@@ -8,9 +8,11 @@ import * as Table from 'cli-table2'
 import { Question, prompt } from 'inquirer'
 import * as colors from 'colors'
 import axios from 'axios'
+import * as Mixpanel from 'mixpanel/lib/mixpanel-node'
+import chalk from 'chalk'
 
 export default class Run extends Command {
-  static description = 'describe the command here'
+  static description = 'Start interactive session'
 
   static examples = [
     `$ botonic run
@@ -32,7 +34,21 @@ Your bot is ready, start talking:
   private df: any;
   private df_session_id: number = Math.random()
 
+  private mixpanel = Mixpanel.init('0a2a173a8daecb5124492f9d319ca429', {
+    protocol: 'https'
+  });
+
   async run() {
+    this.mixpanel.track('botonic_run');
+    const c = chalk.hex('#DEADED')
+    console.log(c('Hey there, thanks for giving ')
+      + c.bold('Botonic')
+      + c(' a try!'));
+    console.log("We're still developing the first version of Botonic, which is not available yet.");
+    console.log("\nWould you like to contribute or send some feedback?\nJust drop us an email at " + chalk.bold("hi@botonic.io"));
+  }
+
+  async run_2() {
     const {args, flags} = this.parse(Run)
     const path = flags.path || '.'
     this.conf = require(join(path, '/.next/botonic.config.js'))

@@ -5,9 +5,10 @@ import * as next from 'next'
 //import dynamic from 'next/dynamic'
 import { load } from 'cheerio'
 import axios from 'axios'
+import * as Mixpanel from 'mixpanel/lib/mixpanel-node'
 
 export default class Run extends Command {
-  static description = 'describe the command here'
+  static description = 'Get response from a single input'
 
   static examples = [
     `$ botonic input "{\"type\": \"text\", \"data\": \"hi\"}"
@@ -27,7 +28,15 @@ Hello!
   private df: any;
   private df_session_id: number = Math.random()
 
+  private mixpanel = Mixpanel.init('0a2a173a8daecb5124492f9d319ca429', {
+    protocol: 'https'
+  });
+
   async run() {
+    this.mixpanel.track('botonic_input');
+  }
+
+  async run_2() {
     const {args, flags} = this.parse(Run)
     const path = flags.path || '.'
     this.conf = require('/Users/eric/Documents/metis/nextjs/.next/botonic.config.js')
