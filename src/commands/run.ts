@@ -39,22 +39,11 @@ Your bot is ready, start talking:
   });
 
   async run() {
-    this.mixpanel.track('botonic_run');
-    const c = chalk.hex('#DEADED')
-    console.log(c('Hey there, thanks for giving ')
-      + c.bold('Botonic')
-      + c(' a try!'));
-    console.log("We're still developing the first version of Botonic, which is not available yet.");
-    console.log("\nWould you like to contribute or send some feedback?\nJust drop us an email at " + chalk.bold("hi@botonic.io"));
-  }
-
-  async run_2() {
+    this.mixpanel.track('botonic_run')
     const {args, flags} = this.parse(Run)
-    const path = flags.path || '.'
+    const path = flags.path? resolve(flags.path) : process.cwd()
     this.conf = require(join(path, '/.next/botonic.config.js'))
-    //process.chdir(resolve(path));
-    process.chdir('/Users/eric/Documents/metis/nextjs');
-    //this.df = new ApiAiClient({accessToken: this.conf.integrations.dialogflow.token})
+    process.chdir(path)
     this.app = next({ dev: false })
     this.chat_loop()
   }

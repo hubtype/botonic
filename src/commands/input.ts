@@ -33,17 +33,14 @@ Hello!
   });
 
   async run() {
-    this.mixpanel.track('botonic_input');
-  }
-
-  async run_2() {
+    this.mixpanel.track('botonic_input')
     const {args, flags} = this.parse(Run)
-    const path = flags.path || '.'
-    this.conf = require('/Users/eric/Documents/metis/nextjs/.next/botonic.config.js')
-    //process.chdir(resolve(path));
-    process.chdir('/Users/eric/Documents/metis/nextjs');
-    //this.df = new ApiAiClient({accessToken: this.conf.integrations.dialogflow.token})
+
+    const path = flags.path? resolve(flags.path) : process.cwd()
+    this.conf = require(join(path, '/.next/botonic.config.js'))
+    process.chdir(path)
     this.app = next({ dev: false })
+
     let input = args.input
     if(input.type == 'text') {
       axios({
