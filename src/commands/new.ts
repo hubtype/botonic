@@ -28,6 +28,6 @@ Creating...
   async run() {
     this.mixpanel.track('botonic_new');
     const {args, flags} = this.parse(Run)
-    fs.mkdir(args.name, err => { if (err) console.log(err) });
+    fs.mkdir(args.bot_name, err => { if (err) console.log(err) });
   }
 }
