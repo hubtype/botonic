@@ -27,5 +27,11 @@ Deploying...
 
   async run() {
     this.mixpanel.track('botonic_deploy')
+    const c = chalk.hex('#DEADED')
+    console.log(c('Hey there, thanks for giving ')
+      + c.bold('Botonic')
+      + c(' a try!'))
+    console.log("We're still developing the first version of Botonic, which is not available yet.")
+    console.log("\nWould you like to contribute or send some feedback?\nJust drop us an email at " + chalk.bold("hi@botonic.io"));
   }
 }
