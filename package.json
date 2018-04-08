@@ -48,7 +48,8 @@
   "files": [
     ".oclif.manifest.json",
     "/bin",
-    "/lib"
+    "/lib",
+    "/scripts"
   ],
   "homepage": "https://github.com/hubtype/botonic",
   "keywords": [
