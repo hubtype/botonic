@@ -5,7 +5,8 @@ import * as next from 'next'
 //import dynamic from 'next/dynamic'
 import { load } from 'cheerio'
 import axios from 'axios'
-import * as Mixpanel from 'mixpanel/lib/mixpanel-node'
+
+var Mixpanel = require('mixpanel');
 
 export default class Run extends Command {
   static description = 'Get response from a single input'

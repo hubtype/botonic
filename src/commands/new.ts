@@ -5,8 +5,9 @@ import * as next from 'next'
 //import dynamic from 'next/dynamic'
 import { load } from 'cheerio'
 import axios from 'axios'
-import * as Mixpanel from 'mixpanel/lib/mixpanel-node'
 import * as fs from 'fs'
+
+var Mixpanel = require('mixpanel');
 
 export default class Run extends Command {
   static description = 'Create a new Botonic project'

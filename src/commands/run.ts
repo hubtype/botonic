@@ -8,8 +8,9 @@ import * as Table from 'cli-table2'
 import { Question, prompt } from 'inquirer'
 import * as colors from 'colors'
 import axios from 'axios'
-import * as Mixpanel from 'mixpanel/lib/mixpanel-node'
 import chalk from 'chalk'
+
+var Mixpanel = require('mixpanel');
 
 export default class Run extends Command {
   static description = 'Start interactive session'
@@ -112,7 +113,7 @@ Your bot is ready, start talking:
             const c = new Table({
               style: { head: [], border: [] },
               wordWrap: false }) as Table.HorizontalTable;
-            let cards = [];
+            let cards: any[] = [];
             el.find('element').slice(0, 3).each((j, e) => {
               let te = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable;
               let el = html(e);
