@@ -21,7 +21,7 @@ $ npm install -g botonic
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-botonic/0.1.3 darwin-x64 node-v9.9.0
+botonic/0.1.4 darwin-x64 node-v9.9.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -50,7 +50,7 @@ EXAMPLE
      🚀 test_bot was successfully deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.1.3/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/deploy.ts)_
 
 ## botonic help [COMMAND]
 
@@ -85,7 +85,7 @@ EXAMPLE
   Hello!
 ```
 
-_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.1.3/src/commands/input.ts)_
+_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/input.ts)_
 
 ## botonic new [BOT_NAME]
 
@@ -101,7 +101,7 @@ EXAMPLE
      💫 test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.1.3/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/new.ts)_
 
 ## botonic run [INPUT]
 
@@ -121,5 +121,5 @@ EXAMPLE
   [bot] > Bye!
 ```
 
-_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.1.3/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/run.ts)_
 <!-- commandsstop -->
