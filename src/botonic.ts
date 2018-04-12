@@ -16,14 +16,31 @@ export class Botonic {
   }
 
   getAction(input: any) {
-    for (var i = 0; i < this.conf.routes.length; i++) {
-      let r = this.conf.routes[i]
-      if((input.type == 'text' && r.text == input.data) ||
-        ((input.type == 'text' || input.type == 'postback') && input.payload && r.payload == input.payload) ||
-        (input.intent && r.intent == input.intent)) {
-          return this.conf.routes[i].action
-      }
-    }
+    let route = this.conf.routes.find((r: object) => Object.entries(r)
+      .filter(([key, value]) => key != 'action')
+      .every(([key, value]) => this.matchRoute(key, value, input)))
+
+    return route? route.action : '404'
+  }
+
+  matchRoute(prop: string, matcher: any, input: any): boolean {
+    /*
+      prop: ('text' | 'payload' | 'intent')
+      matcher: (string: exact match | regex: regular expression match | function: return true)
+      input: user input object, ex: {type: 'text', data: 'Hi'}
+    */
+    let value: string = ''
+    if(prop in input)
+      value = input[prop]
+    else if(prop == 'text')
+      value = input.data
+    if(typeof matcher === 'string')
+      return value == matcher
+    if(matcher instanceof RegExp)
+      return matcher.test(value)
+    if(typeof matcher === 'function')
+      return matcher(value)
+    return false
   }
 
   async processInput(input: any) {
