@@ -1,8 +1,19 @@
 import { join, resolve } from 'path'
+import { homedir } from 'os'
 import * as next from 'next'
 import axios from 'axios'
 
 export class Botonic {
+  public base_url: string = 'http://localhost:8000'
+  public base_api_url = this.base_url+'/v1/'
+  public login_url: string = this.base_url + '/o/token/'
+  public current_path: string = process.cwd()
+  public bot_path: string = join(this.current_path, '/.botonic.json')
+  public home_path: string = join(homedir(), '/.botonic')
+  public home_cred_path: string = join(this.home_path, '/credentials.json')
+  public cliend_id: string = 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
+  public client_secret: string = 'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
+
   public path: string
   public conf: any
   private app: any

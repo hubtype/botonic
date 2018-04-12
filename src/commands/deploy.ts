@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
 import axios from 'axios'
@@ -9,64 +9,50 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 import { Botonic } from '../botonic'
-import { track } from '../utils'
+import { track, alias } from '../utils'
 
 
 export default class Run extends Command {
   static description = 'Deploy Botonic project to botonic.io cloud'
 
-  static examples = [
-    `$ botonic deploy
-Deploying...
-  🚀 test_bot was successfully deployed!
-`,
-  ]
-
   static args = [{name: 'bot_name'}]
 
+  private botonic: any
   private credentials: any
   private me_credentials: any
   private bot_credentials: any
 
-  private base_url: string = 'http://localhost:8000'
-  private base_api_url = this.base_url+'/v1/'
-  private login_url: string = this.base_url + '/o/token/'
-  private current_path: string = process.cwd()
-  private bot_path: string = path.join(this.current_path, '/.botonic.json')
-  private home_path: string = path.join(os.homedir(), '/.botonic')
-  private home_cred_path: string = path.join(this.home_path, '/credentials.json')
-  private cliend_id: string = 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
-  private client_secret: string = 'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
-
-
-
   async run() {
-    track('botonic_deploy')
+    const {args, flags} = this.parse(Run)
+
+    const path = flags.path? resolve(flags.path) : process.cwd()
+
+    this.botonic = new Botonic(path)
     this.checkCredentials()
-    //this.publish()
+    track('botonic_deploy')
   }
 
   async api_post(path:any, body:any = null): Promise<any> {
+    let headers = `Bearer ${this.credentials.access_token}`
+    let url = this.botonic.base_api_url + path
     if(this.credentials){
       return axios({
         method: 'post',
-        url: this.base_api_url + path,
-        headers: {
-          'Authorization': 'Bearer ' + this.credentials['access_token']
-        },
+        url: url,
+        headers: {Authorization: headers},
         data: body
       })
     }
   }
 
   async api_get(path:any, body:any = null): Promise<any> {
+    let headers = `Bearer ${this.credentials.access_token}`
+    let url = this.botonic.base_api_url + path
     if(this.credentials){
       return axios({
         method: 'get',
-        url: this.base_api_url + path,
-        headers: {
-          Authorization: 'Bearer ' + this.credentials['access_token']
-        },
+        url: url,
+        headers: {Authorization: headers},
         data: body
       })
     }
@@ -74,29 +60,30 @@ Deploying...
 
   async post_save_bot(bot_name:string) {
     let bot_info = await this.api_post('bots/', 
-        {'name': bot_name, 'framework': 'framework_botonic'})
+        {name: bot_name, framework: 'framework_botonic'})
     if(bot_info){
-      this.save_bot_creds(bot_info['data'])
+      this.save_bot_creds(bot_info.data)
     }
   }
 
   async api_get_bots(): Promise<any> {
+    let headers = `Bearer ${this.credentials.access_token}`
+    let organization_id = this.me_credentials.organization_id
+    let url = this.botonic.base_url + 'bots/'
     if(this.credentials){
       return axios({
         method: 'get',
-        url: this.base_url + 'bots/',
-        headers: {
-          'Authorization': 'Bearer ' + this.credentials['access_token']
-        },
-        data: {'organization': this.me_credentials['organization_id']}
+        url: url,
+        headers: {Authorization: headers},
+        data: {organization: organization_id}
       })
     }
   }
 
   checkCredentials() {
     try {
-      this.credentials = JSON.parse(fs.readFileSync(this.home_cred_path, 'utf8'))['creds']
-      this.me_credentials = JSON.parse(fs.readFileSync(this.home_cred_path, 'utf8'))['me']
+      this.credentials = JSON.parse(fs.readFileSync(this.botonic.home_cred_path, 'utf8'))['creds']
+      this.me_credentials = JSON.parse(fs.readFileSync(this.botonic.home_cred_path, 'utf8'))['me']
     }catch (e) {}
     if(this.credentials){
       this.checkBot()
@@ -107,7 +94,7 @@ Deploying...
 
   checkBot() {
     try {
-      this.bot_credentials = JSON.parse(fs.readFileSync(this.bot_path, 'utf-8'))
+      this.bot_credentials = JSON.parse(fs.readFileSync(this.botonic.bot_path, 'utf-8'))
     }catch(e){}
     if(this.bot_credentials){
       this.publish()
@@ -117,23 +104,16 @@ Deploying...
   }
 
   async publish() {
-    console.log('publish!')
     let build_out = await exec('npm run build')
-    console.log(build_out.stdout, build_out.stderr)
-    //check if exists
-    let rm_out = await exec('rm botonic_bundle.zip')
+    //console.log(build_out.stdout, build_out.stderr)
     let zip_out = await exec('zip -r botonic_bundle.zip .next')
-    console.log(zip_out.stdout, zip_out.stderr)
-    let url = `${this.base_api_url}bots/${this.bot_credentials.id}/deploy_botonic/`
+    let url = `${this.botonic.base_api_url}bots/${this.bot_credentials.id}/deploy_botonic/`
     let auth = `Bearer ${this.credentials['access_token']}`
     let curl = `curl -H "Authorization: ${auth}" -F "bundle=@./botonic_bundle.zip" ${url}`
     let curl_out = await exec(curl)
-    console.log(curl_out.stdout, curl_out.stderr)
-
-    /*axios({method: 'post', url,
-        headers: {'Authorization': auth},
-        data: {'organization': this.me_credentials['organization_id']}
-      })*/
+    //console.log(curl_out.stdout, curl_out.stderr)
+    console.log('\x1b[32m' ,'Bot deployed! 🚀')
+    let rm_zip = await exec('rm botonic_bundle.zip')
   }
 
 
@@ -144,7 +124,7 @@ Deploying...
       message: 'Are you already registered into BOTONIC?'}
     ]).then( (inp: any) => {
       let email, password
-      let resp = inp['registerConfirmation']
+      let resp = inp.registerConfirmation
       prompt([{
         type: 'input',
         name: 'email',
@@ -158,51 +138,82 @@ Deploying...
         message: 'password:'
         //TODO: validate: validatePassword()
       }]).then( (inp:any ) => {
-        email = inp['email']
-        password = inp['password']
+        email = inp.email
+        password = inp.password
         if (resp){
           this.logInUser(email, password)
         }else {
-          console.log('TODO: REGISTER')
-          //return this.registerUser()
+          this.registerUser(email,password)
         }
       })
     });
   }
 
-  async logInUser(email: any, password:any) {
+  async logInUser(email: string, password:string) {
     let login_data = await this.loginData(email, password)
     if (login_data){
-      this.credentials = login_data['data']
+      this.credentials = login_data.data
+      alias(email)
+      this.saveUserData()
     }
+  }
+
+  async registerUser(email: string, password:string) {
+    let org_name = email.split('@')[0]
+    let campaign = { product: 'botonic' }
+    try{
+      var register_data = await this.registerData(email, password, org_name, campaign)
+      var login_data = await this.loginData(email, password)
+    }catch(e){
+      var err = e.response.data
+      console.log(err)
+    }
+    if (login_data){
+      this.credentials = login_data.data
+      alias(email)
+      this.saveUserData()
+    }
+  }
+
+  async saveUserData() {
     let me_data = await this.api_get('users/me')
-    let me_data_json = null
     if (me_data)
-      this.me_credentials = me_data['data']
-    let creds_file = JSON.parse(fs.readFileSync(this.home_cred_path, 'utf8'))
-    let new_json = {'mixpanel': creds_file['mixpanel'], 'creds': this.credentials, 'me': this.me_credentials}
-    fs.writeFileSync(this.home_cred_path, JSON.stringify(new_json))
+      this.me_credentials = me_data.data
+    let creds_file = JSON.parse(fs.readFileSync(this.botonic.home_cred_path, 'utf8'))
+    let new_json = {mixpanel: creds_file.mixpanel, creds: this.credentials, me: this.me_credentials}
+    fs.writeFileSync(this.botonic.home_cred_path, JSON.stringify(new_json))
     this.checkBot()
   }
+
 
   loginData(email:any, password:any): Promise<any> {
     return axios({
       method: 'post',
-      url: this.login_url,
+      url: this.botonic.login_url,
       params: {
         'username': email,
         'password': password,
-        'client_id': this.cliend_id,
-        'client_secret': this.client_secret,
+        'client_id': this.botonic.cliend_id,
+        'client_secret': this.botonic.client_secret,
         'grant_type': 'password'
       }
     })
   }
 
+  registerData(email:string, password:string, org_name:string, campaign:any) :Promise<any>{
+    let url = this.botonic.base_api_url + 'users/'
+    let register_data = {email, password, org_name, campaign}
+    return axios({
+      method: 'post',
+      url: url,
+      data: register_data
+    })
+  }
+
   async checkNewBot() {
     let bots = await this.checkExistentBots()
-    bots = bots['data']
-    if(!bots['count']){
+    bots = bots.data
+    if(!bots.count){
       this.createNewBot()
     }else {
       prompt([
@@ -211,25 +222,25 @@ Deploying...
         name: 'create_bot_confirm',
         message: 'Do yout want to create a new Bot?'
       }]).then((res:any) => {
-        let confirm = res['create_bot_confirm']
+        let confirm = res.create_bot_confirm
         if(confirm){
           this.createNewBot()
         }else{
-          this.selectExistentBot(bots['results'])
+          this.selectExistentBot(bots.results)
         }
       })
     }
   }
 
   checkExistentBots(): Promise<any> {
-    let organization_id = this.me_credentials['organization_id']
+    let url = this.botonic.base_api_url + 'bots/'
+    let headers = `Bearer ${this.credentials.access_token}`
+    let organization_id = this.me_credentials.organization_id
     return axios({
       method: 'get',
-      url: this.base_api_url + 'bots/',
-      headers: {
-        'Authorization': 'Bearer ' + this.credentials['access_token']
-      },
-      data: {'organization': organization_id}
+      url: url,
+      headers: {Authorization: headers},
+      data: {organization: organization_id}
     })
   }
 
@@ -239,7 +250,7 @@ Deploying...
       name: 'bot_name',
       message: 'Bot name:'
     }]).then( (inp:any) => {
-      this.post_save_bot(inp['bot_name'])
+      this.post_save_bot(inp.bot_name)
     })
   }
 
@@ -257,8 +268,8 @@ Deploying...
 
   save_bot_creds(bot:any) {
     if(bot){
-      fs.writeFileSync(this.bot_path, JSON.stringify(bot))
-      this.bot_credentials = bot['data']
+      fs.writeFileSync(this.botonic.bot_path, JSON.stringify(bot))
+      this.bot_credentials = bot
       this.publish()
     }
   }

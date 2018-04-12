@@ -27,6 +27,19 @@ export function track(event: string) {
     mixpanel.track(event, {distinct_id: credentials? credentials.mixpanel.distinct_id : null})
 }
 
+export function alias(email: string) {
+  if(mixpanel && credentials.mixpanel.distinct_id && email){
+    console.log(mixpanel.people.set(credentials.mixpanel.distinct_id, {
+      "$email": "aaa@gmail.com"
+      //system: os.platform()
+    }))
+    mixpanel.alias(credentials.mixpanel.distinct_id, email, (e:any) => {console.log(e)})
+    credentials.mixpanel.distinct_id = email
+    fs.writeFileSync(path.join(botonic_home_path, 'credentials.json'),
+      JSON.stringify(credentials))
+  }
+}
+
 export function botonicPostInstall() {
   let distinct_id = Math.round(Math.random()*100000000)
   if(!fs.existsSync(botonic_home_path))
