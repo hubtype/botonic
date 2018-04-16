@@ -1,14 +1,12 @@
-import { join, resolve } from 'path'
+import { resolve } from 'path'
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
-import axios from 'axios'
-import fs = require('fs')
-import path = require('path')
-import os = require('os')
+import * as colors from 'colors'
+
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
-import { Botonic } from '../botonic'
+import { BotonicAPIService } from '../botonic'
 import { track, alias } from '../utils'
 
 
@@ -17,115 +15,43 @@ export default class Run extends Command {
 
   static args = [{name: 'bot_name'}]
 
-  private botonic: any
-  private credentials: any
-  private me_credentials: any
-  private bot_credentials: any
+  private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   async run() {
     const {args, flags} = this.parse(Run)
 
     const path = flags.path? resolve(flags.path) : process.cwd()
 
-    this.botonic = new Botonic(path)
-    this.checkCredentials()
+    if(!this.botonicApiService.oauth)
+      await this.signupFlow()
+    else
+      await this.deployBotFlow()
+
+    this.botonicApiService.beforeExit()
+    
     track('botonic_deploy')
   }
 
-  async api_post(path:any, body:any = null): Promise<any> {
-    let headers = `Bearer ${this.credentials.access_token}`
-    let url = this.botonic.base_api_url + path
-    if(this.credentials){
-      return axios({
-        method: 'post',
-        url: url,
-        headers: {Authorization: headers},
-        data: body
-      })
-    }
+  async signupFlow() {
+    let choices = [
+        "No, I need to create a new one (Signup)",
+        "Yes, I do. (Login)"
+      ]
+    return prompt([{
+      type: 'list',
+      name: 'signupConfirmation',
+      message: 'You need to login before deploying your bot.\nDo you have a Botonic account already?',
+      choices: choices
+    }]).then( (inp: any) => {
+      if(inp.signupConfirmation == choices[1])
+        return this.askLogin()
+      else
+        return this.askSignup()
+    });
   }
 
-  async api_get(path:any, body:any = null): Promise<any> {
-    let headers = `Bearer ${this.credentials.access_token}`
-    let url = this.botonic.base_api_url + path
-    if(this.credentials){
-      return axios({
-        method: 'get',
-        url: url,
-        headers: {Authorization: headers},
-        data: body
-      })
-    }
-  }
-
-  async post_save_bot(bot_name:string) {
-    let bot_info = await this.api_post('bots/', 
-        {name: bot_name, framework: 'framework_botonic'})
-    if(bot_info){
-      this.save_bot_creds(bot_info.data)
-    }
-  }
-
-  async api_get_bots(): Promise<any> {
-    let headers = `Bearer ${this.credentials.access_token}`
-    let organization_id = this.me_credentials.organization_id
-    let url = this.botonic.base_url + 'bots/'
-    if(this.credentials){
-      return axios({
-        method: 'get',
-        url: url,
-        headers: {Authorization: headers},
-        data: {organization: organization_id}
-      })
-    }
-  }
-
-  checkCredentials() {
-    try {
-      this.credentials = JSON.parse(fs.readFileSync(this.botonic.home_cred_path, 'utf8'))['creds']
-      this.me_credentials = JSON.parse(fs.readFileSync(this.botonic.home_cred_path, 'utf8'))['me']
-    }catch (e) {}
-    if(this.credentials){
-      this.checkBot()
-    }else{
-      this.checkRegistered()
-    }
-  }
-
-  checkBot() {
-    try {
-      this.bot_credentials = JSON.parse(fs.readFileSync(this.botonic.bot_path, 'utf-8'))
-    }catch(e){}
-    if(this.bot_credentials){
-      this.publish()
-    }else{
-      this.checkNewBot()
-    }
-  }
-
-  async publish() {
-    let build_out = await exec('npm run build')
-    //console.log(build_out.stdout, build_out.stderr)
-    let zip_out = await exec('zip -r botonic_bundle.zip .next')
-    let url = `${this.botonic.base_api_url}bots/${this.bot_credentials.id}/deploy_botonic/`
-    let auth = `Bearer ${this.credentials['access_token']}`
-    let curl = `curl -H "Authorization: ${auth}" -F "bundle=@./botonic_bundle.zip" ${url}`
-    let curl_out = await exec(curl)
-    //console.log(curl_out.stdout, curl_out.stderr)
-    console.log('\x1b[32m' ,'Bot deployed! 🚀')
-    let rm_zip = await exec('rm botonic_bundle.zip')
-  }
-
-
-  checkRegistered() {
-    prompt([{
-      type: 'confirm',
-      name: 'registerConfirmation',
-      message: 'Are you already registered into BOTONIC?'}
-    ]).then( (inp: any) => {
-      let email, password
-      let resp = inp.registerConfirmation
-      prompt([{
+  async askEmailPassword() {
+    return prompt([{
         type: 'input',
         name: 'email',
         message: 'email:'
@@ -137,86 +63,57 @@ export default class Run extends Command {
         mask: '*',
         message: 'password:'
         //TODO: validate: validatePassword()
-      }]).then( (inp:any ) => {
-        email = inp.email
-        password = inp.password
-        if (resp){
-          this.logInUser(email, password)
-        }else {
-          this.registerUser(email,password)
-        }
+      }])
+  }
+
+  async askLogin() {
+    await this.askEmailPassword().then((inp: any) => this.login(inp.email, inp.password))
+  }
+
+  async askSignup() {
+    await this.askEmailPassword().then((inp: any) => this.signup(inp.email, inp.password))
+  }
+
+  async deployBotFlow() {
+    if(!this.botonicApiService.bot)
+      return this.newBotFlow()
+    else
+      return this.deploy()
+  }
+
+  async login(email: string, password:string) {
+    return this.botonicApiService.login(email, password)
+      .then((resp)=> this.deployBotFlow(), (err) => {
+        if(err.response.data && err.response.data.error_description)
+          console.log(err.response.data.error_description)
+        else
+          console.log('There was an error when trying to login. Please, try again:')
+        this.askLogin()
       })
-    });
   }
 
-  async logInUser(email: string, password:string) {
-    let login_data = await this.loginData(email, password)
-    if (login_data){
-      this.credentials = login_data.data
-      alias(email)
-      this.saveUserData()
-    }
-  }
-
-  async registerUser(email: string, password:string) {
+  async signup(email: string, password:string) {
     let org_name = email.split('@')[0]
     let campaign = { product: 'botonic' }
-    try{
-      var register_data = await this.registerData(email, password, org_name, campaign)
-      var login_data = await this.loginData(email, password)
-    }catch(e){
-      var err = e.response.data
-      console.log(err)
-    }
-    if (login_data){
-      this.credentials = login_data.data
-      alias(email)
-      this.saveUserData()
-    }
-  }
-
-  async saveUserData() {
-    let me_data = await this.api_get('users/me')
-    if (me_data)
-      this.me_credentials = me_data.data
-    let creds_file = JSON.parse(fs.readFileSync(this.botonic.home_cred_path, 'utf8'))
-    let new_json = {mixpanel: creds_file.mixpanel, creds: this.credentials, me: this.me_credentials}
-    fs.writeFileSync(this.botonic.home_cred_path, JSON.stringify(new_json))
-    this.checkBot()
-  }
-
-
-  loginData(email:any, password:any): Promise<any> {
-    return axios({
-      method: 'post',
-      url: this.botonic.login_url,
-      params: {
-        'username': email,
-        'password': password,
-        'client_id': this.botonic.cliend_id,
-        'client_secret': this.botonic.client_secret,
-        'grant_type': 'password'
+    try {
+      await this.botonicApiService.signup(email, password, org_name, campaign)
+    } catch(e) {
+      try {
+        console.log((<string[]>Object.values(e.response.data)[0])[0])
+      } catch(e) {
+        console.log('There was an error when trying sign you up. Please, try again:')
       }
-    })
+      this.askSignup()
+    }
+    return this.login(email, password)
   }
 
-  registerData(email:string, password:string, org_name:string, campaign:any) :Promise<any>{
-    let url = this.botonic.base_api_url + 'users/'
-    let register_data = {email, password, org_name, campaign}
-    return axios({
-      method: 'post',
-      url: url,
-      data: register_data
-    })
-  }
-
-  async checkNewBot() {
-    let bots = await this.checkExistentBots()
-    bots = bots.data
-    if(!bots.count){
-      this.createNewBot()
-    }else {
-      prompt([
+  async newBotFlow() {
+    let bots = await this.botonicApiService.getBots()
+    if(!bots.length) {
+      return this.createNewBot()
+    } else {
+      return prompt([
       {
         type: 'confirm',
         name: 'create_bot_confirm',
@@ -224,53 +121,42 @@ export default class Run extends Command {
       }]).then((res:any) => {
         let confirm = res.create_bot_confirm
         if(confirm){
-          this.createNewBot()
+          return this.createNewBot()
         }else{
-          this.selectExistentBot(bots.results)
+          return this.selectExistentBot(bots)
         }
       })
     }
   }
 
-  checkExistentBots(): Promise<any> {
-    let url = this.botonic.base_api_url + 'bots/'
-    let headers = `Bearer ${this.credentials.access_token}`
-    let organization_id = this.me_credentials.organization_id
-    return axios({
-      method: 'get',
-      url: url,
-      headers: {Authorization: headers},
-      data: {organization: organization_id}
-    })
-  }
-
-  createNewBot() {
-    prompt([{
+  async createNewBot() {
+    return prompt([{
       type: 'input',
       name: 'bot_name',
       message: 'Bot name:'
     }]).then( (inp:any) => {
-      this.post_save_bot(inp.bot_name)
+      this.botonicApiService.saveBot(inp.bot_name).then(() => this.deploy())
     })
   }
 
-  selectExistentBot(bots:any[]) {
-    prompt([{
+  async selectExistentBot(bots:any[]) {
+    return prompt([{
       type: 'list',
       name: 'bot_name',
       message: 'What bot do you want to use?',
-      choices: bots.map(b => b['name'])
+      choices: bots.map(b => b.name)
     }]).then( (inp:any) => {
-      let bot = bots.filter(b => b['name']===inp['bot_name'])[0]
-      this.save_bot_creds(bot)
+      let bot = bots.filter(b => b.name === inp.bot_name)[0]
+      this.botonicApiService.setCurrentBot(bot)
+      this.deploy()
     })
   }
 
-  save_bot_creds(bot:any) {
-    if(bot){
-      fs.writeFileSync(this.botonic.bot_path, JSON.stringify(bot))
-      this.bot_credentials = bot
-      this.publish()
-    }
+  async deploy() {
+    let build_out = await exec('npm run build')
+    let zip_out = await exec('zip -r botonic_bundle.zip .next')
+    this.botonicApiService.deployBot('botonic_bundle.zip')
+    let rm_zip = await exec('rm botonic_bundle.zip')
+    console.log('Bot deployed! 🚀'.green)
   }
 }

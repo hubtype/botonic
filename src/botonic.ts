@@ -1,19 +1,17 @@
 import { join, resolve } from 'path'
+import * as fs from 'fs'
 import { homedir } from 'os'
 import * as next from 'next'
 import axios from 'axios'
+const FormData = require('form-data');
+
+const BOTONIC_CLIENT_ID: string = process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
+const BOTONIC_CLIENT_SECRET: string = process.env.BOTONIC_CLIENT_SECRET || 'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
+const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
 export class Botonic {
-  public base_url: string = 'http://localhost:8000'
-  public base_api_url = this.base_url+'/v1/'
-  public login_url: string = this.base_url + '/o/token/'
   public current_path: string = process.cwd()
   public bot_path: string = join(this.current_path, '/.botonic.json')
-  public home_path: string = join(homedir(), '/.botonic')
-  public home_cred_path: string = join(this.home_path, '/credentials.json')
-  public cliend_id: string = 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
-  public client_secret: string = 'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
-
   public path: string
   public conf: any
   private app: any
@@ -81,4 +79,135 @@ export class Botonic {
         })
       }
   }
+}
+
+export class BotonicAPIService {
+  public cliendId: string = BOTONIC_CLIENT_ID
+  public clientSecret: string = BOTONIC_CLIENT_SECRET
+  public baseUrl: string = BOTONIC_URL
+  public baseApiUrl = this.baseUrl + '/v1/'
+  public loginUrl: string = this.baseUrl + '/o/token/'
+  public botPath: string = process.cwd()
+  public botCredentialsPath: string = join(this.botPath, '/.botonic.json')
+  public globalConfigPath: string = join(homedir(), '/.botonic')
+  public globalCredentialsPath: string = join(this.globalConfigPath, '/credentials.json')
+  public oauth: any
+  public me: any
+  public mixpanel: any
+  public bot: any
+  public headers: object | null = null
+
+  constructor() {
+    this.loadGlobalCredentials()
+    this.loadBotCredentials()
+  }
+
+  beforeExit() {
+    this.saveGlobalCredentials()
+    this.saveBotCredentials()
+  }
+
+  loadGlobalCredentials() {
+    try {
+      var credentials = JSON.parse(fs.readFileSync(this.globalCredentialsPath, 'utf8'))
+    } catch(e) {}
+    if(credentials) {
+      this.oauth = credentials.oauth
+      this.me = credentials.me
+      this.mixpanel = credentials.mixpanel
+      if(credentials.oauth)
+        this.headers = {Authorization: `Bearer ${this.oauth.access_token}`}
+    }
+  }
+
+  loadBotCredentials() {
+    try {
+      this.bot = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
+    } catch(e) {}
+  }
+
+  saveGlobalCredentials() {
+    fs.writeFileSync(this.globalCredentialsPath, JSON.stringify({
+      oauth: this.oauth,
+      me: this.me,
+      mixpanel: this.mixpanel
+    }))
+  }
+
+  saveBotCredentials() {
+    fs.writeFileSync(this.botCredentialsPath, JSON.stringify(this.bot))
+  }
+
+  setCurrentBot(bot: any) {
+    this.bot = bot
+  }
+
+  async api(path: string, body: any = null, method: string = 'get', headers: object | null = null): Promise<any> {
+    return axios({
+      method: method,
+      url: this.baseApiUrl + path,
+      headers: headers || this.headers,
+      data: body
+    })
+  }
+
+  async login(email:any, password:any): Promise<any> {
+    let resp = await axios({
+      method: 'post',
+      url: this.loginUrl,
+      params: {
+        'username': email,
+        'password': password,
+        'client_id': this.cliendId,
+        'client_secret': this.clientSecret,
+        'grant_type': 'password'
+      }
+    })
+    this.oauth = resp.data
+    this.headers = {Authorization: `Bearer ${this.oauth.access_token}`}
+    resp = await this.api('users/me')
+    this.me = resp.data
+    return resp
+  }
+
+  signup(email:string, password:string, org_name:string, campaign:any): Promise<any>{
+    let url = `${this.baseApiUrl}users/`
+    let signup_data = {email, password, org_name, campaign}
+    return axios({
+      method: 'post',
+      url: url,
+      data: signup_data
+    })
+  }
+
+  async saveBot(bot_name: string) {
+    let resp = await this.api('bots/',
+        {name: bot_name, framework: 'framework_botonic'}, 'post')
+    this.setCurrentBot(resp.data)
+  }
+
+  async getBots() {
+    let resp = await this.api('bots/', {organization: this.me.organization_id})
+    return resp.data.results
+  }
+
+  async deployBot(bundlePath: string): Promise<any> {
+    const form = new FormData()
+    let data = fs.createReadStream(bundlePath)
+    form.append('bundle', data, 'botonic_bundle.zip')
+    let headers = await this.getHeaders(form)
+    return this.api(`bots/${this.bot.id}/deploy_botonic/`, form, 'post', {...this.headers, ...headers})
+  }
+
+  async getHeaders(form: any) {
+    //https://github.com/axios/axios/issues/1006#issuecomment-352071490
+    return new Promise((resolve, reject) => {
+      form.getLength((err: any, length: any) => {
+        if(err) { reject(err) }
+        let headers = Object.assign({'Content-Length': length}, form.getHeaders())
+        resolve(headers)
+       })
+    })
+  }
+
 }
