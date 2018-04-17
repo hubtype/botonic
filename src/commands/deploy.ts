@@ -7,6 +7,17 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 import { BotonicAPIService } from '../botonic'
+/*
+TODO:
+  botonic_api_post()
+  new --> create folder with templates in it, load them as .botonic-example in .next 
+    pages in (pages->actions(route))
+      -scrips: basic one with Hello
+        -comple:
+          -regEx, IA(intent and entitie? dialogflow and IBMWatson), function like (t)=>someFunc()
+          -if 404 in pages is defined, when inpu_failure goes there, o.w. nothing
+  run --> create new types of botonic messages (images, carrousel?)
+*/
 import { track, alias } from '../utils'
 
 
@@ -85,9 +96,9 @@ export default class Run extends Command {
     return this.botonicApiService.login(email, password)
       .then((resp)=> this.deployBotFlow(), (err) => {
         if(err.response.data && err.response.data.error_description)
-          console.log(err.response.data.error_description)
+          console.log(err.response.data.error_description.red)
         else
-          console.log('There was an error when trying to login. Please, try again:')
+          console.log('There was an error when trying to login. Please, try again:'.red)
         this.askLogin()
       })
   }
@@ -99,11 +110,11 @@ export default class Run extends Command {
       await this.botonicApiService.signup(email, password, org_name, campaign)
     } catch(e) {
       try {
-        console.log((<string[]>Object.values(e.response.data)[0])[0])
+        console.log((<string[]>Object.values(e.response.data)[0])[0].red)
       } catch(e) {
-        console.log('There was an error when trying sign you up. Please, try again:')
+        console.log('There was an error when trying sign you up. Please, try again:'.red)
       }
-      this.askSignup()
+      await this.askSignup()
     }
     return this.login(email, password)
   }

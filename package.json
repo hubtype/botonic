@@ -50,7 +50,8 @@
     ".oclif.manifest.json",
     "/bin",
     "/lib",
-    "/scripts"
+    "/scripts",
+    "/templates"
   ],
   "homepage": "https://github.com/hubtype/botonic",
   "keywords": [
