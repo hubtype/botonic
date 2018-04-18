@@ -42,7 +42,10 @@ export class Botonic {
     if(prop in input)
       value = input[prop]
     else if(prop == 'text')
-      value = input.data
+      if(input.type == 'text')
+        value = input.data
+      if(input.type == 'postback')
+        value = input.payload
     if(typeof matcher === 'string')
       return value == matcher
     if(matcher instanceof RegExp)
