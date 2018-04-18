@@ -17,7 +17,7 @@ Hello!
     path: flags.string({char: 'p', description: 'Path to botonic project. Defaults to current dir.'})
   }
 
-  static args = [{name: 'input', parse: JSON.parse}]
+  static args = [{name: 'input', parse: JSON.parse, required: true}]
 
   private botonic: any
 

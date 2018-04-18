@@ -7,17 +7,7 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 import { BotonicAPIService } from '../botonic'
-/*
-TODO:
-  botonic_api_post()
-  new --> create folder with templates in it, load them as .botonic-example in .next 
-    pages in (pages->actions(route))
-      -scrips: basic one with Hello
-        -comple:
-          -regEx, IA(intent and entitie? dialogflow and IBMWatson), function like (t)=>someFunc()
-          -if 404 in pages is defined, when inpu_failure goes there, o.w. nothing
-  run --> create new types of botonic messages (images, carrousel?)
-*/
+
 import { track, alias } from '../utils'
 
 
@@ -163,11 +153,28 @@ export default class Run extends Command {
     })
   }
 
+  async displayProviders(providers: any) {
+    console.log('Now, you can test your bot in:')
+    providers.map((p:any) => {
+      let p_info = `Facebook link: https://m.me/${p.username}`;
+      if(p.provider === 'telegram')
+        p_info = `Telegram link: https://t.me/${p.username}`;
+      console.log(p_info)
+    })
+  }
+
   async deploy() {
     let build_out = await exec('npm run build')
     let zip_out = await exec('zip -r botonic_bundle.zip .next')
     this.botonicApiService.deployBot('botonic_bundle.zip')
     let rm_zip = await exec('rm botonic_bundle.zip')
     console.log('Bot deployed! 🚀'.green)
+    let providers = await this.botonicApiService.getProviders()
+    if(!providers.length) {
+      let links = `Now, you can integrate a channel in:\nttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}&mixpanel=${this.botonicApiService.mixpanel.distinct_id}`;
+      console.log(links)
+    } else {
+      await this.displayProviders(providers)
+    }
   }
 }

@@ -23,7 +23,7 @@ Creating...
     {name: 'name', description: 'name of the bot folder', required: true},
     {name: 'templateName', description: 'OPTIONAL name of the bot template', required: false},
   ]
-  private botTemplates: any = ['example_1','example_2']
+  private botTemplates: any = ['basic_bot', 'basic_actions', 'AI_bot']
   private botName: string = ""
 
   async run() {
@@ -39,16 +39,23 @@ Creating...
         this.botName = args.templateName
       } else {
         console.log('There is no Template with this name'.red)
+        return
       }
     }
     if(!fs.existsSync(args.name))
       fs.mkdir(args.name, err => { if (err) console.log(err) })
     let botPath = resolve(this.botName)
     let templatePath = `${__dirname.split('/src/')[0]}/templates/${this.botName}` //hardcored don't like it
+    console.log('Copying all the files...')
     let copyFolderCommand = `cp -a ${templatePath}/* ${args.name}`
     let copy_out = await exec(copyFolderCommand)
-    let compileCommand = `cd ${args.name}; npm install; npm run build`
+    console.log('Installing all the dependencies...')
+    let dependencyCommand = `cd ${args.name}; npm install`
+    let dependency = await exec(dependencyCommand)
+    console.log('Compiling your new bot...')
+    let compileCommand = `cd ${args.name}; npm run build`;
     let compile = await exec(compileCommand)
+    console.log('New bot created!')
 
   }
 

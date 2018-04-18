@@ -145,12 +145,13 @@ export class BotonicAPIService {
     this.bot = bot
   }
 
-  async api(path: string, body: any = null, method: string = 'get', headers: object | null = null): Promise<any> {
+  async api(path: string, body: any = null, method: string = 'get', headers: object | null = null, params: any = null): Promise<any> {
     return axios({
       method: method,
       url: this.baseApiUrl + path,
       headers: headers || this.headers,
-      data: body
+      data: body,
+      params: params
     })
   }
 
@@ -190,7 +191,12 @@ export class BotonicAPIService {
   }
 
   async getBots() {
-    let resp = await this.api('bots/', {organization: this.me.organization_id})
+    let resp = await this.api('bots/', null, 'get', null , {organization_id: this.me.organization_id})
+    return resp.data.results
+  }
+
+  async getProviders() {
+    let resp = await this.api('provider_accounts', null, 'get', null, {bot_id: this.bot.id})
     return resp.data.results
   }
 
