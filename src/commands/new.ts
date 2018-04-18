@@ -47,7 +47,7 @@ Creating...
     let templatePath = `${__dirname.split('/src/')[0]}/templates/${this.botName}` //hardcored don't like it
     let copyFolderCommand = `cp -a ${templatePath}/* ${args.name}`
     let copy_out = await exec(copyFolderCommand)
-    let compileCommand = `cd ${this.botName}; npm install; npm run build`
+    let compileCommand = `cd ${args.name}; npm install; npm run build`
     let compile = await exec(compileCommand)
 
   }
