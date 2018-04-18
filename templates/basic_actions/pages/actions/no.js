@@ -7,7 +7,7 @@ export default class extends React.Component {
   render() {
     return (
         <message type="text">
-            I know dude 😂 😂 😂
+            Okai! See you later.
         </message>
     )
   }
