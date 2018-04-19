@@ -96,17 +96,17 @@ export default class Run extends Command {
   async signup(email: string, password:string) {
     let org_name = email.split('@')[0]
     let campaign = { product: 'botonic' }
-    try {
-      await this.botonicApiService.signup(email, password, org_name, campaign)
-    } catch(e) {
-      try {
-        console.log((<string[]>Object.values(e.response.data)[0])[0].red)
-      } catch(e) {
-        console.log('There was an error when trying sign you up. Please, try again:'.red)
-      }
-      await this.askSignup()
-    }
-    return this.login(email, password)
+    return this.botonicApiService.signup(email, password, org_name, campaign)
+      .then((resp) => this.login(email,password),
+        (err) => {
+          if(err.response.data.email)
+            console.log(err.response.data.email[0].red)
+          if(err.response.data.password)
+            console.log(err.response.data.password[0].red)
+          if(!err.response.data.email && !err.response.data.password)
+            console.log('There was an error trying to register. Please, try again:'.red)
+          this.askSignup()
+        })
   }
 
   async newBotFlow() {
