@@ -165,8 +165,10 @@ export default class Run extends Command {
 
   async deploy() {
     let build_out = await exec('npm run build')
-    let zip_out = await exec('zip -r botonic_bundle.zip .next')
-    this.botonicApiService.deployBot('botonic_bundle.zip')
+    let random = Math.round(Math.random()*10000000000)
+    let zip_with_pass = `zip -P ${random} -r botonic_bundle.zip .next`;
+    let zip_out = await exec(zip_with_pass)
+    this.botonicApiService.deployBot('botonic_bundle.zip', random)
     let rm_zip = await exec('rm botonic_bundle.zip')
     console.log('Bot deployed! 🚀'.green)
     let providers = await this.botonicApiService.getProviders()

@@ -200,12 +200,12 @@ export class BotonicAPIService {
     return resp.data.results
   }
 
-  async deployBot(bundlePath: string): Promise<any> {
+  async deployBot(bundlePath: string, password: any): Promise<any> {
     const form = new FormData()
     let data = fs.createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
     let headers = await this.getHeaders(form)
-    return this.api(`bots/${this.bot.id}/deploy_botonic/`, form, 'post', {...this.headers, ...headers})
+    return this.api(`bots/${this.bot.id}/deploy_botonic/`, form, 'post', {...this.headers, ...headers}, {password: password})
   }
 
   async getHeaders(form: any) {
