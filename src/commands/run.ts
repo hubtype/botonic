@@ -55,7 +55,7 @@ Your bot is ready, start talking:
     let soruceData = '[type=image], [type=video], [type=audio], [type=document]'
     let html = load(output)
       let outputs = html('[type=text], [type=carrousel], [type=image], [type=video], [type=audio],\
-        [type=document], [type=location]')
+        [type=document], [type=location], [type=button]')
         .map((i, elem) => {
           let el = html(elem)
           let out = ''
@@ -90,6 +90,26 @@ Your bot is ready, start talking:
             out = `${el.attr('type')}: https://www.google.com/maps?q=${lat},${long}`;
           }
           let keyboard = ''
+          if(el.find('button').length > 0) {
+            out = 'buttons:'
+            let kt = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable
+            let buttons = el.find('button')
+              .map((i, e) => {
+                let button_data = e.attribs
+                let elem = html(e)
+                let data:any = null
+                if(button_data['url']){
+                  return [elem.text() + '\n(' + button_data['url'] + ')']
+                } else if(button_data['href']){
+                  return [elem.text() + '\n(' + button_data['href'] + ')']
+                } else{
+                  return [elem.text() + '\n(' + button_data['payload'] + ')']
+                }
+              })
+              .get()
+            kt.push(buttons)
+            keyboard = '\n' + kt.toString()
+          }
           if(el.find('reply').length > 0) {
             let kt = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable
             let keys = el.find('reply')
