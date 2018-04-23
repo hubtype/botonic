@@ -55,7 +55,7 @@ Creating...
     console.log('Compiling your new bot...')
     let compileCommand = `cd ${args.name}; npm run build`;
     let compile = await exec(compileCommand)
-    console.log('New bot created!')
+    console.log('New bot created! Now test it with \'botonic run\', and then, deploy it with \'botonic deploy\'')
 
   }
 

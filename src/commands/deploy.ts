@@ -3,6 +3,7 @@ import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
 
+const fs = require('fs')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
@@ -56,14 +57,12 @@ export default class Run extends Command {
         type: 'input',
         name: 'email',
         message: 'email:'
-        //TODO: validate: validateEmail()
       },
       {
         type: 'password',
         name: 'password',
         mask: '*',
         message: 'password:'
-        //TODO: validate: validatePassword()
       }])
   }
 
@@ -110,24 +109,27 @@ export default class Run extends Command {
   }
 
   async newBotFlow() {
-    let bots = await this.botonicApiService.getBots()
-    if(!bots.length) {
-      return this.createNewBot()
-    } else {
-      return prompt([
-      {
-        type: 'confirm',
-        name: 'create_bot_confirm',
-        message: 'Do yout want to create a new Bot?'
-      }]).then((res:any) => {
-        let confirm = res.create_bot_confirm
-        if(confirm){
+    this.botonicApiService.getBots()
+      .then((resp) => {
+        let bots = resp.data.results
+        if(!bots.length) {
           return this.createNewBot()
-        }else{
-          return this.selectExistentBot(bots)
+        } else {
+          return prompt([
+          {
+            type: 'confirm',
+            name: 'create_bot_confirm',
+            message: 'Do yout want to create a new Bot?'
+          }]).then((res:any) => {
+            let confirm = res.create_bot_confirm
+            if(confirm){
+              return this.createNewBot()
+            }else{
+              return this.selectExistentBot(bots)
+            }
+          })
         }
       })
-    }
   }
 
   async createNewBot() {
@@ -136,7 +138,8 @@ export default class Run extends Command {
       name: 'bot_name',
       message: 'Bot name:'
     }]).then( (inp:any) => {
-      this.botonicApiService.saveBot(inp.bot_name).then(() => this.deploy())
+      this.botonicApiService.saveBot(inp.bot_name).then((resp) => this.deploy(),
+        (err) => console.log('There was an error saving the bot'.red, err))
     })
   }
 
@@ -168,15 +171,28 @@ export default class Run extends Command {
     let random = Math.round(Math.random()*10000000000)
     let zip_with_pass = `zip -P ${random} -r botonic_bundle.zip .next`;
     let zip_out = await exec(zip_with_pass)
-    this.botonicApiService.deployBot('botonic_bundle.zip', random)
-    let rm_zip = await exec('rm botonic_bundle.zip')
-    console.log('Bot deployed! 🚀'.green)
-    let providers = await this.botonicApiService.getProviders()
-    if(!providers.length) {
-      let links = `Now, you can integrate a channel in:\nttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}&mixpanel=${this.botonicApiService.mixpanel.distinct_id}`;
-      console.log(links)
-    } else {
-      await this.displayProviders(providers)
+    const stats = fs.statSync('botonic_bundle.zip')
+    const fileSizeInBytes = stats.size
+    //Convert the file size to megabytes 
+    const fileSizeInMegabytes = fileSizeInBytes / 1000000.0
+    if(fileSizeInMegabytes >= 1){
+      console.log('The bot folder is bigger than 1Mb, it can be uploaded.'.red)
+      return
     }
+    this.botonicApiService.deployBot('botonic_bundle.zip', random)
+      .then((resp) => console.log('Bot deployed! 🚀'.green),
+        (err) => console.log('There was a problem in the deploy'.red))
+    let rm_zip = await exec('rm botonic_bundle.zip')
+    this.botonicApiService.getProviders()
+      .then((resp) => {
+        let providers = resp.data.results
+        if(!providers.length) {
+          let links = `Now, you can integrate a channel in:\nttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}&mixpanel=${this.botonicApiService.mixpanel.distinct_id}`;
+          console.log(links)
+        } else {
+          this.displayProviders(providers)
+        }
+      },
+      (err) => console.log('There was an error getting the providers'.red, err))
   }
 }

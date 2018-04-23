@@ -29,7 +29,7 @@ export class Botonic {
       .filter(([key, value]) => key != 'action')
       .every(([key, value]) => this.matchRoute(key, value, input)))
 
-    return route? route.action : '404'
+    return route ? route.action : '404'
   }
 
   matchRoute(prop: string, matcher: any, input: any): boolean {
@@ -125,8 +125,10 @@ export class BotonicAPIService {
 
   loadBotCredentials() {
     try {
-      this.bot = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
+      var credentials = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
     } catch(e) {}
+    if(credentials)
+      this.bot = credentials
   }
 
   saveGlobalCredentials() {
@@ -170,12 +172,15 @@ export class BotonicAPIService {
     this.oauth = resp.data
     this.headers = {Authorization: `Bearer ${this.oauth.access_token}`}
     resp = await this.api('users/me')
-    this.me = resp.data
+    if(resp)
+      this.me = resp.data
     return resp
   }
 
   signup(email:string, password:string, org_name:string, campaign:any): Promise<any>{
     let url = `${this.baseApiUrl}users/`
+    if(campaign)
+      campaign.mixpanel_id = this.mixpanel.distinct_id
     let signup_data = {email, password, org_name, campaign}
     return axios({
       method: 'post',
@@ -187,17 +192,17 @@ export class BotonicAPIService {
   async saveBot(bot_name: string) {
     let resp = await this.api('bots/',
         {name: bot_name, framework: 'framework_botonic'}, 'post')
-    this.setCurrentBot(resp.data)
+    if(resp.data)
+      this.setCurrentBot(resp.data)
+    return resp
   }
 
   async getBots() {
-    let resp = await this.api('bots/', null, 'get', null , {organization_id: this.me.organization_id})
-    return resp.data.results
+    return this.api('bots/', null, 'get', null , {organization_id: this.me.organization_id})
   }
 
   async getProviders() {
-    let resp = await this.api('provider_accounts', null, 'get', null, {bot_id: this.bot.id})
-    return resp.data.results
+    return this.api('provider_accounts', null, 'get', null, {bot_id: this.bot.id})
   }
 
   async deployBot(bundlePath: string, password: any): Promise<any> {

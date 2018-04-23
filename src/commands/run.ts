@@ -26,12 +26,19 @@ Your bot is ready, start talking:
   static args = [{name: 'input', parse: JSON.parse}]
 
   private botonic: any
+  private helpText: String = 'This is an interactive chat session with your bot.\n\
+      Type anything and press enter to get a response\n\
+      Use ! to send a payload message\n\
+      Examples:\n\
+      [user]> hi || this will send a message of type \'text\' and content \'hi\'\n\
+      [user]> !button_click_1 || this will send a message of type \'postback\' and payload \'button_click_1\' '
 
   async run() {
     track('botonic_run')
     const {args, flags} = this.parse(Run)
     const path = flags.path? resolve(flags.path) : process.cwd()
     this.botonic = new Botonic(path)
+    console.log('Welcome to this chatbot chat. Here you can talk with the bot, and test it.\nAll the actions you can do are defined in the file \'botonic.config.js\'.\nThe actions are files programmed with react and are stored in the folder \'pages/actions\'.\nHere, you can find different types of messages, the payloads has to be enter like \'!{PAYLOAD} \'.\nIf you want help, just text \'/help\' or if you want to quit, type \'/quit\'')
     this.chat_loop()
   }
 
@@ -45,6 +52,13 @@ Your bot is ready, start talking:
       if(inp.input.startsWith('!'))
         input = {type: 'postback', 'payload': inp.input.slice(1)}
       this.botonic.processInput(input).then((response: string) => {
+        if(['/q', '/quit'].indexOf(input.data)>=0)
+          return
+        if(['/help', '/h'].indexOf(input.data)>=0){
+          console.log(this.helpText)
+          this.chat_loop()
+          return
+        }
         this.parseOutput(response)
         this.chat_loop()
       })
@@ -81,7 +95,7 @@ Your bot is ready, start talking:
                 vAlign: 'center',
                 hAlign: 'center'})
             c.push(cards)
-            out = '\n' + c.toString()
+            out = 'carrousel:\n' + c.toString()
           } else if(el.is(soruceData)) {
             out = `${el.attr('type')}: ${el.attr('src')}`;
           } else if(el.is('[type=location]')) {
@@ -90,8 +104,7 @@ Your bot is ready, start talking:
             out = `${el.attr('type')}: https://www.google.com/maps?q=${lat},${long}`;
           }
           let keyboard = ''
-          if(el.find('button').length > 0) {
-            out = 'buttons:'
+          if(el.find('button').length > 0 && !el.is('[type=carrousel]')) {
             let kt = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable
             let buttons = el.find('button')
               .map((i, e) => {
@@ -108,7 +121,7 @@ Your bot is ready, start talking:
               })
               .get()
             kt.push(buttons)
-            keyboard = '\n' + kt.toString()
+            keyboard = '\nbuttons:\n' + kt.toString()
           }
           if(el.find('reply').length > 0) {
             let kt = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable
@@ -116,7 +129,7 @@ Your bot is ready, start talking:
               .map((i, e) => html(e).text() + '\n(' + html(e).attr('payload') + ')')
               .get()
             kt.push(keys)
-            keyboard = '\n' + kt.toString()
+            keyboard = '\nquickreplies:\n' + kt.toString()
           }
           if(out) return '  [bot]> ' + out + keyboard
         })
