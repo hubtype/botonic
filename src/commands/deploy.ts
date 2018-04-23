@@ -28,8 +28,6 @@ export default class Run extends Command {
       await this.signupFlow()
     else
       await this.deployBotFlow()
-
-    this.botonicApiService.beforeExit()
     
     track('botonic_deploy')
   }
@@ -172,6 +170,7 @@ export default class Run extends Command {
     let zip_with_pass = `zip -P ${random} -r botonic_bundle.zip .next`;
     let zip_out = await exec(zip_with_pass)
     const stats = fs.statSync('botonic_bundle.zip')
+    this.botonicApiService.beforeExit()
     const fileSizeInBytes = stats.size
     //Convert the file size to megabytes 
     const fileSizeInMegabytes = fileSizeInBytes / 1000000.0
@@ -187,7 +186,8 @@ export default class Run extends Command {
       .then((resp) => {
         let providers = resp.data.results
         if(!providers.length) {
-          let links = `Now, you can integrate a channel in:\nttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}&mixpanel=${this.botonicApiService.mixpanel.distinct_id}`;
+          let mixpanel_id = this.botonicApiService.mixpanel ? this.botonicApiService.mixpanel.distinct_id : null
+          let links = `Now, you can integrate a channel in:\nttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}&mixpanel=${mixpanel_id}`;
           console.log(links)
         } else {
           this.displayProviders(providers)
