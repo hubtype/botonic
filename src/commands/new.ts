@@ -23,7 +23,7 @@ Creating...
     {name: 'name', description: 'name of the bot folder', required: true},
     {name: 'templateName', description: 'OPTIONAL name of the bot template', required: false},
   ]
-  private botTemplates: any = ['basic_bot', 'basic_actions', 'AI_bot']
+  private botTemplates: any = ['introduction_bot', 'basic_bot', 'basic_actions', 'AI_bot']
   private botName: string = ""
 
   async run() {

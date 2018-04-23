@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "dev": "next",
+    "build": "rm -rf .next; next build; cp botonic.config.js .next/",
+    "start": "next start"
+  },
+  "dependencies": {
+    "copy-webpack-plugin": "^4.5.1",
+    "next": "^5.1.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1"
+  }
+}

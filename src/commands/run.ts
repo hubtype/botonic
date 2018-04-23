@@ -38,7 +38,8 @@ Your bot is ready, start talking:
     const {args, flags} = this.parse(Run)
     const path = flags.path? resolve(flags.path) : process.cwd()
     this.botonic = new Botonic(path)
-    console.log('Welcome to this chatbot chat. Here you can talk with the bot, and test it.\nAll the actions you can do are defined in the file \'botonic.config.js\'.\nThe actions are files programmed with react and are stored in the folder \'pages/actions\'.\nHere, you can find different types of messages, the payloads has to be enter like \'!{PAYLOAD} \'.\nIf you want help, just text \'/help\' or if you want to quit, type \'/quit\'')
+    console.log('Welcome to this chatbot chat, this is an introductive bot where you can find our potential framework.\nPlease, type \'go\' for starting the conversation')
+    //console.log('Welcome to this chatbot chat. Here you can talk with the bot, and test it.\nAll the actions you can do are defined in the file \'botonic.config.js\'.\nThe actions are files programmed with react and are stored in the folder \'pages/actions\'.\nHere, you can find different types of messages, the payloads has to be enter like \'!{PAYLOAD} \'.\nIf you want help, just text \'/help\' or if you want to quit, type \'/quit\'')
     this.chat_loop()
   }
 
