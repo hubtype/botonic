@@ -1,0 +1,63 @@
+module.exports = {
+    integrations: {
+        /* Uncomment this to enable NLP with Dialogflow
+        dialogflow: {
+            token: "YOUR_DIALOGFLOW_API_TOKEN"
+        }*/
+    },
+    routes: [
+        /* Routes map user inputs to actions (React Components)
+        A user input is an object like this:
+        {
+            type: "text", // Input type, it can be one of text, postback, image, video, audio, document, location
+            data: "Hello!" // Raw text (or attachment URL if it's a media type)
+            payload: "", // This is used when the user has clicked on a button or quick reply
+            intent: "smalltalk.greeting" Intent ID according to the NLP backend
+        }
+
+        Every route (an entry in this array) is composed by a matching rule and an action.
+        A matching rule looks like this: {attribute: test}, which basically means: "take that
+        attribute from the user input and apply the test" if test passes, the action defined in
+        that route will be triggered.
+
+        There are 3 types of tests:
+        - String --> Perfect match
+        - Regexp --> Pass the regular expression
+        - Function --> Passes if the funtion returns true
+
+        The rules will be tested in order so if the 1st rule matches, Botonic won't test
+        other routes and will execute the 1st action.
+        If there are several matching rules in the same route, all of them have to pass
+        to consider a match.
+        */
+
+        /* The first rule matches if and only if we get the text 'go' and will execute the 
+        React component defined in pages/actions/go.js */
+        {text: "go", action: "go"},
+
+        /* These rules use a case insensitive regexp to match text messages that contain
+        a certain text, for example the 1st one will capture 'BUTTONS', 'Buttons', etc */
+        {text: /^buttons$/i, action: "buttons"},
+        {text: /^quickreply$/i, action: "quickreply"},
+
+        /* These rules capture different payloads */
+        {payload: "carrousel", action: "carrousel"},
+        {payload: "ai", action: "ai"},
+
+        /* This rule uses a function test to capture any text that starts with 'bye' */
+        {text: (t) => t.startsWith('bye'), action: "bye"},
+
+        /* Captures any image */
+        {type: "image", action: "any_image"}
+
+        /* Captures different intents (enable the Dialogflow integration) */
+        {intent: "smalltalk.agent.funny", action: "funny"},
+        {intent: "smalltalk.agent.good", action: "funny"},
+        {intent: "smalltalk.user.likes_agent", action: "funny"},
+
+        /* There's an implicit rule that captures any other input and maps it to
+        the 404 action, it would be equivalent to:
+        {type: /^.*$/, action: "404"}
+        */
+    ]
+}

@@ -26,20 +26,22 @@ Your bot is ready, start talking:
   static args = [{name: 'input', parse: JSON.parse}]
 
   private botonic: any
-  private helpText: String = 'This is an interactive chat session with your bot.\n\
-      Type anything and press enter to get a response\n\
-      Use ! to send a payload message\n\
-      Examples:\n\
-      [user]> hi || this will send a message of type \'text\' and content \'hi\'\n\
-      [user]> !button_click_1 || this will send a message of type \'postback\' and payload \'button_click_1\' '
+  private helpText: String = 'This is an interactive chat session with your bot.\n\n\
+Type anything and press enter to get a response\n\
+Use ! to send a payload message\n\
+Examples:\n\
+[user]> hi || this will send a message of type \'text\' and content \'hi\'\n\
+[user]> !button_click_1 || this will send a message of type \'postback\' and payload \'button_click_1\'\n\n\
+Use / to use special commands:\n\
+/quit | /q --> Exit interactive session\n\
+/help | /h --> Show this help\n'
 
   async run() {
     track('botonic_run')
     const {args, flags} = this.parse(Run)
     const path = flags.path? resolve(flags.path) : process.cwd()
     this.botonic = new Botonic(path)
-    console.log('Welcome to this chatbot chat, this is an introductive bot where you can find our potential framework.\nPlease, type \'go\' for starting the conversation')
-    //console.log('Welcome to this chatbot chat. Here you can talk with the bot, and test it.\nAll the actions you can do are defined in the file \'botonic.config.js\'.\nThe actions are files programmed with react and are stored in the folder \'pages/actions\'.\nHere, you can find different types of messages, the payloads has to be enter like \'!{PAYLOAD} \'.\nIf you want help, just text \'/help\' or if you want to quit, type \'/quit\'')
+    console.log(this.helpText)
     this.chat_loop()
   }
 

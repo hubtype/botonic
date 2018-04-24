@@ -208,7 +208,7 @@ export class BotonicAPIService {
   }
 
   async getProviders() {
-    return this.api('provider_accounts', null, 'get', null, {bot_id: this.bot.id})
+    return this.api('provider_accounts/', null, 'get', null, {bot_id: this.bot.id})
   }
 
   async deployBot(bundlePath: string, password: any): Promise<any> {

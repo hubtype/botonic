@@ -1,6 +1,7 @@
 import { Command, flags } from '@oclif/command'
 import { resolve } from 'path'
 import { prompt } from 'inquirer'
+import * as colors from 'colors'
 
 import * as fs from 'fs'
 
@@ -15,7 +16,7 @@ export default class Run extends Command {
   static examples = [
     `$ botonic new test_bot
 Creating...
-  💫 test_bot was successfully created!
+✨ test_bot was successfully created!
 `,
   ]
 
@@ -23,39 +24,49 @@ Creating...
     {name: 'name', description: 'name of the bot folder', required: true},
     {name: 'templateName', description: 'OPTIONAL name of the bot template', required: false},
   ]
-  private botTemplates: any = ['introduction_bot', 'basic_bot', 'basic_actions', 'AI_bot']
-  private botName: string = ""
+  //private templates: any = ['introduction_bot', 'basic_bot', 'basic_actions', 'AI_bot']
+  private templates: any = [{
+    name: 'tutorial',
+    description: 'Tutorial: A template with different examples that help you get started fast'
+  },{
+    name: 'blank',
+    description: 'Blank: A minimal template to start from scratch'
+  }]
 
   async run() {
     track('botonic_new');
     const {args, flags} = this.parse(Run)
+    let template = ''
     if(!args.templateName) {
       await this.selectBotName().then((resp:any) => {
-        this.botName = resp.botName
+        template = this.templates.filter((t:any) => t.description === resp.botName)[0].name
       })
     } else {
-      let botExists = this.botTemplates.filter((name:any) => name === args.templateName)[0]
-      if(botExists){
-        this.botName = args.templateName
+      let botExists = this.templates.filter((t:any) => t.name === args.templateName)
+      if(botExists.length) {
+        template = args.templateName
       } else {
-        console.log('There is no Template with this name'.red)
+        let template_names = this.templates.map((t: any) => t.name)
+        console.log('Template ${args.templateName} does not exist, please choose one of ${template_names}.'.red)
         return
       }
     }
     if(!fs.existsSync(args.name))
       fs.mkdir(args.name, err => { if (err) console.log(err) })
-    let botPath = resolve(this.botName)
-    let templatePath = `${__dirname.split('/src/')[0]}/templates/${this.botName}` //hardcored don't like it
-    console.log('Copying all the files...')
+    let botPath = resolve(template)
+    let templatePath = `${__dirname}/../../templates/${template}`
+    console.log('Copying files...')
     let copyFolderCommand = `cp -a ${templatePath}/* ${args.name}`
     let copy_out = await exec(copyFolderCommand)
-    console.log('Installing all the dependencies...')
+    console.log('Installing dependencies...')
     let dependencyCommand = `cd ${args.name}; npm install`
     let dependency = await exec(dependencyCommand)
-    console.log('Compiling your new bot...')
+    console.log('Compiling...')
     let compileCommand = `cd ${args.name}; npm run build`;
     let compile = await exec(compileCommand)
-    console.log('New bot created! Now test it with \'botonic run\', and then, deploy it with \'botonic deploy\'')
+    let run_cmd = 'botonic run'.bold
+    let deploy_cmd = 'botonic deploy'.bold
+    console.log(`✨ ${args.name.bold} was successfully created!\nNow test it with ${run_cmd}, and then, deploy it with ${deploy_cmd}`)
 
   }
 
@@ -63,8 +74,8 @@ Creating...
     return prompt([{
       type: 'list',
       name: 'botName',
-      message: 'You have to select a bot example.\nWhich one do you prefer?',
-      choices: this.botTemplates
+      message: 'Select a bot template',
+      choices: this.templates.map((t: any) => t.description)
     }])
   }
 }

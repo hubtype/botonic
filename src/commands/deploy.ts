@@ -15,6 +15,15 @@ import { track, alias } from '../utils'
 export default class Run extends Command {
   static description = 'Deploy Botonic project to botonic.io cloud'
 
+  static examples = [
+    `$ botonic deploy
+Building...
+Creating bundle...
+Uploading...
+🚀 Bot deployed!
+`,
+  ]
+
   static args = [{name: 'bot_name'}]
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
@@ -85,7 +94,7 @@ export default class Run extends Command {
         if(err.response.data && err.response.data.error_description)
           console.log(err.response.data.error_description.red)
         else
-          console.log('There was an error when trying to login. Please, try again:'.red)
+          console.log('There was an error when trying to log in. Please, try again:'.red)
         this.askLogin()
       })
   }
@@ -101,7 +110,7 @@ export default class Run extends Command {
           if(err.response.data.password)
             console.log(err.response.data.password[0].red)
           if(!err.response.data.email && !err.response.data.password)
-            console.log('There was an error trying to register. Please, try again:'.red)
+            console.log('There was an error trying to signup. Please, try again:'.red)
           this.askSignup()
         })
   }
@@ -122,7 +131,7 @@ export default class Run extends Command {
             let confirm = res.create_bot_confirm
             if(confirm){
               return this.createNewBot()
-            }else{
+            } else {
               return this.selectExistentBot(bots)
             }
           })
@@ -145,7 +154,7 @@ export default class Run extends Command {
     return prompt([{
       type: 'list',
       name: 'bot_name',
-      message: 'What bot do you want to use?',
+      message: 'Please, select a bot',
       choices: bots.map(b => b.name)
     }]).then( (inp:any) => {
       let bot = bots.filter(b => b.name === inp.bot_name)[0]
@@ -155,40 +164,44 @@ export default class Run extends Command {
   }
 
   async displayProviders(providers: any) {
-    console.log('Now, you can test your bot in:')
+    console.log('Your bot is published on:')
     providers.map((p:any) => {
-      let p_info = `Facebook link: https://m.me/${p.username}`;
+      if(p.provider === 'facebook')
+        console.log(`💬 [facebook] https://m.me/${p.username}`)
       if(p.provider === 'telegram')
-        p_info = `Telegram link: https://t.me/${p.username}`;
-      console.log(p_info)
+        console.log(`💬 [telegram] https://t.me/${p.username}`)
+      if(p.provider === 'twitter')
+        console.log(`💬 [twitter] https://t.me/${p.username}`)
+      if(p.provider === 'generic')
+        console.log(`💬 Your app or website`)
     })
   }
 
   async deploy() {
+    console.log('Building...')
     let build_out = await exec('npm run build')
-    let random = Math.round(Math.random()*10000000000)
-    let zip_with_pass = `zip -P ${random} -r botonic_bundle.zip .next`;
-    let zip_out = await exec(zip_with_pass)
-    const stats = fs.statSync('botonic_bundle.zip')
-    this.botonicApiService.beforeExit()
-    const fileSizeInBytes = stats.size
-    //Convert the file size to megabytes 
-    const fileSizeInMegabytes = fileSizeInBytes / 1000000.0
-    if(fileSizeInMegabytes >= 1){
-      console.log('The bot folder is bigger than 1Mb, it can be uploaded.'.red)
+    let zip_password = Math.round(Math.random()*10000000000)
+    console.log('Creating bundle...')
+    let zip_cmd = `zip -P ${zip_password} -r botonic_bundle.zip .next`;
+    let zip_out = await exec(zip_cmd)
+    const zip_stats = fs.statSync('botonic_bundle.zip')
+    this.botonicApiService.beforeExit() // WHY?
+    if(zip_stats.size >= 10**6) {
+      console.log(`Deploy failed. Bundle size too big ${zip_stats.size} (max 1Mb).`.red)
+      await exec('rm botonic_bundle.zip')
       return
     }
-    this.botonicApiService.deployBot('botonic_bundle.zip', random)
-      .then((resp) => console.log('Bot deployed! 🚀'.green),
+    console.log('Uploading...')
+    this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
+      .then((resp) => console.log('🚀 Bot deployed!'.green),
         (err) => console.log('There was a problem in the deploy'.red))
     let rm_zip = await exec('rm botonic_bundle.zip')
     this.botonicApiService.getProviders()
       .then((resp) => {
         let providers = resp.data.results
         if(!providers.length) {
-          let mixpanel_id = this.botonicApiService.mixpanel ? this.botonicApiService.mixpanel.distinct_id : null
-          let links = `Now, you can integrate a channel in:\nttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}&mixpanel=${mixpanel_id}`;
-          console.log(links)
+          let dashboard_link = `https://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
+          console.log(`Now integrate a channel at:\n${dashboard_link}`)
         } else {
           this.displayProviders(providers)
         }
