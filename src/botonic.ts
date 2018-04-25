@@ -113,11 +113,12 @@ export class BotonicAPIService {
   loadGlobalCredentials() {
     try {
       var credentials = JSON.parse(fs.readFileSync(this.globalCredentialsPath, 'utf8'))
+      var mixpanel = credentials.mixpanel ? credentials.mixpanel : credentials.me.campaign.mixpanel_id
     } catch(e) {}
     if(credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
-      this.mixpanel = credentials.mixpanel
+      this.mixpanel = mixpanel
       if(credentials.oauth)
         this.headers = {Authorization: `Bearer ${this.oauth.access_token}`}
     }
@@ -151,6 +152,15 @@ export class BotonicAPIService {
 
   setCurrentBot(bot: any) {
     this.bot = bot
+  }
+
+  setMixpanelInfo(mixpanel_id: any) {
+    this.mixpanel = { 'mixpanel_id' :  mixpanel_id  }
+  }
+
+  logout() {
+    if(fs.existsSync(this.globalCredentialsPath))
+      fs.unlinkSync(this.globalCredentialsPath)
   }
 
   async api(path: string, body: any = null, method: string = 'get', headers: object | null = null, params: any = null): Promise<any> {

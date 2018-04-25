@@ -24,7 +24,7 @@ if(!process.env.BOTONIC_DISABLE_MIXPANEL)
 
 export function track(event: string) {
   if(mixpanel)
-    mixpanel.track(event, {distinct_id: credentials? credentials.mixpanel.distinct_id : null})
+    mixpanel.track(event, {distinct_id: credentials.mixpanel ? credentials.mixpanel.distinct_id : null})
 }
 
 export function alias(email: string) {
