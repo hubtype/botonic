@@ -21,7 +21,7 @@ $ npm install -g botonic
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-botonic/0.1.4 darwin-x64 node-v9.9.0
+botonic/0.1.6 darwin-x64 node-v9.9.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -32,8 +32,10 @@ USAGE
 <!-- commands -->
 * [botonic deploy [BOT_NAME]](#botonic-deploy-bot-name)
 * [botonic help [COMMAND]](#botonic-help-command)
-* [botonic input [INPUT]](#botonic-input-input)
-* [botonic new [BOT_NAME]](#botonic-new-bot-name)
+* [botonic input INPUT](#botonic-input-input)
+* [botonic login](#botonic-login)
+* [botonic logout](#botonic-logout)
+* [botonic new NAME [TEMPLATENAME]](#botonic-new-name-templatename)
 * [botonic run [INPUT]](#botonic-run-input)
 
 ## botonic deploy [BOT_NAME]
@@ -46,15 +48,17 @@ USAGE
 
 EXAMPLE
   $ botonic deploy
-  Deploying...
-     🚀 test_bot was successfully deployed!
+  Building...
+  Creating bundle...
+  Uploading...
+  🚀 Bot deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.1.6/src/commands/deploy.ts)_
 
 ## botonic help [COMMAND]
 
-Display help for botonic
+display help for botonic
 
 ```
 USAGE
@@ -69,39 +73,71 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v1.2.3/src/commands/help.ts)_
 
-## botonic input [INPUT]
+## botonic input INPUT
 
 Get response from a single input
 
 ```
 USAGE
-  $ botonic input [INPUT]
+  $ botonic input INPUT
 
 OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 
 EXAMPLE
-  $ botonic input "{"type": "text", "data": "hi"}"
+  $ botonic input "{\"type\": \"text\", \"data\": \"hi\"}"
   Hello!
 ```
 
-_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/input.ts)_
+_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.1.6/src/commands/input.ts)_
 
-## botonic new [BOT_NAME]
+## botonic login
+
+Log in to Botonic
+
+```
+USAGE
+  $ botonic login
+
+OPTIONS
+  -p, --path=path  Path to botonic project. Defaults to current dir.
+```
+
+_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.1.6/src/commands/login.ts)_
+
+## botonic logout
+
+Log out of Botonic
+
+```
+USAGE
+  $ botonic logout
+
+OPTIONS
+  -p, --path=path  Path to botonic project. Defaults to current dir.
+```
+
+_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.1.6/src/commands/logout.ts)_
+
+## botonic new NAME [TEMPLATENAME]
 
 Create a new Botonic project
 
 ```
 USAGE
-  $ botonic new [BOT_NAME]
+  $ botonic new NAME [TEMPLATENAME]
+
+ARGUMENTS
+  NAME          name of the bot folder
+  TEMPLATENAME  OPTIONAL name of the bot template
 
 EXAMPLE
   $ botonic new test_bot
   Creating...
-     💫 test_bot was successfully created!
+  ✨ test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.1.6/src/commands/new.ts)_
 
 ## botonic run [INPUT]
 
@@ -121,5 +157,5 @@ EXAMPLE
   [bot] > Bye!
 ```
 
-_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.1.4/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.1.6/src/commands/run.ts)_
 <!-- commandsstop -->
