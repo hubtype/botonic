@@ -8,6 +8,7 @@ import * as fs from 'fs'
 import { track } from '../utils'
 
 const util = require('util')
+const ora = require('ora')
 const exec = util.promisify(require('child_process').exec)
 
 export default class Run extends Command {
@@ -55,19 +56,30 @@ Creating...
       fs.mkdir(args.name, err => { if (err) console.log(err) })
     let botPath = resolve(template)
     let templatePath = `${__dirname}/../../templates/${template}`
-    console.log('Copying files...')
+    let spinner = new ora({
+      text: 'Copying files...',
+      spinner: 'bouncingBar'
+    }).start()
     let copyFolderCommand = `cp -a ${templatePath}/* ${args.name}`
     let copy_out = await exec(copyFolderCommand)
-    console.log('Installing dependencies...')
+    spinner.succeed()
+    spinner = new ora({
+      text: 'Installing dependencies...',
+      spinner: 'bouncingBar'
+    }).start()
     let dependencyCommand = `cd ${args.name}; npm install`
     let dependency = await exec(dependencyCommand)
-    console.log('Compiling...')
+    spinner.succeed()
+    spinner = new ora({
+      text: 'Compiling...',
+      spinner: 'bouncingBar'
+    }).start()
     let compileCommand = `cd ${args.name}; npm run build`;
     let compile = await exec(compileCommand)
+    spinner.succeed()
     let run_cmd = 'botonic run'.bold
     let deploy_cmd = 'botonic deploy'.bold
     console.log(`✨ ${args.name.bold} was successfully created!\nNow test it with ${run_cmd}, and then, deploy it with ${deploy_cmd}`)
-
   }
 
   async selectBotName() {
