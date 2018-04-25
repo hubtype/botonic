@@ -87,7 +87,7 @@ Use / to use special commands:\n\
               let te = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable
               let el = html(e)
               let buttons = el.find('button')
-                .map((k, b) => html(b).text() + '\n(' + html(b).attr('href') + ')')
+                .map((k, b) => html(b).text() + '\n(' + html(b).attr('url').substring(0,20) + '...)')
                 .get()
               te.push([el.find('title').text() + '\n\n' + el.find('desc').text()], buttons)
               cards.push(te.toString())

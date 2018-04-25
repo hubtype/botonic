@@ -74,12 +74,13 @@ Creating...
       text: 'Compiling...',
       spinner: 'bouncingBar'
     }).start()
-    let compileCommand = `cd ${args.name}; npm run build`;
+    let compileCommand = `cd ${args.name}; npm run build`
     let compile = await exec(compileCommand)
     spinner.succeed()
+    let cd_cmd = `cd ${args.name.bold}`.bold
     let run_cmd = 'botonic run'.bold
     let deploy_cmd = 'botonic deploy'.bold
-    console.log(`✨ ${args.name.bold} was successfully created!\nNow test it with ${run_cmd}, and then, deploy it with ${deploy_cmd}`)
+    console.log(`\n✨  Bot ${args.name.bold} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot on your terminal)\n${deploy_cmd} (publish your bot to the world!)`)
   }
 
   async selectBotName() {

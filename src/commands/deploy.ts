@@ -168,13 +168,13 @@ Uploading...
     console.log('Your bot is published on:')
     providers.map((p:any) => {
       if(p.provider === 'facebook')
-        console.log(`💬 [facebook] https://m.me/${p.username}`)
+        console.log(`💬  [facebook] https://m.me/${p.username}`)
       if(p.provider === 'telegram')
-        console.log(`💬 [telegram] https://t.me/${p.username}`)
+        console.log(`💬  [telegram] https://t.me/${p.username}`)
       if(p.provider === 'twitter')
-        console.log(`💬 [twitter] https://t.me/${p.username}`)
+        console.log(`💬  [twitter] https://t.me/${p.username}`)
       if(p.provider === 'generic')
-        console.log(`💬 Your app or website`)
+        console.log(`💬  Your app or website`)
     })
   }
 
@@ -208,13 +208,12 @@ Uploading...
     this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
       .then((resp) => {
         spinner.succeed()
-        console.log('🚀 Bot deployed!'.green)
+        console.log('🚀  Bot deployed!'.green)
         this.botonicApiService.getProviders()
           .then((resp) => {
             let providers = resp.data.results
             if(!providers.length) {
-              let mixpanel_id = this.botonicApiService.mixpanel ? this.botonicApiService.mixpanel.distinct_id : null
-              let links = `Now, you can integrate a channel in:\nttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}&mixpanel=${mixpanel_id}`;
+              let links = `Now, you can integrate a channel in:\nhttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
               console.log(links)
             } else {
               this.displayProviders(providers)
