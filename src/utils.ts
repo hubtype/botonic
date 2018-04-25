@@ -23,12 +23,12 @@ if(!process.env.BOTONIC_DISABLE_MIXPANEL)
   })
 
 export function track(event: string) {
-  if(mixpanel)
+  if(!process.env.BOTONIC_DISABLE_MIXPANEL && mixpanel && credentials && credentials.mixpanel)
     mixpanel.track(event, {distinct_id: credentials.mixpanel ? credentials.mixpanel.distinct_id : null})
 }
 
 export function alias(email: string) {
-  if(mixpanel && credentials.mixpanel.distinct_id && email) {
+  if(!process.env.BOTONIC_DISABLE_MIXPANEL && mixpanel && credentials && credentials.mixpanel && email) {
     mixpanel.alias(credentials.mixpanel.distinct_id, email, (e:any) => {console.log(e)})
     credentials.mixpanel.distinct_id = email
     fs.writeFileSync(path.join(botonic_home_path, 'credentials.json'),
@@ -37,11 +37,13 @@ export function alias(email: string) {
 }
 
 export function botonicPostInstall() {
-  let distinct_id = Math.round(Math.random()*100000000)
-  if(!fs.existsSync(botonic_home_path))
-    fs.mkdirSync(botonic_home_path)
-  fs.writeFileSync(path.join(botonic_home_path, 'credentials.json'),
-    JSON.stringify({mixpanel: {distinct_id}}))
-  readCredentials()
-  track('botonic_install')
+  if(!process.env.BOTONIC_DISABLE_MIXPANEL) {
+    let distinct_id = Math.round(Math.random()*100000000)
+    if(!fs.existsSync(botonic_home_path))
+      fs.mkdirSync(botonic_home_path)
+    fs.writeFileSync(path.join(botonic_home_path, 'credentials.json'),
+      JSON.stringify({mixpanel: {distinct_id}}))
+    readCredentials()
+    track('botonic_install')
+  }
 }
