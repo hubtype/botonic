@@ -3,7 +3,7 @@ const os = require('os')
 const path = require('path')
 const Mixpanel = require('mixpanel')
 
-const mixpanel_token = '0a2a173a8daecb5124492f9d319ca429'
+const mixpanel_token = 'c73e2685df454183c0f97fbf2052d827'
 
 var mixpanel: any
 var credentials: any
@@ -28,11 +28,7 @@ export function track(event: string) {
 }
 
 export function alias(email: string) {
-  if(mixpanel && credentials.mixpanel.distinct_id && email){
-    console.log(mixpanel.people.set(credentials.mixpanel.distinct_id, {
-      "$email": "aaa@gmail.com"
-      //system: os.platform()
-    }))
+  if(mixpanel && credentials.mixpanel.distinct_id && email) {
     mixpanel.alias(credentials.mixpanel.distinct_id, email, (e:any) => {console.log(e)})
     credentials.mixpanel.distinct_id = email
     fs.writeFileSync(path.join(botonic_home_path, 'credentials.json'),
