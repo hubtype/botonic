@@ -48,7 +48,7 @@ module.exports = {
         {text: (t) => t.startsWith('bye'), action: "bye"},
 
         /* Captures any image */
-        {type: "image", action: "any_image"}
+        {type: "image", action: "any_image"},
 
         /* Captures different intents (enable the Dialogflow integration) */
         {intent: "smalltalk.agent.funny", action: "funny"},

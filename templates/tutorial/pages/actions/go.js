@@ -11,7 +11,7 @@ export default class extends React.Component {
 
   render() {
     return (
-      <message>
+      <messages>
         <message type="text">
             Hi {this.props.user}, this is the basic action in the bot.
             I'm just a React component and my code is in the file pages/actions/go.js
@@ -24,7 +24,7 @@ export default class extends React.Component {
         <message type="text">
             Now, if you type 'buttons', we are going to display some different buttons
         </message>
-      </message>
+      </messages>
     )
   }
 }

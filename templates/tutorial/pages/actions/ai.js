@@ -5,7 +5,7 @@ export default class extends React.Component {
 
   render() {
     return (
-      <message>
+      <messages>
         <message type="text">
             Now, let's see how we integrate AI in this bot. When we enter a text input,
             the data goes to dialogflow or another AI framework you have integrated.
@@ -18,7 +18,7 @@ export default class extends React.Component {
           input of the user doesn't match with any of our bot routes. For example if you type
           'error', the bot doesn't understand you, and it jumps to the 404 action. 
         </message>
-      </message>
+      </messages>
     )
   }
 }

@@ -54,7 +54,7 @@ _See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.1
 
 ## botonic help [COMMAND]
 
-display help for botonic
+Display help for botonic
 
 ```
 USAGE
