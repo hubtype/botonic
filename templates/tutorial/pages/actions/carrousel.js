@@ -21,6 +21,7 @@ export default class extends React.Component {
             <message type="text">
                 Great! Here we can see a carrousel. It's a Facebook Messenger component, and it's a
                 group of elements which consists of an image, a title, a subtitle and a group of buttons.
+                You can get more information here: https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic?locale=en_US#carousel
             </message>
             <message type="carrousel">
                 {this.props.movies.map((e, i) => 
@@ -33,7 +34,7 @@ export default class extends React.Component {
                 )}
             </message>
             <message type="text">
-                Now, let's see how a quickreply works. Please type 'quickreply'.
+                Now, we are going to end this tutorial, please type '!end'.
             </message>
         </messages>
     )

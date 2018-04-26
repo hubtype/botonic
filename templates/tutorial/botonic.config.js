@@ -42,7 +42,8 @@ module.exports = {
 
         /* These rules capture different payloads */
         {payload: "carrousel", action: "carrousel"},
-        {payload: "ai", action: "ai"},
+        {payload: "ai", action: "end"},
+        {payload: "end", action: "end"},
 
         /* This rule uses a function test to capture any text that starts with 'bye' */
         {text: (t) => t.startsWith('bye'), action: "bye"},
