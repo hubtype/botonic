@@ -76,6 +76,7 @@ Use / to use special commands:\n\
         .map((i, elem) => {
           let el = html(elem)
           let out = ''
+          let short = (v: string) => v.length > 20? v.substring(0, 17) + '...' : v
           if(el.is('[type=text]')) {
             out = el.contents().filter(e => el.contents()[e].type === 'text').text().trim()
           } else if(el.is('[type=carrousel]')) {
@@ -87,9 +88,14 @@ Use / to use special commands:\n\
               let te = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable
               let el = html(e)
               let buttons = el.find('button')
-                .map((k, b) => html(b).text() + '\n(' + html(b).attr('url').substring(0,20) + '...)')
+                .map((k, b) => { return {
+                  title: html(b).text(),
+                  desc: html(b).attr('url') || html(b).attr('payload')}
+                })
                 .get()
-              te.push([el.find('title').text() + '\n\n' + el.find('desc').text()], buttons)
+                .map(b => Object.values(b).map(short))
+                .map(([title, desc]) => `${title}\n(${desc})`)
+              te.push([short(el.find('title').text()) + '\n\n' + short(el.find('desc').text())], buttons)
               cards.push(te.toString())
             })
             if(el.find('element').length > 3)
