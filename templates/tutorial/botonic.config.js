@@ -31,9 +31,12 @@ module.exports = {
         to consider a match.
         */
 
-        /* The first rule matches if and only if we get the text 'go' and will execute the 
-        React component defined in pages/actions/go.js */
-        {text: "go", action: "go"},
+        /* The first rule matches if and only if we get the text 'start' and will execute the 
+        React component defined in pages/actions/start.js */
+        {text: "start", action: "start"},
+
+        /* Another text rule (perfect match) to trigger the 'end' action */
+        {text: "end", action: "end"},
 
         /* These rules use a case insensitive regexp to match text messages that contain
         a certain text, for example the 1st one will capture 'BUTTONS', 'Buttons', etc */
@@ -42,16 +45,16 @@ module.exports = {
 
         /* These rules capture different payloads */
         {payload: "carrousel", action: "carrousel"},
-        {payload: "ai", action: "end"},
-        {payload: "end", action: "end"},
+        {payload: /^(yes|no)$/, action: "quickreply_response"},
 
         /* This rule uses a function test to capture any text that starts with 'bye' */
         {text: (t) => t.startsWith('bye'), action: "bye"},
 
         /* Captures any image */
-        {type: "image", action: "any_image"},
+        {type: "image", action: "media"},
 
-        /* Captures different intents (enable the Dialogflow integration) */
+        /* Captures different intents (enable the Dialogflow integration,
+        see "integrations" section at the top of this file) */
         {intent: "smalltalk.agent.funny", action: "funny"},
         {intent: "smalltalk.agent.good", action: "funny"},
         {intent: "smalltalk.user.likes_agent", action: "funny"},

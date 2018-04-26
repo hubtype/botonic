@@ -34,7 +34,7 @@ export default class extends React.Component {
                 )}
             </message>
             <message type="text">
-                Now, we are going to end this tutorial, please type '!end'.
+                Now, we are going to end this tutorial, please type 'end'.
             </message>
         </messages>
     )

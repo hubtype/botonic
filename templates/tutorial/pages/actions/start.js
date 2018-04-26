@@ -13,16 +13,21 @@ export default class extends React.Component {
     return (
       <messages>
         <message type="text">
-            Hi {this.props.user}, this is the basic action in the bot.
-            I'm just a React component and my code is in the file pages/actions/go.js
+            Hi {this.props.user}, welcome to the Botonic tutorial. I'll guide you through
+            the basic concepts of the framework. You can exit at any time and deploy this
+            bot with "botonic deploy".
         </message>
         <message type="text">
-            In this case, we're just returning a bunch of text messages after matching
+            This is a basic action in the bot, which is just a simple React component
+            (checkout the code at pages/actions/go.js)
+        </message>
+        <message type="text">
+            In this case, I'm just returning a bunch of text messages after matching
             the user input 'go' with a regular expression. Have a look at the file
             botonic.config.js for more info on routing options.
         </message>
         <message type="text">
-            Now, if you type 'buttons', we are going to display some different buttons
+            Now, if you type 'buttons', I'm going to display some buttons.
         </message>
       </messages>
     )

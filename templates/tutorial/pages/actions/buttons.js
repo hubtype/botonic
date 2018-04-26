@@ -6,9 +6,10 @@ export default class extends React.Component {
     return (
         <messages>
         	<message type="text">
-                Here we display two types of buttons:
-                <button url="https://botonic.io">URL</button>
-                <button payload="carrousel">Postback</button>
+                Here I display two types of buttons, the first one is a URL button
+                and the second is a payload button:
+                <button url="https://botonic.io">Visit botonic.io</button>
+                <button payload="carrousel">Show me a carrousel</button>
     	    </message>
             <message type="text">
                 Clicking on a button with url will just open that URL in the browser.
@@ -18,7 +19,7 @@ export default class extends React.Component {
                 here: https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback
             </message>
             <message type="text">
-                If you want to simulate a button click on this console, just type !PAYLOAD.
+                If you're on the console and want to simulate a button click, just type !PAYLOAD.
                 Go ahead and type '!carrousel'.
             </message>
         </messages>
