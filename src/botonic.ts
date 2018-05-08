@@ -55,14 +55,14 @@ export class Botonic {
     return false
   }
 
-  async processInput(input: any) {
+  async processInput(input: any, context: any = {}) {
     if(input.type == 'text') {
       let intent: any = await this.getIntent(input)
       if(intent)
         input.intent = intent.data.result.action
     }
     let component = 'actions/' + this.getAction(input)
-    const req = {headers: {}, method: 'GET', url: component}
+    const req = {headers: {}, method: 'GET', url: component, context: context}
     const res = {}
     const pathname = component
     const query = {}

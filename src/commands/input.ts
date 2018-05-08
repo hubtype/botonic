@@ -14,7 +14,8 @@ Hello!
   ]
 
   static flags = {
-    path: flags.string({char: 'p', description: 'Path to botonic project. Defaults to current dir.'})
+    path: flags.string({char: 'p', description: 'Path to botonic project. Defaults to current dir.'}),
+    context: flags.string({char: 'c', description: 'Context of current session', parse: JSON.parse})
   }
 
   static args = [{name: 'input', parse: JSON.parse, required: true}]
@@ -29,7 +30,7 @@ Hello!
 
     this.botonic = new Botonic(path)
 
-    this.botonic.processInput(args.input).then((response: string) => {
+    this.botonic.processInput(args.input, flags.context).then((response: string) => {
       console.log(response)
     })
   }
