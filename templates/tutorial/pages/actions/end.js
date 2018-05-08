@@ -12,12 +12,15 @@ export default class extends React.Component {
             and use all kind of rich messages.
         </message>
         <message type="text">
-          That's it! You just finished this Tutorial!!🎉   
+            That's it! You just finished this Tutorial!!🎉
         </message>
         <message type="text">
-            Now, type '/quit' to exit this conversation, and run 'botonic deploy' to publish
-            this bot to the world!
-        </message>        
+            Now, type '/quit' to exit this conversation, and publish
+            this bot to the world by running this command:
+        </message>
+        <message type="text">
+            botonic deploy
+        </message>
       </messages>
     )
   }

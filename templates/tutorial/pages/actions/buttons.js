@@ -19,7 +19,8 @@ export default class extends React.Component {
                 here: https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback
             </message>
             <message type="text">
-                If you're on the console and want to simulate a button click, just type !PAYLOAD.
+                If you're on the console and want to simulate a button click, you need to type ! (exclamation mark)
+                followed by the payload data.
                 Go ahead and type '!carrousel'.
             </message>
         </messages>

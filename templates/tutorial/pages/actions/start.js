@@ -19,11 +19,11 @@ export default class extends React.Component {
         </message>
         <message type="text">
             This is a basic action in the bot, which is just a simple React component
-            (checkout the code at pages/actions/go.js)
+            (checkout the code at pages/actions/start.js)
         </message>
         <message type="text">
             In this case, I'm just returning a bunch of text messages after matching
-            the user input 'go' with a regular expression. Have a look at the file
+            the user input 'start' with a regular expression. Have a look at the file
             botonic.config.js for more info on routing options.
         </message>
         <message type="text">
