@@ -27,7 +27,9 @@ function readCredentials() {
   } catch(e) {}
 }
 
-readCredentials()
+try {
+  readCredentials()
+} catch(e) {}
 
 if(!process.env.BOTONIC_DISABLE_MIXPANEL)
   mixpanel = Mixpanel.init(mixpanel_token, {
@@ -50,9 +52,7 @@ export function alias(email: string) {
 export function botonicPostInstall() {
   track('botonic_install')
   if(!process.env.BOTONIC_DISABLE_MIXPANEL) {
-    try {
-      initializeCredentials()
-      readCredentials()
-    } catch(e) {}
+    initializeCredentials()
+    readCredentials()
   }
 }
