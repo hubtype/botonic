@@ -16,6 +16,7 @@ export class Botonic {
   public conf: any
   private app: any
   private df_session_id: number = Math.random()
+  private lastRoutePath: any
 
   constructor(config_path: string) {
     this.path = config_path
@@ -25,14 +26,74 @@ export class Botonic {
   }
 
   getAction(input: any) {
-    let route = this.conf.routes.find((r: object) => Object.entries(r)
-      .filter(([key, value]) => key != 'action')
-      .every(([key, value]) => this.matchRoute(key, value, input)))
+    let routeParams: any = {}
+    //get ChildRoute depending of the past routepath
+    let lastRouteChilds = this.getLastChildRoutes(this.lastRoutePath, this.conf.routes)
+    if(lastRouteChilds) { //get route depending of current ChildRoute
+      routeParams = this.getRoute(input, lastRouteChilds)
+    }
+    if(!routeParams || !Object.keys(routeParams).length) {
+      /*
+        we couldn't find a route in the state of the lastRoute, so let's find in
+        the general conf.route
+      */
+      this.lastRoutePath = null
+      routeParams = this.getRoute(input, this.conf.routes)
+    }
+    if(!routeParams || !Object.keys(routeParams).length)
+      return {action: '404', params:{}}
 
-    return route ? route.action : '404'
+    if(this.lastRoutePath)
+      this.lastRoutePath = `${this.lastRoutePath}/${routeParams.route.action}`
+    else
+      this.lastRoutePath = routeParams.route.action
+    return {action: routeParams.route.action, params: routeParams.params}
   }
 
-  matchRoute(prop: string, matcher: any, input: any): boolean {
+  getRoute(input: any, routes:any) {
+    /*
+      Find the input throw the routes, if it match with some of the entries,
+      return the hole Route of the entry with optional params (used in regEx)
+    */
+    let params: object = {}
+    let route = routes.find((r: object) => Object.entries(r)
+      .filter(([key, value]) => key != 'action' || 'childRoutes')
+      .some(([key, value]) => {
+        let match = this.matchRoute(key, value, input)
+        try {
+          params = match.groups
+        } catch(e) {}
+        return Boolean(match)
+      })
+    )
+    if(route)
+      return {route: route, params}
+    return null
+  }
+
+  getLastChildRoutes(path: any, routeList: any): any {
+    /*
+      Recursive function that iterates throw a string composed of
+      a set of action separated by '/' ex: 'action1/action2',
+      and find if the action match with an entry. Then if it has childs,
+      check if the childs can match with the next action.
+    */
+    if(!path) return null
+    var childRoutes = []
+    let [currentPath, ...childPath] = path.split('/')
+    for(let r of routeList) { //iterate over all routeList
+      if(r.action == currentPath)
+        childRoutes = r.childRoutes
+      if(childRoutes && childRoutes.length && childPath.length > 0) {
+        //evaluate childroute over next actions
+        childRoutes = this.getLastChildRoutes(childPath.join('/'), childRoutes)
+        if(childRoutes && childRoutes.length) return childRoutes //if we find return it
+      } else if(childRoutes && childRoutes.length) return childRoutes //last action and finded route
+    }
+    return null
+  }
+
+  matchRoute(prop: string, matcher: any, input: any): any {
     /*
       prop: ('text' | 'payload' | 'intent')
       matcher: (string: exact match | regex: regular expression match | function: return true)
@@ -49,23 +110,32 @@ export class Botonic {
     if(typeof matcher === 'string')
       return value == matcher
     if(matcher instanceof RegExp)
-      return matcher.test(value)
+      return matcher.exec(value)
+    /* 
+    var regex1 = /^age-(?<age>\d*)/;
+
+    console.log(regex1.exec('age-21'));
+      Array ["age-21", "21"]
+    */
     if(typeof matcher === 'function')
       return matcher(value)
     return false
   }
 
-  async processInput(input: any, context: any = {}) {
+  async processInput(input: any, routePath: string,  context: any = {}) {
     if(input.type == 'text') {
       let intent: any = await this.getIntent(input)
       if(intent)
         input.intent = intent.data.result.action
     }
-    let component = 'actions/' + this.getAction(input)
-    const req = {headers: {}, method: 'GET', url: component, context: context}
+    if(routePath)
+      this.lastRoutePath = routePath
+    let {action, params} = this.getAction(input)
+    let component = 'actions/' + action
+    const req = {headers: {}, method: 'GET', url: component, context: context,params: params}
     const res = {}
     const pathname = component
-    const query = {}
+    const query = {routePath: this.lastRoutePath}
     return this.app.renderToHTML(req, res, pathname, query, {})
   }
 
