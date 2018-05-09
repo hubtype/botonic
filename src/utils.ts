@@ -3,12 +3,12 @@ const os = require('os')
 const path = require('path')
 const Mixpanel = require('mixpanel')
 
-const mixpanel_token = 'c73e2685df454183c0f97fbf2052d827'
+export const mixpanel_token = 'c73e2685df454183c0f97fbf2052d827'
 
-var mixpanel: any
-var credentials: any
-const botonic_home_path: string = path.join(os.homedir(), '.botonic')
-const botonic_credentials_path = path.join(botonic_home_path, 'credentials.json')
+export var mixpanel: any
+export var credentials: any
+export const botonic_home_path: string = path.join(os.homedir(), '.botonic')
+export const botonic_credentials_path = path.join(botonic_home_path, 'credentials.json')
 
 export function initializeCredentials() {
   if(!fs.existsSync(botonic_home_path))
@@ -50,9 +50,9 @@ export function alias(email: string) {
 }
 
 export function botonicPostInstall() {
-  track('botonic_install')
   if(!process.env.BOTONIC_DISABLE_MIXPANEL) {
     initializeCredentials()
     readCredentials()
+    track('botonic_install')
   }
 }
