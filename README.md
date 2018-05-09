@@ -21,7 +21,7 @@ $ npm install -g botonic
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-botonic/0.1.11 darwin-x64 node-v9.9.0
+botonic/0.1.12 darwin-x64 node-v9.9.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -54,7 +54,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.1.11/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.1.12/src/commands/deploy.ts)_
 
 ## botonic help [COMMAND]
 
@@ -90,7 +90,7 @@ EXAMPLE
   Hello!
 ```
 
-_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.1.11/src/commands/input.ts)_
+_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.1.12/src/commands/input.ts)_
 
 ## botonic login
 
@@ -104,7 +104,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.1.11/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.1.12/src/commands/login.ts)_
 
 ## botonic logout
 
@@ -118,7 +118,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.1.11/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.1.12/src/commands/logout.ts)_
 
 ## botonic new NAME [TEMPLATENAME]
 
@@ -138,7 +138,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.1.11/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.1.12/src/commands/new.ts)_
 
 ## botonic run [INPUT]
 
@@ -158,5 +158,5 @@ EXAMPLE
   [bot] > Bye!
 ```
 
-_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.1.11/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.1.12/src/commands/run.ts)_
 <!-- commandsstop -->
