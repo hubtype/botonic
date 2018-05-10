@@ -111,12 +111,6 @@ export class Botonic {
       return value == matcher
     if(matcher instanceof RegExp)
       return matcher.exec(value)
-    /* 
-    var regex1 = /^age-(?<age>\d*)/;
-
-    console.log(regex1.exec('age-21'));
-      Array ["age-21", "21"]
-    */
     if(typeof matcher === 'function')
       return matcher(value)
     return false
