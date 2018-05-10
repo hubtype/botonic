@@ -42,6 +42,11 @@ module.exports = {
         a certain text, for example the 1st one will capture 'BUTTONS', 'Buttons', etc */
         {text: /^buttons$/i, action: "buttons"},
         {text: /^quickreply$/i, action: "quickreply"},
+        /* If you want to use regexp with grouped values, you need to upgrade Node to v.10
+        or ahead. This regular expression match 'age-{NUMBER}' where NUMBER can be any digit.
+        Then, in your component 'bye', you can access to this that in 'req.params'
+        {text: /^age-(?<age>\d*)/, action: "age"},
+        */
 
         /* These rules capture different payloads */
         {payload: "carrousel", action: "carrousel"},
