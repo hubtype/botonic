@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import { homedir } from 'os'
 import * as next from 'next'
 import axios from 'axios'
+import { Component }  from './react/component'
 const FormData = require('form-data');
 
 const BOTONIC_CLIENT_ID: string = process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
@@ -17,6 +18,7 @@ export class Botonic {
   private app: any
   private df_session_id: number = Math.random()
   private lastRoutePath: any
+  public React: any = {Component: Component}
 
   constructor(config_path: string) {
     this.path = config_path
