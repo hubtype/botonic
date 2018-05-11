@@ -200,7 +200,7 @@ export class BotonicAPIService {
       var credentials = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
     } catch(e) {}
     if(credentials) {
-      if(credentials.bot) {
+      if(credentials.hasOwnProperty('bot')) {
         this.bot = credentials.bot
         this.lastBuildHash = credentials.lastBuildHash
       } else { // Allow users < v0.1.12 to upgrade smoothly
