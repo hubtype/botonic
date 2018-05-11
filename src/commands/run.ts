@@ -4,12 +4,8 @@ import { load } from 'cheerio'
 import * as Table from 'cli-table2'
 import { Question, prompt } from 'inquirer'
 import * as colors from 'colors'
-const ora = require('ora')
 
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
-
-import { Botonic } from '../botonic'
+import { Botonic, BotonicAPIService } from '../botonic'
 import { track } from '../utils'
 
 export default class Run extends Command {
@@ -56,18 +52,16 @@ Use ! to send a payload message\n\
 /quit | /q --> Exit interactive session\n\
 /help | /h --> Show this help\n'
 
+  private botonicApiService: BotonicAPIService = new BotonicAPIService()
+
   async run() {
     track('botonic_run')
     const {args, flags} = this.parse(Run)
     const path = flags.path? resolve(flags.path) : process.cwd()
 
     //Build project
-    let spinner = new ora({
-      text: 'Building...',
-      spinner: 'bouncingBar'
-    }).start()
-    let build_out = await exec('npm run build')
-    spinner.succeed()
+    await this.botonicApiService.buildIfChanged()
+    this.botonicApiService.beforeExit()
 
     this.botonic = new Botonic(path)
     console.log(this.helpText)

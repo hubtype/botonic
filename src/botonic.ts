@@ -5,6 +5,10 @@ import * as next from 'next'
 import axios from 'axios'
 import { Component }  from './react/component'
 const FormData = require('form-data');
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
+const { hashElement } = require('folder-hash');
+const ora = require('ora')
 
 const BOTONIC_CLIENT_ID: string = process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
 const BOTONIC_CLIENT_SECRET: string = process.env.BOTONIC_CLIENT_SECRET || 'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
@@ -163,6 +167,7 @@ export class BotonicAPIService {
   public oauth: any
   public me: any
   public mixpanel: any
+  public lastBuildHash: any
   public bot: any
   public headers: object | null = null
 
@@ -194,8 +199,15 @@ export class BotonicAPIService {
     try {
       var credentials = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
     } catch(e) {}
-    if(credentials)
-      this.bot = credentials
+    if(credentials) {
+      if(credentials.bot) {
+        this.bot = credentials.bot
+        this.lastBuildHash = credentials.lastBuildHash
+      } else { // Allow users < v0.1.12 to upgrade smoothly
+        this.bot = credentials
+        this.lastBuildHash = ''
+      }
+    }
   }
 
   async checkGlobalCredentialsPath() {
@@ -213,7 +225,35 @@ export class BotonicAPIService {
   }
 
   saveBotCredentials() {
-    fs.writeFileSync(this.botCredentialsPath, JSON.stringify(this.bot))
+    let bc = {bot: this.bot, lastBuildHash: this.lastBuildHash}
+    fs.writeFileSync(this.botCredentialsPath, JSON.stringify(bc))
+  }
+
+  async getCurrentBuildHash() {
+    const options = {
+        folders: { exclude: ['.*', 'node_modules'] },
+        files: { include: ['*.js'] }
+    }
+    let hash = await hashElement('.', options)
+    return hash.hash
+  }
+
+  async build() {
+    let spinner = new ora({
+      text: 'Building...',
+      spinner: 'bouncingBar'
+    }).start()
+    var build_out = await exec('npm run build')
+    spinner.succeed()
+    return build_out
+  }
+
+  async buildIfChanged() {
+    let hash = await this.getCurrentBuildHash()
+    if(hash != this.lastBuildHash) {
+      this.lastBuildHash = hash
+      await this.build()
+    }
   }
 
   setCurrentBot(bot: any) {

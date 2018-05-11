@@ -9,7 +9,6 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 import { BotonicAPIService } from '../botonic'
-
 import { track, alias } from '../utils'
 
 
@@ -180,14 +179,10 @@ Uploading...
 
   async deploy() {
     this.botonicApiService.beforeExit()
-    let spinner = new ora({
-      text: 'Building...',
-      spinner: 'bouncingBar'
-    }).start()
-    let build_out = await exec('npm run build')
-    spinner.succeed()
+    let build_out = await this.botonicApiService.buildIfChanged()
     let zip_password = Math.round(Math.random()*10000000000)
-    spinner = new ora({
+    console.log()
+    let spinner = new ora({
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
     }).start()
@@ -208,7 +203,7 @@ Uploading...
     this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
       .then((resp) => {
         spinner.succeed()
-        console.log('🚀  Bot deployed!'.green)
+        console.log('\n🚀  Bot deployed!\n'.green)
         this.botonicApiService.getProviders()
           .then((resp) => {
             let providers = resp.data.results
