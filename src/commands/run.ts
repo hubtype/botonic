@@ -30,6 +30,22 @@ Your bot is ready, start talking:
   static args = [{name: 'input', parse: JSON.parse}]
 
   private botonic: any
+  private context: any = {
+    'last_session': '0',
+    'user': {
+        'id': '000001',
+        'username': 'John',
+        'name': 'Doe',
+        'provider': 'Provider',
+        'provider_id': '0000000',
+        'extra_data': ''
+    },
+    'organization': 'Organization',
+    'bot': {
+        'id': '0000000',
+        'name': 'botName'
+    }
+  }
   private helpText: String = 'This is an interactive chat session with your bot.\n\n\
 Type anything and press enter to get a response\n\
 Use ! to send a payload message\n\
@@ -67,7 +83,7 @@ Use / to use special commands:\n\
       let input: any = {type: 'text', 'data': inp.input}
       if(inp.input.startsWith('!'))
         input = {type: 'postback', 'payload': inp.input.slice(1)}
-      this.botonic.processInput(input).then((response: string) => {
+      this.botonic.processInput(input, null, this.context).then((response: string) => {
         if(['/q', '/quit'].indexOf(input.data)>=0)
           return
         if(['/help', '/h'].indexOf(input.data)>=0){
@@ -83,6 +99,8 @@ Use / to use special commands:\n\
 
   parseOutput(output: string) {
     let soruceData = '[type=image], [type=video], [type=audio], [type=document]'
+    let nextData = JSON.parse(output.split('__NEXT_DATA__ =')[1].split('module')[0])
+    this.context = nextData.props.context || {}
     let html = load(output)
       let outputs = html('[type=text], [type=carrousel], [type=image], [type=video], [type=audio],\
         [type=document], [type=location], [type=button]')
