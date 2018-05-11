@@ -42,15 +42,19 @@ Your bot is ready, start talking:
       'name': 'botName'
     }
   }
-  private helpText: String = '\nThis is an interactive chat session with your bot.\n\n\
-Type anything and press enter to get a response\n\
-Use ! to send a payload message\n\
-\nExamples:\n\
-[user]> hi --> this will send a message of type \'text\' and content \'hi\'\n\
-[user]> !button_click_1 --> this will send a message of type \'postback\' and payload \'button_click_1\'\n\
-\nUse / for special commands:\n\
-/quit | /q --> Exit interactive session\n\
-/help | /h --> Show this help\n'
+  private helpText: string = `
+This is an interactive chat session with your bot.
+
+Type anything and press enter to get a response.
+Use ! to send a payload message.
+
+Examples:
+[user]> ${colors.bold('hi')} --> this will send a message of type 'text' and content 'hi'
+[user]> ${colors.bold('!button_click_1')} --> this will send a message of type 'postback' and payload 'button_click_1'
+
+Use / for special commands:
+${colors.bold('/quit')} | ${colors.bold('/q')} --> Exit interactive session
+${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
@@ -69,6 +73,7 @@ Use ! to send a payload message\n\
   }
 
   chat_loop() {
+    console.log()
     prompt([{
       type: 'input',
       name: 'input',
@@ -85,6 +90,7 @@ Use ! to send a payload message\n\
           this.chat_loop()
           return
         }
+        console.log()
         this.parseOutput(response)
         this.chat_loop()
       })
