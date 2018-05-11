@@ -178,10 +178,8 @@ Uploading...
   }
 
   async deploy() {
-    this.botonicApiService.beforeExit()
     let build_out = await this.botonicApiService.buildIfChanged()
     let zip_password = Math.round(Math.random()*10000000000)
-    console.log()
     let spinner = new ora({
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
@@ -220,5 +218,6 @@ Uploading...
         console.log('There was a problem in the deploy'.red)
       })
     let rm_zip = await exec('rm botonic_bundle.zip')
+    this.botonicApiService.beforeExit()
   }
 }

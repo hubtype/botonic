@@ -30,4 +30,4 @@ try {
 }
 
 console.log('\n✨ Botonic was installed successfully.\n')
-console.log('Create your first chatbot with:\n\x1b[1mbotonic new myBot\x1b[0m')
+console.log('Create your first chatbot with:\n\x1b[1mbotonic new myBot\x1b[0m\n')
