@@ -5,6 +5,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "botonic": "latest",
+    "botonic": "latest"
   }
 }
