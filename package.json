@@ -1,7 +1,7 @@
 {
   "name": "botonic",
   "description": "Build chatbots using React",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "author": "ericmarcos @ericmarcos",
   "bin": {
     "botonic": "./bin/run"
