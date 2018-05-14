@@ -215,6 +215,7 @@ Uploading...
           (err) => console.log('There was an error getting the providers'.red, err))
       }, (err) => {
         spinner.fail()
+        console.log(err)
         console.log('There was a problem in the deploy'.red)
       })
     let rm_zip = await exec('rm botonic_bundle.zip')

@@ -168,7 +168,7 @@ export class BotonicAPIService {
   public me: any
   public mixpanel: any
   public lastBuildHash: any
-  public bot: any
+  public bot: any = null
   public headers: object | null = null
 
   constructor() {

@@ -1,18 +1,14 @@
 import React from 'react'
+import { Botonic } from 'botonic'
 
-export default class extends React.Component {
+export default class extends Botonic.React.Component {
 
-  static async getInitialProps({ req }) {
-
-    /* This is how you fetch data from an API: */
-    //const res = await fetch('https://api.example.com/movies')
-    //const movies = await res.json()
-    const movies = [
+  static async botonicInit({ req }) {
+    req.context.movies = [
         {name: 'Pulp Fiction', desc: 'Le Big Mac', url: 'https://www.imdb.com/title/tt0110912', pic: 'https://ia.media-imdb.com/images/M/MV5BMTkxMTA5OTAzMl5BMl5BanBnXkFtZTgwNjA5MDc3NjE@._V1_SY1000_CR0,0,673,1000_AL_.jpg'},
         {name: 'The Big Lebowski', desc: 'Fuck it Dude', url: 'https://www.imdb.com/title/tt0118715', pic: 'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'},
         {name: 'Snatch', desc: 'Five minutes, Turkish', url: 'https://www.imdb.com/title/tt0208092', pic: 'https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA='},
     ]
-    return { movies }
   }
 
   render() {
@@ -24,7 +20,7 @@ export default class extends React.Component {
                 You can get more information here: https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic?locale=en_US#carousel
             </message>
             <message type="carrousel">
-                {this.props.movies.map((e, i) => 
+                {this.props.context.movies.map((e, i) => 
                     <element key={e.name}>
                         <image>{e.pic}</image>
                         <title>{e.name}</title>

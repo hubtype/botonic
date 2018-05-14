@@ -1,6 +1,7 @@
 import React from 'react'
+import { Botonic } from 'botonic'
 
-export default class extends React.Component {
+export default class extends Botonic.React.Component {
 
   render() {
     return (

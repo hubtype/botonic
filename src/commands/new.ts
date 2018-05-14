@@ -5,6 +5,7 @@ import * as colors from 'colors'
 
 import * as fs from 'fs'
 
+import { BotonicAPIService } from '../botonic'
 import { track } from '../utils'
 
 const util = require('util')
@@ -34,6 +35,8 @@ Creating...
     description: 'Blank: A minimal template to start from scratch'
   }]
 
+  private botonicApiService: BotonicAPIService = new BotonicAPIService()
+
   async run() {
     track('botonic_new');
     const {args, flags} = this.parse(Run)
@@ -52,31 +55,26 @@ Creating...
         return
       }
     }
-    if(!fs.existsSync(args.name))
-      fs.mkdir(args.name, err => { if (err) console.log(err) })
     let botPath = resolve(template)
     let templatePath = `${__dirname}/../../templates/${template}`
     let spinner = new ora({
       text: 'Copying files...',
       spinner: 'bouncingBar'
     }).start()
-    let copyFolderCommand = `cp -a ${templatePath}/* ${args.name}`
+    let copyFolderCommand = `cp -r ${templatePath} ${args.name}`
     let copy_out = await exec(copyFolderCommand)
     spinner.succeed()
+    process.chdir(args.name)
     spinner = new ora({
       text: 'Installing dependencies...',
       spinner: 'bouncingBar'
     }).start()
-    let dependencyCommand = `cd ${args.name}; npm install`
+    let dependencyCommand = `npm install`
     let dependency = await exec(dependencyCommand)
     spinner.succeed()
-    spinner = new ora({
-      text: 'Compiling...',
-      spinner: 'bouncingBar'
-    }).start()
-    let compileCommand = `cd ${args.name}; npm run build`
-    let compile = await exec(compileCommand)
-    spinner.succeed()
+    await this.botonicApiService.buildIfChanged()
+    this.botonicApiService.beforeExit()
+    await exec('mv ../.botonic.json .')
     let cd_cmd = `cd ${args.name.bold}`.bold
     let run_cmd = 'botonic run'.bold
     let deploy_cmd = 'botonic deploy'.bold
