@@ -22,7 +22,10 @@ export class Component extends React.Component {
     return literals.literals[id]
   }
 
-  static async botonicInit(args: any) {
+	static async botonicInit(args: any) {
+	}
 
-  }
+	static async humanHandOff(req: any) {
+		req.context['_botonic_action'] = 'create_case'
+	}
 }
