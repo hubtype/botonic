@@ -139,6 +139,15 @@ export class Botonic {
     return this.app.renderToHTML(req, res, pathname, query, {})
   }
 
+  async getWebview(webview_name: any) {
+    let component = join('webviews', webview_name)
+    const req = {headers: {}, method: 'GET', url: component}
+    const res = {}
+    const pathname = component
+    const query = {}
+    return this.app.renderToHTML(req, res, pathname, query, {})
+  }
+
   async getIntent(input: any): Promise<any> {
     if(this.conf.integrations && this.conf.integrations.dialogflow) {
       return axios({
@@ -244,16 +253,21 @@ export class BotonicAPIService {
       spinner: 'bouncingBar'
     }).start()
     var build_out = await exec('npm run build')
+    if (build_out.stderr){
+      spinner.fail()
+      return false
+    }
     spinner.succeed()
-    return build_out
+    return true
   }
 
   async buildIfChanged() {
     let hash = await this.getCurrentBuildHash()
     if(hash != this.lastBuildHash) {
       this.lastBuildHash = hash
-      await this.build()
+      return await this.build()
     }
+    return true
   }
 
   setCurrentBot(bot: any) {

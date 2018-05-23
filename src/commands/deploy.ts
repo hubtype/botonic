@@ -179,6 +179,10 @@ Uploading...
 
   async deploy() {
     let build_out = await this.botonicApiService.buildIfChanged()
+    if (!build_out){
+      console.log('There was a problem building the bot'.red)
+      return
+    }
     let zip_password = Math.round(Math.random()*10000000000)
     let spinner = new ora({
       text: 'Creating bundle...',
