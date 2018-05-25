@@ -92,9 +92,9 @@ Uploading...
     return this.botonicApiService.login(email, password)
       .then((resp)=> this.deployBotFlow(), (err) => {
         if(err.response.data && err.response.data.error_description)
-          console.log(err.response.data.error_description.red)
+          console.log(colors.red(err.response.data.error_description))
         else
-          console.log('There was an error when trying to log in. Please, try again:'.red)
+          console.log(colors.red('There was an error when trying to log in. Please, try again:'))
         this.askLogin()
       })
   }
@@ -103,14 +103,14 @@ Uploading...
     let org_name = email.split('@')[0]
     let campaign = { product: 'botonic' }
     return this.botonicApiService.signup(email, password, org_name, campaign)
-      .then((resp) => this.login(email,password),
+      .then((resp) => this.login(email, password),
         (err) => {
           if(err.response.data.email)
-            console.log(err.response.data.email[0].red)
+            console.log(colors.red(err.response.data.email[0]))
           if(err.response.data.password)
-            console.log(err.response.data.password[0].red)
+            console.log(colors.red(err.response.data.password[0]))
           if(!err.response.data.email && !err.response.data.password)
-            console.log('There was an error trying to signup. Please, try again:'.red)
+            console.log(colors.red('There was an error trying to signup. Please, try again:'))
           this.askSignup()
         })
   }
@@ -146,7 +146,7 @@ Uploading...
       message: 'Bot name:'
     }]).then( (inp:any) => {
       this.botonicApiService.saveBot(inp.bot_name).then((resp) => this.deploy(),
-        (err) => console.log('There was an error saving the bot'.red, err))
+        (err) => console.log(colors.red('There was an error saving the bot'), err))
     })
   }
 
@@ -180,7 +180,7 @@ Uploading...
   async deploy() {
     let build_out = await this.botonicApiService.buildIfChanged()
     if (!build_out){
-      console.log('There was a problem building the bot'.red)
+      console.log(colors.red('There was a problem building the bot'))
       return
     }
     let zip_password = Math.round(Math.random()*10000000000)
@@ -194,7 +194,7 @@ Uploading...
     spinner.succeed()
     if(zip_stats.size >= 10**6) {
       spinner.fail()
-      console.log(`Deploy failed. Bundle size too big ${zip_stats.size} (max 1Mb).`.red)
+      console.log(colors.red(`Deploy failed. Bundle size too big ${zip_stats.size} (max 1Mb).`))
       await exec('rm botonic_bundle.zip')
       return
     }
@@ -205,7 +205,7 @@ Uploading...
     this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
       .then((resp) => {
         spinner.succeed()
-        console.log('\n🚀  Bot deployed!\n'.green)
+        console.log(colors.green('\n🚀  Bot deployed!\n'))
         this.botonicApiService.getProviders()
           .then((resp) => {
             let providers = resp.data.results
@@ -216,11 +216,11 @@ Uploading...
               this.displayProviders(providers)
             }
           },
-          (err) => console.log('There was an error getting the providers'.red, err))
+          (err) => console.log(colors.red('There was an error getting the providers'), err))
       }, (err) => {
         spinner.fail()
         console.log(err)
-        console.log('There was a problem in the deploy'.red)
+        console.log(colors.red('There was a problem in the deploy'))
       })
     let rm_zip = await exec('rm botonic_bundle.zip')
     this.botonicApiService.beforeExit()
