@@ -30,7 +30,13 @@ export default class extends Botonic.React.Component {
                 )}
             </message>
             <message type="text">
-                Now, we are going to end this tutorial, please type 'end'.
+                I could spend a long time talking about Botonic's features, but I think
+                that's enough for now.
+                Feel free to read through the code to learn how to integrate NLP capabilities
+                and use all kind of rich messages.
+            </message>
+            <message type="text">
+                Now, please, type 'end'.
             </message>
         </messages>
     )
