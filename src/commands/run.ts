@@ -77,7 +77,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
     prompt([{
       type: 'input',
       name: 'input',
-      message: '[user]>'
+      message: '[you]>'
     }]).then((inp: any) => {
       let input: any = {type: 'text', 'data': inp.input}
       if(inp.input.startsWith('!'))

@@ -59,9 +59,5 @@ export function botonicPostInstall() {
 }
 
 function track_mixpanel() {
-  if(process.env.BOTONIC_DISABLE_MIXPANEL==='1')
-    return false
-  if(process.env.BOTONIC_DISABLE_MIXPANEL==='0')
-    return true
-  return true
+  return process.env.BOTONIC_DISABLE_MIXPANEL !== '1'
 }

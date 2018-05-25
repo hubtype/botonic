@@ -51,7 +51,7 @@ Creating...
         template = args.templateName
       } else {
         let template_names = this.templates.map((t: any) => t.name)
-        console.log('Template ${args.templateName} does not exist, please choose one of ${template_names}.'.red)
+        console.log(colors.red('Template ${args.templateName} does not exist, please choose one of ${template_names}.'))
         return
       }
     }
@@ -75,10 +75,10 @@ Creating...
     await this.botonicApiService.buildIfChanged()
     this.botonicApiService.beforeExit()
     await exec('mv ../.botonic.json .')
-    let cd_cmd = `cd ${args.name.bold}`.bold
-    let run_cmd = 'botonic run'.bold
-    let deploy_cmd = 'botonic deploy'.bold
-    console.log(`\n✨  Bot ${args.name.bold} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot on your terminal)\n${deploy_cmd} (publish your bot to the world!)`)
+    let cd_cmd = colors.bold(`cd ${args.name}`)
+    let run_cmd = colors.bold('botonic run')
+    let deploy_cmd = colors.bold('botonic deploy')
+    console.log(`\n✨  Bot ${colors.bold(args.name)} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot on your terminal)\n${deploy_cmd} (publish your bot to the world!)`)
   }
 
   async selectBotName() {

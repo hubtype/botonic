@@ -22,11 +22,13 @@ try {
     //Some users don't have the right permissions to
     //create dirs at instal time. We delay it until
     //they run their first command.
-    const Mixpanel = require('mixpanel')
-    mixpanel = Mixpanel.init(utils.mixpanel_token, {
-        protocol: 'https'
-    })
-    mixpanel.track('botonic_install')
+    if(process.env.BOTONIC_DISABLE_MIXPANEL !== '1') {
+        const Mixpanel = require('mixpanel')
+        mixpanel = Mixpanel.init(utils.mixpanel_token, {
+            protocol: 'https'
+        })
+        mixpanel.track('botonic_install')
+    }
 }
 
 console.log('\n✨ Botonic was installed successfully.\n')
