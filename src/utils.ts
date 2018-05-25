@@ -23,7 +23,7 @@ function readCredentials() {
     initializeCredentials()
   }
   try {
-    credentials = JSON.parse(fs.readFileSync())
+    credentials = JSON.parse(fs.readFileSync(botonic_credentials_path))
   } catch(e) {}
 }
 
@@ -31,18 +31,19 @@ try {
   readCredentials()
 } catch(e) {}
 
-if(!process.env.BOTONIC_DISABLE_MIXPANEL)
+if(track_mixpanel()){
   mixpanel = Mixpanel.init(mixpanel_token, {
     protocol: 'https'
   })
+}
 
 export function track(event: string) {
-  if(!process.env.BOTONIC_DISABLE_MIXPANEL && mixpanel && credentials && credentials.mixpanel)
+  if(track_mixpanel() && mixpanel && credentials && credentials.mixpanel)
     mixpanel.track(event, {distinct_id: credentials.mixpanel ? credentials.mixpanel.distinct_id : null})
 }
 
 export function alias(email: string) {
-  if(!process.env.BOTONIC_DISABLE_MIXPANEL && mixpanel && credentials && credentials.mixpanel && email) {
+  if(track_mixpanel() && mixpanel && credentials && credentials.mixpanel && email) {
     mixpanel.alias(credentials.mixpanel.distinct_id, email, (e:any) => {console.log(e)})
     credentials.mixpanel.distinct_id = email
     fs.writeFileSync(botonic_credentials_path, JSON.stringify(credentials))
@@ -50,9 +51,17 @@ export function alias(email: string) {
 }
 
 export function botonicPostInstall() {
-  if(!process.env.BOTONIC_DISABLE_MIXPANEL) {
+  if(track_mixpanel()) {
     initializeCredentials()
     readCredentials()
     track('botonic_install')
   }
+}
+
+function track_mixpanel() {
+  if(process.env.BOTONIC_DISABLE_MIXPANEL==='1')
+    return false
+  if(process.env.BOTONIC_DISABLE_MIXPANEL==='0')
+    return true
+  return true
 }
