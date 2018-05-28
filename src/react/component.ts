@@ -5,7 +5,6 @@ import { join, resolve } from 'path'
 export class Component extends React.Component {
 
   static async getInitialProps(args: any) {
-
     await this.botonicInit(args)
     return {
       input: args.input,
