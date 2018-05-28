@@ -208,6 +208,7 @@ Uploading...
         console.log(colors.green('\n🚀  Bot deployed!\n'))
         this.botonicApiService.getProviders()
           .then((resp) => {
+            if(!resp) return;
             let providers = resp.data.results
             if(!providers.length) {
               let links = `Now, you can integrate a channel in:\nhttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
