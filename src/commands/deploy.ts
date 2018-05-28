@@ -204,6 +204,7 @@ Uploading...
     }).start()
     this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
       .then((resp) => {
+        console.log('resp deplo')
         spinner.succeed()
         console.log(colors.green('\n🚀  Bot deployed!\n'))
         this.botonicApiService.getProviders()
