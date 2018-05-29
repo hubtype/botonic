@@ -147,7 +147,7 @@ export class Botonic {
   }
 
   async getWebview(webview_name: any) {
-    let component = join('webviews', webview_name)
+    let component = join('/webviews', webview_name)
     const req = {headers: {}, method: 'GET', url: component}
     const res = {}
     const pathname = component
