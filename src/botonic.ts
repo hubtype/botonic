@@ -132,7 +132,14 @@ export class Botonic {
       this.lastRoutePath = routePath
     let {action, params} = this.getAction(input)
     let component = 'actions/' + action
-    const req = {headers: {}, method: 'GET', url: component, context: context, params: params}
+    const req = {
+      headers: {},
+      method: 'GET',
+      url: component,
+      input: input,
+      context: context,
+      params: params
+    }
     const res = {}
     const pathname = component
     const query = {routePath: this.lastRoutePath}
