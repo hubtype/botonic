@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { Command, flags } from '@oclif/command'
 import { load } from 'cheerio'
-import * as Table from 'cli-table2'
+import * as Table from 'cli-table3'
 import { Question, prompt } from 'inquirer'
 import * as colors from 'colors'
 
