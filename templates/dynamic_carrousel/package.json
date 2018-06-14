@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev": "next",
+    "build": "rm -rf .next; next build; cp botonic.config.js .next/",
+    "start": "next start"
+  },
+  "dependencies": {
+    "botonic": "latest",
+    "isomorphic-unfetch": "^2.0.0"
+  }
+}
