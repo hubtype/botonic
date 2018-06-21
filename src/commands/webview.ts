@@ -14,7 +14,8 @@ Hello!
   ]
 
   static flags = {
-    path: flags.string({char: 'p', description: 'Path to botonic project. Defaults to current dir.'})
+    path: flags.string({char: 'p', description: 'Path to botonic project. Defaults to current dir.'}),
+    context: flags.string({char: 'c', description: 'Context of current session', parse: JSON.parse})
   }
 
   static args = [{name: 'webview_page', required: true}]
@@ -26,10 +27,11 @@ Hello!
     const {args, flags} = this.parse(Run)
 
     const path = flags.path? resolve(flags.path) : process.cwd()
+    const context = flags.context ? flags.context : ''
 
     this.botonic = new Botonic(path)
 
-    this.botonic.getWebview(args.webview_page).then((response: string) => {
+    this.botonic.getWebview(args.webview_page, context).then((response: string) => {
       console.log(response)
     })
   }

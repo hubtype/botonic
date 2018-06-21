@@ -154,9 +154,9 @@ export class Botonic {
     return this.app.renderToHTML(req, res, pathname, query, {})
   }
 
-  async getWebview(webview_name: any) {
+  async getWebview(webview_name: any, context: any) {
     let component = join('/webviews', webview_name)
-    const req = {headers: {}, method: 'GET', url: component}
+    const req = {headers: {}, method: 'GET', url: component, context: context}
     const res = {}
     const pathname = component
     const query = {}
