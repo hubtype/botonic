@@ -7,7 +7,7 @@ export default class extends Botonic.React.Component {
     return (
       <messages>
             <message type="text">
-                Pleae, type "start" to start the tutorial.
+                Please, type "start" to start the tutorial.
             </message>
 	    </messages>
     )
