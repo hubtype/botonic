@@ -2,12 +2,11 @@ import React from 'react'
 import Head from 'next/head'
 import axios from 'axios'
 
-const BOTONIC_URL = 'http://localhost:8000'
+const BOTONIC_URL = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
 export default class BotonicWebview extends React.Component {
 
-	static async close (context, payload) { 
-      //console.log('closing', context);
+	static async close (context, payload) {
       if(payload) {
 	      const contextUrl = BOTONIC_URL + '/v1/bots/'+ context.bot.id +'/send_postback/'
 	      let resp = axios({
@@ -16,12 +15,9 @@ export default class BotonicWebview extends React.Component {
 	        data: {payload: payload, chat_id: context.user.id}
 	      })
 	  }
-      //console.log('RESPONSE', resp)
-      //http.POST /bots/send_postback?session_id=99987>&variable=value
       MessengerExtensions.requestCloseBrowser(() => {}, (err) => {})
 	}
 	
-
   	render() {
 		return (
 		    <Head>

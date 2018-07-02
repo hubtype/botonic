@@ -4,6 +4,7 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "module": "commonjs",
+    "noImplicitAny": false,
     "outDir": "./lib",
     "pretty": true,
     "rootDirs": [
