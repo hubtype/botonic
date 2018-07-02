@@ -20,10 +20,10 @@
     "form-data": "^2.3.2",
     "inquirer": "^5.1.0",
     "mixpanel": "^0.9.0",
+    "next": "^6.0.4-canary.9",
     "ora": "^2.0.0",
-    "next": "~5.0.0",
-    "react": "~16.2.0",
-    "react-dom": "~16.2.0"
+    "react": "16.4.1",
+    "react-dom": "16.4.1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.9.0",
