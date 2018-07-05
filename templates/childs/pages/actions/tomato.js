@@ -6,7 +6,7 @@ export default class extends Botonic.React.Component {
   render() {
     return (
         <message type="text">
-            You are in the Child1-2!
+            You chose Tomato on Pasta
         </message>
     )
   }

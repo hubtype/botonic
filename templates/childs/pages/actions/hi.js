@@ -6,9 +6,9 @@ export default class extends Botonic.React.Component {
   render() {
     return (
         <message type="text">
-            Hi! You are in the root. Choose a child route
-            <reply payload="child1">Child1</reply>
-            <reply payload="child1">Child2</reply>
+            Hi! Choose what you want to eat:
+            <reply payload="pizza">Pizza</reply>
+            <reply payload="pasta">Pasta</reply>
         </message>
     )
   }

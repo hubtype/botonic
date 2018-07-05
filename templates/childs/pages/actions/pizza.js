@@ -6,7 +6,9 @@ export default class extends Botonic.React.Component {
   render() {
     return (
         <message type="text">
-            You are in the Child1-1!
+            You chose Pizza! Choose one ingredient:
+            <reply payload="sausage">Sausage</reply>
+            <reply payload="bacon">Bacon</reply>
         </message>
     )
   }

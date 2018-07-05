@@ -49,11 +49,18 @@ export class Botonic {
     if(!routeParams || !Object.keys(routeParams).length)
       return {action: '404', params:{}}
 
-    if(this.lastRoutePath)
-      this.lastRoutePath = `${this.lastRoutePath}/${routeParams.route.action}`
-    else
-      this.lastRoutePath = routeParams.route.action
-    return {action: routeParams.route.action, params: routeParams.params}
+    if('action' in routeParams.route) {
+      if(this.lastRoutePath)
+        this.lastRoutePath = `${this.lastRoutePath}/${routeParams.route.action}`
+      else
+        this.lastRoutePath = routeParams.route.action
+      return {action: routeParams.route.action, params: routeParams.params}
+    } else if('redirect' in routeParams.route) {
+        this.lastRoutePath = routeParams.route.redirect
+        let path = routeParams.route.redirect.split('/')
+        return {action: path[path.length - 1], params: {}}
+    }
+    return {action: '404', params:{}}
   }
 
   getRoute(input: any, routes:any) {
@@ -132,7 +139,7 @@ export class Botonic {
       this.lastRoutePath = routePath
     let {action, params} = this.getAction(input)
     let component = 'actions/' + action
-    const req = {headers: {}, method: 'GET', url: component, context: context, params: params}
+    const req = {headers: {}, method: 'GET', url: component, input: input, context: context, params: params}
     const res = {}
     const pathname = component
     const query = {routePath: this.lastRoutePath}
