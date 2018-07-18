@@ -7,8 +7,9 @@ export class Component extends React.Component {
 
   static async getInitialProps(args: any) {
     i18n.setLocale(args.req.context.__locale || 'en')
-    await this.botonicInit(args)
+    let initProps = await this.botonicInit(args) || {}
     return {
+      ...initProps,
       input: args.input,
       context: args.req.context,
       params: args.params
