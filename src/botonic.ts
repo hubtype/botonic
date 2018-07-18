@@ -111,8 +111,6 @@ export class Botonic {
     else if(prop == 'text')
       if(input.type == 'text')
         value = input.data
-      if(input.type == 'postback')
-        value = input.payload
     if(typeof matcher === 'string')
       return value == matcher
     if(matcher instanceof RegExp)
@@ -125,8 +123,10 @@ export class Botonic {
   async processInput(input: any, routePath: string,  context: any = {}) {
     if(input.type == 'text') {
       let intent: any = await this.getIntent(input)
-      if(intent)
-        input.intent = intent.data.result.action
+      if (intent){
+          input.intent = intent.data.result.metadata.intentName;
+          input.entities = intent.data.result.parameters;
+      }
     }
     if(routePath)
       this.lastRoutePath = routePath
