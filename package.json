@@ -14,7 +14,7 @@
     "axios": "^0.18.0",
     "chalk": "^2.3.2",
     "cheerio": "^1.0.0-rc.2",
-    "cli-table2": "^0.2.0",
+    "cli-table3": "^0.5.0",
     "colors": "^1.2.1",
     "folder-hash": "^2.0.0",
     "form-data": "^2.3.2",
