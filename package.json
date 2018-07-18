@@ -70,7 +70,7 @@
   },
   "repository": "hubtype/botonic",
   "scripts": {
-    "build": "rm -rf lib && tsc && cd src && node ../node_modules/next/dist/bin/next-build && cp -r .next/* ../lib/react/",
+    "build": "rm -rf lib && tsc && cd src && node ../node_modules/next/dist/bin/next-build && cp -r .next/* ../lib/react/ && rm -rf .next/",
     "clean": "rm -f .oclif.manifest.json",
     "postpublish": "yarn run clean",
     "posttest": "tsc -p test --noEmit && tslint -p test -t stylish",

@@ -1,6 +1,6 @@
 export var lang: string = 'en'
 
-interface I { (): any; setLocale: Function; getLocale: Function; }
+export interface I { (): any; setLocale: Function; getLocale: Function; }
 
 var i18n = <I>((literal_id: any) => {
   try {
