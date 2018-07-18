@@ -1,10 +1,12 @@
 import * as React from "react"
 import * as fs from 'fs'
 import { join, resolve } from 'path'
+import { default as i18n } from '../i18n'
 
 export class Component extends React.Component {
 
   static async getInitialProps(args: any) {
+    i18n.setLocale(args.req.context.__locale || 'en')
     await this.botonicInit(args)
     return {
       input: args.input,
@@ -13,17 +15,9 @@ export class Component extends React.Component {
     }
   }
 
-  public lang: string = 'en_EN';
-
-  setLanguage(l: string){
-    this.lang = l
-  }
-
-  getLiteral(id: string) {
-
-    var literals: any = {}
-    var literals = require(process.cwd() + '/.next/dist/bundles/pages/literals/' + this.lang)
-    return literals.literals[id]
+  static setLocale(req: any, locale: string) {
+    req.context.__locale = locale
+    i18n.setLocale(locale)
   }
 
   static async botonicInit(args: any) {
