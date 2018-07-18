@@ -58,6 +58,9 @@ module.exports = {
         /* Captures any image */
         {type: "image", action: "media"},
 
+        /* Shows how i18n works in botonic */
+        {text: "multilanguage", action: "multilanguage"},
+
         /* Captures different intents (enable the Dialogflow integration,
         see "integrations" section at the top of this file) */
         {intent: "smalltalk.agent.funny", action: "funny"},

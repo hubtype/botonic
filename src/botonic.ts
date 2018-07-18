@@ -14,6 +14,7 @@ const BOTONIC_CLIENT_ID: string = process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqw
 const BOTONIC_CLIENT_SECRET: string = process.env.BOTONIC_CLIENT_SECRET || 'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
 const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
+
 export class Botonic {
   public current_path: string = process.cwd()
   public bot_path: string = join(this.current_path, '/.botonic.json')
@@ -49,11 +50,18 @@ export class Botonic {
     if(!routeParams || !Object.keys(routeParams).length)
       return {action: '404', params:{}}
 
-    if(this.lastRoutePath)
-      this.lastRoutePath = `${this.lastRoutePath}/${routeParams.route.action}`
-    else
-      this.lastRoutePath = routeParams.route.action
-    return {action: routeParams.route.action, params: routeParams.params}
+    if('action' in routeParams.route) {
+      if(this.lastRoutePath)
+        this.lastRoutePath = `${this.lastRoutePath}/${routeParams.route.action}`
+      else
+        this.lastRoutePath = routeParams.route.action
+      return {action: routeParams.route.action, params: routeParams.params}
+    } else if('redirect' in routeParams.route) {
+        this.lastRoutePath = routeParams.route.redirect
+        let path = routeParams.route.redirect.split('/')
+        return {action: path[path.length - 1], params: {}}
+    }
+    return {action: '404', params:{}}
   }
 
   getRoute(input: any, routes:any) {
