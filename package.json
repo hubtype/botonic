@@ -1,7 +1,7 @@
 {
   "name": "botonic",
   "description": "Build chatbots using React",
-  "version": "0.2.2",
+  "version": "0.3.0-alpha.1",
   "author": "ericmarcos @ericmarcos",
   "bin": {
     "botonic": "./bin/run"
@@ -20,7 +20,7 @@
     "form-data": "^2.3.2",
     "inquirer": "^5.1.0",
     "mixpanel": "^0.9.0",
-    "next": "^6.0.4-canary.9",
+    "next": "^6.1.1",
     "ora": "^2.0.0",
     "react": "16.4.1",
     "react-dom": "16.4.1"
