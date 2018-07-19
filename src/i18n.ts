@@ -4,7 +4,7 @@ export interface I { (): any; setLocale: Function; getLocale: Function; }
 
 var i18n = <I>((literal_id: any) => {
   try {
-    const literals = require(process.cwd() + '/.next/dist/bundles/pages/locales/' + lang).default
+    const literals = require(process.cwd() + '/.next/server/bundles/pages/locales/' + lang).default
     const l = literal_id.split('.').reduce((o: any, i: any) => o[i], literals)
     if(l instanceof Array)
       return l[Math.floor(Math.random() * l.length)]
