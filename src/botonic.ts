@@ -109,7 +109,7 @@ export class Botonic {
 
   matchRoute(prop: string, matcher: any, input: any): any {
     /*
-      prop: ('text' | 'payload' | 'intent')
+      prop: ('text' | 'payload' | 'intent' | 'type' | ...)
       matcher: (string: exact match | regex: regular expression match | function: return true)
       input: user input object, ex: {type: 'text', data: 'Hi'}
     */
@@ -215,7 +215,10 @@ export class BotonicAPIService {
       this.me = credentials.me
       this.mixpanel = mixpanel
       if(credentials.oauth)
-        this.headers = {Authorization: `Bearer ${this.oauth.access_token}`}
+        this.headers = {
+          Authorization: `Bearer ${this.oauth.access_token}`,
+          'content-type': 'application/json'
+        }
     }
   }
 
@@ -298,14 +301,49 @@ export class BotonicAPIService {
       fs.unlinkSync(this.globalCredentialsPath)
   }
 
-  async api(path: string, body: any = null, method: string = 'get', headers: object | null = null, params: any = null): Promise<any> {
-    return axios({
-      method: method,
-      url: this.baseApiUrl + path,
-      headers: headers || this.headers,
-      data: body,
-      params: params
+  async api(path: string, body: any = null, method: string = 'get', headers: any | null = null, params: any = null): Promise<any> {
+
+    var b = 0
+    try {
+      return await axios({
+        method: method,
+        url: this.baseApiUrl + path,
+        headers: headers || this.headers,
+        data: body,
+        params: params
+      })} catch(e) {
+        b = 1
+      }
+    if(b == 1){
+      await this.refreshToken()
+    }
+
+    return await axios({
+        method: method,
+        url: this.baseApiUrl + path,
+        headers: headers || this.headers,
+        data: body,
+        params: params
+      })
+  }
+
+  async refreshToken(): Promise<any> {
+    let resp = await axios({
+      method: 'post',
+      url: this.loginUrl,
+      params: {
+        'callback': 'none',
+        'grant_type': 'refresh_token',
+        'refresh_token': this.oauth.refresh_token,
+        'client_id': this.cliendId,
+        'client_secret': this.clientSecret
+      }
     })
+    if(!resp) return;
+    this.oauth = resp.data
+    this.headers = {Authorization: `Bearer ${this.oauth.access_token}`}
+    await this.saveGlobalCredentials()
+    return resp
   }
 
   async login(email:any, password:any): Promise<any> {
@@ -321,7 +359,10 @@ export class BotonicAPIService {
       }
     })
     this.oauth = resp.data
-    this.headers = {Authorization: `Bearer ${this.oauth.access_token}`}
+    this.headers = {
+      Authorization: `Bearer ${this.oauth.access_token}`,
+      'content-type': 'application/json'
+    }
     resp = await this.api('users/me')
     if(resp)
       this.me = resp.data
@@ -348,6 +389,10 @@ export class BotonicAPIService {
     return resp
   }
 
+  async getMe() {
+    return this.api('users/me/')
+  }
+
   async getBots() {
     return this.api('bots/', null, 'get', null , {organization_id: this.me.organization_id})
   }
@@ -357,6 +402,11 @@ export class BotonicAPIService {
   }
 
   async deployBot(bundlePath: string, password: any): Promise<any> {
+    try {
+      let a = await this.getMe()
+    } catch(e){
+      console.log(e)
+    }
     const form = new FormData()
     let data = fs.createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')

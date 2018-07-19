@@ -202,28 +202,27 @@ Uploading...
       text: 'Uploading...',
       spinner: 'bouncingBar'
     }).start()
-    this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
-      .then((resp) => {
-        console.log('resp deplo')
-        spinner.succeed()
-        console.log(colors.green('\n🚀  Bot deployed!\n'))
-        this.botonicApiService.getProviders()
-          .then((resp) => {
-            if(!resp) return;
-            let providers = resp.data.results
-            if(!providers.length) {
-              let links = `Now, you can integrate a channel in:\nhttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
-              console.log(links)
-            } else {
-              this.displayProviders(providers)
-            }
-          },
-          (err) => console.log(colors.red('There was an error getting the providers'), err))
-      }, (err) => {
-        spinner.fail()
-        console.log(err)
-        console.log(colors.red('There was a problem in the deploy'))
-      })
+    try{
+      await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
+      spinner.succeed()
+      console.log(colors.green('\n🚀  Bot deployed!\n'))
+      this.botonicApiService.getProviders()
+        .then((resp) => {
+          if(!resp) return;
+          let providers = resp.data.results
+          if(!providers.length) {
+            let links = `Now, you can integrate a channel in:\nhttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
+            console.log(links)
+          } else {
+            this.displayProviders(providers)
+          }
+        },
+        (err) => console.log(colors.red('There was an error getting the providers'), err))
+    }catch(err) {
+      spinner.fail()
+      console.log(err)
+      console.log(colors.red('There was a problem in the deploy'))
+    }
     let rm_zip = await exec('rm botonic_bundle.zip')
     this.botonicApiService.beforeExit()
   }
