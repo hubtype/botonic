@@ -7,5 +7,9 @@
   "dependencies": {
     "botonic": "latest",
     "isomorphic-unfetch": "^2.0.0"
+  },
+  "devDependencies": {
+    "@weco/next-plugin-transpile-modules": "0.0.2",
+    "@zeit/next-css": "^0.2.0"
   }
 }

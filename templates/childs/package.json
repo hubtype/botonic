@@ -6,5 +6,9 @@
   },
   "dependencies": {
     "botonic": "latest"
+  },
+  "devDependencies": {
+    "@weco/next-plugin-transpile-modules": "0.0.2",
+    "@zeit/next-css": "^0.2.0"
   }
 }
