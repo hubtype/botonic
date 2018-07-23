@@ -270,8 +270,9 @@ export class BotonicAPIService {
       text: 'Building...',
       spinner: 'bouncingBar'
     }).start()
-    var build_out = await exec('npm run build')
-    if (build_out.stderr){
+    try {
+      var build_out = await exec('npm run build')
+    } catch (error){
       spinner.fail()
       return false
     }
