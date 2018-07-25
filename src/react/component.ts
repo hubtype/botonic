@@ -10,9 +10,9 @@ export class Component extends React.Component {
     let initProps = await this.botonicInit(args) || {}
     return {
       ...initProps,
-      input: args.input,
+      input: args.req.input,
       context: args.req.context,
-      params: args.params
+      params: args.req.params
     }
   }
 
