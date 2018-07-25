@@ -21,7 +21,7 @@ $ npm install -g botonic
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-botonic/0.2.2 darwin-x64 node-v9.9.0
+botonic/0.3.1 darwin-x64 node-v9.9.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -37,6 +37,7 @@ USAGE
 * [botonic logout](#botonic-logout)
 * [botonic new NAME [TEMPLATENAME]](#botonic-new-name-templatename)
 * [botonic run [INPUT]](#botonic-run-input)
+* [botonic webview WEBVIEW_PAGE](#botonic-webview-webview-page)
 
 ## botonic deploy [BOT_NAME]
 
@@ -54,7 +55,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.2.2/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.3.1/src/commands/deploy.ts)_
 
 ## botonic help [COMMAND]
 
@@ -91,7 +92,7 @@ EXAMPLE
   Hello!
 ```
 
-_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.2.2/src/commands/input.ts)_
+_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.3.1/src/commands/input.ts)_
 
 ## botonic login
 
@@ -105,7 +106,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.2.2/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.3.1/src/commands/login.ts)_
 
 ## botonic logout
 
@@ -119,7 +120,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.2.2/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.3.1/src/commands/logout.ts)_
 
 ## botonic new NAME [TEMPLATENAME]
 
@@ -139,7 +140,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.2.2/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.3.1/src/commands/new.ts)_
 
 ## botonic run [INPUT]
 
@@ -159,5 +160,24 @@ EXAMPLE
   [bot] > Bye!
 ```
 
-_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.2.2/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.3.1/src/commands/run.ts)_
+
+## botonic webview WEBVIEW_PAGE
+
+Get response from a single input
+
+```
+USAGE
+  $ botonic webview WEBVIEW_PAGE
+
+OPTIONS
+  -c, --context=context  Context of current session
+  -p, --path=path        Path to botonic project. Defaults to current dir.
+
+EXAMPLE
+  $ botonic webview webview_hello"
+  Hello!
+```
+
+_See code: [src/commands/webview.ts](https://github.com/hubtype/botonic/blob/v0.3.1/src/commands/webview.ts)_
 <!-- commandsstop -->
