@@ -15,7 +15,7 @@ export default class extends Botonic.React.Component {
             <message type="image" src="https://botonic.io/images/botonic_react_logo-p-500.png">
                 <button url="https://botonic.io">Visit Botonic</button>
             </message>
-            <message type="image" src="https://tenor.com/search/developers-ballmer-gifs"/>
+            <message type="image" src="https://media3.giphy.com/media/gtPaaCbkxpmWk/giphy.gif"/>
             <message type="video" src="https://www.w3schools.com/html/mov_bbb.mp4"/>
             <message type="audio" src="https://www.w3schools.com/html/horse.mp3"/>
             <message type="document" src="http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf"/>
