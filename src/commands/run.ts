@@ -104,7 +104,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
       this.context = nextData.props.context || {}
     } catch(e) {}
     let html = load(output)
-    let outputs = html('[type=text], [type=carrousel], [type=image], [type=video], [type=audio],\
+    let outputs = html('[type=text], [type=carrousel], [type=carousel], [type=image], [type=video], [type=audio],\
       [type=document], [type=location], [type=button]')
       .map((i, elem) => {
         let el = html(elem)
@@ -112,7 +112,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
         let short = (v: string) => v.length > 20? v.substring(0, 17) + '...' : v
         if(el.is('[type=text]')) {
           out = el.contents().filter(e => el.contents()[e].type === 'text').text().trim()
-        } else if(el.is('[type=carrousel]')) {
+        } else if(el.is('[type=carrousel]') || el.is('[type=carousel]')) {
           const c = new Table({
             style: { head: [], border: [] },
             wordWrap: false }) as Table.HorizontalTable
@@ -146,7 +146,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
           out = `${el.attr('type')}: https://www.google.com/maps?q=${lat},${long}`;
         }
         let keyboard = ''
-        if(el.find('button').length > 0 && !el.is('[type=carrousel]')) {
+        if(el.find('button').length > 0 && (!el.is('[type=carrousel]') && !el.is('[type=carousel]'))) {
           let kt = new Table({style: { head: [], border: [] }}) as Table.HorizontalTable
           let buttons = el.find('button')
             .map((i, e) => {
