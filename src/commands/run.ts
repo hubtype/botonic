@@ -104,7 +104,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
     let soruceData = '[type=image], [type=video], [type=audio], [type=document]'
     try {
       let nextData = JSON.parse(output.split('__NEXT_DATA__ =')[1].split('module')[0])
-      this.context = nextData.props.context || {}
+      this.context = nextData.props.context || nextData.props.pageProps.context || {}
     } catch(e) {}
     let html = load(output)
     let outputs = html('[type=text], [type=carrousel], [type=carousel], [type=image], [type=video], [type=audio],\
