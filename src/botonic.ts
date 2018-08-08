@@ -8,6 +8,7 @@ import i18n from './i18n'
 import { Component }  from './react/component'
 const FormData = require('form-data');
 const util = require('util')
+const url = require('url')
 const exec = util.promisify(require('child_process').exec)
 const { hashElement } = require('folder-hash');
 const ora = require('ora')
@@ -146,7 +147,13 @@ export class Botonic {
     let {action, params} = await this.getAction(input)
     try {
       let payload = input.payload
-      action = payload.split('__ACTION_PAYLOAD__')[1] || action
+      let action_params = payload.split('__ACTION_PAYLOAD__')[1].split('?')
+      action = action_params[0] || action
+      if(action_params.length > 1) {
+        let p = new url.URLSearchParams(action_params[1])
+        for(let [key, value] of p.entries())
+          params[key] = value
+      }
     } catch {}
     let path = action.split('/')
     let component = 'actions/'
