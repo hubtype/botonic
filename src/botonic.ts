@@ -140,7 +140,11 @@ export class Botonic {
     }
     if(routePath)
       this.lastRoutePath = routePath
-    let {action, params} = this.getAction(input)
+    let {action, params} = await this.getAction(input)
+    try{
+      let payload = input.payload
+      action = payload.split('ACTION_PAYLOAD:')[1] || action
+    }catch{}
     let component = 'actions/' + action
     const req = {
       headers: {},
