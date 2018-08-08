@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import { homedir } from 'os'
 import * as next from 'next'
 import axios from 'axios'
+import { load } from 'cheerio'
 import i18n from './i18n'
 import { Component }  from './react/component'
 const FormData = require('form-data');
@@ -141,10 +142,10 @@ export class Botonic {
     if(routePath)
       this.lastRoutePath = routePath
     let {action, params} = await this.getAction(input)
-    try{
+    try {
       let payload = input.payload
-      action = payload.split('ACTION_PAYLOAD:')[1] || action
-    }catch{}
+      action = payload.split('__ACTION_PAYLOAD__')[1] || action
+    } catch {}
     let component = 'actions/' + action
     const req = {
       headers: {},
@@ -157,7 +158,14 @@ export class Botonic {
     const res = {}
     const pathname = component
     const query = {routePath: this.lastRoutePath}
-    return this.app.renderToHTML(req, res, pathname, query, {})
+    var output = await this.app.renderToHTML(req, res, pathname, query, {})
+    let html = load(output)
+    html('[action]').map((i, elem) => {
+      let e = html(elem)
+      e.attr('payload', '__ACTION_PAYLOAD__' + e.attr('action'))
+      e.attr('action', null)
+    })
+    return html.html()
   }
 
   async getWebview(webview_name: any, context: any) {
