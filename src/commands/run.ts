@@ -27,7 +27,7 @@ Your bot is ready, start talking:
 
   private botonic: any
   private context: any = {
-    'is_first_interaction': 'True',
+    'is_first_interaction': true,
     'last_session': {},
     'user': {
       'id': '000001',
@@ -85,7 +85,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
         input = {type: 'postback', 'payload': inp.input.slice(1)}
       this.botonic.processInput(input, null, this.context).then((response: string) => {
         if(this.context['is_first_interaction'])
-          this.context['is_first_interaction'] = 'False'
+          this.context['is_first_interaction'] = false
         if(['/q', '/quit'].indexOf(input.data) >= 0)
           return
         if(['/help', '/h'].indexOf(input.data) >= 0) {

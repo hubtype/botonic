@@ -52,17 +52,19 @@ export class Botonic {
     if(!routeParams || !Object.keys(routeParams).length)
       return {action: '404', params:{}}
 
+
     if('action' in routeParams.route) {
       if(this.lastRoutePath)
-        this.lastRoutePath = `${this.lastRoutePath}/${routeParams.route.action}`
+        this.lastRoutePath = `${this.lastRoutePath},${routeParams.route.action}`
       else
         this.lastRoutePath = routeParams.route.action
       return {action: routeParams.route.action, params: routeParams.params}
     } else if('redirect' in routeParams.route) {
         this.lastRoutePath = routeParams.route.redirect
-        let path = routeParams.route.redirect.split('/')
+        let path = routeParams.route.redirect.split(',')
         return {action: path[path.length - 1], params: {}}
     }
+
     return {action: '404', params:{}}
   }
 
@@ -96,13 +98,13 @@ export class Botonic {
     */
     if(!path) return null
     var childRoutes = []
-    let [currentPath, ...childPath] = path.split('/')
+    let [currentPath, ...childPath] = path.split(',')
     for(let r of routeList) { //iterate over all routeList
       if(r.action == currentPath)
         childRoutes = r.childRoutes
       if(childRoutes && childRoutes.length && childPath.length > 0) {
         //evaluate childroute over next actions
-        childRoutes = this.getLastChildRoutes(childPath.join('/'), childRoutes)
+        childRoutes = this.getLastChildRoutes(childPath.join(','), childRoutes)
         if(childRoutes && childRoutes.length) return childRoutes //if we find return it
       } else if(childRoutes && childRoutes.length) return childRoutes //last action and finded route
     }
@@ -146,7 +148,22 @@ export class Botonic {
       let payload = input.payload
       action = payload.split('__ACTION_PAYLOAD__')[1] || action
     } catch {}
-    let component = 'actions/' + action
+    let path = action.split('/')
+    let component = 'actions/'
+
+    if((path.length-1) > 1){
+      path.forEach((item,index) => {
+        if((path.length -1) > index){
+          component = component + item + '/'
+        } else {
+          component = component + item
+        }
+      })
+    }
+    else {
+      component = component + action
+    }
+
     const req = {
       headers: {},
       method: 'GET',
