@@ -27,7 +27,7 @@ export default class extends Botonic.React.Component {
         <message type="carrousel">
             {this.props.context.resp.products.map((e, i) => 
                 <element key={e.name}>
-                    <image>{e.image.sizes.Best.url}</image>
+                    <pic>{e.image.sizes.Best.url}</pic>
                     <title>{e.name}</title>
                     <desc>{e.priceLabel}</desc>
                     <button url={e.clickUrl}>Open Product</button>

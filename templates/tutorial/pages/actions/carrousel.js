@@ -22,7 +22,7 @@ export default class extends Botonic.React.Component {
             <message type="carrousel">
                 {this.props.context.movies.map((e, i) => 
                     <element key={e.name}>
-                        <image>{e.pic}</image>
+                        <pic>{e.pic}</pic>
                         <title>{e.name}</title>
                         <desc>{e.desc}</desc>
                         <button url={e.url}>Visit website</button>
