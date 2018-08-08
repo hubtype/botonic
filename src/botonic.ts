@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import { homedir } from 'os'
 import * as next from 'next'
 import axios from 'axios'
+import i18n from './i18n'
 import { Component }  from './react/component'
 const FormData = require('form-data');
 const util = require('util')
@@ -129,6 +130,7 @@ export class Botonic {
   }
 
   async processInput(input: any, routePath: string,  context: any = {}) {
+    i18n.setLocale(context.__locale || 'en')
     if(input.type == 'text') {
       let intent: any = await this.getIntent(input)
       if (intent){
