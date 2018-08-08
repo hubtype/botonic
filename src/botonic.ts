@@ -178,17 +178,20 @@ export class Botonic {
   }
 
   async getIntent(input: any): Promise<any> {
-    if(this.conf.integrations && this.conf.integrations.dialogflow) {
-      return axios({
-          headers: {
-            Authorization: 'Bearer ' + this.conf.integrations.dialogflow.token
-          },
+    try {
+      if(this.conf.integrations && this.conf.integrations.dialogflow) {
+        return axios({
+            headers: {
+              Authorization: 'Bearer ' + this.conf.integrations.dialogflow.token
+            },
           url: 'https://api.dialogflow.com/v1/query',
           params: {
             query: input.data, lang: 'en', sessionId: this.df_session_id
           }
         })
       }
+    }
+    catch(e){}
   }
 }
 
