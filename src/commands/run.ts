@@ -83,20 +83,24 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
       let input: any = {type: 'text', 'data': inp.input}
       if(inp.input.startsWith('!'))
         input = {type: 'postback', 'payload': inp.input.slice(1)}
-      this.botonic.processInput(input, null, this.context).then((response: string) => {
-        if(this.context['is_first_interaction'])
-          this.context['is_first_interaction'] = false
-        if(['/q', '/quit'].indexOf(input.data) >= 0)
-          return
-        if(['/help', '/h'].indexOf(input.data) >= 0) {
-          console.log(this.helpText)
+      this.botonic.processInput(input, null, this.context)
+        .then((response: string) => {
+          if(this.context['is_first_interaction'])
+            this.context['is_first_interaction'] = false
+          if(['/q', '/quit'].indexOf(input.data) >= 0)
+            return
+          if(['/help', '/h'].indexOf(input.data) >= 0) {
+            console.log(this.helpText)
+            this.chat_loop()
+            return
+          }
+          console.log()
+          this.parseOutput(response)
           this.chat_loop()
-          return
-        }
-        console.log()
-        this.parseOutput(response)
-        this.chat_loop()
-      })
+        })
+        .catch(err => {
+          console.log(colors.red(err))
+        })
     })
   }
 

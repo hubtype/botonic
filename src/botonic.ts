@@ -136,10 +136,14 @@ export class Botonic {
   async processInput(input: any, routePath: string,  context: any = {}) {
     i18n.setLocale(context.__locale || 'en')
     if(input.type == 'text') {
-      let intent: any = await this.getIntent(input)
-      if (intent){
-          input.intent = intent.data.result.metadata.intentName;
-          input.entities = intent.data.result.parameters;
+      try{
+        let intent: any = await this.getIntent(input)
+        if (intent){
+            input.intent = intent.data.result.metadata.intentName;
+            input.entities = intent.data.result.parameters;
+        }
+      } catch (e) {
+        return Promise.reject('Error in dialogflow integration')
       }
     }
     if(routePath)
@@ -202,20 +206,17 @@ export class Botonic {
   }
 
   async getIntent(input: any): Promise<any> {
-    try {
-      if(this.conf.integrations && this.conf.integrations.dialogflow) {
-        return axios({
-            headers: {
-              Authorization: 'Bearer ' + this.conf.integrations.dialogflow.token
-            },
-          url: 'https://api.dialogflow.com/v1/query',
-          params: {
-            query: input.data, lang: 'en', sessionId: this.df_session_id
-          }
-        })
-      }
+    if(this.conf.integrations && this.conf.integrations.dialogflow) {
+      return axios({
+          headers: {
+            Authorization: 'Bearer ' + this.conf.integrations.dialogflow.token
+          },
+        url: 'https://api.dialogflow.com/v1/query',
+        params: {
+          query: input.data, lang: 'en', sessionId: this.df_session_id
+        }
+      })
     }
-    catch(e){}
   }
 }
 

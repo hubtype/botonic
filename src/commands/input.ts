@@ -33,9 +33,13 @@ Hello!
 
     this.botonic = new Botonic(path)
 
-    this.botonic.processInput(args.input, route, context).then((response: string) => {
-      console.log(response)
-    })
+    this.botonic.processInput(args.input, route, context)
+      .then((response: string) => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log('Error:', err)
+      })
   }
 
 }
