@@ -35,38 +35,58 @@ export class Botonic {
     this.app = next({ dev: false })
   }
 
-  getAction(input: any) {
+  getAction(input: any, context: any) {
+    let brokenFlow = false;
     let routeParams: any = {}
-    //get ChildRoute depending of the past routepath
-    let lastRouteChilds = this.getLastChildRoutes(this.lastRoutePath, this.conf.routes)
-    if(lastRouteChilds) { //get route depending of current ChildRoute
-      routeParams = this.getRoute(input, lastRouteChilds)
-    }
+    let lastRoute = this.getLastRoute(this.lastRoutePath, this.conf.routes)
+    if(lastRoute && lastRoute.childRoutes) //get route depending of current ChildRoute
+      routeParams = this.getRoute(input, lastRoute.childRoutes)
     if(!routeParams || !Object.keys(routeParams).length) {
       /*
         we couldn't find a route in the state of the lastRoute, so let's find in
         the general conf.route
       */
-      this.lastRoutePath = null
+      brokenFlow = Boolean(this.lastRoutePath)
       routeParams = this.getRoute(input, this.conf.routes)
     }
-    if(!routeParams || !Object.keys(routeParams).length)
-      return {action: '404', params:{}}
-
-
-    if('action' in routeParams.route) {
-      if(this.lastRoutePath)
-        this.lastRoutePath = `${this.lastRoutePath}>${routeParams.route.action}`
-      else
-        this.lastRoutePath = routeParams.route.action
-      return {action: routeParams.route.action, params: routeParams.params}
-    } else if('redirect' in routeParams.route) {
-        this.lastRoutePath = routeParams.route.redirect
-        let path = routeParams.route.redirect.split('>')
-        return {action: path[path.length - 1], params: {}}
+    if(routeParams && Object.keys(routeParams).length) {
+      if('action' in routeParams.route) {
+        if(brokenFlow && routeParams.route.ignoreRetry != true &&
+            context.__retries <= lastRoute.retry &&
+            routeParams.route.action != lastRoute.action) {
+          context.__retries = context.__retries ? context.__retries + 1 : 1
+          // The flow was broken, but we want to recover it
+          return {
+            action: routeParams.route.action,
+            params: routeParams.params,
+            retryAction: lastRoute ? lastRoute.action : null
+          }
+        } else {
+          context.__retries = 0
+          if(this.lastRoutePath && !brokenFlow)
+            this.lastRoutePath = `${this.lastRoutePath}>${routeParams.route.action}`
+          else
+            this.lastRoutePath = routeParams.route.action
+          return {
+            action: routeParams.route.action,
+            params: routeParams.params,
+            retryAction: null
+          }
+        }
+      } else if('redirect' in routeParams.route) {
+          this.lastRoutePath = routeParams.route.redirect
+          let path = routeParams.route.redirect.split('>')
+          return {action: path[path.length - 1], params: {}, retryAction: null}
+      }
     }
-
-    return {action: '404', params:{}}
+    if(lastRoute && context.__retries < lastRoute.retry) {
+      context.__retries = context.__retries ? context.__retries + 1 : 1
+      return {action: '404', params:{}, retryAction: lastRoute.action}
+    } else {
+      this.lastRoutePath = null
+      context.__retries = 0
+      return {action: '404', params:{}, retryAction: null}
+    }
   }
 
   getRoute(input: any, routes:any) {
@@ -90,7 +110,7 @@ export class Botonic {
     return null
   }
 
-  getLastChildRoutes(path: any, routeList: any): any {
+  getLastRoute(path: any, routeList: any): any {
     /*
       Recursive function that iterates throw a string composed of
       a set of action separated by '/' ex: 'action1/action2',
@@ -98,16 +118,16 @@ export class Botonic {
       check if the childs can match with the next action.
     */
     if(!path) return null
-    var childRoutes = []
+    var lastRoute = {}
     let [currentPath, ...childPath] = path.split('>')
     for(let r of routeList) { //iterate over all routeList
       if(r.action == currentPath)
-        childRoutes = r.childRoutes
-      if(childRoutes && childRoutes.length && childPath.length > 0) {
+        lastRoute = r
+      if(r.childRoutes && r.childRoutes.length && childPath.length > 0) {
         //evaluate childroute over next actions
-        childRoutes = this.getLastChildRoutes(childPath.join('>'), childRoutes)
-        if(childRoutes && childRoutes.length) return childRoutes //if we find return it
-      } else if(childRoutes && childRoutes.length) return childRoutes //last action and finded route
+        lastRoute = this.getLastRoute(childPath.join('>'), r.childRoutes)
+        if(lastRoute) return lastRoute
+      } else if(lastRoute) return lastRoute //last action and finded route
     }
     return null
   }
@@ -148,7 +168,7 @@ export class Botonic {
     }
     if(routePath)
       this.lastRoutePath = routePath
-    let {action, params} = await this.getAction(input)
+    let {action, params, retryAction} = await this.getAction(input, context)
     try {
       let payload = input.payload
       let action_params = payload.split('__ACTION_PAYLOAD__')[1].split('?')
@@ -159,22 +179,15 @@ export class Botonic {
           params[key] = value
       }
     } catch {}
-    let path = action.split('/')
-    let component = 'actions/'
 
-    if((path.length-1) > 1){
-      path.forEach((item: string, index: number) => {
-        if((path.length -1) > index){
-          component = component + item + '/'
-        } else {
-          component = component + item
-        }
-      })
-    }
-    else {
-      component = component + action
-    }
+    let ret = await this.renderAction(action, input, context, params)
+    if(retryAction)
+      ret += await this.renderAction(retryAction, input, context, params)
+    return ret
+  }
 
+  async renderAction(action, input, context, params) {
+    let component = 'actions/' + action
     const req = {
       headers: {},
       method: 'GET',
