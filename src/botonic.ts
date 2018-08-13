@@ -118,7 +118,7 @@ export class Botonic {
       check if the childs can match with the next action.
     */
     if(!path) return null
-    var lastRoute = {}
+    var lastRoute = null
     let [currentPath, ...childPath] = path.split('>')
     for(let r of routeList) { //iterate over all routeList
       if(r.action == currentPath)
