@@ -33,6 +33,7 @@ export class Botonic {
     this.conf = require(join(this.path, '/.next/botonic.config.js'))
     process.chdir(this.path)
     this.app = next({ dev: false })
+    i18n.setLocale(this.conf.lang || 'en')
   }
 
   getAction(input: any, context: any) {
@@ -154,7 +155,6 @@ export class Botonic {
   }
 
   async processInput(input: any, routePath: string,  context: any = {}) {
-    i18n.setLocale(context.__locale || 'en')
     if(input.type == 'text') {
       try{
         let intent: any = await this.getIntent(input)
