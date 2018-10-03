@@ -1,0 +1,33 @@
+{
+  "name": "@botonic/core",
+  "version": "0.5.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf lib && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubtype/botonic.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hubtype/botonic/issues"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "chalk": "^2.3.2",
+    "cheerio": "^1.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@types/node": "^9.6.2",
+    "@types/cheerio": "^0.22.7",
+    "ts-node": "5",
+    "tslib": "^1.9.0",
+    "tslint": "^5.9.1",
+    "typescript": "~3.0.0"
+  },
+  "homepage": "https://github.com/hubtype/botonic#readme"
+}

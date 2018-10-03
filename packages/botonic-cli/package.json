@@ -1,0 +1,71 @@
+{
+  "name": "@botonic/cli",
+  "description": "Build Chatbots Using React",
+  "version": "0.5.0",
+  "bin": {
+    "botonic": "./bin/run"
+  },
+  "bugs": "https://github.com/hubtype/botonic/issues",
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^2",
+    "tslib": "^1",
+    "@botonic/core": "^0.5.0",
+    "chalk":"^2.3.2",
+    "cli-table3":"^0.5.0",
+    "colors":"^1.2.1",
+    "folder-hash":"^2.0.0",
+    "form-data":"^2.3.2",
+    "inquirer":"^5.1.0",
+    "mixpanel":"^0.9.0"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@oclif/test": "^1",
+    "@oclif/tslint": "^3",
+    "@types/chai": "^4",
+    "@types/mocha": "^5",
+    "@types/node": "^10",
+    "chai": "^4",
+    "globby": "^8",
+    "mocha": "^5",
+    "nyc": "^13",
+    "ts-node": "^7",
+    "tslint": "^5",
+    "typescript": "^3.0"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/hubtype/botonic",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "botonic",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "repository": "hubtype/botonic",
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
+    "posttest": "tslint -p test -t stylish",
+    "prepack": "oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md",
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "types": "lib/index.d.ts"
+}

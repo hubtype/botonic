@@ -1,85 +1,25 @@
 {
-  "name": "botonic",
-  "description": "Build chatbots using React",
-  "version": "0.4.1",
-  "author": "ericmarcos @ericmarcos",
-  "bin": {
-    "botonic": "./bin/run"
-  },
-  "bugs": "https://github.com/hubtype/botonic/issues",
-  "dependencies": {
-    "@babel/core": "^7.0.0-beta.42",
-    "@oclif/command": "^1.4.9",
-    "@oclif/config": "^1.4.0",
-    "@oclif/plugin-help": "^1.2.3",
-    "axios": "^0.18.0",
-    "chalk": "^2.3.2",
-    "cheerio": "^1.0.0-rc.2",
-    "cli-table3": "^0.5.0",
-    "colors": "^1.2.1",
-    "folder-hash": "^2.0.0",
-    "form-data": "^2.3.2",
-    "inquirer": "^5.1.0",
-    "mixpanel": "^0.9.0",
-    "next": "^6.1.1",
-    "ora": "^2.0.0",
-    "react": "16.4.1",
-    "react-dom": "16.4.1"
-  },
+  "private": true,
   "devDependencies": {
-    "@oclif/dev-cli": "^1.9.0",
-    "@oclif/test": "^1.0.4",
-    "@oclif/tslint": "^1.1.0",
-    "@types/chai": "^4.1.2",
-    "@types/cheerio": "^0.22.7",
-    "@types/cli-table2": "^0.2.1",
-    "@types/inquirer": "0.0.41",
-    "@types/mixpanel": "^2.14.0",
-    "@types/mocha": "^5.0.0",
-    "@types/next": "^2.4.8",
     "@types/node": "^9.6.2",
-    "chai": "^4.1.2",
-    "globby": "^8.0.1",
+    "lerna": "^3.4.0",
     "mocha": "^5.0.5",
     "ts-node": "5",
     "tslib": "^1.9.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.8.1"
+    "typescript": "^3.0.0"
   },
   "engines": {
     "node": ">=8.0.0"
   },
-  "files": [
-    ".oclif.manifest.json",
-    "/bin",
-    "/lib",
-    "/scripts",
-    "/templates"
-  ],
-  "homepage": "https://github.com/hubtype/botonic",
-  "keywords": [
-    "oclif"
-  ],
   "license": "MIT",
-  "main": "lib/index.js",
-  "oclif": {
-    "commands": "./lib/commands",
-    "bin": "botonic",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
-  },
-  "repository": "hubtype/botonic",
   "scripts": {
-    "build": "rm -rf lib && tsc && cd src && node ../node_modules/next/dist/bin/next-build && cp -r .next/* ../lib/react/ && rm -rf .next/",
-    "clean": "rm -f .oclif.manifest.json",
-    "postpublish": "yarn run clean",
-    "posttest": "tsc -p test --noEmit && tslint -p test -t stylish",
-    "prepublishOnly": "yarn run build && oclif-dev manifest",
-    "preversion": "yarn run clean",
-    "postinstall": "node scripts/postinstall.js",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
+    "bootstrap": "lerna bootstrap",
+    "test": "lerna run test",
+    "build": "lerna run build",
+    "clean": "rimraf packages/**/lib"
   },
-  "types": "lib/index.d.ts"
+  "workspaces": [
+    "packages/*"
+  ]
 }
