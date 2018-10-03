@@ -43,7 +43,9 @@
     "/bin",
     "/lib",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/oclif.manifest.json",
+    "/scripts",
+    "/templates"
   ],
   "homepage": "https://github.com/hubtype/botonic",
   "keywords": [
