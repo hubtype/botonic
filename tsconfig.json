@@ -1,19 +1,9 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "declaration": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "module": "commonjs",
-    "noImplicitAny": false,
-    "outDir": "./lib",
-    "pretty": true,
-    "rootDirs": [
-      "./src"
-    ],
-    "strict": true,
-    "target": "es2017"
-  },
-  "include": [
-    "./src/**/*"
-  ]
+    "baseUrl": "./packages",
+    "paths": {
+      "@botonic/*": ["./*/src"]
+    }
+  }
 }
