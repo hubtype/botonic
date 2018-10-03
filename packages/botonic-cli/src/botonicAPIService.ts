@@ -246,7 +246,7 @@ export class BotonicAPIService {
     let data = fs.createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
     let headers = await this.getHeaders(form)
-    return this.api(`bots/${this.bot.id}/deploy_botonic/`, form, 'post', {...this.headers, ...headers}, {password: password})
+    return this.api(`bots/${this.bot.id}/deploy_botonic_new/`, form, 'post', {...this.headers, ...headers}, {password: password})
   }
 
   async getHeaders(form: any) {
