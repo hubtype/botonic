@@ -207,7 +207,7 @@ export class BotonicAPIService {
   signup(email:string, password:string, org_name:string, campaign:any): Promise<any>{
     let url = `${this.baseApiUrl}users/`
     if(campaign)
-      campaign.mixpanel_id = this.mixpanel ? this.mixpanel.distinct_id : Math.round(Math.random()*10000000000) 
+      campaign.mixpanel_id = this.mixpanel ? this.mixpanel.distinct_id : Math.round(Math.random()*10000000000)
     let signup_data = {email, password, org_name, campaign}
     return axios({
       method: 'post',
