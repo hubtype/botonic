@@ -37,7 +37,7 @@ Uploading...
       await this.signupFlow()
     else
       await this.deployBotFlow()
-    
+
     track('botonic_deploy')
   }
 
