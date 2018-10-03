@@ -188,7 +188,7 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
     }).start()
-    let zip_cmd = `zip -P ${zip_password} -r botonic_bundle.zip .next`;
+    let zip_cmd = `zip -P ${zip_password} -r botonic_bundle.zip dist`;
     let zip_out = await exec(zip_cmd)
     const zip_stats = fs.statSync('botonic_bundle.zip')
     spinner.succeed()
