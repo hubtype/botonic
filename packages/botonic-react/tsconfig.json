@@ -2,9 +2,12 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "jsx": "react"
   },
   "references": [
-    { "path": "../botonic-core" }
+    {
+      "path": "../botonic-core"
+    }
   ]
 }
