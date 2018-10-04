@@ -85,7 +85,6 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
         input = {type: 'postback', 'payload': inp.input.slice(1)}
       this.botonic.processInput(input, null, this.context)
         .then((response: string) => {
-          console.log('context: ', this.context)
           if(this.context['is_first_interaction'])
             this.context['is_first_interaction'] = false
           if(['/q', '/quit'].indexOf(input.data) >= 0)

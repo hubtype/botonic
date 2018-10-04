@@ -6,6 +6,8 @@
     "build": "npm run -s build:bot; npm run -s build:webviews; npm run -s build:assets;"
   },
   "dependencies": {
+    "@botonic/core": "latest",
+    "@botonic/react": "latest",
     "react": "^16.5.2",
     "react-dom": "^16.5.2"
   },
