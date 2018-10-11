@@ -25,7 +25,7 @@ export class Botonic {
     let lastRoute = this.getLastRoute(this.lastRoutePath, this.conf.routes)
     if (lastRoute && lastRoute.childRoutes) //get route depending of current ChildRoute
       routeParams = this.getRoute(input, lastRoute.childRoutes)
-    if (!routeParams || !Object.keys(routeParams).length)  {
+    if (!routeParams || !Object.keys(routeParams).length) {
       /*
         we couldn't find a route in the state of the lastRoute, so let's find in
         the general conf.route

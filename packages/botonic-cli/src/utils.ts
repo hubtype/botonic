@@ -11,11 +11,11 @@ export const botonic_home_path: string = path.join(os.homedir(), '.botonic')
 export const botonic_credentials_path = path.join(botonic_home_path, 'credentials.json')
 
 export function initializeCredentials() {
-  if(!fs.existsSync(botonic_home_path))
+  if (!fs.existsSync(botonic_home_path))
     fs.mkdirSync(botonic_home_path)
-  let distinct_id = Math.round(Math.random()*100000000)
+  let distinct_id = Math.round(Math.random() * 100000000)
   fs.writeFileSync(botonic_credentials_path,
-    JSON.stringify({mixpanel: {distinct_id}}))
+    JSON.stringify({ mixpanel: { distinct_id } }))
 }
 
 function readCredentials() {
@@ -24,34 +24,34 @@ function readCredentials() {
   }
   try {
     credentials = JSON.parse(fs.readFileSync(botonic_credentials_path))
-  } catch(e) {}
+  } catch (e) { }
 }
 
 try {
   readCredentials()
-} catch(e) {}
+} catch (e) { }
 
-if(track_mixpanel()){
+if (track_mixpanel()) {
   mixpanel = Mixpanel.init(mixpanel_token, {
     protocol: 'https'
   })
 }
 
 export function track(event: string) {
-  if(track_mixpanel() && mixpanel && credentials && credentials.mixpanel)
-    mixpanel.track(event, {distinct_id: credentials.mixpanel ? credentials.mixpanel.distinct_id : null})
+  if (track_mixpanel() && mixpanel && credentials && credentials.mixpanel)
+    mixpanel.track(event, { distinct_id: credentials.mixpanel ? credentials.mixpanel.distinct_id : null })
 }
 
 export function alias(email: string) {
-  if(track_mixpanel() && mixpanel && credentials && credentials.mixpanel && email) {
-    mixpanel.alias(credentials.mixpanel.distinct_id, email, (e:any) => {console.log(e)})
+  if (track_mixpanel() && mixpanel && credentials && credentials.mixpanel && email) {
+    mixpanel.alias(credentials.mixpanel.distinct_id, email, (e: any) => { console.log(e) })
     credentials.mixpanel.distinct_id = email
     fs.writeFileSync(botonic_credentials_path, JSON.stringify(credentials))
   }
 }
 
 export function botonicPostInstall() {
-  if(track_mixpanel()) {
+  if (track_mixpanel()) {
     initializeCredentials()
     readCredentials()
     track('botonic_install')
@@ -60,4 +60,8 @@ export function botonicPostInstall() {
 
 function track_mixpanel() {
   return process.env.BOTONIC_DISABLE_MIXPANEL !== '1'
+}
+
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
