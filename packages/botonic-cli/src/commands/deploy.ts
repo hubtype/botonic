@@ -9,7 +9,7 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 
 import { BotonicAPIService } from '../botonicAPIService'
-import { track } from '../utils'
+import { track, sleep } from '../utils'
 
 
 export default class Run extends Command {
@@ -199,31 +199,50 @@ Uploading...
       return
     }
     spinner = new ora({
-      text: 'Uploading...',
+      text: 'Deploying...',
       spinner: 'bouncingBar'
     }).start()
     try {
-      await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
-      spinner.succeed()
-      console.log(colors.green('\n🚀  Bot deployed!\n'))
-      this.botonicApiService.getProviders()
-        .then((resp) => {
-          if (!resp) return;
-          let providers = resp.data.results
-          if (!providers.length) {
-            let links = `Now, you can integrate a channel in:\nhttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
-            console.log(links)
+      let deploy = await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
+      while (true) {
+        await sleep(500)
+        let deploy_status = await this.botonicApiService.deployStatus(deploy.data.deploy_id)
+        if (deploy_status.data.is_completed) {
+          if (deploy_status.data.status == 'deploy_status_completed_ok') {
+            spinner.succeed()
+            console.log(colors.green('\n🚀  Bot deployed!\n'))
+            break
           } else {
-            this.displayProviders(providers)
+            spinner.fail()
+            console.log(deploy_status.data.error)
+            console.log(colors.red('There was a problem in the deploy'))
+            await exec('rm botonic_bundle.zip')
+            return
           }
-        },
-          (err) => console.log(colors.red('There was an error getting the providers'), err))
+        }
+      }
     } catch (err) {
       spinner.fail()
       console.log(err)
       console.log(colors.red('There was a problem in the deploy'))
+      await exec('rm botonic_bundle.zip')
+      return
     }
-    let rm_zip = await exec('rm botonic_bundle.zip')
+    try {
+      let providers_resp = await this.botonicApiService.getProviders()
+      let providers = providers_resp.data.results
+      if (!providers.length) {
+        let links = `Now, you can integrate a channel in:\nhttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
+        console.log(links)
+      } else {
+        this.displayProviders(providers)
+      }
+    } catch (e) {
+      console.log(colors.red('There was an error getting the providers'), e)
+    }
+    try {
+      await exec('rm botonic_bundle.zip')
+    } catch (e) { }
     this.botonicApiService.beforeExit()
   }
 }
