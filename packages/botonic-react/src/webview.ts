@@ -1,26 +1,27 @@
 
 import axios from 'axios'
 
+declare global {
+	interface Window { MessengerExtensions: any; }
+}
 
-const BOTONIC_URL = process.env.BOTONIC_URL || 'https://api.hubtype.com'
-
-var MessengerExtensions: any;
+window.MessengerExtensions = window.MessengerExtensions || {};
 
 export class BotonicWebview {
 
 	static async close(context, payload) {
 		if (payload) {
-			const contextUrl = BOTONIC_URL + '/v1/bots/' + context.bot.id + '/send_postback/'
 			try {
+				let base_url = context._hubtype_api || 'https://api.hubtype.com'
 				let resp = await axios({
 					method: 'post',
-					url: contextUrl,
+					url: `${base_url}/v1/bots/${context.bot.id}/send_postback/`,
 					data: { payload: payload, chat_id: context.user.id }
 				})
 			} catch (e) {
 				console.log(e)
 			}
 		}
-		MessengerExtensions.requestCloseBrowser(() => { }, (err) => console.log(err))
+		window.MessengerExtensions.requestCloseBrowser(() => { }, (err) => console.log(err))
 	}
 }
