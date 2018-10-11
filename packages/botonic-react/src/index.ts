@@ -21,10 +21,6 @@ export async function renderReactAction(req, action) {
     return ReactDOMServer.renderToStaticMarkup(component)
 }
 
-export function humanHandOff(req: any) {
-    req.context['_botonic_action'] = 'create_case'
-}
-
 export function setLocale(req: any, locale: string) {
     req.context.__locale = locale
     i18n.setLocale(locale)

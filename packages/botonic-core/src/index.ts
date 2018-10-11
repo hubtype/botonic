@@ -201,3 +201,29 @@ export class Botonic {
     }
   }
 }
+
+export async function getOpenQueues(req: any, api_endpoint:any) {
+  //need to change into api url
+  const queues_url = api_endpoint + '/v1/queues/get_open_queues/'
+  let bot_id = req.context['bot']['id']
+  let resp = await axios({
+      headers: {
+          Authorization: 'Bearer ' + req.context['access_token']
+      },
+      method: 'post',
+      url: queues_url,
+      data: {'bot_id': bot_id}
+  })
+  return resp.data
+}
+
+export async function humanHandOff(req: any, queue_name: any = '', on_finish:any = {}) {
+  let params = `create_case:${queue_name}`
+  if(on_finish) {
+      if(on_finish.action)
+          params += `:__ACTION_PAYLOAD__${on_finish.action}`
+      else if(on_finish.payload)
+          params += `:${on_finish.payload}`
+  }
+  req.context['_botonic_action'] = params
+}
