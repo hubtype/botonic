@@ -1,11 +1,6 @@
 
 import axios from 'axios'
 
-declare global {
-	interface Window { MessengerExtensions: any; }
-}
-
-window.MessengerExtensions = window.MessengerExtensions || {};
 
 export class BotonicWebview {
 
@@ -22,6 +17,6 @@ export class BotonicWebview {
 				console.log(e)
 			}
 		}
-		window.MessengerExtensions.requestCloseBrowser(() => { }, (err) => console.log(err))
+		(<any>window).MessengerExtensions.requestCloseBrowser(() => { }, (err) => console.log(err))
 	}
 }
