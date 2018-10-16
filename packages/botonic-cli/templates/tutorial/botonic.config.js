@@ -23,7 +23,7 @@ module.exports = {
         There are 3 types of tests:
         - String --> Perfect match
         - Regexp --> Pass the regular expression
-        - Function --> Passes if the funtion returns true
+        - Function --> Passes if the function returns true
 
         The rules will be tested in order so if the 1st rule matches, Botonic won't test
         other routes and will execute the 1st action.
@@ -51,6 +51,12 @@ module.exports = {
         /* These rules capture different payloads */
         {payload: "carrousel", action: "carrousel"},
         {payload: /^(yes|no)$/, action: "quickreply_response"},
+
+        /* Here is an example of how you can integrate Facebook Webviews with your bot */
+        {text:/^webviews$/i, action:"webviews"},
+        /* After closing a webview, sometimes we want obtain its data, these are some examples */
+        {payload: /^DATA_.*/, action:'webviews_response'},
+        {payload: "closed_webview", action:"closed_webview"},
 
         /* This rule uses a function test to capture any text that starts with 'bye' */
         {text: (t) => t.startsWith('bye'), action: "bye"},
