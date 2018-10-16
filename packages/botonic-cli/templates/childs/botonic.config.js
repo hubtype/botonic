@@ -8,16 +8,16 @@ module.exports = {
     routes: [
         {text: /^hi$/i, action: "hi",
             childRoutes: [
-                {text: /^pizza$/i, action: "pizza", 
+                {payload: /^pizza$/i, action: "pizza", 
                     childRoutes: [
-                        {text: /^sausage$/i, action: "sausage"},
-                        {text: /^bacon$/i, action: "bacon"}
+                        {payload: /^sausage$/i, action: "sausage"},
+                        {payload: /^bacon$/i, action: "bacon"}
                     ]
                 },
-                {text: /^pasta$/i, action: "pasta", 
+                {payload: /^pasta$/i, action: "pasta", 
                     childRoutes: [
-                        {text: /^cheese$/i, action: "cheese"},
-                        {text: /^tomato$/i, action: "tomato"}
+                        {payload: /^cheese$/i, action: "cheese"},
+                        {payload: /^tomato$/i, action: "tomato"}
                     ]
                 }
             ]

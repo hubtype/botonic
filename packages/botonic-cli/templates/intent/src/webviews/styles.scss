@@ -1,0 +1,19 @@
+.my-webview {
+  padding: 12px;
+  text-align: center;
+  h2 {
+    font-size: 20px;
+    margin-top: 12px;
+  }
+  .alert {
+    margin-top: 24px;
+  }
+  .close-btn {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    border-radius: 0px;
+  }
+}

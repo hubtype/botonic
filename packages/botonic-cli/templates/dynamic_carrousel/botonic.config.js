@@ -14,8 +14,8 @@ module.exports = {
 
 
         /* These rules capture different payloads */
-        {text: "mens-shirts", action: "mens-shirts"},
-        {text: "womens-shirts", action: "womens-shirts"},
+        {payload: "mens-shirts", action: "mens-shirts"},
+        {payload: "womens-shirts", action: "womens-shirts"},
 
 
         /* There's an implicit rule that captures any other input and maps it to
