@@ -36,7 +36,7 @@ export class Botonic {
     if (routeParams && Object.keys(routeParams).length) {
       if ('action' in routeParams.route) {
         if (brokenFlow && routeParams.route.ignoreRetry != true &&
-          context.__retries < lastRoute.retry &&
+          lastRoute && context.__retries < lastRoute.retry &&
           routeParams.route.action != lastRoute.action) {
           context.__retries = context.__retries ? context.__retries + 1 : 1
           // The flow was broken, but we want to recover it
