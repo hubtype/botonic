@@ -13,7 +13,7 @@ import { track, sleep } from '../utils'
 
 
 export default class Run extends Command {
-  static description = 'Deploy Botonic project to botonic.io cloud'
+  static description = 'Deploy Botonic project to hubtype.com'
 
   static examples = [
     `$ botonic deploy
@@ -49,7 +49,7 @@ Uploading...
     return prompt([{
       type: 'list',
       name: 'signupConfirmation',
-      message: 'You need to login before deploying your bot.\nDo you have a Botonic account already?',
+      message: 'You need to login before deploying your bot.\nDo you have a Hubtype account already?',
       choices: choices
     }]).then((inp: any) => {
       if (inp.signupConfirmation == choices[1])
@@ -192,9 +192,9 @@ Uploading...
     let zip_out = await exec(zip_cmd)
     const zip_stats = fs.statSync('botonic_bundle.zip')
     spinner.succeed()
-    if (zip_stats.size >= 10 ** 7) {
+    if (zip_stats.size >= 5 * 10 ** 6) {
       spinner.fail()
-      console.log(colors.red(`Deploy failed. Bundle size too big ${zip_stats.size} (max 1Mb).`))
+      console.log(colors.red(`Deploy failed. Bundle size too big ${zip_stats.size} (max 5Mb).`))
       await exec('rm botonic_bundle.zip')
       return
     }
@@ -232,7 +232,7 @@ Uploading...
       let providers_resp = await this.botonicApiService.getProviders()
       let providers = providers_resp.data.results
       if (!providers.length) {
-        let links = `Now, you can integrate a channel in:\nhttps://app.botonic.io/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
+        let links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`;
         console.log(links)
       } else {
         this.displayProviders(providers)
