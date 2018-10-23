@@ -1,13 +1,13 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "bin": {
     "botonic": "./bin/run"
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
   "dependencies": {
-    "@botonic/core": "^0.5.0",
+    "@botonic/core": "^0.5.1",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
