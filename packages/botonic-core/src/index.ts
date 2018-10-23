@@ -176,7 +176,7 @@ export class Botonic {
     let a = require(join(this.path, `./dist/actions/${action}`)).default
     let req = { input, context, params }
     // Call render method depending on project "flavour" (React, Angular, Vue...)
-    const BotonicReact = await import('@botonic/react')
+    const BotonicReact = await import(`${this.path}/node_modules/@botonic/react`)
     let output = await BotonicReact.renderReactAction(req, a)
     let html = load(output)
     
