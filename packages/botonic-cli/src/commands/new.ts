@@ -33,6 +33,18 @@ Creating...
   },{
     name: 'blank',
     description: 'Blank: A minimal template to start from scratch'
+  },{
+    name: 'childs',
+    description: 'Childs: Understand how childRoutes works'
+  },{
+    name: 'dynamic_carousel',
+    description: 'Dynamic Carousel: See a dynamic carousel for Facebook'
+  },{
+    name: 'handoff',
+    description: 'Handoff: Test how to transfer a conversation into Hubtype Desk'
+  },{
+    name: 'intent',
+    description: 'Intent: Integrate NLU and see the magic!'
   }]
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
