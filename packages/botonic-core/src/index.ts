@@ -179,6 +179,15 @@ export class Botonic {
     const BotonicReact = await import('@botonic/react')
     let output = await BotonicReact.renderReactAction(req, a)
     let html = load(output)
+    
+    let delay = this.conf.typingOptions && this.conf.typingOptions.delay ? this.conf.typingOptions.delay : 0
+    let typing = this.conf.typingOptions && this.conf.typingOptions.typing ? this.conf.typingOptions.typing : 0
+    html('message').map(({ }, elem) => {
+      let e = html(elem)
+      e.attr('delay', e.attr('delay') ? e.attr('delay') : delay)
+      e.attr('typing', e.attr('typing') ? e.attr('typing') : typing)
+    })
+
     html('[action]').map(({ }, elem) => {
       let e = html(elem)
       e.attr('payload', '__ACTION_PAYLOAD__' + e.attr('action'))
