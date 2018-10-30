@@ -81,7 +81,7 @@ Creating...
       text: 'Installing dependencies...',
       spinner: 'bouncingBar'
     }).start()
-    let dependencyCommand = `yarn install`
+    let dependencyCommand = `npm install`
     let dependency = await exec(dependencyCommand)
     spinner.succeed()
     await this.botonicApiService.buildIfChanged()
