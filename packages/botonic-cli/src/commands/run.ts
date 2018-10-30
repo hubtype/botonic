@@ -115,7 +115,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
       .map(({}, elem) => {
         let el = html(elem)
         let out = ''
-        let short = (v: string) => v.length > 20? v.substring(0, 17) + '...' : v
+        let short = (v: any, _index: any, _array: any) => v.length > 20? v.substring(0, 17) + '...' : v
         if(el.is('[type=text]')) {
           out = el.contents().filter(e => el.contents()[e].type === 'text').text().trim()
         } else if(el.is('[type=carrousel]') || el.is('[type=carousel]')) {
@@ -134,7 +134,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
               .get()
               .map(b => Object.values(b).map(short))
               .map(([title, desc]) => `${title}\n(${desc})`)
-            te.push([short(el.find('title').text()) + '\n\n' + short(el.find('desc').text())], buttons)
+            te.push([short(el.find('title').text(), null, null) + '\n\n' + short(el.find('desc').text(), null, null)], buttons)
             cards.push(te.toString())
           })
           if(el.find('element').length > 3)
