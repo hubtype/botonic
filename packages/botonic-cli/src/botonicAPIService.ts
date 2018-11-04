@@ -92,7 +92,7 @@ export class BotonicAPIService {
 
   async getCurrentBuildHash() {
     const options = {
-      folders: { exclude: ['.*', 'node_modules'] },
+      folders: { exclude: ['.*', 'node_modules', 'dist'] },
       files: { include: ['*.js', '*.css'] }
     }
     let hash = await hashElement('.', options)
