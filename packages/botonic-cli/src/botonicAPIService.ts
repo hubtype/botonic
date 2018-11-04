@@ -237,7 +237,7 @@ export class BotonicAPIService {
     return this.api('provider_accounts/', null, 'get', null, { bot_id: this.bot.id })
   }
 
-  async deployBot(bundlePath: string, password: any): Promise<any> {
+  async deployBot(bundlePath: string, password: any, forceDeploy: boolean): Promise<any> {
     try {
       let a = await this.getMe()
     } catch (e) {
@@ -247,7 +247,8 @@ export class BotonicAPIService {
     let data = fs.createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
     let headers = await this.getHeaders(form)
-    return this.api(`bots/${this.bot.id}/deploy_botonic_new/`, form, 'post', { ...this.headers, ...headers }, { password: password })
+    console.log("doing API CALL")
+    return this.api(`bots/${this.bot.id}/deploy_botonic_new/`, form, 'post', { ...this.headers, ...headers }, { password: password, forceDeploy: forceDeploy })
   }
 
   async deployStatus(deploy_id: string): Promise<any> {

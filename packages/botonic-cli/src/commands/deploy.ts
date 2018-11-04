@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { join, resolve } from 'path'
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
@@ -11,6 +11,7 @@ const exec = util.promisify(require('child_process').exec)
 import { BotonicAPIService } from '../botonicAPIService'
 import { track, sleep } from '../utils'
 
+var force = false
 
 export default class Run extends Command {
   static description = 'Deploy Botonic project to hubtype.com'
@@ -23,6 +24,10 @@ Uploading...
 🚀 Bot deployed!
 `,
   ]
+  static flags = {
+    force: flags.boolean({char: 'f', description: 'Force deploy despite of no changes. Disabled by default'}),
+    path: flags.string({char: 'p', description: 'Path to botonic project. Defaults to current dir.'})
+  }
 
   static args = [{ name: 'bot_name' }]
 
@@ -32,7 +37,7 @@ Uploading...
     const { args, flags } = this.parse(Run)
 
     const path = flags.path ? resolve(flags.path) : process.cwd()
-
+    force = flags.force ? flags.force : false
     if (!this.botonicApiService.oauth)
       await this.signupFlow()
     else
@@ -126,7 +131,7 @@ Uploading...
             {
               type: 'confirm',
               name: 'create_bot_confirm',
-              message: 'Do yout want to create a new Bot?'
+              message: 'Do you want to create a new Bot?'
             }]).then((res: any) => {
               let confirm = res.create_bot_confirm
               if (confirm) {
@@ -201,9 +206,11 @@ Uploading...
     spinner = new ora({
       text: 'Deploying...',
       spinner: 'bouncingBar'
-    }).start()
+    })
     try {
-      let deploy = await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password)
+      var deploy = await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password, force)      
+      console.log("DEPLOY RESSULT", deploy)
+      spinner.start()
       while (true) {
         await sleep(500)
         let deploy_status = await this.botonicApiService.deployStatus(deploy.data.deploy_id)
