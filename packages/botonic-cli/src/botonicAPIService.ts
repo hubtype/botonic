@@ -137,7 +137,6 @@ export class BotonicAPIService {
   }
 
   async api(path: string, body: any = null, method: string = 'get', headers: any | null = null, params: any = null): Promise<any> {
-
     var b = 0
     try {
       return await axios({
@@ -148,12 +147,15 @@ export class BotonicAPIService {
         params: params
       })
     } catch (e) {
-      b = 1
+      if(e.response.status == 401){
+        b = 1
+      }else {
+        return e
+      }
     }
     if (b == 1) {
       await this.refreshToken()
     }
-
     return await axios({
       method: method,
       url: this.baseApiUrl + path,
@@ -247,8 +249,7 @@ export class BotonicAPIService {
     let data = fs.createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
     let headers = await this.getHeaders(form)
-    console.log("doing API CALL")
-    return this.api(`bots/${this.bot.id}/deploy_botonic_new/`, form, 'post', { ...this.headers, ...headers }, { password: password, forceDeploy: forceDeploy })
+    return await this.api(`bots/${this.bot.id}/deploy_botonic_new/`, form, 'post', { ...this.headers, ...headers }, { password: password, forceDeploy: forceDeploy })
   }
 
   async deployStatus(deploy_id: string): Promise<any> {
