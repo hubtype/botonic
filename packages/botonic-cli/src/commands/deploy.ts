@@ -26,7 +26,6 @@ Uploading...
   ]
   static flags = {
     force: flags.boolean({char: 'f', description: 'Force deploy despite of no changes. Disabled by default'}),
-    path: flags.string({char: 'p', description: 'Path to botonic project. Defaults to current dir.'})
   }
 
   static args = [{ name: 'bot_name' }]
@@ -36,7 +35,6 @@ Uploading...
   async run() {
     const { args, flags } = this.parse(Run)
 
-    const path = flags.path ? resolve(flags.path) : process.cwd()
     force = flags.force ? flags.force : false
     if (!this.botonicApiService.oauth)
       await this.signupFlow()
@@ -207,9 +205,12 @@ Uploading...
       text: 'Deploying...',
       spinner: 'bouncingBar'
     })
-    try {
-      var deploy = await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password, force)      
-      console.log("DEPLOY RESSULT", deploy)
+    try { 
+      var deploy = await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password, force)
+      if(deploy.response && deploy.response.status == 403){
+        throw deploy.response.data.status
+      }
+      
       spinner.start()
       while (true) {
         await sleep(500)
