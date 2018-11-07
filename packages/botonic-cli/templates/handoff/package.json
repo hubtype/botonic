@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build:bot": "cp botonic.config.js src/ && parcel build src/actions/*.js src/actions/**/*.js src/locales/*.js src/botonic.config.js --target=node --bundle-node-modules --no-source-maps && rm src/botonic.config.js",
+    "build:bot": "cp botonic.config.js src/ && parcel build src/actions/*.js src/actions/**/*.js src/locales/*.js src/botonic.config.js src/routes.js --target=node --bundle-node-modules --no-source-maps && rm src/botonic.config.js",
     "build:webviews": "parcel build src/webviews/index.html --out-dir='dist/webviews'",
     "build:assets": "cp -r src/assets/ dist/assets;",
     "build": "npm run -s build:bot && npm run -s build:webviews && npm run -s build:assets;"

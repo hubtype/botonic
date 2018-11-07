@@ -1,3 +1,4 @@
 module.exports = {
-    routes: []
+    integrations: {},
+    typingOptions: {}
 }
