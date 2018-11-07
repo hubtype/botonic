@@ -10,19 +10,26 @@ export class Botonic {
   public bot_path: string = join(this.current_path, '/.botonic.json')
   public path: string
   public conf: any
+  public routes: any
   private df_session_id: number = Math.random()
   private lastRoutePath: any
 
   constructor(config_path: string) {
     this.path = config_path
     this.conf = require(join(this.path, '/dist/botonic.config.js'))
+    try{
+      this.routes = require(join(this.path, '/dist/routes.js')).routes
+    } catch(e){
+      this.routes = null
+    }
+    
     process.chdir(this.path)
   }
 
   getAction(input: any, context: any) {
     let brokenFlow = false;
     let routeParams: any = {}
-    let lastRoute = this.getLastRoute(this.lastRoutePath, this.conf.routes)
+    let lastRoute = this.getLastRoute(this.lastRoutePath, this.conf.routes || this.routes)
     if (lastRoute && lastRoute.childRoutes) //get route depending of current ChildRoute
       routeParams = this.getRoute(input, lastRoute.childRoutes)
     if (!routeParams || !Object.keys(routeParams).length) {
@@ -31,7 +38,7 @@ export class Botonic {
         the general conf.route
       */
       brokenFlow = Boolean(this.lastRoutePath)
-      routeParams = this.getRoute(input, this.conf.routes)
+      routeParams = this.getRoute(input, this.conf.routes || this.routes)
     }
     if (routeParams && Object.keys(routeParams).length) {
       if ('action' in routeParams.route) {
