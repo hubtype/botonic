@@ -204,14 +204,13 @@ Uploading...
     spinner = new ora({
       text: 'Deploying...',
       spinner: 'bouncingBar'
-    })
+    }).start()
     try { 
       var deploy = await this.botonicApiService.deployBot('botonic_bundle.zip', zip_password, force)
       if(deploy.response && deploy.response.status == 403){
         throw deploy.response.data.status
       }
       
-      spinner.start()
       while (true) {
         await sleep(500)
         let deploy_status = await this.botonicApiService.deployStatus(deploy.data.deploy_id)
