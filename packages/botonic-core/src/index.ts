@@ -151,13 +151,10 @@ export class Botonic {
     i18n.setLocale(context.__locale || 'en')
     if (input.type == 'text') {
       try {
-        let intent: any = await this.getIntent(input)
-        if (intent) {
-          input.intent = intent.data.result.metadata.intentName;
-          input.entities = intent.data.result.parameters;
-        }
+        let nlu = await this.getNLU(input)
+        Object.assign(input, nlu)
       } catch (e) {
-        return Promise.reject('Error in dialogflow integration')
+        return Promise.reject(`Error in NLU integration: ${e}`)
       }
     }
     if (routePath)
@@ -206,18 +203,48 @@ export class Botonic {
     return html.html()
   }
 
-  async getIntent(input: any): Promise<any> {
-    if (this.conf.integrations && this.conf.integrations.dialogflow) {
-      return axios({
-        headers: {
-          Authorization: 'Bearer ' + this.conf.integrations.dialogflow.token
-        },
-        url: 'https://api.dialogflow.com/v1/query',
-        params: {
-          query: input.data, lang: 'en', sessionId: this.df_session_id
+  async getNLU(input: any): Promise<any> {
+    let intent = null
+    let confidence = 0
+    let intents = []
+    let entities = []
+    if (!this.conf.integrations)
+      return { intent, confidence, intents, entities }
+    if (this.conf.integrations.dialogflow) {
+      try {
+        let dialogflow_resp = await axios({
+          headers: {
+            Authorization: 'Bearer ' + this.conf.integrations.dialogflow.token
+          },
+          url: 'https://api.dialogflow.com/v1/query',
+          params: {
+            query: input.data, lang: 'en', sessionId: this.df_session_id
+          }
+        })
+        if (dialogflow_resp && dialogflow_resp.data) {
+          intent = dialogflow_resp.data.result.metadata.intentName;
+          entities = dialogflow_resp.data.result.parameters;
         }
-      })
+      } catch (e) { }
+    } else if (this.conf.integrations.watson) {
+      let w = this.conf.integrations.watson
+      const AssistantV1 = await import(`${this.path}/node_modules/watson-developer-cloud/assistant/v1`)
+      let assistant = new AssistantV1({ version: '2017-05-26', ...this.conf.integrations.watson });
+
+      assistant.message = util.promisify(assistant.message)
+
+      try {
+        let res = await assistant.message({
+          input: { text: input.data },
+          workspace_id: this.conf.integrations.watson.workspace_id
+        })
+        intent = res.intents[0].intent
+        confidence = res.intents[0].confidence
+        intents = res.intents
+        entities = res.entities
+      } catch (e) { }
     }
+    return { intent, confidence, intents, entities }
   }
 }
 

@@ -197,9 +197,9 @@ Uploading...
     let zip_out = await exec(zip_cmd)
     const zip_stats = fs.statSync('botonic_bundle.zip')
     spinner.succeed()
-    if (zip_stats.size >= 5 * 10 ** 6) {
+    if (zip_stats.size >= 10 * 10 ** 6) {
       spinner.fail()
-      console.log(colors.red(`Deploy failed. Bundle size too big ${zip_stats.size} (max 5Mb).`))
+      console.log(colors.red(`Deploy failed. Bundle size too big ${zip_stats.size} (max 10Mb).`))
       await exec('rm botonic_bundle.zip')
       return
     }
