@@ -17,19 +17,19 @@ export class Botonic {
   constructor(config_path: string) {
     this.path = config_path
     this.conf = require(join(this.path, '/dist/botonic.config.js'))
-    try{
+    try {
       this.routes = require(join(this.path, '/dist/routes.js')).routes
-    } catch(e){
-      this.routes = null
+    } catch (e) {
+      this.routes = this.conf.routes
     }
-    
+
     process.chdir(this.path)
   }
 
   getAction(input: any, context: any) {
     let brokenFlow = false;
     let routeParams: any = {}
-    let lastRoute = this.getLastRoute(this.lastRoutePath, this.conf.routes || this.routes)
+    let lastRoute = this.getLastRoute(this.lastRoutePath, this.routes)
     if (lastRoute && lastRoute.childRoutes) //get route depending of current ChildRoute
       routeParams = this.getRoute(input, lastRoute.childRoutes)
     if (!routeParams || !Object.keys(routeParams).length) {
@@ -38,7 +38,7 @@ export class Botonic {
         the general conf.route
       */
       brokenFlow = Boolean(this.lastRoutePath)
-      routeParams = this.getRoute(input, this.conf.routes || this.routes)
+      routeParams = this.getRoute(input, this.routes)
     }
     if (routeParams && Object.keys(routeParams).length) {
       if ('action' in routeParams.route) {
@@ -186,7 +186,7 @@ export class Botonic {
     const BotonicReact = await import(`${this.path}/node_modules/@botonic/react`)
     let output = await BotonicReact.renderReactAction(req, a)
     let html = load(output)
-    
+
     let delay = this.conf.typingOptions && this.conf.typingOptions.delay ? this.conf.typingOptions.delay : 0
     let typing = this.conf.typingOptions && this.conf.typingOptions.typing ? this.conf.typingOptions.typing : 0
     html('message').map(({ }, elem) => {
