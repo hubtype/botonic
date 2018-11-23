@@ -232,7 +232,15 @@ export class BotonicAPIService {
   }
 
   async getBots() {
-    return this.api('bots/', null, 'get', null, { organization_id: this.me.organization_id })
+    return this.api('bots/bots_paginator/', null, 'get', null, { organization_id: this.me.organization_id })
+  }
+
+  async getMoreBots(bots: any, nextBots: any) {
+    if(!nextBots) return bots
+    let resp = await this.api(nextBots.split(this.baseApiUrl)[1], null, 'get', null)
+    resp.data.results.map(b => bots.push(b))
+    nextBots = resp.data.next
+    return this.getMoreBots(bots, nextBots)
   }
 
   async getProviders() {

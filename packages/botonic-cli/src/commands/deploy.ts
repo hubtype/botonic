@@ -119,27 +119,29 @@ Uploading...
   }
 
   async newBotFlow() {
-    this.botonicApiService.getBots()
-      .then((resp) => {
-        let bots = resp.data.results
-        if (!bots.length) {
-          return this.createNewBot()
-        } else {
-          return prompt([
-            {
-              type: 'confirm',
-              name: 'create_bot_confirm',
-              message: 'Do you want to create a new Bot?'
-            }]).then((res: any) => {
-              let confirm = res.create_bot_confirm
-              if (confirm) {
-                return this.createNewBot()
-              } else {
-                return this.selectExistentBot(bots)
-              }
-            })
-        }
-      })
+    let resp = await this.botonicApiService.getBots()
+    let nextBots = resp.data.next
+    let bots = resp.data.results
+    if(nextBots) {
+      let new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
+    }
+    if (!bots.length) {
+      return this.createNewBot()
+    } else {
+      return prompt([
+        {
+          type: 'confirm',
+          name: 'create_bot_confirm',
+          message: 'Do you want to create a new Bot?'
+        }]).then((res: any) => {
+          let confirm = res.create_bot_confirm
+          if (confirm) {
+            return this.createNewBot()
+          } else {
+            return this.selectExistentBot(bots)
+          }
+        })
+    }
   }
 
   async createNewBot() {
