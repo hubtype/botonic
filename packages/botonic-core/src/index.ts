@@ -96,8 +96,9 @@ export class Botonic {
         return Boolean(match)
       })
     )
-    if (route)
+    if (route){
       return { route: route, params }
+    }
     return null
   }
 
@@ -125,22 +126,24 @@ export class Botonic {
 
   matchRoute(prop: string, matcher: any, input: any): any {
     /*
-      prop: ('text' | 'payload' | 'intent' | 'type' | ...)
+      prop: ('text' | 'payload' | 'intent' | 'type' | 'input' |...)
       matcher: (string: exact match | regex: regular expression match | function: return true)
       input: user input object, ex: {type: 'text', data: 'Hi'}
     */
     let value: string = ''
     if (prop in input)
       value = input[prop]
-    else if (prop == 'text')
+    else if (prop == 'text'){
       if (input.type == 'text')
         value = input.data
+    } else if (prop == 'input')
+        value = input
     if (typeof matcher === 'string')
       return value == matcher
     if (matcher instanceof RegExp)
       return matcher.exec(value)
     if (typeof matcher === 'function')
-      return matcher(value)
+      return matcher(value)      
     return false
   }
 
