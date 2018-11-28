@@ -9,3 +9,4 @@ yarn.lock
 .nyc_output/
 dist/
 tmp/
+package-lock.json
