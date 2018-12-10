@@ -277,11 +277,7 @@ export class BotonicAPIService {
     })
   }
 
-  async deployBot(
-    bundlePath: string,
-    password: any,
-    forceDeploy: boolean
-  ): Promise<any> {
+  async deployBot(bundlePath: string, forceDeploy: boolean): Promise<any> {
     try {
       let a = await this.getMe()
     } catch (e) {
@@ -296,7 +292,7 @@ export class BotonicAPIService {
       form,
       'post',
       { ...this.headers, ...headers },
-      { password: password, forceDeploy: forceDeploy }
+      { forceDeploy: forceDeploy }
     )
   }
 

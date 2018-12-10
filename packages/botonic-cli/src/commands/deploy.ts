@@ -220,12 +220,12 @@ Uploading...
       console.log(colors.red('There was a problem building the bot'))
       return
     }
-    let zip_password = Math.round(Math.random() * 10000000000)
+
     let spinner = new ora({
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
     }).start()
-    let zip_cmd = `zip -P ${zip_password} -r botonic_bundle.zip dist`
+    let zip_cmd = `zip -r botonic_bundle.zip dist`
     let zip_out = await exec(zip_cmd)
     const zip_stats = fs.statSync('botonic_bundle.zip')
     spinner.succeed()
@@ -246,7 +246,6 @@ Uploading...
     try {
       var deploy = await this.botonicApiService.deployBot(
         'botonic_bundle.zip',
-        zip_password,
         force
       )
       if (deploy.response && deploy.response.status == 403) {
