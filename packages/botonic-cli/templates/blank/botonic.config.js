@@ -1,4 +1,4 @@
 module.exports = {
-    integrations: {},
-    typingOptions: {}
+  integrations: {},
+  typingOptions: {}
 }

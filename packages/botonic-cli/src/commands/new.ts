@@ -19,51 +19,72 @@ export default class Run extends Command {
     `$ botonic new test_bot
 Creating...
 ✨ test_bot was successfully created!
-`,
+`
   ]
 
   static args = [
-    {name: 'name', description: 'name of the bot folder', required: true},
-    {name: 'templateName', description: 'OPTIONAL name of the bot template', required: false},
+    { name: 'name', description: 'name of the bot folder', required: true },
+    {
+      name: 'templateName',
+      description: 'OPTIONAL name of the bot template',
+      required: false
+    }
   ]
   //private templates: any = ['introduction_bot', 'basic_bot', 'basic_actions', 'AI_bot']
-  private templates: any = [{
-    name: 'tutorial',
-    description: 'Tutorial: A template with different examples that help you get started fast'
-  },{
-    name: 'blank',
-    description: 'Blank: A minimal template to start from scratch'
-  },{
-    name: 'childs',
-    description: 'Childs: Understand how childRoutes works'
-  },{
-    name: 'dynamic_carousel',
-    description: 'Dynamic Carousel: See a dynamic carousel for Facebook'
-  },{
-    name: 'handoff',
-    description: 'Handoff: Test how to transfer a conversation into Hubtype Desk'
-  },{
-    name: 'intent',
-    description: 'Intent: Integrate NLU and see the magic!'
-  }]
+  private templates: any = [
+    {
+      name: 'tutorial',
+      description:
+        'Tutorial: A template with different examples that help you get started fast'
+    },
+    {
+      name: 'blank',
+      description: 'Blank: A minimal template to start from scratch'
+    },
+    {
+      name: 'childs',
+      description: 'Childs: Understand how childRoutes works'
+    },
+    {
+      name: 'dynamic_carousel',
+      description: 'Dynamic Carousel: See a dynamic carousel for Facebook'
+    },
+    {
+      name: 'handoff',
+      description:
+        'Handoff: Test how to transfer a conversation into Hubtype Desk'
+    },
+    {
+      name: 'intent',
+      description: 'Intent: Integrate NLU and see the magic!'
+    }
+  ]
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   async run() {
-    track('botonic_new');
-    const {args, flags} = this.parse(Run)
+    track('botonic_new')
+    const { args, flags } = this.parse(Run)
     let template = ''
-    if(!args.templateName) {
-      await this.selectBotName().then((resp:any) => {
-        template = this.templates.filter((t:any) => t.description === resp.botName)[0].name
+    if (!args.templateName) {
+      await this.selectBotName().then((resp: any) => {
+        template = this.templates.filter(
+          (t: any) => t.description === resp.botName
+        )[0].name
       })
     } else {
-      let botExists = this.templates.filter((t:any) => t.name === args.templateName)
-      if(botExists.length) {
+      let botExists = this.templates.filter(
+        (t: any) => t.name === args.templateName
+      )
+      if (botExists.length) {
         template = args.templateName
-      } else {
+      } else {
         let template_names = this.templates.map((t: any) => t.name)
-        console.log(colors.red('Template ${args.templateName} does not exist, please choose one of ${template_names}.'))
+        console.log(
+          colors.red(
+            'Template ${args.templateName} does not exist, please choose one of ${template_names}.'
+          )
+        )
         return
       }
     }
@@ -90,15 +111,21 @@ Creating...
     let cd_cmd = colors.bold(`cd ${args.name}`)
     let run_cmd = colors.bold('botonic run')
     let deploy_cmd = colors.bold('botonic deploy')
-    console.log(`\n✨  Bot ${colors.bold(args.name)} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot on your terminal)\n${deploy_cmd} (publish your bot to the world!)`)
+    console.log(
+      `\n✨  Bot ${colors.bold(
+        args.name
+      )} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot on your terminal)\n${deploy_cmd} (publish your bot to the world!)`
+    )
   }
 
   async selectBotName() {
-    return prompt([{
-      type: 'list',
-      name: 'botName',
-      message: 'Select a bot template',
-      choices: this.templates.map((t: any) => t.description)
-    }])
+    return prompt([
+      {
+        type: 'list',
+        name: 'botName',
+        message: 'Select a bot template',
+        choices: this.templates.map((t: any) => t.description)
+      }
+    ])
   }
 }

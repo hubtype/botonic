@@ -1,14 +1,8 @@
 import React from 'react'
 
 export default class extends React.Component {
-
   render() {
-  	
-    return (
-          <message type="text">
-              I don't understand you
-          </message>
-    )
+    return <message type='text'>I don't understand you</message>
     //Uncomment below code to enable Facebook Webviews. Be sure only one render method is executed.
     /*return (
           <message type="text">

@@ -2,14 +2,17 @@ import { join, resolve } from 'path'
 import * as fs from 'fs'
 import { homedir } from 'os'
 import axios from 'axios'
-const FormData = require('form-data');
+const FormData = require('form-data')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
-const { hashElement } = require('folder-hash');
+const { hashElement } = require('folder-hash')
 const ora = require('ora')
 
-const BOTONIC_CLIENT_ID: string = process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
-const BOTONIC_CLIENT_SECRET: string = process.env.BOTONIC_CLIENT_SECRET || 'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
+const BOTONIC_CLIENT_ID: string =
+  process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
+const BOTONIC_CLIENT_SECRET: string =
+  process.env.BOTONIC_CLIENT_SECRET ||
+  'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
 const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
 export class BotonicAPIService {
@@ -21,7 +24,10 @@ export class BotonicAPIService {
   public botPath: string = process.cwd()
   public botCredentialsPath: string = join(this.botPath, '/.botonic.json')
   public globalConfigPath: string = join(homedir(), '/.botonic')
-  public globalCredentialsPath: string = join(this.globalConfigPath, '/credentials.json')
+  public globalCredentialsPath: string = join(
+    this.globalConfigPath,
+    '/credentials.json'
+  )
   public oauth: any
   public me: any
   public mixpanel: any
@@ -41,9 +47,13 @@ export class BotonicAPIService {
 
   loadGlobalCredentials() {
     try {
-      var credentials = JSON.parse(fs.readFileSync(this.globalCredentialsPath, 'utf8'))
-      var mixpanel = credentials.mixpanel ? credentials.mixpanel : credentials.me.campaign.mixpanel_id
-    } catch (e) { }
+      var credentials = JSON.parse(
+        fs.readFileSync(this.globalCredentialsPath, 'utf8')
+      )
+      var mixpanel = credentials.mixpanel
+        ? credentials.mixpanel
+        : credentials.me.campaign.mixpanel_id
+    } catch (e) {}
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
@@ -58,13 +68,16 @@ export class BotonicAPIService {
 
   loadBotCredentials() {
     try {
-      var credentials = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
-    } catch (e) { }
+      var credentials = JSON.parse(
+        fs.readFileSync(this.botCredentialsPath, 'utf8')
+      )
+    } catch (e) {}
     if (credentials) {
       if (credentials.hasOwnProperty('bot')) {
         this.bot = credentials.bot
         this.lastBuildHash = credentials.lastBuildHash
-      } else { // Allow users < v0.1.12 to upgrade smoothly
+      } else {
+        // Allow users < v0.1.12 to upgrade smoothly
         this.bot = credentials
         this.lastBuildHash = ''
       }
@@ -78,11 +91,14 @@ export class BotonicAPIService {
 
   async saveGlobalCredentials() {
     await this.checkGlobalCredentialsPath()
-    fs.writeFileSync(this.globalCredentialsPath, JSON.stringify({
-      oauth: this.oauth,
-      me: this.me,
-      mixpanel: this.mixpanel
-    }))
+    fs.writeFileSync(
+      this.globalCredentialsPath,
+      JSON.stringify({
+        oauth: this.oauth,
+        me: this.me,
+        mixpanel: this.mixpanel
+      })
+    )
   }
 
   saveBotCredentials() {
@@ -128,7 +144,7 @@ export class BotonicAPIService {
   }
 
   setMixpanelInfo(mixpanel_id: any) {
-    this.mixpanel = { 'mixpanel_id': mixpanel_id }
+    this.mixpanel = { mixpanel_id: mixpanel_id }
   }
 
   logout() {
@@ -136,7 +152,13 @@ export class BotonicAPIService {
       fs.unlinkSync(this.globalCredentialsPath)
   }
 
-  async api(path: string, body: any = null, method: string = 'get', headers: any | null = null, params: any = null): Promise<any> {
+  async api(
+    path: string,
+    body: any = null,
+    method: string = 'get',
+    headers: any | null = null,
+    params: any = null
+  ): Promise<any> {
     var b = 0
     try {
       return await axios({
@@ -147,9 +169,9 @@ export class BotonicAPIService {
         params: params
       })
     } catch (e) {
-      if(e.response.status == 401){
+      if (e.response.status == 401) {
         b = 1
-      }else {
+      } else {
         return e
       }
     }
@@ -170,14 +192,14 @@ export class BotonicAPIService {
       method: 'post',
       url: this.loginUrl,
       params: {
-        'callback': 'none',
-        'grant_type': 'refresh_token',
-        'refresh_token': this.oauth.refresh_token,
-        'client_id': this.cliendId,
-        'client_secret': this.clientSecret
+        callback: 'none',
+        grant_type: 'refresh_token',
+        refresh_token: this.oauth.refresh_token,
+        client_id: this.cliendId,
+        client_secret: this.clientSecret
       }
     })
-    if (!resp) return;
+    if (!resp) return
     this.oauth = resp.data
     this.headers = { Authorization: `Bearer ${this.oauth.access_token}` }
     await this.saveGlobalCredentials()
@@ -189,11 +211,11 @@ export class BotonicAPIService {
       method: 'post',
       url: this.loginUrl,
       params: {
-        'username': email,
-        'password': password,
-        'client_id': this.cliendId,
-        'client_secret': this.clientSecret,
-        'grant_type': 'password'
+        username: email,
+        password: password,
+        client_id: this.cliendId,
+        client_secret: this.clientSecret,
+        grant_type: 'password'
       }
     })
     this.oauth = resp.data
@@ -202,15 +224,21 @@ export class BotonicAPIService {
       'content-type': 'application/json'
     }
     resp = await this.api('users/me')
-    if (resp)
-      this.me = resp.data
+    if (resp) this.me = resp.data
     return resp
   }
 
-  signup(email: string, password: string, org_name: string, campaign: any): Promise<any> {
+  signup(
+    email: string,
+    password: string,
+    org_name: string,
+    campaign: any
+  ): Promise<any> {
     let url = `${this.baseApiUrl}users/`
     if (campaign)
-      campaign.mixpanel_id = this.mixpanel ? this.mixpanel.distinct_id : Math.round(Math.random() * 10000000000)
+      campaign.mixpanel_id = this.mixpanel
+        ? this.mixpanel.distinct_id
+        : Math.round(Math.random() * 10000000000)
     let signup_data = { email, password, org_name, campaign }
     return axios({
       method: 'post',
@@ -220,10 +248,12 @@ export class BotonicAPIService {
   }
 
   async saveBot(bot_name: string) {
-    let resp = await this.api('bots/',
-      { name: bot_name, framework: 'framework_botonic' }, 'post')
-    if (resp.data)
-      this.setCurrentBot(resp.data)
+    let resp = await this.api(
+      'bots/',
+      { name: bot_name, framework: 'framework_botonic' },
+      'post'
+    )
+    if (resp.data) this.setCurrentBot(resp.data)
     return resp
   }
 
@@ -232,22 +262,35 @@ export class BotonicAPIService {
   }
 
   async getBots() {
-    return this.api('bots/bots_paginator/', null, 'get', null, { organization_id: this.me.organization_id })
+    return this.api('bots/bots_paginator/', null, 'get', null, {
+      organization_id: this.me.organization_id
+    })
   }
 
   async getMoreBots(bots: any, nextBots: any) {
-    if(!nextBots) return bots
-    let resp = await this.api(nextBots.split(this.baseApiUrl)[1], null, 'get', null)
+    if (!nextBots) return bots
+    let resp = await this.api(
+      nextBots.split(this.baseApiUrl)[1],
+      null,
+      'get',
+      null
+    )
     resp.data.results.map(b => bots.push(b))
     nextBots = resp.data.next
     return this.getMoreBots(bots, nextBots)
   }
 
   async getProviders() {
-    return this.api('provider_accounts/', null, 'get', null, { bot_id: this.bot.id })
+    return this.api('provider_accounts/', null, 'get', null, {
+      bot_id: this.bot.id
+    })
   }
 
-  async deployBot(bundlePath: string, password: any, forceDeploy: boolean): Promise<any> {
+  async deployBot(
+    bundlePath: string,
+    password: any,
+    forceDeploy: boolean
+  ): Promise<any> {
     try {
       let a = await this.getMe()
     } catch (e) {
@@ -257,22 +300,38 @@ export class BotonicAPIService {
     let data = fs.createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
     let headers = await this.getHeaders(form)
-    return await this.api(`bots/${this.bot.id}/deploy_botonic_new/`, form, 'post', { ...this.headers, ...headers }, { password: password, forceDeploy: forceDeploy })
+    return await this.api(
+      `bots/${this.bot.id}/deploy_botonic_new/`,
+      form,
+      'post',
+      { ...this.headers, ...headers },
+      { password: password, forceDeploy: forceDeploy }
+    )
   }
 
   async deployStatus(deploy_id: string): Promise<any> {
-    return this.api(`bots/${this.bot.id}/deploy_botonic_status/`, null, 'get', null, { deploy_id })
+    return this.api(
+      `bots/${this.bot.id}/deploy_botonic_status/`,
+      null,
+      'get',
+      null,
+      { deploy_id }
+    )
   }
 
   async getHeaders(form: any) {
     //https://github.com/axios/axios/issues/1006#issuecomment-352071490
     return new Promise((resolve, reject) => {
       form.getLength((err: any, length: any) => {
-        if (err) { reject(err) }
-        let headers = Object.assign({ 'Content-Length': length }, form.getHeaders())
+        if (err) {
+          reject(err)
+        }
+        let headers = Object.assign(
+          { 'Content-Length': length },
+          form.getHeaders()
+        )
         resolve(headers)
       })
     })
   }
-
 }
