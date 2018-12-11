@@ -63,7 +63,7 @@ Creating...
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   async run() {
-    track('botonic_new')
+    track('Created Botonic Bot CLI')
     const { args, flags } = this.parse(Run)
     let template = ''
     if (!args.templateName) {

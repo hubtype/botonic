@@ -38,11 +38,11 @@ Uploading...
   async run() {
     const { args, flags } = this.parse(Run)
 
+    track('Deployed Botonic CLI')
+
     force = flags.force ? flags.force : false
     if (!this.botonicApiService.oauth) await this.signupFlow()
     else await this.deployBotFlow()
-
-    track('botonic_deploy')
   }
 
   async signupFlow() {

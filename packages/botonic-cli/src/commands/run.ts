@@ -67,7 +67,7 @@ ${colors.bold('/help')} | ${colors.bold('/h')} --> Show this help`
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   async run() {
-    track('botonic_run')
+    track('Run Botonic CLI')
     const { args, flags } = this.parse(Run)
     const path = flags.path ? resolve(flags.path) : process.cwd()
 

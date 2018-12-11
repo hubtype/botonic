@@ -23,11 +23,9 @@ try {
   //create dirs at instal time. We delay it until
   //they run their first command.
   if (process.env.BOTONIC_DISABLE_MIXPANEL !== '1') {
-    const Mixpanel = require('mixpanel')
-    mixpanel = Mixpanel.init(utils.mixpanel_token, {
-      protocol: 'https'
-    })
-    mixpanel.track('botonic_install')
+    const Analytics = require('analytics-node')
+    analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
+    analytics.track({ event: 'Installed Botonic CLI' })
   }
 }
 

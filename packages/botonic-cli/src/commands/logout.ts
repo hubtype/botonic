@@ -22,7 +22,7 @@ export default class Run extends Command {
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   async run() {
-    track('botonic_log_in')
+    track('Logged Out Botonic CLI')
     const { args, flags } = this.parse(Run)
 
     const path = flags.path ? resolve(flags.path) : process.cwd()

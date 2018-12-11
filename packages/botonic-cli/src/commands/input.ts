@@ -2,7 +2,6 @@ import { resolve } from 'path'
 import { Command, flags } from '@oclif/command'
 
 import { Botonic } from '@botonic/core'
-import { track } from '../utils'
 
 export default class Run extends Command {
   static description = 'Get response from a single input'
@@ -34,7 +33,6 @@ Hello!
   private botonic: any
 
   async run() {
-    track('botonic_input')
     const { args, flags } = this.parse(Run)
 
     const path = flags.path ? resolve(flags.path) : process.cwd()

@@ -30,7 +30,7 @@ export class BotonicAPIService {
   )
   public oauth: any
   public me: any
-  public mixpanel: any
+  public analytics: any
   public lastBuildHash: any
   public bot: any = null
   public headers: object | null = null
@@ -50,18 +50,16 @@ export class BotonicAPIService {
       var credentials = JSON.parse(
         fs.readFileSync(this.globalCredentialsPath, 'utf8')
       )
-      var mixpanel = credentials.mixpanel
-        ? credentials.mixpanel
-        : credentials.me.campaign.mixpanel_id
     } catch (e) {}
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
-      this.mixpanel = mixpanel
+      this.analytics = credentials.analytics
       if (credentials.oauth)
         this.headers = {
           Authorization: `Bearer ${this.oauth.access_token}`,
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'x-segment-anonymous-id': this.analytics.anonymous_id
         }
     }
   }
@@ -96,7 +94,7 @@ export class BotonicAPIService {
       JSON.stringify({
         oauth: this.oauth,
         me: this.me,
-        mixpanel: this.mixpanel
+        analytics: this.analytics
       })
     )
   }
@@ -141,10 +139,6 @@ export class BotonicAPIService {
 
   setCurrentBot(bot: any) {
     this.bot = bot
-  }
-
-  setMixpanelInfo(mixpanel_id: any) {
-    this.mixpanel = { mixpanel_id: mixpanel_id }
   }
 
   logout() {
@@ -201,7 +195,11 @@ export class BotonicAPIService {
     })
     if (!resp) return
     this.oauth = resp.data
-    this.headers = { Authorization: `Bearer ${this.oauth.access_token}` }
+    this.headers = {
+      Authorization: `Bearer ${this.oauth.access_token}`,
+      'content-type': 'application/json',
+      'x-segment-anonymous-id': this.analytics.anonymous_id
+    }
     await this.saveGlobalCredentials()
     return resp
   }
@@ -221,7 +219,8 @@ export class BotonicAPIService {
     this.oauth = resp.data
     this.headers = {
       Authorization: `Bearer ${this.oauth.access_token}`,
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      'x-segment-anonymous-id': this.analytics.anonymous_id
     }
     resp = await this.api('users/me')
     if (resp) this.me = resp.data
@@ -235,16 +234,8 @@ export class BotonicAPIService {
     campaign: any
   ): Promise<any> {
     let url = `${this.baseApiUrl}users/`
-    if (campaign)
-      campaign.mixpanel_id = this.mixpanel
-        ? this.mixpanel.distinct_id
-        : Math.round(Math.random() * 10000000000)
     let signup_data = { email, password, org_name, campaign }
-    return axios({
-      method: 'post',
-      url: url,
-      data: signup_data
-    })
+    return axios({ method: 'post', url: url, data: signup_data })
   }
 
   async saveBot(bot_name: string) {

@@ -22,7 +22,7 @@ export default class Run extends Command {
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   async run() {
-    track('botonic_log_in')
+    track('Logged In Botonic CLI')
     const { args, flags } = this.parse(Run)
 
     const path = flags.path ? resolve(flags.path) : process.cwd()
@@ -50,9 +50,6 @@ export default class Run extends Command {
     let user_data: any = await this.askLoginInfo()
     this.botonicApiService.login(user_data.email, user_data.password).then(
       resp => {
-        if (resp.data.campaign && resp.data.campaign.mixpanel_id)
-          this.botonicApiService.setMixpanelInfo(resp.data.campaign.mixpanel_id)
-        this.botonicApiService.saveGlobalCredentials()
         console.log('Successful log in!'.green)
       },
       err => {
