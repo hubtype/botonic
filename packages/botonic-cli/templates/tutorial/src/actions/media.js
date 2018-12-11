@@ -8,9 +8,9 @@ export default class extends React.Component {
         <message type='text'>Let me share some files with you:</message>
         <message
           type='image'
-          src='https://io/images/botonic_react_logo-p-500.png'
+          src='https://botonic.io/images/botonic_react_logo-p-500.png'
         >
-          <button url='https://io'>Visit Botonic</button>
+          <button url='https://botonic.io'>Visit Botonic</button>
         </message>
         <message
           type='image'

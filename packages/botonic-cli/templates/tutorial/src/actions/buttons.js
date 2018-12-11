@@ -7,7 +7,7 @@ export default class extends React.Component {
         <message type='text'>
           Here I display two types of buttons, the first one is a URL button and
           the second is a payload button:
-          <button url='https://io'>Visit io</button>
+          <button url='https://botonic.io'>Visit botonic.io</button>
           <button payload='carrousel'>Show me a carrousel</button>
         </message>
         <message type='text'>
