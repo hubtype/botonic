@@ -49,7 +49,7 @@ export default class Run extends Command {
   async logInUser() {
     let user_data: any = await this.askLoginInfo()
     this.botonicApiService.login(user_data.email, user_data.password).then(
-      resp => {
+      () => {
         console.log('Successful log in!'.green)
       },
       err => {
