@@ -7,6 +7,7 @@
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
   "dependencies": {
+    "@botonic/core": "^0.5.1",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
