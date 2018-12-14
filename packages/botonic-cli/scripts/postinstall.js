@@ -23,7 +23,8 @@ try {
   //create dirs at instal time. We delay it until
   //they run their first command.
   if (process.env.BOTONIC_DISABLE_MIXPANEL !== '1') {
-    analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
+    const Analytics = require('analytics-node')
+    var analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
     analytics.track({
       event: 'Installed Botonic CLI',
       anonymousId: Math.round(Math.random() * 100000000)
