@@ -1,183 +1,86 @@
-botonic
-=======
+# Botonic - Build Chatbots and Conversational Apps Using React
 
-Build chatbots using React
+[![botonic](https://img.shields.io/badge/cli-botonic-brightgreen.svg)](https://botonic.io)
 
-[![Version](https://img.shields.io/npm/v/botonic.svg)](https://npmjs.org/package/botonic)
-[![CircleCI](https://circleci.com/gh/ericmarcos/botonic/tree/master.svg?style=shield)](https://circleci.com/gh/ericmarcos/botonic/tree/master)
-[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/ericmarcos/botonic?branch=master&svg=true)](https://ci.appveyor.com/project/ericmarcos/botonic/branch/master)
-[![Codecov](https://codecov.io/gh/ericmarcos/botonic/branch/master/graph/badge.svg)](https://codecov.io/gh/ericmarcos/botonic)
-[![Downloads/week](https://img.shields.io/npm/dw/botonic.svg)](https://npmjs.org/package/botonic)
-[![License](https://img.shields.io/npm/l/botonic.svg)](https://github.com/ericmarcos/botonic/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/@botonic/cli.svg)](https://npmjs.org/package/@botonic/cli)
+
+[![Downloads/week](https://img.shields.io/npm/dw/@botonic/cli.svg)](https://npmjs.org/package/@botonic/cli)
+
+[![License](https://img.shields.io/npm/l/@botonic/cli.svg)](https://github.com/hubtype/botonic/blob/master/package.json)
+
+<a  href="https://botonic.io/">
+  <img align="center" alt="Node.js" src="https://botonic.io/images/botonic_react_logo-p-500.png" width="150"/>
+</a>
+
+[Botonic](https://botonic.io) is the open source framework developed by [Hubtype](https://www.hubtype.com) for building amazing Chatbots for any Platform with Node and React. [Botonic](https://botonic.io) is an easy to learn, open-source framework that lets you create powerful conversational interfaces.
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [⚛️ Why React](#-why-react)
+
+- [🚀 Getting Started](#-getting-started)
+
+- [📌 Requirements](#-requirements)
+
+- [📚 Related Links](#-related-links)
+
+- [📣 Feedback](#-feedback)
+
 <!-- tocstop -->
-# Usage
-<!-- usage -->
-```sh-session
-$ npm install -g botonic
-$ botonic COMMAND
-running command...
-$ botonic (-v|--version|version)
-botonic/0.4.1 darwin-x64 node-v9.9.0
-$ botonic --help [COMMAND]
-USAGE
-  $ botonic COMMAND
-...
-```
-<!-- usagestop -->
-# Commands
-<!-- commands -->
-* [botonic deploy [BOT_NAME]](#botonic-deploy-bot-name)
-* [botonic help [COMMAND]](#botonic-help-command)
-* [botonic input INPUT](#botonic-input-input)
-* [botonic login](#botonic-login)
-* [botonic logout](#botonic-logout)
-* [botonic new NAME [TEMPLATENAME]](#botonic-new-name-templatename)
-* [botonic run [INPUT]](#botonic-run-input)
-* [botonic webview WEBVIEW_PAGE](#botonic-webview-webview-page)
 
-## botonic deploy [BOT_NAME]
+# ️️️⚛️ Why React
 
-Deploy Botonic project to botonic.io cloud
+![Botonic, why React](https://botonic.io/images/botonic-react.png)
+
+Building chatbots is a lot like building websites, that's why Botonic uses the same abstractions used in React, like routes, components and JSX, so you can build modern conversational interfaces (with text, NLP, rich interactive messages and webviews) using technology you already know and love.
+
+# 🚀 Getting Started
+
+### Install
 
 ```
-USAGE
-  $ botonic deploy [BOT_NAME]
-
-EXAMPLE
-  $ botonic deploy
-  Building...
-  Creating bundle...
-  Uploading...
-  🚀 Bot deployed!
+$> npm install -g @botonic/cli
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.4.1/src/commands/deploy.ts)_
-
-## botonic help [COMMAND]
-
-display help for botonic
+### Create a bot
 
 ```
-USAGE
-  $ botonic help [COMMAND]
-
-ARGUMENTS
-  COMMAND  command to show help for
-
-OPTIONS
-  --all  see all commands in CLI
+$> botonic new myBot tutorial
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v1.2.3/src/commands/help.ts)_
-
-## botonic input INPUT
-
-Get response from a single input
+### Run your bot
 
 ```
-USAGE
-  $ botonic input INPUT
-
-OPTIONS
-  -c, --context=context  Context of current session
-  -p, --path=path        Path to botonic project. Defaults to current dir.
-  -r, --route=route      Route of the current bot state.
-
-EXAMPLE
-  $ botonic input "{\"type\": \"text\", \"data\": \"hi\"}"
-  Hello!
+$> cd myBot
+$> botonic run
 ```
 
-_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.4.1/src/commands/input.ts)_
-
-## botonic login
-
-Log in to Botonic
+### Deploy
 
 ```
-USAGE
-  $ botonic login
-
-OPTIONS
-  -p, --path=path  Path to botonic project. Defaults to current dir.
+$> botonic deploy
 ```
 
-_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.4.1/src/commands/login.ts)_
+Check out the [Getting Started Tutorial](https://botonic.io/docs/getting-started.html) is a step-by-step guide to start building high quality conversational apps.
 
-## botonic logout
+[See the docs for more information](https://botonic.io/docs.html).
 
-Log out of Botonic
+# 📌 Requirements
 
-```
-USAGE
-  $ botonic logout
+Node and NPM are required. LTS version of [NodeJS Installer](https://nodejs.org/) is recommended.
 
-OPTIONS
-  -p, --path=path  Path to botonic project. Defaults to current dir.
-```
+You can verify the installation running `npm --version` and `node --version` on a terminal.
 
-_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.4.1/src/commands/logout.ts)_
+# 📚 Related Links
 
-## botonic new NAME [TEMPLATENAME]
+- [Botonic](https://botonic.io) - Botonic Website
 
-Create a new Botonic project
+- [Hubtype](https://hubtype.com) - Who is behind Botonic?
 
-```
-USAGE
-  $ botonic new NAME [TEMPLATENAME]
+- [Slack](https://slack.botonic.io/) - Slack channel
 
-ARGUMENTS
-  NAME          name of the bot folder
-  TEMPLATENAME  OPTIONAL name of the bot template
+- [Twitter](https://twitter.com/botonic_) - Twitter
 
-EXAMPLE
-  $ botonic new test_bot
-  Creating...
-  ✨ test_bot was successfully created!
-```
+# 📣 Feedback
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.4.1/src/commands/new.ts)_
-
-## botonic run [INPUT]
-
-Start interactive session
-
-```
-USAGE
-  $ botonic run [INPUT]
-
-OPTIONS
-  -p, --path=path  Path to botonic project. Defaults to current dir.
-
-EXAMPLE
-  $ botonic run
-  Your bot is ready, start talking:
-  [you] > Hi
-  [bot] > Bye!
-```
-
-_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.4.1/src/commands/run.ts)_
-
-## botonic webview WEBVIEW_PAGE
-
-Get response from a single input
-
-```
-USAGE
-  $ botonic webview WEBVIEW_PAGE
-
-OPTIONS
-  -c, --context=context  Context of current session
-  -p, --path=path        Path to botonic project. Defaults to current dir.
-
-EXAMPLE
-  $ botonic webview webview_hello"
-  Hello!
-```
-
-_See code: [src/commands/webview.ts](https://github.com/hubtype/botonic/blob/v0.4.1/src/commands/webview.ts)_
-<!-- commandsstop -->
+If you have any suggestions or just want to let us know what you think of Botonic, feel free to contact us on [Slack](https://slack.botonic.io/)!
