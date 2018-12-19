@@ -1,0 +1,101 @@
+---
+name: 1. Installation
+route: /getting-started/installation
+menu: 2. Getting Started
+---
+
+import { NextButton } from '../components/nextButton.tsx'
+
+# **Installing Botonic**
+
+Botonic bots are created and developed primarily through the Botonic command line utility (the "CLI") and deployed to the [Hubtype](https://hubtype.com/). This means we need to install the Botonic CLI to start developing.
+
+## Getting Node and NPM
+
+Most of the tooling in the CLI is based on Node and is managed through npm. The quickest way to get Node and NPM installed on your machine is through the [NodeJS installer](https://nodejs.org/). Be sure to install the LTS version of Node. Close any terminals/command prompts you may have open, run the installer, and launch a new terminal window. To verify you have everything installed correctly, you can run `npm --version` and `node --version`. If this errors, please resolve before moving on.
+
+## Botonic CLI
+
+With Node and NPM setup, let’s install the Botonic CLI. 
+
+This will install few dependencies just to have the CLI available. It might take a while, so please be patient. If you encounter any problem please report it [here](https://github.com/hubtype/botonic/issues). Alternatively, you can also use [yarn](https://yarnpkg.com/lang/en/), as Node Package Manager.
+
+```bash
+$ npm install -g @botonic/cli
+```
+
+> #### NOTE:
+> The -g means this is a global install, so for Windows you will need to open an Admin command prompt. For Mac/Linux, you might need to run the command with sudo.
+
+Once that’s done, create your first Botonic bot:
+
+```bash
+$ botonic new testBot
+```
+
+> #### NOTE:
+> The CLI will prompt you to choose a template, you can optionally pass the name of the template as a second argument to avoid the prompt: `botonic new testBot tutorial`
+
+To run your bot, `cd` into the directory that was created and then run the `botonic run` command to test your bot right in your terminal!
+
+```bash
+$ cd testBot
+$ botonic run
+```
+
+
+> #### NOTE:
+> In order to obtain a more detailed trace, you can also run:
+```bash
+$ npm run build
+```
+> If at any stage you observe something is going wrong with the project, try the following options:
+* Include the flag `--no-cache` in the scripts using parcel command in `package.json`
+* Run the following command:
+```bash
+$ rm -rf .cache/
+```
+
+## Windows Support
+In order to develop with Botonic on Windows, you can achieve it by following this guideline:
+
+**Requirements:**
+
+* **[NodeJS](https://nodejs.org/en/download/)**: tested on v8.12.0
+* **[npm](https://www.npmjs.com/get-npm)**: installed by default alongside Node
+* **[Git for Windows](https://git-scm.com/download/win)**: that includes `bash.exe` by default, which is necessary on the last steps of this configuration
+* **[Cygwin](https://www.cygwin.com/)**: which provide functionality similar to a Linux distribution on Windows
+
+**Steps**
+
+**Step 1 - Installing Cygwin **
+* Download the [setup file](https://www.cygwin.com/) corresponding to your Windows architecture (64/32-bit installation)
+* Follow the Cygwin's installation wizard and select one of the mirrors to proceed with the download of the different available packages.
+    * Install all the packages which will come marked by default.
+    * Install `zip: Info-ZIP compression utility` from the Archive Category
+* Once done, proceed with the installation wizard until the end.
+> #### NOTE:
+> Sometimes, the some packages will not be available depending on the selected mirror, so make sure that the zip package is installed after move on.
+
+**Step 2 - Adding Cygwin to to your Windows Environment Variables **
+* Go to `Settings > System > About > System info > Advanced system settings` and click on `Environment Variables`.
+* On system variables, edit the path value and add a new field with the value `C:\\YOUR_CYGWIN_VERSION\\bin`.
+* Apply and save these preferences.
+
+**Step 3 - Setting shell for npm run-scripts on Windows **
+* Install [Git for Windows](https://git-scm.com/download/win).
+* Once installed, open the Windows command line:
+    * At this point of installation, you should be able to run some Linux commands: say `ls`, `cp`, ...
+* Run the following command:
+```bash
+$ npm config set script-shell "C:\\YOUR_PROGRAM_FILES_GIT_DIRECTORY\\git\\bin\\bash.exe"  
+```
+> #### NOTE:
+> You can revert this operation by running:
+```bash
+$ npm config delete script-shell
+```
+
+Congratulations! Now you are able to install [Botonic](/getting-started/installation#botonic-cli) on Windows.
+
+<NextButton title="Creating Your First Bot" href="/getting-started/creating-your-first-bot" />

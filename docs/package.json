@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "dev": "docz dev --ts",
+    "build": "docz build --ts"
+  },
+  "devDependencies": {
+    "docz": "^0.12.9",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "buble": "0.19.4",
+    "docz-theme-default": "^0.12.17"
+  }
+}

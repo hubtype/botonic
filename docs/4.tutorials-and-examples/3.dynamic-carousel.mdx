@@ -1,0 +1,63 @@
+---
+name: 3. Dynamic Carousel
+route: /tutorials-and-examples/dynamic-carousel
+menu: 4. Tutorials & Examples
+---
+
+# **Dynamic Carousel**
+
+[View on Github](https://github.com/hubtype/botonic/tree/master/templates/dynamic_carousel)
+
+This template shows a simple bot, that displays five men or woman shirts and its price, and we are getting the clothes information on the `Shopstyle API`.
+
+First of all, we ask what are the user interests. When we get it, we generate the carousel of the products.
+
+Also, at the `static async botonicInit({req})` necessary calls are made to grasp the values of api, which must be stored in any place in the context so that they can be passed as parameters. 
+
+To make the call, we need `import fetch from 'isomorphic-fetch'` which needs to pass the url, the method that in this case is a `GET method` and the parameters if needed. This call returns all the information on the `api`.
+When we have all the product information, we can display the carousel.
+The carousel can have at most ten elements, where each element will represent one product and will have its `name`, the `price`, an `image` and a `link` to the product page.
+
+For access to these values, we do a loop with all the products where we extract the values like `e.name`, `e.priceLabel`, etc.
+
+
+```javascript
+import React from 'react'
+import fetch from 'isomorphic-fetch'
+
+export default class extends React.Component {
+
+  static async botonicInit({ req }) {
+
+    const api_key = "uid8900-40385330-57"
+    const url = 'http://api.shopstyle.com/api/v2/products?pid='+
+    			api_key+'&fts='+req.input.data+'&offset=0&limit=5'
+    const res = await fetch(url,{
+      "url": url,
+      "method": "GET",
+      "params": {}
+    })
+
+    req.context.resp = await res.json()
+
+  }
+
+  render() {
+    return (
+      <messages>
+        <message type="carousel">
+            {this.props.context.resp.products.map((e, i) => 
+                <element key={e.name}>
+                    <pic>{e.image.sizes.Best.url}</pic>
+                    <title>{e.name}</title>
+                    <desc>{e.priceLabel}</desc>
+                    <button url={e.clickUrl}>Open Product</button>
+                </element>
+            )}
+        </message>
+      </messages>
+    )
+  }
+}
+
+```

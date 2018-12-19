@@ -1,0 +1,106 @@
+---
+name: 2. Actions
+route: /main-concepts/actions
+menu: 3. Main Concepts
+---
+
+# **Actions**
+
+Actions consist of a simple units of logic that your bot can perform and the response that your bot will generate.
+
+## Simple actions
+
+Botonic allows creating simple actions without any logic inside. The simplest response form of an action is a simple plain text.
+
+```javascript
+import React from 'react'
+
+export default () =>
+    <message type="text">
+        Hello World
+    </message>
+```
+
+With some little modifications, we can also pass variables to the render method.
+
+```javascript
+import React from 'react'
+
+export default class extends React.Component {
+
+    static async botonicInit({ req }) {
+        req.context.user.name = 'John Doe' // <-- Variable stored in context
+        var reminder = "Mathematics";
+        return {reminder: reminder} // <-- Variable to be used locally
+    }
+
+    render() {
+        return (
+            <messages>
+                <message type="text">
+                    Hi {this.props.context.user.name}, I really like your history!
+                </message>
+                <message type="text">
+                    By the way, do you remember that today you have the lesson of {this.props.reminder}?
+                </message>
+            </messages>
+        )
+    }
+}
+```
+This will produce the following output in Facebook Messenger:
+<img src="https://botonic-doc-static.netlify.com/images/john_doe.png" style={{display: 'block', margin: 'auto', 'max-width': '100%'}}/>
+
+## Data persistance
+We can access to different type of information inside the `req` param of the `botonicInit` function.
+- **input:** the type of data and the user input.  
+`{'type': 'text', 'data': 'Hello, it's my first interaction'}`
+- **context:** the context is a group of variables that is always available at any action of the bot. It's recalculated every time there is an user input, so if a variable is updated in any state of the bot, this variable is going to be available and updated in all the others actions.
+
+The `render()` is the function that describes what it will be returned as an output of the bot using [RCML](/api/rich-conversational-markup-language). All the variables defined in `botonicInit` are stored in `{this.props}`. In this example, you can see two ways of retrieving these variables, in order of appearance:  
+-  **from context:** which is always available, as mentioned
+-  **as a local variable:** variables returned in `botonicInit` are accessible only in the current action
+
+
+## Complex actions
+
+The essential purpose of Botonic is having the full control of the bot. By this way, you can enable [ExternalCalls](#ExternalCalls) with `botonicInit({ req })` method and allowing the [HumanHandoff](#humanhandoff) or [Internationalization](#internationalization) in an easy way.
+
+#### ExternalCalls
+```javascript
+import React from 'react'
+import fetch from 'isomorphic-fetch'
+
+export default class extends React.Component {
+
+  static async botonicInit({ req }) {
+    const api_key = "uid8900-40385330-57"
+    const url = 'http://api.shopstyle.com/api/v2/products?pid='+api_key+'&fts='+req.input.data+'&offset=0&limit=5'
+    const res = await fetch(url,{
+      "url": url,
+      "method": "GET",
+      "params": {}
+    })
+
+    req.context.resp = await res.json()
+  }
+
+  render() {
+    return (
+      <messages>
+            {this.props.context.resp.products.map((e, i) =>
+                <message type="text" key={i}>
+                  Product: {e.name}, Price: {e.priceLabel}
+                </message>
+            )}
+      </messages>
+    )
+  }
+}
+```
+
+#### HumanHandoff
+See the section [Human Handoff](/main-concepts/human-handoff) for further information.
+
+#### Internationalization
+See the section [i18n](/main-concepts/i18n) for further information. 

@@ -1,6 +1,7 @@
 *-debug.log
 *-error.log
 .oclif.manifest.json
+.docz
 lib/
 node_modules/
 tmp/

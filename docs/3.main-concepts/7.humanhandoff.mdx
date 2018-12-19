@@ -1,0 +1,47 @@
+---
+name: 7. Human Handoff
+route: /main-concepts/human-handoff
+menu: 3. Main Concepts
+---
+
+# **Human Handoff**
+
+As bots aren’t perfects, we allow to transfer a conversation into an agent.
+
+To configure transfer the conversation into an agent, you must provide the `req` parameters and then the `queue_name` and `next_action`, which are optional, but recommended.
+
+The `queue_name` is the name of the queue where you want to transfer the conversation. If a queue with that name doesn't exist, it will transfer the chat into a random open queue.
+
+The `next_action` allows you to specify which is going to be the next action that the bot will follow after the conversation with the agent has finished.
+
+Here’s a simple example of how to transfer the conversation into the queue 'Support_Queue' and the next step of the bot will be an action called 'say_goodbye'.
+
+> #### NOTE:
+> Right now the conversation is going to be transfer into Hubtype Desk, so the `queue_name` must be the name of a queue inside Hubtype Desk, but in the future it will be posible to transfer the chat into Zendesk, Front or another ticketing tools.
+
+```javascript
+import React from 'react'
+
+const Botonic = require('@botonic/core')
+
+export default class extends React.Component {
+
+  static async botonicInit({req}) {
+    await Botonic.humanHandOff(req, 'Support_Queue', {action: 'say_goodbye'})
+    return {req}
+  }
+
+  render() {
+    return(
+      <message type="text">
+        Thanks for contacting us! One of our agents will take the conversation
+        as soon as posible.
+      </message>
+    )
+  }
+}
+```
+
+## Open Queues
+
+You can get an array of all the open queues of your Hubtype Desk just with this simple Botonic function: `Botonic.getOpenQueues(req)`.

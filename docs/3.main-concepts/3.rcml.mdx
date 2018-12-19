@@ -1,0 +1,290 @@
+---
+name: 3. Rich Conversational Markup Language (RCML)
+route: /main-concepts/rich-conversational-markup-language
+menu: 3. Main Concepts
+---
+
+# **RCML**
+
+The RCML is a language that allows you to create intuitive and powerful conversations for your bots with different type of messages. As you may know there are different types of outputs that messaging apps support like [quickreplies](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies), [carousels](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic?locale=en_US#carousel), [message buttons](https://core.telegram.org/bots/2-0-intro#callback-buttons), etc.
+
+Below you can see some examples of how to render these components using RCML.
+
+## Text
+
+The "Hello World!" output would be defined as below:
+
+```javascript
+<message type="text">
+    Hello World!
+</message>
+```
+
+## Buttons
+
+```javascript
+<messages>
+	<message type="text">
+        Here I display two types of buttons, the first one is a URL button
+        and the second is a payload button:
+        <button url="https://botonic.io">Visit botonic.io</button>
+        <button payload="carousel">Show me a carousel</button>
+    </message>
+</messages>
+```
+*Example of how it looks in the Messenger platform:*
+<img src="https://botonic-doc-static.netlify.com/images/buttons.png" style={{display: 'block', margin: 'auto', 'max-width': '50%'}}/>
+
+## Quickreplies
+```javascript
+<messages>
+  <message type="text">
+      I will show you three quickreplies. One with a payload, one to go to an action and another to pass values to that action:
+      <reply payload="yes">Cool</reply>
+      <reply action="paradise">Take me to paradise</reply>
+      <reply action="paradise?withfruit='coconut'">To a better paradise</reply>
+  </message>
+</messages>
+```
+*Example of how it looks in the Messenger platform:*
+<img src="https://botonic-doc-static.netlify.com/images/quickreplies.png" style={{display: 'block', margin: 'auto', 'max-width': '60%'}}/>
+
+
+> #### NOTE:
+> Buttons and quickreplies can have an url link, a payload attached, a href attribute, or an action to be triggered. When passing parameters through actions as seen in the example, the data will be accessiblein the field `params` inside the `req` object.
+
+## Carousel
+
+You can render a dynamic and static carousel following the below structure:
+
+```javascript
+import React from 'react'
+
+export default class extends React.Component {
+
+static async botonicInit({ req }) {
+    req.context.movies = [
+        {name: 'Pulp Fiction', desc: 'Le Big Mac', url: 'https://www.imdb.com/title/tt0110912', 
+        pic: 'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg'},
+        {name: 'The Big Lebowski', desc: 'Fuck it Dude', url: 'https://www.imdb.com/title/tt0118715', 
+        pic: 'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'},
+        {name: 'Snatch', desc: 'Five minutes, Turkish', url: 'https://www.imdb.com/title/tt0208092', 
+        pic: 'http://www.libertytuga.pt/wp-content/uploads/2011/11/snatch.jpg'},
+    ]
+}
+
+render() {
+    return (
+        <messages>
+            <message type="text">
+                This a dynamic Carousel
+            </message>
+            <message type="carousel">
+                {this.props.context.movies.map((e, i) => 
+                    <element key={e.name}>
+                        <pic>{e.pic}</pic>
+                        <title>{e.name}</title>
+                        <desc>{e.desc}</desc>
+                        <button url={e.url}>Visit website</button>
+                    </element>
+                )}
+            </message>
+        </messages>
+    )
+}
+}
+```
+*Example of how it looks in the Messenger app:*
+
+<img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" style={{display: 'block', margin: 'auto'}}/>
+
+## Media Files
+
+You can send all this types of media files:
+
+```javascript
+<messages>
+	<message type="image" src="https://botonic.io/images/botonic_react_logo-p-500.png"/>
+	<message type="video" src="https://www.w3schools.com/html/mov_bbb.mp4"/>
+	<message type="audio" src="https://www.w3schools.com/html/horse.mp3"/>
+  <message type="document" src="http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf"/>
+</messages>
+```
+*Example of the media types:*
+<img src="https://botonic-doc-static.netlify.com/images/media_files.png" style={{display: 'block', margin: 'auto', paddingLeft: '25%', maxHeight: '500px'}}/>
+
+## Location
+
+```javascript
+<messages>
+    <message type="location">
+        <lat>41.412255</lat>
+        <long>2.2079313</long>
+    </message>
+</messages>
+```
+*Example in Facebook Messenger:*
+<img src="https://botonic-doc-static.netlify.com/images/doc_location.png" style={{display: 'block', margin: 'auto'}}/>
+
+
+## Share Button
+
+You are able to share your desired content with your friends and acquaintances with the following piece of code:
+
+```javascript
+import React from 'react'
+import { ShareButton } from '@botonic/react'
+
+export default class extends React.Component {
+  
+  static async botonicInit({ req }) {
+
+    var my_share_button = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [
+              {
+                "title": "I am a title",
+                "subtitle": "I am a subtitle",
+                "image_url": "http://pngimg.com/uploads/share/share_PNG24.png",
+                "default_action": {
+                  "type": "web_url",
+                  "url": "https://botonic.io/"
+                },
+                "buttons": [
+                  {
+                    "type": "web_url",
+                    "url": "https://botonic.io/", 
+                    "title": "Welcome to Botonic!"
+                  }
+                ]
+              }
+            ]
+          }
+        }      
+    }
+
+    return {my_share_button: my_share_button}
+  }
+
+  render() {
+    return(
+      <messages>
+        <message type="text">
+          I am a share button!
+          <ShareButton payload={this.props.my_share_button}></ShareButton>
+        </message>
+      </messages>           
+    ) 
+  }
+}
+```
+*This will produce the following output in Facebook Messenger:*
+<img src="https://botonic-doc-static.netlify.com/images/share_1.png" style={{display: 'block', margin: 'auto'}}/>
+
+*After clicking on it, your defined elements will be displayed:*
+<img src="https://botonic-doc-static.netlify.com/images/share_2.png" style={{display: 'block', margin: 'auto'}}/>
+
+*This is how it looks on the receiver side:*
+<img src="https://botonic-doc-static.netlify.com/images/share_3.png" style={{display: 'block', margin: 'auto'}}/>
+
+
+## Message Templates
+
+If you want more degrees of freedom, you can also define your templates like in this example.
+
+```javascript
+import React from 'react'
+import { MessageTemplate } from '@botonic/react'
+
+export default class extends React.Component {
+  
+  static async botonicInit({ req }) {
+
+    var my_message_template = {
+            "template_type": "airline_boardingpass",
+            "intro_message": "You are checked in.",
+            "locale": "en_US",
+            "boarding_pass": [
+              {
+                "passenger_name": "SMITH/NICOLAS",
+                "pnr_number": "CG4X7U",
+                "seat": "74J",            
+                "logo_image_url": "https://www.example.com/en/logo.png",
+                "header_image_url": "https://www.example.com/en/fb/header.png",
+                "qr_code": "M1SMITH/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
+                "above_bar_code_image_url": "https://www.example.com/en/PLAT.png",
+                "auxiliary_fields": [
+                  {
+                    "label": "Terminal",
+                    "value": "T1"
+                  },
+                  {
+                    "label": "Departure",
+                    "value": "30OCT 19:05"
+                  }
+                ],
+                "secondary_fields": [
+                  {
+                    "label": "Boarding",
+                    "value": "18:30"
+                  },
+                  {
+                    "label": "Gate",
+                    "value": "D57"
+                  },
+                  {
+                    "label": "Seat",
+                    "value": "74J"
+                  },
+                  {
+                    "label": "Sec.Nr.",
+                    "value": "003"
+                  }
+                ],
+                "flight_info": {
+                  "flight_number": "KL0642",
+                  "departure_airport": {
+                    "airport_code": "JFK",
+                    "city": "New York",
+                    "terminal": "T1",
+                    "gate": "D57"
+                  },
+                  "arrival_airport": {
+                    "airport_code": "AMS",
+                    "city": "Amsterdam"
+                  },
+                  "flight_schedule": {
+                    "departure_time": "2016-01-02T19:05",
+                    "arrival_time": "2016-01-05T17:30"
+                  }
+                }
+              }
+            ]
+    }
+
+    return {my_message_template: my_message_template}
+  }
+
+  render() {
+    return(
+      <messages>
+        <message type="text">
+        I am a message template!
+        <MessageTemplate payload={this.props.my_message_template}></MessageTemplate>
+        </message>
+      </messages>           
+    ) 
+  }
+}
+
+```
+
+*In this case, this template will produce this nice boarding pass.*
+<img src="https://botonic-doc-static.netlify.com/images/message_template.png" style={{display: 'block', margin: 'auto'}}/>
+
+
+Take profit from this example and let's do your own stuff. Have a look at the different [templates](https://developers.facebook.com/docs/messenger-platform/send-messages/templates) available.
+

@@ -1,0 +1,64 @@
+---
+name: 2. Human Handoff
+route: /tutorials-and-examples/human-handoff
+menu: 4. Tutorials & Examples
+---
+
+# **Human Handoff**
+
+[View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/handoff)
+
+This template shows a very simple case of use where a user is transferred to a human agent through the chatbot. This conversation will appear as a new case on Hubtype Desk.
+
+In this example we've set up a route in `src/routes.js` that triggers the handoff when a user types "handoff":
+
+```javascript
+module.exports = {
+    routes: [
+        {text: /^handoff$/i, action: "transfer_agent"}
+    ]
+}
+```
+
+Then, in our `pages/actions/transfer_agent.js` file, we need to call the `humanHandoff` method inside `botonicInit`.
+Additionally, we check if the 'Customer Support' queue is opened:
+
+```javascript
+import React from 'react'
+const Botonic = require('@botonic/core')
+
+export default class extends Botonic.React.Component {
+
+  static async botonicInit({ req }) {
+
+    let openQueues = await Botonic.getOpenQueues(req)
+    openQueues = openQueues['queues']
+    let is_hanfOff = false
+    if(openQueues.indexOf('Customer Support') !== -1){
+      await Botonic.humanHandOff(req, 'Customer Support', {action: 'thanks_for_contacting'})
+      is_hanfOff = true
+    }
+    return {req, is_hanfOff}
+  
+  }
+
+  render() {
+    if(this.props.is_hanfOff){
+      return(
+        <messages>
+          <message type="text">
+            You are being trasnfered to an agent!
+          </message>
+        </messages>
+      )
+    }else {
+      return(
+        <messages>
+          Sorry, right now we can't serve you...Please contact us later!
+        </messages>
+      )
+    }
+  }
+}
+
+```
