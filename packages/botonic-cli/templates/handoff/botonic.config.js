@@ -1,9 +1,14 @@
 module.exports = {
   integrations: {
-    /* Uncomment this to enable NLP with Dialogflow
-        dialogflow: {
-            token: "YOUR_DIALOGFLOW_API_TOKEN"
-        }*/
+    // Uncomment one of these to enable NLP
+    /*dialogflow: {
+      token: 'YOUR_DIALOGFLOW_API_TOKEN'
+    },*/
+    /*luis: {
+      region: 'YOUR_LUIS_REGION',
+      appID: 'YOUR_LUIS_APP_ID',
+      endpointKey: 'YOUR_LUIS_ENDPOINT_KEY'
+    }*/
   },
   typingOptions: {
     /*
