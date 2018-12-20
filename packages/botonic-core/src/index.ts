@@ -257,6 +257,26 @@ export class Botonic {
         intents = res.intents
         entities = res.entities
       } catch (e) {}
+    } else if (this.conf.integrations.luis) {
+      let luis = this.conf.integrations.luis
+      try {
+        let luis_resp = await axios({
+          url: `https://${
+            luis.region
+          }.api.cognitive.microsoft.com/luis/v2.0/apps/${luis.appID}`,
+          params: {
+            'subscription-key': luis.endpointKey,
+            q: input.data,
+            verbose: true
+          }
+        })
+        if (luis_resp && luis_resp.data) {
+          intent = luis_resp.data.topScoringIntent.intent
+          confidence = luis_resp.data.topScoringIntent.score
+          intents = luis_resp.data.intents
+          entities = luis_resp.data.entities
+        }
+      } catch (e) {}
     }
     return { intent, confidence, intents, entities }
   }
