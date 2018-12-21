@@ -42,11 +42,12 @@ if (analytics_enabled()) {
   analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
 }
 
-export function track(event: string) {
+export function track(event: string, properties: {} = {}) {
   if (analytics_enabled() && analytics && credentials && credentials.analytics)
     analytics.track({
       event: event,
-      anonymousId: credentials.analytics.anonymous_id
+      anonymousId: credentials.analytics.anonymous_id,
+      properties: properties
     })
 }
 

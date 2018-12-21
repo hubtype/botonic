@@ -217,6 +217,7 @@ Uploading...
   async deploy() {
     let build_out = await this.botonicApiService.buildIfChanged()
     if (!build_out) {
+      track('Deploy Botonic Build Error')
       console.log(colors.red('There was a problem building the bot'))
       return
     }
@@ -236,6 +237,7 @@ Uploading...
           `Deploy failed. Bundle size too big ${zip_stats.size} (max 10Mb).`
         )
       )
+      track('Deploy Botonic Zip Error')
       await exec('rm botonic_bundle.zip')
       return
     }
@@ -248,7 +250,11 @@ Uploading...
         'botonic_bundle.zip',
         force
       )
-      if (deploy.response && deploy.response.status == 403) {
+      if (
+        (deploy.response && deploy.response.status == 403) ||
+        !deploy.data.deploy_id
+      ) {
+        track('Deploy Botonic Error', { error: deploy.response.data.status })
         throw deploy.response.data.status
       }
 
@@ -266,6 +272,7 @@ Uploading...
             spinner.fail()
             console.log(deploy_status.data.error)
             console.log(colors.red('There was a problem in the deploy'))
+            track('Deploy Botonic Error', { error: deploy_status.data.error })
             await exec('rm botonic_bundle.zip')
             return
           }
@@ -275,6 +282,7 @@ Uploading...
       spinner.fail()
       console.log(err)
       console.log(colors.red('There was a problem in the deploy'))
+      track('Deploy Botonic Error', { error: err })
       await exec('rm botonic_bundle.zip')
       return
     }
@@ -292,6 +300,7 @@ Uploading...
         this.displayProviders(providers)
       }
     } catch (e) {
+      track('Deploy Botonic Provider Error', { error: e })
       console.log(colors.red('There was an error getting the providers'), e)
     }
     try {
