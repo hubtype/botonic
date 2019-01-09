@@ -19,7 +19,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.5.1 darwin-x64 node-v9.9.0
+@botonic/cli/0.6.1 darwin-x64 node-v10.15.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -45,6 +45,9 @@ Deploy Botonic project to hubtype.com
 USAGE
   $ botonic deploy [BOT_NAME]
 
+OPTIONS
+  -f, --force  Force deploy despite of no changes. Disabled by default
+
 EXAMPLE
   $ botonic deploy
   Building...
@@ -53,7 +56,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.5.1/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/deploy.ts)_
 
 ## `botonic help [COMMAND]`
 
@@ -70,7 +73,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.4/src/commands/help.ts)_
 
 ## `botonic input INPUT`
 
@@ -90,7 +93,7 @@ EXAMPLE
   Hello!
 ```
 
-_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.5.1/src/commands/input.ts)_
+_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/input.ts)_
 
 ## `botonic login`
 
@@ -104,7 +107,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.5.1/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/login.ts)_
 
 ## `botonic logout`
 
@@ -118,7 +121,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.5.1/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/logout.ts)_
 
 ## `botonic new NAME [TEMPLATENAME]`
 
@@ -138,7 +141,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.5.1/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/new.ts)_
 
 ## `botonic run [INPUT]`
 
@@ -158,7 +161,7 @@ EXAMPLE
   [bot] > Bye!
 ```
 
-_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.5.1/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/run.ts)_
 
 ## `botonic webview WEBVIEW_PAGE`
 
@@ -177,5 +180,5 @@ EXAMPLE
   Hello!
 ```
 
-_See code: [src/commands/webview.ts](https://github.com/hubtype/botonic/blob/v0.5.1/src/commands/webview.ts)_
+_See code: [src/commands/webview.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/webview.ts)_
 <!-- commandsstop -->

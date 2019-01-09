@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "description": "Build Chatbots using React",
   "main": "lib/index.js",
   "scripts": {
