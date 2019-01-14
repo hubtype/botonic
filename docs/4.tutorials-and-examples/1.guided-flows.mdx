@@ -20,40 +20,41 @@ In the same way you build a website with a deep tree of routes, in botonic you m
 With the following example we will see better how `childRoutes` work:
 
 ```javascript
-routes: [
-    {text: /^hi$/i, action: "hi",
+export const routes: [
+    {path: 'hi', text: /^hi$/i, action: Hi,
         childRoutes: [
-            {text: /^pizza$/i, action: "pizza", 
+            {path: 'pizza', text: /^pizza$/i, action: Pizza, 
                 childRoutes: [
-                    {text: /^sausage$/i, action: "sausage"},
-                    {text: /^bacon$/i, action: "bacon"}
+                    {path: 'sausage', text: /^sausage$/i, action: Sausage},
+                    {path: 'bacon', text: /^bacon$/i, action: Bacon}
                 ]
             },
-            {text: /^pasta$/i, action: "pasta", 
+            {path: 'pasta', text: /^pasta$/i, action: Pasta, 
                 childRoutes: [
-                    {text: /^cheese$/i, action: "cheese"},
-                    {text: /^tomato$/i, action: "tomato"}
+                    {path: 'cheese', text: /^cheese$/i, action: Cheese},
+                    {path: 'tomato', text: /^tomato$/i, action: Tomato}
                 ]
             }
         ]
     },
-] 
+]
 ```
 
 When the user starts the conversation the bot will ask whether he wants to eat pizza or pasta. You "force" the user to select either one by prompting two quick replies:
 
 ```javascript
 import React from 'react'
+import { Text, Reply } from '@botonic/react'
 
 export default class extends React.Component {
 
   render() {
     return (
-        <message type="text">
+        <Text>
             Hi! Choose what you want to eat:
-            <reply payload="pizza">Pizza</reply>
-            <reply payload="pasta">Pasta</reply>
-        </message>
+            <Reply payload='pizza'>Pizza</Reply>
+            <Reply payload='pasta'>Pasta</Reply>
+        </Text>
     )
   }
 }
@@ -65,51 +66,56 @@ We have the option of pizza and also pasta. This is where `childRoutes` comes in
 
 In certain cases, it could be preferable to mantain your routes' file as clean as possible. Let's take the previous example and replace the text attributes with payloads.
 
+**src/routes.js**
+
 ```javascript
-routes: [
-    {payload: /^hi$/i, action: "hi",
-        childRoutes: [
-            {payload: /^pizza$/i, action: "pizza", 
-                childRoutes: [
-                    {payload: /^sausage$/i, action: "sausage"},
-                    {payload: /^bacon$/i, action: "bacon"}
-                ]
-            },
-            {payload: /^pasta$/i, action: "pasta", 
-                childRoutes: [
-                    {payload: /^cheese$/i, action: "cheese"},
-                    {payload: /^tomato$/i, action: "tomato"}
-                ]
-            }
-        ]
-    },
+import { routes as hiRoutes } from './actions/hiFlow/hi.routes'
+import { Hi } from './actions/hi'
+
+export const routes: [
+    {path: 'hi', payload: /^hi$/i, action: Hi, childRoutes: hiRoutes}
 ] 
+```
+
+**src/actions/hiFlow/hi.routes.js**
+
+```javascript
+import { Pizza } from './actions/hiFlow/Pizza'
+import { Sausage } from './actions/hiFlow/Sausage'
+import { Bacon } from './actions/hiFlow/Bacon'
+import { Pasta } from './actions/hiFlow/Pasta'
+import { Cheese } from './actions/hiFlow/Cheese'
+import { Tomato } from './actions/hiFlow/Tomato'
+
+export const routes: [
+  {path: 'pizza', action: Pizza}
+  {path: 'sausage', action: Sausage},
+  {path: 'bacon', action: Bacon},
+  {path: 'pasta', action: Pasta},
+  {path: 'cheese', action: Cheese},
+  {path: 'tomato', action: Tomato}
+]
+
 ```
 
 You can achieve the same flow's behaviour by preserving the parent of the previous flow and doing the following modifications in the corresponding action files:
 
-
-```javascript
-routes: [
-    {payload: /^hi$/i, action: "hi"}
-] 
-```
-
-Note that you can specify directly what action has to be triggered when answering to a reply with the attribute `action="childStateURL"`. 
+Note that you can specify directly what action has to be triggered when answering to a reply with the attribute `path="childStateURL"`. 
 
 
 ```javascript
 import React from 'react'
+import { Text, Reply } from '@botonic/react'
 
 export default class extends React.Component {
 
   render() {
     return (
-        <message type="text">
+        <Text>
             Hi! Choose what you want to eat:
-            <reply action="pizza">Pizza</reply>
-            <reply action="pasta">Pasta</reply>
-        </message>
+            <Reply path='pizza'>Pizza</Reply>
+            <Reply path='pasta'>Pasta</Reply>
+        </Text>
     )
   }
 }
@@ -123,46 +129,48 @@ Since every action is linked in the same way as URL's do, you can also pass addi
 
 ```javascript
 import React from 'react'
+import { Text, Action } from '@botonic/react'
 
 export default class extends React.Component {
 
   render() {
     return (
-        <message type="text">
+        <Text>
             What's your favourite flavour?
-            <reply action="pizza?ans=spicy">Spicy</reply>
-            <reply action="pizza?ans=salty">Salty</reply>
-        </message>
+            <Reply path='pizza?ans=spicy'>Spicy</Reply>
+            <Reply path='pizza?ans=salty'>Salty</Reply>
+        </Text>
     )
   }
 }
 ```
 
-Then you can access its parameters in the following way in `pages/actions/pizza.js`:
+Then you can access its parameters in the following way in `src/actions/hiFlow/pizza.js`:
 
 ```javascript
 import React from 'react'
+import { Text } from '@botonic/react'
 
 export default class extends React.Component {
 
   render() {
-    if(this.props.params.ans == "spicy"){
+    if(this.params.ans == 'spicy'){
       return (
-          <message type="text">
+          <Text>
               Be sure you have the air conditioner turned on.
-          </message>
+          </Text>
       )     
-    } else if (this.props.params.ans == "salty"){
+    } else if (this.params.ans == 'salty'){
       return(
-          <message type="text">
+          <Text>
               Be sure you have a bottle of water near.
-          </message>
+          </Text>
       )
     } else{
       return(
-          <message type="text">
+          <Text>
               This option is not available.
-          </message>
+          </Text>
       )
     }
   }

@@ -1,8 +1,17 @@
 import React from 'react'
+import {
+  Text,
+  Carousel,
+  Element,
+  Image,
+  Button,
+  Title,
+  Subtitle
+} from '@botonic/react'
 
 export default class extends React.Component {
-  static async botonicInit({ req }) {
-    req.context.movies = [
+  render() {
+    let movies = [
       {
         name: 'Pulp Fiction',
         desc: 'Le Big Mac',
@@ -24,36 +33,33 @@ export default class extends React.Component {
           'https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA='
       }
     ]
-  }
-
-  render() {
     return (
-      <messages>
-        <message type='text'>
+      <>
+        <Text>
           Great! Here we can see a carrousel. It's a Facebook Messenger
           component, and it's a group of elements which consists of an image, a
           title, a subtitle and a group of buttons. You can get more information
           here:
           https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic?locale=en_US#carousel
-        </message>
-        <message type='carrousel'>
-          {this.props.context.movies.map((e, i) => (
-            <element key={e.name}>
-              <pic>{e.pic}</pic>
-              <title>{e.name}</title>
-              <desc>{e.desc}</desc>
-              <button url={e.url}>Visit website</button>
-            </element>
+        </Text>
+        <Carousel>
+          {movies.map((e, i) => (
+            <Element key={e.name}>
+              <Image>{e.pic}</Image>
+              <Title>{e.name}</Title>
+              <Subtitle>{e.desc}</Subtitle>
+              <Button url={e.url}>Visit website</Button>
+            </Element>
           ))}
-        </message>
-        <message type='text'>
+        </Carousel>
+        <Text>
           I could spend a long time talking about Botonic's features, but I
           think that's enough for now. Feel free to read through the code to
           learn how to integrate NLP capabilities and use all kind of rich
           messages.
-        </message>
-        <message type='text'>Now, please, type 'end'.</message>
-      </messages>
+        </Text>
+        <Text>Now, please, type 'end'.</Text>
+      </>
     )
   }
 }

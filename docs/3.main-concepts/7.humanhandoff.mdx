@@ -8,7 +8,7 @@ menu: 3. Main Concepts
 
 As bots aren’t perfects, we allow to transfer a conversation into an agent.
 
-To configure transfer the conversation into an agent, you must provide the `req` parameters and then the `queue_name` and `next_action`, which are optional, but recommended.
+To configure transfer the conversation into an agent, you must provide the `session` parameters and then the `queue_name` and `next_action`, which are optional, but recommended.
 
 The `queue_name` is the name of the queue where you want to transfer the conversation. If a queue with that name doesn't exist, it will transfer the chat into a random open queue.
 
@@ -21,22 +21,21 @@ Here’s a simple example of how to transfer the conversation into the queue 'Su
 
 ```javascript
 import React from 'react'
-
-const Botonic = require('@botonic/core')
+import { Text } from '@botonic/react'
+import { humanHandOff } from '@botonic/core'
 
 export default class extends React.Component {
 
-  static async botonicInit({req}) {
-    await Botonic.humanHandOff(req, 'Support_Queue', {action: 'say_goodbye'})
-    return {req}
+  static async botonicInit({ input, session, params, lastRoutePath }) {
+    await humanHandOff(session, 'Support_Queue', {action: 'say_goodbye'})
   }
 
   render() {
     return(
-      <message type="text">
+      <Text>
         Thanks for contacting us! One of our agents will take the conversation
         as soon as posible.
-      </message>
+      </Text>
     )
   }
 }
@@ -44,4 +43,30 @@ export default class extends React.Component {
 
 ## Open Queues
 
-You can get an array of all the open queues of your Hubtype Desk just with this simple Botonic function: `Botonic.getOpenQueues(req)`.
+You can get an array of all the open queues of your Hubtype Desk just with this simple Botonic function: `getOpenQueues()`.
+
+```javascript
+import React from 'react'
+import { Text } from '@botonic/react'
+import { getOpenQueues } from '@botonic/core'
+
+export default class extends React.Component {
+  static async botonicInit({ input, session, params, lastRoutePath }) {
+    let openQueues = await getOpenQueues(session)
+    return { openQueues }
+  }
+
+  render() {
+    if(!this.props.openQueues.queues.length) {
+      return (
+        <Text>There are no open queues</Text>
+      )
+    } else {
+      return(
+        <Text>Open queues: {this.props.openQueues.queues.join(',')}</Text>
+      )
+    }
+  }
+}
+
+```

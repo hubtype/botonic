@@ -1,7 +1,8 @@
 import React from 'react'
+import { Text } from '@botonic/react'
 
 export default class extends React.Component {
-  render() {
-    return <message type='text'>Bye bye! 👋</message>
-  }
+	render() {
+		return <Text>Bye bye! 👋</Text>
+	}
 }

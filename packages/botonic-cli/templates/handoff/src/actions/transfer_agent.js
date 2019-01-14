@@ -1,32 +1,28 @@
 import React from 'react'
-const Botonic = require('@botonic/core')
+import { Text } from '@botonic/react'
+import { getOpenQueues, humanHandOff } from '@botonic/core'
 
 export default class extends React.Component {
-  static async botonicInit({ req }) {
-    let openQueues = await Botonic.getOpenQueues(req)
-    openQueues = openQueues['queues']
+  static async botonicInit({ input, session, params, lastRoutePath }) {
+    let openQueues = await getOpenQueues(session)
     let is_hanfOff = false
-    if (openQueues.indexOf('Customer Support') !== -1) {
-      await Botonic.humanHandOff(req, 'Customer Support', {
+    if (openQueues.queues.indexOf('Customer Support') !== -1) {
+      await humanHandOff(session, 'Customer Support', {
         action: 'thanks_for_contacting'
       })
       is_hanfOff = true
     }
-    return { req, is_hanfOff }
+    return { is_hanfOff }
   }
 
   render() {
     if (this.props.is_hanfOff) {
-      return (
-        <messages>
-          <message type='text'>You are being trasnfered to an agent!</message>
-        </messages>
-      )
+      return <Text>You are being trasnfered to an agent!</Text>
     } else {
       return (
-        <messages>
+        <Text>
           Sorry, right now we can't serve you...Please contact us later!
-        </messages>
+        </Text>
       )
     }
   }
