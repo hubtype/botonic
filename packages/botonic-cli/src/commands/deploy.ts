@@ -1,4 +1,3 @@
-import { join, resolve } from 'path'
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'

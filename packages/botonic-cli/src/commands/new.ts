@@ -1,9 +1,7 @@
-import { Command, flags } from '@oclif/command'
+import { Command } from '@oclif/command'
 import { resolve } from 'path'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
-
-import * as fs from 'fs'
 
 import { BotonicAPIService } from '../botonicAPIService'
 import { track } from '../utils'

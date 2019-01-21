@@ -292,7 +292,7 @@ export class BotonicAPIService {
       form,
       'post',
       { ...this.headers, ...headers },
-      { forceDeploy: forceDeploy, isWebpack: true }
+      { forceDeploy: forceDeploy, version: '0.7' }
     )
   }
 
