@@ -35,32 +35,34 @@ You can only open a webview after a `button` or `quickreply`. For this example, 
 
 ```javascript
 import React from 'react'
+import { 
+  Text,
+  Carousel,
+  Element,
+  Image,
+  Title,
+  Subtitle,
+  Button
+} from '@botonic/react'
 
 export default class extends React.Component {
-
-    static async botonicInit({ req }) {
-        
-        //Here we define the data that will be passed from the bot to the webview.
-        //We managed for you how to pass the context object to the webviews.
-        req.context.some_data = "some_data"
-    }
 
     render() {
         //Here we render a Facebook Carousel with its propers assets and url routes for the webview
         return (
-            <messages>
-                <message type="text">
-                    Here I lend you some options of how helpful the use of Facebook webviews could be.
-                </message>
-                <message type="carousel">
-                    <element>
-                        <pic>/assets/interact_with_bot.jpeg</pic>
-                        <title>Interacting with the bot</title>
-                        <desc>See how the communication bot-webview is done</desc>
-                        <button webview_height_ratio="tall" url="/webviews/invoking_webviews">Go</button>
-                    </element>
-                </message>
-            </messages>
+            <>
+              <Text>
+                  Here I lend you some options of how helpful the use of Facebook webviews could be.
+              </>
+              <Carousel>
+                  <Element>
+                      <Image src='/assets/interact_with_bot.jpeg' />
+                      <Title>Interacting with the bot</Title>
+                      <Subtitle>See how the communication bot-webview is done</Subtitle>
+                      <Button webview_height_ratio="tall" url='/webviews/invoking_webviews'>Go</Button>
+                  </Element>
+              </Carousel>
+            </>
         )
     }
 }
@@ -75,6 +77,8 @@ export default class extends React.Component {
 First of all, we create a new component inside `src/webviews/components`.
 
 **src/webviews/components/InvokingWebviews.js**
+
+TODOOOOOOO
 
 ```javascript
 import React from "react";
@@ -124,6 +128,8 @@ In this example, you can see that we have a button, and when it's triggered we s
 
 After having our component created, now we can move to `src/webviews/index.js`. Simply, add a new Route tag with the path described in our action and the component we have just created. This will render the new component passing the context object as a prop.
 
+
+TODOOOOO
 ```javascript
 import React from "react";
 import { render } from "react-dom";

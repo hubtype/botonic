@@ -1,3 +1,1 @@
-module.exports = {
-  routes: []
-}
+export const routes = []

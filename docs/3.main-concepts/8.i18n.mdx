@@ -13,44 +13,63 @@ First, you need to add in `src/locales` folder a js file for each language you w
 `src/locales/en.js`
 
 ```javascript
-export default { 
-    multilang: {
-        text1: ["Hello!", "Hey there!", "Aloha"],
-        text2: ["What's up?", "How're you?"],
-        text3: ["Bye!", "See you later", "Ciao"]
-    }
+export default {
+    text1: ["Hello!", "Hey there!", "Aloha"],
+    text2: ["What's up?", "How're you?"],
+    text3: ["Bye!", "See you later", "Ciao"]
+}
+```
+
+`src/locales/es.js`
+
+```javascript
+export default {
+    text1: ["Hola!", "Buenas", "Ep!"],
+    text2: ["Que tal?", "Como estas?"],
+    text3: ["Adios", "Hasta luego!"]
 }
 ```
 
 As you can see, locales are just objects that can have any structure you want, the only requirements are that you must have the same structure for all languages and that leafs must be strings or arrays of strings. In the latter case, Botonic will choose one of the strings randomly. This makes the user feel like they're having a more natural conversation.
 
-In order to use these locales in your responses, you need to import Botonic's `core` module. We suggest you import as \_, as it will make your code more concise. Then it's just a matter of accessing the string ID whenever we want to use it with `_('stringID')`, where `stringID` is the dotted path to access the string in you locales object.
+Now, you have to export all the languages that your bot needs.
 
-If you want to change the language for the current user, use the Botonic component method `setLocale(lang)`.
+`src/locales/index.js`
+
+```javascript
+import en from './en'
+import es from './es'
+
+export const locales = { en, es }
+```
+
+In order to use these locales in your responses, you need to import the `RequestContext` from `@botonic/react` and use the context of that Action. We suggest you import as \_, as it will make your code more concise. Then it's just a matter of accessing the string ID whenever we want to use it with `_('stringID')`, where `stringID` is the dotted path to access the string in you locales object.
+
+If you want to change the language for the current user, use the method `setLocale(lang)`.
 
 This is an example of how to use it:
 
 ```javascript
 import React from 'react'
-import { default as _ } from '@botonic/core/lib/i18n'
-
+import { RequestContext, Text} from '@botonic/react'
 
 export default class extends React.Component {
-    static async botonicInit({req}) {
-        _.setLocale('en')
-    }
+    
+    static contextType = RequestContext
 
-  render() {
-    return (
-        <messages>
-            <message type="text">
-                {_('multilang.text1')} 😊 {_('multilang.text2')}
-            </message>
-            <message type="text">
-                {_('multilang.text3')}
-            </message>
-        </messages>
-    )
-  }
+    render() {
+        this.context.setLocale('en')
+        let _ = this.context.getString
+        return (
+            <>
+                <Text>
+                    {_('text1')} 😊 {_('text2')}
+                </Text>
+                <Text>
+                    {_('text3')}
+                </Text>
+            </>
+        )
+    }
 }
 ```

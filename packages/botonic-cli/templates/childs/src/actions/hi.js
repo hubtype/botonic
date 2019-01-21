@@ -1,13 +1,14 @@
 import React from 'react'
+import { Text, Reply } from '@botonic/react'
 
 export default class extends React.Component {
-  render() {
-    return (
-      <message type='text'>
-        Hi! Choose what you want to eat:
-        <reply payload='pizza'>Pizza</reply>
-        <reply payload='pasta'>Pasta</reply>
-      </message>
-    )
-  }
+	render() {
+		return (
+			<Text>
+				Hi! Choose what you want to eat:
+				<Reply payload="pizza">Pizza</Reply>
+				<Reply payload="pasta">Pasta</Reply>
+			</Text>
+		)
+	}
 }
