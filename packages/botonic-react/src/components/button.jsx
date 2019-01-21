@@ -55,7 +55,11 @@ export class Button extends React.Component {
             let payload = `__PATH_PAYLOAD__${this.props.path}`
             return <button payload={payload}>{this.props.children}</button>
         } else if (this.props.payload) {
-            return <button payload={payload}>{this.props.children}</button>
+            return (
+                <button payload={this.props.payload}>
+                    {this.props.children}
+                </button>
+            )
         } else if (this.props.url) {
             return <button url={this.props.url}>{this.props.children}</button>
         }
