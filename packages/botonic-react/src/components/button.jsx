@@ -47,7 +47,7 @@ export class Button extends React.Component {
             let Webview = this.props.webview
             let params = params2queryString(this.props.params)
             return (
-                <button url={`/${Webview.name}?${params}`}>
+                <button url={`/webviews/${Webview.name}?${params}`}>
                     {this.props.children}
                 </button>
             )

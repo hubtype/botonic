@@ -13,12 +13,12 @@ class App extends React.Component {
         super(props)
         let url = new URL(window.location.href)
         let params = Array.from(url.searchParams.entries())
-            .filter(([key, value]) => key != 'session')
+            .filter(([key, value]) => key != 'context')
             .reduce((o, [key, value]) => {
                 o[key] = value
                 return o}
             , {})
-        let session = JSON.parse(url.searchParams.get('session'))
+        let session = JSON.parse(url.searchParams.get('context'))
         this.state = {session, params}
     }
 
