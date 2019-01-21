@@ -6,7 +6,7 @@ menu: 4. Tutorials & Examples
 
 # **Guided Flow**
 
-[View on Github](https://github.com/hubtype/botonic/tree/master/templates/childs)
+[View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/childs)
 
 This template shows how to build a bot with deep flows, where users navigate a decision tree using interactive elements like buttons. This is useful when you want to guide the user through a conversation with predefined flows that consist of several steps. Examples of this type of bots include (but are not limited to):
 
@@ -19,6 +19,8 @@ In the same way you build a website with a deep tree of routes, in botonic you m
 
 With the following example we will see better how `childRoutes` work:
 
+**src/routes.js**
+
 ```javascript
 import Hi from './actions/hi'
 import Pizza from './actions/pizza'
@@ -28,19 +30,19 @@ import Pasta from './actions/pasta'
 import Cheese from './actions/cheese'
 import Tomatosap from './actions/tomato'
 
-export const routes: [
+export const routes = [
     {path: 'hi', text: /^hi$/i, action: Hi,
         childRoutes: [
-            {path: 'pizza', text: /^pizza$/i, action: Pizza, 
+            {path: 'pizza', payload: /^pizza$/i, action: Pizza, 
                 childRoutes: [
-                    {path: 'sausage', text: /^sausage$/i, action: Sausage},
-                    {path: 'bacon', text: /^bacon$/i, action: Bacon}
+                    {path: 'sausage', payload: /^sausage$/i, action: Sausage},
+                    {path: 'bacon', payload: /^bacon$/i, action: Bacon}
                 ]
             },
-            {path: 'pasta', text: /^pasta$/i, action: Pasta, 
+            {path: 'pasta', payload: /^pasta$/i, action: Pasta, 
                 childRoutes: [
-                    {path: 'cheese', text: /^cheese$/i, action: Cheese},
-                    {path: 'tomato', text: /^tomato$/i, action: Tomato}
+                    {path: 'cheese', payload: /^cheese$/i, action: Cheese},
+                    {path: 'tomato', payload: /^tomato$/i, action: Tomato}
                 ]
             }
         ]
@@ -49,6 +51,8 @@ export const routes: [
 ```
 
 When the user starts the conversation the bot will ask whether he wants to eat pizza or pasta. You "force" the user to select either one by prompting two quick replies:
+
+**src/actions/hi.js**
 
 ```javascript
 import React from 'react'
@@ -61,7 +65,7 @@ export default class extends React.Component {
         <Text>
             Hi! Choose what you want to eat:
             <Reply payload='pizza'>Pizza</Reply>
-            <Reply payload='pasta'>Pasta</Reply>
+            <Reply path='pasta'>Pasta</Reply>
         </Text>
     )
   }
@@ -80,23 +84,23 @@ In certain cases, it could be preferable to mantain your routes' file as clean a
 import { routes as hiRoutes } from './actions/hiFlow/hi.routes'
 import Hi from './actions/hi'
 
-export const routes: [
-    {path: 'hi', payload: /^hi$/i, action: Hi, childRoutes: hiRoutes}
+export const routes = [
+    {path: 'hi', text: /^hi$/i, action: Hi, childRoutes: hiRoutes}
 ] 
 ```
 
 **src/actions/hiFlow/hi.routes.js**
 
 ```javascript
-import Pizza from './actions/hiFlow/Pizza'
-import Sausage from './actions/hiFlow/Sausage'
-import Bacon from './actions/hiFlow/Bacon'
-import Pasta from './actions/hiFlow/Pasta'
-import Cheese from './actions/hiFlow/Cheese'
-import Tomato from './actions/hiFlow/Tomato'
+import Pizza from '../pizza'
+import Sausage from '../sausage'
+import Bacon from '../bacon'
+import Pasta from '../pasta'
+import Cheese from '../cheese'
+import Tomato from '../tomato'
 
-export const routes: [
-  {path: 'pizza', action: Pizza}
+export const routes = [
+  {path: 'pizza', payload: 'pizza', action: Pizza},
   {path: 'sausage', action: Sausage},
   {path: 'bacon', action: Bacon},
   {path: 'pasta', action: Pasta},
@@ -110,34 +114,17 @@ You can achieve the same flow's behaviour by preserving the parent of the previo
 
 Note that you can specify directly what action has to be triggered when answering to a reply with the attribute `path="childStateURL"`. 
 
-
-```javascript
-import React from 'react'
-import { Text, Reply } from '@botonic/react'
-
-export default class extends React.Component {
-
-  render() {
-    return (
-        <Text>
-            Hi! Choose what you want to eat:
-            <Reply path='pizza'>Pizza</Reply>
-            <Reply path='pasta'>Pasta</Reply>
-        </Text>
-    )
-  }
-}
-```
-
 So after applying this operation to each action file you will have the ability to obtain the desired flow.
 
 ### Working with URL Parameters
 
 Since every action is linked in the same way as URL's do, you can also pass additional parameters to them in order to have a better control of your responses. So, the following piece of code will fill our params object:
 
+**src/actions/hi.js**
+
 ```javascript
 import React from 'react'
-import { Text, Action } from '@botonic/react'
+import { Text, Reply } from '@botonic/react'
 
 export default class extends React.Component {
 
@@ -153,35 +140,27 @@ export default class extends React.Component {
 }
 ```
 
-Then you can access its parameters in the following way in `src/actions/hiFlow/pizza.js`:
+Then you can access its parameters in the following way in `src/actions/pizza.js`:
+
+**src/actions/pizza.js**
 
 ```javascript
 import React from 'react'
-import { Text } from '@botonic/react'
+import { Text, RequestContext } from '@botonic/react'
 
 export default class extends React.Component {
 
-  render() {
-    if(this.params.ans == 'spicy'){
-      return (
-          <Text>
-              Be sure you have the air conditioner turned on.
-          </Text>
-      )     
-    } else if (this.params.ans == 'salty'){
-      return(
-          <Text>
-              Be sure you have a bottle of water near.
-          </Text>
-      )
-    } else{
-      return(
-          <Text>
-              This option is not available.
-          </Text>
-      )
+    static contextType = RequestContext
+
+    render() {
+        if (this.context.params.ans == 'spicy') {
+            return <Text>Be sure you have the air conditioner turned on.</Text>
+        } else if (this.context.params.ans == 'salty') {
+            return <Text>Be sure you have a bottle of water near.</Text>
+        } else {
+            return <Text>This option is not available.</Text>
+        }
     }
-  }
 }
 ```
 

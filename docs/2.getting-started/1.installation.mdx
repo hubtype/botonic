@@ -21,7 +21,7 @@ With Node and NPM setup, let’s install the Botonic CLI.
 This will install few dependencies just to have the CLI available. It might take a while, so please be patient. If you encounter any problem please report it [here](https://github.com/hubtype/botonic/issues). Alternatively, you can also use [yarn](https://yarnpkg.com/lang/en/), as Node Package Manager.
 
 ```bash
-$ npm install -g @botonic/cli
+npm install -g @botonic/cli
 ```
 
 > #### NOTE:
@@ -30,7 +30,7 @@ $ npm install -g @botonic/cli
 Once that’s done, create your first Botonic bot:
 
 ```bash
-$ botonic new testBot
+botonic new testBot
 ```
 
 > #### NOTE:
@@ -39,21 +39,15 @@ $ botonic new testBot
 To run your bot, `cd` into the directory that was created and then run the `botonic run` command to test your bot right in your terminal!
 
 ```bash
-$ cd testBot
-$ botonic run
+cd testBot
+botonic serve
 ```
 
 
 > #### NOTE:
 > In order to obtain a more detailed trace, you can also run:
 ```bash
-$ npm run build
-```
-> If at any stage you observe something is going wrong with the project, try the following options:
-* Include the flag `--no-cache` in the scripts using parcel command in `package.json`
-* Run the following command:
-```bash
-$ rm -rf .cache/
+npm run build
 ```
 
 ## Windows Support
@@ -88,18 +82,18 @@ In order to develop with Botonic on Windows, you can achieve it by following thi
     * At this point of installation, you should be able to run some Linux commands: say `ls`, `cp`, ...
 * Run the following command:
 ```bash
-$ npm config set script-shell "C:\\YOUR_PROGRAM_FILES_GIT_DIRECTORY\\git\\bin\\bash.exe"  
+npm config set script-shell "C:\\YOUR_PROGRAM_FILES_GIT_DIRECTORY\\git\\bin\\bash.exe"  
 ```
 > #### NOTE:
 > You can revert this operation by running:
 ```bash
-$ npm config delete script-shell
+npm config delete script-shell
 ```
 
 You can now open an Admin command prompt and install Botonic with:
 
 ```bash
-$ npm install -g @botonic/cli
+npm install -g @botonic/cli
 ```
 
 Congratulations! You can now use Botonic on Windows =)

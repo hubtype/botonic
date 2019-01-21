@@ -28,15 +28,13 @@ export default class extends React.Component {
       method: 'GET',
       params: {}
     })
-
-    let resp = await res.json()
-    return { resp }
+    session.resp = await res.json()
   }
 
   render() {
     return (
       <Carousel>
-        {this.props.resp.products.map((e, i) => (
+        {this.context.session.resp.products.map((e, i) => (
           <Element key={e.name}>
             <Pic src={e.image.sizes.Best.url} />
             <Title>{e.name}</Title>

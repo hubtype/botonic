@@ -7,7 +7,7 @@ export default class extends React.Component {
 			<Text>
 				Hi! Choose what you want to eat:
 				<Reply payload="pizza">Pizza</Reply>
-				<Reply payload="pasta">Pasta</Reply>
+				<Reply path="pasta">Pasta</Reply>
 			</Text>
 		)
 	}

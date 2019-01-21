@@ -6,7 +6,7 @@ menu: 4. Tutorials & Examples
 
 # **Dynamic Carousel**
 
-[View on Github](https://github.com/hubtype/botonic/tree/master/templates/dynamic_carousel)
+[View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/dynamic_carousel)
 
 This template shows a simple bot that displays five men or woman shirts and its price, we are getting the clothes information on the `Shopstyle API`.
 
@@ -21,11 +21,16 @@ The carousel can have at most ten elements, where each element will represent on
 For access to these values, we do a loop with all the products where we extract the values like `e.name`, `e.priceLabel`, etc.
 
 
+> #### NOTE:
+> In order to import the `fetch` function from `isomorphic-fetch`, you need to install it into your bot. Please do: `npm install isomorphic-fetch`
+
+**src/actions/carousel.js**
+
 ```javascript
 import React from 'react'
 import { 
   Carousel,
-  Elements,
+  Element,
   Pic,
   Title,
   Subtitle,
@@ -39,7 +44,7 @@ export default class extends React.Component {
 
     const api_key = "uid8900-40385330-57"
     const url = 'http://api.shopstyle.com/api/v2/products?pid='+
-    			api_key+'&fts='+input.data+'&offset=0&limit=5'
+    			api_key+'&fts=mens-shirts&offset=0&limit=5'
     const res = await fetch(url,{
       "url": url,
       "method": "GET",
@@ -52,7 +57,6 @@ export default class extends React.Component {
 
   render() {
     return (
-      <>
         <Carousel>
             {this.props.resp.products.map((e, i) => 
                 <Element key={e.name}>
@@ -63,9 +67,18 @@ export default class extends React.Component {
                 </Element>
             )}
         </Carousel>
-      </>
     )
   }
 }
+```
+
+**src/routes.js**
+
+```
+import Carousel from './actions/carousel'
+
+export const routes = [
+  { path: 'carousel', text: /^.*$/i, action: Carousel }
+]
 
 ```

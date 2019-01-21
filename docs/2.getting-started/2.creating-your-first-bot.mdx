@@ -26,7 +26,7 @@ Let’s get started!
 To start a new bot, open your terminal/command prompt and run:
 
 ```bash
-$ botonic new testBot blank
+botonic new testBot blank
 ```
 
 * `new` will tell the CLI to create a new bot.
@@ -50,8 +50,8 @@ If you don’t specify a template at the start, you will be prompted to pick one
 Now, you can `cd` into the folder that was created. To get a quick preview of your bot in your browser, use the `serve` command.
 
 ```bash
-$ cd testBot
-$ botonic serve
+cd testBot
+botonic serve
 ```
 
 This will give you a local browser url where you can have a chat session with your bot. Just type any text and press enter to send a message to the bot. If you started with the "blank" template the bot will always respond with "I don't understand you".
@@ -75,7 +75,7 @@ Let's start by creating an "echo" bot that just repeats what the user say. So if
 The first step is to create a route that captures any text. Edit your `src/routes.js` file and add a new rule `{path: 'echo', text: /^.+$/, action: Echo}` inside the `routes` section:
 
 ```javascript
-import Echo from './action/echo'
+import Echo from './actions/echo'
 
 export const routes = [
   {path: 'echo', text: /^.+$/, action: Echo}
@@ -149,7 +149,7 @@ Now it's just a matter of adding more routes that capture different intents and 
 ```javascript
 import Age from './actions/age'
 import Smalltalk from './actions/smalltalk'
-import Echo from './action/echo'
+import Echo from './actions/echo'
 
 export const routes = [
   {path:'age', intent: "smalltalk.agent.age", action: Age},

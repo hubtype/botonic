@@ -11,8 +11,8 @@ import {
 
 import MyWebview from '../webviews/components/myWebview'
 import InteractionWithBot from '../webviews/components/interactionWithBot'
-import BotVader from '../assets/bot_vader.jpeg'
-import InteractWithBot from '../assets/interact_with_bot.jpeg'
+import BotVader from '../assets/bot_vader.jpg'
+import InteractWithBot from '../assets/interact_with_bot.jpg'
 
 export default class extends React.Component {
   render() {

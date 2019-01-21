@@ -12,6 +12,8 @@ This template shows a very simple case of use where a user is transferred to a h
 
 In this example we've set up a route in `src/routes.js` that triggers the handoff when a user types "handoff":
 
+**src/routes.js**
+
 ```javascript
 import TransferAgent from './actions/transfer_agent'
 
@@ -23,12 +25,14 @@ export const routes = [
 Then, in our `src/actions/transfer_agent.js` file, we need to call the `humanHandoff` method inside `botonicInit`.
 Additionally, we check if the 'Customer Support' queue is opened:
 
+**src/actions/transfer_agent.js**
+
 ```javascript
 import React from 'react'
 import { Text } from '@botonic/react'
 import { getOpenQueues, humanHandOff } from '@botonic/core'
 
-export default class extends Botonic.React.Component {
+export default class extends React.Component {
 
   static async botonicInit({ input, session, params, lastRoutePath }) {
 
@@ -58,5 +62,8 @@ export default class extends Botonic.React.Component {
     }
   }
 }
-
 ```
+
+> #### NOTE:
+> Remember that `getOpenQueues` and `humanHandOff` are only available when the bot is deployed!
+
