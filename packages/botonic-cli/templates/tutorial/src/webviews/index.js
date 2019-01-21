@@ -1,7 +1,7 @@
 import { WebviewApp } from '@botonic/react'
 
 import { locales } from '../locales'
-import MyWebview from './myWebview'
+import MyWebview from './components/myWebview'
 import InteractionWithBot from './components/interactionWithBot'
 
 const webviews = [MyWebview, InteractionWithBot]

@@ -2,7 +2,7 @@ import React from 'react'
 import fetch from 'isomorphic-fetch'
 import {
   Text,
-  Image,
+  Pic,
   Carousel,
   Element,
   Subtitle,
@@ -38,7 +38,7 @@ export default class extends React.Component {
       <Carousel>
         {this.props.resp.products.map((e, i) => (
           <Element key={e.name}>
-            <Image>{e.image.sizes.Best.url}</Image>
+            <Pic src={e.image.sizes.Best.url} />
             <Title>{e.name}</Title>
             <Subtitle>{e.priceLabel}</Subtitle>
             <Button url={e.clickUrl}>Open Product</Button>

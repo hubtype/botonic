@@ -13,7 +13,7 @@ This template shows a very simple case of use where a user is transferred to a h
 In this example we've set up a route in `src/routes.js` that triggers the handoff when a user types "handoff":
 
 ```javascript
-import { TransferAgent } from './actions/transfer_agent'
+import TransferAgent from './actions/transfer_agent'
 
 export const routes = [
     {path:'agent', text: /^handoff$/i, action: TransferAgent}

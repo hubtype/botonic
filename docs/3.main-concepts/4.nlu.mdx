@@ -14,10 +14,9 @@ The integration with `dialogflow` is super easy. First of all, we need to go to 
 
 ```javascript
 export const integrations: {
-    /* Uncomment this to enable NLP with Dialogflow
     dialogflow: {
         token: "YOUR_DIALOGFLOW_API_TOKEN"
-    }*/
+    }
 }
 ```
 `Dialogflow` allows us to create different `intents` and assign key words or phrases. So, when we write any of them, matches with the `intent` and redirects to the corresponding route.
@@ -25,7 +24,7 @@ export const integrations: {
 Below, we see how to captures different intents (we need the integration with dialogflow enabled, as we have seen above):
 
 ```javascript
-import { Funny } from './actions/funny'
+import Funny from './actions/funny'
 
 export const routes = [
 	{path: 'funny', intent: 'smalltalk.agent.funny', action: Funny},

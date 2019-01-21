@@ -14,10 +14,9 @@ The integration with `dialogflow` is super easy, we have to enter in `integratio
 
 ```javascript
 export const integrations = {
-    /* Uncomment this to enable NLP with Dialogflow
     dialogflow: {
         token: "YOUR_DIALOGFLOW_API_TOKEN"
-    }*/
+    }
 }
 
 ```
@@ -25,8 +24,8 @@ export const integrations = {
 Then in `src/routes.js`, we will add the `dialogflow intents` that we want for our chatbot. The `intents` contain a set of words and / or phrases that when written by the user, the chatbot will search the corresponding `intent` and call the corresponding action. Here we have an example of how to call the `intents`:
 
 ```javascript
-import { Hi } from './actions/hi'
-import { Bye } from './actions/bye'
+import Hi from './actions/hi'
+import Bye from './actions/bye'
 
 export const routes = [
     /* Captures different intents (enable the Dialogflow integration,

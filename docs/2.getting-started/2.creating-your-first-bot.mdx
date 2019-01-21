@@ -47,14 +47,14 @@ If you don’t specify a template at the start, you will be prompted to pick one
 
 ## Testing the bot locally
 
-Now, you can `cd` into the folder that was created. To get a quick preview of your bot in your terminal, use the `run` command.
+Now, you can `cd` into the folder that was created. To get a quick preview of your bot in your browser, use the `serve` command.
 
 ```bash
 $ cd testBot
-$ botonic run
+$ botonic serve
 ```
 
-This will open an interactive chat session with your bot. Just type any text and press enter to send a message to the bot. If you started with the "blank" template the bot will always respond with "I don't understand you". To finish the chat session type `/q` or `CTRL-C`.
+This will give you a local browser url where you can have a chat session with your bot. Just type any text and press enter to send a message to the bot. If you started with the "blank" template the bot will always respond with "I don't understand you".
 
 ## Project Structure
 
@@ -75,7 +75,7 @@ Let's start by creating an "echo" bot that just repeats what the user say. So if
 The first step is to create a route that captures any text. Edit your `src/routes.js` file and add a new rule `{path: 'echo', text: /^.+$/, action: Echo}` inside the `routes` section:
 
 ```javascript
-import { Echo } from './action/echo'
+import Echo from './action/echo'
 
 export const routes = [
   {path: 'echo', text: /^.+$/, action: Echo}
@@ -110,7 +110,7 @@ This is the code that will be executed when the user types anything. As you can 
 > ### NOTE:
 > Usually the `render` method spits out HTML code in a typical React project. However, this is sent to messaging platforms like Whatsapp or Facebook Messenger so sending HTML won't work. We've created this HTML-like language called [Rich Conversational Markup Language (RCML)](/api/rich-conversational-markup-language) to help you construct the bot response in a dynamic way.
 
-Now try to execute `botonic run` again and type "hello world" 😊
+Now try to execute `botonic serve` again and type "hello world" 😊
 
 ## Adding Natural Language Understanding
 
@@ -147,9 +147,9 @@ If this configuration is set, Botonic will automatically send any user input to 
 Now it's just a matter of adding more routes that capture different intents and their corresponding actions. For instance, you can add these routes:
 
 ```javascript
-import { Age } from './actions/age'
-import { Smalltalk } from './actions/smalltalk'
-import { Echo } from './action/echo'
+import Age from './actions/age'
+import Smalltalk from './actions/smalltalk'
+import Echo from './action/echo'
 
 export const routes = [
   {path:'age', intent: "smalltalk.agent.age", action: Age},
@@ -198,6 +198,6 @@ export default class extends React.Component {
 }
 ```
 
-That's it! You can run `botonic run` and play a little bit. Try adding more routes/actions for different Dialogflow intents. When you're ready, go to the next section to learn how to put your bot in production and publish it to messaging platforms like Facebook Messenger.
+That's it! You can run `botonic serve` and play a little bit. Try adding more routes/actions for different Dialogflow intents. When you're ready, go to the next section to learn how to put your bot in production and publish it to messaging platforms like Facebook Messenger.
 
 <NextButton title="Deploying" href="/getting-started/deploying" />

@@ -3,7 +3,7 @@ import {
   Text,
   Carousel,
   Element,
-  Image,
+  Pic,
   Button,
   Title,
   Subtitle
@@ -45,7 +45,7 @@ export default class extends React.Component {
         <Carousel>
           {movies.map((e, i) => (
             <Element key={e.name}>
-              <Image>{e.pic}</Image>
+              <Pic src={e.pic} />
               <Title>{e.name}</Title>
               <Subtitle>{e.desc}</Subtitle>
               <Button url={e.url}>Visit website</Button>

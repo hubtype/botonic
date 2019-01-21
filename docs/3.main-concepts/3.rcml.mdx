@@ -59,7 +59,7 @@ import {
   Text,
   Button,
   Carousel,
-  Image,
+  Pic,
   Element,
   Title,
   Subtitle
@@ -84,7 +84,7 @@ export default class extends React.Component {
           <Carousel>
               {movies.map((e, i) => 
                   <Element key={e.name}>
-                      <Image>{e.pic}</Image>
+                      <Pic src={e.pic} />
                       <Title>{e.name}</Title>
                       <Subtitle>{e.desc}</Subtitle>
                       <Button url={e.url}>Visit website</Button>
@@ -106,7 +106,7 @@ You can send all this types of media files:
 
 ```javascript
 <>
-	<Img src='https://botonic.io/images/botonic_react_logo-p-500.png'/>
+	<Imgage src='https://botonic.io/images/botonic_react_logo-p-500.png'/>
 	<Video src='https://www.w3schools.com/html/mov_bbb.mp4'/>
 	<Audio src='https://www.w3schools.com/html/horse.mp3'/>
   <Document src='http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf'/>

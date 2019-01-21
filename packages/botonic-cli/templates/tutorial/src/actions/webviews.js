@@ -3,7 +3,7 @@ import {
   Text,
   Carousel,
   Element,
-  Image,
+  Pic,
   Button,
   Title,
   Subtitle
@@ -25,13 +25,13 @@ export default class extends React.Component {
         </Text>
         <Carousel>
           <Element>
-            <Image src={BotVader} />
+            <Pic src={BotVader} />
             <Title>ReactJs Components</Title>
             <Subtitle>This will prompt a webview with a component</Subtitle>
             <Button webview={MyWebview}>Go</Button>
           </Element>
           <Element>
-            <Image src={InteractWithBot} />
+            <Pic src={InteractWithBot} />
             <Title>Interacting with the bot</Title>
             <Subtitle>See how the communication bot-webview is done</Subtitle>
             <Button webview={InteractionWithBot} params={{ whatever: 'hi' }}>

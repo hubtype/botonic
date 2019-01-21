@@ -98,7 +98,7 @@ export default class extends React.Component {
   render() {
     return (
       <>
-        {this.context.session.products.map((e, i) =>
+        {this.context.session.resp.products.map((e, i) =>
             <Text key={i}>
               Product: {e.name}, Price: {e.priceLabel}
             </Text>

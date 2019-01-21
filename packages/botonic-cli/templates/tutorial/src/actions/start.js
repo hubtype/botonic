@@ -1,5 +1,4 @@
 import React from 'react'
-import fetch from 'isomorphic-fetch'
 import { Text } from '@botonic/react'
 
 export default class extends React.Component {
@@ -28,7 +27,7 @@ export default class extends React.Component {
         <Text>
           In this case, I'm just returning a bunch of text messages after
           matching the user input 'start' with a regular expression. Have a look
-          at the file config.js for more info on routing options.
+          at the file routes.js for more info on routing options.
         </Text>
         <Text>
           Now, if you type 'buttons', I'm going to display some buttons.

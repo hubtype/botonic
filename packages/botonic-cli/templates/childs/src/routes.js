@@ -1,10 +1,10 @@
-import { Hi } from './actions/hi'
-import { Pizza } from './actions/pizza'
-import { Sausage } from './actions/sausage'
-import { Bacon } from './actions/bacon'
-import { Pasta } from './actions/pasta'
-import { Cheese } from './actions/cheese'
-import { Tomato } from './actions/tomato'
+import Hi from './actions/hi'
+import Pizza from './actions/pizza'
+import Sausage from './actions/sausage'
+import Bacon from './actions/bacon'
+import Pasta from './actions/pasta'
+import Cheese from './actions/cheese'
+import Tomato from './actions/tomato'
 
 export const routes = [
   {
