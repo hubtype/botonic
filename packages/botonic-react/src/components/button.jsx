@@ -45,7 +45,9 @@ export class Button extends React.Component {
     renderNode() {
         if (this.props.webview) {
             let Webview = this.props.webview
-            let params = params2queryString(this.props.params)
+            let params = ''
+            if (this.props.params)
+                params = params2queryString(this.props.params)
             return (
                 <button url={`/webviews/${Webview.name}?${params}`}>
                     {this.props.children}
@@ -55,11 +57,7 @@ export class Button extends React.Component {
             let payload = `__PATH_PAYLOAD__${this.props.path}`
             return <button payload={payload}>{this.props.children}</button>
         } else if (this.props.payload) {
-            return (
-                <button payload={this.props.payload}>
-                    {this.props.children}
-                </button>
-            )
+            return <button payload={this.props.payload}>{this.props.children}</button>
         } else if (this.props.url) {
             return <button url={this.props.url}>{this.props.children}</button>
         }
