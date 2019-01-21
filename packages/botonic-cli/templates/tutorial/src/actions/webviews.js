@@ -9,6 +9,11 @@ import {
   Subtitle
 } from '@botonic/react'
 
+import MyWebview from '../webviews/components/myWebview'
+import InteractionWithBot from '../webviews/components/interactionWithBot'
+import BotVader from '../assets/bot_vader.jpeg'
+import InteractWithBot from '../assets/interact_with_bot.jpeg'
+
 export default class extends React.Component {
   render() {
     //Here we render a Facebook Carrousel with its propers assets and url routes for these webviews
@@ -20,21 +25,16 @@ export default class extends React.Component {
         </Text>
         <Carousel>
           <Element>
-            <Image src="/assets/bot_vader.jpeg" />
+            <Image src={BotVader} />
             <Title>ReactJs Components</Title>
             <Subtitle>This will prompt a webview with a component</Subtitle>
-            <Button webview_height_ratio="compact" url="/webviews/my_webview">
-              Go
-            </Button>
+            <Button webview={MyWebview}>Go</Button>
           </Element>
           <Element>
-            <Image src="/assets/interact_with_bot.jpeg" />
+            <Image src={InteractWithBot} />
             <Title>Interacting with the bot</Title>
             <Subtitle>See how the communication bot-webview is done</Subtitle>
-            <Button
-              webview_height_ratio="tall"
-              url="/webviews/interaction_with_bot"
-            >
+            <Button webview={InteractionWithBot} params={{ whatever: 'hi' }}>
               Go
             </Button>
           </Element>

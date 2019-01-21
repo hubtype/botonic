@@ -1,17 +1,10 @@
 import React from 'react'
-import { Button } from 'reactstrap'
-import { BotonicWebview } from '@botonic/react'
+import { RequestContext } from '@botonic/react'
 
-class MyWebview extends React.Component {
-  //for further information, see: https://reactjs.org/docs/getting-started.html
-  constructor(props) {
-    super(props)
-    //Here you can define all the state variables you will have to deal with
-    this.state = {
-      counter: 0
-    }
-
-    this.handleClick = this.handleClick.bind(this)
+export default class MyWebview extends React.Component {
+  static contextType = RequestContext
+  state = {
+    counter: 0
   }
 
   componentDidMount() {
@@ -19,7 +12,6 @@ class MyWebview extends React.Component {
   }
 
   handleClick() {
-    //every time setState is called, the virtual DOM will be rendered again by render() method
     this.setState({
       counter: this.state.counter + 1
     })
@@ -28,26 +20,24 @@ class MyWebview extends React.Component {
   close() {
     /*
     Here we want to explicitly emit a message after closing a webview.
-    You can also call this method with empty arguments like this: BotonicWebview.close(),
+    You can also call this method with empty arguments like: this.context.closeWebview()
     but be aware that no data will be passed back to the bot.
     */
-    BotonicWebview.close(this.props.context, 'closed_webview')
+    this.context.closeWebview({
+      payload: 'closed_webview'
+    })
   }
 
   render() {
     return (
       <div>
-        <div className='my-webview'>
-          <h1>This is a Botonic Webview!</h1>
-          <Button onClick={() => this.handleClick()}>Click Me</Button>
-          <h2>{this.state.counter}</h2>
-          <Button onClick={() => this.close()}>
-            Click me to close this webview
-          </Button>
-        </div>
+        <h1>This is a Botonic Webview!</h1>
+        <button onClick={() => this.handleClick()}>Click Me</button>
+        <h2>{this.state.counter}</h2>
+        <button onClick={() => this.close()}>
+          Click me to close this webview
+        </button>
       </div>
     )
   }
 }
-
-export default MyWebview

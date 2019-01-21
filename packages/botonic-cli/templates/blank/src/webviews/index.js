@@ -1,36 +1,8 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { BrowserRouter, Route } from 'react-router-dom'
-import MyWebview from './components/MyWebview.js'
-import './styles.scss'
+import { WebviewApp } from '@botonic/react'
 
-class App extends React.Component {
-  constructor(props) {
-    super(props)
-    var url_string = window.location.href
-    var url = new URL(url_string)
-    var context = JSON.parse(url.searchParams.get('context'))
+import { locales } from '../locales'
+import MyWebview from './myWebview'
 
-    this.state = {
-      context: context
-    }
-  }
+const webviews = [MyWebview]
 
-  render() {
-    return (
-      <React.Fragment>
-        <Route
-          path='/my_webview'
-          render={() => <MyWebview context={this.state.context} />}
-        />
-      </React.Fragment>
-    )
-  }
-}
-
-render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('app')
-)
+export default new WebviewApp({ webviews, locales })

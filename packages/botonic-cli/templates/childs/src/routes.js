@@ -6,7 +6,7 @@ import { Pasta } from './actions/pasta'
 import { Cheese } from './actions/cheese'
 import { Tomato } from './actions/tomato'
 
-export const routes = [pre
+export const routes = [
   {
     path: 'hi',
     text: /^hi$/i,
