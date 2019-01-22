@@ -40,14 +40,21 @@ class WebchatHeader extends React.Component {
 }
 
 class WebchatMessageList extends React.Component {
+
+    componentDidUpdate() {
+        let e = document.getElementById("message-list")
+        e.scrollTop = e.scrollHeight
+    }
+
     render() {
         return (
-            <div
+            <div id='message-list'
                 style={{
                     ...(this.props.style || {}),
                     overflow: 'auto',
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    overflowY:'auto'
                 }}
             >
                 {this.props.messages.map((e, i) => (

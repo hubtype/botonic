@@ -19,7 +19,8 @@ export class Carousel extends React.Component {
                     display: 'flex',
                     flexDirection: 'row',
                     overflowX: 'auto',
-                    maxWidth: '400px'
+                    maxWidth: '400px',
+                    fontFamily: 'Arial, Helvetica, sans-serif',
                 }}
             >
                 {this.props.children}
