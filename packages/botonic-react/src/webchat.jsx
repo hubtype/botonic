@@ -4,7 +4,7 @@ import Logo from './assets/botonic_react_logo100x100.png'
 import { WebchatContext, RequestContext } from './contexts'
 import { Text } from './components/text'
 import { Reply } from './components/reply'
-import { params2queryString } from '@botonic/core';
+import { params2queryString } from '@botonic/core'
 
 class WebchatHeader extends React.Component {
     render() {
@@ -161,12 +161,11 @@ export class Webchat extends React.Component {
     closeWebview(options) {
         this.setState({ ...this.state, webview: null })
         this.textarea.focus()
-        if(options && options.payload) {
-            this.sendPayload(payload)
-        } else if(options && options.path) {
+        if (options && options.payload) {
+            this.sendPayload(options.payload)
+        } else if (options && options.path) {
             let params = ''
-            if(options.params)
-                params = params2queryString(options.params)
+            if (options.params) params = params2queryString(options.params)
             this.sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
         }
     }
@@ -229,14 +228,10 @@ export class Webchat extends React.Component {
         }
 
         let webviewRequestContext = {
-            getString: stringId => this.props.botonicApp.getString(
-                stringId,
-                this.state.session
-            ),
-            setLocale: locale => this.props.botonicApp.setLocale(
-                locale,
-                this.state.session
-            ),
+            getString: stringId =>
+                this.props.botonicApp.getString(stringId, this.state.session),
+            setLocale: locale =>
+                this.props.botonicApp.setLocale(locale, this.state.session),
             session: this.state.session || {},
             params: this.state.webviewParams || {},
             closeWebview: this.closeWebview.bind(this)
