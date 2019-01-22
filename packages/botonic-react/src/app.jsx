@@ -6,11 +6,15 @@ import { isBrowser, isNode, getNLU } from '@botonic/core'
 import { Router, getString } from '@botonic/core'
 import { Webchat } from './webchat'
 import { RequestContext } from './contexts'
+import { Text } from './components/text'
 
 export class App {
     constructor({ routes, locales, integrations }) {
         this.rootElement = null
-        this.routes = routes
+        this.routes = [
+            ...routes,
+            {path: '404', action: () => <Text>I don't understand you</Text> }
+        ]
         this.locales = locales
         this.integrations = integrations
         this.routes = [
