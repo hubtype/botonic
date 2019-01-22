@@ -15,29 +15,14 @@ export class Location extends React.Component {
   renderBrowser() {
     let lat = parseFloat(this.props.lat)
     let long = parseFloat(this.props.long)
+    
     return (
       <Message {...this.props} type='location'>
         {' '}
         <div>
-          <iframe
-            frameBorder='0'
-            scrolling='no'
-            marginHeight='0'
-            marginWidth='0'
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${long}%2C${lat}%2C${long +
-              0.003}%2C${lat + 0.003}&amp;layer=mapnik`}
-            style={{
-              border: '1px solid black',
-              borderRadius: '8px',
-              maxWidth: '150px',
-              maxHeight: '150px',
-              margin: '10px'
-            }}
-          />
-          <br />
           <small>
             <a
-              href={`https://www.openstreetmap.org/#map=19/${lat}/${long}`}
+              href={`https://www.google.com/maps/@${lat},${long}`}
               target='_blank'
               rel='noopener noreferrer'
             >
