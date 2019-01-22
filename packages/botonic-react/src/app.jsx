@@ -17,13 +17,6 @@ export class App {
         ]
         this.locales = locales
         this.integrations = integrations
-        this.routes = [
-            ...this.routes,
-            {
-                path: '404',
-                action: () => <Text>I don't understand you</Text>
-            }
-        ]
         this.router = new Router(this.routes)
     }
 
