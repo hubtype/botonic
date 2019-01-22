@@ -17,7 +17,12 @@ class App extends React.Component {
                 o[key] = value
                 return o
             }, {})
-        let session = JSON.parse(url.searchParams.get('context'))
+        let search = url.search
+        search = decodeURIComponent(search)
+        search = search.replace(/\+/g, '')
+        search = search.split('?context=')[1]
+        search = search.split('&fb_iframe_or')[0]
+        let session = JSON.parse(search)
         this.state = { session, params }
     }
 
