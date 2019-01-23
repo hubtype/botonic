@@ -6,7 +6,7 @@ import * as colors from 'colors'
 import { spawn } from 'child_process'
 
 export default class Run extends Command {
-  static description = '\nServe your bot in your localhost'
+  static description = 'Serve your bot in your localhost'
 
   static examples = [
     `$ botonic serve\n> Project is running at http://localhost:8080/`
