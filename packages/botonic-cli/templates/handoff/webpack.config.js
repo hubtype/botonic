@@ -115,7 +115,20 @@ const botonicWebviewsConfig = {
     libraryExport: 'default'
   },
   module: {
-    rules: [babelLoaderConfig, fileLoaderConfig]
+    rules: [
+      babelLoaderConfig,
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: '../assets'
+            }
+          }
+        ]
+      }
+    ]
   },
   resolve: {
     extensions: ['*', '.js', '.jsx']
