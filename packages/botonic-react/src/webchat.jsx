@@ -124,19 +124,30 @@ class WebviewContainer extends React.Component {
             </div>
         )
         return (
+            <div style={{...this.props.style}}>
             <div
-                style={{
-                    ...(this.props.style || {}),
-                    position: 'absolute',
-                    bottom: 0,
-                    width: '100%',
-                    height: '80%',
-                    backgroundColor: '#fff'
-                }}
+            style={{
+              ...(this.props.style || {}),
+              position: 'absolute',
+              display: 'flex',
+              flexDirection: 'column',
+              bottom: 0,
+              width: '100%',
+              height: '80%',
+              backgroundColor: '#fff'
+            }}
+          >
+            <WebviewHeader style={{ flex: 'none' }} />
+            <div
+              style={{
+                flex: 1,
+                overflow: 'auto'
+              }}
             >
-                <WebviewHeader />
-                <Webview />
+              <Webview />
             </div>
+          </div>
+          </div>
         )
     }
 }
