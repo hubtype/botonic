@@ -17,12 +17,7 @@ class App extends React.Component {
                 o[key] = value
                 return o
             }, {})
-        let search = url.search
-        search = decodeURIComponent(search)
-        search = search.replace(/\+/g, '')
-        search = search.split('?context=')[1]
-        search = search.split('&fb_iframe_or')[0]
-        let session = JSON.parse(search)
+        let session = JSON.parse(url.searchParams.get('context') || {})
         this.state = { session, params }
     }
 
@@ -31,8 +26,7 @@ class App extends React.Component {
         if (options.path) payload = `__PATH_PAYLOAD__${options.path}`
         if (payload) {
             if (options.params) {
-                params = params2queryString(options.params)
-                payload = `${payload}?${params}`
+                payload = `${payload}?${params2queryString(options.params)}`
             }
             let s = this.state.session
             try {
