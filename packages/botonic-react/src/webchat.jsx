@@ -283,7 +283,7 @@ export class Webchat extends React.Component {
                         wrap="soft"
                         maxLength="1000"
                         placeholder="Ask me something..."
-                        autoFocus
+                        autoFocus={location.hostname === "localhost"}
                         inputRef={tag => (this.textarea = tag)}
                         onKeyDown={e => this.onKeyDown(e)}
                         style={{
