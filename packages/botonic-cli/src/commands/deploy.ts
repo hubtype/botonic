@@ -180,7 +180,7 @@ Uploading...
         .then(
           ({}) => this.deploy(),
           err =>
-            console.log(colors.red('There was an error saving the bot'), err)
+            console.log(colors.red(`There was an error saving the bot: ${err}`))
         )
     })
   }
@@ -269,8 +269,8 @@ Uploading...
             break
           } else {
             spinner.fail()
+            console.log(colors.red('There was a problem in the deploy:'))
             console.log(deploy_status.data.error)
-            console.log(colors.red('There was a problem in the deploy'))
             track('Deploy Botonic Error', { error: deploy_status.data.error })
             await exec('rm botonic_bundle.zip')
             return
@@ -279,8 +279,8 @@ Uploading...
       }
     } catch (err) {
       spinner.fail()
+      console.log(colors.red('There was a problem in the deploy:'))
       console.log(err)
-      console.log(colors.red('There was a problem in the deploy'))
       track('Deploy Botonic Error', { error: err })
       await exec('rm botonic_bundle.zip')
       return
@@ -300,7 +300,7 @@ Uploading...
       }
     } catch (e) {
       track('Deploy Botonic Provider Error', { error: e })
-      console.log(colors.red('There was an error getting the providers'), e)
+      console.log(colors.red(`There was an error getting the providers: ${e}`))
     }
     try {
       await exec('rm botonic_bundle.zip')

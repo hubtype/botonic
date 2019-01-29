@@ -2,6 +2,7 @@ import { join, resolve } from 'path'
 import * as fs from 'fs'
 import { homedir } from 'os'
 import axios from 'axios'
+import * as colors from 'colors'
 const FormData = require('form-data')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
@@ -122,6 +123,7 @@ export class BotonicAPIService {
       var build_out = await exec('npm run build')
     } catch (error) {
       spinner.fail()
+      console.log(colors.red(`Build error ${error}`))
       return false
     }
     spinner.succeed()
@@ -281,7 +283,7 @@ export class BotonicAPIService {
     try {
       let a = await this.getMe()
     } catch (e) {
-      console.log(e)
+      console.log(`Error deploying: ${e}`)
     }
     const form = new FormData()
     let data = fs.createReadStream(bundlePath)
