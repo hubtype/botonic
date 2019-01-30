@@ -163,7 +163,22 @@ export class Webchat extends React.Component {
         replies: [],
         webview: null,
         webviewParams: null,
-        session: {},
+        session: {
+            'last_session': {},
+            'user': {
+              'id': '000001',
+              'username': 'John',
+              'name': 'Doe',
+              'provider': 'terminal',
+              'provider_id': '0000000',
+              'extra_data': {}
+            },
+            'organization': '',
+            'bot': {
+              'id': '0000000',
+              'name': 'botName'
+            }
+        },
         lastRoutePath: null
     }
 
