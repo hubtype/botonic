@@ -14,7 +14,7 @@ export default class InteractionWithBot extends React.Component {
         <div className='interaction-with-bot'>
           <h4>This is a variable coming from the bot:</h4>
           <p>{this.context.params.whatever}</p>
-          <Button
+          <button
             onClick={() =>
               this.context.closeWebview({
                 payload: 'DATA_returned_data'
@@ -22,7 +22,7 @@ export default class InteractionWithBot extends React.Component {
             }
           >
             Click me to send data back
-          </Button>
+          </button>
         </div>
       </div>
     )

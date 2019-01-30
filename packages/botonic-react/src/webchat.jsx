@@ -1,10 +1,11 @@
 import React from 'react'
 import Textarea from 'react-textarea-autosize'
+import { params2queryString } from '@botonic/core'
+
 import Logo from './assets/botonic_react_logo100x100.png'
 import { WebchatContext, RequestContext } from './contexts'
 import { Text } from './components/text'
-import { Reply } from './components/reply'
-import { params2queryString } from '@botonic/core'
+import { Handoff } from './components/handoff'
 
 class WebchatHeader extends React.Component {
     render() {
@@ -86,7 +87,7 @@ class WebchatReplies extends React.Component {
                     alignItems: 'center',
                     justifyContent: 'right',
                     paddingBottom: 10,
-                    marginLeft:5, 
+                    marginLeft: 5,
                     marginRight: 5
                 }}
             >
@@ -179,7 +180,8 @@ export class Webchat extends React.Component {
               'name': 'botName'
             }
         },
-        lastRoutePath: null
+        lastRoutePath: null,
+        handoff: false
     }
 
     setReplies(replies) {
@@ -225,13 +227,31 @@ export class Webchat extends React.Component {
             lastRoutePath: this.state.lastRoutePath
         })
 
+        let action = output.session._botonic_action || ''
+        let handoff = action.startsWith("create_case")
+        messages = [...messages, output.response]
+        if(handoff)
+            messages = [...messages, <Handoff />]
         this.setState({
             ...this.state,
-            messages: [...messages, output.response],
+            messages,
+            handoff: handoff,
             replies: [],
             session: output.session,
             lastRoutePath: output.lastRoutePath
         })
+    }
+
+    resolveCase() {
+        let action = this.state.session._botonic_action.split(':')
+        this.setState({
+            ...this.state,
+            session: {
+                ...this.state.session,
+                _botonic_action: null
+            },
+            handoff: false
+        }, () => this.sendPayload(action[action.length - 1]))
     }
 
     async sendText(text, payload) {
@@ -260,7 +280,8 @@ export class Webchat extends React.Component {
             sendPayload: this.sendPayload.bind(this),
             setReplies: this.setReplies.bind(this),
             openWebview: this.openWebview.bind(this),
-            closeWebview: this.closeWebview.bind(this)
+            closeWebview: this.closeWebview.bind(this),
+            resolveCase: this.resolveCase.bind(this)
         }
 
         let webviewRequestContext = {
@@ -294,27 +315,29 @@ export class Webchat extends React.Component {
                     {this.state.replies && (
                         <WebchatReplies replies={this.state.replies} />
                     )}
-                    <Textarea
-                        name="text"
-                        minRows={2}
-                        maxRows={4}
-                        wrap="soft"
-                        maxLength="1000"
-                        placeholder="Ask me something..."
-                        autoFocus={location.hostname === "localhost"}
-                        inputRef={tag => (this.textarea = tag)}
-                        onKeyDown={e => this.onKeyDown(e)}
-                        style={{
-                            display: 'flex',
-                            padding: '8px 10px',
-                            fontSize: 14,
-                            border: 'none',
-                            borderTop: '1px solid rgba(0, 0, 0, 0.4)',
-                            resize: 'none',
-                            overflow: 'auto',
-                            outline: 'none'
-                        }}
-                    />
+                    {!this.state.handoff &&
+                        <Textarea
+                            name="text"
+                            minRows={2}
+                            maxRows={4}
+                            wrap="soft"
+                            maxLength="1000"
+                            placeholder="Ask me something..."
+                            autoFocus={location.hostname === "localhost"}
+                            inputRef={tag => (this.textarea = tag)}
+                            onKeyDown={e => this.onKeyDown(e)}
+                            style={{
+                                display: 'flex',
+                                padding: '8px 10px',
+                                fontSize: 14,
+                                border: 'none',
+                                borderTop: '1px solid rgba(0, 0, 0, 0.4)',
+                                resize: 'none',
+                                overflow: 'auto',
+                                outline: 'none'
+                            }}
+                        />
+                    }
                     {this.state.webview && (
                         <RequestContext.Provider value={webviewRequestContext}>
                             <WebviewContainer

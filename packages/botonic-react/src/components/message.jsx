@@ -79,16 +79,16 @@ export class Message extends React.Component {
     }
 
     renderBrowser() {
-        if(this.state.isDelaying)
-            return <></>
+        //if(this.state.isDelaying)
+        //    return <></>
         const buttons = React.Children.toArray(this.props.children).filter(
             e => e.type === Button
         )
         let textChildren = React.Children.toArray(this.props.children).filter(
             e => ![Button, Reply].includes(e.type)
         )
-        if(this.state.isTyping)
-            textChildren = 'typing...'
+        //if(this.state.isTyping)
+        //    textChildren = 'typing...'
         let pointerSize = 6
         let pointerStyles = {
             position: 'absolute',
@@ -117,8 +117,8 @@ export class Message extends React.Component {
                 }} >
                     {textChildren}
                 </div>
-                {!this.state.isTyping && buttons}
-                {!this.state.isTyping && this.isFromUser() && (
+                {buttons}
+                {this.isFromUser() && (
                     <div style={{
                         ...pointerStyles,
                         right: 0,
@@ -127,7 +127,7 @@ export class Message extends React.Component {
                         marginRight: -pointerSize
                     }} />
                 )}
-                {!this.state.isTyping && this.isFromBot() && (
+                {this.isFromBot() && (
                     <div style={{
                         ...pointerStyles,
                         left: 0,
