@@ -87,11 +87,17 @@ export class Router {
           params: defaultAction.params,
           lastRoutePath: lastRoutePath
         }
-      } /* else if ('redirect' in routeParams.route) {
-          this.lastRoutePath = routeParams.route.redirect
-          let path = routeParams.route.redirect.split('>')
-          return { action: path[path.length - 1], params: {}, retryAction: null }
-        }*/
+      } else if ('redirect' in routeParams.route) {
+          lastRoutePath = routeParams.route.redirect
+          let redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
+          if(redirectRoute){
+            return {
+              action: redirectRoute.action,
+              params: redirectRoute.params,
+              lastRoutePath: lastRoutePath
+            }
+          }
+      }
     }
     let notFound = this.getRouteByPath('404', this.routes)
     if (lastRoute && session.__retries < lastRoute.retry) {
