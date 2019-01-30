@@ -82,6 +82,7 @@ class WebchatReplies extends React.Component {
                     ...(this.props.style || {}),
                     display: 'flex',
                     flexDirection: 'row',
+                    overflow:'auto',
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: 4
