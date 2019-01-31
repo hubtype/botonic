@@ -81,18 +81,16 @@ class WebchatReplies extends React.Component {
             <div
                 style={{
                     ...(this.props.style || {}),
-                    display: 'flex',
-                    flexDirection: 'row',
                     overflowX:'auto',
-                    alignItems: 'center',
-                    justifyContent: 'right',
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',
                     paddingBottom: 10,
-                    marginLeft: 5,
-                    marginRight: 5
+                    marginLeft:5, 
+                    marginRight: 5,
                 }}
             >
                 {this.props.replies.map((r, i) => (
-                    <div key={i} style={{ flex: 'none', margin: 3 }}>
+                    <div key={i} style={{ display: 'inline-block', margin: 3 }}>
                         {r}
                     </div>
                 ))}
