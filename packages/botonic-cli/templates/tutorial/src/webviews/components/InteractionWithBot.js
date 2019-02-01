@@ -17,7 +17,7 @@ export default class InteractionWithBot extends React.Component {
           <button
             onClick={() =>
               this.context.closeWebview({
-                payload: 'DATA_returned_data'
+                payload: 'DATA_I am a string coming from webviews!'
               })
             }
           >

@@ -7,10 +7,12 @@ import {
   Element,
   Subtitle,
   Title,
-  Button
+  Button,
+  RequestContext
 } from '@botonic/react'
 
 export default class extends React.Component {
+  static contextType = RequestContext
   static async botonicInit({ input, session, params, lastRoutePath }) {
     /* This is how you fetch data from an API: */
     //const res = await fetch('https://api.example.com/user')

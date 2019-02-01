@@ -40,6 +40,16 @@ const fileLoaderConfig = {
   ]
 }
 
+const nullLoaderConfig = {
+  test: /\.(scss|css)$/,
+  use: 'null-loader'
+}
+
+const stylesLoaderConfig = {
+  test: /\.(scss|css)$/,
+  use: ['style-loader', 'css-loader', 'sass-loader']
+}
+
 const imageminPlugin = new ImageminPlugin({
   bail: false,
   cache: false,
@@ -69,7 +79,7 @@ const botonicWebchatConfig = {
     webviews: './src/app.js'
   },
   module: {
-    rules: [babelLoaderConfig, fileLoaderConfig]
+    rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -127,7 +137,8 @@ const botonicWebviewsConfig = {
             }
           }
         ]
-      }
+      },
+      stylesLoaderConfig
     ]
   },
   resolve: {
@@ -154,7 +165,7 @@ const botonicServerConfig = {
     libraryExport: 'default'
   },
   module: {
-    rules: [babelLoaderConfig, fileLoaderConfig]
+    rules: [babelLoaderConfig, fileLoaderConfig, nullLoaderConfig]
   },
   resolve: {
     extensions: ['*', '.js', '.jsx']

@@ -8,8 +8,8 @@ export default class extends React.Component {
         <Text>
           Here I display two types of buttons, the first one is a URL button and
           the second is a payload button:
-          <Button url="https://botonic.io">Visit botonic.io</Button>
-          <Button payload="carousel">Show me a carousel</Button>
+          <Button url='https://botonic.io'>Visit botonic.io</Button>
+          <Button payload='carousel'>Show me a carousel</Button>
         </Text>
         <Text>
           Clicking on a button with url will just open that URL in the browser.
@@ -19,13 +19,7 @@ export default class extends React.Component {
           https://developers.facebook.com/docs/messenger-platform/send-messages/buttons#postback
         </Text>
         <Text>
-          If you are in interactive mode, you can type 'webviews' and see how
-          enjoyable they are.
-        </Text>
-        <Text>
-          If you're on the console and want to simulate a button click, you need
-          to type ! (exclamation mark) followed by the payload data. Go ahead
-          and type '!carrousel'.
+          Now, you can type 'webviews' and see how enjoyable they are.
         </Text>
       </>
     )

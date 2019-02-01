@@ -6,8 +6,8 @@ export default class extends React.Component {
     return (
       <Text>
         Hey, what clothes are you interested in?
-        <Reply payload="mens-shirts">Mens shirts</Reply>
-        <Reply payload="womens-shirts">Womens shirts</Reply>
+        <Reply payload='men-shirts'>Mens shirts</Reply>
+        <Reply payload='women-shirts'>Womens shirts</Reply>
       </Text>
     )
   }

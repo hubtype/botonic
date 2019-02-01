@@ -10,7 +10,6 @@ export default class extends React.Component {
           Next, go back to the Getting Started Tutorial to learn how to create
           your first bot action
         </Text>
-        <Text>Type '/q' to exit this conversation</Text>
       </>
     )
   }
