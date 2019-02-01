@@ -41,6 +41,10 @@ export class Reply extends React.Component {
     }
 
     renderNode() {
+        if (this.props.path) {
+            let payload = `__PATH_PAYLOAD__${this.props.path}`
+            return <reply payload={payload}>{this.props.children}</reply>
+        }
         return (
             <reply payload={this.props.payload}>{this.props.children}</reply>
         )
