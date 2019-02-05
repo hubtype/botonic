@@ -56,10 +56,14 @@ $> botonic new myBot tutorial
 
 ### Run your bot
 
+Run your bot locally while developing:
+
 ```
 $> cd myBot
-$> botonic run
+$> botonic serve
 ```
+
+`botonic serve` is just an alias for `npm run start` which will start a local server at http://localhost:8080. While you develop, the server will auto reload every time you make changes to your code.
 
 ### Deploy
 
