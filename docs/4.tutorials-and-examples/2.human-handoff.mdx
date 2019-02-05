@@ -37,17 +37,17 @@ export default class extends React.Component {
   static async botonicInit({ input, session, params, lastRoutePath }) {
 
     let openQueues = await getOpenQueues(session)
-    let is_hanfOff = false
+    let is_handOff = false
     if(openQueues.queues.indexOf('Customer Support') !== -1){
       await humanHandOff(session, 'Customer Support', {action: 'thanks_for_contacting'})
-      is_hanfOff = true
+      is_handOff = true
     }
-    return {is_hanfOff}
+    return {is_handOff}
   
   }
 
   render() {
-    if(this.props.is_hanfOff){
+    if(this.props.is_handOff){
       return(
           <Text>
             You are being trasnfered to an agent!
