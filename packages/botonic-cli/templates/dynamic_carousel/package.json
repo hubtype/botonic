@@ -5,9 +5,11 @@
   },
   "dependencies": {
     "@botonic/react": "latest",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "terser": "^3.14.1"
   },
   "devDependencies": {
+    "terser-webpack-plugin": "^1.2.1",
     "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-transform-runtime": "^7.2.0",

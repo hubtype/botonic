@@ -6,9 +6,16 @@ const imageminOptipng = require('imagemin-optipng')
 const imageminSvgo = require('imagemin-svgo')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 
 const root = path.resolve(__dirname, 'src')
+
+const terserPlugin = new TerserPlugin({
+  terserOptions: {
+    keep_fnames: true
+  }
+})
 
 const babelLoaderConfig = {
   test: /\.(js|jsx)$/,
@@ -72,6 +79,9 @@ const imageminPlugin = new ImageminPlugin({
 })
 
 const botonicWebchatConfig = {
+  optimization: {
+    minimizer: [terserPlugin]
+  },
   mode: 'development',
   devtool: 'inline-source-map',
   target: 'web',
@@ -111,6 +121,9 @@ const botonicWebchatConfig = {
 }
 
 const botonicWebviewsConfig = {
+  optimization: {
+    minimizer: [terserPlugin]
+  },
   mode: 'development',
   devtool: 'inline-source-map',
   target: 'web',
@@ -154,6 +167,9 @@ const botonicWebviewsConfig = {
 }
 
 const botonicServerConfig = {
+  optimization: {
+    minimizer: [terserPlugin]
+  },
   context: root,
   mode: 'development',
   target: 'node',
