@@ -12,53 +12,58 @@ This template shows a very simple case of use where a user is transferred to a h
 
 In this example we've set up a route in `src/routes.js` that triggers the handoff when a user types "handoff":
 
+**src/routes.js**
+
 ```javascript
-module.exports = {
-    routes: [
-        {text: /^handoff$/i, action: "transfer_agent"}
-    ]
+import TransferAgent from './actions/transfer_agent'
+
+export const routes = [
+    {path:'agent', text: /^handoff$/i, action: TransferAgent}
 }
 ```
 
-Then, in our `pages/actions/transfer_agent.js` file, we need to call the `humanHandoff` method inside `botonicInit`.
+Then, in our `src/actions/transfer_agent.js` file, we need to call the `humanHandoff` method inside `botonicInit`.
 Additionally, we check if the 'Customer Support' queue is opened:
+
+**src/actions/transfer_agent.js**
 
 ```javascript
 import React from 'react'
-const Botonic = require('@botonic/core')
+import { Text } from '@botonic/react'
+import { getOpenQueues, humanHandOff } from '@botonic/core'
 
-export default class extends Botonic.React.Component {
+export default class extends React.Component {
 
-  static async botonicInit({ req }) {
+  static async botonicInit({ input, session, params, lastRoutePath }) {
 
-    let openQueues = await Botonic.getOpenQueues(req)
-    openQueues = openQueues['queues']
-    let is_hanfOff = false
-    if(openQueues.indexOf('Customer Support') !== -1){
-      await Botonic.humanHandOff(req, 'Customer Support', {action: 'thanks_for_contacting'})
-      is_hanfOff = true
+    let openQueues = await getOpenQueues(session)
+    let is_handOff = false
+    if(openQueues.queues.indexOf('Customer Support') !== -1){
+      await humanHandOff(session, 'Customer Support', {action: 'thanks_for_contacting'})
+      is_handOff = true
     }
-    return {req, is_hanfOff}
+    return {is_handOff}
   
   }
 
   render() {
-    if(this.props.is_hanfOff){
+    if(this.props.is_handOff){
       return(
-        <messages>
-          <message type="text">
+          <Text>
             You are being trasnfered to an agent!
-          </message>
-        </messages>
+          </Text>
       )
     }else {
       return(
-        <messages>
+        <Text>
           Sorry, right now we can't serve you...Please contact us later!
-        </messages>
+        </Text>
       )
     }
   }
 }
-
 ```
+
+> #### NOTE:
+> Remember that `getOpenQueues` and `humanHandOff` are only available when the bot is deployed!
+

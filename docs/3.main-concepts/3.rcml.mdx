@@ -15,43 +15,49 @@ Below you can see some examples of how to render these components using RCML.
 The "Hello World!" output would be defined as below:
 
 ```javascript
-<message type="text">
+<Text>
     Hello World!
-</message>
+</Text>
 ```
+
+In order to create a line break, you new to use `{'\\n'}`.
+
+```javascript
+<Text>
+  First line {'\\n'}
+  Second line
+</Text>
+```
+
 
 ## Buttons
 
 ```javascript
-<messages>
-	<message type="text">
-        Here I display two types of buttons, the first one is a URL button
-        and the second is a payload button:
-        <button url="https://botonic.io">Visit botonic.io</button>
-        <button payload="carousel">Show me a carousel</button>
-    </message>
-</messages>
+<Text>
+  Here I display two types of buttons, the first one is a URL button
+  and the second is a payload button:
+  <Button url='https://botonic.io'>Visit botonic.io</Button>
+  <Button payload='carousel'>Show me a carousel</Button>
+<Text>
 ```
 *Example of how it looks in the Messenger platform:*
 <img src="https://botonic-doc-static.netlify.com/images/buttons.png" style={{display: 'block', margin: 'auto', 'max-width': '50%'}}/>
 
 ## Quickreplies
 ```javascript
-<messages>
-  <message type="text">
-      I will show you three quickreplies. One with a payload, one to go to an action and another to pass values to that action:
-      <reply payload="yes">Cool</reply>
-      <reply action="paradise">Take me to paradise</reply>
-      <reply action="paradise?withfruit='coconut'">To a better paradise</reply>
-  </message>
-</messages>
+<Text>
+    I will show you three quickreplies. One with a payload, one to go to an action and another to pass values to that action:
+    <Reply payload='yes'>Cool</Reply>
+    <Reply path='paradise'>Take me to paradise</Reply>
+    <Reply path='paradise?withfruit=coconut'>To a better paradise</Reply>
+</Text>
 ```
 *Example of how it looks in the Messenger platform:*
 <img src="https://botonic-doc-static.netlify.com/images/quickreplies.png" style={{display: 'block', margin: 'auto', 'max-width': '60%'}}/>
 
 
 > #### NOTE:
-> Buttons and quickreplies can have an url link, a payload attached, a href attribute, or an action to be triggered. When passing parameters through actions as seen in the example, the data will be accessiblein the field `params` inside the `req` object.
+> Buttons and quickreplies can have an url link, a payload attached, a href attribute, or an action to be triggered. When passing parameters through actions as seen in the example, the data will be accessiblein the field `params` inside the `botonicInit` function.
 
 ## Carousel
 
@@ -59,39 +65,45 @@ You can render a dynamic and static carousel following the below structure:
 
 ```javascript
 import React from 'react'
+import {
+  Text,
+  Button,
+  Carousel,
+  Pic,
+  Element,
+  Title,
+  Subtitle
+} from '@botonic/react'
 
 export default class extends React.Component {
 
-static async botonicInit({ req }) {
-    req.context.movies = [
-        {name: 'Pulp Fiction', desc: 'Le Big Mac', url: 'https://www.imdb.com/title/tt0110912', 
-        pic: 'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg'},
-        {name: 'The Big Lebowski', desc: 'Fuck it Dude', url: 'https://www.imdb.com/title/tt0118715', 
-        pic: 'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'},
-        {name: 'Snatch', desc: 'Five minutes, Turkish', url: 'https://www.imdb.com/title/tt0208092', 
-        pic: 'http://www.libertytuga.pt/wp-content/uploads/2011/11/snatch.jpg'},
+  render() {
+    let movies = [
+      {name: 'Pulp Fiction', desc: 'Le Big Mac', url: 'https://www.imdb.com/title/tt0110912', 
+      pic: 'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg'},
+      {name: 'The Big Lebowski', desc: 'Fuck it Dude', url: 'https://www.imdb.com/title/tt0118715', 
+      pic: 'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'},
+      {name: 'Snatch', desc: 'Five minutes, Turkish', url: 'https://www.imdb.com/title/tt0208092', 
+      pic: 'http://www.libertytuga.pt/wp-content/uploads/2011/11/snatch.jpg'},
     ]
-}
-
-render() {
     return (
-        <messages>
-            <message type="text">
-                This a dynamic Carousel
-            </message>
-            <message type="carousel">
-                {this.props.context.movies.map((e, i) => 
-                    <element key={e.name}>
-                        <pic>{e.pic}</pic>
-                        <title>{e.name}</title>
-                        <desc>{e.desc}</desc>
-                        <button url={e.url}>Visit website</button>
-                    </element>
-                )}
-            </message>
-        </messages>
+      <>
+          <Text>
+              This a dynamic Carousel
+          </Text>
+          <Carousel>
+              {movies.map((e, i) => 
+                  <Element key={e.name}>
+                      <Pic src={e.pic} />
+                      <Title>{e.name}</Title>
+                      <Subtitle>{e.desc}</Subtitle>
+                      <Button url={e.url}>Visit website</Button>
+                  </Element>
+              )}
+          </Carousel>
+      </>
     )
-}
+  }
 }
 ```
 *Example of how it looks in the Messenger app:*
@@ -103,12 +115,12 @@ render() {
 You can send all this types of media files:
 
 ```javascript
-<messages>
-	<message type="image" src="https://botonic.io/images/botonic_react_logo-p-500.png"/>
-	<message type="video" src="https://www.w3schools.com/html/mov_bbb.mp4"/>
-	<message type="audio" src="https://www.w3schools.com/html/horse.mp3"/>
-  <message type="document" src="http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf"/>
-</messages>
+<>
+	<Image src='https://botonic.io/images/botonic_react_logo-p-500.png'/>
+	<Video src='https://www.w3schools.com/html/mov_bbb.mp4'/>
+	<Audio src='https://www.w3schools.com/html/horse.mp3'/>
+  <Document src='http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf'/>
+</>
 ```
 *Example of the media types:*
 <img src="https://botonic-doc-static.netlify.com/images/media_files.png" style={{display: 'block', margin: 'auto', paddingLeft: '25%', maxHeight: '500px'}}/>
@@ -116,12 +128,10 @@ You can send all this types of media files:
 ## Location
 
 ```javascript
-<messages>
-    <message type="location">
-        <lat>41.412255</lat>
-        <long>2.2079313</long>
-    </message>
-</messages>
+<Location>
+    <lat>41.412255</lat>
+    <long>2.2079313</long>
+<Location>
 ```
 *Example in Facebook Messenger:*
 <img src="https://botonic-doc-static.netlify.com/images/doc_location.png" style={{display: 'block', margin: 'auto'}}/>
@@ -133,12 +143,11 @@ You are able to share your desired content with your friends and acquaintances w
 
 ```javascript
 import React from 'react'
-import { ShareButton } from '@botonic/react'
+import { Text, ShareButton } from '@botonic/react'
 
 export default class extends React.Component {
-  
-  static async botonicInit({ req }) {
 
+  render() {
     var my_share_button = {
         "attachment": {
           "type": "template",
@@ -165,18 +174,11 @@ export default class extends React.Component {
           }
         }      
     }
-
-    return {my_share_button: my_share_button}
-  }
-
-  render() {
     return(
-      <messages>
-        <message type="text">
-          I am a share button!
-          <ShareButton payload={this.props.my_share_button}></ShareButton>
-        </message>
-      </messages>           
+      <Text>
+        I am a share button!
+        <ShareButton payload={my_share_button}></ShareButton>
+      </Text>
     ) 
   }
 }
@@ -197,85 +199,77 @@ If you want more degrees of freedom, you can also define your templates like in 
 
 ```javascript
 import React from 'react'
-import { MessageTemplate } from '@botonic/react'
+import { Text, MessageTemplate } from '@botonic/react'
 
 export default class extends React.Component {
-  
-  static async botonicInit({ req }) {
-
-    var my_message_template = {
-            "template_type": "airline_boardingpass",
-            "intro_message": "You are checked in.",
-            "locale": "en_US",
-            "boarding_pass": [
-              {
-                "passenger_name": "SMITH/NICOLAS",
-                "pnr_number": "CG4X7U",
-                "seat": "74J",            
-                "logo_image_url": "https://www.example.com/en/logo.png",
-                "header_image_url": "https://www.example.com/en/fb/header.png",
-                "qr_code": "M1SMITH/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
-                "above_bar_code_image_url": "https://www.example.com/en/PLAT.png",
-                "auxiliary_fields": [
-                  {
-                    "label": "Terminal",
-                    "value": "T1"
-                  },
-                  {
-                    "label": "Departure",
-                    "value": "30OCT 19:05"
-                  }
-                ],
-                "secondary_fields": [
-                  {
-                    "label": "Boarding",
-                    "value": "18:30"
-                  },
-                  {
-                    "label": "Gate",
-                    "value": "D57"
-                  },
-                  {
-                    "label": "Seat",
-                    "value": "74J"
-                  },
-                  {
-                    "label": "Sec.Nr.",
-                    "value": "003"
-                  }
-                ],
-                "flight_info": {
-                  "flight_number": "KL0642",
-                  "departure_airport": {
-                    "airport_code": "JFK",
-                    "city": "New York",
-                    "terminal": "T1",
-                    "gate": "D57"
-                  },
-                  "arrival_airport": {
-                    "airport_code": "AMS",
-                    "city": "Amsterdam"
-                  },
-                  "flight_schedule": {
-                    "departure_time": "2016-01-02T19:05",
-                    "arrival_time": "2016-01-05T17:30"
-                  }
-                }
-              }
-            ]
-    }
-
-    return {my_message_template: my_message_template}
-  }
 
   render() {
+    var my_message_template = {
+      "template_type": "airline_boardingpass",
+      "intro_message": "You are checked in.",
+      "locale": "en_US",
+      "boarding_pass": [
+        {
+          "passenger_name": "SMITH/NICOLAS",
+          "pnr_number": "CG4X7U",
+          "seat": "74J",            
+          "logo_image_url": "https://www.example.com/en/logo.png",
+          "header_image_url": "https://www.example.com/en/fb/header.png",
+          "qr_code": "M1SMITH/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
+          "above_bar_code_image_url": "https://www.example.com/en/PLAT.png",
+          "auxiliary_fields": [
+            {
+              "label": "Terminal",
+              "value": "T1"
+            },
+            {
+              "label": "Departure",
+              "value": "30OCT 19:05"
+            }
+          ],
+          "secondary_fields": [
+            {
+              "label": "Boarding",
+              "value": "18:30"
+            },
+            {
+              "label": "Gate",
+              "value": "D57"
+            },
+            {
+              "label": "Seat",
+              "value": "74J"
+            },
+            {
+              "label": "Sec.Nr.",
+              "value": "003"
+            }
+          ],
+          "flight_info": {
+            "flight_number": "KL0642",
+            "departure_airport": {
+              "airport_code": "JFK",
+              "city": "New York",
+              "terminal": "T1",
+              "gate": "D57"
+            },
+            "arrival_airport": {
+              "airport_code": "AMS",
+              "city": "Amsterdam"
+            },
+            "flight_schedule": {
+              "departure_time": "2016-01-02T19:05",
+              "arrival_time": "2016-01-05T17:30"
+            }
+          }
+        }
+      ]
+    }
     return(
-      <messages>
-        <message type="text">
+      <Text>
         I am a message template!
-        <MessageTemplate payload={this.props.my_message_template}></MessageTemplate>
-        </message>
-      </messages>           
+        <MessageTemplate payload={my_message_template}></MessageTemplate>
+      </Text>          
     ) 
   }
 }

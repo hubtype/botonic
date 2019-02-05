@@ -1,5 +1,4 @@
 import { resolve } from 'path'
-import { prompt } from 'inquirer'
 import { Command, flags } from '@oclif/command'
 
 import { BotonicAPIService } from '../botonicAPIService'

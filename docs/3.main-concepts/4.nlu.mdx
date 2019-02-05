@@ -13,11 +13,10 @@ To do this, we need to integrate `dialogflow`. Below, we have the steps to follo
 The integration with `dialogflow` is super easy. First of all, we need to go to `http://dialogflow.com` and sign up for free. Afterwards, we have to create a new agent. Once we have the agent created, we can follow the steps in the `dialogflow docs` to obtain our `api token`. Finally, we have to enter in `botonic.config.js` and add the `api token` to enable the integration. Below we see the code:
 
 ```javascript
-integrations: {
-    /* Uncomment this to enable NLP with Dialogflow
+export const integrations: {
     dialogflow: {
         token: "YOUR_DIALOGFLOW_API_TOKEN"
-    }*/
+    }
 }
 ```
 `Dialogflow` allows us to create different `intents` and assign key words or phrases. So, when we write any of them, matches with the `intent` and redirects to the corresponding route.
@@ -25,23 +24,21 @@ integrations: {
 Below, we see how to captures different intents (we need the integration with dialogflow enabled, as we have seen above):
 
 ```javascript
-{intent: "smalltalk.agent.funny", action: "funny"},
-{intent: "smalltalk.agent.good", action: "funny"},
-{intent: "smalltalk.user.likes_agent", action: "funny"}
+import Funny from './actions/funny'
+
+export const routes = [
+	{path: 'funny', intent: 'smalltalk.agent.funny', action: Funny},
+	{path: 'good', intent: 'smalltalk.agent.good', action: Funny},
+	{path: 'agent', intent: 'smalltalk.user.likes_agent', action: Funny}
+]
 ```
 
-`Dialogflow` also has `entities` which are used for extracting parameter values from natural language inputs. `Entities` are stored inside the `input` and there can be more than one. Below, we see how to access the information of the entities. 
-
-```javascript
-static async botonicInit({ req }) {
-  	console.log(req.input.entities)   
-}
-```
+`Dialogflow` also has `entities` which are used for extracting parameter values from natural language inputs. `Entities` are stored inside the `input` and there can be more than one. 
 
 Also, in `routes.js` we can use `entities` in routes field like we use `text`, `payloads`, `intents`, etc. In this case, we have to do it through a function that verifies that entity is equal to a certain value. 
 
 ```javascript
-{entities: (e) => e.cities == 'New York City', action: "cities"}
+{path: 'cities', entities: (e) => e.cities == 'New York City', action: Cities}
 
 ```
 Once the match exists, it will continue to execute the corresponding action.

@@ -6,18 +6,17 @@ menu: 4. Tutorials & Examples
 
 # **Natural Language Understanding**
 
-[View on Github](https://github.com/hubtype/botonic/tree/master/templates/intent)
+[View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/intent)
 
-This template shows a simple case of use where we use an integration, specifically `Dialogflow` integration.
+This template shows a simple case of use where we use an integration, specifically `dialogflow` integration.
 
-The integration with `dialogflow` is super easy, we have to enter in `botonic.config.js` and add the `dialogflow api token` to enable the integration.
+The integration with `dialogflow` is super easy, we have to enter in `integrations.js` and add the `dialogflow api token` to enable the integration.
 
 ```javascript
-integrations: {
-    /* Uncomment this to enable NLP with Dialogflow
+export const integrations = {
     dialogflow: {
         token: "YOUR_DIALOGFLOW_API_TOKEN"
-    }*/
+    }
 }
 
 ```
@@ -25,11 +24,14 @@ integrations: {
 Then in `src/routes.js`, we will add the `dialogflow intents` that we want for our chatbot. The `intents` contain a set of words and / or phrases that when written by the user, the chatbot will search the corresponding `intent` and call the corresponding action. Here we have an example of how to call the `intents`:
 
 ```javascript
-routes: [
+import Hi from './actions/hi'
+import Bye from './actions/bye'
+
+export const routes = [
     /* Captures different intents (enable the Dialogflow integration,
     see "integrations" section at the top of this file) */
-    {intent: "smalltalk.greetings.hello", action: "hi"},
-    {intent: "smalltalk.greetings.bye", action: "bye"}
+    {path: 'hi', intent: 'smalltalk.greetings.hello', action: Hi},
+    {path: 'bye', intent: 'smalltalk.greetings.bye', action: Bye}
 ]
 ```
 

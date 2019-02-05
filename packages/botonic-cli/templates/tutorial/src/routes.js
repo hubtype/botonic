@@ -1,6 +1,21 @@
-module.exports = {
-  routes: [
-    /* Routes map user inputs to actions (React Components)
+import NotFound from './actions/404'
+import Start from './actions/start'
+import Age from './actions/age'
+import Buttons from './actions/buttons'
+import Bye from './actions/bye'
+import Carousel from './actions/carousel'
+import ClosedWebview from './actions/closed_webview'
+import End from './actions/end'
+import Funny from './actions/funny'
+import Media from './actions/media'
+import Multilanguage from './actions/multilanguage'
+import Quickreply from './actions/quickreply'
+import QuickreplyResponse from './actions/quickreply_response'
+import Webviews from './actions/webviews'
+import WebviewsResponse from './actions/webviews_response'
+
+export const routes = [
+  /* Routes map user inputs to actions (React Components)
         A user input is an object like this:
         {
             type: "text", // Input type, it can be one of text, postback, image, video, audio, document, location
@@ -25,51 +40,55 @@ module.exports = {
         to consider a match.
         */
 
-    /* The first rule matches if and only if we get the text 'start' and will execute the 
+  /* The first rule matches if and only if we get the text 'start' and will execute the 
         React component defined in pages/actions/start.js */
-    { text: 'start', action: 'start' },
+  { path: 'start', text: 'start', action: Start },
 
-    /* Another text rule (perfect match) to trigger the 'end' action */
-    { text: 'end', action: 'end' },
+  /* Another text rule (perfect match) to trigger the 'end' action */
+  { path: 'end', text: 'end', action: End },
 
-    /* These rules use a case insensitive regexp to match text messages that contain
+  /* These rules use a case insensitive regexp to match text messages that contain
         a certain text, for example the 1st one will capture 'BUTTONS', 'Buttons', etc */
-    { text: /^buttons$/i, action: 'buttons' },
-    { text: /^quickreply$/i, action: 'quickreply' },
-    /* If you want to use regexp with grouped values, you need to upgrade Node to v.10
+  { path: 'buttons', text: /^buttons$/i, action: Buttons },
+  { path: 'quickreply', text: /^quickreply$/i, action: Quickreply },
+  /* If you want to use regexp with grouped values, you need to upgrade Node to v.10
         or ahead. This regular expression match 'age-{NUMBER}' where NUMBER can be any digit.
         Then, in your component 'bye', you can access to this that in 'req.params'
         {text: /^age-(?<age>\d*)/, action: "age"},
         */
 
-    /* These rules capture different payloads */
-    { payload: 'carrousel', action: 'carrousel' },
-    { payload: /^(yes|no)$/, action: 'quickreply_response' },
+  /* These rules capture different payloads */
+  { path: 'carousel', payload: 'carousel', action: Carousel },
+  {
+    path: 'quickreply_resp',
+    payload: /^(yes|no)$/,
+    action: QuickreplyResponse
+  },
 
-    /* Here is an example of how you can integrate Facebook Webviews with your bot */
-    { text: /^webviews$/i, action: 'webviews' },
-    /* After closing a webview, sometimes we want obtain its data, these are some examples */
-    { payload: /^DATA_.*/, action: 'webviews_response' },
-    { payload: 'closed_webview', action: 'closed_webview' },
+  /* Here is an example of how you can integrate Facebook Webviews with your bot */
+  { path: 'webviews', text: /^webviews$/i, action: Webviews },
+  /* After closing a webview, sometimes we want obtain its data, these are some examples */
+  { path: 'webviews_resp', payload: /^DATA_.*/, action: WebviewsResponse },
+  { path: 'close_wv', payload: 'closed_webview', action: ClosedWebview },
 
-    /* This rule uses a function test to capture any text that starts with 'bye' */
-    { text: t => t.startsWith('bye'), action: 'bye' },
+  /* This rule uses a function test to capture any text that starts with 'bye' */
+  { path: 'bye', text: t => t.startsWith('bye'), action: Bye },
 
-    /* Captures any image */
-    { type: 'image', action: 'media' },
+  /* Captures any image */
+  { path: 'image', type: 'image', action: Media },
 
-    /* Shows how i18n works in botonic */
-    { text: 'multilanguage', action: 'multilanguage' },
+  /* Shows how i18n works in botonic */
+  { path: 'multilang', text: 'multilang', action: Multilanguage },
 
-    /* Captures different intents (enable the Dialogflow integration,
+  /* Captures different intents (enable the Dialogflow integration,
         see "integrations" section at the top of this file) */
-    { intent: 'smalltalk.agent.funny', action: 'funny' },
-    { intent: 'smalltalk.agent.good', action: 'funny' },
-    { intent: 'smalltalk.user.likes_agent', action: 'funny' }
+  { path: 'funny', intent: 'smalltalk.agent.funny', action: Funny },
+  { path: 'good', intent: 'smalltalk.agent.good', action: Funny },
+  { path: 'agent', intent: 'smalltalk.user.likes_agent', action: Funny },
+  { path: 'not_found', type: /.*/, action: NotFound }
 
-    /* There's an implicit rule that captures any other input and maps it to
+  /* There's an implicit rule that captures any other input and maps it to
         the 404 action, it would be equivalent to:
-        {type: /^.*$/, action: "404"}
+        {path: 'not-found', type: /^.*$/, action: NotFound}
         */
-  ]
-}
+]

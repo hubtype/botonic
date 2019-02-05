@@ -1,19 +1,19 @@
 import React from 'react'
-import { default as _ } from '@botonic/core/lib/i18n'
+import { RequestContext, Text } from '@botonic/react'
 
 export default class extends React.Component {
-  static async botonicInit({ req }) {
-    _.setLocale('en')
-  }
+  static contextType = RequestContext
 
   render() {
+    this.context.setLocale('en')
+    let _ = this.context.getString
     return (
-      <messages>
-        <message type='text'>
+      <>
+        <Text>
           {_('multilang.text1')} 😊 {_('multilang.text2')}
-        </message>
-        <message type='text'>{_('multilang.text3')}</message>
-      </messages>
+        </Text>
+        <Text>{_('multilang.text3')}</Text>
+      </>
     )
   }
 }

@@ -6,7 +6,7 @@ menu: 4. Tutorials & Examples
 
 # **Guided Flow**
 
-[View on Github](https://github.com/hubtype/botonic/tree/master/templates/childs)
+[View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/childs)
 
 This template shows how to build a bot with deep flows, where users navigate a decision tree using interactive elements like buttons. This is useful when you want to guide the user through a conversation with predefined flows that consist of several steps. Examples of this type of bots include (but are not limited to):
 
@@ -19,41 +19,54 @@ In the same way you build a website with a deep tree of routes, in botonic you m
 
 With the following example we will see better how `childRoutes` work:
 
+**src/routes.js**
+
 ```javascript
-routes: [
-    {text: /^hi$/i, action: "hi",
+import Hi from './actions/hi'
+import Pizza from './actions/pizza'
+import Sausage from './actions/sausage'
+import Bacon from './actions/bacon'
+import Pasta from './actions/pasta'
+import Cheese from './actions/cheese'
+import Tomatosap from './actions/tomato'
+
+export const routes = [
+    {path: 'hi', text: /^hi$/i, action: Hi,
         childRoutes: [
-            {text: /^pizza$/i, action: "pizza", 
+            {path: 'pizza', payload: /^pizza$/i, action: Pizza, 
                 childRoutes: [
-                    {text: /^sausage$/i, action: "sausage"},
-                    {text: /^bacon$/i, action: "bacon"}
+                    {path: 'sausage', payload: /^sausage$/i, action: Sausage},
+                    {path: 'bacon', payload: /^bacon$/i, action: Bacon}
                 ]
             },
-            {text: /^pasta$/i, action: "pasta", 
+            {path: 'pasta', payload: /^pasta$/i, action: Pasta, 
                 childRoutes: [
-                    {text: /^cheese$/i, action: "cheese"},
-                    {text: /^tomato$/i, action: "tomato"}
+                    {path: 'cheese', payload: /^cheese$/i, action: Cheese},
+                    {path: 'tomato', payload: /^tomato$/i, action: Tomato}
                 ]
             }
         ]
     },
-] 
+]
 ```
 
 When the user starts the conversation the bot will ask whether he wants to eat pizza or pasta. You "force" the user to select either one by prompting two quick replies:
 
+**src/actions/hi.js**
+
 ```javascript
 import React from 'react'
+import { Text, Reply } from '@botonic/react'
 
 export default class extends React.Component {
 
   render() {
     return (
-        <message type="text">
+        <Text>
             Hi! Choose what you want to eat:
-            <reply payload="pizza">Pizza</reply>
-            <reply payload="pasta">Pasta</reply>
-        </message>
+            <Reply payload='pizza'>Pizza</Reply>
+            <Reply path='pasta'>Pasta</Reply>
+        </Text>
     )
   }
 }
@@ -65,55 +78,41 @@ We have the option of pizza and also pasta. This is where `childRoutes` comes in
 
 In certain cases, it could be preferable to mantain your routes' file as clean as possible. Let's take the previous example and replace the text attributes with payloads.
 
+**src/routes.js**
+
 ```javascript
-routes: [
-    {payload: /^hi$/i, action: "hi",
-        childRoutes: [
-            {payload: /^pizza$/i, action: "pizza", 
-                childRoutes: [
-                    {payload: /^sausage$/i, action: "sausage"},
-                    {payload: /^bacon$/i, action: "bacon"}
-                ]
-            },
-            {payload: /^pasta$/i, action: "pasta", 
-                childRoutes: [
-                    {payload: /^cheese$/i, action: "cheese"},
-                    {payload: /^tomato$/i, action: "tomato"}
-                ]
-            }
-        ]
-    },
+import { routes as hiRoutes } from './actions/hiFlow/hi.routes'
+import Hi from './actions/hi'
+
+export const routes = [
+    {path: 'hi', text: /^hi$/i, action: Hi, childRoutes: hiRoutes}
 ] 
+```
+
+**src/actions/hiFlow/hi.routes.js**
+
+```javascript
+import Pizza from '../pizza'
+import Sausage from '../sausage'
+import Bacon from '../bacon'
+import Pasta from '../pasta'
+import Cheese from '../cheese'
+import Tomato from '../tomato'
+
+export const routes = [
+  {path: 'pizza', payload: 'pizza', action: Pizza},
+  {path: 'sausage', action: Sausage},
+  {path: 'bacon', action: Bacon},
+  {path: 'pasta', action: Pasta},
+  {path: 'cheese', action: Cheese},
+  {path: 'tomato', action: Tomato}
+]
+
 ```
 
 You can achieve the same flow's behaviour by preserving the parent of the previous flow and doing the following modifications in the corresponding action files:
 
-
-```javascript
-routes: [
-    {payload: /^hi$/i, action: "hi"}
-] 
-```
-
-Note that you can specify directly what action has to be triggered when answering to a reply with the attribute `action="childStateURL"`. 
-
-
-```javascript
-import React from 'react'
-
-export default class extends React.Component {
-
-  render() {
-    return (
-        <message type="text">
-            Hi! Choose what you want to eat:
-            <reply action="pizza">Pizza</reply>
-            <reply action="pasta">Pasta</reply>
-        </message>
-    )
-  }
-}
-```
+Note that you can specify directly what action has to be triggered when answering to a reply with the attribute `path="childStateURL"`. 
 
 So after applying this operation to each action file you will have the ability to obtain the desired flow.
 
@@ -121,51 +120,47 @@ So after applying this operation to each action file you will have the ability t
 
 Since every action is linked in the same way as URL's do, you can also pass additional parameters to them in order to have a better control of your responses. So, the following piece of code will fill our params object:
 
+**src/actions/hi.js**
+
 ```javascript
 import React from 'react'
+import { Text, Reply } from '@botonic/react'
 
 export default class extends React.Component {
 
   render() {
     return (
-        <message type="text">
+        <Text>
             What's your favourite flavour?
-            <reply action="pizza?ans=spicy">Spicy</reply>
-            <reply action="pizza?ans=salty">Salty</reply>
-        </message>
+            <Reply path='pizza?ans=spicy'>Spicy</Reply>
+            <Reply path='pizza?ans=salty'>Salty</Reply>
+        </Text>
     )
   }
 }
 ```
 
-Then you can access its parameters in the following way in `pages/actions/pizza.js`:
+Then you can access its parameters in the following way in `src/actions/pizza.js`:
+
+**src/actions/pizza.js**
 
 ```javascript
 import React from 'react'
+import { Text, RequestContext } from '@botonic/react'
 
 export default class extends React.Component {
 
-  render() {
-    if(this.props.params.ans == "spicy"){
-      return (
-          <message type="text">
-              Be sure you have the air conditioner turned on.
-          </message>
-      )     
-    } else if (this.props.params.ans == "salty"){
-      return(
-          <message type="text">
-              Be sure you have a bottle of water near.
-          </message>
-      )
-    } else{
-      return(
-          <message type="text">
-              This option is not available.
-          </message>
-      )
+    static contextType = RequestContext
+
+    render() {
+        if (this.context.params.ans == 'spicy') {
+            return <Text>Be sure you have the air conditioner turned on.</Text>
+        } else if (this.context.params.ans == 'salty') {
+            return <Text>Be sure you have a bottle of water near.</Text>
+        } else {
+            return <Text>This option is not available.</Text>
+        }
     }
-  }
 }
 ```
 

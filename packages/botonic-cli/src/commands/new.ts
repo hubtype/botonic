@@ -1,9 +1,7 @@
-import { Command, flags } from '@oclif/command'
+import { Command } from '@oclif/command'
 import { resolve } from 'path'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
-
-import * as fs from 'fs'
 
 import { BotonicAPIService } from '../botonicAPIService'
 import { track } from '../utils'
@@ -109,12 +107,12 @@ Creating...
     this.botonicApiService.beforeExit()
     await exec('mv ../.botonic.json .')
     let cd_cmd = colors.bold(`cd ${args.name}`)
-    let run_cmd = colors.bold('botonic run')
+    let run_cmd = colors.bold('botonic serve')
     let deploy_cmd = colors.bold('botonic deploy')
     console.log(
       `\n✨  Bot ${colors.bold(
         args.name
-      )} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot on your terminal)\n${deploy_cmd} (publish your bot to the world!)`
+      )} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot locally from the browser)\n${deploy_cmd} (publish your bot to the world!)`
     )
   }
 

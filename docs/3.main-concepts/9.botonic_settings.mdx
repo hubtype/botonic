@@ -6,52 +6,49 @@ menu: 3. Main Concepts
 
 # **Botonic Settings**
 
-`botonic.config.js` is the main file where you can define all your Botonic settings. For now, these are the additional options you can set:
+## NLU Integrations
+Integrate your bots with your preferred NLU services. For further information see the [NLU section](/main-concepts/nlu).
+
+## Botonic Options
+
+`options.js` is the main file where you can define all your Botonic options. For now, these are the additional options you can set:
 
 ```javascript
-module.exports = {
-    integrations: {
-        dialogflow: {
-            token: "YOUR_DIALOGFLOW_API_TOKEN"
-        }
-    },
+export const options = {
     typingOptions: { 
-    	delay: 1,
-    	typing: 2 
+        delay: 1,
+        typing: 2 
     }
 }
 ```
 
-## NLU Integrations
-Integrate your bots with your preferred NLU services. For further information see the [NLU section](/main-concepts/nlu).
-
-## Typing Options
 In `typingOptions` you can define the expected behaviours of your bot when sending messages.
   * `delay`: Specifies the seconds that pass before sending the order to process the user input.
   * `typing`: Specifies how much seconds the typing component has to be displayed.
 
 Both options are set to 0 by default. Feel free tuninng these parameters to obtain the expected behaviour of your bot.
   
-  If necessary, you can also define these settings inside your messages. In this case, the values defined inside a message will have preference over the default settings of `botonic.config.js`.
+If necessary, you can also define these settings inside your messages. In this case, the values defined inside a message will have preference over the default settings.
 
 ```javascript
 import React from 'react'
+import { Text } from '@botonic/react'
 
 export default class extends React.Component {
 
   render() {
     return (
-        <messages>
-            <message type="text" delay="2">
+        <>
+            <Text delay='2'>
                 Hi!
-            </message>
-            <message type="text" typing="1">
+            </Text>
+            <Text typing='1'>
                 How are you?
-            </message>
-            <message type="text" delay="1" typing="1">
+            </Text>
+            <Text delay='1' typing='1'>
                 I am very glad to see you again.
-            </message>
-        </messages>
+            </Text>
+        </>
     )
   }
 }
