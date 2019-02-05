@@ -4,10 +4,10 @@
     "start": "webpack-dev-server --env.webchat"
   },
   "dependencies": {
-    "@botonic/react": "latest",
-    "terser": "^3.14.1"
+    "@botonic/react": "latest"
   },
   "devDependencies": {
+    "terser": "^3.14.1",
     "terser-webpack-plugin": "^1.2.1",
     "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
