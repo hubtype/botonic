@@ -22,7 +22,7 @@ export default class extends React.Component {
         </Text>
         <Text>
           This is a basic action in the bot, which is just a simple React
-          component (checkout the code at pages/actions/start.js)
+          component (checkout the code at src/actions/start.js)
         </Text>
         <Text>
           In this case, I'm just returning a bunch of text messages after
