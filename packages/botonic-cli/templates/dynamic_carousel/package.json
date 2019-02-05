@@ -4,7 +4,7 @@
     "start": "webpack-dev-server --env.webchat"
   },
   "dependencies": {
-    "@botonic/react": "latest",
+    "@botonic/react": "0.7.0",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {

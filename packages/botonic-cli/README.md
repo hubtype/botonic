@@ -19,7 +19,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.6.1 darwin-x64 node-v10.15.0
+@botonic/cli/0.7.0-alpha.5 darwin-x64 node-v10.15.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -30,12 +30,10 @@ USAGE
 <!-- commands -->
 * [`botonic deploy [BOT_NAME]`](#botonic-deploy-bot-name)
 * [`botonic help [COMMAND]`](#botonic-help-command)
-* [`botonic input INPUT`](#botonic-input-input)
 * [`botonic login`](#botonic-login)
 * [`botonic logout`](#botonic-logout)
 * [`botonic new NAME [TEMPLATENAME]`](#botonic-new-name-templatename)
-* [`botonic run [INPUT]`](#botonic-run-input)
-* [`botonic webview WEBVIEW_PAGE`](#botonic-webview-webview-page)
+* [`botonic serve`](#botonic-serve)
 
 ## `botonic deploy [BOT_NAME]`
 
@@ -56,7 +54,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.7.0-alpha.5/src/commands/deploy.ts)_
 
 ## `botonic help [COMMAND]`
 
@@ -75,26 +73,6 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.4/src/commands/help.ts)_
 
-## `botonic input INPUT`
-
-Get response from a single input
-
-```
-USAGE
-  $ botonic input INPUT
-
-OPTIONS
-  -c, --context=context  Context of current session
-  -p, --path=path        Path to botonic project. Defaults to current dir.
-  -r, --route=route      Route of the current bot state.
-
-EXAMPLE
-  $ botonic input "{\"type\": \"text\", \"data\": \"hi\"}"
-  Hello!
-```
-
-_See code: [src/commands/input.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/input.ts)_
-
 ## `botonic login`
 
 Log in to Botonic
@@ -107,7 +85,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.7.0-alpha.5/src/commands/login.ts)_
 
 ## `botonic logout`
 
@@ -121,7 +99,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.7.0-alpha.5/src/commands/logout.ts)_
 
 ## `botonic new NAME [TEMPLATENAME]`
 
@@ -141,44 +119,23 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.7.0-alpha.5/src/commands/new.ts)_
 
-## `botonic run [INPUT]`
+## `botonic serve`
 
-Start interactive session
-
-```
-USAGE
-  $ botonic run [INPUT]
-
-OPTIONS
-  -p, --path=path  Path to botonic project. Defaults to current dir.
-
-EXAMPLE
-  $ botonic run
-  Your bot is ready, start talking:
-  [you] > Hi
-  [bot] > Bye!
-```
-
-_See code: [src/commands/run.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/run.ts)_
-
-## `botonic webview WEBVIEW_PAGE`
-
-Get response from a single input
+Serve your bot in your localhost
 
 ```
 USAGE
-  $ botonic webview WEBVIEW_PAGE
+  $ botonic serve
 
-OPTIONS
-  -c, --context=context  Context of current session
-  -p, --path=path        Path to botonic project. Defaults to current dir.
+DESCRIPTION
+  Serve your bot in your localhost
 
 EXAMPLE
-  $ botonic webview webview_hello"
-  Hello!
+  $ botonic serve
+  > Project is running at http://localhost:8080/
 ```
 
-_See code: [src/commands/webview.ts](https://github.com/hubtype/botonic/blob/v0.6.1/src/commands/webview.ts)_
+_See code: [src/commands/serve.ts](https://github.com/hubtype/botonic/blob/v0.7.0-alpha.5/src/commands/serve.ts)_
 <!-- commandsstop -->
