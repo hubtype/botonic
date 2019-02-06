@@ -4,7 +4,7 @@
     "start": "webpack-dev-server --env.webchat"
   },
   "dependencies": {
-    "@botonic/react": "0.7.0-alpha.4"
+    "@botonic/react": "0.7.0"
   },
   "devDependencies": {
     "terser": "^3.14.1",
