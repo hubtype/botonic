@@ -2,6 +2,7 @@
 *-error.log
 .oclif.manifest.json
 .docz
+.netlify
 lib/
 node_modules/
 tmp/
