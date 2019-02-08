@@ -3,7 +3,7 @@ import { Message} from './message'
 import { isBrowser, isNode } from '@botonic/core'
 
 
-export class Template extends React.Component {
+export class WhatsappTemplate extends React.Component {
     // name, namespace and parameters []
     render() {
         if (isBrowser()) return this.renderBrowser()
