@@ -8,19 +8,25 @@ import { Webchat } from './webchat'
 import { RequestContext } from './contexts'
 import { Text } from './components/text'
 
-function isFunction(o){
+function isFunction(o) {
     return typeof o === 'function'
 }
 
 export class App {
-    constructor({ routes, locales, integrations, plugins=null }) {
+    constructor({ routes, locales, integrations, plugins = null, theme }) {
         this.rootElement = null
         this.routes = routes
-        this.defaultRoutes = { path: '404', action: () => <Text>I don't understand you</Text> }
+        this.defaultRoutes = {
+            path: '404',
+            action: () => <Text>I don't understand you</Text>
+        }
         this.locales = locales
         this.integrations = integrations
-        this.router = isFunction(this.routes) ? null : new Router([...this.routes, this.defaultRoutes])
+        this.router = isFunction(this.routes)
+            ? null
+            : new Router([...this.routes, this.defaultRoutes])
         this.plugins = plugins
+        this.theme = theme
     }
 
     getString(stringID, session) {
@@ -31,42 +37,50 @@ export class App {
         session.__locale = locale
     }
 
-    webchat() {
-        return <Webchat botonicApp={this} />
+    webchat(themeOptions) {
+        if (!themeOptions && this.theme) themeOptions = this.theme
+        if (this.theme && themeOptions)
+            themeOptions = { ...this.theme, ...themeOptions }
+        return <Webchat botonicApp={this} theme={themeOptions} />
     }
 
-    render(dest) {
-        ReactDOM.render(this.webchat(), dest)
+    render(dest, webchatOptions) {
+        if (webchatOptions && webchatOptions.theme)
+            ReactDOM.render(this.webchat(webchatOptions.theme), dest)
+        else ReactDOM.render(this.webchat(null), dest)
     }
 
     async input({ input, session, lastRoutePath }) {
         session = session || {}
         if (!session.__locale) session.__locale = 'en'
-        
-        if(this.plugins){
+
+        if (this.plugins) {
             let pluginsLength = this.plugins.length
-            for(let i = 0; i < pluginsLength; i++){   
+            for (let i = 0; i < pluginsLength; i++) {
                 let pluginRequired = this.plugins[i].resolve
                 let options = this.plugins[i].options
                 try {
-                    let Plugin = (pluginRequired).default
+                    let Plugin = pluginRequired.default
                     let p = new Plugin(options)
                     await p.pre({ input, session, lastRoutePath })
-                } catch(e) {
+                } catch (e) {
                     console.log(e)
                 }
             }
-        } else if(this.integrations && input.type == 'text') {
+        } else if (this.integrations && input.type == 'text') {
             try {
                 let nlu = await getNLU(input, this.integrations)
                 Object.assign(input, nlu)
             } catch (e) {}
         }
-                
-        if(isFunction(this.routes)){
-            this.router = new Router([...this.routes(input, session), this.defaultRoutes])
+
+        if (isFunction(this.routes)) {
+            this.router = new Router([
+                ...this.routes(input, session),
+                this.defaultRoutes
+            ])
         }
-        
+
         let output = this.router.processInput(input, session, lastRoutePath)
         let Action = output.action
         let RetryAction = output.retryAction
@@ -105,23 +119,23 @@ export class App {
                 {DefaultAction && <DefaultAction {...defaultProps} />}
             </RequestContext.Provider>
         )
-        
+
         let response = null
         if (isBrowser()) response = component
         else response = ReactDOMServer.renderToStaticMarkup(component)
-        
+
         lastRoutePath = output.lastRoutePath
-        
-        if(this.plugins){
+
+        if (this.plugins) {
             let pluginsLength = this.plugins.length
-            for(let i = 0; i < pluginsLength; i++){   
+            for (let i = 0; i < pluginsLength; i++) {
                 let pluginRequired = this.plugins[i].resolve
                 let options = this.plugins[i].options
                 try {
-                    let Plugin = (pluginRequired).default
+                    let Plugin = pluginRequired.default
                     let p = new Plugin(options)
                     await p.post({ input, session, lastRoutePath, response })
-                } catch(e) {
+                } catch (e) {
                     console.log(e)
                 }
             }

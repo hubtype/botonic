@@ -11,6 +11,34 @@ class WebchatHeader extends React.Component {
     static contextType = WebchatContext
 
     render() {
+        if (this.props.theme.customHeader) {
+            let CustomHeader = this.props.theme.customHeader
+            return <CustomHeader />
+        }
+        let image = (
+            <img
+                style={{
+                    height: 24,
+                    margin: '0px 12px'
+                }}
+                src={this.context.getStaticAssetsUrl + Logo}
+            />
+        )
+        if (this.props.theme && this.props.theme.brandIconUrl) {
+            image = (
+                <img
+                    style={{
+                        height: 24,
+                        margin: '0px 12px'
+                    }}
+                    src={
+                        this.context.getStaticAssetsUrl +
+                        this.props.theme.brandIconUrl
+                    }
+                />
+            )
+        }
+        let title = this.props.theme ? this.props.theme.title : 'Botonic'
         return (
             <div
                 style={{
@@ -22,20 +50,14 @@ class WebchatHeader extends React.Component {
                     color: '#295179'
                 }}
             >
-                <img
-                    style={{
-                        height: 24,
-                        margin: '0px 12px'
-                    }}
-                    src={this.context.getStaticAssetsUrl + Logo}
-                />
+                {image}
                 <h4
                     style={{
                         margin: 0,
                         fontFamily: 'Arial, Helvetica, sans-serif'
                     }}
                 >
-                    Botonic
+                    {title}
                 </h4>
             </div>
         )
@@ -43,31 +65,31 @@ class WebchatHeader extends React.Component {
 }
 
 class WebchatMessageList extends React.Component {
-    
     constructor() {
         super()
-        this.scrollToBottom = this.scrollToBottom.bind(this);
+        this.scrollToBottom = this.scrollToBottom.bind(this)
     }
 
     messagesEnd = React.createRef()
-    
-    componentDidUpdate () {
+
+    componentDidUpdate() {
         this.scrollToBottom()
     }
 
     scrollToBottom = () => {
-        this.messagesEnd.current.scrollIntoView({ behavior: 'smooth'})
+        this.messagesEnd.current.scrollIntoView({ behavior: 'smooth' })
     }
 
     render() {
         return (
-            <div id='message-list'
+            <div
+                id="message-list"
                 style={{
                     ...(this.props.style || {}),
                     overflow: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
-                    overflowY:'auto'
+                    overflowY: 'auto'
                 }}
             >
                 {this.props.messages.map((e, i) => (
@@ -96,12 +118,12 @@ class WebchatReplies extends React.Component {
             <div
                 style={{
                     ...(this.props.style || {}),
-                    overflowX:'auto',
+                    overflowX: 'auto',
                     textAlign: 'center',
                     whiteSpace: 'nowrap',
                     paddingBottom: 10,
-                    marginLeft:5, 
-                    marginRight: 5,
+                    marginLeft: 5,
+                    marginRight: 5
                 }}
             >
                 {this.props.replies.map((r, i) => (
@@ -141,30 +163,30 @@ class WebviewContainer extends React.Component {
             </div>
         )
         return (
-            <div style={{...this.props.style}}>
-            <div
-            style={{
-              ...(this.props.style || {}),
-              position: 'absolute',
-              display: 'flex',
-              flexDirection: 'column',
-              bottom: 0,
-              width: '100%',
-              height: '80%',
-              backgroundColor: '#fff'
-            }}
-          >
-            <WebviewHeader style={{ flex: 'none' }} />
-            <div
-              style={{
-                flex: 1,
-                overflow: 'auto'
-              }}
-            >
-              <Webview />
+            <div style={{ ...this.props.style }}>
+                <div
+                    style={{
+                        ...(this.props.style || {}),
+                        position: 'absolute',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        bottom: 0,
+                        width: '100%',
+                        height: '80%',
+                        backgroundColor: '#fff'
+                    }}
+                >
+                    <WebviewHeader style={{ flex: 'none' }} />
+                    <div
+                        style={{
+                            flex: 1,
+                            overflow: 'auto'
+                        }}
+                    >
+                        <Webview />
+                    </div>
+                </div>
             </div>
-          </div>
-          </div>
         )
     }
 }
@@ -178,23 +200,29 @@ export class Webchat extends React.Component {
         webview: null,
         webviewParams: null,
         session: {
-            'last_session': {},
-            'user': {
-              'id': '000001',
-              'username': 'John',
-              'name': 'Doe',
-              'provider': 'terminal',
-              'provider_id': '0000000',
-              'extra_data': {}
+            last_session: {},
+            user: {
+                id: '000001',
+                username: 'John',
+                name: 'Doe',
+                provider: 'terminal',
+                provider_id: '0000000',
+                extra_data: {}
             },
-            'organization': '',
-            'bot': {
-              'id': '0000000',
-              'name': 'botName'
+            organization: '',
+            bot: {
+                id: '0000000',
+                name: 'botName'
             }
         },
         lastRoutePath: null,
         handoff: false
+    }
+
+    defaultWebchat = {
+        brandColor: '#0099ff',
+        textPlaceholder: 'Ask me something...',
+        title: 'Botonic'
     }
 
     setReplies(replies) {
@@ -241,10 +269,9 @@ export class Webchat extends React.Component {
         })
 
         let action = output.session._botonic_action || ''
-        let handoff = action.startsWith("create_case")
+        let handoff = action.startsWith('create_case')
         messages = [...messages, output.response]
-        if(handoff)
-            messages = [...messages, <Handoff />]
+        if (handoff) messages = [...messages, <Handoff />]
         this.setState({
             ...this.state,
             messages,
@@ -257,14 +284,17 @@ export class Webchat extends React.Component {
 
     resolveCase() {
         let action = this.state.session._botonic_action.split(':')
-        this.setState({
-            ...this.state,
-            session: {
-                ...this.state.session,
-                _botonic_action: null
+        this.setState(
+            {
+                ...this.state,
+                session: {
+                    ...this.state.session,
+                    _botonic_action: null
+                },
+                handoff: false
             },
-            handoff: false
-        }, () => this.sendPayload(action[action.length - 1]))
+            () => this.sendPayload(action[action.length - 1])
+        )
     }
 
     async sendText(text, payload) {
@@ -300,7 +330,8 @@ export class Webchat extends React.Component {
             openWebview: this.openWebview.bind(this),
             closeWebview: this.closeWebview.bind(this),
             resolveCase: this.resolveCase.bind(this),
-            getStaticAssetsUrl: scriptBaseUrl
+            getStaticAssetsUrl: scriptBaseUrl,
+            theme: { ...this.defaultWebchat, ...this.props.theme }
         }
 
         let webviewRequestContext = {
@@ -326,7 +357,10 @@ export class Webchat extends React.Component {
                         flexDirection: 'column'
                     }}
                 >
-                    <WebchatHeader style={{ height: 36, flex: 'none' }} />
+                    <WebchatHeader
+                        theme={webchatContext.theme}
+                        style={{ height: 36, flex: 'none' }}
+                    />
                     <WebchatMessageList
                         style={{ flex: 1 }}
                         messages={this.state.messages}
@@ -334,15 +368,15 @@ export class Webchat extends React.Component {
                     {this.state.replies && (
                         <WebchatReplies replies={this.state.replies} />
                     )}
-                    {!this.state.handoff &&
+                    {!this.state.handoff && (
                         <Textarea
                             name="text"
                             minRows={2}
                             maxRows={4}
                             wrap="soft"
                             maxLength="1000"
-                            placeholder="Ask me something..."
-                            autoFocus={location.hostname === "localhost"}
+                            placeholder={webchatContext.theme.textPlaceholder}
+                            autoFocus={location.hostname === 'localhost'}
                             inputRef={tag => (this.textarea = tag)}
                             onKeyDown={e => this.onKeyDown(e)}
                             style={{
@@ -356,7 +390,7 @@ export class Webchat extends React.Component {
                                 outline: 'none'
                             }}
                         />
-                    }
+                    )}
                     {this.state.webview && (
                         <RequestContext.Provider value={webviewRequestContext}>
                             <WebviewContainer

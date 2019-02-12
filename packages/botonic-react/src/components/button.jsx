@@ -25,6 +25,14 @@ export class Button extends React.Component {
     }
 
     renderBrowser() {
+        if (this.context.theme.customButton) {
+            let CustomButton = this.context.theme.customButton
+            return (
+                <div onClick={e => this.handleClick(e)}>
+                    <CustomButton>{this.props.children}</CustomButton>
+                </div>
+            )
+        }
         return (
             <button
                 style={{
@@ -57,7 +65,11 @@ export class Button extends React.Component {
             let payload = `__PATH_PAYLOAD__${this.props.path}`
             return <button payload={payload}>{this.props.children}</button>
         } else if (this.props.payload) {
-            return <button payload={this.props.payload}>{this.props.children}</button>
+            return (
+                <button payload={this.props.payload}>
+                    {this.props.children}
+                </button>
+            )
         } else if (this.props.url) {
             return <button url={this.props.url}>{this.props.children}</button>
         }
