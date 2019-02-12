@@ -17,6 +17,7 @@ export class App {
     integrations,
     theme,
     plugins,
+    appId,
     defaultTyping,
     defaultDelay
   }) {
@@ -33,6 +34,7 @@ export class App {
       : new Router([...this.routes, this.defaultRoutes])
     this.plugins = loadPlugins(plugins)
     this.theme = theme
+    this.appId = appId
     this.defaultTyping = defaultTyping || 0
     this.defaultDelay = defaultDelay || 0
   }
