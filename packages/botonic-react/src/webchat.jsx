@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import Textarea from 'react-textarea-autosize'
+import Pusher from 'pusher-js'
 import { params2queryString } from '@botonic/core'
 
 import Logo from './assets/botonic_react_logo100x100.png'
@@ -169,6 +170,22 @@ class WebviewContainer extends React.Component {
 }
 
 export class Webchat extends React.Component {
+    constructor(props) {
+        super(props)
+        this.pusher = new Pusher('da85029877df0c827e44')
+        this.appId = this.props.botonicApp.appId
+        this.userId = this.getCookie('csrftoken')
+
+        this.subscribePusher(this.pusher)
+    }
+
+    componentWillUnmount() {
+        this.pusher.unsubscribe(
+            `public-macbook-pro-de-arnau.local_${this.appId}-${this.userI}`
+        )
+        this.pusher.unbind('botonic_response')
+    }
+
     state = {
         width: 300,
         height: 450,
@@ -196,6 +213,12 @@ export class Webchat extends React.Component {
         handoff: false
     }
 
+    getCookie(name) {
+        let re = new RegExp(name + '=([^;]+)')
+        let value = re.exec(document.cookie)
+        return value != null ? unescape(value[1]) : null
+    }
+
     setReplies(replies) {
         this.setState({ ...this.state, replies })
     }
@@ -220,18 +243,42 @@ export class Webchat extends React.Component {
         }
     }
 
-    postCloudInput(appId, input) {
+    async postCloudInput(appId, input) {
+        let api_url = 'https://api.hubtype.com/v1/'
         return axios.post(
-            `https://l40xbunzpw1igqa7.v1.p.beameio.net/v1/provider_accounts/webhooks/webchat/${appId}/`,
+            `${api_url}/provider_accounts/webhooks/webchat/${appId}/`,
             {
-                sender: 'marc',
+                sender: this.userId,
                 message: input
             }
         )
     }
 
+    processNewInput(data) {
+        //console.log('RDAAAAAAAA')
+        //console.log(data.message)
+        let msg = data.message
+        let messagesNew = []
+        //console.log('type', msg.type)
+        if (msg.type == 'text') messagesNew.push(<Text>{msg.data}</Text>)
+        let messages = [...this.state.messages, messagesNew]
+        if (messagesNew)
+            this.setState({
+                ...this.state,
+                messages
+            })
+    }
+
+    subscribePusher(pusher) {
+        if (!Object.keys(pusher.channels.channels).length) {
+            pusher.subscribe(
+                `public-macbook-pro-de-arnau.local_${this.appId}-${this.userId}`
+            )
+            pusher.bind('botonic_response', this.processNewInput.bind(this))
+        }
+    }
+
     async sendInput(input) {
-        let appId = this.props.botonicApp.appId
         let messages = this.state.messages
         let inputMessage = null
         if (input.type === 'text')
@@ -244,11 +291,11 @@ export class Webchat extends React.Component {
             messages = [...messages, inputMessage]
             this.setState({ ...this.state, messages, replies: [] })
         }
-        if (appId) {
-            console.log('INPUT', input)
-            this.postCloudInput(appId, input)
+        let output = {}
+        if (this.appId) {
+            return this.postCloudInput(this.appId, input)
         } else {
-            let output = await this.props.botonicApp.input({
+            output = await this.props.botonicApp.input({
                 input,
                 session: this.state.session,
                 lastRoutePath: this.state.lastRoutePath
@@ -298,11 +345,11 @@ export class Webchat extends React.Component {
     onKeyDown(event) {
         if (event.keyCode == 13 && event.shiftKey == false) {
             event.preventDefault()
+            console.log('keydonw')
             this.sendText(this.textarea.value)
             this.textarea.value = ''
         }
     }
-
     render() {
         let webchatContext = {
             sendText: this.sendText.bind(this),
