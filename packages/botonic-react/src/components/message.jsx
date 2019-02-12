@@ -27,34 +27,30 @@ export class Message extends React.Component {
     }
 
     componentDidMount() {
-        
         let delay = Number(this.props.delay) // TODO: this.context.defaultDelay
         let typing = Number(this.props.typing) // TODO: this.context.defaultTyping
-        if(delay > 0)
-            this.startDelay(delay, typing)
-        else if(typing > 0)
-            this.startTyping(typing)
-        else
-            this.setReplies()
+        if (delay > 0) this.startDelay(delay, typing)
+        else if (typing > 0) this.startTyping(typing)
+        else this.setReplies()
     }
 
     startDelay(delay, typing) {
-        this.setState({...this.state, isDelaying: true})
+        this.setState({ ...this.state, isDelaying: true })
         setTimeout(() => {
-            if(typing > 0) {
+            if (typing > 0) {
                 this.startTyping(typing)
             } else {
                 this.setReplies()
-                this.setState({...this.state, isDelaying: false})
+                this.setState({ ...this.state, isDelaying: false })
             }
         }, delay * 1000)
     }
 
     startTyping(typing) {
-        this.setState({...this.state, isDelaying: false, isTyping: true})
+        this.setState({ ...this.state, isDelaying: false, isTyping: true })
         setTimeout(() => {
             this.setState({
-                ...this.state, 
+                ...this.state,
                 isTyping: false
             })
             this.setReplies()
@@ -70,7 +66,7 @@ export class Message extends React.Component {
     }
 
     getBgColor() {
-        return this.isFromUser() ? '#0384FF' : '#F1F0F0'
+        return this.isFromUser() ? this.context.theme.brandColor : '#F1F0F0'
     }
 
     render() {
@@ -99,53 +95,58 @@ export class Message extends React.Component {
             marginTop: -pointerSize
         }
         return (
-            <div style={{
-                position: 'relative',
-                alignSelf: this.isFromUser() ? 'flex-end' : 'flex-start',
-                margin: 8,
-                maxWidth: '60%',
-                backgroundColor: this.getBgColor(),
-                color: this.isFromUser() ? '#fff' : '#000',
-                fontFamily: 'Arial, Helvetica, sans-serif',
-                borderRadius: 8
-            }} {...this.props} >
-                <div style={{
-                    padding: '8px 12px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    whiteSpace: "pre-line"
-                }} >
+            <div
+                style={{
+                    position: 'relative',
+                    alignSelf: this.isFromUser() ? 'flex-end' : 'flex-start',
+                    margin: 8,
+                    maxWidth: '60%',
+                    backgroundColor: this.getBgColor(),
+                    color: this.isFromUser() ? '#fff' : '#000',
+                    fontFamily: 'Arial, Helvetica, sans-serif',
+                    borderRadius: 8
+                }}
+                {...this.props}
+            >
+                <div
+                    style={{
+                        padding: '8px 12px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        whiteSpace: 'pre-line'
+                    }}
+                >
                     {textChildren}
                 </div>
                 {buttons}
                 {this.isFromUser() && (
-                    <div style={{
-                        ...pointerStyles,
-                        right: 0,
-                        borderRight: 0,
-                        borderLeftColor: this.getBgColor(),
-                        marginRight: -pointerSize
-                    }} />
+                    <div
+                        style={{
+                            ...pointerStyles,
+                            right: 0,
+                            borderRight: 0,
+                            borderLeftColor: this.getBgColor(),
+                            marginRight: -pointerSize
+                        }}
+                    />
                 )}
                 {this.isFromBot() && (
-                    <div style={{
-                        ...pointerStyles,
-                        left: 0,
-                        borderLeft: 0,
-                        borderRightColor: this.getBgColor(),
-                        marginLeft: -pointerSize
-                    }} />
+                    <div
+                        style={{
+                            ...pointerStyles,
+                            left: 0,
+                            borderLeft: 0,
+                            borderRightColor: this.getBgColor(),
+                            marginLeft: -pointerSize
+                        }}
+                    />
                 )}
             </div>
         )
     }
 
     renderNode() {
-        return (
-            <message {...this.props}>
-                {this.props.children}
-            </message>
-        )
+        return <message {...this.props}>{this.props.children}</message>
     }
 }
 

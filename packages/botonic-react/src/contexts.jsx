@@ -5,9 +5,9 @@ export const RequestContext = React.createContext({
 	setLocale: () => '',
 	session: {},
 	params: {},
-    input: {},
-    defaultDelay: 0,
-    defaultTyping: 0
+	input: {},
+	defaultDelay: 0,
+	defaultTyping: 0
 })
 
 export const WebchatContext = React.createContext({
@@ -15,5 +15,6 @@ export const WebchatContext = React.createContext({
 	sendPayload: payload => '',
 	setReplies: replies => '',
 	openWebview: webviewComponent => '',
-	closeWebview: () => ''
+	closeWebview: () => '',
+	theme: {}
 })
