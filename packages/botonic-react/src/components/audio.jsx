@@ -13,6 +13,6 @@ export class Audio extends React.Component {
                     Your browser does not support this audio format.
                 </audio>
             )
-        return (<Message {...this.props} type="video">{content}</Message>)
+        return (<Message {...this.props} type="audio">{content}</Message>)
     }
 }
