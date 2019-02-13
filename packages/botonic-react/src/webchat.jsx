@@ -73,7 +73,9 @@ class WebchatMessageList extends React.Component {
                         style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            flex: 'none'
+                            flex: 'none',
+                            whiteSpace: 'pre',
+                            wordWrap: 'break-word'
                         }}
                         key={i}
                     >
