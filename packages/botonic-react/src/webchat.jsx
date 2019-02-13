@@ -41,10 +41,20 @@ class WebchatHeader extends React.Component {
 }
 
 class WebchatMessageList extends React.Component {
+    
+    constructor() {
+        super()
+        this.scrollToBottom = this.scrollToBottom.bind(this);
+    }
 
-    componentDidUpdate() {
-        let e = document.getElementById("message-list")
-        e.scrollTop = e.scrollHeight
+    messagesEnd = React.createRef()
+    
+    componentDidUpdate () {
+        this.scrollToBottom()
+    }
+
+    scrollToBottom = () => {
+        this.messagesEnd.current.scrollIntoView({ behavior: 'smooth'})
     }
 
     render() {
@@ -70,6 +80,7 @@ class WebchatMessageList extends React.Component {
                         {e}
                     </div>
                 ))}
+                <div ref={this.messagesEnd} />
             </div>
         )
     }
