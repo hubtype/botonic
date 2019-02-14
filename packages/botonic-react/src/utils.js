@@ -5,6 +5,10 @@ import { Subtitle } from './components/subtitle'
 import { Element } from './components/element'
 import { Button } from './components/button'
 import { Carousel } from './components/carousel'
+import { Element } from './components/element'
+import { Pic } from './components/pic'
+import { Subtitle } from './components/subtitle'
+import { Title } from './components/title'
 import { Reply } from './components/reply'
 import { Image } from './components/image'
 import { Pic } from './components/pic'
@@ -140,19 +144,50 @@ function elements_parse(elements) {
 }
 
 function quickreplies_parse(msg) {
-  let replies = msg.replies.map((el, i) => {
-    return (
-      <Reply key={i} payload={el.payload}>
-        {el.text}
-      </Reply>
-    )
-  })
+  let replies = null
+  let repliesKeyboard = null
+  if (msg.replies) {
+    msg.replies.map((el, i) => {
+      return (
+        <Reply key={i} payload={el.payload}>
+          {el.text}
+        </Reply>
+      )
+    })
+  }
+  if (msg.keyboard) {
+    msg.keyboard.map(el => {
+      return <Reply payload={el.data}>{el.label}</Reply>
+    })
+  }
   return (
     <>
       <Text>
         {msg.data}
         {replies}
+        {repliesKeyboard}
       </Text>
     </>
   )
+}
+
+function buttons_parse(buttons) {
+  return buttons.map(b => {
+    if (b.type == 'web_url') return <Button url={b.url}>{b.title}</Button>
+    else if (b.type == 'postback')
+      return <Button payload={b.payload}>{b.title}</Button>
+  })
+}
+
+function elements_parse(elements) {
+  return elements.map(el => {
+    return (
+      <Element>
+        <Pic src={el.image_url} />
+        <Title>{el.title}</Title>
+        <Subtitle>{el.subtitle}</Subtitle>
+        {buttons_parse(el.buttons)}
+      </Element>
+    )
+  })
 }
