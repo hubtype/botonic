@@ -6,6 +6,7 @@ import { params2queryString } from '@botonic/core'
 
 import Logo from './assets/botonic_react_logo100x100.png'
 import { WebchatContext, RequestContext } from './contexts'
+import { msgToBotonic } from './utils'
 import { Text } from './components/text'
 import { Handoff } from './components/handoff'
 
@@ -254,13 +255,11 @@ export class Webchat extends React.Component {
         )
     }
 
-    processNewInput(data) {
+    async processNewInput(data) {
         //console.log('RDAAAAAAAA')
         //console.log(data.message)
-        let msg = data.message
-        let messagesNew = []
         //console.log('type', msg.type)
-        if (msg.type == 'text') messagesNew.push(<Text>{msg.data}</Text>)
+        let messagesNew = await msgToBotonic(data.message)
         let messages = [...this.state.messages, messagesNew]
         if (messagesNew)
             this.setState({
