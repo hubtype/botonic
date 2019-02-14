@@ -245,7 +245,7 @@ export class Webchat extends React.Component {
     }
 
     async postCloudInput(appId, input) {
-        let api_url = 'https://api.hubtype.com/v1/'
+        //let api_url = 'https://api.hubtype.com/v1'
         return axios.post(
             `${api_url}/provider_accounts/webhooks/webchat/${appId}/`,
             {
