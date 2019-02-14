@@ -21,10 +21,7 @@ export default class extends React.Component {
         <Video src='https://www.w3schools.com/html/mov_bbb.mp4' />
         <Audio src='https://www.w3schools.com/html/horse.mp3' />
         <Document src='http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf' />
-        <Location>
-          <lat>41.412255</lat>
-          <long>2.2079313</long>
-        </Location>
+        <Location lat='41.412255' long='2.2079313' />
       </>
     )
   }

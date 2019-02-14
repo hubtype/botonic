@@ -8,7 +8,7 @@ export default class extends React.Component {
     let is_handOff = false
     if (openQueues.queues.indexOf('Customer Support') !== -1) {
       await humanHandOff(session, 'Customer Support', {
-        action: 'thanks_for_contacting'
+        path: 'thanks_for_contacting'
       })
       is_handOff = true
     }
