@@ -42,6 +42,7 @@ export class Router {
       //get in childRoute if one has path ''
       let defaultAction
       if (
+        !routeParams.route.path &&
         routeParams.route &&
         routeParams.route.childRoutes &&
         routeParams.route.childRoutes.length
@@ -88,15 +89,15 @@ export class Router {
           lastRoutePath: lastRoutePath
         }
       } else if ('redirect' in routeParams.route) {
-          lastRoutePath = routeParams.route.redirect
-          let redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
-          if(redirectRoute){
-            return {
-              action: redirectRoute.action,
-              params: redirectRoute.params,
-              lastRoutePath: lastRoutePath
-            }
+        lastRoutePath = routeParams.route.redirect
+        let redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
+        if (redirectRoute) {
+          return {
+            action: redirectRoute.action,
+            params: redirectRoute.params,
+            lastRoutePath: lastRoutePath
           }
+        }
       }
     }
     let notFound = this.getRouteByPath('404', this.routes)
