@@ -18,6 +18,7 @@
     "react-router-dom": "^5.0.0",
     "pusher-js": "^4.3.1",
     "react-textarea-autosize": "^7.1.0",
-    "unescape": "^1.0.1"
+    "unescape": "^1.0.1",
+    "uuid": "^3.3.2"
   }
 }

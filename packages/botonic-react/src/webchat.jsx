@@ -4,6 +4,8 @@ import Textarea from 'react-textarea-autosize'
 import Pusher from 'pusher-js'
 import { params2queryString } from '@botonic/core'
 
+const uuidv1 = require('uuid/v1')
+
 import Logo from './assets/botonic_react_logo100x100.png'
 import { WebchatContext, RequestContext } from './contexts'
 import { msgToBotonic } from './utils'
@@ -175,8 +177,7 @@ export class Webchat extends React.Component {
         super(props)
         this.pusher = new Pusher('da85029877df0c827e44')
         this.appId = this.props.botonicApp.appId
-        this.userId = this.getCookie('csrftoken')
-
+        this.userId = this.getUserUUID()
         this.subscribePusher(this.pusher)
     }
 
@@ -214,10 +215,13 @@ export class Webchat extends React.Component {
         handoff: false
     }
 
-    getCookie(name) {
-        let re = new RegExp(name + '=([^;]+)')
-        let value = re.exec(document.cookie)
-        return value != null ? unescape(value[1]) : null
+    getUserUUID() {
+        let userId = window.localStorage.getItem('userId')
+        if (!userId) {
+            userId = uuidv1()
+            window.localStorage.setItem('userId', userId)
+        }
+        return userId
     }
 
     setReplies(replies) {
