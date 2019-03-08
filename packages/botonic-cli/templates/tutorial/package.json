@@ -1,12 +1,25 @@
 {
   "scripts": {
     "build": "webpack --env.node",
-    "start": "webpack-dev-server --env.webchat"
+    "start": "webpack-dev-server --env.webchat",
+    "test": "jest"
+  },
+  "jest": {
+    "rootDir": "tests",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@botonic).+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   },
   "dependencies": {
     "@botonic/react": "0.7.0"
   },
   "devDependencies": {
+    "babel-jest": "^24.1.0",
+    "jest": "^24.1.0",
     "terser": "^3.14.1",
     "terser-webpack-plugin": "^1.2.1",
     "@babel/core": "^7.1.0",
