@@ -1,6 +1,10 @@
-export const isBrowser = () => typeof window !== 'undefined'
+export const isBrowser = () => {
+  return typeof window !== 'undefined' && !window.process
+}
 
-export const isNode = () => !isBrowser() && typeof process !== 'undefined'
+export const isNode = () => {
+  return !isBrowser() && typeof process !== 'undefined'
+}
 
 export const params2queryString = params =>
   Object.entries(params)
