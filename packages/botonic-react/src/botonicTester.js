@@ -15,7 +15,7 @@ export class BotonicInputTester {
       session: session,
       lastRoutePath: lastRoutePath
     })
-    return res.response
+    return decode(res.response)
   }
 
   async payload(inp, session = {}, lastRoutePath = '') {
@@ -24,7 +24,7 @@ export class BotonicInputTester {
       session: session,
       lastRoutePath: lastRoutePath
     })
-    return res.response
+    return decode(res.response)
   }
 
   async path(inp, session = {}, lastRoutePath = '') {
@@ -33,7 +33,7 @@ export class BotonicInputTester {
       session: session,
       lastRoutePath: lastRoutePath
     })
-    return res.response
+    return decode(res.response)
   }
 }
 
