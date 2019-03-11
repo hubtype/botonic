@@ -24,7 +24,7 @@ export class Router {
           the general conf.route
         */
       brokenFlow = Boolean(lastRoutePath)
-      routeParams = this.getRoute(input, this.routes)
+      routeParams = this.getRoute(input, this.routes, session)
     }
     try {
       if (path_params.length > 1) {
@@ -121,7 +121,7 @@ export class Router {
     }
   }
 
-  getRoute(input, routes) {
+  getRoute(input, routes, session) {
     /*
         Find the input throw the routes, if it match with some of the entries,
         return the hole Route of the entry with optional params (used in regEx)
@@ -131,7 +131,7 @@ export class Router {
       Object.entries(r)
         .filter(([key, {}]) => key != 'action' && key != 'childRoutes')
         .some(([key, value]) => {
-          let match = this.matchRoute(key, value, input)
+          let match = this.matchRoute(key, value, input, session)
           try {
             params = match.groups
           } catch (e) {}
@@ -161,9 +161,9 @@ export class Router {
     return null
   }
 
-  matchRoute(prop, matcher, input) {
+  matchRoute(prop, matcher, input, session) {
     /*
-        prop: ('text' | 'payload' | 'intent' | 'type' | 'input' |...)
+        prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' |...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
         input: user input object, ex: {type: 'text', data: 'Hi'}
       */
@@ -172,6 +172,7 @@ export class Router {
     if (prop == 'text') {
       if (input.type == 'text') value = input.data
     } else if (prop == 'input') value = input
+    else if (prop == 'session') value = session
     if (typeof matcher === 'string') return value == matcher
     if (matcher instanceof RegExp) return matcher.exec(value)
     if (typeof matcher === 'function') return matcher(value)
