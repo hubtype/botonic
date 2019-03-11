@@ -8,6 +8,8 @@ import { Text } from './components/text'
 import { Handoff } from './components/handoff'
 
 class WebchatHeader extends React.Component {
+    static contextType = WebchatContext
+
     render() {
         return (
             <div
@@ -25,7 +27,7 @@ class WebchatHeader extends React.Component {
                         height: 24,
                         margin: '0px 12px'
                     }}
-                    src={Logo}
+                    src={this.context.getStaticAssetsUrl + Logo}
                 />
                 <h4
                     style={{
@@ -286,13 +288,19 @@ export class Webchat extends React.Component {
     }
 
     render() {
+        var scriptBaseUrl = document
+            .querySelector('script[src$="webchat.botonic.js"]')
+            .getAttribute('src')
+        var scriptName = scriptBaseUrl.split('/').pop()
+        scriptBaseUrl = scriptBaseUrl.replace('/' + scriptName, '/')
         let webchatContext = {
             sendText: this.sendText.bind(this),
             sendPayload: this.sendPayload.bind(this),
             setReplies: this.setReplies.bind(this),
             openWebview: this.openWebview.bind(this),
             closeWebview: this.closeWebview.bind(this),
-            resolveCase: this.resolveCase.bind(this)
+            resolveCase: this.resolveCase.bind(this),
+            getStaticAssetsUrl: scriptBaseUrl
         }
 
         let webviewRequestContext = {
