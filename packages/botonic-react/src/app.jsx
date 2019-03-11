@@ -8,16 +8,18 @@ import { Webchat } from './webchat'
 import { RequestContext } from './contexts'
 import { Text } from './components/text'
 
+function isFunction(o){
+    return typeof o === 'function'
+}
+
 export class App {
     constructor({ routes, locales, integrations }) {
         this.rootElement = null
-        this.routes = [
-            ...routes,
-            {path: '404', action: () => <Text>I don't understand you</Text> }
-        ]
+        this.routes = routes
+        this.defaultRoutes = { path: '404', action: () => <Text>I don't understand you</Text> }
         this.locales = locales
         this.integrations = integrations
-        this.router = new Router(this.routes)
+        this.router = isFunction(this.routes) ? null : new Router([...this.routes, this.defaultRoutes])
     }
 
     getString(stringID, session) {
@@ -45,6 +47,11 @@ export class App {
                 Object.assign(input, nlu)
             } catch (e) {}
         }
+                
+        if(isFunction(this.routes)){
+            this.router = new Router([...this.routes(input, session), this.defaultRoutes])
+        }
+        
         let output = this.router.processInput(input, session, lastRoutePath)
         let Action = output.action
         let RetryAction = output.retryAction
