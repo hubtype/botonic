@@ -55,6 +55,10 @@ Creating...
     {
       name: 'intent',
       description: 'Intent: Integrate NLU and see the magic!'
+    },
+    {
+      name: 'custom_webchat',
+      description: 'Custom Webchat: See how it looks like a custom webchat'
     }
   ]
 
