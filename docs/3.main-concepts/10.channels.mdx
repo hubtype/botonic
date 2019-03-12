@@ -1,0 +1,63 @@
+---
+name: 10. Channels
+route: /main-concepts/channels
+menu: 3. Main Concepts
+---
+
+# **Channels Integrations**
+
+## Facebook Messenger
+
+Facebook Messenger is one of the best messenger platforms for deploying chatbots.
+It has a huge different types of [RCML](/main-concepts/rich-conversational-markup-language).
+With Hubtype, you can integrate your chatbot in a facebook webpage with a single click.
+
+Once your bot is deployed, you need to login into your Hubtype account in `https://app.hubtype.com/`. Then go to your bot section (in the left pannel), and click Integrations.
+
+Click the Facebook option, and just follow the three steps instructions. When you finally click `Connect Page`, it will immediately connect your bot with that Facebook Page.
+
+<img
+    src="https://botonic-doc-static.netlify.com/images/fb_channel.png"
+    style={{ display: 'block', margin: 'auto', 'max-width': '60%' }}
+/>
+
+## Telegram
+
+As seen in Facebook Messenger integration, we need to login into `https://app.hubtype.com/` when your bot is deployed.
+Then, you just need to click into the Telegram option.
+
+For connecting Telegram, you need to create a Bot from Telegram app.
+Finally, you just need to add the bot username, the token and press the `Connect` bot button.
+
+<img
+    src="https://botonic-doc-static.netlify.com/images/tg_channel.png"
+    style={{ display: 'block', margin: 'auto', 'max-width': '60%' }}
+/>
+
+## Twitter
+
+When your bot is deployed, login into `https://app.hubtype.com/`, click the Twitter option, and follow the integration steps required.
+
+One important limitation in the Twitter integration is that in your Twitter App you can only have a unique webhook per environment. So it's important to check this option when you want to integrate your bot into your Twitter App.
+
+<img
+    src="https://botonic-doc-static.netlify.com/images/twitter_channel.png"
+    style={{ display: 'block', margin: 'auto', 'max-width': '60%' }}
+/>
+
+## Webchat
+
+With the webchat integration, you can integrate your chatbot in your personal webpage.
+This integration is 100% editable, meaning that you can display all the messages with your own style.
+
+When you have deployed your bot and logged in `https://app.hubtype.com/`, you only have to click into the Webchat option, introduce a name for this integration ( because you can have multiple webchat integrations with the same bot ), and click `Enable Webchat`.
+
+Then, a HTML code is displayed. This code has to be injected in your webpage.
+Notice that the script has to be injected in the `header` tag, and the initialization of the bot must be in the `body` tag.
+
+You can take a look of a full example in [Custom Webchat](/tutorials-and-examples/custom-webchat).
+
+<img
+    src="https://botonic-doc-static.netlify.com/images/webchat_channel.png"
+    style={{ display: 'block', margin: 'auto', 'max-width': '60%' }}
+/>

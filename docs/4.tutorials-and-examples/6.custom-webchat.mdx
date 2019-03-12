@@ -1,0 +1,115 @@
+---
+name: 6. Custom Webchat
+route: /tutorials-and-examples/custom-webchat
+menu: 4. Tutorials & Examples
+---
+
+# **Custom Webchat**
+
+[View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/custom_webchat)
+
+This template shows how to create custom elements for webchat. All the custom components are stored inside the folder webchat, in `src/webchat`.
+
+**src/webchat/index.js**
+
+```javascript
+import Logo from '../assets/bot_vader.jpg'
+import { MyReply } from './myReply'
+
+export const theme = {
+  brandColor: '#ff0000',
+  textPlaceholder: 'Please, type your message:',
+  title: 'Custom Webchat',
+  brandIconUrl: Logo,
+  customReply: MyReply
+}
+```
+
+This is the main file of the webchat config. In this file, we export all the options that are going to be changed of the default webchat config.
+
+This are the available options that Botonic allows you to modify:
+
+- **brandColor:** the main color of the webchat widget.
+
+* **textPlaceholder:** text placeholder in the input text.
+
+- **title:** the title it's dsiplayed in the header of the widget.
+
+* **brandIconUrl:** it can be a http url, or an image. It's the image displayed in the header.
+
+- **customReply:** React Component that describes how the quickreplies are shown.
+
+* **customButton:** React Component that describes how the button is displayed.
+
+- **customHeader:** React Component that is injected in the Header of the widget.
+
+Now that we know all the options that we can use, let's see some examples.
+
+**src/webchat/myReply.js**
+
+```javascript
+import React from 'react'
+
+export const MyReply = props => (
+  <div
+    style={{
+      color: '#3333cc',
+      border: '2px solid red',
+      backgroundColor: 'pink',
+      borderRadius: 15,
+      padding: 5,
+      cursor: 'pointer'
+    }}
+  >
+    {props.children}
+  </div>
+)
+```
+
+In this example, we are giving the css style into a custom quickreply.
+It's very important to put `{props.children}` inside the container, in this case the `<div>` tag.
+
+**src/webchat/myHeader.js**
+
+```javascript
+import Logo from '../assets/bot_vader.jpg'
+import React from 'react'
+
+export const MyHeader = props => (
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      backgroundColor: 'pink',
+      color: 'saddlebrown'
+    }}
+  >
+    <img
+      style={{
+        height: 24,
+        margin: '0px 12px'
+      }}
+      src={Logo}
+    />
+    <h2
+      style={{
+        margin: 0,
+        fontFamily: 'Arial, Helvetica, sans-serif'
+      }}
+    >
+      Custom Webchat Title
+    </h2>
+  </div>
+)
+```
+
+This is an example of a custom Header for our webchat. We can put all the fancy css styles we want.
+This is a static object, so it's not applied in any [RCML](/main-concepts/rich-conversational-markup-language) component, so we don't have to put `{props.children}` inside any container.
+
+All this changes it can be tested using the `botonic serve` command. This is how it looks like.
+
+<img
+  src="https://botonic-doc-static.netlify.com/images/webchat_example.png"
+  style={{ display: 'block', margin: 'auto', 'max-width': '100%' }}
+/>
