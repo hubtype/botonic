@@ -34,49 +34,56 @@ import React from 'react'
 import { Text, RequestContext } from '@botonic/react'
 
 export default class extends React.Component {
-    static contextType = RequestContext
+  static contextType = RequestContext
 
-    static async botonicInit({ input, session, params, lastRoutePath }) {
-        session.name = 'John Doe' // <-- Variable stored in session
-        var reminder = 'Mathematics'
-        return {reminder} // <-- Variable to be used locally
-    }
+  static async botonicInit({ input, session, params, lastRoutePath }) {
+    session.name = 'John Doe' // <-- Variable stored in session
+    var reminder = 'Mathematics'
+    return { reminder } // <-- Variable to be used locally
+  }
 
-    render() {
-        return (
-            <>
-                <Text>
-                    Hi {this.context.session.name}, I really like your history!
-                </Text>
-                <Text>
-                    By the way, do you remember that today you have the lesson of {this.props.reminder}?
-                </Text>
-            </>
-        )
-    }
+  render() {
+    return (
+      <>
+        <Text>Hi {this.context.session.name}, I really like your history!</Text>
+        <Text>
+          By the way, do you remember that today you have the lesson of{' '}
+          {this.props.reminder}?
+        </Text>
+      </>
+    )
+  }
 }
 ```
+
 This will produce the following output in Facebook Messenger:
-<img src="https://botonic-doc-static.netlify.com/images/john_doe.png" style={{display: 'block', margin: 'auto', 'max-width': '100%'}}/>
+
+<img
+  src="https://botonic-doc-static.netlify.com/images/john_doe.png"
+  style={{ display: 'block', margin: 'auto', maxWidth: '100%' }}
+/>
 
 ## Data persistance
+
 We can access to different type of information inside the `botonicInit` function.
+
 - **input:** the type of data and the user input.  
-`{'type': 'text', 'data': 'Hello, it's my first interaction'}`
+  `{'type': 'text', 'data': 'Hello, it's my first interaction'}`
 - **session**: the session is a group of variables that is always available at any action of the bot. It's recalculated every time there is an user input, so if a variable is updated in any state of the bot, this variable is going to be available and updated in all the others actions.
 - **params**: when a [Button](/main-concepts/rich-conversational-markup-language) redirects you to an action, you can pass attributes to that action. The params store this information.
 - **lastRoutePath**: the last path that the user has go through.
 
-The `render()` is the function that describes what it will be returned as an output of the bot using [RCML](/api/rich-conversational-markup-language). All the variables returned in `botonicInit` are stored in `{this.props}`. In this example, you can see two ways of retrieving these variables, in order of appearance:  
--  **from session:** which is always available, as mentioned
--  **as a local variable:** variables returned in `botonicInit` are accessible only in the current action
+The `render()` is the function that describes what it will be returned as an output of the bot using [RCML](/api/rich-conversational-markup-language). All the variables returned in `botonicInit` are stored in `{this.props}`. In this example, you can see two ways of retrieving these variables, in order of appearance:
 
+- **from session:** which is always available, as mentioned
+- **as a local variable:** variables returned in `botonicInit` are accessible only in the current action
 
 ## Complex actions
 
 The essential purpose of Botonic is having the full control of the bot. By this way, you can enable [ExternalCalls](#ExternalCalls) with `botonicInit({ input, session, params, lastRoutePath })` method and allowing the [HumanHandoff](#humanhandoff) or [Internationalization](#internationalization) in an easy way.
 
 #### ExternalCalls
+
 ```javascript
 import React from 'react'
 import fetch from 'isomorphic-fetch'
@@ -86,12 +93,17 @@ export default class extends React.Component {
   static contextType = RequestContext
 
   static async botonicInit({ input, session, params, lastRoutePath }) {
-    const api_key = "uid8900-40385330-57"
-    const url = 'http://api.shopstyle.com/api/v2/products?pid='+api_key+'&fts='+input.data+'&offset=0&limit=5'
-    const res = await fetch(url,{
-      'url': url,
-      'method': 'GET',
-      'params': {}
+    const api_key = 'uid8900-40385330-57'
+    const url =
+      'http://api.shopstyle.com/api/v2/products?pid=' +
+      api_key +
+      '&fts=' +
+      input.data +
+      '&offset=0&limit=5'
+    const res = await fetch(url, {
+      url: url,
+      method: 'GET',
+      params: {}
     })
 
     session.resp = await res.json()
@@ -100,11 +112,11 @@ export default class extends React.Component {
   render() {
     return (
       <>
-        {this.context.session.resp.products.map((e, i) =>
-            <Text key={i}>
-              Product: {e.name}, Price: {e.priceLabel}
-            </Text>
-        )}
+        {this.context.session.resp.products.map((e, i) => (
+          <Text key={i}>
+            Product: {e.name}, Price: {e.priceLabel}
+          </Text>
+        ))}
       </>
     )
   }
@@ -112,10 +124,13 @@ export default class extends React.Component {
 ```
 
 > #### NOTE:
+>
 > In order to import the `fetch` function from `isomorphic-fetch`, you need to install it into your bot. Please do: `npm install isomorphic-fetch`
 
 #### HumanHandoff
+
 See the section [Human Handoff](/main-concepts/human-handoff) for further information.
 
 #### Internationalization
-See the section [i18n](/main-concepts/i18n) for further information. 
+
+See the section [i18n](/main-concepts/i18n) for further information.

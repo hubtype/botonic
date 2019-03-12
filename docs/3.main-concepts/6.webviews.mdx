@@ -13,13 +13,15 @@ One simple example could be the posibility of creating a webview for picking dif
 With Botonic, it's easier to create webview than developing by your own a webpage and integrate it with the Facebook app, insert the Facebook SDK, keep the bot conversation flow, etc.
 
 ## Structure of webviews directory
+
 All the code related to webviews resides into its respective `src/webviews` directory. These are the essential elements it has to contain:
+
 - **index.js**: in index.js is where we define all the React Components inside the class WebviewApp. Additionaly, it includes in its constructor method, a way of defining the locales object from the bot.
 - **componentA.js**: simple React Components you develop.
 
 > #### NOTE:
+>
 > The main purpose of this structure is that you don't have to worry about the communication between the bot and the webviews, in order that you can focus just on adding new components to index.js and developing new components, so if you do any modifications, do it at your own risk!
-
 
 ## **Steps**
 
@@ -35,7 +37,7 @@ We can pass params into the new component as shown below.
 
 ```javascript
 import React from 'react'
-import { 
+import {
   Text,
   Carousel,
   Element,
@@ -48,31 +50,33 @@ import {
 import Example from '../webviews/example'
 
 export default class extends React.Component {
-
-    render() {
-        //Here we render a Facebook Carousel with its propers assets and url routes for the webview
-        return (
-            <>
-              <Text>
-                  Here I lend you some options of how helpful the use of Facebook webviews could be.
-              </Text>
-              <Carousel>
-                  <Element>
-                      <Pic src='https://botonic.io/images/botonic_react_logo-p-500.png' />
-                      <Title>Interacting with the bot</Title>
-                      <Subtitle>See how the communication bot-webview is done</Subtitle>
-                      <Button webview={Example} params={{ hola: 1 }}>Go</Button>
-                  </Element>
-              </Carousel>
-            </>
-        )
-    }
+  render() {
+    //Here we render a Facebook Carousel with its propers assets and url routes for the webview
+    return (
+      <>
+        <Text>
+          Here I lend you some options of how helpful the use of Facebook
+          webviews could be.
+        </Text>
+        <Carousel>
+          <Element>
+            <Pic src="https://botonic.io/images/botonic_react_logo-p-500.png" />
+            <Title>Interacting with the bot</Title>
+            <Subtitle>See how the communication bot-webview is done</Subtitle>
+            <Button webview={Example} params={{ hola: 1 }}>
+              Go
+            </Button>
+          </Element>
+        </Carousel>
+      </>
+    )
+  }
 }
 ```
 
->#### NOTE:
+> #### NOTE:
+>
 > You can also set the [dimensions](https://developers.facebook.com/docs/messenger-platform/webview/#height) of the webview (available on Messenger phone version).
-
 
 ## Creating a component
 
@@ -81,8 +85,8 @@ First of all, we create a new component inside `src/webviews`.
 **src/webviews/Example.js**
 
 ```javascript
-import React from "react";
-import { RequestContext } from "@botonic/react";
+import React from 'react'
+import { RequestContext } from '@botonic/react'
 
 export default class Example extends React.Component {
   //for further information, see: https://reactjs.org/docs/getting-started.html
@@ -109,10 +113,10 @@ export default class Example extends React.Component {
 }
 ```
 
->#### NOTE:
->The closeWebview function allows you to send data back to the bot in order to continue with the conversation flow.
-In this example, you can see that we have a button, and when it's triggered we send the `path` to the bot with a parambs object which contains a new Date.
-
+> #### NOTE:
+>
+> The closeWebview function allows you to send data back to the bot in order to continue with the conversation flow.
+> In this example, you can see that we have a button, and when it's triggered we send the `path` to the bot with a parambs object which contains a new Date.
 
 ## Adding components into routes
 
@@ -129,11 +133,16 @@ const webviews = [Example]
 export default new WebviewApp({ webviews, locales })
 ```
 
-*This an element to invoke the webview:*
-<img src="https://botonic-doc-static.netlify.com/images/webview_carrousel.png" style={{display: 'block', margin: 'auto', 'max-width': '60%'}}/>
+_This an element to invoke the webview:_
 
-*This is how it looks the webview on Facebook Messenger:*
-<img src="https://botonic-doc-static.netlify.com/images/webview_view.png" style={{display: 'block', margin: 'auto', 'max-width': '50%'}}/>
+<img
+  src="https://botonic-doc-static.netlify.com/images/webview_carrousel.png"
+  style={{ display: 'block', margin: 'auto', maxWidth: '60%' }}
+/>
 
+_This is how it looks the webview on Facebook Messenger:_
 
-
+<img
+  src="https://botonic-doc-static.netlify.com/images/webview_view.png"
+  style={{ display: 'block', margin: 'auto', maxWidth: '50%' }}
+/>

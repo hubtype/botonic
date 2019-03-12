@@ -191,7 +191,7 @@ const botonicServerConfig = {
 
 module.exports = function(env) {
   if (env.node) {
-    return [botonicServerConfig, botonicWebviewsConfig]
+    return [botonicServerConfig, botonicWebviewsConfig, botonicWebchatConfig]
   } else if (env.webchat) {
     return [botonicWebchatConfig]
   }
