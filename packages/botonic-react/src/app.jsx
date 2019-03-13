@@ -13,13 +13,14 @@ function isFunction(o){
 }
 
 export class App {
-    constructor({ routes, locales, integrations }) {
+    constructor({ routes, locales, integrations, plugins=null }) {
         this.rootElement = null
         this.routes = routes
         this.defaultRoutes = { path: '404', action: () => <Text>I don't understand you</Text> }
         this.locales = locales
         this.integrations = integrations
         this.router = isFunction(this.routes) ? null : new Router([...this.routes, this.defaultRoutes])
+        this.plugins = plugins
     }
 
     getString(stringID, session) {
@@ -41,7 +42,21 @@ export class App {
     async input({ input, session, lastRoutePath }) {
         session = session || {}
         if (!session.__locale) session.__locale = 'en'
-        if (this.integrations && input.type == 'text') {
+        
+        if(this.plugins){
+            let pluginsLength = this.plugins.length
+            for(let i = 0; i < pluginsLength; i++){   
+                let pluginRequired = this.plugins[i].resolve
+                let options = this.plugins[i].options
+                try {
+                    let Plugin = (pluginRequired).default
+                    let p = new Plugin(options)
+                    await p.pre({ input, session, lastRoutePath })
+                } catch(e) {
+                    console.log(e)
+                }
+            }
+        } else if(this.integrations && input.type == 'text') {
             try {
                 let nlu = await getNLU(input, this.integrations)
                 Object.assign(input, nlu)
@@ -74,6 +89,7 @@ export class App {
         if (DefaultAction && DefaultAction.botonicInit) {
             defaultProps = await DefaultAction.botonicInit(req)
         }
+
         let request = {
             getString: stringId => this.getString(stringId, session),
             setLocale: locale => this.setLocale(locale, session),
@@ -89,9 +105,28 @@ export class App {
                 {DefaultAction && <DefaultAction {...defaultProps} />}
             </RequestContext.Provider>
         )
+        
         let response = null
         if (isBrowser()) response = component
         else response = ReactDOMServer.renderToStaticMarkup(component)
-        return { response, session, lastRoutePath: output.lastRoutePath }
+        
+        lastRoutePath = output.lastRoutePath
+        
+        if(this.plugins){
+            let pluginsLength = this.plugins.length
+            for(let i = 0; i < pluginsLength; i++){   
+                let pluginRequired = this.plugins[i].resolve
+                let options = this.plugins[i].options
+                try {
+                    let Plugin = (pluginRequired).default
+                    let p = new Plugin(options)
+                    await p.post({ input, session, lastRoutePath, response })
+                } catch(e) {
+                    console.log(e)
+                }
+            }
+        }
+
+        return { response, session, lastRoutePath }
     }
 }
