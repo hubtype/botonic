@@ -13,7 +13,7 @@ function isFunction(o) {
 }
 
 export class App {
-    constructor({ routes, locales, integrations, plugins = null, theme }) {
+    constructor({ routes, locales, integrations, theme, plugins }) {
         this.rootElement = null
         this.routes = routes
         this.defaultRoutes = {
