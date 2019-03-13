@@ -2,13 +2,11 @@ import Logo from '../assets/bot_vader.jpg'
 import React from 'react'
 
 export const MyHeader = props => {
-	console.log('HEADERRRR')
 	var scriptBaseUrl = document
 		.querySelector('script[src$="webchat.botonic.js"]')
 		.getAttribute('src')
 	var scriptName = scriptBaseUrl.split('/').pop()
 	scriptBaseUrl = scriptBaseUrl.replace('/' + scriptName, '/')
-	console.log('ueuuee', scriptBaseUrl)
 	return (
 		<div
 			style={{

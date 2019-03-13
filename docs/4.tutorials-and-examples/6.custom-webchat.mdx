@@ -115,6 +115,21 @@ export const MyHeader = props => {
 This is an example of a custom Header for our webchat. We can put all the fancy css styles we want.
 This is a static object, so it's not applied in any [RCML](/main-concepts/rich-conversational-markup-language) component, so we don't have to put `{props.children}` inside any container.
 
+The last thing we need to do, is to import all this custom components into our bot.
+
+**src/app.js**
+
+```javascript
+import { App } from '@botonic/react'
+
+import { routes } from './routes'
+import { locales } from './locales'
+import { integrations } from './integrations'
+import { theme } from './webchat'
+
+export default new App({ routes, locales, integrations, theme })
+```
+
 All this changes it can be tested using the `botonic serve` command. This is how it looks like.
 
 <img
