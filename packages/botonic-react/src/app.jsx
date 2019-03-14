@@ -8,9 +8,8 @@ import { Webchat } from './webchat'
 import { RequestContext } from './contexts'
 import { Text } from './components/text'
 
-function isFunction(o) {
-    return typeof o === 'function'
-}
+import { isFunction, runPlugins } from './utils'
+
 
 export class App {
     constructor({ routes, locales, integrations, theme, plugins }) {
@@ -55,18 +54,7 @@ export class App {
         if (!session.__locale) session.__locale = 'en'
 
         if (this.plugins) {
-            let pluginsLength = this.plugins.length
-            for (let i = 0; i < pluginsLength; i++) {
-                let pluginRequired = this.plugins[i].resolve
-                let options = this.plugins[i].options
-                try {
-                    let Plugin = pluginRequired.default
-                    let p = new Plugin(options)
-                    await p.pre({ input, session, lastRoutePath })
-                } catch (e) {
-                    console.log(e)
-                }
-            }
+            await runPlugins(this.plugins, 'pre', input, session, lastRoutePath )
         } else if (this.integrations && input.type == 'text') {
             try {
                 let nlu = await getNLU(input, this.integrations)
@@ -76,7 +64,7 @@ export class App {
 
         if (isFunction(this.routes)) {
             this.router = new Router([
-                ...this.routes(input, session),
+                ...this.routes({ input, session }),
                 this.defaultRoutes
             ])
         }
@@ -127,18 +115,7 @@ export class App {
         lastRoutePath = output.lastRoutePath
 
         if (this.plugins) {
-            let pluginsLength = this.plugins.length
-            for (let i = 0; i < pluginsLength; i++) {
-                let pluginRequired = this.plugins[i].resolve
-                let options = this.plugins[i].options
-                try {
-                    let Plugin = pluginRequired.default
-                    let p = new Plugin(options)
-                    await p.post({ input, session, lastRoutePath, response })
-                } catch (e) {
-                    console.log(e)
-                }
-            }
+            await runPlugins(this.plugins, 'post', input, session, lastRoutePath, response )
         }
 
         return { response, session, lastRoutePath }
