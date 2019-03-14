@@ -19,7 +19,7 @@ export default class Run extends Command {
   private botonic: any
 
   async run() {
-    track('botonic_serve')
+    track('Served Botonic CLI')
     const { args, flags } = this.parse(Run)
 
     try {
