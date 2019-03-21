@@ -44,11 +44,12 @@ export const routes = [
 Conceptually, a route is composed by a matching rule and an action. A matching rule looks like this: `{attribute: test}`,  
 which basically means: "take that attribute from the user input and apply the test" if test passes, the action defined in that route will be triggered.
 
-There are 4 different ways of passing these tests:
+There are 5 different ways of passing these tests:
 * **String:** Perfect match
 * **Regexp:** Pass the regular expression
 * **Function:** Passes if the function returns true
-* **Input:** Passes if the condition is met
+* **Input:** Passes if the input satisfies the condition
+* **Session:** Passes if the condition of the session is met
 
 The rules will be tested in order so if the 1st rule matches, Botonic won't test
 other routes and will execute the 1st action.
@@ -89,6 +90,10 @@ It is posible to use a function test to capture any text that starts with `bye`
 You can move to a new action if a condition over the user input is met
 ```javascript
 {path: 'greet', input: (i) => i.type === 'text' && i.intent === 'greetings', action: Greet}
+```  
+Otherwise, you can move forward to new actions depending on session values
+```javascript
+{ path: 'promotion', session: (s) => s.user.id < 150000, action: Promotion }
 ```
 Below, we see how to captures different intents (enable the Dialogflow integration)
 ```javascript
@@ -100,4 +105,24 @@ There's an implicit rule that captures any other input and maps it to
 the `404` action, it would be equivalent to:
 ```javascript
 {path: '404', type: /^.*$/, action: NotFound}
+```
+
+## Dynamic Routes
+At times, you might want to render only some routes in function of a certain condition, 
+so you can define optionally them as a function receiving the input and the session object.
+
+```javascript
+import { MainFlowRoutes } from './actions/main_flow/main_flow.routes'
+
+export function routes(input, session) {
+  if (session.is_first_interaction) {
+    return [
+      {
+        path: 'userWelcome',
+        text: /.*/,
+        action: UserWelcome
+      }
+    ]
+  } else return [ ...MainFlowRoutes ]  
+}
 ```
