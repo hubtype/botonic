@@ -200,6 +200,7 @@ export class Webchat extends React.Component {
         webview: null,
         webviewParams: null,
         session: {
+            is_first_interaction: true,
             last_session: {},
             user: {
                 id: '000001',
