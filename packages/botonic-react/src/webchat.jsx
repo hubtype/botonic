@@ -176,7 +176,7 @@ export class Webchat extends React.Component {
     constructor(props) {
         super(props)
         this.pusher = new Pusher('da85029877df0c827e44')
-        this.appId = this.props.botonicApp.appId
+        this.appId = props.botonicApp.appId
         this.userId = this.getUserUUID()
         this.subscribePusher(this.pusher)
     }
