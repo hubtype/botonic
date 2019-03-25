@@ -1,33 +1,35 @@
 import React from 'react'
-import { Message} from './message'
+import { Message } from './message'
 import { isBrowser, isNode } from '@botonic/core'
 
-
-export class WhatsappTemplate extends React.Component {
-    // name, namespace and parameters []
-    render() {
-        if (isBrowser()) return this.renderBrowser()
-        else if (isNode()) return this.renderNode()
+export const WhatsappTemplate = props => {
+  const renderBrowser = () => {
+    var params = ''
+    for (var param in props.parameters) {
+      params = params + " '" + props.parameters[param] + "', "
     }
+    // Return a dummy message for browser
+    return (
+      <Message {...props} type='text'>
+        Template {props.name} would be send to the user with parameters:"
+        {params} and namespace {props.namespace}
+      </Message>
+    )
+  }
 
-    renderBrowser() {
-        var params = ""
-        for (var param in this.props.parameters) {
-            params = params + " '" + this.props.parameters[param] + "', "
-        }
-        // Return a dummy message for browser
-        return (
-            <Message {...this.props} type="text">Template {this.props.name} would be send to the user with parameters:"{params} and namespace {this.props.namespace}</Message>
-        )
+  const renderNode = () => {
+    var params = ''
+    for (var param in props.parameters) {
+      params = params + ', ' + props.parameters[param]
     }
+    return (
+      <Message {...props} type='text'>
+        &[Fallback text]({props.namespace}, {props.name}
+        {params})
+      </Message>
+    )
+  }
 
-    renderNode(){
-        var params = ""
-        for (var param in this.props.parameters) {
-            params = params + ", " + this.props.parameters[param]
-        }
-        return(
-            <Message {...this.props} type="text">&[Fallback text]({this.props.namespace}, {this.props.name}{params})</Message>
-        )
-    }
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
 }

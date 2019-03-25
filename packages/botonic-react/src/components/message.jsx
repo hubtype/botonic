@@ -1,159 +1,130 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 
-export class Message extends React.Component {
-    static contextType = WebchatContext
-    static defaultProps = {
-        type: '',
-        from: 'bot'
-    }
+export const Message = props => {
+  const {
+    type = '',
+    from = 'bot',
+    delay = 0,
+    typing = 0,
+    children,
+    ...otherProps
+  } = props
 
-    state = {
-        isDelaying: false,
-        isTyping: false,
-        delay: 0,
-        typing: 0
-    }
+  const { webchatState, addMessage, updateReplies } = useContext(WebchatContext)
+  const [state, setState] = useState({
+    id: Math.random()
+  })
 
-    setReplies() {
-        let replies = React.Children.toArray(this.props.children).filter(
-            e => e.type === Reply
-        )
-        this.context.setReplies(replies)
-    }
+  const replies = React.Children.toArray(children).filter(e => e.type === Reply)
+  const buttons = React.Children.toArray(children).filter(
+    e => e.type === Button
+  )
+  const textChildren = React.Children.toArray(children).filter(
+    e => ![Button, Reply].includes(e.type)
+  )
 
-    componentDidMount() {
-        let delay = Number(this.props.delay) // TODO: this.context.defaultDelay
-        let typing = Number(this.props.typing) // TODO: this.context.defaultTyping
-        if (delay > 0) this.startDelay(delay, typing)
-        else if (typing > 0) this.startTyping(typing)
-        else this.setReplies()
-    }
+  if (isBrowser()) {
+    useEffect(() => {
+      let message = {
+        id: state.id,
+        type,
+        data: textChildren,
+        from,
+        delay,
+        typing,
+        replies: replies.map(r => ({ payload: r.payload, text: r.children })),
+        display: delay + typing == 0
+      }
+      addMessage(message)
+    }, [])
 
-    startDelay(delay, typing) {
-        this.setState({ ...this.state, isDelaying: true })
-        setTimeout(() => {
-            if (typing > 0) {
-                this.startTyping(typing)
-            } else {
-                this.setReplies()
-                this.setState({ ...this.state, isDelaying: false })
-            }
-        }, delay * 1000)
-    }
+    useEffect(() => {
+      let msg = webchatState.messagesJSON.find(m => m.id === state.id)
+      if (
+        msg &&
+        msg.display &&
+        webchatState.messagesJSON.filter(m => !m.display).length == 0
+      ) {
+        updateReplies(replies)
+      }
+    }, [webchatState.messagesJSON])
+  }
 
-    startTyping(typing) {
-        this.setState({ ...this.state, isDelaying: false, isTyping: true })
-        setTimeout(() => {
-            this.setState({
-                ...this.state,
-                isTyping: false
-            })
-            this.setReplies()
-        }, typing * 1000)
-    }
+  const isFromUser = () => from === 'user'
+  const isFromBot = () => from === 'bot'
+  const getBgColor = () =>
+    isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
 
-    isFromUser() {
-        return this.props.from === 'user'
+  const renderBrowser = () => {
+    let m = webchatState.messagesJSON.find(m => m.id === state.id)
+    if (!m || !m.display) return <></>
+    let pointerSize = 6
+    let pointerStyles = {
+      position: 'absolute',
+      top: '50%',
+      width: 0,
+      height: 0,
+      border: `${pointerSize}px solid transparent`,
+      marginTop: -pointerSize
     }
+    return (
+      <div
+        style={{
+          position: 'relative',
+          alignSelf: isFromUser() ? 'flex-end' : 'flex-start',
+          margin: 8,
+          maxWidth: '60%',
+          backgroundColor: getBgColor(),
+          color: isFromUser() ? '#fff' : '#000',
+          fontFamily: 'Arial, Helvetica, sans-serif',
+          borderRadius: 8
+        }}
+        {...otherProps}
+      >
+        <div
+          style={{
+            padding: '8px 12px',
+            display: 'flex',
+            flexDirection: 'column',
+            whiteSpace: 'pre-line'
+          }}
+        >
+          {textChildren}
+        </div>
+        {buttons}
+        {isFromUser() && (
+          <div
+            style={{
+              ...pointerStyles,
+              right: 0,
+              borderRight: 0,
+              borderLeftColor: getBgColor(),
+              marginRight: -pointerSize
+            }}
+          />
+        )}
+        {isFromBot() && (
+          <div
+            style={{
+              ...pointerStyles,
+              left: 0,
+              borderLeft: 0,
+              borderRightColor: getBgColor(),
+              marginLeft: -pointerSize
+            }}
+          />
+        )}
+      </div>
+    )
+  }
 
-    isFromBot() {
-        return this.props.from === 'bot'
-    }
+  const renderNode = () => <message {...props}>{children}</message>
 
-    getBgColor() {
-        return this.isFromUser() ? this.context.theme.brandColor : '#F1F0F0'
-    }
-
-    render() {
-        if (isBrowser()) return this.renderBrowser()
-        else if (isNode()) return this.renderNode()
-    }
-
-    renderBrowser() {
-        //if(this.state.isDelaying)
-        //    return <></>
-        const buttons = React.Children.toArray(this.props.children).filter(
-            e => e.type === Button
-        )
-        let textChildren = React.Children.toArray(this.props.children).filter(
-            e => ![Button, Reply].includes(e.type)
-        )
-        //if(this.state.isTyping)
-        //    textChildren = 'typing...'
-        let pointerSize = 6
-        let pointerStyles = {
-            position: 'absolute',
-            top: '50%',
-            width: 0,
-            height: 0,
-            border: `${pointerSize}px solid transparent`,
-            marginTop: -pointerSize
-        }
-        return (
-            <div
-                style={{
-                    position: 'relative',
-                    alignSelf: this.isFromUser() ? 'flex-end' : 'flex-start',
-                    margin: 8,
-                    maxWidth: '60%',
-                    backgroundColor: this.getBgColor(),
-                    color: this.isFromUser() ? '#fff' : '#000',
-                    fontFamily: 'Arial, Helvetica, sans-serif',
-                    borderRadius: 8
-                }}
-                {...this.props}
-            >
-                <div
-                    style={{
-                        padding: '8px 12px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        whiteSpace: 'pre-line'
-                    }}
-                >
-                    {textChildren}
-                </div>
-                {buttons}
-                {this.isFromUser() && (
-                    <div
-                        style={{
-                            ...pointerStyles,
-                            right: 0,
-                            borderRight: 0,
-                            borderLeftColor: this.getBgColor(),
-                            marginRight: -pointerSize
-                        }}
-                    />
-                )}
-                {this.isFromBot() && (
-                    <div
-                        style={{
-                            ...pointerStyles,
-                            left: 0,
-                            borderLeft: 0,
-                            borderRightColor: this.getBgColor(),
-                            marginLeft: -pointerSize
-                        }}
-                    />
-                )}
-            </div>
-        )
-    }
-
-    renderNode() {
-        return <message {...this.props}>{this.props.children}</message>
-    }
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
 }
-
-/*
-var styles = cssInJS({
-    button: {
-      padding: 5,
-      backgroundColor: "blue"
-    }
-  });*/

@@ -1,77 +1,65 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 
-export class Button extends React.Component {
-    static contextType = WebchatContext
+export const Button = props => {
+  const { webchatState, openWebview, sendPayload } = useContext(WebchatContext)
 
-    handleClick(event) {
-        event.preventDefault()
-        if (this.props.webview) {
-            this.context.openWebview(this.props.webview, this.props.params)
-        } else if (this.props.path) {
-            this.context.sendPayload(`__PATH_PAYLOAD__${this.props.path}`)
-        } else if (this.props.payload) {
-            this.context.sendPayload(this.props.payload)
-        } else if (this.props.url) {
-            window.open(this.props.url)
-        }
-    }
+  const handleClick = event => {
+    event.preventDefault()
+    if (props.webview) openWebview(props.webview, props.params)
+    else if (props.path) sendPayload(`__PATH_PAYLOAD__${props.path}`)
+    else if (props.payload) sendPayload(props.payload)
+    else if (props.url) window.open(props.url)
+  }
 
-    render() {
-        if (isBrowser()) return this.renderBrowser()
-        else if (isNode()) return this.renderNode()
+  const renderBrowser = () => {
+    if (webchatState.theme.customButton) {
+      let CustomButton = webchatState.theme.customButton
+      return (
+        <div onClick={e => handleClick(e)}>
+          <CustomButton>{props.children}</CustomButton>
+        </div>
+      )
     }
+    return (
+      <button
+        style={{
+          width: '100%',
+          height: 40,
+          border: '1px solid #F1F0F0',
+          borderRadius: 8,
+          cursor: 'pointer',
+          outline: 0
+        }}
+        onClick={e => handleClick(e)}
+      >
+        {props.children}
+      </button>
+    )
+  }
 
-    renderBrowser() {
-        if (this.context.theme.customButton) {
-            let CustomButton = this.context.theme.customButton
-            return (
-                <div onClick={e => this.handleClick(e)}>
-                    <CustomButton>{this.props.children}</CustomButton>
-                </div>
-            )
-        }
-        return (
-            <button
-                style={{
-                    width: '100%',
-                    height: 40,
-                    border: '1px solid #F1F0F0',
-                    borderRadius: 8,
-                    cursor: 'pointer',
-                    outline: 0
-                }}
-                onClick={e => this.handleClick(e)}
-            >
-                {this.props.children}
-            </button>
-        )
+  const renderNode = () => {
+    if (props.webview) {
+      let Webview = props.webview
+      let params = ''
+      if (props.params) params = params2queryString(props.params)
+      return (
+        <button url={`/webviews/${Webview.name}?${params}`}>
+          {props.children}
+        </button>
+      )
+    } else if (props.path) {
+      let payload = `__PATH_PAYLOAD__${props.path}`
+      return <button payload={payload}>{props.children}</button>
+    } else if (props.payload) {
+      return <button payload={props.payload}>{props.children}</button>
+    } else if (props.url) {
+      return <button url={props.url}>{props.children}</button>
     }
+  }
 
-    renderNode() {
-        if (this.props.webview) {
-            let Webview = this.props.webview
-            let params = ''
-            if (this.props.params)
-                params = params2queryString(this.props.params)
-            return (
-                <button url={`/webviews/${Webview.name}?${params}`}>
-                    {this.props.children}
-                </button>
-            )
-        } else if (this.props.path) {
-            let payload = `__PATH_PAYLOAD__${this.props.path}`
-            return <button payload={payload}>{this.props.children}</button>
-        } else if (this.props.payload) {
-            return (
-                <button payload={this.props.payload}>
-                    {this.props.children}
-                </button>
-            )
-        } else if (this.props.url) {
-            return <button url={this.props.url}>{this.props.children}</button>
-        }
-    }
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
 }

@@ -2,24 +2,12 @@ import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
 
-export class Subtitle extends React.Component {
+export const Subtitle = props => {
+  const renderBrowser = () => (
+    <div style={{ padding: '6px' }}>{props.children}</div>
+  )
+  const renderNode = () => <desc>{props.children}</desc>
 
-    render() {
-        if (isBrowser()) return this.renderBrowser()
-        else if (isNode()) return this.renderNode()
-    }
-
-    renderBrowser() {
-        return (
-            <div
-                style={{ padding: '6px'}}
-            >
-                {this.props.children}
-            </div>
-        )
-    }
-
-    renderNode(){
-        return <desc>{this.props.children}</desc>
-    }
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
 }

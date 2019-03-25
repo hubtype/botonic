@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-var decode = require('unescape')
+//var decode = require('unescape')
+import decode from 'unescape'
 
 import { Text } from './components/text'
 import { Reply } from './components/reply'
