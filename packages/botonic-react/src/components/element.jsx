@@ -1,31 +1,22 @@
 import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
-import { WebchatContext } from '../contexts'
 
-export class Element extends React.Component {
-    static contextType = WebchatContext
+export const Element = props => {
+  const renderBrowser = () => (
+    <div
+      style={{
+        marginRight: '6px',
+        border: '1px solid rgba(0, 0, 0, 0.1)',
+        borderRadius: '6px'
+      }}
+    >
+      {props.children}
+    </div>
+  )
 
-    render() {
-        if (isBrowser()) return this.renderBrowser()
-        else if (isNode()) return this.renderNode()
-    }
+  const renderNode = () => <element>{props.children}</element>
 
-    renderBrowser() {
-        return (
-            <div
-                style={{
-                    marginRight: '6px',
-                    border: '1px solid rgba(0, 0, 0, 0.1)',
-                    borderRadius: '6px'
-                }}
-            >
-                {this.props.children}
-            </div>
-        )
-    }
-
-    renderNode() {
-        return <element>{this.props.children}</element>
-    }
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
 }

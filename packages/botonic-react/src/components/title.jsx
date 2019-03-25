@@ -2,24 +2,12 @@ import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
 
-export class Title extends React.Component {
+export const Title = props => {
+  const renderBrowser = () => (
+    <div style={{ padding: '6px', fontWeight: 'bold' }}>{props.children}</div>
+  )
+  const renderNode = () => <title>{props.children}</title>
 
-    render() {
-        if (isBrowser()) return this.renderBrowser()
-        else if (isNode()) return this.renderNode()
-    }
-
-    renderBrowser() {
-        return (
-            <div
-                style={{ padding: '6px', fontWeight: 'bold' }}
-            >
-                {this.props.children}
-            </div>
-        )
-    }
-
-    renderNode(){
-        return <title>{this.props.children}</title>
-    }
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
 }

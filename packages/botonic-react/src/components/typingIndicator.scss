@@ -1,0 +1,38 @@
+.typing-indicator {
+  background-color: #f1f0f0;
+  will-change: transform;
+  width: 25px;
+  border-radius: 20px;
+  padding: 10px 8px;
+  display: table;
+  margin: 8px;
+  position: relative;
+  animation: 2s bulge infinite ease-out;
+  span {
+    height: 6px;
+    width: 6px;
+    float: left;
+    margin: 0 1px;
+    background-color: #9e9ea1;
+    display: block;
+    border-radius: 50%;
+    opacity: 0.4;
+    @for $i from 1 through 3 {
+      &:nth-of-type(#{$i}) {
+        animation: 1s blink infinite ($i * 0.3333s);
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bulge {
+  50% {
+    transform: scale(1.05);
+  }
+}

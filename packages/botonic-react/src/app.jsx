@@ -10,114 +10,121 @@ import { Text } from './components/text'
 
 import { isFunction, runPlugins } from './utils'
 
-
 export class App {
-    constructor({ routes, locales, integrations, theme, plugins }) {
-        this.rootElement = null
-        this.routes = routes
-        this.defaultRoutes = {
-            path: '404',
-            action: () => <Text>I don't understand you</Text>
-        }
-        this.locales = locales
-        this.integrations = integrations
-        this.router = isFunction(this.routes)
-            ? null
-            : new Router([...this.routes, this.defaultRoutes])
-        this.plugins = plugins
-        this.theme = theme
+  constructor({ routes, locales, integrations, theme, plugins }) {
+    this.rootElement = null
+    this.routes = routes
+    this.defaultRoutes = {
+      path: '404',
+      action: () => <Text>I don't understand you</Text>
+    }
+    this.locales = locales
+    this.integrations = integrations
+    this.router = isFunction(this.routes)
+      ? null
+      : new Router([...this.routes, this.defaultRoutes])
+    this.plugins = plugins
+    this.theme = theme
+  }
+
+  getString(stringID, session) {
+    return getString(this.locales, session.__locale, stringID)
+  }
+
+  setLocale(locale, session) {
+    session.__locale = locale
+  }
+
+  webchat(themeOptions) {
+    if (!themeOptions && this.theme) themeOptions = this.theme
+    if (this.theme && themeOptions)
+      themeOptions = { ...this.theme, ...themeOptions }
+    return <Webchat botonicApp={this} theme={themeOptions} />
+  }
+
+  render(dest, webchatOptions) {
+    if (webchatOptions && webchatOptions.theme)
+      ReactDOM.render(this.webchat(webchatOptions.theme), dest)
+    else ReactDOM.render(this.webchat(null), dest)
+  }
+
+  async input({ input, session, lastRoutePath }) {
+    session = session || {}
+    if (!session.__locale) session.__locale = 'en'
+
+    if (this.plugins) {
+      await runPlugins(this.plugins, 'pre', input, session, lastRoutePath)
+    } else if (this.integrations && input.type == 'text') {
+      try {
+        let nlu = await getNLU(input, this.integrations)
+        Object.assign(input, nlu)
+      } catch (e) {}
     }
 
-    getString(stringID, session) {
-        return getString(this.locales, session.__locale, stringID)
+    if (isFunction(this.routes)) {
+      this.router = new Router([
+        ...this.routes({ input, session }),
+        this.defaultRoutes
+      ])
     }
 
-    setLocale(locale, session) {
-        session.__locale = locale
+    let output = this.router.processInput(input, session, lastRoutePath)
+    let Action = output.action
+    let RetryAction = output.retryAction
+    let DefaultAction = output.defaultAction
+    let props = {}
+    let req = {
+      input,
+      session,
+      params: output.params,
+      lastRoutePath
+    }
+    if (Action.botonicInit) {
+      props = await Action.botonicInit(req)
+    }
+    let retryProps = {}
+    if (RetryAction && RetryAction.botonicInit) {
+      retryProps = await RetryAction.botonicInit(req)
+    }
+    let defaultProps = {}
+    if (DefaultAction && DefaultAction.botonicInit) {
+      defaultProps = await DefaultAction.botonicInit(req)
     }
 
-    webchat(themeOptions) {
-        if (!themeOptions && this.theme) themeOptions = this.theme
-        if (this.theme && themeOptions)
-            themeOptions = { ...this.theme, ...themeOptions }
-        return <Webchat botonicApp={this} theme={themeOptions} />
+    let request = {
+      getString: stringId => this.getString(stringId, session),
+      setLocale: locale => this.setLocale(locale, session),
+      session: session || {},
+      params: output.params || {},
+      input: input
     }
 
-    render(dest, webchatOptions) {
-        if (webchatOptions && webchatOptions.theme)
-            ReactDOM.render(this.webchat(webchatOptions.theme), dest)
-        else ReactDOM.render(this.webchat(null), dest)
+    let component = (
+      <RequestContext.Provider value={request}>
+        <Action {...props} />
+        {RetryAction && <RetryAction {...retryProps} />}
+        {DefaultAction && <DefaultAction {...defaultProps} />}
+      </RequestContext.Provider>
+    )
+
+    let response = null
+    if (isBrowser()) response = component
+    else response = ReactDOMServer.renderToStaticMarkup(component)
+
+    lastRoutePath = output.lastRoutePath
+    session.is_first_interaction = false
+
+    if (this.plugins) {
+      await runPlugins(
+        this.plugins,
+        'post',
+        input,
+        session,
+        lastRoutePath,
+        response
+      )
     }
 
-    async input({ input, session, lastRoutePath }) {
-        session = session || {}
-        if (!session.__locale) session.__locale = 'en'
-
-        if (this.plugins) {
-            await runPlugins(this.plugins, 'pre', input, session, lastRoutePath )
-        } else if (this.integrations && input.type == 'text') {
-            try {
-                let nlu = await getNLU(input, this.integrations)
-                Object.assign(input, nlu)
-            } catch (e) {}
-        }
-
-        if (isFunction(this.routes)) {
-            this.router = new Router([
-                ...this.routes({ input, session }),
-                this.defaultRoutes
-            ])
-        }
-
-        let output = this.router.processInput(input, session, lastRoutePath)
-        let Action = output.action
-        let RetryAction = output.retryAction
-        let DefaultAction = output.defaultAction
-        let props = {}
-        let req = {
-            input,
-            session,
-            params: output.params,
-            lastRoutePath
-        }
-        if (Action.botonicInit) {
-            props = await Action.botonicInit(req)
-        }
-        let retryProps = {}
-        if (RetryAction && RetryAction.botonicInit) {
-            retryProps = await RetryAction.botonicInit(req)
-        }
-        let defaultProps = {}
-        if (DefaultAction && DefaultAction.botonicInit) {
-            defaultProps = await DefaultAction.botonicInit(req)
-        }
-
-        let request = {
-            getString: stringId => this.getString(stringId, session),
-            setLocale: locale => this.setLocale(locale, session),
-            session: session || {},
-            params: output.params || {},
-            input: input
-        }
-
-        let component = (
-            <RequestContext.Provider value={request}>
-                <Action {...props} />
-                {RetryAction && <RetryAction {...retryProps} />}
-                {DefaultAction && <DefaultAction {...defaultProps} />}
-            </RequestContext.Provider>
-        )
-
-        let response = null
-        if (isBrowser()) response = component
-        else response = ReactDOMServer.renderToStaticMarkup(component)
-
-        lastRoutePath = output.lastRoutePath
-
-        if (this.plugins) {
-            await runPlugins(this.plugins, 'post', input, session, lastRoutePath, response )
-        }
-
-        return { response, session, lastRoutePath }
-    }
+    return { input, response, session, lastRoutePath }
+  }
 }

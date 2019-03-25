@@ -1,18 +1,19 @@
 import React from 'react'
-
-import { Message } from './message'
 import { isBrowser } from '@botonic/core'
+import { Message } from './message'
 
-export class Audio extends React.Component {
-    render() {
-        let content = ''
-        if (isBrowser())
-            content = (
-                <audio style={{ maxWidth: '100%' }} id="myAudio" controls>
-                    <source src={this.props.src} type="audio/mpeg" />
-                    Your browser does not support this audio format.
-                </audio>
-            )
-        return (<Message {...this.props} type="audio">{content}</Message>)
-    }
+export const Audio = props => {
+  let content = ''
+  if (isBrowser())
+    content = (
+      <audio style={{ maxWidth: '100%' }} id='myAudio' controls>
+        <source src={props.src} type='audio/mpeg' />
+        Your browser does not support this audio format.
+      </audio>
+    )
+  return (
+    <Message {...props} type='audio'>
+      {content}
+    </Message>
+  )
 }

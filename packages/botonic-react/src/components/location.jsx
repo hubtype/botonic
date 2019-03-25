@@ -1,23 +1,15 @@
 import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
-import { WebchatContext } from '../contexts'
 import { Message } from './message'
 
-export class Location extends React.Component {
-  static contextType = WebchatContext
+export const Location = props => {
+  const renderBrowser = () => {
+    let lat = parseFloat(props.lat)
+    let long = parseFloat(props.long)
 
-  render() {
-    if (isBrowser()) return this.renderBrowser()
-    else if (isNode()) return this.renderNode()
-  }
-
-  renderBrowser() {
-    let lat = parseFloat(this.props.lat)
-    let long = parseFloat(this.props.long)
-    
     return (
-      <Message {...this.props} type='location'>
+      <Message {...props} type='location'>
         {' '}
         <div>
           <small>
@@ -35,12 +27,15 @@ export class Location extends React.Component {
     )
   }
 
-  renderNode() {
+  const renderNode = () => {
     return (
       <message type='location'>
-        <lat>{this.props.lat}</lat>
-        <long>{this.props.long}</long>
+        <lat>{props.lat}</lat>
+        <long>{props.long}</long>
       </message>
     )
   }
+
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
 }
