@@ -2,6 +2,14 @@ export function isFunction(o) {
   return typeof o === 'function'
 }
 
+export function isDev() {
+  return process.env.NODE_ENV == 'development'
+}
+
+export function isProd() {
+  return process.env.NODE_ENV == 'production'
+}
+
 export async function runPlugins(
   plugins,
   mode,
