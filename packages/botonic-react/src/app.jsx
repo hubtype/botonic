@@ -4,11 +4,11 @@ import ReactDOMServer from 'react-dom/server'
 
 import { isBrowser, isNode, getNLU } from '@botonic/core'
 import { Router, getString } from '@botonic/core'
-import { Webchat } from './webchat'
+import { Webchat, WebchatDev } from './webchat'
 import { RequestContext } from './contexts'
 import { Text } from './components/text'
 
-import { isFunction, runPlugins } from './utils'
+import { isFunction, runPlugins, isDev } from './utils'
 
 export class App {
   constructor({ routes, locales, integrations, theme, plugins }) {
@@ -39,7 +39,8 @@ export class App {
     if (!themeOptions && this.theme) themeOptions = this.theme
     if (this.theme && themeOptions)
       themeOptions = { ...this.theme, ...themeOptions }
-    return <Webchat botonicApp={this} theme={themeOptions} />
+    if (isDev()) return <WebchatDev botonicApp={this} theme={themeOptions} />
+    else return <Webchat botonicApp={this} theme={themeOptions} />
   }
 
   render(dest, webchatOptions) {
