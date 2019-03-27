@@ -32,7 +32,7 @@ Ran all test suites.`
   async run() {
     track('botonic test')
     const { args, flags } = this.parse(Run)
-    exec('npm run test', (error, stdout, stderr) => {
+    exec('npm run test', (error, _stdout, stderr) => {
       console.log(colors.blue('\n Executing tests...\n'))
       if (error) {
         console.error(colors.red(`${error}`))
