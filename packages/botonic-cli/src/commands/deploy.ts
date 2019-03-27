@@ -27,7 +27,8 @@ Uploading...
     force: flags.boolean({
       char: 'f',
       description: 'Force deploy despite of no changes. Disabled by default'
-    })
+    }),
+    botName: flags.string()
   }
 
   static args = [{ name: 'bot_name' }]
@@ -36,12 +37,33 @@ Uploading...
 
   async run() {
     const { args, flags } = this.parse(Run)
-
     track('Deployed Botonic CLI')
 
     force = flags.force ? flags.force : false
+    let botName = flags.botName ? flags.botName : false
+
     if (!this.botonicApiService.oauth) await this.signupFlow()
-    else await this.deployBotFlow()
+    else if (botName) {
+      this.deployBotFromFlag(botName)
+    } else await this.deployBotFlow()
+  }
+
+  async deployBotFromFlag(botName: string) {
+    let resp = await this.botonicApiService.getBots()
+    let nextBots = resp.data.next
+    let bots = resp.data.results
+    if (nextBots) {
+      await this.botonicApiService.getMoreBots(bots, nextBots)
+    }
+    let bot = bots.filter(b => b.name === botName)[0]
+    if (bot == undefined) {
+      console.log(colors.red(`Bot ${botName} doesn't exist.`))
+      console.log('\nThese are the available options:')
+      bots.map(b => console.log(` > ${b.name}`))
+    } else {
+      this.botonicApiService.setCurrentBot(bot)
+      this.deploy()
+    }
   }
 
   async signupFlow() {
@@ -93,7 +115,20 @@ Uploading...
 
   async deployBotFlow() {
     if (!this.botonicApiService.bot) return this.newBotFlow()
-    else return this.deploy()
+    else {
+      let resp = await this.botonicApiService.getBots()
+      let nextBots = resp.data.next
+      let bots = resp.data.results
+      if (nextBots) {
+        await this.botonicApiService.getMoreBots(bots, nextBots)
+      }
+      // Show the current bot in credentials at top of the list
+      let first_id = this.botonicApiService.bot.id
+      bots.sort(function(x, y) {
+        return x.id == first_id ? -1 : y.id == first_id ? 1 : 0
+      })
+      return this.selectExistentBot(bots)
+    }
   }
 
   async login(email: string, password: string) {
