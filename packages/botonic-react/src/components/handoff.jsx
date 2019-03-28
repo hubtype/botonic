@@ -26,11 +26,13 @@ export const Handoff = props => {
       }}
     >
       {state.showContinue ? (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', whiteSpace: 'normal' }}>
           Conversation transferred to a human agent...
         </div>
       ) : (
-        <div style={{ textAlign: 'center' }}>Human handoff ended</div>
+        <div style={{ textAlign: 'center', whiteSpace: 'normal' }}>
+          Human handoff ended
+        </div>
       )}
       {state.showContinue && (
         <button

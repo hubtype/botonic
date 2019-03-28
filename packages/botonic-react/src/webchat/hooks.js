@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from 'react'
+import { useEffect, useReducer, useState, useRef } from 'react'
 
 export const webchatInitialState = {
   width: 300,
@@ -32,6 +32,10 @@ export const webchatInitialState = {
     brandColor: '#0099ff',
     textPlaceholder: 'Ask me something...',
     title: 'Botonic'
+  },
+  devSettings: {
+    keepSessionOnReload: true,
+    showSessionView: false
   }
 }
 
@@ -75,6 +79,8 @@ export function webchatReducer(state, action) {
       return { ...state, handoff: action.payload }
     case 'updateTheme':
       return { ...state, theme: action.payload }
+    case 'updateDevSettings':
+      return { ...state, devSettings: action.payload }
     default:
       throw new Error()
   }
@@ -121,6 +127,11 @@ export function useWebchat() {
       type: 'updateTheme',
       payload: theme
     })
+  const updateDevSettings = settings =>
+    webchatDispatch({
+      type: 'updateDevSettings',
+      payload: settings
+    })
   return {
     webchatState,
     webchatDispatch,
@@ -133,7 +144,8 @@ export function useWebchat() {
     updateSession,
     updateLastRoutePath,
     updateHandoff,
-    updateTheme
+    updateTheme,
+    updateDevSettings
   }
 }
 
@@ -168,4 +180,24 @@ export function usePrevious(value) {
     ref.current = value
   })
   return ref.current
+}
+
+export function useComponentVisible(initialIsVisible) {
+  const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible)
+  const ref = useRef(null)
+
+  const handleClickOutside = event => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsComponentVisible(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true)
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true)
+    }
+  })
+
+  return { ref, isComponentVisible, setIsComponentVisible }
 }
