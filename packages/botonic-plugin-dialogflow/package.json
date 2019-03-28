@@ -4,5 +4,8 @@
   "main": "src/index.js",
   "dependencies": {
     "axios": "latest"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.4.2"
   }
 }
