@@ -33,42 +33,48 @@ export const Webchat = props => {
     updateSession,
     updateLastRoutePath,
     updateHandoff,
-    updateTheme
+    updateTheme,
+    updateDevSettings
   } = props.webchatHooks || useWebchat()
 
   useTyping({ webchatState, updateTyping, updateMessage })
 
-  const prevSession = usePrevious(webchatState.session)
-
   useEffect(() => {
     try {
-      let { messages, session, lastRoutePath } = JSON.parse(
+      let { messages, session, lastRoutePath, devSettings } = JSON.parse(
         window.localStorage.getItem('botonicState')
       )
-      if (messages) {
-        messages.map(m => {
-          let newComponent = msgToBotonic(m)
-          if (newComponent) addMessageComponent(newComponent)
-        })
+      if (!devSettings || devSettings.keepSessionOnReload) {
+        if (messages) {
+          messages.map(m => {
+            let newComponent = msgToBotonic(m)
+            if (newComponent) addMessageComponent(newComponent)
+          })
+        }
+        if (session) updateSession(session)
+        if (lastRoutePath) updateLastRoutePath(lastRoutePath)
       }
-      if (session) updateSession(session)
-      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+      if (devSettings) updateDevSettings(devSettings)
     } catch (e) {}
   }, [])
 
   useEffect(() => {
+    let reset =
+      webchatState.devSettings || webchatState.devSettings.keepSessionOnReload
     window.localStorage.setItem(
       'botonicState',
       JSON.stringify({
         messages: webchatState.messagesJSON,
         session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath
+        lastRoutePath: webchatState.lastRoutePath,
+        devSettings: webchatState.devSettings
       })
     )
   }, [
     webchatState.messagesJSON,
     webchatState.session,
-    webchatState.lastRoutePath
+    webchatState.lastRoutePath,
+    webchatState.devSettings
   ])
 
   useEffect(() => {
@@ -122,6 +128,7 @@ export const Webchat = props => {
     updateSession({ ...webchatState.session, _botonic_action: null })
   }
 
+  const prevSession = usePrevious(webchatState.session)
   useEffect(() => {
     // Resume conversation after handoff
     if (
