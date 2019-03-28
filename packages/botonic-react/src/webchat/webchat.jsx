@@ -6,7 +6,7 @@ import { WebchatContext, RequestContext } from '../contexts'
 import { Text } from '../components/text'
 import { TypingIndicator } from '../components/typingIndicator'
 import { Handoff } from '../components/handoff'
-import { useWebchat, useTyping } from './hooks'
+import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
@@ -37,6 +37,8 @@ export const Webchat = props => {
   } = props.webchatHooks || useWebchat()
 
   useTyping({ webchatState, updateTyping, updateMessage })
+
+  const prevSession = usePrevious(webchatState.session)
 
   useEffect(() => {
     try {
@@ -116,11 +118,21 @@ export const Webchat = props => {
   }
 
   const resolveCase = () => {
-    let action = webchatState.session._botonic_action.split(':')
-    updateSession({ ...output.session, _botonic_action: null })
     updateHandoff(false)
-    sendPayload(action[action.length - 1])
+    updateSession({ ...webchatState.session, _botonic_action: null })
   }
+
+  useEffect(() => {
+    // Resume conversation after handoff
+    if (
+      prevSession &&
+      prevSession._botonic_action &&
+      !webchatState.session._botonic_action
+    ) {
+      let action = prevSession._botonic_action.split(':')
+      sendPayload(action[action.length - 1])
+    }
+  }, [webchatState.session._botonic_action])
 
   const sendText = async (text, payload) => {
     if (!text) return

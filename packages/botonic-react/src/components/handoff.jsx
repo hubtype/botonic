@@ -3,7 +3,7 @@ import { WebchatContext } from '../contexts'
 
 export const Handoff = props => {
   const { resolveCase } = useContext(WebchatContext)
-  const { state, setState } = useState({ showContinue: true })
+  const [state, setState] = useState({ showContinue: true })
 
   const continueClick = () => {
     setState({ showContinue: false })
