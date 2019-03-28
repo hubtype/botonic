@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useEffect, useReducer, useRef } from 'react'
 
 export const webchatInitialState = {
   width: 300,
@@ -14,8 +14,8 @@ export const webchatInitialState = {
     last_session: {},
     user: {
       id: '000001',
-      username: 'John',
-      name: 'Doe',
+      username: 'johndoe',
+      name: 'John Doe',
       provider: 'terminal',
       provider_id: '0000000',
       extra_data: {}
@@ -160,4 +160,12 @@ export function useTyping({ webchatState, updateTyping, updateMessage }) {
       clearTimeout(typingTimeout)
     }
   }, [webchatState.messagesJSON])
+}
+
+export function usePrevious(value) {
+  const ref = useRef()
+  useEffect(() => {
+    ref.current = value
+  })
+  return ref.current
 }
