@@ -10,6 +10,20 @@ export function isProd() {
   return process.env.NODE_ENV == 'production'
 }
 
+export function loadPlugins(plugins) {
+  let _plugins = {}
+  let pluginsLength = plugins.length
+  for (let i = 0; i < pluginsLength; i++) {
+    let pluginRequired = plugins[i].resolve
+    let options = plugins[i].options
+    let Plugin = pluginRequired.default
+    let instance = new Plugin(options)
+    let id = plugins[i].id || `${instance.constructor.name}`
+    _plugins[id] = instance
+  }
+  return _plugins
+}
+
 export async function runPlugins(
   plugins,
   mode,
@@ -18,13 +32,9 @@ export async function runPlugins(
   lastRoutePath,
   response = null
 ) {
-  let pluginsLength = plugins.length
-  for (let i = 0; i < pluginsLength; i++) {
-    let pluginRequired = plugins[i].resolve
-    let options = plugins[i].options
+  for (let key in plugins) {
+    let p = plugins[key]
     try {
-      let Plugin = pluginRequired.default
-      let p = new Plugin(options)
       if (mode == 'pre') return p.pre({ input, session, lastRoutePath })
       if (mode == 'post')
         return p.post({ input, session, lastRoutePath, response })
