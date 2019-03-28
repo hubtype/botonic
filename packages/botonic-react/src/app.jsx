@@ -8,7 +8,7 @@ import { Webchat, WebchatDev } from './webchat'
 import { RequestContext } from './contexts'
 import { Text } from './components/text'
 
-import { isFunction, runPlugins, isDev } from './utils'
+import { isFunction, loadPlugins, runPlugins, isDev } from './utils'
 
 export class App {
   constructor({ routes, locales, integrations, theme, plugins }) {
@@ -23,7 +23,7 @@ export class App {
     this.router = isFunction(this.routes)
       ? null
       : new Router([...this.routes, this.defaultRoutes])
-    this.plugins = plugins
+    this.plugins = loadPlugins(plugins)
     this.theme = theme
   }
 
@@ -78,7 +78,8 @@ export class App {
       input,
       session,
       params: output.params,
-      lastRoutePath
+      lastRoutePath,
+      plugins: this.plugins
     }
     if (Action.botonicInit) {
       props = await Action.botonicInit(req)
@@ -97,7 +98,8 @@ export class App {
       setLocale: locale => this.setLocale(locale, session),
       session: session || {},
       params: output.params || {},
-      input: input
+      input: input,
+      plugins: this.plugins
     }
 
     let component = (
