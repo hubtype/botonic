@@ -1,0 +1,143 @@
+---
+name: 1. Botonic Plugins
+route: /plugins/botonic-plugins
+menu: 5. Plugins
+---
+
+# **Botonic Plugins**
+
+Sometimes you may need a specific feature according to your needs and you want to build 
+your particular plugin that doesn't exist yet. In order to achieve this, we have to review some important aspects.
+
+## ** Fundamental Concepts **
+* You can create your own plugins to be used locally in your project or as a npm package.
+* `package.json` is mandatory.
+* Each plugin have to implement the methods we describe in this guidelines.
+
+## ** Plugin Conventions **
+
+Every plugin you create for botonic has to be under a directory named as  
+**`botonic-plugin-{YOUR_PLUGIN_NAME}`**.  
+* **Example:** `botonic-plugin-dialogflow`
+
+In addition, the plugin directory has to be structured in the following way:
+``` 
+botonic-plugin-{my-plugin-name}
+└── package.json
+└── src
+    └── index.js <-- This is the entry point of your code
+    └── MY_USEFUL_CODE
+```  
+
+>The required fields in your **package.json** must be the following:
+>  * **name**: we suggest you to put the same name as the directory, for simplicity and maintainability.
+>  * **version**: the corresponding plugin's version, starting by **0.0.1**.
+>  * **main**: the entry point of your plugin. We suggest you to mantain the structure as it is. 
+>  * **dependencies**: your dependencies, if any.
+>  * **devDependencies**: your devDependencies, if any.  
+
+* **Example** :
+
+```
+{
+  "name": "botonic-plugin-dialogflow",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "dependencies": {
+    "axios": "latest"
+  },
+  "devDependencies": {
+    "@babel/runtime": "latest"
+  }
+}
+```
+
+## ** How to create a plugin? **
+For a better understanding, we will start with the most essential parts our plugin must have.  
+In order to develop a plugin for Botonic, you will have to create a new directory structured as explained before.
+Once created, you will have to copy this boilerplate code in your **`index.js`**:
+
+**botonic-plugin-{my-plugin-name}/src/index.js**
+
+```javascript
+
+// By default, we suggest you to name your class with UpperCamelCase
+export default class BotonicPluginMyPluginName {
+
+  constructor(options) {
+    this.options = options
+  }
+
+  async pre({ input, session, lastRoutePath }) {
+    return { input, session, lastRoutePath }
+  }
+
+  async post({ input, session, lastRoutePath, response }) {
+    return { input, session, lastRoutePath, response }
+  }
+}
+
+```
+
+As can be seen, in our plugin we will have three basic methods:
+* `constructor`: which will be used in order to pass to our plugin the necessary options (JS Objects) needed to run our code,
+such as tokens, authentication keys, etc.
+* `pre`: stands for all these kind of operations that we want to preprocess of our input, such as applying NLU to extract intents or entities.
+* `post`: stands for all these kind of operations that we want to process ex-post, such as adding a tracking id to our session.
+
+Botonic will look for pre and post methods and will execute them before or after the input is processed, correspondingly.
+
+> **NOTE:**
+> It's crucial that `pre` and `post` methods are declared with the **async** keyword for an expected behaviour.
+
+Let's take a look a closer look at [Botonic Dialogflow's Plugin](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dialogflow):
+
+```javascript
+import axios from 'axios'
+
+export default class BotonicPluginDialogflow {
+  constructor(options) {
+    // the constructor method will receive an object with a token:value
+    this.options = options
+  }
+
+  async pre({ input, session, lastRoutePath }) {
+    // declare the necessary variables
+    let df_session_id = session.user.id
+    let intent = null
+    let confidence = 0
+    let intents = []
+    let entities = []
+
+    let dialogflow_resp = await axios({
+      // add the necessary authorization token to do the request
+      headers: {
+        Authorization: 'Bearer ' + this.options.token
+      },
+      url: 'https://api.dialogflow.com/v1/query',
+      params: {
+        // pass the desired params which will be available from your bot
+        query: input.data,
+        lang: session.__locale,
+        sessionId: df_session_id
+      }
+    })
+    // Save your results
+    if (dialogflow_resp && dialogflow_resp.data) {
+      intent = dialogflow_resp.data.result.metadata.intentName
+      entities = dialogflow_resp.data.result.parameters
+    }
+
+    // Merge the input object and your computed values to have them availables in your code
+    Object.assign(input, { intent, confidence, intents, entities })
+    
+    // Return back the objects to Botonic
+    return { input, session, lastRoutePath }
+  }
+
+  async post({ input, session, lastRoutePath, response }) {}
+}
+```
+
+That's all! Once you have implemented your plugin, you will be ready [to use it](/plugins/using-plugins).
+

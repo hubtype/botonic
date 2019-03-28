@@ -1,0 +1,61 @@
+---
+name: 2. Using Botonic Plugins
+route: /plugins/using-plugins
+menu: 5. Plugins
+---
+
+# **How to use Botonic Plugins?**
+
+In order to use one of the [available](https://github.com/hubtype/botonic/tree/master/packages) Botonic plugins, 
+you will need to:
+* Add a `plugins.js` file in your Botonic project at the root of **src**.
+* Require every plugin you want to be executed every time the input is processed.
+* Import your plugins in **src/app.js** and pass them to the App.
+
+```javascript
+import { App } from '@botonic/react'
+
+import { routes } from './routes'
+import { locales } from './locales'
+import { plugins } from './plugins'
+
+export default new App({ routes, locales, plugins })
+```
+
+
+** src/plugins.js **  
+
+```javascript
+export const plugins = [
+  {
+    id: 'dialogflow',
+    resolve: require('botonic-plugin-dialogflow'),
+    options: {
+      token: 'YOUR_TOKEN_HERE'
+    }
+  }
+]
+```
+
+After this is done, you will have your plugins running!  
+## ** Accessing plugins within your Actions **
+If for any scenario you need to access the plugin within your bot actions, you can also access and run them by the `id` you have defined when requiring your plugins, as shown in the example:
+
+```javascript
+import React from 'react'
+import { Text } from '@botonic/react'
+import { RequestContext } from '@botonic/react'
+
+export default class extends React.Component {
+  static contextType = RequestContext
+
+  static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
+    let { dialogflow } = plugins
+    await dialogflow.pre({ input, session, lastRoutePath })
+    // Your stuff
+  }
+
+  render() {
+      // Your rendered components
+  }
+```
