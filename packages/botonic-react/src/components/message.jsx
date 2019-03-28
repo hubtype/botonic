@@ -37,7 +37,10 @@ export const Message = props => {
         from,
         delay,
         typing,
-        replies: replies.map(r => ({ payload: r.payload, text: r.children })),
+        replies: replies.map(r => ({
+          payload: r.props.payload || r.props.path,
+          text: r.props.children
+        })),
         display: delay + typing == 0
       }
       addMessage(message)

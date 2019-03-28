@@ -11,7 +11,7 @@ import { WebchatHeader } from './header'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
-import { isDev } from '../utils'
+import { isDev, msgToBotonic } from '../utils'
 
 const getScriptBaseURL = () => {
   let scriptBaseURL = document
@@ -37,6 +37,37 @@ export const Webchat = props => {
   } = props.webchatHooks || useWebchat()
 
   useTyping({ webchatState, updateTyping, updateMessage })
+
+  useEffect(() => {
+    try {
+      let { messages, session, lastRoutePath } = JSON.parse(
+        window.localStorage.getItem('botonicState')
+      )
+      if (messages) {
+        messages.map(m => {
+          let newComponent = msgToBotonic(m)
+          if (newComponent) addMessageComponent(newComponent)
+        })
+      }
+      if (session) updateSession(session)
+      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+    } catch (e) {}
+  }, [])
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      'botonicState',
+      JSON.stringify({
+        messages: webchatState.messagesJSON,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath
+      })
+    )
+  }, [
+    webchatState.messagesJSON,
+    webchatState.session,
+    webchatState.lastRoutePath
+  ])
 
   useEffect(() => {
     updateTheme({ ...webchatState.theme, ...props.theme })
