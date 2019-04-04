@@ -6,7 +6,13 @@ menu: 5. Plugins
 
 # **How to use Botonic Plugins?**
 
-In order to use one of the [available](https://github.com/hubtype/botonic/tree/master/packages) Botonic plugins, 
+---  
+* [botonic-plugin-dialogflow](#botonic-plugin-dialogflow)
+* [botonic-plugin-luis](#botonic-plugin-luis)
+* [botonic-plugin-segment](#botonic-plugin-segment)
+---
+
+In order to use one of the [available](#Plugins) Botonic plugins, 
 you will need to:
 * Add a `plugins.js` file in your Botonic project at the root of **src**.
 * Require every plugin you want to be executed every time the input is processed.
@@ -57,5 +63,85 @@ export default class extends React.Component {
 
   render() {
       // Your rendered components
+  }
+```
+
+### [botonic-plugin-dialogflow](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dialogflow)
+
+Botonic plugin that use [Dialogflow](https://dialogflow.com/) as NLU service. The variables `intent`, `confidence`, `entities`, `defaultFallback`, `dialogflowResponse` will be automatically
+available inside the `input` object.
+
+** Usage ** 
+```javascript
+export const plugins = [
+  {
+    id: 'dialogflow',
+    resolve: require('botonic-plugin-dialogflow'),
+    options: {
+      token: 'YOUR_TOKEN_HERE'
+    }
+  }
+]
+``` 
+
+### [botonic-plugin-luis](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-luis)
+Botonic plugin that use [LUIS](https://www.luis.ai/) as NLU service. The variables `intent`, `confidence`, `entities` and `intents` will be automatically
+available inside the `input` object.
+
+** Usage **  
+```javascript
+export const plugins = [
+  {
+    id: 'luis',
+    resolve: require('botonic-plugin-luis'),
+    options: {
+      region: 'YOUR_REGION',
+      appID: 'YOUR_APP_ID',
+      endpointKey: 'YOUR_ENDPOINT_KEY'
+    }
+  }
+]
+```
+### [botonic-plugin-segment](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-segment)
+Botonic plugin that use [Segment](https://segment.com/) to clean, collect and control customer data. 
+Don't forget to add colon `:` to your write key as specified in [Segment Docs](https://segment.com/docs/sources/server/http/#authentication).
+
+** Usage **
+```javascript
+export const plugins = [
+  {
+    id: 'segment',
+    resolve: require('botonic-plugin-segment'),
+    options: {
+      writeKey: 'YOUR_WRITE_KEY'
+    }
+  }
+]
+```
+
+The default behaviour of this plugin is to [identify](https://segment.com/docs/spec/identify/) the user in the first bot interaction and `track` a [page](https://segment.com/docs/spec/page/) event to Segment from then on.
+If you prefer to track your events manually, you can add the flag `trackManually: true` in your options. Once set you can use them inside the method `botonicInit` on each Botonic component you want to track:  
+```javascript
+static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
+    
+    let { segment } = plugins
+
+    let userId = session.user.id
+    let event = 'This is the name of the current event I'm tracking'
+    let traits = { name: 'Peter', email: 'peter@domain.com', plan: 'premium' }
+    
+    await segment.identify({
+      input,
+      session,
+      userId: userId,
+      traits: traits
+    })
+
+    let properties = {
+      name: "Some interesting data", 
+      value: "14.99"
+    }
+
+    await segment.track({ input, session, userId: userId, event, properties })
   }
 ```
