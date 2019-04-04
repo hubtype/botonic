@@ -11,6 +11,8 @@ export default class BotonicPluginDialogflow {
     let confidence = 0
     let intents = []
     let entities = []
+    let defaultFallback = ''
+    let dialogflowResponse = null
 
     let dialogflow_resp = await axios({
       headers: {
@@ -27,9 +29,19 @@ export default class BotonicPluginDialogflow {
     if (dialogflow_resp && dialogflow_resp.data) {
       intent = dialogflow_resp.data.result.metadata.intentName
       entities = dialogflow_resp.data.result.parameters
+      confidence = dialogflow_resp.data.result.score
+      defaultFallback = dialogflow_resp.data.result.speech
+      dialogflowResponse = dialogflow_resp.data
     }
 
-    Object.assign(input, { intent, confidence, intents, entities })
+    Object.assign(input, {
+      intent,
+      confidence,
+      intents,
+      entities,
+      defaultFallback,
+      dialogflowResponse
+    })
 
     return { input, session, lastRoutePath }
   }
