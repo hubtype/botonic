@@ -115,7 +115,6 @@ export class App {
     else response = ReactDOMServer.renderToStaticMarkup(component)
 
     lastRoutePath = output.lastRoutePath
-    session.is_first_interaction = false
 
     if (this.plugins) {
       await runPlugins(
@@ -127,7 +126,7 @@ export class App {
         response
       )
     }
-
+    session.is_first_interaction = false
     return { input, response, session, lastRoutePath }
   }
 }

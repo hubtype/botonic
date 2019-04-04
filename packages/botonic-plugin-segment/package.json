@@ -1,0 +1,12 @@
+{
+  "name": "botonic-plugin-segment",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "dependencies": {
+    "axios": "latest",
+    "btoa": "^1.2.1"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.4.2"
+  }
+}
