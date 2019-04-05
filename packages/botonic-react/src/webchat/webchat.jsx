@@ -206,6 +206,7 @@ export const Webchat = props => {
           messages={webchatState.messagesComponents}
         >
           {webchatState.typing && <TypingIndicator />}
+          <div id='messages-end' />
         </WebchatMessageList>
         {webchatState.replies && (
           <WebchatReplies replies={webchatState.replies} />

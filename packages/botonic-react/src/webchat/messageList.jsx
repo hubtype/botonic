@@ -2,13 +2,7 @@ import React, { useRef, useEffect, useContext } from 'react'
 import { WebchatContext } from '../contexts'
 
 export const WebchatMessageList = props => {
-  const messagesEnd = useRef(null)
   const { webchatState } = useContext(WebchatContext)
-
-  useEffect(() => {
-    messagesEnd.current.scrollIntoView({ behavior: 'smooth' })
-  }, [webchatState.messagesComponents])
-
   return (
     <div
       style={{
@@ -34,7 +28,6 @@ export const WebchatMessageList = props => {
         </div>
       ))}
       {props.children}
-      <div ref={messagesEnd} />
     </div>
   )
 }

@@ -152,6 +152,10 @@ export function useWebchat() {
 export function useTyping({ webchatState, updateTyping, updateMessage }) {
   useEffect(() => {
     let delayTimeout, typingTimeout
+    let end = document.getElementById('messages-end')
+    if (end) {
+      end.scrollIntoView({ behavior: 'smooth' })
+    }
     try {
       let nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
       if (nextMsg.delay && nextMsg.typing) {
