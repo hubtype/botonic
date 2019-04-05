@@ -11,7 +11,15 @@ import { Text } from './components/text'
 import { isFunction, loadPlugins, runPlugins, isDev } from './utils'
 
 export class App {
-  constructor({ routes, locales, integrations, theme, plugins }) {
+  constructor({
+    routes,
+    locales,
+    integrations,
+    theme,
+    plugins,
+    defaultTyping,
+    defaultDelay
+  }) {
     this.rootElement = null
     this.routes = routes
     this.defaultRoutes = {
@@ -25,6 +33,8 @@ export class App {
       : new Router([...this.routes, this.defaultRoutes])
     this.plugins = loadPlugins(plugins)
     this.theme = theme
+    this.defaultTyping = defaultTyping || 0
+    this.defaultDelay = defaultDelay || 0
   }
 
   getString(stringID, session) {
@@ -99,7 +109,9 @@ export class App {
       session: session || {},
       params: output.params || {},
       input: input,
-      plugins: this.plugins
+      plugins: this.plugins,
+      defaultTyping: this.defaultTyping,
+      defaultDelay: this.defaultDelay
     }
 
     let component = (

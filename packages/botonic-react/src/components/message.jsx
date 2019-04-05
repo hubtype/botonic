@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
-import { WebchatContext } from '../contexts'
+import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 
 export const Message = props => {
+  const { defaultTyping, defaultDelay } = useContext(RequestContext)
   const {
     type = '',
     from = 'bot',
-    delay = 0,
-    typing = 0,
+    delay = defaultDelay,
+    typing = defaultTyping,
     children,
     ...otherProps
   } = props
