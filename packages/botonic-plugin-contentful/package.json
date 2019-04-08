@@ -1,7 +1,13 @@
 {
   "scripts": {
+    "build": "rm -rf lib && tsc",
     "test": "jest",
-    "lint": "node_modules/.bin/eslint --fix --quiet src/**/*.ts* tests/**/*.ts*"
+    "lint": "node_modules/.bin/eslint --fix --quiet src/**/*.ts* tests/**/*.ts*",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run lint && git add -A src tests",
+    "postversion": "git push && git push --tags"
   },
   "name": "botonic-plugin-contentful",
   "version": "0.0.1",
@@ -38,5 +44,6 @@
   },
   "engines": {
     "node": ">=8.10.0"
-  }
+  },
+  "types": "lib/index.d.ts"
 }
