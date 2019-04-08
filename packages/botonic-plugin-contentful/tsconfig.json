@@ -7,10 +7,18 @@
       ]
     },
     "lib": [
-      "es2017"
+      "es2015"
     ],
+    "outDir": "lib",
     "jsx": "react",
     "allowJs": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
