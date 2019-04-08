@@ -1,10 +1,11 @@
 export class Callback {
   payload: string;
+
   url: string;
 }
 export interface CMS {
   richMessage(id: string, payload: string): Promise<RichMessage>;
-  carousel(id: string, callbacks: Array<Callback>): Promise<Carousel>;
+  carousel(id: string, callbacks: Callback[]): Promise<Carousel>;
 }
 
 export class DummyCMS implements CMS {

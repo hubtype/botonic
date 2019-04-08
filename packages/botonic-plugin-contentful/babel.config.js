@@ -4,30 +4,29 @@
  */
 
 module.exports = {
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: {
-            node: 'current'
-          }
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          node: "current"
         }
-      ],
-      [
-        '@babel/react',
-        {
-          targets: {
-            node: 'current'
-          }
-        }
-      ],
-      "@babel/preset-typescript"
+      }
     ],
-    plugins: [
+    [
+      "@babel/react",
+      {
+        targets: {
+          node: "current"
+        }
+      }
+    ],
+    "@babel/preset-typescript"
+  ],
+  plugins: [
     //   require('@babel/plugin-proposal-object-rest-spread'),
-      require('@babel/plugin-proposal-class-properties'),
-      require('babel-plugin-add-module-exports'),
-      require('@babel/plugin-transform-runtime')
-    ]
-  }
-  
+    require("@babel/plugin-proposal-class-properties"),
+    require("babel-plugin-add-module-exports"),
+    require("@babel/plugin-transform-runtime")
+  ]
+};

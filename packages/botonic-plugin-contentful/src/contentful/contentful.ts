@@ -1,19 +1,21 @@
 import { ContentfulClientApi, createClient } from "contentful";
 import { CMS, Callback } from "../cms/cms";
 
+interface ContentfulRichMessage {
+  title: string;
+  subtitle: string;
+  pic: string;
+  button: string;
+}
+
 export class Contentful implements CMS {
   carousel(id: string, callbacks: Callback[]): Promise<Carousel> {
     throw new Error("Method not implemented.");
   }
+
   client: ContentfulClientApi;
 
-  login(spaceId: string, accessToken: string): void {
-    // this.client = createClient({
-    //   space: '92w5st1ik4od', // MASSIMO
-    //   accessToken:
-    //     '531e998080a22a1da8cca3d3642a4628f0c19053e0a5244815c9a10b5b3781c4'
-    // });
-
+  login(spaceId: string, accessToken: string) {
     this.client = createClient({
       space: "u5utof016sy1", // SantCugat
       accessToken:
