@@ -1,7 +1,7 @@
 import { Renderer } from "../src/render/render";
 import { RichMessage, Button } from "../src/cms/model";
 
-test("TEST: contentful", async () => {
+test("TEST: contentful", () => {
   let sut = new Renderer();
   let msg = new RichMessage();
   msg.title = "my title";

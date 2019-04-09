@@ -1,9 +1,10 @@
 import { RequestContext, Text, Button, Reply, Image } from "@botonic/react";
-import { ReactNode } from "react";
+// import { ReactNode } from "react";
+import React from "react";
 import { RichMessage, Carousel } from "../cms/model";
 
 export class Renderer {
-  richMessage(msg: RichMessage): ReactNode {
+  richMessage(msg: RichMessage): React.ReactNode {
     return (
       <>
         <Image src={msg.imgURL} />
