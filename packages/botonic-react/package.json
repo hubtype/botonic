@@ -1,8 +1,8 @@
 {
   "name": "@botonic/react",
-  "version": "0.7.0",
+  "version": "0.8.0-beta.2",
   "description": "Build Chatbots using React",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf lib && babel src --out-dir lib --copy-files"
@@ -20,5 +20,18 @@
     "react-textarea-autosize": "^7.1.0",
     "unescape": "^1.0.1",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.0",
+    "@babel/runtime": "^7.4.3",
+    "babel-dts-generator": "^0.6.3",
+    "react-hot-loader": "^4.8.3"
   }
 }
