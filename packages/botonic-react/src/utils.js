@@ -46,9 +46,9 @@ export async function runPlugins(
   for (let key in plugins) {
     let p = plugins[key]
     try {
-      if (mode == 'pre') return p.pre({ input, session, lastRoutePath })
+      if (mode == 'pre') return await p.pre({ input, session, lastRoutePath })
       if (mode == 'post')
-        return p.post({ input, session, lastRoutePath, response })
+        return await p.post({ input, session, lastRoutePath, response })
     } catch (e) {
       console.log(e)
     }
