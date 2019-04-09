@@ -1,10 +1,17 @@
 module.exports = {
   roots: ["<rootDir>"],
-  // if transform configured, it will not read babel.config.js
-  // transform: {
-  //   "^.+\\.tsx?$": "ts-jest"
-  // },
-  verbose: true,
-  testRegex: "(tests/.*|(\\.|/)(test|spec))\\.tsx?$",
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"]
+  transform: {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$",
+  testPathIgnorePatterns: [],
+  collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!/node_modules/"],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
+  snapshotSerializers: [],
+  setupFilesAfterEnv: [],
+  moduleNameMapper: {
+    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+      "<rootDir>/tests/__mocks__/fileMock.js",
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+  }
 };
