@@ -15,10 +15,12 @@
     "allowSyntheticDefaultImports": true,
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "tests/**/*"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "*.scss"
   ]
 }

@@ -1,18 +1,21 @@
-interface RichMessage {
+export class RichMessage {
   title?: string;
+
   subtitle?: string;
+
   imgURL?: string;
 
   button?: Button;
 }
 
-interface Button {
+export class Button {
   text: string;
 
   url?: string;
+
   payload?: string;
 }
 
-interface Carousel {
+export class Carousel {
   elements: RichMessage[];
 }

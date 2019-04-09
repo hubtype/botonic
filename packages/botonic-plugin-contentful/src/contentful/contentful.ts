@@ -1,5 +1,6 @@
 import { ContentfulClientApi, createClient } from "contentful";
 import { CMS, Callback } from "../cms/cms";
+import { Carousel, RichMessage } from "../cms/model";
 
 interface ContentfulRichMessage {
   title: string;

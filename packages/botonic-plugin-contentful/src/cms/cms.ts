@@ -1,3 +1,5 @@
+import { RichMessage, Carousel } from "./model";
+
 export class Callback {
   payload: string;
 
