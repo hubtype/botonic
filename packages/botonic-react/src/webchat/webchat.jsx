@@ -1,5 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import Textarea from 'react-textarea-autosize'
+import Pusher from 'pusher-js'
+import axios from 'axios'
 import { params2queryString } from '@botonic/core'
 
 import { WebchatContext, RequestContext } from '../contexts'
@@ -13,12 +15,23 @@ import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
 import { isDev, msgToBotonic } from '../utils'
 
+const uuidv1 = require('uuid/v1')
+
 const getScriptBaseURL = () => {
   let scriptBaseURL = document
     .querySelector('script[src$="webchat.botonic.js"]')
     .getAttribute('src')
   let scriptName = scriptBaseURL.split('/').pop()
   return scriptBaseURL.replace('/' + scriptName, '/')
+}
+
+const getUserUUID = () => {
+  let userId = window.localStorage.getItem('userId')
+  if (!userId) {
+    userId = uuidv1()
+    window.localStorage.setItem('userId', userId)
+  }
+  return userId
 }
 
 export const Webchat = props => {
@@ -36,6 +49,10 @@ export const Webchat = props => {
     updateTheme,
     updateDevSettings
   } = props.webchatHooks || useWebchat()
+
+  const appId = props.botonicApp.appId
+  let pusher
+  const pusherUserId = getUserUUID()
 
   useTyping({ webchatState, updateTyping, updateMessage })
 
@@ -56,6 +73,16 @@ export const Webchat = props => {
       }
       if (devSettings) updateDevSettings(devSettings)
     } catch (e) {}
+    if (appId) {
+      pusher = new Pusher('da85029877df0c827e44')
+      if (!Object.keys(pusher.channels.channels).length) {
+        //TODO: remove my endpoint, generic one with socket
+        pusher.subscribe(
+          `public-macbook-pro-de-arnau.local_${appId}-${pusherUserId}`
+        )
+        pusher.bind('botonic_response', processNewInput)
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -84,6 +111,22 @@ export const Webchat = props => {
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
+  const processNewInput = data => {
+    let newComponent = msgToBotonic(data.message)
+    if (newComponent) addMessageComponent(newComponent)
+  }
+
+  const postCloudInput = async input => {
+    let api_url = 'https://api.hubtype.com/v1'
+    return axios.post(
+      `${api_url}/provider_accounts/webhooks/webchat/${appId}/`,
+      {
+        sender: pusherUserId,
+        message: input
+      }
+    )
+  }
+
   const closeWebview = options => {
     updateWebview()
     textArea.current.focus()
@@ -108,6 +151,7 @@ export const Webchat = props => {
       addMessageComponent(inputMessage)
       updateReplies(false)
     }
+    if (appId) return postCloudInput(input)
     let output = await props.botonicApp.input({
       input,
       session: webchatState.session,
