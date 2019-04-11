@@ -5,17 +5,32 @@ import { RichMessage, Carousel } from "../cms/model";
 
 export class Renderer {
   richMessage(msg: RichMessage): React.ReactNode {
-    return (
+    let nodes: JSX.Element[] = [];
+    if (msg.imgUrl) {
+      nodes = nodes.concat(<Image src={msg.imgUrl} />);
+    }
+    nodes = nodes.concat(<Text>
+      {msg.title || ''}
+      <p />{msg.subtitle || ''}
       <>
-        <Image src={msg.imgURL} />
-        <Text>
-          {msg.title}
-          {msg.subtitle}
-          <Button payload={msg.button.payload}>{msg.button.text}</Button>
-        </Text>
+        {msg.buttons.map(button =>
+          button.callback.payload
+            ? <Button payload={button.callback.payload}>{button.text}</Button>
+            : <Button url={button.callback.url}>{button.text}</Button>
+        )}
       </>
-    );
+    </Text>);
+    return <>
+      {nodes}
+    </>
+      ;
   }
 
-  carousel(carousel: Carousel) {}
+  carousel(carousel: Carousel) : React.ReactNode { 
+    return <>
+      {carousel.elements.map(
+        msg => this.richMessage(msg)
+      )}
+    </>;
+  }
 }
