@@ -5,7 +5,7 @@ import { mock } from "ts-mockito";
 
 
 test("TEST: contentful", async () => {
-  let c = new Contentful();
+  
   // // Massimo
   // this.client = c.login(
   //   '92w5st1ik4od',
@@ -13,7 +13,7 @@ test("TEST: contentful", async () => {
   // );
 
   // SantCugat
-  c.login(
+  let c = new Contentful(
     "u5utof016sy1",
     "09ad9c1ef3f1fb3b4c4e330d13dff04f1666fcd1b4cde5ee607f3ca993ef574d"
   );
