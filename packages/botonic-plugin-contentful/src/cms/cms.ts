@@ -8,10 +8,10 @@ export class Callback {
   }
 
   static ofPayload(payload: string): Callback {
-    return new Callback(payload, null);
+    return new Callback(payload, undefined);
   }
   static ofUrl(url: string): Callback {
-    return new Callback(null, url);
+    return new Callback(undefined, url);
   }
 }
 
@@ -19,25 +19,28 @@ export class Callback {
  * Map the id of a UI element such a button to a callback
  */
 export class CallbackMap {
-  private callbacks?: Map<string, Callback> | Callback = new Map();
-  private static ALL_IDS: string = null;
+  private callbacks: Map<string, Callback> = new Map();
+  private forAllIds?: Callback;
 
   static forAllIds(callback: Callback): CallbackMap {
     let map = new CallbackMap();
-    map.callbacks = callback;
+    map.forAllIds = callback;
     return map;
   }
 
   addCallback(id: string, callback: Callback): CallbackMap {
+    if (this.forAllIds) {
+      throw new Error('Cannot add callback when created with forAllIds');
+    } 
     this.callbacks[id] = callback;
     return this;
   }
 
   getCallback(id: string): Callback {
-    if (this.callbacks instanceof Map) {
-      return this.callbacks[id];
+    if (this.forAllIds) {
+      return this.forAllIds;
     }
-    return <Callback> this.callbacks;
+    return this.callbacks[id];
   }
 }
 

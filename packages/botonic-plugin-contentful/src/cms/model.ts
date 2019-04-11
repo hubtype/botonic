@@ -1,7 +1,7 @@
 import { Callback } from "./cms";
 
 export class RichMessage {
-  buttons?: Button[] = [];
+  buttons: Button[] = [];
 
   constructor(readonly title?: string, readonly subtitle?: string, readonly imgUrl?: string) {
     this.subtitle = subtitle;

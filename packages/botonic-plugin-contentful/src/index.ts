@@ -1,5 +1,5 @@
-import { Renderer } from "./render/render";
 import { Contentful } from "./contentful/contentful";
+import { CMS } from "./cms/cms";
 
 export { RichMessage } from './cms/model'
 export { Button } from './cms/model'
@@ -12,12 +12,13 @@ export { Contentful } from './contentful/contentful'
 
 export { Renderer } from './render/render'
 
+
 export default class BotonicPluginContentful {
-  options: any;
+  readonly contentful: CMS;
 
   constructor(options: any) {
-    this.options = options;
-    let r = new Contentful();
+    let contentful= new Contentful(options['spaceId'], options['accessToken']);
+    this.contentful = contentful;
   }
 
   async pre({ input, session, lastRoutePath }) {
