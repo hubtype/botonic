@@ -1,21 +1,35 @@
+import { Callback } from "./cms";
+
 export class RichMessage {
-  title?: string;
+  buttons?: Button[] = [];
 
-  subtitle?: string;
+  constructor(readonly title?: string, readonly subtitle?: string, readonly imgUrl?: string) {
+    this.subtitle = subtitle;
+    this.imgUrl = imgUrl;
+  }
 
-  imgURL?: string;
-
-  button?: Button;
+  addButton(button: Button): RichMessage {
+    this.buttons = this.buttons.concat(button);
+    return this;
+  }
 }
 
+// export interface Observable {
+//   setUrl(url: string): Observable;
+//   setPayload(payload: string) :Observable;
+// } 
+
 export class Button {
-  text: string;
-
-  url?: string;
-
-  payload?: string;
+  
+  constructor(readonly text: string, readonly callback: Callback) {
+  }
 }
 
 export class Carousel {
-  elements: RichMessage[];
+  elements: RichMessage[] = [];
+
+  addElement(element: RichMessage): Carousel {
+    this.elements = this.elements.concat(element);
+    return this;
+  }
 }
