@@ -1,0 +1,1 @@
+rm -rf node_modules/@botonic && mkdir -p node_modules/@botonic && cp -r ~/hubtype/botonic/packages/botonic-core node_modules/@botonic/core && cp -r ~/hubtype/botonic/packages/botonic-react node_modules/@botonic/react
