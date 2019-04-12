@@ -15,27 +15,39 @@ const terserPlugin = new TerserPlugin({
   }
 });
 
-const babelLoaderConfig = {
+// const babelLoaderConfig = {
+//   test: /\.(js|jsx|ts|tsx)$/,
+//   exclude: /node_modules\/(?!(@botonic)\/)/,
+//   use: {
+//     loader: "babel-loader",
+//     options: {
+//       cacheDirectory: true,
+//       presets: [
+//         "@babel/preset-env",
+//         "@babel/react",
+//         "@babel/preset-typescript"
+//       ],
+//       plugins: [
+//         require("@babel/plugin-proposal-object-rest-spread"),
+//         require("@babel/plugin-proposal-class-properties"),
+//         require("babel-plugin-add-module-exports"),
+//         require("@babel/plugin-transform-runtime"),
+//       ]
+//     }
+//   }
+// };
+
+const typescriptLoaderConfig = {
   test: /\.(js|jsx|ts|tsx)$/,
   exclude: /node_modules\/(?!(@botonic)\/)/,
   use: {
-    loader: "babel-loader",
+    loader: "ts-loader",
     options: {
-      cacheDirectory: true,
-      presets: [
-        "@babel/preset-env",
-        "@babel/react",
-        "@babel/preset-typescript"
-      ],
-      plugins: [
-        require("@babel/plugin-proposal-object-rest-spread"),
-        require("@babel/plugin-proposal-class-properties"),
-        require("babel-plugin-add-module-exports"),
-        require("@babel/plugin-transform-runtime"),
-      ]
+      // see https://github.com/TypeStrong/ts-loader#loader-options
     }
   }
 };
+
 
 const fileLoaderConfig = {
   test: /\.(png|svg|jpg|gif)$/,
@@ -90,7 +102,7 @@ const botonicServerConfig = {
     libraryTarget: "umd",
   },
   module: {
-    rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
+    rules: [typescriptLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
   },
   resolve: {
     extensions: ["*", ".ts", ".tsx", ".js", ".jsx"]
@@ -98,6 +110,6 @@ const botonicServerConfig = {
   plugins: [new CleanWebpackPlugin(), imageminPlugin]
 };
 
-module.exports = function(env) {
+module.exports = function (env) {
   return botonicServerConfig;
 };
