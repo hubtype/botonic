@@ -77,9 +77,7 @@ export const Webchat = props => {
       pusher = new Pusher('da85029877df0c827e44')
       if (!Object.keys(pusher.channels.channels).length) {
         //TODO: remove my endpoint, generic one with socket
-        pusher.subscribe(
-          `public-macbook-pro-de-arnau.local_${appId}-${pusherUserId}`
-        )
+        pusher.subscribe(`public-${appId}-${pusherUserId}`)
         pusher.bind('botonic_response', processNewInput)
       }
     }
