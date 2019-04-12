@@ -1,7 +1,7 @@
 import React from 'react'
 import { useWebchat, useComponentVisible } from './hooks'
 import { Webchat } from './webchat'
-import { SessionView } from './sessionView'
+// import { SessionView } from './sessionView'
 
 export const WebchatDev = props => {
   const webchatHooks = useWebchat()
@@ -98,7 +98,7 @@ export const WebchatDev = props => {
             marginLeft: '20px'
           }}
         >
-          <SessionView webchatHooks={webchatHooks} />
+          {/* <SessionView webchatHooks={webchatHooks} /> */}
         </div>
       )}
     </div>
