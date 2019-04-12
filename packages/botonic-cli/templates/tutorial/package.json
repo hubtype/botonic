@@ -4,18 +4,9 @@
     "start": "webpack-dev-server --env.webchat",
     "test": "jest"
   },
-  "jest": {
-    "rootDir": "tests",
-    "transformIgnorePatterns": [
-      "/node_modules/(?!@botonic).+\\.(js|jsx)$"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(scss|css|less)$": "<rootDir>/__mocks__/styleMock.js"
-    }
-  },
   "dependencies": {
-    "@botonic/react": "0.8.0-beta.2"
+    "@botonic/react": "0.8.0-beta.2",
+    "@botonic/botonic-plugin-contentful": "0.0.1"
   },
   "devDependencies": {
     "babel-jest": "^24.1.0",
