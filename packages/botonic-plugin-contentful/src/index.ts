@@ -1,16 +1,16 @@
 import { Contentful } from "./contentful/contentful";
 import { CMS } from "./cms/cms";
 
-export { RichMessage } from './cms/model'
-export { Button } from './cms/model'
-export { Carousel } from './cms/model'
+// export { RichMessage } from './cms/model'
+// export { Button } from './cms/model'
+// export { Carousel } from './cms/model'
 
-export { CMS } from './cms/cms'
-export { Callback } from './cms/cms'
+// export { CMS } from './cms/cms'
+// export { Callback } from './cms/cms'
 
-export { Contentful } from './contentful/contentful'
+// export { Contentful } from './contentful/contentful'
 
-export { Renderer } from './render/render'
+// export { Renderer } from './render/render'
 
 
 export default class BotonicPluginContentful {
