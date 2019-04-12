@@ -1,115 +1,70 @@
-const path = require("path");
-const ImageminPlugin = require("imagemin-webpack");
-const imageminGifsicle = require("imagemin-gifsicle");
-const imageminJpegtran = require("imagemin-jpegtran");
-const imageminOptipng = require("imagemin-optipng");
-const imageminSvgo = require("imagemin-svgo");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
+var path = require("path");
+var webpack = require("webpack");
 
-const root = path.resolve(__dirname, "src");
+var PATHS = {
+  entryPoint: path.resolve(__dirname, 'src/index.ts'),
+  bundles: path.resolve(__dirname, 'lib'),
+}
 
-const terserPlugin = new TerserPlugin({
-  terserOptions: {
-    keep_fnames: true
-  }
-});
-
-// const babelLoaderConfig = {
-//   test: /\.(js|jsx|ts|tsx)$/,
-//   exclude: /node_modules\/(?!(@botonic)\/)/,
-//   use: {
-//     loader: "babel-loader",
-//     options: {
-//       cacheDirectory: true,
-//       presets: [
-//         "@babel/preset-env",
-//         "@babel/react",
-//         "@babel/preset-typescript"
-//       ],
-//       plugins: [
-//         require("@babel/plugin-proposal-object-rest-spread"),
-//         require("@babel/plugin-proposal-class-properties"),
-//         require("babel-plugin-add-module-exports"),
-//         require("@babel/plugin-transform-runtime"),
-//       ]
-//     }
-//   }
-// };
-
-const typescriptLoaderConfig = {
-  test: /\.(js|jsx|ts|tsx)$/,
-  exclude: /node_modules\/(?!(@botonic)\/)/,
-  use: {
-    loader: "ts-loader",
-    options: {
-      // see https://github.com/TypeStrong/ts-loader#loader-options
-    }
-  }
-};
-
-
-const fileLoaderConfig = {
-  test: /\.(png|svg|jpg|gif)$/,
-  use: [
-    {
-      loader: "file-loader",
-      options: {
-        outputPath: "assets"
-      }
-    }
-  ]
-};
-
-const stylesLoaderConfig = {
-  test: /\.(scss|css)$/,
-  use: ["style-loader", "css-loader", "sass-loader"]
-};
-
-const imageminPlugin = new ImageminPlugin({
-  bail: false,
-  cache: false,
-  imageminOptions: {
-    plugins: [
-      imageminGifsicle({
-        interlaced: true
-      }),
-      imageminJpegtran({
-        progressive: true
-      }),
-      imageminOptipng({
-        optimizationLevel: 5
-      }),
-      imageminSvgo({
-        removeViewBox: true
-      })
-    ]
-  }
-});
-
-const botonicServerConfig = {
-  optimization: {
-    minimizer: [terserPlugin]
+var config = {
+  // These are the entry point of our library. We tell webpack to use
+  // the name we assign later, when creating the bundle. We also use
+  // the name to filter the second entry point for applying code
+  // minification via UglifyJS
+  entry: {
+    'my-lib': [PATHS.entryPoint]
+    // 'my-lib.min': [PATHS.entryPoint]
   },
-  context: root,
   mode: "development",
-  target: "node",
-  entry: "./index.ts",
+  // The output defines how and where we want the bundles. The special
+  // value `[name]` in `filename` tell Webpack to use the name we defined above.
+  // We target a UMD and name it MyLib. When including the bundle in the browser
+  // it will be accessible at `window.MyLib`
   output: {
-    path: path.resolve(__dirname, "lib"),
-    filename: "index.js",
-    library: "botonic-plugin-contentful",
-    libraryTarget: "umd",
+    path: PATHS.bundles,
+    filename: 'index.js',
+    libraryTarget: 'amd',
+    library: 'botonic-plugin-contentful',
+    umdNamedDefine: true
   },
-  module: {
-    rules: [typescriptLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
-  },
+  // Add resolve for `tsx` and `ts` files, otherwise Webpack would
+  // only look for common JavaScript file extension (.js)
   resolve: {
-    extensions: ["*", ".ts", ".tsx", ".js", ".jsx"]
+    extensions: ['.ts', '.tsx', '.js']
   },
-  plugins: [new CleanWebpackPlugin(), imageminPlugin]
-};
+  // Activate source maps for the bundles in order to preserve the original
+  // source when the user debugs the application
+  devtool: 'source-map',
+  plugins: [
+    // TODO Error: webpack.optimize.UglifyJsPlugin has been removed, please use config.optimization.minimize instead.
 
-module.exports = function (env) {
-  return botonicServerConfig;
-};
+    // // Apply minification only on the second bundle by
+    // // using a RegEx on the name, which must end with `.min.js`
+    // // NB: Remember to activate sourceMaps in UglifyJsPlugin
+    // // since they are disabled by default!
+    // new webpack.optimize.UglifyJsPlugin({
+    //   minimize: true,
+    //   sourceMap: true,
+    //   include: /\.min\.js$/,
+    // })
+  ],
+  module: {
+    // Webpack doesn't understand TypeScript files and a loader is needed.
+    // `node_modules` folder is excluded in order to prevent problems with
+    // the library dependencies, as well as `__tests__` folders that
+    // contain the tests for the library
+    rules: [{
+      test: /\.tsx?$/,
+      loader: 'awesome-typescript-loader',
+      exclude: /node_modules/,
+      query: {
+        // we don't want any declaration file in the bundles
+        // folder since it wouldn't be of any use ans the source
+        // map already include everything for debugging
+        declaration: false,
+      }
+    }]
+  }
+}
+
+module.exports = config;
