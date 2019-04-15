@@ -29,8 +29,25 @@ export function decomposeComponent(component) {
     componentJSON = carousel
   }
   try {
-    if (component[0].type == 'img' && !carousel.length)
-      componentJSON = component[0].props.src
+    if (component[0].type == 'img') componentJSON = component[0].props.src
+  } catch (e) {}
+
+  try {
+    if (component[0].type == 'video')
+      componentJSON = component[0].props.children.props.src
+  } catch (e) {}
+
+  try {
+    if (component[0].type == 'audio')
+      componentJSON = component[0].props.children[0].props.src
+  } catch (e) {}
+
+  try {
+    if (component[0].type == 'embed') componentJSON = component[0].props.src
+  } catch (e) {}
+  try {
+    if (component[1].type == 'div')
+      componentJSON = component[1].props.children.props.children.props.href
   } catch (e) {}
   return componentJSON
 }

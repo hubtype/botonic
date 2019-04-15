@@ -8,16 +8,17 @@ export const Location = props => {
     let lat = parseFloat(props.lat)
     let long = parseFloat(props.long)
 
+    let location_url = `https://www.google.com/maps/@${lat},${long}`
+    if (props.data) {
+      location_url = props.data
+    }
+
     return (
       <Message {...props} type='location'>
         {' '}
         <div>
           <small>
-            <a
-              href={`https://www.google.com/maps/@${lat},${long}`}
-              target='_blank'
-              rel='noopener noreferrer'
-            >
+            <a href={location_url} target='_blank' rel='noopener noreferrer'>
               {' '}
               See Location
             </a>
