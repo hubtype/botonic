@@ -1,5 +1,8 @@
 import React from 'react'
 import { Text } from './components/text'
+import { Title } from './components/title'
+import { Subtitle } from './components/subtitle'
+import { Element } from './components/element'
 import { Button } from './components/button'
 import { Carousel } from './components/carousel'
 import { Reply } from './components/reply'
@@ -61,7 +64,7 @@ export function msgToBotonic(msg) {
     if (msg.replies && msg.replies.length) return quickreplies_parse(msg)
     return <Text {...msg}>{msg.data}</Text>
   } else if (msg.type == 'carousel') {
-    return <Carousel {...msg}>{elements_parse(msg.elements)}</Carousel>
+    return <Carousel {...msg}>{elements_parse(msg.data)}</Carousel>
   } else if (msg.type == 'image') {
     return <Image {...msg} src={msg.data} />
   } else if (msg.type == 'video') {
@@ -79,6 +82,17 @@ export function msgToBotonic(msg) {
       </>
     )
   }
+}
+
+function elements_parse(elements) {
+  return elements.map((e, i) => (
+    <Element key={i}>
+      <Image src={e.img} />
+      <Title>{e.title}</Title>
+      <Subtitle>{e.subtitle}</Subtitle>
+      <Button payload={e.button.payload}>{e.button.children}</Button>
+    </Element>
+  ))
 }
 
 function quickreplies_parse(msg) {

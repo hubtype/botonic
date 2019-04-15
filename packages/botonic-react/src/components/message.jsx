@@ -31,10 +31,33 @@ export const Message = props => {
 
   if (isBrowser()) {
     useEffect(() => {
+      console.log('STRING', textChildren)
+      let carousel = []
+      let img_url = null
+      let new_Child = null
+      try {
+        textChildren[0].props.children.map((e, i) => {
+          let c = e.props.children
+          carousel[i] = {
+            img: c[0].props.src,
+            title: c[1].props.children,
+            subtitle: c[2].props.children,
+            button: c[3].props
+          }
+        })
+      } catch (e) {}
+      if (carousel.length) {
+        console.log('CAAAR;', carousel)
+        new_Child = carousel
+      }
+      try {
+        if (textChildren[0].type == 'img') img_url = textChildren[0].props.src
+      } catch (e) {}
+      if (img_url && !carousel.length) new_Child = img_url
       let message = {
         id: state.id,
         type,
-        data: textChildren,
+        data: new_Child ? new_Child : textChildren,
         from,
         delay,
         typing,
