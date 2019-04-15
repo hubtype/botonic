@@ -11,6 +11,30 @@ import { Video } from './components/video'
 import { Document } from './components/document'
 import { Location } from './components/location'
 
+export function decomposeComponent(component) {
+  let componentJSON = null
+  let carousel = []
+  try {
+    component[0].props.children.map((e, i) => {
+      let c = e.props.children
+      carousel[i] = {
+        img: c[0].props.src,
+        title: c[1].props.children,
+        subtitle: c[2].props.children,
+        button: c[3].props
+      }
+    })
+  } catch (e) {}
+  if (carousel.length) {
+    componentJSON = carousel
+  }
+  try {
+    if (component[0].type == 'img' && !carousel.length)
+      componentJSON = component[0].props.src
+  } catch (e) {}
+  return componentJSON
+}
+
 export function isFunction(o) {
   return typeof o === 'function'
 }
