@@ -4,7 +4,7 @@ import { isBrowser, isNode } from '@botonic/core'
 
 export const Carousel = props => {
   let content = ''
-  if (isBrowser())
+  if (isBrowser()) {
     content = (
       <div
         style={{
@@ -18,7 +18,7 @@ export const Carousel = props => {
       >
         {props.children}
       </div>
-    )
+    ) }
   return <Message type='carousel'>{content}</Message>
 } /*
   const renderBrowser = () => (
