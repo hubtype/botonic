@@ -12,7 +12,8 @@
   },
   "name": "botonic-plugin-contentful",
   "version": "0.0.1",
-  "main": "lib/index.js",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "dependencies": {
     "@babel/types": "7.4.0",
     "@botonic/react": "^0.8.0-beta.2",
@@ -66,8 +67,5 @@
     "style-loader": "^0.23.1",
     "node-sass": "^4.11.0",
     "css-loader": "^2.1.1"
-  },
-  "engines": {
-    "node": ">=8.10.0"
   }
 }
