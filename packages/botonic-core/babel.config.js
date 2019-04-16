@@ -10,15 +10,9 @@
  */
 
 module.exports = {
+  sourceType: "unambiguous",
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          node: 'current'
-        }
-      }
-    ],
+    '@babel/preset-env',
   ],
   plugins: [
     require('@babel/plugin-proposal-object-rest-spread'),

@@ -10,24 +10,10 @@
  */
 
 module.exports = {
+  sourceType: "unambiguous",
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          node: 'current'
-        }
-      }
-    ],
-    [
-      '@babel/react',
-      {
-        targets: {
-          node: 'current'
-        }
-      }
-    ],
-  ],
+    '@babel/preset-env'
+    , '@babel/react'],
   plugins: [
     require('@babel/plugin-proposal-object-rest-spread'),
     require('@babel/plugin-proposal-class-properties'),
