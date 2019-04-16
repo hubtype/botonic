@@ -1,10 +1,13 @@
-import ReactJson from 'react-json-view'
+import { JSONEditor } from 'react-json-editor-viewer'
 import React from 'react'
 
 import { useWebchat } from './hooks'
 
 export const SessionView = props => {
   const { webchatState, updateSession } = props.webchatHooks || useWebchat()
+  const updateSessionTest = (props, value, parent, data) => {
+    updateSession(data)
+  }
   return (
     <div
       style={{
@@ -28,14 +31,10 @@ export const SessionView = props => {
           /{webchatState.lastRoutePath}
         </span>
       </div>
-      <ReactJson
-        style={{ flex: 1, overflow: 'auto' }}
-        onEdit={e => updateSession(e.updated_src)}
-        onDelete={e => updateSession(e.updated_src)}
-        theme='apathy:inverted'
-        iconStyle='triangle'
-        name='Session'
-        src={webchatState.session}
+      <JSONEditor
+        data={webchatState.session}
+        collapsible
+        onChange={updateSessionTest}
       />
     </div>
   )
