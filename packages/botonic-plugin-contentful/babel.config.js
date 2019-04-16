@@ -3,25 +3,7 @@
  * do not modify to avoid conflicts with webpack.config.js.
  */
 module.exports = {
-  presets: [
-    [
-      "@babel/preset-env",
-      {
-        targets: {
-          node: "current"
-        }
-      }
-    ],
-    [
-      "@babel/react",
-      {
-        targets: {
-          node: "current"
-        }
-      }
-    ],
-    "@babel/typescript"
-  ],
+  presets: ["@babel/preset-env", "@babel/react", "@babel/typescript"],
   plugins: [
     //   require('@babel/plugin-proposal-object-rest-spread'),
     require('@babel/plugin-proposal-object-rest-spread'),
