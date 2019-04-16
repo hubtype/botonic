@@ -21,6 +21,12 @@ export class App {
     defaultTyping,
     defaultDelay
   }) {
+    this.plugins = loadPlugins(plugins)
+    this.theme = theme
+    this.defaultTyping = defaultTyping || 0
+    this.defaultDelay = defaultDelay || 0
+    this.locales = locales
+    this.integrations = integrations
     if (appId) {
       this.appId = appId
       return
@@ -31,15 +37,9 @@ export class App {
       path: '404',
       action: () => <Text>I don't understand you</Text>
     }
-    this.locales = locales
-    this.integrations = integrations
     this.router = isFunction(this.routes)
       ? null
       : new Router([...this.routes, this.defaultRoutes])
-    this.plugins = loadPlugins(plugins)
-    this.theme = theme
-    this.defaultTyping = defaultTyping || 0
-    this.defaultDelay = defaultDelay || 0
   }
 
   getString(stringID, session) {
@@ -58,7 +58,7 @@ export class App {
     else return <Webchat botonicApp={this} theme={themeOptions} />
   }
 
-  render(dest, webchatOptions, appId = null) {
+  render({ dest, webchatOptions, appId }) {
     if (appId) this.appId = appId
     if (webchatOptions && webchatOptions.theme)
       ReactDOM.render(this.webchat(webchatOptions.theme), dest)
