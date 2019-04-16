@@ -14,42 +14,41 @@ import { Location } from './components/location'
 
 export function decomposeComponent(component) {
   let componentJSON = null
-  let carousel = []
   try {
-    component[0].props.children.map((e, i) => {
-      let c = e.props.children
-      carousel[i] = {
-        img: c[0].props.src,
-        title: c[1].props.children,
-        subtitle: c[2].props.children,
-        button: c[3].props
-      }
-    })
-  } catch (e) {}
-  if (carousel.length) {
-    componentJSON = carousel
+    switch (component[0].type) {
+      case 'div':
+        let carousel = []
+        component[0].props.children.map((e, i) => {
+          let c = e.props.children
+          carousel[i] = {
+            img: c[0].props.src,
+            title: c[1].props.children,
+            subtitle: c[2].props.children,
+            button: c[3].props
+          }
+        })
+        componentJSON = carousel
+        break
+      case 'img':
+        componentJSON = component[0].props.src
+        break
+      case 'video':
+        componentJSON = component[0].props.children.props.src
+        break
+      case 'audio':
+        componentJSON = component[0].props.children[0].props.src
+        break
+      case 'embed':
+        componentJSON = component[0].props.src
+        break
+      case 'a':
+        componentJSON = component[0].props.href
+        break
+    }
+    return componentJSON
+  } catch (e) {
+    console.log(`Error decomposing Component ${e}`)
   }
-  try {
-    if (component[0].type == 'img') componentJSON = component[0].props.src
-  } catch (e) {}
-
-  try {
-    if (component[0].type == 'video')
-      componentJSON = component[0].props.children.props.src
-  } catch (e) {}
-
-  try {
-    if (component[0].type == 'audio')
-      componentJSON = component[0].props.children[0].props.src
-  } catch (e) {}
-
-  try {
-    if (component[0].type == 'embed') componentJSON = component[0].props.src
-  } catch (e) {}
-  try {
-    if (component[0].type == 'a') componentJSON = component[0].props.href
-  } catch (e) {}
-  return componentJSON
 }
 
 export function isFunction(o) {
