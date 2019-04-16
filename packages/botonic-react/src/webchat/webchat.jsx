@@ -79,7 +79,7 @@ export const Webchat = props => {
 
   useEffect(() => {
     updateTheme({ ...webchatState.theme, ...props.theme })
-  }, [webchatState.theme, props.theme])
+  }, [props.theme])
 
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
