@@ -7,6 +7,7 @@ import { Button } from './components/button'
 import { Carousel } from './components/carousel'
 import { Reply } from './components/reply'
 import { Image } from './components/image'
+import { Pic } from './components/pic'
 import { Video } from './components/video'
 import { Document } from './components/document'
 import { Location } from './components/location'
@@ -46,8 +47,7 @@ export function decomposeComponent(component) {
     if (component[0].type == 'embed') componentJSON = component[0].props.src
   } catch (e) {}
   try {
-    if (component[1].type == 'div')
-      componentJSON = component[1].props.children.props.children.props.href
+    if (component[0].type == 'a') componentJSON = component[0].props.href
   } catch (e) {}
   return componentJSON
 }
@@ -128,10 +128,12 @@ export function msgToBotonic(msg) {
 function elements_parse(elements) {
   return elements.map((e, i) => (
     <Element key={i}>
-      <Image src={e.img} />
+      <Pic src={e.img} />
       <Title>{e.title}</Title>
       <Subtitle>{e.subtitle}</Subtitle>
-      <Button payload={e.button.payload}>{e.button.children}</Button>
+      <Button url={e.button.url} payload={e.button.payload}>
+        {e.button.children}
+      </Button>
     </Element>
   ))
 }

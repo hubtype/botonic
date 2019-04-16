@@ -15,15 +15,10 @@ export const Location = props => {
 
     return (
       <Message {...props} type='location'>
-        {' '}
-        <div>
-          <small>
-            <a href={location_url} target='_blank' rel='noopener noreferrer'>
-              {' '}
-              See Location
-            </a>
-          </small>
-        </div>
+        <a href={location_url} target='_blank' rel='noopener noreferrer'>
+          {' '}
+          See Location
+        </a>
       </Message>
     )
   }
