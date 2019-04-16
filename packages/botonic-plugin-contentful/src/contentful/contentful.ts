@@ -1,13 +1,6 @@
-import { ContentfulClientApi, createClient, Entry } from "contentful";
-import { CMS, Callback, CallbackMap } from "../cms/cms";
-import { Carousel, RichMessage, Button } from "../cms/model";
-
-interface ContentfulRichMessage {
-  title: string;
-  subtitle: string;
-  pic: string;
-  button: string;
-}
+import { ContentfulClientApi, createClient, Entry } from 'contentful';
+import { CMS, CallbackMap } from '../cms';
+import { Carousel, RichMessage, Button } from '../cms';
 
 export class Contentful implements CMS {
   private client: ContentfulClientApi;
@@ -23,20 +16,28 @@ export class Contentful implements CMS {
    * @todo support multiple buttons
    */
   async richMessage(id: string, callbacks: CallbackMap): Promise<RichMessage> {
-    let entry : Entry<Map<string, string>> = await this.client.getEntry(id);
+    let entry: Entry<RichMessageModel> = await this.client.getEntry(id);
 
-    let msg = new RichMessage(
-      entry.fields["title"] || null,
-      entry.fields["subtitle"] || null,
-      entry.fields["pic"] || null
+    let message = new RichMessage(
+      entry.fields.title || null,
+      entry.fields.subtitle || null,
+      entry.fields.pic || null
     );
-    msg.addButton(new Button(entry.fields["button"], callbacks.getCallback(id)));
+    message.addButton(
+      new Button(entry.fields['button'], callbacks.getCallback(id))
+    );
 
-    return Promise.resolve(msg);
+    return Promise.resolve(message);
   }
+
   carousel(id: string, callbacks: CallbackMap): Promise<Carousel> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
+}
 
-
+interface RichMessageModel {
+  title: string;
+  subtitle: string;
+  pic: string;
+  button: string;
 }
