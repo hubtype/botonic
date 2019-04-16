@@ -40,7 +40,10 @@ class App extends React.Component {
                 console.log(e)
             }
         }
-        window.WebviewSdk.close(() => {}, err => console.log(err))
+        if (this.state.session.user.provider === 'whatsappnew') {
+            window.open('https://wa.me/' + this.state.session.user.imp_id, '_self');
+        }
+        else window.WebviewSdk.close(() => {}, err => console.log(err))
     }
 
     render() {
