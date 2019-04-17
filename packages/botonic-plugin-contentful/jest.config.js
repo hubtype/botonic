@@ -1,14 +1,15 @@
 module.exports = {
-  roots: ['<rootDir>'],
+  roots: ['tests/'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   },
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
-  testPathIgnorePatterns: ['lib'],
+  testPathIgnorePatterns: ['lib', '.*\.d\.ts'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   snapshotSerializers: [],
   setupFilesAfterEnv: [],
+  modulePaths: ['node_modules', 'src'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/tests/__mocks__/fileMock.js',

@@ -1,19 +1,19 @@
 {
   // start of path dependent configuration
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
       "*": [
-        "src/*",
-        "lib/src/*",
-        "types/*"
+        "../src/*",
+        "../lib/src/*",
+        "../types/*"
       ]
     },
-    "rootDir": "src",
+//    "rootDir": "../src",
     // end of path dependent configuration
     "outDir": "lib",
     "declaration": true,
@@ -23,11 +23,14 @@
     "module": "commonjs",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-//    "esModuleInterop": true,
     // lint options
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    // test options
+    "types": [
+      "@types/jest"
+    ]
   }
 }

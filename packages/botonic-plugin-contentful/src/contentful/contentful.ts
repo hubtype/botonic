@@ -1,7 +1,6 @@
 import * as contentful from 'contentful';
-import { CMS, CallbackMap } from '../cms';
-import { Carousel, Element, Button } from '../cms';
-import { Callback } from '../cms';
+import { Carousel, Element, Button } from '../cms/model';
+import { Callback, CMS, CallbackMap } from '../cms/cms';
 
 export class Contentful implements CMS {
   private client: contentful.ContentfulClientApi;
