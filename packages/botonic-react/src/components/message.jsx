@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
+import { decomposeComponent } from '../utils'
 import { Button } from './button'
 import { Reply } from './reply'
 
@@ -28,13 +29,13 @@ export const Message = props => {
   const textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
-
   if (isBrowser()) {
     useEffect(() => {
+      let decomposedChildren = decomposeComponent(textChildren)
       let message = {
         id: state.id,
         type,
-        data: textChildren,
+        data: decomposedChildren ? decomposedChildren : textChildren,
         from,
         delay,
         typing,

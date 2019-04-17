@@ -1,12 +1,55 @@
 import React from 'react'
 import { Text } from './components/text'
+import { Title } from './components/title'
+import { Subtitle } from './components/subtitle'
+import { Element } from './components/element'
 import { Button } from './components/button'
 import { Carousel } from './components/carousel'
 import { Reply } from './components/reply'
 import { Image } from './components/image'
+import { Pic } from './components/pic'
 import { Video } from './components/video'
 import { Document } from './components/document'
 import { Location } from './components/location'
+
+export function decomposeComponent(component) {
+  let componentJSON = null
+  try {
+    switch (component[0].type) {
+      case 'div':
+        let carousel = []
+        component[0].props.children.map((e, i) => {
+          let c = e.props.children
+          carousel[i] = {
+            img: c[0].props.src,
+            title: c[1].props.children,
+            subtitle: c[2].props.children,
+            button: c[3].props
+          }
+        })
+        componentJSON = carousel
+        break
+      case 'img':
+        componentJSON = component[0].props.src
+        break
+      case 'video':
+        componentJSON = component[0].props.children.props.src
+        break
+      case 'audio':
+        componentJSON = component[0].props.children[0].props.src
+        break
+      case 'embed':
+        componentJSON = component[0].props.src
+        break
+      case 'a':
+        componentJSON = component[0].props.href
+        break
+    }
+    return componentJSON
+  } catch (e) {
+    console.log(`Error decomposing Component ${e}`)
+  }
+}
 
 export function isFunction(o) {
   return typeof o === 'function'
@@ -61,7 +104,7 @@ export function msgToBotonic(msg) {
     if (msg.replies && msg.replies.length) return quickreplies_parse(msg)
     return <Text {...msg}>{msg.data}</Text>
   } else if (msg.type == 'carousel') {
-    return <Carousel {...msg}>{elements_parse(msg.elements)}</Carousel>
+    return <Carousel {...msg}>{elements_parse(msg.data)}</Carousel>
   } else if (msg.type == 'image') {
     return <Image {...msg} src={msg.data} />
   } else if (msg.type == 'video') {
@@ -79,6 +122,19 @@ export function msgToBotonic(msg) {
       </>
     )
   }
+}
+
+function elements_parse(elements) {
+  return elements.map((e, i) => (
+    <Element key={i}>
+      <Pic src={e.img} />
+      <Title>{e.title}</Title>
+      <Subtitle>{e.subtitle}</Subtitle>
+      <Button url={e.button.url} payload={e.button.payload}>
+        {e.button.children}
+      </Button>
+    </Element>
+  ))
 }
 
 function quickreplies_parse(msg) {
