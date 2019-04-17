@@ -5,10 +5,6 @@ import { Subtitle } from './components/subtitle'
 import { Element } from './components/element'
 import { Button } from './components/button'
 import { Carousel } from './components/carousel'
-import { Element } from './components/element'
-import { Pic } from './components/pic'
-import { Subtitle } from './components/subtitle'
-import { Title } from './components/title'
 import { Reply } from './components/reply'
 import { Image } from './components/image'
 import { Pic } from './components/pic'
@@ -28,7 +24,7 @@ export function decomposeComponent(component) {
             img: c[0].props.src,
             title: c[1].props.children,
             subtitle: c[2].props.children,
-            button: c[3].props
+            button: c.slice(3)
           }
         })
         componentJSON = carousel
@@ -107,10 +103,15 @@ export async function runPlugins(
 export function msgToBotonic(msg) {
   delete msg.display
   if (msg.type == 'text') {
-    if (msg.replies && msg.replies.length) return quickreplies_parse(msg)
+    if (
+      (msg.replies && msg.replies.length) ||
+      (msg.keyboard && msg.keyboard.length)
+    )
+      return quickreplies_parse(msg)
     return <Text {...msg}>{msg.data}</Text>
   } else if (msg.type == 'carousel') {
-    return <Carousel {...msg}>{elements_parse(msg.data)}</Carousel>
+    let elements = msg.data || msg.elements
+    return <Carousel {...msg}>{elements_parse(elements)}</Carousel>
   } else if (msg.type == 'image') {
     return <Image {...msg} src={msg.data} />
   } else if (msg.type == 'video') {
@@ -123,8 +124,10 @@ export function msgToBotonic(msg) {
     let buttons = buttons_parse(msg.buttons)
     return (
       <>
-        <Text {...msg}>{msg.text}</Text>
-        {buttons}
+        <Text {...msg}>
+          {msg.text}
+          {buttons}
+        </Text>
       </>
     )
   }
@@ -133,21 +136,45 @@ export function msgToBotonic(msg) {
 function elements_parse(elements) {
   return elements.map((e, i) => (
     <Element key={i}>
-      <Pic src={e.img} />
+      <Pic src={e.img || e.image_url} />
       <Title>{e.title}</Title>
       <Subtitle>{e.subtitle}</Subtitle>
-      <Button url={e.button.url} payload={e.button.payload}>
-        {e.button.children}
-      </Button>
+      {buttons_parse(e.button || e.buttons)}
     </Element>
   ))
+}
+
+// function elements_parse(elements) {
+//   return elements.map(el => {
+//     return (
+//       <Element>
+//         <Pic src={el.image_url} />
+//         <Title>{el.title}</Title>
+//         <Subtitle>{el.subtitle}</Subtitle>
+//         {buttons_parse(el.buttons)}
+//       </Element>
+//     )
+//   })
+// }
+
+function buttons_parse(buttons) {
+  return buttons.map(b => {
+    let payload = b.props ? b.props.payload : b.payload
+    let url = b.props ? b.props.url : b.url
+    let title = b.props ? b.props.children : b.title
+    return (
+      <Button payload={payload} url={url}>
+        {title}
+      </Button>
+    )
+  })
 }
 
 function quickreplies_parse(msg) {
   let replies = null
   let repliesKeyboard = null
   if (msg.replies) {
-    msg.replies.map((el, i) => {
+    replies = msg.replies.map((el, i) => {
       return (
         <Reply key={i} payload={el.payload}>
           {el.text}
@@ -156,7 +183,7 @@ function quickreplies_parse(msg) {
     })
   }
   if (msg.keyboard) {
-    msg.keyboard.map(el => {
+    repliesKeyboard = msg.keyboard.map(el => {
       return <Reply payload={el.data}>{el.label}</Reply>
     })
   }
@@ -169,25 +196,4 @@ function quickreplies_parse(msg) {
       </Text>
     </>
   )
-}
-
-function buttons_parse(buttons) {
-  return buttons.map(b => {
-    if (b.type == 'web_url') return <Button url={b.url}>{b.title}</Button>
-    else if (b.type == 'postback')
-      return <Button payload={b.payload}>{b.title}</Button>
-  })
-}
-
-function elements_parse(elements) {
-  return elements.map(el => {
-    return (
-      <Element>
-        <Pic src={el.image_url} />
-        <Title>{el.title}</Title>
-        <Subtitle>{el.subtitle}</Subtitle>
-        {buttons_parse(el.buttons)}
-      </Element>
-    )
-  })
 }
