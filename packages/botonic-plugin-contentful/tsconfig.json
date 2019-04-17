@@ -7,7 +7,8 @@
     "paths": {
       "*": [
         "src/*",
-        "lib/src/*"
+        "lib/src/*",
+        "types/*"
       ]
     },
     "rootDir": "src",
@@ -16,7 +17,12 @@
 //    "allowJs": true,
     "declaration": true,
     "declarationDir": "lib",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true
   },
   "include": [
     "src/**/*.ts"

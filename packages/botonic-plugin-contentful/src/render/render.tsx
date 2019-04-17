@@ -8,21 +8,24 @@ export class Renderer {
     if (msg.imgUrl) {
       nodes = nodes.concat(<Image src={msg.imgUrl} />);
     }
-    nodes = nodes.concat(<Text>
-      {msg.title || ''}
-      <p />{msg.subtitle || ''}
-      <>
-        {msg.buttons.map(button =>
-          button.callback.payload
-            ? <Button payload={button.callback.payload}>{button.text}</Button>
-            : <Button url={button.callback.url}>{button.text}</Button>
-        )}
-      </>
-    </Text>);
-    return <>
-      {nodes}
-    </>
-      ;
+
+    nodes = nodes.concat(
+      <Text>
+        {msg.title || ''}
+        <p />
+        {msg.subtitle || ''}
+        <>
+          {msg.buttons.map(button =>
+            button.callback.payload ? (
+              <Button payload={button.callback.payload}>{button.text}</Button>
+            ) : (
+              <Button url={button.callback.url}>{button.text}</Button>
+            )
+          )}
+        </>
+      </Text>
+    );
+    return <>{nodes}</>;
   }
 
   carousel(carousel: Carousel): React.ReactNode {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as botoreact from '@botonic/react';
-import * as cms from '../src/';
+import * as cms from '../src';
 
 test('TEST: render element', () => {
   let sut = new cms.Renderer();

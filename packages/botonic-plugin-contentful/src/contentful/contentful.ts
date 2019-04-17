@@ -1,10 +1,10 @@
-import { ContentfulClientApi, createClient, Entry } from 'contentful';
+import * as contentful from 'contentful';
 import { CMS, CallbackMap } from '../cms';
 import { Carousel, Element, Button } from '../cms';
 import { Callback } from '../cms';
 
 export class Contentful implements CMS {
-  private client: ContentfulClientApi;
+  private client: contentful.ContentfulClientApi;
 
   /**
    *
@@ -12,7 +12,7 @@ export class Contentful implements CMS {
    * during the first connection
    */
   constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
-    this.client = createClient({
+    this.client = contentful.createClient({
       space: spaceId,
       accessToken: accessToken,
       timeout: timeoutMs
@@ -24,7 +24,7 @@ export class Contentful implements CMS {
    *
    */
   async element(id: string, callbacks: CallbackMap): Promise<Element> {
-    let entry: Entry<ElementFields> = await this.client.getEntry(id);
+    let entry: contentful.Entry<ElementFields> = await this.client.getEntry(id);
     let message = new Element(
       entry.fields.title || undefined,
       entry.fields.subtitle || undefined,
@@ -47,27 +47,12 @@ export class Contentful implements CMS {
 
 interface ButtonFields {
   text: string;
-  carousel?: Entry<ElementFields>;
-}
-
-interface FileFields {
-  contentType: string;
-  fileName: string;
-  url: string;
-}
-
-/**
- * It also contains the size of the object
- */
-interface PicFields {
-  title: string;
-  description: string;
-  file: FileFields;
+  carousel?: contentful.Entry<ElementFields>;
 }
 
 interface ElementFields {
   title: string;
   subtitle: string;
-  pic?: Entry<PicFields>;
-  button: Entry<ButtonFields>;
+  pic?: contentful.Asset;
+  button: contentful.Entry<ButtonFields>;
 }
