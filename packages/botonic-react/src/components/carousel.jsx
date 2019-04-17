@@ -3,7 +3,7 @@ import { Message } from './message'
 import { isBrowser, isNode } from '@botonic/core'
 
 export const Carousel = props => {
-  let content = ''
+  let content = props.children
   if (isBrowser()) {
     content = (
       <div
@@ -18,7 +18,8 @@ export const Carousel = props => {
       >
         {props.children}
       </div>
-    ) }
+    )
+  }
   return <Message type='carousel'>{content}</Message>
 } /*
   const renderBrowser = () => (
