@@ -1,7 +1,8 @@
-import { RichMessage, Carousel, Button } from './model';
+import {Element, Carousel, Button} from './model';
 
 export class Callback {
-  constructor(readonly payload?: string, readonly url?: string) {}
+  constructor(readonly payload?: string, readonly url?: string) {
+  }
 
   static ofPayload(payload: string): Callback {
     return new Callback(payload, undefined);
@@ -45,7 +46,7 @@ export class CallbackMap {
 }
 
 export interface CMS {
-  richMessage(id: string, callbacks: CallbackMap): Promise<RichMessage>;
+  element(id: string, callbacks: CallbackMap): Promise<Element>;
 
   carousel(id: string, callbacks: CallbackMap): Promise<Carousel>;
 }
@@ -53,12 +54,12 @@ export interface CMS {
 export class DummyCMS implements CMS {
   async carousel(id: string, callbacks: CallbackMap): Promise<Carousel> {
     return Promise.resolve(
-      new Carousel().addElement(await this.richMessage(id, callbacks))
+      new Carousel().addElement(await this.element(id, callbacks))
     );
   }
 
-  async richMessage(id: string, callbacks: CallbackMap): Promise<RichMessage> {
-    let message = new RichMessage(
+  async element(id: string, callbacks: CallbackMap): Promise<Element> {
+    let message = new Element(
       'Title for ' + id,
       'subtitle',
       '../assets/img_home_bg.png'

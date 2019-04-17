@@ -1,10 +1,9 @@
-import { RequestContext, Text, Button, Reply, Image } from "@botonic/react";
-// import { ReactNode } from "react";
-import * as React from "react";
-import { RichMessage, Carousel } from "../cms/model";
+import { Text, Button, Image } from '@botonic/react';
+import * as React from 'react';
+import { Carousel, Element } from '../cms';
 
 export class Renderer {
-  richMessage(msg: RichMessage): React.ReactNode {
+  element(msg: Element): React.ReactNode {
     let nodes: JSX.Element[] = [];
     if (msg.imgUrl) {
       nodes = nodes.concat(<Image src={msg.imgUrl} />);
@@ -26,11 +25,7 @@ export class Renderer {
       ;
   }
 
-  carousel(carousel: Carousel) : React.ReactNode { 
-    return <>
-      {carousel.elements.map(
-        msg => this.richMessage(msg)
-      )}
-    </>;
+  carousel(carousel: Carousel): React.ReactNode {
+    return <>{carousel.elements.map(msg => this.element(msg))}</>;
   }
 }

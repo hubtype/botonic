@@ -4,31 +4,27 @@ import * as cms from '../src';
 
 test('TEST: contentful', async () => {
   // // Massimo
-  // this.client = c.login(
-  //   '92w5st1ik4od',
-  //   '531e998080a22a1da8cca3d3642a4628f0c19053e0a5244815c9a10b5b3781c4'
-  // );
-
-  // SantCugat
   let c = new Contentful(
-    'u5utof016sy1',
-    '09ad9c1ef3f1fb3b4c4e330d13dff04f1666fcd1b4cde5ee607f3ca993ef574d'
+    'c6yifkuc6gv8',
+    'cdce543064355bfbe80585e4d603776d6e2ec0f213f7395d3cc7c74ce7ef6cad',
+    2000
   );
-
   // act
   let callback = mock(cms.Callback);
-  let rm = await c.richMessage(
-    '65SHlSs0paCgFrk93XzCxg',
+  let rm = await c.element(
+    '714AB6c5NZoHLku5NoYVPE',
     cms.CallbackMap.forAllIds(callback)
   );
 
   // assert
-  expect(rm.title).toBe('Altres tràmits');
-  expect(rm.subtitle).toBeNull();
+  expect(rm.title).toBe('Dudas previas a la compra');
+  expect(rm.subtitle).toBe(
+    'Le ayudaré con sus compras en la tienda online de Massimo Dutti.'
+  );
   expect(rm.imgUrl).toBe(
-    'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'
+    'https://images.ctfassets.net/c6yifkuc6gv8/4yiuNsEcnINqDEfNEX2Ap2/84f81b12f0e0cd328a76bdc38db82f3c/img_01_comprar_new.png'
   );
   expect(rm.buttons).toHaveLength(1);
-  expect(rm.buttons[0].callback).toBe(callback);
-  expect(rm.buttons[0].text).toBe('Ves-hi');
+  expect(rm.buttons[0].callback.payload).toBe('714AB6c5NZoHLku5NoYVPE');
+  expect(rm.buttons[0].text).toBe('Ver opciones');
 });
