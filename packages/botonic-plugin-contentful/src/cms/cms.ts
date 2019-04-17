@@ -1,8 +1,7 @@
-import {Element, Carousel, Button} from './model';
+import { Element, Carousel, Button } from './model';
 
 export class Callback {
-  constructor(readonly payload?: string, readonly url?: string) {
-  }
+  constructor(readonly payload?: string, readonly url?: string) {}
 
   static ofPayload(payload: string): Callback {
     return new Callback(payload, undefined);
@@ -32,7 +31,7 @@ export class CallbackMap {
       throw new Error('Cannot add callback when created with forAllIds');
     }
 
-    this.callbacks[id] = callback;
+    this.callbacks.set(id, callback);
     return this;
   }
 
@@ -41,7 +40,12 @@ export class CallbackMap {
       return this.forAllIds;
     }
 
-    return this.callbacks[id];
+    let callback = this.callbacks.get(id);
+    if (!callback) {
+      throw new Error(`No callback for id ${id}`);
+    }
+
+    return callback;
   }
 }
 
