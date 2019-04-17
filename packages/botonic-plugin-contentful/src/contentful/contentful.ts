@@ -1,31 +1,41 @@
 import { ContentfulClientApi, createClient, Entry } from 'contentful';
 import { CMS, CallbackMap } from '../cms';
-import { Carousel, RichMessage, Button } from '../cms';
+import { Carousel, Element, Button } from '../cms';
+import { Callback } from '../cms';
 
 export class Contentful implements CMS {
   private client: ContentfulClientApi;
 
-  constructor(spaceId: string, accessToken: string) {
+  /**
+   *
+   * @param timeoutMs does not work at least when there's no network
+   * during the first connection
+   */
+  constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
     this.client = createClient({
       space: spaceId,
-      accessToken: accessToken
+      accessToken: accessToken,
+      timeout: timeoutMs
     });
   }
 
   /**
    * @todo support multiple buttons
+   *
    */
-  async richMessage(id: string, callbacks: CallbackMap): Promise<RichMessage> {
-    let entry: Entry<RichMessageModel> = await this.client.getEntry(id);
-
-    let message = new RichMessage(
-      entry.fields.title || null,
-      entry.fields.subtitle || null,
-      entry.fields.pic || null
+  async element(id: string, callbacks: CallbackMap): Promise<Element> {
+    let entry: Entry<ElementFields> = await this.client.getEntry(id);
+    let message = new Element(
+      entry.fields.title || undefined,
+      entry.fields.subtitle || undefined,
+      (entry.fields.pic && 'https:' + entry.fields.pic.fields.file.url) ||
+        undefined
     );
-    message.addButton(
-      new Button(entry.fields['button'], callbacks.getCallback(id))
-    );
+    let but = entry.fields.button.fields;
+    let callback = but.carousel
+      ? Callback.ofPayload(but.carousel.sys.id)
+      : callbacks.getCallback(id);
+    message.addButton(new Button(but.text, callback));
 
     return Promise.resolve(message);
   }
@@ -35,9 +45,29 @@ export class Contentful implements CMS {
   }
 }
 
-interface RichMessageModel {
+interface ButtonFields {
+  text: string;
+  carousel?: Entry<ElementFields>;
+}
+
+interface FileFields {
+  contentType: string;
+  fileName: string;
+  url: string;
+}
+
+/**
+ * It also contains the size of the object
+ */
+interface PicFields {
+  title: string;
+  description: string;
+  file: FileFields;
+}
+
+interface ElementFields {
   title: string;
   subtitle: string;
-  pic: string;
-  button: string;
+  pic?: Entry<PicFields>;
+  button: Entry<ButtonFields>;
 }

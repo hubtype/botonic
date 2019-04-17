@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as botoreact from '@botonic/react';
-import * as cms from 'botonic-plugin-contentful';
+import * as cms from '../src/';
 
-test('TEST: render RichMessage', () => {
+test('TEST: render element', () => {
   let sut = new cms.Renderer();
-  let msg = new cms.RichMessage('my title', 'my subtitle', 'http://myimg.jpg');
+  let msg = new cms.Element('my title', 'my subtitle', 'http://myimg.jpg');
   msg.addButton(
     new cms.Button('my button1', cms.Callback.ofPayload('my payload1'))
   );
@@ -13,7 +13,7 @@ test('TEST: render RichMessage', () => {
   );
 
   // act
-  let render = sut.richMessage(msg);
+  let render = sut.element(msg);
 
   // assert
   expect(render).toEqual(
@@ -35,7 +35,7 @@ test('TEST: render RichMessage', () => {
 test('TEST: render_Carousel', () => {
   let sut = new cms.Renderer();
 
-  let msg = new cms.RichMessage('my title', 'my subtitle', 'http://myimg.jpg');
+  let msg = new cms.Element('my title', 'my subtitle', 'http://myimg.jpg');
   msg.addButton(
     new cms.Button('my button1', cms.Callback.ofPayload('my payload1'))
   );

@@ -1,6 +1,7 @@
 import { Callback } from './cms';
 
-export class RichMessage {
+/** Part of a carousel */
+export class Element {
   buttons: Button[] = [];
 
   constructor(
@@ -12,7 +13,7 @@ export class RichMessage {
     this.imgUrl = imgUrl;
   }
 
-  addButton(button: Button): RichMessage {
+  addButton(button: Button): Element {
     this.buttons = this.buttons.concat(button);
     return this;
   }
@@ -23,9 +24,9 @@ export class Button {
 }
 
 export class Carousel {
-  elements: RichMessage[] = [];
+  elements: Element[] = [];
 
-  addElement(element: RichMessage): Carousel {
+  addElement(element: Element): Carousel {
     this.elements = this.elements.concat(element);
     return this;
   }
