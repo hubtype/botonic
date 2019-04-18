@@ -57,9 +57,7 @@ export interface CMS {
 
 export class DummyCMS implements CMS {
   async carousel(id: string, callbacks: CallbackMap): Promise<Carousel> {
-    return Promise.resolve(
-      new Carousel().addElement(await this.element(id, callbacks))
-    );
+    return Promise.resolve(new Carousel([await this.element(id, callbacks)]));
   }
 
   async element(id: string, callbacks: CallbackMap): Promise<Element> {

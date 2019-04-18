@@ -46,7 +46,7 @@ test('TEST: render_Carousel', () => {
   let msg2 = Object.create(msg);
   msg2.title = 'my title2';
 
-  let carousel = new cms.Carousel().addElement(msg).addElement(msg2);
+  let carousel = new cms.Carousel([msg, msg2]);
 
   // act
   let render = sut.carousel(carousel);
