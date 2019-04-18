@@ -108,7 +108,11 @@ export function msgToBotonic(msg) {
       (msg.keyboard && msg.keyboard.length)
     )
       return quickreplies_parse(msg)
-    return <Text {...msg}>{msg.data}</Text>
+    return (
+      <Text {...msg}>
+        {msg.data} {buttons_parse(msg.buttons)}
+      </Text>
+    )
   } else if (msg.type == 'carousel') {
     let elements = msg.data || msg.elements
     return <Carousel {...msg}>{elements_parse(elements)}</Carousel>

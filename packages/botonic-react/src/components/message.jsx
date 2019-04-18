@@ -37,6 +37,11 @@ export const Message = props => {
         type,
         data: decomposedChildren ? decomposedChildren : textChildren,
         from,
+        buttons: buttons.map(b => ({
+          payload: b.props.payload || b.props.path,
+          url: b.props.url,
+          title: b.props.children
+        })),
         delay,
         typing,
         replies: replies.map(r => ({
