@@ -1,6 +1,6 @@
-import { Entry } from 'contentful';
 import * as contentful from 'contentful';
-import * as cms from '../cms';
+import * as cms from '../cms/cms';
+import * as model from '../cms/model';
 import { Delivery } from './delivery';
 
 export class Carousel {
@@ -9,36 +9,45 @@ export class Carousel {
   async carousel(
     id: string,
     callbacks: cms.CallbackMap
-  ): Promise<cms.Carousel> {
+  ): Promise<model.Carousel> {
     let entry: contentful.Entry<CarouselFields> = await this.delivery.getEntry(
       id
     );
     let elements = entry.fields.elements.map(async entry => {
       return this.elementFromEntry(entry, callbacks);
     });
-    return new cms.Carousel(await Promise.all(elements));
+    return new model.Carousel(await Promise.all(elements));
   }
 
-  async button(id: string, callbacks: cms.CallbackMap): Promise<cms.Button> {
+  async button(id: string, callbacks: cms.CallbackMap): Promise<model.Button> {
     return (this.delivery.getEntry(id) as Promise<
       contentful.Entry<ButtonFields>
     >).then(entry => {
       let callback = entry.fields.carousel
-        ? cms.Callback.ofPayload(entry.fields.carousel.sys.id)
+        ? Carousel.callbackToOpenCarousel(entry.fields.carousel.sys.id)
         : callbacks.getCallback(id);
-      return new cms.Button(entry.fields.text, callback);
+      console.log(callback.payload);
+      return new model.Button(entry.fields.text, callback);
     });
+  }
+
+  private static callbackToOpenCarousel(newCarouselId: string): cms.Callback {
+    let payload =
+      cms.Callback.Constants.CAROUSEL_PREFIX +
+      cms.Callback.Constants.PAYLOAD_SEPARATOR +
+      newCarouselId;
+    return cms.Callback.ofPayload(payload);
   }
 
   /**
    * @todo support multiple buttons
    */
   private async elementFromEntry(
-    entry: Entry<ElementFields>,
+    entry: contentful.Entry<ElementFields>,
     callbacks: cms.CallbackMap
-  ): Promise<cms.Element> {
+  ): Promise<model.Element> {
     let fields = entry.fields;
-    let element = new cms.Element(
+    let element = new model.Element(
       fields.title || undefined,
       fields.subtitle || undefined,
       (fields.pic && 'https:' + fields.pic.fields.file.url) || undefined

@@ -21,7 +21,9 @@ function assertElementDudasPrevias(element: cms.Element) {
     'https://images.ctfassets.net/c6yifkuc6gv8/4yiuNsEcnINqDEfNEX2Ap2/84f81b12f0e0cd328a76bdc38db82f3c/img_01_comprar_new.png'
   );
   expect(element.buttons).toHaveLength(1);
-  expect(element.buttons[0].callback.payload).toBe(MASSIMO_MAIN_CAROUSEL_ID);
+  expect(element.buttons[0].callback.payload).toBe(
+    'carousel$2yR9f3stNAEqdamUr8VtfD'
+  );
   expect(element.buttons[0].text).toBe('Ver opciones');
 }
 
@@ -36,6 +38,6 @@ test('TEST: contentful carousel', async () => {
   );
 
   // assert
-  expect(carousel.elements).toHaveLength(1);
+  expect(carousel.elements).toHaveLength(2);
   assertElementDudasPrevias(carousel.elements[0]);
 });
