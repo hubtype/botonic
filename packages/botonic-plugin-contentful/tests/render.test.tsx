@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as botoreact from '@botonic/react';
+import { Text, Button, Pic, Carousel } from '@botonic/react';
 import * as cms from '../src';
 
 test('TEST: render element', () => {
@@ -18,16 +18,16 @@ test('TEST: render element', () => {
   // assert
   expect(render).toEqual(
     <>
-      <botoreact.Image src="http://myimg.jpg" />
-      <botoreact.Text>
+      <Pic src="http://myimg.jpg" />
+      <Text>
         my title
         <p />
         my subtitle
         <>
-          <botoreact.Button payload="my payload1">my button1</botoreact.Button>
-          <botoreact.Button url="http://url2">my button2</botoreact.Button>
+          <Button payload="my payload1">my button1</Button>
+          <Button url="http://url2">my button2</Button>
         </>
-      </botoreact.Text>
+      </Text>
     </>
   );
 });
@@ -54,34 +54,32 @@ test('TEST: render_Carousel', () => {
   // assert
   let expected = (
     <>
-      <>
-        <botoreact.Image src="http://myimg.jpg" />
-        <botoreact.Text>
-          my title
-          <p />
-          my subtitle
-          <>
-            <botoreact.Button payload="my payload1">
-              my button1
-            </botoreact.Button>
-            <botoreact.Button url="http://url2">my button2</botoreact.Button>
-          </>
-        </botoreact.Text>
-      </>
-      <>
-        <botoreact.Image src="http://myimg.jpg" />
-        <botoreact.Text>
-          my title2
-          <p />
-          my subtitle
-          <>
-            <botoreact.Button payload="my payload1">
-              my button1
-            </botoreact.Button>
-            <botoreact.Button url="http://url2">my button2</botoreact.Button>
-          </>
-        </botoreact.Text>
-      </>
+      <Carousel>
+        <>
+          <Pic src="http://myimg.jpg" />
+          <Text>
+            my title
+            <p />
+            my subtitle
+            <>
+              <Button payload="my payload1">my button1</Button>
+              <Button url="http://url2">my button2</Button>
+            </>
+          </Text>
+        </>
+        <>
+          <Pic src="http://myimg.jpg" />
+          <Text>
+            my title2
+            <p />
+            my subtitle
+            <>
+              <Button payload="my payload1">my button1</Button>
+              <Button url="http://url2">my button2</Button>
+            </>
+          </Text>
+        </>
+      </Carousel>
     </>
   );
   expect(render).toEqual(expected);
