@@ -1,4 +1,4 @@
-import { Contentful } from './contentful/contentful';
+import Contentful from './contentful';
 import { CMS } from './cms';
 import { Renderer } from './render';
 

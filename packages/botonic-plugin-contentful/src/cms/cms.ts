@@ -1,4 +1,4 @@
-import { Element, Carousel, Button } from './model';
+import { Carousel } from './model';
 
 export class Callback {
   constructor(readonly payload?: string, readonly url?: string) {}
@@ -50,24 +50,5 @@ export class CallbackMap {
 }
 
 export interface CMS {
-  element(id: string, callbacks: CallbackMap): Promise<Element>;
-
   carousel(id: string, callbacks: CallbackMap): Promise<Carousel>;
-}
-
-export class DummyCMS implements CMS {
-  async carousel(id: string, callbacks: CallbackMap): Promise<Carousel> {
-    return Promise.resolve(new Carousel([await this.element(id, callbacks)]));
-  }
-
-  async element(id: string, callbacks: CallbackMap): Promise<Element> {
-    let message = new Element(
-      'Title for ' + id,
-      'subtitle',
-      '../assets/img_home_bg.png'
-    );
-    message.addButton(new Button('press me', callbacks.getCallback(id)));
-
-    return Promise.resolve(message);
-  }
 }
