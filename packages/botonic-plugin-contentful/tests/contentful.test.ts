@@ -1,4 +1,4 @@
-import { Contentful } from '../src/contentful/contentful';
+import Contentful from '../src/contentful';
 import { mock } from 'ts-mockito';
 import * as cms from '../src';
 
@@ -24,20 +24,6 @@ function assertElementDudasPrevias(element: cms.Element) {
   expect(element.buttons[0].callback.payload).toBe(MASSIMO_MAIN_CAROUSEL_ID);
   expect(element.buttons[0].text).toBe('Ver opciones');
 }
-
-test('TEST: contentful element', async () => {
-  let sut = massimoContentful();
-  let callback = mock(cms.Callback);
-
-  // act
-  let element = await sut.element(
-    '714AB6c5NZoHLku5NoYVPE',
-    cms.CallbackMap.forAllIds(callback)
-  );
-
-  // assert
-  assertElementDudasPrevias(element);
-});
 
 test('TEST: contentful carousel', async () => {
   let sut = massimoContentful();
