@@ -19,7 +19,7 @@ const terserPlugin = new TerserPlugin({
 
 const babelLoaderConfig = {
   test: /\.(js|jsx)$/,
-  exclude: /node_modules\/(?!(@botonic)\/)/,
+  exclude: /node_modules[\/\\](?!(@botonic)[\/\\])/,
   use: {
     loader: 'babel-loader',
     options: {
