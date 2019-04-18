@@ -1,6 +1,13 @@
 import { Carousel } from './model';
 
+enum CallbackConstants {
+  CAROUSEL_PREFIX = 'carousel',
+  PAYLOAD_SEPARATOR = '$'
+}
+
 export class Callback {
+  static readonly Constants = CallbackConstants;
+
   constructor(readonly payload?: string, readonly url?: string) {}
 
   static ofPayload(payload: string): Callback {
