@@ -24,10 +24,5 @@ export class Button {
 }
 
 export class Carousel {
-  elements: Element[] = [];
-
-  addElement(element: Element): Carousel {
-    this.elements = this.elements.concat(element);
-    return this;
-  }
+  constructor(readonly elements: Element[] = []) {}
 }
