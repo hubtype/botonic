@@ -25,7 +25,7 @@ Element.serialize = elementProps => {
   let element = Object.assign(
     {},
     ...elementProps.children
-      .filter(c => c.type && c.type.name != 'Button')
+      .filter(c => c && c.type && c.type.name != 'Button')
       .map(c => c.type.serialize && c.type.serialize(c.props))
   )
   // When we are serializer buttons from backend, we are receiving the data
@@ -34,15 +34,21 @@ Element.serialize = elementProps => {
     ...elementProps.children
       .filter(c => {
         if (c instanceof Array) return true
-        return c.type && c.type.name == 'Button'
+        return c && c.type && c.type.name == 'Button'
       })
       .map(b => {
         if (b instanceof Array) {
           return b.map(
-            bb => bb.type.serialize && bb.type.serialize(bb.props).button
+            bb =>
+              bb &&
+              bb.type &&
+              bb.type.serialize &&
+              bb.type.serialize(bb.props).button
           )
         }
-        return b.type.serialize && b.type.serialize(b.props).button
+        return (
+          bb && bb.type && b.type.serialize && b.type.serialize(b.props).button
+        )
       })
   ]
   // When we have the buttons from backend, we have all buttons inside an array on the first position
