@@ -12,8 +12,12 @@ export default class BotonicPluginContentful {
   readonly renderer: Renderer;
 
   constructor(options: any) {
-    this.cms = new Contentful(options['spaceId'], options['accessToken']);
-    this.renderer = new Renderer();
+    if (options['cms']) {
+      this.cms = options['cms'];
+    } else {
+      this.cms = new Contentful(options['spaceId'], options['accessToken']);
+    } 
+    this.renderer = options['renderer'] || new Renderer();
   }
 
   // @ts-ignore
