@@ -1,4 +1,4 @@
-import { Carousel } from './model';
+import { Button, Carousel, Element } from './model';
 
 enum CallbackConstants {
   CAROUSEL_PREFIX = 'carousel',
@@ -58,4 +58,26 @@ export class CallbackMap {
 
 export interface CMS {
   carousel(id: string, callbacks: CallbackMap): Promise<Carousel>;
+}
+
+export class DummyCMS implements CMS {
+  constructor(readonly buttonCallbacks: Callback[]) {}
+
+  async carousel(id: string, callbacks: CallbackMap): Promise<Carousel> {
+    let elements = this.buttonCallbacks.map(callback =>
+      this.element(Math.random().toString(), callback)
+    );
+    return Promise.resolve(new Carousel(elements));
+  }
+
+  element(id: string, callback: Callback): Element {
+    let message = new Element(
+      'Title for ' + id,
+      'subtitle',
+      '../assets/img_home_bg.png'
+    );
+    message.addButton(new Button('press me', callback));
+
+    return message;
+  }
 }
