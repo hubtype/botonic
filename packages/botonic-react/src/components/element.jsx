@@ -26,10 +26,7 @@ Element.serialize = elementProps => {
     {},
     ...elementProps.children
       .filter(c => c.type && c.type.name != 'Button')
-      .map(c => {
-        console.log('CompoentneEl', c)
-        return c.type.serialize && c.type.serialize(c.props)
-      })
+      .map(c => c.type.serialize && c.type.serialize(c.props))
   )
   element['buttons'] = [
     ...elementProps.children
