@@ -7,16 +7,78 @@ export class Router {
   }
 
   processInput(input, session, lastRoutePath) {
+    let path_params = Router.parseInputPath(input)
+    let {routeParams, brokenFlow, lastRoute} = this.parseRoute(lastRoutePath, input, session, path_params)
+    if (routeParams && Object.keys(routeParams).length) {
+      let defaultAction = this.getActionFromChildRoutesIfNoPath(routeParams)
+      if ('action' in routeParams.route) {
+        let actionRoute = Router.processActionRoute(brokenFlow, routeParams, lastRoute, session, defaultAction, lastRoutePath)
+        if (actionRoute) return actionRoute
+      } else if (defaultAction) {
+        return {
+          action: defaultAction.route.action,
+          params: defaultAction.params,
+          lastRoutePath: lastRoutePath
+        }
+      } else if ('redirect' in routeParams.route) {
+        lastRoutePath = routeParams.route.redirect
+        let redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
+        if (redirectRoute) {
+          return {
+            action: redirectRoute.action,
+            params: redirectRoute.params,
+            lastRoutePath: lastRoutePath
+          }
+        }
+      }
+    }
+    return this.getNotFound(lastRoute, session, lastRoutePath);
+  }
+
+  getNotFound(lastRoute, session, lastRoutePath) {
+    let notFound = this.getRouteByPath('404', this.routes)
+    if (lastRoute && session.__retries < lastRoute.retry) {
+      session.__retries = session.__retries ? session.__retries + 1 : 1
+      return {
+        action: notFound.action,
+        params: {},
+        retryAction: lastRoute.action,
+        lastRoutePath: lastRoutePath
+      }
+    } else {
+      this.lastRoutePath = null
+      session.__retries = 0
+      return {
+        action: notFound.action,
+        params: {},
+        retryAction: null,
+        lastRoutePath: lastRoutePath
+      }
+    }
+  }
+
+  getActionFromChildRoutesIfNoPath(routeParams) {
+    let defaultAction
+    if (
+      !routeParams.route.path &&
+      routeParams.route &&
+      routeParams.route.childRoutes &&
+      routeParams.route.childRoutes.length
+    ) {
+      defaultAction = this.getRoute(
+        {path: ''},
+        routeParams.route.childRoutes
+      )
+    }
+
+    return defaultAction;
+  }
+
+  parseRoute(lastRoutePath, input, session, path_params) {
     let routeParams = {}
-    let path_params
-    try {
-      path_params = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
-      if (path_params.length > 0) input.path = path_params[0]
-    } catch (e) {}
     let brokenFlow = false
     let lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (lastRoute && lastRoute.childRoutes)
-      //get route depending of current ChildRoute
       routeParams = this.getRoute(input, lastRoute.childRoutes)
     if (!routeParams || !Object.keys(routeParams).length) {
       /*
@@ -38,84 +100,53 @@ export class Router {
         }
       }
     } catch (e) {}
-    if (routeParams && Object.keys(routeParams).length) {
-      //get in childRoute if one has path ''
-      let defaultAction
-      if (
-        !routeParams.route.path &&
-        routeParams.route &&
-        routeParams.route.childRoutes &&
-        routeParams.route.childRoutes.length
-      ) {
-        defaultAction = this.getRoute(
-          { path: '' },
-          routeParams.route.childRoutes
-        )
-      }
-      if ('action' in routeParams.route) {
-        if (
-          brokenFlow &&
-          routeParams.route.ignoreRetry != true &&
-          lastRoute &&
-          session.__retries < lastRoute.retry &&
-          routeParams.route.path != lastRoute.action
-        ) {
-          session.__retries = session.__retries ? session.__retries + 1 : 1
-          // The flow was broken, but we want to recover it
-          return {
-            action: routeParams.route.action,
-            params: routeParams.params,
-            retryAction: lastRoute ? lastRoute.action : null,
-            defaultAction: defaultAction ? defaultAction.route.action : null,
-            lastRoutePath: lastRoutePath
-          }
-        } else {
-          session.__retries = 0
-          if (lastRoutePath && !brokenFlow)
-            lastRoutePath = `${lastRoutePath}/${routeParams.route.path}`
-          else lastRoutePath = routeParams.route.path
-          return {
-            action: routeParams.route.action,
-            params: routeParams.params,
-            retryAction: null,
-            defaultAction: defaultAction ? defaultAction.route.action : null,
-            lastRoutePath: lastRoutePath
-          }
-        }
-      } else if (defaultAction) {
-        return {
-          action: defaultAction.route.action,
-          params: defaultAction.params,
-          lastRoutePath: lastRoutePath
-        }
-      } else if ('redirect' in routeParams.route) {
-        lastRoutePath = routeParams.route.redirect
-        let redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
-        if (redirectRoute) {
-          return {
-            action: redirectRoute.action,
-            params: redirectRoute.params,
-            lastRoutePath: lastRoutePath
-          }
-        }
-      }
+    return { routeParams, brokenFlow, lastRoute };
+  }
+
+  static parseInputPath(input) {
+    let pathParams
+    try {
+      pathParams = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
+      if (pathParams.length > 0) input.path = pathParams[0]
+    } catch (e) {
     }
-    let notFound = this.getRouteByPath('404', this.routes)
-    if (lastRoute && session.__retries < lastRoute.retry) {
+    return pathParams
+  }
+
+  static processActionRoute(
+    brokenFlow,
+    routeParams,
+    lastRoute,
+    session,
+    defaultAction,
+    lastRoutePath
+  ) {
+    if (
+      brokenFlow &&
+      routeParams.route.ignoreRetry != true &&
+      lastRoute &&
+      session.__retries < lastRoute.retry &&
+      routeParams.route.path != lastRoute.action
+    ) {
       session.__retries = session.__retries ? session.__retries + 1 : 1
+      // The flow was broken, but we want to recover it
       return {
-        action: notFound.action,
-        params: {},
-        retryAction: lastRoute.action,
+        action: routeParams.route.action,
+        params: routeParams.params,
+        retryAction: lastRoute ? lastRoute.action : null,
+        defaultAction: defaultAction ? defaultAction.route.action : null,  //eslint-disable-line no-null/no-null
         lastRoutePath: lastRoutePath
       }
     } else {
-      this.lastRoutePath = null
       session.__retries = 0
+      if (lastRoutePath && !brokenFlow)
+        lastRoutePath = `${lastRoutePath}/${routeParams.route.path}`
+      else lastRoutePath = routeParams.route.path
       return {
-        action: notFound.action,
-        params: {},
+        action: routeParams.route.action,
+        params: routeParams.params,
         retryAction: null,
+        defaultAction: defaultAction ? defaultAction.route.action : null,
         lastRoutePath: lastRoutePath
       }
     }
@@ -150,13 +181,12 @@ export class Router {
     routeList = routeList || this.routes
     let [currentPath, ...childPath] = path.split('/')
     for (let r of routeList) {
-      //iterate over all routeList
       if (r.path == currentPath) route = r
       if (r.childRoutes && r.childRoutes.length && childPath.length > 0) {
         //evaluate childroute over next actions
         route = this.getRouteByPath(childPath.join('/'), r.childRoutes)
         if (route) return route
-      } else if (route) return route //last action and finded route
+      } else if (route) return route //last action and found route
     }
     return null
   }
