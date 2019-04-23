@@ -71,37 +71,33 @@ export function msgToBotonic(msg) {
     )
       return (
         <Text {...msg}>
-          {msg.data.text}
+          {msg.data.text || msg.data}
           {quickreplies_parse(msg)}
         </Text>
       )
     if (msg.buttons && msg.buttons.length)
       return (
         <Text {...msg}>
-          {msg.data.text}
+          {msg.data.text || msg.data}
           {buttons_parse(msg.buttons)}
         </Text>
       )
-    return <Text {...msg}>{msg.data.text}</Text>
+    return <Text {...msg}>{msg.data.text || msg.data}</Text>
   } else if (msg.type == 'carousel') {
-    let elements = msg.data || msg.elements
+    let elements = msg.elements || msg.data.elements
     return <Carousel {...msg}>{elements_parse(elements)}</Carousel>
   } else if (msg.type == 'image') {
-    return <Image {...msg} src={msg.data.image} />
+    return <Image {...msg} src={msg.data.image || msg.data} />
   } else if (msg.type == 'video') {
-    return <Video {...msg} src={msg.data.video} />
+    return <Video {...msg} src={msg.data.video || msg.data} />
   } else if (msg.type == 'audio') {
-    return <Audio {...msg} src={msg.data.audio} />
+    return <Audio {...msg} src={msg.data.audio || msg.data} />
   } else if (msg.type == 'document') {
-    return <Document {...msg} src={msg.data.document} />
+    return <Document {...msg} src={msg.data.document || msg.data} />
   } else if (msg.type == 'location') {
-    return (
-      <Location
-        {...msg}
-        lat={msg.data.location.lat}
-        long={msg.data.location.long}
-      />
-    )
+    let lat = msg.data ? msg.data.location.lat : msg.latitude
+    let long = msg.data ? msg.data.location.long : msg.longitude
+    return <Location {...msg} lat={lat} long={long} />
   } else if (msg.type == 'buttonmessage') {
     let buttons = buttons_parse(msg.buttons)
     return (
@@ -116,7 +112,7 @@ export function msgToBotonic(msg) {
 }
 
 function elements_parse(elements) {
-  return elements.elements.map((e, i) => (
+  return elements.map((e, i) => (
     <Element key={i}>
       <Pic src={e.img || e.pic || e.image_url} />
       <Title>{e.title}</Title>
