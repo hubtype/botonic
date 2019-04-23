@@ -63,3 +63,16 @@ export const Button = props => {
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
 }
+
+Button.serialize = buttonProps => {
+  let payload = buttonProps.payload
+  if (buttonProps.path) payload = `__PATH_PAYLOAD__${buttonProps.path}`
+  return {
+    button: {
+      payload,
+      url: buttonProps.url,
+      webview: buttonProps.webview,
+      title: buttonProps.children
+    }
+  }
+}
