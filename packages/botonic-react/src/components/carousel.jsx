@@ -6,7 +6,7 @@ const serialize = carouselProps => {
   return {
     type: 'carousel',
     elements: carouselProps.children.map(
-      e => e.type.serialize && e.type.serialize(e.props)
+      e => e && e.type && e.type.serialize && e.type.serialize(e.props)
     )
   }
 }
