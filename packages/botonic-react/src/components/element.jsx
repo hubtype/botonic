@@ -20,3 +20,21 @@ export const Element = props => {
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
 }
+
+Element.serialize = elementProps => {
+  let element = Object.assign(
+    {},
+    ...elementProps.children
+      .filter(c => c.type && c.type.name != 'Button')
+      .map(c => {
+        console.log('CompoentneEl', c)
+        return c.type.serialize && c.type.serialize(c.props)
+      })
+  )
+  element['buttons'] = [
+    ...elementProps.children
+      .filter(c => c.type && c.type.name == 'Button')
+      .map(b => b.type.serialize && b.type.serialize(b.props).button)
+  ]
+  return element
+}

@@ -2,6 +2,10 @@ import React from 'react'
 import { isBrowser } from '@botonic/core'
 import { Message } from './message'
 
+const serialize = audioProps => {
+  return { audio: audioProps.src }
+}
+
 export const Audio = props => {
   let content = ''
   if (isBrowser())
@@ -12,8 +16,10 @@ export const Audio = props => {
       </audio>
     )
   return (
-    <Message {...props} type='audio'>
+    <Message json={serialize(props)} {...props} type='audio'>
       {content}
     </Message>
   )
 }
+
+Audio.serialize = serialize

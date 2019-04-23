@@ -3,18 +3,19 @@ import React from 'react'
 import { isBrowser, isNode } from '@botonic/core'
 import { Message } from './message'
 
+const serialize = locationProps => {
+  return { location: { lat: locationProps.lat, long: locationProps.long } }
+}
+
 export const Location = props => {
   const renderBrowser = () => {
     let lat = parseFloat(props.lat)
     let long = parseFloat(props.long)
 
     let location_url = `https://www.google.com/maps/@${lat},${long}`
-    if (props.data) {
-      location_url = props.data
-    }
 
     return (
-      <Message {...props} type='location'>
+      <Message json={serialize(props)} {...props} type='location'>
         <a href={location_url} target='_blank' rel='noopener noreferrer'>
           {' '}
           See Location
@@ -35,3 +36,5 @@ export const Location = props => {
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
 }
+
+Location.serialize = serialize

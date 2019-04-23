@@ -53,3 +53,9 @@ export const Reply = props => {
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
 }
+
+Reply.serialize = replyProps => {
+  let payload = replyProps.payload
+  if (replyProps.path) payload = `__PATH_PAYLOAD__${replyProps.path}`
+  return { reply: { title: replyProps.children, payload } }
+}

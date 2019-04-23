@@ -11,3 +11,7 @@ export const Subtitle = props => {
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
 }
+
+Subtitle.serialize = subtitleProps => {
+  return { subtitle: subtitleProps.children }
+}

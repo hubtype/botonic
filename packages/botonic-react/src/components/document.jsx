@@ -3,6 +3,10 @@ import React from 'react'
 import { Message } from './message'
 import { isBrowser } from '@botonic/core'
 
+const serialize = documentProps => {
+  return { document: documentProps.src }
+}
+
 export const Document = props => {
   let content = ''
   if (isBrowser())
@@ -17,8 +21,10 @@ export const Document = props => {
       />
     )
   return (
-    <Message {...props} type='document'>
+    <Message json={serialize(props)} {...props} type='document'>
       {content}
     </Message>
   )
 }
+
+Document.serialize = serialize

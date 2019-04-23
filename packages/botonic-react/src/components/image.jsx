@@ -3,6 +3,10 @@ import React from 'react'
 import { Message } from './message'
 import { isBrowser } from '@botonic/core'
 
+const serialize = imageProps => {
+  return { image: imageProps.src }
+}
+
 export const Image = props => {
   let content = ''
   if (isBrowser())
@@ -18,8 +22,10 @@ export const Image = props => {
       />
     )
   return (
-    <Message {...props} type='image'>
+    <Message json={serialize(props)} {...props} type='image'>
       {content}
     </Message>
   )
 }
+
+Image.serialize = serialize

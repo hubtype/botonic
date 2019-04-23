@@ -3,6 +3,10 @@ import React from 'react'
 import { Message } from './message'
 import { isBrowser } from '@botonic/core'
 
+const serialize = videoProps => {
+  return { video: videoProps.src }
+}
+
 export const Video = props => {
   let content = ''
   if (isBrowser())
@@ -21,8 +25,10 @@ export const Video = props => {
       </video>
     )
   return (
-    <Message {...props} type='video'>
+    <Message json={serialize(props)} {...props} type='video'>
       {content}
     </Message>
   )
 }
+
+Video.serialize = serialize
