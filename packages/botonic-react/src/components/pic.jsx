@@ -18,3 +18,7 @@ export const Pic = props => {
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
 }
+
+Pic.serialize = picProps => {
+  return { pic: picProps.src }
+}

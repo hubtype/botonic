@@ -11,3 +11,7 @@ export const Title = props => {
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
 }
+
+Title.serialize = titleProps => {
+  return { title: titleProps.children }
+}
