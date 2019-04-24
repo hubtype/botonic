@@ -1,5 +1,6 @@
-import { Entry } from 'contentful';
+import { ModelType } from '../cms';
 import * as contentful from 'contentful';
+import { Entry } from 'contentful';
 
 export class Delivery {
   private client: contentful.ContentfulClientApi;
@@ -22,5 +23,11 @@ export class Delivery {
 
   async getEntry<T>(id: string): Promise<Entry<T>> {
     return this.client.getEntry<T>(id);
+  }
+
+  static getContentModel<T>(entry: Entry<T>): ModelType {
+    // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
+    const typ = entry.sys.contentType.sys.id;
+    return typ as ModelType;
   }
 }
