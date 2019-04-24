@@ -14,6 +14,7 @@ export const Message = props => {
     typing = defaultTyping,
     children,
     json,
+    style,
     ...otherProps
   } = props
 
@@ -88,11 +89,11 @@ export const Message = props => {
           position: 'relative',
           alignSelf: isFromUser() ? 'flex-end' : 'flex-start',
           margin: 8,
-          maxWidth: '60%',
           backgroundColor: getBgColor(),
           color: isFromUser() ? '#fff' : '#000',
           fontFamily: 'Arial, Helvetica, sans-serif',
-          borderRadius: 8
+          borderRadius: 8,
+          ...style
         }}
         {...otherProps}
       >

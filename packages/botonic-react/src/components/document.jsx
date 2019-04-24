@@ -21,7 +21,12 @@ export const Document = props => {
       />
     )
   return (
-    <Message json={serialize(props)} {...props} type='document'>
+    <Message
+      style={{ maxWidth: '60%' }}
+      json={serialize(props)}
+      {...props}
+      type='document'
+    >
       {content}
     </Message>
   )

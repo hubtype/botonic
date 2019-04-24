@@ -15,7 +15,12 @@ export const Location = props => {
     let location_url = `https://www.google.com/maps/@${lat},${long}`
 
     return (
-      <Message json={serialize(props)} {...props} type='location'>
+      <Message
+        style={{ maxWidth: '60%' }}
+        json={serialize(props)}
+        {...props}
+        type='location'
+      >
         <a href={location_url} target='_blank' rel='noopener noreferrer'>
           {' '}
           See Location

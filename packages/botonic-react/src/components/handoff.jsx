@@ -37,6 +37,7 @@ export const Handoff = props => {
       {state.showContinue && (
         <button
           style={{
+            maxWidth: '60%',
             padding: '12px 24px',
             backgroundColor: 'white',
             border: 'none',
