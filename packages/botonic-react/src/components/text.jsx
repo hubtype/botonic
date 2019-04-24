@@ -16,7 +16,12 @@ const serialize = textProps => {
 }
 
 export const Text = props => (
-  <Message json={serialize(props)} {...props} type='text'>
+  <Message
+    style={{ maxWidth: '60%' }}
+    json={serialize(props)}
+    {...props}
+    type='text'
+  >
     {props.children}
   </Message>
 )
