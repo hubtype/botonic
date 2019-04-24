@@ -35,7 +35,8 @@ module.exports = {
     "no-useless-constructor": "off", //makes no sense for TS (https://github.com/typescript-eslint/typescript-eslint/issues/426)
     "@typescript-eslint/no-parameter-properties": "off", // opinionated: parameter properties make data classes shorter
     "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
-    "unicorn/prevent-abbreviations" : "off"// the plugin removes removes type annotations from typescript code :-(
+    "unicorn/prevent-abbreviations" : "off", // the plugin removes removes type annotations from typescript code :-(
+    "unicorn/filename-case" : "off" // React convention is in CamelCase
   },
   settings: {
     react: {

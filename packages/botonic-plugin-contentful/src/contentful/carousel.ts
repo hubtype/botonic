@@ -1,11 +1,14 @@
 import * as contentful from 'contentful';
-import { Button } from './button';
+import { ButtonDelivery } from './button';
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
-import { Delivery } from './delivery';
+import { DeliveryApi } from './deliveryApi';
 
-export class Carousel {
-  constructor(readonly delivery: Delivery, readonly button: Button) {}
+export class CarouselDelivery {
+  constructor(
+    readonly delivery: DeliveryApi,
+    readonly button: ButtonDelivery
+  ) {}
 
   async carousel(
     id: string,

@@ -2,7 +2,7 @@ import { ModelType } from '../cms';
 import * as contentful from 'contentful';
 import { Entry } from 'contentful';
 
-export class Delivery {
+export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
 
   /**
