@@ -87,7 +87,7 @@ export async function runPlugins(
   response = null
 ) {
   for (let key in plugins) {
-    let p = plugins[key]
+    let p = await plugins[key]
     try {
       if (mode == 'pre') return await p.pre({ input, session, lastRoutePath })
       if (mode == 'post')
