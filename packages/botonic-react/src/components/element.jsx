@@ -47,7 +47,7 @@ Element.serialize = elementProps => {
           )
         }
         return (
-          bb && bb.type && b.type.serialize && b.type.serialize(b.props).button
+          b && b.type && b.type.serialize && b.type.serialize(b.props).button
         )
       })
   ]
