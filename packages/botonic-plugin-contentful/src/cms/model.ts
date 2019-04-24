@@ -19,10 +19,28 @@ export class Element {
   }
 }
 
-export class Button {
-  constructor(readonly text: string, readonly callback: Callback) {}
+export abstract class Model {}
+
+export class Button extends Model {
+  constructor(readonly text: string, readonly callback: Callback) {
+    super();
+  }
 }
 
-export class Carousel {
-  constructor(readonly elements: Element[] = []) {}
+export class Carousel extends Model {
+  constructor(readonly elements: Element[] = []) {
+    super();
+  }
+}
+
+export class Text extends Model {
+  constructor(readonly text: string, readonly buttons: Button[]) {
+    super();
+  }
+}
+
+export class Url extends Model {
+  constructor(readonly url: string) {
+    super();
+  }
 }

@@ -1,10 +1,11 @@
 import * as contentful from 'contentful';
+import { Button } from './button';
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
 import { Delivery } from './delivery';
 
 export class Carousel {
-  constructor(readonly delivery: Delivery) {}
+  constructor(readonly delivery: Delivery, readonly button: Button) {}
 
   async carousel(
     id: string,
@@ -17,26 +18,6 @@ export class Carousel {
       return this.elementFromEntry(entry, callbacks);
     });
     return new model.Carousel(await Promise.all(elements));
-  }
-
-  async button(id: string, callbacks: cms.CallbackMap): Promise<model.Button> {
-    return (this.delivery.getEntry(id) as Promise<
-      contentful.Entry<ButtonFields>
-    >).then(entry => {
-      let callback = entry.fields.carousel
-        ? Carousel.callbackToOpenCarousel(entry.fields.carousel.sys.id)
-        : callbacks.getCallback(id);
-      console.log(callback.payload);
-      return new model.Button(entry.fields.text, callback);
-    });
-  }
-
-  private static callbackToOpenCarousel(newCarouselId: string): cms.Callback {
-    let payload =
-      cms.Callback.Constants.CAROUSEL_PREFIX +
-      cms.Callback.Constants.PAYLOAD_SEPARATOR +
-      newCarouselId;
-    return cms.Callback.ofPayload(payload);
   }
 
   /**
@@ -52,24 +33,22 @@ export class Carousel {
       fields.subtitle || undefined,
       (fields.pic && 'https:' + fields.pic.fields.file.url) || undefined
     );
-    element.addButton(await this.button(fields.button.sys.id, callbacks));
+    element.addButton(
+      await this.button.fromReference(fields.button, callbacks)
+    );
     return element;
   }
-}
-
-interface ButtonFields {
-  text: string;
-  carousel?: contentful.Entry<ElementFields>;
 }
 
 interface ElementFields {
   title: string;
   subtitle: string;
   pic?: contentful.Asset;
-  button: contentful.Entry<ButtonFields>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any it's just a reference
+  button: contentful.Entry<any>;
 }
 
-interface CarouselFields {
+export interface CarouselFields {
   name: string;
   elements: contentful.Entry<ElementFields>[];
 }

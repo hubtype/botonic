@@ -25,7 +25,7 @@ module.exports = {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
-    // "quotes": ["warn", "single"], // it should be configurable through prettier
+    "unicorn/no-abusive-eslint-disable" : "off",
 
     // special for TYPESCRIPT
     "no-null/no-null": "warn", // fields declared with ? are undefined, not null (be aware that React uses null)

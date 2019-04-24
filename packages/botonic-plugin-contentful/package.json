@@ -17,6 +17,7 @@
   "dependencies": {
     "@botonic/react": "^0.8.0-beta.2",
     "contentful": "^7.5.0",
+    "escape-string-regexp": "^2.0.0",
     "react": "^16.8.6",
     "typescript": "^3.4.1"
   },
