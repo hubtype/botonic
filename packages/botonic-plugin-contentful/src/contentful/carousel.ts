@@ -31,15 +31,19 @@ export class CarouselDelivery {
     callbacks: cms.CallbackMap
   ): Promise<model.Element> {
     let fields = entry.fields;
-    let element = new model.Element(
-      fields.title || undefined,
-      fields.subtitle || undefined,
-      (fields.pic && 'https:' + fields.pic.fields.file.url) || undefined
+    let buttonsPromises = entry.fields.buttons.map(reference =>
+      this.button.fromReference(reference, callbacks)
     );
-    element.addButton(
-      await this.button.fromReference(fields.button, callbacks)
+
+    return Promise.all(buttonsPromises).then(
+      buttons =>
+        new model.Element(
+          buttons,
+          fields.title,
+          fields.subtitle,
+          fields.pic && 'https:' + fields.pic.fields.file.url
+        )
     );
-    return element;
   }
 }
 
@@ -48,7 +52,7 @@ interface ElementFields {
   subtitle: string;
   pic?: contentful.Asset;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any it's just a reference
-  button: contentful.Entry<any>;
+  buttons: contentful.Entry<any>[];
 }
 
 export interface CarouselFields {

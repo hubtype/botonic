@@ -127,14 +127,12 @@ export class DummyCMS implements CMS {
   }
 
   private element(id: string, callback: Callback): Element {
-    let message = new Element(
+    return new Element(
+      [new Button('press me', callback)],
       'Title for ' + id,
       'subtitle',
       '../assets/img_home_bg.png'
     );
-    message.addButton(new Button('press me', callback));
-
-    return message;
   }
 
   url(id: string): Promise<Url> {
