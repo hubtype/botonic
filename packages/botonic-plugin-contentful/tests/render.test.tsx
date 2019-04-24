@@ -4,12 +4,14 @@ import * as cms from '../src';
 
 test('TEST: render element', () => {
   let sut = new cms.Renderer();
-  let msg = new cms.Element('my title', 'my subtitle', 'http://myimg.jpg');
-  msg.addButton(
-    new cms.Button('my button1', cms.Callback.ofPayload('my payload1'))
-  );
-  msg.addButton(
-    new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+  let msg = new cms.Element(
+    [
+      new cms.Button('my button1', cms.Callback.ofPayload('my payload1')),
+      new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+    ],
+    'my title',
+    'my subtitle',
+    'http://myimg.jpg'
   );
 
   // act
@@ -35,12 +37,14 @@ test('TEST: render element', () => {
 test('TEST: render_Carousel', () => {
   let sut = new cms.Renderer();
 
-  let msg = new cms.Element('my title', 'my subtitle', 'http://myimg.jpg');
-  msg.addButton(
-    new cms.Button('my button1', cms.Callback.ofPayload('my payload1'))
-  );
-  msg.addButton(
-    new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+  let msg = new cms.Element(
+    [
+      new cms.Button('my button1', cms.Callback.ofPayload('my payload1')),
+      new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+    ],
+    'my title',
+    'my subtitle',
+    'http://myimg.jpg'
   );
 
   let msg2 = Object.create(msg);
