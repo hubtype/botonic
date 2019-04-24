@@ -1,9 +1,9 @@
 import * as model from '../cms/model';
 import * as contentful from 'contentful';
-import { Delivery } from './delivery';
+import { DeliveryApi } from './deliveryApi';
 
 export class Url {
-  constructor(readonly delivery: Delivery) {}
+  constructor(readonly delivery: DeliveryApi) {}
 
   async url(id: string): Promise<model.Url> {
     let entry: contentful.Entry<UrlFields> = await this.delivery.getEntry(id);

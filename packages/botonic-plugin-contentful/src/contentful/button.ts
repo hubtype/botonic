@@ -1,12 +1,12 @@
 import * as contentful from 'contentful';
-import { ModelType, Delivery } from '.';
+import { ModelType, DeliveryApi } from '.';
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
 import { CarouselFields } from './carousel';
 import { TextFields } from './text';
 
-export class Button {
-  constructor(readonly delivery: Delivery) {}
+export class ButtonDelivery {
+  constructor(readonly delivery: DeliveryApi) {}
 
   public fromReference(
     reference: contentful.Entry<any>,
@@ -23,7 +23,7 @@ export class Button {
       contentful.Entry<ButtonFields>
     >).then(entry => {
       let callback = entry.fields.target
-        ? Button.getTargetCallback(entry.fields.target)
+        ? ButtonDelivery.getTargetCallback(entry.fields.target)
         : callbacks.getCallback(id);
       return new model.Button(entry.fields.text, callback);
     });
@@ -32,7 +32,7 @@ export class Button {
   private static getTargetCallback(
     target: contentful.Entry<CarouselFields | TextFields>
   ): cms.Callback {
-    let model = Delivery.getContentModel(target);
+    let model = DeliveryApi.getContentModel(target);
     switch (model) {
       case ModelType.CAROUSEL:
       case ModelType.TEXT:

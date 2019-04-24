@@ -1,24 +1,24 @@
 import { CallbackMap } from '../cms';
-import { Button } from './button';
-import { Delivery } from './delivery';
-import { Carousel } from './carousel';
-import { Text } from './text';
-import { Url } from './url';
+import { ButtonDelivery } from './button';
+import { DeliveryApi } from './deliveryApi';
+import { CarouselDelivery } from './carousel';
+import { TextDelivery } from './text';
+import { UrlDelivery } from './urlDelivery';
 import * as cms from '../cms';
 
 export default class Contentful implements cms.CMS {
-  _carousel: Carousel;
+  _carousel: CarouselDelivery;
 
-  _text: Text;
+  _text: TextDelivery;
 
-  _url: Url;
+  _url: UrlDelivery;
 
   constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
-    let delivery = new Delivery(spaceId, accessToken, timeoutMs);
-    let button = new Button(delivery);
-    this._carousel = new Carousel(delivery, button);
-    this._text = new Text(delivery, button);
-    this._url = new Url(delivery);
+    let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
+    let button = new ButtonDelivery(delivery);
+    this._carousel = new CarouselDelivery(delivery, button);
+    this._text = new TextDelivery(delivery, button);
+    this._url = new UrlDelivery(delivery);
   }
 
   async carousel(
@@ -40,6 +40,6 @@ export default class Contentful implements cms.CMS {
   }
 }
 
-export { Delivery } from './delivery';
-export { Carousel } from './carousel';
+export { DeliveryApi } from './deliveryApi';
+export { CarouselDelivery } from './carousel';
 export { ModelType } from '../cms';

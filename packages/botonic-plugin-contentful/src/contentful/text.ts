@@ -1,11 +1,14 @@
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
 import * as contentful from 'contentful';
-import { Button } from './button';
-import { Delivery } from './delivery';
+import { ButtonDelivery } from './button';
+import { DeliveryApi } from './deliveryApi';
 
-export class Text {
-  constructor(readonly delivery: Delivery, readonly button: Button) {}
+export class TextDelivery {
+  constructor(
+    readonly delivery: DeliveryApi,
+    readonly button: ButtonDelivery
+  ) {}
 
   async text(id: string, callbacks: cms.CallbackMap): Promise<model.Text> {
     let entry: contentful.Entry<TextFields> = await this.delivery.getEntry(id);
