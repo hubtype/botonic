@@ -10,6 +10,7 @@ export class Element {
   ) {}
 }
 
+// TODO rename to Content?
 export abstract class Model {}
 
 export class Button extends Model {
@@ -28,14 +29,20 @@ export class Text extends Model {
   constructor(
     readonly text: string,
     readonly buttons: Button[],
-    readonly followup?: Text | Carousel
+    readonly followup?: FollowUp
   ) {
     super();
   }
 }
 
 export class Url extends Model {
-  constructor(readonly url: string) {
+  //TODO followUp not yet rendered
+  constructor(readonly url: string, readonly followup?: FollowUp) {
     super();
   }
 }
+
+/**
+ * A {@link Model} which is automatically displayed after another one
+ */
+export type FollowUp = Text | Carousel;
