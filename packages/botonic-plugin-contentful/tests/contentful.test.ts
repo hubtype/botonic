@@ -27,7 +27,7 @@ function assertElementDudasPrevias(element: cms.Element) {
   );
   expect(element.buttons).toHaveLength(1);
   expect(element.buttons[0].callback.payload).toBe(
-    'carousel$2yR9f3stNAEqdamUr8VtfD'
+    'text$79aRfznNCyN2VGdGDQZBf3'
   );
   expect(element.buttons[0].text).toBe('Ver opciones');
 }

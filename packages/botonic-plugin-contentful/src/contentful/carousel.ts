@@ -1,14 +1,15 @@
 import * as contentful from 'contentful';
+import { DeliveryWithFollowUp } from './followUp';
 import { ButtonDelivery } from './button';
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
 import { DeliveryApi } from './deliveryApi';
 
-export class CarouselDelivery {
-  constructor(
-    readonly delivery: DeliveryApi,
-    readonly button: ButtonDelivery
-  ) {}
+// TODO remove DeliveryWithFollowUp
+export class CarouselDelivery extends DeliveryWithFollowUp {
+  constructor(delivery: DeliveryApi, readonly button: ButtonDelivery) {
+    super(delivery);
+  }
 
   async carousel(
     id: string,

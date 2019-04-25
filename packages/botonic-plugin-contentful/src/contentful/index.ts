@@ -1,3 +1,4 @@
+import { FollowUpDelivery } from './followUp';
 import { CallbackMap } from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './deliveryApi';
@@ -17,8 +18,12 @@ export default class Contentful implements cms.CMS {
     let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
     let button = new ButtonDelivery(delivery);
     this._carousel = new CarouselDelivery(delivery, button);
-    this._text = new TextDelivery(delivery, button, this._carousel);
+    this._text = new TextDelivery(delivery, button);
     this._url = new UrlDelivery(delivery);
+    let followUp = new FollowUpDelivery(this._carousel, this._text);
+    [this._text, this._url, this._carousel].forEach(d =>
+      d.setFollowUp(followUp)
+    );
   }
 
   async carousel(
