@@ -25,7 +25,11 @@ export class Carousel extends Model {
 }
 
 export class Text extends Model {
-  constructor(readonly text: string, readonly buttons: Button[]) {
+  constructor(
+    readonly text: string,
+    readonly buttons: Button[],
+    readonly followup?: Text
+  ) {
     super();
   }
 }

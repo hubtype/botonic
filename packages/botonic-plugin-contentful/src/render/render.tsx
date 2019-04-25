@@ -30,13 +30,22 @@ export class Renderer {
     );
   }
 
-  text(text: cms.Text): React.ReactNode {
-    return (
-      <Text>
+  text(text: cms.Text, delayS: number = 0): React.ReactNode {
+    let node = (
+      <Text delay={delayS}>
         {text.text}
-        <>{text.buttons.map(b => this.button(b))}</>
+        {text.buttons.map(b => this.button(b))}
       </Text>
     );
+    if (text.followup) {
+      node = (
+        <>
+          {node}
+          {this.text(text.followup, 3)}
+        </>
+      );
+    }
+    return node;
   }
 
   private button(button: cms.Button): React.ReactNode {

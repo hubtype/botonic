@@ -45,7 +45,7 @@ test('TEST: contentful carousel', async () => {
   assertElementDudasPrevias(carousel.elements[0]);
 });
 
-test('TEST: contentful text with URL button', async () => {
+test('TEST: contentful text with URL button without followup', async () => {
   let sut = massimoContentful();
   let callback = mock(cms.Callback);
 
@@ -66,9 +66,10 @@ test('TEST: contentful text with URL button', async () => {
   expect(text.buttons[0].callback.url).toEqual(
     'https://www.massimodutti.com/es/'
   );
+  expect(text.followup).toBeUndefined();
 });
 
-test('TEST: contentful text without buttons', async () => {
+test('TEST: contentful text without buttons with followup', async () => {
   let sut = massimoContentful();
   // let callback = mock(cms.Callback);
 
@@ -85,6 +86,7 @@ test('TEST: contentful text without buttons', async () => {
   //   'Si ha realizado su compra con un perfil invitado, siga su pedido con el enlace que aparece en el email de confirmación. Si tiene otras dudas sobre la entrega del pedido, el equipo de Atención al Cliente está a su disposición.'
   // );
   expect(text.buttons).toHaveLength(0);
+  expect(text.followup!.buttons).toHaveLength(2);
   // expect(text.buttons[0].text).toEqual('Acceda a su cuenta');
   // expect(text.buttons[0].callback.url).toEqual(
   //   'https://www.massimodutti.com/es/'

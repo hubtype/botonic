@@ -12,16 +12,31 @@ export class TextDelivery {
 
   async text(id: string, callbacks: cms.CallbackMap): Promise<model.Text> {
     let entry: contentful.Entry<TextFields> = await this.delivery.getEntry(id);
+    return this.textFromField(entry, callbacks);
+  }
+
+  async textFromField(
+    entry: contentful.Entry<TextFields>,
+    callbacks: cms.CallbackMap
+  ): Promise<model.Text> {
     let fields = entry.fields;
-    if (!entry.fields.buttons) {
-      return new model.Text(fields.text, []);
+    let buttons = fields.buttons || [];
+    let followup: Promise<model.Model | undefined> = Promise.resolve(undefined);
+    if (fields.followup) {
+      followup = this.textFromField(fields.followup, callbacks);
     }
-    let buttonsPromises = entry.fields.buttons.map(reference =>
-      this.button.fromReference(reference, callbacks)
+    let promises: Promise<model.Model | undefined>[] = [followup];
+    promises.push(
+      ...buttons.map(reference =>
+        this.button.fromReference(reference, callbacks)
+      )
     );
-    return Promise.all(buttonsPromises).then(
-      buttons => new model.Text(fields.text, buttons)
-    );
+
+    return Promise.all(promises).then(followUpAndButtons => {
+      let followUp = followUpAndButtons.shift() as (model.Text | undefined);
+      let buttons = followUpAndButtons as model.Button[];
+      return new model.Text(fields.text, buttons, followUp);
+    });
   }
 }
 
@@ -30,4 +45,5 @@ export interface TextFields {
   text: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any it's just a reference
   buttons: contentful.Entry<any>[];
+  followup?: contentful.Entry<TextFields>;
 }
