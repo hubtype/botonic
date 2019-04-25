@@ -100,6 +100,37 @@ export interface CMS {
   url(id: string): Promise<Url>;
 }
 
+export class ErrorReportingCMS implements CMS {
+  constructor(readonly cms: CMS) {}
+
+  carousel(id: string, callbacks?: CallbackMap): Promise<Carousel> {
+    return this.cms
+      .carousel(id, callbacks)
+      .catch(this.handleError(id, ModelType.CAROUSEL));
+  }
+
+  text(id: string, callbacks?: CallbackMap): Promise<Text> {
+    return this.cms
+      .text(id, callbacks)
+      .catch(this.handleError(id, ModelType.TEXT));
+  }
+
+  url(id: string): Promise<Url> {
+    return this.cms.url(id).catch(this.handleError(id, ModelType.URL));
+  }
+
+  handleError(id: string, model: ModelType): (reason: any) => never {
+    return (reason: any) => {
+      // eslint-disable-next-line no-console
+      console.error(`Error fetching ${model} with id '${id}': ${reason}`);
+      throw reason;
+    };
+  }
+}
+
+/**
+ * Useful for mocking it, as ts-mockito does not allow mocking interfaces
+ */
 export class DummyCMS implements CMS {
   constructor(readonly buttonCallbacks: Callback[]) {}
 

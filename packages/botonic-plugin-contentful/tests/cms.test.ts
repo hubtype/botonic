@@ -1,6 +1,6 @@
-import { instance, mock } from 'ts-mockito';
+import { instance, mock, when } from 'ts-mockito';
 import * as cms from '../src';
-import { ModelType } from '../src';
+import { DummyCMS, ErrorReportingCMS, ModelType } from '../src';
 
 test('TEST: callbackMap multiple callbacks', () => {
   let callback1 = mock(cms.Callback);
@@ -16,6 +16,22 @@ test('TEST: callbackMap fixed callback', () => {
   let callback = instance(mock(cms.Callback));
   let sut = cms.CallbackMap.forAllIds(callback);
   expect(sut.getCallback(Math.random().toString())).toBe(callback);
+});
+
+test('TEST: ErrorReportingCMS', () => {
+  let mockCms = mock(DummyCMS);
+  let error = new Error('mock error');
+  when(mockCms.carousel('id1', undefined)).thenReject(error);
+  let sut = new ErrorReportingCMS(instance(mockCms));
+
+  sut
+    .carousel('id1')
+    .then(c => {
+      fail('should have thrown');
+    })
+    .catch(error2 => {
+      expect(error2).toBe(error);
+    });
 });
 
 test('TEST: regexForModelType', async () => {
