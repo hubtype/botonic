@@ -1,5 +1,5 @@
 import Contentful from './contentful';
-import { CMS } from './cms';
+import { CMS, ErrorReportingCMS } from './cms';
 import { Renderer } from './render';
 
 // Exports
@@ -12,12 +12,13 @@ export default class BotonicPluginContentful {
   readonly renderer: Renderer;
 
   constructor(options: any) {
-    if (options['cms']) {
-      this.cms = options['cms'];
+    if (options.cms) {
+      this.cms = options.cms;
     } else {
-      this.cms = new Contentful(options['spaceId'], options['accessToken']);
-    } 
-    this.renderer = options['renderer'] || new Renderer();
+      this.cms = new Contentful(options.spaceId, options.accessToken);
+    }
+    this.cms = new ErrorReportingCMS(this.cms);
+    this.renderer = options.renderer || new Renderer();
   }
 
   // @ts-ignore
