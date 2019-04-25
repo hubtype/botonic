@@ -17,7 +17,7 @@ export default class Contentful implements cms.CMS {
     let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
     let button = new ButtonDelivery(delivery);
     this._carousel = new CarouselDelivery(delivery, button);
-    this._text = new TextDelivery(delivery, button);
+    this._text = new TextDelivery(delivery, button, this._carousel);
     this._url = new UrlDelivery(delivery);
   }
 
