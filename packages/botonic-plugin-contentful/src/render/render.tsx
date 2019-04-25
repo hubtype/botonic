@@ -30,6 +30,15 @@ export class Renderer {
     );
   }
 
+  text(text: cms.Text): React.ReactNode {
+    return (
+      <Text>
+        {text.text}
+        <>{text.buttons.map(b => this.button(b))}</>
+      </Text>
+    );
+  }
+
   private button(button: cms.Button): React.ReactNode {
     return button.callback.payload ? (
       <Button payload={button.callback.payload}>{button.text}</Button>

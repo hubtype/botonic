@@ -88,3 +88,25 @@ test('TEST: render_Carousel', () => {
   );
   expect(render).toEqual(expected);
 });
+
+test('TEST: render text', () => {
+  let sut = new cms.Renderer();
+  let text = new cms.Text('my text', [
+    new cms.Button('my button1', cms.Callback.ofPayload('my payload1')),
+    new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+  ]);
+
+  // act
+  let render = sut.text(text);
+
+  // assert
+  expect(render).toEqual(
+    <Text>
+      my text
+      <>
+        <Button payload="my payload1">my button1</Button>
+        <Button url="http://url2">my button2</Button>
+      </>
+    </Text>
+  );
+});
