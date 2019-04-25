@@ -1,3 +1,6 @@
+import { Entry } from 'contentful';
+import { ModelType } from '../cms/cms';
+import { CarouselDelivery, CarouselFields } from './carousel';
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
 import * as contentful from 'contentful';
@@ -7,7 +10,8 @@ import { DeliveryApi } from './deliveryApi';
 export class TextDelivery {
   constructor(
     readonly delivery: DeliveryApi,
-    readonly button: ButtonDelivery
+    readonly button: ButtonDelivery,
+    readonly carousel: CarouselDelivery
   ) {}
 
   async text(id: string, callbacks: cms.CallbackMap): Promise<model.Text> {
@@ -21,11 +25,8 @@ export class TextDelivery {
   ): Promise<model.Text> {
     let fields = entry.fields;
     let buttons = fields.buttons || [];
-    let followup: Promise<model.Model | undefined> = Promise.resolve(undefined);
-    if (fields.followup) {
-      followup = this.textFromField(fields.followup, callbacks);
-    }
-    let promises: Promise<model.Model | undefined>[] = [followup];
+    let followup = this.followUpFromField(fields.followup, callbacks);
+    let promises = [followup];
     promises.push(
       ...buttons.map(reference =>
         this.button.fromReference(reference, callbacks)
@@ -38,12 +39,29 @@ export class TextDelivery {
       return new model.Text(fields.text, buttons, followUp);
     });
   }
+
+  private followUpFromField(
+    followUp: Entry<TextFields | CarouselFields> | undefined,
+    callbacks: cms.CallbackMap
+  ): Promise<model.Model | undefined> {
+    if (!followUp) {
+      return Promise.resolve(undefined);
+    }
+    switch (DeliveryApi.getContentModel(followUp)) {
+      case ModelType.CAROUSEL:
+        // here followUp already has its fields set, but not yet its element fields
+        return this.carousel.carousel(followUp.sys.id, callbacks);
+      case ModelType.TEXT:
+        return this.textFromField(followUp as Entry<TextFields>, callbacks);
+      default:
+        throw new Error(`Unexpected followup type ${followUp.sys.type}`);
+    }
+  }
 }
 
 export interface TextFields {
   name: string;
   text: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any it's just a reference
   buttons: contentful.Entry<any>[];
-  followup?: contentful.Entry<TextFields>;
+  followup?: contentful.Entry<TextFields | CarouselFields>;
 }

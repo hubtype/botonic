@@ -38,14 +38,23 @@ export class Renderer {
       </Text>
     );
     if (text.followup) {
-      node = (
+      return (
         <>
           {node}
-          {this.text(text.followup, 3)}
+          {this.followUp(text.followup)}
         </>
       );
     }
     return node;
+  }
+
+  private followUp(followUp: cms.Text | cms.Carousel): React.ReactNode {
+    if (followUp instanceof cms.Text) {
+      // give use time to read the initial text
+      return this.text(followUp, 3);
+    }
+    // for carousels, the initial text usually introduces the carousel
+    return this.carousel(followUp);
   }
 
   private button(button: cms.Button): React.ReactNode {
