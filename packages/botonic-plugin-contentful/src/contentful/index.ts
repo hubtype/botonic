@@ -3,7 +3,7 @@ import { ButtonDelivery } from './button';
 import { DeliveryApi } from './deliveryApi';
 import { CarouselDelivery } from './carousel';
 import { TextDelivery } from './text';
-import { UrlDelivery } from './urlDelivery';
+import { UrlDelivery } from './url';
 import * as cms from '../cms';
 
 export default class Contentful implements cms.CMS {

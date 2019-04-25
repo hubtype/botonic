@@ -2,7 +2,7 @@ import * as model from '../cms/model';
 import * as contentful from 'contentful';
 import { DeliveryApi } from './deliveryApi';
 
-export class Url {
+export class UrlDelivery {
   constructor(readonly delivery: DeliveryApi) {}
 
   async url(id: string): Promise<model.Url> {

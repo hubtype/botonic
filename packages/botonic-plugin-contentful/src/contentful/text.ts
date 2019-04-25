@@ -13,6 +13,9 @@ export class TextDelivery {
   async text(id: string, callbacks: cms.CallbackMap): Promise<model.Text> {
     let entry: contentful.Entry<TextFields> = await this.delivery.getEntry(id);
     let fields = entry.fields;
+    if (!entry.fields.buttons) {
+      return new model.Text(fields.text, []);
+    }
     let buttonsPromises = entry.fields.buttons.map(reference =>
       this.button.fromReference(reference, callbacks)
     );
