@@ -1,4 +1,12 @@
-import { Text, Button, Pic, Carousel } from '@botonic/react';
+import {
+  Text,
+  Button,
+  Pic,
+  Carousel,
+  Title,
+  Subtitle,
+  Element
+} from '@botonic/react';
 import * as React from 'react';
 import * as cms from '../cms';
 
@@ -10,14 +18,11 @@ export class Renderer {
     }
 
     nodes = nodes.concat(
-      <Text>
-        {msg.title || ''}
-        <p />
-        {msg.subtitle || ''}
-        <>{msg.buttons.map(b => this.button(b))}</>
-      </Text>
+      <Title>{msg.title || ''}</Title>,
+      <Subtitle>{msg.subtitle || ''}</Subtitle>,
+      <>{msg.buttons.map(b => this.button(b))}</>
     );
-    return <>{nodes}</>;
+    return <Element>{nodes}</Element>;
   }
 
   carousel(carousel: cms.Carousel): React.ReactNode {

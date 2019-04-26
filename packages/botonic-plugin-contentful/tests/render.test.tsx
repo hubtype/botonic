@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { Text, Button, Pic, Carousel } from '@botonic/react';
+import {
+  Text,
+  Button,
+  Pic,
+  Carousel,
+  Element,
+  Title,
+  Subtitle
+} from '@botonic/react';
 import * as cms from '../src';
 
 test('TEST: render element', () => {
@@ -19,18 +27,15 @@ test('TEST: render element', () => {
 
   // assert
   expect(render).toEqual(
-    <>
+    <Element>
       <Pic src="http://myimg.jpg" />
-      <Text>
-        my title
-        <p />
-        my subtitle
-        <>
-          <Button payload="my payload1">my button1</Button>
-          <Button url="http://url2">my button2</Button>
-        </>
-      </Text>
-    </>
+      <Title>my title</Title>
+      <Subtitle>my subtitle</Subtitle>
+      <>
+        <Button payload="my payload1">my button1</Button>
+        <Button url="http://url2">my button2</Button>
+      </>
+    </Element>
   );
 });
 
@@ -59,30 +64,24 @@ test('TEST: render_Carousel', () => {
   let expected = (
     <>
       <Carousel>
-        <>
+        <Element>
           <Pic src="http://myimg.jpg" />
-          <Text>
-            my title
-            <p />
-            my subtitle
-            <>
-              <Button payload="my payload1">my button1</Button>
-              <Button url="http://url2">my button2</Button>
-            </>
-          </Text>
-        </>
-        <>
+          <Title>my title</Title>
+          <Subtitle>my subtitle</Subtitle>
+          <>
+            <Button payload="my payload1">my button1</Button>
+            <Button url="http://url2">my button2</Button>
+          </>
+        </Element>
+        <Element>
           <Pic src="http://myimg.jpg" />
-          <Text>
-            my title2
-            <p />
-            my subtitle
-            <>
-              <Button payload="my payload1">my button1</Button>
-              <Button url="http://url2">my button2</Button>
-            </>
-          </Text>
-        </>
+          <Title>my title2</Title>
+          <Subtitle>my subtitle</Subtitle>
+          <>
+            <Button payload="my payload1">my button1</Button>
+            <Button url="http://url2">my button2</Button>
+          </>
+        </Element>
       </Carousel>
     </>
   );

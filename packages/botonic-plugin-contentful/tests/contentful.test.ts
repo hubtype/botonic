@@ -43,7 +43,7 @@ test('TEST: contentful carousel', async () => {
   );
 
   // assert
-  expect(carousel.elements).toHaveLength(2);
+  expect(carousel.elements).toHaveLength(3);
   assertElementDudasPrevias(carousel.elements[0]);
 });
 
@@ -96,7 +96,7 @@ test('TEST: contentful text without buttons with text followup', async () => {
 
   // assert
   expect(text.buttons).toHaveLength(0);
-  expect((text.followup as cms.Text).buttons).toHaveLength(2);
+  expect((text.followup as cms.Text).buttons).toHaveLength(3);
 });
 
 test('TEST: contentful text without buttons with carousel followup', async () => {

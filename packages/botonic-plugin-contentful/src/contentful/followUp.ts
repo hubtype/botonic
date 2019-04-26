@@ -22,6 +22,7 @@ export class FollowUpDelivery {
     private readonly text: TextDelivery
   ) {}
 
+  // TODO we should detect cycles to avoid infinite recursion
   fromFields(
     followUp: Entry<TextFields | CarouselFields> | undefined,
     callbacks: cms.CallbackMap
