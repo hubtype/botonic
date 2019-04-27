@@ -32,6 +32,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
     "@babel/runtime": "^7.4.3",
+    "//@types/react": "fixed version to avoid error: TS2300: Duplicate identifier 'LibraryManagedAttributes'",
+    "@types/react": "16.8.14",
     "babel-dts-generator": "^0.6.3",
     "babel-plugin-add-module-exports": "^1.0.0",
     "eslint-plugin-no-null": "^1.0.2",

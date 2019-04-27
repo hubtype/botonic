@@ -16,6 +16,7 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@botonic/react": "^0.8.0-beta.2",
+    "@botonic/core": "^0.8.0-beta.2",
     "contentful": "^7.5.0",
     "escape-string-regexp": "^2.0.0",
     "react": "^16.8.6",
@@ -32,7 +33,8 @@
     "@babel/runtime": "latest",
     "@babel/types": "7.4.0",
     "@types/jest": "^24.0.11",
-    "@types/react": "^16.8.12",
+    "//@types/react": "fixed version to avoid error: TS2300: Duplicate identifier 'LibraryManagedAttributes'",
+    "@types/react": "16.8.14",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "@typescript-eslint/parser": "^1.6.0",
     "babel-eslint": "^10.0.1",

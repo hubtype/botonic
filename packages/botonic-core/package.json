@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf lib && babel src --out-dir lib --source-maps"
+    "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files"
   },
   "repository": {
     "type": "git",
