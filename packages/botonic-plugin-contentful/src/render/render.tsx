@@ -11,25 +11,22 @@ import * as React from 'react';
 import * as cms from '../cms';
 
 export class Renderer {
-  element(msg: cms.Element): React.ReactNode {
-    let nodes: JSX.Element[] = [];
-    if (msg.imgUrl) {
-      nodes = nodes.concat(<Pic src={msg.imgUrl} />);
-    }
-
-    nodes = nodes.concat(
-      <Title>{msg.title || ''}</Title>,
-      <Subtitle>{msg.subtitle || ''}</Subtitle>,
-      <>{msg.buttons.map(b => this.button(b))}</>
+  element(msg: cms.Element, index: number): React.ReactNode {
+    return (
+      <Element key={index}>
+        {msg.imgUrl && <Pic src={msg.imgUrl} />}
+        <Title>{msg.title || ''}</Title>
+        <Subtitle>{msg.subtitle || ''}</Subtitle>
+        <>{msg.buttons.map((b, i) => this.button(b, i))}</>
+      </Element>
     );
-    return <Element>{nodes}</Element>;
   }
 
   carousel(carousel: cms.Carousel): React.ReactNode {
     return (
       <>
         <Carousel>
-          {carousel.elements.map(element => this.element(element))}
+          {carousel.elements.map((element, i) => this.element(element, i))}
         </Carousel>
       </>
     );
@@ -39,7 +36,7 @@ export class Renderer {
     let node = (
       <Text delay={delayS}>
         {text.text}
-        {text.buttons.map(b => this.button(b))}
+        {text.buttons.map((b, i) => this.button(b, i))}
       </Text>
     );
     if (text.followup) {
@@ -62,11 +59,16 @@ export class Renderer {
     return this.carousel(followUp);
   }
 
-  private button(button: cms.Button): React.ReactNode {
-    return button.callback.payload ? (
-      <Button payload={button.callback.payload}>{button.text}</Button>
+  private button(button: cms.Button, index: number): React.ReactNode {
+    let cb = button.callback;
+    return cb.payload ? (
+      <Button key={index} payload={cb.payload}>
+        {button.text}
+      </Button>
     ) : (
-      <Button url={button.callback.url}>{button.text}</Button>
+      <Button key={index} url={cb.url}>
+        {button.text}
+      </Button>
     );
   }
 }

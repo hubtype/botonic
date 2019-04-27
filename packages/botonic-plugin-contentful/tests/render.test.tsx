@@ -23,17 +23,21 @@ test('TEST: render element', () => {
   );
 
   // act
-  let render = sut.element(msg);
+  let render = sut.element(msg, 0);
 
   // assert
   expect(render).toEqual(
-    <Element>
+    <Element key="0">
       <Pic src="http://myimg.jpg" />
       <Title>my title</Title>
       <Subtitle>my subtitle</Subtitle>
       <>
-        <Button payload="my payload1">my button1</Button>
-        <Button url="http://url2">my button2</Button>
+        <Button key="0" payload="my payload1">
+          my button1
+        </Button>
+        <Button key="1" url="http://url2">
+          my button2
+        </Button>
       </>
     </Element>
   );
@@ -64,22 +68,30 @@ test('TEST: render_Carousel', () => {
   let expected = (
     <>
       <Carousel>
-        <Element>
+        <Element key="0">
           <Pic src="http://myimg.jpg" />
           <Title>my title</Title>
           <Subtitle>my subtitle</Subtitle>
           <>
-            <Button payload="my payload1">my button1</Button>
-            <Button url="http://url2">my button2</Button>
+            <Button key="0" payload="my payload1">
+              my button1
+            </Button>
+            <Button key="1" url="http://url2">
+              my button2
+            </Button>
           </>
         </Element>
-        <Element>
+        <Element key="1">
           <Pic src="http://myimg.jpg" />
           <Title>my title2</Title>
           <Subtitle>my subtitle</Subtitle>
           <>
-            <Button payload="my payload1">my button1</Button>
-            <Button url="http://url2">my button2</Button>
+            <Button key="0" payload="my payload1">
+              my button1
+            </Button>
+            <Button key="1" url="http://url2">
+              my button2
+            </Button>
           </>
         </Element>
       </Carousel>
@@ -120,8 +132,16 @@ test('TEST: render text with buttons and followup', () => {
 
   // act
   let render = sut.text(text);
-  let button1 = <Button payload="my payload1">my button1</Button>;
-  let button2 = <Button url="http://url2">my button2</Button>;
+  let button1 = (
+    <Button key="0" payload="my payload1">
+      my button1
+    </Button>
+  );
+  let button2 = (
+    <Button key="1" url="http://url2">
+      my button2
+    </Button>
+  );
   // assert
   expect(render).toEqual(
     <>
@@ -131,7 +151,11 @@ test('TEST: render text with buttons and followup', () => {
       </Text>
       <Text delay={3}>
         my text FU
-        {[<Button payload="my payload FU">my button FU</Button>]}
+        {[
+          <Button key="0" payload="my payload FU">
+            my button FU
+          </Button>
+        ]}
       </Text>
     </>
   );
