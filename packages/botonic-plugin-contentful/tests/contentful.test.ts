@@ -2,17 +2,17 @@ import Contentful from '../src/contentful';
 import { mock } from 'ts-mockito';
 import * as cms from '../src';
 
-const MASSIMO_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
-const MASSIMO_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
-const MASSIMO_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
-const MASSIMO_URL_CUENTA_ID = '3ePsGfyLHBHsrxtU7IkPh9';
-const MASSIMO_GRACIAS = '63lakRZRu1AJ1DqlbZZb9O';
-const MASSIMO_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
+const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
+const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
+const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
+const TEST_URL_CUENTA_ID = '3ePsGfyLHBHsrxtU7IkPh9';
+const TEST_GRACIAS = '63lakRZRu1AJ1DqlbZZb9O';
+const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
 
-function massimoContentful(): Contentful {
+function testContentful(): Contentful {
   return new Contentful(
-    'c6yifkuc6gv8',
-    'cdce543064355bfbe80585e4d603776d6e2ec0f213f7395d3cc7c74ce7ef6cad',
+    process.env['CONTENTFUL_TEST_SPACE_ID']!,
+    process.env['CONTENTFUL_TEST_TOKEN']!,
     2000
   );
 }
@@ -23,7 +23,7 @@ function assertElementDudasPrevias(element: cms.Element) {
     'Le ayudaré con sus compras en la tienda online de Massimo Dutti.'
   );
   expect(element.imgUrl).toBe(
-    'https://images.ctfassets.net/c6yifkuc6gv8/4yiuNsEcnINqDEfNEX2Ap2/84f81b12f0e0cd328a76bdc38db82f3c/img_01_comprar_new.png'
+    'https://images.ctfassets.net/5wh7etpd1y84/4yiuNsEcnINqDEfNEX2Ap2/a1ba900b4bbaefe58a7483a6192ba360/img_01_comprar_new.png'
   );
   expect(element.buttons).toHaveLength(1);
   expect(element.buttons[0].callback.payload).toBe(
@@ -33,12 +33,12 @@ function assertElementDudasPrevias(element: cms.Element) {
 }
 
 test('TEST: contentful carousel', async () => {
-  let sut = massimoContentful();
+  let sut = testContentful();
   let callback = mock(cms.Callback);
 
   // act
   let carousel = await sut.carousel(
-    MASSIMO_CAROUSEL_MAIN_ID,
+    TEST_CAROUSEL_MAIN_ID,
     cms.CallbackMap.forAllIds(callback)
   );
 
@@ -48,11 +48,11 @@ test('TEST: contentful carousel', async () => {
 });
 
 test('TEST: contentful text without followup', async () => {
-  let sut = massimoContentful();
+  let sut = testContentful();
   let callback = mock(cms.Callback);
 
   // act
-  let text = await sut.text(MASSIMO_SORRY, cms.CallbackMap.forAllIds(callback));
+  let text = await sut.text(TEST_SORRY, cms.CallbackMap.forAllIds(callback));
 
   // assert
   expect(text.text).toEqual(
@@ -65,12 +65,12 @@ test('TEST: contentful text without followup', async () => {
 });
 
 test('TEST: contentful text with URL button with followup', async () => {
-  let sut = massimoContentful();
+  let sut = testContentful();
   let callback = mock(cms.Callback);
 
   // act
   let text = await sut.text(
-    MASSIMO_POST_FAQ1_ID,
+    TEST_POST_FAQ1_ID,
     cms.CallbackMap.forAllIds(callback)
   );
 
@@ -89,28 +89,28 @@ test('TEST: contentful text with URL button with followup', async () => {
 });
 
 test('TEST: contentful text without buttons with text followup', async () => {
-  let sut = massimoContentful();
+  let sut = testContentful();
 
   // act
-  let text = await sut.text(MASSIMO_POST_FAQ2_ID, new cms.CallbackMap());
+  let text = await sut.text(TEST_POST_FAQ2_ID, new cms.CallbackMap());
 
   // assert
   expect(text.buttons).toHaveLength(0);
-  expect((text.followup as cms.Text).buttons).toHaveLength(3);
+  expect((text.followup as cms.Text).buttons).toHaveLength(2);
 });
 
 test('TEST: contentful text without buttons with carousel followup', async () => {
-  let sut = massimoContentful();
+  let sut = testContentful();
 
   // act
-  let text = await sut.text(MASSIMO_GRACIAS, new cms.CallbackMap());
+  let text = await sut.text(TEST_GRACIAS, new cms.CallbackMap());
 
   // assert
   expect(text.buttons).toHaveLength(0);
-  expect((text.followup as cms.Carousel).elements).toHaveLength(2);
+  expect((text.followup as cms.Carousel).elements).toHaveLength(3);
 });
 
 test('TEST: contentful url', async () => {
-  let url = await massimoContentful().url(MASSIMO_URL_CUENTA_ID);
+  let url = await testContentful().url(TEST_URL_CUENTA_ID);
   expect(url.url).toEqual('https://www.massimodutti.com/es/');
 });
