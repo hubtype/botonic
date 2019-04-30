@@ -3,8 +3,9 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   },
+  // regex works fine with "find tests | egrep ..." but incorrectly gets files with names without 'test' or 'spec
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
-  testPathIgnorePatterns: ['lib', '.*\.d\.ts'],
+  testPathIgnorePatterns: ['lib', '.*\.d\.ts', 'tests/helpers'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   snapshotSerializers: [],
