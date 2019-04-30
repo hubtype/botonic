@@ -1,11 +1,7 @@
 import { UpdateItemInput } from 'aws-sdk/clients/dynamodb';
-import { TrackStorage, Track, TABLE_NAME, TrackFields } from '../domain';
+import * as domain from '../domain';
+import { Track, TABLE_NAME } from './track';
 import { DataMapper } from '@aws/dynamodb-data-mapper';
-import {
-  UpdateExpression,
-  FunctionExpression,
-  AttributePath
-} from '@aws/dynamodb-expressions';
 import DynamoDB = require('aws-sdk/clients/dynamodb');
 
 export enum Env {
@@ -25,7 +21,7 @@ export class Dynamo {
   }
 }
 
-export class DynamoTrackStorage implements TrackStorage {
+export class DynamoTrackStorage implements domain.TrackStorage {
   readonly mapper: DataMapper;
   readonly tableName: string;
   private readonly client: DynamoDB;
@@ -39,32 +35,8 @@ export class DynamoTrackStorage implements TrackStorage {
     this.tableName = Dynamo.tableName(TABLE_NAME, env);
   }
 
-  // DOES NOT Work: ValidationException: Invalid UpdateExpression: Incorrect operand type for operator or function; operator or function: list_append, operand type: M
-  async writeKO(track: Track): Promise<Track> {
-    //https://github.com/awslabs/dynamodb-data-mapper-js/issues/150
-    let expr = new UpdateExpression();
-    let append = new FunctionExpression(
-      'list_append',
-      new FunctionExpression(
-        'if_not_exists',
-        new AttributePath(TrackFields.EVENTS),
-        []
-      ),
-      ['bar']
-    );
-
-    expr.toSet.set(new AttributePath(TrackFields.EVENTS), append);
-    return this.mapper.executeUpdateExpression(
-      expr,
-      {
-        bot: track.bot,
-        time: track.time
-      },
-      Track
-    );
-  }
-
-  async write(track: Track): Promise<Track | undefined> {
+  async write(domTrack: domain.Track): Promise<undefined> {
+    let track = Track.fromDomain(domTrack);
     // from https://stackoverflow.com/questions/34951043/is-it-possible-to-combine-if-not-exists-and-list-append-in-update-item
     let input: UpdateItemInput = {
       Key: track.marshallKey(),
@@ -80,5 +52,17 @@ export class DynamoTrackStorage implements TrackStorage {
     return req.promise().then(r => {
       return Promise.resolve(undefined);
     });
+  }
+
+  async read(bot: string, time: Date): Promise<domain.Track> {
+    let request = Track.fromKey(bot, time);
+    let track = await this.mapper.get(request);
+    return track.toDomain();
+  }
+
+  async remove(bot: string, time: Date): Promise<undefined> {
+    let request = Track.fromKey(bot, time);
+    await this.mapper.delete(request);
+    return Promise.resolve(undefined);
   }
 }
