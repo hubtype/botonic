@@ -86,12 +86,14 @@ export async function runPlugins(
   lastRoutePath,
   response = null
 ) {
+  // TODO execute all plugins in parallel
   for (let key in plugins) {
     let p = await plugins[key]
     try {
-      if (mode == 'pre') return await p.pre({ input, session, lastRoutePath })
+      if (mode == 'pre')
+        await p.pre({ input, session, lastRoutePath })
       if (mode == 'post')
-        return await p.post({ input, session, lastRoutePath, response })
+        await p.post({ input, session, lastRoutePath, response })
     } catch (e) {
       console.log(e)
     }
