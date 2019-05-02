@@ -141,14 +141,16 @@ export class DummyCMS implements CMS {
     let elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
     );
-    return Promise.resolve(new Carousel(elements));
+    return Promise.resolve(new Carousel(id, elements));
   }
 
   async text(
     id: string,
     callbacks: CallbackMap = new CallbackMap()
   ): Promise<Text> {
-    return Promise.resolve(new Text('Dummy text for ' + id, this.buttons()));
+    return Promise.resolve(
+      new Text(id, 'Dummy text for ' + id, this.buttons())
+    );
   }
 
   private buttons(): Button[] {

@@ -12,7 +12,9 @@ export class TextDelivery extends DeliveryWithFollowUp {
   }
 
   async text(id: string, callbacks: cms.CallbackMap): Promise<model.Text> {
-    let entry: contentful.Entry<TextFields> = await this.delivery.getEntry(id);
+    let entry: contentful.Entry<
+      TextFields
+    > = await this.delivery.getEntryByIdOrName(id, cms.ModelType.TEXT);
     return this.textFromField(entry, callbacks);
   }
 
@@ -36,7 +38,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
     return Promise.all(promises).then(followUpAndButtons => {
       let followUp = followUpAndButtons.shift() as (model.Text | undefined);
       let buttons = followUpAndButtons as model.Button[];
-      return new model.Text(fields.text, buttons, followUp);
+      return new model.Text(fields.name, fields.text, buttons, followUp);
     });
   }
 }

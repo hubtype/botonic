@@ -20,13 +20,14 @@ export class Button extends Model {
 }
 
 export class Carousel extends Model {
-  constructor(readonly elements: Element[] = []) {
+  constructor(readonly name: string, readonly elements: Element[] = []) {
     super();
   }
 }
 
 export class Text extends Model {
   constructor(
+    readonly name: string,
     readonly text: string,
     readonly buttons: Button[],
     readonly followup?: FollowUp

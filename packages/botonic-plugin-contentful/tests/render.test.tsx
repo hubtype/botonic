@@ -59,7 +59,7 @@ test('TEST: render_Carousel', () => {
   let msg2 = Object.create(msg);
   msg2.title = 'my title2';
 
-  let carousel = new cms.Carousel([msg, msg2]);
+  let carousel = new cms.Carousel('name', [msg, msg2]);
 
   // act
   let render = sut.carousel(carousel);
@@ -102,7 +102,7 @@ test('TEST: render_Carousel', () => {
 
 test('TEST: render text without buttons nor followup', () => {
   let sut = new cms.Renderer();
-  let text = new cms.Text('my text', []);
+  let text = new cms.Text('name', 'my text', []);
 
   // act
   let render = sut.text(text);
@@ -118,10 +118,11 @@ test('TEST: render text without buttons nor followup', () => {
 
 test('TEST: render text with buttons and followup', () => {
   let sut = new cms.Renderer();
-  let followUp = new cms.Text('my text FU', [
+  let followUp = new cms.Text('textFollowUp', 'my text FU', [
     new cms.Button('my button FU', cms.Callback.ofPayload('my payload FU'))
   ]);
   let text = new cms.Text(
+    'textMain',
     'my text',
     [
       new cms.Button('my button1', cms.Callback.ofPayload('my payload1')),

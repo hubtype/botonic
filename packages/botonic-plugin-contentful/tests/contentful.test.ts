@@ -6,13 +6,13 @@ const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
 const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
 const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
 const TEST_URL_CUENTA_ID = '3ePsGfyLHBHsrxtU7IkPh9';
-const TEST_GRACIAS = '63lakRZRu1AJ1DqlbZZb9O';
+const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
 
 function testContentful(): Contentful {
   return new Contentful(
-    process.env['CONTENTFUL_TEST_SPACE_ID']!,
-    process.env['CONTENTFUL_TEST_TOKEN']!,
+    process.env.CONTENTFUL_TEST_SPACE_ID!,
+    process.env.CONTENTFUL_TEST_TOKEN!,
     2000
   );
 }
@@ -103,7 +103,7 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_GRACIAS, new cms.CallbackMap());
+  let text = await sut.text(TEST_FBK_OK_MSG, new cms.CallbackMap());
 
   // assert
   expect(text.buttons).toHaveLength(0);
@@ -113,4 +113,19 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
 test('TEST: contentful url', async () => {
   let url = await testContentful().url(TEST_URL_CUENTA_ID);
   expect(url.url).toEqual('https://www.massimodutti.com/es/');
+});
+
+test('TEST: contentful text from model name', async () => {
+  let sut = testContentful();
+  let callback = mock(cms.Callback);
+
+  // act
+  let text = await sut.text(
+    'PRE_MENU_CRSL',
+    cms.CallbackMap.forAllIds(callback)
+  );
+
+  // assert
+  expect(text.name).toEqual('PRE_MENU_CRSL');
+  expect(text.buttons).toHaveLength(3);
 });

@@ -1,6 +1,5 @@
 import { ModelType } from '../cms';
 import * as contentful from 'contentful';
-import { Entry } from 'contentful';
 
 export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
@@ -21,11 +20,33 @@ export class DeliveryApi {
     });
   }
 
-  async getEntry<T>(id: string): Promise<Entry<T>> {
+  async getEntryByIdOrName<T>(
+    id: string,
+    contentType: string
+  ): Promise<contentful.Entry<T>> {
+    try {
+      if (id.indexOf('_') >= 0) {
+        let entries = await this.client.getEntries<T>({
+          'fields.name': id,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          content_type: contentType
+        });
+        if (entries.total === 0) {
+          throw new Error(`No entry with name ${id}`);
+        }
+        return entries.items[0];
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return this.getEntry(id);
+  }
+
+  async getEntry<T>(id: string): Promise<contentful.Entry<T>> {
     return this.client.getEntry<T>(id);
   }
 
-  static getContentModel<T>(entry: Entry<T>): ModelType {
+  static getContentModel<T>(entry: contentful.Entry<T>): ModelType {
     // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
     const typ = entry.sys.contentType.sys.id;
     return typ as ModelType;

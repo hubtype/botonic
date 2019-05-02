@@ -15,13 +15,13 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     id: string,
     callbacks: cms.CallbackMap
   ): Promise<model.Carousel> {
-    let entry: contentful.Entry<CarouselFields> = await this.delivery.getEntry(
-      id
-    );
+    let entry: contentful.Entry<
+      CarouselFields
+    > = await this.delivery.getEntryByIdOrName(id, cms.ModelType.CAROUSEL);
     let elements = entry.fields.elements.map(async entry => {
       return this.elementFromEntry(entry, callbacks);
     });
-    return new model.Carousel(await Promise.all(elements));
+    return new model.Carousel(entry.fields.name, await Promise.all(elements));
   }
 
   /**
