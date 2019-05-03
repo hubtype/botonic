@@ -17,7 +17,7 @@ export class Renderer {
         <Pic src={msg.imgUrl || ''} />
         <Title>{msg.title || ''}</Title>
         <Subtitle>{msg.subtitle || ''}</Subtitle>
-        <>{msg.buttons.map((b, i) => this.button(b, i))}</>
+        {this.buttons(msg.buttons)}
       </Element>
     );
   }
@@ -36,7 +36,7 @@ export class Renderer {
     let node = (
       <Text delay={delayS}>
         {text.text}
-        {text.buttons.map((b, i) => this.button(b, i))}
+        {this.buttons(text.buttons)}
       </Text>
     );
     if (text.followup) {
@@ -59,16 +59,21 @@ export class Renderer {
     return this.carousel(followUp);
   }
 
-  private button(button: cms.Button, index: number): React.ReactNode {
-    let cb = button.callback;
-    return cb.payload ? (
-      <Button key={index} payload={cb.payload}>
-        {button.text}
-      </Button>
-    ) : (
-      <Button key={index} url={cb.url}>
-        {button.text}
-      </Button>
+  private buttons(buttons: cms.Button[]): React.ReactNode {
+    return (
+      <>
+        {buttons.map((button, index) => {
+          return (
+            <Button
+              key={index}
+              payload={button.callback.payload}
+              url={button.callback.url}
+            >
+              {button.text}
+            </Button>
+          );
+        })}
+      </>
     );
   }
 }

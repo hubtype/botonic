@@ -10,7 +10,7 @@ import {
 } from '@botonic/react';
 import * as cms from '../src';
 
-test('TEST: render element', () => {
+test('TEST: render element with 2 buttons', () => {
   let sut = new cms.Renderer();
   let msg = new cms.Element(
     [
@@ -32,7 +32,7 @@ test('TEST: render element', () => {
       <Title>my title</Title>
       <Subtitle>my subtitle</Subtitle>
       <>
-        <Button key="0" payload="my payload1">
+        <Button key="0" payload="payload1">
           but text1
         </Button>
         <Button key="1" url="http://url2">
@@ -76,10 +76,7 @@ test('TEST: render_Carousel', () => {
   let sut = new cms.Renderer();
 
   let msg = new cms.Element(
-    [
-      new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1')),
-      new cms.Button('but2', 'but text2', cms.Callback.ofUrl('http://url2'))
-    ],
+    [new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1'))],
     'my title',
     'my subtitle',
     'http://myimg.jpg'
@@ -102,12 +99,11 @@ test('TEST: render_Carousel', () => {
           <Title>my title</Title>
           <Subtitle>my subtitle</Subtitle>
           <>
-            <Button key="0" payload="payload1">
-              but text1
-            </Button>
-            <Button key="1" url="http://url2">
-              but text2
-            </Button>
+            {[
+              <Button key="0" payload="payload1">
+                but text1
+              </Button>
+            ]}
           </>
         </Element>
         <Element key="1">
@@ -115,12 +111,11 @@ test('TEST: render_Carousel', () => {
           <Title>my title2</Title>
           <Subtitle>my subtitle</Subtitle>
           <>
-            <Button key="0" payload="payload1">
-              but text1
-            </Button>
-            <Button key="1" url="http://url2">
-              but text2
-            </Button>
+            {[
+              <Button key="0" payload="payload1">
+                but text1
+              </Button>
+            ]}
           </>
         </Element>
       </Carousel>
@@ -140,7 +135,7 @@ test('TEST: render text without buttons nor followup', () => {
   expect(render).toEqual(
     <Text delay={0}>
       my text
-      {[]}
+      <>{[]}</>
     </Text>
   );
 });
@@ -153,39 +148,34 @@ test('TEST: render text with buttons and followup', () => {
   let text = new cms.Text(
     'textMain',
     'my text',
-    [
-      new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1')),
-      new cms.Button('but2', 'but text2', cms.Callback.ofUrl('http://url2'))
-    ],
+    [new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1'))],
     followUp
   );
 
   // act
   let render = sut.text(text);
-  let button1 = (
-    <Button key="0" payload="payload1">
-      but text1
-    </Button>
-  );
-  let button2 = (
-    <Button key="1" url="http://url2">
-      but text2
-    </Button>
-  );
   // assert
   expect(render).toEqual(
     <>
       <Text delay={0}>
         my text
-        {[button1, button2]}
+        <>
+          {[
+            <Button key="0" payload="payload1">
+              but text1
+            </Button>
+          ]}
+        </>
       </Text>
       <Text delay={3}>
         my text FU
-        {[
-          <Button key="0" payload="payload FU">
-            but FU txt
-          </Button>
-        ]}
+        <>
+          {[
+            <Button key="0" payload="payload FU">
+              but FU txt
+            </Button>
+          ]}
+        </>
       </Text>
     </>
   );
