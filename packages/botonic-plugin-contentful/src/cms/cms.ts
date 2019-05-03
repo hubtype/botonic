@@ -119,7 +119,7 @@ export class ErrorReportingCMS implements CMS {
     return this.cms.url(id).catch(this.handleError(id, ModelType.URL));
   }
 
-  handleError(id: string, model: ModelType): (reason: any) => never {
+  private handleError(id: string, model: ModelType): (reason: any) => never {
     return (reason: any) => {
       // eslint-disable-next-line no-console
       console.error(`Error fetching ${model} with id '${id}': ${reason}`);

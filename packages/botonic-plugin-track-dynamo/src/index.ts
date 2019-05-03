@@ -1,7 +1,12 @@
 // Exports
 
 import { DynamoDB } from 'aws-sdk';
-import { Track, TrackStorage, UserEvent } from './domain';
+import {
+  ErrorReportingTrackStorage,
+  Track,
+  TrackStorage,
+  UserEvent
+} from './domain';
 import { DynamoTrackStorage } from './infrastructure/dynamo';
 import time from './domain/time';
 
@@ -14,6 +19,7 @@ export default class BotonicPluginTrackDynamo {
       region: options['region']
     };
     this.storage = new DynamoTrackStorage(options['env'], conf);
+    this.storage = new ErrorReportingTrackStorage(this.storage);
   }
 
   async track(botId: string, user: string, event: string): Promise<undefined> {
