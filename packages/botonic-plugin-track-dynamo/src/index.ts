@@ -1,14 +1,25 @@
 // Exports
 
+import { DynamoDB } from 'aws-sdk';
+import { Track, TrackStorage, UserEvent } from './domain';
+import { DynamoTrackStorage } from './infrastructure/dynamo';
+import time from './domain/time';
+
 export default class BotonicPluginTrackDynamo {
+  storage: TrackStorage;
   constructor(options: any) {
-    // if (options.cms) {
-    //   this.cms = options.cms;
-    // } else {
-    //   this.cms = new Contentful(options.spaceId, options.accessToken);
-    // }
-    // this.cms = new ErrorReportingCMS(this.cms);
-    // this.renderer = options.renderer || new Renderer();
+    let conf: DynamoDB.ClientConfiguration = {
+      accessKeyId: options['accessKeyId'],
+      secretAccessKey: options['secretAccessKey'],
+      region: options['region']
+    };
+    this.storage = new DynamoTrackStorage(options['env'], conf);
+  }
+
+  async track(botId: string, user: string, event: string): Promise<undefined> {
+    let userEvent = new UserEvent(user, event);
+    let track = new Track(botId, time.now(), [userEvent]);
+    return this.storage.write(track);
   }
 
   // @ts-ignore
