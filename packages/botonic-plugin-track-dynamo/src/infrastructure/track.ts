@@ -47,15 +47,15 @@ export class Track extends TrackKey {
   })
   events: domain.UserEvent[] = [];
 
-  static fromKey(bot: string, time: Date): Track {
+  static fromKey(botId: string, time: Date): Track {
     let track = new Track();
-    track.bot = bot;
+    track.bot = botId;
     track.time = time;
     return track;
   }
   static fromDomain(domTrack: domain.Track): Track {
     let track = new Track();
-    track.bot = domTrack.bot;
+    track.bot = domTrack.botId;
     track.time = domTrack.time;
     track.events = domTrack.events;
     return track;

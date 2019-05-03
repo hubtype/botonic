@@ -18,11 +18,11 @@ test('TEST: dynamo write', async () => {
     await sut.write(track2);
 
     // assert
-    let track3 = await sut.read(track1.bot, track1.time);
-    expect(track3.bot).toEqual(track1.bot);
+    let track3 = await sut.read(track1.botId, track1.time);
+    expect(track3.botId).toEqual(track1.botId);
     expect(track3.time).toEqual(track1.time);
     expect(track3.events).toEqual(track1.events.concat(track2.events));
   } finally {
-    await sut.remove(track1.bot, track1.time);
+    await sut.remove(track1.botId, track1.time);
   }
 });

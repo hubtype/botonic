@@ -1,6 +1,6 @@
 export class Track {
   constructor(
-    readonly bot: string,
+    readonly botId: string,
     readonly time: Date,
     readonly events: UserEvent[]
   ) {}
