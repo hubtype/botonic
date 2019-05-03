@@ -11,17 +11,23 @@ export class Element {
 }
 
 // TODO rename to Content?
-export abstract class Model {}
+export abstract class Model {
+  protected constructor(readonly name: string) {}
+}
 
 export class Button extends Model {
-  constructor(readonly text: string, readonly callback: Callback) {
-    super();
+  constructor(
+    readonly name: string,
+    readonly text: string,
+    readonly callback: Callback
+  ) {
+    super(name);
   }
 }
 
 export class Carousel extends Model {
   constructor(readonly name: string, readonly elements: Element[] = []) {
-    super();
+    super(name);
   }
 }
 
@@ -32,14 +38,14 @@ export class Text extends Model {
     readonly buttons: Button[],
     readonly followup?: FollowUp
   ) {
-    super();
+    super(name);
   }
 }
 
 export class Url extends Model {
   //TODO followUp not yet rendered
   constructor(readonly url: string, readonly followup?: FollowUp) {
-    super();
+    super(url);
   }
 }
 

@@ -26,7 +26,7 @@ export class ButtonDelivery {
     let callback = entry.fields.target
       ? await this.getTargetCallback(entry.fields.target)
       : callbacks.getCallback(id);
-    return new model.Button(entry.fields.text, callback);
+    return new model.Button(entry.fields.name, entry.fields.text, callback);
   }
 
   private async getTargetCallback(target: ButtonTarget): Promise<cms.Callback> {

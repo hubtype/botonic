@@ -155,13 +155,13 @@ export class DummyCMS implements CMS {
 
   private buttons(): Button[] {
     return this.buttonCallbacks.map(
-      callback => new Button('press me', callback)
+      callback => new Button(callback.payload || callback.url!, 'press me', callback)
     );
   }
 
   private element(id: string, callback: Callback): Element {
     return new Element(
-      [new Button('press me', callback)],
+      [new Button(callback.payload || callback.url!, 'press me', callback)],
       'Title for ' + id,
       'subtitle',
       '../assets/img_home_bg.png'

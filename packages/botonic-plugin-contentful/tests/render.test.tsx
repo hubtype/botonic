@@ -14,8 +14,8 @@ test('TEST: render element', () => {
   let sut = new cms.Renderer();
   let msg = new cms.Element(
     [
-      new cms.Button('my button1', cms.Callback.ofPayload('my payload1')),
-      new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+      new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1')),
+      new cms.Button('but2', 'but text2', cms.Callback.ofUrl('http://url2'))
     ],
     'my title',
     'my subtitle',
@@ -33,10 +33,10 @@ test('TEST: render element', () => {
       <Subtitle>my subtitle</Subtitle>
       <>
         <Button key="0" payload="my payload1">
-          my button1
+          but text1
         </Button>
         <Button key="1" url="http://url2">
-          my button2
+          but text2
         </Button>
       </>
     </Element>
@@ -48,8 +48,8 @@ test('TEST: render_Carousel', () => {
 
   let msg = new cms.Element(
     [
-      new cms.Button('my button1', cms.Callback.ofPayload('my payload1')),
-      new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+      new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1')),
+      new cms.Button('but2', 'but text2', cms.Callback.ofUrl('http://url2'))
     ],
     'my title',
     'my subtitle',
@@ -73,11 +73,11 @@ test('TEST: render_Carousel', () => {
           <Title>my title</Title>
           <Subtitle>my subtitle</Subtitle>
           <>
-            <Button key="0" payload="my payload1">
-              my button1
+            <Button key="0" payload="payload1">
+              but text1
             </Button>
             <Button key="1" url="http://url2">
-              my button2
+              but text2
             </Button>
           </>
         </Element>
@@ -86,11 +86,11 @@ test('TEST: render_Carousel', () => {
           <Title>my title2</Title>
           <Subtitle>my subtitle</Subtitle>
           <>
-            <Button key="0" payload="my payload1">
-              my button1
+            <Button key="0" payload="payload1">
+              but text1
             </Button>
             <Button key="1" url="http://url2">
-              my button2
+              but text2
             </Button>
           </>
         </Element>
@@ -119,14 +119,14 @@ test('TEST: render text without buttons nor followup', () => {
 test('TEST: render text with buttons and followup', () => {
   let sut = new cms.Renderer();
   let followUp = new cms.Text('textFollowUp', 'my text FU', [
-    new cms.Button('my button FU', cms.Callback.ofPayload('my payload FU'))
+    new cms.Button('butFU', 'but FU txt', cms.Callback.ofPayload('payload FU'))
   ]);
   let text = new cms.Text(
     'textMain',
     'my text',
     [
-      new cms.Button('my button1', cms.Callback.ofPayload('my payload1')),
-      new cms.Button('my button2', cms.Callback.ofUrl('http://url2'))
+      new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1')),
+      new cms.Button('but2', 'but text2', cms.Callback.ofUrl('http://url2'))
     ],
     followUp
   );
@@ -134,13 +134,13 @@ test('TEST: render text with buttons and followup', () => {
   // act
   let render = sut.text(text);
   let button1 = (
-    <Button key="0" payload="my payload1">
-      my button1
+    <Button key="0" payload="payload1">
+      but text1
     </Button>
   );
   let button2 = (
     <Button key="1" url="http://url2">
-      my button2
+      but text2
     </Button>
   );
   // assert
@@ -153,8 +153,8 @@ test('TEST: render text with buttons and followup', () => {
       <Text delay={3}>
         my text FU
         {[
-          <Button key="0" payload="my payload FU">
-            my button FU
+          <Button key="0" payload="payload FU">
+            but FU txt
           </Button>
         ]}
       </Text>

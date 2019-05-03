@@ -50,14 +50,23 @@ export class App {
 }
 
 export interface Input {
-  payload: string;
-  type: string; // text, ...
+  type: string; // text, postback...
+  payload?: string;
+  data?: string;
 }
 
+export interface SimplifiedSession {
+  user: {
+    id: string
+  },
+  bot: {
+    id: string
+  }
+}
 // Parameters of the actions' botonicInit method
 export interface ActionInitInput {
   input : Input;
-  session: any;
+  session: SimplifiedSession;
   params: any;
   lastRoutePath: any;
   plugins: any;
@@ -78,3 +87,21 @@ export class BotonicOutputTester {
 }
 
 export const RequestContext: React.Context<any>;
+
+export interface Session {
+  __locale: string;
+  __retries?: number;
+}
+// plugins
+export interface PluginPreInput {
+  input: Input;
+  session: Session;
+  lastRoutePath: string;
+}
+
+export interface PluginPostInput {
+  input: Input;
+  session: Session;
+  lastRoutePath: string;
+  response: string;
+}

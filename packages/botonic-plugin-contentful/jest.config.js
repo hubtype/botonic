@@ -4,7 +4,7 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest'
   },
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
-  testPathIgnorePatterns: ['lib', '.*\.d\.ts'],
+  testPathIgnorePatterns: ['lib', '.*\.d\.ts', 'tests/helpers'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   snapshotSerializers: [],

@@ -27,10 +27,12 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": true
     // test options
-    "types": [
-      "@types/jest"
-    ]
+    // I added it so that IDE recognized test & expect, but with it, it ignores other types , eg. @types/node
+    // now test/expect work fine without iy. A bug fixed in webstorm 2019.1.1?
+//    "types": [
+//      "@types/jest"
+//    ]
   }
 }
