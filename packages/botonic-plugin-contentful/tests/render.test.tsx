@@ -43,6 +43,35 @@ test('TEST: render element', () => {
   );
 });
 
+test('TEST: render element without image', () => {
+  let sut = new cms.Renderer();
+  let msg = new cms.Element(
+    [new cms.Button('but1', 'but text1', cms.Callback.ofPayload('payload1'))],
+    'my title',
+    'my subtitle',
+    undefined
+  );
+
+  // act
+  let render = sut.element(msg, 0);
+
+  // assert
+  expect(render).toEqual(
+    <Element key="0">
+      <Pic src="" />
+      <Title>my title</Title>
+      <Subtitle>my subtitle</Subtitle>
+      <>
+        {[
+          <Button key="0" payload="payload1">
+            but text1
+          </Button>
+        ]}
+      </>
+    </Element>
+  );
+});
+
 test('TEST: render_Carousel', () => {
   let sut = new cms.Renderer();
 

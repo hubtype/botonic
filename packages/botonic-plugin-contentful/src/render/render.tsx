@@ -14,7 +14,7 @@ export class Renderer {
   element(msg: cms.Element, index: number): React.ReactNode {
     return (
       <Element key={index}>
-        {msg.imgUrl && <Pic src={msg.imgUrl} />}
+        <Pic src={msg.imgUrl || ''} />
         <Title>{msg.title || ''}</Title>
         <Subtitle>{msg.subtitle || ''}</Subtitle>
         <>{msg.buttons.map((b, i) => this.button(b, i))}</>
