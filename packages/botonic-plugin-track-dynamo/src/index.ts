@@ -10,15 +10,22 @@ import {
 import { DynamoTrackStorage } from './infrastructure/dynamo';
 import time from './domain/time';
 
+export * from './domain/dummy';
+
 export default class BotonicPluginTrackDynamo {
-  storage: TrackStorage;
+  readonly storage: TrackStorage;
+
   constructor(options: any) {
-    let conf: DynamoDB.ClientConfiguration = {
-      accessKeyId: options['accessKeyId'],
-      secretAccessKey: options['secretAccessKey'],
-      region: options['region']
-    };
-    this.storage = new DynamoTrackStorage(options['env'], conf);
+    if (options.storage) {
+      this.storage = options.storage;
+    } else {
+      let conf: DynamoDB.ClientConfiguration = {
+        accessKeyId: options['accessKeyId'],
+        secretAccessKey: options['secretAccessKey'],
+        region: options['region']
+      };
+      this.storage = new DynamoTrackStorage(options['env'], conf);
+    }
     this.storage = new ErrorReportingTrackStorage(this.storage);
   }
 

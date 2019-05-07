@@ -49,7 +49,7 @@ export class DynamoTrackStorage implements domain.TrackStorage {
       }
     };
     let req = this.client.updateItem(input);
-    return req.promise().then(r => {
+    return req.promise().then(({}) => {
       return Promise.resolve(undefined);
     });
   }
