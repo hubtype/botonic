@@ -128,6 +128,8 @@ export class ErrorReportingCMS implements CMS {
   }
 }
 
+export class ContentNotFoundException extends Error {}
+
 /**
  * Useful for mocking it, as ts-mockito does not allow mocking interfaces
  */
@@ -155,7 +157,8 @@ export class DummyCMS implements CMS {
 
   private buttons(): Button[] {
     return this.buttonCallbacks.map(
-      callback => new Button(callback.payload || callback.url!, 'press me', callback)
+      callback =>
+        new Button(callback.payload || callback.url!, 'press me', callback)
     );
   }
 

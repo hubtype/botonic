@@ -1,54 +1,17 @@
 import { ModelType } from '../cms';
 import * as contentful from 'contentful';
 
-export class DeliveryApi {
-  private client: contentful.ContentfulClientApi;
-
-  /**
-   *
-   * @param timeoutMs does not work at least when there's no network
-   * during the first connection
-   *
-   * See https://www.contentful.com/developers/docs/references/content-delivery-api/#/introduction/api-rate-limits
-   * for API rate limits
-   */
-  constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
-    this.client = contentful.createClient({
-      space: spaceId,
-      accessToken: accessToken,
-      timeout: timeoutMs
-    });
-  }
-
-  async getEntryByIdOrName<T>(
+export interface DeliveryApi {
+  getEntryByIdOrName<T>(
     id: string,
-    contentType: string
-  ): Promise<contentful.Entry<T>> {
-    try {
-      if (id.indexOf('_') >= 0) {
-        let entries = await this.client.getEntries<T>({
-          'fields.name': id,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          content_type: contentType
-        });
-        if (entries.total === 0) {
-          throw new Error(`No entry with name ${id}`);
-        }
-        return entries.items[0];
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return this.getEntry(id);
-  }
+    contentType: ModelType
+  ): Promise<contentful.Entry<T>>;
 
-  async getEntry<T>(id: string): Promise<contentful.Entry<T>> {
-    return this.client.getEntry<T>(id);
-  }
+  getEntry<T>(id: string): Promise<contentful.Entry<T>>;
+}
 
-  static getContentModel<T>(entry: contentful.Entry<T>): ModelType {
-    // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
-    const typ = entry.sys.contentType.sys.id;
-    return typ as ModelType;
-  }
+export function getContentModel<T>(entry: contentful.Entry<T>): ModelType {
+  // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
+  const typ = entry.sys.contentType.sys.id;
+  return typ as ModelType;
 }

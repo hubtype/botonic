@@ -4,7 +4,7 @@ import { Entry } from 'contentful';
 import { TextFields } from './text';
 import { TextDelivery } from './text';
 import { CarouselDelivery, CarouselFields } from './carousel';
-import { DeliveryApi } from './deliveryApi';
+import { DeliveryApi, getContentModel } from './deliveryApi';
 
 export class DeliveryWithFollowUp {
   followUp: FollowUpDelivery | undefined;
@@ -30,7 +30,7 @@ export class FollowUpDelivery {
     if (!followUp) {
       return Promise.resolve(undefined);
     }
-    switch (DeliveryApi.getContentModel(followUp)) {
+    switch (getContentModel(followUp)) {
       case cms.ModelType.CAROUSEL:
         // here followUp already has its fields set, but not yet its element fields
         return this.carousel.carousel(followUp.sys.id, callbacks);

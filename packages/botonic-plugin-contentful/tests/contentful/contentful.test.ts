@@ -2,14 +2,14 @@ import Contentful from '../../src/contentful';
 import { mock } from 'ts-mockito';
 import * as cms from '../../src';
 
-const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
+export const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
 const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
 const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
 const TEST_URL_CUENTA_ID = '3ePsGfyLHBHsrxtU7IkPh9';
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
 
-function testContentful(): Contentful {
+export function testContentful(): Contentful {
   return new Contentful(
     process.env.CONTENTFUL_TEST_SPACE_ID!,
     process.env.CONTENTFUL_TEST_TOKEN!,

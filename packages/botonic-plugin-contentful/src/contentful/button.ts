@@ -1,5 +1,5 @@
 import * as contentful from 'contentful';
-import { ModelType, DeliveryApi } from '.';
+import { DeliveryApi, getContentModel } from './deliveryApi';
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
 import { UrlFields } from './url';
@@ -30,12 +30,12 @@ export class ButtonDelivery {
   }
 
   private async getTargetCallback(target: ButtonTarget): Promise<cms.Callback> {
-    let model = DeliveryApi.getContentModel(target);
+    let model = getContentModel(target);
     switch (model) {
-      case ModelType.CAROUSEL:
-      case ModelType.TEXT:
+      case cms.ModelType.CAROUSEL:
+      case cms.ModelType.TEXT:
         return cms.Callback.ofModel(model, target.sys.id);
-      case ModelType.URL: {
+      case cms.ModelType.URL: {
         let urlFields = target as contentful.Entry<UrlFields>;
         return cms.Callback.ofUrl(urlFields.fields.url);
       }

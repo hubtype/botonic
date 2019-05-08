@@ -1,7 +1,8 @@
+import * as contentful from 'contentful';
 import { FollowUpDelivery } from './followUp';
 import { CallbackMap } from '../cms';
 import { ButtonDelivery } from './button';
-import { DeliveryApi } from './deliveryApi';
+import { CachedDeliveryApi } from './deliveryApiCache';
 import { CarouselDelivery } from './carousel';
 import { TextDelivery } from './text';
 import { UrlDelivery } from './url';
@@ -14,8 +15,20 @@ export default class Contentful implements cms.CMS {
 
   _url: UrlDelivery;
 
-  constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
-    let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
+  constructor(
+    spaceId: string,
+    accessToken: string,
+    cacheTtlInMs: number = 10000
+  ) {
+    /**
+     * ContentfulClientApi.timeoutMs does not work when there's no network during the first connection
+     */
+    let client = contentful.createClient({
+      space: spaceId,
+      accessToken: accessToken,
+      timeout: 30000
+    });
+    let delivery = new CachedDeliveryApi(client, cacheTtlInMs);
     let button = new ButtonDelivery(delivery);
     this._carousel = new CarouselDelivery(delivery, button);
     this._text = new TextDelivery(delivery, button);
