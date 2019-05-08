@@ -1,5 +1,6 @@
+import { EntryCollection } from 'contentful';
 import { string } from 'prop-types';
-import { instance, mock, when } from 'ts-mockito';
+import { deepEqual, instance, mock, when } from 'ts-mockito';
 import { ContentNotFoundException } from '../../src/cms';
 import * as cms from '../../src/cms';
 import { CachedDeliveryApi } from '../../src/contentful/deliveryApiCache';
@@ -11,14 +12,34 @@ import {
   entryCollection
 } from '../helpers/contentful';
 
+function mockRefreshCache(
+  mockApi: DummyContentfulClientApi,
+  modelType: cms.ModelType,
+  entryCollections: EntryCollection<any>[]
+) {
+  let w = when(
+    mockApi.getEntries(
+      deepEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        content_type: modelType
+      })
+    )
+  );
+  for (let entryCollection of entryCollections) {
+    w = w.thenResolve(entryCollection);
+  }
+}
+
 test('TEST: contentful cache only refreshes when necessary', async () => {
   let mockApi = mock(DummyContentfulClientApi);
   const ID = mock(string);
   let mockEntry1 = entry(ID, cms.ModelType.TEXT, 'name1');
   let mockEntry2 = entry(ID, cms.ModelType.TEXT, 'name2');
-  when(mockApi.getEntries())
-    .thenResolve(entryCollection(mockEntry1))
-    .thenResolve(entryCollection(mockEntry2));
+  mockRefreshCache(mockApi, cms.ModelType.TEXT, [
+    entryCollection(mockEntry1),
+    entryCollection(mockEntry2)
+  ]);
+  mockRefreshCache(mockApi, cms.ModelType.CAROUSEL, [entryCollection()]);
   let sut = new CachedDeliveryApi(instance(mockApi), 100);
 
   // while TTL has not expired, expect what getEntries returned the first time
@@ -45,7 +66,8 @@ test('TEST: contentful cache throws when not found', async () => {
   let mockApi = mock(DummyContentfulClientApi);
   const ID = mock(string);
   let mockEntry1 = entry(ID, cms.ModelType.TEXT, 'name1');
-  when(mockApi.getEntries()).thenResolve(entryCollection(mockEntry1));
+  mockRefreshCache(mockApi, cms.ModelType.TEXT, [entryCollection(mockEntry1)]);
+  mockRefreshCache(mockApi, cms.ModelType.CAROUSEL, [entryCollection()]);
   let sut = new CachedDeliveryApi(instance(mockApi), 100);
 
   await expect(sut.getEntry('other id')).rejects.toThrow(

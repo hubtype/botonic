@@ -15,10 +15,15 @@ export default class Contentful implements cms.CMS {
 
   _url: UrlDelivery;
 
+  /**
+   *
+   * @param cacheTtlInMs thanks to memoizee preFetch (https://github.com/medikoo/memoizee) we can have a very short TTL
+   * without connecting to Contentful in periods when there's no activity
+   */
   constructor(
     spaceId: string,
     accessToken: string,
-    cacheTtlInMs: number = 10000
+    cacheTtlInMs: number = 1000
   ) {
     /**
      * ContentfulClientApi.timeoutMs does not work when there's no network during the first connection
