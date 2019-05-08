@@ -1,6 +1,6 @@
-import Contentful from '../src/contentful';
+import Contentful from '../../src/contentful';
 import { mock } from 'ts-mockito';
-import * as cms from '../src';
+import * as cms from '../../src';
 
 const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
 const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';

@@ -8,7 +8,7 @@ import {
   Title,
   Subtitle
 } from '@botonic/react';
-import * as cms from '../src';
+import * as cms from '../../src';
 
 test('TEST: render element with 2 buttons', () => {
   let sut = new cms.Renderer();

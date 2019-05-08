@@ -1,6 +1,6 @@
 import { instance, mock, when } from 'ts-mockito';
-import * as cms from '../src';
-import { DummyCMS, ErrorReportingCMS, ModelType } from '../src';
+import * as cms from '../../src';
+import { DummyCMS, ErrorReportingCMS, ModelType } from '../../src';
 
 test('TEST: callbackMap multiple callbacks', () => {
   let callback1 = mock(cms.Callback);
