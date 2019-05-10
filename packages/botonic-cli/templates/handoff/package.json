@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "webpack --env.node",
+    "build": "webpack --env.node --mode=production",
     "start": "webpack-dev-server --env.webchat",
     "test": "jest"
   },
@@ -45,6 +45,7 @@
     "sass": "^1.14.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "node-sass": "^4.11.0",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.14"

@@ -60,7 +60,7 @@ export function webchatReducer(state, action) {
           ...state,
           messagesJSON: [
             ...state.messagesJSON.slice(0, msgIndex),
-            action.payload,
+            { ...action.payload },
             ...state.messagesJSON.slice(msgIndex + 1)
           ]
         }
@@ -72,15 +72,15 @@ export function webchatReducer(state, action) {
     case 'updateWebview':
       return { ...state, ...action.payload }
     case 'updateSession':
-      return { ...state, session: action.payload }
+      return { ...state, session: { ...action.payload } }
     case 'updateLastRoutePath':
       return { ...state, lastRoutePath: action.payload }
     case 'updateHandoff':
       return { ...state, handoff: action.payload }
     case 'updateTheme':
-      return { ...state, theme: action.payload }
+      return { ...state, theme: { ...action.payload } }
     case 'updateDevSettings':
-      return { ...state, devSettings: action.payload }
+      return { ...state, devSettings: { ...action.payload } }
     default:
       throw new Error()
   }
@@ -112,10 +112,10 @@ export function useWebchat() {
       type: 'updateSession',
       payload: session
     })
-  const updateLastRoutePath = session =>
+  const updateLastRoutePath = path =>
     webchatDispatch({
       type: 'updateLastRoutePath',
-      payload: session
+      payload: path
     })
   const updateHandoff = handoff =>
     webchatDispatch({
