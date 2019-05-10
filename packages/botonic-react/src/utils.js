@@ -125,6 +125,8 @@ function elements_parse(elements) {
 function buttons_parse(buttons) {
   return buttons.map(b => {
     let payload = b.props ? b.props.payload : b.payload
+    if ((b.props && b.props.path) || b.path)
+      payload = `__PATH_PAYLOAD__${b.path}`
     let url = b.props ? b.props.url : b.url
     let title = b.props ? b.props.children : b.title
     return (
@@ -138,11 +140,15 @@ function buttons_parse(buttons) {
 function quickreplies_parse(msg) {
   let replies = null
   if (msg.replies) {
-    replies = msg.replies.map((el, i) => (
-      <Reply key={i} payload={el.payload}>
-        {el.text}
-      </Reply>
-    ))
+    replies = msg.replies.map((el, i) => {
+      let payload = el.payload
+      if (el.path) payload = `__PATH_PAYLOAD__${el.path}`
+      return (
+        <Reply key={i} payload={payload}>
+          {el.text}
+        </Reply>
+      )
+    })
   }
   if (msg.keyboard) {
     replies = msg.keyboard.map(el => (

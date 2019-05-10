@@ -237,12 +237,20 @@ export const Webchat = props => {
           height: webchatState.height,
           margin: 'auto',
           backgroundColor: 'white',
-          border: '1px solid rgba(0, 0, 0, 0.4)',
+          borderRadius: '10px',
+          boxShadow: '0 0 12px rgba(0,0,0,.15)',
           display: 'flex',
           flexDirection: 'column'
         }}
       >
-        <WebchatHeader style={{ height: 36, flex: 'none' }} />
+        <WebchatHeader
+          style={{
+            borderRadius: '8px 8px 0 0',
+            boxShadow: 'rgba(176, 196, 222, 0.5) 0px 2px 5px',
+            height: 36,
+            flex: 'none'
+          }}
+        />
         <WebchatMessageList
           style={{ flex: 1 }}
           messages={webchatState.messagesComponents}
@@ -268,8 +276,9 @@ export const Webchat = props => {
               display: 'flex',
               padding: '8px 10px',
               fontSize: 14,
+              borderRadius: '0 0 8px 8px',
               border: 'none',
-              borderTop: '1px solid rgba(0, 0, 0, 0.4)',
+              boxShadow: 'rgba(176, 196, 222, 0.5) 0px 0px 5px',
               resize: 'none',
               overflow: 'auto',
               outline: 'none'
