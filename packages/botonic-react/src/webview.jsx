@@ -41,7 +41,7 @@ class App extends React.Component {
             }
         }
         if (this.state.session.user.provider === 'whatsappnew') {
-            location.href = 'https://wa.me/' + this.state.session.user.imp_id, '_self';
+            location.href = 'https://wa.me/' + this.state.session.user.imp_id;
         }
         else window.WebviewSdk.close(() => {}, err => console.log(err))
     }
