@@ -36,7 +36,8 @@ export const webchatInitialState = {
   devSettings: {
     keepSessionOnReload: true,
     showSessionView: false
-  }
+  },
+  isWebchatOpen: false
 }
 
 export function webchatReducer(state, action) {
@@ -81,6 +82,8 @@ export function webchatReducer(state, action) {
       return { ...state, theme: { ...action.payload } }
     case 'updateDevSettings':
       return { ...state, devSettings: { ...action.payload } }
+    case 'triggerWebchat':
+      return { ...state, isWebchatOpen: action.payload }
     default:
       throw new Error()
   }
@@ -132,6 +135,12 @@ export function useWebchat() {
       type: 'updateDevSettings',
       payload: settings
     })
+  const triggerWebchat = triggerOption =>
+    webchatDispatch({
+      type: 'triggerWebchat',
+      payload: triggerOption
+    })
+
   return {
     webchatState,
     webchatDispatch,
@@ -145,7 +154,8 @@ export function useWebchat() {
     updateLastRoutePath,
     updateHandoff,
     updateTheme,
-    updateDevSettings
+    updateDevSettings,
+    triggerWebchat
   }
 }
 
