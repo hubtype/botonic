@@ -3,7 +3,9 @@ import { WebchatContext } from '../contexts'
 import Logo from './botonic_react_logo100x100.png'
 
 export const WebchatHeader = props => {
-  const { webchatState, staticAssetsUrl } = useContext(WebchatContext)
+  const { webchatState, staticAssetsUrl, triggerWebchat } = useContext(
+    WebchatContext
+  )
 
   if (webchatState.theme.customHeader) {
     let CustomHeader = webchatState.theme.customHeader
@@ -35,6 +37,22 @@ export const WebchatHeader = props => {
       >
         {webchatState.theme.title || 'Botonic'}
       </h4>
+      <div
+        style={{
+          cursor: 'pointer',
+          fontSize: '25px',
+          color: 'black',
+          position: 'absolute',
+          right: '10px',
+          top: '0px'
+        }}
+        onClick={event => {
+          triggerWebchat(!webchatState.isWebchatOpen)
+          event.preventDefault()
+        }}
+      >
+        &times;
+      </div>
     </div>
   )
 }
