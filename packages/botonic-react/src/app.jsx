@@ -58,7 +58,7 @@ export class App {
     else return <Webchat botonicApp={this} theme={themeOptions} />
   }
 
-  render({ dest, webchatOptions, appId }) {
+  render(dest, webchatOptions = null, appId = null) {
     if (appId) this.appId = appId
     if (webchatOptions && webchatOptions.theme)
       ReactDOM.render(this.webchat(webchatOptions.theme), dest)

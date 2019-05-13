@@ -14,6 +14,7 @@ import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
 import { isDev, msgToBotonic } from '../utils'
+import Logo from './botonic_react_logo100x100.png'
 
 const uuidv1 = require('uuid/v1')
 
@@ -47,7 +48,8 @@ export const Webchat = props => {
     updateLastRoutePath,
     updateHandoff,
     updateTheme,
-    updateDevSettings
+    updateDevSettings,
+    triggerWebchat
   } = props.webchatHooks || useWebchat()
 
   const appId = props.botonicApp.appId
@@ -76,7 +78,6 @@ export const Webchat = props => {
     if (appId) {
       pusher = new Pusher('da85029877df0c827e44')
       if (!Object.keys(pusher.channels.channels).length) {
-        //TODO: remove my endpoint, generic one with socket
         pusher.subscribe(`public-${appId}-${pusherUserId}`)
         pusher.bind('botonic_response', processNewInput)
       }
@@ -225,81 +226,108 @@ export const Webchat = props => {
         resolveCase,
         webchatState,
         addMessage,
+        triggerWebchat,
         updateMessage,
         updateReplies,
         staticAssetsUrl
       }}
     >
-      <div
-        style={{
-          position: 'relative',
-          width: webchatState.width,
-          height: webchatState.height,
-          margin: 'auto',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          boxShadow: '0 0 12px rgba(0,0,0,.15)',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <WebchatHeader
-          style={{
-            borderRadius: '8px 8px 0 0',
-            boxShadow: 'rgba(176, 196, 222, 0.5) 0px 2px 5px',
-            height: 36,
-            flex: 'none'
+      {!webchatState.isWebchatOpen && (
+        <div
+          onClick={event => {
+            triggerWebchat(!webchatState.isWebchatOpen)
+            event.preventDefault()
           }}
-        />
-        <WebchatMessageList
-          style={{ flex: 1 }}
-          messages={webchatState.messagesComponents}
+          style={{
+            cursor: 'pointer',
+            position: 'absolute',
+            bottom: 20,
+            right: 0
+          }}
         >
-          {webchatState.typing && <TypingIndicator />}
-          <div id='messages-end' />
-        </WebchatMessageList>
-        {webchatState.replies && (
-          <WebchatReplies replies={webchatState.replies} />
-        )}
-        {!webchatState.handoff && (
-          <Textarea
-            name='text'
-            minRows={2}
-            maxRows={4}
-            wrap='soft'
-            maxLength='1000'
-            placeholder={webchatState.theme.textPlaceholder}
-            autoFocus={location.hostname === 'localhost'}
-            inputRef={textArea}
-            onKeyDown={e => onKeyDown(e)}
+          <img
             style={{
-              display: 'flex',
-              padding: '8px 10px',
-              fontSize: 14,
-              borderRadius: '0 0 8px 8px',
-              border: 'none',
-              boxShadow: 'rgba(176, 196, 222, 0.5) 0px 0px 5px',
-              resize: 'none',
-              overflow: 'auto',
-              outline: 'none'
+              height: 50,
+              margin: '0px 12px'
+            }}
+            src={staticAssetsUrl + (webchatState.theme.brandIconUrl || Logo)}
+          />
+        </div>
+      )}
+      {webchatState.isWebchatOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            right: 20,
+            bottom: 20,
+            width: webchatState.width,
+            height: webchatState.height,
+            margin: 'auto',
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            boxShadow: '0 0 12px rgba(0,0,0,.15)',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <WebchatHeader
+            style={{
+              borderRadius: '8px 8px 0 0',
+              boxShadow: 'rgba(176, 196, 222, 0.5) 0px 2px 5px',
+              height: 36,
+              flex: 'none'
             }}
           />
-        )}
-        {webchatState.webview && (
-          <RequestContext.Provider value={webviewRequestContext}>
-            <WebviewContainer
+          <WebchatMessageList
+            style={{ flex: 1 }}
+            messages={webchatState.messagesComponents}
+          >
+            {webchatState.typing && <TypingIndicator />}
+            <div id='messages-end' />
+          </WebchatMessageList>
+          {webchatState.replies && (
+            <WebchatReplies replies={webchatState.replies} />
+          )}
+          {!webchatState.handoff && (
+            <Textarea
+              name='text'
+              minRows={2}
+              maxRows={4}
+              wrap='soft'
+              maxLength='1000'
+              placeholder={webchatState.theme.textPlaceholder}
+              autoFocus={location.hostname === 'localhost'}
+              inputRef={textArea}
+              onKeyDown={e => onKeyDown(e)}
               style={{
-                position: 'absolute',
-                bottom: 0,
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                display: 'flex',
+                padding: '8px 10px',
+                fontSize: 14,
+                borderRadius: '0 0 8px 8px',
+                border: 'none',
+                boxShadow: 'rgba(176, 196, 222, 0.5) 0px 0px 5px',
+                resize: 'none',
+                overflow: 'auto',
+                outline: 'none'
               }}
-              webview={webchatState.webview}
             />
-          </RequestContext.Provider>
-        )}
-      </div>
+          )}
+          {webchatState.webview && (
+            <RequestContext.Provider value={webviewRequestContext}>
+              <WebviewContainer
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                }}
+                webview={webchatState.webview}
+              />
+            </RequestContext.Provider>
+          )}
+        </div>
+      )}
     </WebchatContext.Provider>
   )
 }

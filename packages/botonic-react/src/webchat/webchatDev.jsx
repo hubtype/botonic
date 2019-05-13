@@ -38,19 +38,25 @@ export const WebchatDev = props => {
           height: webchatState.height
         }}
       >
-        <Webchat style={{ flex: 1 }} {...props} webchatHooks={webchatHooks} />
-        <div
-          style={{
-            position: 'absolute',
-            right: 5,
-            top: 2,
-            padding: 5,
-            cursor: 'pointer'
-          }}
-          onClick={() => setIsComponentVisible(!isComponentVisible)}
-        >
-          ☰
-        </div>
+        <Webchat
+          style={{ flex: 1, position: 'relative' }}
+          {...props}
+          webchatHooks={webchatHooks}
+        />
+        {webchatState.isWebchatOpen && (
+          <div
+            style={{
+              position: 'absolute',
+              right: 48,
+              top: '-23px',
+              padding: 5,
+              cursor: 'pointer'
+            }}
+            onClick={() => setIsComponentVisible(!isComponentVisible)}
+          >
+            ☰
+          </div>
+        )}
         <div ref={ref}>
           {isComponentVisible && (
             <div
