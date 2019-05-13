@@ -241,13 +241,17 @@ export const Webchat = props => {
           style={{
             cursor: 'pointer',
             position: 'absolute',
+            background: 'white',
+            borderRadius: '50%',
+            height: 65,
             bottom: 20,
-            right: 0
+            right: 10
           }}
         >
           <img
             style={{
               height: 50,
+              paddingTop: 8,
               margin: '0px 12px'
             }}
             src={staticAssetsUrl + (webchatState.theme.brandIconUrl || Logo)}
