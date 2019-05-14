@@ -245,7 +245,8 @@ export const Webchat = props => {
             borderRadius: '50%',
             height: 65,
             bottom: 20,
-            right: 10
+            right: 10,
+            ...webchatState.theme.triggerButtonProps
           }}
         >
           <img
