@@ -1,0 +1,40 @@
+{
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "build_with_tests": "rm -rf lib tests/lib && tsc -b tests/tsconfig.json",
+    "test": "jest",
+    "lint": "node_modules/.bin/eslint --fix --quiet src/**/*.ts* tests/**/*.ts*",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run lint && git add -A src tests",
+    "postversion": "git push && git push --tags"
+  },
+  "name": "botonic-plugin-dynamodb",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "aws-sdk": "^2.445.0",
+    "typescript": "^3.4.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.13.8",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.7.1",
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.2",
+    "ts-mockito": "^2.3.1"
+  },
+  "engines": {
+    "node": ">=8.10.0"
+  }
+}
