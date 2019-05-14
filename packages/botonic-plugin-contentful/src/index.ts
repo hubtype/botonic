@@ -1,8 +1,7 @@
-import { ButtonsWithKeywords } from './cms';
-import { KeywordsParser } from './nlp/keywords';
 import Contentful from './contentful';
 import * as cms from './cms';
 import { Renderer } from './render';
+import { Keywords } from './keywords';
 
 // Exports
 export * from './cms';
@@ -13,6 +12,8 @@ export default class BotonicPluginContentful {
 
   readonly renderer: Renderer;
 
+  readonly keywords: Keywords;
+
   constructor(options: any) {
     if (options.cms) {
       this.cms = options.cms;
@@ -21,20 +22,19 @@ export default class BotonicPluginContentful {
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = options.renderer || new Renderer();
+    this.keywords = options.keywords || new Keywords(this.cms);
   }
 
   async suggestTextsForInput(
     inputText: string,
-    textId: string
+    keywordsFoundTextId: string,
+    keywordsNotFoundTextId: string
   ): Promise<cms.Text> {
-    // TODO call in parallel
-    let template = await this.cms.text(textId, new cms.CallbackMap());
-    let allButtons = await this.cms.textsWithKeywordsAsButtons();
-    let kws = new KeywordsParser<ButtonsWithKeywords>();
-    allButtons.forEach(but => kws.addCandidate(but, but.keywords));
-    let matches = kws.findCandidatesWithKeywordsAt(inputText);
-    let buttons = matches.map(match => match.button);
-    return new cms.Text(template.name, template.text, buttons);
+    return this.keywords.suggestTextsForInput(
+      inputText,
+      keywordsFoundTextId,
+      keywordsNotFoundTextId
+    );
   }
 
   // @ts-ignore
