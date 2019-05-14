@@ -144,7 +144,7 @@ export class DummyCMS implements CMS {
 
   async carousel(
     id: string,
-    callbacks: CallbackMap = new CallbackMap()
+    {  }: CallbackMap = new CallbackMap()
   ): Promise<Carousel> {
     let elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
@@ -152,10 +152,7 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Carousel(id, elements));
   }
 
-  async text(
-    id: string,
-    callbacks: CallbackMap = new CallbackMap()
-  ): Promise<Text> {
+  async text(id: string, {  }: CallbackMap = new CallbackMap()): Promise<Text> {
     return Promise.resolve(
       new Text(id, 'Dummy text for ' + id, this.buttons(), id, ['kw1', 'kw2'])
     );
