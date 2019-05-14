@@ -1,0 +1,12 @@
+{
+  "name": "botonic-plugin-dashbot",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "dependencies": {
+    "axios": "latest",
+    "dashbot": "^10.3.4"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.4.3"
+  }
+}
