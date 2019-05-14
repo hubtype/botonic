@@ -8,7 +8,7 @@ export class KeywordsParser<M> {
   private readonly candidates = [] as CandidateWithKeywords<M>[];
 
   addCandidate(candidate: M, keywords: string[]): void {
-    keywords = keywords.map((kw, index, array) => {
+    keywords = keywords.map(kw => {
       return normalize(kw);
     });
     this.candidates.push(new CandidateWithKeywords(candidate, keywords));
