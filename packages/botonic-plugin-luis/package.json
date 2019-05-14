@@ -1,6 +1,6 @@
 {
-  "name": "botonic-plugin-luis",
-  "version": "0.0.1",
+  "name": "@botonic/plugin-luis",
+  "version": "0.8.0",
   "main": "src/index.js",
   "dependencies": {
     "axios": "latest"

@@ -15,7 +15,7 @@
     }
   },
   "dependencies": {
-    "@botonic/react": "0.7.0",
+    "@botonic/react": "0.8.0",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {

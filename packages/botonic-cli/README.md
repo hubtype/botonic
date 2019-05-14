@@ -19,7 +19,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.7.1 darwin-x64 node-v10.15.0
+@botonic/cli/0.8.0 darwin-x64 node-v10.15.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -34,6 +34,7 @@ USAGE
 * [`botonic logout`](#botonic-logout)
 * [`botonic new NAME [TEMPLATENAME]`](#botonic-new-name-templatename)
 * [`botonic serve`](#botonic-serve)
+* [`botonic test`](#botonic-test)
 
 ## `botonic deploy [BOT_NAME]`
 
@@ -44,7 +45,8 @@ USAGE
   $ botonic deploy [BOT_NAME]
 
 OPTIONS
-  -f, --force  Force deploy despite of no changes. Disabled by default
+  -f, --force        Force deploy despite of no changes. Disabled by default
+  --botName=botName
 
 EXAMPLE
   $ botonic deploy
@@ -54,7 +56,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.7.1/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.8.0/src/commands/deploy.ts)_
 
 ## `botonic help [COMMAND]`
 
@@ -85,7 +87,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.7.1/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.8.0/src/commands/login.ts)_
 
 ## `botonic logout`
 
@@ -99,7 +101,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.7.1/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.8.0/src/commands/logout.ts)_
 
 ## `botonic new NAME [TEMPLATENAME]`
 
@@ -119,7 +121,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.7.1/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.8.0/src/commands/new.ts)_
 
 ## `botonic serve`
 
@@ -134,5 +136,32 @@ EXAMPLE
   > Project is running at http://localhost:8080/
 ```
 
-_See code: [src/commands/serve.ts](https://github.com/hubtype/botonic/blob/v0.7.1/src/commands/serve.ts)_
+_See code: [src/commands/serve.ts](https://github.com/hubtype/botonic/blob/v0.8.0/src/commands/serve.ts)_
+
+## `botonic test`
+
+Test your Botonic components
+
+```
+USAGE
+  $ botonic test
+
+EXAMPLE
+  PASS  tests/app.test.js
+     ✓ TEST: hi.js (10ms)
+     ✓ TEST: pizza.js (1ms)
+     ✓ TEST: sausage.js (1ms)
+     ✓ TEST: bacon.js
+     ✓ TEST: pasta.js (1ms)
+     ✓ TEST: cheese.js (1ms)
+     ✓ TEST: tomato.js
+
+  Test Suites: 1 passed, 1 total
+  Tests:       7 passed, 7 total
+  Snapshots:   0 total
+  Time:        1.223s
+  Ran all test suites.
+```
+
+_See code: [src/commands/test.ts](https://github.com/hubtype/botonic/blob/v0.8.0/src/commands/test.ts)_
 <!-- commandsstop -->
