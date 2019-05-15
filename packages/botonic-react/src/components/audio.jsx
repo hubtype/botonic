@@ -3,7 +3,7 @@ import { isBrowser } from '@botonic/core'
 import { Message } from './message'
 
 export const Audio = props => {
-  let content = ''
+  let content = props.children
   if (isBrowser())
     content = (
       <audio style={{ maxWidth: '100%' }} id='myAudio' controls>
