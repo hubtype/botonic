@@ -4,7 +4,7 @@ import { Message } from './message'
 import { isBrowser } from '@botonic/core'
 
 export const Document = props => {
-  let content = ''
+  let content = props.children
   if (isBrowser())
     content = (
       <embed
