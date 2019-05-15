@@ -101,12 +101,15 @@ export interface Session {
 }
 
 // plugins
+
+// Arguments of the plugin pre() method
 export interface PluginPreInput {
   input: Input;
   session: Session;
   lastRoutePath: string;
 }
 
+// Arguments of the plugin post() method
 export interface PluginPostInput {
   input: Input;
   session: Session;

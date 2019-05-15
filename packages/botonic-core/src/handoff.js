@@ -23,3 +23,18 @@ export async function humanHandOff(session, queue_name, on_finish) {
   }
   session._botonic_action = params
 }
+
+export async function storeCaseRating(session, rating) {
+  let base_url = session._hubtype_api || 'https://api.hubtype.com'
+  const queues_url = `${base_url}/v1/cases/store_case_rating/`
+  let chat_id = session.user.id
+  let resp = await axios({
+    headers: {
+      Authorization: `Bearer ${session._access_token}`
+    },
+    method: 'post',
+    url: queues_url,
+    data: { chat_id, rating }
+  })
+  return resp.data
+}
