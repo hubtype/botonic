@@ -64,13 +64,22 @@ export class ButtonDelivery {
         let urlFields = target as contentful.Entry<UrlFields>;
         return cms.Callback.ofUrl(urlFields.fields.url);
       }
+      case ModelType.PAYLOAD: {
+        let payloadFields = target as contentful.Entry<PayloadFields>;
+        return cms.Callback.ofPayload(payloadFields.fields.payload);
+      }
       default:
-        throw new Error('Unexpected type :' + model);
+        throw new Error('Unexpected type: ' + model);
     }
   }
 }
+export interface PayloadFields {
+  payload: string;
+}
 
-type ButtonTarget = contentful.Entry<CarouselFields | TextFields | UrlFields>;
+type ButtonTarget = contentful.Entry<
+  CarouselFields | TextFields | UrlFields | PayloadFields
+>;
 
 export interface ButtonFields {
   name: string;
