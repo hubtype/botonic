@@ -15,7 +15,7 @@
     }
   },
   "dependencies": {
-    "@botonic/react": "0.8.0"
+    "@botonic/react": "0.8.1"
   },
   "devDependencies": {
     "babel-jest": "^24.1.0",
