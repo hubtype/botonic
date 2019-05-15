@@ -15,11 +15,8 @@ export default class BotonicPluginContentful {
   readonly keywords: Keywords;
 
   constructor(options: any) {
-    if (options.cms) {
-      this.cms = options.cms;
-    } else {
-      this.cms = new Contentful(options.spaceId, options.accessToken);
-    }
+    this.cms =
+      options.cms || new Contentful(options.spaceId, options.accessToken);
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = options.renderer || new Renderer();
     this.keywords = options.keywords || new Keywords(this.cms);
