@@ -15,9 +15,9 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@botonic/core": "^0.8.0-beta.2",
-    "@botonic/react": "^0.8.0-beta.2",
-    "contentful": "^7.5.0",
+    "@botonic/core": "^0.8.0",
+    "@botonic/react": "^0.8.0",
+    "contentful": "^7.6.0",
     "escape-string-regexp": "^2.0.0",
     "react": "^16.8.6",
     "typescript": "^3.4.1"
