@@ -1,10 +1,11 @@
-import { DeliveryWithFollowUp } from './followUp';
-import { CarouselFields } from './carousel';
-import * as cms from '../cms/cms';
-import * as model from '../cms/model';
 import * as contentful from 'contentful';
+import * as cms from '../cms/cms';
+import { ButtonStyle } from '../cms/cms';
+import * as model from '../cms/model';
 import { ButtonDelivery } from './button';
+import { CarouselFields } from './carousel';
 import { DeliveryApi } from './deliveryApi';
+import { DeliveryWithFollowUp } from './followUp';
 
 export class TextDelivery extends DeliveryWithFollowUp {
   constructor(
@@ -47,7 +48,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
         buttons,
         fields.shortText,
         fields.keywords,
-        followUp
+        followUp,
+        fields.buttonsStyle == 'QuickReplies'
+          ? ButtonStyle.QUICK_REPLY
+          : ButtonStyle.BUTTON
       );
     });
   }
@@ -63,4 +67,5 @@ export interface TextFields {
   buttons: contentful.Entry<any>[];
   keywords?: string[];
   followup?: contentful.Entry<TextFields | CarouselFields>;
+  buttonsStyle?: string;
 }
