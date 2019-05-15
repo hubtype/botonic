@@ -7,6 +7,7 @@ const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
 const TEST_URL_CUENTA_ID = '3ePsGfyLHBHsrxtU7IkPh9';
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
+const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm';
 
 test('TEST: contentful text without followup', async () => {
   let sut = testContentful();
@@ -50,6 +51,17 @@ test('TEST: contentful text with URL button with followup', async () => {
     'https://www.massimodutti.com/es/'
   );
   expect(text.followup).not.toBeUndefined();
+});
+
+test('TEST: contentful text with payload button', async () => {
+  let sut = testContentful();
+
+  // act
+  let text = await sut.text(KEYWORDS_NOT_FOUND, new cms.CallbackMap());
+
+  // assert
+  expect(text.buttons).toHaveLength(1);
+  expect(text.buttons[0].callback.payload).toBe('humanHandOff');
 });
 
 test('TEST: contentful text without buttons with text followup', async () => {

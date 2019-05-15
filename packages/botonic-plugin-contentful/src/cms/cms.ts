@@ -6,7 +6,8 @@ export enum ModelType {
   CAROUSEL = 'carousel',
   TEXT = 'text',
   BUTTON = 'button',
-  URL = 'url'
+  URL = 'url',
+  PAYLOAD = 'payload'
 }
 
 export class Callback {
