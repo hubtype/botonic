@@ -10,6 +10,11 @@ export enum ModelType {
   PAYLOAD = 'payload'
 }
 
+export enum ButtonStyle {
+  BUTTON = 0,
+  QUICK_REPLY = 1
+}
+
 export class Callback {
   private static PAYLOAD_SEPARATOR = '$';
 
