@@ -1,4 +1,4 @@
-import { Callback } from './cms';
+import { ButtonStyle, Callback } from './cms';
 
 /** Part of a carousel */
 export class Element {
@@ -45,7 +45,8 @@ export class Text extends Model {
     // Useful to display in buttons or reports
     readonly shortText?: string,
     readonly keywords: string[] = [],
-    readonly followup?: FollowUp
+    readonly followup?: FollowUp,
+    readonly buttonsStyle = ButtonStyle.BUTTON
   ) {
     super(name);
   }
