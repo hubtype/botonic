@@ -18,4 +18,7 @@ export { Document } from './components/document'
 export { Location } from './components/location'
 export { ShareButton } from './components/shareButton'
 export { MessageTemplate } from './components/messageTemplate'
+
+// QA
 export { BotonicInputTester, BotonicOutputTester } from './botonicTester'
+export { Inspector } from './debug'

@@ -1,18 +1,32 @@
 import * as url from 'url'
 import { isBrowser, isNode } from './utils'
+import { RouteInspector } from './debug'
 
 export class Router {
-  constructor(routes) {
+  constructor(routes, routeInspector = undefined) {
     this.routes = routes
+    this.routeInspector = routeInspector || new RouteInspector()
   }
 
   processInput(input, session, lastRoutePath) {
     let path_params = Router.parseInputPath(input)
-    let {routeParams, brokenFlow, lastRoute} = this.parseRoute(lastRoutePath, input, session, path_params)
+    let { routeParams, brokenFlow, lastRoute } = this.parseRoute(
+      lastRoutePath,
+      input,
+      session,
+      path_params
+    )
     if (routeParams && Object.keys(routeParams).length) {
       let defaultAction = this.getActionFromChildRoutesIfNoPath(routeParams)
       if ('action' in routeParams.route) {
-        let actionRoute = Router.processActionRoute(brokenFlow, routeParams, lastRoute, session, defaultAction, lastRoutePath)
+        let actionRoute = Router.processActionRoute(
+          brokenFlow,
+          routeParams,
+          lastRoute,
+          session,
+          defaultAction,
+          lastRoutePath
+        )
         if (actionRoute) return actionRoute
       } else if (defaultAction) {
         return {
@@ -32,7 +46,7 @@ export class Router {
         }
       }
     }
-    return this.getNotFound(lastRoute, session, lastRoutePath);
+    return this.getNotFound(lastRoute, session, lastRoutePath)
   }
 
   getNotFound(lastRoute, session, lastRoutePath) {
@@ -65,13 +79,10 @@ export class Router {
       routeParams.route.childRoutes &&
       routeParams.route.childRoutes.length
     ) {
-      defaultAction = this.getRoute(
-        {path: ''},
-        routeParams.route.childRoutes
-      )
+      defaultAction = this.getRoute({ path: '' }, routeParams.route.childRoutes)
     }
 
-    return defaultAction;
+    return defaultAction
   }
 
   parseRoute(lastRoutePath, input, session, path_params) {
@@ -100,7 +111,7 @@ export class Router {
         }
       }
     } catch (e) {}
-    return { routeParams, brokenFlow, lastRoute };
+    return { routeParams, brokenFlow, lastRoute }
   }
 
   static parseInputPath(input) {
@@ -108,8 +119,7 @@ export class Router {
     try {
       pathParams = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
       if (pathParams.length > 0) input.path = pathParams[0]
-    } catch (e) {
-    }
+    } catch (e) {}
     return pathParams
   }
 
@@ -134,7 +144,7 @@ export class Router {
         action: routeParams.route.action,
         params: routeParams.params,
         retryAction: lastRoute ? lastRoute.action : null,
-        defaultAction: defaultAction ? defaultAction.route.action : null,  //eslint-disable-line no-null/no-null
+        defaultAction: defaultAction ? defaultAction.route.action : null, //eslint-disable-line no-null/no-null
         lastRoutePath: lastRoutePath
       }
     } else {
@@ -162,7 +172,7 @@ export class Router {
       Object.entries(r)
         .filter(([key, {}]) => key != 'action' && key != 'childRoutes')
         .some(([key, value]) => {
-          let match = this.matchRoute(key, value, input, session)
+          let match = this.matchRoute(r, key, value, input, session)
           try {
             params = match.groups
           } catch (e) {}
@@ -191,7 +201,7 @@ export class Router {
     return null
   }
 
-  matchRoute(prop, matcher, input, session) {
+  matchRoute(route, prop, matcher, input, session) {
     /*
         prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' |...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
@@ -203,9 +213,27 @@ export class Router {
       if (input.type == 'text') value = input.data
     } else if (prop == 'input') value = input
     else if (prop == 'session') value = session
-    if (typeof matcher === 'string') return value == matcher
-    if (matcher instanceof RegExp) return matcher.exec(value)
-    if (typeof matcher === 'function') return matcher(value)
+
+    let matched = this.matchValue(matcher, value)
+    if (matched) {
+      this.routeInspector.routeMatched(route, prop, matcher, value)
+    }
+    return matched
+  }
+
+  matchValue(matcher, value) {
+    if (typeof matcher === 'string') {
+      return value == matcher
+    }
+    if (matcher instanceof RegExp) {
+      if (value === undefined) {
+        return false
+      }
+      return matcher.exec(value)
+    }
+    if (typeof matcher === 'function') {
+      return matcher(value)
+    }
     return false
   }
 }

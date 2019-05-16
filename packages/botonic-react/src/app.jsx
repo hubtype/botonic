@@ -9,6 +9,7 @@ import { RequestContext } from './contexts'
 import { Text } from './components/text'
 
 import { isFunction, loadPlugins, runPlugins, isDev } from './utils'
+import {Inspector} from './debug';
 
 export class App {
   constructor({
@@ -18,8 +19,10 @@ export class App {
     theme,
     plugins,
     defaultTyping,
-    defaultDelay
+    defaultDelay,
+    inspector
   }) {
+    this.inspector = inspector || new Inspector();
     this.rootElement = null
     this.routes = routes
     this.defaultRoutes = {
@@ -30,7 +33,7 @@ export class App {
     this.integrations = integrations
     this.router = isFunction(this.routes)
       ? null
-      : new Router([...this.routes, this.defaultRoutes])
+      : new Router([...this.routes, this.defaultRoutes], this.inspector.getRouteInspector())
     this.plugins = loadPlugins(plugins)
     this.theme = theme
     this.defaultTyping = defaultTyping || 0
@@ -76,7 +79,7 @@ export class App {
       this.router = new Router([
         ...this.routes({ input, session }),
         this.defaultRoutes
-      ])
+      ], this.inspector.getRouteInspector())
     }
 
     let output = this.router.processInput(input, session, lastRoutePath)
@@ -141,4 +144,5 @@ export class App {
     session.is_first_interaction = false
     return { input, response, session, lastRoutePath }
   }
+
 }

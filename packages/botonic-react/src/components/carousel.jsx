@@ -3,7 +3,8 @@ import { Message } from './message'
 import { isBrowser, isNode } from '@botonic/core'
 
 export const Carousel = props => {
-  let content = ''
+  // let content = ''
+  let content = props.children
   if (isBrowser()) {
     content = (
       <div

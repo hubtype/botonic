@@ -53,7 +53,9 @@ export class App {
     appId?: any,
     defaultTyping?: any,
     defaultDelay?: any
+    inspector?: Inspector
   });
+
 }
 
 export interface Input {
@@ -79,19 +81,6 @@ export interface ActionInitInput {
   plugins: any;
 }
 
-export class BotonicInputTester {
-  constructor(app: App);
-
-  text(inp: string, session?: any, lastRoutePath?: string): Promise<string>;
-
-  payload(inp: string, session?: any, lastRoutePath?: string): Promise<string>;
-}
-
-export class BotonicOutputTester {
-  constructor(app: any);
-
-  text(out: string, replies?: any): Promise<string>;
-}
 
 export const RequestContext: React.Context<any>;
 
@@ -115,4 +104,27 @@ export interface PluginPostInput {
   session: Session;
   lastRoutePath: string;
   response: string;
+}
+
+// QA
+
+export class BotonicInputTester {
+  constructor(app: App);
+
+  text(inp: string, session?: any, lastRoutePath?: string): Promise<string>;
+
+  payload(inp: string, session?: any, lastRoutePath?: string): Promise<string>;
+}
+
+export class BotonicOutputTester {
+  constructor(app: any);
+
+  text(out: string, replies?: any): Promise<string>;
+}
+
+// debug
+export class Inspector {
+  constructor(routeInspector: core.RouteInspector);
+
+  getRouteInspector(): core.RouteInspector;
 }
