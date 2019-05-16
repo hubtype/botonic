@@ -204,7 +204,13 @@ export class Router {
     } else if (prop == 'input') value = input
     else if (prop == 'session') value = session
     if (typeof matcher === 'string') return value == matcher
-    if (matcher instanceof RegExp) return matcher.exec(value)
+    if (matcher instanceof RegExp) {
+      if (value === undefined) {
+        // when running in browser, undefined is converted into string 'undefined'
+        return false
+      }
+      return matcher.exec(value)
+    }
     if (typeof matcher === 'function') return matcher(value)
     return false
   }
