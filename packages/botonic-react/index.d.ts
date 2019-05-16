@@ -9,7 +9,6 @@ export interface MessageProps{
   children : any;
   json: any;
   style: any;
-
 }
 export class Message extends React.Component<MessageProps, any> {}
 
@@ -17,6 +16,7 @@ export class Message extends React.Component<MessageProps, any> {}
 //TODO inherit from MessageProps?
 export interface TextProps{
   delay?: number;
+  typing?: number;
 }
 export class Text extends React.Component<TextProps, any> {}
 
@@ -26,10 +26,17 @@ export interface ButtonProps{
 }
 export class Button extends React.Component<ButtonProps, any> {}
 
+export interface ButtonProps{
+  payload?: string;
+  url?: string;
+}
+export class Reply extends React.Component<ButtonProps, any> {}
+
 export interface PicProps{
   src: string;
 }
 export class Pic extends React.Component<PicProps, any> {}
+export class Image extends React.Component<PicProps, any> {}
 
 export class Carousel extends React.Component<any, any> {}
 export class Title extends React.Component<any, any> {}
@@ -92,6 +99,7 @@ export interface Session {
   __locale: string;
   __retries?: number;
 }
+
 // plugins
 export interface PluginPreInput {
   input: Input;
