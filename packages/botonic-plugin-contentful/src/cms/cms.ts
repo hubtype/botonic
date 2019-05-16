@@ -45,10 +45,33 @@ export class Callback {
     );
   }
 
+  parseModel(): { type: cms.ModelType; id: string } {
+    let [type, id] = this.payload!.split(Callback.PAYLOAD_SEPARATOR);
+    if (!id) {
+      throw new Error(
+        `Callback payload '${this.payload}' does not content a model reference`
+      );
+    }
+    return { type: Callback.checkDeliverableModel(type), id };
+  }
+
+  private static checkDeliverableModel(modelType: string): cms.ModelType {
+    switch (modelType as ModelType) {
+      case ModelType.CAROUSEL:
+      case ModelType.TEXT:
+      case ModelType.URL:
+        return modelType as ModelType;
+      default:
+        throw new Error(
+          `${modelType} is not a mode type than can be delivered from CMS`
+        );
+    }
+  }
+
   deliverPayloadModel(cms: CMS, callbacks?: CallbackMap): Promise<Model> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    let [type, id] = this.payload!.split(Callback.PAYLOAD_SEPARATOR);
-    switch (type as ModelType) {
+    let { type, id } = this.parseModel();
+    switch (type) {
       case ModelType.CAROUSEL:
         return cms.carousel(id, callbacks);
       case ModelType.TEXT:
@@ -57,7 +80,7 @@ export class Callback {
         return cms.url(id);
       default:
         throw new Error(
-          `Type ${type} not supported for callback with id ${id}`
+          `Type '${type}' not supported for callback with id '${id}'`
         );
     }
   }
