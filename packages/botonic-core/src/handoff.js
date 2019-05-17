@@ -26,8 +26,9 @@ export async function humanHandOff(session, queue_name, on_finish) {
 
 export async function storeCaseRating(session, rating) {
   let base_url = session._hubtype_api || 'https://api.hubtype.com'
-  const queues_url = `${base_url}/v1/cases/store_case_rating/`
   let chat_id = session.user.id
+  const queues_url = `${base_url}/v1/chats/${chat_id}/store_case_rating/`
+
   let resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`
