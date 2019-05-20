@@ -23,7 +23,7 @@
     "module": "commonjs",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
-//    "esModuleInterop": true,
+    "esModuleInterop": true,
     // lint options
     "strict": true,
     "forceConsistentCasingInFileNames": true,

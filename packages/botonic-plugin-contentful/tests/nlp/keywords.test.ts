@@ -1,4 +1,4 @@
-import { KeywordsParser } from '../../src/nlp/keywords';
+import { KeywordsParser } from '../../src/nlp';
 import 'jest-extended';
 
 test('hack because webstorm does not recognize test.each', () => {});
