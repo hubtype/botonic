@@ -1,4 +1,4 @@
-import { normalize, substringIsBlankSeparated } from '../../src/nlp/tokens';
+import { substringIsBlankSeparated } from '../../src/nlp/';
 import 'jest-extended';
 
 test('TEST: substringIsBlankSeparated', () => {
@@ -11,9 +11,4 @@ test('TEST: substringIsBlankSeparated', () => {
 
   expect(substringIsBlankSeparated('not found', 'k w1')).toBeFalse();
   expect(substringIsBlankSeparated('partial w1', 'k w1')).toBeFalse();
-});
-
-test('TEST: normalize', () => {
-  expect(normalize('áá')).toEqual('aa');
-  expect(normalize(',./ áé  íó(úÑ)  ;')).toEqual('ae io uñ');
 });
