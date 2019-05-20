@@ -20,31 +20,3 @@ export function substringIsBlankSeparated(
   }
   return true;
 }
-
-class Replacer {
-  constructor(readonly from: RegExp, readonly to: string) {}
-  static separatorsToBlanks(input: string): string {
-    return input.replace(/[^a-zA-Zñ0-9]+/g, BLANK);
-  }
-  static forLocale(locale: string): Replacer[] {
-    if (locale != 'es') {
-      return [];
-    }
-    return [
-      new Replacer(/á/g, 'a'),
-      new Replacer(/é/g, 'e'),
-      new Replacer(/í/g, 'i'),
-      new Replacer(/ó/g, 'o'),
-      new Replacer(/ú/g, 'u')
-    ];
-  }
-}
-
-export function normalize(inputText: string): string {
-  inputText = inputText.toLocaleLowerCase();
-  for (let rep of Replacer.forLocale('es')) {
-    inputText = inputText.replace(rep.from, rep.to);
-  }
-  inputText = Replacer.separatorsToBlanks(inputText);
-  return inputText.trim();
-}
