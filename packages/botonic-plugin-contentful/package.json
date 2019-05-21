@@ -10,17 +10,18 @@
     "version": "npm run lint && git add -A src tests",
     "postversion": "git push && git push --tags"
   },
-  "name": "botonic-plugin-contentful",
-  "version": "0.0.1",
+  "name": "@botonic/plugin-contentful",
+  "version": "0.9.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@botonic/core": "^0.8.0",
-    "@botonic/react": "^0.8.0",
+    "@botonic/core": "^0.9.0-beta.1",
+    "@botonic/react": "^0.9.0-beta.1",
     "contentful": "^7.6.0",
     "escape-string-regexp": "^2.0.0",
+    "node-nlp": "^3.1.1",
     "react": "^16.8.6",
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.5"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
