@@ -1,0 +1,49 @@
+{
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "build_with_tests": "rm -rf tests/lib && tsc -b tests/tsconfig.json",
+    "test": "jest",
+    "lint": "node_modules/.bin/eslint --fix --quiet src/**/*.ts* tests/**/*.ts*",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run lint && git add -A src tests",
+    "postversion": "git push && git push --tags"
+  },
+  "name": "botonic-plugin-contentful",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@botonic/core": "^0.8.0-beta.2",
+    "@botonic/react": "^0.8.0-beta.2",
+    "contentful": "^7.5.0",
+    "escape-string-regexp": "^2.0.0",
+    "react": "^16.8.6",
+    "typescript": "^3.4.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/jest-each": "^0.3.4",
+    "@types/node": "^12.0.0",
+    "@types/react": "16.8.14",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
+    "csstype": "^2.6.3",
+    "eslint": "^5.16.0",
+    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.7.1",
+    "jest-extended": "^0.11.1",
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.2",
+    "ts-mockito": "^2.3.1"
+  },
+  "engines": {
+    "node": ">=8.10.0"
+  }
+}
