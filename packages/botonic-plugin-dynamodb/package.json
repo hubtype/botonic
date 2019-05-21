@@ -10,8 +10,8 @@
     "version": "npm run lint && git add -A src tests",
     "postversion": "git push && git push --tags"
   },
-  "name": "botonic-plugin-dynamodb",
-  "version": "0.0.1",
+  "name": "@botonic/plugin-dynamodb",
+  "version": "0.9.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
