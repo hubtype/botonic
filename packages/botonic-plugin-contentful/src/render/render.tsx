@@ -1,14 +1,16 @@
 import {
-  Text,
   Button,
-  Pic,
   Carousel,
-  Title,
+  Element,
+  Pic,
+  Reply,
   Subtitle,
-  Element
+  Text,
+  Title
 } from '@botonic/react';
 import * as React from 'react';
 import * as cms from '../cms';
+import { ButtonStyle } from '../cms';
 
 export class Renderer {
   element(msg: cms.Element, index: number): React.ReactNode {
@@ -17,7 +19,7 @@ export class Renderer {
         <Pic src={msg.imgUrl || ''} />
         <Title>{msg.title || ''}</Title>
         <Subtitle>{msg.subtitle || ''}</Subtitle>
-        {this.buttons(msg.buttons)}
+        {this.buttons(msg.buttons, ButtonStyle.BUTTON)}
       </Element>
     );
   }
@@ -36,7 +38,7 @@ export class Renderer {
     let node = (
       <Text delay={delayS}>
         {text.text}
-        {this.buttons(text.buttons)}
+        {this.buttons(text.buttons, text.buttonsStyle)}
       </Text>
     );
     if (text.followup) {
@@ -59,19 +61,20 @@ export class Renderer {
     return this.carousel(followUp);
   }
 
-  private buttons(buttons: cms.Button[]): React.ReactNode {
+  private buttons(buttons: cms.Button[], style: ButtonStyle): React.ReactNode {
     return (
       <>
         {buttons.map((button, index) => {
-          return (
-            <Button
-              key={index}
-              payload={button.callback.payload}
-              url={button.callback.url}
-            >
-              {button.text}
-            </Button>
-          );
+          let props = {
+            key: index,
+            payload: button.callback.payload,
+            url: button.callback.url
+          };
+          if (style == ButtonStyle.QUICK_REPLY) {
+            return <Reply {...props}>{button.text}</Reply>;
+          } else {
+            return <Button {...props}>{button.text}</Button>;
+          }
         })}
       </>
     );

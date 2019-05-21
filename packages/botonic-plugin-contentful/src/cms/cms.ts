@@ -6,7 +6,13 @@ export enum ModelType {
   CAROUSEL = 'carousel',
   TEXT = 'text',
   BUTTON = 'button',
-  URL = 'url'
+  URL = 'url',
+  PAYLOAD = 'payload'
+}
+
+export enum ButtonStyle {
+  BUTTON = 0,
+  QUICK_REPLY = 1
 }
 
 export class Callback {
@@ -39,10 +45,33 @@ export class Callback {
     );
   }
 
+  parseModel(): { type: cms.ModelType; id: string } {
+    let [type, id] = this.payload!.split(Callback.PAYLOAD_SEPARATOR);
+    if (!id) {
+      throw new Error(
+        `Callback payload '${this.payload}' does not content a model reference`
+      );
+    }
+    return { type: Callback.checkDeliverableModel(type), id };
+  }
+
+  private static checkDeliverableModel(modelType: string): cms.ModelType {
+    switch (modelType as ModelType) {
+      case ModelType.CAROUSEL:
+      case ModelType.TEXT:
+      case ModelType.URL:
+        return modelType as ModelType;
+      default:
+        throw new Error(
+          `${modelType} is not a mode type than can be delivered from CMS`
+        );
+    }
+  }
+
   deliverPayloadModel(cms: CMS, callbacks?: CallbackMap): Promise<Model> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    let [type, id] = this.payload!.split(Callback.PAYLOAD_SEPARATOR);
-    switch (type as ModelType) {
+    let { type, id } = this.parseModel();
+    switch (type) {
       case ModelType.CAROUSEL:
         return cms.carousel(id, callbacks);
       case ModelType.TEXT:
@@ -51,7 +80,7 @@ export class Callback {
         return cms.url(id);
       default:
         throw new Error(
-          `Type ${type} not supported for callback with id ${id}`
+          `Type '${type}' not supported for callback with id '${id}'`
         );
     }
   }
@@ -136,15 +165,23 @@ export class ErrorReportingCMS implements CMS {
   }
 }
 
+export class ButtonsWithKeywords {
+  constructor(readonly button: Button, readonly keywords: string[]) {}
+}
+
 /**
- * Useful for mocking it, as ts-mockito does not allow mocking interfaces
+ * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
  */
 export class DummyCMS implements CMS {
+  /**
+   *
+   * @param buttonCallbacks models which contain buttons will return one per each specified callback
+   */
   constructor(readonly buttonCallbacks: Callback[]) {}
 
   async carousel(
     id: string,
-    callbacks: CallbackMap = new CallbackMap()
+    {  }: CallbackMap = new CallbackMap()
   ): Promise<Carousel> {
     let elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
@@ -152,25 +189,24 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Carousel(id, elements));
   }
 
-  async text(
-    id: string,
-    callbacks: CallbackMap = new CallbackMap()
-  ): Promise<Text> {
+  async text(id: string, {  }: CallbackMap = new CallbackMap()): Promise<Text> {
     return Promise.resolve(
       new Text(id, 'Dummy text for ' + id, this.buttons(), id, ['kw1', 'kw2'])
     );
   }
 
   private buttons(): Button[] {
-    return this.buttonCallbacks.map(
-      callback =>
-        new Button(callback.payload || callback.url!, 'press me', callback)
-    );
+    return this.buttonCallbacks.map(DummyCMS.buttonFromCallback);
+  }
+
+  private static buttonFromCallback(callback: Callback): Button {
+    let id = callback.payload || callback.url!;
+    return new Button(id, 'button text for ' + id, callback);
   }
 
   private element(id: string, callback: Callback): Element {
     return new Element(
-      [new Button(callback.payload || callback.url!, 'press me', callback)],
+      [DummyCMS.buttonFromCallback(callback)],
       'Title for ' + id,
       'subtitle',
       '../assets/img_home_bg.png'
@@ -182,11 +218,12 @@ export class DummyCMS implements CMS {
   }
 
   textsWithKeywordsAsButtons(): Promise<cms.ButtonsWithKeywords[]> {
-    // return Promise.resolve(new cms.ButtonsWithKeywords())
-    throw new Error('not implemented yet');
+    let buttons = this.buttonCallbacks.map(cb => {
+      let button = new Button(Math.random().toString(), 'random text', cb);
+      return new ButtonsWithKeywords(button, [
+        'keyword for ' + (button.callback.payload || button.callback.url!)
+      ]);
+    });
+    return Promise.resolve(buttons);
   }
-}
-
-export class ButtonsWithKeywords {
-  constructor(readonly button: Button, readonly keywords: string[]) {}
 }

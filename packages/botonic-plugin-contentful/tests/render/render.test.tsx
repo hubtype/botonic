@@ -1,14 +1,16 @@
-import * as React from 'react';
 import {
-  Text,
   Button,
-  Pic,
   Carousel,
   Element,
-  Title,
-  Subtitle
+  Pic,
+  Reply,
+  Subtitle,
+  Text,
+  Title
 } from '@botonic/react';
+import * as React from 'react';
 import * as cms from '../../src';
+import { ButtonStyle } from '../../src';
 
 test('TEST: render element with 2 buttons', () => {
   let sut = new cms.Renderer();
@@ -140,11 +142,23 @@ test('TEST: render text without buttons nor followup', () => {
   );
 });
 
-test('TEST: render text with buttons and followup', () => {
+test('TEST: render text with buttons and followup with reply buttons', () => {
   let sut = new cms.Renderer();
-  let followUp = new cms.Text('textFollowUp', 'my text FU', [
-    new cms.Button('butFU', 'but FU txt', cms.Callback.ofPayload('payload FU'))
-  ]);
+  let followUp = new cms.Text(
+    'textFollowUp',
+    'my text FU',
+    [
+      new cms.Button(
+        'butFU',
+        'but FU txt',
+        cms.Callback.ofPayload('payload FU')
+      )
+    ],
+    undefined,
+    undefined,
+    undefined,
+    ButtonStyle.QUICK_REPLY
+  );
   let text = new cms.Text(
     'textMain',
     'my text',
@@ -156,6 +170,7 @@ test('TEST: render text with buttons and followup', () => {
 
   // act
   let render = sut.text(text);
+
   // assert
   expect(render).toEqual(
     <>
@@ -173,9 +188,9 @@ test('TEST: render text with buttons and followup', () => {
         my text FU
         <>
           {[
-            <Button key="0" payload="payload FU">
+            <Reply key="0" payload="payload FU">
               but FU txt
-            </Button>
+            </Reply>
           ]}
         </>
       </Text>
