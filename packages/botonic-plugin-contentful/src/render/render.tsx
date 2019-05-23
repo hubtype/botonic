@@ -54,8 +54,8 @@ export class Renderer {
 
   private followUp(followUp: cms.Text | cms.Carousel): React.ReactNode {
     if (followUp instanceof cms.Text) {
-      // give use time to read the initial text
-      return this.text(followUp, 3);
+      // give user time to read the initial text
+      return this.text(followUp, 6);
     }
     // for carousels, the initial text usually introduces the carousel
     return this.carousel(followUp);
