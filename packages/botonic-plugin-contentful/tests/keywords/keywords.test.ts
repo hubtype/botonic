@@ -30,8 +30,8 @@ test.each<any>([
     ]);
 
     // assert
-    expect(chitchat.shortText).toEqual('chitchat');
-    expect(chitchat.buttons).toHaveLength(0);
+    expect(chitchat!.shortText).toEqual('chitchat');
+    expect(chitchat!.buttons).toHaveLength(0);
   }
 );
 
@@ -54,15 +54,16 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
   ]);
 
   // assert
-  expect(chitchat.shortText).not.toEqual('chitchat');
-  expect(chitchat.buttons).toHaveLength(2);
+  expect(chitchat!.shortText).not.toEqual('chitchat');
+  expect(chitchat!.buttons).toHaveLength(2);
 });
 
 test.each<any>([
   //@bug it recognizes only 1 chitchat
   //['buenos dias como esta no_reconocido no_reconocido no_reconocido!', 2],
   ['buenos dias hasta luego no_reconocido no_reconocido no_reconocido!', 2],
-  ['hola no_reconocido no_reconocido no_reconocido no_reconocido', 1]
+  ['hola no_reconocido no_reconocido no_reconocido no_reconocido', 1],
+  ['hola asdhas sad asd dsa', 1]
 ])(
   'TEST treatChitChat: chitchats detected , plus aprox >2 non recognized tokens => RETRY',
   async (inputText: string, numChitChats: number) => {
@@ -84,8 +85,7 @@ test.each<any>([
     ]);
 
     // assert
-    expect(chitchat.shortText).not.toEqual('chitchat');
-    expect(chitchat.buttons).toHaveLength(0);
+    expect(chitchat).toBeUndefined();
   }
 );
 
