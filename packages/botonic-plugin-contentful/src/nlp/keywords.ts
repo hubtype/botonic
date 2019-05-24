@@ -15,12 +15,11 @@ export class KeywordsParser<M> {
     this.candidates.push(new CandidateWithKeywords(candidate, keywords));
   }
 
-  findCandidatesWithKeywordsAt(inputText: string): M[] {
-    inputText = normalize(inputText).join(' ');
+  findCandidatesWithKeywordsAt(tokens: string[]): M[] {
     let matches = [] as M[];
     for (let candidate of this.candidates) {
       for (let keyword of candidate.keywords) {
-        if (substringIsBlankSeparated(inputText, keyword)) {
+        if (substringIsBlankSeparated(tokens.join(' '), keyword)) {
           matches = matches.concat(candidate.owner);
           break;
         }

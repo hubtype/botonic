@@ -219,7 +219,7 @@ export class DummyCMS implements CMS {
 
   textsWithKeywordsAsButtons(): Promise<cms.ButtonsWithKeywords[]> {
     let buttons = this.buttonCallbacks.map(cb => {
-      let button = new Button(Math.random().toString(), 'random text', cb);
+      let button = DummyCMS.buttonFromCallback(cb);
       return new ButtonsWithKeywords(button, [
         'keyword for ' + (button.callback.payload || button.callback.url!)
       ]);
