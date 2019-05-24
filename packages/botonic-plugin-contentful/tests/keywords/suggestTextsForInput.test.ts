@@ -1,5 +1,5 @@
-import { testContentful } from './contentful/contentful.helper';
-import * as plugin from '../src/';
+import { testContentful } from '../contentful/contentful.helper';
+import * as plugin from '../../src';
 import 'jest-extended';
 
 // TODO move to keywords folder
