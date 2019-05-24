@@ -1,3 +1,4 @@
+import { normalize } from '../nlp';
 import * as cms from '../cms';
 import { KeywordsParser } from '../nlp/keywords';
 
@@ -27,5 +28,32 @@ export class Keywords {
     }
     let buttons = matches.map(match => match.button);
     return new cms.Text(foundText.name, foundText.text, buttons);
+  }
+
+  public async treatChitChat(
+    tokens: string[],
+    text: cms.Text,
+    chitchatShortTexts: string[]
+  ): Promise<cms.Text> {
+    const onlyChitChatsFunc = (b: cms.Button) =>
+      chitchatShortTexts.includes(b.text);
+
+    const onlyChitChats = text.buttons.filter(onlyChitChatsFunc);
+    if (onlyChitChats.length == 0) {
+      // no chitchats
+      return text;
+    }
+    if (onlyChitChats.length == text.buttons.length) {
+      // all chitchats, no normal keywords
+      const estimatedNoChitchatWords = tokens.length - onlyChitChats.length * 2;
+      if (estimatedNoChitchatWords <= 2 ) {
+        // avoid that a sentence with chitchat and a question without recognized keywords is answered as chitchat
+
+        let anyCallback = onlyChitChats[0].callback;
+        return (await anyCallback.deliverPayloadModel(this.cms)) as cms.Text;
+      }
+    }
+    // remove chitchats if input text matches with some keywords
+    return text.cloneWithFilteredButtons(b => !onlyChitChatsFunc(b));
   }
 }
