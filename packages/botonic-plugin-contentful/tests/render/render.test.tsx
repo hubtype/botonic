@@ -184,7 +184,7 @@ test('TEST: render text with buttons and followup with reply buttons', () => {
           ]}
         </>
       </Text>
-      <Text delay={3}>
+      <Text delay={6}>
         my text FU
         <>
           {[
