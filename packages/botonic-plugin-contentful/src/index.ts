@@ -6,6 +6,20 @@ import { Keywords } from './keywords';
 // Exports
 export * from './cms';
 export * from './render';
+export * from './keywords';
+
+export interface CmsOptions {
+  cms?: cms.CMS;
+  renderer?: Renderer;
+  keywords?: Keywords;
+}
+
+export interface ContentfulOptions {
+  spaceId: string;
+  accessToken: string;
+  renderer?: Renderer;
+  keywords?: Keywords;
+}
 
 export default class BotonicPluginContentful {
   readonly cms: cms.CMS;
@@ -14,24 +28,17 @@ export default class BotonicPluginContentful {
 
   readonly keywords: Keywords;
 
-  constructor(options: any) {
-    this.cms =
-      options.cms || new Contentful(options.spaceId, options.accessToken);
+  constructor(options: CmsOptions | ContentfulOptions) {
+    let optionsAny = options as any;
+    if (optionsAny.cms) {
+      this.cms = optionsAny.cms;
+    } else {
+      let contOptions = options as ContentfulOptions;
+      this.cms = new Contentful(contOptions.spaceId, contOptions.accessToken);
+    }
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = options.renderer || new Renderer();
     this.keywords = options.keywords || new Keywords(this.cms);
-  }
-
-  async suggestTextsForInput(
-    inputText: string,
-    keywordsFoundTextId: string,
-    keywordsNotFoundTextId: string
-  ): Promise<cms.Text> {
-    return this.keywords.suggestTextsForInput(
-      inputText,
-      keywordsFoundTextId,
-      keywordsNotFoundTextId
-    );
   }
 
   // @ts-ignore
