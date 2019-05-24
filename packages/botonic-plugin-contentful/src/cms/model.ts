@@ -51,9 +51,9 @@ export class Text extends Model {
     super(name);
   }
   /** Useful to hide a button (eg. when Desk queue is closed) */
-  cloneWithoutButtonsThat(filter: (b: Button) => boolean): Text {
+  cloneWithFilteredButtons(onlyKeep: (b: Button) => boolean): Text {
     const clone: any = { ...this };
-    clone.buttons = clone.buttons.filter(filter);
+    clone.buttons = clone.buttons.filter(onlyKeep);
     return clone as Text;
   }
 }

@@ -6,7 +6,7 @@ test('TEST: cloneWithoutButtonsThat copies all fields except buttons', () => {
   builder.buttons.withButton().withButton();
   const t1 = builder.build();
 
-  const clone = t1.cloneWithoutButtonsThat(b => b === t1.buttons[1]);
+  const clone = t1.cloneWithFilteredButtons(b => b === t1.buttons[1]);
 
   expect(clone).not.toEqual(t1);
   expect(clone.buttons).toHaveLength(1);
