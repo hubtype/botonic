@@ -20,7 +20,7 @@ export const Carousel = props => {
       </div>
     )
   }
-  return <Message type='carousel'>{content}</Message>
+  return <Message {...props} type='carousel'>{content}</Message>
 } /*
   const renderBrowser = () => (
     <div
