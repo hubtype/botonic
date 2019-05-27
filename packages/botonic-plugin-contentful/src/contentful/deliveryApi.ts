@@ -1,4 +1,6 @@
+import { Entry } from 'contentful';
 import * as contentful from 'contentful';
+import { ContentCallback, ContentWithKeywords } from '../cms';
 import * as cms from '../cms';
 
 export class DeliveryApi {
@@ -57,4 +59,23 @@ export class DeliveryApi {
     const typ = entry.sys.contentType.sys.id;
     return typ as cms.ModelType;
   }
+
+  static buildContentWithKeywords(
+    entry: Entry<ContentWithKeywordsFields>
+  ): ContentWithKeywords {
+    return new ContentWithKeywords(
+      new ContentCallback(this.getContentModel(entry), entry.sys.id),
+      entry.fields.name,
+      entry.fields.shortText,
+      entry.fields.keywords
+    );
+  }
+}
+
+export interface ContentWithKeywordsFields {
+  // An ID (eg. PRE_FAQ1)
+  name: string;
+  // Useful to display in buttons or reports
+  shortText: string;
+  keywords: string[];
 }

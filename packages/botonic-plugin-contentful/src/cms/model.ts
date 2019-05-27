@@ -28,10 +28,43 @@ export class Button extends Model {
     super(name);
   }
 }
+export class ContentWithKeywords extends Model {
+  constructor(
+    readonly callback: ContentCallback,
+    readonly name: string,
+    // Useful to display in buttons or reports
+    readonly shortText?: string,
+    readonly keywords: string[] = []
+  ) {
+    super(name);
+  }
+
+  toButton(): Button {
+    let shortText = this.shortText;
+    if (!shortText) {
+      shortText = this.name;
+      console.error(
+        `${this.callback.model} ${
+          this.name
+        } without shortText. Assigning name to button text`
+      );
+    }
+    return new Button(this.name, shortText, this.callback);
+  }
+}
 
 export class Carousel extends Model {
-  constructor(readonly name: string, readonly elements: Element[] = []) {
+  constructor(
+    readonly name: string, // Useful to display in buttons or reports
+    readonly elements: Element[] = [],
+    readonly shortText?: string,
+    readonly keywords: string[] = []
+  ) {
     super(name);
+  }
+
+  contentType(): ModelType {
+    return ModelType.CAROUSEL;
   }
 }
 
@@ -50,6 +83,11 @@ export class Text extends Model {
   ) {
     super(name);
   }
+
+  contentType(): ModelType {
+    return ModelType.TEXT;
+  }
+
   /** Useful to hide a button (eg. when Desk queue is closed) */
   cloneWithFilteredButtons(onlyKeep: (b: Button) => boolean): Text {
     const clone: any = { ...this };
