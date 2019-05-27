@@ -140,7 +140,7 @@ export interface CMS {
   carousel(id: string, callbacks?: CallbackMap): Promise<Carousel>;
   text(id: string, callbacks?: cms.CallbackMap): Promise<Text>;
   url(id: string): Promise<Url>;
-  textsWithKeywordsAsButtons(): Promise<cms.ButtonsWithKeywords[]>;
+  contentsWithKeywords(): Promise<ContentWithKeywords[]>;
 }
 
 export class ErrorReportingCMS implements CMS {
@@ -162,24 +162,24 @@ export class ErrorReportingCMS implements CMS {
     return this.cms.url(id).catch(this.handleError(ModelType.URL, id));
   }
 
-  textsWithKeywordsAsButtons(): Promise<cms.ButtonsWithKeywords[]> {
+  contentsWithKeywords(): Promise<ContentWithKeywords[]> {
     return this.cms
-      .textsWithKeywordsAsButtons()
+      .contentsWithKeywords()
       .catch(this.handleError('textsWithKeywords'));
   }
 
   private handleError(modelType: string, id?: string): (reason: any) => never {
     return (reason: any) => {
       let withId = id ? ` with id '${id}'` : '';
+      if (reason.response && reason.response.data) {
+        reason =
+          reason.response.status + ': ' + JSON.stringify(reason.response.data);
+      }
       // eslint-disable-next-line no-console
       console.error(`Error fetching ${modelType}${withId}: ${reason}`);
       throw reason;
     };
   }
-}
-
-export class ButtonsWithKeywords {
-  constructor(readonly button: Button, readonly keywords: string[]) {}
 }
 
 /**
@@ -230,13 +230,19 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Url(`http://url.${id}`));
   }
 
-  textsWithKeywordsAsButtons(): Promise<cms.ButtonsWithKeywords[]> {
-    let buttons = this.buttonCallbacks.map(cb => {
-      let button = DummyCMS.buttonFromCallback(cb);
-      return new ButtonsWithKeywords(button, [
-        'keyword for ' + (button.callback.payload || button.callback.url!)
-      ]);
-    });
-    return Promise.resolve(buttons);
+  contentsWithKeywords(): Promise<ContentWithKeywords[]> {
+    let contents = this.buttonCallbacks
+      .filter(cb => cb instanceof ContentCallback)
+      .map(cb => {
+        let button = DummyCMS.buttonFromCallback(cb);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return new ContentWithKeywords(
+          cb as ContentCallback,
+          button.name,
+          button.text,
+          ['keyword for ' + (button.callback.payload || button.callback.url!)]
+        );
+      });
+    return Promise.resolve(contents);
   }
 }
