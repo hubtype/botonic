@@ -50,7 +50,7 @@ export class ButtonDelivery {
     return new model.Button(
       textEntry.fields.name,
       textEntry.fields.shortText,
-      cms.Callback.ofModel(cms.ModelType.TEXT, textEntry.sys.id)
+      new cms.ContentCallback(cms.ModelType.TEXT, textEntry.sys.id)
     );
   }
 
@@ -59,7 +59,7 @@ export class ButtonDelivery {
     switch (model) {
       case ModelType.CAROUSEL:
       case ModelType.TEXT:
-        return cms.Callback.ofModel(model, target.sys.id);
+        return new cms.ContentCallback(model, target.sys.id);
       case ModelType.URL: {
         let urlFields = target as contentful.Entry<UrlFields>;
         return cms.Callback.ofUrl(urlFields.fields.url);

@@ -34,10 +34,12 @@ test('TEST: ErrorReportingCMS', async () => {
     });
 });
 
-test('TEST: regexForModelType', async () => {
-  let callback = cms.Callback.ofModel(ModelType.CAROUSEL, 'id1');
+test('TEST: regexForModel', async () => {
+  let callback = new cms.ContentCallback(ModelType.CAROUSEL, 'id1');
   expect(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    cms.Callback.regexForModelType(ModelType.CAROUSEL).test(callback.payload!)
+    cms.ContentCallback.regexForModel(ModelType.CAROUSEL).test(
+      callback.payload!
+    )
   ).toBeTruthy();
 });
