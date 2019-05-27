@@ -1,37 +1,42 @@
 import { Entry } from 'contentful';
 import * as cms from '../cms';
-import { ButtonsWithKeywords } from '../cms';
-import { DeliveryApi } from './deliveryApi';
-import { TextFields } from './text';
+import { ContentWithKeywords } from '../cms';
+import { ContentWithKeywordsFields, DeliveryApi } from './deliveryApi';
 
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}
 
-  async textsWithKeywordsAsButtons(): Promise<ButtonsWithKeywords[]> {
-    let texts = await this.getTextsWithKeywords();
-    return texts.map(text => {
-      let fields = text.fields;
+  async contentsWithKeywords(): Promise<ContentWithKeywords[]> {
+    let entries = await this.getEntriesWithKeywords();
+    return entries.map(entry => {
+      let fields = entry.fields;
       let shortText = fields.shortText;
+      let contentModel = DeliveryApi.getContentModel(entry);
       if (!shortText) {
-        console.error(`No shortText found Text ${fields.name}`);
-        shortText = fields.name;
+        console.error(`No shortText found ${contentModel} ${fields.name}`);
+        fields.shortText = fields.name;
       }
-      let button = new cms.Button(
-        fields.name,
-        shortText,
-        cms.Callback.ofModel(cms.ModelType.TEXT, text.sys.id)
-      );
-      return new ButtonsWithKeywords(button, text.fields.keywords!);
+      return DeliveryApi.buildContentWithKeywords(entry);
     });
   }
 
-  private async getTextsWithKeywords(): Promise<Entry<TextFields>[]> {
-    let entries = await this.delivery.getEntries<TextFields>({
+  private async getEntriesWithKeywords(): Promise<
+    Entry<ContentWithKeywordsFields>[]
+  > {
+    let texts = this.delivery.getEntries<ContentWithKeywordsFields>({
       // eslint-disable-next-line @typescript-eslint/camelcase
       content_type: cms.ModelType.TEXT,
       'fields.keywords[exists]': true,
       include: 0
     });
-    return entries.items;
+    let carousels = this.delivery.getEntries<ContentWithKeywordsFields>({
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      content_type: cms.ModelType.CAROUSEL,
+      'fields.keywords[exists]': true,
+      include: 0
+    });
+    return Promise.all([texts, carousels]).then(e =>
+      e[0].items.concat(e[1].items)
+    );
   }
 }
