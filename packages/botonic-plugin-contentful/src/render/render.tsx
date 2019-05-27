@@ -13,6 +13,8 @@ import * as cms from '../cms';
 import { ButtonStyle } from '../cms';
 
 export class Renderer {
+  constructor(readonly followUpDelaySeconds: number = 4) {}
+
   element(msg: cms.Element, index: number): React.ReactNode {
     return (
       <Element key={index}>
@@ -24,10 +26,10 @@ export class Renderer {
     );
   }
 
-  carousel(carousel: cms.Carousel): React.ReactNode {
+  carousel(carousel: cms.Carousel, delayS: number = 0): React.ReactNode {
     return (
       <>
-        <Carousel>
+        <Carousel delay={delayS}>
           {carousel.elements.map((element, i) => this.element(element, i))}
         </Carousel>
       </>
@@ -55,10 +57,10 @@ export class Renderer {
   private followUp(followUp: cms.Text | cms.Carousel): React.ReactNode {
     if (followUp instanceof cms.Text) {
       // give user time to read the initial text
-      return this.text(followUp, 6);
+      return this.text(followUp, this.followUpDelaySeconds);
     }
     // for carousels, the initial text usually introduces the carousel
-    return this.carousel(followUp);
+    return this.carousel(followUp, this.followUpDelaySeconds);
   }
 
   private buttons(buttons: cms.Button[], style: ButtonStyle): React.ReactNode {
