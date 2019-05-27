@@ -14,12 +14,12 @@
     "module": "commonjs",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     // lint options
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "esModuleInterop": true
+    "noUnusedLocals": true
 
     // test options
     // I added it so that IDE recognized test & expect, but with it, it ignores other types , eg. @types/node
