@@ -1,4 +1,4 @@
-import { normalize } from './node-nlp';
+import { tokenizeAndStem } from './node-nlp';
 import { substringIsBlankSeparated } from './tokens';
 
 class CandidateWithKeywords<M> {
@@ -10,7 +10,7 @@ export class KeywordsParser<M> {
 
   addCandidate(candidate: M, keywords: string[]): void {
     keywords = keywords.map(kw => {
-      return normalize(kw).join(' ');
+      return tokenizeAndStem(kw).join(' ');
     });
     this.candidates.push(new CandidateWithKeywords(candidate, keywords));
   }
