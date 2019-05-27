@@ -1,5 +1,13 @@
 import * as cms from './cms';
-import { Button, Carousel, Element, Model, Text, Url } from './model';
+import {
+  Button,
+  Carousel,
+  ContentWithKeywords,
+  Element,
+  Model,
+  Text,
+  Url
+} from './model';
 import escapeStringRegexp = require('escape-string-regexp');
 
 export enum ModelType {
@@ -16,8 +24,6 @@ export enum ButtonStyle {
 }
 
 export class Callback {
-  private static PAYLOAD_SEPARATOR = '$';
-
   /**
    * @param payload may contain the reference of a {@link Model}. See {@link ofModel}
    * @param url for hardcoded URLs (otherwise, use a {@link Url})
@@ -25,34 +31,43 @@ export class Callback {
   constructor(readonly payload?: string, readonly url?: string) {}
 
   static ofPayload(payload: string): Callback {
-    return new Callback(payload, undefined);
+    if (ContentCallback.payloadReferencesContent(payload)) {
+      return ContentCallback.ofPayload(payload);
+    } else {
+      return new Callback(payload, undefined);
+    }
   }
 
   static ofUrl(url: string): Callback {
     return new Callback(undefined, url);
   }
+}
 
-  /**
-   * Create Callback to open a model configured through CMS
-   */
-  static ofModel(model: ModelType, contentId: string): Callback {
-    return Callback.ofPayload(model + Callback.PAYLOAD_SEPARATOR + contentId);
+export class ContentCallback extends Callback {
+  private static PAYLOAD_SEPARATOR = '$';
+
+  constructor(readonly model: ModelType, readonly id: string) {
+    super(model + ContentCallback.PAYLOAD_SEPARATOR + id);
   }
 
-  static regexForModelType(modelType: ModelType): RegExp {
-    return new RegExp(
-      escapeStringRegexp(modelType + Callback.PAYLOAD_SEPARATOR)
-    );
+  static payloadReferencesContent(payload: string): boolean {
+    return payload.includes(ContentCallback.PAYLOAD_SEPARATOR);
   }
 
-  parseModel(): { type: cms.ModelType; id: string } {
-    let [type, id] = this.payload!.split(Callback.PAYLOAD_SEPARATOR);
+  static ofPayload(payload: string): ContentCallback {
+    let [type, id] = payload.split(ContentCallback.PAYLOAD_SEPARATOR);
     if (!id) {
       throw new Error(
-        `Callback payload '${this.payload}' does not content a model reference`
+        `Callback payload '${payload}' does not content a model reference`
       );
     }
-    return { type: Callback.checkDeliverableModel(type), id };
+    return new ContentCallback(ContentCallback.checkDeliverableModel(type), id);
+  }
+
+  static regexForModel(modelType: ModelType): RegExp {
+    return new RegExp(
+      escapeStringRegexp(modelType + ContentCallback.PAYLOAD_SEPARATOR)
+    );
   }
 
   private static checkDeliverableModel(modelType: string): cms.ModelType {
@@ -69,18 +84,16 @@ export class Callback {
   }
 
   deliverPayloadModel(cms: CMS, callbacks?: CallbackMap): Promise<Model> {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    let { type, id } = this.parseModel();
-    switch (type) {
+    switch (this.model) {
       case ModelType.CAROUSEL:
-        return cms.carousel(id, callbacks);
+        return cms.carousel(this.id, callbacks);
       case ModelType.TEXT:
-        return cms.text(id, callbacks);
+        return cms.text(this.id, callbacks);
       case ModelType.URL:
-        return cms.url(id);
+        return cms.url(this.id);
       default:
         throw new Error(
-          `Type '${type}' not supported for callback with id '${id}'`
+          `Type '${this.model}' not supported for callback with id '${this.id}'`
         );
     }
   }

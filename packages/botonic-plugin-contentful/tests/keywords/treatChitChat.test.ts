@@ -17,7 +17,7 @@ test.each<any>([
 
     let keywords = new Keywords(sut);
     let tokens = keywords.tokenize(inputText);
-    let textWithButtons = await keywords.suggestTextsForInput(
+    let textWithButtons = await keywords.suggestContentsForInput(
       tokens,
       KEYWORDS_OK,
       KEYWORDS_NOT_FOUND
@@ -41,7 +41,7 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
   let keywords = new Keywords(sut);
   let tokens = keywords.tokenize('hola, DevoluciON fuera de  plazo?');
 
-  let textWithButtons = await keywords.suggestTextsForInput(
+  let textWithButtons = await keywords.suggestContentsForInput(
     tokens,
     KEYWORDS_OK,
     KEYWORDS_NOT_FOUND
@@ -72,7 +72,7 @@ test.each<any>([
     let keywords = new Keywords(sut);
     let tokens = keywords.tokenize(inputText);
 
-    let textWithButtons = await keywords.suggestTextsForInput(
+    let textWithButtons = await keywords.suggestContentsForInput(
       tokens,
       KEYWORDS_OK,
       KEYWORDS_NOT_FOUND
@@ -95,7 +95,7 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   let keywords = new Keywords(sut);
   let tokens = keywords.tokenize('DevoluciON fuera de  plazo?');
 
-  let textWithButtons = await keywords.suggestTextsForInput(
+  let textWithButtons = await keywords.suggestContentsForInput(
     tokens,
     KEYWORDS_OK,
     KEYWORDS_NOT_FOUND
