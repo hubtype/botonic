@@ -26,7 +26,7 @@ test('TEST: contentful text without followup', async () => {
   expect(text.buttons[0].callback).toEqual(
     new cms.ContentCallback(cms.ModelType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
   );
-  expect(text.followup).toBeUndefined();
+  expect(text.followUp).toBeUndefined();
 });
 
 test('TEST: contentful text with URL button with followup', async () => {

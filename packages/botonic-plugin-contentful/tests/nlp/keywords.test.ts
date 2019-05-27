@@ -1,4 +1,4 @@
-import { KeywordsParser } from '../../src/nlp';
+import { KeywordsParser, tokenizeAndStem } from '../../src/nlp';
 import 'jest-extended';
 
 test('hack because webstorm does not recognize test.each', () => {});
@@ -24,7 +24,8 @@ test.each<any>([
     for (let candidate in keywordsByCandidate) {
       parser.addCandidate(candidate, keywordsByCandidate[candidate]);
     }
-    let foundNames = parser.findCandidatesWithKeywordsAt(inputText);
+    let tokens = tokenizeAndStem(inputText);
+    let foundNames = parser.findCandidatesWithKeywordsAt(tokens);
     expect(foundNames).toIncludeSameMembers(expectedMatch);
   }
 );

@@ -41,11 +41,11 @@ export class Renderer {
         {this.buttons(text.buttons, text.buttonsStyle)}
       </Text>
     );
-    if (text.followup) {
+    if (text.followUp) {
       return (
         <>
           {node}
-          {this.followUp(text.followup)}
+          {this.followUp(text.followUp)}
         </>
       );
     }
