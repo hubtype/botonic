@@ -28,7 +28,7 @@
     "chai": "^4",
     "globby": "^8",
     "mocha": "^6",
-    "nyc": "^13",
+    "nyc": "^14",
     "ts-node": "^7",
     "tslint": "^5",
     "typescript": "^3.0"
