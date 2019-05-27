@@ -1,7 +1,8 @@
 import {
   Button,
   ButtonStyle,
-  Callback,
+  ContentCallback,
+  FollowUp,
   Model,
   ModelType,
   Text
@@ -35,7 +36,11 @@ export class ButtonsBuilder {
 
   withButton(): ButtonsBuilder {
     this.buttons.push(
-      new Button(rndStr(), rndStr(), Callback.ofModel(ModelType.TEXT, rndStr()))
+      new Button(
+        rndStr(),
+        rndStr(),
+        new ContentCallback(ModelType.TEXT, rndStr())
+      )
     );
     return this;
   }
