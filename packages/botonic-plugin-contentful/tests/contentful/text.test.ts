@@ -24,7 +24,7 @@ test('TEST: contentful text without followup', async () => {
   expect(text.buttons).toHaveLength(1);
   expect(text.buttons[0].text).toEqual('Contactar con agente');
   expect(text.buttons[0].callback).toEqual(
-    cms.Callback.ofModel(cms.ModelType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
+    new cms.ContentCallback(cms.ModelType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
   );
   expect(text.followup).toBeUndefined();
 });
@@ -51,7 +51,7 @@ test('TEST: contentful text with URL button with followup', async () => {
   expect(text.buttons[0].callback.url).toEqual(
     'https://www.massimodutti.com/es/'
   );
-  expect(text.followup).not.toBeUndefined();
+  expect(text.followUp).not.toBeUndefined();
 });
 
 test('TEST: contentful text with payload button', async () => {
@@ -73,7 +73,7 @@ test('TEST: contentful text without buttons with text followup', async () => {
 
   // assert
   expect(text.buttons).toHaveLength(0);
-  expect((text.followup as cms.Text).buttons).toHaveLength(2);
+  expect((text.followUp as cms.Text).buttons).toHaveLength(2);
 });
 
 test('TEST: contentful text without buttons with carousel followup', async () => {
@@ -84,7 +84,7 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
 
   // assert
   expect(text.buttons).toHaveLength(0);
-  expect((text.followup as cms.Carousel).elements).toHaveLength(3);
+  expect((text.followUp as cms.Carousel).elements).toHaveLength(3);
 });
 
 test('TEST: contentful url', async () => {

@@ -50,7 +50,7 @@ export class Keywords {
         // avoid that a sentence with chitchat and a question without recognized keywords is answered as chitchat
         return undefined;
       }
-      let anyCallback = onlyChitChats[0].callback;
+      let anyCallback = onlyChitChats[0].callback as ContentCallback;
       return (await anyCallback.deliverPayloadModel(this.cms)) as cms.Text;
     }
     // remove chitchats if input text matches with some keywords
