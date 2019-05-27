@@ -1,4 +1,5 @@
-import { normalize } from '../nlp';
+import { ContentCallback } from '../cms';
+import { tokenizeAndStem } from '../nlp';
 import * as cms from '../cms';
 import { KeywordsParser } from '../nlp/keywords';
 
@@ -6,27 +7,29 @@ export class Keywords {
   constructor(readonly cms: cms.CMS) {}
 
   tokenize(inputText: string): string[] {
-    return normalize(inputText);
+    return tokenizeAndStem(inputText);
   }
 
-  async suggestTextsForInput(
+  async suggestContentsForInput(
     tokens: string[],
     keywordsFoundTextId: string,
     keywordsNotFoundTextId: string
   ): Promise<cms.Text> {
-    let [foundText, notFoundText, allButtons] = await Promise.all([
+    let [foundText, notFoundText, contentsWithKeywords] = await Promise.all([
       this.cms.text(keywordsFoundTextId),
       this.cms.text(keywordsNotFoundTextId),
-      this.cms.textsWithKeywordsAsButtons()
+      this.cms.contentsWithKeywords()
     ]);
-    let kws = new KeywordsParser<cms.ButtonsWithKeywords>();
-    allButtons.forEach(but => kws.addCandidate(but, but.keywords));
+    let kws = new KeywordsParser<cms.ContentWithKeywords>();
+    contentsWithKeywords.forEach(content =>
+      kws.addCandidate(content, content.keywords)
+    );
     let matches = kws.findCandidatesWithKeywordsAt(tokens);
 
     if (matches.length == 0) {
-      return new cms.Text(notFoundText.name, notFoundText.text, []);
+      return notFoundText.cloneWithFilteredButtons(b => false);
     }
-    let buttons = matches.map(match => match.button);
+    let buttons = matches.map(match => match.toButton());
     return new cms.Text(foundText.name, foundText.text, buttons);
   }
 

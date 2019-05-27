@@ -4,7 +4,7 @@ import { ButtonStyle } from '../cms/cms';
 import * as model from '../cms/model';
 import { ButtonDelivery } from './button';
 import { CarouselFields } from './carousel';
-import { DeliveryApi } from './deliveryApi';
+import { DeliveryApi, ContentWithKeywordsFields } from './deliveryApi';
 import { DeliveryWithFollowUp } from './followUp';
 
 export class TextDelivery extends DeliveryWithFollowUp {
@@ -42,12 +42,13 @@ export class TextDelivery extends DeliveryWithFollowUp {
     return Promise.all(promises).then(followUpAndButtons => {
       let followUp = followUpAndButtons.shift() as (model.Text | undefined);
       let buttons = followUpAndButtons as model.Button[];
+      let cwk = DeliveryApi.buildContentWithKeywords(entry);
       return new model.Text(
-        fields.name,
+        cwk.name,
         fields.text,
         buttons,
-        fields.shortText,
-        fields.keywords,
+        cwk.shortText,
+        cwk.keywords,
         followUp,
         fields.buttonsStyle == 'QuickReplies'
           ? ButtonStyle.QUICK_REPLY
@@ -57,15 +58,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
   }
 }
 
-export interface TextFields {
-  // An ID (eg. PRE_FAQ1)
-  name: string;
-  // Useful to display in buttons or reports
-  shortText: string;
+export interface TextFields extends ContentWithKeywordsFields {
   // Full text
   text: string;
   buttons: contentful.Entry<any>[];
-  keywords?: string[];
   followup?: contentful.Entry<TextFields | CarouselFields>;
   buttonsStyle?: string;
 }
