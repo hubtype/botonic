@@ -3,7 +3,7 @@ import { DeliveryWithFollowUp } from './followUp';
 import { ButtonDelivery } from './button';
 import * as cms from '../cms/cms';
 import * as model from '../cms/model';
-import { DeliveryApi } from './deliveryApi';
+import { DeliveryApi, ContentWithKeywordsFields } from './deliveryApi';
 
 // TODO remove DeliveryWithFollowUp
 export class CarouselDelivery extends DeliveryWithFollowUp {
@@ -24,7 +24,9 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     let elements = entry.fields.elements.map(async entry => {
       return this.elementFromEntry(entry, callbacks);
     });
-    return new model.Carousel(entry.fields.name, await Promise.all(elements));
+    const cwk = DeliveryApi.buildContentWithKeywords(entry);
+    let e = await Promise.all(elements);
+    return new model.Carousel(cwk.name, e, cwk.shortText, cwk.keywords);
   }
 
   /**
@@ -59,7 +61,6 @@ interface ElementFields {
   buttons: contentful.Entry<any>[];
 }
 
-export interface CarouselFields {
-  name: string;
+export interface CarouselFields extends ContentWithKeywordsFields {
   elements: contentful.Entry<ElementFields>[];
 }
