@@ -12,7 +12,10 @@ const defaultStopWords = [
   "poco","mi","tú","te","ti"
 ];
 
-export function normalize(inputText: string, stopWords?: string[]): string[] {
+export function tokenizeAndStem(
+  inputText: string,
+  stopWords?: string[]
+): string[] {
   stopWords = stopWords || defaultStopWords;
   //const stemmer = NlpUtil.getStemmer('es');
   // const stemmer = ;
