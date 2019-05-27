@@ -1,9 +1,8 @@
-import { TextBuilder } from '../helpers/builders';
+import { RndTextBuilder } from '../helpers/builders';
 import { expectEqualExceptOneField } from '../helpers/expect';
 
 test('TEST: cloneWithoutButtonsThat copies all fields except buttons', () => {
-  const builder = new TextBuilder();
-  builder.buttons.withButton().withButton();
+  const builder = new RndTextBuilder();
   const t1 = builder.build();
 
   const clone = t1.cloneWithFilteredButtons(b => b === t1.buttons[1]);
@@ -14,4 +13,3 @@ test('TEST: cloneWithoutButtonsThat copies all fields except buttons', () => {
 
   expectEqualExceptOneField(t1, clone, 'buttons');
 });
-
