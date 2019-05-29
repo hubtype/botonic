@@ -114,13 +114,13 @@ export class BotonicAPIService {
     return hash.hash
   }
 
-  async build() {
+  async build(npmCommand: string = 'build') {
     let spinner = new ora({
       text: 'Building...',
       spinner: 'bouncingBar'
     }).start()
     try {
-      var build_out = await exec('npm run build')
+      var build_out = await exec(`npm run ${npmCommand}`)
     } catch (error) {
       spinner.fail()
       console.log(colors.red(`Build error ${error}`))
@@ -130,11 +130,11 @@ export class BotonicAPIService {
     return true
   }
 
-  async buildIfChanged() {
+  async buildIfChanged(npmCommand?: string) {
     let hash = await this.getCurrentBuildHash()
     if (hash != this.lastBuildHash) {
       this.lastBuildHash = hash
-      return await this.build()
+      return await this.build(npmCommand)
     }
     return true
   }
