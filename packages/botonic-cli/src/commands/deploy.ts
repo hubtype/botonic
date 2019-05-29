@@ -11,6 +11,7 @@ import { BotonicAPIService } from '../botonicAPIService'
 import { track, sleep } from '../utils'
 
 var force = false
+var npmCommand: string
 
 export default class Run extends Command {
   static description = 'Deploy Botonic project to hubtype.com'
@@ -26,7 +27,11 @@ Uploading...
   static flags = {
     force: flags.boolean({
       char: 'f',
-      description: 'Force deploy despite of no changes. Disabled by default'
+      description: 'Force deploy despite of no changes. Disabled by default',
+    }),
+    command: flags.string({
+      char: 'c',
+      description: 'Command to execute from the package "scripts" object',
     }),
     botName: flags.string()
   }
@@ -40,6 +45,7 @@ Uploading...
     track('Deployed Botonic CLI')
 
     force = flags.force ? flags.force : false
+    npmCommand = flags.command
     let botName = flags.botName ? flags.botName : false
 
     if (!this.botonicApiService.oauth) await this.signupFlow()
@@ -251,7 +257,7 @@ Uploading...
   }
 
   async deploy() {
-    let build_out = await this.botonicApiService.buildIfChanged()
+    let build_out = await this.botonicApiService.buildIfChanged(npmCommand)
     if (!build_out) {
       track('Deploy Botonic Build Error')
       console.log(colors.red('There was a problem building the bot'))
