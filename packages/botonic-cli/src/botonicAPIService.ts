@@ -123,7 +123,8 @@ export class BotonicAPIService {
       var build_out = await exec('npm run build')
     } catch (error) {
       spinner.fail()
-      console.log(colors.red(`Build error ${error}`))
+      console.log(`${error.stdout}` +
+        colors.red(`\n\nBuild error:\n${error}`))
       return false
     }
     spinner.succeed()
