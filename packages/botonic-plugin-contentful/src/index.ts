@@ -7,6 +7,7 @@ import { Keywords } from './keywords';
 export * from './cms';
 export * from './render';
 export * from './keywords';
+export * from './time';
 
 export interface CmsOptions {
   cms?: cms.CMS;
