@@ -124,13 +124,14 @@ function elements_parse(elements) {
 
 function buttons_parse(buttons) {
   return buttons.map(b => {
-    let payload = b.props ? b.props.payload : b.payload
-    if ((b.props && b.props.path) || b.path)
-      payload = `__PATH_PAYLOAD__${b.path}`
-    let url = b.props ? b.props.url : b.url
-    let title = b.props ? b.props.children : b.title
+    let props = b.props || b
+    let payload = props.payload
+    if (props.path) payload = `__PATH_PAYLOAD__${props.path}`
+    let url = props.messenger_extensions ? null : props.url
+    let title = props.title
+    let webview = props.messenger_extensions ? props.url : null
     return (
-      <Button payload={payload} url={url}>
+      <Button payload={payload} url={url} webview={webview}>
         {title}
       </Button>
     )

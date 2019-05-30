@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import Frame from 'react-frame-component';
 import { RequestContext, WebchatContext } from '../contexts'
 
 export const WebviewHeader = props => {
@@ -28,7 +29,18 @@ export const WebviewHeader = props => {
 
 export const WebviewContainer = props => {
   const { webchatState } = useContext(WebchatContext)
+  const { closeWebview } = useContext(RequestContext)
   let Webview = webchatState.webview
+
+  let close = (e) => (e.data == 'botonicCloseWebview' && closeWebview())
+
+  useEffect(() => {
+    if (window.addEventListener) {
+      window.addEventListener('message', close, false);
+    } else if (window.attachEvent) { // ie8
+      window.attachEvent('onmessage', close);
+    }
+  }, [])
 
   return (
     <div style={{ ...props.style }}>
@@ -51,7 +63,19 @@ export const WebviewContainer = props => {
             overflow: 'auto'
           }}
         >
-          <Webview />
+          {typeof Webview === 'string' ?
+            <iframe src={Webview} style={{
+              borderStyle: 'none',
+              width: '100%',
+              height: '100%'
+            }}
+            /> : <Frame style={{
+            borderStyle: 'none',
+            width: '100%',
+            height: '100%'
+          }}>
+            <Webview />
+          </Frame> }
         </div>
       </div>
     </div>
