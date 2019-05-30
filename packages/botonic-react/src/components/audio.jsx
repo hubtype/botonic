@@ -17,7 +17,6 @@ export const Audio = props => {
     )
   return (
     <Message
-      style={{ maxWidth: '60%' }}
       json={serialize(props)}
       {...props}
       type='audio'
