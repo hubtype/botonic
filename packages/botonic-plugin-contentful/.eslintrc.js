@@ -26,6 +26,9 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
     "unicorn/no-abusive-eslint-disable" : "off",
+    // allow public functions/classes to call private functions/classes declared below.
+    // otoh, variables (typically constants) should be declared at the top
+    "@typescript-eslint/no-use-before-define": ["error", { "variables": true, "functions": false, "classes": false }],
 
     // special for TYPESCRIPT
     "no-null/no-null": "warn", // fields declared with ? are undefined, not null (be aware that React uses null)
