@@ -1,8 +1,6 @@
-import * as cms from '../cms/cms';
-import * as model from '../cms/model';
+import * as cms from '../cms';
 import { Entry } from 'contentful';
-import { TextFields } from './text';
-import { TextDelivery } from './text';
+import { TextFields, TextDelivery } from './text';
 import { CarouselDelivery, CarouselFields } from './carousel';
 import { DeliveryApi } from './deliveryApi';
 
@@ -26,7 +24,7 @@ export class FollowUpDelivery {
   fromFields(
     followUp: Entry<TextFields | CarouselFields> | undefined,
     callbacks: cms.CallbackMap
-  ): Promise<model.FollowUp | undefined> {
+  ): Promise<cms.FollowUp | undefined> {
     if (!followUp) {
       return Promise.resolve(undefined);
     }
