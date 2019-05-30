@@ -1,7 +1,5 @@
 import * as contentful from 'contentful';
-import * as cms from '../cms/cms';
-import { ButtonStyle } from '../cms/cms';
-import * as model from '../cms/model';
+import * as cms from '../cms';
 import { ButtonDelivery } from './button';
 import { CarouselFields } from './carousel';
 import { DeliveryApi, ContentWithKeywordsFields } from './deliveryApi';
@@ -15,7 +13,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
     super(delivery);
   }
 
-  async text(id: string, callbacks: cms.CallbackMap): Promise<model.Text> {
+  async text(id: string, callbacks: cms.CallbackMap): Promise<cms.Text> {
     let entry: contentful.Entry<
       TextFields
     > = await this.delivery.getEntryByIdOrName(id, cms.ModelType.TEXT);
@@ -25,10 +23,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
   async textFromEntry(
     entry: contentful.Entry<TextFields>,
     callbacks: cms.CallbackMap
-  ): Promise<model.Text> {
+  ): Promise<cms.Text> {
     let fields = entry.fields;
     let buttons = fields.buttons || [];
-    let followup: Promise<model.Model | undefined> = this.followUp!.fromFields(
+    let followup: Promise<cms.Model | undefined> = this.followUp!.fromFields(
       fields.followup,
       callbacks
     );
@@ -40,10 +38,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
     );
 
     return Promise.all(promises).then(followUpAndButtons => {
-      let followUp = followUpAndButtons.shift() as (model.Text | undefined);
-      let buttons = followUpAndButtons as model.Button[];
+      let followUp = followUpAndButtons.shift() as (cms.Text | undefined);
+      let buttons = followUpAndButtons as cms.Button[];
       let cwk = DeliveryApi.buildContentWithKeywords(entry);
-      return new model.Text(
+      return new cms.Text(
         cwk.name,
         fields.text,
         buttons,
@@ -51,8 +49,8 @@ export class TextDelivery extends DeliveryWithFollowUp {
         cwk.keywords,
         followUp,
         fields.buttonsStyle == 'QuickReplies'
-          ? ButtonStyle.QUICK_REPLY
-          : ButtonStyle.BUTTON
+          ? cms.ButtonStyle.QUICK_REPLY
+          : cms.ButtonStyle.BUTTON
       );
     });
   }
