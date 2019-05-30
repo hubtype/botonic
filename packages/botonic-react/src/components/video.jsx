@@ -26,7 +26,6 @@ export const Video = props => {
     )
   return (
     <Message
-      style={{ maxWidth: '60%' }}
       json={serialize(props)}
       {...props}
       type='video'

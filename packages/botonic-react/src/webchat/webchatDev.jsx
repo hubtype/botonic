@@ -48,7 +48,7 @@ export const WebchatDev = props => {
             style={{
               position: 'absolute',
               right: 48,
-              top: '-23px',
+              top: '-19px',
               padding: 5,
               cursor: 'pointer'
             }}

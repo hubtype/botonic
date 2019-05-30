@@ -40,18 +40,18 @@ export const WebchatHeader = props => {
       <div
         style={{
           cursor: 'pointer',
-          fontSize: '25px',
+          fontSize: '16px',
           color: 'black',
           position: 'absolute',
           right: '10px',
-          top: '0px'
+          top: '9px'
         }}
         onClick={event => {
           triggerWebchat(!webchatState.isWebchatOpen)
           event.preventDefault()
         }}
       >
-        &times;
+        ✕
       </div>
     </div>
   )

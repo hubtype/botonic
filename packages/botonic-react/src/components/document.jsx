@@ -22,7 +22,6 @@ export const Document = props => {
     )
   return (
     <Message
-      style={{ maxWidth: '60%' }}
       json={serialize(props)}
       {...props}
       type='document'

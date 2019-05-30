@@ -9,6 +9,7 @@ export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
   const {
     type = '',
+    blob = true,
     from = 'bot',
     delay = defaultDelay,
     typing = defaultTyping,
@@ -71,8 +72,10 @@ export const Message = props => {
 
   const isFromUser = () => from === 'user'
   const isFromBot = () => from === 'bot'
-  const getBgColor = () =>
-    isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
+  const getBgColor = () => {
+    if(!blob) return 'transparent'
+    return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
+  }
 
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -96,6 +99,7 @@ export const Message = props => {
           color: isFromUser() ? '#fff' : '#000',
           fontFamily: 'Arial, Helvetica, sans-serif',
           borderRadius: 8,
+          maxWidth: blob ? '60%' : 'calc(100% - 16px)',
           ...style
         }}
         {...otherProps}
@@ -111,7 +115,7 @@ export const Message = props => {
           {textChildren}
         </div>
         {buttons}
-        {isFromUser() && (
+        {isFromUser() && blob && (
           <div
             style={{
               ...pointerStyles,
@@ -122,7 +126,7 @@ export const Message = props => {
             }}
           />
         )}
-        {isFromBot() && (
+        {isFromBot() && blob && (
           <div
             style={{
               ...pointerStyles,

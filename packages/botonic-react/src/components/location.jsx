@@ -16,7 +16,6 @@ export const Location = props => {
 
     return (
       <Message
-        style={{ maxWidth: '60%' }}
         json={serialize(props)}
         {...props}
         type='location'
