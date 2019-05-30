@@ -22,9 +22,9 @@ export class App {
     defaultDelay
   }) {
     this.plugins = loadPlugins(plugins)
-    this.theme = theme
-    this.defaultTyping = defaultTyping || 0
-    this.defaultDelay = defaultDelay || 0
+    this.theme = theme || {}
+    this.defaultTyping = defaultTyping || 1
+    this.defaultDelay = defaultDelay || 1
     this.locales = locales
     this.integrations = integrations
     if (appId) {
@@ -50,19 +50,15 @@ export class App {
     session.__locale = locale
   }
 
-  webchat(themeOptions) {
-    if (!themeOptions && this.theme) themeOptions = this.theme
-    if (this.theme && themeOptions)
-      themeOptions = { ...this.theme, ...themeOptions }
-    if (isDev()) return <WebchatDev botonicApp={this} theme={themeOptions} />
-    else return <Webchat botonicApp={this} theme={themeOptions} />
+  webchat(themeAtRuntime = {}) {
+    let theme = { ...this.theme, ...themeAtRuntime }
+    if (isDev()) return <WebchatDev botonicApp={this} theme={theme} />
+    else return <Webchat botonicApp={this} theme={theme} />
   }
 
-  render(dest, webchatOptions = {}) {
-    if (webchatOptions.appId) this.appId = webchatOptions.appId
-    if (webchatOptions.theme)
-      ReactDOM.render(this.webchat(webchatOptions.theme), dest)
-    else ReactDOM.render(this.webchat(null), dest)
+  render(dest, optionsAtRuntime = {}) {
+    if (optionsAtRuntime.appId) this.appId = optionsAtRuntime.appId
+    ReactDOM.render(this.webchat(optionsAtRuntime.theme), dest)
   }
 
   async input({ input, session, lastRoutePath }) {

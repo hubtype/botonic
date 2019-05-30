@@ -17,7 +17,6 @@ const serialize = textProps => {
 
 export const Text = props => (
   <Message
-    style={{ maxWidth: '60%' }}
     json={serialize(props)}
     {...props}
     type='text'
