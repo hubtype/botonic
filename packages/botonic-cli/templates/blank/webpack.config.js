@@ -119,7 +119,7 @@ const botonicWebchatConfig = {
     imageminPlugin,
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('development')
+        HUBTYPE_API_URL: JSON.stringify(process.env.HUBTYPE_API_URL)
       }
     })
   ]
@@ -167,7 +167,12 @@ const botonicWebviewsConfig = {
       template: './node_modules/@botonic/react/src/webview.template.html',
       filename: 'index.html'
     }),
-    imageminPlugin
+    imageminPlugin,
+    new webpack.DefinePlugin({
+      'process.env': {
+        HUBTYPE_API_URL: JSON.stringify(process.env.HUBTYPE_API_URL)
+      }
+    })
   ]
 }
 
@@ -191,15 +196,7 @@ const botonicServerConfig = {
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },
-  plugins: [
-    new CleanWebpackPlugin(['dist']),
-    imageminPlugin,
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    })
-  ]
+  plugins: [new CleanWebpackPlugin(['dist']), imageminPlugin]
 }
 
 module.exports = function(env) {
