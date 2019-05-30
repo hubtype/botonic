@@ -59,8 +59,8 @@ export class Renderer {
       // give user time to read the initial text
       return this.text(followUp, this.followUpDelaySeconds);
     }
-    // for carousels, the initial text usually introduces the carousel
-    return this.carousel(followUp, this.followUpDelaySeconds);
+    // for carousels, the previous text usually introduces the carousel. So, we set a smaller delay
+    return this.carousel(followUp, 2);
   }
 
   private buttons(buttons: cms.Button[], style: ButtonStyle): React.ReactNode {
