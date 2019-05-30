@@ -95,7 +95,7 @@ test('TEST: render_Carousel', () => {
   // assert
   let expected = (
     <>
-      <Carousel>
+      <Carousel delay={0}>
         <Element key="0">
           <Pic src="http://myimg.jpg" />
           <Title>my title</Title>
@@ -184,7 +184,7 @@ test('TEST: render text with buttons and followup with reply buttons', () => {
           ]}
         </>
       </Text>
-      <Text delay={6}>
+      <Text delay={4}>
         my text FU
         <>
           {[
