@@ -1,0 +1,104 @@
+import {
+  DaySchedule,
+  HourAndMinute,
+  Schedule,
+  TimeRange,
+  WeekDay
+} from '../../src/time/schedule';
+import momentTz from 'moment-timezone';
+
+const MARCH = 2;
+const APRIL = 3;
+
+test.each<any>([
+  // Friday winter time
+  [new Date(2019, MARCH, 29, 8, 59), false],
+  [new Date(2019, MARCH, 29, 9, 0), true],
+  [new Date(2019, MARCH, 29, 18, 59), true],
+  [new Date(2019, MARCH, 29, 19, 0), false],
+  // Saturday winter time
+  [new Date(2019, MARCH, 30, 9, 59), false],
+  [new Date(2019, MARCH, 30, 10, 0), true],
+  [new Date(2019, MARCH, 30, 15, 59), true],
+  [new Date(2019, MARCH, 30, 16, 0), false],
+  // Sunday (directly discarded because there's no service on Sunday)
+  [new Date(2019, MARCH, 31, rand(0, 23), rand(0, 59)), false],
+  // Monday summer time
+  [new Date(2019, APRIL, 1, 8, 59), false],
+  [new Date(2019, APRIL, 1, 9, 0), true],
+  [new Date(2019, APRIL, 1, 18, 59), true],
+  [new Date(2019, APRIL, 1, 19, 0), false]
+])('TEST: Schedule.contains(%s)=>%s', (date: Date, expected: boolean) => {
+  let sut = new Schedule(Schedule.TZ_CET);
+
+  for (let d = WeekDay.MONDAY; d <= WeekDay.FRIDAY; d++) {
+    let timeRange = new TimeRange(
+      sut.createHourAndMinute(9),
+      sut.createHourAndMinute(19)
+    );
+    sut.addDaySchedule(d, new DaySchedule([timeRange]));
+  }
+  let timeRange = new TimeRange(
+    sut.createHourAndMinute(10),
+    sut.createHourAndMinute(16)
+  );
+  sut.addDaySchedule(WeekDay.SATURDAY, new DaySchedule([timeRange]));
+
+  // act
+  expect(sut.contains(date)).toEqual(expected);
+});
+
+test('TEST: HourAndMinute.compareToDate CET', () => {
+  assertInCET();
+  let zone = momentTz.tz.zone('Europe/Madrid');
+  let time = new HourAndMinute(zone!, 13, 45);
+
+  let date = new Date(2019, 5, 29, 13, 46);
+
+  expect(time.compareToDate(date)).toEqual(-1);
+
+  date.setMinutes(45);
+  expect(time.compareToDate(date)).toEqual(0);
+
+  date.setMinutes(44);
+  expect(time.compareToDate(date)).toEqual(1);
+});
+
+test('TEST: HourAndMinute.compareToDate OTHER', () => {
+  assertInCET();
+  let zone = momentTz.tz.zone('Europe/London');
+  let time = new HourAndMinute(zone!, 12, 45);
+
+  let date = new Date(2019, 5, 29, 13, 46);
+  expect(time.compareToDate(date)).toEqual(-1);
+
+  date.setMinutes(45);
+  expect(time.compareToDate(date)).toEqual(0);
+
+  date.setMinutes(44);
+  expect(time.compareToDate(date)).toEqual(1);
+});
+
+test('TEST: timeInThisTimezone ', () => {
+  let sut = new Schedule('Europe/London');
+
+  let date = new Date(2019, 5, 29, 0, 51);
+  expect(sut.timeInThisTimezone('es', date)).toEqual('23:51:00');
+});
+
+test('TEST: time.toString ', () => {
+  // tz does not affect toString
+  let zone = momentTz.tz.zone('Europe/London');
+
+  let time = new HourAndMinute(zone!, 13, 45);
+  expect(time.toString()).toEqual('13:45h');
+});
+
+function assertInCET(): void {
+  let tzName = momentTz.tz.guess();
+  expect(tzName).toEqual('Europe/Madrid');
+}
+
+function rand(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
