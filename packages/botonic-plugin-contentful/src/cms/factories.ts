@@ -1,5 +1,4 @@
-import { ButtonStyle } from './cms';
-import { Button, FollowUp, Model, Text } from './model';
+import { Button, ButtonStyle, FollowUp, Model, Text } from './model';
 
 abstract class ModelBuilder {
   protected constructor(readonly name: string) {}
