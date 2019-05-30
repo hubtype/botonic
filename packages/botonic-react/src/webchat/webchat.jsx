@@ -116,9 +116,10 @@ export const Webchat = props => {
   }
 
   const postCloudInput = async input => {
-    let api_url = 'https://api.hubtype.com/v1'
+    console.log(process.env.HUBTYPE_API_URL)
+    let api_url = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
     return axios.post(
-      `${api_url}/provider_accounts/webhooks/webchat/${appId}/`,
+      `${api_url}/v1/provider_accounts/webhooks/webchat/${appId}/`,
       {
         sender: pusherUserId,
         message: input
