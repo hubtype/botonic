@@ -1,8 +1,7 @@
 import * as contentful from 'contentful';
 import { DeliveryWithFollowUp } from './followUp';
 import { ButtonDelivery } from './button';
-import * as cms from '../cms/cms';
-import * as model from '../cms/model';
+import * as cms from '../cms';
 import { DeliveryApi, ContentWithKeywordsFields } from './deliveryApi';
 
 // TODO remove DeliveryWithFollowUp
@@ -17,7 +16,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
   async carousel(
     id: string,
     callbacks: cms.CallbackMap
-  ): Promise<model.Carousel> {
+  ): Promise<cms.Carousel> {
     let entry: contentful.Entry<
       CarouselFields
     > = await this.delivery.getEntryByIdOrName(id, cms.ModelType.CAROUSEL);
@@ -26,7 +25,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     });
     const cwk = DeliveryApi.buildContentWithKeywords(entry);
     let e = await Promise.all(elements);
-    return new model.Carousel(cwk.name, e, cwk.shortText, cwk.keywords);
+    return new cms.Carousel(cwk.name, e, cwk.shortText, cwk.keywords);
   }
 
   /**
@@ -35,7 +34,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
   private async elementFromEntry(
     entry: contentful.Entry<ElementFields>,
     callbacks: cms.CallbackMap
-  ): Promise<model.Element> {
+  ): Promise<cms.Element> {
     let fields = entry.fields;
     let buttonsPromises = entry.fields.buttons.map(reference =>
       this.button.fromReference(reference, callbacks)
@@ -43,7 +42,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
 
     return Promise.all(buttonsPromises).then(
       buttons =>
-        new model.Element(
+        new cms.Element(
           buttons,
           fields.title,
           fields.subtitle,

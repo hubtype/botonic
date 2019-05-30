@@ -1,4 +1,10 @@
-import { ButtonStyle, Callback, ContentCallback, ModelType } from './cms';
+import { ModelType } from './cms';
+import { Callback, ContentCallback } from './callback';
+
+export enum ButtonStyle {
+  BUTTON = 0,
+  QUICK_REPLY = 1
+}
 
 /** Part of a carousel */
 export class Element {
