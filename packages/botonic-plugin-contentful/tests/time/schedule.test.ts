@@ -43,6 +43,7 @@ test.each<any>([
     sut.createHourAndMinute(16)
   );
   sut.addDaySchedule(WeekDay.SATURDAY, new DaySchedule([timeRange]));
+  sut.addDaySchedule(WeekDay.SUNDAY, new DaySchedule([]));
 
   // act
   expect(sut.contains(date)).toEqual(expected);
@@ -84,6 +85,30 @@ test('TEST: timeInThisTimezone ', () => {
 
   let date = new Date(2019, 5, 29, 0, 51);
   expect(sut.timeInThisTimezone('es', date)).toEqual('23:51:00');
+});
+
+test('TEST: addException', () => {
+  let sut = new Schedule('Europe/Madrid');
+  sut.addDaySchedule(
+    WeekDay.FRIDAY,
+    new DaySchedule([
+      new TimeRange(sut.createHourAndMinute(10), sut.createHourAndMinute(12))
+    ])
+  );
+
+  let date10h = new Date(2019, MARCH, 29, 10);
+  expect(sut.contains(date10h)).toBeTruthy();
+  let date12h = new Date(2019, MARCH, 29, 12);
+  expect(sut.contains(date12h)).toBeFalsy();
+
+  sut.addException(
+    date10h,
+    new DaySchedule([
+      new TimeRange(sut.createHourAndMinute(11), sut.createHourAndMinute(13))
+    ])
+  );
+  expect(sut.contains(date10h)).toBeFalsy();
+  expect(sut.contains(date12h)).toBeTruthy();
 });
 
 test('TEST: time.toString ', () => {
