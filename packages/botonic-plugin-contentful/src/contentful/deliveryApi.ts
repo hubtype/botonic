@@ -46,8 +46,8 @@ export class DeliveryApi {
     return this.getEntry(id);
   }
 
-  async getEntry<T>(id: string): Promise<contentful.Entry<T>> {
-    return this.client.getEntry<T>(id);
+  async getEntry<T>(id: string, query?: any): Promise<contentful.Entry<T>> {
+    return this.client.getEntry<T>(id, query);
   }
 
   async getEntries<T>(query?: any): Promise<contentful.EntryCollection<T>> {
@@ -72,9 +72,12 @@ export class DeliveryApi {
   }
 }
 
-export interface ContentWithKeywordsFields {
+export interface ContentWithNameFields {
   // An ID (eg. PRE_FAQ1)
   name: string;
+}
+
+export interface ContentWithKeywordsFields extends ContentWithNameFields {
   // Useful to display in buttons or reports
   shortText: string;
   keywords: string[];
