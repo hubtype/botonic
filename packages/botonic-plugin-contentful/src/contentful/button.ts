@@ -1,4 +1,5 @@
 import * as contentful from 'contentful';
+import { ContentWithNameFields } from './deliveryApi';
 import { ModelType, DeliveryApi } from '.';
 import * as cms from '../cms';
 import { UrlFields } from './url';
@@ -80,8 +81,7 @@ type ButtonTarget = contentful.Entry<
   CarouselFields | TextFields | UrlFields | PayloadFields
 >;
 
-export interface ButtonFields {
-  name: string;
+export interface ButtonFields extends ContentWithNameFields {
   text: string;
   target?: ButtonTarget;
 }
