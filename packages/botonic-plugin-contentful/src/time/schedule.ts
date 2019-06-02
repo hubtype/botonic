@@ -4,12 +4,14 @@ import { MomentZone } from 'moment-timezone/moment-timezone';
 /**
  * Manages ranges of hour/minutes for each day of a week.
  * The hour/minutes refer to the specified timezone.
+ * Use {@link addException} to add holidays (eg with empty {@link TimeRange}) or sales openings in weekends
  * TODO consider using everywhere Date.toLocaleTimeString() to remove moment-timezone dependency
  */
 export class Schedule {
   static TZ_CET = 'Europe/Madrid';
   private readonly zone: MomentZone;
   private readonly scheduleByDay = new Map<WeekDay, DaySchedule>();
+  private readonly exceptions = [] as ExceptionSchedule[];
 
   constructor(tzName: string) {
     let zone = momentTz.tz.zone(tzName);
@@ -29,6 +31,14 @@ export class Schedule {
   }
 
   /**
+   * For the specified date, the weekly schedule will be superseded by the daySchedule specified here
+   */
+  addException(date: Date, daySchedule: DaySchedule): Schedule {
+    this.exceptions.push(new ExceptionSchedule(date, daySchedule));
+    return this;
+  }
+
+  /**
    * Formats the specified date using the {@link Schedule}'s timezone.
    * @param locales don't confuse with timezone. This is just to format the date
    */
@@ -44,6 +54,10 @@ export class Schedule {
   }
 
   contains(date: Date): boolean {
+    let exception = this.exceptions.find(exception => isSameDay(date, exception.date));
+    if (exception) {
+      return exception.daySchedule.contains(date);
+    }
     let weekDay = date.getDay() as WeekDay;
     let schedule = this.scheduleByDay.get(weekDay);
     if (!schedule) {
@@ -75,6 +89,11 @@ export enum WeekDay {
   FRIDAY = 5,
   SATURDAY = 6
 }
+
+class ExceptionSchedule {
+  constructor(readonly date: Date, readonly daySchedule: DaySchedule) {}
+}
+
 export class TimeRange {
   /**
    * @param from inclusive
@@ -136,4 +155,12 @@ export class HourAndMinute {
     }
     return str + 'h';
   }
+}
+
+function isSameDay(d1: Date, d2: Date): boolean {
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
 }
