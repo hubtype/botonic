@@ -1,3 +1,4 @@
+import * as time from '../time/schedule';
 import { CallbackMap, Callback, ContentCallback } from './callback';
 import {
   Button,
@@ -13,7 +14,8 @@ export enum ModelType {
   TEXT = 'text',
   BUTTON = 'button',
   URL = 'url',
-  PAYLOAD = 'payload'
+  PAYLOAD = 'payload',
+  SCHEDULE = 'schedule'
 }
 
 export interface CMS {
@@ -21,6 +23,7 @@ export interface CMS {
   text(id: string, callbacks?: CallbackMap): Promise<Text>;
   url(id: string): Promise<Url>;
   contentsWithKeywords(): Promise<ContentWithKeywords[]>;
+  schedule(id: string): Promise<time.Schedule>;
 }
 
 export class ErrorReportingCMS implements CMS {
@@ -59,6 +62,12 @@ export class ErrorReportingCMS implements CMS {
       console.error(`Error fetching ${modelType}${withId}: ${reason}`);
       throw reason;
     };
+  }
+
+  schedule(id: string): Promise<time.Schedule> {
+    return this.cms
+      .schedule(id)
+      .catch(this.handleError(ModelType.SCHEDULE, id));
   }
 }
 
@@ -124,5 +133,9 @@ export class DummyCMS implements CMS {
         );
       });
     return Promise.resolve(contents);
+  }
+
+  schedule(id: string): Promise<time.Schedule> {
+    return Promise.resolve(new time.Schedule('Europe/Madrid'));
   }
 }
