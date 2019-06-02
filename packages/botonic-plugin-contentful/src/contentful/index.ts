@@ -1,3 +1,4 @@
+import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './followUp';
 import { CallbackMap, ContentWithKeywords } from '../cms';
@@ -7,6 +8,7 @@ import { CarouselDelivery } from './carousel';
 import { TextDelivery } from './text';
 import { UrlDelivery } from './url';
 import * as cms from '../cms';
+import * as time from '../time';
 
 export default class Contentful implements cms.CMS {
   _carousel: CarouselDelivery;
@@ -16,6 +18,8 @@ export default class Contentful implements cms.CMS {
   _url: UrlDelivery;
 
   _keywords: KeywordsDelivery;
+
+  _schedule: ScheduleDelivery;
 
   constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
     let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
@@ -28,6 +32,7 @@ export default class Contentful implements cms.CMS {
       d.setFollowUp(followUp)
     );
     this._keywords = new KeywordsDelivery(delivery);
+    this._schedule = new ScheduleDelivery(delivery);
   }
 
   async carousel(
@@ -50,6 +55,10 @@ export default class Contentful implements cms.CMS {
 
   async contentsWithKeywords(): Promise<ContentWithKeywords[]> {
     return this._keywords.contentsWithKeywords();
+  }
+
+  async schedule(id: string): Promise<time.Schedule> {
+    return this._schedule.schedule(id);
   }
 }
 
