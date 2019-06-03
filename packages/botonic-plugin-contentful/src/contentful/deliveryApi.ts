@@ -1,6 +1,6 @@
 import { Entry } from 'contentful';
 import * as contentful from 'contentful';
-import { ContentCallback, ContentWithKeywords } from '../cms';
+import { ContentCallback, ContentCallbackWithKeywords } from '../cms';
 import * as cms from '../cms';
 
 export class DeliveryApi {
@@ -62,8 +62,8 @@ export class DeliveryApi {
 
   static buildContentWithKeywords(
     entry: Entry<ContentWithKeywordsFields>
-  ): ContentWithKeywords {
-    return new ContentWithKeywords(
+  ): ContentCallbackWithKeywords {
+    return new ContentCallbackWithKeywords(
       new ContentCallback(this.getContentModel(entry), entry.sys.id),
       entry.fields.name,
       entry.fields.shortText,

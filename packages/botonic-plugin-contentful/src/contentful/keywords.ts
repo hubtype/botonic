@@ -1,12 +1,12 @@
 import { Entry } from 'contentful';
 import * as cms from '../cms';
-import { ContentWithKeywords } from '../cms';
+import { ContentCallbackWithKeywords } from '../cms';
 import { ContentWithKeywordsFields, DeliveryApi } from './deliveryApi';
 
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}
 
-  async contentsWithKeywords(): Promise<ContentWithKeywords[]> {
+  async contentsWithKeywords(): Promise<ContentCallbackWithKeywords[]> {
     let entries = await this.getEntriesWithKeywords();
     return entries.map(entry => {
       let fields = entry.fields;
