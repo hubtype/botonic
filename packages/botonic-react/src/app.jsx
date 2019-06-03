@@ -64,7 +64,8 @@ export class App {
   }
   //if we want to trigger a payload, we need the second line,
   //if not, we are going to display simple text
-  open(input) {
+  open(input, dest = null) {
+    if (dest) this.dest = dest
     ReactDOM.unmountComponentAtNode(this.dest)
     input = { type: 'text', data: input }
     //option = { type: 'postback', payload: input }
