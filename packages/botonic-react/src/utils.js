@@ -75,6 +75,11 @@ export function loadPlugins(plugins) {
     let id = plugins[i].id || `${instance.constructor.name}`
     _plugins[id] = instance
   }
+  for (let _plugin of Object.values(_plugins)) {
+    if (_plugin.init) {
+      _plugin.init(_plugins)
+    }
+  }
   return _plugins
 }
 
