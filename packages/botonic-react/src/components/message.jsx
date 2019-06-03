@@ -16,6 +16,7 @@ export const Message = props => {
     children,
     json,
     style,
+    invisible,
     ...otherProps
   } = props
 
@@ -53,7 +54,8 @@ export const Message = props => {
           url: r.props.url,
           text: r.props.children
         })),
-        display: delay + typing == 0
+        display: delay + typing == 0,
+        invisible
       }
       addMessage(message)
     }, [])
@@ -73,13 +75,13 @@ export const Message = props => {
   const isFromUser = () => from === 'user'
   const isFromBot = () => from === 'bot'
   const getBgColor = () => {
-    if(!blob) return 'transparent'
+    if (!blob) return 'transparent'
     return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
   }
 
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
-    if (!m || !m.display) return <></>
+    if (!m || !m.display || m.invisible) return <></>
     let pointerSize = 6
     let pointerStyles = {
       position: 'absolute',
