@@ -10,10 +10,10 @@ test('TEST: ErrorReportingCMS', async () => {
 
   await sut
     .carousel('id1')
-    .then(c => {
+    .then(({}) => {
       fail('should have thrown');
     })
-    .catch(error2 => {
+    .catch((error2: any) => {
       expect(error2).toBe(error);
     });
 });
