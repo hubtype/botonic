@@ -42,11 +42,11 @@ export class TextDelivery extends DeliveryWithFollowUp {
       let buttons = followUpAndButtons as cms.Button[];
       let cwk = DeliveryApi.buildContentWithKeywords(entry);
       return new cms.Text(
-        cwk.name,
+        cwk.content.name,
         fields.text,
         buttons,
-        cwk.shortText,
-        cwk.keywords,
+        cwk.content.shortText,
+        cwk.content.keywords,
         followUp,
         fields.buttonsStyle == 'QuickReplies'
           ? cms.ButtonStyle.QUICK_REPLY
