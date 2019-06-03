@@ -3,7 +3,7 @@ import { CMS } from './cms';
 import {
   Button,
   Carousel,
-  ContentWithKeywords,
+  ContentCallbackWithKeywords,
   Element,
   Text,
   Url
@@ -60,13 +60,13 @@ export class DummyCMS implements CMS {
     );
   }
 
-  contentsWithKeywords(): Promise<ContentWithKeywords[]> {
+  contentsWithKeywords(): Promise<ContentCallbackWithKeywords[]> {
     let contents = this.buttonCallbacks
       .filter(cb => cb instanceof ContentCallback)
       .map(cb => {
         let button = DummyCMS.buttonFromCallback(cb);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        return new ContentWithKeywords(
+        return new ContentCallbackWithKeywords(
           cb as ContentCallback,
           button.name,
           button.text,
