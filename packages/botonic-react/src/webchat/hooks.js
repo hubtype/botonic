@@ -85,7 +85,8 @@ export function webchatReducer(state, action) {
     case 'triggerWebchat':
       return {
         ...state,
-        isWebchatOpen: action.payload.isopen
+        isWebchatOpen: action.payload.isopen,
+        theme: { ...state.theme, initialMessage: null }
       }
     default:
       throw new Error()
