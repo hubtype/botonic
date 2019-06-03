@@ -1,7 +1,7 @@
-import Contentful from './contentful';
 import * as cms from './cms';
-import { Renderer } from './render';
+import Contentful from './contentful';
 import { Keywords } from './keywords';
+import { Renderer } from './render';
 
 // Exports
 export * from './cms';
