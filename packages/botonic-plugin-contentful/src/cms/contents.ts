@@ -13,6 +13,16 @@ export abstract class Content {
   protected constructor(readonly name: string) {}
 }
 
+/**
+ * When any {@link keywords} is detected on a user input, we can use display the {@link shortText} for users
+ * to confirm their interest on this content
+ */
+export interface ContentWithKeywords {
+  readonly name: string;
+  readonly shortText?: string;
+  readonly keywords?: string[];
+}
+
 export class Button extends Content {
   constructor(
     readonly name: string,
@@ -23,32 +33,28 @@ export class Button extends Content {
   }
 }
 
-export class ContentCallbackWithKeywords extends Content {
+export class ContentCallbackWithKeywords {
   constructor(
     readonly callback: ContentCallback,
-    readonly name: string,
-    // Useful to display in buttons or reports
-    readonly shortText?: string,
-    readonly keywords: string[] = []
-  ) {
-    super(name);
-  }
+    /** It does not contain all the content fields. Do not downcast */
+    readonly content: ContentWithKeywords
+  ) {}
 
   toButton(): Button {
-    let shortText = this.shortText;
+    let shortText = this.content.shortText;
     if (!shortText) {
-      shortText = this.name;
+      shortText = this.content.name;
       console.error(
         `${this.callback.model} ${
-          this.name
+          this.content.name
         } without shortText. Assigning name to button text`
       );
     }
-    return new Button(this.name, shortText, this.callback);
+    return new Button(this.content.name, shortText, this.callback);
   }
 }
 
-export class Carousel extends Content {
+export class Carousel extends Content implements ContentWithKeywords {
   constructor(
     readonly name: string, // Useful to display in buttons or reports
     readonly elements: Element[] = [],
@@ -69,7 +75,7 @@ export class Element {
   ) {}
 }
 
-export class Text extends Content {
+export class Text extends Content implements ContentWithKeywords {
   constructor(
     // An ID (eg. PRE_FAQ1)
     readonly name: string,
@@ -93,7 +99,7 @@ export class Text extends Content {
   }
 }
 
-export class Url extends Content {
+export class Url extends Content implements ContentWithKeywords {
   //TODO followUp not yet rendered
   constructor(
     readonly name: string,
