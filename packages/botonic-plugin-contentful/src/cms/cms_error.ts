@@ -1,6 +1,6 @@
 import { CallbackMap } from './callback';
 import { CMS, ModelType } from './cms';
-import { Carousel, ContentCallbackWithKeywords, Text, Url } from './model';
+import { Carousel, ContentCallbackWithKeywords, Text, Url } from './contents';
 import * as time from '../time/schedule';
 
 export class ErrorReportingCMS implements CMS {

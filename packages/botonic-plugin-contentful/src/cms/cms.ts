@@ -1,6 +1,6 @@
 import * as time from '../time/schedule';
 import { CallbackMap } from './callback';
-import { Carousel, ContentCallbackWithKeywords, Text, Url } from './model';
+import { Carousel, ContentCallbackWithKeywords, Text, Url } from './contents';
 
 export enum ModelType {
   CAROUSEL = 'carousel',
