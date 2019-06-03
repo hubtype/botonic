@@ -26,7 +26,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
   ): Promise<cms.Text> {
     let fields = entry.fields;
     let buttons = fields.buttons || [];
-    let followup: Promise<cms.Model | undefined> = this.followUp!.fromFields(
+    let followup: Promise<cms.Content | undefined> = this.followUp!.fromFields(
       fields.followup,
       callbacks
     );

@@ -54,7 +54,7 @@ export class Keywords {
         return undefined;
       }
       let anyCallback = onlyChitChats[0].callback as ContentCallback;
-      return (await anyCallback.deliverPayloadModel(this.cms)) as cms.Text;
+      return (await anyCallback.deliverPayloadContent(this.cms)) as cms.Text;
     }
     // remove chitchats if input text matches with some keywords
     return text.cloneWithFilteredButtons(b => !onlyChitChatsFunc(b));
