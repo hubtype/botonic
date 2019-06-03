@@ -65,9 +65,7 @@ export class DeliveryApi {
   ): ContentCallbackWithKeywords {
     return new ContentCallbackWithKeywords(
       new ContentCallback(this.getContentModel(entry), entry.sys.id),
-      entry.fields.name,
-      entry.fields.shortText,
-      entry.fields.keywords
+      entry.fields
     );
   }
 }

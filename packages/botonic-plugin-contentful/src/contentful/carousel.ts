@@ -25,7 +25,12 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     });
     const cwk = DeliveryApi.buildContentWithKeywords(entry);
     let e = await Promise.all(elements);
-    return new cms.Carousel(cwk.name, e, cwk.shortText, cwk.keywords);
+    return new cms.Carousel(
+      cwk.content.name,
+      e,
+      cwk.content.shortText,
+      cwk.content.keywords
+    );
   }
 
   /**
