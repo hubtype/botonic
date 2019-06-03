@@ -4,7 +4,6 @@ import * as cms from '../../src';
 
 const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
 const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
-const TEST_URL_CUENTA_ID = '3ePsGfyLHBHsrxtU7IkPh9';
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
 export const KEYWORDS_OK = 'GbIpKJu8kW6PqMGAUYkoS';
@@ -85,11 +84,6 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
   // assert
   expect(text.buttons).toHaveLength(0);
   expect((text.followUp as cms.Carousel).elements).toHaveLength(3);
-});
-
-test('TEST: contentful url', async () => {
-  let url = await testContentful().url(TEST_URL_CUENTA_ID);
-  expect(url.url).toEqual('https://www.massimodutti.com/es/');
 });
 
 test('TEST: contentful text from model name', async () => {
