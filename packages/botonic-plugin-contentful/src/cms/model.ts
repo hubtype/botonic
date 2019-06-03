@@ -35,7 +35,7 @@ export class Button extends Model {
   }
 }
 
-export class ContentWithKeywords extends Model {
+export class ContentCallbackWithKeywords extends Model {
   constructor(
     readonly callback: ContentCallback,
     readonly name: string,
