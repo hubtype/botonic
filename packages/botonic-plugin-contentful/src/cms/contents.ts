@@ -1,4 +1,3 @@
-import { ModelType } from './cms';
 import { Callback, ContentCallback } from './callback';
 
 export enum ButtonStyle {
@@ -6,18 +5,7 @@ export enum ButtonStyle {
   QUICK_REPLY = 1
 }
 
-/** Part of a carousel */
-export class Element {
-  constructor(
-    readonly buttons: Button[],
-    readonly title?: string,
-    readonly subtitle?: string,
-    readonly imgUrl?: string
-  ) {}
-}
-
-// TODO rename to Content?
-export abstract class Model {
+export abstract class Content {
   /**
    * An ID (eg. PRE_FAQ1)
    * @param name TODO rename to id or code?
@@ -25,7 +13,7 @@ export abstract class Model {
   protected constructor(readonly name: string) {}
 }
 
-export class Button extends Model {
+export class Button extends Content {
   constructor(
     readonly name: string,
     readonly text: string,
@@ -35,7 +23,7 @@ export class Button extends Model {
   }
 }
 
-export class ContentCallbackWithKeywords extends Model {
+export class ContentCallbackWithKeywords extends Content {
   constructor(
     readonly callback: ContentCallback,
     readonly name: string,
@@ -60,7 +48,7 @@ export class ContentCallbackWithKeywords extends Model {
   }
 }
 
-export class Carousel extends Model {
+export class Carousel extends Content {
   constructor(
     readonly name: string, // Useful to display in buttons or reports
     readonly elements: Element[] = [],
@@ -69,13 +57,19 @@ export class Carousel extends Model {
   ) {
     super(name);
   }
-
-  contentType(): ModelType {
-    return ModelType.CAROUSEL;
-  }
 }
 
-export class Text extends Model {
+/** Part of a carousel */
+export class Element {
+  constructor(
+    readonly buttons: Button[],
+    readonly title?: string,
+    readonly subtitle?: string,
+    readonly imgUrl?: string
+  ) {}
+}
+
+export class Text extends Content {
   constructor(
     // An ID (eg. PRE_FAQ1)
     readonly name: string,
@@ -91,10 +85,6 @@ export class Text extends Model {
     super(name);
   }
 
-  contentType(): ModelType {
-    return ModelType.TEXT;
-  }
-
   /** Useful to hide a button (eg. when Desk queue is closed) */
   cloneWithFilteredButtons(onlyKeep: (b: Button) => boolean): Text {
     const clone: any = { ...this };
@@ -103,7 +93,7 @@ export class Text extends Model {
   }
 }
 
-export class Url extends Model {
+export class Url extends Content {
   //TODO followUp not yet rendered
   constructor(
     readonly name: string,
@@ -117,6 +107,6 @@ export class Url extends Model {
 }
 
 /**
- * A {@link Model} which is automatically displayed after another one
+ * A {@link Content} which is automatically displayed after another one
  */
 export type FollowUp = Text | Carousel;
