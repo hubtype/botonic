@@ -54,7 +54,9 @@ export class Schedule {
   }
 
   contains(date: Date): boolean {
-    let exception = this.exceptions.find(exception => isSameDay(date, exception.date));
+    let exception = this.exceptions.find(exception =>
+      isSameDay(date, exception.date)
+    );
     if (exception) {
       return exception.daySchedule.contains(date);
     }

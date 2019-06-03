@@ -66,12 +66,13 @@ export class DummyCMS implements CMS {
       .map(cb => {
         let button = DummyCMS.buttonFromCallback(cb);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        return new ContentCallbackWithKeywords(
-          cb as ContentCallback,
-          button.name,
-          button.text,
-          ['keyword for ' + (button.callback.payload || button.callback.url!)]
-        );
+        return new ContentCallbackWithKeywords(cb as ContentCallback, {
+          name: button.name,
+          shortText: button.text,
+          keywords: [
+            'keyword for ' + (button.callback.payload || button.callback.url!)
+          ]
+        });
       });
     return Promise.resolve(contents);
   }
