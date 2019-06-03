@@ -83,7 +83,10 @@ export function webchatReducer(state, action) {
     case 'updateDevSettings':
       return { ...state, devSettings: { ...action.payload } }
     case 'triggerWebchat':
-      return { ...state, isWebchatOpen: action.payload }
+      return {
+        ...state,
+        isWebchatOpen: action.payload.isopen
+      }
     default:
       throw new Error()
   }
