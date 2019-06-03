@@ -22,7 +22,7 @@ export class Keywords {
     ]);
     let kws = new KeywordsParser<cms.ContentCallbackWithKeywords>();
     contentsWithKeywords.forEach(content =>
-      kws.addCandidate(content, content.keywords)
+      kws.addCandidate(content, content.content.keywords!)
     );
     let matches = kws.findCandidatesWithKeywordsAt(tokens);
 
