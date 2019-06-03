@@ -1,6 +1,6 @@
 import { CallbackMap } from './callback';
 import { CMS, ModelType } from './cms';
-import { Carousel, ContentWithKeywords, Text, Url } from './model';
+import { Carousel, ContentCallbackWithKeywords, Text, Url } from './model';
 import * as time from '../time/schedule';
 
 export class ErrorReportingCMS implements CMS {
@@ -22,7 +22,7 @@ export class ErrorReportingCMS implements CMS {
     return this.cms.url(id).catch(this.handleError(ModelType.URL, id));
   }
 
-  contentsWithKeywords(): Promise<ContentWithKeywords[]> {
+  contentsWithKeywords(): Promise<ContentCallbackWithKeywords[]> {
     return this.cms
       .contentsWithKeywords()
       .catch(this.handleError('textsWithKeywords'));
