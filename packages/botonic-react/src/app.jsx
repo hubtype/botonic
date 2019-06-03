@@ -32,6 +32,7 @@ export class App {
       return
     }
     this.rootElement = null
+    this.dest = null
     this.routes = routes
     this.defaultRoutes = {
       path: '404',
@@ -58,7 +59,23 @@ export class App {
 
   render(dest, optionsAtRuntime = {}) {
     if (optionsAtRuntime.appId) this.appId = optionsAtRuntime.appId
+    this.dest = dest
     ReactDOM.render(this.webchat(optionsAtRuntime.theme), dest)
+  }
+  //if we want to trigger a payload, we need the second line,
+  //if not, we are going to display simple text
+  open(input) {
+    ReactDOM.unmountComponentAtNode(this.dest)
+    input = { type: 'text', data: input }
+    //option = { type: 'postback', payload: input }
+    ReactDOM.render(
+      this.webchat({ initialMessage: input, openCall: true }),
+      this.dest
+    )
+  }
+
+  close() {
+    ReactDOM.unmountComponentAtNode(this.dest)
   }
 
   async input({ input, session, lastRoutePath }) {

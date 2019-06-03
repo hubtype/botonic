@@ -105,6 +105,8 @@ export const Webchat = props => {
 
   useEffect(() => {
     updateTheme({ ...webchatState.theme, ...props.theme })
+    if (props.theme.openCall && props.theme.initialMessage)
+      openWebchat(props.theme.initialMessage)
   }, [props.theme])
 
   const openWebview = (webviewComponent, params) =>
@@ -139,14 +141,27 @@ export const Webchat = props => {
     }
   }
 
-  const sendInput = async input => {
+  /*startPayload indicates if this function is called from 
+  the user opening the webchat or not (from html or trigger the webchat button)
+  */
+  const sendInput = async (input, startPayload = false) => {
     let inputMessage = null
-    if (input.type === 'text')
+    if (startPayload && input.type === 'postback') {
+      inputMessage = (
+        <Text invisible={startPayload} payload={input.payload}>
+          Invisible
+        </Text>
+      )
+    } else if (input.type === 'text' && startPayload) {
+      inputMessage = <Text from='bot'>{input.data}</Text>
+      return addMessageComponent(inputMessage)
+    } else {
       inputMessage = (
         <Text from='user' payload={input.payload}>
           {input.data}
         </Text>
       )
+    }
     if (inputMessage) {
       addMessageComponent(inputMessage)
       updateReplies(false)
@@ -215,33 +230,14 @@ export const Webchat = props => {
     closeWebview: closeWebview
   }
 
-  const openWebchat = async event => {
+  const openWebchat = async data => {
     let input = webchatState.theme.initialMessage
-    let inputMessage
+    if (data) input = data
     triggerWebchat({
       isopen: !webchatState.isWebchatOpen
     })
-    if (input.type === 'text') {
-      inputMessage = <Text from='bot'>{input.data}</Text>
-      return addMessageComponent(inputMessage)
-    }
-    inputMessage = (
-      <Text invisible='true' payload={input.payload}>
-        Invisible
-      </Text>
-    )
-
-    updateReplies(false)
-    if (appId) return postCloudInput(input)
-    let output = await props.botonicApp.input({
-      input,
-      session: webchatState.session,
-      lastRoutePath: webchatState.lastRoutePath
-    })
-
-    addMessageComponent(output.response)
-    updateSession(output.session)
-    updateLastRoutePath(output.lastRoutePath)
+    if (!input) return
+    await sendInput(input, true)
   }
 
   const textArea = useRef()
