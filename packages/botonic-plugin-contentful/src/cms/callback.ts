@@ -1,10 +1,10 @@
 import { CMS, ModelType } from './cms';
-import { Model } from './model';
+import { Content } from './contents';
 import escapeStringRegexp = require('escape-string-regexp');
 
 export class Callback {
   /**
-   * @param payload may contain the reference of a {@link Model}. See {@link ContentCallback}
+   * @param payload may contain the reference of a {@link Content}. See {@link ContentCallback}
    * @param url for hardcoded URLs (otherwise, use a {@link Url})
    */
   constructor(readonly payload?: string, readonly url?: string) {}
@@ -62,7 +62,7 @@ export class ContentCallback extends Callback {
     }
   }
 
-  deliverPayloadModel(cms: CMS, callbacks?: CallbackMap): Promise<Model> {
+  deliverPayloadContent(cms: CMS, callbacks?: CallbackMap): Promise<Content> {
     switch (this.model) {
       case ModelType.CAROUSEL:
         return cms.carousel(this.id, callbacks);
