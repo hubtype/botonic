@@ -55,7 +55,9 @@ export class DummyCMS implements CMS {
   }
 
   url(id: string): Promise<Url> {
-    return Promise.resolve(new Url(`http://url.${id}`));
+    return Promise.resolve(
+      new Url(id, `http://url.${id}`, 'button text for' + id)
+    );
   }
 
   contentsWithKeywords(): Promise<ContentWithKeywords[]> {

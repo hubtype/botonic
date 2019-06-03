@@ -34,6 +34,7 @@ export class Button extends Model {
     super(name);
   }
 }
+
 export class ContentWithKeywords extends Model {
   constructor(
     readonly callback: ContentCallback,
@@ -104,8 +105,14 @@ export class Text extends Model {
 
 export class Url extends Model {
   //TODO followUp not yet rendered
-  constructor(readonly url: string, readonly followup?: FollowUp) {
-    super(url);
+  constructor(
+    readonly name: string,
+    readonly url: string,
+    readonly shortText?: string,
+    readonly keywords: string[] = [],
+    readonly followup?: FollowUp
+  ) {
+    super(name);
   }
 }
 
