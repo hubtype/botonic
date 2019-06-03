@@ -3,7 +3,7 @@ import { DeliveryWithFollowUp } from './followUp';
 import { TextFields } from './text';
 import * as cms from '../cms';
 import * as contentful from 'contentful';
-import { DeliveryApi } from './deliveryApi';
+import { ContentWithKeywordsFields, DeliveryApi } from './deliveryApi';
 
 export class UrlDelivery extends DeliveryWithFollowUp {
   constructor(protected readonly delivery: DeliveryApi) {
@@ -12,15 +12,23 @@ export class UrlDelivery extends DeliveryWithFollowUp {
 
   async url(id: string): Promise<cms.Url> {
     let entry: contentful.Entry<UrlFields> = await this.delivery.getEntry(id);
-    let followUp = this.followUp!.fromFields(
-      entry.fields.followup!,
+    let fields = entry.fields;
+    let followUp = await this.followUp!.fromFields(
+      fields.followup!,
       new cms.CallbackMap()
     );
-    return new cms.Url(entry.fields.url, await followUp);
+    let name = fields.name || fields.url;
+    return new cms.Url(
+      name,
+      fields.url,
+      fields.shortText,
+      fields.keywords,
+      followUp
+    );
   }
 }
 
-export interface UrlFields {
+export interface UrlFields extends ContentWithKeywordsFields {
   url: string;
   followup?: contentful.Entry<TextFields | CarouselFields>;
 }
