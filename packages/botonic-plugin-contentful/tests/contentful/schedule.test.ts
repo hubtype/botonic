@@ -21,7 +21,7 @@ test('TEST: contentful schedule', async () => {
     expected.createHourAndMinute(16)
   );
   expected.addDaySchedule(WeekDay.SATURDAY, new DaySchedule([timeRange]));
-  expected.addException(new Date(2019, 5, 3), new DaySchedule([]));
+  expected.addException(new Date(2019, 5, 24), new DaySchedule([]));
   expected.addException(
     new Date(2019, 6, 7),
     new DaySchedule([

@@ -7,7 +7,7 @@ import {
   Element,
   Text,
   Url
-} from './model';
+} from './contents';
 import * as time from '../time/schedule';
 
 /**

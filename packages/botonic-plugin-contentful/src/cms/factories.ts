@@ -1,9 +1,9 @@
-import { Button, ButtonStyle, FollowUp, Model, Text } from './model';
+import { Button, ButtonStyle, FollowUp, Content, Text } from './contents';
 
 abstract class ModelBuilder {
   protected constructor(readonly name: string) {}
 
-  abstract build(): Model;
+  abstract build(): Content;
 }
 
 /**
