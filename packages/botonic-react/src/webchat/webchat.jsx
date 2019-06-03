@@ -215,6 +215,35 @@ export const Webchat = props => {
     closeWebview: closeWebview
   }
 
+  const openWebchat = async event => {
+    let input = webchatState.theme.initialMessage
+    let inputMessage
+    triggerWebchat({
+      isopen: !webchatState.isWebchatOpen
+    })
+    if (input.type === 'text') {
+      inputMessage = <Text from='bot'>{input.data}</Text>
+      return addMessageComponent(inputMessage)
+    }
+    inputMessage = (
+      <Text invisible='true' payload={input.payload}>
+        Invisible
+      </Text>
+    )
+
+    updateReplies(false)
+    if (appId) return postCloudInput(input)
+    let output = await props.botonicApp.input({
+      input,
+      session: webchatState.session,
+      lastRoutePath: webchatState.lastRoutePath
+    })
+
+    addMessageComponent(output.response)
+    updateSession(output.session)
+    updateLastRoutePath(output.lastRoutePath)
+  }
+
   const textArea = useRef()
   const staticAssetsUrl = getScriptBaseURL()
 
@@ -236,7 +265,7 @@ export const Webchat = props => {
       {!webchatState.isWebchatOpen && (
         <div
           onClick={event => {
-            triggerWebchat(!webchatState.isWebchatOpen)
+            openWebchat()
             event.preventDefault()
           }}
           style={{
