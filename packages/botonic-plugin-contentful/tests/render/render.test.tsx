@@ -2,6 +2,7 @@ import {
   Button,
   Carousel,
   Element,
+  Image,
   Pic,
   Reply,
   Subtitle,
@@ -196,4 +197,10 @@ test('TEST: render text with buttons and followup with reply buttons', () => {
       </Text>
     </>
   );
+});
+
+test('TEST: render image', () => {
+  let image = new cms.Image('name', 'http://domain.net/img.jpg');
+  let render = new cms.Renderer().image(image);
+  expect(render).toEqual(<Image src="http://domain.net/img.jpg" />);
 });

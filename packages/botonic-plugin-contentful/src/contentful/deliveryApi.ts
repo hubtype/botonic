@@ -80,6 +80,10 @@ export class DeliveryApi {
     }
     return new ContentCallback(modelType, entry.sys.id);
   }
+
+  static urlFromAsset(assetField: contentful.Asset): string {
+    return 'https:' + assetField.fields.file.url;
+  }
 }
 
 export interface ContentWithNameFields {
