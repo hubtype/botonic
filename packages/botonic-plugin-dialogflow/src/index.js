@@ -21,7 +21,7 @@ export default class BotonicPluginDialogflow {
   }
 
   async pre({ input, session, lastRoutePath }) {
-    this.dialogflowToInput({ input, session, lastRoutePath })
+    await this.dialogflowToInput({ input, session, lastRoutePath })
     return { input, session, lastRoutePath }
   }
 
