@@ -51,7 +51,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
           buttons,
           fields.title,
           fields.subtitle,
-          fields.pic && 'https:' + fields.pic.fields.file.url
+          fields.pic && DeliveryApi.urlFromAsset(fields.pic)
         )
     );
   }
