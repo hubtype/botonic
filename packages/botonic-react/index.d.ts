@@ -43,16 +43,25 @@ export class Title extends React.Component<any, any> {}
 export class Subtitle extends React.Component<any, any> {}
 export class Element extends React.Component<any, any> {}
 
+export type Locales = {[id: string]: string|string[]|Locales };
+
 export class App {
+  routes: core.Route[]
+  locales: Locales;
+  integrations?: {[id: string]: any};
+  theme?: string;
+  plugins: { [id: string]: any};
+  defaultTyping : number;
+  defaultDelay : number;
+
   constructor(app: {
     routes: core.Route[],
-    locales: any,
-    integrations?: any,
-    theme?: any,
-    plugins?: any,
-    appId?: any,
-    defaultTyping?: any,
-    defaultDelay?: any
+    locales: Locales,
+    integrations?: {[id: string]: any};
+    theme?: string,
+    plugins?: { [id: string]: any},
+    defaultTyping?: number,
+    defaultDelay?: number
   });
 }
 
