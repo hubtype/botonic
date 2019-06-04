@@ -1,7 +1,9 @@
+import { ModelType } from '../cms';
 import * as cms from '../cms';
 import { Entry } from 'contentful';
 import { TextFields, TextDelivery } from './text';
 import { CarouselDelivery, CarouselFields } from './carousel';
+import { ImageDelivery, ImageFields } from './image';
 import { DeliveryApi } from './deliveryApi';
 
 export class DeliveryWithFollowUp {
@@ -14,28 +16,36 @@ export class DeliveryWithFollowUp {
     this.followUp = followUp;
   }
 }
+
+type FollowUpFields = TextFields | CarouselFields | ImageFields;
+
 export class FollowUpDelivery {
   constructor(
     private readonly carousel: CarouselDelivery,
-    private readonly text: TextDelivery
+    private readonly text: TextDelivery,
+    private readonly image: ImageDelivery
   ) {}
 
   // TODO we should detect cycles to avoid infinite recursion
   fromFields(
-    followUp: Entry<TextFields | CarouselFields> | undefined,
+    followUp: Entry<FollowUpFields> | undefined,
     callbacks: cms.CallbackMap
   ): Promise<cms.FollowUp | undefined> {
     if (!followUp) {
       return Promise.resolve(undefined);
     }
     switch (DeliveryApi.getContentModel(followUp)) {
-      case cms.ModelType.CAROUSEL:
+      case ModelType.CAROUSEL:
         // here followUp already has its fields set, but not yet its element fields
         return this.carousel.carousel(followUp.sys.id, callbacks);
       case cms.ModelType.TEXT:
         return this.text.textFromEntry(
           followUp as Entry<TextFields>,
           callbacks
+        );
+      case cms.ModelType.IMAGE:
+        return Promise.resolve(
+          this.image.imageFromEntry(followUp as Entry<ImageFields>)
         );
       default:
         throw new Error(`Unexpected followUp type ${followUp.sys.type}`);

@@ -1,6 +1,7 @@
 import { testContentful } from './contentful.helper';
 import { mock } from 'ts-mockito';
 import * as cms from '../../src';
+import { expectImgUrlIs } from './image.test';
 
 const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
 
@@ -9,9 +10,7 @@ function assertElementDudasPrevias(element: cms.Element) {
   expect(element.subtitle).toBe(
     'Le ayudaré con sus compras en la tienda online de Massimo Dutti.'
   );
-  let urlChunks = element.imgUrl!.split('/');
-  expect(urlChunks[0]).toBe('https:');
-  expect(urlChunks[urlChunks.length - 1]).toBe('blue.jpg');
+  expectImgUrlIs(element.imgUrl!, 'blue.jpg');
   expect(element.buttons).toHaveLength(1);
   expect(element.buttons[0].callback.payload).toBe(
     'text$79aRfznNCyN2VGdGDQZBf3'
