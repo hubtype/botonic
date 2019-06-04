@@ -1,4 +1,4 @@
-import { Callback, ContentCallback } from './callback';
+import { Callback } from './callback';
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -33,9 +33,12 @@ export class Button extends Content {
   }
 }
 
-export class ContentCallbackWithKeywords {
+export class CallbackToContentWithKeywords {
   constructor(
-    readonly callback: ContentCallback,
+    /**
+     * It's not a ContentCallback so that we can have {@link Callback}'s with URLs
+     */
+    readonly callback: Callback,
     /** It does not contain all the content fields. Do not downcast */
     readonly content: ContentWithKeywords
   ) {}
@@ -45,7 +48,7 @@ export class ContentCallbackWithKeywords {
     if (!shortText) {
       shortText = this.content.name;
       console.error(
-        `${this.callback.model} ${
+        `${JSON.stringify(this.callback)} ${
           this.content.name
         } without shortText. Assigning name to button text`
       );
