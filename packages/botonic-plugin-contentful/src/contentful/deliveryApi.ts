@@ -68,11 +68,9 @@ export class DeliveryApi {
 
   static buildContentWithKeywords(
     entry: Entry<ContentWithKeywordsFields>
-  ): ContentCallbackWithKeywords {
-    return new ContentCallbackWithKeywords(
-      new ContentCallback(this.getContentModel(entry), entry.sys.id),
-      entry.fields
-    );
+  ): CallbackToContentWithKeywords {
+    let callback = DeliveryApi.callbackFromEntry(entry);
+    return new CallbackToContentWithKeywords(callback, entry.fields);
   }
 
   static callbackFromEntry(entry: Entry<ContentWithKeywordsFields>): Callback {
