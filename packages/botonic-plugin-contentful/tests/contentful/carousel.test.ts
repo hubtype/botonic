@@ -11,7 +11,7 @@ function assertElementDudasPrevias(element: cms.Element) {
   );
   let urlChunks = element.imgUrl!.split('/');
   expect(urlChunks[0]).toBe('https:');
-  expect(urlChunks[urlChunks.length - 1]).toBe('img_01_comprar_new.png');
+  expect(urlChunks[urlChunks.length - 1]).toBe('blue.jpg');
   expect(element.buttons).toHaveLength(1);
   expect(element.buttons[0].callback.payload).toBe(
     'text$79aRfznNCyN2VGdGDQZBf3'
