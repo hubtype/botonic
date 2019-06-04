@@ -6,6 +6,7 @@ const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
 const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
+const TEST_URL_TEXT = '2N9HQ960BdUVlDDQjpTA6I';
 export const KEYWORDS_OK = 'GbIpKJu8kW6PqMGAUYkoS';
 export const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm';
 
@@ -99,4 +100,18 @@ test('TEST: contentful text from model name', async () => {
   // assert
   expect(text.name).toEqual('PRE_MENU_CRSL');
   expect(text.buttons).toHaveLength(3);
+});
+
+test('TEST: contentful text with URL buttons', async () => {
+  let sut = testContentful();
+
+  // act
+  let text = await sut.text(TEST_URL_TEXT);
+
+  // assert
+  expect(text.buttons).toHaveLength(1);
+  expect(text.buttons[0].text).toEqual('Web de Hubtype');
+  expect(text.buttons[0].callback).toEqual(
+    cms.Callback.ofUrl('https://www.hubtype.com/')
+  );
 });
