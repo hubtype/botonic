@@ -1,6 +1,6 @@
 import { CMS, ModelType } from './cms';
 import { Content } from './contents';
-import escapeStringRegexp = require('escape-string-regexp');
+import escapeStringRegexp from 'escape-string-regexp';
 
 export class Callback {
   /**
