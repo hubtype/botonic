@@ -1,9 +1,9 @@
-import { Callback, CallbackMap, ContentCallback } from './callback';
+import { Callback, CallbackMap } from './callback';
 import { CMS } from './cms';
 import {
   Button,
   Carousel,
-  ContentCallbackWithKeywords,
+  CallbackToContentWithKeywords,
   Element,
   Text,
   Url
@@ -60,20 +60,18 @@ export class DummyCMS implements CMS {
     );
   }
 
-  contentsWithKeywords(): Promise<ContentCallbackWithKeywords[]> {
-    let contents = this.buttonCallbacks
-      .filter(cb => cb instanceof ContentCallback)
-      .map(cb => {
-        let button = DummyCMS.buttonFromCallback(cb);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        return new ContentCallbackWithKeywords(cb as ContentCallback, {
-          name: button.name,
-          shortText: button.text,
-          keywords: [
-            'keyword for ' + (button.callback.payload || button.callback.url!)
-          ]
-        });
+  contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
+    let contents = this.buttonCallbacks.map(cb => {
+      let button = DummyCMS.buttonFromCallback(cb);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      return new CallbackToContentWithKeywords(cb, {
+        name: button.name,
+        shortText: button.text,
+        keywords: [
+          'keyword for ' + (button.callback.payload || button.callback.url!)
+        ]
       });
+    });
     return Promise.resolve(contents);
   }
 
