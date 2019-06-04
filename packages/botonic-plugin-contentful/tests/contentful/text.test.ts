@@ -1,3 +1,4 @@
+import { expectImgUrlIs } from './image.test';
 import { testContentful } from './contentful.helper';
 import { mock } from 'ts-mockito';
 import * as cms from '../../src';
@@ -6,7 +7,8 @@ const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
 const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
-const TEST_URL_TEXT = '2N9HQ960BdUVlDDQjpTA6I';
+const TEST_TEXT_URL_BUTTON = '2N9HQ960BdUVlDDQjpTA6I';
+const TEST_TEXT_IMAGE_FOLLOWUP = '35aCTbYevK13TAXqqCdY8t';
 export const KEYWORDS_OK = 'GbIpKJu8kW6PqMGAUYkoS';
 export const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm';
 
@@ -58,7 +60,7 @@ test('TEST: contentful text with payload button', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(KEYWORDS_NOT_FOUND, new cms.CallbackMap());
+  let text = await sut.text(KEYWORDS_NOT_FOUND);
 
   // assert
   expect(text.buttons).toHaveLength(1);
@@ -69,7 +71,7 @@ test('TEST: contentful text without buttons with text followup', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_POST_FAQ2_ID, new cms.CallbackMap());
+  let text = await sut.text(TEST_POST_FAQ2_ID);
 
   // assert
   expect(text.buttons).toHaveLength(0);
@@ -80,11 +82,21 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_FBK_OK_MSG, new cms.CallbackMap());
+  let text = await sut.text(TEST_FBK_OK_MSG);
 
   // assert
   expect(text.buttons).toHaveLength(0);
   expect((text.followUp as cms.Carousel).elements).toHaveLength(3);
+});
+
+test('TEST: contentful text without buttons with image followup', async () => {
+  let sut = testContentful();
+
+  // act
+  let text = await sut.text(TEST_TEXT_IMAGE_FOLLOWUP);
+
+  // assert
+  expectImgUrlIs((text.followUp as cms.Image).imgUrl, 'red.jpg');
 });
 
 test('TEST: contentful text from model name', async () => {
@@ -102,11 +114,11 @@ test('TEST: contentful text from model name', async () => {
   expect(text.buttons).toHaveLength(3);
 });
 
-test('TEST: contentful text with URL buttons', async () => {
+test('TEST: contentful text with URL button', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_URL_TEXT);
+  let text = await sut.text(TEST_TEXT_URL_BUTTON);
 
   // assert
   expect(text.buttons).toHaveLength(1);

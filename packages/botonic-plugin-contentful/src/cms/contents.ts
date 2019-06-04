@@ -78,6 +78,12 @@ export class Element {
   ) {}
 }
 
+export class Image extends Content {
+  constructor(readonly name: string, readonly imgUrl: string) {
+    super(name);
+  }
+}
+
 export class Text extends Content implements ContentWithKeywords {
   constructor(
     // An ID (eg. PRE_FAQ1)
@@ -118,4 +124,4 @@ export class Url extends Content implements ContentWithKeywords {
 /**
  * A {@link Content} which is automatically displayed after another one
  */
-export type FollowUp = Text | Carousel;
+export type FollowUp = Text | Carousel | Image;

@@ -1,3 +1,4 @@
+import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './followUp';
@@ -12,14 +13,11 @@ import * as time from '../time';
 
 export default class Contentful implements cms.CMS {
   _carousel: CarouselDelivery;
-
   _text: TextDelivery;
-
   _url: UrlDelivery;
-
   _keywords: KeywordsDelivery;
-
   _schedule: ScheduleDelivery;
+  _image: ImageDelivery;
 
   constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
     let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
@@ -27,7 +25,12 @@ export default class Contentful implements cms.CMS {
     this._carousel = new CarouselDelivery(delivery, button);
     this._text = new TextDelivery(delivery, button);
     this._url = new UrlDelivery(delivery);
-    let followUp = new FollowUpDelivery(this._carousel, this._text);
+    this._image = new ImageDelivery(delivery);
+    let followUp = new FollowUpDelivery(
+      this._carousel,
+      this._text,
+      this._image
+    );
     [this._text, this._url, this._carousel].forEach(d =>
       d.setFollowUp(followUp)
     );
@@ -59,6 +62,10 @@ export default class Contentful implements cms.CMS {
 
   async schedule(id: string): Promise<time.Schedule> {
     return this._schedule.schedule(id);
+  }
+
+  image(id: string): Promise<cms.Image> {
+    return this._image.image(id);
   }
 }
 
