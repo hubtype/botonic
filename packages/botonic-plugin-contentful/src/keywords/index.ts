@@ -20,7 +20,7 @@ export class Keywords {
       this.cms.text(keywordsNotFoundTextId),
       this.cms.contentsWithKeywords()
     ]);
-    let kws = new KeywordsParser<cms.ContentCallbackWithKeywords>();
+    let kws = new KeywordsParser<cms.CallbackToContentWithKeywords>();
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.content.keywords!)
     );

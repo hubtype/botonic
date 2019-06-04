@@ -1,6 +1,6 @@
 import * as time from '../time/schedule';
 import { CallbackMap } from './callback';
-import { Carousel, ContentCallbackWithKeywords, Text, Url } from './contents';
+import { Carousel, CallbackToContentWithKeywords, Text, Url } from './contents';
 
 export enum ModelType {
   CAROUSEL = 'carousel',
@@ -15,6 +15,6 @@ export interface CMS {
   carousel(id: string, callbacks?: CallbackMap): Promise<Carousel>;
   text(id: string, callbacks?: CallbackMap): Promise<Text>;
   url(id: string): Promise<Url>;
-  contentsWithKeywords(): Promise<ContentCallbackWithKeywords[]>;
+  contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]>;
   schedule(id: string): Promise<time.Schedule>;
 }
