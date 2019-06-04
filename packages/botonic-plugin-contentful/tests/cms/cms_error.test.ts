@@ -1,6 +1,5 @@
 import { instance, mock, when } from 'ts-mockito';
-import * as cms from '../../src';
-import { DummyCMS, ErrorReportingCMS, ModelType } from '../../src';
+import { DummyCMS, ErrorReportingCMS } from '../../src';
 
 test('TEST: ErrorReportingCMS', async () => {
   let mockCms = mock(DummyCMS);
@@ -16,14 +15,4 @@ test('TEST: ErrorReportingCMS', async () => {
     .catch((error2: any) => {
       expect(error2).toBe(error);
     });
-});
-
-test('TEST: regexForModel', async () => {
-  let callback = new cms.ContentCallback(ModelType.CAROUSEL, 'id1');
-  expect(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    cms.ContentCallback.regexForModel(ModelType.CAROUSEL).test(
-      callback.payload!
-    )
-  ).toBeTruthy();
 });
