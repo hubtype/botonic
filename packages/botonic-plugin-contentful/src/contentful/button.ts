@@ -1,5 +1,8 @@
 import * as contentful from 'contentful';
-import { ContentWithNameFields } from './deliveryApi';
+import {
+  ContentWithKeywordsFields,
+  ContentWithNameFields
+} from './deliveryApi';
 import { ModelType, DeliveryApi } from '.';
 import * as cms from '../cms';
 import { UrlFields } from './url';
@@ -23,8 +26,12 @@ export class ButtonDelivery {
     let entry = await this.delivery.getEntry(id);
     let entryType = DeliveryApi.getContentModel(entry);
     switch (entryType as string) {
+      case cms.ModelType.CAROUSEL:
       case cms.ModelType.TEXT:
-        return this.fromText(entry);
+      case cms.ModelType.URL:
+        return ButtonDelivery.fromContent(entry as contentful.Entry<
+          ContentWithKeywordsFields
+        >);
       case cms.ModelType.BUTTON:
         let buttonEntry = entry as contentful.Entry<ButtonFields>;
         let callback = buttonEntry.fields.target
@@ -40,17 +47,19 @@ export class ButtonDelivery {
     }
   }
 
-  private async fromText(entry: contentful.Entry<any>): Promise<cms.Button> {
-    let textEntry = entry as contentful.Entry<TextFields>;
-    let text = textEntry.fields.shortText;
+  private static async fromContent(
+    entry: contentful.Entry<ContentWithKeywordsFields>
+  ): Promise<cms.Button> {
+    let fields = entry.fields;
+    let text = fields.shortText;
     if (!text) {
-      text = textEntry.fields.name;
+      text = fields.name;
       console.error(`Text ${text} without short text`);
     }
     return new cms.Button(
-      textEntry.fields.name,
-      textEntry.fields.shortText,
-      new cms.ContentCallback(cms.ModelType.TEXT, textEntry.sys.id)
+      fields.name,
+      fields.shortText,
+      DeliveryApi.callbackFromEntry(entry)
     );
   }
 

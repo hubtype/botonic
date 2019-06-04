@@ -1,6 +1,12 @@
 import { Entry } from 'contentful';
 import * as contentful from 'contentful';
-import { ContentCallback, ContentCallbackWithKeywords } from '../cms';
+import { UrlFields } from './url';
+import {
+  Callback,
+  ContentCallback,
+  CallbackToContentWithKeywords,
+  ModelType
+} from '../cms';
 import * as cms from '../cms';
 
 export class DeliveryApi {
@@ -67,6 +73,14 @@ export class DeliveryApi {
       new ContentCallback(this.getContentModel(entry), entry.sys.id),
       entry.fields
     );
+  }
+
+  static callbackFromEntry(entry: Entry<ContentWithKeywordsFields>): Callback {
+    let modelType = this.getContentModel(entry);
+    if (modelType === ModelType.URL) {
+      return Callback.ofUrl((entry.fields as UrlFields).url);
+    }
+    return new ContentCallback(modelType, entry.sys.id);
   }
 }
 
