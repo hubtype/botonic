@@ -1,4 +1,5 @@
 import { instance, mock } from 'ts-mockito';
+import { ModelType } from '../../src';
 import * as cms from '../../src';
 
 test('TEST: callbackMap multiple callbacks', () => {
@@ -15,4 +16,14 @@ test('TEST: callbackMap fixed callback', () => {
   let callback = instance(mock(cms.Callback));
   let sut = cms.CallbackMap.forAllIds(callback);
   expect(sut.getCallback(Math.random().toString())).toBe(callback);
+});
+
+test('TEST: regexForModel', async () => {
+  let callback = new cms.ContentCallback(ModelType.CAROUSEL, 'id1');
+  expect(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    cms.ContentCallback.regexForModel(ModelType.CAROUSEL).test(
+      callback.payload!
+    )
+  ).toBeTruthy();
 });
