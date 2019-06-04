@@ -2,6 +2,7 @@ import {
   Button,
   Carousel,
   Element,
+  Image,
   Pic,
   Reply,
   Subtitle,
@@ -54,13 +55,22 @@ export class Renderer {
     return node;
   }
 
-  private followUp(followUp: cms.Text | cms.Carousel): React.ReactNode {
+  image(img: cms.Image): React.ReactNode {
+    return <Image src={img.imgUrl} />;
+  }
+
+  private followUp(followUp: cms.FollowUp): React.ReactNode {
     if (followUp instanceof cms.Text) {
       // give user time to read the initial text
       return this.text(followUp, this.followUpDelaySeconds);
+    } else if (followUp instanceof cms.Carousel) {
+      // for carousels, the previous text usually introduces the carousel. So, we set a smaller delay
+      return this.carousel(followUp, 2);
+    } else if (followUp instanceof cms.Image) {
+      return this.image(followUp);
+    } else {
+      throw new Error('Unexpected followUp type ' + typeof followUp);
     }
-    // for carousels, the previous text usually introduces the carousel. So, we set a smaller delay
-    return this.carousel(followUp, 2);
   }
 
   private buttons(buttons: cms.Button[], style: ButtonStyle): React.ReactNode {

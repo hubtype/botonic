@@ -5,6 +5,7 @@ import {
   Carousel,
   CallbackToContentWithKeywords,
   Element,
+  Image,
   Text,
   Url
 } from './contents';
@@ -14,6 +15,7 @@ import * as time from '../time/schedule';
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
  */
 export class DummyCMS implements CMS {
+  static IMG = '../assets/img_home_bg.png';
   /**
    *
    * @param buttonCallbacks models which contain buttons will return one per each specified callback
@@ -50,7 +52,7 @@ export class DummyCMS implements CMS {
       [DummyCMS.buttonFromCallback(callback)],
       'Title for ' + id,
       'subtitle',
-      '../assets/img_home_bg.png'
+      DummyCMS.IMG
     );
   }
 
@@ -58,6 +60,10 @@ export class DummyCMS implements CMS {
     return Promise.resolve(
       new Url(id, `http://url.${id}`, 'button text for' + id)
     );
+  }
+
+  image(id: string): Promise<Image> {
+    return Promise.resolve(new Image(id, DummyCMS.IMG));
   }
 
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
