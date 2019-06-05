@@ -11,7 +11,7 @@ import { BotonicAPIService } from '../botonicAPIService'
 import { track, sleep } from '../utils'
 
 var force = false
-var npmCommand: string
+var npmCommand: string | undefined
 
 export default class Run extends Command {
   static description = 'Deploy Botonic project to hubtype.com'
