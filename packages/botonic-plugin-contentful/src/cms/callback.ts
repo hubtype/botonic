@@ -45,7 +45,9 @@ export class ContentCallback extends Callback {
 
   static regexForModel(modelType: ModelType): RegExp {
     return new RegExp(
-      escapeStringRegexp(modelType + ContentCallback.PAYLOAD_SEPARATOR)
+      '^' +
+        escapeStringRegexp(modelType + ContentCallback.PAYLOAD_SEPARATOR) +
+        '[a-zA-Z0-9]*$'
     );
   }
 

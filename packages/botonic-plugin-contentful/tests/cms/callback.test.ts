@@ -21,8 +21,8 @@ test('TEST: callbackMap fixed callback', () => {
 test('TEST: regexForModel', async () => {
   let callback = new cms.ContentCallback(ModelType.CAROUSEL, 'id1');
   expect(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     cms.ContentCallback.regexForModel(ModelType.CAROUSEL).test(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       callback.payload!
     )
   ).toBeTruthy();
