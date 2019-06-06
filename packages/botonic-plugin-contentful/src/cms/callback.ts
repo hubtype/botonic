@@ -1,5 +1,5 @@
 import { CMS, ModelType } from './cms';
-import { Content } from './contents';
+import { ContentWithKeywords } from './contents';
 import escapeStringRegexp from 'escape-string-regexp';
 
 export class Callback {
@@ -64,12 +64,12 @@ export class ContentCallback extends Callback {
     }
   }
 
-  deliverPayloadContent(cms: CMS, callbacks?: CallbackMap): Promise<Content> {
+  deliverPayloadContent(cms: CMS): Promise<ContentWithKeywords> {
     switch (this.model) {
       case ModelType.CAROUSEL:
-        return cms.carousel(this.id, callbacks);
+        return cms.carousel(this.id);
       case ModelType.TEXT:
-        return cms.text(this.id, callbacks);
+        return cms.text(this.id);
       case ModelType.URL:
         return cms.url(this.id);
       default:

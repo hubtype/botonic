@@ -21,7 +21,10 @@ module.exports = {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
 
-    "dot-notation": "warn", // in typescript we must use obj.field when we have the types, and obj['field'] when we don't
+    // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
+    // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
+    "dot-notation": "off",
+
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
