@@ -60,6 +60,7 @@ export class Schedule {
     if (exception) {
       return exception.daySchedule.contains(date);
     }
+    // BUG should get date in Schedule's timezone
     let weekDay = date.getDay() as WeekDay;
     let schedule = this.scheduleByDay.get(weekDay);
     if (!schedule) {
@@ -159,6 +160,7 @@ export class HourAndMinute {
   }
 }
 
+// BUG should check date in schedule timezone
 function isSameDay(d1: Date, d2: Date): boolean {
   return (
     d1.getFullYear() === d2.getFullYear() &&
