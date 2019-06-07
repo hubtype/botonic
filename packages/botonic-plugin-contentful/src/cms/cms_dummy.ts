@@ -42,7 +42,7 @@ export class DummyCMS implements CMS {
     return this.buttonCallbacks.map(DummyCMS.buttonFromCallback);
   }
 
-  private static buttonFromCallback(callback: Callback): Button {
+  public static buttonFromCallback(callback: Callback): Button {
     let id = callback.payload || callback.url!;
     return new Button(id, 'button text for ' + id, callback);
   }
