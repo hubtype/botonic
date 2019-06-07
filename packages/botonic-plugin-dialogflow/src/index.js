@@ -15,13 +15,18 @@ export default class BotonicPluginDialogflow {
       params: {
         query: data,
         lang: lang,
-        sessionId: sessionId
+        sessionId: sessionId,
+        v: this.options.version
       }
     })
   }
 
   async pre({ input, session, lastRoutePath }) {
-    await this.dialogflowToInput({ input, session, lastRoutePath })
+    try {
+      await this.dialogflowToInput({ input, session, lastRoutePath })
+    } catch (error) {
+      console.log(error.response)
+    }
     return { input, session, lastRoutePath }
   }
 
