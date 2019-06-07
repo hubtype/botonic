@@ -100,10 +100,9 @@ export class Text extends Content implements ContentWithKeywords {
     super(name);
   }
 
-  /** Useful to hide a button (eg. when Desk queue is closed) */
-  cloneWithFilteredButtons(onlyKeep: (b: Button) => boolean): Text {
-    const clone: any = { ...this };
-    clone.buttons = clone.buttons.filter(onlyKeep);
+  cloneWithButtons(buttons: Button[]): Text {
+    const clone = Object.create(this);
+    clone.buttons = buttons;
     return clone as Text;
   }
 }
