@@ -30,7 +30,7 @@ export class Keywords {
     let matches = kws.findCandidatesWithKeywordsAt(tokens);
 
     if (matches.length == 0) {
-      return notFoundText.cloneWithFilteredButtons(b => false);
+      return notFoundText.cloneWithButtons([]);
     }
     let buttons = matches.map(match => match.toButton());
     return new cms.Text(foundText.name, foundText.text, buttons);
@@ -54,18 +54,14 @@ export class Keywords {
       return text;
     }
     if (onlyChitChats.length < text.buttons.length) {
-      let textWithoutChitChats = text.cloneWithFilteredButtons(b => !isChitChat(b));
-      return this.limitNumButtons(textWithoutChitChats);
+      let textWithoutChitChats = text.cloneWithButtons(
+        text.buttons.filter(b => !isChitChat(b))
+      );
+      return textWithoutChitChats.cloneWithButtons(
+        textWithoutChitChats.buttons.slice(0, this.maxButtons)
+      );
     }
     return await this.treatOnlyChitchats(tokens, onlyChitChats);
-  }
-
-  private limitNumButtons(text: cms.Text): cms.Text {
-    if (text.buttons.length <= this.maxButtons) {
-      return text;
-    }
-    let counter = 0;
-    return text.cloneWithFilteredButtons(b => ++counter <= this.maxButtons);
   }
 
   private async treatOnlyChitchats(
