@@ -4,6 +4,7 @@ import {
   Button,
   Carousel,
   CallbackToContentWithKeywords,
+  Chitchat,
   Element,
   Image,
   Text,
@@ -83,5 +84,9 @@ export class DummyCMS implements CMS {
 
   schedule(id: string): Promise<time.Schedule> {
     return Promise.resolve(new time.Schedule('Europe/Madrid'));
+  }
+
+  chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat> {
+    return this.text(id, callbacks);
   }
 }
