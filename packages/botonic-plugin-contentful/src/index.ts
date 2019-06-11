@@ -1,25 +1,25 @@
 import * as cms from './cms';
 import Contentful from './contentful';
-import { Keywords } from './keywords';
+import Intents from './intents';
 import { Renderer } from './render';
 
 // Exports
 export * from './cms';
 export * from './render';
-export * from './keywords';
+export * from './intents';
 export * from './time';
 
 export interface CmsOptions {
   cms?: cms.CMS;
   renderer?: Renderer;
-  keywords?: Keywords;
+  intents?: Intents;
 }
 
 export interface ContentfulOptions {
   spaceId: string;
   accessToken: string;
   renderer?: Renderer;
-  keywords?: Keywords;
+  intents?: Intents;
 }
 
 export default class BotonicPluginContentful {
@@ -27,7 +27,7 @@ export default class BotonicPluginContentful {
 
   readonly renderer: Renderer;
 
-  readonly keywords: Keywords;
+  readonly intents: Intents;
 
   constructor(options: CmsOptions | ContentfulOptions) {
     let optionsAny = options as any;
@@ -39,7 +39,7 @@ export default class BotonicPluginContentful {
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = options.renderer || new Renderer();
-    this.keywords = options.keywords || new Keywords(this.cms);
+    this.intents = options.intents || new Intents(this.cms);
   }
 
   // @ts-ignore
