@@ -5,7 +5,8 @@ import {
   CallbackToContentWithKeywords,
   Text,
   Url,
-  Image
+  Image,
+  Chitchat
 } from './contents';
 import * as time from '../time/schedule';
 
@@ -22,6 +23,12 @@ export class ErrorReportingCMS implements CMS {
     return this.cms
       .text(id, callbacks)
       .catch(this.handleError(ModelType.TEXT, id));
+  }
+
+  chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat> {
+    return this.cms
+      .text(id, callbacks)
+      .catch(this.handleError(ModelType.CHITCHAT, id));
   }
 
   url(id: string): Promise<Url> {

@@ -19,8 +19,8 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
-    // in typescript we must use obj.field when we have the types, and obj['field'] when we don't
-    // not set to warn because webstorm cannot run eslint with --quiet
+    // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
+    // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
     "dot-notation": "off",
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",

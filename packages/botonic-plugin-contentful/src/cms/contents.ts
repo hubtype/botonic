@@ -1,4 +1,4 @@
-import { Callback } from './callback';
+import { Callback, ContentCallback } from './callback';
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -34,6 +34,7 @@ export class Button extends Content {
 }
 
 export class CallbackToContentWithKeywords {
+  static CHITCHAT_SHORT_TEXT = 'chitchat';
   constructor(
     /**
      * It's not a ContentCallback so that we can have {@link Callback}'s with URLs
@@ -54,6 +55,19 @@ export class CallbackToContentWithKeywords {
       );
     }
     return new Button(this.content.name, shortText, this.callback);
+  }
+
+  getCallbackIfChitchat(): ContentCallback | undefined {
+    if (!(this.callback instanceof ContentCallback)) {
+      return undefined;
+    }
+    if (
+      this.content.shortText !==
+      CallbackToContentWithKeywords.CHITCHAT_SHORT_TEXT
+    ) {
+      return undefined;
+    }
+    return this.callback;
   }
 }
 
@@ -106,6 +120,8 @@ export class Text extends Content implements ContentWithKeywords {
     return clone as Text;
   }
 }
+
+export type Chitchat = Text;
 
 export class Url extends Content implements ContentWithKeywords {
   //TODO followUp not yet rendered

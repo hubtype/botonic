@@ -67,6 +67,10 @@ export default class Contentful implements cms.CMS {
   image(id: string): Promise<cms.Image> {
     return this._image.image(id);
   }
+
+  chitchat(id: string, callbacks: CallbackMap): Promise<cms.Chitchat> {
+    return this._text.text(id, callbacks);
+  }
 }
 
 export { DeliveryApi } from './deliveryApi';

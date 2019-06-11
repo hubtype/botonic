@@ -70,6 +70,8 @@ export class ContentCallback extends Callback {
         return cms.carousel(this.id);
       case ModelType.TEXT:
         return cms.text(this.id);
+      case ModelType.CHITCHAT:
+        return cms.chitchat(this.id);
       case ModelType.URL:
         return cms.url(this.id);
       default:
