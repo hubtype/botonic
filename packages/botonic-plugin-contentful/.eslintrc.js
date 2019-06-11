@@ -43,7 +43,8 @@ module.exports = {
     "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
     "unicorn/prevent-abbreviations" : "off", // the plugin removes removes type annotations from typescript code :-(
     "unicorn/filename-case" : "off", // React convention is in CamelCase
-    "@typescript-eslint/no-non-null-assertion" : "warn" // specially useful in tests, and "when you know what you're doing"
+    "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
+    "@typescript-eslint/no-object-literal-type-assertion" : {allowAsParameter: false} //useful to pass options to plugins
   },
   settings: {
     react: {
