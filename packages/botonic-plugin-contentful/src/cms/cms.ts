@@ -5,12 +5,14 @@ import {
   CallbackToContentWithKeywords,
   Image,
   Text,
-  Url
+  Url,
+  Chitchat
 } from './contents';
 
 export enum ModelType {
   CAROUSEL = 'carousel',
   TEXT = 'text',
+  CHITCHAT = 'chitchat',
   BUTTON = 'button',
   URL = 'url',
   PAYLOAD = 'payload',
@@ -21,6 +23,7 @@ export enum ModelType {
 export interface CMS {
   carousel(id: string, callbacks?: CallbackMap): Promise<Carousel>;
   text(id: string, callbacks?: CallbackMap): Promise<Text>;
+  chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat>;
   url(id: string): Promise<Url>;
   image(id: string): Promise<Image>;
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]>;
