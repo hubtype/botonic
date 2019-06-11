@@ -1,53 +1,74 @@
 import 'jest-extended';
-import * as plugin from '../../src';
-import { Button, ContentCallback, ModelType } from '../../src';
-import { testContentful } from '../contentful/contentful.helper';
+import { instance, mock, when } from 'ts-mockito';
+import {
+  Callback,
+  CallbackToContentWithKeywords,
+  ContentCallback,
+  ContentWithKeywords,
+  IntentPredictorFromKeywords,
+  DummyCMS,
+  ModelType
+} from '../../src';
+import { default as cms } from '../../src/cms';
 
 test('TEST: suggestTextsForInput keywords found', async () => {
-  let cmsPlugin = new plugin.default({ cms: testContentful() });
+  let contents = [
+    contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'devolucion plazo']),
+    contentWithKeyword(Callback.ofPayload('p2'), ['devolución', 'kw2']),
+    contentWithKeyword(Callback.ofPayload('p3'), ['Empezar']),
+    contentWithKeyword(Callback.ofUrl('http...'), ['hubtype']),
+    contentWithKeyword(Callback.ofPayload('p4'), ['not_found'])
+  ];
+  let keywords = keywordsWithMockCms(contents);
 
   // act
-
-  let text = await cmsPlugin.keywords.suggestContentsForInput(
-    cmsPlugin.keywords.tokenize(' DevoluciON fuera de  plazo? Empezar Hubtype'),
-    'GbIpKJu8kW6PqMGAUYkoS',
-    '4C2ghzuNPXIl0KqLaq1Qqm'
+  let expectedContents = contents.slice(0, 4);
+  let suggested = await keywords.suggestContentsFromInput(
+    keywords.tokenize(' DevoluciON de  plazo? Empezar Hubtype')
   );
 
   // assert
-  expect(text.name).toEqual('KEYWORDS_OK');
-  expect(text.buttons).toHaveLength(4);
-  let textNames = text.buttons.map(b => b.name);
-  expect(textNames).toIncludeSameMembers([
-    'POST_FAQ3',
-    'POST_FAQ5',
-    'INICIO',
-    'URL_HUBTYPE'
-  ]);
-  let contentButtons = text.buttons.filter(
-    b => b.callback instanceof ContentCallback
-  );
-  let models = contentButtons.map(b => (b.callback as ContentCallback).model);
-  expect(models).toIncludeSameMembers([
-    ModelType.TEXT,
-    ModelType.TEXT,
-    ModelType.CAROUSEL
-  ]);
-  let hubTypeUrl: Button = text.buttons.find(b => b.name == 'URL_HUBTYPE')!;
-  expect(hubTypeUrl.callback.url).toEqual('https://www.hubtype.com/');
+  expect(suggested).toIncludeSameMembers(expectedContents);
 });
 
 test('TEST: suggestTextsForInput no keywords found', async () => {
-  let cmsPlugin = new plugin.default({ cms: testContentful() });
+  let keywords = keywordsWithMockCms([
+    contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'kw2'])
+  ]);
 
   // act
-  let text = await cmsPlugin.keywords.suggestContentsForInput(
-    cmsPlugin.keywords.tokenize('willnotbefound'),
-    'GbIpKJu8kW6PqMGAUYkoS',
-    '4C2ghzuNPXIl0KqLaq1Qqm'
+  let contents = await keywords.suggestContentsFromInput(
+    keywords.tokenize('willnotbefound')
   );
 
   // assert
-  expect(text.name).toEqual('KEYWORDS_KO_RETRY');
-  expect(text.buttons).toHaveLength(0);
+  expect(contents).toHaveLength(0);
 });
+
+export function contentWithKeyword(callback: Callback, keywords: string[]) {
+  return new CallbackToContentWithKeywords(callback, {
+    name: callback.payload,
+    shortText: 'shortText' + callback.payload,
+    keywords
+  } as ContentWithKeywords);
+}
+
+export function chitchatContent(keywords: string[]) {
+  let id = Math.random().toString();
+  return new CallbackToContentWithKeywords(
+    new ContentCallback(ModelType.TEXT, id),
+    {
+      name: id,
+      shortText: 'chitchat',
+      keywords
+    } as ContentWithKeywords
+  );
+}
+
+export function keywordsWithMockCms(
+  allContents: cms.CallbackToContentWithKeywords[]
+): IntentPredictorFromKeywords {
+  let mockCms = mock(DummyCMS);
+  when(mockCms.contentsWithKeywords()).thenResolve(allContents);
+  return new IntentPredictorFromKeywords(instance(mockCms));
+}
