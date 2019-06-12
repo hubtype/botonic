@@ -7,9 +7,9 @@ menu: 5. Plugins
 # **How to use Botonic Plugins?**
 
 ---  
-* [botonic-plugin-dialogflow](#botonic-plugin-dialogflow)
-* [botonic-plugin-luis](#botonic-plugin-luis)
-* [botonic-plugin-segment](#botonic-plugin-segment)
+* [@botonic/plugin-dialogflow](#botonic-plugin-dialogflow)
+* [@botonic/plugin-luis](#botonic-plugin-luis)
+* [@botonic/plugin-segment](#botonic-plugin-segment)
 ---
 
 In order to use one of the [available](#Plugins) Botonic plugins, 
@@ -35,7 +35,7 @@ export default new App({ routes, locales, plugins })
 export const plugins = [
   {
     id: 'dialogflow',
-    resolve: require('botonic-plugin-dialogflow'),
+    resolve: require('@botonic/plugin-dialogflow'),
     options: {
       token: 'YOUR_TOKEN_HERE'
     }
@@ -76,7 +76,7 @@ available inside the `input` object.
 export const plugins = [
   {
     id: 'dialogflow',
-    resolve: require('botonic-plugin-dialogflow'),
+    resolve: require('@botonic/plugin-dialogflow'),
     options: {
       token: 'YOUR_TOKEN_HERE'
     }
@@ -93,7 +93,7 @@ available inside the `input` object.
 export const plugins = [
   {
     id: 'luis',
-    resolve: require('botonic-plugin-luis'),
+    resolve: require('@botonic/plugin-luis'),
     options: {
       region: 'YOUR_REGION',
       appID: 'YOUR_APP_ID',
@@ -111,7 +111,7 @@ Don't forget to add colon `:` to your write key as specified in [Segment Docs](h
 export const plugins = [
   {
     id: 'segment',
-    resolve: require('botonic-plugin-segment'),
+    resolve: require('@botonic/plugin-segment'),
     options: {
       writeKey: 'YOUR_WRITE_KEY'
     }
