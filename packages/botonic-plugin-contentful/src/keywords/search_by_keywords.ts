@@ -1,19 +1,21 @@
 import { tokenizeAndStem } from '../nlp';
 import * as cms from '../cms';
-import { KeywordsParser } from '../nlp/keywords';
+import { KeywordsParser, MatchType } from '../nlp/keywords';
 
-export class IntentPredictorFromKeywords {
-  constructor(readonly cms: cms.CMS) {}
+export class SearchByKeywords {
+  constructor(readonly cms: cms.CMS, readonly matchType: MatchType) {}
 
   tokenize(inputText: string): string[] {
     return tokenizeAndStem(inputText);
   }
 
-  async suggestContentsFromInput(
+  async searchContentsFromInput(
     tokens: string[]
   ): Promise<cms.CallbackToContentWithKeywords[]> {
     let contentsWithKeywords = await this.cms.contentsWithKeywords();
-    let kws = new KeywordsParser<cms.CallbackToContentWithKeywords>();
+    let kws = new KeywordsParser<cms.CallbackToContentWithKeywords>(
+      this.matchType
+    );
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.content.keywords!)
     );
@@ -21,13 +23,14 @@ export class IntentPredictorFromKeywords {
   }
 
   /**
-   * It decides how to react to a list of chitchat keywords and not chitchat keywords.
+   * Chitchat contents need special treatment: does not make sense to ask user to disambiguate,
+   * have less priority than non-chitchat contents,...
    * @return which contents must be displayed
    */
-  public async filterChitchat(
+  public filterChitchat(
     tokens: string[],
     callbacks: cms.CallbackToContentWithKeywords[]
-  ): Promise<cms.CallbackToContentWithKeywords[]> {
+  ): cms.CallbackToContentWithKeywords[] {
     const isChitChat = (cc: cms.CallbackToContentWithKeywords) =>
       cc.getCallbackIfChitchat();
 

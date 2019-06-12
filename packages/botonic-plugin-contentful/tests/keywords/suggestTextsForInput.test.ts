@@ -5,11 +5,12 @@ import {
   CallbackToContentWithKeywords,
   ContentCallback,
   ContentWithKeywords,
-  IntentPredictorFromKeywords,
   DummyCMS,
-  ModelType
+  ModelType,
+  SearchByKeywords
 } from '../../src';
 import { default as cms } from '../../src/cms';
+import { MatchType } from '../../src/nlp/keywords';
 
 test('TEST: suggestTextsForInput keywords found', async () => {
   let contents = [
@@ -23,7 +24,7 @@ test('TEST: suggestTextsForInput keywords found', async () => {
 
   // act
   let expectedContents = contents.slice(0, 4);
-  let suggested = await keywords.suggestContentsFromInput(
+  let suggested = await keywords.searchContentsFromInput(
     keywords.tokenize(' DevoluciON de  plazo? Empezar Hubtype')
   );
 
@@ -37,7 +38,7 @@ test('TEST: suggestTextsForInput no keywords found', async () => {
   ]);
 
   // act
-  let contents = await keywords.suggestContentsFromInput(
+  let contents = await keywords.searchContentsFromInput(
     keywords.tokenize('willnotbefound')
   );
 
@@ -67,8 +68,11 @@ export function chitchatContent(keywords: string[]) {
 
 export function keywordsWithMockCms(
   allContents: cms.CallbackToContentWithKeywords[]
-): IntentPredictorFromKeywords {
+): SearchByKeywords {
   let mockCms = mock(DummyCMS);
   when(mockCms.contentsWithKeywords()).thenResolve(allContents);
-  return new IntentPredictorFromKeywords(instance(mockCms));
+  return new SearchByKeywords(
+    instance(mockCms),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND
+  );
 }
