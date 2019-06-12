@@ -11,7 +11,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.9.0-beta.7",
+  "version": "0.9.0-beta.8",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
@@ -30,8 +30,8 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^12.0.0",
     "@types/react": "16.8.14",
-    "@typescript-eslint/eslint-plugin": "^1.6.0",
-    "@typescript-eslint/parser": "^1.6.0",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
     "csstype": "^2.6.3",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0",
