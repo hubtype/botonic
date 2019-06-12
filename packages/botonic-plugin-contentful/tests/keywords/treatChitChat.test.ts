@@ -21,11 +21,11 @@ test.each<any>([
       chitchatContent(['adios', 'hasta luego'])
     ]);
     let tokens = keywords.tokenize(inputText);
-    let contents = await keywords.suggestContentsFromInput(tokens);
+    let contents = await keywords.searchContentsFromInput(tokens);
     expect(contents).toHaveLength(numChitchats);
 
     // act
-    let filtered = await keywords.filterChitchat(tokens, contents);
+    let filtered = keywords.filterChitchat(tokens, contents);
 
     // assert
     expect(filtered).toHaveLength(1);
@@ -41,11 +41,11 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
     contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
   ]);
   let tokens = keywords.tokenize('hola, DevoluciON fuera de  plazo?');
-  let parsedKeywords = await keywords.suggestContentsFromInput(tokens);
+  let parsedKeywords = await keywords.searchContentsFromInput(tokens);
   expect(parsedKeywords).toHaveLength(2);
 
   // act
-  let filtered = await keywords.filterChitchat(tokens, parsedKeywords);
+  let filtered = keywords.filterChitchat(tokens, parsedKeywords);
 
   // assert
   expect(filtered).toHaveLength(1);
@@ -67,11 +67,11 @@ test.each<any>([
     ]);
     let tokens = keywords.tokenize(inputText);
 
-    let contents = await keywords.suggestContentsFromInput(tokens);
+    let contents = await keywords.searchContentsFromInput(tokens);
     expect(contents).toHaveLength(numChitChats);
 
     // act
-    let filtered = await keywords.filterChitchat(tokens, contents);
+    let filtered = keywords.filterChitchat(tokens, contents);
 
     // assert
     expect(filtered).toEqual([]);
@@ -85,11 +85,11 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   ]);
 
   let tokens = keywords.tokenize('DevoluciON fuera de  plazo');
-  let contents = await keywords.suggestContentsFromInput(tokens);
+  let contents = await keywords.searchContentsFromInput(tokens);
   expect(contents).toHaveLength(1);
 
   // act
-  let filtered = await keywords.filterChitchat(tokens, contents);
+  let filtered = keywords.filterChitchat(tokens, contents);
 
   // assert
   expect(filtered).toBe(contents);
