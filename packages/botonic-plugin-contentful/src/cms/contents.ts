@@ -1,4 +1,5 @@
 import { Callback, ContentCallback } from './callback';
+import { ModelType } from './cms';
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -37,7 +38,7 @@ export class CallbackToContentWithKeywords {
   static CHITCHAT_SHORT_TEXT = 'chitchat';
   constructor(
     /**
-     * It's not a ContentCallback so that we can have {@link Callback}'s with URLs
+     * It may be a {@link Callback}'s with an URL instead of payload
      */
     readonly callback: Callback,
     /** It does not contain all the content fields. Do not downcast */
@@ -55,6 +56,16 @@ export class CallbackToContentWithKeywords {
       );
     }
     return new Button(this.content.name, shortText, this.callback);
+  }
+
+  getCallbackIfContentIs(modelType: ModelType): ContentCallback | undefined {
+    if (
+      this.callback instanceof ContentCallback &&
+      this.callback.model === modelType
+    ) {
+      return this.callback;
+    }
+    return undefined;
   }
 
   getCallbackIfChitchat(): ContentCallback | undefined {

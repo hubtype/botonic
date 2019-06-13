@@ -1,4 +1,11 @@
-import { CallbackToContentWithKeywords, CMS, Text } from '../cms';
+import {
+  Button,
+  Callback,
+  CallbackToContentWithKeywords,
+  CMS,
+  ModelType,
+  Text
+} from '../cms';
 import { MatchType } from '../nlp/keywords';
 import { SearchByKeywords } from './search_by_keywords';
 
@@ -36,8 +43,20 @@ export class Keywords {
     if (chitchatCallback) {
       return this.cms.chitchat(chitchatCallback.id);
     }
-    let buttons = contents.map(callback => callback.toButton());
-    buttons = buttons.slice(0, this.maxButtons);
+    contents = contents.slice(0, this.maxButtons);
+    let buttonPromises = contents.map(async contentCallback => {
+      let urlCallback = contentCallback.getCallbackIfContentIs(ModelType.URL);
+      if (urlCallback) {
+        let url = await this.cms.url(urlCallback.id);
+        return new Button(
+          contentCallback.content.name,
+          contentCallback.content.shortText!,
+          Callback.ofUrl(url.url)
+        );
+      }
+      return contentCallback.toButton();
+    });
+    let buttons = await Promise.all(buttonPromises);
     let text = await this.cms.text(confirmKeywordsFoundTextId);
     return text.cloneWithButtons(buttons);
   }
