@@ -3,6 +3,12 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   },
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/tsconfig.json'
+    }
+  },
+  preset: 'ts-jest',
   // regex works fine with "find tests | egrep ..." but incorrectly gets files with names without 'test' or 'spec
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
   testPathIgnorePatterns: ['lib', '.*\.d\.ts', 'tests/helpers'],
