@@ -36,7 +36,7 @@ export class ErrorReportingTrackStorage implements TrackStorage {
   write(track: Track): Promise<undefined> {
     return this.storage
       .write(track)
-      .catch(this.handleError('reading', track.botId, track.time));
+      .catch(this.handleError('writing', track.botId, track.time));
   }
 
   handleError(doing: string, bot: string, time: Date): (reason: any) => never {

@@ -22,6 +22,8 @@ test('TEST: dynamo write', async () => {
     expect(track3.botId).toEqual(track1.botId);
     expect(track3.time).toEqual(track1.time);
     expect(track3.events).toEqual(track1.events.concat(track2.events));
+  } catch (error) {
+    console.error('error', error);
   } finally {
     await sut.remove(track1.botId, track1.time);
   }
