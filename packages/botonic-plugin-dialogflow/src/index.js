@@ -3,10 +3,16 @@ import axios from 'axios'
 export default class BotonicPluginDialogflow {
   constructor(options) {
     this.options = options
+    this.defaultVersion = '20150910'
   }
 
-  async query(data, lang, sessionId) {
-    // Data, lang and sessionId are required parameters
+  async query(data, lang, sessionId, version = this.defaultVersion) {
+    // Data, lang, sessionId and version are required parameters
+    // See https://dialogflow.com/docs/reference/agent/query for more information
+
+    if (this.options.version) {
+      version = this.options.version
+    }
     return await axios({
       headers: {
         Authorization: 'Bearer ' + this.options.token
@@ -16,7 +22,7 @@ export default class BotonicPluginDialogflow {
         query: data,
         lang: lang,
         sessionId: sessionId,
-        v: this.options.version
+        v: version
       }
     })
   }
