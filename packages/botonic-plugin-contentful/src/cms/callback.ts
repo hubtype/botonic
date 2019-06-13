@@ -55,6 +55,7 @@ export class ContentCallback extends Callback {
     switch (modelType as ModelType) {
       case ModelType.CAROUSEL:
       case ModelType.TEXT:
+      case ModelType.CHITCHAT:
       case ModelType.URL:
         return modelType as ModelType;
       default:
