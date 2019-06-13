@@ -5,7 +5,7 @@ import { ErrorReportingTrackStorage, Track } from '../../src/domain/track';
 test('TEST: ErrorReportingCMS write rejected', async () => {
   let mockStorage = mock(DynamoTrackStorage);
   let error = new Error('mock error');
-  let track = instance(mock(Track));
+  let track = new Track('botid', new Date(), []);
   when(mockStorage.write(track)).thenReject(error);
   let sut = new ErrorReportingTrackStorage(instance(mockStorage));
 
