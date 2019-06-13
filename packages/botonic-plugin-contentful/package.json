@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "build_with_tests": "rm -rf tests/lib && tsc -b tests/tsconfig.json",
+    "build_with_tests": "rm -rf tests/lib && tsc -b tsconfig.json",
     "test": "jest",
     "lint": "node_modules/.bin/eslint --fix --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
     "prepare": "npm run build",
