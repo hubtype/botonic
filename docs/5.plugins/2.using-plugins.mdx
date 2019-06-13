@@ -84,6 +84,8 @@ export const plugins = [
 ]
 ``` 
 
+You can optionally define the [protocol version](https://dialogflow.com/docs/reference/agent/#protocol_version) of the dialogflow API to be used by adding a new option `version: 20150910`. If no version is specified the default is `20150910`.
+
 ### [botonic-plugin-luis](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-luis)
 Botonic plugin that use [LUIS](https://www.luis.ai/) as NLU service. The variables `intent`, `confidence`, `entities` and `intents` will be automatically
 available inside the `input` object.
