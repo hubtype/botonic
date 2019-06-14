@@ -4,7 +4,7 @@ import {
   chitchatContent,
   contentWithKeyword,
   keywordsWithMockCms
-} from './suggestTextsForInput.test';
+} from './search-contents-from-input.test';
 
 test.each<any>([
   //@bug it recognizes only 1 chitchat because both keywords belong to same content

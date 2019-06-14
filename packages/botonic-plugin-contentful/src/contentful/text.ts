@@ -2,8 +2,8 @@ import * as contentful from 'contentful';
 import * as cms from '../cms';
 import { ButtonDelivery } from './button';
 import { CarouselFields } from './carousel';
-import { DeliveryApi, ContentWithKeywordsFields } from './deliveryApi';
-import { DeliveryWithFollowUp } from './followUp';
+import { DeliveryApi, ContentWithKeywordsFields } from './delivery-api';
+import { DeliveryWithFollowUp } from './follow-up';
 
 export class TextDelivery extends DeliveryWithFollowUp {
   constructor(

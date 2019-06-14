@@ -1,10 +1,10 @@
 import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
-import { FollowUpDelivery } from './followUp';
+import { FollowUpDelivery } from './follow-up';
 import { CallbackMap, CallbackToContentWithKeywords } from '../cms';
 import { ButtonDelivery } from './button';
-import { DeliveryApi } from './deliveryApi';
+import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
 import { TextDelivery } from './text';
 import { UrlDelivery } from './url';
@@ -73,6 +73,6 @@ export default class Contentful implements cms.CMS {
   }
 }
 
-export { DeliveryApi } from './deliveryApi';
+export { DeliveryApi } from './delivery-api';
 export { CarouselDelivery } from './carousel';
 export { ModelType } from '../cms';
