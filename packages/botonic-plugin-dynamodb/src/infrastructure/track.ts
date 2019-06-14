@@ -68,8 +68,9 @@ export class Track extends TrackKey {
   marshallEvents(): AttributeValue {
     let schema: Schema = (this as any)[DynamoDbSchema];
     if (!schema) {
+      console.error('schema', DynamoDbSchema, Object.keys(this));
       throw new Error(
-        'No Dynamo schema found. This may happen with typescript >=3.5'
+        'No Dynamo schema found. Does this happen only with typescript=3.5.1?'
       );
     }
     let marshalled = marshallItem(schema, this);
