@@ -7,7 +7,7 @@ import {
   Text
 } from '../cms';
 import { MatchType } from '../nlp/keywords';
-import { SearchByKeywords } from './search_by_keywords';
+import { SearchByKeywords } from './search-by-keywords';
 
 export class Keywords {
   readonly search: SearchByKeywords;
@@ -62,4 +62,4 @@ export class Keywords {
   }
 }
 
-export * from './search_by_keywords';
+export * from './search-by-keywords';
