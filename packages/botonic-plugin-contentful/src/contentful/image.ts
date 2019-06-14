@@ -1,5 +1,5 @@
 import * as cms from '../cms';
-import { ContentWithKeywordsFields, DeliveryApi } from './deliveryApi';
+import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
 
 export class ImageDelivery {

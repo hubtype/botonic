@@ -1,9 +1,9 @@
 import { CarouselFields } from './carousel';
-import { DeliveryWithFollowUp } from './followUp';
+import { DeliveryWithFollowUp } from './follow-up';
 import { TextFields } from './text';
 import * as cms from '../cms';
 import * as contentful from 'contentful';
-import { ContentWithKeywordsFields, DeliveryApi } from './deliveryApi';
+import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 
 export class UrlDelivery extends DeliveryWithFollowUp {
   constructor(protected readonly delivery: DeliveryApi) {
