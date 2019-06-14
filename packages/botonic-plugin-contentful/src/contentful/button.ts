@@ -2,7 +2,7 @@ import * as contentful from 'contentful';
 import {
   ContentWithKeywordsFields,
   ContentWithNameFields
-} from './deliveryApi';
+} from './delivery-api';
 import { ModelType, DeliveryApi } from '.';
 import * as cms from '../cms';
 import { UrlFields } from './url';

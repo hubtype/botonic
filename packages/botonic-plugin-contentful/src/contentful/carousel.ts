@@ -1,8 +1,8 @@
 import * as contentful from 'contentful';
-import { DeliveryWithFollowUp } from './followUp';
+import { DeliveryWithFollowUp } from './follow-up';
 import { ButtonDelivery } from './button';
 import * as cms from '../cms';
-import { DeliveryApi, ContentWithKeywordsFields } from './deliveryApi';
+import { DeliveryApi, ContentWithKeywordsFields } from './delivery-api';
 
 // TODO remove DeliveryWithFollowUp
 export class CarouselDelivery extends DeliveryWithFollowUp {

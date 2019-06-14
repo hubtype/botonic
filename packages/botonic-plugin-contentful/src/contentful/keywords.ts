@@ -1,7 +1,7 @@
 import { Entry, EntryCollection } from 'contentful';
 import * as cms from '../cms';
 import { CallbackToContentWithKeywords } from '../cms';
-import { ContentWithKeywordsFields, DeliveryApi } from './deliveryApi';
+import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}

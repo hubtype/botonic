@@ -6,7 +6,8 @@ module.exports = {
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
   plugins: [
-    "no-null"
+    "no-null",
+    "filenames"
   ],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
@@ -19,13 +20,20 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
+    "filenames/match-regex": [2, "^[a-z-.]+$", true],
+
+
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
     "dot-notation": "off",
+
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
     "unicorn/no-abusive-eslint-disable" : "off",
+    // allow public functions/classes to call private functions/classes declared below.
+    // otoh, variables (typically constants) should be declared at the top
+    "@typescript-eslint/no-use-before-define": ["error", { "variables": true, "functions": false, "classes": false }],
 
     // special for TYPESCRIPT
     "no-null/no-null": "warn", // fields declared with ? are undefined, not null (be aware that React uses null)
@@ -37,7 +45,9 @@ module.exports = {
     "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
     "unicorn/prevent-abbreviations" : "off", // the plugin removes removes type annotations from typescript code :-(
     "unicorn/filename-case" : "off", // React convention is in CamelCase
-    "@typescript-eslint/no-non-null-assertion" : "warn" // specially useful in tests, and "when you know what you're doing"
+    "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
+    "@typescript-eslint/no-object-literal-type-assertion" : {allowAsParameter: false}, //useful to pass options to plugins
+    "@typescript-eslint/no-namespace": { allowDeclarations: true }, // to encapsulate types in namespace with same name as Class
   },
   env: {
     jest: true

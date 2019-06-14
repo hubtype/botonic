@@ -4,7 +4,7 @@ import { Entry } from 'contentful';
 import { TextFields, TextDelivery } from './text';
 import { CarouselDelivery, CarouselFields } from './carousel';
 import { ImageDelivery, ImageFields } from './image';
-import { DeliveryApi } from './deliveryApi';
+import { DeliveryApi } from './delivery-api';
 
 export class DeliveryWithFollowUp {
   followUp: FollowUpDelivery | undefined;
