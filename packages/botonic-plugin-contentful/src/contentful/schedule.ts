@@ -1,6 +1,6 @@
 import { Entry } from 'contentful';
 import * as time from '../time';
-import { ContentWithNameFields, DeliveryApi } from './deliveryApi';
+import { ContentWithNameFields, DeliveryApi } from './delivery-api';
 
 export class ScheduleDelivery {
   constructor(protected delivery: DeliveryApi) {}

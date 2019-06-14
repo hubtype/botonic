@@ -7,7 +7,8 @@ module.exports = {
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
   plugins: [
-    "no-null"
+    "no-null",
+    "filenames"
   ],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
@@ -20,6 +21,8 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
+    "filenames/match-regex": [2, "^[a-z-.]+$", true],
+
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
