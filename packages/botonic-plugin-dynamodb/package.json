@@ -11,20 +11,19 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.9.0-beta.1",
+  "version": "0.9.0-beta.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
-    "aws-sdk": "^2.445.0",
-    "typescript": "^3.4.1"
+    "aws-sdk": "^2.445.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.8",
-    "@typescript-eslint/eslint-plugin": "^1.6.0",
-    "@typescript-eslint/parser": "^1.6.0",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-filenames": "^1.3.2",
@@ -33,7 +32,8 @@
     "jest": "^24.7.1",
     "prettier": "^1.16.4",
     "ts-jest": "^24.0.2",
-    "ts-mockito": "^2.3.1"
+    "ts-mockito": "^2.3.1",
+    "typescript": "^3.5.2"
   },
   "engines": {
     "node": ">=8.10.0"
