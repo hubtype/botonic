@@ -1,8 +1,8 @@
 {
   "name": "@botonic/core",
-  "version": "0.9.0-beta.1",
+  "version": "0.9.0-beta.2",
   "description": "Build Chatbots using React",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files"
