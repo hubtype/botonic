@@ -71,18 +71,32 @@ export interface Input {
   data?: string;
 }
 
-export interface SimplifiedSession {
+export interface Session {
+  is_first_interaction?: boolean,
+  last_session?: any,
   user: {
     id: string
+    // login
+    username?: string,
+    // person name
+    name?: string,
+    // whatsapp, telegram,...
+    provider?: string,
+    // The provider's user id
+    provider_id?: string,
+    extra_data?: any
   },
   bot: {
-    id: string
+    id: string,
+    name?: string
   }
+  __locale?: string,
+  __retries?: number
 }
 // Parameters of the actions' botonicInit method
 export interface ActionInitInput {
   input : Input;
-  session: SimplifiedSession;
+  session: Session;
   params: any;
   lastRoutePath: any;
   plugins: any;
@@ -91,9 +105,9 @@ export interface ActionInitInput {
 export class BotonicInputTester {
   constructor(app: App);
 
-  text(inp: string, session?: any, lastRoutePath?: string): Promise<string>;
+  text(inp: string, session?: Session, lastRoutePath?: string): Promise<string>;
 
-  payload(inp: string, session?: any, lastRoutePath?: string): Promise<string>;
+  payload(inp: string, session?: Session, lastRoutePath?: string): Promise<string>;
 }
 
 export class BotonicOutputTester {
@@ -104,10 +118,6 @@ export class BotonicOutputTester {
 
 export const RequestContext: React.Context<any>;
 
-export interface Session {
-  __locale: string;
-  __retries?: number;
-}
 
 // plugins
 
