@@ -1,10 +1,15 @@
 {
   "extends": "../tsconfig",
+  // include need to be specified for running tsc on tests
   "include": [
     "**/*.ts",
     "**/*.tsx"
   ],
   "compilerOptions": {
-    "rootDir": "../"
+    "rootDir": "../",
+    // Options below are for compiling @botonic js/jsx files
+    "allowJs": true,
+    "declaration": false,
+    "declarationDir": null
   }
 }
