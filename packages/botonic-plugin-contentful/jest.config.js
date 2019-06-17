@@ -1,17 +1,20 @@
+// Options about JS are for compiling @botonic .js/jsx files
 module.exports = {
   roots: ['tests/'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.jsx?$': 'ts-jest'
   },
   globals: {
     'ts-jest': {
-      tsConfig: '<rootDir>/tsconfig.json'
+      tsConfig: '<rootDir>/tests/tsconfig.json'
     }
   },
   preset: 'ts-jest',
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
   testPathIgnorePatterns: ['lib', '.*.d.ts', 'tests/helpers', '.*.helper.ts'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
+  transformIgnorePatterns: ['node_modules/(?!@botonic).+\\.(js|jsx)$'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   snapshotSerializers: [],
   setupFilesAfterEnv: ['jest-extended', '<rootDir>/jest.setup.js'],
