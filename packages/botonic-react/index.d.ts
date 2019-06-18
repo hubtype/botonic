@@ -13,24 +13,28 @@ export interface MessageProps{
 export class Message extends React.Component<MessageProps, any> {}
 
 
-//TODO inherit from MessageProps?
 export interface TextProps{
   delay?: number;
   typing?: number;
 }
 export class Text extends React.Component<TextProps, any> {}
 
-export interface ButtonProps{
-  payload?: string;
-  url?: string;
+export interface Webview {
+  name: string;
 }
-export class Button extends React.Component<ButtonProps, any> {}
 
 export interface ButtonProps{
   payload?: string;
   url?: string;
+  path?: string;
+  webview?: Webview;
 }
-export class Reply extends React.Component<ButtonProps, any> {}
+
+export class Button extends React.Component<ButtonProps, any> {}
+
+export type ReplyProps = ButtonProps;
+
+export class Reply extends React.Component<ReplyProps, any> {}
 
 export interface PicProps{
   src: string;
@@ -71,32 +75,10 @@ export interface Input {
   data?: string;
 }
 
-export interface Session {
-  is_first_interaction?: boolean,
-  last_session?: any,
-  user: {
-    id: string
-    // login
-    username?: string,
-    // person name
-    name?: string,
-    // whatsapp, telegram,...
-    provider?: string,
-    // The provider's user id
-    provider_id?: string,
-    extra_data?: any
-  },
-  bot: {
-    id: string,
-    name?: string
-  }
-  __locale?: string,
-  __retries?: number
-}
 // Parameters of the actions' botonicInit method
 export interface ActionInitInput {
   input : Input;
-  session: Session;
+  session: core.Session;
   params: any;
   lastRoutePath: any;
   plugins: any;
@@ -105,9 +87,9 @@ export interface ActionInitInput {
 export class BotonicInputTester {
   constructor(app: App);
 
-  text(inp: string, session?: Session, lastRoutePath?: string): Promise<string>;
+  text(inp: string, session?: core.Session, lastRoutePath?: string): Promise<string>;
 
-  payload(inp: string, session?: Session, lastRoutePath?: string): Promise<string>;
+  payload(inp: string, session?: core.Session, lastRoutePath?: string): Promise<string>;
 }
 
 export class BotonicOutputTester {
@@ -124,14 +106,14 @@ export const RequestContext: React.Context<any>;
 // Arguments of the plugin pre() method
 export interface PluginPreInput {
   input: Input;
-  session: Session;
+  session: core.Session;
   lastRoutePath: string;
 }
 
 // Arguments of the plugin post() method
 export interface PluginPostInput {
   input: Input;
-  session: Session;
+  session: core.Session;
   lastRoutePath: string;
   response: string;
 }
