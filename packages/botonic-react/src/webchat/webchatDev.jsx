@@ -1,13 +1,13 @@
-import React from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { useWebchat, useComponentVisible } from './hooks'
 import { Webchat } from './webchat'
 import { SessionView } from './sessionView'
 
-export const WebchatDev = props => {
+export const WebchatDev = forwardRef((props, ref) => {
   const webchatHooks = useWebchat()
-  const { webchatState } = webchatHooks
+  const { webchatState, updateTheme } = webchatHooks
   const {
-    ref,
+    ref: isVisibleRef,
     isComponentVisible,
     setIsComponentVisible
   } = useComponentVisible(false)
@@ -21,6 +21,19 @@ export const WebchatDev = props => {
       ...webchatState.devSettings,
       keepSessionOnReload: !webchatState.devSettings.keepSessionOnReload
     })
+
+  useEffect(() => updateTheme({
+    ...webchatState.theme,
+    ...props.theme,
+    style: {
+      position: 'absolute',
+      right: 0,
+      bottom: 0
+    },
+    triggerButtonStyle: {
+      position: 'absolute'
+    }
+  }), [props.theme, webchatState.theme])
 
   return (
     <div
@@ -41,14 +54,36 @@ export const WebchatDev = props => {
         <Webchat
           style={{ flex: 1, position: 'relative' }}
           {...props}
+          ref={ref}
           webchatHooks={webchatHooks}
+          initialSession={{
+            is_first_interaction: true,
+            last_session: {},
+            user: {
+              id: '000001',
+              username: 'johndoe',
+              name: 'John Doe',
+              provider: 'terminal',
+              provider_id: '0000000',
+              extra_data: {}
+            },
+            organization: '',
+            bot: {
+              id: '0000000',
+              name: 'botName'
+            }
+          }}
+          initialDevSettings={{
+            keepSessionOnReload: true,
+            showSessionView: false
+          }}
         />
         {webchatState.isWebchatOpen && (
           <div
             style={{
               position: 'absolute',
-              right: 48,
-              top: '-19px',
+              right: 28,
+              top: -1,
               padding: 5,
               cursor: 'pointer'
             }}
@@ -57,7 +92,7 @@ export const WebchatDev = props => {
             ☰
           </div>
         )}
-        <div ref={ref}>
+        <div ref={isVisibleRef}>
           {isComponentVisible && (
             <div
               style={{
@@ -109,4 +144,4 @@ export const WebchatDev = props => {
       )}
     </div>
   )
-}
+})
