@@ -9,23 +9,8 @@ export const webchatInitialState = {
   typing: false,
   webview: null,
   webviewParams: null,
-  session: {
-    is_first_interaction: true,
-    last_session: {},
-    user: {
-      id: '000001',
-      username: 'johndoe',
-      name: 'John Doe',
-      provider: 'terminal',
-      provider_id: '0000000',
-      extra_data: {}
-    },
-    organization: '',
-    bot: {
-      id: '0000000',
-      name: 'botName'
-    }
-  },
+  session: {},
+  user: null,
   lastRoutePath: null,
   handoff: false,
   theme: {
@@ -33,10 +18,7 @@ export const webchatInitialState = {
     textPlaceholder: 'Ask me something...',
     title: 'Botonic'
   },
-  devSettings: {
-    keepSessionOnReload: true,
-    showSessionView: false
-  },
+  devSettings: {},
   isWebchatOpen: false
 }
 
@@ -74,6 +56,8 @@ export function webchatReducer(state, action) {
       return { ...state, ...action.payload }
     case 'updateSession':
       return { ...state, session: { ...action.payload } }
+    case 'updateUser':
+      return { ...state, user: { ...action.payload } }
     case 'updateLastRoutePath':
       return { ...state, lastRoutePath: action.payload }
     case 'updateHandoff':
@@ -82,12 +66,8 @@ export function webchatReducer(state, action) {
       return { ...state, theme: { ...action.payload } }
     case 'updateDevSettings':
       return { ...state, devSettings: { ...action.payload } }
-    case 'triggerWebchat':
-      return {
-        ...state,
-        isWebchatOpen: action.payload.isopen,
-        theme: { ...state.theme, initialMessage: null }
-      }
+    case 'toggleWebchat':
+      return { ...state, isWebchatOpen: action.payload }
     default:
       throw new Error()
   }
@@ -119,6 +99,11 @@ export function useWebchat() {
       type: 'updateSession',
       payload: session
     })
+  const updateUser = user =>
+    webchatDispatch({
+      type: 'updateUser',
+      payload: user
+    })
   const updateLastRoutePath = path =>
     webchatDispatch({
       type: 'updateLastRoutePath',
@@ -139,10 +124,10 @@ export function useWebchat() {
       type: 'updateDevSettings',
       payload: settings
     })
-  const triggerWebchat = triggerOption =>
+  const toggleWebchat = toggle =>
     webchatDispatch({
-      type: 'triggerWebchat',
-      payload: triggerOption
+      type: 'toggleWebchat',
+      payload: toggle
     })
 
   return {
@@ -155,11 +140,12 @@ export function useWebchat() {
     updateTyping,
     updateWebview,
     updateSession,
+    updateUser,
     updateLastRoutePath,
     updateHandoff,
     updateTheme,
     updateDevSettings,
-    triggerWebchat
+    toggleWebchat
   }
 }
 
