@@ -3,7 +3,7 @@ import { WebchatContext } from '../contexts'
 import Logo from './botonic_react_logo100x100.png'
 
 export const WebchatHeader = props => {
-  const { webchatState, staticAssetsUrl, triggerWebchat } = useContext(
+  const { webchatState, staticAssetsUrl, toggleWebchat } = useContext(
     WebchatContext
   )
 
@@ -47,7 +47,7 @@ export const WebchatHeader = props => {
           top: '9px'
         }}
         onClick={event => {
-          triggerWebchat(!webchatState.isWebchatOpen)
+          toggleWebchat(false)
           event.preventDefault()
         }}
       >

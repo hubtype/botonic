@@ -16,7 +16,6 @@ export const Message = props => {
     children,
     json,
     style,
-    invisible,
     ...otherProps
   } = props
 
@@ -54,8 +53,7 @@ export const Message = props => {
           url: r.props.url,
           text: r.props.children
         })),
-        display: delay + typing == 0,
-        invisible
+        display: delay + typing == 0
       }
       addMessage(message)
     }, [])
@@ -81,7 +79,7 @@ export const Message = props => {
 
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
-    if (!m || !m.display || m.invisible) return <></>
+    if (!m || !m.display) return <></>
     let pointerSize = 6
     let pointerStyles = {
       position: 'absolute',
@@ -143,7 +141,8 @@ export const Message = props => {
     )
   }
 
-  const renderNode = () => <message {...props}>{children}</message>
+  let { blob: _blob, json: _json, ...nodeProps } = props
+  const renderNode = () => <message {...nodeProps}>{children}</message>
 
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()

@@ -1,7 +1,9 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
 import Textarea from 'react-textarea-autosize'
-import Pusher from 'pusher-js'
-import axios from 'axios'
+import { useLocalStorage } from '@rehooks/local-storage'
+import uuid from 'uuid/v4'
+import UAParser from 'ua-parser-js'
+
 import { params2queryString } from '@botonic/core'
 
 import { WebchatContext, RequestContext } from '../contexts'
@@ -16,7 +18,6 @@ import { WebviewContainer } from './webview'
 import { isDev, msgToBotonic } from '../utils'
 import Logo from './botonic_react_logo100x100.png'
 
-const uuidv1 = require('uuid/v1')
 
 const getScriptBaseURL = () => {
   let scriptBaseURL = document
@@ -26,16 +27,19 @@ const getScriptBaseURL = () => {
   return scriptBaseURL.replace('/' + scriptName, '/')
 }
 
-const getUserUUID = () => {
-  let userId = window.localStorage.getItem('userId')
-  if (!userId) {
-    userId = uuidv1()
-    window.localStorage.setItem('userId', userId)
+const createUser = () => {
+  let parser = new UAParser();
+  let ua = parser.getResult()
+  let name = `${ua.os.name} ${ua.browser.name}`
+  if(ua.device && ua.device.type)
+    name = `${ua.device.type} ${name}`
+  return {
+    id: uuid(),
+    name
   }
-  return userId
 }
 
-export const Webchat = props => {
+export const Webchat = forwardRef((props, ref) => {
   const {
     webchatState,
     addMessage,
@@ -45,89 +49,65 @@ export const Webchat = props => {
     updateTyping,
     updateWebview,
     updateSession,
+    updateUser,
     updateLastRoutePath,
     updateHandoff,
     updateTheme,
     updateDevSettings,
-    triggerWebchat
+    toggleWebchat
   } = props.webchatHooks || useWebchat()
 
-  const appId = props.botonicApp.appId
-  let pusher
-  const pusherUserId = getUserUUID()
+  const { initialSession, initialDevSettings } = props
 
-  useTyping({ webchatState, updateTyping, updateMessage })
+  const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
 
+  // Load initial state from localStorage
   useEffect(() => {
-    try {
-      let { messages, session, lastRoutePath, devSettings } = JSON.parse(
-        window.localStorage.getItem('botonicState')
-      )
-      if (!devSettings || devSettings.keepSessionOnReload) {
-        if (messages) {
-          messages.map(m => {
-            let newComponent = msgToBotonic(m)
-            if (newComponent) addMessageComponent(newComponent)
-          })
-        }
-        if (session) updateSession(session)
-        if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+    let { user, messages, session, lastRoutePath, devSettings } = JSON.parse(
+      botonicState || '{}'
+    )
+    if(!user) user = createUser()
+    updateUser(user)
+    if (!devSettings || devSettings.keepSessionOnReload) {
+      if (messages) {
+        messages.map(m => {
+          let newComponent = msgToBotonic(m)
+          if (newComponent) addMessageComponent(newComponent)
+        })
       }
-      if (devSettings) updateDevSettings(devSettings)
-    } catch (e) {}
-    if (appId) {
-      pusher = new Pusher('da85029877df0c827e44')
-      if (!Object.keys(pusher.channels.channels).length) {
-        pusher.subscribe(`public-${appId}-${pusherUserId}`)
-        pusher.bind('botonic_response', processNewInput)
-      }
-    }
+      if (session) updateSession(session)
+      else if(initialSession) updateSession(initialSession)
+      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+    } else updateSession(initialSession)
+    if (devSettings) updateDevSettings(devSettings)
+    else if(initialDevSettings) updateDevSettings(initialDevSettings)
+    if(props.onInit) props.onInit()
   }, [])
 
   useEffect(() => {
-    let reset =
-      webchatState.devSettings || webchatState.devSettings.keepSessionOnReload
-    window.localStorage.setItem(
-      'botonicState',
-      JSON.stringify({
-        messages: webchatState.messagesJSON,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-        devSettings: webchatState.devSettings
-      })
-    )
+    saveState(JSON.stringify({
+      user: webchatState.user,
+      messages: webchatState.messagesJSON,
+      session: webchatState.session,
+      lastRoutePath: webchatState.lastRoutePath,
+      devSettings: webchatState.devSettings
+    }))
   }, [
+    webchatState.user,
     webchatState.messagesJSON,
     webchatState.session,
     webchatState.lastRoutePath,
     webchatState.devSettings
   ])
 
+  useTyping({ webchatState, updateTyping, updateMessage })
+
   useEffect(() => {
     updateTheme({ ...webchatState.theme, ...props.theme })
-    if (props.theme.openCall && props.theme.initialMessage)
-      openWebchat(props.theme.initialMessage)
   }, [props.theme])
 
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
-
-  const processNewInput = data => {
-    let newComponent = msgToBotonic(data.message)
-    if (newComponent) addMessageComponent(newComponent)
-  }
-
-  const postCloudInput = async input => {
-    console.log(process.env.HUBTYPE_API_URL)
-    let api_url = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
-    return axios.post(
-      `${api_url}/v1/provider_accounts/webhooks/webchat/${appId}/`,
-      {
-        sender: pusherUserId,
-        message: input
-      }
-    )
-  }
 
   const closeWebview = options => {
     updateWebview()
@@ -141,21 +121,9 @@ export const Webchat = props => {
     }
   }
 
-  /*startPayload indicates if this function is called from 
-  the user opening the webchat or not (from html or trigger the webchat button)
-  */
-  const sendInput = async (input, startPayload = false) => {
+  const sendInput = async input => {
     let inputMessage = null
-    if (startPayload && input.type === 'postback') {
-      inputMessage = (
-        <Text invisible={startPayload} payload={input.payload}>
-          Invisible
-        </Text>
-      )
-    } else if (input.type === 'text' && startPayload) {
-      inputMessage = <Text from='bot'>{input.data}</Text>
-      return addMessageComponent(inputMessage)
-    } else {
+    if (input.type === 'text') {
       inputMessage = (
         <Text from='user' payload={input.payload}>
           {input.data}
@@ -166,21 +134,40 @@ export const Webchat = props => {
       addMessageComponent(inputMessage)
       updateReplies(false)
     }
-    if (appId) return postCloudInput(input)
-    let output = await props.botonicApp.input({
+    props.onUserInput && props.onUserInput({
+      user: webchatState.user,
       input,
       session: webchatState.session,
       lastRoutePath: webchatState.lastRoutePath
     })
-
-    addMessageComponent(output.response)
-    updateSession(output.session)
-    updateLastRoutePath(output.lastRoutePath)
-    let action = output.session._botonic_action || ''
-    let handoff = action.startsWith('create_case')
-    if (handoff && isDev()) addMessageComponent(<Handoff />)
-    updateHandoff(handoff)
   }
+
+  /* This is the public API this component exposes to its parents
+  https://stackoverflow.com/questions/37949981/call-child-method-from-parent
+  */
+  useImperativeHandle(ref, () => ({
+    addBotResponse: ({response, session, lastRoutePath}) => {
+      updateTyping(false)
+      if(Array.isArray(response))
+        response.map(r => addMessageComponent(r))
+      else if(response)
+        addMessageComponent(response)
+      if(session) {
+        updateSession(session)
+        let action = session._botonic_action || ''
+        let handoff = action.startsWith('create_case')
+        if (handoff && isDev()) addMessageComponent(<Handoff />)
+        updateHandoff(handoff)
+      }
+      if(lastRoutePath)
+        updateLastRoutePath(lastRoutePath)
+    },
+    setTyping: typing => updateTyping(typing),
+    addUserMessage: message => sendInput(message),
+    openWebchat: () => toggleWebchat(true),
+    closeWebchat: () => toggleWebchat(false),
+    toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen)
+  }));
 
   const resolveCase = () => {
     updateHandoff(false)
@@ -221,27 +208,49 @@ export const Webchat = props => {
   }
 
   let webviewRequestContext = {
-    getString: stringId =>
-      props.botonicApp.getString(stringId, webchatState.session),
-    setLocale: locale =>
-      props.botonicApp.setLocale(locale, webchatState.session),
+    getString: stringId => props.getString(stringId, webchatState.session),
+    setLocale: locale => props.getString(locale, webchatState.session),
     session: webchatState.session || {},
     params: webchatState.webviewParams || {},
     closeWebview: closeWebview
   }
 
-  const openWebchat = async data => {
-    let input = webchatState.theme.initialMessage
-    if (data) input = data
-    triggerWebchat({
-      isopen: !webchatState.isWebchatOpen
-    })
-    if (!input) return
-    await sendInput(input, true)
-  }
+  useEffect(() => {
+    if(webchatState.isWebchatOpen && props.onOpen)
+      props.onOpen()
+    if(!webchatState.isWebchatOpen && props.onClose)
+      props.onClose()
+  }, [webchatState.isWebchatOpen])
 
   const textArea = useRef()
   const staticAssetsUrl = getScriptBaseURL()
+
+  const CustomTriggerButton = webchatState.theme.customTriggerButton
+  const triggerButton = CustomTriggerButton ? <CustomTriggerButton/> : (
+    <div
+      style={{
+        cursor: 'pointer',
+        position: 'fixed',
+        background: 'white',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 65,
+        height: 65,
+        bottom: 20,
+        right: 10,
+        ...webchatState.theme.triggerButtonStyle
+      }}
+    >
+      <img
+        style={{
+          height: 50
+        }}
+        src={staticAssetsUrl + (webchatState.theme.brandIconUrl || Logo)}
+      />
+    </div>
+  )
 
   return (
     <WebchatContext.Provider
@@ -252,7 +261,7 @@ export const Webchat = props => {
         resolveCase,
         webchatState,
         addMessage,
-        triggerWebchat,
+        toggleWebchat,
         updateMessage,
         updateReplies,
         staticAssetsUrl
@@ -261,34 +270,17 @@ export const Webchat = props => {
       {!webchatState.isWebchatOpen && (
         <div
           onClick={event => {
-            openWebchat()
+            toggleWebchat(true)
             event.preventDefault()
           }}
-          style={{
-            cursor: 'pointer',
-            position: 'absolute',
-            background: 'white',
-            borderRadius: '50%',
-            height: 65,
-            bottom: 20,
-            right: 10,
-            ...webchatState.theme.triggerButtonProps
-          }}
         >
-          <img
-            style={{
-              height: 50,
-              paddingTop: 8,
-              margin: '0px 12px'
-            }}
-            src={staticAssetsUrl + (webchatState.theme.brandIconUrl || Logo)}
-          />
+          {triggerButton}
         </div>
       )}
       {webchatState.isWebchatOpen && (
         <div
           style={{
-            position: 'absolute',
+            position: 'fixed',
             right: 20,
             bottom: 20,
             width: webchatState.width,
@@ -298,7 +290,8 @@ export const Webchat = props => {
             borderRadius: '10px',
             boxShadow: '0 0 12px rgba(0,0,0,.15)',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            ...webchatState.theme.style
           }}
         >
           <WebchatHeader
@@ -361,4 +354,4 @@ export const Webchat = props => {
       )}
     </WebchatContext.Provider>
   )
-}
+})
