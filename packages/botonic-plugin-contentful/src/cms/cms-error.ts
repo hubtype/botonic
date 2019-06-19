@@ -1,6 +1,7 @@
 import { CallbackMap } from './callback';
 import { CMS, ModelType } from './cms';
 import {
+  Asset,
   Carousel,
   CallbackToContentWithKeywords,
   Text,
@@ -62,5 +63,9 @@ export class ErrorReportingCMS implements CMS {
     return this.cms
       .schedule(id)
       .catch(this.handleError(ModelType.SCHEDULE, id));
+  }
+
+  asset(id: string): Promise<Asset> {
+    return this.cms.asset(id).catch(this.handleError(ModelType.ASSET, id));
   }
 }
