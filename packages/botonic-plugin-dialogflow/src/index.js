@@ -6,23 +6,19 @@ export default class BotonicPluginDialogflow {
     this.defaultVersion = '20150910'
   }
 
-  async query(data, lang, sessionId, version = this.defaultVersion) {
+  async query(data, lang, sessionId) {
     // Data, lang, sessionId and version are required parameters
     // See https://dialogflow.com/docs/reference/agent/query for more information
-
-    if (this.options.version) {
-      version = this.options.version
-    }
     return await axios({
       headers: {
-        Authorization: 'Bearer ' + this.options.token
+        Authorization: `Bearer ${this.options.token}`
       },
-      url: 'https://api.dialogflow.com/v1/query',
+      url: `https://api.dialogflow.com/v1/query`,
       params: {
         query: data,
         lang: lang,
         sessionId: sessionId,
-        v: version
+        v: this.options.version || this.defaultVersion
       }
     })
   }
