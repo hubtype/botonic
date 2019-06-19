@@ -6,6 +6,20 @@ export enum ButtonStyle {
   QUICK_REPLY = 1
 }
 
+/** Not a Content because it cannot have custom fields */
+export class Asset {
+  /**
+   * @param type eg. image/jpeg
+   * @param details depends on the type. eg the image size
+   */
+  constructor(
+    readonly name: string,
+    readonly url: string,
+    readonly type?: string,
+    readonly details?: any
+  ) {}
+}
+
 export abstract class Content {
   /**
    * An ID (eg. PRE_FAQ1)

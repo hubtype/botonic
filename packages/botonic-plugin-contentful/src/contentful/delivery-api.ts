@@ -52,6 +52,10 @@ export class DeliveryApi {
     return this.getEntry(id);
   }
 
+  async getAsset(id: string, query?: any): Promise<contentful.Asset> {
+    return this.client.getAsset(id, query);
+  }
+
   async getEntry<T>(id: string, query?: any): Promise<contentful.Entry<T>> {
     return this.client.getEntry<T>(id, query);
   }
