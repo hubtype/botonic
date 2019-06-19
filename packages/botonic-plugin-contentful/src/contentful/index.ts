@@ -1,3 +1,4 @@
+import { AssetDelivery } from './asset';
 import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
@@ -18,6 +19,7 @@ export default class Contentful implements cms.CMS {
   _keywords: KeywordsDelivery;
   _schedule: ScheduleDelivery;
   _image: ImageDelivery;
+  _asset: AssetDelivery;
 
   constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
     let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
@@ -26,6 +28,7 @@ export default class Contentful implements cms.CMS {
     this._text = new TextDelivery(delivery, button);
     this._url = new UrlDelivery(delivery);
     this._image = new ImageDelivery(delivery);
+    this._asset = new AssetDelivery(delivery);
     let followUp = new FollowUpDelivery(
       this._carousel,
       this._text,
@@ -70,6 +73,10 @@ export default class Contentful implements cms.CMS {
 
   chitchat(id: string, callbacks: CallbackMap): Promise<cms.Chitchat> {
     return this._text.text(id, callbacks);
+  }
+
+  asset(id: string): Promise<cms.Asset> {
+    return this._asset.asset(id);
   }
 }
 

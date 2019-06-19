@@ -1,6 +1,7 @@
 import * as time from '../time/schedule';
 import { CallbackMap } from './callback';
 import {
+  Asset,
   Carousel,
   CallbackToContentWithKeywords,
   Image,
@@ -17,7 +18,8 @@ export enum ModelType {
   URL = 'url',
   PAYLOAD = 'payload',
   SCHEDULE = 'schedule',
-  IMAGE = 'image'
+  IMAGE = 'image',
+  ASSET = 'asset'
 }
 
 export interface CMS {
@@ -28,4 +30,5 @@ export interface CMS {
   image(id: string): Promise<Image>;
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]>;
   schedule(id: string): Promise<time.Schedule>;
+  asset(id: string): Promise<Asset>;
 }

@@ -1,6 +1,7 @@
 import { Callback, CallbackMap } from './callback';
 import { CMS } from './cms';
 import {
+  Asset,
   Button,
   Carousel,
   CallbackToContentWithKeywords,
@@ -88,5 +89,9 @@ export class DummyCMS implements CMS {
 
   chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat> {
     return this.text(id, callbacks);
+  }
+
+  asset(id: string): Promise<Asset> {
+    return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`));
   }
 }
