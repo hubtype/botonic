@@ -1,5 +1,6 @@
 import 'jest-extended';
 import { Callback } from '../../src/cms';
+import { MatchType } from '../../src/nlp';
 import {
   chitchatContent,
   contentWithKeyword,
@@ -21,7 +22,10 @@ test.each<any>([
       chitchatContent(['adios', 'hasta luego'])
     ]);
     let tokens = keywords.tokenize(inputText);
-    let contents = await keywords.searchContentsFromInput(tokens);
+    let contents = await keywords.searchContentsFromInput(
+      tokens,
+      MatchType.KEYWORDS_AND_OTHERS_FOUND
+    );
     expect(contents).toHaveLength(numChitchats);
 
     // act
@@ -41,7 +45,10 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
     contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
   ]);
   let tokens = keywords.tokenize('hola, DevoluciON fuera de  plazo?');
-  let parsedKeywords = await keywords.searchContentsFromInput(tokens);
+  let parsedKeywords = await keywords.searchContentsFromInput(
+    tokens,
+    MatchType.KEYWORDS_AND_OTHERS_FOUND
+  );
   expect(parsedKeywords).toHaveLength(2);
 
   // act
@@ -67,7 +74,10 @@ test.each<any>([
     ]);
     let tokens = keywords.tokenize(inputText);
 
-    let contents = await keywords.searchContentsFromInput(tokens);
+    let contents = await keywords.searchContentsFromInput(
+      tokens,
+      MatchType.KEYWORDS_AND_OTHERS_FOUND
+    );
     expect(contents).toHaveLength(numChitChats);
 
     // act
@@ -85,7 +95,10 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   ]);
 
   let tokens = keywords.tokenize('DevoluciON fuera de  plazo');
-  let contents = await keywords.searchContentsFromInput(tokens);
+  let contents = await keywords.searchContentsFromInput(
+    tokens,
+    MatchType.KEYWORDS_AND_OTHERS_FOUND
+  );
   expect(contents).toHaveLength(1);
 
   // act
