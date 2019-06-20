@@ -7,12 +7,12 @@ import {
   Text,
   Url
 } from '../../src/cms';
-import { Keywords } from '../../src/keywords';
+import { Search } from '../../src/search';
 
 test('TEST: respondFoundContents text with buttons', async () => {
   let cms = mock(DummyCMS);
   when(cms.url('urlCmsId')).thenResolve(new Url('url', 'http:/mocked_url'));
-  let sut = new Keywords(instance(cms));
+  let sut = new Search(instance(cms));
 
   let urlContent = new CallbackToContentWithKeywords(
     new ContentCallback(ModelType.URL, 'urlCmsId'),
@@ -54,7 +54,7 @@ test('TEST: respondFoundContents text with buttons', async () => {
 
 test('TEST: respondFoundContents text with chitchat', async () => {
   let cms = mock(DummyCMS);
-  let sut = new Keywords(instance(cms));
+  let sut = new Search(instance(cms));
 
   let chitchat = instance(mock(Text));
   when(cms.chitchat('chitchatCmsId')).thenResolve(chitchat);
@@ -81,7 +81,7 @@ test('TEST: respondFoundContents text with chitchat', async () => {
 
 test('TEST: respondFoundContents without contents', async () => {
   let cms = mock(DummyCMS);
-  let sut = new Keywords(instance(cms));
+  let sut = new Search(instance(cms));
 
   // sut
   when(cms.text('notFoundId')).thenResolve(
