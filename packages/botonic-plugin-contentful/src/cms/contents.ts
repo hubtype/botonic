@@ -1,5 +1,6 @@
 import { Callback, ContentCallback } from './callback';
 import { ModelType } from './cms';
+import { Schedule } from '../time';
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -156,6 +157,17 @@ export class Url extends Content implements ContentWithKeywords {
     readonly shortText?: string,
     readonly keywords: string[] = [],
     readonly followup?: FollowUp
+  ) {
+    super(name);
+  }
+}
+
+export class Queue extends Content implements ContentWithKeywords {
+  constructor(
+    readonly name: string,
+    readonly shortText?: string,
+    readonly keywords: string[] = [],
+    readonly schedule?: Schedule
   ) {
     super(name);
   }

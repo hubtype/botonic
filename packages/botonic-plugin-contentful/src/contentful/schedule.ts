@@ -3,14 +3,20 @@ import * as time from '../time';
 import { ContentWithNameFields, DeliveryApi } from './delivery-api';
 
 export class ScheduleDelivery {
+  static REFERENCES_INCLUDE = 2;
   constructor(protected delivery: DeliveryApi) {}
 
   async schedule(id: string): Promise<time.Schedule> {
-    let f = (await this.delivery.getEntry<ScheduleFields>(id, { include: 2 }))
-      .fields;
+    let f = await this.delivery.getEntry<ScheduleFields>(id, {
+      include: ScheduleDelivery.REFERENCES_INCLUDE
+    });
+    return ScheduleDelivery.scheduleFromEntry(f);
+  }
+
+  static scheduleFromEntry(f: Entry<ScheduleFields>): time.Schedule {
     let schedule = new time.Schedule(time.Schedule.TZ_CET);
-    ScheduleDelivery.addDaySchedules(schedule, f);
-    ScheduleDelivery.addExceptions(schedule, f.exceptions);
+    ScheduleDelivery.addDaySchedules(schedule, f.fields);
+    ScheduleDelivery.addExceptions(schedule, f.fields.exceptions);
     return schedule;
   }
 
@@ -19,16 +25,16 @@ export class ScheduleDelivery {
     fields: ScheduleFields
   ): void {
     let days = [
-      fields.sundays,
-      fields.mondays,
-      fields.tuesdays,
-      fields.wednesdays,
-      fields.thursdays,
-      fields.fridays,
-      fields.saturdays
+      fields.sundays || undefined,
+      fields.mondays || undefined,
+      fields.tuesdays || undefined,
+      fields.wednesdays || undefined,
+      fields.thursdays || undefined,
+      fields.fridays || undefined,
+      fields.saturdays || undefined
     ];
     for (let day in days) {
-      if (!days[day]) {
+      if (!day || !days[day]) {
         continue;
       }
       let daySchedule = ScheduleDelivery.createDaySchedule(

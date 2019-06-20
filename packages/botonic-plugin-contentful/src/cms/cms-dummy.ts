@@ -9,7 +9,8 @@ import {
   Element,
   Image,
   Text,
-  Url
+  Url,
+  Queue
 } from './contents';
 import * as time from '../time/schedule';
 
@@ -66,6 +67,10 @@ export class DummyCMS implements CMS {
 
   image(id: string): Promise<Image> {
     return Promise.resolve(new Image(id, DummyCMS.IMG));
+  }
+
+  queue(id: string): Promise<Queue> {
+    return Promise.resolve(new Queue(id));
   }
 
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
