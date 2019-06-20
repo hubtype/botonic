@@ -1,14 +1,7 @@
+import { SearchResult } from '../search/search-result';
 import { CallbackMap } from './callback';
 import { CMS, ModelType } from './cms';
-import {
-  Asset,
-  Carousel,
-  CallbackToContentWithKeywords,
-  Text,
-  Url,
-  Image,
-  Chitchat,
-  Queue,
+import { Asset, Carousel, Text, Url, Image, Chitchat, Queue ,
   Content
 } from './contents';
 import * as time from '../time/schedule';
@@ -46,7 +39,7 @@ export class ErrorReportingCMS implements CMS {
     return this.cms.queue(id).catch(this.handleError(ModelType.QUEUE, id));
   }
 
-  contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
+  contentsWithKeywords(): Promise<SearchResult[]> {
     return this.cms
       .contentsWithKeywords()
       .catch(this.handleError('contentsWithKeywords'));
