@@ -8,6 +8,10 @@ test('TEST: contentful schedule', async () => {
   let schedule = await sut.schedule('71twiV4wcaFwhK6tSYuIKy');
 
   // assert
+  expect(schedule).toEqual(testSchedule());
+});
+
+export function testSchedule(): Schedule {
   let expected = new Schedule('Europe/Madrid');
   for (let d = WeekDay.MONDAY; d <= WeekDay.FRIDAY; d++) {
     let timeRange = new TimeRange(
@@ -35,6 +39,5 @@ test('TEST: contentful schedule', async () => {
       )
     ])
   );
-
-  expect(schedule).toEqual(expected);
-});
+  return expected;
+}
