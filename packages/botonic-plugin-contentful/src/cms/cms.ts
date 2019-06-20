@@ -1,14 +1,7 @@
+import { SearchResult } from '../search/search-result';
 import * as time from '../time/schedule';
 import { CallbackMap } from './callback';
-import {
-  Asset,
-  Carousel,
-  CallbackToContentWithKeywords,
-  Image,
-  Text,
-  Url,
-  Chitchat,
-  Queue,
+import { Asset, Carousel, Image, Text, Url, Chitchat, Queue ,
   Content
 } from './contents';
 
@@ -31,7 +24,7 @@ export interface CMS {
   chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat>;
   url(id: string): Promise<Url>;
   image(id: string): Promise<Image>;
-  contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]>;
+  contentsWithKeywords(): Promise<SearchResult[]>;
   schedule(id: string): Promise<time.Schedule>;
   asset(id: string): Promise<Asset>;
   queue(id: string): Promise<Queue>;

@@ -1,6 +1,5 @@
-import { Callback, ContentCallback } from './callback';
-import { ModelType } from './cms';
 import { Schedule } from '../time';
+import { Callback } from './callback';
 import { SearchableBy } from './fields';
 
 export enum ButtonStyle {
@@ -47,54 +46,6 @@ export class Button extends Content {
     readonly callback: Callback
   ) {
     super(name);
-  }
-}
-
-export class CallbackToContentWithKeywords {
-  static CHITCHAT_SHORT_TEXT = 'chitchat';
-  constructor(
-    /**
-     * It may be a {@link Callback}'s with an URL instead of payload
-     */
-    readonly callback: Callback,
-    /** It does not contain all the content fields. Do not downcast */
-    readonly content: ContentWithKeywords
-  ) {}
-
-  toButton(): Button {
-    let shortText = this.content.shortText;
-    if (!shortText) {
-      shortText = this.content.name;
-      console.error(
-        `${JSON.stringify(this.callback)} ${
-          this.content.name
-        } without shortText. Assigning name to button text`
-      );
-    }
-    return new Button(this.content.name, shortText, this.callback);
-  }
-
-  getCallbackIfContentIs(modelType: ModelType): ContentCallback | undefined {
-    if (
-      this.callback instanceof ContentCallback &&
-      this.callback.model === modelType
-    ) {
-      return this.callback;
-    }
-    return undefined;
-  }
-
-  getCallbackIfChitchat(): ContentCallback | undefined {
-    if (!(this.callback instanceof ContentCallback)) {
-      return undefined;
-    }
-    if (
-      this.content.shortText !==
-      CallbackToContentWithKeywords.CHITCHAT_SHORT_TEXT
-    ) {
-      return undefined;
-    }
-    return this.callback;
   }
 }
 

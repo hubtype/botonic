@@ -1,11 +1,4 @@
-import {
-  Button,
-  Callback,
-  CallbackToContentWithKeywords,
-  CMS,
-  ModelType,
-  Text
-} from '../cms';
+import { Button, Callback, SearchResult, CMS, ModelType, Text } from '../cms';
 import { MatchType } from '../nlp/keywords';
 import { SearchByKeywords } from './search-by-keywords';
 
@@ -18,39 +11,38 @@ export class Search {
   async searchByKeywords(
     inputText: string,
     matchType: MatchType
-  ): Promise<CallbackToContentWithKeywords[]> {
+  ): Promise<SearchResult[]> {
     let tokens = this.search.tokenize(inputText);
     let contents = await this.search.searchContentsFromInput(tokens, matchType);
     return this.search.filterChitchat(tokens, contents);
   }
 
   async respondFoundContents(
-    contents: CallbackToContentWithKeywords[],
+    results: SearchResult[],
     confirmKeywordsFoundTextId: string,
     noKeywordsFoundTextId: string
   ): Promise<Text> {
-    if (contents.length == 0) {
+    if (results.length == 0) {
       return this.cms.text(noKeywordsFoundTextId);
     }
-    let chitchatCallback = contents[0].getCallbackIfChitchat();
+    let chitchatCallback = results[0].getCallbackIfChitchat();
     if (chitchatCallback) {
       return this.cms.chitchat(chitchatCallback.id);
     }
-    let buttonPromises = contents.map(async contentCallback => {
-      let urlCallback = contentCallback.getCallbackIfContentIs(ModelType.URL);
+    let buttonPromises = results.map(async result => {
+      let urlCallback = result.getCallbackIfContentIs(ModelType.URL);
       if (urlCallback) {
         let url = await this.cms.url(urlCallback.id);
         return new Button(
-          contentCallback.content.name,
-          contentCallback.content.shortText!,
+          result.name,
+          result.shortText!,
           Callback.ofUrl(url.url)
         );
       }
-      return contentCallback.toButton();
+      return result.toButton();
     });
     let buttons = await Promise.all(buttonPromises);
     let text = await this.cms.text(confirmKeywordsFoundTextId);
     return text.cloneWithButtons(buttons);
   }
 }
-
