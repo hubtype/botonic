@@ -11,23 +11,16 @@ import { SearchByKeywords } from './search-by-keywords';
 
 export class Keywords {
   readonly search: SearchByKeywords;
-  /**
-   * @param maxButtons Some providers only support 3 buttons
-   */
-  constructor(
-    private readonly cms: CMS,
-    search?: SearchByKeywords,
-    readonly maxButtons: number = 3
-  ) {
-    this.search =
-      search || new SearchByKeywords(cms, MatchType.ONLY_KEYWORDS_FOUND);
+  constructor(private readonly cms: CMS) {
+    this.search = new SearchByKeywords(cms);
   }
 
   async searchByKeywords(
-    inputText: string
+    inputText: string,
+    matchType: MatchType
   ): Promise<CallbackToContentWithKeywords[]> {
     let tokens = this.search.tokenize(inputText);
-    let contents = await this.search.searchContentsFromInput(tokens);
+    let contents = await this.search.searchContentsFromInput(tokens, matchType);
     return this.search.filterChitchat(tokens, contents);
   }
 
@@ -43,7 +36,6 @@ export class Keywords {
     if (chitchatCallback) {
       return this.cms.chitchat(chitchatCallback.id);
     }
-    contents = contents.slice(0, this.maxButtons);
     let buttonPromises = contents.map(async contentCallback => {
       let urlCallback = contentCallback.getCallbackIfContentIs(ModelType.URL);
       if (urlCallback) {

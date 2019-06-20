@@ -5,21 +5,22 @@ import { Renderer } from './render';
 
 // Exports
 export * from './cms';
-export * from './render';
 export * from './keywords';
-export * from './time';
+export * from './nlp';
+export * from './render';
 
-export interface CmsOptions {
-  cms?: cms.CMS;
+interface OptionsBase {
   renderer?: Renderer;
   keywords?: Keywords;
 }
 
-export interface ContentfulOptions {
+export interface CmsOptions extends OptionsBase {
+  cms?: cms.CMS;
+}
+
+export interface ContentfulOptions extends OptionsBase {
   spaceId: string;
   accessToken: string;
-  renderer?: Renderer;
-  keywords?: Keywords;
 }
 
 export default class BotonicPluginContentful {

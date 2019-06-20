@@ -25,7 +25,8 @@ test('TEST: suggestTextsForInput keywords found', async () => {
   // act
   let expectedContents = contents.slice(0, 4);
   let suggested = await keywords.searchContentsFromInput(
-    keywords.tokenize(' DevoluciON de  plazo? Empezar Hubtype')
+    keywords.tokenize(' DevoluciON de  plazo? Empezar Hubtype'),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND
   );
 
   // assert
@@ -39,7 +40,8 @@ test('TEST: suggestTextsForInput no keywords found', async () => {
 
   // act
   let contents = await keywords.searchContentsFromInput(
-    keywords.tokenize('willnotbefound')
+    keywords.tokenize('willnotbefound'),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND
   );
 
   // assert
@@ -71,8 +73,5 @@ export function keywordsWithMockCms(
 ): SearchByKeywords {
   let mockCms = mock(DummyCMS);
   when(mockCms.contentsWithKeywords()).thenResolve(allContents);
-  return new SearchByKeywords(
-    instance(mockCms),
-    MatchType.KEYWORDS_AND_OTHERS_FOUND
-  );
+  return new SearchByKeywords(instance(mockCms));
 }
