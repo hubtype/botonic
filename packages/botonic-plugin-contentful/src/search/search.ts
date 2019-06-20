@@ -9,7 +9,7 @@ import {
 import { MatchType } from '../nlp/keywords';
 import { SearchByKeywords } from './search-by-keywords';
 
-export class Keywords {
+export class Search {
   readonly search: SearchByKeywords;
   constructor(private readonly cms: CMS) {
     this.search = new SearchByKeywords(cms);
@@ -54,4 +54,3 @@ export class Keywords {
   }
 }
 
-export * from './search-by-keywords';
