@@ -1,7 +1,11 @@
 import * as cms from '../cms';
 import * as contentful from 'contentful';
-import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
+import { ContentWithNameFields, DeliveryApi } from './delivery-api';
 import { ScheduleFields, ScheduleDelivery } from './schedule';
+import {
+  SearchableByKeywordsDelivery,
+  SearchableByKeywordsFields
+} from './searchable-by';
 
 export class QueueDelivery {
   constructor(protected delivery: DeliveryApi) {}
@@ -17,15 +21,29 @@ export class QueueDelivery {
   static fromEntry(entry: contentful.Entry<QueueFields>): cms.Queue {
     let fields = entry.fields;
     let name = fields.name;
-    let schedule = undefined;
     console.log('sched del', fields.schedule);
 
-    if (fields.schedule)
-      schedule = ScheduleDelivery.scheduleFromEntry(fields.schedule);
-    return new cms.Queue(name, fields.shortText, fields.keywords, schedule);
+    let schedule =
+      fields.schedule && ScheduleDelivery.scheduleFromEntry(fields.schedule);
+
+    let searchableBy =
+      fields.searchableBy &&
+      fields.searchableBy.map(searchableBy =>
+        SearchableByKeywordsDelivery.fromEntry(searchableBy)
+      );
+    return new cms.Queue(
+      name,
+      fields.shortText,
+      fields.queue,
+      schedule,
+      new cms.SearchableBy(searchableBy)
+    );
   }
 }
 
-export interface QueueFields extends ContentWithKeywordsFields {
+export interface QueueFields extends ContentWithNameFields {
+  shortText: string;
+  queue: string;
   schedule?: contentful.Entry<ScheduleFields>;
+  searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
 }

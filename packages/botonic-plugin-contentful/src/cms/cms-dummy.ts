@@ -71,7 +71,7 @@ export class DummyCMS implements CMS {
   }
 
   queue(id: string): Promise<Queue> {
-    return Promise.resolve(new Queue(id));
+    return Promise.resolve(new Queue(id, id));
   }
 
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
