@@ -1,12 +1,12 @@
 import { Entry, EntryCollection } from 'contentful';
 import * as cms from '../cms';
-import { CallbackToContentWithKeywords } from '../cms';
+import { SearchResult } from '../cms';
 import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}
 
-  async contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
+  async contentsWithKeywords(): Promise<SearchResult[]> {
     let entries = await this.getEntriesWithKeywords();
     return entries.map(entry => {
       let fields = entry.fields;
@@ -16,7 +16,10 @@ export class KeywordsDelivery {
         console.error(`No shortText found ${contentModel} ${fields.name}`);
         fields.shortText = fields.name;
       }
-      return DeliveryApi.buildContentWithKeywords(entry);
+
+      let callback = DeliveryApi.callbackFromEntry(entry);
+      let f = entry.fields;
+      return new SearchResult(callback, f.name, f.shortText, f.keywords);
     });
   }
 

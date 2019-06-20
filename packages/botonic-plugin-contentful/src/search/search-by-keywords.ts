@@ -1,6 +1,7 @@
-import { tokenizeAndStem } from '../nlp';
 import * as cms from '../cms';
+import { tokenizeAndStem } from '../nlp';
 import { KeywordsParser, MatchType } from '../nlp/keywords';
+import { SearchResult } from './search-result';
 
 export class SearchByKeywords {
   constructor(readonly cms: cms.CMS) {}
@@ -12,11 +13,11 @@ export class SearchByKeywords {
   async searchContentsFromInput(
     tokens: string[],
     matchType: MatchType
-  ): Promise<cms.CallbackToContentWithKeywords[]> {
+  ): Promise<SearchResult[]> {
     let contentsWithKeywords = await this.cms.contentsWithKeywords();
-    let kws = new KeywordsParser<cms.CallbackToContentWithKeywords>(matchType);
+    let kws = new KeywordsParser<SearchResult>(matchType);
     contentsWithKeywords.forEach(content =>
-      kws.addCandidate(content, content.content.keywords!)
+      kws.addCandidate(content, content.keywords!)
     );
     return kws.findCandidatesWithKeywordsAt(tokens);
   }
@@ -28,9 +29,9 @@ export class SearchByKeywords {
    */
   public filterChitchat(
     tokens: string[],
-    callbacks: cms.CallbackToContentWithKeywords[]
-  ): cms.CallbackToContentWithKeywords[] {
-    const isChitChat = (cc: cms.CallbackToContentWithKeywords) =>
+    callbacks: SearchResult[]
+  ): SearchResult[] {
+    const isChitChat = (cc: SearchResult) =>
       cc.getCallbackIfChitchat();
 
     const chitchatContents = callbacks.filter(isChitChat);

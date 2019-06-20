@@ -23,13 +23,12 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     let elements = entry.fields.elements.map(async entry => {
       return this.elementFromEntry(entry, callbacks);
     });
-    const cwk = DeliveryApi.buildContentWithKeywords(entry);
     let e = await Promise.all(elements);
     return new cms.Carousel(
-      cwk.content.name,
+      entry.fields.name,
       e,
-      cwk.content.shortText,
-      cwk.content.keywords
+      entry.fields.shortText,
+      entry.fields.keywords
     );
   }
 

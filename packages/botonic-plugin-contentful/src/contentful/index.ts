@@ -3,7 +3,7 @@ import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './follow-up';
-import { CallbackMap, CallbackToContentWithKeywords, ModelType } from '../cms';
+import { CallbackMap, SearchResult, ModelType } from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
@@ -68,7 +68,7 @@ export default class Contentful implements cms.CMS {
     return this._queue.queue(id);
   }
 
-  async contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
+  async contentsWithKeywords(): Promise<SearchResult[]> {
     return this._keywords.contentsWithKeywords();
   }
 

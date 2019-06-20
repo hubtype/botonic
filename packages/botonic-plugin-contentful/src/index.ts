@@ -5,13 +5,14 @@ import { Renderer } from './render';
 
 // Exports
 export * from './cms';
-export * from './search';
 export * from './nlp';
 export * from './render';
+export * from './search';
+export * from './time';
 
 interface OptionsBase {
   renderer?: Renderer;
-  keywords?: Search;
+  search?: Search;
 }
 
 export interface CmsOptions extends OptionsBase {
@@ -40,7 +41,7 @@ export default class BotonicPluginContentful {
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = options.renderer || new Renderer();
-    this.search = options.keywords || new Search(this.cms);
+    this.search = options.search || new Search(this.cms);
   }
 
   // @ts-ignore

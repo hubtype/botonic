@@ -2,15 +2,14 @@ import 'jest-extended';
 import { instance, mock, when } from 'ts-mockito';
 import {
   Callback,
-  CallbackToContentWithKeywords,
+  SearchResult,
   ContentCallback,
-  ContentWithKeywords,
   DummyCMS,
   ModelType,
   SearchByKeywords
 } from '../../src';
-import { default as cms } from '../../src/cms';
 import { MatchType } from '../../src/nlp/keywords';
+import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result';
 
 test('TEST: suggestTextsForInput keywords found', async () => {
   let contents = [
@@ -49,27 +48,26 @@ test('TEST: suggestTextsForInput no keywords found', async () => {
 });
 
 export function contentWithKeyword(callback: Callback, keywords: string[]) {
-  return new CallbackToContentWithKeywords(callback, {
-    name: callback.payload,
-    shortText: 'shortText' + callback.payload,
+  return new SearchResult(
+    callback,
+    callback.payload!,
+    'shortText' + callback.payload,
     keywords
-  } as ContentWithKeywords);
+  );
 }
 
 export function chitchatContent(keywords: string[]) {
   let id = Math.random().toString();
-  return new CallbackToContentWithKeywords(
+  return new SearchResult(
     new ContentCallback(ModelType.TEXT, id),
-    {
-      name: id,
-      shortText: 'chitchat',
-      keywords
-    } as ContentWithKeywords
+    id,
+    'chitchat',
+    keywords
   );
 }
 
 export function keywordsWithMockCms(
-  allContents: cms.CallbackToContentWithKeywords[]
+  allContents: CallbackToContentWithKeywords1[]
 ): SearchByKeywords {
   let mockCms = mock(DummyCMS);
   when(mockCms.contentsWithKeywords()).thenResolve(allContents);

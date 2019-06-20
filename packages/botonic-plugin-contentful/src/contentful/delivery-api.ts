@@ -1,13 +1,7 @@
 import { Entry } from 'contentful';
 import { UrlFields } from './url';
-import {
-  Callback,
-  CallbackToContentWithKeywords,
-  Content,
-  ContentCallback,
-  ModelType
-} from '../cms';
-import { QueueDelivery } from './queue';
+import { Callback,CallbackToContentWithKeywords,
+  Content, ContentCallback, ModelType } from '../cms';import { QueueDelivery } from './queue';
 import * as cms from '../cms';
 import * as contentful from 'contentful';
 
@@ -70,13 +64,6 @@ export class DeliveryApi {
     // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
     const typ = entry.sys.contentType.sys.id;
     return typ as cms.ModelType;
-  }
-
-  static buildContentWithKeywords(
-    entry: Entry<ContentWithKeywordsFields>
-  ): CallbackToContentWithKeywords {
-    let callback = DeliveryApi.callbackFromEntry(entry);
-    return new CallbackToContentWithKeywords(callback, entry.fields);
   }
 
   static callbackFromEntry(entry: Entry<ContentWithKeywordsFields>): Callback {
