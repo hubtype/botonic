@@ -7,7 +7,8 @@ import {
   Image,
   Text,
   Url,
-  Chitchat
+  Chitchat,
+  Queue
 } from './contents';
 
 export enum ModelType {
@@ -19,7 +20,8 @@ export enum ModelType {
   PAYLOAD = 'payload',
   SCHEDULE = 'schedule',
   IMAGE = 'image',
-  ASSET = 'asset'
+  ASSET = 'asset',
+  QUEUE = 'queue'
 }
 
 export interface CMS {
@@ -31,4 +33,5 @@ export interface CMS {
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]>;
   schedule(id: string): Promise<time.Schedule>;
   asset(id: string): Promise<Asset>;
+  queue(id: string): Promise<Queue>;
 }

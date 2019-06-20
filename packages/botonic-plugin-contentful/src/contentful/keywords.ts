@@ -34,7 +34,8 @@ export class KeywordsDelivery {
     for (let contentType of [
       cms.ModelType.CAROUSEL,
       cms.ModelType.TEXT,
-      cms.ModelType.URL
+      cms.ModelType.URL,
+      cms.ModelType.QUEUE
     ]) {
       promises.push(getWithKeywords(contentType));
     }
