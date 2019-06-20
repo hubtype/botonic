@@ -14,9 +14,11 @@ export class TextDelivery extends DeliveryWithFollowUp {
   }
 
   async text(id: string, callbacks: cms.CallbackMap): Promise<cms.Text> {
+    // we only get the 1 level of included references...
     let entry: contentful.Entry<
       TextFields
     > = await this.delivery.getEntryByIdOrName(id, cms.ModelType.TEXT);
+    // .. so we need to fetch the buttons
     return this.textFromEntry(entry, callbacks);
   }
 
@@ -59,6 +61,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
 export interface TextFields extends ContentWithKeywordsFields {
   // Full text
   text: string;
+  // typed as any because we might only get the entry.sys but not the fields
   buttons: contentful.Entry<any>[];
   followup?: contentful.Entry<TextFields | CarouselFields>;
   buttonsStyle?: string;
