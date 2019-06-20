@@ -3,19 +3,18 @@ import * as cms from '../cms';
 import { KeywordsParser, MatchType } from '../nlp/keywords';
 
 export class SearchByKeywords {
-  constructor(readonly cms: cms.CMS, readonly matchType: MatchType) {}
+  constructor(readonly cms: cms.CMS) {}
 
   tokenize(inputText: string): string[] {
     return tokenizeAndStem(inputText);
   }
 
   async searchContentsFromInput(
-    tokens: string[]
+    tokens: string[],
+    matchType: MatchType
   ): Promise<cms.CallbackToContentWithKeywords[]> {
     let contentsWithKeywords = await this.cms.contentsWithKeywords();
-    let kws = new KeywordsParser<cms.CallbackToContentWithKeywords>(
-      this.matchType
-    );
+    let kws = new KeywordsParser<cms.CallbackToContentWithKeywords>(matchType);
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.content.keywords!)
     );
