@@ -1,17 +1,17 @@
 import * as cms from './cms';
 import Contentful from './contentful';
-import { Keywords } from './keywords';
+import { Search } from './search';
 import { Renderer } from './render';
 
 // Exports
 export * from './cms';
-export * from './keywords';
+export * from './search';
 export * from './nlp';
 export * from './render';
 
 interface OptionsBase {
   renderer?: Renderer;
-  keywords?: Keywords;
+  keywords?: Search;
 }
 
 export interface CmsOptions extends OptionsBase {
@@ -28,7 +28,7 @@ export default class BotonicPluginContentful {
 
   readonly renderer: Renderer;
 
-  readonly keywords: Keywords;
+  readonly search: Search;
 
   constructor(options: CmsOptions | ContentfulOptions) {
     let optionsAny = options as any;
@@ -40,7 +40,7 @@ export default class BotonicPluginContentful {
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = options.renderer || new Renderer();
-    this.keywords = options.keywords || new Keywords(this.cms);
+    this.search = options.keywords || new Search(this.cms);
   }
 
   // @ts-ignore
