@@ -7,7 +7,8 @@ import {
   Text,
   Url,
   Image,
-  Chitchat
+  Chitchat,
+  Queue
 } from './contents';
 import * as time from '../time/schedule';
 
@@ -38,6 +39,10 @@ export class ErrorReportingCMS implements CMS {
 
   image(id: string): Promise<Image> {
     return this.cms.image(id).catch(this.handleError(ModelType.IMAGE, id));
+  }
+
+  queue(id: string): Promise<Queue> {
+    return this.cms.queue(id).catch(this.handleError(ModelType.QUEUE, id));
   }
 
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
