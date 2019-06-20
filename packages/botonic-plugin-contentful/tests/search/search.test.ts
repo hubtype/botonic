@@ -1,6 +1,6 @@
 import { instance, mock, when } from 'ts-mockito';
 import {
-  CallbackToContentWithKeywords,
+  SearchResult,
   ContentCallback,
   DummyCMS,
   ModelType,
@@ -14,22 +14,18 @@ test('TEST: respondFoundContents text with buttons', async () => {
   when(cms.url('urlCmsId')).thenResolve(new Url('url', 'http:/mocked_url'));
   let sut = new Search(instance(cms));
 
-  let urlContent = new CallbackToContentWithKeywords(
+  let urlContent = new SearchResult(
     new ContentCallback(ModelType.URL, 'urlCmsId'),
-    {
-      name: 'name',
-      keywords: [],
-      shortText: 'url shortText'
-    }
+    'name',
+    'url shortText',
+    []
   );
 
-  let textContent = new CallbackToContentWithKeywords(
+  let textContent = new SearchResult(
     new ContentCallback(ModelType.TEXT, 'textCmsId'),
-    {
-      name: 'name',
-      keywords: [],
-      shortText: 'text shortText'
-    }
+    'name',
+    'text shortText',
+    []
   );
 
   // sut
@@ -58,13 +54,11 @@ test('TEST: respondFoundContents text with chitchat', async () => {
 
   let chitchat = instance(mock(Text));
   when(cms.chitchat('chitchatCmsId')).thenResolve(chitchat);
-  let chitchatCallback = new CallbackToContentWithKeywords(
+  let chitchatCallback = new SearchResult(
     new ContentCallback(ModelType.CHITCHAT, 'chitchatCmsId'),
-    {
-      name: 'name',
-      keywords: [],
-      shortText: 'chitchat'
-    }
+    'name',
+    'chitchat',
+    []
   );
 
   // sut

@@ -1,10 +1,10 @@
+import { SearchResult } from '../search/search-result';
 import { Callback, CallbackMap } from './callback';
 import { CMS, ModelType } from './cms';
 import {
   Asset,
   Button,
   Carousel,
-  CallbackToContentWithKeywords,
   Chitchat,
   Element,
   Image,
@@ -74,17 +74,13 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Queue(id, id));
   }
 
-  contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
+  contentsWithKeywords(): Promise<SearchResult[]> {
     let contents = this.buttonCallbacks.map(cb => {
       let button = DummyCMS.buttonFromCallback(cb);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      return new CallbackToContentWithKeywords(cb, {
-        name: button.name,
-        shortText: button.text,
-        keywords: [
-          'keyword for ' + (button.callback.payload || button.callback.url!)
-        ]
-      });
+      return new SearchResult(cb, button.name, button.text, [
+        'keyword for ' + (button.callback.payload || button.callback.url!)
+      ]);
     });
     return Promise.resolve(contents);
   }
