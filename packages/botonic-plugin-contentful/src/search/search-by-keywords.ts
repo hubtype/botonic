@@ -11,7 +11,7 @@ export class SearchByKeywords {
   }
 
   async searchContentsFromInput(
-    tokens: string[],
+    inputTextTokens: string[],
     matchType: MatchType
   ): Promise<SearchResult[]> {
     let contentsWithKeywords = await this.cms.contentsWithKeywords();
@@ -19,7 +19,7 @@ export class SearchByKeywords {
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.keywords!)
     );
-    return kws.findCandidatesWithKeywordsAt(tokens);
+    return kws.findCandidatesWithKeywordsAt(inputTextTokens);
   }
 
   /**
@@ -31,8 +31,7 @@ export class SearchByKeywords {
     tokens: string[],
     callbacks: SearchResult[]
   ): SearchResult[] {
-    const isChitChat = (cc: SearchResult) =>
-      cc.getCallbackIfChitchat();
+    const isChitChat = (cc: SearchResult) => cc.getCallbackIfChitchat();
 
     const chitchatContents = callbacks.filter(isChitChat);
     if (chitchatContents.length == 0) {
