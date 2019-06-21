@@ -8,7 +8,8 @@ import {
   Text,
   Url,
   Chitchat,
-  Queue
+  Queue,
+  Content
 } from './contents';
 
 export enum ModelType {
@@ -34,4 +35,5 @@ export interface CMS {
   schedule(id: string): Promise<time.Schedule>;
   asset(id: string): Promise<Asset>;
   queue(id: string): Promise<Queue>;
+  contents(model: ModelType): Promise<Content[]>;
 }

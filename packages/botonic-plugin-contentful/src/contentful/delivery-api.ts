@@ -1,13 +1,15 @@
 import { Entry } from 'contentful';
-import * as contentful from 'contentful';
 import { UrlFields } from './url';
 import {
   Callback,
-  ContentCallback,
   CallbackToContentWithKeywords,
+  Content,
+  ContentCallback,
   ModelType
 } from '../cms';
+import { QueueDelivery } from './queue';
 import * as cms from '../cms';
+import * as contentful from 'contentful';
 
 export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
@@ -87,6 +89,25 @@ export class DeliveryApi {
 
   static urlFromAsset(assetField: contentful.Asset): string {
     return 'https:' + assetField.fields.file.url;
+  }
+
+  async contents(model: ModelType): Promise<Content[]> {
+    let entries = await this.getEntries<ContentWithKeywordsFields>({
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      content_type: model,
+      include: 3 // TODO
+    });
+    return entries.items.map(item => QueueDelivery.fromEntry(item));
+    //TODO switch with instanceof the model
+    // if (model instanceof ModelType.QUEUE) {
+    // }
+    // switch (true) {
+    //   case model instanceof ModelType.QUEUE:
+    //     console.log('QUEUE');
+    //     return QueueDelivery.fromEntry(entries);
+    //   default:
+    //     console.error('Content not implemented!');
+    // }
   }
 }
 
