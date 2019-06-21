@@ -6,6 +6,7 @@
     "axios": "latest"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.4.2"
+    "@babel/runtime": "^7.4.2",
+    "core-js": "^3.1.4"
   }
 }
