@@ -2,7 +2,7 @@ import { Queue, SearchableBy, SearchableByKeywords } from '../../src/cms';
 import { testContentful } from './contentful.helper';
 import { testSchedule } from './schedule.test';
 
-const TEST_QUEUE_ID = '1rrH5vyrCZR2ZzysLmeCXh';
+const TEST_QUEUE_ID = '62ILnVxLHOEp7aVvPMpCO8';
 
 test('TEST: contentful Queue', async () => {
   let queue = await testContentful().queue(TEST_QUEUE_ID);

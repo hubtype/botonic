@@ -3,7 +3,7 @@ import { testContentful } from './contentful.helper';
 import { mock } from 'ts-mockito';
 import * as cms from '../../src';
 
-const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
+export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
 const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';

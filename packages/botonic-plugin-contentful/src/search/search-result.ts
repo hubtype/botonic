@@ -1,4 +1,10 @@
-import { Button, Callback, ContentCallback, ModelType } from '../cms';
+import {
+  Button,
+  Callback,
+  ContentCallback,
+  ModelType,
+  PRIORITY_MAX
+} from '../cms';
 
 export class SearchResult {
   static CHITCHAT_SHORT_TEXT = 'chitchat';
@@ -10,7 +16,8 @@ export class SearchResult {
     readonly callback: Callback,
     readonly name: string,
     readonly shortText?: string,
-    readonly keywords?: string[]
+    readonly keywords: string[] = [],
+    readonly priority: number = PRIORITY_MAX
   ) {}
 
   toButton(): Button {
