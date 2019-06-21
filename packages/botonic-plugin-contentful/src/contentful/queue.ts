@@ -11,6 +11,10 @@ export class QueueDelivery {
       id,
       { include: ScheduleDelivery.REFERENCES_INCLUDE + 1 }
     );
+    return QueueDelivery.fromEntry(entry);
+  }
+
+  static fromEntry(entry: contentful.Entry<QueueFields>): cms.Queue {
     let fields = entry.fields;
     let name = fields.name;
     let schedule = undefined;

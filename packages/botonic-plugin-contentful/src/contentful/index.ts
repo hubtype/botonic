@@ -3,7 +3,7 @@ import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './follow-up';
-import { CallbackMap, CallbackToContentWithKeywords } from '../cms';
+import { CallbackMap, CallbackToContentWithKeywords, ModelType } from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
@@ -14,6 +14,7 @@ import * as time from '../time';
 import { QueueDelivery } from './queue';
 
 export default class Contentful implements cms.CMS {
+  _delivery: DeliveryApi;
   _carousel: CarouselDelivery;
   _text: TextDelivery;
   _url: UrlDelivery;
@@ -25,6 +26,7 @@ export default class Contentful implements cms.CMS {
 
   constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
     let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
+    this._delivery = delivery;
     let button = new ButtonDelivery(delivery);
     this._carousel = new CarouselDelivery(delivery, button);
     this._text = new TextDelivery(delivery, button);
@@ -84,6 +86,10 @@ export default class Contentful implements cms.CMS {
 
   asset(id: string): Promise<cms.Asset> {
     return this._asset.asset(id);
+  }
+
+  contents(model: ModelType): Promise<cms.Content[]> {
+    return this._delivery.contents(model);
   }
 }
 
