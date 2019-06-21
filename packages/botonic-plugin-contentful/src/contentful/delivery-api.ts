@@ -66,7 +66,7 @@ export class DeliveryApi {
     return typ as cms.ModelType;
   }
 
-  static callbackFromEntry(entry: Entry<ContentWithKeywordsFields>): Callback {
+  static callbackFromEntry(entry: Entry<any>): Callback {
     let modelType = this.getContentModel(entry);
     if (modelType === ModelType.URL) {
       return Callback.ofUrl((entry.fields as UrlFields).url);
