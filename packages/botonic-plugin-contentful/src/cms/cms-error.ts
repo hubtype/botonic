@@ -8,7 +8,8 @@ import {
   Url,
   Image,
   Chitchat,
-  Queue
+  Queue,
+  Content
 } from './contents';
 import * as time from '../time/schedule';
 
@@ -48,7 +49,7 @@ export class ErrorReportingCMS implements CMS {
   contentsWithKeywords(): Promise<CallbackToContentWithKeywords[]> {
     return this.cms
       .contentsWithKeywords()
-      .catch(this.handleError('textsWithKeywords'));
+      .catch(this.handleError('contentsWithKeywords'));
   }
 
   private handleError(modelType: string, id?: string): (reason: any) => never {
@@ -72,5 +73,9 @@ export class ErrorReportingCMS implements CMS {
 
   asset(id: string): Promise<Asset> {
     return this.cms.asset(id).catch(this.handleError(ModelType.ASSET, id));
+  }
+
+  contents(model: ModelType): Promise<Content[]> {
+    return this.cms.contents(model).catch(this.handleError('contents'));
   }
 }

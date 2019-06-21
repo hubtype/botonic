@@ -1,5 +1,5 @@
 import { Callback, CallbackMap } from './callback';
-import { CMS } from './cms';
+import { CMS, ModelType } from './cms';
 import {
   Asset,
   Button,
@@ -10,7 +10,8 @@ import {
   Image,
   Text,
   Url,
-  Queue
+  Queue,
+  Content
 } from './contents';
 import * as time from '../time/schedule';
 
@@ -98,5 +99,9 @@ export class DummyCMS implements CMS {
 
   asset(id: string): Promise<Asset> {
     return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`));
+  }
+
+  contents(model: ModelType): Promise<Content[]> {
+    return Promise.resolve([]);
   }
 }
