@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../src/**/*.ts",
+    "../src/**/*.tsx"
+  ],
+  "compilerOptions": {
+    "rootDir": "../"
+  },
+  // test options
+  "types": [
+    "@types/jest"
+  ]
+}
