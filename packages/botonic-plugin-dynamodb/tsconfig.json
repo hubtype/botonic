@@ -22,14 +22,15 @@
     "target": "es2015",
     "module": "commonjs",
     "allowSyntheticDefaultImports": true,
-    //"esModuleInterop": true,
+    "esModuleInterop": true,
+    // without typeRoots, it also checks @types of parent folders
+    "typeRoots" : ["node_modules/@types"],
+
     // lint options
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    // without typeRoots, it also checks in types of parent folders
-    "typeRoots" : ["node_modules/@types"],
 
     // options for dynamo-data-mapper-annotations
     "experimentalDecorators": true,
