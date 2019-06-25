@@ -8,12 +8,13 @@ import {
 } from './searchable-by';
 
 export class QueueDelivery {
+  static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1;
   constructor(protected delivery: DeliveryApi) {}
 
   async queue(id: string): Promise<cms.Queue> {
     let entry: contentful.Entry<QueueFields> = await this.delivery.getEntry(
       id,
-      { include: ScheduleDelivery.REFERENCES_INCLUDE + 1 }
+      { include: QueueDelivery.REFERENCES_INCLUDE }
     );
     return QueueDelivery.fromEntry(entry);
   }

@@ -1,9 +1,9 @@
-import { Entry } from 'contentful';
-import { UrlFields } from './url';
-import { Callback,CallbackToContentWithKeywords,
-  Content, ContentCallback, ModelType } from '../cms';import { QueueDelivery } from './queue';
-import * as cms from '../cms';
 import * as contentful from 'contentful';
+import { Entry } from 'contentful';
+import * as cms from '../cms';
+import { Callback, Content, ContentCallback, ModelType } from '../cms';
+import { QueueDelivery, QueueFields } from './queue';
+import { UrlFields } from './url';
 
 export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
@@ -79,12 +79,17 @@ export class DeliveryApi {
   }
 
   async contents(model: ModelType): Promise<Content[]> {
-    let entries = await this.getEntries<ContentWithKeywordsFields>({
+    if (model != ModelType.QUEUE) {
+      throw new Error('CMS.contents only supports queue at the moment');
+    }
+    let entries = await this.getEntries({
       // eslint-disable-next-line @typescript-eslint/camelcase
       content_type: model,
-      include: 3 // TODO
+      include: QueueDelivery.REFERENCES_INCLUDE // TODO change for other types
     });
-    return entries.items.map(item => QueueDelivery.fromEntry(item));
+    return entries.items.map(item =>
+      QueueDelivery.fromEntry(item as Entry<QueueFields>)
+    );
     //TODO switch with instanceof the model
     // if (model instanceof ModelType.QUEUE) {
     // }
