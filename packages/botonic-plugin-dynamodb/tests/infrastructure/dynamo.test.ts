@@ -1,7 +1,12 @@
 import { testConfig } from '../helpers/dynamo';
 import { DynamoTrackStorage, Env } from '../../src/infrastructure/dynamo';
+import { Track as DynamoTrack } from '../../src/infrastructure/track';
 import { Track, UserEvent } from '../../src/domain';
 import time from '../../src/domain/time';
+
+test('TEST: Track serialization', async () => {
+  DynamoTrack.testSerialization();
+});
 
 test('TEST: dynamo write', async () => {
   let sut = new DynamoTrackStorage(Env.DEV, testConfig());
