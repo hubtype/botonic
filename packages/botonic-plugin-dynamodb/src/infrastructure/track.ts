@@ -66,14 +66,41 @@ export class Track extends TrackKey {
   }
 
   marshallEvents(): AttributeValue {
-    let schema: Schema = (this as any)[DynamoDbSchema];
-    if (!schema) {
-      console.error('schema', DynamoDbSchema, Object.keys(this));
-      throw new Error(
-        'No Dynamo schema found. Does this happen only with typescript=3.5.1?'
-      );
-    }
+    let schema = this.schema();
+
     let marshalled = marshallItem(schema, this);
     return marshalled.events as AttributeValue;
+  }
+
+  private schema(): Schema {
+    let schema: Schema = (this as any)[DynamoDbSchema];
+    if (schema) {
+      return schema;
+    }
+
+    // https://metisai.atlassian.net/browse/HTYPE-1881
+    let proto = Object.getPrototypeOf(this);
+    var sym = Object.getOwnPropertySymbols(proto).find(function(s) {
+      return String(s) === DynamoDbSchema.toString();
+    }) as symbol;
+    schema = (proto as any)[sym];
+    if (schema) {
+      console.log('Successfully applied workaround for getting schema');
+      return schema;
+    }
+
+    const msg =
+      'Could not get DynamoDB schema. Trying deleting node_modules and package-lock.json';
+    console.error(msg, DynamoDbSchema, Object.keys(this));
+    throw new Error(msg);
+  }
+
+  /**
+   * Useful to check from other projects that issue
+   * https://metisai.atlassian.net/browse/HTYPE-1881 is not manifesting
+   */
+  static testSerialization(): void {
+    let track = new Track();
+    track.schema();
   }
 }
