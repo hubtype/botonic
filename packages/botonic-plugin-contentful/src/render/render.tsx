@@ -16,6 +16,7 @@ import { ButtonStyle } from '../cms';
 export class RenderOptions {
   followUpDelaySeconds = 4;
   maxButtons = 3;
+  maxQuickReplies = 5;
 }
 
 export class Renderer {
@@ -79,9 +80,13 @@ export class Renderer {
   }
 
   private buttons(buttons: cms.Button[], style: ButtonStyle): React.ReactNode {
+    let maxButtons =
+      style == ButtonStyle.BUTTON
+        ? this.options.maxButtons
+        : this.options.maxQuickReplies;
     return (
       <>
-        {buttons.slice(0, this.options.maxButtons).map((button, index) => {
+        {buttons.slice(0, maxButtons).map((button, index) => {
           let props = {
             key: index,
             payload: button.callback.payload,
