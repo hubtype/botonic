@@ -14,7 +14,7 @@ export class ScheduleDelivery {
   }
 
   static scheduleFromEntry(f: Entry<ScheduleFields>): time.Schedule {
-    let schedule = new time.Schedule(time.Schedule.TZ_CET);
+    let schedule = new time.Schedule(time.Schedule.TZ_CET); // TODO allow configuration
     ScheduleDelivery.addDaySchedules(schedule, f.fields);
     ScheduleDelivery.addExceptions(schedule, f.fields.exceptions);
     return schedule;
