@@ -47,7 +47,10 @@ export class SearchResult {
     if (!(this.callback instanceof ContentCallback)) {
       return undefined;
     }
-    if (this.shortText !== SearchResult.CHITCHAT_SHORT_TEXT) {
+    if (
+      this.shortText !== SearchResult.CHITCHAT_SHORT_TEXT &&
+      this.callback.model !== ModelType.CHITCHAT
+    ) {
       return undefined;
     }
     return this.callback;
