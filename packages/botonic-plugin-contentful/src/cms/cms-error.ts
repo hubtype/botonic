@@ -1,10 +1,17 @@
 import { SearchResult } from '../search/search-result';
 import { CallbackMap } from './callback';
 import { CMS, ModelType } from './cms';
-import { Asset, Carousel, Text, Url, Image, Chitchat, Queue ,
+import {
+  Asset,
+  Carousel,
+  Text,
+  Url,
+  Image,
+  Chitchat,
+  Queue,
   Content
 } from './contents';
-import * as time from '../time/schedule';
+import * as time from '../time';
 
 export class ErrorReportingCMS implements CMS {
   constructor(readonly cms: CMS) {}
@@ -62,6 +69,12 @@ export class ErrorReportingCMS implements CMS {
     return this.cms
       .schedule(id)
       .catch(this.handleError(ModelType.SCHEDULE, id));
+  }
+
+  dateRange(id: string): Promise<time.DateRange> {
+    return this.cms
+      .dateRange(id)
+      .catch(this.handleError(ModelType.DATE_RANGE, id));
   }
 
   asset(id: string): Promise<Asset> {
