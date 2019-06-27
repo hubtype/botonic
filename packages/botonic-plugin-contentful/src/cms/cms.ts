@@ -1,7 +1,14 @@
 import { SearchResult } from '../search/search-result';
-import * as time from '../time/schedule';
+import * as time from '../time';
 import { CallbackMap } from './callback';
-import { Asset, Carousel, Image, Text, Url, Chitchat, Queue ,
+import {
+  Asset,
+  Carousel,
+  Image,
+  Text,
+  Url,
+  Chitchat,
+  Queue,
   Content
 } from './contents';
 
@@ -13,6 +20,7 @@ export enum ModelType {
   URL = 'url',
   PAYLOAD = 'payload',
   SCHEDULE = 'schedule',
+  DATE_RANGE = 'dateRange',
   IMAGE = 'image',
   ASSET = 'asset',
   QUEUE = 'queue'
@@ -26,6 +34,7 @@ export interface CMS {
   image(id: string): Promise<Image>;
   contentsWithKeywords(): Promise<SearchResult[]>;
   schedule(id: string): Promise<time.Schedule>;
+  dateRange(id: string): Promise<time.DateRange>;
   asset(id: string): Promise<Asset>;
   queue(id: string): Promise<Queue>;
   contents(model: ModelType): Promise<Content[]>;
