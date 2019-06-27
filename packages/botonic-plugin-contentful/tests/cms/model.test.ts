@@ -17,3 +17,18 @@ test('TEST: cloneWithButtons copies all fields except buttons', () => {
 
   expectEqualExceptOneField(t1, clone, 'buttons');
 });
+
+test('TEST: cloneWithText copies all fields except text', () => {
+  const builder = new RndTextBuilder();
+  const t1 = builder.build();
+  const oldText = t1.text;
+  expect(t1).toBeInstanceOf(Text);
+
+  const clone = t1.cloneWithText('modified text');
+
+  expect(clone).toBeInstanceOf(Text);
+  expect(clone).not.toEqual(t1);
+  expect(t1.text).toEqual(oldText);
+
+  expectEqualExceptOneField(t1, clone, 'text');
+});

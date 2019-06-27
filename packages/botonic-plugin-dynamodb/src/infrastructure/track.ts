@@ -85,7 +85,7 @@ export class Track extends TrackKey {
     }) as symbol;
     schema = (proto as any)[sym];
     if (schema) {
-      console.log('Successfully applied workaround for getting schema');
+      console.log('Applied hack to get Dynamo schema');
       return schema;
     }
 
