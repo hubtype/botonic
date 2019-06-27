@@ -13,7 +13,7 @@ import {
   Queue,
   Content
 } from './contents';
-import * as time from '../time/schedule';
+import * as time from '../time';
 
 /**
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
@@ -99,5 +99,10 @@ export class DummyCMS implements CMS {
 
   contents(model: ModelType): Promise<Content[]> {
     return Promise.resolve([]);
+  }
+
+  dateRange(id: string): Promise<time.DateRange> {
+    let now = new Date();
+    return Promise.resolve(new time.DateRange('daterange name', now, now));
   }
 }

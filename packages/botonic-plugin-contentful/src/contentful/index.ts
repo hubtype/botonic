@@ -1,4 +1,5 @@
 import { AssetDelivery } from './asset';
+import { DateRangeDelivery } from './date-range';
 import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
@@ -20,6 +21,7 @@ export default class Contentful implements cms.CMS {
   _url: UrlDelivery;
   _keywords: KeywordsDelivery;
   _schedule: ScheduleDelivery;
+  _dateRange: DateRangeDelivery;
   _image: ImageDelivery;
   _asset: AssetDelivery;
   _queue: QueueDelivery;
@@ -44,6 +46,7 @@ export default class Contentful implements cms.CMS {
     );
     this._keywords = new KeywordsDelivery(delivery);
     this._schedule = new ScheduleDelivery(delivery);
+    this._dateRange = new DateRangeDelivery(delivery);
   }
 
   async carousel(
@@ -90,6 +93,10 @@ export default class Contentful implements cms.CMS {
 
   contents(model: ModelType): Promise<cms.Content[]> {
     return this._delivery.contents(model);
+  }
+
+  dateRange(id: string): Promise<time.DateRange> {
+    return this._dateRange.dateRange(id);
   }
 }
 
