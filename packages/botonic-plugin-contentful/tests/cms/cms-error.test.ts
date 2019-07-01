@@ -1,7 +1,7 @@
 import { instance, mock, when } from 'ts-mockito';
-import { DummyCMS, ErrorReportingCMS } from '../../src';
+import { Carousel, DummyCMS, ErrorReportingCMS } from '../../src';
 
-test('TEST: ErrorReportingCMS', async () => {
+test('TEST: ErrorReportingCMS carousel delivery failed', async () => {
   let mockCms = mock(DummyCMS);
   let error = new Error('mock error');
   when(mockCms.carousel('id1', undefined)).thenReject(error);
@@ -15,4 +15,17 @@ test('TEST: ErrorReportingCMS', async () => {
     .catch((error2: any) => {
       expect(error2).toBe(error);
     });
+});
+
+test('TEST: ErrorReportingCMS carousel delivery ok', async () => {
+  let mockCms = mock(DummyCMS);
+  let carousel = mock(Carousel);
+  when(carousel.validate()).thenReturn('invalid carousel');
+
+  when(mockCms.carousel('id1', undefined)).thenResolve(instance(carousel));
+  let sut = new ErrorReportingCMS(instance(mockCms));
+
+  await sut.carousel('id1').then(c => {
+    expect(c).toEqual(instance(carousel));
+  });
 });
