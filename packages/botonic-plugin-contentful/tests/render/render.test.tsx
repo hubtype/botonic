@@ -61,7 +61,7 @@ test('TEST: render element without image', () => {
   // assert
   expect(render).toEqual(
     <Element key="0">
-      <Pic src="" />
+      {null}
       <Title>my title</Title>
       <Subtitle>my subtitle</Subtitle>
       <>
