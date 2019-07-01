@@ -1,7 +1,17 @@
 import React, { useContext } from 'react'
+import styled from 'styled-components'
 
 import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
+
+const StyledButton = styled.button`
+  width: 100%;
+  height: 40px;
+  border: 1px solid #F1F0F0;
+  borderRadius: 8px;
+  cursor: pointer;
+  outline: 0px;
+`
 
 export const Button = props => {
   const { webchatState, openWebview, sendPayload } = useContext(WebchatContext)
@@ -24,19 +34,9 @@ export const Button = props => {
       )
     }
     return (
-      <button
-        style={{
-          width: '100%',
-          height: 40,
-          border: '1px solid #F1F0F0',
-          borderRadius: 8,
-          cursor: 'pointer',
-          outline: 0
-        }}
-        onClick={e => handleClick(e)}
-      >
+      <StyledButton onClick={e => handleClick(e)}>
         {props.children}
-      </button>
+      </StyledButton>
     )
   }
 

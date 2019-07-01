@@ -22,6 +22,9 @@ export const WebchatDev = forwardRef((props, ref) => {
       keepSessionOnReload: !webchatState.devSettings.keepSessionOnReload
     })
 
+  /* TODO: webchatState.theme shoud be included in the dependencies array
+  together with props.theme. The problem is that this effect modifies webchatState
+  so we enter an infinite rerender loop. */
   useEffect(() => updateTheme({
     ...webchatState.theme,
     ...props.theme,
@@ -33,7 +36,7 @@ export const WebchatDev = forwardRef((props, ref) => {
     triggerButtonStyle: {
       position: 'absolute'
     }
-  }), [props.theme, webchatState.theme])
+  }), [props.theme])
 
   return (
     <div
