@@ -27,6 +27,19 @@ export abstract class Content {
    * @param name TODO rename to id or code?
    */
   protected constructor(readonly name: string) {}
+
+  /** @return message if any issue detected */
+  validate(): string | undefined {
+    return undefined;
+  }
+
+  static validateContents(contents: Content[]): string | undefined {
+    let invalids = contents.map(c => c.validate()).filter(v => v);
+    if (invalids.length == 0) {
+      return undefined;
+    }
+    return invalids.join('. ');
+  }
 }
 
 /**
@@ -47,6 +60,16 @@ export class Button extends Content {
   ) {
     super(name);
   }
+
+  validate(): string | undefined {
+    if (!this.text) {
+      return `Button '${this.name}' without text`;
+    }
+    if (!this.name) {
+      return `Button with text '${this.text}' without name`;
+    }
+    return undefined;
+  }
 }
 
 export class Carousel extends Content implements ContentWithKeywords {
@@ -58,16 +81,26 @@ export class Carousel extends Content implements ContentWithKeywords {
   ) {
     super(name);
   }
+
+  validate(): string | undefined {
+    return Content.validateContents(this.elements);
+  }
 }
 
 /** Part of a carousel */
-export class Element {
+export class Element extends Content {
   constructor(
     readonly buttons: Button[],
     readonly title?: string,
     readonly subtitle?: string,
     readonly imgUrl?: string
-  ) {}
+  ) {
+    super(title || '');
+  }
+
+  validate(): string | undefined {
+    return Content.validateContents(this.buttons);
+  }
 }
 
 export class Image extends Content {
@@ -90,6 +123,10 @@ export class Text extends Content implements ContentWithKeywords {
     readonly buttonsStyle = ButtonStyle.BUTTON
   ) {
     super(name);
+  }
+
+  validate(): string | undefined {
+    return Content.validateContents(this.buttons);
   }
 
   cloneWithButtons(buttons: Button[]): Text {

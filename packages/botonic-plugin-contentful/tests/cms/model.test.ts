@@ -1,4 +1,5 @@
-import { Text } from '../../src/cms';
+import { instance, mock, when } from 'ts-mockito';
+import { Content, Text } from '../../src/cms';
 import { RndTextBuilder } from '../helpers/builders';
 import { expectEqualExceptOneField } from '../helpers/expect';
 
@@ -31,4 +32,24 @@ test('TEST: cloneWithText copies all fields except text', () => {
   expect(t1.text).toEqual(oldText);
 
   expectEqualExceptOneField(t1, clone, 'text');
+});
+
+test('TEST: validateContents', () => {
+  let invalidContent = mock(Content);
+  when(invalidContent.validate()).thenReturn('wrong button');
+
+  let validContent = mock(Content);
+  when(validContent.validate()).thenReturn(undefined);
+
+  expect(
+    Content.validateContents([instance(validContent), instance(validContent)])
+  ).toBeUndefined();
+  expect(
+    Content.validateContents([
+      instance(validContent),
+      instance(invalidContent),
+      instance(validContent),
+      instance(invalidContent)
+    ])
+  ).toEqual('wrong button. wrong button');
 });
