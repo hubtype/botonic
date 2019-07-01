@@ -58,7 +58,7 @@ export class ButtonDelivery {
     }
     return new cms.Button(
       fields.name,
-      fields.shortText,
+      text,
       DeliveryApi.callbackFromEntry(entry)
     );
   }
