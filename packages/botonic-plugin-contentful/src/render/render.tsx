@@ -25,9 +25,9 @@ export class Renderer {
   element(msg: cms.Element, index: number): React.ReactNode {
     return (
       <Element key={index}>
-        <Pic src={msg.imgUrl || ''} />
-        <Title>{msg.title || ''}</Title>
-        <Subtitle>{msg.subtitle || ''}</Subtitle>
+        {msg.imgUrl ? <Pic src={msg.imgUrl} /> : null}
+        {msg.title ? <Title>{msg.title}</Title> : null}
+        {msg.subtitle ? <Subtitle>{msg.subtitle}</Subtitle> : null}
         {this.buttons(msg.buttons, ButtonStyle.BUTTON)}
       </Element>
     );
