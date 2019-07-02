@@ -1,5 +1,5 @@
 import { CMS, ModelType } from './cms';
-import { ContentWithKeywords } from './contents';
+import { Content } from './contents';
 import escapeStringRegexp from 'escape-string-regexp';
 
 export class Callback {
@@ -65,7 +65,7 @@ export class ContentCallback extends Callback {
     }
   }
 
-  deliverPayloadContent(cms: CMS): Promise<ContentWithKeywords> {
+  deliverPayloadContent(cms: CMS): Promise<Content> {
     switch (this.model) {
       case ModelType.CAROUSEL:
         return cms.carousel(this.id);
@@ -75,6 +75,10 @@ export class ContentCallback extends Callback {
         return cms.chitchat(this.id);
       case ModelType.URL:
         return cms.url(this.id);
+      case ModelType.QUEUE:
+        return cms.queue(this.id);
+      case ModelType.IMAGE:
+        return cms.image(this.id);
       default:
         throw new Error(
           `Type '${this.model}' not supported for callback with id '${this.id}'`
