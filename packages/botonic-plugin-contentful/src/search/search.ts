@@ -8,6 +8,9 @@ export class Search {
     this.search = new SearchByKeywords(cms);
   }
 
+  /**
+   * It does not sort the results based on the {@link SearchResult.priority}.
+   */
   async searchByKeywords(
     inputText: string,
     matchType: MatchType
