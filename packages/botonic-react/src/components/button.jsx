@@ -5,12 +5,27 @@ import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 
 const StyledButton = styled.button`
+  display: flex;
   width: 100%;
-  height: 40px;
-  border: 1px solid #F1F0F0;
-  borderRadius: 8px;
+  max-height: 80px;
+  font-size: 14px;
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+  padding: 12px 32px;
+  color: ${props => props.theme.brandColor || `#000`};
+  border: none;
+  border-top: 1px solid #F1F0F0;
   cursor: pointer;
   outline: 0px;
+  &:last-of-type {
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+  &:hover {
+    background-color: #F3F3F3;
+  }
+  overflow: hidden;
 `
 
 export const Button = props => {
@@ -34,7 +49,10 @@ export const Button = props => {
       )
     }
     return (
-      <StyledButton onClick={e => handleClick(e)}>
+      <StyledButton
+        theme={webchatState.theme}
+        onClick={e => handleClick(e)}
+      >
         {props.children}
       </StyledButton>
     )

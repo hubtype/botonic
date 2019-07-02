@@ -4,14 +4,15 @@ import { isBrowser, isNode } from '@botonic/core'
 
 export const Pic = props => {
   const renderBrowser = () => (
-    <img
+    <div
       style={{
-        borderRadius: '8px',
-        maxWidth: '150px',
-        maxHeight: '150px',
-        margin: '10px'
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        width: 222,
+        height: 140,
+        background: `#fff url(${props.src}) no-repeat center/cover`,
+        borderBottom: '1px solid #F1F0F0'
       }}
-      src={props.src}
     />
   )
   const renderNode = () => <pic>{props.src}</pic>

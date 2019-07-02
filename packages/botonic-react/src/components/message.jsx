@@ -97,10 +97,11 @@ export const Message = props => {
           margin: 8,
           backgroundColor: getBgColor(),
           color: isFromUser() ? '#fff' : '#000',
+          border: `1px solid ${getBgColor()}`,
           fontFamily: 'Arial, Helvetica, sans-serif',
           borderRadius: 8,
           maxWidth: blob ? '60%' : 'calc(100% - 16px)',
-          ...style
+          ...style,
         }}
         {...otherProps}
       >

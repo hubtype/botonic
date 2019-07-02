@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Message } from './message'
 import { isBrowser, isNode } from '@botonic/core'
 
@@ -16,23 +17,29 @@ export const Carousel = props => {
   if (isBrowser()) {
     content = (
       <div
-        name='carousel'
         style={{
           paddingTop: '10px',
           display: 'flex',
           flexDirection: 'row',
           overflowX: 'auto',
-          maxWidth: '400px',
-          fontFamily: 'Arial, Helvetica, sans-serif'
+          maxWidth: '100%',
         }}
       >
-        {props.children}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'start'
+          }}
+        >
+          {props.children}
+        </div>
       </div>
     )
   }
   return (
     <Message
-      style={{ maxWidth: '90%' }}
+      style={{ maxWidth: '90%', padding: 0 }}
       blob={false}
       json={serialize(props)}
       type='carousel'
