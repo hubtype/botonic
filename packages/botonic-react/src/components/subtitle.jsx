@@ -1,10 +1,18 @@
 import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
+import { maxHeaderSize } from 'http';
 
 export const Subtitle = props => {
   const renderBrowser = () => (
-    <div style={{ padding: '6px' }}>{props.children}</div>
+    <div style={{
+      fontSize: 12,
+      padding: '0px 15px 10px 15px',
+      color: '#696973',
+      ...(props.style || {})
+    }}>
+      {props.children}
+    </div>
   )
   const renderNode = () => <desc>{props.children}</desc>
 
