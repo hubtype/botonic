@@ -63,9 +63,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   // Load initial state from localStorage
   useEffect(() => {
-    let { user, messages, session, lastRoutePath, devSettings } = JSON.parse(
-      botonicState || '{}'
-    )
+    let { user, messages, session, lastRoutePath, devSettings } = botonicState || {}
     if(!user) user = createUser()
     updateUser(user)
     if (!devSettings || devSettings.keepSessionOnReload) {
