@@ -28,10 +28,28 @@ test('TEST: cloneWithText copies all fields except text', () => {
   const clone = t1.cloneWithText('modified text');
 
   expect(clone).toBeInstanceOf(Text);
+  expect(clone.text).toEqual('modified text');
   expect(clone).not.toEqual(t1);
   expect(t1.text).toEqual(oldText);
 
   expectEqualExceptOneField(t1, clone, 'text');
+});
+
+test('TEST: cloneWithFollowUp copies all fields except followUp', () => {
+  const builder = new RndTextBuilder();
+  const t1 = builder.build();
+  const oldFollowUp = t1.followUp;
+  expect(t1).toBeInstanceOf(Text);
+
+  let newFollowUp = builder.build();
+  const clone = t1.cloneWithFollowUp(newFollowUp);
+
+  expect(clone).toBeInstanceOf(Text);
+  expect(clone.followUp).toBe(newFollowUp);
+  expect(clone).not.toEqual(t1);
+  expect(t1.followUp).toBe(oldFollowUp);
+
+  expectEqualExceptOneField(t1, clone, 'followUp');
 });
 
 test('TEST: validateContents', () => {
