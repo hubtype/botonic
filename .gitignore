@@ -11,3 +11,5 @@ yarn.lock
 .nyc_output/
 dist/
 tmp/
+.yalc/
+yalc.lock
