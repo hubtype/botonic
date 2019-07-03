@@ -140,6 +140,12 @@ export class Text extends Content implements ContentWithKeywords {
     clone.text = newText;
     return clone as Text;
   }
+
+  cloneWithFollowUp(newFollowUp: FollowUp): Text {
+    const clone = Object.create(this);
+    clone.followUp = newFollowUp;
+    return clone as Text;
+  }
 }
 
 export type Chitchat = Text;
