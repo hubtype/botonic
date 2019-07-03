@@ -7,7 +7,11 @@ export class Track {
 }
 
 export class UserEvent {
-  constructor(readonly user: string = '', readonly event: string = '') {}
+  constructor(
+    readonly user: string = '',
+    readonly event: string = '',
+    readonly args: any = undefined
+  ) {}
 }
 
 export interface TrackStorage {
