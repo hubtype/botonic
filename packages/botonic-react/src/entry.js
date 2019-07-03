@@ -1,4 +1,4 @@
-import { DevApp, NodeApp, WebchatApp, WebviewApp } from '@botonic/react'
+import { DevApp, NodeApp, WebchatApp, WebviewApp } from './index'
 import { routes, locales, webchat, webviews } from 'BotonicProject'
 
 export let app
