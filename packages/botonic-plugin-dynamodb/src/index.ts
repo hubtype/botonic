@@ -29,8 +29,13 @@ export default class BotonicPluginDynamoDB {
     this.storage = new ErrorReportingTrackStorage(this.storage);
   }
 
-  async track(botId: string, user: string, event: string): Promise<undefined> {
-    let userEvent = new UserEvent(user, event);
+  async track(
+    botId: string,
+    user: string,
+    event: string,
+    args: any = undefined
+  ): Promise<undefined> {
+    let userEvent = new UserEvent(user, event, args);
     let track = new Track(botId, time.now(), [userEvent]);
     return this.storage.write(track);
   }

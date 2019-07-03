@@ -11,14 +11,14 @@ test('TEST: Track serialization', async () => {
 test('TEST: dynamo write', async () => {
   let sut = new DynamoTrackStorage(Env.DEV, testConfig());
   let track1 = new Track('test_bot', time.now(), [
-    new UserEvent('user1', 'event1'),
+    new UserEvent('user1', 'event1', { arg1: 'val1' }),
     new UserEvent('user2', 'event2')
   ]);
   try {
     // act
     await sut.write(track1);
     let track2 = new Track('test_bot', track1.time, [
-      new UserEvent('user1', 'event3')
+      new UserEvent('user1', 'event3', { arg3: 3 })
     ]);
     await sut.write(track2);
 
