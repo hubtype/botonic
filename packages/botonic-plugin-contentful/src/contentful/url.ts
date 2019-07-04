@@ -1,3 +1,4 @@
+import { Context } from '../cms';
 import { CarouselFields } from './carousel';
 import { DeliveryWithFollowUp } from './follow-up';
 import { TextFields } from './text';
@@ -10,10 +11,13 @@ export class UrlDelivery extends DeliveryWithFollowUp {
     super(delivery);
   }
 
-  async url(id: string): Promise<cms.Url> {
-    let entry: contentful.Entry<UrlFields> = await this.delivery.getEntry(id);
+  async url(id: string, context: Context): Promise<cms.Url> {
+    let entry: contentful.Entry<UrlFields> = await this.delivery.getEntry(
+      id,
+      context
+    );
     let fields = entry.fields;
-    let followUp = await this.followUp!.fromFields(fields.followup!);
+    let followUp = await this.followUp!.fromFields(fields.followup!, context);
     let name = fields.name || fields.url;
     return new cms.Url(
       name,

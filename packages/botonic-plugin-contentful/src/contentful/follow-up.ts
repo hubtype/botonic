@@ -29,7 +29,7 @@ export class FollowUpDelivery {
   // TODO we should detect cycles to avoid infinite recursion
   fromFields(
     followUp: Entry<FollowUpFields> | undefined,
-    context = new cms.Context()
+    context: cms.Context
   ): Promise<cms.FollowUp | undefined> {
     if (!followUp) {
       return Promise.resolve(undefined);

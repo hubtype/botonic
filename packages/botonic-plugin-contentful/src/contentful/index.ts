@@ -1,10 +1,11 @@
+import { Context } from '../cms/context';
 import { AssetDelivery } from './asset';
 import { DateRangeDelivery } from './date-range';
 import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './follow-up';
-import { SearchResult, ModelType, Context } from '../cms';
+import { SearchResult, ModelType } from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
@@ -60,36 +61,47 @@ export default class Contentful implements cms.CMS {
     return this._text.text(id, context);
   }
 
-  async url(id: string): Promise<cms.Url> {
-    return this._url.url(id);
+  async url(id: string, context: Context = new Context()): Promise<cms.Url> {
+    return this._url.url(id, context);
   }
 
-  async queue(id: string): Promise<cms.Queue> {
-    return this._queue.queue(id);
+  async queue(
+    id: string,
+    context: Context = new Context()
+  ): Promise<cms.Queue> {
+    return this._queue.queue(id, context);
   }
 
-  async contentsWithKeywords(): Promise<SearchResult[]> {
-    return this._keywords.contentsWithKeywords();
+  image(id: string, context: Context = new Context()): Promise<cms.Image> {
+    return this._image.image(id, context);
+  }
+
+  chitchat(
+    id: string,
+    context: Context = new Context()
+  ): Promise<cms.Chitchat> {
+    return this._text.text(id, context);
+  }
+
+  contents(
+    model: ModelType,
+    context: Context = new Context()
+  ): Promise<cms.Content[]> {
+    return this._delivery.contents(model, context);
+  }
+
+  async contentsWithKeywords(
+    context: Context = new Context()
+  ): Promise<SearchResult[]> {
+    return this._keywords.contentsWithKeywords(context);
   }
 
   async schedule(id: string): Promise<time.Schedule> {
     return this._schedule.schedule(id);
   }
 
-  image(id: string): Promise<cms.Image> {
-    return this._image.image(id);
-  }
-
-  chitchat(id: string, context: cms.Context): Promise<cms.Chitchat> {
-    return this._text.text(id, context);
-  }
-
   asset(id: string): Promise<cms.Asset> {
     return this._asset.asset(id);
-  }
-
-  contents(model: ModelType): Promise<cms.Content[]> {
-    return this._delivery.contents(model);
   }
 
   dateRange(id: string): Promise<time.DateRange> {

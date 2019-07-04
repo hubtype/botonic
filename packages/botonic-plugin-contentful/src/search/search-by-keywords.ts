@@ -12,9 +12,10 @@ export class SearchByKeywords {
 
   async searchContentsFromInput(
     inputTextTokens: string[],
-    matchType: MatchType
+    matchType: MatchType,
+    context?: cms.Context
   ): Promise<SearchResult[]> {
-    let contentsWithKeywords = await this.cms.contentsWithKeywords();
+    let contentsWithKeywords = await this.cms.contentsWithKeywords(context);
     let kws = new KeywordsParser<SearchResult>(matchType);
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.keywords!)

@@ -1,5 +1,5 @@
 import 'jest-extended';
-import { instance, mock, when } from 'ts-mockito';
+import { anything, instance, mock, when } from 'ts-mockito';
 import {
   Callback,
   SearchResult,
@@ -70,6 +70,6 @@ export function keywordsWithMockCms(
   allContents: CallbackToContentWithKeywords1[]
 ): SearchByKeywords {
   let mockCms = mock(DummyCMS);
-  when(mockCms.contentsWithKeywords()).thenResolve(allContents);
+  when(mockCms.contentsWithKeywords(anything())).thenResolve(allContents);
   return new SearchByKeywords(instance(mockCms));
 }
