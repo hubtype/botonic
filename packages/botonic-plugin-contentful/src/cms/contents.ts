@@ -151,7 +151,10 @@ export class Text extends Content implements ContentWithKeywords {
 export type Chitchat = Text;
 
 export class Url extends Content implements ContentWithKeywords {
-  //TODO followUp not yet rendered
+  /**
+   *
+   * @param followup so far not defined in Contentful model, since URL's are not rendered anyway
+   */
   constructor(
     readonly name: string,
     readonly url: string,

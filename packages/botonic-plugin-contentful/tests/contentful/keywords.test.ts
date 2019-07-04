@@ -1,10 +1,12 @@
 import { ContentCallback, ModelType, SearchResult } from '../../src/cms';
-import { testContentful } from './contentful.helper';
+import { testContentful, testContext } from './contentful.helper';
 import { TEST_POST_FAQ1_ID } from './text.test';
 import 'jest-extended';
 
 test('TEST: contentful contentsWithKeywords', async () => {
-  let results = await testContentful().contentsWithKeywords();
+  let results = await testContentful().contentsWithKeywords(
+    testContext([{ locale: 'es' }, {}, undefined])
+  );
 
   let queues: SearchResult[] = [];
   let contentsWithKeywords: SearchResult[] = [];

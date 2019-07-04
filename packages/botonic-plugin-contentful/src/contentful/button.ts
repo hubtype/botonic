@@ -33,7 +33,7 @@ export class ButtonDelivery {
         let buttonEntry = entry as contentful.Entry<ButtonFields>;
         let callback = buttonEntry.fields.target
           ? await this.getTargetCallback(buttonEntry.fields.target)
-          : context.callbacks.getCallback(id);
+          : context.callbacks!.getCallback(id);
         return new cms.Button(
           buttonEntry.fields.name,
           buttonEntry.fields.text,

@@ -66,8 +66,8 @@ export class DeliveryApi {
   }
 
   private static queryFromContext(context: Context, query: any = {}): any {
-    if (context.language) {
-      query['locale'] = context.language;
+    if (context.locale) {
+      query['locale'] = context.locale;
     }
     return query;
   }

@@ -1,3 +1,4 @@
+import { DEFAULT_CONTEXT } from '../cms';
 import * as cms from '../cms';
 import { tokenizeAndStem } from '../nlp';
 import { KeywordsParser, MatchType } from '../nlp/keywords';
@@ -13,7 +14,7 @@ export class SearchByKeywords {
   async searchContentsFromInput(
     inputTextTokens: string[],
     matchType: MatchType,
-    context?: cms.Context
+    context = DEFAULT_CONTEXT
   ): Promise<SearchResult[]> {
     let contentsWithKeywords = await this.cms.contentsWithKeywords(context);
     let kws = new KeywordsParser<SearchResult>(matchType);
