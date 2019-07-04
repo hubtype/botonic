@@ -26,10 +26,14 @@ export enum ModelType {
   QUEUE = 'queue'
 }
 
+export class Context {
+  constructor(readonly callbacks = new CallbackMap()) {}
+}
+
 export interface CMS {
-  carousel(id: string, callbacks?: CallbackMap): Promise<Carousel>;
-  text(id: string, callbacks?: CallbackMap): Promise<Text>;
-  chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat>;
+  carousel(id: string, context?: Context): Promise<Carousel>;
+  text(id: string, context?: Context): Promise<Text>;
+  chitchat(id: string, context?: Context): Promise<Chitchat>;
   url(id: string): Promise<Url>;
   image(id: string): Promise<Image>;
   contentsWithKeywords(): Promise<SearchResult[]>;

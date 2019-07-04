@@ -4,7 +4,7 @@ import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './follow-up';
-import { CallbackMap, SearchResult, ModelType } from '../cms';
+import { SearchResult, ModelType, Context } from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
@@ -51,16 +51,13 @@ export default class Contentful implements cms.CMS {
 
   async carousel(
     id: string,
-    callbacks: cms.CallbackMap = new CallbackMap()
+    context: Context = new Context()
   ): Promise<cms.Carousel> {
-    return this._carousel.carousel(id, callbacks);
+    return this._carousel.carousel(id, context);
   }
 
-  async text(
-    id: string,
-    callbacks: cms.CallbackMap = new CallbackMap()
-  ): Promise<cms.Text> {
-    return this._text.text(id, callbacks);
+  async text(id: string, context: Context = new Context()): Promise<cms.Text> {
+    return this._text.text(id, context);
   }
 
   async url(id: string): Promise<cms.Url> {
@@ -83,8 +80,8 @@ export default class Contentful implements cms.CMS {
     return this._image.image(id);
   }
 
-  chitchat(id: string, callbacks: CallbackMap): Promise<cms.Chitchat> {
-    return this._text.text(id, callbacks);
+  chitchat(id: string, context: cms.Context): Promise<cms.Chitchat> {
+    return this._text.text(id, context);
   }
 
   asset(id: string): Promise<cms.Asset> {

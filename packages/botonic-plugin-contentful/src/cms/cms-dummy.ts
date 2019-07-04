@@ -1,6 +1,6 @@
 import { SearchResult } from '../search/search-result';
-import { Callback, CallbackMap } from './callback';
-import { CMS, ModelType } from './cms';
+import { Callback } from './callback';
+import { CMS, Context, ModelType } from './cms';
 import {
   Asset,
   Button,
@@ -26,17 +26,14 @@ export class DummyCMS implements CMS {
    */
   constructor(readonly buttonCallbacks: Callback[]) {}
 
-  async carousel(
-    id: string,
-    {  }: CallbackMap = new CallbackMap()
-  ): Promise<Carousel> {
+  async carousel(id: string, {  }: Context = new Context()): Promise<Carousel> {
     let elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
     );
     return Promise.resolve(new Carousel(id, elements));
   }
 
-  async text(id: string, {  }: CallbackMap = new CallbackMap()): Promise<Text> {
+  async text(id: string, {  }: Context = new Context()): Promise<Text> {
     return Promise.resolve(
       new Text(id, 'Dummy text for ' + id, this.buttons(), id, ['kw1', 'kw2'])
     );
@@ -89,8 +86,8 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new time.Schedule('Europe/Madrid'));
   }
 
-  chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat> {
-    return this.text(id, callbacks);
+  chitchat(id: string, context?: Context): Promise<Chitchat> {
+    return this.text(id, context);
   }
 
   asset(id: string): Promise<Asset> {
