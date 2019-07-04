@@ -1,3 +1,4 @@
+import { Context } from '../cms';
 import * as cms from '../cms';
 import * as contentful from 'contentful';
 import { ContentWithNameFields, DeliveryApi } from './delivery-api';
@@ -11,9 +12,10 @@ export class QueueDelivery {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1;
   constructor(protected delivery: DeliveryApi) {}
 
-  async queue(id: string): Promise<cms.Queue> {
+  async queue(id: string, context: Context): Promise<cms.Queue> {
     let entry: contentful.Entry<QueueFields> = await this.delivery.getEntry(
       id,
+      context,
       { include: QueueDelivery.REFERENCES_INCLUDE }
     );
     return QueueDelivery.fromEntry(entry);

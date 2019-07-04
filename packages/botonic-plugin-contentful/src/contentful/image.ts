@@ -1,3 +1,4 @@
+import { Context } from '../cms';
 import * as cms from '../cms';
 import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
@@ -5,8 +6,11 @@ import * as contentful from 'contentful/index';
 export class ImageDelivery {
   constructor(protected delivery: DeliveryApi) {}
 
-  async image(id: string): Promise<cms.Image> {
-    let entry: contentful.Entry<ImageFields> = await this.delivery.getEntry(id);
+  async image(id: string, context: Context): Promise<cms.Image> {
+    let entry: contentful.Entry<ImageFields> = await this.delivery.getEntry(
+      id,
+      context
+    );
     return this.imageFromEntry(entry);
   }
 

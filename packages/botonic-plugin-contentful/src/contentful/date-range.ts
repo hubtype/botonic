@@ -1,3 +1,4 @@
+import { Context } from '../cms';
 import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
 import * as time from '../time';
@@ -7,7 +8,8 @@ export class DateRangeDelivery {
 
   async dateRange(id: string): Promise<time.DateRange> {
     let entry: contentful.Entry<DateRangeFields> = await this.delivery.getEntry(
-      id
+      id,
+      Context.DEFAULT
     );
     return DateRangeDelivery.dateRangeFromEntry(entry);
   }
