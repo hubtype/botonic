@@ -26,6 +26,10 @@ export enum ModelType {
   QUEUE = 'queue'
 }
 
+/**
+ * Except for {@link contents} and {@link contentsWithKeywords}, when {@link Context.locale} is specified it will default
+ * to the fallback locale for those fields not available in the specified locale.
+ */
 export interface CMS {
   carousel(id: string, context?: Context): Promise<Carousel>;
   text(id: string, context?: Context): Promise<Text>;
@@ -33,7 +37,14 @@ export interface CMS {
   url(id: string, context?: Context): Promise<Url>;
   image(id: string, context?: Context): Promise<Image>;
   queue(id: string, context?: Context): Promise<Queue>;
+  /**
+   * @param context If locale specified, it does not returns contents without values for the locale (even if it has value for the fallback locale)
+   */
   contents(model: ModelType, context?: Context): Promise<Content[]>;
+
+  /**
+   * @param context If locale specified, it does not returns contents without values for the locale (even if it has value for the fallback locale)
+   */
   contentsWithKeywords(context?: Context): Promise<SearchResult[]>;
   schedule(id: string): Promise<time.Schedule>;
   dateRange(id: string): Promise<time.DateRange>;

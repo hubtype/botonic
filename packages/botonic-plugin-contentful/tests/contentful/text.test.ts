@@ -1,5 +1,5 @@
 import { expectImgUrlIs } from './image.test';
-import { testContentful } from './contentful.helper';
+import { testContentful, testContext } from './contentful.helper';
 import * as cms from '../../src';
 
 export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
@@ -15,7 +15,7 @@ test('TEST: contentful text without followup', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_SORRY);
+  let text = await sut.text(TEST_SORRY, testContext()); // actually returns the fallback language (es)
 
   // assert
   expect(text.text).toEqual(
@@ -33,7 +33,8 @@ test('TEST: contentful text with URL button with followup', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_POST_FAQ1_ID);
+  let ctx = testContext();
+  let text = await sut.text(TEST_POST_FAQ1_ID, ctx);
 
   // assert
   expect(text.text).toEqual(
@@ -41,7 +42,9 @@ test('TEST: contentful text with URL button with followup', async () => {
       'Una vez enviado, recibirá un correo electrónico de confirmación de salida de almacén que incluirá un enlace de seguimiento. Con este enlace podrá en todo momento saber la situación/ubicación.\n' +
       'Si ha realizado su compra con un perfil invitado, siga su pedido con el enlace que aparece en el email de confirmación. Si tiene otras dudas sobre la entrega del pedido, el equipo de Atención al Cliente está a su disposición.'
   );
-  expect(text.shortText).toEqual('Encontrar mi pedido');
+  expect(text.shortText).toEqual(
+    ctx && ctx.locale == 'en' ? 'Find my command' : 'Encontrar mi pedido'
+  );
   expect(text.buttons).toHaveLength(1);
   expect(text.buttons[0].text).toEqual('Acceda a su cuenta');
   expect(text.buttons[0].callback.url).toEqual(
@@ -54,7 +57,7 @@ test('TEST: contentful text with payload button', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(KEYWORDS_NOT_FOUND);
+  let text = await sut.text(KEYWORDS_NOT_FOUND, testContext());
 
   // assert
   expect(text.buttons).toHaveLength(1);
@@ -65,7 +68,7 @@ test('TEST: contentful text without buttons with text followup', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_POST_FAQ2_ID);
+  let text = await sut.text(TEST_POST_FAQ2_ID, testContext());
 
   // assert
   expect(text.buttons).toHaveLength(0);
@@ -76,7 +79,7 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_FBK_OK_MSG);
+  let text = await sut.text(TEST_FBK_OK_MSG, testContext());
 
   // assert
   expect(text.buttons).toHaveLength(0);
@@ -87,7 +90,7 @@ test('TEST: contentful text without buttons with image followup', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_TEXT_IMAGE_FOLLOWUP);
+  let text = await sut.text(TEST_TEXT_IMAGE_FOLLOWUP, testContext());
 
   // assert
   expectImgUrlIs((text.followUp as cms.Image).imgUrl, 'red.jpg');
@@ -97,7 +100,7 @@ test('TEST: contentful text from model name', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text('PRE_MENU_CRSL');
+  let text = await sut.text('PRE_MENU_CRSL', testContext());
 
   // assert
   expect(text.name).toEqual('PRE_MENU_CRSL');
@@ -108,12 +111,12 @@ test('TEST: contentful text with URL button', async () => {
   let sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_TEXT_URL_BUTTON);
+  let text = await sut.text(TEST_TEXT_URL_BUTTON, { locale: 'en' });
 
   // assert
   expect(text.buttons).toHaveLength(1);
   expect(text.buttons[0].text).toEqual('Web de Hubtype');
   expect(text.buttons[0].callback).toEqual(
-    cms.Callback.ofUrl('https://www.hubtype.com/')
+    cms.Callback.ofUrl('https://www.hubtype.com/en')
   );
 });

@@ -1,11 +1,11 @@
 import { Queue, SearchableBy, SearchableByKeywords } from '../../src/cms';
-import { testContentful } from './contentful.helper';
+import { testContentful, testContext } from './contentful.helper';
 import { testSchedule } from './schedule.test';
 
 const TEST_QUEUE_ID = '62ILnVxLHOEp7aVvPMpCO8';
 
 test('TEST: contentful Queue', async () => {
-  let queue = await testContentful().queue(TEST_QUEUE_ID);
+  let queue = await testContentful().queue(TEST_QUEUE_ID, testContext());
 
   let searchableBy = new SearchableBy([
     new SearchableByKeywords('HIGH_PRIO', ['high1', 'high2'], 99),
