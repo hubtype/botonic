@@ -1,5 +1,6 @@
 import * as contentful from 'contentful';
 import { Entry } from 'contentful';
+import { Context } from '../cms';
 import * as cms from '../cms';
 import { Callback, Content, ContentCallback, ModelType } from '../cms';
 import { QueueDelivery, QueueFields } from './queue';
@@ -28,11 +29,12 @@ export class DeliveryApi {
 
   async getEntryByIdOrName<T>(
     id: string,
-    contentType: string
+    contentType: string,
+    context: Context
   ): Promise<contentful.Entry<T>> {
     try {
       if (id.indexOf('_') >= 0) {
-        let entries = await this.client.getEntries<T>({
+        let entries = await this.getEntries<T>(context, {
           'fields.name': id,
           // eslint-disable-next-line @typescript-eslint/camelcase
           content_type: contentType
@@ -45,19 +47,38 @@ export class DeliveryApi {
     } catch (error) {
       console.log(error);
     }
-    return this.getEntry(id);
+    return this.getEntry(id, context);
   }
 
   async getAsset(id: string, query?: any): Promise<contentful.Asset> {
     return this.client.getAsset(id, query);
   }
 
-  async getEntry<T>(id: string, query?: any): Promise<contentful.Entry<T>> {
-    return this.client.getEntry<T>(id, query);
+  async getEntry<T>(
+    id: string,
+    context: Context,
+    query: any = {}
+  ): Promise<contentful.Entry<T>> {
+    return this.client.getEntry<T>(
+      id,
+      DeliveryApi.queryFromContext(context, query)
+    );
   }
 
-  async getEntries<T>(query?: any): Promise<contentful.EntryCollection<T>> {
-    return this.client.getEntries<T>(query);
+  private static queryFromContext(context: Context, query: any = {}): any {
+    if (context.language) {
+      query['locale'] = context.language;
+    }
+    return query;
+  }
+
+  async getEntries<T>(
+    context: Context,
+    query?: any
+  ): Promise<contentful.EntryCollection<T>> {
+    return this.client.getEntries<T>(
+      DeliveryApi.queryFromContext(context, query)
+    );
   }
 
   static getContentModel(entry: contentful.Entry<any>): cms.ModelType {
@@ -78,11 +99,11 @@ export class DeliveryApi {
     return 'https:' + assetField.fields.file.url;
   }
 
-  async contents(model: ModelType): Promise<Content[]> {
+  async contents(model: ModelType, context: Context): Promise<Content[]> {
     if (model != ModelType.QUEUE) {
       throw new Error('CMS.contents only supports queue at the moment');
     }
-    let entries = await this.getEntries({
+    let entries = await this.getEntries(context, {
       // eslint-disable-next-line @typescript-eslint/camelcase
       content_type: model,
       include: QueueDelivery.REFERENCES_INCLUDE // TODO change for other types

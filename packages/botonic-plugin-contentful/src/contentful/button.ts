@@ -20,7 +20,7 @@ export class ButtonDelivery {
   }
 
   private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
-    let entry = await this.delivery.getEntry(id);
+    let entry = await this.delivery.getEntry(id, context);
     let entryType = DeliveryApi.getContentModel(entry);
     switch (entryType as string) {
       case cms.ModelType.CAROUSEL:

@@ -1,4 +1,12 @@
-import { Button, Callback, SearchResult, CMS, ModelType, Text } from '../cms';
+import {
+  Button,
+  Callback,
+  Context,
+  SearchResult,
+  CMS,
+  ModelType,
+  Text
+} from '../cms';
 import { MatchType } from '../nlp/keywords';
 import { SearchByKeywords } from './search-by-keywords';
 
@@ -13,10 +21,15 @@ export class Search {
    */
   async searchByKeywords(
     inputText: string,
-    matchType: MatchType
+    matchType: MatchType,
+    context: Context
   ): Promise<SearchResult[]> {
     let tokens = this.search.tokenize(inputText);
-    let contents = await this.search.searchContentsFromInput(tokens, matchType);
+    let contents = await this.search.searchContentsFromInput(
+      tokens,
+      matchType,
+      context
+    );
     return this.search.filterChitchat(tokens, contents);
   }
 

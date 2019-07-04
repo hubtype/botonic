@@ -1,4 +1,5 @@
 import { Entry, EntryCollection } from 'contentful';
+import { Context } from '../cms';
 import * as cms from '../cms';
 import { ModelType, SearchResult } from '../cms';
 import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
@@ -7,9 +8,9 @@ import { QueueFields } from './queue';
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}
 
-  async contentsWithKeywords(): Promise<SearchResult[]> {
-    let fromKeywords = this.entriesWithKeywords();
-    let fromSearchable = this.entriesWithSearchableByKeywords();
+  async contentsWithKeywords(context: Context): Promise<SearchResult[]> {
+    let fromKeywords = this.entriesWithKeywords(context);
+    let fromSearchable = this.entriesWithSearchableByKeywords(context);
     return (await fromKeywords).concat(await fromSearchable);
   }
 
@@ -34,8 +35,10 @@ export class KeywordsDelivery {
     );
   }
 
-  private async entriesWithSearchableByKeywords(): Promise<SearchResult[]> {
-    let queues = await this.delivery.getEntries<QueueFields>({
+  private async entriesWithSearchableByKeywords(
+    context: Context
+  ): Promise<SearchResult[]> {
+    let queues = await this.delivery.getEntries<QueueFields>(context, {
       // eslint-disable-next-line @typescript-eslint/camelcase
       content_type: ModelType.QUEUE,
       'fields.searchableBy[exists]': true,
@@ -57,9 +60,9 @@ export class KeywordsDelivery {
     );
   }
 
-  private entriesWithKeywords(): Promise<SearchResult[]> {
+  private entriesWithKeywords(context: Context): Promise<SearchResult[]> {
     const getWithKeywords = (contentType: cms.ModelType) =>
-      this.delivery.getEntries<ContentWithKeywordsFields>({
+      this.delivery.getEntries<ContentWithKeywordsFields>(context, {
         // eslint-disable-next-line @typescript-eslint/camelcase
         content_type: contentType,
         'fields.keywords[exists]': true,
