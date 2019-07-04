@@ -1,6 +1,5 @@
 import { SearchResult } from '../search/search-result';
-import { CallbackMap } from './callback';
-import { CMS, ModelType } from './cms';
+import { CMS, ModelType, Context } from './cms';
 import {
   Asset,
   Carousel,
@@ -24,23 +23,23 @@ export class ErrorReportingCMS implements CMS {
     return content;
   }
 
-  carousel(id: string, callbacks?: CallbackMap): Promise<Carousel> {
+  carousel(id: string, context?: Context): Promise<Carousel> {
     return this.cms
-      .carousel(id, callbacks)
+      .carousel(id, context)
       .catch(this.handleError(ModelType.CAROUSEL, id))
       .then(this.validate);
   }
 
-  text(id: string, callbacks?: CallbackMap): Promise<Text> {
+  text(id: string, context?: Context): Promise<Text> {
     return this.cms
-      .text(id, callbacks)
+      .text(id, context)
       .catch(this.handleError(ModelType.TEXT, id))
       .then(this.validate);
   }
 
-  chitchat(id: string, callbacks?: CallbackMap): Promise<Chitchat> {
+  chitchat(id: string, context?: Context): Promise<Chitchat> {
     return this.cms
-      .text(id, callbacks)
+      .text(id, context)
       .catch(this.handleError(ModelType.CHITCHAT, id))
       .then(this.validate);
   }
