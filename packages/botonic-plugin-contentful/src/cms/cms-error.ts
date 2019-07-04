@@ -1,5 +1,5 @@
 import { SearchResult } from '../search/search-result';
-import { CMS, ModelType, Context } from './cms';
+import { CMS, ModelType } from './cms';
 import {
   Asset,
   Carousel,
@@ -10,6 +10,8 @@ import {
   Queue,
   Content
 } from './contents';
+import { Context } from './context';
+
 import * as time from '../time';
 
 export class ErrorReportingCMS implements CMS {
@@ -44,44 +46,37 @@ export class ErrorReportingCMS implements CMS {
       .then(this.validate);
   }
 
-  url(id: string): Promise<Url> {
+  url(id: string, context?: Context): Promise<Url> {
     return this.cms
-      .url(id)
+      .url(id, context)
       .catch(this.handleError(ModelType.URL, id))
       .then(this.validate);
   }
 
-  image(id: string): Promise<Image> {
+  image(id: string, context?: Context): Promise<Image> {
     return this.cms
-      .image(id)
+      .image(id, context)
       .catch(this.handleError(ModelType.IMAGE, id))
       .then(this.validate);
   }
 
-  queue(id: string): Promise<Queue> {
+  queue(id: string, context?: Context): Promise<Queue> {
     return this.cms
-      .queue(id)
+      .queue(id, context)
       .catch(this.handleError(ModelType.QUEUE, id))
       .then(this.validate);
   }
 
-  contentsWithKeywords(): Promise<SearchResult[]> {
+  contentsWithKeywords(context?: Context): Promise<SearchResult[]> {
     return this.cms
-      .contentsWithKeywords()
+      .contentsWithKeywords(context)
       .catch(this.handleError('contentsWithKeywords'));
   }
 
-  private handleError(modelType: string, id?: string): (reason: any) => never {
-    return (reason: any) => {
-      let withId = id ? ` with id '${id}'` : '';
-      if (reason.response && reason.response.data) {
-        reason =
-          reason.response.status + ': ' + JSON.stringify(reason.response.data);
-      }
-      // eslint-disable-next-line no-console
-      console.error(`Error fetching ${modelType}${withId}: ${reason}`);
-      throw reason;
-    };
+  contents(model: ModelType, context?: Context): Promise<Content[]> {
+    return this.cms
+      .contents(model, context)
+      .catch(this.handleError('contents'));
   }
 
   schedule(id: string): Promise<time.Schedule> {
@@ -100,7 +95,16 @@ export class ErrorReportingCMS implements CMS {
     return this.cms.asset(id).catch(this.handleError(ModelType.ASSET, id));
   }
 
-  contents(model: ModelType): Promise<Content[]> {
-    return this.cms.contents(model).catch(this.handleError('contents'));
+  private handleError(modelType: string, id?: string): (reason: any) => never {
+    return (reason: any) => {
+      let withId = id ? ` with id '${id}'` : '';
+      if (reason.response && reason.response.data) {
+        reason =
+          reason.response.status + ': ' + JSON.stringify(reason.response.data);
+      }
+      // eslint-disable-next-line no-console
+      console.error(`Error fetching ${modelType}${withId}: ${reason}`);
+      throw reason;
+    };
   }
 }

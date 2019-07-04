@@ -1,6 +1,6 @@
 import { SearchResult } from '../search/search-result';
 import { Callback } from './callback';
-import { CMS, Context, ModelType } from './cms';
+import { CMS, ModelType } from './cms';
 import {
   Asset,
   Button,
@@ -14,6 +14,7 @@ import {
   Content
 } from './contents';
 import * as time from '../time';
+import { Context } from './context';
 
 /**
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
@@ -57,7 +58,7 @@ export class DummyCMS implements CMS {
     );
   }
 
-  url(id: string): Promise<Url> {
+  url(id: string, {  }: Context = new Context()): Promise<Url> {
     return Promise.resolve(
       new Url(id, `http://url.${id}`, 'button text for' + id)
     );
@@ -67,11 +68,11 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Image(id, DummyCMS.IMG));
   }
 
-  queue(id: string): Promise<Queue> {
+  queue(id: string, {  }: Context = new Context()): Promise<Queue> {
     return Promise.resolve(new Queue(id, id));
   }
 
-  contentsWithKeywords(): Promise<SearchResult[]> {
+  contentsWithKeywords({  }: Context = new Context()): Promise<SearchResult[]> {
     let contents = this.buttonCallbacks.map(cb => {
       let button = DummyCMS.buttonFromCallback(cb);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,7 +87,7 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new time.Schedule('Europe/Madrid'));
   }
 
-  chitchat(id: string, context?: Context): Promise<Chitchat> {
+  chitchat(id: string, context = new Context()): Promise<Chitchat> {
     return this.text(id, context);
   }
 
@@ -94,7 +95,7 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`));
   }
 
-  contents(model: ModelType): Promise<Content[]> {
+  contents(model: ModelType, context = new Context()): Promise<Content[]> {
     return Promise.resolve([]);
   }
 

@@ -8,7 +8,7 @@
   "compilerOptions": {
     "rootDir": "../",
     // Options below are for compiling @botonic js/jsx files
-    "allowJs": true,
+    "allowJs": true, //when set, jest does not validate types anymore
     "declaration": false,
     "declarationDir": null
   }
