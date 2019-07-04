@@ -14,15 +14,12 @@ export class ButtonDelivery {
 
   public fromReference(
     reference: contentful.Entry<any>,
-    callbacks: cms.CallbackMap
+    context: cms.Context
   ): Promise<cms.Button> {
-    return this.fromId(reference.sys.id, callbacks);
+    return this.fromId(reference.sys.id, context);
   }
 
-  private async fromId(
-    id: string,
-    callbacks: cms.CallbackMap
-  ): Promise<cms.Button> {
+  private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
     let entry = await this.delivery.getEntry(id);
     let entryType = DeliveryApi.getContentModel(entry);
     switch (entryType as string) {
@@ -36,7 +33,7 @@ export class ButtonDelivery {
         let buttonEntry = entry as contentful.Entry<ButtonFields>;
         let callback = buttonEntry.fields.target
           ? await this.getTargetCallback(buttonEntry.fields.target)
-          : callbacks.getCallback(id);
+          : context.callbacks.getCallback(id);
         return new cms.Button(
           buttonEntry.fields.name,
           buttonEntry.fields.text,
