@@ -13,30 +13,28 @@ export class TextDelivery extends DeliveryWithFollowUp {
     super(delivery);
   }
 
-  async text(id: string, callbacks: cms.CallbackMap): Promise<cms.Text> {
+  async text(id: string, context: cms.Context): Promise<cms.Text> {
     // we only get the 1 level of included references...
     let entry: contentful.Entry<
       TextFields
     > = await this.delivery.getEntryByIdOrName(id, cms.ModelType.TEXT);
     // .. so we need to fetch the buttons
-    return this.textFromEntry(entry, callbacks);
+    return this.textFromEntry(entry, context);
   }
 
   async textFromEntry(
     entry: contentful.Entry<TextFields>,
-    callbacks: cms.CallbackMap
+    context: cms.Context
   ): Promise<cms.Text> {
     let fields = entry.fields;
     let buttons = fields.buttons || [];
     let followup: Promise<cms.Content | undefined> = this.followUp!.fromFields(
       fields.followup,
-      callbacks
+      context
     );
     let promises = [followup];
     promises.push(
-      ...buttons.map(reference =>
-        this.button.fromReference(reference, callbacks)
-      )
+      ...buttons.map(reference => this.button.fromReference(reference, context))
     );
 
     return Promise.all(promises).then(followUpAndButtons => {

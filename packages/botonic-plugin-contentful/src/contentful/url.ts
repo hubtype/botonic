@@ -13,10 +13,7 @@ export class UrlDelivery extends DeliveryWithFollowUp {
   async url(id: string): Promise<cms.Url> {
     let entry: contentful.Entry<UrlFields> = await this.delivery.getEntry(id);
     let fields = entry.fields;
-    let followUp = await this.followUp!.fromFields(
-      fields.followup!,
-      new cms.CallbackMap()
-    );
+    let followUp = await this.followUp!.fromFields(fields.followup!);
     let name = fields.name || fields.url;
     return new cms.Url(
       name,

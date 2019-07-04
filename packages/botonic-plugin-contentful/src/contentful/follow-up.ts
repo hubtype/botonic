@@ -29,7 +29,7 @@ export class FollowUpDelivery {
   // TODO we should detect cycles to avoid infinite recursion
   fromFields(
     followUp: Entry<FollowUpFields> | undefined,
-    callbacks: cms.CallbackMap
+    context = new cms.Context()
   ): Promise<cms.FollowUp | undefined> {
     if (!followUp) {
       return Promise.resolve(undefined);
@@ -37,12 +37,9 @@ export class FollowUpDelivery {
     switch (DeliveryApi.getContentModel(followUp)) {
       case ModelType.CAROUSEL:
         // here followUp already has its fields set, but not yet its element fields
-        return this.carousel.carousel(followUp.sys.id, callbacks);
+        return this.carousel.carousel(followUp.sys.id, context);
       case cms.ModelType.TEXT:
-        return this.text.textFromEntry(
-          followUp as Entry<TextFields>,
-          callbacks
-        );
+        return this.text.textFromEntry(followUp as Entry<TextFields>, context);
       case cms.ModelType.IMAGE:
         return Promise.resolve(
           this.image.imageFromEntry(followUp as Entry<ImageFields>)

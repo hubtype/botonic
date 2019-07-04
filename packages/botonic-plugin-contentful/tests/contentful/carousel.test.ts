@@ -1,5 +1,4 @@
 import { testContentful } from './contentful.helper';
-import { mock } from 'ts-mockito';
 import * as cms from '../../src';
 import { expectImgUrlIs } from './image.test';
 
@@ -20,13 +19,9 @@ function assertElementDudasPrevias(element: cms.Element) {
 
 test('TEST: contentful carousel', async () => {
   let sut = testContentful();
-  let callback = mock(cms.Callback);
 
   // act
-  let carousel = await sut.carousel(
-    TEST_CAROUSEL_MAIN_ID,
-    cms.CallbackMap.forAllIds(callback)
-  );
+  let carousel = await sut.carousel(TEST_CAROUSEL_MAIN_ID);
 
   // assert
   expect(carousel.elements).toHaveLength(3);

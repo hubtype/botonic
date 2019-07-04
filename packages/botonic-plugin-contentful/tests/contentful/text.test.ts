@@ -1,6 +1,5 @@
 import { expectImgUrlIs } from './image.test';
 import { testContentful } from './contentful.helper';
-import { mock } from 'ts-mockito';
 import * as cms from '../../src';
 
 export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
@@ -14,10 +13,9 @@ export const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm';
 
 test('TEST: contentful text without followup', async () => {
   let sut = testContentful();
-  let callback = mock(cms.Callback);
 
   // act
-  let text = await sut.text(TEST_SORRY, cms.CallbackMap.forAllIds(callback));
+  let text = await sut.text(TEST_SORRY);
 
   // assert
   expect(text.text).toEqual(
@@ -33,13 +31,9 @@ test('TEST: contentful text without followup', async () => {
 
 test('TEST: contentful text with URL button with followup', async () => {
   let sut = testContentful();
-  let callback = mock(cms.Callback);
 
   // act
-  let text = await sut.text(
-    TEST_POST_FAQ1_ID,
-    cms.CallbackMap.forAllIds(callback)
-  );
+  let text = await sut.text(TEST_POST_FAQ1_ID);
 
   // assert
   expect(text.text).toEqual(
@@ -101,13 +95,9 @@ test('TEST: contentful text without buttons with image followup', async () => {
 
 test('TEST: contentful text from model name', async () => {
   let sut = testContentful();
-  let callback = mock(cms.Callback);
 
   // act
-  let text = await sut.text(
-    'PRE_MENU_CRSL',
-    cms.CallbackMap.forAllIds(callback)
-  );
+  let text = await sut.text('PRE_MENU_CRSL');
 
   // assert
   expect(text.name).toEqual('PRE_MENU_CRSL');
