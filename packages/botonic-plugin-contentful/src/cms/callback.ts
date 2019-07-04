@@ -2,8 +2,6 @@ import { CMS, ModelType } from './cms';
 import { Content } from './contents';
 import escapeStringRegexp from 'escape-string-regexp';
 
-export type Language = string;
-
 export class Callback {
   /**
    * @param payload may contain the reference of a {@link Content}. See {@link ContentCallback}
