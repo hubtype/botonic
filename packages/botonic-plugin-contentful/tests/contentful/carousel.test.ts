@@ -1,4 +1,4 @@
-import { testContentful } from './contentful.helper';
+import { testContentful, testContext } from './contentful.helper';
 import * as cms from '../../src';
 import { expectImgUrlIs } from './image.test';
 
@@ -21,7 +21,7 @@ test('TEST: contentful carousel', async () => {
   let sut = testContentful();
 
   // act
-  let carousel = await sut.carousel(TEST_CAROUSEL_MAIN_ID);
+  let carousel = await sut.carousel(TEST_CAROUSEL_MAIN_ID, testContext());
 
   // assert
   expect(carousel.elements).toHaveLength(3);

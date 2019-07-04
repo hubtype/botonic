@@ -1,11 +1,11 @@
 import {
   Button,
   Callback,
-  Context,
   SearchResult,
   CMS,
   ModelType,
-  Text
+  Text,
+  DEFAULT_CONTEXT
 } from '../cms';
 import { MatchType } from '../nlp/keywords';
 import { SearchByKeywords } from './search-by-keywords';
@@ -22,7 +22,7 @@ export class Search {
   async searchByKeywords(
     inputText: string,
     matchType: MatchType,
-    context: Context
+    context = DEFAULT_CONTEXT
   ): Promise<SearchResult[]> {
     let tokens = this.search.tokenize(inputText);
     let contents = await this.search.searchContentsFromInput(

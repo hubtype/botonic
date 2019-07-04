@@ -1,4 +1,4 @@
-import { Context } from '../cms/context';
+import { DEFAULT_CONTEXT } from '../cms/context';
 import { AssetDelivery } from './asset';
 import { DateRangeDelivery } from './date-range';
 import { ImageDelivery } from './image';
@@ -50,48 +50,39 @@ export default class Contentful implements cms.CMS {
     this._dateRange = new DateRangeDelivery(delivery);
   }
 
-  async carousel(
-    id: string,
-    context: Context = new Context()
-  ): Promise<cms.Carousel> {
+  async carousel(id: string, context = DEFAULT_CONTEXT): Promise<cms.Carousel> {
     return this._carousel.carousel(id, context);
   }
 
-  async text(id: string, context: Context = new Context()): Promise<cms.Text> {
+  async text(id: string, context = DEFAULT_CONTEXT): Promise<cms.Text> {
     return this._text.text(id, context);
   }
 
-  async url(id: string, context: Context = new Context()): Promise<cms.Url> {
+  async url(id: string, context = DEFAULT_CONTEXT): Promise<cms.Url> {
     return this._url.url(id, context);
   }
 
-  async queue(
-    id: string,
-    context: Context = new Context()
-  ): Promise<cms.Queue> {
+  async queue(id: string, context = DEFAULT_CONTEXT): Promise<cms.Queue> {
     return this._queue.queue(id, context);
   }
 
-  image(id: string, context: Context = new Context()): Promise<cms.Image> {
+  image(id: string, context = DEFAULT_CONTEXT): Promise<cms.Image> {
     return this._image.image(id, context);
   }
 
-  chitchat(
-    id: string,
-    context: Context = new Context()
-  ): Promise<cms.Chitchat> {
+  chitchat(id: string, context = DEFAULT_CONTEXT): Promise<cms.Chitchat> {
     return this._text.text(id, context);
   }
 
   contents(
     model: ModelType,
-    context: Context = new Context()
+    context = DEFAULT_CONTEXT
   ): Promise<cms.Content[]> {
     return this._delivery.contents(model, context);
   }
 
   async contentsWithKeywords(
-    context: Context = new Context()
+    context = DEFAULT_CONTEXT
   ): Promise<SearchResult[]> {
     return this._keywords.contentsWithKeywords(context);
   }

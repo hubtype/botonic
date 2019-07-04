@@ -14,7 +14,7 @@ import {
   Content
 } from './contents';
 import * as time from '../time';
-import { Context } from './context';
+import { DEFAULT_CONTEXT } from './context';
 
 /**
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
@@ -27,21 +27,21 @@ export class DummyCMS implements CMS {
    */
   constructor(readonly buttonCallbacks: Callback[]) {}
 
-  async carousel(id: string, {  }: Context = new Context()): Promise<Carousel> {
+  async carousel(id: string, {} = DEFAULT_CONTEXT): Promise<Carousel> {
     let elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
     );
     return Promise.resolve(new Carousel(id, elements));
   }
 
-  async text(id: string, {  }: Context = new Context()): Promise<Text> {
+  async text(id: string, {} = DEFAULT_CONTEXT): Promise<Text> {
     return Promise.resolve(
       new Text(id, 'Dummy text for ' + id, this.buttons(), id, ['kw1', 'kw2'])
     );
   }
 
-  private buttons(): Button[] {
-    return this.buttonCallbacks.map(DummyCMS.buttonFromCallback);
+  chitchat(id: string, context = DEFAULT_CONTEXT): Promise<Chitchat> {
+    return this.text(id, context);
   }
 
   public static buttonFromCallback(callback: Callback): Button {
@@ -58,21 +58,25 @@ export class DummyCMS implements CMS {
     );
   }
 
-  url(id: string, {  }: Context = new Context()): Promise<Url> {
+  url(id: string, {} = DEFAULT_CONTEXT): Promise<Url> {
     return Promise.resolve(
       new Url(id, `http://url.${id}`, 'button text for' + id)
     );
   }
 
-  image(id: string): Promise<Image> {
+  image(id: string, {} = DEFAULT_CONTEXT): Promise<Image> {
     return Promise.resolve(new Image(id, DummyCMS.IMG));
   }
 
-  queue(id: string, {  }: Context = new Context()): Promise<Queue> {
+  queue(id: string, {} = DEFAULT_CONTEXT): Promise<Queue> {
     return Promise.resolve(new Queue(id, id));
   }
 
-  contentsWithKeywords({  }: Context = new Context()): Promise<SearchResult[]> {
+  contents(model: ModelType, {} = DEFAULT_CONTEXT): Promise<Content[]> {
+    return Promise.resolve([]);
+  }
+
+  contentsWithKeywords({} = DEFAULT_CONTEXT): Promise<SearchResult[]> {
     let contents = this.buttonCallbacks.map(cb => {
       let button = DummyCMS.buttonFromCallback(cb);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,20 +91,16 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new time.Schedule('Europe/Madrid'));
   }
 
-  chitchat(id: string, context = new Context()): Promise<Chitchat> {
-    return this.text(id, context);
-  }
-
   asset(id: string): Promise<Asset> {
     return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`));
-  }
-
-  contents(model: ModelType, context = new Context()): Promise<Content[]> {
-    return Promise.resolve([]);
   }
 
   dateRange(id: string): Promise<time.DateRange> {
     let now = new Date();
     return Promise.resolve(new time.DateRange('daterange name', now, now));
+  }
+
+  private buttons(): Button[] {
+    return this.buttonCallbacks.map(DummyCMS.buttonFromCallback);
   }
 }

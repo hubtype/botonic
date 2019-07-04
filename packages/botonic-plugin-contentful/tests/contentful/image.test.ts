@@ -1,11 +1,11 @@
-import { testContentful } from './contentful.helper';
+import { testContentful, testContext } from './contentful.helper';
 
 const TEST_IMAGE = '3xjvpC7d7PYBmiptEeygfd';
 
 test('TEST: contentful image', async () => {
   let sut = testContentful();
 
-  let image = await sut.image(TEST_IMAGE);
+  let image = await sut.image(TEST_IMAGE, testContext());
   expectImgUrlIs(image.imgUrl, 'red.jpg');
 });
 
