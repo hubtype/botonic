@@ -26,6 +26,8 @@ export enum ModelType {
   QUEUE = 'queue'
 }
 
+export const MODEL_TYPES = Object.values(ModelType).map(m => m as ModelType);
+
 /**
  * Except for {@link contents} and {@link contentsWithKeywords}, when {@link Context.locale} is specified it will default
  * to the fallback locale for those fields not available in the specified locale.
@@ -43,6 +45,7 @@ export interface CMS {
   contents(model: ModelType, context?: Context): Promise<Content[]>;
 
   /**
+   * For contents with 'Seachable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
    * @param context If locale specified, it does not returns contents without values for the locale (even if it has value for the fallback locale)
    */
   contentsWithKeywords(context?: Context): Promise<SearchResult[]>;
