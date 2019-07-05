@@ -40,6 +40,10 @@ export class WebchatApp {
       this.addBotMessage(event.message)
   }
 
+  updateUser(user) {
+    this.webchatRef.current.updateUser(user)
+  }
+
   addBotMessage(message) {
     this.webchatRef.current.addBotResponse({response: msgToBotonic(message)})
   }

@@ -173,6 +173,9 @@ export const Webchat = forwardRef((props, ref) => {
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
+    updateUser: user => {
+      updateSession({...webchatState.session, user: {...webchatState.session.user, ...user}})
+      updateUser({...webchatState.user, ...user})},
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen)
