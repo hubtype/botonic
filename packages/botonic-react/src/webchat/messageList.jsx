@@ -7,7 +7,6 @@ export const WebchatMessageList = props => {
     <div
       style={{
         ...(props.style || {}),
-        overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto'

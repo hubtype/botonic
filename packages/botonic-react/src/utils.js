@@ -82,7 +82,7 @@ function elements_parse(elements) {
 }
 
 function buttons_parse(buttons) {
-  return buttons.map(b => {
+  return buttons.map((b, i) => {
     let props = b.props || b
     let payload = props.payload
     if (props.path) payload = `__PATH_PAYLOAD__${props.path}`
@@ -90,7 +90,7 @@ function buttons_parse(buttons) {
     let title = props.title
     let webview = props.messenger_extensions ? props.url : null
     return (
-      <Button payload={payload} url={url} webview={webview}>
+      <Button key={i} payload={payload} url={url} webview={webview}>
         {title}
       </Button>
     )
