@@ -69,7 +69,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (!devSettings || devSettings.keepSessionOnReload) {
       if (messages) {
         messages.map(m => {
-          let newComponent = msgToBotonic(m)
+          let newComponent = msgToBotonic({...m, delay: 0, typing: 0})
           if (newComponent) addMessageComponent(newComponent)
         })
       }
@@ -79,8 +79,19 @@ export const Webchat = forwardRef((props, ref) => {
     } else updateSession(initialSession)
     if (devSettings) updateDevSettings(devSettings)
     else if(initialDevSettings) updateDevSettings(initialDevSettings)
-    if(props.onInit) props.onInit()
+    if(props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
+
+
+  useEffect(() => {
+    if(!webchatState.isWebchatOpen) return
+    setTimeout(() => {
+      let end = document.getElementById('messages-end')
+      if (end) {
+        end.scrollIntoView()
+      }
+    })
+  }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
     saveState(JSON.stringify({

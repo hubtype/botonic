@@ -1,4 +1,5 @@
 import React from 'react'
+import { webchatInitialState } from './webchat/hooks'
 
 export const RequestContext = React.createContext({
   getString: () => '',
@@ -15,6 +16,9 @@ export const WebchatContext = React.createContext({
   sendPayload: payload => '',
   setReplies: replies => '',
   openWebview: webviewComponent => '',
+  addMessage: message => '',
+  updateReplies: replies => '',
   closeWebview: () => '',
-  theme: {}
+  theme: {},
+  webchatState: webchatInitialState
 })
