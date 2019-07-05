@@ -66,7 +66,7 @@ export const WebchatDev = forwardRef((props, ref) => {
               id: '000001',
               username: 'johndoe',
               name: 'John Doe',
-              provider: 'terminal',
+              provider: 'dev',
               provider_id: '0000000',
               extra_data: {}
             },
