@@ -1,5 +1,4 @@
-import { CMS, ModelType } from './cms';
-import { Content } from './contents';
+import { CMS, MODEL_TYPES, ModelType } from './cms';
 import escapeStringRegexp from 'escape-string-regexp';
 
 export class Callback {
@@ -37,7 +36,7 @@ export class ContentCallback extends Callback {
     let [type, id] = payload.split(ContentCallback.PAYLOAD_SEPARATOR);
     if (!id) {
       throw new Error(
-        `Callback payload '${payload}' does not content a model reference`
+        `Callback payload '${payload}' does not contain a model reference`
       );
     }
     return new ContentCallback(ContentCallback.checkDeliverableModel(type), id);
@@ -52,20 +51,16 @@ export class ContentCallback extends Callback {
   }
 
   private static checkDeliverableModel(modelType: string): ModelType {
-    switch (modelType as ModelType) {
-      case ModelType.CAROUSEL:
-      case ModelType.TEXT:
-      case ModelType.CHITCHAT:
-      case ModelType.URL:
-        return modelType as ModelType;
-      default:
-        throw new Error(
-          `${modelType} is not a mode type than can be delivered from CMS`
-        );
+    if (MODEL_TYPES.includes(modelType as ModelType)) {
+      return modelType as ModelType;
+    } else {
+      throw new Error(
+        `${modelType} is not a model type than can be delivered from CMS`
+      );
     }
   }
 
-  deliverPayloadContent(cms: CMS): Promise<Content> {
+  deliverPayloadContent(cms: CMS): Promise<any> {
     switch (this.model) {
       case ModelType.CAROUSEL:
         return cms.carousel(this.id);
@@ -79,6 +74,12 @@ export class ContentCallback extends Callback {
         return cms.queue(this.id);
       case ModelType.IMAGE:
         return cms.image(this.id);
+      case ModelType.SCHEDULE:
+        return cms.schedule(this.id);
+      case ModelType.DATE_RANGE:
+        return cms.dateRange(this.id);
+      case ModelType.ASSET:
+        return cms.asset(this.id);
       default:
         throw new Error(
           `Type '${this.model}' not supported for callback with id '${this.id}'`

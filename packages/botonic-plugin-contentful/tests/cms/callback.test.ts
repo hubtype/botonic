@@ -1,6 +1,13 @@
 import { instance, mock } from 'ts-mockito';
-import { ModelType } from '../../src';
+import { ContentCallback, ModelType } from '../../src';
 import * as cms from '../../src';
+
+test('TEST: ofPayload', async () => {
+  let callback = cms.Callback.ofPayload('text$text1');
+  expect(callback).toBeInstanceOf(ContentCallback);
+  expect((callback as ContentCallback).id).toEqual('text1');
+  expect((callback as ContentCallback).model).toEqual(ModelType.TEXT);
+});
 
 test('TEST: callbackMap multiple callbacks', () => {
   let callback1 = mock(cms.Callback);
