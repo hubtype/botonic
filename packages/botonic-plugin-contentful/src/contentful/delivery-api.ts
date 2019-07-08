@@ -1,8 +1,6 @@
 import * as contentful from 'contentful';
-import { Entry } from 'contentful';
-import { Context } from '../cms';
 import * as cms from '../cms';
-import { Callback, Content, ContentCallback, ModelType } from '../cms';
+import { Callback, Content, ContentCallback, Context, ModelType } from '../cms';
 import { QueueDelivery, QueueFields } from './queue';
 import { UrlFields } from './url';
 
@@ -29,7 +27,7 @@ export class DeliveryApi {
 
   async getEntryByIdOrName<T>(
     id: string,
-    contentType: string,
+    contentType: ModelType,
     context: Context
   ): Promise<contentful.Entry<T>> {
     try {
@@ -87,7 +85,7 @@ export class DeliveryApi {
     return typ as cms.ModelType;
   }
 
-  static callbackFromEntry(entry: Entry<any>): Callback {
+  static callbackFromEntry(entry: contentful.Entry<any>): Callback {
     let modelType = this.getContentModel(entry);
     if (modelType === ModelType.URL) {
       return Callback.ofUrl((entry.fields as UrlFields).url);
@@ -109,7 +107,7 @@ export class DeliveryApi {
       include: QueueDelivery.REFERENCES_INCLUDE // TODO change for other types
     });
     return entries.items.map(item =>
-      QueueDelivery.fromEntry(item as Entry<QueueFields>)
+      QueueDelivery.fromEntry(item as contentful.Entry<QueueFields>)
     );
     //TODO switch with instanceof the model
     // if (model instanceof ModelType.QUEUE) {

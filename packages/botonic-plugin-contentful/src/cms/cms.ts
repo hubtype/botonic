@@ -28,6 +28,16 @@ export enum ModelType {
 
 export const MODEL_TYPES = Object.values(ModelType).map(m => m as ModelType);
 
+export function isSameModel(model1: ModelType, model2: ModelType): boolean {
+  switch (model1) {
+    case ModelType.TEXT:
+    case ModelType.CHITCHAT:
+      return model2 == ModelType.TEXT || model2 == ModelType.CHITCHAT;
+    default:
+      return model1 == model2;
+  }
+}
+
 /**
  * Except for {@link contents} and {@link contentsWithKeywords}, when {@link Context.locale} is specified it will default
  * to the fallback locale for those fields not available in the specified locale.
