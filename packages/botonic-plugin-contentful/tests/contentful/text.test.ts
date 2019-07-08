@@ -96,17 +96,6 @@ test('TEST: contentful text without buttons with image followup', async () => {
   expectImgUrlIs((text.followUp as cms.Image).imgUrl, 'red.jpg');
 });
 
-test('TEST: contentful text from model name', async () => {
-  let sut = testContentful();
-
-  // act
-  let text = await sut.text('PRE_MENU_CRSL', testContext());
-
-  // assert
-  expect(text.name).toEqual('PRE_MENU_CRSL');
-  expect(text.buttons).toHaveLength(3);
-});
-
 test('TEST: contentful text with URL button', async () => {
   let sut = testContentful();
 
