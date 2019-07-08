@@ -1,16 +1,19 @@
 import * as contentful from 'contentful';
+import { DeliveryApi, ModelType } from '.';
+import * as cms from '../cms';
+import { CarouselFields } from './carousel';
+import { ContentDelivery } from './content-delivery';
 import {
   ContentWithKeywordsFields,
   ContentWithNameFields
 } from './delivery-api';
-import { ModelType, DeliveryApi } from '.';
-import * as cms from '../cms';
-import { UrlFields } from './url';
-import { CarouselFields } from './carousel';
 import { TextFields } from './text';
+import { UrlFields } from './url';
 
-export class ButtonDelivery {
-  constructor(private readonly delivery: DeliveryApi) {}
+export class ButtonDelivery extends ContentDelivery {
+  constructor(delivery: DeliveryApi) {
+    super(ModelType.BUTTON, delivery);
+  }
 
   public fromReference(
     reference: contentful.Entry<any>,

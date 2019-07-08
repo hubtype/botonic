@@ -7,15 +7,12 @@ import * as contentful from 'contentful';
 import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 
 export class UrlDelivery extends DeliveryWithFollowUp {
-  constructor(protected readonly delivery: DeliveryApi) {
-    super(delivery);
+  constructor(delivery: DeliveryApi) {
+    super(cms.ModelType.URL, delivery);
   }
 
   async url(id: string, context: Context): Promise<cms.Url> {
-    let entry: contentful.Entry<UrlFields> = await this.delivery.getEntry(
-      id,
-      context
-    );
+    let entry: contentful.Entry<UrlFields> = await this.getEntry(id, context);
     let fields = entry.fields;
     let followUp = await this.followUp!.fromFields(fields.followup!, context);
     let name = fields.name || fields.url;

@@ -1,14 +1,18 @@
 import { Entry } from 'contentful';
-import { DEFAULT_CONTEXT } from '../cms';
+import { DEFAULT_CONTEXT, ModelType } from '../cms';
 import * as time from '../time';
+import { ContentDelivery } from './content-delivery';
 import { ContentWithNameFields, DeliveryApi } from './delivery-api';
 
-export class ScheduleDelivery {
+export class ScheduleDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = 2;
-  constructor(protected delivery: DeliveryApi) {}
+
+  constructor(delivery: DeliveryApi) {
+    super(ModelType.SCHEDULE, delivery);
+  }
 
   async schedule(id: string): Promise<time.Schedule> {
-    let f = await this.delivery.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
+    let f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
       include: ScheduleDelivery.REFERENCES_INCLUDE
     });
     return ScheduleDelivery.scheduleFromEntry(f);
