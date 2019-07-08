@@ -6,11 +6,8 @@ import { DeliveryApi, ContentWithKeywordsFields } from './delivery-api';
 
 // TODO remove DeliveryWithFollowUp
 export class CarouselDelivery extends DeliveryWithFollowUp {
-  constructor(
-    protected delivery: DeliveryApi,
-    readonly button: ButtonDelivery
-  ) {
-    super(delivery);
+  constructor(delivery: DeliveryApi, readonly button: ButtonDelivery) {
+    super(cms.ModelType.CAROUSEL, delivery);
   }
 
   async carousel(id: string, context: cms.Context): Promise<cms.Carousel> {

@@ -1,19 +1,26 @@
 import { Context } from '../cms';
 import * as cms from '../cms';
 import * as contentful from 'contentful';
-import { ContentWithNameFields, DeliveryApi } from './delivery-api';
+import { ContentDelivery } from './content-delivery';
+import {
+  ContentWithNameFields,
+  DeliveryApi
+} from './delivery-api';
 import { ScheduleFields, ScheduleDelivery } from './schedule';
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields
 } from './searchable-by';
 
-export class QueueDelivery {
+export class QueueDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1;
-  constructor(protected delivery: DeliveryApi) {}
+
+  constructor(delivery: DeliveryApi) {
+    super(cms.ModelType.QUEUE, delivery);
+  }
 
   async queue(id: string, context: Context): Promise<cms.Queue> {
-    let entry: contentful.Entry<QueueFields> = await this.delivery.getEntry(
+    let entry: contentful.Entry<QueueFields> = await this.getEntry(
       id,
       context,
       { include: QueueDelivery.REFERENCES_INCLUDE }
