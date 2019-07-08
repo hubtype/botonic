@@ -1,15 +1,18 @@
 import { ModelType } from '../cms';
 import * as cms from '../cms';
 import { Entry } from 'contentful';
+import { ContentDelivery } from './content-delivery';
 import { TextFields, TextDelivery } from './text';
 import { CarouselDelivery, CarouselFields } from './carousel';
 import { ImageDelivery, ImageFields } from './image';
 import { DeliveryApi } from './delivery-api';
 
-export class DeliveryWithFollowUp {
+export class DeliveryWithFollowUp extends ContentDelivery {
   followUp: FollowUpDelivery | undefined;
 
-  constructor(protected readonly delivery: DeliveryApi) {}
+  constructor(modelType: ModelType, delivery: DeliveryApi) {
+    super(modelType, delivery);
+  }
 
   // cannot be set in constructor because there's a circular dependency Model <-> Followup
   setFollowUp(followUp: FollowUpDelivery) {

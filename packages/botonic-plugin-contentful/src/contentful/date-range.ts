@@ -1,13 +1,19 @@
-import { DEFAULT_CONTEXT } from '../cms';
-import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
+import { DEFAULT_CONTEXT, ModelType } from '../cms';
 import * as time from '../time';
+import { ContentDelivery } from './content-delivery';
+import {
+  ContentWithKeywordsFields,
+  DeliveryApi
+} from './delivery-api';
 
-export class DateRangeDelivery {
-  constructor(protected delivery: DeliveryApi) {}
+export class DateRangeDelivery extends ContentDelivery {
+  constructor(delivery: DeliveryApi) {
+    super(ModelType.DATE_RANGE, delivery);
+  }
 
   async dateRange(id: string): Promise<time.DateRange> {
-    let entry: contentful.Entry<DateRangeFields> = await this.delivery.getEntry(
+    let entry: contentful.Entry<DateRangeFields> = await this.getEntry(
       id,
       DEFAULT_CONTEXT
     );
