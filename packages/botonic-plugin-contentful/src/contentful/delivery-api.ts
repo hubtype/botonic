@@ -25,29 +25,6 @@ export class DeliveryApi {
     });
   }
 
-  async getEntryByIdOrName<T>(
-    id: string,
-    contentType: ModelType,
-    context: Context
-  ): Promise<contentful.Entry<T>> {
-    try {
-      if (id.indexOf('_') >= 0) {
-        let entries = await this.getEntries<T>(context, {
-          'fields.name': id,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          content_type: contentType
-        });
-        if (entries.total === 0) {
-          throw new Error(`No entry with name ${id}`);
-        }
-        return entries.items[0];
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return this.getEntry(id, context);
-  }
-
   async getAsset(id: string, query?: any): Promise<contentful.Asset> {
     return this.client.getAsset(id, query);
   }
