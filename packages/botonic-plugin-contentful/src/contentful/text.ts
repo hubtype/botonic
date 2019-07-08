@@ -15,9 +15,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
 
   async text(id: string, context: cms.Context): Promise<cms.Text> {
     // we only get the 1 level of included references...
-    let entry: contentful.Entry<
-      TextFields
-    > = await this.delivery.getEntryByIdOrName(id, cms.ModelType.TEXT, context);
+    let entry: contentful.Entry<TextFields> = await this.getEntry(id, context);
     // .. so we need to fetch the buttons
     return this.textFromEntry(entry, context);
   }
