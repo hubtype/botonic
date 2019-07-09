@@ -31,9 +31,7 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(ofType(ModelType.CAROUSEL)).toHaveLength(1);
   expect(ofType(ModelType.TEXT)).toHaveLength(15);
   expect(ofType(ModelType.CHITCHAT)).toHaveLength(0);
-  expect(ofType(ModelType.BUTTON)).toHaveLength(0);
   expect(ofType(ModelType.URL)).toHaveLength(0);
-  expect(ofType(ModelType.PAYLOAD)).toHaveLength(0);
   expect(ofType(ModelType.SCHEDULE)).toHaveLength(0);
   expect(ofType(ModelType.DATE_RANGE)).toHaveLength(0);
   expect(ofType(ModelType.IMAGE)).toHaveLength(0);
