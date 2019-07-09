@@ -2,7 +2,6 @@ import * as contentful from 'contentful';
 import { DeliveryApi, ModelType } from '.';
 import * as cms from '../cms';
 import { CarouselFields } from './carousel';
-import { ContentDelivery } from './content-delivery';
 import {
   ContentWithKeywordsFields,
   ContentWithNameFields
@@ -10,10 +9,10 @@ import {
 import { TextFields } from './text';
 import { UrlFields } from './url';
 
-export class ButtonDelivery extends ContentDelivery {
-  constructor(delivery: DeliveryApi) {
-    super(ModelType.BUTTON, delivery);
-  }
+export class ButtonDelivery {
+  private static BUTTON_CONTENT_TYPE = 'button';
+  private static PAYLOAD_CONTENT_TYPE = 'payload';
+  constructor(private readonly delivery: DeliveryApi) {}
 
   public fromReference(
     reference: contentful.Entry<any>,
@@ -32,7 +31,7 @@ export class ButtonDelivery extends ContentDelivery {
         return ButtonDelivery.fromContent(entry as contentful.Entry<
           ContentWithKeywordsFields
         >);
-      case cms.ModelType.BUTTON:
+      case ButtonDelivery.BUTTON_CONTENT_TYPE:
         let buttonEntry = entry as contentful.Entry<ButtonFields>;
         let callback = buttonEntry.fields.target
           ? await this.getTargetCallback(buttonEntry.fields.target)
@@ -73,7 +72,7 @@ export class ButtonDelivery extends ContentDelivery {
         let urlFields = target as contentful.Entry<UrlFields>;
         return cms.Callback.ofUrl(urlFields.fields.url);
       }
-      case ModelType.PAYLOAD: {
+      case ButtonDelivery.PAYLOAD_CONTENT_TYPE: {
         let payloadFields = target as contentful.Entry<PayloadFields>;
         return cms.Callback.ofPayload(payloadFields.fields.payload);
       }
