@@ -118,3 +118,7 @@ export interface PluginPostInput {
   lastRoutePath: string;
   response: string;
 }
+
+export function msgToBotonic(msg: any): React.ReactNode;
+export function msgsToBotonic(msgs: any | any[]): React.ReactNode;
+
