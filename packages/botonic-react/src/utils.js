@@ -70,6 +70,13 @@ export function msgToBotonic(msg) {
   }
 }
 
+export function msgsToBotonic(msgs) {
+  if (Array.isArray(msgs)) {
+    return <>{msgs.map(msg => msgToBotonic(msg))}</>;
+  }
+  return msgToBotonic(msgs);
+}
+
 function elements_parse(elements) {
   return elements.map((e, i) => (
     <Element key={i}>
