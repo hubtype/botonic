@@ -13,6 +13,14 @@ export interface BotonicMsg {
   data: any;
 }
 
+/**
+ * To render a CMS content:
+ * import { msgsToBotonic } from '@botonic/react';
+ * let converter = new BotonicMsgConverter();
+ * let cmsText = cms.text(id);
+ * let msg = converter.text(cmsText);
+ * let reactNode = msgsToBotonic(msg);
+ */
 export class BotonicMsgConverter {
   constructor(readonly options = new RenderOptions()) {}
 
