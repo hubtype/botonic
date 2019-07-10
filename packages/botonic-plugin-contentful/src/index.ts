@@ -1,7 +1,7 @@
 import * as cms from './cms';
 import Contentful from './contentful';
 import { Search } from './search';
-import { Renderer } from './render';
+import { BotonicMsgConverter } from './render';
 
 // Exports
 export * from './cms';
@@ -11,7 +11,7 @@ export * from './search';
 export * from './time';
 
 interface OptionsBase {
-  renderer?: Renderer;
+  renderer?: BotonicMsgConverter;
   search?: Search;
 }
 
@@ -27,7 +27,7 @@ export interface ContentfulOptions extends OptionsBase {
 export default class BotonicPluginContentful {
   readonly cms: cms.CMS;
 
-  readonly renderer: Renderer;
+  readonly renderer: BotonicMsgConverter;
 
   readonly search: Search;
 
@@ -40,7 +40,7 @@ export default class BotonicPluginContentful {
       this.cms = new Contentful(contOptions.spaceId, contOptions.accessToken);
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);
-    this.renderer = options.renderer || new Renderer();
+    this.renderer = options.renderer || new BotonicMsgConverter();
     this.search = options.search || new Search(this.cms);
   }
 
