@@ -48,11 +48,9 @@ export class Title extends React.Component<any, any> {}
 export class Subtitle extends React.Component<any, any> {}
 export class Element extends React.Component<any, any> {}
 
-export type Locales = {[id: string]: string|string[]|Locales };
-
 export class App {
   routes: core.Route[]
-  locales: Locales;
+  locales: core.Locales;
   integrations?: {[id: string]: any};
   theme?: string;
   plugins: { [id: string]: any};
@@ -61,7 +59,7 @@ export class App {
 
   constructor(app: {
     routes: core.Route[],
-    locales: Locales,
+    locales: core.Locales,
     integrations?: {[id: string]: any};
     theme?: string,
     plugins?: { [id: string]: any},
@@ -70,15 +68,10 @@ export class App {
   });
 }
 
-export interface Input {
-  type: string; // text, postback...
-  payload?: string;
-  data?: string;
-}
 
 // Parameters of the actions' botonicInit method
 export interface ActionInitInput {
-  input : Input;
+  input : core.Input;
   session: core.Session;
   params: any;
   lastRoutePath: any;
@@ -106,14 +99,14 @@ export const RequestContext: React.Context<any>;
 
 // Arguments of the plugin pre() method
 export interface PluginPreInput {
-  input: Input;
+  input: core.Input;
   session: core.Session;
   lastRoutePath: string;
 }
 
 // Arguments of the plugin post() method
 export interface PluginPostInput {
-  input: Input;
+  input: core.Input;
   session: core.Session;
   lastRoutePath: string;
   response: string;
