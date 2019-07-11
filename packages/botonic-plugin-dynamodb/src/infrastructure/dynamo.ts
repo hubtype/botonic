@@ -54,6 +54,9 @@ export class DynamoTrackStorage implements domain.TrackStorage {
     });
   }
 
+  /**
+   * If {@link UserEvent.args} contains numeric fields, they will be wrapped in DynamoDB's value/type structure
+   */
   async read(bot: string, time: Date): Promise<domain.Track> {
     const request = Track.fromKey(bot, time);
     const track = await this.mapper.get(request);
