@@ -8,6 +8,7 @@ import {
 import { marshallItem, Schema } from '@aws/dynamodb-data-marshaller';
 import { DynamoDB } from 'aws-sdk';
 import { AttributeValue } from 'aws-sdk/clients/dynamodb';
+import { UserEvent } from '../domain';
 import * as domain from '../domain';
 
 import Time from '../domain/time';
@@ -41,9 +42,10 @@ export enum TrackFields {
 export class Track extends TrackKey {
   /**
    * Insertions won't be idempotent. Maybe we can use instead user-time as key in a set?
+   * Datamapper is not creating UserEvent instances. {@link Track.toDomain} fixes it
    */
   @attribute({
-    defaultProvider: () => []
+    defaultProvider: () => [] as domain.UserEvent[]
   })
   events: domain.UserEvent[] = [];
 
@@ -62,7 +64,14 @@ export class Track extends TrackKey {
   }
 
   toDomain(): domain.Track {
-    return new domain.Track(this.bot, this.time, this.events);
+    const events = this.events.map(e => {
+      /** {@link Track.events} */
+      if ((e as any) instanceof UserEvent) {
+        return e;
+      }
+      return new UserEvent(e.user, e.event, e.args);
+    });
+    return new domain.Track(this.bot, this.time, events);
   }
 
   marshallEvents(): AttributeValue {
