@@ -36,9 +36,9 @@ export class DynamoTrackStorage implements domain.TrackStorage {
   }
 
   async write(domTrack: domain.Track): Promise<undefined> {
-    let track = Track.fromDomain(domTrack);
+    const track = Track.fromDomain(domTrack);
     // from https://stackoverflow.com/questions/34951043/is-it-possible-to-combine-if-not-exists-and-list-append-in-update-item
-    let input: UpdateItemInput = {
+    const input: UpdateItemInput = {
       Key: track.marshallKey(),
       TableName: this.tableName,
       UpdateExpression:
@@ -48,20 +48,20 @@ export class DynamoTrackStorage implements domain.TrackStorage {
         ':newEvents': track.marshallEvents()
       }
     };
-    let req = this.client.updateItem(input);
+    const req = this.client.updateItem(input);
     return req.promise().then(({}) => {
       return Promise.resolve(undefined);
     });
   }
 
   async read(bot: string, time: Date): Promise<domain.Track> {
-    let request = Track.fromKey(bot, time);
-    let track = await this.mapper.get(request);
+    const request = Track.fromKey(bot, time);
+    const track = await this.mapper.get(request);
     return track.toDomain();
   }
 
   async remove(bot: string, time: Date): Promise<undefined> {
-    let request = Track.fromKey(bot, time);
+    const request = Track.fromKey(bot, time);
     await this.mapper.delete(request);
     return Promise.resolve(undefined);
   }
