@@ -10,7 +10,7 @@ export function testConfig(
   conf?: ServiceConfigurationOptions
 ): ServiceConfigurationOptions {
   if (!conf || !conf.secretAccessKey || !conf.accessKeyId) {
-    let credentials = os.homedir() + '/.aws/credentials';
+    const credentials = os.homedir() + '/.aws/credentials';
     if (!fs.existsSync(credentials)) {
       console.warn(
         `Credentials file not found at ${credentials}. Are you authenticating some other way?`
