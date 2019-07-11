@@ -6,8 +6,7 @@ test('TEST: ErrorReportingCMS write rejected', async done => {
   const mockStorage = mock(DynamoTrackStorage);
   const error = new Error('mock error');
   const track = new Track('botid', new Date(), []);
-  // when(mockStorage.write(track)).thenReject(error);
-  when(mockStorage.write(track)).thenResolve(undefined);
+  when(mockStorage.write(track)).thenReject(error);
   const sut = new ErrorReportingTrackStorage(instance(mockStorage));
 
   // act
@@ -20,6 +19,7 @@ test('TEST: ErrorReportingCMS write rejected', async done => {
     })
     .catch(error2 => {
       expect(error2).toBe(error);
+      done();
     });
 });
 
