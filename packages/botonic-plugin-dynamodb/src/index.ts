@@ -29,7 +29,7 @@ export default class BotonicPluginDynamoDB {
     this.storage = new ErrorReportingTrackStorage(this.storage);
   }
 
-  async track(
+  track(
     botId: string,
     user: string,
     event: string,
@@ -41,12 +41,12 @@ export default class BotonicPluginDynamoDB {
   }
 
   // @ts-ignore
-  async pre({ input, session, lastRoutePath }) {
+  pre({ input, session, lastRoutePath }) {
     return { input, session, lastRoutePath };
   }
 
   // @ts-ignore
-  async post({ input, session, lastRoutePath, response }) {
+  post({ input, session, lastRoutePath, response }) {
     return { input, session, lastRoutePath, response };
   }
 }

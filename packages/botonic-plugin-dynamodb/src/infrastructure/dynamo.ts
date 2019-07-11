@@ -35,7 +35,7 @@ export class DynamoTrackStorage implements domain.TrackStorage {
     this.tableName = Dynamo.tableName(TABLE_NAME, env);
   }
 
-  async write(domTrack: domain.Track): Promise<undefined> {
+  write(domTrack: domain.Track): Promise<undefined> {
     const track = Track.fromDomain(domTrack);
     // from https://stackoverflow.com/questions/34951043/is-it-possible-to-combine-if-not-exists-and-list-append-in-update-item
     const input: UpdateItemInput = {

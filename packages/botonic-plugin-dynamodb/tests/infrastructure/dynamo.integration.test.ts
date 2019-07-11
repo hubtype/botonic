@@ -4,7 +4,7 @@ import { Track as DynamoTrack } from '../../src/infrastructure/track';
 import { Track, UserEvent } from '../../src/domain';
 import time from '../../src/domain/time';
 
-test('TEST: Track serialization', async () => {
+test('TEST: Track serialization', () => {
   DynamoTrack.testSerialization();
 });
 
