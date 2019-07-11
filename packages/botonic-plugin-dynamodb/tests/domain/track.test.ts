@@ -2,7 +2,7 @@ import { instance, mock, when } from 'ts-mockito';
 import { DynamoTrackStorage } from '../../src/infrastructure/dynamo';
 import { ErrorReportingTrackStorage, Track } from '../../src/domain/track';
 
-test('TEST: ErrorReportingCMS write rejected', async () => {
+test('TEST: ErrorReportingCMS write rejected', async done => {
   const mockStorage = mock(DynamoTrackStorage);
   const error = new Error('mock error');
   const track = new Track('botid', new Date(), []);
@@ -16,7 +16,7 @@ test('TEST: ErrorReportingCMS write rejected', async () => {
   // assert
   await promise
     .then(() => {
-      fail('should have thrown');
+      done.fail('should have thrown');
     })
     .catch(error2 => {
       expect(error2).toBe(error);
