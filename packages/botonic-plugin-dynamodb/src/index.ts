@@ -19,7 +19,7 @@ export default class BotonicPluginDynamoDB {
     if (options.storage) {
       this.storage = options.storage;
     } else {
-      let conf: DynamoDB.ClientConfiguration = {
+      const conf: DynamoDB.ClientConfiguration = {
         accessKeyId: options['accessKeyId'],
         secretAccessKey: options['secretAccessKey'],
         region: options['region']
@@ -35,8 +35,8 @@ export default class BotonicPluginDynamoDB {
     event: string,
     args: any = undefined
   ): Promise<undefined> {
-    let userEvent = new UserEvent(user, event, args);
-    let track = new Track(botId, time.now(), [userEvent]);
+    const userEvent = new UserEvent(user, event, args);
+    const track = new Track(botId, time.now(), [userEvent]);
     return this.storage.write(track);
   }
 

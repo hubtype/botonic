@@ -48,13 +48,13 @@ export class Track extends TrackKey {
   events: domain.UserEvent[] = [];
 
   static fromKey(botId: string, time: Date): Track {
-    let track = new Track();
+    const track = new Track();
     track.bot = botId;
     track.time = time;
     return track;
   }
   static fromDomain(domTrack: domain.Track): Track {
-    let track = new Track();
+    const track = new Track();
     track.bot = domTrack.botId;
     track.time = domTrack.time;
     track.events = domTrack.events;
@@ -66,9 +66,9 @@ export class Track extends TrackKey {
   }
 
   marshallEvents(): AttributeValue {
-    let schema = this.schema();
+    const schema = this.schema();
 
-    let marshalled = marshallItem(schema, this);
+    const marshalled = marshallItem(schema, this);
     return marshalled.events as AttributeValue;
   }
 
@@ -79,8 +79,8 @@ export class Track extends TrackKey {
     }
 
     // https://metisai.atlassian.net/browse/HTYPE-1881
-    let proto = Object.getPrototypeOf(this);
-    var sym = Object.getOwnPropertySymbols(proto).find(function(s) {
+    const proto = Object.getPrototypeOf(this);
+    const sym = Object.getOwnPropertySymbols(proto).find(function(s) {
       return String(s) === DynamoDbSchema.toString();
     }) as symbol;
     schema = (proto as any)[sym];
@@ -100,7 +100,7 @@ export class Track extends TrackKey {
    * https://metisai.atlassian.net/browse/HTYPE-1881 is not manifesting
    */
   static testSerialization(): void {
-    let track = new Track();
+    const track = new Track();
     track.schema();
   }
 }
