@@ -3,7 +3,7 @@ import {
   Callback,
   ContentCallback,
   ModelType,
-  PRIORITY_MAX
+  PRIORITY_MAX, SCORE_MAX
 } from '../cms';
 
 export class SearchResult {
@@ -17,7 +17,8 @@ export class SearchResult {
     readonly name: string,
     readonly shortText?: string,
     readonly keywords: string[] = [],
-    readonly priority: number = PRIORITY_MAX
+    readonly priority = PRIORITY_MAX,
+    readonly score = SCORE_MAX
   ) {}
 
   toButton(): Button {

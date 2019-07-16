@@ -10,10 +10,6 @@ import { DeliveryApi } from './delivery-api';
 export class DeliveryWithFollowUp extends ContentDelivery {
   followUp: FollowUpDelivery | undefined;
 
-  constructor(modelType: ModelType, delivery: DeliveryApi) {
-    super(modelType, delivery);
-  }
-
   // cannot be set in constructor because there's a circular dependency Model <-> Followup
   setFollowUp(followUp: FollowUpDelivery) {
     this.followUp = followUp;
