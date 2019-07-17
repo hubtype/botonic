@@ -64,3 +64,15 @@ test.each<any>([
       : MatchType.ONLY_KEYWORDS_FOUND
   )
 );
+
+test.each<any>([
+  // keyword with 3 words, words in between, different order
+  ['wc foo wb bar wa', { A: ['wa wb wc', 'other'] }, ['A']],
+  // keyword with 1 word, found
+  ['foo wa bar', { A: ['wa', 'other'] }, ['A']],
+  // keyword with 2 words, only 1 found
+  ['wb', { A: ['wa wb', 'other'] }, []]
+])(
+  'TEST: find keywords of "%s" with ONLY_KEYWORDS_FOUND',
+  testFindKeywords(MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP)
+);

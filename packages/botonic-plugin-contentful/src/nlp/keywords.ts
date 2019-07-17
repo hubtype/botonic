@@ -9,7 +9,9 @@ export enum MatchType {
   /** After removing stop words, spaces and word endings, the input text must only contain the keywords*/
   ONLY_KEYWORDS_FOUND,
   /** The keyword may be preceded and followed by other words */
-  KEYWORDS_AND_OTHERS_FOUND
+  KEYWORDS_AND_OTHERS_FOUND,
+  /** All the words in the keyword must appear on input text, even if mixed up with other words*/
+  ALL_WORDS_IN_KEYWORDS_MIXED_UP
 }
 
 export class KeywordsParser<M> {
@@ -44,6 +46,13 @@ export class KeywordsParser<M> {
         return substringIsBlankSeparated(joinedTokens, keyword);
       case MatchType.ONLY_KEYWORDS_FOUND:
         return joinedTokens == keyword;
+      case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
+        for (let word of keyword.split(' ')) {
+          if (!joinedTokens.includes(word)) {
+            return false;
+          }
+        }
+        return true;
     }
   }
 }
