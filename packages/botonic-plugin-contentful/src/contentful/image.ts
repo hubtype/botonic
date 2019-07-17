@@ -1,10 +1,7 @@
 import { Context } from '../cms';
 import * as cms from '../cms';
 import { ContentDelivery } from './content-delivery';
-import {
-  ContentWithKeywordsFields,
-  DeliveryApi
-} from './delivery-api';
+import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
 
 export class ImageDelivery extends ContentDelivery {

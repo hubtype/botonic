@@ -2,10 +2,7 @@ import * as contentful from 'contentful/index';
 import { DEFAULT_CONTEXT, ModelType } from '../cms';
 import * as time from '../time';
 import { ContentDelivery } from './content-delivery';
-import {
-  ContentWithKeywordsFields,
-  DeliveryApi
-} from './delivery-api';
+import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 
 export class DateRangeDelivery extends ContentDelivery {
   constructor(delivery: DeliveryApi) {
