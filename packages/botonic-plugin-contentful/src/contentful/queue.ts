@@ -2,10 +2,7 @@ import { Context } from '../cms';
 import * as cms from '../cms';
 import * as contentful from 'contentful';
 import { ContentDelivery } from './content-delivery';
-import {
-  ContentWithNameFields,
-  DeliveryApi
-} from './delivery-api';
+import { ContentWithNameFields, DeliveryApi } from './delivery-api';
 import { ScheduleFields, ScheduleDelivery } from './schedule';
 import {
   SearchableByKeywordsDelivery,
