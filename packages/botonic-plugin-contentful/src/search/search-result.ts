@@ -3,7 +3,8 @@ import {
   Callback,
   ContentCallback,
   ModelType,
-  PRIORITY_MAX, SCORE_MAX
+  PRIORITY_MAX,
+  SCORE_MAX
 } from '../cms';
 
 export class SearchResult {

@@ -11,8 +11,8 @@ export const PRIORITY_MAX: Priority = 100;
  * The score is how certain we are that the content matches the user input
  */
 export type Score = number;
-export const SCORE_MIN : Score = 0;
-export const SCORE_MAX : Score = 1;
+export const SCORE_MIN: Score = 0;
+export const SCORE_MAX: Score = 1;
 
 export class SearchableByKeywords {
   constructor(
