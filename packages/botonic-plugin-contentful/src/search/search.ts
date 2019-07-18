@@ -39,19 +39,20 @@ export class Search {
   async respondFoundContents(
     results: SearchResult[],
     confirmKeywordsFoundTextId: string,
-    noKeywordsFoundTextId: string
+    noKeywordsFoundTextId: string,
+    context: Context
   ): Promise<Text> {
     if (results.length == 0) {
-      return this.cms.text(noKeywordsFoundTextId);
+      return this.cms.text(noKeywordsFoundTextId, context);
     }
     let chitchatCallback = results[0].getCallbackIfChitchat();
     if (chitchatCallback) {
-      return this.cms.chitchat(chitchatCallback.id);
+      return this.cms.chitchat(chitchatCallback.id, context);
     }
     let buttonPromises = results.map(async result => {
       let urlCallback = result.getCallbackIfContentIs(ModelType.URL);
       if (urlCallback) {
-        let url = await this.cms.url(urlCallback.id);
+        let url = await this.cms.url(urlCallback.id, context);
         return new Button(
           result.name,
           result.shortText!,
@@ -61,7 +62,7 @@ export class Search {
       return result.toButton();
     });
     let buttons = await Promise.all(buttonPromises);
-    let text = await this.cms.text(confirmKeywordsFoundTextId);
+    let text = await this.cms.text(confirmKeywordsFoundTextId, context);
     return text.cloneWithButtons(buttons);
   }
 }

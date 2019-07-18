@@ -1,12 +1,13 @@
 import 'jest-extended';
-import { anything, instance, mock, when } from 'ts-mockito';
+import { deepEqual, instance, mock, when } from 'ts-mockito';
 import {
   Callback,
   SearchResult,
   ContentCallback,
   DummyCMS,
   ModelType,
-  SearchByKeywords
+  SearchByKeywords,
+  Context
 } from '../../src';
 import { MatchType } from '../../src/nlp/keywords';
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result';
@@ -20,7 +21,7 @@ test('TEST: suggestTextsForInput keywords found', async () => {
     contentWithKeyword(Callback.ofUrl('http...'), ['hubtype']),
     contentWithKeyword(Callback.ofPayload('p4'), ['not_found'])
   ];
-  let keywords = keywordsWithMockCms(contents);
+  let keywords = keywordsWithMockCms(contents, ES_CONTEXT);
 
   // act
   let expectedContents = contents.slice(0, 4);
@@ -35,9 +36,10 @@ test('TEST: suggestTextsForInput keywords found', async () => {
 });
 
 test('TEST: suggestTextsForInput no keywords found', async () => {
-  let keywords = keywordsWithMockCms([
-    contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'kw2'])
-  ]);
+  let keywords = keywordsWithMockCms(
+    [contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'kw2'])],
+    ES_CONTEXT
+  );
 
   // act
   let contents = await keywords.searchContentsFromInput(
@@ -70,9 +72,12 @@ export function chitchatContent(keywords: string[]) {
 }
 
 export function keywordsWithMockCms(
-  allContents: CallbackToContentWithKeywords1[]
+  allContents: CallbackToContentWithKeywords1[],
+  context: Context
 ): SearchByKeywords {
   let mockCms = mock(DummyCMS);
-  when(mockCms.contentsWithKeywords(anything())).thenResolve(allContents);
+  when(mockCms.contentsWithKeywords(deepEqual(context))).thenResolve(
+    allContents
+  );
   return new SearchByKeywords(instance(mockCms));
 }
