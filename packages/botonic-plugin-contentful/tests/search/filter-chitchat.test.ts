@@ -7,6 +7,7 @@ import {
   keywordsWithMockCms
 } from './search-contents-from-input.test';
 
+const LOCALE = 'es';
 test.each<any>([
   //@bug it recognizes only 1 chitchat because both keywords belong to same content
   //['buenos dias como esta no_reconocido no_reconocido!', 2],
@@ -21,10 +22,11 @@ test.each<any>([
       chitchatContent(['hola', 'buenos dias']),
       chitchatContent(['adios', 'hasta luego'])
     ]);
-    let tokens = keywords.tokenize(inputText);
+    let tokens = keywords.tokenize(LOCALE, inputText);
     let contents = await keywords.searchContentsFromInput(
       tokens,
-      MatchType.KEYWORDS_AND_OTHERS_FOUND
+      MatchType.KEYWORDS_AND_OTHERS_FOUND,
+      { locale: 'es' }
     );
     expect(contents).toHaveLength(numChitchats);
 
@@ -44,10 +46,11 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
     chitchatContent(['hola', 'buenos dias']),
     contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
   ]);
-  let tokens = keywords.tokenize('hola, DevoluciON fuera de  plazo?');
+  let tokens = keywords.tokenize(LOCALE, 'hola, DevoluciON fuera de  plazo?');
   let parsedKeywords = await keywords.searchContentsFromInput(
     tokens,
-    MatchType.KEYWORDS_AND_OTHERS_FOUND
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    { locale: LOCALE }
   );
   expect(parsedKeywords).toHaveLength(2);
 
@@ -72,11 +75,12 @@ test.each<any>([
       chitchatContent(['hola', 'buenos dias']),
       chitchatContent(['hasta luego'])
     ]);
-    let tokens = keywords.tokenize(inputText);
+    let tokens = keywords.tokenize(LOCALE, inputText);
 
     let contents = await keywords.searchContentsFromInput(
       tokens,
-      MatchType.KEYWORDS_AND_OTHERS_FOUND
+      MatchType.KEYWORDS_AND_OTHERS_FOUND,
+      { locale: LOCALE }
     );
     expect(contents).toHaveLength(numChitChats);
 
@@ -94,10 +98,11 @@ test('TEST treatChitChat: no chitchat detected', async () => {
     contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
   ]);
 
-  let tokens = keywords.tokenize('DevoluciON fuera de  plazo');
+  let tokens = keywords.tokenize(LOCALE, 'DevoluciON fuera de  plazo');
   let contents = await keywords.searchContentsFromInput(
     tokens,
-    MatchType.KEYWORDS_AND_OTHERS_FOUND
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    { locale: LOCALE }
   );
   expect(contents).toHaveLength(1);
 

@@ -1,3 +1,4 @@
+import { Locale } from './index';
 import { tokenizeAndStem } from './node-nlp';
 import { substringIsBlankSeparated } from './tokens';
 
@@ -17,11 +18,11 @@ export enum MatchType {
 export class KeywordsParser<M> {
   private readonly candidates = [] as CandidateWithKeywords<M>[];
 
-  constructor(readonly matchType: MatchType) {}
+  constructor(readonly locale: Locale, readonly matchType: MatchType) {}
 
   addCandidate(candidate: M, rawKeywords: string[]): void {
     let stemmedKeywords = rawKeywords.map(kw => {
-      return tokenizeAndStem(kw).join(' ');
+      return tokenizeAndStem(this.locale, kw).join(' ');
     });
     this.candidates.push(new CandidateWithKeywords(candidate, stemmedKeywords));
   }

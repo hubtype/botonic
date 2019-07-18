@@ -10,12 +10,12 @@ function testFindKeywords(matchType: MatchType) {
     keywordsByCandidate: { [index: string]: string[] },
     expectedMatch: string[]
   ) => {
-    let parser = new KeywordsParser(matchType);
+    let parser = new KeywordsParser('es', matchType);
 
     for (let candidate in keywordsByCandidate) {
       parser.addCandidate(candidate, keywordsByCandidate[candidate]);
     }
-    let tokens = tokenizeAndStem(inputText);
+    let tokens = tokenizeAndStem('es', inputText);
     let foundNames = parser.findCandidatesWithKeywordsAt(tokens);
     expect(foundNames).toIncludeSameMembers(expectedMatch);
   };
