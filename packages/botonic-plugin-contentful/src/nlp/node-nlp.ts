@@ -1,4 +1,5 @@
-import stemmer from 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer-es';
+import { Locale } from './index';
+import { stemmerFor } from './stemmer';
 
 // TODO should be filtered before stemmer, because stemmer removes some final letters
 const defaultStopWords = [
@@ -21,12 +22,12 @@ const defaultStopWords = [
 ];
 
 export function tokenizeAndStem(
+  locale: Locale,
   inputText: string,
   stopWords?: string[]
 ): string[] {
   stopWords = stopWords || defaultStopWords;
-  //const stemmer = NlpUtil.getStemmer('es');
-  // const stemmer = ;
+  const stemmer = stemmerFor(locale);
   let tokens: string[] = stemmer.tokenizeAndStem(
     inputText,
     // keeping stops because it cannot be configured (node-nlp/lib/nlp/stopwords/stopwords_es.json) and:
