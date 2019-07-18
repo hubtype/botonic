@@ -5,9 +5,10 @@ import {
   CMS,
   ModelType,
   Text,
-  DEFAULT_CONTEXT
+  Context
 } from '../cms';
 import { MatchType } from '../nlp/keywords';
+import { checkLocale } from '../nlp/locales';
 import { SearchByKeywords } from './search-by-keywords';
 
 export class Search {
@@ -18,13 +19,15 @@ export class Search {
 
   /**
    * It does not sort the results based on the {@link SearchResult.priority}.
+   * @param context must contain language
    */
   async searchByKeywords(
     inputText: string,
     matchType: MatchType,
-    context = DEFAULT_CONTEXT
+    context: Context
   ): Promise<SearchResult[]> {
-    let tokens = this.search.tokenize(inputText);
+    let locale = checkLocale(context.locale);
+    let tokens = this.search.tokenize(locale, inputText);
     let contents = await this.search.searchContentsFromInput(
       tokens,
       matchType,

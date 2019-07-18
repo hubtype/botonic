@@ -1,23 +1,25 @@
-import { DEFAULT_CONTEXT } from '../cms';
+import { Context } from '../cms';
 import * as cms from '../cms';
-import { tokenizeAndStem } from '../nlp';
+import { Locale, tokenizeAndStem } from '../nlp';
 import { KeywordsParser, MatchType } from '../nlp/keywords';
+import { checkLocale } from '../nlp/locales';
 import { SearchResult } from './search-result';
 
 export class SearchByKeywords {
   constructor(readonly cms: cms.CMS) {}
 
-  tokenize(inputText: string): string[] {
-    return tokenizeAndStem(inputText);
+  tokenize(locale: Locale, inputText: string): string[] {
+    return tokenizeAndStem(locale, inputText);
   }
 
   async searchContentsFromInput(
     inputTextTokens: string[],
     matchType: MatchType,
-    context = DEFAULT_CONTEXT
+    context: Context
   ): Promise<SearchResult[]> {
+    let locale = checkLocale(context.locale);
     let contentsWithKeywords = await this.cms.contentsWithKeywords(context);
-    let kws = new KeywordsParser<SearchResult>(matchType);
+    let kws = new KeywordsParser<SearchResult>(locale, matchType);
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.keywords!)
     );
