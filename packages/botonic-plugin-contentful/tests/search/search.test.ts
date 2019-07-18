@@ -9,9 +9,13 @@ import {
 } from '../../src/cms';
 import { Search } from '../../src/search';
 
+const CONTEXT = { locale: 'es' };
+
 test('TEST: respondFoundContents text with buttons', async () => {
   let cms = mock(DummyCMS);
-  when(cms.url('urlCmsId')).thenResolve(new Url('url', 'http:/mocked_url'));
+  when(cms.url('urlCmsId', CONTEXT)).thenResolve(
+    new Url('url', 'http:/mocked_url')
+  );
   let sut = new Search(instance(cms));
 
   let urlContent = new SearchResult(
@@ -29,11 +33,14 @@ test('TEST: respondFoundContents text with buttons', async () => {
   );
 
   // sut
-  when(cms.text('foundId')).thenResolve(new Text('foundName', 'foundText', []));
+  when(cms.text('foundId', CONTEXT)).thenResolve(
+    new Text('foundName', 'foundText', [])
+  );
   let response = await sut.respondFoundContents(
     [urlContent, textContent],
     'foundId',
-    'notFoundId'
+    'notFoundId',
+    CONTEXT
   );
 
   // assert
@@ -53,7 +60,7 @@ test('TEST: respondFoundContents text with chitchat', async () => {
   let sut = new Search(instance(cms));
 
   let chitchat = instance(mock(Text));
-  when(cms.chitchat('chitchatCmsId')).thenResolve(chitchat);
+  when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat);
   let chitchatCallback = new SearchResult(
     new ContentCallback(ModelType.CHITCHAT, 'chitchatCmsId'),
     'name',
@@ -62,11 +69,14 @@ test('TEST: respondFoundContents text with chitchat', async () => {
   );
 
   // sut
-  when(cms.text('foundId')).thenResolve(new Text('foundName', 'foundText', []));
+  when(cms.text('foundId', CONTEXT)).thenResolve(
+    new Text('foundName', 'foundText', [])
+  );
   let response = await sut.respondFoundContents(
     [chitchatCallback],
     'foundId',
-    'notFoundId'
+    'notFoundId',
+    CONTEXT
   );
 
   // assert
@@ -78,10 +88,15 @@ test('TEST: respondFoundContents without contents', async () => {
   let sut = new Search(instance(cms));
 
   // sut
-  when(cms.text('notFoundId')).thenResolve(
+  when(cms.text('notFoundId', CONTEXT)).thenResolve(
     new Text('notFoundName', 'notFoundText', [])
   );
-  let response = await sut.respondFoundContents([], 'foundId', 'notFoundId');
+  let response = await sut.respondFoundContents(
+    [],
+    'foundId',
+    'notFoundId',
+    CONTEXT
+  );
 
   // assert
   expect(response.text).toEqual('notFoundText');
