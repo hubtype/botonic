@@ -11,6 +11,7 @@ import {
 import { MatchType } from '../../src/nlp/keywords';
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result';
 
+const ES_CONTEXT = { locale: 'es' };
 test('TEST: suggestTextsForInput keywords found', async () => {
   let contents = [
     contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'devolucion plazo']),
@@ -24,8 +25,9 @@ test('TEST: suggestTextsForInput keywords found', async () => {
   // act
   let expectedContents = contents.slice(0, 4);
   let suggested = await keywords.searchContentsFromInput(
-    keywords.tokenize(' DevoluciON de  plazo? Empezar Hubtype'),
-    MatchType.KEYWORDS_AND_OTHERS_FOUND
+    keywords.tokenize('es', ' DevoluciON de  plazo? Empezar Hubtype'),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    ES_CONTEXT
   );
 
   // assert
@@ -39,8 +41,9 @@ test('TEST: suggestTextsForInput no keywords found', async () => {
 
   // act
   let contents = await keywords.searchContentsFromInput(
-    keywords.tokenize('willnotbefound'),
-    MatchType.KEYWORDS_AND_OTHERS_FOUND
+    keywords.tokenize('es', 'willnotbefound'),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    ES_CONTEXT
   );
 
   // assert
