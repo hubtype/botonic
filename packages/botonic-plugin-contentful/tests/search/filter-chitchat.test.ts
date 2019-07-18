@@ -8,6 +8,8 @@ import {
 } from './search-contents-from-input.test';
 
 const LOCALE = 'es';
+const CONTEXT = { locale: LOCALE };
+
 test.each<any>([
   //@bug it recognizes only 1 chitchat because both keywords belong to same content
   //['buenos dias como esta no_reconocido no_reconocido!', 2],
@@ -18,10 +20,13 @@ test.each<any>([
 ])(
   'TEST treatChitChat(%s): only filtered keywords, plus aprox <=2 non recognized tokens',
   async (inputText: string, numChitchats: number) => {
-    let keywords = keywordsWithMockCms([
-      chitchatContent(['hola', 'buenos dias']),
-      chitchatContent(['adios', 'hasta luego'])
-    ]);
+    let keywords = keywordsWithMockCms(
+      [
+        chitchatContent(['hola', 'buenos dias']),
+        chitchatContent(['adios', 'hasta luego'])
+      ],
+      CONTEXT
+    );
     let tokens = keywords.tokenize(LOCALE, inputText);
     let contents = await keywords.searchContentsFromInput(
       tokens,
@@ -42,10 +47,13 @@ test.each<any>([
 );
 
 test('TEST treatChitChat: chitchat and other keywords detected', async () => {
-  let keywords = keywordsWithMockCms([
-    chitchatContent(['hola', 'buenos dias']),
-    contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
-  ]);
+  let keywords = keywordsWithMockCms(
+    [
+      chitchatContent(['hola', 'buenos dias']),
+      contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
+    ],
+    CONTEXT
+  );
   let tokens = keywords.tokenize(LOCALE, 'hola, DevoluciON fuera de  plazo?');
   let parsedKeywords = await keywords.searchContentsFromInput(
     tokens,
@@ -71,10 +79,13 @@ test.each<any>([
 ])(
   'TEST treatChitChat: chitchats detected, plus aprox >2 non recognized tokens => ask user to repeat',
   async (inputText: string, numChitChats: number) => {
-    let keywords = keywordsWithMockCms([
-      chitchatContent(['hola', 'buenos dias']),
-      chitchatContent(['hasta luego'])
-    ]);
+    let keywords = keywordsWithMockCms(
+      [
+        chitchatContent(['hola', 'buenos dias']),
+        chitchatContent(['hasta luego'])
+      ],
+      CONTEXT
+    );
     let tokens = keywords.tokenize(LOCALE, inputText);
 
     let contents = await keywords.searchContentsFromInput(
@@ -93,10 +104,13 @@ test.each<any>([
 );
 
 test('TEST treatChitChat: no chitchat detected', async () => {
-  let keywords = keywordsWithMockCms([
-    chitchatContent(['hola']),
-    contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
-  ]);
+  let keywords = keywordsWithMockCms(
+    [
+      chitchatContent(['hola']),
+      contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
+    ],
+    CONTEXT
+  );
 
   let tokens = keywords.tokenize(LOCALE, 'DevoluciON fuera de  plazo');
   let contents = await keywords.searchContentsFromInput(
