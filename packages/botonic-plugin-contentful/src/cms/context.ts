@@ -1,6 +1,5 @@
+import { Locale } from '../nlp';
 import { CallbackMap } from './callback';
-
-export type Locale = string;
 
 /**
  * Default values when the context argument {@link Context} is not specified in a {@link CMS} call.
