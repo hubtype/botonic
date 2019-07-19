@@ -1,4 +1,5 @@
-import { tokenizeAndStem } from '../../src/nlp';
+import { Locale, tokenizeAndStem } from '../../src/nlp';
+import { DEFAULT_STOP_WORDS } from '../../src/nlp/node-nlp';
 
 test('TEST: normalize es', () => {
   const loc = 'es';
@@ -15,11 +16,14 @@ test('TEST: normalize ca', () => {
   expect(tokenizeAndStem(loc, ',./ àé  íò(óçÇ)  ;')).toEqual([
     'ae',
     'io',
-    'oçÇ'
+    'oçç'
   ]);
   expect(
-    tokenizeAndStem(loc, 'però realitzar la meva un una de ja de les comandes')
-  ).toEqual(['realitz', 'comand']);
+    tokenizeAndStem(
+      loc,
+      'ho hi però guanyés la meva un una de ja de les comandes'
+    )
+  ).toEqual(['guany', 'comand']);
 });
 
 test('TEST: normalize en', () => {
@@ -29,3 +33,12 @@ test('TEST: normalize en', () => {
     'token'
   ]);
 });
+
+test.each<any>([['es'], ['ca'], ['en']])(
+  'tokenizeAndStem(%s)',
+  (locale: Locale) => {
+    for (let stopWord of DEFAULT_STOP_WORDS[locale]) {
+      expect(tokenizeAndStem(locale, stopWord)).toEqual([]);
+    }
+  }
+);

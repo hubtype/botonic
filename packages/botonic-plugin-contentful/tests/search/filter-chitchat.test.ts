@@ -13,10 +13,10 @@ const CONTEXT = { locale: LOCALE };
 test.each<any>([
   //@bug it recognizes only 1 chitchat because both keywords belong to same content
   //['buenos dias como esta no_reconocido no_reconocido!', 2],
-  ['buenos dias hasta luego no_reconocido no_reconocido!', 2],
-  ['hola adios no_reconocido', 2],
-  ['hola no_reconocido', 1],
-  ['hola adios no_reconocido no_reconocido', 2]
+  ['buenos dias hasta luego noReconocido noReconocido!', 2],
+  ['hola adios noReconocido', 2],
+  ['hola noReconocido', 1],
+  ['hola adios noReconocido noReconocido', 2]
 ])(
   'TEST treatChitChat(%s): only filtered keywords, plus aprox <=2 non recognized tokens',
   async (inputText: string, numChitchats: number) => {
