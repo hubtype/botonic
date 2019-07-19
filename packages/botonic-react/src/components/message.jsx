@@ -86,17 +86,19 @@ export const Message = props => {
     return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
   }
 
-  const getFontColor = () => {
-    let fontColorUser = '#ffffff'
-    let fontColorBot = '#000000'
+  const getFontColor = colors => {
     if (isFromUser()) {
-      return webchatState.theme.customUserMessages
-        ? webchatState.theme.customUserMessages.color
-        : fontColorUser
+      if (webchatState.theme.customUserMessages.color) {
+        return webchatState.theme.customUserMessages.color
+      } else {
+        return '#ffffff'
+      }
     } else {
-      return webchatState.theme.customBotMessages
-        ? webchatState.theme.customBotMessages.color
-        : fontColorBot
+      if (webchatState.theme.customBotMessages.color) {
+        return webchatState.theme.customBotMessages.color
+      } else {
+        return '#000'
+      }
     }
   }
 
@@ -121,39 +123,26 @@ export const Message = props => {
           paddingLeft: 5
         }}
       >
-        <div
-          style={{
-            width: 30,
-            position: 'absolute',
-            height: '108%'
-          }}
-        >
+        <div style={{ width: 30, position: 'absolute', bottom: 0 }}>
           {isFromBot() && webchatState.theme.botLogoChat ? (
             <webchatState.theme.botLogoChat />
           ) : (
-            isFromBot() && (
-              <img
-                style={{
-                  margin: 'auto',
-                  position: 'absolute',
-                  top: 0,
-                  bottom: 0
-                }}
-                src={Logo}
-              />
-            )
+            isFromBot() && <img style={{ width: 30 }} src={Logo} />
           )}
         </div>
 
         <DefaultMessage
           style={{
-            left: isFromBot() ? 22 : 0,
+            width: 30,
+            position: 'absolute',
+            height: '108%',
+            left: isFromBot() ? 30 : 0,
             top: isFromBot() ? 5 : 0,
             backgroundColor: getBgColor(),
             color:
               webchatState.theme.customUserMessages ||
               webchatState.theme.customBotMessages
-                ? getFontColor()
+                ? getFontColor(webchatState.theme)
                 : isFromUser()
                 ? '#FFFFFF'
                 : '#000',

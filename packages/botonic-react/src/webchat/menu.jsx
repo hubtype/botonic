@@ -9,11 +9,11 @@ const DefaultMenu = () => {
   const { webchatState } = useContext(WebchatContext)
   return (
     <Textarea
-      name="text"
+      name='text'
       minRows={2}
       maxRows={4}
-      wrap="soft"
-      maxLength="1000"
+      wrap='soft'
+      maxLength='1000'
       placeholder={webchatState.theme.textPlaceholder}
       autoFocus={location.hostname === 'localhost'}
       inputRef={textArea}

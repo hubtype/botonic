@@ -131,6 +131,20 @@ export const Webchat = forwardRef((props, ref) => {
     updateTheme({ ...webchatState.theme, ...props.theme })
   }, [props.theme])
 
+  const openMenu = () => {
+    if (menuIsOpened) {
+      setMenuIsOpened(false)
+    } else {
+      setMenuIsOpened(true)
+    }
+  }
+  const openEmoji = () => {
+    if (emojiIsOpened) {
+      setemojiIsOpened(false)
+    } else {
+      setemojiIsOpened(true)
+    }
+  }
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
@@ -415,6 +429,13 @@ export const Webchat = forwardRef((props, ref) => {
               <Button onClick={closeMenu}>Cancel</Button>
             </PersistentMenu>
           )}
+          {webchatState.webviewOption.isOpen && (
+            <webchatState.webviewOption.component />
+          )}
+          {menuIsOpened && choiceMenu(webchatState.theme.customMenu)}
+          {emojiIsOpened && (
+            <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
+          )}
           {!webchatState.handoff && (
             <div
               style={{
@@ -468,6 +489,7 @@ export const Webchat = forwardRef((props, ref) => {
               />
             </div>
           )}
+
           {webchatState.webview && (
             <RequestContext.Provider value={webviewRequestContext}>
               <WebviewContainer
