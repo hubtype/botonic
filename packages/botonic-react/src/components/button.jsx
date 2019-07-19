@@ -15,15 +15,15 @@ const StyledButton = styled.button`
   padding: 12px 32px;
   color: ${props => props.theme.brandColor || `#000`};
   border: none;
-  border-top: 1px solid #F1F0F0;
+  border: 1px solid #f1f0f0;
   cursor: pointer;
   outline: 0px;
-  &:last-of-type {
-    border-bottom-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-  }
+  border-top-right-radius: ${props => props.borderTop || `0px`};
+  border-top-left-radius: ${props => props.borderTop || `0px`};
+  border-bottom-right-radius: ${props => props.borderBottom || `0px`};
+  border-bottom-left-radius: ${props => props.borderBottom || `0px`};
   &:hover {
-    background-color: #F3F3F3;
+    background-color: #f3f3f3;
   }
   overflow: hidden;
 `
@@ -50,6 +50,8 @@ export const Button = props => {
     }
     return (
       <StyledButton
+        borderTop={props.top}
+        borderBottom={props.bottom}
         theme={webchatState.theme}
         onClick={e => handleClick(e)}
       >
