@@ -19,6 +19,12 @@ declare module 'node-nlp/lib/nlp/nlp-util' {
 
   export = NlpUtil;
 }
+declare module 'node-nlp/lib/nlp/tokenizers/punct-tokenizer' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
+
+  class PunctTokenizer extends Tokenizer {}
+  export = PunctTokenizer;
+}
 
 // We use directly the ES Stemmer instead of using NlpUtil to avoid loading dependencies of so many languages
 // (there are evn errors with 'fs' library and with Japanese dependencies)
