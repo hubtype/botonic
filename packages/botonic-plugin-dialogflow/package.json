@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dialogflow",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "main": "src/index.js",
   "dependencies": {
     "axios": "latest"

@@ -42,8 +42,14 @@ export default class BotonicPluginDialogflow {
     let entities = []
     let defaultFallback = ''
     let dialogflowResponse = null
+
+    let data_to_query = input.data
+      ? input.data
+      : input.payload
+      ? input.payload
+      : null
     let dialogflow_resp = await this.query(
-      input.data,
+      data_to_query,
       session.__locale,
       df_session_id
     )
