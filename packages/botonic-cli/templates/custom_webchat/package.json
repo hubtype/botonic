@@ -1,10 +1,10 @@
 {
   "scripts": {
-    "build": "webpack --env.node --mode=production",
-    "start": "webpack-dev-server --env.webchat"
+    "build": "webpack --env.target=all --mode=production",
+    "start": "webpack-dev-server --env.target=dev"
   },
   "dependencies": {
-    "@botonic/react": "0.8.1"
+    "@botonic/react": "0.9.0"
   },
   "devDependencies": {
     "terser": "^3.14.1",
