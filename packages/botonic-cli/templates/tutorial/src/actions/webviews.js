@@ -9,8 +9,8 @@ import {
   Subtitle
 } from '@botonic/react'
 
-import MyWebview from '../webviews/components/myWebview'
-import InteractionWithBot from '../webviews/components/interactionWithBot'
+import MyWebview from '../webviews/myWebview'
+import InteractionWithBot from '../webviews/interactionWithBot'
 import BotVader from '../assets/bot_vader.jpg'
 import InteractWithBot from '../assets/interact_with_bot.jpg'
 

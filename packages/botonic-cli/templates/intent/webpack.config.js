@@ -10,8 +10,11 @@ const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 
 const root = path.resolve(__dirname, 'src')
+const botonicPath = path.resolve(__dirname, 'node_modules', '@botonic', 'react')
 
 const terserPlugin = new TerserPlugin({
+  parallel: true,
+  sourceMap: true,
   terserOptions: {
     keep_fnames: true
   }
@@ -78,16 +81,14 @@ const imageminPlugin = new ImageminPlugin({
   }
 })
 
-const botonicWebchatConfig = {
+const botonicDevConfig = {
   optimization: {
     minimizer: [terserPlugin]
   },
   mode: 'development',
   devtool: 'inline-source-map',
   target: 'web',
-  entry: {
-    webviews: './src/app.js'
-  },
+  entry: path.resolve(botonicPath, 'src', 'entry.js'),
   module: {
     rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
   },
@@ -96,11 +97,14 @@ const botonicWebchatConfig = {
     filename: 'webchat.botonic.js',
     library: 'Botonic',
     libraryTarget: 'umd',
-    libraryExport: 'default',
+    libraryExport: 'app',
     publicPath: './'
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    alias: {
+      BotonicProject: path.resolve(__dirname, 'src')
+    }
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
@@ -110,17 +114,53 @@ const botonicWebchatConfig = {
     hot: true
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      template: './node_modules/@botonic/react/src/webchat.template.html',
+      template: path.resolve(botonicPath, 'src', 'webchat.template.html'),
       filename: 'index.html'
     }),
     new webpack.HotModuleReplacementPlugin(),
     imageminPlugin,
-    new webpack.DefinePlugin({
-      'process.env': {
-        HUBTYPE_API_URL: JSON.stringify(process.env.HUBTYPE_API_URL)
-      }
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: null,
+      BOTONIC_TARGET: 'dev'
+    })
+  ]
+}
+
+const botonicWebchatConfig = {
+  optimization: {
+    minimizer: [terserPlugin]
+  },
+  mode: 'development',
+  target: 'web',
+  entry: path.resolve(botonicPath, 'src', 'entry.js'),
+  module: {
+    rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'webchat.botonic.js',
+    library: 'Botonic',
+    libraryTarget: 'umd',
+    libraryExport: 'app',
+    publicPath: './'
+  },
+  resolve: {
+    extensions: ['*', '.js', '.jsx'],
+    alias: {
+      BotonicProject: path.resolve(__dirname, 'src')
+    }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(botonicPath, 'src', 'webchat.template.html'),
+      filename: 'index.html'
+    }),
+    imageminPlugin,
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: null,
+      WEBCHAT_PUSHER_KEY: null,
+      BOTONIC_TARGET: 'webchat'
     })
   ]
 }
@@ -132,15 +172,13 @@ const botonicWebviewsConfig = {
   mode: 'development',
   devtool: 'inline-source-map',
   target: 'web',
-  entry: {
-    webviews: './src/webviews/index.js'
-  },
+  entry: path.resolve(botonicPath, 'src', 'entry.js'),
   output: {
     path: path.resolve(__dirname, 'dist/webviews'),
     filename: 'webviews.js',
     library: 'BotonicWebview',
     libraryTarget: 'umd',
-    libraryExport: 'default'
+    libraryExport: 'app'
   },
   module: {
     rules: [
@@ -160,18 +198,21 @@ const botonicWebviewsConfig = {
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    alias: {
+      BotonicProject: path.resolve(__dirname, 'src')
+    }
   },
+  devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
-      template: './node_modules/@botonic/react/src/webview.template.html',
+      template: path.resolve(botonicPath, 'src', 'webview.template.html'),
       filename: 'index.html'
     }),
     imageminPlugin,
-    new webpack.DefinePlugin({
-      'process.env': {
-        HUBTYPE_API_URL: JSON.stringify(process.env.HUBTYPE_API_URL)
-      }
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: null,
+      BOTONIC_TARGET: 'webviews'
     })
   ]
 }
@@ -183,26 +224,43 @@ const botonicServerConfig = {
   context: root,
   mode: 'development',
   target: 'node',
-  entry: './app.js',
+  entry: path.resolve(botonicPath, 'src', 'entry.js'),
   output: {
     filename: 'bot.js',
     library: 'bot',
     libraryTarget: 'umd',
-    libraryExport: 'default'
+    libraryExport: 'app'
   },
   module: {
     rules: [babelLoaderConfig, fileLoaderConfig, nullLoaderConfig]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    alias: {
+      BotonicProject: path.resolve(__dirname, 'src')
+    }
   },
-  plugins: [new CleanWebpackPlugin(['dist']), imageminPlugin]
+  devtool: 'source-map',
+  plugins: [
+    new CleanWebpackPlugin(['dist']),
+    imageminPlugin,
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: null,
+      BOTONIC_TARGET: 'node'
+    })
+  ]
 }
 
 module.exports = function(env) {
-  if (env.node) {
-    return [botonicServerConfig, botonicWebviewsConfig]
-  } else if (env.webchat) {
+  if (env.target === 'all') {
+    return [botonicServerConfig, botonicWebviewsConfig, botonicWebchatConfig]
+  } else if (env.target === 'dev') {
+    return [botonicDevConfig]
+  } else if (env.target === 'node') {
+    return [botonicServerConfig]
+  } else if (env.target === 'webviews') {
+    return [botonicWebviewsConfig]
+  } else if (env.target === 'webchat') {
     return [botonicWebchatConfig]
   }
 }
