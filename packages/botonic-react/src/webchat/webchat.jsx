@@ -241,6 +241,9 @@ export const Webchat = forwardRef((props, ref) => {
   const staticAssetsUrl = getScriptBaseURL()
 
   const CustomTriggerButton = webchatState.theme.customTriggerButton
+  let logoUrl = Logo
+  if(props.theme && props.theme.brandIconUrl) logoUrl = props.theme.brandIconUrl
+  if(webchatState.theme && webchatState.theme.brandIconUrl) logoUrl = webchatState.theme.brandIconUrl
   const triggerButton = CustomTriggerButton ? <CustomTriggerButton/> : (
     <div
       style={{
@@ -262,7 +265,7 @@ export const Webchat = forwardRef((props, ref) => {
         style={{
           height: 50
         }}
-        src={staticAssetsUrl + (webchatState.theme.brandIconUrl || Logo)}
+        src={staticAssetsUrl + logoUrl}
       />
     </div>
   )
