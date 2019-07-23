@@ -59,6 +59,10 @@ Creating...
     {
       name: 'custom_webchat',
       description: 'Custom Webchat: See how it looks like a custom webchat'
+    },
+    {
+      name: 'nlu',
+      description: 'NLU: Train with your own intents with @botonic/plugin-nlu!'
     }
   ]
 
