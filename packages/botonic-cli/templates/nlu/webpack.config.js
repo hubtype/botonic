@@ -125,14 +125,10 @@ const botonicDevConfig = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     imageminPlugin,
-    new webpack.DefinePlugin({
-      'process.env.HUBTYPE_API_URL': JSON.stringify(
-        process.env.HUBTYPE_API_URL
-      ),
-      'process.env.BOTONIC_TARGET': JSON.stringify('dev'),
-      'process.env.BOTONIC_PROJECT_ROOT': JSON.stringify(
-        path.resolve(__dirname, 'src')
-      )
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: 'https://api.hubtype.com',
+      BOTONIC_TARGET: 'dev',
+      BOTONIC_PROJECT_ROOT: JSON.stringify(path.resolve(__dirname, 'src'))
     })
   ]
 }
@@ -170,11 +166,10 @@ const botonicWebchatConfig = {
       filename: 'index.html'
     }),
     imageminPlugin,
-    new webpack.DefinePlugin({
-      'process.env.HUBTYPE_API_URL': JSON.stringify(
-        process.env.HUBTYPE_API_URL
-      ),
-      'process.env.BOTONIC_TARGET': JSON.stringify('webchat')
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: 'https://api.hubtype.com',
+      WEBCHAT_PUSHER_KEY: '434ca667c8e6cb3f641c',
+      BOTONIC_TARGET: 'webchat'
     })
   ]
 }
@@ -226,11 +221,9 @@ const botonicWebviewsConfig = {
       filename: 'index.html'
     }),
     imageminPlugin,
-    new webpack.DefinePlugin({
-      'process.env.HUBTYPE_API_URL': JSON.stringify(
-        process.env.HUBTYPE_API_URL
-      ),
-      'process.env.BOTONIC_TARGET': JSON.stringify('webviews')
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: 'https://api.hubtype.com',
+      BOTONIC_TARGET: 'webviews'
     })
   ]
 }
@@ -264,11 +257,9 @@ const botonicServerConfig = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     imageminPlugin,
-    new webpack.DefinePlugin({
-      'process.env.HUBTYPE_API_URL': JSON.stringify(
-        process.env.HUBTYPE_API_URL
-      ),
-      'process.env.BOTONIC_TARGET': JSON.stringify('node')
+    new webpack.EnvironmentPlugin({
+      HUBTYPE_API_URL: 'https://api.hubtype.com',
+      BOTONIC_TARGET: 'node'
     })
   ]
 }
