@@ -25,9 +25,14 @@ export const webchatInitialState = {
 export function webchatReducer(state, action) {
   switch (action.type) {
     case 'addMessage':
+      if (
+        state.messagesJSON &&
+        state.messagesJSON.find(m => m.id === action.payload.id)
+      )
+        return state
       return {
         ...state,
-        messagesJSON: [...state.messagesJSON, { ...action.payload }]
+        messagesJSON: [...(state.messagesJSON || []), { ...action.payload }]
       }
     case 'addMessageComponent':
       return {

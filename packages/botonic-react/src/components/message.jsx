@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-
+import uuid from 'uuid/v4'
 import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
@@ -21,7 +21,7 @@ export const Message = props => {
 
   const { webchatState, addMessage, updateReplies } = useContext(WebchatContext)
   const [state, setState] = useState({
-    id: Math.random()
+    id: props.id || uuid()
   })
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
