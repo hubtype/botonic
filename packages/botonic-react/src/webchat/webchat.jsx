@@ -64,11 +64,12 @@ export const Webchat = forwardRef((props, ref) => {
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } = botonicState || {}
-    if(!user) user = createUser()
+    if(!user || Object.keys(user).length == 0) user = createUser()
     updateUser(user)
-    if (!devSettings || devSettings.keepSessionOnReload) {
+    if (!devSettings || Object.keys(devSettings).length == 0 || devSettings.keepSessionOnReload) {
       if (messages) {
         messages.map(m => {
+          addMessage(m)
           let newComponent = msgToBotonic({...m, delay: 0, typing: 0})
           if (newComponent) addMessageComponent(newComponent)
         })
@@ -132,9 +133,11 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendInput = async input => {
     let inputMessage = null
+    if(!input || Object.keys(input).length == 0) return
+    if(!input.id) input.id = uuid()
     if (input.type === 'text') {
       inputMessage = (
-        <Text from='user' payload={input.payload}>
+        <Text id={input.id} from='user' payload={input.payload}>
           {input.data}
         </Text>
       )
