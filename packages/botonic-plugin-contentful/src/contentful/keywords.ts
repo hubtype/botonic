@@ -1,7 +1,8 @@
 import { Entry, EntryCollection } from 'contentful';
 import { Context } from '../cms';
 import * as cms from '../cms';
-import { ModelType, SearchResult } from '../cms';
+import { ModelType } from '../cms';
+import { SearchResult } from '../search';
 import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
 import { QueueFields } from './queue';
 

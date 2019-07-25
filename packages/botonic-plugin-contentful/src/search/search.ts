@@ -1,15 +1,8 @@
-import {
-  Button,
-  Callback,
-  SearchResult,
-  CMS,
-  ModelType,
-  Text,
-  Context
-} from '../cms';
+import { Button, Callback, CMS, ModelType, Text, Context } from '../cms';
 import { MatchType } from '../nlp/keywords';
 import { checkLocale } from '../nlp/locales';
 import { SearchByKeywords } from './search-by-keywords';
+import { SearchResult } from './search-result';
 
 export class Search {
   readonly search: SearchByKeywords;

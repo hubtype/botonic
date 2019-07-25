@@ -1,13 +1,6 @@
 import { instance, mock, when } from 'ts-mockito';
-import {
-  SearchResult,
-  ContentCallback,
-  DummyCMS,
-  ModelType,
-  Text,
-  Url
-} from '../../src/cms';
-import { Search } from '../../src/search';
+import { ContentCallback, DummyCMS, ModelType, Text, Url } from '../../src/cms';
+import { Search, SearchResult } from '../../src/search';
 
 const CONTEXT = { locale: 'es' };
 

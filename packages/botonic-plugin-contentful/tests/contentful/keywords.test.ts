@@ -1,4 +1,5 @@
-import { ContentCallback, ModelType, SearchResult } from '../../src/cms';
+import { ContentCallback, ModelType } from '../../src/cms';
+import { SearchResult } from '../../src/search';
 import { testContentful, testContext } from './contentful.helper';
 import { TEST_POST_FAQ1_ID } from './text.test';
 import 'jest-extended';
