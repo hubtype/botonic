@@ -2,15 +2,18 @@ module.exports = {
   parser: "@typescript-eslint/parser", // Specifies the ESLint parser
   extends: [
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+    "eslint:recommended",
     "plugin:jest/recommended",
     // typescript
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    "plugin:@typescript-eslint/eslint-recommended",
     "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
   plugins: [
+    "jest",
     "no-null",
     "filenames",
-    "jest"
+    "@typescript-eslint"
   ],
   parserOptions: {
     project: "./tsconfig.json",
@@ -35,27 +38,33 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
     "unicorn/no-abusive-eslint-disable" : "off",
+
+    // special for TYPESCRIPT
+    "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
+    "@typescript-eslint/explicit-member-accessibility": "off", //we think defaulting to public is a good default
+    "@typescript-eslint/no-floating-promises": "error", // see https://github.com/xjamundx/eslint-plugin-promise/issues/151
+    "@typescript-eslint/no-misused-promises": "error",
+    "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }], // to encapsulate types in namespace with same name as Class
+    "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
+    "@typescript-eslint/no-object-literal-type-assertion" : [ "error", {allowAsParameter: false}], //useful to pass options to plugins
+    "@typescript-eslint/no-parameter-properties": "off", // opinionated: parameter properties make data classes shorter
     // allow public functions/classes to call private functions/classes declared below.
     // otoh, variables (typically constants) should be declared at the top
     "@typescript-eslint/no-use-before-define": ["error", { "variables": true, "functions": false, "classes": false }],
-
-    // special for TYPESCRIPT
-    "no-null/no-null": "warn", // fields declared with ? are undefined, not null (be aware that React uses null)
-    "@typescript-eslint/explicit-member-accessibility": "off", //we think defaulting to public is a good default
-    "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
     "@typescript-eslint/no-useless-constructor": "warn",
-    "no-useless-constructor": "off", //makes no sense for TS (https://github.com/typescript-eslint/typescript-eslint/issues/426)
-    "@typescript-eslint/no-parameter-properties": "off", // opinionated: parameter properties make data classes shorter
-    "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
+    "@typescript-eslint/require-await": "error",
+    "no-empty-pattern" : "off",
+    "no-null/no-null": "warn", // fields declared with ? are undefined, not null (be aware that React uses null)
     "unicorn/prevent-abbreviations" : "off", // the plugin removes removes type annotations from typescript code :-(
     "unicorn/filename-case" : "off", // React convention is in CamelCase
-    "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
-    "@typescript-eslint/no-object-literal-type-assertion" : [ "error", {allowAsParameter: false}], //useful to pass options to plugins
-    "@typescript-eslint/require-await": "error",
-    "@typescript-eslint/no-misused-promises": "error",
-    "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }], // to encapsulate types in namespace with same name as Class
+    "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
   },
   env: {
-    jest: true
+    jest: true,
+    "jest/globals": true,
+    es6: true,
+    // browser/node to prevent "'console' is not defined  no-undef"
+    browser: true,
+    node: true
   }
 };
