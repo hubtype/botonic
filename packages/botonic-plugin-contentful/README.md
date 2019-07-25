@@ -11,3 +11,7 @@ Generate personal token from https://app.contentful.com/spaces/5wh7etpd1y84/api/
 ````
 contentful space export --space-id=p2iyhzd1u4a7 --management-token=xxx --download-assets
 ````
+
+## Build
+
+* @babel/runtime must be a dependency in case the plugin is used from a bot packaged with babel-loader
