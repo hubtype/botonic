@@ -28,7 +28,7 @@ export class DummyCMS implements CMS {
   constructor(readonly buttonCallbacks: Callback[]) {}
 
   async carousel(id: string, {} = DEFAULT_CONTEXT): Promise<Carousel> {
-    let elements = this.buttonCallbacks.map(callback =>
+    const elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
     );
     return Promise.resolve(new Carousel(id, elements));
@@ -45,7 +45,7 @@ export class DummyCMS implements CMS {
   }
 
   public static buttonFromCallback(callback: Callback): Button {
-    let id = callback.payload || callback.url!;
+    const id = callback.payload || callback.url!;
     return new Button(id, 'button text for ' + id, callback);
   }
 
@@ -77,8 +77,8 @@ export class DummyCMS implements CMS {
   }
 
   contentsWithKeywords({} = DEFAULT_CONTEXT): Promise<SearchResult[]> {
-    let contents = this.buttonCallbacks.map(cb => {
-      let button = DummyCMS.buttonFromCallback(cb);
+    const contents = this.buttonCallbacks.map(cb => {
+      const button = DummyCMS.buttonFromCallback(cb);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       return new SearchResult(cb, button.name, button.text, [
         'keyword for ' + (button.callback.payload || button.callback.url!)
@@ -96,7 +96,7 @@ export class DummyCMS implements CMS {
   }
 
   dateRange(id: string): Promise<time.DateRange> {
-    let now = new Date();
+    const now = new Date();
     return Promise.resolve(new time.DateRange('daterange name', now, now));
   }
 

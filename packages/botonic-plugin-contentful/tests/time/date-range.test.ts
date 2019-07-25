@@ -1,8 +1,8 @@
 import { DateRange } from '../../src/time';
 
 test('TEST DateRange.contains', () => {
-  let from = new Date();
-  let sut = new DateRange('name', from, new Date(from.getTime() + 1000));
+  const from = new Date();
+  const sut = new DateRange('name', from, new Date(from.getTime() + 1000));
 
   expect(sut.contains(new Date(from.getTime() - 1))).toBe(false);
   expect(sut.contains(from)).toBe(true);

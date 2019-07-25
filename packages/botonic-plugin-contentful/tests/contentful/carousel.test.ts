@@ -18,10 +18,10 @@ function assertElementDudasPrevias(element: cms.Element) {
 }
 
 test('TEST: contentful carousel', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let carousel = await sut.carousel(TEST_CAROUSEL_MAIN_ID, testContext());
+  const carousel = await sut.carousel(TEST_CAROUSEL_MAIN_ID, testContext());
 
   // assert
   expect(carousel.elements).toHaveLength(3);

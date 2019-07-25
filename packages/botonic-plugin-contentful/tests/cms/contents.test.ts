@@ -41,7 +41,7 @@ test('TEST: cloneWithFollowUp copies all fields except followUp', () => {
   const oldFollowUp = t1.followUp;
   expect(t1).toBeInstanceOf(Text);
 
-  let newFollowUp = builder.build();
+  const newFollowUp = builder.build();
   const clone = t1.cloneWithFollowUp(newFollowUp);
 
   expect(clone).toBeInstanceOf(Text);
@@ -53,10 +53,10 @@ test('TEST: cloneWithFollowUp copies all fields except followUp', () => {
 });
 
 test('TEST: validateContents', () => {
-  let invalidContent = mock(Content);
+  const invalidContent = mock(Content);
   when(invalidContent.validate()).thenReturn('wrong button');
 
-  let validContent = mock(Content);
+  const validContent = mock(Content);
   when(validContent.validate()).thenReturn(undefined);
 
   expect(

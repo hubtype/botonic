@@ -12,10 +12,10 @@ export const KEYWORDS_OK = 'GbIpKJu8kW6PqMGAUYkoS';
 export const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm';
 
 test('TEST: contentful text without followup', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_SORRY, testContext()); // actually returns the fallback language (es)
+  const text = await sut.text(TEST_SORRY, testContext()); // actually returns the fallback language (es)
 
   // assert
   expect(text.text).toEqual(
@@ -30,11 +30,11 @@ test('TEST: contentful text without followup', async () => {
 });
 
 test('TEST: contentful text with URL button with followup', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let ctx = testContext();
-  let text = await sut.text(TEST_POST_FAQ1_ID, ctx);
+  const ctx = testContext();
+  const text = await sut.text(TEST_POST_FAQ1_ID, ctx);
 
   // assert
   expect(text.text).toEqual(
@@ -54,10 +54,10 @@ test('TEST: contentful text with URL button with followup', async () => {
 });
 
 test('TEST: contentful text with payload button', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let text = await sut.text(KEYWORDS_NOT_FOUND, testContext());
+  const text = await sut.text(KEYWORDS_NOT_FOUND, testContext());
 
   // assert
   expect(text.buttons).toHaveLength(1);
@@ -65,10 +65,10 @@ test('TEST: contentful text with payload button', async () => {
 });
 
 test('TEST: contentful text without buttons with text followup', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_POST_FAQ2_ID, testContext());
+  const text = await sut.text(TEST_POST_FAQ2_ID, testContext());
 
   // assert
   expect(text.buttons).toHaveLength(0);
@@ -76,10 +76,10 @@ test('TEST: contentful text without buttons with text followup', async () => {
 });
 
 test('TEST: contentful text without buttons with carousel followup', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_FBK_OK_MSG, testContext());
+  const text = await sut.text(TEST_FBK_OK_MSG, testContext());
 
   // assert
   expect(text.buttons).toHaveLength(0);
@@ -87,20 +87,20 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
 });
 
 test('TEST: contentful text without buttons with image followup', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_TEXT_IMAGE_FOLLOWUP, testContext());
+  const text = await sut.text(TEST_TEXT_IMAGE_FOLLOWUP, testContext());
 
   // assert
   expectImgUrlIs((text.followUp as cms.Image).imgUrl, 'red.jpg');
 });
 
 test('TEST: contentful text with URL button', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let text = await sut.text(TEST_TEXT_URL_BUTTON, { locale: 'en' });
+  const text = await sut.text(TEST_TEXT_URL_BUTTON, { locale: 'en' });
 
   // assert
   expect(text.buttons).toHaveLength(1);

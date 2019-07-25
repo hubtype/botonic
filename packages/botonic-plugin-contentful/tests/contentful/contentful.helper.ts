@@ -22,7 +22,7 @@ export function testContext(
     undefined
   ]
 ): Context | undefined {
-  let index = Math.floor(Math.random() * contexts.length);
+  const index = Math.floor(Math.random() * contexts.length);
 
   return contexts[index];
 }

@@ -5,20 +5,20 @@ import { Search, SearchResult } from '../../src/search';
 const CONTEXT = { locale: 'es' };
 
 test('TEST: respondFoundContents text with buttons', async () => {
-  let cms = mock(DummyCMS);
+  const cms = mock(DummyCMS);
   when(cms.url('urlCmsId', CONTEXT)).thenResolve(
     new Url('url', 'http:/mocked_url')
   );
-  let sut = new Search(instance(cms));
+  const sut = new Search(instance(cms));
 
-  let urlContent = new SearchResult(
+  const urlContent = new SearchResult(
     new ContentCallback(ModelType.URL, 'urlCmsId'),
     'name',
     'url shortText',
     []
   );
 
-  let textContent = new SearchResult(
+  const textContent = new SearchResult(
     new ContentCallback(ModelType.TEXT, 'textCmsId'),
     'name',
     'text shortText',
@@ -29,7 +29,7 @@ test('TEST: respondFoundContents text with buttons', async () => {
   when(cms.text('foundId', CONTEXT)).thenResolve(
     new Text('foundName', 'foundText', [])
   );
-  let response = await sut.respondFoundContents(
+  const response = await sut.respondFoundContents(
     [urlContent, textContent],
     'foundId',
     'notFoundId',
@@ -49,12 +49,12 @@ test('TEST: respondFoundContents text with buttons', async () => {
 });
 
 test('TEST: respondFoundContents text with chitchat', async () => {
-  let cms = mock(DummyCMS);
-  let sut = new Search(instance(cms));
+  const cms = mock(DummyCMS);
+  const sut = new Search(instance(cms));
 
-  let chitchat = instance(mock(Text));
+  const chitchat = instance(mock(Text));
   when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat);
-  let chitchatCallback = new SearchResult(
+  const chitchatCallback = new SearchResult(
     new ContentCallback(ModelType.CHITCHAT, 'chitchatCmsId'),
     'name',
     'chitchat',
@@ -65,7 +65,7 @@ test('TEST: respondFoundContents text with chitchat', async () => {
   when(cms.text('foundId', CONTEXT)).thenResolve(
     new Text('foundName', 'foundText', [])
   );
-  let response = await sut.respondFoundContents(
+  const response = await sut.respondFoundContents(
     [chitchatCallback],
     'foundId',
     'notFoundId',
@@ -77,14 +77,14 @@ test('TEST: respondFoundContents text with chitchat', async () => {
 });
 
 test('TEST: respondFoundContents without contents', async () => {
-  let cms = mock(DummyCMS);
-  let sut = new Search(instance(cms));
+  const cms = mock(DummyCMS);
+  const sut = new Search(instance(cms));
 
   // sut
   when(cms.text('notFoundId', CONTEXT)).thenResolve(
     new Text('notFoundName', 'notFoundText', [])
   );
-  let response = await sut.respondFoundContents(
+  const response = await sut.respondFoundContents(
     [],
     'foundId',
     'notFoundId',

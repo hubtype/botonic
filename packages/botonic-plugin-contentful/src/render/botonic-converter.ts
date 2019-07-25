@@ -36,7 +36,7 @@ export class BotonicMsgConverter {
   }
 
   private convertButtons(cmsButtons: cms.Button[], style: ButtonStyle): any[] {
-    let maxButtons =
+    const maxButtons =
       style == ButtonStyle.BUTTON
         ? this.options.maxButtons
         : this.options.maxQuickReplies;
@@ -53,12 +53,12 @@ export class BotonicMsgConverter {
   }
 
   text(text: cms.Text, delayS: number = 0): BotonicMsg | BotonicMsg[] {
-    let msg: any = {
+    const msg: any = {
       type: 'text',
       delay: delayS,
       data: { text: text.text }
     };
-    let buttons = this.convertButtons(text.buttons, text.buttonsStyle);
+    const buttons = this.convertButtons(text.buttons, text.buttonsStyle);
     if (text.buttonsStyle == ButtonStyle.QUICK_REPLY) {
       msg['replies'] = buttons;
     } else {

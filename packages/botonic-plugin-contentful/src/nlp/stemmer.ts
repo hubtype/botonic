@@ -17,7 +17,7 @@ export const stemmers: { [key: string]: BaseStemmer } = {
 };
 
 export function stemmerFor(locale: Locale): BaseStemmer {
-  let stem = stemmers[locale];
+  const stem = stemmers[locale];
   if (!stem) {
     throw new Error(`No stemmer configured for locale '${locale}'`);
   }

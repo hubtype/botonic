@@ -14,7 +14,7 @@ export class Schedule {
   private readonly exceptions = [] as ExceptionSchedule[];
 
   constructor(tzName: string) {
-    let zone = momentTz.tz.zone(tzName);
+    const zone = momentTz.tz.zone(tzName);
     if (!zone) {
       throw new Error(`${tzName} is not a valid timezone name`);
     }
@@ -46,7 +46,7 @@ export class Schedule {
     locales?: string | string[],
     date: Date = new Date()
   ): string {
-    var options: Intl.DateTimeFormatOptions = {
+    const options: Intl.DateTimeFormatOptions = {
       timeZone: this.zone.name,
       hour12: false
     };
@@ -54,15 +54,15 @@ export class Schedule {
   }
 
   contains(date: Date): boolean {
-    let exception = this.exceptions.find(exception =>
+    const exception = this.exceptions.find(exception =>
       isSameDay(date, exception.date)
     );
     if (exception) {
       return exception.daySchedule.contains(date);
     }
     // BUG should get date in Schedule's timezone
-    let weekDay = date.getDay() as WeekDay;
-    let schedule = this.scheduleByDay.get(weekDay);
+    const weekDay = date.getDay() as WeekDay;
+    const schedule = this.scheduleByDay.get(weekDay);
     if (!schedule) {
       return false;
     }
@@ -74,7 +74,7 @@ export class DaySchedule {
   constructor(readonly ranges: TimeRange[]) {}
 
   contains(date: Date): boolean {
-    for (let range of this.ranges) {
+    for (const range of this.ranges) {
       if (range.contains(date)) {
         return true;
       }
@@ -123,9 +123,9 @@ export class HourAndMinute {
   ) {}
 
   compareToDate(date: Date): number {
-    let hourAndMinuteOffset = this.zone.utcOffset(date.getTime());
-    let hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset;
-    let dateUtc = date.getUTCHours() * 60 + date.getUTCMinutes();
+    const hourAndMinuteOffset = this.zone.utcOffset(date.getTime());
+    const hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset;
+    const dateUtc = date.getUTCHours() * 60 + date.getUTCMinutes();
 
     return HourAndMinute.compareNumber(hourAndMinuteUtc, dateUtc);
   }

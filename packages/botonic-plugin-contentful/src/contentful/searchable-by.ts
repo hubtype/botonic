@@ -6,7 +6,7 @@ export class SearchableByKeywordsDelivery {
   static fromEntry(
     entry: Entry<SearchableByKeywordsFields>
   ): cms.SearchableByKeywords {
-    let fields = entry.fields;
+    const fields = entry.fields;
     return new cms.SearchableByKeywords(
       fields.name,
       fields.keywords,

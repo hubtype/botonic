@@ -63,7 +63,7 @@ export class DeliveryApi {
   }
 
   static callbackFromEntry(entry: contentful.Entry<any>): Callback {
-    let modelType = this.getContentModel(entry);
+    const modelType = this.getContentModel(entry);
     if (modelType === ModelType.URL) {
       return Callback.ofUrl((entry.fields as UrlFields).url);
     }
@@ -78,7 +78,7 @@ export class DeliveryApi {
     if (model != ModelType.QUEUE) {
       throw new Error('CMS.contents only supports queue at the moment');
     }
-    let entries = await this.getEntries(context, {
+    const entries = await this.getEntries(context, {
       // eslint-disable-next-line @typescript-eslint/camelcase
       content_type: model,
       include: QueueDelivery.REFERENCES_INCLUDE // TODO change for other types

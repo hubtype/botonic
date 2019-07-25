@@ -10,7 +10,10 @@ export class ImageDelivery extends ContentDelivery {
   }
 
   async image(id: string, context: Context): Promise<cms.Image> {
-    let entry: contentful.Entry<ImageFields> = await this.getEntry(id, context);
+    const entry: contentful.Entry<ImageFields> = await this.getEntry(
+      id,
+      context
+    );
     return this.imageFromEntry(entry);
   }
 

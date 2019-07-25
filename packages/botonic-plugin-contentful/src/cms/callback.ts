@@ -33,7 +33,7 @@ export class ContentCallback extends Callback {
   }
 
   static ofPayload(payload: string): ContentCallback {
-    let [type, id] = payload.split(ContentCallback.PAYLOAD_SEPARATOR);
+    const [type, id] = payload.split(ContentCallback.PAYLOAD_SEPARATOR);
     if (!id) {
       throw new Error(
         `Callback payload '${payload}' does not contain a model reference`
@@ -97,7 +97,7 @@ export class CallbackMap {
   private callbacks: Map<string, Callback> = new Map();
 
   static forAllIds(callback: Callback): CallbackMap {
-    let map = new CallbackMap();
+    const map = new CallbackMap();
     map.forAllIds = callback;
     return map;
   }
@@ -116,7 +116,7 @@ export class CallbackMap {
       return this.forAllIds;
     }
 
-    let callback = this.callbacks.get(id);
+    const callback = this.callbacks.get(id);
     if (!callback) {
       throw new Error(`No callback for id ${id}`);
     }
