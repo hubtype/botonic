@@ -11,14 +11,13 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
   }
 
   async carousel(id: string, context: cms.Context): Promise<cms.Carousel> {
-    let entry: contentful.Entry<CarouselFields> = await this.delivery.getEntry(
-      id,
-      context
-    );
-    let elements = entry.fields.elements.map(async entry => {
+    const entry: contentful.Entry<
+      CarouselFields
+    > = await this.delivery.getEntry(id, context);
+    const elements = entry.fields.elements.map(async entry => {
       return this.elementFromEntry(entry, context);
     });
-    let e = await Promise.all(elements);
+    const e = await Promise.all(elements);
     return new cms.Carousel(
       entry.fields.name,
       e,
@@ -34,8 +33,8 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<ElementFields>,
     context: cms.Context
   ): Promise<cms.Element> {
-    let fields = entry.fields;
-    let buttonsPromises = entry.fields.buttons.map(reference =>
+    const fields = entry.fields;
+    const buttonsPromises = entry.fields.buttons.map(reference =>
       this.button.fromReference(reference, context)
     );
 

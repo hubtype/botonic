@@ -25,11 +25,11 @@ export default class BotonicPluginContentful {
   readonly search: Search;
 
   constructor(options: CmsOptions | ContentfulOptions) {
-    let optionsAny = options as any;
+    const optionsAny = options as any;
     if (optionsAny.cms) {
       this.cms = optionsAny.cms;
     } else {
-      let contOptions = options as ContentfulOptions;
+      const contOptions = options as ContentfulOptions;
       this.cms = new Contentful(contOptions.spaceId, contOptions.accessToken);
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);

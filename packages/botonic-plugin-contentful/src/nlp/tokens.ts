@@ -5,7 +5,7 @@ export function substringIsBlankSeparated(
   needle: string
 ): boolean {
   //not using regex because recompiling them for each keyword might be expensive
-  let foundAt = haystack.indexOf(needle);
+  const foundAt = haystack.indexOf(needle);
   if (foundAt < 0) {
     return false;
   }

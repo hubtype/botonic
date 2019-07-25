@@ -5,9 +5,9 @@ import { testSchedule } from './schedule.test';
 const TEST_QUEUE_ID = '62ILnVxLHOEp7aVvPMpCO8';
 
 test('TEST: contentful Queue', async () => {
-  let queue = await testContentful().queue(TEST_QUEUE_ID, testContext());
+  const queue = await testContentful().queue(TEST_QUEUE_ID, testContext());
 
-  let searchableBy = new SearchableBy([
+  const searchableBy = new SearchableBy([
     new SearchableByKeywords('HIGH_PRIO', ['high1', 'high2'], 99),
     new SearchableByKeywords('LOW_PRIO', ['low1', 'low2'], 10)
   ]);

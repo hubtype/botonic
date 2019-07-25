@@ -19,9 +19,9 @@ export class Search {
     matchType: MatchType,
     context: Context
   ): Promise<SearchResult[]> {
-    let locale = checkLocale(context.locale);
-    let tokens = this.search.tokenize(locale, inputText);
-    let contents = await this.search.searchContentsFromInput(
+    const locale = checkLocale(context.locale);
+    const tokens = this.search.tokenize(locale, inputText);
+    const contents = await this.search.searchContentsFromInput(
       tokens,
       matchType,
       context
@@ -38,14 +38,14 @@ export class Search {
     if (results.length == 0) {
       return this.cms.text(noKeywordsFoundTextId, context);
     }
-    let chitchatCallback = results[0].getCallbackIfChitchat();
+    const chitchatCallback = results[0].getCallbackIfChitchat();
     if (chitchatCallback) {
       return this.cms.chitchat(chitchatCallback.id, context);
     }
-    let buttonPromises = results.map(async result => {
-      let urlCallback = result.getCallbackIfContentIs(ModelType.URL);
+    const buttonPromises = results.map(async result => {
+      const urlCallback = result.getCallbackIfContentIs(ModelType.URL);
       if (urlCallback) {
-        let url = await this.cms.url(urlCallback.id, context);
+        const url = await this.cms.url(urlCallback.id, context);
         return new Button(
           result.name,
           result.shortText!,
@@ -54,8 +54,8 @@ export class Search {
       }
       return result.toButton();
     });
-    let buttons = await Promise.all(buttonPromises);
-    let text = await this.cms.text(confirmKeywordsFoundTextId, context);
+    const buttons = await Promise.all(buttonPromises);
+    const text = await this.cms.text(confirmKeywordsFoundTextId, context);
     return text.cloneWithButtons(buttons);
   }
 }

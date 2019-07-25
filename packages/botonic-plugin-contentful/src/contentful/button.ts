@@ -23,8 +23,8 @@ export class ButtonDelivery {
   }
 
   private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
-    let entry = await this.delivery.getEntry(id, context);
-    let entryType = DeliveryApi.getContentModel(entry);
+    const entry = await this.delivery.getEntry(id, context);
+    const entryType = DeliveryApi.getContentModel(entry);
     switch (entryType as string) {
       case cms.ModelType.CAROUSEL:
       case cms.ModelType.TEXT:
@@ -33,8 +33,8 @@ export class ButtonDelivery {
           ContentWithKeywordsFields
         >);
       case ButtonDelivery.BUTTON_CONTENT_TYPE:
-        let buttonEntry = entry as contentful.Entry<ButtonFields>;
-        let callback = buttonEntry.fields.target
+        const buttonEntry = entry as contentful.Entry<ButtonFields>;
+        const callback = buttonEntry.fields.target
           ? await this.getTargetCallback(buttonEntry.fields.target)
           : context.callbacks!.getCallback(id);
         return new cms.Button(
@@ -50,7 +50,7 @@ export class ButtonDelivery {
   private static fromContent(
     entry: contentful.Entry<ContentWithKeywordsFields>
   ): cms.Button {
-    let fields = entry.fields;
+    const fields = entry.fields;
     let text = fields.shortText;
     if (!text) {
       text = fields.name;
@@ -64,17 +64,17 @@ export class ButtonDelivery {
   }
 
   private getTargetCallback(target: ButtonTarget): cms.Callback {
-    let model = DeliveryApi.getContentModel(target) as string;
+    const model = DeliveryApi.getContentModel(target) as string;
     switch (model) {
       case ModelType.CAROUSEL:
       case ModelType.TEXT:
         return new cms.ContentCallback(model, target.sys.id);
       case ModelType.URL: {
-        let urlFields = target as contentful.Entry<UrlFields>;
+        const urlFields = target as contentful.Entry<UrlFields>;
         return cms.Callback.ofUrl(urlFields.fields.url);
       }
       case ButtonDelivery.PAYLOAD_CONTENT_TYPE: {
-        let payloadFields = target as contentful.Entry<PayloadFields>;
+        const payloadFields = target as contentful.Entry<PayloadFields>;
         return cms.Callback.ofPayload(payloadFields.fields.payload);
       }
       default:

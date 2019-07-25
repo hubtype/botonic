@@ -21,7 +21,7 @@ export class KeywordsParser<M> {
   constructor(readonly locale: Locale, readonly matchType: MatchType) {}
 
   addCandidate(candidate: M, rawKeywords: string[]): void {
-    let stemmedKeywords = rawKeywords.map(kw => {
+    const stemmedKeywords = rawKeywords.map(kw => {
       return tokenizeAndStem(this.locale, kw).join(' ');
     });
     this.candidates.push(new CandidateWithKeywords(candidate, stemmedKeywords));
@@ -29,9 +29,9 @@ export class KeywordsParser<M> {
 
   findCandidatesWithKeywordsAt(stemmedTokens: string[]): M[] {
     let matches = [] as M[];
-    let joinedTokens = stemmedTokens.join(' ');
-    for (let candidate of this.candidates) {
-      for (let keyword of candidate.keywords) {
+    const joinedTokens = stemmedTokens.join(' ');
+    for (const candidate of this.candidates) {
+      for (const keyword of candidate.keywords) {
         if (this.keywordMatches(joinedTokens, keyword)) {
           matches = matches.concat(candidate.owner);
           break;
@@ -48,7 +48,7 @@ export class KeywordsParser<M> {
       case MatchType.ONLY_KEYWORDS_FOUND:
         return joinedTokens == keyword;
       case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
-        for (let word of keyword.split(' ')) {
+        for (const word of keyword.split(' ')) {
           if (!joinedTokens.includes(word)) {
             return false;
           }

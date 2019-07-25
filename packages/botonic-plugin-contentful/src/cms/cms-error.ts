@@ -18,7 +18,7 @@ export class ErrorReportingCMS implements CMS {
   constructor(readonly cms: CMS) {}
 
   private validate<C extends Content>(content: C): C {
-    let v = content.validate();
+    const v = content.validate();
     if (v) {
       console.error(v);
     }
@@ -97,7 +97,7 @@ export class ErrorReportingCMS implements CMS {
 
   private handleError(modelType: string, id?: string): (reason: any) => never {
     return (reason: any) => {
-      let withId = id ? ` with id '${id}'` : '';
+      const withId = id ? ` with id '${id}'` : '';
       if (reason.response && reason.response.data) {
         reason =
           reason.response.status + ': ' + JSON.stringify(reason.response.data);

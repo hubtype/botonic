@@ -13,8 +13,8 @@ export abstract class ContentDelivery {
     context: Context,
     query: any = {}
   ): Promise<contentful.Entry<T>> {
-    let entry = await this.delivery.getEntry<T>(id, context, query);
-    let gotType = DeliveryApi.getContentModel(entry);
+    const entry = await this.delivery.getEntry<T>(id, context, query);
+    const gotType = DeliveryApi.getContentModel(entry);
     if (!isSameModel(gotType, this.modelType)) {
       throw new Error(
         `Requested model with id '${id}' of type '${this.modelType}' but got '${gotType}'`
