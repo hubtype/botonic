@@ -1,5 +1,6 @@
 import * as contentful from 'contentful';
-import { DeliveryApi, ModelType } from '.';
+import { DeliveryApi } from '.';
+import { ModelType } from '../cms';
 import * as cms from '../cms';
 import { CarouselFields } from './carousel';
 import {
