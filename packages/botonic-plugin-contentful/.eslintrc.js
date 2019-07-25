@@ -3,8 +3,6 @@ module.exports = {
   extends: [
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
     "plugin:jest/recommended",
-    //react
-    "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
     // typescript
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
@@ -53,11 +51,6 @@ module.exports = {
     "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
     "@typescript-eslint/no-object-literal-type-assertion" : {allowAsParameter: false}, //useful to pass options to plugins
     "@typescript-eslint/no-namespace": { allowDeclarations: true }, // to encapsulate types in namespace with same name as Class
-  },
-  settings: {
-    react: {
-      version: "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
-    }
   },
   env: {
     jest: true
