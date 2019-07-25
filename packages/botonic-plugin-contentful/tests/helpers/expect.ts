@@ -3,7 +3,7 @@ export function expectEqualExceptOneField(
   o2: any,
   fieldName: string
 ): void {
-  for (let f of Object.keys(o1)) {
+  for (const f of Object.keys(o1)) {
     if (f == fieldName) continue;
     expect(o2[f]).toEqual(o1[f]);
   }

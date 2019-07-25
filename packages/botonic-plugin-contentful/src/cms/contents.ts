@@ -34,7 +34,7 @@ export abstract class Content {
   }
 
   static validateContents(contents: Content[]): string | undefined {
-    let invalids = contents.map(c => c.validate()).filter(v => v);
+    const invalids = contents.map(c => c.validate()).filter(v => v);
     if (invalids.length == 0) {
       return undefined;
     }

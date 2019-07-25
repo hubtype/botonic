@@ -5,12 +5,12 @@ import { TEST_POST_FAQ1_ID } from './text.test';
 import 'jest-extended';
 
 test('TEST: contentful contentsWithKeywords', async () => {
-  let results = await testContentful().contentsWithKeywords(
+  const results = await testContentful().contentsWithKeywords(
     testContext([{ locale: 'es' }, {}, undefined])
   );
 
-  let queues: SearchResult[] = [];
-  let contentsWithKeywords: SearchResult[] = [];
+  const queues: SearchResult[] = [];
+  const contentsWithKeywords: SearchResult[] = [];
   results
     .filter(result => result.callback instanceof ContentCallback)
     .map(result => {
@@ -23,8 +23,8 @@ test('TEST: contentful contentsWithKeywords', async () => {
       }
     });
   expect(queues).toHaveLength(2);
-  let keywordsByPrio: { [priority: number]: string[] } = {};
-  for (let queue of queues) {
+  const keywordsByPrio: { [priority: number]: string[] } = {};
+  for (const queue of queues) {
     expect(queue.name).toEqual('TEST_QUEUE');
     expect(queue.shortText).toEqual('Short Text');
     keywordsByPrio[queue.priority] = queue.keywords;
@@ -34,7 +34,7 @@ test('TEST: contentful contentsWithKeywords', async () => {
 
   expect(contentsWithKeywords).toHaveLength(16);
 
-  let postFaq1 = contentsWithKeywords.find(
+  const postFaq1 = contentsWithKeywords.find(
     content => (content.callback as ContentCallback).id == TEST_POST_FAQ1_ID
   );
   expect(postFaq1!.name).toEqual('POST_FAQ1');

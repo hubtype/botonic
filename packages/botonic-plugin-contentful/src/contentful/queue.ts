@@ -17,7 +17,7 @@ export class QueueDelivery extends ContentDelivery {
   }
 
   async queue(id: string, context: Context): Promise<cms.Queue> {
-    let entry: contentful.Entry<QueueFields> = await this.getEntry(
+    const entry: contentful.Entry<QueueFields> = await this.getEntry(
       id,
       context,
       { include: QueueDelivery.REFERENCES_INCLUDE }
@@ -26,14 +26,14 @@ export class QueueDelivery extends ContentDelivery {
   }
 
   static fromEntry(entry: contentful.Entry<QueueFields>): cms.Queue {
-    let fields = entry.fields;
-    let name = fields.name;
+    const fields = entry.fields;
+    const name = fields.name;
     console.log('sched del', fields.schedule);
 
-    let schedule =
+    const schedule =
       fields.schedule && ScheduleDelivery.scheduleFromEntry(fields.schedule);
 
-    let searchableBy =
+    const searchableBy =
       fields.searchableBy &&
       fields.searchableBy.map(searchableBy =>
         SearchableByKeywordsDelivery.fromEntry(searchableBy)

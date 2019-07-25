@@ -2,25 +2,25 @@ import { DaySchedule, Schedule, TimeRange, WeekDay } from '../../src/time';
 import { testContentful } from './contentful.helper';
 
 test('TEST: contentful schedule', async () => {
-  let sut = testContentful();
+  const sut = testContentful();
 
   // act
-  let schedule = await sut.schedule('71twiV4wcaFwhK6tSYuIKy');
+  const schedule = await sut.schedule('71twiV4wcaFwhK6tSYuIKy');
 
   // assert
   expect(schedule).toEqual(testSchedule());
 });
 
 export function testSchedule(): Schedule {
-  let expected = new Schedule('Europe/Madrid');
+  const expected = new Schedule('Europe/Madrid');
   for (let d = WeekDay.MONDAY; d <= WeekDay.FRIDAY; d++) {
-    let timeRange = new TimeRange(
+    const timeRange = new TimeRange(
       expected.createHourAndMinute(9),
       expected.createHourAndMinute(19)
     );
     expected.addDaySchedule(d, new DaySchedule([timeRange]));
   }
-  let timeRange = new TimeRange(
+  const timeRange = new TimeRange(
     expected.createHourAndMinute(10),
     expected.createHourAndMinute(16)
   );

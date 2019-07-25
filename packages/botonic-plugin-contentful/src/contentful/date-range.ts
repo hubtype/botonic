@@ -10,7 +10,7 @@ export class DateRangeDelivery extends ContentDelivery {
   }
 
   async dateRange(id: string): Promise<time.DateRange> {
-    let entry: contentful.Entry<DateRangeFields> = await this.getEntry(
+    const entry: contentful.Entry<DateRangeFields> = await this.getEntry(
       id,
       DEFAULT_CONTEXT
     );

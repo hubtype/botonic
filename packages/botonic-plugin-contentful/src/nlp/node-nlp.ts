@@ -37,7 +37,7 @@ export function tokenizeAndStem(
   inputText = inputText.trim();
   stopWords = stopWords || STEMMED_STOP_WORDS[locale];
   const stemmer = stemmerFor(locale);
-  let tokens: string[] = stemmer.tokenizeAndStem(
+  const tokens: string[] = stemmer.tokenizeAndStem(
     inputText,
     // keeping stops because it cannot be configured (node-nlp/lib/nlp/stopwords/stopwords_es.json) and:
     // the default list contains 'donde', which may help to interpret intent in a sentence

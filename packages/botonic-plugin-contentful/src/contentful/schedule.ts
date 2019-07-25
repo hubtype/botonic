@@ -12,14 +12,14 @@ export class ScheduleDelivery extends ContentDelivery {
   }
 
   async schedule(id: string): Promise<time.Schedule> {
-    let f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
+    const f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
       include: ScheduleDelivery.REFERENCES_INCLUDE
     });
     return ScheduleDelivery.scheduleFromEntry(f);
   }
 
   static scheduleFromEntry(f: Entry<ScheduleFields>): time.Schedule {
-    let schedule = new time.Schedule(time.Schedule.TZ_CET); // TODO allow configuration
+    const schedule = new time.Schedule(time.Schedule.TZ_CET); // TODO allow configuration
     ScheduleDelivery.addDaySchedules(schedule, f.fields);
     ScheduleDelivery.addExceptions(schedule, f.fields.exceptions);
     return schedule;
@@ -29,7 +29,7 @@ export class ScheduleDelivery extends ContentDelivery {
     schedule: time.Schedule,
     fields: ScheduleFields
   ): void {
-    let days = [
+    const days = [
       fields.sundays || undefined,
       fields.mondays || undefined,
       fields.tuesdays || undefined,
@@ -38,11 +38,11 @@ export class ScheduleDelivery extends ContentDelivery {
       fields.fridays || undefined,
       fields.saturdays || undefined
     ];
-    for (let day in days) {
+    for (const day in days) {
       if (!day || !days[day]) {
         continue;
       }
-      let daySchedule = ScheduleDelivery.createDaySchedule(
+      const daySchedule = ScheduleDelivery.createDaySchedule(
         schedule,
         days[day]!
       );
@@ -54,7 +54,7 @@ export class ScheduleDelivery extends ContentDelivery {
     sched: time.Schedule,
     hourRanges: Entry<HourRangeFields>[]
   ): time.DaySchedule {
-    let timeRanges = hourRanges.map(
+    const timeRanges = hourRanges.map(
       hr =>
         new time.TimeRange(
           sched.createHourAndMinute(hr.fields.fromHour, hr.fields.fromMinute),
@@ -73,13 +73,13 @@ export class ScheduleDelivery extends ContentDelivery {
     if (!exceptions) {
       return;
     }
-    for (let exception of exceptions) {
-      let timeRanges = ScheduleDelivery.createDaySchedule(
+    for (const exception of exceptions) {
+      const timeRanges = ScheduleDelivery.createDaySchedule(
         schedule,
         exception.fields.hourRanges || []
       );
-      let dateStr = exception.fields.date.split('-');
-      let date = new Date(+dateStr[0], +dateStr[1] - 1, +dateStr[2]);
+      const dateStr = exception.fields.date.split('-');
+      const date = new Date(+dateStr[0], +dateStr[1] - 1, +dateStr[2]);
       schedule.addException(date, timeRanges);
     }
   }

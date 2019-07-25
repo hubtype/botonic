@@ -17,9 +17,9 @@ export class SearchByKeywords {
     matchType: MatchType,
     context: Context
   ): Promise<SearchResult[]> {
-    let locale = checkLocale(context.locale);
-    let contentsWithKeywords = await this.cms.contentsWithKeywords(context);
-    let kws = new KeywordsParser<SearchResult>(locale, matchType);
+    const locale = checkLocale(context.locale);
+    const contentsWithKeywords = await this.cms.contentsWithKeywords(context);
+    const kws = new KeywordsParser<SearchResult>(locale, matchType);
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.keywords!)
     );

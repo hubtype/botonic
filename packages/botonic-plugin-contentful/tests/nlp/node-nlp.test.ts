@@ -37,7 +37,7 @@ test('TEST: normalize en', () => {
 test.each<any>([['es'], ['ca'], ['en']])(
   'tokenizeAndStem(%s)',
   (locale: Locale) => {
-    for (let stopWord of DEFAULT_STOP_WORDS[locale]) {
+    for (const stopWord of DEFAULT_STOP_WORDS[locale]) {
       expect(tokenizeAndStem(locale, stopWord)).toEqual([]);
     }
   }

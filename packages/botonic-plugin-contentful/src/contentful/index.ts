@@ -29,16 +29,16 @@ export default class Contentful implements cms.CMS {
   _queue: QueueDelivery;
 
   constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
-    let delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
+    const delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
     this._delivery = delivery;
-    let button = new ButtonDelivery(delivery);
+    const button = new ButtonDelivery(delivery);
     this._carousel = new CarouselDelivery(delivery, button);
     this._text = new TextDelivery(delivery, button);
     this._url = new UrlDelivery(delivery);
     this._image = new ImageDelivery(delivery);
     this._asset = new AssetDelivery(delivery);
     this._queue = new QueueDelivery(delivery);
-    let followUp = new FollowUpDelivery(
+    const followUp = new FollowUpDelivery(
       this._carousel,
       this._text,
       this._image

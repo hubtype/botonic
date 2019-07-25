@@ -10,8 +10,8 @@ export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}
 
   async contentsWithKeywords(context: Context): Promise<SearchResult[]> {
-    let fromKeywords = this.entriesWithKeywords(context);
-    let fromSearchable = this.entriesWithSearchableByKeywords(context);
+    const fromKeywords = this.entriesWithKeywords(context);
+    const fromSearchable = this.entriesWithSearchableByKeywords(context);
     return (await fromKeywords).concat(await fromSearchable);
   }
 
@@ -20,13 +20,13 @@ export class KeywordsDelivery {
     keywords: string[],
     priority?: number
   ): SearchResult {
-    let contentModel = DeliveryApi.getContentModel(entry);
+    const contentModel = DeliveryApi.getContentModel(entry);
     if (!entry.fields.shortText) {
       console.error(`No shortText found ${contentModel} ${name}`);
       entry.fields.shortText = name;
     }
 
-    let callback = DeliveryApi.callbackFromEntry(entry);
+    const callback = DeliveryApi.callbackFromEntry(entry);
     return new SearchResult(
       callback,
       entry.fields.name,
@@ -39,13 +39,13 @@ export class KeywordsDelivery {
   private async entriesWithSearchableByKeywords(
     context: Context
   ): Promise<SearchResult[]> {
-    let queues = await this.delivery.getEntries<QueueFields>(context, {
+    const queues = await this.delivery.getEntries<QueueFields>(context, {
       // eslint-disable-next-line @typescript-eslint/camelcase
       content_type: ModelType.QUEUE,
       'fields.searchableBy[exists]': true,
       include: 1
     });
-    let results = queues.items.map(queue =>
+    const results = queues.items.map(queue =>
       KeywordsDelivery.resultsFromQueue(queue)
     );
     return Array.prototype.concat(...results);
@@ -69,8 +69,8 @@ export class KeywordsDelivery {
         'fields.keywords[exists]': true,
         include: 0
       });
-    let promises = [];
-    for (let contentType of [
+    const promises = [];
+    for (const contentType of [
       cms.ModelType.CAROUSEL,
       cms.ModelType.TEXT,
       cms.ModelType.URL
@@ -87,7 +87,7 @@ export class KeywordsDelivery {
   private static flatMapEntryCollection<T>(
     collections: EntryCollection<T>[]
   ): Entry<T>[] {
-    let entries = [] as Entry<T>[];
+    const entries = [] as Entry<T>[];
     collections.forEach(collection => entries.push(...collection.items));
     return entries;
   }

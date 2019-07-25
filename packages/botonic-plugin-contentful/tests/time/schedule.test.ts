@@ -29,16 +29,16 @@ test.each<any>([
   [new Date(2019, APRIL, 1, 18, 59), true],
   [new Date(2019, APRIL, 1, 19, 0), false]
 ])('TEST: Schedule.contains(%s)=>%s', (date: Date, expected: boolean) => {
-  let sut = new Schedule(Schedule.TZ_CET);
+  const sut = new Schedule(Schedule.TZ_CET);
 
   for (let d = WeekDay.MONDAY; d <= WeekDay.FRIDAY; d++) {
-    let timeRange = new TimeRange(
+    const timeRange = new TimeRange(
       sut.createHourAndMinute(9),
       sut.createHourAndMinute(19)
     );
     sut.addDaySchedule(d, new DaySchedule([timeRange]));
   }
-  let timeRange = new TimeRange(
+  const timeRange = new TimeRange(
     sut.createHourAndMinute(10),
     sut.createHourAndMinute(16)
   );
@@ -51,10 +51,10 @@ test.each<any>([
 
 test('TEST: HourAndMinute.compareToDate CET', () => {
   assertInCET();
-  let zone = momentTz.tz.zone('Europe/Madrid');
-  let time = new HourAndMinute(zone!, 13, 45);
+  const zone = momentTz.tz.zone('Europe/Madrid');
+  const time = new HourAndMinute(zone!, 13, 45);
 
-  let date = new Date(2019, 5, 29, 13, 46);
+  const date = new Date(2019, 5, 29, 13, 46);
 
   expect(time.compareToDate(date)).toEqual(-1);
 
@@ -67,10 +67,10 @@ test('TEST: HourAndMinute.compareToDate CET', () => {
 
 test('TEST: HourAndMinute.compareToDate OTHER', () => {
   assertInCET();
-  let zone = momentTz.tz.zone('Europe/London');
-  let time = new HourAndMinute(zone!, 12, 45);
+  const zone = momentTz.tz.zone('Europe/London');
+  const time = new HourAndMinute(zone!, 12, 45);
 
-  let date = new Date(2019, 5, 29, 13, 46);
+  const date = new Date(2019, 5, 29, 13, 46);
   expect(time.compareToDate(date)).toEqual(-1);
 
   date.setMinutes(45);
@@ -81,14 +81,14 @@ test('TEST: HourAndMinute.compareToDate OTHER', () => {
 });
 
 test('TEST: timeInThisTimezone ', () => {
-  let sut = new Schedule('Europe/London');
+  const sut = new Schedule('Europe/London');
 
-  let date = new Date(2019, 5, 29, 0, 51);
+  const date = new Date(2019, 5, 29, 0, 51);
   expect(sut.timeInThisTimezone('es', date)).toEqual('23:51:00');
 });
 
 test('TEST: addException', () => {
-  let sut = new Schedule('Europe/Madrid');
+  const sut = new Schedule('Europe/Madrid');
   sut.addDaySchedule(
     WeekDay.FRIDAY,
     new DaySchedule([
@@ -96,9 +96,9 @@ test('TEST: addException', () => {
     ])
   );
 
-  let date10h = new Date(2019, MARCH, 29, 10);
+  const date10h = new Date(2019, MARCH, 29, 10);
   expect(sut.contains(date10h)).toBeTruthy();
-  let date12h = new Date(2019, MARCH, 29, 12);
+  const date12h = new Date(2019, MARCH, 29, 12);
   expect(sut.contains(date12h)).toBeFalsy();
 
   sut.addException(
@@ -113,14 +113,14 @@ test('TEST: addException', () => {
 
 test('TEST: time.toString ', () => {
   // tz does not affect toString
-  let zone = momentTz.tz.zone('Europe/London');
+  const zone = momentTz.tz.zone('Europe/London');
 
-  let time = new HourAndMinute(zone!, 13, 45);
+  const time = new HourAndMinute(zone!, 13, 45);
   expect(time.toString()).toEqual('13:45h');
 });
 
 function assertInCET(): void {
-  let tzName = momentTz.tz.guess();
+  const tzName = momentTz.tz.guess();
   expect(tzName).toEqual('Europe/Madrid');
 }
 
