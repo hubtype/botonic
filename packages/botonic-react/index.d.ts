@@ -28,6 +28,7 @@ export interface ButtonProps{
   url?: string;
   path?: string;
   webview?: Webview;
+  params?: any;
 }
 
 export class Button extends React.Component<ButtonProps, any> {}
