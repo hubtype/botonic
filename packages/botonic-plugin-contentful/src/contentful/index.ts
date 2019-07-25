@@ -1,11 +1,12 @@
 import { DEFAULT_CONTEXT } from '../cms/context';
+import { SearchResult } from '../search';
 import { AssetDelivery } from './asset';
 import { DateRangeDelivery } from './date-range';
 import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './follow-up';
-import { SearchResult, ModelType } from '../cms';
+import { ModelType } from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
@@ -102,4 +103,3 @@ export default class Contentful implements cms.CMS {
 
 export { DeliveryApi } from './delivery-api';
 export { CarouselDelivery } from './carousel';
-export { ModelType } from '../cms';
