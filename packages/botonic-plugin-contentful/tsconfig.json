@@ -21,7 +21,6 @@
     "sourceMap": true,
     "target": "es2015",
     "module": "commonjs",
-    "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     // without typeRoots, it also checks @types of parent folders
