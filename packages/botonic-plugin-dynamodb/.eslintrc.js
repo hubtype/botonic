@@ -55,7 +55,8 @@ module.exports = {
     "@typescript-eslint/no-object-literal-type-assertion" : [ "error", {allowAsParameter: false}], //useful to pass options to plugins
     "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }], // to encapsulate types in namespace with same name as Class
     "no-empty-pattern" : "off",
-    "require-await": "error"
+    "@typescript-eslint/require-await": "error",
+    "@typescript-eslint/no-misused-promises": "error",
 
     // nice rules which are on development
     // https://github.com/typescript-eslint/typescript-eslint/pull/612
