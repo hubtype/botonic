@@ -13,6 +13,7 @@ module.exports = {
     "jest"
   ],
   parserOptions: {
+    project: "./tsconfig.json",
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
     sourceType: "module", // Allows for the use of imports
     ecmaFeatures: {
@@ -50,6 +51,8 @@ module.exports = {
     "unicorn/filename-case" : "off", // React convention is in CamelCase
     "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
     "@typescript-eslint/no-object-literal-type-assertion" : {allowAsParameter: false}, //useful to pass options to plugins
+    "@typescript-eslint/require-await": "error",
+    "@typescript-eslint/no-misused-promises": "error",
     "@typescript-eslint/no-namespace": { allowDeclarations: true }, // to encapsulate types in namespace with same name as Class
   },
   env: {
