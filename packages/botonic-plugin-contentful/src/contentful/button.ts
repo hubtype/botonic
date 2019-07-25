@@ -47,9 +47,9 @@ export class ButtonDelivery {
     }
   }
 
-  private static async fromContent(
+  private static fromContent(
     entry: contentful.Entry<ContentWithKeywordsFields>
-  ): Promise<cms.Button> {
+  ): cms.Button {
     let fields = entry.fields;
     let text = fields.shortText;
     if (!text) {
@@ -63,7 +63,7 @@ export class ButtonDelivery {
     );
   }
 
-  private async getTargetCallback(target: ButtonTarget): Promise<cms.Callback> {
+  private getTargetCallback(target: ButtonTarget): cms.Callback {
     let model = DeliveryApi.getContentModel(target) as string;
     switch (model) {
       case ModelType.CAROUSEL:
