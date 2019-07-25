@@ -55,7 +55,7 @@ interface ElementFields {
   title: string;
   subtitle: string;
   pic?: contentful.Asset;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any it's just a reference
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   buttons: contentful.Entry<any>[];
 }
 
