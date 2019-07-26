@@ -7,7 +7,7 @@ const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
 function assertElementDudasPrevias(element: cms.Element) {
   expect(element.title).toBe('Dudas previas a la compra');
   expect(element.subtitle).toBe(
-    'Le ayudaré con sus compras en la tienda online de Massimo Dutti.'
+    'Le ayudaré con sus compras en la tienda online.'
   );
   expectImgUrlIs(element.imgUrl!, 'blue.jpg');
   expect(element.buttons).toHaveLength(1);

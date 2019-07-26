@@ -37,18 +37,14 @@ test('TEST: contentful text with URL button with followup', async () => {
   const text = await sut.text(TEST_POST_FAQ1_ID, ctx);
 
   // assert
-  expect(text.text).toEqual(
-    'Después de que se autorice el pago recibirá un correo electrónico con el número del pedido. A partir de este momento podrá consultar el estado de este en el apartado “Mis pedidos” directamente en su cuenta.\n' +
-      'Una vez enviado, recibirá un correo electrónico de confirmación de salida de almacén que incluirá un enlace de seguimiento. Con este enlace podrá en todo momento saber la situación/ubicación.\n' +
-      'Si ha realizado su compra con un perfil invitado, siga su pedido con el enlace que aparece en el email de confirmación. Si tiene otras dudas sobre la entrega del pedido, el equipo de Atención al Cliente está a su disposición.'
-  );
+  expect(text.text).toEqual('Cómo encontrar su “pedido”\n' + '...');
   expect(text.shortText).toEqual(
     ctx && ctx.locale == 'en' ? 'Find my command' : 'Encontrar mi pedido'
   );
   expect(text.buttons).toHaveLength(1);
   expect(text.buttons[0].text).toEqual('Acceda a su cuenta');
   expect(text.buttons[0].callback.url).toEqual(
-    'https://www.massimodutti.com/es/'
+    'https://shop.com/es/'
   );
   expect(text.followUp).not.toBeUndefined();
 });
