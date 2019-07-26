@@ -7,11 +7,11 @@ import { Text } from './components/text'
 import { Reply } from './components/reply'
 
 export class BotonicInputTester {
-  constructor(app) {
-    this.app = app
+  constructor(bot) {
+    this.bot = bot
   }
   async text(inp, session = {}, lastRoutePath = '') {
-    let res = await this.app.input({
+    let res = await this.bot.input({
       input: { type: 'text', data: inp },
       session: session,
       lastRoutePath: lastRoutePath
@@ -20,7 +20,7 @@ export class BotonicInputTester {
   }
 
   async payload(inp, session = {}, lastRoutePath = '') {
-    let res = await this.app.input({
+    let res = await this.bot.input({
       input: { type: 'postback', payload: inp },
       session: session,
       lastRoutePath: lastRoutePath
@@ -29,7 +29,7 @@ export class BotonicInputTester {
   }
 
   async path(inp, session = {}, lastRoutePath = '') {
-    let res = await this.app.input({
+    let res = await this.bot.input({
       input: { type: 'text', payload: `__PATH_PAYLOAD__${inp}` },
       session: session,
       lastRoutePath: lastRoutePath
@@ -39,8 +39,8 @@ export class BotonicInputTester {
 }
 
 export class BotonicOutputTester {
-  constructor(app) {
-    this.app = app
+  constructor(bot) {
+    this.bot = bot
   }
 
   text(out, replies = null) {

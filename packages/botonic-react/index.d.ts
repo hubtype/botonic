@@ -58,7 +58,7 @@ export interface ActionInitInput {
 }
 
 export class BotonicInputTester {
-  constructor(app: App);
+  constructor(app: core.CoreBot)
 
   text(inp: string, session?: core.Session, lastRoutePath?: string): Promise<string>
 
@@ -66,7 +66,7 @@ export class BotonicInputTester {
 }
 
 export class BotonicOutputTester {
-  constructor(app: any);
+  constructor(app: core.CoreBot)
 
   text(out: string, replies?: any): Promise<string>
 }
