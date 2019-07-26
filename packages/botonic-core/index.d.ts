@@ -46,10 +46,12 @@ export declare function humanHandOff(session: Session, queue_name: string, on_fi
 export declare function getOpenQueues(session: Session): Promise<{queues: string[]}>;
 export declare function storeCaseRating(session: Session, rating: number): Promise<any>;
 
+type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[]);
+
 export class CoreBot {
 
   constructor(_ : {
-      routes: Route[],
+      routes: Routes,
       locales: Locales,
       integrations?: {[id: string]: any},
       theme?: string,
