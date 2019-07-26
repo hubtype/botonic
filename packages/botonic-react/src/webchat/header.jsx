@@ -61,7 +61,6 @@ import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import styled from 'styled-components'
 import Logo from './botonic_react_logo100x100.png'
-import Arrow from '../../../../../../webchatBot/src/static/img/dArrow.svg'
 import { Flex } from '@rebass/grid'
 
 const HeaderTitle = styled.h1`
