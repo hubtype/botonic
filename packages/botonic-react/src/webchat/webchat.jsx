@@ -429,13 +429,14 @@ export const Webchat = forwardRef((props, ref) => {
               <Button onClick={closeMenu}>Cancel</Button>
             </PersistentMenu>
           )}
-          {webchatState.webviewOption.isOpen && (
+          {/* {webchatState.webviewOption.isOpen && (
             <webchatState.webviewOption.component />
-          )}
+          )} */}
           {menuIsOpened && choiceMenu(webchatState.theme.customMenu)}
           {emojiIsOpened && (
             <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
           )}
+          {/* {!webchatState.handoff && <WebchatMenu />} */}
           {!webchatState.handoff && (
             <div
               style={{
@@ -489,7 +490,6 @@ export const Webchat = forwardRef((props, ref) => {
               />
             </div>
           )}
-
           {webchatState.webview && (
             <RequestContext.Provider value={webviewRequestContext}>
               <WebviewContainer
