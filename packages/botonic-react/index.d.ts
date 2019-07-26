@@ -48,27 +48,6 @@ export class Title extends React.Component<any, any> {}
 export class Subtitle extends React.Component<any, any> {}
 export class Element extends React.Component<any, any> {}
 
-export class App {
-  routes: core.Route[]
-  locales: core.Locales;
-  integrations?: {[id: string]: any};
-  theme?: string;
-  plugins: { [id: string]: any};
-  defaultTyping : number;
-  defaultDelay : number;
-
-  constructor(app: {
-    routes: core.Route[],
-    locales: core.Locales,
-    integrations?: {[id: string]: any};
-    theme?: string,
-    plugins?: { [id: string]: any},
-    defaultTyping?: number,
-    defaultDelay?: number
-  });
-}
-
-
 // Parameters of the actions' botonicInit method
 export interface ActionInitInput {
   input : core.Input;
