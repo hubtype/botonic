@@ -17,15 +17,12 @@ import { TypingIndicator } from '../components/typingIndicator'
 import { Handoff } from '../components/handoff'
 import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
+import { WebchatMenu } from './menu'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
 import { isDev, msgToBotonic } from '../utils'
-// import Logo from './botonic_react_logo100x100.png'
-// import MenuLogo from './menuLogo.svg'
-// import IconEmoji from './IconEmoji.svg'
-// import IconMedia from './IconMedia.svg'
-import { Menu } from './menu'
+import Logo from './botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 
 const getScriptBaseURL = () => {
@@ -66,7 +63,6 @@ export const Webchat = forwardRef((props, ref) => {
     openWebviewT,
     closeWebviewT
   } = props.webchatHooks || useWebchat()
-  console.log(webchatState)
   const { initialSession, initialDevSettings } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
 
@@ -375,75 +371,37 @@ export const Webchat = forwardRef((props, ref) => {
           {webchatState.replies && (
             <WebchatReplies replies={webchatState.replies} />
           )}
-          {webchatState.webviewOption.isOpen && (
+          {/* {webchatState.webviewOption.isOpen && (
             <webchatState.webviewOption.component />
-          )}
+          )} */}
           {menuIsOpened && choiceMenu(webchatState.theme.customMenu)}
           {emojiIsOpened && (
             <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
           )}
+          {/* {!webchatState.handoff && <WebchatMenu />} */}
           {!webchatState.handoff && (
-            <Flex style={{ border: '1px solid #F2F2F2' }}>
-              <Flex
-                style={{
-                  alignItems: 'center',
-                  paddingLeft: 10
-                }}
-                width={1 / 8}
-              >
-                <img
-                  style={{ height: 10, width: 18 }}
-                  src={MenuLogo}
-                  onClick={() => openMenu()}
-                />
-              </Flex>
-              <Textarea
-                name="text"
-                minRows={2}
-                maxRows={4}
-                wrap="soft"
-                maxLength="1000"
-                placeholder={webchatState.theme.textPlaceholder}
-                autoFocus={location.hostname === 'localhost'}
-                inputRef={textArea}
-                onKeyDown={e => onKeyDown(e)}
-                style={{
-                  display: 'flex',
-                  padding: '0px 10px',
-                  fontSize: 14,
-                  borderRadius: '0 0 8px 8px',
-                  border: 'none',
-                  resize: 'none',
-                  overflow: 'auto',
-                  outline: 'none',
-                  marginTop: 12
-                }}
-              />
-              <Flex
-                style={{
-                  alignItems: 'center',
-                  paddingLeft: 10
-                }}
-                width={1 / 8}
-              >
-                <img
-                  style={{ height: 19, width: 20 }}
-                  src={IconEmoji}
-                  onClick={() => openEmoji()}
-                />
-              </Flex>
-              <Flex
-                style={{
-                  alignItems: 'center',
-                  paddingLeft: 10
-                }}
-                width={1 / 8}
-              >
-                <img style={{ height: 19, width: 18 }} src={IconMedia} />
-              </Flex>
-            </Flex>
+            <Textarea
+              name="text"
+              minRows={2}
+              maxRows={4}
+              wrap="soft"
+              maxLength="1000"
+              placeholder={webchatState.theme.textPlaceholder}
+              autoFocus={location.hostname === 'localhost'}
+              inputRef={textArea}
+              onKeyDown={e => onKeyDown(e)}
+              style={{
+                display: 'flex',
+                padding: '8px 10px',
+                fontSize: 14,
+                border: 'none',
+                borderTop: '1px solid rgba(0, 0, 0, 0.4)',
+                resize: 'none',
+                overflow: 'auto',
+                outline: 'none'
+              }}
+            />
           )}
-
           {webchatState.webview && (
             <RequestContext.Provider value={webviewRequestContext}>
               <WebviewContainer
