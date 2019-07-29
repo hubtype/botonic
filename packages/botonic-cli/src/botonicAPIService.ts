@@ -131,9 +131,9 @@ export class BotonicAPIService {
     return true
   }
 
-  async buildIfChanged(npmCommand?: string) {
+  async buildIfChanged(force: boolean, npmCommand?: string) {
     let hash = await this.getCurrentBuildHash()
-    if (hash != this.lastBuildHash) {
+    if (force || hash != this.lastBuildHash) {
       this.lastBuildHash = hash
       return await this.build(npmCommand)
     }

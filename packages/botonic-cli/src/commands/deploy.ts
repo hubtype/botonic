@@ -257,7 +257,7 @@ Uploading...
   }
 
   async deploy() {
-    let build_out = await this.botonicApiService.buildIfChanged(npmCommand)
+    let build_out = await this.botonicApiService.buildIfChanged(force, npmCommand)
     if (!build_out) {
       track('Deploy Botonic Build Error')
       console.log(colors.red('There was a problem building the bot'))
