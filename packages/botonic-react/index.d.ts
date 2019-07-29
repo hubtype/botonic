@@ -1,3 +1,4 @@
+import { Input, Locales, Routes, Session } from '@botonic/core';
 import * as React from 'react'
 import * as core from '@botonic/core'
 
@@ -78,7 +79,7 @@ export interface ActionInitInput {
 }
 
 export class BotonicInputTester {
-  constructor(app: core.CoreBot)
+  constructor(app: NodeApp)
 
   text(
     inp: string,
@@ -94,7 +95,7 @@ export class BotonicInputTester {
 }
 
 export class BotonicOutputTester {
-  constructor(app: core.CoreBot)
+  constructor(app: NodeApp)
 
   text(out: string, replies?: any): Promise<string>
 }
