@@ -42,13 +42,16 @@ export class BotonicMsgConverter {
         : this.options.maxQuickReplies;
     cmsButtons = cmsButtons.slice(0, maxButtons);
     return cmsButtons.map(cmsButton => {
-      return {
-        props: {
-          payload: cmsButton.callback.payload,
-          url: cmsButton.callback.url,
-          title: cmsButton.text
-        }
-      };
+      const msgButton = {
+        payload: cmsButton.callback.payload,
+        url: cmsButton.callback.url
+      } as any;
+      if (style == ButtonStyle.BUTTON) {
+        msgButton['title'] = cmsButton.text;
+      } else {
+        msgButton['text'] = cmsButton.text;
+      }
+      return msgButton;
     });
   }
 
