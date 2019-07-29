@@ -107,7 +107,7 @@ Creating...
     let dependencyCommand = `npm install`
     let dependency = await exec(dependencyCommand)
     spinner.succeed()
-    await this.botonicApiService.buildIfChanged()
+    await this.botonicApiService.buildIfChanged(false)
     this.botonicApiService.beforeExit()
     await exec('mv ../.botonic.json .')
     let cd_cmd = colors.bold(`cd ${args.name}`)
