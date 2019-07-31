@@ -1,5 +1,5 @@
 # Design
- See [diagram](./doc/class-diagram.png). Exported from https://www.draw.io/#G1fMaHqDYF-DsGWC6JrCWvo6f7Psx7Vpzw
+ See [diagram](/packages/botonic-plugin-contentful/doc/class-diagram.png). Exported from https://www.draw.io/#G1fMaHqDYF-DsGWC6JrCWvo6f7Psx7Vpzw
 # Management
 ## Export 
 Install cli:
@@ -11,7 +11,3 @@ Generate personal token from https://app.contentful.com/spaces/p2iyhzd1u4a7/api/
 ````
 contentful space export --space-id=p2iyhzd1u4a7 --management-token=xxx --download-assets
 ````
-
-## Build
-
-* @babel/runtime must be a dependency in case the plugin is used from a bot packaged with babel-loader

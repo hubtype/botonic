@@ -32,7 +32,7 @@ export class ButtonDelivery {
         return ButtonDelivery.fromContent(entry as contentful.Entry<
           ContentWithKeywordsFields
         >);
-      case ButtonDelivery.BUTTON_CONTENT_TYPE:
+      case ButtonDelivery.BUTTON_CONTENT_TYPE: {
         const buttonEntry = entry as contentful.Entry<ButtonFields>;
         const callback = buttonEntry.fields.target
           ? await this.getTargetCallback(buttonEntry.fields.target)
@@ -42,6 +42,7 @@ export class ButtonDelivery {
           buttonEntry.fields.text,
           callback
         );
+      }
       default:
         throw new Error(`Unexpected type ${entryType}`);
     }
