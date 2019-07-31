@@ -8,8 +8,10 @@ node_modules/
 tmp/
 .DS_Store
 yarn.lock
+.yarn-metadata.json
 .nyc_output/
 dist/
 tmp/
 .yalc/
 yalc.lock
+.eslintcache
