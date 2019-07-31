@@ -46,6 +46,16 @@ declare module 'node-nlp/lib/nlp/stemmers/catalan-stemmer' {
   export = CatalanStemmer;
 }
 
+declare module 'node-nlp/lib/nlp/stemmers/spanish-stemmer' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
+
+  class SpanishStemmer {
+    constructor(tokenizer: Tokenizer);
+    tokenizeAndStem(str: string, keepStops: boolean): string[];
+  }
+  export = SpanishStemmer;
+}
+
 declare module 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer' {
   class PorterStemmer {
     tokenizeAndStem(str: string, keepStops: boolean): string[];
