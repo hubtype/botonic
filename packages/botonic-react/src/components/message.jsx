@@ -86,20 +86,61 @@ export const Message = props => {
     return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
   }
 
-  const getFontColor = colors => {
-    if (isFromUser()) {
-      if (webchatState.theme.customUserMessages.color) {
+  const getFontColor = () => {
+    if (
+      webchatState.theme.customUserMessages &&
+      webchatState.theme.customBotMessages
+    ) {
+      if (isFromUser()) {
         return webchatState.theme.customUserMessages.color
       } else {
-        return '#ffffff'
-      }
-    } else {
-      if (webchatState.theme.customBotMessages.color) {
         return webchatState.theme.customBotMessages.color
-      } else {
-        return '#000'
       }
     }
+    if (
+      webchatState.theme.customUserMessages &&
+      !webchatState.theme.customBotMessages
+    ) {
+      if (isFromUser()) {
+        return webchatState.theme.customUserMessages
+      } else {
+        return '#000000'
+      }
+    }
+    if (
+      !webchatState.theme.customUserMessages &&
+      webchatState.theme.customBotMessages
+    ) {
+      if (isFromUser()) {
+        return '#ffffff'
+      } else {
+        return webchatState.theme.customBotMessages.color
+      }
+    }
+    if (
+      !webchatState.theme.customUserMessages &&
+      !webchatState.theme.customBotMessages
+    ) {
+      if (isFromUser()) {
+        return '#ffffff'
+      } else {
+        return '#000000'
+      }
+    }
+
+    // if (isFromUser() && webchatState.theme.customUserMessages) {
+    //   if (webchatState.theme.customUserMessages.color) {
+    //     return webchatState.theme.customUserMessages.color
+    //   } else {
+    //     return '#ffffff'
+    //   }
+    // } else if (webchatState.theme.customBotMessages) {
+    //   if (webchatState.theme.customBotMessages.color) {
+    //     return webchatState.theme.customBotMessages.color
+    //   } else {
+    //     return '#000'
+    //   }
+    // }
   }
 
   const renderBrowser = () => {
