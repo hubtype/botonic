@@ -35,10 +35,27 @@ test('TEST: normalize en', () => {
 });
 
 test.each<any>([['es'], ['ca'], ['en']])(
-  'tokenizeAndStem(%s)',
+  'tokenizeAndStem stopwords for %s',
   (locale: Locale) => {
-    for (const stopWord of DEFAULT_STOP_WORDS[locale]) {
-      expect(tokenizeAndStem(locale, stopWord)).toEqual([]);
+    for (let stopWord of DEFAULT_STOP_WORDS[locale]) {
+      stopWord = naiveStemmer(stopWord, locale);
+      expect(stopWord).toStartWith(tokenizeAndStem(locale, stopWord)[0]);
+      expect(tokenizeAndStem(locale, stopWord + ' abcdex')).toEqual(['abcdex']);
     }
   }
 );
+
+function naiveStemmer(word: string, locale: string): string {
+  word = word
+    .replace('á', 'a')
+    .replace('ò', 'o')
+    .replace('í', 'i')
+    .replace('ú', 'u')
+    .replace('è', 'e')
+    .replace('é', 'e')
+    .replace('during', 'dure');
+  if (locale == 'en' && word.length > 2) {
+    word = word.replace(/y$/, 'i');
+  }
+  return word;
+}
