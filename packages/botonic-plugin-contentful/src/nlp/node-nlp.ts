@@ -44,6 +44,12 @@ export function tokenizeAndStem(
     true
   );
   // Maybe we should filter stopwords before stemmer, because stemmer removes some final letters
-  // But we should do it between tokenizer and stemmer, which is not possible
-  return tokens.filter(t => !stopWords!.includes(t));
+  // But then we should do it between tokenizer and stemmer, which is not possible with node-nlp
+  const noStopWords = tokens.filter(t => !stopWords!.includes(t));
+
+  if (noStopWords.length == 0) {
+    console.log(`'${inputText}' only contains stopwords. Not removing them`);
+    return tokens;
+  }
+  return noStopWords;
 }
