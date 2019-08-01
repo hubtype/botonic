@@ -87,14 +87,18 @@ export const Message = props => {
   }
 
   const getFontColor = () => {
+    let fontColorUser = '#ffffff'
+    let fontColorBot = '#000000'
     if (
       webchatState.theme.customUserMessages &&
       webchatState.theme.customBotMessages
     ) {
       if (isFromUser()) {
-        return webchatState.theme.customUserMessages.color
+        fontColorUser = webchatState.theme.customUserMessages.color
+        return fontColorUser
       } else {
-        return webchatState.theme.customBotMessages.color
+        fontColorBot = webchatState.theme.customBotMessages.color
+        return fontColorBot
       }
     }
     if (
@@ -102,9 +106,10 @@ export const Message = props => {
       !webchatState.theme.customBotMessages
     ) {
       if (isFromUser()) {
-        return webchatState.theme.customUserMessages
+        fontColorUser = webchatState.theme.customUserMessages.color
+        return fontColorUser
       } else {
-        return '#000000'
+        return fontColorBot
       }
     }
     if (
@@ -112,9 +117,10 @@ export const Message = props => {
       webchatState.theme.customBotMessages
     ) {
       if (isFromUser()) {
-        return '#ffffff'
+        return fontColorUser
       } else {
-        return webchatState.theme.customBotMessages.color
+        fontColorBot = webchatState.theme.customBotMessages.color
+        return fontColorBot
       }
     }
     if (
@@ -122,9 +128,9 @@ export const Message = props => {
       !webchatState.theme.customBotMessages
     ) {
       if (isFromUser()) {
-        return '#ffffff'
+        return fontColorUser
       } else {
-        return '#000000'
+        return fontColorBot
       }
     }
 

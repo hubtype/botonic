@@ -129,20 +129,6 @@ export const Webchat = forwardRef((props, ref) => {
     updateTheme({ ...webchatState.theme, ...props.theme })
   }, [props.theme])
 
-  const openMenu = () => {
-    if (menuIsOpened) {
-      setMenuIsOpened(false)
-    } else {
-      setMenuIsOpened(true)
-    }
-  }
-  const openEmoji = () => {
-    if (emojiIsOpened) {
-      setemojiIsOpened(false)
-    } else {
-      setemojiIsOpened(true)
-    }
-  }
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
