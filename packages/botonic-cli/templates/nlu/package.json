@@ -7,7 +7,7 @@
     "retrain": "node node_modules/@botonic/plugin-nlu/dist/scripts/retrain.js --lang"
   },
   "dependencies": {
-    "@botonic/plugin-nlu": "botonic-plugin-nlu-0.1.0.tgz",
+    "@botonic/plugin-nlu": "0.1.0-alpha.2",
     "@botonic/react": "^0.9.0-alpha.4"
   },
   "devDependencies": {
