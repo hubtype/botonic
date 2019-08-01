@@ -86,7 +86,7 @@ const Diffuse = styled(Flex)`
 `
 
 export const DefaultHeader = props => (
-  <Diffuse colorr={props.color}>
+  <Diffuse color={props.color}>
     <Flex width={1 / 4}>
       <img
         style={{
