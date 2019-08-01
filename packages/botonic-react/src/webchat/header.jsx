@@ -79,7 +79,7 @@ const Subtitle = styled.h1`
   color: #ffffff;
 `
 const Diffuse = styled(Flex)`
-  background: linear-gradient(90deg, #2e203b 0%, ${props => props.colorr} 100%);
+  background: linear-gradient(90deg, #2e203b 0%, ${props => props.color} 100%);
   width: 1;
   height: 55px;
   border-radius: 6px 6px 0px 0px;
