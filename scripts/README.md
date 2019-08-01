@@ -1,6 +1,6 @@
 This is a script that allows you to generate new word embeddings to use alongside with @botonic/plugin-nlu.
 
-Usage: Pass as flag the file to be dumped into a .db file.
+Usage: Specify as argument the embeddings file to be dumped into a .db file.
 Example: $ node dump_word_embedding_to_db.js input_file.txt
 
 - Required format: {ALGORITHM_NAME}-{DIMENSIONS}d-{LANGUAGE_CODE(ISO639-3)}.txt'
