@@ -86,67 +86,18 @@ export const Message = props => {
     return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
   }
 
-  const getFontColor = () => {
+  const getFontColor = props => {
     let fontColorUser = '#ffffff'
     let fontColorBot = '#000000'
-    if (
-      webchatState.theme.customUserMessages &&
-      webchatState.theme.customBotMessages
-    ) {
-      if (isFromUser()) {
-        fontColorUser = webchatState.theme.customUserMessages.color
-        return fontColorUser
-      } else {
-        fontColorBot = webchatState.theme.customBotMessages.color
-        return fontColorBot
-      }
+    if (isFromUser()) {
+      return webchatState.theme.customUserMessages
+        ? props.customUserMessages.color
+        : fontColorUser
+    } else {
+      return webchatState.theme.customBotMessages
+        ? props.customBotMessages.color
+        : fontColorBot
     }
-    if (
-      webchatState.theme.customUserMessages &&
-      !webchatState.theme.customBotMessages
-    ) {
-      if (isFromUser()) {
-        fontColorUser = webchatState.theme.customUserMessages.color
-        return fontColorUser
-      } else {
-        return fontColorBot
-      }
-    }
-    if (
-      !webchatState.theme.customUserMessages &&
-      webchatState.theme.customBotMessages
-    ) {
-      if (isFromUser()) {
-        return fontColorUser
-      } else {
-        fontColorBot = webchatState.theme.customBotMessages.color
-        return fontColorBot
-      }
-    }
-    if (
-      !webchatState.theme.customUserMessages &&
-      !webchatState.theme.customBotMessages
-    ) {
-      if (isFromUser()) {
-        return fontColorUser
-      } else {
-        return fontColorBot
-      }
-    }
-
-    // if (isFromUser() && webchatState.theme.customUserMessages) {
-    //   if (webchatState.theme.customUserMessages.color) {
-    //     return webchatState.theme.customUserMessages.color
-    //   } else {
-    //     return '#ffffff'
-    //   }
-    // } else if (webchatState.theme.customBotMessages) {
-    //   if (webchatState.theme.customBotMessages.color) {
-    //     return webchatState.theme.customBotMessages.color
-    //   } else {
-    //     return '#000'
-    //   }
-    // }
   }
 
   const renderBrowser = () => {
