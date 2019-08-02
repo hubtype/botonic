@@ -3,13 +3,19 @@ import '@tensorflow/tfjs-node'
 import path from 'path'
 import inquirer from 'inquirer'
 import { NLU } from '../nlu'
-import mkdirp from 'mkdirp'
 import {
   NLU_PATH,
   NLU_CONFIG_PATH,
   INTENTS_DIRNAME,
   INTENTS_EXTENSION
 } from '../constants'
+import {
+  readDir,
+  readFile,
+  createDir,
+  pathExists,
+  appendNewLine
+} from '../fileUtils'
 
 async function askForUserInput() {
   const questions = [
@@ -111,14 +117,11 @@ async function retrain() {
   let flagLang = process.argv.slice(3)[0]
   let projectPath = process.env.INIT_CWD
   let nluPath = path.join(projectPath, NLU_PATH)
-  let options = JSON.parse(
-    fs.readFileSync(path.join(projectPath, NLU_CONFIG_PATH))
-  )
+  let options = JSON.parse(readFile(path.join(projectPath, NLU_CONFIG_PATH)))
   if (flagLang) {
     options = options.filter(config => config.LANG === flagLang)
   }
   let intentsPath = path.join(nluPath, INTENTS_DIRNAME)
-
   let nlu = await new NLU(options)
   while (true) {
     let input = await askForUserInput()
@@ -133,26 +136,20 @@ async function retrain() {
           let createNewFile = await askIfNewFile()
           if (createNewFile.res) {
             let newIntentPath = undefined
-            let langSelected = (await askForLang(fs.readdirSync(intentsPath)))
-              .res
+            let langSelected = (await askForLang(readDir(intentsPath))).res
             if (langSelected === 'New Language') {
               langSelected = (await askForNewLang()).res
             }
             let newIntent = await askForFileName()
             newIntentPath = path.join(intentsPath, langSelected)
-            let newSample = input.res
-            if (fs.existsSync(newIntentPath)) {
-              newSample = `\n${newSample}`
-            } else {
-              if (!fs.existsSync(newIntentPath)) {
-                mkdirp(newIntentPath)
-              }
+            if (!pathExists(newIntentPath)) {
+              createDir(newIntentPath)
             }
             newIntentPath = path.join(
               newIntentPath,
               `${newIntent.name}${INTENTS_EXTENSION}`
             )
-            fs.appendFileSync(newIntentPath, newSample)
+            appendNewLine(newIntentPath, input.res)
             console.log('Created: ', newIntentPath.split('src/')[1])
           }
         } else {
@@ -163,7 +160,7 @@ async function retrain() {
             intents.language,
             `${intentSelected}${INTENTS_EXTENSION}`
           )
-          fs.appendFileSync(intentFilePath, '\n' + input.res)
+          appendNewLine(intentFilePath, input.res)
         }
       } else {
         let wantsToAdd = await askIfWantsToAdd()
@@ -174,7 +171,8 @@ async function retrain() {
             intents.language,
             `${intentPredicted.intent}${INTENTS_EXTENSION}`
           )
-          fs.appendFileSync(intentFilePath, '\n' + input.res)
+          appendNewLine(intentFilePath, input.res)
+          console.log('Appended at: ', intentFilePath.split('src/')[1])
         }
       }
     }

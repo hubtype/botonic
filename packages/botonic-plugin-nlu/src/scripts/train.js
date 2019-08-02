@@ -1,10 +1,10 @@
 import path from 'path'
 import { homedir } from 'os'
 import * as tf from '@tensorflow/tfjs-node'
-import { loadIntentsData, saveResults, printPrettyConfig } from '../utils'
+import { printPrettyConfig } from '../utils'
+import { loadIntentsData, readFile, saveResults } from '../fileUtils'
 import { generateEmbeddingMatrix } from '../db-embeddings'
 import { Tokenizer, padSequences } from '../preprocessing'
-import fs from 'fs'
 import {
   NLU_PATH,
   NLU_CONFIG_PATH,
@@ -16,10 +16,7 @@ async function train() {
   let flagLang = process.argv.slice(3)[0]
   let projectPath = process.env.INIT_CWD
   let nluPath = path.join(projectPath, NLU_PATH)
-  let options = JSON.parse(
-    fs.readFileSync(path.join(projectPath, NLU_CONFIG_PATH))
-  )
-
+  let options = JSON.parse(readFile(path.join(projectPath, NLU_CONFIG_PATH)))
   if (flagLang) {
     options = options.filter(config => config.LANG === flagLang)
   }
