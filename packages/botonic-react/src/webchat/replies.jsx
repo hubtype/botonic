@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 
+const alignOptions = /^left$|^center$|^right$/
+
 export const WebchatReplies = props => {
   const { webchatState } = useContext(WebchatContext)
   return (
@@ -8,7 +10,7 @@ export const WebchatReplies = props => {
       style={{
         ...(props.style || {}),
         overflowX: 'auto',
-        textAlign: 'center',
+        textAlign: (props.align && props.align.match(alignOptions)) || 'center',
         whiteSpace: 'wrap',
         paddingBottom: 10,
         marginLeft: 5,
