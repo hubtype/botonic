@@ -1,5 +1,35 @@
 import React, { useState, useContext } from 'react'
 import { WebchatContext } from '../contexts'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  display: flex;
+  font-family: Arial, Helvetica, sans-serif;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+`
+
+const TransferredContainer = styled.div`
+  text-align: center;
+  white-space: normal;
+`
+
+const EndedContainer = styled.div`
+  text-align: center;
+  white-space: normal;
+`
+
+const StyledButton = styled.button`
+  max-width: 60%;
+  padding: 12px 24px;
+  background-color: white;
+  border: none;
+  border-radius: 4px;
+  margin-top: 8px;
+  cursor: pointer;
+`
 
 export const Handoff = props => {
   const { resolveCase } = useContext(WebchatContext)
@@ -13,43 +43,22 @@ export const Handoff = props => {
   let bgColor = state.showContinue ? '#c6e7c0' : '#d1d8cf'
   let fontColor = state.showContinue ? '#3a9c35' : '#5f735e'
   return (
-    <div
+    <Container
       style={{
-        display: 'flex',
         color: fontColor,
-        fontFamily: 'Arial, Helvetica, sans-serif',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 24,
         backgroundColor: bgColor
       }}
     >
       {state.showContinue ? (
-        <div style={{ textAlign: 'center', whiteSpace: 'normal' }}>
+        <TransferredContainer>
           Conversation transferred to a human agent...
-        </div>
+        </TransferredContainer>
       ) : (
-        <div style={{ textAlign: 'center', whiteSpace: 'normal' }}>
-          Human handoff ended
-        </div>
+        <EndedContainer>Human handoff ended</EndedContainer>
       )}
       {state.showContinue && (
-        <button
-          style={{
-            maxWidth: '60%',
-            padding: '12px 24px',
-            backgroundColor: 'white',
-            border: 'none',
-            borderRadius: 4,
-            marginTop: 8,
-            cursor: 'pointer'
-          }}
-          onClick={continueClick}
-        >
-          Continue
-        </button>
+        <StyledButton onClick={continueClick}>Continue</StyledButton>
       )}
-    </div>
+    </Container>
   )
 }
