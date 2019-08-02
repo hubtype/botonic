@@ -358,6 +358,7 @@ export const Webchat = forwardRef((props, ref) => {
             <WebchatReplies
               replies={webchatState.replies}
               align={webchatState.theme.alignReplies}
+              wrap={webchatState.theme.wrapReplies}
             />
           )}
           {/* {webchatState.webviewOption.isOpen && (
