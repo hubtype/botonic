@@ -9,7 +9,7 @@ export const WebchatReplies = props => {
         ...(props.style || {}),
         overflowX: 'auto',
         textAlign: 'center',
-        whiteSpace: 'nowrap',
+        whiteSpace: 'wrap',
         paddingBottom: 10,
         marginLeft: 5,
         marginRight: 5
