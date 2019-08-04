@@ -84,13 +84,13 @@ function generateVocabulary(tokenizedSamples) {
 }
 
 function getSeqLengths(sequences) {
-  let seqLenghts = []
+  let seqLengths = []
   for (let sequence of sequences) {
-    seqLenghts.push(sequence.length)
+    seqLengths.push(sequence.length)
   }
   return {
-    minSeqLength: Math.min.apply(null, seqLenghts),
-    maxSeqLength: Math.max.apply(null, seqLenghts)
+    minSeqLength: Math.min.apply(null, seqLengths),
+    maxSeqLength: Math.max.apply(null, seqLengths)
   }
 }
 
