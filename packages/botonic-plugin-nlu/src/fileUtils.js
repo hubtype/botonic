@@ -32,11 +32,13 @@ export async function saveResults({
   lang
 }) {
   let modelsPath = path.join(nluPath, MODELS_DIRNAME)
+  let resultsPath = path.join(modelsPath, `${lang}`)
   if (!pathExists(modelsPath)) {
     createDir(modelsPath)
   }
-  let resultsPath = path.join(modelsPath, `${lang}`)
-  createDir(resultsPath)
+  if (!pathExists(resultsPath)) {
+    createDir(resultsPath)
+  }
   console.log('Saving intents...')
   console.log('Saving word index...')
   let nluData = {
@@ -63,25 +65,21 @@ function getIntentName(fileName) {
   }
 }
 
-export function loadIntentsData({
-  intentsPath,
-  fileEncoding = 'utf-8',
-  shuffleData = true
-}) {
+export function loadIntentsData(intentsPath) {
   let samples = []
   let labels = []
   let intentsDict = {}
   let intentsFiles = readDir(intentsPath)
   for (let i = 0, len = intentsFiles.length; i < len; i++) {
     intentsDict[i] = getIntentName(intentsFiles[i])
-    let file = readFile(path.join(intentsPath, intentsFiles[i])).split('\n')
-    for (let l = 0, len = file.length; l < len; l++) {
-      samples.push(file[l])
+    let sentences = readFile(path.join(intentsPath, intentsFiles[i])).split(
+      '\n'
+    )
+    for (let l = 0, len = sentences.length; l < len; l++) {
+      samples.push(sentences[l])
       labels.push(i)
     }
   }
-  if (shuffleData) {
-    shuffle(samples, labels)
-  }
+  shuffle(samples, labels)
   return { samples, labels, intentsDict }
 }

@@ -19,10 +19,10 @@ export async function generateEmbeddingMatrix({
 function createEmbeddingMatrix(dim1, dim2) {
   let min = -1
   let max = 1
-  var matrix = []
-  for (var i = 0; i < dim1; i++) {
+  let matrix = []
+  for (let i = 0; i < dim1; i++) {
     matrix[i] = new Array(dim2)
-    for (var j = 0; j < dim2; j++) {
+    for (let j = 0; j < dim2; j++) {
       matrix[i][j] = Math.random() * (max - min) + min
     }
   }

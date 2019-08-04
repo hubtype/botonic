@@ -25,10 +25,7 @@ async function train() {
     let start = new Date()
     let lang = config.LANG
     let intentsPath = path.join(nluPath, INTENTS_DIRNAME, `${lang}`)
-    let { samples, labels, intentsDict } = loadIntentsData({
-      intentsPath
-    })
-
+    let { samples, labels, intentsDict } = loadIntentsData(intentsPath)
     let tokenizer = new Tokenizer()
     tokenizer.fitOnSamples(samples)
     let sequences = tokenizer.samplesToSequences(samples)
