@@ -58,7 +58,7 @@ function loadOption(lang, env) {
       )
     }
   } catch (e) {
-    console.log('Cannot retrieve NLU Information')
+    console.log('Cannot retrieve NLU Information', e)
   }
   return nlu
 }
@@ -103,15 +103,15 @@ export class NLU {
   predict(userInput, nlu) {
     let sequences = nlu.tokenizer.samplesToSequences(userInput)
     let paddedSequences = []
-    for (let s = 0, len = sequences.length; s < len; s++) {
+    let predictions = []
+    for (let sequence of sequences) {
       paddedSequences.push(
-        padSequences([sequences[s]], nlu.maxSeqLength).dataSync()
+        padSequences([sequence], nlu.maxSeqLength).dataSync()
       )
     }
-    let predictions = []
-    for (let ps = 0, len = paddedSequences.length; ps < len; ps++) {
+    for (let paddedSequence of paddedSequences) {
       predictions.push(
-        nlu.model.predict(tf.tensor([paddedSequences[ps]])).dataSync()
+        nlu.model.predict(tf.tensor([paddedSequence])).dataSync()
       )
     }
     return predictions
@@ -138,8 +138,8 @@ export class NLU {
     let nlu = this.nlus[lang]
     let predictions = this.predict(userInput, nlu)
     let results = []
-    for (let p = 0, len = predictions.length; p < len; p++) {
-      results.push(this.getIntent(predictions[p], nlu))
+    for (let prediction of predictions) {
+      results.push(this.getIntent(prediction, nlu))
     }
     if (results.length == 1) {
       results[0].intents.sort((a, b) => b.prob - a.prob)

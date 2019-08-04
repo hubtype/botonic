@@ -70,14 +70,12 @@ export function loadIntentsData(intentsPath) {
   let labels = []
   let intentsDict = {}
   let intentsFiles = readDir(intentsPath)
-  for (let i = 0, len = intentsFiles.length; i < len; i++) {
-    intentsDict[i] = getIntentName(intentsFiles[i])
-    let sentences = readFile(path.join(intentsPath, intentsFiles[i])).split(
-      '\n'
-    )
-    for (let l = 0, len = sentences.length; l < len; l++) {
-      samples.push(sentences[l])
-      labels.push(i)
+  for (let [idx, file] of intentsFiles.entries()) {
+    intentsDict[idx] = getIntentName(file)
+    let sentences = readFile(path.join(intentsPath, file)).split('\n')
+    for (let sentence of sentences) {
+      samples.push(sentence)
+      labels.push(idx)
     }
   }
   shuffle(samples, labels)

@@ -4,9 +4,9 @@ import { replaceAll, clone } from './utils'
 import { UNKNOWN_TOKEN } from './constants'
 
 export class Tokenizer {
-  constructor(vocabulary) {
+  constructor(vocabulary = null) {
     this.charsToShift = ["'", '.', ',', '?', '!']
-    this.vocabulary = vocabulary ? vocabulary : null
+    this.vocabulary = vocabulary
     this.vocabularyLength = vocabulary
       ? Object.keys(this.vocabulary).length
       : null
@@ -21,8 +21,8 @@ export class Tokenizer {
 
   tokenizeSamples(samples) {
     let tokenizedSamples = []
-    for (let s = 0, len = samples.length; s < len; s++) {
-      tokenizedSamples.push(this.tokenize(samples[s]))
+    for (let sample of samples) {
+      tokenizedSamples.push(this.tokenize(sample))
     }
     return tokenizedSamples
   }
@@ -40,9 +40,9 @@ export class Tokenizer {
       samples = [samples]
     }
     tokenizedSamples = this.tokenizeSamples(samples)
-    for (let ts = 0, len = tokenizedSamples.length; ts < len; ts++) {
+    for (let tokenizedSample of tokenizedSamples) {
       let sequence = []
-      for (let token of tokenizedSamples[ts]) {
+      for (let token of tokenizedSample) {
         if (!(token in this.vocabulary)) {
           sequence.push(this.vocabulary[UNKNOWN_TOKEN])
         } else {
@@ -71,10 +71,9 @@ function shiftSpecialChars(userInput, charsToShift) {
 function generateVocabulary(tokenizedSamples) {
   let vocabulary = {}
   vocabulary[UNKNOWN_TOKEN] = 0
-  let c = 1
-  for (let ts = 0, len = tokenizedSamples.length; ts < len; ts++) {
-    for (let t = 0, len = tokenizedSamples[ts].length; t < len; t++) {
-      let token = tokenizedSamples[ts][t]
+  let c = 1 // Reserved for UNKNOWN_TOKEN
+  for (let tokenizedSample of tokenizedSamples) {
+    for (let token of tokenizedSample) {
       if (!(token in vocabulary)) {
         vocabulary[token] = c
         c++
@@ -86,8 +85,8 @@ function generateVocabulary(tokenizedSamples) {
 
 function getSeqLengths(sequences) {
   let seqLenghts = []
-  for (let s = 0, len = sequences.length; s < len; s++) {
-    seqLenghts.push(sequences[s].length)
+  for (let sequence of sequences) {
+    seqLenghts.push(sequence.length)
   }
   return {
     minSeqLength: Math.min.apply(null, seqLenghts),
@@ -97,9 +96,8 @@ function getSeqLengths(sequences) {
 
 export function padSequences(sequences, maxSeqLength) {
   let paddedSequences = []
-  for (let s = 0, len = sequences.length; s < len; s++) {
-    let seq = sequences[s]
-    let t = tf.tensor1d(seq).pad([[maxSeqLength - seq.length, 0]])
+  for (let sequence of sequences) {
+    let t = tf.tensor1d(sequence).pad([[maxSeqLength - sequence.length, 0]])
     paddedSequences.push(t)
   }
   return tf.stack(paddedSequences)
@@ -108,8 +106,7 @@ export function padSequences(sequences, maxSeqLength) {
 export function detectLang(input, langs) {
   let res = franc(input, { whitelist: langs })
   if (res === 'und') {
-    return langs[0]
-  } else {
-    return res
+    res = langs[0]
   }
+  return res
 }

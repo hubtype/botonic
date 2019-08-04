@@ -64,7 +64,7 @@ async function askIfWantsToAdd() {
 }
 
 async function askForCorrectIntent(intentsResp) {
-  let sortedIntents = intentsResp.intents.sort((a, b) => a.prob < b.prob)
+  let sortedIntents = intentsResp.intents.sort((a, b) => b.prob - a.prob)
   let choices = sortedIntents.map(e => `${e.intent}, ${e.prob}`)
   const questions = [
     {
