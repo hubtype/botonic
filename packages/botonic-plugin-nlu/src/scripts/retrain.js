@@ -1,4 +1,3 @@
-import fs from 'fs'
 import '@tensorflow/tfjs-node'
 import path from 'path'
 import inquirer from 'inquirer'
@@ -16,6 +15,10 @@ import {
   pathExists,
   appendNewLine
 } from '../fileUtils'
+
+const projectPath = process.env.INIT_CWD
+const nluPath = path.join(projectPath, NLU_PATH)
+const intentsPath = path.join(nluPath, INTENTS_DIRNAME)
 
 async function askForUserInput() {
   const questions = [
@@ -113,15 +116,47 @@ async function askForNewLang() {
   return inquirer.prompt(questions)
 }
 
+async function addressWrongIntents(intents, input) {
+  let correctIntent = await askForCorrectIntent(intents)
+  if (correctIntent.res == 'NONE') {
+    let createNewFile = await askIfNewFile()
+    if (createNewFile.res) {
+      let newIntentPath = undefined
+      let langSelected = (await askForLang(readDir(intentsPath))).res
+      if (langSelected === 'New Language') {
+        langSelected = (await askForNewLang()).res
+      }
+      let newIntent = await askForFileName()
+      newIntentPath = path.join(intentsPath, langSelected)
+      if (!pathExists(newIntentPath)) {
+        createDir(newIntentPath)
+      }
+      newIntentPath = path.join(
+        newIntentPath,
+        `${newIntent.name}${INTENTS_EXTENSION}`
+      )
+      appendNewLine(newIntentPath, input.res)
+      console.log('Created: ', newIntentPath.split('src/')[1])
+    }
+  } else {
+    let resp = correctIntent.res.match(/(.*), (.*)/)
+    let intentSelected = resp[1]
+    let intentFilePath = path.join(
+      intentsPath,
+      intents.language,
+      `${intentSelected}${INTENTS_EXTENSION}`
+    )
+    appendNewLine(intentFilePath, input.res)
+  }
+}
+
 async function retrain() {
   let flagLang = process.argv.slice(3)[0]
-  let projectPath = process.env.INIT_CWD
-  let nluPath = path.join(projectPath, NLU_PATH)
   let options = JSON.parse(readFile(path.join(projectPath, NLU_CONFIG_PATH)))
   if (flagLang) {
     options = options.filter(config => config.LANG === flagLang)
   }
-  let intentsPath = path.join(nluPath, INTENTS_DIRNAME)
+
   let nlu = await new NLU(options)
   while (true) {
     let input = await askForUserInput()
@@ -131,37 +166,7 @@ async function retrain() {
       let intents = await nlu.getIntents(input.res)
       let isCorrect = await askIfCorrect(intents)
       if (!isCorrect.res) {
-        let correctIntent = await askForCorrectIntent(intents)
-        if (correctIntent.res == 'NONE') {
-          let createNewFile = await askIfNewFile()
-          if (createNewFile.res) {
-            let newIntentPath = undefined
-            let langSelected = (await askForLang(readDir(intentsPath))).res
-            if (langSelected === 'New Language') {
-              langSelected = (await askForNewLang()).res
-            }
-            let newIntent = await askForFileName()
-            newIntentPath = path.join(intentsPath, langSelected)
-            if (!pathExists(newIntentPath)) {
-              createDir(newIntentPath)
-            }
-            newIntentPath = path.join(
-              newIntentPath,
-              `${newIntent.name}${INTENTS_EXTENSION}`
-            )
-            appendNewLine(newIntentPath, input.res)
-            console.log('Created: ', newIntentPath.split('src/')[1])
-          }
-        } else {
-          let resp = correctIntent.res.match(/(.*), (.*)/)
-          let intentSelected = resp[1]
-          let intentFilePath = path.join(
-            intentsPath,
-            intents.language,
-            `${intentSelected}${INTENTS_EXTENSION}`
-          )
-          appendNewLine(intentFilePath, input.res)
-        }
+        await addressWrongIntents(intents, input)
       } else {
         let wantsToAdd = await askIfWantsToAdd()
         if (wantsToAdd.res) {
