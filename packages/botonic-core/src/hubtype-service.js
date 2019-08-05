@@ -1,7 +1,5 @@
 import Pusher from 'pusher-js'
 import axios from 'axios'
-import { secretbox } from 'tweetnacl'
-import { encodeUTF8, decodeBase64 } from 'tweetnacl-util'
 
 const PUSHER_KEY = process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c'
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
@@ -25,21 +23,8 @@ export class HubtypeService {
         }
       }
     })
-    this.pusher.subscribe(this.pusherChannel)
-    this.pusher.bind('botonic_response', data => {
-      try {
-        let cipherText = decodeBase64(data.ciphertext)
-        let nonce = decodeBase64(data.nonce)
-        let bytes = secretbox.open(
-          cipherText,
-          nonce,
-          this.pusher.allChannels()[0].key
-        )
-        this.onEvent(JSON.parse(encodeUTF8(bytes)))
-      } catch (e) {
-        console.log(e)
-      }
-    })
+    this.channel = this.pusher.subscribe(this.pusherChannel)
+    this.channel.bind('botonic_response', data => this.onEvent(data))
   }
 
   onPusherEvent(event) {
