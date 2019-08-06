@@ -15,6 +15,8 @@ export enum MatchType {
   ALL_WORDS_IN_KEYWORDS_MIXED_UP
 }
 
+export const MATCH_TYPES = Object.values(MatchType).map(m => m as MatchType);
+
 export class KeywordsParser<M> {
   private readonly candidates = [] as CandidateWithKeywords<M>[];
 
