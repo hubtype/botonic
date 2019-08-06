@@ -6,7 +6,10 @@ test('TEST: normalize es', () => {
   expect(tokenizeAndStem(loc, 'áá')).toEqual(['aa']);
   expect(tokenizeAndStem(loc, ',./ áé  íó(óÑ)  ;')).toEqual(['ae', 'io', 'on']);
   expect(
-    tokenizeAndStem(loc, 'pero realizar mi la un una de ya del pedido')
+    tokenizeAndStem(
+      loc,
+      'hola, hola!! pero realizar mi la un una de ya del pedido'
+    )
   ).toEqual(['realiz', 'ped']);
 });
 

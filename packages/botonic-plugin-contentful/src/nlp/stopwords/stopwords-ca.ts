@@ -19,6 +19,7 @@ export const caDefaultStopWords = [
   'quin','quina',
   'poc','poca','pocs','poques',
   'tú','te','et','ti',
-  'hi'
+  'hi',
+  'hola'
 ];
 

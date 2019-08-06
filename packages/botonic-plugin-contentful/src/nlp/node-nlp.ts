@@ -43,8 +43,8 @@ export function tokenizeAndStem(
     // the default list contains 'donde', which may help to interpret intent in a sentence
     true
   );
-  // Maybe we should filter stopwords before stemmer, because stemmer removes some final letters
-  // But then we should do it between tokenizer and stemmer, which is not possible with node-nlp
+  // TODO We should remove from whole input text, because it's not possible to do it between tokenizer and stemmer
+  // this has the advantage that the stopwords could have more than 1 word
   const noStopWords = tokens.filter(t => !stopWords!.includes(t));
 
   if (noStopWords.length == 0) {
