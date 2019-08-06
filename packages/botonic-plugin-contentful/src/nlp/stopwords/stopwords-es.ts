@@ -8,5 +8,6 @@ export const esDefaultStopWords = [
   'ya','o','muy','sin','sobre','también',
   'me','hasta','desde','nos','durante','uno',
   'ni','contra','ese','eso','mí','qué','otro','él','cual',
-  'poco','mi','tú','te','ti'
+  'poco','mi','tú','te','ti',
+  'hola'
 ];
