@@ -15,3 +15,5 @@ tmp/
 .yalc/
 yalc.lock
 .eslintcache
+coverage.data
+coverage/

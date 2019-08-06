@@ -4,7 +4,7 @@
   "description": "Build Chatbots using React",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files"
   },
   "repository": {
@@ -33,6 +33,7 @@
     "eslint-config-prettier": "^5.1.0",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.8.0",
     "prettier": "^1.17.0"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
