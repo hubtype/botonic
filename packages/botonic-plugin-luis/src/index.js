@@ -25,7 +25,7 @@ export default class BotonicPluginLUIS {
       if (luis_resp && luis_resp.data) {
         intent = luis_resp.data.topScoringIntent.intent
         confidence = luis_resp.data.topScoringIntent.score
-        intents = luis_resp.data.intents
+        intents = this.convertIntents(luis_resp.data.intents)
         entities = luis_resp.data.entities
       }
     } catch (e) {}
@@ -33,6 +33,10 @@ export default class BotonicPluginLUIS {
     Object.assign(input, { intent, confidence, intents, entities })
 
     return { input, session, lastRoutePath }
+  }
+
+  convertIntents(luisIntents) {
+    return luisIntents.map(li => ({intent: li.intent, confidence: li.score}))
   }
 
   async post({ input, session, lastRoutePath, response }) {}

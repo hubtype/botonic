@@ -1,9 +1,18 @@
 export type Locales = { [id: string]: string | string[] | Locales }
 
 export interface Input {
-  type: string // text, postback...
+  // text, postback...
+  type: string
   payload?: string
   data?: string
+
+  /** Fields set by NLU plugins: Luis, Dialogflow, ... **/
+  // the name of the highest confidence intent
+  intent?: string
+  confidence?: number
+  intents?: [{ intent: string; confidence: number }]
+  // entity recognition results in the format provided by the NLU engine
+  entities?: any
 }
 
 type StringMatcher = RegExp | string | ((data: string) => boolean)
@@ -37,6 +46,7 @@ export interface Route {
   text?: StringMatcher
   type?: StringMatcher
   intent?: StringMatcher
+  input?: (input: Input) => boolean
   session?: (session: Session) => boolean
   action: React.ReactNode
 }
