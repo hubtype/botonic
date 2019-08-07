@@ -6,8 +6,19 @@ import { HubtypeService } from '@botonic/core'
 import { msgToBotonic } from './utils'
 
 export class WebchatApp {
-  constructor({ theme = {}, onInit, onOpen, onClose, onMessage, appId }) {
+  constructor({
+    theme = {},
+    persistentMenu = {},
+    blockInputs = {},
+    onInit,
+    onOpen,
+    onClose,
+    onMessage,
+    appId
+  }) {
     this.theme = theme
+    this.persistentMenu = persistentMenu
+    this.blockInputs = blockInputs
     this.onInit = onInit
     this.onOpen = onOpen
     this.onClose = onClose
@@ -34,10 +45,9 @@ export class WebchatApp {
   }
 
   onServiceEvent(event) {
-    if(event.message.type === 'sender_action')
-      this.setTyping(event.message.data === "typing_on")
-    else
-      this.addBotMessage(event.message)
+    if (event.message.type === 'sender_action')
+      this.setTyping(event.message.data === 'typing_on')
+    else this.addBotMessage(event.message)
   }
 
   updateUser(user) {
@@ -45,11 +55,11 @@ export class WebchatApp {
   }
 
   addBotMessage(message) {
-    this.webchatRef.current.addBotResponse({response: msgToBotonic(message)})
+    this.webchatRef.current.addBotResponse({ response: msgToBotonic(message) })
   }
 
   addBotText(text) {
-    this.addBotMessage({type: 'text', data: text})
+    this.addBotMessage({ type: 'text', data: text })
   }
 
   addUserMessage(message) {
@@ -57,11 +67,11 @@ export class WebchatApp {
   }
 
   addUserText(text) {
-    this.webchatRef.current.addUserMessage({type: 'text', data: text})
+    this.webchatRef.current.addUserMessage({ type: 'text', data: text })
   }
 
   addUserPayload(payload) {
-    this.webchatRef.current.addUserMessage({type: 'postback', payload})
+    this.webchatRef.current.addUserMessage({ type: 'postback', payload })
   }
 
   setTyping(typing) {
@@ -81,8 +91,20 @@ export class WebchatApp {
   }
 
   render(dest, optionsAtRuntime = {}) {
-    let { theme = {}, onInit, onOpen, onClose, onMessage, appId, ...webchatOptions } = optionsAtRuntime
+    let {
+      theme = {},
+      persistentMenu = {},
+      blockInputs = {},
+      onInit,
+      onOpen,
+      onClose,
+      onMessage,
+      appId,
+      ...webchatOptions
+    } = optionsAtRuntime
     theme = { ...this.theme, ...theme }
+    persistentMenu = { ...this.persistentMenu, ...persistentMenu }
+    blockInputs = { ...this.blockInputs, ...blockInputs }
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -97,6 +119,8 @@ export class WebchatApp {
         ref={this.webchatRef}
         {...webchatOptions}
         theme={theme}
+        persistentMenu={persistentMenu}
+        blockInputs={blockInputs}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
