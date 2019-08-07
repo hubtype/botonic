@@ -9,7 +9,7 @@ export default class BotonicPluginDialogflow {
   async query(data, lang, sessionId) {
     // Data, lang, sessionId and version are required parameters
     // See https://dialogflow.com/docs/reference/agent/query for more information
-    return await axios({
+    return axios({
       headers: {
         Authorization: `Bearer ${this.options.token}`
       },
@@ -29,7 +29,6 @@ export default class BotonicPluginDialogflow {
     } catch (error) {
       console.log(error.response)
     }
-    return { input, session, lastRoutePath }
   }
 
   async post({ input, session, lastRoutePath, response }) {}
