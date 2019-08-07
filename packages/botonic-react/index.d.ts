@@ -47,6 +47,23 @@ export class Title extends React.Component<any, any> {}
 export class Subtitle extends React.Component<any, any> {}
 export class Element extends React.Component<any, any> {}
 
+export class NodeApp {
+  constructor(options: core.BotOptions)
+
+  renderNode(args): string
+
+  input(_: {
+    input: core.Input
+    session?: core.Session
+    lastRoutePath: string
+  }): {
+    input: core.Input
+    response: React.ReactNode
+    session: core.Session
+    lastRoutePath: string
+  }
+}
+
 // Parameters of the actions' botonicInit method
 export interface ActionInitInput {
   input: core.Input
@@ -78,24 +95,17 @@ export class BotonicOutputTester {
   text(out: string, replies?: any): Promise<string>
 }
 
-export const RequestContext: React.Context<any>
-
-// plugins
-
-// Arguments of the plugin pre() method
-export interface PluginPreInput {
-  input: core.Input
+export const RequestContext: React.Context<{
+  getString: (stringId: string) => string
+  setLocale: (locale: string) => string
   session: core.Session
-  lastRoutePath: string
-}
-
-// Arguments of the plugin post() method
-export interface PluginPostInput {
+  params: any
   input: core.Input
-  session: core.Session
-  lastRoutePath: string
-  response: string
-}
+  defaultDelay: number
+  defaultTyping: number
+  lastRoutePath?: string
+  plugins: { [id: string]: core.Plugin }
+}>
 
 export function msgToBotonic(msg: any): React.ReactNode
 export function msgsToBotonic(msgs: any | any[]): React.ReactNode

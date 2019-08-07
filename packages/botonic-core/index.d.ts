@@ -51,33 +51,56 @@ export interface Route {
   action: React.ReactNode
 }
 
+type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[])
+
 // Desk
 export declare function humanHandOff(
   session: Session,
   queue_name: string,
   on_finish: { payload?: any; path?: any }
 ): Promise<void>
+
 export declare function getOpenQueues(
   session: Session
 ): Promise<{ queues: string[] }>
+
 export declare function storeCaseRating(
   session: Session,
   rating: number
 ): Promise<any>
 
-type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[])
+export interface Plugin {
+  pre(_: { input: Input; session: Session; lastRoutePath: string })
+  post(_: {
+    input: Input
+    session: Session
+    lastRoutePath: string
+    response: string
+  })
+}
+
+interface BotOptions {
+  routes: Routes
+  locales: Locales
+  integrations?: { [id: string]: any }
+  theme?: string
+  /** The plugin configurations */
+  plugins?: { [id: string]: any }
+  appId?: string
+  defaultTyping?: number
+  defaultDelay?: number
+}
 
 export class CoreBot {
-  constructor(_: {
-    routes: Routes
-    locales: Locales
-    integrations?: { [id: string]: any }
-    theme?: string
-    plugins?: { [id: string]: any }
-    appId?: string
-    defaultTyping?: number
-    defaultDelay?: number
-  })
+  routes: Routes
+  locales: Locales
+  integrations?: { [id: string]: any }
+  theme?: string
+  plugins: { [id: string]: Plugin }
+  defaultTyping: number
+  defaultDelay: number
+
+  constructor(options: BotOptions)
 
   getString(stringID: string, session: Session): string
 
