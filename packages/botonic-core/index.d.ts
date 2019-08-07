@@ -69,13 +69,19 @@ export declare function storeCaseRating(
   rating: number
 ): Promise<any>
 
+/** The response of the bot for the triggered actions, which can be
+ * the one matched by the routes, the default action and the retry actions.
+ * See the @botonic/react's index.d.ts for this implementations particular type.
+ * */
+export type Response = any
+
 export interface Plugin {
   pre(_: { input: Input; session: Session; lastRoutePath: string })
   post(_: {
     input: Input
     session: Session
     lastRoutePath: string
-    response: string
+    response: Response
   })
 }
 
@@ -112,7 +118,7 @@ export class CoreBot {
     lastRoutePath: string
   }): {
     input: Input
-    response: React.ReactNode
+    response: Response
     session: Session
     lastRoutePath: string
   }
