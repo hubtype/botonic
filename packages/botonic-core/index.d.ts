@@ -76,13 +76,13 @@ export declare function storeCaseRating(
 export type Response = any
 
 export interface Plugin {
-  pre(_: { input: Input; session: Session; lastRoutePath: string })
+  pre(_: { input: Input; session: Session; lastRoutePath: string }): void
   post(_: {
     input: Input
     session: Session
     lastRoutePath: string
     response: Response
-  })
+  }): void
 }
 
 interface BotOptions {

@@ -31,8 +31,6 @@ export default class BotonicPluginLUIS {
     } catch (e) {}
 
     Object.assign(input, { intent, confidence, intents, entities })
-
-    return { input, session, lastRoutePath }
   }
 
   convertIntents(luisIntents) {
