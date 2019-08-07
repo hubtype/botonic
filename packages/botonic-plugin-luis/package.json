@@ -1,11 +1,11 @@
 {
   "name": "@botonic/plugin-luis",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "main": "src/index.js",
   "dependencies": {
     "axios": "latest"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.4.2"
+    "@babel/runtime": "^7.5.5"
   }
 }
