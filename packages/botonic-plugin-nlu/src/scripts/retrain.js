@@ -67,8 +67,10 @@ async function askIfWantsToAdd() {
 }
 
 async function askForCorrectIntent(intentsResp) {
-  let sortedIntents = intentsResp.intents.sort((a, b) => b.prob - a.prob)
-  let choices = sortedIntents.map(e => `${e.intent}, ${e.prob}`)
+  let sortedIntents = intentsResp.intents.sort(
+    (a, b) => b.confidence - a.confidence
+  )
+  let choices = sortedIntents.map(e => `${e.intent}, ${e.confidence}`)
   const questions = [
     {
       type: 'list',
@@ -163,7 +165,7 @@ async function retrain() {
     if (input.res == 'exit()') {
       break
     } else {
-      let intents = await nlu.getIntents(input.res)
+      let intents = await nlu.getIntents(input.res)[0]
       let isCorrect = await askIfCorrect(intents)
       if (!isCorrect.res) {
         await addressWrongIntents(intents, input)

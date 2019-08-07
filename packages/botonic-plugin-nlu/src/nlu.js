@@ -102,50 +102,34 @@ export class NLU {
 
   predict(userInput, nlu) {
     let sequences = nlu.tokenizer.samplesToSequences(userInput)
-    let paddedSequences = []
-    let predictions = []
-    for (let sequence of sequences) {
-      paddedSequences.push(
-        padSequences([sequence], nlu.maxSeqLength).dataSync()
-      )
-    }
-    for (let paddedSequence of paddedSequences) {
-      predictions.push(
+    let predictions = sequences
+      .map(sequence => padSequences([sequence], nlu.maxSeqLength).dataSync())
+      .map(paddedSequence =>
         nlu.model.predict(tf.tensor([paddedSequence])).dataSync()
       )
-    }
     return predictions
   }
 
   getIntent(prediction, nlu) {
     let results = {}
-    results.intents = []
-    prediction.map((prob, i) => {
-      let res = {}
-      res['intent'] = `${nlu.intents[i]}`
-      res['prob'] = prob
-      results.intents.push(res)
-    })
-    let index = prediction.indexOf(Math.max(...prediction))
-    results.intent = nlu.intents[index]
-    results.confidence = prediction[index]
     results.language = nlu.lang
+    let maxScoreIdx = prediction.indexOf(Math.max(...prediction))
+    results.intent = nlu.intents[maxScoreIdx]
+    results.confidence = prediction[maxScoreIdx]
+    results.intents = Array.from(prediction)
+      .map((confidence, i) =>
+        Object.create({ intent: `${nlu.intents[i]}`, confidence: confidence })
+      )
+      .sort((a, b) => b.confidence - a.confidence)
     return results
   }
 
-  getIntents(userInput) {
-    let lang = detectLang(userInput, this.langs)
+  getIntents(userInputs) {
+    let lang = detectLang(userInputs, this.langs)
     let nlu = this.nlus[lang]
-    let predictions = this.predict(userInput, nlu)
-    let results = []
-    for (let prediction of predictions) {
-      results.push(this.getIntent(prediction, nlu))
-    }
-    if (results.length == 1) {
-      results[0].intents.sort((a, b) => b.prob - a.prob)
-      return results[0]
-    }
-    return results
+    return this.predict(userInputs, nlu).map(prediction =>
+      this.getIntent(prediction, nlu)
+    )
   }
 
   getEntities(userInput) {
