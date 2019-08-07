@@ -47,6 +47,10 @@ export class Title extends React.Component<any, any> {}
 export class Subtitle extends React.Component<any, any> {}
 export class Element extends React.Component<any, any> {}
 
+/**
+ * See @botonic/core's Response for the description of the Response's semantics*/
+type Response = [React.ReactNode]
+
 export class NodeApp {
   constructor(options: core.BotOptions)
 
@@ -58,7 +62,7 @@ export class NodeApp {
     lastRoutePath: string
   }): {
     input: core.Input
-    response: React.ReactNode
+    response: Response
     session: core.Session
     lastRoutePath: string
   }
