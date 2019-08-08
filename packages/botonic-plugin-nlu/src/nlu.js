@@ -125,7 +125,10 @@ export class NLU {
   }
 
   getIntents(userInputs) {
-    let lang = detectLang(userInputs, this.langs)
+    let lang = detectLang(
+      Array.isArray(userInputs) ? userInputs[0] : userInputs,
+      this.langs
+    )
     let nlu = this.nlus[lang]
     return this.predict(userInputs, nlu).map(prediction =>
       this.getIntent(prediction, nlu)
