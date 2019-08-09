@@ -23,6 +23,7 @@
     "@tensorflow/tfjs-node": "^1.2.7",
     "@types/jest": "^24.0.17",
     "axios": "latest",
+    "colors": "^1.3.3",
     "compromise": "^11.13.2",
     "franc": "^4.1.0",
     "fs": "0.0.1-security",

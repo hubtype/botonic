@@ -2,7 +2,7 @@ import path from 'path'
 import { homedir } from 'os'
 import * as tf from '@tensorflow/tfjs-node'
 import { printPrettyConfig } from '../utils'
-import { loadIntentsData, readJSON, saveResults } from '../fileUtils'
+import { loadIntentsData, saveResults, readNLUConfig } from '../fileUtils'
 import { generateEmbeddingMatrix } from '../db-embeddings'
 import { Tokenizer, padSequences } from '../preprocessing'
 import {
@@ -15,6 +15,7 @@ import {
 const developerPath = path.join(process.env.INIT_CWD, 'src')
 const nluPath = path.join(developerPath, NLU_DIRNAME)
 const intentsPath = path.join(nluPath, INTENTS_DIRNAME)
+const nluConfigPath = path.join(nluPath, NLU_CONFIG_FILENAME)
 
 function preprocessData(data, config) {
   let tokenizer = new Tokenizer()
@@ -96,10 +97,7 @@ function embeddingLSTMModel({
 
 async function train() {
   let flagLang = process.argv.slice(3)[0]
-  let options = readJSON(path.join(nluPath, NLU_CONFIG_FILENAME))
-  if (flagLang) {
-    options = options.filter(config => config.LANG === flagLang)
-  }
+  let options = readNLUConfig(nluConfigPath, flagLang)
   for (let config of options) {
     printPrettyConfig(config)
     let start = new Date()

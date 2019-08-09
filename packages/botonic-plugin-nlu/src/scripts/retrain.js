@@ -10,15 +10,16 @@ import {
 } from '../constants'
 import {
   readDir,
-  readJSON,
   createDir,
   pathExists,
-  appendNewLine
+  appendNewLine,
+  readNLUConfig
 } from '../fileUtils'
 
 const developerPath = path.join(process.env.INIT_CWD, 'src')
 const nluPath = path.join(developerPath, NLU_DIRNAME)
 const intentsPath = path.join(nluPath, INTENTS_DIRNAME)
+const nluConfigPath = path.join(nluPath, NLU_CONFIG_FILENAME)
 
 async function askForUserInput() {
   const questions = [
@@ -154,10 +155,7 @@ async function addressWrongIntents(intents, input) {
 
 async function retrain() {
   let flagLang = process.argv.slice(3)[0]
-  let options = readJSON(path.join(nluPath, NLU_CONFIG_FILENAME))
-  if (flagLang) {
-    options = options.filter(config => config.LANG === flagLang)
-  }
+  let options = readNLUConfig(nluConfigPath, flagLang)
 
   let nlu = await new NLU(options)
   while (true) {

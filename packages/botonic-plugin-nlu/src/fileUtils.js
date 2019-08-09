@@ -1,18 +1,38 @@
 import fs from 'fs'
 import path from 'path'
+import colors from 'colors'
 import { shuffle } from './utils'
-import { NLU_DATA_FILENAME, MODELS_DIRNAME } from './constants'
+import {
+  NLU_DATA_FILENAME,
+  MODELS_DIRNAME,
+  NLU_CONFIG_FILENAME
+} from './constants'
 
-export function readDir(path) {
-  return fs.readdirSync(path)
+const PATH_DOES_NOT_EXIST_EXCEPTION = path =>
+  colors.red(`PathError: '${path}', doesn't exists.`)
+const CONFIG_NOT_FOUND_EXCEPTION = flagLang =>
+  colors.red(
+    `No configuration found for '${flagLang}' in ${NLU_CONFIG_FILENAME}.`
+  )
+
+export function readDir(dirPath) {
+  try {
+    return fs.readdirSync(dirPath)
+  } catch (e) {
+    throw PATH_DOES_NOT_EXIST_EXCEPTION(dirPath)
+  }
 }
 
-export function readFile(path, fileEncoding = 'utf-8') {
-  return fs.readFileSync(path, fileEncoding)
+export function readFile(filePath, fileEncoding = 'utf-8') {
+  try {
+    return fs.readFileSync(filePath, fileEncoding)
+  } catch (e) {
+    throw PATH_DOES_NOT_EXIST_EXCEPTION(filePath)
+  }
 }
 
-export function readJSON(path) {
-  return JSON.parse(readFile(path))
+export function readJSON(jsonPath) {
+  return JSON.parse(readFile(jsonPath))
 }
 
 export function createDir(path) {
@@ -25,6 +45,18 @@ export function pathExists(path) {
 
 export function appendNewLine(path, str) {
   fs.appendFileSync(path, `\n${str}`)
+}
+
+export function readNLUConfig(nluConfigPath, flagLang) {
+  let options = flagLang
+    ? readJSON(path.join(nluConfigPath)).filter(
+        config => config.LANG == flagLang
+      )
+    : readJSON(nluConfigPath)
+  if (!(Array.isArray(options) && options.length)) {
+    throw CONFIG_NOT_FOUND_EXCEPTION(flagLang)
+  }
+  return options
 }
 
 export async function saveResults({
