@@ -2,18 +2,18 @@ import path from 'path'
 import { homedir } from 'os'
 import * as tf from '@tensorflow/tfjs-node'
 import { printPrettyConfig } from '../utils'
-import { loadIntentsData, readFile, saveResults } from '../fileUtils'
+import { loadIntentsData, readJSON, saveResults } from '../fileUtils'
 import { generateEmbeddingMatrix } from '../db-embeddings'
 import { Tokenizer, padSequences } from '../preprocessing'
 import {
-  NLU_PATH,
-  NLU_CONFIG_PATH,
+  NLU_DIRNAME,
+  NLU_CONFIG_FILENAME,
   WORD_EMBEDDINGS_PATH,
   INTENTS_DIRNAME
 } from '../constants'
 
-const projectPath = process.env.INIT_CWD
-const nluPath = path.join(projectPath, NLU_PATH)
+const developerPath = path.join(process.env.INIT_CWD, 'src')
+const nluPath = path.join(developerPath, NLU_DIRNAME)
 const intentsPath = path.join(nluPath, INTENTS_DIRNAME)
 
 function preprocessData(data, config) {
@@ -96,7 +96,7 @@ function embeddingLSTMModel({
 
 async function train() {
   let flagLang = process.argv.slice(3)[0]
-  let options = JSON.parse(readFile(path.join(projectPath, NLU_CONFIG_PATH)))
+  let options = readJSON(path.join(nluPath, NLU_CONFIG_FILENAME))
   if (flagLang) {
     options = options.filter(config => config.LANG === flagLang)
   }

@@ -5,8 +5,8 @@ export const MODEL_FILENAME = 'model.json'
 export const MODELS_DIRNAME = 'models'
 export const INTENTS_DIRNAME = 'intents'
 // Subpaths
-export const NLU_PATH = 'src/nlu'
-export const NLU_CONFIG_PATH = 'src/nlu.config.json'
+export const NLU_DIRNAME = 'nlu'
+export const NLU_CONFIG_FILENAME = 'nlu.config.json'
 export const WORD_EMBEDDINGS_PATH = '/.botonic/word_embeddings'
 // General Config
 export const INTENTS_EXTENSION = '.txt'

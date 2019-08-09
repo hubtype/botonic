@@ -20,11 +20,7 @@ export class Tokenizer {
   }
 
   tokenizeSamples(samples) {
-    let tokenizedSamples = []
-    for (let sample of samples) {
-      tokenizedSamples.push(this.tokenize(sample))
-    }
-    return tokenizedSamples
+    return samples.map(sample => this.tokenize(sample))
   }
 
   fitOnSamples(samples) {

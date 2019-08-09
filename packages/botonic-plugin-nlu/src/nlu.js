@@ -2,14 +2,14 @@ import axios from 'axios'
 import * as tf from '@tensorflow/tfjs'
 import { default as fetch } from 'node-fetch'
 import path from 'path'
-import { readFile } from './fileUtils'
+import { readFile, readJSON } from './fileUtils'
 import { Tokenizer, padSequences, detectLang } from './preprocessing'
 import { processEntities } from './ner'
 import {
   NLU_DATA_FILENAME,
   MODEL_FILENAME,
   MODELS_DIRNAME,
-  NLU_PATH,
+  NLU_DIRNAME,
   ASSETS_DIRNAME
 } from './constants'
 
@@ -36,7 +36,7 @@ async function resolveEnv() {
   } else {
     return {
       mode: 'node',
-      uri: `${path.join(process.cwd(), NLU_PATH, MODELS_DIRNAME)}/`
+      uri: `${path.join(process.cwd(), 'src', NLU_DIRNAME, MODELS_DIRNAME)}/`
     }
   }
 }
@@ -50,9 +50,7 @@ function loadOption(lang, env) {
       })
       nlu.model = tf.loadLayersModel(`${env.uri}${lang}/${MODEL_FILENAME}`)
     } else {
-      nlu.nluData = JSON.parse(
-        readFile(`${env.uri}/${lang}/${NLU_DATA_FILENAME}`)
-      )
+      nlu.nluData = readJSON(`${env.uri}/${lang}/${NLU_DATA_FILENAME}`)
       nlu.model = tf.loadLayersModel(
         `file://${env.uri}${lang}/${MODEL_FILENAME}`
       )

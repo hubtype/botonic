@@ -11,6 +11,10 @@ export function readFile(path, fileEncoding = 'utf-8') {
   return fs.readFileSync(path, fileEncoding)
 }
 
+export function readJSON(path) {
+  return JSON.parse(readFile(path))
+}
+
 export function createDir(path) {
   fs.mkdirSync(path)
 }

@@ -3,21 +3,21 @@ import path from 'path'
 import inquirer from 'inquirer'
 import { NLU } from '../nlu'
 import {
-  NLU_PATH,
-  NLU_CONFIG_PATH,
+  NLU_DIRNAME,
+  NLU_CONFIG_FILENAME,
   INTENTS_DIRNAME,
   INTENTS_EXTENSION
 } from '../constants'
 import {
   readDir,
-  readFile,
+  readJSON,
   createDir,
   pathExists,
   appendNewLine
 } from '../fileUtils'
 
-const projectPath = process.env.INIT_CWD
-const nluPath = path.join(projectPath, NLU_PATH)
+const developerPath = path.join(process.env.INIT_CWD, 'src')
+const nluPath = path.join(developerPath, NLU_DIRNAME)
 const intentsPath = path.join(nluPath, INTENTS_DIRNAME)
 
 async function askForUserInput() {
@@ -154,7 +154,7 @@ async function addressWrongIntents(intents, input) {
 
 async function retrain() {
   let flagLang = process.argv.slice(3)[0]
-  let options = JSON.parse(readFile(path.join(projectPath, NLU_CONFIG_PATH)))
+  let options = readJSON(path.join(nluPath, NLU_CONFIG_FILENAME))
   if (flagLang) {
     options = options.filter(config => config.LANG === flagLang)
   }

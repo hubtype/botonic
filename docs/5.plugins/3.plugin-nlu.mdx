@@ -58,7 +58,7 @@ After defining your intents, you can move to the plugin's configuration. It cons
 First of all you have to create a new file called `nlu.config.json`. This file defines which languages you want to be enabled in `botonic serve` and in **production**, 
 as well as it configures the training phase parameters.
 
-** src/nlu.config.json **
+** src/nlu/nlu.config.json **
 
 ```javascript
 [
@@ -105,7 +105,7 @@ If the plugin is not able to correctly identify which is the language of a new i
 After setting all your necessary parameters, let's require the plugin in `src/plugins.js`. It's indispensable that you set its `id` to **nlu**.
 
 ```javascript
-import nluConfig from './nlu.config.json'
+import nluConfig from './nlu/nlu.config.json'
 export const plugins = [
   {
     id: 'nlu',
