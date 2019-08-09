@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "scripts": {
-    "build": "rm -rf dist && babel src -d dist"
+    "build": "rm -rf dist && babel src -d dist",
+    "test": "jest"
   },
   "babel": {
     "presets": [
@@ -18,13 +19,15 @@
     ]
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^1.2.2",
-    "@tensorflow/tfjs-node": "^1.2.3",
+    "@tensorflow/tfjs": "^1.2.7",
+    "@tensorflow/tfjs-node": "^1.2.7",
+    "@types/jest": "^24.0.17",
     "axios": "latest",
     "compromise": "^11.13.2",
     "franc": "^4.1.0",
     "fs": "0.0.1-security",
     "inquirer": "^6.3.1",
+    "jest": "^24.8.0",
     "node-fetch": "^2.6.0",
     "sqlite-async": "^1.0.11"
   },
