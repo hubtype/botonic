@@ -69,8 +69,6 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setemojiIsOpened] = useState(false)
-  const [isRegex, setIsRegex] = useState(false)
-  console.log('renderitzo')
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } =
@@ -152,37 +150,51 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const handleMenu = props => {
+  const handleMenu = () => {
     menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
   }
 
   const sendInput = async input => {
+    let isRegex = false
     let inputMessage = null
     if (!input || Object.keys(input).length == 0) return
     if (!input.id) input.id = uuid()
+    //if is a text we check if it is a RE
     if (input.type === 'text') {
-      //TODO: comprovar blockInput
       Object.values(props.blockInputs).map((e, i) => {
-        if (e.match.test(input.data)) {
-          setMenuIsOpened(true)
-          console.log(menuIsOpened)
-          addMessageComponent(
-            <Text id={input.id} from="bot">
-              {e.message}
-            </Text>
-          )
-          updateReplies(false)
-        } else {
-          console.log('abans del false', isRegex)
-          if (!isRegex) {
-            inputMessage = (
-              <Text id={input.id} from="user" payload={input.payload}>
-                {input.data}
+        e.match.map((l, m) => {
+          if (l.test(input.data)) {
+            addMessageComponent(
+              <Text id={input.id} from="bot">
+                {e.message}
               </Text>
             )
+            updateReplies(false)
+            isRegex = true
           }
-        }
+        })
       })
+      //if it is not a RE then we show the input data, and the response
+      if (!isRegex) {
+        inputMessage = (
+          <Text id={input.id} from="user" payload={input.payload}>
+            {input.data}
+          </Text>
+        )
+        if (inputMessage) {
+          !isRegex ? addMessageComponent(inputMessage) : ''
+          updateReplies(false)
+        }
+        props.onUserInput &&
+          props.onUserInput({
+            user: webchatState.user,
+            input,
+            session: webchatState.session,
+            lastRoutePath: webchatState.lastRoutePath
+          })
+      }
+      // if it is a option of persitent menu && inpute message is not a text
+    } else {
       if (inputMessage) {
         addMessageComponent(inputMessage)
         updateReplies(false)
@@ -194,6 +206,7 @@ export const Webchat = forwardRef((props, ref) => {
           session: webchatState.session,
           lastRoutePath: webchatState.lastRoutePath
         })
+      setMenuIsOpened(false)
     }
   }
 
@@ -203,20 +216,17 @@ export const Webchat = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
-      console.log(isRegex)
-      if (!isRegex) {
-        updateTyping(false)
-        if (Array.isArray(response)) response.map(r => addMessageComponent(r))
-        else if (response) addMessageComponent(response)
-        if (session) {
-          updateSession(session)
-          let action = session._botonic_action || ''
-          let handoff = action.startsWith('create_case')
-          if (handoff && isDev()) addMessageComponent(<Handoff />)
-          updateHandoff(handoff)
-        }
-        if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+      updateTyping(false)
+      if (Array.isArray(response)) response.map(r => addMessageComponent(r))
+      else if (response) addMessageComponent(response)
+      if (session) {
+        updateSession(session)
+        let action = session._botonic_action || ''
+        let handoff = action.startsWith('create_case')
+        if (handoff && isDev()) addMessageComponent(<Handoff />)
+        updateHandoff(handoff)
       }
+      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
