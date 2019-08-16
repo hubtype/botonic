@@ -8,8 +8,7 @@ import {
   NLU_CONFIG_FILENAME
 } from './constants'
 
-const PATH_DOES_NOT_EXIST_EXCEPTION = path =>
-  colors.red(`PathError: '${path}', doesn't exists.`)
+const FILE_OPEN_EXCEPTION = path => colors.red(`'${path}' cannot be opened.`)
 const CONFIG_NOT_FOUND_EXCEPTION = flagLang =>
   colors.red(
     `No configuration found for '${flagLang}' in ${NLU_CONFIG_FILENAME}.`
@@ -19,7 +18,7 @@ export function readDir(dirPath) {
   try {
     return fs.readdirSync(dirPath)
   } catch (e) {
-    throw PATH_DOES_NOT_EXIST_EXCEPTION(dirPath)
+    throw FILE_OPEN_EXCEPTION(dirPath)
   }
 }
 
@@ -27,7 +26,7 @@ export function readFile(filePath, fileEncoding = 'utf-8') {
   try {
     return fs.readFileSync(filePath, fileEncoding)
   } catch (e) {
-    throw PATH_DOES_NOT_EXIST_EXCEPTION(filePath)
+    throw FILE_OPEN_EXCEPTION(filePath)
   }
 }
 
