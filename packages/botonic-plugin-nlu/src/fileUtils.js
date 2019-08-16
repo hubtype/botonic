@@ -8,7 +8,7 @@ import {
   NLU_CONFIG_FILENAME
 } from './constants'
 
-const FILE_OPEN_EXCEPTION = path => colors.red(`'${path}' cannot be opened.`)
+const FILE_OPEN_EXCEPTION = error => colors.red(`${error}`)
 const CONFIG_NOT_FOUND_EXCEPTION = flagLang =>
   colors.red(
     `No configuration found for '${flagLang}' in ${NLU_CONFIG_FILENAME}.`
@@ -18,7 +18,7 @@ export function readDir(dirPath) {
   try {
     return fs.readdirSync(dirPath)
   } catch (e) {
-    throw FILE_OPEN_EXCEPTION(dirPath)
+    throw FILE_OPEN_EXCEPTION(e)
   }
 }
 
@@ -26,7 +26,7 @@ export function readFile(filePath, fileEncoding = 'utf-8') {
   try {
     return fs.readFileSync(filePath, fileEncoding)
   } catch (e) {
-    throw FILE_OPEN_EXCEPTION(filePath)
+    throw FILE_OPEN_EXCEPTION(e)
   }
 }
 
