@@ -116,21 +116,21 @@ export const WebchatDev = forwardRef((props, ref) => {
             >
               <label style={{ flex: 'none', marginBottom: 6 }}>
                 <input
-                  type="checkbox"
-                  name="toggleSessionView"
+                  type='checkbox'
+                  name='toggleSessionView'
                   checked={webchatState.devSettings.showSessionView}
                   onChange={toggleSessionView}
-                  className="form-check-input"
+                  className='form-check-input'
                 />
                 Show session
               </label>
               <label style={{ flex: 'none' }}>
                 <input
-                  type="checkbox"
-                  name="toggleKeepSessionOnReload"
+                  type='checkbox'
+                  name='toggleKeepSessionOnReload'
                   checked={webchatState.devSettings.keepSessionOnReload}
                   onChange={toggleKeepSessionOnReload}
-                  className="form-check-input"
+                  className='form-check-input'
                 />
                 Keep session on reload
               </label>

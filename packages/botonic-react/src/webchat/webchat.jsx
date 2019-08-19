@@ -18,7 +18,7 @@ import { Handoff } from '../components/handoff'
 import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
 import { WebchatMenu } from './menu'
-import { PersistentMenu } from '../components/persitentMenu'
+import { PersistentMenu } from '../components/persistentMenu'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
@@ -165,7 +165,7 @@ export const Webchat = forwardRef((props, ref) => {
         e.match.map((l, m) => {
           if (l.test(input.data)) {
             addMessageComponent(
-              <Text id={input.id} from="bot">
+              <Text id={input.id} from='bot'>
                 {e.message}
               </Text>
             )
@@ -177,7 +177,7 @@ export const Webchat = forwardRef((props, ref) => {
       //if it is not a RE then we show the input data, and the response
       if (!isRegex) {
         inputMessage = (
-          <Text id={input.id} from="user" payload={input.payload}>
+          <Text id={input.id} from='user' payload={input.payload}>
             {input.data}
           </Text>
         )
@@ -193,7 +193,7 @@ export const Webchat = forwardRef((props, ref) => {
             lastRoutePath: webchatState.lastRoutePath
           })
       }
-      // if it is a option of persitent menu && inpute message is not a text
+      // if it is a option of persistent menu && inpute message is not a text
     } else {
       if (inputMessage) {
         addMessageComponent(inputMessage)
@@ -338,7 +338,7 @@ export const Webchat = forwardRef((props, ref) => {
   const addNewMessage = value => {
     let newComponent = msgToBotonic({ delay: 100, typing: 100 })
     if (!newComponent) {
-      addMessageComponent(<Text from="user">{value}</Text>)
+      addMessageComponent(<Text from='user'>{value}</Text>)
       setMenuIsOpened(false)
       return
     }
@@ -399,7 +399,7 @@ export const Webchat = forwardRef((props, ref) => {
             messages={webchatState.messagesComponents}
           >
             {webchatState.typing && <TypingIndicator />}
-            <div id="messages-end" />
+            <div id='messages-end' />
           </WebchatMessageList>
           {webchatState.replies && (
             <WebchatReplies
@@ -445,11 +445,11 @@ export const Webchat = forwardRef((props, ref) => {
                     />
                   </div>
                   <Textarea
-                    name="text"
+                    name='text'
                     minRows={2}
                     maxRows={4}
-                    wrap="soft"
-                    maxLength="1000"
+                    wrap='soft'
+                    maxLength='1000'
                     placeholder={webchatState.theme.textPlaceholder}
                     autoFocus={location.hostname === 'localhost'}
                     inputRef={textArea}
@@ -470,11 +470,11 @@ export const Webchat = forwardRef((props, ref) => {
           {!webchatState.handoff &&
             Object.keys(props.persistentMenu).length === 0 && (
               <Textarea
-                name="text"
+                name='text'
                 minRows={2}
                 maxRows={4}
-                wrap="soft"
-                maxLength="1000"
+                wrap='soft'
+                maxLength='1000'
                 placeholder={webchatState.theme.textPlaceholder}
                 autoFocus={location.hostname === 'localhost'}
                 inputRef={textArea}
