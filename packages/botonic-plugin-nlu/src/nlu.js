@@ -67,6 +67,7 @@ export class NLU {
       this.env = await resolveEnv()
       this.langs = []
       this.nlus = {}
+      this.entities = {}
       for (let config of options) {
         this.langs.push(config.LANG)
         let { nluData, model } = loadOption(config.LANG, this.env)
@@ -80,9 +81,12 @@ export class NLU {
         ...Object.values(this.nlus).map(nlu => nlu.model),
         ...Object.values(this.nlus).map(nlu => nlu.nluData)
       ])
+      let tagList = []
+      let words = {}
+      let tags = {}
       for (let [k, v] of Object.entries(this.nlus)) {
         let nluData = await v.nluData
-        let { intentsDict, maxSeqLength, vocabulary } =
+        let { intentsDict, maxSeqLength, vocabulary, devEntities } =
           this.env.mode === 'node' ? nluData : nluData.data
         let model = await v.model
         let { lang } = v
@@ -93,7 +97,14 @@ export class NLU {
           maxSeqLength: maxSeqLength,
           tokenizer: new Tokenizer(vocabulary)
         }
+        words = Object.assign(words, devEntities.words)
+        tags = Object.assign(tags, devEntities.tags)
+        tagList = tagList.concat(devEntities.tagList)
       }
+
+      this.entities.words = words
+      this.entities.tags = tags
+      this.entities.tagList = tagList
       return this
     })()
   }
@@ -134,6 +145,6 @@ export class NLU {
   }
 
   getEntities(userInput) {
-    return processEntities(userInput)
+    return processEntities(userInput, this.entities)
   }
 }

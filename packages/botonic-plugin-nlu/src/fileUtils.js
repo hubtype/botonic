@@ -5,7 +5,8 @@ import { shuffle } from './utils'
 import {
   NLU_DATA_FILENAME,
   MODELS_DIRNAME,
-  NLU_CONFIG_FILENAME
+  NLU_CONFIG_FILENAME,
+  ENTITIES_REGEX
 } from './constants'
 
 const FILE_OPEN_EXCEPTION = error => colors.red(`${error}`)
@@ -64,7 +65,8 @@ export async function saveResults({
   vocabulary,
   intentsDict,
   model,
-  lang
+  lang,
+  devEntities
 }) {
   let modelsPath = path.join(nluPath, MODELS_DIRNAME)
   let resultsPath = path.join(modelsPath, `${lang}`)
@@ -74,13 +76,14 @@ export async function saveResults({
   if (!pathExists(resultsPath)) {
     createDir(resultsPath)
   }
-  console.log('Saving intents...')
+  console.log('Saving intents and entities...')
   console.log('Saving word index...')
   let nluData = {
     maxSeqLength,
     vocabulary,
     intentsDict,
-    lang
+    lang,
+    devEntities
   }
   console.log('Saving model...')
   await model.save(`file://${resultsPath}`)
@@ -100,19 +103,50 @@ function getIntentName(fileName) {
   }
 }
 
-export function loadIntentsData(intentsPath) {
+export function parseUtterance(utterance) {
+  let capturedGroup = utterance.match(new RegExp(ENTITIES_REGEX, 'g')) || []
+  let parsedEntities = capturedGroup
+    .map(matched => ENTITIES_REGEX.exec(matched))
+    .map(parsedEntity => ({
+      raw: parsedEntity[0],
+      value: parsedEntity[1],
+      type: parsedEntity[2]
+    }))
+  for (let entity of parsedEntities) {
+    utterance = utterance.replace(entity.raw, entity.value)
+  }
+  return { parsedUtterance: utterance, parsedEntities }
+}
+
+export function loadDevData(utterancesPath) {
   let samples = []
   let labels = []
   let intentsDict = {}
-  let intentsFiles = readDir(intentsPath)
-  for (let [idx, file] of intentsFiles.entries()) {
+  let words = {}
+  let tags = {}
+  let tagList = []
+  let devEntities = {}
+  let utterancesFiles = readDir(utterancesPath)
+  for (let [idx, file] of utterancesFiles.entries()) {
     intentsDict[idx] = getIntentName(file)
-    let sentences = readFile(path.join(intentsPath, file)).split('\n')
-    for (let sentence of sentences) {
-      samples.push(sentence)
+    let utterances = readFile(path.join(utterancesPath, file)).split('\n')
+    for (let utterance of utterances) {
+      let { parsedUtterance, parsedEntities } = parseUtterance(utterance)
+      for (let entity of parsedEntities) {
+        let { type, value } = entity
+        words[`${value}`] = type
+        tags[`${type}`] = { isA: type }
+        if (!tagList.includes(type)) {
+          tagList.push(type)
+        }
+      }
+      samples.push(parsedUtterance)
       labels.push(idx)
     }
   }
+  devEntities.words = words
+  devEntities.tags = tags
+  devEntities.tagList = tagList
   shuffle(samples, labels)
-  return { samples, labels, intentsDict }
+  return { samples, labels, intentsDict, devEntities }
 }

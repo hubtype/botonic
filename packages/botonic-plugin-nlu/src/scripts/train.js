@@ -2,19 +2,19 @@ import path from 'path'
 import { homedir } from 'os'
 import * as tf from '@tensorflow/tfjs-node'
 import { printPrettyConfig } from '../utils'
-import { loadIntentsData, saveResults, readNLUConfig } from '../fileUtils'
+import { loadDevData, saveResults, readNLUConfig } from '../fileUtils'
 import { generateEmbeddingMatrix } from '../db-embeddings'
 import { Tokenizer, padSequences } from '../preprocessing'
 import {
   NLU_DIRNAME,
   NLU_CONFIG_FILENAME,
   WORD_EMBEDDINGS_PATH,
-  INTENTS_DIRNAME
+  UTTERANCES_DIRNAME
 } from '../constants'
 
 const developerPath = path.join(process.env.INIT_CWD, 'src')
 const nluPath = path.join(developerPath, NLU_DIRNAME)
-const intentsPath = path.join(nluPath, INTENTS_DIRNAME)
+const intentsPath = path.join(nluPath, UTTERANCES_DIRNAME)
 const nluConfigPath = path.join(nluPath, NLU_CONFIG_FILENAME)
 
 function preprocessData(data, config) {
@@ -72,18 +72,18 @@ function embeddingLSTMModel({
   )
 
   model.add(
-    // tf.layers.bidirectional({
-    //   layer: tf.layers.lstm({
-    //     units: config.UNITS,
-    //     dropout: config.DROPOUT_REG,
-    //     recurrentDropout: config.DROPOUT_REG
-    //   })
-    // })
-    tf.layers.lstm({
-      units: config.UNITS,
-      dropout: config.DROPOUT_REG,
-      recurrentDropout: config.DROPOUT_REG
+    tf.layers.bidirectional({
+      layer: tf.layers.lstm({
+        units: config.UNITS,
+        dropout: config.DROPOUT_REG,
+        recurrentDropout: config.DROPOUT_REG
+      })
     })
+    // tf.layers.lstm({
+    //   units: config.UNITS,
+    //   dropout: config.DROPOUT_REG,
+    //   recurrentDropout: config.DROPOUT_REG
+    // })
   )
 
   model.add(
@@ -101,7 +101,7 @@ async function train() {
   for (let config of options) {
     printPrettyConfig(config)
     let start = new Date()
-    let data = loadIntentsData(path.join(intentsPath, `${config.LANG}`))
+    let data = loadDevData(path.join(intentsPath, `${config.LANG}`))
     let {
       tensorData,
       tensorLabels,
@@ -139,7 +139,8 @@ async function train() {
       vocabulary,
       intentsDict: data.intentsDict,
       model,
-      lang: config.LANG
+      lang: config.LANG,
+      devEntities: data.devEntities
     })
   }
 }
