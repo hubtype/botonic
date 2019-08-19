@@ -86,16 +86,16 @@ export const Message = props => {
     return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
   }
 
-  const getFontColor = props => {
+  const getFontColor = () => {
     let fontColorUser = '#ffffff'
     let fontColorBot = '#000000'
     if (isFromUser()) {
       return webchatState.theme.customUserMessages
-        ? props.customUserMessages.color
+        ? webchatState.theme.customUserMessages.color
         : fontColorUser
     } else {
       return webchatState.theme.customBotMessages
-        ? props.customBotMessages.color
+        ? webchatState.theme.customBotMessages.color
         : fontColorBot
     }
   }
@@ -137,7 +137,7 @@ export const Message = props => {
             color:
               webchatState.theme.customUserMessages ||
               webchatState.theme.customBotMessages
-                ? getFontColor(webchatState.theme)
+                ? getFontColor()
                 : isFromUser()
                 ? '#FFFFFF'
                 : '#000',
