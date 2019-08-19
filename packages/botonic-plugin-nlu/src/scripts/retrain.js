@@ -5,8 +5,8 @@ import { NLU } from '../nlu'
 import {
   NLU_DIRNAME,
   NLU_CONFIG_FILENAME,
-  INTENTS_DIRNAME,
-  INTENTS_EXTENSION
+  UTTERANCES_DIRNAME,
+  UTTERANCES_EXTENSION
 } from '../constants'
 import {
   readDir,
@@ -18,7 +18,7 @@ import {
 
 const developerPath = path.join(process.env.INIT_CWD, 'src')
 const nluPath = path.join(developerPath, NLU_DIRNAME)
-const intentsPath = path.join(nluPath, INTENTS_DIRNAME)
+const intentsPath = path.join(nluPath, UTTERANCES_DIRNAME)
 const nluConfigPath = path.join(nluPath, NLU_CONFIG_FILENAME)
 
 async function askForUserInput() {
@@ -136,7 +136,7 @@ async function addressWrongIntents(intents, input) {
       }
       newIntentPath = path.join(
         newIntentPath,
-        `${newIntent.name}${INTENTS_EXTENSION}`
+        `${newIntent.name}${UTTERANCES_EXTENSION}`
       )
       appendNewLine(newIntentPath, input.res)
       console.log('Created: ', newIntentPath.split('src/')[1])
@@ -147,7 +147,7 @@ async function addressWrongIntents(intents, input) {
     let intentFilePath = path.join(
       intentsPath,
       intents.language,
-      `${intentSelected}${INTENTS_EXTENSION}`
+      `${intentSelected}${UTTERANCES_EXTENSION}`
     )
     appendNewLine(intentFilePath, input.res)
   }
@@ -174,7 +174,7 @@ async function retrain() {
           let intentFilePath = path.join(
             intentsPath,
             intents.language,
-            `${intentPredicted.intent}${INTENTS_EXTENSION}`
+            `${intentPredicted.intent}${UTTERANCES_EXTENSION}`
           )
           appendNewLine(intentFilePath, input.res)
           console.log('Appended at: ', intentFilePath.split('src/')[1])
