@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as tf from '@tensorflow/tfjs'
 import { default as fetch } from 'node-fetch'
 import path from 'path'
-import { readFile, readJSON } from './fileUtils'
+import { readFile, readJSON } from './file-utils'
 import { Tokenizer, padSequences, detectLang } from './preprocessing'
 import { processEntities } from './ner'
 import {

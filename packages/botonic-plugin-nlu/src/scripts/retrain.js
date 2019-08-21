@@ -14,7 +14,7 @@ import {
   pathExists,
   appendNewLine,
   readNLUConfig
-} from '../fileUtils'
+} from '../file-utils'
 
 const developerPath = path.join(process.env.INIT_CWD, 'src')
 const nluPath = path.join(developerPath, NLU_DIRNAME)
