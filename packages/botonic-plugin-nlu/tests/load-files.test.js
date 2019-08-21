@@ -5,7 +5,7 @@ import {
   readFile,
   parseUtterance,
   readJSON
-} from '../src/fileUtils'
+} from '../src/file-utils'
 
 import { shuffle } from '../src/utils'
 import path from 'path'

@@ -2,7 +2,7 @@ import path from 'path'
 import { homedir } from 'os'
 import * as tf from '@tensorflow/tfjs-node'
 import { printPrettyConfig } from '../utils'
-import { loadDevData, saveResults, readNLUConfig } from '../fileUtils'
+import { loadDevData, saveResults, readNLUConfig } from '../file-utils'
 import { generateEmbeddingMatrix } from '../db-embeddings'
 import { Tokenizer, padSequences } from '../preprocessing'
 import {
