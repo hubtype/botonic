@@ -26,6 +26,7 @@ import { isDev, msgToBotonic } from '../utils'
 import Logo from './botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from './menuButton.svg'
+import { Button } from '../components/button'
 
 const getScriptBaseURL = () => {
   let scriptBaseURL = document
@@ -69,6 +70,8 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setemojiIsOpened] = useState(false)
+  const [isRegex, setIsRegex] = useState(false)
+  console.log('renderitzo')
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } =
@@ -154,6 +157,10 @@ export const Webchat = forwardRef((props, ref) => {
     menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
   }
 
+  const closeMenu = () => {
+    setMenuIsOpened(false)
+  }
+
   const sendInput = async input => {
     let isRegex = false
     let inputMessage = null
@@ -216,17 +223,20 @@ export const Webchat = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
-      updateTyping(false)
-      if (Array.isArray(response)) response.map(r => addMessageComponent(r))
-      else if (response) addMessageComponent(response)
-      if (session) {
-        updateSession(session)
-        let action = session._botonic_action || ''
-        let handoff = action.startsWith('create_case')
-        if (handoff && isDev()) addMessageComponent(<Handoff />)
-        updateHandoff(handoff)
+      console.log(isRegex)
+      if (!isRegex) {
+        updateTyping(false)
+        if (Array.isArray(response)) response.map(r => addMessageComponent(r))
+        else if (response) addMessageComponent(response)
+        if (session) {
+          updateSession(session)
+          let action = session._botonic_action || ''
+          let handoff = action.startsWith('create_case')
+          if (handoff && isDev()) addMessageComponent(<Handoff />)
+          updateHandoff(handoff)
+        }
+        if (lastRoutePath) updateLastRoutePath(lastRoutePath)
       }
-      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
@@ -416,11 +426,12 @@ export const Webchat = forwardRef((props, ref) => {
             <PersistentMenu>
               {Object.values(props.persistentMenu).map((e, i) => {
                 return (
-                  <p key={i} onClick={() => sendPayload(e.payload)}>
+                  <Button payload={e.payload} key={i}>
                     {Object.values(e.label)}
-                  </p>
+                  </Button>
                 )
               })}
+              <Button onClick={closeMenu}>Cancel</Button>
             </PersistentMenu>
           )}
           {!webchatState.handoff &&
@@ -436,7 +447,7 @@ export const Webchat = forwardRef((props, ref) => {
                   <div style={{ width: 50 }}>
                     <img
                       style={{
-                        paddingTop: '14px',
+                        paddingTop: '20px',
                         marginLeft: '18px',
                         marginRight: '8px'
                       }}
@@ -456,12 +467,13 @@ export const Webchat = forwardRef((props, ref) => {
                     onKeyDown={e => onKeyDown(e)}
                     style={{
                       display: 'flex',
-                      padding: '8px 10px',
+                      paddingLeft: '10px',
                       fontSize: 14,
                       border: 'none',
                       resize: 'none',
                       overflow: 'auto',
-                      outline: 'none'
+                      outline: 'none',
+                      marginTop: '13px'
                     }}
                   />
                 </div>
