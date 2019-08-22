@@ -70,6 +70,8 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setemojiIsOpened] = useState(false)
+  const [isRegex, setIsRegex] = useState(false)
+  console.log('renderitzo')
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } =
@@ -210,17 +212,20 @@ export const Webchat = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
-      updateTyping(false)
-      if (Array.isArray(response)) response.map(r => addMessageComponent(r))
-      else if (response) addMessageComponent(response)
-      if (session) {
-        updateSession(session)
-        let action = session._botonic_action || ''
-        let handoff = action.startsWith('create_case')
-        if (handoff && isDev()) addMessageComponent(<Handoff />)
-        updateHandoff(handoff)
+      console.log(isRegex)
+      if (!isRegex) {
+        updateTyping(false)
+        if (Array.isArray(response)) response.map(r => addMessageComponent(r))
+        else if (response) addMessageComponent(response)
+        if (session) {
+          updateSession(session)
+          let action = session._botonic_action || ''
+          let handoff = action.startsWith('create_case')
+          if (handoff && isDev()) addMessageComponent(<Handoff />)
+          updateHandoff(handoff)
+        }
+        if (lastRoutePath) updateLastRoutePath(lastRoutePath)
       }
-      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
