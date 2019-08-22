@@ -70,11 +70,6 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setemojiIsOpened] = useState(false)
-  const [isRegex, setIsRegex] = useState(false)
-<<<<<<< HEAD
-=======
-  console.log('renderitzo')
->>>>>>> add: commits from another branch that was done
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } =
@@ -215,23 +210,17 @@ export const Webchat = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
-<<<<<<< HEAD
-=======
-      console.log(isRegex)
->>>>>>> add: commits from another branch that was done
-      if (!isRegex) {
-        updateTyping(false)
-        if (Array.isArray(response)) response.map(r => addMessageComponent(r))
-        else if (response) addMessageComponent(response)
-        if (session) {
-          updateSession(session)
-          let action = session._botonic_action || ''
-          let handoff = action.startsWith('create_case')
-          if (handoff && isDev()) addMessageComponent(<Handoff />)
-          updateHandoff(handoff)
-        }
-        if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+      updateTyping(false)
+      if (Array.isArray(response)) response.map(r => addMessageComponent(r))
+      else if (response) addMessageComponent(response)
+      if (session) {
+        updateSession(session)
+        let action = session._botonic_action || ''
+        let handoff = action.startsWith('create_case')
+        if (handoff && isDev()) addMessageComponent(<Handoff />)
+        updateHandoff(handoff)
       }
+      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
@@ -439,10 +428,7 @@ export const Webchat = forwardRef((props, ref) => {
                     <img
                       style={{
                         paddingTop: '20px',
-<<<<<<< HEAD
                         paddingBottom: '15px',
-=======
->>>>>>> add: commits from another branch that was done
                         marginLeft: '18px',
                         marginRight: '8px',
                         cursor: 'pointer'
@@ -451,30 +437,6 @@ export const Webchat = forwardRef((props, ref) => {
                       onClick={() => handleMenu()}
                     />
                   </div>
-<<<<<<< HEAD
-=======
-                  <Textarea
-                    name='text'
-                    minRows={2}
-                    maxRows={4}
-                    wrap='soft'
-                    maxLength='1000'
-                    placeholder={webchatState.theme.textPlaceholder}
-                    autoFocus={location.hostname === 'localhost'}
-                    inputRef={textArea}
-                    onKeyDown={e => onKeyDown(e)}
-                    style={{
-                      display: 'flex',
-                      paddingLeft: '10px',
-                      fontSize: 14,
-                      border: 'none',
-                      resize: 'none',
-                      overflow: 'auto',
-                      outline: 'none',
-                      marginTop: '13px'
-                    }}
-                  />
->>>>>>> add: commits from another branch that was done
                 </div>
               )}
               <Textarea
