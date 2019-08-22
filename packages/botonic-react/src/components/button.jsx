@@ -37,6 +37,7 @@ export const Button = props => {
     else if (props.path) sendPayload(`__PATH_PAYLOAD__${props.path}`)
     else if (props.payload) sendPayload(props.payload)
     else if (props.url) window.open(props.url)
+    else if (props.onClick) props.onClick()
   }
 
   const renderBrowser = () => {
