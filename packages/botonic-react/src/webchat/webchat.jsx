@@ -71,7 +71,6 @@ export const Webchat = forwardRef((props, ref) => {
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setemojiIsOpened] = useState(false)
   const [isRegex, setIsRegex] = useState(false)
-  console.log('renderitzo')
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } =
@@ -223,7 +222,6 @@ export const Webchat = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
-      console.log(isRegex)
       if (!isRegex) {
         updateTyping(false)
         if (Array.isArray(response)) response.map(r => addMessageComponent(r))
