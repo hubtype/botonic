@@ -4,6 +4,15 @@ import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
+import Logo from '../webchat/botonic_react_logo100x100.png'
+import styled from 'styled-components'
+
+const DefaultMessage = styled.div`
+  position: relative;
+  margin: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 8px;
+`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -77,6 +86,20 @@ export const Message = props => {
     return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
   }
 
+  const getFontColor = () => {
+    let fontColorUser = '#ffffff'
+    let fontColorBot = '#000000'
+    if (isFromUser()) {
+      return webchatState.theme.customUserMessages
+        ? webchatState.theme.customUserMessages.color
+        : fontColorUser
+    } else {
+      return webchatState.theme.customBotMessages
+        ? webchatState.theme.customBotMessages.color
+        : fontColorBot
+    }
+  }
+
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
     if (!m || !m.display) return <></>
@@ -92,52 +115,75 @@ export const Message = props => {
     return (
       <div
         style={{
+          display: 'flex',
+          justifyContent: isFromUser() ? 'flex-end' : 'flex-start',
           position: 'relative',
-          alignSelf: isFromUser() ? 'flex-end' : 'flex-start',
-          margin: 8,
-          backgroundColor: getBgColor(),
-          color: isFromUser() ? '#fff' : '#000',
-          border: `1px solid ${getBgColor()}`,
-          fontFamily: 'Arial, Helvetica, sans-serif',
-          borderRadius: 8,
-          maxWidth: blob ? '60%' : 'calc(100% - 16px)',
-          ...style,
+          paddingLeft: 5
         }}
-        {...otherProps}
       >
-        <div
-          style={{
-            padding: '8px 12px',
-            display: 'flex',
-            flexDirection: 'column',
-            whiteSpace: 'pre-line'
-          }}
-        >
-          {textChildren}
+        <div style={{ width: 30, position: 'absolute', bottom: 0 }}>
+          {isFromBot() && webchatState.theme.botLogoChat ? (
+            <webchatState.theme.botLogoChat />
+          ) : (
+            isFromBot() && <img style={{ width: 30 }} src={Logo} />
+          )}
         </div>
-        {buttons}
-        {isFromUser() && blob && (
+
+        <DefaultMessage
+          style={{
+            left: isFromBot() ? 30 : 0,
+            top: isFromBot() ? 5 : 0,
+            backgroundColor: getBgColor(),
+            color:
+              webchatState.theme.customUserMessages ||
+              webchatState.theme.customBotMessages
+                ? getFontColor()
+                : isFromUser()
+                ? '#FFFFFF'
+                : '#000',
+            border: `1px solid ${getBgColor()}`,
+            borderRadius: webchatState.theme.customUserMessages
+              ? webchatState.theme.customUserMessages.borderRadius
+              : '',
+            maxWidth: blob ? '60%' : 'calc(100% - 16px)',
+            ...style
+          }}
+          {...otherProps}
+        >
           <div
             style={{
-              ...pointerStyles,
-              right: 0,
-              borderRight: 0,
-              borderLeftColor: getBgColor(),
-              marginRight: -pointerSize
+              padding: '8px 12px',
+              display: 'flex',
+              flexDirection: 'column',
+              whiteSpace: 'pre-line'
             }}
-          />
-        )}
-        {isFromBot() && blob && (
-          <div
-            style={{
-              ...pointerStyles,
-              left: 0,
-              borderLeft: 0,
-              borderRightColor: getBgColor(),
-              marginLeft: -pointerSize
-            }}
-          />
-        )}
+          >
+            {textChildren}
+          </div>
+          {buttons}
+          {isFromUser() && blob && (
+            <div
+              style={{
+                ...pointerStyles,
+                right: 0,
+                borderRight: 0,
+                borderLeftColor: getBgColor(),
+                marginRight: -pointerSize
+              }}
+            />
+          )}
+          {isFromBot() && blob && (
+            <div
+              style={{
+                ...pointerStyles,
+                left: 0,
+                borderLeft: 0,
+                borderRightColor: getBgColor(),
+                marginLeft: -pointerSize
+              }}
+            />
+          )}
+        </DefaultMessage>
       </div>
     )
   }

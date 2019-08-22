@@ -12,6 +12,7 @@ export const WebchatMessageList = props => {
         overflowY: 'auto'
       }}
     >
+      {webchatState.theme.introImage && <webchatState.theme.introImage />}
       {webchatState.messagesComponents.map((e, i) => (
         <div
           style={{

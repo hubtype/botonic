@@ -25,18 +25,22 @@ export const WebchatDev = forwardRef((props, ref) => {
   /* TODO: webchatState.theme shoud be included in the dependencies array
   together with props.theme. The problem is that this effect modifies webchatState
   so we enter an infinite rerender loop. */
-  useEffect(() => updateTheme({
-    ...webchatState.theme,
-    ...props.theme,
-    style: {
-      position: 'absolute',
-      right: 0,
-      bottom: 0
-    },
-    triggerButtonStyle: {
-      position: 'absolute'
-    }
-  }), [props.theme])
+  useEffect(
+    () =>
+      updateTheme({
+        ...webchatState.theme,
+        ...props.theme,
+        style: {
+          position: 'absolute',
+          right: 0,
+          bottom: 0
+        },
+        triggerButtonStyle: {
+          position: 'absolute'
+        }
+      }),
+    [props.theme]
+  )
 
   return (
     <div
@@ -81,14 +85,15 @@ export const WebchatDev = forwardRef((props, ref) => {
             showSessionView: false
           }}
         />
-        {webchatState.isWebchatOpen && (
+        {webchatState.isWebchatOpen && !webchatState.theme.customHeader && (
           <div
             style={{
               position: 'absolute',
               right: 28,
-              top: -1,
+              top: 12,
               padding: 5,
-              cursor: 'pointer'
+              cursor: 'pointer',
+              color: 'white'
             }}
             onClick={() => setIsComponentVisible(!isComponentVisible)}
           >

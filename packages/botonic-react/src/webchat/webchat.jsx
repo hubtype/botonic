@@ -1,23 +1,31 @@
-import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef
+} from 'react'
 import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
 import uuid from 'uuid/v4'
 import UAParser from 'ua-parser-js'
-
+import { Flex } from '@rebass/grid'
 import { params2queryString } from '@botonic/core'
-
 import { WebchatContext, RequestContext } from '../contexts'
 import { Text } from '../components/text'
 import { TypingIndicator } from '../components/typingIndicator'
 import { Handoff } from '../components/handoff'
 import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
+import { WebchatMenu } from './menu'
+import { PersistentMenu } from '../components/persistentMenu'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
 import { isDev, msgToBotonic } from '../utils'
 import Logo from './botonic_react_logo100x100.png'
-
+import EmojiPicker from 'emoji-picker-react'
+import LogoMenu from './menuButton.svg'
 
 const getScriptBaseURL = () => {
   let scriptBaseURL = document
@@ -28,11 +36,10 @@ const getScriptBaseURL = () => {
 }
 
 const createUser = () => {
-  let parser = new UAParser();
+  let parser = new UAParser()
   let ua = parser.getResult()
   let name = `${ua.os.name} ${ua.browser.name}`
-  if(ua.device && ua.device.type)
-    name = `${ua.device.type} ${name}`
+  if (ua.device && ua.device.type) name = `${ua.device.type} ${name}`
   return {
     id: uuid(),
     name
@@ -54,38 +61,43 @@ export const Webchat = forwardRef((props, ref) => {
     updateHandoff,
     updateTheme,
     updateDevSettings,
-    toggleWebchat
+    toggleWebchat,
+    openWebviewT,
+    closeWebviewT
   } = props.webchatHooks || useWebchat()
-
   const { initialSession, initialDevSettings } = props
-
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
-
+  const [menuIsOpened, setMenuIsOpened] = useState(false)
+  const [emojiIsOpened, setemojiIsOpened] = useState(false)
   // Load initial state from localStorage
   useEffect(() => {
-    let { user, messages, session, lastRoutePath, devSettings } = botonicState || {}
-    if(!user || Object.keys(user).length == 0) user = createUser()
+    let { user, messages, session, lastRoutePath, devSettings } =
+      botonicState || {}
+    if (!user || Object.keys(user).length == 0) user = createUser()
     updateUser(user)
-    if (!devSettings || Object.keys(devSettings).length == 0 || devSettings.keepSessionOnReload) {
+    if (
+      !devSettings ||
+      Object.keys(devSettings).length == 0 ||
+      devSettings.keepSessionOnReload
+    ) {
       if (messages) {
         messages.map(m => {
           addMessage(m)
-          let newComponent = msgToBotonic({...m, delay: 0, typing: 0})
+          let newComponent = msgToBotonic({ ...m, delay: 0, typing: 0 })
           if (newComponent) addMessageComponent(newComponent)
         })
       }
       if (session) updateSession(session)
-      else if(initialSession) updateSession(initialSession)
+      else if (initialSession) updateSession(initialSession)
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
     } else updateSession(initialSession)
     if (devSettings) updateDevSettings(devSettings)
-    else if(initialDevSettings) updateDevSettings(initialDevSettings)
-    if(props.onInit) setTimeout(() => props.onInit(), 100)
+    else if (initialDevSettings) updateDevSettings(initialDevSettings)
+    if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
-
   useEffect(() => {
-    if(!webchatState.isWebchatOpen) return
+    if (!webchatState.isWebchatOpen) return
     setTimeout(() => {
       let end = document.getElementById('messages-end')
       if (end) {
@@ -95,13 +107,15 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
-    saveState(JSON.stringify({
-      user: webchatState.user,
-      messages: webchatState.messagesJSON,
-      session: webchatState.session,
-      lastRoutePath: webchatState.lastRoutePath,
-      devSettings: webchatState.devSettings
-    }))
+    saveState(
+      JSON.stringify({
+        user: webchatState.user,
+        messages: webchatState.messagesJSON,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath,
+        devSettings: webchatState.devSettings
+      })
+    )
   }, [
     webchatState.user,
     webchatState.messagesJSON,
@@ -119,6 +133,11 @@ export const Webchat = forwardRef((props, ref) => {
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
+  const myCallback = code => {
+    const emoji = String.fromCodePoint(`0x${code}`)
+    textArea.current.value += emoji
+  }
+
   const closeWebview = options => {
     updateWebview()
     textArea.current.focus()
@@ -131,58 +150,98 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
+  const handleMenu = () => {
+    menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
+  }
+
   const sendInput = async input => {
+    let isRegex = false
     let inputMessage = null
-    if(!input || Object.keys(input).length == 0) return
-    if(!input.id) input.id = uuid()
+    if (!input || Object.keys(input).length == 0) return
+    if (!input.id) input.id = uuid()
+    //if is a text we check if it is a RE
     if (input.type === 'text') {
-      inputMessage = (
-        <Text id={input.id} from='user' payload={input.payload}>
-          {input.data}
-        </Text>
-      )
+      Object.values(props.blockInputs).map((e, i) => {
+        e.match.map((l, m) => {
+          if (l.test(input.data)) {
+            addMessageComponent(
+              <Text id={input.id} from='bot'>
+                {e.message}
+              </Text>
+            )
+            updateReplies(false)
+            isRegex = true
+          }
+        })
+      })
+      //if it is not a RE then we show the input data, and the response
+      if (!isRegex) {
+        inputMessage = (
+          <Text id={input.id} from='user' payload={input.payload}>
+            {input.data}
+          </Text>
+        )
+        if (inputMessage) {
+          !isRegex ? addMessageComponent(inputMessage) : ''
+          updateReplies(false)
+        }
+        props.onUserInput &&
+          props.onUserInput({
+            user: webchatState.user,
+            input,
+            session: webchatState.session,
+            lastRoutePath: webchatState.lastRoutePath
+          })
+      }
+      // if it is a option of persistent menu && inpute message is not a text
+    } else {
+      if (inputMessage) {
+        addMessageComponent(inputMessage)
+        updateReplies(false)
+      }
+      props.onUserInput &&
+        props.onUserInput({
+          user: webchatState.user,
+          input,
+          session: webchatState.session,
+          lastRoutePath: webchatState.lastRoutePath
+        })
+      setMenuIsOpened(false)
     }
-    if (inputMessage) {
-      addMessageComponent(inputMessage)
-      updateReplies(false)
-    }
-    props.onUserInput && props.onUserInput({
-      user: webchatState.user,
-      input,
-      session: webchatState.session,
-      lastRoutePath: webchatState.lastRoutePath
-    })
   }
 
   /* This is the public API this component exposes to its parents
   https://stackoverflow.com/questions/37949981/call-child-method-from-parent
   */
+
   useImperativeHandle(ref, () => ({
-    addBotResponse: ({response, session, lastRoutePath}) => {
+    addBotResponse: ({ response, session, lastRoutePath }) => {
       updateTyping(false)
-      if(Array.isArray(response))
-        response.map(r => addMessageComponent(r))
-      else if(response)
-        addMessageComponent(response)
-      if(session) {
+      if (Array.isArray(response)) response.map(r => addMessageComponent(r))
+      else if (response) addMessageComponent(response)
+      if (session) {
         updateSession(session)
         let action = session._botonic_action || ''
         let handoff = action.startsWith('create_case')
         if (handoff && isDev()) addMessageComponent(<Handoff />)
         updateHandoff(handoff)
       }
-      if(lastRoutePath)
-        updateLastRoutePath(lastRoutePath)
+      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
     updateUser: user => {
-      updateSession({...webchatState.session, user: {...webchatState.session.user, ...user}})
-      updateUser({...webchatState.user, ...user})},
+      updateSession({
+        ...webchatState.session,
+        user: { ...webchatState.session.user, ...user }
+      })
+      updateUser({ ...webchatState.user, ...user })
+    },
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
-    toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen)
-  }));
+    toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
+    openWebviewApi: component => openWebviewT(component)
+  }))
 
   const resolveCase = () => {
     updateHandoff(false)
@@ -209,6 +268,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const sendPayload = async payload => {
+    addNewMessage(payload)
     if (!payload) return
     let input = { type: 'postback', payload }
     await sendInput(input)
@@ -222,6 +282,10 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
+  const choiceMenu = menu => {
+    return <Menu options={webchatState.theme.customMenu} />
+  }
+
   let webviewRequestContext = {
     getString: stringId => props.getString(stringId, webchatState.session),
     setLocale: locale => props.getString(locale, webchatState.session),
@@ -231,10 +295,8 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
-    if(webchatState.isWebchatOpen && props.onOpen)
-      props.onOpen()
-    if(!webchatState.isWebchatOpen && props.onClose)
-      props.onClose()
+    if (webchatState.isWebchatOpen && props.onOpen) props.onOpen()
+    if (!webchatState.isWebchatOpen && props.onClose) props.onClose()
   }, [webchatState.isWebchatOpen])
 
   const textArea = useRef()
@@ -242,9 +304,13 @@ export const Webchat = forwardRef((props, ref) => {
 
   const CustomTriggerButton = webchatState.theme.customTriggerButton
   let logoUrl = Logo
-  if(props.theme && props.theme.brandIconUrl) logoUrl = props.theme.brandIconUrl
-  if(webchatState.theme && webchatState.theme.brandIconUrl) logoUrl = webchatState.theme.brandIconUrl
-  const triggerButton = CustomTriggerButton ? <CustomTriggerButton/> : (
+  if (props.theme && props.theme.brandIconUrl)
+    logoUrl = props.theme.brandIconUrl
+  if (webchatState.theme && webchatState.theme.brandIconUrl)
+    logoUrl = webchatState.theme.brandIconUrl
+  const triggerButton = CustomTriggerButton ? (
+    <CustomTriggerButton />
+  ) : (
     <div
       style={{
         cursor: 'pointer',
@@ -269,6 +335,14 @@ export const Webchat = forwardRef((props, ref) => {
       />
     </div>
   )
+  const addNewMessage = value => {
+    let newComponent = msgToBotonic({ delay: 100, typing: 100 })
+    if (!newComponent) {
+      addMessageComponent(<Text from='user'>{value}</Text>)
+      setMenuIsOpened(false)
+      return
+    }
+  }
 
   return (
     <WebchatContext.Provider
@@ -328,32 +402,95 @@ export const Webchat = forwardRef((props, ref) => {
             <div id='messages-end' />
           </WebchatMessageList>
           {webchatState.replies && (
-            <WebchatReplies replies={webchatState.replies} />
-          )}
-          {!webchatState.handoff && (
-            <Textarea
-              name='text'
-              minRows={2}
-              maxRows={4}
-              wrap='soft'
-              maxLength='1000'
-              placeholder={webchatState.theme.textPlaceholder}
-              autoFocus={location.hostname === 'localhost'}
-              inputRef={textArea}
-              onKeyDown={e => onKeyDown(e)}
-              style={{
-                display: 'flex',
-                padding: '8px 10px',
-                fontSize: 14,
-                borderRadius: '0 0 8px 8px',
-                border: 'none',
-                boxShadow: 'rgba(176, 196, 222, 0.5) 0px 0px 5px',
-                resize: 'none',
-                overflow: 'auto',
-                outline: 'none'
-              }}
+            <WebchatReplies
+              replies={webchatState.replies}
+              align={webchatState.theme.alignReplies}
+              wrap={webchatState.theme.wrapReplies}
             />
           )}
+          {emojiIsOpened && (
+            <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
+          )}
+
+          {menuIsOpened && (
+            <PersistentMenu>
+              {Object.values(props.persistentMenu).map((e, i) => {
+                return (
+                  <p key={i} onClick={() => sendPayload(e.payload)}>
+                    {Object.values(e.label)}
+                  </p>
+                )
+              })}
+            </PersistentMenu>
+          )}
+          {!webchatState.handoff &&
+            Object.keys(props.persistentMenu).length != 0 && (
+              <>
+                <div
+                  style={{
+                    display: 'flex',
+
+                    borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+                  }}
+                >
+                  <div style={{ width: 50 }}>
+                    <img
+                      style={{
+                        paddingTop: '14px',
+                        marginLeft: '18px',
+                        marginRight: '8px'
+                      }}
+                      src={LogoMenu}
+                      onClick={() => handleMenu()}
+                    />
+                  </div>
+                  <Textarea
+                    name='text'
+                    minRows={2}
+                    maxRows={4}
+                    wrap='soft'
+                    maxLength='1000'
+                    placeholder={webchatState.theme.textPlaceholder}
+                    autoFocus={location.hostname === 'localhost'}
+                    inputRef={textArea}
+                    onKeyDown={e => onKeyDown(e)}
+                    style={{
+                      display: 'flex',
+                      padding: '8px 10px',
+                      fontSize: 14,
+                      border: 'none',
+                      resize: 'none',
+                      overflow: 'auto',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+              </>
+            )}
+          {!webchatState.handoff &&
+            Object.keys(props.persistentMenu).length === 0 && (
+              <Textarea
+                name='text'
+                minRows={2}
+                maxRows={4}
+                wrap='soft'
+                maxLength='1000'
+                placeholder={webchatState.theme.textPlaceholder}
+                autoFocus={location.hostname === 'localhost'}
+                inputRef={textArea}
+                onKeyDown={e => onKeyDown(e)}
+                style={{
+                  display: 'flex',
+                  padding: '8px 10px',
+                  fontSize: 14,
+                  border: 'none',
+                  resize: 'none',
+                  overflow: 'auto',
+                  outline: 'none',
+                  borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+                }}
+              />
+            )}
           {webchatState.webview && (
             <RequestContext.Provider value={webviewRequestContext}>
               <WebviewContainer
