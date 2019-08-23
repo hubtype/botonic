@@ -9,7 +9,7 @@ export class DevApp extends WebchatApp {
   constructor({
     theme = {},
     persistentMenu = {},
-    blockInputs = {},
+    blockInputs,
     onInit,
     onOpen,
     onClose,
@@ -34,7 +34,7 @@ export class DevApp extends WebchatApp {
     let {
       theme = {},
       persistentMenu = {},
-      blockInputs = {},
+      blockInputs,
       onInit,
       onOpen,
       onClose,
@@ -43,7 +43,7 @@ export class DevApp extends WebchatApp {
     } = optionsAtRuntime
     theme = { ...this.theme, ...theme }
     persistentMenu = { ...this.persistentMenu, ...persistentMenu }
-    blockInputs = { ...this.blockInputs, ...blockInputs }
+    blockInputs = blockInputs || this.blockInputs
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
