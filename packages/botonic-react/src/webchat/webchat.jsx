@@ -412,53 +412,36 @@ export const Webchat = forwardRef((props, ref) => {
               <Button onClick={closeMenu}>Cancel</Button>
             </PersistentMenu>
           )}
-          {!webchatState.handoff &&
-            Object.keys(props.persistentMenu).length != 0 && (
-              <>
+          {!webchatState.handoff && (
+            <div
+              style={{
+                display: 'flex',
+                borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+              }}
+            >
+              {Object.keys(props.persistentMenu).length != 0 && (
                 <div
                   style={{
                     display: 'flex',
-
-                    borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+                    flex: 'none',
+                    width: 50
                   }}
                 >
                   <div style={{ width: 50 }}>
                     <img
                       style={{
                         paddingTop: '20px',
+                        paddingBottom: '15px',
                         marginLeft: '18px',
-                        marginRight: '8px'
+                        marginRight: '8px',
+                        cursor: 'pointer'
                       }}
                       src={LogoMenu}
                       onClick={() => handleMenu()}
                     />
                   </div>
-                  <Textarea
-                    name='text'
-                    minRows={2}
-                    maxRows={4}
-                    wrap='soft'
-                    maxLength='1000'
-                    placeholder={webchatState.theme.textPlaceholder}
-                    autoFocus={location.hostname === 'localhost'}
-                    inputRef={textArea}
-                    onKeyDown={e => onKeyDown(e)}
-                    style={{
-                      display: 'flex',
-                      paddingLeft: '10px',
-                      fontSize: 14,
-                      border: 'none',
-                      resize: 'none',
-                      overflow: 'auto',
-                      outline: 'none',
-                      marginTop: '13px'
-                    }}
-                  />
                 </div>
-              </>
-            )}
-          {!webchatState.handoff &&
-            Object.keys(props.persistentMenu).length === 0 && (
+              )}
               <Textarea
                 name='text'
                 minRows={2}
@@ -471,16 +454,17 @@ export const Webchat = forwardRef((props, ref) => {
                 onKeyDown={e => onKeyDown(e)}
                 style={{
                   display: 'flex',
-                  padding: '8px 10px',
+                  paddingLeft: '10px',
                   fontSize: 14,
                   border: 'none',
                   resize: 'none',
                   overflow: 'auto',
                   outline: 'none',
-                  borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+                  marginTop: '13px'
                 }}
               />
-            )}
+            </div>
+          )}
           {webchatState.webview && (
             <RequestContext.Provider value={webviewRequestContext}>
               <WebviewContainer
