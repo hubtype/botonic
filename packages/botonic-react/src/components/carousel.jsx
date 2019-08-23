@@ -1,21 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import { Message } from './message'
 import { isBrowser, isNode } from '@botonic/core'
 
-const Box = styled.div`
-  padding-top: 10px;
-  margin-left: -13px;
+const CarouselStyled = styled.div`
+  paddingtop: 10px;
   display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  max-width: 100%;
+  flexdirection: row;
+  overflowx: auto;
+  maxwidth: 100%;
 `
-const Item = styled.div`
+const CarouselItems = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: start;
+  flexdirection: row;
+  alignitems: start;
 `
 
 const serialize = carouselProps => {
@@ -31,9 +29,9 @@ export const Carousel = props => {
   let content = props.children
   if (isBrowser()) {
     content = (
-      <Box>
-        <Item>{props.children}</Item>
-      </Box>
+      <CarouselStyled>
+        <CarouselItems>{props.children}</CarouselItems>
+      </CarouselStyled>
     )
   }
   return (

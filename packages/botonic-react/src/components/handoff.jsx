@@ -2,32 +2,27 @@ import React, { useState, useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import styled from 'styled-components'
 
-const Container = styled.div`
+const HandoffStyled = styled.div`
   display: flex;
-  font-family: Arial, Helvetica, sans-serif;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  color: ${props => props.fontColor};
+  fontfamily: Arial, Helvetica, sans-serif;
+  flexdirection: column;
+  justifycontent: center;
+  alignitems: center;
   padding: 24px;
+  background-color: ${props => props.bgColor};
 `
-
-const TransferredContainer = styled.div`
+const HandoffResponse = styled.div`
   text-align: center;
   white-space: normal;
 `
-
-const EndedContainer = styled.div`
-  text-align: center;
-  white-space: normal;
-`
-
-const StyledButton = styled.button`
+const HandoffButton = styled.button`
   max-width: 60%;
   padding: 12px 24px;
   background-color: white;
   border: none;
-  border-radius: 4px;
-  margin-top: 8px;
+  border-radius: 4;
+  margin-top: 8;
   cursor: pointer;
 `
 
@@ -42,23 +37,19 @@ export const Handoff = props => {
 
   let bgColor = state.showContinue ? '#c6e7c0' : '#d1d8cf'
   let fontColor = state.showContinue ? '#3a9c35' : '#5f735e'
+  console.log(bgColor)
   return (
-    <Container
-      style={{
-        color: fontColor,
-        backgroundColor: bgColor
-      }}
-    >
+    <HandoffStyled bgColor={bgColor} fontColor={fontColor}>
       {state.showContinue ? (
-        <TransferredContainer>
+        <HandoffResponse>
           Conversation transferred to a human agent...
-        </TransferredContainer>
+        </HandoffResponse>
       ) : (
-        <EndedContainer>Human handoff ended</EndedContainer>
+        <HandoffResponse>Human handoff ended</HandoffResponse>
       )}
       {state.showContinue && (
-        <StyledButton onClick={continueClick}>Continue</StyledButton>
+        <HandoffButton onClick={continueClick}>Continue</HandoffButton>
       )}
-    </Container>
+    </HandoffStyled>
   )
 }
