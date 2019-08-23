@@ -154,60 +154,50 @@ export const Webchat = forwardRef((props, ref) => {
     menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
   }
 
+  const checkBlockInput = input => {
+    if (!Array.isArray(props.blockInputs)) return
+    for (let rule of props.blockInputs) {
+      if (rule.match.some((l, m) => l.test(input.data))) {
+        addMessageComponent(
+          <Text
+            id={input.id}
+            from='user'
+            style={{ backgroundColor: '#585757', borderColor: '#585757' }}
+          >
+            {rule.message}
+          </Text>
+        )
+        updateReplies(false)
+        return true
+      }
+    }
+  }
+
   const sendInput = async input => {
-    let isRegex = false
     let inputMessage = null
     if (!input || Object.keys(input).length == 0) return
     if (!input.id) input.id = uuid()
     //if is a text we check if it is a RE
     if (input.type === 'text') {
-      Object.values(props.blockInputs).map((e, i) => {
-        e.match.map((l, m) => {
-          if (l.test(input.data)) {
-            addMessageComponent(
-              <Text id={input.id} from='bot'>
-                {e.message}
-              </Text>
-            )
-            updateReplies(false)
-            isRegex = true
-          }
-        })
-      })
-      //if it is not a RE then we show the input data, and the response
-      if (!isRegex) {
-        inputMessage = (
-          <Text id={input.id} from='user' payload={input.payload}>
-            {input.data}
-          </Text>
-        )
-        if (inputMessage) {
-          !isRegex ? addMessageComponent(inputMessage) : ''
-          updateReplies(false)
-        }
-        props.onUserInput &&
-          props.onUserInput({
-            user: webchatState.user,
-            input,
-            session: webchatState.session,
-            lastRoutePath: webchatState.lastRoutePath
-          })
-      }
-      // if it is a option of persistent menu && inpute message is not a text
-    } else {
-      if (inputMessage) {
-        addMessageComponent(inputMessage)
-        updateReplies(false)
-      }
-      props.onUserInput &&
-        props.onUserInput({
-          user: webchatState.user,
-          input,
-          session: webchatState.session,
-          lastRoutePath: webchatState.lastRoutePath
-        })
-      setMenuIsOpened(false)
+      if (checkBlockInput(input)) return
+      inputMessage = (
+        <Text id={input.id} payload={input.payload} from='user'>
+          {input.data}
+        </Text>
+      )
     }
+    if (inputMessage) {
+      addMessageComponent(inputMessage)
+    }
+    props.onUserInput &&
+      props.onUserInput({
+        user: webchatState.user,
+        input,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath
+      })
+    updateReplies(false)
+    setMenuIsOpened(false)
   }
 
   /* This is the public API this component exposes to its parents
