@@ -19,6 +19,7 @@ export const webchatInitialState = {
     title: 'Botonic'
   },
   devSettings: {},
+  webchatConfig: {},
   isWebchatOpen: false
 }
 
@@ -71,6 +72,8 @@ export function webchatReducer(state, action) {
       return { ...state, theme: { ...action.payload } }
     case 'updateDevSettings':
       return { ...state, devSettings: { ...action.payload } }
+    case 'updateWebchatConfig':
+      return { ...state, webchatConfig: { ...action.payload } }
     case 'toggleWebchat':
       return { ...state, isWebchatOpen: action.payload }
     default:
@@ -129,6 +132,11 @@ export function useWebchat() {
       type: 'updateDevSettings',
       payload: settings
     })
+  const updateWebchatConfig = config =>
+    webchatDispatch({
+      type: 'updateWebchatConfig',
+      payload: config
+    })
   const toggleWebchat = toggle =>
     webchatDispatch({
       type: 'toggleWebchat',
@@ -150,6 +158,7 @@ export function useWebchat() {
     updateHandoff,
     updateTheme,
     updateDevSettings,
+    updateWebchatConfig,
     toggleWebchat
   }
 }

@@ -29,8 +29,6 @@ export const Message = props => {
   } = props
 
   const { webchatState, addMessage, updateReplies } = useContext(WebchatContext)
-  const messageWidth = webchatState.theme.isRomeu ? '83%' : '60%'
-
   const [state, setState] = useState({
     id: props.id || uuid()
   })
@@ -162,7 +160,8 @@ export const Message = props => {
             borderRadius: webchatState.theme.customUserMessages
               ? webchatState.theme.customUserMessages.borderRadius
               : '',
-            maxWidth: blob ? messageWidth : 'calc(100% - 16px)',
+            maxWidth: blob ? '60%' : 'calc(100% - 16px)',
+            ...webchatState.webchatConfig.messageStyle,
             ...style
           }}
           {...otherProps}
