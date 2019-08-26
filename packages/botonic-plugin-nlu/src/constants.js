@@ -1,3 +1,5 @@
+// Execution
+export const LANG_FLAG = '--lang'
 // Filenames
 export const NLU_DATA_FILENAME = 'nlu-data.json'
 export const MODEL_FILENAME = 'model.json'
