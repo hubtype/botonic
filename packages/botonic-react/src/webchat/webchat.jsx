@@ -157,7 +157,7 @@ export const Webchat = forwardRef((props, ref) => {
   const checkBlockInput = input => {
     if (!Array.isArray(props.blockInputs)) return
     for (let rule of props.blockInputs) {
-      if (rule.match.some((regex, m) => regex.test(input.data))) {
+      if (rule.match.some(regex => regex.test(input.data))) {
         addMessageComponent(
           <Text
             id={input.id}
