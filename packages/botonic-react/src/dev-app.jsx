@@ -10,6 +10,7 @@ export class DevApp extends WebchatApp {
     theme = {},
     persistentMenu,
     blockInputs,
+    webchatConfig = {},
     onInit,
     onOpen,
     onClose,
@@ -18,6 +19,7 @@ export class DevApp extends WebchatApp {
   }) {
     super({
       theme,
+      webchatConfig,
       persistentMenu,
       blockInputs,
       onInit,
@@ -35,6 +37,7 @@ export class DevApp extends WebchatApp {
       theme = {},
       persistentMenu,
       blockInputs,
+      webchatConfig = {},
       onInit,
       onOpen,
       onClose,
@@ -44,6 +47,7 @@ export class DevApp extends WebchatApp {
     theme = { ...this.theme, ...theme }
     persistentMenu = persistentMenu || this.persistentMenu
     blockInputs = blockInputs || this.blockInputs
+    webchatConfig = { ...this.webchatConfig, ...webchatConfig }
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -53,6 +57,7 @@ export class DevApp extends WebchatApp {
         ref={this.webchatRef}
         {...webchatOptions}
         theme={theme}
+        webchatConfig={webchatConfig}
         persistentMenu={persistentMenu}
         blockInputs={blockInputs}
         getString={(stringId, session) => this.bot.getString(stringId, session)}
