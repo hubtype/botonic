@@ -64,7 +64,6 @@ export const Button = props => {
   }
 
   const renderNode = () => {
-    console.log('hi')
     if (props.webview) {
       let Webview = props.webview
       let params = ''
