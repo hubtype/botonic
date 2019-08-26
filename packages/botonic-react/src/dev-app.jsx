@@ -8,7 +8,7 @@ import { WebchatDev } from './webchat'
 export class DevApp extends WebchatApp {
   constructor({
     theme = {},
-    persistentMenu = {},
+    persistentMenu,
     blockInputs,
     onInit,
     onOpen,
@@ -33,7 +33,7 @@ export class DevApp extends WebchatApp {
   render(dest, optionsAtRuntime = {}) {
     let {
       theme = {},
-      persistentMenu = {},
+      persistentMenu,
       blockInputs,
       onInit,
       onOpen,
@@ -42,7 +42,7 @@ export class DevApp extends WebchatApp {
       ...webchatOptions
     } = optionsAtRuntime
     theme = { ...this.theme, ...theme }
-    persistentMenu = { ...this.persistentMenu, ...persistentMenu }
+    persistentMenu = persistentMenu || this.persistentMenu
     blockInputs = blockInputs || this.blockInputs
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
