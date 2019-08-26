@@ -10,7 +10,6 @@ export class WebchatApp {
     theme = {},
     persistentMenu,
     blockInputs,
-    webchatConfig,
     onInit,
     onOpen,
     onClose,
@@ -18,7 +17,6 @@ export class WebchatApp {
     appId
   }) {
     this.theme = theme
-    this.webchatConfig = webchatConfig
     this.persistentMenu = persistentMenu
     this.blockInputs = blockInputs
     this.onInit = onInit
@@ -97,7 +95,6 @@ export class WebchatApp {
       theme = {},
       persistentMenu,
       blockInputs,
-      webchatConfig,
       onInit,
       onOpen,
       onClose,
@@ -108,7 +105,6 @@ export class WebchatApp {
     theme = { ...this.theme, ...theme }
     persistentMenu = persistentMenu || this.persistentMenu
     blockInputs = blockInputs || this.blockInputs
-    webchatConfig = webchatConfig || this.webchatConfig
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -123,7 +119,6 @@ export class WebchatApp {
         ref={this.webchatRef}
         {...webchatOptions}
         theme={theme}
-        webchatConfig={webchatConfig}
         persistentMenu={persistentMenu}
         blockInputs={blockInputs}
         onInit={(...args) => this.onInitWebchat(...args)}
