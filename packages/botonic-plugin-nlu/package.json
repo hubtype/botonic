@@ -6,6 +6,9 @@
     "build": "rm -rf dist && babel src -d dist",
     "test": "jest"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "babel": {
     "presets": [
       [
@@ -31,6 +34,7 @@
     "inquirer": "^6.3.1",
     "jest": "^24.8.0",
     "node-fetch": "^2.6.0",
+    "node-nlp": "^3.5.2",
     "sqlite-async": "^1.0.11"
   },
   "devDependencies": {

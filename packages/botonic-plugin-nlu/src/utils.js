@@ -1,5 +1,5 @@
 import path from 'path'
-
+import { LANG_FLAG } from './constants'
 function escapeRegExp(str) {
   return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1')
 }
@@ -29,20 +29,39 @@ export function clone(src) {
   return Object.assign([], src)
 }
 
-export function printPrettyConfig(config) {
+export function printPrettyConfig(params) {
   console.log('\n\n*******************************************')
-  console.log(`\n\nTRAINING MODEL FOR ${config.LANG}`)
+  console.log(`\n\nTRAINING MODEL FOR ${params.LANG}`)
   console.log('\nRUNNING WITH CONFIGURATION:')
   let max = 0
-  for (let key in config) {
+  for (let key in params) {
     if (key.length > max) {
       max = key.length
     }
   }
-  for (let key in config) {
+  for (let key in params) {
     let param = key + Array(max + 1 - key.length).join(' ')
-    console.log(`   ${param} = ${config[key]}`)
+    console.log(`   ${param} = ${params[key]}`)
   }
   console.log('\n')
   console.log('*******************************************')
+}
+
+export function parseLangFlag(args) {
+  args = args.slice(2)
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] == LANG_FLAG && args[i + 1]) {
+      return [args[i + 1]]
+    }
+  }
+  return undefined
+}
+
+export function filterObjectByWhitelist(object, whiteList) {
+  return Object.keys(object)
+    .filter(key => whiteList.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = object[key]
+      return obj
+    }, {})
 }

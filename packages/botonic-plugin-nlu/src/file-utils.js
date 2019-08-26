@@ -17,7 +17,7 @@ const CONFIG_NOT_FOUND_EXCEPTION = flagLang =>
 
 export function readDir(dirPath) {
   try {
-    return fs.readdirSync(dirPath)
+    return fs.readdirSync(dirPath).filter(dirName => dirName !== '.DS_Store')
   } catch (e) {
     throw FILE_OPEN_EXCEPTION(e)
   }
@@ -33,6 +33,9 @@ export function readFile(filePath, fileEncoding = 'utf-8') {
 
 export function readJSON(jsonPath) {
   return JSON.parse(readFile(jsonPath))
+}
+export function writeJSON(jsonPath, object) {
+  fs.writeFile(jsonPath, JSON.stringify(object, null, 2))
 }
 
 export function createDir(path) {
@@ -93,7 +96,7 @@ export async function saveResults({
   )
 }
 
-function getIntentName(fileName) {
+export function getIntentName(fileName) {
   try {
     return fileName.match(/(.*).txt/)[1]
   } catch (e) {
