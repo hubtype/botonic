@@ -27,17 +27,17 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
-    "filenames/match-regex": [2, "^[a-z-.]+$", true],
-
+    "filenames/match-regex": ["warn", "^[a-z-.]+$", true],
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
     "dot-notation": "off",
-
+    "no-console" :"off",
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
     "unicorn/no-abusive-eslint-disable" : "off",
+    "@typescript-eslint/camelcase" : "warn",
 
     // special for TYPESCRIPT
     "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
@@ -51,13 +51,28 @@ module.exports = {
     // allow public functions/classes to call private functions/classes declared below.
     // otoh, variables (typically constants) should be declared at the top
     "@typescript-eslint/no-use-before-define": ["error", { "variables": true, "functions": false, "classes": false }],
-    "@typescript-eslint/no-useless-constructor": "warn",
     "@typescript-eslint/require-await": "error",
     "no-empty-pattern" : "off",
     "no-null/no-null": "warn", // fields declared with ? are undefined, not null (be aware that React uses null)
     "unicorn/prevent-abbreviations" : "off", // the plugin removes removes type annotations from typescript code :-(
     "unicorn/filename-case" : "off", // React convention is in CamelCase
     "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
+ 
+  },
+  "overrides": [
+    {
+      "files": [
+        "tests/**/*.ts" // to be able to skip required fields when not used in a particular test
+      ],
+      "rules": {
+        "@typescript-eslint/no-object-literal-type-assertion" : "off",
+      }
+    }
+  ],
+  settings: {
+    react: {
+      version: "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
+    }
   },
   env: {
     jest: true,

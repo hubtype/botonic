@@ -43,9 +43,7 @@ test('TEST: contentful text with URL button with followup', async () => {
   );
   expect(text.buttons).toHaveLength(1);
   expect(text.buttons[0].text).toEqual('Acceda a su cuenta');
-  expect(text.buttons[0].callback.url).toEqual(
-    'https://shop.com/es/'
-  );
+  expect(text.buttons[0].callback.url).toEqual('https://shop.com/es/');
   expect(text.followUp).not.toBeUndefined();
 });
 
