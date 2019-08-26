@@ -36,8 +36,10 @@ export const Button = props => {
     if (props.webview) openWebview(props.webview, props.params)
     else if (props.path) sendPayload(`__PATH_PAYLOAD__${props.path}`)
     else if (props.payload) sendPayload(props.payload)
-    else if (props.url) window.open(props.url)
-    else if (props.onClick) props.onClick()
+    else if (props.url) {
+      window.open(props.url)
+      props.onClick()
+    } else if (props.onClick) props.onClick()
   }
 
   const renderBrowser = () => {
@@ -62,6 +64,7 @@ export const Button = props => {
   }
 
   const renderNode = () => {
+    console.log('hi')
     if (props.webview) {
       let Webview = props.webview
       let params = ''
