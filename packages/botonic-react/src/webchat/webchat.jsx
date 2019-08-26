@@ -401,7 +401,12 @@ export const Webchat = forwardRef((props, ref) => {
             <PersistentMenu>
               {Object.values(props.persistentMenu).map((e, i) => {
                 return (
-                  <Button payload={e.payload} key={i}>
+                  <Button
+                    onClick={closeMenu}
+                    url={e.url}
+                    payload={e.payload}
+                    key={i}
+                  >
                     {Object.values(e.label)}
                   </Button>
                 )
