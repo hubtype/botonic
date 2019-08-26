@@ -258,7 +258,6 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const sendPayload = async payload => {
-    addNewMessage(payload)
     if (!payload) return
     let input = { type: 'postback', payload }
     await sendInput(input)
@@ -325,14 +324,6 @@ export const Webchat = forwardRef((props, ref) => {
       />
     </div>
   )
-  const addNewMessage = value => {
-    let newComponent = msgToBotonic({ delay: 100, typing: 100 })
-    if (!newComponent) {
-      addMessageComponent(<Text from='user'>{value}</Text>)
-      setMenuIsOpened(false)
-      return
-    }
-  }
 
   return (
     <WebchatContext.Provider
