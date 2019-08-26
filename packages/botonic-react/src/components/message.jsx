@@ -29,10 +29,11 @@ export const Message = props => {
   } = props
 
   const { webchatState, addMessage, updateReplies } = useContext(WebchatContext)
+  const messageWidth = webchatState.theme.isRomeu ? '83%' : '60%'
+
   const [state, setState] = useState({
     id: props.id || uuid()
   })
-
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
     e => e.type === Button
@@ -161,7 +162,7 @@ export const Message = props => {
             borderRadius: webchatState.theme.customUserMessages
               ? webchatState.theme.customUserMessages.borderRadius
               : '',
-            maxWidth: blob ? '60%' : 'calc(100% - 16px)',
+            maxWidth: blob ? messageWidth : 'calc(100% - 16px)',
             ...style
           }}
           {...otherProps}
