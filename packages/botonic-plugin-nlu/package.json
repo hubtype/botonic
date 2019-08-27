@@ -28,7 +28,7 @@
     "franc": "^4.1.0",
     "fs": "0.0.1-security",
     "inquirer": "^6.3.1",
-    "jest": "^24.8.0",
+    "jest": "^25.0.0",
     "node-fetch": "^2.6.0",
     "sqlite-async": "^1.0.11"
   },
