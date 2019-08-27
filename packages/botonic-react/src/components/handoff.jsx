@@ -37,7 +37,6 @@ export const Handoff = props => {
 
   let bgColor = state.showContinue ? '#c6e7c0' : '#d1d8cf'
   let fontColor = state.showContinue ? '#3a9c35' : '#5f735e'
-  console.log(bgColor)
   return (
     <HandoffStyled bgColor={bgColor} fontColor={fontColor}>
       {state.showContinue ? (
