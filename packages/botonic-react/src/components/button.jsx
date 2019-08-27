@@ -38,8 +38,8 @@ export const Button = props => {
     else if (props.payload) sendPayload(props.payload)
     else if (props.url) {
       window.open(props.url)
-      props.onClick()
-    } else if (props.onClick) props.onClick()
+    }
+    if (props.onClick) props.onClick()
   }
 
   const renderBrowser = () => {
