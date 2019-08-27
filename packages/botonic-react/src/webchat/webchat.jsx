@@ -27,6 +27,35 @@ import Logo from './botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from './menuButton.svg'
 import { Button } from '../components/button'
+import styled from 'styled-components'
+
+const WebchatStyled = styled.div`
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 12px;
+  display: flex;
+  flex-direction: column;
+`
+
+const TriggerButtonStyled = styled.div`
+  cursor: pointer;
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  bottom: 20px;
+  right: 10px;
+`
 
 const getScriptBaseURL = () => {
   let scriptBaseURL = document
@@ -304,29 +333,14 @@ export const Webchat = forwardRef((props, ref) => {
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
   ) : (
-    <div
-      style={{
-        cursor: 'pointer',
-        position: 'fixed',
-        background: 'white',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 65,
-        height: 65,
-        bottom: 20,
-        right: 10,
-        ...webchatState.theme.triggerButtonStyle
-      }}
-    >
+    <TriggerButtonStyled style={{ ...webchatState.theme.triggerButtonStyle }}>
       <img
         style={{
           height: 50
         }}
         src={staticAssetsUrl + logoUrl}
       />
-    </div>
+    </TriggerButtonStyled>
   )
 
   return (
@@ -355,19 +369,10 @@ export const Webchat = forwardRef((props, ref) => {
         </div>
       )}
       {webchatState.isWebchatOpen && (
-        <div
+        <WebchatStyled
+          width={webchatState.width}
+          height={webchatState.height}
           style={{
-            position: 'fixed',
-            right: 20,
-            bottom: 20,
-            width: webchatState.width,
-            height: webchatState.height,
-            margin: 'auto',
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            boxShadow: '0 0 12px rgba(0,0,0,.15)',
-            display: 'flex',
-            flexDirection: 'column',
             ...webchatState.theme.style
           }}
         >
@@ -490,7 +495,7 @@ export const Webchat = forwardRef((props, ref) => {
               />
             </RequestContext.Provider>
           )}
-        </div>
+        </WebchatStyled>
       )}
     </WebchatContext.Provider>
   )
