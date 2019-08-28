@@ -8,8 +8,8 @@ import { msgToBotonic } from './utils'
 export class WebchatApp {
   constructor({
     theme = {},
-    persistentMenu = {},
-    blockInputs = {},
+    persistentMenu,
+    blockInputs,
     onInit,
     onOpen,
     onClose,
@@ -93,8 +93,8 @@ export class WebchatApp {
   render(dest, optionsAtRuntime = {}) {
     let {
       theme = {},
-      persistentMenu = {},
-      blockInputs = {},
+      persistentMenu,
+      blockInputs,
       onInit,
       onOpen,
       onClose,
@@ -103,8 +103,8 @@ export class WebchatApp {
       ...webchatOptions
     } = optionsAtRuntime
     theme = { ...this.theme, ...theme }
-    persistentMenu = { ...this.persistentMenu, ...persistentMenu }
-    blockInputs = { ...this.blockInputs, ...blockInputs }
+    persistentMenu = persistentMenu || this.persistentMenu
+    blockInputs = blockInputs || this.blockInputs
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
