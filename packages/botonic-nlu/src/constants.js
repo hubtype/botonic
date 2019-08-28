@@ -21,7 +21,7 @@ export const DB = {
 
 //Entities
 export const ENTITIES_REGEX = /\[(.*?)\]\((.*?)\)/
-export const COMPROMISE_DEFAULT_ENTITIES = [
+export const DEFAULT_ENTITIES = [
   // Nouns
   'Organization',
   'Currency',
