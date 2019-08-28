@@ -1,5 +1,25 @@
+import os from 'os'
+import path from 'path'
 import Database from 'sqlite-async'
-import { DB } from './constants'
+import { DB, WORD_EMBEDDINGS_PATH } from './constants'
+
+export async function getEmbeddingMatrix({
+  vocabulary,
+  vocabularyLength,
+  params
+}) {
+  let embeddingMatrix = await generateEmbeddingMatrix({
+    dim1: vocabularyLength,
+    dim2: params.EMBEDDING_DIM,
+    vocabulary,
+    wordEmbeddingsPath: path.join(
+      os.homedir(),
+      WORD_EMBEDDINGS_PATH,
+      `${params.ALGORITHM}-${params.EMBEDDING_DIM}d-${params.LANG}.db`
+    )
+  })
+  return embeddingMatrix
+}
 
 export async function generateEmbeddingMatrix({
   dim1,
