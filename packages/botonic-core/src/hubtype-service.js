@@ -17,6 +17,7 @@ export class HubtypeService {
     this.pusher = new Pusher(PUSHER_KEY, {
       cluster: 'eu',
       authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
+      encrypted: true,
       auth: {
         headers: {
           'X-BOTONIC-USER-ID': this.user.id
