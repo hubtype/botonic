@@ -12,6 +12,7 @@ import { Pic } from './components/pic'
 import { Video } from './components/video'
 import { Document } from './components/document'
 import { Location } from './components/location'
+import { webchat } from 'BotonicProject'
 
 export function isDev() {
   return process.env.NODE_ENV == 'development'
@@ -22,6 +23,7 @@ export function isProd() {
 }
 
 export function msgToBotonic(msg) {
+  console.log('MSGTOBOTNIC', msg)
   delete msg.display
   if (msg.type == 'text') {
     if (
@@ -67,7 +69,23 @@ export function msgToBotonic(msg) {
         </Text>
       </>
     )
+  } else if (msg.type == 'custom') {
+    console.log('WebchatLLLL', webchat)
+    let arrayCustomMessages = webchat.theme.customMessageTypes
+    let customType = getCustomType(msg)
+    console.log('Customtype', customType)
+    let CustomMessageType = arrayCustomMessages[customType]
+    return <CustomMessageType typeClass={customType} {...msg} />
   }
+}
+
+function getCustomType(msg) {
+  if (msg.data && msg.data.extra_data) {
+    return msg.data.extra_data.customType
+  }
+  let dataParsed = JSON.parse(msg.extra_data)
+  console.log('dataparsed', dataParsed)
+  return dataParsed['custom_type']
 }
 
 export function msgsToBotonic(msgs) {
