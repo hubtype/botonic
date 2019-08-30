@@ -9,6 +9,7 @@ const HeaderTitle = styled.h1`
   font-size: 15px;
   line-height: 22px;
   color: #ffffff;
+  margin-top: ${props => (props.headerSubtitle == undefined ? '18px' : 5)};
 `
 
 const Subtitle = styled.h1`
