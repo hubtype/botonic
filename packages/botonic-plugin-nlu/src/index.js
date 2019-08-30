@@ -3,7 +3,7 @@ import { NLU } from './nlu'
 export default class BotonicPluginNLU {
   constructor(options) {
     let languages = Object.keys(options)
-    return (async () => {
+    ;(async () => {
       this.nlu = await new NLU(languages)
       return this
     })()
@@ -12,7 +12,7 @@ export default class BotonicPluginNLU {
   async pre({ input, session, lastRoutePath }) {
     try {
       let { intent, entities } = this.nlu.predict(input.data)
-      Object.assign(input, { ...intent, ...entities })
+      Object.assign(input, intent, entities)
     } catch (e) {
       console.log('Cannot predict the results', e)
     }
