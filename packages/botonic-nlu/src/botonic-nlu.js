@@ -48,7 +48,7 @@ export class BotonicNLU {
     for (let language of this.languages) {
       let devData = this.devData[language]
       let { devIntents, params, devEntities } = devData
-      params = { ...params, LANG: language } // TODO: Think better this reassignment
+      params = { ...params, language } // TODO: Think better this reassignment
       printPrettyConfig(params)
       let start = new Date()
       let {

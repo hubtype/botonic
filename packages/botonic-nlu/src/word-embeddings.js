@@ -15,7 +15,7 @@ export async function getEmbeddingMatrix({
     wordEmbeddingsPath: path.join(
       os.homedir(),
       WORD_EMBEDDINGS_PATH,
-      `${params.ALGORITHM}-${params.EMBEDDING_DIM}d-${params.LANG}.db`
+      `${params.ALGORITHM}-${params.EMBEDDING_DIM}d-${params.language}.db`
     )
   })
   return embeddingMatrix
