@@ -9,7 +9,8 @@ export const UTTERANCES_DIRNAME = 'utterances'
 // Subpaths
 export const NLU_DIRNAME = 'nlu'
 export const NLU_CONFIG_FILENAME = 'nlu.config.json'
-export const WORD_EMBEDDINGS_PATH = '/.botonic/word_embeddings'
+export const GLOBAL_CONFIG_PATH = '.botonic'
+export const WORD_EMBEDDINGS_PATH = 'word_embeddings'
 // General Config
 export const UTTERANCES_EXTENSION = '.txt'
 export const ASSETS_DIRNAME = 'assets'
@@ -21,6 +22,7 @@ export const DB = {
 
 //Entities
 export const ENTITIES_REGEX = /\[(.*?)\]\((.*?)\)/
+export const GLOBAL_ENTITIES_REGEX = /\[(.*?)\]\((.*?)\)/g
 export const DEFAULT_ENTITIES = [
   // Nouns
   'Organization',

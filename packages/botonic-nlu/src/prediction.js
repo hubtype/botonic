@@ -11,10 +11,7 @@ export function getPrediction(input, model, nluData) {
 export function getIntent(prediction, intentsDict, language) {
   let intent = {}
   intent.language = language
-  let maxScoreIdx = prediction.reduce(
-    (iMax, x, i, arr) => (x > arr[iMax] ? i : iMax),
-    0
-  )
+  let maxScoreIdx = Math.max.apply(Math, prediction)
   intent.intent = intentsDict[maxScoreIdx]
   intent.confidence = prediction[maxScoreIdx]
   intent.intents = Array.from(prediction)

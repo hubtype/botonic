@@ -1,7 +1,11 @@
 import * as tf from '@tensorflow/tfjs'
 import franc from 'franc'
 import { replaceAll, clone, shuffle } from './utils'
-import { UNKNOWN_TOKEN, ENTITIES_REGEX } from './constants'
+import {
+  UNKNOWN_TOKEN,
+  GLOBAL_ENTITIES_REGEX,
+  ENTITIES_REGEX
+} from './constants'
 
 export class Tokenizer {
   constructor(vocabulary = null) {
@@ -107,9 +111,20 @@ export function detectLang(input, langs) {
   return res
 }
 
+/**
+ * Given a training example utterance extracts its entities (if exist)
+ * and returns a valid utterance for training with its entities.
+ * E.g.:
+ * Input: 'I would like to go to [Barcelona](Place)'
+ * Output:
+ * parsedUtterance: 'I would like to go to Barcelona',
+ * parsedEntities: [ { raw: '[Barcelona](Place)', value: 'Barcelona', type: 'Place' } ]
+ * @param {string} utterance Training example utterance
+ * @returns {object} {parsedUtterance, parsedEntities}
+ */
 export function parseUtterance(utterance) {
-  let capturedGroup = utterance.match(new RegExp(ENTITIES_REGEX, 'g')) || []
-  let parsedEntities = capturedGroup
+  let capturedGroups = utterance.match(GLOBAL_ENTITIES_REGEX) || []
+  let parsedEntities = capturedGroups
     .map(matched => ENTITIES_REGEX.exec(matched))
     .map(parsedEntity => ({
       raw: parsedEntity[0],
