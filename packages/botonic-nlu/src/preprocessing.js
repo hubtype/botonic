@@ -123,7 +123,7 @@ export function parseUtterance(utterance) {
 }
 
 export function preprocessData(devIntents, params) {
-  let { samples, labels } = getSamplesAndLabels(devIntents.intents)
+  let { samples, labels } = getShuffledSamplesAndLabels(devIntents.intents)
   let tokenizer = new Tokenizer()
   tokenizer.fitOnSamples(samples)
   let sequences = tokenizer.samplesToSequences(samples)
@@ -146,15 +146,9 @@ export function preprocessData(devIntents, params) {
   }
 }
 
-function getSamplesAndLabels(intents) {
-  let { samples, labels } = intents.reduce(
-    (result, intent) => {
-      result.samples.push(intent.utterance)
-      result.labels.push(intent.label)
-      return result
-    },
-    { samples: [], labels: [] }
-  )
+function getShuffledSamplesAndLabels(intents) {
+  let samples = intents.map(intent => intent.utterance)
+  let labels = intents.map(intent => intent.label)
   shuffle(samples, labels)
   return { samples, labels }
 }
