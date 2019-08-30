@@ -6,6 +6,7 @@ import { isBrowser, isNode } from '@botonic/core'
 
 const Box = styled.div`
   padding-top: 10px;
+  margin-left: -13px;
   display: flex;
   flex-direction: row;
   overflow-x: auto;
