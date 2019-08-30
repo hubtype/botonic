@@ -21,9 +21,9 @@ export default class Run extends Command {
   async run() {
     const { args, flags } = this.parse(Run)
 
-    const globalNodeModulesPath = await getGlobalNodeModulesPath()
     const botonicNLUPath: string = path.join(
-      globalNodeModulesPath,
+      process.cwd(),
+      'node_modules',
       '@botonic',
       'nlu'
     )
@@ -42,7 +42,7 @@ export default class Run extends Command {
         `You don't have @botonic/nlu installed.\nPlease, install it by typing the following command:`
           .red
       )
-      console.log(`  $ npm install -g @botonic/nlu`)
+      console.log(`  $ npm install @botonic/nlu`)
     }
   }
 }
