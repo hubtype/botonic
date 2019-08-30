@@ -30,7 +30,7 @@ export function clone(src) {
 
 export function printPrettyConfig(params) {
   console.log('\n\n*******************************************')
-  console.log(`\n\nTRAINING MODEL FOR ${params.LANG}`)
+  console.log(`\n\nTRAINING MODEL FOR ${params.language}`)
   console.log('\nRUNNING WITH CONFIGURATION:')
   let maxKeyLength = 0
   for (let key in params) {
