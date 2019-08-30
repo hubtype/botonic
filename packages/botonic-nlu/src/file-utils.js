@@ -85,8 +85,8 @@ export function loadDevData(nluPath, languages) {
         })
         for (let entity of parsedEntities) {
           let { type, value } = entity
-          config.devEntities.words[`${value}`] = type
-          config.devEntities.tags[`${type}`] = { isA: type }
+          config.devEntities.words[value] = type
+          config.devEntities.tags[type] = { isA: type }
           if (!config.devEntities.tagList.includes(type)) {
             config.devEntities.tagList.push(type)
           }
@@ -98,7 +98,7 @@ export function loadDevData(nluPath, languages) {
 }
 
 export async function saveDevData({ modelsPath, model, language, nluData }) {
-  let resultsPath = path.join(modelsPath, `${language}`)
+  let resultsPath = path.join(modelsPath, language)
   if (!pathExists(modelsPath)) {
     createDir(modelsPath)
   }
