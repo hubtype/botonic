@@ -378,7 +378,12 @@ export const Webchat = forwardRef((props, ref) => {
               height: 36,
               flex: 'none'
             }}
+<<<<<<< HEAD
             onCloseClick={() => {
+=======
+            value={true}
+            onChange={() => {
+>>>>>>> add(react): close webchat button for default headers
               toggleWebchat(false)
             }}
           />
