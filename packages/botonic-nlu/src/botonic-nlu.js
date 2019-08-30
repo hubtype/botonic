@@ -46,7 +46,7 @@ export class BotonicNLU {
     this.devData = loadDevData(this.nluPath, this.languages)
     this.languages = Object.keys(this.devData)
     for (let language of this.languages) {
-      let devData = this.devData[`${language}`]
+      let devData = this.devData[language]
       let { devIntents, params, devEntities } = devData
       params = { ...params, LANG: language } // TODO: Think better this reassignment
       printPrettyConfig(params)
@@ -62,21 +62,21 @@ export class BotonicNLU {
         vocabularyLength,
         params
       })
-      this.models[`${language}`] = embeddingLSTMModel({
+      this.models[language] = embeddingLSTMModel({
         params,
         vocabularyLength,
         embeddingMatrix: tf.tensor(embeddingMatrix),
         outputDim: Object.keys(devIntents.intentsDict).length
       })
-      this.models[`${language}`].summary()
-      this.models[`${language}`].compile({
+      this.models[language].summary()
+      this.models[language].compile({
         optimizer: tf.train.adam(params.LEARNING_RATE),
         loss: 'categoricalCrossentropy',
         metrics: ['accuracy']
       })
       console.log('TRAINING...')
 
-      const history = await this.models[`${language}`].fit(
+      const history = await this.models[language].fit(
         tensorData,
         tensorLabels,
         {
@@ -95,7 +95,7 @@ export class BotonicNLU {
       }
       await saveDevData({
         modelsPath: this.modelsPath,
-        model: this.models[`${language}`],
+        model: this.models[language],
         language,
         nluData
       })
