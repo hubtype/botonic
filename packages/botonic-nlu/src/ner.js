@@ -2,9 +2,9 @@ import { default as nlp } from 'compromise'
 import { default as compromisePlugin } from 'compromise-plugin'
 import { DEFAULT_ENTITIES } from './constants'
 
-function listContainEntity(obj, list) {
+function listContainsEntity(entity, list) {
   for (let item of list) {
-    if (obj.type == item.type && obj.value == item.value) {
+    if (entity.type == item.type && entity.value == item.value) {
       return true
     }
   }
@@ -28,7 +28,7 @@ export function getEntities(input, devEntities) {
     for (let taggedToken of processedInput.out('tags')) {
       if (taggedToken.tags.includes(tag)) {
         let entity = { value: taggedToken.text, tags: taggedToken.tags }
-        if (!listContainEntity(entity, taggedEntities)) {
+        if (!listContainsEntity(entity, taggedEntities)) {
           taggedEntities.push(entity)
         }
       }

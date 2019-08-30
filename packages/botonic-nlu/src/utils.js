@@ -8,19 +8,15 @@ export function replaceAll(str, find, replace) {
 }
 
 export function shuffle(obj1, obj2) {
-  // shuffle two related arrays preserving indexes
-  var index = obj1.length
-  var rnd, tmp1, tmp2
-
-  while (index) {
-    rnd = Math.floor(Math.random() * index)
-    index -= 1
-    tmp1 = obj1[index]
-    tmp2 = obj2[index]
-    obj1[index] = obj1[rnd]
-    obj2[index] = obj2[rnd]
-    obj1[rnd] = tmp1
-    obj2[rnd] = tmp2
+  // shuffle 2 arrays with same length preserving their relative indices
+  // Fisher-Yates Shuffle: https://stackoverflow.com/a/2450976/145289
+  let idx = obj1.length
+  let rnd = undefined
+  while (idx) {
+    rnd = Math.floor(Math.random() * idx)
+    idx -= 1
+    ;[obj1[idx], obj1[rnd]] = [obj1[rnd], obj1[idx]]
+    ;[obj2[idx], obj2[rnd]] = [obj2[rnd], obj2[idx]]
   }
 }
 
