@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import axios from 'axios'
 import colors from 'colors'
 import { parseUtterance } from './preprocessing'
 import { filterObjectByWhitelist } from './utils'
@@ -111,4 +112,19 @@ export async function saveDevData({ modelsPath, model, language, nluData }) {
   console.log('Saving word index...')
   writeJSON(`${resultsPath}/${NLU_DATA_FILENAME}`, nluData)
   console.log('\n')
+}
+
+export async function downloadFileToDisk({ url, downloadPath }) {
+  try {
+    const fileWriter = fs.createWriteStream(downloadPath)
+    let downloadedFile = await axios.get(url, { responseType: 'stream' })
+    downloadedFile.data.pipe(fileWriter)
+    return new Promise((resolve, reject) => {
+      fileWriter.on('finish', resolve)
+      fileWriter.on('error', reject)
+    })
+  } catch (e) {
+    console.log(colors.red(`Error downloading the file.`))
+    console.log(colors.red(`${e.response.status}: ${e.response.statusText}`))
+  }
 }
