@@ -10,16 +10,15 @@ export function getPrediction(input, model, nluData) {
 }
 export function getIntent(prediction, intentsDict, language) {
   let intent = {}
-  intent.language = language
-  let maxScoreIdx = Math.max.apply(Math, prediction)
-  intent.intent = intentsDict[maxScoreIdx]
-  intent.confidence = prediction[maxScoreIdx]
   intent.intents = Array.from(prediction)
     .map((confidence, i) => ({
       intent: `${intentsDict[i]}`,
       confidence: confidence
     }))
     .sort((a, b) => b.confidence - a.confidence)
+  intent.language = language
+  intent.intent = intent.intents[0].intent
+  intent.confidence = intent.intents[0].confidence
   return intent
 }
 
