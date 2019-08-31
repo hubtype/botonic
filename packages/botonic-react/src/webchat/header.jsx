@@ -42,11 +42,26 @@ export const DefaultHeader = props => (
       <HeaderTitle>Botonic</HeaderTitle>
       <Subtitle>Online</Subtitle>
     </Flex>
+    <div
+      style={{
+        cursor: "pointer",
+        fontSize: "16px",
+        color: "black",
+        position: "absolute",
+        right: "10px",
+        top: "9px"
+      }}
+      onClick={() => {
+        toggleWebchat(false);
+      }}
+    >
+      ✕
+    </div>
   </Diffuse>
 )
 
 export const WebchatHeader = props => {
-  const { webchatState } = useContext(WebchatContext)
+  const { webchatState, toggleWebchat } = useContext(WebchatContext);
 
   if (webchatState.theme.customHeader) {
     let CustomHeader = webchatState.theme.customHeader
