@@ -13,6 +13,7 @@
     "@babel/runtime": "^7.5.5",
     "@tensorflow/tfjs": "^1.2.7",
     "@tensorflow/tfjs-node": "^1.2.7",
+    "axios": "^0.19.0",
     "colors": "^1.3.3",
     "compromise": "^11.13.2",
     "compromise-plugin": "0.0.9",

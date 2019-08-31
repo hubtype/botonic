@@ -9,8 +9,9 @@ export const UTTERANCES_DIRNAME = 'utterances'
 // Subpaths
 export const NLU_DIRNAME = 'nlu'
 export const NLU_CONFIG_FILENAME = 'nlu.config.json'
-export const GLOBAL_CONFIG_PATH = '.botonic'
-export const WORD_EMBEDDINGS_PATH = 'word_embeddings'
+export const GLOBAL_CONFIG_DIRNAME = '.botonic'
+export const WORD_EMBEDDINGS_DIRNAME = 'word-embeddings'
+
 // General Config
 export const UTTERANCES_EXTENSION = '.txt'
 export const ASSETS_DIRNAME = 'assets'
@@ -19,6 +20,8 @@ export const DB = {
   TABLE: 'embeddings',
   COLUMN: 'token'
 }
+export const WORD_EMBEDDDINGS_ENDPOINT =
+  'https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com'
 
 //Entities
 export const ENTITIES_REGEX = /\[(.*?)\]\((.*?)\)/
