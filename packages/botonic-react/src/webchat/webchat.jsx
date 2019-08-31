@@ -390,14 +390,14 @@ export const Webchat = forwardRef((props, ref) => {
           >
             {webchatState.typing && <TypingIndicator />}
             <div id='messages-end' />
+            {webchatState.replies && (
+              <WebchatReplies
+                replies={webchatState.replies}
+                align={webchatState.theme.alignReplies}
+                wrap={webchatState.theme.wrapReplies}
+              />
+            )}
           </WebchatMessageList>
-          {webchatState.replies && (
-            <WebchatReplies
-              replies={webchatState.replies}
-              align={webchatState.theme.alignReplies}
-              wrap={webchatState.theme.wrapReplies}
-            />
-          )}
           {emojiIsOpened && (
             <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
           )}
