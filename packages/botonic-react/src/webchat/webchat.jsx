@@ -421,7 +421,7 @@ export const Webchat = forwardRef((props, ref) => {
                 borderTop: '1px solid rgba(0, 0, 0, 0.4)'
               }}
             >
-              {Object.keys(props.persistentMenu).length != 0 && (
+              {props.persistentMenu && (
                 <div
                   style={{
                     display: 'flex',
