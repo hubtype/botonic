@@ -175,7 +175,6 @@ export const Message = props => {
           {isFromBot() && blob && (
             <div
               style={{
-                //...pointerStyles,
                 left: 0,
                 borderLeft: 0,
                 borderRightColor: getBgColor(),
