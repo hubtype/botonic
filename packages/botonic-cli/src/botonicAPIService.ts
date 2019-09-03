@@ -108,7 +108,19 @@ export class BotonicAPIService {
   async getCurrentBuildHash() {
     const options = {
       folders: { exclude: ['.*', 'node_modules', 'dist'] },
-      files: { include: ['*.js', '*.jsx', '*.ts', '*.tsx', '*.css', '*.scss', 'webpack.config.js', '.babelrc', 'tsconfig.json'] }
+      files: {
+        include: [
+          '*.js',
+          '*.jsx',
+          '*.ts',
+          '*.tsx',
+          '*.css',
+          '*.scss',
+          'webpack.config.js',
+          '.babelrc',
+          'tsconfig.json'
+        ]
+      }
     }
     let hash = await hashElement('.', options)
     return hash.hash
@@ -123,8 +135,7 @@ export class BotonicAPIService {
       var build_out = await exec(`npm run ${npmCommand}`)
     } catch (error) {
       spinner.fail()
-      console.log(`${error.stdout}` +
-        colors.red(`\n\nBuild error:\n${error}`))
+      console.log(`${error.stdout}` + colors.red(`\n\nBuild error:\n${error}`))
       return false
     }
     spinner.succeed()
