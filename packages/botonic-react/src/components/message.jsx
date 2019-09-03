@@ -161,7 +161,6 @@ export const Message = props => {
               ? webchatState.theme.customUserMessages.borderRadius
               : '',
             maxWidth: blob ? '60%' : 'calc(100% - 16px)',
-            ...webchatState.webchatConfig.messageStyle,
             ...style
           }}
           {...otherProps}

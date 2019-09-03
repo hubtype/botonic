@@ -62,7 +62,6 @@ export const Webchat = forwardRef((props, ref) => {
     updateHandoff,
     updateTheme,
     updateDevSettings,
-    updateWebchatConfig,
     toggleWebchat,
     openWebviewT,
     closeWebviewT
@@ -131,10 +130,6 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     updateTheme({ ...webchatState.theme, ...props.theme })
   }, [props.theme])
-
-  useEffect(() => {
-    updateWebchatConfig({ ...webchatState.webchatConfig, ...props.webchatConfig })
-  }, [props.webchatConfig])
 
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
