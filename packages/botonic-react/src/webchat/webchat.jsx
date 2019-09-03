@@ -379,9 +379,12 @@ export const Webchat = forwardRef((props, ref) => {
               flex: 'none'
             }}
 <<<<<<< HEAD
+<<<<<<< HEAD
             onCloseClick={() => {
 =======
             value={true}
+=======
+>>>>>>> fix(react): issues from PR
             onChange={() => {
 >>>>>>> add(react): close webchat button for default headers
               toggleWebchat(false)
