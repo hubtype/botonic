@@ -59,7 +59,7 @@ export function webchatReducer(state, action) {
     case 'updateTyping':
       return { ...state, typing: action.payload }
     case 'updateWebview':
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload, replies: [] }
     case 'updateSession':
       return { ...state, session: { ...action.payload } }
     case 'updateUser':
