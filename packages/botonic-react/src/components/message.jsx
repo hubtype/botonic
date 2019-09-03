@@ -121,11 +121,27 @@ export const Message = props => {
           paddingLeft: 5
         }}
       >
-        <div style={{ width: 30, position: 'absolute', bottom: 0 }}>
+        <div
+          style={{
+            width: 30,
+            position: 'absolute',
+            height: '108%'
+          }}
+        >
           {isFromBot() && webchatState.theme.botLogoChat ? (
             <webchatState.theme.botLogoChat />
           ) : (
-            isFromBot() && <img style={{ width: 24 }} src={Logo} />
+            isFromBot() && (
+              <img
+                style={{
+                  margin: 'auto',
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0
+                }}
+                src={Logo}
+              />
+            )
           )}
         </div>
 
@@ -175,6 +191,7 @@ export const Message = props => {
           {isFromBot() && blob && (
             <div
               style={{
+                ...pointerStyles,
                 left: 0,
                 borderLeft: 0,
                 borderRightColor: getBgColor(),
