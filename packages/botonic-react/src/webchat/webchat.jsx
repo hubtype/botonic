@@ -378,7 +378,6 @@ export const Webchat = forwardRef((props, ref) => {
               height: 36,
               flex: 'none'
             }}
-            value={true}
             onChange={() => {
               toggleWebchat(false)
             }}

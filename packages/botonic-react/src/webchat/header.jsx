@@ -70,7 +70,7 @@ export const DefaultHeader = props => {
 
 export const WebchatHeader = () => {
   const { webchatState } = useContext(WebchatContext)
-  const handleCloseWebchat = event => {
+  const handleCloseWebchat = () => {
     props.onChange(event.target.value)
   }
   if (webchatState.theme.customHeader) {
