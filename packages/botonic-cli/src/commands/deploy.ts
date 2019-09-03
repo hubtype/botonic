@@ -27,11 +27,11 @@ Uploading...
   static flags = {
     force: flags.boolean({
       char: 'f',
-      description: 'Force deploy despite of no changes. Disabled by default',
+      description: 'Force deploy despite of no changes. Disabled by default'
     }),
     command: flags.string({
       char: 'c',
-      description: 'Command to execute from the package "scripts" object',
+      description: 'Command to execute from the package "scripts" object'
     }),
     botName: flags.string()
   }
@@ -257,7 +257,10 @@ Uploading...
   }
 
   async deploy() {
-    let build_out = await this.botonicApiService.buildIfChanged(force, npmCommand)
+    let build_out = await this.botonicApiService.buildIfChanged(
+      force,
+      npmCommand
+    )
     if (!build_out) {
       track('Deploy Botonic Build Error')
       console.log(colors.red('There was a problem building the bot'))
@@ -332,11 +335,7 @@ Uploading...
       let providers_resp = await this.botonicApiService.getProviders()
       let providers = providers_resp.data.results
       if (!providers.length) {
-        let links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${
-          this.botonicApiService.bot.id
-        }/integrations?access_token=${
-          this.botonicApiService.oauth.access_token
-        }`
+        let links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
         console.log(links)
       } else {
         this.displayProviders(providers)
