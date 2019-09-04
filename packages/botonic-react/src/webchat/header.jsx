@@ -30,7 +30,7 @@ const Diffuse = styled(Flex)`
 export const DefaultHeader = props => {
   let HeaderImage = props.webchatState.theme.headerImage
   let headerTitle = props.webchatState.theme.headerTitle
-  headerTitle ? headerTitle : (headerTitle = 'Botonic')
+  headerTitle = headerTitle || 'Botonic'
   let headerSubtitle = props.webchatState.theme.headerSubtitle
   return (
     <Diffuse color={props.color}>
