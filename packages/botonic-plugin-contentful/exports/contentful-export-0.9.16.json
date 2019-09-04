@@ -1,0 +1,2573 @@
+{
+  "contentTypes": [
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "button",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.402Z",
+        "updatedAt": "2019-09-04T09:16:28.066Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:28.066Z",
+        "firstPublishedAt": "2019-09-04T09:16:28.066Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Button",
+      "description": "",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Code",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "text",
+          "name": "Text",
+          "type": "Symbol",
+          "localized": true,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "target",
+          "name": "Target",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkContentType": [
+                "carousel",
+                "payload",
+                "text",
+                "url"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "text",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.404Z",
+        "updatedAt": "2019-09-04T09:16:28.535Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:28.535Z",
+        "firstPublishedAt": "2019-09-04T09:16:28.535Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Text",
+      "description": "A text optionally with buttons",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Code",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "shortText",
+          "name": "Short Text",
+          "type": "Symbol",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "text",
+          "name": "Text",
+          "type": "Text",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "buttons",
+          "name": "Buttons",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "button",
+                  "text",
+                  "url",
+                  "carousel"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "buttonsStyle",
+          "name": "Buttons Style",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "in": [
+                "Buttons",
+                "QuickReplies"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "followup",
+          "name": "Optional Follow up",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "text",
+                "carousel",
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "keywords",
+          "name": "Keywords",
+          "type": "Array",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Symbol",
+            "validations": [
+              {
+                "size": {
+                  "min": 2,
+                  "max": 128
+                },
+                "message": "Each keyword should have between 2 & 128 characters"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "element",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.411Z",
+        "updatedAt": "2019-09-04T09:16:28.966Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:28.966Z",
+        "firstPublishedAt": "2019-09-04T09:16:28.966Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "subtitle",
+      "name": "Element",
+      "description": "Image with text and a button displayed on a Carousel",
+      "fields": [
+        {
+          "id": "title",
+          "name": "Title",
+          "type": "Symbol",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "subtitle",
+          "name": "Subtitle",
+          "type": "Text",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "pic",
+          "name": "Image",
+          "type": "Link",
+          "localized": true,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ],
+              "message": "Unsupported Image format"
+            },
+            {
+              "assetFileSize": {
+                "max": 1048576
+              },
+              "message": "Please reduce the image size so that it can load faster"
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "buttons",
+          "name": "Buttons",
+          "type": "Array",
+          "localized": false,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "button",
+                  "text",
+                  "url",
+                  "carousel"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "url",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.436Z",
+        "updatedAt": "2019-09-04T09:16:22.587Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:22.587Z",
+        "firstPublishedAt": "2019-09-04T09:16:22.587Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "URL",
+      "description": "",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "url",
+          "name": "url",
+          "type": "Symbol",
+          "localized": true,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            },
+            {
+              "regexp": {
+                "pattern": "^(ftp|http|https):\\/\\/(\\w+:{0,1}\\w*@)?(\\S+)(:[0-9]+)?(\\/|\\/([\\w#!:.?+=&%@!\\-\\/]))?$"
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "keywords",
+          "name": "Keywords",
+          "type": "Array",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Symbol",
+            "validations": [
+            ]
+          }
+        },
+        {
+          "id": "shortText",
+          "name": "Short Text",
+          "type": "Symbol",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "carousel",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.440Z",
+        "updatedAt": "2019-09-04T09:16:29.984Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:29.984Z",
+        "firstPublishedAt": "2019-09-04T09:16:29.984Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Carousel",
+      "description": "",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Code",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "shortText",
+          "name": "Short Text",
+          "type": "Symbol",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "elements",
+          "name": "Elements",
+          "type": "Array",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "size": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "element"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "keywords",
+          "name": "Keywords",
+          "type": "Array",
+          "localized": true,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Symbol",
+            "validations": [
+              {
+                "size": {
+                  "min": 2,
+                  "max": 128
+                },
+                "message": "Each keyword should have between 2 & 128 characters"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "image",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.462Z",
+        "updatedAt": "2019-09-04T09:16:29.435Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:29.435Z",
+        "firstPublishedAt": "2019-09-04T09:16:29.435Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Image",
+      "description": "Simple image. Maximum size set to 1MB to ensure it loads quickly",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ],
+              "message": "Not supported image type"
+            },
+            {
+              "assetFileSize": {
+                "max": 1048576
+              },
+              "message": "Images must be smaller than 1MB to ensure it loads quickly"
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "daySchedule",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.751Z",
+        "updatedAt": "2019-09-04T09:16:23.144Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:23.144Z",
+        "firstPublishedAt": "2019-09-04T09:16:23.144Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Day Schedule",
+      "description": "A list of hour ranges for a specific date",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "date",
+          "name": "Date",
+          "type": "Date",
+          "localized": false,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "hourRanges",
+          "name": "Hour ranges",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "schedule",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.773Z",
+        "updatedAt": "2019-09-04T09:16:24.304Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:24.304Z",
+        "firstPublishedAt": "2019-09-04T09:16:24.304Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Schedule",
+      "description": "",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "mondays",
+          "name": "Mondays",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "tuesdays",
+          "name": "Tuesdays",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "wednesdays",
+          "name": "Wednesdays",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "thursdays",
+          "name": "Thursdays",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "fridays",
+          "name": "Fridays",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "saturdays",
+          "name": "Saturdays",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "sundays",
+          "name": "Sundays",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "hourRange"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        },
+        {
+          "id": "exceptions",
+          "name": "Exceptions",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "daySchedule"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "searchableByKeywords",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.788Z",
+        "updatedAt": "2019-09-04T09:16:25.068Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:25.068Z",
+        "firstPublishedAt": "2019-09-04T09:16:25.068Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Searchable By Keywords",
+      "description": null,
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "keywords",
+          "name": "Keywords",
+          "type": "Array",
+          "localized": true,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Symbol",
+            "validations": [
+            ]
+          }
+        },
+        {
+          "id": "priority",
+          "name": "Priority",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "hourRange",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:19.807Z",
+        "updatedAt": "2019-09-04T09:16:23.662Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:23.662Z",
+        "firstPublishedAt": "2019-09-04T09:16:23.662Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Hour Range",
+      "description": "",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "fromHour",
+          "name": "From hour",
+          "type": "Integer",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "range": {
+                "min": 0,
+                "max": 23
+              },
+              "message": "Please specify a valid hour (from 0 to 23)"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "fromMinute",
+          "name": "From minute",
+          "type": "Integer",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "range": {
+                "min": 0,
+                "max": 59
+              },
+              "message": "Please specify a valide minute (0 to 59)"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "toHour",
+          "name": "To hour",
+          "type": "Integer",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "range": {
+                "min": 0,
+                "max": 23
+              },
+              "message": "Please specifiy a valid hour (from 0 to 23)"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "toMinute",
+          "name": "To minute",
+          "type": "Integer",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "range": {
+                "min": 0,
+                "max": 59
+              },
+              "message": "Please specify a valid minute (0 to 59)"
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "dateRange",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:21.539Z",
+        "updatedAt": "2019-09-04T09:16:26.371Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:26.371Z",
+        "firstPublishedAt": "2019-09-04T09:16:26.371Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Time Range",
+      "description": "Time between 2 moments",
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "from",
+          "name": "Start moment",
+          "type": "Date",
+          "localized": false,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "to",
+          "name": "End moment",
+          "type": "Date",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "queue",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:21.629Z",
+        "updatedAt": "2019-09-04T09:16:27.098Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:27.098Z",
+        "firstPublishedAt": "2019-09-04T09:16:27.098Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "name",
+      "name": "Desk Queue",
+      "description": null,
+      "fields": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "shortText",
+          "name": "Short Text",
+          "type": "Symbol",
+          "localized": true,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "queue",
+          "name": "Botonic Queue Name",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
+          "id": "schedule",
+          "name": "Schedule",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkContentType": [
+                "schedule"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Entry"
+        },
+        {
+          "id": "searchableBy",
+          "name": "Searchable by",
+          "type": "Array",
+          "localized": false,
+          "required": false,
+          "validations": [
+          ],
+          "disabled": false,
+          "omitted": false,
+          "items": {
+            "type": "Link",
+            "validations": [
+              {
+                "linkContentType": [
+                  "searchableByKeywords"
+                ]
+              }
+            ],
+            "linkType": "Entry"
+          }
+        }
+      ]
+    },
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "id": "payload",
+        "type": "ContentType",
+        "createdAt": "2019-09-04T09:16:22.087Z",
+        "updatedAt": "2019-09-04T09:16:27.632Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 1,
+        "publishedAt": "2019-09-04T09:16:27.632Z",
+        "firstPublishedAt": "2019-09-04T09:16:27.632Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 2,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        }
+      },
+      "displayField": "payload",
+      "name": "payload",
+      "description": "Identifies an action that will be internally triggered by the bot. Do not change the value",
+      "fields": [
+        {
+          "id": "payload",
+          "name": "payload",
+          "type": "Symbol",
+          "localized": false,
+          "required": true,
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        }
+      ]
+    }
+  ],
+  "editorInterfaces": [
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:28.211Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:34.785Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "button",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "settings": {
+            "helpText": "The Code will be displayed in logs and reports. It's recommended to set it with the same value as the target's Code."
+          },
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "text",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "target",
+          "settings": {
+            "helpText": "The content to be fetched when the button is pressed"
+          },
+          "widgetId": "entryLinkEditor",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:28.681Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:34.899Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "text",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "settings": {
+            "helpText": "The Code will be displayed in logs and reports. Once set, it should not be changed"
+          },
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "shortText",
+          "settings": {
+            "helpText": "Appears in buttons that lead to the Text"
+          },
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "text",
+          "widgetId": "markdown",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "buttons",
+          "settings": {
+            "helpText": "When not using QuickReply style, a maximum of 3 buttons can be defined",
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "buttonsStyle",
+          "settings": {
+            "helpText": "Buttons (the default) appear within a panel. QuickReplies are displayed independently"
+          },
+          "widgetId": "radio",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "followup",
+          "widgetId": "entryLinkEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "keywords",
+          "settings": {
+            "helpText": "When user types any of these keywords, a button with its ShortText will be displayed. Separate them with commas"
+          },
+          "widgetId": "tagEditor",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:29.138Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:32.857Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "element",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "title",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "subtitle",
+          "widgetId": "markdown",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "pic",
+          "widgetId": "assetLinkEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "buttons",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:22.714Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:34.595Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "url",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "url",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "keywords",
+          "widgetId": "tagEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "shortText",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:30.176Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:32.498Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "carousel",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "settings": {
+            "helpText": "The code will be displayed in logs and reports. Once set, it should not be changed"
+          },
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "shortText",
+          "settings": {
+            "helpText": "Appears in buttons that lead to the carousel"
+          },
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "elements",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "keywords",
+          "settings": {
+            "helpText": "When user types any of these keywords, the carousel will open. Separate them with commas"
+          },
+          "widgetId": "listInput",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:29.561Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:32.865Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "image",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "image",
+          "widgetId": "assetLinkEditor",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:23.270Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:34.645Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "daySchedule",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "date",
+          "settings": {
+            "format": "dateonly"
+          },
+          "widgetId": "datePicker",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "hourRanges",
+          "settings": {
+            "helpText": "Leave blank for days with no service",
+            "bulkEditing": true
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:24.433Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:32.841Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "schedule",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "mondays",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "tuesdays",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "wednesdays",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "thursdays",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "fridays",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "saturdays",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "sundays",
+          "settings": {
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "exceptions",
+          "settings": {
+            "helpText": "Dates with different schedules",
+            "bulkEditing": false
+          },
+          "widgetId": "entryLinksEditor",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:25.205Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:34.562Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "searchableByKeywords",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "keywords",
+          "widgetId": "tagEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "priority",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:23.794Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:32.493Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "hourRange",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "fromHour",
+          "widgetId": "numberEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "fromMinute",
+          "widgetId": "numberEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "toHour",
+          "widgetId": "numberEditor",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "toMinute",
+          "widgetId": "numberEditor",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:26.520Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:32.539Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "dateRange",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "from",
+          "settings": {
+            "ampm": "24",
+            "format": "timeZ",
+            "helpText": "Moment at which the period starts"
+          },
+          "widgetId": "datePicker",
+          "widgetNamespace": "builtin"
+        },
+        {
+          "fieldId": "to",
+          "settings": {
+            "ampm": "24",
+            "format": "timeZ",
+            "helpText": "Moment at which the period ends"
+          },
+          "widgetId": "datePicker",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:27.237Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:34.860Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "queue",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "name",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "shortText",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "queue",
+          "widgetId": "singleLine"
+        },
+        {
+          "fieldId": "schedule",
+          "widgetId": "entryLinkEditor"
+        },
+        {
+          "fieldId": "searchableBy",
+          "widgetId": "entryLinksEditor"
+        }
+      ]
+    },
+    {
+      "sys": {
+        "id": "default",
+        "type": "EditorInterface",
+        "space": {
+          "sys": {
+            "id": "7zhtlol4pmuv",
+            "type": "Link",
+            "linkType": "Space"
+          }
+        },
+        "version": 2,
+        "createdAt": "2019-09-04T09:16:27.777Z",
+        "createdBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "updatedAt": "2019-09-04T09:16:32.683Z",
+        "updatedBy": {
+          "sys": {
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ",
+            "type": "Link",
+            "linkType": "User"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "id": "payload",
+            "type": "Link",
+            "linkType": "ContentType"
+          }
+        },
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        }
+      },
+      "controls": [
+        {
+          "fieldId": "payload",
+          "widgetId": "singleLine",
+          "widgetNamespace": "builtin"
+        }
+      ]
+    }
+  ],
+  "locales": [
+    {
+      "name": "English (United States)",
+      "code": "en-US",
+      "fallbackCode": null,
+      "default": true,
+      "contentManagementApi": true,
+      "contentDeliveryApi": true,
+      "optional": false,
+      "sys": {
+        "type": "Locale",
+        "id": "62yb4zJHFDbTIfwFXNBsPu",
+        "version": 3,
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "7zhtlol4pmuv"
+          }
+        },
+        "environment": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Environment",
+            "id": "master"
+          }
+        },
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "createdAt": "2019-09-04T09:03:24Z",
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedAt": "2019-09-04T09:22:04Z"
+      }
+    }
+  ],
+  "webhooks": [
+  ]
+}
