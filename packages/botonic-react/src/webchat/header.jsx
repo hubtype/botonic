@@ -27,7 +27,7 @@ const Diffuse = styled(Flex)`
   height: 55px;
   border-radius: 6px 6px 0px 0px;
 `
-const CrossHeader = styled(Flex)`
+const CloseHeader = styled(Flex)`
   position: absolute;
   right: 10px;
   top: 14px;
@@ -63,14 +63,14 @@ export const DefaultHeader = props => {
         <HeaderTitle>{headerTitle}</HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
       </Flex>
-      <CrossHeader onClick={props.onChange}>X</CrossHeader>}
+      <CloseHeader onClick={props.onChange}>X</CloseHeader>}
     </Diffuse>
   )
 }
 
 export const WebchatHeader = () => {
   const { webchatState } = useContext(WebchatContext)
-  const handleCloseWebchat = () => {
+  const handleCloseWebchat = event => {
     props.onChange(event.target.value)
   }
   if (webchatState.theme.customHeader) {
