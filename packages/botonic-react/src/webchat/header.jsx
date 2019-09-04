@@ -9,7 +9,6 @@ const HeaderTitle = styled.h1`
   font-size: 15px;
   line-height: 22px;
   color: #ffffff;
-  margin-top: ${props => (props.headerSubtitle == undefined ? '18px' : 5)};
 `
 
 const Subtitle = styled.h1`
@@ -48,8 +47,8 @@ export const DefaultHeader = props => {
           />
         )}
       </Flex>
-      <Flex width={1} flexDirection='column'>
-        <HeaderTitle headerSubtitle={headerSubtitle}>{headerTitle}</HeaderTitle>
+      <Flex width={1} flexDirection='column' justifyContent='center'>
+        <HeaderTitle>{headerTitle}</HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
       </Flex>
     </Diffuse>
