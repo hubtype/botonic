@@ -63,15 +63,14 @@ export const DefaultHeader = props => {
         <HeaderTitle>{headerTitle}</HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
       </Flex>
-      <CloseHeader onClick={props.onChange}>X</CloseHeader>}
+      <CloseHeader onClick={props.onCloseClick}>X</CloseHeader>}
     </Diffuse>
   )
 }
-
 export const WebchatHeader = () => {
   const { webchatState } = useContext(WebchatContext)
   const handleCloseWebchat = event => {
-    props.onChange(event.target.value)
+    props.onCloseClick(event.target.value)
   }
   if (webchatState.theme.customHeader) {
     let CustomHeader = webchatState.theme.customHeader
@@ -82,7 +81,7 @@ export const WebchatHeader = () => {
     <DefaultHeader
       webchatState={webchatState}
       color={webchatState.theme.brandColor}
-      onChange={handleCloseWebchat}
+      onCloseClick={handleCloseWebchat}
     />
   )
 }
