@@ -26,26 +26,36 @@ const Diffuse = styled(Flex)`
   border-radius: 6px 6px 0px 0px;
 `
 
-export const DefaultHeader = props => (
-  <Diffuse color={props.color}>
-    <Flex width={1 / 4}>
-      <img
-        style={{
-          height: 24,
-          paddingTop: 15,
-          paddingLeft: 15
-        }}
-        src={Logo}
-      />
-    </Flex>
-    <Flex width={1} flexDirection='column'>
-      <HeaderTitle>Botonic</HeaderTitle>
-      <Subtitle>Online</Subtitle>
-    </Flex>
-  </Diffuse>
-)
+export const DefaultHeader = props => {
+  let HeaderImage = props.webchatState.theme.headerImage
+  let headerTitle = props.webchatState.theme.headerTitle
+  headerTitle = headerTitle || 'Botonic'
+  let headerSubtitle = props.webchatState.theme.headerSubtitle
+  return (
+    <Diffuse color={props.color}>
+      <Flex width={1 / 4}>
+        {HeaderImage ? (
+          <HeaderImage />
+        ) : (
+          <img
+            style={{
+              height: 24,
+              paddingTop: 15,
+              paddingLeft: 15
+            }}
+            src={Logo}
+          />
+        )}
+      </Flex>
+      <Flex width={1} flexDirection='column' justifyContent='center'>
+        <HeaderTitle>{headerTitle}</HeaderTitle>
+        <Subtitle>{headerSubtitle}</Subtitle>
+      </Flex>
+    </Diffuse>
+  )
+}
 
-export const WebchatHeader = props => {
+export const WebchatHeader = () => {
   const { webchatState } = useContext(WebchatContext)
 
   if (webchatState.theme.customHeader) {
@@ -53,5 +63,10 @@ export const WebchatHeader = props => {
     return <CustomHeader />
   }
 
-  return <DefaultHeader color={webchatState.theme.brandColor} />
+  return (
+    <DefaultHeader
+      webchatState={webchatState}
+      color={webchatState.theme.brandColor}
+    />
+  )
 }
