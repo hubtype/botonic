@@ -67,7 +67,7 @@ export const DefaultHeader = props => {
     </Diffuse>
   )
 }
-export const WebchatHeader = () => {
+export const WebchatHeader = props => {
   const { webchatState } = useContext(WebchatContext)
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
