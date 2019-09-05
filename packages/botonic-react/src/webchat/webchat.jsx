@@ -439,7 +439,7 @@ export const Webchat = forwardRef((props, ref) => {
                         marginRight: '8px',
                         cursor: 'pointer'
                       }}
-                      src={LogoMenu}
+                      src={staticAssetsUrl + LogoMenu}
                       onClick={() => handleMenu()}
                     />
                   </div>
