@@ -61,10 +61,11 @@ test('TEST: respondFoundContents text with chitchat', async () => {
     []
   );
 
-  // sut
   when(cms.text('foundId', CONTEXT)).thenResolve(
     new Text('foundName', 'foundText', [])
   );
+
+  //act
   const response = await sut.respondFoundContents(
     [chitchatCallback],
     'foundId',

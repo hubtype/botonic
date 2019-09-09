@@ -13,7 +13,7 @@ import { MatchType } from '../../src/nlp/keywords';
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result';
 
 const ES_CONTEXT = { locale: 'es' };
-test('TEST: suggestTextsForInput keywords found', async () => {
+test('TEST: searchContentsFromInput keywords found', async () => {
   const contents = [
     contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'devolucion plazo']),
     contentWithKeyword(Callback.ofPayload('p2'), ['devolución', 'kw2']),
@@ -35,7 +35,7 @@ test('TEST: suggestTextsForInput keywords found', async () => {
   expect(suggested).toIncludeSameMembers(expectedContents);
 });
 
-test('TEST: suggestTextsForInput no keywords found', async () => {
+test('TEST: searchContentsFromInput no keywords found', async () => {
   const keywords = keywordsWithMockCms(
     [contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'kw2'])],
     ES_CONTEXT
