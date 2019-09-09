@@ -127,3 +127,28 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   // assert
   expect(filtered).toBe(contents);
 });
+
+test('TEST treatChitChat: keyword is a stopword', async () => {
+  const keywords = keywordsWithMockCms(
+    [
+      chitchatContent(['hola']),
+      chitchatContent(['buenos dias']),
+    ],
+    CONTEXT
+  );
+
+  // hola is a stopword
+  const tokens = keywords.tokenize(LOCALE, 'Hola, buenos días.');
+  const contents = await keywords.searchContentsFromInput(
+    tokens,
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    { locale: LOCALE }
+  );
+  expect(contents).toHaveLength(1);
+
+  // act
+  const filtered = keywords.filterChitchat(tokens, contents);
+
+  // assert
+  expect(filtered).toBe(contents);
+});
