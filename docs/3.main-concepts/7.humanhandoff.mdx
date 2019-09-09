@@ -8,16 +8,27 @@ menu: 3. Main Concepts
 
 As bots aren’t perfects, we allow to transfer a conversation into an agent.
 
-To configure transfer the conversation into an agent, you must provide the `session` parameters and then the `queue_name` and `next_action`, which are optional, but recommended.
+To configure transfer the conversation into an agent, you must provide the `session` parameters and then the `queueName` and `onFinish`, which are optional, but recommended.
 
-The `queue_name` is the name of the queue where you want to transfer the conversation. If a queue with that name doesn't exist, it will transfer the chat into a random open queue.
+The `queueName` is the name of the queue where you want to transfer the conversation. If a queue with that name doesn't exist, it will transfer the chat into a random open queue.
 
-The `next_action` allows you to specify which is going to be the next action that the bot will follow after the conversation with the agent has finished.
+The `onFinish` allows you to specify a payload or a path in order to trigger the next action that the bot will follow after the conversation with the agent has finished.
 
-Here’s a simple example of how to transfer the conversation into the queue 'Support_Queue' and the next step of the bot will be an action called 'say_goodbye'.
+Here’s a simple example of how to transfer the conversation into the queue `Support_Queue` and the next step of the bot will be the action called `SayGoodbye` which will be triggered after receiving the payload `sayGoodbye` (which has to be defined in your `routes.js` file).
+
+**src/routes.js**
+
+```javascript
+import SayGoodbye from './actions/say-goodbye';
+import HumanHandoff from './actions/human-handoff.js'
+export const routes = [
+  { payload: 'sayGoodbye', action: SayGoodbye },
+  { text: 'handoff', action: HumanHandoff }
+];
+```
 
 > #### NOTE:
-> Right now the conversation is going to be transfer into Hubtype Desk, so the `queue_name` must be the name of a queue inside Hubtype Desk, but in the future it will be posible to transfer the chat into Zendesk, Front or another ticketing tools.
+> Right now the conversation is going to be transferred into Hubtype Desk, so the `queueName` must be the name of a queue inside Hubtype Desk, but in the future it will be posible to transfer the chat into Zendesk, Front or another ticketing tools.
 
 ```javascript
 import React from 'react'
@@ -27,7 +38,7 @@ import { humanHandOff } from '@botonic/core'
 export default class extends React.Component {
 
   static async botonicInit({ input, session, params, lastRoutePath }) {
-    await humanHandOff(session, 'Support_Queue', {action: 'say_goodbye'})
+    await humanHandOff(session, 'Support_Queue', { payload: 'sayGoodbye' })
   }
 
   render() {
@@ -68,8 +79,6 @@ export default class extends React.Component {
     }
   }
 }
-
-> #### NOTE:
-> Both features are only available when the bot is deployed. It's not supported in `botonic serve`
-
 ```
+> #### NOTE:
+> Both features are only available when the bot is deployed. You can only emulate the behaviour of `humanHandoff` with the `botonic serve` command.
