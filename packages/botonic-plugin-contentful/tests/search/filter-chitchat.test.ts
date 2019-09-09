@@ -5,7 +5,7 @@ import {
   chitchatContent,
   contentWithKeyword,
   keywordsWithMockCms
-} from './search-contents-from-input.test';
+} from './search-by-keywords.test';
 
 const LOCALE = 'es';
 const CONTEXT = { locale: LOCALE };
@@ -130,10 +130,7 @@ test('TEST treatChitChat: no chitchat detected', async () => {
 
 test('TEST treatChitChat: keyword is a stopword', async () => {
   const keywords = keywordsWithMockCms(
-    [
-      chitchatContent(['hola']),
-      chitchatContent(['buenos dias']),
-    ],
+    [chitchatContent(['hola']), chitchatContent(['buenos dias'])],
     CONTEXT
   );
 
@@ -150,5 +147,5 @@ test('TEST treatChitChat: keyword is a stopword', async () => {
   const filtered = keywords.filterChitchat(tokens, contents);
 
   // assert
-  expect(filtered).toBe(contents);
+  expect(filtered).toEqual(contents);
 });

@@ -1,3 +1,4 @@
+import { SimilarSearch } from 'node-nlp/lib/util';
 import { ContentCallback, ModelType } from '../../src/cms';
 import { SearchResult } from '../../src/search';
 import { testContentful, testContext } from './contentful.helper';
@@ -44,4 +45,9 @@ test('TEST: contentful contentsWithKeywords', async () => {
     'no encuentro mi pedido',
     'donde esta mi pedido'
   ]);
+});
+
+test('TEST: similar', () => {
+  const search = new SimilarSearch({ normalize: true });
+  expect(search.getSimilarity('factura', 'fastura')).toEqual(1);
 });
