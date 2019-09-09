@@ -4,13 +4,17 @@ import { MatchType } from '../../src/nlp/keywords';
 
 test('hack because webstorm does not recognize test.each', () => {});
 
-function testFindKeywords(locale: string, matchType: MatchType) {
+function testFindKeywords(
+  locale: string,
+  matchType: MatchType,
+  maxDistance = 0
+) {
   return (
     inputText: string,
     keywordsByCandidate: { [index: string]: string[] },
     expectedMatch: string[]
   ) => {
-    const parser = new KeywordsParser(locale, matchType);
+    const parser = new KeywordsParser(locale, matchType, { maxDistance });
 
     for (const candidate in keywordsByCandidate) {
       parser.addCandidate(candidate, keywordsByCandidate[candidate]);
@@ -20,6 +24,26 @@ function testFindKeywords(locale: string, matchType: MatchType) {
     expect(foundNames).toIncludeSameMembers(expectedMatch);
   };
 }
+
+test.each<any>([
+  ['quiero realiSar un pedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
+  ['venga realizarpedido', { A: ['realizar pedido', 'comprar'] }, ['A']]
+])(
+  'TEST: find similar keywords of "%s" with KEYWORDS_AND_OTHERS_FOUND',
+  testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 1)
+);
+
+test.each<any>([
+  // found with multiword keyword
+  ['realizar', { A: ['realizar pedido', 'comprar'] }, []],
+  ['realiSar un pedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
+  ['realizarpedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
+  ['pedido', { A: ['realizar pedido', 'comprar'] }, []]
+])(
+  'TEST: find similar keywords of "%s" with ONLY_KEYWORDS_FOUND',
+  testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 1)
+);
+
 
 test.each<any>([
   // found at start with multiword keyword
@@ -71,6 +95,7 @@ test.each<any>([
   'TEST: find keywords of "%s" with ONLY_KEYWORDS_FOUND',
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND)
 );
+
 
 test.each<any>([
   // exact words
