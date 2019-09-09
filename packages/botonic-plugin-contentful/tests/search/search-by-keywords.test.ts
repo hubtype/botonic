@@ -35,6 +35,21 @@ test('TEST: searchContentsFromInput keywords found', async () => {
   expect(suggested).toIncludeSameMembers(expectedContents);
 });
 
+test('TEST: searchContentsFromInput similar', async () => {
+  const contents = [contentWithKeyword(Callback.ofPayload('p1'), ['tax free'])];
+  const keywords = keywordsWithMockCms(contents, ES_CONTEXT);
+
+  // act
+  const suggested = await keywords.searchContentsFromInput(
+    keywords.tokenize('es', 'Quiero el tas free'),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    ES_CONTEXT
+  );
+
+  // assert
+  expect(suggested).toEqual(contents);
+});
+
 test('TEST: searchContentsFromInput no keywords found', async () => {
   const keywords = keywordsWithMockCms(
     [contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'kw2'])],
