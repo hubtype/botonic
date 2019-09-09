@@ -383,9 +383,9 @@ export const Webchat = forwardRef((props, ref) => {
             style={{ flex: 1 }}
             messages={webchatState.messagesComponents}
           >
-            {webchatState.typing && <TypingIndicator />}
             <div id='messages-end' />
           </WebchatMessageList>
+          {webchatState.typing && <TypingIndicator />}
           {webchatState.replies && (
             <WebchatReplies
               replies={webchatState.replies}
