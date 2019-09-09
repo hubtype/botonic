@@ -404,6 +404,7 @@ export const Webchat = forwardRef((props, ref) => {
                   <Button
                     onClick={closeMenu}
                     url={e.url}
+                    webview={e.webview}
                     payload={e.payload}
                     key={i}
                   >
