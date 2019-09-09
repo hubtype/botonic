@@ -20,3 +20,17 @@ export function substringIsBlankSeparated(
   }
   return true;
 }
+
+export function countOccurrences(haystack: string, needle: string): number {
+  let n = 0;
+  let pos = 0;
+
+  while (true) {
+    pos = haystack.indexOf(needle, pos);
+    if (pos >= 0) {
+      ++n;
+      pos += needle.length;
+    } else break;
+  }
+  return n;
+}
