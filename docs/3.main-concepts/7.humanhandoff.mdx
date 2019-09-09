@@ -14,7 +14,7 @@ The `queueName` is the name of the queue where you want to transfer the conversa
 
 The `onFinish` allows you to specify a payload or a path in order to trigger the next action that the bot will follow after the conversation with the agent has finished.
 
-Here’s a simple example of how to transfer the conversation into the queue `Support_Queue` and the next step of the bot will be the action called `SayGoodbye` which will be triggered after receiving the payload `sayGoodbye` (which has to be defined in your `routes.js` file).
+Here’s a simple example of how to transfer the conversation into the queue `Support_Queue`. The next step of the bot will be the action called `SayGoodbye` which will be triggered after receiving the payload `sayGoodbye` (which has to be defined in your `routes.js` file).
 
 **src/routes.js**
 
@@ -28,7 +28,7 @@ export const routes = [
 ```
 
 > #### NOTE:
-> Right now the conversation is going to be transferred into Hubtype Desk, so the `queueName` must be the name of a queue inside Hubtype Desk, but in the future it will be posible to transfer the chat into Zendesk, Front or another ticketing tools.
+> Right now the conversation is going to be transferred into Hubtype Desk, so the `queueName` must be the name of a queue inside Hubtype Desk. In the future it will be posible to transfer the chat into Zendesk, Front or other ticketing tools.
 
 ```javascript
 import React from 'react'
@@ -81,4 +81,5 @@ export default class extends React.Component {
 }
 ```
 > #### NOTE:
-> Both features are only available when the bot is deployed. You can only emulate the behaviour of `humanHandoff` with the `botonic serve` command.
+> Both features are only available when the bot is deployed. 
+When you are in development mode (`botonic serve` command), you can press the button 'Continue' in order to emulate the resolution of a case.
