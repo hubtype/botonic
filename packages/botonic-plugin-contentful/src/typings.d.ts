@@ -1,8 +1,41 @@
+declare module 'node-nlp/lib/util' {
+  export interface WordPosition {
+    start: number;
+    end: number;
+    len: number;
+  }
+
+  export interface BestSubstringResult {
+    start: number;
+    /** end is INCLUSIVE */
+    end: number;
+    len: number;
+    levenshtein: number;
+    accuracy: number;
+  }
+
+  export class SimilarSearch {
+    constructor(settings: { normalize: boolean });
+
+    getWordPositions(str: string): WordPosition[];
+
+    getSimilarity(str1: string, str2: string): number;
+
+    getBestSubstringList(
+      str1: string,
+      str2: string,
+      words1: WordPosition[] | undefined,
+      threshold: number
+    ): BestSubstringResult[];
+  }
+}
+
 declare module 'node-nlp/lib/nlp/tokenizers' {
   export class Tokenizer {
     tokenize(text: string): string[];
   }
 }
+
 declare module 'node-nlp/lib/nlp/stemmers' {
   export class BaseStemmer {
     tokenizeAndStem(str: string, keepStops: boolean): string[];
@@ -12,8 +45,10 @@ declare module 'node-nlp/lib/nlp/stemmers' {
 declare module 'node-nlp/lib/nlp/nlp-util' {
   import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
   import { BaseStemmer } from 'node-nlp/lib/nlp/stemmers';
+
   class NlpUtil {
     static getStemmer(locale: string): BaseStemmer;
+
     static getTokenizer(locale: string): Tokenizer;
   }
 
@@ -22,7 +57,9 @@ declare module 'node-nlp/lib/nlp/nlp-util' {
 declare module 'node-nlp/lib/nlp/tokenizers/punct-tokenizer' {
   import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
 
-  class PunctTokenizer extends Tokenizer {}
+  class PunctTokenizer extends Tokenizer {
+  }
+
   export = PunctTokenizer;
 }
 
@@ -32,6 +69,7 @@ declare module 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer-es' {
   class PorterStemmer {
     tokenizeAndStem(str: string, keepStops: boolean): string[];
   }
+
   const stemmer: PorterStemmer;
   export = stemmer;
 }
@@ -41,8 +79,10 @@ declare module 'node-nlp/lib/nlp/stemmers/catalan-stemmer' {
 
   class CatalanStemmer {
     constructor(tokenizer: Tokenizer);
+
     tokenizeAndStem(str: string, keepStops: boolean): string[];
   }
+
   export = CatalanStemmer;
 }
 
@@ -51,8 +91,10 @@ declare module 'node-nlp/lib/nlp/stemmers/spanish-stemmer' {
 
   class SpanishStemmer {
     constructor(tokenizer: Tokenizer);
+
     tokenizeAndStem(str: string, keepStops: boolean): string[];
   }
+
   export = SpanishStemmer;
 }
 
@@ -60,6 +102,7 @@ declare module 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer' {
   class PorterStemmer {
     tokenizeAndStem(str: string, keepStops: boolean): string[];
   }
+
   const stemmer: PorterStemmer;
   export = stemmer;
 }
@@ -68,6 +111,7 @@ declare module 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer-pt' {
   class PorterStemmer {
     tokenizeAndStem(str: string, keepStops: boolean): string[];
   }
+
   const stemmer: PorterStemmer;
   export = stemmer;
 }

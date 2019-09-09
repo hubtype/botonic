@@ -2,7 +2,7 @@ import { Locale } from './index';
 import { tokenizeAndStem } from './node-nlp';
 import { substringIsBlankSeparated } from './tokens';
 
-class CandidateWithKeywords<M> {
+export class CandidateWithKeywords<M> {
   constructor(readonly owner: M, readonly keywords: string[]) {}
 }
 
