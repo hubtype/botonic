@@ -10,16 +10,19 @@ import {
 export class SearchResult {
   static CHITCHAT_SHORT_TEXT = 'chitchat';
 
+  /**
+   * @param callback It may be a {@link Callback}'s with an URL instead of payload
+   * @param match part of the input which match against a recognized text
+   * TODO group args about content & args about match separately. make match compulsory
+   */
   constructor(
-    /**
-     * It may be a {@link Callback}'s with an URL instead of payload
-     */
     readonly callback: Callback,
     readonly name: string,
     readonly shortText?: string,
     readonly keywords: string[] = [],
     readonly priority = PRIORITY_MAX,
-    readonly score = SCORE_MAX
+    readonly score = SCORE_MAX,
+    readonly match?: string
   ) {}
 
   toButton(): Button {

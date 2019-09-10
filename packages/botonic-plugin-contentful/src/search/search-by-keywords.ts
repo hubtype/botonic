@@ -1,7 +1,7 @@
 import { Context } from '../cms';
 import * as cms from '../cms';
 import { Locale, tokenizeAndStem } from '../nlp';
-import { KeywordsParser, MatchType } from '../nlp/keywords';
+import { KeywordsOptions, KeywordsParser, MatchType } from '../nlp/keywords';
 import { checkLocale } from '../nlp/locales';
 import { SearchResult } from './search-result';
 
@@ -19,13 +19,21 @@ export class SearchByKeywords {
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale);
     const contentsWithKeywords = await this.cms.contentsWithKeywords(context);
-    const kws = new KeywordsParser<SearchResult>(locale, matchType, {
-      maxDistance: 1
-    });
+    const kws = new KeywordsParser<SearchResult>(
+      locale,
+      matchType,
+      new KeywordsOptions(1)
+    );
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.keywords!)
     );
-    return kws.findCandidatesWithKeywordsAt(inputTextTokens);
+    const results = kws.findCandidatesWithKeywordsAt(inputTextTokens);
+    return results.map(res => {
+      const candidate = res.candidate as SearchResult;
+      // @ts-ignore
+      candidate.match = res.match;
+      return candidate;
+    });
   }
 
   /**
