@@ -20,6 +20,7 @@ export const caDefaultStopWords = [
   'poc','poca','pocs','poques',
   'tú','te','et','ti',
   'hi',
+  'és', 'està',
   'hola'
 ];
 
