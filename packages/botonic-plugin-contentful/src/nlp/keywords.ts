@@ -1,6 +1,6 @@
 import { Locale } from './index';
 import { tokenizeAndStem } from './node-nlp';
-import { SimilarWordFinder } from './similar-words';
+import { SimilarWordFinder, SimilarWordResult } from './similar-words';
 
 export class CandidateWithKeywords<M> {
   constructor(readonly owner: M, readonly keywords: string[]) {}
@@ -17,8 +17,16 @@ export enum MatchType {
 
 export const MATCH_TYPES = Object.values(MatchType).map(m => m as MatchType);
 
+export enum SortType {
+  NONE,
+  LENGTH
+}
+
 export class KeywordsOptions {
-  constructor(readonly maxDistance = 0) {}
+  constructor(
+    readonly maxDistance = 0,
+    readonly resultsSortType = SortType.LENGTH
+  ) {}
 }
 
 export class KeywordsParser<M> {
@@ -49,38 +57,52 @@ export class KeywordsParser<M> {
     this.similar.addCandidate(candidateWithK);
   }
 
-  findCandidatesWithKeywordsAt(stemmedTokens: string[]): M[] {
+  findCandidatesWithKeywordsAt(
+    stemmedTokens: string[]
+  ): SimilarWordResult<M>[] {
     const joinedTokens = stemmedTokens.join(' ');
+    let results: SimilarWordResult<M>[] = [];
     switch (this.matchType) {
-      case MatchType.ONLY_KEYWORDS_FOUND: {
-        const results = this.similar.findSimilarKeyword(joinedTokens);
-        return results.map(swr => swr.candidate.owner);
-      }
-      case MatchType.KEYWORDS_AND_OTHERS_FOUND: {
-        const results = this.similar.findSubstring(
+      case MatchType.ONLY_KEYWORDS_FOUND:
+        results = this.similar.findSimilarKeyword(
           joinedTokens,
           this.options.maxDistance
         );
-        return results.map(swr => swr.candidate.owner);
-      }
-      case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP: {
-        if (this.options.maxDistance > 0) {
-          throw new Error(
-            'ALL_WORDS_IN_KEYWORDS_MIXED_UP does not support distance> 0'
-          );
+        break;
+      case MatchType.KEYWORDS_AND_OTHERS_FOUND:
+        results = this.similar.findSubstring(
+          joinedTokens,
+          this.options.maxDistance
+        );
+        break;
+      case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
+        results = this.mixedUp(joinedTokens);
+    }
+    return this.sort(results);
+  }
+
+  private mixedUp(joinedTokens: string) {
+    if (this.options.maxDistance > 0) {
+      throw new Error(
+        'ALL_WORDS_IN_KEYWORDS_MIXED_UP does not support distance> 0'
+      );
+    }
+    const results: SimilarWordResult<M>[] = [];
+    for (const candidate of this.candidates) {
+      for (const keyword of candidate.keywords) {
+        if (this.containsAllWordsInKeyword(joinedTokens, keyword)) {
+          results.push(new SimilarWordResult<M>(candidate.owner, keyword, 0));
         }
-        const matches = [];
-        for (const candidate of this.candidates) {
-          for (const keyword of candidate.keywords) {
-            if (this.containsAllWordsInKeyword(joinedTokens, keyword)) {
-              matches.push(candidate.owner);
-              break;
-            }
-          }
-        }
-        return matches;
       }
     }
+    return results;
+  }
+
+  private sort(results: SimilarWordResult<M>[]) {
+    if (this.options.resultsSortType === SortType.NONE) {
+      return results;
+    }
+    return results.sort((r1, r2) => r2.match.length - r1.match.length);
   }
 
   private containsAllWordsInKeyword(
