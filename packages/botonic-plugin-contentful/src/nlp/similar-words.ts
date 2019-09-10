@@ -4,7 +4,8 @@ import { countOccurrences } from './tokens';
 
 export class SimilarWordResult<M> {
   constructor(
-    readonly candidate: CandidateWithKeywords<M>,
+    readonly candidate: M,
+    readonly match: string,
     readonly distance: number
   ) {}
 }
@@ -27,7 +28,7 @@ export class SimilarWordFinder<M> {
 
   findSimilarKeyword(
     sentence: string,
-    maxDistance = 1
+    maxDistance: number
   ): SimilarWordResult<M>[] {
     const results = [];
     for (const candidate of this.candidates) {
@@ -43,33 +44,35 @@ export class SimilarWordFinder<M> {
           distance <= maxDistance ||
           this.stemmedDecorator.verify(sentence, keyword)
         ) {
-          results.push(new SimilarWordResult(candidate, distance));
+          results.push(
+            new SimilarWordResult<M>(candidate.owner, sentence, distance)
+          );
         }
       }
     }
 
-    return this.sortByDistance(results);
+    return this.getLongestResultPerCandidate(results);
   }
 
-  private sortByDistance(
+  private getLongestResultPerCandidate(
     results: SimilarWordResult<M>[]
   ): SimilarWordResult<M>[] {
     const sorted = results.sort(
       (a: SimilarWordResult<M>, b: SimilarWordResult<M>) =>
-        a.distance - b.distance
+        a.match.length - b.match.length
     );
     // avoid duplicates
     const uniq = [];
     const findBefore = (needle: M, before: number) => {
       for (let prev = before - 1; prev >= 0; prev--) {
-        if (sorted[prev].candidate.owner === needle) {
+        if (sorted[prev].candidate === needle) {
           return true;
         }
       }
       return false;
     };
     for (let i = sorted.length - 1; i >= 0; i--) {
-      if (!findBefore(sorted[i].candidate.owner, i)) {
+      if (!findBefore(sorted[i].candidate, i)) {
         uniq.push(sorted[i]);
       }
     }
@@ -94,23 +97,22 @@ export class SimilarWordFinder<M> {
           const bestSubstr = substrings.sort(
             (s1, s2) => s2.accuracy - s1.accuracy
           )[0];
-          substrings.forEach(ss => console.log(sentence.slice(ss.start, ss.end+1), keyword));
+          const match = sentence.slice(bestSubstr.start, bestSubstr.end + 1);
           const distance =
             keyword.length - bestSubstr.accuracy * keyword.length;
           if (
             distance <= maxDistance ||
-            this.stemmedDecorator.verify(
-              sentence.slice(bestSubstr.start, bestSubstr.end + 1),
-              keyword
-            )
+            this.stemmedDecorator.verify(match, keyword)
           ) {
-            results.push(new SimilarWordResult<M>(candidate, distance));
+            results.push(
+              new SimilarWordResult<M>(candidate.owner, match, distance)
+            );
           }
         }
       }
     }
 
-    return this.sortByDistance(results);
+    return this.getLongestResultPerCandidate(results);
   }
 
   //TODO
@@ -140,7 +142,6 @@ class StemmedExtraDistance {
     const words = keyword.split(' ');
     for (const word of words) {
       if (!sentence.includes(word)) {
-        console.log(`not included ${word} in ${sentence}`);
         return false;
       }
     }
