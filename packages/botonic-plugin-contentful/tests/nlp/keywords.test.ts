@@ -1,6 +1,6 @@
 import 'jest-extended';
 import { KeywordsParser, tokenizeAndStem } from '../../src/nlp';
-import { MatchType } from '../../src/nlp/keywords';
+import { KeywordsOptions, MatchType } from '../../src/nlp/keywords';
 
 test('hack because webstorm does not recognize test.each', () => {});
 
@@ -14,14 +14,18 @@ function testFindKeywords(
     keywordsByCandidate: { [index: string]: string[] },
     expectedMatch: string[]
   ) => {
-    const parser = new KeywordsParser(locale, matchType, { maxDistance });
+    const parser = new KeywordsParser<string>(
+      locale,
+      matchType,
+      new KeywordsOptions(maxDistance)
+    );
 
     for (const candidate in keywordsByCandidate) {
       parser.addCandidate(candidate, keywordsByCandidate[candidate]);
     }
     const tokens = tokenizeAndStem(locale, inputText);
-    const foundNames = parser.findCandidatesWithKeywordsAt(tokens);
-    expect(foundNames).toIncludeSameMembers(expectedMatch);
+    const results = parser.findCandidatesWithKeywordsAt(tokens);
+    expect(results.map(r => r.candidate)).toIncludeSameMembers(expectedMatch);
   };
 }
 
@@ -33,6 +37,21 @@ test.each<any>([
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 1)
 );
 
+test('TEST: results sorted by length with ONLY_KEYWORDS_FOUND', () =>
+  testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 2)(
+    'abcde',
+    { A: ['abc'], B: ['abXde'] },
+    ['B', 'A']
+  ));
+
+
+test('TEST: results sorted by length with KEYWORDS_AND_OTHERS_FOUND', () =>
+  testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 2)(
+    'words before abcde words after',
+    { A: ['abc'], B: ['abXde'] },
+    ['B', 'A']
+  ));
+
 test.each<any>([
   // found with multiword keyword
   ['realizar', { A: ['realizar pedido', 'comprar'] }, []],
@@ -43,7 +62,6 @@ test.each<any>([
   'TEST: find similar keywords of "%s" with ONLY_KEYWORDS_FOUND',
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 1)
 );
-
 
 test.each<any>([
   // found at start with multiword keyword
@@ -95,7 +113,6 @@ test.each<any>([
   'TEST: find keywords of "%s" with ONLY_KEYWORDS_FOUND',
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND)
 );
-
 
 test.each<any>([
   // exact words
