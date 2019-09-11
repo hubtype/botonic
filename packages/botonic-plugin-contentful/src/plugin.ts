@@ -1,11 +1,16 @@
 import * as cms from './cms';
 import Contentful from './contentful';
+import { StemmingEscaper } from './nlp/node-nlp';
 import { Search } from './search';
 import { BotonicMsgConverter } from './render';
 
 interface OptionsBase {
   renderer?: BotonicMsgConverter;
   search?: Search;
+  stemming?: {
+    /** @see StemmingEscaper */
+    blackList: string[][];
+  };
 }
 
 export interface CmsOptions extends OptionsBase {
@@ -34,7 +39,10 @@ export default class BotonicPluginContentful {
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = options.renderer || new BotonicMsgConverter();
-    this.search = options.search || new Search(this.cms);
+
+    const blackList = options.stemming ? options.stemming.blackList : [];
+    const escaper = new StemmingEscaper(blackList);
+    this.search = options.search || new Search(this.cms, escaper);
   }
 
   // @ts-ignore
