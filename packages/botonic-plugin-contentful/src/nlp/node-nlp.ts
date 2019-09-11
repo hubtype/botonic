@@ -25,6 +25,42 @@ const STEMMED_STOP_WORDS: { [key: string]: string[] } = {
 
 export const DEFAULT_SEPARATORS_REGEX = new RegExp('[;,./()]', 'g');
 
+export class StemmerEscaper {
+  /**
+   *
+   * @param blackList they'll be searched case-insensitively. The first item of each list is the token we want to generate
+   * The rest are other accepted spellings. Eg. [['camión','camion', 'camiones'],['casa']]
+   */
+  constructor(readonly blackList: string[][]) {}
+
+  escape(input: string): string {
+    // eslint-disable-next-line prefer-const
+    for (const [i, words] of this.blackList.entries()) {
+      for (const word of words) {
+        input = input.replace(this.wordRegex(word, 'gi'), this.escapedFor(i));
+      }
+    }
+    return input;
+  }
+
+  unescape(escaped: string): string {
+    for (const [i, words] of this.blackList.entries()) {
+      const token = words[0].toLowerCase();
+      //TODO cache unescape regex
+      escaped = escaped.replace(this.wordRegex(this.escapedFor(i)), token);
+    }
+    return escaped;
+  }
+
+  private escapedFor(index: number): string {
+    return 'x' + 'z'.repeat(index + 1) + 'x';
+  }
+
+  private wordRegex(word: string, flags?: string): RegExp {
+    return new RegExp('\\b' + word + '\\b', flags);
+  }
+}
+
 export function tokenizeAndStem(
   locale: Locale,
   inputText: string,
