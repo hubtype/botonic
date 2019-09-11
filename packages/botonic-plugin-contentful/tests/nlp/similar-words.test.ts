@@ -25,7 +25,7 @@ function result(
 
 test.each<any>([
   ['bueno dia', 2, result(CAND_BUENAS, 'bueno dia', 2)], //missing 2 letters
-  ['addios', 2, result(CAND_ADIOS, 'addios',1)], // 1 extra letter
+  ['addios', 2, result(CAND_ADIOS, 'addios', 1)], // 1 extra letter
   ['aidos', 2, result(CAND_ADIOS, 'aidos', 2)], // 1 letter swapped
   ['afios', 2, result(CAND_ADIOS, 'afios', 1)], // 1 wrong swapped
   ['adddios', 1, undefined] // too far
@@ -61,7 +61,7 @@ test('TEST: findSimilarKeyword() stemmed checks all words in keyword', () => {
 
 test.each<any>([
   ['bueno dia como estamos', 2, result(CAND_BUENAS, 'bueno dia', 2)], //missing 2 letters
-  ['vale, addios', 2, result(CAND_ADIOS, 'addios',1)], // 1 extra letter
+  ['vale, addios', 2, result(CAND_ADIOS, 'addios', 1)], // 1 extra letter
   ['esta bien aidos', 2, result(CAND_ADIOS, 'aidos', 2)], // 1 letter swapped
   ['gracias. afios', 2, result(CAND_ADIOS, 'afios', 1)], // 1 wrong swapped
   ['adddios amigos', 1, undefined] // 1 wrong swapped
@@ -71,7 +71,6 @@ test.each<any>([
     needle: string,
     maxDistance: number,
     expectedResult?: SimilarWordResult<TestCandidate>
-
   ) => {
     const sut = new SimilarWordFinder<TestCandidate>(false);
     sut.addCandidate(CAND_ADIOS);

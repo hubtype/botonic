@@ -57,8 +57,7 @@ declare module 'node-nlp/lib/nlp/nlp-util' {
 declare module 'node-nlp/lib/nlp/tokenizers/punct-tokenizer' {
   import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
 
-  class PunctTokenizer extends Tokenizer {
-  }
+  class PunctTokenizer extends Tokenizer {}
 
   export = PunctTokenizer;
 }
