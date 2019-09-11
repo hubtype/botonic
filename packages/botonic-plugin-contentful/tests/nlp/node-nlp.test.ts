@@ -1,5 +1,5 @@
 import { Locale, tokenizeAndStem } from '../../src/nlp';
-import { DEFAULT_STOP_WORDS } from '../../src/nlp/node-nlp';
+import { DEFAULT_STOP_WORDS, StemmerEscaper } from '../../src/nlp/node-nlp';
 
 test('TEST: normalize es', () => {
   const loc = 'es';
@@ -47,6 +47,14 @@ test.each<any>([['es'], ['ca'], ['en']])(
     }
   }
 );
+
+test('TEST: StemmerEscaper', () => {
+  const sut = new StemmerEscaper([['perro', 'can', 'cán', 'canes']]);
+  const escaped = sut.escape('perro. gato pipican adios cán canes');
+  const stemmed = tokenizeAndStem('es', escaped);
+  const unescaped = stemmed.map(stem => sut.unescape(stem));
+  expect(unescaped).toEqual(['perro', 'gat', 'pipic', 'adi', 'perro', 'perro']);
+});
 
 function naiveStemmer(word: string, locale: string): string {
   word = word
