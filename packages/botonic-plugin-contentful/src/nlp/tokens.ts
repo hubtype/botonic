@@ -25,6 +25,7 @@ export function countOccurrences(haystack: string, needle: string): number {
   let n = 0;
   let pos = 0;
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     pos = haystack.indexOf(needle, pos);
     if (pos >= 0) {
