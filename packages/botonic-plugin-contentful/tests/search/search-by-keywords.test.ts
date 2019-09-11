@@ -10,6 +10,7 @@ import {
   Context
 } from '../../src';
 import { MatchType } from '../../src/nlp/keywords';
+import { StemmingEscaper } from '../../src/nlp/node-nlp';
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result';
 
 const ES_CONTEXT = { locale: 'es' };
@@ -67,6 +68,33 @@ test('TEST: searchContentsFromInput no keywords found', async () => {
   expect(contents).toHaveLength(0);
 });
 
+test('TEST: searchContentsFromInput with stem blacklist', async () => {
+  const keywords = keywordsWithMockCms(
+    [contentWithKeyword(Callback.ofPayload('p1'), ['pedido'])],
+    ES_CONTEXT,
+    [['pedido']]
+  );
+
+  // act
+  let contents = await keywords.searchContentsFromInput(
+    keywords.tokenize('es', 'querida pedida bonita'),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    ES_CONTEXT
+  );
+
+  // assert
+  expect(contents).toHaveLength(0);
+
+  contents = await keywords.searchContentsFromInput(
+    keywords.tokenize('es', 'querido pedido bonito'),
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    ES_CONTEXT
+  );
+
+  // assert
+  expect(contents).toHaveLength(1);
+});
+
 export function contentWithKeyword(callback: Callback, keywords: string[]) {
   return new SearchResult(
     callback,
@@ -88,11 +116,13 @@ export function chitchatContent(keywords: string[]) {
 
 export function keywordsWithMockCms(
   allContents: CallbackToContentWithKeywords1[],
-  context: Context
+  context: Context,
+  stemBlackList: string[][] = []
 ): SearchByKeywords {
   const mockCms = mock(DummyCMS);
   when(mockCms.contentsWithKeywords(deepEqual(context))).thenResolve(
     allContents
   );
-  return new SearchByKeywords(instance(mockCms));
+  const escaper = new StemmingEscaper(stemBlackList);
+  return new SearchByKeywords(instance(mockCms), escaper);
 }

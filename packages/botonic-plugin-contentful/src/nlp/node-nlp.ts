@@ -25,7 +25,7 @@ const STEMMED_STOP_WORDS: { [key: string]: string[] } = {
 
 export const DEFAULT_SEPARATORS_REGEX = new RegExp('[;,./()]', 'g');
 
-export class StemmerEscaper {
+export class StemmingEscaper {
   /**
    *
    * @param blackList they'll be searched case-insensitively. The first item of each list is the token we want to generate

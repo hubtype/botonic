@@ -1,5 +1,6 @@
 import { instance, mock, when } from 'ts-mockito';
 import { ContentCallback, DummyCMS, ModelType, Text, Url } from '../../src/cms';
+import { StemmingEscaper } from '../../src/nlp/node-nlp';
 import { Search, SearchResult } from '../../src/search';
 
 const CONTEXT = { locale: 'es' };
@@ -9,7 +10,7 @@ test('TEST: respondFoundContents text with buttons', async () => {
   when(cms.url('urlCmsId', CONTEXT)).thenResolve(
     new Url('url', 'http:/mocked_url')
   );
-  const sut = new Search(instance(cms));
+  const sut = new Search(instance(cms), new StemmingEscaper([]));
 
   const urlContent = new SearchResult(
     new ContentCallback(ModelType.URL, 'urlCmsId'),
@@ -50,7 +51,7 @@ test('TEST: respondFoundContents text with buttons', async () => {
 
 test('TEST: respondFoundContents text with chitchat', async () => {
   const cms = mock(DummyCMS);
-  const sut = new Search(instance(cms));
+  const sut = new Search(instance(cms), new StemmingEscaper([]));
 
   const chitchat = instance(mock(Text));
   when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat);
@@ -79,7 +80,7 @@ test('TEST: respondFoundContents text with chitchat', async () => {
 
 test('TEST: respondFoundContents without contents', async () => {
   const cms = mock(DummyCMS);
-  const sut = new Search(instance(cms));
+  const sut = new Search(instance(cms), new StemmingEscaper([]));
 
   // sut
   when(cms.text('notFoundId', CONTEXT)).thenResolve(

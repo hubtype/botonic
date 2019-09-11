@@ -9,3 +9,11 @@ export function checkLocale(locale?: Locale): Locale {
   stemmerFor(locale);
   return locale;
 }
+
+/**
+ * Converts to lowercase and removes accents
+ */
+export function normalize(locale: Locale, text: string): string {
+  text = text.trim().toLowerCase();
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}

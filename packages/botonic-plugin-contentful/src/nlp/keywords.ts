@@ -25,6 +25,10 @@ export enum SortType {
 export class KeywordsOptions {
   constructor(
     readonly maxDistance = 0,
+    readonly tokenizer: (
+      locale: Locale,
+      text: string
+    ) => string[] = tokenizeAndStem,
     readonly resultsSortType = SortType.LENGTH
   ) {}
 }
@@ -47,7 +51,7 @@ export class KeywordsParser<M> {
    */
   addCandidate(candidate: M, rawKeywords: string[]): void {
     const stemmedKeywords = rawKeywords.map(kw => {
-      return tokenizeAndStem(this.locale, kw).join(' ');
+      return this.options.tokenizer(this.locale, kw).join(' ');
     });
     const candidateWithK = new CandidateWithKeywords(
       candidate,
