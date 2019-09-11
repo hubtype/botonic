@@ -1,13 +1,14 @@
 import { Button, Callback, CMS, ModelType, Text, Context } from '../cms';
 import { MatchType } from '../nlp/keywords';
 import { checkLocale } from '../nlp/locales';
+import { StemmingEscaper } from '../nlp/node-nlp';
 import { SearchByKeywords } from './search-by-keywords';
 import { SearchResult } from './search-result';
 
 export class Search {
   readonly search: SearchByKeywords;
-  constructor(private readonly cms: CMS) {
-    this.search = new SearchByKeywords(cms);
+  constructor(private readonly cms: CMS, stemEscaper: StemmingEscaper) {
+    this.search = new SearchByKeywords(cms, stemEscaper);
   }
 
   /**
