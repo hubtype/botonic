@@ -1,7 +1,7 @@
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
-import { zipSync } from 'cross-zip'
+import * as ZipFolder from 'folder-zip-sync'
 import { removeSync } from 'fs-extra'
 
 const fs = require('fs')
@@ -274,7 +274,7 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
     }).start()
-    zipSync('dist', BOTONIC_BUNDLE_FILE)
+    ZipFolder('dist', BOTONIC_BUNDLE_FILE)
     const zip_stats = fs.statSync(BOTONIC_BUNDLE_FILE)
     spinner.succeed()
     if (zip_stats.size >= 10 * 10 ** 6) {
