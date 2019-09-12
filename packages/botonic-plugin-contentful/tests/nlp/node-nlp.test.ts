@@ -1,7 +1,7 @@
 import { Locale, tokenizeAndStem } from '../../src/nlp';
 import { DEFAULT_STOP_WORDS, StemmingEscaper } from '../../src/nlp/node-nlp';
 
-test('TEST: normalize es', () => {
+test('TEST: tokenizeAndStem es', () => {
   const loc = 'es';
   expect(tokenizeAndStem(loc, 'áá')).toEqual(['aa']);
   expect(tokenizeAndStem(loc, ',./ áé  íó(óÑ)  ;')).toEqual(['ae', 'io', 'on']);
@@ -13,7 +13,7 @@ test('TEST: normalize es', () => {
   ).toEqual(['realiz', 'ped']);
 });
 
-test('TEST: normalize ca', () => {
+test('TEST: tokenizeAndStem ca', () => {
   const loc = 'ca';
   expect(tokenizeAndStem(loc, 'àí')).toEqual(['ai']);
   expect(tokenizeAndStem(loc, ',./ àé  íò(óçÇ)  ;')).toEqual([
@@ -29,7 +29,7 @@ test('TEST: normalize ca', () => {
   ).toEqual(['guany', 'comand']);
 });
 
-test('TEST: normalize en', () => {
+test('TEST: tokenizeAndStem en', () => {
   const loc = 'en';
   expect(tokenizeAndStem(loc, 'realizing tokenization')).toEqual([
     'realiz',
@@ -49,11 +49,11 @@ test.each<any>([['es'], ['ca'], ['en']])(
 );
 
 test('TEST: StemmerEscaper', () => {
-  const sut = new StemmingEscaper([['perro', 'can', 'cán', 'canes']]);
-  const escaped = sut.escape('perro. gato pipican adios cán canes');
+  const sut = new StemmingEscaper([['perro', 'can', 'cán', 'canes'], ['ey']]);
+  const escaped = sut.escape('perro. ey gato pipican adios cán canes');
   const stemmed = tokenizeAndStem('es', escaped);
   const unescaped = stemmed.map(stem => sut.unescape(stem));
-  expect(unescaped).toEqual(['perro', 'gat', 'pipic', 'adi', 'perro', 'perro']);
+  expect(unescaped).toEqual(['perro', 'ey', 'gat', 'pipic', 'adi', 'perro', 'perro']);
 });
 
 function naiveStemmer(word: string, locale: string): string {
