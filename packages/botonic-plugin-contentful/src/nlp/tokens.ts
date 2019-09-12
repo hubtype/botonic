@@ -1,3 +1,6 @@
+import { Locale, tokenizeAndStem } from './index';
+import { StemmingEscaper } from './node-nlp';
+
 export const BLANK = ' ';
 
 export function substringIsBlankSeparated(
@@ -34,4 +37,18 @@ export function countOccurrences(haystack: string, needle: string): number {
     } else break;
   }
   return n;
+}
+
+export class Tokenizer {
+  constructor(readonly stemEscaper?: StemmingEscaper) {}
+
+  tokenize(locale: Locale, inputText: string): string[] {
+    const escaper = this.stemEscaper;
+    if (!escaper) {
+      return tokenizeAndStem(locale, inputText);
+    }
+    const escaped = escaper.escape(inputText);
+    const stems = tokenizeAndStem(locale, escaped);
+    return stems.map(stem => escaper.unescape(stem));
+  }
 }
