@@ -12,7 +12,7 @@ function candidate(...kws: string[]): CandidateWithKeywords<TestCandidate> {
   return new CandidateWithKeywords<TestCandidate>(new TestCandidate(), kws);
 }
 
-const CAND_BUENAS = candidate('buenos dias', 'güenas');
+const CAND_BUENAS = candidate('buenos dias', 'güenas', 'ey');
 const CAND_ADIOS = candidate('adios', 'adeu');
 
 function result(
@@ -28,7 +28,9 @@ test.each<any>([
   ['addios', 2, result(CAND_ADIOS, 'addios', 1)], // 1 extra letter
   ['aidos', 2, result(CAND_ADIOS, 'aidos', 2)], // 1 letter swapped
   ['afios', 2, result(CAND_ADIOS, 'afios', 1)], // 1 wrong swapped
-  ['adddios', 1, undefined] // too far
+  ['adddios', 1, undefined], // too far
+  ['ey', 1, result(CAND_BUENAS, 'ey', 0)], // short keyword
+  ['el', 1, undefined] // short keyword must be identical
 ])(
   'TEST: findSimilarKeyword(%s)',
   (
@@ -64,7 +66,9 @@ test.each<any>([
   ['vale, addios', 2, result(CAND_ADIOS, 'addios', 1)], // 1 extra letter
   ['esta bien aidos', 2, result(CAND_ADIOS, 'aidos', 2)], // 1 letter swapped
   ['gracias. afios', 2, result(CAND_ADIOS, 'afios', 1)], // 1 wrong swapped
-  ['adddios amigos', 1, undefined] // 1 wrong swapped
+  ['adddios amigos', 1, undefined], // 1 wrong swapped
+  ['ey amigos', 1, result(CAND_BUENAS, 'ey', 0)], // short keyword
+  ['el coche', 1, undefined] // short keyword must be identical (ey)
 ])(
   'TEST: findSubstring(%s)',
   (
