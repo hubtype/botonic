@@ -1,6 +1,8 @@
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
+import { zipSync } from 'cross-zip'
+import { removeSync } from 'fs-extra'
 
 const fs = require('fs')
 const ora = require('ora')
@@ -12,6 +14,7 @@ import { track, sleep } from '../utils'
 
 var force = false
 var npmCommand: string | undefined
+const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 
 export default class Run extends Command {
   static description = 'Deploy Botonic project to hubtype.com'
@@ -27,11 +30,11 @@ Uploading...
   static flags = {
     force: flags.boolean({
       char: 'f',
-      description: 'Force deploy despite of no changes. Disabled by default',
+      description: 'Force deploy despite of no changes. Disabled by default'
     }),
     command: flags.string({
       char: 'c',
-      description: 'Command to execute from the package "scripts" object',
+      description: 'Command to execute from the package "scripts" object'
     }),
     botName: flags.string()
   }
@@ -257,7 +260,10 @@ Uploading...
   }
 
   async deploy() {
-    let build_out = await this.botonicApiService.buildIfChanged(force, npmCommand)
+    let build_out = await this.botonicApiService.buildIfChanged(
+      force,
+      npmCommand
+    )
     if (!build_out) {
       track('Deploy Botonic Build Error')
       console.log(colors.red('There was a problem building the bot'))
@@ -268,9 +274,8 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
     }).start()
-    let zip_cmd = `zip -r botonic_bundle.zip dist`
-    let zip_out = await exec(zip_cmd)
-    const zip_stats = fs.statSync('botonic_bundle.zip')
+    zipSync('dist', BOTONIC_BUNDLE_FILE)
+    const zip_stats = fs.statSync(BOTONIC_BUNDLE_FILE)
     spinner.succeed()
     if (zip_stats.size >= 10 * 10 ** 6) {
       spinner.fail()
@@ -280,7 +285,7 @@ Uploading...
         )
       )
       track('Deploy Botonic Zip Error')
-      await exec('rm botonic_bundle.zip')
+      removeSync(BOTONIC_BUNDLE_FILE)
       return
     }
     spinner = new ora({
@@ -289,7 +294,7 @@ Uploading...
     }).start()
     try {
       var deploy = await this.botonicApiService.deployBot(
-        'botonic_bundle.zip',
+        BOTONIC_BUNDLE_FILE,
         force
       )
       if (
@@ -315,7 +320,7 @@ Uploading...
             console.log(colors.red('There was a problem in the deploy:'))
             console.log(deploy_status.data.error)
             track('Deploy Botonic Error', { error: deploy_status.data.error })
-            await exec('rm botonic_bundle.zip')
+            removeSync(BOTONIC_BUNDLE_FILE)
             return
           }
         }
@@ -325,18 +330,14 @@ Uploading...
       console.log(colors.red('There was a problem in the deploy:'))
       console.log(err)
       track('Deploy Botonic Error', { error: err })
-      await exec('rm botonic_bundle.zip')
+      removeSync(BOTONIC_BUNDLE_FILE)
       return
     }
     try {
       let providers_resp = await this.botonicApiService.getProviders()
       let providers = providers_resp.data.results
       if (!providers.length) {
-        let links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${
-          this.botonicApiService.bot.id
-        }/integrations?access_token=${
-          this.botonicApiService.oauth.access_token
-        }`
+        let links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
         console.log(links)
       } else {
         this.displayProviders(providers)
@@ -346,7 +347,7 @@ Uploading...
       console.log(colors.red(`There was an error getting the providers: ${e}`))
     }
     try {
-      await exec('rm botonic_bundle.zip')
+      removeSync(BOTONIC_BUNDLE_FILE)
     } catch (e) {}
     this.botonicApiService.beforeExit()
   }
