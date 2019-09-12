@@ -10,12 +10,20 @@ export class SimilarWordResult<M> {
   ) {}
 }
 
+const TOO_DISTANT = -1;
+
+/**
+ * It does not normalize case, ie. uppercase will be considered different than lowercase
+ */
 export class SimilarWordFinder<M> {
   private readonly similar = new SimilarSearch({ normalize: false });
   private readonly candidates: CandidateWithKeywords<M>[] = [];
   private readonly stemmedDecorator: StemmedExtraDistance;
-
-  constructor(wordsAreStemmed: boolean) {
+  /**
+   * @param wordsAreStemmed see {@link StemmedExtraDistance}
+   * @param minWordLength below this length the words (or stems) must be identical
+   */
+  constructor(wordsAreStemmed: boolean, readonly minWordLength = 3) {
     this.stemmedDecorator = new StemmedExtraDistance(wordsAreStemmed);
   }
   /**
@@ -33,17 +41,8 @@ export class SimilarWordFinder<M> {
     const results = [];
     for (const candidate of this.candidates) {
       for (const keyword of candidate.keywords) {
-        const distance = this.similar.getSimilarity(sentence, keyword);
-        if (
-          distance >
-          maxDistance + this.stemmedDecorator.extraDistance(keyword)
-        ) {
-          continue;
-        }
-        if (
-          distance <= maxDistance ||
-          this.stemmedDecorator.verify(sentence, keyword)
-        ) {
+        const distance = this.getDistance(sentence, keyword, maxDistance);
+        if (distance != TOO_DISTANT) {
           results.push(
             new SimilarWordResult<M>(candidate.owner, sentence, distance)
           );
@@ -52,6 +51,24 @@ export class SimilarWordFinder<M> {
     }
 
     return this.getLongestResultPerCandidate(results);
+  }
+
+  getDistance(sentence: string, keyword: string, maxDistance: number): number {
+    if (sentence.length < this.minWordLength) {
+      return sentence == keyword ? 0 : TOO_DISTANT;
+    }
+
+    const distance = this.similar.getSimilarity(sentence, keyword);
+    if (distance > maxDistance + this.stemmedDecorator.extraDistance(keyword)) {
+      return TOO_DISTANT;
+    }
+    if (
+      distance > maxDistance &&
+      !this.stemmedDecorator.verify(sentence, keyword)
+    ) {
+      return TOO_DISTANT;
+    }
+    return distance;
   }
 
   private getLongestResultPerCandidate(
@@ -84,6 +101,12 @@ export class SimilarWordFinder<M> {
     const wordPositions = this.similar.getWordPositions(sentence);
     for (const candidate of this.candidates) {
       for (const keyword of candidate.keywords) {
+        if (keyword.length < this.minWordLength) {
+          if (new RegExp(`\\b${keyword}\\b`).test(sentence)) {
+            results.push(new SimilarWordResult<M>(candidate.owner, keyword, 0));
+          }
+          continue;
+        }
         const extra = this.stemmedDecorator.extraDistance(keyword);
         const minAccuracy =
           (keyword.length - (maxDistance + extra)) / keyword.length;
