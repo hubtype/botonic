@@ -1,6 +1,6 @@
 import { Locale } from './index';
-import { tokenizeAndStem } from './node-nlp';
 import { SimilarWordFinder, SimilarWordResult } from './similar-words';
+import { Tokenizer } from './tokens';
 
 export class CandidateWithKeywords<M> {
   constructor(readonly owner: M, readonly keywords: string[]) {}
@@ -24,11 +24,8 @@ export enum SortType {
 
 export class KeywordsOptions {
   constructor(
-    readonly maxDistance = 0,
-    readonly tokenizer: (
-      locale: Locale,
-      text: string
-    ) => string[] = tokenizeAndStem,
+    readonly maxDistance = 1,
+    readonly similarWordsMinLength = 3,
     readonly resultsSortType = SortType.LENGTH
   ) {}
 }
@@ -40,7 +37,8 @@ export class KeywordsParser<M> {
   constructor(
     readonly locale: Locale,
     readonly matchType: MatchType,
-    readonly options = new KeywordsOptions()
+    readonly tokenizer: Tokenizer,
+    readonly options: KeywordsOptions
   ) {}
 
   /**
@@ -51,7 +49,7 @@ export class KeywordsParser<M> {
    */
   addCandidate(candidate: M, rawKeywords: string[]): void {
     const stemmedKeywords = rawKeywords.map(kw => {
-      return this.options.tokenizer(this.locale, kw).join(' ');
+      return this.tokenizer.tokenize(this.locale, kw).join(' ');
     });
     const candidateWithK = new CandidateWithKeywords(
       candidate,
