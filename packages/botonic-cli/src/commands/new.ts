@@ -1,5 +1,6 @@
 import { Command } from '@oclif/command'
-import { resolve } from 'path'
+import { resolve, join } from 'path'
+import { copySync, moveSync } from 'fs-extra'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
 
@@ -88,20 +89,19 @@ Creating...
         let template_names = this.templates.map((t: any) => t.name)
         console.log(
           colors.red(
-            'Template ${args.templateName} does not exist, please choose one of ${template_names}.'
+            `Template ${args.templateName} does not exist, please choose one of ${template_names}.`
           )
         )
         return
       }
     }
     let botPath = resolve(template)
-    let templatePath = `${__dirname}/../../templates/${template}`
+    let templatePath = join(__dirname, '..', '..', 'templates', template)
     let spinner = new ora({
       text: 'Copying files...',
       spinner: 'bouncingBar'
     }).start()
-    let copyFolderCommand = `cp -r ${templatePath} ${args.name}`
-    let copy_out = await exec(copyFolderCommand)
+    copySync(templatePath, args.name)
     spinner.succeed()
     process.chdir(args.name)
     spinner = new ora({
@@ -113,7 +113,7 @@ Creating...
     spinner.succeed()
     await this.botonicApiService.buildIfChanged(false)
     this.botonicApiService.beforeExit()
-    await exec('mv ../.botonic.json .')
+    moveSync(join('..', '.botonic.json'), join(process.cwd(), '.botonic.json'))
     let cd_cmd = colors.bold(`cd ${args.name}`)
     let run_cmd = colors.bold('botonic serve')
     let deploy_cmd = colors.bold('botonic deploy')
