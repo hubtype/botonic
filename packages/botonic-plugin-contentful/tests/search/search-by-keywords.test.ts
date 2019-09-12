@@ -11,6 +11,7 @@ import {
 } from '../../src';
 import { MatchType } from '../../src/nlp/keywords';
 import { StemmingEscaper } from '../../src/nlp/node-nlp';
+import { Tokenizer } from '../../src/nlp/tokens';
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result';
 
 const ES_CONTEXT = { locale: 'es' };
@@ -27,7 +28,7 @@ test('TEST: searchContentsFromInput keywords found', async () => {
   // act
   const expectedContents = contents.slice(0, 4);
   const suggested = await keywords.searchContentsFromInput(
-    keywords.tokenize('es', ' DevoluciON de  plazo? Empezar Hubtype'),
+    keywords.tokenizer.tokenize('es', ' DevoluciON de  plazo? Empezar Hubtype'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -42,7 +43,7 @@ test('TEST: searchContentsFromInput similar', async () => {
 
   // act
   const suggested = await keywords.searchContentsFromInput(
-    keywords.tokenize('es', 'Quiero el tas free'),
+    keywords.tokenizer.tokenize('es', 'Quiero el tas free'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -59,7 +60,7 @@ test('TEST: searchContentsFromInput no keywords found', async () => {
 
   // act
   const contents = await keywords.searchContentsFromInput(
-    keywords.tokenize('es', 'willnotbefound'),
+    keywords.tokenizer.tokenize('es', 'willnotbefound'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -77,7 +78,7 @@ test('TEST: searchContentsFromInput with stem blacklist', async () => {
 
   // act
   let contents = await keywords.searchContentsFromInput(
-    keywords.tokenize('es', 'querida pedida bonita'),
+    keywords.tokenizer.tokenize('es', 'querida pedida bonita'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -86,7 +87,7 @@ test('TEST: searchContentsFromInput with stem blacklist', async () => {
   expect(contents).toHaveLength(0);
 
   contents = await keywords.searchContentsFromInput(
-    keywords.tokenize('es', 'querido pedido bonito'),
+    keywords.tokenizer.tokenize('es', 'querido pedido bonito'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -124,5 +125,5 @@ export function keywordsWithMockCms(
     allContents
   );
   const escaper = new StemmingEscaper(stemBlackList);
-  return new SearchByKeywords(instance(mockCms), escaper);
+  return new SearchByKeywords(instance(mockCms), new Tokenizer(escaper));
 }
