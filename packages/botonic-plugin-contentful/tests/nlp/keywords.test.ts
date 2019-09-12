@@ -1,5 +1,5 @@
 import 'jest-extended';
-import { KeywordsParser, tokenizeAndStem } from '../../src/nlp';
+import { KeywordsParser, tokenizeAndStem, Tokenizer } from '../../src/nlp';
 import { KeywordsOptions, MatchType } from '../../src/nlp/keywords';
 
 test('hack because webstorm does not recognize test.each', () => {});
@@ -17,6 +17,7 @@ function testFindKeywords(
     const parser = new KeywordsParser<string>(
       locale,
       matchType,
+      new Tokenizer(),
       new KeywordsOptions(maxDistance)
     );
 

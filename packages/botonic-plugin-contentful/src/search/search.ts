@@ -21,7 +21,7 @@ export class Search {
     context: Context
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale);
-    const tokens = this.search.tokenize(locale, inputText);
+    const tokens = this.tokenizer.tokenize(locale, inputText);
     const contents = await this.search.searchContentsFromInput(
       tokens,
       matchType,
