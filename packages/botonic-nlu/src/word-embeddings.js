@@ -44,7 +44,7 @@ export async function getEmbeddingMatrix({
         `The file '${wordEmbeddingsFileName}' was not found in your machine.`
       )
     )
-    console.log('An automatic download will start briefly.')
+    console.log('An automatic download will start in brief.')
     if (!pathExists(wordEmbeddingsPath)) {
       createDir(wordEmbeddingsPath)
     }
