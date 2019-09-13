@@ -15,7 +15,6 @@ export async function resolveEnv() {
   if (isProd()) {
     return {
       mode: 'prod',
-      // uri: `${process.env.STATIC_URL}/${CONSTANTS.ASSETS_DIRNAME}/${CONSTANTS.MODELS_DIRNAME}/`
       uri: `${process.env.STATIC_URL}/${ASSETS_DIRNAME}/${MODELS_DIRNAME}/`
     }
   } else {
@@ -26,12 +25,6 @@ export async function resolveEnv() {
 export function loadOption(lang, env) {
   let nlu = {}
   try {
-    // nlu.nluData = axios({
-    //   url: `${env.uri}${lang}/${CONSTANTS.NLU_DATA_FILENAME}`
-    // })
-    // nlu.model = tf.loadLayersModel(
-    //   `${env.uri}${lang}/${CONSTANTS.MODEL_FILENAME}`
-    // )
     nlu.nluData = axios({
       url: `${env.uri}${lang}/${NLU_DATA_FILENAME}`
     })
