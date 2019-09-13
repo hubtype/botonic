@@ -2,6 +2,7 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const Analytics = require('analytics-node')
+import { exec } from 'child_process'
 
 export var analytics: any
 
@@ -61,4 +62,24 @@ export function botonicPostInstall() {
 
 export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function sh(cmd) {
+  return new Promise(function(resolve, reject) {
+    exec(cmd, (err, stdout, stderr) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve({ stdout, stderr })
+      }
+    })
+  })
+}
+
+export async function getGlobalNodeModulesPath() {
+  const CROSS_PLATFORM_REGEX = /\r?\n|\r/g
+  return ((await sh('npm root -g')) as any).stdout.replace(
+    CROSS_PLATFORM_REGEX,
+    ''
+  )
 }

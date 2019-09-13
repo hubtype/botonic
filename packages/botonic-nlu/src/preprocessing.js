@@ -1,7 +1,11 @@
 import * as tf from '@tensorflow/tfjs'
 import franc from 'franc'
-import { replaceAll, clone } from './utils'
-import { UNKNOWN_TOKEN } from './constants'
+import { replaceAll, clone, shuffle } from './utils'
+import {
+  UNKNOWN_TOKEN,
+  GLOBAL_ENTITIES_REGEX,
+  ENTITIES_REGEX
+} from './constants'
 
 export class Tokenizer {
   constructor(vocabulary = null) {
@@ -105,4 +109,61 @@ export function detectLang(input, langs) {
     res = langs[0]
   }
   return res
+}
+
+/**
+ * Given a training example utterance extracts its entities (if exist)
+ * and returns a valid utterance for training with its entities.
+ * E.g.:
+ * Input: 'I would like to go to [Barcelona](Place)'
+ * Output:
+ * parsedUtterance: 'I would like to go to Barcelona',
+ * parsedEntities: [ { raw: '[Barcelona](Place)', value: 'Barcelona', type: 'Place' } ]
+ * @param {string} utterance Training example utterance
+ * @returns {object} {parsedUtterance, parsedEntities}
+ */
+export function parseUtterance(utterance) {
+  let capturedGroups = utterance.match(GLOBAL_ENTITIES_REGEX) || []
+  let parsedEntities = capturedGroups
+    .map(matched => ENTITIES_REGEX.exec(matched))
+    .map(parsedEntity => ({
+      raw: parsedEntity[0],
+      value: parsedEntity[1],
+      type: parsedEntity[2]
+    }))
+  for (let entity of parsedEntities) {
+    utterance = utterance.replace(entity.raw, entity.value)
+  }
+  return { parsedUtterance: utterance, parsedEntities }
+}
+
+export function preprocessData(devIntents, params) {
+  let { samples, labels } = getShuffledSamplesAndLabels(devIntents.intents)
+  let tokenizer = new Tokenizer()
+  tokenizer.fitOnSamples(samples)
+  let sequences = tokenizer.samplesToSequences(samples)
+  let seqLength = params.MAX_SEQ_LENGTH || tokenizer.maxSeqLength
+  params.MAX_SEQ_LENGTH = seqLength
+  let tensorData = padSequences(sequences, seqLength)
+  console.log(`Shape of data tensor: [${tensorData.shape}]`)
+  let tensorLabels = tf.oneHot(
+    tf.tensor1d(labels, 'int32'),
+    Object.keys(devIntents.intentsDict).length
+  )
+  console.log(`Shape of label tensor: [${tensorLabels.shape}]`)
+  let vocabularyLength = tokenizer.vocabularyLength
+  console.log(`Found ${vocabularyLength} unique tokens`)
+  return {
+    tensorData,
+    tensorLabels,
+    vocabulary: tokenizer.vocabulary,
+    vocabularyLength: tokenizer.vocabularyLength
+  }
+}
+
+function getShuffledSamplesAndLabels(intents) {
+  let samples = intents.map(intent => intent.utterance)
+  let labels = intents.map(intent => intent.label)
+  shuffle(samples, labels)
+  return { samples, labels }
 }
