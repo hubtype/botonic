@@ -11,7 +11,7 @@ global.fetch = fetch
 
 export class NLU {
   constructor(languages) {
-    ;(async () => {
+    return (async () => {
       this.env = await resolveEnv()
       this.languages = []
       this.models = {}
