@@ -1,13 +1,12 @@
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
 import * as colors from 'colors'
-import * as ZipFolder from 'folder-zip-sync'
-import { removeSync } from 'fs-extra'
+import { join } from 'path'
+import { copySync, removeSync } from 'fs-extra'
+import { zip } from 'zip-a-folder'
 
 const fs = require('fs')
 const ora = require('ora')
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
 
 import { BotonicAPIService } from '../botonicAPIService'
 import { track, sleep } from '../utils'
@@ -274,7 +273,9 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
     }).start()
-    ZipFolder('dist', BOTONIC_BUNDLE_FILE)
+    fs.mkdirSync(join('tmp'))
+    copySync('dist', join('tmp', 'dist'))
+    await zip('tmp', join('botonic_bundle.zip'))
     const zip_stats = fs.statSync(BOTONIC_BUNDLE_FILE)
     spinner.succeed()
     if (zip_stats.size >= 10 * 10 ** 6) {
@@ -286,6 +287,7 @@ Uploading...
       )
       track('Deploy Botonic Zip Error')
       removeSync(BOTONIC_BUNDLE_FILE)
+      removeSync('tmp')
       return
     }
     spinner = new ora({
@@ -294,7 +296,7 @@ Uploading...
     }).start()
     try {
       var deploy = await this.botonicApiService.deployBot(
-        BOTONIC_BUNDLE_FILE,
+        join(process.cwd(), BOTONIC_BUNDLE_FILE),
         force
       )
       if (
@@ -321,6 +323,7 @@ Uploading...
             console.log(deploy_status.data.error)
             track('Deploy Botonic Error', { error: deploy_status.data.error })
             removeSync(BOTONIC_BUNDLE_FILE)
+            removeSync('tmp')
             return
           }
         }
@@ -331,6 +334,7 @@ Uploading...
       console.log(err)
       track('Deploy Botonic Error', { error: err })
       removeSync(BOTONIC_BUNDLE_FILE)
+      removeSync('tmp')
       return
     }
     try {
@@ -348,6 +352,7 @@ Uploading...
     }
     try {
       removeSync(BOTONIC_BUNDLE_FILE)
+      removeSync('tmp')
     } catch (e) {}
     this.botonicApiService.beforeExit()
   }
