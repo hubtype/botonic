@@ -258,17 +258,7 @@ Uploading...
     })
   }
 
-  async deploy() {
-    let build_out = await this.botonicApiService.buildIfChanged(
-      force,
-      npmCommand
-    )
-    if (!build_out) {
-      track('Deploy Botonic Build Error')
-      console.log(colors.red('There was a problem building the bot'))
-      return
-    }
-
+  async createBundle() {
     let spinner = new ora({
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
@@ -286,11 +276,12 @@ Uploading...
         )
       )
       track('Deploy Botonic Zip Error')
-      removeSync(BOTONIC_BUNDLE_FILE)
-      removeSync('tmp')
       return
     }
-    spinner = new ora({
+  }
+
+  async deployBundle() {
+    let spinner = new ora({
       text: 'Deploying...',
       spinner: 'bouncingBar'
     }).start()
@@ -322,8 +313,6 @@ Uploading...
             console.log(colors.red('There was a problem in the deploy:'))
             console.log(deploy_status.data.error)
             track('Deploy Botonic Error', { error: deploy_status.data.error })
-            removeSync(BOTONIC_BUNDLE_FILE)
-            removeSync('tmp')
             return
           }
         }
@@ -333,10 +322,11 @@ Uploading...
       console.log(colors.red('There was a problem in the deploy:'))
       console.log(err)
       track('Deploy Botonic Error', { error: err })
-      removeSync(BOTONIC_BUNDLE_FILE)
-      removeSync('tmp')
       return
     }
+  }
+
+  async displayDeployResults() {
     try {
       let providers_resp = await this.botonicApiService.getProviders()
       let providers = providers_resp.data.results
@@ -350,10 +340,27 @@ Uploading...
       track('Deploy Botonic Provider Error', { error: e })
       console.log(colors.red(`There was an error getting the providers: ${e}`))
     }
+  }
+
+  async deploy() {
     try {
+      let build_out = await this.botonicApiService.buildIfChanged(
+        force,
+        npmCommand
+      )
+      if (!build_out) {
+        track('Deploy Botonic Build Error')
+        console.log(colors.red('There was a problem building the bot'))
+        return
+      }
+      await this.createBundle()
+      await this.deployBundle()
+      await this.displayDeployResults()
+    } catch (e) {
+    } finally {
       removeSync(BOTONIC_BUNDLE_FILE)
       removeSync('tmp')
-    } catch (e) {}
-    this.botonicApiService.beforeExit()
+      this.botonicApiService.beforeExit()
+    }
   }
 }
