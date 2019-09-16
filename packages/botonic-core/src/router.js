@@ -6,33 +6,6 @@ export class Router {
     this.routes = routes
   }
 
-  /*processInput(input, session, lastRoutePath = null, redirects = 0) {
-    if (redirects > 10) throw Error('Botonic: Maximum redirects reached (10)')
-    let route, params
-
-    // If path is defined we'll return the action located in that path or 404 if not exists
-    try {
-      var [path, pathParams] = input.payload
-        .split('__PATH_PAYLOAD__')[1]
-        .split('?')
-      let absolutePath = path.startsWith('/') ? path : join(lastRoutePath, path)
-      route = this.getRouteByPath(absolutePath, this.routes)
-      return getRouteAction(route)
-    } catch (e) {}
-  }
-
-  getRouteAction(route, params) {
-    // Takes a route object and returns the associated action, 404 or redirect
-    if (route.action)
-      return [
-        {
-          action: route.action,
-          params: {},
-          lastRoutePath
-        }
-      ]
-  }*/
-
   processInput(input, session = {}, lastRoutePath = null) {
     let routeParams = {}
     let path_params

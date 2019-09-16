@@ -8,17 +8,17 @@ const postbackInput = { type: 'postback', payload: 'foo' }
 describe('Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
     let router = new Router([])
-    expect(() => router.processInput2(textInput)).toThrow(TypeError)
+    expect(() => router.processInput(textInput)).toThrow(TypeError)
   })
   test('null routes throw TypeError', () => {
     let router = new Router()
-    expect(() => router.processInput2(textInput)).toThrow(TypeError)
+    expect(() => router.processInput(textInput)).toThrow(TypeError)
   })
 })
 
 test('Router returns 404', () => {
   let router = new Router([{ path: '404', action: '404Action' }])
-  let { action } = router.processInput2(textInput)
+  let { action } = router.processInput(textInput)
   expect(action).toBe('404Action')
 })
 
@@ -195,7 +195,7 @@ describe('Process input (v<0.9)', () => {
     let input = { type: 'text', data: 'hi', intent: 'greeting' }
     let session = {}
     let lastRoutePath = null
-    expect(router.processInput2(input, session, lastRoutePath).action).toBe(
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1'
     )
   })
@@ -203,7 +203,7 @@ describe('Process input (v<0.9)', () => {
     let input = { type: 'postback', payload: '2' }
     let session = {}
     let lastRoutePath = 'initial'
-    expect(router.processInput2(input, session, lastRoutePath).action).toBe(
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
     )
   })
@@ -211,7 +211,7 @@ describe('Process input (v<0.9)', () => {
     let input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
     let session = {}
     let lastRoutePath = ''
-    expect(router.processInput2(input, session, lastRoutePath).action).toBe(
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
     )
   })
@@ -219,7 +219,7 @@ describe('Process input (v<0.9)', () => {
     let input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
     let session = {}
     let lastRoutePath = 'initial'
-    expect(router.processInput2(input, session, lastRoutePath).action).toBe(
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
     )
   })
