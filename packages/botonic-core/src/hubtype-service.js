@@ -17,7 +17,7 @@ export class HubtypeService {
     this.pusher = new Pusher(PUSHER_KEY, {
       cluster: 'eu',
       authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
-      encrypted: true,
+      forceTLS: true,
       auth: {
         headers: {
           'X-BOTONIC-USER-ID': this.user.id
@@ -25,19 +25,44 @@ export class HubtypeService {
       }
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
-    this.channel.bind('botonic_response', data => this.onEvent(data))
+    let connectionPromise = new Promise((resolve, reject) => {
+      let cleanAndReject = msg => {
+        clearTimeout(connectTimeout)
+        this.pusher.connection.unbind()
+        this.channel.unbind()
+        reject(msg)
+      }
+      let connectTimeout = setTimeout(
+        () => cleanAndReject('Connection Timeout'),
+        10000
+      )
+      this.pusher.connection.bind('connected', () => {
+        clearTimeout(connectTimeout)
+        resolve()
+      })
+      this.pusher.connection.bind('error', error => {
+        cleanAndReject(`Pusher error (${error.error.data.code})`)
+      })
+    })
+    this.channel.bind('botonic_response', data => this.onPusherEvent(data))
+    return connectionPromise
   }
 
   onPusherEvent(event) {
-    this.onEvent(event)
+    if (this.onEvent && typeof this.onEvent === 'function') this.onEvent(event)
   }
 
   get pusherChannel() {
     return `private-encrypted-${this.appId}-${this.user.id}`
   }
 
-  postMessage(user, message) {
-    this.initPusher(user)
+  async postMessage(user, message) {
+    try {
+      await this.initPusher(user)
+    } catch (e) {
+      this.onEvent({ isError: true, errorMessage: String(e) })
+      return
+    }
     return axios.post(
       `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
       {
