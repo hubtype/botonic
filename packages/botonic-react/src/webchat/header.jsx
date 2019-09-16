@@ -6,6 +6,7 @@ import { Flex } from '@rebass/grid'
 
 const HeaderTitle = styled.h1`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   line-height: 22px;
   color: #ffffff;
@@ -13,6 +14,7 @@ const HeaderTitle = styled.h1`
 
 const Subtitle = styled.h1`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 11px;
   line-height: 16px;
   /* identical to box height */
@@ -24,6 +26,16 @@ const Diffuse = styled(Flex)`
   width: 100%;
   height: 55px;
   border-radius: 6px 6px 0px 0px;
+`
+const CloseHeader = styled(Flex)`
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  padding: 5px;
+  cursor: pointer;
+  color: white;
+  font-family: sans-serif;
+  font-size: 18px;
 `
 
 export const DefaultHeader = props => {
@@ -51,13 +63,15 @@ export const DefaultHeader = props => {
         <HeaderTitle>{headerTitle}</HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
       </Flex>
+      <CloseHeader onClick={props.onCloseClick}>X</CloseHeader>}
     </Diffuse>
   )
 }
-
-export const WebchatHeader = () => {
+export const WebchatHeader = props => {
   const { webchatState } = useContext(WebchatContext)
-
+  const handleCloseWebchat = event => {
+    props.onCloseClick(event.target.value)
+  }
   if (webchatState.theme.customHeader) {
     let CustomHeader = webchatState.theme.customHeader
     return <CustomHeader />
@@ -67,6 +81,7 @@ export const WebchatHeader = () => {
     <DefaultHeader
       webchatState={webchatState}
       color={webchatState.theme.brandColor}
+      onCloseClick={handleCloseWebchat}
     />
   )
 }

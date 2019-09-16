@@ -378,6 +378,9 @@ export const Webchat = forwardRef((props, ref) => {
               height: 36,
               flex: 'none'
             }}
+            onCloseClick={() => {
+              toggleWebchat(false)
+            }}
           />
           <WebchatMessageList
             style={{ flex: 1 }}

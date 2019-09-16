@@ -85,11 +85,11 @@ export const WebchatDev = forwardRef((props, ref) => {
             showSessionView: false
           }}
         />
-        {webchatState.isWebchatOpen && !webchatState.theme.customHeader && (
+        {webchatState.isWebchatOpen && (
           <div
             style={{
               position: 'absolute',
-              right: 28,
+              right: 32,
               top: 12,
               padding: 5,
               cursor: 'pointer',
