@@ -17,6 +17,7 @@
     "@rebass/grid": "^6.0.0",
     "@rehooks/local-storage": "^1.6.0",
     "axios": "^0.19.0",
+    "emoji-picker-react": "^2.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-frame-component": "^4.1.0",
