@@ -27,6 +27,52 @@ import Logo from './botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from './menuButton.svg'
 import { Button } from '../components/button'
+import styled from 'styled-components'
+
+const StyledTriggerButton = styled.div`
+  cursor: pointer;
+  position: fixed;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  bottom: 20px;
+  right: 10px;
+`
+
+const StyledWebchatOpen = styled.div`
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+`
+
+const StyledMenuImg = styled.img`
+  padding-top: 20px;
+  padding-bottom: 15px;
+  margin-left: 18px;
+  margin-right: 8px;
+  cursor: pointer;
+`
+
+const StyledPersistentMenu = styled.div`
+  display: flex;
+  flex: none;
+  width: 50px;
+`
+
+const StyledTextBox = styled.div`
+  display: flex;
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
+`
 
 const createUser = () => {
   let parser = new UAParser()
@@ -304,19 +350,8 @@ export const Webchat = forwardRef((props, ref) => {
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
   ) : (
-    <div
+    <StyledTriggerButton
       style={{
-        cursor: 'pointer',
-        position: 'fixed',
-        background: 'white',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 65,
-        height: 65,
-        bottom: 20,
-        right: 10,
         ...webchatState.theme.triggerButtonStyle
       }}
     >
@@ -328,7 +363,7 @@ export const Webchat = forwardRef((props, ref) => {
           src={staticAsset(triggerImage)}
         />
       )}
-    </div>
+    </StyledTriggerButton>
   )
 
   return (
@@ -357,19 +392,10 @@ export const Webchat = forwardRef((props, ref) => {
         </div>
       )}
       {webchatState.isWebchatOpen && (
-        <div
+        <StyledWebchatOpen
           style={{
-            position: 'fixed',
-            right: 20,
-            bottom: 20,
             width: webchatState.width,
             height: webchatState.height,
-            margin: 'auto',
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            boxShadow: '0 0 12px rgba(0,0,0,.15)',
-            display: 'flex',
-            flexDirection: 'column',
             ...webchatState.theme.style
           }}
         >
@@ -435,34 +461,16 @@ export const Webchat = forwardRef((props, ref) => {
                 </PersistentMenu>
               )}
               {!webchatState.handoff && (
-                <div
-                  style={{
-                    display: 'flex',
-                    borderTop: '1px solid rgba(0, 0, 0, 0.4)'
-                  }}
-                >
+                <StyledTextBox>
                   {props.persistentMenu && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        flex: 'none',
-                        width: 50
-                      }}
-                    >
+                    <StyledPersistentMenu>
                       <div style={{ width: 50 }}>
-                        <img
-                          style={{
-                            paddingTop: '20px',
-                            paddingBottom: '15px',
-                            marginLeft: '18px',
-                            marginRight: '8px',
-                            cursor: 'pointer'
-                          }}
+                        <StyledMenuImg
                           src={staticAsset(LogoMenu)}
                           onClick={() => handleMenu()}
                         />
                       </div>
-                    </div>
+                    </StyledPersistentMenu>
                   )}
                   <Textarea
                     name='text'
@@ -485,7 +493,7 @@ export const Webchat = forwardRef((props, ref) => {
                       outline: 'none'
                     }}
                   />
-                </div>
+                </StyledTextBox>
               )}
               {webchatState.webview && (
                 <RequestContext.Provider value={webviewRequestContext}>
@@ -499,7 +507,7 @@ export const Webchat = forwardRef((props, ref) => {
               )}
             </>
           )}
-        </div>
+        </StyledWebchatOpen>
       )}
     </WebchatContext.Provider>
   )

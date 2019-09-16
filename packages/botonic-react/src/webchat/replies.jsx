@@ -1,5 +1,18 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
+import styled from 'styled-components'
+
+const StyledReplies = styled.div`
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+`
+
+const StyledRepliesContent = styled.div`
+  display: inline-block;
+  margin: 3px;
+`
 
 const alignOptions = /^left$|^center$|^right$/
 const wrapOptions = /^wrap$|^no-wrap$/
@@ -7,22 +20,16 @@ const wrapOptions = /^wrap$|^no-wrap$/
 export const WebchatReplies = props => {
   const { webchatState } = useContext(WebchatContext)
   return (
-    <div
+    <StyledReplies
       style={{
         ...(props.style || {}),
-        overflowX: 'auto',
         textAlign: (props.align && props.align.match(alignOptions)) || 'center',
-        whiteSpace: (props.wrap && props.wrap.match(wrapOptions)) || 'wrap',
-        paddingBottom: 10,
-        marginLeft: 5,
-        marginRight: 5
+        whiteSpace: (props.wrap && props.wrap.match(wrapOptions)) || 'wrap'
       }}
     >
       {webchatState.replies.map((r, i) => (
-        <div key={i} style={{ display: 'inline-block', margin: 3 }}>
-          {r}
-        </div>
+        <StyledRepliesContent key={i}>{r}</StyledRepliesContent>
       ))}
-    </div>
+    </StyledReplies>
   )
 }
