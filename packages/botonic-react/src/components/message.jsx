@@ -14,6 +14,12 @@ const DefaultMessage = styled.div`
   font-family: Arial, Helvetica, sans-serif;
   border-radius: 8px;
 `
+const TextMessage = styled.div`
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  white-space: pre-line;
+`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -145,16 +151,7 @@ export const Message = props => {
           }}
           {...otherProps}
         >
-          <div
-            style={{
-              padding: '8px 12px',
-              display: 'flex',
-              flexDirection: 'column',
-              whiteSpace: 'pre-line'
-            }}
-          >
-            {textChildren}
-          </div>
+          <TextMessage>{textChildren}</TextMessage>
           {buttons}
           {isFromUser() && blob && (
             <div
