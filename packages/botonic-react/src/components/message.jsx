@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import uuid from 'uuid/v4'
 import { isBrowser, isNode } from '@botonic/core'
+import { staticAsset } from '../utils'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
@@ -134,12 +135,13 @@ export const Message = props => {
             isFromBot() && (
               <img
                 style={{
+                  width: '80%',
                   margin: 'auto',
                   position: 'absolute',
                   top: 0,
                   bottom: 0
                 }}
-                src={Logo}
+                src={staticAsset(Logo)}
               />
             )
           )}
