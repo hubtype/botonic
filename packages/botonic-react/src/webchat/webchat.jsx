@@ -64,6 +64,7 @@ export const Webchat = forwardRef((props, ref) => {
     updateTheme,
     updateDevSettings,
     toggleWebchat,
+    setError,
     openWebviewT,
     closeWebviewT
   } = props.webchatHooks || useWebchat()
@@ -201,8 +202,8 @@ export const Webchat = forwardRef((props, ref) => {
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath
       })
-      updateLatestInput(input)
-      updateReplies(false)
+    updateLatestInput(input)
+    updateReplies(false)
     setMenuIsOpened(false)
   }
 
@@ -236,7 +237,8 @@ export const Webchat = forwardRef((props, ref) => {
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
-    openWebviewApi: component => openWebviewT(component)
+    openWebviewApi: component => openWebviewT(component),
+    setError
   }))
 
   const resolveCase = () => {
@@ -385,104 +387,120 @@ export const Webchat = forwardRef((props, ref) => {
               toggleWebchat(false)
             }}
           />
-          <WebchatMessageList
-            style={{ flex: 1 }}
-            messages={webchatState.messagesComponents}
-          >
-            {webchatState.typing && <TypingIndicator />}
-            <div id='messages-end' />
-          </WebchatMessageList>
-          {webchatState.replies && (
-            <WebchatReplies
-              replies={webchatState.replies}
-              align={webchatState.theme.alignReplies}
-              wrap={webchatState.theme.wrapReplies}
-            />
-          )}
-          {emojiIsOpened && (
-            <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
-          )}
-
-          {menuIsOpened && (
-            <PersistentMenu>
-              {Object.values(props.persistentMenu).map((e, i) => {
-                return (
-                  <Button
-                    onClick={closeMenu}
-                    url={e.url}
-                    webview={e.webview}
-                    payload={e.payload}
-                    key={i}
-                  >
-                    {Object.values(e.label)}
-                  </Button>
-                )
-              })}
-              <Button onClick={closeMenu}>Cancel</Button>
-            </PersistentMenu>
-          )}
-          {!webchatState.handoff && (
+          {webchatState.error.message ? (
             <div
               style={{
+                flex: '1 1 auto',
                 display: 'flex',
-                borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'Arial, Helvetica, sans-serif'
               }}
             >
-              {props.persistentMenu && (
+              Error: {webchatState.error.message}
+            </div>
+          ) : (
+            <>
+              <WebchatMessageList
+                style={{ flex: 1 }}
+                messages={webchatState.messagesComponents}
+              >
+                {webchatState.typing && <TypingIndicator />}
+                <div id='messages-end' />
+              </WebchatMessageList>
+              {webchatState.replies && (
+                <WebchatReplies
+                  replies={webchatState.replies}
+                  align={webchatState.theme.alignReplies}
+                  wrap={webchatState.theme.wrapReplies}
+                />
+              )}
+              {emojiIsOpened && (
+                <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
+              )}
+              {menuIsOpened && (
+                <PersistentMenu>
+                  {Object.values(props.persistentMenu).map((e, i) => {
+                    return (
+                      <Button
+                        onClick={closeMenu}
+                        url={e.url}
+                        webview={e.webview}
+                        payload={e.payload}
+                        key={i}
+                      >
+                        {Object.values(e.label)}
+                      </Button>
+                    )
+                  })}
+                  <Button onClick={closeMenu}>Cancel</Button>
+                </PersistentMenu>
+              )}
+              {!webchatState.handoff && (
                 <div
                   style={{
                     display: 'flex',
-                    flex: 'none',
-                    width: 50
+                    borderTop: '1px solid rgba(0, 0, 0, 0.4)'
                   }}
                 >
-                  <div style={{ width: 50 }}>
-                    <img
+                  {props.persistentMenu && (
+                    <div
                       style={{
-                        paddingTop: '20px',
-                        paddingBottom: '15px',
-                        marginLeft: '18px',
-                        marginRight: '8px',
-                        cursor: 'pointer'
+                        display: 'flex',
+                        flex: 'none',
+                        width: 50
                       }}
-                      src={staticAssetsUrl + LogoMenu}
-                      onClick={() => handleMenu()}
-                    />
-                  </div>
+                    >
+                      <div style={{ width: 50 }}>
+                        <img
+                          style={{
+                            paddingTop: '20px',
+                            paddingBottom: '15px',
+                            marginLeft: '18px',
+                            marginRight: '8px',
+                            cursor: 'pointer'
+                          }}
+                          src={staticAssetsUrl + LogoMenu}
+                          onClick={() => handleMenu()}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  <Textarea
+                    name='text'
+                    minRows={2}
+                    maxRows={4}
+                    wrap='soft'
+                    maxLength='1000'
+                    placeholder={webchatState.theme.textPlaceholder}
+                    autoFocus={location.hostname === 'localhost'}
+                    inputRef={textArea}
+                    onKeyDown={e => onKeyDown(e)}
+                    style={{
+                      display: 'flex',
+                      paddingLeft: '10px',
+                      fontSize: 14,
+                      border: 'none',
+                      resize: 'none',
+                      overflow: 'auto',
+                      outline: 'none',
+                      marginTop: '13px'
+                    }}
+                  />
                 </div>
               )}
-              <Textarea
-                name='text'
-                minRows={2}
-                maxRows={4}
-                wrap='soft'
-                maxLength='1000'
-                placeholder={webchatState.theme.textPlaceholder}
-                autoFocus={location.hostname === 'localhost'}
-                inputRef={textArea}
-                onKeyDown={e => onKeyDown(e)}
-                style={{
-                  display: 'flex',
-                  paddingLeft: '10px',
-                  fontSize: 14,
-                  border: 'none',
-                  resize: 'none',
-                  overflow: 'auto',
-                  outline: 'none',
-                  marginTop: '13px'
-                }}
-              />
-            </div>
-          )}
-          {webchatState.webview && (
-            <RequestContext.Provider value={webviewRequestContext}>
-              <WebviewContainer
-                style={{
-                  ...props.theme.webviewStyle
-                }}
-                webview={webchatState.webview}
-              />
-            </RequestContext.Provider>
+              {webchatState.webview && (
+                <RequestContext.Provider value={webviewRequestContext}>
+                  <WebviewContainer
+                    style={{
+                      ...props.theme.webviewStyle
+                    }}
+                    webview={webchatState.webview}
+                  />
+                </RequestContext.Provider>
+              )}
+            </>
           )}
         </div>
       )}
