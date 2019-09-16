@@ -45,7 +45,9 @@ export class WebchatApp {
   }
 
   onServiceEvent(event) {
-    if (event.message.type === 'sender_action')
+    if (event.isError)
+      this.webchatRef.current.setError({ message: event.errorMessage })
+    else if (event.message.type === 'sender_action')
       this.setTyping(event.message.data === 'typing_on')
     else this.addBotMessage(event.message)
   }
