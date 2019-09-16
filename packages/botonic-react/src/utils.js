@@ -72,12 +72,16 @@ export function msgToBotonic(msg) {
 
 export function msgsToBotonic(msgs) {
   if (Array.isArray(msgs)) {
-    return <>{msgs.map((msg, i) => {
-      if (msg["key"] == null) {
-        msg["key"] = `msg${i}`
-      }
-      return msgToBotonic(msg)
-    })}</>;
+    return (
+      <>
+        {msgs.map((msg, i) => {
+          if (msg['key'] == null) {
+            msg['key'] = `msg${i}`
+          }
+          return msgToBotonic(msg)
+        })}
+      </>
+    )
   }
   return msgToBotonic(msgs)
 }
@@ -128,4 +132,13 @@ function quickreplies_parse(msg) {
     ))
   }
   return replies
+}
+
+export const staticAsset = path => {
+  let scriptBaseURL = document
+    .querySelector('script[src$="webchat.botonic.js"]')
+    .getAttribute('src')
+  let scriptName = scriptBaseURL.split('/').pop()
+  let basePath = scriptBaseURL.replace('/' + scriptName, '/')
+  return basePath + path
 }

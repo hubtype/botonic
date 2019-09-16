@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
+import { staticAsset } from '../utils'
 import styled from 'styled-components'
 import Logo from './botonic_react_logo100x100.png'
 import { Flex } from '@rebass/grid'
@@ -55,7 +56,7 @@ export const DefaultHeader = props => {
               paddingTop: 15,
               paddingLeft: 15
             }}
-            src={Logo}
+            src={staticAsset(Logo)}
           />
         )}
       </Flex>
