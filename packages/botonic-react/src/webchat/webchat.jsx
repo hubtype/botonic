@@ -22,19 +22,11 @@ import { PersistentMenu } from '../components/persistentMenu'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
-import { isDev, msgToBotonic } from '../utils'
+import { isDev, msgToBotonic, staticAsset } from '../utils'
 import Logo from './botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from './menuButton.svg'
 import { Button } from '../components/button'
-
-const getScriptBaseURL = () => {
-  let scriptBaseURL = document
-    .querySelector('script[src$="webchat.botonic.js"]')
-    .getAttribute('src')
-  let scriptName = scriptBaseURL.split('/').pop()
-  return scriptBaseURL.replace('/' + scriptName, '/')
-}
 
 const createUser = () => {
   let parser = new UAParser()
@@ -297,7 +289,6 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.isWebchatOpen])
 
   const textArea = useRef()
-  const staticAssetsUrl = getScriptBaseURL()
 
   const CustomTriggerButton = webchatState.theme.customTriggerButton
   let logoUrl = Logo
@@ -328,7 +319,7 @@ export const Webchat = forwardRef((props, ref) => {
         style={{
           height: 50
         }}
-        src={staticAssetsUrl + logoUrl}
+        src={staticAsset(logoUrl)}
       />
     </div>
   )
@@ -345,8 +336,7 @@ export const Webchat = forwardRef((props, ref) => {
         toggleWebchat,
         updateMessage,
         updateReplies,
-        updateLatestInput,
-        staticAssetsUrl
+        updateLatestInput
       }}
     >
       {!webchatState.isWebchatOpen && (
@@ -461,7 +451,7 @@ export const Webchat = forwardRef((props, ref) => {
                             marginRight: '8px',
                             cursor: 'pointer'
                           }}
-                          src={staticAssetsUrl + LogoMenu}
+                          src={staticAsset(LogoMenu)}
                           onClick={() => handleMenu()}
                         />
                       </div>
@@ -479,13 +469,13 @@ export const Webchat = forwardRef((props, ref) => {
                     onKeyDown={e => onKeyDown(e)}
                     style={{
                       display: 'flex',
-                      paddingLeft: '10px',
+                      flex: '1 1 auto',
+                      padding: 10,
                       fontSize: 14,
                       border: 'none',
                       resize: 'none',
                       overflow: 'auto',
-                      outline: 'none',
-                      marginTop: '13px'
+                      outline: 'none'
                     }}
                   />
                 </div>
