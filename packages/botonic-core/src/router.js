@@ -6,7 +6,7 @@ export class Router {
     this.routes = routes
   }
 
-  processInput(input, session, lastRoutePath) {
+  processInput(input, session = {}, lastRoutePath = null) {
     let routeParams = {}
     let path_params
     try {
@@ -122,10 +122,8 @@ export class Router {
   }
 
   getRoute(input, routes, session) {
-    /*
-        Find the input throw the routes, if it match with some of the entries,
-        return the hole Route of the entry with optional params (used in regEx)
-      */
+    /* Find the route that matches the given input, if it match with some of the entries,
+      return the whole Route of the entry with optional params captured if matcher was a regex */
     let params = {}
     let route = routes.find(r =>
       Object.entries(r)
@@ -151,12 +149,14 @@ export class Router {
     let [currentPath, ...childPath] = path.split('/')
     for (let r of routeList) {
       //iterate over all routeList
-      if (r.path == currentPath) route = r
-      if (r.childRoutes && r.childRoutes.length && childPath.length > 0) {
-        //evaluate childroute over next actions
-        route = this.getRouteByPath(childPath.join('/'), r.childRoutes)
-        if (route) return route
-      } else if (route) return route //last action and finded route
+      if (r.path == currentPath) {
+        route = r
+        if (r.childRoutes && r.childRoutes.length && childPath.length > 0) {
+          //evaluate childroute over next actions
+          route = this.getRouteByPath(childPath.join('/'), r.childRoutes)
+          if (route) return route
+        } else if (childPath.length == 0) return route //last action and found route
+      }
     }
     return null
   }
