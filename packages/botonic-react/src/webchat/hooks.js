@@ -6,6 +6,7 @@ export const webchatInitialState = {
   messagesJSON: [],
   messagesComponents: [],
   replies: [],
+  latestInput: {},
   typing: false,
   webview: null,
   webviewParams: null,
@@ -55,6 +56,8 @@ export function webchatReducer(state, action) {
       return state
     case 'updateReplies':
       return { ...state, replies: action.payload }
+    case 'updateLatestInput':
+      return { ...state, latestInput: action.payload }
     case 'updateTyping':
       return { ...state, typing: action.payload }
     case 'updateWebview':
@@ -92,6 +95,8 @@ export function useWebchat() {
     webchatDispatch({ type: 'updateMessage', payload: message })
   const updateReplies = replies =>
     webchatDispatch({ type: 'updateReplies', payload: replies })
+  const updateLatestInput = input =>
+    webchatDispatch({ type: 'updateLatestInput', payload: input })
   const updateTyping = typing =>
     webchatDispatch({ type: 'updateTyping', payload: typing })
   const updateWebview = (webview, params) =>
@@ -142,6 +147,7 @@ export function useWebchat() {
     addMessageComponent,
     updateMessage,
     updateReplies,
+    updateLatestInput,
     updateTyping,
     updateWebview,
     updateSession,

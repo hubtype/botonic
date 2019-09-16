@@ -54,6 +54,7 @@ export const Webchat = forwardRef((props, ref) => {
     addMessageComponent,
     updateMessage,
     updateReplies,
+    updateLatestInput,
     updateTyping,
     updateWebview,
     updateSession,
@@ -200,7 +201,8 @@ export const Webchat = forwardRef((props, ref) => {
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath
       })
-    updateReplies(false)
+      updateLatestInput(input)
+      updateReplies(false)
     setMenuIsOpened(false)
   }
 
@@ -341,6 +343,7 @@ export const Webchat = forwardRef((props, ref) => {
         toggleWebchat,
         updateMessage,
         updateReplies,
+        updateLatestInput,
         staticAssetsUrl
       }}
     >
