@@ -28,8 +28,6 @@ export const WebchatDev = forwardRef((props, ref) => {
   useEffect(
     () =>
       updateTheme({
-        ...webchatState.theme,
-        ...props.theme,
         style: {
           position: 'absolute',
           right: 0,
@@ -37,7 +35,9 @@ export const WebchatDev = forwardRef((props, ref) => {
         },
         triggerButtonStyle: {
           position: 'absolute'
-        }
+        },
+        ...webchatState.theme,
+        ...props.theme
       }),
     [props.theme]
   )
