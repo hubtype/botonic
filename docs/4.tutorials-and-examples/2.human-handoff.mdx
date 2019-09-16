@@ -15,17 +15,19 @@ In this example we've set up a route in `src/routes.js` that triggers the handof
 **src/routes.js**
 
 ```javascript
-import TransferAgent from './actions/transfer_agent'
+import TransferAgent from './actions/transfer-agent'
+import Thanks from './actions/thanks'
 
 export const routes = [
-    {path:'agent', text: /^handoff$/i, action: TransferAgent}
-}
+  { path: 'agent', text: /^handoff$/i, action: TransferAgent },
+  { path: 'thanks-for-contacting', action: Thanks }
+]
 ```
 
-Then, in our `src/actions/transfer_agent.js` file, we need to call the `humanHandoff` method inside `botonicInit`.
+Then, in our `src/actions/transfer-agent.js` file, we need to call the `humanHandoff` method inside `botonicInit`.
 Additionally, we check if the 'Customer Support' queue is opened:
 
-**src/actions/transfer_agent.js**
+**src/actions/transfer-agent.js**
 
 ```javascript
 import React from 'react'
@@ -35,28 +37,24 @@ import { getOpenQueues, humanHandOff } from '@botonic/core'
 export default class extends React.Component {
 
   static async botonicInit({ input, session, params, lastRoutePath }) {
-
     let openQueues = await getOpenQueues(session)
-    let is_handOff = false
-    if(openQueues.queues.indexOf('Customer Support') !== -1){
-      await humanHandOff(session, 'Customer Support', {action: 'thanks_for_contacting'})
-      is_handOff = true
+    let isHandOff = false
+    if (openQueues.queues.indexOf('Customer Support') !== -1) {
+      await humanHandOff(session, 'Customer Support', {
+        path: 'thanks-for-contacting'
+      })
+      isHandOff = true
     }
-    return {is_handOff}
-  
+    return { isHandOff }
   }
 
   render() {
-    if(this.props.is_handOff){
-      return(
-          <Text>
-            You are being trasnfered to an agent!
-          </Text>
-      )
-    }else {
-      return(
+    if (this.props.isHandOff) {
+      return <Text>You are being transferred to an agent!</Text>
+    } else {
+      return (
         <Text>
-          Sorry, right now we can't serve you...Please contact us later!
+          Sorry, right now we can't serve you... Please contact us later!
         </Text>
       )
     }
@@ -65,5 +63,5 @@ export default class extends React.Component {
 ```
 
 > #### NOTE:
-> Remember that `getOpenQueues` and `humanHandOff` are only available when the bot is deployed!
+> Remember that the full features for `getOpenQueues` and `humanHandOff` are only available when the bot is deployed!
 
