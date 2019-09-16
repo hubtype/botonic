@@ -19,6 +19,7 @@ export const webchatInitialState = {
     textPlaceholder: 'Ask me something...',
     title: 'Botonic'
   },
+  error: {},
   devSettings: {},
   isWebchatOpen: false
 }
@@ -76,6 +77,8 @@ export function webchatReducer(state, action) {
       return { ...state, devSettings: { ...action.payload } }
     case 'toggleWebchat':
       return { ...state, isWebchatOpen: action.payload }
+    case 'setError':
+      return { ...state, error: action.payload || {} }
     default:
       throw new Error()
   }
@@ -139,6 +142,11 @@ export function useWebchat() {
       type: 'toggleWebchat',
       payload: toggle
     })
+  const setError = error =>
+    webchatDispatch({
+      type: 'setError',
+      payload: error
+    })
 
   return {
     webchatState,
@@ -156,7 +164,8 @@ export function useWebchat() {
     updateHandoff,
     updateTheme,
     updateDevSettings,
-    toggleWebchat
+    toggleWebchat,
+    setError
   }
 }
 
