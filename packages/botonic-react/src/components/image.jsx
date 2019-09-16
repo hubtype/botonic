@@ -2,6 +2,14 @@ import React from 'react'
 
 import { Message } from './message'
 import { isBrowser } from '@botonic/core'
+import styled from 'styled-components'
+
+const StyledImage = styled.img`
+  border-radius: 8px;
+  max-width: 150px;
+  max-height: 150px;
+  margin: 10px;
+`
 
 const serialize = imageProps => {
   return { image: imageProps.src }
@@ -9,18 +17,7 @@ const serialize = imageProps => {
 
 export const Image = props => {
   let content = props.children
-  if (isBrowser())
-    content = (
-      <img
-        style={{
-          borderRadius: '8px',
-          maxWidth: '150px',
-          maxHeight: '150px',
-          margin: '10px'
-        }}
-        src={props.src}
-      />
-    )
+  if (isBrowser()) content = <StyledImage src={props.src} />
   return (
     <Message json={serialize(props)} {...props} type='image'>
       {content}

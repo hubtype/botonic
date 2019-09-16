@@ -2,6 +2,15 @@ import React, { useContext } from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext } from '../contexts'
+import styled from 'styled-components'
+
+const StyledReply = styled.button`
+  width: 100%;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: 0;
+`
 
 export const Reply = props => {
   const { webchatState, sendText } = useContext(WebchatContext)
@@ -25,20 +34,15 @@ export const Reply = props => {
       )
     }
     return (
-      <button
+      <StyledReply
         style={{
-          width: '100%',
-          padding: '4px 8px',
           border: `1px solid ${webchatState.theme.brandColor}`,
-          color: webchatState.theme.brandColor,
-          borderRadius: 8,
-          cursor: 'pointer',
-          outline: 0
+          color: webchatState.theme.brandColor
         }}
         onClick={e => handleClick(e)}
       >
         {props.children}
-      </button>
+      </StyledReply>
     )
   }
 

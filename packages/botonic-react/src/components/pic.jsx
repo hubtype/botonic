@@ -1,17 +1,21 @@
 import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
+import styled from 'styled-components'
+
+const StyledPic = styled.div`
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  width: 222px;
+  height: 140px;
+  border-bottom: 1px solid #f1f0f0;
+`
 
 export const Pic = props => {
   const renderBrowser = () => (
-    <div
+    <StyledPic
       style={{
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        width: 222,
-        height: 140,
-        background: `#fff url(${props.src}) no-repeat center/cover`,
-        borderBottom: '1px solid #F1F0F0'
+        background: `#fff url(${props.src}) no-repeat center/cover`
       }}
     />
   )
