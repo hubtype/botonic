@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 
 import { Webchat } from './webchat'
 import { HubtypeService } from '@botonic/core'
-import { msgToBotonic } from './utils'
+import { msgToBotonic } from './msgToBotonic'
 
 export class WebchatApp {
   constructor({
