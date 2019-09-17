@@ -14,7 +14,7 @@ const DefaultMessage = styled.div`
   font-family: Arial, Helvetica, sans-serif;
   border-radius: 8px;
 `
-const TextMessage = styled.div`
+const StyledMessageContent = styled.div`
   padding: 8px 12px;
   display: flex;
   flex-direction: column;
@@ -151,7 +151,7 @@ export const Message = props => {
           }}
           {...otherProps}
         >
-          <TextMessage>{textChildren}</TextMessage>
+          <StyledMessageContent>{textChildren}</StyledMessageContent>
           {buttons}
           {isFromUser() && blob && (
             <div
