@@ -9,7 +9,6 @@ import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
 import uuid from 'uuid/v4'
 import UAParser from 'ua-parser-js'
-import { Flex } from '@rebass/grid'
 import { params2queryString } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Text } from '../components/text'
@@ -21,12 +20,13 @@ import { PersistentMenu } from '../components/persistentMenu'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
-import { isDev, msgToBotonic, staticAsset } from '../utils'
+import { isDev, staticAsset } from '../utils'
 import Logo from './botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from './menuButton.svg'
 import LogoEmoji from './emojiButton.svg'
 import { Button } from '../components/button'
+import {msgToBotonic} from "../msgToBotonic";
 
 const createUser = () => {
   let parser = new UAParser()
