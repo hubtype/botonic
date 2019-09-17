@@ -53,7 +53,15 @@ test('TEST: StemmerEscaper', () => {
   const escaped = sut.escape('perro. ey gato pipican adios cán canes');
   const stemmed = tokenizeAndStem('es', escaped);
   const unescaped = stemmed.map(stem => sut.unescape(stem));
-  expect(unescaped).toEqual(['perro', 'ey', 'gat', 'pipic', 'adi', 'perro', 'perro']);
+  expect(unescaped).toEqual([
+    'perro',
+    'ey',
+    'gat',
+    'pipic',
+    'adi',
+    'perro',
+    'perro'
+  ]);
 });
 
 function naiveStemmer(word: string, locale: string): string {
