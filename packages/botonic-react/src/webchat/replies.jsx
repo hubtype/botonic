@@ -22,9 +22,9 @@ export const WebchatReplies = props => {
   return (
     <StyledReplies
       style={{
-        ...(props.style || {}),
         textAlign: (props.align && props.align.match(alignOptions)) || 'center',
-        whiteSpace: (props.wrap && props.wrap.match(wrapOptions)) || 'wrap'
+        whiteSpace: (props.wrap && props.wrap.match(wrapOptions)) || 'wrap',
+        ...(props.style || {})
       }}
     >
       {webchatState.replies.map((r, i) => (
