@@ -8,7 +8,8 @@ import {
   Image,
   Chitchat,
   Queue,
-  Content
+  Content,
+  StartUp
 } from './contents';
 import { Context } from './context';
 
@@ -43,6 +44,13 @@ export class ErrorReportingCMS implements CMS {
     return this.cms
       .text(id, context)
       .catch(this.handleError(ModelType.CHITCHAT, id))
+      .then(this.validate);
+  }
+
+  startUp(id: string, context?: Context): Promise<StartUp> {
+    return this.cms
+      .startUp(id, context)
+      .catch(this.handleError(ModelType.STARTUP, id))
       .then(this.validate);
   }
 

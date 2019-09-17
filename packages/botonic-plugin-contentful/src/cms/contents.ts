@@ -72,6 +72,24 @@ export class Button extends Content {
   }
 }
 
+export class StartUp extends Content implements ContentWithKeywords {
+  constructor(
+    // An ID (eg. PRE_FAQ1)
+    readonly name: string,
+    readonly imgUrl: string | undefined,
+    readonly text: string | undefined,
+    readonly buttons: Button[],
+    readonly shortText?: string,
+    readonly keywords: string[] = []
+  ) {
+    super(name);
+  }
+
+  validate(): string | undefined {
+    return Content.validateContents(this.buttons);
+  }
+}
+
 export class Carousel extends Content implements ContentWithKeywords {
   constructor(
     readonly name: string, // Useful to display in buttons or reports

@@ -9,19 +9,21 @@ import {
   Url,
   Chitchat,
   Queue,
-  Content
+  Content,
+  StartUp
 } from './contents';
 
 export enum ModelType {
+  ASSET = 'asset',
   CAROUSEL = 'carousel',
-  TEXT = 'text',
   CHITCHAT = 'chitchat',
-  URL = 'url',
-  SCHEDULE = 'schedule',
   DATE_RANGE = 'dateRange',
   IMAGE = 'image',
-  ASSET = 'asset',
-  QUEUE = 'queue'
+  QUEUE = 'queue',
+  TEXT = 'text',
+  URL = 'url',
+  SCHEDULE = 'schedule',
+  STARTUP = 'startUp'
 }
 
 export const MODEL_TYPES = Object.values(ModelType).map(m => m as ModelType);
@@ -42,11 +44,12 @@ export function isSameModel(model1: ModelType, model2: ModelType): boolean {
  */
 export interface CMS {
   carousel(id: string, context?: Context): Promise<Carousel>;
-  text(id: string, context?: Context): Promise<Text>;
   chitchat(id: string, context?: Context): Promise<Chitchat>;
-  url(id: string, context?: Context): Promise<Url>;
   image(id: string, context?: Context): Promise<Image>;
   queue(id: string, context?: Context): Promise<Queue>;
+  startUp(id: string, context?: Context): Promise<StartUp>;
+  text(id: string, context?: Context): Promise<Text>;
+  url(id: string, context?: Context): Promise<Url>;
   /**
    * @param context If locale specified, it does not returns contents without values for the locale (even if it has value for the fallback locale)
    */

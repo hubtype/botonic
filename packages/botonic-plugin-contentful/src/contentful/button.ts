@@ -67,6 +67,7 @@ export class ButtonDelivery {
   private getTargetCallback(target: ButtonTarget): cms.Callback {
     const model = DeliveryApi.getContentModel(target) as string;
     switch (model) {
+      case ModelType.STARTUP:
       case ModelType.CAROUSEL:
       case ModelType.TEXT:
         return new cms.ContentCallback(model, target.sys.id);

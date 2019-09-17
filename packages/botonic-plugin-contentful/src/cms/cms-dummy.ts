@@ -11,7 +11,8 @@ import {
   Text,
   Url,
   Queue,
-  Content
+  Content,
+  StartUp
 } from './contents';
 import * as time from '../time';
 import { DEFAULT_CONTEXT } from './context';
@@ -44,7 +45,13 @@ export class DummyCMS implements CMS {
     return this.text(id, context);
   }
 
-  public static buttonFromCallback(callback: Callback): Button {
+  async startUp(id: string, {} = DEFAULT_CONTEXT): Promise<StartUp> {
+    return Promise.resolve(
+      new StartUp(id, DummyCMS.IMG, 'Dummy text for ' + id, this.buttons())
+    );
+  }
+
+  static buttonFromCallback(callback: Callback): Button {
     const id = callback.payload || callback.url!;
     return new Button(id, 'button text for ' + id, callback);
   }
