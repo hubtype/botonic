@@ -10,6 +10,7 @@ import { ModelType } from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
+import { StartUpDelivery } from './startup';
 import { TextDelivery } from './text';
 import { UrlDelivery } from './url';
 import * as cms from '../cms';
@@ -20,6 +21,7 @@ export default class Contentful implements cms.CMS {
   _delivery: DeliveryApi;
   _carousel: CarouselDelivery;
   _text: TextDelivery;
+  _startUp: StartUpDelivery;
   _url: UrlDelivery;
   _keywords: KeywordsDelivery;
   _schedule: ScheduleDelivery;
@@ -34,6 +36,7 @@ export default class Contentful implements cms.CMS {
     const button = new ButtonDelivery(delivery);
     this._carousel = new CarouselDelivery(delivery, button);
     this._text = new TextDelivery(delivery, button);
+    this._startUp = new StartUpDelivery(delivery, button);
     this._url = new UrlDelivery(delivery);
     this._image = new ImageDelivery(delivery);
     this._asset = new AssetDelivery(delivery);
@@ -57,6 +60,10 @@ export default class Contentful implements cms.CMS {
 
   async text(id: string, context = DEFAULT_CONTEXT): Promise<cms.Text> {
     return this._text.text(id, context);
+  }
+
+  async startUp(id: string, context = DEFAULT_CONTEXT): Promise<cms.StartUp> {
+    return this._startUp.startUp(id, context);
   }
 
   async url(id: string, context = DEFAULT_CONTEXT): Promise<cms.Url> {
