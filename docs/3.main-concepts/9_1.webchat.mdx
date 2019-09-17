@@ -1,0 +1,90 @@
+---
+name: 10. Webchat
+route: /main-concepts/webchat
+menu: 3. Main Concepts
+---
+
+# **Webchat**
+
+## What is Webchat?
+
+Bots developed with Botonic can be easily deployed to different messaging channels. 
+This is due to the fact that Botonic components are specifically treated in order to be executed in a server environment such as Node.Js. 
+As they are based on React, Botonic components are the perfect fit in order to offer you applications such as Webchat. Webchat is a system that allows you to not being restricted to use one of the different messaging providers in order to be able to run your bots and it can easily be embedded in your website.
+It has all the necessary features that you will need to develop a conversational application, such as interactive elements, handovers to human agents, etc.
+
+<img
+	src="https://botonic-doc-static.netlify.com/images/webchat_usage.png"
+	style={{ display: 'block', margin: 'auto', maxWidth: '50%' }}
+/>
+
+_Webchat's look. Embedded Webchats can be triggered by clicking the chat bubble._
+
+
+
+## Webchat SDK API
+
+Once you have your Webchat integrated ([see Webchat channel integration](/main-concepts/channels)), you will be provided with a snippet of code to be embedded in your page.
+This snippet of code will be loading as a script the entire code of your bot and thus, the following API methods will be available for you in order to invoke explicitly the Webchat component (you can test it in your current browser's developers console).
+These methods are:
+* `Botonic.open()`: Opens the webchat window if it's closed.
+* `Botonic.close()`: Closes the webchat window if it's open.
+* `Botonic.toggle()`: Opens or closes the webchat window depending on current state.
+* `Botonic.setTyping(boolean)`: Sets the visibility of the typing indicator.
+* `Botonic.addUserText(string)`: Sends a text to the bot as if the user sent it.
+* `Botonic.addUserPayload(string)`: Sends a payload to the bot as if the user sent it.
+* `Botonic.addBotText(string)`: Adds a new message in the webchat window as if the bot sent it.
+* `Botonic.updateUser(Object)`: Updates the attributes of the user. `({id: '1234', name: 'Pepito'})`
+
+### Webchat listeners
+In the same way, sometimes you would want to react to some of the events that take place when some actions occur in the Webchat. For fulfilling this purpose, you can define the following event listeners:
+
+**`Snippet to be embedded`**
+```html
+<html>
+  <head>
+    <script
+      type="text/javascript"
+      src="{BOT_DOMAIN}/webchat.botonic.js"
+    ></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function(event) {
+        Botonic.render(document.getElementById('root'), {
+          appId: 'YOUR_APP_ID',
+          	onInit: app => console.log('Webchat initialized!'),
+          	onOpen: app => console.log('Webchat opened!'),
+          	onClose: app => console.log('Webchat closedd!'),
+          	onMessage: (app, msg) => console.log('Current message', msg)
+        })
+      })
+    </script>
+  </body>
+</html>
+```
+It can be used as well in **`src/webchat/index.js`**.
+```javascript
+export const webchat = {
+  onInit: app => {
+    // You can combine webchat listeners with the Webchat SDK's Api in order
+    // to obtain extra functionalities. This will open automatically the webchat once the site is loaded.
+    app.toggle()
+  },
+  onOpen: app => {
+    app.addUserPayload('INITIAL_PAYLOAD')
+  },
+  onClose: app => {
+    console.log('Webchat closed!')
+  },
+  onMessage: app => {
+    // Your stuff here
+  }
+}
+```
+
+## Customizing the Webchat
+Another great advantage of Webchat is that you can fully customize its components. Some of them are predefined and ready to be modified, 
+but since it's based on React, you can let your imagination run free to achieve great results by creating your own components from scratch! Check [Webchat's customization section](/tutorials-and-examples/custom-webchat) for further details.
