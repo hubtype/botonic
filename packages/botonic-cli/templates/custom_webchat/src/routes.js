@@ -1,7 +1,10 @@
 import Start from './actions/start'
-import Thanks from './actions/thanks'
+import Help from './actions/help'
+import ShowButtons from './actions/show-buttons'
+import ShowReplies from './actions/show-replies'
 export const routes = [
-  { path: 'reply-yes', payload: 'yes', action: Thanks },
-  { path: 'reply-no', payload: 'no', action: Thanks },
+  { path: 'help', payload: 'help', action: Help },
+  { path: 'buttons', payload: 'buttons', action: ShowButtons },
+  { path: 'replies', payload: 'replies', action: ShowReplies },
   { path: 'start', text: /.*/, action: Start }
 ]
