@@ -21,9 +21,17 @@ export function isProd() {
   return process.env.NODE_ENV == 'production'
 }
 
-export function msgToBotonic(msg) {
+export function msgToBotonic(msg, customMessageTypes) {
   delete msg.display
-  if (msg.type == 'text') {
+  if (msg.type == 'custom') {
+    try {
+      return customMessageTypes
+        .find(mt => mt.customTypeName == msg.data.customTypeName)
+        .deserialize(msg)
+    } catch (e) {
+      console.log(e)
+    }
+  } else if (msg.type == 'text') {
     if (
       (msg.replies && msg.replies.length) ||
       (msg.keyboard && msg.keyboard.length)
@@ -70,7 +78,7 @@ export function msgToBotonic(msg) {
   }
 }
 
-export function msgsToBotonic(msgs) {
+export function msgsToBotonic(msgs, customMessageTypes) {
   if (Array.isArray(msgs)) {
     return (
       <>
@@ -78,12 +86,12 @@ export function msgsToBotonic(msgs) {
           if (msg['key'] == null) {
             msg['key'] = `msg${i}`
           }
-          return msgToBotonic(msg)
+          return msgToBotonic(msg, customMessageTypes)
         })}
       </>
     )
   }
-  return msgToBotonic(msgs)
+  return msgToBotonic(msgs, customMessageTypes)
 }
 
 function elements_parse(elements) {
