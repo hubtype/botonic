@@ -207,7 +207,12 @@ export const Message = props => {
   }
 
   let { blob: _blob, json: _json, ...nodeProps } = props
-  const renderNode = () => <message {...nodeProps}>{children}</message>
+  const renderNode = () =>
+    type === 'custom' ? (
+      <message json={JSON.stringify(_json)} {...nodeProps} />
+    ) : (
+      <message {...nodeProps}>{children}</message>
+    )
 
   if (isBrowser()) return renderBrowser()
   else if (isNode()) return renderNode()
