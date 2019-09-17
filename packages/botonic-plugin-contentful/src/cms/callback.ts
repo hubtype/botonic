@@ -1,5 +1,6 @@
 import { CMS, MODEL_TYPES, ModelType } from './cms';
 import escapeStringRegexp from 'escape-string-regexp';
+import { Context } from './context';
 
 export class Callback {
   /**
@@ -60,20 +61,22 @@ export class ContentCallback extends Callback {
     }
   }
 
-  deliverPayloadContent(cms: CMS): Promise<any> {
+  deliverPayloadContent(cms: CMS, context?: Context): Promise<any> {
     switch (this.model) {
       case ModelType.CAROUSEL:
-        return cms.carousel(this.id);
+        return cms.carousel(this.id, context);
       case ModelType.TEXT:
-        return cms.text(this.id);
+        return cms.text(this.id, context);
       case ModelType.CHITCHAT:
-        return cms.chitchat(this.id);
+        return cms.chitchat(this.id, context);
+      case ModelType.STARTUP:
+        return cms.startUp(this.id, context);
       case ModelType.URL:
-        return cms.url(this.id);
+        return cms.url(this.id, context);
       case ModelType.QUEUE:
-        return cms.queue(this.id);
+        return cms.queue(this.id, context);
       case ModelType.IMAGE:
-        return cms.image(this.id);
+        return cms.image(this.id, context);
       case ModelType.SCHEDULE:
         return cms.schedule(this.id);
       case ModelType.DATE_RANGE:

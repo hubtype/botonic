@@ -13,6 +13,10 @@ export interface BotonicMsg {
   data: any;
 }
 
+export interface BotonicText extends BotonicMsg {
+  buttons: any;
+}
+
 export class BotonicMsgConverter {
   constructor(readonly options = new RenderOptions()) {}
 
@@ -71,6 +75,19 @@ export class BotonicMsgConverter {
       return [msg, this.followUp(text.followUp)];
     }
     return msg;
+  }
+
+  startUp(startUp: cms.StartUp): BotonicMsg[] {
+    const img: BotonicMsg = {
+      type: 'image',
+      data: { image: startUp.imgUrl }
+    };
+    const text: BotonicText = {
+      type: 'text',
+      data: { text: startUp.text },
+      buttons: this.convertButtons(startUp.buttons, ButtonStyle.BUTTON)
+    };
+    return [img, text];
   }
 
   image(img: cms.Image): BotonicMsg {

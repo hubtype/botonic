@@ -31,7 +31,7 @@ Managing the bot contents in an external tool offers the following advantages:
 
 Currently the Contentful plugin allows your bot to easily access these kind of contents:
 
-* Combinations of the following Botonic UI components: Carousels and Texts. Carousel and Texts buttons can be configured
+* Combinations of the following Botonic UI components: Start up messages, Carousels and Texts. Their buttons can be configured
 to trigger other botonic components as well as opening external URLs. 
 * Images, which optionally can be assigned to different assets depending on the user language. 
 * Information about Botonic desk queues, such as its name and schedule.
@@ -91,11 +91,11 @@ Go to contentful dashboard. Open the "Contents section" and create the contents 
   style={{ display: 'block', margin: 'auto', maxWidth: '30%' }}
 />
 
-#### References between contents
+#### Buttons
 
-Your *Text* or *Carousel* buttons may trigger different behaviours depending on the type of its *target* field
+The content buttons may trigger different behaviours depending on the type of its *target* field:
 
-* If you assign a Text or Carousel, the button text will be automatically assigned to the *Short Text* field of the target content. When the button is pressed, it will send your bot a payload with value "\<MODEL_TYPE\>$\<ID\>". \<MODEL\_TYPE\> may be *text* or *carousel*, whereas \<ID\> will be the ID of the target.
+* If you assign a *StartUp*, *Text* or *Carousel*, the button text will be automatically assigned to the *Short Text* field of the target content. When the button is pressed, it will send your bot a payload with value "\<MODEL_TYPE\>$\<ID\>". \<MODEL\_TYPE\> may be *startUp*, *text* or *carousel*, whereas \<ID\> will be the ID of the target.
 * If you assign a URL, the browser will open it when the button is pressed.
 * In two cases you should assing a *Button* target. 1) When you want the button to have a text different than the target content's *Short Text*. 2) When you want to assign a custom *Payload* to trigger a bot action.
 
@@ -151,9 +151,9 @@ export const plugins = [
 ...
 ```
 
-#### Rendering a botonic Text or Carousel
+#### Rendering a Contentful content with Botonic React
 
-To render a botonic Texts and Carousels with the contents configured at contentful space:
+To render a botonic *StartUp*, *Texts* and *Carousels* with the contents configured at contentful space:
 
 1) Create the following functions, which convert the result from the Contentful plugin to react components (They are not
 implemented within the Contentful plugin to keep the plugin fully decoupled from React)
@@ -171,6 +171,11 @@ export function renderText(text) {
 
 export function renderCarousel(carousel) {
   const msg = converter.carousel(carousel);
+  return msgsToBotonic(msg);
+}
+
+export function renderStartUp(startUp: cms.StartUp): React.ReactNode {
+  const msg = converter.startUp(startUp);
   return msgsToBotonic(msg);
 }
 ```
@@ -201,7 +206,7 @@ export default class Text extends React.Component {
 
 *plugin.cms.text(id)* returns an object with all the fields configured at www.contentful.com. Instead of directly passing it to the renderText function, you can also process them according to your requirements (eg. you could be just interested on the text field).
 
-3) to render the *Text*s and *Carousel*s assigned to the buttons at the Contentful dashboard,
+3) to render the content assigned to the buttons at the Contentful dashboard,
 you we'll need to assign these routes:
 
 ```
@@ -240,7 +245,7 @@ export default class Text extends React.Component {
 
 #### Search by keywords
 
-Apart from fetching your contents by ID, you can also search them. From www.contentful.com, you can assign Keywords to your Text, Carousel, URLs and Queue's. Each keyword is a string
+Apart from fetching your contents by ID, you can also search them. From www.contentful.com, you can assign keywords to your contents of type *StartUp*, *Text*, *Carousel*, *URL* and *Queue*. Each keyword is a string
 of words that can be used to search your contents. To make the search more flexible, the plugin will perform the 
 following preprocessing in both the content keywords and the search keywords:
 
@@ -263,7 +268,20 @@ import * as cms from '@botonic/plugin-contentful';
     	console.log(result);
 	 }
   }
+  
 ```
+
+#### Keyword edition in contenful.com
+
+Be careful when editing the keywords in contenful.com. If you select "Tag" as the Appearance configuration for your keywords,
+remember to alway press RETURN after typing a new keyword. Otherwise, it will be ignored. See image below:
+ <img
+  src="https://botonic-doc-static.netlify.com/images/contentful/keywords.png"
+  style={{ display: 'block', margin: 'auto', maxWidth: '60%' }}
+/>
+
+#### Types of search
+
 *searchByKeywords* allows 3 different match types (all of them performing the previously specified preprocessing):
 
 * **ONLY\_KEYWORDS\_FOUND**: the content must have a keyword with all the words from the search text.

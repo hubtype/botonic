@@ -13,4 +13,4 @@ fi
 
 contentful space import --space-id=$CONTENTFUL_SPACEID \
     --management-token=$CONTENTFUL_TOKEN \
-    --content-file "$BIN_DIR/../exports/contentful-export-0.9.16.json"
+    --content-file "$BIN_DIR/../exports/contentful-export-0.9.20.json"

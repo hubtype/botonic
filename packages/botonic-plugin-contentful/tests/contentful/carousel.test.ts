@@ -2,7 +2,7 @@ import { testContentful, testContext } from './contentful.helper';
 import * as cms from '../../src';
 import { expectImgUrlIs } from './image.test';
 
-const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
+export const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD';
 
 function assertElementDudasPrevias(element: cms.Element) {
   expect(element.title).toBe('Dudas previas a la compra');
