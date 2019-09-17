@@ -78,7 +78,10 @@ export const Webchat = forwardRef((props, ref) => {
       if (messages) {
         messages.map(m => {
           addMessage(m)
-          let newComponent = msgToBotonic({ ...m, delay: 0, typing: 0 })
+          let newComponent = msgToBotonic(
+            { ...m, delay: 0, typing: 0 },
+            props.theme.customMessageTypes
+          )
           if (newComponent) addMessageComponent(newComponent)
         })
       }
