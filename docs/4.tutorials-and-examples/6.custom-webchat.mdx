@@ -16,25 +16,38 @@ This template shows how to create custom elements for webchat. All the custom co
 **src/webchat/index.js**
 
 ```javascript
-import Logo from '../assets/bot_vader.jpg'
-import { MyReply } from './myReply'
+export const webchat = {
+  theme: {},
 
-export const theme = {
-  brandColor: '#ff0000',
-  textPlaceholder: 'Please, type your message:',
-  title: 'Custom Webchat',
-  brandIconUrl: Logo,
-  customReply: MyReply
+  persistentMenu: [],
+
+  blockInputs: [],
+
+  // Webchat listeners
+  onInit: app => {},
+  onOpen: app => {},
+  onClose: app => {},
+  onMessage: app => {}
 }
 ```
 
-This is the main file of the webchat config. In this file, we export all the options that are going to be changed from the default webchat config.
+This is just a boilerplate code containing all the allowed definitions for your Webchat.
+- **theme**: In this object you can define the styles for your Webchat components.
+- **persistentMenu**: This will enable a persistent menu, which is a component that will help users to access the core functionalities of the bot at any point in the conversation.
+- **blockInputs**: Sometimes you would want to forbide some user inputs of the user. This permits you to define which are the inputs not allowed.
+- **Listeners**: Listeners are useful in order to react to some events when using the webchat.  
 
-These are the options that Botonic allows you to modify:
+Let's see how we can use these objects:
 
-- **brandColor:** the main color of the webchat widget.
+## theme
 
-* **textPlaceholder:** text placeholder in the input text.
+These are the available styles that Botonic allows you to modify:
+### General Styling
+- **style:** the main characteristics of webchat such as its size, its background color...
+
+* **brandColor:** the main color palette of the webchat widget.
+
+- **textPlaceHolder:** text placeholder in the input text.
 
 - **title:** the title that's displayed in the header of the widget.
 
@@ -46,25 +59,55 @@ These are the options that Botonic allows you to modify:
 
 - **customHeader:** React Component that is injected in the Header of the widget.
 
+* **botLogoChat:** the icon representing the bot in the chat.
+
+- **brandIconUrl:** launcher icon for toggling the webchat.
+
+* **customTriggerButton:** React component that is injected in the Launcher icon.
+
+### Header Styling
+- **headerTitle:** display title of the webchat.
+
+* **headerSubtitle:** display subtitle of the webchat.
+
+- **headerImage:** the main color of the webchat widget.
+
+* **introImage:** text placeholder in the input text.
+
+- **customHeader:** React Component that is injected in the Header of the widget.
+
+### Botonic Components Styling
+- **customUserMessages:** color and border radius of user messages.
+
+* **customBotMessages:** color and border radius of bot messages.
+
+- **customButton:** React Component that is injected in the Button objects of the widget.
+
+* **customReply:** React Component that is injected in the Reply objects of the widget.
+
+- **alignReplies:** aling replies at `left`, `center` or `right`.
+
+* **wrapReplies:** to wrap replies or not in the same row.
 
 ## Custom Compononent Examples
 
 In this example, we are putting css styles into a custom quickreply.
 It's very important to put `{props.children}` inside the container, in this case the `<div>` tag:
 
-**src/webchat/myReply.js**
+
+**src/webchat/myCustomReply.js**
 
 ```javascript
 import React from 'react'
 
-export const MyReply = props => (
+export const MyCustomReply = props => (
   <div
     style={{
-      color: '#3333cc',
-      border: '2px solid red',
-      backgroundColor: 'pink',
-      borderRadius: 15,
-      padding: 5,
+      color: '#0000ff',
+      border: '2px solid #0000ff',
+      backgroundColor: 'white',
+      borderRadius: 30,
+      padding: 8,
       cursor: 'pointer'
     }}
   >
@@ -76,71 +119,174 @@ This is an example of a custom Header for our webchat. We can put all the fancy 
 This is a static object, so it's not applied in any [RCML](/main-concepts/rich-conversational-markup-language) component, so we don't have to put `{props.children}` inside any container.
 
 
-**src/webchat/myHeader.js**
+**src/webchat/myCustomHeader.js**
 
 ```javascript
-import Logo from '../assets/bot_vader.jpg'
 import React from 'react'
+import Icon from '../assets/header-logo.png'
 
-export const MyHeader = props => {
+export const MyCustomHeader = () => {
   var scriptBaseUrl = document
     .querySelector('script[src$="webchat.botonic.js"]')
     .getAttribute('src')
   var scriptName = scriptBaseUrl.split('/').pop()
   scriptBaseUrl = scriptBaseUrl.replace('/' + scriptName, '/')
-
   return (
     <div
       style={{
+        background: 'linear-gradient(90deg, #184BA5 0%, #5E90C3 100%)',
+        borderRadius: '6px 6px 0px 0px',
+        height: 70,
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        backgroundColor: 'pink',
-        color: 'saddlebrown'
+        alignItems: 'center'
       }}
     >
       <img
-        style={{
-          height: 24,
-          margin: '0px 12px'
-        }}
-        src={scriptBaseUrl + Logo}
+        style={{ margin: '0px 12px', width: 38, color: 'white' }}
+        src={scriptBaseUrl + Icon}
       />
-      <h2
+      <h1
         style={{
-          margin: 0,
-          fontFamily: 'Arial, Helvetica, sans-serif'
+          fontFamily: 'Noto Sans JP',
+          src: 'https://fonts.googleapis.com/css?family=Noto+Sans+JP',
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          fontSize: 16,
+          lineHeight: 10,
+          color: '#ffffff',
+          width: '80%'
         }}
       >
-        Custom Webchat Title
-      </h2>
+        My customized header
+      </h1>
+      <div
+        style={{
+          cursor: 'pointer',
+          fontSize: 16,
+          color: 'white',
+          width: '30%',
+          justifyContent: 'center',
+          display: 'flex'
+        }}
+        onClick={() => {
+          Botonic.close()
+        }}
+      >
+        ✕
+      </div>
     </div>
   )
 }
 ```
 
-
 Finally, import all the custom components into the bot:
 
-**src/app.js**
+**src/webchat/index.js**
 
 ```javascript
-import { App } from '@botonic/react'
+import { MyCustomReply } from './myCustomReply'
+import { MyCustomButton } from './myCustomButton'
+import { MyCustomHeader } from './myCustomHeader'
+import launcherIcon from '../assets/launcher-logo.png'
+import { MyCustomIntroImage } from './myCustomIntroImage'
+import { MyBotLogoChat } from './myBotLogoChat'
+import { MyCustomHeaderImage } from './myCustomHeaderImage'
+import { TriggerCustom } from './triggerCustom'
 
-import { routes } from './routes'
-import { locales } from './locales'
-import { integrations } from './integrations'
-import { theme } from './webchat'
-
-export default new App({ routes, locales, integrations, theme })
+export const webchat = {
+  theme: {
+    style: {
+      position: 'fixed',
+      right: 20,
+      bottom: 20,
+      width: 400,
+      height: 500,
+      margin: 'auto',
+      backgroundColor: 'white',
+      borderRadius: '25px',
+      boxShadow: '0 0 50px rgba(0,0,255,.30)',
+      backgroundImage:
+        'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
+    },
+    brandColor: '#0000ff',
+    textPlaceholder: 'Type something...',
+    botLogoChat: MyBotLogoChat,
+    headerTitle: 'My customized webchat',
+    headerSubtitle: 'R2D2',
+    headerImage: MyCustomHeaderImage,
+    introImage: MyCustomIntroImage,
+    customUserMessages: {
+      color: 'white',
+      borderRadius: '20px'
+    },
+    customBotMessages: {
+      color: 'blue',
+      borderRadius: '10px'
+    },
+    customReply: MyCustomReply,
+    alignReplies: 'right',
+    wrapReplies: 'wrap',
+    customButton: MyCustomButton,
+    brandIconUrl: launcherIcon,
+    customTriggerButton: TriggerCustom,
+    customHeader: MyCustomHeader
+  }
+}
 ```
 
 All these changes can be tested using the `botonic serve` command *(npm run start on windows)*. This is how it looks:
+Try to play with the properties in the template in order to see how they affect to the differents components in the webchat. 
+This is how it looks like.
 
 <img
   src="https://botonic-doc-static.netlify.com/images/webchat_example.png"
-  style={{ display: 'block', margin: 'auto', maxWidth: '100%' }}
+  style={{ display: 'block', margin: 'auto', maxWidth: '40%' }}
 />
+
+## Persistent Menu
+By adding these few lines of code in webchat's object, you can enable the persistent menu:
+
+```javascript
+persistentMenu: [
+    { label: 'Help', payload: 'help' },
+    {
+      label: 'See docs',
+      url: 'https://docs.botonic.io'
+    }
+  ]
+```
+
+<img
+  src="https://botonic-doc-static.netlify.com/images/webchat_persistent_menu.png"
+  style={{ display: 'block', margin: 'auto', maxWidth: '50%' }}
+/>
+
+_Example of the Persistent Menu_
+
+The persistent menu lets you to use the same properties as a Botonic Button, this is `payload` and `url`.
+## Block Inputs
+Sometimes you would want to not allow certain messages for security reasons or to avoid agressive words. You can block these inputs as follows:
+
+```javascript
+blockInputs: [
+    {
+      match: [/ugly/, /bastard/],
+      message: 'We cannot tolerate these kind of words.'
+    }
+  ]
+```
+<img
+  src="https://botonic-doc-static.netlify.com/images/webchat_block_inputs.png"
+  style={{ display: 'block', margin: 'auto', maxWidth: '25%' }}
+/>
+
+
+_Example of blocking inputs_
+
+Once the specified inputs are matched, an automatic message will be displayed warning the user and the bot won't execute any internal logic.
+
+> We suggest you check the full template which offers a bunch of examples to get started customizing the Webchat components.
+
 <NextButton title="Testing Your Components" href="/tutorials-and-examples/testing-your-components" />
 
 <PrevButton title="Interactive Examples" href="/tutorials-and-examples/interactive-examples" />
