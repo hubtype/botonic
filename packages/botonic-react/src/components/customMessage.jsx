@@ -1,12 +1,7 @@
 import React from 'react'
 import { Message } from './message'
 
-export const customMessage = ({
-  name,
-  component: CustomMessageComponent,
-  serializer,
-  deserializer
-}) => {
+export const customMessage = ({ name, component: CustomMessageComponent }) => {
   const CustomMessage = props => (
     <Message id={props.id} json={props.json} type='custom'>
       {props.children}
@@ -15,10 +10,7 @@ export const customMessage = ({
   let WrappedComponent = props => {
     let { id, ...customMessageProps } = props
     return (
-      <CustomMessage
-        id={id}
-        json={{ ...serializer(props), customTypeName: name }}
-      >
+      <CustomMessage id={id} json={{ ...props, customTypeName: name }}>
         <CustomMessageComponent {...customMessageProps}>
           {props.children}
         </CustomMessageComponent>
@@ -27,9 +19,7 @@ export const customMessage = ({
   }
   WrappedComponent.customTypeName = name
   WrappedComponent.deserialize = msg => (
-    <CustomMessage id={msg.id} json={msg.data}>
-      {deserializer(msg.data)}
-    </CustomMessage>
+    <WrappedComponent id={msg.id} json={msg.data} {...msg.data} />
   )
   return WrappedComponent
 }
