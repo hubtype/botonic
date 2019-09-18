@@ -57,7 +57,7 @@ In the same way, sometimes you would want to react to some of the events that ta
           appId: 'YOUR_APP_ID',
           	onInit: app => console.log('Webchat initialized!'),
           	onOpen: app => console.log('Webchat opened!'),
-          	onClose: app => console.log('Webchat closedd!'),
+          	onClose: app => console.log('Webchat closed!'),
           	onMessage: (app, msg) => console.log('Current message', msg)
         })
       })
@@ -87,4 +87,4 @@ export const webchat = {
 
 ## Customizing the Webchat
 Another great advantage of Webchat is that you can fully customize its components. Some of them are predefined and ready to be modified, 
-but since it's based on React, you can let your imagination run free to achieve great results by creating your own components from scratch! Check [Webchat's customization section](/tutorials-and-examples/custom-webchat) for further details.
+but since it's based on React, you can let your imagination run free to achieve great results by creating your own components from scratch! Check [Custom Webchat section](/tutorials-and-examples/custom-webchat) for further details.
