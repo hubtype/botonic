@@ -1,6 +1,7 @@
 import { MyReply } from './myReply'
 import { MyButton } from './myButton'
 import { MyHeader } from './myHeader'
+import MyCalendarMessage from './myCalendarMessage'
 import Logo from '../assets/bot_vader.jpg'
 
 export const webchat = {
@@ -11,6 +12,7 @@ export const webchat = {
     brandIconUrl: Logo,
     customReply: MyReply,
     customButton: MyButton,
-    customHeader: MyHeader
+    customHeader: MyHeader,
+    customMessageTypes: [MyCalendarMessage]
   }
 }
