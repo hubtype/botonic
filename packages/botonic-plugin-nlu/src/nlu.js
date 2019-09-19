@@ -52,7 +52,7 @@ export class NLU {
     let { model, nluData } = this.models[language]
     let prediction = getPrediction(input, model, nluData)
     let intent = getIntent(prediction, nluData.intentsDict, language)
-    let entities = getEntities(input, nluData.devEntities)
+    let entities = { entities: getEntities(input, nluData.devEntities) }
     return { intent, entities }
   }
 }
