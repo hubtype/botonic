@@ -1,4 +1,4 @@
-import nluConfig from './nlu.config.json'
+import nluConfig from './nlu/nlu.config.json'
 export const plugins = [
   {
     id: 'nlu',
