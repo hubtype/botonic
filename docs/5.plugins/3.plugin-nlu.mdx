@@ -13,7 +13,7 @@ import { PrevButton } from '../components/prevButton.tsx'
 
 Botonic Plugin NLU is another one of the [available](https://github.com/hubtype/botonic/tree/master/packages) plugins for Botonic, 
 but with few particularities.
-This extension allows you to define your own set of intents to be recognized within your bot's code. Let's see how to do it!
+This extension allows you to define your own set of intents and entities to be recognized within your bot's code. Let's see how to do it!
 We suggest you to start with the predefined [NLU template](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/nlu)
 which contains an scaffold project to start with. It can be initialized by running:
 
@@ -34,28 +34,46 @@ The first step is to install the module with the following command in your bot's
 npm install @botonic/plugin-nlu
 ```
 
-This command will install all the necessary stuff to start working with your intents.
+This command will install all the necessary stuff to start working with your intents and entities.
 
 
 ### **Defining your intents**
 
 Once installed, you will need to define a new directory called `nlu` under the `src` folder of your bot. Inside this new folder, 
-we are going to create a subdirectory called `intents`, which will contain your multilingual intents. Then for every language you want to support, 
-you will need to create another directory under `src/nlu/intents` with its language code (it must be [ISO 639-3](https://iso639-3.sil.org/code_tables/639/data)).
+we are going to create a subdirectory called `utterances`, which will contain your multilingual intents. Then for every language you want to support, 
+you will need to create another directory under `src/nlu/utterances` with its language code (it must be [ISO 639-3](https://iso639-3.sil.org/code_tables/639/data)).
 After having defined this in your project, you just need to add a bunch of simple text files as `{YOUR_INTENT}.txt` and fill them with the utterances you think that best describe each intent. **Every sentence must be on a different line of the file.**
 
 For the sake of clarity, let's illustrate with an example how your directory should look at this point:
 
-**src/nlu/intents/eng**
+**src/nlu/utterances/eng**
 * BookRestaurant.txt
 * GetDirections.txt
 * Greetings.txt
 
-So in this example, we have added three different intents which our bot will know how to understand. Obviously, 
-but the more example utterances you have, the better results you will obtain.
+So in this example, we have added three different intents which our bot will know how to understand. Obviously, the more example utterances you have, the better results you will obtain.
+
+### **Defining your entities**
+You can also define your entities in the same utterances as follows:
+
+"Book a table for today's lunch at `[Eggy's Diner](Place)` for 3 people"
+
+With this notation we are telling Botonic NLU that `Eggy's Diner` is the value for an entity of type `Place`.
+`Place` is a generic entity as well as `Person`, `Organization` or `Date`, this is how you can access them with the input object:
+* `Place`: `input.entities.places`
+* `Person`: `input.entities.people`
+* `Organization`: `input.entities.organizations`
+* `Date`: `input.entities.dates`
+
+Sometimes, you will need to capture more specific entites which you can define as this:  
+
+"Show me the way to Rand's birthday party by [car](Vehicle)"  
+
+which you can access in `input.entities.tags`, that is a list containing all the tagged words by the algorithm.
+
 
 ### **Configuring the plugin **
-After defining your intents, you can move to the plugin's configuration. It consists of two steps:
+After defining your utterances, you can move to the plugin's configuration. It consists of two steps:
 
 ### Tuning your training parameters
 First of all you have to create a new file called `nlu.config.json`. This file defines which languages you want to be enabled in `botonic serve` and in **production**, 
@@ -64,44 +82,56 @@ as well as it configures the training phase parameters.
 ** src/nlu/nlu.config.json **
 
 ```javascript
-[
-  {
-    "LANG": "eng",
-    "ALGORITHM": "glove",
-    "EMBEDDING_DIM": 50,
-    "TRAINABLE_EMBEDDINGS": true,
-    "LEARNING_RATE": 0.03,
-    "EPOCHS": 10,
-    "UNITS": 21,
-    "MAX_SEQ_LENGTH": 30,
-    "VALIDATION_SPLIT": 0.2,
-    "DROPOUT_REG": 0.2
+{
+  "eng": {
+    "params": {
+      "ALGORITHM": "glove",
+      "EMBEDDING_DIM": 50,
+      "TRAINABLE_EMBEDDINGS": true,
+      "LEARNING_RATE": 0.03,
+      "EPOCHS": 10,
+      "UNITS": 21,
+      "MAX_SEQ_LENGTH": null,
+      "VALIDATION_SPLIT": 0.2,
+      "DROPOUT_REG": 0.2
+    }
   },
-  {
-    "LANG": "spa",
-    "ALGORITHM": "10k-fasttext",
-    "EMBEDDING_DIM": 300,
-    "TRAINABLE_EMBEDDINGS": false,
-    "LEARNING_RATE": 0.01,
-    "EPOCHS": 15,
-    "UNITS": 30,
-    "MAX_SEQ_LENGTH": 15,
-    "VALIDATION_SPLIT": 0.3,
-    "DROPOUT_REG": 0.25
+  "spa": {
+    "params": {
+      "ALGORITHM": "10k-fasttext",
+      "EMBEDDING_DIM": 300,
+      "TRAINABLE_EMBEDDINGS": true,
+      "LEARNING_RATE": 0.03,
+      "EPOCHS": 10,
+      "UNITS": 21,
+      "MAX_SEQ_LENGTH": null,
+      "VALIDATION_SPLIT": 0.2,
+      "DROPOUT_REG": 0.2
+    }
   }
-]
+}
 ```
 
 If the plugin is not able to correctly identify which is the language of a new input, it will use the first language from the file.
 
 > #### IMPORTANT NOTE:
-> At this moment we only support the following pre-trained word embeddings, so you will only be able to train with one of these four. 
+> At this moment we only support the following pre-trained word embeddings, so you will only be able to train with one of these. 
 > We expect to support as many of them as possible in the near future. For more information, feel free to contact us at [Slack](http://botonic.slack.com).
-> * **glove-50d-eng**
-> * **glove-100d-eng**
-> * **10k-fasttext-300d-spa**
-> * **glove-50d-cat**
-> * You can also generate your own word embeddings following these [instructions](https://github.com/hubtype/botonic/scripts).
+> * You can also generate your own word embeddings following these [instructions](https://github.com/hubtype/botonic/scripts).  
+
+| Language   |      Language Code     | Type           |      Dimensions     |
+|:----------:|     :-------------:    |:----------:    |    :-------------:  |
+| English    |           eng          |   glove        |          50         |
+| English    |           eng          |   10k-fasttext |          300        |
+| Spanish    |           spa          |   10k-fasttext |          300        |
+| French     |           fra          |   10k-fasttext |          300        |
+| Portuguese |           por          |   10k-fasttext |          300        |
+| German     |           deu          |   10k-fasttext |          300        |
+| Italian    |           ita          |   10k-fasttext |          300        |
+| Hindi      |           hin          |   10k-fasttext |          300        |
+| Indonesian |           ind          |   10k-fasttext |          300        |
+| Russian    |           rus          |   10k-fasttext |          300        |
+| Turkish    |           tur          |   10k-fasttext |          300        |
 
 ### Requiring the plugin
 
@@ -123,24 +153,8 @@ Now it's time to see how good are the results. It's time to run the training alg
 To make this happen, run the command:
 
 ```bash
-npm run train
+botonic train
 ```
-
-This will generate a folder with the results obtained under `src/nlu/models`, so make sure you don't delete any of these files or you should run the algorithm again.
-The first time you run this command and if there are no errors during the configuration of the plugin, it will automatically download the pre-trained word embeddings.
-
-### **Testing the plugin**
-
-In order to have an alternative to test your intent's system, you can now run the command:
-
-```bash
-npm run retrain
-```
-
-This will read the results obtained in the previous point and you will be able to see how your algorithm performs in a minimal interface. Also, this CLI permits you to 
-add new samples on the existing files or creating new intents. You can quit the interface by entering `exit()`.
-Try adding some new examples and run `npm run train` and `npm run retrain` iteratively and see how your algorithms improve gradually. 
-Try different configurations in `nlu.config.json` until you are comfortable with the results.  
 
 ### **Calling your intents within the code**
 After having done this process, you can now develop your bot by your intents. As an example is worth a thousand words, check how you 
@@ -175,7 +189,7 @@ You can now run the command `botonic serve` and see how the bot would be like in
 
 _Example of how it looks in the Development environment_
 
-Finally, deploy your bot with `botonic deploy` and you will have a bot with a customized intent recognition system!  
+Finally, deploy your bot with `botonic deploy` and you will have a bot with a customized intent and entity recognition system!  
 
 <img
   src="https://botonic-doc-static.netlify.com/images/nlu_prod.png"
