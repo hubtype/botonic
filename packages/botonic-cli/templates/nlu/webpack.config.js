@@ -81,9 +81,6 @@ const imageminPlugin = new ImageminPlugin({
 })
 
 const botonicDevConfig = {
-  node: {
-    fs: 'empty'
-  },
   optimization: {
     minimizer: [terserPlugin]
   },
@@ -134,9 +131,6 @@ const botonicDevConfig = {
 }
 
 const botonicWebchatConfig = {
-  node: {
-    fs: 'empty'
-  },
   optimization: {
     minimizer: [terserPlugin]
   },
@@ -175,9 +169,6 @@ const botonicWebchatConfig = {
 }
 
 const botonicWebviewsConfig = {
-  node: {
-    fs: 'empty'
-  },
   optimization: {
     minimizer: [terserPlugin]
   },
@@ -229,9 +220,6 @@ const botonicWebviewsConfig = {
 }
 
 const botonicServerConfig = {
-  node: {
-    fs: 'empty'
-  },
   optimization: {
     minimizer: [terserPlugin]
   },
