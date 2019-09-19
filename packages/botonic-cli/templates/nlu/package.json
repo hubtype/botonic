@@ -2,13 +2,12 @@
   "scripts": {
     "build": "webpack --env.target=all --mode=production && mkdir dist/assets/models && cp -r src/nlu/models/* dist/assets/models",
     "build_development": "webpack --env.node --mode=development",
-    "start": "webpack-dev-server --env.target=dev",
-    "train": "node node_modules/@botonic/plugin-nlu/dist/scripts/train.js --lang",
-    "retrain": "node node_modules/@botonic/plugin-nlu/dist/scripts/retrain.js --lang"
+    "start": "webpack-dev-server --env.target=dev"
   },
   "dependencies": {
-    "@botonic/plugin-nlu": "0.1.0-alpha.2",
-    "@botonic/react": "^0.9.0-alpha.4"
+    "@botonic/nlu": "0.1.0-alpha.1",
+    "@botonic/plugin-nlu": "0.1.0-alpha.4",
+    "@botonic/react": "^0.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
