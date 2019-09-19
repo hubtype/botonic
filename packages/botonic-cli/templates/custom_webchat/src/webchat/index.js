@@ -6,6 +6,7 @@ import { MyCustomIntroImage } from './myCustomIntroImage'
 import { MyBotLogoChat } from './myBotLogoChat'
 import { MyCustomHeaderImage } from './myCustomHeaderImage'
 import { TriggerCustom } from './triggerCustom'
+import MyCalendarMessage from './myCalendarMessage'
 
 export const webchat = {
   theme: {
@@ -53,7 +54,9 @@ export const webchat = {
 
     // BUTTONS STYLING
     customButton: MyCustomButton,
-    brandIconUrl: launcherIcon
+    brandIconUrl: launcherIcon,
+
+    customMessageTypes: [MyCalendarMessage]
 
     // FULLY CUSTOMIZABLE COMPONENTS (uncomment below lines to see them in action)
     // customHeader: MyCustomHeader
