@@ -3,6 +3,7 @@ name: 7. Human Handoff
 route: /main-concepts/human-handoff
 menu: 3. Main Concepts
 ---
+import { NextButton } from '../components/nextButton.tsx'
 
 # **Human Handoff**
 
@@ -14,7 +15,7 @@ The `queueName` is the name of the queue where you want to transfer the conversa
 
 The `onFinish` allows you to specify a payload or a path in order to trigger the next action that the bot will follow after the conversation with the agent has finished.
 
-Here’s a simple example of how to transfer the conversation into the queue `Support_Queue`. The next step of the bot will be the action called `SayGoodbye` which will be triggered after receiving the payload `sayGoodbye` (which has to be defined in your `routes.js` file).
+Here’s a simple example of how to transfer the conversation to the queue `Support_Queue`. The next step of the bot will be the action called `SayGoodbye` which will be triggered after receiving the payload `sayGoodbye` (which has to be defined in your `routes.js` file).
 
 **src/routes.js**
 
@@ -28,7 +29,7 @@ export const routes = [
 ```
 
 > #### NOTE:
-> Right now the conversation is going to be transferred into Hubtype Desk, so the `queueName` must be the name of a queue inside Hubtype Desk. In the future it will be posible to transfer the chat into Zendesk, Front or other ticketing tools.
+> Right now the conversation is going to be transferred into Hubtype Desk, so the `queueName` must be the name of a queue inside Hubtype Desk. In the future it will be possible to transfer the chat into Zendesk, Front or other ticketing tools.
 
 ```javascript
 import React from 'react'
@@ -45,7 +46,7 @@ export default class extends React.Component {
     return(
       <Text>
         Thanks for contacting us! One of our agents will take the conversation
-        as soon as posible.
+        as soon as possible.
       </Text>
     )
   }
@@ -54,7 +55,7 @@ export default class extends React.Component {
 
 ## Open Queues
 
-You can get an array of all the open queues of your Hubtype Desk just with this simple Botonic function: `getOpenQueues()`.
+You can get an array of all the open queues of your Hubtype Desk with the simple Botonic function `getOpenQueues()`.
 
 ```javascript
 import React from 'react'
@@ -83,3 +84,5 @@ export default class extends React.Component {
 > #### NOTE:
 > Both features are only available when the bot is deployed. 
 When you are in development mode (`botonic serve` command), you can press the button 'Continue' in order to emulate the resolution of a case.
+
+<NextButton title="Internationalization" href="/main-concepts/i18n" />
