@@ -31,10 +31,10 @@ export const webchat = {
 }
 ```
 
-This is just a boilerplate code containing all the allowed definitions for your Webchat.
-- **theme**: In this object you can define the styles for your Webchat components.
-- **persistentMenu**: This will enable a persistent menu, which is a component that will help users to access the core functionalities of the bot at any point in the conversation.
-- **blockInputs**: Sometimes you would want to forbide some user inputs of the user. This permits you to define which are the inputs not allowed.
+See above a template with Webchat allowed definitions. With them you can configure the following (see detailed examples below):
+- **theme**: It defines the styles.
+- **persistentMenu**: Optionally, a persistent menu can be accessed from a little button at the input text box. It allows the user to access popular functionalities at any point in the conversation.
+- **blockInputs**: This permits you to define which user inputs will not be allowed. E.g., it's useful for preventing the user to type a credit card.
 - **Listeners**: Listeners are useful in order to react to some events when using the webchat.  
 
 Let's see how we can use these objects:
@@ -70,9 +70,9 @@ These are the available styles that Botonic allows you to modify:
 
 * **headerSubtitle:** display subtitle of the webchat.
 
-- **headerImage:** the main color of the webchat widget.
+- **headerImage:** the main logo appearing in the header.
 
-* **introImage:** text placeholder in the input text.
+* **introImage:** an introductory image shown the first time the conversation is initialized.
 
 - **customHeader:** React Component that is injected in the Header of the widget.
 
@@ -81,13 +81,13 @@ These are the available styles that Botonic allows you to modify:
 
 * **customBotMessages:** color and border radius of bot messages.
 
-- **customButton:** React Component that is injected in the Button objects of the widget.
+- **customButton:** React Component that is injected in the Button components of the widget.
 
-* **customReply:** React Component that is injected in the Reply objects of the widget.
+* **customReply:** React Component that is injected in the Reply components of the widget.
 
-- **alignReplies:** aling replies at `left`, `center` or `right`.
+- **alignReplies:** align replies at `left`, `center` or `right`.
 
-* **wrapReplies:** to wrap replies or not in the same row.
+* **wrapReplies:** whether replies be displayed on a single row (horizontal scrolling will appear when required) or they will be wrapped in different lines.
 
 ## Custom Compononent Examples
 
@@ -179,6 +179,7 @@ export const MyCustomHeader = () => {
 }
 ```
 
+
 Finally, import all the custom components into the bot:
 
 **src/webchat/index.js**
@@ -234,9 +235,8 @@ export const webchat = {
 }
 ```
 
-All these changes can be tested using the `botonic serve` command *(npm run start on windows)*. This is how it looks:
-Try to play with the properties in the template in order to see how they affect to the differents components in the webchat. 
-This is how it looks like.
+
+All these changes can be tested using the `botonic serve` command *(npm run start on Windows)*. This is how it looks:
 
 <img
   src="https://botonic-doc-static.netlify.com/images/webchat_example.png"
@@ -263,7 +263,7 @@ persistentMenu: [
 
 _Example of the Persistent Menu_
 
-The persistent menu lets you to use the same properties as a Botonic Button, this is `payload` and `url`.
+The persistent menu accepts the same properties as a Botonic Button, this is `payload` and `url`.
 ## Block Inputs
 Sometimes you would want to not allow certain messages for security reasons or to avoid agressive words. You can block these inputs as follows:
 
@@ -283,9 +283,13 @@ blockInputs: [
 
 _Example of blocking inputs_
 
-Once the specified inputs are matched, an automatic message will be displayed warning the user and the bot won't execute any internal logic.
+Once the specified inputs are matched:
+* The user input will not be displayed in the message history.
+* The configured message will appear.
+* The bot will not receive the blocked message.
 
-> We suggest you check the full template which offers a bunch of examples to get started customizing the Webchat components.
+
+> We suggest you to check the full template which offers a bunch of examples to get started customizing the Webchat components.
 
 <NextButton title="Testing Your Components" href="/tutorials-and-examples/testing-your-components" />
 
