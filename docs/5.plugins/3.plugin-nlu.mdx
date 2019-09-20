@@ -28,10 +28,10 @@ Alternatively, if you want to take a closer look of how to make it work from scr
 
 ### **Installing the plugin**
 
-The first step is to install the module with the following command in your bot's project:
+The first step is to install the following packages with the following command in your bot's project:
 
 ```bash
-npm install @botonic/plugin-nlu
+npm install @botonic/nlu @botonic/plugin-nlu 
 ```
 
 This command will install all the necessary stuff to start working with your intents and entities.
@@ -51,25 +51,28 @@ For the sake of clarity, let's illustrate with an example how your directory sho
 * GetDirections.txt
 * Greetings.txt
 
-So in this example, we have added three different intents which our bot will know how to understand. Obviously, the more example utterances you have, the better results you will obtain.
+In this example, we have added three different intents which our bot will know how to understand.
 
 ### **Defining your entities**
-You can also define your entities in the same utterances as follows:
+You can also define your entities within the same utterances as follows:
 
 "Book a table for today's lunch at `[Eggy's Diner](Place)` for 3 people"
 
 With this notation we are telling Botonic NLU that `Eggy's Diner` is the value for an entity of type `Place`.
-`Place` is a generic entity as well as `Person`, `Organization` or `Date`, this is how you can access them with the input object:
+`Place` is a named entity type as well as `Person`, `Organization` or `Date` and can be accessed with the following methods:
 * `Place`: `input.entities.places`
 * `Person`: `input.entities.people`
 * `Organization`: `input.entities.organizations`
 * `Date`: `input.entities.dates`
 
-Sometimes, you will need to capture more specific entites which you can define as this:  
+The entity recognition system is based on [spencermountain/compromise](https://github.com/spencermountain/compromise), so this is the [full list](https://observablehq.com/@spencermountain/compromise-tags) of 
+entity tags which are supported by default.
+
+Sometimes, you will need to capture custom entities of your application domain, so you can add new entity types as shown below:  
 
 "Show me the way to Rand's birthday party by `[car](Vehicle)`"  
 
-which you can access in `input.entities.tags`, that is a list containing all the tagged words by the algorithm.
+which you can access in `input.entities.tags`. This list will contain all the custom tagged entity types with its values.
 
 
 ### **Configuring the plugin **
