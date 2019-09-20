@@ -8,17 +8,17 @@ import { NextButton } from '../components/nextButton.tsx'
 
 # **Installing Botonic**
 
-Botonic bots are created and developed primarily through the Botonic command line utility (the "CLI") and deployed to the [Hubtype](https://hubtype.com/). This means we need to install the Botonic CLI to start developing.
+Botonic bots are created and developed primarily through the Botonic command line utility (the "CLI") and deployed to [Hubtype](https://hubtype.com/). This means we need to install the Botonic CLI to start developing.
 
 ## Getting Node and NPM
 
-Most of the tooling in the CLI is based on Node and is managed through npm. The quickest way to get Node and NPM installed on your machine is through the [NodeJS installer](https://nodejs.org/). Be sure to install the LTS version of Node. Close any terminals/command prompts you may have open, run the installer, and launch a new terminal window. To verify you have everything installed correctly, you can run `npm --version` and `node --version`. If this errors, please resolve before moving on.
+Most of the tooling in the CLI is based on Node and is managed through npm. The quickest way to get Node and NPM installed on your machine is through the [NodeJS installer](https://nodejs.org/). Be sure to install the LTS version of Node. Close any terminals/command prompts you may have open, run the installer, and launch a new terminal window. To verify you have everything installed correctly, you can run `npm --version` and `node --version`. If this throws errors, please resolve them before moving on.
 
 ## Botonic CLI
 
 With Node and NPM setup, let’s install the Botonic CLI. 
 
-This will install few dependencies just to have the CLI available. It might take a while, so please be patient. If you encounter any problem please report it [here](https://github.com/hubtype/botonic/issues). Alternatively, you can also use [yarn](https://yarnpkg.com/lang/en/), as Node Package Manager.
+This will install a few dependencies just to have the CLI available. It might take a while, so please be patient. If you encounter any problems please report them [here](https://github.com/hubtype/botonic/issues). Alternatively, you can also use [yarn](https://yarnpkg.com/lang/en/), as Node Package Manager.
 
 ```bash
 npm install -g @botonic/cli
@@ -34,7 +34,7 @@ botonic new testBot
 ```
 
 > #### NOTE:
-> The CLI will prompt you to choose a template, you can optionally pass the name of the template as a second argument to avoid the prompt: `botonic new testBot tutorial`
+> The CLI will prompt you to choose a template, you can optionally pass the name of the template as a second argument to bypass the prompt: `botonic new testBot tutorial`
 
 To run your bot, `cd` into the directory that was created and then run the `botonic run` command to test your bot right in your terminal!
 
@@ -96,6 +96,6 @@ You can now open an Admin command prompt and install Botonic with:
 npm install -g @botonic/cli
 ```
 
-Congratulations! You can now use Botonic on Windows =)
+Congratulations! You can now use Botonic on Windows!
 
 <NextButton title="Creating Your First Bot" href="/getting-started/creating-your-first-bot" />
