@@ -4,13 +4,13 @@ route: /main-concepts/nlu
 menu: 3. Main Concepts
 ---
 
+import { NextButton } from '../components/nextButton.tsx'
+
 # **NLU**
 
 `Dialogflow` has agents that are best described as `NLU (Natural Language Understanding)` modules. They can be used by your app, product, or service to transform natural user requests into actionable data. This transformation occurs when a user input matches one of the intents inside your agent.
 
-To do this, we need to integrate `dialogflow`. Below, we have the steps to follow:
-
-The integration with `dialogflow` is super easy. First of all, we need to go to `http://dialogflow.com` and sign up for free. Afterwards, we have to create a new agent. Once we have the agent created, we can follow the steps in the `dialogflow docs` to obtain our `api token`. Finally, we have to enter in `botonic.config.js` and add the `api token` to enable the integration. Below we see the code:
+To do this, you need to integrate `dialogflow`. The integration with `dialogflow` is super easy. First, go to `http://dialogflow.com` and sign up for free. Afterwards, create a new agent. Once you have the agent created, you can follow the steps in the `dialogflow docs` to obtain your `api token`. Finally, enter `botonic.config.js` and add the `api token` to enable the integration. It should look like this:
 
 ```javascript
 export const integrations: {
@@ -19,9 +19,9 @@ export const integrations: {
     }
 }
 ```
-`Dialogflow` allows us to create different `intents` and assign key words or phrases. So, when we write any of them, matches with the `intent` and redirects to the corresponding route.
+`Dialogflow` allows us to create different `intents` and assign key words or phrases. These will match with the `intent` and redirect to the corresponding route.
 
-Below, we see how to captures different intents (we need the integration with dialogflow enabled, as we have seen above):
+Below, we see how we might use intents in the routes (with the integration with dialogflow enabled):
 
 ```javascript
 import Funny from './actions/funny'
@@ -33,12 +33,14 @@ export const routes = [
 ]
 ```
 
-`Dialogflow` also has `entities` which are used for extracting parameter values from natural language inputs. `Entities` are stored inside the `input` and there can be more than one. 
+`Dialogflow` also has `entities` which are used for extracting parameter values from natural language inputs. One or more `entities` can be stored inside the `input`. 
 
-Also, in `routes.js` we can use `entities` in routes field like we use `text`, `payloads`, `intents`, etc. In this case, we have to do it through a function that verifies that entity is equal to a certain value. 
+In `routes.js` we can use `entities` in the routes field like we use `text`, `payloads`, `intents`, etc. In this case, we have to do it through a function that verifies that entity is equal to a certain value. 
 
 ```javascript
 {path: 'cities', entities: (e) => e.cities == 'New York City', action: Cities}
 
 ```
-Once the match exists, it will continue to execute the corresponding action.
+Once matched, it will continue to execute the corresponding action.
+
+<NextButton title="Digressions" href="/main-concepts/digressions" />
