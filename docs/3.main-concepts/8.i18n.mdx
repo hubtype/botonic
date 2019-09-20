@@ -3,12 +3,14 @@ name: 8. i18n
 route: /main-concepts/i18n
 menu: 3. Main Concepts
 ---
+import { NextButton } from '../components/nextButton.tsx'
+
 
 # **Internationalization**
 
 Building a bot that supports different languages requires you to separate your string literals from your RCML code.
 
-First, you need to add in `src/locales` folder a js file for each language you want to support. For example:
+First, you need to go to your `src/locales` folder and add a js file for each language you want to support. For example:
 
 `src/locales/en.js`
 
@@ -47,7 +49,7 @@ In order to use these locales in your responses, you need to import the `Request
 
 If you want to change the language for the current user, use the method `setLocale(lang)`.
 
-This is an example of how to use it:
+Here is an example of a component using locales:
 
 ```javascript
 import React from 'react'
@@ -73,3 +75,4 @@ export default class extends React.Component {
     }
 }
 ```
+<NextButton title="Botonic Settings" href="/main-concepts/botonic-settings" />

@@ -4,6 +4,9 @@ route: /main-concepts/botonic-settings
 menu: 3. Main Concepts
 ---
 
+import { NextButton } from '../components/nextButton.tsx'
+
+
 # **Botonic Settings**
 
 ## NLU Integrations
@@ -26,9 +29,9 @@ In `typingOptions` you can define the expected behaviours of your bot when sendi
   * `delay`: Specifies the seconds that pass before sending the order to process the user input.
   * `typing`: Specifies how much seconds the typing component has to be displayed.
 
-Both options are set to 0 by default. Feel free tuninng these parameters to obtain the expected behaviour of your bot.
+Both options are set to 0 by default. Feel free to tune these parameters to obtain the expected behaviour of your bot.
   
-If necessary, you can also define these settings inside your messages. In this case, the values defined inside a message will have preference over the default settings.
+You can also define these settings inside your messages. In this case, the values defined inside a message will have preference over the default settings.
 
 ```javascript
 import React from 'react'
@@ -54,3 +57,4 @@ export default class extends React.Component {
 }
 ```
 
+<NextButton title="Channels" href="/main-concepts/channels" />
