@@ -3,10 +3,11 @@ name: 3. Rich Conversational Markup Language (RCML)
 route: /main-concepts/rich-conversational-markup-language
 menu: 3. Main Concepts
 ---
+import { NextButton } from '../components/nextButton.tsx'
 
 # **RCML**
 
-The RCML is a language that allows you to create intuitive and powerful conversations for your bots with different type of messages. As you may know there are different types of outputs that messaging apps support like [quickreplies](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies), [carousels](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic?locale=en_US#carousel), [message buttons](https://core.telegram.org/bots/2-0-intro#callback-buttons), etc.
+The RCML is a language that allows you to create intuitive and powerful conversations for your bots with different type of messages. It supports different types of outputs for messaging apps, like [quickreplies](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies), [carousels](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic?locale=en_US#carousel), [message buttons](https://core.telegram.org/bots/2-0-intro#callback-buttons), etc.
 
 Below you can see some examples of how to render these components using RCML.
 
@@ -18,7 +19,7 @@ The "Hello World!" output would be defined as below:
 <Text>Hello World!</Text>
 ```
 
-In order to create a line break, you new to use `{'\\n'}`.
+In order to create a line break, you need to use `{'\\n'}`.
 
 ```javascript
 <Text>
@@ -330,3 +331,5 @@ _In this case, this template will produce this nice boarding pass._
 />
 
 Take profit from this example and let's do your own stuff. Have a look at the different [templates](https://developers.facebook.com/docs/messenger-platform/send-messages/templates) available.
+
+<NextButton title="NLU" href="/main-concepts/nlu" />

@@ -3,6 +3,8 @@ name: 1. Routes
 route: /main-concepts/routes
 menu: 3. Main Concepts
 ---
+import { NextButton } from '../components/nextButton.tsx'
+
 
 # **Routes**
 
@@ -10,16 +12,16 @@ Basically, routes map user inputs to actions (React Components)
 
 ## User inputs
 
-The user input is captured as an object that has some fields:
+The user input is captured as an object with the following fields:
 
-- **Type:** it is the input type, and it can be one of the followings:  
+- **Type:** the input type, which can be one of the following:  
 `text`, `postback`, `audio`, `image`,  `video`, `document`, `location`, `referral` 
 
-* **Data:** contains raw text (or attachment URL if it's a media type). 
+* **Data:** the raw text (or attachment URL if it's a media type). 
 
-- **Payload:** field is used when the user has clicked on a button or quick reply. 
+- **Payload:** the input caused by the user clicking on a button or quick reply. 
 
-* **Intent:** which match Intent ID according to the NLP backend with the integration.
+* **Intent:** the Intent ID matching the backend NLP integration.
 
 ```javascript
 {
@@ -126,3 +128,4 @@ export function routes(input, session) {
   } else return [ ...MainFlowRoutes ]  
 }
 ```
+<NextButton title="Actions" href="/main-concepts/actions" />
