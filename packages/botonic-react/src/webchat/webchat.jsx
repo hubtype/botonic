@@ -26,6 +26,7 @@ import { isDev, msgToBotonic, staticAsset } from '../utils'
 import Logo from './botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from './menuButton.svg'
+import LogoEmoji from './emojiButton.svg'
 import { Button } from '../components/button'
 import styled from 'styled-components'
 
@@ -198,6 +199,9 @@ export const Webchat = forwardRef((props, ref) => {
 
   const handleMenu = () => {
     menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
+  }
+  const handleEmoji = () => {
+    emojiIsOpened ? setemojiIsOpened(false) : setemojiIsOpened(true)
   }
 
   const checkBlockInput = input => {
@@ -422,6 +426,65 @@ export const Webchat = forwardRef((props, ref) => {
               }}
             >
               Error: {webchatState.error.message}
+              {props.persistentMenu && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flex: 'none',
+                    padding: 18
+                  }}
+                >
+                  <div>
+                    <img
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer'
+                      }}
+                      src={staticAssetsUrl + LogoMenu}
+                      onClick={() => handleMenu()}
+                    />
+                  </div>
+                </div>
+              )}
+              <Textarea
+                name='text'
+                minRows={2}
+                maxRows={4}
+                wrap='soft'
+                maxLength='1000'
+                placeholder={webchatState.theme.textPlaceholder}
+                autoFocus={location.hostname === 'localhost'}
+                inputRef={textArea}
+                onKeyDown={e => onKeyDown(e)}
+                style={{
+                  display: 'flex',
+                  fontSize: 14,
+                  border: 'none',
+                  resize: 'none',
+                  overflow: 'auto',
+                  outline: 'none',
+                  flex: '1 1 auto',
+                  padding: '14px 10px 0px 0px'
+                }}
+              />
+              {props.emojiPicker && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: 15
+                  }}
+                >
+                  <img
+                    style={{
+                      cursor: 'pointer'
+                    }}
+                    src={staticAssetsUrl + LogoEmoji}
+                    onClick={() => handleEmoji()}
+                  />
+                </div>
+              )}
             </div>
           ) : (
             <>

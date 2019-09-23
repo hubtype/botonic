@@ -19,5 +19,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "emoji-picker-react": "^2.1.1"
+  }
 }
