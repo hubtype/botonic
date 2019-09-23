@@ -70,7 +70,7 @@ export const Webchat = forwardRef((props, ref) => {
   const { initialSession, initialDevSettings } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [menuIsOpened, setMenuIsOpened] = useState(false)
-  const [emojiIsOpened, setemojiIsOpened] = useState(false)
+  const [emojiIsOpened, setEmojiIsOpened] = useState(false)
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } =
@@ -156,7 +156,7 @@ export const Webchat = forwardRef((props, ref) => {
     menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
   }
   const handleEmoji = () => {
-    emojiIsOpened ? setemojiIsOpened(false) : setemojiIsOpened(true)
+    emojiIsOpened ? setEmojiIsOpened(false) : setEmojiIsOpened(true)
   }
 
   const checkBlockInput = input => {
