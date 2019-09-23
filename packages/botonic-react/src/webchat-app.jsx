@@ -10,6 +10,7 @@ export class WebchatApp {
     theme = {},
     persistentMenu,
     blockInputs,
+    emojiPicker,
     onInit,
     onOpen,
     onClose,
@@ -19,6 +20,7 @@ export class WebchatApp {
     this.theme = theme
     this.persistentMenu = persistentMenu
     this.blockInputs = blockInputs
+    this.emojiPicker = emojiPicker
     this.onInit = onInit
     this.onOpen = onOpen
     this.onClose = onClose
@@ -111,6 +113,7 @@ export class WebchatApp {
       theme = {},
       persistentMenu,
       blockInputs,
+      emojiPicker,
       onInit,
       onOpen,
       onClose,
@@ -121,6 +124,7 @@ export class WebchatApp {
     theme = { ...this.theme, ...theme }
     persistentMenu = persistentMenu || this.persistentMenu
     blockInputs = blockInputs || this.blockInputs
+    emojiPicker = emojiPicker || this.emojiPicker
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -133,6 +137,7 @@ export class WebchatApp {
         theme={theme}
         persistentMenu={persistentMenu}
         blockInputs={blockInputs}
+        emojiPicker={emojiPicker}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
