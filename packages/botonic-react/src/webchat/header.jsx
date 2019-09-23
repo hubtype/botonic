@@ -24,19 +24,25 @@ const Subtitle = styled.h1`
 `
 const Diffuse = styled(Flex)`
   background: linear-gradient(90deg, #2e203b 0%, ${props => props.color} 100%);
-  width: 100%;
   height: 55px;
   border-radius: 6px 6px 0px 0px;
 `
 const CloseHeader = styled(Flex)`
-  position: absolute;
-  right: 10px;
-  top: 14px;
-  padding: 5px;
+  align-items: center;
+  padding: 15px;
   cursor: pointer;
   color: white;
   font-family: sans-serif;
   font-size: 18px;
+`
+const StyledHeaderImage = styled(Flex)`
+  padding: 10px;
+  align-items: center;
+`
+const StyledHeaderTitle = styled(Flex)`
+  flex-direction: column;
+  justify-content: center;
+  flex: 1 1 auto;
 `
 
 export const DefaultHeader = props => {
@@ -46,25 +52,23 @@ export const DefaultHeader = props => {
   let headerSubtitle = props.webchatState.theme.headerSubtitle
   return (
     <Diffuse color={props.color}>
-      <Flex width={1 / 4}>
+      <StyledHeaderImage>
         {HeaderImage ? (
           <HeaderImage />
         ) : (
           <img
             style={{
-              height: 24,
-              paddingTop: 15,
-              paddingLeft: 15
+              height: 24
             }}
             src={staticAsset(Logo)}
           />
         )}
-      </Flex>
-      <Flex width={1} flexDirection='column' justifyContent='center'>
+      </StyledHeaderImage>
+      <StyledHeaderTitle>
         <HeaderTitle>{headerTitle}</HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
-      </Flex>
-      <CloseHeader onClick={props.onCloseClick}>X</CloseHeader>}
+      </StyledHeaderTitle>
+      <CloseHeader onClick={props.onCloseClick}>X</CloseHeader>
     </Diffuse>
   )
 }
