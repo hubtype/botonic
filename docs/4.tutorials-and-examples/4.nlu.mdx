@@ -3,14 +3,17 @@ name: 4. NLU
 route: /tutorials-and-examples/nlu
 menu: 4. Tutorials & Examples
 ---
+import { NextButton } from '../components/nextButton.tsx'
+
+import { PrevButton } from '../components/prevButton.tsx'
 
 # **Natural Language Understanding**
 
 [View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/intent)
 
-This template shows a simple case of use where we use an integration, specifically `dialogflow` integration.
+This template shows a simple integration use case, using the `dialogflow` integration.
 
-The integration with `dialogflow` is super easy, we have to enter in `integrations.js` and add the `dialogflow api token` to enable the integration.
+The integration with `dialogflow` is super easy, simply add your `dialogflow api token` to `integrations.js` to enable the integration.
 
 ```javascript
 export const integrations = {
@@ -36,3 +39,5 @@ export const routes = [
 ```
 
 You can have as many `intents` as you want, and each one will call a component of the chatbot.
+<NextButton title="Interactive Examples" href="/tutorials-and-examples/interactive-examples" />
+<PrevButton title="Dynamic Carousel" href="/tutorials-and-examples/dynamic-carousel" />

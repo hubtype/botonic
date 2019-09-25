@@ -5,18 +5,22 @@ route: /tutorials-and-examples/testing-your-components
 menu: 4. Tutorials & Examples
 ---
 
+import { NextButton } from '../components/nextButton.tsx'
+
+import { PrevButton } from '../components/prevButton.tsx'
+
 # **Testing your components**
 
-As your Botonic project gets bigger, it's crucial to being able to test every component of your bot for several reasons:  
+As your Botonic project gets bigger, it's crucial to be able to test every component of your bot for several reasons:  
 * Avoid introducing breaking changes
 * Decide whether the quality of the code is sufficient or not
 * Find as many bugs as possible
 
-Botonic provides you a way of testing your bot, based on [JEST](https://jestjs.io/).
-By the way, you can execute your tests by running `botonic test` or `npm run test`. 
-However, we suggest you to use `npm run test` for a better visualization.
+Botonic provides a way of testing your bot, based on [JEST](https://jestjs.io/).
+You can execute your tests by running `botonic test` or `npm run test`. 
+We suggest you to use `npm run test` for a better visualization.
 
-Let's see how you can define your tests by looking at childs template:
+Let's see how you can define your tests by looking at the childs template:
 
 **src/routes.js**
 
@@ -49,8 +53,8 @@ export const routes = [
 ]
 ```
 
-More concretely, we want to focus on testing if passing as input a payload with the value "pizza", 
-the Pizza action is rendered consequently. Let's have a closer look.
+More concretely, let's focus on testing whether when we pass a payload with the value "pizza", 
+the Pizza action is rendered. 
 
 ```javascript
     {path: 'hi', text: /^hi$/i, action: Hi,
@@ -64,8 +68,8 @@ the Pizza action is rendered consequently. Let's have a closer look.
 ]
 ```
 
-As it can be seen, the Pizza action will only be rendered after receiving a payload matching 
-the regular expression `/^pizza$/i`, with an empty session `{}` and coming from `hi` path. This can be defined as follows:
+You can see the Pizza action will only be rendered after receiving a payload matching 
+the regular expression `/^pizza$/i`, with an empty session `{}` and coming from the `hi` path. This can be defined as follows:
 
 ```javascript
 import { BotonicInputTester } from '@botonic/react'
@@ -106,7 +110,7 @@ o.text('You chose Pizza! Choose one ingredient:',
     )
 ```
 
-It's that simple! Now, algonside the methods [expect](https://jestjs.io/docs/en/expect#expectvalue) and [toBe](https://jestjs.io/docs/en/expect#tobevalue) of JEST, you can define the entire test like this:
+It's that simple! Now, alongside the methods [expect](https://jestjs.io/docs/en/expect#expectvalue) and [toBe](https://jestjs.io/docs/en/expect#tobevalue) of JEST, you can define the entire test like this:
 
 **tests/app.test.js**
 ```javascript
@@ -136,12 +140,8 @@ test('TEST: pizza.js', async () => {
 [View the full example on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/childs/tests/app.test.js)
     
 
-
-
-
-
-
-
+<PrevButton title="Custom Webchat" href="/tutorials-and-examples/custom-webchat" />
+<NextButton title="Plugins" href="/plugins/botonic-plugins" />
 
 
 
