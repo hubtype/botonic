@@ -4,6 +4,9 @@ route: /plugins/using-plugins
 menu: 5. Plugins
 ---
 
+import { NextButton } from '../components/nextButton.tsx'
+import { PrevButton } from '../components/prevButton.tsx'
+
 # **How to use Botonic Plugins?**
 
 ---  
@@ -148,3 +151,6 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
     await segment.track({ input, session, userId: userId, event, properties })
   }
 ```
+<NextButton title="Botonic Plugin NLU" href="/plugins/plugin-nlu" />
+<PrevButton title="Plugins" href="/plugins/botonic-plugins" />
+
