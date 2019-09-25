@@ -4,6 +4,10 @@ route: /getting-started/deploying
 menu: 2. Getting Started
 ---
 
+
+import { PrevButton } from '../components/prevButton.tsx'
+import { NextButton } from '../components/nextButton.tsx'
+
 # **Deploying**
 
 Testing your bot in the terminal with `botonic serve` is fast, easy and convenient when your bot is in development, but eventually you're going to have to test on a messaging platform. Not only is it the only way to accurately test how your bot will behave and perform, but many special features, like requesting location and sending files, will only work when they are run on the actual messaging platforms. Likewise, many features may look and work differently on different platforms.
@@ -45,3 +49,6 @@ In this tutorial we're going to show you how to connect a Facebook Messenger acc
 * Click on "Connect Page"
 
 That's it. You'll see that a new integration appears on the left side. Click on the link to Facebook Messenger and start talking to your bot!
+
+<NextButton title='Main Concepts: Routes' href='/main-concepts/routes' />
+<PrevButton title="Creating Your First Bot" href="/getting-started/creating-your-first-bot"/>
