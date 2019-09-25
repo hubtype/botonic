@@ -3,6 +3,9 @@ name: 7. Human Handoff
 route: /main-concepts/human-handoff
 menu: 3. Main Concepts
 ---
+
+
+import { PrevButton } from '../components/prevButton.tsx'
 import { NextButton } from '../components/nextButton.tsx'
 
 # **Human Handoff**
@@ -13,9 +16,9 @@ To configure the transfer, you must provide the `session` parameters and then th
 
 The `queueName` is the name of the queue where you want to transfer the conversation. If a queue with that name doesn't exist, it will transfer the chat into a random open queue.
 
-The `onFinish` allows you to specify a payload or a path in order to trigger the next action that the bot will follow after the conversation with the agent has finished.
+The `onFinish` allows you to specify a payload or a path in order to trigger the action that the bot will follow after the conversation with the agent has finished.
 
-Here’s a simple example of how to transfer the conversation to the queue `Support_Queue`. The next step of the bot will be the action called `SayGoodbye` which will be triggered after receiving the payload `sayGoodbye` (which has to be defined in your `routes.js` file).
+Here’s a simple example of how to transfer the conversation to the queue `Support_Queue`. Once the human agent has solved the case, the bot will receive the payload `endConversation` which will trigger the action `SayGoodbye`.
 
 **src/routes.js**
 
@@ -23,13 +26,15 @@ Here’s a simple example of how to transfer the conversation to the queue `Supp
 import SayGoodbye from './actions/say-goodbye';
 import HumanHandoff from './actions/human-handoff.js'
 export const routes = [
-  { payload: 'sayGoodbye', action: SayGoodbye },
+  { payload: 'endConversation', action: SayGoodbye },
   { text: 'handoff', action: HumanHandoff }
 ];
 ```
 
 > #### NOTE:
-> Right now the conversation is going to be transferred into Hubtype Desk, so the `queueName` must be the name of a queue inside Hubtype Desk. In the future it will be possible to transfer the chat into Zendesk, Front or other ticketing tools.
+> The conversation is transferred to Hubtype Desk, so the `queueName` must be the name of a queue inside Hubtype Desk. [Contact us] (https://botonic.slack.com/) if you need to integrate with another CRM. 
+
+**./actions/handoff-example.js**
 
 ```javascript
 import React from 'react'
@@ -39,7 +44,7 @@ import { humanHandOff } from '@botonic/core'
 export default class extends React.Component {
 
   static async botonicInit({ input, session, params, lastRoutePath }) {
-    await humanHandOff(session, 'Support_Queue', { payload: 'sayGoodbye' })
+    await humanHandOff(session, 'Support_Queue', { payload: 'endConversation' })
   }
 
   render() {
@@ -56,6 +61,8 @@ export default class extends React.Component {
 ## Open Queues
 
 You can get an array of all the open queues of your Hubtype Desk with the simple Botonic function `getOpenQueues()`.
+
+**./actions/handoff-queue-example.js**
 
 ```javascript
 import React from 'react'
@@ -86,3 +93,4 @@ export default class extends React.Component {
 When you are in development mode (`botonic serve` command), you can press the button 'Continue' in order to emulate the resolution of a case.
 
 <NextButton title="Internationalization" href="/main-concepts/i18n" />
+<PrevButton title="Webviews" href="/main-concepts/webviews" />

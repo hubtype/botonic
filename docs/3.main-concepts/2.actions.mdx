@@ -3,6 +3,8 @@ name: 2. Actions
 route: /main-concepts/actions
 menu: 3. Main Concepts
 ---
+
+import { PrevButton } from '../components/prevButton.tsx'
 import { NextButton } from '../components/nextButton.tsx'
 
 # **Actions**
@@ -81,9 +83,9 @@ The `render()` function describes what will be returned as an output of the bot 
 
 ## Complex actions
 
-The essential purpose of Botonic is having full control over the bot. You can enable [ExternalCalls](#ExternalCalls) with the `botonicInit({ input, session, params, lastRoutePath })` method and allowing the [HumanHandoff](#humanhandoff) or [Internationalization](#internationalization) in an easy way.
+Sometimes it's helpful to pull information from an external site. You can do this within the `botonicInit({ input, session, params, lastRoutePath })` method.
 
-#### ExternalCalls
+**./actions/example.js**
 
 ```javascript
 import React from 'react'
@@ -136,4 +138,6 @@ See the section [Human Handoff](/main-concepts/human-handoff) for further inform
 
 See the section [i18n](/main-concepts/i18n) for further information.
 
-<NextButton title="RCML" href="/main-concepts/rich-conversational-markup-language" />
+
+ <NextButton title="RCML" href="/main-concepts/rich-conversational-markup-language" />
+<PrevButton title="Routes" href="/main-concepts/routes" />
