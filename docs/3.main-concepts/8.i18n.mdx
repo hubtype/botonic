@@ -5,6 +5,8 @@ menu: 3. Main Concepts
 ---
 import { NextButton } from '../components/nextButton.tsx'
 
+import { PrevButton } from '../components/prevButton.tsx'
+
 
 # **Internationalization**
 
@@ -12,7 +14,7 @@ Building a bot that supports different languages requires you to separate your s
 
 First, you need to go to your `src/locales` folder and add a js file for each language you want to support. For example:
 
-`src/locales/en.js`
+**src/locales/en.js**
 
 ```javascript
 export default {
@@ -22,7 +24,7 @@ export default {
 }
 ```
 
-`src/locales/es.js`
+**src/locales/es.js**
 
 ```javascript
 export default {
@@ -32,11 +34,11 @@ export default {
 }
 ```
 
-As you can see, locales are just objects that can have any structure you want, the only requirements are that you must have the same structure for all languages and that leafs must be strings or arrays of strings. In the latter case, Botonic will choose one of the strings randomly. This makes the user feel like they're having a more natural conversation.
+Locales are just javascript objects which can be defined freely, however you must have the same structure for all languages and leafs must be strings or arrays of strings. In the latter case, Botonic will choose one of the strings randomly. This makes the user feel like they're having a more natural conversation.
 
 Now, you have to export all the languages that your bot needs.
 
-`src/locales/index.js`
+**src/locales/index.js**
 
 ```javascript
 import en from './en'
@@ -45,7 +47,9 @@ import es from './es'
 export const locales = { en, es }
 ```
 
-In order to use these locales in your responses, you need to import the `RequestContext` from `@botonic/react` and use the context of that Action. We suggest you import as \_, as it will make your code more concise. Then it's just a matter of accessing the string ID whenever we want to use it with `_('stringID')`, where `stringID` is the dotted path to access the string in you locales object.
+In order to use these locales in your responses, you need to import the `RequestContext` from `@botonic/react`. 
+
+You can access an object from locales with the `this.context.getString` method. We suggest you import `this.context.getString` as `_`, as it will make your code more concise. Then you can access the string with `_('stringID')`, where `stringID` is the dotted path to access the string in you locales object.
 
 If you want to change the language for the current user, use the method `setLocale(lang)`.
 
@@ -76,3 +80,4 @@ export default class extends React.Component {
 }
 ```
 <NextButton title="Botonic Settings" href="/main-concepts/botonic-settings" />
+<PrevButton title="Human Handoff" href="/main-concepts/human-handoff" />

@@ -4,6 +4,7 @@ route: /main-concepts/rich-conversational-markup-language
 menu: 3. Main Concepts
 ---
 import { NextButton } from '../components/nextButton.tsx'
+import { PrevButton } from '../components/prevButton.tsx'
 
 # **RCML**
 
@@ -71,7 +72,7 @@ _Example of how it looks in the Messenger platform:_
 
 ## Carousel
 
-You can render a dynamic and static carousel following the below structure:
+You can render a carousel following the structure below:
 
 ```javascript
 import React from 'react'
@@ -136,7 +137,7 @@ _Example of how it looks in the Messenger app:_
 
 ## Media Files
 
-You can send all this types of media files:
+You can send all these types of media files:
 
 ```javascript
 <>
@@ -177,7 +178,7 @@ _Example in Facebook Messenger:_
 
 ## Share Button
 
-You are able to share your desired content with your friends and acquaintances with the following piece of code:
+On Facebook Messenger, you can share your desired content with your friends and acquaintances with the following piece of code:
 
 ```javascript
 import React from 'react'
@@ -235,7 +236,7 @@ _After clicking on it, your defined elements will be displayed:_
   style={{ display: 'block', margin: 'auto' }}
 />
 
-_This is how it looks on the receiver side:_
+_This is how it looks for the recipient:_
 
 <img
   src='https://botonic-doc-static.netlify.com/images/share_3.png'
@@ -244,7 +245,9 @@ _This is how it looks on the receiver side:_
 
 ## Message Templates
 
-If you want more degrees of freedom, you can also define your templates like in this example.
+Like the share button, Facebook Messenger allows you to define your templates.
+
+**./actions/example.js**
 
 ```javascript
 import React from 'react'
@@ -330,6 +333,7 @@ _In this case, this template will produce this nice boarding pass._
   style={{ display: 'block', margin: 'auto' }}
 />
 
-Take profit from this example and let's do your own stuff. Have a look at the different [templates](https://developers.facebook.com/docs/messenger-platform/send-messages/templates) available.
+Facebook supports many different [templates](https://developers.facebook.com/docs/messenger-platform/send-messages/templates).
 
 <NextButton title="NLU" href="/main-concepts/nlu" />
+<PrevButton title="Actions" href="/main-concepts/actions" />
