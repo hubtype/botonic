@@ -6,13 +6,15 @@ import { withRouter } from 'react-router'
 `*/
 
 
-export const NextButton = withRouter(({ history, title, href }) => {
+export const PrevButton = withRouter(({ history, title, href }) => {
   console.log(history)
 return (
-  <div style={{textAlign: 'right'}}>
+  <div style={{textAlign: 'left'}}>
     <a href={href} >
-      Next ({title}) >
+    &lt; Previous ({title}) 
     </a>
+    
   </div>
+
 )
 })
