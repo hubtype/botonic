@@ -4,6 +4,9 @@ route: /tutorials-and-examples/custom-webchat
 menu: 4. Tutorials & Examples
 ---
 
+import { NextButton } from '../components/nextButton.tsx'
+import { PrevButton } from '../components/prevButton.tsx'
+
 # **Custom Webchat**
 
 [View on Github](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/custom_webchat)
@@ -25,25 +28,29 @@ export const theme = {
 }
 ```
 
-This is the main file of the webchat config. In this file, we export all the options that are going to be changed of the default webchat config.
+This is the main file of the webchat config. In this file, we export all the options that are going to be changed from the default webchat config.
 
-This are the available options that Botonic allows you to modify:
+These are the options that Botonic allows you to modify:
 
 - **brandColor:** the main color of the webchat widget.
 
 * **textPlaceholder:** text placeholder in the input text.
 
-- **title:** the title it's dsiplayed in the header of the widget.
+- **title:** the title that's displayed in the header of the widget.
 
-* **brandIconUrl:** it can be a http url, or an image. It's the image displayed in the header.
+* **brandIconUrl:** the image displayed in the header. 
 
-- **customReply:** React Component that describes how the quickreplies are shown.
+- **customReply:** React Component that defines how the quickreplies are displayed.
 
-* **customButton:** React Component that describes how the button is displayed.
+* **customButton:** React Component that defines how the buttons are displayed.
 
 - **customHeader:** React Component that is injected in the Header of the widget.
 
-Now that we know all the options that we can use, let's see some examples.
+
+## Custom Compononent Examples
+
+In this example, we are putting css styles into a custom quickreply.
+It's very important to put `{props.children}` inside the container, in this case the `<div>` tag:
 
 **src/webchat/myReply.js**
 
@@ -65,9 +72,9 @@ export const MyReply = props => (
   </div>
 )
 ```
+This is an example of a custom Header for our webchat. We can put all the fancy css styles we want.
+This is a static object, so it's not applied in any [RCML](/main-concepts/rich-conversational-markup-language) component, so we don't have to put `{props.children}` inside any container.
 
-In this example, we are giving the css style into a custom quickreply.
-It's very important to put `{props.children}` inside the container, in this case the `<div>` tag.
 
 **src/webchat/myHeader.js**
 
@@ -112,10 +119,8 @@ export const MyHeader = props => {
 }
 ```
 
-This is an example of a custom Header for our webchat. We can put all the fancy css styles we want.
-This is a static object, so it's not applied in any [RCML](/main-concepts/rich-conversational-markup-language) component, so we don't have to put `{props.children}` inside any container.
 
-The last thing we need to do, is to import all this custom components into our bot.
+Finally, import all the custom components into the bot:
 
 **src/app.js**
 
@@ -130,9 +135,12 @@ import { theme } from './webchat'
 export default new App({ routes, locales, integrations, theme })
 ```
 
-All this changes it can be tested using the `botonic serve` command *(npm run start on windows)*. This is how it looks like.
+All these changes can be tested using the `botonic serve` command *(npm run start on windows)*. This is how it looks:
 
 <img
   src="https://botonic-doc-static.netlify.com/images/webchat_example.png"
   style={{ display: 'block', margin: 'auto', maxWidth: '100%' }}
 />
+<NextButton title="Testing Your Components" href="/tutorials-and-examples/testing-your-components" />
+
+<PrevButton title="Interactive Examples" href="/tutorials-and-examples/interactive-examples" />
