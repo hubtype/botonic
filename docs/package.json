@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "docz dev --ts",
-    "build": "docz build --ts"
+    "build": "docz build --ts && cp _redirects .docz/dist"
   },
   "devDependencies": {
     "docz": "^0.12.9",
