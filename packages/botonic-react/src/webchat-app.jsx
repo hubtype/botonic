@@ -44,6 +44,18 @@ export class WebchatApp {
     this.hubtypeService.postMessage(user, input)
   }
 
+  onStateChange({ user, messagesJSON }) {
+    if (!this.hubtypeService && user) {
+      let lastMessage = messagesJSON[messagesJSON.length - 1]
+      this.hubtypeService = new HubtypeService({
+        appId: this.appId,
+        user,
+        lastMessageId: lastMessage && lastMessage.id,
+        onEvent: event => this.onServiceEvent(event)
+      })
+    }
+  }
+
   onServiceEvent(event) {
     if (event.isError)
       this.webchatRef.current.setError({ message: event.errorMessage })
@@ -114,10 +126,6 @@ export class WebchatApp {
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
     this.appId = appId || this.appId
-    this.hubtypeService = new HubtypeService({
-      appId: this.appId,
-      onEvent: event => this.onServiceEvent(event)
-    })
     render(
       <Webchat
         ref={this.webchatRef}
@@ -129,6 +137,7 @@ export class WebchatApp {
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
+        onStateChange={webchatState => this.onStateChange(webchatState)}
       />,
       dest
     )

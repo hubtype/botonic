@@ -60,7 +60,7 @@ export const Webchat = forwardRef((props, ref) => {
     openWebviewT,
     closeWebviewT
   } = props.webchatHooks || useWebchat()
-  const { initialSession, initialDevSettings } = props
+  const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setemojiIsOpened] = useState(false)
@@ -105,6 +105,8 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
+    if (onStateChange && typeof onStateChange === 'function')
+      onStateChange(webchatState)
     saveState(
       JSON.stringify({
         user: webchatState.user,

@@ -5,14 +5,17 @@ const PUSHER_KEY = process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c'
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 export class HubtypeService {
-  constructor({ appId, user, onEvent }) {
+  constructor({ appId, user, lastMessageId, onEvent }) {
     this.appId = appId
     this.user = user || {}
+    this.lastMessageId = lastMessageId
     this.onEvent = onEvent
+    if (user.id && lastMessageId) this.init()
   }
 
-  initPusher(user) {
+  init(user, lastMessageId) {
     if (user) this.user = user
+    if (lastMessageId) this.lastMessageId = lastMessageId
     if (this.pusher || !this.user.id || !this.appId) return
     this.pusher = new Pusher(PUSHER_KEY, {
       cluster: 'eu',
@@ -20,7 +23,8 @@ export class HubtypeService {
       forceTLS: true,
       auth: {
         headers: {
-          'X-BOTONIC-USER-ID': this.user.id
+          'X-BOTONIC-USER-ID': this.user.id,
+          'X-BOTONIC-LAST-MESSAGE-ID': this.lastMessageId
         }
       }
     })
@@ -36,12 +40,14 @@ export class HubtypeService {
         () => cleanAndReject('Connection Timeout'),
         10000
       )
-      this.pusher.connection.bind('connected', () => {
+      this.channel.bind('pusher:subscription_succeeded', () => {
         clearTimeout(connectTimeout)
         resolve()
       })
       this.pusher.connection.bind('error', error => {
-        cleanAndReject(`Pusher error (${error.error.data.code})`)
+        cleanAndReject(
+          `Pusher error (${error.error.data.code || error.data.message})`
+        )
       })
     })
     this.channel.bind('botonic_response', data => this.onPusherEvent(data))
@@ -58,7 +64,7 @@ export class HubtypeService {
 
   async postMessage(user, message) {
     try {
-      await this.initPusher(user)
+      await this.init(user)
     } catch (e) {
       this.onEvent({ isError: true, errorMessage: String(e) })
       return
