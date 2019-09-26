@@ -216,12 +216,52 @@ export const Webchat = forwardRef((props, ref) => {
           style={{
             cursor: 'pointer'
           }}
-          src={staticAssetsUrl + LogoEmoji}
+          src={staticAsset(LogoEmoji)}
           onClick={() => handleEmoji()}
         />
       </div>
     )
   }
+
+  const persistentMenuComponent = () => (
+    <PersistentMenu>
+      {Object.values(props.persistentMenu).map((e, i) => {
+        return (
+          <Button
+            onClick={closeMenu}
+            url={e.url}
+            webview={e.webview}
+            payload={e.payload}
+            key={i}
+          >
+            {Object.values(e.label)}
+          </Button>
+        )
+      })}
+      <Button onClick={closeMenu}>Cancel</Button>
+    </PersistentMenu>
+  )
+  const persistentMenuLogo = () => (
+    <div
+      style={{
+        display: 'flex',
+        flex: 'none',
+        padding: 18
+      }}
+    >
+      <div>
+        <img
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer'
+          }}
+          src={staticAsset(LogoMenu)}
+          onClick={() => handleMenu()}
+        />
+      </div>
+    </div>
+  )
 
   const checkBlockInput = input => {
     if (!Array.isArray(props.blockInputs)) return
@@ -445,27 +485,7 @@ export const Webchat = forwardRef((props, ref) => {
               }}
             >
               Error: {webchatState.error.message}
-              {props.persistentMenu && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flex: 'none',
-                    padding: 18
-                  }}
-                >
-                  <div>
-                    <img
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        cursor: 'pointer'
-                      }}
-                      src={staticAssetsUrl + LogoMenu}
-                      onClick={() => handleMenu()}
-                    />
-                  </div>
-                </div>
-              )}
+              {props.persistentMenu && persistentMenuLogo()}
               <Textarea
                 name='text'
                 minRows={2}
@@ -508,24 +528,7 @@ export const Webchat = forwardRef((props, ref) => {
               {emojiIsOpened && (
                 <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
               )}
-              {menuIsOpened && (
-                <PersistentMenu>
-                  {Object.values(props.persistentMenu).map((e, i) => {
-                    return (
-                      <Button
-                        onClick={closeMenu}
-                        url={e.url}
-                        webview={e.webview}
-                        payload={e.payload}
-                        key={i}
-                      >
-                        {Object.values(e.label)}
-                      </Button>
-                    )
-                  })}
-                  <Button onClick={closeMenu}>Cancel</Button>
-                </PersistentMenu>
-              )}
+              {menuIsOpened && persistentMenuComponent()}
               {!webchatState.handoff && (
                 <StyledTextBox>
                   {props.persistentMenu && (
@@ -559,6 +562,7 @@ export const Webchat = forwardRef((props, ref) => {
                       outline: 'none'
                     }}
                   />
+                  {props.emojiPicker && emojiPickerComponent()}
                 </StyledTextBox>
               )}
               {webchatState.webview && (
