@@ -158,25 +158,63 @@ export const Webchat = forwardRef((props, ref) => {
   const handleEmoji = () => {
     emojiIsOpened ? setEmojiIsOpened(false) : setEmojiIsOpened(true)
   }
-  const emojiPickerComponent = () => {
-    return (
-      <div
+  const emojiPickerComponent = () => (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: 15
+      }}
+    >
+      <img
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: 15
+          cursor: 'pointer'
         }}
-      >
+        src={staticAssetsUrl + LogoEmoji}
+        onClick={() => handleEmoji()}
+      />
+    </div>
+  )
+
+  const persistentMenuComponent = () => (
+    <PersistentMenu>
+      {Object.values(props.persistentMenu).map((e, i) => {
+        return (
+          <Button
+            onClick={closeMenu}
+            url={e.url}
+            webview={e.webview}
+            payload={e.payload}
+            key={i}
+          >
+            {Object.values(e.label)}
+          </Button>
+        )
+      })}
+      <Button onClick={closeMenu}>Cancel</Button>
+    </PersistentMenu>
+  )
+  const persistentMenuLogo = () => (
+    <div
+      style={{
+        display: 'flex',
+        flex: 'none',
+        padding: 18
+      }}
+    >
+      <div>
         <img
           style={{
+            display: 'flex',
+            alignItems: 'center',
             cursor: 'pointer'
           }}
-          src={staticAssetsUrl + LogoEmoji}
-          onClick={() => handleEmoji()}
+          src={staticAssetsUrl + LogoMenu}
+          onClick={() => handleMenu()}
         />
       </div>
-    )
-  }
+    </div>
+  )
 
   const checkBlockInput = input => {
     if (!Array.isArray(props.blockInputs)) return
@@ -423,24 +461,7 @@ export const Webchat = forwardRef((props, ref) => {
             <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
           )}
 
-          {menuIsOpened && (
-            <PersistentMenu>
-              {Object.values(props.persistentMenu).map((e, i) => {
-                return (
-                  <Button
-                    onClick={closeMenu}
-                    url={e.url}
-                    webview={e.webview}
-                    payload={e.payload}
-                    key={i}
-                  >
-                    {Object.values(e.label)}
-                  </Button>
-                )
-              })}
-              <Button onClick={closeMenu}>Cancel</Button>
-            </PersistentMenu>
-          )}
+          {menuIsOpened && persistentMenuComponent()}
           {!webchatState.handoff && (
             <div
               style={{
@@ -448,27 +469,7 @@ export const Webchat = forwardRef((props, ref) => {
                 borderTop: '1px solid rgba(0, 0, 0, 0.4)'
               }}
             >
-              {props.persistentMenu && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flex: 'none',
-                    padding: 18
-                  }}
-                >
-                  <div>
-                    <img
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        cursor: 'pointer'
-                      }}
-                      src={staticAssetsUrl + LogoMenu}
-                      onClick={() => handleMenu()}
-                    />
-                  </div>
-                </div>
-              )}
+              {props.persistentMenu && persistentMenuLogo()}
               <Textarea
                 name='text'
                 minRows={2}
