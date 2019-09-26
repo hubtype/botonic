@@ -157,6 +157,25 @@ export const Webchat = forwardRef((props, ref) => {
   const handleEmoji = () => {
     emojiIsOpened ? setEmojiIsOpened(false) : setEmojiIsOpened(true)
   }
+  const emojiPickerComponent = () => {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: 15
+        }}
+      >
+        <img
+          style={{
+            cursor: 'pointer'
+          }}
+          src={staticAssetsUrl + LogoEmoji}
+          onClick={() => handleEmoji()}
+        />
+      </div>
+    )
+  }
 
   const checkBlockInput = input => {
     if (!Array.isArray(props.blockInputs)) return
@@ -442,23 +461,7 @@ export const Webchat = forwardRef((props, ref) => {
                   padding: '14px 10px 0px 0px'
                 }}
               />
-              {props.emojiPicker && (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: 15
-                  }}
-                >
-                  <img
-                    style={{
-                      cursor: 'pointer'
-                    }}
-                    src={staticAssetsUrl + LogoEmoji}
-                    onClick={() => handleEmoji()}
-                  />
-                </div>
-              )}
+              {props.emojiPicker && emojiPickerComponent()}
             </div>
           ) : (
             <>
