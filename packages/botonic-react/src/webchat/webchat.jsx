@@ -429,6 +429,83 @@ export const Webchat = forwardRef((props, ref) => {
     </StyledTriggerButton>
   )
 
+  const webchatHeader = () => (
+    <WebchatHeader
+      style={{
+        borderRadius: '8px 8px 0 0',
+        boxShadow: 'rgba(176, 196, 222, 0.5) 0px 2px 5px',
+        height: 36,
+        flex: 'none'
+      }}
+      onCloseClick={() => {
+        toggleWebchat(false)
+      }}
+    />
+  )
+  const webchatMessageList = () => (
+    <WebchatMessageList
+      style={{ flex: 1 }}
+      messages={webchatState.messagesComponents}
+    >
+      {webchatState.typing && <TypingIndicator />}
+      <div id='messages-end' />
+    </WebchatMessageList>
+  )
+  const webchatReplies = () => (
+    <WebchatReplies
+      replies={webchatState.replies}
+      align={webchatState.theme.alignReplies}
+      wrap={webchatState.theme.wrapReplies}
+    />
+  )
+  const emoji = () => (
+    <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
+  )
+  const inputUserArea = () => {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+        }}
+      >
+        {props.persistentMenu && persistentMenuLogo()}
+        <Textarea
+          name='text'
+          minRows={2}
+          maxRows={4}
+          wrap='soft'
+          maxLength='1000'
+          placeholder={webchatState.theme.textPlaceholder}
+          autoFocus={location.hostname === 'localhost'}
+          inputRef={textArea}
+          onKeyDown={e => onKeyDown(e)}
+          style={{
+            display: 'flex',
+            fontSize: 14,
+            border: 'none',
+            resize: 'none',
+            overflow: 'auto',
+            outline: 'none',
+            flex: '1 1 auto',
+            padding: '14px 10px 0px 0px'
+          }}
+        />
+        {props.emojiPicker && emojiPickerComponent()}
+      </div>
+    )
+  }
+  const webchatWebview = () => (
+    <RequestContext.Provider value={webviewRequestContext}>
+      <WebviewContainer
+        style={{
+          ...props.theme.webviewStyle
+        }}
+        webview={webchatState.webview}
+      />
+    </RequestContext.Provider>
+  )
+
   return (
     <WebchatContext.Provider
       value={{
@@ -462,17 +539,7 @@ export const Webchat = forwardRef((props, ref) => {
             ...webchatState.theme.style
           }}
         >
-          <WebchatHeader
-            style={{
-              borderRadius: '8px 8px 0 0',
-              boxShadow: 'rgba(176, 196, 222, 0.5) 0px 2px 5px',
-              height: 36,
-              flex: 'none'
-            }}
-            onCloseClick={() => {
-              toggleWebchat(false)
-            }}
-          />
+          {webchatHeader()}
           {webchatState.error.message ? (
             <div
               style={{
@@ -485,96 +552,16 @@ export const Webchat = forwardRef((props, ref) => {
               }}
             >
               Error: {webchatState.error.message}
-              {props.persistentMenu && persistentMenuLogo()}
-              <Textarea
-                name='text'
-                minRows={2}
-                maxRows={4}
-                wrap='soft'
-                maxLength='1000'
-                placeholder={webchatState.theme.textPlaceholder}
-                autoFocus={location.hostname === 'localhost'}
-                inputRef={textArea}
-                onKeyDown={e => onKeyDown(e)}
-                style={{
-                  display: 'flex',
-                  fontSize: 14,
-                  border: 'none',
-                  resize: 'none',
-                  overflow: 'auto',
-                  outline: 'none',
-                  flex: '1 1 auto',
-                  padding: '14px 10px 0px 0px'
-                }}
-              />
-              {props.emojiPicker && emojiPickerComponent()}
+              {inputUserArea()}
             </div>
           ) : (
             <>
-              <WebchatMessageList
-                style={{ flex: 1 }}
-                messages={webchatState.messagesComponents}
-              >
-                {webchatState.typing && <TypingIndicator />}
-                <div id='messages-end' />
-              </WebchatMessageList>
-              {webchatState.replies && (
-                <WebchatReplies
-                  replies={webchatState.replies}
-                  align={webchatState.theme.alignReplies}
-                  wrap={webchatState.theme.wrapReplies}
-                />
-              )}
-              {emojiIsOpened && (
-                <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
-              )}
+              {webchatMessageList()}
+              {webchatState.replies && webchatReplies()}
+              {emojiIsOpened && emoji()}
               {menuIsOpened && persistentMenuComponent()}
-              {!webchatState.handoff && (
-                <StyledTextBox>
-                  {props.persistentMenu && (
-                    <StyledPersistentMenu>
-                      <div style={{ width: 50 }}>
-                        <StyledMenuImg
-                          src={staticAsset(LogoMenu)}
-                          onClick={() => handleMenu()}
-                        />
-                      </div>
-                    </StyledPersistentMenu>
-                  )}
-                  <Textarea
-                    name='text'
-                    minRows={2}
-                    maxRows={4}
-                    wrap='soft'
-                    maxLength='1000'
-                    placeholder={webchatState.theme.textPlaceholder}
-                    autoFocus={location.hostname === 'localhost'}
-                    inputRef={textArea}
-                    onKeyDown={e => onKeyDown(e)}
-                    style={{
-                      display: 'flex',
-                      flex: '1 1 auto',
-                      padding: 10,
-                      fontSize: 14,
-                      border: 'none',
-                      resize: 'none',
-                      overflow: 'auto',
-                      outline: 'none'
-                    }}
-                  />
-                  {props.emojiPicker && emojiPickerComponent()}
-                </StyledTextBox>
-              )}
-              {webchatState.webview && (
-                <RequestContext.Provider value={webviewRequestContext}>
-                  <WebviewContainer
-                    style={{
-                      ...props.theme.webviewStyle
-                    }}
-                    webview={webchatState.webview}
-                  />
-                </RequestContext.Provider>
-              )}
+              {!webchatState.handoff && inputUserArea()}
+              {webchatState.webview && webchatWebview()}
             </>
           )}
         </StyledWebchatOpen>
