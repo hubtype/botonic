@@ -1,26 +1,17 @@
+import uuid from 'uuid'
 import axios from 'axios'
+import { KJUR } from 'jsrsasign'
 
 export default class BotonicPluginDialogflow {
-  constructor(options) {
-    this.options = options
-    this.defaultVersion = '20150910'
-  }
-
-  async query(data, lang, sessionId) {
-    // Data, lang, sessionId and version are required parameters
-    // See https://dialogflow.com/docs/reference/agent/query for more information
-    return await axios({
-      headers: {
-        Authorization: `Bearer ${this.options.token}`
-      },
-      url: `https://api.dialogflow.com/v1/query`,
-      params: {
-        query: data,
-        lang: lang,
-        sessionId: sessionId,
-        v: this.options.version || this.defaultVersion
-      }
-    })
+  constructor(creds) {
+    this.projectID = creds.project_id
+    this.sessionID = uuid.v4()
+    this.defaultLanguageCode = 'en-US'
+    this.creds = creds
+    return (async () => {
+      this.token = await this.generateToken(creds)
+      return this
+    })()
   }
 
   async pre({ input, session, lastRoutePath }) {
@@ -28,14 +19,64 @@ export default class BotonicPluginDialogflow {
       await this.dialogflowToInput({ input, session, lastRoutePath })
     } catch (error) {
       console.log(error.response)
+      await this.refreshToken()
+      await this.dialogflowToInput({ input, session, lastRoutePath })
     }
     return { input, session, lastRoutePath }
   }
 
   async post({ input, session, lastRoutePath, response }) {}
 
+  async refreshToken() {
+    this.token = await this.generateToken(this.creds)
+  }
+
+  async generateToken(creds) {
+    const header = {
+      alg: 'RS256',
+      typ: 'JWT',
+      kid: creds.private_key_id
+    }
+    const payload = {
+      iss: creds.client_email,
+      sub: creds.client_email,
+      iat: KJUR.jws.IntDate.get('now'),
+      exp: KJUR.jws.IntDate.get('now + 1hour'),
+      aud:
+        'https://dialogflow.googleapis.com/google.cloud.dialogflow.v2.Sessions'
+    }
+
+    const stringHeader = JSON.stringify(header)
+    const stringPayload = JSON.stringify(payload)
+    let token = KJUR.jws.JWS.sign(
+      'RS256',
+      stringHeader,
+      stringPayload,
+      creds.private_key
+    )
+    return token
+  }
+
+  async detectIntent(queryData) {
+    return axios({
+      method: 'post',
+      url: `https://dialogflow.googleapis.com/v2/projects/${this.projectID}/agent/sessions/${this.sessionID}:detectIntent`,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        queryInput: {
+          text: {
+            text: queryData,
+            languageCode: this.defaultLanguageCode
+          }
+        }
+      }
+    })
+  }
+
   async dialogflowToInput({ input, session, lastRoutePath }) {
-    let df_session_id = session.user.id
     let intent = null
     let confidence = 0
     let intents = []
@@ -43,24 +84,18 @@ export default class BotonicPluginDialogflow {
     let defaultFallback = ''
     let dialogflowResponse = null
 
-    let data_to_query = input.data
-      ? input.data
-      : input.payload
-      ? input.payload
-      : null
-    let dialogflow_resp = await this.query(
-      data_to_query,
-      session.__locale,
-      df_session_id
-    )
+    let queryData = input.data || input.payload || null
+    dialogflowResponse = await this.detectIntent(queryData)
+    let {
+      action,
+      intentDetectionConfidence,
+      fulfillmentText
+    } = dialogflowResponse.data.queryResult
+    intent = action
+    confidence = intentDetectionConfidence
+    defaultFallback = fulfillmentText
+    dialogflowResponse = dialogflowResponse.data
 
-    if (dialogflow_resp && dialogflow_resp.data) {
-      intent = dialogflow_resp.data.result.metadata.intentName
-      entities = dialogflow_resp.data.result.parameters
-      confidence = dialogflow_resp.data.result.score
-      defaultFallback = dialogflow_resp.data.result.speech
-      dialogflowResponse = dialogflow_resp.data
-    }
     Object.assign(input, {
       intent,
       confidence,
