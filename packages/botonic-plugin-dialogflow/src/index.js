@@ -7,10 +7,14 @@ export default class BotonicPluginDialogflow {
     this.projectID = creds.project_id
     this.sessionID = uuid.v4()
     this.creds = creds
-    return (async () => {
-      this.token = await this.generateToken(creds)
-      return this
-    })()
+    this.token = null
+  }
+
+  async getToken() {
+    if (!this.token) {
+      this.token = await this.generateToken(this.creds)
+    }
+    return this.token
   }
 
   async pre({ input, session, lastRoutePath }) {
@@ -61,7 +65,7 @@ export default class BotonicPluginDialogflow {
       method: 'post',
       url: `https://dialogflow.googleapis.com/v2/projects/${this.projectID}/agent/sessions/${this.sessionID}:detectIntent`,
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${await this.getToken()}`,
         'Content-Type': 'application/json'
       },
       data: {
