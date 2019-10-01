@@ -3,10 +3,12 @@
   "version": "0.8.3",
   "main": "src/index.js",
   "dependencies": {
-    "axios": "latest"
+    "@babel/runtime": "^7.4.2",
+    "axios": "latest",
+    "jsrsasign": "^8.0.12",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.4.2",
     "core-js": "^3.1.4"
   }
 }
