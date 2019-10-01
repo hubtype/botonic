@@ -27,22 +27,23 @@ Let’s get started!
 To start a new bot, open your terminal/command prompt and run:
 
 ```bash
-botonic new testBot blank
+botonic new testBot nlu
 ```
 
 - `new` will tell the CLI to create a new bot.
 - `testBot` will be the directory name for your project.
-- `blank` will be the starter template for your project.
+- `nlu` will be the starter template for your project, which includes NLU capabilities.
 
 Along with creating your project, this will also install node modules for the application, and make the first build.
 
-Along with the blank template, Botonic also provides the following official templates:
+Along with the nlu template, Botonic also provides the following official templates:
 
+- `blank`: a template with empty actions.
 - `tutorial`: a bot that explains some basic concepts in Botonic. This template has lots of comments in its code so you can learn by reading through the source files.
 - `childs`: a simple example on how `childRoutes` work.
 - `dynamic_carousel`: a bot that gets data from an external API and renders a Carousel (see: [RCML](/main-concepts/rich-conversational-markup-language)).
 - `handoff`: a simple bot that transfers the conversation into Hubtype Desk. (see: [human handOff](/tutorials-and-examples/human-handoff))
-- `intent`: a bot that use external AI like DialogFlow.
+- `intent`: a bot that uses external AI like DialogFlow.
 
 If you don’t specify a template at the start, you will be prompted to pick one.
 
@@ -62,7 +63,7 @@ This will give you a local browser url (usually localhost:8080) where you can ha
 ## Project Structure
 
 - `routes.js`: Here you'll define routes, which maps user inputs and payloads to actions. You can use imported subroutes from other files.
-- `integrations.js`: Define your integration keys with 3rd party services, like NLP platforms.
+- `plugins.js`: Define your botonic plugins.
 - `locales`: Locales are objects from which your bot takes your multilanguage definitions. This is useful if you want your bot to address different audiences. The `locales/index.js` file is where all the languages are imported.
 - `webviews`: Webviews are small web pages that pop up in the middle of the conversation flow. This lets you offer experiences and features that might be difficult to offer with message bubbles, such as picking products to buy, seats to book, or dates to reserve.
 - `actions`: Actions are the units of logic that your bot can perform and where the responses of your bot are defined. You are free to organize them into subdirectories.
@@ -71,134 +72,69 @@ This will give you a local browser url (usually localhost:8080) where you can ha
 
 ## Adding basic functionality to your bot
 
-Let's start by creating an "echo" bot that just repeats what the user says. So if the user says "hello world" the bot will respond with "hello world".
+### Routes and Actions
 
-### Create a route
+Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View the [Routes page](/main-concepts/routes) for more details.
 
-The first step is to create a route that captures any text. Edit your `src/routes.js` file and add a new rule `{path: 'echo', text: /^.+$/, action: Echo}` inside the `routes` section:
+Actions are where you define the behaviour of your bot. You can add an Action by creating a new .js file inside `src/actions`. View the [Actions page](/main-concepts/actions) and [RCML page](/main-concepts/rich-conversational-markup-language) for more details.
 
-```javascript
-import Echo from './actions/echo'
-
-export const routes = [{ path: 'echo', text: /^.+$/, action: Echo }]
-```
-
-- `path: 'echo'` means the path that the bot flow has taken.
-- `text: /^.+$/` means that this route will capture any text that matches this regular expression.
-- `action: "echo"` means that when a user input is matched by this rule, the action named "echo" (that we're going to create in the next step) will be triggered.
-
-### Create an action
-
-Next, create a new file inside `src/actions` named "echo.js" and paste this code:
-
-```javascript
-import React from 'react'
-import { RequestContext, Text } from '@botonic/react'
-
-export default class extends React.Component {
-  static contextType = RequestContext
-
-  render() {
-    return <Text>{this.context.input.data}</Text>
-  }
-}
-```
-
-This is the code that will be executed when the user types anything. As you can see, this is just a React component.
-
-- `render`: this is where you construct the answer of your bot. In this example we return just one message 'Text' whose content is the user input. This data is stored in the variable `context.input.data`.
-
-> ### NOTE:
->
-> Usually the `render` method spits out HTML code in a typical React project. However, this is sent to messaging platforms like Whatsapp or Facebook Messenger so sending HTML won't work. We've created this HTML-like language called [Rich Conversational Markup Language (RCML)](/main-concepts/rich-conversational-markup-language) to help you construct the bot response in a dynamic way.
-
-Now execute `botonic serve` again and try typing "hello world" 😊
 
 ## Adding Natural Language Understanding
 
-You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot you get to a point where you need Natural [Language Understanding (NLU)](/main-concepts/nlu) capabilities.
+You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot, you get to a point where you need Natural [Language Understanding (NLU)](/main-concepts/nlu) capabilities.
 
 NLU lets you capture user inputs by "intent" instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California?" and "Do you know if it's sunny today in California?" to the intent `get_weather` and the parameter `city=California`. You can then map that intent to an action using a route.
 
-Botonic has a NLU module under development, but in the meantime you can use our Dialogflow integration. [Dialogflow](https://dialogflow.com/) is Google's NLU as a service.
+Botonic has its own NLU module with intent and entity recognition tasks.
 
-### 1. Create a free Dialogflow account
+### 1. Install the Botonic NLU
+If you are using the nlu template, you should already have the botonic NLU installed.
+If not, you can use the following command from within your bot project to install:
 
-The first thing you need to do is to signup to [Dialogflow](https://console.dialogflow.com/). You can do it with your Google account and it's completely free.
-
-Then you have to create an agent (name it as you wish), click on "Prebuilt Agents", find "Small Talk", click on IMPORT and choose "Create a new project". This will instantly make our bot understand typical chit-chat sentences like "how old are you" or "you're annoying".
-
-Next, go to your agent Settings (click on the little gear icon on the top left) and copy your **client access token**.
-
-### 2. Integrate Dialogflow into your bot
-
-All you have to do to make the integration is to paste your Dialogflow access token in your `integrations.js` file:
-
-```javascript
-export const integrations = {
-  dialogflow: {
-    token: 'YOUR_DIALOGFLOW_API_TOKEN' // <-- Put your token here
-  }
-}
+```bash
+npm install @botonic/nlu @botonic/plugin-nlu 
 ```
+> Note: Windows users should first use the command:
+> `npm install --global --production windows-build-tools --vs2015`
+>
+>Followed by: `npm install @botonic/nlu @botonic/plugin-nlu `
 
-Once this configuration is set, Botonic will automatically send any user input to Dialogflow and get the intent, which you can then match against your routes.
+### 2. Add Utterances and Intents
+There are many ways that a user can express their intent. For example the Utterances "Hello", "Hi", and "Good morning" are all examples
+of a Greeting intent. 
+To create an intent, simply add a new text file under `src/nlu/utterances/eng/`, for example `src/nlu/utterances/eng/Greetings.txt`.
+Within the Greetings.txt file, you can add possible ways a user may greet the bot. Then you can reference the intent 'Greetings' by adding a route:
 
-### 3. Add new routes and actions
+### 3. Add routes for intents
 
-Now it's just a matter of adding more routes that capture different intents and their corresponding actions. For instance, you can add these routes:
+You can add routes that capture different intents and their corresponding actions. For example, in your `routes.js` file:
 
 ```javascript
-import Age from './actions/age'
-import Smalltalk from './actions/smalltalk'
-import Echo from './actions/echo'
+import Start from './actions/start'
+import NotFound from './actions/not-found'
 
 export const routes = [
-  { path: 'age', intent: 'smalltalk.agent.age', action: Age },
-  { path: 'smalltalk', intent: /^smalltalk/, action: Smalltalk },
-  { path: 'echo', text: /^.+$/, action: Echo }
+  { input: i => i.confidence < 0.7, action: NotFound },
+  { intent: 'Greetings', action: Start }
 ]
 ```
 
-- `{path:'age', intent: "smalltalk.agent.age", action: Age}` will match exactly the intent "smalltalk.agent.age".
-- `{path:'smalltalk', intent: /^smalltalk/, action: Smalltalk}` will match any other "smalltalk" intent.
+- `{ input: i => i.confidence < 0.7, action: NotFound }` i.confidence references the confidence value of the input. The confidence value is 
+between 0 and 1 and indicates the likelihood that an input has a certain intent. This route is used if the input doesn't match an intent with enough confidence.
+- `{ intent: 'Greetings', action: Start }` will trigger the action `Start` when the user inputs a greeting.
 
-Important Note: Routes are checked in order. To function correctly, you'll want to put the more specific ones first and the more generic at the end.
+>Note: Routes are checked in order. To function correctly, you'll want to put the more specific ones first and the more generic at the end.
 
-Finally, just create a couple of actions that respond to these intents:
+Next create a couple of actions that respond to these intents in `src/actions`.
 
-**src/actions/age.js**
+### 4. Run botonic train
+Once you've added utterances to your intents, run `botonic train` in your command line. This will train your bot with the utterances in your directory.
 
-```javascript
-import React from 'react'
-import { Text } from '@botonic/react'
+### 5. Run botonic serve
+You can run `botonic serve` to test your bot. 
+Experiment with adding more routes/actions for different intents. 
 
-export default class extends React.Component {
-  render() {
-    return <Text>I'm older than the universe itself</Text>
-  }
-}
-```
-
-**src/actions/smalltalk.js**
-
-```javascript
-import React from 'react'
-import { Text, Image } from '@botonic/react'
-
-export default class extends React.Component {
-  render() {
-    return (
-      <>
-        <Text>I'm not interested in talking about that...</Text>
-        <Image src='https://i.pinimg.com/originals/eb/4d/d1/eb4dd12ae0b4a57a3fbb85e61d0c1cf4.gif' />
-      </>
-    )
-  }
-}
-```
-
-That's it! You can run `botonic serve` and play a little bit. Try adding more routes/actions for different Dialogflow intents. When you're ready, go to the next section to learn how to put your bot in production and publish it to messaging platforms like Facebook Messenger.
+When you're ready, go to the next section to learn how to put your bot in production and publish it to messaging platforms like Facebook Messenger.
 
 <NextButton title='Deploying' href='/getting-started/deploying' />
 <PrevButton title="Installation" href="/getting-started/installation" />
