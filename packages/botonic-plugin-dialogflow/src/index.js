@@ -6,7 +6,6 @@ export default class BotonicPluginDialogflow {
   constructor(creds) {
     this.projectID = creds.project_id
     this.sessionID = uuid.v4()
-    this.defaultLanguageCode = 'en-US'
     this.creds = creds
     return (async () => {
       this.token = await this.generateToken(creds)
@@ -57,7 +56,7 @@ export default class BotonicPluginDialogflow {
     return token
   }
 
-  async detectIntent(queryData) {
+  async query(queryData, languageCode = 'en-US') {
     return axios({
       method: 'post',
       url: `https://dialogflow.googleapis.com/v2/projects/${this.projectID}/agent/sessions/${this.sessionID}:detectIntent`,
@@ -69,7 +68,7 @@ export default class BotonicPluginDialogflow {
         queryInput: {
           text: {
             text: queryData,
-            languageCode: this.defaultLanguageCode
+            languageCode: languageCode
           }
         }
       }
@@ -77,23 +76,21 @@ export default class BotonicPluginDialogflow {
   }
 
   async dialogflowToInput({ input, session, lastRoutePath }) {
-    let intent = null
     let confidence = 0
+    let intent = null
     let intents = []
     let entities = []
     let defaultFallback = ''
     let dialogflowResponse = null
 
     let queryData = input.data || input.payload || null
-    dialogflowResponse = await this.detectIntent(queryData)
-    let {
-      action,
-      intentDetectionConfidence,
-      fulfillmentText
-    } = dialogflowResponse.data.queryResult
-    intent = action
-    confidence = intentDetectionConfidence
-    defaultFallback = fulfillmentText
+    dialogflowResponse = await this.query(queryData)
+
+    let queryResult = dialogflowResponse.data.queryResult
+    intent = queryResult.intent.displayName
+    confidence = queryResult.intentDetectionConfidence
+    entities = queryResult.parameters
+    defaultFallback = queryResult.fulfillmentText
     dialogflowResponse = dialogflowResponse.data
 
     Object.assign(input, {
