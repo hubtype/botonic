@@ -5,21 +5,18 @@ import styled from 'styled-components'
 import Logo from './botonic_react_logo100x100.png'
 import { Flex } from '@rebass/grid'
 
-const HeaderTitle = styled.h1`
+const HeaderTitle = styled(Flex)`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
-  line-height: 22px;
+  font-weight: bold;
   color: #ffffff;
 `
 
-const Subtitle = styled.h1`
+const Subtitle = styled(Flex)`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
   font-family: Arial, Helvetica, sans-serif;
   font-size: 11px;
-  line-height: 16px;
-  /* identical to box height */
-  margin-top: -12px;
   color: #ffffff;
 `
 const Diffuse = styled(Flex)`
@@ -27,13 +24,12 @@ const Diffuse = styled(Flex)`
   height: 55px;
   border-radius: 6px 6px 0px 0px;
 `
-const CloseHeader = styled(Flex)`
-  align-items: center;
-  padding: 15px;
+const CloseHeader = styled.div`
+  padding: 0px 16px;
   cursor: pointer;
   color: white;
   font-family: sans-serif;
-  font-size: 18px;
+  font-size: 36px;
 `
 const StyledHeaderImage = styled(Flex)`
   padding: 10px;
@@ -46,29 +42,35 @@ const StyledHeaderTitle = styled(Flex)`
 `
 
 export const DefaultHeader = props => {
-  let HeaderImage = props.webchatState.theme.headerImage
+  let HeaderImage = Logo
+  if ('brandImage' in props.webchatState.theme)
+    HeaderImage = props.webchatState.theme.brandImage
+  if ('headerImage' in props.webchatState.theme)
+    HeaderImage = props.webchatState.theme.headerImage
+
   let headerTitle = props.webchatState.theme.headerTitle
   headerTitle = headerTitle || 'Botonic'
   let headerSubtitle = props.webchatState.theme.headerSubtitle
   return (
     <Diffuse color={props.color}>
-      <StyledHeaderImage>
-        {HeaderImage ? (
-          <HeaderImage />
-        ) : (
+      {HeaderImage && (
+        <StyledHeaderImage>
           <img
             style={{
-              height: 24
+              width: 32,
+              borderRadius: '50%'
             }}
-            src={staticAsset(Logo)}
+            src={staticAsset(HeaderImage)}
           />
-        )}
-      </StyledHeaderImage>
-      <StyledHeaderTitle>
-        <HeaderTitle>{headerTitle}</HeaderTitle>
+        </StyledHeaderImage>
+      )}
+      <StyledHeaderTitle ml={HeaderImage ? 0 : 16}>
+        <HeaderTitle mb={headerSubtitle ? '6px' : '0px'}>
+          {headerTitle}
+        </HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
       </StyledHeaderTitle>
-      <CloseHeader onClick={props.onCloseClick}>X</CloseHeader>
+      <CloseHeader onClick={props.onCloseClick}>⨯</CloseHeader>
     </Diffuse>
   )
 }
