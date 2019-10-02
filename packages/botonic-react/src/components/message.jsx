@@ -87,19 +87,10 @@ export const Message = props => {
     return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
   }
 
-  const getFontColor = () => {
-    let fontColorUser = '#ffffff'
-    let fontColorBot = '#000000'
-    if (isFromUser()) {
-      return webchatState.theme.customUserMessages
-        ? webchatState.theme.customUserMessages.color
-        : fontColorUser
-    } else {
-      return webchatState.theme.customBotMessages
-        ? webchatState.theme.customBotMessages.color
-        : fontColorBot
-    }
-  }
+  const getMessageStyle = () =>
+    isFromBot()
+      ? webchatState.theme.botMessageStyle || {}
+      : webchatState.theme.userMessageStyle || {}
 
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -113,6 +104,12 @@ export const Message = props => {
       border: `${pointerSize}px solid transparent`,
       marginTop: -pointerSize
     }
+
+    let BotMessageImage = Logo
+    if ('brandImage' in webchatState.theme)
+      BotMessageImage = webchatState.theme.brandImage
+    if ('botMessageImage' in webchatState.theme)
+      BotMessageImage = webchatState.theme.botMessageImage
     return (
       <div
         style={{
@@ -122,48 +119,28 @@ export const Message = props => {
           paddingLeft: 5
         }}
       >
-        <div
-          style={{
-            width: 30,
-            position: 'absolute',
-            height: '108%'
-          }}
-        >
-          {isFromBot() && webchatState.theme.botLogoChat ? (
-            <webchatState.theme.botLogoChat />
-          ) : (
-            isFromBot() && (
-              <img
-                style={{
-                  width: '80%',
-                  margin: 'auto',
-                  position: 'absolute',
-                  top: 0,
-                  bottom: 0
-                }}
-                src={staticAsset(Logo)}
-              />
-            )
-          )}
-        </div>
+        {isFromBot() && BotMessageImage && (
+          <div
+            style={{
+              width: 28,
+              padding: 4,
+              flex: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <img style={{ width: '100%' }} src={staticAsset(BotMessageImage)} />
+          </div>
+        )}
 
         <DefaultMessage
           style={{
-            left: isFromBot() ? 22 : 0,
-            top: isFromBot() ? 5 : 0,
             backgroundColor: getBgColor(),
-            color:
-              webchatState.theme.customUserMessages ||
-              webchatState.theme.customBotMessages
-                ? getFontColor()
-                : isFromUser()
-                ? '#FFFFFF'
-                : '#000',
+            color: isFromUser() ? '#FFF' : '#000',
             border: `1px solid ${getBgColor()}`,
-            borderRadius: webchatState.theme.customUserMessages
-              ? webchatState.theme.customUserMessages.borderRadius
-              : '',
             maxWidth: blob ? '60%' : 'calc(100% - 16px)',
+            ...getMessageStyle(),
             ...style
           }}
           {...otherProps}
@@ -183,9 +160,9 @@ export const Message = props => {
             <div
               style={{
                 ...pointerStyles,
+                borderLeftColor: getBgColor(),
                 right: 0,
                 borderRight: 0,
-                borderLeftColor: getBgColor(),
                 marginRight: -pointerSize
               }}
             />
@@ -194,9 +171,9 @@ export const Message = props => {
             <div
               style={{
                 ...pointerStyles,
+                borderRightColor: getBgColor(),
                 left: 0,
                 borderLeft: 0,
-                borderRightColor: getBgColor(),
                 marginLeft: -pointerSize
               }}
             />

@@ -295,12 +295,12 @@ export const Webchat = forwardRef((props, ref) => {
 
   const textArea = useRef()
 
-  const CustomTriggerButton = webchatState.theme.customTriggerButton
-  let logoUrl = Logo
-  if (props.theme && props.theme.brandIconUrl)
-    logoUrl = props.theme.brandIconUrl
-  if (webchatState.theme && webchatState.theme.brandIconUrl)
-    logoUrl = webchatState.theme.brandIconUrl
+  const CustomTriggerButton = webchatState.theme.customTrigger
+  let triggerImage = Logo
+  if (props.theme && 'triggerButtonImage' in props.theme)
+    triggerImage = props.theme.triggerButtonImage
+  if (webchatState.theme && 'triggerButtonImage' in webchatState.theme)
+    triggerImage = webchatState.theme.triggerButtonImage
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
   ) : (
@@ -320,12 +320,14 @@ export const Webchat = forwardRef((props, ref) => {
         ...webchatState.theme.triggerButtonStyle
       }}
     >
-      <img
-        style={{
-          height: 50
-        }}
-        src={staticAsset(logoUrl)}
-      />
+      {triggerImage && (
+        <img
+          style={{
+            height: 50
+          }}
+          src={staticAsset(triggerImage)}
+        />
+      )}
     </div>
   )
 
