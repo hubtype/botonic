@@ -175,6 +175,7 @@ export function useTyping({ webchatState, updateTyping, updateMessage }) {
     let end = document.getElementById('messages-end')
     if (end) {
       end.scrollIntoView({ behavior: 'smooth' })
+      setTimeout(() => end.scrollIntoView({ behavior: 'smooth' }), 100)
     }
     try {
       let nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]

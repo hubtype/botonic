@@ -1,22 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { Message } from './message'
 import { isBrowser, isNode } from '@botonic/core'
-
-const Box = styled.div`
-  padding-top: 10px;
-  margin-left: -13px;
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  max-width: 100%;
-`
-const Item = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: start;
-`
 
 const serialize = carouselProps => {
   return {
@@ -31,14 +16,31 @@ export const Carousel = props => {
   let content = props.children
   if (isBrowser()) {
     content = (
-      <Box>
-        <Item>{props.children}</Item>
-      </Box>
+      <div
+        style={{
+          paddingTop: 10,
+          marginLeft: -13,
+          display: 'flex',
+          flexDirection: 'row',
+          overflowX: 'auto',
+          maxWidth: '100%'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'start'
+          }}
+        >
+          {props.children}
+        </div>
+      </div>
     )
   }
   return (
     <Message
-      style={{ maxWidth: '90%', padding: 0, backgroundColor: 'transparent' }}
+      style={{ maxWidth: '85%', padding: 0, backgroundColor: 'transparent' }}
       blob={false}
       json={serialize(props)}
       type='carousel'

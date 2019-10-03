@@ -1,35 +1,11 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components'
+import React, { useContext, useState } from 'react'
 
 import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 
-const StyledButton = styled.button`
-  display: flex;
-  width: 100%;
-  max-height: 80px;
-  font-size: 14px;
-  text-align: center;
-  align-content: center;
-  justify-content: center;
-  padding: 12px 32px;
-  color: ${props => props.theme.brandColor || `#000`};
-  border: none;
-  border: 1px solid #f1f0f0;
-  cursor: pointer;
-  outline: 0px;
-  border-top-right-radius: ${props => props.borderTop || `0px`};
-  border-top-left-radius: ${props => props.borderTop || `0px`};
-  border-bottom-right-radius: ${props => props.borderBottom || `0px`};
-  border-bottom-left-radius: ${props => props.borderBottom || `0px`};
-  &:hover {
-    background-color: #f3f3f3;
-  }
-  overflow: hidden;
-`
-
 export const Button = props => {
   const { webchatState, openWebview, sendPayload } = useContext(WebchatContext)
+  const [hover, setHover] = useState(false)
 
   const handleClick = event => {
     event.preventDefault()
@@ -52,14 +28,36 @@ export const Button = props => {
       )
     }
     return (
-      <StyledButton
-        borderTop={props.top}
-        borderBottom={props.bottom}
+      <button
         theme={webchatState.theme}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
         onClick={e => handleClick(e)}
+        style={{
+          display: 'flex',
+          width: '100%',
+          maxHeight: 80,
+          fontSize: 14,
+          textAlign: 'center',
+          alignContent: 'center',
+          justifyContent: 'center',
+          padding: '12px 32px',
+          color:
+            (webchatState.theme && webchatState.theme.brandColor) || '#000',
+          backgroundColor: hover ? '#f3f3f3' : '#fff',
+          border: 'none',
+          border: '1px solid #f1f0f0',
+          cursor: 'pointer',
+          outline: 0,
+          borderTopRightRadius: props.top || 0,
+          borderTopLeftRadius: props.top || 0,
+          borderBottomRightRadius: props.bottom || 0,
+          borderBottomLeftRadius: props.bottom || 0,
+          overflow: 'hidden'
+        }}
       >
         {props.children}
-      </StyledButton>
+      </button>
     )
   }
 
