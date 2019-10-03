@@ -41,7 +41,6 @@ export default class Run extends Command {
     track('Trained with Botonic train')
     const botonicNLU = new BotonicNLU(flags.lang && [flags.lang])
     const nluPath = path.join(process.cwd(), 'src', CONSTANTS.NLU_DIRNAME)
-    console.log('Lets train')
     await botonicNLU.train({ nluPath })
   }
 }
