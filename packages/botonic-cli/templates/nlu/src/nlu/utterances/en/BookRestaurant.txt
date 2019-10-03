@@ -1,10 +1,10 @@
 Find me a table for four for dinner tonight
-Book a table for today's lunch at Eggy's Diner for 3 people
-Book a table at a restaurant near Times Square for 2 people tomorrow night
-Book a table for friday 8pm for 2 people at Katz's Delicatessen
-Book a table at Joan's on Third for my family reunion on Saturday
-I'd like a table in a peaceful restaurant around Times Square
-Book a table at Seven Hills for 6 people with a nice view
+Book a table for today's lunch at [Eggy's](Restaurant) for 3 people
+Book a table at a restaurant near [Times Square](Place) for 2 people tomorrow night
+Book a table for friday 8pm for 2 people at [Delicatessen](Restaurant)
+Book a table at [Joan's](Restaurant) on Third for my family reunion on Saturday
+I'd like a table in a peaceful restaurant around [Times Square](Place)
+Book a table at [Seven-Hills](Restaurant) for 6 people with a nice view
 Book a table for 6 people at Mr Donahue's for tomorrow's lunch
 Book a restaurant for 6 near my morning meeting tomorrow at 1pm
 I want reservations to grab brunch for 5 in hells kitchen tomorrow
@@ -24,7 +24,7 @@ Get me a table at Din Tai Fung for the 4th of December at 12:30
 Get me a table at a restaurant nearby that is not too crowded for tomorrow evening
 Find me an outdoor table at Five leaves for 3
 Get me a table at Delmonico's next monday at 8pm
-We are a party of 4 people and we want to book a table at Seven Hills for sunset
+We are a party of 4 people and we want to book a table at [Seven-Hills](Restaurant) for sunset
 I need reservations at Quince at 9:30
 Make a reservation at Delmonico's on Saturday 8pm for 10 people
 Book a table at an italian restaurant nearby for dinner with 5 people
@@ -53,7 +53,7 @@ I want a table in a good japanese restaurant near Trump tower
 Table for two at Nobu New York tonight
 Book a table at The Standard Grill for four people for the day after tomorrow at 8:30pm
 Book for 4 people at Per Se for Tuesday evening
-I want a table for friday 8pm for 2 people at Katz's Delicatessen
+I want a table for friday 8pm for 2 people at [Delicatessen](Restaurant)
 Need a table for 6
 I want a reservation to get drinks after class tomorrow for 10
 Book a table at an American restaurant for Thanksgiving
