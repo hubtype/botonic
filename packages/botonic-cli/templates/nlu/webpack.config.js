@@ -7,12 +7,15 @@ const imageminSvgo = require('imagemin-svgo')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
 
 const root = path.resolve(__dirname, 'src')
 const botonicPath = path.resolve(__dirname, 'node_modules', '@botonic', 'react')
 
 const terserPlugin = new TerserPlugin({
+  parallel: true,
+  sourceMap: true,
   terserOptions: {
     keep_fnames: true
   }
@@ -117,15 +120,14 @@ const botonicDevConfig = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './node_modules/@botonic/react/src/webchat.template.html',
+      template: path.resolve(botonicPath, 'src', 'webchat.template.html'),
       filename: 'index.html'
     }),
     new webpack.HotModuleReplacementPlugin(),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
-      HUBTYPE_API_URL: 'https://api.hubtype.com',
-      BOTONIC_TARGET: 'dev',
-      BOTONIC_PROJECT_ROOT: JSON.stringify(path.resolve(__dirname, 'src'))
+      HUBTYPE_API_URL: null,
+      BOTONIC_TARGET: 'dev'
     })
   ]
 }
@@ -156,13 +158,13 @@ const botonicWebchatConfig = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './node_modules/@botonic/react/src/webchat.template.html',
+      template: path.resolve(botonicPath, 'src', 'webchat.template.html'),
       filename: 'index.html'
     }),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
-      HUBTYPE_API_URL: 'https://api.hubtype.com',
-      WEBCHAT_PUSHER_KEY: '434ca667c8e6cb3f641c',
+      HUBTYPE_API_URL: null,
+      WEBCHAT_PUSHER_KEY: null,
       BOTONIC_TARGET: 'webchat'
     })
   ]
@@ -206,14 +208,15 @@ const botonicWebviewsConfig = {
       BotonicProject: path.resolve(__dirname, 'src')
     }
   },
+  devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
-      template: './node_modules/@botonic/react/src/webview.template.html',
+      template: path.resolve(botonicPath, 'src', 'webview.template.html'),
       filename: 'index.html'
     }),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
-      HUBTYPE_API_URL: 'https://api.hubtype.com',
+      HUBTYPE_API_URL: null,
       BOTONIC_TARGET: 'webviews'
     })
   ]
@@ -242,13 +245,15 @@ const botonicServerConfig = {
       BotonicProject: path.resolve(__dirname, 'src')
     }
   },
+  devtool: 'source-map',
   plugins: [
     new CleanWebpackPlugin(['dist']),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
-      HUBTYPE_API_URL: 'https://api.hubtype.com',
+      HUBTYPE_API_URL: null,
       BOTONIC_TARGET: 'node'
-    })
+    }),
+    new CopyPlugin([{ from: 'nlu/models/', to: 'assets/models/' }])
   ]
 }
 
