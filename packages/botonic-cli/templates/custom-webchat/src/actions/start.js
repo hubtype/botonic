@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, Button, Reply } from '@botonic/react'
-import MyCalendarMessage from '../webchat/myCalendarMessage'
+import CalendarMessage from '../webchat/calendar-message'
 
 export default class extends React.Component {
   render() {
@@ -11,11 +11,11 @@ export default class extends React.Component {
           <Button url='https://botonic.io'>Visit botonic.io</Button>
         </Text>
         <Text>For example, this is a custom message type:</Text>
-        <MyCalendarMessage />
+        <CalendarMessage />
         <Text>
-          Am I pretty?
-          <Reply payload='yes'>Absolutely</Reply>
-          <Reply payload='no'>Meh..</Reply>
+          Something else?
+          <Reply payload='replies'>Show me replies</Reply>
+          <Reply payload='buttons'>Show me buttons</Reply>
         </Text>
       </>
     )
