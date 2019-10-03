@@ -4,6 +4,7 @@ export const PersistentMenu = props => {
     <div
       style={{
         position: 'absolute',
+        zIndex: 1,
         width: '100%',
         bottom: 0,
         textAlign: 'center'
