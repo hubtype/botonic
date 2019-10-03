@@ -32,9 +32,4 @@ export const routes = [
       }
     ]
   }
-
-  /* There's an implicit rule that captures any other input and maps it to
-        the 404 action, it would be equivalent to:
-        {type: /^.*$/, action: "404"}
-        */
 ]
