@@ -1,7 +1,7 @@
 import Icon from '../assets/trigger-button.png'
 import React from 'react'
-import { scriptUrl } from '../util'
-export const TriggerCustom = () => {
+
+export const CustomTrigger = () => {
   return (
     <div
       style={{
@@ -25,7 +25,7 @@ export const TriggerCustom = () => {
           height: '50%',
           width: '50%'
         }}
-        src={scriptUrl() + Icon}
+        src={Icon}
       />
       <h3>I am customizable</h3>
     </div>

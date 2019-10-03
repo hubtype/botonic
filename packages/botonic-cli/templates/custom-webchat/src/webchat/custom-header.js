@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon from '../assets/header-logo.png'
+import Icon from '../assets/r2d2-logo.png'
 
 var link = document.createElement('link')
 link.setAttribute('rel', 'stylesheet')
@@ -10,12 +10,7 @@ link.setAttribute(
 )
 document.head.appendChild(link)
 
-export const MyCustomHeader = () => {
-  var scriptBaseUrl = document
-    .querySelector('script[src$="webchat.botonic.js"]')
-    .getAttribute('src')
-  var scriptName = scriptBaseUrl.split('/').pop()
-  scriptBaseUrl = scriptBaseUrl.replace('/' + scriptName, '/')
+export const CustomHeader = () => {
   return (
     <div
       style={{
@@ -28,7 +23,7 @@ export const MyCustomHeader = () => {
     >
       <img
         style={{ margin: '0px 12px', width: 38, color: 'white' }}
-        src={scriptBaseUrl + Icon}
+        src={Icon}
       />
       <h1
         style={{
