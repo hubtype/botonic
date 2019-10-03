@@ -28,7 +28,7 @@ export async function getEmbeddingMatrix({
   vocabularyLength,
   params
 }) {
-  let wordEmbeddingsFileName = `${params.ALGORITHM}-${params.EMBEDDING_DIM}d-${params.language}.db`
+  let wordEmbeddingsFileName = `${params.EMBEDDING}-${params.EMBEDDING_DIM}d-${params.language}.db`
   let wordEmbeddingsPath = path.join(
     os.homedir(),
     GLOBAL_CONFIG_DIRNAME,

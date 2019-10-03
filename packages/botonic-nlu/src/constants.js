@@ -1,5 +1,3 @@
-// Execution
-export const LANG_FLAG = '--lang'
 // Filenames
 export const NLU_DATA_FILENAME = 'nlu-data.json'
 export const MODEL_FILENAME = 'model.json'
@@ -51,3 +49,15 @@ export const DEFAULT_ENTITIES = [
   'Honorific',
   'Person'
 ]
+
+export const DEFAULT_HYPERPARAMETERS = {
+  EMBEDDING: '10k-fasttext',
+  EMBEDDING_DIM: 300,
+  TRAINABLE_EMBEDDINGS: true,
+  LEARNING_RATE: 0.03,
+  EPOCHS: 10,
+  UNITS: 21,
+  MAX_SEQ_LENGTH: 50,
+  VALIDATION_SPLIT: 0.2,
+  DROPOUT_REG: 0.2
+}
