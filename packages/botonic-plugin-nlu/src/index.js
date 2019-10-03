@@ -2,9 +2,8 @@ import { NLU } from './nlu'
 
 export default class BotonicPluginNLU {
   constructor(options) {
-    let languages = Object.keys(options)
     return (async () => {
-      this.nlu = await new NLU(languages)
+      this.nlu = await new NLU(options.langs)
       return this
     })()
   }

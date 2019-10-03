@@ -27,22 +27,21 @@ export default class Run extends Command {
       '@botonic',
       'nlu'
     )
+
     try {
-      const { BotonicNLU, CONSTANTS } = await import(botonicNLUPath)
-      process.argv.push(CONSTANTS.LANG_FLAG)
-      if (flags.lang) {
-        process.argv.push(flags.lang)
-      }
-      track('Trained with Botonic train')
-      const botonicNLU = new BotonicNLU()
-      const nluPath = path.join(process.cwd(), 'src', CONSTANTS.NLU_DIRNAME)
-      await botonicNLU.train({ nluPath })
+      var { BotonicNLU, CONSTANTS } = await import(botonicNLUPath)
     } catch (e) {
       console.log(
         `You don't have @botonic/nlu installed.\nPlease, install it by typing the following command:`
           .red
       )
       console.log(`  $ npm install @botonic/nlu`)
+      return
     }
+    track('Trained with Botonic train')
+    const botonicNLU = new BotonicNLU(flags.lang && [flags.lang])
+    const nluPath = path.join(process.cwd(), 'src', CONSTANTS.NLU_DIRNAME)
+    console.log('Lets train')
+    await botonicNLU.train({ nluPath })
   }
 }

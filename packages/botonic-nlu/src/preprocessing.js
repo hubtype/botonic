@@ -1,5 +1,6 @@
 import * as tf from '@tensorflow/tfjs'
 import franc from 'franc'
+import langs from 'langs'
 import { replaceAll, clone, shuffle } from './utils'
 import {
   UNKNOWN_TOKEN,
@@ -104,11 +105,11 @@ export function padSequences(sequences, maxSeqLength) {
 }
 
 export function detectLang(input, langs) {
-  let res = franc(input, { whitelist: langs })
+  let res = franc(input, { whitelist: langs.map(l => langs.where('1', l)[3]) })
   if (res === 'und') {
-    res = langs[0]
+    return langs[0]
   }
-  return res
+  return langs.where('3', res)[1]
 }
 
 /**
