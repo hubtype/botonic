@@ -1,16 +1,16 @@
-import { MyCustomReply } from './myCustomReply'
-import { MyCustomButton } from './myCustomButton'
-import { MyCustomHeader } from './myCustomHeader'
 import launcherIcon from '../assets/launcher-logo.png'
-import { MyCustomIntroImage } from './myCustomIntroImage'
-import { MyBotLogoChat } from './myBotLogoChat'
-import { MyCustomHeaderImage } from './myCustomHeaderImage'
-import { TriggerCustom } from './triggerCustom'
-import MyCalendarMessage from './myCalendarMessage'
+import { IntroImage } from './intro-image'
+import C3POLogo from '../assets/c3po-logo.png'
+import R2D2Logo from '../assets/r2d2-logo.png'
+import CalendarMessage from './calendar-message'
+import { CustomTrigger } from './custom-trigger'
+import { CustomHeader } from './custom-header'
+import { CustomReply } from './custom-reply'
+import { CustomButton } from './custom-button'
 
 export const webchat = {
   theme: {
-    // WEBCHAT GENERAL STYLING
+    // GENERAL STYLE OF WEBCHAT
     style: {
       position: 'fixed',
       right: 20,
@@ -24,43 +24,44 @@ export const webchat = {
       backgroundImage:
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
     },
+    triggerButtonImage: launcherIcon,
     brandColor: '#0000ff',
-    textPlaceholder: 'Type something...',
-    botLogoChat: MyBotLogoChat,
-
-    // HEADER STYLING
+    /*
+     * brandImage will set both headerImage and botMessageImage with its current logo
+     * you can overwrite these values by redefining them individually
+     */
+    brandImage: R2D2Logo,
+    botMessageImage: C3POLogo, // set it to 'null' to hide the botMessageImage
+    // headerImage: R2D2Logo, // set it to 'null' to hide the headerImage
+    introImage: IntroImage,
     headerTitle: 'My customized webchat',
     headerSubtitle: 'R2D2',
-    headerImage: MyCustomHeaderImage,
-    introImage: MyCustomIntroImage,
-
-    // INTRODUCTORY IMAGE
-    introImage: MyCustomIntroImage,
-
-    // MESSAGES STYLING
-    customUserMessages: {
-      color: 'white',
+    textPlaceholder: 'Type something...',
+    botMessageStyle: {
+      border: 'none',
+      color: 'blue',
       borderRadius: '20px'
     },
-    customBotMessages: {
-      color: 'blue',
+    userMessageStyle: {
+      // border:'none',
+      color: 'white',
       borderRadius: '10px'
     },
-
-    // REPLIES STYLING
-    customReply: MyCustomReply,
-    alignReplies: 'right',
+    alignReplies: 'center',
     wrapReplies: 'wrap',
+    triggerButtonStyle: {
+      width: '200px'
+    },
 
-    // BUTTONS STYLING
-    customButton: MyCustomButton,
-    brandIconUrl: launcherIcon,
+    // CUSTOM MESSAGES
+    customMessageTypes: [CalendarMessage],
 
-    customMessageTypes: [MyCalendarMessage]
-
-    // FULLY CUSTOMIZABLE COMPONENTS (uncomment below lines to see them in action)
-    // customHeader: MyCustomHeader
-    // customTriggerButton: TriggerCustom
+    // REACT CUSTOMIZABLE COMPONENTS: Remember that these components will overwrite any style for the component they are replacing
+    /* Uncomment the other lines to see the rest of React components  */
+    // customTrigger: CustomTrigger
+    // customHeader: CustomHeader,
+    // customButton: CustomButton,
+    customReply: CustomReply
   },
 
   // Comment below lines to disable the Persistent Menu
@@ -75,7 +76,7 @@ export const webchat = {
   // These are the set of inputs which are not allowed.
   blockInputs: [
     {
-      match: [/ugly/, /bastard/],
+      match: [/ugly/i, /bastard/i],
       message: 'We cannot tolerate these kind of words.'
     }
   ],
@@ -84,7 +85,7 @@ export const webchat = {
   onInit: app => {
     // You can combine webchat listeners with the Webchat SDK's Api in order
     // to obtain extra functionalities. This will open automatically the webchat.
-    app.toggle()
+    app.open()
   },
   onOpen: app => {
     // app.addBotText('Hi human!')

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const MyCustomButton = props => (
+export const CustomButton = props => (
   <div
     style={{
       color: 'white',

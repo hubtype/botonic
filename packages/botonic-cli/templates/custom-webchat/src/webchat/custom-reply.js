@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const MyCustomReply = props => (
+export const CustomReply = props => (
   <div
     style={{
       color: '#0000ff',
