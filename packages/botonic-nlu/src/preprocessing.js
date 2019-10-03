@@ -104,10 +104,12 @@ export function padSequences(sequences, maxSeqLength) {
   return tf.stack(paddedSequences)
 }
 
-export function detectLang(input, langs) {
-  let res = franc(input, { whitelist: langs.map(l => langs.where('1', l)[3]) })
+export function detectLang(input, languages) {
+  let res = franc(input, {
+    whitelist: languages.map(l => langs.where('1', l)[3])
+  })
   if (res === 'und') {
-    return langs[0]
+    return languages[0]
   }
   return langs.where('3', res)[1]
 }
