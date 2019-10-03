@@ -1,25 +1,22 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { isBrowser, isNode } from '@botonic/core'
 
-const StyledElement = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 222px;
-  &:not(:last-child) {
-    margin-right: 6px;
-  }
-  border-radius: 6px;
-  border: 1px solid #F1F0F0;
-  overflow: hidden;
-`
-
 export const Element = props => {
   const renderBrowser = () => (
-    <StyledElement>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: 222,
+        marginRight: 6,
+        borderRadius: 6,
+        border: '1px solid #F1F0F0',
+        overflow: 'hidden'
+      }}
+    >
       {props.children}
-    </StyledElement>
+    </div>
   )
 
   const renderNode = () => <element>{props.children}</element>

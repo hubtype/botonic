@@ -136,6 +136,7 @@ export const Webchat = forwardRef((props, ref) => {
   const emojiClick = code => {
     const emoji = String.fromCodePoint(`0x${code}`)
     textArea.current.value += emoji
+    textArea.current.focus()
   }
 
   const closeWebview = options => {
@@ -259,6 +260,7 @@ export const Webchat = forwardRef((props, ref) => {
     updateLatestInput(input)
     updateReplies(false)
     setMenuIsOpened(false)
+    setEmojiIsOpened(false)
   }
 
   /* This is the public API this component exposes to its parents
@@ -543,77 +545,12 @@ export const Webchat = forwardRef((props, ref) => {
           ) : (
             <>
               {webchatMessageList()}
-              {webchatState.replies && webchatReplies()}
+              {webchatState.replies &&
+                Object.keys(webchatState.replies).length > 0 &&
+                webchatReplies()}
               {menuIsOpened && persistentMenuComponent()}
-<<<<<<< HEAD
-              {!webchatState.handoff && (
-                <div
-                  style={{
-                    display: 'flex',
-                    borderTop: '1px solid rgba(0, 0, 0, 0.4)'
-                  }}
-                >
-                  {props.persistentMenu && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        flex: 'none',
-                        width: 50
-                      }}
-                    >
-                      <div style={{ width: 50 }}>
-                        <img
-                          style={{
-                            paddingTop: '20px',
-                            paddingBottom: '15px',
-                            marginLeft: '18px',
-                            marginRight: '8px',
-                            cursor: 'pointer'
-                          }}
-                          src={staticAsset(LogoMenu)}
-                          onClick={() => handleMenu()}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  <Textarea
-                    name='text'
-                    minRows={2}
-                    maxRows={4}
-                    wrap='soft'
-                    maxLength='1000'
-                    placeholder={webchatState.theme.textPlaceholder}
-                    autoFocus={location.hostname === 'localhost'}
-                    inputRef={textArea}
-                    onKeyDown={e => onKeyDown(e)}
-                    style={{
-                      display: 'flex',
-                      flex: '1 1 auto',
-                      padding: 10,
-                      fontSize: 14,
-                      border: 'none',
-                      resize: 'none',
-                      overflow: 'auto',
-                      outline: 'none'
-                    }}
-                  />
-                  {props.emojiPicker && emojiPickerComponent()}
-                </div>
-              )}
-              {webchatState.webview && (
-                <RequestContext.Provider value={webviewRequestContext}>
-                  <WebviewContainer
-                    style={{
-                      ...props.theme.webviewStyle
-                    }}
-                    webview={webchatState.webview}
-                  />
-                </RequestContext.Provider>
-              )}
-=======
               {!webchatState.handoff && inputUserArea()}
               {webchatState.webview && webchatWebview()}
->>>>>>> 0bf3fff... feat: refactor/simplify webchat return for better readability
             </>
           )}
         </div>
