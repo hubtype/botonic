@@ -1,15 +1,13 @@
 {
-  "eng": {
-    "params": {
-      "ALGORITHM": "glove",
-      "EMBEDDING_DIM": 50,
-      "TRAINABLE_EMBEDDINGS": true,
-      "LEARNING_RATE": 0.03,
-      "EPOCHS": 10,
-      "UNITS": 21,
+  "langs": ["en"],
+  "params": {
+    "default": {
+      "EPOCHS": 4,
       "MAX_SEQ_LENGTH": null,
-      "VALIDATION_SPLIT": 0.2,
-      "DROPOUT_REG": 0.2
+      "LEARNING_RATE": 0.01
+    },
+    "en": {
+      "EPOCHS": 22
     }
   }
 }
