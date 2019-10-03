@@ -6,14 +6,6 @@ import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 import Logo from '../webchat/botonic_react_logo100x100.png'
-import styled from 'styled-components'
-
-const DefaultMessage = styled.div`
-  position: relative;
-  margin: 8px;
-  font-family: Arial, Helvetica, sans-serif;
-  border-radius: 8px;
-`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -134,8 +126,12 @@ export const Message = props => {
           </div>
         )}
 
-        <DefaultMessage
+        <div
           style={{
+            position: 'relative',
+            margin: 8,
+            fontFamily: 'Arial, Helvetica, sans-serif',
+            borderRadius: 8,
             backgroundColor: getBgColor(),
             color: isFromUser() ? '#FFF' : '#000',
             border: `1px solid ${getBgColor()}`,
@@ -178,7 +174,7 @@ export const Message = props => {
               }}
             />
           )}
-        </DefaultMessage>
+        </div>
       </div>
     )
   }
