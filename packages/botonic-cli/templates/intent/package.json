@@ -15,6 +15,7 @@
     }
   },
   "dependencies": {
+    "@botonic/plugin-dialogflow": "^0.9.0-beta.1",
     "@botonic/react": "0.9.0"
   },
   "devDependencies": {
