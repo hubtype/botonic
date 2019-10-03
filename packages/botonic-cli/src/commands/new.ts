@@ -45,7 +45,7 @@ Creating...
       description: 'Childs: Understand how childRoutes works'
     },
     {
-      name: 'dynamic_carousel',
+      name: 'dynamic-carousel',
       description: 'Dynamic Carousel: See a dynamic carousel for Facebook'
     },
     {
@@ -58,7 +58,7 @@ Creating...
       description: 'Intent: Integrate NLU and see the magic!'
     },
     {
-      name: 'custom_webchat',
+      name: 'custom-webchat',
       description: 'Custom Webchat: See how it looks like a custom webchat'
     },
     {
