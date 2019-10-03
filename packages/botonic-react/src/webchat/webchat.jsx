@@ -17,7 +17,6 @@ import { TypingIndicator } from '../components/typingIndicator'
 import { Handoff } from '../components/handoff'
 import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
-import { WebchatMenu } from './menu'
 import { PersistentMenu } from '../components/persistentMenu'
 import { WebchatMessageList } from './messageList'
 import { WebchatReplies } from './replies'
@@ -134,7 +133,7 @@ export const Webchat = forwardRef((props, ref) => {
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
-  const myCallback = code => {
+  const emojiClick = code => {
     const emoji = String.fromCodePoint(`0x${code}`)
     textArea.current.value += emoji
   }
@@ -152,6 +151,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const handleMenu = () => {
+    setEmojiIsOpened(false)
     menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
   }
   const handleEmoji = () => {
@@ -199,21 +199,15 @@ export const Webchat = forwardRef((props, ref) => {
     <div
       style={{
         display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         flex: 'none',
+        cursor: 'pointer',
         padding: 18
       }}
+      onClick={() => handleMenu()}
     >
-      <div>
-        <img
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer'
-          }}
-          src={staticAsset(LogoMenu)}
-          onClick={() => handleMenu()}
-        />
-      </div>
+      <img src={staticAsset(LogoMenu)} />
     </div>
   )
 
@@ -339,10 +333,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const choiceMenu = menu => {
-    return <Menu options={webchatState.theme.customMenu} />
-  }
-
   let webviewRequestContext = {
     getString: stringId => props.getString(stringId, webchatState.session),
     setLocale: locale => props.getString(locale, webchatState.session),
@@ -424,38 +414,61 @@ export const Webchat = forwardRef((props, ref) => {
     />
   )
   const emoji = () => (
-    <EmojiPicker style={{ width: 300 }} onEmojiClick={myCallback} />
+    <div
+      style={{
+        width: webchatState.theme.width || '100%',
+        maxWidth: 400,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        position: 'absolute',
+        right: 0,
+        top: -332
+      }}
+    >
+      <EmojiPicker onEmojiClick={emojiClick} />
+    </div>
   )
   const inputUserArea = () => {
     return (
       <div
         style={{
           display: 'flex',
+          position: 'relative',
           borderTop: '1px solid rgba(0, 0, 0, 0.4)'
         }}
       >
+        {emojiIsOpened && emoji()}
         {props.persistentMenu && persistentMenuLogo()}
-        <Textarea
-          name='text'
-          minRows={2}
-          maxRows={4}
-          wrap='soft'
-          maxLength='1000'
-          placeholder={webchatState.theme.textPlaceholder}
-          autoFocus={location.hostname === 'localhost'}
-          inputRef={textArea}
-          onKeyDown={e => onKeyDown(e)}
+        <div
           style={{
             display: 'flex',
-            fontSize: 14,
-            border: 'none',
-            resize: 'none',
-            overflow: 'auto',
-            outline: 'none',
             flex: '1 1 auto',
-            padding: '14px 10px 0px 0px'
+            alignItems: 'center'
           }}
-        />
+        >
+          <Textarea
+            name='text'
+            maxRows={4}
+            wrap='soft'
+            maxLength='1000'
+            placeholder={webchatState.theme.textPlaceholder}
+            autoFocus={location.hostname === 'localhost'}
+            inputRef={textArea}
+            onKeyDown={e => onKeyDown(e)}
+            style={{
+              display: 'flex',
+              fontSize: 14,
+              width: '100%',
+              border: 'none',
+              resize: 'none',
+              overflow: 'auto',
+              outline: 'none',
+              flex: '1 1 auto',
+              padding: 10,
+              paddingLeft: props.persistentMenu ? 0 : 10
+            }}
+          />
+        </div>
         {props.emojiPicker && emojiPickerComponent()}
       </div>
     )
@@ -526,13 +539,11 @@ export const Webchat = forwardRef((props, ref) => {
               }}
             >
               Error: {webchatState.error.message}
-              {inputUserArea()}
             </div>
           ) : (
             <>
               {webchatMessageList()}
               {webchatState.replies && webchatReplies()}
-              {emojiIsOpened && emoji()}
               {menuIsOpened && persistentMenuComponent()}
 <<<<<<< HEAD
               {!webchatState.handoff && (
