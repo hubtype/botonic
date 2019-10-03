@@ -7,6 +7,7 @@ const imageminSvgo = require('imagemin-svgo')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
 
 const root = path.resolve(__dirname, 'src')
@@ -107,7 +108,10 @@ const botonicDevConfig = {
     }
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: [
+      path.join(__dirname, 'dist'),
+      path.join(__dirname, 'src', 'nlu', 'models')
+    ],
     watchContentBase: true,
     historyApiFallback: true,
     publicPath: '/',
@@ -247,7 +251,8 @@ const botonicServerConfig = {
     new webpack.EnvironmentPlugin({
       HUBTYPE_API_URL: null,
       BOTONIC_TARGET: 'node'
-    })
+    }),
+    new CopyPlugin([{ from: 'nlu/models/', to: 'assets/models/' }])
   ]
 }
 
