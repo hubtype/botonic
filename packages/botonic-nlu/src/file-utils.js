@@ -3,7 +3,6 @@ import path from 'path'
 import axios from 'axios'
 import colors from 'colors'
 import { parseUtterance } from './preprocessing'
-import { filterObjectByWhitelist } from './utils'
 import {
   NLU_CONFIG_FILENAME,
   UTTERANCES_DIRNAME,
@@ -62,43 +61,55 @@ export function getIntentName(fileName) {
   }
 }
 
-export function loadDevData(nluPath, languages) {
+export function loadConfigAndTrainingData(nluPath, languages) {
   let nluConfig = readJSON(path.join(nluPath, NLU_CONFIG_FILENAME))
-  let devData = languages
-    ? filterObjectByWhitelist(nluConfig, languages)
-    : nluConfig
-  Object.entries(devData).forEach(([lang, config]) => {
-    config.utterancesDir = path.join(nluPath, UTTERANCES_DIRNAME, lang)
-    config.modelsPath = path.join(nluPath, MODELS_DIRNAME, lang)
-    config.devIntents = { intentsDict: {}, intents: [] }
-    config.devEntities = { words: {}, tags: {}, tagList: [] }
-    let utterancesDir = config.utterancesDir
-    let utterancesFiles = readDir(utterancesDir)
-    for (let [idx, file] of utterancesFiles.entries()) {
-      config.devIntents.intentsDict[idx] = getIntentName(file)
-      let utterances = readFile(path.join(utterancesDir, file)).split('\n')
-      for (let utterance of utterances) {
-        let { parsedUtterance, parsedEntities } = parseUtterance(utterance)
-        config.devIntents.intents.push({
-          rawUtterance: utterance,
-          utterance: parsedUtterance,
-          label: idx
-        })
-        for (let entity of parsedEntities) {
-          let { type, value } = entity
-          config.devEntities.words[value] = type
-          config.devEntities.tags[type] = { isA: type }
-          if (!config.devEntities.tagList.includes(type)) {
-            config.devEntities.tagList.push(type)
+  let { default: defaultConfig, ...langsConfig } = nluConfig.params
+  return nluConfig.langs
+    .filter(l => (languages ? languages.includes(l) : true))
+    .map(language => {
+      let utterancesDir = path.join(nluPath, UTTERANCES_DIRNAME, language)
+      let modelsPath = path.join(nluPath, MODELS_DIRNAME, language)
+      let utterancesFiles = readDir(utterancesDir)
+      let devIntents = { intentsDict: {}, intents: [] }
+      let devEntities = { words: {}, tags: {}, tagList: [] }
+      for (let [idx, file] of utterancesFiles.entries()) {
+        devIntents.intentsDict[idx] = getIntentName(file)
+        let utterances = readFile(path.join(utterancesDir, file)).split('\n')
+        for (let utterance of utterances) {
+          let { parsedUtterance, parsedEntities } = parseUtterance(utterance)
+          devIntents.intents.push({
+            rawUtterance: utterance,
+            utterance: parsedUtterance,
+            label: idx
+          })
+          for (let entity of parsedEntities) {
+            let { type, value } = entity
+            devEntities.words[value] = type
+            devEntities.tags[type] = { isA: type }
+            if (!devEntities.tagList.includes(type)) {
+              devEntities.tagList.push(type)
+            }
           }
         }
       }
-    }
-  })
-  return devData
+      return {
+        ...defaultConfig,
+        ...(langsConfig[language] || {}),
+        utterancesDir,
+        modelsPath,
+        devIntents,
+        devEntities,
+        language
+      }
+    })
 }
 
-export async function saveDevData({ modelsPath, model, language, nluData }) {
+export async function saveConfigAndTrainingData({
+  modelsPath,
+  model,
+  language,
+  nluData
+}) {
   let resultsPath = path.join(modelsPath, language)
   if (!pathExists(modelsPath)) {
     createDir(modelsPath)

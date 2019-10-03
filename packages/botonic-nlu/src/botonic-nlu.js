@@ -3,14 +3,18 @@ import { readJSON, readDir } from './file-utils'
 import { detectLang, preprocessData } from './preprocessing'
 import { getEmbeddingMatrix } from './word-embeddings'
 import * as tf from '@tensorflow/tfjs-node'
-import { parseLangFlag, printPrettyConfig } from './utils'
+import { printPrettyConfig } from './utils'
 import {
   UTTERANCES_DIRNAME,
   MODELS_DIRNAME,
   NLU_DATA_FILENAME,
-  MODEL_FILENAME
+  MODEL_FILENAME,
+  DEFAULT_HYPERPARAMETERS
 } from './constants'
-import { loadDevData, saveDevData } from './file-utils'
+import {
+  loadConfigAndTrainingData,
+  saveConfigAndTrainingData
+} from './file-utils'
 import { getPrediction, getIntent } from './prediction'
 import { getEntities } from './ner'
 
@@ -29,8 +33,8 @@ import { getEntities } from './ner'
 // }
 
 export class BotonicNLU {
-  constructor() {
-    this.languages = parseLangFlag(process.argv)
+  constructor(langs) {
+    this.languages = langs
     this.nluPath = ''
     this.utterancesPath = ''
     this.modelsPath = ''
@@ -43,12 +47,17 @@ export class BotonicNLU {
     this.nluPath = nluPath
     this.utterancesPath = path.join(nluPath, UTTERANCES_DIRNAME)
     this.modelsPath = path.join(nluPath, MODELS_DIRNAME)
-    this.devData = loadDevData(this.nluPath, this.languages)
-    this.languages = Object.keys(this.devData)
-    for (let language of this.languages) {
-      let devData = this.devData[language]
-      let { devIntents, params, devEntities } = devData
-      params = { ...params, language } // TODO: Think better this reassignment
+    try {
+      this.configsByLang = loadConfigAndTrainingData(
+        this.nluPath,
+        this.languages
+      )
+    } catch (e) {
+      console.log(e)
+    }
+    for (let config of this.configsByLang) {
+      let { devIntents, devEntities, ...params } = config
+      params = { ...DEFAULT_HYPERPARAMETERS, ...params }
       printPrettyConfig(params)
       let start = new Date()
       let {
@@ -62,21 +71,21 @@ export class BotonicNLU {
         vocabularyLength,
         params
       })
-      this.models[language] = embeddingLSTMModel({
+      this.models[params.language] = embeddingLSTMModel({
         params,
         vocabularyLength,
         embeddingMatrix: tf.tensor(embeddingMatrix),
         outputDim: Object.keys(devIntents.intentsDict).length
       })
-      this.models[language].summary()
-      this.models[language].compile({
+      this.models[params.language].summary()
+      this.models[params.language].compile({
         optimizer: tf.train.adam(params.LEARNING_RATE),
         loss: 'categoricalCrossentropy',
         metrics: ['accuracy']
       })
       console.log('TRAINING...')
 
-      const history = await this.models[language].fit(
+      const history = await this.models[params.language].fit(
         tensorData,
         tensorLabels,
         {
@@ -90,13 +99,13 @@ export class BotonicNLU {
         maxSeqLength: params.MAX_SEQ_LENGTH,
         vocabulary,
         intentsDict: devIntents.intentsDict,
-        language,
+        language: params.language,
         devEntities
       }
-      await saveDevData({
+      await saveConfigAndTrainingData({
         modelsPath: this.modelsPath,
-        model: this.models[language],
-        language,
+        model: this.models[params.language],
+        language: params.language,
         nluData
       })
     }
