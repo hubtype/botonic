@@ -368,18 +368,18 @@ export const Webchat = forwardRef((props, ref) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        overflow: 'hidden',
         width: 65,
         height: 65,
         bottom: 20,
+        paddding: 8,
         right: 10,
         ...webchatState.theme.triggerButtonStyle
       }}
     >
       {triggerImage && (
         <img
-          style={{
-            height: 50
-          }}
+          style={{ maxWidth: '100%', maxHeight: '100%' }}
           src={staticAsset(triggerImage)}
         />
       )}
@@ -434,6 +434,7 @@ export const Webchat = forwardRef((props, ref) => {
     return (
       <div
         style={{
+          minHeight: 52,
           display: 'flex',
           position: 'relative',
           borderTop: '1px solid rgba(0, 0, 0, 0.4)'
