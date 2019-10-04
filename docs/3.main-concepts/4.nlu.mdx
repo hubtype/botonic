@@ -10,41 +10,271 @@ import { NextButton } from '../components/nextButton.tsx'
 
 # **NLU**
 
-`Dialogflow` has agents that are best described as `NLU (Natural Language Understanding)` modules. They can be used by your app, product, or service to transform natural user requests into actionable data. This transformation occurs when a user input matches one of the intents inside your agent.
+NLUs can be used by your app, product, or service to transform natural user requests into actionable data. This transformation occurs when a user input matches one of the intents in your bot.
+The Botonic NLU allows us to create different `intents` and assign key words or phrases. These will match with the `intent` and direct to the corresponding route.
 
-To do this, you need to integrate `dialogflow`. The integration with `dialogflow` is super easy. First, go to `http://dialogflow.com` and sign up for free. Afterwards, create a new agent. Once you have the agent created, you can follow the steps in the `dialogflow docs` to obtain your `api token`. Finally, enter `botonic.config.js` and add the `api token` to enable the integration. It should look like this:
+To use the botonic NLU, you can create a bot using the NLU template by running:
+
+```bash
+botonic new {BOT_NAME} nlu
+```
+
+Alternatively, if you already have a project, you can follow the steps below to install and setup the NLU:
+
+## Install the Botonic NLU
+
+From within your project, enter the following command: 
+
+```bash
+npm install @botonic/plugin-nlu 
+```
+
+This command will install everything necessary to start working with your intents and entities.
+> Note: Windows users should first use the command:
+> `npm install --global --production windows-build-tools --vs2015`
+>
+>Followed by: `npm install @botonic/plugin-nlu`
+
+Under the src files of your project, create a folder named `nlu`.
+
+## Setup
+
+### Tuning your training parameters
+Under `nlu`, create a new file called `nlu.config.json`. This file defines which languages you want enabled and
+ configures the training phase parameters. 
+
+You must have at least this much in your file:
+
+** src/nlu/nlu.config.json **
 
 ```javascript
-export const integrations: {
-    dialogflow: {
-        token: "YOUR_DIALOGFLOW_API_TOKEN"
-    }
+{
+  "langs": ["en"],
+  "params": {
+    "default": {   }
+  }
 }
 ```
-`Dialogflow` allows us to create different `intents` and assign key words or phrases. These will match with the `intent` and redirect to the corresponding route.
+If you wish to change your training parameters from the default, you can adjust them here. 
+In the example below, we change the default values in the `default` section. We can also change the parameters for 
+individual languages.
 
-Below, we see how we might use intents in the routes (with the integration with dialogflow enabled):
+** src/nlu/nlu.config.json **
 
 ```javascript
-import Funny from './actions/funny'
+{
+  "langs": ["en", "es"],
+  "params": {
+    "default": {
+      "EPOCHS": 4,
+      "MAX_SEQ_LENGTH": null,
+      "LEARNING_RATE": 0.01
+    },
+    "en": {
+      "EPOCHS": 22
+    },
+    "es" :{
+       "LEARNING_RATE": 0.02
+    }
+  }
 
-export const routes = [
-	{path: 'funny', intent: 'smalltalk.agent.funny', action: Funny},
-	{path: 'good', intent: 'smalltalk.agent.good', action: Funny},
-	{path: 'agent', intent: 'smalltalk.user.likes_agent', action: Funny}
+}
+```
+The default values of the training parameters are listed below:
+- EMBEDDING: '10k-fasttext'
+- EMBEDDING_DIM: 300
+- TRAINABLE_EMBEDDINGS: true
+- LEARNING_RATE: 0.03
+- EPOCHS: 10
+- UNITS: 21
+- MAX_SEQ_LENGTH: 50
+- VALIDATION_SPLIT: 0.2
+- DROPOUT_REG: 0.2
+
+If the plugin is not able to correctly identify the language of a new input, it will use the first language in the file.
+
+> #### IMPORTANT NOTE:
+> We currently only support the following pre-trained word embeddings, so you can only train your bot in these languages. 
+> We expect to support more in the near future. For more information, feel free to contact us at [Slack](http://botonic.slack.com).
+> * You can also generate your own word embeddings following these [instructions](https://github.com/hubtype/botonic/scripts).  
+
+| Language   |      Language Code     | Type           |      Dimensions     |                               Source                                                                                          |
+|:----------:|     :-------------:    |:----------:    |    :-------------:  |                            :----------:                                                                                       |
+| English    |           en          |   glove        |          50         | [glove-50d-eng](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/glove-50d-eng.db)                              |                  |
+| English    |           en          |   10k-fasttext |          300        | [10k-fasttext-300d-eng](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-eng.db)              |
+| Spanish    |           es          |   10k-fasttext |          300        | [10k-fasttext-300d-spa](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-spa.db)              |
+| Catalan    |           ca          |   10k-fasttext |          300        | [10k-fasttext-300d-cat](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-cat.db)              |
+| French     |           fr          |   10k-fasttext |          300        | [10k-fasttext-300d-fra](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-fra.db)              |
+| Portuguese |           pt          |   10k-fasttext |          300        | [10k-fasttext-300d-por](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-por.db)              |
+| German     |           de          |   10k-fasttext |          300        | [10k-fasttext-300d-deu](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-deu.db)              |
+| Italian    |           it          |   10k-fasttext |          300        | [10k-fasttext-300d-ita](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ita.db)              |
+| Hindi      |           hi          |   10k-fasttext |          300        | [10k-fasttext-300d-hin](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-hin.db)              |
+| Indonesian |           id          |   10k-fasttext |          300        | [10k-fasttext-300d-ind](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ind.db)              |
+| Russian    |           ru          |   10k-fasttext |          300        | [10k-fasttext-300d-rus](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-rus.db)              |
+| Turkish    |           tr          |   10k-fasttext |          300        | [10k-fasttext-300d-tur](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-tur.db)              |
+
+> 10k-fasttext word embeddings contain the 10k most commons words of the language.  
+
+### Requiring the plugin
+
+After setting all your necessary parameters, require the plugin in `src/plugins.js`. You must set its `id` to **nlu** for the plugin to function.
+
+**src/plugins.js**
+```javascript
+import nluConfig from './nlu/nlu.config.json'
+export const plugins = [
+  {
+    id: 'nlu',
+    resolve: require('@botonic/plugin-nlu'),
+    options: nluConfig
+  }
 ]
 ```
 
-`Dialogflow` also has `entities` which are used for extracting parameter values from natural language inputs. One or more `entities` can be stored inside the `input`. 
+## Intents and Utterances
+### **Defining your intents**
 
-In `routes.js` we can use `entities` in the routes field like we use `text`, `payloads`, `intents`, etc. In this case, we have to do it through a function that verifies that entity is equal to a certain value. 
+Under the `nlu` folder, create a folder called `utterances`, which will contain your multilingual intents. For every language you want to support, 
+create a folder under `src/nlu/utterances` with its language code (it must be [ISO 639-1](https://iso639-3.sil.org/code_tables/639/data)), such as `en` for English.
+
+Then add a text file for each intent you want to create, naming them `{YOUR_INTENT}.txt`, and fill them with possible ways to express each 
+intent. **Every sentence must be on a different line of the file.**
+
+For example, you could have the following files under **src/nlu/utterances/en**:
+* BookRestaurant.txt
+* GetDirections.txt
+* Greetings.txt
+With several examples of greetings in the Greetings.txt file:
+**src/nlu/utterances/en/Greetings.txt**
+```txt
+Hey!
+Hi!
+Good morning!
+Morning!
+What's up bot?
+hi
+Good afternoon!
+How are you?
+morning
+hello
+```
+Once you've defined your intents, you can use them in the routes in the same way you use `text`, `payloads`, and the like. 
+Below, we see how we might use them:
+
+**routes.js**
 
 ```javascript
-{path: 'cities', entities: (e) => e.cities == 'New York City', action: Cities}
+import Start from './actions/start'
+import ShowRestaurants from './actions/show-restaurants'
+import NotFound from './actions/not-found'
+import ShowDirections from './actions/show-directions'
 
+export const routes = [
+      { input: i => i.confidence < 0.7, action: NotFound },
+      { intent: 'Greetings', action: Start },
+	  { intent: 'BookRestaurant', action: ShowRestaurants },
+]
 ```
-Once matched, it will continue to execute the corresponding action.
 
-<NextButton title="Digressions" href="/main-concepts/digressions" />
+## Entities
+The Botonic NLU also has `entities` which are used for extracting parameter values from natural language inputs. 
+One or more `entities` can be stored inside the `input`. 
 
- <PrevButton title="RCML" href="/main-concepts/rich-conversational-markup-language" />
+You can define your entities within an utterance like this: `[ENTITY_NAME](type)`
+For example, within the intent **BookRestaurant.txt**:
+```txt
+Find me a table for four for dinner tonight
+Book a table for today's lunch at [Eggy's](Restaurant) for 3 people
+Book a table at a restaurant near [Times Square](Place) for 2 people tomorrow night
+Book a table for friday 8pm for 2 people at [Delicatessen](Restaurant)
+```
+
+With this notation we are telling Botonic NLU that `Times Square` is the value for an entity of type `Place`.
+`Place` is a named entity type as well as `Person`, `Organization` or `Date` and can be accessed with the following methods:
+* `Place`: `input.entities.places`
+* `Person`: `input.entities.people`
+* `Organization`: `input.entities.organizations`
+* `Date`: `input.entities.dates`
+
+The entity recognition system is based on [spencermountain/compromise](https://github.com/spencermountain/compromise), so this is the [full list](https://observablehq.com/@spencermountain/compromise-tags) of 
+entity tags which are supported by default.
+
+Sometimes, you will need to capture custom entities, like `Restaurant`.
+You can access your custom entitites with the method `input.entities.tags`. This list will contain all the custom tagged entity types with its values.
+
+In the example below, we show how entities might be used within an action:
+**src/actions/show-restaurants**
+
+```javascript
+import React from 'react'
+import { RequestContext, Text } from '@botonic/react'
+
+export default class extends React.Component {
+  static contextType = RequestContext
+  static async botonicInit({ input, session, lastRoutePath }) {
+    const getNotUndefinedCustomEntities = (entities, tag) =>
+      entities.tags.length
+        ? entities.tags.filter(e => e.tags.includes(tag)).map(res => res.value)
+        : undefined
+
+    let namedEntitiesPlace = input.entities.places.length
+      ? input.entities.places
+      : undefined
+
+    let customEntitiesRestaurants = getNotUndefinedCustomEntities(
+      input.entities,
+      'Restaurant'
+    )
+    return { namedEntitiesPlace, customEntitiesRestaurants }
+  }
+
+  render() {
+    if (
+      this.props.customEntitiesRestaurants &&
+      this.props.customEntitiesRestaurants.length
+    ) {
+      return (
+          <Text>
+            For sure! I will make a reservation at{' '}
+            {this.props.customEntitiesRestaurants}
+          </Text>
+      )
+    } else if (
+      this.props.namedEntitiesPlace &&
+      this.props.namedEntitiesPlace.length
+    ) {
+      return (
+          <Text>
+            Okay! Let's make a reservation close to{' '}
+            {this.props.namedEntitiesPlace[0]}
+          </Text>
+      )
+    } else {
+      return (<Text>Where would you like to book a table?</Text>)
+    }
+  }
+}
+```
+## Running your bot
+
+To train your bot with your utterances and intents, run:
+
+```bash
+botonic train
+```
+You can then run `botonic serve` to see how the bot runs in the development environment.
+
+Finally, deploy your bot with `botonic deploy` and you will have a bot with a customized intent and entity recognition system!  
+
+<img
+  src="https://botonic-doc-static.netlify.com/images/nlu_prod.png"
+  style={{ display: 'block', margin: 'auto', maxWidth: '50%' }}
+/>
+
+_Example of how it looks in FB Messenger (Production)_
+
+
+<div style={{display:"flex", justifyContent:"space-between"}}>
+  <PrevButton title="RCML" href="/main-concepts/rich-conversational-markup-language" />
+  <NextButton title="Digressions" href="/main-concepts/digressions" />
+</div>

@@ -150,7 +150,9 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
 
     await segment.track({ input, session, userId: userId, event, properties })
   }
-```
-<NextButton title="Botonic Plugin NLU" href="/plugins/plugin-nlu" />
-<PrevButton title="Plugins" href="/plugins/botonic-plugins" />
+```  
 
+<div style={{display:"flex", justifyContent:"space-between"}}>
+  <PrevButton title="Plugins" href="/plugins/botonic-plugins" />
+  <NextButton title="Botonic Plugin NLU" href="/plugins/plugin-nlu" />
+</div>

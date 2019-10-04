@@ -23,14 +23,14 @@ The user input is captured as an object with the following fields:
 
 - **Payload:** the input caused by the user clicking on a button or quick reply. 
 
-* **Intent:** the Intent ID matching the backend NLP integration.
+* **Intent:** the intent of the user according to your bot's NLU 
 
 ```javascript
 {
     type: 'text', 
     data: 'Hello!'
     payload: '',
-    intent: 'smalltalk.greeting'
+    intent: 'Greetings'
 }
 ```
 
@@ -39,10 +39,7 @@ The user input is captured as an object with the following fields:
 Every route, which is an entry in the routes' array can be defined in `src/routes.js`:
 
 ```javascript
-export const routes = [
-
-    ]
-}
+export const routes = []
 ```
 
 Conceptually, a route is composed by a matching rule and an action. A matching rule looks like this: `{attribute: test}`,  
@@ -99,11 +96,11 @@ Otherwise, you can move forward to new actions depending on session values
 ```javascript
 { path: 'promotion', session: (s) => s.user.id < 150000, action: Promotion }
 ```
-Below, we see how to captures different intents (enable the Dialogflow integration)
+Below, we see how to captures different intents
 ```javascript
-{path: 'funny', intent: 'smalltalk.agent.funny', action: Funny},
-{path: 'good', intent: 'smalltalk.agent.good', action: Funny},
-{path: 'agent', intent: 'smalltalk.user.likes_agent', action: Funny}
+  { path: 'greetings', intent: 'Greetings', action: Start },
+  { path: 'book-restaurant', intent: 'BookRestaurant', action: ShowRestaurants },
+  { path: 'get-directions', intent: 'GetDirections', action: ShowDirections }
 ```
 There's an implicit rule that captures any other input and maps it to
 the `404` action, it would be equivalent to:
@@ -129,6 +126,8 @@ export function routes(input, session) {
     ]
   } else return [ ...MainFlowRoutes ]  
 }
-```
-<NextButton title="Actions" href="/main-concepts/actions" />
-<PrevButton title='Deploying' href='/getting-started/deploying' />
+```  
+<div style={{display:"flex", justifyContent:"space-between"}}>
+  <PrevButton title='Deploying' href='/getting-started/deploying' />
+  <NextButton title="Actions" href="/main-concepts/actions" />
+</div>
