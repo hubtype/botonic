@@ -11,7 +11,7 @@ import { NextButton } from '../components/nextButton.tsx'
 # **NLU**
 
 NLUs can be used by your app, product, or service to transform natural user requests into actionable data. This transformation occurs when a user input matches one of the intents in your bot.
-The Botonic NLU allows us to create different `intents` and assign key words or phrases. These will match with the `intent` and direct to the corresponding route.
+The Botonic NLU allows us to create different `intents` and assign keywords or phrases. These will match with the `intent` and direct to the corresponding route.
 
 To use the botonic NLU, you can create a bot using the NLU template by running:
 
@@ -51,7 +51,7 @@ You must have at least this much in your file:
 {
   "langs": ["en"],
   "params": {
-    "default": {   }
+    "default": { }
   }
 }
 ```
@@ -81,37 +81,37 @@ individual languages.
 }
 ```
 The default values of the training parameters are listed below:
-- EMBEDDING: '10k-fasttext'
-- EMBEDDING_DIM: 300
-- TRAINABLE_EMBEDDINGS: true
-- LEARNING_RATE: 0.03
-- EPOCHS: 10
-- UNITS: 21
-- MAX_SEQ_LENGTH: 50
-- VALIDATION_SPLIT: 0.2
-- DROPOUT_REG: 0.2
+- **EMBEDDING**: '10k-fasttext'
+- **EMBEDDING_DIM**: 300
+- **TRAINABLE_EMBEDDINGS**: true
+- **LEARNING_RATE**: 0.03
+- **EPOCHS**: 10
+- **UNITS**: 21
+- **MAX_SEQ_LENGTH**: 50
+- **VALIDATION_SPLIT**: 0.2
+- **DROPOUT_REG**: 0.2
 
 If the plugin is not able to correctly identify the language of a new input, it will use the first language in the file.
 
 > #### IMPORTANT NOTE:
 > We currently only support the following pre-trained word embeddings, so you can only train your bot in these languages. 
 > We expect to support more in the near future. For more information, feel free to contact us at [Slack](http://botonic.slack.com).
-> * You can also generate your own word embeddings following these [instructions](https://github.com/hubtype/botonic/scripts).  
+> * You can also generate your own word embeddings following these [instructions](https://github.com/hubtype/botonic/tree/master/scripts).  
 
 | Language   |      Language Code     | Type           |      Dimensions     |                               Source                                                                                          |
 |:----------:|     :-------------:    |:----------:    |    :-------------:  |                            :----------:                                                                                       |
-| English    |           en          |   glove        |          50         | [glove-50d-eng](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/glove-50d-eng.db)                              |                  |
-| English    |           en          |   10k-fasttext |          300        | [10k-fasttext-300d-eng](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-eng.db)              |
-| Spanish    |           es          |   10k-fasttext |          300        | [10k-fasttext-300d-spa](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-spa.db)              |
-| Catalan    |           ca          |   10k-fasttext |          300        | [10k-fasttext-300d-cat](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-cat.db)              |
-| French     |           fr          |   10k-fasttext |          300        | [10k-fasttext-300d-fra](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-fra.db)              |
-| Portuguese |           pt          |   10k-fasttext |          300        | [10k-fasttext-300d-por](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-por.db)              |
-| German     |           de          |   10k-fasttext |          300        | [10k-fasttext-300d-deu](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-deu.db)              |
-| Italian    |           it          |   10k-fasttext |          300        | [10k-fasttext-300d-ita](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ita.db)              |
-| Hindi      |           hi          |   10k-fasttext |          300        | [10k-fasttext-300d-hin](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-hin.db)              |
-| Indonesian |           id          |   10k-fasttext |          300        | [10k-fasttext-300d-ind](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ind.db)              |
-| Russian    |           ru          |   10k-fasttext |          300        | [10k-fasttext-300d-rus](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-rus.db)              |
-| Turkish    |           tr          |   10k-fasttext |          300        | [10k-fasttext-300d-tur](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-tur.db)              |
+| English    |           en          |   glove        |          50         | [glove-50d-en](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/glove-50d-en.db)                              |                  |
+| English    |           en          |   10k-fasttext |          300        | [10k-fasttext-300d-en](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-en.db)              |
+| Spanish    |           es          |   10k-fasttext |          300        | [10k-fasttext-300d-es](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-es.db)              |
+| Catalan    |           ca          |   10k-fasttext |          300        | [10k-fasttext-300d-ca](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ca.db)              |
+| French     |           fr          |   10k-fasttext |          300        | [10k-fasttext-300d-fr](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-fr.db)              |
+| Portuguese |           pt          |   10k-fasttext |          300        | [10k-fasttext-300d-pt](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-pt.db)              |
+| German     |           de          |   10k-fasttext |          300        | [10k-fasttext-300d-de](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-de.db)              |
+| Italian    |           it          |   10k-fasttext |          300        | [10k-fasttext-300d-it](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-it.db)              |
+| Hindi      |           hi          |   10k-fasttext |          300        | [10k-fasttext-300d-hi](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-hi.db)              |
+| Indonesian |           id          |   10k-fasttext |          300        | [10k-fasttext-300d-id](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-id.db)              |
+| Russian    |           ru          |   10k-fasttext |          300        | [10k-fasttext-300d-ru](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ru.db)              |
+| Turkish    |           tr          |   10k-fasttext |          300        | [10k-fasttext-300d-tr](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-tr.db)              |
 
 > 10k-fasttext word embeddings contain the 10k most commons words of the language.  
 

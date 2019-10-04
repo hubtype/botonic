@@ -34,9 +34,9 @@ try {
 } catch (e) {
   console.log('Usage: Pass as flag the file to be dumped into a .db file.')
   console.log(
-    '- Required format: {ALGORITHM_NAME}-{DIMENSIONS}d-{LANGUAGE_CODE(ISO639-3)}.txt'
+    '- Required format: {ALGORITHM_NAME}-{DIMENSIONS}d-{LANGUAGE_CODE(ISO639-1)}.txt'
   )
-  console.log('- Example: glove-50d-eng.txt')
+  console.log('- Example: glove-50d-en.txt')
 
   console.log('\n Format for Word Embeddings file:')
   console.log('   {token_1} v_11 v_12 v_13 v_14 ... v_1N\\n')

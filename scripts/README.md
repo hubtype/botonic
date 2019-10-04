@@ -1,10 +1,10 @@
 This is a script that allows you to generate new word embeddings to use alongside with @botonic/plugin-nlu.
 
 Usage: Specify as argument the embeddings file to be dumped into a .db file.
-Example: $ node dump_word_embedding_to_db.js input_file.txt
+Example: \$ node dump_word_embedding_to_db.js input_file.txt
 
-- Required format: {ALGORITHM_NAME}-{DIMENSIONS}d-{LANGUAGE_CODE(ISO639-3)}.txt'
-- Example: glove-50d-eng.txt
+- Required format: {ALGORITHM_NAME}-{DIMENSIONS}d-{LANGUAGE_CODE(ISO639-1)}.txt'
+- Example: glove-50d-en.txt
 
 Format for Word Embeddings file:
 {token_1} v_11 v_12 v_13 v_14 ... v_1N\n
