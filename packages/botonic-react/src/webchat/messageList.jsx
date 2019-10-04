@@ -1,8 +1,19 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
+import { staticAsset } from '../utils'
 
 export const WebchatMessageList = props => {
   const { webchatState } = useContext(WebchatContext)
+  const CustomIntro = webchatState.theme && webchatState.theme.customIntro
+  const DefaultIntro = webchatState.theme && webchatState.theme.introImage && (
+    <img
+      style={{
+        maxHeight: '50%',
+        ...(webchatState.theme.introStyle || {})
+      }}
+      src={staticAsset(webchatState.theme.introImage)}
+    />
+  )
   return (
     <div
       style={{
@@ -12,7 +23,7 @@ export const WebchatMessageList = props => {
         overflowY: 'auto'
       }}
     >
-      {webchatState.theme.introImage && <webchatState.theme.introImage />}
+      {CustomIntro ? <CustomIntro /> : DefaultIntro}
       {webchatState.messagesComponents.map((e, i) => (
         <div
           style={{
