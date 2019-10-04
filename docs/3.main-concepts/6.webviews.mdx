@@ -125,14 +125,9 @@ export default class Example extends React.Component {
 After having our component created, move to `src/webviews/index.js` and simply add the new Component that was just created.
 
 ```javascript
-import { WebviewApp } from '@botonic/react'
-
-import { locales } from '../locales'
 import Example from './example'
 
-const webviews = [Example]
-
-export default new WebviewApp({ webviews, locales })
+export const webviews = [Example]
 ```
 
 _This an element to invoke the webview:_
