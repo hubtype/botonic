@@ -28,9 +28,10 @@ export default class extends React.Component {
 
 With some small modifications, we can also pass variables or external responses to the render method.
 
-The `botonicInit` function is always called before the `render()`. With this feature, we can do all the external api calls and use the responses in the `render()` method.
+The `botonicInit` function is always called before the `render()` and it's asynchronous. This means that you can do all type of external api calls here and use the responses in the `render()` method, as an example.
 
-The data returned in this function is available in `this.props`.
+In the example below, we are storing as a session variable the name that a user would have typed. Also we are declaring the variable `reminder` which we want to use inside the `render()` method.  
+The session variables can be accessed within `render()` with `this.context.session`, and the ones declared inside `botonicInit()` scope with `this.props.{variableName}`.
 
 ```javascript
 import React from 'react'
@@ -40,9 +41,9 @@ export default class extends React.Component {
   static contextType = RequestContext
 
   static async botonicInit({ input, session, params, lastRoutePath }) {
-    session.name = 'John Doe' // <-- Variable stored in session
-    var reminder = 'Mathematics'
-    return { reminder } // <-- Variable to be used locally
+    session.name = input.data 
+    let reminder = 'Mathematics'
+    return { reminder } 
   }
 
   render() {
@@ -73,17 +74,14 @@ We can access different types of information inside the `botonicInit` function.
 - **input:** the type of data and the user input.  
   `{'type': 'text', 'data': 'Hello, it's my first interaction'}`
 - **session**: the session is a group of variables that is always available at any action of the bot. It's recalculated every time there is an user input, so if a variable is updated in any state of the bot, this variable is going to be available and updated in all the others actions.
-- **params**: when a [Button](/main-concepts/rich-conversational-markup-language) redirects you to an action, you can pass attributes (parameters) to that action. The params store this information.
+- **params**: when a [Button](/main-concepts/components) redirects you to an action, you can pass attributes (parameters) to that action. The params store this information.
 - **lastRoutePath**: the last path that the user has gone through.
 
-The `render()` function describes what will be returned as an output of the bot using [RCML](/api/rich-conversational-markup-language). All the variables returned in `botonicInit` are stored in `{this.props}`. In this example, you can see two ways of retrieving these variables, in order of appearance:
-
-- **from session:** which is always available, as mentioned
-- **as a local variable:** variables returned in `botonicInit` are accessible only in the current action
+The `render()` method describes what will be returned as an output of the bot using [Components](/api/components).
 
 ## Complex actions
 
-Sometimes it's helpful to pull information from an external site. You can do this within the `botonicInit({ input, session, params, lastRoutePath })` method.
+Sometimes it's helpful to pull information from an external site. You can do this within the `botonicInit()` method.
 
 **./actions/example.js**
 
@@ -140,5 +138,5 @@ See the section [i18n](/main-concepts/i18n) for further information.
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
   <PrevButton title="Routes" href="/main-concepts/routes" />
-  <NextButton title="RCML" href="/main-concepts/rich-conversational-markup-language" />
+  <NextButton title="Components" href="/main-concepts/components" />
 </div>
