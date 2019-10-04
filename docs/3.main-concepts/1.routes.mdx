@@ -10,7 +10,7 @@ import { NextButton } from '../components/nextButton.tsx'
 
 # **Routes**
 
-Basically, routes map user inputs to actions (React Components)
+Basically, routes map user inputs to actions which are in fact React Components.
 
 ## User inputs
 
@@ -52,13 +52,12 @@ There are 5 different ways of passing these tests:
 * **Input:** Passes if the input satisfies the condition
 * **Session:** Passes if the condition of the session is met
 
-The rules will be tested in order so if the 1st rule matches, Botonic won't test
-other routes and will execute the 1st action.
-If there are several matching rules in the same route, all of them have to pass
-to consider a match.
+> The rules will be tested in order so if the 1st rule matches, Botonic won't test
+> other routes and will execute the 1st action.
+> If there are several matching rules in the same route, all of them have to pass
+> to consider a match.
 
-In the following example, the first rule matches if and only if we get the text `start` and will execute the
-React component defined in `src/actions/start.js`
+In the following example, the first rule matches if and only if we get the text `start` and will trigger the action defined in `src/actions/start.js`
 
 ```javascript
 {path: 'start', text: 'start', action: Start}
