@@ -1,5 +1,5 @@
 import React from 'react'
 import Img from '../assets/intro-image.jpg'
-export const IntroImage = () => {
+export const CustomIntro = () => {
   return <img height={'50%'} width={'100%'} src={Img} />
 }
