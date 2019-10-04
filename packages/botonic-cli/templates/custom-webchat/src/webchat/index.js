@@ -1,10 +1,11 @@
 import launcherIcon from '../assets/launcher-logo.png'
-import { IntroImage } from './intro-image'
+import IntroImage from '../assets/intro-image.jpg'
 import C3POLogo from '../assets/c3po-logo.png'
 import R2D2Logo from '../assets/r2d2-logo.png'
 import CalendarMessage from './calendar-message'
 import { CustomTrigger } from './custom-trigger'
 import { CustomHeader } from './custom-header'
+import { CustomIntro } from './custom-intro'
 import { CustomReply } from './custom-reply'
 import { CustomButton } from './custom-button'
 
@@ -21,6 +22,7 @@ export const webchat = {
       backgroundColor: 'white',
       borderRadius: '25px',
       boxShadow: '0 0 50px rgba(0,0,255,.30)',
+      overflow: 'hidden',
       backgroundImage:
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
     },
@@ -34,6 +36,9 @@ export const webchat = {
     botMessageImage: C3POLogo, // set it to 'null' to hide the botMessageImage
     // headerImage: R2D2Logo, // set it to 'null' to hide the headerImage
     introImage: IntroImage,
+    introStyle: {
+      padding: 20
+    },
     headerTitle: 'My customized webchat',
     headerSubtitle: 'R2D2',
     textPlaceholder: 'Type something...',
@@ -60,6 +65,7 @@ export const webchat = {
     /* Uncomment the other lines to see the rest of React components  */
     // customTrigger: CustomTrigger
     // customHeader: CustomHeader,
+    // customIntro: CustomIntro,
     // customButton: CustomButton,
     customReply: CustomReply
   },
