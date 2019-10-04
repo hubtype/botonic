@@ -1,15 +1,6 @@
 import React from 'react'
 import Icon from '../assets/r2d2-logo.png'
 
-var link = document.createElement('link')
-link.setAttribute('rel', 'stylesheet')
-link.setAttribute('type', 'text/css')
-link.setAttribute(
-  'href',
-  'https://fonts.googleapis.com/css?family=Noto+Sans+JP'
-)
-document.head.appendChild(link)
-
 export const CustomHeader = () => {
   return (
     <div
