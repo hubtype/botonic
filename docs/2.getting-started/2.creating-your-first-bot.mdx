@@ -36,14 +36,15 @@ botonic new testBot nlu
 
 Along with creating your project, this will also install node modules for the application, and make the first build.
 
-Along with the nlu template, Botonic also provides the following official templates:
+Apart from the nlu template, Botonic also provides the following official templates:
 
 - `blank`: a template with empty actions.
 - `tutorial`: a bot that explains some basic concepts in Botonic. This template has lots of comments in its code so you can learn by reading through the source files.
 - `childs`: a simple example on how `childRoutes` work.
-- `dynamic_carousel`: a bot that gets data from an external API and renders a Carousel (see: [RCML](/main-concepts/rich-conversational-markup-language)).
-- `handoff`: a simple bot that transfers the conversation into Hubtype Desk. (see: [human handOff](/tutorials-and-examples/human-handoff))
+- `dynamic-carousel`: a bot that gets data from an external API and renders a Carousel (see: [Components](/main-concepts/components)).
+- `handoff`: a simple bot that transfers the conversation into Hubtype Desk. (see: [Human Handoff](/tutorials-and-examples/human-handoff))
 - `intent`: a bot that uses external AI like DialogFlow.
+- `custom-webchat`: a customizable webchat that can be embedded in your website. (see: [Custom Webchat](/tutorials-and-examples/custom-webchat))
 
 If you don’t specify a template at the start, you will be prompted to pick one.
 
@@ -63,33 +64,35 @@ This will give you a local browser url (usually localhost:8080) where you can ha
 ## Project Structure
 
 - `routes.js`: Here you'll define routes, which maps user inputs and payloads to actions. You can use imported subroutes from other files.
-- `plugins.js`: Define your botonic plugins.
+- `actions`: Actions are the units of logic that your bot can perform and where the responses of your bot are defined. You are free to organize them into subdirectories.
 - `locales`: Locales are objects from which your bot takes your multilanguage definitions. This is useful if you want your bot to address different audiences. The `locales/index.js` file is where all the languages are imported.
 - `webviews`: Webviews are small web pages that pop up in the middle of the conversation flow. This lets you offer experiences and features that might be difficult to offer with message bubbles, such as picking products to buy, seats to book, or dates to reserve.
-- `actions`: Actions are the units of logic that your bot can perform and where the responses of your bot are defined. You are free to organize them into subdirectories.
+- `webchat`: Here reside all the styles and customized components for your webchat.
+- `nlu`: Here you can define the utterances for every language you want to understand with `Botonic NLU`.
 - `assets`: Assets is where you can store all the media required for your bot.
-- `...`: The rest of the files are needed for the [babel](https://babeljs.io/) and [Botonic](https://github.com/hubtype/botonic) project configuration. We recommend not modifying its contents, do so at your own risk!
+- `plugins.js`: Define your botonic plugins.
+- `...`: The rest of the files are needed for [babel](https://babeljs.io/) and [Botonic](https://github.com/hubtype/botonic) project configuration. We recommend not modifying its contents, do so at your own risk!
 
 ## Adding basic functionality to your bot
 
 ### Routes and Actions
 
-Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View the [Routes page](/main-concepts/routes) for more details.
+Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View [Routes](/main-concepts/routes) for more details.
 
-Actions are where you define the behaviour of your bot. You can add an Action by creating a new .js file inside `src/actions`. View the [Actions page](/main-concepts/actions) and [RCML page](/main-concepts/rich-conversational-markup-language) for more details.
+Actions are where you define the behaviour of your bot. You can add an Action by creating a new .js file inside `src/actions`. View [Actions](/main-concepts/actions) and [Components](/main-concepts/components) for more details.
 
 
 ## Adding Natural Language Understanding
 
-You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot, you get to a point where you need Natural [Language Understanding (NLU)](/main-concepts/nlu) capabilities.
+You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot, you get to a point where you need Natural Language Understanding (NLU) capabilities.
 
-NLU lets you capture user inputs by "intent" instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California?" and "Do you know if it's sunny today in California?" to the intent `get_weather` and the parameter `city=California`. You can then map that intent to an action using a route.
+NLU lets you capture user inputs by "intent" instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California?" and "Do you know if it's sunny today in California?" to the intent `GetWeather` and the parameter `city=California`. You can then map that intent to an action using a route.
 
-Botonic has its own NLU module with intent and entity recognition tasks.
+Botonic has its own [NLU module](/main-concepts/nlu) which covers intent and entity recognition tasks.
 
-### 1. Install the Botonic NLU
-If you are using the nlu template, you should already have the botonic NLU installed.
-If not, you can use the following command from within your bot project to install:
+### 1. Install the plugin for Botonic NLU
+If you are using the nlu template, you should already have Botonic NLU set up.
+If not, you can use the following command from within your bot project to install it:
 
 ```bash
 npm install @botonic/plugin-nlu 
@@ -103,7 +106,7 @@ npm install @botonic/plugin-nlu
 There are many ways that a user can express their intent. For example the Utterances "Hello", "Hi", and "Good morning" are all examples
 of a Greeting intent. 
 To create an intent, simply add a new text file under `src/nlu/utterances/en/`, for example `src/nlu/utterances/en/Greetings.txt`.
-Within the Greetings.txt file, you can add possible ways a user may greet the bot. Then you can reference the intent 'Greetings' by adding a route:
+Within the `Greetings.txt` file, you can add possible ways a user may greet the bot. Then you can reference the intent 'Greetings' by adding it in routes:
 
 ### 3. Add routes for intents
 

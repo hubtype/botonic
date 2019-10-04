@@ -13,35 +13,37 @@ import { PrevButton } from '../components/prevButton.tsx'
 * [@botonic/plugin-dialogflow](#botonic-plugin-dialogflow)
 * [@botonic/plugin-luis](#botonic-plugin-luis)
 * [@botonic/plugin-segment](#botonic-plugin-segment)
-* [@botonic/plugin-nlu](/plugins/plugin-nlu)
----
+* [@botonic/plugin-nlu](/main-concepts/nlu)
+* [@botonic/plugin-contentful](/plugins/plugin-contentful)
+--- 
 
 In order to use one of the [available](#Plugins) Botonic plugins, 
 you will need to:
 * Add a `plugins.js` file in your Botonic project at the root of **src**.
 * Require every plugin you want to be executed every time the input is processed.
-* Import your plugins in **src/app.js** and pass them to the App.
+* Import your plugins in **src/index.js**.
+
+** src/index.js **  
 
 ```javascript
-import { App } from '@botonic/react'
-
-import { routes } from './routes'
-import { locales } from './locales'
-import { plugins } from './plugins'
-
-export default new App({ routes, locales, plugins })
+export { routes } from './routes'
+export { locales } from './locales'
+export { plugins } from './plugins'
+export { webchat } from './webchat'
+export { webviews } from './webviews'
 ```
-
 
 ** src/plugins.js **  
 
 ```javascript
 export const plugins = [
   {
-    id: 'dialogflow',
-    resolve: require('@botonic/plugin-dialogflow'),
+    id: 'luis',
+    resolve: require('@botonic/plugin-luis'),
     options: {
-      token: 'YOUR_TOKEN_HERE'
+      region: 'YOUR_REGION',
+      appID: 'YOUR_APP_ID',
+      endpointKey: 'YOUR_ENDPOINT_KEY'
     }
   }
 ]
@@ -81,14 +83,12 @@ export const plugins = [
   {
     id: 'dialogflow',
     resolve: require('@botonic/plugin-dialogflow'),
-    options: {
-      token: 'YOUR_TOKEN_HERE'
-    }
+    options: 'YOUR_DIALOGFLOW_V2_GENERATED_JSON_KEY'
   }
 ]
 ``` 
 
-You can optionally define the [protocol version](https://dialogflow.com/docs/reference/agent/#protocol_version) of the dialogflow API to be used by adding a new option `version: 20150910`. If no version is specified the default is `20150910`.
+Refer to Dialogflow to [migrate your agents to V2]((https://dialogflow.com/docs/reference/v1-v2-migration-guide#switch_your_agent_from_v1_to_v2)) and for obtaining the [JSON key](https://dialogflow.com/docs/reference/v2-auth-setup).
 
 ### [botonic-plugin-luis](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-luis)
 Botonic plugin that use [LUIS](https://www.luis.ai/) as NLU service. The variables `intent`, `confidence`, `entities` and `intents` will be automatically
@@ -152,7 +152,11 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
   }
 ```  
 
+### [botonic-plugin-nlu](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-nlu)
+
+### [botonic-plugin-contentful](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful)
+
 <div style={{display:"flex", justifyContent:"space-between"}}>
   <PrevButton title="Plugins" href="/plugins/botonic-plugins" />
-  <NextButton title="Botonic Plugin NLU" href="/plugins/plugin-nlu" />
+  <NextButton title="Plugin Contentful" href="/plugins/plugin-contentful" />
 </div>
