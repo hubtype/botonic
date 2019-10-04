@@ -1,5 +1,5 @@
 ---
-name: 6. Custom Webchat
+name: 4. Custom Webchat
 route: /tutorials-and-examples/custom-webchat
 menu: 4. Tutorials & Examples
 ---
@@ -43,51 +43,66 @@ Let's see how we can use these objects:
 
 These are the available styles that Botonic allows you to modify:
 ### General Styling
-- **style:** the main characteristics of webchat such as its size, its background color...
+- **style**: the main characteristics of webchat such as its size, its background color...
+* **triggerButtonImage**: launcher icon for toggling the webchat.
+- **triggerButtonStyle**: launcher icon styles.
+* **brandColor**: the main color palette of the webchat widget.
+- **brandImage**: this will set an image for both `headerImage` and `botMessageImage`.
+* **headerImage**: the image displayed in the header. Overwrites the one set in brandImage. You can set it to `null` to disable it.
+- **headerTitle**: display title of the webchat.
+* **headerSubtitle**: display subtitle of the webchat.
+- **botMessageImage**: the image displayed next to the bot's chat bubble. Overwrites the one set in brandImage. You can set it to `null` to disable it.
+* **botMessageStyle**: styles of bot message.
+- **userMessageStyle**: styles of user message.
+* **introImage**: an introductory image shown the first time the conversation is initialized.
+- **introStyle**: styles of the introductory image.
+* **textPlaceholder**: text placeholder in the input text.
+- **alignReplies**: align replies at `left`, `center` or `right`.
+* **wrapReplies**: whether replies be displayed on a single row `no-wrap` (horizontal scrolling will appear when required) or they will be wrapped in different lines `wrap`.
 
-* **brandColor:** the main color palette of the webchat widget.
-
-- **textPlaceHolder:** text placeholder in the input text.
-
-* **title:** the title that's displayed in the header of the widget.
-
-- **brandIconUrl:** the image displayed in the header. 
-
-* **customReply:** React Component that defines how the quickreplies are displayed.
-
-- **customButton:** React Component that defines how the buttons are displayed.
-
+### Custom components
+You can also create your own components from scratch.
+* **customIntro:** React component that is injected where introImage is displayed.
+- **customTrigger:** React component that is injected in the Launcher icon.
 * **customHeader:** React Component that is injected in the Header of the widget.
+- **customReply:** React Component that is injected in the Reply components of the widget.
+* **customButton:** React Component that is injected in the Button components of the widget.
 
-- **botLogoChat:** the icon representing the bot in the chat.
+> **NOTE**: Custom components redefine completely the components that are replacing, so the styles conflicting with these components will be overridden.  
 
-* **brandIconUrl:** launcher icon for toggling the webchat.
+### Custom Message Styles
+Additionally, you can create the kind of messages you desire. Check the example below to see how to create one: 
+* **customMessageTypes:** Array of React components representing your messages.
 
-- **customTriggerButton:** React component that is injected in the Launcher icon.
+**src/webchat/calendar-message.js**
 
-### Header Styling
-- **headerTitle:** display title of the webchat.
+```javascript
+import React from 'react'
+import { WebchatContext, customMessage } from '@botonic/react'
+import Calendar from 'react-calendar'
 
-* **headerSubtitle:** display subtitle of the webchat.
+class CalendarMessage extends React.Component {
+  static contextType = WebchatContext
 
-- **headerImage:** the main logo appearing in the header.
+  render() {
+    return (
+      <>
+        <Calendar
+          onChange={date =>
+            this.context.sendText(`Booked for ${date.toLocaleDateString()}`)
+          }
+        />
+        <p>{this.props.children}</p>
+      </>
+    )
+  }
+}
 
-* **introImage:** an introductory image shown the first time the conversation is initialized.
-
-- **customHeader:** React Component that is injected in the Header of the widget.
-
-### Botonic Components Styling
-- **customUserMessages:** color and border radius of user messages.
-
-* **customBotMessages:** color and border radius of bot messages.
-
-- **customButton:** React Component that is injected in the Button components of the widget.
-
-* **customReply:** React Component that is injected in the Reply components of the widget.
-
-- **alignReplies:** align replies at `left`, `center` or `right`.
-
-* **wrapReplies:** whether replies be displayed on a single row (horizontal scrolling will appear when required) or they will be wrapped in different lines.
+export default customMessage({
+  name: 'calendar',
+  component: CalendarMessage
+})
+```
 
 ## Custom Compononent Examples
 
@@ -95,12 +110,12 @@ In this example, we are putting css styles into a custom quickreply.
 It's very important to put `{props.children}` inside the container, in this case the `<div>` tag:
 
 
-**src/webchat/myCustomReply.js**
+**src/webchat/custom-reply.js**
 
 ```javascript
 import React from 'react'
 
-export const MyCustomReply = props => (
+export const CustomReply = props => (
   <div
     style={{
       color: '#0000ff',
@@ -119,83 +134,23 @@ This is an example of a custom Header for our webchat. We can put all the fancy 
 This is a static object, so it's not applied in any [components](/main-concepts/components) component, so we don't have to put `{props.children}` inside any container.
 
 
-**src/webchat/myCustomHeader.js**
+**src/webchat/custom-header.js**
 
 ```javascript
-import React from 'react'
-import Icon from '../assets/header-logo.png'
-
-export const MyCustomHeader = () => {
-  var scriptBaseUrl = document
-    .querySelector('script[src$="webchat.botonic.js"]')
-    .getAttribute('src')
-  var scriptName = scriptBaseUrl.split('/').pop()
-  scriptBaseUrl = scriptBaseUrl.replace('/' + scriptName, '/')
-  return (
-    <div
-      style={{
-        background: 'linear-gradient(90deg, #184BA5 0%, #5E90C3 100%)',
-        borderRadius: '6px 6px 0px 0px',
-        height: 70,
-        display: 'flex',
-        alignItems: 'center'
-      }}
-    >
-      <img
-        style={{ margin: '0px 12px', width: 38, color: 'white' }}
-        src={scriptBaseUrl + Icon}
-      />
-      <h1
-        style={{
-          fontFamily: 'Noto Sans JP',
-          src: 'https://fonts.googleapis.com/css?family=Noto+Sans+JP',
-          fontStyle: 'normal',
-          fontWeight: 'bold',
-          fontSize: 16,
-          lineHeight: 10,
-          color: '#ffffff',
-          width: '80%'
-        }}
-      >
-        My customized header
-      </h1>
-      <div
-        style={{
-          cursor: 'pointer',
-          fontSize: 16,
-          color: 'white',
-          width: '30%',
-          justifyContent: 'center',
-          display: 'flex'
-        }}
-        onClick={() => {
-          Botonic.close()
-        }}
-      >
-        ✕
-      </div>
-    </div>
-  )
-}
-```
-
-
-Finally, import all the custom components into the bot:
-
-**src/webchat/index.js**
-
-```javascript
-import { MyCustomReply } from './myCustomReply'
-import { MyCustomButton } from './myCustomButton'
-import { MyCustomHeader } from './myCustomHeader'
 import launcherIcon from '../assets/launcher-logo.png'
-import { MyCustomIntroImage } from './myCustomIntroImage'
-import { MyBotLogoChat } from './myBotLogoChat'
-import { MyCustomHeaderImage } from './myCustomHeaderImage'
-import { TriggerCustom } from './triggerCustom'
+import IntroImage from '../assets/intro-image.jpg'
+import C3POLogo from '../assets/c3po-logo.png'
+import R2D2Logo from '../assets/r2d2-logo.png'
+import CalendarMessage from './calendar-message'
+import { CustomTrigger } from './custom-trigger'
+import { CustomHeader } from './custom-header'
+import { CustomIntro } from './custom-intro'
+import { CustomReply } from './custom-reply'
+import { CustomButton } from './custom-button'
 
 export const webchat = {
   theme: {
+    // GENERAL STYLE OF WEBCHAT
     style: {
       position: 'fixed',
       right: 20,
@@ -206,31 +161,52 @@ export const webchat = {
       backgroundColor: 'white',
       borderRadius: '25px',
       boxShadow: '0 0 50px rgba(0,0,255,.30)',
+      overflow: 'hidden',
       backgroundImage:
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
     },
+    triggerButtonImage: launcherIcon,
     brandColor: '#0000ff',
+    /*
+     * brandImage will set both headerImage and botMessageImage with its current logo
+     * you can overwrite these values by redefining them individually
+     */
+    brandImage: R2D2Logo,
+    botMessageImage: C3POLogo, // set it to 'null' to hide the botMessageImage
+    // headerImage: R2D2Logo, // set it to 'null' to hide the headerImage
+    introImage: IntroImage,
+    introStyle: {
+      padding: 20
+    },
+    // headerTitle: 'My customized webchat',
+    // headerSubtitle: 'R2D2',
     textPlaceholder: 'Type something...',
-    botLogoChat: MyBotLogoChat,
-    headerTitle: 'My customized webchat',
-    headerSubtitle: 'R2D2',
-    headerImage: MyCustomHeaderImage,
-    introImage: MyCustomIntroImage,
-    customUserMessages: {
-      color: 'white',
+    botMessageStyle: {
+      border: 'none',
+      color: 'blue',
       borderRadius: '20px'
     },
-    customBotMessages: {
-      color: 'blue',
+    userMessageStyle: {
+      // border:'none',
+      color: 'white',
       borderRadius: '10px'
     },
-    customReply: MyCustomReply,
-    alignReplies: 'right',
+    alignReplies: 'center',
     wrapReplies: 'wrap',
-    customButton: MyCustomButton,
-    brandIconUrl: launcherIcon,
-    customTriggerButton: TriggerCustom,
-    customHeader: MyCustomHeader
+    triggerButtonStyle: {
+      width: '200px'
+    },
+
+    // CUSTOM MESSAGES
+    customMessageTypes: [CalendarMessage],
+
+    // REACT CUSTOMIZABLE COMPONENTS: Remember that these components will overwrite any style for the component they are replacing
+    /* Uncomment the other lines to see the rest of React components  */
+    // customTrigger: CustomTrigger
+    customHeader: CustomHeader,
+    // customIntro: CustomIntro,
+    // customButton: CustomButton,
+    customReply: CustomReply
   }
 }
 ```
@@ -292,6 +268,6 @@ Once the specified inputs are matched:
 > We suggest you to check the full template which offers a bunch of examples to get started customizing the Webchat components.  
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
-  <PrevButton title="Interactive Examples" href="/tutorials-and-examples/interactive-examples" />
+  <PrevButton title="Dynamic Carousel" href="/tutorials-and-examples/dynamic-carousel" />
   <NextButton title="Testing Your Components" href="/tutorials-and-examples/testing-your-components" />
 </div>
