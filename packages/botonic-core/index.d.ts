@@ -56,8 +56,10 @@ type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[])
 // Desk
 export declare function humanHandOff(
   session: Session,
-  queue_name: string,
-  on_finish: { payload?: any; path?: any }
+  queueName?: string = '',
+  onFinish: { payload?: any; path?: any },
+  agentEmail?: string = '',
+  extraInfo: { caseInfo?: any; note?: any }
 ): Promise<void>
 
 export declare function getOpenQueues(
