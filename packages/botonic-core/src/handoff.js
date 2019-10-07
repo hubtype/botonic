@@ -15,11 +15,25 @@ export async function getOpenQueues(session) {
   return resp.data
 }
 
-export async function humanHandOff(session, queue_name, on_finish) {
-  let params = `create_case:${queue_name}`
-  if (on_finish) {
-    if (on_finish.path) params += `:__PATH_PAYLOAD__${on_finish.path}`
-    else if (on_finish.payload) params += `:${on_finish.payload}`
+export async function humanHandOff({
+  session,
+  queueName = '',
+  onFinish,
+  agentEmail = '',
+  extraInfo
+}) {
+  let params = `create_case:${queueName}:${agentEmail}`
+  if (!queueName && agentEmail) {
+    throw 'You must provide a queueName'
+  }
+  if (extraInfo) {
+    if (extraInfo.caseInfo)
+      params += `:__CASE_INFO__${extraInfo.caseInfo}__END_CASE_INFO__`
+    if (extraInfo.note) params += `:__NOTE__${extraInfo.note}__END_NOTE__`
+  }
+  if (onFinish) {
+    if (onFinish.path) params += `:__PATH_PAYLOAD__${onFinish.path}`
+    else if (onFinish.payload) params += `:${onFinish.payload}`
   }
   session._botonic_action = params
 }
