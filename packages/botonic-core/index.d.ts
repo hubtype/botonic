@@ -71,6 +71,11 @@ export declare function storeCaseRating(
   rating: number
 ): Promise<any>
 
+export declare function getAvailableAgentsForQueue(
+  session: Session,
+  queueName?: string
+): Promise<{ agents: string[] }>
+
 /** The response of the bot for the triggered actions, which can be
  * the one matched by the routes, the default action and the retry actions.
  * See the @botonic/react's index.d.ts for this implementations particular type.
