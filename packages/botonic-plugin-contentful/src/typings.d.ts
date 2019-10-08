@@ -32,7 +32,7 @@ declare module 'node-nlp/lib/util' {
 
 declare module 'node-nlp/lib/nlp/tokenizers' {
   export class Tokenizer {
-    tokenize(text: string): string[];
+    tokenize(text: string, normalize: boolean): string[];
   }
 }
 
@@ -54,6 +54,7 @@ declare module 'node-nlp/lib/nlp/nlp-util' {
 
   export = NlpUtil;
 }
+
 declare module 'node-nlp/lib/nlp/tokenizers/punct-tokenizer' {
   import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
 
@@ -62,16 +63,34 @@ declare module 'node-nlp/lib/nlp/tokenizers/punct-tokenizer' {
   export = PunctTokenizer;
 }
 
-// We use directly the ES Stemmer instead of using NlpUtil to avoid loading dependencies of so many languages
-// (there are evn errors with 'fs' library and with Japanese dependencies)
-declare module 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer-es' {
-  class PorterStemmer {
-    tokenizeAndStem(str: string, keepStops: boolean): string[];
+declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-en' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
+
+  class AggressiveTokenizerEn extends Tokenizer {}
+
+  export = AggressiveTokenizerEn;
+}
+
+declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-es' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
+
+  class AggressiveTokenizerEs extends Tokenizer {
+    trim(arr: string[]): string[];
   }
 
-  const stemmer: PorterStemmer;
-  export = stemmer;
+  export = AggressiveTokenizerEs;
 }
+
+declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pt' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
+
+  class AggressiveTokenizerPt extends Tokenizer {}
+
+  export = AggressiveTokenizerPt;
+}
+
+// We use directly the ES Stemmer instead of using NlpUtil to avoid loading dependencies of so many languages
+// (there are evn errors with 'fs' library and with Japanese dependencies)
 
 declare module 'node-nlp/lib/nlp/stemmers/catalan-stemmer' {
   import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
@@ -97,20 +116,22 @@ declare module 'node-nlp/lib/nlp/stemmers/spanish-stemmer' {
   export = SpanishStemmer;
 }
 
-declare module 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer' {
-  class PorterStemmer {
+declare module 'node-nlp/lib/nlp/stemmers/english-stemmer' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
+  class EnglishStemmer {
+    constructor(tokenizer: Tokenizer);
     tokenizeAndStem(str: string, keepStops: boolean): string[];
   }
 
-  const stemmer: PorterStemmer;
-  export = stemmer;
+  export = EnglishStemmer;
 }
 
-declare module 'node-nlp/lib/nlp/stemmers/natural/porter-stemmer-pt' {
-  class PorterStemmer {
+declare module 'node-nlp/lib/nlp/stemmers/portuguese-stemmer' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers';
+  class PortugueseStemmer {
+    constructor(tokenizer: Tokenizer);
     tokenizeAndStem(str: string, keepStops: boolean): string[];
   }
 
-  const stemmer: PorterStemmer;
-  export = stemmer;
+  export = PortugueseStemmer;
 }
