@@ -2,8 +2,12 @@ import { SimilarWordFinder, SimilarWordResult } from './similar-words';
 import { Normalizer } from './normalizer';
 import { Locale } from './locales';
 
+export class Keyword {
+  constructor(readonly raw: string, readonly stemmed: string) {}
+}
+
 export class CandidateWithKeywords<M> {
-  constructor(readonly owner: M, readonly keywords: string[]) {}
+  constructor(readonly owner: M, readonly keywords: Keyword[]) {}
 }
 
 export enum MatchType {
@@ -53,9 +57,10 @@ export class KeywordsParser<M> {
    * words (which must appear together in the same order). The keywords will be stemmed.
    */
   addCandidate(candidate: M, rawKeywords: string[]): void {
-    const stemmedKeywords = rawKeywords.map(kw => {
-      return this.normalizer.normalize(this.locale, kw).join(' ');
-    });
+    const stemmedKeywords = rawKeywords.map(
+      kw =>
+        new Keyword(kw, this.normalizer.normalize(this.locale, kw).join(' '))
+    );
     const candidateWithK = new CandidateWithKeywords(
       candidate,
       stemmedKeywords
@@ -98,7 +103,14 @@ export class KeywordsParser<M> {
     for (const candidate of this.candidates) {
       for (const keyword of candidate.keywords) {
         if (this.containsAllWordsInKeyword(joinedTokens, keyword)) {
-          results.push(new SimilarWordResult<M>(candidate.owner, keyword, 0));
+          results.push(
+            new SimilarWordResult<M>(
+              candidate.owner,
+              keyword,
+              keyword.stemmed,
+              0
+            )
+          );
         }
       }
     }
@@ -114,9 +126,9 @@ export class KeywordsParser<M> {
 
   private containsAllWordsInKeyword(
     joinedTokens: string,
-    keyword: string
+    keyword: Keyword
   ): boolean {
-    for (const word of keyword.split(' ')) {
+    for (const word of keyword.stemmed.split(' ')) {
       if (!joinedTokens.includes(word)) {
         return false;
       }
