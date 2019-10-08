@@ -1,16 +1,15 @@
 import axios from 'axios'
 
 export async function getOpenQueues(session) {
-  let base_url = session._hubtype_api || 'https://api.hubtype.com'
-  const queues_url = `${base_url}/v1/queues/get_open_queues/`
-  let bot_id = session.bot.id
+  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
   let resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`
     },
     method: 'post',
-    url: queues_url,
-    data: { bot_id }
+    url: endpointUrl,
+    data: { bot_id: session.bot.id }
   })
   return resp.data
 }
@@ -39,16 +38,29 @@ export async function humanHandOff({
 }
 
 export async function storeCaseRating(session, rating) {
-  let base_url = session._hubtype_api || 'https://api.hubtype.com'
-  let chat_id = session.user.id
-
+  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  let chatId = session.user.id
   let resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`
     },
     method: 'post',
-    url: `${base_url}/v1/chats/${chat_id}/store_case_rating/`,
-    data: { chat_id, rating }
+    url: `${baseUrl}/v1/chats/${chatId}/store_case_rating/`,
+    data: { chat_id: chatId, rating }
+  })
+  return resp.data
+}
+
+export async function getAvailableAgentsForQueue(session, queueName) {
+  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const endpointUrl = `${baseUrl}/v1/queues/get_available_agents_for_queue/`
+  let resp = await axios({
+    headers: {
+      Authorization: `Bearer ${session._access_token}`
+    },
+    method: 'post',
+    url: endpointUrl,
+    data: { bot_id: session.bot.id, queue_name: queueName }
   })
   return resp.data
 }
