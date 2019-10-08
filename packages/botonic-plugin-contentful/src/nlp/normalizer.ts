@@ -42,20 +42,16 @@ export class Normalizer {
     private readonly tokenizer = tokenizerPerLocale,
     private readonly separatorsRegex = DEFAULT_SEPARATORS_REGEX
   ) {
-    const normalizer = (locale: Locale, txt: string) =>
-      tokenizerPerLocale(locale)
-        .tokenize(txt.toLowerCase(), true)
-        .join(' ');
     for (const locale in stemmingBlackListPerLocale) {
       const blacks = stemmingBlackListPerLocale[locale].map(black =>
-        black.normalize(txt => normalizer(locale, txt))
+        black.normalize(txt => this.normalizeWord(locale, txt))
       );
       this.stemmingBlackListPerLocale[locale] = blacks;
     }
 
     for (const locale in stopWordsPerLocale) {
       this.stopWordsPerLocale[locale] = stopWordsPerLocale[locale].map(sw =>
-        normalizer(locale, sw)
+        this.normalizeWord(locale, sw)
       );
     }
   }
@@ -85,6 +81,12 @@ export class Normalizer {
       return tokens;
     }
     return stems;
+  }
+
+  private normalizeWord(locale: Locale, stopWord: string): string {
+    return this.tokenizer(locale)
+      .tokenize(stopWord.toLowerCase(), true)
+      .join(' ');
   }
 
   private getBlackListStem(locale: Locale, word: string): string | undefined {
