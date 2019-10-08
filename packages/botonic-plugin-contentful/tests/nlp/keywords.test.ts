@@ -1,6 +1,10 @@
 import 'jest-extended';
-import { KeywordsParser, tokenizeAndStem, Tokenizer } from '../../src/nlp';
-import { KeywordsOptions, MatchType } from '../../src/nlp/keywords';
+import {
+  KeywordsParser,
+  Normalizer,
+  KeywordsOptions,
+  MatchType
+} from '../../src/nlp';
 
 test('hack because webstorm does not recognize test.each', () => {});
 
@@ -17,14 +21,15 @@ function testFindKeywords(
     const parser = new KeywordsParser<string>(
       locale,
       matchType,
-      new Tokenizer(),
+      new Normalizer(),
       new KeywordsOptions(maxDistance)
     );
 
     for (const candidate in keywordsByCandidate) {
       parser.addCandidate(candidate, keywordsByCandidate[candidate]);
     }
-    const tokens = tokenizeAndStem(locale, inputText);
+    const normalizer = new Normalizer();
+    const tokens = normalizer.normalize(locale, inputText);
     const results = parser.findCandidatesWithKeywordsAt(tokens);
     expect(results.map(r => r.candidate)).toIncludeSameMembers(expectedMatch);
   };
@@ -37,6 +42,13 @@ test.each<any>([
   'TEST: find similar keywords of "%s" with KEYWORDS_AND_OTHERS_FOUND',
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 1)
 );
+
+test('TEST: do not match if length smaller than stem with ONLY_KEYWORDS_FOUND', () =>
+  testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 1)(
+    'est',
+    { A: ['cesta'], B: ['está'] },
+    ['B']
+  ));
 
 test('TEST: results sorted by length with ONLY_KEYWORDS_FOUND', () =>
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 2)(
@@ -80,7 +92,7 @@ test.each<any>([
   ['kwA kwB', { A: ['kwA'], B: ['kwB'] }, ['A', 'B']],
 
   // BUG does not detect keywords which only contain stopwords when input contains other (no stopwords) words
-  ['sobres enormes', { ONLY_STOPWORD: ['kw1', 'sobre'] }, []],
+  ['Sobre enormes', { ONLY_STOPWORD: ['kw1', 'sobre'] }, []],
 
   // does not false positive with keywords which only contain stopwords
   ['something else', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
@@ -101,7 +113,7 @@ test.each<any>([
   ['kwA', { A: ['kwA', 'kwB'] }, ['A']],
 
   // detects keywords which only contain stopwords
-  ['sobres', { ONLY_STOPWORD: ['kw1', 'sobre'] }, ['ONLY_STOPWORD']],
+  ['Sobre', { ONLY_STOPWORD: ['kw1', 'sobre'] }, ['ONLY_STOPWORD']],
 
   // does not false positive with keywords which only contain stopwords
   ['other', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
@@ -147,7 +159,7 @@ test.each<any>([
   ['wb', { A: ['wa wb', 'other'] }, []],
 
   // keywords which only contain stopwords
-  ['sobres', { ONLY_STOPWORD: ['kw1', 'sobre'] }, ['ONLY_STOPWORD']],
+  ['sobre', { ONLY_STOPWORD: ['kw1', 'Sobre'] }, ['ONLY_STOPWORD']],
 
   // does not false positive with keywords which only contain stopwords
   ['something else', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],

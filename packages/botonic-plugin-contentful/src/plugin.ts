@@ -1,19 +1,18 @@
 import * as cms from './cms';
 import Contentful from './contentful';
-import { KeywordsOptions } from './nlp/keywords';
-import { StemmingEscaper } from './nlp/node-nlp';
-import { Tokenizer } from './nlp/tokens';
+import { KeywordsOptions, Normalizer, StemmingBlackList } from './nlp';
 import { Search } from './search';
 import { BotonicMsgConverter } from './render';
+
+interface NlpOptions {
+  blackList: { [locale: string]: StemmingBlackList[] };
+}
 
 interface OptionsBase {
   renderer?: BotonicMsgConverter;
   search?: Search;
-  searchOptions?: {
-    /** @see StemmingEscaper */
-    blackList: string[][];
-    keywords: KeywordsOptions;
-  };
+  nlpOptions?: NlpOptions;
+  keywordsOptions?: { [locale: string]: KeywordsOptions };
 }
 
 export interface CmsOptions extends OptionsBase {
@@ -46,12 +45,10 @@ export default class BotonicPluginContentful {
     if (opt.search) {
       this.search = opt.search;
     } else {
-      const blackList = opt.searchOptions ? opt.searchOptions.blackList : [];
-      const keywords = opt.searchOptions
-        ? opt.searchOptions.keywords
-        : new KeywordsOptions();
-      const escaper = new StemmingEscaper(blackList);
-      this.search = new Search(this.cms, new Tokenizer(escaper), keywords);
+      const normalizer = opt.nlpOptions
+        ? new Normalizer(opt.nlpOptions.blackList)
+        : new Normalizer();
+      this.search = new Search(this.cms, normalizer, opt.keywordsOptions);
     }
   }
 
