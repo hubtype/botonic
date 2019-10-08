@@ -1,5 +1,6 @@
-import { Locale } from './index';
 import { stemmerFor } from './stemmer';
+
+export type Locale = string;
 
 export function checkLocale(locale?: Locale): Locale {
   if (!locale) {

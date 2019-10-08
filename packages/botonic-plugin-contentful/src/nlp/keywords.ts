@@ -1,6 +1,6 @@
-import { Locale } from './index';
 import { SimilarWordFinder, SimilarWordResult } from './similar-words';
-import { Tokenizer } from './tokens';
+import { Normalizer } from './normalizer';
+import { Locale } from './locales';
 
 export class CandidateWithKeywords<M> {
   constructor(readonly owner: M, readonly keywords: string[]) {}
@@ -32,14 +32,19 @@ export class KeywordsOptions {
 
 export class KeywordsParser<M> {
   private readonly candidates = [] as CandidateWithKeywords<M>[];
-  private readonly similar = new SimilarWordFinder<M>(true);
+  private readonly similar: SimilarWordFinder<M>;
 
   constructor(
     readonly locale: Locale,
     readonly matchType: MatchType,
-    readonly tokenizer: Tokenizer,
+    readonly normalizer: Normalizer,
     readonly options: KeywordsOptions
-  ) {}
+  ) {
+    this.similar = new SimilarWordFinder<M>(
+      true,
+      options.similarWordsMinLength
+    );
+  }
 
   /**
    *
@@ -49,7 +54,7 @@ export class KeywordsParser<M> {
    */
   addCandidate(candidate: M, rawKeywords: string[]): void {
     const stemmedKeywords = rawKeywords.map(kw => {
-      return this.tokenizer.tokenize(this.locale, kw).join(' ');
+      return this.normalizer.normalize(this.locale, kw).join(' ');
     });
     const candidateWithK = new CandidateWithKeywords(
       candidate,

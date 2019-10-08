@@ -1,7 +1,5 @@
 import { Button, Callback, CMS, ModelType, Text, Context } from '../cms';
-import { KeywordsOptions, MatchType } from '../nlp/keywords';
-import { checkLocale } from '../nlp/locales';
-import { Tokenizer } from '../nlp/tokens';
+import { KeywordsOptions, MatchType, Normalizer, checkLocale } from '../nlp';
 import { SearchByKeywords } from './search-by-keywords';
 import { SearchResult } from './search-result';
 
@@ -9,10 +7,10 @@ export class Search {
   readonly search: SearchByKeywords;
   constructor(
     private readonly cms: CMS,
-    private readonly tokenizer: Tokenizer,
-    keywordsOptions?: KeywordsOptions
+    private readonly normalizer: Normalizer,
+    keywordsOptions?: { [locale: string]: KeywordsOptions }
   ) {
-    this.search = new SearchByKeywords(cms, tokenizer, keywordsOptions);
+    this.search = new SearchByKeywords(cms, normalizer, keywordsOptions);
   }
 
   /**
@@ -25,7 +23,7 @@ export class Search {
     context: Context
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale);
-    const tokens = this.tokenizer.tokenize(locale, inputText);
+    const tokens = this.normalizer.normalize(locale, inputText);
     const contents = await this.search.searchContentsFromInput(
       tokens,
       matchType,

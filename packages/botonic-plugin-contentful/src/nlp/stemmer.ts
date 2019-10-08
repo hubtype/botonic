@@ -16,7 +16,7 @@ export const stemmers: { [key: string]: BaseStemmer } = {
   //node-nlp does not support polish
 };
 
-export function stemmerFor(locale: Locale): BaseStemmer {
+export function stemmerFor(locale: string): BaseStemmer {
   const stem = stemmers[locale];
   if (!stem) {
     throw new Error(`No stemmer configured for locale '${locale}'`);

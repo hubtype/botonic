@@ -9,10 +9,8 @@ import {
   SearchByKeywords,
   Context
 } from '../../src';
-import { MatchType } from '../../src/nlp/keywords';
-import { StemmingEscaper } from '../../src/nlp/node-nlp';
-import { Tokenizer } from '../../src/nlp/tokens';
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result';
+import { Normalizer, StemmingBlackList, MatchType } from '../../src/nlp';
 
 const ES_CONTEXT = { locale: 'es' };
 test('TEST: searchContentsFromInput keywords found', async () => {
@@ -28,7 +26,10 @@ test('TEST: searchContentsFromInput keywords found', async () => {
   // act
   const expectedContents = contents.slice(0, 4);
   const suggested = await keywords.searchContentsFromInput(
-    keywords.tokenizer.tokenize('es', ' DevoluciON de  plazo? Empezar Hubtype'),
+    keywords.normalizer.normalize(
+      'es',
+      ' DevoluciON de  plazo? Empezar Hubtype'
+    ),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -43,7 +44,7 @@ test('TEST: searchContentsFromInput similar', async () => {
 
   // act
   const suggested = await keywords.searchContentsFromInput(
-    keywords.tokenizer.tokenize('es', 'Quiero el tas free'),
+    keywords.normalizer.normalize('es', 'Quiero el tas free'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -60,7 +61,7 @@ test('TEST: searchContentsFromInput no keywords found', async () => {
 
   // act
   const contents = await keywords.searchContentsFromInput(
-    keywords.tokenizer.tokenize('es', 'willnotbefound'),
+    keywords.normalizer.normalize('es', 'willnotbefound'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -73,12 +74,12 @@ test('TEST: searchContentsFromInput with stem blacklist', async () => {
   const keywords = keywordsWithMockCms(
     [contentWithKeyword(Callback.ofPayload('p1'), ['pedido'])],
     ES_CONTEXT,
-    [['pedido']]
+    { es: [new StemmingBlackList('pedido', [])] }
   );
 
   // act
   let contents = await keywords.searchContentsFromInput(
-    keywords.tokenizer.tokenize('es', 'querida pedida bonita'),
+    keywords.normalizer.normalize('es', 'querida pedida bonita'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -87,7 +88,7 @@ test('TEST: searchContentsFromInput with stem blacklist', async () => {
   expect(contents).toHaveLength(0);
 
   contents = await keywords.searchContentsFromInput(
-    keywords.tokenizer.tokenize('es', 'querido pedido bonito'),
+    keywords.normalizer.normalize('es', 'querido pedido bonito'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   );
@@ -118,12 +119,12 @@ export function chitchatContent(keywords: string[]) {
 export function keywordsWithMockCms(
   allContents: CallbackToContentWithKeywords1[],
   context: Context,
-  stemBlackList: string[][] = []
+  stemBlackList: { [locale: string]: StemmingBlackList[] } = {}
 ): SearchByKeywords {
   const mockCms = mock(DummyCMS);
   when(mockCms.contentsWithKeywords(deepEqual(context))).thenResolve(
     allContents
   );
-  const escaper = new StemmingEscaper(stemBlackList);
-  return new SearchByKeywords(instance(mockCms), new Tokenizer(escaper));
+  const normalizer = new Normalizer(stemBlackList);
+  return new SearchByKeywords(instance(mockCms), normalizer);
 }
