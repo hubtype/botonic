@@ -27,7 +27,7 @@ test.each<any>([
       ],
       CONTEXT
     );
-    const tokens = keywords.tokenizer.tokenize(LOCALE, inputText);
+    const tokens = keywords.normalizer.normalize(LOCALE, inputText);
     const contents = await keywords.searchContentsFromInput(
       tokens,
       MatchType.KEYWORDS_AND_OTHERS_FOUND,
@@ -54,7 +54,7 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
     ],
     CONTEXT
   );
-  const tokens = keywords.tokenizer.tokenize(
+  const tokens = keywords.normalizer.normalize(
     LOCALE,
     'hey, DevoluciON fuera de  plazo?'
   );
@@ -89,7 +89,7 @@ test.each<any>([
       ],
       CONTEXT
     );
-    const tokens = keywords.tokenizer.tokenize(LOCALE, inputText);
+    const tokens = keywords.normalizer.normalize(LOCALE, inputText);
 
     const contents = await keywords.searchContentsFromInput(
       tokens,
@@ -116,7 +116,7 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   );
 
   // hola is a stopword
-  const tokens = keywords.tokenizer.tokenize(
+  const tokens = keywords.normalizer.normalize(
     LOCALE,
     'hola, DevoluciON fuera de  plazo'
   );
@@ -141,7 +141,7 @@ test('TEST treatChitChat: keyword is a stopword', async () => {
   );
 
   // hola is a stopword
-  const tokens = keywords.tokenizer.tokenize(LOCALE, 'Hola, buenos días.');
+  const tokens = keywords.normalizer.normalize(LOCALE, 'Hola, buenos días.');
   const contents = await keywords.searchContentsFromInput(
     tokens,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
