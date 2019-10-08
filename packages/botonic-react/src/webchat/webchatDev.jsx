@@ -53,8 +53,8 @@ export const WebchatDev = forwardRef((props, ref) => {
           position: 'fixed',
           left: 0,
           top: 0,
-          width: 350,
-          height: '100%'
+          width: webchatState.devSettings.showSessionView ? 350 : 32,
+          height: webchatState.devSettings.showSessionView ? '100%' : 42
         }}
       >
         <SessionView webchatHooks={webchatHooks} />
