@@ -1,10 +1,11 @@
 import { SimilarSearch } from 'node-nlp/lib/util';
-import { CandidateWithKeywords } from './keywords';
+import { CandidateWithKeywords, Keyword } from './keywords';
 import { countOccurrences } from './tokens';
 
 export class SimilarWordResult<M> {
   constructor(
     readonly candidate: M,
+    readonly keyword: Keyword,
     readonly match: string,
     readonly distance: number
   ) {}
@@ -44,7 +45,12 @@ export class SimilarWordFinder<M> {
         const distance = this.getDistance(sentence, keyword, maxDistance);
         if (distance != TOO_DISTANT) {
           results.push(
-            new SimilarWordResult<M>(candidate.owner, sentence, distance)
+            new SimilarWordResult<M>(
+              candidate.owner,
+              keyword,
+              sentence,
+              distance
+            )
           );
         }
       }
@@ -53,12 +59,16 @@ export class SimilarWordFinder<M> {
     return this.getLongestResultPerCandidate(results);
   }
 
-  getDistance(sentence: string, keyword: string, maxDistance: number): number {
+  private getDistance(
+    sentence: string,
+    keyword: Keyword,
+    maxDistance: number
+  ): number {
     if (sentence.length < this.minWordLength) {
-      return sentence == keyword ? 0 : TOO_DISTANT;
+      return sentence == keyword.stemmed ? 0 : TOO_DISTANT;
     }
 
-    const distance = this.similar.getSimilarity(sentence, keyword);
+    const distance = this.similar.getSimilarity(sentence, keyword.stemmed);
     if (distance > maxDistance + this.stemmedDecorator.extraDistance(keyword)) {
       return TOO_DISTANT;
     }
@@ -101,18 +111,26 @@ export class SimilarWordFinder<M> {
     const wordPositions = this.similar.getWordPositions(sentence);
     for (const candidate of this.candidates) {
       for (const keyword of candidate.keywords) {
-        if (keyword.length < this.minWordLength) {
-          if (new RegExp(`\\b${keyword}\\b`).test(sentence)) {
-            results.push(new SimilarWordResult<M>(candidate.owner, keyword, 0));
+        if (keyword.stemmed.length < this.minWordLength) {
+          if (new RegExp(`\\b${keyword.stemmed}\\b`).test(sentence)) {
+            results.push(
+              new SimilarWordResult<M>(
+                candidate.owner,
+                keyword,
+                keyword.stemmed,
+                0
+              )
+            );
           }
           continue;
         }
         const extra = this.stemmedDecorator.extraDistance(keyword);
         const minAccuracy =
-          (keyword.length - (maxDistance + extra)) / keyword.length;
+          (keyword.stemmed.length - (maxDistance + extra)) /
+          keyword.stemmed.length;
         const substrings = this.similar.getBestSubstringList(
           sentence,
-          keyword,
+          keyword.stemmed,
           wordPositions,
           minAccuracy
         );
@@ -122,13 +140,19 @@ export class SimilarWordFinder<M> {
           )[0];
           const match = sentence.slice(bestSubstr.start, bestSubstr.end + 1);
           const distance =
-            keyword.length - bestSubstr.accuracy * keyword.length;
+            keyword.stemmed.length -
+            bestSubstr.accuracy * keyword.stemmed.length;
           if (
             distance <= maxDistance ||
             this.stemmedDecorator.verify(match, keyword)
           ) {
             results.push(
-              new SimilarWordResult<M>(candidate.owner, match, distance)
+              new SimilarWordResult<M>(
+                candidate.owner,
+                keyword,
+                match,
+                distance
+              )
             );
           }
         }
@@ -145,12 +169,12 @@ export class SimilarWordFinder<M> {
 class StemmedExtraDistance {
   constructor(readonly wordsAreStemmed: boolean) {}
 
-  extraDistance(keyword: string): number {
+  extraDistance(keyword: Keyword): number {
     if (!this.wordsAreStemmed) {
       return 0;
     }
-    const wordsInKeyword = countOccurrences(keyword, ' ') + 1;
-    if (wordsInKeyword > 1 && keyword.length > 5) {
+    const wordsInKeyword = countOccurrences(keyword.stemmed, ' ') + 1;
+    if (wordsInKeyword > 1 && keyword.stemmed.length > 5) {
       // in case needle is missing a space, the first word could not be stemmed.
       // So we need to ignore the suffix
       return 3 * (wordsInKeyword - 1);
@@ -158,11 +182,11 @@ class StemmedExtraDistance {
     return 0;
   }
 
-  verify(sentence: string, keyword: string): boolean {
+  verify(sentence: string, keyword: Keyword): boolean {
     if (!this.wordsAreStemmed) {
       return true;
     }
-    const words = keyword.split(' ');
+    const words = keyword.stemmed.split(' ');
     for (const word of words) {
       if (!sentence.includes(word)) {
         return false;
