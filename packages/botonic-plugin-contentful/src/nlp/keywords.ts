@@ -1,9 +1,13 @@
 import { SimilarWordFinder, SimilarWordResult } from './similar-words';
-import { Normalizer } from './normalizer';
+import { NormalizedUtterance, Normalizer } from './normalizer';
 import { Locale } from './locales';
 
 export class Keyword {
-  constructor(readonly raw: string, readonly stemmed: string) {}
+  constructor(
+    readonly raw: string,
+    readonly stemmed: string,
+    readonly hasOnlyStopWords: boolean
+  ) {}
 }
 
 export class CandidateWithKeywords<M> {
@@ -57,10 +61,14 @@ export class KeywordsParser<M> {
    * words (which must appear together in the same order). The keywords will be stemmed.
    */
   addCandidate(candidate: M, rawKeywords: string[]): void {
-    const stemmedKeywords = rawKeywords.map(
-      kw =>
-        new Keyword(kw, this.normalizer.normalize(this.locale, kw).join(' '))
-    );
+    const stemmedKeywords = rawKeywords.map(kw => {
+      const normalized = this.normalizer.normalize(this.locale, kw);
+      return new Keyword(
+        kw,
+        normalized.joinedStems,
+        normalized.hasOnlyStopWords()
+      );
+    });
     const candidateWithK = new CandidateWithKeywords(
       candidate,
       stemmedKeywords
@@ -70,30 +78,29 @@ export class KeywordsParser<M> {
   }
 
   findCandidatesWithKeywordsAt(
-    stemmedTokens: string[]
+    utterance: NormalizedUtterance
   ): SimilarWordResult<M>[] {
-    const joinedTokens = stemmedTokens.join(' ');
     let results: SimilarWordResult<M>[] = [];
     switch (this.matchType) {
       case MatchType.ONLY_KEYWORDS_FOUND:
         results = this.similar.findSimilarKeyword(
-          joinedTokens,
+          utterance,
           this.options.maxDistance
         );
         break;
       case MatchType.KEYWORDS_AND_OTHERS_FOUND:
         results = this.similar.findSubstring(
-          joinedTokens,
+          utterance,
           this.options.maxDistance
         );
         break;
       case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
-        results = this.mixedUp(joinedTokens);
+        results = this.mixedUp(utterance);
     }
     return this.sort(results);
   }
 
-  private mixedUp(joinedTokens: string) {
+  private mixedUp(utterance: NormalizedUtterance) {
     if (this.options.maxDistance > 0) {
       throw new Error(
         'ALL_WORDS_IN_KEYWORDS_MIXED_UP does not support distance> 0'
@@ -102,7 +109,7 @@ export class KeywordsParser<M> {
     const results: SimilarWordResult<M>[] = [];
     for (const candidate of this.candidates) {
       for (const keyword of candidate.keywords) {
-        if (this.containsAllWordsInKeyword(joinedTokens, keyword)) {
+        if (this.containsAllWordsInKeyword(utterance, keyword)) {
           results.push(
             new SimilarWordResult<M>(
               candidate.owner,
@@ -125,11 +132,11 @@ export class KeywordsParser<M> {
   }
 
   private containsAllWordsInKeyword(
-    joinedTokens: string,
+    utterance: NormalizedUtterance,
     keyword: Keyword
   ): boolean {
     for (const word of keyword.stemmed.split(' ')) {
-      if (!joinedTokens.includes(word)) {
+      if (!utterance.joinedStems.includes(word)) {
         return false;
       }
     }

@@ -43,13 +43,6 @@ test.each<any>([
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 1)
 );
 
-test('TEST: do not match if length smaller than stem with ONLY_KEYWORDS_FOUND', () =>
-  testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 1)(
-    'est',
-    { A: ['cesta'], B: ['está'] },
-    ['B']
-  ));
-
 test('TEST: results sorted by length with ONLY_KEYWORDS_FOUND', () =>
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 2)(
     'abcde',
@@ -114,6 +107,7 @@ test.each<any>([
 
   // detects keywords which only contain stopwords
   ['Sobre', { ONLY_STOPWORD: ['kw1', 'sobre'] }, ['ONLY_STOPWORD']],
+  ['Como esta', { ONLY_STOPWORD: ['kw1', 'como está'] }, ['ONLY_STOPWORD']],
 
   // does not false positive with keywords which only contain stopwords
   ['other', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],

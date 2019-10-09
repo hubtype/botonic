@@ -4,7 +4,7 @@ import { SearchByKeywords } from './search-by-keywords';
 import { SearchResult } from './search-result';
 
 export class Search {
-  readonly search: SearchByKeywords;
+  private readonly search: SearchByKeywords;
   constructor(
     private readonly cms: CMS,
     private readonly normalizer: Normalizer,
@@ -23,13 +23,13 @@ export class Search {
     context: Context
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale);
-    const tokens = this.normalizer.normalize(locale, inputText);
+    const utterance = this.normalizer.normalize(locale, inputText);
     const contents = await this.search.searchContentsFromInput(
-      tokens,
+      utterance,
       matchType,
       context
     );
-    return this.search.filterChitchat(tokens, contents);
+    return this.search.filterChitchat(utterance.stems, contents);
   }
 
   async respondFoundContents(

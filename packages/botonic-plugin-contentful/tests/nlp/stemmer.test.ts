@@ -4,6 +4,11 @@ test('hack because webstorm does not recognize test.each', () => {});
 
 test.each<any>([
   ['es', 'ponerse', ['pon']],
+  ['es', 'quedate', ['quedat']], // node-nlp does not yet convert to "qued"
+  ['es', 'comeré', ['comer']],
+  ['es', 'come', ['com']],
+  ['es', 'compraría', ['comprari']], // BUG in node-nlp: AggressiveTokenizerEs removes accents, but stemmer has them in its tables
+  ['es', 'compraba', ['compr']],
   ['en', "can't", ['ca', 'not']],
   ['en', 'wanna', ['want', 'to']],
   ['en', 'gonna', ['go', 'to']],

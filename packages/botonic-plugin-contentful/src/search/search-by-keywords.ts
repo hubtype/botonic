@@ -4,7 +4,8 @@ import {
   KeywordsParser,
   MatchType,
   checkLocale,
-  Normalizer
+  Normalizer,
+  NormalizedUtterance
 } from '../nlp';
 import { SearchResult } from './search-result';
 
@@ -16,7 +17,7 @@ export class SearchByKeywords {
   ) {}
 
   async searchContentsFromInput(
-    inputTextTokens: string[],
+    inputText: NormalizedUtterance,
     matchType: MatchType,
     context: cms.Context
   ): Promise<SearchResult[]> {
@@ -31,7 +32,7 @@ export class SearchByKeywords {
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.keywords!)
     );
-    const results = kws.findCandidatesWithKeywordsAt(inputTextTokens);
+    const results = kws.findCandidatesWithKeywordsAt(inputText);
     return results.map(res => {
       const candidate = res.candidate as SearchResult;
       // @ts-ignore
@@ -51,20 +52,22 @@ export class SearchByKeywords {
   ): SearchResult[] {
     const isChitChat = (cc: SearchResult) => cc.getCallbackIfChitchat();
 
-    const chitchatContents = callbacks.filter(isChitChat);
-    if (chitchatContents.length == 0) {
+    const chitchats = callbacks.filter(isChitChat);
+    if (chitchats.length == 0) {
       return callbacks;
     }
-    if (chitchatContents.length < callbacks.length) {
-      return callbacks.filter(c => !isChitChat(c));
+    if (chitchats.length < callbacks.length) {
+      const noChitchats = callbacks.filter(c => !isChitChat(c));
+      if (chitchats[0].match!.length - noChitchats[0].match!.length < 2) {
+        return noChitchats;
+      }
     }
     // all are chitchats
-    const estimatedNoChitchatWords =
-      tokens.length - chitchatContents.length * 2;
+    const estimatedNoChitchatWords = tokens.length - chitchats.length * 2;
     if (estimatedNoChitchatWords > 2) {
       // avoid that a sentence with chitchat and a question without recognized keywords is answered as chitchat
       return [];
     }
-    return [chitchatContents[0]];
+    return [chitchats[0]];
   }
 }
