@@ -1,8 +1,19 @@
 import React, { useContext, useEffect } from 'react'
 import Frame from 'react-frame-component'
 import { RequestContext, WebchatContext } from '../contexts'
+import styled from 'styled-components'
 
-export const WebviewHeader = props => {
+const StyledWebview = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  bottom: 0;
+  width: 100%;
+  height: 80%;
+  background-color: #fff;
+`
+
+export const WebviewHeader = () => {
   const { closeWebview } = useContext(RequestContext)
   const { getThemeProperty } = useContext(WebchatContext)
   return (
@@ -46,7 +57,7 @@ export const WebviewContainer = props => {
   }, [])
 
   return (
-    <div
+    <StyledWebview
       style={{
         position: 'absolute',
         display: 'flex',
@@ -86,6 +97,6 @@ export const WebviewContainer = props => {
           </Frame>
         )}
       </div>
-    </div>
+    </StyledWebview>
   )
 }
