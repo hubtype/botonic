@@ -30,6 +30,30 @@ export class StemmingBlackList {
   }
 }
 
+export class NormalizedUtterance {
+  joinedStems: string;
+
+  /**
+   *
+   * @param raw
+   * @param tokens lowercase, with i18n characters converted to ascii
+   * @param stems lowercase, stemmed
+   * @param onlyStopWords tokens are all stop words
+   */
+  constructor(
+    readonly raw: string,
+    readonly tokens: string[],
+    readonly stems: string[],
+    private readonly onlyStopWords = false
+  ) {
+    this.joinedStems = stems.join(' ');
+  }
+
+  hasOnlyStopWords(): boolean {
+    return this.onlyStopWords;
+  }
+}
+
 export class Normalizer {
   private stopWordsPerLocale: typeof DEFAULT_STOP_WORDS = {};
   private stemmingBlackListPerLocale: {
@@ -56,7 +80,7 @@ export class Normalizer {
     }
   }
 
-  normalize(locale: Locale, txt: string): string[] {
+  normalize(locale: Locale, txt: string): NormalizedUtterance {
     txt = txt.toLowerCase();
     txt = txt.replace(this.separatorsRegex, ' ');
     const stemmer = stemmerFor(locale);
@@ -78,9 +102,9 @@ export class Normalizer {
     }
     if (stems.length == 0) {
       console.log(`'${txt}' only contains stopwords. Not removing them`);
-      return tokens;
+      return new NormalizedUtterance(txt, tokens, tokens, true);
     }
-    return stems;
+    return new NormalizedUtterance(txt, tokens, stems, false);
   }
 
   private normalizeWord(locale: Locale, stopWord: string): string {

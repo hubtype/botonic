@@ -15,4 +15,4 @@ test('TEST: contentful delivery checks that we get the requested model type', as
       await expect(content).rejects.toThrow();
     }
   }
-});
+}, 10000);

@@ -7,39 +7,50 @@ import {
 
 test('TEST: sut.normalize stopWord', () => {
   const sut = new Normalizer(undefined, { es: ['stopWórd'] });
-  expect(sut.normalize('es', 'no digas STOPword')).toEqual(['no', 'dig']);
+  expect(sut.normalize('es', 'no digas STOPword').stems).toEqual([
+    'no',
+    'dig'
+  ]);
 });
 
 test('TEST: sut.normalize es', () => {
   const loc = 'es';
   const sut = new Normalizer();
-  expect(sut.normalize(loc, 'áá')).toEqual(['aa']);
-  expect(sut.normalize(loc, ',./ áé  íó(óÑ)  ;')).toEqual(['ae', 'io', 'on']);
+  expect(sut.normalize(loc, 'áá').stems).toEqual(['aa']);
+  expect(sut.normalize(loc, ',./ áé  íó(óÑ)  ;').stems).toEqual([
+    'ae',
+    'io',
+    'on'
+  ]);
   expect(
     sut.normalize(
       loc,
       'hola, hola!! pero realizar mi la un una de ya del pedido'
-    )
+    ).stems
   ).toEqual(['realiz', 'ped']);
 });
 
 test('TEST: sut.normalize ca', () => {
   const loc = 'ca';
   const sut = new Normalizer();
-  expect(sut.normalize(loc, 'àí')).toEqual(['ai']);
-  expect(sut.normalize(loc, ',./ àé  íò(óçÇ)  ;')).toEqual(['ae', 'io', 'oçç']);
+  expect(sut.normalize(loc, 'àí').stems).toEqual(['ai']);
+  expect(sut.normalize(loc, ',./ àé  íò(óçÇ)  ;').stems).toEqual([
+    'ae',
+    'io',
+    'oçç'
+  ]);
   expect(
     sut.normalize(
       loc,
       'ho hi però guanyés la meva un una de ja de les comandes'
-    )
+    ).stems
   ).toEqual(['guany', 'comand']);
 });
 
 test('TEST: sut.normalize en', () => {
   const loc = 'en';
   const sut = new Normalizer();
-  expect(sut.normalize(loc, 'realizing tokenization')).toEqual([
+  expect(sut.normalize(loc, 'realizing tokenization').stems).toEqual([
     'realiz',
     'token'
   ]);
@@ -50,11 +61,14 @@ test.each<any>([['es'], ['ca'], ['en']])(
   (locale: Locale) => {
     const sut = new Normalizer();
     for (const stopWord of DEFAULT_STOP_WORDS[locale]) {
-      // stopWord = naiveStemmer(stopWord, locale);
-      expect(naiveStemmer(stopWord, locale)).toStartWith(
-        sut.normalize(locale, stopWord)[0]
+      const normalized = sut.normalize(locale, stopWord);
+      expect(normalized.hasOnlyStopWords()).toEqual(true);
+      expect(replaceI18nChars(stopWord, locale)).toStartWith(
+        normalized.stems[0]
       );
-      expect(sut.normalize(locale, stopWord + ' abcdex')).toEqual(['abcdex']);
+      expect(sut.normalize(locale, stopWord + ' abcdex').stems).toEqual([
+        'abcdex'
+      ]);
     }
   }
 );
@@ -70,7 +84,7 @@ test('TEST: Normalizer does not stem blacklisted tokens', () => {
     'es',
     'perro. ey gato pipican adios cán canes'
   );
-  expect(normalized).toEqual([
+  expect(normalized.stems).toEqual([
     'perro',
     'ey',
     'gat',
@@ -81,7 +95,7 @@ test('TEST: Normalizer does not stem blacklisted tokens', () => {
   ]);
 });
 
-function naiveStemmer(word: string, locale: string): string {
+function replaceI18nChars(word: string, locale: string): string {
   word = word
     .replace('á', 'a')
     .replace('à', 'a')
