@@ -27,16 +27,16 @@ test.each<any>([
       ],
       CONTEXT
     );
-    const tokens = keywords.normalizer.normalize(LOCALE, inputText);
+    const normalized = keywords.normalizer.normalize(LOCALE, inputText);
     const contents = await keywords.searchContentsFromInput(
-      tokens,
+      normalized,
       MatchType.KEYWORDS_AND_OTHERS_FOUND,
       { locale: 'es' }
     );
     expect(contents).toHaveLength(numChitchats);
 
     // act
-    const filtered = keywords.filterChitchat(tokens, contents);
+    const filtered = keywords.filterChitchat(normalized.stems, contents);
 
     // assert
     expect(filtered).toHaveLength(1);
@@ -54,19 +54,19 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
     ],
     CONTEXT
   );
-  const tokens = keywords.normalizer.normalize(
+  const normalized = keywords.normalizer.normalize(
     LOCALE,
     'hey, DevoluciON fuera de  plazo?'
   );
   const parsedKeywords = await keywords.searchContentsFromInput(
-    tokens,
+    normalized,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     { locale: LOCALE }
   );
   expect(parsedKeywords).toHaveLength(2);
 
   // act
-  const filtered = keywords.filterChitchat(tokens, parsedKeywords);
+  const filtered = keywords.filterChitchat(normalized.stems, parsedKeywords);
 
   // assert
   expect(filtered).toHaveLength(1);
@@ -89,17 +89,17 @@ test.each<any>([
       ],
       CONTEXT
     );
-    const tokens = keywords.normalizer.normalize(LOCALE, inputText);
+    const normalized = keywords.normalizer.normalize(LOCALE, inputText);
 
     const contents = await keywords.searchContentsFromInput(
-      tokens,
+      normalized,
       MatchType.KEYWORDS_AND_OTHERS_FOUND,
       { locale: LOCALE }
     );
     expect(contents).toHaveLength(numChitChats);
 
     // act
-    const filtered = keywords.filterChitchat(tokens, contents);
+    const filtered = keywords.filterChitchat(normalized.stems, contents);
 
     // assert
     expect(filtered).toEqual([]);
@@ -116,19 +116,19 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   );
 
   // hola is a stopword
-  const tokens = keywords.normalizer.normalize(
+  const normalized = keywords.normalizer.normalize(
     LOCALE,
     'hola, DevoluciON fuera de  plazo'
   );
   const contents = await keywords.searchContentsFromInput(
-    tokens,
+    normalized,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     { locale: LOCALE }
   );
   expect(contents).toHaveLength(1);
 
   // act
-  const filtered = keywords.filterChitchat(tokens, contents);
+  const filtered = keywords.filterChitchat(normalized.stems, contents);
 
   // assert
   expect(filtered).toBe(contents);
@@ -141,16 +141,19 @@ test('TEST treatChitChat: keyword is a stopword', async () => {
   );
 
   // hola is a stopword
-  const tokens = keywords.normalizer.normalize(LOCALE, 'Hola, buenos días.');
+  const normalized = keywords.normalizer.normalize(
+    LOCALE,
+    'Hola, buenos días.'
+  );
   const contents = await keywords.searchContentsFromInput(
-    tokens,
+    normalized,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     { locale: LOCALE }
   );
   expect(contents).toHaveLength(1);
 
   // act
-  const filtered = keywords.filterChitchat(tokens, contents);
+  const filtered = keywords.filterChitchat(normalized.stems, contents);
 
   // assert
   expect(filtered).toEqual(contents);

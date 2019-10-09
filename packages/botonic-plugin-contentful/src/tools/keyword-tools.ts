@@ -27,7 +27,10 @@ export class KeywordsTool {
     for (const res of results) {
       const stemmed = res.keywords.map(
         kw =>
-          new StemmedKeyword(kw, this.normalizer.normalize(context.locale, kw))
+          new StemmedKeyword(
+            kw,
+            this.normalizer.normalize(context.locale, kw).stems
+          )
       );
       keywords.set(res.name, stemmed);
     }
