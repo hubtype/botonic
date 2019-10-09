@@ -13,30 +13,38 @@ const StyledWebview = styled.div`
   background-color: #fff;
 `
 
+const StyledWebviewHeader = styled.div`
+  text-align: right;
+  background-color: #f4f4f4;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+`
+const StyledCloseHeader = styled.div`
+  display: inline-block;
+  padding: 8px 12px;
+  cursor: pointer;
+`
+
+const StyledWebviewContent = styled.div`
+  flex: 1;
+  overflow: auto;
+`
+
+const StyledFrame = styled.iframe`
+  border-style: none;
+  width: 100%;
+  height: 100%;
+`
+
 export const WebviewHeader = () => {
   const { closeWebview } = useContext(RequestContext)
   const { getThemeProperty } = useContext(WebchatContext)
   return (
-    <div
-      style={{
-        textAlign: 'right',
-        backgroundColor: '#f4f4f4',
-        borderTop: '1px solid rgba(0, 0, 0, 0.2)',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
-        ...getThemeProperty('webview.header.style'),
-      }}
+    <StyledWebviewHeader
+      style={{ ...getThemeProperty('webview.header.style') }}
     >
-      <div
-        style={{
-          display: 'inline-block',
-          padding: '8px 12px',
-          cursor: 'pointer',
-        }}
-        onClick={closeWebview}
-      >
-        ✕
-      </div>
-    </div>
+      <StyledCloseHeader onClick={closeWebview}>✕</StyledCloseHeader>
+    </StyledWebviewHeader>
   )
 }
 
@@ -59,32 +67,13 @@ export const WebviewContainer = props => {
   return (
     <StyledWebview
       style={{
-        position: 'absolute',
-        display: 'flex',
-        flexDirection: 'column',
-        bottom: 0,
-        width: '100%',
-        height: '80%',
-        backgroundColor: '#fff',
         ...(props.style || {}),
       }}
     >
       <WebviewHeader style={{ flex: 'none' }} />
-      <div
-        style={{
-          flex: 1,
-          overflow: 'auto',
-        }}
-      >
+      <StyledWebviewContent>
         {typeof Webview === 'string' ? (
-          <iframe
-            src={Webview}
-            style={{
-              borderStyle: 'none',
-              width: '100%',
-              height: '100%',
-            }}
-          />
+          <StyledFrame src={Webview} />
         ) : (
           <Frame
             style={{
@@ -96,7 +85,7 @@ export const WebviewContainer = props => {
             <Webview />
           </Frame>
         )}
-      </div>
+      </StyledWebviewContent>
     </StyledWebview>
   )
 }
