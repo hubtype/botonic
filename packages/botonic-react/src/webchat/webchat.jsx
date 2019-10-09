@@ -35,12 +35,41 @@ import LogoMenu from '../assets/menuButton.svg'
 import LogoEmoji from '../assets/emojiButton.svg'
 import { MIME_WHITELIST } from '../constants'
 import { motion } from 'framer-motion'
+import styled from 'styled-components'
 
 const getAttachmentType = fileType => {
   return Object.entries(MIME_WHITELIST)
     .filter(([k, v]) => v.includes(fileType))
     .map(([k, v]) => k)[0]
 }
+
+const StyledWebchat = styled.div`
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 12px;
+  display: flex;
+  flex-direction: column;
+`
+
+const StyledTriggerButton = styled.div`
+  cursor: pointer;
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  bottom: 20px;
+  right: 10px;
+`
 
 const createUser = () => {
   let parser = new UAParser()
@@ -427,31 +456,14 @@ export const Webchat = forwardRef((props, ref) => {
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
   ) : (
-    <div
-      style={{
-        cursor: 'pointer',
-        position: 'fixed',
-        background: 'white',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-        width: 65,
-        height: 65,
-        bottom: 20,
-        paddding: 8,
-        right: 10,
-        ...triggerButtonStyle,
-      }}
-    >
+    <StyledTriggerButton style={{ ...webchatState.theme.triggerButtonStyle }}>
       {triggerImage && (
         <img
           style={{ maxWidth: '100%', maxHeight: '100%' }}
           src={staticAsset(triggerImage)}
         />
       )}
-    </div>
+    </StyledTriggerButton>
   )
   const webchatHeader = () => (
     <WebchatHeader
@@ -660,22 +672,11 @@ export const Webchat = forwardRef((props, ref) => {
         </div>
       )}
       {webchatState.isWebchatOpen && (
-        <div
+        <StyledWebchat
+          width={webchatState.width}
+          height={webchatState.height}
           style={{
-            position: 'fixed',
-            right: 20,
-            bottom: 20,
-            width: webchatState.width,
-            height: webchatState.height,
-            margin: 'auto',
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            boxShadow: '0 0 12px rgba(0,0,0,.15)',
-            display: 'flex',
-            flexDirection: 'column',
-            fontFamily: '"Arial", Helvetica, sans-serif',
-            ...theme.style,
-            ...mobileStyle,
+            ...webchatState.theme.style,
           }}
         >
           {webchatHeader()}
@@ -708,7 +709,7 @@ export const Webchat = forwardRef((props, ref) => {
               {webchatState.webview && webchatWebview()}
             </>
           )}
-        </div>
+        </StyledWebchat>
       )}
     </WebchatContext.Provider>
   )

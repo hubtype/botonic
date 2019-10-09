@@ -3,6 +3,22 @@ import { Message } from './message'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from '../webchat/styled-scrollbar'
 import { isBrowser, isNode } from '@botonic/core'
+import styled from 'styled-components'
+
+const StyledCarousel = styled.div`
+  padding-top: 10;
+  margin-left: -13;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  max-width: 100%;
+`
+
+const StyledItems = styled.div`
+  display: flex;
+  flexdirection: row;
+  alignitems: start;
+`
 
 const serialize = carouselProps => {
   let carouselChildren = carouselProps.children
