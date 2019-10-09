@@ -6,11 +6,9 @@ import { isBrowser, isNode } from '@botonic/core'
 import styled from 'styled-components'
 
 const StyledCarousel = styled.div`
-  padding-top: 10;
-  margin-left: -13;
+  padding-top: 10px;
   display: flex;
   flex-direction: row;
-  overflow-x: auto;
   max-width: 100%;
 `
 
@@ -44,24 +42,9 @@ export const Carousel = props => {
         scrollbar={scrollbarOptions}
         data-simplebar-auto-hide={scrollbarOptions.autoHide}
       >
-        <div
-          style={{
-            paddingTop: 10,
-            display: 'flex',
-            flexDirection: 'row',
-            maxWidth: '100%',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'start',
-            }}
-          >
-            {props.children}
-          </div>
-        </div>
+        <StyledCarousel>
+          <StyledItems>{props.children}</StyledItems>
+        </StyledCarousel>
       </StyledScrollbar>
     )
   }
