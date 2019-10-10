@@ -9,12 +9,14 @@ import {
   ModelType,
   SearchableBy
 } from '../cms';
-import { QueueDelivery, QueueFields } from './queue';
+import { QueueDelivery } from './queue';
 import { UrlFields } from './url';
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields
 } from './searchable-by';
+import { ScheduleDelivery } from './schedule';
+import { Entry, EntryCollection } from 'contentful';
 
 export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
@@ -86,28 +88,32 @@ export class DeliveryApi {
     return 'https:' + assetField.fields.file.url;
   }
 
-  async contents(model: ModelType, context: Context): Promise<Content[]> {
-    if (model != ModelType.QUEUE) {
-      throw new Error('CMS.contents only supports queue at the moment');
-    }
-    const entries = await this.getEntries(context, {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      content_type: model,
-      include: QueueDelivery.REFERENCES_INCLUDE // TODO change for other types
-    });
-    return entries.items.map(item =>
-      QueueDelivery.fromEntry(item as contentful.Entry<QueueFields>)
+  async contents(
+    model: ModelType,
+    context: Context,
+    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>,
+    filter?: (cf: CommonFields) => boolean
+  ) {
+    const entries: EntryCollection<CommonEntryFields> = await this.getEntries(
+      context,
+      {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        content_type: model,
+        include: this.maxReferencesInclude()
+      }
     );
-    //TODO switch with instanceof the model
-    // if (model instanceof ModelType.QUEUE) {
-    // }
-    // switch (true) {
-    //   case model instanceof ModelType.QUEUE:
-    //     console.log('QUEUE');
-    //     return QueueDelivery.fromEntry(entries);
-    //   default:
-    //     console.error('Content not implemented!');
-    // }
+    let promises = entries.items;
+    if (filter) {
+      promises = promises.filter(entry => filter(commonFieldsFromEntry(entry)));
+    }
+    return Promise.all(promises.map(entry => factory(entry, context)));
+  }
+
+  private maxReferencesInclude() {
+    return Math.max(
+      QueueDelivery.REFERENCES_INCLUDE,
+      ScheduleDelivery.REFERENCES_INCLUDE
+    );
   }
 }
 
@@ -123,7 +129,10 @@ export interface CommonEntryFields extends ContentWithNameFields {
   searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
 }
 
-export function commonFieldsFromEntry(fields: CommonEntryFields): CommonFields {
+export function commonFieldsFromEntry(
+  entry: Entry<CommonEntryFields>
+): CommonFields {
+  const fields = entry.fields;
   const searchableBy =
     fields.searchableBy &&
     new SearchableBy(

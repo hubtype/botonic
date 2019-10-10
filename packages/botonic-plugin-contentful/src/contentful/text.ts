@@ -24,10 +24,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
       context
     );
     // .. so we need to fetch the buttons
-    return this.textFromEntry(entry, context);
+    return this.fromEntry(entry, context);
   }
 
-  async textFromEntry(
+  async fromEntry(
     entry: contentful.Entry<TextFields>,
     context: cms.Context
   ): Promise<cms.Text> {

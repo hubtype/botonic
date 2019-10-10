@@ -47,18 +47,21 @@ export class CommonFields {
   readonly shortText?: string;
   readonly keywords?: string[];
   readonly searchableBy?: SearchableBy;
+  readonly partition?: string;
   constructor(
     readonly name: string,
     opt?: {
       shortText?: string;
       keywords?: string[];
       searchableBy?: SearchableBy;
+      partition?: string;
     }
   ) {
     if (opt) {
       this.shortText = opt.shortText;
       this.keywords = opt.keywords;
       this.searchableBy = opt.searchableBy;
+      this.partition = opt.partition;
     }
   }
 }

@@ -14,12 +14,10 @@ export class DateRangeDelivery extends ContentDelivery {
       id,
       DEFAULT_CONTEXT
     );
-    return DateRangeDelivery.dateRangeFromEntry(entry);
+    return DateRangeDelivery.fromEntry(entry);
   }
 
-  static dateRangeFromEntry(
-    entry: contentful.Entry<DateRangeFields>
-  ): time.DateRange {
+  static fromEntry(entry: contentful.Entry<DateRangeFields>): time.DateRange {
     return new time.DateRange(
       entry.fields.name,
       new Date(Date.parse(entry.fields.from)),

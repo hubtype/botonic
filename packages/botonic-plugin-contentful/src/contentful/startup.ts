@@ -23,10 +23,10 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
       context
     );
     // .. so we need to fetch the buttons
-    return this.startUpFromEntry(entry, context);
+    return this.fromEntry(entry, context);
   }
 
-  async startUpFromEntry(
+  async fromEntry(
     entry: contentful.Entry<StartUpFields>,
     context: cms.Context
   ): Promise<cms.StartUp> {
