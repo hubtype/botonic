@@ -163,10 +163,12 @@ _Example of the media types:_
 ## Location
 
 ```javascript
-<Location>
-    <lat>41.412255</lat>
-    <long>2.2079313</long>
-<Location>
+<Location lat='41.3894058' long='2.1568464' />
+```
+In `botonic serve` the text 'Open Location' will be displayed by default. You can redefine it by passing the prop `text` as shown below:
+
+```javascript
+<Location text={'Check location'} lat='41.3894058' long='2.1568464' />
 ```
 
 _Example in Facebook Messenger:_
