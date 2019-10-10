@@ -8,7 +8,8 @@ test('TEST: contentful schedule', async () => {
   const schedule = await sut.schedule('71twiV4wcaFwhK6tSYuIKy');
 
   // assert
-  expect(schedule).toEqual(testSchedule());
+  expect(schedule.schedule).toEqual(testSchedule());
+  expect(schedule.common.name).toEqual('SUPPORT_SCHEDULE1');
 });
 
 export function testSchedule(): Schedule {

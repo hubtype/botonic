@@ -55,6 +55,5 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(ofType(ModelType.SCHEDULE)).toHaveLength(0);
   expect(ofType(ModelType.DATE_RANGE)).toHaveLength(0);
   expect(ofType(ModelType.IMAGE)).toHaveLength(0);
-  expect(ofType(ModelType.ASSET)).toHaveLength(0);
   expect(ofType(ModelType.QUEUE)).toHaveLength(2);
 });

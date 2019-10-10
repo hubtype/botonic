@@ -6,7 +6,13 @@ import { ImageDelivery } from './image';
 import { ScheduleDelivery } from './schedule';
 import { KeywordsDelivery } from './keywords';
 import { FollowUpDelivery } from './follow-up';
-import { CommonFields, Content, isMessageModel, ModelType } from '../cms';
+import {
+  CommonFields,
+  DateRangeContent,
+  ModelType,
+  ScheduleContent,
+  TopContent
+} from '../cms';
 import { ButtonDelivery } from './button';
 import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
@@ -14,7 +20,6 @@ import { StartUpDelivery } from './startup';
 import { TextDelivery } from './text';
 import { UrlDelivery } from './url';
 import * as cms from '../cms';
-import * as time from '../time';
 import { QueueDelivery } from './queue';
 import * as contentful from 'contentful';
 
@@ -83,12 +88,7 @@ export default class Contentful implements cms.CMS {
     model: ModelType,
     context = DEFAULT_CONTEXT,
     filter?: (cf: CommonFields) => boolean
-  ): Promise<Content[]> {
-    if (!isMessageModel(model)) {
-      throw new Error(
-        `contents() can only be used for message models but '${model}' is not`
-      );
-    }
+  ): Promise<TopContent[]> {
     return this._delivery.contents(
       model,
       context,
@@ -101,7 +101,7 @@ export default class Contentful implements cms.CMS {
   async fromEntry(
     entry: contentful.Entry<any>,
     context: Context
-  ): Promise<Content> {
+  ): Promise<TopContent> {
     const model: ModelType = DeliveryApi.getContentModel(entry);
     switch (model) {
       case ModelType.CAROUSEL:
@@ -128,7 +128,7 @@ export default class Contentful implements cms.CMS {
     return this._keywords.contentsWithKeywords(context);
   }
 
-  async schedule(id: string): Promise<time.Schedule> {
+  async schedule(id: string): Promise<ScheduleContent> {
     return this._schedule.schedule(id);
   }
 
@@ -136,7 +136,7 @@ export default class Contentful implements cms.CMS {
     return this._asset.asset(id);
   }
 
-  dateRange(id: string): Promise<time.DateRange> {
+  dateRange(id: string): Promise<DateRangeContent> {
     return this._dateRange.dateRange(id);
   }
 }
