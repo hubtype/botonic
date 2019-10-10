@@ -1,8 +1,13 @@
 import { Entry } from 'contentful';
-import { DEFAULT_CONTEXT, ModelType } from '../cms';
+import { DEFAULT_CONTEXT, ModelType, ScheduleContent } from '../cms';
 import * as time from '../time';
 import { ContentDelivery } from './content-delivery';
-import { ContentWithNameFields, DeliveryApi } from './delivery-api';
+import {
+  CommonEntryFields,
+  commonFieldsFromEntry,
+  ContentWithNameFields,
+  DeliveryApi
+} from './delivery-api';
 
 export class ScheduleDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = 2;
@@ -11,18 +16,18 @@ export class ScheduleDelivery extends ContentDelivery {
     super(ModelType.SCHEDULE, delivery);
   }
 
-  async schedule(id: string): Promise<time.Schedule> {
+  async schedule(id: string): Promise<ScheduleContent> {
     const f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
       include: ScheduleDelivery.REFERENCES_INCLUDE
     });
     return ScheduleDelivery.fromEntry(f);
   }
 
-  static fromEntry(f: Entry<ScheduleFields>): time.Schedule {
+  static fromEntry(entry: Entry<ScheduleFields>): ScheduleContent {
     const schedule = new time.Schedule(time.Schedule.TZ_CET); // TODO allow configuration
-    ScheduleDelivery.addDaySchedules(schedule, f.fields);
-    ScheduleDelivery.addExceptions(schedule, f.fields.exceptions);
-    return schedule;
+    ScheduleDelivery.addDaySchedules(schedule, entry.fields);
+    ScheduleDelivery.addExceptions(schedule, entry.fields.exceptions);
+    return new ScheduleContent(commonFieldsFromEntry(entry), schedule);
   }
 
   private static addDaySchedules(
@@ -84,7 +89,7 @@ export class ScheduleDelivery extends ContentDelivery {
     }
   }
 }
-export interface ScheduleFields extends ContentWithNameFields {
+export interface ScheduleFields extends CommonEntryFields {
   mondays?: Entry<HourRangeFields>[];
   tuesdays?: Entry<HourRangeFields>[];
   wednesdays?: Entry<HourRangeFields>[];

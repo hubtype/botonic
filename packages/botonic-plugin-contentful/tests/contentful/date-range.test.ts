@@ -7,7 +7,7 @@ test('TEST: contentful dateRange', async () => {
     TEST_DATE_RANGE_HUBTYPE_ID
   );
 
-  expect(dateRange.name).toEqual('Test DateRange name');
-  expect(dateRange.from).toEqual(new Date(2019, 4, 26, 20, 30));
-  expect(dateRange.to).toEqual(new Date(2019, 8, 1));
+  expect(dateRange.common.name).toEqual('Test DateRange name');
+  expect(dateRange.dateRange.from).toEqual(new Date(2019, 4, 26, 20, 30));
+  expect(dateRange.dateRange.to).toEqual(new Date(2019, 8, 1));
 });

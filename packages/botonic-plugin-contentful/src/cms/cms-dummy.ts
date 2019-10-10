@@ -11,9 +11,11 @@ import {
   Text,
   Url,
   Queue,
-  Content,
   StartUp,
-  CommonFields
+  CommonFields,
+  ScheduleContent,
+  DateRangeContent,
+  TopContent
 } from './contents';
 import * as time from '../time';
 import { Context, DEFAULT_CONTEXT } from './context';
@@ -85,7 +87,7 @@ export class DummyCMS implements CMS {
   }
 
   image(id: string, {} = DEFAULT_CONTEXT): Promise<Image> {
-    return Promise.resolve(new Image(id, DummyCMS.IMG));
+    return Promise.resolve(new Image(new CommonFields(id), DummyCMS.IMG));
   }
 
   queue(id: string, {} = DEFAULT_CONTEXT): Promise<Queue> {
@@ -96,7 +98,7 @@ export class DummyCMS implements CMS {
     model: ModelType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean
-  ): Promise<Content[]> {
+  ): Promise<TopContent[]> {
     return Promise.resolve([]);
   }
 
@@ -111,17 +113,23 @@ export class DummyCMS implements CMS {
     return Promise.resolve(contents);
   }
 
-  schedule(id: string): Promise<time.Schedule> {
-    return Promise.resolve(new time.Schedule('Europe/Madrid'));
+  schedule(id: string): Promise<ScheduleContent> {
+    const schedule = new time.Schedule('Europe/Madrid');
+    return Promise.resolve(
+      new ScheduleContent(new CommonFields('name'), schedule)
+    );
   }
 
   asset(id: string): Promise<Asset> {
     return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`));
   }
 
-  dateRange(id: string): Promise<time.DateRange> {
+  dateRange(id: string): Promise<DateRangeContent> {
     const now = new Date();
-    return Promise.resolve(new time.DateRange('daterange name', now, now));
+    const dateRange = new time.DateRange('daterange name', now, now);
+    return Promise.resolve(
+      new DateRangeContent(new CommonFields(dateRange.name), dateRange)
+    );
   }
 
   private buttons(): Button[] {
