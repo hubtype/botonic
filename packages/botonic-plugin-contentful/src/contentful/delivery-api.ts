@@ -1,5 +1,6 @@
 import * as contentful from 'contentful';
 import * as cms from '../cms';
+
 import {
   Callback,
   CommonFields,
@@ -17,6 +18,7 @@ import {
 } from './searchable-by';
 import { ScheduleDelivery } from './schedule';
 import { Entry, EntryCollection } from 'contentful';
+import { DateRangeDelivery, DateRangeFields } from './date-range';
 
 export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
@@ -130,12 +132,15 @@ export interface CommonEntryFields extends ContentWithNameFields {
   shortText: string;
   keywords?: string[];
   searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
+  partition?: string;
+  dateRange?: contentful.Entry<DateRangeFields>;
 }
 
 export function commonFieldsFromEntry(
   entry: Entry<CommonEntryFields>
 ): CommonFields {
   const fields = entry.fields;
+
   const searchableBy =
     fields.searchableBy &&
     new SearchableBy(
@@ -144,9 +149,14 @@ export function commonFieldsFromEntry(
       )
     );
 
+  const dateRange =
+    fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange);
+
   return new CommonFields(fields.name, {
     keywords: fields.keywords,
     shortText: fields.shortText,
-    searchableBy: searchableBy
+    partition: fields.partition,
+    searchableBy,
+    dateRange
   });
 }
