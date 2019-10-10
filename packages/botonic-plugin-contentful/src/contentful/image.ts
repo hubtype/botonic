@@ -1,7 +1,11 @@
 import { Context } from '../cms';
 import * as cms from '../cms';
 import { ContentDelivery } from './content-delivery';
-import { CommonEntryFields, DeliveryApi } from './delivery-api';
+import {
+  CommonEntryFields,
+  commonFieldsFromEntry,
+  DeliveryApi
+} from './delivery-api';
 import * as contentful from 'contentful/index';
 
 export class ImageDelivery extends ContentDelivery {
@@ -19,7 +23,7 @@ export class ImageDelivery extends ContentDelivery {
 
   static fromEntry(entry: contentful.Entry<ImageFields>): cms.Image {
     return new cms.Image(
-      entry.fields.name,
+      commonFieldsFromEntry(entry),
       DeliveryApi.urlFromAsset(entry.fields.image)
     );
   }
