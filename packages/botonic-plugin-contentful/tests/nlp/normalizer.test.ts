@@ -7,10 +7,7 @@ import {
 
 test('TEST: sut.normalize stopWord', () => {
   const sut = new Normalizer(undefined, { es: ['stopWórd'] });
-  expect(sut.normalize('es', 'no digas STOPword').stems).toEqual([
-    'no',
-    'dig'
-  ]);
+  expect(sut.normalize('es', 'no digas STOPword').stems).toEqual(['no', 'dig']);
 });
 
 test('TEST: sut.normalize es', () => {

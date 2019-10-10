@@ -21,13 +21,10 @@ export class Asset {
   ) {}
 }
 
+/**
+ * Any content deliverable from a CMS
+ */
 export abstract class Content {
-  /**
-   * An ID (eg. PRE_FAQ1)
-   * @param name TODO rename to id or code?
-   */
-  protected constructor(readonly name: string) {}
-
   /** @return message if any issue detected */
   validate(): string | undefined {
     return undefined;
@@ -46,10 +43,24 @@ export abstract class Content {
  * When any {@link keywords} is detected on a user input, we can use display the {@link shortText} for users
  * to confirm their interest on this content
  */
-export interface ContentWithKeywords {
-  readonly name: string;
+export class CommonFields {
   readonly shortText?: string;
   readonly keywords?: string[];
+  readonly searchableBy?: SearchableBy;
+  constructor(
+    readonly name: string,
+    opt?: {
+      shortText?: string;
+      keywords?: string[];
+      searchableBy?: SearchableBy;
+    }
+  ) {
+    if (opt) {
+      this.shortText = opt.shortText;
+      this.keywords = opt.keywords;
+      this.searchableBy = opt.searchableBy;
+    }
+  }
 }
 
 export class Button extends Content {
@@ -58,7 +69,7 @@ export class Button extends Content {
     readonly text: string,
     readonly callback: Callback
   ) {
-    super(name);
+    super();
   }
 
   validate(): string | undefined {
@@ -72,17 +83,14 @@ export class Button extends Content {
   }
 }
 
-export class StartUp extends Content implements ContentWithKeywords {
+export class StartUp extends Content {
   constructor(
-    // An ID (eg. PRE_FAQ1)
-    readonly name: string,
+    readonly common: CommonFields,
     readonly imgUrl: string | undefined,
     readonly text: string | undefined,
-    readonly buttons: Button[],
-    readonly shortText?: string,
-    readonly keywords: string[] = []
+    readonly buttons: Button[]
   ) {
-    super(name);
+    super();
   }
 
   validate(): string | undefined {
@@ -90,14 +98,12 @@ export class StartUp extends Content implements ContentWithKeywords {
   }
 }
 
-export class Carousel extends Content implements ContentWithKeywords {
+export class Carousel extends Content {
   constructor(
-    readonly name: string, // Useful to display in buttons or reports
-    readonly elements: Element[] = [],
-    readonly shortText?: string,
-    readonly keywords: string[] = []
+    readonly common: CommonFields,
+    readonly elements: Element[] = []
   ) {
-    super(name);
+    super();
   }
 
   validate(): string | undefined {
@@ -107,13 +113,15 @@ export class Carousel extends Content implements ContentWithKeywords {
 
 /** Part of a carousel */
 export class Element extends Content {
+  readonly name: string;
   constructor(
     readonly buttons: Button[],
     readonly title?: string,
     readonly subtitle?: string,
     readonly imgUrl?: string
   ) {
-    super(title || '');
+    super();
+    this.name = title || '';
   }
 
   validate(): string | undefined {
@@ -123,24 +131,20 @@ export class Element extends Content {
 
 export class Image extends Content {
   constructor(readonly name: string, readonly imgUrl: string) {
-    super(name);
+    super();
   }
 }
 
-export class Text extends Content implements ContentWithKeywords {
+export class Text extends Content {
   constructor(
-    // An ID (eg. PRE_FAQ1)
-    readonly name: string,
+    readonly common: CommonFields,
     // Full text
     readonly text: string,
     readonly buttons: Button[],
-    // Useful to display in buttons or reports
-    readonly shortText?: string,
-    readonly keywords: string[] = [],
     readonly followUp?: FollowUp,
     readonly buttonsStyle = ButtonStyle.BUTTON
   ) {
-    super(name);
+    super();
   }
 
   validate(): string | undefined {
@@ -168,31 +172,27 @@ export class Text extends Content implements ContentWithKeywords {
 
 export type Chitchat = Text;
 
-export class Url extends Content implements ContentWithKeywords {
+export class Url extends Content {
   /**
    *
    * @param followup so far not defined in Contentful model, since URL's are not rendered anyway
    */
   constructor(
-    readonly name: string,
+    readonly common: CommonFields,
     readonly url: string,
-    readonly shortText?: string,
-    readonly keywords: string[] = [],
     readonly followup?: FollowUp
   ) {
-    super(name);
+    super();
   }
 }
 
-export class Queue extends Content implements ContentWithKeywords {
+export class Queue extends Content {
   constructor(
-    readonly name: string,
+    readonly common: CommonFields,
     readonly queue: string,
-    readonly shortText?: string,
-    readonly schedule?: Schedule,
-    readonly searchableBy: SearchableBy = new SearchableBy()
+    readonly schedule?: Schedule
   ) {
-    super(name);
+    super();
   }
 }
 

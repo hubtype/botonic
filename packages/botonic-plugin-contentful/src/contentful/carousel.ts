@@ -2,7 +2,11 @@ import * as contentful from 'contentful';
 import { DeliveryWithFollowUp } from './follow-up';
 import { ButtonDelivery } from './button';
 import * as cms from '../cms';
-import { DeliveryApi, ContentWithKeywordsFields } from './delivery-api';
+import {
+  DeliveryApi,
+  CommonEntryFields,
+  commonFieldsFromEntry
+} from './delivery-api';
 
 // TODO remove DeliveryWithFollowUp
 export class CarouselDelivery extends DeliveryWithFollowUp {
@@ -18,12 +22,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
       return this.elementFromEntry(entry, context);
     });
     const e = await Promise.all(elements);
-    return new cms.Carousel(
-      entry.fields.name,
-      e,
-      entry.fields.shortText,
-      entry.fields.keywords
-    );
+    return new cms.Carousel(commonFieldsFromEntry(entry), e);
   }
 
   /**
@@ -58,6 +57,6 @@ interface ElementFields {
   buttons: contentful.Entry<any>[];
 }
 
-export interface CarouselFields extends ContentWithKeywordsFields {
+export interface CarouselFields extends CommonEntryFields {
   elements: contentful.Entry<ElementFields>[];
 }

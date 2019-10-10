@@ -2,7 +2,11 @@ import * as contentful from 'contentful';
 import * as cms from '../cms';
 import { ButtonDelivery } from './button';
 import { CarouselFields } from './carousel';
-import { DeliveryApi, ContentWithKeywordsFields } from './delivery-api';
+import {
+  DeliveryApi,
+  CommonEntryFields,
+  commonFieldsFromEntry
+} from './delivery-api';
 import { DeliveryWithFollowUp } from './follow-up';
 
 export class TextDelivery extends DeliveryWithFollowUp {
@@ -41,11 +45,9 @@ export class TextDelivery extends DeliveryWithFollowUp {
       const followUp = followUpAndButtons.shift() as (cms.Text | undefined);
       const buttons = followUpAndButtons as cms.Button[];
       return new cms.Text(
-        fields.name,
+        commonFieldsFromEntry(entry),
         fields.text,
         buttons,
-        fields.shortText,
-        fields.keywords,
         followUp,
         fields.buttonsStyle == 'QuickReplies'
           ? cms.ButtonStyle.QUICK_REPLY
@@ -55,7 +57,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
   }
 }
 
-export interface TextFields extends ContentWithKeywordsFields {
+export interface TextFields extends CommonEntryFields {
   // Full text
   text: string;
   // typed as any because we might only get the entry.sys but not the fields
