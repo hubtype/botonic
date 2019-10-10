@@ -12,17 +12,19 @@ export const Location = props => {
     let lat = parseFloat(props.lat)
     let long = parseFloat(props.long)
 
-    let location_url = `https://www.google.com/maps/@${lat},${long}`
-
+    let locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
     return (
-      <Message
-        json={serialize(props)}
-        {...props}
-        type='location'
-      >
-        <a href={location_url} target='_blank' rel='noopener noreferrer'>
-          {' '}
-          See Location
+      <Message json={serialize(props)} {...props} type='location'>
+        <a
+          style={{
+            textDecoration: 'none',
+            fontWeight: 'bold',
+            target: 'blank'
+          }}
+          href={locationUrl}
+          target='_blank'
+        >
+          {props.text || 'Open Location'}
         </a>
       </Message>
     )
@@ -31,8 +33,8 @@ export const Location = props => {
   const renderNode = () => {
     return (
       <message type='location'>
-        <lat>{props.lat}</lat>
-        <long>{props.long}</long>
+        <lat>{lat}</lat>
+        <long>{long}</long>
       </message>
     )
   }
