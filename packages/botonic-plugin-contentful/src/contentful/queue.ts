@@ -31,7 +31,11 @@ export class QueueDelivery extends ContentDelivery {
     const schedule =
       fields.schedule && ScheduleDelivery.fromEntry(fields.schedule);
 
-    return new cms.Queue(commonFieldsFromEntry(entry), fields.queue, schedule);
+    return new cms.Queue(
+      commonFieldsFromEntry(entry),
+      fields.queue,
+      schedule && schedule.schedule
+    );
   }
 }
 
