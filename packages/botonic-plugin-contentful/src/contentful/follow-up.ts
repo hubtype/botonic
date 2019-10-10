@@ -21,8 +21,7 @@ type FollowUpFields = TextFields | CarouselFields | ImageFields;
 export class FollowUpDelivery {
   constructor(
     private readonly carousel: CarouselDelivery,
-    private readonly text: TextDelivery,
-    private readonly image: ImageDelivery
+    private readonly text: TextDelivery
   ) {}
 
   // TODO we should detect cycles to avoid infinite recursion
@@ -38,10 +37,10 @@ export class FollowUpDelivery {
         // here followUp already has its fields set, but not yet its element fields
         return this.carousel.carousel(followUp.sys.id, context);
       case cms.ModelType.TEXT:
-        return this.text.textFromEntry(followUp as Entry<TextFields>, context);
+        return this.text.fromEntry(followUp as Entry<TextFields>, context);
       case cms.ModelType.IMAGE:
         return Promise.resolve(
-          this.image.imageFromEntry(followUp as Entry<ImageFields>)
+          ImageDelivery.fromEntry(followUp as Entry<ImageFields>)
         );
       default:
         throw new Error(`Unexpected followUp type ${followUp.sys.type}`);

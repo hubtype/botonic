@@ -16,7 +16,7 @@ import {
   CommonFields
 } from './contents';
 import * as time from '../time';
-import { DEFAULT_CONTEXT } from './context';
+import { Context, DEFAULT_CONTEXT } from './context';
 
 /**
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
@@ -92,7 +92,11 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Queue(new CommonFields(id), id));
   }
 
-  contents(model: ModelType, {} = DEFAULT_CONTEXT): Promise<Content[]> {
+  contents(
+    model: ModelType,
+    context?: Context,
+    filter?: (cf: CommonFields) => boolean
+  ): Promise<Content[]> {
     return Promise.resolve([]);
   }
 

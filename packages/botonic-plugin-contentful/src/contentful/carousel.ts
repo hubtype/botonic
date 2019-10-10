@@ -18,6 +18,13 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     const entry: contentful.Entry<
       CarouselFields
     > = await this.delivery.getEntry(id, context);
+    return this.fromEntry(entry, context);
+  }
+
+  async fromEntry(
+    entry: contentful.Entry<CarouselFields>,
+    context: cms.Context
+  ) {
     const elements = entry.fields.elements.map(async entry => {
       return this.elementFromEntry(entry, context);
     });

@@ -9,7 +9,8 @@ import {
   Chitchat,
   Queue,
   Content,
-  StartUp
+  StartUp,
+  CommonFields
 } from './contents';
 import { Context } from './context';
 
@@ -81,9 +82,13 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleError('contentsWithKeywords'));
   }
 
-  contents(model: ModelType, context?: Context): Promise<Content[]> {
+  contents(
+    model: ModelType,
+    context?: Context,
+    filter?: (cf: CommonFields) => boolean
+  ): Promise<Content[]> {
     return this.cms
-      .contents(model, context)
+      .contents(model, context, filter)
       .catch(this.handleError('contents'));
   }
 
