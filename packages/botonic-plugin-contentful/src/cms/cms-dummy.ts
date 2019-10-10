@@ -12,7 +12,8 @@ import {
   Url,
   Queue,
   Content,
-  StartUp
+  StartUp,
+  CommonFields
 } from './contents';
 import * as time from '../time';
 import { DEFAULT_CONTEXT } from './context';
@@ -32,12 +33,16 @@ export class DummyCMS implements CMS {
     const elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
     );
-    return Promise.resolve(new Carousel(id, elements));
+    return Promise.resolve(new Carousel(new CommonFields(id), elements));
   }
 
   async text(id: string, {} = DEFAULT_CONTEXT): Promise<Text> {
     return Promise.resolve(
-      new Text(id, 'Dummy text for ' + id, this.buttons(), id, ['kw1', 'kw2'])
+      new Text(
+        new CommonFields(id, { keywords: ['kw1', 'kw2'], shortText: id }),
+        'Dummy text for ' + id,
+        this.buttons()
+      )
     );
   }
 
@@ -47,7 +52,12 @@ export class DummyCMS implements CMS {
 
   async startUp(id: string, {} = DEFAULT_CONTEXT): Promise<StartUp> {
     return Promise.resolve(
-      new StartUp(id, DummyCMS.IMG, 'Dummy text for ' + id, this.buttons())
+      new StartUp(
+        new CommonFields(id),
+        DummyCMS.IMG,
+        'Dummy text for ' + id,
+        this.buttons()
+      )
     );
   }
 
@@ -67,7 +77,10 @@ export class DummyCMS implements CMS {
 
   url(id: string, {} = DEFAULT_CONTEXT): Promise<Url> {
     return Promise.resolve(
-      new Url(id, `http://url.${id}`, 'button text for' + id)
+      new Url(
+        new CommonFields(id, { shortText: 'button text for' + id }),
+        `http://url.${id}`
+      )
     );
   }
 
@@ -76,7 +89,7 @@ export class DummyCMS implements CMS {
   }
 
   queue(id: string, {} = DEFAULT_CONTEXT): Promise<Queue> {
-    return Promise.resolve(new Queue(id, id));
+    return Promise.resolve(new Queue(new CommonFields(id), id));
   }
 
   contents(model: ModelType, {} = DEFAULT_CONTEXT): Promise<Content[]> {

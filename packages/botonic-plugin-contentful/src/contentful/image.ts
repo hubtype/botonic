@@ -1,7 +1,7 @@
 import { Context } from '../cms';
 import * as cms from '../cms';
 import { ContentDelivery } from './content-delivery';
-import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
+import { CommonEntryFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
 
 export class ImageDelivery extends ContentDelivery {
@@ -25,6 +25,6 @@ export class ImageDelivery extends ContentDelivery {
   }
 }
 
-export interface ImageFields extends ContentWithKeywordsFields {
+export interface ImageFields extends CommonEntryFields {
   image: contentful.Asset;
 }

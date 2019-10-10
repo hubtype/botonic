@@ -1,7 +1,11 @@
 import * as contentful from 'contentful';
 import * as cms from '../cms';
 import { ButtonDelivery } from './button';
-import { DeliveryApi, ContentWithKeywordsFields } from './delivery-api';
+import {
+  DeliveryApi,
+  CommonEntryFields,
+  commonFieldsFromEntry
+} from './delivery-api';
 import { DeliveryWithFollowUp } from './follow-up';
 
 export class StartUpDelivery extends DeliveryWithFollowUp {
@@ -33,17 +37,15 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
     const buttons = await Promise.all(promises);
     const img = fields.pic ? DeliveryApi.urlFromAsset(fields.pic) : undefined;
     return new cms.StartUp(
-      fields.name,
+      commonFieldsFromEntry(entry),
       img,
       fields.text,
-      buttons,
-      fields.shortText,
-      fields.keywords
+      buttons
     );
   }
 }
 
-export interface StartUpFields extends ContentWithKeywordsFields {
+export interface StartUpFields extends CommonEntryFields {
   pic?: contentful.Asset;
   text?: string;
   // typed as any because we might only get the entry.sys but not the fields

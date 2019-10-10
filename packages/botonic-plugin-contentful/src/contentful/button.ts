@@ -3,10 +3,7 @@ import { DeliveryApi } from '.';
 import { ModelType } from '../cms';
 import * as cms from '../cms';
 import { CarouselFields } from './carousel';
-import {
-  ContentWithKeywordsFields,
-  ContentWithNameFields
-} from './delivery-api';
+import { CommonEntryFields, ContentWithNameFields } from './delivery-api';
 import { TextFields } from './text';
 import { UrlFields } from './url';
 
@@ -30,7 +27,7 @@ export class ButtonDelivery {
       case cms.ModelType.TEXT:
       case cms.ModelType.URL:
         return ButtonDelivery.fromContent(entry as contentful.Entry<
-          ContentWithKeywordsFields
+          CommonEntryFields
         >);
       case ButtonDelivery.BUTTON_CONTENT_TYPE: {
         const buttonEntry = entry as contentful.Entry<ButtonFields>;
@@ -49,7 +46,7 @@ export class ButtonDelivery {
   }
 
   private static fromContent(
-    entry: contentful.Entry<ContentWithKeywordsFields>
+    entry: contentful.Entry<CommonEntryFields>
   ): cms.Button {
     const fields = entry.fields;
     let text = fields.shortText;
