@@ -3,7 +3,7 @@ import { Context } from '../cms';
 import * as cms from '../cms';
 import { ModelType } from '../cms';
 import { SearchResult } from '../search';
-import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
+import { CommonEntryFields, DeliveryApi } from './delivery-api';
 import { QueueFields } from './queue';
 
 export class KeywordsDelivery {
@@ -63,7 +63,7 @@ export class KeywordsDelivery {
 
   private entriesWithKeywords(context: Context): Promise<SearchResult[]> {
     const getWithKeywords = (contentType: cms.ModelType) =>
-      this.delivery.getEntries<ContentWithKeywordsFields>(context, {
+      this.delivery.getEntries<CommonEntryFields>(context, {
         // eslint-disable-next-line @typescript-eslint/camelcase
         content_type: contentType,
         'fields.keywords[exists]': true,
@@ -79,7 +79,7 @@ export class KeywordsDelivery {
     }
     return Promise.all(promises).then(entryCollections =>
       KeywordsDelivery.flatMapEntryCollection(entryCollections).map(entry =>
-        KeywordsDelivery.resultFromEntry(entry, entry.fields.keywords)
+        KeywordsDelivery.resultFromEntry(entry, entry.fields.keywords || [])
       )
     );
   }

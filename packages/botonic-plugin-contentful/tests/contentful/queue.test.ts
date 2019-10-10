@@ -1,4 +1,9 @@
-import { Queue, SearchableBy, SearchableByKeywords } from '../../src/cms';
+import {
+  CommonFields,
+  Queue,
+  SearchableBy,
+  SearchableByKeywords
+} from '../../src/cms';
 import { testContentful, testContext } from './contentful.helper';
 import { testSchedule } from './schedule.test';
 
@@ -13,11 +18,9 @@ test('TEST: contentful Queue', async () => {
   ]);
   expect(queue).toEqual(
     new Queue(
-      'TEST_QUEUE',
-      'Short Text',
+      new CommonFields('TEST_QUEUE', { shortText: 'Short Text', searchableBy }),
       'queueName',
-      testSchedule(),
-      searchableBy
+      testSchedule()
     )
   );
 });

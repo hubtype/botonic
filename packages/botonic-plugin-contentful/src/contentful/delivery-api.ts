@@ -1,8 +1,20 @@
 import * as contentful from 'contentful';
 import * as cms from '../cms';
-import { Callback, Content, ContentCallback, Context, ModelType } from '../cms';
+import {
+  Callback,
+  CommonFields,
+  Content,
+  ContentCallback,
+  Context,
+  ModelType,
+  SearchableBy
+} from '../cms';
 import { QueueDelivery, QueueFields } from './queue';
 import { UrlFields } from './url';
+import {
+  SearchableByKeywordsDelivery,
+  SearchableByKeywordsFields
+} from './searchable-by';
 
 export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
@@ -104,8 +116,25 @@ export interface ContentWithNameFields {
   name: string;
 }
 
-export interface ContentWithKeywordsFields extends ContentWithNameFields {
+export interface CommonEntryFields extends ContentWithNameFields {
   // Useful to display in buttons or reports
   shortText: string;
-  keywords: string[];
+  keywords?: string[];
+  searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
+}
+
+export function commonFieldsFromEntry(fields: CommonEntryFields): CommonFields {
+  const searchableBy =
+    fields.searchableBy &&
+    new SearchableBy(
+      fields.searchableBy.map(searchableBy =>
+        SearchableByKeywordsDelivery.fromEntry(searchableBy)
+      )
+    );
+
+  return new CommonFields(fields.name, {
+    keywords: fields.keywords,
+    shortText: fields.shortText,
+    searchableBy: searchableBy
+  });
 }

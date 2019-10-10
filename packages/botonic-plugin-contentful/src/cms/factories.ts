@@ -1,4 +1,11 @@
-import { Button, ButtonStyle, FollowUp, Content, Text } from './contents';
+import {
+  Button,
+  ButtonStyle,
+  FollowUp,
+  Content,
+  Text,
+  CommonFields
+} from './contents';
 
 abstract class ModelBuilder {
   protected constructor(readonly name: string) {}
@@ -47,11 +54,12 @@ export class TextBuilder extends ModelBuilder {
 
   build(): Text {
     return new Text(
-      this.name,
+      new CommonFields(this.name, {
+        shortText: this.shortText,
+        keywords: this.keywords
+      }),
       this.text,
       this.buttons,
-      this.shortText,
-      this.keywords,
       this.followUp,
       this.buttonsStyle
     );
