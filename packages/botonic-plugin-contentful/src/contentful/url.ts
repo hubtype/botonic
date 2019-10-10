@@ -17,6 +17,10 @@ export class UrlDelivery extends DeliveryWithFollowUp {
 
   async url(id: string, context: Context): Promise<cms.Url> {
     const entry: contentful.Entry<UrlFields> = await this.getEntry(id, context);
+    return this.fromEntry(entry, context);
+  }
+
+  async fromEntry(entry: contentful.Entry<UrlFields>, context: Context) {
     const fields = entry.fields;
     const followUp = fields.followup
       ? await this.followUp!.fromFields(fields.followup, context)

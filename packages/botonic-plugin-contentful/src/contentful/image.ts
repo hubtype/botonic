@@ -14,10 +14,10 @@ export class ImageDelivery extends ContentDelivery {
       id,
       context
     );
-    return this.imageFromEntry(entry);
+    return ImageDelivery.fromEntry(entry);
   }
 
-  imageFromEntry(entry: contentful.Entry<ImageFields>): cms.Image {
+  static fromEntry(entry: contentful.Entry<ImageFields>): cms.Image {
     return new cms.Image(
       entry.fields.name,
       DeliveryApi.urlFromAsset(entry.fields.image)

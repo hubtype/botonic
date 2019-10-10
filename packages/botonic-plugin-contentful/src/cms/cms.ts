@@ -10,7 +10,8 @@ import {
   Chitchat,
   Queue,
   Content,
-  StartUp
+  StartUp,
+  CommonFields
 } from './contents';
 
 export enum ModelType {
@@ -24,6 +25,20 @@ export enum ModelType {
   URL = 'url',
   SCHEDULE = 'schedule',
   STARTUP = 'startUp'
+}
+
+export function isMessageModel(model: ModelType): boolean {
+  switch (model) {
+    case ModelType.CAROUSEL:
+    case ModelType.CHITCHAT:
+    case ModelType.IMAGE:
+    case ModelType.QUEUE:
+    case ModelType.TEXT:
+    case ModelType.URL:
+    case ModelType.STARTUP:
+      return true;
+  }
+  return false;
 }
 
 export const MODEL_TYPES = Object.values(ModelType).map(m => m as ModelType);
@@ -51,9 +66,13 @@ export interface CMS {
   text(id: string, context?: Context): Promise<Text>;
   url(id: string, context?: Context): Promise<Url>;
   /**
-   * @param context If locale specified, it does not returns contents without values for the locale (even if it has value for the fallback locale)
+   * If locale specified in context, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
-  contents(model: ModelType, context?: Context): Promise<Content[]>;
+  contents(
+    model: ModelType,
+    context?: Context,
+    filter?: (cf: CommonFields) => boolean
+  ): Promise<Content[]>;
 
   /**
    * For contents with 'Seachable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry

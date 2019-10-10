@@ -15,10 +15,10 @@ export class ScheduleDelivery extends ContentDelivery {
     const f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
       include: ScheduleDelivery.REFERENCES_INCLUDE
     });
-    return ScheduleDelivery.scheduleFromEntry(f);
+    return ScheduleDelivery.fromEntry(f);
   }
 
-  static scheduleFromEntry(f: Entry<ScheduleFields>): time.Schedule {
+  static fromEntry(f: Entry<ScheduleFields>): time.Schedule {
     const schedule = new time.Schedule(time.Schedule.TZ_CET); // TODO allow configuration
     ScheduleDelivery.addDaySchedules(schedule, f.fields);
     ScheduleDelivery.addExceptions(schedule, f.fields.exceptions);
