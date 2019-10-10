@@ -3,11 +3,11 @@ import * as cms from '../cms';
 import {
   Callback,
   CommonFields,
-  Content,
   ContentCallback,
   Context,
   ModelType,
-  SearchableBy
+  SearchableBy,
+  TopContent
 } from '../cms';
 import { QueueDelivery } from './queue';
 import { UrlFields } from './url';
@@ -91,7 +91,10 @@ export class DeliveryApi {
   async contents(
     model: ModelType,
     context: Context,
-    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>,
+    factory: (
+      entry: contentful.Entry<any>,
+      ctxt: Context
+    ) => Promise<TopContent>,
     filter?: (cf: CommonFields) => boolean
   ) {
     const entries: EntryCollection<CommonEntryFields> = await this.getEntries(
@@ -118,7 +121,7 @@ export class DeliveryApi {
 }
 
 export interface ContentWithNameFields {
-  // An ID (eg. PRE_FAQ1)
+  // The content code (eg. PRE_FAQ1) Not called Id to differentiate from contentful automatic Id
   name: string;
 }
 

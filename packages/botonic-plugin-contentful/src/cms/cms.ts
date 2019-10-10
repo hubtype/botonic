@@ -1,5 +1,4 @@
 import { SearchResult } from '../search/search-result';
-import * as time from '../time';
 import { Context } from './context';
 import {
   Asset,
@@ -9,13 +8,14 @@ import {
   Url,
   Chitchat,
   Queue,
-  Content,
   StartUp,
-  CommonFields
+  CommonFields,
+  ScheduleContent,
+  DateRangeContent,
+  TopContent
 } from './contents';
 
 export enum ModelType {
-  ASSET = 'asset',
   CAROUSEL = 'carousel',
   CHITCHAT = 'chitchat',
   DATE_RANGE = 'dateRange',
@@ -25,20 +25,6 @@ export enum ModelType {
   URL = 'url',
   SCHEDULE = 'schedule',
   STARTUP = 'startUp'
-}
-
-export function isMessageModel(model: ModelType): boolean {
-  switch (model) {
-    case ModelType.CAROUSEL:
-    case ModelType.CHITCHAT:
-    case ModelType.IMAGE:
-    case ModelType.QUEUE:
-    case ModelType.TEXT:
-    case ModelType.URL:
-    case ModelType.STARTUP:
-      return true;
-  }
-  return false;
 }
 
 export const MODEL_TYPES = Object.values(ModelType).map(m => m as ModelType);
@@ -72,14 +58,14 @@ export interface CMS {
     model: ModelType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean
-  ): Promise<Content[]>;
+  ): Promise<TopContent[]>;
 
   /**
    * For contents with 'Seachable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
    * @param context If locale specified, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
   contentsWithKeywords(context?: Context): Promise<SearchResult[]>;
-  schedule(id: string): Promise<time.Schedule>;
-  dateRange(id: string): Promise<time.DateRange>;
+  schedule(id: string): Promise<ScheduleContent>;
+  dateRange(id: string): Promise<DateRangeContent>;
   asset(id: string): Promise<Asset>;
 }

@@ -1,4 +1,4 @@
-import { Schedule } from '../time';
+import * as time from '../time';
 import { Callback } from './callback';
 import { SearchableBy } from './fields';
 
@@ -36,6 +36,15 @@ export abstract class Content {
       return undefined;
     }
     return invalids.join('. ');
+  }
+}
+
+/**
+ * A self-contained content to which {@link Callback} may refer
+ */
+export abstract class TopContent extends Content {
+  protected constructor(readonly common: CommonFields) {
+    super();
   }
 }
 
@@ -86,14 +95,14 @@ export class Button extends Content {
   }
 }
 
-export class StartUp extends Content {
+export class StartUp extends TopContent {
   constructor(
     readonly common: CommonFields,
     readonly imgUrl: string | undefined,
     readonly text: string | undefined,
     readonly buttons: Button[]
   ) {
-    super();
+    super(common);
   }
 
   validate(): string | undefined {
@@ -101,12 +110,12 @@ export class StartUp extends Content {
   }
 }
 
-export class Carousel extends Content {
+export class Carousel extends TopContent {
   constructor(
     readonly common: CommonFields,
     readonly elements: Element[] = []
   ) {
-    super();
+    super(common);
   }
 
   validate(): string | undefined {
@@ -132,13 +141,13 @@ export class Element extends Content {
   }
 }
 
-export class Image extends Content {
-  constructor(readonly name: string, readonly imgUrl: string) {
-    super();
+export class Image extends TopContent {
+  constructor(readonly common: CommonFields, readonly imgUrl: string) {
+    super(common);
   }
 }
 
-export class Text extends Content {
+export class Text extends TopContent {
   constructor(
     readonly common: CommonFields,
     // Full text
@@ -147,7 +156,7 @@ export class Text extends Content {
     readonly followUp?: FollowUp,
     readonly buttonsStyle = ButtonStyle.BUTTON
   ) {
-    super();
+    super(common);
   }
 
   validate(): string | undefined {
@@ -175,7 +184,7 @@ export class Text extends Content {
 
 export type Chitchat = Text;
 
-export class Url extends Content {
+export class Url extends TopContent {
   /**
    *
    * @param followup so far not defined in Contentful model, since URL's are not rendered anyway
@@ -185,17 +194,32 @@ export class Url extends Content {
     readonly url: string,
     readonly followup?: FollowUp
   ) {
-    super();
+    super(common);
   }
 }
 
-export class Queue extends Content {
+export class Queue extends TopContent {
   constructor(
     readonly common: CommonFields,
     readonly queue: string,
-    readonly schedule?: Schedule
+    readonly schedule?: time.Schedule
   ) {
-    super();
+    super(common);
+  }
+}
+
+export class DateRangeContent extends TopContent {
+  constructor(
+    readonly common: CommonFields,
+    readonly dateRange: time.DateRange
+  ) {
+    super(common);
+  }
+}
+
+export class ScheduleContent extends TopContent {
+  constructor(readonly common: CommonFields, readonly schedule: time.Schedule) {
+    super(common);
   }
 }
 
