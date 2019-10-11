@@ -89,6 +89,7 @@ export class ScheduleDelivery extends ContentDelivery {
     }
   }
 }
+
 export interface ScheduleFields extends CommonEntryFields {
   mondays?: Entry<HourRangeFields>[];
   tuesdays?: Entry<HourRangeFields>[];

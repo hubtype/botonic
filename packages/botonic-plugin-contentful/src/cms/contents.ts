@@ -1,7 +1,6 @@
 import * as time from '../time';
 import { Callback } from './callback';
 import { SearchableBy } from './fields';
-import { DateRange } from '../time';
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -59,23 +58,23 @@ export class CommonFields {
   readonly searchableBy?: SearchableBy;
   /** Useful when contents need to be replicated according to some criteria. Eg. country, company,...
    */
-  readonly partition?: string;
-  readonly dateRange?: DateRange;
+  readonly partitions?: string[];
+  readonly dateRange?: DateRangeContent;
   constructor(
     readonly name: string,
     opt?: {
       shortText?: string;
       keywords?: string[];
       searchableBy?: SearchableBy;
-      partition?: string;
-      dateRange?: DateRange;
+      partitions?: string[];
+      dateRange?: DateRangeContent;
     }
   ) {
     if (opt) {
       this.shortText = opt.shortText;
       this.keywords = opt.keywords;
       this.searchableBy = opt.searchableBy;
-      this.partition = opt.partition;
+      this.partitions = opt.partitions;
       this.dateRange = opt.dateRange;
     }
   }

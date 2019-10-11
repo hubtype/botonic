@@ -18,16 +18,16 @@ export class DateRangeDelivery extends ContentDelivery {
       id,
       DEFAULT_CONTEXT
     );
-    const dateRange = DateRangeDelivery.fromEntry(entry);
-    return new DateRangeContent(commonFieldsFromEntry(entry), dateRange);
+    return DateRangeDelivery.fromEntry(entry);
   }
 
-  static fromEntry(entry: contentful.Entry<DateRangeFields>): time.DateRange {
-    return new time.DateRange(
+  static fromEntry(entry: contentful.Entry<DateRangeFields>): DateRangeContent {
+    const dateRange = new time.DateRange(
       entry.fields.name,
       new Date(Date.parse(entry.fields.from)),
       new Date(Date.parse(entry.fields.to))
     );
+    return new DateRangeContent(commonFieldsFromEntry(entry), dateRange);
   }
 }
 
