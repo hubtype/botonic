@@ -132,7 +132,7 @@ export interface CommonEntryFields extends ContentWithNameFields {
   shortText: string;
   keywords?: string[];
   searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
-  partition?: string;
+  partitions?: string[];
   dateRange?: contentful.Entry<DateRangeFields>;
 }
 
@@ -155,7 +155,7 @@ export function commonFieldsFromEntry(
   return new CommonFields(fields.name, {
     keywords: fields.keywords,
     shortText: fields.shortText,
-    partition: fields.partition,
+    partitions: fields.partitions,
     searchableBy,
     dateRange
   });
