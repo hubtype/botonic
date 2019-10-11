@@ -473,7 +473,7 @@ export const Webchat = forwardRef((props, ref) => {
                     style={{
                       display: 'flex',
                       flex: '1 1 auto',
-                      padding: 10,
+                      paddingTop: 15,
                       fontSize: 14,
                       border: 'none',
                       resize: 'none',

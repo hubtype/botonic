@@ -146,7 +146,7 @@ export const Message = props => {
             )
           )}
         </div>
-
+        
         <DefaultMessage
           style={{
             left: isFromBot() ? 22 : 0,
@@ -163,7 +163,7 @@ export const Message = props => {
             borderRadius: webchatState.theme.customUserMessages
               ? webchatState.theme.customUserMessages.borderRadius
               : '',
-            maxWidth: blob ? '60%' : 'calc(100% - 16px)',
+            maxWidth: blob ? '83%' : 'calc(100% - 16px)',
             ...style
           }}
           {...otherProps}
