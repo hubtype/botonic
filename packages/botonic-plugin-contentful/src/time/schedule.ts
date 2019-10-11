@@ -70,6 +70,15 @@ export class Schedule {
   }
 }
 
+export class ScheduleAlwaysOn extends Schedule {
+  constructor() {
+    super('UTC');
+  }
+  contains(date: Date): boolean {
+    return true;
+  }
+}
+
 export class DaySchedule {
   constructor(readonly ranges: TimeRange[]) {}
 
