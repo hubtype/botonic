@@ -11,6 +11,7 @@ import { DynamoTrackStorage } from './infrastructure/dynamo';
 import time from './domain/time';
 
 export * from './domain/dummy';
+export * from './infrastructure';
 
 export default class BotonicPluginDynamoDB {
   readonly storage: TrackStorage;

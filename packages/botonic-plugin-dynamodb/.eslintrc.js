@@ -24,7 +24,7 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
-    "filenames/match-regex": [2, "^[a-z-.]+$", true],
+    "filenames/match-regex": ["error", "^[a-z-.]+$", true],
 
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
@@ -35,6 +35,8 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
     "unicorn/no-abusive-eslint-disable" : "off",
+    "@typescript-eslint/camelcase" : "warn",
+    "consistent-return": "error",
 
     // special for TYPESCRIPT
     "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
