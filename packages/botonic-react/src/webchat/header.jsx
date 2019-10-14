@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
-import { staticAsset } from '../utils'
+import { staticAsset, getProperty } from '../utils'
 import styled from 'styled-components'
-import Logo from './botonic_react_logo100x100.png'
+import Logo from '../assets/botonic_react_logo100x100.png'
 import { Flex } from '@rebass/grid'
 
 const HeaderTitle = styled(Flex)`
@@ -42,15 +42,18 @@ const StyledHeaderTitle = styled(Flex)`
 `
 
 export const DefaultHeader = props => {
+  const { webchatState, useTheme } = props
+  const { theme } = webchatState
   let HeaderImage = Logo
-  if ('brandImage' in props.webchatState.theme)
-    HeaderImage = props.webchatState.theme.brandImage
-  if ('headerImage' in props.webchatState.theme)
-    HeaderImage = props.webchatState.theme.headerImage
+  // These conditions are done in this way because HeaderImage can be null
+  if (getProperty(theme, 'brand.image') || getProperty(theme, 'brandImage'))
+    HeaderImage = useTheme('brand.image')
+  if (getProperty(theme, 'header.image') || getProperty(theme, 'headerImage'))
+    HeaderImage = useTheme('header.image')
 
-  let headerTitle = props.webchatState.theme.headerTitle
-  headerTitle = headerTitle || 'Botonic'
-  let headerSubtitle = props.webchatState.theme.headerSubtitle
+  let headerTitle = useTheme('header.title') || 'Botonic'
+  let headerSubtitle = useTheme('header.subtitle') || ''
+
   return (
     <Diffuse color={props.color}>
       {HeaderImage && (
@@ -75,19 +78,20 @@ export const DefaultHeader = props => {
   )
 }
 export const WebchatHeader = props => {
-  const { webchatState } = useContext(WebchatContext)
+  const { webchatState, useTheme } = useContext(WebchatContext)
+  const { theme } = webchatState
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }
-  if (webchatState.theme.customHeader) {
-    let CustomHeader = webchatState.theme.customHeader
+  let CustomHeader = useTheme('header.custom')
+  if (CustomHeader) {
     return <CustomHeader />
   }
-
   return (
     <DefaultHeader
       webchatState={webchatState}
-      color={webchatState.theme.brandColor}
+      useTheme={useTheme}
+      color={useTheme('brand.color')}
       onCloseClick={handleCloseWebchat}
     />
   )

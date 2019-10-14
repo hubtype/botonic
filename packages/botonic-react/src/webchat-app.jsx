@@ -76,7 +76,11 @@ export class WebchatApp {
 
   addBotMessage(message) {
     this.webchatRef.current.addBotResponse({
-      response: msgToBotonic(message, this.theme.customMessageTypes)
+      response: msgToBotonic(
+        message,
+        (this.theme.message && this.theme.message.customTypes) ||
+          this.theme.customMessageTypes
+      )
     })
   }
 

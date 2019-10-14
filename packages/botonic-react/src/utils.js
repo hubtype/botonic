@@ -35,3 +35,23 @@ export const staticAsset = path => {
     return path
   }
 }
+
+/**
+ * given an object and a property, returns if the property exists (recursively)
+ * @param  {Object} arg1 object to be checked
+ * @param  {String} arg2 string describing the property (for nested values, separate them with '.')
+ * @return {Boolean}     true if property exists, false otherwise
+ */
+export const getProperty = (obj, property) => {
+  if (!property) return false
+  let properties = property.split('.')
+  for (let i = 0; i < properties.length; i++) {
+    let prop = properties[i]
+    if (!obj || !obj.hasOwnProperty(prop)) {
+      return false
+    } else {
+      obj = obj[prop]
+    }
+  }
+  return obj
+}

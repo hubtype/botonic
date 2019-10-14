@@ -4,8 +4,8 @@ import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 
 export const Reply = props => {
-  const { webchatState, sendText } = useContext(WebchatContext)
-
+  const { webchatState, sendText, useTheme } = useContext(WebchatContext)
+  const { theme } = webchatState
   const handleClick = event => {
     event.preventDefault()
     if (props.children) {
@@ -16,21 +16,22 @@ export const Reply = props => {
   }
 
   const renderBrowser = () => {
-    if (webchatState.theme.customReply) {
-      let CustomReply = webchatState.theme.customReply
+    let CustomReply = useTheme('replies.custom')
+    if (CustomReply) {
       return (
         <div onClick={e => handleClick(e)}>
           <CustomReply>{props.children}</CustomReply>
         </div>
       )
     }
+
     return (
       <button
         style={{
           width: '100%',
           padding: '4px 8px',
-          border: `1px solid ${webchatState.theme.brandColor}`,
-          color: webchatState.theme.brandColor,
+          border: `1px solid ${useTheme('brand.color')}`,
+          color: useTheme('brand.color'),
           borderRadius: 8,
           cursor: 'pointer',
           outline: 0

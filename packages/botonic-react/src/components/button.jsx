@@ -4,8 +4,11 @@ import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 
 export const Button = props => {
-  const { webchatState, openWebview, sendPayload } = useContext(WebchatContext)
+  const { webchatState, openWebview, sendPayload, useTheme } = useContext(
+    WebchatContext
+  )
   const [hover, setHover] = useState(false)
+  const { theme } = webchatState
 
   const handleClick = event => {
     event.preventDefault()
@@ -19,8 +22,8 @@ export const Button = props => {
   }
 
   const renderBrowser = () => {
-    if (webchatState.theme.customButton) {
-      let CustomButton = webchatState.theme.customButton
+    let CustomButton = useTheme('button.custom')
+    if (CustomButton) {
       return (
         <div onClick={e => handleClick(e)}>
           <CustomButton>{props.children}</CustomButton>
@@ -29,7 +32,7 @@ export const Button = props => {
     }
     return (
       <button
-        theme={webchatState.theme}
+        theme={theme}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={e => handleClick(e)}
@@ -42,8 +45,7 @@ export const Button = props => {
           alignContent: 'center',
           justifyContent: 'center',
           padding: '12px 32px',
-          color:
-            (webchatState.theme && webchatState.theme.brandColor) || '#000',
+          color: useTheme('brand.color') || '#000',
           backgroundColor: hover ? '#f3f3f3' : '#fff',
           border: 'none',
           border: '1px solid #f1f0f0',

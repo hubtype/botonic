@@ -1,18 +1,26 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 
-const alignOptions = /^left$|^center$|^right$/
-const wrapOptions = /^wrap$|^no-wrap$/
+const options = {
+  left: 'flex-start',
+  center: 'center',
+  right: 'flex-end'
+}
 
 export const WebchatReplies = props => {
   const { webchatState } = useContext(WebchatContext)
+  let justify = 'center'
+  if (props.align) justify = options[props.align]
+  if (props.wrap == 'nowrap') justify = 'flex-start'
   return (
     <div
       style={{
+        display: 'flex',
         ...(props.style || {}),
         overflowX: 'auto',
-        textAlign: (props.align && props.align.match(alignOptions)) || 'center',
-        whiteSpace: (props.wrap && props.wrap.match(wrapOptions)) || 'wrap',
+        textAlign: 'center',
+        justifyContent: justify,
+        flexWrap: props.wrap || 'wrap',
         paddingBottom: 10,
         marginLeft: 5,
         marginRight: 5
