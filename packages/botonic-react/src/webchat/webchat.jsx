@@ -67,6 +67,14 @@ export const Webchat = forwardRef((props, ref) => {
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setEmojiIsOpened] = useState(false)
 
+  const useTheme = property => {
+    for (let [k, v] of Object.entries(customWebchatProperties)) {
+      if (v == property) {
+        return getProperty(theme, v) || getProperty(theme, k)
+      }
+    }
+  }
+
   // Load initial state from localStorage
   useEffect(() => {
     let { user, messages, session, lastRoutePath, devSettings } =
@@ -181,24 +189,29 @@ export const Webchat = forwardRef((props, ref) => {
     )
   }
 
-  const persistentMenuComponent = () => (
-    <PersistentMenu>
-      {Object.values(props.persistentMenu).map((e, i) => {
-        return (
-          <Button
-            onClick={closeMenu}
-            url={e.url}
-            webview={e.webview}
-            payload={e.payload}
-            key={i}
-          >
-            {Object.values(e.label)}
-          </Button>
-        )
-      })}
-      <Button onClick={closeMenu}>Cancel</Button>
-    </PersistentMenu>
-  )
+  const persistentMenu =
+    useTheme('userInput.persistentMenu') || props.persistentMenu
+
+  const persistentMenuComponent = () => {
+    return (
+      <PersistentMenu>
+        {Object.values(persistentMenu).map((e, i) => {
+          return (
+            <Button
+              onClick={closeMenu}
+              url={e.url}
+              webview={e.webview}
+              payload={e.payload}
+              key={i}
+            >
+              {Object.values(e.label)}
+            </Button>
+          )
+        })}
+        <Button onClick={closeMenu}>Cancel</Button>
+      </PersistentMenu>
+    )
+  }
   const persistentMenuLogo = () => (
     <div
       style={{
@@ -216,8 +229,9 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const checkBlockInput = input => {
-    if (!Array.isArray(props.blockInputs)) return
-    for (let rule of props.blockInputs) {
+    let blockInputs = useTheme('userInput.blockInputs') || props.blockInputs
+    if (!Array.isArray(blockInputs)) return
+    for (let rule of blockInputs) {
       if (rule.match.some(regex => regex.test(input.data))) {
         addMessageComponent(
           <Text
@@ -322,14 +336,6 @@ export const Webchat = forwardRef((props, ref) => {
     if (!text) return
     let input = { type: 'text', data: text, payload }
     await sendInput(input)
-  }
-
-  const useTheme = property => {
-    for (let [k, v] of Object.entries(customWebchatProperties)) {
-      if (v == property) {
-        return getProperty(theme, v) || getProperty(theme, k)
-      }
-    }
   }
 
   const sendPayload = async payload => {
@@ -453,7 +459,7 @@ export const Webchat = forwardRef((props, ref) => {
         }}
       >
         {emojiIsOpened && emoji()}
-        {props.persistentMenu && persistentMenuLogo()}
+        {persistentMenu && persistentMenuLogo()}
         <div
           style={{
             display: 'flex',
@@ -481,12 +487,13 @@ export const Webchat = forwardRef((props, ref) => {
                 outline: 'none',
                 flex: '1 1 auto',
                 padding: 10,
-                paddingLeft: props.persistentMenu ? 0 : 10
+                paddingLeft: persistentMenu ? 0 : 10
               }}
             />
           )}
         </div>
-        {props.emojiPicker && emojiPickerComponent()}
+        {(useTheme('userInput.emojiPicker') || props.emojiPicker) &&
+          emojiPickerComponent()}
       </div>
     )
   }
