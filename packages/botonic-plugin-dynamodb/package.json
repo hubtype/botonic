@@ -11,7 +11,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
@@ -24,7 +24,7 @@
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@babel/runtime": "^7.5.5",
-    "aws-sdk": "^2.479.0"
+    "aws-sdk": "^2.547.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",

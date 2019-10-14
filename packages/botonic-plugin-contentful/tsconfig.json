@@ -5,6 +5,7 @@
     "src/**/*.tsx"
   ],
   "compilerOptions": {
+    "allowUnreachableCode": false,
     "baseUrl": "src",
     "paths": {
       "*": [
