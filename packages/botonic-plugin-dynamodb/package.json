@@ -3,7 +3,8 @@
     "build": "rm -rf lib && tsc",
     "build_with_tests": "tsc -b tests/tsconfig.json",
     "test": "jest",
-    "lint": "node_modules/.bin/eslint --fix --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
+    "lint": "node_modules/.bin/eslint_d --fix --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
+    "lint_slow": "node_modules/.bin/eslint_d -c .eslintrc_slow.js --fix --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
@@ -24,7 +25,7 @@
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@babel/runtime": "^7.5.5",
-    "aws-sdk": "^2.547.0"
+    "aws-sdk": "^2.548.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
@@ -37,11 +38,12 @@
     "eslint-plugin-jest": "^22.11.1",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-prettier": "^3.1.0",
-    "jest": "^24.8.0",
+    "eslint_d": "^8.0.0",
+    "jest": "^25.0.0",
     "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^24.1.0",
     "ts-mockito": "^2.4.2",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.4"
   },
   "engines": {
     "node": ">=8.10.0"
