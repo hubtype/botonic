@@ -106,9 +106,15 @@ export class DummyCMS implements CMS {
     const contents = this.buttonCallbacks.map(cb => {
       const button = DummyCMS.buttonFromCallback(cb);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      return new SearchResult(cb, button.name, button.text, [
-        'keyword for ' + (button.callback.payload || button.callback.url!)
-      ]);
+      return new SearchResult(
+        cb,
+        new CommonFields(button.name, {
+          shortText: button.text,
+          keywords: [
+            'keyword for ' + (button.callback.payload || button.callback.url!)
+          ]
+        })
+      );
     });
     return Promise.resolve(contents);
   }

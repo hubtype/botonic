@@ -1,5 +1,5 @@
 import { Entry, EntryCollection } from 'contentful';
-import { Context } from '../cms';
+import { CommonFields, Context } from '../cms';
 import * as cms from '../cms';
 import { ModelType } from '../cms';
 import { SearchResult } from '../search';
@@ -29,9 +29,10 @@ export class KeywordsDelivery {
     const callback = DeliveryApi.callbackFromEntry(entry);
     return new SearchResult(
       callback,
-      entry.fields.name,
-      entry.fields.shortText,
-      keywords,
+      new CommonFields(entry.fields.name, {
+        shortText: entry.fields.shortText,
+        keywords
+      }),
       priority
     );
   }

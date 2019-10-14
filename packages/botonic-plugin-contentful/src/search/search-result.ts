@@ -1,6 +1,7 @@
 import {
   Button,
   Callback,
+  CommonFields,
   ContentCallback,
   ModelType,
   PRIORITY_MAX,
@@ -17,25 +18,23 @@ export class SearchResult {
    */
   constructor(
     readonly callback: Callback,
-    readonly name: string,
-    readonly shortText?: string,
-    readonly keywords: string[] = [],
+    readonly common: CommonFields,
     readonly priority = PRIORITY_MAX,
     readonly score = SCORE_MAX,
     readonly match?: string
   ) {}
 
   toButton(): Button {
-    let shortText = this.shortText;
+    let shortText = this.common.shortText;
     if (!shortText) {
-      shortText = this.name;
+      shortText = this.common.name;
       console.error(
         `${JSON.stringify(this.callback)} ${
-          this.name
+          this.common.name
         } without shortText. Assigning name to button text`
       );
     }
-    return new Button(this.name, shortText, this.callback);
+    return new Button(this.common.name, shortText, this.callback);
   }
 
   getCallbackIfContentIs(modelType: ModelType): ContentCallback | undefined {
@@ -53,7 +52,7 @@ export class SearchResult {
       return undefined;
     }
     if (
-      this.shortText !== SearchResult.CHITCHAT_SHORT_TEXT &&
+      this.common.shortText !== SearchResult.CHITCHAT_SHORT_TEXT &&
       this.callback.model !== ModelType.CHITCHAT
     ) {
       return undefined;
