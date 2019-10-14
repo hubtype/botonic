@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import uuid from 'uuid/v4'
 import { isBrowser, isNode } from '@botonic/core'
-import { staticAsset } from '../utils'
+import { staticAsset, getProperty } from '../utils'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
-import Logo from '../webchat/botonic_react_logo100x100.png'
+import Logo from '../assets/botonic_react_logo100x100.png'
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -21,7 +21,10 @@ export const Message = props => {
     ...otherProps
   } = props
 
-  const { webchatState, addMessage, updateReplies } = useContext(WebchatContext)
+  const { webchatState, addMessage, updateReplies, useTheme } = useContext(
+    WebchatContext
+  )
+  const { theme } = webchatState
   const [state, setState] = useState({
     id: props.id || uuid()
   })
@@ -76,13 +79,13 @@ export const Message = props => {
   const isFromBot = () => from === 'bot'
   const getBgColor = () => {
     if (!blob) return 'transparent'
-    return isFromUser() ? webchatState.theme.brandColor : '#F1F0F0'
+    return isFromUser() ? useTheme('brand.color') : '#F1F0F0'
   }
 
   const getMessageStyle = () =>
     isFromBot()
-      ? webchatState.theme.botMessageStyle || {}
-      : webchatState.theme.userMessageStyle || {}
+      ? useTheme('message.bot.style') || {}
+      : useTheme('message.user.style') || {}
 
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -98,10 +101,16 @@ export const Message = props => {
     }
 
     let BotMessageImage = Logo
-    if ('brandImage' in webchatState.theme)
-      BotMessageImage = webchatState.theme.brandImage
-    if ('botMessageImage' in webchatState.theme)
-      BotMessageImage = webchatState.theme.botMessageImage
+    // These conditions are done in this way because BotMessageImage can be null
+    if (getProperty(theme, 'brand.image') || getProperty(theme, 'brandImage')) {
+      BotMessageImage = useTheme('brand.image')
+    }
+    if (
+      getProperty(theme, 'bot.message.image') ||
+      getProperty(theme, 'botMessageImage')
+    )
+      BotMessageImage = useTheme('message.bot.image')
+
     return (
       <div
         style={{

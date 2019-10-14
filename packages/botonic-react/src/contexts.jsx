@@ -19,6 +19,7 @@ export const WebchatContext = React.createContext({
   addMessage: message => '',
   updateReplies: replies => '',
   closeWebview: () => '',
+  useTheme: property => {},
   theme: {},
   webchatState: webchatInitialState
 })
