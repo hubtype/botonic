@@ -20,5 +20,8 @@ export const customWebchatProperties = {
   triggerButtonStyle: 'triggerButton.style',
   customTrigger: 'triggerButton.custom',
   disableUserInput: 'userInput.disable',
-  textPlaceholder: 'userInput.placeholder'
+  textPlaceholder: 'userInput.placeholder',
+  emojiPicker: 'userInput.emojiPicker',
+  persistentMenu: 'userInput.persistentMenu',
+  blockInputs: 'userInput.blockInputs'
 }
