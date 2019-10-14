@@ -21,16 +21,12 @@ test('TEST: respondFoundContents text with buttons', async () => {
 
   const urlContent = new SearchResult(
     new ContentCallback(ModelType.URL, 'urlCmsId'),
-    'name',
-    'url shortText',
-    []
+    new CommonFields('name', { shortText: 'url shortText' })
   );
 
   const textContent = new SearchResult(
     new ContentCallback(ModelType.TEXT, 'textCmsId'),
-    'name',
-    'text shortText',
-    []
+    new CommonFields('name', { shortText: 'text shortText' })
   );
 
   // sut
@@ -64,9 +60,7 @@ test('TEST: respondFoundContents text with chitchat', async () => {
   when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat);
   const chitchatCallback = new SearchResult(
     new ContentCallback(ModelType.CHITCHAT, 'chitchatCmsId'),
-    'name',
-    'chitchat',
-    []
+    new CommonFields('name', { shortText: 'chitchat' })
   );
 
   when(cms.text('foundId', CONTEXT)).thenResolve(

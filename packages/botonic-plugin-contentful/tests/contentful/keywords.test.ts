@@ -26,9 +26,9 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(queues).toHaveLength(2);
   const keywordsByPrio: { [priority: number]: string[] } = {};
   for (const queue of queues) {
-    expect(queue.name).toEqual('TEST_QUEUE');
-    expect(queue.shortText).toEqual('Short Text');
-    keywordsByPrio[queue.priority] = queue.keywords;
+    expect(queue.common.name).toEqual('TEST_QUEUE');
+    expect(queue.common.shortText).toEqual('Short Text');
+    keywordsByPrio[queue.priority] = queue.common.keywords;
   }
   expect(keywordsByPrio[10]).toEqual(['low1', 'low2']);
   expect(keywordsByPrio[99]).toEqual(['high1', 'high2']);
@@ -38,10 +38,10 @@ test('TEST: contentful contentsWithKeywords', async () => {
   const postFaq1 = contentsWithKeywords.find(
     content => (content.callback as ContentCallback).id == TEST_POST_FAQ1_ID
   );
-  expect(postFaq1!.name).toEqual('POST_FAQ1');
-  expect(postFaq1!.shortText).toEqual('Encontrar mi pedido');
+  expect(postFaq1!.common.name).toEqual('POST_FAQ1');
+  expect(postFaq1!.common.shortText).toEqual('Encontrar mi pedido');
   expect(postFaq1!.priority).toEqual(100);
-  expect(postFaq1!.keywords).toIncludeSameMembers([
+  expect(postFaq1!.common.keywords).toIncludeSameMembers([
     'no encuentro mi pedido',
     'donde esta mi pedido'
   ]);
