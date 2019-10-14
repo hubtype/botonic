@@ -54,11 +54,11 @@ export abstract class TopContent extends Content {
  */
 export class CommonFields {
   readonly shortText?: string;
-  readonly keywords?: string[];
+  readonly keywords: string[];
   readonly searchableBy?: SearchableBy;
   /** Useful when contents need to be replicated according to some criteria. Eg. country, company,...
    */
-  readonly partitions?: string[];
+  readonly partitions: string[];
   readonly dateRange?: DateRangeContent;
   constructor(
     readonly name: string,
@@ -72,10 +72,13 @@ export class CommonFields {
   ) {
     if (opt) {
       this.shortText = opt.shortText;
-      this.keywords = opt.keywords;
+      this.keywords = opt.keywords || [];
       this.searchableBy = opt.searchableBy;
-      this.partitions = opt.partitions;
+      this.partitions = opt.partitions || [];
       this.dateRange = opt.dateRange;
+    } else {
+      this.keywords = [];
+      this.partitions = [];
     }
   }
 }
