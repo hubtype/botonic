@@ -15,9 +15,9 @@ export const webchatInitialState = {
   lastRoutePath: null,
   handoff: false,
   theme: {
+    headerTitle: 'Botonic',
     brandColor: '#0099ff',
-    textPlaceholder: 'Ask me something...',
-    title: 'Botonic'
+    textPlaceholder: 'Ask me something...'
   },
   error: {},
   devSettings: {},
