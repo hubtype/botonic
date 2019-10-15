@@ -11,7 +11,6 @@ import { CustomButton } from './custom-button'
 
 export const webchat = {
   theme: {
-    // GENERAL STYLE OF WEBCHAT
     style: {
       position: 'fixed',
       right: 20,
@@ -26,66 +25,81 @@ export const webchat = {
       backgroundImage:
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
     },
-    triggerButtonImage: launcherIcon,
-    brandColor: '#0000ff',
+    brand: {
+      color: '#0000ff',
+      image: R2D2Logo
+    },
+    triggerButton: {
+      image: launcherIcon,
+      style: {
+        width: '200px'
+      }
+      // custom: CustomTrigger
+    },
+    intro: {
+      image: IntroImage,
+      style: {
+        padding: 20
+      }
+      // custom: CustomIntro
+    },
+    header: {
+      title: 'My customized webchat',
+      subtitle: 'R2D2',
+      image: R2D2Logo
+      // custom: CustomHeader
+    },
     /*
      * brandImage will set both headerImage and botMessageImage with its current logo
      * you can overwrite these values by redefining them individually
      */
-    brandImage: R2D2Logo,
-    botMessageImage: C3POLogo, // set it to 'null' to hide the botMessageImage
-    // headerImage: R2D2Logo, // set it to 'null' to hide the headerImage
-    introImage: IntroImage,
-    introStyle: {
-      padding: 20
-    },
-    headerTitle: 'My customized webchat',
-    headerSubtitle: 'R2D2',
-    textPlaceholder: 'Type something...',
-    botMessageStyle: {
-      border: 'none',
-      color: 'blue',
-      borderRadius: '20px'
-    },
-    userMessageStyle: {
-      // border:'none',
-      color: 'white',
-      borderRadius: '10px'
-    },
-    alignReplies: 'center',
-    wrapReplies: 'wrap',
-    triggerButtonStyle: {
-      width: '200px'
+    message: {
+      bot: {
+        image: C3POLogo, // set it to 'null' to hide this image
+        style: {
+          border: 'none',
+          color: 'blue',
+          borderRadius: '20px'
+        }
+      },
+      user: {
+        style: {
+          // border:'none',
+          color: 'white',
+          borderRadius: '10px'
+        }
+      },
+      customTypes: [CalendarMessage]
     },
 
-    // CUSTOM MESSAGES
-    customMessageTypes: [CalendarMessage],
-
-    // REACT CUSTOMIZABLE COMPONENTS: Remember that these components will overwrite any style for the component they are replacing
-    /* Uncomment the other lines to see the rest of React components  */
-    // customTrigger: CustomTrigger
-    // customHeader: CustomHeader,
-    // customIntro: CustomIntro,
-    // customButton: CustomButton,
-    customReply: CustomReply
+    button: {
+      // custom: CustomButton
+    },
+    replies: {
+      align: 'right',
+      wrap: 'wrap',
+      custom: CustomReply
+    },
+    userInput: {
+      // disable: true,
+      placeholder: 'Type something...',
+      emojiPicker: true,
+      // These are the set of inputs which are not allowed.
+      blockInputs: [
+        {
+          match: [/ugly/i, /bastard/i],
+          message: 'We cannot tolerate these kind of words.'
+        }
+      ],
+      persistentMenu: [
+        { label: 'Help', payload: 'help' },
+        {
+          label: 'See docs',
+          url: 'https://docs.botonic.io'
+        }
+      ]
+    }
   },
-
-  // Comment below lines to disable the Persistent Menu
-  persistentMenu: [
-    { label: 'Help', payload: 'help' },
-    {
-      label: 'See docs',
-      url: 'https://docs.botonic.io'
-    }
-  ],
-
-  // These are the set of inputs which are not allowed.
-  blockInputs: [
-    {
-      match: [/ugly/i, /bastard/i],
-      message: 'We cannot tolerate these kind of words.'
-    }
-  ],
 
   // Webchat listeners
   onInit: app => {
