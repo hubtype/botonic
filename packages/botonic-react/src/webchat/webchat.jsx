@@ -450,24 +450,24 @@ export const Webchat = forwardRef((props, ref) => {
   const userInputDisabled = useTheme('userInput.disable')
   const inputUserArea = () => {
     return (
-      <div
-        style={{
-          minHeight: 52,
-          display: 'flex',
-          position: 'relative',
-          borderTop: '1px solid rgba(0, 0, 0, 0.4)'
-        }}
-      >
-        {emojiIsOpened && emoji()}
-        {persistentMenu && persistentMenuLogo()}
+      !userInputDisabled && (
         <div
           style={{
+            minHeight: 52,
             display: 'flex',
-            flex: '1 1 auto',
-            alignItems: 'center'
+            position: 'relative',
+            borderTop: '1px solid rgba(0, 0, 0, 0.4)'
           }}
         >
-          {!userInputDisabled && (
+          {emojiIsOpened && emoji()}
+          {persistentMenu && persistentMenuLogo()}
+          <div
+            style={{
+              display: 'flex',
+              flex: '1 1 auto',
+              alignItems: 'center'
+            }}
+          >
             <Textarea
               name='text'
               maxRows={4}
@@ -490,11 +490,11 @@ export const Webchat = forwardRef((props, ref) => {
                 paddingLeft: persistentMenu ? 0 : 10
               }}
             />
-          )}
+          </div>
+          {(useTheme('userInput.emojiPicker') || props.emojiPicker) &&
+            emojiPickerComponent()}
         </div>
-        {(useTheme('userInput.emojiPicker') || props.emojiPicker) &&
-          emojiPickerComponent()}
-      </div>
+      )
     )
   }
   const webchatWebview = () => (
