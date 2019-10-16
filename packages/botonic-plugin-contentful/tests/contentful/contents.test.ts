@@ -32,7 +32,7 @@ test('TEST: contentful contents no filter', async () => {
 test('TEST: contentful contentsWithKeywords', async () => {
   // act
   const results = await testContentful().contentsWithKeywords(
-    testContext([{ locale: 'es' }, {}, undefined])
+    testContext([{ locale: 'en' }, {}, undefined])
   );
 
   // assert

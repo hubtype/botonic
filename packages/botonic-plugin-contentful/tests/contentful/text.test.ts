@@ -39,7 +39,7 @@ test('TEST: contentful text with URL button with followup', async () => {
   // assert
   expect(text.text).toEqual('Cómo encontrar su “pedido”\n' + '...');
   expect(text.common.shortText).toEqual(
-    ctx && ctx.locale == 'en' ? 'Find my command' : 'Encontrar mi pedido'
+    ctx && ctx.locale == 'es' ? 'Encontrar mi pedido' : 'Find my command'
   );
   expect(text.buttons).toHaveLength(1);
   expect(text.buttons[0].text).toEqual('Acceda a su cuenta');

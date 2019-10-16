@@ -7,7 +7,7 @@ import 'jest-extended';
 
 test('TEST: contentful contentsWithKeywords', async () => {
   const results = await testContentful().contentsWithKeywords(
-    testContext([{ locale: 'es' }, {}, undefined])
+    testContext([{ locale: 'en' }, {}, undefined])
   );
 
   const queues: SearchResult[] = [];
@@ -39,7 +39,7 @@ test('TEST: contentful contentsWithKeywords', async () => {
     content => (content.callback as ContentCallback).id == TEST_POST_FAQ1_ID
   );
   expect(postFaq1!.common.name).toEqual('POST_FAQ1');
-  expect(postFaq1!.common.shortText).toEqual('Encontrar mi pedido');
+  expect(postFaq1!.common.shortText).toEqual('Find my command');
   expect(postFaq1!.priority).toEqual(100);
   expect(postFaq1!.common.keywords).toIncludeSameMembers([
     'no encuentro mi pedido',
