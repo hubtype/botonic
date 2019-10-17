@@ -21,6 +21,8 @@ export class WebchatApp {
     this.persistentMenu = persistentMenu
     this.blockInputs = blockInputs
     this.emojiPicker = emojiPicker
+    this.defaultDelay = defaultDelay
+    this.defaultTyping = defaultTyping
     this.onInit = onInit
     this.onOpen = onOpen
     this.onClose = onClose
@@ -125,6 +127,8 @@ export class WebchatApp {
     persistentMenu = persistentMenu || this.persistentMenu
     blockInputs = blockInputs || this.blockInputs
     emojiPicker = emojiPicker || this.emojiPicker
+    defaultDelay = defaultDelay || this.defaultDelay
+    defaultTyping = defaultTyping || this.defaultTyping
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -138,6 +142,8 @@ export class WebchatApp {
         persistentMenu={persistentMenu}
         blockInputs={blockInputs}
         emojiPicker={emojiPicker}
+        defaultDelay={defaultDelay}
+        defaultTyping={defaultTyping}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}

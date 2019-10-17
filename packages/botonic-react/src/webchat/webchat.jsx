@@ -340,7 +340,9 @@ export const Webchat = forwardRef((props, ref) => {
     setLocale: locale => props.getString(locale, webchatState.session),
     session: webchatState.session || {},
     params: webchatState.webviewParams || {},
-    closeWebview: closeWebview
+    closeWebview: closeWebview,
+    defaultDelay: props.defaultDelay || 0,
+    defaultTyping: props.defaultTyping || 0
   }
 
   useEffect(() => {
