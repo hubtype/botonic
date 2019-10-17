@@ -23,5 +23,6 @@ export const customWebchatProperties = {
   textPlaceholder: 'userInput.placeholder',
   emojiPicker: 'userInput.emojiPicker',
   persistentMenu: 'userInput.persistentMenu',
-  blockInputs: 'userInput.blockInputs'
+  blockInputs: 'userInput.blockInputs',
+  scrollbar: 'scrollbar'
 }
