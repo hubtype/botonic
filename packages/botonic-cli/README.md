@@ -19,7 +19,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.9.0-alpha.6 darwin-x64 node-v10.15.0
+@botonic/cli/0.9.0 darwin-x64 node-v10.15.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -35,6 +35,7 @@ USAGE
 * [`botonic new NAME [TEMPLATENAME]`](#botonic-new-name-templatename)
 * [`botonic serve`](#botonic-serve)
 * [`botonic test`](#botonic-test)
+* [`botonic train`](#botonic-train)
 
 ## `botonic deploy [BOT_NAME]`
 
@@ -57,7 +58,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.9.0-alpha.6/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/hubtype/botonic/blob/v0.9.0/src/commands/deploy.ts)_
 
 ## `botonic help [COMMAND]`
 
@@ -88,7 +89,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.9.0-alpha.6/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/hubtype/botonic/blob/v0.9.0/src/commands/login.ts)_
 
 ## `botonic logout`
 
@@ -102,7 +103,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.9.0-alpha.6/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/hubtype/botonic/blob/v0.9.0/src/commands/logout.ts)_
 
 ## `botonic new NAME [TEMPLATENAME]`
 
@@ -122,7 +123,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.9.0-alpha.6/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/hubtype/botonic/blob/v0.9.0/src/commands/new.ts)_
 
 ## `botonic serve`
 
@@ -137,7 +138,7 @@ EXAMPLE
   > Project is running at http://localhost:8080/
 ```
 
-_See code: [src/commands/serve.ts](https://github.com/hubtype/botonic/blob/v0.9.0-alpha.6/src/commands/serve.ts)_
+_See code: [src/commands/serve.ts](https://github.com/hubtype/botonic/blob/v0.9.0/src/commands/serve.ts)_
 
 ## `botonic test`
 
@@ -164,5 +165,23 @@ EXAMPLE
   Ran all test suites.
 ```
 
-_See code: [src/commands/test.ts](https://github.com/hubtype/botonic/blob/v0.9.0-alpha.6/src/commands/test.ts)_
+_See code: [src/commands/test.ts](https://github.com/hubtype/botonic/blob/v0.9.0/src/commands/test.ts)_
+
+## `botonic train`
+
+Serve your bot in your localhost
+
+```
+USAGE
+  $ botonic train
+
+OPTIONS
+  --lang=lang
+
+EXAMPLE
+  $ botonic train
+       TRAINING MODEL FOR {LANGUAGE}...
+```
+
+_See code: [src/commands/train.ts](https://github.com/hubtype/botonic/blob/v0.9.0/src/commands/train.ts)_
 <!-- commandsstop -->

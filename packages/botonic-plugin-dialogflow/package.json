@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dialogflow",
-  "version": "0.9.0-beta.1",
+  "version": "0.9.0",
   "main": "src/index.js",
   "dependencies": {
     "@babel/runtime": "^7.4.2",

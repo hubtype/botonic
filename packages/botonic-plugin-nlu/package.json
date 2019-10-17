@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-nlu",
-  "version": "0.1.0-alpha.5",
+  "version": "0.9.0",
   "main": "src/index.js",
   "scripts": {
     "build": "rm -rf dist && babel src -d dist",
