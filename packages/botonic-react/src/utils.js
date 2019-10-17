@@ -24,10 +24,14 @@ export function isProd() {
 
 
 export const staticAsset = path => {
-  let scriptBaseURL = document
-    .querySelector('script[src$="webchat.botonic.js"]')
-    .getAttribute('src')
-  let scriptName = scriptBaseURL.split('/').pop()
-  let basePath = scriptBaseURL.replace('/' + scriptName, '/')
-  return basePath + path
+  try {
+    let scriptBaseURL = document
+      .querySelector('script[src$="webchat.botonic.js"]')
+      .getAttribute('src')
+    let scriptName = scriptBaseURL.split('/').pop()
+    let basePath = scriptBaseURL.replace('/' + scriptName, '/')
+    return basePath + path
+  } catch (e) {
+    return path
+  }
 }
