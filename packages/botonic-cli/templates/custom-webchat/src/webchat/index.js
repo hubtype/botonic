@@ -77,8 +77,8 @@ export const webchat = {
     },
     replies: {
       align: 'right',
-      wrap: 'wrap',
-      custom: CustomReply
+      wrap: 'nowrap'
+      // custom: CustomReply
     },
     userInput: {
       // disable: true,
@@ -98,6 +98,23 @@ export const webchat = {
           url: 'https://docs.botonic.io'
         }
       ]
+    },
+    scrollbar: {
+      disabled: false,
+      autoHide: true,
+      thumb: {
+        opacity: 1,
+        color: 'yellow',
+        bgcolor:
+          'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);',
+        border: '20px'
+      },
+      track: {
+        color: 'black',
+        bgcolor:
+          'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);',
+        border: '20px'
+      }
     }
   },
 
