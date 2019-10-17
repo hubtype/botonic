@@ -110,7 +110,7 @@ export class WebchatApp {
     this.webchatRef.current.toggleWebchat()
   }
 
-  render(dest, optionsAtRuntime = {}) {
+  getComponent(optionsAtRuntime = {}) {
     let {
       theme = {},
       persistentMenu,
@@ -134,7 +134,7 @@ export class WebchatApp {
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
     this.appId = appId || this.appId
-    render(
+    return (
       <Webchat
         ref={this.webchatRef}
         {...webchatOptions}
@@ -149,8 +149,11 @@ export class WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
-      />,
-      dest
+      />
     )
+  }
+
+  render(dest, optionsAtRuntime = {}) {
+    render(this.getComponent(optionsAtRuntime), dest)
   }
 }
