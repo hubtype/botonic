@@ -1,17 +1,19 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
+import { StyledSimpleBar } from './scrollbar'
 import { staticAsset } from '../utils'
 
 export const WebchatMessageList = props => {
   const { webchatState, useTheme } = useContext(WebchatContext)
-  const { theme } = webchatState
   const CustomIntro = useTheme('intro.custom')
   const introImage = useTheme('intro.image')
   const introStyle = useTheme('intro.style')
-  const DefaultIntro = (
+  const scrollbarOptions = useTheme('scrollbar')
+  const DefaultIntro = introImage && (
     <img
       style={{
         maxHeight: '50%',
+        maxWidth: '100%',
         ...(introStyle || {})
       }}
       src={introImage && staticAsset(introImage)}
@@ -19,12 +21,15 @@ export const WebchatMessageList = props => {
   )
 
   return (
-    <div
+    <StyledSimpleBar
+      scrollbar={scrollbarOptions}
+      data-simplebar-auto-hide={scrollbarOptions.autoHide || false}
       style={{
         ...(props.style || {}),
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        overflowX: 'hidden'
       }}
     >
       {CustomIntro ? <CustomIntro /> : DefaultIntro}
@@ -44,6 +49,6 @@ export const WebchatMessageList = props => {
         </div>
       ))}
       {props.children}
-    </div>
+    </StyledSimpleBar>
   )
 }
