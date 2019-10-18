@@ -4,6 +4,7 @@ import * as cms from '../../src';
 
 export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip';
 const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt';
+const TEST_FBK_MSG = '1U7XKJccDSsI3mP0yX04Mj';
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O';
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D';
 const TEST_TEXT_URL_BUTTON = '2N9HQ960BdUVlDDQjpTA6I';
@@ -80,14 +81,22 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
   expect((text.common.followUp as cms.Carousel).elements).toHaveLength(3);
 });
 
-test('TEST: contentful text without buttons with image followup', async () => {
+test('TEST: contentful text without buttons with image followup with text followup', async () => {
   const sut = testContentful();
 
   // act
   const text = await sut.text(TEST_TEXT_IMAGE_FOLLOWUP, testContext());
 
   // assert
-  expectImgUrlIs((text.common.followUp as cms.Image).imgUrl, 'red.jpg');
+  const followUp1 = text.common.followUp as cms.Image;
+  expect(followUp1).toBeInstanceOf(cms.Image);
+  expectImgUrlIs(followUp1.imgUrl, 'red.jpg');
+
+  const followUp2 = followUp1.common.followUp as cms.Text;
+  expect(followUp2).toBeInstanceOf(cms.Text);
+
+  const feedback = await sut.text(TEST_FBK_MSG, testContext());
+  expect(followUp2).toEqual(feedback);
 });
 
 test('TEST: contentful text with URL button', async () => {

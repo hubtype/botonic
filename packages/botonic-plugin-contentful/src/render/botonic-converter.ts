@@ -108,7 +108,14 @@ export class BotonicMsgConverter {
     content: TopContent
   ): BotonicMsgs {
     if (content.common.followUp) {
-      return [contentMsgs, this.followUp(content.common.followUp)];
+      const followUp = this.followUp(content.common.followUp);
+      const followUps = Array.isArray(followUp) ? followUp : [followUp];
+      if (Array.isArray(contentMsgs)) {
+        contentMsgs.push(...followUps);
+      } else {
+        contentMsgs = [contentMsgs, ...followUps];
+      }
+      return contentMsgs;
     }
     return contentMsgs;
   }
