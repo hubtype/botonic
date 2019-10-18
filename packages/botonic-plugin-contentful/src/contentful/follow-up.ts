@@ -50,8 +50,11 @@ export class FollowUpDelivery {
       case cms.ModelType.TEXT:
         return this.text.fromEntry(followUp as Entry<TextFields>, context);
       case cms.ModelType.IMAGE:
-        return Promise.resolve(
-          ImageDelivery.fromEntry(followUp as Entry<ImageFields>)
+        return this.image.fromEntry(followUp as Entry<ImageFields>, context);
+      case cms.ModelType.STARTUP:
+        return this.startUp.fromEntry(
+          followUp as Entry<StartUpFields>,
+          context
         );
       default:
         throw new Error(`Unexpected followUp type ${followUp.sys.type}`);
