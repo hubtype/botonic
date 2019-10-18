@@ -160,3 +160,5 @@ export function commonFieldsFromEntry(
     dateRange
   });
 }
+
+export type FollowUpFields = CommonEntryFields;

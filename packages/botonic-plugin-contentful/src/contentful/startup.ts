@@ -33,7 +33,7 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
     const buttons = await Promise.all(promises);
     const img = fields.pic ? DeliveryApi.urlFromAsset(fields.pic) : undefined;
     return new cms.StartUp(
-      commonFieldsFromEntry(entry),
+      await this.getFollowUp().commonFields(entry, context),
       img,
       fields.text,
       buttons
