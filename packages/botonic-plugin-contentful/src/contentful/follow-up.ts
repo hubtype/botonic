@@ -29,6 +29,7 @@ export class DeliveryWithFollowUp extends ContentDelivery {
 
 export class FollowUpDelivery {
   constructor(
+    private readonly delivery: DeliveryApi,
     private readonly carousel: CarouselDelivery,
     private readonly text: TextDelivery,
     private readonly image: ImageDelivery,
@@ -64,7 +65,14 @@ export class FollowUpDelivery {
   async commonFields(entry: Entry<CommonEntryFields>, context: cms.Context) {
     const common = commonFieldsFromEntry(entry);
     if (entry.fields.followup) {
-      common.followUp = await this.fromEntry(entry.fields.followup, context);
+      const followUp = entry.fields.followup.sys.contentType
+        ? entry.fields.followup
+        : await this.delivery.getEntry<FollowUpFields>(
+            entry.fields.followup.sys.id,
+            context
+          );
+
+      common.followUp = await this.fromEntry(followUp, context);
       return common;
     }
     return common;
