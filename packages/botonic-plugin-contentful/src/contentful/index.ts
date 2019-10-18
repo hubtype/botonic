@@ -48,6 +48,7 @@ export default class Contentful implements cms.CMS {
     this._asset = new AssetDelivery(delivery);
     this._queue = new QueueDelivery(delivery);
     const followUp = new FollowUpDelivery(
+      this._delivery,
       this._carousel,
       this._text,
       this._image,
