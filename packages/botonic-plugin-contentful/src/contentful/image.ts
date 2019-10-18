@@ -1,14 +1,10 @@
 import { Context } from '../cms';
 import * as cms from '../cms';
-import { ContentDelivery } from './content-delivery';
-import {
-  CommonEntryFields,
-  commonFieldsFromEntry,
-  DeliveryApi
-} from './delivery-api';
+import { CommonEntryFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
+import { DeliveryWithFollowUp } from './follow-up';
 
-export class ImageDelivery extends ContentDelivery {
+export class ImageDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi) {
     super(cms.ModelType.IMAGE, delivery);
   }
@@ -18,10 +14,13 @@ export class ImageDelivery extends ContentDelivery {
       id,
       context
     );
-    return ImageDelivery.fromEntry(entry);
+    return this.fromEntry(entry, context);
   }
 
-  static fromEntry(entry: contentful.Entry<ImageFields>): cms.Image {
+  async fromEntry(
+    entry: contentful.Entry<ImageFields>,
+    context: cms.Context
+  ): Promise<cms.Image> {
     return new cms.Image(
       commonFieldsFromEntry(entry),
       DeliveryApi.urlFromAsset(entry.fields.image)

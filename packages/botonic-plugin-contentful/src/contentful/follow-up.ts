@@ -1,11 +1,17 @@
-import { ModelType } from '../cms';
 import * as cms from '../cms';
+import { ModelType } from '../cms';
 import { Entry } from 'contentful';
 import { ContentDelivery } from './content-delivery';
-import { TextFields, TextDelivery } from './text';
-import { CarouselDelivery, CarouselFields } from './carousel';
+import { TextDelivery, TextFields } from './text';
+import { CarouselDelivery } from './carousel';
 import { ImageDelivery, ImageFields } from './image';
-import { DeliveryApi } from './delivery-api';
+import {
+  CommonEntryFields,
+  commonFieldsFromEntry,
+  DeliveryApi,
+  FollowUpFields
+} from './delivery-api';
+import { StartUpDelivery, StartUpFields } from './startup';
 
 export class DeliveryWithFollowUp extends ContentDelivery {
   followUp: FollowUpDelivery | undefined;
@@ -14,18 +20,23 @@ export class DeliveryWithFollowUp extends ContentDelivery {
   setFollowUp(followUp: FollowUpDelivery) {
     this.followUp = followUp;
   }
-}
 
-type FollowUpFields = TextFields | CarouselFields | ImageFields;
+  getFollowUp(): FollowUpDelivery {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.followUp!;
+  }
+}
 
 export class FollowUpDelivery {
   constructor(
     private readonly carousel: CarouselDelivery,
-    private readonly text: TextDelivery
+    private readonly text: TextDelivery,
+    private readonly image: ImageDelivery,
+    private readonly startUp: StartUpDelivery
   ) {}
 
   // TODO we should detect cycles to avoid infinite recursion
-  fromFields(
+  fromEntry(
     followUp: Entry<FollowUpFields> | undefined,
     context: cms.Context
   ): Promise<cms.FollowUp | undefined> {
@@ -45,5 +56,14 @@ export class FollowUpDelivery {
       default:
         throw new Error(`Unexpected followUp type ${followUp.sys.type}`);
     }
+  }
+
+  async commonFields(entry: Entry<CommonEntryFields>, context: cms.Context) {
+    const common = commonFieldsFromEntry(entry);
+    if (entry.fields.followup) {
+      common.followUp = await this.fromEntry(entry.fields.followup, context);
+      return common;
+    }
+    return common;
   }
 }
