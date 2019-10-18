@@ -1,5 +1,5 @@
 import * as cms from '../cms';
-import { ButtonStyle } from '../cms';
+import { ButtonStyle, TopContent } from '../cms';
 
 export class RenderOptions {
   followUpDelaySeconds = 4;
@@ -13,6 +13,11 @@ export interface BotonicMsg {
   data: any;
 }
 
+// https://stackoverflow.com/a/45999529/145289
+export type BotonicMsgs = BotonicMsg | BotonicMsgArray;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface BotonicMsgArray extends Array<BotonicMsgs> {}
+
 export interface BotonicText extends BotonicMsg {
   buttons: any;
 }
@@ -20,14 +25,15 @@ export interface BotonicText extends BotonicMsg {
 export class BotonicMsgConverter {
   constructor(readonly options = new RenderOptions()) {}
 
-  carousel(carousel: cms.Carousel, delayS: number = 0): BotonicMsg {
+  carousel(carousel: cms.Carousel, delayS: number = 0): BotonicMsgs {
+    // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
     return {
       type: 'carousel',
       delay: delayS,
       data: {
         elements: carousel.elements.map(e => this.element(e))
       }
-    };
+    } as BotonicMsg;
   }
 
   private element(cmsElement: cms.Element): any {
@@ -59,7 +65,7 @@ export class BotonicMsgConverter {
     });
   }
 
-  text(text: cms.Text, delayS: number = 0): BotonicMsg | BotonicMsg[] {
+  text(text: cms.Text, delayS: number = 0): BotonicMsgs {
     const msg: any = {
       type: 'text',
       delay: delayS,
@@ -71,13 +77,10 @@ export class BotonicMsgConverter {
     } else {
       msg['buttons'] = buttons;
     }
-    if (text.followUp) {
-      return [msg, this.followUp(text.followUp)];
-    }
-    return msg;
+    return this.appendFollowUp(msg, text);
   }
 
-  startUp(startUp: cms.StartUp): BotonicMsg[] {
+  startUp(startUp: cms.StartUp): BotonicMsgs {
     const img: BotonicMsg = {
       type: 'image',
       data: { image: startUp.imgUrl }
@@ -90,8 +93,8 @@ export class BotonicMsgConverter {
     return [img, text];
   }
 
-  image(img: cms.Image): BotonicMsg {
-    return {
+  image(img: cms.Image): BotonicMsgs {
+    const msg: BotonicMsg = {
       type: 'image',
       data: {
         image: img.imgUrl
@@ -99,7 +102,17 @@ export class BotonicMsgConverter {
     };
   }
 
-  private followUp(followUp: cms.FollowUp): BotonicMsg | BotonicMsg[] {
+  private appendFollowUp(
+    contentMsgs: BotonicMsgs,
+    content: TopContent
+  ): BotonicMsgs {
+    if (content.common.followUp) {
+      return [contentMsgs, this.followUp(content.common.followUp)];
+    }
+    return contentMsgs;
+  }
+
+  private followUp(followUp: cms.FollowUp): BotonicMsgs {
     if (followUp instanceof cms.Text) {
       // give user time to read the initial text
       return this.text(followUp, this.options.followUpDelaySeconds);

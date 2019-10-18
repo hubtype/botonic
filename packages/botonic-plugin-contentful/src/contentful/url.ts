@@ -1,14 +1,8 @@
 import { Context } from '../cms';
-import { CarouselFields } from './carousel';
 import { DeliveryWithFollowUp } from './follow-up';
-import { TextFields } from './text';
 import * as cms from '../cms';
 import * as contentful from 'contentful';
-import {
-  commonFieldsFromEntry,
-  CommonEntryFields,
-  DeliveryApi
-} from './delivery-api';
+import { CommonEntryFields, DeliveryApi } from './delivery-api';
 
 export class UrlDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi) {
@@ -21,15 +15,13 @@ export class UrlDelivery extends DeliveryWithFollowUp {
   }
 
   async fromEntry(entry: contentful.Entry<UrlFields>, context: Context) {
-    const fields = entry.fields;
-    const followUp = fields.followup
-      ? await this.followUp!.fromFields(fields.followup, context)
-      : undefined;
-    return new cms.Url(commonFieldsFromEntry(entry), fields.url, followUp);
+    return new cms.Url(
+      await this.getFollowUp().commonFields(entry, context),
+      entry.fields.url
+    );
   }
 }
 
 export interface UrlFields extends CommonEntryFields {
   url: string;
-  followup?: contentful.Entry<TextFields | CarouselFields>;
 }

@@ -56,11 +56,11 @@ export class TextBuilder extends ModelBuilder {
     return new Text(
       new CommonFields(this.name, {
         shortText: this.shortText,
-        keywords: this.keywords
+        keywords: this.keywords,
+        followUp: this.followUp
       }),
       this.text,
       this.buttons,
-      this.followUp,
       this.buttonsStyle
     );
   }

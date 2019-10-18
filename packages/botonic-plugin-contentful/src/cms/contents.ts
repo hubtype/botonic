@@ -60,6 +60,7 @@ export class CommonFields {
    */
   readonly partitions: string[];
   readonly dateRange?: DateRangeContent;
+  followUp?: FollowUp;
   constructor(
     readonly name: string,
     opt?: {
@@ -68,6 +69,7 @@ export class CommonFields {
       searchableBy?: SearchableBy;
       partitions?: string[];
       dateRange?: DateRangeContent;
+      followUp?: FollowUp;
     }
   ) {
     if (opt) {
@@ -76,6 +78,7 @@ export class CommonFields {
       this.searchableBy = opt.searchableBy;
       this.partitions = opt.partitions || [];
       this.dateRange = opt.dateRange;
+      this.followUp = opt.followUp;
     } else {
       this.keywords = [];
       this.partitions = [];
@@ -161,7 +164,6 @@ export class Text extends TopContent {
     // Full text
     readonly text: string,
     readonly buttons: Button[],
-    readonly followUp?: FollowUp,
     readonly buttonsStyle = ButtonStyle.BUTTON
   ) {
     super(common);
@@ -185,7 +187,8 @@ export class Text extends TopContent {
 
   cloneWithFollowUp(newFollowUp: FollowUp): Text {
     const clone = Object.create(this);
-    clone.followUp = newFollowUp;
+    clone.common = Object.create(clone.common);
+    clone.common.followUp = newFollowUp;
     return clone as Text;
   }
 }
@@ -193,15 +196,7 @@ export class Text extends TopContent {
 export type Chitchat = Text;
 
 export class Url extends TopContent {
-  /**
-   *
-   * @param followup so far not defined in Contentful model, since URL's are not rendered anyway
-   */
-  constructor(
-    readonly common: CommonFields,
-    readonly url: string,
-    readonly followup?: FollowUp
-  ) {
+  constructor(readonly common: CommonFields, readonly url: string) {
     super(common);
   }
 }
