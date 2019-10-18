@@ -47,9 +47,14 @@ export default class Contentful implements cms.CMS {
     this._image = new ImageDelivery(delivery);
     this._asset = new AssetDelivery(delivery);
     this._queue = new QueueDelivery(delivery);
-    const followUp = new FollowUpDelivery(this._carousel, this._text);
-    [this._text, this._url, this._carousel].forEach(d =>
-      d.setFollowUp(followUp)
+    const followUp = new FollowUpDelivery(
+      this._carousel,
+      this._text,
+      this._image,
+      this._startUp
+    );
+    [this._text, this._url, this._carousel, this._image, this._startUp].forEach(
+      d => d.setFollowUp(followUp)
     );
     this._keywords = new KeywordsDelivery(delivery);
     this._schedule = new ScheduleDelivery(delivery);
@@ -112,7 +117,7 @@ export default class Contentful implements cms.CMS {
       case ModelType.TEXT:
         return this._text.fromEntry(entry, context);
       case ModelType.IMAGE:
-        return ImageDelivery.fromEntry(entry);
+        return this._image.fromEntry(entry, context);
       case ModelType.URL:
         return this._url.fromEntry(entry, context);
       case ModelType.STARTUP:

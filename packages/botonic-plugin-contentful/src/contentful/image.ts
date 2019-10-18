@@ -22,7 +22,7 @@ export class ImageDelivery extends DeliveryWithFollowUp {
     context: cms.Context
   ): Promise<cms.Image> {
     return new cms.Image(
-      commonFieldsFromEntry(entry),
+      await this.getFollowUp().commonFields(entry, context),
       DeliveryApi.urlFromAsset(entry.fields.image)
     );
   }

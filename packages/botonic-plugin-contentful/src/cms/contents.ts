@@ -229,4 +229,4 @@ export class ScheduleContent extends TopContent {
 /**
  * A {@link Content} which is automatically displayed after another one
  */
-export type FollowUp = Text | Carousel | Image;
+export type FollowUp = Text | Carousel | Image | StartUp;

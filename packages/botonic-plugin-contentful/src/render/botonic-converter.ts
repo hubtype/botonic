@@ -90,7 +90,7 @@ export class BotonicMsgConverter {
       data: { text: startUp.text },
       buttons: this.convertButtons(startUp.buttons, ButtonStyle.BUTTON)
     };
-    return [img, text];
+    return this.appendFollowUp([img, text], startUp);
   }
 
   image(img: cms.Image): BotonicMsgs {
@@ -100,6 +100,7 @@ export class BotonicMsgConverter {
         image: img.imgUrl
       }
     };
+    return this.appendFollowUp(msg, img);
   }
 
   private appendFollowUp(
@@ -121,6 +122,8 @@ export class BotonicMsgConverter {
       return this.carousel(followUp, 2);
     } else if (followUp instanceof cms.Image) {
       return this.image(followUp);
+    } else if (followUp instanceof cms.StartUp) {
+      return this.startUp(followUp);
     } else {
       throw new Error('Unexpected followUp type ' + typeof followUp);
     }
