@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
-import { StyledSimpleBar } from './scrollbar'
+import { StyledScrollbar } from './styled-scrollbar'
 import { staticAsset } from '../utils'
 
 export const WebchatMessageList = props => {
@@ -21,7 +21,7 @@ export const WebchatMessageList = props => {
   )
 
   return (
-    <StyledSimpleBar
+    <StyledScrollbar
       scrollbar={scrollbarOptions}
       data-simplebar-auto-hide={scrollbarOptions.autoHide || false}
       style={{
@@ -49,6 +49,6 @@ export const WebchatMessageList = props => {
         </div>
       ))}
       {props.children}
-    </StyledSimpleBar>
+    </StyledScrollbar>
   )
 }

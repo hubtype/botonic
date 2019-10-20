@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
-import { StyledSimpleBar } from './scrollbar'
+import { StyledScrollbar } from './styled-scrollbar'
 
 const options = {
   left: 'flex-start',
@@ -16,7 +16,7 @@ export const WebchatReplies = props => {
   if (props.wrap == 'nowrap') justify = 'flex-start'
 
   return (
-    <StyledSimpleBar
+    <StyledScrollbar
       scrollbar={scrollbarOptions}
       data-simplebar-auto-hide={
         (scrollbarOptions && scrollbarOptions.autoHide) || false
@@ -26,7 +26,6 @@ export const WebchatReplies = props => {
         style={{
           display: 'flex',
           ...(props.style || {}),
-          // overflowX: 'auto',
           textAlign: 'center',
           justifyContent: justify,
           flexWrap: props.wrap || 'wrap',
@@ -36,11 +35,14 @@ export const WebchatReplies = props => {
         }}
       >
         {webchatState.replies.map((r, i) => (
-          <div key={i} style={{ display: 'inline-block', margin: 3 }}>
+          <div
+            key={i}
+            style={{ flex: 'none', display: 'inline-block', margin: 3 }}
+          >
             {r}
           </div>
         ))}
       </div>
-    </StyledSimpleBar>
+    </StyledScrollbar>
   )
 }

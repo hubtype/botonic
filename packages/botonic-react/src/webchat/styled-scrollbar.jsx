@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.css'
 
-export const StyledSimpleBar = styled(SimpleBar)`
+export const StyledScrollbar = styled(SimpleBar)`
   & .simplebar-scrollbar::before {
     background-color: ${({ scrollbar }) =>
       scrollbar && scrollbar.thumb && scrollbar.thumb.color

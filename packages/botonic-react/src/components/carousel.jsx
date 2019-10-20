@@ -1,6 +1,7 @@
-import React from 'react'
-
+import React, { useContext } from 'react'
 import { Message } from './message'
+import { WebchatContext } from '../contexts'
+import { StyledScrollbar } from '../webchat/styled-scrollbar'
 import { isBrowser, isNode } from '@botonic/core'
 
 const serialize = carouselProps => {
@@ -13,9 +14,16 @@ const serialize = carouselProps => {
 }
 
 export const Carousel = props => {
+  const { useTheme } = useContext(WebchatContext)
   let content = props.children
+  const scrollbarOptions = useTheme('scrollbar')
   if (isBrowser()) {
     content = (
+      // <StyledScrollbar
+      //   scrollbar={scrollbarOptions}
+      //   data-simplebar-auto-hide={false}
+      //   style={{ display: 'flex', width: '100%' }}
+      // >
       <div
         style={{
           paddingTop: 10,
@@ -36,6 +44,7 @@ export const Carousel = props => {
           {props.children}
         </div>
       </div>
+      // </StyledScrollbar>
     )
   }
   return (

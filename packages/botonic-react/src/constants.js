@@ -1,4 +1,4 @@
-export const customWebchatProperties = {
+export const CUSTOM_WEBCHAT_PROPERTIES = {
   brandColor: 'brand.color',
   brandImage: 'brand.image',
   headerTitle: 'header.title',
@@ -22,7 +22,15 @@ export const customWebchatProperties = {
   disableUserInput: 'userInput.disable',
   textPlaceholder: 'userInput.placeholder',
   emojiPicker: 'userInput.emojiPicker',
+  enableAttachments: 'userInput.enableAttachments',
   persistentMenu: 'userInput.persistentMenu',
   blockInputs: 'userInput.blockInputs',
   scrollbar: 'scrollbar'
+}
+
+export const MIME_WHITELIST = {
+  document: ['application/pdf'],
+  image: ['image/jpeg', 'image/png'],
+  video: ['video/mp4'],
+  audio: ['audio/mpeg', 'audio/mp3']
 }
