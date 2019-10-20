@@ -11,7 +11,7 @@ import uuid from 'uuid/v4'
 import UAParser from 'ua-parser-js'
 import { params2queryString } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
-import { Text } from '../components/text'
+import { Text, Document, Image, Video, Audio } from '../components'
 import { TypingIndicator } from '../components/typingIndicator'
 import { Handoff } from '../components/handoff'
 import { useWebchat, useTyping, usePrevious } from './hooks'
@@ -26,8 +26,15 @@ import Logo from '../assets/botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
 import LogoEmoji from '../assets/emojiButton.svg'
+import AttachmentIcon from '../assets/attachment-icon.svg'
 import { Button } from '../components/button'
-import { customWebchatProperties } from '../constants'
+import { CUSTOM_WEBCHAT_PROPERTIES, MIME_WHITELIST } from '../constants'
+
+const getAttachmentType = fileType => {
+  return Object.entries(MIME_WHITELIST)
+    .filter(([k, v]) => v.includes(fileType))
+    .map(([k, v]) => k)[0]
+}
 
 const createUser = () => {
   let parser = new UAParser()
@@ -66,13 +73,23 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [menuIsOpened, setMenuIsOpened] = useState(false)
   const [emojiIsOpened, setEmojiIsOpened] = useState(false)
+  const [attachment, setAttachment] = useState({})
 
   const useTheme = property => {
-    for (let [k, v] of Object.entries(customWebchatProperties)) {
+    for (let [k, v] of Object.entries(CUSTOM_WEBCHAT_PROPERTIES)) {
       if (v == property) {
         return getProperty(theme, v) || getProperty(theme, k)
       }
     }
+  }
+
+  const attachmentHandler = event => {
+    textArea.current.value += event.target.files[0].name
+    textArea.current.focus()
+    setAttachment({
+      file: event.target.files[0], // TODO: Be able to attach more files
+      loaded: 0
+    })
   }
 
   // Load initial state from localStorage
@@ -141,6 +158,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     updateTheme({ ...theme, ...props.theme })
   }, [props.theme])
+
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
@@ -166,6 +184,7 @@ export const Webchat = forwardRef((props, ref) => {
     setEmojiIsOpened(false)
     menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
   }
+
   const handleEmoji = () => {
     emojiIsOpened ? setEmojiIsOpened(false) : setEmojiIsOpened(true)
   }
@@ -188,6 +207,34 @@ export const Webchat = forwardRef((props, ref) => {
       </div>
     )
   }
+  const AttachmentComponent = () => (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: 15
+      }}
+    >
+      <label htmlFor='attachment'>
+        <img
+          style={{
+            cursor: 'pointer',
+            width: 20,
+            height: 20
+          }}
+          src={staticAsset(AttachmentIcon)}
+        />
+      </label>
+      <input
+        type='file'
+        name='file'
+        id='attachment'
+        style={{ display: 'none' }}
+        // accept='image/png, image/jpeg' // TODO: Accept types from whitelist
+        onChange={attachmentHandler}
+      ></input>
+    </div>
+  )
 
   const persistentMenu =
     useTheme('userInput.persistentMenu') || props.persistentMenu
@@ -264,6 +311,26 @@ export const Webchat = forwardRef((props, ref) => {
         </Text>
       )
     }
+    if (input.type == 'image') {
+      inputMessage = <Image id={input.id} src={input.data} from='user' />
+    }
+    if (input.type == 'audio') {
+      inputMessage = <Audio id={input.id} src={input.data} from='user' />
+    }
+    if (input.type == 'video') {
+      inputMessage = (
+        <Video
+          id={input.id}
+          src={'https://png.pngtree.com/svg/20160127/video_160375.png'}
+          from='user'
+        >
+          {input.data}
+        </Video>
+      )
+    }
+    if (input.type == 'document') {
+      inputMessage = <Document id={input.id} src={input.data} from='user' />
+    }
     if (inputMessage) {
       addMessageComponent(inputMessage)
     }
@@ -278,6 +345,7 @@ export const Webchat = forwardRef((props, ref) => {
     updateReplies(false)
     setMenuIsOpened(false)
     setEmojiIsOpened(false)
+    setAttachment({})
   }
 
   /* This is the public API this component exposes to its parents
@@ -344,10 +412,33 @@ export const Webchat = forwardRef((props, ref) => {
     await sendInput(input)
   }
 
+  const toBase64 = file =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = error => reject(error)
+    })
+
+  const sendAttachment = async attachment => {
+    // TODO: Preserve filename
+    let attachmentType = getAttachmentType(attachment.file.type)
+    if (!attachmentType) return
+    let input = {
+      type: attachmentType,
+      data: await toBase64(attachment.file)
+    }
+    await sendInput(input)
+  }
+
   const onKeyDown = event => {
     if (event.keyCode == 13 && event.shiftKey == false) {
       event.preventDefault()
-      sendText(textArea.current.value)
+      if (Object.keys(attachment).length != 0) {
+        sendAttachment(attachment)
+      } else {
+        sendText(textArea.current.value)
+      }
       textArea.current.value = ''
     }
   }
@@ -493,10 +584,13 @@ export const Webchat = forwardRef((props, ref) => {
           </div>
           {(useTheme('userInput.emojiPicker') || props.emojiPicker) &&
             emojiPickerComponent()}
+          {(useTheme('userInput.enableAttachments') ||
+            props.enableAttachments) && <AttachmentComponent />}
         </div>
       )
     )
   }
+
   const webchatWebview = () => (
     <RequestContext.Provider value={webviewRequestContext}>
       <WebviewContainer
@@ -512,6 +606,7 @@ export const Webchat = forwardRef((props, ref) => {
     <WebchatContext.Provider
       value={{
         sendText,
+        sendAttachment,
         sendPayload,
         openWebview,
         resolveCase,
