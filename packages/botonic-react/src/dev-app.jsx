@@ -11,6 +11,7 @@ export class DevApp extends WebchatApp {
     persistentMenu,
     blockInputs,
     emojiPicker,
+    enableAttachments,
     onInit,
     onOpen,
     onClose,
@@ -22,6 +23,7 @@ export class DevApp extends WebchatApp {
       persistentMenu,
       blockInputs,
       emojiPicker,
+      enableAttachments,
       onInit,
       onOpen,
       onClose,
@@ -38,6 +40,7 @@ export class DevApp extends WebchatApp {
       persistentMenu,
       blockInputs,
       emojiPicker,
+      enableAttachments,
       onInit,
       onOpen,
       onClose,
@@ -48,6 +51,7 @@ export class DevApp extends WebchatApp {
     persistentMenu = persistentMenu || this.persistentMenu
     blockInputs = blockInputs || this.blockInputs
     emojiPicker = emojiPicker || this.emojiPicker
+    enableAttachments = enableAttachments || this.enableAttachments
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -60,6 +64,7 @@ export class DevApp extends WebchatApp {
         persistentMenu={persistentMenu}
         blockInputs={blockInputs}
         emojiPicker={emojiPicker}
+        enableAttachments={enableAttachments}
         getString={(stringId, session) => this.bot.getString(stringId, session)}
         setLocale={(locale, session) => this.bot.setLocale(locale, session)}
         onInit={(...args) => this.onInitWebchat(...args)}

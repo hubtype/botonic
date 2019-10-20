@@ -13,6 +13,7 @@ export const RequestContext = React.createContext({
 
 export const WebchatContext = React.createContext({
   sendText: text => '',
+  sendAttachment: attachment => '',
   sendPayload: payload => '',
   setReplies: replies => '',
   openWebview: webviewComponent => '',
