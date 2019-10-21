@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect } from 'react'
 import { useWebchat } from './hooks'
 import { Webchat } from './webchat'
-import { SessionView } from './sessionView'
+import { SessionView } from './session-view'
 
 export const WebchatDev = forwardRef((props, ref) => {
   const webchatHooks = useWebchat()

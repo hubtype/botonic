@@ -19,37 +19,37 @@ export const Carousel = props => {
   const scrollbarOptions = useTheme('scrollbar')
   if (isBrowser()) {
     content = (
-      // <StyledScrollbar
-      //   scrollbar={scrollbarOptions}
-      //   data-simplebar-auto-hide={false}
-      //   style={{ display: 'flex', width: '100%' }}
-      // >
-      <div
-        style={{
-          paddingTop: 10,
-          marginLeft: -13,
-          display: 'flex',
-          flexDirection: 'row',
-          overflowX: 'auto',
-          maxWidth: '100%'
-        }}
+      <StyledScrollbar
+        scrollbar={scrollbarOptions}
+        data-simplebar-auto-hide={
+          (scrollbarOptions && scrollbarOptions.autoHide) || true
+        }
       >
         <div
           style={{
+            paddingTop: 10,
+            marginLeft: -13,
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'start'
+            maxWidth: '100%'
           }}
         >
-          {props.children}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'start'
+            }}
+          >
+            {props.children}
+          </div>
         </div>
-      </div>
-      // </StyledScrollbar>
+      </StyledScrollbar>
     )
   }
   return (
     <Message
-      style={{ maxWidth: '85%', padding: 0, backgroundColor: 'transparent' }}
+      style={{ width: '85%', padding: 0, backgroundColor: 'transparent' }}
       blob={false}
       json={serialize(props)}
       type='carousel'
