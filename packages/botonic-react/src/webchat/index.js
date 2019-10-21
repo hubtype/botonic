@@ -1,2 +1,2 @@
 export { Webchat } from './webchat'
-export { WebchatDev } from './webchatDev'
+export { WebchatDev } from './webchat-dev'
