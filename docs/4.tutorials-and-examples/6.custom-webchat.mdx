@@ -45,7 +45,10 @@ Let's see how we can use these objects:
 
 These are the available styles that Botonic allows you to modify:
 ### General Styling
-- **style**: the main characteristics of webchat such as its size, its background color...
+* **style**: the main characteristics of webchat such as its size, its background color...
+- **webviewStyle**: the main characteristics of your webviews such as its size, its background color...
+* **defaultTyping**: global configuration to define the time length (in seconds) that the typing indicator must be showed for every message.
+- **defaultDelay**: global configuration to define the time length (in seconds) before a message is processed.
 * **triggerButtonImage**: launcher icon for toggling the webchat. Can be defined also in `triggerButton.image`.
 - **triggerButtonStyle**: launcher icon styles. Can be defined also in `triggerButton.style`.
 * **brandColor**: the main color palette of the webchat widget. Can be defined also in `brand.color`.
@@ -67,7 +70,8 @@ These are the available styles that Botonic allows you to modify:
 * **persistentMenu**: an array containing the options of your persistent menu. Can be defined also in `userInput.persistentMenu`.
 - **alignReplies**: align replies at `left`, `center` or `right`. Can be defined also in `replies.align`.
 * **wrapReplies**: whether replies be displayed on a single row `nowrap` (horizontal scrolling will appear when required) or they will be wrapped in different lines `wrap`. Can be defined also in `replies.wrap`.
-
+- **enableAttachments**: whether to allow user media attachments or not (`true|false`). Can be defined also in `userInput.attachments.enable`.
+* **scrollbar**: refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.
 
 ### Custom components
 You can also create your own components from scratch.
@@ -174,49 +178,106 @@ export const webchat = {
       backgroundImage:
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
     },
-    triggerButtonImage: launcherIcon,
-    brandColor: '#0000ff',
+    webviewStyle: {
+      top: 0,
+      right: 0,
+      height: 500,
+      width: '100%'
+    },
+    brand: {
+      color: '#0000ff',
+      image: R2D2Logo
+    },
+    triggerButton: {
+      image: launcherIcon,
+      style: {
+        width: '200px'
+      }
+      // custom: CustomTrigger
+    },
+    intro: {
+      // image: IntroImage,
+      // style: {
+      //   padding: 20
+      // }
+      custom: CustomIntro
+    },
+    header: {
+      title: 'My customized webchat',
+      subtitle: 'R2D2',
+      image: R2D2Logo
+      // custom: CustomHeader
+    },
     /*
      * brandImage will set both headerImage and botMessageImage with its current logo
      * you can overwrite these values by redefining them individually
      */
-    brandImage: R2D2Logo,
-    botMessageImage: C3POLogo, // set it to 'null' to hide the botMessageImage
-    // headerImage: R2D2Logo, // set it to 'null' to hide the headerImage
-    introImage: IntroImage,
-    introStyle: {
-      padding: 20
-    },
-    // headerTitle: 'My customized webchat',
-    // headerSubtitle: 'R2D2',
-    textPlaceholder: 'Type something...',
-    botMessageStyle: {
-      border: 'none',
-      color: 'blue',
-      borderRadius: '20px'
-    },
-    userMessageStyle: {
-      // border:'none',
-      color: 'white',
-      borderRadius: '10px'
-    },
-    alignReplies: 'center',
-    wrapReplies: 'wrap',
-    triggerButtonStyle: {
-      width: '200px'
+    message: {
+      bot: {
+        image: C3POLogo, // set it to 'null' to hide this image
+        style: {
+          border: 'none',
+          color: 'blue',
+          borderRadius: '20px'
+        }
+      },
+      user: {
+        style: {
+          // border:'none',
+          color: 'white',
+          borderRadius: '10px'
+        }
+      },
+      customTypes: [CalendarMessage]
     },
 
-    // CUSTOM MESSAGES
-    customMessageTypes: [CalendarMessage],
-
-    // REACT CUSTOMIZABLE COMPONENTS: Remember that these components will overwrite any style for the component they are replacing
-    /* Uncomment the other lines to see the rest of React components  */
-    // customTrigger: CustomTrigger
-    customHeader: CustomHeader,
-    // customIntro: CustomIntro,
-    // customButton: CustomButton,
-    customReply: CustomReply
-  }
+    button: {
+      // custom: CustomButton
+    },
+    replies: {
+      align: 'center',
+      wrap: 'nowrap'
+      // custom: CustomReply
+    },
+    userInput: {
+      attachments: {
+        enable: true
+      },
+      // disable: true,
+      placeholder: 'Type something...',
+      emojiPicker: true,
+      // These are the set of inputs which are not allowed.
+      blockInputs: [
+        {
+          match: [/ugly/i, /bastard/i],
+          message: 'We cannot tolerate these kind of words.'
+        }
+      ],
+      persistentMenu: [
+        { label: 'Help', payload: 'help' },
+        {
+          label: 'See docs',
+          url: 'https://docs.botonic.io'
+        }
+      ]
+    },
+    scrollbar: {
+      disabled: false, // wheter to enable or not the scrollbar
+      autoHide: true, // 'true' if you want the scrollbar to disappear after a certain time. 'false' otherwise.
+      thumb: {
+        opacity: 1, // the opacity of the scrollbar's thumb
+        color: 'yellow', // main color of the thumb
+        bgcolor:
+          'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);', // overwrites color above
+        border: '20px' 
+      }
+      // track: {
+      //   color: 'black', // main color of the track where the thumb is placed
+      //   bgcolor:
+      //     'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);', // overwrites color above
+      //   border: '20px'
+      // }
+    }
 }
 ```
 
