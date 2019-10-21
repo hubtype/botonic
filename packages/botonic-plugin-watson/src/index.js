@@ -31,7 +31,6 @@ export default class BotonicPluginWatson {
       console.log(error)
     }
     Object.assign(input, { intent, confidence, intents, entities })
-    return { input, session, lastRoutePath }
   }
 
   async post({ input, session, lastRoutePath, response }) {}
