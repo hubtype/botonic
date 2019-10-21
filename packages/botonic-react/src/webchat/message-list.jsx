@@ -23,7 +23,9 @@ export const WebchatMessageList = props => {
   return (
     <StyledScrollbar
       scrollbar={scrollbarOptions}
-      data-simplebar-auto-hide={scrollbarOptions.autoHide || false}
+      data-simplebar-auto-hide={
+        (scrollbarOptions && scrollbarOptions.autoHide) || true
+      }
       style={{
         ...(props.style || {}),
         display: 'flex',

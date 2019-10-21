@@ -12,22 +12,26 @@ import UAParser from 'ua-parser-js'
 import { params2queryString } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Text, Document, Image, Video, Audio } from '../components'
-import { TypingIndicator } from '../components/typingIndicator'
+import { TypingIndicator } from '../components/typing-indicator'
 import { Handoff } from '../components/handoff'
 import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
-import { PersistentMenu } from '../components/persistentMenu'
-import { WebchatMessageList } from './messageList'
+import { PersistentMenu } from '../components/persistent-menu'
+import { Attachment } from '../components/attachment'
+import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
-import { msgToBotonic } from '../msgToBotonic'
+import { msgToBotonic } from '../msg-to-botonic'
 import { isDev, staticAsset, getProperty } from '../utils'
 import Logo from '../assets/botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
 import LogoEmoji from '../assets/emojiButton.svg'
-import AttachmentIcon from '../assets/attachment-icon.svg'
-import { Button } from '../components/button'
+
+import DocumentIcon from '../assets/document.svg'
+import ImageIcon from '../assets/image.svg'
+import AudioIcon from '../assets/audio.svg'
+import VideoIcon from '../assets/video.svg'
 import { CUSTOM_WEBCHAT_PROPERTIES, MIME_WHITELIST } from '../constants'
 
 const getAttachmentType = fileType => {
@@ -71,8 +75,8 @@ export const Webchat = forwardRef((props, ref) => {
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
-  const [menuIsOpened, setMenuIsOpened] = useState(false)
-  const [emojiIsOpened, setEmojiIsOpened] = useState(false)
+  const [persistentMenuOpened, setPersistentMenuOpened] = useState(false)
+  const [emojiPickerOpened, setEmojiPickerOpened] = useState(false)
   const [attachment, setAttachment] = useState({})
 
   const useTheme = property => {
@@ -83,14 +87,19 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const attachmentHandler = event => {
-    textArea.current.value += event.target.files[0].name
-    textArea.current.focus()
+  const handleAttachment = event => {
+    // textArea.current.value = event.target.files[0].name
+    // textArea.current.focus()
     setAttachment({
-      file: event.target.files[0], // TODO: Be able to attach more files
-      loaded: 0
+      fileName: event.target.files[0].name,
+      file: event.target.files[0], // TODO: Attach more files?
+      attachmentType: getAttachmentType(event.target.files[0].type)
     })
   }
+
+  useEffect(() => {
+    sendAttachment(attachment)
+  }, [attachment])
 
   // Load initial state from localStorage
   useEffect(() => {
@@ -181,84 +190,36 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const handleMenu = () => {
-    setEmojiIsOpened(false)
-    menuIsOpened ? setMenuIsOpened(false) : setMenuIsOpened(true)
+    setEmojiPickerOpened(false)
+    persistentMenuOpened
+      ? setPersistentMenuOpened(false)
+      : setPersistentMenuOpened(true)
   }
 
   const handleEmoji = () => {
-    emojiIsOpened ? setEmojiIsOpened(false) : setEmojiIsOpened(true)
+    emojiPickerOpened ? setEmojiPickerOpened(false) : setEmojiPickerOpened(true)
   }
-  const emojiPickerComponent = () => {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: 15
-        }}
-      >
-        <img
-          style={{
-            cursor: 'pointer'
-          }}
-          src={staticAsset(LogoEmoji)}
-          onClick={() => handleEmoji()}
-        />
-      </div>
-    )
-  }
-  const AttachmentComponent = () => (
+  const EmojiPickerComponent = () => (
     <div
       style={{
         display: 'flex',
         alignItems: 'center',
-        padding: 15
+        paddingRight: 15
       }}
     >
-      <label htmlFor='attachment'>
-        <img
-          style={{
-            cursor: 'pointer',
-            width: 20,
-            height: 20
-          }}
-          src={staticAsset(AttachmentIcon)}
-        />
-      </label>
-      <input
-        type='file'
-        name='file'
-        id='attachment'
-        style={{ display: 'none' }}
-        // accept='image/png, image/jpeg' // TODO: Accept types from whitelist
-        onChange={attachmentHandler}
-      ></input>
+      <img
+        style={{
+          cursor: 'pointer'
+        }}
+        src={staticAsset(LogoEmoji)}
+        onClick={() => handleEmoji()}
+      />
     </div>
   )
 
-  const persistentMenu =
+  const persistentMenuOptions =
     useTheme('userInput.persistentMenu') || props.persistentMenu
 
-  const persistentMenuComponent = () => {
-    return (
-      <PersistentMenu>
-        {Object.values(persistentMenu).map((e, i) => {
-          return (
-            <Button
-              onClick={closeMenu}
-              url={e.url}
-              webview={e.webview}
-              payload={e.payload}
-              key={i}
-            >
-              {Object.values(e.label)}
-            </Button>
-          )
-        })}
-        <Button onClick={closeMenu}>Cancel</Button>
-      </PersistentMenu>
-    )
-  }
   const persistentMenuLogo = () => (
     <div
       style={{
@@ -295,7 +256,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
   const closeMenu = () => {
-    setMenuIsOpened(false)
+    setPersistentMenuOpened(false)
   }
 
   const sendInput = async input => {
@@ -318,15 +279,8 @@ export const Webchat = forwardRef((props, ref) => {
       inputMessage = <Audio id={input.id} src={input.data} from='user' />
     }
     if (input.type == 'video') {
-      inputMessage = (
-        <Video
-          id={input.id}
-          src={'https://png.pngtree.com/svg/20160127/video_160375.png'}
-          from='user'
-        >
-          {input.data}
-        </Video>
-      )
+      // This is set willfully since if we set this 'src' to video data will surpass the limits of localStorage
+      inputMessage = <Video id={input.id} src={''} from='user' />
     }
     if (input.type == 'document') {
       inputMessage = <Document id={input.id} src={input.data} from='user' />
@@ -343,9 +297,8 @@ export const Webchat = forwardRef((props, ref) => {
       })
     updateLatestInput(input)
     updateReplies(false)
-    setMenuIsOpened(false)
-    setEmojiIsOpened(false)
-    setAttachment({})
+    setPersistentMenuOpened(false)
+    setEmojiPickerOpened(false)
   }
 
   /* This is the public API this component exposes to its parents
@@ -421,24 +374,21 @@ export const Webchat = forwardRef((props, ref) => {
     })
 
   const sendAttachment = async attachment => {
-    // TODO: Preserve filename
-    let attachmentType = getAttachmentType(attachment.file.type)
-    if (!attachmentType) return
-    let input = {
-      type: attachmentType,
-      data: await toBase64(attachment.file)
+    if (attachment.file) {
+      let attachmentType = getAttachmentType(attachment.file.type)
+      if (!attachmentType) return
+      let input = {
+        type: attachmentType,
+        data: await toBase64(attachment.file)
+      }
+      await sendInput(input)
     }
-    await sendInput(input)
   }
 
   const onKeyDown = event => {
     if (event.keyCode == 13 && event.shiftKey == false) {
       event.preventDefault()
-      if (Object.keys(attachment).length != 0) {
-        sendAttachment(attachment)
-      } else {
-        sendText(textArea.current.value)
-      }
+      sendText(textArea.current.value)
       textArea.current.value = ''
     }
   }
@@ -550,8 +500,8 @@ export const Webchat = forwardRef((props, ref) => {
             borderTop: '1px solid rgba(0, 0, 0, 0.4)'
           }}
         >
-          {emojiIsOpened && emoji()}
-          {persistentMenu && persistentMenuLogo()}
+          {emojiPickerOpened && emoji()}
+          {persistentMenuOptions && persistentMenuLogo()}
           <div
             style={{
               display: 'flex',
@@ -578,14 +528,24 @@ export const Webchat = forwardRef((props, ref) => {
                 outline: 'none',
                 flex: '1 1 auto',
                 padding: 10,
-                paddingLeft: persistentMenu ? 0 : 10
+                paddingLeft: persistentMenuOptions ? 0 : 10
               }}
             />
           </div>
-          {(useTheme('userInput.emojiPicker') || props.emojiPicker) &&
-            emojiPickerComponent()}
-          {(useTheme('userInput.enableAttachments') ||
-            props.enableAttachments) && <AttachmentComponent />}
+          <div style={{ display: 'flex' }}>
+            {(useTheme('userInput.emojiPicker') || props.emojiPicker) && (
+              <EmojiPickerComponent />
+            )}
+            {(useTheme('userInput.attachments.enable') ||
+              props.enableAttachments) && (
+              <Attachment
+                onChange={handleAttachment}
+                accept={Object.values(MIME_WHITELIST)
+                  .map(v => v.join(','))
+                  .join(',')}
+              />
+            )}
+          </div>
         </div>
       )
     )
@@ -666,7 +626,12 @@ export const Webchat = forwardRef((props, ref) => {
               {webchatState.replies &&
                 Object.keys(webchatState.replies).length > 0 &&
                 webchatReplies()}
-              {menuIsOpened && persistentMenuComponent()}
+              {persistentMenuOpened && (
+                <PersistentMenu
+                  onClick={closeMenu}
+                  options={persistentMenuOptions}
+                />
+              )}
               {!webchatState.handoff && inputUserArea()}
               {webchatState.webview && webchatWebview()}
             </>

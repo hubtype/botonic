@@ -1,5 +1,5 @@
 import React from 'react'
-import './typingIndicator.scss'
+import './typing-indicator.scss'
 
 export const TypingIndicator = props => (
   <div className='typing-indicator'>
