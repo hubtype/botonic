@@ -25,6 +25,12 @@ export const webchat = {
       backgroundImage:
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
     },
+    webviewStyle: {
+      top: 0,
+      right: 0,
+      height: 500,
+      width: '100%'
+    },
     brand: {
       color: '#0000ff',
       image: R2D2Logo
@@ -37,11 +43,11 @@ export const webchat = {
       // custom: CustomTrigger
     },
     intro: {
-      image: IntroImage,
-      style: {
-        padding: 20
-      }
-      // custom: CustomIntro
+      // image: IntroImage,
+      // style: {
+      //   padding: 20
+      // }
+      custom: CustomIntro
     },
     header: {
       title: 'My customized webchat',
@@ -76,11 +82,14 @@ export const webchat = {
       // custom: CustomButton
     },
     replies: {
-      align: 'right',
+      align: 'center',
       wrap: 'nowrap'
       // custom: CustomReply
     },
     userInput: {
+      attachments: {
+        enable: true
+      },
       // disable: true,
       placeholder: 'Type something...',
       emojiPicker: true,
@@ -108,13 +117,13 @@ export const webchat = {
         bgcolor:
           'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);',
         border: '20px'
-      },
-      track: {
-        color: 'black',
-        bgcolor:
-          'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);',
-        border: '20px'
       }
+      // track: {
+      //   color: 'black',
+      //   bgcolor:
+      //     'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);',
+      //   border: '20px'
+      // }
     }
   },
 
