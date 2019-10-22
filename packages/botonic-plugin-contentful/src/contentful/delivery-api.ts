@@ -19,26 +19,16 @@ import {
 import { ScheduleDelivery } from './schedule';
 import { DateRangeDelivery, DateRangeFields } from './date-range';
 
-export class DeliveryApi {
-  private client: contentful.ContentfulClientApi;
+export type DeliveryApiInterface = Pick<
+  contentful.ContentfulClientApi,
+  'getAsset' | 'getEntries' | 'getEntry'
+>;
 
-  /**
-   *
-   * @param timeoutMs does not work at least when there's no network
-   * during the first connection
-   *
-   * See https://www.contentful.com/developers/docs/references/content-delivery-api/#/introduction/api-rate-limits
-   * for API rate limits
-   *
-   *  https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
-   */
-  constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
-    this.client = contentful.createClient({
-      space: spaceId,
-      accessToken: accessToken,
-      timeout: timeoutMs
-    });
-  }
+/**
+ * Manages the {@link Context}, parses Content's Id and ModelType from the Contentful entries...
+ */
+export class DeliveryApi {
+  constructor(readonly client: DeliveryApiInterface) {}
 
   async getAsset(id: string, query?: any): Promise<contentful.Asset> {
     return this.client.getAsset(id, query);
@@ -53,13 +43,6 @@ export class DeliveryApi {
       id,
       DeliveryApi.queryFromContext(context, query)
     );
-  }
-
-  private static queryFromContext(context: Context, query: any = {}): any {
-    if (context.locale) {
-      query['locale'] = context.locale;
-    }
-    return query;
   }
 
   async getEntries<T>(
@@ -111,6 +94,13 @@ export class DeliveryApi {
       promises = promises.filter(entry => filter(commonFieldsFromEntry(entry)));
     }
     return Promise.all(promises.map(entry => factory(entry, context)));
+  }
+
+  private static queryFromContext(context: Context, query: any = {}): any {
+    if (context.locale) {
+      query['locale'] = context.locale;
+    }
+    return query;
   }
 
   private maxReferencesInclude() {

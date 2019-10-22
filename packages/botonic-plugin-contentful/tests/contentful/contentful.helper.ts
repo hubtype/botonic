@@ -7,11 +7,10 @@ export function testSpaceId(): string {
 
 export function testContentful(): Contentful {
   // useful to have long timeouts so that we can send many requests simultaneously
-  return new Contentful(
-    testSpaceId(),
-    process.env.CONTENTFUL_TEST_TOKEN!,
-    10000
-  );
+  return new Contentful({
+    spaceId: testSpaceId(),
+    accessToken: process.env.CONTENTFUL_TEST_TOKEN!
+  });
 }
 
 export function testContext(

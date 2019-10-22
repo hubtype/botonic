@@ -1,7 +1,6 @@
 import { Entry, EntryCollection } from 'contentful';
-import { CommonFields, Context } from '../cms';
 import * as cms from '../cms';
-import { ModelType } from '../cms';
+import { CommonFields, Context, ModelType } from '../cms';
 import { SearchResult } from '../search';
 import { CommonEntryFields, DeliveryApi } from './delivery-api';
 import { QueueFields } from './queue';
@@ -9,9 +8,18 @@ import { QueueFields } from './queue';
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}
 
-  async contentsWithKeywords(context: Context): Promise<SearchResult[]> {
-    const fromKeywords = this.entriesWithKeywords(context);
-    const fromSearchable = this.entriesWithSearchableByKeywords(context);
+  async contentsWithKeywords(
+    context: Context,
+    modelsWithKeywords = [ModelType.TEXT, ModelType.CAROUSEL, ModelType.URL],
+    modelsWithSearchableByKeywords = [ModelType.QUEUE]
+  ): Promise<SearchResult[]> {
+    // TODO maybe it's more efficient to get all contents (since most have keywords anyway and we normally have few non
+    //  TopContents such as Buttons)
+    const fromKeywords = this.entriesWithKeywords(context, modelsWithKeywords);
+    const fromSearchable = this.entriesWithSearchableByKeywords(
+      context,
+      modelsWithSearchableByKeywords
+    );
     return (await fromKeywords).concat(await fromSearchable);
   }
 
@@ -38,18 +46,30 @@ export class KeywordsDelivery {
   }
 
   private async entriesWithSearchableByKeywords(
-    context: Context
+    context: Context,
+    models: ModelType[]
   ): Promise<SearchResult[]> {
-    const queues = await this.delivery.getEntries<QueueFields>(context, {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      content_type: ModelType.QUEUE,
-      'fields.searchableBy[exists]': true,
-      include: 1
-    });
-    const results = queues.items.map(queue =>
-      KeywordsDelivery.resultsFromQueue(queue)
-    );
-    return Array.prototype.concat(...results);
+    const getWithKeywords = (contentType: cms.ModelType) =>
+      this.delivery.getEntries<QueueFields>(context, {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        content_type: contentType,
+        'fields.searchableBy[exists]': true,
+        include: 1
+      });
+    const promises = [];
+    for (const contentType of models) {
+      promises.push(getWithKeywords(contentType));
+    }
+    const queues = await Promise.all(promises);
+    const results: SearchResult[] = [];
+    for (const q of queues) {
+      for (const queueFields of q.items) {
+        for (const result of KeywordsDelivery.resultsFromQueue(queueFields)) {
+          results.push(result);
+        }
+      }
+    }
+    return results;
   }
 
   private static resultsFromQueue(queue: Entry<QueueFields>): SearchResult[] {
@@ -62,7 +82,10 @@ export class KeywordsDelivery {
     );
   }
 
-  private entriesWithKeywords(context: Context): Promise<SearchResult[]> {
+  private entriesWithKeywords(
+    context: Context,
+    models: ModelType[]
+  ): Promise<SearchResult[]> {
     const getWithKeywords = (contentType: cms.ModelType) =>
       this.delivery.getEntries<CommonEntryFields>(context, {
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -71,11 +94,7 @@ export class KeywordsDelivery {
         include: 0
       });
     const promises = [];
-    for (const contentType of [
-      cms.ModelType.CAROUSEL,
-      cms.ModelType.TEXT,
-      cms.ModelType.URL
-    ]) {
+    for (const contentType of models) {
       promises.push(getWithKeywords(contentType));
     }
     return Promise.all(promises).then(entryCollections =>
