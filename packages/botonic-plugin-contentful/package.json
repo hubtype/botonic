@@ -26,7 +26,7 @@
     "escape-string-regexp": "^2.0.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
-    "node-nlp": "^3.10.0"
+    "node-nlp": "^3.10.1"
   },
   "devDependencies": {
     "@babel/runtime": "^7.6.2",
