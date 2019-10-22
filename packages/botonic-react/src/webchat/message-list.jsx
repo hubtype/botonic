@@ -3,6 +3,16 @@ import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './styled-scrollbar'
 import { staticAsset, ConditionalWrapper } from '../utils'
 import Fade from 'react-reveal/Fade'
+import styled from 'styled-components'
+
+const StyledMessages = styled.div`
+  display: flex;
+  overflow-x: hidden;
+  flex-direction: column;
+  flex: none;
+  white-space: pre;
+  word-wrap: break-word;
+`
 
 export const WebchatMessageList = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
@@ -46,19 +56,7 @@ export const WebchatMessageList = props => {
         {CustomIntro ? <CustomIntro /> : DefaultIntro}
       </ConditionalWrapper>
       {webchatState.messagesComponents.map((e, i) => (
-        <div
-          style={{
-            display: 'flex',
-            overflowX: 'hidden',
-            flexDirection: 'column',
-            flex: 'none',
-            whiteSpace: 'pre',
-            wordWrap: 'break-word',
-          }}
-          key={i}
-        >
-          {e}
-        </div>
+        <StyledMessages key={i}>{e}</StyledMessages>
       ))}
       {props.children}
     </StyledScrollbar>
