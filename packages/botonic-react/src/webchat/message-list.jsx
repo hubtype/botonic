@@ -4,11 +4,11 @@ import { StyledScrollbar } from './styled-scrollbar'
 import { staticAsset } from '../utils'
 
 export const WebchatMessageList = props => {
-  const { webchatState, useTheme } = useContext(WebchatContext)
-  const CustomIntro = useTheme('intro.custom')
-  const introImage = useTheme('intro.image')
-  const introStyle = useTheme('intro.style')
-  const scrollbarOptions = useTheme('scrollbar')
+  const { webchatState, getThemeProperty } = useContext(WebchatContext)
+  const CustomIntro = getThemeProperty('intro.custom')
+  const introImage = getThemeProperty('intro.image')
+  const introStyle = getThemeProperty('intro.style')
+  const scrollbarOptions = getThemeProperty('scrollbar')
   const DefaultIntro = introImage && (
     <img
       style={{

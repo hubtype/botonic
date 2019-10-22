@@ -42,17 +42,17 @@ const StyledHeaderTitle = styled(Flex)`
 `
 
 export const DefaultHeader = props => {
-  const { webchatState, useTheme } = props
+  const { webchatState, getThemeProperty } = props
   const { theme } = webchatState
   let HeaderImage = Logo
-  // These conditions are done in this way because HeaderImage can be null
+  // In this condition we look for below properties to exist and to have value (which can be also null)
   if (getProperty(theme, 'brand.image') || getProperty(theme, 'brandImage'))
-    HeaderImage = useTheme('brand.image')
+    HeaderImage = getThemeProperty('brand.image')
   if (getProperty(theme, 'header.image') || getProperty(theme, 'headerImage'))
-    HeaderImage = useTheme('header.image')
+    HeaderImage = getThemeProperty('header.image')
 
-  let headerTitle = useTheme('header.title') || 'Botonic'
-  let headerSubtitle = useTheme('header.subtitle') || ''
+  let headerTitle = getThemeProperty('header.title') || 'Botonic'
+  let headerSubtitle = getThemeProperty('header.subtitle') || ''
 
   return (
     <Diffuse color={props.color}>
@@ -78,20 +78,20 @@ export const DefaultHeader = props => {
   )
 }
 export const WebchatHeader = props => {
-  const { webchatState, useTheme } = useContext(WebchatContext)
+  const { webchatState, getThemeProperty } = useContext(WebchatContext)
   const { theme } = webchatState
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }
-  let CustomHeader = useTheme('header.custom')
+  let CustomHeader = getThemeProperty('header.custom')
   if (CustomHeader) {
     return <CustomHeader />
   }
   return (
     <DefaultHeader
       webchatState={webchatState}
-      useTheme={useTheme}
-      color={useTheme('brand.color')}
+      getThemeProperty={getThemeProperty}
+      color={getThemeProperty('brand.color')}
       onCloseClick={handleCloseWebchat}
     />
   )
