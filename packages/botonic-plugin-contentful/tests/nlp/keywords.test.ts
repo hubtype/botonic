@@ -37,7 +37,7 @@ function testFindKeywords(
 
 test.each<any>([
   ['quiero realiSar un pedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
-  ['venga realizarpedido', { A: ['realizar pedido', 'comprar'] }, ['A']]
+  ['venga hacerpedido', { A: ['hacer pedido', 'comprar'] }, ['A']]
 ])(
   'TEST: find similar keywords of "%s" with KEYWORDS_AND_OTHERS_FOUND',
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 1)
@@ -61,7 +61,8 @@ test.each<any>([
   // found with multiword keyword
   ['realizar', { A: ['realizar pedido', 'comprar'] }, []],
   ['realiSar un pedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
-  ['realizarpedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
+  // 'realizar' would be stemmed to 'realic', which would be too different
+  ['hacerpedido', { A: ['hacerpedido', 'comprar'] }, ['A']],
   ['pedido', { A: ['realizar pedido', 'comprar'] }, []]
 ])(
   'TEST: find similar keywords of "%s" with ONLY_KEYWORDS_FOUND',
