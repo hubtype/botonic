@@ -263,10 +263,15 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar'
     }).start()
+    console.log("createBundle")
     fs.mkdirSync(join('tmp'))
     copySync('dist', join('tmp', 'dist'))
+    console.log("zipping")
     await zip('tmp', join(BOTONIC_BUNDLE_FILE))
+    console.log("zipped")
     const zip_stats = fs.statSync(BOTONIC_BUNDLE_FILE)
+    console.log("zipped")
+
     spinner.succeed()
     if (zip_stats.size >= 10 * 10 ** 6) {
       spinner.fail()

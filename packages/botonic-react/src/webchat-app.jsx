@@ -53,6 +53,7 @@ export class WebchatApp {
   onStateChange({ user, messagesJSON }) {
     if (!this.hubtypeService && user) {
       let lastMessage = messagesJSON[messagesJSON.length - 1]
+      console.log("onStateChange")
       this.hubtypeService = new HubtypeService({
         appId: this.appId,
         user,

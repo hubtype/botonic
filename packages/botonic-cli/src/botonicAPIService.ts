@@ -292,15 +292,22 @@ export class BotonicAPIService {
   }
 
   async deployBot(bundlePath: string, forceDeploy: boolean): Promise<any> {
+    console.log("deployBot")
     try {
       let a = await this.getMe()
     } catch (e) {
       console.log(`Error deploying: ${e}`)
     }
+    console.log("deployBot1")
+
     const form = new FormData()
     let data = fs.createReadStream(bundlePath)
+    console.log("deployBot2")
+
     form.append('bundle', data, 'botonic_bundle.zip')
     let headers = await this.getHeaders(form)
+    console.log("deployBot3")
+
     return await this.api(
       `bots/${this.bot.id}/deploy_botonic_new/`,
       form,
