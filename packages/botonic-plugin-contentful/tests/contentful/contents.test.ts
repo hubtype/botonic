@@ -44,9 +44,6 @@ test('TEST: contentful contentsWithKeywords', async () => {
   );
   const ofType = (model: ModelType) =>
     contentResults.filter(r => (r.callback as ContentCallback).model == model);
-  // for (let m of ALL_TYPES) {
-  //   console.log(`${m}: ${ofType(m).length}`);
-  // }
 
   expect(ofType(ModelType.CAROUSEL)).toHaveLength(1);
   expect(ofType(ModelType.TEXT)).toHaveLength(15);
@@ -56,4 +53,4 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(ofType(ModelType.DATE_RANGE)).toHaveLength(0);
   expect(ofType(ModelType.IMAGE)).toHaveLength(0);
   expect(ofType(ModelType.QUEUE)).toHaveLength(2);
-});
+}, 15000);

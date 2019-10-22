@@ -14,7 +14,7 @@ import {
   TopContent
 } from '../cms';
 import { ButtonDelivery } from './button';
-import { DeliveryApi } from './delivery-api';
+import { DeliveryApi} from './delivery-api';
 import { CarouselDelivery } from './carousel';
 import { StartUpDelivery } from './startup';
 import { TextDelivery } from './text';
@@ -22,6 +22,8 @@ import { UrlDelivery } from './url';
 import * as cms from '../cms';
 import { QueueDelivery } from './queue';
 import * as contentful from 'contentful';
+import { ContentfulOptions } from '../plugin';
+import { CachedDelivery } from './cache';
 
 export default class Contentful implements cms.CMS {
   _delivery: DeliveryApi;
@@ -36,8 +38,22 @@ export default class Contentful implements cms.CMS {
   _asset: AssetDelivery;
   _queue: QueueDelivery;
 
-  constructor(spaceId: string, accessToken: string, timeoutMs: number = 30000) {
-    const delivery = new DeliveryApi(spaceId, accessToken, timeoutMs);
+  /**
+   *
+   * See https://www.contentful.com/developers/docs/references/content-delivery-api/#/introduction/api-rate-limits
+   * for API rate limits
+   *
+   *  https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
+   */
+  constructor(options: ContentfulOptions) {
+    const client = contentful.createClient({
+      space: options.spaceId,
+      accessToken: options.accessToken,
+      timeout: options.timeoutMs
+    });
+    const memoizedClient = new CachedDelivery(client, options.cacheTtlMs);
+    const delivery = new DeliveryApi(memoizedClient);
+
     this._delivery = delivery;
     const button = new ButtonDelivery(delivery);
     this._carousel = new CarouselDelivery(delivery, button);
