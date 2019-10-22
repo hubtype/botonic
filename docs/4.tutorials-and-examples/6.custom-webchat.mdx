@@ -209,7 +209,7 @@ export const webchat = {
       // custom: CustomHeader
     },
     /*
-     * brandImage will set both headerImage and botMessageImage with its current logo
+     * brand.image will set both header.image and message.bot.image with its current logo
      * you can overwrite these values by redefining them individually
      */
     message: {
@@ -262,19 +262,19 @@ export const webchat = {
       ]
     },
     scrollbar: {
-      disabled: false, // wheter to enable or not the scrollbar
-      autoHide: true, // 'true' if you want the scrollbar to disappear after a certain time. 'false' otherwise.
+      disable: false, 
+      autoHide: true, 
       thumb: {
-        opacity: 1, // the opacity of the scrollbar's thumb
-        color: 'yellow', // main color of the thumb
+        opacity: 1, 
+        color: 'yellow', 
         bgcolor:
-          'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);', // overwrites color above
+          'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);', // has preference over color
         border: '20px' 
       }
       // track: {
-      //   color: 'black', // main color of the track where the thumb is placed
+      //   color: 'black', 
       //   bgcolor:
-      //     'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);', // overwrites color above
+      //     'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);', // has preference over color
       //   border: '20px'
       // }
     }

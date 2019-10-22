@@ -20,7 +20,7 @@ export const WebchatContext = React.createContext({
   addMessage: message => '',
   updateReplies: replies => '',
   closeWebview: () => '',
-  useTheme: property => {},
+  getThemeProperty: property => {}, // used to retrieve a specific property of the theme defined by the developer in his 'webchat/index.js'
   theme: {},
   webchatState: webchatInitialState
 })

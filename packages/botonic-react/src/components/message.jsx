@@ -21,9 +21,12 @@ export const Message = props => {
     ...otherProps
   } = props
 
-  const { webchatState, addMessage, updateReplies, useTheme } = useContext(
-    WebchatContext
-  )
+  const {
+    webchatState,
+    addMessage,
+    updateReplies,
+    getThemeProperty
+  } = useContext(WebchatContext)
   const { theme } = webchatState
   const [state, setState] = useState({
     id: props.id || uuid()
@@ -79,13 +82,13 @@ export const Message = props => {
   const isFromBot = () => from === 'bot'
   const getBgColor = () => {
     if (!blob) return 'transparent'
-    return isFromUser() ? useTheme('brand.color') : '#F1F0F0'
+    return isFromUser() ? getThemeProperty('brand.color') : '#F1F0F0'
   }
 
   const getMessageStyle = () =>
     isFromBot()
-      ? useTheme('message.bot.style') || {}
-      : useTheme('message.user.style') || {}
+      ? getThemeProperty('message.bot.style') || {}
+      : getThemeProperty('message.user.style') || {}
 
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -101,15 +104,15 @@ export const Message = props => {
     }
 
     let BotMessageImage = Logo
-    // These conditions are done in this way because BotMessageImage can be null
+    // In this condition we look for 'brand.image' or 'brandImage' to exist and to have value (which can be null)
     if (getProperty(theme, 'brand.image') || getProperty(theme, 'brandImage')) {
-      BotMessageImage = useTheme('brand.image')
+      BotMessageImage = getThemeProperty('brand.image')
     }
     if (
       getProperty(theme, 'bot.message.image') ||
       getProperty(theme, 'botMessageImage')
     )
-      BotMessageImage = useTheme('message.bot.image')
+      BotMessageImage = getThemeProperty('message.bot.image')
 
     return (
       <div

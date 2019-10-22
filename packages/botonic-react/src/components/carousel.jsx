@@ -14,9 +14,9 @@ const serialize = carouselProps => {
 }
 
 export const Carousel = props => {
-  const { useTheme } = useContext(WebchatContext)
+  const { getThemeProperty } = useContext(WebchatContext)
   let content = props.children
-  const scrollbarOptions = useTheme('scrollbar')
+  const scrollbarOptions = getThemeProperty('scrollbar')
   if (isBrowser()) {
     content = (
       <StyledScrollbar

@@ -79,7 +79,7 @@ export const Webchat = forwardRef((props, ref) => {
   const [emojiPickerOpened, setEmojiPickerOpened] = useState(false)
   const [attachment, setAttachment] = useState({})
 
-  const useTheme = property => {
+  const getThemeProperty = property => {
     for (let [k, v] of Object.entries(CUSTOM_WEBCHAT_PROPERTIES)) {
       if (v == property) {
         return getProperty(theme, v) || getProperty(theme, k)
@@ -218,7 +218,7 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const persistentMenuOptions =
-    useTheme('userInput.persistentMenu') || props.persistentMenu
+    getThemeProperty('userInput.persistentMenu') || props.persistentMenu
 
   const persistentMenuLogo = () => (
     <div
@@ -237,7 +237,7 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const checkBlockInput = input => {
-    let blockInputs = useTheme('userInput.blockInputs') || props.blockInputs
+    let blockInputs = getThemeProperty('userInput.blockInputs') || props.blockInputs
     if (!Array.isArray(blockInputs)) return
     for (let rule of blockInputs) {
       if (rule.match.some(regex => regex.test(input.data))) {
@@ -410,9 +410,9 @@ export const Webchat = forwardRef((props, ref) => {
 
   const textArea = useRef()
 
-  let triggerImage = useTheme('triggerButton.image') || Logo
-  const triggerButtonStyle = useTheme('triggerButton.style')
-  const CustomTriggerButton = useTheme('triggerButton.custom')
+  let triggerImage = getThemeProperty('triggerButton.image') || Logo
+  const triggerButtonStyle = getThemeProperty('triggerButton.style')
+  const CustomTriggerButton = getThemeProperty('triggerButton.custom')
 
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
@@ -469,8 +469,8 @@ export const Webchat = forwardRef((props, ref) => {
   const webchatReplies = () => (
     <WebchatReplies
       replies={webchatState.replies}
-      align={useTheme('replies.align')}
-      wrap={useTheme('replies.wrap')}
+      align={getThemeProperty('replies.align')}
+      wrap={getThemeProperty('replies.wrap')}
     />
   )
   const emoji = () => (
@@ -488,7 +488,7 @@ export const Webchat = forwardRef((props, ref) => {
       <EmojiPicker onEmojiClick={emojiClick} />
     </div>
   )
-  const userInputDisabled = useTheme('userInput.disable')
+  const userInputDisabled = getThemeProperty('userInput.disable')
   const inputUserArea = () => {
     return (
       !userInputDisabled && (
@@ -514,7 +514,7 @@ export const Webchat = forwardRef((props, ref) => {
               maxRows={4}
               wrap='soft'
               maxLength='1000'
-              placeholder={useTheme('userInput.placeholder')}
+              placeholder={getThemeProperty('userInput.placeholder')}
               autoFocus={true}
               inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
@@ -533,10 +533,10 @@ export const Webchat = forwardRef((props, ref) => {
             />
           </div>
           <div style={{ display: 'flex' }}>
-            {(useTheme('userInput.emojiPicker') || props.emojiPicker) && (
+            {(getThemeProperty('userInput.emojiPicker') || props.emojiPicker) && (
               <EmojiPickerComponent />
             )}
-            {(useTheme('userInput.attachments.enable') ||
+            {(getThemeProperty('userInput.attachments.enable') ||
               props.enableAttachments) && (
               <Attachment
                 onChange={handleAttachment}
@@ -571,7 +571,7 @@ export const Webchat = forwardRef((props, ref) => {
         openWebview,
         resolveCase,
         webchatState,
-        useTheme,
+        getThemeProperty,
         addMessage,
         toggleWebchat,
         updateMessage,
