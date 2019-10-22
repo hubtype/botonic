@@ -4,6 +4,6 @@
   "main": "src/index.js",
   "dependencies": {
     "axios": "latest",
-    "dashbot": "^10.4.5"
+    "dashbot": "^11.0.0"
   }
 }
