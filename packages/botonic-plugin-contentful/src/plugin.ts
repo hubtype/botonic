@@ -19,9 +19,22 @@ export interface CmsOptions extends OptionsBase {
   cms?: cms.CMS;
 }
 
+export const DEFAULT_TIMEOUT_MS = 30000;
+export const DEFAULT_CACHE_TTL_MS = 10000;
+
 export interface ContentfulOptions extends OptionsBase {
   spaceId: string;
   accessToken: string;
+  /**
+   * does not work at least when there's no network during the first connection
+   * Defaults to {@link DEFAULT_TIMEOUT_MS}
+   */
+  timeoutMs?: number;
+  /**
+   * Contents are cached up to this amount of time.
+   * Defaults to {@link DEFAULT_CACHE_TTL_MS}
+   */
+  cacheTtlMs?: number;
 }
 
 export default class BotonicPluginContentful {
@@ -37,7 +50,7 @@ export default class BotonicPluginContentful {
       this.cms = optionsAny.cms;
     } else {
       const contOptions = opt as ContentfulOptions;
-      this.cms = new Contentful(contOptions.spaceId, contOptions.accessToken);
+      this.cms = new Contentful(contOptions);
     }
     this.cms = new cms.ErrorReportingCMS(this.cms);
     this.renderer = opt.renderer || new BotonicMsgConverter();
