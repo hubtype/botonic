@@ -12,7 +12,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.9.23",
+  "version": "0.9.24",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
@@ -24,6 +24,7 @@
   "dependencies": {
     "contentful": "^7.10.0",
     "escape-string-regexp": "^2.0.0",
+    "memoizee": "^0.4.14",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
     "node-nlp": "^3.10.1"
@@ -32,6 +33,7 @@
     "@babel/runtime": "^7.6.2",
     "@types/jest": "^24.0.18",
     "@types/jest-each": "^0.3.4",
+    "@types/memoizee": "^0.4.3",
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^12.7.7",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
