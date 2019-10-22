@@ -109,7 +109,7 @@ export const webchat = {
       ]
     },
     scrollbar: {
-      disabled: false,
+      disable: false,
       autoHide: true,
       thumb: {
         opacity: 1,

@@ -4,9 +4,12 @@ import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 
 export const Button = props => {
-  const { webchatState, openWebview, sendPayload, useTheme } = useContext(
-    WebchatContext
-  )
+  const {
+    webchatState,
+    openWebview,
+    sendPayload,
+    getThemeProperty
+  } = useContext(WebchatContext)
   const [hover, setHover] = useState(false)
   const { theme } = webchatState
 
@@ -22,7 +25,7 @@ export const Button = props => {
   }
 
   const renderBrowser = () => {
-    let CustomButton = useTheme('button.custom')
+    let CustomButton = getThemeProperty('button.custom')
     if (CustomButton) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -45,7 +48,7 @@ export const Button = props => {
           alignContent: 'center',
           justifyContent: 'center',
           padding: '12px 32px',
-          color: useTheme('brand.color') || '#000',
+          color: getThemeProperty('brand.color') || '#000',
           backgroundColor: hover ? '#f3f3f3' : '#fff',
           border: 'none',
           border: '1px solid #f1f0f0',

@@ -9,8 +9,8 @@ const options = {
 }
 
 export const WebchatReplies = props => {
-  const { webchatState, useTheme } = useContext(WebchatContext)
-  const scrollbarOptions = useTheme('scrollbar')
+  const { webchatState, getThemeProperty } = useContext(WebchatContext)
+  const scrollbarOptions = getThemeProperty('scrollbar')
   let justify = 'center'
   if (props.align) justify = options[props.align]
   if (props.wrap == 'nowrap') justify = 'flex-start'

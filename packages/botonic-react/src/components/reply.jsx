@@ -4,8 +4,9 @@ import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 
 export const Reply = props => {
-  const { webchatState, sendText, useTheme } = useContext(WebchatContext)
-  const { theme } = webchatState
+  const { webchatState, sendText, getThemeProperty } = useContext(
+    WebchatContext
+  )
   const handleClick = event => {
     event.preventDefault()
     if (props.children) {
@@ -16,7 +17,7 @@ export const Reply = props => {
   }
 
   const renderBrowser = () => {
-    let CustomReply = useTheme('replies.custom')
+    let CustomReply = getThemeProperty('replies.custom')
     if (CustomReply) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -30,8 +31,8 @@ export const Reply = props => {
         style={{
           width: '100%',
           padding: '4px 8px',
-          border: `1px solid ${useTheme('brand.color')}`,
-          color: useTheme('brand.color'),
+          border: `1px solid ${getThemeProperty('brand.color')}`,
+          color: getThemeProperty('brand.color'),
           borderRadius: 8,
           cursor: 'pointer',
           outline: 0
