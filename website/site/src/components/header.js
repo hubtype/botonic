@@ -1,42 +1,45 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
 import React from "react"
+import styled from "styled-components"
+import LinkedCta from "./common/LinkedCta"
+import PlainLink from "./common/PlainLink"
+import BotonicLogo from "./common/BotonicLogo"
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
-)
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
+const Header = ({ siteTitle }) => {
+  const Container = styled.div`
+    background: #464d65;
+    padding: 29px 60px;
+    display: flex;
+  `
+  const Inner = styled.div`
+    padding: 16px;
+    display: flex;
+    width: 33%;
+  `
+  return (
+    <header>
+      <Container fontFamily="Palanquin" color="white">
+        <Inner>
+          <PlainLink
+            text={"Docs"}
+            link={"/docs/"}
+            style={{ marginRight: "30px" }}
+          />
+          <PlainLink
+            text={"Github"}
+            link={"/github/"}
+            style={{ marginRight: "30px" }}
+          />
+          <PlainLink text={"Slack"} link={"/slack/"} />
+        </Inner>
+        <Inner style={{ justifyContent: "center" }}>
+          <BotonicLogo />
+        </Inner>
+        <Inner style={{ justifyContent: "flex-end" }}>
+          <LinkedCta text={"GET STARTED"} link={"/get-started/"} />
+        </Inner>
+      </Container>
+    </header>
+  )
 }
 
 export default Header
