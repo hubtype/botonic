@@ -17,7 +17,7 @@ export class Router {
     let lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (lastRoute && lastRoute.childRoutes)
       //get route depending of current ChildRoute
-      routeParams = this.getRoute(input, lastRoute.childRoutes)
+      routeParams = this.getRoute(input, lastRoute.childRoutes, session)
     if (!routeParams || !Object.keys(routeParams).length) {
       /*
           we couldn't find a route in the state of the lastRoute, so let's find in
@@ -49,7 +49,8 @@ export class Router {
       ) {
         defaultAction = this.getRoute(
           { path: '' },
-          routeParams.route.childRoutes
+          routeParams.route.childRoutes,
+          session
         )
       }
       if ('action' in routeParams.route) {
