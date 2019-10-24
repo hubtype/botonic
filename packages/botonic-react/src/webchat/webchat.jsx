@@ -179,7 +179,9 @@ export const Webchat = forwardRef((props, ref) => {
 
   const closeWebview = options => {
     updateWebview()
-    textArea.current.focus()
+    if (!userInputDisabled) {
+      textArea.current.focus()
+    }
     if (options && options.payload) {
       sendPayload(options.payload)
     } else if (options && options.path) {
@@ -237,7 +239,8 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const checkBlockInput = input => {
-    let blockInputs = getThemeProperty('userInput.blockInputs') || props.blockInputs
+    let blockInputs =
+      getThemeProperty('userInput.blockInputs') || props.blockInputs
     if (!Array.isArray(blockInputs)) return
     for (let rule of blockInputs) {
       if (rule.match.some(regex => regex.test(input.data))) {
@@ -533,9 +536,8 @@ export const Webchat = forwardRef((props, ref) => {
             />
           </div>
           <div style={{ display: 'flex' }}>
-            {(getThemeProperty('userInput.emojiPicker') || props.emojiPicker) && (
-              <EmojiPickerComponent />
-            )}
+            {(getThemeProperty('userInput.emojiPicker') ||
+              props.emojiPicker) && <EmojiPickerComponent />}
             {(getThemeProperty('userInput.attachments.enable') ||
               props.enableAttachments) && (
               <Attachment
