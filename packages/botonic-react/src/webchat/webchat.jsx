@@ -27,11 +27,6 @@ import Logo from '../assets/botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
 import LogoEmoji from '../assets/emojiButton.svg'
-
-import DocumentIcon from '../assets/document.svg'
-import ImageIcon from '../assets/image.svg'
-import AudioIcon from '../assets/audio.svg'
-import VideoIcon from '../assets/video.svg'
 import { CUSTOM_WEBCHAT_PROPERTIES, MIME_WHITELIST } from '../constants'
 
 const getAttachmentType = fileType => {
@@ -82,14 +77,18 @@ export const Webchat = forwardRef((props, ref) => {
   const getThemeProperty = property => {
     for (let [k, v] of Object.entries(CUSTOM_WEBCHAT_PROPERTIES)) {
       if (v == property) {
-        return getProperty(theme, v) || getProperty(theme, k)
+        let themeProperty = null
+        if (getProperty(theme, v) == null || getProperty(theme, k) == null) {
+          themeProperty = null
+        } else {
+          themeProperty = getProperty(theme, v) || getProperty(theme, k)
+        }
+        return themeProperty
       }
     }
   }
 
   const handleAttachment = event => {
-    // textArea.current.value = event.target.files[0].name
-    // textArea.current.focus()
     setAttachment({
       fileName: event.target.files[0].name,
       file: event.target.files[0], // TODO: Attach more files?

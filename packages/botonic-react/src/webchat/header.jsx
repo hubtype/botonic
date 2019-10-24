@@ -45,10 +45,19 @@ export const DefaultHeader = props => {
   const { webchatState, getThemeProperty } = props
   const { theme } = webchatState
   let HeaderImage = Logo
-  // In this condition we look for below properties to exist and to have value (which can be also null)
-  if (getProperty(theme, 'brand.image') || getProperty(theme, 'brandImage'))
+  /* 
+  brand.image, brandImage, headerImage and header.image 
+  can be set explicitly to null if the developer doesn't want to display them 
+  */
+  if (
+    getThemeProperty('brand.image') ||
+    getThemeProperty('brand.image') == null
+  )
     HeaderImage = getThemeProperty('brand.image')
-  if (getProperty(theme, 'header.image') || getProperty(theme, 'headerImage'))
+  if (
+    getThemeProperty('header.image') ||
+    getThemeProperty('header.image') == null
+  )
     HeaderImage = getThemeProperty('header.image')
 
   let headerTitle = getThemeProperty('header.title') || 'Botonic'

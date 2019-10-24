@@ -20,7 +20,7 @@ export const Carousel = props => {
   if (isBrowser()) {
     content = (
       <StyledScrollbar
-        scrollbar={scrollbarOptions}
+        scrollbar={scrollbarOptions ? scrollbarOptions : undefined}
         data-simplebar-auto-hide={
           (scrollbarOptions && scrollbarOptions.autoHide) || true
         }

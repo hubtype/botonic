@@ -104,13 +104,21 @@ export const Message = props => {
     }
 
     let BotMessageImage = Logo
-    // In this condition we look for 'brand.image' or 'brandImage' to exist and to have value (which can be null)
-    if (getProperty(theme, 'brand.image') || getProperty(theme, 'brandImage')) {
-      BotMessageImage = getThemeProperty('brand.image')
-    }
+
+    /* 
+    brand.image, brandImage, bot.message.image and botMessageImage
+    can be set explicitly to null if the developer doesn't want to display them 
+    */
+
     if (
-      getProperty(theme, 'bot.message.image') ||
-      getProperty(theme, 'botMessageImage')
+      getThemeProperty('brand.image') ||
+      getThemeProperty('brand.image') == null
+    )
+      BotMessageImage = getThemeProperty('brand.image')
+
+    if (
+      getThemeProperty('message.bot.image') ||
+      getThemeProperty('message.bot.image') == null
     )
       BotMessageImage = getThemeProperty('message.bot.image')
 

@@ -17,7 +17,7 @@ export const WebchatReplies = props => {
 
   return (
     <StyledScrollbar
-      scrollbar={scrollbarOptions}
+      scrollbar={scrollbarOptions ? scrollbarOptions : undefined}
       data-simplebar-auto-hide={
         (scrollbarOptions && scrollbarOptions.autoHide) || true
       }
@@ -25,13 +25,13 @@ export const WebchatReplies = props => {
       <div
         style={{
           display: 'flex',
-          ...(props.style || {}),
           textAlign: 'center',
           justifyContent: justify,
           flexWrap: props.wrap || 'wrap',
           paddingBottom: 10,
           marginLeft: 5,
-          marginRight: 5
+          marginRight: 5,
+          ...(props.style || {})
         }}
       >
         {webchatState.replies.map((r, i) => (
