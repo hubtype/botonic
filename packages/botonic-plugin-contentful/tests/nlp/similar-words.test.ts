@@ -1,4 +1,8 @@
-import { CandidateWithKeywords, Keyword } from '../../src/nlp/keywords';
+import {
+  CandidateWithKeywords,
+  Keyword,
+  MatchType
+} from '../../src/nlp/keywords';
 import {
   SimilarWordFinder,
   SimilarWordResult
@@ -15,6 +19,7 @@ function candidate(...kws: string[]): CandidateWithKeywords<TestCandidate> {
     kws.map(kw)
   );
 }
+
 function kw(kw: string) {
   return new Keyword(`raw ${kw}`, kw, false);
 }
@@ -58,24 +63,32 @@ test.each<any>([
     const sut = new SimilarWordFinder<TestCandidate>(false);
     sut.addCandidate(CAND_ADIOS);
     sut.addCandidate(CAND_HOLA);
-    const result = sut.findIfOnlyWordsFromKeyword(ut(needle), maxDistance);
+    const result = sut.find(
+      MatchType.ONLY_KEYWORDS_FOUND,
+      ut(needle),
+      maxDistance
+    );
     expect(result[0]).toEqual(expectedResult);
   }
 );
 
-test('TEST: findSimilarKeyword() missing space', () => {
+test('TEST: ONLY_KEYWORDS_FOUND missing space', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
   sut.addCandidate(CAND_ADIOS);
   sut.addCandidate(CAND_HOLA);
-  const result = sut.findIfOnlyWordsFromKeyword(ut('buenosdias'), 1);
+  const result = sut.find(MatchType.ONLY_KEYWORDS_FOUND, ut('buenosdias'), 1);
   expect(result[0].candidate).toEqual(CAND_HOLA.owner);
 });
 
-test('TEST: findSimilarKeyword() stemmed checks all words in keyword', () => {
+test('TEST: ONLY_KEYWORDS_FOUND stemmed checks all words in keyword', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
   sut.addCandidate(candidate('realiz ped'));
-  expect(sut.findIfOnlyWordsFromKeyword(ut('realiz'), 1)).toHaveLength(0);
-  expect(sut.findIfOnlyWordsFromKeyword(ut('realizarped'), 1)).toHaveLength(1);
+  expect(sut.find(MatchType.ONLY_KEYWORDS_FOUND, ut('realiz'), 1)).toHaveLength(
+    0
+  );
+  expect(
+    sut.find(MatchType.ONLY_KEYWORDS_FOUND, ut('realizarped'), 1)
+  ).toHaveLength(1);
 });
 
 test.each<any>([
@@ -100,7 +113,11 @@ test.each<any>([
     const sut = new SimilarWordFinder<TestCandidate>(false);
     sut.addCandidate(CAND_ADIOS);
     sut.addCandidate(CAND_HOLA);
-    const result = sut.findSubstring(ut(needle), maxDistance);
+    const result = sut.find(
+      MatchType.KEYWORDS_AND_OTHERS_FOUND,
+      ut(needle),
+      maxDistance
+    );
     expect(result[0]).toEqual(expectedResult);
   }
 );
@@ -122,18 +139,22 @@ test.each<any>([
   }
 );
 
-test('TEST: findSubstring gets closest match', () => {
+test('TEST: KEYWORDS_AND_OTHERS_FOUND gets closest match', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
   sut.addCandidate(candidate('abc', 'abcdef'));
-  const result = sut.findSubstring(ut('xxxx abcd'), 2);
+  const result = sut.find(
+    MatchType.KEYWORDS_AND_OTHERS_FOUND,
+    ut('xxxx abcd'),
+    2
+  );
   expect(result).toHaveLength(1);
   expect(result[0].distance).toEqual(1);
 });
 
-test('TEST: findSimilarKeyword gets closest match', () => {
+test('TEST: ONLY_KEYWORDS_FOUND gets closest match', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
   sut.addCandidate(candidate('abc', 'abcdef'));
-  const result = sut.findIfOnlyWordsFromKeyword(ut('abcd'), 2);
+  const result = sut.find(MatchType.ONLY_KEYWORDS_FOUND, ut('abcd'), 2);
   expect(result).toHaveLength(1);
   expect(result[0].distance).toEqual(1);
 });
