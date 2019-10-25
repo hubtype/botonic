@@ -50,7 +50,7 @@ export class SimilarWordFinder<M> {
     this.candidates.push(candidate);
   }
 
-  findSimilarKeyword(
+  findIfOnlyWordsFromKeyword(
     utterance: NormalizedUtterance,
     maxDistance: number
   ): SimilarWordResult<M>[] {
@@ -65,6 +65,36 @@ export class SimilarWordFinder<M> {
         if (distance != TOO_DISTANT) {
           results.push(
             new SimilarWordResult<M>(candidate.owner, keyword, match, distance)
+          );
+        }
+      }
+    }
+
+    return this.getLongestResultPerCandidate(results);
+  }
+
+  findSubstring(
+    sentence: NormalizedUtterance,
+    maxDistance = 1
+  ): SimilarWordResult<M>[] {
+    const results: SimilarWordResult<M>[] = [];
+    const wordPositions = this.similar.getWordPositions(sentence.joinedStems);
+    for (const candidate of this.candidates) {
+      for (const keyword of candidate.keywords) {
+        const partialMatch = this.findKeyword(
+          keyword,
+          sentence,
+          maxDistance,
+          wordPositions
+        );
+        if (partialMatch) {
+          results.push(
+            new SimilarWordResult<M>(
+              candidate.owner,
+              keyword,
+              partialMatch.match,
+              partialMatch.distance
+            )
           );
         }
       }
@@ -132,37 +162,7 @@ export class SimilarWordFinder<M> {
     return uniq;
   }
 
-  findSubstring(
-    sentence: NormalizedUtterance,
-    maxDistance = 1
-  ): SimilarWordResult<M>[] {
-    const results: SimilarWordResult<M>[] = [];
-    const wordPositions = this.similar.getWordPositions(sentence.joinedStems);
-    for (const candidate of this.candidates) {
-      for (const keyword of candidate.keywords) {
-        const partialMatch = this.findKeyword(
-          keyword,
-          sentence,
-          maxDistance,
-          wordPositions
-        );
-        if (partialMatch) {
-          results.push(
-            new SimilarWordResult<M>(
-              candidate.owner,
-              keyword,
-              partialMatch.match,
-              partialMatch.distance
-            )
-          );
-        }
-      }
-    }
-
-    return this.getLongestResultPerCandidate(results);
-  }
-
-  findKeyword(
+  private findKeyword(
     keyword: Keyword,
     sentence: NormalizedUtterance,
     maxDistance: number,
