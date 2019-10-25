@@ -470,7 +470,8 @@ export const Webchat = forwardRef((props, ref) => {
               outline: 'none',
               flex: '1 1 auto',
               padding: 10,
-              paddingLeft: props.persistentMenu ? 0 : 10
+              paddingLeft: props.persistentMenu ? 0 : 10,
+              ...webchatState.theme.textAreaStyle
             }}
           />
         </div>
