@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 const LightLink = ({ text, link, style }) => {
   const StyledLink = styled(Link)`
-    color: #BEBED2;
+    color: #bebed2;
     text-decoration: none;
     margin-right: 4rem;
     font-family: Heebo;

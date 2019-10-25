@@ -4,6 +4,21 @@ import Img from "gatsby-image"
 import styled from "styled-components"
 import LightLink from "./common/LightLink"
 
+const Container = styled.div`
+  padding: 29px 60px;
+  display: flex;
+`
+const InnerLeft = styled.div`
+  display: flex;
+`
+const InnerRight = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+  color: #bebed2;
+  font-family: Heebo;
+`
+
 const Footer = () => {
   const { languageIcon } = useStaticQuery(
     graphql`
@@ -19,20 +34,6 @@ const Footer = () => {
     `
   )
 
-  const Container = styled.div`
-    padding: 29px 60px;
-    display: flex;
-  `
-  const InnerLeft = styled.div`
-    display: flex;
-  `
-  const InnerRight = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    flex-grow: 1; 
-    color: #BEBED2;
-    font-family: Heebo;
-  `
   return (
     <footer>
       <Container>
