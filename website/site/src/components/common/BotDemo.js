@@ -42,14 +42,12 @@ let app = new WebchatApp({
   },
 })
 
-const BotDemo = React.memo(({onMessageSent}) => {
-  
-  console.log("hello");
-  return (app.getComponent({
+const BotDemo = React.memo(({ onMessageSent }) => {
+  return app.getComponent({
     onMessage: (app, message) => {
       console.log(message)
       onMessageSent(message.message.data)
     },
-  }))
+  })
 })
 export default BotDemo

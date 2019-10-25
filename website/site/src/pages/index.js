@@ -63,7 +63,7 @@ const InnerPerspective = styled.div`
   perspective: 539px;
   z-index: -2;
   padding: 32px;
-  `
+`
 
 const IndexPage = () => {
   const [userInput, setUserInput] = useState("none")
@@ -93,14 +93,14 @@ const IndexPage = () => {
     )
   }`
 
-const handleCodeToShow = (message) => setUserInput(message)
+  const handleCodeToShow = message => setUserInput(message)
 
   return (
     <Layout>
       <Container>
         <InnerLeft>
           <div>
-          <BotDemo onMessageSent={handleCodeToShow}/>
+            <BotDemo onMessageSent={handleCodeToShow} />
           </div>
         </InnerLeft>
         <InnerPerspective>

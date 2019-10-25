@@ -4,17 +4,18 @@ import LinkedCta from "./common/LinkedCta"
 import PlainLink from "./common/PlainLink"
 import BotonicLogo from "./common/BotonicLogo"
 
+const Container = styled.div`
+  background: #464d65;
+  padding: 29px 60px;
+  display: flex;
+`
+const Inner = styled.div`
+  padding: 16px 0px;
+  display: flex;
+  width: 33%;
+`
+
 const Header = ({ siteTitle }) => {
-  const Container = styled.div`
-    background: #464d65;
-    padding: 29px 60px;
-    display: flex;
-  `
-  const Inner = styled.div`
-    padding: 16px 0px;
-    display: flex;
-    width: 33%;
-  `
   return (
     <header>
       <Container fontFamily="Palanquin" color="white">
