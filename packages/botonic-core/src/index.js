@@ -4,7 +4,7 @@ export {
   getOpenQueues,
   humanHandOff,
   storeCaseRating,
-  getAvailableAgentsForQueue
+  getAvailableAgents
 } from './handoff'
 export { getNLU } from './nlu'
 export { isBrowser, isNode, params2queryString } from './utils'

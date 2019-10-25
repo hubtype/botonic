@@ -56,10 +56,10 @@ type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[])
 // Desk
 export declare function humanHandOff(
   session: Session,
-  queueName?: string = '',
-  onFinish: { payload?: any; path?: any },
+  queueNameOrId?: string = '', // queue_name for backward compatiblity, queue_id for new versions
+  onFinish: { payload?: string; path?: string },
   agentEmail?: string = '',
-  extraInfo: { caseInfo?: any; note?: any }
+  extraInfo: { caseInfo?: string; note?: string }
 ): Promise<void>
 
 export declare function getOpenQueues(
@@ -71,9 +71,9 @@ export declare function storeCaseRating(
   rating: number
 ): Promise<any>
 
-export declare function getAvailableAgentsForQueue(
+export declare function getAvailableAgents(
   session: Session,
-  queueName?: string
+  queueId?: string
 ): Promise<{ agents: string[] }>
 
 /** The response of the bot for the triggered actions, which can be
