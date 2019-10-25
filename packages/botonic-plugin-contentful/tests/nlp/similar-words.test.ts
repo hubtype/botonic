@@ -58,7 +58,7 @@ test.each<any>([
     const sut = new SimilarWordFinder<TestCandidate>(false);
     sut.addCandidate(CAND_ADIOS);
     sut.addCandidate(CAND_HOLA);
-    const result = sut.findSimilarKeyword(ut(needle), maxDistance);
+    const result = sut.findIfOnlyWordsFromKeyword(ut(needle), maxDistance);
     expect(result[0]).toEqual(expectedResult);
   }
 );
@@ -67,15 +67,15 @@ test('TEST: findSimilarKeyword() missing space', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
   sut.addCandidate(CAND_ADIOS);
   sut.addCandidate(CAND_HOLA);
-  const result = sut.findSimilarKeyword(ut('buenosdias'), 1);
+  const result = sut.findIfOnlyWordsFromKeyword(ut('buenosdias'), 1);
   expect(result[0].candidate).toEqual(CAND_HOLA.owner);
 });
 
 test('TEST: findSimilarKeyword() stemmed checks all words in keyword', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
   sut.addCandidate(candidate('realiz ped'));
-  expect(sut.findSimilarKeyword(ut('realiz'), 1)).toHaveLength(0);
-  expect(sut.findSimilarKeyword(ut('realizarped'), 1)).toHaveLength(1);
+  expect(sut.findIfOnlyWordsFromKeyword(ut('realiz'), 1)).toHaveLength(0);
+  expect(sut.findIfOnlyWordsFromKeyword(ut('realizarped'), 1)).toHaveLength(1);
 });
 
 test.each<any>([
@@ -133,7 +133,7 @@ test('TEST: findSubstring gets closest match', () => {
 test('TEST: findSimilarKeyword gets closest match', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
   sut.addCandidate(candidate('abc', 'abcdef'));
-  const result = sut.findSimilarKeyword(ut('abcd'), 2);
+  const result = sut.findIfOnlyWordsFromKeyword(ut('abcd'), 2);
   expect(result).toHaveLength(1);
   expect(result[0].distance).toEqual(1);
 });

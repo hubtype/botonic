@@ -86,7 +86,7 @@ export class KeywordsParser<M> {
     let results: SimilarWordResult<M>[] = [];
     switch (this.matchType) {
       case MatchType.ONLY_KEYWORDS_FOUND:
-        results = this.similar.findSimilarKeyword(
+        results = this.similar.findIfOnlyWordsFromKeyword(
           utterance,
           this.options.maxDistance
         );
