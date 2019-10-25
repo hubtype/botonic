@@ -9,11 +9,13 @@ import {
   Chitchat,
   Queue,
   Content,
-  StartUp
+  StartUp,
+  CommonFields,
+  ScheduleContent,
+  DateRangeContent,
+  TopContent
 } from './contents';
 import { Context } from './context';
-
-import * as time from '../time';
 
 export class ErrorReportingCMS implements CMS {
   constructor(readonly cms: CMS) {}
@@ -81,26 +83,30 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleError('contentsWithKeywords'));
   }
 
-  contents(model: ModelType, context?: Context): Promise<Content[]> {
+  contents(
+    model: ModelType,
+    context?: Context,
+    filter?: (cf: CommonFields) => boolean
+  ): Promise<TopContent[]> {
     return this.cms
-      .contents(model, context)
+      .contents(model, context, filter)
       .catch(this.handleError('contents'));
   }
 
-  schedule(id: string): Promise<time.Schedule> {
+  schedule(id: string): Promise<ScheduleContent> {
     return this.cms
       .schedule(id)
       .catch(this.handleError(ModelType.SCHEDULE, id));
   }
 
-  dateRange(id: string): Promise<time.DateRange> {
+  dateRange(id: string): Promise<DateRangeContent> {
     return this.cms
       .dateRange(id)
       .catch(this.handleError(ModelType.DATE_RANGE, id));
   }
 
   asset(id: string): Promise<Asset> {
-    return this.cms.asset(id).catch(this.handleError(ModelType.ASSET, id));
+    return this.cms.asset(id).catch(this.handleError('asset', id));
   }
 
   private handleError(modelType: string, id?: string): (reason: any) => never {

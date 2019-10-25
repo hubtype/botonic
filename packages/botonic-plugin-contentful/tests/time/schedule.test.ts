@@ -2,6 +2,7 @@ import {
   DaySchedule,
   HourAndMinute,
   Schedule,
+  ScheduleAlwaysOn,
   TimeRange,
   WeekDay
 } from '../../src/time/schedule';
@@ -9,6 +10,11 @@ import momentTz from 'moment-timezone';
 
 const MARCH = 2;
 const APRIL = 3;
+
+test('TEST ScheduleAlwaysOn', () => {
+  const sut = new ScheduleAlwaysOn();
+  expect(sut.contains(new Date())).toEqual(true);
+});
 
 test.each<any>([
   // Friday winter time

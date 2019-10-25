@@ -1,10 +1,10 @@
 import { Context } from '../cms';
 import * as cms from '../cms';
-import { ContentDelivery } from './content-delivery';
-import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
+import { CommonEntryFields, DeliveryApi } from './delivery-api';
 import * as contentful from 'contentful/index';
+import { DeliveryWithFollowUp } from './follow-up';
 
-export class ImageDelivery extends ContentDelivery {
+export class ImageDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi) {
     super(cms.ModelType.IMAGE, delivery);
   }
@@ -14,17 +14,20 @@ export class ImageDelivery extends ContentDelivery {
       id,
       context
     );
-    return this.imageFromEntry(entry);
+    return this.fromEntry(entry, context);
   }
 
-  imageFromEntry(entry: contentful.Entry<ImageFields>): cms.Image {
+  async fromEntry(
+    entry: contentful.Entry<ImageFields>,
+    context: cms.Context
+  ): Promise<cms.Image> {
     return new cms.Image(
-      entry.fields.name,
+      await this.getFollowUp().commonFields(entry, context),
       DeliveryApi.urlFromAsset(entry.fields.image)
     );
   }
 }
 
-export interface ImageFields extends ContentWithKeywordsFields {
+export interface ImageFields extends CommonEntryFields {
   image: contentful.Asset;
 }

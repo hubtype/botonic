@@ -1,6 +1,7 @@
 import {
   Button,
   ButtonStyle,
+  CommonFields,
   ContentCallback,
   ModelType,
   Text
@@ -55,7 +56,9 @@ export class RndTextBuilder extends TextBuilder {
       .build();
     this.shortText = rndStr();
     this.keywords = this.keywordsBuilder.build();
-    this.followUp = rndBool() ? undefined : new Text(rndStr(), rndStr(), []);
+    this.followUp = rndBool()
+      ? undefined
+      : new Text(new CommonFields(rndStr()), rndStr(), []);
     this.buttonsStyle = rndBool()
       ? ButtonStyle.QUICK_REPLY
       : ButtonStyle.BUTTON;

@@ -50,8 +50,8 @@ export class Search {
       if (urlCallback) {
         const url = await this.cms.url(urlCallback.id, context);
         return new Button(
-          result.name,
-          result.shortText!,
+          result.common.name,
+          result.common.shortText!,
           Callback.ofUrl(url.url)
         );
       }

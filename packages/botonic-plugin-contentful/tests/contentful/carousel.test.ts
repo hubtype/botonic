@@ -25,8 +25,8 @@ test('TEST: contentful carousel', async () => {
 
   // assert
   expect(carousel.elements).toHaveLength(3);
-  expect(carousel.name).toEqual('INICIO');
-  expect(carousel.keywords).toEqual(['Inicio', 'menu', 'empezar']);
-  expect(carousel.shortText).toEqual('Menú de Inicio');
+  expect(carousel.common.name).toEqual('INICIO');
+  expect(carousel.common.keywords).toEqual(['Inicio', 'menu', 'empezar']);
+  expect(carousel.common.shortText).toEqual('Menú de Inicio');
   assertElementDudasPrevias(carousel.elements[0]);
 });

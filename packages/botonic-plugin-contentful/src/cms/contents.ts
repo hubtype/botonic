@@ -1,4 +1,4 @@
-import { Schedule } from '../time';
+import * as time from '../time';
 import { Callback } from './callback';
 import { SearchableBy } from './fields';
 
@@ -21,13 +21,10 @@ export class Asset {
   ) {}
 }
 
+/**
+ * Any content deliverable from a CMS
+ */
 export abstract class Content {
-  /**
-   * An ID (eg. PRE_FAQ1)
-   * @param name TODO rename to id or code?
-   */
-  protected constructor(readonly name: string) {}
-
   /** @return message if any issue detected */
   validate(): string | undefined {
     return undefined;
@@ -43,13 +40,50 @@ export abstract class Content {
 }
 
 /**
+ * A self-contained content to which {@link Callback} may refer
+ */
+export abstract class TopContent extends Content {
+  protected constructor(readonly common: CommonFields) {
+    super();
+  }
+}
+
+/**
  * When any {@link keywords} is detected on a user input, we can use display the {@link shortText} for users
  * to confirm their interest on this content
  */
-export interface ContentWithKeywords {
-  readonly name: string;
+export class CommonFields {
   readonly shortText?: string;
-  readonly keywords?: string[];
+  readonly keywords: string[];
+  readonly searchableBy?: SearchableBy;
+  /** Useful when contents need to be replicated according to some criteria. Eg. country, company,...
+   */
+  readonly partitions: string[];
+  readonly dateRange?: DateRangeContent;
+  followUp?: FollowUp;
+  constructor(
+    readonly name: string,
+    opt?: {
+      shortText?: string;
+      keywords?: string[];
+      searchableBy?: SearchableBy;
+      partitions?: string[];
+      dateRange?: DateRangeContent;
+      followUp?: FollowUp;
+    }
+  ) {
+    if (opt) {
+      this.shortText = opt.shortText;
+      this.keywords = opt.keywords || [];
+      this.searchableBy = opt.searchableBy;
+      this.partitions = opt.partitions || [];
+      this.dateRange = opt.dateRange;
+      this.followUp = opt.followUp;
+    } else {
+      this.keywords = [];
+      this.partitions = [];
+    }
+  }
 }
 
 export class Button extends Content {
@@ -58,7 +92,7 @@ export class Button extends Content {
     readonly text: string,
     readonly callback: Callback
   ) {
-    super(name);
+    super();
   }
 
   validate(): string | undefined {
@@ -72,17 +106,14 @@ export class Button extends Content {
   }
 }
 
-export class StartUp extends Content implements ContentWithKeywords {
+export class StartUp extends TopContent {
   constructor(
-    // An ID (eg. PRE_FAQ1)
-    readonly name: string,
+    readonly common: CommonFields,
     readonly imgUrl: string | undefined,
     readonly text: string | undefined,
-    readonly buttons: Button[],
-    readonly shortText?: string,
-    readonly keywords: string[] = []
+    readonly buttons: Button[]
   ) {
-    super(name);
+    super(common);
   }
 
   validate(): string | undefined {
@@ -90,14 +121,12 @@ export class StartUp extends Content implements ContentWithKeywords {
   }
 }
 
-export class Carousel extends Content implements ContentWithKeywords {
+export class Carousel extends TopContent {
   constructor(
-    readonly name: string, // Useful to display in buttons or reports
-    readonly elements: Element[] = [],
-    readonly shortText?: string,
-    readonly keywords: string[] = []
+    readonly common: CommonFields,
+    readonly elements: Element[] = []
   ) {
-    super(name);
+    super(common);
   }
 
   validate(): string | undefined {
@@ -107,13 +136,15 @@ export class Carousel extends Content implements ContentWithKeywords {
 
 /** Part of a carousel */
 export class Element extends Content {
+  readonly name: string;
   constructor(
     readonly buttons: Button[],
     readonly title?: string,
     readonly subtitle?: string,
     readonly imgUrl?: string
   ) {
-    super(title || '');
+    super();
+    this.name = title || '';
   }
 
   validate(): string | undefined {
@@ -121,26 +152,21 @@ export class Element extends Content {
   }
 }
 
-export class Image extends Content {
-  constructor(readonly name: string, readonly imgUrl: string) {
-    super(name);
+export class Image extends TopContent {
+  constructor(readonly common: CommonFields, readonly imgUrl: string) {
+    super(common);
   }
 }
 
-export class Text extends Content implements ContentWithKeywords {
+export class Text extends TopContent {
   constructor(
-    // An ID (eg. PRE_FAQ1)
-    readonly name: string,
+    readonly common: CommonFields,
     // Full text
     readonly text: string,
     readonly buttons: Button[],
-    // Useful to display in buttons or reports
-    readonly shortText?: string,
-    readonly keywords: string[] = [],
-    readonly followUp?: FollowUp,
     readonly buttonsStyle = ButtonStyle.BUTTON
   ) {
-    super(name);
+    super(common);
   }
 
   validate(): string | undefined {
@@ -161,42 +187,46 @@ export class Text extends Content implements ContentWithKeywords {
 
   cloneWithFollowUp(newFollowUp: FollowUp): Text {
     const clone = Object.create(this);
-    clone.followUp = newFollowUp;
+    clone.common = Object.create(clone.common);
+    clone.common.followUp = newFollowUp;
     return clone as Text;
   }
 }
 
 export type Chitchat = Text;
 
-export class Url extends Content implements ContentWithKeywords {
-  /**
-   *
-   * @param followup so far not defined in Contentful model, since URL's are not rendered anyway
-   */
-  constructor(
-    readonly name: string,
-    readonly url: string,
-    readonly shortText?: string,
-    readonly keywords: string[] = [],
-    readonly followup?: FollowUp
-  ) {
-    super(name);
+export class Url extends TopContent {
+  constructor(readonly common: CommonFields, readonly url: string) {
+    super(common);
   }
 }
 
-export class Queue extends Content implements ContentWithKeywords {
+export class Queue extends TopContent {
   constructor(
-    readonly name: string,
+    readonly common: CommonFields,
     readonly queue: string,
-    readonly shortText?: string,
-    readonly schedule?: Schedule,
-    readonly searchableBy: SearchableBy = new SearchableBy()
+    readonly schedule?: time.Schedule
   ) {
-    super(name);
+    super(common);
+  }
+}
+
+export class DateRangeContent extends TopContent {
+  constructor(
+    readonly common: CommonFields,
+    readonly dateRange: time.DateRange
+  ) {
+    super(common);
+  }
+}
+
+export class ScheduleContent extends TopContent {
+  constructor(readonly common: CommonFields, readonly schedule: time.Schedule) {
+    super(common);
   }
 }
 
 /**
  * A {@link Content} which is automatically displayed after another one
  */
-export type FollowUp = Text | Carousel | Image;
+export type FollowUp = Text | Carousel | Image | StartUp;

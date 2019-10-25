@@ -1,8 +1,23 @@
 import * as contentful from 'contentful';
+import { Entry, EntryCollection } from 'contentful';
 import * as cms from '../cms';
-import { Callback, Content, ContentCallback, Context, ModelType } from '../cms';
-import { QueueDelivery, QueueFields } from './queue';
+import {
+  Callback,
+  CommonFields,
+  ContentCallback,
+  Context,
+  ModelType,
+  SearchableBy,
+  TopContent
+} from '../cms';
+import { QueueDelivery } from './queue';
 import { UrlFields } from './url';
+import {
+  SearchableByKeywordsDelivery,
+  SearchableByKeywordsFields
+} from './searchable-by';
+import { ScheduleDelivery } from './schedule';
+import { DateRangeDelivery, DateRangeFields } from './date-range';
 
 export class DeliveryApi {
   private client: contentful.ContentfulClientApi;
@@ -74,38 +89,75 @@ export class DeliveryApi {
     return 'https:' + assetField.fields.file.url;
   }
 
-  async contents(model: ModelType, context: Context): Promise<Content[]> {
-    if (model != ModelType.QUEUE) {
-      throw new Error('CMS.contents only supports queue at the moment');
-    }
-    const entries = await this.getEntries(context, {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      content_type: model,
-      include: QueueDelivery.REFERENCES_INCLUDE // TODO change for other types
-    });
-    return entries.items.map(item =>
-      QueueDelivery.fromEntry(item as contentful.Entry<QueueFields>)
+  async contents(
+    model: ModelType,
+    context: Context,
+    factory: (
+      entry: contentful.Entry<any>,
+      ctxt: Context
+    ) => Promise<TopContent>,
+    filter?: (cf: CommonFields) => boolean
+  ) {
+    const entries: EntryCollection<CommonEntryFields> = await this.getEntries(
+      context,
+      {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        content_type: model,
+        include: this.maxReferencesInclude()
+      }
     );
-    //TODO switch with instanceof the model
-    // if (model instanceof ModelType.QUEUE) {
-    // }
-    // switch (true) {
-    //   case model instanceof ModelType.QUEUE:
-    //     console.log('QUEUE');
-    //     return QueueDelivery.fromEntry(entries);
-    //   default:
-    //     console.error('Content not implemented!');
-    // }
+    let promises = entries.items;
+    if (filter) {
+      promises = promises.filter(entry => filter(commonFieldsFromEntry(entry)));
+    }
+    return Promise.all(promises.map(entry => factory(entry, context)));
+  }
+
+  private maxReferencesInclude() {
+    return Math.max(
+      QueueDelivery.REFERENCES_INCLUDE,
+      ScheduleDelivery.REFERENCES_INCLUDE
+    );
   }
 }
 
 export interface ContentWithNameFields {
-  // An ID (eg. PRE_FAQ1)
+  // The content code (eg. PRE_FAQ1) Not called Id to differentiate from contentful automatic Id
   name: string;
 }
 
-export interface ContentWithKeywordsFields extends ContentWithNameFields {
+export interface CommonEntryFields extends ContentWithNameFields {
   // Useful to display in buttons or reports
   shortText: string;
-  keywords: string[];
+  keywords?: string[];
+  searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
+  partitions?: string[];
+  dateRange?: contentful.Entry<DateRangeFields>;
+  followup?: contentful.Entry<FollowUpFields>;
+}
+export type FollowUpFields = CommonEntryFields;
+
+export function commonFieldsFromEntry(
+  entry: Entry<CommonEntryFields>
+): CommonFields {
+  const fields = entry.fields;
+
+  const searchableBy =
+    fields.searchableBy &&
+    new SearchableBy(
+      fields.searchableBy.map(searchableBy =>
+        SearchableByKeywordsDelivery.fromEntry(searchableBy)
+      )
+    );
+
+  const dateRange =
+    fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange);
+
+  return new CommonFields(fields.name, {
+    keywords: fields.keywords,
+    shortText: fields.shortText,
+    partitions: fields.partitions,
+    searchableBy,
+    dateRange
+  });
 }
