@@ -11,7 +11,7 @@ const Header = ({ siteTitle }) => {
     display: flex;
   `
   const Inner = styled.div`
-    padding: 16px;
+    padding: 16px 0px;
     display: flex;
     width: 33%;
   `

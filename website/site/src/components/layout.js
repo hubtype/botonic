@@ -25,13 +25,13 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <>
+    <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
       <Header siteTitle={data.site.siteMetadata.title} />
-      <div style={{ margin: `0px` }} >
+      <div style={{ margin: `0px`, flexGrow: 1}} >
         <main>{children}</main>
       </div>
       <Footer/>
-    </>
+    </div>
   )
 }
 
