@@ -1,7 +1,27 @@
-import { ContentCallback, ModelType, Queue } from '../../src/cms';
+import {
+  CommonFields,
+  ContentCallback,
+  ModelType,
+  Queue,
+  Text
+} from '../../src/cms';
 import { testContentful, testContext } from './contentful.helper';
 
-test('TEST: contentful contents', async () => {
+test('TEST: contentful contents filter', async () => {
+  const filter = (cf: CommonFields) => cf.name.startsWith('POST');
+  const texts = await testContentful().contents(
+    ModelType.TEXT,
+    { locale: 'en' },
+    filter
+  );
+  expect(texts).toSatisfyAll(
+    text => text instanceof Text && filter(text.common)
+  );
+
+  expect(texts.length).toBeGreaterThanOrEqual(8);
+});
+
+test('TEST: contentful contents no filter', async () => {
   const queues = await testContentful().contents(ModelType.QUEUE, {
     locale: 'en'
   });
@@ -12,7 +32,7 @@ test('TEST: contentful contents', async () => {
 test('TEST: contentful contentsWithKeywords', async () => {
   // act
   const results = await testContentful().contentsWithKeywords(
-    testContext([{ locale: 'es' }, {}, undefined])
+    testContext([{ locale: 'en' }, {}, undefined])
   );
 
   // assert
@@ -35,6 +55,5 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(ofType(ModelType.SCHEDULE)).toHaveLength(0);
   expect(ofType(ModelType.DATE_RANGE)).toHaveLength(0);
   expect(ofType(ModelType.IMAGE)).toHaveLength(0);
-  expect(ofType(ModelType.ASSET)).toHaveLength(0);
   expect(ofType(ModelType.QUEUE)).toHaveLength(2);
 });

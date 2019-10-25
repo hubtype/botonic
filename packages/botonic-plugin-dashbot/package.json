@@ -5,8 +5,5 @@
   "dependencies": {
     "axios": "latest",
     "dashbot": "^10.4.5"
-  },
-  "devDependencies": {
-    "@babel/runtime": "^7.6.0"
   }
 }

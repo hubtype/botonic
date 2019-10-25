@@ -1,35 +1,37 @@
 import * as contentful from 'contentful/index';
-import { DEFAULT_CONTEXT, ModelType } from '../cms';
+import { DateRangeContent, DEFAULT_CONTEXT, ModelType } from '../cms';
 import * as time from '../time';
 import { ContentDelivery } from './content-delivery';
-import { ContentWithKeywordsFields, DeliveryApi } from './delivery-api';
+import {
+  CommonEntryFields,
+  commonFieldsFromEntry,
+  DeliveryApi
+} from './delivery-api';
 
 export class DateRangeDelivery extends ContentDelivery {
   constructor(delivery: DeliveryApi) {
     super(ModelType.DATE_RANGE, delivery);
   }
 
-  async dateRange(id: string): Promise<time.DateRange> {
+  async dateRange(id: string): Promise<DateRangeContent> {
     const entry: contentful.Entry<DateRangeFields> = await this.getEntry(
       id,
       DEFAULT_CONTEXT
     );
-    return DateRangeDelivery.dateRangeFromEntry(entry);
+    return DateRangeDelivery.fromEntry(entry);
   }
 
-  static dateRangeFromEntry(
-    entry: contentful.Entry<DateRangeFields>
-  ): time.DateRange {
-    return new time.DateRange(
+  static fromEntry(entry: contentful.Entry<DateRangeFields>): DateRangeContent {
+    const dateRange = new time.DateRange(
       entry.fields.name,
       new Date(Date.parse(entry.fields.from)),
       new Date(Date.parse(entry.fields.to))
     );
+    return new DateRangeContent(commonFieldsFromEntry(entry), dateRange);
   }
 }
 
-export interface DateRangeFields extends ContentWithKeywordsFields {
-  name: string;
+export interface DateRangeFields extends CommonEntryFields {
   from: string;
   to: string;
 }

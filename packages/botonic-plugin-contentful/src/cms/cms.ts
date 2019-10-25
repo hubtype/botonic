@@ -1,5 +1,4 @@
 import { SearchResult } from '../search/search-result';
-import * as time from '../time';
 import { Context } from './context';
 import {
   Asset,
@@ -9,12 +8,14 @@ import {
   Url,
   Chitchat,
   Queue,
-  Content,
-  StartUp
+  StartUp,
+  CommonFields,
+  ScheduleContent,
+  DateRangeContent,
+  TopContent
 } from './contents';
 
 export enum ModelType {
-  ASSET = 'asset',
   CAROUSEL = 'carousel',
   CHITCHAT = 'chitchat',
   DATE_RANGE = 'dateRange',
@@ -51,16 +52,20 @@ export interface CMS {
   text(id: string, context?: Context): Promise<Text>;
   url(id: string, context?: Context): Promise<Url>;
   /**
-   * @param context If locale specified, it does not returns contents without values for the locale (even if it has value for the fallback locale)
+   * If locale specified in context, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
-  contents(model: ModelType, context?: Context): Promise<Content[]>;
+  contents(
+    model: ModelType,
+    context?: Context,
+    filter?: (cf: CommonFields) => boolean
+  ): Promise<TopContent[]>;
 
   /**
    * For contents with 'Seachable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
    * @param context If locale specified, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
   contentsWithKeywords(context?: Context): Promise<SearchResult[]>;
-  schedule(id: string): Promise<time.Schedule>;
-  dateRange(id: string): Promise<time.DateRange>;
+  schedule(id: string): Promise<ScheduleContent>;
+  dateRange(id: string): Promise<DateRangeContent>;
   asset(id: string): Promise<Asset>;
 }

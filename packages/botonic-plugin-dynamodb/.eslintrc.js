@@ -16,7 +16,6 @@ module.exports = {
     "@typescript-eslint"
   ],
   parserOptions: {
-    project: "./tsconfig.json",
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
     sourceType: "module" // Allows for the use of imports
   },
@@ -24,7 +23,7 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
-    "filenames/match-regex": [2, "^[a-z-.]+$", true],
+    "filenames/match-regex": ["error", "^[a-z-.]+$", true],
 
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
@@ -35,12 +34,12 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
     "unicorn/no-abusive-eslint-disable" : "off",
+    "@typescript-eslint/camelcase" : "warn",
+    "consistent-return": "error",
 
     // special for TYPESCRIPT
     "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
     "@typescript-eslint/explicit-member-accessibility": "off", //we think defaulting to public is a good default
-    "@typescript-eslint/no-floating-promises": "error", // see https://github.com/xjamundx/eslint-plugin-promise/issues/151
-    "@typescript-eslint/no-misused-promises": "error",
     "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }], // to encapsulate types in namespace with same name as Class
     "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
     "@typescript-eslint/no-object-literal-type-assertion" : [ "error", {allowAsParameter: false}], //useful to pass options to plugins
@@ -49,7 +48,6 @@ module.exports = {
     // otoh, variables (typically constants) should be declared at the top
     "@typescript-eslint/no-use-before-define": ["error", { "variables": true, "functions": false, "classes": false }],
     "@typescript-eslint/no-useless-constructor": "warn",
-    "@typescript-eslint/require-await": "error",
     "no-empty-pattern" : "off",
     "no-null/no-null": "warn", // fields declared with ? are undefined, not null (be aware that React uses null)
     "unicorn/prevent-abbreviations" : "off", // the plugin removes removes type annotations from typescript code :-(

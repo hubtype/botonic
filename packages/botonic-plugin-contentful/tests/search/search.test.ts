@@ -1,5 +1,12 @@
 import { instance, mock, when } from 'ts-mockito';
-import { ContentCallback, DummyCMS, ModelType, Text, Url } from '../../src/cms';
+import {
+  CommonFields,
+  ContentCallback,
+  DummyCMS,
+  ModelType,
+  Text,
+  Url
+} from '../../src/cms';
 import { Search, SearchResult } from '../../src/search';
 import { Normalizer } from '../../src/nlp';
 
@@ -8,27 +15,23 @@ const CONTEXT = { locale: 'es' };
 test('TEST: respondFoundContents text with buttons', async () => {
   const cms = mock(DummyCMS);
   when(cms.url('urlCmsId', CONTEXT)).thenResolve(
-    new Url('url', 'http:/mocked_url')
+    new Url(new CommonFields('url'), 'http:/mocked_url')
   );
   const sut = new Search(instance(cms), instance(mock(Normalizer)));
 
   const urlContent = new SearchResult(
     new ContentCallback(ModelType.URL, 'urlCmsId'),
-    'name',
-    'url shortText',
-    []
+    new CommonFields('name', { shortText: 'url shortText' })
   );
 
   const textContent = new SearchResult(
     new ContentCallback(ModelType.TEXT, 'textCmsId'),
-    'name',
-    'text shortText',
-    []
+    new CommonFields('name', { shortText: 'text shortText' })
   );
 
   // sut
   when(cms.text('foundId', CONTEXT)).thenResolve(
-    new Text('foundName', 'foundText', [])
+    new Text(new CommonFields('foundName'), 'foundText', [])
   );
   const response = await sut.respondFoundContents(
     [urlContent, textContent],
@@ -57,13 +60,11 @@ test('TEST: respondFoundContents text with chitchat', async () => {
   when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat);
   const chitchatCallback = new SearchResult(
     new ContentCallback(ModelType.CHITCHAT, 'chitchatCmsId'),
-    'name',
-    'chitchat',
-    []
+    new CommonFields('name', { shortText: 'chitchat' })
   );
 
   when(cms.text('foundId', CONTEXT)).thenResolve(
-    new Text('foundName', 'foundText', [])
+    new Text(new CommonFields('foundName'), 'foundText', [])
   );
 
   //act
@@ -84,7 +85,7 @@ test('TEST: respondFoundContents without contents', async () => {
 
   // sut
   when(cms.text('notFoundId', CONTEXT)).thenResolve(
-    new Text('notFoundName', 'notFoundText', [])
+    new Text(new CommonFields('notFoundName'), 'notFoundText', [])
   );
   const response = await sut.respondFoundContents(
     [],

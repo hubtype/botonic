@@ -25,14 +25,14 @@ export class KeywordsTool {
     const context = { locale: this.locale };
     const results = await this.cms.contentsWithKeywords(context);
     for (const res of results) {
-      const stemmed = res.keywords.map(
+      const stemmed = res.common.keywords.map(
         kw =>
           new StemmedKeyword(
             kw,
             this.normalizer.normalize(context.locale, kw).stems
           )
       );
-      keywords.set(res.name, stemmed);
+      keywords.set(res.common.name, stemmed);
     }
     return keywords;
   }

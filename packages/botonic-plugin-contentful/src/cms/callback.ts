@@ -1,6 +1,7 @@
 import { CMS, MODEL_TYPES, ModelType } from './cms';
 import escapeStringRegexp from 'escape-string-regexp';
 import { Context } from './context';
+import { TopContent } from './contents';
 
 export class Callback {
   /**
@@ -61,7 +62,7 @@ export class ContentCallback extends Callback {
     }
   }
 
-  deliverPayloadContent(cms: CMS, context?: Context): Promise<any> {
+  deliverPayloadContent(cms: CMS, context?: Context): Promise<TopContent> {
     switch (this.model) {
       case ModelType.CAROUSEL:
         return cms.carousel(this.id, context);
@@ -81,8 +82,6 @@ export class ContentCallback extends Callback {
         return cms.schedule(this.id);
       case ModelType.DATE_RANGE:
         return cms.dateRange(this.id);
-      case ModelType.ASSET:
-        return cms.asset(this.id);
       default:
         throw new Error(
           `Type '${this.model}' not supported for callback with id '${this.id}'`

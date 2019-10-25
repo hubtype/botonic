@@ -8,6 +8,9 @@ import { tokenizerPerLocale } from './tokens';
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
 // and https://stackoverflow.com/a/11210358/145289
+// snowball algorithm inspired from https://github.com/MihaiValentin/lunr-languages, based on
+// https://github.com/fortnightlabs/snowball-js/blob/master/stemmer/src/ext/SpanishStemmer.js based on
+// java version at http://snowball.tartarus.org/download.html
 export const stemmers: { [key: string]: BaseStemmer } = {
   ca: new CatalanStemmer(tokenizerPerLocale('ca')),
   en: new EnglishStemmer(tokenizerPerLocale('en')),

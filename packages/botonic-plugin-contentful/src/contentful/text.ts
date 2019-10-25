@@ -1,8 +1,11 @@
 import * as contentful from 'contentful';
 import * as cms from '../cms';
 import { ButtonDelivery } from './button';
-import { CarouselFields } from './carousel';
-import { DeliveryApi, ContentWithKeywordsFields } from './delivery-api';
+import {
+  DeliveryApi,
+  CommonEntryFields,
+  commonFieldsFromEntry
+} from './delivery-api';
 import { DeliveryWithFollowUp } from './follow-up';
 
 export class TextDelivery extends DeliveryWithFollowUp {
@@ -20,10 +23,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
       context
     );
     // .. so we need to fetch the buttons
-    return this.textFromEntry(entry, context);
+    return this.fromEntry(entry, context);
   }
 
-  async textFromEntry(
+  async fromEntry(
     entry: contentful.Entry<TextFields>,
     context: cms.Context
   ): Promise<cms.Text> {
@@ -31,22 +34,21 @@ export class TextDelivery extends DeliveryWithFollowUp {
     const buttons = fields.buttons || [];
     const followup: Promise<
       cms.Content | undefined
-    > = this.followUp!.fromFields(fields.followup, context);
+    > = this.getFollowUp().fromEntry(fields.followup, context);
     const promises = [followup];
     promises.push(
       ...buttons.map(reference => this.button.fromReference(reference, context))
     );
 
     return Promise.all(promises).then(followUpAndButtons => {
-      const followUp = followUpAndButtons.shift() as (cms.Text | undefined);
+      const followUp = followUpAndButtons.shift() as (cms.FollowUp | undefined);
       const buttons = followUpAndButtons as cms.Button[];
+      const common = commonFieldsFromEntry(entry);
+      common.followUp = followUp;
       return new cms.Text(
-        fields.name,
+        common,
         fields.text,
         buttons,
-        fields.shortText,
-        fields.keywords,
-        followUp,
         fields.buttonsStyle == 'QuickReplies'
           ? cms.ButtonStyle.QUICK_REPLY
           : cms.ButtonStyle.BUTTON
@@ -55,11 +57,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
   }
 }
 
-export interface TextFields extends ContentWithKeywordsFields {
+export interface TextFields extends CommonEntryFields {
   // Full text
   text: string;
   // typed as any because we might only get the entry.sys but not the fields
   buttons: contentful.Entry<any>[];
-  followup?: contentful.Entry<TextFields | CarouselFields>;
   buttonsStyle?: string;
 }

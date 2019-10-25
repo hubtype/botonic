@@ -1,0 +1,8 @@
+{
+  "name": "@botonic/plugin-watson",
+  "version": "0.9.0",
+  "main": "src/index.js",
+  "dependencies": {
+    "ibm-watson": "^5.1.0"
+  }
+}
