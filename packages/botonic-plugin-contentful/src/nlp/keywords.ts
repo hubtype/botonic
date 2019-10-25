@@ -2,6 +2,9 @@ import { SimilarWordFinder, SimilarWordResult } from './similar-words';
 import { NormalizedUtterance, Normalizer } from './normalizer';
 import { Locale } from './locales';
 
+/**
+ * May contain multiple words
+ */
 export class Keyword {
   constructor(
     readonly raw: string,
