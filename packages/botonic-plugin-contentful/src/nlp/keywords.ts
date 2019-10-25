@@ -83,27 +83,18 @@ export class KeywordsParser<M> {
   findCandidatesWithKeywordsAt(
     utterance: NormalizedUtterance
   ): SimilarWordResult<M>[] {
-    let results: SimilarWordResult<M>[] = [];
-    switch (this.matchType) {
-      case MatchType.ONLY_KEYWORDS_FOUND:
-        results = this.similar.findIfOnlyWordsFromKeyword(
-          utterance,
-          this.options.maxDistance
-        );
-        break;
-      case MatchType.KEYWORDS_AND_OTHERS_FOUND:
-        results = this.similar.findSubstring(
-          utterance,
-          this.options.maxDistance
-        );
-        break;
-      case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
-        results = this.mixedUp(utterance);
-    }
+    const results: SimilarWordResult<M>[] =
+      this.matchType === MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP
+        ? this.mixedUp(utterance)
+        : this.similar.find(
+            this.matchType,
+            utterance,
+            this.options.maxDistance
+          );
     return this.sort(results);
   }
 
-  private mixedUp(utterance: NormalizedUtterance) {
+  mixedUp(utterance: NormalizedUtterance) {
     if (this.options.maxDistance > 0) {
       throw new Error(
         'ALL_WORDS_IN_KEYWORDS_MIXED_UP does not support distance> 0'
