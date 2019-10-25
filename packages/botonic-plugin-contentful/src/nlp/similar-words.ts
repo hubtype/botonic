@@ -1,4 +1,4 @@
-import { SimilarSearch } from 'node-nlp/lib/util';
+import { SimilarSearch, WordPosition } from 'node-nlp/lib/util';
 import { CandidateWithKeywords, Keyword } from './keywords';
 import { countOccurrences } from './tokens';
 import { NormalizedUtterance } from './normalizer';
@@ -25,6 +25,9 @@ export class SimilarWordResult<M> {
 
 const TOO_DISTANT = -1;
 
+class PartialMatch {
+  constructor(readonly match: string, readonly distance: number) {}
+}
 /**
  * It does not normalize case, ie. uppercase will be considered different than lowercase
  */
@@ -137,55 +140,21 @@ export class SimilarWordFinder<M> {
     const wordPositions = this.similar.getWordPositions(sentence.joinedStems);
     for (const candidate of this.candidates) {
       for (const keyword of candidate.keywords) {
-        if (keyword.stemmed.length < this.minWordLength) {
-          if (
-            new RegExp(`\\b${keyword.stemmed}\\b`).test(sentence.joinedStems)
-          ) {
-            results.push(
-              new SimilarWordResult<M>(
-                candidate.owner,
-                keyword,
-                keyword.stemmed,
-                0
-              )
-            );
-          }
-          continue;
-        }
-        const extra = this.stemmedDecorator.extraDistance(keyword.stemmed);
-        const minAccuracy =
-          (keyword.stemmed.length - (maxDistance + extra)) /
-          keyword.stemmed.length;
-        const substrings = this.similar.getBestSubstringList(
-          sentence.joinedStems,
-          keyword.stemmed,
-          wordPositions,
-          minAccuracy
+        const partialMatch = this.findKeyword(
+          keyword,
+          sentence,
+          maxDistance,
+          wordPositions
         );
-        if (substrings.length > 0) {
-          const bestSubstr = substrings.sort(
-            (s1, s2) => s2.accuracy - s1.accuracy
-          )[0];
-          const match = sentence.joinedStems.slice(
-            bestSubstr.start,
-            bestSubstr.end + 1
+        if (partialMatch) {
+          results.push(
+            new SimilarWordResult<M>(
+              candidate.owner,
+              keyword,
+              partialMatch.match,
+              partialMatch.distance
+            )
           );
-          const distance =
-            keyword.stemmed.length -
-            bestSubstr.accuracy * keyword.stemmed.length;
-          if (
-            distance <= maxDistance ||
-            this.stemmedDecorator.verify(match, keyword.stemmed)
-          ) {
-            results.push(
-              new SimilarWordResult<M>(
-                candidate.owner,
-                keyword,
-                match,
-                distance
-              )
-            );
-          }
         }
       }
     }
@@ -193,8 +162,47 @@ export class SimilarWordFinder<M> {
     return this.getLongestResultPerCandidate(results);
   }
 
-  //TODO
-  // findSubstringKeywordMixedUp(sentence: string, maxDistance = 1): SimilarWordResult<M>[] {
+  findKeyword(
+    keyword: Keyword,
+    sentence: NormalizedUtterance,
+    maxDistance: number,
+    wordPositions: WordPosition[]
+  ): PartialMatch | undefined {
+    if (keyword.stemmed.length < this.minWordLength) {
+      if (new RegExp(`\\b${keyword.stemmed}\\b`).test(sentence.joinedStems)) {
+        return new PartialMatch(keyword.stemmed, 0);
+      }
+      return undefined;
+    }
+    const extra = this.stemmedDecorator.extraDistance(keyword.stemmed);
+    const minAccuracy =
+      (keyword.stemmed.length - (maxDistance + extra)) / keyword.stemmed.length;
+    const substrings = this.similar.getBestSubstringList(
+      sentence.joinedStems,
+      keyword.stemmed,
+      wordPositions,
+      minAccuracy
+    );
+    if (substrings.length == 0) {
+      return undefined;
+    }
+    const bestSubstr = substrings.sort(
+      (s1, s2) => s2.accuracy - s1.accuracy
+    )[0];
+    const match = sentence.joinedStems.slice(
+      bestSubstr.start,
+      bestSubstr.end + 1
+    );
+    const distance =
+      keyword.stemmed.length - bestSubstr.accuracy * keyword.stemmed.length;
+    if (
+      distance > maxDistance &&
+      !this.stemmedDecorator.verify(match, keyword.stemmed)
+    ) {
+      return undefined;
+    }
+    return new PartialMatch(match, distance);
+  }
 }
 
 /**
