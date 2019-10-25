@@ -4,6 +4,7 @@ import LinkedCta from "./common/LinkedCta"
 import PlainLink from "./common/PlainLink"
 import BotonicLogo from "./common/BotonicLogo"
 
+
 const Container = styled.div`
   background: #464d65;
   padding: 29px 60px;
@@ -16,6 +17,7 @@ const Inner = styled.div`
 `
 
 const Header = ({ siteTitle }) => {
+
   return (
     <header>
       <Container fontFamily="Palanquin" color="white">

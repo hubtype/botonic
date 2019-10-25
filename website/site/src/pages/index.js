@@ -6,6 +6,7 @@ import PerspectiveCodeHighlighter from "../components/common/PerspectiveCodeHigh
 import BotDemo from "../components/common/BotDemo"
 import styled from "styled-components"
 
+
 let app = new WebchatApp({
   appId: "959e282d-3e03-4469-bec9-0d42d4d0662e",
   theme: {
@@ -17,6 +18,7 @@ let app = new WebchatApp({
       fontFamily: "Noto Sans JP",
       background: "#FFFFFF",
       lineHeight: "26px",
+
       fontSize: "18 spx",
       borderRadius: "26px",
       border: "1px solid white",
@@ -67,7 +69,6 @@ const InnerPerspective = styled.div`
 
 const IndexPage = () => {
   const [userInput, setUserInput] = useState("none")
-
   const codeString = `render() {
     return (
       <>

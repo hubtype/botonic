@@ -20,6 +20,7 @@ const StyledLink = styled(Link)`
 `
 
 const LinkedCta = ({ text, link }) => {
+
   return (
     <StyledLink to={link}>
       <Container>
