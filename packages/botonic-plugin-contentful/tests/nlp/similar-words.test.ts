@@ -56,6 +56,7 @@ test.each<any>([
   ['aidos', 2, res(CAND_ADIOS, kw('adios'), 'aidos', 2)], // 1 letter swapped
   ['afios', 2, res(CAND_ADIOS, kw('adios'), 'afios', 1)], // 1 wrong swapped
   ['adddios', 1, undefined], // too far
+  ['arou', 2, undefined], // has distance 2 to adeu, but only 2 letters match
   ['ey', 1, res(CAND_HOLA, kw('ey'), 'ey', 0)], // short keyword
   ['el', 1, undefined] // similar to 'ey', but short keyword must be identical
 ])(
@@ -102,16 +103,13 @@ test.each<any>([
     2,
     res(CAND_HOLA, kw('buenos dias'), 'bueno dia', 2)
   ], //missing 2 letters
-  [
-    'buenosdias',
-    1,
-    res(CAND_HOLA, kw('buenos dias'), 'buenosdias', 1)
-  ], //missing 2 letters
+  ['buenosdias', 1, res(CAND_HOLA, kw('buenos dias'), 'buenosdias', 1)], //missing 2 letters
   ['vale, addios', 2, res(CAND_ADIOS, kw('adios'), 'addios', 1)], // 1 extra letter
   ['esta bien aidos', 2, res(CAND_ADIOS, kw('adios'), 'aidos', 2)], // 1 letter swapped
   ['gracias. afios', 2, res(CAND_ADIOS, kw('adios'), 'afios', 1)], // 1 wrong swapped
   ['adddios amigos', 1, undefined], // too far
   ['ey amigos', 1, res(CAND_HOLA, kw('ey'), 'ey', 0)], // short keyword
+  ['amic arou', 2, undefined], // arou has distance 2 to adeu, but only 2 letters match
   ['el coche', 1, undefined] // similar to 'ey', but short keyword must be identical
 ])(
   'TEST: findSubstring(%s)',
@@ -204,6 +202,6 @@ test.each<any>([
   (w1: string, w2: string, expected: number) => {
     const similar = new SimilarSearch({ normalize: false });
     const distance = similar.getSimilarity(w1, w2);
-    expect(getMatchLength(w1, w2, distance)).toEqual(expected);
+    expect(getMatchLength(w1.length, w2.length, distance)).toEqual(expected);
   }
 );
