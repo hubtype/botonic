@@ -47,7 +47,7 @@ export enum SortType {
 export class KeywordsOptions {
   constructor(
     readonly maxDistance = 1,
-    readonly similarWordsMinLength = 3,
+    readonly similarWordsMinMatchLength = 3,
     readonly resultsSortType = SortType.LENGTH
   ) {}
 }
@@ -64,7 +64,7 @@ export class KeywordsParser<M> {
   ) {
     this.similar = new SimilarWordFinder<M>(
       true,
-      options.similarWordsMinLength
+      options.similarWordsMinMatchLength
     );
   }
 
