@@ -170,3 +170,11 @@ test.each<any>([
   'TEST: find keywords of "%s" with ALL_WORDS_IN_KEYWORDS_MIXED_UP',
   testFindKeywords('es', MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP)
 );
+
+test('ALL_WORDS_IN_KEYWORDS_MIXED_UP', () => {
+  testFindKeywords('es', MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP)(
+    'sobre',
+    { ONLY_STOPWORD: ['kw1', 'Sobre'] },
+    ['ONLY_STOPWORD']
+  );
+});
