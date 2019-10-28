@@ -37,7 +37,7 @@ export class NormalizedUtterance {
    *
    * @param raw
    * @param tokens lowercase, with i18n characters converted to ascii
-   * @param stems lowercase, stemmed
+   * @param stems lowercase, stemmed. Equal to tokens if onlyStopWords==true
    * @param onlyStopWords tokens are all stop words
    */
   constructor(
@@ -101,7 +101,7 @@ export class Normalizer {
       stems = stems.concat(...tokenStems);
     }
     if (stems.length == 0) {
-      console.log(`'${txt}' only contains stopwords. Not removing them`);
+      // console.log(`'${txt}' only contains stopwords. Not removing them`);
       return new NormalizedUtterance(txt, tokens, tokens, true);
     }
     return new NormalizedUtterance(txt, tokens, stems, false);

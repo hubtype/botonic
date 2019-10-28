@@ -4,13 +4,24 @@ import { Locale } from './locales';
 
 /**
  * May contain multiple words
+ * TODO consider storing as a list of new Token class instances', each with a raw and stem fields
  */
 export class Keyword {
+  readonly raw: string;
   constructor(
-    readonly raw: string,
+    raw: string,
     readonly stemmed: string,
     readonly hasOnlyStopWords: boolean
-  ) {}
+  ) {
+    this.raw = raw.trim().toLowerCase();
+  }
+
+  splitInWords(): Keyword[] {
+    if (this.hasOnlyStopWords) {
+      return this.raw.split(' ').map(w => new Keyword(w, w, true));
+    }
+    return this.stemmed.split(' ').map(w => new Keyword(w, w, false));
+  }
 }
 
 export class CandidateWithKeywords<M> {
@@ -83,39 +94,12 @@ export class KeywordsParser<M> {
   findCandidatesWithKeywordsAt(
     utterance: NormalizedUtterance
   ): SimilarWordResult<M>[] {
-    const results: SimilarWordResult<M>[] =
-      this.matchType === MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP
-        ? this.mixedUp(utterance)
-        : this.similar.find(
-            this.matchType,
-            utterance,
-            this.options.maxDistance
-          );
+    const results: SimilarWordResult<M>[] = this.similar.find(
+      this.matchType,
+      utterance,
+      this.options.maxDistance
+    );
     return this.sort(results);
-  }
-
-  mixedUp(utterance: NormalizedUtterance) {
-    if (this.options.maxDistance > 0) {
-      throw new Error(
-        'ALL_WORDS_IN_KEYWORDS_MIXED_UP does not support distance> 0'
-      );
-    }
-    const results: SimilarWordResult<M>[] = [];
-    for (const candidate of this.candidates) {
-      for (const keyword of candidate.keywords) {
-        if (this.containsAllWordsInKeyword(utterance, keyword)) {
-          results.push(
-            new SimilarWordResult<M>(
-              candidate.owner,
-              keyword,
-              keyword.stemmed,
-              0
-            )
-          );
-        }
-      }
-    }
-    return results;
   }
 
   private sort(results: SimilarWordResult<M>[]) {
@@ -123,17 +107,5 @@ export class KeywordsParser<M> {
       return results;
     }
     return results.sort((r1, r2) => r2.match.length - r1.match.length);
-  }
-
-  private containsAllWordsInKeyword(
-    utterance: NormalizedUtterance,
-    keyword: Keyword
-  ): boolean {
-    for (const word of keyword.stemmed.split(' ')) {
-      if (!utterance.joinedStems.includes(word)) {
-        return false;
-      }
-    }
-    return true;
   }
 }
