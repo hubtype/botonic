@@ -14,7 +14,7 @@ import {
   TopContent
 } from '../cms';
 import { ButtonDelivery } from './button';
-import { DeliveryApi} from './delivery-api';
+import { DeliveryApi } from './delivery-api';
 import { CarouselDelivery } from './carousel';
 import { StartUpDelivery } from './startup';
 import { TextDelivery } from './text';
