@@ -4,28 +4,33 @@ import {
   MatchType
 } from '../../src/nlp/keywords';
 import {
+  getMatchLength,
   SimilarWordFinder,
   SimilarWordResult
 } from '../../src/nlp/similar-words';
 import { NormalizedUtterance } from '../../src/nlp';
+import { SimilarSearch } from 'node-nlp/lib/util';
 
 test('hack because webstorm does not recognize test.each', () => {});
 
 class TestCandidate {}
 
-function candidate(...kws: string[]): CandidateWithKeywords<TestCandidate> {
+function candidate(
+  kws: string[],
+  hasOnlyStopWords = false
+): CandidateWithKeywords<TestCandidate> {
   return new CandidateWithKeywords<TestCandidate>(
     new TestCandidate(),
-    kws.map(kw)
+    kws.map(k => kw(k, hasOnlyStopWords))
   );
 }
 
-function kw(kw: string) {
-  return new Keyword(`raw ${kw}`, kw, false);
+function kw(kw: string, hasOnlyStopWords = false) {
+  return new Keyword(`${kw}`, kw, hasOnlyStopWords);
 }
 
-const CAND_HOLA = candidate('buenos dias', 'güenas', 'ey');
-const CAND_ADIOS = candidate('adios', 'adeu');
+const CAND_HOLA = candidate(['buenos dias', 'güenas', 'ey']);
+const CAND_ADIOS = candidate(['adios', 'adeu']);
 
 function res(
   cand: CandidateWithKeywords<TestCandidate>,
@@ -52,11 +57,11 @@ test.each<any>([
   ['afios', 2, res(CAND_ADIOS, kw('adios'), 'afios', 1)], // 1 wrong swapped
   ['adddios', 1, undefined], // too far
   ['ey', 1, res(CAND_HOLA, kw('ey'), 'ey', 0)], // short keyword
-  ['el', 1, undefined] // short keyword must be identical
+  ['el', 1, undefined] // similar to 'ey', but short keyword must be identical
 ])(
   'TEST: findSimilarKeyword(%s)',
   (
-    needle: string,
+    utterance: string,
     maxDistance: number,
     expectedResult?: SimilarWordResult<TestCandidate>
   ) => {
@@ -65,7 +70,7 @@ test.each<any>([
     sut.addCandidate(CAND_HOLA);
     const result = sut.find(
       MatchType.ONLY_KEYWORDS_FOUND,
-      ut(needle),
+      ut(utterance),
       maxDistance
     );
     expect(result[0]).toEqual(expectedResult);
@@ -82,7 +87,7 @@ test('TEST: ONLY_KEYWORDS_FOUND missing space', () => {
 
 test('TEST: ONLY_KEYWORDS_FOUND stemmed checks all words in keyword', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
-  sut.addCandidate(candidate('realiz ped'));
+  sut.addCandidate(candidate(['realiz ped']));
   expect(sut.find(MatchType.ONLY_KEYWORDS_FOUND, ut('realiz'), 1)).toHaveLength(
     0
   );
@@ -97,16 +102,21 @@ test.each<any>([
     2,
     res(CAND_HOLA, kw('buenos dias'), 'bueno dia', 2)
   ], //missing 2 letters
+  [
+    'buenosdias',
+    1,
+    res(CAND_HOLA, kw('buenos dias'), 'buenosdias', 1)
+  ], //missing 2 letters
   ['vale, addios', 2, res(CAND_ADIOS, kw('adios'), 'addios', 1)], // 1 extra letter
   ['esta bien aidos', 2, res(CAND_ADIOS, kw('adios'), 'aidos', 2)], // 1 letter swapped
   ['gracias. afios', 2, res(CAND_ADIOS, kw('adios'), 'afios', 1)], // 1 wrong swapped
   ['adddios amigos', 1, undefined], // too far
   ['ey amigos', 1, res(CAND_HOLA, kw('ey'), 'ey', 0)], // short keyword
-  ['el coche', 1, undefined] // short keyword must be identical
+  ['el coche', 1, undefined] // similar to 'ey', but short keyword must be identical
 ])(
   'TEST: findSubstring(%s)',
   (
-    needle: string,
+    utterance: string,
     maxDistance: number,
     expectedResult?: SimilarWordResult<TestCandidate>
   ) => {
@@ -115,7 +125,7 @@ test.each<any>([
     sut.addCandidate(CAND_HOLA);
     const result = sut.find(
       MatchType.KEYWORDS_AND_OTHERS_FOUND,
-      ut(needle),
+      ut(utterance),
       maxDistance
     );
     expect(result[0]).toEqual(expectedResult);
@@ -141,7 +151,7 @@ test.each<any>([
 
 test('TEST: KEYWORDS_AND_OTHERS_FOUND gets closest match', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
-  sut.addCandidate(candidate('abc', 'abcdef'));
+  sut.addCandidate(candidate(['abc', 'abcdef']));
   const result = sut.find(
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ut('xxxx abcd'),
@@ -153,8 +163,47 @@ test('TEST: KEYWORDS_AND_OTHERS_FOUND gets closest match', () => {
 
 test('TEST: ONLY_KEYWORDS_FOUND gets closest match', () => {
   const sut = new SimilarWordFinder<TestCandidate>(true);
-  sut.addCandidate(candidate('abc', 'abcdef'));
+  sut.addCandidate(candidate(['abc', 'abcdef']));
   const result = sut.find(MatchType.ONLY_KEYWORDS_FOUND, ut('abcd'), 2);
   expect(result).toHaveLength(1);
   expect(result[0].distance).toEqual(1);
 });
+
+test.each<any>([
+  ['buenosdias', 2, res(CAND_HOLA, kw('buenos dias'), 'buenosdias', 1)], //missing 2 letters
+  ['bueno y gran dia', 2, res(CAND_HOLA, kw('buenos dias'), 'bueno dia', 2)], //missing 2 letters
+  ['dia gran y bueno', 2, res(CAND_HOLA, kw('buenos dias'), 'bueno dia', 2)], //missing 2 letters
+  ['buenos', 1, undefined], // all words in keywords must match
+  ['el coche', 1, undefined] // similar to 'ey', but short keyword must be identical
+])(
+  'TEST: ALL_WORDS_IN_KEYWORDS_MIXED_UP(%s)',
+  (
+    utterance: string,
+    maxDistance: number,
+    expectedResult?: SimilarWordResult<TestCandidate>
+  ) => {
+    const sut = new SimilarWordFinder<TestCandidate>(true);
+    sut.addCandidate(CAND_ADIOS);
+    sut.addCandidate(CAND_HOLA);
+    const result = sut.find(
+      MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP,
+      ut(utterance),
+      maxDistance
+    );
+    expect(result[0]).toEqual(expectedResult);
+  }
+);
+
+test.each<any>([
+  ['abc', 'abcd', 3],
+  ['abc', 'abdc', 3],
+  ['abc', 'abd', 2],
+  ['abc', 'acb', 1]
+])(
+  'TEST: getMatchLength(%s, %s)',
+  (w1: string, w2: string, expected: number) => {
+    const similar = new SimilarSearch({ normalize: false });
+    const distance = similar.getSimilarity(w1, w2);
+    expect(getMatchLength(w1, w2, distance)).toEqual(expected);
+  }
+);

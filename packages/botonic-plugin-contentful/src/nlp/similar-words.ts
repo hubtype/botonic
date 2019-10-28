@@ -61,9 +61,10 @@ export class SimilarWordFinder<M> {
         );
       case MatchType.KEYWORDS_AND_OTHERS_FOUND:
         return new FindSubstring(this.wordsAreStemmed, this.minWordLength);
-      default:
-        throw new Error('wip');
+      case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
+        return new FindMixedUp(this.wordsAreStemmed, this.minWordLength);
     }
+    throw new Error(`Unexpected matchType ${matchType}`);
   }
 
   find(
@@ -195,7 +196,7 @@ class FindSubstring extends CandidateFinder {
       .map(m => m!);
   }
 
-  private findKeyword(
+  public findKeyword(
     keyword: Keyword,
     utterance: NormalizedUtterance,
     maxDistance: number,
@@ -238,6 +239,69 @@ class FindSubstring extends CandidateFinder {
   }
 }
 
+class FindMixedUp extends CandidateFinder {
+  readonly substring: FindSubstring;
+  constructor(readonly wordsAreStemmed: boolean, readonly minWordLength = 3) {
+    super(wordsAreStemmed, minWordLength);
+    this.substring = new FindSubstring(wordsAreStemmed, minWordLength);
+  }
+
+  find(
+    keywords: Keyword[],
+    utterance: NormalizedUtterance,
+    maxDistance: number
+  ): PartialMatch[] {
+    // TODO catch utterance of pass n constructor
+    const wordPositions = this.similar.getWordPositions(utterance.joinedStems);
+    const matches = [];
+    for (const keyword of keywords) {
+      let submatches: PartialMatch[] | undefined = [];
+      for (const subkw of keyword.splitInWords()) {
+        const match = this.substring.findKeyword(
+          subkw,
+          utterance,
+          maxDistance,
+          wordPositions
+        );
+        if (!match) {
+          submatches = undefined;
+          break;
+        }
+        submatches.push(match);
+      }
+      // in case the space between the words in the keyword is missing
+      if (
+        !submatches ||
+        (submatches.length == 0 && keyword.raw.includes(' '))
+      ) {
+        const wordsWithoutSpace = this.substring.findKeyword(
+          keyword,
+          utterance,
+          maxDistance,
+          wordPositions
+        );
+        if (wordsWithoutSpace) {
+          submatches = [];
+          submatches.push(wordsWithoutSpace);
+        }
+      }
+      if (submatches) {
+        const match = submatches.reduce(
+          (m1: PartialMatch, m2: PartialMatch) =>
+            new PartialMatch(
+              keyword,
+              m1.match + (m1.match ? ' ' : '') + m2.match,
+              m1.distance + m2.distance
+            ),
+          new PartialMatch(keyword, '', 0)
+        );
+        matches.push(match);
+      }
+    }
+    return matches;
+  }
+}
+
 /**
  * When keywords contain multiple words and they're stemmed, allow extra distance
  */
@@ -269,4 +333,21 @@ class StemmedExtraDistance {
     }
     return true;
   }
+}
+
+export function getMatchLength(
+  utterance: string,
+  keyword: string,
+  distance: number
+): number {
+  // if (utterance.length != keyword.length) {
+  const difLen = Math.abs(utterance.length - keyword.length);
+  //   if (difLen == distance) {
+  // distance(abc,ab) = 1 => matchLen = 2
+  return Math.min(utterance.length, keyword.length) - distance + difLen;
+  // } else {
+  //   // distance(abc,acbd) = 2 => matchLen 1
+  //   return Math.min(utterance.length, keyword.length) - difLen;
+  // }
+  // }
 }
