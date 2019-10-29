@@ -1,8 +1,8 @@
-import { UpdateItemInput } from 'aws-sdk/clients/dynamodb';
-import * as domain from '../domain';
-import { Track, TABLE_NAME } from './track';
-import { DataMapper } from '@aws/dynamodb-data-mapper';
-import DynamoDB = require('aws-sdk/clients/dynamodb');
+import { UpdateItemInput } from 'aws-sdk/clients/dynamodb'
+import * as domain from '../domain'
+import { Track, TABLE_NAME } from './track'
+import { DataMapper } from '@aws/dynamodb-data-mapper'
+import DynamoDB = require('aws-sdk/clients/dynamodb')
 
 export enum Env {
   PRO = 'pro',
@@ -11,32 +11,32 @@ export enum Env {
 
 export class Dynamo {
   static tableName(name: string, env: Env): string {
-    return Dynamo.tablePrefix(env) + name;
+    return Dynamo.tablePrefix(env) + name
   }
   static tablePrefix(env: Env): string {
     if (env == Env.PRO) {
-      return '';
+      return ''
     }
-    return env + '_';
+    return env + '_'
   }
 }
 
 export class DynamoTrackStorage implements domain.TrackStorage {
-  readonly mapper: DataMapper;
-  readonly tableName: string;
-  private readonly client: DynamoDB;
+  readonly mapper: DataMapper
+  readonly tableName: string
+  private readonly client: DynamoDB
 
   constructor(env: Env, conf: DynamoDB.Types.ClientConfiguration) {
-    this.client = new DynamoDB(conf);
+    this.client = new DynamoDB(conf)
     this.mapper = new DataMapper({
       client: this.client,
       tableNamePrefix: Dynamo.tablePrefix(env)
-    });
-    this.tableName = Dynamo.tableName(TABLE_NAME, env);
+    })
+    this.tableName = Dynamo.tableName(TABLE_NAME, env)
   }
 
   write(domTrack: domain.Track): Promise<undefined> {
-    const track = Track.fromDomain(domTrack);
+    const track = Track.fromDomain(domTrack)
     // from https://stackoverflow.com/questions/34951043/is-it-possible-to-combine-if-not-exists-and-list-append-in-update-item
     const input: UpdateItemInput = {
       Key: track.marshallKey(),
@@ -47,25 +47,25 @@ export class DynamoTrackStorage implements domain.TrackStorage {
         ':empty': { L: [] },
         ':newEvents': track.marshallEvents()
       }
-    };
-    const req = this.client.updateItem(input);
+    }
+    const req = this.client.updateItem(input)
     return req.promise().then(({}) => {
-      return Promise.resolve(undefined);
-    });
+      return Promise.resolve(undefined)
+    })
   }
 
   /**
    * If {@link UserEvent.args} contains numeric fields, they will be wrapped in DynamoDB's value/type structure
    */
   async read(bot: string, time: Date): Promise<domain.Track> {
-    const request = Track.fromKey(bot, time);
-    const track = await this.mapper.get(request);
-    return track.toDomain();
+    const request = Track.fromKey(bot, time)
+    const track = await this.mapper.get(request)
+    return track.toDomain()
   }
 
   async remove(bot: string, time: Date): Promise<undefined> {
-    const request = Track.fromKey(bot, time);
-    await this.mapper.delete(request);
-    return Promise.resolve(undefined);
+    const request = Track.fromKey(bot, time)
+    await this.mapper.delete(request)
+    return Promise.resolve(undefined)
   }
 }
