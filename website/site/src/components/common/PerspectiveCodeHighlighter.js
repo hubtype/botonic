@@ -1,8 +1,8 @@
-import PropTypes from "prop-types"
-import React from "react"
-import styled from "styled-components"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism"
+import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 const PerspectiveContainer = styled.div`
   transform: rotate3d(0, 1, 0, -10deg);
@@ -15,12 +15,12 @@ const PerspectiveCodeHighlighter = ({ codeString }) => {
   return (
     <PerspectiveContainer>
       <SyntaxHighlighter
-        language="jsx"
+        language='jsx'
         style={tomorrow}
         customStyle={{
-          background: "transparent",
-          fontFamily: "Palinquin",
-          fontSize: "13px",
+          background: 'transparent',
+          fontFamily: 'Palinquin',
+          fontSize: '13px'
         }}
       >
         {codeString}
@@ -29,11 +29,11 @@ const PerspectiveCodeHighlighter = ({ codeString }) => {
   )
 }
 PerspectiveCodeHighlighter.propTypes = {
-  codeString: PropTypes.string,
+  codeString: PropTypes.string
 }
 
 PerspectiveCodeHighlighter.defaultProps = {
-  codeString: "",
+  codeString: ''
 }
 
 export default PerspectiveCodeHighlighter

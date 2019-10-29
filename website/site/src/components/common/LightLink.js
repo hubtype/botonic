@@ -1,7 +1,7 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
-import styled from "styled-components"
+import { Link } from 'gatsby'
+import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components'
 
 const LightLink = ({ text, link, style }) => {
   const StyledLink = styled(Link)`
@@ -15,11 +15,11 @@ const LightLink = ({ text, link, style }) => {
 }
 LightLink.propTypes = {
   text: PropTypes.string,
-  link: PropTypes.string,
+  link: PropTypes.string
 }
 
 LightLink.defaultProps = {
-  text: "",
-  link: "/",
+  text: '',
+  link: '/'
 }
 export default LightLink

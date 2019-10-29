@@ -1,7 +1,7 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
-import styled from "styled-components"
+import { Link } from 'gatsby'
+import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components'
 
 const PlainLink = ({ text, link, style }) => {
   const StyledLink = styled(Link)`
@@ -14,11 +14,11 @@ const PlainLink = ({ text, link, style }) => {
 }
 PlainLink.propTypes = {
   text: PropTypes.string,
-  link: PropTypes.string,
+  link: PropTypes.string
 }
 
 PlainLink.defaultProps = {
-  text: "",
-  link: "/",
+  text: '',
+  link: '/'
 }
 export default PlainLink

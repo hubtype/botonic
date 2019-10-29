@@ -1,8 +1,8 @@
-import { useStaticQuery, graphql } from "gatsby"
-import React from "react"
-import Img from "gatsby-image"
-import styled from "styled-components"
-import LightLink from "./common/LightLink"
+import { useStaticQuery, graphql } from 'gatsby'
+import React from 'react'
+import Img from 'gatsby-image'
+import styled from 'styled-components'
+import LightLink from './common/LightLink'
 
 const Container = styled.div`
   padding: 29px 60px;
@@ -40,12 +40,12 @@ const Footer = () => {
         <InnerLeft>
           <Img
             fixed={languageIcon.childImageSharp.fixed}
-            style={{ marginTop: "4px", marginRight: "4px" }}
+            style={{ marginTop: '4px', marginRight: '4px' }}
           />
-          <LightLink text={"English"} link={"/privacy-policy/"} />
-          <LightLink text={"Privacy Policy"} link={"/privacy-policy/"} />
-          <LightLink text={"Cookies"} link={"/cookies/"} />
-          <LightLink text={"Terms of service"} link={"/terms-of-service/"} />
+          <LightLink text={'English'} link={'/privacy-policy/'} />
+          <LightLink text={'Privacy Policy'} link={'/privacy-policy/'} />
+          <LightLink text={'Cookies'} link={'/cookies/'} />
+          <LightLink text={'Terms of service'} link={'/terms-of-service/'} />
         </InnerLeft>
 
         <InnerRight>

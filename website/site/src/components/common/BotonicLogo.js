@@ -1,6 +1,6 @@
-import { useStaticQuery, graphql } from "gatsby"
-import React from "react"
-import Img from "gatsby-image"
+import { useStaticQuery, graphql } from 'gatsby'
+import React from 'react'
+import Img from 'gatsby-image'
 
 const BotonicLogo = () => {
   const { botonicLogo } = useStaticQuery(

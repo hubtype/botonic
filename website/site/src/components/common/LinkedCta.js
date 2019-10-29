@@ -1,7 +1,7 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
-import styled from "styled-components"
+import { Link } from 'gatsby'
+import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components'
 
 const Container = styled.div`
   width: 140px;
@@ -30,12 +30,12 @@ const LinkedCta = ({ text, link }) => {
 }
 LinkedCta.propTypes = {
   text: PropTypes.string,
-  link: PropTypes.string,
+  link: PropTypes.string
 }
 
 LinkedCta.defaultProps = {
-  text: "",
-  link: "/",
+  text: '',
+  link: '/'
 }
 
 export default LinkedCta
