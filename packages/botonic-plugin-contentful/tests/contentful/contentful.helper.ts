@@ -9,7 +9,8 @@ export function testContentful(): Contentful {
   // useful to have long timeouts so that we can send many requests simultaneously
   return new Contentful({
     spaceId: testSpaceId(),
-    accessToken: process.env.CONTENTFUL_TEST_TOKEN!
+    accessToken: process.env.CONTENTFUL_TEST_TOKEN!,
+    environment: 'master'
   });
 }
 
