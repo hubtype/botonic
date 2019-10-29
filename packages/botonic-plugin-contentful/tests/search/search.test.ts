@@ -5,7 +5,7 @@ import {
   DummyCMS,
   ModelType,
   Text,
-  Url
+  Url,
 } from '../../src/cms'
 import { Search, SearchResult } from '../../src/search'
 import { Normalizer } from '../../src/nlp'

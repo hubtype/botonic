@@ -8,7 +8,7 @@ test('TEST: CachedDelivery getEntries', async () => {
   const mockApi = mock<DeliveryApiInterface>()
   const query = {}
   const entryCollection = ({
-    items: []
+    items: [],
   } as any) as EntryCollection<any>
   when(mockApi.getEntries(query)).thenResolve(entryCollection)
   const sut = new CachedDelivery(instance(mockApi), CACHE_TTL)

@@ -5,7 +5,7 @@ import { ContentDelivery } from './content-delivery'
 import {
   commonFieldsFromEntry,
   CommonEntryFields,
-  DeliveryApi
+  DeliveryApi,
 } from './delivery-api'
 import { ScheduleFields, ScheduleDelivery } from './schedule'
 

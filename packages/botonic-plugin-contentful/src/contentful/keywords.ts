@@ -39,7 +39,7 @@ export class KeywordsDelivery {
       callback,
       new CommonFields(entry.fields.name, {
         shortText: entry.fields.shortText,
-        keywords
+        keywords,
       }),
       priority
     )
@@ -54,7 +54,7 @@ export class KeywordsDelivery {
         // eslint-disable-next-line @typescript-eslint/camelcase
         content_type: contentType,
         'fields.searchableBy[exists]': true,
-        include: 1
+        include: 1,
       })
     const promises = []
     for (const contentType of models) {
@@ -91,7 +91,7 @@ export class KeywordsDelivery {
         // eslint-disable-next-line @typescript-eslint/camelcase
         content_type: contentType,
         'fields.keywords[exists]': true,
-        include: 0
+        include: 0,
       })
     const promises = []
     for (const contentType of models) {

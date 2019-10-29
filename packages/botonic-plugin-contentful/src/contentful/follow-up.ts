@@ -9,7 +9,7 @@ import {
   CommonEntryFields,
   commonFieldsFromEntry,
   DeliveryApi,
-  FollowUpFields
+  FollowUpFields,
 } from './delivery-api'
 import { StartUpDelivery, StartUpFields } from './startup'
 

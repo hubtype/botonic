@@ -3,7 +3,7 @@ import {
   KeywordsParser,
   Normalizer,
   KeywordsOptions,
-  MatchType
+  MatchType,
 } from '../../src/nlp'
 
 test('hack because webstorm does not recognize test.each', () => {})
@@ -37,7 +37,7 @@ function testFindKeywords(
 
 test.each<any>([
   ['quiero realiSar un pedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
-  ['venga hacerpedido', { A: ['hacer pedido', 'comprar'] }, ['A']]
+  ['venga hacerpedido', { A: ['hacer pedido', 'comprar'] }, ['A']],
 ])(
   'TEST: find similar keywords of "%s" with KEYWORDS_AND_OTHERS_FOUND',
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 1)
@@ -63,7 +63,7 @@ test.each<any>([
   ['realiSar un pedido', { A: ['realizar pedido', 'comprar'] }, ['A']],
   // 'realizar' would be stemmed to 'realic', which would be too different
   ['hacerpedido', { A: ['hacerpedido', 'comprar'] }, ['A']],
-  ['pedido', { A: ['realizar pedido', 'comprar'] }, []]
+  ['pedido', { A: ['realizar pedido', 'comprar'] }, []],
 ])(
   'TEST: find similar keywords of "%s" with ONLY_KEYWORDS_FOUND',
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 1)
@@ -93,7 +93,7 @@ test.each<any>([
   ['', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
 
   // a keyword is shared by 2 contents
-  ['informacion kw1', { A: ['kw1', 'unKw'], B: ['kw1', 'otroKw'] }, ['A', 'B']]
+  ['informacion kw1', { A: ['kw1', 'unKw'], B: ['kw1', 'otroKw'] }, ['A', 'B']],
 ])(
   'TEST: find keywords of "%s" with KEYWORDS_AND_OTHERS_FOUND',
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND)
@@ -115,7 +115,7 @@ test.each<any>([
   ['', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
 
   // a keyword is shared by 2 contents
-  ['kw1 kw2', { A: ['kw1 kw2', 'unKw'], B: ['kw1 kw2', 'otroKw'] }, ['A', 'B']]
+  ['kw1 kw2', { A: ['kw1 kw2', 'unKw'], B: ['kw1 kw2', 'otroKw'] }, ['A', 'B']],
 ])(
   'TEST: find keywords of "%s" with ONLY_KEYWORDS_FOUND',
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND)
@@ -132,7 +132,7 @@ test.each<any>([
   ['kwC kwD', { A: ['kwA'], B: ['kwB'] }, []],
 
   // keywords found for 2 models
-  ['kwAB', { A: ['kwAB'], B: ['kwAB'] }, ['A', 'B']]
+  ['kwAB', { A: ['kwAB'], B: ['kwAB'] }, ['A', 'B']],
 ])(
   'TEST: find keywords of "%s" for all match type',
   testFindKeywords(
@@ -164,8 +164,8 @@ test.each<any>([
   [
     'kw1 enmedio kw2',
     { A: ['kw1 kw2', 'unKw'], B: ['kw1 kw2', 'otroKw'] },
-    ['A', 'B']
-  ]
+    ['A', 'B'],
+  ],
 ])(
   'TEST: find keywords of "%s" with ALL_WORDS_IN_KEYWORDS_MIXED_UP',
   testFindKeywords('es', MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP)

@@ -8,7 +8,7 @@ import {
   ModelType,
   SearchByKeywords,
   Context,
-  CommonFields
+  CommonFields,
 } from '../../src'
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result'
 import { Normalizer, StemmingBlackList, MatchType } from '../../src/nlp'
@@ -20,7 +20,7 @@ test('TEST: searchContentsFromInput keywords found', async () => {
     contentWithKeyword(Callback.ofPayload('p2'), ['devolución', 'kw2']),
     contentWithKeyword(Callback.ofPayload('p3'), ['Empezar']),
     contentWithKeyword(Callback.ofUrl('http...'), ['hubtype']),
-    contentWithKeyword(Callback.ofPayload('p4'), ['not_found'])
+    contentWithKeyword(Callback.ofPayload('p4'), ['not_found']),
   ]
   const keywords = keywordsWithMockCms(contents, ES_CONTEXT)
 
@@ -103,7 +103,7 @@ export function contentWithKeyword(callback: Callback, keywords: string[]) {
     callback,
     new CommonFields(callback.payload!, {
       shortText: 'shortText' + callback.payload,
-      keywords
+      keywords,
     })
   )
 }

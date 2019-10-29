@@ -10,7 +10,7 @@ export function testContentful(): Contentful {
   return new Contentful({
     spaceId: testSpaceId(),
     accessToken: process.env.CONTENTFUL_TEST_TOKEN!,
-    environment: 'master'
+    environment: 'master',
   })
 }
 
@@ -19,7 +19,7 @@ export function testContext(
     { locale: 'es' },
     { locale: 'en' },
     {},
-    undefined
+    undefined,
   ]
 ): Context | undefined {
   const index = Math.floor(Math.random() * contexts.length)

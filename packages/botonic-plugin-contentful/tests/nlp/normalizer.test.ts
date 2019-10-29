@@ -2,7 +2,7 @@ import {
   DEFAULT_STOP_WORDS,
   Normalizer,
   StemmingBlackList,
-  Locale
+  Locale,
 } from '../../src/nlp'
 
 test('TEST: sut.normalize stopWord', () => {
@@ -17,7 +17,7 @@ test('TEST: sut.normalize es', () => {
   expect(sut.normalize(loc, ',./ áé  íó(óÑ)  ;').stems).toEqual([
     'ae',
     'io',
-    'on'
+    'on',
   ])
   expect(
     sut.normalize(
@@ -34,7 +34,7 @@ test('TEST: sut.normalize ca', () => {
   expect(sut.normalize(loc, ',./ àé  íò(óçÇ)  ;').stems).toEqual([
     'ae',
     'io',
-    'oçç'
+    'oçç',
   ])
   expect(
     sut.normalize(
@@ -49,7 +49,7 @@ test('TEST: sut.normalize en', () => {
   const sut = new Normalizer()
   expect(sut.normalize(loc, 'realizing tokenization').stems).toEqual([
     'realiz',
-    'token'
+    'token',
   ])
 })
 
@@ -64,7 +64,7 @@ test.each<any>([['es'], ['ca'], ['en']])(
         normalized.stems[0]
       )
       expect(sut.normalize(locale, stopWord + ' abcdex').stems).toEqual([
-        'abcdex'
+        'abcdex',
       ])
     }
   }
@@ -74,8 +74,8 @@ test('TEST: Normalizer does not stem blacklisted tokens', () => {
   const sut = new Normalizer({
     es: [
       new StemmingBlackList('perro', ['perro', 'can', 'cán', 'canes']),
-      new StemmingBlackList('ey', [])
-    ]
+      new StemmingBlackList('ey', []),
+    ],
   })
   const normalized = sut.normalize(
     'es',
@@ -88,7 +88,7 @@ test('TEST: Normalizer does not stem blacklisted tokens', () => {
     'pipic',
     'adi',
     'perro',
-    'perro'
+    'perro',
   ])
 })
 

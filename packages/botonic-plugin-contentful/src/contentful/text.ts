@@ -4,7 +4,7 @@ import { ButtonDelivery } from './button'
 import {
   DeliveryApi,
   CommonEntryFields,
-  commonFieldsFromEntry
+  commonFieldsFromEntry,
 } from './delivery-api'
 import { DeliveryWithFollowUp } from './follow-up'
 
