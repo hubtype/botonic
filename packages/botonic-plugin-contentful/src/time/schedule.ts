@@ -1,5 +1,5 @@
-import momentTz from 'moment-timezone';
-import { MomentZone } from 'moment-timezone/moment-timezone';
+import momentTz from 'moment-timezone'
+import { MomentZone } from 'moment-timezone/moment-timezone'
 
 /**
  * Manages ranges of hour/minutes for each day of a week.
@@ -8,34 +8,34 @@ import { MomentZone } from 'moment-timezone/moment-timezone';
  * TODO consider using everywhere Date.toLocaleTimeString() to remove moment-timezone dependency
  */
 export class Schedule {
-  static TZ_CET = 'Europe/Madrid';
-  private readonly zone: MomentZone;
-  private readonly scheduleByDay = new Map<WeekDay, DaySchedule>();
-  private readonly exceptions = [] as ExceptionSchedule[];
+  static TZ_CET = 'Europe/Madrid'
+  private readonly zone: MomentZone
+  private readonly scheduleByDay = new Map<WeekDay, DaySchedule>()
+  private readonly exceptions = [] as ExceptionSchedule[]
 
   constructor(tzName: string) {
-    const zone = momentTz.tz.zone(tzName);
+    const zone = momentTz.tz.zone(tzName)
     if (!zone) {
-      throw new Error(`${tzName} is not a valid timezone name`);
+      throw new Error(`${tzName} is not a valid timezone name`)
     }
-    this.zone = zone;
+    this.zone = zone
   }
 
   createHourAndMinute(hour: number, minute: number = 0): HourAndMinute {
-    return new HourAndMinute(this.zone, hour, minute);
+    return new HourAndMinute(this.zone, hour, minute)
   }
 
   addDaySchedule(weekday: WeekDay, daySchedule: DaySchedule): Schedule {
-    this.scheduleByDay.set(weekday, daySchedule);
-    return this;
+    this.scheduleByDay.set(weekday, daySchedule)
+    return this
   }
 
   /**
    * For the specified date, the weekly schedule will be superseded by the daySchedule specified here
    */
   addException(date: Date, daySchedule: DaySchedule): Schedule {
-    this.exceptions.push(new ExceptionSchedule(date, daySchedule));
-    return this;
+    this.exceptions.push(new ExceptionSchedule(date, daySchedule))
+    return this
   }
 
   /**
@@ -49,33 +49,33 @@ export class Schedule {
     const options: Intl.DateTimeFormatOptions = {
       timeZone: this.zone.name,
       hour12: false
-    };
-    return date.toLocaleTimeString(locales, options);
+    }
+    return date.toLocaleTimeString(locales, options)
   }
 
   contains(date: Date): boolean {
     const exception = this.exceptions.find(exception =>
       isSameDay(date, exception.date)
-    );
+    )
     if (exception) {
-      return exception.daySchedule.contains(date);
+      return exception.daySchedule.contains(date)
     }
     // BUG should get date in Schedule's timezone
-    const weekDay = date.getDay() as WeekDay;
-    const schedule = this.scheduleByDay.get(weekDay);
+    const weekDay = date.getDay() as WeekDay
+    const schedule = this.scheduleByDay.get(weekDay)
     if (!schedule) {
-      return false;
+      return false
     }
-    return schedule.contains(date);
+    return schedule.contains(date)
   }
 }
 
 export class ScheduleAlwaysOn extends Schedule {
   constructor() {
-    super('UTC');
+    super('UTC')
   }
   contains(date: Date): boolean {
-    return true;
+    return true
   }
 }
 
@@ -85,10 +85,10 @@ export class DaySchedule {
   contains(date: Date): boolean {
     for (const range of this.ranges) {
       if (range.contains(date)) {
-        return true;
+        return true
       }
     }
-    return false;
+    return false
   }
 }
 
@@ -113,14 +113,14 @@ export class TimeRange {
    */
   constructor(readonly from: HourAndMinute, readonly to: HourAndMinute) {
     if (from.compare(to) >= 0) {
-      throw new Error(`${from.toString()} should be before ${to.toString()}`);
+      throw new Error(`${from.toString()} should be before ${to.toString()}`)
     }
   }
   contains(date: Date): boolean {
     if (this.from.compareToDate(date) > 0) {
-      return false;
+      return false
     }
-    return this.to.compareToDate(date) > 0;
+    return this.to.compareToDate(date) > 0
   }
 }
 
@@ -132,40 +132,40 @@ export class HourAndMinute {
   ) {}
 
   compareToDate(date: Date): number {
-    const hourAndMinuteOffset = this.zone.utcOffset(date.getTime());
-    const hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset;
-    const dateUtc = date.getUTCHours() * 60 + date.getUTCMinutes();
+    const hourAndMinuteOffset = this.zone.utcOffset(date.getTime())
+    const hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset
+    const dateUtc = date.getUTCHours() * 60 + date.getUTCMinutes()
 
-    return HourAndMinute.compareNumber(hourAndMinuteUtc, dateUtc);
+    return HourAndMinute.compareNumber(hourAndMinuteUtc, dateUtc)
   }
 
   private static compareNumber(first: number, second: number): number {
     if (first === second) {
-      return 0;
+      return 0
     }
     if (first < second) {
-      return -1;
+      return -1
     }
-    return 1;
+    return 1
   }
 
   compare(other: HourAndMinute): number {
     if (this.zone != other.zone) {
-      throw new Error('Cannot compare HourAndMinute of different timezones');
+      throw new Error('Cannot compare HourAndMinute of different timezones')
     }
-    return HourAndMinute.compareNumber(this.toMinutes(), other.toMinutes());
+    return HourAndMinute.compareNumber(this.toMinutes(), other.toMinutes())
   }
 
   private toMinutes(): number {
-    return this.hour * 60 + this.minute;
+    return this.hour * 60 + this.minute
   }
 
   toString(): string {
-    let str = this.hour.toString();
+    let str = this.hour.toString()
     if (this.minute != 0) {
-      str += ':' + this.minute.toString();
+      str += ':' + this.minute.toString()
     }
-    return str + 'h';
+    return str + 'h'
   }
 }
 
@@ -175,5 +175,5 @@ function isSameDay(d1: Date, d2: Date): boolean {
     d1.getFullYear() === d2.getFullYear() &&
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate()
-  );
+  )
 }

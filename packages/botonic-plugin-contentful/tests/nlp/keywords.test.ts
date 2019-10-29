@@ -1,12 +1,12 @@
-import 'jest-extended';
+import 'jest-extended'
 import {
   KeywordsParser,
   Normalizer,
   KeywordsOptions,
   MatchType
-} from '../../src/nlp';
+} from '../../src/nlp'
 
-test('hack because webstorm does not recognize test.each', () => {});
+test('hack because webstorm does not recognize test.each', () => {})
 
 function testFindKeywords(
   locale: string,
@@ -23,16 +23,16 @@ function testFindKeywords(
       matchType,
       new Normalizer(),
       new KeywordsOptions(maxDistance)
-    );
+    )
 
     for (const candidate in keywordsByCandidate) {
-      parser.addCandidate(candidate, keywordsByCandidate[candidate]);
+      parser.addCandidate(candidate, keywordsByCandidate[candidate])
     }
-    const normalizer = new Normalizer();
-    const tokens = normalizer.normalize(locale, inputText);
-    const results = parser.findCandidatesWithKeywordsAt(tokens);
-    expect(results.map(r => r.candidate)).toIncludeSameMembers(expectedMatch);
-  };
+    const normalizer = new Normalizer()
+    const tokens = normalizer.normalize(locale, inputText)
+    const results = parser.findCandidatesWithKeywordsAt(tokens)
+    expect(results.map(r => r.candidate)).toIncludeSameMembers(expectedMatch)
+  }
 }
 
 test.each<any>([
@@ -41,21 +41,21 @@ test.each<any>([
 ])(
   'TEST: find similar keywords of "%s" with KEYWORDS_AND_OTHERS_FOUND',
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 1)
-);
+)
 
 test('TEST: results sorted by length with ONLY_KEYWORDS_FOUND', () =>
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 2)(
     'abcde',
     { A: ['abc'], B: ['abXde'] },
     ['B', 'A']
-  ));
+  ))
 
 test('TEST: results sorted by length with KEYWORDS_AND_OTHERS_FOUND', () =>
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 2)(
     'words before abcde words after',
     { A: ['abc'], B: ['abXde'] },
     ['B', 'A']
-  ));
+  ))
 
 test.each<any>([
   // found with multiword keyword
@@ -67,7 +67,7 @@ test.each<any>([
 ])(
   'TEST: find similar keywords of "%s" with ONLY_KEYWORDS_FOUND',
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 1)
-);
+)
 
 test.each<any>([
   // found at start with multiword keyword
@@ -97,7 +97,7 @@ test.each<any>([
 ])(
   'TEST: find keywords of "%s" with KEYWORDS_AND_OTHERS_FOUND',
   testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND)
-);
+)
 
 test.each<any>([
   // found with multiword keyword
@@ -119,7 +119,7 @@ test.each<any>([
 ])(
   'TEST: find keywords of "%s" with ONLY_KEYWORDS_FOUND',
   testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND)
-);
+)
 
 test.each<any>([
   // exact words
@@ -141,7 +141,7 @@ test.each<any>([
       ? MatchType.KEYWORDS_AND_OTHERS_FOUND
       : MatchType.ONLY_KEYWORDS_FOUND
   )
-);
+)
 
 test.each<any>([
   // keyword with 3 words, words in between, different order
@@ -169,12 +169,12 @@ test.each<any>([
 ])(
   'TEST: find keywords of "%s" with ALL_WORDS_IN_KEYWORDS_MIXED_UP',
   testFindKeywords('es', MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP)
-);
+)
 
 test('ALL_WORDS_IN_KEYWORDS_MIXED_UP', () => {
   testFindKeywords('es', MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP)(
     'sobre',
     { ONLY_STOPWORD: ['kw1', 'Sobre'] },
     ['ONLY_STOPWORD']
-  );
-});
+  )
+})

@@ -4,12 +4,12 @@ import {
   ContentCallback,
   ModelType,
   StartUp
-} from '../../src/cms';
-import { testContentful } from './contentful.helper';
-import { TEST_CAROUSEL_MAIN_ID } from './carousel.test';
+} from '../../src/cms'
+import { testContentful } from './contentful.helper'
+import { TEST_CAROUSEL_MAIN_ID } from './carousel.test'
 
 test('TEST: contentful startUp', async () => {
-  const startUp = await testContentful().startUp('PfMPIeS6zD1Rix6Px9m0u');
+  const startUp = await testContentful().startUp('PfMPIeS6zD1Rix6Px9m0u')
   expect(startUp).toEqual(
     new StartUp(
       new CommonFields('BANNER', {
@@ -27,5 +27,5 @@ test('TEST: contentful startUp', async () => {
         )
       ]
     )
-  );
-});
+  )
+})

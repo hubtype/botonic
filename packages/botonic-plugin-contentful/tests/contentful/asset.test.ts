@@ -1,14 +1,14 @@
-import { testContentful } from './contentful.helper';
-import { expectImgUrlIs } from './image.test';
+import { testContentful } from './contentful.helper'
+import { expectImgUrlIs } from './image.test'
 
-const TEST_ASSET_ID = '1T0ntgNJnDUSwz59zGMZO6';
+const TEST_ASSET_ID = '1T0ntgNJnDUSwz59zGMZO6'
 
 test('TEST: contentful asset', async () => {
-  const sut = testContentful();
+  const sut = testContentful()
 
-  const asset = await sut.asset(TEST_ASSET_ID);
+  const asset = await sut.asset(TEST_ASSET_ID)
 
-  expectImgUrlIs(asset.url, 'red.jpg');
-  expect(asset.type).toEqual('image/jpeg');
-  expect(asset.details.size).toEqual(2253);
-});
+  expectImgUrlIs(asset.url, 'red.jpg')
+  expect(asset.type).toEqual('image/jpeg')
+  expect(asset.details.size).toEqual(2253)
+})

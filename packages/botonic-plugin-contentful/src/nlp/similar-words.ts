@@ -1,7 +1,7 @@
-import { SimilarSearch, WordPosition } from 'node-nlp/lib/util';
-import { CandidateWithKeywords, Keyword, MatchType } from './keywords';
-import { countOccurrences } from './tokens';
-import { NormalizedUtterance } from './normalizer';
+import { SimilarSearch, WordPosition } from 'node-nlp/lib/util'
+import { CandidateWithKeywords, Keyword, MatchType } from './keywords'
+import { countOccurrences } from './tokens'
+import { NormalizedUtterance } from './normalizer'
 
 export class SimilarWordResult<M> {
   constructor(
@@ -17,9 +17,9 @@ export class SimilarWordResult<M> {
    */
   compare(other: SimilarWordResult<M>): number {
     if (this.distance == other.distance) {
-      return other.match.length - this.match.length;
+      return other.match.length - this.match.length
     }
-    return this.distance - other.distance;
+    return this.distance - other.distance
   }
 }
 
@@ -30,13 +30,13 @@ class PartialMatch {
     readonly distance: number
   ) {}
 }
-const TOO_DISTANT = -1;
+const TOO_DISTANT = -1
 
 /**
  * It does not normalize case, ie. uppercase will be considered different than lowercase
  */
 export class SimilarWordFinder<M> {
-  private readonly candidates: CandidateWithKeywords<M>[] = [];
+  private readonly candidates: CandidateWithKeywords<M>[] = []
 
   /**
    * @param wordsAreStemmed see {@link StemmedExtraDistance}
@@ -49,7 +49,7 @@ export class SimilarWordFinder<M> {
    * @param candidate may contain several words (eg. "buenos días")
    */
   addCandidate(candidate: CandidateWithKeywords<M>): void {
-    this.candidates.push(candidate);
+    this.candidates.push(candidate)
   }
 
   private createFinder(matchType: MatchType) {
@@ -58,13 +58,13 @@ export class SimilarWordFinder<M> {
         return new FindIfOnlyWordsFromKeyword(
           this.wordsAreStemmed,
           this.minMatchLength
-        );
+        )
       case MatchType.KEYWORDS_AND_OTHERS_FOUND:
-        return new FindSubstring(this.wordsAreStemmed, this.minMatchLength);
+        return new FindSubstring(this.wordsAreStemmed, this.minMatchLength)
       case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
-        return new FindMixedUp(this.wordsAreStemmed, this.minMatchLength);
+        return new FindMixedUp(this.wordsAreStemmed, this.minMatchLength)
     }
-    throw new Error(`Unexpected matchType ${matchType}`);
+    throw new Error(`Unexpected matchType ${matchType}`)
   }
 
   find(
@@ -72,8 +72,8 @@ export class SimilarWordFinder<M> {
     utterance: NormalizedUtterance,
     maxDistance: number
   ) {
-    const finder = this.createFinder(matchType);
-    const results: SimilarWordResult<M>[] = [];
+    const finder = this.createFinder(matchType)
+    const results: SimilarWordResult<M>[] = []
     for (const candidate of this.candidates) {
       const matches = finder
         .find(candidate.keywords, utterance, maxDistance)
@@ -85,48 +85,48 @@ export class SimilarWordFinder<M> {
               m.match,
               m.distance
             )
-        );
-      results.push(...matches);
+        )
+      results.push(...matches)
     }
-    return this.getLongestResultPerCandidate(results);
+    return this.getLongestResultPerCandidate(results)
   }
 
   private getLongestResultPerCandidate(
     results: SimilarWordResult<M>[]
   ): SimilarWordResult<M>[] {
-    const sorted = results.sort((a, b) => a.compare(b));
+    const sorted = results.sort((a, b) => a.compare(b))
     // avoid duplicates
-    const uniq = [];
+    const uniq = []
     const findBefore = (needle: M, before: number) => {
       for (let prev = before - 1; prev >= 0; prev--) {
         if (sorted[prev].candidate === needle) {
-          return true;
+          return true
         }
       }
-      return false;
-    };
+      return false
+    }
     for (let i = sorted.length - 1; i >= 0; i--) {
       if (!findBefore(sorted[i].candidate, i)) {
-        uniq.push(sorted[i]);
+        uniq.push(sorted[i])
       }
     }
-    return uniq;
+    return uniq
   }
 }
 
 abstract class CandidateFinder {
-  protected readonly stemmedDecorator: StemmedExtraDistance;
-  protected readonly similar = new SimilarSearch({ normalize: false });
+  protected readonly stemmedDecorator: StemmedExtraDistance
+  protected readonly similar = new SimilarSearch({ normalize: false })
 
   constructor(readonly wordsAreStemmed: boolean, readonly minMatchLength = 3) {
-    this.stemmedDecorator = new StemmedExtraDistance(wordsAreStemmed);
+    this.stemmedDecorator = new StemmedExtraDistance(wordsAreStemmed)
   }
 
   abstract find(
     keywords: Keyword[],
     utterance: NormalizedUtterance,
     maxDistance: number
-  ): PartialMatch[];
+  ): PartialMatch[]
 
   protected getDistanceCore(
     utterance: string,
@@ -134,26 +134,26 @@ abstract class CandidateFinder {
     maxDistance: number
   ): number {
     if (utterance.length <= this.minMatchLength) {
-      return utterance == keyword ? 0 : TOO_DISTANT;
+      return utterance == keyword ? 0 : TOO_DISTANT
     }
 
-    const distance = this.similar.getSimilarity(utterance, keyword);
+    const distance = this.similar.getSimilarity(utterance, keyword)
     if (distance > maxDistance + this.stemmedDecorator.extraDistance(keyword)) {
-      return TOO_DISTANT;
+      return TOO_DISTANT
     }
     if (
       getMatchLength(utterance.length, keyword.length, distance) <
       this.minMatchLength
     ) {
-      return TOO_DISTANT;
+      return TOO_DISTANT
     }
     if (
       distance > maxDistance &&
       !this.stemmedDecorator.verify(utterance, keyword)
     ) {
-      return TOO_DISTANT;
+      return TOO_DISTANT
     }
-    return distance;
+    return distance
   }
 }
 
@@ -165,7 +165,7 @@ class FindIfOnlyWordsFromKeyword extends CandidateFinder {
   ): PartialMatch[] {
     return keywords
       .map(keyword => this.getDistance(utterance, keyword, maxDistance))
-      .filter(match => match.distance != TOO_DISTANT);
+      .filter(match => match.distance != TOO_DISTANT)
   }
 
   getDistance(
@@ -174,14 +174,14 @@ class FindIfOnlyWordsFromKeyword extends CandidateFinder {
     maxDistance: number
   ): PartialMatch {
     if (keyword.hasOnlyStopWords) {
-      const re = this.getDistanceCore(text.raw, keyword.stemmed, maxDistance);
-      return new PartialMatch(keyword, text.raw, re);
+      const re = this.getDistanceCore(text.raw, keyword.stemmed, maxDistance)
+      return new PartialMatch(keyword, text.raw, re)
     }
     return new PartialMatch(
       keyword,
       text.joinedStems,
       this.getDistanceCore(text.joinedStems, keyword.stemmed, maxDistance)
-    );
+    )
   }
 }
 
@@ -192,14 +192,14 @@ class FindSubstring extends CandidateFinder {
     maxDistance: number
   ): PartialMatch[] {
     // TODO catch utterance of pass n constructor
-    const wordPositions = this.similar.getWordPositions(utterance.joinedStems);
+    const wordPositions = this.similar.getWordPositions(utterance.joinedStems)
 
     return keywords
       .map(keyword =>
         this.findKeyword(keyword, utterance, maxDistance, wordPositions)
       )
       .filter(m => !!m)
-      .map(m => m!);
+      .map(m => m!)
   }
 
   public findKeyword(
@@ -210,51 +210,49 @@ class FindSubstring extends CandidateFinder {
   ): PartialMatch | undefined {
     if (keyword.stemmed.length < this.minMatchLength) {
       if (new RegExp(`\\b${keyword.stemmed}\\b`).test(utterance.joinedStems)) {
-        return new PartialMatch(keyword, keyword.stemmed, 0);
+        return new PartialMatch(keyword, keyword.stemmed, 0)
       }
-      return undefined;
+      return undefined
     }
-    const extra = this.stemmedDecorator.extraDistance(keyword.stemmed);
+    const extra = this.stemmedDecorator.extraDistance(keyword.stemmed)
     const minAccuracy =
-      (keyword.stemmed.length - (maxDistance + extra)) / keyword.stemmed.length;
+      (keyword.stemmed.length - (maxDistance + extra)) / keyword.stemmed.length
     let substrings = this.similar.getBestSubstringList(
       utterance.joinedStems,
       keyword.stemmed,
       wordPositions,
       minAccuracy
-    );
+    )
     substrings = substrings.filter(
       bs =>
         getMatchLength(bs.len, keyword.stemmed.length, bs.levenshtein) >=
         this.minMatchLength
-    );
+    )
     if (substrings.length == 0) {
-      return undefined;
+      return undefined
     }
-    const bestSubstr = substrings.sort(
-      (s1, s2) => s2.accuracy - s1.accuracy
-    )[0];
+    const bestSubstr = substrings.sort((s1, s2) => s2.accuracy - s1.accuracy)[0]
     const match = utterance.joinedStems.slice(
       bestSubstr.start,
       bestSubstr.end + 1
-    );
+    )
     const distance =
-      keyword.stemmed.length - bestSubstr.accuracy * keyword.stemmed.length;
+      keyword.stemmed.length - bestSubstr.accuracy * keyword.stemmed.length
     if (
       distance > maxDistance &&
       !this.stemmedDecorator.verify(match, keyword.stemmed)
     ) {
-      return undefined;
+      return undefined
     }
-    return new PartialMatch(keyword, match, distance);
+    return new PartialMatch(keyword, match, distance)
   }
 }
 
 class FindMixedUp extends CandidateFinder {
-  readonly substring: FindSubstring;
+  readonly substring: FindSubstring
   constructor(readonly wordsAreStemmed: boolean, readonly minMatchLength = 3) {
-    super(wordsAreStemmed, minMatchLength);
-    this.substring = new FindSubstring(wordsAreStemmed, minMatchLength);
+    super(wordsAreStemmed, minMatchLength)
+    this.substring = new FindSubstring(wordsAreStemmed, minMatchLength)
   }
 
   find(
@@ -263,22 +261,22 @@ class FindMixedUp extends CandidateFinder {
     maxDistance: number
   ): PartialMatch[] {
     // TODO catch utterance of pass n constructor
-    const wordPositions = this.similar.getWordPositions(utterance.joinedStems);
-    const matches = [];
+    const wordPositions = this.similar.getWordPositions(utterance.joinedStems)
+    const matches = []
     for (const keyword of keywords) {
-      let submatches: PartialMatch[] | undefined = [];
+      let submatches: PartialMatch[] | undefined = []
       for (const subkw of keyword.splitInWords()) {
         const match = this.substring.findKeyword(
           subkw,
           utterance,
           maxDistance,
           wordPositions
-        );
+        )
         if (!match) {
-          submatches = undefined;
-          break;
+          submatches = undefined
+          break
         }
-        submatches.push(match);
+        submatches.push(match)
       }
       // in case the space between the words in the keyword is missing
       if (
@@ -290,10 +288,10 @@ class FindMixedUp extends CandidateFinder {
           utterance,
           maxDistance,
           wordPositions
-        );
+        )
         if (wordsWithoutSpace) {
-          submatches = [];
-          submatches.push(wordsWithoutSpace);
+          submatches = []
+          submatches.push(wordsWithoutSpace)
         }
       }
       if (submatches) {
@@ -305,11 +303,11 @@ class FindMixedUp extends CandidateFinder {
               m1.distance + m2.distance
             ),
           new PartialMatch(keyword, '', 0)
-        );
-        matches.push(match);
+        )
+        matches.push(match)
       }
     }
-    return matches;
+    return matches
   }
 }
 
@@ -321,28 +319,28 @@ class StemmedExtraDistance {
 
   extraDistance(keyword: string): number {
     if (!this.wordsAreStemmed) {
-      return 0;
+      return 0
     }
-    const wordsInKeyword = countOccurrences(keyword, ' ') + 1;
+    const wordsInKeyword = countOccurrences(keyword, ' ') + 1
     if (wordsInKeyword > 1 && keyword.length > 5) {
       // in case needle is missing a space, the first word could not be stemmed.
       // So we need to ignore the suffix
-      return 3 * (wordsInKeyword - 1);
+      return 3 * (wordsInKeyword - 1)
     }
-    return 0;
+    return 0
   }
 
   verify(utterance: string, keyword: string): boolean {
     if (!this.wordsAreStemmed) {
-      return true;
+      return true
     }
-    const words = keyword.split(' ');
+    const words = keyword.split(' ')
     for (const word of words) {
       if (!utterance.includes(word)) {
-        return false;
+        return false
       }
     }
-    return true;
+    return true
   }
 }
 
@@ -351,6 +349,6 @@ export function getMatchLength(
   keywordLen: number,
   distance: number
 ): number {
-  const difLen = Math.abs(utteranceLen - keywordLen);
-  return Math.min(utteranceLen, keywordLen) - distance + difLen;
+  const difLen = Math.abs(utteranceLen - keywordLen)
+  return Math.min(utteranceLen, keywordLen) - distance + difLen
 }
