@@ -1,1 +1,1 @@
-export { Env } from './dynamo';
+export { Env } from './dynamo'
