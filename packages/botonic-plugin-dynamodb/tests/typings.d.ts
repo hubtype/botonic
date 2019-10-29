@@ -1,1 +1,1 @@
-declare module '@types/jest';
+declare module '@types/jest'

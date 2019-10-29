@@ -1,35 +1,35 @@
-import { DynamoDbSchema } from '@aws/dynamodb-data-mapper';
+import { DynamoDbSchema } from '@aws/dynamodb-data-mapper'
 import {
   attribute,
   hashKey,
   rangeKey,
   table
-} from '@aws/dynamodb-data-mapper-annotations';
-import { marshallItem, Schema } from '@aws/dynamodb-data-marshaller';
-import { DynamoDB } from 'aws-sdk';
-import { AttributeValue } from 'aws-sdk/clients/dynamodb';
-import { UserEvent } from '../domain';
-import * as domain from '../domain';
+} from '@aws/dynamodb-data-mapper-annotations'
+import { marshallItem, Schema } from '@aws/dynamodb-data-marshaller'
+import { DynamoDB } from 'aws-sdk'
+import { AttributeValue } from 'aws-sdk/clients/dynamodb'
+import { UserEvent } from '../domain'
+import * as domain from '../domain'
 
-import Time from '../domain/time';
+import Time from '../domain/time'
 
-export const TABLE_NAME = 'track';
+export const TABLE_NAME = 'track'
 
 export class TrackKey {
   @hashKey()
-  bot: string = '';
+  bot: string = ''
 
   @rangeKey({
     defaultProvider: () => Time.now()
   })
-  time: Date = Time.now();
+  time: Date = Time.now()
 
   marshallKey(): DynamoDB.Key {
     // implement with marshallItem and TrackKey's schema?
     return {
       bot: { S: this.bot },
       time: { N: String(Math.floor(this.time.getTime() / 1000)) }
-    };
+    }
   }
 }
 
@@ -47,61 +47,61 @@ export class Track extends TrackKey {
   @attribute({
     defaultProvider: () => [] as domain.UserEvent[]
   })
-  events: domain.UserEvent[] = [];
+  events: domain.UserEvent[] = []
 
   static fromKey(botId: string, time: Date): Track {
-    const track = new Track();
-    track.bot = botId;
-    track.time = time;
-    return track;
+    const track = new Track()
+    track.bot = botId
+    track.time = time
+    return track
   }
   static fromDomain(domTrack: domain.Track): Track {
-    const track = new Track();
-    track.bot = domTrack.botId;
-    track.time = domTrack.time;
-    track.events = domTrack.events;
-    return track;
+    const track = new Track()
+    track.bot = domTrack.botId
+    track.time = domTrack.time
+    track.events = domTrack.events
+    return track
   }
 
   toDomain(): domain.Track {
     const events = this.events.map(e => {
       /** {@link Track.events} */
       if ((e as any) instanceof UserEvent) {
-        return e;
+        return e
       }
-      return new UserEvent(e.user, e.event, e.args);
-    });
-    return new domain.Track(this.bot, this.time, events);
+      return new UserEvent(e.user, e.event, e.args)
+    })
+    return new domain.Track(this.bot, this.time, events)
   }
 
   marshallEvents(): AttributeValue {
-    const schema = this.schema();
+    const schema = this.schema()
 
-    const marshalled = marshallItem(schema, this);
-    return marshalled.events as AttributeValue;
+    const marshalled = marshallItem(schema, this)
+    return marshalled.events as AttributeValue
   }
 
   private schema(): Schema {
-    let schema: Schema = (this as any)[DynamoDbSchema];
+    let schema: Schema = (this as any)[DynamoDbSchema]
     if (schema) {
-      return schema;
+      return schema
     }
 
     // https://metisai.atlassian.net/browse/HTYPE-1881
-    const proto = Object.getPrototypeOf(this);
+    const proto = Object.getPrototypeOf(this)
     const sym = Object.getOwnPropertySymbols(proto).find(function(s) {
-      return String(s) === DynamoDbSchema.toString();
-    }) as symbol;
-    schema = (proto as any)[sym];
+      return String(s) === DynamoDbSchema.toString()
+    }) as symbol
+    schema = (proto as any)[sym]
     if (schema) {
       //console.log('Applied hack to get Dynamo schema');
-      return schema;
+      return schema
     }
 
     const msg =
-      'Could not get DynamoDB schema. Trying deleting node_modules and package-lock.json';
-    console.error(msg, DynamoDbSchema, Object.keys(this));
-    throw new Error(msg);
+      'Could not get DynamoDB schema. Trying deleting node_modules and package-lock.json'
+    console.error(msg, DynamoDbSchema, Object.keys(this))
+    throw new Error(msg)
   }
 
   /**
@@ -109,7 +109,7 @@ export class Track extends TrackKey {
    * https://metisai.atlassian.net/browse/HTYPE-1881 is not manifesting
    */
   static testSerialization(): void {
-    const track = new Track();
-    track.schema();
+    const track = new Track()
+    track.schema()
   }
 }
