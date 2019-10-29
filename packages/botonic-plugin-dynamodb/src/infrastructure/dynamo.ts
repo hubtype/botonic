@@ -6,7 +6,7 @@ import DynamoDB = require('aws-sdk/clients/dynamodb')
 
 export enum Env {
   PRO = 'pro',
-  DEV = 'dev'
+  DEV = 'dev',
 }
 
 export class Dynamo {
@@ -30,7 +30,7 @@ export class DynamoTrackStorage implements domain.TrackStorage {
     this.client = new DynamoDB(conf)
     this.mapper = new DataMapper({
       client: this.client,
-      tableNamePrefix: Dynamo.tablePrefix(env)
+      tableNamePrefix: Dynamo.tablePrefix(env),
     })
     this.tableName = Dynamo.tableName(TABLE_NAME, env)
   }
@@ -45,8 +45,8 @@ export class DynamoTrackStorage implements domain.TrackStorage {
         'SET events=list_append(if_not_exists(events,:empty), :newEvents)',
       ExpressionAttributeValues: {
         ':empty': { L: [] },
-        ':newEvents': track.marshallEvents()
-      }
+        ':newEvents': track.marshallEvents(),
+      },
     }
     const req = this.client.updateItem(input)
     return req.promise().then(({}) => {
