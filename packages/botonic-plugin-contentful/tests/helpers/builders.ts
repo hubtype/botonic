@@ -5,23 +5,23 @@ import {
   ContentCallback,
   ModelType,
   Text
-} from '../../src/cms';
-import { TextBuilder } from '../../src/cms/factories';
+} from '../../src/cms'
+import { TextBuilder } from '../../src/cms/factories'
 
 function rndStr(): string {
-  return Math.random().toString();
+  return Math.random().toString()
 }
 
 function rndBool(): boolean {
-  return Math.random() >= 0.5;
+  return Math.random() >= 0.5
 }
 
 export class ButtonsBuilder {
-  name = rndStr();
-  buttons: Button[] = [];
+  name = rndStr()
+  buttons: Button[] = []
 
   build(): Button[] {
-    return this.buttons;
+    return this.buttons
   }
 
   withButton(): ButtonsBuilder {
@@ -31,36 +31,34 @@ export class ButtonsBuilder {
         rndStr(),
         new ContentCallback(ModelType.TEXT, rndStr())
       )
-    );
-    return this;
+    )
+    return this
   }
 }
 
 export class KeywordsBuilder {
-  keywords = [rndStr(), rndStr()];
+  keywords = [rndStr(), rndStr()]
 
   build(): string[] {
-    return this.keywords;
+    return this.keywords
   }
 }
 
 export class RndTextBuilder extends TextBuilder {
-  readonly buttonsBuilder = new ButtonsBuilder();
-  readonly keywordsBuilder = new KeywordsBuilder();
+  readonly buttonsBuilder = new ButtonsBuilder()
+  readonly keywordsBuilder = new KeywordsBuilder()
 
   constructor(name: string = rndStr(), text: string = rndStr()) {
-    super(name, text);
+    super(name, text)
     this.buttons = this.buttonsBuilder
       .withButton()
       .withButton()
-      .build();
-    this.shortText = rndStr();
-    this.keywords = this.keywordsBuilder.build();
+      .build()
+    this.shortText = rndStr()
+    this.keywords = this.keywordsBuilder.build()
     this.followUp = rndBool()
       ? undefined
-      : new Text(new CommonFields(rndStr()), rndStr(), []);
-    this.buttonsStyle = rndBool()
-      ? ButtonStyle.QUICK_REPLY
-      : ButtonStyle.BUTTON;
+      : new Text(new CommonFields(rndStr()), rndStr(), [])
+    this.buttonsStyle = rndBool() ? ButtonStyle.QUICK_REPLY : ButtonStyle.BUTTON
   }
 }

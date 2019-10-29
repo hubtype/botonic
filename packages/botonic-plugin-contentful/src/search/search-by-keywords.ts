@@ -1,4 +1,4 @@
-import * as cms from '../cms';
+import * as cms from '../cms'
 import {
   KeywordsOptions,
   KeywordsParser,
@@ -6,8 +6,8 @@ import {
   checkLocale,
   Normalizer,
   NormalizedUtterance
-} from '../nlp';
-import { SearchResult } from './search-result';
+} from '../nlp'
+import { SearchResult } from './search-result'
 
 export class SearchByKeywords {
   constructor(
@@ -21,24 +21,24 @@ export class SearchByKeywords {
     matchType: MatchType,
     context: cms.Context
   ): Promise<SearchResult[]> {
-    const locale = checkLocale(context.locale);
-    const contentsWithKeywords = await this.cms.contentsWithKeywords(context);
+    const locale = checkLocale(context.locale)
+    const contentsWithKeywords = await this.cms.contentsWithKeywords(context)
     const kws = new KeywordsParser<SearchResult>(
       locale,
       matchType,
       this.normalizer,
       this.keywordsOptions[locale] || new KeywordsOptions()
-    );
+    )
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.common.keywords!)
-    );
-    const results = kws.findCandidatesWithKeywordsAt(inputText);
+    )
+    const results = kws.findCandidatesWithKeywordsAt(inputText)
     return results.map(res => {
-      const candidate = res.candidate as SearchResult;
+      const candidate = res.candidate as SearchResult
       // @ts-ignore
-      candidate.match = res.match;
-      return candidate;
-    });
+      candidate.match = res.match
+      return candidate
+    })
   }
 
   /**
@@ -50,24 +50,24 @@ export class SearchByKeywords {
     tokens: string[],
     callbacks: SearchResult[]
   ): SearchResult[] {
-    const isChitChat = (cc: SearchResult) => cc.getCallbackIfChitchat();
+    const isChitChat = (cc: SearchResult) => cc.getCallbackIfChitchat()
 
-    const chitchats = callbacks.filter(isChitChat);
+    const chitchats = callbacks.filter(isChitChat)
     if (chitchats.length == 0) {
-      return callbacks;
+      return callbacks
     }
     if (chitchats.length < callbacks.length) {
-      const noChitchats = callbacks.filter(c => !isChitChat(c));
+      const noChitchats = callbacks.filter(c => !isChitChat(c))
       if (chitchats[0].match!.length - noChitchats[0].match!.length < 2) {
-        return noChitchats;
+        return noChitchats
       }
     }
     // all are chitchats
-    const estimatedNoChitchatWords = tokens.length - chitchats.length * 2;
+    const estimatedNoChitchatWords = tokens.length - chitchats.length * 2
     if (estimatedNoChitchatWords > 2) {
       // avoid that a sentence with chitchat and a question without recognized keywords is answered as chitchat
-      return [];
+      return []
     }
-    return [chitchats[0]];
+    return [chitchats[0]]
   }
 }

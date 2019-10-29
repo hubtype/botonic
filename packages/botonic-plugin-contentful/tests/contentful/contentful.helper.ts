@@ -1,8 +1,8 @@
-import Contentful from '../../src/contentful';
-import { Context } from '../../src/cms';
+import Contentful from '../../src/contentful'
+import { Context } from '../../src/cms'
 
 export function testSpaceId(): string {
-  return process.env.CONTENTFUL_TEST_SPACE_ID!;
+  return process.env.CONTENTFUL_TEST_SPACE_ID!
 }
 
 export function testContentful(): Contentful {
@@ -11,7 +11,7 @@ export function testContentful(): Contentful {
     spaceId: testSpaceId(),
     accessToken: process.env.CONTENTFUL_TEST_TOKEN!,
     environment: 'master'
-  });
+  })
 }
 
 export function testContext(
@@ -22,7 +22,7 @@ export function testContext(
     undefined
   ]
 ): Context | undefined {
-  const index = Math.floor(Math.random() * contexts.length);
+  const index = Math.floor(Math.random() * contexts.length)
 
-  return contexts[index];
+  return contexts[index]
 }

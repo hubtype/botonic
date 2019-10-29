@@ -6,10 +6,10 @@ import {
   ModelType,
   PRIORITY_MAX,
   SCORE_MAX
-} from '../cms';
+} from '../cms'
 
 export class SearchResult {
-  static CHITCHAT_SHORT_TEXT = 'chitchat';
+  static CHITCHAT_SHORT_TEXT = 'chitchat'
 
   /**
    * @param callback It may be a {@link Callback}'s with an URL instead of payload
@@ -25,16 +25,16 @@ export class SearchResult {
   ) {}
 
   toButton(): Button {
-    let shortText = this.common.shortText;
+    let shortText = this.common.shortText
     if (!shortText) {
-      shortText = this.common.name;
+      shortText = this.common.name
       console.error(
         `${JSON.stringify(this.callback)} ${
           this.common.name
         } without shortText. Assigning name to button text`
-      );
+      )
     }
-    return new Button(this.common.name, shortText, this.callback);
+    return new Button(this.common.name, shortText, this.callback)
   }
 
   getCallbackIfContentIs(modelType: ModelType): ContentCallback | undefined {
@@ -42,21 +42,21 @@ export class SearchResult {
       this.callback instanceof ContentCallback &&
       this.callback.model === modelType
     ) {
-      return this.callback;
+      return this.callback
     }
-    return undefined;
+    return undefined
   }
 
   getCallbackIfChitchat(): ContentCallback | undefined {
     if (!(this.callback instanceof ContentCallback)) {
-      return undefined;
+      return undefined
     }
     if (
       this.common.shortText !== SearchResult.CHITCHAT_SHORT_TEXT &&
       this.callback.model !== ModelType.CHITCHAT
     ) {
-      return undefined;
+      return undefined
     }
-    return this.callback;
+    return this.callback
   }
 }
