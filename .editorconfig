@@ -6,7 +6,9 @@ indent_size = 2
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+# https://youtrack.jetbrains.com/issue/WEB-21157#focus=streamItem-27-3617910.0-0
 quote_type = single
+ij_typescript_use_double_quotes = false
 
 [*.md]
 trim_trailing_whitespace = false
