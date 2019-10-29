@@ -1,14 +1,14 @@
-import 'jest-extended';
-import { Callback } from '../../src/cms';
-import { MatchType } from '../../src/nlp';
+import 'jest-extended'
+import { Callback } from '../../src/cms'
+import { MatchType } from '../../src/nlp'
 import {
   chitchatContent,
   contentWithKeyword,
   keywordsWithMockCms
-} from './search-by-keywords.test';
+} from './search-by-keywords.test'
 
-const LOCALE = 'es';
-const CONTEXT = { locale: LOCALE };
+const LOCALE = 'es'
+const CONTEXT = { locale: LOCALE }
 
 test.each<any>([
   //@bug it recognizes only 1 chitchat because both keywords belong to same content
@@ -26,25 +26,25 @@ test.each<any>([
         chitchatContent(['adios', 'hasta luego'])
       ],
       CONTEXT
-    );
-    const normalized = keywords.normalizer.normalize(LOCALE, inputText);
+    )
+    const normalized = keywords.normalizer.normalize(LOCALE, inputText)
     const contents = await keywords.searchContentsFromInput(
       normalized,
       MatchType.KEYWORDS_AND_OTHERS_FOUND,
       { locale: 'es' }
-    );
-    expect(contents).toHaveLength(numChitchats);
+    )
+    expect(contents).toHaveLength(numChitchats)
 
     // act
-    const filtered = keywords.filterChitchat(normalized.stems, contents);
+    const filtered = keywords.filterChitchat(normalized.stems, contents)
 
     // assert
-    expect(filtered).toHaveLength(1);
+    expect(filtered).toHaveLength(1)
     filtered.forEach(filtered => {
-      expect(filtered.getCallbackIfChitchat()).not.toBeUndefined();
-    });
+      expect(filtered.getCallbackIfChitchat()).not.toBeUndefined()
+    })
   }
-);
+)
 
 test('TEST treatChitChat: chitchat and other keywords detected', async () => {
   const keywords = keywordsWithMockCms(
@@ -53,25 +53,25 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
       contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
     ],
     CONTEXT
-  );
+  )
   const normalized = keywords.normalizer.normalize(
     LOCALE,
     'hey, DevoluciON fuera de  plazo?'
-  );
+  )
   const parsedKeywords = await keywords.searchContentsFromInput(
     normalized,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     { locale: LOCALE }
-  );
-  expect(parsedKeywords).toHaveLength(2);
+  )
+  expect(parsedKeywords).toHaveLength(2)
 
   // act
-  const filtered = keywords.filterChitchat(normalized.stems, parsedKeywords);
+  const filtered = keywords.filterChitchat(normalized.stems, parsedKeywords)
 
   // assert
-  expect(filtered).toHaveLength(1);
-  expect(filtered[0].getCallbackIfChitchat()).toBeUndefined();
-});
+  expect(filtered).toHaveLength(1)
+  expect(filtered[0].getCallbackIfChitchat()).toBeUndefined()
+})
 
 test.each<any>([
   //@bug it recognizes only 1 chitchat because both keywords belong to same content
@@ -88,23 +88,23 @@ test.each<any>([
         chitchatContent(['hasta luego'])
       ],
       CONTEXT
-    );
-    const normalized = keywords.normalizer.normalize(LOCALE, inputText);
+    )
+    const normalized = keywords.normalizer.normalize(LOCALE, inputText)
 
     const contents = await keywords.searchContentsFromInput(
       normalized,
       MatchType.KEYWORDS_AND_OTHERS_FOUND,
       { locale: LOCALE }
-    );
-    expect(contents).toHaveLength(numChitChats);
+    )
+    expect(contents).toHaveLength(numChitChats)
 
     // act
-    const filtered = keywords.filterChitchat(normalized.stems, contents);
+    const filtered = keywords.filterChitchat(normalized.stems, contents)
 
     // assert
-    expect(filtered).toEqual([]);
+    expect(filtered).toEqual([])
   }
-);
+)
 
 test('TEST treatChitChat: no chitchat detected', async () => {
   const keywords = keywordsWithMockCms(
@@ -113,48 +113,45 @@ test('TEST treatChitChat: no chitchat detected', async () => {
       contentWithKeyword(Callback.ofPayload('payload'), ['devolucion'])
     ],
     CONTEXT
-  );
+  )
 
   // hola is a stopword
   const normalized = keywords.normalizer.normalize(
     LOCALE,
     'hola, DevoluciON fuera de  plazo'
-  );
+  )
   const contents = await keywords.searchContentsFromInput(
     normalized,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     { locale: LOCALE }
-  );
-  expect(contents).toHaveLength(1);
+  )
+  expect(contents).toHaveLength(1)
 
   // act
-  const filtered = keywords.filterChitchat(normalized.stems, contents);
+  const filtered = keywords.filterChitchat(normalized.stems, contents)
 
   // assert
-  expect(filtered).toBe(contents);
-});
+  expect(filtered).toBe(contents)
+})
 
 test('TEST treatChitChat: keyword is a stopword', async () => {
   const keywords = keywordsWithMockCms(
     [chitchatContent(['hola']), chitchatContent(['buenos dias'])],
     CONTEXT
-  );
+  )
 
   // hola is a stopword
-  const normalized = keywords.normalizer.normalize(
-    LOCALE,
-    'Hola, buenos días.'
-  );
+  const normalized = keywords.normalizer.normalize(LOCALE, 'Hola, buenos días.')
   const contents = await keywords.searchContentsFromInput(
     normalized,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     { locale: LOCALE }
-  );
-  expect(contents).toHaveLength(1);
+  )
+  expect(contents).toHaveLength(1)
 
   // act
-  const filtered = keywords.filterChitchat(normalized.stems, contents);
+  const filtered = keywords.filterChitchat(normalized.stems, contents)
 
   // assert
-  expect(filtered).toEqual(contents);
-});
+  expect(filtered).toEqual(contents)
+})
