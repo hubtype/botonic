@@ -42,8 +42,8 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(postFaq1!.common.shortText).toEqual('Find my command');
   expect(postFaq1!.priority).toEqual(100);
   expect(postFaq1!.common.keywords).toIncludeSameMembers([
-    'no encuentro mi pedido',
-    'donde esta mi pedido'
+    "can't find my order",
+    'where is my order'
   ]);
 });
 

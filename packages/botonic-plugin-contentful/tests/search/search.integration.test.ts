@@ -9,11 +9,12 @@ test('TEST search: ', async () => {
     es: new KeywordsOptions(1)
   });
   const res = await sut.searchByKeywords(
-    'esta',
-    MatchType.ONLY_KEYWORDS_FOUND,
+    'mi pedido no encuentro',
+    MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP,
     {
       locale: 'es'
     }
   );
-  console.log(res);
+  expect(res.length).toBeGreaterThanOrEqual(1);
+  expect(res.filter(res => res.common.name == 'POST_FAQ1')).toHaveLength(1);
 });
