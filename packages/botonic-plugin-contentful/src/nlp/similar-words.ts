@@ -282,8 +282,8 @@ class FindMixedUp extends CandidateFinder {
       }
       // in case the space between the words in the keyword is missing
       if (
-        !submatches ||
-        (submatches.length == 0 && keyword.raw.includes(' '))
+        (!submatches || submatches.length == 0) &&
+        keyword.raw.includes(' ')
       ) {
         const wordsWithoutSpace = this.substring.findKeyword(
           keyword,
