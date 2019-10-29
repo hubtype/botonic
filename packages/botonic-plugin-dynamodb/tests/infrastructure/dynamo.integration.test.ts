@@ -12,13 +12,13 @@ test('TEST: dynamo write', async () => {
   const sut = new DynamoTrackStorage(Env.DEV, testConfig())
   const track1 = new Track('test_bot', time.now(), [
     new UserEvent('user1', 'event1', { arg1: 'val1' }),
-    new UserEvent('user2', 'event2')
+    new UserEvent('user2', 'event2'),
   ])
   try {
     // act
     await sut.write(track1)
     const track2 = new Track('test_bot', track1.time, [
-      new UserEvent('user1', 'event3', { arg3: 'val3' })
+      new UserEvent('user1', 'event3', { arg3: 'val3' }),
     ])
     await sut.write(track2)
 

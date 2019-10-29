@@ -14,15 +14,15 @@ export function init() {
         return {
           message: () =>
             `expected ${actual} to be around ${expected} with max error ${maxError}`,
-          pass: true
+          pass: true,
         }
       } else {
         return {
           message: () =>
             `expected ${actual} not to be around ${expected} with max error ${maxError}`,
-          pass: false
+          pass: false,
         }
       }
-    }
+    },
   })
 }

@@ -5,7 +5,7 @@ import {
   ErrorReportingTrackStorage,
   Track,
   TrackStorage,
-  UserEvent
+  UserEvent,
 } from './domain'
 import { DynamoTrackStorage } from './infrastructure/dynamo'
 import time from './domain/time'
@@ -23,7 +23,7 @@ export default class BotonicPluginDynamoDB {
       const conf: DynamoDB.ClientConfiguration = {
         accessKeyId: options['accessKeyId'],
         secretAccessKey: options['secretAccessKey'],
-        region: options['region']
+        region: options['region'],
       }
       this.storage = new DynamoTrackStorage(options['env'], conf)
     }

@@ -3,7 +3,7 @@ import {
   attribute,
   hashKey,
   rangeKey,
-  table
+  table,
 } from '@aws/dynamodb-data-mapper-annotations'
 import { marshallItem, Schema } from '@aws/dynamodb-data-marshaller'
 import { DynamoDB } from 'aws-sdk'
@@ -20,7 +20,7 @@ export class TrackKey {
   bot: string = ''
 
   @rangeKey({
-    defaultProvider: () => Time.now()
+    defaultProvider: () => Time.now(),
   })
   time: Date = Time.now()
 
@@ -28,14 +28,14 @@ export class TrackKey {
     // implement with marshallItem and TrackKey's schema?
     return {
       bot: { S: this.bot },
-      time: { N: String(Math.floor(this.time.getTime() / 1000)) }
+      time: { N: String(Math.floor(this.time.getTime() / 1000)) },
     }
   }
 }
 
 export enum TrackFields {
   // get from TrackKey schema?
-  EVENTS = 'events'
+  EVENTS = 'events',
 }
 
 @table(TABLE_NAME)
@@ -45,7 +45,7 @@ export class Track extends TrackKey {
    * Datamapper is not creating UserEvent instances. {@link Track.toDomain} fixes it
    */
   @attribute({
-    defaultProvider: () => [] as domain.UserEvent[]
+    defaultProvider: () => [] as domain.UserEvent[],
   })
   events: domain.UserEvent[] = []
 
