@@ -1,42 +1,41 @@
-import React, { useState } from "react"
-import { WebchatApp } from "@botonic/react"
-import Layout from "../components/layout"
-import AppsImage from "../images/bg-apps.svg"
-import PerspectiveCodeHighlighter from "../components/common/PerspectiveCodeHighlighter"
-import BotDemo from "../components/common/BotDemo"
-import styled from "styled-components"
-
+import React, { useState } from 'react'
+import { WebchatApp } from '@botonic/react'
+import Layout from '../components/layout'
+import AppsImage from '../images/bg-apps.svg'
+import PerspectiveCodeHighlighter from '../components/common/PerspectiveCodeHighlighter'
+import BotDemo from '../components/common/BotDemo'
+import styled from 'styled-components'
 
 let app = new WebchatApp({
-  appId: "959e282d-3e03-4469-bec9-0d42d4d0662e",
+  appId: '959e282d-3e03-4469-bec9-0d42d4d0662e',
   theme: {
     style: {
-      position: "relative",
-      background: "#43495F",
+      position: 'relative',
+      background: '#43495F'
     },
     botMessageStyle: {
-      fontFamily: "Noto Sans JP",
-      background: "#FFFFFF",
-      lineHeight: "26px",
+      fontFamily: 'Noto Sans JP',
+      background: '#FFFFFF',
+      lineHeight: '26px',
 
-      fontSize: "18 spx",
-      borderRadius: "26px",
-      border: "1px solid white",
+      fontSize: '18 spx',
+      borderRadius: '26px',
+      border: '1px solid white'
     },
     userMessageStyle: {
-      fontFamily: "Noto Sans JP",
-      background: "rgb(0, 153, 255)",
-      border: "1px solid rgb(0, 153, 255)",
-      lineHeight: "26px",
-      fontSize: "18 spx",
-      borderRadius: "26px",
+      fontFamily: 'Noto Sans JP',
+      background: 'rgb(0, 153, 255)',
+      border: '1px solid rgb(0, 153, 255)',
+      lineHeight: '26px',
+      fontSize: '18 spx',
+      borderRadius: '26px'
     },
     textAreaStyle: {
-      lineHeight: "26px",
-      borderRadius: "26px",
+      lineHeight: '26px',
+      borderRadius: '26px'
     },
     customHeader: () => <div></div>,
-    triggerButtonImage: null,
+    triggerButtonImage: null
   },
   persistentMenu: null,
   emojiPicker: true,
@@ -44,9 +43,9 @@ let app = new WebchatApp({
   defaultTyping: 1,
   onInit: () => {
     app.open()
-    app.addBotMessage({ type: "text", data: "Welcome to Botonic!" })
-    app.addUserMessage({ type: "text", data: "start" })
-  },
+    app.addBotMessage({ type: 'text', data: 'Welcome to Botonic!' })
+    app.addUserMessage({ type: 'text', data: 'start' })
+  }
 })
 
 const Container = styled.div`
@@ -68,7 +67,7 @@ const InnerPerspective = styled.div`
 `
 
 const IndexPage = () => {
-  const [userInput, setUserInput] = useState("none")
+  const [userInput, setUserInput] = useState('none')
   const codeString = `render() {
     return (
       <>
@@ -108,7 +107,7 @@ const IndexPage = () => {
           <PerspectiveCodeHighlighter codeString={codeString} />
         </InnerPerspective>
         <AppsImage
-          style={{ position: "absolute", width: "100%", zIndex: -1 }}
+          style={{ position: 'absolute', width: '100%', zIndex: -1 }}
         />
       </Container>
     </Layout>
