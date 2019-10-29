@@ -13,7 +13,7 @@ import {
   CommonFields,
   ScheduleContent,
   DateRangeContent,
-  TopContent
+  TopContent,
 } from './contents'
 import { Context } from './context'
 

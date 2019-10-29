@@ -3,7 +3,7 @@ import {
   CommonFields,
   ContentCallback,
   ModelType,
-  StartUp
+  StartUp,
 } from '../../src/cms'
 import { testContentful } from './contentful.helper'
 import { TEST_CAROUSEL_MAIN_ID } from './carousel.test'
@@ -14,7 +14,7 @@ test('TEST: contentful startUp', async () => {
     new StartUp(
       new CommonFields('BANNER', {
         shortText: 'Bienvenida',
-        keywords: ['keyword1']
+        keywords: ['keyword1'],
       }),
 
       'https://images.ctfassets.net/p2iyhzd1u4a7/1T0ntgNJnDUSwz59zGMZO6/ed6772d3a7b426025540c879b9d95347/red.jpg',
@@ -24,7 +24,7 @@ test('TEST: contentful startUp', async () => {
           'INICIO',
           'Menú de Inicio',
           new ContentCallback(ModelType.CAROUSEL, TEST_CAROUSEL_MAIN_ID)
-        )
+        ),
       ]
     )
   )

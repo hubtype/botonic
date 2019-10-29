@@ -8,13 +8,13 @@ import {
   Context,
   ModelType,
   SearchableBy,
-  TopContent
+  TopContent,
 } from '../cms'
 import { QueueDelivery } from './queue'
 import { UrlFields } from './url'
 import {
   SearchableByKeywordsDelivery,
-  SearchableByKeywordsFields
+  SearchableByKeywordsFields,
 } from './searchable-by'
 import { ScheduleDelivery } from './schedule'
 import { DateRangeDelivery, DateRangeFields } from './date-range'
@@ -86,7 +86,7 @@ export class DeliveryApi {
       {
         // eslint-disable-next-line @typescript-eslint/camelcase
         content_type: model,
-        include: this.maxReferencesInclude()
+        include: this.maxReferencesInclude(),
       }
     )
     let promises = entries.items
@@ -148,6 +148,6 @@ export function commonFieldsFromEntry(
     shortText: fields.shortText,
     partitions: fields.partitions,
     searchableBy,
-    dateRange
+    dateRange,
   })
 }

@@ -21,7 +21,7 @@ export class CachedDelivery implements DeliveryApiInterface {
           return args
             .map((arg: any) => JSON.stringify(arg))
             .reduce((a: any, b: any) => a + b)
-        }
+        },
       } as memoize.Options)
 
     this.getAsset = memoize(client.getAsset, options(2))

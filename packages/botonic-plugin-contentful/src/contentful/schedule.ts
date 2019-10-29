@@ -6,7 +6,7 @@ import {
   CommonEntryFields,
   commonFieldsFromEntry,
   ContentWithNameFields,
-  DeliveryApi
+  DeliveryApi,
 } from './delivery-api'
 
 export class ScheduleDelivery extends ContentDelivery {
@@ -18,7 +18,7 @@ export class ScheduleDelivery extends ContentDelivery {
 
   async schedule(id: string): Promise<ScheduleContent> {
     const f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
-      include: ScheduleDelivery.REFERENCES_INCLUDE
+      include: ScheduleDelivery.REFERENCES_INCLUDE,
     })
     return ScheduleDelivery.fromEntry(f)
   }
@@ -41,7 +41,7 @@ export class ScheduleDelivery extends ContentDelivery {
       fields.wednesdays || undefined,
       fields.thursdays || undefined,
       fields.fridays || undefined,
-      fields.saturdays || undefined
+      fields.saturdays || undefined,
     ]
     for (const day in days) {
       if (!day || !days[day]) {

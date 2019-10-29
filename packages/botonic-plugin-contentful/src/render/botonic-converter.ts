@@ -31,8 +31,8 @@ export class BotonicMsgConverter {
       type: 'carousel',
       delay: delayS,
       data: {
-        elements: carousel.elements.map(e => this.element(e))
-      }
+        elements: carousel.elements.map(e => this.element(e)),
+      },
     } as BotonicMsg
   }
 
@@ -41,7 +41,7 @@ export class BotonicMsgConverter {
       img: cmsElement.imgUrl,
       title: cmsElement.title,
       subtitle: cmsElement.subtitle,
-      buttons: this.convertButtons(cmsElement.buttons, ButtonStyle.BUTTON)
+      buttons: this.convertButtons(cmsElement.buttons, ButtonStyle.BUTTON),
     }
   }
 
@@ -54,7 +54,7 @@ export class BotonicMsgConverter {
     return cmsButtons.map(cmsButton => {
       const msgButton = {
         payload: cmsButton.callback.payload,
-        url: cmsButton.callback.url
+        url: cmsButton.callback.url,
       } as any
       if (style == ButtonStyle.BUTTON) {
         msgButton['title'] = cmsButton.text
@@ -69,7 +69,7 @@ export class BotonicMsgConverter {
     const msg: any = {
       type: 'text',
       delay: delayS,
-      data: { text: text.text }
+      data: { text: text.text },
     }
     const buttons = this.convertButtons(text.buttons, text.buttonsStyle)
     if (text.buttonsStyle == ButtonStyle.QUICK_REPLY) {
@@ -83,12 +83,12 @@ export class BotonicMsgConverter {
   startUp(startUp: cms.StartUp): BotonicMsgs {
     const img: BotonicMsg = {
       type: 'image',
-      data: { image: startUp.imgUrl }
+      data: { image: startUp.imgUrl },
     }
     const text: BotonicText = {
       type: 'text',
       data: { text: startUp.text },
-      buttons: this.convertButtons(startUp.buttons, ButtonStyle.BUTTON)
+      buttons: this.convertButtons(startUp.buttons, ButtonStyle.BUTTON),
     }
     return this.appendFollowUp([img, text], startUp)
   }
@@ -97,8 +97,8 @@ export class BotonicMsgConverter {
     const msg: BotonicMsg = {
       type: 'image',
       data: {
-        image: img.imgUrl
-      }
+        image: img.imgUrl,
+      },
     }
     return this.appendFollowUp(msg, img)
   }

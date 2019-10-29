@@ -68,7 +68,7 @@ test('TEST: validateContents', () => {
       instance(validContent),
       instance(invalidContent),
       instance(validContent),
-      instance(invalidContent)
+      instance(invalidContent),
     ])
   ).toEqual('wrong button. wrong button')
 })

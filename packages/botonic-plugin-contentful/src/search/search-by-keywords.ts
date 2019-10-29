@@ -5,7 +5,7 @@ import {
   MatchType,
   checkLocale,
   Normalizer,
-  NormalizedUtterance
+  NormalizedUtterance,
 } from '../nlp'
 import { SearchResult } from './search-result'
 

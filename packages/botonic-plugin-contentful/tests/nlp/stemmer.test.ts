@@ -15,7 +15,7 @@ test.each<any>([
   ['en', "can't", ['ca', 'not']],
   ['en', 'wanna', ['want', 'to']],
   ['en', 'gonna', ['go', 'to']],
-  ['pt', 'disse-me', ['diss', 'me']]
+  ['pt', 'disse-me', ['diss', 'me']],
   // not yet supported. TODO try with node-nlp autostemmer
   // ['ca', "adonar-se'n", ['adon', 'se', 'en']] // we don't have AggressiveCatalanTokenizer
 ])('TEST: stemmer(%s) %j', (locale: string, raw: string, expected: string) => {

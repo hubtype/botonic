@@ -4,7 +4,7 @@ import {
   FollowUp,
   Content,
   Text,
-  CommonFields
+  CommonFields,
 } from './contents'
 
 abstract class ModelBuilder {
@@ -57,7 +57,7 @@ export class TextBuilder extends ModelBuilder {
       new CommonFields(this.name, {
         shortText: this.shortText,
         keywords: this.keywords,
-        followUp: this.followUp
+        followUp: this.followUp,
       }),
       this.text,
       this.buttons,

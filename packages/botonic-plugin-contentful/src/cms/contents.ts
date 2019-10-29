@@ -4,7 +4,7 @@ import { SearchableBy } from './fields'
 
 export enum ButtonStyle {
   BUTTON = 0,
-  QUICK_REPLY = 1
+  QUICK_REPLY = 1,
 }
 
 /** Not a Content because it cannot have custom fields */

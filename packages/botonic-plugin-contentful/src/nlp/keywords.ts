@@ -34,14 +34,14 @@ export enum MatchType {
   /** The keyword may be preceded and followed by other words */
   KEYWORDS_AND_OTHERS_FOUND,
   /** All the words in the keyword must appear on input text, even if mixed up with other words*/
-  ALL_WORDS_IN_KEYWORDS_MIXED_UP
+  ALL_WORDS_IN_KEYWORDS_MIXED_UP,
 }
 
 export const MATCH_TYPES = Object.values(MatchType).map(m => m as MatchType)
 
 export enum SortType {
   NONE,
-  LENGTH
+  LENGTH,
 }
 
 export class KeywordsOptions {

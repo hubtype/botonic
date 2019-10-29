@@ -2,7 +2,7 @@ import {
   CommonFields,
   Queue,
   SearchableBy,
-  SearchableByKeywords
+  SearchableByKeywords,
 } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
 import { testSchedule } from './schedule.test'
@@ -14,7 +14,7 @@ test('TEST: contentful Queue', async () => {
 
   const searchableBy = new SearchableBy([
     new SearchableByKeywords('HIGH_PRIO', ['high1', 'high2'], 99),
-    new SearchableByKeywords('LOW_PRIO', ['low1', 'low2'], 10)
+    new SearchableByKeywords('LOW_PRIO', ['low1', 'low2'], 10),
   ])
   expect(queue).toEqual(
     new Queue(

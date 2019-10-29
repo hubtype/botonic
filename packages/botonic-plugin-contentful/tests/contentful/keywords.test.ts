@@ -43,7 +43,7 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(postFaq1!.priority).toEqual(100)
   expect(postFaq1!.common.keywords).toIncludeSameMembers([
     "can't find my order",
-    'where is my order'
+    'where is my order',
   ])
 })
 

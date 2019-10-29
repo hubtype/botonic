@@ -37,7 +37,7 @@ export function testSchedule(): Schedule {
       new TimeRange(
         expected.createHourAndMinute(18, 30),
         expected.createHourAndMinute(22, 45)
-      )
+      ),
     ])
   )
   return expected

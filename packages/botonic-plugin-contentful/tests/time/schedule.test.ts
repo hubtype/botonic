@@ -4,7 +4,7 @@ import {
   Schedule,
   ScheduleAlwaysOn,
   TimeRange,
-  WeekDay
+  WeekDay,
 } from '../../src/time/schedule'
 import momentTz from 'moment-timezone'
 
@@ -33,7 +33,7 @@ test.each<any>([
   [new Date(2019, APRIL, 1, 8, 59), false],
   [new Date(2019, APRIL, 1, 9, 0), true],
   [new Date(2019, APRIL, 1, 18, 59), true],
-  [new Date(2019, APRIL, 1, 19, 0), false]
+  [new Date(2019, APRIL, 1, 19, 0), false],
 ])('TEST: Schedule.contains(%s)=>%s', (date: Date, expected: boolean) => {
   const sut = new Schedule(Schedule.TZ_CET)
 
@@ -98,7 +98,7 @@ test('TEST: addException', () => {
   sut.addDaySchedule(
     WeekDay.FRIDAY,
     new DaySchedule([
-      new TimeRange(sut.createHourAndMinute(10), sut.createHourAndMinute(12))
+      new TimeRange(sut.createHourAndMinute(10), sut.createHourAndMinute(12)),
     ])
   )
 
@@ -110,7 +110,7 @@ test('TEST: addException', () => {
   sut.addException(
     date10h,
     new DaySchedule([
-      new TimeRange(sut.createHourAndMinute(11), sut.createHourAndMinute(13))
+      new TimeRange(sut.createHourAndMinute(11), sut.createHourAndMinute(13)),
     ])
   )
   expect(sut.contains(date10h)).toBeFalsy()

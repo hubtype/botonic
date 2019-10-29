@@ -15,7 +15,7 @@ import {
   CommonFields,
   ScheduleContent,
   DateRangeContent,
-  TopContent
+  TopContent,
 } from './contents'
 import * as time from '../time'
 import { Context, DEFAULT_CONTEXT } from './context'
@@ -111,8 +111,8 @@ export class DummyCMS implements CMS {
         new CommonFields(button.name, {
           shortText: button.text,
           keywords: [
-            'keyword for ' + (button.callback.payload || button.callback.url!)
-          ]
+            'keyword for ' + (button.callback.payload || button.callback.url!),
+          ],
         })
       )
     })

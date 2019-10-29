@@ -2,7 +2,7 @@ import { stemmerFor } from './stemmer'
 import {
   DEFAULT_SEPARATORS_REGEX,
   DEFAULT_STOP_WORDS,
-  tokenizerPerLocale
+  tokenizerPerLocale,
 } from './tokens'
 import { Locale } from './locales'
 

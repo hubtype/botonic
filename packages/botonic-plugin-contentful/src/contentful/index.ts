@@ -11,7 +11,7 @@ import {
   DateRangeContent,
   ModelType,
   ScheduleContent,
-  TopContent
+  TopContent,
 } from '../cms'
 import { ButtonDelivery } from './button'
 import { DeliveryApi } from './delivery-api'
@@ -50,7 +50,7 @@ export default class Contentful implements cms.CMS {
     const params: CreateClientParams = {
       space: options.spaceId,
       accessToken: options.accessToken,
-      timeout: options.timeoutMs
+      timeout: options.timeoutMs,
     }
     if (options.environment) {
       params.environment = options.environment
@@ -80,7 +80,7 @@ export default class Contentful implements cms.CMS {
       this._url,
       this._carousel,
       this._image,
-      this._startUp
+      this._startUp,
     ].forEach(d => d.setFollowUp(followUp))
     this._keywords = new KeywordsDelivery(delivery)
     this._schedule = new ScheduleDelivery(delivery)
