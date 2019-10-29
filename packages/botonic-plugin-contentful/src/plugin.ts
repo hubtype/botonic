@@ -24,6 +24,7 @@ export const DEFAULT_CACHE_TTL_MS = 10000;
 
 export interface ContentfulOptions extends OptionsBase {
   spaceId: string;
+  environment?: string;
   accessToken: string;
   /**
    * does not work at least when there's no network during the first connection

@@ -24,6 +24,7 @@ import { QueueDelivery } from './queue';
 import * as contentful from 'contentful';
 import { ContentfulOptions } from '../plugin';
 import { CachedDelivery } from './cache';
+import { CreateClientParams } from 'contentful';
 
 export default class Contentful implements cms.CMS {
   _delivery: DeliveryApi;
@@ -46,11 +47,15 @@ export default class Contentful implements cms.CMS {
    *  https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
    */
   constructor(options: ContentfulOptions) {
-    const client = contentful.createClient({
+    const params: CreateClientParams = {
       space: options.spaceId,
       accessToken: options.accessToken,
       timeout: options.timeoutMs
-    });
+    };
+    if (options.environment) {
+      params.environment = options.environment;
+    }
+    const client = contentful.createClient(params);
     const memoizedClient = new CachedDelivery(client, options.cacheTtlMs);
     const delivery = new DeliveryApi(memoizedClient);
 
