@@ -5,51 +5,51 @@ import {
   Content,
   Text,
   CommonFields
-} from './contents';
+} from './contents'
 
 abstract class ModelBuilder {
   protected constructor(readonly name: string) {}
 
-  abstract build(): Content;
+  abstract build(): Content
 }
 
 /**
  * Helps constructing @link Text, which has many fields and it's immutable
  */
 export class TextBuilder extends ModelBuilder {
-  buttons: Button[] = [];
-  shortText?: string;
-  keywords: string[] = [];
-  followUp?: FollowUp;
-  buttonsStyle = ButtonStyle.BUTTON;
+  buttons: Button[] = []
+  shortText?: string
+  keywords: string[] = []
+  followUp?: FollowUp
+  buttonsStyle = ButtonStyle.BUTTON
 
   constructor(readonly name: string, readonly text: string) {
-    super(name);
+    super(name)
   }
 
   withButtons(buttons: Button[]): TextBuilder {
-    this.buttons = buttons;
-    return this;
+    this.buttons = buttons
+    return this
   }
 
   withShortText(shortText: string): TextBuilder {
-    this.shortText = shortText;
-    return this;
+    this.shortText = shortText
+    return this
   }
 
   withFollowUp(followUp: FollowUp): TextBuilder {
-    this.followUp = followUp;
-    return this;
+    this.followUp = followUp
+    return this
   }
 
   withKeywords(kw: string[]): TextBuilder {
-    this.keywords = kw;
-    return this;
+    this.keywords = kw
+    return this
   }
 
   withButtonStyle(style: ButtonStyle): TextBuilder {
-    this.buttonsStyle = style;
-    return this;
+    this.buttonsStyle = style
+    return this
   }
 
   build(): Text {
@@ -62,6 +62,6 @@ export class TextBuilder extends ModelBuilder {
       this.text,
       this.buttons,
       this.buttonsStyle
-    );
+    )
   }
 }

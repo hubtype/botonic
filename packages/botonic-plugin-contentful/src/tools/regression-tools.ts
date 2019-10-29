@@ -1,12 +1,12 @@
-import { Locale, MatchType } from '../nlp';
-import BotonicPluginContentful from '../plugin';
-import { ContentCallback } from '../cms';
+import { Locale, MatchType } from '../nlp'
+import BotonicPluginContentful from '../plugin'
+import { ContentCallback } from '../cms'
 
 export type SearchEvaluator = (
   /** Starting with 0. Undefined if not found */
   matchPosition: number | undefined,
   numResults: number
-) => number;
+) => number
 
 export class GroundTruth {
   constructor(readonly utterance: string, readonly contentId: string) {}
@@ -23,20 +23,20 @@ export class SearchRegression {
     groundTruths: Iterable<GroundTruth>,
     locale: Locale
   ): Promise<number> {
-    let sumEvals = 0;
-    let count = 0;
+    let sumEvals = 0
+    let count = 0
     for (const gt of groundTruths) {
-      count++;
+      count++
       const res = await this.plugin.search.searchByKeywords(
         gt.utterance,
         matchType,
         { locale }
-      );
+      )
       const pos = res.findIndex(
         res => (res.callback as ContentCallback).id == gt.contentId
-      );
-      sumEvals += this.evaluator(pos >= 0 ? pos : undefined, res.length);
+      )
+      sumEvals += this.evaluator(pos >= 0 ? pos : undefined, res.length)
     }
-    return sumEvals / count;
+    return sumEvals / count
   }
 }

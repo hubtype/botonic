@@ -1,6 +1,6 @@
-import { SearchResult } from '../search/search-result';
-import { Callback } from './callback';
-import { CMS, ModelType } from './cms';
+import { SearchResult } from '../search/search-result'
+import { Callback } from './callback'
+import { CMS, ModelType } from './cms'
 import {
   Asset,
   Button,
@@ -16,15 +16,15 @@ import {
   ScheduleContent,
   DateRangeContent,
   TopContent
-} from './contents';
-import * as time from '../time';
-import { Context, DEFAULT_CONTEXT } from './context';
+} from './contents'
+import * as time from '../time'
+import { Context, DEFAULT_CONTEXT } from './context'
 
 /**
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
  */
 export class DummyCMS implements CMS {
-  static IMG = '../assets/img_home_bg.png';
+  static IMG = '../assets/img_home_bg.png'
   /**
    *
    * @param buttonCallbacks models which contain buttons will return one per each specified callback
@@ -34,8 +34,8 @@ export class DummyCMS implements CMS {
   async carousel(id: string, {} = DEFAULT_CONTEXT): Promise<Carousel> {
     const elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
-    );
-    return Promise.resolve(new Carousel(new CommonFields(id), elements));
+    )
+    return Promise.resolve(new Carousel(new CommonFields(id), elements))
   }
 
   async text(id: string, {} = DEFAULT_CONTEXT): Promise<Text> {
@@ -45,11 +45,11 @@ export class DummyCMS implements CMS {
         'Dummy text for ' + id,
         this.buttons()
       )
-    );
+    )
   }
 
   chitchat(id: string, context = DEFAULT_CONTEXT): Promise<Chitchat> {
-    return this.text(id, context);
+    return this.text(id, context)
   }
 
   async startUp(id: string, {} = DEFAULT_CONTEXT): Promise<StartUp> {
@@ -60,12 +60,12 @@ export class DummyCMS implements CMS {
         'Dummy text for ' + id,
         this.buttons()
       )
-    );
+    )
   }
 
   static buttonFromCallback(callback: Callback): Button {
-    const id = callback.payload || callback.url!;
-    return new Button(id, 'button text for ' + id, callback);
+    const id = callback.payload || callback.url!
+    return new Button(id, 'button text for ' + id, callback)
   }
 
   private element(id: string, callback: Callback): Element {
@@ -74,7 +74,7 @@ export class DummyCMS implements CMS {
       'Title for ' + id,
       'subtitle',
       DummyCMS.IMG
-    );
+    )
   }
 
   url(id: string, {} = DEFAULT_CONTEXT): Promise<Url> {
@@ -83,15 +83,15 @@ export class DummyCMS implements CMS {
         new CommonFields(id, { shortText: 'button text for' + id }),
         `http://url.${id}`
       )
-    );
+    )
   }
 
   image(id: string, {} = DEFAULT_CONTEXT): Promise<Image> {
-    return Promise.resolve(new Image(new CommonFields(id), DummyCMS.IMG));
+    return Promise.resolve(new Image(new CommonFields(id), DummyCMS.IMG))
   }
 
   queue(id: string, {} = DEFAULT_CONTEXT): Promise<Queue> {
-    return Promise.resolve(new Queue(new CommonFields(id), id));
+    return Promise.resolve(new Queue(new CommonFields(id), id))
   }
 
   contents(
@@ -99,12 +99,12 @@ export class DummyCMS implements CMS {
     context?: Context,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]> {
-    return Promise.resolve([]);
+    return Promise.resolve([])
   }
 
   contentsWithKeywords({} = DEFAULT_CONTEXT): Promise<SearchResult[]> {
     const contents = this.buttonCallbacks.map(cb => {
-      const button = DummyCMS.buttonFromCallback(cb);
+      const button = DummyCMS.buttonFromCallback(cb)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       return new SearchResult(
         cb,
@@ -114,31 +114,31 @@ export class DummyCMS implements CMS {
             'keyword for ' + (button.callback.payload || button.callback.url!)
           ]
         })
-      );
-    });
-    return Promise.resolve(contents);
+      )
+    })
+    return Promise.resolve(contents)
   }
 
   schedule(id: string): Promise<ScheduleContent> {
-    const schedule = new time.Schedule('Europe/Madrid');
+    const schedule = new time.Schedule('Europe/Madrid')
     return Promise.resolve(
       new ScheduleContent(new CommonFields('name'), schedule)
-    );
+    )
   }
 
   asset(id: string): Promise<Asset> {
-    return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`));
+    return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`))
   }
 
   dateRange(id: string): Promise<DateRangeContent> {
-    const now = new Date();
-    const dateRange = new time.DateRange('daterange name', now, now);
+    const now = new Date()
+    const dateRange = new time.DateRange('daterange name', now, now)
     return Promise.resolve(
       new DateRangeContent(new CommonFields(dateRange.name), dateRange)
-    );
+    )
   }
 
   private buttons(): Button[] {
-    return this.buttonCallbacks.map(DummyCMS.buttonFromCallback);
+    return this.buttonCallbacks.map(DummyCMS.buttonFromCallback)
   }
 }

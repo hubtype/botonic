@@ -1,6 +1,6 @@
-import * as contentful from 'contentful';
-import { Entry, EntryCollection } from 'contentful';
-import * as cms from '../cms';
+import * as contentful from 'contentful'
+import { Entry, EntryCollection } from 'contentful'
+import * as cms from '../cms'
 import {
   Callback,
   CommonFields,
@@ -9,20 +9,20 @@ import {
   ModelType,
   SearchableBy,
   TopContent
-} from '../cms';
-import { QueueDelivery } from './queue';
-import { UrlFields } from './url';
+} from '../cms'
+import { QueueDelivery } from './queue'
+import { UrlFields } from './url'
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields
-} from './searchable-by';
-import { ScheduleDelivery } from './schedule';
-import { DateRangeDelivery, DateRangeFields } from './date-range';
+} from './searchable-by'
+import { ScheduleDelivery } from './schedule'
+import { DateRangeDelivery, DateRangeFields } from './date-range'
 
 export type DeliveryApiInterface = Pick<
   contentful.ContentfulClientApi,
   'getAsset' | 'getEntries' | 'getEntry'
->;
+>
 
 /**
  * Manages the {@link Context}, parses Content's Id and ModelType from the Contentful entries...
@@ -31,7 +31,7 @@ export class DeliveryApi {
   constructor(readonly client: DeliveryApiInterface) {}
 
   async getAsset(id: string, query?: any): Promise<contentful.Asset> {
-    return this.client.getAsset(id, query);
+    return this.client.getAsset(id, query)
   }
 
   async getEntry<T>(
@@ -42,7 +42,7 @@ export class DeliveryApi {
     return this.client.getEntry<T>(
       id,
       DeliveryApi.queryFromContext(context, query)
-    );
+    )
   }
 
   async getEntries<T>(
@@ -51,25 +51,25 @@ export class DeliveryApi {
   ): Promise<contentful.EntryCollection<T>> {
     return this.client.getEntries<T>(
       DeliveryApi.queryFromContext(context, query)
-    );
+    )
   }
 
   static getContentModel(entry: contentful.Entry<any>): cms.ModelType {
     // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
-    const typ = entry.sys.contentType.sys.id;
-    return typ as cms.ModelType;
+    const typ = entry.sys.contentType.sys.id
+    return typ as cms.ModelType
   }
 
   static callbackFromEntry(entry: contentful.Entry<any>): Callback {
-    const modelType = this.getContentModel(entry);
+    const modelType = this.getContentModel(entry)
     if (modelType === ModelType.URL) {
-      return Callback.ofUrl((entry.fields as UrlFields).url);
+      return Callback.ofUrl((entry.fields as UrlFields).url)
     }
-    return new ContentCallback(modelType, entry.sys.id);
+    return new ContentCallback(modelType, entry.sys.id)
   }
 
   static urlFromAsset(assetField: contentful.Asset): string {
-    return 'https:' + assetField.fields.file.url;
+    return 'https:' + assetField.fields.file.url
   }
 
   async contents(
@@ -88,49 +88,49 @@ export class DeliveryApi {
         content_type: model,
         include: this.maxReferencesInclude()
       }
-    );
-    let promises = entries.items;
+    )
+    let promises = entries.items
     if (filter) {
-      promises = promises.filter(entry => filter(commonFieldsFromEntry(entry)));
+      promises = promises.filter(entry => filter(commonFieldsFromEntry(entry)))
     }
-    return Promise.all(promises.map(entry => factory(entry, context)));
+    return Promise.all(promises.map(entry => factory(entry, context)))
   }
 
   private static queryFromContext(context: Context, query: any = {}): any {
     if (context.locale) {
-      query['locale'] = context.locale;
+      query['locale'] = context.locale
     }
-    return query;
+    return query
   }
 
   private maxReferencesInclude() {
     return Math.max(
       QueueDelivery.REFERENCES_INCLUDE,
       ScheduleDelivery.REFERENCES_INCLUDE
-    );
+    )
   }
 }
 
 export interface ContentWithNameFields {
   // The content code (eg. PRE_FAQ1) Not called Id to differentiate from contentful automatic Id
-  name: string;
+  name: string
 }
 
 export interface CommonEntryFields extends ContentWithNameFields {
   // Useful to display in buttons or reports
-  shortText: string;
-  keywords?: string[];
-  searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
-  partitions?: string[];
-  dateRange?: contentful.Entry<DateRangeFields>;
-  followup?: contentful.Entry<FollowUpFields>;
+  shortText: string
+  keywords?: string[]
+  searchableBy?: contentful.Entry<SearchableByKeywordsFields>[]
+  partitions?: string[]
+  dateRange?: contentful.Entry<DateRangeFields>
+  followup?: contentful.Entry<FollowUpFields>
 }
-export type FollowUpFields = CommonEntryFields;
+export type FollowUpFields = CommonEntryFields
 
 export function commonFieldsFromEntry(
   entry: Entry<CommonEntryFields>
 ): CommonFields {
-  const fields = entry.fields;
+  const fields = entry.fields
 
   const searchableBy =
     fields.searchableBy &&
@@ -138,10 +138,10 @@ export function commonFieldsFromEntry(
       fields.searchableBy.map(searchableBy =>
         SearchableByKeywordsDelivery.fromEntry(searchableBy)
       )
-    );
+    )
 
   const dateRange =
-    fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange);
+    fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange)
 
   return new CommonFields(fields.name, {
     keywords: fields.keywords,
@@ -149,5 +149,5 @@ export function commonFieldsFromEntry(
     partitions: fields.partitions,
     searchableBy,
     dateRange
-  });
+  })
 }

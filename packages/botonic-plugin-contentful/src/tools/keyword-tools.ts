@@ -1,11 +1,11 @@
-import { CMS } from '../cms';
-import { Locale, Normalizer } from '../nlp';
+import { CMS } from '../cms'
+import { Locale, Normalizer } from '../nlp'
 
 export class StemmedKeyword {
   constructor(readonly rawKeyword: string, readonly stemmedKeyword: string[]) {}
 
   toString(): string {
-    return `${this.rawKeyword}: ${this.stemmedKeyword.toString()}`;
+    return `${this.rawKeyword}: ${this.stemmedKeyword.toString()}`
   }
 }
 
@@ -21,9 +21,9 @@ export class KeywordsTool {
   ) {}
 
   async dumpKeywords(): Promise<Map<string, StemmedKeyword[]>> {
-    const keywords = new Map<string, StemmedKeyword[]>();
-    const context = { locale: this.locale };
-    const results = await this.cms.contentsWithKeywords(context);
+    const keywords = new Map<string, StemmedKeyword[]>()
+    const context = { locale: this.locale }
+    const results = await this.cms.contentsWithKeywords(context)
     for (const res of results) {
       const stemmed = res.common.keywords.map(
         kw =>
@@ -31,9 +31,9 @@ export class KeywordsTool {
             kw,
             this.normalizer.normalize(context.locale, kw).stems
           )
-      );
-      keywords.set(res.common.name, stemmed);
+      )
+      keywords.set(res.common.name, stemmed)
     }
-    return keywords;
+    return keywords
   }
 }
