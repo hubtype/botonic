@@ -12,7 +12,7 @@ import {
   CommonFields,
   ScheduleContent,
   DateRangeContent,
-  TopContent
+  TopContent,
 } from './contents'
 
 export enum ModelType {
@@ -24,7 +24,7 @@ export enum ModelType {
   TEXT = 'text',
   URL = 'url',
   SCHEDULE = 'schedule',
-  STARTUP = 'startUp'
+  STARTUP = 'startUp',
 }
 
 export const MODEL_TYPES = Object.values(ModelType).map(m => m as ModelType)

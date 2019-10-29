@@ -5,7 +5,7 @@ import { ContentDelivery } from './content-delivery'
 import {
   CommonEntryFields,
   commonFieldsFromEntry,
-  DeliveryApi
+  DeliveryApi,
 } from './delivery-api'
 
 export class DateRangeDelivery extends ContentDelivery {

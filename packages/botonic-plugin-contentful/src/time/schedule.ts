@@ -48,7 +48,7 @@ export class Schedule {
   ): string {
     const options: Intl.DateTimeFormatOptions = {
       timeZone: this.zone.name,
-      hour12: false
+      hour12: false,
     }
     return date.toLocaleTimeString(locales, options)
   }
@@ -99,7 +99,7 @@ export enum WeekDay {
   WEDNESDAY = 3,
   THURSDAY = 4,
   FRIDAY = 5,
-  SATURDAY = 6
+  SATURDAY = 6,
 }
 
 class ExceptionSchedule {

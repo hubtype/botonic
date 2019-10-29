@@ -4,7 +4,7 @@ import {
   CommonFields,
   ContentCallback,
   ModelType,
-  Text
+  Text,
 } from '../../src/cms'
 import { TextBuilder } from '../../src/cms/factories'
 

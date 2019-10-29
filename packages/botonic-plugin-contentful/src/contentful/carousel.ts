@@ -5,7 +5,7 @@ import * as cms from '../cms'
 import {
   DeliveryApi,
   CommonEntryFields,
-  commonFieldsFromEntry
+  commonFieldsFromEntry,
 } from './delivery-api'
 
 // TODO remove DeliveryWithFollowUp

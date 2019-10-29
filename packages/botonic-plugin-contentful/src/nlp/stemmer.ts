@@ -15,7 +15,7 @@ export const stemmers: { [key: string]: BaseStemmer } = {
   ca: new CatalanStemmer(tokenizerPerLocale('ca')),
   en: new EnglishStemmer(tokenizerPerLocale('en')),
   es: new SpanishStemmer(tokenizerPerLocale('es')),
-  pt: new PortugueseStemmer(tokenizerPerLocale('pt'))
+  pt: new PortugueseStemmer(tokenizerPerLocale('pt')),
   //node-nlp does not support polish
 }
 

@@ -48,7 +48,7 @@ const tokenizers: { [locale: string]: Tokenizer } = {
   es: new AggressiveTokenizerEs(),
   en: new AggressiveTokenizerEn(),
   ca: new CatalanTokenizer(),
-  pt: new AggressiveTokenizerPt()
+  pt: new AggressiveTokenizerPt(),
 }
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
@@ -60,5 +60,5 @@ export const DEFAULT_SEPARATORS_REGEX = new RegExp('[;,./()]', 'g')
 export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   es: esDefaultStopWords,
   ca: caDefaultStopWords,
-  en: enDefaultStopWords
+  en: enDefaultStopWords,
 }

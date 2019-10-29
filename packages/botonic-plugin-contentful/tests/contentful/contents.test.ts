@@ -3,7 +3,7 @@ import {
   ContentCallback,
   ModelType,
   Queue,
-  Text
+  Text,
 } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
 
@@ -23,7 +23,7 @@ test('TEST: contentful contents filter', async () => {
 
 test('TEST: contentful contents no filter', async () => {
   const queues = await testContentful().contents(ModelType.QUEUE, {
-    locale: 'en'
+    locale: 'en',
   })
   expect(queues).toSatisfyAll(queue => queue instanceof Queue)
   expect(queues.length).toEqual(1)

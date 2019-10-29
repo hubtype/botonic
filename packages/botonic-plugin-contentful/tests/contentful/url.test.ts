@@ -9,7 +9,7 @@ test('TEST: contentful url', async () => {
     new Url(
       new CommonFields('URL_HUBTYPE', {
         shortText: 'Web de Hubtype',
-        keywords: ['hubtypeEn', 'botonicEn']
+        keywords: ['hubtypeEn', 'botonicEn'],
       }),
       'https://www.hubtype.com/en'
     )

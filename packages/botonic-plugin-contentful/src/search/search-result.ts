@@ -5,7 +5,7 @@ import {
   ContentCallback,
   ModelType,
   PRIORITY_MAX,
-  SCORE_MAX
+  SCORE_MAX,
 } from '../cms'
 
 export class SearchResult {
