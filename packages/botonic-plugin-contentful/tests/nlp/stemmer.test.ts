@@ -10,16 +10,23 @@ test.each<any>([
   ['es', 'realizando', ['realic']],
   ['es', 'realice', ['realic']],
   ['es', 'realicéis', ['realic']],
-  ['es', 'compraría', ['compr']], // BUG in node-nlp: AggressiveTokenizerEs removes accents, but stemmer has them in its tables
+  ['es', 'compraría', ['compr']],
   ['es', 'compraba', ['compr']],
+
   ['en', "can't", ['ca', 'not']],
   ['en', 'wanna', ['want', 'to']],
   ['en', 'gonna', ['go', 'to']],
+
   ['pt', 'disse-me', ['diss', 'me']],
+
+  ['pl', 'JeŚć', ['je']],
   // not yet supported. TODO try with node-nlp autostemmer
   // ['ca', "adonar-se'n", ['adon', 'se', 'en']] // we don't have AggressiveCatalanTokenizer
-])('TEST: stemmer(%s) %j', (locale: string, raw: string, expected: string) => {
-  const stemmer = stemmerFor(locale)
-  const stemmed = stemmer.tokenizeAndStem(raw, true)
-  expect(stemmed).toEqual(expected)
-})
+])(
+  'TEST: stemmer removes final letters(%s) =>%j',
+  (locale: string, raw: string, expected: string) => {
+    const stemmer = stemmerFor(locale)
+    const stemmed = stemmer.tokenizeAndStem(raw, true)
+    expect(stemmed).toEqual(expected)
+  }
+)

@@ -61,4 +61,6 @@ export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   es: esDefaultStopWords,
   ca: caDefaultStopWords,
   en: enDefaultStopWords,
+  pl: plDefaultStopWords,
+  pt: ptDefaultStopWords,
 }
