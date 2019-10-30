@@ -6,6 +6,9 @@ import { esDefaultStopWords } from './stopwords/stopwords-es'
 import { caDefaultStopWords } from './stopwords/stopwords-ca'
 import { enDefaultStopWords } from './stopwords/stopwords-en'
 import { Locale } from './locales'
+import AggressiveTokenizerPl from 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pl'
+import { plDefaultStopWords } from './stopwords/stopwords-pl'
+import { ptDefaultStopWords } from './stopwords/stopwords-pt'
 
 export function countOccurrences(haystack: string, needle: string): number {
   let n = 0
@@ -48,6 +51,7 @@ const tokenizers: { [locale: string]: Tokenizer } = {
   es: new AggressiveTokenizerEs(),
   en: new AggressiveTokenizerEn(),
   ca: new CatalanTokenizer(),
+  pl: new AggressiveTokenizerPl(),
   pt: new AggressiveTokenizerPt(),
 }
 
