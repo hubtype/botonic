@@ -81,6 +81,14 @@ declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-es' {
   export = AggressiveTokenizerEs
 }
 
+declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pl' {
+  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
+
+  class AggressiveTokenizerPl extends Tokenizer {}
+
+  export = AggressiveTokenizerPl
+}
+
 declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pt' {
   import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
 
