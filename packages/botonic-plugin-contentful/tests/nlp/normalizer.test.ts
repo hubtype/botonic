@@ -3,12 +3,31 @@ import {
   Normalizer,
   StemmingBlackList,
   Locale,
+  NormalizedUtterance,
 } from '../../src/nlp'
 
 test('TEST: sut.normalize stopWord', () => {
   const sut = new Normalizer(undefined, { es: ['stopWórd'] })
   expect(sut.normalize('es', 'no digas STOPword').stems).toEqual(['no', 'dec'])
 })
+
+test.each<any>([
+  ['es', 'ponerse un toro', ['ponerse', 'un', 'toro'], ['pon', 'tor']],
+
+  ['en', "you can't", ['you', 'ca', 'not'], ['ca', 'not']],
+
+  ['pt', 'depois disse-me', ['depois', 'disse', 'me'], ['diss']],
+
+  ['pl', 'gdziekolwiek JeŚć', ['gdziekolwiek', 'jesc'], ['je']],
+])(
+  'TEST: stemmer removes stopwords (%s) =>%j',
+  (locale: string, raw: string, tokens: string[], stems: string[]) => {
+    const sut = new Normalizer()
+    expect(sut.normalize(locale, raw)).toEqual(
+      new NormalizedUtterance(raw.toLowerCase(), tokens, stems, false)
+    )
+  }
+)
 
 test('TEST: sut.normalize es', () => {
   const loc = 'es'
