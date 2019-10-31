@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import LinkedCta from './common/LinkedCta'
 import PlainLink from './common/PlainLink'
-import BotonicLogo from './common/BotonicLogo'
+import BotonicLogo from '../images/botonic_logo_svg.svg'
 
 const Container = styled.div`
   background: #464d65;

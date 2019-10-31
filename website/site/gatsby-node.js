@@ -65,4 +65,11 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       context: {}, // additional data can be passed via context
     })
   })
+
+  const blogList = path.resolve(`src/components/blogList.js`)
+  createPage({
+    path: "/blog",
+    component: blogList,
+    context: {}, // additional data can be passed via context
+  })
 }
