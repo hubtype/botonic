@@ -1,7 +1,7 @@
 import * as contentful from '@botonic/plugin-contentful'
-import { Staging } from './config'
+import { ContentfulConfig } from './config'
 
-const CONFIG = new Staging()
+const CONFIG = new ContentfulConfig()
 
 export const plugins = [
   {

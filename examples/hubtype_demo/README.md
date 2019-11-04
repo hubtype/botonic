@@ -5,9 +5,9 @@ npm i package.json
 
 ### Import space to Contentful:
 
-Create an account into Contentful
+Create an account into Contentful. See https://docs.botonic.io/plugins/plugin-contentful for more details.
 
-Once registered, you need to fill the document `bin/credentials` and then do the followint steps: - STAGING_SPACE: you need to set the id of your space ID (Inside Contentful in 'settings-general settings') - MNGMT_TOKEN: token for having access to get/post data to Contentful (Inside Contentful in 'Settings-ApiKeys-Contet management tokens')
+Once registered, you need to fill the document `bin/credentials` and then do the followint steps: - STAGING_SPACE: you need to set the id of your space ID (Inside Contentful in 'settings-general settings') - MNGMT_TOKEN: token for having access to get/post data to Contentful (Inside Contentful in 'Settings | ApiKeys | Content management tokens')
 
 Save the document and open a terminal into your project and execute the following code:
 
@@ -20,7 +20,7 @@ Now, in Contentful you should have new Content model objects.
 
 ### Connect our bot project with Contentful
 
-Open the file `src/config.ts`. Here we will define all our configurations. - The `spaceId` is the same value that we set before in the `bin/credentials` file. - The `accessToken` is a new value, in order to get it, go to Contentful in `Settings-ApiKeys-Content delivery/preview tokens` and press the `Add API key` in the right.
+Open the file `src/config.ts`. Here we will define all our configurations. - The `spaceId` is the same value that we set before in the `bin/credentials` file. - The `accessToken` is a new value, in order to get it, go to Contentful in `Settings|ApiKeys|Content delivery|preview tokens` and press the `Add API key` in the right.
 
 ### Create a Hello World Text example
 
