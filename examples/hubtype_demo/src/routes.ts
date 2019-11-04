@@ -9,20 +9,10 @@ import SelectCalendar from './actions/selectCalendar'
 import ResponseCalendar from './actions/responseCalendar'
 import { BankRoutes } from './routes_bank'
 
+const introRegex = /(reset|hola|buenas|hello|hi)/i
+
 export function routes(_: { input: Input; session: Session }): any {
-  if (
-    _.input.data == 'reset' ||
-    _.input.data == 'Reset' ||
-    _.input.data == 'hola' ||
-    _.input.data == 'Hola' ||
-    _.input.data == 'buenas' ||
-    _.input.data == 'Buenas' ||
-    _.input.data == 'hello' ||
-    _.input.data == 'Hello' ||
-    _.input.data == 'hi' ||
-    _.input.data == 'Hi' ||
-    _.session.is_first_interaction
-  ) {
+  if (_.input.data.match(introRegex) || _.session.is_first_interaction) {
     _.session['sayHi'] = true
     return [
       {
