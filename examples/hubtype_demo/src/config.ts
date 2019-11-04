@@ -1,9 +1,4 @@
-export class Staging {
+export class ContentfulConfig {
   spaceId = ''
   accessToken = ''
 }
-
-/*export class Production {
-  spaceId = 
-  accessToken =
-}*/
