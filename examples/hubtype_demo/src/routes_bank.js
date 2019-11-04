@@ -1,3 +1,4 @@
+import React from 'react'
 import DateSelected from './actions/dateSelected'
 import EmailResponse from './actions/emailResponse'
 import Feedback from './actions/feedback'
@@ -7,10 +8,11 @@ import OfficeInformation from './actions/officeInformation'
 import PaymentResponse from './actions/paymentResponse'
 import StolenCard from './actions/stolenCard'
 import UnsolicitedCharge from './actions/unsolicitedCharge'
-import Wait from './actions/wait'
 import Webviews from './actions/webviews'
 import SelectCalendar from './actions/selectCalendar'
 import ResponseCalendar from './actions/responseCalendar'
+
+const restartFlowRegex = /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i
 
 export const BankRoutes = [
   { path: 'webviews', text: /^(webview|webviews)$/i, action: Webviews },
@@ -32,13 +34,13 @@ export const BankRoutes = [
     childRoutes: [
       {
         path: 'feedback',
-        text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
+        text: restartFlowRegex,
         action: Feedback,
         childRoutes: [
           {
             path: 'wait',
-            text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
-            action: Wait
+            text: restartFlowRegex,
+            action: () => <></>
           }
         ]
       }
@@ -51,13 +53,13 @@ export const BankRoutes = [
     childRoutes: [
       {
         path: 'feedback',
-        text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
+        text: restartFlowRegex,
         action: Feedback,
         childRoutes: [
           {
             path: 'wait',
-            text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
-            action: Wait
+            text: restartFlowRegex,
+            action: () => <></>
           }
         ]
       }
@@ -70,13 +72,13 @@ export const BankRoutes = [
     childRoutes: [
       {
         path: 'feedback',
-        text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
+        text: restartFlowRegex,
         action: Feedback,
         childRoutes: [
           {
             path: 'wait',
-            text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
-            action: Wait
+            text: restartFlowRegex,
+            action: () => <></>
           }
         ]
       }
@@ -84,18 +86,18 @@ export const BankRoutes = [
   },
   {
     path: 'greetings',
-    text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
+    text: restartFlowRegex,
     action: GeneralTransfer,
     childRoutes: [
       {
         path: 'feedback',
-        text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
+        text: restartFlowRegex,
         action: Feedback,
         childRoutes: [
           {
             path: 'wait',
-            text: /\b(?!reset|hola|buenas|hello|hi|webview|webviews)\b\S+/i,
-            action: Wait
+            text: restartFlowRegex,
+            action: () => <></>
           }
         ]
       }
