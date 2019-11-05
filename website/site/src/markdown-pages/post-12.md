@@ -1,10 +1,9 @@
 ---
-path: '/blog/3'
-date: '2019-09-18T23:19:51.246Z'
-title: 'Why WhatsApp is the Tool Your Customer Service Team NeedsFeatured'
-category: 'JavaScript'
-featuredImage: ../images/kitten.jpg
-isFeatured: true
+path: '/blog/12'
+date: '2017-09-18T23:19:51.246Z'
+title: 'Why WhatsApp is the Tool Your Customer Service Team Needs'
+category: 'NLU'
+featuredImage: ../images/blog_image.png
 ---
 
 WhatsApp is one of the most preferred messaging apps in the world. People in 180 countries and counting use WhatsApp to stay in touch daily. With such an enormous reach, it represents an opportunity to engage with customers and increase revenue on a large scale. Now, Live Agent Chatbots make it more practical for companies to use WhatsApp for business communication. Live Agent Chatbots resolve large volumes of common questions without human supervision. This makes it possible for companies to use such a ubiquitous platform without growing their customer service teams.

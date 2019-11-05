@@ -1,7 +1,8 @@
 ---
-path: "/blog/2"
-date: "2017-09-18T23:19:51.246Z"
-title: "Why WhatsApp is the Tool Your Customer Service Team Needs2"
+path: '/blog/2'
+date: '2014-09-18T23:19:51.246Z'
+title: 'Why WhatsApp is the Tool Your Customer Service Team Needs2'
+
 featuredImage: ../images/blog_image.png
 ---
 

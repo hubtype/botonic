@@ -1,7 +1,7 @@
-import React from "react"
-import Breakpoint from "react-socks"
-import { Flex } from "@rebass/grid"
-import styled from "styled-components"
+import React from 'react'
+import Breakpoint from 'react-socks'
+import { Flex } from '@rebass/grid'
+import styled from 'styled-components'
 
 const D = props => (
   <Breakpoint medium up {...props}>

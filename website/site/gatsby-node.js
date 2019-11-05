@@ -22,12 +22,12 @@ exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
       // Exclude all node_modules from transpilation, except for '@botonic'
       exclude: modulePath =>
         /node_modules/.test(modulePath) &&
-        !/node_modules\/(@botonic)/.test(modulePath),
+        !/node_modules\/(@botonic)/.test(modulePath)
     },
     {
       test: /\.(scss)$/,
-      use: ["style-loader", "css-loader", "sass-loader"],
-    },
+      use: ['style-loader', 'css-loader', 'sass-loader']
+    }
   ]
   // This will completely replace the webpack config with the modified object.
   actions.replaceWebpackConfig(config)
@@ -58,18 +58,29 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
     return
   }
+  // ...
+  // Create blog-list pages
+  const posts = result.data.allMarkdownRemark.edges
+  const postsPerPage = 10
+  const numPages = Math.ceil(posts.length / postsPerPage)
+  Array.from({ length: numPages }).forEach((_, i) => {
+    createPage({
+      path: i === 0 ? `/blog` : `/blog/page/${i + 1}`,
+      component: path.resolve('./src/components/blog/blogList.js'),
+      context: {
+        limit: postsPerPage,
+        skip: i * postsPerPage,
+        numPages,
+        currentPage: i + 1,
+        absolutePath: i === 0 ? `/blog` : `/blog/page/${i + 1}`
+      }
+    })
+  })
   result.data.allMarkdownRemark.edges.forEach(({ node }) => {
     createPage({
       path: node.frontmatter.path,
       component: blogPostTemplate,
-      context: {}, // additional data can be passed via context
+      context: {} // additional data can be passed via context
     })
-  })
-
-  const blogList = path.resolve(`src/components/blogList.js`)
-  createPage({
-    path: "/blog",
-    component: blogList,
-    context: {}, // additional data can be passed via context
   })
 }

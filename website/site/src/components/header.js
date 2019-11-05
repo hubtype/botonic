@@ -15,7 +15,7 @@ const Inner = styled.div`
   width: 33%;
 `
 
-const Header = ({ siteTitle }) => {
+const Header = () => {
   return (
     <header>
       <Container fontFamily='Palanquin' color='white'>
@@ -30,7 +30,12 @@ const Header = ({ siteTitle }) => {
             link={'/github/'}
             style={{ marginRight: '30px' }}
           />
-          <PlainLink text={'Slack'} link={'/slack/'} />
+          <PlainLink
+            text={'Slack'}
+            style={{ marginRight: '30px' }}
+            link={'/slack/'}
+          />
+          <PlainLink text={'Blog'} link={'/blog'} />
         </Inner>
         <Inner style={{ justifyContent: 'center' }}>
           <BotonicLogo />
