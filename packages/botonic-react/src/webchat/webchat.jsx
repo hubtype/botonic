@@ -74,11 +74,18 @@ export const Webchat = forwardRef((props, ref) => {
   const [emojiPickerOpened, setEmojiPickerOpened] = useState(false)
   const [attachment, setAttachment] = useState({})
 
+  /*
+   * returns the value of a property defined in bot's theme based on CUSTOM_WEBCHAT_PROPERTIES dictionary.
+   * it gives preference to nested defined properties over plain properties.
+   * if property doesn't exist, returns the defaultValue
+   */
   const getThemeProperty = (property, defaultValue = undefined) => {
     for (let [k, v] of Object.entries(CUSTOM_WEBCHAT_PROPERTIES)) {
       if (v == property) {
-        if (getProperty(theme, v) !== undefined) return getProperty(theme, v)
-        if (getProperty(theme, k) !== undefined) return getProperty(theme, k)
+        let nestedProperty = getProperty(theme, v)
+        let plainProperty = getProperty(theme, k)
+        if (nestedProperty !== undefined) return nestedProperty
+        if (plainProperty !== undefined) return plainProperty
         return defaultValue
       }
     }
