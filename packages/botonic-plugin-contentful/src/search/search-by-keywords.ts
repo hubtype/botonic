@@ -6,6 +6,7 @@ import {
   checkLocale,
   Normalizer,
   NormalizedUtterance,
+  Word,
 } from '../nlp'
 import { SearchResult } from './search-result'
 
@@ -47,23 +48,23 @@ export class SearchByKeywords {
    * @return which contents must be displayed
    */
   public filterChitchat(
-    tokens: string[],
-    callbacks: SearchResult[]
+    words: Word[],
+    results: SearchResult[]
   ): SearchResult[] {
     const isChitChat = (cc: SearchResult) => cc.getCallbackIfChitchat()
 
-    const chitchats = callbacks.filter(isChitChat)
+    const chitchats = results.filter(isChitChat)
     if (chitchats.length == 0) {
-      return callbacks
+      return results
     }
-    if (chitchats.length < callbacks.length) {
-      const noChitchats = callbacks.filter(c => !isChitChat(c))
+    if (chitchats.length < results.length) {
+      const noChitchats = results.filter(c => !isChitChat(c))
       if (chitchats[0].match!.length - noChitchats[0].match!.length < 2) {
         return noChitchats
       }
     }
     // all are chitchats
-    const estimatedNoChitchatWords = tokens.length - chitchats.length * 2
+    const estimatedNoChitchatWords = words.length - chitchats.length * 2
     if (estimatedNoChitchatWords > 2) {
       // avoid that a sentence with chitchat and a question without recognized keywords is answered as chitchat
       return []
