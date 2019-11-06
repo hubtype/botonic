@@ -80,7 +80,7 @@ test('TEST: searchContentsFromInput with stem blacklist', async () => {
 
   // act
   let contents = await keywords.searchContentsFromInput(
-    keywords.normalizer.normalize('es', 'querida pedida bonita'),
+    keywords.normalizer.normalize('es', 'pedí que me llamarais'),
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     ES_CONTEXT
   )

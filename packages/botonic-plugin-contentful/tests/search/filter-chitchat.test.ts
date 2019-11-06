@@ -36,7 +36,7 @@ test.each<any>([
     expect(contents).toHaveLength(numChitchats)
 
     // act
-    const filtered = keywords.filterChitchat(normalized.stems, contents)
+    const filtered = keywords.filterChitchat(normalized.words, contents)
 
     // assert
     expect(filtered).toHaveLength(1)
@@ -66,7 +66,7 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
   expect(parsedKeywords).toHaveLength(2)
 
   // act
-  const filtered = keywords.filterChitchat(normalized.stems, parsedKeywords)
+  const filtered = keywords.filterChitchat(normalized.words, parsedKeywords)
 
   // assert
   expect(filtered).toHaveLength(1)
@@ -99,7 +99,7 @@ test.each<any>([
     expect(contents).toHaveLength(numChitChats)
 
     // act
-    const filtered = keywords.filterChitchat(normalized.stems, contents)
+    const filtered = keywords.filterChitchat(normalized.words, contents)
 
     // assert
     expect(filtered).toEqual([])
@@ -128,7 +128,7 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   expect(contents).toHaveLength(1)
 
   // act
-  const filtered = keywords.filterChitchat(normalized.stems, contents)
+  const filtered = keywords.filterChitchat(normalized.words, contents)
 
   // assert
   expect(filtered).toBe(contents)
@@ -136,22 +136,29 @@ test('TEST treatChitChat: no chitchat detected', async () => {
 
 test('TEST treatChitChat: keyword is a stopword', async () => {
   const keywords = keywordsWithMockCms(
-    [chitchatContent(['hola']), chitchatContent(['buenos dias'])],
+    [
+      chitchatContent(['hola']),
+      chitchatContent(['adios']),
+      chitchatContent(['buenos dias']),
+    ],
     CONTEXT
   )
 
-  // hola is a stopword
-  const normalized = keywords.normalizer.normalize(LOCALE, 'Hola, buenos días.')
+  // it matches hola with holi even when it's a stopword
+  const normalized = keywords.normalizer.normalize(
+    LOCALE,
+    'Holi, adios, buenos días.'
+  )
   const contents = await keywords.searchContentsFromInput(
     normalized,
     MatchType.KEYWORDS_AND_OTHERS_FOUND,
     { locale: LOCALE }
   )
-  expect(contents).toHaveLength(1)
+  expect(contents).toHaveLength(3)
 
   // act
-  const filtered = keywords.filterChitchat(normalized.stems, contents)
+  const filtered = keywords.filterChitchat(normalized.words, contents)
 
   // assert
-  expect(filtered).toEqual(contents)
+  expect(filtered).toEqual([contents[0]])
 })
