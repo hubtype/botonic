@@ -5,22 +5,23 @@ import { StyledScrollbar } from './styled-scrollbar'
 const options = {
   left: 'flex-start',
   center: 'center',
-  right: 'flex-end'
+  right: 'flex-end',
 }
 
 export const WebchatReplies = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
-  const scrollbarOptions = getThemeProperty('scrollbar')
+  const scrollbarOptions = {
+    ...{ enable: true, autoHide: true },
+    ...getThemeProperty('scrollbar'),
+  }
   let justify = 'center'
   if (props.align) justify = options[props.align]
   if (props.wrap == 'nowrap') justify = 'flex-start'
 
   return (
     <StyledScrollbar
-      scrollbar={scrollbarOptions ? scrollbarOptions : undefined}
-      data-simplebar-auto-hide={
-        (scrollbarOptions && scrollbarOptions.autoHide) || true
-      }
+      scrollbar={scrollbarOptions}
+      data-simplebar-auto-hide={scrollbarOptions.autoHide}
     >
       <div
         style={{
@@ -31,7 +32,7 @@ export const WebchatReplies = props => {
           paddingBottom: 10,
           marginLeft: 5,
           marginRight: 5,
-          ...(props.style || {})
+          ...(props.style || {}),
         }}
       >
         {webchatState.replies.map((r, i) => (

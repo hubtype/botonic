@@ -42,23 +42,16 @@ const StyledHeaderTitle = styled(Flex)`
 `
 
 export const DefaultHeader = props => {
-  const { webchatState, getThemeProperty } = props
-  const { theme } = webchatState
+  const { getThemeProperty } = props
   let HeaderImage = Logo
   /* 
   brand.image, brandImage, headerImage and header.image 
   can be set explicitly to null if the developer doesn't want to display them 
   */
-  if (
-    getThemeProperty('brand.image') ||
-    getThemeProperty('brand.image') == null
-  )
-    HeaderImage = getThemeProperty('brand.image')
-  if (
-    getThemeProperty('header.image') ||
-    getThemeProperty('header.image') == null
-  )
-    HeaderImage = getThemeProperty('header.image')
+  let brandImg = getThemeProperty('brand.image')
+  if (brandImg !== undefined) HeaderImage = brandImg
+  let headerImg = getThemeProperty('header.image')
+  if (headerImg !== undefined) HeaderImage = headerImg
 
   let headerTitle = getThemeProperty('header.title') || 'Botonic'
   let headerSubtitle = getThemeProperty('header.subtitle') || ''
@@ -70,7 +63,7 @@ export const DefaultHeader = props => {
           <img
             style={{
               width: 32,
-              borderRadius: '50%'
+              borderRadius: '50%',
             }}
             src={staticAsset(HeaderImage)}
           />
@@ -88,7 +81,7 @@ export const DefaultHeader = props => {
 }
 export const WebchatHeader = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
-  const { theme } = webchatState
+
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }

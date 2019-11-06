@@ -35,7 +35,7 @@ export const Reply = props => {
           color: getThemeProperty('brand.color'),
           borderRadius: 8,
           cursor: 'pointer',
-          outline: 0
+          outline: 0,
         }}
         onClick={e => handleClick(e)}
       >

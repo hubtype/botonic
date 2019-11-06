@@ -19,18 +19,18 @@ export const CUSTOM_WEBCHAT_PROPERTIES = {
   triggerButtonImage: 'triggerButton.image',
   triggerButtonStyle: 'triggerButton.style',
   customTrigger: 'triggerButton.custom',
-  disableUserInput: 'userInput.disable',
+  enableUserInput: 'userInput.enable',
   textPlaceholder: 'userInput.placeholder',
   emojiPicker: 'userInput.emojiPicker',
   enableAttachments: 'userInput.attachments.enable',
   persistentMenu: 'userInput.persistentMenu',
   blockInputs: 'userInput.blockInputs',
-  scrollbar: 'scrollbar'
+  scrollbar: 'scrollbar',
 }
 
 export const MIME_WHITELIST = {
   document: ['application/pdf'],
   image: ['image/jpeg', 'image/png'],
   video: ['video/mp4'],
-  audio: ['audio/mpeg', 'audio/mp3']
+  audio: ['audio/mpeg', 'audio/mp3'],
 }
