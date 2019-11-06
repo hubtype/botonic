@@ -1,10 +1,10 @@
 import { stemmerFor } from './stemmer'
 
-// TODO convert to string enum?
+// TODO convert to string enum
 export type Locale = string
 export const SPANISH = 'es'
 export const CATALAN = 'ca'
-export const ENGLIGH = 'en'
+export const ENGLISH = 'en'
 export const PORTUGUESE = 'pt'
 export const POLISH = 'pl'
 
