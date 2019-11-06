@@ -109,9 +109,9 @@ export class Normalizer {
     const stopWords = this.stopWordsPerLocale[locale]
     let numStopWords = 0
     for (const token of tokens) {
-      const black = this.getBlackListStem(locale, token)
-      if (black) {
-        words.push(new Word(token, black))
+      const blacklistedStem = this.getBlackListStem(locale, token)
+      if (blacklistedStem) {
+        words.push(new Word(token, blacklistedStem))
         continue
       }
       if (stopWords.includes(token)) {

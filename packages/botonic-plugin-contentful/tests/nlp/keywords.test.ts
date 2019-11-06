@@ -198,6 +198,14 @@ test('ALL_WORDS_IN_KEYWORDS_MIXED_UP', () => {
   )
 })
 
+test('match missing space may utterance but not the keywords', () => {
+  testFindKeywords('es', MatchType.ONLY_KEYWORDS_FOUND, 1)(
+    'buenosdias', // stemmed to 'buenosd'
+    { A: ['buenos días'] },
+    ['A']
+  )
+})
+
 test.each<any>([
   [MatchType.ONLY_KEYWORDS_FOUND],
   [MatchType.KEYWORDS_AND_OTHERS_FOUND],
