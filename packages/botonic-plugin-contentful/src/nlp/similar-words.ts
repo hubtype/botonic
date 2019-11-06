@@ -129,27 +129,32 @@ abstract class CandidateFinder {
   ): PartialMatch[]
 
   protected getDistanceCore(
-    utterance: string,
-    keyword: string,
+    utterance: NormalizedUtterance,
+    utteranceText: string,
+    keyword: Keyword,
     maxDistance: number
   ): number {
-    if (utterance.length <= this.minMatchLength) {
-      return utterance == keyword ? 0 : TOO_DISTANT
+    const kwMatchString = keyword.matchString
+    if (utteranceText.length <= this.minMatchLength) {
+      return utteranceText == kwMatchString ? 0 : TOO_DISTANT
     }
 
-    const distance = this.similar.getSimilarity(utterance, keyword)
-    if (distance > maxDistance + this.stemmedDecorator.extraDistance(keyword)) {
+    const distance = this.similar.getSimilarity(utteranceText, kwMatchString)
+    if (
+      distance >
+      maxDistance + this.stemmedDecorator.extraDistance(kwMatchString)
+    ) {
       return TOO_DISTANT
     }
     if (
-      getMatchLength(utterance.length, keyword.length, distance) <
+      getMatchLength(utteranceText.length, kwMatchString.length, distance) <
       this.minMatchLength
     ) {
       return TOO_DISTANT
     }
     if (
       distance > maxDistance &&
-      !this.stemmedDecorator.verify(utterance, keyword)
+      !this.stemmedDecorator.verify(utterance.raw, utteranceText, keyword)
     ) {
       return TOO_DISTANT
     }
@@ -191,7 +196,7 @@ class FindIfOnlyWordsFromKeyword extends CandidateFinder {
     return new PartialMatch(
       keyword,
       utteranceText,
-      this.getDistanceCore(utteranceText, keyword.matchString, maxDistance)
+      this.getDistanceCore(utterance, utteranceText, keyword, maxDistance)
     )
   }
 }
@@ -246,7 +251,7 @@ class FindSubstring extends CandidateFinder {
       bestSubstr.accuracy * keyword.matchString.length
     if (
       distance > maxDistance &&
-      !this.stemmedDecorator.verify(match, keyword.matchString)
+      !this.stemmedDecorator.verify(match, match, keyword)
     ) {
       return undefined
     }
@@ -311,6 +316,7 @@ class FindMixedUp extends CandidateFinder {
 
 /**
  * When keywords contain multiple words and they're stemmed, allow extra distance
+ * in case utterance missed a space eg 'goodmorning'
  */
 class StemmedExtraDistance {
   constructor(readonly wordsAreStemmed: boolean) {}
@@ -328,13 +334,19 @@ class StemmedExtraDistance {
     return 0
   }
 
-  verify(utterance: string, keyword: string): boolean {
+  verify(
+    utteranceRaw: string,
+    utteranceNormalized: string,
+    keyword: Keyword
+  ): boolean {
     if (!this.wordsAreStemmed) {
       return true
     }
-    const words = keyword.split(' ')
+    const words = keyword.matchString.split(' ')
     for (const word of words) {
-      if (!utterance.includes(word)) {
+      // checking also raw because if utterance missing a space, maybe utterance
+      // is more aggressively stemmed than the keyword
+      if (!utteranceRaw.includes(word) && !utteranceNormalized.includes(word)) {
         return false
       }
     }
