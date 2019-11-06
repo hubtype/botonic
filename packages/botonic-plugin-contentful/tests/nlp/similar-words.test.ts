@@ -8,7 +8,7 @@ import {
   SimilarWordFinder,
   SimilarWordResult,
 } from '../../src/nlp/similar-words'
-import { NormalizedUtterance } from '../../src/nlp'
+import { NormalizedUtterance, Word } from '../../src/nlp'
 import { SimilarSearch } from 'node-nlp/lib/util'
 
 test('hack because webstorm does not recognize test.each', () => {})
@@ -26,7 +26,11 @@ function candidate(
 }
 
 function kw(kw: string, hasOnlyStopWords = false) {
-  return new Keyword(`${kw}`, kw, hasOnlyStopWords)
+  return new Keyword(
+    `${kw}`,
+    kw.split(' ').map(w => new Word(w, w)),
+    hasOnlyStopWords
+  )
 }
 
 const CAND_HOLA = candidate(['buenos dias', 'güenas', 'ey'])
@@ -47,7 +51,7 @@ function res(
 }
 
 function ut(text: string): NormalizedUtterance {
-  return new NormalizedUtterance(text, [text], text.split(' '))
+  return new NormalizedUtterance(text, text.split(' ').map(w => new Word(w, w)))
 }
 
 test.each<any>([
