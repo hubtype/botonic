@@ -30,23 +30,42 @@ export class StemmingBlackList {
   }
 }
 
-export class NormalizedUtterance {
-  joinedStems: string
-
+export class Word {
   /**
-   *
-   * @param raw
-   * @param tokens lowercase, with i18n characters converted to ascii
-   * @param stems lowercase, stemmed. Equal to tokens if onlyStopWords==true
-   * @param onlyStopWords tokens are all stop words
+   * @param token lowercase, with i18n characters converted to ascii
+   * @param stem lowercase, stemmed. Same as token for stopwords
+   */
+  constructor(
+    readonly token: string,
+    readonly stem: string,
+    readonly isStopWord = false
+  ) {}
+
+  static joinedTokens(words: Word[], withStopwords: boolean): string {
+    if (!withStopwords) {
+      words = words.filter(w => !w.isStopWord)
+    }
+    return words.map(w => w.token).join(' ')
+  }
+
+  static StopWord(token: string): Word {
+    return new Word(token, token, true)
+  }
+}
+
+export class NormalizedUtterance {
+  /** Without stopwords */
+  stems: string[]
+
+  /*
+   * onlyStopWords tokens are all stop words
    */
   constructor(
     readonly raw: string,
-    readonly tokens: string[],
-    readonly stems: string[],
+    readonly words: Word[],
     private readonly onlyStopWords = false
   ) {
-    this.joinedStems = stems.join(' ')
+    this.stems = words.filter(w => !w.isStopWord).map(w => w.stem)
   }
 
   hasOnlyStopWords(): boolean {
@@ -86,25 +105,25 @@ export class Normalizer {
     const stemmer = stemmerFor(locale)
     // tokenizer will replace i18n characters
     const tokens = this.tokenizer(locale).tokenize(txt, true)
-    let stems: string[] = []
+    let words: Word[] = []
     const stopWords = this.stopWordsPerLocale[locale]
+    let numStopWords = 0
     for (const token of tokens) {
       const black = this.getBlackListStem(locale, token)
       if (black) {
-        stems.push(black)
+        words.push(new Word(token, black))
         continue
       }
       if (stopWords.includes(token)) {
+        words.push(Word.StopWord(token))
+        numStopWords++
         continue
       }
+      // a token could generate 2 stems (eg can't => can not)
       const tokenStems = stemmer.tokenizeAndStem(token, true)
-      stems = stems.concat(...tokenStems)
+      words = words.concat(tokenStems.map(stem => new Word(token, stem)))
     }
-    if (stems.length == 0) {
-      // console.log(`'${txt}' only contains stopwords. Not removing them`);
-      return new NormalizedUtterance(txt, tokens, tokens, true)
-    }
-    return new NormalizedUtterance(txt, tokens, stems, false)
+    return new NormalizedUtterance(txt, words, numStopWords == tokens.length)
   }
 
   private normalizeWord(locale: Locale, stopWord: string): string {

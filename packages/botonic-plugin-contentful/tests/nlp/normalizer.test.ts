@@ -4,6 +4,7 @@ import {
   StemmingBlackList,
   Locale,
   NormalizedUtterance,
+  Word,
 } from '../../src/nlp'
 
 test('TEST: sut.normalize stopWord', () => {
@@ -12,19 +13,35 @@ test('TEST: sut.normalize stopWord', () => {
 })
 
 test.each<any>([
-  ['es', 'ponerse un toro', ['ponerse', 'un', 'toro'], ['pon', 'tor']],
+  [
+    'es',
+    'ponerse un toro',
+    [new Word('ponerse', 'pon'), Word.StopWord('un'), new Word('toro', 'tor')],
+  ],
 
-  ['en', "you can't", ['you', 'ca', 'not'], ['ca', 'not']],
+  [
+    'en',
+    "you can't",
+    [Word.StopWord('you'), new Word('ca', 'ca'), new Word('not', 'not')],
+  ],
 
-  ['pt', 'depois disse-me', ['depois', 'disse', 'me'], ['diss']],
+  [
+    'pt',
+    'depois disse-me',
+    [Word.StopWord('depois'), new Word('disse', 'diss'), Word.StopWord('me')],
+  ],
 
-  ['pl', 'gdziekolwiek JeŚć', ['gdziekolwiek', 'jesc'], ['je']],
+  [
+    'pl',
+    'gdziekolwiek JeŚć',
+    [Word.StopWord('gdziekolwiek'), new Word('jesc', 'je')],
+  ],
 ])(
   'TEST: stemmer removes stopwords (%s) =>%j',
-  (locale: string, raw: string, tokens: string[], stems: string[]) => {
+  (locale: string, raw: string, words: Word[]) => {
     const sut = new Normalizer()
     expect(sut.normalize(locale, raw)).toEqual(
-      new NormalizedUtterance(raw.toLowerCase(), tokens, stems, false)
+      new NormalizedUtterance(raw.toLowerCase(), words, false)
     )
   }
 )
@@ -80,7 +97,7 @@ test.each<any>([['es'], ['ca'], ['en']])(
       const normalized = sut.normalize(locale, stopWord)
       expect(normalized.hasOnlyStopWords()).toEqual(true)
       expect(replaceI18nChars(stopWord, locale)).toStartWith(
-        normalized.stems[0]
+        normalized.words[0].token
       )
       expect(sut.normalize(locale, stopWord + ' abcdex').stems).toEqual([
         'abcdex',
