@@ -25,6 +25,7 @@ export const Button = props => {
   }
 
   const renderBrowser = () => {
+    let buttonStyle = getThemeProperty('button.style')
     let CustomButton = getThemeProperty('button.custom')
     if (CustomButton) {
       return (
@@ -49,7 +50,9 @@ export const Button = props => {
           justifyContent: 'center',
           padding: '12px 32px',
           color: getThemeProperty('brand.color', '#000'),
-          backgroundColor: hover ? '#f3f3f3' : '#fff',
+          backgroundColor: hover
+            ? getThemeProperty('button.style.hover', '#f3f3f3')
+            : getThemeProperty('button.style.background', '#fff'),
           border: 'none',
           border: '1px solid #f1f0f0',
           cursor: 'pointer',
@@ -59,6 +62,7 @@ export const Button = props => {
           borderBottomRightRadius: props.bottom || 0,
           borderBottomLeftRadius: props.bottom || 0,
           overflow: 'hidden',
+          ...buttonStyle,
         }}
       >
         {props.children}
