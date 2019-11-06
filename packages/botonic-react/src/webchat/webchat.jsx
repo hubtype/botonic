@@ -3,7 +3,7 @@ import React, {
   useRef,
   useEffect,
   useImperativeHandle,
-  forwardRef
+  forwardRef,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
@@ -42,7 +42,7 @@ const createUser = () => {
   if (ua.device && ua.device.type) name = `${ua.device.type} ${name}`
   return {
     id: uuid(),
-    name
+    name,
   }
 }
 
@@ -65,7 +65,7 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat,
     setError,
     openWebviewT,
-    closeWebviewT
+    closeWebviewT,
   } = props.webchatHooks || useWebchat()
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
@@ -74,16 +74,12 @@ export const Webchat = forwardRef((props, ref) => {
   const [emojiPickerOpened, setEmojiPickerOpened] = useState(false)
   const [attachment, setAttachment] = useState({})
 
-  const getThemeProperty = property => {
+  const getThemeProperty = (property, defaultValue = undefined) => {
     for (let [k, v] of Object.entries(CUSTOM_WEBCHAT_PROPERTIES)) {
       if (v == property) {
-        let themeProperty = null
-        if (getProperty(theme, v) == null || getProperty(theme, k) == null) {
-          themeProperty = null
-        } else {
-          themeProperty = getProperty(theme, v) || getProperty(theme, k)
-        }
-        return themeProperty
+        if (getProperty(theme, v) !== undefined) return getProperty(theme, v)
+        if (getProperty(theme, k) !== undefined) return getProperty(theme, k)
+        return defaultValue
       }
     }
   }
@@ -92,7 +88,7 @@ export const Webchat = forwardRef((props, ref) => {
     setAttachment({
       fileName: event.target.files[0].name,
       file: event.target.files[0], // TODO: Attach more files?
-      attachmentType: getAttachmentType(event.target.files[0].type)
+      attachmentType: getAttachmentType(event.target.files[0].type),
     })
   }
 
@@ -150,7 +146,7 @@ export const Webchat = forwardRef((props, ref) => {
         messages: webchatState.messagesJSON,
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
-        devSettings: webchatState.devSettings
+        devSettings: webchatState.devSettings,
       })
     )
   }, [
@@ -158,7 +154,7 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.messagesJSON,
     webchatState.session,
     webchatState.lastRoutePath,
-    webchatState.devSettings
+    webchatState.devSettings,
   ])
 
   useTyping({ webchatState, updateTyping, updateMessage })
@@ -178,7 +174,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const closeWebview = options => {
     updateWebview()
-    if (!userInputDisabled) {
+    if (userInputEnabled) {
       textArea.current.focus()
     }
     if (options && options.payload) {
@@ -205,12 +201,12 @@ export const Webchat = forwardRef((props, ref) => {
       style={{
         display: 'flex',
         alignItems: 'center',
-        paddingRight: 15
+        paddingRight: 15,
       }}
     >
       <img
         style={{
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
         src={staticAsset(LogoEmoji)}
         onClick={() => handleEmoji()}
@@ -229,7 +225,7 @@ export const Webchat = forwardRef((props, ref) => {
         justifyContent: 'center',
         flex: 'none',
         cursor: 'pointer',
-        padding: 18
+        padding: 18,
       }}
       onClick={() => handleMenu()}
     >
@@ -295,7 +291,7 @@ export const Webchat = forwardRef((props, ref) => {
         user: webchatState.user,
         input,
         session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath
+        lastRoutePath: webchatState.lastRoutePath,
       })
     updateLatestInput(input)
     updateReplies(false)
@@ -326,7 +322,7 @@ export const Webchat = forwardRef((props, ref) => {
     updateUser: user => {
       updateSession({
         ...webchatState.session,
-        user: { ...webchatState.session.user, ...user }
+        user: { ...webchatState.session.user, ...user },
       })
       updateUser({ ...webchatState.user, ...user })
     },
@@ -334,7 +330,7 @@ export const Webchat = forwardRef((props, ref) => {
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
     openWebviewApi: component => openWebviewT(component),
-    setError
+    setError,
   }))
 
   const resolveCase = () => {
@@ -381,7 +377,7 @@ export const Webchat = forwardRef((props, ref) => {
       if (!attachmentType) return
       let input = {
         type: attachmentType,
-        data: await toBase64(attachment.file)
+        data: await toBase64(attachment.file),
       }
       await sendInput(input)
     }
@@ -402,7 +398,7 @@ export const Webchat = forwardRef((props, ref) => {
     params: webchatState.webviewParams || {},
     closeWebview: closeWebview,
     defaultDelay: props.defaultDelay || 0,
-    defaultTyping: props.defaultTyping || 0
+    defaultTyping: props.defaultTyping || 0,
   }
 
   useEffect(() => {
@@ -434,7 +430,7 @@ export const Webchat = forwardRef((props, ref) => {
         bottom: 20,
         paddding: 8,
         right: 10,
-        ...triggerButtonStyle
+        ...triggerButtonStyle,
       }}
     >
       {triggerImage && (
@@ -452,7 +448,7 @@ export const Webchat = forwardRef((props, ref) => {
         borderRadius: '8px 8px 0 0',
         boxShadow: 'rgba(176, 196, 222, 0.5) 0px 2px 5px',
         height: 36,
-        flex: 'none'
+        flex: 'none',
       }}
       onCloseClick={() => {
         toggleWebchat(false)
@@ -484,22 +480,27 @@ export const Webchat = forwardRef((props, ref) => {
         justifyContent: 'flex-end',
         position: 'absolute',
         right: 0,
-        top: -332
+        top: -332,
       }}
     >
       <EmojiPicker onEmojiClick={emojiClick} />
     </div>
   )
-  const userInputDisabled = getThemeProperty('userInput.disable')
+  const userInputEnabled = getThemeProperty('userInput.enable', true)
+  const emojiPickerEnabled = getThemeProperty('userInput.emojiPicker', false)
+  const attachmentsEnabled = getThemeProperty(
+    'userInput.attachments.enable',
+    false
+  )
   const inputUserArea = () => {
     return (
-      !userInputDisabled && (
+      userInputEnabled && (
         <div
           style={{
             minHeight: 52,
             display: 'flex',
             position: 'relative',
-            borderTop: '1px solid rgba(0, 0, 0, 0.4)'
+            borderTop: '1px solid rgba(0, 0, 0, 0.4)',
           }}
         >
           {emojiPickerOpened && emoji()}
@@ -508,7 +509,7 @@ export const Webchat = forwardRef((props, ref) => {
             style={{
               display: 'flex',
               flex: '1 1 auto',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Textarea
@@ -530,15 +531,13 @@ export const Webchat = forwardRef((props, ref) => {
                 outline: 'none',
                 flex: '1 1 auto',
                 padding: 10,
-                paddingLeft: persistentMenuOptions ? 0 : 10
+                paddingLeft: persistentMenuOptions ? 0 : 10,
               }}
             />
           </div>
           <div style={{ display: 'flex' }}>
-            {(getThemeProperty('userInput.emojiPicker') ||
-              props.emojiPicker) && <EmojiPickerComponent />}
-            {(getThemeProperty('userInput.attachments.enable') ||
-              props.enableAttachments) && (
+            {emojiPickerEnabled && <EmojiPickerComponent />}
+            {attachmentsEnabled && (
               <Attachment
                 onChange={handleAttachment}
                 accept={Object.values(MIME_WHITELIST)
@@ -556,7 +555,7 @@ export const Webchat = forwardRef((props, ref) => {
     <RequestContext.Provider value={webviewRequestContext}>
       <WebviewContainer
         style={{
-          ...props.theme.webviewStyle
+          ...props.theme.webviewStyle,
         }}
         webview={webchatState.webview}
       />
@@ -577,7 +576,7 @@ export const Webchat = forwardRef((props, ref) => {
         toggleWebchat,
         updateMessage,
         updateReplies,
-        updateLatestInput
+        updateLatestInput,
       }}
     >
       {!webchatState.isWebchatOpen && (
@@ -604,7 +603,7 @@ export const Webchat = forwardRef((props, ref) => {
             boxShadow: '0 0 12px rgba(0,0,0,.15)',
             display: 'flex',
             flexDirection: 'column',
-            ...theme.style
+            ...theme.style,
           }}
         >
           {webchatHeader()}
@@ -616,7 +615,7 @@ export const Webchat = forwardRef((props, ref) => {
                 backgroundColor: 'white',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontFamily: 'Arial, Helvetica, sans-serif'
+                fontFamily: 'Arial, Helvetica, sans-serif',
               }}
             >
               Error: {webchatState.error.message}

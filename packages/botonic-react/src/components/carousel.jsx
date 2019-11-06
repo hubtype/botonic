@@ -9,21 +9,22 @@ const serialize = carouselProps => {
     type: 'carousel',
     elements: carouselProps.children.map(
       e => e && e.type && e.type.serialize && e.type.serialize(e.props)
-    )
+    ),
   }
 }
 
 export const Carousel = props => {
   const { getThemeProperty } = useContext(WebchatContext)
   let content = props.children
-  const scrollbarOptions = getThemeProperty('scrollbar')
+  const scrollbarOptions = {
+    ...{ enable: true, autoHide: true },
+    ...getThemeProperty('scrollbar'),
+  }
   if (isBrowser()) {
     content = (
       <StyledScrollbar
-        scrollbar={scrollbarOptions ? scrollbarOptions : undefined}
-        data-simplebar-auto-hide={
-          (scrollbarOptions && scrollbarOptions.autoHide) || true
-        }
+        scrollbar={scrollbarOptions}
+        data-simplebar-auto-hide={scrollbarOptions.autoHide}
       >
         <div
           style={{
@@ -31,14 +32,14 @@ export const Carousel = props => {
             marginLeft: -13,
             display: 'flex',
             flexDirection: 'row',
-            maxWidth: '100%'
+            maxWidth: '100%',
           }}
         >
           <div
             style={{
               display: 'flex',
               flexDirection: 'row',
-              alignItems: 'start'
+              alignItems: 'start',
             }}
           >
             {props.children}

@@ -23,23 +23,23 @@ export const webchat = {
       boxShadow: '0 0 50px rgba(0,0,255,.30)',
       overflow: 'hidden',
       backgroundImage:
-        'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
+        'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)',
     },
     webviewStyle: {
       top: 0,
       right: 0,
       height: 500,
-      width: '100%'
+      width: '100%',
     },
-    brand: {
-      color: '#0000ff',
-      image: R2D2Logo
-    },
+    // brand: {
+    //   color: 'green',
+    //   image: R2D2Logo,
+    // },
     triggerButton: {
       image: launcherIcon,
       style: {
-        width: '200px'
-      }
+        width: '200px',
+      },
       // custom: CustomTrigger
     },
     intro: {
@@ -47,12 +47,12 @@ export const webchat = {
       // style: {
       //   padding: 20
       // }
-      custom: CustomIntro
+      custom: CustomIntro,
     },
     header: {
       title: 'My customized webchat',
       subtitle: 'R2D2',
-      image: R2D2Logo
+      image: R2D2Logo,
       // custom: CustomHeader
     },
     /*
@@ -65,66 +65,67 @@ export const webchat = {
         style: {
           border: 'none',
           color: 'blue',
-          borderRadius: '20px'
-        }
+          borderRadius: '20px',
+        },
       },
       user: {
         style: {
           // border:'none',
           color: 'white',
-          borderRadius: '10px'
-        }
+          borderRadius: '10px',
+        },
       },
-      customTypes: [CalendarMessage]
+      customTypes: [CalendarMessage],
     },
 
     button: {
-      // custom: CustomButton
+      // custom: CustomButton,
     },
     replies: {
       align: 'center',
-      wrap: 'nowrap'
+      wrap: 'nowrap',
       // custom: CustomReply
     },
     userInput: {
+      // enable: false,
       attachments: {
-        enable: true
+        enable: true,
       },
-      // disable: true,
+
       placeholder: 'Type something...',
       emojiPicker: true,
       // These are the set of inputs which are not allowed.
       blockInputs: [
         {
           match: [/ugly/i, /bastard/i],
-          message: 'We cannot tolerate these kind of words.'
-        }
+          message: 'We cannot tolerate these kind of words.',
+        },
       ],
       persistentMenu: [
         { label: 'Help', payload: 'help' },
         {
           label: 'See docs',
-          url: 'https://docs.botonic.io'
-        }
-      ]
+          url: 'https://docs.botonic.io',
+        },
+      ],
     },
     scrollbar: {
-      disable: false,
+      // enable: false,
       autoHide: true,
       thumb: {
         opacity: 1,
-        color: 'yellow',
+        // color: 'yellow',
         bgcolor:
           'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);',
-        border: '20px'
-      }
+        border: '20px',
+      },
       // track: {
       //   color: 'black',
       //   bgcolor:
       //     'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);',
-      //   border: '20px'
-      // }
-    }
+      //   border: '20px',
+      // },
+    },
   },
 
   // Webchat listeners
@@ -143,5 +144,5 @@ export const webchat = {
   },
   onMessage: app => {
     console.log('New message!')
-  }
+  },
 }

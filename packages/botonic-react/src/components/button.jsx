@@ -8,7 +8,7 @@ export const Button = props => {
     webchatState,
     openWebview,
     sendPayload,
-    getThemeProperty
+    getThemeProperty,
   } = useContext(WebchatContext)
   const [hover, setHover] = useState(false)
   const { theme } = webchatState
@@ -48,7 +48,7 @@ export const Button = props => {
           alignContent: 'center',
           justifyContent: 'center',
           padding: '12px 32px',
-          color: getThemeProperty('brand.color') || '#000',
+          color: getThemeProperty('brand.color', '#000'),
           backgroundColor: hover ? '#f3f3f3' : '#fff',
           border: 'none',
           border: '1px solid #f1f0f0',
@@ -58,7 +58,7 @@ export const Button = props => {
           borderTopLeftRadius: props.top || 0,
           borderBottomRightRadius: props.bottom || 0,
           borderBottomLeftRadius: props.bottom || 0,
-          overflow: 'hidden'
+          overflow: 'hidden',
         }}
       >
         {props.children}
@@ -98,7 +98,7 @@ Button.serialize = buttonProps => {
       payload,
       url: buttonProps.url,
       webview: buttonProps.webview,
-      title: buttonProps.children
-    }
+      title: buttonProps.children,
+    },
   }
 }

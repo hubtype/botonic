@@ -19,7 +19,7 @@ export const StyledScrollbar = styled(SimpleBar)`
   }
   & .simplebar-track .simplebar-scrollbar.simplebar-visible::before {
     opacity: ${({ scrollbar }) =>
-      scrollbar && scrollbar.disable
+      scrollbar && !scrollbar.enable
         ? '0'
         : scrollbar && scrollbar.thumb && scrollbar.thumb.opacity
         ? scrollbar.thumb.opacity
@@ -30,14 +30,14 @@ export const StyledScrollbar = styled(SimpleBar)`
       scrollbar &&
       scrollbar.track &&
       scrollbar.track.color &&
-      !(scrollbar && scrollbar.disable)
+      !(scrollbar && !scrollbar.enable)
         ? scrollbar.track.color
         : 'transparent'};
     background-image: ${({ scrollbar }) =>
       scrollbar &&
       scrollbar.track &&
       scrollbar.track.bgcolor &&
-      !(scrollbar && scrollbar.disable)
+      !(scrollbar && !scrollbar.enable)
         ? scrollbar.track.bgcolor
         : 'transparent'};
     border-radius: ${({ scrollbar }) =>
