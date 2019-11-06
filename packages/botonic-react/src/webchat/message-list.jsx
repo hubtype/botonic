@@ -8,13 +8,18 @@ export const WebchatMessageList = props => {
   const CustomIntro = getThemeProperty('intro.custom')
   const introImage = getThemeProperty('intro.image')
   const introStyle = getThemeProperty('intro.style')
-  const scrollbarOptions = getThemeProperty('scrollbar')
+
+  const scrollbarOptions = {
+    ...{ enable: true, autoHide: true },
+    ...getThemeProperty('scrollbar'),
+  }
+
   const DefaultIntro = introImage && (
     <img
       style={{
         maxHeight: '50%',
         maxWidth: '100%',
-        ...(introStyle || {})
+        ...(introStyle || {}),
       }}
       src={introImage && staticAsset(introImage)}
     />
@@ -22,16 +27,14 @@ export const WebchatMessageList = props => {
 
   return (
     <StyledScrollbar
-      scrollbar={scrollbarOptions ? scrollbarOptions : undefined}
-      data-simplebar-auto-hide={
-        (scrollbarOptions && scrollbarOptions.autoHide) || true
-      }
+      scrollbar={scrollbarOptions}
+      data-simplebar-auto-hide={scrollbarOptions.autoHide}
       style={{
         ...(props.style || {}),
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
       }}
     >
       {CustomIntro ? <CustomIntro /> : DefaultIntro}
@@ -43,7 +46,7 @@ export const WebchatMessageList = props => {
             flexDirection: 'column',
             flex: 'none',
             whiteSpace: 'pre',
-            wordWrap: 'break-word'
+            wordWrap: 'break-word',
           }}
           key={i}
         >

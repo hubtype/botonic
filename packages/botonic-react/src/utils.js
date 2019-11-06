@@ -21,8 +21,6 @@ export function isProd() {
   return process.env.NODE_ENV == 'production'
 }
 
-
-
 export const staticAsset = path => {
   try {
     let scriptBaseURL = document
@@ -37,18 +35,19 @@ export const staticAsset = path => {
 }
 
 /**
- * given an object and a property, returns if the property exists (recursively)
- * @param  {Object} arg1 object to be checked
- * @param  {String} arg2 string describing the property (for nested values, separate them with '.')
- * @return {Boolean}     true if property exists, false otherwise
+ * given an object and a property, returns the property if exists (recursively), else undefined
+ * ex:
+ * let obj = { a: { b: { c: 5 } } }
+ * getProperty(obj, 'a.b.c'), returns 5
+ * getProperty(obj, 'a.b.z'), returns undefined
  */
 export const getProperty = (obj, property) => {
-  if (!property) return false
+  if (!property) return undefined
   let properties = property.split('.')
   for (let i = 0; i < properties.length; i++) {
     let prop = properties[i]
     if (!obj || !obj.hasOwnProperty(prop)) {
-      return false
+      return undefined
     } else {
       obj = obj[prop]
     }

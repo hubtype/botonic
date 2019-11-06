@@ -25,11 +25,11 @@ export const Message = props => {
     webchatState,
     addMessage,
     updateReplies,
-    getThemeProperty
+    getThemeProperty,
   } = useContext(WebchatContext)
   const { theme } = webchatState
   const [state, setState] = useState({
-    id: props.id || uuid()
+    id: props.id || uuid(),
   })
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
@@ -51,7 +51,7 @@ export const Message = props => {
           payload: b.props.payload,
           path: b.props.path,
           url: b.props.url,
-          title: b.props.children
+          title: b.props.children,
         })),
         delay,
         typing,
@@ -59,9 +59,9 @@ export const Message = props => {
           payload: r.props.payload,
           path: r.props.path,
           url: r.props.url,
-          text: r.props.children
+          text: r.props.children,
         })),
-        display: delay + typing == 0
+        display: delay + typing == 0,
       }
       addMessage(message)
     }, [])
@@ -100,7 +100,7 @@ export const Message = props => {
       width: 0,
       height: 0,
       border: `${pointerSize}px solid transparent`,
-      marginTop: -pointerSize
+      marginTop: -pointerSize,
     }
 
     let BotMessageImage = Logo
@@ -109,18 +109,10 @@ export const Message = props => {
     brand.image, brandImage, bot.message.image and botMessageImage
     can be set explicitly to null if the developer doesn't want to display them 
     */
-
-    if (
-      getThemeProperty('brand.image') ||
-      getThemeProperty('brand.image') == null
-    )
-      BotMessageImage = getThemeProperty('brand.image')
-
-    if (
-      getThemeProperty('message.bot.image') ||
-      getThemeProperty('message.bot.image') == null
-    )
-      BotMessageImage = getThemeProperty('message.bot.image')
+    let brandImg = getThemeProperty('brand.image')
+    if (brandImg !== undefined) BotMessageImage = brandImg
+    let botMsgImg = getThemeProperty('message.bot.image')
+    if (botMsgImg !== undefined) BotMessageImage = botMsgImg
 
     return (
       <div
@@ -128,7 +120,7 @@ export const Message = props => {
           display: 'flex',
           justifyContent: isFromUser() ? 'flex-end' : 'flex-start',
           position: 'relative',
-          paddingLeft: 5
+          paddingLeft: 5,
         }}
       >
         {isFromBot() && BotMessageImage && (
@@ -139,7 +131,7 @@ export const Message = props => {
               flex: 'none',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
             <img style={{ width: '100%' }} src={staticAsset(BotMessageImage)} />
@@ -157,7 +149,7 @@ export const Message = props => {
             border: `1px solid ${getBgColor()}`,
             maxWidth: blob ? '60%' : 'calc(100% - 16px)',
             ...getMessageStyle(),
-            ...style
+            ...style,
           }}
           {...otherProps}
         >
@@ -166,7 +158,7 @@ export const Message = props => {
               padding: '8px 12px',
               display: 'flex',
               flexDirection: 'column',
-              whiteSpace: 'pre-line'
+              whiteSpace: 'pre-line',
             }}
           >
             {textChildren}
@@ -179,7 +171,7 @@ export const Message = props => {
                 borderLeftColor: getBgColor(),
                 right: 0,
                 borderRight: 0,
-                marginRight: -pointerSize
+                marginRight: -pointerSize,
               }}
             />
           )}
@@ -190,7 +182,7 @@ export const Message = props => {
                 borderRightColor: getBgColor(),
                 left: 0,
                 borderLeft: 0,
-                marginLeft: -pointerSize
+                marginLeft: -pointerSize,
               }}
             />
           )}
