@@ -1,5 +1,5 @@
 import { CMS } from '../cms'
-import { Locale, Normalizer } from '../nlp'
+import { Keyword, Locale, Normalizer } from '../nlp'
 
 export class StemmedKeyword {
   constructor(readonly rawKeyword: string, readonly stemmedKeyword: string[]) {}
@@ -20,17 +20,13 @@ export class KeywordsTool {
     readonly normalizer: Normalizer
   ) {}
 
-  async dumpKeywords(): Promise<Map<string, StemmedKeyword[]>> {
-    const keywords = new Map<string, StemmedKeyword[]>()
+  async dumpKeywords(): Promise<Map<string, Keyword[]>> {
+    const keywords = new Map<string, Keyword[]>()
     const context = { locale: this.locale }
     const results = await this.cms.contentsWithKeywords(context)
     for (const res of results) {
-      const stemmed = res.common.keywords.map(
-        kw =>
-          new StemmedKeyword(
-            kw,
-            this.normalizer.normalize(context.locale, kw).stems
-          )
+      const stemmed = res.common.keywords.map(kw =>
+        Keyword.fromUtterance(kw, context.locale, this.normalizer)
       )
       keywords.set(res.common.name, stemmed)
     }

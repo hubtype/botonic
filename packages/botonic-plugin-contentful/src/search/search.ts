@@ -24,12 +24,12 @@ export class Search {
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale)
     const utterance = this.normalizer.normalize(locale, inputText)
-    const contents = await this.search.searchContentsFromInput(
+    const results = await this.search.searchContentsFromInput(
       utterance,
       matchType,
       context
     )
-    return this.search.filterChitchat(utterance.stems, contents)
+    return this.search.filterChitchat(utterance.words, results)
   }
 
   async respondFoundContents(
