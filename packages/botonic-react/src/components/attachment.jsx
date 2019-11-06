@@ -6,16 +6,11 @@ export const Attachment = ({ onChange, accept }) => (
     style={{
       display: 'flex',
       alignItems: 'center',
-      paddingRight: 15
+      paddingRight: 15,
     }}
   >
     <label htmlFor='attachment'>
-      <img
-        style={{
-          cursor: 'pointer'
-        }}
-        src={staticAsset(AttachmentIcon)}
-      />
+      <img src={staticAsset(AttachmentIcon)} style={{ cursor: 'pointer' }} />
     </label>
     <input
       type='file'

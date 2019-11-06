@@ -21,7 +21,7 @@ export const WebchatMessageList = props => {
         maxWidth: '100%',
         ...(introStyle || {}),
       }}
-      src={introImage && staticAsset(introImage)}
+      src={staticAsset(introImage)}
     />
   )
 
