@@ -3,7 +3,7 @@ import { WebchatContext } from '../contexts'
 import { staticAsset, getProperty } from '../utils'
 import styled from 'styled-components'
 import Logo from '../assets/botonic_react_logo100x100.png'
-import { Flex } from '@rebass/grid'
+import { Flex } from 'rebass'
 
 const HeaderTitle = styled(Flex)`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');

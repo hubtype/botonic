@@ -62,16 +62,15 @@ These are the available styles that Botonic allows you to modify:
 * **introImage**: an introductory image shown the first time the conversation is initialized. Can be defined also in `intro.image`.
 - **introStyle**: styles of the introductory image. Can be defined also in `intro.style`.
 * **textPlaceholder**: text placeholder in the input text. Can be defined also in `userInput.placeholder`.
-- **disableUserInput**: set it to `true` if you want to disable text input. Can be defined also in `userInput.disable`.
-* **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`.
+- **enableUserInput**: set it to `false` if you want to disable text input. Can be defined also in `userInput.enable`. `true` by default.
+* **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`. `false` by default.
 - **blockInputs**: the inputs not allowed by the bot. Can be defined also in `userInput.blockInputs`.
-* **disableUserInput**: set it to `true` if you want to disable text input. Can be defined also in `userInput.disable`.
-- **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`.
-* **persistentMenu**: an array containing the options of your persistent menu. Can be defined also in `userInput.persistentMenu`.
-- **alignReplies**: align replies at `left`, `center` or `right`. Can be defined also in `replies.align`.
-* **wrapReplies**: whether replies be displayed on a single row `nowrap` (horizontal scrolling will appear when required) or they will be wrapped in different lines `wrap`. Can be defined also in `replies.wrap`.
-- **enableAttachments**: whether to allow user media attachments or not (`true|false`). Can be defined also in `userInput.attachments.enable`.
-* **scrollbar**: refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.
+* **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`.
+- **persistentMenu**: an array containing the options of your persistent menu. Can be defined also in `userInput.persistentMenu`.
+* **alignReplies**: align replies at `left`, `center` or `right`. Can be defined also in `replies.align`.
+- **wrapReplies**: whether replies be displayed on a single row `nowrap` (horizontal scrolling will appear when required) or they will be wrapped in different lines `wrap`. Can be defined also in `replies.wrap`.
+* **enableAttachments**: whether to allow user media attachments or not (`true|false`). Can be defined also in `userInput.attachments.enable`. `false` by default.
+- **scrollbar**: refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.
 
 ### Custom components
 You can also create your own components from scratch.
@@ -243,7 +242,7 @@ export const webchat = {
       attachments: {
         enable: true
       },
-      // disable: true,
+      // enable: true,
       placeholder: 'Type something...',
       emojiPicker: true,
       // These are the set of inputs which are not allowed.
@@ -262,7 +261,7 @@ export const webchat = {
       ]
     },
     scrollbar: {
-      disable: false, 
+      // enable: false, 
       autoHide: true, 
       thumb: {
         opacity: 1, 
