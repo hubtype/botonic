@@ -1,5 +1,5 @@
 import { SimilarWordFinder, SimilarWordResult } from './similar-words'
-import { NormalizedUtterance, Normalizer } from './normalizer'
+import { NormalizedUtterance, Normalizer, Word } from './normalizer'
 import { Locale } from './locales'
 
 /**
@@ -8,19 +8,46 @@ import { Locale } from './locales'
  */
 export class Keyword {
   readonly raw: string
+  /**
+   * If hasOnlyStopWords == false, the stems of the non stopWords (eg. buy a shirt => buy shirt)
+   * Otherwise, it contains the tokens of the stopwords (how are you => how are you)
+   */
+  readonly matchString: string
+
   constructor(
     raw: string,
-    readonly stemmed: string,
+    readonly words: Word[],
     readonly hasOnlyStopWords: boolean
   ) {
+    if (hasOnlyStopWords) {
+      this.matchString = Word.joinedTokens(words, true)
+    } else {
+      this.matchString = words
+        .filter(w => !w.isStopWord)
+        .map(w => w.stem)
+        .join(' ')
+    }
     this.raw = raw.trim().toLowerCase()
   }
 
+  static fromUtterance(
+    rawKeyword: string,
+    locale: Locale,
+    normalizer: Normalizer
+  ): Keyword {
+    const normalized = normalizer.normalize(locale, rawKeyword)
+    return new Keyword(
+      rawKeyword,
+      normalized.words,
+      normalized.hasOnlyStopWords()
+    )
+  }
+
   splitInWords(): Keyword[] {
-    if (this.hasOnlyStopWords) {
-      return this.raw.split(' ').map(w => new Keyword(w, w, true))
+    if (this.words.length == 1) {
+      return [this]
     }
-    return this.stemmed.split(' ').map(w => new Keyword(w, w, false))
+    return this.words.map(w => new Keyword(w.token, [w], w.isStopWord))
   }
 }
 
@@ -75,13 +102,8 @@ export class KeywordsParser<M> {
    * words (which must appear together in the same order). The keywords will be stemmed.
    */
   addCandidate(candidate: M, rawKeywords: string[]): void {
-    const stemmedKeywords = rawKeywords.map(kw => {
-      const normalized = this.normalizer.normalize(this.locale, kw)
-      return new Keyword(
-        kw,
-        normalized.joinedStems,
-        normalized.hasOnlyStopWords()
-      )
+    const stemmedKeywords = rawKeywords.map(rawKeyword => {
+      return Keyword.fromUtterance(rawKeyword, this.locale, this.normalizer)
     })
     const candidateWithK = new CandidateWithKeywords(candidate, stemmedKeywords)
     this.candidates.push(candidateWithK)

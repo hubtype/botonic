@@ -4,14 +4,34 @@ import {
   Normalizer,
   KeywordsOptions,
   MatchType,
+  StemmingBlackList,
+  Keyword,
+  Word,
 } from '../../src/nlp'
 
-test('hack because webstorm does not recognize test.each', () => {})
+test('new Keyword', () => {
+  const kw1 = new Keyword(
+    ' A cooker',
+    [Word.StopWord('a'), new Word('cooker', 'cook')],
+    false
+  )
+  expect(kw1.raw).toBe('a cooker')
+  expect(kw1.matchString).toBe('cook')
+
+  const kw2 = new Keyword(
+    ' You are',
+    [Word.StopWord('you'), Word.StopWord('are')],
+    true
+  )
+  expect(kw2.raw).toBe('you are')
+  expect(kw2.matchString).toBe('you are')
+})
 
 function testFindKeywords(
   locale: string,
   matchType: MatchType,
-  maxDistance = 0
+  maxDistance = 0,
+  normalizer = new Normalizer()
 ) {
   return (
     inputText: string,
@@ -21,14 +41,13 @@ function testFindKeywords(
     const parser = new KeywordsParser<string>(
       locale,
       matchType,
-      new Normalizer(),
+      normalizer,
       new KeywordsOptions(maxDistance)
     )
 
     for (const candidate in keywordsByCandidate) {
       parser.addCandidate(candidate, keywordsByCandidate[candidate])
     }
-    const normalizer = new Normalizer()
     const tokens = normalizer.normalize(locale, inputText)
     const results = parser.findCandidatesWithKeywordsAt(tokens)
     expect(results.map(r => r.candidate)).toIncludeSameMembers(expectedMatch)
@@ -85,8 +104,8 @@ test.each<any>([
   // keywords found for 2 models
   ['kwA kwB', { A: ['kwA'], B: ['kwB'] }, ['A', 'B']],
 
-  // BUG does not detect keywords which only contain stopwords when input contains other (no stopwords) words
-  ['Sobre enormes', { ONLY_STOPWORD: ['kw1', 'sobre'] }, []],
+  // keywords which only contain stopwords when input contains other (no stopwords) words
+  ['Sobre enormes', { ONLY_STOPWORD: ['kw1', 'sobre'] }, ['ONLY_STOPWORD']],
 
   // does not false positive with keywords which only contain stopwords
   ['something else', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
@@ -162,8 +181,8 @@ test.each<any>([
 
   // a keyword is shared by 2 contents
   [
-    'kw1 enmedio kw2',
-    { A: ['kw1 kw2', 'unKw'], B: ['kw1 kw2', 'otroKw'] },
+    'kwA enmedio kwB',
+    { A: ['kwA kwB', 'unKw'], B: ['kwA kwB', 'otroKw'] },
     ['A', 'B'],
   ],
 ])(
@@ -174,7 +193,23 @@ test.each<any>([
 test('ALL_WORDS_IN_KEYWORDS_MIXED_UP', () => {
   testFindKeywords('es', MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP)(
     'sobre',
-    { ONLY_STOPWORD: ['kw1', 'Sobre'] },
+    { ONLY_STOPWORD: ['kw', 'Sobre'] },
     ['ONLY_STOPWORD']
   )
 })
+
+test.each<any>([
+  [MatchType.ONLY_KEYWORDS_FOUND],
+  [MatchType.KEYWORDS_AND_OTHERS_FOUND],
+  [MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP],
+])(
+  'blacklisted stems are also checked for similar words. MatchType: %s',
+  (mt: MatchType) => {
+    testFindKeywords(
+      'es',
+      mt,
+      1,
+      new Normalizer({ es: [new StemmingBlackList('presente', [])] })
+    )('prezente', { KW1: ['presente'] }, ['KW1'])
+  }
+)
