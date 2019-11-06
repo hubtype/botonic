@@ -1,7 +1,7 @@
-import { SimilarSearch, WordPosition } from 'node-nlp/lib/util'
+import { SimilarSearch } from 'node-nlp/lib/util'
 import { CandidateWithKeywords, Keyword, MatchType } from './keywords'
 import { countOccurrences } from './tokens'
-import { NormalizedUtterance } from './normalizer'
+import { NormalizedUtterance, Word } from './normalizer'
 
 export class SimilarWordResult<M> {
   constructor(
@@ -155,6 +155,20 @@ abstract class CandidateFinder {
     }
     return distance
   }
+
+  protected utteranceText(
+    utterance: NormalizedUtterance,
+    keyword: Keyword
+  ): string {
+    if (keyword.hasOnlyStopWords) {
+      return utterance.raw
+    }
+    // If it was not stemmed (maybe because it was on a black list), we don't want to stem the matching utterance
+    // in case it contains the full keyword but with a typo
+    return keyword.raw == keyword.matchString
+      ? Word.joinedTokens(utterance.words, false)
+      : utterance.stems.join(' ')
+  }
 }
 
 class FindIfOnlyWordsFromKeyword extends CandidateFinder {
@@ -169,18 +183,15 @@ class FindIfOnlyWordsFromKeyword extends CandidateFinder {
   }
 
   getDistance(
-    text: NormalizedUtterance,
+    utterance: NormalizedUtterance,
     keyword: Keyword,
     maxDistance: number
   ): PartialMatch {
-    if (keyword.hasOnlyStopWords) {
-      const re = this.getDistanceCore(text.raw, keyword.stemmed, maxDistance)
-      return new PartialMatch(keyword, text.raw, re)
-    }
+    const utteranceText = this.utteranceText(utterance, keyword)
     return new PartialMatch(
       keyword,
-      text.joinedStems,
-      this.getDistanceCore(text.joinedStems, keyword.stemmed, maxDistance)
+      utteranceText,
+      this.getDistanceCore(utteranceText, keyword.matchString, maxDistance)
     )
   }
 }
@@ -191,13 +202,8 @@ class FindSubstring extends CandidateFinder {
     utterance: NormalizedUtterance,
     maxDistance: number
   ): PartialMatch[] {
-    // TODO catch utterance of pass n constructor
-    const wordPositions = this.similar.getWordPositions(utterance.joinedStems)
-
     return keywords
-      .map(keyword =>
-        this.findKeyword(keyword, utterance, maxDistance, wordPositions)
-      )
+      .map(keyword => this.findKeyword(keyword, utterance, maxDistance))
       .filter(m => !!m)
       .map(m => m!)
   }
@@ -205,42 +211,42 @@ class FindSubstring extends CandidateFinder {
   public findKeyword(
     keyword: Keyword,
     utterance: NormalizedUtterance,
-    maxDistance: number,
-    wordPositions: WordPosition[]
+    maxDistance: number
   ): PartialMatch | undefined {
-    if (keyword.stemmed.length < this.minMatchLength) {
-      if (new RegExp(`\\b${keyword.stemmed}\\b`).test(utterance.joinedStems)) {
-        return new PartialMatch(keyword, keyword.stemmed, 0)
+    const utteranceText = this.utteranceText(utterance, keyword)
+    const wordPositions = this.similar.getWordPositions(utteranceText)
+    if (keyword.matchString.length < this.minMatchLength) {
+      if (new RegExp(`\\b${keyword.matchString}\\b`).test(utteranceText)) {
+        return new PartialMatch(keyword, keyword.matchString, 0)
       }
       return undefined
     }
-    const extra = this.stemmedDecorator.extraDistance(keyword.stemmed)
+    const extra = this.stemmedDecorator.extraDistance(keyword.matchString)
     const minAccuracy =
-      (keyword.stemmed.length - (maxDistance + extra)) / keyword.stemmed.length
+      (keyword.matchString.length - (maxDistance + extra)) /
+      keyword.matchString.length
     let substrings = this.similar.getBestSubstringList(
-      utterance.joinedStems,
-      keyword.stemmed,
+      utteranceText,
+      keyword.matchString,
       wordPositions,
       minAccuracy
     )
     substrings = substrings.filter(
       bs =>
-        getMatchLength(bs.len, keyword.stemmed.length, bs.levenshtein) >=
+        getMatchLength(bs.len, keyword.matchString.length, bs.levenshtein) >=
         this.minMatchLength
     )
     if (substrings.length == 0) {
       return undefined
     }
     const bestSubstr = substrings.sort((s1, s2) => s2.accuracy - s1.accuracy)[0]
-    const match = utterance.joinedStems.slice(
-      bestSubstr.start,
-      bestSubstr.end + 1
-    )
+    const match = utteranceText.slice(bestSubstr.start, bestSubstr.end + 1)
     const distance =
-      keyword.stemmed.length - bestSubstr.accuracy * keyword.stemmed.length
+      keyword.matchString.length -
+      bestSubstr.accuracy * keyword.matchString.length
     if (
       distance > maxDistance &&
-      !this.stemmedDecorator.verify(match, keyword.stemmed)
+      !this.stemmedDecorator.verify(match, keyword.matchString)
     ) {
       return undefined
     }
@@ -260,18 +266,11 @@ class FindMixedUp extends CandidateFinder {
     utterance: NormalizedUtterance,
     maxDistance: number
   ): PartialMatch[] {
-    // TODO catch utterance of pass n constructor
-    const wordPositions = this.similar.getWordPositions(utterance.joinedStems)
     const matches = []
     for (const keyword of keywords) {
       let submatches: PartialMatch[] | undefined = []
       for (const subkw of keyword.splitInWords()) {
-        const match = this.substring.findKeyword(
-          subkw,
-          utterance,
-          maxDistance,
-          wordPositions
-        )
+        const match = this.substring.findKeyword(subkw, utterance, maxDistance)
         if (!match) {
           submatches = undefined
           break
@@ -286,8 +285,7 @@ class FindMixedUp extends CandidateFinder {
         const wordsWithoutSpace = this.substring.findKeyword(
           keyword,
           utterance,
-          maxDistance,
-          wordPositions
+          maxDistance
         )
         if (wordsWithoutSpace) {
           submatches = []
