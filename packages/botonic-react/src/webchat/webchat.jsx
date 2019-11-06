@@ -508,6 +508,7 @@ export const Webchat = forwardRef((props, ref) => {
             display: 'flex',
             position: 'relative',
             borderTop: '1px solid rgba(0, 0, 0, 0.4)',
+            ...getThemeProperty('userInput.style'),
           }}
         >
           {emojiPickerOpened && emoji()}
@@ -524,7 +525,7 @@ export const Webchat = forwardRef((props, ref) => {
               maxRows={4}
               wrap='soft'
               maxLength='1000'
-              placeholder={getThemeProperty('userInput.placeholder')}
+              placeholder={getThemeProperty('userInput.box.placeholder')}
               autoFocus={true}
               inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
@@ -539,6 +540,7 @@ export const Webchat = forwardRef((props, ref) => {
                 flex: '1 1 auto',
                 padding: 10,
                 paddingLeft: persistentMenuOptions ? 0 : 10,
+                ...getThemeProperty('userInput.box.style'),
               }}
             />
           </div>

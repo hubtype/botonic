@@ -72,6 +72,7 @@ export const webchat = {
         style: {
           // border:'none',
           color: 'white',
+          background: 'blue',
           borderRadius: '10px',
         },
       },
@@ -81,9 +82,9 @@ export const webchat = {
     button: {
       style: {
         color: 'black',
+        hoverText: '#FFFFFF',
         background: 'white',
-        hover: '#DDA0DD',
-        fontWeight: 'bold',
+        hover: '#0000FF',
         borderRadius: 20,
       },
       // custom: CustomButton,
@@ -97,16 +98,33 @@ export const webchat = {
         color: 'purple',
         background: 'white',
         borderColor: 'purple',
+        fontFamily: 'Arial',
       },
       // custom: CustomReply,
     },
     userInput: {
+      style: {
+        background: 'black',
+      },
+      box: {
+        style: {
+          border: '2px solid blue',
+          color: 'blue',
+          background: '#F0F0F0',
+          width: '90%',
+          borderRadius: 20,
+          paddingLeft: 20,
+          marginRight: 10,
+          fontFamily: '"Times New Roman", Times, serif',
+        },
+        placeholder: 'Type something...',
+      },
+
       // enable: false,
       attachments: {
         enable: true,
       },
 
-      placeholder: 'Type something...',
       emojiPicker: true,
       // These are the set of inputs which are not allowed.
       blockInputs: [
@@ -151,7 +169,7 @@ export const webchat = {
   onOpen: app => {
     // app.addBotText('Hi human!')
     // app.addUserText('Hi bot!')
-    app.addUserPayload('POSTBACK_INITCHAT')
+    // app.addUserPayload('POSTBACK_INITCHAT')
   },
   onClose: app => {
     console.log('I have been closed!')

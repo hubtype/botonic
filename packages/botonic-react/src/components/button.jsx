@@ -34,6 +34,14 @@ export const Button = props => {
         </div>
       )
     }
+
+    let buttonBgColor = hover
+      ? getThemeProperty('button.style.hover', '#f3f3f3')
+      : getThemeProperty('button.style.background', '#fff')
+    let buttonTextColor = hover
+      ? getThemeProperty('button.style.hoverText', '#000')
+      : getThemeProperty('button.style.color', '#000')
+
     return (
       <button
         theme={theme}
@@ -50,9 +58,6 @@ export const Button = props => {
           justifyContent: 'center',
           padding: '12px 32px',
           color: getThemeProperty('brand.color', '#000'),
-          backgroundColor: hover
-            ? getThemeProperty('button.style.hover', '#f3f3f3')
-            : getThemeProperty('button.style.background', '#fff'),
           border: 'none',
           border: '1px solid #f1f0f0',
           cursor: 'pointer',
@@ -63,6 +68,8 @@ export const Button = props => {
           borderBottomLeftRadius: props.bottom || 0,
           overflow: 'hidden',
           ...buttonStyle,
+          color: buttonTextColor,
+          backgroundColor: buttonBgColor,
         }}
       >
         {props.children}

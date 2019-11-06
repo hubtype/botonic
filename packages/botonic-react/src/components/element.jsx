@@ -12,7 +12,7 @@ export const Element = props => {
         marginRight: 6,
         borderRadius: 6,
         border: '1px solid #F1F0F0',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
       {props.children}
@@ -53,7 +53,7 @@ Element.serialize = elementProps => {
         return (
           b && b.type && b.type.serialize && b.type.serialize(b.props).button
         )
-      })
+      }),
   ]
   // When we have the buttons from backend, we have all buttons inside an array on the first position
   // of another array in element['buttons'] we want that element['buttons'] to be an array of buttons,
