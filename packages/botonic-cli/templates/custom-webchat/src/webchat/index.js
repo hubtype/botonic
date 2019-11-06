@@ -79,12 +79,26 @@ export const webchat = {
     },
 
     button: {
+      style: {
+        color: 'black',
+        background: 'white',
+        hover: '#DDA0DD',
+        fontWeight: 'bold',
+        borderRadius: 20,
+      },
       // custom: CustomButton,
     },
     replies: {
       align: 'center',
       wrap: 'nowrap',
-      // custom: CustomReply
+    },
+    reply: {
+      style: {
+        color: 'purple',
+        background: 'white',
+        borderColor: 'purple',
+      },
+      // custom: CustomReply,
     },
     userInput: {
       // enable: false,
