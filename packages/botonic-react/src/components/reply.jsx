@@ -17,7 +17,8 @@ export const Reply = props => {
   }
 
   const renderBrowser = () => {
-    let CustomReply = getThemeProperty('replies.custom')
+    let replyStyle = getThemeProperty('reply.style')
+    let CustomReply = getThemeProperty('reply.custom')
     if (CustomReply) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -36,6 +37,7 @@ export const Reply = props => {
           borderRadius: 8,
           cursor: 'pointer',
           outline: 0,
+          ...replyStyle,
         }}
         onClick={e => handleClick(e)}
       >

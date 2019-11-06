@@ -27,10 +27,10 @@ export class DevApp extends WebchatApp {
       onInit,
       onOpen,
       onClose,
-      onMessage
+      onMessage,
     })
     this.bot = new ReactBot({
-      ...botOptions
+      ...botOptions,
     })
   }
 
