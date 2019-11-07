@@ -25,6 +25,8 @@ export const webchat = {
 
   emojiPicker: {true|false},
 
+  enableAttachments: {true|false},
+
   // Webchat listeners
   onInit: app => {},
   onOpen: app => {},
@@ -37,6 +39,8 @@ See above a template with Webchat allowed definitions. With them you can configu
 - **theme**: It defines the styles.
 - **persistentMenu**: Optionally, a persistent menu can be accessed from a little button at the input text box. It allows the user to access popular functionalities at any point in the conversation.
 - **blockInputs**: This permits you to define which user inputs will not be allowed. E.g., it's useful for preventing the user to type a credit card.
+- **emojiPicker**: Enable the emoji picker. Can be defined also in `userInput.emojiPicker`. `false` by default.
+- **enableAttachments**: Whether to allow user media attachments or not (`true|false`). Can be defined also in `userInput.attachments.enable`. `false` by default.
 - **Listeners**: Listeners are useful in order to react to some events when using the webchat.  
 
 Let's see how we can use these objects:
@@ -45,10 +49,9 @@ Let's see how we can use these objects:
 
 These are the available styles that Botonic allows you to modify:
 ### General Styling
+- **mobileBreakpoint**: width (in pixels) for mobile responsive design. Set to `460px` by default.
 * **style**: the main characteristics of webchat such as its size, its background color...
 - **webviewStyle**: the main characteristics of your webviews such as its size, its background color...
-* **defaultTyping**: global configuration to define the time length (in seconds) that the typing indicator must be showed for every message.
-- **defaultDelay**: global configuration to define the time length (in seconds) before a message is processed.
 * **triggerButtonImage**: launcher icon for toggling the webchat. Can be defined also in `triggerButton.image`.
 - **triggerButtonStyle**: launcher icon styles. Can be defined also in `triggerButton.style`.
 * **brandColor**: the main color palette of the webchat widget. Can be defined also in `brand.color`.
@@ -56,21 +59,30 @@ These are the available styles that Botonic allows you to modify:
 * **headerImage**: the image displayed in the header. Overwrites the one set in brandImage. You can set it to `null` to disable it. Can be defined also in `header.image`.
 - **headerTitle**: display title of the webchat. Can be defined also in `header.title`.
 * **headerSubtitle**: display subtitle of the webchat. Can be defined also in `header.subtitle`.
-- **botMessageImage**: the image displayed next to the bot's chat bubble. Overwrites the one set in brandImage. You can set it to `null` to disable it. Can be defined also in `message.bot.image`.
-* **botMessageStyle**: styles of bot message. Can be defined also in `message.bot.style`.
-- **userMessageStyle**: styles of user message. Can be defined also in `message.user.style`.
-* **introImage**: an introductory image shown the first time the conversation is initialized. Can be defined also in `intro.image`.
-- **introStyle**: styles of the introductory image. Can be defined also in `intro.style`.
-* **textPlaceholder**: text placeholder in the input text. Can be defined also in `userInput.placeholder`.
-- **enableUserInput**: set it to `false` if you want to disable text input. Can be defined also in `userInput.enable`. `true` by default.
-* **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`. `false` by default.
-- **blockInputs**: the inputs not allowed by the bot. Can be defined also in `userInput.blockInputs`.
-* **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`.
-- **persistentMenu**: an array containing the options of your persistent menu. Can be defined also in `userInput.persistentMenu`.
+- **headerStyle**: styles of the header. Can be defined also in `header.style`.
+* **buttonStyle**: styles for buttons. Can be defined also in `button.style`.
+- **buttonHoverBackground**: background color when hovering over a button. Can be defined also in `button.hoverBackground`.
+* **buttonHoverTextColor**: text color when hovering over a button. Can be defined also in `button.hoverTextColor`.
+- **replyStyle**: styles for replies. Can be defined also in `reply.style`.
 * **alignReplies**: align replies at `left`, `center` or `right`. Can be defined also in `replies.align`.
 - **wrapReplies**: whether replies be displayed on a single row `nowrap` (horizontal scrolling will appear when required) or they will be wrapped in different lines `wrap`. Can be defined also in `replies.wrap`.
+* **botMessageImage**: the image displayed next to the bot's chat bubble. Overwrites the one set in brandImage. You can set it to `null` to disable it. Can be defined also in `message.bot.image`.
+- **botMessageStyle**: styles of bot message. Can be defined also in `message.bot.style`.
+* **userMessageStyle**: styles of user message. Can be defined also in `message.user.style`.
+- **introImage**: an introductory image shown the first time the conversation is initialized. Can be defined also in `intro.image`.
+* **introStyle**: styles of the introductory image. Can be defined also in `intro.style`.
+- **textPlaceholder**: text placeholder in the input text. Can be defined also in `userInput.box.placeholder`.
+* **enableUserInput**: set it to `false` if you want to disable text input. Can be defined also in `userInput.enable`. `true` by default.
+- **userInputStyle**: styles for the bottom area of the user input. Can be defined also in `userInput.style`.
+* **userInputBoxStyle**: styles for the text input box. Can be defined also in `userInput.box.style`.
+- **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`. `false` by default.
+* **blockInputs**: the inputs not allowed by the bot. Can be defined also in `userInput.blockInputs`.
+- **emojiPicker**: set it to `true` to enable the emoji picker. Can be defined also in `userInput.emojiPicker`.
+- **persistentMenu**: an array containing the options of your persistent menu. Can be defined also in `userInput.persistentMenu`.
 * **enableAttachments**: whether to allow user media attachments or not (`true|false`). Can be defined also in `userInput.attachments.enable`. `false` by default.
 - **scrollbar**: refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.
+
+> **NOTE**: By specifying the `fontFamily` attribute in `style` property you can overwrite the entire typography of your webchat
 
 ### Custom components
 You can also create your own components from scratch.
@@ -142,8 +154,21 @@ export const CustomReply = props => (
   </div>
 )
 ```
-This is an example of a custom Header for our webchat. We can put all the fancy css styles we want.
+This is an example of a custom Reply for our webchat. We can put all the fancy css styles we want.
 This is a static object, so it's not applied in any [components](/main-concepts/components) component, so we don't have to put `{props.children}` inside any container.
+
+**src/webchat/custom-intro.js**  
+```javascript
+import React from 'react'
+import { staticAsset } from '@botonic/react'
+import Img from '../assets/intro-image.jpg'
+export const CustomIntro = () => 
+  <img height={'50%'} width={'100%'} src={staticAsset(Img)} />
+```
+
+> **NOTE**: When you define custom components that use static assets as shown in the example above, you must use the the method `staticAsset` from `@botonic/react` 
+> in order to get it working properly in production environment,
+
 
 
 **src/webchat/index.js**
@@ -162,7 +187,7 @@ import { CustomButton } from './custom-button'
 
 export const webchat = {
   theme: {
-    // GENERAL STYLE OF WEBCHAT
+    mobileBreakpoint: 460,
     style: {
       position: 'fixed',
       right: 20,
@@ -171,44 +196,48 @@ export const webchat = {
       height: 500,
       margin: 'auto',
       backgroundColor: 'white',
-      borderRadius: '25px',
+      borderRadius: 25,
       boxShadow: '0 0 50px rgba(0,0,255,.30)',
       overflow: 'hidden',
       backgroundImage:
-        'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)'
+        'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)',
+      fontFamily: '"Comic Sans MS", cursive, sans-serif',
     },
     webviewStyle: {
       top: 0,
       right: 0,
       height: 500,
-      width: '100%'
+      width: '100%',
     },
     brand: {
-      color: '#0000ff',
-      image: R2D2Logo
+      // color: 'blue',
+      image: R2D2Logo,
     },
     triggerButton: {
       image: launcherIcon,
       style: {
-        width: '200px'
-      }
-      // custom: CustomTrigger
+        width: '200px',
+      },
+      // custom: CustomTrigger,
     },
     intro: {
       // image: IntroImage,
       // style: {
       //   padding: 20
       // }
-      custom: CustomIntro
+      custom: CustomIntro,
     },
     header: {
       title: 'My customized webchat',
       subtitle: 'R2D2',
-      image: R2D2Logo
+      image: R2D2Logo,
+      style: {
+        height: 70,
+      },
       // custom: CustomHeader
     },
     /*
-     * brand.image will set both header.image and message.bot.image with its current logo
+     * brandImage will set both headerImage and botMessageImage with its current logo
      * you can overwrite these values by redefining them individually
      */
     message: {
@@ -216,67 +245,102 @@ export const webchat = {
         image: C3POLogo, // set it to 'null' to hide this image
         style: {
           border: 'none',
-          color: 'blue',
-          borderRadius: '20px'
-        }
+          color: 'black',
+          borderRadius: '20px',
+          background: '#e1fcfb',
+        },
       },
       user: {
         style: {
           // border:'none',
           color: 'white',
-          borderRadius: '10px'
-        }
+          background: '#2b81b6',
+          borderRadius: '10px',
+        },
       },
-      customTypes: [CalendarMessage]
+      customTypes: [CalendarMessage],
     },
 
     button: {
-      // custom: CustomButton
+      style: {
+        color: 'black',
+        background: 'white',
+        borderRadius: 20,
+      },
+      hoverBackground: '#b3fcfa',
+      hoverTextColor: 'black',
+
+      // custom: CustomButton,
     },
     replies: {
       align: 'center',
-      wrap: 'nowrap'
-      // custom: CustomReply
+      wrap: 'nowrap',
+    },
+    reply: {
+      style: {
+        color: 'black',
+        background: '#e1fcfb',
+        borderColor: 'black',
+      },
+      // custom: CustomReply,
     },
     userInput: {
-      attachments: {
-        enable: true
+      style: {
+        background: 'black',
       },
-      // enable: true,
-      placeholder: 'Type something...',
+      box: {
+        style: {
+          border: '2px solid #2b81b6',
+          color: '#2b81b6',
+          background: '#F0F0F0',
+          width: '90%',
+          borderRadius: 20,
+          paddingLeft: 20,
+          marginRight: 10,
+        },
+        placeholder: 'Type something...',
+      },
+
+      // enable: false,
+      attachments: {
+        enable: true,
+      },
+
       emojiPicker: true,
       // These are the set of inputs which are not allowed.
       blockInputs: [
         {
           match: [/ugly/i, /bastard/i],
-          message: 'We cannot tolerate these kind of words.'
-        }
+          message: 'We cannot tolerate these kind of words.',
+        },
       ],
       persistentMenu: [
         { label: 'Help', payload: 'help' },
         {
           label: 'See docs',
-          url: 'https://docs.botonic.io'
-        }
-      ]
+          url: 'https://docs.botonic.io',
+        },
+        { closeLabel: 'Close' },
+      ],
     },
     scrollbar: {
-      // enable: false, 
-      autoHide: true, 
+      // enable: false,
+      autoHide: true,
       thumb: {
-        opacity: 1, 
-        color: 'yellow', 
+        opacity: 1,
+        // color: 'yellow',
         bgcolor:
-          'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);', // has preference over color
-        border: '20px' 
-      }
+          'linear-gradient(-131deg,rgba(231, 176, 43) 0%,rgb(193, 62, 81) 100%);',
+        border: '20px',
+      },
       // track: {
-      //   color: 'black', 
+      //   color: 'black',
       //   bgcolor:
-      //     'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);', // has preference over color
-      //   border: '20px'
-      // }
-    }
+      //     'linear-gradient(-131deg,rgba(50, 40, 43) 0%,rgb(125, 62, 81) 100%);',
+      //   border: '20px',
+      // },
+    },
+  },
 }
 ```
 
@@ -288,16 +352,14 @@ All these changes can be tested using the `botonic serve` command *(npm run star
 />
 
 ## Persistent Menu
-By adding these few lines of code in webchat's object, you can enable the persistent menu:
+By adding these few lines of code in webchat's object, you can enable the persistent menu. You can redefine the label for closing the persistent menu with `closeLabel`. Set to `'Cancel'` by default.
 
 ```javascript
 persistentMenu: [
-    { label: 'Help', payload: 'help' },
-    {
-      label: 'See docs',
-      url: 'https://docs.botonic.io'
-    }
-  ]
+  { label: 'Help', payload: 'help' },
+  { label: 'See docs', url: 'https://docs.botonic.io' },
+  { closeLabel: 'Close' }
+]
 ```
 
 <img
@@ -333,7 +395,7 @@ Once the specified inputs are matched:
 * The bot will not receive the blocked message.
 
 
-> We suggest you to check the full template which offers a bunch of examples to get started customizing the Webchat components.  
+> We suggest you to check the [full template](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/custom-webchat) which offers a bunch of examples to get started customizing the Webchat components.  
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
   <PrevButton title="Dynamic Carousel" href="/tutorials-and-examples/dynamic-carousel" />
