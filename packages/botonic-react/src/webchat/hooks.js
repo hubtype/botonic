@@ -17,11 +17,11 @@ export const webchatInitialState = {
   theme: {
     headerTitle: 'Botonic',
     brandColor: '#0099ff',
-    textPlaceholder: 'Ask me something...'
+    textPlaceholder: 'Ask me something...',
   },
   error: {},
   devSettings: {},
-  isWebchatOpen: false
+  isWebchatOpen: false,
 }
 
 export function webchatReducer(state, action) {
@@ -34,12 +34,12 @@ export function webchatReducer(state, action) {
         return state
       return {
         ...state,
-        messagesJSON: [...(state.messagesJSON || []), { ...action.payload }]
+        messagesJSON: [...(state.messagesJSON || []), { ...action.payload }],
       }
     case 'addMessageComponent':
       return {
         ...state,
-        messagesComponents: [...state.messagesComponents, action.payload]
+        messagesComponents: [...state.messagesComponents, action.payload],
       }
     case 'updateMessage':
       let msgIndex = state.messagesJSON
@@ -51,8 +51,8 @@ export function webchatReducer(state, action) {
           messagesJSON: [
             ...state.messagesJSON.slice(0, msgIndex),
             { ...action.payload },
-            ...state.messagesJSON.slice(msgIndex + 1)
-          ]
+            ...state.messagesJSON.slice(msgIndex + 1),
+          ],
         }
       return state
     case 'updateReplies':
@@ -105,47 +105,47 @@ export function useWebchat() {
   const updateWebview = (webview, params) =>
     webchatDispatch({
       type: 'updateWebview',
-      payload: { webview, webviewParams: params }
+      payload: { webview, webviewParams: params },
     })
   const updateSession = session =>
     webchatDispatch({
       type: 'updateSession',
-      payload: session
+      payload: session,
     })
   const updateUser = user =>
     webchatDispatch({
       type: 'updateUser',
-      payload: user
+      payload: user,
     })
   const updateLastRoutePath = path =>
     webchatDispatch({
       type: 'updateLastRoutePath',
-      payload: path
+      payload: path,
     })
   const updateHandoff = handoff =>
     webchatDispatch({
       type: 'updateHandoff',
-      payload: handoff
+      payload: handoff,
     })
   const updateTheme = theme =>
     webchatDispatch({
       type: 'updateTheme',
-      payload: theme
+      payload: theme,
     })
   const updateDevSettings = settings =>
     webchatDispatch({
       type: 'updateDevSettings',
-      payload: settings
+      payload: settings,
     })
   const toggleWebchat = toggle =>
     webchatDispatch({
       type: 'toggleWebchat',
-      payload: toggle
+      payload: toggle,
     })
   const setError = error =>
     webchatDispatch({
       type: 'setError',
-      payload: error
+      payload: error,
     })
 
   return {
@@ -165,7 +165,7 @@ export function useWebchat() {
     updateTheme,
     updateDevSettings,
     toggleWebchat,
-    setError
+    setError,
   }
 }
 

@@ -2,6 +2,11 @@ import React from 'react'
 import { Button } from './button'
 
 export const PersistentMenu = ({ onClick, options }) => {
+  let closeLabel = 'Cancel'
+  try {
+    closeLabel = options.filter(opt => opt.closeLabel !== undefined)[0]
+      .closeLabel
+  } catch (e) {}
   return (
     <div
       style={{
@@ -9,23 +14,25 @@ export const PersistentMenu = ({ onClick, options }) => {
         zIndex: 1,
         width: '100%',
         bottom: 0,
-        textAlign: 'center'
+        textAlign: 'center',
       }}
     >
       {Object.values(options).map((e, i) => {
         return (
-          <Button
-            onClick={onClick}
-            url={e.url}
-            webview={e.webview}
-            payload={e.payload}
-            key={i}
-          >
-            {Object.values(e.label)}
-          </Button>
+          e.label && (
+            <Button
+              onClick={onClick}
+              url={e.url}
+              webview={e.webview}
+              payload={e.payload}
+              key={i}
+            >
+              {Object.values(e.label)}
+            </Button>
+          )
         )
       })}
-      <Button onClick={onClick}>Cancel</Button>
+      <Button onClick={onClick}>{closeLabel}</Button>
     </div>
   )
 }
