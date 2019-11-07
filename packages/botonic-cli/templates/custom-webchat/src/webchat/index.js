@@ -11,6 +11,7 @@ import { CustomButton } from './custom-button'
 
 export const webchat = {
   theme: {
+    mobileBreakpoint: 460,
     style: {
       position: 'fixed',
       right: 20,

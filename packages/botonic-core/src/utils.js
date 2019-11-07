@@ -6,6 +6,18 @@ export const isNode = () => {
   return !isBrowser() && typeof process !== 'undefined'
 }
 
+export const isMobile = (mobileBreakpoint = 460) => {
+  if (isBrowser()) {
+    let w = Math.max(
+      document.documentElement.clientWidth,
+      window.innerWidth || 0
+    )
+    if (w < mobileBreakpoint) {
+      return true
+    }
+  }
+  return false
+}
 export function isFunction(o) {
   return typeof o === 'function'
 }
