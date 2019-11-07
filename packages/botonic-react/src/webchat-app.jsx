@@ -18,7 +18,7 @@ export class WebchatApp {
     onOpen,
     onClose,
     onMessage,
-    appId
+    appId,
   }) {
     this.theme = theme
     this.persistentMenu = persistentMenu
@@ -59,7 +59,7 @@ export class WebchatApp {
         appId: this.appId,
         user,
         lastMessageId: lastMessage && lastMessage.id,
-        onEvent: event => this.onServiceEvent(event)
+        onEvent: event => this.onServiceEvent(event),
       })
     }
   }
@@ -82,7 +82,7 @@ export class WebchatApp {
         message,
         (this.theme.message && this.theme.message.customTypes) ||
           this.theme.customMessageTypes
-      )
+      ),
     })
   }
 

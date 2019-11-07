@@ -43,11 +43,11 @@ export const webchat = {
       // custom: CustomTrigger
     },
     intro: {
-      // image: IntroImage,
+      image: IntroImage,
       // style: {
       //   padding: 20
       // }
-      custom: CustomIntro,
+      // custom: CustomIntro,
     },
     header: {
       title: 'My customized webchat',
@@ -139,6 +139,7 @@ export const webchat = {
           label: 'See docs',
           url: 'https://docs.botonic.io',
         },
+        { closeLabel: 'Close' },
       ],
     },
     scrollbar: {
@@ -159,6 +160,9 @@ export const webchat = {
       // },
     },
   },
+
+  defaultDelay: 1,
+  defaultTyping: 3,
 
   // Webchat listeners
   onInit: app => {
