@@ -448,7 +448,6 @@ export const Webchat = forwardRef((props, ref) => {
       )}
     </div>
   )
-
   const webchatHeader = () => (
     <WebchatHeader
       style={{
@@ -540,6 +539,7 @@ export const Webchat = forwardRef((props, ref) => {
                 flex: '1 1 auto',
                 padding: 10,
                 paddingLeft: persistentMenuOptions ? 0 : 10,
+                fontFamily: 'inherit',
                 ...getThemeProperty('userInput.box.style'),
               }}
             />
