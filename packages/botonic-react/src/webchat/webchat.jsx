@@ -572,7 +572,13 @@ export const Webchat = forwardRef((props, ref) => {
   )
   let mobileStyle = {}
   if (isMobile(webchatState.theme.mobileBreakpoint)) {
-    mobileStyle = { width: '100%', height: '100%', right: 0, bottom: 0 }
+    mobileStyle = {
+      width: '100%',
+      height: '100%',
+      right: 0,
+      bottom: 0,
+      borderRadius: 0,
+    }
   }
 
   return (
@@ -616,6 +622,7 @@ export const Webchat = forwardRef((props, ref) => {
             boxShadow: '0 0 12px rgba(0,0,0,.15)',
             display: 'flex',
             flexDirection: 'column',
+            fontFamily: '"Arial", Helvetica, sans-serif',
             ...theme.style,
             ...mobileStyle,
           }}

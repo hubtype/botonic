@@ -20,7 +20,7 @@ export const webchat = {
       height: 500,
       margin: 'auto',
       backgroundColor: 'white',
-      borderRadius: '25px',
+      borderRadius: 25,
       boxShadow: '0 0 50px rgba(0,0,255,.30)',
       overflow: 'hidden',
       backgroundImage:
@@ -34,7 +34,7 @@ export const webchat = {
       width: '100%',
     },
     brand: {
-      // color: 'red',
+      // color: 'blue',
       image: R2D2Logo,
     },
     triggerButton: {
@@ -55,7 +55,9 @@ export const webchat = {
       title: 'My customized webchat',
       subtitle: 'R2D2',
       image: R2D2Logo,
-
+      style: {
+        height: 70,
+      },
       // custom: CustomHeader
     },
     /*
@@ -69,7 +71,7 @@ export const webchat = {
           border: 'none',
           color: 'black',
           borderRadius: '20px',
-          background: '#ffd638',
+          background: '#e1fcfb',
         },
       },
       user: {
@@ -86,11 +88,12 @@ export const webchat = {
     button: {
       style: {
         color: 'black',
-        hoverText: '#FFFFFF',
         background: 'white',
-        hover: 'grey',
         borderRadius: 20,
       },
+      hoverBackground: '#b3fcfa',
+      hoverTextColor: 'black',
+
       // custom: CustomButton,
     },
     replies: {
@@ -99,9 +102,9 @@ export const webchat = {
     },
     reply: {
       style: {
-        color: '#2b81b6',
-        background: 'white',
-        borderColor: '#2b81b6',
+        color: 'black',
+        background: '#e1fcfb',
+        borderColor: 'black',
       },
       // custom: CustomReply,
     },
@@ -171,7 +174,7 @@ export const webchat = {
   },
   onOpen: app => {
     // app.addBotText('Hi human!')
-    // app.addUserText('Hi bot!')
+    app.addUserText('Hi bot!')
     // app.addUserPayload('POSTBACK_INITCHAT')
   },
   onClose: app => {
