@@ -21,6 +21,6 @@ export const caDefaultStopWords = [
   'tú','te','et','ti',
   'hi',
   'és', 'està',
-  'hola'
+  'hola', 'tal'
 ];
 
