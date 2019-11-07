@@ -9,7 +9,7 @@ import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
 import uuid from 'uuid/v4'
 import UAParser from 'ua-parser-js'
-import { params2queryString } from '@botonic/core'
+import { isMobile, params2queryString } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Text, Document, Image, Video, Audio } from '../components'
 import { TypingIndicator } from '../components/typing-indicator'
@@ -570,6 +570,10 @@ export const Webchat = forwardRef((props, ref) => {
       />
     </RequestContext.Provider>
   )
+  let mobileStyle = {}
+  if (isMobile(webchatState.theme.mobileBreakpoint)) {
+    mobileStyle = { width: '100%', height: '100%', right: 0, bottom: 0 }
+  }
 
   return (
     <WebchatContext.Provider
@@ -613,6 +617,7 @@ export const Webchat = forwardRef((props, ref) => {
             display: 'flex',
             flexDirection: 'column',
             ...theme.style,
+            ...mobileStyle,
           }}
         >
           {webchatHeader()}
