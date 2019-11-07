@@ -10,5 +10,6 @@ export const esDefaultStopWords = [
   'ni','contra','este','ese','eso','aquel','mí','qué','otro','él','cual',
   'poco','mi','tú','te','ti',
   'es', 'está',
-  'hola'
+  'hola',
+  'tal'
 ];
