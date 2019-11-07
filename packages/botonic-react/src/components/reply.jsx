@@ -34,6 +34,7 @@ export const Reply = props => {
           padding: '4px 8px',
           border: `1px solid ${getThemeProperty('brand.color')}`,
           color: getThemeProperty('brand.color'),
+          fontFamily: 'inherit',
           borderRadius: 8,
           cursor: 'pointer',
           outline: 0,

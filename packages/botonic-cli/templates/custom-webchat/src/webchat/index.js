@@ -24,6 +24,7 @@ export const webchat = {
       overflow: 'hidden',
       backgroundImage:
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)',
+      fontFamily: '"Comic Sans MS", cursive, sans-serif',
     },
     webviewStyle: {
       top: 0,
@@ -31,28 +32,29 @@ export const webchat = {
       height: 500,
       width: '100%',
     },
-    // brand: {
-    //   color: 'green',
-    //   image: R2D2Logo,
-    // },
+    brand: {
+      // color: 'red',
+      image: R2D2Logo,
+    },
     triggerButton: {
       image: launcherIcon,
       style: {
         width: '200px',
       },
-      // custom: CustomTrigger
+      // custom: CustomTrigger,
     },
     intro: {
-      image: IntroImage,
+      // image: IntroImage,
       // style: {
       //   padding: 20
       // }
-      // custom: CustomIntro,
+      custom: CustomIntro,
     },
     header: {
       title: 'My customized webchat',
       subtitle: 'R2D2',
       image: R2D2Logo,
+
       // custom: CustomHeader
     },
     /*
@@ -64,15 +66,16 @@ export const webchat = {
         image: C3POLogo, // set it to 'null' to hide this image
         style: {
           border: 'none',
-          color: 'blue',
+          color: 'black',
           borderRadius: '20px',
+          background: '#ffd638',
         },
       },
       user: {
         style: {
           // border:'none',
           color: 'white',
-          background: 'blue',
+          background: '#2b81b6',
           borderRadius: '10px',
         },
       },
@@ -84,7 +87,7 @@ export const webchat = {
         color: 'black',
         hoverText: '#FFFFFF',
         background: 'white',
-        hover: '#0000FF',
+        hover: 'grey',
         borderRadius: 20,
       },
       // custom: CustomButton,
@@ -95,10 +98,9 @@ export const webchat = {
     },
     reply: {
       style: {
-        color: 'purple',
+        color: '#2b81b6',
         background: 'white',
-        borderColor: 'purple',
-        fontFamily: 'Arial',
+        borderColor: '#2b81b6',
       },
       // custom: CustomReply,
     },
@@ -108,14 +110,13 @@ export const webchat = {
       },
       box: {
         style: {
-          border: '2px solid blue',
-          color: 'blue',
+          border: '2px solid #2b81b6',
+          color: '#2b81b6',
           background: '#F0F0F0',
           width: '90%',
           borderRadius: 20,
           paddingLeft: 20,
           marginRight: 10,
-          fontFamily: '"Times New Roman", Times, serif',
         },
         placeholder: 'Type something...',
       },
@@ -160,9 +161,6 @@ export const webchat = {
       // },
     },
   },
-
-  defaultDelay: 1,
-  defaultTyping: 3,
 
   // Webchat listeners
   onInit: app => {
