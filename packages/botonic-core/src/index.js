@@ -5,9 +5,9 @@ export {
   humanHandOff,
   HandOffBuilder,
   storeCaseRating,
-  getAvailableAgents
+  getAvailableAgents,
 } from './handoff'
 export { getNLU } from './nlu'
-export { isBrowser, isNode, params2queryString } from './utils'
+export { isBrowser, isNode, isMobile, params2queryString } from './utils'
 export { CoreBot } from './core-bot'
 export { HubtypeService } from './hubtype-service'
