@@ -58,6 +58,7 @@ export const Button = props => {
           justifyContent: 'center',
           padding: '12px 32px',
           color: getThemeProperty('brand.color', '#000'),
+          fontFamily: 'inherit',
           border: 'none',
           border: '1px solid #f1f0f0',
           cursor: 'pointer',

@@ -196,7 +196,7 @@ export function useTyping({ webchatState, updateTyping, updateMessage }) {
       clearTimeout(delayTimeout)
       clearTimeout(typingTimeout)
     }
-  }, [webchatState.messagesJSON])
+  }, [webchatState.messagesJSON, webchatState.typing])
 }
 
 export function usePrevious(value) {

@@ -7,7 +7,7 @@ import { Flex } from 'rebass'
 
 const HeaderTitle = styled(Flex)`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: inherit;
   font-size: 15px;
   font-weight: bold;
   color: #ffffff;
@@ -15,7 +15,7 @@ const HeaderTitle = styled(Flex)`
 
 const Subtitle = styled(Flex)`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: inherit;
   font-size: 11px;
   color: #ffffff;
 `
@@ -28,7 +28,7 @@ const CloseHeader = styled.div`
   padding: 0px 16px;
   cursor: pointer;
   color: white;
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 36px;
 `
 const StyledHeaderImage = styled(Flex)`

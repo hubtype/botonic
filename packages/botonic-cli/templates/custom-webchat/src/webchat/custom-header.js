@@ -1,4 +1,5 @@
 import React from 'react'
+import { staticAsset } from '@botonic/react'
 import Icon from '../assets/r2d2-logo.png'
 
 export const CustomHeader = () => {
@@ -9,12 +10,12 @@ export const CustomHeader = () => {
         borderRadius: '6px 6px 0px 0px',
         height: 70,
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <img
         style={{ margin: '0px 12px', width: 38, color: 'white' }}
-        src={Icon}
+        src={staticAsset(Icon)}
       />
       <h1
         style={{
@@ -25,7 +26,7 @@ export const CustomHeader = () => {
           fontSize: 16,
           lineHeight: 10,
           color: '#ffffff',
-          width: '80%'
+          width: '80%',
         }}
       >
         My customized header
@@ -37,7 +38,7 @@ export const CustomHeader = () => {
           color: 'white',
           width: '30%',
           justifyContent: 'center',
-          display: 'flex'
+          display: 'flex',
         }}
         onClick={() => {
           Botonic.close()

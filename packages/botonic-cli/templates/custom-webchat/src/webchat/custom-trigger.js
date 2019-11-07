@@ -1,4 +1,5 @@
 import Icon from '../assets/trigger-button.png'
+import { staticAsset } from '@botonic/react'
 import React from 'react'
 
 export const CustomTrigger = () => {
@@ -17,15 +18,15 @@ export const CustomTrigger = () => {
         width: '90px',
         height: '90px',
         flexDirection: 'column',
-        textAlign: 'center'
+        textAlign: 'center',
       }}
     >
       <img
         style={{
           height: '50%',
-          width: '50%'
+          width: '50%',
         }}
-        src={Icon}
+        src={staticAsset(Icon)}
       />
       <h3>I am customizable</h3>
     </div>

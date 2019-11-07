@@ -142,11 +142,12 @@ export const Message = props => {
           style={{
             position: 'relative',
             margin: 8,
-            fontFamily: 'Arial, Helvetica, sans-serif',
             borderRadius: 8,
             backgroundColor: getBgColor(),
             color: isFromUser() ? '#FFF' : '#000',
-            border: `1px solid ${getBgColor()}`,
+            border: `1px solid ${getThemeProperty(
+              'message.user.style.background'
+            ) || getBgColor()}`,
             maxWidth: blob ? '60%' : 'calc(100% - 16px)',
             ...getMessageStyle(),
             ...style,
@@ -168,7 +169,9 @@ export const Message = props => {
             <div
               style={{
                 ...pointerStyles,
-                borderLeftColor: getBgColor(),
+                borderLeftColor:
+                  getThemeProperty('message.user.style.background') ||
+                  getBgColor(),
                 right: 0,
                 borderRight: 0,
                 marginRight: -pointerSize,
@@ -179,10 +182,12 @@ export const Message = props => {
             <div
               style={{
                 ...pointerStyles,
-                borderRightColor: getBgColor(),
+                borderRightColor:
+                  getThemeProperty('message.bot.style.background') ||
+                  getBgColor(),
                 left: 0,
                 borderLeft: 0,
-                marginLeft: -pointerSize,
+                marginLeft: -pointerSize + 1,
               }}
             />
           )}
@@ -194,9 +199,16 @@ export const Message = props => {
   let { blob: _blob, json: _json, ...nodeProps } = props
   const renderNode = () =>
     type === 'custom' ? (
-      <message json={JSON.stringify(_json)} {...nodeProps} />
+      <message
+        json={JSON.stringify(_json)}
+        typing={typing}
+        delay={delay}
+        {...nodeProps}
+      />
     ) : (
-      <message {...nodeProps}>{children}</message>
+      <message typing={typing} delay={delay} {...nodeProps}>
+        {children}
+      </message>
     )
 
   if (isBrowser()) return renderBrowser()
