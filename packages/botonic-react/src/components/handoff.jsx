@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: inherit;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -46,7 +46,7 @@ export const Handoff = props => {
     <Container
       style={{
         color: fontColor,
-        backgroundColor: bgColor
+        backgroundColor: bgColor,
       }}
     >
       {state.showContinue ? (

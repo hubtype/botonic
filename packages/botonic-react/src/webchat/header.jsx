@@ -55,9 +55,11 @@ export const DefaultHeader = props => {
 
   let headerTitle = getThemeProperty('header.title') || 'Botonic'
   let headerSubtitle = getThemeProperty('header.subtitle') || ''
-
   return (
-    <Diffuse color={props.color}>
+    <Diffuse
+      color={props.color}
+      style={{ ...getThemeProperty('header.style') }}
+    >
       {HeaderImage && (
         <StyledHeaderImage>
           <img
