@@ -4,20 +4,22 @@ import { RequestContext, WebchatContext } from '../contexts'
 
 export const WebviewHeader = props => {
   const { closeWebview } = useContext(RequestContext)
+  const { getThemeProperty } = useContext(WebchatContext)
   return (
     <div
       style={{
         textAlign: 'right',
         backgroundColor: '#f4f4f4',
         borderTop: '1px solid rgba(0, 0, 0, 0.2)',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.2)'
+        borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+        ...getThemeProperty('webview.header.style'),
       }}
     >
       <div
         style={{
           display: 'inline-block',
           padding: '8px 12px',
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
         onClick={closeWebview}
       >
@@ -53,14 +55,14 @@ export const WebviewContainer = props => {
         width: '100%',
         height: '80%',
         backgroundColor: '#fff',
-        ...(props.style || {})
+        ...(props.style || {}),
       }}
     >
       <WebviewHeader style={{ flex: 'none' }} />
       <div
         style={{
           flex: 1,
-          overflow: 'auto'
+          overflow: 'auto',
         }}
       >
         {typeof Webview === 'string' ? (
@@ -69,7 +71,7 @@ export const WebviewContainer = props => {
             style={{
               borderStyle: 'none',
               width: '100%',
-              height: '100%'
+              height: '100%',
             }}
           />
         ) : (
@@ -77,7 +79,7 @@ export const WebviewContainer = props => {
             style={{
               borderStyle: 'none',
               width: '100%',
-              height: '100%'
+              height: '100%',
             }}
           >
             <Webview />
