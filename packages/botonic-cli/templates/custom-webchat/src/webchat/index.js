@@ -27,12 +27,20 @@ export const webchat = {
         'linear-gradient(to top, #ffffff,#ffffff 11%,#9a9ae3 40%,#0000ff 85%,#0000ff 85%)',
       fontFamily: '"Comic Sans MS", cursive, sans-serif',
     },
-    webviewStyle: {
-      top: 0,
-      right: 0,
-      height: 500,
-      width: '100%',
+    webview: {
+      style: {
+        top: 0,
+        right: 0,
+        height: 500,
+        width: '100%',
+      },
+      header: {
+        style: {
+          background: '#6677FF',
+        },
+      },
     },
+
     brand: {
       // color: 'blue',
       image: R2D2Logo,
@@ -174,7 +182,7 @@ export const webchat = {
   },
   onOpen: app => {
     // app.addBotText('Hi human!')
-    app.addUserText('Hi bot!')
+    // app.addUserText('Hi bot!')
     // app.addUserPayload('POSTBACK_INITCHAT')
   },
   onClose: app => {
