@@ -562,7 +562,8 @@ export const Webchat = forwardRef((props, ref) => {
     <RequestContext.Provider value={webviewRequestContext}>
       <WebviewContainer
         style={{
-          ...props.theme.webviewStyle,
+          ...getThemeProperty('webview.style'),
+          ...mobileStyle,
         }}
         webview={webchatState.webview}
       />
