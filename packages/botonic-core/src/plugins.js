@@ -9,6 +9,9 @@ export function loadPlugins(plugins) {
     let instance = new Plugin(options)
     let id = plugins[i].id || `${instance.constructor.name}`
     _plugins[id] = instance
+    _plugins[id].id = id
+    _plugins[id].config = options
+    _plugins[id].name = `${instance.constructor.name}`
   }
   return _plugins
 }
