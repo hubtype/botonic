@@ -127,8 +127,8 @@ function quickreplies_parse(msg) {
     })
   }
   if (msg.keyboard) {
-    replies = msg.keyboard.map(el => (
-      <Reply payload={el.data}>{el.label}</Reply>
+    replies = msg.keyboard.map((el, i) => (
+      <Reply key={i} payload={el.data}>{el.label}</Reply>
     ))
   }
   return replies
