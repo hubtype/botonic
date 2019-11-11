@@ -265,7 +265,10 @@ Uploading...
     }).start()
     fs.mkdirSync(join('tmp'))
     copySync('dist', join('tmp', 'dist'))
-    await zip('tmp', join(BOTONIC_BUNDLE_FILE))
+    const zipRes = await zip('tmp', join(BOTONIC_BUNDLE_FILE))
+    if (zipRes instanceof Error) {
+      throw Error
+    }
     const zip_stats = fs.statSync(BOTONIC_BUNDLE_FILE)
     spinner.succeed()
     if (zip_stats.size >= 10 * 10 ** 6) {
