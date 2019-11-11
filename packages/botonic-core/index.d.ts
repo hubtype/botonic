@@ -1,10 +1,13 @@
-export type Locales = { [id: string]: string | string[] | Locales }
+export interface Locales {
+  [id: string]: string | string[] | Locales
+}
 
 export interface Input {
   // text, postback...
   type: string
   payload?: string
   data?: string
+  path?: string
 
   /** Fields set by NLU plugins: Luis, Dialogflow, ... **/
   // the name of the highest confidence intent
@@ -54,12 +57,27 @@ export interface Route {
 type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[])
 
 // Desk
+
+export class HandOffBuilder {
+  constructor(session: Session)
+
+  withQueue(queueNameOrId: string): HandOffBuilder
+  withOnFinishPayload(payload: string): HandOffBuilder
+  withOnFinishPath(path: string): HandOffBuilder
+  withAgentEmail(email: string): HandOffBuilder
+  withNoteURL(note: string): HandOffBuilder
+  withCaseInfoURL(caseInfo: string): HandOffBuilder
+
+  handOff(): Promise<void>
+}
+
+/**
+ * @deprecated use {@link HandOffBuilder} class instead
+ */
 export declare function humanHandOff(
   session: Session,
-  queueNameOrId?: string = '', // queue_name for backward compatiblity, queue_id for new versions
-  onFinish: { payload?: string; path?: string },
-  agentEmail?: string = '',
-  extraInfo: { caseInfo?: string; note?: string }
+  queueNameOrId: string, // queue_name for backward compatibility, queue_id for new versions
+  onFinish: { payload?: string; path?: string }
 ): Promise<void>
 
 export declare function getOpenQueues(

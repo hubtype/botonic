@@ -8,11 +8,7 @@ export class Router {
 
   processInput(input, session = {}, lastRoutePath = null) {
     let routeParams = {}
-    let path_params
-    try {
-      path_params = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
-      if (path_params.length > 0) input.path = path_params[0]
-    } catch (e) {}
+    this.getOnFinishParams(input)
     let brokenFlow = false
     let lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (lastRoute && lastRoute.childRoutes)
@@ -27,10 +23,10 @@ export class Router {
       routeParams = this.getRoute(input, this.routes, session)
     }
     try {
-      if (path_params.length > 1) {
+      if (input.path.length > 1) {
         let searchParams = ''
-        if (isBrowser()) searchParams = new URLSearchParams(path_params[1])
-        if (isNode()) searchParams = new url.URLSearchParams(path_params[1])
+        if (isBrowser()) searchParams = new URLSearchParams(input.path[1])
+        if (isNode()) searchParams = new url.URLSearchParams(input.path[1])
         for (let [key, value] of searchParams) {
           routeParams.params
             ? (routeParams.params[key] = value)
@@ -119,6 +115,22 @@ export class Router {
         retryAction: null,
         lastRoutePath: lastRoutePath
       }
+    }
+  }
+
+  getOnFinishParams(input) {
+    if (input.path) {
+      // new protocol
+      return
+    }
+    // TODO Old protocol: remove once backend refactor is stable
+    try {
+      const path_params = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
+      if (path_params.length > 0) {
+        input.path = path_params[0]
+        delete input.payload
+      }
+    } catch (e) {
     }
   }
 

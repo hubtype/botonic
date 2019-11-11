@@ -34,7 +34,7 @@
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^24.8.0",
-    "prettier": "^1.17.0"
+    "prettier": "^1.18.2"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
   "engines": {
