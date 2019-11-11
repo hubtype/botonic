@@ -44,6 +44,7 @@
     "babel-plugin-add-module-exports": "^1.0.0",
     "eslint-plugin-no-null": "^1.0.2",
     "identity-obj-proxy": "^3.0.0",
+    "jest": "^25.0.0",
     "react-hot-loader": "^4.8.3"
   },
   "engines": {
