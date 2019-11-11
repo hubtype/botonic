@@ -5,37 +5,103 @@ export async function getOpenQueues(session) {
   const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
   let resp = await axios({
     headers: {
-      Authorization: `Bearer ${session._access_token}`
+      Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
     url: endpointUrl,
-    data: { bot_id: session.bot.id }
+    data: { bot_id: session.bot.id },
   })
   return resp.data
 }
 
-export async function humanHandOff(
+export class HandOffBuilder {
+  constructor(session) {
+    this._session = session
+  }
+
+  withQueue(queueNameOrId) {
+    this._queue = queueNameOrId
+    return this
+  }
+
+  withOnFinishPayload(payload) {
+    this._onFinish = { payload }
+    return this
+  }
+
+  withOnFinishPath(path) {
+    this._onFinish = { path }
+    return this
+  }
+
+  withAgentEmail(email) {
+    this._email = email
+    return this
+  }
+
+  withNoteURL(note) {
+    this._note = note
+    return this
+  }
+
+  withCaseInfoURL(caseInfo) {
+    this._caseInfo = caseInfo
+    return this
+  }
+
+  async handOff() {
+    return _humanHandOff(
+      this._session,
+      this._queue,
+      this._onFinish,
+      this._email,
+      this._caseInfo,
+      this._note
+    )
+  }
+}
+
+/**
+ * @deprecated use {@link HandOffBuilder} class instead
+ */
+export async function humanHandOff(session, queueNameOrId = '', onFinish) {
+  return _humanHandOff(session, queueNameOrId, onFinish)
+}
+
+async function _humanHandOff(
   session,
   queueNameOrId = '',
   onFinish,
   agentEmail = '',
-  extraInfo
+  caseInfo = '',
+  note = ''
 ) {
-  let params = `create_case:${queueNameOrId}:${agentEmail}`
+  let params = {}
   if (!queueNameOrId && agentEmail) {
     throw 'You must provide a queue ID'
   }
-  if (extraInfo) {
-    params += extraInfo.caseInfo
-      ? `:${encodeURIComponent(extraInfo.caseInfo)}`
-      : ':'
-    params += extraInfo.note ? `:${encodeURIComponent(extraInfo.note)}` : ':'
+  if (queueNameOrId) {
+    params.queue = queueNameOrId
   }
+  if (agentEmail) {
+    params.agent_email = agentEmail
+  }
+  if (caseInfo) {
+    params.case_info = encodeURIComponent(caseInfo)
+  }
+  if (note) {
+    params.note = encodeURIComponent(note)
+  }
+
   if (onFinish) {
-    if (onFinish.path) params += `:__PATH_PAYLOAD__${onFinish.path}`
-    else if (onFinish.payload) params += `:${onFinish.payload}`
+    params.on_finish = {}
+    if (onFinish.path) {
+      params.on_finish.path = onFinish.path
+    } else if (onFinish.payload) {
+      params.on_finish.payload = onFinish.payload
+    }
   }
-  session._botonic_action = params
+  session._botonic_action = `create_case:${JSON.stringify(params)}`
 }
 
 export async function storeCaseRating(session, rating) {
