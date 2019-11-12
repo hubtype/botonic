@@ -20,8 +20,9 @@ export class CoreBot {
     this.renderer = renderer
     this.plugins = loadPlugins(plugins)
     this.theme = theme || {}
-    this.defaultTyping = defaultTyping || 0.6
-    this.defaultDelay = defaultDelay || 0.4
+    this.defaultTyping =
+      typeof defaultTyping !== 'undefined' ? defaultTyping : 0.6
+    this.defaultDelay = typeof defaultDelay !== 'undefined' ? defaultDelay : 0.4
     this.locales = locales
     this.integrations = integrations
     if (appId) {
