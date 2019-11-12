@@ -3,6 +3,7 @@ export { getString } from './i18n'
 export {
   getOpenQueues,
   humanHandOff,
+  HandOffBuilder,
   storeCaseRating,
   getAvailableAgents
 } from './handoff'
