@@ -22,6 +22,7 @@ export const CUSTOM_WEBCHAT_PROPERTIES = {
   buttonHoverBackground: 'button.hoverBackground',
   buttonStyleColor: 'button.style.color',
   buttonHoverTextColor: 'button.hoverTextColor',
+  buttonMessageType: 'button.messageType',
   customButton: 'button.custom',
   alignReplies: 'replies.align',
   wrapReplies: 'replies.wrap',
