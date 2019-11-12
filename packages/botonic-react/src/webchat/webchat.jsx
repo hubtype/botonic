@@ -586,6 +586,7 @@ export const Webchat = forwardRef((props, ref) => {
         sendText,
         sendAttachment,
         sendPayload,
+        sendInput,
         openWebview,
         resolveCase,
         webchatState,
