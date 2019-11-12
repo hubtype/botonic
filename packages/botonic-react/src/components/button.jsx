@@ -8,6 +8,7 @@ export const Button = props => {
     webchatState,
     openWebview,
     sendPayload,
+    sendInput,
     getThemeProperty,
   } = useContext(WebchatContext)
   const [hover, setHover] = useState(false)
@@ -15,10 +16,25 @@ export const Button = props => {
 
   const handleClick = event => {
     event.preventDefault()
+    let type = getThemeProperty('button.messageType') || 'postback'
     if (props.webview) openWebview(props.webview, props.params)
-    else if (props.path) sendPayload(`__PATH_PAYLOAD__${props.path}`)
-    else if (props.payload) sendPayload(props.payload)
-    else if (props.url) {
+    else if (props.path) {
+      type == 'postback'
+        ? sendPayload(`__PATH_PAYLOAD__${props.path}`)
+        : sendInput({
+            type: 'text',
+            data: String(props.children),
+            payload: `__PATH_PAYLOAD__${props.path}`,
+          })
+    } else if (props.payload) {
+      type == 'postback'
+        ? sendPayload(props.payload)
+        : sendInput({
+            type: 'text',
+            data: String(props.children),
+            payload: props.payload,
+          })
+    } else if (props.url) {
       window.open(props.url)
     }
     if (props.onClick) props.onClick()
