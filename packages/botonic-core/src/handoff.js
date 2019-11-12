@@ -5,11 +5,11 @@ export async function getOpenQueues(session) {
   const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
   let resp = await axios({
     headers: {
-      Authorization: `Bearer ${session._access_token}`,
+      Authorization: `Bearer ${session._access_token}`
     },
     method: 'post',
     url: endpointUrl,
-    data: { bot_id: session.bot.id },
+    data: { bot_id: session.bot.id }
   })
   return resp.data
 }
@@ -39,12 +39,12 @@ export class HandOffBuilder {
     return this
   }
 
-  withNoteURL(note) {
+  withNote(note) {
     this._note = note
     return this
   }
 
-  withCaseInfoURL(caseInfo) {
+  withCaseInfo(caseInfo) {
     this._caseInfo = caseInfo
     return this
   }
@@ -87,10 +87,10 @@ async function _humanHandOff(
     params.agent_email = agentEmail
   }
   if (caseInfo) {
-    params.case_info = encodeURIComponent(caseInfo)
+    params.case_info = caseInfo
   }
   if (note) {
-    params.note = encodeURIComponent(note)
+    params.note = note
   }
 
   if (onFinish) {
