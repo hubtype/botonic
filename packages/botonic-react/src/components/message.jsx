@@ -156,7 +156,7 @@ export const Message = props => {
         >
           <div
             style={{
-              padding: '8px 12px',
+              padding: blob ? '8px 12px' : 0,
               display: 'flex',
               flexDirection: 'column',
               whiteSpace: 'pre-line',

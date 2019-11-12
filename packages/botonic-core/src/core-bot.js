@@ -15,7 +15,7 @@ export class CoreBot {
     appId,
     defaultTyping,
     defaultDelay,
-    defaultRoutes
+    defaultRoutes,
   }) {
     this.renderer = renderer
     this.plugins = loadPlugins(plugins)
@@ -61,7 +61,7 @@ export class CoreBot {
     if (isFunction(this.routes)) {
       this.router = new Router([
         ...(await this.routes({ input, session })),
-        ...this.defaultRoutes
+        ...this.defaultRoutes,
       ])
     }
 
@@ -76,7 +76,7 @@ export class CoreBot {
       plugins: this.plugins,
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
-      lastRoutePath
+      lastRoutePath,
     }
 
     let actions = [output.action, output.retryAction, output.defaultAction]
@@ -95,6 +95,7 @@ export class CoreBot {
         response
       )
     }
+
     session.is_first_interaction = false
     return { input, response, session, lastRoutePath }
   }

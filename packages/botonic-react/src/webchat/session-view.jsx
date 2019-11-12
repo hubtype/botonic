@@ -13,12 +13,12 @@ const SessionViewAttribute = props => (
       fontSize: 12,
       fontWeight: 600,
       color: 'white',
-      alignItems: 'center'
+      alignItems: 'center',
     }}
   >
     <div
       style={{
-        flex: 'none'
+        flex: 'none',
       }}
     >
       {props.label}
@@ -31,7 +31,7 @@ const SessionViewAttribute = props => (
         fontWeight: 400,
         marginLeft: 6,
         color: 'rgb(38, 139, 210)',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
       }}
     >
       {props.value}
@@ -45,12 +45,12 @@ export const SessionView = props => {
   const toggleSessionView = () =>
     updateDevSettings({
       ...webchatState.devSettings,
-      showSessionView: !webchatState.devSettings.showSessionView
+      showSessionView: !webchatState.devSettings.showSessionView,
     })
   const toggleKeepSessionOnReload = () =>
     updateDevSettings({
       ...webchatState.devSettings,
-      keepSessionOnReload: !webchatState.devSettings.keepSessionOnReload
+      keepSessionOnReload: !webchatState.devSettings.keepSessionOnReload,
     })
   return (
     <div
@@ -63,7 +63,7 @@ export const SessionView = props => {
         fontFamily: 'Arial, Helvetica, sans-serif',
         flexDirection: 'column',
         zIndex: 100000,
-        transition: 'all .2s ease-in-out'
+        transition: 'all .2s ease-in-out',
       }}
     >
       <div
@@ -84,7 +84,7 @@ export const SessionView = props => {
           flexDirection: 'column',
           zIndex: 100000,
           borderTopRightRadius: 6,
-          borderBottomRightRadius: 6
+          borderBottomRightRadius: 6,
         }}
         onClick={toggleSessionView}
       >
@@ -96,7 +96,7 @@ export const SessionView = props => {
           overflowX: 'hidden',
           display: 'flex',
           flex: '1 1 auto',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         <div
@@ -104,7 +104,7 @@ export const SessionView = props => {
             padding: 12,
             textAlign: 'center',
             color: 'white',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.3)'
+            borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
           }}
         >
           Botonic Dev Console
@@ -113,7 +113,7 @@ export const SessionView = props => {
           label='INPUT:'
           value={
             input && Object.keys(input).length
-              ? `[${input.type}] ${input.data}`
+              ? `[${input.type}] ${input.data || ''}`
               : ''
           }
         />
@@ -139,7 +139,7 @@ export const SessionView = props => {
             flex: 'none',
             padding: 12,
             color: 'rgba(255, 255, 255, 0.8)',
-            fontSize: 12
+            fontSize: 12,
           }}
         >
           <label>
