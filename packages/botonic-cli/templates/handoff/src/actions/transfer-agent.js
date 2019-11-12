@@ -1,11 +1,15 @@
 import React from 'react'
 import { Text } from '@botonic/react'
-import { getOpenQueues, getAvailableAgents, humanHandOff } from '@botonic/core'
+import {
+  getOpenQueues,
+  getAvailableAgents,
+  HandOffBuilder,
+} from '@botonic/core'
 
 export default class extends React.Component {
   static async botonicInit({ input, session, params, lastRoutePath }) {
-    /* 
-      Uncomment the lines below before deploying the bot to Hubtype 
+    /*
+      Uncomment the lines below before deploying the bot to Hubtype
       in order to test the getOpenQueues call for 'Customer Support'.
     */
     // let openQueues = await getOpenQueues(session)
@@ -19,17 +23,18 @@ export default class extends React.Component {
 
     let isHandOff = false
     // if (openQueues.queues.indexOf('Customer Support') !== -1) {
-    await humanHandOff(
-      session,
-      'HUBTYPE_DESK_QUEUE_ID',
-      { path: 'thanks-for-contacting' },
-      agentEmail,
-      {
-        caseInfo:
-          'This is some case information that will be available in the new created case',
-        note: 'This is a note that will be attached to the case as a reminder'
-      }
+    let handOffBuilder = new HandOffBuilder(session)
+    handOffBuilder.withQueue('HUBTYPE_DESK_QUEUE_ID')
+    handOffBuilder.withAgentEmail('agent-1@hubtype.com')
+    handOffBuilder.withOnFinishPath('thanks-for-contacting') // or handOffBuilder.withOnFinishPayload('thanks-for-contacting')
+    handOffBuilder.withCaseInfo(
+      'This is some case information that will be available in the new created case'
     )
+    handOffBuilder.withNote(
+      'This is a note that will be attached to the case as a reminder'
+    )
+    await handOffBuilder.handOff()
+
     isHandOff = true
     // }
     return { isHandOff }
