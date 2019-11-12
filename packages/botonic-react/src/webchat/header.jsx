@@ -89,7 +89,7 @@ export const WebchatHeader = props => {
   }
   let CustomHeader = getThemeProperty('header.custom')
   if (CustomHeader) {
-    return <CustomHeader />
+    return <CustomHeader onCloseClick={handleCloseWebchat} />
   }
   return (
     <DefaultHeader
