@@ -30,8 +30,10 @@ export class KeywordsDelivery {
   ): SearchResult {
     const contentModel = DeliveryApi.getContentModel(entry)
     if (!entry.fields.shortText) {
-      console.error(`No shortText found ${contentModel} ${name}`)
-      entry.fields.shortText = name
+      console.error(
+        `No shortText found for content of type ${contentModel} and name: ${entry.fields.name}`
+      )
+      entry.fields.shortText = entry.fields.name
     }
 
     const callback = DeliveryApi.callbackFromEntry(entry)
