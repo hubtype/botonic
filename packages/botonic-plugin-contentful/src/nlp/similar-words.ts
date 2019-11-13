@@ -63,8 +63,9 @@ export class SimilarWordFinder<M> {
         return new FindSubstring(this.wordsAreStemmed, this.minMatchLength)
       case MatchType.ALL_WORDS_IN_KEYWORDS_MIXED_UP:
         return new FindMixedUp(this.wordsAreStemmed, this.minMatchLength)
+      default:
+        throw new Error(`Unexpected matchType ${matchType}`)
     }
-    throw new Error(`Unexpected matchType ${matchType}`)
   }
 
   find(
