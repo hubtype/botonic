@@ -115,7 +115,7 @@ export class ErrorReportingCMS implements CMS {
           reason.response.status + ': ' + JSON.stringify(reason.response.data)
       }
       // eslint-disable-next-line no-console
-      console.error(`Error fetching ${modelType}${withId}: ${reason}`)
+      console.error(`Error fetching ${modelType}${withId}:`, reason)
       throw reason
     }
   }
