@@ -61,7 +61,7 @@ export interface CMS {
   ): Promise<TopContent[]>
 
   /**
-   * For contents with 'Seachable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
+   * For contents with 'Searchable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
    * @param context If locale specified, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
   contentsWithKeywords(context?: Context): Promise<SearchResult[]>
