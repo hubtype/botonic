@@ -24,20 +24,21 @@ export function msgToBotonic(msg, customMessageTypes) {
       console.log(e)
     }
   } else if (msg.type === 'text') {
+    let txt = msg.data.text != undefined ? msg.data.text : String(msg.data)
     if (
       (msg.replies && msg.replies.length) ||
       (msg.keyboard && msg.keyboard.length)
     )
       return (
         <Text {...msg}>
-          {msg.data.text || msg.data}
+          {txt}
           {quickreplies_parse(msg)}
         </Text>
       )
     if (msg.buttons && msg.buttons.length)
       return (
         <Text {...msg}>
-          {msg.data.text || msg.data}
+          {txt}
           {buttons_parse(msg.buttons)}
         </Text>
       )
@@ -46,13 +47,33 @@ export function msgToBotonic(msg, customMessageTypes) {
     let elements = msg.elements || msg.data.elements
     return <Carousel {...msg}>{elements_parse(elements)}</Carousel>
   } else if (msg.type === 'image') {
-    return <Image {...msg} src={msg.data.image || msg.data} />
+    return (
+      <Image
+        {...msg}
+        src={msg.data.image != undefined ? msg.data.image : msg.data}
+      />
+    )
   } else if (msg.type === 'video') {
-    return <Video {...msg} src={msg.data.video || msg.data} />
+    return (
+      <Video
+        {...msg}
+        src={msg.data.video != undefined ? msg.data.video : msg.data}
+      />
+    )
   } else if (msg.type === 'audio') {
-    return <Audio {...msg} src={msg.data.audio || msg.data} />
+    return (
+      <Audio
+        {...msg}
+        src={msg.data.audio != undefined ? msg.data.audio : msg.data}
+      />
+    )
   } else if (msg.type === 'document') {
-    return <Document {...msg} src={msg.data.document || msg.data} />
+    return (
+      <Document
+        {...msg}
+        src={msg.data.document != undefined ? msg.data.document : msg.data}
+      />
+    )
   } else if (msg.type === 'location') {
     let lat = msg.data ? msg.data.location.lat : msg.latitude
     let long = msg.data ? msg.data.location.long : msg.longitude
@@ -128,7 +149,9 @@ function quickreplies_parse(msg) {
   }
   if (msg.keyboard) {
     replies = msg.keyboard.map((el, i) => (
-      <Reply key={i} payload={el.data}>{el.label}</Reply>
+      <Reply key={i} payload={el.data}>
+        {el.label}
+      </Reply>
     ))
   }
   return replies
