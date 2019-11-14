@@ -334,6 +334,7 @@ export const Webchat = forwardRef((props, ref) => {
       })
       updateUser({ ...webchatState.user, ...user })
     },
+    getMessages: () => webchatState.messagesJSON,
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),

@@ -118,6 +118,10 @@ export class WebchatApp {
     this.webchatRef.current.toggleWebchat()
   }
 
+  getMessages() {
+    return this.webchatRef.current.getMessages()
+  }
+
   getComponent(optionsAtRuntime = {}) {
     let {
       theme = {},
