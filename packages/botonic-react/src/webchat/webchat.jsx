@@ -270,6 +270,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (!input.id) input.id = uuid()
     //if is a text we check if it is a RE
     if (input.type === 'text') {
+      if (!input.data) return
       if (checkBlockInput(input)) return
       inputMessage = (
         <Text id={input.id} payload={input.payload} from='user'>
