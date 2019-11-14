@@ -90,6 +90,11 @@ export const Message = props => {
       ? getThemeProperty('message.bot.style') || {}
       : getThemeProperty('message.user.style') || {}
 
+  const getBlobTick = () => {
+    let blobTick = getThemeProperty(`message.${from}.blobTick`)
+    return blobTick === undefined || Boolean(blobTick)
+  }
+
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
     if (!m || !m.display) return <></>
@@ -127,11 +132,12 @@ export const Message = props => {
           <div
             style={{
               width: 28,
-              padding: 4,
+              padding: '12px 4px',
               flex: 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              ...(getThemeProperty('message.bot.imageStyle') || {}),
             }}
           >
             <img style={{ width: '100%' }} src={staticAsset(BotMessageImage)} />
@@ -165,7 +171,7 @@ export const Message = props => {
             {textChildren}
           </div>
           {buttons}
-          {isFromUser() && blob && (
+          {isFromUser() && blob && getBlobTick() && (
             <div
               style={{
                 ...pointerStyles,
@@ -178,7 +184,7 @@ export const Message = props => {
               }}
             />
           )}
-          {isFromBot() && blob && (
+          {isFromBot() && blob && getBlobTick() && (
             <div
               style={{
                 ...pointerStyles,
