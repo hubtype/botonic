@@ -119,11 +119,6 @@ export class Router {
   }
 
   getOnFinishParams(input) {
-    if (input.path) {
-      // new protocol
-      return
-    }
-    // TODO Old protocol: remove once backend refactor is stable
     try {
       const path_params = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
       if (path_params.length > 0) {

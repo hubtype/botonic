@@ -5,17 +5,17 @@ describe('handOff', () => {
     [
       `create_case:{
         "queue":"q1",
-        "on_finish":{"payload":"payload1"}
+        "on_finish":"payload1"
        }`,
       'q1',
-      { payload: 'payload1' }
+      { payload: 'payload1' },
     ],
     [
       `create_case:{
-        "on_finish":{"path":"path1"}
+        "on_finish":"__PATH_PAYLOAD__path1"
        }`,
       '',
-      { path: 'path1' }
+      { path: 'path1' },
     ]
   ])('humanHandOff', (expected, queue, onFinish) => {
     let session = {}
@@ -31,22 +31,22 @@ describe('handOff', () => {
           agent_email: 'email1',
           case_info: '{}{:::: m"ho menjo tot}',
           note: '{}{:::: m"ho menjo tot2}',
-          on_finish: { payload: 'payload1' }
+          on_finish: 'payload1',
         }),
       new HandOffBuilder({})
         .withQueue('q1')
         .withOnFinishPayload('payload1')
         .withAgentEmail('email1')
         .withCaseInfo('{}{:::: m"ho menjo tot}')
-        .withNote('{}{:::: m"ho menjo tot2}')
+        .withNote('{}{:::: m"ho menjo tot2}'),
     ],
     [
       `create_case:` +
         JSON.stringify({
-          on_finish: { path: 'path1' }
+          on_finish: '__PATH_PAYLOAD__path1',
         }),
-      new HandOffBuilder({}).withOnFinishPath('path1')
-    ]
+      new HandOffBuilder({}).withOnFinishPath('path1'),
+    ],
   ])('HandOffBuilder', (expected, builder) => {
     builder.handOff()
     expect(builder._session._botonic_action).toEqual(expected)
