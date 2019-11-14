@@ -5,11 +5,11 @@ export async function getOpenQueues(session) {
   const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
   let resp = await axios({
     headers: {
-      Authorization: `Bearer ${session._access_token}`
+      Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
     url: endpointUrl,
-    data: { bot_id: session.bot.id }
+    data: { bot_id: session.bot.id },
   })
   return resp.data
 }
@@ -25,12 +25,12 @@ export class HandOffBuilder {
   }
 
   withOnFinishPayload(payload) {
-    this._onFinish = { payload }
+    this._onFinish = payload
     return this
   }
 
   withOnFinishPath(path) {
-    this._onFinish = { path }
+    this._onFinish = `__PATH_PAYLOAD__${path}`
     return this
   }
 
@@ -65,7 +65,20 @@ export class HandOffBuilder {
  * @deprecated use {@link HandOffBuilder} class instead
  */
 export async function humanHandOff(session, queueNameOrId = '', onFinish) {
-  return _humanHandOff(session, queueNameOrId, onFinish)
+  const builder = new HandOffBuilder(session)
+  if (queueNameOrId) {
+    builder.withQueue(queueNameOrId)
+  }
+  if (onFinish) {
+    if (onFinish['path']) {
+      builder.withOnFinishPath(onFinish['path'])
+    } else if (onFinish['payload']) {
+      builder.withOnFinishPayload(onFinish['payload'])
+    } else {
+      throw new Error('onFinish requires payload or path field')
+    }
+  }
+  return builder.handOff()
 }
 
 async function _humanHandOff(
@@ -94,12 +107,7 @@ async function _humanHandOff(
   }
 
   if (onFinish) {
-    params.on_finish = {}
-    if (onFinish.path) {
-      params.on_finish.path = onFinish.path
-    } else if (onFinish.payload) {
-      params.on_finish.payload = onFinish.payload
-    }
+    params.on_finish = onFinish
   }
   session._botonic_action = `create_case:${JSON.stringify(params)}`
 }
@@ -109,11 +117,11 @@ export async function storeCaseRating(session, rating) {
   let chatId = session.user.id
   let resp = await axios({
     headers: {
-      Authorization: `Bearer ${session._access_token}`
+      Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
     url: `${baseUrl}/v1/chats/${chatId}/store_case_rating/`,
-    data: { chat_id: chatId, rating }
+    data: { chat_id: chatId, rating },
   })
   return resp.data
 }
@@ -122,11 +130,11 @@ export async function getAvailableAgents(session, queueId) {
   let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
   let resp = await axios({
     headers: {
-      Authorization: `Bearer ${session._access_token}`
+      Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
     url: `${baseUrl}/v1/queues/${queueId}/get_available_agents/`,
-    data: { bot_id: session.bot.id, queue_id: queueId }
+    data: { bot_id: session.bot.id, queue_id: queueId },
   })
   return resp.data
 }
