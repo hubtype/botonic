@@ -207,14 +207,6 @@ describe('Process input (v<0.9)', () => {
       'Flow1.2'
     )
   })
-  test('path input, root level route', () => {
-    let input = { type: 'postback', path: 'initial' }
-    let session = {}
-    let lastRoutePath = ''
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1'
-    )
-  })
   test('old protocol:path payload input, root level route', () => {
     let input = { type: 'postback', payload: '__PATH_PAYLOAD__initial' }
     let session = {}
