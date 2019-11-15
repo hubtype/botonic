@@ -13,12 +13,50 @@ import { Document } from './components/document'
 import { Location } from './components/location'
 import { Reply } from './components/reply'
 
-export function msgToBotonic(msg, customMessageTypes) {
+/**
+ * Decorates the ReactNode's created by msgToBotonic
+ */
+export class BotonicDecorator {
+  constructor() {
+    this.decorators = {}
+  }
+
+  /**
+   * @param type {MessageType}
+   * @param decorator {function}
+   */
+  addDecorator(type, decorator) {
+    this.decorators[type] = decorator
+  }
+
+  /**
+   * @param type { MessageType}
+   * @param node { ReactNode}
+   * @return { ReactNode}
+   */
+  decorate(type, node) {
+    const decorator = this.decorators[type]
+    if (!decorator) {
+      return node
+    }
+    return decorator(node)
+  }
+}
+
+/**
+ *
+ * @param msg {object}
+ * @param customMessageTypes {{customTypeName}[]?}
+ * @param decorator { BotonicDecorator?}
+ * @return {React.ReactNode}
+ */
+export function msgToBotonic(msg, customMessageTypes, decorator) {
   delete msg.display
+  const decorate = (type, node) => decorator ? decorator.decorate(type, node) : node
   if (msg.type === 'custom') {
     try {
       return customMessageTypes
-        .find(mt => mt.customTypeName == msg.data.customTypeName)
+        .find(mt => mt.customTypeName === msg.data.customTypeName)
         .deserialize(msg)
     } catch (e) {
       console.log(e)
@@ -29,20 +67,20 @@ export function msgToBotonic(msg, customMessageTypes) {
       (msg.replies && msg.replies.length) ||
       (msg.keyboard && msg.keyboard.length)
     )
-      return (
+      return decorate('text',
         <Text {...msg}>
           {txt}
           {quickreplies_parse(msg)}
         </Text>
       )
     if (msg.buttons && msg.buttons.length)
-      return (
+      return decorate('text',
         <Text {...msg}>
           {txt}
           {buttons_parse(msg.buttons)}
         </Text>
       )
-    return <Text {...msg}>{msg.data.text || msg.data}</Text>
+    return decorate('text', <Text {...msg}>{msg.data.text || msg.data}</Text>)
   } else if (msg.type === 'carousel') {
     let elements = msg.elements || msg.data.elements
     return <Carousel {...msg}>{elements_parse(elements)}</Carousel>
@@ -82,16 +120,23 @@ export function msgToBotonic(msg, customMessageTypes) {
     let buttons = buttons_parse(msg.buttons)
     return (
       <>
-        <Text {...msg}>
+        decorate('text', <Text {...msg}>
           {msg.text}
           {buttons}
-        </Text>
+        </Text>)
       </>
     )
   }
 }
 
-export function msgsToBotonic(msgs, customMessageTypes) {
+
+/**
+ * @param msgs {object|object[]}
+ * @param customMessageTypes {{customTypeName}[]?}
+ * @param decorator { BotonicDecorator?}
+ * @return {React.ReactNode}
+ */
+export function msgsToBotonic(msgs, customMessageTypes, decorator ) {
   if (Array.isArray(msgs)) {
     return (
       <>
@@ -99,12 +144,12 @@ export function msgsToBotonic(msgs, customMessageTypes) {
           if (msg['key'] == null) {
             msg['key'] = `msg${i}`
           }
-          return msgToBotonic(msg, customMessageTypes)
+          return msgToBotonic(msg, customMessageTypes, decorator)
         })}
       </>
     )
   }
-  return msgToBotonic(msgs, customMessageTypes)
+  return msgToBotonic(msgs, customMessageTypes, decorator)
 }
 
 function elements_parse(elements) {
