@@ -1,5 +1,8 @@
 import * as React from 'react'
 import * as core from '@botonic/core'
+import { ReactNode } from 'react'
+
+export type MessageType = 'text' | 'carousel' | 'audio' | 'video' | 'location' | 'document' | 'buttonmessage' | 'custom' | 'image'
 
 export interface MessageProps {
   type?: string
@@ -102,5 +105,15 @@ export interface RequestContextInterface extends ActionRequest {
 
 export const RequestContext: React.Context<RequestContextInterface>
 
-export function msgToBotonic(msg: any): React.ReactNode
-export function msgsToBotonic(msgs: any | any[]): React.ReactNode
+export interface CustomMessageType {
+  customTypeName: string
+}
+
+export class BotonicDecorator {
+  addDecorator(type: MessageType, decorator: (node: React.ReactNode) => React.ReactNode)
+  decorate(type: MessageType, node: ReactNode): React.ReactNode
+}
+
+
+export function msgToBotonic(msg: any, customMessageTypes?: CustomMessageType[] , decorator?:  BotonicDecorator): React.ReactNode
+export function msgsToBotonic(msgs: any | any[], customMessageTypes?: CustomMessageType[] , decorator?:  BotonicDecorator): React.ReactNode
