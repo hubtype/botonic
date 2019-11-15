@@ -26,9 +26,9 @@ export class ButtonDelivery {
       case cms.ModelType.CAROUSEL:
       case cms.ModelType.TEXT:
       case cms.ModelType.URL:
-        return ButtonDelivery.fromContent(entry as contentful.Entry<
-          CommonEntryFields
-        >)
+        return ButtonDelivery.fromContent(
+          entry as contentful.Entry<CommonEntryFields>
+        )
       case ButtonDelivery.BUTTON_CONTENT_TYPE: {
         const buttonEntry = entry as contentful.Entry<ButtonFields>
         const callback = buttonEntry.fields.target

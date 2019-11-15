@@ -51,7 +51,10 @@ function res(
 }
 
 function ut(text: string): NormalizedUtterance {
-  return new NormalizedUtterance(text, text.split(' ').map(w => new Word(w, w)))
+  return new NormalizedUtterance(
+    text,
+    text.split(' ').map(w => new Word(w, w))
+  )
 }
 
 test.each<any>([
@@ -135,9 +138,13 @@ test.each<any>([
 )
 
 test.each<any>([
+  // eslint-disable-next-line prettier/prettier
   [[['loooooooooong_match', 2], ['short_match', 2]], -8],
+  // eslint-disable-next-line prettier/prettier
   [[['short_match', 2], ['loooooooooong_match', 2]], 8],
+  // eslint-disable-next-line prettier/prettier
   [[['loooooooooong_match', 3], ['short_match', 1]], 2],
+  // eslint-disable-next-line prettier/prettier
   [[['short_match', 1], ['loooooooooong_match', 3]], -2],
 ])(
   'SimilarWordResult.compare',
