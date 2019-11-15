@@ -9,6 +9,7 @@ const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O'
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D'
 const TEST_TEXT_URL_BUTTON = '2N9HQ960BdUVlDDQjpTA6I'
 const TEST_TEXT_IMAGE_FOLLOWUP = '35aCTbYevK13TAXqqCdY8t'
+const TEXT_TEXT_FOLLOWUP = '6qkqu4uXc4FMSVm8grtiBR'
 export const KEYWORDS_OK = 'GbIpKJu8kW6PqMGAUYkoS'
 export const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm'
 
@@ -97,6 +98,22 @@ test('TEST: contentful text without buttons with image followup with text follow
 
   const feedback = await sut.text(TEST_FBK_MSG, testContext())
   expect(followUp2).toEqual(feedback)
+})
+
+test('TEST: contentful text with text followup with text followup', async () => {
+  const sut = testContentful()
+
+  // act
+  const text = await sut.text(TEXT_TEXT_FOLLOWUP, testContext())
+
+  // assert
+  const followUp1 = text.common.followUp as cms.Text
+  expect(followUp1).toBeInstanceOf(cms.Text)
+  expect(followUp1.common.name).toEqual('POST_FAQ2')
+
+  const followUp2 = followUp1.common.followUp as cms.Text
+  expect(followUp2).toBeInstanceOf(cms.Text)
+  expect(followUp2.common.name).toEqual('FBK_MSG')
 })
 
 test('TEST: contentful text with URL button', async () => {
