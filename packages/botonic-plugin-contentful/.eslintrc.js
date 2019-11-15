@@ -38,6 +38,7 @@ module.exports = {
     "unicorn/no-abusive-eslint-disable" : "off",
     "@typescript-eslint/camelcase" : "warn",
     "consistent-return": "error",
+    "jest/no-export": "warn",
 
     // special for TYPESCRIPT
     "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
