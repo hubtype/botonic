@@ -12,7 +12,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.9.27",
+  "version": "0.9.29",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {

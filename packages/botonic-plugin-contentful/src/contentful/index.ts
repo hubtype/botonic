@@ -27,17 +27,17 @@ import { CachedDelivery } from './cache'
 import { CreateClientParams } from 'contentful'
 
 export default class Contentful implements cms.CMS {
-  _delivery: DeliveryApi
-  _carousel: CarouselDelivery
-  _text: TextDelivery
-  _startUp: StartUpDelivery
-  _url: UrlDelivery
-  _keywords: KeywordsDelivery
-  _schedule: ScheduleDelivery
-  _dateRange: DateRangeDelivery
-  _image: ImageDelivery
-  _asset: AssetDelivery
-  _queue: QueueDelivery
+  private readonly _delivery: DeliveryApi
+  private readonly _carousel: CarouselDelivery
+  private readonly _text: TextDelivery
+  private readonly _startUp: StartUpDelivery
+  private readonly _url: UrlDelivery
+  private readonly _keywords: KeywordsDelivery
+  private readonly _schedule: ScheduleDelivery
+  private readonly _dateRange: DateRangeDelivery
+  private readonly _image: ImageDelivery
+  private readonly _asset: AssetDelivery
+  private readonly _queue: QueueDelivery
 
   /**
    *
