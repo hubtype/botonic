@@ -37,12 +37,15 @@ export class FollowUpDelivery {
   ) {}
 
   // TODO we should detect cycles to avoid infinite recursion
-  fromEntry(
+  async fromEntry(
     followUp: Entry<FollowUpFields> | undefined,
     context: cms.Context
   ): Promise<cms.FollowUp | undefined> {
     if (!followUp) {
       return Promise.resolve(undefined)
+    }
+    if (!followUp.sys.contentType) {
+      followUp = await this.delivery.getEntry(followUp.sys.id, context)
     }
     switch (DeliveryApi.getContentModel(followUp)) {
       case ModelType.CAROUSEL:
