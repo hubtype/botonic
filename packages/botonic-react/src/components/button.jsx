@@ -125,8 +125,8 @@ Button.serialize = buttonProps => {
     button: {
       payload,
       url: buttonProps.url,
-      webview: buttonProps.webview,
-      title: buttonProps.children,
+      webview: buttonProps.webview && String(buttonProps.webview),
+      title: buttonProps.children && String(buttonProps.children),
     },
   }
 }
