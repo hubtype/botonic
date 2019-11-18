@@ -51,6 +51,7 @@ export const Message = props => {
           payload: b.props.payload,
           path: b.props.path,
           url: b.props.url,
+          webview: b.props.webview && String(b.props.webview),
           title: b.props.children,
         })),
         delay,
