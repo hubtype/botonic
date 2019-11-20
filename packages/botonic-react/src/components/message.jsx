@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react'
 import uuid from 'uuid/v4'
+import styled from 'styled-components'
+import ReactMarkdown from 'react-markdown'
 import { isBrowser, isNode } from '@botonic/core'
 import { staticAsset, getProperty } from '../utils'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 import Logo from '../assets/botonic_react_logo100x100.png'
+
+const MarkddownDiv = styled.div`
+  & > * * > p {
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+  }
+`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -121,7 +130,7 @@ export const Message = props => {
     if (botMsgImg !== undefined) BotMessageImage = botMsgImg
 
     return (
-      <div
+      <MarkddownDiv
         style={{
           display: 'flex',
           justifyContent: isFromUser() ? 'flex-end' : 'flex-start',
@@ -169,7 +178,8 @@ export const Message = props => {
               whiteSpace: 'pre-line',
             }}
           >
-            {textChildren}
+            <ReactMarkdown source={textChildren[0]} />
+            {/* {textChildren} */}
           </div>
           {buttons}
           {isFromUser() && blob && getBlobTick() && (
@@ -199,7 +209,7 @@ export const Message = props => {
             />
           )}
         </div>
-      </div>
+      </MarkddownDiv>
     )
   }
 
