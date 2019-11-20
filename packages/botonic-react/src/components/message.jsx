@@ -12,7 +12,13 @@ import Logo from '../assets/botonic_react_logo100x100.png'
 const MarkddownDiv = styled.div`
   & > * * > p {
     margin-block-start: 0px;
-    margin-block-end: 0px;
+    margin-block-end: 20px;
+    &:last-of-type {
+      margin-block-end: 0px;
+    }
+    a {
+      text-decoration: underline !important;
+    }
   }
 `
 
