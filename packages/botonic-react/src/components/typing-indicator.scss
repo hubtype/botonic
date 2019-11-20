@@ -1,9 +1,11 @@
 .typing-indicator {
   background-color: #f1f0f0;
   will-change: transform;
-  width: 25px;
+  width: 44px;
+  line-height: 0px;
   border-radius: 20px;
-  padding: 10px 8px 15px;
+  padding: 8px 2px 8px;
+  text-align: center;
   display: block;
   margin: 8px;
   position: relative;
@@ -11,10 +13,9 @@
   span {
     height: 6px;
     width: 6px;
-    float: left;
     margin: 0 1px;
     background-color: #9e9ea1;
-    display: block;
+    display: inline-block;
     border-radius: 50%;
     opacity: 0.4;
     @for $i from 1 through 3 {
