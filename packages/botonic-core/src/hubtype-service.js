@@ -24,9 +24,9 @@ export class HubtypeService {
       auth: {
         headers: {
           'X-BOTONIC-USER-ID': this.user.id,
-          'X-BOTONIC-LAST-MESSAGE-ID': this.lastMessageId
-        }
-      }
+          'X-BOTONIC-LAST-MESSAGE-ID': this.lastMessageId,
+        },
+      },
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
     let connectionPromise = new Promise((resolve, reject) => {
@@ -34,6 +34,7 @@ export class HubtypeService {
         clearTimeout(connectTimeout)
         this.pusher.connection.unbind()
         this.channel.unbind()
+        this.pusher = null
         reject(msg)
       }
       let connectTimeout = setTimeout(
@@ -45,9 +46,11 @@ export class HubtypeService {
         resolve()
       })
       this.pusher.connection.bind('error', error => {
-        cleanAndReject(
-          `Pusher error (${error.error.data.code || error.data.message})`
-        )
+        let errorMsg =
+          error.error && error.error.data
+            ? error.error.data.code || error.data.message
+            : 'Connection error'
+        cleanAndReject(`Pusher error (${errorMsg})`)
       })
     })
     this.channel.bind('botonic_response', data => this.onPusherEvent(data))
@@ -73,7 +76,7 @@ export class HubtypeService {
       `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
       {
         sender: this.user,
-        message: message
+        message: message,
       }
     )
   }
