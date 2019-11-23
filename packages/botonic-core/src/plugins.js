@@ -1,5 +1,5 @@
 export function loadPlugins(plugins) {
-  if (!plugins) return
+  if (!plugins) return []
   let _plugins = {}
   let pluginsLength = plugins.length
   for (let i = 0; i < pluginsLength; i++) {

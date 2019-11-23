@@ -18,7 +18,7 @@ export class CoreBot {
     defaultRoutes,
   }) {
     this.renderer = renderer
-    this.plugins = plugins ? loadPlugins(plugins) : []
+    this.plugins = loadPlugins(plugins)
     this.theme = theme || {}
     this.defaultTyping =
       typeof defaultTyping !== 'undefined' ? defaultTyping : 0.6
@@ -43,10 +43,6 @@ export class CoreBot {
 
   setLocale(locale, session) {
     session.__locale = locale
-  }
-
-  getPlugins() {
-    return this.plugins
   }
 
   async input({ input, session, lastRoutePath }) {
