@@ -1,5 +1,4 @@
-import { getProperty } from '../src/utils'
-import { CUSTOM_WEBCHAT_PROPERTIES } from '../src/constants'
+import { getProperty, _getThemeProperty } from '../src/utils'
 
 let theme = {
   message: {
@@ -29,18 +28,6 @@ let anotherTheme = {
   botMessageImage: null,
 }
 
-const getThemeProperty = (property, defaultValue = undefined) => {
-  for (let [k, v] of Object.entries(CUSTOM_WEBCHAT_PROPERTIES)) {
-    if (v == property) {
-      let nestedProperty = getProperty(theme, v)
-      let plainProperty = getProperty(theme, k)
-      if (nestedProperty !== undefined) return nestedProperty
-      if (plainProperty !== undefined) return plainProperty
-      return defaultValue
-    }
-  }
-}
-
 describe('getProperty', () => {
   it('founds directly the property', () => {
     expect(getProperty(theme, 'botMessageImage')).toBe('DefaultLogoPath')
@@ -66,6 +53,7 @@ describe('getProperty', () => {
 })
 
 describe('getThemeProperty', () => {
+  const getThemeProperty = _getThemeProperty(theme)
   it('gives preference to nested property', () => {
     expect(getThemeProperty('message.bot.image')).toBe('DefaultLogoPathNested')
   })
