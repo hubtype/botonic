@@ -21,7 +21,7 @@ export class NodeApp {
   }
 
   getConfig() {
-    return Object.entries(this.bot.getPlugins()).map(([_, plugin]) => {
+    return Object.entries(this.bot.plugins).map(([_, plugin]) => {
       return { id: plugin.id, name: plugin.name, config: plugin.config }
     })
   }
