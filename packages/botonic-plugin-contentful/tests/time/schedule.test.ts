@@ -10,6 +10,7 @@ import momentTz from 'moment-timezone'
 
 const MARCH = 2
 const APRIL = 3
+const NOVEMBER = 10
 
 test('TEST ScheduleAlwaysOn', () => {
   const sut = new ScheduleAlwaysOn()
@@ -91,6 +92,20 @@ test('TEST: timeInThisTimezone ', () => {
 
   const date = new Date(2019, 5, 29, 0, 51)
   expect(sut.timeInThisTimezone('es', date)).toEqual('23:51:00')
+})
+
+test('TEST: ends at midnight', () => {
+  const sut = new Schedule('Europe/Madrid')
+  sut.addDaySchedule(
+    WeekDay.WEDNESDAY,
+    new DaySchedule([
+      new TimeRange(sut.createHourAndMinute(10), sut.createHourAndMinute(0)),
+    ])
+  )
+  const date9h = new Date(2019, NOVEMBER, 27, 9)
+  expect(sut.contains(date9h)).toBeFalsy()
+  const date23h = new Date(2019, NOVEMBER, 27, 23, 59)
+  expect(sut.contains(date23h)).toBeTruthy()
 })
 
 test('TEST: addException', () => {
