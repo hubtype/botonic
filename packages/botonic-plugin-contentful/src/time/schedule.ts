@@ -107,15 +107,20 @@ class ExceptionSchedule {
 }
 
 export class TimeRange {
+  readonly from: HourAndMinute
+  readonly to: HourAndMinute
   /**
    * @param from inclusive
-   * @param to exclusive
+   * @param to exclusive if 00:00, it will be interpreted as 24:00
    */
-  constructor(readonly from: HourAndMinute, readonly to: HourAndMinute) {
-    if (from.compare(to) >= 0) {
+  constructor(from: HourAndMinute, to: HourAndMinute) {
+    this.from = from
+    this.to = to.isMidnight() ? new HourAndMinute(to.zone, 24, 0) : to
+    if (this.from.compare(this.to) >= 0) {
       throw new Error(`${from.toString()} should be before ${to.toString()}`)
     }
   }
+
   contains(date: Date): boolean {
     if (this.from.compareToDate(date) > 0) {
       return false
@@ -137,6 +142,10 @@ export class HourAndMinute {
     const dateUtc = date.getUTCHours() * 60 + date.getUTCMinutes()
 
     return HourAndMinute.compareNumber(hourAndMinuteUtc, dateUtc)
+  }
+
+  isMidnight(): boolean {
+    return this.hour === 0 && this.minute === 0
   }
 
   private static compareNumber(first: number, second: number): number {
