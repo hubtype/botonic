@@ -138,7 +138,10 @@ export class HourAndMinute {
 
   compareToDate(date: Date): number {
     const hourAndMinuteOffset = this.zone.utcOffset(date.getTime())
-    const hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset
+    let hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset
+    if (hourAndMinuteUtc <= 0) {
+      hourAndMinuteUtc += 24 * 60
+    }
     const dateUtc = date.getUTCHours() * 60 + date.getUTCMinutes()
 
     return HourAndMinute.compareNumber(hourAndMinuteUtc, dateUtc)
