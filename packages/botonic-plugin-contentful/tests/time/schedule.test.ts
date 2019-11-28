@@ -132,6 +132,58 @@ test('TEST: addException', () => {
   expect(sut.contains(date12h)).toBeTruthy()
 })
 
+test('TEST: addException start day', () => {
+  const sut = new Schedule('Europe/Madrid')
+  sut.addDaySchedule(
+    WeekDay.FRIDAY,
+    new DaySchedule([
+      new TimeRange(sut.createHourAndMinute(10), sut.createHourAndMinute(12)),
+    ])
+  )
+
+  sut.addException(
+    new Date(2019, MARCH, 29),
+    new DaySchedule([
+      new TimeRange(sut.createHourAndMinute(0), sut.createHourAndMinute(1)),
+      new TimeRange(sut.createHourAndMinute(11), sut.createHourAndMinute(13)),
+    ])
+  )
+  expect(sut.contains(new Date(2019, MARCH, 28, 23, 59))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 0, 0))).toBeTruthy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 0, 15))).toBeTruthy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 1, 0))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 1, 1))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 23, 59))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 30, 0, 0))).toBeFalsy()
+})
+
+test('TEST: addException end day', () => {
+  const sut = new Schedule('Europe/Madrid')
+  sut.addDaySchedule(
+    WeekDay.FRIDAY,
+    new DaySchedule([
+      new TimeRange(sut.createHourAndMinute(10), sut.createHourAndMinute(12)),
+    ])
+  )
+
+  sut.addException(
+    new Date(2019, MARCH, 29),
+    new DaySchedule([
+      new TimeRange(
+        sut.createHourAndMinute(23),
+        sut.createHourAndMinute(23, 30)
+      ),
+    ])
+  )
+  expect(sut.contains(new Date(2019, MARCH, 28, 23, 15))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 22, 59))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 23, 0))).toBeTruthy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 23, 29))).toBeTruthy()
+  expect(sut.contains(new Date(2019, MARCH, 29, 23, 30))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 30, 0, 0))).toBeFalsy()
+  expect(sut.contains(new Date(2019, MARCH, 30, 23, 15))).toBeFalsy()
+})
+
 test('TEST: time.toString ', () => {
   // tz does not affect toString
   const zone = momentTz.tz.zone('Europe/London')
