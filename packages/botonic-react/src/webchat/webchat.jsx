@@ -28,6 +28,8 @@ import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
 import LogoEmoji from '../assets/emojiButton.svg'
 import { MIME_WHITELIST } from '../constants'
+import { CUSTOM_WEBCHAT_PROPERTIES, MIME_WHITELIST } from '../constants'
+import { motion, useViewportScroll, useTransform } from 'framer-motion'
 
 const getAttachmentType = fileType => {
   return Object.entries(MIME_WHITELIST)
@@ -210,19 +212,21 @@ export const Webchat = forwardRef((props, ref) => {
     getThemeProperty('userInput.persistentMenu') || props.persistentMenu
 
   const persistentMenuLogo = () => (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 'none',
-        cursor: 'pointer',
-        padding: 18,
-      }}
-      onClick={() => handleMenu()}
-    >
-      <img src={staticAsset(LogoMenu)} />
-    </div>
+    <motion.div whileHover={{ scale: 1.2 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 'none',
+          cursor: 'pointer',
+          padding: 18,
+        }}
+        onClick={() => handleMenu()}
+      >
+        <img src={staticAsset(LogoMenu)} />
+      </div>
+    </motion.div>
   )
 
   const checkBlockInput = input => {

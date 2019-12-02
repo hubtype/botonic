@@ -6,6 +6,9 @@ import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 import Logo from '../assets/botonic_react_logo100x100.png'
+import Fade from 'react-reveal/Fade'
+import LightSpeed from 'react-reveal/LightSpeed'
+import Slide from 'react-reveal/Slide'
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -196,7 +199,43 @@ export const Message = props => {
                 borderLeft: 0,
                 marginLeft: -pointerSize + 1,
               }}
-            />
+              {...otherProps}
+            >
+              <div
+                style={{
+                  padding: '8px 12px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {textChildren}
+              </div>
+
+              {buttons}
+              {isFromUser() && blob && (
+                <div
+                  style={{
+                    ...pointerStyles,
+                    borderLeftColor: getBgColor(),
+                    right: 0,
+                    borderRight: 0,
+                    marginRight: -pointerSize,
+                  }}
+                />
+              )}
+              {isFromBot() && blob && (
+                <div
+                  style={{
+                    ...pointerStyles,
+                    borderRightColor: getBgColor(),
+                    left: 0,
+                    borderLeft: 0,
+                    marginLeft: -pointerSize,
+                  }}
+                />
+              )}
+            </div>
           )}
         </div>
       </div>

@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './styled-scrollbar'
 import { staticAsset } from '../utils'
+import Fade from 'react-reveal/Fade'
 
 export const WebchatMessageList = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
@@ -15,14 +16,16 @@ export const WebchatMessageList = props => {
   }
 
   const DefaultIntro = introImage && (
-    <img
-      style={{
-        maxHeight: '50%',
-        width: '100%',
-        ...(introStyle || {}),
-      }}
-      src={staticAsset(introImage)}
-    />
+    <Fade>
+      <img
+        style={{
+          maxHeight: '50%',
+          width: '100%',
+          ...(introStyle || {}),
+        }}
+        src={staticAsset(introImage)}
+      />
+    </Fade>
   )
 
   return (
