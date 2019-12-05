@@ -54,6 +54,16 @@ module.exports = {
     "unicorn/filename-case" : "off", // React convention is in CamelCase
     "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
   },
+  "overrides": [
+    {
+      "files": [
+        "tests/**/*.ts" // to be able to skip required fields when not used in a particular test
+      ],
+      "rules": {
+        "@typescript-eslint/no-object-literal-type-assertion" : "off",
+      }
+    }
+  ],
   env: {
     jest: true,
     "jest/globals": true,
