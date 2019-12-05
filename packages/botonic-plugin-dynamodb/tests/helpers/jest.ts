@@ -1,7 +1,7 @@
 // https://github.com/testing-library/react-testing-library/issues/36#issuecomment-440442300 is cleaner,
 // but I couldn't make it work
 // causes "TypeError: Cannot read property 'name' of undefined" with versions > 22.12.0
-export interface ExtendedMatchers<R> extends jest.Matchers<R> {
+export interface ExtendedMatchers<R, T> extends jest.Matchers<R, T> {
   toBeAround(expected: number, maxError: number): R
 }
 export function init() {

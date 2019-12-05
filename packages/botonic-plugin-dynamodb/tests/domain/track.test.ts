@@ -1,8 +1,11 @@
 import { instance, mock, when } from 'ts-mockito'
 import { DynamoTrackStorage } from '../../src/infrastructure/dynamo'
 import { ErrorReportingTrackStorage, Track } from '../../src/domain/track'
+import DoneCallback = jest.DoneCallback
 
-test('TEST: ErrorReportingCMS write rejected', async done => {
+// next line avoids refactor as per https://github.com/jest-community/eslint-plugin-jest/blob/master/docs/rules/no-test-callback.md
+// eslint-disable-next-line jest/no-test-callback
+test('TEST: ErrorReportingCMS write rejected', async (done: DoneCallback) => {
   const mockStorage = mock(DynamoTrackStorage)
   const error = new Error('mock error')
   const track = new Track('botid', new Date(), [])
