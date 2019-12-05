@@ -4,6 +4,9 @@ import { Track, TABLE_NAME } from './track'
 import { DataMapper } from '@aws/dynamodb-data-mapper'
 import DynamoDB = require('aws-sdk/clients/dynamodb')
 
+/**
+ * Env affects the name of the table were the tracks will be stored
+ */
 export enum Env {
   PRO = 'pro',
   DEV = 'dev',
@@ -35,7 +38,7 @@ export class DynamoTrackStorage implements domain.TrackStorage {
     this.tableName = Dynamo.tableName(TABLE_NAME, env)
   }
 
-  write(domTrack: domain.Track): Promise<undefined> {
+  async write(domTrack: domain.Track): Promise<void> {
     const track = Track.fromDomain(domTrack)
     // from https://stackoverflow.com/questions/34951043/is-it-possible-to-combine-if-not-exists-and-list-append-in-update-item
     const input: UpdateItemInput = {
@@ -49,9 +52,7 @@ export class DynamoTrackStorage implements domain.TrackStorage {
       },
     }
     const req = this.client.updateItem(input)
-    return req.promise().then(({}) => {
-      return Promise.resolve(undefined)
-    })
+    await req.promise()
   }
 
   /**
@@ -63,9 +64,8 @@ export class DynamoTrackStorage implements domain.TrackStorage {
     return track.toDomain()
   }
 
-  async remove(bot: string, time: Date): Promise<undefined> {
+  async remove(bot: string, time: Date): Promise<void> {
     const request = Track.fromKey(bot, time)
     await this.mapper.delete(request)
-    return Promise.resolve(undefined)
   }
 }
