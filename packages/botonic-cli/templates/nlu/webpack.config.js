@@ -1,13 +1,10 @@
 const path = require('path')
 const ImageminPlugin = require('imagemin-webpack')
-const imageminGifsicle = require('imagemin-gifsicle')
-const imageminJpegtran = require('imagemin-jpegtran')
-const imageminOptipng = require('imagemin-optipng')
-const imageminSvgo = require('imagemin-svgo')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+
 const webpack = require('webpack')
 
 const root = path.resolve(__dirname, 'src')
@@ -17,8 +14,8 @@ const terserPlugin = new TerserPlugin({
   parallel: true,
   sourceMap: true,
   terserOptions: {
-    keep_fnames: true
-  }
+    keep_fnames: true,
+  },
 })
 
 const babelLoaderConfig = {
@@ -34,10 +31,10 @@ const babelLoaderConfig = {
         require('@babel/plugin-proposal-class-properties'),
         require('babel-plugin-add-module-exports'),
         require('@babel/plugin-transform-runtime'),
-        require('@babel/plugin-syntax-dynamic-import')
-      ]
-    }
-  }
+        require('@babel/plugin-syntax-dynamic-import'),
+      ],
+    },
+  },
 }
 
 const fileLoaderConfig = {
@@ -46,20 +43,20 @@ const fileLoaderConfig = {
     {
       loader: 'file-loader',
       options: {
-        outputPath: 'assets'
-      }
-    }
-  ]
+        outputPath: 'assets',
+      },
+    },
+  ],
 }
 
 const nullLoaderConfig = {
   test: /\.(scss|css)$/,
-  use: 'null-loader'
+  use: 'null-loader',
 }
 
 const stylesLoaderConfig = {
   test: /\.(scss|css)$/,
-  use: ['style-loader', 'css-loader', 'sass-loader']
+  use: ['style-loader', 'css-loader', 'sass-loader'],
 }
 
 const imageminPlugin = new ImageminPlugin({
@@ -67,32 +64,24 @@ const imageminPlugin = new ImageminPlugin({
   cache: false,
   imageminOptions: {
     plugins: [
-      imageminGifsicle({
-        interlaced: true
-      }),
-      imageminJpegtran({
-        progressive: true
-      }),
-      imageminOptipng({
-        optimizationLevel: 5
-      }),
-      imageminSvgo({
-        removeViewBox: true
-      })
-    ]
-  }
+      ['imagemin-gifsicle', { interlaced: true }],
+      ['imagemin-jpegtran', { progressive: true }],
+      ['imagemin-optipng', { optimizationLevel: 5 }],
+      ['imagemin-svgo', { removeViewBox: true }],
+    ],
+  },
 })
 
 const botonicDevConfig = {
   optimization: {
-    minimizer: [terserPlugin]
+    minimizer: [terserPlugin],
   },
   mode: 'development',
   devtool: 'inline-source-map',
   target: 'web',
   entry: path.resolve(botonicPath, 'src', 'entry.js'),
   module: {
-    rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
+    rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -100,47 +89,47 @@ const botonicDevConfig = {
     library: 'Botonic',
     libraryTarget: 'umd',
     libraryExport: 'app',
-    publicPath: './'
+    publicPath: './',
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      BotonicProject: path.resolve(__dirname, 'src')
-    }
+      BotonicProject: path.resolve(__dirname, 'src'),
+    },
   },
   devServer: {
     contentBase: [
       path.join(__dirname, 'dist'),
-      path.join(__dirname, 'src', 'nlu', 'models')
+      path.join(__dirname, 'src', 'nlu', 'models'),
     ],
     watchContentBase: true,
     historyApiFallback: true,
     publicPath: '/',
-    hot: true
+    hot: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(botonicPath, 'src', 'webchat.template.html'),
-      filename: 'index.html'
+      filename: 'index.html',
     }),
     new webpack.HotModuleReplacementPlugin(),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
       HUBTYPE_API_URL: null,
-      BOTONIC_TARGET: 'dev'
-    })
-  ]
+      BOTONIC_TARGET: 'dev',
+    }),
+  ],
 }
 
 const botonicWebchatConfig = {
   optimization: {
-    minimizer: [terserPlugin]
+    minimizer: [terserPlugin],
   },
   mode: 'development',
   target: 'web',
   entry: path.resolve(botonicPath, 'src', 'entry.js'),
   module: {
-    rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig]
+    rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -148,31 +137,31 @@ const botonicWebchatConfig = {
     library: 'Botonic',
     libraryTarget: 'umd',
     libraryExport: 'app',
-    publicPath: './'
+    publicPath: './',
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      BotonicProject: path.resolve(__dirname, 'src')
-    }
+      BotonicProject: path.resolve(__dirname, 'src'),
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(botonicPath, 'src', 'webchat.template.html'),
-      filename: 'index.html'
+      filename: 'index.html',
     }),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
       HUBTYPE_API_URL: null,
       WEBCHAT_PUSHER_KEY: null,
-      BOTONIC_TARGET: 'webchat'
-    })
-  ]
+      BOTONIC_TARGET: 'webchat',
+    }),
+  ],
 }
 
 const botonicWebviewsConfig = {
   optimization: {
-    minimizer: [terserPlugin]
+    minimizer: [terserPlugin],
   },
   mode: 'development',
   devtool: 'inline-source-map',
@@ -183,7 +172,7 @@ const botonicWebviewsConfig = {
     filename: 'webviews.js',
     library: 'BotonicWebview',
     libraryTarget: 'umd',
-    libraryExport: 'app'
+    libraryExport: 'app',
   },
   module: {
     rules: [
@@ -194,37 +183,37 @@ const botonicWebviewsConfig = {
           {
             loader: 'file-loader',
             options: {
-              outputPath: '../assets'
-            }
-          }
-        ]
+              outputPath: '../assets',
+            },
+          },
+        ],
       },
-      stylesLoaderConfig
-    ]
+      stylesLoaderConfig,
+    ],
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      BotonicProject: path.resolve(__dirname, 'src')
-    }
+      BotonicProject: path.resolve(__dirname, 'src'),
+    },
   },
   devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(botonicPath, 'src', 'webview.template.html'),
-      filename: 'index.html'
+      filename: 'index.html',
     }),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
       HUBTYPE_API_URL: null,
-      BOTONIC_TARGET: 'webviews'
-    })
-  ]
+      BOTONIC_TARGET: 'webviews',
+    }),
+  ],
 }
 
 const botonicServerConfig = {
   optimization: {
-    minimizer: [terserPlugin]
+    minimizer: [terserPlugin],
   },
   context: root,
   mode: 'development',
@@ -234,27 +223,27 @@ const botonicServerConfig = {
     filename: 'bot.js',
     library: 'bot',
     libraryTarget: 'umd',
-    libraryExport: 'app'
+    libraryExport: 'app',
   },
   module: {
-    rules: [babelLoaderConfig, fileLoaderConfig, nullLoaderConfig]
+    rules: [babelLoaderConfig, fileLoaderConfig, nullLoaderConfig],
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      BotonicProject: path.resolve(__dirname, 'src')
-    }
+      BotonicProject: path.resolve(__dirname, 'src'),
+    },
   },
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin({}),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
       HUBTYPE_API_URL: null,
-      BOTONIC_TARGET: 'node'
+      BOTONIC_TARGET: 'node',
     }),
-    new CopyPlugin([{ from: 'nlu/models/', to: 'assets/models/' }])
-  ]
+    new CopyPlugin([{ from: 'nlu/models/', to: 'assets/models/' }]),
+  ],
 }
 
 module.exports = function(env) {
