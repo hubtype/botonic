@@ -120,7 +120,7 @@ export class Normalizer {
         continue
       }
       // a token could generate 2 stems (eg can't => can not)
-      const tokenStems = stemmer.tokenizeAndStem(token, true)
+      const tokenStems = stemmer.stem([token])
       words = words.concat(tokenStems.map(stem => new Word(token, stem)))
     }
     return new NormalizedUtterance(txt, words, numStopWords == tokens.length)

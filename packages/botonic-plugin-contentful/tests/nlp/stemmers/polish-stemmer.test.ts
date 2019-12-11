@@ -1,4 +1,4 @@
-import { PolishStemmer } from '../../../src/nlp/stemmers/polish-stemmer'
+import { StemmerPl } from '../../../src/nlp/stemmers/polish-stemmer'
 import { tokenizerPerLocale } from '../../../src/nlp'
 
 test('hack because webstorm does not recognize test.each', () => {})
@@ -18,7 +18,7 @@ test.each<any>([
   ['najlepszych', 'lep'],
   ['zwieść', 'zwi'],
   ['Słuchaj', 'słuch'],
-  ['śpiewać', 'śpiew'],
+  ['śpiewać', 'spiew'],
   ['zwrotkach', 'zwrotk'],
   ['rezygnacji', 'rezygn'],
   ['piosence', 'piosen'],
@@ -26,7 +26,7 @@ test.each<any>([
   ['cukierek', 'cukier'],
   ['parobek', 'parob'],
   ['byłbym', 'był'],
-  ['szczęśliwie', 'szczęśliw'],
+  ['szczęśliwie', 'szczesliw'],
   ['niedobrze', 'niedobr'],
   ['rodzicielskiej', 'rodzicielski'],
   ['warunków', 'warunk'],
@@ -35,7 +35,7 @@ test.each<any>([
   ['negacja', 'neg'],
 ])('TEST: Polish stemmer("%s")->"%s"', (word: string, expected: string) => {
   const tokenizer = tokenizerPerLocale('pl')
-  const sut = new PolishStemmer(tokenizer)
-  const result = sut.tokenizeAndStem(word, true)
+  const sut = new StemmerPl()
+  const result = sut.stem(tokenizer.tokenize(word, true))
   expect(result).toEqual([expected])
 })

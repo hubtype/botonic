@@ -1,4 +1,5 @@
 import { stemmerFor } from '../../src/nlp/stemmer'
+import { tokenizerPerLocale } from '../../src/nlp'
 
 test('hack because webstorm does not recognize test.each', () => {})
 
@@ -26,7 +27,7 @@ test.each<any>([
   'TEST: stemmer removes final letters(%s) =>%j',
   (locale: string, raw: string, expected: string) => {
     const stemmer = stemmerFor(locale)
-    const stemmed = stemmer.tokenizeAndStem(raw, true)
+    const stemmed = stemmer.stem(tokenizerPerLocale(locale).tokenize(raw, true))
     expect(stemmed).toEqual(expected)
   }
 )
