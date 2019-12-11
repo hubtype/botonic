@@ -1,7 +1,8 @@
-import { SimilarSearch } from 'node-nlp/lib/util'
+import { ExtractorEnum } from '@nlpjs/ner/src'
 import { CandidateWithKeywords, Keyword, MatchType } from './keywords'
 import { countOccurrences } from './tokens'
 import { NormalizedUtterance, Word } from './normalizer'
+import { leven } from '@nlpjs/similarity/src'
 
 export class SimilarWordResult<M> {
   constructor(
@@ -117,7 +118,7 @@ export class SimilarWordFinder<M> {
 
 abstract class CandidateFinder {
   protected readonly stemmedDecorator: StemmedExtraDistance
-  protected readonly similar = new SimilarSearch({ normalize: false })
+  protected readonly similar = new ExtractorEnum()
 
   constructor(readonly wordsAreStemmed: boolean, readonly minMatchLength = 3) {
     this.stemmedDecorator = new StemmedExtraDistance(wordsAreStemmed)
@@ -140,7 +141,7 @@ abstract class CandidateFinder {
       return utteranceText == kwMatchString ? 0 : TOO_DISTANT
     }
 
-    const distance = this.similar.getSimilarity(utteranceText, kwMatchString)
+    const distance = leven(utteranceText, kwMatchString)
     if (
       distance >
       maxDistance + this.stemmedDecorator.extraDistance(kwMatchString)

@@ -18,12 +18,10 @@ declare module '@nlpjs/ner/src' {
     accuracy: number
   }
 
-  export class SimilarSearch {
-    constructor(settings: { normalize: boolean })
+  export class ExtractorEnum {
+    constructor()
 
     getWordPositions(str: string): WordPosition[]
-
-    getSimilarity(str1: string, str2: string): number
 
     getBestSubstringList(
       str1: string,
