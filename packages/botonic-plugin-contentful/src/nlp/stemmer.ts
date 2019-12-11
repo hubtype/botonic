@@ -1,11 +1,9 @@
-import { BaseStemmer } from 'node-nlp/lib/nlp/stemmers'
-// With the natural stemmers we cannot customize the tokenizer
-import CatalanStemmer from 'node-nlp/lib/nlp/stemmers/catalan-stemmer'
-import EnglishStemmer from 'node-nlp/lib/nlp/stemmers/english-stemmer'
-import SpanishStemmer from 'node-nlp/lib/nlp/stemmers/spanish-stemmer'
-import PortugueseStemmer from 'node-nlp/lib/nlp/stemmers/portuguese-stemmer'
-import { tokenizerPerLocale } from './tokens'
-import { PolishStemmer } from './stemmers/polish-stemmer'
+import { BaseStemmer } from '@nlpjs/core/src'
+import { StemmerCa } from '@nlpjs/lang-ca/src'
+import { StemmerEn } from '@nlpjs/lang-en/src'
+import { StemmerEs } from '@nlpjs/lang-es/src'
+import { StemmerPt } from '@nlpjs/lang-pt/src'
+import { StemmerPl } from './stemmers/polish-stemmer'
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
 // and https://stackoverflow.com/a/11210358/145289
@@ -13,11 +11,11 @@ import { PolishStemmer } from './stemmers/polish-stemmer'
 // https://github.com/fortnightlabs/snowball-js/blob/master/stemmer/src/ext/SpanishStemmer.js based on
 // java version at http://snowball.tartarus.org/download.html
 export const stemmers: { [key: string]: BaseStemmer } = {
-  ca: new CatalanStemmer(tokenizerPerLocale('ca')),
-  en: new EnglishStemmer(tokenizerPerLocale('en')),
-  es: new SpanishStemmer(tokenizerPerLocale('es')),
-  pl: new PolishStemmer(tokenizerPerLocale('pl')),
-  pt: new PortugueseStemmer(tokenizerPerLocale('pt')),
+  ca: new StemmerCa(),
+  en: new StemmerEn(),
+  es: new StemmerEs(),
+  pl: new StemmerPl(),
+  pt: new StemmerPt(),
   //node-nlp does not support polish
 }
 

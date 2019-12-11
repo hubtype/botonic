@@ -1,4 +1,8 @@
-declare module 'node-nlp/lib/util' {
+declare module '@nlpjs/similarity/src' {
+  function leven(left: string, right: string): number
+}
+
+declare module '@nlpjs/ner/src' {
   export interface WordPosition {
     start: number
     end: number
@@ -30,116 +34,45 @@ declare module 'node-nlp/lib/util' {
   }
 }
 
-declare module 'node-nlp/lib/nlp/tokenizers' {
+declare module '@nlpjs/core/src' {
   export class Tokenizer {
     tokenize(text: string, normalize: boolean): string[]
   }
-}
+  export class Stemmer {
+    stem(tokens: string[]): string[]
+  }
 
-declare module 'node-nlp/lib/nlp/stemmers' {
-  export class BaseStemmer {
-    tokenizeAndStem(str: string, keepStops: boolean): string[]
+  export class BaseStemmer extends Stemmer {
+    stem(tokens: string[]): string[]
   }
 }
 
-declare module 'node-nlp/lib/nlp/nlp-util' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-  import { BaseStemmer } from 'node-nlp/lib/nlp/stemmers'
+declare module '@nlpjs/lang-en/src' {
+  import { BaseStemmer, Tokenizer } from '@nlpjs/core/src'
 
-  class NlpUtil {
-    static getStemmer(locale: string): BaseStemmer
+  export class TokenizerEn extends Tokenizer {}
 
-    static getTokenizer(locale: string): Tokenizer
-  }
-
-  export = NlpUtil
+  export class StemmerEn extends BaseStemmer {}
 }
 
-declare module 'node-nlp/lib/nlp/tokenizers/punct-tokenizer' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
+declare module '@nlpjs/lang-es/src' {
+  import { BaseStemmer, Tokenizer } from '@nlpjs/core/src'
 
-  class PunctTokenizer extends Tokenizer {}
+  export class TokenizerEs extends Tokenizer {}
 
-  export = PunctTokenizer
+  export class StemmerEs extends BaseStemmer {}
 }
 
-declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-en' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
+declare module '@nlpjs/lang-pt/src' {
+  import { BaseStemmer, Tokenizer } from '@nlpjs/core/src'
 
-  class AggressiveTokenizerEn extends Tokenizer {}
+  export class TokenizerPt extends Tokenizer {}
 
-  export = AggressiveTokenizerEn
+  export class StemmerPt extends BaseStemmer {}
 }
 
-declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-es' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
+declare module '@nlpjs/lang-ca/src' {
+  import { BaseStemmer } from '@nlpjs/core/src'
 
-  class AggressiveTokenizerEs extends Tokenizer {
-    trim(arr: string[]): string[]
-  }
-
-  export = AggressiveTokenizerEs
-}
-
-declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pl' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-
-  class AggressiveTokenizerPl extends Tokenizer {}
-
-  export = AggressiveTokenizerPl
-}
-
-declare module 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pt' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-
-  class AggressiveTokenizerPt extends Tokenizer {}
-
-  export = AggressiveTokenizerPt
-}
-
-// We use directly the ES Stemmer instead of using NlpUtil to avoid loading dependencies of so many languages
-// (there are evn errors with 'fs' library and with Japanese dependencies)
-
-declare module 'node-nlp/lib/nlp/stemmers/catalan-stemmer' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-
-  class CatalanStemmer {
-    constructor(tokenizer: Tokenizer)
-
-    tokenizeAndStem(str: string, keepStops: boolean): string[]
-  }
-
-  export = CatalanStemmer
-}
-
-declare module 'node-nlp/lib/nlp/stemmers/spanish-stemmer' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-
-  class SpanishStemmer {
-    constructor(tokenizer: Tokenizer)
-
-    tokenizeAndStem(str: string, keepStops: boolean): string[]
-  }
-
-  export = SpanishStemmer
-}
-
-declare module 'node-nlp/lib/nlp/stemmers/english-stemmer' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-  class EnglishStemmer {
-    constructor(tokenizer: Tokenizer)
-    tokenizeAndStem(str: string, keepStops: boolean): string[]
-  }
-
-  export = EnglishStemmer
-}
-
-declare module 'node-nlp/lib/nlp/stemmers/portuguese-stemmer' {
-  import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-  class PortugueseStemmer {
-    constructor(tokenizer: Tokenizer)
-    tokenizeAndStem(str: string, keepStops: boolean): string[]
-  }
-
-  export = PortugueseStemmer
+  export class StemmerCa extends BaseStemmer {}
 }
