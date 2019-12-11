@@ -1,14 +1,10 @@
-import { BaseStemmer } from 'node-nlp/lib/nlp/stemmers'
-import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-
 /**
  * From https://github.com/Tutanchamon/pl_stemmer/blob/master/pl_stemmer.py
  */
-export class PolishStemmer implements BaseStemmer {
-  constructor(private readonly tokenizer: Tokenizer) {}
+import { BaseStemmer } from '@nlpjs/core/src'
 
-  tokenizeAndStem(str: string, keepStops: boolean): string[] {
-    const tokens = this.tokenizer.tokenize(str, false)
+export class StemmerPl implements BaseStemmer {
+  stem(tokens: string[]): string[] {
     return tokens.map((stem: string) => {
       stem = stem.toLowerCase()
       stem = this.removeNouns(stem)

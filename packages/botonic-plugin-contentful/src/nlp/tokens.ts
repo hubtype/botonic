@@ -1,12 +1,11 @@
-import { Tokenizer } from 'node-nlp/lib/nlp/tokenizers'
-import AggressiveTokenizerEs from 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-es'
-import AggressiveTokenizerEn from 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-en'
-import AggressiveTokenizerPt from 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pt'
+import { Tokenizer } from '@nlpjs/core/src'
+import { TokenizerEs } from '@nlpjs/lang-es/src'
+import { TokenizerEn } from '@nlpjs/lang-en/src'
+import { TokenizerPt } from '@nlpjs/lang-pt/src'
 import { esDefaultStopWords } from './stopwords/stopwords-es'
 import { caDefaultStopWords } from './stopwords/stopwords-ca'
 import { enDefaultStopWords } from './stopwords/stopwords-en'
 import { Locale } from './locales'
-import AggressiveTokenizerPl from 'node-nlp/lib/nlp/tokenizers/aggressive-tokenizer-pl'
 import { plDefaultStopWords } from './stopwords/stopwords-pl'
 import { ptDefaultStopWords } from './stopwords/stopwords-pt'
 
@@ -26,33 +25,42 @@ export function countOccurrences(haystack: string, needle: string): number {
 }
 
 /**
- * Identical to AggressiveTokenizerEs, except that it maintains ç & Ç
+ * Identical to TokenizerEs, except that it maintains ç & Ç
  */
-class CatalanTokenizer implements Tokenizer {
+class TokenizerCa implements Tokenizer {
   static RESTORE_CEDIL = new RegExp('c' + String.fromCharCode(807), 'gi')
-  private esTokenizer = new AggressiveTokenizerEs()
 
   static restoreAfterTokenizer(text: string) {
-    return text.replace(CatalanTokenizer.RESTORE_CEDIL, 'ç')
+    return text.replace(TokenizerCa.RESTORE_CEDIL, 'ç')
   }
 
   tokenize(text: string, normalize = true): string[] {
     let normalized = text
     if (normalize) {
       normalized = text.normalize('NFD')
-      normalized = CatalanTokenizer.restoreAfterTokenizer(normalized)
+      normalized = TokenizerCa.restoreAfterTokenizer(normalized)
       normalized = normalized.replace(/[\u0300-\u036f]/g, '')
     }
-    return this.esTokenizer.trim(normalized.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/))
+    return this.trim(normalized.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/))
+  }
+
+  private trim(arr: string[]): string[] {
+    while (arr[arr.length - 1] === '') {
+      arr.pop()
+    }
+    while (arr[0] === '') {
+      arr.shift()
+    }
+    return arr
   }
 }
 
 const tokenizers: { [locale: string]: Tokenizer } = {
-  es: new AggressiveTokenizerEs(),
-  en: new AggressiveTokenizerEn(),
-  ca: new CatalanTokenizer(),
-  pl: new AggressiveTokenizerPl(),
-  pt: new AggressiveTokenizerPt(),
+  es: new TokenizerEs(),
+  en: new TokenizerEn(),
+  ca: new TokenizerCa(),
+  pl: new Tokenizer(),
+  pt: new TokenizerPt(),
 }
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
