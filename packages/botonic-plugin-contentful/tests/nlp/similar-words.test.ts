@@ -9,7 +9,7 @@ import {
   SimilarWordResult,
 } from '../../src/nlp/similar-words'
 import { NormalizedUtterance, Word } from '../../src/nlp'
-import { SimilarSearch } from 'node-nlp/lib/util'
+import { leven } from '@nlpjs/similarity/src'
 
 test('hack because webstorm does not recognize test.each', () => {})
 
@@ -211,8 +211,35 @@ test.each<any>([
 ])(
   'TEST: getMatchLength(%s, %s)',
   (w1: string, w2: string, expected: number) => {
-    const similar = new SimilarSearch({ normalize: false })
-    const distance = similar.getSimilarity(w1, w2)
+    const distance = leven(w1, w2)
     expect(getMatchLength(w1.length, w2.length, distance)).toEqual(expected)
   }
 )
+
+// test('TEST: performance', () => {
+function perfom() {
+  const sut = new SimilarWordFinder<TestCandidate>(true)
+  for (let i = 0; i < 50; i++) {
+    sut.addCandidate(candidate([`kw${i}`]))
+  }
+  let utterance = ''
+  //ALL_WORDS_IN_KEYWORDS_MIXED_UP
+  // 50 => ms
+  // 100 2,2s
+  // 130 6s
+
+  //KEYWORDS_AND_OTHERS_FOUND
+  // 100 2,3s
+  // 130 6s
+  for (let i = 0; i < 100; i++) {
+    utterance += i + ' '
+  }
+  console.log(utterance.length)
+  console.log(new Date())
+  expect(
+    sut.find(MatchType.KEYWORDS_AND_OTHERS_FOUND, ut(utterance), 1)
+  ).toHaveLength(0)
+  console.log(new Date())
+}
+
+perfom()
