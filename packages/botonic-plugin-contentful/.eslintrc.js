@@ -26,7 +26,7 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
-    "filenames/match-regex": ["warn", "^[a-z-.]+$", true],
+    "filenames/match-regex": ["error", "^[a-z-.]+$", true],
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
