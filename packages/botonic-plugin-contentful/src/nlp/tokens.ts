@@ -66,8 +66,12 @@ const tokenizers: { [locale: string]: Tokenizer } = {
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
   return tokenizers[locale]
 }
-
-export const DEFAULT_SEPARATORS_REGEX = new RegExp('[;,./()]', 'g')
+const SEPARATORS = ';,./()!? '
+export const DEFAULT_SEPARATORS_REGEX = new RegExp('[' + SEPARATORS + ']', 'g')
+export const DEFAULT_NOT_SEPARATORS_REGEX = new RegExp(
+  '[^' + SEPARATORS + ']',
+  'g'
+)
 
 export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   es: esDefaultStopWords,
