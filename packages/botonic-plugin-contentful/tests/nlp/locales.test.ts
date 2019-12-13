@@ -1,5 +1,5 @@
-import { normalize } from '../../src/nlp/locales'
+import { preprocess } from '../../src/nlp/locales'
 
 test('TEST normalize', () => {
-  expect(normalize('es', ' ÑÇáü òL·l ')).toEqual('ncau ol·l')
+  expect(preprocess('es', ' ÑÇáü òL·l ')).toEqual('ncau ol·l')
 })

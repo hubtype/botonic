@@ -100,7 +100,7 @@ export class Normalizer {
   }
 
   normalize(locale: Locale, txt: string): NormalizedUtterance {
-    txt = txt.toLowerCase()
+    txt = txt.trim().toLowerCase()
     txt = txt.replace(this.separatorsRegex, ' ')
     const stemmer = stemmerFor(locale)
     // tokenizer will replace i18n characters
