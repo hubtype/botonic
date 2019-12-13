@@ -18,9 +18,9 @@ export function checkLocale(locale?: Locale): Locale {
 }
 
 /**
- * Converts to lowercase and removes accents
+ * Converts to lowercase, trims and removes accents
  */
-export function normalize(locale: Locale, text: string): string {
+export function preprocess(locale: Locale, text: string): string {
   text = text.trim().toLowerCase()
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
