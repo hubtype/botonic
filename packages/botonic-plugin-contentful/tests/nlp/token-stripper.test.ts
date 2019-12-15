@@ -1,7 +1,5 @@
-// import { TokenRange, SearchPosition, TextEdit } from '../../src/nlp/edit'
-
 import { TokenStripper, TokenRange } from '../../src/nlp/token-stripper'
-import { Normalizer } from '../../src/nlp'
+import { DEFAULT_SEPARATORS_REGEX, Normalizer, preprocess } from '../../src/nlp'
 
 test('hack because webstorm does not recognize test.each', () => {})
 
@@ -9,12 +7,14 @@ const LOCALE = 'es'
 const normalizer = new Normalizer()
 
 function tok(str: string) {
-  return normalizer.normalize(LOCALE, str.toLowerCase())
+  return preprocess(LOCALE, str)
+    .split(DEFAULT_SEPARATORS_REGEX)
+    .filter(t => !!t)
 }
 
 test.each<any>([
   [
-    ['hey', 'buenas tardes'],
+    ['hey', 'buenas', 'buenas tardes'],
     'buenas tardes teneis zapatos?',
     new TokenRange(0, 2),
   ],
@@ -49,6 +49,7 @@ test.each<any>([
 )
 
 test.each<any>([
+  [TokenStripper.END_POSITION, ['Thank you'], "I'm? Thank you.", "I'm?"],
   [
     TokenStripper.START_POSITION,
     ['buenos días', 'ey'],

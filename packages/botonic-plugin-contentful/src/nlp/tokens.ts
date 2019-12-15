@@ -66,10 +66,13 @@ const tokenizers: { [locale: string]: Tokenizer } = {
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
   return tokenizers[locale]
 }
-const SEPARATORS = ';,./()!? '
-export const DEFAULT_SEPARATORS_REGEX = new RegExp('[' + SEPARATORS + ']', 'g')
+export const DEFAULT_SEPARATORS = ';,./()!?" '
+export const DEFAULT_SEPARATORS_REGEX = new RegExp(
+  '[' + DEFAULT_SEPARATORS + ']',
+  'g'
+)
 export const DEFAULT_NOT_SEPARATORS_REGEX = new RegExp(
-  '[^' + SEPARATORS + ']',
+  '[^' + DEFAULT_SEPARATORS + ']',
   'g'
 )
 
