@@ -1,7 +1,8 @@
 import { equalArrays } from '../util/arrays'
-import { NormalizedUtterance, Normalizer } from './normalizer'
-import { Locale } from './locales'
+import { Normalizer } from './normalizer'
+import { Locale, preprocess } from './locales'
 import { TokenSkipper } from './token-skipper'
+import { DEFAULT_SEPARATORS_REGEX } from './tokens'
 
 export class TokenRange {
   constructor(readonly from: number, readonly to: number) {}
@@ -25,17 +26,20 @@ export class TokenStripper {
   ) {
     this.needleTokensByPos = {}
     for (const pos in needlesByPos) {
-      this.needleTokensByPos[pos] = needlesByPos[pos].map(n =>
-        normalizer.normalize(locale, n).words.map(w => w.token)
-      )
+      // we sort them to avoid stripping "buenas" before "buenas tardes"
+      const firstLongest = (s1: string, s2: string) => {
+        return s2.length - s1.length
+      }
+      this.needleTokensByPos[pos] = needlesByPos[pos]
+        .sort(firstLongest)
+        .map(n => normalizer.normalize(locale, n).words.map(w => w.token))
     }
   }
 
   /**
    * tokens do not to previously remove stopwords which may occur in needles
    */
-  search(input: NormalizedUtterance, pos: number): TokenRange | undefined {
-    const tokens = input.words.map(w => w.token)
+  search(tokens: string[], pos: number): TokenRange | undefined {
     for (const needle of this.needleTokensByPos[pos] || []) {
       let range: TokenRange
       if (pos === TokenStripper.START_POSITION) {
@@ -55,28 +59,35 @@ export class TokenStripper {
 
   strip(haystack: string, pos: number): string {
     const skipper = new TokenSkipper()
+    let tokens = preprocess(this.locale, haystack)
+      .split(DEFAULT_SEPARATORS_REGEX)
+      .filter(t => !!t)
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const range = this.search(
-        this.normalizer.normalize(this.locale, haystack),
-        pos
-      )
+      const range = this.search(tokens, pos)
       if (!range) {
         return haystack
       }
+      const last = haystack
       switch (pos) {
         case TokenStripper.START_POSITION: {
           const idx = skipper.skipWords(haystack, range.to, true)
           haystack = haystack.substr(idx)
+          tokens = tokens.slice(range.to)
           break
         }
         case TokenStripper.END_POSITION: {
           const idx = skipper.skipWords(haystack, range.from, false)
           haystack = haystack.substr(0, idx)
+          tokens = tokens.slice(0, range.from)
           break
         }
         default:
           throw new Error(`Invalid search position ${pos}`)
+      }
+      if (last == haystack) {
+        console.error(`Could not skip ${range} from ${haystack}`)
+        return haystack
       }
     }
   }

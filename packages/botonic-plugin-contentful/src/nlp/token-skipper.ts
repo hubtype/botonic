@@ -3,26 +3,29 @@ import {
   DEFAULT_SEPARATORS_REGEX,
 } from './tokens'
 
-/**
- *
- */
 export class TokenSkipper {
+  private readonly notClosingSeparator: RegExp
   constructor(
-    readonly separators = DEFAULT_SEPARATORS_REGEX,
-    readonly notSeparators = DEFAULT_NOT_SEPARATORS_REGEX
-  ) {}
+    private readonly separators = DEFAULT_SEPARATORS_REGEX,
+    private readonly notSeparators = DEFAULT_NOT_SEPARATORS_REGEX
+  ) {
+    this.notClosingSeparator = /[^?!)]/g
+  }
 
   /**
-   * Returns the index within a text after skipping some words
+   * Eg. skipWords('a? b',1, false) => 1
+   * @param text
+   * @param skipWordsCount how many words to skip
+   * @param skipClosingSeparators whether characters like ? must be skipped
    */
   skipWords(
     text: string,
     skipWordsCount: number,
-    skipFinalSeparators: boolean
+    skipClosingSeparators: boolean
   ): number {
     let idx = 0
     for (let w = 0; w < skipWordsCount; w++) {
-      idx = this.skipSeparators(text, idx)
+      idx = this.skipSeparators(text, idx, this.notSeparators)
       if (idx >= 0) {
         idx = this.skipWord(text, idx)
       }
@@ -34,8 +37,12 @@ export class TokenSkipper {
         }
       }
     }
-    if (skipFinalSeparators && idx >= 0) {
-      idx = this.skipSeparators(text, idx)
+    if (idx >= 0) {
+      idx = this.skipSeparators(
+        text,
+        idx,
+        skipClosingSeparators ? this.notSeparators : this.notClosingSeparator
+      )
     }
     if (idx < 0) {
       return text.length
@@ -51,8 +58,8 @@ export class TokenSkipper {
     return idx + offset
   }
 
-  private skipSeparators(text: string, offset: number): number {
-    const idx = text.substr(offset).search(this.notSeparators)
+  private skipSeparators(text: string, offset: number, seps: RegExp): number {
+    const idx = text.substr(offset).search(seps)
     if (idx < 0) {
       return idx
     }
