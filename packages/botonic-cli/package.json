@@ -24,11 +24,9 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@oclif/tslint": "^3",
     "@types/node": "^12.12.18",
     "globby": "^10.0.1",
     "ts-node": "^8.5.4",
-    "tslint": "^5.9.1",
     "typescript": "~3.6.4"
   },
   "engines": {
