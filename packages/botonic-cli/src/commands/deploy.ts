@@ -10,6 +10,7 @@ const ora = require('ora')
 
 import { BotonicAPIService } from '../botonicAPIService'
 import { track, sleep } from '../utils'
+import { AxiosError } from 'axios'
 
 var force = false
 var npmCommand: string | undefined
@@ -142,19 +143,24 @@ Uploading...
   async login(email: string, password: string) {
     return this.botonicApiService.login(email, password).then(
       ({}) => this.deployBotFlow(),
-      err => {
+      (err: AxiosError) => {
         if (
           err.response &&
           err.response.data &&
           err.response.data.error_description
-        )
+        ) {
           console.log(colors.red(err.response.data.error_description))
-        else
+        }
+        else {
           console.log(
             colors.red(
               'There was an error when trying to log in. Please, try again:'
             )
           )
+          if (err.response && err.response.status && err.response.statusText) {
+            console.error(`Error ${err.response.status}: ${err.response.statusText}`)
+          }
+        }
         this.askLogin()
       }
     )
