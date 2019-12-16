@@ -1,7 +1,7 @@
-import { join, resolve } from 'path'
+import { join } from 'path'
 import * as fs from 'fs'
 import { homedir } from 'os'
-import axios from 'axios'
+import axios, { Method } from 'axios'
 import * as colors from 'colors'
 const FormData = require('form-data')
 const util = require('util')
@@ -163,7 +163,7 @@ export class BotonicAPIService {
   async api(
     path: string,
     body: any = null,
-    method: string = 'get',
+    method: Method = 'get',
     headers: any | null = null,
     params: any = null
   ): Promise<any> {
@@ -320,7 +320,7 @@ export class BotonicAPIService {
     )
   }
 
-  async getHeaders(form: any) {
+  async getHeaders(form: any): Promise<Object> {
     //https://github.com/axios/axios/issues/1006#issuecomment-352071490
     return new Promise((resolve, reject) => {
       form.getLength((err: any, length: any) => {
