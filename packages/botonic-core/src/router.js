@@ -1,5 +1,5 @@
 import * as url from 'url'
-import { isBrowser, isNode } from './utils'
+import { isBrowser, isNode, isFunction } from './utils'
 
 export class Router {
   constructor(routes) {
@@ -64,7 +64,7 @@ export class Router {
             params: routeParams.params,
             retryAction: lastRoute ? lastRoute.action : null,
             defaultAction: defaultAction ? defaultAction.route.action : null,
-            lastRoutePath: lastRoutePath
+            lastRoutePath: lastRoutePath,
           }
         } else {
           session.__retries = 0
@@ -76,14 +76,14 @@ export class Router {
             params: routeParams.params,
             retryAction: null,
             defaultAction: defaultAction ? defaultAction.route.action : null,
-            lastRoutePath: lastRoutePath
+            lastRoutePath: lastRoutePath,
           }
         }
       } else if (defaultAction) {
         return {
           action: defaultAction.route.action,
           params: defaultAction.params,
-          lastRoutePath: lastRoutePath
+          lastRoutePath: lastRoutePath,
         }
       } else if ('redirect' in routeParams.route) {
         lastRoutePath = routeParams.route.redirect
@@ -92,7 +92,7 @@ export class Router {
           return {
             action: redirectRoute.action,
             params: redirectRoute.params,
-            lastRoutePath: lastRoutePath
+            lastRoutePath: lastRoutePath,
           }
         }
       }
@@ -104,7 +104,7 @@ export class Router {
         action: notFound.action,
         params: {},
         retryAction: lastRoute.action,
-        lastRoutePath: lastRoutePath
+        lastRoutePath: lastRoutePath,
       }
     } else {
       this.lastRoutePath = null
@@ -113,7 +113,7 @@ export class Router {
         action: notFound.action,
         params: {},
         retryAction: null,
-        lastRoutePath: lastRoutePath
+        lastRoutePath: lastRoutePath,
       }
     }
   }
@@ -125,15 +125,15 @@ export class Router {
         input.path = path_params[0]
         delete input.payload
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   getRoute(input, routes, session) {
+    let computedRoutes = isFunction(routes) ? routes(input, session) : routes
     /* Find the route that matches the given input, if it match with some of the entries,
       return the whole Route of the entry with optional params captured if matcher was a regex */
     let params = {}
-    let route = routes.find(r =>
+    let route = computedRoutes.find(r =>
       Object.entries(r)
         .filter(([key, {}]) => key != 'action' && key != 'childRoutes')
         .some(([key, value]) => {
