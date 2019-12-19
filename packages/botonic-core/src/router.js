@@ -8,7 +8,7 @@ export class Router {
 
   processInput(input, session = {}, lastRoutePath = null) {
     let routeParams = {}
-    this.getOnFinishParams(input)
+    let pathParams = this.getOnFinishParams(input)
     let brokenFlow = false
     let lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (lastRoute && lastRoute.childRoutes)
@@ -23,10 +23,10 @@ export class Router {
       routeParams = this.getRoute(input, this.routes, session)
     }
     try {
-      if (input.path.length > 1) {
+      if (pathParams) {
         let searchParams = ''
-        if (isBrowser()) searchParams = new URLSearchParams(input.path[1])
-        if (isNode()) searchParams = new url.URLSearchParams(input.path[1])
+        if (isBrowser()) searchParams = new URLSearchParams(pathParams)
+        if (isNode()) searchParams = new url.URLSearchParams(pathParams)
         for (let [key, value] of searchParams) {
           routeParams.params
             ? (routeParams.params[key] = value)
@@ -120,12 +120,17 @@ export class Router {
 
   getOnFinishParams(input) {
     try {
-      const path_params = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
-      if (path_params.length > 0) {
-        input.path = path_params[0]
+      const pathParams = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
+      if (pathParams.length > 0) {
+        input.path = pathParams[0]
         delete input.payload
       }
-    } catch (e) {}
+      if (pathParams.length > 1) {
+        return pathParams[1]
+      }
+    } catch (e) {
+      return undefined
+    }
   }
 
   getRoute(input, routes, session) {
