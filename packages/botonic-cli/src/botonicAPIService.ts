@@ -60,7 +60,7 @@ export class BotonicAPIService {
         this.headers = {
           Authorization: `Bearer ${this.oauth.access_token}`,
           'content-type': 'application/json',
-          'x-segment-anonymous-id': this.analytics.anonymous_id
+          'x-segment-anonymous-id': this.analytics.anonymous_id,
         }
     }
   }
@@ -95,7 +95,7 @@ export class BotonicAPIService {
       JSON.stringify({
         oauth: this.oauth,
         me: this.me,
-        analytics: this.analytics
+        analytics: this.analytics,
       })
     )
   }
@@ -118,9 +118,9 @@ export class BotonicAPIService {
           '*.scss',
           'webpack.config.js',
           '.babelrc',
-          'tsconfig.json'
-        ]
-      }
+          'tsconfig.json',
+        ],
+      },
     }
     let hash = await hashElement('.', options)
     return hash.hash
@@ -129,7 +129,7 @@ export class BotonicAPIService {
   async build(npmCommand: string = 'build') {
     let spinner = new ora({
       text: 'Building...',
-      spinner: 'bouncingBar'
+      spinner: 'bouncingBar',
     }).start()
     try {
       var build_out = await exec(`npm run ${npmCommand}`)
@@ -174,7 +174,7 @@ export class BotonicAPIService {
         url: this.baseApiUrl + path,
         headers: headers || this.headers,
         data: body,
-        params: params
+        params: params,
       })
     } catch (e) {
       if (e.response.status == 401) {
@@ -191,7 +191,7 @@ export class BotonicAPIService {
       url: this.baseApiUrl + path,
       headers: headers || this.headers,
       data: body,
-      params: params
+      params: params,
     })
   }
 
@@ -204,15 +204,15 @@ export class BotonicAPIService {
         grant_type: 'refresh_token',
         refresh_token: this.oauth.refresh_token,
         client_id: this.cliendId,
-        client_secret: this.clientSecret
-      }
+        client_secret: this.clientSecret,
+      },
     })
     if (!resp) return
     this.oauth = resp.data
     this.headers = {
       Authorization: `Bearer ${this.oauth.access_token}`,
       'content-type': 'application/json',
-      'x-segment-anonymous-id': this.analytics.anonymous_id
+      'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
     await this.saveGlobalCredentials()
     return resp
@@ -227,14 +227,14 @@ export class BotonicAPIService {
         password: password,
         client_id: this.cliendId,
         client_secret: this.clientSecret,
-        grant_type: 'password'
-      }
+        grant_type: 'password',
+      },
     })
     this.oauth = resp.data
     this.headers = {
       Authorization: `Bearer ${this.oauth.access_token}`,
       'content-type': 'application/json',
-      'x-segment-anonymous-id': this.analytics.anonymous_id
+      'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
     resp = await this.api('users/me')
     if (resp) this.me = resp.data
@@ -268,7 +268,7 @@ export class BotonicAPIService {
 
   async getBots() {
     return this.api('bots/bots_paginator/', null, 'get', null, {
-      organization_id: this.me.organization_id
+      organization_id: this.me.organization_id,
     })
   }
 
@@ -287,7 +287,7 @@ export class BotonicAPIService {
 
   async getProviders() {
     return this.api('provider_accounts/', null, 'get', null, {
-      bot_id: this.bot.id
+      bot_id: this.bot.id,
     })
   }
 
