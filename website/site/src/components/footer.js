@@ -1,11 +1,26 @@
-import { Link, useStaticQuery, graphql } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
-import { Flex } from "rebass"
-import Img from "gatsby-image"
+import { useStaticQuery, graphql } from 'gatsby'
+import React from 'react'
+import Img from 'gatsby-image'
+import styled from 'styled-components'
+import LightLink from './common/LightLink'
+
+const Container = styled.div`
+  padding: 29px 60px;
+  display: flex;
+`
+const InnerLeft = styled.div`
+  display: flex;
+`
+const InnerRight = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+  color: #bebed2;
+  font-family: Heebo;
+`
 
 const Footer = () => {
-  const { hubtypeLogo, languageIcon } = useStaticQuery(
+  const { languageIcon } = useStaticQuery(
     graphql`
       query {
         languageIcon: file(relativePath: { eq: "language-icon.png" }) {
@@ -21,32 +36,22 @@ const Footer = () => {
 
   return (
     <footer>
-      <Flex style={{ padding: "29px 60px 29px 60px", fontFamily: "Heebo", color: "#BEBED2", width:"100%", position:'fixed', bottom: 0}}> 
-        <Flex >
+      <Container>
+        <InnerLeft>
           <Img
             fixed={languageIcon.childImageSharp.fixed}
-            style={{ marginTop: "4px", marginRight: "4px" }}
+            style={{ marginTop: '4px', marginRight: '4px' }}
           />
-          <span style={{ marginRight: "4rem" }}>English</span>
+          <LightLink text={'English'} link={'/privacy-policy/'} />
+          <LightLink text={'Privacy Policy'} link={'/privacy-policy/'} />
+          <LightLink text={'Cookies'} link={'/cookies/'} />
+          <LightLink text={'Terms of service'} link={'/terms-of-service/'} />
+        </InnerLeft>
 
-          <Link to="/" style={{ color: "#BEBED2", textDecoration: "none", marginRight: "4rem" }}>
-            Privacy policy
-          </Link>
-
-          <Link to="/" style={{ color: "#BEBED2", textDecoration: "none", marginRight: "4rem" }}>
-            Cookies
-          </Link>
-
-          <Link to="/" style={{ color: "#BEBED2", textDecoration: "none", marginRight: "4rem" }}>
-            Terms of service
-          </Link>
-        </Flex>
-        <Flex flexGrow={1} justifyContent="flex-end">
-          
+        <InnerRight>
           <span>© {new Date().getFullYear()} All rights reserved</span>
-        </Flex>
-      </Flex>
-      
+        </InnerRight>
+      </Container>
     </footer>
   )
 }

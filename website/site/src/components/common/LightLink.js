@@ -3,22 +3,23 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 
-const PlainLink = ({ text, link, style }) => {
+const LightLink = ({ text, link, style }) => {
   const StyledLink = styled(Link)`
-    color: white;
+    color: #bebed2;
     text-decoration: none;
-    font-family: Palanquin;
+    margin-right: 4rem;
+    font-family: Heebo;
     ${style}
   `
   return <StyledLink to={link}>{text}</StyledLink>
 }
-PlainLink.propTypes = {
+LightLink.propTypes = {
   text: PropTypes.string,
   link: PropTypes.string
 }
 
-PlainLink.defaultProps = {
+LightLink.defaultProps = {
   text: '',
   link: '/'
 }
-export default PlainLink
+export default LightLink
