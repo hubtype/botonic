@@ -89,10 +89,21 @@ export declare function storeCaseRating(
   rating: number
 ): Promise<any>
 
-export declare function getAvailableAgents(
+export declare function getAvailableAgentsByQueue(
   session: Session,
-  queueId?: string
+  queueId: string
 ): Promise<{ agents: string[] }>
+
+export interface HubtypeAgentsInfo {
+  email: string
+  attending_count: number
+  status: string
+  last_message_sent: string
+}
+
+export declare function getAvailableAgents(
+  session: Session
+): Promise<{ agents: HubtypeAgentsInfo[] }>
 
 /** The response of the bot for the triggered actions, which can be
  * the one matched by the routes, the default action and the retry actions.

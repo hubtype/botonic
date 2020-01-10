@@ -126,7 +126,7 @@ export async function storeCaseRating(session, rating) {
   return resp.data
 }
 
-export async function getAvailableAgents(session, queueId) {
+export async function getAvailableAgentsByQueue(session, queueId) {
   let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
   let resp = await axios({
     headers: {
@@ -134,7 +134,20 @@ export async function getAvailableAgents(session, queueId) {
     },
     method: 'post',
     url: `${baseUrl}/v1/queues/${queueId}/get_available_agents/`,
-    data: { bot_id: session.bot.id, queue_id: queueId },
+    data: { queue_id: queueId },
+  })
+  return resp.data
+}
+
+export async function getAvailableAgents(session) {
+  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  let botId = session.bot.id
+  let resp = await axios({
+    headers: {
+      Authorization: `Bearer ${session._access_token}`,
+    },
+    method: 'post',
+    url: `${baseUrl}/v1/bots/${botId}/get_available_agents/`,
   })
   return resp.data
 }
