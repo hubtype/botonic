@@ -147,7 +147,7 @@ export async function getAvailableAgents(session) {
       Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
-    url: `${baseUrl}/v1/bots/${botId}/get_available_agents/`,
+    url: `${baseUrl}/v1/bots/${botId}/get_agents/`,
   })
   return resp.data
 }
