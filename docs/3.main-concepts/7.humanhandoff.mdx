@@ -1,5 +1,5 @@
 ---
-name: 6. Human Handoff
+name: 7. Human Handoff
 route: /main-concepts/human-handoff
 menu: 3. Main Concepts
 ---
@@ -32,7 +32,7 @@ export const routes = [
 ```
 
 > #### NOTE:
-> The conversation is transferred to Hubtype Desk, so the `queueId` must be the id of a queue inside Hubtype Desk. [Contact us] (https://botonic.slack.com/) if you need to integrate with another CRM.  
+> The conversation is transferred to Hubtype Desk, so the `queueId` must be the id of a queue inside Hubtype Desk. [Contact us] (https://botonic.slack.com/) if you need to integrate with another CRM.
 > You can find the `HUBTYPE_DESK_QUEUE_ID` by checking the URL `https://app.hubtype.com/organization/queues/{HUBTYPE_DESK_QUEUE_ID}/messengers` under `Edit Queue` tab.
 
 **./actions/handoff-example.js**
@@ -90,22 +90,22 @@ export default class extends React.Component {
 }
 ```
 > #### NOTE:
-> Both features are only available when the bot is deployed. 
-When you are in development mode (`botonic serve` command), you can press the button 'Continue' in order to emulate the resolution of a case.  
+> Both features are only available when the bot is deployed.
+When you are in development mode (`botonic serve` command), you can press the button 'Continue' in order to emulate the resolution of a case.
 
 ## Case Handling
-Each time a **Human Handoff** is done a new case will be created in Hubtype's Desk. 
-When creating a new case you can autoassign this case to a specific agent using `getAvailableAgents` as shown below. 
-You can also send relevant information to Hubtype Desk by specifying the optional parameter with `caseInfo` and `note`.  
+Each time a **Human Handoff** is done a new case will be created in Hubtype's Desk.
+When creating a new case you can autoassign this case to a specific agent using `getAvailableAgents` as shown below.
+You can also send relevant information to Hubtype Desk by specifying the optional parameter with `caseInfo` and `note`.
 
-> * `caseInfo` can contain, as an example, the name of the action where the user get stucked. Will be displayed in case details in Hubtype Desk.  
+> * `caseInfo` can contain, as an example, the name of the action where the user get stucked. Will be displayed in case details in Hubtype Desk.
 
 > * `note` can be used to leave a message for other agents who don't have constancy of the case.
 
 ```javascript
 import React from 'react'
 import { Text } from '@botonic/react'
-import { getAvailableAgents, humanHandOff } from '@botonic/core'
+import { getAvailableAgentsByQueue, humanHandOff } from '@botonic/core'
 
 export default class extends React.Component {
   static async botonicInit({ input, session, params, lastRoutePath }) {
@@ -113,7 +113,7 @@ export default class extends React.Component {
 
     let agentEmail = ''
     try {
-      agentEmail = (await getAvailableAgents(
+      agentEmail = (await getAvailableAgentsByQueue(
         session,
         'HUBTYPE_DESK_QUEUE_ID'
       )).filter(agent => agent == 'agent-name@hubtype.com')[0]
@@ -149,6 +149,10 @@ export default class extends React.Component {
 }
 ```
 
+> #### NOTE:
+>
+> For getting the agents with extra information, sorted by the number of cases that
+> are attending in Hubtype, you can use `getAvailableAgents`.
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
   <PrevButton title="Webviews" href="/main-concepts/webviews" />
