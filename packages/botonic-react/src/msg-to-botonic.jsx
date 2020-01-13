@@ -42,7 +42,7 @@ export function msgToBotonic(msg, customMessageTypes) {
           {buttons_parse(msg.buttons)}
         </Text>
       )
-    return <Text {...msg}>{msg.data.text || msg.data}</Text>
+    return <Text {...msg}>{txt}</Text>
   } else if (msg.type === 'carousel') {
     let elements = msg.elements || msg.data.elements
     return <Carousel {...msg}>{elements_parse(elements)}</Carousel>
