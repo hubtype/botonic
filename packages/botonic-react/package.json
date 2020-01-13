@@ -16,7 +16,7 @@
     "@botonic/core": "^0.10.0",
     "@rehooks/local-storage": "^1.6.0",
     "axios": "^0.19.0",
-    "emoji-picker-react": "^2.1.1",
+    "emoji-picker-react": "^3.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-frame-component": "^4.1.0",
