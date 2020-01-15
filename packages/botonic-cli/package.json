@@ -19,7 +19,7 @@
     "inquirer": "^6.5.2",
     "ora": "^3.4.0",
     "tslib": "^1.10.0",
-    "zip-a-folder": "0.0.9"
+    "zip-a-folder": "0.0.10"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
