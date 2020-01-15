@@ -24,7 +24,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@types/node": "^12.12.18",
+    "@types/node": "^13.1.7",
     "globby": "^10.0.1",
     "ts-node": "^8.5.4",
     "typescript": "~3.7.4"
