@@ -24,7 +24,7 @@
     "react-router-dom": "^5.0.0",
     "react-textarea-autosize": "^7.1.0",
     "rebass": "^4.0.7",
-    "simplebar-react": "^1.2.3",
+    "simplebar-react": "^2.1.0",
     "styled-components": "^5.0.0-beta.6",
     "ua-parser-js": "^0.7.20",
     "unescape": "^1.0.1",
