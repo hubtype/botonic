@@ -84,15 +84,12 @@ export async function humanHandOff(session, queueNameOrId = '', onFinish) {
 async function _humanHandOff(
   session,
   queueNameOrId = '',
-  onFinish,
+  onFinish = '',
   agentEmail = '',
   caseInfo = '',
   note = ''
 ) {
   let params = {}
-  if (!queueNameOrId && agentEmail) {
-    throw 'You must provide a queue ID'
-  }
   if (queueNameOrId) {
     params.queue = queueNameOrId
   }
@@ -105,7 +102,6 @@ async function _humanHandOff(
   if (note) {
     params.note = note
   }
-
   if (onFinish) {
     params.on_finish = onFinish
   }

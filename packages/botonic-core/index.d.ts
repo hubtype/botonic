@@ -77,7 +77,7 @@ export class HandOffBuilder {
 export declare function humanHandOff(
   session: Session,
   queueNameOrId: string, // queue_name for backward compatibility, queue_id for new versions
-  onFinish: { payload?: string; path?: string }
+  onFinish?: { payload?: string; path?: string }
 ): Promise<void>
 
 export declare function getOpenQueues(
