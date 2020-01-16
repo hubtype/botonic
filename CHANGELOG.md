@@ -1,3 +1,4 @@
+
 # Changelog
 All notable changes to Botonic will be documented in this file.
 
@@ -8,6 +9,21 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 </details>
+
+## [0.10.1] - 2020-14-01
+### Added
+- Added default config for every template `{  defaultDelay: 0.4,  defaultTyping: 0.6  }` to avoid extravagant warnings in `botonic serve`.
+
+### Changed
+- Upgraded dependencies.
+- Change `@botonic/cli`'s templates to upgrade automatically to last patch version.
+- Bump [@tensorflow/tfjs](https://www.npmjs.com/package/@tensorflow/tfjs) and [@tensorflow/tfjs-node](https://www.npmjs.com/package/@tensorflow/tfjs-node) to latest versions for [@botonic/nlu](https://www.npmjs.com/package/@botonic/nlu) and [@botonic/plugin-nlu](https://www.npmjs.com/package/@botonic/plugin-nlu).
+
+### Fixed
+- Allow calling dynamic routes (routes as a function) in nested routes.
+- Fix for issue [#409](https://github.com/hubtype/botonic/issues/409).
+- Fix for runtime error produced when a `Text` had empty text and no buttons nor replies.
+
 
 ## [0.10.0] - 2019-12-03
 ### Added
@@ -37,4 +53,6 @@ All notable changes to Botonic will be documented in this file.
 - Carousels with just one element won't be broken.
 - Using `staticAsset` in `custom-webchat` template that produced a bug in production.
 
-[0.10.0]: https://github.com/hubtype/botonic/compare/master...release/0.10.0
+[0.10.0]: https://github.com/hubtype/botonic/releases/tag/v0.10.0
+
+[0.10.1]:https://github.com/hubtype/botonic/releases/tag/v0.10.1
