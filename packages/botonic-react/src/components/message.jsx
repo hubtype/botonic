@@ -6,9 +6,6 @@ import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 import Logo from '../assets/botonic_react_logo100x100.png'
-import Fade from 'react-reveal/Fade'
-import LightSpeed from 'react-reveal/LightSpeed'
-import Slide from 'react-reveal/Slide'
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)

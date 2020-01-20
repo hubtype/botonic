@@ -28,8 +28,8 @@ import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
 import LogoEmoji from '../assets/emojiButton.svg'
 import { MIME_WHITELIST } from '../constants'
-import { CUSTOM_WEBCHAT_PROPERTIES, MIME_WHITELIST } from '../constants'
-import { motion, useViewportScroll, useTransform } from 'framer-motion'
+import { MIME_WHITELIST } from '../constants'
+import { motion } from 'framer-motion'
 
 const getAttachmentType = fileType => {
   return Object.entries(MIME_WHITELIST)
