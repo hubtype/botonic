@@ -59,11 +59,11 @@ Uploading...
     const { args, flags } = this.parse(Run)
     track('Deployed Botonic CLI')
 
-    force = flags.force ? flags.force : false
+    force = flags.force || false
     npmCommand = flags.command
-    this.botName = flags.botName ? flags.botName : undefined
-    let email = flags.email ? flags.email : undefined
-    let password = flags.password ? flags.password : undefined
+    this.botName = flags.botName
+    let email = flags.email
+    let password = flags.password
     if (email && password) await this.login(email, password)
     else if (!this.botonicApiService.oauth) await this.signupFlow()
     else if (this.botName) {
