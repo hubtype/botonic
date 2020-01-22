@@ -2,7 +2,7 @@
 module.exports = {
   roots: ['tests/'],
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx)$',
-  testPathIgnorePatterns: ['lib', '.*.d.ts', 'tests/helpers', '.*.helper.js'],
+  testPathIgnorePatterns: ['lib', '.*.d.ts', 'tests/helpers', '.*.helper.js', 'tests/__mocks__'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
   transformIgnorePatterns: ['node_modules/(?!@botonic).+\\.(js|jsx)$'],
   moduleFileExtensions: ['js', 'jsx', 'json'],
