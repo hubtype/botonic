@@ -34,26 +34,40 @@ Uploading...
     }),
     command: flags.string({
       char: 'c',
-      description: 'Command to execute from the package "scripts" object'
+      description: 'Command to execute from the package "scripts" object',
     }),
-    botName: flags.string()
+    email: flags.string({
+      char: 'e',
+      description: 'Email from Hubtype Organization',
+    }),
+    password: flags.string({
+      char: 'p',
+      description: 'Password from Hubtype Organization',
+    }),
+    botName: flags.string({
+      char: 'b',
+      description: 'Name of the bot from Hubtype where you want to deploy',
+    }),
   }
 
   static args = [{ name: 'bot_name' }]
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
+  private botName: string | undefined = undefined
 
   async run() {
     const { args, flags } = this.parse(Run)
     track('Deployed Botonic CLI')
 
-    force = flags.force ? flags.force : false
+    force = flags.force || false
     npmCommand = flags.command
-    let botName = flags.botName ? flags.botName : false
-
-    if (!this.botonicApiService.oauth) await this.signupFlow()
-    else if (botName) {
-      this.deployBotFromFlag(botName)
+    this.botName = flags.botName
+    let email = flags.email
+    let password = flags.password
+    if (email && password) await this.login(email, password)
+    else if (!this.botonicApiService.oauth) await this.signupFlow()
+    else if (this.botName) {
+      this.deployBotFromFlag(this.botName)
     } else await this.deployBotFlow()
   }
 
@@ -123,6 +137,7 @@ Uploading...
   }
 
   async deployBotFlow() {
+    if (this.botName) return this.deployBotFromFlag(this.botName)
     if (!this.botonicApiService.bot) return this.newBotFlow()
     else {
       let resp = await this.botonicApiService.getBots()
@@ -150,15 +165,16 @@ Uploading...
           err.response.data.error_description
         ) {
           console.log(colors.red(err.response.data.error_description))
-        }
-        else {
+        } else {
           console.log(
             colors.red(
               'There was an error when trying to log in. Please, try again:'
             )
           )
           if (err.response && err.response.status && err.response.statusText) {
-            console.error(`Error ${err.response.status}: ${err.response.statusText}`)
+            console.error(
+              `Error ${err.response.status}: ${err.response.statusText}`
+            )
           }
         }
         this.askLogin()
