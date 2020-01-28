@@ -17,7 +17,7 @@
     "colors": "^1.3.3",
     "compromise": "^13.0.0",
     "compromise-plugin": "0.0.9",
-    "franc": "^4.1.0",
+    "franc": "^5.0.0",
     "fs": "0.0.1-security",
     "inquirer": "^7.0.4",
     "langs": "^2.0.0",
