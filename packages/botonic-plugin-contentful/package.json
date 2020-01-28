@@ -31,7 +31,7 @@
     "node-nlp": "^4.0.2"
   },
   "devDependencies": {
-    "@types/jest": "^24.9.0",
+    "@types/jest": "^25.1.0",
     "@types/jest-each": "^24.3.0",
     "@types/memoizee": "^0.4.3",
     "@types/moment-timezone": "^0.5.12",
