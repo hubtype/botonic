@@ -28,7 +28,7 @@
     "@babel/core": "^7.5.5",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@types/jest": "^24.0.17",
+    "@types/jest": "^25.1.0",
     "jest": "^24.8.0"
   }
 }
