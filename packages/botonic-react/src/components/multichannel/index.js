@@ -1,8 +1,8 @@
 import { Multichannel } from './multichannel'
-import { MultichannelText } from './m-text'
-import { MultichannelButton } from './m-button'
-import { MultichannelReply } from './m-reply'
-import { MultichannelCarousel } from './m-carousel'
+import { MultichannelText } from './multichannel-text'
+import { MultichannelButton } from './multichannel-button'
+import { MultichannelReply } from './multichannel-reply'
+import { MultichannelCarousel } from './multichannel-carousel'
 
 export { Multichannel }
 export { MultichannelText }

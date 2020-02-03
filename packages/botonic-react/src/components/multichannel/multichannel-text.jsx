@@ -10,7 +10,11 @@ export class MultichannelText extends React.Component {
     this.elements = []
   }
   render() {
-    if (this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW) {
+    if (
+      this.context.session &&
+      this.context.session.user &&
+      this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW
+    ) {
       let text = !Array.isArray(this.props.children)
         ? [this.props.children]
         : this.props.children.filter(e => !e.props)
