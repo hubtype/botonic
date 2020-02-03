@@ -20,7 +20,9 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
- 
+    - env:
+        CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
+        CONTENTFUL_TEST_TOKEN: ${{ CONTENTFUL_TEST_TOKEN }}
     - run: (cd ./packages/botonic-react && npm install && npm run test --key)
     - run: (cd ./packages/botonic-plugin-contentful && npm install && npm run test --key)
     - run: (cd ./packages/botonic-plugin-dynamodb && npm install && npm run test --key)
