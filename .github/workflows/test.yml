@@ -1,0 +1,24 @@
+name: CI
+ 
+on: [push]
+ 
+jobs:
+  tests:
+ 
+    # using Ubuntu
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1 #this installs node and npm for us
+      with:
+        node-version: '12'
+ 
+    - uses: actions/cache@v1 # this allows for re-using node_modules caching, making builds a bit faster.
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+ 
+    - run: (cd .packages/botonic-cli && npm install && npm run test --key)
