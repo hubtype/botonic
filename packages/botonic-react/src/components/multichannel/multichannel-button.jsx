@@ -9,7 +9,11 @@ export class MultichannelButton extends React.Component {
     super(props)
   }
   render() {
-    if (this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW) {
+    if (
+      this.context.session &&
+      this.context.session.user &&
+      this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW
+    ) {
       if (this.props.url) {
         return `${this.props.children}: ${this.props.url}`
       }

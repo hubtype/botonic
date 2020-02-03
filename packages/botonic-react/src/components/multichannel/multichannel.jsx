@@ -7,7 +7,11 @@ export class Multichannel extends React.Component {
     super(props)
   }
   render() {
-    if (this.context.session.user.provider == this.props.channel) {
+    if (
+      this.context.session &&
+      this.context.session.user &&
+      this.context.session.user.provider == this.props.channel
+    ) {
       return this.props.children
     }
     return null
