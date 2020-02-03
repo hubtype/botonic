@@ -21,4 +21,4 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
  
-    - run: (cd .packages/botonic-cli && npm install && npm run test --key)
+    - run: (cd ./packages/botonic-cli && npm install && npm run test --key)
