@@ -7,6 +7,6 @@ let o = new BotonicOutputTester(App)
 
 test('TEST: (404) NOT FOUND', async () => {
   await expect(i.text('whatever')).resolves.toBe(
-    o.text('Please, type "start" to start the tutorial.')
+    o.text("I don't understand you")
   )
 })

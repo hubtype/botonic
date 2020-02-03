@@ -5,8 +5,9 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
-    "@botonic/react": "^0.9.0",
+    "@botonic/react": "^0.10.0",
     "@rebass/grid": "^6.1.0",
+    "core-js": "3",
     "gatsby": "^2.16.1",
     "gatsby-background-image": "^0.8.15",
     "gatsby-image": "^2.2.29",

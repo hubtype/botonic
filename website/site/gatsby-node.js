@@ -1,5 +1,48 @@
-exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
+const path = require(`path`)
+
+exports.onCreateWebpackConfig = ({ actions, loaders, getConfig, stage }) => {
   const config = getConfig()
+  console.log(stage)
+  if (stage === 'build-html') {
+    actions.setWebpackConfig({
+      module: {
+        rules: [
+          {
+            test: /@rehooks\/local-storage/, // how should i match the module on here??
+            use: loaders.null()
+          }
+        ]
+      }
+    })
+  }
+
+  delete config.resolve.alias['core-js']
+  config.resolve.modules = [
+    path.resolve(__dirname, 'node_modules/gatsby/node_modules'), // for Gatsby's core-js@2
+    'node_modules' // your modules w/ core-js@3
+  ]
+  /*config.resolve.modules = [
+    path.resolve(__dirname, '../../node_modules/gatsby/node_modules'),
+    path.resolve(__dirname, './node_modules'),
+    'node_modules'
+  ]*/
+  //delete config.resolve.alias['core-js']
+  /*const coreJs2config = config.resolve.alias['core-js']
+  delete config.resolve.alias['core-js']
+  config.resolve.alias[`core-js/modules`] = `${coreJs2config}/modules`
+  try {
+    config.resolve.alias[`core-js/es`] = path.dirname(
+      require.resolve('core-js/es')
+    )
+  } catch (err) {}*/
+  /*config.resolve.alias['core-js/modules/es.array.filter'] = path.resolve(
+    __dirname,
+    'node_modules/simplebar/node_modules/core-js/modules/es.array.filter'
+  )
+  config.resolve.modules = [
+    'node_modules', // your modules w/ core-js@3
+    path.resolve(__dirname, 'node_modules/gatsby/node_modules') // for Gatsby's core-js@2
+  ]*/
   config.module.rules = [
     // Omit the default rule where test === '\.jsx?$'
     ...config.module.rules.filter(
@@ -28,12 +71,19 @@ exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
       test: /\.(scss)$/,
       use: ['style-loader', 'css-loader', 'sass-loader']
     }
+    /*{
+      test: /(@rehooks\/local-storage|typing-indicator.jsx|emoji-picker-react)/,
+      use: loaders.null()
+    }*/
+    /*{
+      test: /(@botonic\/react)/,
+      use: loaders.null()
+    }*/
   ]
   // This will completely replace the webpack config with the modified object.
   actions.replaceWebpackConfig(config)
 }
 
-const path = require(`path`)
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
   const blogPostTemplate = path.resolve(`src/templates/blogTemplate.js`)
