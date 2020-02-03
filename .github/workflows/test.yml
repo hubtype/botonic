@@ -13,10 +13,6 @@ jobs:
     - uses: actions/setup-node@v1 #this installs node and npm for us
       with:
         node-version: '12'
-      env:
-        CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
-        CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
- 
     - uses: actions/cache@v1 # this allows for re-using node_modules caching, making builds a bit faster.
       with:
         path: ~/.npm
@@ -25,4 +21,7 @@ jobs:
           ${{ runner.os }}-node-
     - run: (cd ./packages/botonic-react && npm install && npm run test --key)
     - run: (cd ./packages/botonic-plugin-contentful && npm install && npm run test --key)
+      env:
+        CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
+        CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
     - run: (cd ./packages/botonic-plugin-dynamodb && npm install && npm run test --key)
