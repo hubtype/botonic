@@ -2,8 +2,8 @@ import React from 'react'
 import { RequestContext } from '../../contexts'
 import { Carousel } from '../carousel'
 import { Image } from '../image'
-import { MultichannelText } from './m-text'
-import { MultichannelButton } from './m-button'
+import { MultichannelText } from './multichannel-text'
+import { MultichannelButton } from './multichannel-button'
 import { Providers } from '@botonic/core'
 
 export class MultichannelCarousel extends React.Component {
@@ -13,7 +13,11 @@ export class MultichannelCarousel extends React.Component {
     this.enablePics = this.props.enablePics ? this.props.enablePics : true
   }
   render() {
-    if (this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW) {
+    if (
+      this.context.session &&
+      this.context.session.user &&
+      this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW
+    ) {
       return this.props.children
         .map(e => e.props.children)
         .map((element, i) => {
