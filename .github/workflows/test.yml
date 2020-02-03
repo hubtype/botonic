@@ -15,7 +15,7 @@ jobs:
         node-version: '12'
       env:
         CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
-        CONTENTFUL_TEST_TOKEN: ${{ CONTENTFUL_TEST_TOKEN }}
+        CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
  
     - uses: actions/cache@v1 # this allows for re-using node_modules caching, making builds a bit faster.
       with:
