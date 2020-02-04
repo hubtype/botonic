@@ -10,7 +10,7 @@ export class MultichannelCarousel extends React.Component {
   static contextType = RequestContext
   constructor(props) {
     super(props)
-    this.enablePics = this.props.enablePics ? this.props.enablePics : true
+    this.enableURL = this.props.enableURL
   }
   render() {
     if (
@@ -41,20 +41,31 @@ export class MultichannelCarousel extends React.Component {
               button.url = e.props.url
             }
           }
-          return (
-            <React.Fragment key={i}>
-              <MultichannelText>
-                {`*${title}* - _${subtitle}_`}
-                <MultichannelButton url={button.url}>
-                  {`${button.text}`}
-                </MultichannelButton>
-              </MultichannelText>
-              {this.props.enablePics && <Image src={imageSrc}></Image>}
-            </React.Fragment>
-          )
+          if (this.enableURL) {
+            return (
+              <React.Fragment key={i}>
+                <MultichannelText>
+                  {`*${title}* - _${subtitle}_`}
+                  <MultichannelButton url={button.url}>
+                    {`${button.text}`}
+                  </MultichannelButton>
+                </MultichannelText>
+                {this.props.enablePics && <Image src={imageSrc}></Image>}
+              </React.Fragment>
+            )
+          } else {
+            return (
+              <React.Fragment key={i}>
+                <Image
+                  src={imageSrc}
+                  caption={`*${title}* - _${subtitle}_\n${button.text}: ${button.url}`}
+                ></Image>
+              </React.Fragment>
+            )
+          }
         })
     } else {
-      return <Carousel>{this.props.children}</Carousel>
+      return <Carousel {...props}>{this.props.children}</Carousel>
     }
   }
 }
