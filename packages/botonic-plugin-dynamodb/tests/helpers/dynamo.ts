@@ -8,6 +8,9 @@ import { DynamoDbOptions } from '../../src'
  * @param conf
  */
 export function testConfig(conf: DynamoDbOptions): DynamoDbOptions {
+  conf.accessKeyId = conf.accessKeyId || process.env.AWS_ACCESS_KEY_ID
+  conf.secretAccessKey =
+    conf.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY
   if (!conf || !conf.secretAccessKey || !conf.accessKeyId) {
     const credentials = os.homedir() + '/.aws/credentials'
     if (!fs.existsSync(credentials)) {
