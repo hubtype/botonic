@@ -137,6 +137,7 @@ export class HourAndMinute {
   ) {}
 
   compareToDate(date: Date): number {
+    // TODO this is error prone. Try to use string conversion as in function europeDate in schedule.test
     const hourAndMinuteOffset = this.zone.utcOffset(date.getTime())
     let hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset
     if (hourAndMinuteUtc <= 0) {
