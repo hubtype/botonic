@@ -3,17 +3,15 @@ name: CI
 on: [push]
  
 jobs:
-  tests:
- 
-    # using Ubuntu
+  tests: 
     runs-on: ubuntu-latest
- 
+    
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1 #this installs node and npm for us
+    - uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - uses: actions/cache@v1 # this allows for re-using node_modules caching, making builds a bit faster.
+    - uses: actions/cache@v1
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -25,3 +23,6 @@ jobs:
         CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
         CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
     - run: (cd ./packages/botonic-plugin-dynamodb && npm install && npm run test --key)
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
