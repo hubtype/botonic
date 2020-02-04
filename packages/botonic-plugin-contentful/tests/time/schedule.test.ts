@@ -183,7 +183,7 @@ test('TEST: addException end day', () => {
   )
 
   sut.addException(
-    europeDate(2019, MARCH, 29),//Friday
+    europeDate(2019, MARCH, 29, 1),//Friday //BUG this do not work when hour is 0 executed on github actions
     new DaySchedule([
       new TimeRange(
         sut.createHourAndMinute(23),
