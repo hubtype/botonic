@@ -18,6 +18,7 @@ import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
 import { PersistentMenu } from '../components/persistent-menu'
 import { Attachment } from '../components/attachment'
+import { SendButton } from '../components/send-button'
 import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
@@ -390,11 +391,15 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
+  const sendTextAreaText = () => {
+    sendText(textArea.current.value)
+    textArea.current.value = ''
+  }
+
   const onKeyDown = event => {
     if (event.keyCode == 13 && event.shiftKey == false) {
       event.preventDefault()
-      sendText(textArea.current.value)
-      textArea.current.value = ''
+      sendTextAreaText()
     }
   }
 
@@ -496,6 +501,10 @@ export const Webchat = forwardRef((props, ref) => {
   const emojiPickerEnabled = getThemeProperty('userInput.emojiPicker', false)
   const attachmentsEnabled =
     getThemeProperty('userInput.attachments.enable') || props.enableAttachments
+  const sendButtonEnabled = getThemeProperty(
+    'userInput.sendButton.enable',
+    true
+  )
   const inputUserArea = () => {
     return (
       userInputEnabled && (
@@ -576,6 +585,18 @@ export const Webchat = forwardRef((props, ref) => {
                     .map(v => v.join(','))
                     .join(',')}
                 />
+              </ConditionalWrapper>
+            )}
+            {sendButtonEnabled && (
+              <ConditionalWrapper
+                condition={animationsEnabled}
+                wrapper={children => (
+                  <motion.div whileHover={{ scale: 1.2 }}>
+                    {children}
+                  </motion.div>
+                )}
+              >
+                <SendButton onClick={sendTextAreaText} />
               </ConditionalWrapper>
             )}
           </div>
