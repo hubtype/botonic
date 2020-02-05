@@ -27,6 +27,7 @@ test('TEST: ErrorReportingCMS write rejected', async (done: DoneCallback) => {
       expect(trackException.reason).toBe(error)
       done()
     })
+    
 })
 
 test('TEST: ErrorReportingCMS write success', async () => {
