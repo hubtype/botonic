@@ -191,6 +191,7 @@ test('TEST: addException end day', () => {
       ),
     ])
   )
+  
   expect(sut.contains(europeDate(2019, MARCH, 28, 23, 15))).toBeFalsy()
   expect(sut.contains(europeDate(2019, MARCH, 29, 22, 59))).toBeFalsy()
   expect(sut.contains(europeDate(2019, MARCH, 29, 23, 0))).toBeTruthy()
