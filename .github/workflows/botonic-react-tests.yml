@@ -7,8 +7,6 @@ on:
   pull_request:
     branches:
       - master
-    paths:
-      - 'packages/botonic-react/**'
  
 jobs:
   botonic_react_tests:
@@ -21,6 +19,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12'
+    - name: Setting up cache (Step 3 of 5)
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
     - name: Install botonic-react (Step 4 of 5)
       run: (cd ./packages/botonic-react && npm install --key)
     - name: Run tests botonic-react (Step 5 of 5)
