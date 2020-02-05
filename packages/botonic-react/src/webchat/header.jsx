@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
-import { staticAsset, getProperty } from '../utils'
+import { staticAsset, ConditionalWrapper } from '../utils'
 import styled from 'styled-components'
 import Logo from '../assets/botonic_react_logo100x100.png'
 import { Flex } from 'rebass'
@@ -44,6 +44,7 @@ const StyledHeaderTitle = styled(Flex)`
 
 export const DefaultHeader = props => {
   const { getThemeProperty } = props
+  const animationsEnabled = getThemeProperty('animations.enable', true)
   let HeaderImage = Logo
   /*
   brand.image, brandImage, headerImage and header.image
@@ -56,6 +57,7 @@ export const DefaultHeader = props => {
 
   let headerTitle = getThemeProperty('header.title') || 'Botonic'
   let headerSubtitle = getThemeProperty('header.subtitle') || ''
+
   return (
     <Diffuse
       color={props.color}
@@ -78,9 +80,14 @@ export const DefaultHeader = props => {
         </HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
       </StyledHeaderTitle>
-      <motion.div whileHover={{ scale: 1.2 }}>
+      <ConditionalWrapper
+        condition={animationsEnabled}
+        wrapper={children => (
+          <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
+        )}
+      >
         <CloseHeader onClick={props.onCloseClick}>⨯</CloseHeader>
-      </motion.div>
+      </ConditionalWrapper>
     </Diffuse>
   )
 }

@@ -1,5 +1,6 @@
 export const CUSTOM_WEBCHAT_PROPERTIES = {
   webviewStyle: 'webview.style',
+  enableAnimations: 'animations.enable',
   webviewHeaderStyle: 'webview.header.style',
   brandColor: 'brand.color',
   brandImage: 'brand.image',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import uuid from 'uuid/v4'
 import { isBrowser, isNode } from '@botonic/core'
-import { staticAsset, getProperty } from '../utils'
+import { staticAsset, ConditionalWrapper } from '../utils'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
@@ -32,6 +32,8 @@ export const Message = props => {
   const [state, setState] = useState({
     id: props.id || uuid(),
   })
+
+  const animationsEnabled = getThemeProperty('animations.enable', true)
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
@@ -122,7 +124,10 @@ export const Message = props => {
     if (botMsgImg !== undefined) BotMessageImage = botMsgImg
 
     return (
-      <Fade>
+      <ConditionalWrapper
+        condition={animationsEnabled}
+        wrapper={children => <Fade>{children}</Fade>}
+      >
         <div
           style={{
             display: 'flex',
@@ -205,7 +210,7 @@ export const Message = props => {
             )}
           </div>
         </div>
-      </Fade>
+      </ConditionalWrapper>
     )
   }
 
