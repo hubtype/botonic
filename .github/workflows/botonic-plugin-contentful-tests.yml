@@ -21,11 +21,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - name: Install botonic-plugin-contentful (Step 4 of 6)
-      run: (cd ./packages/botonic-plugin-contentful && npm install --key)
+      run: (cd ./packages/botonic-plugin-contentful && npm install)
     - name: Build botonic-plugin-contentful (Step 5 of 6)
-      run: (cd ./packages/botonic-plugin-contentful && npm run build --key)
+      run: (cd ./packages/botonic-plugin-contentful && npm run build)
     - name: Run tests botonic-plugin-contentful (Step 6 of 6)
       env:
         CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
         CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
-      run: (cd ./packages/botonic-plugin-contentful && npm run test --key)
+      run: (cd ./packages/botonic-plugin-contentful && npm run test)
