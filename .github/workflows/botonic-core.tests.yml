@@ -21,8 +21,7 @@ jobs:
     #     restore-keys: |
     #       ${{ runner.os }}-node-botonic-core
     - name: Install botonic-core (Step 4 of 6)
-      run: (cd ./packages/botonic-core && npm cache clean --force --key)
-      run: (cd ./packages/botonic-core && npm install --key)
+      run: (cd ./packages/botonic-core && npm cache clean --force --key && npm install)
     
     - name: Build botonic-core (Step 5 of 6)
       run: (cd ./packages/botonic-core && npm run build --key)
