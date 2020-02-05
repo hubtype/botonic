@@ -1,14 +1,9 @@
 name: Botonic plugin contentful tests
  
-on: [push]
-  # push:
-  #   paths:
-  #   - 'packages/botonic-plugin-contentful/**'
-  # pull_request:
-  #   branches:
-  #     - master
-  #   paths:
-  #     - 'packages/botonic-plugin-contentful/**'
+on:
+  push:
+    paths:
+    - 'packages/botonic-plugin-contentful/**'
  
 jobs:
   botonic-plugin-contentful:
