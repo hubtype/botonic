@@ -10,14 +10,14 @@ jobs:
     - name: Set up environment
       uses: actions/checkout@v1
       uses: actions/setup-node@v1
-        with:
-          node-version: '12'
+      with:
+        node-version: '12'
       uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
     - name: Install botonic-react
       run: (cd ./packages/botonic-react && npm install --key)
     - name: Run tests botonic-react
