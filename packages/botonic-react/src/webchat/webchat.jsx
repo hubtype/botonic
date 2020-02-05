@@ -22,7 +22,12 @@ import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
 import { msgToBotonic } from '../msg-to-botonic'
-import { isDev, staticAsset, _getThemeProperty } from '../utils'
+import {
+  isDev,
+  staticAsset,
+  _getThemeProperty,
+  ConditionalWrapper,
+} from '../utils'
 import Logo from '../assets/botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
@@ -206,12 +211,17 @@ export const Webchat = forwardRef((props, ref) => {
       />
     </div>
   )
-
+  const animationsEnabled = getThemeProperty('animations.enable', true)
   const persistentMenuOptions =
     getThemeProperty('userInput.persistentMenu') || props.persistentMenu
 
   const persistentMenuLogo = () => (
-    <motion.div whileHover={{ scale: 1.2 }}>
+    <ConditionalWrapper
+      condition={animationsEnabled}
+      wrapper={children => (
+        <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
+      )}
+    >
       <div
         style={{
           display: 'flex',
@@ -225,7 +235,7 @@ export const Webchat = forwardRef((props, ref) => {
       >
         <img src={staticAsset(LogoMenu)} />
       </div>
-    </motion.div>
+    </ConditionalWrapper>
   )
 
   const checkBlockInput = input => {
@@ -540,19 +550,33 @@ export const Webchat = forwardRef((props, ref) => {
             }}
           >
             {emojiPickerEnabled && (
-              <motion.div whileHover={{ scale: 1.2 }}>
+              <ConditionalWrapper
+                condition={animationsEnabled}
+                wrapper={children => (
+                  <motion.div whileHover={{ scale: 1.2 }}>
+                    {children}
+                  </motion.div>
+                )}
+              >
                 <EmojiPickerComponent />
-              </motion.div>
+              </ConditionalWrapper>
             )}
             {attachmentsEnabled && (
-              <motion.div whileHover={{ scale: 1.2 }}>
+              <ConditionalWrapper
+                condition={animationsEnabled}
+                wrapper={children => (
+                  <motion.div whileHover={{ scale: 1.2 }}>
+                    {children}
+                  </motion.div>
+                )}
+              >
                 <Attachment
                   onChange={handleAttachment}
                   accept={Object.values(MIME_WHITELIST)
                     .map(v => v.join(','))
                     .join(',')}
                 />
-              </motion.div>
+              </ConditionalWrapper>
             )}
           </div>
         </div>

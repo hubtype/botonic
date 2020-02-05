@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './styled-scrollbar'
-import { staticAsset } from '../utils'
+import { staticAsset, ConditionalWrapper } from '../utils'
 import Fade from 'react-reveal/Fade'
 
 export const WebchatMessageList = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
+  const animationsEnabled = getThemeProperty('animations.enable', true)
   const CustomIntro = getThemeProperty('intro.custom')
   const introImage = getThemeProperty('intro.image')
   const introStyle = getThemeProperty('intro.style')
@@ -38,7 +39,12 @@ export const WebchatMessageList = props => {
         overflowX: 'hidden',
       }}
     >
-      <Fade>{CustomIntro ? <CustomIntro /> : DefaultIntro}</Fade>
+      <ConditionalWrapper
+        condition={animationsEnabled}
+        wrapper={children => <Fade>{children}</Fade>}
+      >
+        {CustomIntro ? <CustomIntro /> : DefaultIntro}
+      </ConditionalWrapper>
       {webchatState.messagesComponents.map((e, i) => (
         <div
           style={{
