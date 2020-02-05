@@ -1,10 +1,7 @@
 name: Botonic react tests
  
-on:
-  push:
-    paths:
-    - 'packages/botonic-react/**'
- 
+on: [push, pull_request]
+
 jobs:
   botonic_react_tests:
     name: Botonic react tests
