@@ -45,6 +45,9 @@ jobs:
     - name: Install botonic-plugin-contentful (Step 4 of 5)
       run: (cd ./packages/botonic-plugin-contentful && npm install --key)
     - name: Run tests botonic-plugin-contentful (Step 5 of 5)
+      env:
+        CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
+        CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
       run: (cd ./packages/botonic-plugin-contentful && npm run test --key)
 
   botonic-plugin-dynamodb:
@@ -68,3 +71,11 @@ jobs:
       run: (cd ./packages/botonic-plugin-dynamodb && npm install --key)
     - name: Run tests botonic-plugin-dynamodb (Step 5 of 5)
       run: (cd ./packages/botonic-plugin-dynamodb && npm run test --key)
+    # - run: (cd ./packages/botonic-plugin-contentful && npm install && npm run test --key)
+      # env:
+      #   CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
+      #   CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
+    # - run: (cd ./packages/botonic-plugin-dynamodb && npm install && npm run test --key)
+      # env:
+      #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
