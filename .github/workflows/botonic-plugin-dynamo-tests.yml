@@ -3,7 +3,12 @@ name: Botonic plugin dynamo tests
 on:
   push:
     paths:
-    - 'packages/botonic-plugin-dynamodb/**'
+      - 'packages/botonic-plugin-dynamodb/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'packages/botonic-plugin-dynamodb/**'
  
 jobs:
   botonic-plugin-dynamodb:
