@@ -12,14 +12,14 @@ export async function getNLU(input, integrations) {
     try {
       let dialogflow_resp = await axios({
         headers: {
-          Authorization: 'Bearer ' + integrations.dialogflow.token
+          Authorization: 'Bearer ' + integrations.dialogflow.token,
         },
         url: 'https://api.dialogflow.com/v1/query',
         params: {
           query: input.data,
           lang: 'en',
-          sessionId: df_session_id
-        }
+          sessionId: df_session_id,
+        },
       })
       if (dialogflow_resp && dialogflow_resp.data) {
         intent = dialogflow_resp.data.result.metadata.intentName
@@ -50,14 +50,12 @@ export async function getNLU(input, integrations) {
     let luis = integrations.luis
     try {
       let luis_resp = await axios({
-        url: `https://${
-          luis.region
-        }.api.cognitive.microsoft.com/luis/v2.0/apps/${luis.appID}`,
+        url: `https://${luis.region}.api.cognitive.microsoft.com/luis/v2.0/apps/${luis.appID}`,
         params: {
           'subscription-key': luis.endpointKey,
           q: input.data,
-          verbose: true
-        }
+          verbose: true,
+        },
       })
       if (luis_resp && luis_resp.data) {
         intent = luis_resp.data.topScoringIntent.intent
