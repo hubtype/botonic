@@ -1,6 +1,6 @@
 name: Botonic react tests
  
-on: [push, pull_request]
+on: [push]
 
 jobs:
   botonic_react_tests:
