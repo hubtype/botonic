@@ -4,8 +4,8 @@ on:
   push:
     paths:
     - 'packages/botonic-react/**'
-    - 'packages/botonic-plugin-contentful'
-    - 'packages/botonic-plugin-dynamodb'
+    - 'packages/botonic-plugin-contentful/**'
+    - 'packages/botonic-plugin-dynamodb/**'
  
 jobs:
   botonic_react_tests:
