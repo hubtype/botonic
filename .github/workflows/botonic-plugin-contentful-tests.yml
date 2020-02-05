@@ -1,6 +1,6 @@
 name: Botonic plugin contentful tests
  
-on: [push, pull_request]
+on: [push]
  
 jobs:
   botonic-plugin-contentful:
