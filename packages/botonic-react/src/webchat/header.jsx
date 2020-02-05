@@ -4,6 +4,7 @@ import { staticAsset, getProperty } from '../utils'
 import styled from 'styled-components'
 import Logo from '../assets/botonic_react_logo100x100.png'
 import { Flex } from 'rebass'
+import { motion } from 'framer-motion'
 
 const HeaderTitle = styled(Flex)`
   @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
@@ -44,9 +45,9 @@ const StyledHeaderTitle = styled(Flex)`
 export const DefaultHeader = props => {
   const { getThemeProperty } = props
   let HeaderImage = Logo
-  /* 
-  brand.image, brandImage, headerImage and header.image 
-  can be set explicitly to null if the developer doesn't want to display them 
+  /*
+  brand.image, brandImage, headerImage and header.image
+  can be set explicitly to null if the developer doesn't want to display them
   */
   let brandImg = getThemeProperty('brand.image')
   if (brandImg !== undefined) HeaderImage = brandImg
@@ -77,7 +78,9 @@ export const DefaultHeader = props => {
         </HeaderTitle>
         <Subtitle>{headerSubtitle}</Subtitle>
       </StyledHeaderTitle>
-      <CloseHeader onClick={props.onCloseClick}>⨯</CloseHeader>
+      <motion.div whileHover={{ scale: 1.2 }}>
+        <CloseHeader onClick={props.onCloseClick}>⨯</CloseHeader>
+      </motion.div>
     </Diffuse>
   )
 }
