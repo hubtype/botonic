@@ -23,7 +23,7 @@ jobs:
     - name: Install botonic-plugin-contentful (Step 4 of 6)
       run: (cd ./packages/botonic-plugin-contentful && npm install --key)
     - name: Build botonic-plugin-contentful (Step 5 of 6)
-      run: (cd ./packages/botonic-plugin-contentful && npm install --key)
+      run: (cd ./packages/botonic-plugin-contentful && npm run build --key)
     - name: Run tests botonic-plugin-contentful (Step 6 of 6)
       env:
         CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
