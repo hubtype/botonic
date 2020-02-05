@@ -22,7 +22,7 @@ jobs:
           ${{ runner.os }}-node-
     - name: Install botonic-react (Step 4 of 6)
       run: (cd ./packages/botonic-react && npm install --key)
-    - name: Install botonic-react (Step 5 of 6)
+    - name: Build botonic-react (Step 5 of 6)
       run: (cd ./packages/botonic-react && npm run build --key)
     - name: Run tests botonic-react (Step 6 of 6)
       run: (cd ./packages/botonic-react && npm run test --key)

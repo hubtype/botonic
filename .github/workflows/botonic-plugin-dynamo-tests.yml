@@ -22,7 +22,7 @@ jobs:
           ${{ runner.os }}-node-
     - name: Install botonic-plugin-dynamodb (Step 4 of 6)
       run: (cd ./packages/botonic-plugin-dynamodb && npm install --key)
-    - name: Install botonic-plugin-dynamodb (Step 5 of 6)
+    - name: Build botonic-plugin-dynamodb (Step 5 of 6)
       run: (cd ./packages/botonic-plugin-dynamodb && npm run build --key)
     - name: Run tests botonic-plugin-dynamodb (Step 6 of 6)
       env:
