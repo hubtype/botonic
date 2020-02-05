@@ -4,9 +4,6 @@ on:
   push:
     paths:
     - 'packages/botonic-react/**'
-  pull_request:
-    branches:
-      - master
  
 jobs:
   botonic_react_tests:
