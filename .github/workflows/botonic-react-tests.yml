@@ -21,8 +21,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - name: Install botonic-react (Step 4 of 6)
-      run: (cd ./packages/botonic-react && npm install --key)
+      run: (cd ./packages/botonic-react && npm install)
     - name: Build botonic-react (Step 5 of 6)
-      run: (cd ./packages/botonic-react && npm run build --key)
+      run: (cd ./packages/botonic-react && npm run build)
     - name: Run tests botonic-react (Step 6 of 6)
-      run: (cd ./packages/botonic-react && npm run test --key)
+      run: (cd ./packages/botonic-react && npm run test)

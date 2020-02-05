@@ -17,12 +17,12 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-node-botonic-core-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-botonic-core
+          ${{ runner.os }}-node-
     - name: Install botonic-core (Step 4 of 6)
-      run: (cd ./packages/botonic-core && npm install --key)
+      run: (cd ./packages/botonic-core && npm install)
     - name: Build botonic-core (Step 5 of 6)
-      run: (cd ./packages/botonic-core && npm run build --key)
+      run: (cd ./packages/botonic-core && npm run build)
     - name: Run tests botonic-core (Step 6 of 6)
-      run: (cd ./packages/botonic-core && npm run test --key)
+      run: (cd ./packages/botonic-core && npm run test)
