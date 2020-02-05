@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './styled-scrollbar'
 import { staticAsset } from '../utils'
+import Fade from 'react-reveal/Fade'
 
 export const WebchatMessageList = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
@@ -37,7 +38,7 @@ export const WebchatMessageList = props => {
         overflowX: 'hidden',
       }}
     >
-      {CustomIntro ? <CustomIntro /> : DefaultIntro}
+      <Fade>{CustomIntro ? <CustomIntro /> : DefaultIntro}</Fade>
       {webchatState.messagesComponents.map((e, i) => (
         <div
           style={{

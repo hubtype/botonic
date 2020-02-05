@@ -6,6 +6,7 @@ import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 import Logo from '../assets/botonic_react_logo100x100.png'
+import Fade from 'react-reveal/Fade'
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -111,9 +112,9 @@ export const Message = props => {
 
     let BotMessageImage = Logo
 
-    /* 
+    /*
     brand.image, brandImage, bot.message.image and botMessageImage
-    can be set explicitly to null if the developer doesn't want to display them 
+    can be set explicitly to null if the developer doesn't want to display them
     */
     let brandImg = getThemeProperty('brand.image')
     if (brandImg !== undefined) BotMessageImage = brandImg
@@ -121,85 +122,90 @@ export const Message = props => {
     if (botMsgImg !== undefined) BotMessageImage = botMsgImg
 
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: isFromUser() ? 'flex-end' : 'flex-start',
-          position: 'relative',
-          paddingLeft: 5,
-        }}
-      >
-        {isFromBot() && BotMessageImage && (
-          <div
-            style={{
-              width: 28,
-              padding: '12px 4px',
-              flex: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              ...(getThemeProperty('message.bot.imageStyle') || {}),
-            }}
-          >
-            <img style={{ width: '100%' }} src={staticAsset(BotMessageImage)} />
-          </div>
-        )}
-
+      <Fade>
         <div
           style={{
+            display: 'flex',
+            justifyContent: isFromUser() ? 'flex-end' : 'flex-start',
             position: 'relative',
-            margin: 8,
-            borderRadius: 8,
-            backgroundColor: getBgColor(),
-            color: isFromUser() ? '#FFF' : '#000',
-            border: `1px solid ${getThemeProperty(
-              'message.user.style.background'
-            ) || getBgColor()}`,
-            maxWidth: blob ? '60%' : 'calc(100% - 16px)',
-            ...getMessageStyle(),
-            ...style,
+            paddingLeft: 5,
           }}
-          {...otherProps}
         >
+          {isFromBot() && BotMessageImage && (
+            <div
+              style={{
+                width: 28,
+                padding: '12px 4px',
+                flex: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                ...(getThemeProperty('message.bot.imageStyle') || {}),
+              }}
+            >
+              <img
+                style={{ width: '100%' }}
+                src={staticAsset(BotMessageImage)}
+              />
+            </div>
+          )}
+
           <div
             style={{
-              padding: blob ? '8px 12px' : 0,
-              display: 'flex',
-              flexDirection: 'column',
-              whiteSpace: 'pre-line',
+              position: 'relative',
+              margin: 8,
+              borderRadius: 8,
+              backgroundColor: getBgColor(),
+              color: isFromUser() ? '#FFF' : '#000',
+              border: `1px solid ${getThemeProperty(
+                'message.user.style.background'
+              ) || getBgColor()}`,
+              maxWidth: blob ? '60%' : 'calc(100% - 16px)',
+              ...getMessageStyle(),
+              ...style,
             }}
+            {...otherProps}
           >
-            {textChildren}
+            <div
+              style={{
+                padding: blob ? '8px 12px' : 0,
+                display: 'flex',
+                flexDirection: 'column',
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {textChildren}
+            </div>
+            {buttons}
+            {isFromUser() && blob && getBlobTick() && (
+              <div
+                style={{
+                  ...pointerStyles,
+                  borderLeftColor:
+                    getThemeProperty('message.user.style.background') ||
+                    getBgColor(),
+                  right: 0,
+                  borderRight: 0,
+                  marginRight: -pointerSize,
+                }}
+              />
+            )}
+            {isFromBot() && blob && getBlobTick() && (
+              <div
+                style={{
+                  ...pointerStyles,
+                  borderRightColor:
+                    getThemeProperty('message.bot.style.background') ||
+                    getBgColor(),
+                  left: 0,
+                  borderLeft: 0,
+                  marginLeft: -pointerSize + 1,
+                }}
+              />
+            )}
           </div>
-          {buttons}
-          {isFromUser() && blob && getBlobTick() && (
-            <div
-              style={{
-                ...pointerStyles,
-                borderLeftColor:
-                  getThemeProperty('message.user.style.background') ||
-                  getBgColor(),
-                right: 0,
-                borderRight: 0,
-                marginRight: -pointerSize,
-              }}
-            />
-          )}
-          {isFromBot() && blob && getBlobTick() && (
-            <div
-              style={{
-                ...pointerStyles,
-                borderRightColor:
-                  getThemeProperty('message.bot.style.background') ||
-                  getBgColor(),
-                left: 0,
-                borderLeft: 0,
-                marginLeft: -pointerSize + 1,
-              }}
-            />
-          )}
         </div>
-      </div>
+      </Fade>
     )
   }
 
