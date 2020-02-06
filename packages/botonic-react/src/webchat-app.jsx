@@ -10,7 +10,7 @@ export class WebchatApp {
     theme = {},
     persistentMenu,
     blockInputs,
-    emojiPicker,
+    enableEmojiPicker,
     enableAttachments,
     defaultDelay,
     defaultTyping,
@@ -23,7 +23,7 @@ export class WebchatApp {
     this.theme = theme
     this.persistentMenu = persistentMenu
     this.blockInputs = blockInputs
-    this.emojiPicker = emojiPicker
+    this.enableEmojiPicker = enableEmojiPicker
     this.enableAttachments = enableAttachments
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
@@ -128,7 +128,7 @@ export class WebchatApp {
       persistentMenu,
       blockInputs,
       enableAttachments,
-      emojiPicker,
+      enableEmojiPicker,
       defaultDelay,
       defaultTyping,
       onInit,
@@ -141,7 +141,7 @@ export class WebchatApp {
     theme = { ...this.theme, ...theme }
     persistentMenu = persistentMenu || this.persistentMenu
     blockInputs = blockInputs || this.blockInputs
-    emojiPicker = emojiPicker || this.emojiPicker
+    enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
     enableAttachments = enableAttachments || this.enableAttachments
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
@@ -157,7 +157,7 @@ export class WebchatApp {
         theme={theme}
         persistentMenu={persistentMenu}
         blockInputs={blockInputs}
-        emojiPicker={emojiPicker}
+        enableEmojiPicker={enableEmojiPicker}
         enableAttachments={enableAttachments}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
