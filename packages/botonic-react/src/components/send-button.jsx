@@ -1,7 +1,7 @@
 import React from 'react'
 import SendButtonIcon from '../assets/send-button.svg'
 import { staticAsset } from '../utils'
-export const SendButton = ({ onClick }) => (
+export const SendButton = () => (
   <div
     style={{
       display: 'flex',
@@ -9,10 +9,6 @@ export const SendButton = ({ onClick }) => (
       paddingRight: 15,
     }}
   >
-    <img
-      src={staticAsset(SendButtonIcon)}
-      style={{ cursor: 'pointer' }}
-      onClick={onClick}
-    />
+    <img src={staticAsset(SendButtonIcon)} style={{ cursor: 'pointer' }} />
   </div>
 )

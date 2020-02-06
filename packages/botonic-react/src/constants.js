@@ -42,6 +42,7 @@ export const CUSTOM_WEBCHAT_PROPERTIES = {
   enableEmojiPicker: 'userInput.emojiPicker.enable',
   enableAttachments: 'userInput.attachments.enable',
   enableSendButton: 'userInput.sendButton.enable',
+  customSendButton: 'userInput.sendButton.custom',
   persistentMenu: 'userInput.persistentMenu',
   blockInputs: 'userInput.blockInputs',
   scrollbar: 'scrollbar',

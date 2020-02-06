@@ -506,6 +506,7 @@ export const Webchat = forwardRef((props, ref) => {
     'userInput.sendButton.enable',
     true
   )
+  const CustomSendButton = getThemeProperty('userInput.sendButton.custom')
   const inputUserArea = () => {
     return (
       userInputEnabled && (
@@ -588,7 +589,7 @@ export const Webchat = forwardRef((props, ref) => {
                 />
               </ConditionalWrapper>
             )}
-            {sendButtonEnabled && (
+            {(sendButtonEnabled || CustomSendButton) && (
               <ConditionalWrapper
                 condition={animationsEnabled}
                 wrapper={children => (
@@ -597,7 +598,9 @@ export const Webchat = forwardRef((props, ref) => {
                   </motion.div>
                 )}
               >
-                <SendButton onClick={sendTextAreaText} />
+                <div onClick={sendTextAreaText}>
+                  {CustomSendButton ? <CustomSendButton /> : <SendButton />}
+                </div>
               </ConditionalWrapper>
             )}
           </div>
