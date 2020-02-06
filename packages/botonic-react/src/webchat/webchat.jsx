@@ -499,7 +499,7 @@ export const Webchat = forwardRef((props, ref) => {
   )
   const userInputEnabled = getThemeProperty('userInput.enable', true)
   const emojiPickerEnabled =
-    getThemeProperty('userInput.emojiPicker.enable') || props.emojiPicker
+    getThemeProperty('userInput.emojiPicker.enable') || props.enableEmojiPicker
   const attachmentsEnabled =
     getThemeProperty('userInput.attachments.enable') || props.enableAttachments
   const sendButtonEnabled = getThemeProperty(
