@@ -8,6 +8,7 @@ export class MultichannelText extends React.Component {
   constructor(props) {
     super(props)
     this.elements = []
+    this.index = props.index !== undefined ? props.index + 1 : undefined
   }
   render() {
     if (
@@ -49,7 +50,7 @@ export class MultichannelText extends React.Component {
             let option = ' - '
             if (element.type && element.type.name == 'MultichannelButton') {
               if (element.props.payload || element.props.path) {
-                option = ` ${index}. `
+                option = this.index ? ` ${this.index}. ` : ` ${index}. `
               }
               let props = {}
               props.url = element.props.url
@@ -62,7 +63,7 @@ export class MultichannelText extends React.Component {
               element.type.name == 'MultichannelReply'
             ) {
               if (element.props.payload || element.props.path) {
-                option = ` ${index}. `
+                option = this.index ? ` ${this.index}. ` : ` ${index}. `
               }
               let props = {}
               props.children = `\n${option}${element.props.children}`
