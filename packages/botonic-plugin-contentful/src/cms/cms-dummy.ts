@@ -35,13 +35,13 @@ export class DummyCMS implements CMS {
     const elements = this.buttonCallbacks.map(callback =>
       this.element(Math.random().toString(), callback)
     )
-    return Promise.resolve(new Carousel(new CommonFields(id), elements))
+    return Promise.resolve(new Carousel(new CommonFields(id, id), elements))
   }
 
   async text(id: string, {} = DEFAULT_CONTEXT): Promise<Text> {
     return Promise.resolve(
       new Text(
-        new CommonFields(id, { keywords: ['kw1', 'kw2'], shortText: id }),
+        new CommonFields(id, id, { keywords: ['kw1', 'kw2'], shortText: id }),
         'Dummy text for ' + id,
         this.buttons()
       )
@@ -55,7 +55,7 @@ export class DummyCMS implements CMS {
   async startUp(id: string, {} = DEFAULT_CONTEXT): Promise<StartUp> {
     return Promise.resolve(
       new StartUp(
-        new CommonFields(id),
+        new CommonFields(id, id),
         DummyCMS.IMG,
         'Dummy text for ' + id,
         this.buttons()
@@ -80,18 +80,18 @@ export class DummyCMS implements CMS {
   url(id: string, {} = DEFAULT_CONTEXT): Promise<Url> {
     return Promise.resolve(
       new Url(
-        new CommonFields(id, { shortText: 'button text for' + id }),
+        new CommonFields(id, id, { shortText: 'button text for' + id }),
         `http://url.${id}`
       )
     )
   }
 
   image(id: string, {} = DEFAULT_CONTEXT): Promise<Image> {
-    return Promise.resolve(new Image(new CommonFields(id), DummyCMS.IMG))
+    return Promise.resolve(new Image(new CommonFields(id, id), DummyCMS.IMG))
   }
 
   queue(id: string, {} = DEFAULT_CONTEXT): Promise<Queue> {
-    return Promise.resolve(new Queue(new CommonFields(id), id))
+    return Promise.resolve(new Queue(new CommonFields(id, id), id))
   }
 
   contents(
@@ -103,12 +103,12 @@ export class DummyCMS implements CMS {
   }
 
   contentsWithKeywords({} = DEFAULT_CONTEXT): Promise<SearchResult[]> {
-    const contents = this.buttonCallbacks.map(cb => {
+    const contents = this.buttonCallbacks.map((cb, id) => {
       const button = DummyCMS.buttonFromCallback(cb)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       return new SearchResult(
         cb,
-        new CommonFields(button.name, {
+        new CommonFields(String(id), button.name, {
           shortText: button.text,
           keywords: [
             'keyword for ' + (button.callback.payload || button.callback.url!),
@@ -122,7 +122,7 @@ export class DummyCMS implements CMS {
   schedule(id: string): Promise<ScheduleContent> {
     const schedule = new time.Schedule('Europe/Madrid')
     return Promise.resolve(
-      new ScheduleContent(new CommonFields('name'), schedule)
+      new ScheduleContent(new CommonFields(id, 'name'), schedule)
     )
   }
 
@@ -134,7 +134,7 @@ export class DummyCMS implements CMS {
     const now = new Date()
     const dateRange = new time.DateRange('daterange name', now, now)
     return Promise.resolve(
-      new DateRangeContent(new CommonFields(dateRange.name), dateRange)
+      new DateRangeContent(new CommonFields(id, dateRange.name), dateRange)
     )
   }
 

@@ -7,7 +7,7 @@ test('TEST: contentful url', async () => {
   const url = await testContentful().url(TEST_URL_HUBTYPE_ID, { locale: 'en' })
   expect(url).toEqual(
     new Url(
-      new CommonFields('URL_HUBTYPE', {
+      new CommonFields(TEST_URL_HUBTYPE_ID, 'URL_HUBTYPE', {
         shortText: 'Web de Hubtype',
         keywords: ['hubtypeEn', 'botonicEn'],
       }),
