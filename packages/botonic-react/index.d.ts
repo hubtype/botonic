@@ -1,4 +1,3 @@
-import { Input, Locales, Routes, Session } from '@botonic/core';
 import * as React from 'react'
 import * as core from '@botonic/core'
 
@@ -50,32 +49,28 @@ export class Element extends React.Component<any, any> {}
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/
-type Response = [React.ReactNode]
+export interface BotResponse extends core.BotRequest {
+  response: [React.ReactNode]
+}
+
 
 export class NodeApp {
   constructor(options: core.BotOptions)
 
   renderNode(args): string
 
-  input(_: {
-    input: core.Input
-    session?: core.Session
-    lastRoutePath: string
-  }): {
-    input: core.Input
-    response: Response
-    session: core.Session
-    lastRoutePath: string
-  }
+  input(request: core.BotRequest): BotResponse
 }
 
 // Parameters of the actions' botonicInit method
-export interface ActionInitInput {
-  input: core.Input
+export interface ActionRequest {
   session: core.Session
-  params: any
-  lastRoutePath: any
-  plugins: any
+  params: {[key: string]: string}
+  input: core.Input
+  plugins: { [id: string]: core.Plugin }
+  defaultTyping: number,
+  defaultDelay: number,
+  lastRoutePath: string
 }
 
 export class BotonicInputTester {
@@ -100,17 +95,12 @@ export class BotonicOutputTester {
   text(out: string, replies?: any): Promise<string>
 }
 
-export const RequestContext: React.Context<{
+export interface RequestContextInterface extends ActionRequest {
   getString: (stringId: string) => string
   setLocale: (locale: string) => string
-  session: core.Session
-  params: any
-  input: core.Input
-  defaultDelay: number
-  defaultTyping: number
-  lastRoutePath?: string
-  plugins: { [id: string]: core.Plugin }
-}>
+}
+
+export const RequestContext: React.Context<RequestContextInterface>
 
 export function msgToBotonic(msg: any): React.ReactNode
 export function msgsToBotonic(msgs: any | any[]): React.ReactNode
