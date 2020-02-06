@@ -56,14 +56,10 @@ export default class BotonicPluginDynamoDB {
   }
 
   // @ts-ignore
-  pre({ input, session, lastRoutePath }) {
-    return { input, session, lastRoutePath }
-  }
+  pre({ input, session, lastRoutePath }) {}
 
   // @ts-ignore
-  post({ input, session, lastRoutePath, response }) {
-    return { input, session, lastRoutePath, response }
-  }
+  post({ input, session, lastRoutePath, response }) {}
 
   private applyTimeout(pluginDynamoOpts: DynamoDbOptions): void {
     if (!pluginDynamoOpts.timeout) {
