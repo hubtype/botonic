@@ -1,9 +1,11 @@
 import * as url from 'url'
 import { isBrowser, isNode, isFunction } from './utils'
+import { RouteInspector } from './debug/inspector'
 
 export class Router {
-  constructor(routes) {
+  constructor(routes, routeInspector = undefined) {
     this.routes = routes
+    this.routeInspector = routeInspector || new RouteInspector()
   }
 
   processInput(input, session = {}, lastRoutePath = null) {
@@ -144,7 +146,7 @@ export class Router {
       Object.entries(r)
         .filter(([key, {}]) => key != 'action' && key != 'childRoutes')
         .some(([key, value]) => {
-          const match = this.matchRoute(key, value, input, session)
+          const match = this.matchRoute(r, key, value, input, session)
           try {
             params = match.groups
           } catch (e) {}
@@ -176,7 +178,7 @@ export class Router {
     return null
   }
 
-  matchRoute(prop, matcher, input, session) {
+  matchRoute(route, prop, matcher, input, session) {
     /*
         prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' |...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
@@ -188,9 +190,29 @@ export class Router {
       if (input.type == 'text') value = input.data
     } else if (prop == 'input') value = input
     else if (prop == 'session') value = session
-    if (typeof matcher === 'string') return value == matcher
-    if (matcher instanceof RegExp) return matcher.exec(value)
-    if (typeof matcher === 'function') return matcher(value)
+    const matched = this.matchValue(matcher, value)
+    if (matched) {
+      this.routeInspector.routeMatched(route, prop, matcher, value)
+    } else {
+      this.routeInspector.routeNotMatched(route, prop, matcher, value)
+    }
+    return matched
+  }
+
+  matchValue(matcher, value) {
+    if (typeof matcher === 'string') {
+      return value == matcher
+    }
+    if (matcher instanceof RegExp) {
+      // check if undefined to avoid conversion to 'undefined'
+      if (value === undefined) {
+        return false
+      }
+      return matcher.exec(value)
+    }
+    if (typeof matcher === 'function') {
+      return matcher(value)
+    }
     return false
   }
 }

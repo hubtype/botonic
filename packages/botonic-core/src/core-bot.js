@@ -3,6 +3,7 @@ import { getNLU } from './nlu'
 import { getString } from './i18n'
 import { loadPlugins, runPlugins } from './plugins'
 import { isFunction } from './utils'
+import { Inspector } from './debug/inspector'
 
 export class CoreBot {
   constructor({
@@ -16,6 +17,7 @@ export class CoreBot {
     defaultTyping,
     defaultDelay,
     defaultRoutes,
+    inspector,
   }) {
     this.renderer = renderer
     this.plugins = loadPlugins(plugins)
@@ -30,11 +32,15 @@ export class CoreBot {
       return
     }
     this.rootElement = null
+    this.inspector = inspector || new Inspector()
     this.routes = routes
     this.defaultRoutes = defaultRoutes || []
     this.router = isFunction(this.routes)
       ? null
-      : new Router([...this.routes, ...this.defaultRoutes])
+      : new Router(
+          [...this.routes, ...this.defaultRoutes],
+          this.inspector.routeInspector
+        )
   }
 
   getString(stringID, session) {
@@ -59,10 +65,10 @@ export class CoreBot {
     }
 
     if (isFunction(this.routes)) {
-      this.router = new Router([
-        ...(await this.routes({ input, session })),
-        ...this.defaultRoutes,
-      ])
+      this.router = new Router(
+        [...(await this.routes({ input, session })), ...this.defaultRoutes],
+        this.inspector.routeInspector
+      )
     }
 
     const output = this.router.processInput(input, session, lastRoutePath)

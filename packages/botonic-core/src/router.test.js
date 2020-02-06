@@ -4,6 +4,7 @@ const textInput = { type: 'text', data: 'hi' }
 const textInputComplex = { type: 'text', data: 'Cömplêx input &% 🚀' }
 const textPayloadInput = { type: 'text', data: 'hi', payload: 'foo' }
 const postbackInput = { type: 'postback', payload: 'foo' }
+const route = 'route'
 
 describe('Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
@@ -24,77 +25,78 @@ test('Router returns 404', () => {
 
 describe('Match route by MATCHER <> INPUT', () => {
   const router = new Router()
+  const matchTextProp = (matcher, textInput) =>
+    router.matchRoute(route, 'text', matcher, textInput)
+  const matchPayloadProp = (matcher, payload) =>
+    router.matchRoute(route, 'payload', matcher, payload)
   test('text <> text', () => {
-    expect(router.matchRoute('text', 'hi', textInput)).toBeTruthy()
-    expect(router.matchRoute('text', 'hii', textInput)).toBeFalsy()
-    expect(router.matchRoute('text', 'bye', textInput)).toBeFalsy()
-    expect(router.matchRoute('text', '', textInput)).toBeFalsy()
-    expect(router.matchRoute('text', null, textInput)).toBeFalsy()
-    expect(
-      router.matchRoute('text', 'Cömplêx input &% 🚀', textInputComplex)
-    ).toBeTruthy()
-    expect(
-      router.matchRoute('text', ' Cömplêx input &% 🚀', textInputComplex)
-    ).toBeFalsy() // has a space at the beginning
+    expect(matchTextProp('hi', textInput)).toBeTruthy()
+    expect(matchTextProp('hii', textInput)).toBeFalsy()
+    expect(matchTextProp('bye', textInput)).toBeFalsy()
+    expect(matchTextProp('', textInput)).toBeFalsy()
+    expect(matchTextProp(null, textInput)).toBeFalsy()
+    expect(matchTextProp('Cömplêx input &% 🚀', textInputComplex)).toBeTruthy()
+    expect(matchTextProp(' Cömplêx input &% 🚀', textInputComplex)).toBeFalsy() // has a space at the beginning
   })
   test('regex <> text', () => {
-    expect(router.matchRoute('text', /hi/, textInput)).toBeTruthy()
-    expect(router.matchRoute('text', /bye/, textInput)).toBeFalsy()
-    expect(router.matchRoute('text', /🚀/, textInputComplex)).toBeTruthy()
-    expect(router.matchRoute('text', /complex/, textInputComplex)).toBeFalsy()
+    expect(matchTextProp(/hi/, textInput)).toBeTruthy()
+    expect(matchTextProp(/bye/, textInput)).toBeFalsy()
+    expect(matchTextProp(/🚀/, textInputComplex)).toBeTruthy()
+    expect(matchTextProp(/complex/, textInputComplex)).toBeFalsy()
   })
   test('function <> text', () => {
-    expect(
-      router.matchRoute('text', v => v.startsWith('hi'), textInput)
-    ).toBeTruthy()
-    expect(
-      router.matchRoute('text', v => !v.startsWith('hi'), textInput)
-    ).toBeFalsy()
+    expect(matchTextProp(v => v.startsWith('hi'), textInput)).toBeTruthy()
+    expect(matchTextProp(v => !v.startsWith('hi'), textInput)).toBeFalsy()
   })
   test('input <> text', () => {
     expect(
-      router.matchRoute('input', i => i.data.startsWith('hi'), textInput)
+      router.matchRoute(route, 'input', i => i.data.startsWith('hi'), textInput)
     ).toBeTruthy()
     expect(
-      router.matchRoute('input', i => !i.data.startsWith('hi'), textInput)
+      router.matchRoute(
+        route,
+        'input',
+        i => !i.data.startsWith('hi'),
+        textInput
+      )
     ).toBeFalsy()
   })
   test('text <> text payload', () => {
-    expect(router.matchRoute('payload', 'foo', textPayloadInput)).toBeTruthy()
-    expect(router.matchRoute('payload', 'fooo', textPayloadInput)).toBeFalsy()
-    expect(router.matchRoute('payload', 'bar', textPayloadInput)).toBeFalsy()
-    expect(router.matchRoute('payload', '', textPayloadInput)).toBeFalsy()
-    expect(router.matchRoute('payload', null, textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp('foo', textPayloadInput)).toBeTruthy()
+    expect(matchPayloadProp('fooo', textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp('bar', textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp('', textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp(null, textPayloadInput)).toBeFalsy()
   })
   test('regex <> text payload', () => {
-    expect(router.matchRoute('payload', /foo/, textPayloadInput)).toBeTruthy()
-    expect(router.matchRoute('payload', /bar/, textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp(/foo/, textPayloadInput)).toBeTruthy()
+    expect(matchPayloadProp(/bar/, textPayloadInput)).toBeFalsy()
   })
   test('function <> text payload', () => {
     expect(
-      router.matchRoute('payload', v => v.startsWith('fo'), textPayloadInput)
+      matchPayloadProp(v => v.startsWith('fo'), textPayloadInput)
     ).toBeTruthy()
     expect(
-      router.matchRoute('payload', v => !v.startsWith('fo'), textPayloadInput)
+      matchPayloadProp(v => !v.startsWith('fo'), textPayloadInput)
     ).toBeFalsy()
   })
   test('text <> postback', () => {
-    expect(router.matchRoute('payload', 'foo', postbackInput)).toBeTruthy()
-    expect(router.matchRoute('payload', 'fooo', postbackInput)).toBeFalsy()
-    expect(router.matchRoute('payload', 'bar', postbackInput)).toBeFalsy()
-    expect(router.matchRoute('payload', '', postbackInput)).toBeFalsy()
-    expect(router.matchRoute('payload', null, postbackInput)).toBeFalsy()
+    expect(matchPayloadProp('foo', postbackInput)).toBeTruthy()
+    expect(matchPayloadProp('fooo', postbackInput)).toBeFalsy()
+    expect(matchPayloadProp('bar', postbackInput)).toBeFalsy()
+    expect(matchPayloadProp('', postbackInput)).toBeFalsy()
+    expect(matchPayloadProp(null, postbackInput)).toBeFalsy()
   })
   test('regex <> postback', () => {
-    expect(router.matchRoute('payload', /foo/, postbackInput)).toBeTruthy()
-    expect(router.matchRoute('payload', /bar/, postbackInput)).toBeFalsy()
+    expect(matchPayloadProp(/foo/, postbackInput)).toBeTruthy()
+    expect(matchPayloadProp(/bar/, postbackInput)).toBeFalsy()
   })
   test('function <> postback', () => {
     expect(
-      router.matchRoute('payload', v => v.startsWith('fo'), postbackInput)
+      matchPayloadProp(v => v.startsWith('fo'), postbackInput)
     ).toBeTruthy()
     expect(
-      router.matchRoute('payload', v => !v.startsWith('fo'), postbackInput)
+      matchPayloadProp(v => !v.startsWith('fo'), postbackInput)
     ).toBeFalsy()
   })
 })
