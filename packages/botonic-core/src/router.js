@@ -134,7 +134,9 @@ export class Router {
   }
 
   getRoute(input, routes, session) {
-    let computedRoutes = isFunction(routes) ? routes({input, session}) : routes
+    let computedRoutes = isFunction(routes)
+      ? routes({ input, session })
+      : routes
     /* Find the route that matches the given input, if it match with some of the entries,
       return the whole Route of the entry with optional params captured if matcher was a regex */
     let params = {}

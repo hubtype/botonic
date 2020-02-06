@@ -39,7 +39,7 @@ export const WebchatReplies = props => {
   return (
     <StyledScrollbar
       scrollbar={scrollbarOptions}
-      data-simplebar-auto-hide={scrollbarOptions.autoHide}
+      autoHide={scrollbarOptions.autoHide}
     >
       <RepliesContainer
         justify={justifyContent}
