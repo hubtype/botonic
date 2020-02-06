@@ -151,6 +151,8 @@ interface BotOptions {
   appId?: string
   defaultTyping?: number
   defaultDelay?: number
+  defaultRoutes?: Route[]
+  inspector?: Inspector
 }
 
 export class CoreBot {
@@ -169,4 +171,25 @@ export class CoreBot {
   setLocale(locale: string, session: Session): void
 
   input(request: BotRequest): BotResponse
+}
+
+// Debug
+
+export class RouteInspector {
+  routeMatched(route: Route, routeKey: string, routeValue: RouteMatcher, input: Input): void;
+  routeNotMatched(route: Route, routeKey: string, routeValue: RouteMatcher, input: Input): void;
+}
+
+export class FocusRouteInspector extends RouteInspector {
+  focusOnlyOnRoutes(focusRoutePaths: string[]): FocusRouteInspector
+  focusOnlyOnMatches(): FocusRouteInspector
+}
+
+export class LogRouteInspector extends FocusRouteInspector {
+}
+
+export class Inspector {
+  constructor(routeInspector: RouteInspector | undefined);
+
+  getRouteInspector(): RouteInspector;
 }
