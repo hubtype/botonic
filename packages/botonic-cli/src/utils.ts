@@ -27,7 +27,7 @@ function readCredentials() {
     initializeCredentials()
   }
   try {
-    credentials = JSON.parse(fs.readFileSync(botonic_credentials_path))
+    credentials = JSON.parse(fs.readFileSync(botonic_credentials_path, 'utf8'))
   } catch (e) {
     if (fs.existsSync(botonic_credentials_path)) {
       console.warn('Credentials could not be loaded', e)

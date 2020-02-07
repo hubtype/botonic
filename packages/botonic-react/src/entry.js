@@ -15,11 +15,11 @@ if (process.env.BOTONIC_TARGET === 'dev') {
     routes,
     locales,
     plugins,
-    ...webchat,
-    ...config,
+    ...webchat, // eslint-disable-line
+    ...config, // eslint-disable-line
   })
 } else if (process.env.BOTONIC_TARGET === 'node') {
-  app = new NodeApp({ routes, locales, plugins, ...config })
+  app = new NodeApp({ routes, locales, plugins, ...config }) // eslint-disable-line
 } else if (process.env.BOTONIC_TARGET === 'webchat') {
   app = new WebchatApp(webchat)
 } else if (process.env.BOTONIC_TARGET === 'webviews') {

@@ -97,14 +97,14 @@ Creating...
     }
     const botPath = resolve(template)
     const templatePath = join(__dirname, '..', '..', 'templates', template)
-    let spinner = new ora({
+    let spinner = ora({
       text: 'Copying files...',
       spinner: 'bouncingBar',
     }).start()
     copySync(templatePath, args.name)
     spinner.succeed()
     process.chdir(args.name)
-    spinner = new ora({
+    spinner = ora({
       text: 'Installing dependencies...',
       spinner: 'bouncingBar',
     }).start()

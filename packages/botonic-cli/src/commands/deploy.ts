@@ -279,7 +279,7 @@ Uploading...
   }
 
   async createBundle() {
-    const spinner = new ora({
+    const spinner = ora({
       text: 'Creating bundle...',
       spinner: 'bouncingBar',
     }).start()
@@ -304,7 +304,7 @@ Uploading...
   }
 
   async deployBundle() {
-    const spinner = new ora({
+    const spinner = ora({
       text: 'Deploying...',
       spinner: 'bouncingBar',
     }).start()

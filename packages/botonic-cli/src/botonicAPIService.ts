@@ -47,7 +47,7 @@ export class BotonicAPIService {
   }
 
   loadGlobalCredentials() {
-    let credentials = ''
+    let credentials
     try {
       credentials = JSON.parse(
         fs.readFileSync(this.globalCredentialsPath, 'utf8')
@@ -136,7 +136,7 @@ export class BotonicAPIService {
   }
 
   async build(npmCommand: string = 'build') {
-    const spinner = new ora({
+    const spinner = ora({
       text: 'Building...',
       spinner: 'bouncingBar',
     }).start()
