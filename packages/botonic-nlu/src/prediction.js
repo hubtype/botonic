@@ -13,7 +13,7 @@ export function getIntent(prediction, intentsDict, language) {
   intent.intents = Array.from(prediction)
     .map((confidence, i) => ({
       intent: intentsDict[i],
-      confidence: confidence
+      confidence: confidence,
     }))
     .sort((a, b) => b.confidence - a.confidence)
   intent.language = language

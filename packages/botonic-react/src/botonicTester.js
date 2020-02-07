@@ -14,7 +14,7 @@ export class BotonicInputTester {
     let res = await this.bot.input({
       input: { type: 'text', data: inp },
       session: session,
-      lastRoutePath: lastRoutePath
+      lastRoutePath: lastRoutePath,
     })
     return decode(res.response)
   }
@@ -23,7 +23,7 @@ export class BotonicInputTester {
     let res = await this.bot.input({
       input: { type: 'postback', payload: inp },
       session: session,
-      lastRoutePath: lastRoutePath
+      lastRoutePath: lastRoutePath,
     })
     return decode(res.response)
   }
@@ -32,7 +32,7 @@ export class BotonicInputTester {
     let res = await this.bot.input({
       input: { type: 'text', payload: `__PATH_PAYLOAD__${inp}` },
       session: session,
-      lastRoutePath: lastRoutePath
+      lastRoutePath: lastRoutePath,
     })
     return decode(res.response)
   }

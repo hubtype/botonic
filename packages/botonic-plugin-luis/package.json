@@ -2,10 +2,20 @@
   "name": "@botonic/plugin-luis",
   "version": "0.9.0",
   "main": "src/index.js",
+  "scripts": {
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core",
+    "lint_core": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
+  },
   "dependencies": {
     "axios": "latest"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.5.5"
+    "@babel/runtime": "^7.5.5",
+    "eslint_d": "^8.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-no-null": "^1.0.2",
+    "prettier": "^1.19.1"
   }
 }

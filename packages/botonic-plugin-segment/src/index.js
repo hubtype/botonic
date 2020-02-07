@@ -7,8 +7,8 @@ export default class BotonicPluginSegment {
     this.headers = {
       headers: {
         Authorization: `Basic ${btoa(this.options.writeKey)}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     }
   }
 
@@ -29,7 +29,7 @@ export default class BotonicPluginSegment {
       await segmentAPI('identify', this.headers, {
         userId: userId || session.user.id,
         traits: t,
-        input: input || ''
+        input: input || '',
       })
     } catch (e) {
       console.log(e)
@@ -43,7 +43,7 @@ export default class BotonicPluginSegment {
         userId: userId || session.user.id,
         event: event || session.bot.id,
         properties: p,
-        input: input || ''
+        input: input || '',
       })
     } catch (e) {
       console.log(e)
@@ -58,7 +58,7 @@ export default class BotonicPluginSegment {
         category: lastRoutePath,
         name: session.bot.name,
         properties: p,
-        input: input || ''
+        input: input || '',
       })
     } catch (e) {
       console.log(e)

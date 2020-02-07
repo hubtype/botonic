@@ -6,7 +6,7 @@ import {
   DB,
   GLOBAL_CONFIG_DIRNAME,
   WORD_EMBEDDINGS_DIRNAME,
-  WORD_EMBEDDDINGS_ENDPOINT
+  WORD_EMBEDDDINGS_ENDPOINT,
 } from './constants'
 import { pathExists, createDir, downloadFileToDisk } from './file-utils'
 
@@ -19,14 +19,14 @@ async function downloadWordEmbeddingsFile(
   let downloadPath = path.join(wordEmbeddingsPath, wordEmbeddingsFileName)
   await downloadFileToDisk({
     url: `${WORD_EMBEDDDINGS_ENDPOINT}/${wordEmbeddingsFileName}`,
-    downloadPath
+    downloadPath,
   })
 }
 
 export async function getEmbeddingMatrix({
   vocabulary,
   vocabularyLength,
-  params
+  params,
 }) {
   let wordEmbeddingsFileName = `${params.EMBEDDING}-${params.EMBEDDING_DIM}d-${params.language}.db`
   let wordEmbeddingsPath = path.join(
@@ -54,7 +54,7 @@ export async function getEmbeddingMatrix({
     dim1: vocabularyLength,
     dim2: params.EMBEDDING_DIM,
     vocabulary,
-    wordEmbeddingsFilePath
+    wordEmbeddingsFilePath,
   })
   return embeddingMatrix
 }
@@ -63,7 +63,7 @@ export async function generateEmbeddingMatrix({
   dim1,
   dim2,
   vocabulary,
-  wordEmbeddingsFilePath
+  wordEmbeddingsFilePath,
 }) {
   let embeddingMatrix = createEmbeddingMatrix(dim1, dim2)
   embeddingMatrix = await fillEmbeddingMatrix(

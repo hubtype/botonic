@@ -38,7 +38,7 @@ export default class BotonicPluginDialogflow {
     const header = {
       alg: 'RS256',
       typ: 'JWT',
-      kid: creds.private_key_id
+      kid: creds.private_key_id,
     }
     const payload = {
       iss: creds.client_email,
@@ -46,7 +46,7 @@ export default class BotonicPluginDialogflow {
       iat: KJUR.jws.IntDate.get('now'),
       exp: KJUR.jws.IntDate.get('now + 1hour'),
       aud:
-        'https://dialogflow.googleapis.com/google.cloud.dialogflow.v2.Sessions'
+        'https://dialogflow.googleapis.com/google.cloud.dialogflow.v2.Sessions',
     }
 
     const stringHeader = JSON.stringify(header)
@@ -66,16 +66,16 @@ export default class BotonicPluginDialogflow {
       url: `https://dialogflow.googleapis.com/v2/projects/${this.projectID}/agent/sessions/${this.sessionID}:detectIntent`,
       headers: {
         Authorization: `Bearer ${await this.getToken()}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       data: {
         queryInput: {
           text: {
             text: queryData,
-            languageCode: languageCode
-          }
-        }
-      }
+            languageCode: languageCode,
+          },
+        },
+      },
     })
   }
 
@@ -103,7 +103,7 @@ export default class BotonicPluginDialogflow {
       intents,
       entities,
       defaultFallback,
-      dialogflowResponse
+      dialogflowResponse,
     })
     return { input, session, lastRoutePath }
   }

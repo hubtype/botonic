@@ -4,7 +4,10 @@
   "main": "src/index.js",
   "scripts": {
     "build": "rm -rf dist && babel src -d dist",
-    "test": "jest"
+    "test": "jest",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core",
+    "lint_core": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "jest": {
     "testEnvironment": "node"
@@ -21,6 +24,11 @@
     "@babel/core": "^7.5.5",
     "@babel/plugin-transform-modules-commonjs": "^7.5.0",
     "@babel/preset-env": "^7.5.5",
-    "core-js": "^3.1.4"
+    "core-js": "^3.1.4",
+    "eslint_d": "^8.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-no-null": "^1.0.2",
+    "prettier": "^1.19.1"
   }
 }

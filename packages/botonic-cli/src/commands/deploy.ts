@@ -5,15 +5,15 @@ import { join } from 'path'
 import { copySync, removeSync } from 'fs-extra'
 import { zip } from 'zip-a-folder'
 
-const fs = require('fs')
-const ora = require('ora')
+import * as fs from 'fs'
+import * as ora from 'ora'
 
-import { BotonicAPIService } from '../botonicAPIService'
+import { BotonicAPIService } from '../botonicapiservice'
 import { track, sleep } from '../utils'
 import { AxiosError } from 'axios'
 
-var force = false
-var npmCommand: string | undefined
+let force = false
+let npmCommand: string | undefined
 const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 
 export default class Run extends Command {
@@ -25,12 +25,12 @@ Building...
 Creating bundle...
 Uploading...
 🚀 Bot deployed!
-`
+`,
   ]
   static flags = {
     force: flags.boolean({
       char: 'f',
-      description: 'Force deploy despite of no changes. Disabled by default'
+      description: 'Force deploy despite of no changes. Disabled by default',
     }),
     command: flags.string({
       char: 'c',
@@ -62,8 +62,8 @@ Uploading...
     force = flags.force || false
     npmCommand = flags.command
     this.botName = flags.botName
-    let email = flags.email
-    let password = flags.password
+    const email = flags.email
+    const password = flags.password
     if (email && password) await this.login(email, password)
     else if (!this.botonicApiService.oauth) await this.signupFlow()
     else if (this.botName) {
@@ -72,13 +72,13 @@ Uploading...
   }
 
   async deployBotFromFlag(botName: string) {
-    let resp = await this.botonicApiService.getBots()
-    let nextBots = resp.data.next
-    let bots = resp.data.results
+    const resp = await this.botonicApiService.getBots()
+    const nextBots = resp.data.next
+    const bots = resp.data.results
     if (nextBots) {
       await this.botonicApiService.getMoreBots(bots, nextBots)
     }
-    let bot = bots.filter(b => b.name === botName)[0]
+    const bot = bots.filter(b => b.name === botName)[0]
     if (bot == undefined) {
       console.log(colors.red(`Bot ${botName} doesn't exist.`))
       console.log('\nThese are the available options:')
@@ -90,9 +90,9 @@ Uploading...
   }
 
   async signupFlow() {
-    let choices = [
+    const choices = [
       'No, I need to create a new one (Signup)',
-      'Yes, I do. (Login)'
+      'Yes, I do. (Login)',
     ]
     return prompt([
       {
@@ -100,8 +100,8 @@ Uploading...
         name: 'signupConfirmation',
         message:
           'You need to login before deploying your bot.\nDo you have a Hubtype account already?',
-        choices: choices
-      }
+        choices: choices,
+      },
     ]).then((inp: any) => {
       if (inp.signupConfirmation == choices[1]) return this.askLogin()
       else return this.askSignup()
@@ -113,14 +113,14 @@ Uploading...
       {
         type: 'input',
         name: 'email',
-        message: 'email:'
+        message: 'email:',
       },
       {
         type: 'password',
         name: 'password',
         mask: '*',
-        message: 'password:'
-      }
+        message: 'password:',
+      },
     ])
   }
 
@@ -140,14 +140,14 @@ Uploading...
     if (this.botName) return this.deployBotFromFlag(this.botName)
     if (!this.botonicApiService.bot) return this.newBotFlow()
     else {
-      let resp = await this.botonicApiService.getBots()
-      let nextBots = resp.data.next
-      let bots = resp.data.results
+      const resp = await this.botonicApiService.getBots()
+      const nextBots = resp.data.next
+      const bots = resp.data.results
       if (nextBots) {
         await this.botonicApiService.getMoreBots(bots, nextBots)
       }
       // Show the current bot in credentials at top of the list
-      let first_id = this.botonicApiService.bot.id
+      const first_id = this.botonicApiService.bot.id
       bots.sort(function(x, y) {
         return x.id == first_id ? -1 : y.id == first_id ? 1 : 0
       })
@@ -183,8 +183,8 @@ Uploading...
   }
 
   async signup(email: string, password: string) {
-    let org_name = email.split('@')[0]
-    let campaign = { product: 'botonic' }
+    const org_name = email.split('@')[0]
+    const campaign = { product: 'botonic' }
     return this.botonicApiService
       .signup(email, password, org_name, campaign)
       .then(
@@ -206,11 +206,11 @@ Uploading...
   }
 
   async newBotFlow() {
-    let resp = await this.botonicApiService.getBots()
-    let nextBots = resp.data.next
-    let bots = resp.data.results
+    const resp = await this.botonicApiService.getBots()
+    const nextBots = resp.data.next
+    const bots = resp.data.results
     if (nextBots) {
-      let new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
+      const new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
     }
     if (!bots.length) {
       return this.createNewBot()
@@ -219,10 +219,10 @@ Uploading...
         {
           type: 'confirm',
           name: 'create_bot_confirm',
-          message: 'Do you want to create a new Bot?'
-        }
+          message: 'Do you want to create a new Bot?',
+        },
       ]).then((res: any) => {
-        let confirm = res.create_bot_confirm
+        const confirm = res.create_bot_confirm
         if (confirm) {
           return this.createNewBot()
         } else {
@@ -237,16 +237,14 @@ Uploading...
       {
         type: 'input',
         name: 'bot_name',
-        message: 'Bot name:'
-      }
+        message: 'Bot name:',
+      },
     ]).then((inp: any) => {
-      this.botonicApiService
-        .saveBot(inp.bot_name)
-        .then(
-          ({}) => this.deploy(),
-          err =>
-            console.log(colors.red(`There was an error saving the bot: ${err}`))
-        )
+      this.botonicApiService.saveBot(inp.bot_name).then(
+        ({}) => this.deploy(),
+        err =>
+          console.log(colors.red(`There was an error saving the bot: ${err}`))
+      )
     })
   }
 
@@ -256,10 +254,10 @@ Uploading...
         type: 'list',
         name: 'bot_name',
         message: 'Please, select a bot',
-        choices: bots.map(b => b.name)
-      }
+        choices: bots.map(b => b.name),
+      },
     ]).then((inp: any) => {
-      let bot = bots.filter(b => b.name === inp.bot_name)[0]
+      const bot = bots.filter(b => b.name === inp.bot_name)[0]
       this.botonicApiService.setCurrentBot(bot)
       this.deploy()
     })
@@ -281,9 +279,9 @@ Uploading...
   }
 
   async createBundle() {
-    let spinner = new ora({
+    const spinner = new ora({
       text: 'Creating bundle...',
-      spinner: 'bouncingBar'
+      spinner: 'bouncingBar',
     }).start()
     fs.mkdirSync(join('tmp'))
     copySync('dist', join('tmp', 'dist'))
@@ -306,12 +304,12 @@ Uploading...
   }
 
   async deployBundle() {
-    let spinner = new ora({
+    const spinner = new ora({
       text: 'Deploying...',
-      spinner: 'bouncingBar'
+      spinner: 'bouncingBar',
     }).start()
     try {
-      var deploy = await this.botonicApiService.deployBot(
+      const deploy = await this.botonicApiService.deployBot(
         join(process.cwd(), BOTONIC_BUNDLE_FILE),
         force
       )
@@ -322,10 +320,10 @@ Uploading...
         track('Deploy Botonic Error', { error: deploy.response.data.status })
         throw deploy.response.data.status
       }
-
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         await sleep(500)
-        let deploy_status = await this.botonicApiService.deployStatus(
+        const deploy_status = await this.botonicApiService.deployStatus(
           deploy.data.deploy_id
         )
         if (deploy_status.data.is_completed) {
@@ -353,10 +351,10 @@ Uploading...
 
   async displayDeployResults() {
     try {
-      let providers_resp = await this.botonicApiService.getProviders()
-      let providers = providers_resp.data.results
+      const providers_resp = await this.botonicApiService.getProviders()
+      const providers = providers_resp.data.results
       if (!providers.length) {
-        let links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
+        const links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
         console.log(links)
       } else {
         this.displayProviders(providers)
@@ -369,7 +367,7 @@ Uploading...
 
   async deploy() {
     try {
-      let build_out = await this.botonicApiService.buildIfChanged(
+      const build_out = await this.botonicApiService.buildIfChanged(
         force,
         npmCommand
       )
@@ -382,6 +380,7 @@ Uploading...
       await this.deployBundle()
       await this.displayDeployResults()
     } catch (e) {
+      console.log(colors.red('Deploy Error'), e)
     } finally {
       removeSync(BOTONIC_BUNDLE_FILE)
       removeSync('tmp')

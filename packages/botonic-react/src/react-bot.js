@@ -9,11 +9,11 @@ export class ReactBot extends CoreBot {
       defaultRoutes: [
         {
           path: '404',
-          action: () => <Text>I don't understand you</Text>
-        }
+          action: () => <Text>I don't understand you</Text>, // eslint-disable-line
+        },
       ],
       renderer: args => this.renderReactActions(args),
-      ...options
+      ...options,
     })
   }
 

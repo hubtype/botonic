@@ -2,7 +2,7 @@ import { resolve } from 'path'
 import { prompt } from 'inquirer'
 import { Command, flags } from '@oclif/command'
 
-import { BotonicAPIService } from '../botonicAPIService'
+import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'
 
 export default class Run extends Command {
@@ -13,8 +13,8 @@ export default class Run extends Command {
   static flags = {
     path: flags.string({
       char: 'p',
-      description: 'Path to botonic project. Defaults to current dir.'
-    })
+      description: 'Path to botonic project. Defaults to current dir.',
+    }),
   }
 
   static args = []
@@ -35,19 +35,19 @@ export default class Run extends Command {
       {
         type: 'input',
         name: 'email',
-        message: 'email:'
+        message: 'email:',
       },
       {
         type: 'password',
         name: 'password',
         mask: '*',
-        message: 'password:'
-      }
+        message: 'password:',
+      },
     ])
   }
 
   async logInUser() {
-    let user_data: any = await this.askLoginInfo()
+    const user_data: any = await this.askLoginInfo()
     this.botonicApiService.login(user_data.email, user_data.password).then(
       () => {
         console.log('Successful log in!'.green)

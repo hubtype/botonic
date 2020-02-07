@@ -11,13 +11,13 @@ export default class BotonicPluginDashbot {
   async post({ input, session, lastRoutePath, response }) {
     const messageInDashbot = {
       text: input.data,
-      userId: session.user.id
+      userId: session.user.id,
     }
     await dashbot.logIncoming(messageInDashbot)
 
     const messageOutDashbot = {
       text: response,
-      userId: session.user.id
+      userId: session.user.id,
     }
     await dashbot.logOutgoing(messageOutDashbot)
   }

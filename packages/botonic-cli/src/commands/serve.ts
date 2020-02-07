@@ -9,7 +9,7 @@ export default class Run extends Command {
   static description = 'Serve your bot in your localhost'
 
   static examples = [
-    `$ botonic serve\n> Project is running at http://localhost:8080/`
+    `$ botonic serve\n> Project is running at http://localhost:8080/`,
   ]
 
   static flags = {}

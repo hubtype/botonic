@@ -1,6 +1,0 @@
-{
-  "extends": "oclif",
-  "rules": {
-    "no-console": "off"
-  }
-}

@@ -5,7 +5,7 @@ import { replaceAll, clone, shuffle } from './utils'
 import {
   UNKNOWN_TOKEN,
   GLOBAL_ENTITIES_REGEX,
-  ENTITIES_REGEX
+  ENTITIES_REGEX,
 } from './constants'
 
 export class Tokenizer {
@@ -91,7 +91,7 @@ function getSeqLengths(sequences) {
   }
   return {
     minSeqLength: Math.min.apply(null, seqLengths),
-    maxSeqLength: Math.max.apply(null, seqLengths)
+    maxSeqLength: Math.max.apply(null, seqLengths),
   }
 }
 
@@ -106,7 +106,7 @@ export function padSequences(sequences, maxSeqLength) {
 
 export function detectLang(input, languages) {
   let res = franc(input, {
-    whitelist: languages.map(l => langs.where('1', l)[3])
+    whitelist: languages.map(l => langs.where('1', l)[3]),
   })
   if (res === 'und') {
     return languages[0]
@@ -132,7 +132,7 @@ export function parseUtterance(utterance) {
     .map(parsedEntity => ({
       raw: parsedEntity[0],
       value: parsedEntity[1],
-      type: parsedEntity[2]
+      type: parsedEntity[2],
     }))
   for (let entity of parsedEntities) {
     utterance = utterance.replace(entity.raw, entity.value)
@@ -160,7 +160,7 @@ export function preprocessData(devIntents, params) {
     tensorData,
     tensorLabels,
     vocabulary: tokenizer.vocabulary,
-    vocabularyLength: tokenizer.vocabularyLength
+    vocabularyLength: tokenizer.vocabularyLength,
   }
 }
 

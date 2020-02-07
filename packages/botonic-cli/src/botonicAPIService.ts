@@ -3,11 +3,11 @@ import * as fs from 'fs'
 import { homedir } from 'os'
 import axios, { Method } from 'axios'
 import * as colors from 'colors'
-const FormData = require('form-data')
-const util = require('util')
+import * as FormData from 'form-data'
+import * as util from 'util'
 const exec = util.promisify(require('child_process').exec)
-const { hashElement } = require('folder-hash')
-const ora = require('ora')
+import { hashElement } from 'folder-hash'
+import * as ora from 'ora'
 
 const BOTONIC_CLIENT_ID: string =
   process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
@@ -47,11 +47,16 @@ export class BotonicAPIService {
   }
 
   loadGlobalCredentials() {
+    let credentials = ''
     try {
-      var credentials = JSON.parse(
+      credentials = JSON.parse(
         fs.readFileSync(this.globalCredentialsPath, 'utf8')
       )
-    } catch (e) {}
+    } catch (e) {
+      if (fs.existsSync(this.globalCredentialsPath)) {
+        console.warn('Credentials could not be loaded', e)
+      }
+    }
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
@@ -66,12 +71,16 @@ export class BotonicAPIService {
   }
 
   loadBotCredentials() {
+    let credentials
     try {
-      var credentials = JSON.parse(
-        fs.readFileSync(this.botCredentialsPath, 'utf8')
-      )
-    } catch (e) {}
+      credentials = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
+    } catch (e) {
+      if (fs.existsSync(this.botCredentialsPath)) {
+        console.warn('Credentials could not be loaded', e)
+      }
+    }
     if (credentials) {
+      // eslint-disable-next-line no-prototype-builtins
       if (credentials.hasOwnProperty('bot')) {
         this.bot = credentials.bot
         this.lastBuildHash = credentials.lastBuildHash
@@ -101,7 +110,7 @@ export class BotonicAPIService {
   }
 
   saveBotCredentials() {
-    let bc = { bot: this.bot, lastBuildHash: this.lastBuildHash }
+    const bc = { bot: this.bot, lastBuildHash: this.lastBuildHash }
     fs.writeFileSync(this.botCredentialsPath, JSON.stringify(bc))
   }
 
@@ -122,17 +131,17 @@ export class BotonicAPIService {
         ],
       },
     }
-    let hash = await hashElement('.', options)
+    const hash = await hashElement('.', options)
     return hash.hash
   }
 
   async build(npmCommand: string = 'build') {
-    let spinner = new ora({
+    const spinner = new ora({
       text: 'Building...',
       spinner: 'bouncingBar',
     }).start()
     try {
-      var build_out = await exec(`npm run ${npmCommand}`)
+      const build_out = await exec(`npm run ${npmCommand}`)
     } catch (error) {
       spinner.fail()
       console.log(`${error.stdout}` + colors.red(`\n\nBuild error:\n${error}`))
@@ -143,7 +152,7 @@ export class BotonicAPIService {
   }
 
   async buildIfChanged(force: boolean, npmCommand?: string) {
-    let hash = await this.getCurrentBuildHash()
+    const hash = await this.getCurrentBuildHash()
     if (force || hash != this.lastBuildHash) {
       this.lastBuildHash = hash
       return await this.build(npmCommand)
@@ -167,7 +176,7 @@ export class BotonicAPIService {
     headers: any | null = null,
     params: any = null
   ): Promise<any> {
-    var b = 0
+    let b = 0
     try {
       return await axios({
         method: method,
@@ -196,7 +205,7 @@ export class BotonicAPIService {
   }
 
   async refreshToken(): Promise<any> {
-    let resp = await axios({
+    const resp = await axios({
       method: 'post',
       url: this.loginUrl,
       params: {
@@ -215,6 +224,7 @@ export class BotonicAPIService {
       'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
     await this.saveGlobalCredentials()
+    // eslint-disable-next-line consistent-return
     return resp
   }
 
@@ -247,13 +257,13 @@ export class BotonicAPIService {
     org_name: string,
     campaign: any
   ): Promise<any> {
-    let url = `${this.baseApiUrl}users/`
-    let signup_data = { email, password, org_name, campaign }
+    const url = `${this.baseApiUrl}users/`
+    const signup_data = { email, password, org_name, campaign }
     return axios({ method: 'post', url: url, data: signup_data })
   }
 
   async saveBot(bot_name: string) {
-    let resp = await this.api(
+    const resp = await this.api(
       'bots/',
       { name: bot_name, framework: 'framework_botonic' },
       'post'
@@ -274,7 +284,7 @@ export class BotonicAPIService {
 
   async getMoreBots(bots: any, nextBots: any) {
     if (!nextBots) return bots
-    let resp = await this.api(
+    const resp = await this.api(
       nextBots.split(this.baseApiUrl)[1],
       null,
       'get',
@@ -293,14 +303,14 @@ export class BotonicAPIService {
 
   async deployBot(bundlePath: string, forceDeploy: boolean): Promise<any> {
     try {
-      let a = await this.getMe()
+      const a = await this.getMe()
     } catch (e) {
       console.log(`Error deploying: ${e}`)
     }
     const form = new FormData()
-    let data = fs.createReadStream(bundlePath)
+    const data = fs.createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
-    let headers = await this.getHeaders(form)
+    const headers = await this.getHeaders(form)
     return await this.api(
       `bots/${this.bot.id}/deploy_botonic_new/`,
       form,
@@ -320,14 +330,14 @@ export class BotonicAPIService {
     )
   }
 
-  async getHeaders(form: any): Promise<Object> {
+  async getHeaders(form: any): Promise<Record<string, any>> {
     //https://github.com/axios/axios/issues/1006#issuecomment-352071490
     return new Promise((resolve, reject) => {
       form.getLength((err: any, length: any) => {
         if (err) {
           reject(err)
         }
-        let headers = Object.assign(
+        const headers = Object.assign(
           { 'Content-Length': length },
           form.getHeaders()
         )
