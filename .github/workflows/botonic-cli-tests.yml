@@ -21,6 +21,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - name: Install botonic-cli (Step 4 of 7)
+      env: 
+        BOTONIC_DISABLE_MIXPANEL: 1
       run: (cd ./packages/botonic-cli && npm install -D)
     - name: Build botonic-cli (Step 5 of 7)
       run: (cd ./packages/botonic-cli && npm run build)
