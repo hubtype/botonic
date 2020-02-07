@@ -13,13 +13,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - name: Setting up cache (Step 3 of 7)
-      uses: actions/cache@v1
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+    # - name: Setting up cache (Step 3 of 7)
+    #   uses: actions/cache@v1
+    #   with:
+    #     path: ~/.npm
+    #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-node-
     - name: Install botonic-nlu (Step 4 of 7)
       run: (cd ./packages/botonic-nlu && npm install -D)
     - name: Build botonic-nlu (Step 5 of 7)
