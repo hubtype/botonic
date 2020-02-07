@@ -7,22 +7,20 @@ jobs:
     name: Botonic plugin-luis tests
     runs-on: ubuntu-latest
     steps:
-    - name: Checking out to current branch (Step 1 of 6)
+    - name: Checking out to current branch (Step 1 of 5)
       uses: actions/checkout@v1
-    - name: Setting up node (Step 2 of 6)
+    - name: Setting up node (Step 2 of 5)
       uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - name: Setting up cache (Step 3 of 6)
+    - name: Setting up cache (Step 3 of 5)
       uses: actions/cache@v1
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Install botonic-plugin-luis (Step 4 of 6)
+    - name: Install botonic-plugin-luis (Step 4 of 5)
       run: (cd ./packages/botonic-plugin-luis && npm install -D)
-    - name: Build botonic-plugin-luis (Step 5 of 6)
-      run: (cd ./packages/botonic-plugin-luis && npm run build)
-    - name: Verify lint botonic-plugin-luis (Step 6 of 6)
-      run: (cd ./packages/botonic-plugin-luis && npm run test)
+    - name: Verify lint botonic-plugin-luis (Step 5 of 5)
+      run: (cd ./packages/botonic-plugin-luis && npm run lint_ci)

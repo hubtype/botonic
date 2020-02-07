@@ -25,4 +25,4 @@ jobs:
     - name: Build botonic-plugin-nlu (Step 5 of 6)
       run: (cd ./packages/botonic-plugin-nlu && npm run build)
     - name: Verify lint botonic-plugin-nlu (Step 6 of 6)
-      run: (cd ./packages/botonic-plugin-nlu && npm run test)
+      run: (cd ./packages/botonic-plugin-nlu && npm run lint_ci)

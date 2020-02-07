@@ -25,4 +25,4 @@ jobs:
     - name: Build botonic-cli (Step 5 of 6)
       run: (cd ./packages/botonic-cli && npm run build)
     - name: Verify lint botonic-cli (Step 6 of 6)
-      run: (cd ./packages/botonic-cli && npm run test)
+      run: (cd ./packages/botonic-cli && npm run lint_ci)
