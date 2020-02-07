@@ -3,7 +3,7 @@ name: Botonic plugin dynamo tests
 on: [push]
  
 jobs:
-  botonic-plugin-dynamodb:
+  botonic-plugin-dynamodb-tests:
     name: Botonic plugin dynamodb Tests
     runs-on: ubuntu-latest
     steps:

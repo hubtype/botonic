@@ -1,10 +1,10 @@
-name: Botonic react tests
+name: Botonic plugin-watson tests
  
 on: [push]
  
 jobs:
-  botonic-react-tests:
-    name: Botonic react tests
+  botonic-plugin-watson-tests:
+    name: Botonic plugin-watson tests
     runs-on: ubuntu-latest
     steps:
     - name: Checking out to current branch (Step 1 of 6)
@@ -20,9 +20,9 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Install botonic-react (Step 4 of 6)
-      run: (cd ./packages/botonic-react && npm install)
-    - name: Build botonic-react (Step 5 of 6)
-      run: (cd ./packages/botonic-react && npm run build)
-    - name: Run tests botonic-react (Step 6 of 6)
-      run: (cd ./packages/botonic-react && npm run test)
+    - name: Install botonic-plugin-watson (Step 4 of 6)
+      run: (cd ./packages/botonic-plugin-watson && npm install -D)
+    - name: Build botonic-plugin-watson (Step 5 of 6)
+      run: (cd ./packages/botonic-plugin-watson && npm run build)
+    - name: Verify lint botonic-plugin-watson (Step 6 of 6)
+      run: (cd ./packages/botonic-plugin-watson && npm run test)

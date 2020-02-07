@@ -3,7 +3,7 @@ name: Botonic core tests
 on: [push]
  
 jobs:
-  botonic_react_tests:
+  botonic-core-tests:
     name: Botonic core tests
     runs-on: ubuntu-latest
     steps:

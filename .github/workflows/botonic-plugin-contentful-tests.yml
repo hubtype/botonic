@@ -3,7 +3,7 @@ name: Botonic plugin contentful tests
 on: [push]
  
 jobs:
-  botonic-plugin-contentful:
+  botonic-plugin-contentful-tests:
     name: Botonic plugin contentful Tests
     runs-on: ubuntu-latest
     steps:
