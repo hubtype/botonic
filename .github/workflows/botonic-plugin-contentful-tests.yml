@@ -1,10 +1,10 @@
-name: Botonic plugin contentful tests
+name: Botonic plugin-contentful tests
  
 on: [push]
  
 jobs:
   botonic-plugin-contentful-tests:
-    name: Botonic plugin contentful Tests
+    name: Botonic plugin-contentful Tests
     runs-on: ubuntu-latest
     steps:
     - name: Checking out to current branch (Step 1 of 7)
