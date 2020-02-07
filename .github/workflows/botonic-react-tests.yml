@@ -27,6 +27,6 @@ jobs:
     - name: Run tests botonic-react (Step 6 of 8)
       run: (cd ./packages/botonic-react && npm run test)
     - name: Install common packages dependencies (Step 7 of 8)
-      run: (cd ./packages && npm install -D)
+      run: npm install -D
     - name: Verify lint botonic-react (Step 8 of 8)
       run: (cd ./packages/botonic-react && npm run lint_ci)
