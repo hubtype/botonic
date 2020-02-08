@@ -2,14 +2,16 @@ import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
 import styled from 'styled-components'
+import { COLORS } from '../constants'
 
 const PicStyled = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   width: 222px;
   height: 140px;
-  background: #fff url(${props => props.src}) no-repeat center/cover;
-  border-bottom: 1px solid #f1f0f0;
+  background: ${COLORS.SOLID_WHITE} url(${props => props.src}) no-repeat
+    center/cover;
+  border-bottom: 1px solid ${COLORS.SEASHELL_WHITE};
 `
 
 export const Pic = props => {

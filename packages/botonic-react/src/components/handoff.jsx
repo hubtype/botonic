@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import styled from 'styled-components'
+import { COLORS } from '../constants'
 
 const Container = styled.div`
   display: flex;
@@ -24,7 +25,7 @@ const EndedContainer = styled.div`
 const StyledButton = styled.button`
   max-width: 60%;
   padding: 12px 24px;
-  background-color: white;
+  background-color: ${COLORS.SOLID_WHITE};
   border: none;
   border-radius: 4px;
   margin-top: 8px;
@@ -40,8 +41,10 @@ export const Handoff = props => {
     resolveCase()
   }
 
-  let bgColor = state.showContinue ? '#c6e7c0' : '#d1d8cf'
-  let fontColor = state.showContinue ? '#3a9c35' : '#5f735e'
+  let bgColor = state.showContinue
+    ? COLORS.FRINGY_FLOWER_GREEN
+    : COLORS.TASMAN_GRAY
+  let fontColor = state.showContinue ? COLORS.APPLE_GREEN : COLORS.CACTUS_GREEN
   return (
     <Container
       style={{

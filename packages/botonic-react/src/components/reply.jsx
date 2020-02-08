@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext } from '../contexts'
+import { COLORS } from '../constants'
 
 export const Reply = props => {
   const { sendText, getThemeProperty } = useContext(WebchatContext)
@@ -30,8 +31,11 @@ export const Reply = props => {
         style={{
           width: '100%',
           padding: '4px 8px',
-          border: `1px solid ${getThemeProperty('brand.color', '#0099ff')}`,
-          color: getThemeProperty('brand.color', '#0099ff'),
+          border: `1px solid ${getThemeProperty(
+            'brand.color',
+            COLORS.BOTONIC_BLUE
+          )}`,
+          color: getThemeProperty('brand.color', COLORS.BOTONIC_BLUE),
           fontFamily: 'inherit',
           borderRadius: 8,
           cursor: 'pointer',

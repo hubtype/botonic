@@ -2,6 +2,7 @@ import React from 'react'
 import JSONTree from 'react-json-tree'
 
 import { useWebchat } from './hooks'
+import { COLORS } from '../constants'
 
 const SessionViewAttribute = props => (
   <div
@@ -12,7 +13,7 @@ const SessionViewAttribute = props => (
       paddingBottom: 0,
       fontSize: 12,
       fontWeight: 600,
-      color: 'white',
+      color: `${COLORS.SOLID_WHITE}`,
       alignItems: 'center',
     }}
   >
@@ -30,7 +31,7 @@ const SessionViewAttribute = props => (
         fontSize: 16,
         fontWeight: 400,
         marginLeft: 6,
-        color: 'rgb(38, 139, 210)',
+        color: `${COLORS.CURIOUS_BLUE}`,
         overflowX: 'hidden',
       }}
     >
@@ -59,7 +60,7 @@ export const SessionView = props => {
         width: webchatState.devSettings.showSessionView ? '100%' : '0%',
         height: '100%',
         display: 'flex',
-        backgroundColor: '#002B35',
+        backgroundColor: COLORS.DAINTREE_BLUE,
         fontFamily: 'Arial, Helvetica, sans-serif',
         flexDirection: 'column',
         zIndex: 100000,
@@ -77,10 +78,10 @@ export const SessionView = props => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'rgba(255, 255, 255, 0.8)',
+          color: `${COLORS.SOLID_WHITE_ALPHA_0_8}`,
           fontSize: 14,
           fontWeight: 600,
-          backgroundColor: '#002B35',
+          backgroundColor: COLORS.DAINTREE_BLUE,
           flexDirection: 'column',
           zIndex: 100000,
           borderTopRightRadius: 6,
@@ -103,8 +104,8 @@ export const SessionView = props => {
           style={{
             padding: 12,
             textAlign: 'center',
-            color: 'white',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
+            color: `${COLORS.SOLID_WHITE}`,
+            borderBottom: `1px solid ${COLORS.SOLID_WHITE_ALPHA_0_2}`,
           }}
         >
           Botonic Dev Console
@@ -138,7 +139,7 @@ export const SessionView = props => {
           style={{
             flex: 'none',
             padding: 12,
-            color: 'rgba(255, 255, 255, 0.8)',
+            color: `${COLORS.SOLID_WHITE_ALPHA_0_8}`,
             fontSize: 12,
           }}
         >

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import { staticAsset, ConditionalWrapper } from '../utils'
 import styled from 'styled-components'
-import Logo from '../assets/botonic_react_logo100x100.png'
+import { WEBCHAT, COLORS } from '../constants'
 import { Flex } from 'rebass'
 import { motion } from 'framer-motion'
 
@@ -10,23 +10,27 @@ const HeaderTitle = styled(Flex)`
   font-family: inherit;
   font-size: 15px;
   font-weight: bold;
-  color: #ffffff;
+  color: ${COLORS.SOLID_WHITE};
 `
 
 const Subtitle = styled(Flex)`
   font-family: inherit;
   font-size: 11px;
-  color: #ffffff;
+  color: ${COLORS.SOLID_WHITE};
 `
 const Diffuse = styled(Flex)`
-  background: linear-gradient(90deg, #2e203b 0%, ${props => props.color} 100%);
+  background: linear-gradient(
+    90deg,
+    ${COLORS.BLEACHED_CEDAR_PURPLE} 0%,
+    ${props => props.color} 100%
+  );
   height: 55px;
   border-radius: 6px 6px 0px 0px;
 `
 const CloseHeader = styled.div`
   padding: 0px 16px;
   cursor: pointer;
-  color: white;
+  color: ${COLORS.SOLID_WHITE};
   font-family: inherit;
   font-size: 36px;
 `
@@ -45,7 +49,7 @@ export const DefaultHeader = props => {
   const animationsEnabled = getThemeProperty('animations.enable', true)
   let HeaderImage = getThemeProperty(
     'header.image',
-    getThemeProperty('brand.image', Logo)
+    getThemeProperty('brand.image', WEBCHAT.DEFAULTS.LOGO)
   )
 
   let headerTitle = getThemeProperty('header.title', 'Botonic')
@@ -98,7 +102,7 @@ export const WebchatHeader = props => {
     <DefaultHeader
       webchatState={webchatState}
       getThemeProperty={getThemeProperty}
-      color={getThemeProperty('brand.color', '#0099ff')}
+      color={getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)}
       onCloseClick={handleCloseWebchat}
     />
   )

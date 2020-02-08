@@ -1,9 +1,9 @@
 import { useEffect, useReducer, useState, useRef } from 'react'
-import Logo from '../assets/botonic_react_logo100x100.png'
+import { WEBCHAT, COLORS } from '../constants'
 
 export const webchatInitialState = {
-  width: 300,
-  height: 450,
+  width: WEBCHAT.DEFAULTS.WIDTH,
+  height: WEBCHAT.DEFAULTS.HEIGHT,
   messagesJSON: [],
   messagesComponents: [],
   replies: [],
@@ -16,13 +16,13 @@ export const webchatInitialState = {
   lastRoutePath: null,
   handoff: false,
   theme: {
-    headerTitle: 'Botonic',
-    brandColor: '#0099ff',
-    brandImage: Logo,
-    triggerButtonImage: Logo,
-    textPlaceholder: 'Ask me something...',
+    headerTitle: WEBCHAT.DEFAULTS.TITLE,
+    brandColor: COLORS.BOTONIC_BLUE,
+    brandImage: WEBCHAT.DEFAULTS.LOGO,
+    triggerButtonImage: WEBCHAT.DEFAULTS.LOGO,
+    textPlaceholder: WEBCHAT.DEFAULTS.PLACEHOLDER,
     style: {
-      fontFamily: "'Noto Sans JP', sans-serif",
+      fontFamily: WEBCHAT.DEFAULTS.FONT_FAMILY,
     },
   },
   error: {},

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 
 import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
+import { COLORS } from '../constants'
 
 export const Button = props => {
   const {
@@ -52,11 +53,11 @@ export const Button = props => {
     }
 
     let buttonBgColor = hover
-      ? getThemeProperty('button.hoverBackground', '#f3f3f3')
-      : getThemeProperty('button.style.background', '#fff')
+      ? getThemeProperty('button.hoverBackground', COLORS.CONCRETE_WHITE)
+      : getThemeProperty('button.style.background', COLORS.SOLID_WHITE)
     let buttonTextColor = hover
-      ? getThemeProperty('button.hoverText', '#000')
-      : getThemeProperty('button.style.color', '#000')
+      ? getThemeProperty('button.hoverText', COLORS.SOLID_BLACK)
+      : getThemeProperty('button.style.color', COLORS.SOLID_BLACK)
 
     return (
       <button
@@ -73,10 +74,10 @@ export const Button = props => {
           alignContent: 'center',
           justifyContent: 'center',
           padding: '12px 32px',
-          color: getThemeProperty('brand.color', '#000'),
+          color: getThemeProperty('brand.color', COLORS.SOLID_BLACK),
           fontFamily: 'inherit',
           border: 'none',
-          border: '1px solid #f1f0f0',
+          border: `1px solid ${COLORS.SEASHELL_WHITE}`,
           cursor: 'pointer',
           outline: 0,
           borderTopRightRadius: props.top || 0,

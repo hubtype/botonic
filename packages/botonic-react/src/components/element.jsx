@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { isBrowser, isNode } from '@botonic/core'
+import { COLORS } from '../constants'
 
 export const Element = props => {
   const renderBrowser = () => (
@@ -11,7 +12,7 @@ export const Element = props => {
         width: 222,
         marginRight: 6,
         borderRadius: 6,
-        border: '1px solid #F1F0F0',
+        border: `1px solid ${COLORS.SEASHELL_WHITE}`,
         overflow: 'hidden',
       }}
     >
