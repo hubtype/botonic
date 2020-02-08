@@ -41,7 +41,7 @@ export const WebviewHeader = () => {
   const { getThemeProperty } = useContext(WebchatContext)
   return (
     <StyledWebviewHeader
-      style={{ ...getThemeProperty('webview.header.style') }}
+      style={{ ...getThemeProperty('webview.header.style', {}) }}
     >
       <StyledCloseHeader onClick={closeWebview}>✕</StyledCloseHeader>
     </StyledWebviewHeader>

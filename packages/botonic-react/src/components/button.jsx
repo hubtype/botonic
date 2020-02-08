@@ -16,7 +16,7 @@ export const Button = props => {
 
   const handleClick = event => {
     event.preventDefault()
-    let type = getThemeProperty('button.messageType') || 'postback'
+    let type = getThemeProperty('button.messageType', 'postback')
     if (props.webview) openWebview(props.webview, props.params)
     else if (props.path) {
       type == 'postback'
@@ -41,8 +41,8 @@ export const Button = props => {
   }
 
   const renderBrowser = () => {
-    let buttonStyle = getThemeProperty('button.style')
-    let CustomButton = getThemeProperty('button.custom')
+    let buttonStyle = getThemeProperty('button.style', {})
+    let CustomButton = getThemeProperty('button.custom', undefined)
     if (CustomButton) {
       return (
         <div onClick={e => handleClick(e)}>

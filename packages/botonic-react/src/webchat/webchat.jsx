@@ -245,8 +245,10 @@ export const Webchat = forwardRef((props, ref) => {
     </div>
   )
   const animationsEnabled = getThemeProperty('animations.enable', true)
-  const persistentMenuOptions =
-    getThemeProperty('userInput.persistentMenu') || props.persistentMenu
+  const persistentMenuOptions = getThemeProperty(
+    'userInput.persistentMenu',
+    props.persistentMenu
+  )
 
   const persistentMenuLogo = () => (
     <ConditionalWrapper
@@ -272,8 +274,10 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const checkBlockInput = input => {
-    let blockInputs =
-      getThemeProperty('userInput.blockInputs') || props.blockInputs
+    let blockInputs = getThemeProperty(
+      'userInput.blockInputs',
+      props.blockInputs
+    )
     if (!Array.isArray(blockInputs)) return
     for (let rule of blockInputs) {
       if (rule.match.some(regex => regex.test(input.data))) {
@@ -452,14 +456,17 @@ export const Webchat = forwardRef((props, ref) => {
 
   const textArea = useRef()
 
-  let triggerImage = getThemeProperty('triggerButton.image') || Logo
-  const triggerButtonStyle = getThemeProperty('triggerButton.style')
-  const CustomTriggerButton = getThemeProperty('triggerButton.custom')
+  const triggerImage = getThemeProperty('triggerButton.image', Logo)
+  const triggerButtonStyle = getThemeProperty('triggerButton.style', {})
+  const CustomTriggerButton = getThemeProperty(
+    'triggerButton.custom',
+    undefined
+  )
 
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
   ) : (
-    <StyledTriggerButton style={{ ...webchatState.theme.triggerButtonStyle }}>
+    <StyledTriggerButton style={{ ...triggerButtonStyle }}>
       {triggerImage && (
         <img
           style={{ maxWidth: '100%', maxHeight: '100%' }}
@@ -490,13 +497,7 @@ export const Webchat = forwardRef((props, ref) => {
       <div id='messages-end' />
     </WebchatMessageList>
   )
-  const webchatReplies = () => (
-    <WebchatReplies
-      replies={webchatState.replies}
-      align={getThemeProperty('replies.align')}
-      wrap={getThemeProperty('replies.wrap')}
-    />
-  )
+  const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
   const emoji = () => (
     <div
       style={{
@@ -513,15 +514,22 @@ export const Webchat = forwardRef((props, ref) => {
     </div>
   )
   const userInputEnabled = getThemeProperty('userInput.enable', true)
-  const emojiPickerEnabled =
-    getThemeProperty('userInput.emojiPicker.enable') || props.enableEmojiPicker
-  const attachmentsEnabled =
-    getThemeProperty('userInput.attachments.enable') || props.enableAttachments
+  const emojiPickerEnabled = getThemeProperty(
+    'userInput.emojiPicker.enable',
+    props.enableEmojiPicker
+  )
+  const attachmentsEnabled = getThemeProperty(
+    'userInput.attachments.enable',
+    props.enableAttachments
+  )
   const sendButtonEnabled = getThemeProperty(
     'userInput.sendButton.enable',
     true
   )
-  const CustomSendButton = getThemeProperty('userInput.sendButton.custom')
+  const CustomSendButton = getThemeProperty(
+    'userInput.sendButton.custom',
+    undefined
+  )
   const inputUserArea = () => {
     return (
       userInputEnabled && (
@@ -531,7 +539,7 @@ export const Webchat = forwardRef((props, ref) => {
             display: 'flex',
             position: 'relative',
             borderTop: '1px solid rgba(0, 0, 0, 0.4)',
-            ...getThemeProperty('userInput.style'),
+            ...getThemeProperty('userInput.style', {}),
           }}
         >
           {emojiPickerOpened && emoji()}
@@ -548,7 +556,10 @@ export const Webchat = forwardRef((props, ref) => {
               maxRows={4}
               wrap='soft'
               maxLength='1000'
-              placeholder={getThemeProperty('userInput.box.placeholder')}
+              placeholder={getThemeProperty(
+                'userInput.box.placeholder',
+                'Ask me something...'
+              )}
               autoFocus={true}
               inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
@@ -564,7 +575,7 @@ export const Webchat = forwardRef((props, ref) => {
                 padding: 10,
                 paddingLeft: persistentMenuOptions ? 0 : 10,
                 fontFamily: 'inherit',
-                ...getThemeProperty('userInput.box.style'),
+                ...getThemeProperty('userInput.box.style', {}),
               }}
             />
           </div>
@@ -628,7 +639,7 @@ export const Webchat = forwardRef((props, ref) => {
     <RequestContext.Provider value={webviewRequestContext}>
       <WebviewContainer
         style={{
-          ...getThemeProperty('webview.style'),
+          ...getThemeProperty('webview.style', {}),
           ...mobileStyle,
         }}
         webview={webchatState.webview}
