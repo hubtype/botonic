@@ -28,12 +28,9 @@ export const Message = props => {
     updateReplies,
     getThemeProperty,
   } = useContext(WebchatContext)
-  const { theme } = webchatState
   const [state, setState] = useState({
     id: props.id || uuid(),
   })
-
-  const animationsEnabled = getThemeProperty('animations.enable', true)
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
@@ -86,18 +83,15 @@ export const Message = props => {
   const isFromBot = () => from === 'bot'
   const getBgColor = () => {
     if (!blob) return 'transparent'
-    return isFromUser() ? getThemeProperty('brand.color') : '#F1F0F0'
+    return isFromUser() ? getThemeProperty('brand.color', '#0099ff') : '#F1F0F0'
   }
 
   const getMessageStyle = () =>
     isFromBot()
-      ? getThemeProperty('message.bot.style') || {}
-      : getThemeProperty('message.user.style') || {}
+      ? getThemeProperty('message.bot.style', {})
+      : getThemeProperty('message.user.style', {})
 
-  const getBlobTick = () => {
-    let blobTick = getThemeProperty(`message.${from}.blobTick`)
-    return blobTick === undefined || Boolean(blobTick)
-  }
+  const getBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
 
   const renderBrowser = () => {
     let m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -112,17 +106,11 @@ export const Message = props => {
       marginTop: -pointerSize,
     }
 
-    let BotMessageImage = Logo
-
-    /*
-    brand.image, brandImage, bot.message.image and botMessageImage
-    can be set explicitly to null if the developer doesn't want to display them
-    */
-    let brandImg = getThemeProperty('brand.image')
-    if (brandImg !== undefined) BotMessageImage = brandImg
-    let botMsgImg = getThemeProperty('message.bot.image')
-    if (botMsgImg !== undefined) BotMessageImage = botMsgImg
-
+    const BotMessageImage = getThemeProperty(
+      'message.bot.image',
+      getThemeProperty('brand.image', Logo)
+    )
+    const animationsEnabled = getThemeProperty('animations.enable', true)
     return (
       <ConditionalWrapper
         condition={animationsEnabled}
@@ -163,8 +151,9 @@ export const Message = props => {
               backgroundColor: getBgColor(),
               color: isFromUser() ? '#FFF' : '#000',
               border: `1px solid ${getThemeProperty(
-                'message.user.style.background'
-              ) || getBgColor()}`,
+                'message.user.style.background',
+                getBgColor()
+              )}`,
               maxWidth: blob ? '60%' : 'calc(100% - 16px)',
               ...getMessageStyle(),
               ...style,
@@ -186,9 +175,10 @@ export const Message = props => {
               <div
                 style={{
                   ...pointerStyles,
-                  borderLeftColor:
-                    getThemeProperty('message.user.style.background') ||
-                    getBgColor(),
+                  borderLeftColor: getThemeProperty(
+                    'message.user.style.background',
+                    getBgColor()
+                  ),
                   right: 0,
                   borderRight: 0,
                   marginRight: -pointerSize,
@@ -199,9 +189,10 @@ export const Message = props => {
               <div
                 style={{
                   ...pointerStyles,
-                  borderRightColor:
-                    getThemeProperty('message.bot.style.background') ||
-                    getBgColor(),
+                  borderRightColor: getThemeProperty(
+                    'message.bot.style.background',
+                    getBgColor()
+                  ),
                   left: 0,
                   borderLeft: 0,
                   marginLeft: -pointerSize + 1,

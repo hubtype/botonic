@@ -43,23 +43,18 @@ const StyledHeaderTitle = styled(Flex)`
 export const DefaultHeader = props => {
   const { getThemeProperty } = props
   const animationsEnabled = getThemeProperty('animations.enable', true)
-  let HeaderImage = Logo
-  /*
-  brand.image, brandImage, headerImage and header.image
-  can be set explicitly to null if the developer doesn't want to display them
-  */
-  let brandImg = getThemeProperty('brand.image')
-  if (brandImg !== undefined) HeaderImage = brandImg
-  let headerImg = getThemeProperty('header.image')
-  if (headerImg !== undefined) HeaderImage = headerImg
+  let HeaderImage = getThemeProperty(
+    'header.image',
+    getThemeProperty('brand.image', Logo)
+  )
 
-  let headerTitle = getThemeProperty('header.title') || 'Botonic'
-  let headerSubtitle = getThemeProperty('header.subtitle') || ''
+  let headerTitle = getThemeProperty('header.title', 'Botonic')
+  let headerSubtitle = getThemeProperty('header.subtitle', '')
 
   return (
     <Diffuse
       color={props.color}
-      style={{ ...getThemeProperty('header.style') }}
+      style={{ ...getThemeProperty('header.style', {}) }}
     >
       {HeaderImage && (
         <StyledHeaderImage>
@@ -95,7 +90,7 @@ export const WebchatHeader = props => {
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }
-  let CustomHeader = getThemeProperty('header.custom')
+  const CustomHeader = getThemeProperty('header.custom', undefined)
   if (CustomHeader) {
     return <CustomHeader onCloseClick={handleCloseWebchat} />
   }
@@ -103,7 +98,7 @@ export const WebchatHeader = props => {
     <DefaultHeader
       webchatState={webchatState}
       getThemeProperty={getThemeProperty}
-      color={getThemeProperty('brand.color')}
+      color={getThemeProperty('brand.color', '#0099ff')}
       onCloseClick={handleCloseWebchat}
     />
   )

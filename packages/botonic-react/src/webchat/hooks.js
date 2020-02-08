@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useState, useRef } from 'react'
+import Logo from '../assets/botonic_react_logo100x100.png'
 
 export const webchatInitialState = {
   width: 300,
@@ -17,6 +18,8 @@ export const webchatInitialState = {
   theme: {
     headerTitle: 'Botonic',
     brandColor: '#0099ff',
+    brandImage: Logo,
+    triggerButtonImage: Logo,
     textPlaceholder: 'Ask me something...',
     style: {
       fontFamily: "'Noto Sans JP', sans-serif",

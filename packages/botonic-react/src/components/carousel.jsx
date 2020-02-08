@@ -34,7 +34,7 @@ export const Carousel = props => {
   let content = props.children
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
-    ...getThemeProperty('scrollbar'),
+    ...getThemeProperty('scrollbar', {}),
   }
   if (isBrowser()) {
     content = (

@@ -17,13 +17,13 @@ const StyledMessages = styled.div`
 export const WebchatMessageList = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
   const animationsEnabled = getThemeProperty('animations.enable', true)
-  const CustomIntro = getThemeProperty('intro.custom')
-  const introImage = getThemeProperty('intro.image')
-  const introStyle = getThemeProperty('intro.style')
+  const CustomIntro = getThemeProperty('intro.custom', undefined)
+  const introImage = getThemeProperty('intro.image', undefined)
+  const introStyle = getThemeProperty('intro.style', {})
 
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
-    ...getThemeProperty('scrollbar'),
+    ...getThemeProperty('scrollbar', {}),
   }
 
   const DefaultIntro = introImage && (
@@ -31,7 +31,7 @@ export const WebchatMessageList = props => {
       style={{
         maxHeight: '50%',
         width: '100%',
-        ...(introStyle || {}),
+        ...introStyle,
       }}
       src={staticAsset(introImage)}
     />
