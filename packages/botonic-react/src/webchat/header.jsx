@@ -7,7 +7,6 @@ import { Flex } from 'rebass'
 import { motion } from 'framer-motion'
 
 const HeaderTitle = styled(Flex)`
-  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
   font-family: inherit;
   font-size: 15px;
   font-weight: bold;
@@ -15,7 +14,6 @@ const HeaderTitle = styled(Flex)`
 `
 
 const Subtitle = styled(Flex)`
-  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
   font-family: inherit;
   font-size: 11px;
   color: #ffffff;
