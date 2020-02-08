@@ -188,6 +188,9 @@ export const Webchat = forwardRef((props, ref) => {
   useTyping({ webchatState, updateTyping, updateMessage })
 
   useEffect(() => {
+    if (props.theme && props.theme.style) {
+      props.theme.style = { ...theme.style, ...props.theme.style }
+    }
     updateTheme({ ...theme, ...props.theme })
   }, [props.theme])
 

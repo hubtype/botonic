@@ -18,6 +18,9 @@ export const webchatInitialState = {
     headerTitle: 'Botonic',
     brandColor: '#0099ff',
     textPlaceholder: 'Ask me something...',
+    style: {
+      fontFamily: "'Noto Sans JP', sans-serif",
+    },
   },
   error: {},
   devSettings: {},
