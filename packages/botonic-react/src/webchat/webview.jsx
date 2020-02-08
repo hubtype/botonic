@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import Frame from 'react-frame-component'
 import { RequestContext, WebchatContext } from '../contexts'
 import styled from 'styled-components'
+import { COLORS } from '../constants'
 
 const StyledWebview = styled.div`
   position: absolute;
@@ -10,14 +11,14 @@ const StyledWebview = styled.div`
   bottom: 0;
   width: 100%;
   height: 80%;
-  background-color: #fff;
+  background-color: ${COLORS.SOLID_WHITE};
 `
 
 const StyledWebviewHeader = styled.div`
   text-align: right;
-  background-color: #f4f4f4;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: ${COLORS.WILD_SAND_WHITE};
+  border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_2};
+  border-bottom: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_2};
 `
 const StyledCloseHeader = styled.div`
   display: inline-block;

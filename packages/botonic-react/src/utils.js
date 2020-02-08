@@ -1,4 +1,4 @@
-import { CUSTOM_WEBCHAT_PROPERTIES } from './constants'
+import { WEBCHAT } from './constants'
 export function isDev() {
   return process.env.NODE_ENV == 'development'
 }
@@ -42,7 +42,7 @@ export const getProperty = (obj, property) => {
 }
 
 /*
- * returns the value of a property defined in bot's theme based on CUSTOM_WEBCHAT_PROPERTIES dictionary.
+ * returns the value of a property defined in bot's theme based on WEBCHAT.CUSTOM_PROPERTIES dictionary.
  * it gives preference to nested defined properties (e.g.: header.style) over plain properties (e.g.: headerStyle).
  * if property doesn't exist, returns the defaultValue
  */
@@ -51,7 +51,7 @@ export const _getThemeProperty = theme => (
   property,
   defaultValue = undefined
 ) => {
-  for (let [k, v] of Object.entries(CUSTOM_WEBCHAT_PROPERTIES)) {
+  for (let [k, v] of Object.entries(WEBCHAT.CUSTOM_PROPERTIES)) {
     if (v == property) {
       let nestedProperty = getProperty(theme, v)
       if (nestedProperty !== undefined) return nestedProperty

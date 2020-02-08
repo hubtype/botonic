@@ -1,3 +1,4 @@
+import { COLORS } from '../constants'
 import styled from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.css'
@@ -7,11 +8,11 @@ export const StyledScrollbar = styled(SimpleBar)`
     background-color: ${({ scrollbar }) =>
       scrollbar && scrollbar.thumb && scrollbar.thumb.color
         ? scrollbar.thumb.color
-        : '#818181'};
+        : `${COLORS.GRAY}`};
     background-image: ${({ scrollbar }) =>
       scrollbar && scrollbar.thumb && scrollbar.thumb.bgcolor
         ? scrollbar.thumb.bgcolor
-        : '#818181'};
+        : `${COLORS.GRAY}`};
     border-radius: ${({ scrollbar }) =>
       scrollbar && scrollbar.thumb && scrollbar.thumb.border
         ? scrollbar.thumb.border
@@ -32,14 +33,14 @@ export const StyledScrollbar = styled(SimpleBar)`
       scrollbar.track.color &&
       !(scrollbar && !scrollbar.enable)
         ? scrollbar.track.color
-        : 'transparent'};
+        : COLORS.TRANSPARENT};
     background-image: ${({ scrollbar }) =>
       scrollbar &&
       scrollbar.track &&
       scrollbar.track.bgcolor &&
       !(scrollbar && !scrollbar.enable)
         ? scrollbar.track.bgcolor
-        : 'transparent'};
+        : COLORS.TRANSPARENT};
     border-radius: ${({ scrollbar }) =>
       scrollbar && scrollbar.track && scrollbar.track.border
         ? scrollbar.track.border

@@ -5,7 +5,7 @@ import { staticAsset, ConditionalWrapper } from '../utils'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
-import Logo from '../assets/botonic_react_logo100x100.png'
+import { WEBCHAT, COLORS } from '../constants'
 import Fade from 'react-reveal/Fade'
 
 export const Message = props => {
@@ -82,8 +82,10 @@ export const Message = props => {
   const isFromUser = () => from === 'user'
   const isFromBot = () => from === 'bot'
   const getBgColor = () => {
-    if (!blob) return 'transparent'
-    return isFromUser() ? getThemeProperty('brand.color', '#0099ff') : '#F1F0F0'
+    if (!blob) return COLORS.TRANSPARENT
+    return isFromUser()
+      ? getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
+      : COLORS.SEASHELL_WHITE
   }
 
   const getMessageStyle = () =>
@@ -102,13 +104,13 @@ export const Message = props => {
       top: '50%',
       width: 0,
       height: 0,
-      border: `${pointerSize}px solid transparent`,
+      border: `${pointerSize}px solid ${COLORS.TRANSPARENT}`,
       marginTop: -pointerSize,
     }
 
     const BotMessageImage = getThemeProperty(
       'message.bot.image',
-      getThemeProperty('brand.image', Logo)
+      getThemeProperty('brand.image', WEBCHAT.DEFAULTS.LOGO)
     )
     const animationsEnabled = getThemeProperty('animations.enable', true)
     return (
@@ -149,7 +151,7 @@ export const Message = props => {
               margin: 8,
               borderRadius: 8,
               backgroundColor: getBgColor(),
-              color: isFromUser() ? '#FFF' : '#000',
+              color: isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK,
               border: `1px solid ${getThemeProperty(
                 'message.user.style.background',
                 getBgColor()

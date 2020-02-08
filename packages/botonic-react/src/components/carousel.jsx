@@ -4,6 +4,7 @@ import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from '../webchat/styled-scrollbar'
 import { isBrowser, isNode } from '@botonic/core'
 import styled from 'styled-components'
+import { COLORS } from '../constants'
 
 const StyledCarousel = styled.div`
   padding-top: 10px;
@@ -50,7 +51,7 @@ export const Carousel = props => {
   }
   return (
     <Message
-      style={{ width: '85%', padding: 0, backgroundColor: 'transparent' }}
+      style={{ width: '85%', padding: 0, backgroundColor: COLORS.TRANSPARENT }}
       blob={false}
       json={serialize(props)}
       type='carousel'

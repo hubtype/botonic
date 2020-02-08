@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Message } from './message'
 import { isBrowser } from '@botonic/core'
+import { COLORS } from '../constants'
 
 const serialize = videoProps => {
   return { video: videoProps.src }
@@ -13,11 +14,11 @@ export const Video = props => {
     content = (
       <video
         style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: COLORS.SOLID_BLACK_ALPHA_0_5,
           borderRadius: '8px',
           maxHeight: '180px',
           maxWidth: '300px',
-          margin: '10px'
+          margin: '10px',
         }}
         controls
       >
@@ -25,11 +26,7 @@ export const Video = props => {
       </video>
     )
   return (
-    <Message
-      json={serialize(props)}
-      {...props}
-      type='video'
-    >
+    <Message json={serialize(props)} {...props} type='video'>
       {content}
     </Message>
   )

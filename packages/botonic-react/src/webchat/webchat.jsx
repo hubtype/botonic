@@ -29,11 +29,10 @@ import {
   _getThemeProperty,
   ConditionalWrapper,
 } from '../utils'
-import Logo from '../assets/botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
 import LogoEmoji from '../assets/emojiButton.svg'
-import { MIME_WHITELIST } from '../constants'
+import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
@@ -50,9 +49,9 @@ const StyledWebchat = styled.div`
   width: ${props => props.width}px;
   height: ${props => props.height}px;
   margin: auto;
-  background-color: white;
+  background-color: ${COLORS.SOLID_WHITE};
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 12px;
+  box-shadow: ${COLORS.SOLID_BLACK_ALPHA_0_2} 0px 0px 12px;
   display: flex;
   flex-direction: column;
 `
@@ -60,7 +59,7 @@ const StyledWebchat = styled.div`
 const StyledTriggerButton = styled.div`
   cursor: pointer;
   position: absolute;
-  background: white;
+  background: ${COLORS.SOLID_WHITE};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -285,7 +284,10 @@ export const Webchat = forwardRef((props, ref) => {
           <Text
             id={input.id}
             from='user'
-            style={{ backgroundColor: '#585757', borderColor: '#585757' }}
+            style={{
+              backgroundColor: COLORS.SCORPION_GRAY,
+              borderColor: COLORS.SCORPION_GRAY,
+            }}
           >
             {rule.message}
           </Text>
@@ -456,7 +458,10 @@ export const Webchat = forwardRef((props, ref) => {
 
   const textArea = useRef()
 
-  const triggerImage = getThemeProperty('triggerButton.image', Logo)
+  const triggerImage = getThemeProperty(
+    'triggerButton.image',
+    WEBCHAT.DEFAULTS.LOGO
+  )
   const triggerButtonStyle = getThemeProperty('triggerButton.style', {})
   const CustomTriggerButton = getThemeProperty(
     'triggerButton.custom',
@@ -479,7 +484,7 @@ export const Webchat = forwardRef((props, ref) => {
     <WebchatHeader
       style={{
         borderRadius: '8px 8px 0 0',
-        boxShadow: 'rgba(176, 196, 222, 0.5) 0px 2px 5px',
+        boxShadow: `${COLORS.PIGEON_POST_BLUE_ALPHA_0_5} 0px 2px 5px`,
         height: 36,
         flex: 'none',
       }}
@@ -538,7 +543,7 @@ export const Webchat = forwardRef((props, ref) => {
             minHeight: 52,
             display: 'flex',
             position: 'relative',
-            borderTop: '1px solid rgba(0, 0, 0, 0.4)',
+            borderTop: `1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5}`,
             ...getThemeProperty('userInput.style', {}),
           }}
         >
@@ -558,7 +563,7 @@ export const Webchat = forwardRef((props, ref) => {
               maxLength='1000'
               placeholder={getThemeProperty(
                 'userInput.box.placeholder',
-                'Ask me something...'
+                WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
               autoFocus={true}
               inputRef={textArea}
@@ -699,7 +704,7 @@ export const Webchat = forwardRef((props, ref) => {
               style={{
                 flex: '1 1 auto',
                 display: 'flex',
-                backgroundColor: 'white',
+                backgroundColor: `${COLORS.SOLID_WHITE}`,
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontFamily: 'Arial, Helvetica, sans-serif',
