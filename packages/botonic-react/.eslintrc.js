@@ -27,8 +27,11 @@ module.exports = {
     "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
 
     // compatibility with botonic style
-    "no-null/no-null": "off"
-  },
+    "no-null/no-null": "off",
+
+    "react/prop-types": ["error", { skipUndeclared: true }]
+
+},
   settings: {
     react: {
       version: "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
