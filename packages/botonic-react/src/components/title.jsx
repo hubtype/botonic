@@ -9,7 +9,9 @@ const TitleContainer = styled.div`
 
 export const Title = props => {
   const renderBrowser = () => (
-    <TitleContainer style={{ ...props.style }}>{props.children}</TitleContainer>
+    <TitleContainer style={{ ...props.style }}>
+      {props.children}
+    </TitleContainer>
   )
   const renderNode = () => <title>{props.children}</title>
 
