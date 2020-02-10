@@ -1,0 +1,31 @@
+name: Botonic plugin dynamo tests
+ 
+on: [push]
+ 
+jobs:
+  botonic-plugin-dynamodb:
+    name: Botonic plugin dynamodb Tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checking out to current branch (Step 1 of 6)
+      uses: actions/checkout@v1
+    - name: Setting up node (Step 2 of 6)
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - name: Setting up cache (Step 3 of 6)
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install botonic-plugin-dynamodb (Step 4 of 6)
+      run: (cd ./packages/botonic-plugin-dynamodb && npm install)
+    - name: Build botonic-plugin-dynamodb (Step 5 of 6)
+      run: (cd ./packages/botonic-plugin-dynamodb && npm run build)
+    - name: Run tests botonic-plugin-dynamodb (Step 6 of 6)
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: (cd ./packages/botonic-plugin-dynamodb && npm run test)

@@ -20,6 +20,7 @@ describe('msgsToBotonic text', () => {
         },
       ],
     }
+    
     expect(msgsToBotonic(msg)).toEqual(
       <Text {...msg}>
         The verbose text
@@ -45,6 +46,7 @@ describe('msgsToBotonic text', () => {
         },
       ],
     }
+    
     expect(msgsToBotonic(msg)).toEqual(
       <Text {...msg}>
         The verbose text
