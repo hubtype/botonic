@@ -1,19 +1,22 @@
 import React from 'react'
+import styled from 'styled-components'
 import { isBrowser, isNode } from '@botonic/core'
 import { COLORS } from '../constants'
 
+const SubtitleContainer = styled.div`
+  font-size: 12px;
+  padding: 0px 15px 10px 15px;
+  color: ${COLORS.MID_GRAY};
+`
 export const Subtitle = props => {
   const renderBrowser = () => (
-    <div
+    <SubtitleContainer
       style={{
-        fontSize: 12,
-        padding: '0px 15px 10px 15px',
-        color: COLORS.MID_GRAY,
-        ...(props.style || {}),
+        ...props.style,
       }}
     >
       {props.children}
-    </div>
+    </SubtitleContainer>
   )
   const renderNode = () => <desc>{props.children}</desc>
 

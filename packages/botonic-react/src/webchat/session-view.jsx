@@ -1,44 +1,101 @@
 import React from 'react'
 import JSONTree from 'react-json-tree'
+import styled from 'styled-components'
 
 import { useWebchat } from './hooks'
 import { COLORS } from '../constants'
 
+const AttributeContainer = styled.div`
+  display: flex;
+  flex: none;
+  padding: 12px;
+  padding-bottom: 0px;
+  font-size: 12px;
+  font-weight: 600;
+  color: ${COLORS.SOLID_WHITE};
+  alignitems: center;
+`
+
+const Label = styled.div`
+  flex: none;
+`
+
+const Value = styled.div`
+  flex: 1 1 auto;
+  max-height: 20px;
+  font-size: 16px;
+  font-weight: 400;
+  margin-left: 6px;
+  color: ${COLORS.CURIOUS_BLUE};
+  overflow-x: hidden;
+`
+
 const SessionViewAttribute = props => (
-  <div
-    style={{
-      display: 'flex',
-      flex: 'none',
-      padding: 12,
-      paddingBottom: 0,
-      fontSize: 12,
-      fontWeight: 600,
-      color: `${COLORS.SOLID_WHITE}`,
-      alignItems: 'center',
-    }}
-  >
-    <div
-      style={{
-        flex: 'none',
-      }}
-    >
-      {props.label}
-    </div>
-    <div
-      style={{
-        flex: '1 1 auto',
-        maxHeight: 20,
-        fontSize: 16,
-        fontWeight: 400,
-        marginLeft: 6,
-        color: `${COLORS.CURIOUS_BLUE}`,
-        overflowX: 'hidden',
-      }}
-    >
-      {props.value}
-    </div>
-  </div>
+  <AttributeContainer>
+    <Label>{props.label}</Label>
+    <Value>{props.value}</Value>
+  </AttributeContainer>
 )
+
+const SessionViewContent = styled.div`
+  position: relative;
+  width: ${props => (props.show ? '100%' : '0%')};
+  height: 100%;
+  display: flex;
+  background-color: ${COLORS.DAINTREE_BLUE};
+  font-family: Arial, Helvetica, sans-serif;
+  flex-direction: column;
+  z-index: 100000;
+  transition: all 0.2s ease-in-out;
+`
+
+const ToggleTab = styled.div`
+  position: absolute;
+  top: 10px;
+  right: -32px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${COLORS.SOLID_WHITE_ALPHA_0_8};
+  font-size: 14px;
+  font-weight: 600;
+  background-color: ${COLORS.DAINTREE_BLUE};
+  flex-direction: column;
+  z-index: 100000;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+`
+
+const ContentContainer = styled.div`
+  overflow-y: auto;
+  overflow-x: auto;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+`
+
+const Title = styled.div`
+  padding: 12px;
+  text-align: center;
+  color: ${COLORS.SOLID_WHITE};
+  border-bottom: 1px solid ${COLORS.SOLID_WHITE_ALPHA_0_2};
+`
+
+const SessionContainer = styled.div`
+  flex: 1 1 auto;
+  height: 100%;
+  overflow-y: auto;
+`
+
+const KeepSessionContainer = styled.div`
+  flex: none;
+  padding: 12px;
+  color: ${COLORS.SOLID_WHITE_ALPHA_0_8};
+  font-size: 12px;
+`
 
 export const SessionView = props => {
   const { webchatState, updateDevSettings } = props.webchatHooks || useWebchat()
@@ -54,62 +111,12 @@ export const SessionView = props => {
       keepSessionOnReload: !webchatState.devSettings.keepSessionOnReload,
     })
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: webchatState.devSettings.showSessionView ? '100%' : '0%',
-        height: '100%',
-        display: 'flex',
-        backgroundColor: COLORS.DAINTREE_BLUE,
-        fontFamily: 'Arial, Helvetica, sans-serif',
-        flexDirection: 'column',
-        zIndex: 100000,
-        transition: 'all .2s ease-in-out',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          top: 10,
-          right: -32,
-          width: 32,
-          height: 32,
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: `${COLORS.SOLID_WHITE_ALPHA_0_8}`,
-          fontSize: 14,
-          fontWeight: 600,
-          backgroundColor: COLORS.DAINTREE_BLUE,
-          flexDirection: 'column',
-          zIndex: 100000,
-          borderTopRightRadius: 6,
-          borderBottomRightRadius: 6,
-        }}
-        onClick={toggleSessionView}
-      >
+    <SessionViewContent show={webchatState.devSettings.showSessionView}>
+      <ToggleTab onClick={toggleSessionView}>
         {webchatState.devSettings.showSessionView ? '⇤' : '⇥'}
-      </div>
-      <div
-        style={{
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          display: 'flex',
-          flex: '1 1 auto',
-          flexDirection: 'column',
-        }}
-      >
-        <div
-          style={{
-            padding: 12,
-            textAlign: 'center',
-            color: `${COLORS.SOLID_WHITE}`,
-            borderBottom: `1px solid ${COLORS.SOLID_WHITE_ALPHA_0_2}`,
-          }}
-        >
-          Botonic Dev Console
-        </div>
+      </ToggleTab>
+      <ContentContainer>
+        <Title>Botonic Dev Console</Title>
         <SessionViewAttribute
           label='INPUT:'
           value={
@@ -132,29 +139,21 @@ export const SessionView = props => {
           value={lastRoutePath ? `/${lastRoutePath}` : '/'}
         />
         <SessionViewAttribute label='SESSION:' />
-        <div style={{ flex: '1 1 auto', height: '100%', overflowY: 'auto' }}>
+        <SessionContainer>
           <JSONTree data={session} hideRoot={true} />
-        </div>
-        <div
-          style={{
-            flex: 'none',
-            padding: 12,
-            color: `${COLORS.SOLID_WHITE_ALPHA_0_8}`,
-            fontSize: 12,
-          }}
-        >
+        </SessionContainer>
+        <KeepSessionContainer>
           <label>
             <input
               type='checkbox'
               name='toggleKeepSessionOnReload'
               checked={Boolean(webchatState.devSettings.keepSessionOnReload)}
               onChange={toggleKeepSessionOnReload}
-              style={{ marginRight: 5 }}
             />
             Keep session on reload
           </label>
-        </div>
-      </div>
-    </div>
+        </KeepSessionContainer>
+      </ContentContainer>
+    </SessionViewContent>
   )
 }

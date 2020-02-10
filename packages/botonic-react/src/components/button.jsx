@@ -1,8 +1,30 @@
 import React, { useContext, useState } from 'react'
+import styled from 'styled-components'
 
 import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { COLORS } from '../constants'
+
+const StyledButton = styled.button`
+  display: flex;
+  width: 100%;
+  max-height: 80px;
+  font-size: 14px;
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+  padding: 12px 32px;
+  font-family: inherit;
+  border: none;
+  border: 1px solid ${COLORS.SEASHELL_WHITE};
+  cursor: pointer;
+  outline: 0;
+  border-top-right-radius: ${props => props.top || '0px'};
+  border-top-left-radius: ${props => props.top || '0px'};
+  border-bottom-right-radius: ${props => props.bottom || '0px'};
+  border-bottom-left-radius: ${props => props.bottom || '0px'};
+  overflow: hidden;
+`
 
 export const Button = props => {
   const {
@@ -42,8 +64,8 @@ export const Button = props => {
   }
 
   const renderBrowser = () => {
-    let buttonStyle = getThemeProperty('button.style', {})
-    let CustomButton = getThemeProperty('button.custom', undefined)
+    let buttonStyle = getThemeProperty('button.style')
+    let CustomButton = getThemeProperty('button.custom')
     if (CustomButton) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -60,38 +82,20 @@ export const Button = props => {
       : getThemeProperty('button.style.color', COLORS.SOLID_BLACK)
 
     return (
-      <button
+      <StyledButton
         theme={theme}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={e => handleClick(e)}
         style={{
-          display: 'flex',
-          width: '100%',
-          maxHeight: 80,
-          fontSize: 14,
-          textAlign: 'center',
-          alignContent: 'center',
-          justifyContent: 'center',
-          padding: '12px 32px',
           color: getThemeProperty('brand.color', COLORS.SOLID_BLACK),
-          fontFamily: 'inherit',
-          border: 'none',
-          border: `1px solid ${COLORS.SEASHELL_WHITE}`,
-          cursor: 'pointer',
-          outline: 0,
-          borderTopRightRadius: props.top || 0,
-          borderTopLeftRadius: props.top || 0,
-          borderBottomRightRadius: props.bottom || 0,
-          borderBottomLeftRadius: props.bottom || 0,
-          overflow: 'hidden',
           ...buttonStyle,
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
         }}
       >
         {props.children}
-      </button>
+      </StyledButton>
     )
   }
 

@@ -1,7 +1,34 @@
 import React, { forwardRef, useEffect } from 'react'
+import styled from 'styled-components'
 import { useWebchat } from './hooks'
 import { Webchat } from './webchat'
 import { SessionView } from './session-view'
+
+export const FixedTab = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: ${props => (props.show ? '350px' : '32px')};
+  height: ${props => (props.show ? '100%' : '42px')};
+`
+
+const initialSession = {
+  is_first_interaction: true,
+  last_session: {},
+  user: {
+    id: '000001',
+    username: 'johndoe',
+    name: 'John Doe',
+    provider: 'dev',
+    provider_id: '0000000',
+    extra_data: {},
+  },
+  organization: '',
+  bot: {
+    id: '0000000',
+    name: 'botName',
+  },
+}
 
 export const WebchatDev = forwardRef((props, ref) => {
   const webchatHooks = useWebchat()
@@ -14,7 +41,7 @@ export const WebchatDev = forwardRef((props, ref) => {
     () =>
       updateTheme({
         ...webchatState.theme,
-        ...props.theme
+        ...props.theme,
       }),
     [props.theme]
   )
@@ -26,39 +53,15 @@ export const WebchatDev = forwardRef((props, ref) => {
         {...props}
         ref={ref}
         webchatHooks={webchatHooks}
-        initialSession={{
-          is_first_interaction: true,
-          last_session: {},
-          user: {
-            id: '000001',
-            username: 'johndoe',
-            name: 'John Doe',
-            provider: 'dev',
-            provider_id: '0000000',
-            extra_data: {}
-          },
-          organization: '',
-          bot: {
-            id: '0000000',
-            name: 'botName'
-          }
-        }}
+        initialSession={initialSession}
         initialDevSettings={{
           keepSessionOnReload: webchatState.devSettings.keepSessionOnReload,
-          showSessionView: webchatState.devSettings.showSessionView
+          showSessionView: webchatState.devSettings.showSessionView,
         }}
       />
-      <div
-        style={{
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          width: webchatState.devSettings.showSessionView ? 350 : 32,
-          height: webchatState.devSettings.showSessionView ? '100%' : 42
-        }}
-      >
+      <FixedTab show={webchatState.devSettings.showSessionView}>
         <SessionView webchatHooks={webchatHooks} />
-      </div>
+      </FixedTab>
     </div>
   )
 })

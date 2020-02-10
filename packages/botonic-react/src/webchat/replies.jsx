@@ -1,6 +1,23 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
-import { StyledScrollbar } from './styled-scrollbar'
+import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
+import styled from 'styled-components'
+
+const RepliesContainer = styled.div`
+  display: flex;
+  text-align: center;
+  justify-content: ${props => props.justify};
+  flex-wrap: ${props => props.wrap};
+  padding-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+`
+
+const ReplyContainer = styled.div`
+  flex: none;
+  display: inline-block;
+  margin: 3px;
+`
 
 const options = {
   left: 'flex-start',
@@ -12,10 +29,10 @@ export const WebchatReplies = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
-    ...getThemeProperty('scrollbar', {}),
+    ...getThemeProperty('scrollbar'),
   }
   let justifyContent = 'center'
-  let flexWrap = getThemeProperty('replies.wrap', 'wrap')
+  let flexWrap = getThemeProperty('replies.wrap', 'nowrap')
   if (flexWrap == 'nowrap') justifyContent = 'flex-start'
   else justifyContent = options[getThemeProperty('replies.align')]
 
@@ -24,27 +41,17 @@ export const WebchatReplies = props => {
       scrollbar={scrollbarOptions}
       data-simplebar-auto-hide={scrollbarOptions.autoHide}
     >
-      <div
+      <RepliesContainer
+        justify={justifyContent}
+        wrap={flexWrap}
         style={{
-          display: 'flex',
-          textAlign: 'center',
-          justifyContent: justifyContent,
-          flexWrap: flexWrap,
-          paddingBottom: 10,
-          marginLeft: 5,
-          marginRight: 5,
-          ...(props.style || {}),
+          ...props.style,
         }}
       >
         {webchatState.replies.map((r, i) => (
-          <div
-            key={i}
-            style={{ flex: 'none', display: 'inline-block', margin: 3 }}
-          >
-            {r}
-          </div>
+          <ReplyContainer key={i}>{r}</ReplyContainer>
         ))}
-      </div>
+      </RepliesContainer>
     </StyledScrollbar>
   )
 }

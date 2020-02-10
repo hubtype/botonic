@@ -1,8 +1,17 @@
 import React, { useContext } from 'react'
-
+import styled from 'styled-components'
 import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { COLORS } from '../constants'
+
+const StyledButton = styled.button`
+  width: 100%;
+  padding: 4px 8px;
+  font-family: inherit;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: 0;
+`
 
 export const Reply = props => {
   const { sendText, getThemeProperty } = useContext(WebchatContext)
@@ -16,8 +25,8 @@ export const Reply = props => {
   }
 
   const renderBrowser = () => {
-    let replyStyle = getThemeProperty('reply.style', {})
-    const CustomReply = getThemeProperty('reply.custom', undefined)
+    let replyStyle = getThemeProperty('reply.style')
+    const CustomReply = getThemeProperty('reply.custom')
     if (CustomReply) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -27,25 +36,19 @@ export const Reply = props => {
     }
 
     return (
-      <button
+      <StyledButton
         style={{
-          width: '100%',
-          padding: '4px 8px',
           border: `1px solid ${getThemeProperty(
             'brand.color',
             COLORS.BOTONIC_BLUE
           )}`,
           color: getThemeProperty('brand.color', COLORS.BOTONIC_BLUE),
-          fontFamily: 'inherit',
-          borderRadius: 8,
-          cursor: 'pointer',
-          outline: 0,
           ...replyStyle,
         }}
         onClick={e => handleClick(e)}
       >
         {props.children}
-      </button>
+      </StyledButton>
     )
   }
 

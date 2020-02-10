@@ -1,9 +1,17 @@
-import { COLORS } from '../constants'
-import styled from 'styled-components'
+import { COLORS } from '../../constants'
+import styled, { css } from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.css'
 
 export const StyledScrollbar = styled(SimpleBar)`
+  ${props =>
+    props.ismessagescontainer &&
+    css`
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    `}
   & .simplebar-scrollbar::before {
     background-color: ${({ scrollbar }) =>
       scrollbar && scrollbar.thumb && scrollbar.thumb.color

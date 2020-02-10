@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Message } from './message'
 import { WebchatContext } from '../contexts'
-import { StyledScrollbar } from '../webchat/styled-scrollbar'
+import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
 import { isBrowser, isNode } from '@botonic/core'
 import styled from 'styled-components'
 import { COLORS } from '../constants'
@@ -35,7 +35,7 @@ export const Carousel = props => {
   let content = props.children
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
-    ...getThemeProperty('scrollbar', {}),
+    ...getThemeProperty('scrollbar'),
   }
   if (isBrowser()) {
     content = (
