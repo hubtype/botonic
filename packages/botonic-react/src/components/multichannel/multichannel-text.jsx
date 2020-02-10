@@ -2,6 +2,7 @@ import React from 'react'
 import { RequestContext } from '../../contexts'
 import { Text } from '../text'
 import { Providers } from '@botonic/core'
+import { buttonHasUrl, getButtons } from './multichannel-utils'
 
 export class MultichannelText extends React.Component {
   static contextType = RequestContext
@@ -20,26 +21,18 @@ export class MultichannelText extends React.Component {
         ? [this.props.children]
         : this.props.children.filter(e => !e.props)
 
-      let payloadButtons = !Array.isArray(this.props.children)
-        ? []
-        : this.props.children.filter(
-            e => e.props && (e.props.payload || e.props.path)
-          )
+      let buttonsWithoutUrl = getButtons(this.props.children, but => !buttonHasUrl(but))
+      let buttonsWithUrl = getButtons(this.props.children, buttonHasUrl)
 
-      let otherButtons = !Array.isArray(this.props.children)
-        ? []
-        : this.props.children.filter(
-            e => e.props && !(e.props.payload || e.props.path)
-          )
 
       this.elements = [].concat(
         [...text],
-        [...payloadButtons],
-        [...otherButtons]
+        [...buttonsWithoutUrl],
+        [...buttonsWithUrl]
       )
       let index = 0
       return (
-        <Text>
+        <Text {...this.props}>
           {this.elements.map((element, i) => {
             if (
               (element.props && element.props.payload != undefined) ||
@@ -77,7 +70,7 @@ export class MultichannelText extends React.Component {
         </Text>
       )
     } else {
-      return <Text>{this.props.children}</Text>
+      return <Text {...this.props}>{this.props.children}</Text>
     }
   }
 }
