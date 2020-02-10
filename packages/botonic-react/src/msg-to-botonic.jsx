@@ -68,6 +68,7 @@ export function msgToBotonic(msg, customMessageTypes) {
     )
   } else if (msg.type === 'audio') {
     return (
+
       <Audio
         {...msg}
         src={msg.data.audio != undefined ? msg.data.audio : msg.data}
@@ -110,12 +111,12 @@ export function msgsToBotonic(msgs, customMessageTypes) {
           if (msg.key == null) {
             msg.key = `msg${i}`
           }
-          return msgToBotonic(msg, customMessageTypes, decorator)
+          return msgToBotonic(msg, customMessageTypes)
         })}
       </>
     )
   }
-  return msgToBotonic(msgs, customMessageTypes, decorator)
+  return msgToBotonic(msgs, customMessageTypes)
 }
 
 function elementsParse(elements) {

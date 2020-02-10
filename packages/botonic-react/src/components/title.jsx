@@ -4,7 +4,9 @@ import { isBrowser, isNode } from '@botonic/core'
 
 export const Title = props => {
   const renderBrowser = () => (
-    <div style={{ fontSize: 14, padding: '10px 15px', ...(props.style || {}) }}>{props.children}</div>
+    <div style={{ fontSize: 14, padding: '10px 15px', ...(props.style || {}) }}>
+      {props.children}
+    </div>
   )
   const renderNode = () => <title>{props.children}</title>
 

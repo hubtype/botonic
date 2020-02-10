@@ -11,7 +11,7 @@ export const Pic = props => {
         width: 222,
         height: 140,
         background: `#fff url(${props.src}) no-repeat center/cover`,
-        borderBottom: '1px solid #F1F0F0'
+        borderBottom: '1px solid #F1F0F0',
       }}
     />
   )

@@ -15,17 +15,13 @@ export const Document = props => {
         style={{
           borderRadius: '8px',
           height: '300px',
-          margin: '10px'
+          margin: '10px',
         }}
         src={props.src}
       />
     )
   return (
-    <Message
-      json={serialize(props)}
-      {...props}
-      type='document'
-    >
+    <Message json={serialize(props)} {...props} type='document'>
       {content}
     </Message>
   )

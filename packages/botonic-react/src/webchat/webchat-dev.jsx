@@ -14,7 +14,7 @@ export const WebchatDev = forwardRef((props, ref) => {
     () =>
       updateTheme({
         ...webchatState.theme,
-        ...props.theme
+        ...props.theme,
       }),
     [props.theme]
   )
@@ -35,17 +35,17 @@ export const WebchatDev = forwardRef((props, ref) => {
             name: 'John Doe',
             provider: 'dev',
             provider_id: '0000000',
-            extra_data: {}
+            extra_data: {},
           },
           organization: '',
           bot: {
             id: '0000000',
-            name: 'botName'
-          }
+            name: 'botName',
+          },
         }}
         initialDevSettings={{
           keepSessionOnReload: webchatState.devSettings.keepSessionOnReload,
-          showSessionView: webchatState.devSettings.showSessionView
+          showSessionView: webchatState.devSettings.showSessionView,
         }}
       />
       <div
@@ -54,7 +54,7 @@ export const WebchatDev = forwardRef((props, ref) => {
           left: 0,
           top: 0,
           width: webchatState.devSettings.showSessionView ? 350 : 32,
-          height: webchatState.devSettings.showSessionView ? '100%' : 42
+          height: webchatState.devSettings.showSessionView ? '100%' : 42,
         }}
       >
         <SessionView webchatHooks={webchatHooks} />

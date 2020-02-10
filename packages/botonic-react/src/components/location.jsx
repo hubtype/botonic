@@ -18,7 +18,7 @@ export const Location = props => {
           style={{
             textDecoration: 'none',
             fontWeight: 'bold',
-            target: 'blank'
+            target: 'blank',
           }}
           href={locationUrl}
           target='_blank'

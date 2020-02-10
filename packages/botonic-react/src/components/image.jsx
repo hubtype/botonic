@@ -16,7 +16,7 @@ export const Image = props => {
           borderRadius: '8px',
           maxWidth: '150px',
           maxHeight: '150px',
-          margin: '10px'
+          margin: '10px',
         }}
         src={props.src}
       />

@@ -17,7 +17,7 @@ export const Video = props => {
           borderRadius: '8px',
           maxHeight: '180px',
           maxWidth: '300px',
-          margin: '10px'
+          margin: '10px',
         }}
         controls
       >
@@ -25,11 +25,7 @@ export const Video = props => {
       </video>
     )
   return (
-    <Message
-      json={serialize(props)}
-      {...props}
-      type='video'
-    >
+    <Message json={serialize(props)} {...props} type='video'>
       {content}
     </Message>
   )
