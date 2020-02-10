@@ -70,10 +70,10 @@ export async function humanHandOff(session, queueNameOrId = '', onFinish) {
     builder.withQueue(queueNameOrId)
   }
   if (onFinish) {
-    if (onFinish['path']) {
-      builder.withOnFinishPath(onFinish['path'])
-    } else if (onFinish['payload']) {
-      builder.withOnFinishPayload(onFinish['payload'])
+    if (onFinish.path) {
+      builder.withOnFinishPath(onFinish.path)
+    } else if (onFinish.payload) {
+      builder.withOnFinishPayload(onFinish.payload)
     } else {
       throw new Error('onFinish requires payload or path field')
     }

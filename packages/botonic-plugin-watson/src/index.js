@@ -16,12 +16,12 @@ export default class BotonicPluginWatson {
       let assistant = new AssistantV1({
         authenticator: new IamAuthenticator({ apikey: this.options.apiKey }),
         url: this.options.url,
-        version: '2018-09-19'
+        version: '2018-09-19',
       })
 
       let res = await assistant.message({
         input: { text: input.data },
-        workspaceId: this.options.workspaceId
+        workspaceId: this.options.workspaceId,
       })
       intent = res.result.intents[0].intent
       confidence = res.result.intents[0].intent.confidence

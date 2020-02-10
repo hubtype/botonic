@@ -102,7 +102,7 @@ describe('Match route by MATCHER <> INPUT', () => {
 describe('Get route by path', () => {
   const externalRoutes = [
     { path: '', action: 'DefaultAction' },
-    { path: 'child', action: 'ChildAction' }
+    { path: 'child', action: 'ChildAction' },
   ]
   const router = new Router([
     { path: 'initial', action: 'Initial' },
@@ -116,8 +116,8 @@ describe('Get route by path', () => {
           childRoutes: [
             { path: '1', action: 'Flow1.1.1' },
             { path: '2', action: 'Flow1.1.2' },
-            { path: '3', action: 'Flow1.1.3' }
-          ]
+            { path: '3', action: 'Flow1.1.3' },
+          ],
         },
         { path: '2', action: 'Flow1.2', childRoutes: externalRoutes },
         {
@@ -126,12 +126,12 @@ describe('Get route by path', () => {
           childRoutes: [
             { path: '1', action: 'Flow1.3.1' },
             { path: '2', action: 'Flow1.3.2' },
-            { path: '3', action: 'Flow1.3.3' }
-          ]
-        }
-      ]
+            { path: '3', action: 'Flow1.3.3' },
+          ],
+        },
+      ],
     },
-    { path: '404', action: '404Action' }
+    { path: '404', action: '404Action' },
   ])
   test('path exists', () => {
     expect(router.getRouteByPath('initial').action).toBe('Initial')
@@ -152,7 +152,7 @@ describe('Get route by path', () => {
 describe('Process input (v<0.9)', () => {
   const externalRoutes = [
     { path: '', action: 'DefaultAction' },
-    { path: 'child', action: 'ChildAction' }
+    { path: 'child', action: 'ChildAction' },
   ]
   const router = new Router([
     { path: 'help', payload: 'help', action: 'Help' },
@@ -168,14 +168,14 @@ describe('Process input (v<0.9)', () => {
           childRoutes: [
             { path: '1', payload: '1', action: 'Flow1.1.1' },
             { path: '2', payload: '2', action: 'Flow1.1.2' },
-            { path: '3', payload: '3', action: 'Flow1.1.3' }
-          ]
+            { path: '3', payload: '3', action: 'Flow1.1.3' },
+          ],
         },
         {
           path: '2',
           payload: '2',
           action: 'Flow1.2',
-          childRoutes: externalRoutes
+          childRoutes: externalRoutes,
         },
         {
           path: '3',
@@ -184,12 +184,12 @@ describe('Process input (v<0.9)', () => {
           childRoutes: [
             { path: '1', payload: '1', action: 'Flow1.3.1' },
             { path: '2', payload: '2', action: 'Flow1.3.2' },
-            { path: '3', payload: '3', action: 'Flow1.3.3' }
-          ]
-        }
-      ]
+            { path: '3', payload: '3', action: 'Flow1.3.3' },
+          ],
+        },
+      ],
     },
-    { path: '404', action: '404Action' }
+    { path: '404', action: '404Action' },
   ])
   test('text input, root level route', () => {
     let input = { type: 'text', data: 'hi', intent: 'greeting' }

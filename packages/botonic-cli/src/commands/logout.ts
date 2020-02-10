@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { Command, flags } from '@oclif/command'
 
-import { BotonicAPIService } from '../botonicAPIService'
+import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'
 
 export default class Run extends Command {
@@ -12,8 +12,8 @@ export default class Run extends Command {
   static flags = {
     path: flags.string({
       char: 'p',
-      description: 'Path to botonic project. Defaults to current dir.'
-    })
+      description: 'Path to botonic project. Defaults to current dir.',
+    }),
   }
 
   static args = []

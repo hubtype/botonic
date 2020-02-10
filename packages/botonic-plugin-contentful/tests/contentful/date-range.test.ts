@@ -9,16 +9,18 @@ function europeDate(
   hour: number = 0,
   minute: number = 0
 ): Date {
-  let date = new Date(Date.UTC(year, month, day, hour, minute, 0));
+  const date = new Date(Date.UTC(year, month, day, hour, minute, 0))
 
-  let utcDate = new Date(date.toLocaleString('en-US', { timeZone: "UTC" }));
-  let tzDate = new Date(date.toLocaleString('en-US', { timeZone: "Europe/Madrid" }));
-  let offset = utcDate.getTime() - tzDate.getTime();
+  const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }))
+  const tzDate = new Date(
+    date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })
+  )
+  const offset = utcDate.getTime() - tzDate.getTime()
 
-  date.setTime( date.getTime() + offset );
+  date.setTime(date.getTime() + offset)
 
-  return date;
-};
+  return date
+}
 
 test('TEST: contentful dateRange', async () => {
   const dateRange = await testContentful().dateRange(TEST_DATE_RANGE_HUBTYPE_ID)

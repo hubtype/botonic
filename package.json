@@ -2,7 +2,14 @@
   "private": true,
   "devDependencies": {
     "@types/node": "^13.1.6",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^5.1.0",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint_d": "^8.0.0",
     "lerna": "^3.19.0",
+    "prettier": "^1.19.1",
     "ts-node": "^8.5.4",
     "tslib": "^1.10.0",
     "typescript": "~3.7.4"

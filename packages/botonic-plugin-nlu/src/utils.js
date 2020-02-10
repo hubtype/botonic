@@ -4,7 +4,7 @@ import {
   ASSETS_DIRNAME,
   MODELS_DIRNAME,
   NLU_DATA_FILENAME,
-  MODEL_FILENAME
+  MODEL_FILENAME,
 } from '@botonic/nlu/lib/constants'
 
 export const isProd = () => {
@@ -15,7 +15,7 @@ export async function resolveEnv() {
   if (isProd()) {
     return {
       mode: 'prod',
-      uri: `${process.env.STATIC_URL}/${ASSETS_DIRNAME}/${MODELS_DIRNAME}/`
+      uri: `${process.env.STATIC_URL}/${ASSETS_DIRNAME}/${MODELS_DIRNAME}/`,
     }
   } else {
     return { mode: 'dev', uri: window.location.href }
@@ -26,7 +26,7 @@ export function loadOption(lang, env) {
   let nlu = {}
   try {
     nlu.nluData = axios({
-      url: `${env.uri}${lang}/${NLU_DATA_FILENAME}`
+      url: `${env.uri}${lang}/${NLU_DATA_FILENAME}`,
     })
     nlu.model = tf.loadLayersModel(`${env.uri}${lang}/${MODEL_FILENAME}`)
   } catch (e) {

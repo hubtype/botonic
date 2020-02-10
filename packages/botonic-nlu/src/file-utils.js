@@ -7,7 +7,7 @@ import {
   NLU_CONFIG_FILENAME,
   UTTERANCES_DIRNAME,
   MODELS_DIRNAME,
-  NLU_DATA_FILENAME
+  NLU_DATA_FILENAME,
 } from './constants'
 
 const FILE_OPEN_EXCEPTION = error => colors.red(`${error}`)
@@ -80,7 +80,7 @@ export function loadConfigAndTrainingData(nluPath, languages) {
           devIntents.intents.push({
             rawUtterance: utterance,
             utterance: parsedUtterance,
-            label: idx
+            label: idx,
           })
           for (let entity of parsedEntities) {
             let { type, value } = entity
@@ -99,7 +99,7 @@ export function loadConfigAndTrainingData(nluPath, languages) {
         modelsPath,
         devIntents,
         devEntities,
-        language
+        language,
       }
     })
 }
@@ -108,7 +108,7 @@ export async function saveConfigAndTrainingData({
   modelsPath,
   model,
   language,
-  nluData
+  nluData,
 }) {
   let resultsPath = path.join(modelsPath, language)
   if (!pathExists(modelsPath)) {

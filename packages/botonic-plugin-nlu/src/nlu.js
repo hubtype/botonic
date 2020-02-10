@@ -4,7 +4,7 @@ import { detectLang } from '@botonic/nlu/lib/preprocessing'
 import {
   getIntent,
   getEntities,
-  getPrediction
+  getPrediction,
 } from '@botonic/nlu/lib/prediction'
 
 global.fetch = fetch
@@ -21,12 +21,12 @@ export class NLU {
         this.models[language] = {
           language,
           model,
-          nluData
+          nluData,
         }
       }
       await Promise.all([
         ...Object.values(this.models).map(nlu => nlu.model),
-        ...Object.values(this.models).map(nlu => nlu.nluData)
+        ...Object.values(this.models).map(nlu => nlu.nluData),
       ])
       for (let [language, res] of Object.entries(this.models)) {
         let nluData = await res.nluData
@@ -38,9 +38,9 @@ export class NLU {
             intentsDict,
             maxSeqLength,
             vocabulary,
-            devEntities
+            devEntities,
           },
-          model: await res.model
+          model: await res.model,
         }
       }
       return this

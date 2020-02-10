@@ -16,7 +16,7 @@ export const ASSETS_DIRNAME = 'assets'
 export const UNKNOWN_TOKEN = '<UNK>'
 export const DB = {
   TABLE: 'embeddings',
-  COLUMN: 'token'
+  COLUMN: 'token',
 }
 export const WORD_EMBEDDDINGS_ENDPOINT =
   'https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com'
@@ -47,7 +47,7 @@ export const DEFAULT_ENTITIES = [
   'MaleName',
   'FemaleName',
   'Honorific',
-  'Person'
+  'Person',
 ]
 
 export const DEFAULT_HYPERPARAMETERS = {
@@ -59,5 +59,5 @@ export const DEFAULT_HYPERPARAMETERS = {
   UNITS: 21,
   MAX_SEQ_LENGTH: 50,
   VALIDATION_SPLIT: 0.2,
-  DROPOUT_REG: 0.2
+  DROPOUT_REG: 0.2,
 }

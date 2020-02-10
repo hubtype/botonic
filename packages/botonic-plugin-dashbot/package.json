@@ -2,8 +2,20 @@
   "name": "@botonic/plugin-dashbot",
   "version": "0.8.2",
   "main": "src/index.js",
+  "scripts": {
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core",
+    "lint_core": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
+  },
   "dependencies": {
     "axios": "latest",
     "dashbot": "^11.1.0"
+  },
+  "devDependencies": {
+    "eslint_d": "^8.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-no-null": "^1.0.2",
+    "prettier": "^1.19.1"
   }
 }

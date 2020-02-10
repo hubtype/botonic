@@ -1,10 +1,10 @@
-name: Botonic plugin dynamo tests
+name: Botonic plugin-dynamodb tests
  
 on: [push]
  
 jobs:
-  botonic-plugin-dynamodb:
-    name: Botonic plugin dynamodb Tests
+  botonic-plugin-dynamodb-tests:
+    name: Botonic plugin-dynamodb Tests
     runs-on: ubuntu-latest
     steps:
     - name: Checking out to current branch (Step 1 of 6)

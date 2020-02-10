@@ -9,7 +9,6 @@ import {
 } from 'BotonicProject'
 
 export let app
-
 if (process.env.BOTONIC_TARGET === 'dev') {
   app = new DevApp({
     routes,

@@ -9,11 +9,11 @@ import {
   MODELS_DIRNAME,
   NLU_DATA_FILENAME,
   MODEL_FILENAME,
-  DEFAULT_HYPERPARAMETERS
+  DEFAULT_HYPERPARAMETERS,
 } from './constants'
 import {
   loadConfigAndTrainingData,
-  saveConfigAndTrainingData
+  saveConfigAndTrainingData,
 } from './file-utils'
 import { getPrediction, getIntent } from './prediction'
 import { getEntities } from './ner'
@@ -64,24 +64,24 @@ export class BotonicNLU {
         tensorData,
         tensorLabels,
         vocabulary,
-        vocabularyLength
+        vocabularyLength,
       } = preprocessData(devIntents, params)
       let embeddingMatrix = await getEmbeddingMatrix({
         vocabulary,
         vocabularyLength,
-        params
+        params,
       })
       this.models[params.language] = embeddingLSTMModel({
         params,
         vocabularyLength,
         embeddingMatrix: tf.tensor(embeddingMatrix),
-        outputDim: Object.keys(devIntents.intentsDict).length
+        outputDim: Object.keys(devIntents.intentsDict).length,
       })
       this.models[params.language].summary()
       this.models[params.language].compile({
         optimizer: tf.train.adam(params.LEARNING_RATE),
         loss: 'categoricalCrossentropy',
-        metrics: ['accuracy']
+        metrics: ['accuracy'],
       })
       console.log('TRAINING...')
 
@@ -90,7 +90,7 @@ export class BotonicNLU {
         tensorLabels,
         {
           epochs: params.EPOCHS,
-          validationSplit: params.VALIDATION_SPLIT
+          validationSplit: params.VALIDATION_SPLIT,
         }
       )
       let end = new Date() - start
@@ -100,13 +100,13 @@ export class BotonicNLU {
         vocabulary,
         intentsDict: devIntents.intentsDict,
         language: params.language,
-        devEntities
+        devEntities,
       }
       await saveConfigAndTrainingData({
         modelsPath: this.modelsPath,
         model: this.models[params.language],
         language: params.language,
-        nluData
+        nluData,
       })
     }
   }
@@ -156,7 +156,7 @@ function embeddingLSTMModel({
   vocabularyLength,
   embeddingMatrix,
   params,
-  outputDim
+  outputDim,
 }) {
   let model = tf.sequential()
   model.add(
@@ -165,7 +165,7 @@ function embeddingLSTMModel({
       outputDim: params.EMBEDDING_DIM,
       inputLength: params.MAX_SEQ_LENGTH,
       trainable: params.TRAINABLE_EMBEDDINGS,
-      weights: [embeddingMatrix]
+      weights: [embeddingMatrix],
     })
   )
 
@@ -180,13 +180,13 @@ function embeddingLSTMModel({
     tf.layers.lstm({
       units: params.UNITS,
       dropout: params.DROPOUT_REG,
-      recurrentDropout: params.DROPOUT_REG
+      recurrentDropout: params.DROPOUT_REG,
     })
   )
   model.add(
     tf.layers.dense({
       units: outputDim,
-      activation: 'softmax'
+      activation: 'softmax',
     })
   )
   return model

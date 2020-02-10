@@ -13,14 +13,12 @@ export default class BotonicPluginLUIS {
 
     try {
       let luis_resp = await axios({
-        url: `https://${
-          this.options.region
-        }.api.cognitive.microsoft.com/luis/v2.0/apps/${this.options.appID}`,
+        url: `https://${this.options.region}.api.cognitive.microsoft.com/luis/v2.0/apps/${this.options.appID}`,
         params: {
           'subscription-key': this.options.endpointKey,
           q: input.data,
-          verbose: true
-        }
+          verbose: true,
+        },
       })
       if (luis_resp && luis_resp.data) {
         intent = luis_resp.data.topScoringIntent.intent
@@ -36,7 +34,7 @@ export default class BotonicPluginLUIS {
   }
 
   convertIntents(luisIntents) {
-    return luisIntents.map(li => ({intent: li.intent, confidence: li.score}))
+    return luisIntents.map(li => ({ intent: li.intent, confidence: li.score }))
   }
 
   async post({ input, session, lastRoutePath, response }) {}

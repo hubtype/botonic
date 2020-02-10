@@ -1,12 +1,12 @@
-const fs = require('fs')
-const os = require('os')
-const path = require('path')
-const Analytics = require('analytics-node')
+import * as fs from 'fs'
+import * as os from 'os'
+import * as path from 'path'
+import * as Analytics from 'analytics-node'
 import { exec } from 'child_process'
 
-export var analytics: any
+export let analytics: any
 
-export var credentials: any
+export let credentials: any
 export const botonic_home_path: string = path.join(os.homedir(), '.botonic')
 export const botonic_credentials_path = path.join(
   botonic_home_path,
@@ -15,7 +15,7 @@ export const botonic_credentials_path = path.join(
 
 export function initializeCredentials() {
   if (!fs.existsSync(botonic_home_path)) fs.mkdirSync(botonic_home_path)
-  let anonymous_id = Math.round(Math.random() * 100000000)
+  const anonymous_id = Math.round(Math.random() * 100000000)
   fs.writeFileSync(
     botonic_credentials_path,
     JSON.stringify({ analytics: { anonymous_id } })
@@ -27,13 +27,19 @@ function readCredentials() {
     initializeCredentials()
   }
   try {
-    credentials = JSON.parse(fs.readFileSync(botonic_credentials_path))
-  } catch (e) {}
+    credentials = JSON.parse(fs.readFileSync(botonic_credentials_path, 'utf8'))
+  } catch (e) {
+    if (fs.existsSync(botonic_credentials_path)) {
+      console.warn('Credentials could not be loaded', e)
+    }
+  }
 }
 
 try {
   readCredentials()
-} catch (e) {}
+} catch (e) {
+  console.warn('Credentials could not be loaded', e)
+}
 
 function analytics_enabled() {
   return process.env.BOTONIC_DISABLE_ANALYTICS !== '1'
@@ -48,7 +54,7 @@ export function track(event: string, properties: {} = {}) {
     analytics.track({
       event: event,
       anonymousId: credentials.analytics.anonymous_id,
-      properties: properties
+      properties: properties,
     })
 }
 

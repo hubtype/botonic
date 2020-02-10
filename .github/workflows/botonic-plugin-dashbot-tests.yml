@@ -1,0 +1,28 @@
+name: Botonic plugin-dashbot tests
+ 
+on: [push]
+ 
+jobs:
+  botonic-plugin-dashbot-tests:
+    name: Botonic plugin-dashbot tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checking out to current branch (Step 1 of 6)
+      uses: actions/checkout@v1
+    - name: Setting up node (Step 2 of 6)
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - name: Setting up cache (Step 3 of 6)
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install botonic-plugin-dashbot (Step 4 of 6)
+      run: (cd ./packages/botonic-plugin-dashbot && npm install -D)
+    - name: Install common packages dependencies (Step 5 of 6)
+      run: npm install -D
+    - name: Verify lint botonic-plugin-dashbot (Step 6 of 6)
+      run: (cd ./packages/botonic-plugin-dashbot && npm run lint_ci)

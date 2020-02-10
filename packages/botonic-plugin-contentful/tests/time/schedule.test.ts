@@ -24,16 +24,18 @@ function europeDate(
   hour: number = 0,
   minute: number = 0
 ): Date {
-  let date = new Date(Date.UTC(year, month, day, hour, minute, 0));
+  const date = new Date(Date.UTC(year, month, day, hour, minute, 0))
 
-  let utcDate = new Date(date.toLocaleString('en-US', { timeZone: "UTC" }));
-  let tzDate = new Date(date.toLocaleString('en-US', { timeZone: "Europe/Madrid" }));
-  let offset = utcDate.getTime() - tzDate.getTime();
+  const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }))
+  const tzDate = new Date(
+    date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })
+  )
+  const offset = utcDate.getTime() - tzDate.getTime()
 
-  date.setTime( date.getTime() + offset );
+  date.setTime(date.getTime() + offset)
 
-  return date;
-};
+  return date
+}
 
 test.each<any>([
   // Friday winter time
@@ -183,7 +185,7 @@ test('TEST: addException end day', () => {
   )
 
   sut.addException(
-    europeDate(2019, MARCH, 29, 1),//Friday //BUG this do not work when hour is 0 executed on github actions
+    europeDate(2019, MARCH, 29, 1), //Friday //BUG this do not work when hour is 0 executed on github actions
     new DaySchedule([
       new TimeRange(
         sut.createHourAndMinute(23),
@@ -191,7 +193,7 @@ test('TEST: addException end day', () => {
       ),
     ])
   )
-  
+
   expect(sut.contains(europeDate(2019, MARCH, 28, 23, 15))).toBeFalsy()
   expect(sut.contains(europeDate(2019, MARCH, 29, 22, 59))).toBeFalsy()
   expect(sut.contains(europeDate(2019, MARCH, 29, 23, 0))).toBeTruthy()

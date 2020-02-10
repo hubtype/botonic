@@ -1,19 +1,19 @@
 import { Command, flags } from '@oclif/command'
 import { track, getGlobalNodeModulesPath } from '../utils'
 import * as colors from 'colors'
-const path = require('path')
+import * as path from 'path'
 
 export default class Run extends Command {
   static description = 'Serve your bot in your localhost'
 
   static examples = [
     `$ botonic train
-    TRAINING MODEL FOR {LANGUAGE}...
-    `
+    TRAINING MODEL FOR {LANGUAGE}...
+    `,
   ]
 
   static flags = {
-    lang: flags.string()
+    lang: flags.string(),
   }
 
   static args = []
@@ -27,9 +27,11 @@ export default class Run extends Command {
       '@botonic',
       'nlu'
     )
-
+    let BotonicNLU, CONSTANTS
     try {
-      var { BotonicNLU, CONSTANTS } = await import(botonicNLUPath)
+      const nluImport = await import(botonicNLUPath)
+      BotonicNLU = nluImport.BotonicNLU
+      CONSTANTS = nluImport.CONSTANTS
     } catch (e) {
       console.log(
         `You don't have @botonic/nlu installed.\nPlease, install it by typing the following command:`

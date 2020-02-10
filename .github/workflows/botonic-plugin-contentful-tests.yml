@@ -1,31 +1,33 @@
-name: Botonic plugin contentful tests
+name: Botonic plugin-contentful tests
  
 on: [push]
  
 jobs:
-  botonic-plugin-contentful:
-    name: Botonic plugin contentful Tests
+  botonic-plugin-contentful-tests:
+    name: Botonic plugin-contentful Tests
     runs-on: ubuntu-latest
     steps:
-    - name: Checking out to current branch (Step 1 of 6)
+    - name: Checking out to current branch (Step 1 of 7)
       uses: actions/checkout@v1
-    - name: Setting up node (Step 2 of 6)
+    - name: Setting up node (Step 2 of 7)
       uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - name: Setting up cache (Step 3 of 6)
+    - name: Setting up cache (Step 3 of 7)
       uses: actions/cache@v1
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Install botonic-plugin-contentful (Step 4 of 6)
-      run: (cd ./packages/botonic-plugin-contentful && npm install)
-    - name: Build botonic-plugin-contentful (Step 5 of 6)
+    - name: Install botonic-plugin-contentful (Step 4 of 7)
+      run: (cd ./packages/botonic-plugin-contentful && npm install -D)
+    - name: Build botonic-plugin-contentful (Step 5 of 7)
       run: (cd ./packages/botonic-plugin-contentful && npm run build)
-    - name: Run tests botonic-plugin-contentful (Step 6 of 6)
+    - name: Run tests botonic-plugin-contentful (Step 6 of 7)
       env:
         CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
         CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
       run: (cd ./packages/botonic-plugin-contentful && npm run test)
+    - name: Verify lint botonic-plugin-contentful (Step 7 of 7)
+      run: (cd ./packages/botonic-plugin-contentful && npm run lint_ci)

@@ -22,7 +22,7 @@ Test Suites: 1 passed, 1 total
 Tests:       7 passed, 7 total
 Snapshots:   0 total
 Time:        1.223s
-Ran all test suites.`
+Ran all test suites.`,
   ]
 
   static flags = {}

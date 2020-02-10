@@ -16,7 +16,7 @@ describe('handOff', () => {
        }`,
       '',
       { path: 'path1' },
-    ]
+    ],
   ])('humanHandOff', (expected, queue, onFinish) => {
     let session = {}
     humanHandOff(session, queue, onFinish)
