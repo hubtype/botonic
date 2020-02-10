@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`multiChannel text with buttons 1`] = `
+<message
+  style="style1"
+  type="text"
+>
+  The verbose text
+  [object Object],[object Object]
+</message>
+`;
