@@ -1,23 +1,21 @@
 import React from 'react'
-
+import styled from 'styled-components'
 import { isBrowser, isNode } from '@botonic/core'
 import { COLORS } from '../constants'
 
+const ElementContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 222px;
+  margin-right: 6px;
+  border-radius: 6px;
+  border: 1px solid ${COLORS.SEASHELL_WHITE};
+  overflow: hidden;
+`
+
 export const Element = props => {
   const renderBrowser = () => (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: 222,
-        marginRight: 6,
-        borderRadius: 6,
-        border: `1px solid ${COLORS.SEASHELL_WHITE}`,
-        overflow: 'hidden',
-      }}
-    >
-      {props.children}
-    </div>
+    <ElementContainer>{props.children}</ElementContainer>
   )
 
   const renderNode = () => <element>{props.children}</element>

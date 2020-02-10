@@ -1,7 +1,13 @@
 import React from 'react'
-
+import styled from 'styled-components'
 import { isBrowser, isNode } from '@botonic/core'
 import { Message } from './message'
+
+const Link = styled.a`
+  text-decoration: none;
+  font-weight: bold;
+  target: blank;
+`
 
 const serialize = locationProps => {
   return { location: { lat: locationProps.lat, long: locationProps.long } }
@@ -14,17 +20,9 @@ export const Location = props => {
     let locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
     return (
       <Message json={serialize(props)} {...props} type='location'>
-        <a
-          style={{
-            textDecoration: 'none',
-            fontWeight: 'bold',
-            target: 'blank'
-          }}
-          href={locationUrl}
-          target='_blank'
-        >
+        <Link href={locationUrl} target='_blank'>
           {props.text || 'Open Location'}
-        </a>
+        </Link>
       </Message>
     )
   }

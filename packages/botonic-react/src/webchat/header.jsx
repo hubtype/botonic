@@ -6,7 +6,33 @@ import { WEBCHAT, COLORS } from '../constants'
 import { Flex } from 'rebass'
 import { motion } from 'framer-motion'
 
-const HeaderTitle = styled(Flex)`
+const Header = styled(Flex)`
+  background: linear-gradient(
+    90deg,
+    ${COLORS.BLEACHED_CEDAR_PURPLE} 0%,
+    ${props => props.color} 100%
+  );
+  height: 55px;
+  border-radius: 6px 6px 0px 0px;
+`
+
+const ImageContainer = styled(Flex)`
+  padding: 10px;
+  align-items: center;
+`
+
+const Image = styled.img`
+  width: 32px;
+  border-radius: 50%;
+`
+
+const TextContainer = styled(Flex)`
+  flex-direction: column;
+  justify-content: center;
+  flex: 1 1 auto;
+`
+
+const Title = styled(Flex)`
   font-family: inherit;
   font-size: 15px;
   font-weight: bold;
@@ -18,15 +44,7 @@ const Subtitle = styled(Flex)`
   font-size: 11px;
   color: ${COLORS.SOLID_WHITE};
 `
-const Diffuse = styled(Flex)`
-  background: linear-gradient(
-    90deg,
-    ${COLORS.BLEACHED_CEDAR_PURPLE} 0%,
-    ${props => props.color} 100%
-  );
-  height: 55px;
-  border-radius: 6px 6px 0px 0px;
-`
+
 const CloseHeader = styled.div`
   padding: 0px 16px;
   cursor: pointer;
@@ -34,20 +52,11 @@ const CloseHeader = styled.div`
   font-family: inherit;
   font-size: 36px;
 `
-const StyledHeaderImage = styled(Flex)`
-  padding: 10px;
-  align-items: center;
-`
-const StyledHeaderTitle = styled(Flex)`
-  flex-direction: column;
-  justify-content: center;
-  flex: 1 1 auto;
-`
 
 export const DefaultHeader = props => {
   const { getThemeProperty } = props
   const animationsEnabled = getThemeProperty('animations.enable', true)
-  let HeaderImage = getThemeProperty(
+  let headerImage = getThemeProperty(
     'header.image',
     getThemeProperty('brand.image', WEBCHAT.DEFAULTS.LOGO)
   )
@@ -56,27 +65,16 @@ export const DefaultHeader = props => {
   let headerSubtitle = getThemeProperty('header.subtitle', '')
 
   return (
-    <Diffuse
-      color={props.color}
-      style={{ ...getThemeProperty('header.style', {}) }}
-    >
-      {HeaderImage && (
-        <StyledHeaderImage>
-          <img
-            style={{
-              width: 32,
-              borderRadius: '50%',
-            }}
-            src={staticAsset(HeaderImage)}
-          />
-        </StyledHeaderImage>
+    <Header color={props.color} style={{ ...getThemeProperty('header.style') }}>
+      {headerImage && (
+        <ImageContainer>
+          <Image src={staticAsset(headerImage)} />
+        </ImageContainer>
       )}
-      <StyledHeaderTitle ml={HeaderImage ? 0 : 16}>
-        <HeaderTitle mb={headerSubtitle ? '6px' : '0px'}>
-          {headerTitle}
-        </HeaderTitle>
+      <TextContainer ml={headerImage ? '0px' : '16px'}>
+        <Title mb={headerSubtitle ? '6px' : '0px'}>{headerTitle}</Title>
         <Subtitle>{headerSubtitle}</Subtitle>
-      </StyledHeaderTitle>
+      </TextContainer>
       <ConditionalWrapper
         condition={animationsEnabled}
         wrapper={children => (
@@ -85,16 +83,17 @@ export const DefaultHeader = props => {
       >
         <CloseHeader onClick={props.onCloseClick}>⨯</CloseHeader>
       </ConditionalWrapper>
-    </Diffuse>
+    </Header>
   )
 }
+
 export const WebchatHeader = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
 
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }
-  const CustomHeader = getThemeProperty('header.custom', undefined)
+  const CustomHeader = getThemeProperty('header.custom')
   if (CustomHeader) {
     return <CustomHeader onCloseClick={handleCloseWebchat} />
   }
@@ -107,3 +106,10 @@ export const WebchatHeader = props => {
     />
   )
 }
+
+export const StyledWebchatHeader = styled(WebchatHeader)`
+  border-radius: 8px 8px 0px 0px;
+  box-shadow: ${COLORS.PIGEON_POST_BLUE_ALPHA_0_5} 0px 2px 5px;
+  height: 36px;
+  flex: none;
+`

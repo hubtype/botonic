@@ -12,13 +12,17 @@ import UAParser from 'ua-parser-js'
 import { isMobile, params2queryString } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Text, Document, Image, Video, Audio } from '../components'
-import { TypingIndicator } from '../components/typing-indicator'
+import { TypingIndicator } from './components/typing-indicator'
 import { Handoff } from '../components/handoff'
 import { useWebchat, useTyping, usePrevious } from './hooks'
-import { WebchatHeader } from './header'
-import { PersistentMenu } from '../components/persistent-menu'
-import { Attachment } from '../components/attachment'
-import { SendButton } from '../components/send-button'
+import { StyledWebchatHeader } from './header'
+import {
+  PersistentMenu,
+  OpenedPersistentMenu,
+} from './components/persistent-menu'
+import { Attachment } from './components/attachment'
+import { SendButton } from './components/send-button'
+import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
 import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
@@ -29,9 +33,6 @@ import {
   _getThemeProperty,
   ConditionalWrapper,
 } from '../utils'
-import EmojiPicker from 'emoji-picker-react'
-import LogoMenu from '../assets/menuButton.svg'
-import LogoEmoji from '../assets/emojiButton.svg'
 import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
@@ -70,6 +71,39 @@ const StyledTriggerButton = styled.div`
   right: 10px;
 `
 
+const UserInputContainer = styled.div`
+  min-height: 52px;
+  display: flex;
+  position: relative;
+  border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5};
+`
+
+const TextAreaContainer = styled.div`
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+`
+
+const FeaturesWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const TriggerImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+`
+
+const ErrorMessageContainer = styled.div`
+  flex: 1 1 auto;
+  display: flex;
+  background-color: ${COLORS.SOLID_WHITE};
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+`
+
 const createUser = () => {
   let parser = new UAParser()
   let ua = parser.getResult()
@@ -105,8 +139,8 @@ export const Webchat = forwardRef((props, ref) => {
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
-  const [persistentMenuOpened, setPersistentMenuOpened] = useState(false)
-  const [emojiPickerOpened, setEmojiPickerOpened] = useState(false)
+  const [persistentMenuIsOpened, setPersistentMenuIsOpened] = useState(false)
+  const [emojiPickerIsOpened, setEmojiPickerIsOpened] = useState(false)
   const [attachment, setAttachment] = useState({})
 
   const getThemeProperty = _getThemeProperty(theme)
@@ -196,7 +230,7 @@ export const Webchat = forwardRef((props, ref) => {
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
-  const emojiClick = code => {
+  const handleSelectedEmoji = code => {
     const emoji = String.fromCodePoint(`0x${code}`)
     textArea.current.value += emoji
     textArea.current.focus()
@@ -217,59 +251,22 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const handleMenu = () => {
-    setEmojiPickerOpened(false)
-    persistentMenuOpened
-      ? setPersistentMenuOpened(false)
-      : setPersistentMenuOpened(true)
+    setEmojiPickerIsOpened(false)
+    persistentMenuIsOpened
+      ? setPersistentMenuIsOpened(false)
+      : setPersistentMenuIsOpened(true)
   }
 
-  const handleEmoji = () => {
-    emojiPickerOpened ? setEmojiPickerOpened(false) : setEmojiPickerOpened(true)
+  const handleEmojiClick = () => {
+    emojiPickerIsOpened
+      ? setEmojiPickerIsOpened(false)
+      : setEmojiPickerIsOpened(true)
   }
-  const EmojiPickerComponent = () => (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        paddingRight: 15,
-      }}
-    >
-      <img
-        style={{
-          cursor: 'pointer',
-        }}
-        src={staticAsset(LogoEmoji)}
-        onClick={() => handleEmoji()}
-      />
-    </div>
-  )
+
   const animationsEnabled = getThemeProperty('animations.enable', true)
   const persistentMenuOptions = getThemeProperty(
     'userInput.persistentMenu',
     props.persistentMenu
-  )
-
-  const persistentMenuLogo = () => (
-    <ConditionalWrapper
-      condition={animationsEnabled}
-      wrapper={children => (
-        <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
-      )}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 'none',
-          cursor: 'pointer',
-          padding: 18,
-        }}
-        onClick={() => handleMenu()}
-      >
-        <img src={staticAsset(LogoMenu)} />
-      </div>
-    </ConditionalWrapper>
   )
 
   const checkBlockInput = input => {
@@ -298,7 +295,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
   const closeMenu = () => {
-    setPersistentMenuOpened(false)
+    setPersistentMenuIsOpened(false)
   }
 
   const sendInput = async input => {
@@ -340,8 +337,8 @@ export const Webchat = forwardRef((props, ref) => {
       })
     updateLatestInput(input)
     updateReplies(false)
-    setPersistentMenuOpened(false)
-    setEmojiPickerOpened(false)
+    setPersistentMenuIsOpened(false)
+    setEmojiPickerIsOpened(false)
   }
 
   /* This is the public API this component exposes to its parents
@@ -462,7 +459,7 @@ export const Webchat = forwardRef((props, ref) => {
     'triggerButton.image',
     WEBCHAT.DEFAULTS.LOGO
   )
-  const triggerButtonStyle = getThemeProperty('triggerButton.style', {})
+  const triggerButtonStyle = getThemeProperty('triggerButton.style')
   const CustomTriggerButton = getThemeProperty(
     'triggerButton.custom',
     undefined
@@ -472,27 +469,10 @@ export const Webchat = forwardRef((props, ref) => {
     <CustomTriggerButton />
   ) : (
     <StyledTriggerButton style={{ ...triggerButtonStyle }}>
-      {triggerImage && (
-        <img
-          style={{ maxWidth: '100%', maxHeight: '100%' }}
-          src={staticAsset(triggerImage)}
-        />
-      )}
+      {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
     </StyledTriggerButton>
   )
-  const webchatHeader = () => (
-    <WebchatHeader
-      style={{
-        borderRadius: '8px 8px 0 0',
-        boxShadow: `${COLORS.PIGEON_POST_BLUE_ALPHA_0_5} 0px 2px 5px`,
-        height: 36,
-        flex: 'none',
-      }}
-      onCloseClick={() => {
-        toggleWebchat(false)
-      }}
-    />
-  )
+
   const webchatMessageList = () => (
     <WebchatMessageList
       style={{ flex: 1 }}
@@ -503,21 +483,7 @@ export const Webchat = forwardRef((props, ref) => {
     </WebchatMessageList>
   )
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
-  const emoji = () => (
-    <div
-      style={{
-        width: theme.width || '100%',
-        maxWidth: 400,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        position: 'absolute',
-        right: 0,
-        top: -332,
-      }}
-    >
-      <EmojiPicker onEmojiClick={emojiClick} />
-    </div>
-  )
+
   const userInputEnabled = getThemeProperty('userInput.enable', true)
   const emojiPickerEnabled = getThemeProperty(
     'userInput.emojiPicker.enable',
@@ -535,27 +501,38 @@ export const Webchat = forwardRef((props, ref) => {
     'userInput.sendButton.custom',
     undefined
   )
-  const inputUserArea = () => {
+
+  const ConditionalAnimation = props => (
+    <ConditionalWrapper
+      condition={animationsEnabled}
+      wrapper={children => (
+        <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
+      )}
+    >
+      {props.children}
+    </ConditionalWrapper>
+  )
+
+  const userInputArea = () => {
     return (
       userInputEnabled && (
-        <div
+        <UserInputContainer
           style={{
-            minHeight: 52,
-            display: 'flex',
-            position: 'relative',
-            borderTop: `1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5}`,
-            ...getThemeProperty('userInput.style', {}),
+            ...getThemeProperty('userInput.style'),
           }}
         >
-          {emojiPickerOpened && emoji()}
-          {persistentMenuOptions && persistentMenuLogo()}
-          <div
-            style={{
-              display: 'flex',
-              flex: '1 1 auto',
-              alignItems: 'center',
-            }}
-          >
+          {emojiPickerIsOpened && (
+            <OpenedEmojiPicker
+              width={theme.width}
+              onClick={handleSelectedEmoji}
+            />
+          )}
+          {persistentMenuOptions && (
+            <ConditionalAnimation>
+              <PersistentMenu onClick={handleMenu} />
+            </ConditionalAnimation>
+          )}
+          <TextAreaContainer>
             <Textarea
               name='text'
               maxRows={4}
@@ -580,62 +557,35 @@ export const Webchat = forwardRef((props, ref) => {
                 padding: 10,
                 paddingLeft: persistentMenuOptions ? 0 : 10,
                 fontFamily: 'inherit',
-                ...getThemeProperty('userInput.box.style', {}),
+                ...getThemeProperty('userInput.box.style'),
               }}
             />
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          </TextAreaContainer>
+          <FeaturesWrapper>
             {emojiPickerEnabled && (
-              <ConditionalWrapper
-                condition={animationsEnabled}
-                wrapper={children => (
-                  <motion.div whileHover={{ scale: 1.2 }}>
-                    {children}
-                  </motion.div>
-                )}
-              >
-                <EmojiPickerComponent />
-              </ConditionalWrapper>
+              <ConditionalAnimation>
+                <EmojiPicker onClick={handleEmojiClick} />
+              </ConditionalAnimation>
             )}
             {attachmentsEnabled && (
-              <ConditionalWrapper
-                condition={animationsEnabled}
-                wrapper={children => (
-                  <motion.div whileHover={{ scale: 1.2 }}>
-                    {children}
-                  </motion.div>
-                )}
-              >
+              <ConditionalAnimation>
                 <Attachment
                   onChange={handleAttachment}
                   accept={Object.values(MIME_WHITELIST)
                     .map(v => v.join(','))
                     .join(',')}
                 />
-              </ConditionalWrapper>
+              </ConditionalAnimation>
             )}
             {(sendButtonEnabled || CustomSendButton) && (
-              <ConditionalWrapper
-                condition={animationsEnabled}
-                wrapper={children => (
-                  <motion.div whileHover={{ scale: 1.2 }}>
-                    {children}
-                  </motion.div>
-                )}
-              >
+              <ConditionalAnimation>
                 <div onClick={sendTextAreaText}>
                   {CustomSendButton ? <CustomSendButton /> : <SendButton />}
                 </div>
-              </ConditionalWrapper>
+              </ConditionalAnimation>
             )}
-          </div>
-        </div>
+          </FeaturesWrapper>
+        </UserInputContainer>
       )
     )
   }
@@ -644,7 +594,7 @@ export const Webchat = forwardRef((props, ref) => {
     <RequestContext.Provider value={webviewRequestContext}>
       <WebviewContainer
         style={{
-          ...getThemeProperty('webview.style', {}),
+          ...getThemeProperty('webview.style'),
           ...mobileStyle,
         }}
         webview={webchatState.webview}
@@ -698,33 +648,28 @@ export const Webchat = forwardRef((props, ref) => {
             ...webchatState.theme.style,
           }}
         >
-          {webchatHeader()}
+          <StyledWebchatHeader
+            onCloseClick={() => {
+              toggleWebchat(false)
+            }}
+          />
           {webchatState.error.message ? (
-            <div
-              style={{
-                flex: '1 1 auto',
-                display: 'flex',
-                backgroundColor: `${COLORS.SOLID_WHITE}`,
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontFamily: 'Arial, Helvetica, sans-serif',
-              }}
-            >
+            <ErrorMessageContainer>
               Error: {webchatState.error.message}
-            </div>
+            </ErrorMessageContainer>
           ) : (
             <>
               {webchatMessageList()}
               {webchatState.replies &&
                 Object.keys(webchatState.replies).length > 0 &&
                 webchatReplies()}
-              {persistentMenuOpened && (
-                <PersistentMenu
+              {persistentMenuIsOpened && (
+                <OpenedPersistentMenu
                   onClick={closeMenu}
                   options={persistentMenuOptions}
                 />
               )}
-              {!webchatState.handoff && inputUserArea()}
+              {!webchatState.handoff && userInputArea()}
               {webchatState.webview && webchatWebview()}
             </>
           )}

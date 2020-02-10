@@ -1,10 +1,15 @@
 import React from 'react'
-
+import styled from 'styled-components'
 import { isBrowser, isNode } from '@botonic/core'
+
+const TitleContainer = styled.div`
+  font-size: 14px;
+  padding: 10px 15px;
+`
 
 export const Title = props => {
   const renderBrowser = () => (
-    <div style={{ fontSize: 14, padding: '10px 15px', ...(props.style || {}) }}>{props.children}</div>
+    <TitleContainer style={{ ...props.style }}>{props.children}</TitleContainer>
   )
   const renderNode = () => <title>{props.children}</title>
 

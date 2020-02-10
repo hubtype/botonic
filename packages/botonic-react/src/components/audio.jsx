@@ -16,11 +16,7 @@ export const Audio = props => {
       </audio>
     )
   return (
-    <Message
-      json={serialize(props)}
-      {...props}
-      type='audio'
-    >
+    <Message json={serialize(props)} {...props} type='audio'>
       {content}
     </Message>
   )

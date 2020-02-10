@@ -42,7 +42,7 @@ export const WebviewHeader = () => {
   const { getThemeProperty } = useContext(WebchatContext)
   return (
     <StyledWebviewHeader
-      style={{ ...getThemeProperty('webview.header.style', {}) }}
+      style={{ ...getThemeProperty('webview.header.style') }}
     >
       <StyledCloseHeader onClick={closeWebview}>✕</StyledCloseHeader>
     </StyledWebviewHeader>
@@ -68,7 +68,7 @@ export const WebviewContainer = props => {
   return (
     <StyledWebview
       style={{
-        ...(props.style || {}),
+        ...props.style,
       }}
     >
       <WebviewHeader style={{ flex: 'none' }} />

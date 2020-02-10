@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import styled from 'styled-components'
 import uuid from 'uuid/v4'
 import { isBrowser, isNode } from '@botonic/core'
 import { staticAsset, ConditionalWrapper } from '../utils'
@@ -7,6 +8,38 @@ import { Button } from './button'
 import { Reply } from './reply'
 import { WEBCHAT, COLORS } from '../constants'
 import Fade from 'react-reveal/Fade'
+
+const MessageContainer = styled.div`
+  display: flex;
+  justify-content: ${props => (props.isfromuser ? 'flex-end' : 'flex-start')};
+  position: relative;
+  padding-left: 5px;
+`
+
+const BotMessageImageContainer = styled.div`
+  width: 28px;
+  padding: 12px 4px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const Blob = styled.div`
+  position: relative;
+  margin: 8px;
+  border-radius: 8px;
+  background-color: ${props => props.bgcolor};
+  color: ${props => props.color};
+  max-width: ${props => (props.blob ? '60%' : 'calc(100% - 16px)')};
+`
+
+const BlobText = styled.div`
+  padding: ${props => (props.blob ? '8px 12px' : '0px')};
+  display: flex;
+  flex-direction: column;
+  white-space: pre-line;
+`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -90,8 +123,8 @@ export const Message = props => {
 
   const getMessageStyle = () =>
     isFromBot()
-      ? getThemeProperty('message.bot.style', {})
-      : getThemeProperty('message.user.style', {})
+      ? getThemeProperty('message.bot.style')
+      : getThemeProperty('message.user.style')
 
   const getBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
 
@@ -118,60 +151,35 @@ export const Message = props => {
         condition={animationsEnabled}
         wrapper={children => <Fade>{children}</Fade>}
       >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: isFromUser() ? 'flex-end' : 'flex-start',
-            position: 'relative',
-            paddingLeft: 5,
-          }}
-        >
+        <MessageContainer isfromuser={isFromUser()}>
           {isFromBot() && BotMessageImage && (
-            <div
+            <BotMessageImageContainer
               style={{
-                width: 28,
-                padding: '12px 4px',
-                flex: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                ...(getThemeProperty('message.bot.imageStyle') || {}),
+                ...getThemeProperty('message.bot.imageStyle'),
               }}
             >
               <img
                 style={{ width: '100%' }}
                 src={staticAsset(BotMessageImage)}
               />
-            </div>
+            </BotMessageImageContainer>
           )}
 
-          <div
+          <Blob
+            bgcolor={getBgColor()}
+            color={isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
+            blob={blob}
             style={{
-              position: 'relative',
-              margin: 8,
-              borderRadius: 8,
-              backgroundColor: getBgColor(),
-              color: isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK,
               border: `1px solid ${getThemeProperty(
                 'message.user.style.background',
                 getBgColor()
               )}`,
-              maxWidth: blob ? '60%' : 'calc(100% - 16px)',
               ...getMessageStyle(),
               ...style,
             }}
             {...otherProps}
           >
-            <div
-              style={{
-                padding: blob ? '8px 12px' : 0,
-                display: 'flex',
-                flexDirection: 'column',
-                whiteSpace: 'pre-line',
-              }}
-            >
-              {textChildren}
-            </div>
+            <BlobText blob={blob}>{textChildren}</BlobText>
             {buttons}
             {isFromUser() && blob && getBlobTick() && (
               <div
@@ -201,8 +209,8 @@ export const Message = props => {
                 }}
               />
             )}
-          </div>
-        </div>
+          </Blob>
+        </MessageContainer>
       </ConditionalWrapper>
     )
   }
