@@ -30,11 +30,12 @@ const initialSession = {
   },
 }
 
+// eslint-disable-next-line react/display-name
 export const WebchatDev = forwardRef((props, ref) => {
   const webchatHooks = useWebchat()
   const { webchatState, updateTheme } = webchatHooks
 
-  /* TODO: webchatState.theme shoud be included in the dependencies array
+  /* TODO: webchatState.theme should be included in the dependencies array
   together with props.theme. The problem is that this effect modifies webchatState
   so we enter an infinite rerender loop. */
   useEffect(
