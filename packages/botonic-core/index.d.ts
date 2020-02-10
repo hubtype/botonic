@@ -133,9 +133,7 @@ export interface BotResponse extends BotRequest {
 }
 
 export type PluginPreRequest = BotRequest
-export type PluginPostRequest = BotRequest & {
-  response: any
-}
+export type PluginPostRequest = BotResponse
 
 export interface Plugin {
   pre(pluginRequest: PluginPreRequest): void
