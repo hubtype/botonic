@@ -5,18 +5,18 @@ import {
   ContentCallback,
   ModelType,
   Text,
-} from '../../src/cms'
-import { TextBuilder } from '../../src/cms/factories'
+} from '../index'
+import { TextBuilder } from '../factories'
 
-function rndStr(): string {
+export function rndStr(): string {
   return Math.random().toString()
 }
 
-function rndBool(): boolean {
+export function rndBool(): boolean {
   return Math.random() >= 0.5
 }
 
-export class ButtonsBuilder {
+export class RndButtonsBuilder {
   name = rndStr()
   buttons: Button[] = []
 
@@ -24,7 +24,7 @@ export class ButtonsBuilder {
     return this.buttons
   }
 
-  withButton(): ButtonsBuilder {
+  withButton(): RndButtonsBuilder {
     this.buttons.push(
       new Button(
         rndStr(),
@@ -36,7 +36,7 @@ export class ButtonsBuilder {
   }
 }
 
-export class KeywordsBuilder {
+export class RndKeywordsBuilder {
   keywords = [rndStr(), rndStr()]
 
   build(): string[] {
@@ -45,11 +45,14 @@ export class KeywordsBuilder {
 }
 
 export class RndTextBuilder extends TextBuilder {
-  readonly buttonsBuilder = new ButtonsBuilder()
-  readonly keywordsBuilder = new KeywordsBuilder()
+  readonly buttonsBuilder = new RndButtonsBuilder()
+  readonly keywordsBuilder = new RndKeywordsBuilder()
 
   constructor(name: string = rndStr(), text: string = rndStr()) {
-    super(name, text)
+    super(rndStr(), name, text)
+  }
+
+  withRandomFields(): RndTextBuilder {
     this.buttons = this.buttonsBuilder
       .withButton()
       .withButton()
@@ -58,7 +61,8 @@ export class RndTextBuilder extends TextBuilder {
     this.keywords = this.keywordsBuilder.build()
     this.followUp = rndBool()
       ? undefined
-      : new Text(new CommonFields(rndStr()), rndStr(), [])
+      : new Text(new CommonFields(rndStr(), rndStr()), rndStr(), [])
     this.buttonsStyle = rndBool() ? ButtonStyle.QUICK_REPLY : ButtonStyle.BUTTON
+    return this
   }
 }

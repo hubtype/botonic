@@ -8,7 +8,17 @@ import {
 } from './contents'
 
 abstract class ModelBuilder {
-  protected constructor(readonly name: string) {}
+  protected constructor(public id: string, public name: string) {}
+
+  withId(id: string): ModelBuilder {
+    this.id = id
+    return this
+  }
+
+  withName(name: string): ModelBuilder {
+    this.name = name
+    return this
+  }
 
   abstract build(): Content
 }
@@ -17,14 +27,21 @@ abstract class ModelBuilder {
  * Helps constructing @link Text, which has many fields and it's immutable
  */
 export class TextBuilder extends ModelBuilder {
-  buttons: Button[] = []
+  // TODO move CommonFields to a new TopContentBuilder
   shortText?: string
   keywords: string[] = []
   followUp?: FollowUp
+
+  buttons: Button[] = []
   buttonsStyle = ButtonStyle.BUTTON
 
-  constructor(readonly name: string, readonly text: string) {
-    super(name)
+  constructor(id: string, name: string, public text: string) {
+    super(id, name)
+  }
+
+  withText(text: string): TextBuilder {
+    this.text = text
+    return this
   }
 
   withButtons(buttons: Button[]): TextBuilder {
@@ -54,7 +71,7 @@ export class TextBuilder extends ModelBuilder {
 
   build(): Text {
     return new Text(
-      new CommonFields(this.name, {
+      new CommonFields(this.id, this.name, {
         shortText: this.shortText,
         keywords: this.keywords,
         followUp: this.followUp,

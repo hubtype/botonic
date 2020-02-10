@@ -39,7 +39,7 @@ export class KeywordsDelivery {
     const callback = DeliveryApi.callbackFromEntry(entry)
     return new SearchResult(
       callback,
-      new CommonFields(entry.fields.name, {
+      new CommonFields(entry.sys.id, entry.fields.name, {
         shortText: entry.fields.shortText,
         keywords,
       }),

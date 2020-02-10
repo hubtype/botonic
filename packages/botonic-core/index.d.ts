@@ -18,23 +18,24 @@ export interface Input {
   entities?: any
 }
 
-type StringMatcher = RegExp | string | ((data: string) => boolean)
+
+export interface SessionUser {
+  id: string
+  // login
+  username?: string
+  // person name
+  name?: string
+  // whatsapp, telegram,...
+  provider?: string
+  // The provider's user id
+  provider_id?: string
+  extra_data?: any
+}
 
 export interface Session {
   is_first_interaction?: boolean
   last_session?: any
-  user: {
-    id: string
-    // login
-    username?: string
-    // person name
-    name?: string
-    // whatsapp, telegram,...
-    provider?: string
-    // The provider's user id
-    provider_id?: string
-    extra_data?: any
-  }
+  user: SessionUser
   bot: {
     id: string
     name?: string
@@ -43,15 +44,26 @@ export interface Session {
   __retries?: number
 }
 
+type StringMatcher = RegExp | string | ((data: string) => boolean)
+type ParamsMatcher = { [key: string]: string } | ((params: { [key: string]: string }) => boolean)
+type SessionMatcher = (session: Session) => boolean
+type InputMatcher = (input: Input) => boolean
+type RouteMatcher = StringMatcher | ParamsMatcher| SessionMatcher | InputMatcher
+
 export interface Route {
-  path: StringMatcher
+  path?: StringMatcher
+  action?: React.ReactNode
+  redirect?: string
+  childRoutes?: Route[]
+
+  // matchers
   payload?: StringMatcher
   text?: StringMatcher
+  params?: ParamsMatcher
   type?: StringMatcher
   intent?: StringMatcher
-  input?: (input: Input) => boolean
-  session?: (session: Session) => boolean
-  action: React.ReactNode
+  input?: InputMatcher
+  session?: SessionMatcher
 }
 
 type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[])
@@ -62,6 +74,7 @@ export class HandOffBuilder {
   constructor(session: Session)
 
   withQueue(queueNameOrId: string): HandOffBuilder
+
   withOnFinishPayload(payload: string): HandOffBuilder
   withOnFinishPath(path: string): HandOffBuilder
   withAgentEmail(email: string): HandOffBuilder
@@ -105,20 +118,29 @@ export declare function getAvailableAgents(
   session: Session
 ): Promise<{ agents: HubtypeAgentsInfo[] }>
 
+export interface BotRequest {
+  input: Input
+  session: Session
+  lastRoutePath: string
+}
+
 /** The response of the bot for the triggered actions, which can be
  * the one matched by the routes, the default action and the retry actions.
- * See the @botonic/react's index.d.ts for this implementations particular type.
+ * See Response at @botonic/react's index.d.ts for the React type
  * */
-export type Response = any
+export interface BotResponse extends BotRequest {
+  response: any
+}
+
+export type PluginPreRequest = BotRequest
+export type PluginPostRequest = BotRequest & {
+  response: any
+}
 
 export interface Plugin {
-  pre(_: { input: Input; session: Session; lastRoutePath: string })
-  post(_: {
-    input: Input
-    session: Session
-    lastRoutePath: string
-    response: Response
-  })
+  pre(pluginRequest: PluginPreRequest): void
+
+  post(_: PluginPostRequest): void
 }
 
 interface BotOptions {
@@ -148,14 +170,5 @@ export class CoreBot {
 
   setLocale(locale: string, session: Session): void
 
-  input(_: {
-    input: Input
-    session?: Session
-    lastRoutePath: string
-  }): {
-    input: Input
-    response: Response
-    session: Session
-    lastRoutePath: string
-  }
+  input(request: BotRequest): BotResponse
 }

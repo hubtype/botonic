@@ -9,10 +9,11 @@ import { testContentful } from './contentful.helper'
 import { TEST_CAROUSEL_MAIN_ID } from './carousel.test'
 
 test('TEST: contentful startUp', async () => {
-  const startUp = await testContentful().startUp('PfMPIeS6zD1Rix6Px9m0u')
+  const id = 'PfMPIeS6zD1Rix6Px9m0u'
+  const startUp = await testContentful().startUp(id)
   expect(startUp).toEqual(
     new StartUp(
-      new CommonFields('BANNER', {
+      new CommonFields(id, 'BANNER', {
         shortText: 'Bienvenida',
         keywords: ['keyword1'],
       }),

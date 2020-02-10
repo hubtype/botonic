@@ -143,7 +143,7 @@ export function commonFieldsFromEntry(
   const dateRange =
     fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange)
 
-  return new CommonFields(fields.name, {
+  return new CommonFields(entry.sys.id, fields.name, {
     keywords: fields.keywords,
     shortText: fields.shortText,
     partitions: fields.partitions,

@@ -1,11 +1,10 @@
 import { instance, mock, when } from 'ts-mockito'
 import { Content, Text } from '../../src/cms'
-import { RndTextBuilder } from '../helpers/builders'
+import { RndTextBuilder } from '../../src/cms/test-helpers/builders'
 import { expectEqualExceptOneField } from '../helpers/expect'
 
 test('TEST: cloneWithButtons copies all fields except buttons', () => {
-  const builder = new RndTextBuilder()
-  const t1 = builder.build()
+  const t1 = new RndTextBuilder().withRandomFields().build()
   expect(t1).toBeInstanceOf(Text)
 
   const clone = t1.cloneWithButtons(t1.buttons.slice(1, 2))
@@ -20,8 +19,7 @@ test('TEST: cloneWithButtons copies all fields except buttons', () => {
 })
 
 test('TEST: cloneWithText copies all fields except text', () => {
-  const builder = new RndTextBuilder()
-  const t1 = builder.build()
+  const t1 = new RndTextBuilder().withRandomFields().build()
   const oldText = t1.text
   expect(t1).toBeInstanceOf(Text)
 
@@ -36,7 +34,7 @@ test('TEST: cloneWithText copies all fields except text', () => {
 })
 
 test('TEST: cloneWithFollowUp copies all fields except followUp', () => {
-  const builder = new RndTextBuilder()
+  const builder = new RndTextBuilder().withRandomFields()
   const t1 = builder.build()
   const oldFollowUp = t1.common.followUp
   expect(t1).toBeInstanceOf(Text)

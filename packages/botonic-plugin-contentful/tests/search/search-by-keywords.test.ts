@@ -12,6 +12,7 @@ import {
 } from '../../src'
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result'
 import { Normalizer, StemmingBlackList, MatchType } from '../../src/nlp'
+import { rndStr } from '../../src/cms/test-helpers/builders'
 
 const ES_CONTEXT = { locale: 'es' }
 test('TEST: searchContentsFromInput keywords found', async () => {
@@ -101,7 +102,7 @@ test('TEST: searchContentsFromInput with stem blacklist', async () => {
 export function contentWithKeyword(callback: Callback, keywords: string[]) {
   return new SearchResult(
     callback,
-    new CommonFields(callback.payload!, {
+    new CommonFields(rndStr(), callback.payload!, {
       shortText: 'shortText' + callback.payload,
       keywords,
     })
@@ -112,7 +113,7 @@ export function chitchatContent(keywords: string[]) {
   const id = Math.random().toString()
   return new SearchResult(
     new ContentCallback(ModelType.TEXT, id),
-    new CommonFields(id, { shortText: 'chitchat', keywords })
+    new CommonFields(id, id, { shortText: 'chitchat', keywords })
   )
 }
 

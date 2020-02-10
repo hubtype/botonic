@@ -62,6 +62,7 @@ export class CommonFields {
   readonly dateRange?: DateRangeContent
   followUp?: FollowUp
   constructor(
+    readonly id: string,
     readonly name: string,
     opt?: {
       shortText?: string
