@@ -11,7 +11,7 @@ export const WhatsappTemplate = props => {
     // Return a dummy message for browser
     return (
       <Message {...props} type='text'>
-        Template {props.name} would be send to the user with parameters:"
+        Template {props.name} would be send to the user with parameters:&quot;
         {params} and namespace {props.namespace}
       </Message>
     )
