@@ -1,5 +1,6 @@
 export const CUSTOM_WEBCHAT_PROPERTIES = {
   webviewStyle: 'webview.style',
+  enableAnimations: 'animations.enable',
   webviewHeaderStyle: 'webview.header.style',
   brandColor: 'brand.color',
   brandImage: 'brand.image',
@@ -38,8 +39,10 @@ export const CUSTOM_WEBCHAT_PROPERTIES = {
   userInputStyle: 'userInput.style',
   userInputBoxStyle: 'userInput.box.style',
   textPlaceholder: 'userInput.box.placeholder',
-  emojiPicker: 'userInput.emojiPicker',
+  enableEmojiPicker: 'userInput.emojiPicker.enable',
   enableAttachments: 'userInput.attachments.enable',
+  enableSendButton: 'userInput.sendButton.enable',
+  customSendButton: 'userInput.sendButton.custom',
   persistentMenu: 'userInput.persistentMenu',
   blockInputs: 'userInput.blockInputs',
   scrollbar: 'scrollbar',

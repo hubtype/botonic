@@ -18,11 +18,17 @@ import { useWebchat, useTyping, usePrevious } from './hooks'
 import { WebchatHeader } from './header'
 import { PersistentMenu } from '../components/persistent-menu'
 import { Attachment } from '../components/attachment'
+import { SendButton } from '../components/send-button'
 import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
 import { msgToBotonic } from '../msg-to-botonic'
-import { isDev, staticAsset, _getThemeProperty } from '../utils'
+import {
+  isDev,
+  staticAsset,
+  _getThemeProperty,
+  ConditionalWrapper,
+} from '../utils'
 import Logo from '../assets/botonic_react_logo100x100.png'
 import EmojiPicker from 'emoji-picker-react'
 import LogoMenu from '../assets/menuButton.svg'
@@ -206,12 +212,17 @@ export const Webchat = forwardRef((props, ref) => {
       />
     </div>
   )
-
+  const animationsEnabled = getThemeProperty('animations.enable', true)
   const persistentMenuOptions =
     getThemeProperty('userInput.persistentMenu') || props.persistentMenu
 
   const persistentMenuLogo = () => (
-    <motion.div whileHover={{ scale: 1.2 }}>
+    <ConditionalWrapper
+      condition={animationsEnabled}
+      wrapper={children => (
+        <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
+      )}
+    >
       <div
         style={{
           display: 'flex',
@@ -225,7 +236,7 @@ export const Webchat = forwardRef((props, ref) => {
       >
         <img src={staticAsset(LogoMenu)} />
       </div>
-    </motion.div>
+    </ConditionalWrapper>
   )
 
   const checkBlockInput = input => {
@@ -380,11 +391,15 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
+  const sendTextAreaText = () => {
+    sendText(textArea.current.value)
+    textArea.current.value = ''
+  }
+
   const onKeyDown = event => {
     if (event.keyCode == 13 && event.shiftKey == false) {
       event.preventDefault()
-      sendText(textArea.current.value)
-      textArea.current.value = ''
+      sendTextAreaText()
     }
   }
 
@@ -483,9 +498,15 @@ export const Webchat = forwardRef((props, ref) => {
     </div>
   )
   const userInputEnabled = getThemeProperty('userInput.enable', true)
-  const emojiPickerEnabled = getThemeProperty('userInput.emojiPicker', false)
+  const emojiPickerEnabled =
+    getThemeProperty('userInput.emojiPicker.enable') || props.enableEmojiPicker
   const attachmentsEnabled =
     getThemeProperty('userInput.attachments.enable') || props.enableAttachments
+  const sendButtonEnabled = getThemeProperty(
+    'userInput.sendButton.enable',
+    true
+  )
+  const CustomSendButton = getThemeProperty('userInput.sendButton.custom')
   const inputUserArea = () => {
     return (
       userInputEnabled && (
@@ -540,19 +561,47 @@ export const Webchat = forwardRef((props, ref) => {
             }}
           >
             {emojiPickerEnabled && (
-              <motion.div whileHover={{ scale: 1.2 }}>
+              <ConditionalWrapper
+                condition={animationsEnabled}
+                wrapper={children => (
+                  <motion.div whileHover={{ scale: 1.2 }}>
+                    {children}
+                  </motion.div>
+                )}
+              >
                 <EmojiPickerComponent />
-              </motion.div>
+              </ConditionalWrapper>
             )}
             {attachmentsEnabled && (
-              <motion.div whileHover={{ scale: 1.2 }}>
+              <ConditionalWrapper
+                condition={animationsEnabled}
+                wrapper={children => (
+                  <motion.div whileHover={{ scale: 1.2 }}>
+                    {children}
+                  </motion.div>
+                )}
+              >
                 <Attachment
                   onChange={handleAttachment}
                   accept={Object.values(MIME_WHITELIST)
                     .map(v => v.join(','))
                     .join(',')}
                 />
-              </motion.div>
+              </ConditionalWrapper>
+            )}
+            {(sendButtonEnabled || CustomSendButton) && (
+              <ConditionalWrapper
+                condition={animationsEnabled}
+                wrapper={children => (
+                  <motion.div whileHover={{ scale: 1.2 }}>
+                    {children}
+                  </motion.div>
+                )}
+              >
+                <div onClick={sendTextAreaText}>
+                  {CustomSendButton ? <CustomSendButton /> : <SendButton />}
+                </div>
+              </ConditionalWrapper>
             )}
           </div>
         </div>
