@@ -32,13 +32,13 @@
     "@babel/register": "^7.4.0",
     "@babel/runtime": "^7.4.3",
     "babel-plugin-add-module-exports": "^1.0.0",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^5.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-no-null": "^1.0.2",
-    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint_d": "^8.0.0",
     "jest": "^25.1.0",
-    "prettier": "^1.19.1",
-    "eslint_d": "^8.0.0"
+    "prettier": "^1.19.1"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
   "engines": {
