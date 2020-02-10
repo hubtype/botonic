@@ -20,7 +20,11 @@ export const Location = props => {
     let locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
     return (
       <Message json={serialize(props)} {...props} type='location'>
-        <Link href={locationUrl} target='_blank'>
+        <Link
+          href={locationUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           {props.text || 'Open Location'}
         </Link>
       </Message>
