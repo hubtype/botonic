@@ -22,6 +22,7 @@ export const Location = props => {
           }}
           href={locationUrl}
           target='_blank'
+          rel='noopener noreferrer'
         >
           {props.text || 'Open Location'}
         </a>
