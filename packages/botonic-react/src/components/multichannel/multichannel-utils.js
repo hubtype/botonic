@@ -8,6 +8,10 @@ export function isMultichannelReply(node) {
   return isNodeKind(node, 'MultichannelReply')
 }
 
+export function isButton(node) {
+  return isNodeKind(node, 'Button')
+}
+
 export function isNodeKind(node, kind) {
   return node.type && node.type.name == kind
 }
