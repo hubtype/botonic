@@ -8,7 +8,7 @@ export const RequestContext = React.createContext({
   params: {},
   input: {},
   defaultDelay: 0,
-  defaultTyping: 0
+  defaultTyping: 0,
 })
 
 export const WebchatContext = React.createContext({
@@ -22,5 +22,5 @@ export const WebchatContext = React.createContext({
   closeWebview: () => '',
   getThemeProperty: property => {}, // used to retrieve a specific property of the theme defined by the developer in his 'webchat/index.js'
   theme: {},
-  webchatState: webchatInitialState
+  webchatState: webchatInitialState,
 })
