@@ -30,7 +30,6 @@ export class MultichannelCarousel extends React.Component {
           let imageProps = undefined
           let title = undefined
           let subtitle = undefined
-          let buttonProps = undefined
           let buttons = []
 
           for (let node of element) {
@@ -45,7 +44,7 @@ export class MultichannelCarousel extends React.Component {
             }
 
             if (isNodeKind(node, 'Button')) {
-              buttonProps = node.props
+              buttons = [node]
             }
             if (Array.isArray(node)) {
               buttons = this.getButtons(node)
@@ -53,28 +52,18 @@ export class MultichannelCarousel extends React.Component {
           }
 
           let header = `${title ? `*${title}*` : ''}`
-          header += `${subtitle ? ` - _${subtitle}_` : ''}`
-          if (buttonProps) {
-            return (
-              <MultichannelText key={i} newkey={i}>
-                {header}
-                <MultichannelButton {...buttonProps}>
-                  {buttonProps.children}
+          header += `${subtitle ? `_${subtitle}_` : ''}`
+
+          return (
+            <MultichannelText key={i} newkey={i}>
+              {header}
+              {buttons.map((b, i) => (
+                <MultichannelButton key={i} {...b.props}>
+                  {b.props.children}
                 </MultichannelButton>
-              </MultichannelText>
-            )
-          } else {
-            return (
-              <MultichannelText key={i} newkey={i}>
-                {header}
-                {buttons.map((b, i) => (
-                  <MultichannelButton key={i} {...b.props}>
-                    {b.props.children}
-                  </MultichannelButton>
-                ))}
-              </MultichannelText>
-            )
-          }
+              ))}
+            </MultichannelText>
+          )
 
           // TODO: in the future, this would be the default mode
           // } else {
