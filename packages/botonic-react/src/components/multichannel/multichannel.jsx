@@ -21,10 +21,6 @@ export class Multichannel extends React.Component {
             </MultichannelButton>
           )
         }
-        return child
-      })
-
-      newChildren = deepMap(this.props.children, child => {
         if (child && child.type && child.type.name === 'Reply') {
           return (
             <MultichannelReply {...child.props}>
@@ -32,10 +28,6 @@ export class Multichannel extends React.Component {
             </MultichannelReply>
           )
         }
-        return child
-      })
-
-      newChildren = deepMap(newChildren, child => {
         if (child && child.type && child.type.name === 'Text') {
           return (
             <MultichannelText {...child.props}>
@@ -43,9 +35,6 @@ export class Multichannel extends React.Component {
             </MultichannelText>
           )
         }
-        return child
-      })
-      newChildren = deepMap(newChildren, child => {
         if (child && child.type && child.type.name === 'Carousel') {
           return (
             <MultichannelCarousel {...child.props}>
