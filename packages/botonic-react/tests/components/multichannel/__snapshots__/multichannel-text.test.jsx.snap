@@ -1,11 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`multiChannel text with buttons 1`] = `
+exports[`Multichannel text just text 1`] = `
 <message
-  style="style1"
+  type="text"
+>
+  Some text
+</message>
+`;
+
+exports[`Multichannel text with buttons as array 1`] = `
+<message
   type="text"
 >
   The verbose text
-  [object Object],[object Object]
+  
+ 1. button text1
+  
+ 2. button text3
+  
+ - button text2: http://adrss
+</message>
+`;
+
+exports[`Multichannel text with buttons plain 1`] = `
+<message
+  type="text"
+>
+  The verbose text
+  
+ 1. button text1
+  
+ 2. button text3
+  
+ - button text2: http://adrss
+</message>
+`;
+
+exports[`Multichannel text with replies as array 1`] = `
+<message
+  type="text"
+>
+  The verbose text
+  
+ 1. reply text1
+  
+ 2. reply text2
+</message>
+`;
+
+exports[`Multichannel text with replies plain 1`] = `
+<message
+  type="text"
+>
+  Quick replies
+  
+ 1. reply text1
+  
+ 2. reply text2
 </message>
 `;

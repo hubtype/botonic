@@ -1,26 +1,43 @@
-export function getButtons(node, buttonFilter) {
-  const buttons = []
-  buttonFilter = buttonFilter || (() => true)
-  let isFilteredButton = but => but.type.name == 'Button' && buttonFilter
+import { Providers } from '@botonic/core'
 
+export function isMultichannelButton(node) {
+  return isNodeKind(node, 'MultichannelButton')
+}
+
+export function isMultichannelReply(node) {
+  return isNodeKind(node, 'MultichannelReply')
+}
+
+export function isNodeKind(node, kind) {
+  return node.type && node.type.name == kind
+}
+export function elementHasUrl(element) {
+  return element.props && element.props.url
+}
+export function elementHasPostback(element) {
+  return (
+    (element.props && element.props.payload) ||
+    (element.props && element.props.path)
+  )
+}
+
+export function getFilteredElements(node, filter) {
+  let elements = []
   for (let n of node) {
-    if (n instanceof Array) {
-      for (let but of n) {
-        if (isFilteredButton(but)) {
-          buttons.push(but)
-        }
-      }
-    }
-    if (!n.type) {
-      continue
-    }
-    if (isFilteredButton(n)) {
-      buttons.push(n)
-    }
+    if (filter(n)) elements.push(n)
   }
-  return buttons
+  return elements
 }
 
-export function buttonHasUrl(button) {
-  return button.props.url != null
+export function getMultichannelButtons(node) {
+  return getFilteredElements(node, isMultichannelButton)
 }
+
+export function getMultichannelReplies(node) {
+  return getFilteredElements(node, isMultichannelReply)
+}
+
+export const isWhatsapp = context =>
+  context.session &&
+  context.session.user &&
+  context.session.user.provider == Providers.Messaging.WHATSAPPNEW
