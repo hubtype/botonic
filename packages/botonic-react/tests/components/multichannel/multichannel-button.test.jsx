@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '../../../src'
 import { MultichannelButton } from '../../../src/components/multichannel'
-import { whatsappRenderer } from './helper-utils'
+import { whatsappRenderer } from '../../helpers/test-utils'
 
 describe('Multichannel buttons:', () => {
   const Buttons = {}
