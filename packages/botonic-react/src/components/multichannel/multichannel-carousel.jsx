@@ -4,7 +4,12 @@ import { Carousel } from '../carousel'
 // import { Image } from '../image'
 import { MultichannelText } from './multichannel-text'
 import { MultichannelButton } from './multichannel-button'
-import { isWhatsapp, isNodeKind } from './multichannel-utils'
+import {
+  isWhatsapp,
+  isNodeKind,
+  getFilteredElements,
+  isButton,
+} from './multichannel-utils'
 
 export class MultichannelCarousel extends React.Component {
   static contextType = RequestContext
@@ -12,6 +17,11 @@ export class MultichannelCarousel extends React.Component {
     super(props)
     // this.enableURL = this.props.enableURL
   }
+
+  getButtons(node) {
+    return [].concat(getFilteredElements(node, isButton))
+  }
+
   render() {
     if (isWhatsapp(this.context)) {
       return this.props.children
@@ -20,7 +30,8 @@ export class MultichannelCarousel extends React.Component {
           let imageProps = undefined
           let title = undefined
           let subtitle = undefined
-          let buttonProps = {}
+          let buttonProps = undefined
+          let buttons = []
 
           for (let node of element) {
             if (isNodeKind(node, 'Pic')) {
@@ -32,22 +43,38 @@ export class MultichannelCarousel extends React.Component {
             if (isNodeKind(node, 'Subtitle')) {
               subtitle = node.props.children
             }
+
             if (isNodeKind(node, 'Button')) {
               buttonProps = node.props
+            }
+            if (Array.isArray(node)) {
+              buttons = this.getButtons(node)
             }
           }
 
           let header = `${title ? `*${title}*` : ''}`
           header += `${subtitle ? ` - _${subtitle}_` : ''}`
-          return (
-            // Compact mode (show url if cached)
-            <MultichannelText key={i} newkey={i}>
-              {header}
-              <MultichannelButton {...buttonProps}>
-                {buttonProps.children}
-              </MultichannelButton>
-            </MultichannelText>
-          )
+          if (buttonProps) {
+            return (
+              <MultichannelText key={i} newkey={i}>
+                {header}
+                <MultichannelButton {...buttonProps}>
+                  {buttonProps.children}
+                </MultichannelButton>
+              </MultichannelText>
+            )
+          } else {
+            return (
+              <MultichannelText key={i} newkey={i}>
+                {header}
+                {buttons.map((b, i) => (
+                  <MultichannelButton key={i} {...b.props}>
+                    {b.props.children}
+                  </MultichannelButton>
+                ))}
+              </MultichannelText>
+            )
+          }
 
           // TODO: in the future, this would be the default mode
           // } else {
