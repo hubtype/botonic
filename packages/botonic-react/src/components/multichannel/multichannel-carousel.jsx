@@ -8,7 +8,7 @@ import {
   isWhatsapp,
   isNodeKind,
   getFilteredElements,
-  isButton,
+  isMultichannelButton,
 } from './multichannel-utils'
 
 export class MultichannelCarousel extends React.Component {
@@ -19,7 +19,7 @@ export class MultichannelCarousel extends React.Component {
   }
 
   getButtons(node) {
-    return [].concat(getFilteredElements(node, isButton))
+    return [].concat(getFilteredElements(node, isMultichannelButton))
   }
 
   render() {
@@ -43,7 +43,7 @@ export class MultichannelCarousel extends React.Component {
               subtitle = node.props.children
             }
 
-            if (isNodeKind(node, 'Button')) {
+            if (isNodeKind(node, 'MultichannelButton')) {
               buttons = [node]
             }
             if (Array.isArray(node)) {
@@ -55,13 +55,10 @@ export class MultichannelCarousel extends React.Component {
           header += `${subtitle ? `_${subtitle}_` : ''}`
 
           return (
+            // TODO: newkey only for 1 nested button
             <MultichannelText key={i} newkey={i}>
               {header}
-              {buttons.map((b, i) => (
-                <MultichannelButton key={i} {...b.props}>
-                  {b.props.children}
-                </MultichannelButton>
-              ))}
+              {buttons}
             </MultichannelText>
           )
 
