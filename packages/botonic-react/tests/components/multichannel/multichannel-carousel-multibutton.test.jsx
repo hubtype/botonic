@@ -1,4 +1,11 @@
-import { Button, Carousel, Element, Pic, Subtitle, Title } from '../../../src'
+import {
+  MultichannelButton,
+  Carousel,
+  Element,
+  Pic,
+  Subtitle,
+  Title,
+} from '../../../src'
 import { MultichannelCarousel } from '../../../src/components/multichannel'
 import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
@@ -30,12 +37,12 @@ describe('Multichannel carousel COMPACT mode N Buttons', () => {
             <Title>{e.name}</Title>
             <Subtitle>{e.desc}</Subtitle>
             {[
-              <Button key={'1'} url={e.url}>
+              <MultichannelButton key={'1'} url={e.url}>
                 Visit website
-              </Button>,
-              <Button key={'2'} url={'anotherurl.com'}>
+              </MultichannelButton>,
+              <MultichannelButton key={'2'} url={'anotherurl.com'}>
                 Another website
-              </Button>,
+              </MultichannelButton>,
             ]}
           </Element>
         ))}
@@ -79,12 +86,12 @@ describe('Multichannel carousel COMPACT mode N Buttons', () => {
             <Title>{e.name}</Title>
             <Subtitle>{e.desc}</Subtitle>
             {[
-              <Button key={'1'} payload={'payload1'}>
+              <MultichannelButton key={'1'} payload={'payload1'}>
                 {e.buttonText}
-              </Button>,
-              <Button key={'2'} payload={'payload2'}>
+              </MultichannelButton>,
+              <MultichannelButton key={'2'} payload={'payload2'}>
                 another button{i}
-              </Button>,
+              </MultichannelButton>,
             ]}
           </Element>
         ))}
@@ -128,12 +135,12 @@ describe('Multichannel carousel COMPACT mode N Buttons', () => {
             <Title>{e.name}</Title>
             <Subtitle>{e.desc}</Subtitle>
             {[
-              <Button key={'1'} payload={e.payload}>
+              <MultichannelButton key={'1'} payload={e.payload}>
                 {e.buttonText}
-              </Button>,
-              <Button key={'2'} payload={e.payload}>
+              </MultichannelButton>,
+              <MultichannelButton key={'2'} payload={e.payload}>
                 another button{i}
-              </Button>,
+              </MultichannelButton>,
             ]}
           </Element>
         ))}
