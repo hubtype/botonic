@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Multichannel replies: with path 1`] = `"reply text with path1"`;
+
+exports[`Multichannel replies: with payload 1`] = `"reply text with payload1"`;

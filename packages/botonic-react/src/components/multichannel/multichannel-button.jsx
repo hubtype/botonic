@@ -1,30 +1,46 @@
 import React from 'react'
 import { RequestContext } from '../../contexts'
 import { Button } from '../button'
-import { Providers } from '@botonic/core'
+import { isWhatsapp } from './multichannel-utils'
 
 export class MultichannelButton extends React.Component {
   static contextType = RequestContext
   constructor(props) {
     super(props)
   }
+  hasUrl() {
+    return Boolean(this.props.url)
+  }
+  hasPath() {
+    return Boolean(this.props.path)
+  }
+  hasPayload() {
+    return Boolean(this.props.payload)
+  }
+  hasWebview() {
+    return Boolean(this.props.webview)
+  }
+
+  getText() {
+    return `${this.props.children}`
+  }
+
+  getUrl() {
+    return this.props.url
+  }
+
+  getWebview() {
+    return this.props.webview
+  }
+
   render() {
-    if (
-      this.context.session &&
-      this.context.session.user &&
-      this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW
-    ) {
-      if (this.props.url) {
-        return `${this.props.children}: ${this.props.url}`
-      }
-      if (this.props.payload || this.props.path) {
-        return `${this.props.children}`
-      }
-      if (this.props.webview) {
-        return <Button {...this.props}>{`${this.props.children}`}</Button>
-      }
-    } else {
-      return <Button {...this.props}>{this.props.children}</Button>
+    if (isWhatsapp(this.context)) {
+      if (this.hasUrl()) return `${this.getText()}: ${this.getUrl()}`
+      else if (this.hasPath() || this.hasPayload()) return `${this.getText()}`
+      else if (this.hasWebview())
+        return <Button {...this.props}>{this.getText()}</Button>
+      else return <Button {...this.props}>{this.props.children}</Button>
     }
+    return <Button {...this.props}>{this.props.children}</Button>
   }
 }
