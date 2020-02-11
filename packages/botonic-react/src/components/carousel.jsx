@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Message } from './message'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
-import { isBrowser, isNode } from '@botonic/core'
+import { isBrowser } from '@botonic/core'
 import styled from 'styled-components'
 import { COLORS } from '../constants'
 
