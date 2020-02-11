@@ -4,11 +4,12 @@
   "description": "Build Chatbots using React",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "../../node_modules/.bin/jest --coverage",
+    "preinstall": "node ../../preinstall.js",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.jsx' 'tests/**/*.jsx'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.jsx' 'tests/**/*.jsx'"
   },
   "sideEffects": [
     "*.(scss|css)"
@@ -48,11 +49,6 @@
     "@types/react": "16.9.19",
     "babel-dts-generator": "^0.6.3",
     "babel-plugin-add-module-exports": "^1.0.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-no-null": "^1.0.2",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.18.3",
     "html-react-parser": "^0.10.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",

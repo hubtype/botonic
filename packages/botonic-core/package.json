@@ -4,10 +4,10 @@
   "description": "Build Chatbots using React",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest --coverage",
-    "echo": "echo",
+    "test": "../../node_modules/.bin/jest --coverage",
+    "preinstall": "node ../../preinstall.js",
     "lint": "npm run lint_ci -- --fix",
-    "lint_ci": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js*'",
+    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js*'",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files"
   },
   "repository": {
@@ -31,14 +31,7 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/register": "^7.4.0",
     "@babel/runtime": "^7.4.3",
-    "babel-plugin-add-module-exports": "^1.0.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-no-null": "^1.0.2",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint_d": "^8.0.0",
-    "jest": "^25.1.0",
-    "prettier": "^1.19.1"
+    "babel-plugin-add-module-exports": "^1.0.0"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
   "engines": {
