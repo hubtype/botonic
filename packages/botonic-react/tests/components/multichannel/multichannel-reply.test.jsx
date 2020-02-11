@@ -1,7 +1,7 @@
 import React from 'react'
 import { Reply } from '../../../src'
 import { MultichannelReply } from '../../../src/components/multichannel'
-import { whatsappRenderer } from './helper-utils'
+import { whatsappRenderer } from '../../helpers/test-utils'
 
 describe('Multichannel replies:', () => {
   const Replies = {}

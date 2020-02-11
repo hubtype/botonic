@@ -4,7 +4,7 @@ import {
   MultichannelButton,
 } from '../../../src/components/multichannel'
 import React from 'react'
-import { whatsappRenderer } from './helper-utils'
+import { whatsappRenderer } from '../../helpers/test-utils'
 import { MultichannelReply } from '../../../src/components/multichannel/multichannel-reply'
 
 describe('Multichannel text', () => {

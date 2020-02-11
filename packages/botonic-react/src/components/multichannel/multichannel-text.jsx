@@ -17,7 +17,7 @@ export class MultichannelText extends React.Component {
   constructor(props) {
     super(props)
     this.elements = []
-    // this.index = props.index !== undefined ? props.index + 1 : undefined
+    this.newIndex = props.newkey !== undefined ? props.newkey + 1 : undefined
   }
 
   getText() {
@@ -28,7 +28,7 @@ export class MultichannelText extends React.Component {
     }
   }
 
-  getButtons() {
+  getButtonsAndReplies() {
     return [].concat(
       getMultichannelButtons(React.Children.toArray(this.props.children)),
       getMultichannelReplies(React.Children.toArray(this.props.children))
@@ -38,7 +38,7 @@ export class MultichannelText extends React.Component {
   getWhatsappButtons() {
     let postbackButtons = []
     let urlButtons = []
-    for (let button of this.getButtons()) {
+    for (let button of this.getButtonsAndReplies()) {
       if (elementHasUrl(button)) urlButtons.push(button)
       if (elementHasPostback(button)) postbackButtons.push(button)
     }
@@ -56,6 +56,10 @@ export class MultichannelText extends React.Component {
         [...urlButtons]
       )
 
+      const hasPreviousText = Boolean(
+        this.elements[0] && this.elements[0].length
+      )
+
       let index = 0
       return (
         <Text {...this.props}>
@@ -66,16 +70,16 @@ export class MultichannelText extends React.Component {
             let option = ' - '
             if (isMultichannelButton(element) || isMultichannelReply(element)) {
               if (elementHasPostback(element)) {
-                // option = this.index ? ` ${this.index}. ` : ` ${index}. `
-                option = ` ${index}. `
+                option = this.newIndex ? ` ${this.newIndex}. ` : ` ${index}. `
               }
-              let props = {
+              let newProps = {
                 url: element.props.url,
-                children: `\n${option}${element.props.children}`,
+                children: `${hasPreviousText ? '\n' : ''}${option}${
+                  element.props.children
+                }`,
                 key: i,
               }
-
-              let newElement = React.cloneElement(element, { ...props })
+              let newElement = React.cloneElement(element, { ...newProps })
               return newElement
             } else {
               return `${element}`
