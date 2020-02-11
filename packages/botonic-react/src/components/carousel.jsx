@@ -26,7 +26,7 @@ export const Carousel = props => {
     content = (
       <StyledScrollbar
         scrollbar={scrollbarOptions}
-        data-simplebar-auto-hide={scrollbarOptions.autoHide}
+        autoHide={scrollbarOptions.autoHide}
       >
         <div
           style={{
