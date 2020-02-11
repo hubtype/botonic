@@ -27,7 +27,7 @@ Array [
     newkey={0}
     type="text"
   >
-    *Title1* - _Subtitle1_
+    *Title1*_Subtitle1_
     
  1. Previo a la compra
     
@@ -37,7 +37,7 @@ Array [
     newkey={1}
     type="text"
   >
-    *Title2* - _Subtitle2_
+    *Title2*_Subtitle2_
     
  2. Durante la compra
     
@@ -52,7 +52,7 @@ Array [
     newkey={0}
     type="text"
   >
-    *Snatch* - _Five minutes, Turkish_
+    *Snatch*_Five minutes, Turkish_
     
  - Visit website: https://www.imdb.com/title/tt0208092
     
@@ -62,7 +62,7 @@ Array [
     newkey={1}
     type="text"
   >
-    *El laberinto del fauno* - _2006_
+    *El laberinto del fauno*_2006_
     
  - Visit website: https://www.imdb.com/title/tt0457430
     
