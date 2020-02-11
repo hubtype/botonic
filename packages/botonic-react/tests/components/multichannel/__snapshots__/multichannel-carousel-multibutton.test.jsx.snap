@@ -3,16 +3,20 @@
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel (just text in button) with payload/path buttons N Buttons 1`] = `
 Array [
   <message
+    delay={0}
     newkey={0}
     type="text"
+    typing={0}
   >
     
      1. Previo a la compra
      1. another button,0
   </message>,
   <message
+    delay={0}
     newkey={1}
     type="text"
+    typing={0}
   >
     
      2. Durante la compra
@@ -24,8 +28,10 @@ Array [
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with payload/path buttons N Buttons 1`] = `
 Array [
   <message
+    delay={0}
     newkey={0}
     type="text"
+    typing={0}
   >
     *Title1*_Subtitle1_
     
@@ -34,8 +40,10 @@ Array [
  1. another button,0
   </message>,
   <message
+    delay={0}
     newkey={1}
     type="text"
+    typing={0}
   >
     *Title2*_Subtitle2_
     
@@ -49,8 +57,10 @@ Array [
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with url buttons 1`] = `
 Array [
   <message
+    delay={0}
     newkey={0}
     type="text"
+    typing={0}
   >
     *Snatch*_Five minutes, Turkish_
     
@@ -59,8 +69,10 @@ Array [
  - Another website: anotherurl.com
   </message>,
   <message
+    delay={0}
     newkey={1}
     type="text"
+    typing={0}
   >
     *El laberinto del fauno*_2006_
     
