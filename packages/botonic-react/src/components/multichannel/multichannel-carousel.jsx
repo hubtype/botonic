@@ -44,10 +44,10 @@ export class MultichannelCarousel extends React.Component {
             }
 
             if (isNodeKind(node, 'MultichannelButton')) {
-              buttons = [node]
+              buttons.push(node)
             }
             if (Array.isArray(node)) {
-              buttons = this.getButtons(node)
+              buttons.push(this.getButtons(node))
             }
           }
 
