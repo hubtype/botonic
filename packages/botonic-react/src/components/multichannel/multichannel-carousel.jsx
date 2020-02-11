@@ -5,7 +5,11 @@ import { Image } from '../image'
 import { MultichannelText } from './multichannel-text'
 import { MultichannelButton } from './multichannel-button'
 import { Providers } from '@botonic/core'
-import { getButtons } from './multichannel-utils'
+import {
+  getButtons,
+  isWhatsapp,
+  getMultichannelButtons,
+} from './multichannel-utils'
 
 const carouselToCaption = (index, title, subtitle, imageSrc, buttonProps) => {
   let caption = ''
@@ -28,15 +32,22 @@ export class MultichannelCarousel extends React.Component {
   constructor(props) {
     super(props)
     this.enableURL = this.props.enableURL
+    this.buttons = []
+  }
+
+  getWhatsappButtons() {
+    let postbackButtons = []
+    let urlButtons = []
+    for (let button of this.buttons) {
+      if (elementHasUrl(button)) urlButtons.push(button)
+      if (elementHasPostback(button)) postbackButtons.push(button)
+    }
+    return { postbackButtons, urlButtons }
   }
 
   render() {
     this.optionIndex = 1
-    if (
-      this.context.session &&
-      this.context.session.user &&
-      this.context.session.user.provider == Providers.Messaging.WHATSAPPNEW
-    ) {
+    if (isWhatsapp(this.context)) {
       return this.props.children
         .map(e => e.props.children)
         .map((element, elementIndex) => {
@@ -51,7 +62,7 @@ export class MultichannelCarousel extends React.Component {
     let imageSrc = undefined
     let title = undefined
     let subtitle = undefined
-    let buttons = getButtons(carouselElement)
+    let buttons = undefined
 
     try {
       for (let e of carouselElement) {
@@ -67,6 +78,7 @@ export class MultichannelCarousel extends React.Component {
         if (e.type.name == 'Subtitle') {
           subtitle = e.props.children
         }
+        buttons = getMultichannelButtons(e)
       }
       if (this.enableURL) {
         let header = `${title ? `*${title}*` : ''}`
@@ -85,20 +97,18 @@ export class MultichannelCarousel extends React.Component {
           </React.Fragment>
         )
       } else {
-        return (<React.Fragment key={elementIndex}>
-            {buttons.map((button, buttonIndex) => (
-              <Image key={buttonIndex}
-                     src={imageSrc}
-                     caption={carouselToCaption(
-                       this.optionIndex,
-                       title,
-                       subtitle,
-                       imageSrc,
-                       button.props
-                     )}
-              ></Image>))
-            }
-          </React.Fragment>
+        return (
+          <Image
+            key={elementIndex}
+            src={imageSrc}
+            caption={carouselToCaption(
+              this.optionIndex,
+              title,
+              subtitle,
+              imageSrc,
+              buttons
+            )}
+          ></Image>
         )
       }
     } finally {
@@ -106,4 +116,3 @@ export class MultichannelCarousel extends React.Component {
     }
   }
 }
-

@@ -22,6 +22,7 @@
     "emoji-picker-react": "^2.1.1",
     "framer-motion": "^1.8.3",
     "react": "^16.8.6",
+    "react-children-utilities": "^2.0.6",
     "react-dom": "^16.8.6",
     "react-frame-component": "^4.1.0",
     "react-json-tree": "^0.11.2",
