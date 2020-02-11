@@ -2,11 +2,10 @@ import React from 'react'
 import { RequestContext } from '../../contexts'
 import { isWhatsapp } from './multichannel-utils'
 import { deepMap } from 'react-children-utilities'
-import {
-  MultichannelText,
-  MultichannelButton,
-  MultichannelCarousel,
-} from './multichannel-text'
+import { MultichannelButton } from './multichannel-button'
+import { MultichannelText } from './multichannel-text'
+import { MultichannelCarousel } from './multichannel-carousel'
+import { MultichannelReply } from './multichannel-reply'
 export class Multichannel extends React.Component {
   static contextType = RequestContext
   constructor(props) {
@@ -24,6 +23,18 @@ export class Multichannel extends React.Component {
         }
         return child
       })
+
+      newChildren = deepMap(this.props.children, child => {
+        if (child && child.type && child.type.name === 'Reply') {
+          return (
+            <MultichannelReply {...child.props}>
+              {child.props.children}
+            </MultichannelReply>
+          )
+        }
+        return child
+      })
+
       newChildren = deepMap(newChildren, child => {
         if (child && child.type && child.type.name === 'Text') {
           return (
@@ -45,7 +56,7 @@ export class Multichannel extends React.Component {
         return child
       })
 
-      return <Multichannel {...props}>{newChildren}</Multichannel>
+      return newChildren
     }
     return this.props.children
   }
