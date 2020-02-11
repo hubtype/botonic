@@ -29,7 +29,6 @@ export function parseReactElement(html) {
   return parsed
 }
 
-
 /**
  *
  * @param node {React.ReactNode}
@@ -40,7 +39,7 @@ export function withContext(node, context) {
   // const kk =React.useContext(RequestContext)
   // const cons = RequestContext.Consumer
   // const val = RequestContext.Consumer.getValue
-  return <RequestContext.Provider value={context}>
-    {node}
-  </RequestContext.Provider>
+  return (
+    <RequestContext.Provider value={context}>{node}</RequestContext.Provider>
+  )
 }
