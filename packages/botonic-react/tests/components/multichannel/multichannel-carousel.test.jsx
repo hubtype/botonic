@@ -1,4 +1,4 @@
-import { Button, Carousel, Element, Pic, Subtitle, Title } from '../../../src'
+import { MultichannelButton, Element, Pic, Subtitle, Title } from '../../../src'
 import { MultichannelCarousel } from '../../../src/components/multichannel'
 import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
@@ -22,21 +22,16 @@ let movies = [
 
 describe('Multichannel carousel COMPACT mode', () => {
   test('dynamic carousel with url buttons', () => {
-    const carousel = (
-      <Carousel>
+    const sut = (
+      <MultichannelCarousel>
         {movies.map((e, i) => (
           <Element key={e.name}>
             <Pic src={e.pic} />
             <Title>{e.name}</Title>
             <Subtitle>{e.desc}</Subtitle>
-            <Button url={e.url}>Visit website</Button>
+            <MultichannelButton url={e.url}>Visit website</MultichannelButton>
           </Element>
         ))}
-      </Carousel>
-    )
-    const sut = (
-      <MultichannelCarousel {...carousel.props}>
-        {carousel.props.children}
       </MultichannelCarousel>
     )
     const renderer = whatsappRenderer(sut)
@@ -64,21 +59,18 @@ describe('Multichannel carousel COMPACT mode', () => {
   ]
 
   test('dynamic carousel with payload/path buttons', () => {
-    const carousel = (
-      <Carousel>
+    const sut = (
+      <MultichannelCarousel>
         {options.map((e, i) => (
           <Element key={e.name}>
             <Pic src={e.pic} />
             <Title>{e.name}</Title>
             <Subtitle>{e.desc}</Subtitle>
-            <Button payload={e.payload}>{e.buttonText}</Button>
+            <MultichannelButton payload={e.payload}>
+              {e.buttonText}
+            </MultichannelButton>
           </Element>
         ))}
-      </Carousel>
-    )
-    const sut = (
-      <MultichannelCarousel {...carousel.props}>
-        {carousel.props.children}
       </MultichannelCarousel>
     )
     const renderer = whatsappRenderer(sut)
@@ -106,21 +98,18 @@ describe('Multichannel carousel COMPACT mode', () => {
   ]
 
   test('dynamic carousel (just text in button) with payload/path buttons', () => {
-    const carousel = (
-      <Carousel>
+    const sut = (
+      <MultichannelCarousel>
         {optionsNoTitleNoSubtitle.map((e, i) => (
           <Element key={e.name}>
             <Pic src={e.pic} />
             <Title>{e.name}</Title>
             <Subtitle>{e.desc}</Subtitle>
-            <Button payload={e.payload}>{e.buttonText}</Button>
+            <MultichannelButton payload={e.payload}>
+              {e.buttonText}
+            </MultichannelButton>
           </Element>
         ))}
-      </Carousel>
-    )
-    const sut = (
-      <MultichannelCarousel {...carousel.props}>
-        {carousel.props.children}
       </MultichannelCarousel>
     )
     const renderer = whatsappRenderer(sut)
