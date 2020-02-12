@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { Text } from '../text'
-import { Providers } from '@botonic/core'
 import {
   elementHasUrl,
   getMultichannelButtons,
@@ -13,68 +12,58 @@ import {
 } from './multichannel-utils'
 import { MultichannelButton } from './multichannel-button'
 
-export class MultichannelText extends React.Component {
-  static contextType = RequestContext
-  constructor(props) {
-    super(props)
-    this.elements = []
-    this.newIndex = props.newkey !== undefined ? props.newkey + 1 : undefined
-  }
+export const MultichannelText = props => {
+  let requestContext = useContext(RequestContext)
+  let elements = []
 
-  getText() {
-    if (typeof this.props.children == 'string') {
-      return [this.props.children]
-    } else if (Array.isArray(this.props.children)) {
-      return [this.props.children[0]]
+  const getText = () => {
+    if (typeof props.children == 'string') {
+      return [props.children]
+    } else if (Array.isArray(props.children)) {
+      return [props.children[0]]
     }
   }
 
-  getButtonsAndReplies() {
-    return [].concat(
-      getMultichannelButtons(React.Children.toArray(this.props.children)),
-      getMultichannelReplies(React.Children.toArray(this.props.children))
+  const getButtonsAndReplies = () =>
+    [].concat(
+      getMultichannelButtons(React.Children.toArray(props.children)),
+      getMultichannelReplies(React.Children.toArray(props.children))
     )
-  }
 
-  getWhatsappButtons() {
+  const getWhatsappButtons = () => {
     let postbackButtons = []
     let urlButtons = []
-    for (let button of this.getButtonsAndReplies()) {
+    for (let button of getButtonsAndReplies()) {
       if (elementHasUrl(button)) urlButtons.push(button)
       if (elementHasPostback(button)) postbackButtons.push(button)
     }
     return { postbackButtons, urlButtons }
   }
 
-  render() {
-    if (isWhatsapp(this.context)) {
-      const text = this.getText(this.props.children)
-      const { postbackButtons, urlButtons } = this.getWhatsappButtons()
+  if (isWhatsapp(requestContext)) {
+    const text = getText(props.children)
+    const { postbackButtons, urlButtons } = getWhatsappButtons()
 
-      this.elements = [].concat(
-        [...text],
-        [...postbackButtons],
-        [...urlButtons]
-      )
-      this.context.currentIndex =
-        this.context.currentIndex != null ? this.context.currentIndex : 1
-      return (
-        <Text {...this.props}>
-          {this.elements.map((element, i) => {
-            if (isMultichannelButton(element) || isMultichannelReply(element)) {
-              return (
-                <MultichannelButton key={i} {...element.props}>
-                  {element.props.children}
-                </MultichannelButton>
-              )
-            } else {
-              return element
-            }
-          })}
-        </Text>
-      )
-    } else {
-      return <Text {...this.props}>{this.props.children}</Text>
-    }
+    elements = [].concat([...text], [...postbackButtons], [...urlButtons])
+
+    requestContext.currentIndex =
+      requestContext.currentIndex != null ? requestContext.currentIndex : 1
+    return (
+      <Text {...props}>
+        {elements.map((element, i) => {
+          if (isMultichannelButton(element) || isMultichannelReply(element)) {
+            return (
+              <MultichannelButton key={i} newline={i > 0} {...element.props}>
+                {element.props.children}
+              </MultichannelButton>
+            )
+          } else {
+            return element
+          }
+        })}
+      </Text>
+    )
+  } else {
+    return <Text {...props}>{props.children}</Text>
   }
 }
