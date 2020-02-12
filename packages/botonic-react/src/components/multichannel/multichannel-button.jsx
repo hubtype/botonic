@@ -1,10 +1,13 @@
 import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { Button } from '../button'
+import { MultichannelContext } from './multichannel-context'
 import { isWhatsapp } from './multichannel-utils'
 
 export const MultichannelButton = props => {
   let requestContext = useContext(RequestContext)
+  let multichannelContext = useContext(MultichannelContext)
+
   const hasUrl = () => Boolean(props.url)
 
   const hasPath = () => Boolean(props.path)
@@ -25,7 +28,9 @@ export const MultichannelButton = props => {
       text =
         newLine +
         `${
-          requestContext.currentIndex ? `${requestContext.currentIndex}. ` : ''
+          multichannelContext.currentIndex
+            ? `${multichannelContext.currentIndex}. `
+            : ''
         }${text}`
     } else if (hasUrl()) {
       text = newLine + `- ${text}`
@@ -38,7 +43,7 @@ export const MultichannelButton = props => {
       return `${getText()}: ${getUrl()}`
     } else if (hasPath() || hasPayload()) {
       let text = getText()
-      requestContext.currentIndex += 1
+      multichannelContext.currentIndex += 1
       return `${text}`
     } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
     else return <Button {...props}>{props.children}</Button>
