@@ -18,11 +18,11 @@ exports[`Multichannel text with buttons as array 1`] = `
 >
   The verbose text
   
- 1. button text1
+1. button text1
   
- 2. button text3
+2. button text3
   
- - button text2: http://adrss
+- button text2: http://adrss
 </message>
 `;
 
@@ -34,11 +34,11 @@ exports[`Multichannel text with buttons plain 1`] = `
 >
   The verbose text
   
- 1. button text1
+1. button text1
   
- 2. button text3
+2. button text3
   
- - button text2: http://adrss
+- button text2: http://adrss
 </message>
 `;
 
@@ -50,9 +50,9 @@ exports[`Multichannel text with replies as array 1`] = `
 >
   The verbose text
   
- 1. reply text1
+1. reply text1
   
- 2. reply text2
+2. reply text2
 </message>
 `;
 
@@ -64,8 +64,8 @@ exports[`Multichannel text with replies plain 1`] = `
 >
   Quick replies
   
- 1. reply text1
+1. reply text1
   
- 2. reply text2
+2. reply text2
 </message>
 `;
