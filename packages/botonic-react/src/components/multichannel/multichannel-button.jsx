@@ -1,61 +1,47 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { Button } from '../button'
 import { isWhatsapp } from './multichannel-utils'
 
-export class MultichannelButton extends React.Component {
-  static contextType = RequestContext
-  constructor(props) {
-    super(props)
-  }
-  hasUrl() {
-    return Boolean(this.props.url)
-  }
-  hasPath() {
-    return Boolean(this.props.path)
-  }
-  hasPayload() {
-    return Boolean(this.props.payload)
-  }
-  hasPostback() {
-    return this.hasPath() || this.hasPayload()
-  }
-  hasWebview() {
-    return Boolean(this.props.webview)
-  }
+export const MultichannelButton = props => {
+  let requestContext = useContext(RequestContext)
+  const hasUrl = () => Boolean(props.url)
 
-  getText() {
-    let text = this.props.children
-    if (this.hasPostback()) {
-      text = `\n${
-        this.context.currentIndex ? `${this.context.currentIndex}. ` : ''
-      }${text}`
-    } else if (this.hasUrl()) {
-      text = `\n- ${text}`
+  const hasPath = () => Boolean(props.path)
+
+  const hasPayload = () => Boolean(props.payload)
+
+  const hasPostback = () => hasPath() || hasPayload()
+
+  const hasWebview = () => Boolean(props.webview)
+
+  const getUrl = () => props.url
+  const getWebview = () => props.webview
+
+  const getText = () => {
+    let text = props.children
+    let newLine = props.newline ? '\n' : ''
+    if (hasPostback()) {
+      text =
+        newLine +
+        `${
+          requestContext.currentIndex ? `${requestContext.currentIndex}. ` : ''
+        }${text}`
+    } else if (hasUrl()) {
+      text = newLine + `- ${text}`
     }
     return text
   }
 
-  getUrl() {
-    return this.props.url
+  if (isWhatsapp(requestContext)) {
+    if (hasUrl()) {
+      return `${getText()}: ${getUrl()}`
+    } else if (hasPath() || hasPayload()) {
+      let text = getText()
+      requestContext.currentIndex += 1
+      return `${text}`
+    } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
+    else return <Button {...props}>{props.children}</Button>
   }
-
-  getWebview() {
-    return this.props.webview
-  }
-
-  render() {
-    if (isWhatsapp(this.context)) {
-      if (this.hasUrl()) {
-        return `${this.getText()}: ${this.getUrl()}`
-      } else if (this.hasPath() || this.hasPayload()) {
-        let text = this.getText()
-        this.context.currentIndex += 1
-        return `${text}`
-      } else if (this.hasWebview())
-        return <Button {...this.props}>{this.getText()}</Button>
-      else return <Button {...this.props}>{this.props.children}</Button>
-    }
-    return <Button {...this.props}>{this.props.children}</Button>
-  }
+  return <Button {...props}>{props.children}</Button>
 }
