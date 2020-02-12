@@ -1,12 +1,8 @@
+import { Carousel, Element, Pic, Subtitle, Title } from '../../../src'
 import {
+  MultichannelCarousel,
   MultichannelButton,
-  Carousel,
-  Element,
-  Pic,
-  Subtitle,
-  Title,
-} from '../../../src'
-import { MultichannelCarousel } from '../../../src/components/multichannel'
+} from '../../../src/components/multichannel'
 import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 

@@ -8,7 +8,6 @@ import {
   Title,
   Subtitle,
 } from '../../../src'
-import { MultichannelButton } from '../../../src/components/multichannel'
 import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 import { Multichannel } from '../../../src/components/multichannel/multichannel'
