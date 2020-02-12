@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text Component Just one Text 1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Just one Text
+</message>
+`;
+
+exports[`Text Component N Text with N button  1`] = `
+Array [
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    N Text with N button 
+    1
+    <button
+      payload="payload1"
+    >
+      Button Text 
+      1
+    </button>
+  </message>,
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    N Text with N button 
+    2
+    <button
+      payload="payload2"
+    >
+      Button Text 
+      2
+    </button>
+  </message>,
+]
+`;
+
+exports[`Text Component N Text with N replies  1`] = `
+Array [
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    N Text with N replies 
+    1
+    <reply
+      payload="payload1"
+    >
+      Reply Text 
+      1
+    </reply>
+  </message>,
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    N Text with N replies 
+    2
+    <reply
+      payload="payload2"
+    >
+      Reply Text 
+      2
+    </reply>
+  </message>,
+]
+`;
+
+exports[`Text Component Text with 1 button  1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Text with 1 button
+  <button
+    payload="payload1"
+  >
+    Text 1
+  </button>
+</message>
+`;
+
+exports[`Text Component Text with 1 reply  1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Text with 1 reply
+  <reply
+    payload="payload1"
+  >
+    Text Reply 1
+  </reply>
+</message>
+`;
+
+exports[`Text Component Text with N button  1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Text with N button
+  <button
+    payload="payload1"
+  >
+    Text 1
+  </button>
+  <button
+    payload="payload2"
+  >
+    Text 2
+  </button>
+</message>
+`;
+
+exports[`Text Component Text with N replies  1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Text with N replies
+  <reply
+    payload="payload1"
+  >
+    Text Reply 1
+  </reply>
+  <reply
+    payload="payload2"
+  >
+    Text Reply 2
+  </reply>
+</message>
+`;
