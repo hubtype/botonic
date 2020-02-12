@@ -178,10 +178,10 @@ export function useWebchat() {
 export function useTyping({ webchatState, updateTyping, updateMessage }) {
   useEffect(() => {
     let delayTimeout, typingTimeout
-    let end = document.getElementById('messages-end')
-    if (end) {
-      end.scrollIntoView({ behavior: 'smooth' })
-      setTimeout(() => end.scrollIntoView({ behavior: 'smooth' }), 100)
+    let frame = document.querySelectorAll('.simplebar-content-wrapper')[0];
+    if (frame) {
+      frame.scrollTop = frame.scrollHeight
+      setTimeout(() => frame.scrollTop = frame.scrollHeight, 100)
     }
     try {
       let nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
