@@ -1,32 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { Reply } from '../reply'
 import { isWhatsapp } from './multichannel-utils'
 
-export class MultichannelReply extends React.Component {
-  static contextType = RequestContext
-  constructor(props) {
-    super(props)
-  }
+export const MultichannelReply = props => {
+  let requestContext = useContext(RequestContext)
+  const hasPath = () => Boolean(props.path)
+  const hasPayload = () => Boolean(props.payload)
+  const getText = () => `${props.children}`
 
-  hasPath() {
-    return Boolean(this.props.path)
-  }
-  hasPayload() {
-    return Boolean(this.props.payload)
-  }
-
-  getText() {
-    return `${this.props.children}`
-  }
-
-  render() {
-    if (isWhatsapp(this.context)) {
-      if (this.hasPath() || this.hasPayload()) {
-        return `${this.getText()}`
-      }
-    } else {
-      return <Reply {...this.props}>{this.props.children}</Reply>
-    }
+  if (isWhatsapp(requestContext)) {
+    if (hasPath() || hasPayload()) return `${getText()}`
+  } else {
+    return <Reply {...props}>{props.children}</Reply>
   }
 }

@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { Carousel } from '../carousel'
 // import { Image } from '../image'
 import { MultichannelText } from './multichannel-text'
-import { MultichannelButton } from './multichannel-button'
 import {
   isWhatsapp,
   isNodeKind,
@@ -11,81 +10,75 @@ import {
   isMultichannelButton,
 } from './multichannel-utils'
 
-export class MultichannelCarousel extends React.Component {
-  static contextType = RequestContext
-  constructor(props) {
-    super(props)
-    // this.enableURL = this.props.enableURL
-  }
+export const MultichannelCarousel = props => {
+  let requestContext = useContext(RequestContext)
+  const getButtons = node =>
+    [].concat(getFilteredElements(node, isMultichannelButton))
 
-  getButtons(node) {
-    return [].concat(getFilteredElements(node, isMultichannelButton))
-  }
+  if (isWhatsapp(requestContext)) {
+    return props.children
+      .map(e => e.props.children)
+      .map((element, i) => {
+        let imageProps = undefined
+        let title = undefined
+        let subtitle = undefined
+        let buttons = []
 
-  render() {
-    if (isWhatsapp(this.context)) {
-      return this.props.children
-        .map(e => e.props.children)
-        .map((element, i) => {
-          let imageProps = undefined
-          let title = undefined
-          let subtitle = undefined
-          let buttons = []
-
-          for (let node of element) {
-            if (isNodeKind(node, 'Pic')) {
-              imageProps = node.props
-            }
-            if (isNodeKind(node, 'Title')) {
-              title = node.props.children
-            }
-            if (isNodeKind(node, 'Subtitle')) {
-              subtitle = node.props.children
-            }
-
-            if (isNodeKind(node, 'MultichannelButton')) {
-              buttons.push(node)
-            }
-            if (Array.isArray(node)) {
-              buttons.push(this.getButtons(node))
-            }
+        for (let node of element) {
+          if (isNodeKind(node, 'Pic')) {
+            imageProps = node.props
+          }
+          if (isNodeKind(node, 'Title')) {
+            title = node.props.children
+          }
+          if (isNodeKind(node, 'Subtitle')) {
+            subtitle = node.props.children
           }
 
-          let header = `${title ? `*${title}*` : ''}`
-          if (title && subtitle) {
-            header += ' '
+          if (isNodeKind(node, 'MultichannelButton')) {
+            buttons.push(node)
           }
+          if (Array.isArray(node)) {
+            buttons.push(getButtons(node))
+          }
+        }
+
+        let header = `${title ? `*${title}*` : ''}`
+        if (title && subtitle) {
+          header += ' '
+        }
+        if (subtitle) {
           header += `_${subtitle}_`
+        }
 
-          return (
-            // TODO: newkey only for 1 nested button
-            <MultichannelText key={i} newkey={i}>
-              {header}
-              {buttons}
-            </MultichannelText>
-          )
+        return (
+          // TODO: newkey only for 1 nested button
+          <MultichannelText key={i} newkey={i}>
+            {header}
+            {buttons}
+          </MultichannelText>
+        )
 
-          // TODO: in the future, this would be the default mode
-          // } else {
-          // return (
-          //   <React.Fragment key={i}>
-          //     <Image
-          //       src={imageSrc}
-          //       caption={carouselToCaption(
-          //         i + 1,
-          //         title,
-          //         subtitle,
-          //         imageSrc,
-          //         buttonProps
-          //       )}
-          //     ></Image>
-          //   </React.Fragment>
-          // )
-          // }
-        })
-    } else {
-      return <Carousel {...props}>{this.props.children}</Carousel>
-    }
+        // TODO: in the future, this would be the default mode
+        // } else {
+        // return (
+        //   <React.Fragment key={i}>
+        //     <Image
+        //       src={imageSrc}
+        //       caption={carouselToCaption(
+        //         i + 1,
+        //         title,
+        //         subtitle,
+        //         imageSrc,
+        //         buttonProps
+        //       )}
+        //     ></Image>
+        //   </React.Fragment>
+        // )
+        // }
+      })
+  } else {
+    return <Carousel {...props}>{props.children}</Carousel>
   }
 }
 
