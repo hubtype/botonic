@@ -123,4 +123,52 @@ describe('Multichannel wrapper', () => {
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
+
+  test('many multichannels', () => {
+    const sut = (
+      <>
+        <Multichannel>
+          <Text>
+            Some text with replies
+            {[
+              <Reply key={'1'} payload='payload1'>
+                Reply 1
+              </Reply>,
+              <Reply key={'2'} path='path1'>
+                Reply 2
+              </Reply>,
+            ]}
+          </Text>
+          <Text>
+            Some text with replies
+            {[
+              <Reply key={'1'} payload='payload1'>
+                Reply 1 should have 3.
+              </Reply>,
+              <Reply key={'2'} path='path1'>
+                Reply 2 should have 4.
+              </Reply>,
+            ]}
+          </Text>
+        </Multichannel>
+        <Multichannel>
+          <Text>
+            Some text with replies
+            {[
+              <Reply key={'1'} payload='payload1'>
+                Reply 1 number reset
+              </Reply>,
+              <Reply key={'2'} path='path1'>
+                Reply 2 number reset
+              </Reply>,
+            ]}
+          </Text>
+        </Multichannel>
+      </>
+    )
+
+    const renderer = whatsappRenderer(sut)
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 })

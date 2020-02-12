@@ -10,6 +10,44 @@ exports[`Multichannel wrapper just text 1`] = `
 </message>
 `;
 
+exports[`Multichannel wrapper many multichannels 1`] = `
+Array [
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    Some text with replies
+    
+1. Reply 1
+    
+2. Reply 2
+  </message>,
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    Some text with replies
+    
+3. Reply 1 should have 3.
+    
+4. Reply 2 should have 4.
+  </message>,
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    Some text with replies
+    
+1. Reply 1 number reset
+    
+2. Reply 2 number reset
+  </message>,
+]
+`;
+
 exports[`Multichannel wrapper text and carousel 1`] = `
 Array [
   <message
