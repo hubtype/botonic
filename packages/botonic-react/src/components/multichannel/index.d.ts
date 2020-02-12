@@ -1,24 +1,16 @@
 import * as React from 'react'
 
-export interface MultiChannelProps {
-  channel: string
-}
-
-export class MultiChannel extends React.Component<MultiChannelProps, any> {
-}
+export const Multichannel: React.FunctionComponent
 
 // Text
-export interface MultiChannelTextProps {
+export interface MultichannelTextProps {
   index?: string
 }
 
-export class MultichannelText extends React.Component<MultiChannelTextProps, any> {
-}
+export const MultichannelText: React.FunctionComponent<MultichannelTextProps>
 
 // Carousel
 export interface MultichannelCarouselProps {
   enableURL?: boolean
 }
-
-export class MultichannelCarousel extends React.Component<MultichannelCarouselProps, any> {
-}
+export const MultichannelCarousel: React.FunctionComponent<MultichannelCarouselProps>
