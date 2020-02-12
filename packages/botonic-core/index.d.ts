@@ -26,7 +26,7 @@ export interface SessionUser {
   // person name
   name?: string
   // whatsapp, telegram,...
-  provider?: string
+  provider: string
   // The provider's user id
   provider_id?: string
   extra_data?: any
