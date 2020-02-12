@@ -11,9 +11,12 @@ import {
   getMultichannelReplies,
 } from './multichannel-utils'
 import { MultichannelButton } from './multichannel-button'
+import { MultichannelContext } from './multichannel-context'
 
 export const MultichannelText = props => {
   let requestContext = useContext(RequestContext)
+  let multichannelContext = useContext(MultichannelContext)
+
   let elements = []
 
   const getText = () => {
@@ -46,8 +49,10 @@ export const MultichannelText = props => {
 
     elements = [].concat([...text], [...postbackButtons], [...urlButtons])
 
-    requestContext.currentIndex =
-      requestContext.currentIndex != null ? requestContext.currentIndex : 1
+    multichannelContext.currentIndex =
+      multichannelContext.currentIndex != null
+        ? multichannelContext.currentIndex
+        : 1
     return (
       <Text {...props}>
         {elements.map((element, i) => {

@@ -12,6 +12,7 @@ import {
 
 export const MultichannelCarousel = props => {
   let requestContext = useContext(RequestContext)
+
   const getButtons = node =>
     [].concat(getFilteredElements(node, isMultichannelButton))
 
