@@ -8,9 +8,11 @@ Array [
     type="text"
     typing={0}
   >
+    __
     
-     1. Previo a la compra
-     1. another button,0
+1. Previo a la compra
+    
+2. another button,0
   </message>,
   <message
     delay={0}
@@ -18,9 +20,11 @@ Array [
     type="text"
     typing={0}
   >
+    __
     
-     2. Durante la compra
-     2. another button,1
+3. Durante la compra
+    
+4. another button,1
   </message>,
 ]
 `;
@@ -33,11 +37,11 @@ Array [
     type="text"
     typing={0}
   >
-    *Title1*_Subtitle1_
+    *Title1* _Subtitle1_
     
- 1. Previo a la compra
+1. Previo a la compra
     
- 1. another button,0
+2. another button,0
   </message>,
   <message
     delay={0}
@@ -45,11 +49,11 @@ Array [
     type="text"
     typing={0}
   >
-    *Title2*_Subtitle2_
+    *Title2* _Subtitle2_
     
- 2. Durante la compra
+3. Durante la compra
     
- 2. another button,1
+4. another button,1
   </message>,
 ]
 `;
@@ -62,11 +66,11 @@ Array [
     type="text"
     typing={0}
   >
-    *Snatch*_Five minutes, Turkish_
+    *Snatch* _Five minutes, Turkish_
     
- - Visit website: https://www.imdb.com/title/tt0208092
+- Visit website: https://www.imdb.com/title/tt0208092
     
- - Another website: anotherurl.com
+- Another website: anotherurl.com
   </message>,
   <message
     delay={0}
@@ -74,11 +78,11 @@ Array [
     type="text"
     typing={0}
   >
-    *El laberinto del fauno*_2006_
+    *El laberinto del fauno* _2006_
     
- - Visit website: https://www.imdb.com/title/tt0457430
+- Visit website: https://www.imdb.com/title/tt0457430
     
- - Another website: anotherurl.com
+- Another website: anotherurl.com
   </message>,
 ]
 `;

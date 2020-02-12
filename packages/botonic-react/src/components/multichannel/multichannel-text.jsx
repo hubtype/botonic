@@ -11,6 +11,7 @@ import {
   isMultichannelReply,
   getMultichannelReplies,
 } from './multichannel-utils'
+import { MultichannelButton } from './multichannel-button'
 
 export class MultichannelText extends React.Component {
   static contextType = RequestContext
@@ -55,34 +56,19 @@ export class MultichannelText extends React.Component {
         [...postbackButtons],
         [...urlButtons]
       )
-
-      const hasPreviousText = Boolean(
-        this.elements[0] && this.elements[0].length
-      )
-
-      let index = 0
+      this.context.currentIndex =
+        this.context.currentIndex != null ? this.context.currentIndex : 1
       return (
         <Text {...this.props}>
           {this.elements.map((element, i) => {
-            if (elementHasPostback(element)) {
-              index += 1
-            }
-            let option = ' - '
             if (isMultichannelButton(element) || isMultichannelReply(element)) {
-              if (elementHasPostback(element)) {
-                option = this.newIndex ? ` ${this.newIndex}. ` : ` ${index}. `
-              }
-              let newProps = {
-                url: element.props.url,
-                children: `${hasPreviousText ? '\n' : ''}${option}${
-                  element.props.children
-                }`,
-                key: i,
-              }
-              let newElement = React.cloneElement(element, { ...newProps })
-              return newElement
+              return (
+                <MultichannelButton key={i} {...element.props}>
+                  {element.props.children}
+                </MultichannelButton>
+              )
             } else {
-              return `${element}`
+              return element
             }
           })}
         </Text>

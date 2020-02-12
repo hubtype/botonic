@@ -52,7 +52,10 @@ export class MultichannelCarousel extends React.Component {
           }
 
           let header = `${title ? `*${title}*` : ''}`
-          header += `${subtitle ? `_${subtitle}_` : ''}`
+          if (title && subtitle) {
+            header += ' '
+          }
+          header += `_${subtitle}_`
 
           return (
             // TODO: newkey only for 1 nested button

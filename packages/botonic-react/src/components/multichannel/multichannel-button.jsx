@@ -17,12 +17,23 @@ export class MultichannelButton extends React.Component {
   hasPayload() {
     return Boolean(this.props.payload)
   }
+  hasPostback() {
+    return this.hasPath() || this.hasPayload()
+  }
   hasWebview() {
     return Boolean(this.props.webview)
   }
 
   getText() {
-    return `${this.props.children}`
+    let text = this.props.children
+    if (this.hasPostback()) {
+      text = `\n${
+        this.context.currentIndex ? `${this.context.currentIndex}. ` : ''
+      }${text}`
+    } else if (this.hasUrl()) {
+      text = `\n- ${text}`
+    }
+    return text
   }
 
   getUrl() {
@@ -35,9 +46,13 @@ export class MultichannelButton extends React.Component {
 
   render() {
     if (isWhatsapp(this.context)) {
-      if (this.hasUrl()) return `${this.getText()}: ${this.getUrl()}`
-      else if (this.hasPath() || this.hasPayload()) return `${this.getText()}`
-      else if (this.hasWebview())
+      if (this.hasUrl()) {
+        return `${this.getText()}: ${this.getUrl()}`
+      } else if (this.hasPath() || this.hasPayload()) {
+        let text = this.getText()
+        this.context.currentIndex += 1
+        return `${text}`
+      } else if (this.hasWebview())
         return <Button {...this.props}>{this.getText()}</Button>
       else return <Button {...this.props}>{this.props.children}</Button>
     }
