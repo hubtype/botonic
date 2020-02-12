@@ -8,10 +8,8 @@ const serialize = textProps => {
     If we have an array of string, we want to join all the string as a single string, for
     future render actions
   */
-  if (Array.isArray(textProps.children)) {
-    text = textProps.children.join(' ')
-    if (typeof textProps.children[1] != 'string') text = textProps.children[0]
-  }
+  if (Array.isArray(textProps.children))
+    text = textProps.children.filter(n => !n.type).join(' ')
   return { text }
 }
 
