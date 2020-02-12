@@ -11,7 +11,9 @@ export class Multichannel extends React.Component {
   constructor(props) {
     super(props)
   }
+
   render() {
+    this.context.currentIndex = 1
     if (isWhatsapp(this.context)) {
       let newChildren = deepMap(this.props.children, child => {
         if (child && child.type && child.type.name === 'Button') {
