@@ -12,10 +12,5 @@
     "dashbot": "^11.1.0"
   },
   "devDependencies": {
-    "eslint_d": "^8.0.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-no-null": "^1.0.2",
-    "prettier": "^1.19.1"
   }
 }

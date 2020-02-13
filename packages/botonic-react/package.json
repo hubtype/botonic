@@ -5,11 +5,11 @@
   "main": "src/index.js",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
-    "preinstall": "node ../../preinstall.js",
+    "prepare": "node ../../preinstall.js",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.jsx' 'tests/**/*.jsx'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
   },
   "sideEffects": [
     "*.(scss|css)"
