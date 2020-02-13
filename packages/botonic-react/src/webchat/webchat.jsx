@@ -133,6 +133,7 @@ export const Webchat = forwardRef((props, ref) => {
     updateDevSettings,
     toggleWebchat,
     setError,
+    clearMessages,
     openWebviewT,
     closeWebviewT,
   } = props.webchatHooks || useWebchat()
@@ -374,6 +375,10 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
     openWebviewApi: component => openWebviewT(component),
     setError,
+    getMessages: () => webchatState.messagesJSON,
+    clearMessages: () => {
+      clearMessages()
+    },
   }))
 
   const resolveCase = () => {

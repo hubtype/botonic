@@ -85,6 +85,12 @@ export function webchatReducer(state, action) {
       return { ...state, isWebchatOpen: action.payload }
     case 'setError':
       return { ...state, error: action.payload || {} }
+    case 'clearMessages':
+      return {
+        ...state,
+        messagesJSON: [],
+        messagesComponents: [],
+      }
     default:
       throw new Error()
   }
@@ -154,6 +160,12 @@ export function useWebchat() {
       payload: error,
     })
 
+  const clearMessages = () => {
+    webchatDispatch({
+      type: 'clearMessages',
+    })
+  }
+
   return {
     webchatState,
     webchatDispatch,
@@ -172,6 +184,7 @@ export function useWebchat() {
     updateDevSettings,
     toggleWebchat,
     setError,
+    clearMessages,
   }
 }
 

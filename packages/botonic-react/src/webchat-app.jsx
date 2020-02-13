@@ -122,6 +122,10 @@ export class WebchatApp {
     return this.webchatRef.current.getMessages()
   }
 
+  clearMessages() {
+    this.webchatRef.current.clearMessages()
+  }
+
   getComponent(optionsAtRuntime = {}) {
     let {
       theme = {},
