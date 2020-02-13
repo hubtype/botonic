@@ -1,3 +1,4 @@
+import NotFound from './actions/not-found'
 import Start from './actions/start'
 import Help from './actions/help'
 import ShowButtons from './actions/show-buttons'
@@ -14,5 +15,6 @@ export const routes = [
     input: i => i.payload == 'replies' || i.data == 'replies',
     action: ShowReplies,
   },
-  { path: 'start', text: /.*/, action: Start },
+  { path: 'start', text: /hi|start|hello/, action: Start },
+  { path: '404', text: /.*/, action: NotFound },
 ]

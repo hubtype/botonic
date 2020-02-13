@@ -1,14 +1,17 @@
-import { BotonicInputTester, BotonicOutputTester } from '@botonic/react'
+import { routes, locales, config } from '../src/'
+import {
+  BotonicInputTester,
+  BotonicOutputTester,
+  NodeApp,
+} from '@botonic/react'
 
-import App from '../src/app'
+const app = new NodeApp({ routes, locales, ...config })
 
-let i = new BotonicInputTester(App)
-let o = new BotonicOutputTester(App)
+const i = new BotonicInputTester(app)
+const o = new BotonicOutputTester(app)
 
 test('TEST: (404) NOT FOUND', async () => {
   await expect(i.text('whatever')).resolves.toBe(
-    o.text(
-      'Enter the dialogflow token in integrations.js to test the bot. Try typing "hello" to start the bot.'
-    )
+    o.text("I don't understand you")
   )
 })
