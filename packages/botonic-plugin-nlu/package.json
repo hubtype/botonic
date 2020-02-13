@@ -5,9 +5,10 @@
   "scripts": {
     "build": "rm -rf dist && babel src -d dist",
     "test": "jest",
+    "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "jest": {
     "testEnvironment": "node"

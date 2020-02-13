@@ -54,6 +54,7 @@
   },
   "repository": "hubtype/botonic",
   "scripts": {
+    "prepare": "node ../../preinstall.js",
     "build": "rm -rf lib && tsc",
     "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
     "posttest": "tslint -p test -t stylish",
@@ -63,7 +64,7 @@
     "postinstall": "node scripts/postinstall.js",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "types": "lib/index.d.ts"
 }

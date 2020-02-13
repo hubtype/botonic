@@ -5,8 +5,9 @@
   "scripts": {
     "build": "rm -rf lib && babel src -d lib",
     "test": "jest",
-    "lint": "npm run lint_ci -- --fix",
-    "lint_ci": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js*'"
+    "prepare": "node ../../preinstall.js",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js*'"
   },
   "jest": {
     "testEnvironment": "node"

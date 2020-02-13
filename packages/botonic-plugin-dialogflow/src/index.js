@@ -51,7 +51,7 @@ export default class BotonicPluginDialogflow {
 
     const stringHeader = JSON.stringify(header)
     const stringPayload = JSON.stringify(payload)
-    let token = KJUR.jws.JWS.sign(
+    const token = KJUR.jws.JWS.sign(
       'RS256',
       stringHeader,
       stringPayload,
@@ -82,15 +82,15 @@ export default class BotonicPluginDialogflow {
   async dialogflowToInput({ input, session, lastRoutePath }) {
     let confidence = 0
     let intent = null
-    let intents = []
+    const intents = []
     let entities = []
     let defaultFallback = ''
     let dialogflowResponse = null
 
-    let queryData = input.data || input.payload || null
+    const queryData = input.data || input.payload || null
     dialogflowResponse = await this.query(queryData)
 
-    let queryResult = dialogflowResponse.data.queryResult
+    const queryResult = dialogflowResponse.data.queryResult
     intent = queryResult.intent.displayName
     confidence = queryResult.intentDetectionConfidence
     entities = queryResult.parameters
