@@ -39,7 +39,7 @@ export const Button = props => {
 
   const handleClick = event => {
     event.preventDefault()
-    let type = getThemeProperty('button.messageType', 'postback')
+    const type = getThemeProperty('button.messageType', 'postback')
     if (props.webview) openWebview(props.webview, props.params)
     else if (props.path) {
       type == 'postback'
@@ -64,8 +64,8 @@ export const Button = props => {
   }
 
   const renderBrowser = () => {
-    let buttonStyle = getThemeProperty('button.style')
-    let CustomButton = getThemeProperty('button.custom')
+    const buttonStyle = getThemeProperty('button.style')
+    const CustomButton = getThemeProperty('button.custom')
     if (CustomButton) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -74,10 +74,10 @@ export const Button = props => {
       )
     }
 
-    let buttonBgColor = hover
+    const buttonBgColor = hover
       ? getThemeProperty('button.hoverBackground', COLORS.CONCRETE_WHITE)
       : getThemeProperty('button.style.background', COLORS.SOLID_WHITE)
-    let buttonTextColor = hover
+    const buttonTextColor = hover
       ? getThemeProperty('button.hoverText', COLORS.SOLID_BLACK)
       : getThemeProperty('button.style.color', COLORS.SOLID_BLACK)
 
@@ -101,7 +101,7 @@ export const Button = props => {
 
   const renderNode = () => {
     if (props.webview) {
-      let Webview = props.webview
+      const Webview = props.webview
       let params = ''
       if (props.params) params = params2queryString(props.params)
       return (
@@ -110,7 +110,7 @@ export const Button = props => {
         </button>
       )
     } else if (props.path) {
-      let payload = `__PATH_PAYLOAD__${props.path}`
+      const payload = `__PATH_PAYLOAD__${props.path}`
       return <button payload={payload}>{props.children}</button>
     } else if (props.payload) {
       return <button payload={props.payload}>{props.children}</button>

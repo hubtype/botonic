@@ -1,6 +1,6 @@
 import { getProperty, _getThemeProperty } from '../src/utils'
 
-let theme = {
+const theme = {
   message: {
     bot: {
       image: 'DefaultLogoPathNested',
@@ -14,7 +14,7 @@ let theme = {
   botMessageImage: 'DefaultLogoPath',
 }
 
-let anotherTheme = {
+const anotherTheme = {
   message: {
     bot: {
       image: null,

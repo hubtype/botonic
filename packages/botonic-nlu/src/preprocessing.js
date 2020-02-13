@@ -20,7 +20,7 @@ export class Tokenizer {
   }
 
   tokenize(text) {
-    let shifted = shiftSpecialChars(text, clone(this.charsToShift))
+    const shifted = shiftSpecialChars(text, clone(this.charsToShift))
     return shifted.toLowerCase().split(' ')
   }
 
@@ -29,21 +29,21 @@ export class Tokenizer {
   }
 
   fitOnSamples(samples) {
-    let tokenizedSamples = this.tokenizeSamples(samples)
+    const tokenizedSamples = this.tokenizeSamples(samples)
     this.vocabulary = generateVocabulary(tokenizedSamples)
     this.vocabularyLength = Object.keys(this.vocabulary).length
   }
 
   samplesToSequences(samples) {
     let tokenizedSamples = []
-    let sequences = []
+    const sequences = []
     if (typeof samples === 'string') {
       samples = [samples]
     }
     tokenizedSamples = this.tokenizeSamples(samples)
-    for (let tokenizedSample of tokenizedSamples) {
-      let sequence = []
-      for (let token of tokenizedSample) {
+    for (const tokenizedSample of tokenizedSamples) {
+      const sequence = []
+      for (const token of tokenizedSample) {
         if (!(token in this.vocabulary)) {
           sequence.push(this.vocabulary[UNKNOWN_TOKEN])
         } else {
@@ -52,7 +52,7 @@ export class Tokenizer {
       }
       sequences.push(sequence)
     }
-    let { minSeqLength, maxSeqLength } = getSeqLengths(sequences)
+    const { minSeqLength, maxSeqLength } = getSeqLengths(sequences)
     this.minSeqLength = minSeqLength
     this.maxSeqLength = maxSeqLength
     return sequences
@@ -63,18 +63,18 @@ function shiftSpecialChars(userInput, charsToShift) {
   if (charsToShift.length == 0) {
     return userInput
   } else {
-    let char = charsToShift.pop()
-    let newInput = replaceAll(userInput, `${char}`, ` ${char}`)
+    const char = charsToShift.pop()
+    const newInput = replaceAll(userInput, `${char}`, ` ${char}`)
     return shiftSpecialChars(newInput, charsToShift)
   }
 }
 
 function generateVocabulary(tokenizedSamples) {
-  let vocabulary = {}
+  const vocabulary = {}
   vocabulary[UNKNOWN_TOKEN] = 0
   let c = 1 // Reserved for UNKNOWN_TOKEN
-  for (let tokenizedSample of tokenizedSamples) {
-    for (let token of tokenizedSample) {
+  for (const tokenizedSample of tokenizedSamples) {
+    for (const token of tokenizedSample) {
       if (!(token in vocabulary)) {
         vocabulary[token] = c
         c++
@@ -85,8 +85,8 @@ function generateVocabulary(tokenizedSamples) {
 }
 
 function getSeqLengths(sequences) {
-  let seqLengths = []
-  for (let sequence of sequences) {
+  const seqLengths = []
+  for (const sequence of sequences) {
     seqLengths.push(sequence.length)
   }
   return {
@@ -96,16 +96,16 @@ function getSeqLengths(sequences) {
 }
 
 export function padSequences(sequences, maxSeqLength) {
-  let paddedSequences = []
-  for (let sequence of sequences) {
-    let t = tf.tensor1d(sequence).pad([[maxSeqLength - sequence.length, 0]])
+  const paddedSequences = []
+  for (const sequence of sequences) {
+    const t = tf.tensor1d(sequence).pad([[maxSeqLength - sequence.length, 0]])
     paddedSequences.push(t)
   }
   return tf.stack(paddedSequences)
 }
 
 export function detectLang(input, languages) {
-  let res = franc(input, {
+  const res = franc(input, {
     whitelist: languages.map(l => langs.where('1', l)[3]),
   })
   if (res === 'und') {
@@ -126,35 +126,35 @@ export function detectLang(input, languages) {
  * @returns {object} {parsedUtterance, parsedEntities}
  */
 export function parseUtterance(utterance) {
-  let capturedGroups = utterance.match(GLOBAL_ENTITIES_REGEX) || []
-  let parsedEntities = capturedGroups
+  const capturedGroups = utterance.match(GLOBAL_ENTITIES_REGEX) || []
+  const parsedEntities = capturedGroups
     .map(matched => ENTITIES_REGEX.exec(matched))
     .map(parsedEntity => ({
       raw: parsedEntity[0],
       value: parsedEntity[1],
       type: parsedEntity[2],
     }))
-  for (let entity of parsedEntities) {
+  for (const entity of parsedEntities) {
     utterance = utterance.replace(entity.raw, entity.value)
   }
   return { parsedUtterance: utterance, parsedEntities }
 }
 
 export function preprocessData(devIntents, params) {
-  let { samples, labels } = getShuffledSamplesAndLabels(devIntents.intents)
-  let tokenizer = new Tokenizer()
+  const { samples, labels } = getShuffledSamplesAndLabels(devIntents.intents)
+  const tokenizer = new Tokenizer()
   tokenizer.fitOnSamples(samples)
-  let sequences = tokenizer.samplesToSequences(samples)
-  let seqLength = params.MAX_SEQ_LENGTH || tokenizer.maxSeqLength
+  const sequences = tokenizer.samplesToSequences(samples)
+  const seqLength = params.MAX_SEQ_LENGTH || tokenizer.maxSeqLength
   params.MAX_SEQ_LENGTH = seqLength
-  let tensorData = padSequences(sequences, seqLength)
+  const tensorData = padSequences(sequences, seqLength)
   console.log(`Shape of data tensor: [${tensorData.shape}]`)
-  let tensorLabels = tf.oneHot(
+  const tensorLabels = tf.oneHot(
     tf.tensor1d(labels, 'int32'),
     Object.keys(devIntents.intentsDict).length
   )
   console.log(`Shape of label tensor: [${tensorLabels.shape}]`)
-  let vocabularyLength = tokenizer.vocabularyLength
+  const vocabularyLength = tokenizer.vocabularyLength
   console.log(`Found ${vocabularyLength} unique tokens`)
   return {
     tensorData,
@@ -165,8 +165,8 @@ export function preprocessData(devIntents, params) {
 }
 
 function getShuffledSamplesAndLabels(intents) {
-  let samples = intents.map(intent => intent.utterance)
-  let labels = intents.map(intent => intent.label)
+  const samples = intents.map(intent => intent.utterance)
+  const labels = intents.map(intent => intent.label)
   shuffle(samples, labels)
   return { samples, labels }
 }

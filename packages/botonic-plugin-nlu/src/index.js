@@ -11,7 +11,7 @@ export default class BotonicPluginNLU {
   async pre({ input, session, lastRoutePath }) {
     try {
       if (input.type == 'text' && !input.payload) {
-        let { intent, entities } = this.nlu.predict(input.data)
+        const { intent, entities } = this.nlu.predict(input.data)
         Object.assign(input, intent, entities)
       }
     } catch (e) {

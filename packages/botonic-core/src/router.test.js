@@ -7,23 +7,23 @@ const postbackInput = { type: 'postback', payload: 'foo' }
 
 describe('Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
-    let router = new Router([])
+    const router = new Router([])
     expect(() => router.processInput(textInput)).toThrow(TypeError)
   })
   test('null routes throw TypeError', () => {
-    let router = new Router()
+    const router = new Router()
     expect(() => router.processInput(textInput)).toThrow(TypeError)
   })
 })
 
 test('Router returns 404', () => {
-  let router = new Router([{ path: '404', action: '404Action' }])
-  let { action } = router.processInput(textInput)
+  const router = new Router([{ path: '404', action: '404Action' }])
+  const { action } = router.processInput(textInput)
   expect(action).toBe('404Action')
 })
 
 describe('Match route by MATCHER <> INPUT', () => {
-  let router = new Router()
+  const router = new Router()
   test('text <> text', () => {
     expect(router.matchRoute('text', 'hi', textInput)).toBeTruthy()
     expect(router.matchRoute('text', 'hii', textInput)).toBeFalsy()
@@ -192,49 +192,49 @@ describe('Process input (v<0.9)', () => {
     { path: '404', action: '404Action' },
   ])
   test('text input, root level route', () => {
-    let input = { type: 'text', data: 'hi', intent: 'greeting' }
-    let session = {}
-    let lastRoutePath = null
+    const input = { type: 'text', data: 'hi', intent: 'greeting' }
+    const session = {}
+    const lastRoutePath = null
     expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1'
     )
   })
   test('payload input, 2nd level route', () => {
-    let input = { type: 'postback', payload: '2' }
-    let session = {}
-    let lastRoutePath = 'initial'
+    const input = { type: 'postback', payload: '2' }
+    const session = {}
+    const lastRoutePath = 'initial'
     expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
     )
   })
   test('old protocol:path payload input, root level route', () => {
-    let input = { type: 'postback', payload: '__PATH_PAYLOAD__initial' }
-    let session = {}
-    let lastRoutePath = ''
+    const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial' }
+    const session = {}
+    const lastRoutePath = ''
     expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1'
     )
   })
   test.skip('old protocol:path payload input, root level route (should be ignored)', () => {
-    let input = { type: 'postback', path: 'initial/2' }
-    let session = {}
-    let lastRoutePath = ''
+    const input = { type: 'postback', path: 'initial/2' }
+    const session = {}
+    const lastRoutePath = ''
     expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
     )
   })
   test.skip('path payload input with deprecated protocol, root level route (should be ignored)', () => {
-    let input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
-    let session = {}
-    let lastRoutePath = ''
+    const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
+    const session = {}
+    const lastRoutePath = ''
     expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
     )
   })
   test.skip('old protocol:path payload input with deprecated protocol, 2nd level route (should be ignored)', () => {
-    let input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
-    let session = {}
-    let lastRoutePath = 'initial'
+    const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
+    const session = {}
+    const lastRoutePath = 'initial'
     expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
     )

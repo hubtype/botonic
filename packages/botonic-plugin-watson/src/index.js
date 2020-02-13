@@ -13,13 +13,13 @@ export default class BotonicPluginWatson {
     let entities = []
 
     try {
-      let assistant = new AssistantV1({
+      const assistant = new AssistantV1({
         authenticator: new IamAuthenticator({ apikey: this.options.apiKey }),
         url: this.options.url,
         version: '2018-09-19',
       })
 
-      let res = await assistant.message({
+      const res = await assistant.message({
         input: { text: input.data },
         workspaceId: this.options.workspaceId,
       })
@@ -33,5 +33,5 @@ export default class BotonicPluginWatson {
     Object.assign(input, { intent, confidence, intents, entities })
   }
 
-  async post({ input, session, lastRoutePath, response }) {}
+  post({ input, session, lastRoutePath, response }) {}
 }

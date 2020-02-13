@@ -14,8 +14,8 @@ import { MultichannelButton } from './multichannel-button'
 import { MultichannelContext } from './multichannel-context'
 
 export const MultichannelText = props => {
-  let requestContext = useContext(RequestContext)
-  let multichannelContext = useContext(MultichannelContext)
+  const requestContext = useContext(RequestContext)
+  const multichannelContext = useContext(MultichannelContext)
 
   let elements = []
 
@@ -34,9 +34,9 @@ export const MultichannelText = props => {
     )
 
   const getWhatsappButtons = () => {
-    let postbackButtons = []
-    let urlButtons = []
-    for (let button of getButtonsAndReplies()) {
+    const postbackButtons = []
+    const urlButtons = []
+    for (const button of getButtonsAndReplies()) {
       if (elementHasUrl(button)) urlButtons.push(button)
       if (elementHasPostback(button)) postbackButtons.push(button)
     }

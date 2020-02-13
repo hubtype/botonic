@@ -24,7 +24,7 @@ export default class BotonicPluginSegment {
   }
 
   async identify({ input, session, userId, traits }) {
-    let t = traits || { user: session.user }
+    const t = traits || { user: session.user }
     try {
       await segmentAPI('identify', this.headers, {
         userId: userId || session.user.id,
@@ -37,7 +37,7 @@ export default class BotonicPluginSegment {
   }
 
   async track({ input, session, userId, event, properties }) {
-    let p = properties || { user: session.user }
+    const p = properties || { user: session.user }
     try {
       await segmentAPI('track', this.headers, {
         userId: userId || session.user.id,
@@ -51,7 +51,7 @@ export default class BotonicPluginSegment {
   }
 
   async page({ input, session, lastRoutePath, userId, event, properties }) {
-    let p = properties || { user: session.user }
+    const p = properties || { user: session.user }
     try {
       await segmentAPI('page', this.headers, {
         userId: userId || session.user.id,

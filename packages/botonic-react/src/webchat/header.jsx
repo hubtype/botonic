@@ -56,13 +56,13 @@ const CloseHeader = styled.div`
 export const DefaultHeader = props => {
   const { getThemeProperty } = props
   const animationsEnabled = getThemeProperty('animations.enable', true)
-  let headerImage = getThemeProperty(
+  const headerImage = getThemeProperty(
     'header.image',
     getThemeProperty('brand.image', WEBCHAT.DEFAULTS.LOGO)
   )
 
-  let headerTitle = getThemeProperty('header.title', 'Botonic')
-  let headerSubtitle = getThemeProperty('header.subtitle', '')
+  const headerTitle = getThemeProperty('header.title', 'Botonic')
+  const headerSubtitle = getThemeProperty('header.subtitle', '')
 
   return (
     <Header color={props.color} style={{ ...getThemeProperty('header.style') }}>

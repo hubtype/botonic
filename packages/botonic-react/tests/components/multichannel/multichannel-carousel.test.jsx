@@ -3,7 +3,7 @@ import { MultichannelCarousel } from '../../../src/components/multichannel'
 import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
-let movies = [
+const movies = [
   {
     name: 'Snatch',
     desc: 'Five minutes, Turkish',

@@ -7,8 +7,8 @@ export const customMessage = ({ name, component: CustomMessageComponent }) => {
       {props.children}
     </Message>
   )
-  let WrappedComponent = props => {
-    let { id, ...customMessageProps } = props
+  const WrappedComponent = props => {
+    const { id, ...customMessageProps } = props
     return (
       <CustomMessage id={id} json={{ ...props, customTypeName: name }}>
         <CustomMessageComponent {...customMessageProps}>

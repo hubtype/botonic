@@ -29,15 +29,15 @@ export class HubtypeService {
       },
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
-    let connectionPromise = new Promise((resolve, reject) => {
-      let cleanAndReject = msg => {
+    const connectionPromise = new Promise((resolve, reject) => {
+      const cleanAndReject = msg => {
         clearTimeout(connectTimeout)
         this.pusher.connection.unbind()
         this.channel.unbind()
         this.pusher = null
         reject(msg)
       }
-      let connectTimeout = setTimeout(
+      const connectTimeout = setTimeout(
         () => cleanAndReject('Connection Timeout'),
         10000
       )
@@ -46,7 +46,7 @@ export class HubtypeService {
         resolve()
       })
       this.pusher.connection.bind('error', error => {
-        let errorMsg =
+        const errorMsg =
           error.error && error.error.data
             ? error.error.data.code || error.data.message
             : 'Connection error'

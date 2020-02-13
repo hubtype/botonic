@@ -3,13 +3,16 @@ import { Tokenizer, padSequences } from './preprocessing'
 import { getEntities } from './ner'
 
 export function getPrediction(input, model, nluData) {
-  let tokenizer = new Tokenizer(nluData.vocabulary)
-  let sequence = tokenizer.samplesToSequences(input)[0]
-  let paddedSequence = padSequences([sequence], nluData.maxSeqLength).dataSync()
+  const tokenizer = new Tokenizer(nluData.vocabulary)
+  const sequence = tokenizer.samplesToSequences(input)[0]
+  const paddedSequence = padSequences(
+    [sequence],
+    nluData.maxSeqLength
+  ).dataSync()
   return model.predict(tf.tensor([paddedSequence])).dataSync()
 }
 export function getIntent(prediction, intentsDict, language) {
-  let intent = {}
+  const intent = {}
   intent.intents = Array.from(prediction)
     .map((confidence, i) => ({
       intent: intentsDict[i],

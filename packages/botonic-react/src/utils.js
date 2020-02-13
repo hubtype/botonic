@@ -9,11 +9,11 @@ export function isProd() {
 
 export const staticAsset = path => {
   try {
-    let scriptBaseURL = document
+    const scriptBaseURL = document
       .querySelector('script[src$="webchat.botonic.js"]')
       .getAttribute('src')
-    let scriptName = scriptBaseURL.split('/').pop()
-    let basePath = scriptBaseURL.replace('/' + scriptName, '/')
+    const scriptName = scriptBaseURL.split('/').pop()
+    const basePath = scriptBaseURL.replace('/' + scriptName, '/')
     return basePath + path
   } catch (e) {
     return path
@@ -29,9 +29,9 @@ export const staticAsset = path => {
  */
 export const getProperty = (obj, property) => {
   if (!property) return undefined
-  let properties = property.split('.')
+  const properties = property.split('.')
   for (let i = 0; i < properties.length; i++) {
-    let prop = properties[i]
+    const prop = properties[i]
     if (!obj || !obj.hasOwnProperty(prop)) {
       return undefined
     } else {
@@ -51,11 +51,11 @@ export const _getThemeProperty = theme => (
   property,
   defaultValue = undefined
 ) => {
-  for (let [k, v] of Object.entries(WEBCHAT.CUSTOM_PROPERTIES)) {
+  for (const [k, v] of Object.entries(WEBCHAT.CUSTOM_PROPERTIES)) {
     if (v == property) {
-      let nestedProperty = getProperty(theme, v)
+      const nestedProperty = getProperty(theme, v)
       if (nestedProperty !== undefined) return nestedProperty
-      let plainProperty = getProperty(theme, k)
+      const plainProperty = getProperty(theme, k)
       if (plainProperty !== undefined) return plainProperty
       return defaultValue
     }

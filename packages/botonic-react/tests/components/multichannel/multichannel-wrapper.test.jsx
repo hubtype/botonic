@@ -71,7 +71,7 @@ describe('Multichannel wrapper', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  let carouselWithButtons = [
+  const carouselWithButtons = [
     {
       title: 'Title1',
       subtitle: 'Subtitle1',

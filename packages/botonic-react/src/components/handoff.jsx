@@ -41,10 +41,10 @@ export const Handoff = props => {
     resolveCase()
   }
 
-  let bgColor = state.showContinue
+  const bgColor = state.showContinue
     ? COLORS.FRINGY_FLOWER_GREEN
     : COLORS.TASMAN_GRAY
-  let fontColor = state.showContinue ? COLORS.APPLE_GREEN : COLORS.CACTUS_GREEN
+  const fontColor = state.showContinue ? COLORS.APPLE_GREEN : COLORS.CACTUS_GREEN
   return (
     <Container
       style={{

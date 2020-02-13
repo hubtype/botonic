@@ -23,7 +23,7 @@ export async function resolveEnv() {
 }
 
 export function loadOption(lang, env) {
-  let nlu = {}
+  const nlu = {}
   try {
     nlu.nluData = axios({
       url: `${env.uri}${lang}/${NLU_DATA_FILENAME}`,

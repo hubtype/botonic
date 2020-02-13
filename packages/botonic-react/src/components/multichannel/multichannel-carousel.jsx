@@ -11,7 +11,7 @@ import {
 } from './multichannel-utils'
 
 export const MultichannelCarousel = props => {
-  let requestContext = useContext(RequestContext)
+  const requestContext = useContext(RequestContext)
 
   const getButtons = node =>
     [].concat(getFilteredElements(node, isMultichannelButton))
@@ -23,9 +23,9 @@ export const MultichannelCarousel = props => {
         let imageProps = undefined
         let title = undefined
         let subtitle = undefined
-        let buttons = []
+        const buttons = []
 
-        for (let node of element) {
+        for (const node of element) {
           if (isNodeKind(node, 'Pic')) {
             imageProps = node.props
           }

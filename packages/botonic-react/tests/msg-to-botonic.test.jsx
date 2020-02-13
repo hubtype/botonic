@@ -123,7 +123,7 @@ describe('msgsToBotonic text', () => {
   })
 
   test('array', () => {
-    let msg = { type: 'text', data: { text: '' } }
+    const msg = { type: 'text', data: { text: '' } }
     expect(msgsToBotonic([msg])).toEqual(
       <>
         {[

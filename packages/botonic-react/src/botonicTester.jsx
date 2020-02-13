@@ -10,7 +10,7 @@ export class BotonicInputTester {
     this.bot = bot
   }
   async text(inp, session = {}, lastRoutePath = '') {
-    let res = await this.bot.input({
+    const res = await this.bot.input({
       input: { type: 'text', data: inp },
       session: session,
       lastRoutePath: lastRoutePath,
@@ -19,7 +19,7 @@ export class BotonicInputTester {
   }
 
   async payload(inp, session = {}, lastRoutePath = '') {
-    let res = await this.bot.input({
+    const res = await this.bot.input({
       input: { type: 'postback', payload: inp },
       session: session,
       lastRoutePath: lastRoutePath,
@@ -28,7 +28,7 @@ export class BotonicInputTester {
   }
 
   async path(inp, session = {}, lastRoutePath = '') {
-    let res = await this.bot.input({
+    const res = await this.bot.input({
       input: { type: 'text', payload: `__PATH_PAYLOAD__${inp}` },
       session: session,
       lastRoutePath: lastRoutePath,
@@ -72,10 +72,10 @@ export class BotonicOutputTester {
     }
   }
 
-  replies() {
-    let replies = []
-    for (let i = 0; i < arguments.length; i++) {
-      let r = arguments[i]
+  replies(...args) {
+    const replies = []
+    for (let i = 0; i < args.length; i++) {
+      const r = args[i]
       replies.push(
         this.reply({ text: r.text, payload: r.payload, path: r.path })
       )

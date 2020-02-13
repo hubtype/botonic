@@ -26,8 +26,8 @@ export function elementHasPostback(element) {
 }
 
 export function getFilteredElements(node, filter) {
-  let elements = []
-  for (let n of node) {
+  const elements = []
+  for (const n of node) {
     if (filter(n)) elements.push(n)
   }
   return elements

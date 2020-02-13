@@ -9,10 +9,10 @@ import { MultichannelCarousel } from './multichannel-carousel'
 import { MultichannelReply } from './multichannel-reply'
 
 export const Multichannel = props => {
-  let requestContext = useContext(RequestContext)
+  const requestContext = useContext(RequestContext)
 
   if (isWhatsapp(requestContext)) {
-    let newChildren = deepMap(props.children, child => {
+    const newChildren = deepMap(props.children, child => {
       if (child && child.type && child.type.name === 'Button') {
         return (
           <MultichannelButton {...child.props}>

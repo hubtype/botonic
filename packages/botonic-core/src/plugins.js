@@ -1,13 +1,13 @@
 export function loadPlugins(plugins) {
   if (!plugins) return []
-  let _plugins = {}
-  let pluginsLength = plugins.length
+  const _plugins = {}
+  const pluginsLength = plugins.length
   for (let i = 0; i < pluginsLength; i++) {
-    let pluginRequired = plugins[i].resolve
-    let options = plugins[i].options
-    let Plugin = pluginRequired.default
-    let instance = new Plugin(options)
-    let id = plugins[i].id || `${instance.constructor.name}`
+    const pluginRequired = plugins[i].resolve
+    const options = plugins[i].options
+    const Plugin = pluginRequired.default
+    const instance = new Plugin(options)
+    const id = plugins[i].id || `${instance.constructor.name}`
     _plugins[id] = instance
     _plugins[id].id = id
     _plugins[id].config = options
@@ -24,8 +24,8 @@ export async function runPlugins(
   lastRoutePath,
   response = null
 ) {
-  for (let key in plugins) {
-    let p = await plugins[key]
+  for (const key in plugins) {
+    const p = await plugins[key]
     try {
       if (mode == 'pre') await p.pre({ input, session, lastRoutePath })
       if (mode == 'post')

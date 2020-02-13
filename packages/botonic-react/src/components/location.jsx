@@ -14,10 +14,10 @@ const serialize = locationProps => {
 }
 
 export const Location = props => {
-  let lat = parseFloat(props.lat)
-  let long = parseFloat(props.long)
+  const lat = parseFloat(props.lat)
+  const long = parseFloat(props.long)
   const renderBrowser = () => {
-    let locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
+    const locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
     return (
       <Message json={serialize(props)} {...props} type='location'>
         <Link

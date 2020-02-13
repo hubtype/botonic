@@ -8,9 +8,9 @@ export class Router {
 
   processInput(input, session = {}, lastRoutePath = null) {
     let routeParams = {}
-    let pathParams = this.getOnFinishParams(input)
+    const pathParams = this.getOnFinishParams(input)
     let brokenFlow = false
-    let lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
+    const lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (lastRoute && lastRoute.childRoutes)
       //get route depending of current ChildRoute
       routeParams = this.getRoute(input, lastRoute.childRoutes, session)
@@ -27,7 +27,7 @@ export class Router {
         let searchParams = ''
         if (isBrowser()) searchParams = new URLSearchParams(pathParams)
         if (isNode()) searchParams = new url.URLSearchParams(pathParams)
-        for (let [key, value] of searchParams) {
+        for (const [key, value] of searchParams) {
           routeParams.params
             ? (routeParams.params[key] = value)
             : (routeParams.params = { [key]: value })
@@ -87,7 +87,7 @@ export class Router {
         }
       } else if ('redirect' in routeParams.route) {
         lastRoutePath = routeParams.route.redirect
-        let redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
+        const redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
         if (redirectRoute) {
           return {
             action: redirectRoute.action,
@@ -97,7 +97,7 @@ export class Router {
         }
       }
     }
-    let notFound = this.getRouteByPath('404', this.routes)
+    const notFound = this.getRouteByPath('404', this.routes)
     if (lastRoute && session.__retries < lastRoute.retry) {
       session.__retries = session.__retries ? session.__retries + 1 : 1
       return {
@@ -134,17 +134,17 @@ export class Router {
   }
 
   getRoute(input, routes, session) {
-    let computedRoutes = isFunction(routes)
+    const computedRoutes = isFunction(routes)
       ? routes({ input, session })
       : routes
     /* Find the route that matches the given input, if it match with some of the entries,
       return the whole Route of the entry with optional params captured if matcher was a regex */
     let params = {}
-    let route = computedRoutes.find(r =>
+    const route = computedRoutes.find(r =>
       Object.entries(r)
         .filter(([key, {}]) => key != 'action' && key != 'childRoutes')
         .some(([key, value]) => {
-          let match = this.matchRoute(key, value, input, session)
+          const match = this.matchRoute(key, value, input, session)
           try {
             params = match.groups
           } catch (e) {}
@@ -161,8 +161,8 @@ export class Router {
     if (!path) return null
     let route = null
     routeList = routeList || this.routes
-    let [currentPath, ...childPath] = path.split('/')
-    for (let r of routeList) {
+    const [currentPath, ...childPath] = path.split('/')
+    for (const r of routeList) {
       //iterate over all routeList
       if (r.path == currentPath) {
         route = r

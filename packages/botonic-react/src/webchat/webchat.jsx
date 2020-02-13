@@ -105,8 +105,8 @@ const ErrorMessageContainer = styled.div`
 `
 
 const createUser = () => {
-  let parser = new UAParser()
-  let ua = parser.getResult()
+  const parser = new UAParser()
+  const ua = parser.getResult()
   let name = `${ua.os.name} ${ua.browser.name}`
   if (ua.device && ua.device.type) name = `${ua.device.type} ${name}`
   return {
@@ -172,7 +172,7 @@ export const Webchat = forwardRef((props, ref) => {
       if (messages) {
         messages.map(m => {
           addMessage(m)
-          let newComponent = msgToBotonic(
+          const newComponent = msgToBotonic(
             { ...m, delay: 0, typing: 0 },
             (props.theme.message && props.theme.message.customTypes) ||
               props.theme.customMessageTypes
@@ -192,7 +192,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     if (!webchatState.isWebchatOpen) return
     setTimeout(() => {
-      let end = document.getElementById('messages-end')
+      const end = document.getElementById('messages-end')
       if (end) {
         end.scrollIntoView()
       }
@@ -271,12 +271,12 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const checkBlockInput = input => {
-    let blockInputs = getThemeProperty(
+    const blockInputs = getThemeProperty(
       'userInput.blockInputs',
       props.blockInputs
     )
     if (!Array.isArray(blockInputs)) return
-    for (let rule of blockInputs) {
+    for (const rule of blockInputs) {
       if (rule.match.some(regex => regex.test(input.data))) {
         addMessageComponent(
           <Text
@@ -353,8 +353,8 @@ export const Webchat = forwardRef((props, ref) => {
       else if (response) addMessageComponent(response)
       if (session) {
         updateSession(session)
-        let action = session._botonic_action || ''
-        let handoff = action.startsWith('create_case')
+        const action = session._botonic_action || ''
+        const handoff = action.startsWith('create_case')
         if (handoff && isDev()) addMessageComponent(<Handoff />)
         updateHandoff(handoff)
       }
@@ -394,20 +394,20 @@ export const Webchat = forwardRef((props, ref) => {
       prevSession._botonic_action &&
       !webchatState.session._botonic_action
     ) {
-      let action = prevSession._botonic_action.split(':')
+      const action = prevSession._botonic_action.split(':')
       sendPayload(action[action.length - 1])
     }
   }, [webchatState.session._botonic_action])
 
   const sendText = async (text, payload) => {
     if (!text) return
-    let input = { type: 'text', data: text, payload }
+    const input = { type: 'text', data: text, payload }
     await sendInput(input)
   }
 
   const sendPayload = async payload => {
     if (!payload) return
-    let input = { type: 'postback', payload }
+    const input = { type: 'postback', payload }
     await sendInput(input)
   }
 
@@ -421,9 +421,9 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendAttachment = async attachment => {
     if (attachment.file) {
-      let attachmentType = getAttachmentType(attachment.file.type)
+      const attachmentType = getAttachmentType(attachment.file.type)
       if (!attachmentType) return
-      let input = {
+      const input = {
         type: attachmentType,
         data: await toBase64(attachment.file),
       }
@@ -443,7 +443,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  let webviewRequestContext = {
+  const webviewRequestContext = {
     getString: stringId => props.getString(stringId, webchatState.session),
     setLocale: locale => props.getString(locale, webchatState.session),
     session: webchatState.session || {},

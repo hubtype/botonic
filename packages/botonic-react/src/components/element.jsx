@@ -25,7 +25,7 @@ export const Element = props => {
 }
 
 Element.serialize = elementProps => {
-  let element = Object.assign(
+  const element = Object.assign(
     {},
     ...elementProps.children
       .filter(c => c && c.type && c.type.name != 'Button')

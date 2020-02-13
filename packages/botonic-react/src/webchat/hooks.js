@@ -48,7 +48,7 @@ export function webchatReducer(state, action) {
         messagesComponents: [...state.messagesComponents, action.payload],
       }
     case 'updateMessage':
-      let msgIndex = state.messagesJSON
+      const msgIndex = state.messagesJSON
         .map(m => m.id)
         .indexOf(action.payload.id)
       if (msgIndex > -1)
@@ -191,20 +191,20 @@ export function useWebchat() {
 export function useTyping({ webchatState, updateTyping, updateMessage }) {
   useEffect(() => {
     let delayTimeout, typingTimeout
-    let end = document.getElementById('messages-end')
+    const end = document.getElementById('messages-end')
     if (end) {
       end.scrollIntoView({ behavior: 'smooth' })
       setTimeout(() => end.scrollIntoView({ behavior: 'smooth' }), 100)
     }
     try {
-      let nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
+      const nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
       if (nextMsg.delay && nextMsg.typing) {
         delayTimeout = setTimeout(
           () => updateTyping(true),
           nextMsg.delay * 1000
         )
       } else if (nextMsg.typing) updateTyping(true)
-      let totalDelay = nextMsg.delay + nextMsg.typing
+      const totalDelay = nextMsg.delay + nextMsg.typing
       if (totalDelay)
         typingTimeout = setTimeout(() => {
           updateMessage({ ...nextMsg, display: true })

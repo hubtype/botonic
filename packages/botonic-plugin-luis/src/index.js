@@ -12,7 +12,7 @@ export default class BotonicPluginLUIS {
     let entities = []
 
     try {
-      let luis_resp = await axios({
+      const luis_resp = await axios({
         url: `https://${this.options.region}.api.cognitive.microsoft.com/luis/v2.0/apps/${this.options.appID}`,
         params: {
           'subscription-key': this.options.endpointKey,

@@ -62,28 +62,28 @@ export function getIntentName(fileName) {
 }
 
 export function loadConfigAndTrainingData(nluPath, languages) {
-  let nluConfig = readJSON(path.join(nluPath, NLU_CONFIG_FILENAME))
-  let { default: defaultConfig, ...langsConfig } = nluConfig.params
+  const nluConfig = readJSON(path.join(nluPath, NLU_CONFIG_FILENAME))
+  const { default: defaultConfig, ...langsConfig } = nluConfig.params
   return nluConfig.langs
     .filter(l => (languages ? languages.includes(l) : true))
     .map(language => {
-      let utterancesDir = path.join(nluPath, UTTERANCES_DIRNAME, language)
-      let modelsPath = path.join(nluPath, MODELS_DIRNAME, language)
-      let utterancesFiles = readDir(utterancesDir)
-      let devIntents = { intentsDict: {}, intents: [] }
-      let devEntities = { words: {}, tags: {}, tagList: [] }
-      for (let [idx, file] of utterancesFiles.entries()) {
+      const utterancesDir = path.join(nluPath, UTTERANCES_DIRNAME, language)
+      const modelsPath = path.join(nluPath, MODELS_DIRNAME, language)
+      const utterancesFiles = readDir(utterancesDir)
+      const devIntents = { intentsDict: {}, intents: [] }
+      const devEntities = { words: {}, tags: {}, tagList: [] }
+      for (const [idx, file] of utterancesFiles.entries()) {
         devIntents.intentsDict[idx] = getIntentName(file)
-        let utterances = readFile(path.join(utterancesDir, file)).split('\n')
-        for (let utterance of utterances) {
-          let { parsedUtterance, parsedEntities } = parseUtterance(utterance)
+        const utterances = readFile(path.join(utterancesDir, file)).split('\n')
+        for (const utterance of utterances) {
+          const { parsedUtterance, parsedEntities } = parseUtterance(utterance)
           devIntents.intents.push({
             rawUtterance: utterance,
             utterance: parsedUtterance,
             label: idx,
           })
-          for (let entity of parsedEntities) {
-            let { type, value } = entity
+          for (const entity of parsedEntities) {
+            const { type, value } = entity
             devEntities.words[value] = type
             devEntities.tags[type] = { isA: type }
             if (!devEntities.tagList.includes(type)) {
@@ -110,7 +110,7 @@ export async function saveConfigAndTrainingData({
   language,
   nluData,
 }) {
-  let resultsPath = path.join(modelsPath, language)
+  const resultsPath = path.join(modelsPath, language)
   if (!pathExists(modelsPath)) {
     createDir(modelsPath)
   }
@@ -128,7 +128,7 @@ export async function saveConfigAndTrainingData({
 export async function downloadFileToDisk({ url, downloadPath }) {
   try {
     const fileWriter = fs.createWriteStream(downloadPath)
-    let downloadedFile = await axios.get(url, { responseType: 'stream' })
+    const downloadedFile = await axios.get(url, { responseType: 'stream' })
     downloadedFile.data.pipe(fileWriter)
     return new Promise((resolve, reject) => {
       fileWriter.on('finish', resolve)

@@ -5,8 +5,8 @@ import { MultichannelContext } from './multichannel-context'
 import { isWhatsapp } from './multichannel-utils'
 
 export const MultichannelButton = props => {
-  let requestContext = useContext(RequestContext)
-  let multichannelContext = useContext(MultichannelContext)
+  const requestContext = useContext(RequestContext)
+  const multichannelContext = useContext(MultichannelContext)
 
   const hasUrl = () => Boolean(props.url)
 
@@ -23,7 +23,7 @@ export const MultichannelButton = props => {
 
   const getText = () => {
     let text = props.children
-    let newLine = props.newline ? '\n' : ''
+    const newLine = props.newline ? '\n' : ''
     if (hasPostback()) {
       text =
         newLine +
@@ -42,7 +42,7 @@ export const MultichannelButton = props => {
     if (hasUrl()) {
       return `${getText()}: ${getUrl()}`
     } else if (hasPath() || hasPayload()) {
-      let text = getText()
+      const text = getText()
       multichannelContext.currentIndex += 1
       return `${text}`
     } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
