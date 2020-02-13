@@ -7,6 +7,7 @@ export class RenderOptions {
   maxQuickReplies = 5
 }
 
+// TODO consider moving it to @botonic/core
 export interface BotonicMsg {
   type: 'carousel' | 'text' | 'image'
   delay?: number
@@ -50,7 +51,10 @@ export class BotonicMsgConverter {
       style == ButtonStyle.BUTTON
         ? this.options.maxButtons
         : this.options.maxQuickReplies
-    cmsButtons = cmsButtons.slice(0, maxButtons)
+    if (cmsButtons.length > maxButtons) {
+      console.error('Content has more buttons than maximum. Trimming')
+      cmsButtons = cmsButtons.slice(0, maxButtons)
+    }
     return cmsButtons.map(cmsButton => {
       const msgButton = {
         payload: cmsButton.callback.payload,

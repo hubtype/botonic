@@ -33,7 +33,8 @@ class App extends React.Component {
         const baseUrl = s._hubtype_api || 'https://api.hubtype.com'
         const resp = await axios({
           method: 'post',
-          url: `${base_url}/v1/bots/${s.bot.id}/send_postback/`,
+          url: `${baseUrl}/v1/bots/${s.bot.id}/send_postback/`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
           data: { payload: payload, chat_id: s.user.id },
         })
       } catch (e) {
@@ -45,7 +46,7 @@ class App extends React.Component {
     } else {
       try {
         window.WebviewSdk.close(
-          () => {},
+          () => undefined,
           err => console.log(err)
         )
       } catch (e) {}

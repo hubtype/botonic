@@ -4,6 +4,7 @@ import { Context } from './context'
 import { TopContent } from './contents'
 
 export class Callback {
+  // TODO add path
   /**
    * @param payload may contain the reference of a {@link Content}. See {@link ContentCallback}
    * @param url for hardcoded URLs (otherwise, use a {@link Url})
