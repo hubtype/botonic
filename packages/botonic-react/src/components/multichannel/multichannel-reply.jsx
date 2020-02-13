@@ -4,7 +4,7 @@ import { Reply } from '../reply'
 import { isWhatsapp } from './multichannel-utils'
 
 export const MultichannelReply = props => {
-  let requestContext = useContext(RequestContext)
+  const requestContext = useContext(RequestContext)
   const hasPath = () => Boolean(props.path)
   const hasPayload = () => Boolean(props.payload)
   const getText = () => `${props.children}`

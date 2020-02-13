@@ -16,7 +16,7 @@ async function downloadWordEmbeddingsFile(
 ) {
   console.log(colors.blue(`Downloading '${wordEmbeddingsFileName}'...`))
   console.log(`Please, wait until the download finishes.\n`)
-  let downloadPath = path.join(wordEmbeddingsPath, wordEmbeddingsFileName)
+  const downloadPath = path.join(wordEmbeddingsPath, wordEmbeddingsFileName)
   await downloadFileToDisk({
     url: `${WORD_EMBEDDDINGS_ENDPOINT}/${wordEmbeddingsFileName}`,
     downloadPath,
@@ -28,13 +28,13 @@ export async function getEmbeddingMatrix({
   vocabularyLength,
   params,
 }) {
-  let wordEmbeddingsFileName = `${params.EMBEDDING}-${params.EMBEDDING_DIM}d-${params.language}.db`
-  let wordEmbeddingsPath = path.join(
+  const wordEmbeddingsFileName = `${params.EMBEDDING}-${params.EMBEDDING_DIM}d-${params.language}.db`
+  const wordEmbeddingsPath = path.join(
     os.homedir(),
     GLOBAL_CONFIG_DIRNAME,
     WORD_EMBEDDINGS_DIRNAME
   )
-  let wordEmbeddingsFilePath = path.join(
+  const wordEmbeddingsFilePath = path.join(
     wordEmbeddingsPath,
     wordEmbeddingsFileName
   )
@@ -50,7 +50,7 @@ export async function getEmbeddingMatrix({
     }
     await downloadWordEmbeddingsFile(wordEmbeddingsPath, wordEmbeddingsFileName)
   }
-  let embeddingMatrix = await generateEmbeddingMatrix({
+  const embeddingMatrix = await generateEmbeddingMatrix({
     dim1: vocabularyLength,
     dim2: params.EMBEDDING_DIM,
     vocabulary,
@@ -75,9 +75,9 @@ export async function generateEmbeddingMatrix({
 }
 
 function createEmbeddingMatrix(dim1, dim2) {
-  let min = -1
-  let max = 1
-  let matrix = []
+  const min = -1
+  const max = 1
+  const matrix = []
   for (let i = 0; i < dim1; i++) {
     matrix[i] = new Array(dim2)
     for (let j = 0; j < dim2; j++) {
@@ -93,7 +93,7 @@ async function fillEmbeddingMatrix(
   wordEmbeddingsFilePath
 ) {
   let out_of_embedding = 0
-  let db = await Database.open(wordEmbeddingsFilePath)
+  const db = await Database.open(wordEmbeddingsFilePath)
   for (const [word, index] of Object.entries(vocabulary)) {
     if (index == 0) {
       continue // SKIP UNK TOKEN

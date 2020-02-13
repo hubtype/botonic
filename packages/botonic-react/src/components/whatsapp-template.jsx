@@ -4,8 +4,8 @@ import { isBrowser, isNode } from '@botonic/core'
 
 export const WhatsappTemplate = props => {
   const renderBrowser = () => {
-    var params = ''
-    for (var param in props.parameters) {
+    let params = ''
+    for (const param in props.parameters) {
       params = params + " '" + props.parameters[param] + "', "
     }
     // Return a dummy message for browser
@@ -18,8 +18,8 @@ export const WhatsappTemplate = props => {
   }
 
   const renderNode = () => {
-    var params = ''
-    for (var param in props.parameters) {
+    let params = ''
+    for (const param in props.parameters) {
       params = params + ', ' + props.parameters[param]
     }
     return (

@@ -53,7 +53,7 @@ export class CoreBot {
       await runPlugins(this.plugins, 'pre', input, session, lastRoutePath)
     } else if (this.integrations && input.type == 'text') {
       try {
-        let nlu = await getNLU(input, this.integrations)
+        const nlu = await getNLU(input, this.integrations)
         Object.assign(input, nlu)
       } catch (e) {}
     }
@@ -65,9 +65,9 @@ export class CoreBot {
       ])
     }
 
-    let output = this.router.processInput(input, session, lastRoutePath)
+    const output = this.router.processInput(input, session, lastRoutePath)
 
-    let request = {
+    const request = {
       getString: stringId => this.getString(stringId, session),
       setLocale: locale => this.setLocale(locale, session),
       session: session || {},
@@ -79,9 +79,9 @@ export class CoreBot {
       lastRoutePath,
     }
 
-    let actions = [output.action, output.retryAction, output.defaultAction]
+    const actions = [output.action, output.retryAction, output.defaultAction]
 
-    let response = await this.renderer({ request, actions })
+    const response = await this.renderer({ request, actions })
 
     lastRoutePath = output.lastRoutePath
 

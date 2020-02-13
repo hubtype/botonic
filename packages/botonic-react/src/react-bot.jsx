@@ -18,10 +18,10 @@ export class ReactBot extends CoreBot {
   }
 
   async renderReactActions({ request, actions }) {
-    let renderedActions = []
+    const renderedActions = []
     let props
     let renderedAction
-    for (let Action of actions) {
+    for (const Action of actions) {
       if (Action) {
         props = Action.botonicInit ? await Action.botonicInit(request) : {}
         renderedAction = (

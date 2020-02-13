@@ -78,7 +78,7 @@ export class DevApp extends WebchatApp {
 
   async onUserInput({ input, session, lastRoutePath }) {
     this.onMessage && this.onMessage(this, { from: 'user', message: input })
-    let resp = await this.bot.input({ input, session, lastRoutePath })
+    const resp = await this.bot.input({ input, session, lastRoutePath })
     this.onMessage &&
       resp.response.map(r => this.onMessage(this, { from: 'bot', message: r }))
     this.webchatRef.current.addBotResponse(resp)

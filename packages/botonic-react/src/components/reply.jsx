@@ -25,7 +25,7 @@ export const Reply = props => {
   }
 
   const renderBrowser = () => {
-    let replyStyle = getThemeProperty('reply.style')
+    const replyStyle = getThemeProperty('reply.style')
     const CustomReply = getThemeProperty('reply.custom')
     if (CustomReply) {
       return (
@@ -54,7 +54,7 @@ export const Reply = props => {
 
   const renderNode = () => {
     if (props.path) {
-      let payload = `__PATH_PAYLOAD__${props.path}`
+      const payload = `__PATH_PAYLOAD__${props.path}`
       return <reply payload={payload}>{props.children}</reply>
     }
     return <reply payload={props.payload}>{props.children}</reply>

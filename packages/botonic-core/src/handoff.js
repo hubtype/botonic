@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 export async function getOpenQueues(session) {
-  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
   const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
-  let resp = await axios({
+  const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
@@ -89,7 +89,7 @@ async function _humanHandOff(
   caseInfo = '',
   note = ''
 ) {
-  let params = {}
+  const params = {}
   if (!queueNameOrId && agentEmail) {
     throw 'You must provide a queue ID'
   }
@@ -113,9 +113,9 @@ async function _humanHandOff(
 }
 
 export async function storeCaseRating(session, rating) {
-  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
-  let chatId = session.user.id
-  let resp = await axios({
+  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const chatId = session.user.id
+  const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
@@ -127,8 +127,8 @@ export async function storeCaseRating(session, rating) {
 }
 
 export async function getAvailableAgentsByQueue(session, queueId) {
-  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
-  let resp = await axios({
+  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
@@ -140,9 +140,9 @@ export async function getAvailableAgentsByQueue(session, queueId) {
 }
 
 export async function getAvailableAgents(session) {
-  let baseUrl = session._hubtype_api || 'https://api.hubtype.com'
-  let botId = session.bot.id
-  let resp = await axios({
+  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const botId = session.bot.id
+  const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },

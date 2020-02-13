@@ -15,9 +15,9 @@ export class NLU {
       this.env = await resolveEnv()
       this.languages = []
       this.models = {}
-      for (let language of languages) {
+      for (const language of languages) {
         this.languages.push(language)
-        let { nluData, model } = loadOption(language, this.env)
+        const { nluData, model } = loadOption(language, this.env)
         this.models[language] = {
           language,
           model,
@@ -28,9 +28,9 @@ export class NLU {
         ...Object.values(this.models).map(nlu => nlu.model),
         ...Object.values(this.models).map(nlu => nlu.nluData),
       ])
-      for (let [language, res] of Object.entries(this.models)) {
-        let nluData = await res.nluData
-        let { intentsDict, maxSeqLength, vocabulary, devEntities } =
+      for (const [language, res] of Object.entries(this.models)) {
+        const nluData = await res.nluData
+        const { intentsDict, maxSeqLength, vocabulary, devEntities } =
           this.env.mode === 'node' ? nluData : nluData.data
         this.models[language] = {
           nluData: {
@@ -48,11 +48,11 @@ export class NLU {
   }
 
   predict(input) {
-    let language = detectLang(input, this.languages)
-    let { model, nluData } = this.models[language]
-    let prediction = getPrediction(input, model, nluData)
-    let intent = getIntent(prediction, nluData.intentsDict, language)
-    let entities = { entities: getEntities(input, nluData.devEntities) }
+    const language = detectLang(input, this.languages)
+    const { model, nluData } = this.models[language]
+    const prediction = getPrediction(input, model, nluData)
+    const intent = getIntent(prediction, nluData.intentsDict, language)
+    const entities = { entities: getEntities(input, nluData.devEntities) }
     return { intent, entities }
   }
 }

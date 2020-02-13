@@ -74,8 +74,8 @@ export const Message = props => {
   )
   if (isBrowser()) {
     useEffect(() => {
-      let decomposedChildren = json
-      let message = {
+      const decomposedChildren = json
+      const message = {
         id: state.id,
         type,
         data: decomposedChildren ? decomposedChildren : textChildren,
@@ -101,7 +101,7 @@ export const Message = props => {
     }, [])
 
     useEffect(() => {
-      let msg = webchatState.messagesJSON.find(m => m.id === state.id)
+      const msg = webchatState.messagesJSON.find(m => m.id === state.id)
       if (
         msg &&
         msg.display &&
@@ -129,10 +129,10 @@ export const Message = props => {
   const getBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
 
   const renderBrowser = () => {
-    let m = webchatState.messagesJSON.find(m => m.id === state.id)
+    const m = webchatState.messagesJSON.find(m => m.id === state.id)
     if (!m || !m.display) return <></>
-    let pointerSize = 6
-    let pointerStyles = {
+    const pointerSize = 6
+    const pointerStyles = {
       position: 'absolute',
       top: '50%',
       width: 0,
@@ -215,7 +215,7 @@ export const Message = props => {
     )
   }
 
-  let { blob: _blob, json: _json, ...nodeProps } = props
+  const { blob: _blob, json: _json, ...nodeProps } = props
   const renderNode = () =>
     type === 'custom' ? (
       <message

@@ -28,13 +28,13 @@ export function printPrettyConfig(params) {
   console.log(`\n\nTRAINING MODEL FOR ${params.language}`)
   console.log('\nRUNNING WITH CONFIGURATION:')
   let maxKeyLength = 0
-  for (let key in params) {
+  for (const key in params) {
     if (key.length > maxKeyLength) {
       maxKeyLength = key.length
     }
   }
-  for (let key in params) {
-    let param = key + Array(maxKeyLength + 1 - key.length).join(' ')
+  for (const key in params) {
+    const param = key + Array(maxKeyLength + 1 - key.length).join(' ')
     console.log(`   ${param} = ${params[key]}`)
   }
   console.log('\n')

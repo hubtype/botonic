@@ -2,7 +2,7 @@ import axios from 'axios'
 //import { AssistantV1 } from 'watson-developer-cloud/assistant/v1'
 
 export async function getNLU(input, integrations) {
-  let df_session_id = Math.random()
+  const df_session_id = Math.random()
   let intent = null
   let confidence = 0
   let intents = []
@@ -10,7 +10,7 @@ export async function getNLU(input, integrations) {
   if (!integrations) return { intent, confidence, intents, entities }
   if (integrations.dialogflow) {
     try {
-      let dialogflow_resp = await axios({
+      const dialogflow_resp = await axios({
         headers: {
           Authorization: 'Bearer ' + integrations.dialogflow.token,
         },
@@ -47,9 +47,9 @@ export async function getNLU(input, integrations) {
       entities = res.entities
     } catch (e) {}*/
   } else if (integrations.luis) {
-    let luis = integrations.luis
+    const luis = integrations.luis
     try {
-      let luis_resp = await axios({
+      const luis_resp = await axios({
         url: `https://${luis.region}.api.cognitive.microsoft.com/luis/v2.0/apps/${luis.appID}`,
         params: {
           'subscription-key': luis.endpointKey,

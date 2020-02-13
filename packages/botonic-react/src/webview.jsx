@@ -10,14 +10,14 @@ import { RequestContext } from './contexts'
 class App extends React.Component {
   constructor(props) {
     super(props)
-    let url = new URL(window.location.href)
-    let params = Array.from(url.searchParams.entries())
+    const url = new URL(window.location.href)
+    const params = Array.from(url.searchParams.entries())
       .filter(([key, value]) => key != 'context')
       .reduce((o, [key, value]) => {
         o[key] = value
         return o
       }, {})
-    let session = JSON.parse(url.searchParams.get('context') || {})
+    const session = JSON.parse(url.searchParams.get('context') || {})
     this.state = { session, params }
   }
 
@@ -28,10 +28,10 @@ class App extends React.Component {
       if (options.params) {
         payload = `${payload}?${params2queryString(options.params)}`
       }
-      let s = this.state.session
+      const s = this.state.session
       try {
-        let base_url = s._hubtype_api || 'https://api.hubtype.com'
-        let resp = await axios({
+        const baseUrl = s._hubtype_api || 'https://api.hubtype.com'
+        const resp = await axios({
           method: 'post',
           url: `${base_url}/v1/bots/${s.bot.id}/send_postback/`,
           data: { payload: payload, chat_id: s.user.id },
@@ -56,7 +56,7 @@ class App extends React.Component {
   }
 
   render() {
-    let requestContext = {
+    const requestContext = {
       getString: stringId =>
         getString(this.props.locales, this.state.session.__locale, stringId),
       session: this.state.session || {},

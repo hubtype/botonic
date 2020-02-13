@@ -55,18 +55,18 @@ export class BotonicNLU {
     } catch (e) {
       console.log(e)
     }
-    for (let config of this.configsByLang) {
+    for (const config of this.configsByLang) {
       let { devIntents, devEntities, ...params } = config
       params = { ...DEFAULT_HYPERPARAMETERS, ...params }
       printPrettyConfig(params)
-      let start = new Date()
-      let {
+      const start = new Date()
+      const {
         tensorData,
         tensorLabels,
         vocabulary,
         vocabularyLength,
       } = preprocessData(devIntents, params)
-      let embeddingMatrix = await getEmbeddingMatrix({
+      const embeddingMatrix = await getEmbeddingMatrix({
         vocabulary,
         vocabularyLength,
         params,
@@ -93,9 +93,9 @@ export class BotonicNLU {
           validationSplit: params.VALIDATION_SPLIT,
         }
       )
-      let end = new Date() - start
+      const end = new Date() - start
       console.log(`\nTOTAL TRAINING TIME: ${end}ms`)
-      let nluData = {
+      const nluData = {
         maxSeqLength: params.MAX_SEQ_LENGTH,
         vocabulary,
         intentsDict: devIntents.intentsDict,
@@ -112,9 +112,9 @@ export class BotonicNLU {
   }
 
   async loadModels({ modelsPath }) {
-    let models = {}
+    const models = {}
     models.languages = readDir(modelsPath)
-    for (let language of models.languages) {
+    for (const language of models.languages) {
       models[language] = {}
       models[language].nluData = readJSON(
         path.join(modelsPath, language, NLU_DATA_FILENAME)
@@ -126,11 +126,11 @@ export class BotonicNLU {
     return models
   }
   predict(models, input) {
-    let language = detectLang(input, models.languages)
-    let { model, nluData } = models[language]
-    let prediction = getPrediction(input, model, nluData)
-    let intent = getIntent(prediction, nluData.intentsDict, language)
-    let entities = getEntities(input, nluData.devEntities)
+    const language = detectLang(input, models.languages)
+    const { model, nluData } = models[language]
+    const prediction = getPrediction(input, model, nluData)
+    const intent = getIntent(prediction, nluData.intentsDict, language)
+    const entities = getEntities(input, nluData.devEntities)
     return { intent, entities }
   }
   // static async interactive({ modelsPath, languages }) {
@@ -158,7 +158,7 @@ function embeddingLSTMModel({
   params,
   outputDim,
 }) {
-  let model = tf.sequential()
+  const model = tf.sequential()
   model.add(
     tf.layers.embedding({
       inputDim: vocabularyLength,
