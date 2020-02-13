@@ -135,7 +135,7 @@ export class BotonicAPIService {
     return hash.hash
   }
 
-  async build(npmCommand: string = 'build') {
+  async build(npmCommand = 'build') {
     const spinner = ora({
       text: 'Building...',
       spinner: 'bouncingBar',
