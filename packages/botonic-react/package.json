@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.10.1",
+  "version": "0.11.0-alpha.0",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@botonic/core": "^0.10.1",
+    "@botonic/core": "0.11.0-alpha.0",
     "@rehooks/local-storage": "^2.1.1",
     "axios": "^0.19.2",
     "emoji-picker-react": "^2.1.1",
