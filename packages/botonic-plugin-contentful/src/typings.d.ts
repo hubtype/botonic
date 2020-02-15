@@ -1,5 +1,5 @@
 declare module '@nlpjs/similarity/src' {
-  function leven(left: string, right: string): number
+  export function leven(left: string, right: string): number
 }
 
 declare module '@nlpjs/ner/src' {

@@ -1,6 +1,7 @@
 import * as time from '../time'
 import { Callback } from './callback'
 import { SearchableBy } from './fields'
+import { shallowClone } from '../util/objects'
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -45,6 +46,13 @@ export abstract class Content {
 export abstract class TopContent extends Content {
   protected constructor(readonly common: CommonFields) {
     super()
+  }
+
+  cloneWithFollowUp(newFollowUp: FollowUp): TopContent {
+    const clone = shallowClone(this)
+    ;(clone as any).common = shallowClone(clone.common)
+    ;(clone as any).common.followUp = newFollowUp
+    return clone
   }
 }
 
@@ -175,22 +183,15 @@ export class Text extends TopContent {
   }
 
   cloneWithButtons(buttons: Button[]): Text {
-    const clone = Object.create(this)
-    clone.buttons = buttons
+    const clone = shallowClone(this)
+    ;(clone as any).buttons = buttons
     return clone as Text
   }
 
   cloneWithText(newText: string): Text {
-    const clone = Object.create(this)
-    clone.text = newText
-    return clone as Text
-  }
-
-  cloneWithFollowUp(newFollowUp: FollowUp): Text {
-    const clone = Object.create(this)
-    clone.common = Object.create(clone.common)
-    clone.common.followUp = newFollowUp
-    return clone as Text
+    const clone = shallowClone(this)
+    ;(clone as any).text = newText
+    return clone
   }
 }
 

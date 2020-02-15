@@ -45,6 +45,7 @@ export class ButtonDelivery {
     }
   }
 
+  // TODO move to a new CmsUtils.buttonToCallback(cms.ContentCallback)?
   private static fromContent(
     entry: contentful.Entry<CommonEntryFields>
   ): cms.Button {
