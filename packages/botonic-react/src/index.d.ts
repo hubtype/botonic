@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as core from '@botonic/core'
-import { MessageType } from './components'
+
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/
 export interface BotResponse extends core.BotRequest {
