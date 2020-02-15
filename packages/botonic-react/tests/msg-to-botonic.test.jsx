@@ -1,5 +1,5 @@
 import React from 'react'
-import { BotonicDecorator, msgsToBotonic } from '../src/msg-to-botonic'
+import { msgsToBotonic } from '../src/msg-to-botonic'
 import { Text, Carousel, Reply, Button, Element, Pic, Subtitle, Title } from '../src'
 
 describe('msgsToBotonic carousel', () => {
@@ -78,7 +78,7 @@ describe('msgsToBotonic text', () => {
         },
       ],
     }
-    
+
     expect(msgsToBotonic(msg)).toEqual(
       <Text {...msg}>
         The verbose text
@@ -131,7 +131,6 @@ describe('msgsToBotonic text', () => {
         },
       ],
     }
-    const decorator = new BotonicDecorator()
     const swapChildren = (txt, key) => (
       <Text {...txt.props} key={key}>
         {txt.props.children[1]}
