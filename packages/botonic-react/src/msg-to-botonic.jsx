@@ -14,49 +14,13 @@ import { Location } from './components/location'
 import { Reply } from './components/reply'
 
 /**
- * Decorates the ReactNode's created by msgToBotonic
- */
-export class BotonicDecorator {
-  constructor() {
-    this.decorators = {}
-  }
-
-  /**
-   * @param type {MessageType}
-   * @param decorator {function}
-   * @return {void}
-   */
-  addDecorator(type, decorator) {
-    this.decorators[type] = decorator
-  }
-
-  /**
-   * @param type {MessageType}
-   * @param component {React.Component}
-   * @param key {String|undeifned}
-   * @return {ReactNode}
-   */
-  decorate(type, component, key) {
-    const decorator = this.decorators[type]
-    if (!decorator) {
-      return component
-    }
-    // https://reactjs.org/warnings/special-props.html
-    return decorator(component, key)
-  }
-}
-
-/**
  *
  * @param msg {object}
  * @param customMessageTypes {{customTypeName}[]?}
- * @param decorator {BotonicDecorator?}
  * @return {React.ReactNode}
  */
-export function msgToBotonic(msg, customMessageTypes, decorator) {
+export function msgToBotonic(msg, customMessageTypes) {
   delete msg.display
-  const decorate = (type, node) =>
-    decorator ? decorator.decorate(type, node, msg.key) : node
   if (msg.type === 'custom') {
     try {
       return customMessageTypes
@@ -66,77 +30,68 @@ export function msgToBotonic(msg, customMessageTypes, decorator) {
       console.log(e)
     }
   } else if (msg.type === 'text') {
-    let txt = msg.data.text != undefined ? msg.data.text : String(msg.data)
+    const txt = msg.data.text != undefined ? msg.data.text : String(msg.data)
     if (
       (msg.replies && msg.replies.length) ||
       (msg.keyboard && msg.keyboard.length)
     )
-      return decorate(
-        'text',
+      return (
         <Text {...msg}>
           {txt}
-          {quickreplies_parse(msg)}
+          {quickrepliesParse(msg)}
         </Text>
       )
     if (msg.buttons && msg.buttons.length)
-      return decorate(
-        'text',
+      return (
         <Text {...msg}>
           {txt}
-          {buttons_parse(msg.buttons)}
+          {buttonsParse(msg.buttons)}
         </Text>
       )
-    return decorate('text', <Text {...msg}>{txt}</Text>)
+    return <Text {...msg}>{txt}</Text>
   } else if (msg.type === 'carousel') {
-    let elements = msg.elements || msg.data.elements
-    return decorate(
-      'carousel',
-      <Carousel {...msg}>{elements_parse(elements)}</Carousel>
-    )
+    const elements = msg.elements || msg.data.elements
+    return <Carousel {...msg}>{elementsParse(elements)}</Carousel>
   } else if (msg.type === 'image') {
-    return
-    return decorate(
-      'image',
+    return (
       <Image
         {...msg}
         src={msg.data.image != undefined ? msg.data.image : msg.data}
       />
     )
   } else if (msg.type === 'video') {
-    return decorate(
-      'video',
+    return (
       <Video
         {...msg}
         src={msg.data.video != undefined ? msg.data.video : msg.data}
       />
     )
   } else if (msg.type === 'audio') {
-    return decorate(
-        'audio',<Audio
+    return (
+      <Audio
         {...msg}
         src={msg.data.audio != undefined ? msg.data.audio : msg.data}
       />
     )
   } else if (msg.type === 'document') {
-    return decorate('document',
+    return (
       <Document
         {...msg}
         src={msg.data.document != undefined ? msg.data.document : msg.data}
       />
     )
   } else if (msg.type === 'location') {
-    let lat = msg.data ? msg.data.location.lat : msg.latitude
-    let long = msg.data ? msg.data.location.long : msg.longitude
+    const lat = msg.data ? msg.data.location.lat : msg.latitude
+    const long = msg.data ? msg.data.location.long : msg.longitude
     return <Location {...msg} lat={lat} long={long} />
   } else if (msg.type === 'buttonmessage') {
-    let buttons = buttons_parse(msg.buttons)
+    const buttons = buttonsParse(msg.buttons)
     return (
       <>
-        decorate('text', <Text {...msg}>
+        <Text {...msg}>
           {msg.text}
           {buttons}
         </Text>
-        )
       </>
     )
   }
@@ -145,10 +100,9 @@ export function msgToBotonic(msg, customMessageTypes, decorator) {
 /**
  * @param msgs {object|object[]}
  * @param customMessageTypes {{customTypeName}[]?}
- * @param decorator { BotonicDecorator?}
  * @return {React.ReactNode}
  */
-export function msgsToBotonic(msgs, customMessageTypes, decorator) {
+export function msgsToBotonic(msgs, customMessageTypes) {
   if (Array.isArray(msgs)) {
     return (
       <>
@@ -164,25 +118,25 @@ export function msgsToBotonic(msgs, customMessageTypes, decorator) {
   return msgToBotonic(msgs, customMessageTypes, decorator)
 }
 
-function elements_parse(elements) {
+function elementsParse(elements) {
   return elements.map((e, i) => (
     <Element key={i}>
       <Pic src={e.img || e.pic || e.image_url} />
       <Title>{e.title}</Title>
       <Subtitle>{e.subtitle}</Subtitle>
-      {buttons_parse(e.button || e.buttons)}
+      {buttonsParse(e.button || e.buttons)}
     </Element>
   ))
 }
 
-function buttons_parse(buttons) {
+function buttonsParse(buttons) {
   return buttons.map((b, i) => {
-    let props = b.props || b
+    const props = b.props || b
     let payload = props.payload
     if (props.path) payload = `__PATH_PAYLOAD__${props.path}`
-    let url = props.messenger_extensions ? null : props.url
-    let title = props.title
-    let webview = props.messenger_extensions ? props.url : props.webview
+    const url = props.messenger_extensions ? null : props.url
+    const title = props.title
+    const webview = props.messenger_extensions ? props.url : props.webview
     return (
       <Button key={i} payload={payload} url={url} webview={webview}>
         {title}
@@ -191,7 +145,7 @@ function buttons_parse(buttons) {
   })
 }
 
-function quickreplies_parse(msg) {
+function quickrepliesParse(msg) {
   let replies = null
   if (msg.replies) {
     replies = msg.replies.map((el, i) => {

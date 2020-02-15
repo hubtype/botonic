@@ -109,11 +109,5 @@ export interface CustomMessageType {
   customTypeName: string
 }
 
-export class BotonicDecorator {
-  addDecorator(type: MessageType, decorator: (node: React.ReactNode) => React.ReactNode)
-  decorate(type: MessageType, node: ReactNode): React.ReactNode
-}
-
-
-export function msgToBotonic(msg: any, customMessageTypes?: CustomMessageType[] , decorator?:  BotonicDecorator): React.ReactNode
-export function msgsToBotonic(msgs: any | any[], customMessageTypes?: CustomMessageType[] , decorator?:  BotonicDecorator): React.ReactNode
+export function msgToBotonic(msg: any, customMessageTypes?: CustomMessageType[]): React.ReactNode
+export function msgsToBotonic(msgs: any | any[], customMessageTypes?: CustomMessageType[]): React.ReactNode
