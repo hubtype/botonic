@@ -43,7 +43,7 @@ export const WebchatMessageList = props => {
   return (
     <StyledScrollbar
       scrollbar={scrollbarOptions}
-      data-simplebar-auto-hide={scrollbarOptions.autoHide}
+      autoHide={scrollbarOptions.autoHide}
       ismessagescontainer='true'
       style={{
         ...props.style,
