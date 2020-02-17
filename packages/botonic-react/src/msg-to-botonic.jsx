@@ -68,7 +68,6 @@ export function msgToBotonic(msg, customMessageTypes) {
     )
   } else if (msg.type === 'audio') {
     return (
-
       <Audio
         {...msg}
         src={msg.data.audio != undefined ? msg.data.audio : msg.data}

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
-    "lint": "npm run lint_core -- --fix",
+    "lint": "npm run lint_ci -- --fix",
     "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js*'",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files"
   },
