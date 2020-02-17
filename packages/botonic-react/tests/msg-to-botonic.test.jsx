@@ -81,7 +81,6 @@ describe('msgsToBotonic text', () => {
         text: 'The verbose text',
       },
       buttons: [
-
         {
           payload: 'payload1',
           title: 'button text',

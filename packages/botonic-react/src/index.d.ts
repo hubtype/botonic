@@ -61,12 +61,12 @@ export interface CustomMessageType {
 
 export function msgToBotonic(
   msg: any,
-  customMessageTypes?: CustomMessageType[],
+  customMessageTypes?: CustomMessageType[]
 ): React.ReactNode
 
 export function msgsToBotonic(
   msgs: any | any[],
-  customMessageTypes?: CustomMessageType[],
+  customMessageTypes?: CustomMessageType[]
 ): React.ReactNode
 
 export * from './components'

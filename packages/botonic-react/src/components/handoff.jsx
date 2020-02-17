@@ -44,7 +44,9 @@ export const Handoff = props => {
   const bgColor = state.showContinue
     ? COLORS.FRINGY_FLOWER_GREEN
     : COLORS.TASMAN_GRAY
-  const fontColor = state.showContinue ? COLORS.APPLE_GREEN : COLORS.CACTUS_GREEN
+  const fontColor = state.showContinue
+    ? COLORS.APPLE_GREEN
+    : COLORS.CACTUS_GREEN
   return (
     <Container
       style={{
