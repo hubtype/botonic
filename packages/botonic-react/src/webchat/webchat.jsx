@@ -651,6 +651,7 @@ export const Webchat = forwardRef((props, ref) => {
           height={webchatState.height}
           style={{
             ...webchatState.theme.style,
+            ...mobileStyle,
           }}
         >
           <StyledWebchatHeader
