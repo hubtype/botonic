@@ -21,17 +21,22 @@ export const MultichannelButton = props => {
   const getUrl = () => props.url
   const getWebview = () => props.webview
 
+  const formatIndex = index => {
+    const boldIndex =
+      multichannelContext.boldIndex == null
+        ? false
+        : multichannelContext.boldIndex
+    return boldIndex ? `*${index}*` : index
+  }
+
   const getText = () => {
     let text = props.children
     const newLine = props.newline ? '\n' : ''
+    const index = multichannelContext.currentIndex
+      ? `${formatIndex(multichannelContext.currentIndex + '.')} `
+      : ''
     if (hasPostback()) {
-      text =
-        newLine +
-        `${
-          multichannelContext.currentIndex
-            ? `${multichannelContext.currentIndex}. `
-            : ''
-        }${text}`
+      text = newLine + `${index}${text}`
     } else if (hasUrl()) {
       text = newLine + `- ${text}`
     }

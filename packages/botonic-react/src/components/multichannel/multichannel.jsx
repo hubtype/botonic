@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { isWhatsapp } from './multichannel-utils'
 import { deepMap } from 'react-children-utilities'
@@ -47,7 +47,8 @@ export const Multichannel = props => {
     return (
       <MultichannelContext.Provider
         value={{
-          currentIndex: 1,
+          currentIndex: props.firstIndex == undefined ? 1 : props.firstIndex,
+          boldIndex: props.boldIndex,
         }}
       >
         {newChildren}
