@@ -49,12 +49,14 @@ export const WebchatMessageList = props => {
         ...props.style,
       }}
     >
-      <ConditionalWrapper
-        condition={animationsEnabled}
-        wrapper={children => <Fade>{children}</Fade>}
-      >
-        {CustomIntro ? <CustomIntro /> : DefaultIntro}
-      </ConditionalWrapper>
+      {(CustomIntro || DefaultIntro) && (
+        <ConditionalWrapper
+          condition={animationsEnabled}
+          wrapper={children => <Fade>{children}</Fade>}
+        >
+          {CustomIntro ? <CustomIntro /> : DefaultIntro}
+        </ConditionalWrapper>
+      )}
       {webchatState.messagesComponents.map((e, i) => (
         <StyledMessages key={i}>{e}</StyledMessages>
       ))}
