@@ -1,32 +1,32 @@
 name: Botonic cli tests
- 
+
 on: [push]
- 
+
 jobs:
   botonic-cli-tests:
     name: Botonic cli tests
     runs-on: ubuntu-latest
+    env:
+      PACKAGE: botonic-cli
     steps:
-    - name: Checking out to current branch (Step 1 of 7)
+    - name: Checking out to current branch
       uses: actions/checkout@v1
-    - name: Setting up node (Step 2 of 7)
+    - name: Setting up node
       uses: actions/setup-node@v1
       with:
         node-version: '12'
-    - name: Setting up cache (Step 3 of 7)
+    - name: Setting up cache
       uses: actions/cache@v1
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Install botonic-cli (Step 4 of 7)
-      env: 
+    - name: Install dev dependencies
+      env:
         BOTONIC_DISABLE_MIXPANEL: 1
-      run: (cd ./packages/botonic-cli && npm install -D)
-    - name: Build botonic-cli (Step 5 of 7)
-      run: (cd ./packages/botonic-cli && npm run build)
-    - name: Install common packages dependencies (Step 6 of 7)
-      run: npm install -D
-    - name: Verify lint botonic-cli (Step 7 of 7)
-      run: (cd ./packages/botonic-cli && npm run lint_ci)
+      run: (cd ./packages/$PACKAGE && npm install -D)
+    - name: Build
+      run: (cd ./packages/$PACKAGE && npm run build)
+    - name: Verify lint
+      run: (cd ./packages/$PACKAGE && npm run lint_ci)
