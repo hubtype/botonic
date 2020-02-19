@@ -2,11 +2,11 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "build_with_tests": "tsc -b tests/tsconfig.json",
-    "test": "jest",
+    "test": "../../node_modules/.bin/jest",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
-    "lint_core": "node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
-    "prepare": "npm run build",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
+    "prepare": "node ../../preinstall.js",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
@@ -32,27 +32,11 @@
     "node-nlp": "^4.0.2"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.0",
-    "@types/jest-each": "^24.3.0",
     "@types/memoizee": "^0.4.3",
     "@types/moment-timezone": "^0.5.12",
-    "@types/node": "^13.1.6",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^5.1.0",
-    "eslint-plugin-filenames": "^1.3.2",
-    "eslint-plugin-jest": "^23.1.1",
-    "eslint-plugin-no-null": "^1.0.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint_d": "^8.0.0",
+    "@types/node": "^13.7.2",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^25.1.0",
-    "jest-extended": "^0.11.4",
-    "prettier": "^1.19.1",
-    "ts-jest": "^25.0.0",
-    "ts-mockito": "^2.5.0",
-    "typescript": "^3.7.5"
+    "jest-extended": "^0.11.4"
   },
   "engines": {
     "node": ">=12.0.0"

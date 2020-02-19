@@ -66,9 +66,7 @@ export default class BotonicPluginContentful {
     }
   }
 
-  // @ts-ignore
-  pre({ input, session, lastRoutePath }) {}
+  pre(r: { input: any; session: any; lastRoutePath: any }) {}
 
-  // @ts-ignore
-  post({ input, session, lastRoutePath, response }) {}
+  post(r: { input: any; session: any; lastRoutePath: any; response: any }) {}
 }
