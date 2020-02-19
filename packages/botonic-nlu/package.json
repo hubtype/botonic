@@ -6,7 +6,7 @@
     "build": "rm -rf lib && babel src -d lib",
     "test": "jest",
     "prepare": "node ../../preinstall.js",
-    "lint": "npm run lint_core -- --fix",
+    "lint": "npm run lint_ci -- --fix",
     "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js*'"
   },
   "jest": {
