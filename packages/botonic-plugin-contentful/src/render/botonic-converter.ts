@@ -26,8 +26,7 @@ export interface BotonicText extends BotonicMsg {
 export class BotonicMsgConverter {
   constructor(readonly options = new RenderOptions()) {}
 
-  carousel(carousel: cms.Carousel, delayS: number = 0): BotonicMsgs {
-    // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
+  carousel(carousel: cms.Carousel, delayS = 0): BotonicMsgs {
     return {
       type: 'carousel',
       delay: delayS,
@@ -69,7 +68,7 @@ export class BotonicMsgConverter {
     })
   }
 
-  text(text: cms.Text, delayS: number = 0): BotonicMsgs {
+  text(text: cms.Text, delayS = 0): BotonicMsgs {
     const msg: any = {
       type: 'text',
       delay: delayS,

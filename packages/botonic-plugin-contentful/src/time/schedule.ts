@@ -21,7 +21,7 @@ export class Schedule {
     this.zone = zone
   }
 
-  createHourAndMinute(hour: number, minute: number = 0): HourAndMinute {
+  createHourAndMinute(hour: number, minute = 0): HourAndMinute {
     return new HourAndMinute(this.zone, hour, minute)
   }
 

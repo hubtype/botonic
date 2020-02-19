@@ -25,12 +25,18 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     // without typeRoots, it also checks @types of parent folders
-    "typeRoots" : ["node_modules/@types"],
+    //"typeRoots" : ["node_modules/@types"],
 
     // lint options
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true
-  }
+  },
+  // test options
+  "types": [
+    // @types/node must be a direct dependency. If only defined in a parent package.json, we get TSC errors for
+    // symbols from these libs: "ES2016.Array.Include", "ES2017.object"
+    "@types/jest"
+  ]
 }

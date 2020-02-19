@@ -21,8 +21,8 @@ function europeDate(
   year: number,
   month: number,
   day: number,
-  hour: number = 0,
-  minute: number = 0
+  hour = 0,
+  minute = 0
 ): Date {
   const date = new Date(Date.UTC(year, month, day, hour, minute, 0))
 
