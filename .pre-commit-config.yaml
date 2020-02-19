@@ -1,0 +1,77 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: core
+        name: core
+        entry: scripts/qa/lint-package.sh packages/botonic-core
+        language: system
+        files: ^packages/botonic-core/
+
+      - id: nlu
+        name: nlu
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-nlu
+        language: system
+        files: ^packages/botonic-plugin-nlu/
+
+      - id: contentful
+        name: contentful
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-contentful
+        language: system
+        files: ^packages/botonic-plugin-contentful/
+
+      - id: dashbot
+        name: dashbot
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-dashbot
+        language: system
+        files: ^packages/botonic-plugin-dashbot/
+
+      - id: dialogflow
+        name: dialogflow
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-dialogflow
+        language: system
+        files: ^packages/botonic-plugin-dialogflow/
+
+      - id: dynamodb
+        name: dynamodb
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-dynamodb
+        language: system
+        files: ^packages/botonic-plugin-dynamodb/
+
+      - id: luis
+        name: luis
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-luis
+        language: system
+        files: ^packages/botonic-plugin-luis/
+
+      - id: plugin-nlu
+        name: plugin-nlu
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-nlu
+        language: system
+        files: ^packages/botonic-plugin-nlu/
+
+      - id: segment
+        name: segment
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-segment
+        language: system
+        files: ^packages/botonic-plugin-segment/
+
+      - id: watson
+        name: watson
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-watson
+        language: system
+        files: ^packages/botonic-plugin-watson/
+
+      - id: react
+        name: react
+        entry: scripts/qa/lint-package.sh packages/botonic-react
+        language: system
+        files: ^packages/botonic-react/
+
