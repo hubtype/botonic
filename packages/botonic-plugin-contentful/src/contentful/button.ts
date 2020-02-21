@@ -1,6 +1,6 @@
 import * as contentful from 'contentful'
 import { DeliveryApi } from '.'
-import { ModelType } from '../cms'
+import { ContentType } from '../cms'
 import * as cms from '../cms'
 import { CarouselFields } from './carousel'
 import { CommonEntryFields, ContentWithNameFields } from './delivery-api'
@@ -23,10 +23,10 @@ export class ButtonDelivery {
     const entry = await this.delivery.getEntry(id, context)
     const entryType = DeliveryApi.getContentModel(entry)
     switch (entryType as string) {
-      case cms.ModelType.CAROUSEL:
-      case cms.ModelType.TEXT:
-      case cms.ModelType.URL:
-        return ButtonDelivery.fromContent(
+      case cms.ContentType.CAROUSEL:
+      case cms.ContentType.TEXT:
+      case cms.ContentType.URL:
+        return ButtonDelivery.fromContentReference(
           entry as contentful.Entry<CommonEntryFields>
         )
       case ButtonDelivery.BUTTON_CONTENT_TYPE: {
@@ -56,6 +56,7 @@ export class ButtonDelivery {
       console.error(`Text ${text} without short text`)
     }
     return new cms.Button(
+      entry.sys.id,
       fields.name,
       text,
       DeliveryApi.callbackFromEntry(entry)
@@ -65,11 +66,11 @@ export class ButtonDelivery {
   private getTargetCallback(target: ButtonTarget): cms.Callback {
     const model = DeliveryApi.getContentModel(target) as string
     switch (model) {
-      case ModelType.STARTUP:
-      case ModelType.CAROUSEL:
-      case ModelType.TEXT:
+      case ContentType.STARTUP:
+      case ContentType.CAROUSEL:
+      case ContentType.TEXT:
         return new cms.ContentCallback(model, target.sys.id)
-      case ModelType.URL: {
+      case ContentType.URL: {
         const urlFields = target as contentful.Entry<UrlFields>
         return cms.Callback.ofUrl(urlFields.fields.url)
       }
@@ -82,6 +83,7 @@ export class ButtonDelivery {
     }
   }
 }
+
 export interface PayloadFields {
   payload: string
 }

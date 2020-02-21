@@ -1,6 +1,6 @@
 import { SearchResult } from '../search/search-result'
 import { Callback } from './callback'
-import { CMS, ModelType } from './cms'
+import { CMS, ContentType, TopContentType } from './cms'
 import {
   Asset,
   Button,
@@ -16,6 +16,7 @@ import {
   ScheduleContent,
   DateRangeContent,
   TopContent,
+  Content,
 } from './contents'
 import * as time from '../time'
 import { Context, DEFAULT_CONTEXT } from './context'
@@ -65,11 +66,12 @@ export class DummyCMS implements CMS {
 
   static buttonFromCallback(callback: Callback): Button {
     const id = callback.payload || callback.url!
-    return new Button(id, 'button text for ' + id, callback)
+    return new Button(id, id, 'button text for ' + id, callback)
   }
 
   private element(id: string, callback: Callback): Element {
     return new Element(
+      id,
       [DummyCMS.buttonFromCallback(callback)],
       'Title for ' + id,
       'subtitle',

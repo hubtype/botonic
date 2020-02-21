@@ -13,7 +13,7 @@ export class QueueDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1
 
   constructor(delivery: DeliveryApi) {
-    super(cms.ModelType.QUEUE, delivery)
+    super(cms.ContentType.QUEUE, delivery)
   }
 
   async queue(id: string, context: Context): Promise<cms.Queue> {

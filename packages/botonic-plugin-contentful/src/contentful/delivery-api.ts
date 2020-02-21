@@ -4,9 +4,11 @@ import * as cms from '../cms'
 import {
   Callback,
   CommonFields,
+  Content,
   ContentCallback,
+  ContentType,
   Context,
-  ModelType,
+  TopContentType,
   SearchableBy,
   TopContent,
 } from '../cms'
@@ -25,7 +27,7 @@ export type DeliveryApiInterface = Pick<
 >
 
 /**
- * Manages the {@link Context}, parses Content's Id and ModelType from the Contentful entries...
+ * Manages the {@link Context}, parses Content's Id and ContentType from the Contentful entries...
  */
 export class DeliveryApi {
   constructor(readonly client: DeliveryApiInterface) {}
@@ -54,15 +56,15 @@ export class DeliveryApi {
     )
   }
 
-  static getContentModel(entry: contentful.Entry<any>): cms.ModelType {
+  static getContentModel(entry: contentful.Entry<any>): cms.ContentType {
     // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
     const typ = entry.sys.contentType.sys.id
-    return typ as cms.ModelType
+    return typ as cms.ContentType
   }
 
   static callbackFromEntry(entry: contentful.Entry<any>): Callback {
-    const modelType = this.getContentModel(entry)
-    if (modelType === ModelType.URL) {
+    const modelType = this.getContentModel(entry) as TopContentType
+    if (modelType === ContentType.URL) {
       return Callback.ofUrl((entry.fields as UrlFields).url)
     }
     return new ContentCallback(modelType, entry.sys.id)

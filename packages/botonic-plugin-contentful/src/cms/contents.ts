@@ -1,6 +1,7 @@
 import * as time from '../time'
 import { Callback } from './callback'
 import { SearchableBy } from './fields'
+import { ContentType, MessageContentType, TopContentType } from './cms'
 import { shallowClone } from '../util/objects'
 
 export enum ButtonStyle {
@@ -26,10 +27,15 @@ export class Asset {
  * Any content deliverable from a CMS
  */
 export abstract class Content {
+  protected constructor(readonly contentType: ContentType) {}
+
   /** @return message if any issue detected */
   validate(): string | undefined {
     return undefined
   }
+
+  abstract get id(): string
+  abstract get name(): string
 
   static validateContents(contents: Content[]): string | undefined {
     const invalids = contents.map(c => c.validate()).filter(v => v)
@@ -41,11 +47,21 @@ export abstract class Content {
 }
 
 /**
- * A self-contained content to which {@link Callback} may refer
+ * A self-contained content with {@link CommonFields}
  */
 export abstract class TopContent extends Content {
-  protected constructor(readonly common: CommonFields) {
-    super()
+  protected constructor(
+    readonly common: CommonFields,
+    readonly contentType: TopContentType
+  ) {
+    super(contentType)
+  }
+
+  get name(): string {
+    return this.common.name
+  }
+  get id(): string {
+    return this.common.id
   }
 
   cloneWithFollowUp(newFollowUp: FollowUp): TopContent {
@@ -53,6 +69,18 @@ export abstract class TopContent extends Content {
     ;(clone as any).common = shallowClone(clone.common)
     ;(clone as any).common.followUp = newFollowUp
     return clone
+  }
+}
+
+/**
+ * Contents which have a correspondent Botonic React Message
+ */
+export abstract class MessageContent extends TopContent {
+  protected constructor(
+    readonly common: CommonFields,
+    readonly contentType: MessageContentType
+  ) {
+    super(common, contentType)
   }
 }
 
@@ -97,11 +125,12 @@ export class CommonFields {
 
 export class Button extends Content {
   constructor(
+    readonly id: string,
     readonly name: string,
     readonly text: string,
     readonly callback: Callback
   ) {
-    super()
+    super(ContentType.BUTTON)
   }
 
   validate(): string | undefined {
@@ -115,14 +144,14 @@ export class Button extends Content {
   }
 }
 
-export class StartUp extends TopContent {
+export class StartUp extends MessageContent {
   constructor(
     readonly common: CommonFields,
     readonly imgUrl: string | undefined,
     readonly text: string | undefined,
     readonly buttons: Button[]
   ) {
-    super(common)
+    super(common, ContentType.STARTUP)
   }
 
   validate(): string | undefined {
@@ -130,12 +159,12 @@ export class StartUp extends TopContent {
   }
 }
 
-export class Carousel extends TopContent {
+export class Carousel extends MessageContent {
   constructor(
     readonly common: CommonFields,
     readonly elements: Element[] = []
   ) {
-    super(common)
+    super(common, ContentType.CAROUSEL)
   }
 
   validate(): string | undefined {
@@ -147,12 +176,13 @@ export class Carousel extends TopContent {
 export class Element extends Content {
   readonly name: string
   constructor(
+    readonly id: string,
     readonly buttons: Button[],
     readonly title?: string,
     readonly subtitle?: string,
     readonly imgUrl?: string
   ) {
-    super()
+    super(ContentType.ELEMENT)
     this.name = title || ''
   }
 
@@ -161,13 +191,13 @@ export class Element extends Content {
   }
 }
 
-export class Image extends TopContent {
+export class Image extends MessageContent {
   constructor(readonly common: CommonFields, readonly imgUrl: string) {
-    super(common)
+    super(common, ContentType.IMAGE)
   }
 }
 
-export class Text extends TopContent {
+export class Text extends MessageContent {
   constructor(
     readonly common: CommonFields,
     // Full text
@@ -175,7 +205,7 @@ export class Text extends TopContent {
     readonly buttons: Button[],
     readonly buttonsStyle = ButtonStyle.BUTTON
   ) {
-    super(common)
+    super(common, ContentType.TEXT)
   }
 
   validate(): string | undefined {
@@ -199,7 +229,7 @@ export type Chitchat = Text
 
 export class Url extends TopContent {
   constructor(readonly common: CommonFields, readonly url: string) {
-    super(common)
+    super(common, ContentType.URL)
   }
 }
 
@@ -209,7 +239,7 @@ export class Queue extends TopContent {
     readonly queue: string,
     readonly schedule?: time.Schedule
   ) {
-    super(common)
+    super(common, ContentType.QUEUE)
   }
 }
 
@@ -218,13 +248,13 @@ export class DateRangeContent extends TopContent {
     readonly common: CommonFields,
     readonly dateRange: time.DateRange
   ) {
-    super(common)
+    super(common, ContentType.DATE_RANGE)
   }
 }
 
 export class ScheduleContent extends TopContent {
   constructor(readonly common: CommonFields, readonly schedule: time.Schedule) {
-    super(common)
+    super(common, ContentType.SCHEDULE)
   }
 }
 

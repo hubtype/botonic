@@ -13,34 +13,58 @@ import {
   ScheduleContent,
   DateRangeContent,
   TopContent,
+  Content,
 } from './contents'
 
-export enum ModelType {
+export enum MessageContentType {
   CAROUSEL = 'carousel',
-  CHITCHAT = 'chitchat',
-  DATE_RANGE = 'dateRange',
   IMAGE = 'image',
-  QUEUE = 'queue',
   TEXT = 'text',
-  URL = 'url',
-  SCHEDULE = 'schedule',
+  CHITCHAT = 'chitchat', //so far it's an alias for TEXT
   STARTUP = 'startUp',
 }
+export const MESSAGE_TYPES = Object.values(MessageContentType).map(
+  m => m as MessageContentType
+)
 
-export const MODEL_TYPES = Object.values(ModelType).map(m => m as ModelType)
+export enum NonMessageTopContentType {
+  DATE_RANGE = 'dateRange',
+  QUEUE = 'queue',
+  URL = 'url',
+  SCHEDULE = 'schedule',
+}
 
-export function isSameModel(model1: ModelType, model2: ModelType): boolean {
+export type TopContentType = MessageContentType | NonMessageTopContentType
+export const TopContentType = {
+  ...MessageContentType,
+  ...NonMessageTopContentType,
+}
+export const TOPCONTENT_TYPES = Object.values(TopContentType).map(
+  m => m as TopContentType
+)
+
+export enum SubContentType {
+  BUTTON = 'button',
+  ELEMENT = 'element',
+}
+export type ContentType = TopContentType | SubContentType
+export const ContentType = { ...TopContentType, ...SubContentType }
+export const CONTENT_TYPES = Object.values(ContentType).map(
+  m => m as ContentType
+)
+
+export function isSameModel(model1: ContentType, model2: ContentType): boolean {
   switch (model1) {
-    case ModelType.TEXT:
-    case ModelType.CHITCHAT:
-      return model2 == ModelType.TEXT || model2 == ModelType.CHITCHAT
+    case ContentType.TEXT:
+    case ContentType.CHITCHAT:
+      return model2 == ContentType.TEXT || model2 == ContentType.CHITCHAT
     default:
       return model1 == model2
   }
 }
 
 /**
- * Except for {@link contents} and {@link contentsWithKeywords}, when {@link Context.locale} is specified it will default
+ * Except for {@link topContents} and {@link contentsWithKeywords}, when {@link Context.locale} is specified it will default
  * to the fallback locale for those fields not available in the specified locale.
  */
 export interface CMS {
@@ -59,6 +83,11 @@ export interface CMS {
     context?: Context,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]>
+
+  /**
+   * TODO add filter by id or name
+   */
+  contents(contentType: ContentType, context?: Context): Promise<Content[]>
 
   /**
    * For contents with 'Searchable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry

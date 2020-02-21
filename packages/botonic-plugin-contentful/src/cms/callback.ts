@@ -1,4 +1,4 @@
-import { CMS, MODEL_TYPES, ModelType } from './cms'
+import { CMS, ContentType, MESSAGE_TYPES, MessageContentType } from './cms'
 import escapeStringRegexp from 'escape-string-regexp'
 import { Context } from './context'
 import { TopContent } from './contents'
@@ -27,7 +27,7 @@ export class Callback {
 export class ContentCallback extends Callback {
   private static PAYLOAD_SEPARATOR = '$'
 
-  constructor(readonly model: ModelType, readonly id: string) {
+  constructor(readonly model: ContentType, readonly id: string) {
     super(model + ContentCallback.PAYLOAD_SEPARATOR + id)
   }
 
@@ -45,7 +45,7 @@ export class ContentCallback extends Callback {
     return new ContentCallback(ContentCallback.checkDeliverableModel(type), id)
   }
 
-  static regexForModel(modelType: ModelType): RegExp {
+  static regexForModel(modelType: MessageContentType): RegExp {
     return new RegExp(
       '^' +
         escapeStringRegexp(modelType + ContentCallback.PAYLOAD_SEPARATOR) +
@@ -53,9 +53,9 @@ export class ContentCallback extends Callback {
     )
   }
 
-  private static checkDeliverableModel(modelType: string): ModelType {
-    if (MODEL_TYPES.includes(modelType as ModelType)) {
-      return modelType as ModelType
+  private static checkDeliverableModel(modelType: string): MessageContentType {
+    if (MESSAGE_TYPES.includes(modelType as MessageContentType)) {
+      return modelType as MessageContentType
     } else {
       throw new Error(
         `${modelType} is not a model type than can be delivered from CMS`
@@ -65,24 +65,16 @@ export class ContentCallback extends Callback {
 
   deliverPayloadContent(cms: CMS, context?: Context): Promise<TopContent> {
     switch (this.model) {
-      case ModelType.CAROUSEL:
+      case ContentType.CAROUSEL:
         return cms.carousel(this.id, context)
-      case ModelType.TEXT:
+      case ContentType.TEXT:
         return cms.text(this.id, context)
-      case ModelType.CHITCHAT:
+      case ContentType.CHITCHAT:
         return cms.chitchat(this.id, context)
-      case ModelType.STARTUP:
+      case ContentType.STARTUP:
         return cms.startUp(this.id, context)
-      case ModelType.URL:
-        return cms.url(this.id, context)
-      case ModelType.QUEUE:
-        return cms.queue(this.id, context)
-      case ModelType.IMAGE:
+      case ContentType.IMAGE:
         return cms.image(this.id, context)
-      case ModelType.SCHEDULE:
-        return cms.schedule(this.id)
-      case ModelType.DATE_RANGE:
-        return cms.dateRange(this.id)
       default:
         throw new Error(
           `Type '${this.model}' not supported for callback with id '${this.id}'`

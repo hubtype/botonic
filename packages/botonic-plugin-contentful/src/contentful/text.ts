@@ -13,7 +13,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
     protected delivery: DeliveryApi,
     private readonly button: ButtonDelivery
   ) {
-    super(cms.ModelType.TEXT, delivery)
+    super(cms.ContentType.TEXT, delivery)
   }
 
   async text(id: string, context: cms.Context): Promise<cms.Text> {

@@ -1,7 +1,10 @@
 import {
+  Button,
+  Callback,
   CommonFields,
   ContentCallback,
-  ModelType,
+  ContentType,
+  TopContentType,
   Queue,
   Text,
 } from '../../src/cms'
@@ -42,15 +45,15 @@ test('TEST: contentful contentsWithKeywords', async () => {
   const contentResults = results.filter(
     result => result.callback instanceof ContentCallback
   )
-  const ofType = (model: ModelType) =>
+  const ofType = (model: TopContentType) =>
     contentResults.filter(r => (r.callback as ContentCallback).model == model)
 
-  expect(ofType(ModelType.CAROUSEL)).toHaveLength(1)
-  expect(ofType(ModelType.TEXT)).toHaveLength(15)
-  expect(ofType(ModelType.CHITCHAT)).toHaveLength(0)
-  expect(ofType(ModelType.URL)).toHaveLength(0)
-  expect(ofType(ModelType.SCHEDULE)).toHaveLength(0)
-  expect(ofType(ModelType.DATE_RANGE)).toHaveLength(0)
-  expect(ofType(ModelType.IMAGE)).toHaveLength(0)
-  expect(ofType(ModelType.QUEUE)).toHaveLength(2)
+  expect(ofType(ContentType.CAROUSEL)).toHaveLength(1)
+  expect(ofType(ContentType.TEXT)).toHaveLength(15)
+  expect(ofType(ContentType.CHITCHAT)).toHaveLength(0)
+  expect(ofType(ContentType.URL)).toHaveLength(0)
+  expect(ofType(ContentType.SCHEDULE)).toHaveLength(0)
+  expect(ofType(ContentType.DATE_RANGE)).toHaveLength(0)
+  expect(ofType(ContentType.IMAGE)).toHaveLength(0)
+  expect(ofType(ContentType.QUEUE)).toHaveLength(2)
 }, 15000)

@@ -1,4 +1,4 @@
-import { ContentCallback, ModelType } from '../../src/cms'
+import { ContentCallback, ContentType } from '../../src/cms'
 import { SearchResult } from '../../src/search'
 import { testContentful, testContext } from './contentful.helper'
 import { TEST_POST_FAQ1_ID } from './text.test'
@@ -15,7 +15,7 @@ test('TEST: contentful contentsWithKeywords', async () => {
     .filter(result => result.callback instanceof ContentCallback)
     .map(result => {
       switch ((result.callback as ContentCallback).model) {
-        case ModelType.QUEUE:
+        case ContentType.QUEUE:
           queues.push(result)
           break
         default:

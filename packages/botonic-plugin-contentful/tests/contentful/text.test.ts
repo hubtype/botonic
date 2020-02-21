@@ -26,7 +26,7 @@ test('TEST: contentful text without followup', async () => {
   expect(text.buttons).toHaveLength(1)
   expect(text.buttons[0].text).toEqual('Contactar con agente')
   expect(text.buttons[0].callback).toEqual(
-    new cms.ContentCallback(cms.ModelType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
+    new cms.ContentCallback(cms.ContentType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
   )
   expect(text.common.followUp).toBeUndefined()
 })

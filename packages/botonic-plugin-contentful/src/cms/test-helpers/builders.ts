@@ -4,10 +4,11 @@ import {
   Callback,
   CommonFields,
   ContentCallback,
-  ModelType,
   Text,
+  MessageContentType,
 } from '../index'
 import { TextBuilder } from '../factories'
+import { ContentType } from '../cms'
 
 export function rndStr(): string {
   return Math.random().toString()
@@ -19,11 +20,11 @@ export function rndBool(): boolean {
 
 export class ContentCallbackBuilder {
   callback: ContentCallback | undefined
-  modelType: ModelType | undefined
+  contentType: MessageContentType | undefined
   contentId = rndStr()
 
-  withModelType(modelType: ModelType): ContentCallbackBuilder {
-    this.modelType = modelType
+  withContentType(contentType: MessageContentType): ContentCallbackBuilder {
+    this.contentType = contentType
     return this
   }
 
@@ -34,7 +35,7 @@ export class ContentCallbackBuilder {
 
   build(): ContentCallback {
     return new ContentCallback(
-      this.modelType || ModelType.TEXT,
+      this.contentType || ContentType.TEXT,
       this.contentId || rndStr()
     )
   }
@@ -59,6 +60,7 @@ export class RndButtonsBuilder {
   addButton(): RndButtonsBuilder {
     this.buttons.push(
       new Button(
+        rndStr(),
         this.name || rndStr(),
         this.text || rndStr(),
         this.callback || this.callbackBuilder.build()

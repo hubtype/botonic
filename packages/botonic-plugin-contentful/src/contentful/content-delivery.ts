@@ -1,10 +1,10 @@
-import { Context, isSameModel, ModelType } from '../cms'
+import { Context, isSameModel, TopContentType } from '../cms'
 import * as contentful from 'contentful'
 import { DeliveryApi } from './delivery-api'
 
 export abstract class ContentDelivery {
   constructor(
-    readonly modelType: ModelType,
+    readonly modelType: TopContentType,
     protected readonly delivery: DeliveryApi
   ) {}
 

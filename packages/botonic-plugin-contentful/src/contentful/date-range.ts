@@ -1,5 +1,5 @@
 import * as contentful from 'contentful/index'
-import { DateRangeContent, DEFAULT_CONTEXT, ModelType } from '../cms'
+import { DateRangeContent, DEFAULT_CONTEXT, ContentType } from '../cms'
 import * as time from '../time'
 import { ContentDelivery } from './content-delivery'
 import {
@@ -10,7 +10,7 @@ import {
 
 export class DateRangeDelivery extends ContentDelivery {
   constructor(delivery: DeliveryApi) {
-    super(ModelType.DATE_RANGE, delivery)
+    super(ContentType.DATE_RANGE, delivery)
   }
 
   async dateRange(id: string): Promise<DateRangeContent> {

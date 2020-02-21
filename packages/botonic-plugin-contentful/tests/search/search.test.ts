@@ -3,7 +3,7 @@ import {
   CommonFields,
   ContentCallback,
   DummyCMS,
-  ModelType,
+  ContentType,
   Text,
   Url,
 } from '../../src/cms'
@@ -21,12 +21,12 @@ test('TEST: respondFoundContents text with buttons', async () => {
   const sut = new Search(instance(cms), instance(mock(Normalizer)))
 
   const urlContent = new SearchResult(
-    new ContentCallback(ModelType.URL, 'urlCmsId'),
+    new ContentCallback(ContentType.URL, 'urlCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'url shortText' })
   )
 
   const textContent = new SearchResult(
-    new ContentCallback(ModelType.TEXT, 'textCmsId'),
+    new ContentCallback(ContentType.TEXT, 'textCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'text shortText' })
   )
 
@@ -60,7 +60,7 @@ test('TEST: respondFoundContents text with chitchat', async () => {
   const chitchat = instance(mock(Text))
   when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat)
   const chitchatCallback = new SearchResult(
-    new ContentCallback(ModelType.CHITCHAT, 'chitchatCmsId'),
+    new ContentCallback(ContentType.CHITCHAT, 'chitchatCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'chitchat' })
   )
 

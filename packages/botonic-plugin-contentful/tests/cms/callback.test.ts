@@ -1,12 +1,12 @@
 import { instance, mock } from 'ts-mockito'
-import { ContentCallback, ModelType } from '../../src'
+import { ContentCallback, ContentType } from '../../src'
 import * as cms from '../../src'
 
 test('TEST: ofPayload', () => {
   const callback = cms.Callback.ofPayload('text$text1')
   expect(callback).toBeInstanceOf(ContentCallback)
   expect((callback as ContentCallback).id).toEqual('text1')
-  expect((callback as ContentCallback).model).toEqual(ModelType.TEXT)
+  expect((callback as ContentCallback).model).toEqual(ContentType.TEXT)
 })
 
 test('TEST: callbackMap multiple callbacks', () => {
@@ -26,9 +26,9 @@ test('TEST: callbackMap fixed callback', () => {
 })
 
 test('TEST: regexForModel', () => {
-  const callback = new cms.ContentCallback(ModelType.CAROUSEL, 'id1')
+  const callback = new cms.ContentCallback(ContentType.CAROUSEL, 'id1')
   expect(
-    cms.ContentCallback.regexForModel(ModelType.CAROUSEL).test(
+    cms.ContentCallback.regexForModel(ContentType.CAROUSEL).test(
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       callback.payload!
     )

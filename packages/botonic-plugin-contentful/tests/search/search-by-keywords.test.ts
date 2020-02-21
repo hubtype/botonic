@@ -5,7 +5,7 @@ import {
   SearchResult,
   ContentCallback,
   DummyCMS,
-  ModelType,
+  ContentType,
   SearchByKeywords,
   Context,
   CommonFields,
@@ -112,7 +112,7 @@ export function contentWithKeyword(callback: Callback, keywords: string[]) {
 export function chitchatContent(keywords: string[]) {
   const id = Math.random().toString()
   return new SearchResult(
-    new ContentCallback(ModelType.TEXT, id),
+    new ContentCallback(ContentType.TEXT, id),
     new CommonFields(id, id, { shortText: 'chitchat', keywords })
   )
 }
