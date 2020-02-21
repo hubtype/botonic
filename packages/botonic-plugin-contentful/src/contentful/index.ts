@@ -59,8 +59,11 @@ export default class Contentful implements cms.CMS {
       params.environment = options.environment
     }
     const client = contentful.createClient(params)
-    const memoizedClient = new CachedDelivery(client, options.cacheTtlMs)
-    const delivery = new DeliveryApi(memoizedClient)
+    const delivery = new DeliveryApi(
+      options.disableCache
+        ? client
+        : new CachedDelivery(client, options.cacheTtlMs)
+    )
 
     this._delivery = delivery
     this._button = new ButtonDelivery(delivery)
