@@ -9,7 +9,7 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
     protected delivery: DeliveryApi,
     private readonly button: ButtonDelivery
   ) {
-    super(cms.ModelType.STARTUP, delivery)
+    super(cms.ContentType.STARTUP, delivery)
   }
 
   async startUp(id: string, context: cms.Context): Promise<cms.StartUp> {

@@ -6,7 +6,7 @@ import { CommonEntryFields, DeliveryApi } from './delivery-api'
 
 export class UrlDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi) {
-    super(cms.ModelType.URL, delivery)
+    super(cms.ContentType.URL, delivery)
   }
 
   async url(id: string, context: Context): Promise<cms.Url> {

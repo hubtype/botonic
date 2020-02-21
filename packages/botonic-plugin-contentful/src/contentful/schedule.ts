@@ -1,5 +1,5 @@
 import { Entry } from 'contentful'
-import { DEFAULT_CONTEXT, ModelType, ScheduleContent } from '../cms'
+import { DEFAULT_CONTEXT, ContentType, ScheduleContent } from '../cms'
 import * as time from '../time'
 import { ContentDelivery } from './content-delivery'
 import {
@@ -13,7 +13,7 @@ export class ScheduleDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = 2
 
   constructor(delivery: DeliveryApi) {
-    super(ModelType.SCHEDULE, delivery)
+    super(ContentType.SCHEDULE, delivery)
   }
 
   async schedule(id: string): Promise<ScheduleContent> {

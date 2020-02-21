@@ -1,12 +1,7 @@
-import {
-  Button,
-  CommonFields,
-  ContentCallback,
-  ModelType,
-  StartUp,
-} from '../../src/cms'
+import { Button, CommonFields, ContentCallback, StartUp } from '../../src/cms'
 import { testContentful } from './contentful.helper'
 import { TEST_CAROUSEL_MAIN_ID } from './carousel.test'
+import { ContentType } from '../../src/cms/cms'
 
 test('TEST: contentful startUp', async () => {
   const id = 'PfMPIeS6zD1Rix6Px9m0u'
@@ -22,9 +17,10 @@ test('TEST: contentful startUp', async () => {
       'Le damos la bienvenida a su nuevo asistente virtual.',
       [
         new Button(
+          TEST_CAROUSEL_MAIN_ID,
           'INICIO',
           'Menú de Inicio',
-          new ContentCallback(ModelType.CAROUSEL, TEST_CAROUSEL_MAIN_ID)
+          new ContentCallback(ContentType.CAROUSEL, TEST_CAROUSEL_MAIN_ID)
         ),
       ]
     )

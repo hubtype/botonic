@@ -8,8 +8,10 @@ import { KeywordsDelivery } from './keywords'
 import { FollowUpDelivery } from './follow-up'
 import {
   CommonFields,
+  Content,
+  ContentType,
   DateRangeContent,
-  ModelType,
+  TopContentType,
   ScheduleContent,
   TopContent,
 } from '../cms'
@@ -38,6 +40,7 @@ export default class Contentful implements cms.CMS {
   private readonly _image: ImageDelivery
   private readonly _asset: AssetDelivery
   private readonly _queue: QueueDelivery
+  private readonly _button: ButtonDelivery
 
   /**
    *
@@ -60,10 +63,10 @@ export default class Contentful implements cms.CMS {
     const delivery = new DeliveryApi(memoizedClient)
 
     this._delivery = delivery
-    const button = new ButtonDelivery(delivery)
-    this._carousel = new CarouselDelivery(delivery, button)
-    this._text = new TextDelivery(delivery, button)
-    this._startUp = new StartUpDelivery(delivery, button)
+    this._button = new ButtonDelivery(delivery)
+    this._carousel = new CarouselDelivery(delivery, this._button)
+    this._text = new TextDelivery(delivery, this._button)
+    this._startUp = new StartUpDelivery(delivery, this._button)
     this._url = new UrlDelivery(delivery)
     this._image = new ImageDelivery(delivery)
     this._asset = new AssetDelivery(delivery)
@@ -115,41 +118,67 @@ export default class Contentful implements cms.CMS {
     return this._text.text(id, context)
   }
 
-  contents(
-    model: ModelType,
+  topContents(
+    model: TopContentType,
     context = DEFAULT_CONTEXT,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]> {
-    return this._delivery.contents(
+    console.log('getting contents for lang', context.locale)
+    return this._delivery.topContents(
       model,
       context,
       (entry: contentful.Entry<any>, ctxt: Context) =>
-        this.fromEntry(entry, ctxt),
+        this.topContentFromEntry(entry, ctxt),
       filter
     )
   }
 
-  async fromEntry(
+  contents(
+    contentType: ContentType,
+    context = DEFAULT_CONTEXT
+  ): Promise<Content[]> {
+    return this._delivery.contents(
+      contentType,
+      context,
+      (entry: contentful.Entry<any>, ctxt: Context) =>
+        this.contentFromEntry(entry, ctxt)
+    )
+  }
+
+  async topContentFromEntry(
     entry: contentful.Entry<any>,
     context: Context
   ): Promise<TopContent> {
-    const model: ModelType = DeliveryApi.getContentModel(entry)
+    const model = DeliveryApi.getContentModel(entry)
     switch (model) {
-      case ModelType.CAROUSEL:
+      case ContentType.CAROUSEL:
         return this._carousel.fromEntry(entry, context)
-      case ModelType.QUEUE:
+      case ContentType.QUEUE:
         return QueueDelivery.fromEntry(entry)
-      case ModelType.CHITCHAT:
-      case ModelType.TEXT:
+      case ContentType.CHITCHAT:
+      case ContentType.TEXT:
         return this._text.fromEntry(entry, context)
-      case ModelType.IMAGE:
+      case ContentType.IMAGE:
         return this._image.fromEntry(entry, context)
-      case ModelType.URL:
+      case ContentType.URL:
         return this._url.fromEntry(entry, context)
-      case ModelType.STARTUP:
+      case ContentType.STARTUP:
         return this._startUp.fromEntry(entry, context)
       default:
         throw new Error(`${model} is not a Content type`)
+    }
+  }
+
+  async contentFromEntry(
+    entry: contentful.Entry<any>,
+    context: Context
+  ): Promise<Content> {
+    const model = DeliveryApi.getContentModel(entry)
+    switch (model) {
+      case ContentType.BUTTON:
+        return this._button.fromEntry(entry, context)
+      default:
+        return this.topContentFromEntry(entry, context)
     }
   }
 

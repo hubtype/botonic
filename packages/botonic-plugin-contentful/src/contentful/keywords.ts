@@ -1,17 +1,22 @@
 import { Entry, EntryCollection } from 'contentful'
 import * as cms from '../cms'
-import { CommonFields, Context, ModelType } from '../cms'
+import { CommonFields, Context, TopContentType } from '../cms'
 import { SearchResult } from '../search'
 import { CommonEntryFields, DeliveryApi } from './delivery-api'
 import { QueueFields } from './queue'
+import { ContentType } from '../cms/cms'
 
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}
 
   async contentsWithKeywords(
     context: Context,
-    modelsWithKeywords = [ModelType.TEXT, ModelType.CAROUSEL, ModelType.URL],
-    modelsWithSearchableByKeywords = [ModelType.QUEUE]
+    modelsWithKeywords = [
+      ContentType.TEXT,
+      ContentType.CAROUSEL,
+      ContentType.URL,
+    ],
+    modelsWithSearchableByKeywords = [ContentType.QUEUE]
   ): Promise<SearchResult[]> {
     // TODO maybe it's more efficient to get all contents (since most have keywords anyway and we normally have few non
     //  TopContents such as Buttons)
@@ -49,9 +54,9 @@ export class KeywordsDelivery {
 
   private async entriesWithSearchableByKeywords(
     context: Context,
-    models: ModelType[]
+    models: TopContentType[]
   ): Promise<SearchResult[]> {
-    const getWithKeywords = (contentType: cms.ModelType) =>
+    const getWithKeywords = (contentType: cms.TopContentType) =>
       this.delivery.getEntries<QueueFields>(context, {
         // eslint-disable-next-line @typescript-eslint/camelcase
         content_type: contentType,
@@ -86,9 +91,9 @@ export class KeywordsDelivery {
 
   private entriesWithKeywords(
     context: Context,
-    models: ModelType[]
+    models: TopContentType[]
   ): Promise<SearchResult[]> {
-    const getWithKeywords = (contentType: cms.ModelType) =>
+    const getWithKeywords = (contentType: cms.TopContentType) =>
       this.delivery.getEntries<CommonEntryFields>(context, {
         // eslint-disable-next-line @typescript-eslint/camelcase
         content_type: contentType,

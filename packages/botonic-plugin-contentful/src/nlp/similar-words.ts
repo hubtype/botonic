@@ -1,4 +1,4 @@
-import { ExtractorEnum } from '@nlpjs/ner/src'
+import { BestSubstringResult, ExtractorEnum } from '@nlpjs/ner/src'
 import { CandidateWithKeywords, Keyword, MatchType } from './keywords'
 import { countOccurrences } from './tokens'
 import { NormalizedUtterance, Word } from './normalizer'
@@ -239,14 +239,17 @@ class FindSubstring extends CandidateFinder {
       minAccuracy
     )
     substrings = substrings.filter(
-      bs =>
+      (bs: BestSubstringResult) =>
         getMatchLength(bs.len, keyword.matchString.length, bs.levenshtein) >=
         this.minMatchLength
     )
     if (substrings.length == 0) {
       return undefined
     }
-    const bestSubstr = substrings.sort((s1, s2) => s2.accuracy - s1.accuracy)[0]
+    const bestSubstr = substrings.sort(
+      (s1: BestSubstringResult, s2: BestSubstringResult) =>
+        s2.accuracy - s1.accuracy
+    )[0]
     const match = utteranceText.slice(bestSubstr.start, bestSubstr.end + 1)
     const distance =
       keyword.matchString.length -

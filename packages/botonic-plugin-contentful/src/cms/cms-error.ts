@@ -1,5 +1,5 @@
 import { SearchResult } from '../search/search-result'
-import { CMS, ModelType } from './cms'
+import { CMS, ContentType, TopContentType } from './cms'
 import {
   Asset,
   Carousel,
@@ -31,49 +31,49 @@ export class ErrorReportingCMS implements CMS {
   carousel(id: string, context?: Context): Promise<Carousel> {
     return this.cms
       .carousel(id, context)
-      .catch(this.handleError(ModelType.CAROUSEL, id))
+      .catch(this.handleError(ContentType.CAROUSEL, id))
       .then(this.validate)
   }
 
   text(id: string, context?: Context): Promise<Text> {
     return this.cms
       .text(id, context)
-      .catch(this.handleError(ModelType.TEXT, id))
+      .catch(this.handleError(ContentType.TEXT, id))
       .then(this.validate)
   }
 
   chitchat(id: string, context?: Context): Promise<Chitchat> {
     return this.cms
       .text(id, context)
-      .catch(this.handleError(ModelType.CHITCHAT, id))
+      .catch(this.handleError(ContentType.CHITCHAT, id))
       .then(this.validate)
   }
 
   startUp(id: string, context?: Context): Promise<StartUp> {
     return this.cms
       .startUp(id, context)
-      .catch(this.handleError(ModelType.STARTUP, id))
+      .catch(this.handleError(ContentType.STARTUP, id))
       .then(this.validate)
   }
 
   url(id: string, context?: Context): Promise<Url> {
     return this.cms
       .url(id, context)
-      .catch(this.handleError(ModelType.URL, id))
+      .catch(this.handleError(ContentType.URL, id))
       .then(this.validate)
   }
 
   image(id: string, context?: Context): Promise<Image> {
     return this.cms
       .image(id, context)
-      .catch(this.handleError(ModelType.IMAGE, id))
+      .catch(this.handleError(ContentType.IMAGE, id))
       .then(this.validate)
   }
 
   queue(id: string, context?: Context): Promise<Queue> {
     return this.cms
       .queue(id, context)
-      .catch(this.handleError(ModelType.QUEUE, id))
+      .catch(this.handleError(ContentType.QUEUE, id))
       .then(this.validate)
   }
 
@@ -94,13 +94,15 @@ export class ErrorReportingCMS implements CMS {
   }
 
   schedule(id: string): Promise<ScheduleContent> {
-    return this.cms.schedule(id).catch(this.handleError(ModelType.SCHEDULE, id))
+    return this.cms
+      .schedule(id)
+      .catch(this.handleError(ContentType.SCHEDULE, id))
   }
 
   dateRange(id: string): Promise<DateRangeContent> {
     return this.cms
       .dateRange(id)
-      .catch(this.handleError(ModelType.DATE_RANGE, id))
+      .catch(this.handleError(ContentType.DATE_RANGE, id))
   }
 
   asset(id: string): Promise<Asset> {

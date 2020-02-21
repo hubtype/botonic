@@ -6,7 +6,7 @@ import { DeliveryWithFollowUp } from './follow-up'
 
 export class ImageDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi) {
-    super(cms.ModelType.IMAGE, delivery)
+    super(cms.ContentType.IMAGE, delivery)
   }
 
   async image(id: string, context: Context): Promise<cms.Image> {

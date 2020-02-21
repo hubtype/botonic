@@ -1,4 +1,4 @@
-import { Button, Callback, CMS, ModelType, Text, Context } from '../cms'
+import { Button, Callback, CMS, ContentType, Text, Context } from '../cms'
 import { KeywordsOptions, MatchType, Normalizer, checkLocale } from '../nlp'
 import { SearchByKeywords } from './search-by-keywords'
 import { SearchResult } from './search-result'
@@ -46,10 +46,11 @@ export class Search {
       return this.cms.chitchat(chitchatCallback.id, context)
     }
     const buttonPromises = results.map(async result => {
-      const urlCallback = result.getCallbackIfContentIs(ModelType.URL)
+      const urlCallback = result.getCallbackIfContentIs(ContentType.URL)
       if (urlCallback) {
         const url = await this.cms.url(urlCallback.id, context)
         return new Button(
+          result.common.id,
           result.common.name,
           result.common.shortText!,
           Callback.ofUrl(url.url)

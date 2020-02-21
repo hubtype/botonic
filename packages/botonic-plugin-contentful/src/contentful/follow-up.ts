@@ -1,5 +1,5 @@
 import * as cms from '../cms'
-import { ModelType } from '../cms'
+import { ContentType } from '../cms'
 import { Entry } from 'contentful'
 import { ContentDelivery } from './content-delivery'
 import { TextDelivery, TextFields } from './text'
@@ -48,14 +48,14 @@ export class FollowUpDelivery {
       followUp = await this.delivery.getEntry(followUp.sys.id, context)
     }
     switch (DeliveryApi.getContentModel(followUp)) {
-      case ModelType.CAROUSEL:
+      case ContentType.CAROUSEL:
         // here followUp already has its fields set, but not yet its element fields
         return this.carousel.carousel(followUp.sys.id, context)
-      case cms.ModelType.TEXT:
+      case cms.ContentType.TEXT:
         return this.text.fromEntry(followUp as Entry<TextFields>, context)
-      case cms.ModelType.IMAGE:
+      case cms.ContentType.IMAGE:
         return this.image.fromEntry(followUp as Entry<ImageFields>, context)
-      case cms.ModelType.STARTUP:
+      case cms.ContentType.STARTUP:
         return this.startUp.fromEntry(followUp as Entry<StartUpFields>, context)
       default:
         throw new Error(`Unexpected followUp type ${followUp.sys.type}`)

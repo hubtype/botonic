@@ -11,7 +11,7 @@ import {
 // TODO remove DeliveryWithFollowUp
 export class CarouselDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi, readonly button: ButtonDelivery) {
-    super(cms.ModelType.CAROUSEL, delivery)
+    super(cms.ContentType.CAROUSEL, delivery)
   }
 
   async carousel(id: string, context: cms.Context): Promise<cms.Carousel> {
@@ -48,6 +48,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     return Promise.all(buttonsPromises).then(
       buttons =>
         new cms.Element(
+          entry.sys.id,
           buttons,
           fields.title,
           fields.subtitle,
