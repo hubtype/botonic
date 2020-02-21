@@ -36,6 +36,7 @@ export interface ContentfulOptions extends OptionsBase {
    * Defaults to {@link DEFAULT_CACHE_TTL_MS}
    */
   cacheTtlMs?: number
+  disableCache?: boolean
 }
 
 export default class BotonicPluginContentful {
