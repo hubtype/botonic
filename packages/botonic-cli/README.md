@@ -19,7 +19,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.10.1 darwin-x64 node-v10.15.0
+@botonic/cli/0.10.1 linux-x64 node-v13.9.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -46,9 +46,11 @@ USAGE
   $ botonic deploy [BOT_NAME]
 
 OPTIONS
-  -c, --command=command  Command to execute from the package "scripts" object
-  -f, --force            Force deploy despite of no changes. Disabled by default
-  --botName=botName
+  -b, --botName=botName    Name of the bot from Hubtype where you want to deploy
+  -c, --command=command    Command to execute from the package "scripts" object
+  -e, --email=email        Email from Hubtype Organization
+  -f, --force              Force deploy despite of no changes. Disabled by default
+  -p, --password=password  Password from Hubtype Organization
 
 EXAMPLE
   $ botonic deploy
@@ -180,7 +182,7 @@ OPTIONS
 
 EXAMPLE
   $ botonic train
-       TRAINING MODEL FOR {LANGUAGE}...
+       TRAINING MODEL FOR {LANGUAGE}...
 ```
 
 _See code: [src/commands/train.ts](https://github.com/hubtype/botonic/blob/v0.10.1/src/commands/train.ts)_
