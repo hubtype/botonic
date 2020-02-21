@@ -96,8 +96,8 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Queue(new CommonFields(id, id), id))
   }
 
-  contents(
-    model: ModelType,
+  topContents(
+    model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]> {
@@ -142,5 +142,9 @@ export class DummyCMS implements CMS {
 
   private buttons(): Button[] {
     return this.buttonCallbacks.map(DummyCMS.buttonFromCallback)
+  }
+
+  contents(contentType: ContentType, context?: Context): Promise<Content[]> {
+    return Promise.resolve([])
   }
 }

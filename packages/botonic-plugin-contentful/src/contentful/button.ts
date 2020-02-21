@@ -31,22 +31,31 @@ export class ButtonDelivery {
         )
       case ButtonDelivery.BUTTON_CONTENT_TYPE: {
         const buttonEntry = entry as contentful.Entry<ButtonFields>
-        const callback = buttonEntry.fields.target
-          ? await this.getTargetCallback(buttonEntry.fields.target)
-          : context.callbacks!.getCallback(id)
-        return new cms.Button(
-          buttonEntry.fields.name,
-          buttonEntry.fields.text,
-          callback
-        )
+        return await this.fromEntry(buttonEntry, context)
       }
       default:
         throw new Error(`Unexpected type ${entryType}`)
     }
   }
 
+  public async fromEntry(
+    buttonEntry: contentful.Entry<ButtonFields>,
+    context: cms.Context
+  ) {
+    // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
+    const callback = buttonEntry.fields.target
+      ? await this.getTargetCallback(buttonEntry.fields.target)
+      : context.callbacks!.getCallback(buttonEntry.sys.id)
+    return new cms.Button(
+      buttonEntry.sys.id,
+      buttonEntry.fields.name,
+      buttonEntry.fields.text,
+      callback
+    )
+  }
+
   // TODO move to a new CmsUtils.buttonToCallback(cms.ContentCallback)?
-  private static fromContent(
+  private static fromContentReference(
     entry: contentful.Entry<CommonEntryFields>
   ): cms.Button {
     const fields = entry.fields
