@@ -75,15 +75,33 @@ export class DeliveryApi {
   }
 
   async contents(
-    model: ModelType,
+    contentType: ContentType,
+    context: Context,
+    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>
+  ): Promise<Content[]> {
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.getEntries(
+      context,
+      {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        content_type: contentType,
+        include: this.maxReferencesInclude(),
+      }
+    )
+    return Promise.all(
+      entryCollection.items.map(entry => factory(entry, context))
+    )
+  }
+
+  async topContents(
+    model: TopContentType,
     context: Context,
     factory: (
       entry: contentful.Entry<any>,
       ctxt: Context
     ) => Promise<TopContent>,
     filter?: (cf: CommonFields) => boolean
-  ) {
-    const entries: EntryCollection<CommonEntryFields> = await this.getEntries(
+  ): Promise<TopContent[]> {
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.getEntries(
       context,
       {
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -91,11 +109,11 @@ export class DeliveryApi {
         include: this.maxReferencesInclude(),
       }
     )
-    let promises = entries.items
+    let entries = entryCollection.items
     if (filter) {
-      promises = promises.filter(entry => filter(commonFieldsFromEntry(entry)))
+      entries = entries.filter(entry => filter(commonFieldsFromEntry(entry)))
     }
-    return Promise.all(promises.map(entry => factory(entry, context)))
+    return Promise.all(entries.map(entry => factory(entry, context)))
   }
 
   private static queryFromContext(context: Context, query: any = {}): any {

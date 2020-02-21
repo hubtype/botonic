@@ -10,10 +10,37 @@ import {
 } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
 
-test('TEST: contentful contents filter', async () => {
+test('TEST: contentful contents buttons', async () => {
+  const buttons = await testContentful().contents(ContentType.BUTTON, {
+    locale: 'en',
+  })
+  expect(buttons).toSatisfyAll(button => button instanceof Button)
+  expect(buttons.length).toEqual(32)
+
+  const star = buttons.filter(b => b.id == '6JYiydi8JhveDAjDSQ2fp4')
+  expect(star[0]).toEqual(
+    new Button(
+      '6JYiydi8JhveDAjDSQ2fp4',
+      'STAR_1',
+      '⭐',
+      Callback.ofPayload('RATING_1')
+    )
+  )
+  const empezar = buttons.filter(b => b.id == '40buQOqp9jbwoxmMZhFO16')
+  expect(empezar[0]).toEqual(
+    new Button(
+      '40buQOqp9jbwoxmMZhFO16',
+      'POST_FAQ3',
+      'Return an article',
+      new ContentCallback(ContentType.TEXT, 'C39lEROUgJl9hHSXKOEXS')
+    )
+  )
+})
+
+test('TEST: contentful topContents filter', async () => {
   const filter = (cf: CommonFields) => cf.name.startsWith('POST')
-  const texts = await testContentful().contents(
-    ModelType.TEXT,
+  const texts = await testContentful().topContents(
+    ContentType.TEXT,
     { locale: 'en' },
     filter
   )
@@ -24,8 +51,8 @@ test('TEST: contentful contents filter', async () => {
   expect(texts.length).toBeGreaterThanOrEqual(8)
 })
 
-test('TEST: contentful contents no filter', async () => {
-  const queues = await testContentful().contents(ModelType.QUEUE, {
+test('TEST: contentful topContents no filter', async () => {
+  const queues = await testContentful().topContents(ContentType.QUEUE, {
     locale: 'en',
   })
   expect(queues).toSatisfyAll(queue => queue instanceof Queue)

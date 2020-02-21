@@ -3,10 +3,11 @@ import {
   Callback,
   CommonFields,
   ContentCallback,
-  ModelType,
+  TopContentType,
   PRIORITY_MAX,
   SCORE_MAX,
 } from '../cms'
+import { ContentType } from '../cms/cms'
 
 export class SearchResult {
   static CHITCHAT_SHORT_TEXT = 'chitchat'
@@ -34,10 +35,17 @@ export class SearchResult {
         } without shortText. Assigning name to button text`
       )
     }
-    return new Button(this.common.name, shortText, this.callback)
+    return new Button(
+      this.common.name,
+      this.common.name,
+      shortText,
+      this.callback
+    )
   }
 
-  getCallbackIfContentIs(modelType: ModelType): ContentCallback | undefined {
+  getCallbackIfContentIs(
+    modelType: TopContentType
+  ): ContentCallback | undefined {
     if (
       this.callback instanceof ContentCallback &&
       this.callback.model === modelType
@@ -53,7 +61,7 @@ export class SearchResult {
     }
     if (
       this.common.shortText !== SearchResult.CHITCHAT_SHORT_TEXT &&
-      this.callback.model !== ModelType.CHITCHAT
+      this.callback.model !== ContentType.CHITCHAT
     ) {
       return undefined
     }

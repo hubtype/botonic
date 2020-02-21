@@ -78,8 +78,8 @@ export interface CMS {
   /**
    * If locale specified in context, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
-  contents(
-    model: ModelType,
+  topContents(
+    model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]>

@@ -83,13 +83,22 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleError('contentsWithKeywords'))
   }
 
-  contents(
-    model: ModelType,
+  topContents(
+    model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]> {
     return this.cms
-      .contents(model, context, filter)
+      .topContents(model, context, filter)
+      .catch(this.handleError('topContents'))
+  }
+
+  contents(
+    contentType: ContentType,
+    context?: Context | undefined
+  ): Promise<Content[]> {
+    return this.cms
+      .contents(contentType, context)
       .catch(this.handleError('contents'))
   }
 
