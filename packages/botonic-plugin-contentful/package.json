@@ -25,6 +25,7 @@
   "dependencies": {
     "@babel/runtime": "^7.8.3",
     "contentful": "^7.13.1",
+    "csv-stringify": "^5.3.6",
     "escape-string-regexp": "^2.0.0",
     "memoizee": "^0.4.14",
     "moment": "^2.24.0",
