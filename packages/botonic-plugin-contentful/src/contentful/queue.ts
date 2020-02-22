@@ -3,9 +3,9 @@ import * as cms from '../cms'
 import * as contentful from 'contentful'
 import { ContentDelivery } from './content-delivery'
 import {
-  commonFieldsFromEntry,
   CommonEntryFields,
   DeliveryApi,
+  ContentfulEntryUtils,
 } from './delivery-api'
 import { ScheduleFields, ScheduleDelivery } from './schedule'
 
@@ -32,7 +32,7 @@ export class QueueDelivery extends ContentDelivery {
       fields.schedule && ScheduleDelivery.fromEntry(fields.schedule)
 
     return new cms.Queue(
-      commonFieldsFromEntry(entry),
+      ContentfulEntryUtils.commonFieldsFromEntry(entry),
       fields.queue,
       schedule && schedule.schedule
     )

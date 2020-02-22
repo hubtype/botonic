@@ -4,7 +4,7 @@ import * as time from '../time'
 import { ContentDelivery } from './content-delivery'
 import {
   CommonEntryFields,
-  commonFieldsFromEntry,
+  ContentfulEntryUtils,
   DeliveryApi,
 } from './delivery-api'
 
@@ -27,7 +27,10 @@ export class DateRangeDelivery extends ContentDelivery {
       new Date(Date.parse(entry.fields.from)),
       new Date(Date.parse(entry.fields.to))
     )
-    return new DateRangeContent(commonFieldsFromEntry(entry), dateRange)
+    return new DateRangeContent(
+      ContentfulEntryUtils.commonFieldsFromEntry(entry),
+      dateRange
+    )
   }
 }
 

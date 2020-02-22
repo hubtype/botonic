@@ -4,7 +4,7 @@ import { ButtonDelivery } from './button'
 import {
   DeliveryApi,
   CommonEntryFields,
-  commonFieldsFromEntry,
+  ContentfulEntryUtils,
 } from './delivery-api'
 import { DeliveryWithFollowUp } from './follow-up'
 
@@ -40,7 +40,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
     return Promise.all(promises).then(followUpAndButtons => {
       const followUp = followUpAndButtons.shift() as cms.FollowUp | undefined
       const buttons = followUpAndButtons as cms.Button[]
-      const common = commonFieldsFromEntry(entry)
+      const common = ContentfulEntryUtils.commonFieldsFromEntry(entry)
       common.followUp = followUp
       return new cms.Text(
         common,

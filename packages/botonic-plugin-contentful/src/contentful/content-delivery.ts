@@ -1,7 +1,8 @@
 import { Context, isSameModel, TopContentType } from '../cms'
 import * as contentful from 'contentful'
-import { DeliveryApi } from './delivery-api'
+import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
 
+//  move to AdaptorDeliveryApi ?
 export abstract class ContentDelivery {
   constructor(
     readonly modelType: TopContentType,
@@ -14,7 +15,7 @@ export abstract class ContentDelivery {
     query: any = {}
   ): Promise<contentful.Entry<T>> {
     const entry = await this.delivery.getEntry<T>(id, context, query)
-    const gotType = DeliveryApi.getContentModel(entry)
+    const gotType = ContentfulEntryUtils.getContentModel(entry)
     if (!isSameModel(gotType, this.modelType)) {
       throw new Error(
         `Requested model with id '${id}' of type '${this.modelType}' but got '${gotType}'`

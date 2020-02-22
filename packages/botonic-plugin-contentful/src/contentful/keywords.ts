@@ -2,7 +2,11 @@ import { Entry, EntryCollection } from 'contentful'
 import * as cms from '../cms'
 import { CommonFields, Context, TopContentType } from '../cms'
 import { SearchResult } from '../search'
-import { CommonEntryFields, DeliveryApi } from './delivery-api'
+import {
+  CommonEntryFields,
+  ContentfulEntryUtils,
+  DeliveryApi,
+} from './delivery-api'
 import { QueueFields } from './queue'
 import { ContentType } from '../cms/cms'
 
@@ -33,7 +37,7 @@ export class KeywordsDelivery {
     keywords: string[],
     priority?: number
   ): SearchResult {
-    const contentModel = DeliveryApi.getContentModel(entry)
+    const contentModel = ContentfulEntryUtils.getContentModel(entry)
     if (!entry.fields.shortText) {
       console.error(
         `No shortText found for content of type ${contentModel} and name: ${entry.fields.name}`
@@ -41,7 +45,7 @@ export class KeywordsDelivery {
       entry.fields.shortText = entry.fields.name
     }
 
-    const callback = DeliveryApi.callbackFromEntry(entry)
+    const callback = ContentfulEntryUtils.callbackFromEntry(entry)
     return new SearchResult(
       callback,
       new CommonFields(entry.sys.id, entry.fields.name, {

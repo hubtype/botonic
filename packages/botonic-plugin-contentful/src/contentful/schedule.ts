@@ -4,7 +4,7 @@ import * as time from '../time'
 import { ContentDelivery } from './content-delivery'
 import {
   CommonEntryFields,
-  commonFieldsFromEntry,
+  ContentfulEntryUtils,
   ContentWithNameFields,
   DeliveryApi,
 } from './delivery-api'
@@ -27,7 +27,10 @@ export class ScheduleDelivery extends ContentDelivery {
     const schedule = new time.Schedule(time.Schedule.TZ_CET) // TODO allow configuration
     ScheduleDelivery.addDaySchedules(schedule, entry.fields)
     ScheduleDelivery.addExceptions(schedule, entry.fields.exceptions)
-    return new ScheduleContent(commonFieldsFromEntry(entry), schedule)
+    return new ScheduleContent(
+      ContentfulEntryUtils.commonFieldsFromEntry(entry),
+      schedule
+    )
   }
 
   private static addDaySchedules(
