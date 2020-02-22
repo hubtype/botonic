@@ -7,7 +7,7 @@ import { CarouselDelivery } from './carousel'
 import { ImageDelivery, ImageFields } from './image'
 import {
   CommonEntryFields,
-  commonFieldsFromEntry,
+  ContentfulEntryUtils,
   DeliveryApi,
   FollowUpFields,
 } from './delivery-api'
@@ -47,7 +47,7 @@ export class FollowUpDelivery {
     if (!followUp.sys.contentType) {
       followUp = await this.delivery.getEntry(followUp.sys.id, context)
     }
-    switch (DeliveryApi.getContentModel(followUp)) {
+    switch (ContentfulEntryUtils.getContentModel(followUp)) {
       case ContentType.CAROUSEL:
         // here followUp already has its fields set, but not yet its element fields
         return this.carousel.carousel(followUp.sys.id, context)
@@ -63,7 +63,7 @@ export class FollowUpDelivery {
   }
 
   async commonFields(entry: Entry<CommonEntryFields>, context: cms.Context) {
-    const common = commonFieldsFromEntry(entry)
+    const common = ContentfulEntryUtils.commonFieldsFromEntry(entry)
     if (entry.fields.followup) {
       const followUp = entry.fields.followup.sys.contentType
         ? entry.fields.followup

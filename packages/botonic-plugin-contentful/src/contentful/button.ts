@@ -3,7 +3,11 @@ import { DeliveryApi } from '.'
 import { ContentType } from '../cms'
 import * as cms from '../cms'
 import { CarouselFields } from './carousel'
-import { CommonEntryFields, ContentWithNameFields } from './delivery-api'
+import {
+  ContentfulEntryUtils,
+  CommonEntryFields,
+  ContentWithNameFields,
+} from './delivery-api'
 import { TextFields } from './text'
 import { UrlFields } from './url'
 
@@ -21,7 +25,7 @@ export class ButtonDelivery {
 
   private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
     const entry = await this.delivery.getEntry(id, context)
-    const entryType = DeliveryApi.getContentModel(entry)
+    const entryType = ContentfulEntryUtils.getContentModel(entry)
     switch (entryType as string) {
       case cms.ContentType.CAROUSEL:
       case cms.ContentType.TEXT:
@@ -68,12 +72,12 @@ export class ButtonDelivery {
       entry.sys.id,
       fields.name,
       text,
-      DeliveryApi.callbackFromEntry(entry)
+      ContentfulEntryUtils.callbackFromEntry(entry)
     )
   }
 
   private getTargetCallback(target: ButtonTarget): cms.Callback {
-    const model = DeliveryApi.getContentModel(target) as string
+    const model = ContentfulEntryUtils.getContentModel(target) as string
     switch (model) {
       case ContentType.STARTUP:
       case ContentType.CAROUSEL:

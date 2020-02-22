@@ -5,7 +5,7 @@ import * as cms from '../cms'
 import {
   DeliveryApi,
   CommonEntryFields,
-  commonFieldsFromEntry,
+  ContentfulEntryUtils,
 } from './delivery-api'
 
 // TODO remove DeliveryWithFollowUp
@@ -30,7 +30,10 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
       return this.elementFromEntry(entry, context)
     })
     const e = await Promise.all(elements)
-    return new cms.Carousel(commonFieldsFromEntry(entry), e)
+    return new cms.Carousel(
+      ContentfulEntryUtils.commonFieldsFromEntry(entry),
+      e
+    )
   }
 
   /**
@@ -52,7 +55,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
           buttons,
           fields.title,
           fields.subtitle,
-          fields.pic && DeliveryApi.urlFromAsset(fields.pic)
+          fields.pic && ContentfulEntryUtils.urlFromAsset(fields.pic)
         )
     )
   }

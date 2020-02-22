@@ -1,17 +1,14 @@
-import * as contentful from 'contentful'
-import { Entry } from 'contentful'
+import * as contentful from 'contentful/index'
+import { Entry } from 'contentful/index'
 import memoize from 'memoizee'
-import { DeliveryApiInterface } from './delivery-api'
+import { ReducedClientApi } from './client-api'
 
-export class CachedDelivery implements DeliveryApiInterface {
+export class CachedClientApi implements ReducedClientApi {
   readonly getAsset: (id: string, query?: any) => Promise<contentful.Asset>
   readonly getEntries: <T>(query: any) => Promise<contentful.EntryCollection<T>>
   readonly getEntry: <T>(id: string, query?: any) => Promise<Entry<T>>
 
-  constructor(
-    readonly client: DeliveryApiInterface,
-    readonly cacheTtlMs = 10000
-  ) {
+  constructor(readonly client: ReducedClientApi, readonly cacheTtlMs = 10000) {
     const options = (length: number) =>
       ({
         primitive: true,

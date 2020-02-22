@@ -16,7 +16,12 @@ import {
   TopContent,
 } from '../cms'
 import { ButtonDelivery } from './button'
-import { DeliveryApi } from './delivery-api'
+import {
+  AdaptorDeliveryApi,
+  ContentfulEntryUtils,
+  ContentsApi,
+  DeliveryApi,
+} from './delivery-api'
 import { CarouselDelivery } from './carousel'
 import { StartUpDelivery } from './startup'
 import { TextDelivery } from './text'
@@ -25,11 +30,12 @@ import * as cms from '../cms'
 import { QueueDelivery } from './queue'
 import * as contentful from 'contentful'
 import { ContentfulOptions } from '../plugin'
-import { CachedDelivery } from './cache'
+import { CachedClientApi } from './cache'
 import { CreateClientParams } from 'contentful'
 
 export default class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
+  private readonly _contents: ContentsApi
   private readonly _carousel: CarouselDelivery
   private readonly _text: TextDelivery
   private readonly _startUp: StartUpDelivery
@@ -59,11 +65,13 @@ export default class Contentful implements cms.CMS {
       params.environment = options.environment
     }
     const client = contentful.createClient(params)
-    const delivery = new DeliveryApi(
+    const deliveryApi = new AdaptorDeliveryApi(
       options.disableCache
         ? client
-        : new CachedDelivery(client, options.cacheTtlMs)
+        : new CachedClientApi(client, options.cacheTtlMs)
     )
+    const delivery = deliveryApi
+    this._contents = new ContentsApi(delivery)
 
     this._delivery = delivery
     this._button = new ButtonDelivery(delivery)
@@ -127,7 +135,7 @@ export default class Contentful implements cms.CMS {
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]> {
     console.log('getting contents for lang', context.locale)
-    return this._delivery.topContents(
+    return this._contents.topContents(
       model,
       context,
       (entry: contentful.Entry<any>, ctxt: Context) =>
@@ -140,7 +148,7 @@ export default class Contentful implements cms.CMS {
     contentType: ContentType,
     context = DEFAULT_CONTEXT
   ): Promise<Content[]> {
-    return this._delivery.contents(
+    return this._contents.contents(
       contentType,
       context,
       (entry: contentful.Entry<any>, ctxt: Context) =>
@@ -152,7 +160,7 @@ export default class Contentful implements cms.CMS {
     entry: contentful.Entry<any>,
     context: Context
   ): Promise<TopContent> {
-    const model = DeliveryApi.getContentModel(entry)
+    const model = ContentfulEntryUtils.getContentModel(entry)
     switch (model) {
       case ContentType.CAROUSEL:
         return this._carousel.fromEntry(entry, context)
@@ -176,7 +184,7 @@ export default class Contentful implements cms.CMS {
     entry: contentful.Entry<any>,
     context: Context
   ): Promise<Content> {
-    const model = DeliveryApi.getContentModel(entry)
+    const model = ContentfulEntryUtils.getContentModel(entry)
     switch (model) {
       case ContentType.BUTTON:
         return this._button.fromEntry(entry, context)

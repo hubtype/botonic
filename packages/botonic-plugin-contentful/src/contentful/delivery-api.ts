@@ -8,9 +8,9 @@ import {
   ContentCallback,
   ContentType,
   Context,
-  TopContentType,
   SearchableBy,
   TopContent,
+  TopContentType,
 } from '../cms'
 import { QueueDelivery } from './queue'
 import { UrlFields } from './url'
@@ -20,17 +20,28 @@ import {
 } from './searchable-by'
 import { ScheduleDelivery } from './schedule'
 import { DateRangeDelivery, DateRangeFields } from './date-range'
+import { ReducedClientApi } from './delivery/client-api'
 
-export type DeliveryApiInterface = Pick<
-  contentful.ContentfulClientApi,
-  'getAsset' | 'getEntries' | 'getEntry'
->
+export interface DeliveryApi {
+  getAsset(id: string, query?: any): Promise<contentful.Asset>
+
+  getEntry<T>(
+    id: string,
+    context: Context,
+    query?: any
+  ): Promise<contentful.Entry<T>>
+
+  getEntries<T>(
+    context: Context,
+    query?: any
+  ): Promise<contentful.EntryCollection<T>>
+}
 
 /**
  * Manages the {@link Context}, parses Content's Id and ContentType from the Contentful entries...
  */
-export class DeliveryApi {
-  constructor(readonly client: DeliveryApiInterface) {}
+export class AdaptorDeliveryApi implements DeliveryApi {
+  constructor(readonly client: ReducedClientApi) {}
 
   async getAsset(id: string, query?: any): Promise<contentful.Asset> {
     return this.client.getAsset(id, query)
@@ -43,43 +54,36 @@ export class DeliveryApi {
   ): Promise<contentful.Entry<T>> {
     return this.client.getEntry<T>(
       id,
-      DeliveryApi.queryFromContext(context, query)
+      AdaptorDeliveryApi.queryFromContext(context, query)
     )
   }
 
   async getEntries<T>(
     context: Context,
-    query?: any
+    query: any = {}
   ): Promise<contentful.EntryCollection<T>> {
     return this.client.getEntries<T>(
-      DeliveryApi.queryFromContext(context, query)
+      AdaptorDeliveryApi.queryFromContext(context, query)
     )
   }
 
-  static getContentModel(entry: contentful.Entry<any>): cms.ContentType {
-    // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
-    const typ = entry.sys.contentType.sys.id
-    return typ as cms.ContentType
-  }
-
-  static callbackFromEntry(entry: contentful.Entry<any>): Callback {
-    const modelType = this.getContentModel(entry) as TopContentType
-    if (modelType === ContentType.URL) {
-      return Callback.ofUrl((entry.fields as UrlFields).url)
+  private static queryFromContext(context: Context, query: any = {}): any {
+    if (context.locale) {
+      query['locale'] = context.locale
     }
-    return new ContentCallback(modelType, entry.sys.id)
+    return query
   }
+}
 
-  static urlFromAsset(assetField: contentful.Asset): string {
-    return 'https:' + assetField.fields.file.url
-  }
+export class ContentsApi {
+  constructor(readonly api: DeliveryApi) {}
 
   async contents(
     contentType: ContentType,
     context: Context,
     factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>
   ): Promise<Content[]> {
-    const entryCollection: EntryCollection<CommonEntryFields> = await this.getEntries(
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
       context,
       {
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -101,7 +105,7 @@ export class DeliveryApi {
     ) => Promise<TopContent>,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]> {
-    const entryCollection: EntryCollection<CommonEntryFields> = await this.getEntries(
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
       context,
       {
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -111,16 +115,11 @@ export class DeliveryApi {
     )
     let entries = entryCollection.items
     if (filter) {
-      entries = entries.filter(entry => filter(commonFieldsFromEntry(entry)))
+      entries = entries.filter(entry =>
+        filter(ContentfulEntryUtils.commonFieldsFromEntry(entry))
+      )
     }
     return Promise.all(entries.map(entry => factory(entry, context)))
-  }
-
-  private static queryFromContext(context: Context, query: any = {}): any {
-    if (context.locale) {
-      query['locale'] = context.locale
-    }
-    return query
   }
 
   private maxReferencesInclude() {
@@ -147,27 +146,47 @@ export interface CommonEntryFields extends ContentWithNameFields {
 }
 export type FollowUpFields = CommonEntryFields
 
-export function commonFieldsFromEntry(
-  entry: Entry<CommonEntryFields>
-): CommonFields {
-  const fields = entry.fields
+export class ContentfulEntryUtils {
+  static getContentModel(entry: contentful.Entry<any>): cms.ContentType {
+    // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
+    const typ = entry.sys.contentType.sys.id
+    return typ as cms.ContentType
+  }
 
-  const searchableBy =
-    fields.searchableBy &&
-    new SearchableBy(
-      fields.searchableBy.map(searchableBy =>
-        SearchableByKeywordsDelivery.fromEntry(searchableBy)
+  static callbackFromEntry(entry: contentful.Entry<any>): Callback {
+    const modelType = ContentfulEntryUtils.getContentModel(
+      entry
+    ) as TopContentType
+    if (modelType === ContentType.URL) {
+      return Callback.ofUrl((entry.fields as UrlFields).url)
+    }
+    return new ContentCallback(modelType, entry.sys.id)
+  }
+
+  static urlFromAsset(assetField: contentful.Asset): string {
+    return 'https:' + assetField.fields.file.url
+  }
+
+  static commonFieldsFromEntry(entry: Entry<CommonEntryFields>): CommonFields {
+    const fields = entry.fields
+
+    const searchableBy =
+      fields.searchableBy &&
+      new SearchableBy(
+        fields.searchableBy.map(searchableBy =>
+          SearchableByKeywordsDelivery.fromEntry(searchableBy)
+        )
       )
-    )
 
-  const dateRange =
-    fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange)
+    const dateRange =
+      fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange)
 
-  return new CommonFields(entry.sys.id, fields.name, {
-    keywords: fields.keywords,
-    shortText: fields.shortText,
-    partitions: fields.partitions,
-    searchableBy,
-    dateRange,
-  })
+    return new CommonFields(entry.sys.id, fields.name, {
+      keywords: fields.keywords,
+      shortText: fields.shortText,
+      partitions: fields.partitions,
+      searchableBy,
+      dateRange,
+    })
+  }
 }

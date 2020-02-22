@@ -1,5 +1,5 @@
 import * as cms from '../cms'
-import { DeliveryApi } from './delivery-api'
+import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
 
 export class AssetDelivery {
   constructor(protected delivery: DeliveryApi) {}
@@ -8,7 +8,7 @@ export class AssetDelivery {
     const asset = await this.delivery.getAsset(id)
     return new cms.Asset(
       asset.fields.title,
-      DeliveryApi.urlFromAsset(asset),
+      ContentfulEntryUtils.urlFromAsset(asset),
       asset.fields.file.contentType,
       asset.fields.file.details
     )
