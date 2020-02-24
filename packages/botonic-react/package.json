@@ -46,7 +46,7 @@
     "@babel/preset-react": "^7.8.3",
     "@babel/register": "^7.8.3",
     "@babel/runtime": "^7.8.4",
-    "@types/react": "16.9.20",
+    "@types/react": "16.9.22",
     "babel-dts-generator": "^0.6.3",
     "babel-plugin-add-module-exports": "^1.0.2",
     "html-react-parser": "^0.10.1",
