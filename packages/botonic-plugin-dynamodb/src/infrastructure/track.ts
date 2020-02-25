@@ -16,7 +16,7 @@ import Time from '../domain/time'
 export const TABLE_NAME = 'track'
 
 export class TrackKey {
-  @hashKey()
+  @hashKey({ type: 'String' })
   bot = ''
 
   @rangeKey({
