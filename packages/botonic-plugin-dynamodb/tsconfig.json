@@ -25,7 +25,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     // without typeRoots, it also checks @types of parent folders
-    "typeRoots" : ["node_modules/@types"],
+//    "typeRoots" : ["node_modules/@types"],
 
     // lint options
     "strict": true,

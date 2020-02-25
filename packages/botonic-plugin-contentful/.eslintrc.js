@@ -18,9 +18,6 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
     sourceType: "module", // Allows for the use of imports
-    ecmaFeatures: {
-      jsx: true // Allows for the parsing of JSX
-    }
   },
 // npm run lint runs eslint with --quiet --fix so that only errors are fixed
   rules: {
@@ -41,6 +38,7 @@ module.exports = {
     "jest/no-export": "warn",
 
     // special for TYPESCRIPT
+    "@typescript-eslint/ban-ts-ignore": "warn",
     "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
     "@typescript-eslint/explicit-member-accessibility": "off", //we think defaulting to public is a good default
     "@typescript-eslint/no-empty-function": "warn",
@@ -56,7 +54,6 @@ module.exports = {
     "unicorn/prevent-abbreviations" : "off", // the plugin removes removes type annotations from typescript code :-(
     "unicorn/filename-case" : "off", // React convention is in CamelCase
     "valid-jsdoc": "off", // function comments hide code complexity (and typescript already have type specifications),
-
   },
   "overrides": [
     {
