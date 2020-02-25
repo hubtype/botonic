@@ -17,14 +17,13 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
-    sourceType: "module" // Allows for the use of imports
+    sourceType: "module", // Allows for the use of imports
   },
 // npm run lint runs eslint with --quiet --fix so that only errors are fixed
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
     "filenames/match-regex": ["error", "^[a-z-.]+$", true],
-
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
@@ -36,13 +35,15 @@ module.exports = {
     "unicorn/no-abusive-eslint-disable" : "off",
     "@typescript-eslint/camelcase" : "warn",
     "consistent-return": "error",
+    "jest/no-export": "warn",
 
     // special for TYPESCRIPT
+    "@typescript-eslint/ban-ts-ignore": "warn",
     "@typescript-eslint/explicit-function-return-type": "off", // annoying for tests
     "@typescript-eslint/explicit-member-accessibility": "off", //we think defaulting to public is a good default
+    "@typescript-eslint/no-empty-function": "warn",
     "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }], // to encapsulate types in namespace with same name as Class
     "@typescript-eslint/no-non-null-assertion" : "warn", // specially useful in tests, and "when you know what you're doing"
-    "@typescript-eslint/no-object-literal-type-assertion" : [ "error", {allowAsParameter: false}], //useful to pass options to plugins
     "@typescript-eslint/no-parameter-properties": "off", // opinionated: parameter properties make data classes shorter
     // allow public functions/classes to call private functions/classes declared below.
     // otoh, variables (typically constants) should be declared at the top
@@ -59,9 +60,6 @@ module.exports = {
       "files": [
         "tests/**/*.ts" // to be able to skip required fields when not used in a particular test
       ],
-      "rules": {
-        "@typescript-eslint/no-object-literal-type-assertion" : "off",
-      }
     }
   ],
   env: {

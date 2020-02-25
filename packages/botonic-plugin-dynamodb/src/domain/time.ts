@@ -3,7 +3,7 @@ export interface TimeProvider {
 }
 
 class RealTimeProvider implements TimeProvider {
-  now(withMilliseconds: boolean = false): Date {
+  now(withMilliseconds = false): Date {
     const now = new Date()
     // since we store times without milliseconds, it simplifies testing to always remove them
     if (!withMilliseconds) {
