@@ -17,7 +17,7 @@ export const TABLE_NAME = 'track'
 
 export class TrackKey {
   @hashKey()
-  bot: string = ''
+  bot = ''
 
   @rangeKey({
     defaultProvider: () => Time.now(),
