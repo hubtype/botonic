@@ -2,6 +2,7 @@ import { COLORS } from '../../constants'
 import styled, { css } from 'styled-components'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.css'
+import './styled-scrollbar.scss'
 
 export const StyledScrollbar = styled(SimpleBar)`
   ${props =>

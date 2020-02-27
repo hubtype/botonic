@@ -64,3 +64,16 @@ export const _getThemeProperty = theme => (
 
 export const ConditionalWrapper = ({ condition, wrapper, children }) =>
   condition ? wrapper(children) : children
+
+export const scrollToBottom = (timeout = 100) => {
+  const botonicScrollableArea = document.getElementById(
+    'botonic-scrollable-content'
+  )
+  const frame =
+    botonicScrollableArea &&
+    botonicScrollableArea.querySelectorAll('.simplebar-content-wrapper')[0]
+  if (frame) {
+    frame.scrollTop = frame.scrollHeight
+    setTimeout(() => (frame.scrollTop = frame.scrollHeight), timeout)
+  }
+}
