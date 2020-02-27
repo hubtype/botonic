@@ -89,7 +89,7 @@ export abstract class MessageContent extends TopContent {
  * to confirm their interest on this content
  */
 export class CommonFields {
-  readonly shortText?: string
+  readonly shortText: string
   readonly keywords: string[]
   readonly searchableBy?: SearchableBy
   /** Useful when contents need to be replicated according to some criteria. Eg. country, company,...
@@ -110,13 +110,14 @@ export class CommonFields {
     }
   ) {
     if (opt) {
-      this.shortText = opt.shortText
+      this.shortText = opt.shortText || ''
       this.keywords = opt.keywords || []
       this.searchableBy = opt.searchableBy
       this.partitions = opt.partitions || []
       this.dateRange = opt.dateRange
       this.followUp = opt.followUp
     } else {
+      this.shortText = ''
       this.keywords = []
       this.partitions = []
     }
@@ -148,7 +149,7 @@ export class StartUp extends MessageContent {
   constructor(
     readonly common: CommonFields,
     readonly imgUrl: string | undefined,
-    readonly text: string | undefined,
+    readonly text: string,
     readonly buttons: Button[]
   ) {
     super(common, ContentType.STARTUP)
@@ -178,8 +179,8 @@ export class Element extends Content {
   constructor(
     readonly id: string,
     readonly buttons: Button[],
-    readonly title?: string,
-    readonly subtitle?: string,
+    readonly title: string,
+    readonly subtitle: string,
     readonly imgUrl?: string
   ) {
     super(ContentType.ELEMENT)
