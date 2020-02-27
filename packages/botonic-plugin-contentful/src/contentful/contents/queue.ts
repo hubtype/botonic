@@ -1,12 +1,12 @@
-import { Context } from '../cms'
-import * as cms from '../cms'
-import * as contentful from 'contentful'
-import { ContentDelivery } from './content-delivery'
+import { Context } from '../../cms'
+import * as cms from '../../cms'
+import * as contentful from 'contentful/index'
+import { ContentDelivery } from '../content-delivery'
 import {
   CommonEntryFields,
   DeliveryApi,
   ContentfulEntryUtils,
-} from './delivery-api'
+} from '../delivery-api'
 import { ScheduleFields, ScheduleDelivery } from './schedule'
 
 export class QueueDelivery extends ContentDelivery {

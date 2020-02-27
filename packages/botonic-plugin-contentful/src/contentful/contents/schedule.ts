@@ -1,13 +1,13 @@
-import { Entry } from 'contentful'
-import { DEFAULT_CONTEXT, ContentType, ScheduleContent } from '../cms'
-import * as time from '../time'
-import { ContentDelivery } from './content-delivery'
+import { Entry } from 'contentful/index'
+import { DEFAULT_CONTEXT, ContentType, ScheduleContent } from '../../cms'
+import * as time from '../../time'
+import { ContentDelivery } from '../content-delivery'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   ContentWithNameFields,
   DeliveryApi,
-} from './delivery-api'
+} from '../delivery-api'
 
 export class ScheduleDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = 2

@@ -3,8 +3,8 @@ import {
   Queue,
   SearchableBy,
   SearchableByKeywords,
-} from '../../src/cms'
-import { testContentful, testContext } from './contentful.helper'
+} from '../../../src/cms'
+import { testContentful, testContext } from '../contentful.helper'
 import { testSchedule } from './schedule.test'
 
 const TEST_QUEUE_ID = '62ILnVxLHOEp7aVvPMpCO8'

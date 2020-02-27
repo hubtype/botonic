@@ -1,13 +1,13 @@
-import * as contentful from 'contentful'
-import { DeliveryApi } from '.'
-import { ContentType } from '../cms'
-import * as cms from '../cms'
+import * as contentful from 'contentful/index'
+import { DeliveryApi } from '../index'
+import { ContentType } from '../../cms'
+import * as cms from '../../cms'
 import { CarouselFields } from './carousel'
 import {
   ContentfulEntryUtils,
   CommonEntryFields,
   ContentWithNameFields,
-} from './delivery-api'
+} from '../delivery-api'
 import { TextFields } from './text'
 import { UrlFields } from './url'
 

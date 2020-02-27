@@ -1,10 +1,10 @@
-import { Context } from '../cms'
-import * as cms from '../cms'
+import { Context } from '../../cms'
+import * as cms from '../../cms'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   DeliveryApi,
-} from './delivery-api'
+} from '../delivery-api'
 import * as contentful from 'contentful/index'
 import { DeliveryWithFollowUp } from './follow-up'
 

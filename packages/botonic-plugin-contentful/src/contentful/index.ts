@@ -1,11 +1,11 @@
 import { DEFAULT_CONTEXT, Context } from '../cms/context'
 import { SearchResult } from '../search'
-import { AssetDelivery } from './asset'
-import { DateRangeDelivery } from './date-range'
-import { ImageDelivery } from './image'
-import { ScheduleDelivery } from './schedule'
-import { KeywordsDelivery } from './keywords'
-import { FollowUpDelivery } from './follow-up'
+import { AssetDelivery } from './contents/asset'
+import { DateRangeDelivery } from './contents/date-range'
+import { ImageDelivery } from './contents/image'
+import { ScheduleDelivery } from './contents/schedule'
+import { KeywordsDelivery } from './search/keywords'
+import { FollowUpDelivery } from './contents/follow-up'
 import {
   CommonFields,
   Content,
@@ -15,22 +15,22 @@ import {
   ScheduleContent,
   TopContent,
 } from '../cms'
-import { ButtonDelivery } from './button'
+import { ButtonDelivery } from './contents/button'
 import {
   AdaptorDeliveryApi,
   ContentfulEntryUtils,
   ContentsApi,
   DeliveryApi,
 } from './delivery-api'
-import { CarouselDelivery } from './carousel'
-import { StartUpDelivery } from './startup'
-import { TextDelivery } from './text'
-import { UrlDelivery } from './url'
+import { CarouselDelivery } from './contents/carousel'
+import { StartUpDelivery } from './contents/startup'
+import { TextDelivery } from './contents/text'
+import { UrlDelivery } from './contents/url'
 import * as cms from '../cms'
-import { QueueDelivery } from './queue'
+import { QueueDelivery } from './contents/queue'
 import * as contentful from 'contentful'
 import { ContentfulOptions } from '../plugin'
-import { CachedClientApi } from './cache'
+import { CachedClientApi } from './delivery/cache'
 import { CreateClientParams } from 'contentful'
 
 export default class Contentful implements cms.CMS {
@@ -213,4 +213,4 @@ export default class Contentful implements cms.CMS {
 }
 
 export { DeliveryApi } from './delivery-api'
-export { CarouselDelivery } from './carousel'
+export { CarouselDelivery } from './contents/carousel'

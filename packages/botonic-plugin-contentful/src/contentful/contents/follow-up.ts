@@ -1,7 +1,7 @@
-import * as cms from '../cms'
-import { ContentType } from '../cms'
-import { Entry } from 'contentful'
-import { ContentDelivery } from './content-delivery'
+import * as cms from '../../cms'
+import { ContentType } from '../../cms'
+import { Entry } from 'contentful/index'
+import { ContentDelivery } from '../content-delivery'
 import { TextDelivery, TextFields } from './text'
 import { CarouselDelivery } from './carousel'
 import { ImageDelivery, ImageFields } from './image'
@@ -10,7 +10,7 @@ import {
   ContentfulEntryUtils,
   DeliveryApi,
   FollowUpFields,
-} from './delivery-api'
+} from '../delivery-api'
 import { StartUpDelivery, StartUpFields } from './startup'
 
 export class DeliveryWithFollowUp extends ContentDelivery {

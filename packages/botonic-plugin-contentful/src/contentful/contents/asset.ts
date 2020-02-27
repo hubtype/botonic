@@ -1,5 +1,5 @@
-import * as cms from '../cms'
-import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
+import * as cms from '../../cms'
+import { ContentfulEntryUtils, DeliveryApi } from '../delivery-api'
 
 export class AssetDelivery {
   constructor(protected delivery: DeliveryApi) {}

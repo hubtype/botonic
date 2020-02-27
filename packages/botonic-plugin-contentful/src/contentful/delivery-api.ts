@@ -12,14 +12,14 @@ import {
   TopContent,
   TopContentType,
 } from '../cms'
-import { QueueDelivery } from './queue'
-import { UrlFields } from './url'
+import { QueueDelivery } from './contents/queue'
+import { UrlFields } from './contents/url'
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields,
-} from './searchable-by'
-import { ScheduleDelivery } from './schedule'
-import { DateRangeDelivery, DateRangeFields } from './date-range'
+} from './search/searchable-by'
+import { ScheduleDelivery } from './contents/schedule'
+import { DateRangeDelivery, DateRangeFields } from './contents/date-range'
 import { ReducedClientApi } from './delivery/client-api'
 
 export interface DeliveryApi {
