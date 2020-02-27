@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useState, useRef } from 'react'
 import { WEBCHAT, COLORS } from '../constants'
+import { scrollToBottom } from '../utils'
 
 export const webchatInitialState = {
   width: WEBCHAT.DEFAULTS.WIDTH,
@@ -191,11 +192,7 @@ export function useWebchat() {
 export function useTyping({ webchatState, updateTyping, updateMessage }) {
   useEffect(() => {
     let delayTimeout, typingTimeout
-    const end = document.getElementById('messages-end')
-    if (end) {
-      end.scrollIntoView({ behavior: 'smooth' })
-      setTimeout(() => end.scrollIntoView({ behavior: 'smooth' }), 100)
-    }
+    scrollToBottom()
     try {
       const nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
       if (nextMsg.delay && nextMsg.typing) {

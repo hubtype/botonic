@@ -32,6 +32,7 @@ import {
   staticAsset,
   _getThemeProperty,
   ConditionalWrapper,
+  scrollToBottom,
 } from '../utils'
 import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
 import { motion } from 'framer-motion'
@@ -191,12 +192,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (!webchatState.isWebchatOpen) return
-    setTimeout(() => {
-      const end = document.getElementById('messages-end')
-      if (end) {
-        end.scrollIntoView()
-      }
-    })
+    scrollToBottom()
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
@@ -484,7 +480,6 @@ export const Webchat = forwardRef((props, ref) => {
       messages={webchatState.messagesComponents}
     >
       {webchatState.typing && <TypingIndicator />}
-      <div id='messages-end' />
     </WebchatMessageList>
   )
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
