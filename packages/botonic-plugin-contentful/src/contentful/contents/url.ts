@@ -1,8 +1,8 @@
-import { Context } from '../cms'
+import { Context } from '../../cms'
 import { DeliveryWithFollowUp } from './follow-up'
-import * as cms from '../cms'
-import * as contentful from 'contentful'
-import { CommonEntryFields, DeliveryApi } from './delivery-api'
+import * as cms from '../../cms'
+import * as contentful from 'contentful/index'
+import { CommonEntryFields, DeliveryApi } from '../delivery-api'
 
 export class UrlDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi) {

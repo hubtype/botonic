@@ -1,12 +1,12 @@
-import * as contentful from 'contentful'
+import * as contentful from 'contentful/index'
 import { DeliveryWithFollowUp } from './follow-up'
 import { ButtonDelivery } from './button'
-import * as cms from '../cms'
+import * as cms from '../../cms'
 import {
   DeliveryApi,
   CommonEntryFields,
   ContentfulEntryUtils,
-} from './delivery-api'
+} from '../delivery-api'
 
 // TODO remove DeliveryWithFollowUp
 export class CarouselDelivery extends DeliveryWithFollowUp {
@@ -36,9 +36,6 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     )
   }
 
-  /**
-   * @todo support multiple buttons
-   */
   private async elementFromEntry(
     entry: contentful.Entry<ElementFields>,
     context: cms.Context

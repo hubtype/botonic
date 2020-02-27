@@ -1,5 +1,5 @@
-import { CommonFields, Url } from '../../src/cms'
-import { testContentful } from './contentful.helper'
+import { CommonFields, Url } from '../../../src/cms'
+import { testContentful } from '../contentful.helper'
 
 const TEST_URL_HUBTYPE_ID = '4ceaDUEr0ay6N7aXzFRt69'
 

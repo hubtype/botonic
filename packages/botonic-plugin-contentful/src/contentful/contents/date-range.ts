@@ -1,12 +1,12 @@
 import * as contentful from 'contentful/index'
-import { DateRangeContent, DEFAULT_CONTEXT, ContentType } from '../cms'
-import * as time from '../time'
-import { ContentDelivery } from './content-delivery'
+import { DateRangeContent, DEFAULT_CONTEXT, ContentType } from '../../cms'
+import * as time from '../../time'
+import { ContentDelivery } from '../content-delivery'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   DeliveryApi,
-} from './delivery-api'
+} from '../delivery-api'
 
 export class DateRangeDelivery extends ContentDelivery {
   constructor(delivery: DeliveryApi) {

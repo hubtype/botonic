@@ -1,5 +1,5 @@
-import { DaySchedule, Schedule, TimeRange, WeekDay } from '../../src/time'
-import { testContentful } from './contentful.helper'
+import { DaySchedule, Schedule, TimeRange, WeekDay } from '../../../src/time'
+import { testContentful } from '../contentful.helper'
 
 test('TEST: contentful schedule', async () => {
   const sut = testContentful()

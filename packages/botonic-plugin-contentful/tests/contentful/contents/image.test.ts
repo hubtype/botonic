@@ -1,4 +1,4 @@
-import { testContentful, testContext } from './contentful.helper'
+import { testContentful, testContext } from '../contentful.helper'
 
 const TEST_IMAGE = '3xjvpC7d7PYBmiptEeygfd'
 

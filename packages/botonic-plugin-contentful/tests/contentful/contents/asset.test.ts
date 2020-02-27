@@ -1,4 +1,4 @@
-import { testContentful } from './contentful.helper'
+import { testContentful } from '../contentful.helper'
 import { expectImgUrlIs } from './image.test'
 
 const TEST_ASSET_ID = '1T0ntgNJnDUSwz59zGMZO6'

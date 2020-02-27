@@ -1,7 +1,12 @@
-import { Button, CommonFields, ContentCallback, StartUp } from '../../src/cms'
-import { testContentful } from './contentful.helper'
+import {
+  Button,
+  CommonFields,
+  ContentCallback,
+  StartUp,
+} from '../../../src/cms'
+import { testContentful } from '../contentful.helper'
 import { TEST_CAROUSEL_MAIN_ID } from './carousel.test'
-import { ContentType } from '../../src/cms/cms'
+import { ContentType } from '../../../src/cms/cms'
 
 test('TEST: contentful startUp', async () => {
   const id = 'PfMPIeS6zD1Rix6Px9m0u'
