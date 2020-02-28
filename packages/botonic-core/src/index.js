@@ -6,6 +6,8 @@ export {
   HandOffBuilder,
   storeCaseRating,
   getAvailableAgents,
+  cancelHandoff,
+  deleteUser,
 } from './handoff'
 export { getNLU } from './nlu'
 export { isBrowser, isNode, isMobile, params2queryString } from './utils'
