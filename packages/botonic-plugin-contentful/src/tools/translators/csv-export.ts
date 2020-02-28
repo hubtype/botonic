@@ -76,9 +76,13 @@ export class CsvExport {
     return finished(writable)
   }
 
-  async *generate(cms: CMS, from: Locale): AsyncGenerator<string[]> {
-    for (const model of [...MESSAGE_TYPES, ContentType.BUTTON]) {
-      const contents = await cms.contents(model, { locale: from })
+  async *generate(cms: CMS, from: Locale): AsyncGenerator<CsvLine> {
+    for (const model of BOTONIC_CONTENT_TYPES) {
+      console.log(`Exporting contents of type ${model}`)
+      const contents = await cms.contents(model, {
+        locale: from,
+        ignoreFallbackLocale: true,
+      })
       for (const content of contents) {
         if (this.options.nameFilter && !this.options.nameFilter(content.name)) {
           continue
