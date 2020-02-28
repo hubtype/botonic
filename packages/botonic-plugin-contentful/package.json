@@ -25,12 +25,14 @@
   "dependencies": {
     "@babel/runtime": "^7.8.3",
     "contentful": "^7.13.1",
+    "csv-parse": "^4.8.6",
     "csv-stringify": "^5.3.6",
     "escape-string-regexp": "^2.0.0",
     "memoizee": "^0.4.14",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
-    "node-nlp": "^4.0.2"
+    "node-nlp": "^4.0.2",
+    "sort-stream": "^1.0.1"
   },
   "devDependencies": {
     "@types/memoizee": "^0.4.3",

@@ -1,37 +1,44 @@
 import {
+  BOTONIC_CONTENT_TYPES,
   Button,
-  Carousel,
   CMS,
   CommonFields,
   Content,
-  ContentType,
-  MESSAGE_TYPES,
+  Element,
   StartUp,
+  TopContent,
 } from '../../index'
 import { Locale } from '../../nlp'
-import { Text, TopContent } from '../../cms'
+import { Text } from '../../cms'
 import stringify from 'csv-stringify'
 import * as stream from 'stream'
 import * as fs from 'fs'
 import { promisify } from 'util'
+import sort from 'sort-stream'
 
-console.log(typeof stream.finished)
 const finished = promisify(stream.finished)
 
 class I18nField {
-  constructor(readonly name: string, readonly value?: string) {}
+  constructor(readonly name: string, readonly value: string) {}
 }
+
+type CsvLine = string[]
 
 interface CsvExportOptions {
-  nameFilter?: (name: string) => boolean
+  readonly nameFilter?: (name: string) => boolean
+  readonly stringFilter?: (text: string) => boolean
 }
 
+export const skipEmptyStrings = (str: string) => Boolean(str && str.trim())
 /***
  * Uses https://csv.js.org/stringify/api/
  */
 export class CsvExport {
-  private toFields = new ContentToI18nFields()
-  constructor(private readonly options: CsvExportOptions) {}
+  private toFields: ContentToCsvLines
+
+  constructor(private readonly options: CsvExportOptions) {
+    this.toFields = new ContentToCsvLines(options)
+  }
 
   create_stringifier() {
     return stringify({
@@ -41,14 +48,25 @@ export class CsvExport {
       quoted: true,
       record_delimiter: 'windows',
       header: true,
-      columns: ['Model', 'Id', 'Code', 'Field', 'From', 'To'],
+      columns: ['Model', 'Code', 'Id', 'Field', 'From', 'To'],
     })
+  }
+
+  static sortRows(a: string[], b: string[]): number {
+    for (const i in a) {
+      const cmp = a[i].localeCompare(b[i])
+      if (cmp != 0) {
+        return cmp
+      }
+    }
+    return 0
   }
 
   async write(fname: string, cms: CMS, locale: Locale): Promise<void> {
     const stringifier = this.create_stringifier()
     const readable = stream.Readable.from(this.generate(cms, locale))
     const writable = readable
+      .pipe(sort(CsvExport.sortRows))
       .pipe(stringifier)
       .pipe(fs.createWriteStream(fname))
     return this.toPromise(writable)
@@ -65,31 +83,32 @@ export class CsvExport {
         if (this.options.nameFilter && !this.options.nameFilter(content.name)) {
           continue
         }
-        console.log('Exporting content', content.name)
-        for (const field of this.getI18nFields(content)) {
+        console.log('Exporting content', content.name.trim() || content.id)
+        for (const field of this.toFields.getCsvLines(content)) {
           const TO_COLUMN = ''
           yield [...field, TO_COLUMN]
         }
       }
     }
   }
-
-  // TODO create a text TextFieldVisitor
-  getI18nFields(content: Content): string[][] {
-    const columns = [content.contentType, content.id, content.name]
-    if (!(content instanceof TopContent)) {
-      if (content instanceof Button) {
-        return [[...columns, 'Text', content.text]]
-      }
-    }
-    const fields = this.toFields.getFields(content)
-    return fields.filter(f => f.value).map(f => [...columns, f.name, f.value!])
-  }
 }
 
-class ContentToI18nFields {
+export class ContentToCsvLines {
+  constructor(private readonly options: CsvExportOptions) {}
+
+  getCsvLines(content: Content): CsvLine[] {
+    const columns = [content.contentType, content.name, content.id]
+    let fields = this.getFields(content)
+    if (this.options.stringFilter) {
+      fields = fields.filter(f => this.options.stringFilter!(f.value))
+    }
+    return fields.map(f => [...columns, f.name, f.value!])
+  }
+
   getFields(content: Content): I18nField[] {
-    if (content instanceof StartUp) {
+    if (content instanceof Button) {
+      return [new I18nField('Text', content.text)]
+    } else if (content instanceof StartUp) {
       return [
         ...this.getCommonFields(content.common),
         new I18nField('Text', content.text),
@@ -99,14 +118,13 @@ class ContentToI18nFields {
         ...this.getCommonFields(content.common),
         new I18nField('Text', content.text),
       ]
-    } else if (content instanceof Carousel) {
-      const fields = this.getCommonFields(content.common)
-      return fields.concat(
-        ...content.elements.map(e => [
-          new I18nField('Title', e.title),
-          new I18nField('Subtitle', e.subtitle),
-        ])
-      )
+    } else if (content instanceof Element) {
+      return [
+        new I18nField('Title', content.title),
+        new I18nField('Subtitle', content.subtitle),
+      ]
+    } else if (content instanceof TopContent) {
+      return this.getCommonFields(content.common)
     }
     return []
   }

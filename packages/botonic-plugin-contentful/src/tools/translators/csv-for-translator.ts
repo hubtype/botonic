@@ -1,4 +1,4 @@
-import { CsvExport } from './csv-export'
+import { CsvExport, skipEmptyStrings } from './csv-export'
 import { Locale } from '../../nlp'
 import Contentful from '../../contentful'
 
@@ -11,9 +11,10 @@ async function writeCsvForTranslators(
     spaceId: spaceId,
     accessToken: accessToken,
     environment: 'master',
+    disableCache: true,
   })
   const exporter = new CsvExport({
-    // nameFilter: n => ['HOME_RETURN_URL'].includes(n),
+    stringFilter: skipEmptyStrings,
   })
   const promises = locales.map((from: string) =>
     exporter.write(`contentful_${from}.csv`, cms, from)
