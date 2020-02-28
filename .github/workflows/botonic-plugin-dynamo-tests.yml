@@ -25,7 +25,7 @@ jobs:
     - name: Install dev dependencies
       run: (cd ./packages/$PACKAGE && npm install -D)
     - name: Build
-      run: (cd ./packages/$PACKAGE && npm run build)
+      run: (cd ./packages/$PACKAGE && npm run build_with_tests)
     - name: Run tests
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
