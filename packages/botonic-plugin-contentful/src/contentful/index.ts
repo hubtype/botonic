@@ -63,7 +63,7 @@ export default class Contentful implements cms.CMS {
         ? client
         : new CachedClientApi(client, options.cacheTtlMs)
     )
-    const delivery = deliveryApi
+    const delivery = new IgnoreFallbackDecorator(deliveryApi)
     this._contents = new ContentsApi(delivery)
 
     this._delivery = delivery
@@ -181,6 +181,8 @@ export default class Contentful implements cms.CMS {
     switch (model) {
       case ContentType.BUTTON:
         return this._button.fromEntry(entry, context)
+      case ContentType.ELEMENT:
+        return this._carousel.elementFromEntry(entry, context)
       default:
         return this.topContentFromEntry(entry, context)
     }

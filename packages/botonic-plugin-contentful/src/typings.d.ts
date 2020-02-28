@@ -74,3 +74,8 @@ declare module '@nlpjs/lang-ca/src' {
 
   export class StemmerCa extends BaseStemmer {}
 }
+
+declare module 'sort-stream' {
+  function sort(func: (a: any, b: any) => number): any
+  export = sort
+}
