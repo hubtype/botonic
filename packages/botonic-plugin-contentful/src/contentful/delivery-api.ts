@@ -70,7 +70,12 @@ export class AdaptorDeliveryApi implements DeliveryApi {
   }
 
   async getContentType(id: string): Promise<contentful.ContentType> {
-    return this.client.getContentType(id)
+    try {
+      return this.client.getContentType(id)
+    } catch (e) {
+      console.error(`ERROR in getContentType for id ${id}: ${e}`)
+      throw e
+    }
   }
 
   private static queryFromContext(context: Context, query: any = {}): any {

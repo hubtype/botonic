@@ -15,6 +15,7 @@ import {
   TopContent,
   Content,
 } from './contents'
+import { enumValues } from '../util/enums'
 
 export enum MessageContentType {
   CAROUSEL = 'carousel',
@@ -23,8 +24,10 @@ export enum MessageContentType {
   CHITCHAT = 'chitchat', //so far it's an alias for TEXT
   STARTUP = 'startUp',
 }
-export const MESSAGE_TYPES = Object.values(MessageContentType).map(
-  m => m as MessageContentType
+
+// CHITCHAT removed because it's an alias for texts
+export const MESSAGE_CONTENT_TYPES = enumValues(MessageContentType).filter(
+  m => m != MessageContentType.CHITCHAT
 )
 
 export enum NonMessageTopContentType {
@@ -39,9 +42,10 @@ export const TopContentType = {
   ...MessageContentType,
   ...NonMessageTopContentType,
 }
-export const TOPCONTENT_TYPES = Object.values(TopContentType).map(
-  m => m as TopContentType
-)
+export const TOP_CONTENT_TYPES = [
+  ...MESSAGE_CONTENT_TYPES,
+  ...enumValues(NonMessageTopContentType),
+]
 
 export enum SubContentType {
   BUTTON = 'button',
@@ -49,9 +53,17 @@ export enum SubContentType {
 }
 export type ContentType = TopContentType | SubContentType
 export const ContentType = { ...TopContentType, ...SubContentType }
-export const CONTENT_TYPES = Object.values(ContentType).map(
-  m => m as ContentType
-)
+export const CONTENT_TYPES = [
+  ...TOP_CONTENT_TYPES,
+  ...enumValues(SubContentType),
+]
+
+export type BotonicContentType = MessageContentType | SubContentType
+export const BotonicContentType = { ...MessageContentType, ...SubContentType }
+export const BOTONIC_CONTENT_TYPES = [
+  ...MESSAGE_CONTENT_TYPES,
+  ...enumValues(SubContentType),
+]
 
 export function isSameModel(model1: ContentType, model2: ContentType): boolean {
   switch (model1) {

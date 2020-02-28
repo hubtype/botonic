@@ -10,6 +10,8 @@ import {
 } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
 
+const BUTTON_POST_FAQ3 = '40buQOqp9jbwoxmMZhFO16'
+
 test('TEST: contentful contents buttons', async () => {
   const buttons = await testContentful().contents(ContentType.BUTTON, {
     locale: 'en',
@@ -26,10 +28,10 @@ test('TEST: contentful contents buttons', async () => {
       Callback.ofPayload('RATING_1')
     )
   )
-  const empezar = buttons.filter(b => b.id == '40buQOqp9jbwoxmMZhFO16')
+  const empezar = buttons.filter(b => b.id == BUTTON_POST_FAQ3)
   expect(empezar[0]).toEqual(
     new Button(
-      '40buQOqp9jbwoxmMZhFO16',
+      BUTTON_POST_FAQ3,
       'POST_FAQ3',
       'Return an article',
       new ContentCallback(ContentType.TEXT, 'C39lEROUgJl9hHSXKOEXS')

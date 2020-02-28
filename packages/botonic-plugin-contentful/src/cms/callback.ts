@@ -1,4 +1,9 @@
-import { CMS, ContentType, MESSAGE_TYPES, MessageContentType } from './cms'
+import {
+  CMS,
+  ContentType,
+  MESSAGE_CONTENT_TYPES,
+  MessageContentType,
+} from './cms'
 import escapeStringRegexp from 'escape-string-regexp'
 import { Context } from './context'
 import { TopContent } from './contents'
@@ -54,7 +59,7 @@ export class ContentCallback extends Callback {
   }
 
   private static checkDeliverableModel(modelType: string): MessageContentType {
-    if (MESSAGE_TYPES.includes(modelType as MessageContentType)) {
+    if (MESSAGE_CONTENT_TYPES.includes(modelType as MessageContentType)) {
       return modelType as MessageContentType
     } else {
       throw new Error(
