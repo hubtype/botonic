@@ -35,6 +35,8 @@ export interface DeliveryApi {
     context: Context,
     query?: any
   ): Promise<contentful.EntryCollection<T>>
+
+  getContentType(id: string): Promise<contentful.ContentType>
 }
 
 /**
@@ -65,6 +67,10 @@ export class AdaptorDeliveryApi implements DeliveryApi {
     return this.client.getEntries<T>(
       AdaptorDeliveryApi.queryFromContext(context, query)
     )
+  }
+
+  async getContentType(id: string): Promise<contentful.ContentType> {
+    return this.client.getContentType(id)
   }
 
   private static queryFromContext(context: Context, query: any = {}): any {
