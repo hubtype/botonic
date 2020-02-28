@@ -13,4 +13,41 @@ export function shallowClone<T extends object>(obj: T): T {
   return clone as T
 }
 
-// consider this deepClone in TS https://gist.github.com/erikvullings/ada7af09925082cbb89f40ed962d475e
+/**
+ * Deep copy function for TypeScript.
+ * @param T Generic type of target/copied value.
+ * @param target Target value to be copied.
+ * @see Source project, ts-deepcopy https://github.com/ykdr2017/ts-deepcopy
+ * @see Code pen https://codepen.io/erikvullings/pen/ejyBYg
+ */
+export const deepClone = <T>(target: T, alreadyCloned: object[] = []): T => {
+  // @ts-ignore
+  if (alreadyCloned.includes(target)) {
+    return target
+  }
+  // @ts-ignore
+  alreadyCloned.push(target)
+  if (target === undefined) {
+    return target
+  }
+  if (target instanceof Date) {
+    return new Date(target.getTime()) as any
+  }
+  if (target instanceof Array) {
+    const cp = [] as any[]
+    ;(target as any[]).forEach(v => {
+      cp.push(v)
+    })
+    return cp.map((n: any) => deepClone<any>(n, alreadyCloned)) as any
+  }
+  if (typeof target === 'object' && target !== {}) {
+    const cp = { ...(target as { [key: string]: any }) } as {
+      [key: string]: any
+    }
+    Object.keys(cp).forEach(k => {
+      cp[k] = deepClone<any>(cp[k], alreadyCloned)
+    })
+    return cp as T
+  }
+  return target
+}
