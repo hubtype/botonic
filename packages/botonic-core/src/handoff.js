@@ -49,6 +49,11 @@ export class HandOffBuilder {
     return this
   }
 
+  withShadowing(shadowing = true) {
+    this._shadowing = shadowing
+    return this
+  }
+
   async handOff() {
     return _humanHandOff(
       this._session,
@@ -56,7 +61,8 @@ export class HandOffBuilder {
       this._onFinish,
       this._email,
       this._caseInfo,
-      this._note
+      this._note,
+      this._shadowing
     )
   }
 }
@@ -87,7 +93,8 @@ async function _humanHandOff(
   onFinish,
   agentEmail = '',
   caseInfo = '',
-  note = ''
+  note = '',
+  shadowing = false
 ) {
   const params = {}
   if (!queueNameOrId && agentEmail) {
@@ -104,6 +111,9 @@ async function _humanHandOff(
   }
   if (note) {
     params.note = note
+  }
+  if (shadowing) {
+    params.shadowing = shadowing
   }
 
   if (onFinish) {
@@ -150,4 +160,13 @@ export async function getAvailableAgents(session) {
     url: `${baseUrl}/v1/bots/${botId}/get_agents/`,
   })
   return resp.data
+}
+
+export function cancelHandoff(session, typification = null) {
+  let params = { typification }
+  session._botonic_action = `discard_case:${JSON.stringify(params)}`
+}
+
+export function deleteUser(session) {
+  session._botonic_action = `delete_user`
 }
