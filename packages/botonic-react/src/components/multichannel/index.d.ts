@@ -1,8 +1,8 @@
 import * as React from 'react'
 
 export const Multichannel: React.FunctionComponent<{
-  firstIndex: number
-  boldIndex: boolean
+  firstIndex?: number
+  boldIndex?: boolean
 }>
 
 // Text
