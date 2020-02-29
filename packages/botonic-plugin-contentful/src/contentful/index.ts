@@ -127,7 +127,6 @@ export default class Contentful implements cms.CMS {
     context = DEFAULT_CONTEXT,
     filter?: (cf: CommonFields) => boolean
   ): Promise<TopContent[]> {
-    console.log('getting contents for lang', context.locale)
     return this._contents.topContents(
       model,
       context,
@@ -154,22 +153,27 @@ export default class Contentful implements cms.CMS {
     context: Context
   ): Promise<TopContent> {
     const model = ContentfulEntryUtils.getContentModel(entry)
-    switch (model) {
-      case ContentType.CAROUSEL:
-        return this._carousel.fromEntry(entry, context)
-      case ContentType.QUEUE:
-        return QueueDelivery.fromEntry(entry)
-      case ContentType.CHITCHAT:
-      case ContentType.TEXT:
-        return this._text.fromEntry(entry, context)
-      case ContentType.IMAGE:
-        return this._image.fromEntry(entry, context)
-      case ContentType.URL:
-        return this._url.fromEntry(entry, context)
-      case ContentType.STARTUP:
-        return this._startUp.fromEntry(entry, context)
-      default:
-        throw new Error(`${model} is not a Content type`)
+    try {
+      switch (model) {
+        case ContentType.CAROUSEL:
+          return await this._carousel.fromEntry(entry, context)
+        case ContentType.QUEUE:
+          return await QueueDelivery.fromEntry(entry)
+        case ContentType.CHITCHAT:
+        case ContentType.TEXT:
+          return await this._text.fromEntry(entry, context)
+        case ContentType.IMAGE:
+          return await this._image.fromEntry(entry, context)
+        case ContentType.URL:
+          return await this._url.fromEntry(entry, context)
+        case ContentType.STARTUP:
+          return await this._startUp.fromEntry(entry, context)
+        default:
+          throw new Error(`${model} is not a Content type`)
+      }
+    } catch (e) {
+      console.error(`Error creating ${model} with id: ${entry.sys.id}`)
+      throw e
     }
   }
 

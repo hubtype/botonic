@@ -2,33 +2,35 @@ import * as cf from 'contentful'
 
 import { Context } from '../cms'
 import { DeliveryApi } from './delivery-api'
+import { Locale } from '../nlp'
+import { ButtonDelivery } from './contents/button'
 
 export type I18nValue<T> = { [locale: string]: T }
 
+export class VisitedField<V> {
+  constructor(
+    readonly entry: cf.Entry<any>,
+    readonly locale: Locale,
+    readonly field: cf.Field,
+    readonly value: I18nValue<V>
+  ) {}
+}
 export interface ContentfulVisitor {
   name(): string
-  visitEntry(entry: cf.Entry<any>): void
-  visitName(entry: cf.Entry<any>, entryName: string): void
-  visitStringField(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<string>
-  ): void
-  visitMultipleStringField(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<string[]>
-  ): void
+
+  visitEntry<T>(entry: cf.Entry<T>): cf.Entry<T>
+
+  visitStringField(field: VisitedField<string>): I18nValue<string>
+
+  visitMultipleStringField(field: VisitedField<string[]>): I18nValue<string[]>
+
   visitSingleReference(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<cf.Entry<any>>
-  ): void
-  visitMultipleReference(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<cf.EntryCollection<any>>
-  ): void
+    field: VisitedField<cf.Entry<any>>
+  ): I18nValue<cf.Entry<any>>
+
+  visitMultipleReference<T>(
+    field: VisitedField<cf.EntryCollection<T>>
+  ): I18nValue<cf.EntryCollection<T>>
 }
 
 export class LoggerContentfulVisitor implements ContentfulVisitor {
@@ -36,63 +38,45 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
   name(): string {
     return this.visitor.name()
   }
-
-  visitEntry(entry: cf.Entry<any>): void {
+  visitEntry<T>(entry: cf.Entry<T>): cf.Entry<T> {
     this.log('visitEntry', entry)
     return this.visitor.visitEntry(entry)
   }
 
-  visitMultipleReference(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<cf.EntryCollection<any>>
-  ): void {
-    this.log('visitMultipleReference', entry, field)
-    return this.visitor.visitMultipleReference(entry, field, value)
+  visitStringField<T>(field: VisitedField<string>): I18nValue<string> {
+    this.log('visitStringField', field.entry, field.field)
+    return this.visitor.visitStringField(field)
   }
 
-  visitMultipleStringField(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<string[]>
-  ): void {
-    this.log('visitMultipleStringField', entry, field)
-    return this.visitor.visitMultipleStringField(entry, field, value)
+  visitMultipleStringField<T>(
+    field: VisitedField<string[]>
+  ): I18nValue<string[]> {
+    this.log('visitMultipleStringField', field.entry, field.field)
+    return this.visitor.visitMultipleStringField(field)
   }
 
-  visitName(entry: cf.Entry<any>, entryName: string): void {
-    this.log('visitName', entry)
-    return this.visitor.visitName(entry, entryName)
+  visitSingleReference<T>(
+    field: VisitedField<cf.Entry<T>>
+  ): I18nValue<cf.Entry<T>> {
+    this.log('visitSingleReference', field.entry, field.field)
+    return this.visitor.visitSingleReference(field)
   }
 
-  visitSingleReference(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<cf.Entry<any>>
-  ): void {
-    this.log('visitSingleReference', entry, field)
-    return this.visitor.visitSingleReference(entry, field, value)
+  visitMultipleReference<T>(
+    field: VisitedField<cf.EntryCollection<T>>
+  ): I18nValue<cf.EntryCollection<T>> {
+    this.log('visitMultipleReference', field.entry, field.field)
+    return this.visitor.visitMultipleReference(field)
   }
 
-  visitStringField(
-    entry: cf.Entry<any>,
-    field: cf.Field,
-    value: I18nValue<string>
-  ): void {
-    this.log('visitStringField', entry, field)
-    return this.visitor.visitStringField(entry, field, value)
-  }
-
-  log(method: string, entry: cf.Entry<any>, field?: cf.Field): void {
+  log<V>(method: string, entry: cf.Entry<any>, field?: cf.Field): void {
     const on = field
       ? LoggerContentfulVisitor.describeField(entry, field.id)
       : LoggerContentfulVisitor.describeEntry(entry)
     console.log(`Visiting '${this.visitor.name()}.${method}' on ${on}`)
   }
+
   static describeEntry(entry: cf.Entry<any>): string {
-    if (!entry.sys) {
-      console.error('no sys')
-    }
     if (!entry.sys.contentType) {
       return `entry with id ${entry.sys.id}`
     }
@@ -100,9 +84,8 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
   }
 
   static describeField(entry: cf.Entry<any>, name: string): string {
-    return `field '${name}' of ${LoggerContentfulVisitor.describeEntry(entry)}`
     // cannot stringify field values because they may contain circular references
-    // )} value:\n${JSON.stringify(entry.fields[name])}`
+    return `field '${name}' of ${LoggerContentfulVisitor.describeEntry(entry)}`
   }
 }
 
@@ -111,97 +94,116 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
  * Limitations. It does not fetch entries from references which have not yet been delivered
  */
 export class I18nEntryTraverser {
-  constructor(private readonly api: DeliveryApi) {}
+  private visited = new Set<string>()
+  constructor(
+    private readonly api: DeliveryApi,
+    readonly visitor: ContentfulVisitor
+  ) {}
 
-  async traverse(
-    entry: cf.Entry<any>,
-    visitor: ContentfulVisitor,
+  async traverse<T>(
+    entry: cf.Entry<T>,
     context: Context
-  ): Promise<void> {
-    console.log(`Traversing ${LoggerContentfulVisitor.describeEntry(entry)}`)
+  ): Promise<cf.Entry<T>> {
+    //in the future we might extending to traverse all locales
     console.assert(context.locale)
     console.assert(context.ignoreFallbackLocale)
-    const locale = context.locale!
+    const promise = this.traverseCore(entry, context)
+    this.visited.add(entry.sys.id)
+    return promise
+  }
 
+  async traverseCore<T>(
+    entry: cf.Entry<T>,
+    context: Context
+  ): Promise<cf.Entry<T>> {
+    entry = { ...entry, fields: { ...entry.fields } }
     const fields = (entry.fields as unknown) as {
       [fieldName: string]: I18nValue<any>
     }
     if (!entry.sys.contentType) {
-      console.log('no contentType') // it's a file
-      return
+      // it's a file or a dangling reference
+      return entry
     }
     const contentType = await this.api.getContentType(
       entry.sys.contentType.sys.id
     )
-
-    for (const fieldName in fields) {
-      const field = contentType.fields.find(f => f.id == fieldName)!
-      const i18nValue = () => fields[fieldName]
-      // TODO remove when
-      if (this.alreadyVisited(i18nValue())) {
-        return
-      }
-      const value = () => {
-        if (field.localized) {
-          return i18nValue()[locale]
-        }
-        return this.getSingleValue<string>(i18nValue())
-      }
-      if (field.name == 'name') {
-        visitor.visitName(entry, name)
-      }
-      // const values = Object.values(i18nValue())
-      // if (values.length == 0) {
-      //   console.log(
-      //     `${LoggerContentfulVisitor.describeField(
-      //       entry,
-      //       fieldName
-      //     )} has no values`
-      //   )
-      // }
-      if (field.type === 'Symbol' || field.type === 'Text') {
-        visitor.visitStringField(entry, field, i18nValue())
-      } else if (field.type == 'Link') {
-        if (value()) {
-          await this.traverse(value(), visitor, context)
-        }
-        visitor.visitSingleReference(entry, field, i18nValue())
-      } else if (this.isArrayOfType(field, 'Link')) {
-        if (value()) {
-          const promises = value().map((item: cf.Entry<any>) =>
-            this.traverse(item, visitor, context)
-          )
-          await Promise.all(promises)
-        }
-        visitor.visitMultipleReference(entry, field, i18nValue())
-      } else if (this.isArrayOfType(field, 'Symbol')) {
-        visitor.visitMultipleStringField(entry, field, i18nValue())
-      } else {
-        console.log(
-          `Not traversing ${LoggerContentfulVisitor.describeField(
-            entry,
-            fieldName
-          )}'}`
-        )
-      }
+    for (const fieldId in fields) {
+      const field = contentType.fields.find(f => f.id == fieldId)!
+      const i18nValue = { ...fields[fieldId] } as I18nValue<any>
+      const locale = field.localized
+        ? context.locale!
+        : Object.keys(i18nValue)[0]
+      const vf = new VisitedField(entry, locale, field, i18nValue)
+      fields[fieldId] = await this.traverseField(context, vf)
     }
-    visitor.visitEntry(entry)
+    entry = this.visitor.visitEntry(entry)
+    return entry
+  }
+
+  async traverseField<E>(
+    context: Context,
+    vf: VisitedField<any>
+  ): Promise<I18nValue<any>> {
+    let val = vf.value[vf.locale]
+
+    const visitOrTraverse = async (val: cf.Entry<any>) => {
+      if (this.visited.has(val.sys.id) && val.sys.id >= vf.entry.sys.id) {
+        // break deadlock if contents have cyclic dependencies
+        return val
+      }
+      return this.traverse(val, context)
+    }
+    if (vf.field.type === 'Symbol' || vf.field.type === 'Text') {
+      return this.visitor.visitStringField(vf)
+    } else if (vf.field.type == 'Link') {
+      if (val) {
+        val = this.stopRecursionOnButtonCallbacks(vf.field, val)
+        vf.value[vf.locale] = visitOrTraverse(val)
+      }
+      return this.visitor.visitSingleReference(vf)
+    } else if (this.isArrayOfType(vf.field, 'Link')) {
+      if (val) {
+        val = await Promise.all(
+          (val as cf.Entry<any>[]).map(v => visitOrTraverse(v))
+        )
+        vf.value[vf.locale] = val
+      }
+      return this.visitor.visitMultipleReference(vf)
+    } else if (this.isArrayOfType(vf.field, 'Symbol')) {
+      return this.visitor.visitMultipleStringField(vf)
+    } else {
+      console.log(
+        `Not traversing ${LoggerContentfulVisitor.describeField(
+          vf.entry,
+          vf.field.id
+        )}'}`
+      )
+      return vf.value
+    }
   }
 
   isArrayOfType(field: cf.Field, itemType: cf.FieldType): boolean {
     return field.type == 'Array' && field.items?.type == itemType
   }
 
-  private getSingleValue<T>(field: I18nValue<T>): T {
-    const values = Object.values(field)
-    console.assert(
-      values.length == 1,
-      `Expecting a single value but got ${values.length}`
-    )
-    return values[0]
-  }
-
-  private alreadyVisited(value: any): boolean {
-    return !value['en'] && !value['es']
+  /**
+   * When a content has a button with another content reference, we just need the referered content id
+   * to create the content. Hence, we stop traversing.
+   */
+  private stopRecursionOnButtonCallbacks(
+    field: cf.Field,
+    val: cf.Entry<any>
+  ): cf.Entry<any> {
+    if (field.id !== 'target') {
+      return val
+    }
+    if (
+      !val.fields ||
+      val.fields.payload ||
+      val.sys.contentType.sys.id == ButtonDelivery.BUTTON_CONTENT_TYPE
+    ) {
+      return val
+    }
+    return { ...val, fields: {} }
   }
 }

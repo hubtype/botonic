@@ -7,7 +7,7 @@ class Class {
   constructor(public arr = [3, 4], public sub = new Subclass(1)) {}
 }
 
-test('TEST: shallowClone', async () => {
+test('TEST: shallowClone', () => {
   const source = new Class()
 
   // act
@@ -24,7 +24,7 @@ test('TEST: shallowClone', async () => {
   expect(source.sub.field).toEqual(2)
 })
 
-test('TEST: deepClone', async () => {
+test('TEST: deepClone', () => {
   const source = new Class()
 
   // act
@@ -45,7 +45,7 @@ class RecursiveClass {
   constructor(public rec?: RecursiveClass) {}
 }
 
-test('TEST: deepClone no recursive call', async () => {
+test('TEST: deepClone no recursive call', () => {
   const source = new RecursiveClass()
   source.rec = source
 

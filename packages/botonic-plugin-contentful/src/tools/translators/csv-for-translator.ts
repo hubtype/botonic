@@ -11,7 +11,6 @@ async function writeCsvForTranslators(
     spaceId: spaceId,
     accessToken: accessToken,
     environment: 'master',
-    disableCache: true,
   })
   const exporter = new CsvExport({
     stringFilter: skipEmptyStrings,
@@ -19,7 +18,7 @@ async function writeCsvForTranslators(
   const promises = locales.map((from: string) =>
     exporter.write(`contentful_${from}.csv`, cms, from)
   )
-  return Promise.all(promises)
+  await Promise.all(promises)
 }
 
 const spaceId = process.argv[2]
@@ -31,6 +30,16 @@ if (process.argv.length < 5) {
   process.exit(1)
 }
 
-writeCsvForTranslators(spaceId, token, locales).then(() => {
+async function main() {
+  try {
+    await writeCsvForTranslators(spaceId, token, locales)
+    console.log('done')
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+main().then(() => {
   console.log('done')
 })

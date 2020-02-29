@@ -12,7 +12,7 @@ import { TextFields } from './text'
 import { UrlFields } from './url'
 
 export class ButtonDelivery {
-  private static BUTTON_CONTENT_TYPE = 'button'
+  public static BUTTON_CONTENT_TYPE = 'button'
   private static PAYLOAD_CONTENT_TYPE = 'payload'
   constructor(private readonly delivery: DeliveryApi) {}
 

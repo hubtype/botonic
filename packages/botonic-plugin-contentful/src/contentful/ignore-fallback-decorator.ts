@@ -1,22 +1,12 @@
-import { Asset, ContentType, Entry, EntryCollection, Field } from 'contentful'
+import { Asset, ContentType, Entry, EntryCollection } from 'contentful'
 import { DeliveryApi } from './delivery-api'
 import { Context } from '../cms'
-import { Locale } from '../nlp'
 import {
   ContentfulVisitor,
   I18nEntryTraverser,
   I18nValue,
-  LoggerContentfulVisitor,
+  VisitedField,
 } from './traverser'
-import { ContentfulOptions } from '../plugin'
-
-/**
- * Option required because IgnoreFallbackDecorator modifies the entries
- * Consider using deepCopy in the decorator
- */
-export const OPTIONS_FOR_IGNORE_FALLBACK: Partial<ContentfulOptions> = {
-  disableCache: true,
-}
 
 export class IgnoreFallbackDecorator implements DeliveryApi {
   constructor(private readonly api: DeliveryApi) {}
@@ -32,12 +22,10 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
     if (!context.ignoreFallbackLocale) {
       return this.api.getEntries(context, query)
     }
-    const entries = await this.api.getEntries<T>(
-      this.i18nContext(context),
-      query
-    )
+    let entries = await this.api.getEntries<T>(this.i18nContext(context), query)
 
-    await this.traverseEntries(context, entries.items)
+    entries = { ...entries }
+    entries.items = await this.traverseEntries(context, entries.items)
     return entries
   }
 
@@ -54,18 +42,19 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
       this.i18nContext(context),
       query
     )
-    await this.traverseEntries(context, [entry])
-    return entry
+    return (await this.traverseEntries(context, [entry]))[0]
   }
 
-  async traverseEntries(
+  async traverseEntries<T>(
     context: Context,
-    entries: Entry<any>[]
-  ): Promise<void[]> {
-    const traverser = new I18nEntryTraverser(this.api)
+    entries: Entry<T>[]
+  ): Promise<Entry<T>[]> {
     const visitor = new IgnoreFallbackVisitor(context)
     return Promise.all(
-      entries.map(item => traverser.traverse(item, visitor, context))
+      entries.map(async item => {
+        const traverser = new I18nEntryTraverser(this.api, visitor)
+        return await traverser.traverse(item, context)
+      })
     )
   }
 
@@ -95,73 +84,32 @@ class IgnoreFallbackVisitor implements ContentfulVisitor {
     }
   }
 
-  visitEntry(entry: Entry<any>): void {}
-
-  visitName(entry: Entry<any>, entryName: string): void {
-    entry.fields.name = entryName
+  visitEntry<T>(entry: Entry<T>): Entry<T> {
+    return entry
   }
 
-  visitStringField(
-    entry: Entry<any>,
-    field: Field,
-    values: I18nValue<string>
-  ): void {
-    const value = this.valueForLocale(values, field)
-    this.setField(entry, field, value ?? '')
+  visitStringField(vf: VisitedField<string>): I18nValue<string> {
+    return this.hackType(vf.value[vf.locale], '')
   }
-
-  visitMultipleStringField(
-    entry: Entry<any>,
-    field: Field,
-    values: I18nValue<string[]>
-  ): void {
-    const value = this.valueForLocale(values, field)
-    this.setField(entry, field, value ?? [])
-  }
-
-  visitSingleReference(
-    entry: Entry<any>,
-    field: Field,
-    values: I18nValue<Entry<any>>
-  ): void {
-    const value = this.valueForLocale(values, field)
-    if (value == undefined) {
-      console.log(
-        `${LoggerContentfulVisitor.describeField(
-          entry,
-          field.id
-        )} has no value for locale ${this.locale()}. This might break the CMS model`
-      )
+  hackType<T>(t: T, defaultValue?: T): I18nValue<T> {
+    if (defaultValue != undefined) {
+      t = t ?? defaultValue
     }
-    this.setField(entry, field, value)
+    return (t as any) as I18nValue<T>
   }
 
-  visitMultipleReference(
-    entry: Entry<any>,
-    field: Field,
-    values: I18nValue<EntryCollection<any>>
-  ): void {
-    const value = this.valueForLocale(values, field)
-    this.setField(entry, field, value ?? [])
+  visitMultipleStringField(vf: VisitedField<string[]>): I18nValue<string[]> {
+    return this.hackType(vf.value[vf.locale], [])
   }
 
-  private setField(entry: Entry<any>, field: Field, value: any): void {
-    entry.fields[field.id] = value
+  visitSingleReference<T>(vf: VisitedField<Entry<T>>): I18nValue<Entry<T>> {
+    return this.hackType(vf.value[vf.locale], (undefined as any) as Entry<T>)
   }
 
-  private valueForLocale<T>(value: I18nValue<T>, field: Field): T | undefined {
-    if (!field.localized) {
-      return Object.values(value)[0]
-    }
-    if (!value['en'] && !value['es']) {
-      console.log('already translated')
-      return (value as any) as T
-    }
-    return value[this.locale()]
-  }
-
-  private locale(): Locale {
-    return this.context.locale!
+  visitMultipleReference<T>(
+    vf: VisitedField<EntryCollection<T>>
+  ): I18nValue<EntryCollection<T>> {
+    return this.hackType(vf.value[vf.locale])
   }
 
   name(): string {
