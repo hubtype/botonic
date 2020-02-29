@@ -8,10 +8,9 @@ import { ENGLISH } from '../../../src/nlp'
 import { TextBuilder } from '../../../src/cms/factories'
 import sync from 'csv-stringify/lib/sync'
 import { RndButtonsBuilder } from '../../../src/cms/test-helpers'
-import { OPTIONS_FOR_IGNORE_FALLBACK } from '../../../src/contentful/ignore-fallback-decorator'
 
 test('TEST: CsvExport integration test', async () => {
-  const cms = testContentful(OPTIONS_FOR_IGNORE_FALLBACK)
+  const cms = testContentful()
 
   const exporter = new CsvExport({})
   // running for ENGLISH to test contents with empty fields

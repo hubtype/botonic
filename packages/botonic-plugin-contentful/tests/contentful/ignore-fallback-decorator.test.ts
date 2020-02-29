@@ -2,12 +2,14 @@ import { testContentful, testContentfulOptions } from './contentful.helper'
 import { AdaptorDeliveryApi } from '../../src/contentful/delivery-api'
 import { createContentfulClientApi } from '../../src/contentful'
 import { ButtonFields } from '../../src/contentful/contents/button'
-import { ENGLISH, SPANISH } from '../../src/nlp'
-import { ContentCallback, ContentType, Context } from '../../src/cms'
+import { ENGLISH, Locale, SPANISH } from '../../src/nlp'
 import {
-  IgnoreFallbackDecorator,
-  OPTIONS_FOR_IGNORE_FALLBACK,
-} from '../../src/contentful/ignore-fallback-decorator'
+  BOTONIC_CONTENT_TYPES,
+  ContentCallback,
+  ContentType,
+  Context,
+} from '../../src/cms'
+import { IgnoreFallbackDecorator } from '../../src/contentful/ignore-fallback-decorator'
 import { TEST_POST_FAQ1_ID } from './contents/text.test'
 import { TextFields } from '../../src/contentful/contents/text'
 import {
@@ -19,11 +21,7 @@ const TEST_BUTTON_BLANK_SPANISH = '40buQOqp9jbwoxmMZhFO16'
 
 function createIgnoreFallbackDecorator() {
   return new IgnoreFallbackDecorator(
-    new AdaptorDeliveryApi(
-      createContentfulClientApi(
-        testContentfulOptions(OPTIONS_FOR_IGNORE_FALLBACK)
-      )
-    )
+    new AdaptorDeliveryApi(createContentfulClientApi(testContentfulOptions()))
   )
 }
 
@@ -53,7 +51,7 @@ test.each<any>(FALLBACK_TESTS)(
 )
 
 test('TEST: ignoreFallbackLocale with a carousel with buttons to other carousels ', async () => {
-  const contentful = testContentful(OPTIONS_FOR_IGNORE_FALLBACK)
+  const contentful = testContentful()
   const carousel = await contentful.carousel(TEST_CAROUSEL_MAIN_ID, {
     locale: SPANISH,
     ignoreFallbackLocale: true,
@@ -67,6 +65,23 @@ test('TEST: ignoreFallbackLocale with a carousel with buttons to other carousels
     new ContentCallback(ContentType.CAROUSEL, TEST_POST_MENU_CRSL)
   )
 })
+
+test.each<any>([ENGLISH, SPANISH])(
+  'TEST: ignoreFallbackLocale all contents %s',
+  async (locale: Locale) => {
+    const contentful = testContentful()
+    for (const model of BOTONIC_CONTENT_TYPES) {
+      const ret = await contentful.contents(model, {
+        locale,
+        ignoreFallbackLocale: true,
+      })
+      for (const content of ret) {
+        expect(content.id).toBeDefined()
+        expect(content.name).toBeDefined()
+      }
+    }
+  }
+)
 
 test('TEST: IgnoreFallbackDecorator.getEntry<TextFields> uses fallback locale ', async () => {
   const sut = createIgnoreFallbackDecorator()
