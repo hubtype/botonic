@@ -85,7 +85,7 @@ export class HandOffBuilder {
   withAgentEmail(email: string): HandOffBuilder
   withNoteURL(note: string): HandOffBuilder
   withCaseInfoURL(caseInfo: string): HandOffBuilder
-  withShadowing(shadowing: boolean): HandOffBuilder
+  withShadowing(shadowing?: boolean): HandOffBuilder
 
   handOff(): Promise<void>
 }
@@ -126,7 +126,7 @@ export declare function getAvailableAgents(
 
 export declare function cancelHandoff(
   session: Session,
-  typification: string
+  typification?: string
 ): void
 
 export declare function deleteUser(session: Session): void
