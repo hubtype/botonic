@@ -163,8 +163,9 @@ export async function getAvailableAgents(session) {
 }
 
 export function cancelHandoff(session, typification = null) {
-  let params = { typification }
-  session._botonic_action = `discard_case:${JSON.stringify(params)}`
+  let action = 'discard_case'
+  if (typification) action = `${action}:${JSON.stringify({ typification })}`
+  session._botonic_action = action
 }
 
 export function deleteUser(session) {
