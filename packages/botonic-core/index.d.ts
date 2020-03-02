@@ -80,6 +80,7 @@ export class HandOffBuilder {
   withAgentEmail(email: string): HandOffBuilder
   withNoteURL(note: string): HandOffBuilder
   withCaseInfoURL(caseInfo: string): HandOffBuilder
+  withShadowing(shadowing: boolean): HandOffBuilder
 
   handOff(): Promise<void>
 }
@@ -117,6 +118,13 @@ export interface HubtypeAgentsInfo {
 export declare function getAvailableAgents(
   session: Session
 ): Promise<{ agents: HubtypeAgentsInfo[] }>
+
+export declare function cancelHandoff(
+  session: Session,
+  typification: string
+): void
+
+export declare function deleteUser(session: Session): void
 
 export interface BotRequest {
   input: Input
