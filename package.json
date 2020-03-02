@@ -22,7 +22,7 @@
     "ts-mockito": "^2.5.0",
     "ts-node": "^8.6.2",
     "tslib": "^1.10.0",
-    "typescript": "~3.7.5"
+    "typescript": "~3.8.3"
   },
   "engines": {
     "node": ">=8.0.0"
