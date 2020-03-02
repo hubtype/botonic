@@ -18,7 +18,6 @@ export interface Input {
   entities?: any
 }
 
-
 export interface SessionUser {
   id: string
   // login
@@ -45,10 +44,16 @@ export interface Session {
 }
 
 type StringMatcher = RegExp | string | ((data: string) => boolean)
-type ParamsMatcher = { [key: string]: string } | ((params: { [key: string]: string }) => boolean)
+type ParamsMatcher =
+  | { [key: string]: string }
+  | ((params: { [key: string]: string }) => boolean)
 type SessionMatcher = (session: Session) => boolean
 type InputMatcher = (input: Input) => boolean
-type RouteMatcher = StringMatcher | ParamsMatcher| SessionMatcher | InputMatcher
+type RouteMatcher =
+  | StringMatcher
+  | ParamsMatcher
+  | SessionMatcher
+  | InputMatcher
 
 export interface Route {
   path?: StringMatcher
@@ -184,8 +189,18 @@ export class CoreBot {
 // Debug
 
 export class RouteInspector {
-  routeMatched(route: Route, routeKey: string, routeValue: RouteMatcher, input: Input): void;
-  routeNotMatched(route: Route, routeKey: string, routeValue: RouteMatcher, input: Input): void;
+  routeMatched(
+    route: Route,
+    routeKey: string,
+    routeValue: RouteMatcher,
+    input: Input
+  ): void
+  routeNotMatched(
+    route: Route,
+    routeKey: string,
+    routeValue: RouteMatcher,
+    input: Input
+  ): void
 }
 
 export class FocusRouteInspector extends RouteInspector {
@@ -193,11 +208,10 @@ export class FocusRouteInspector extends RouteInspector {
   focusOnlyOnMatches(): FocusRouteInspector
 }
 
-export class LogRouteInspector extends FocusRouteInspector {
-}
+export class LogRouteInspector extends FocusRouteInspector {}
 
 export class Inspector {
-  constructor(routeInspector: RouteInspector | undefined);
+  constructor(routeInspector: RouteInspector | undefined)
 
-  getRouteInspector(): RouteInspector;
+  getRouteInspector(): RouteInspector
 }
