@@ -1,6 +1,6 @@
 import { Entry, EntryCollection } from 'contentful/index'
 import * as cms from '../../cms'
-import { CommonFields, Context, TopContentType } from '../../cms'
+import { CommonFields, TopContentId, Context, TopContentType } from '../../cms'
 import { SearchResult } from '../../search'
 import {
   CommonEntryFields,
@@ -33,11 +33,13 @@ export class KeywordsDelivery {
   }
 
   private static resultFromEntry(
-    entry: Entry<{ name: string; shortText: string }>,
+    entry: Entry<CommonEntryFields>,
     keywords: string[],
     priority?: number
   ): SearchResult {
-    const contentModel = ContentfulEntryUtils.getContentModel(entry)
+    const contentModel = ContentfulEntryUtils.getContentModel<TopContentType>(
+      entry
+    )
     if (!entry.fields.shortText) {
       console.error(
         `No shortText found for content of type ${contentModel} and name: ${entry.fields.name}`
@@ -45,10 +47,10 @@ export class KeywordsDelivery {
       entry.fields.shortText = entry.fields.name
     }
 
-    const callback = ContentfulEntryUtils.callbackFromEntry(entry)
+    const contentId = new TopContentId(contentModel, entry.sys.id)
     return new SearchResult(
-      callback,
-      new CommonFields(entry.sys.id, entry.fields.name, {
+      contentId,
+      new CommonFields(contentId.id, entry.fields.name, {
         shortText: entry.fields.shortText,
         keywords,
       }),

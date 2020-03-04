@@ -1,11 +1,10 @@
 import {
   Button,
-  Callback,
   CommonFields,
-  ContentCallback,
-  TopContentType,
+  TopContentId,
   PRIORITY_MAX,
   SCORE_MAX,
+  ContentCallback,
 } from '../cms'
 import { ContentType } from '../cms/cms'
 
@@ -13,12 +12,12 @@ export class SearchResult {
   static CHITCHAT_SHORT_TEXT = 'chitchat'
 
   /**
-   * @param callback It may be a {@link Callback}'s with an URL instead of payload
+   * @param contentId It may be a {@link Callback}'s with an URL instead of payload
    * @param match part of the input which match against a recognized text
    * TODO group args about content & args about match separately. make match compulsory
    */
   constructor(
-    readonly callback: Callback,
+    readonly contentId: TopContentId,
     readonly common: CommonFields,
     readonly priority = PRIORITY_MAX,
     readonly score = SCORE_MAX,
@@ -30,7 +29,7 @@ export class SearchResult {
     if (!shortText) {
       shortText = this.common.name
       console.error(
-        `${JSON.stringify(this.callback)} ${
+        `${JSON.stringify(this.contentId)} ${
           this.common.name
         } without shortText. Assigning name to button text`
       )
@@ -39,32 +38,17 @@ export class SearchResult {
       this.common.name,
       this.common.name,
       shortText,
-      this.callback
+      ContentCallback.ofContentId(this.contentId)
     )
   }
 
-  getCallbackIfContentIs(
-    modelType: TopContentType
-  ): ContentCallback | undefined {
-    if (
-      this.callback instanceof ContentCallback &&
-      this.callback.model === modelType
-    ) {
-      return this.callback
-    }
-    return undefined
-  }
-
-  getCallbackIfChitchat(): ContentCallback | undefined {
-    if (!(this.callback instanceof ContentCallback)) {
-      return undefined
-    }
+  getCallbackIfChitchat(): TopContentId | undefined {
     if (
       this.common.shortText !== SearchResult.CHITCHAT_SHORT_TEXT &&
-      this.callback.model !== ContentType.CHITCHAT
+      this.contentId.model !== ContentType.CHITCHAT
     ) {
       return undefined
     }
-    return this.callback
+    return this.contentId
   }
 }

@@ -1,11 +1,11 @@
 import 'jest-extended'
-import { Callback } from '../../src/cms'
 import { MatchType } from '../../src/nlp'
 import {
   chitchatContent,
   contentWithKeyword,
   keywordsWithMockCms,
 } from './search-by-keywords.test'
+import { testContentId } from '../helpers/test-data'
 
 const LOCALE = 'es'
 const CONTEXT = { locale: LOCALE }
@@ -50,7 +50,7 @@ test('TEST treatChitChat: chitchat and other keywords detected', async () => {
   const keywords = keywordsWithMockCms(
     [
       chitchatContent(['hey', 'buenos dias']),
-      contentWithKeyword(Callback.ofPayload('payload'), ['devolucion']),
+      contentWithKeyword(testContentId(), ['devolucion']),
     ],
     CONTEXT
   )
@@ -110,7 +110,7 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   const keywords = keywordsWithMockCms(
     [
       chitchatContent(['hey']),
-      contentWithKeyword(Callback.ofPayload('payload'), ['devolucion']),
+      contentWithKeyword(testContentId(), ['devolucion']),
     ],
     CONTEXT
   )

@@ -17,7 +17,7 @@ import {
   TEST_POST_MENU_CRSL,
 } from './contents/carousel.test'
 
-const TEST_BUTTON_BLANK_SPANISH = '40buQOqp9jbwoxmMZhFO16'
+export const TEST_BUTTON_BLANK_SPANISH = '40buQOqp9jbwoxmMZhFO16'
 
 function createIgnoreFallbackDecorator() {
   return new IgnoreFallbackDecorator(

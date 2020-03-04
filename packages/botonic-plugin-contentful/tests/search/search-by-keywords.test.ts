@@ -1,9 +1,8 @@
 import 'jest-extended'
 import { deepEqual, instance, mock, when } from 'ts-mockito'
 import {
-  Callback,
   SearchResult,
-  ContentCallback,
+  TopContentId,
   DummyCMS,
   ContentType,
   SearchByKeywords,
@@ -12,21 +11,21 @@ import {
 } from '../../src'
 import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result'
 import { Normalizer, StemmingBlackList, MatchType } from '../../src/nlp'
-import { rndStr } from '../../src/cms/test-helpers/builders'
+import { testContentId } from '../helpers/test-data'
 
 const ES_CONTEXT = { locale: 'es' }
 test('TEST: searchContentsFromInput keywords found', async () => {
   const contents = [
-    contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'devolucion plazo']),
-    contentWithKeyword(Callback.ofPayload('p2'), ['devolución', 'kw2']),
-    contentWithKeyword(Callback.ofPayload('p3'), ['Empezar']),
-    contentWithKeyword(Callback.ofUrl('http...'), ['hubtype']),
-    contentWithKeyword(Callback.ofPayload('p4'), ['not_found']),
+    contentWithKeyword(testContentId(), ['kw1', 'devolucion plazo']),
+    contentWithKeyword(testContentId(), ['devolución', 'kw2']),
+    contentWithKeyword(testContentId(), ['Empezar']),
   ]
-  const keywords = keywordsWithMockCms(contents, ES_CONTEXT)
+  const keywords = keywordsWithMockCms(
+    [...contents, contentWithKeyword(testContentId(), ['not_found'])],
+    ES_CONTEXT
+  )
 
   // act
-  const expectedContents = contents.slice(0, 4)
   const suggested = await keywords.searchContentsFromInput(
     keywords.normalizer.normalize(
       'es',
@@ -37,11 +36,11 @@ test('TEST: searchContentsFromInput keywords found', async () => {
   )
 
   // assert
-  expect(suggested).toIncludeSameMembers(expectedContents)
+  expect(suggested).toIncludeSameMembers(contents)
 })
 
 test('TEST: searchContentsFromInput similar', async () => {
-  const contents = [contentWithKeyword(Callback.ofPayload('p1'), ['tax free'])]
+  const contents = [contentWithKeyword(testContentId(), ['tax free'])]
   const keywords = keywordsWithMockCms(contents, ES_CONTEXT)
 
   // act
@@ -57,7 +56,7 @@ test('TEST: searchContentsFromInput similar', async () => {
 
 test('TEST: searchContentsFromInput no keywords found', async () => {
   const keywords = keywordsWithMockCms(
-    [contentWithKeyword(Callback.ofPayload('p1'), ['kw1', 'kw2'])],
+    [contentWithKeyword(testContentId(), ['kw1', 'kw2'])],
     ES_CONTEXT
   )
 
@@ -74,7 +73,7 @@ test('TEST: searchContentsFromInput no keywords found', async () => {
 
 test('TEST: searchContentsFromInput with stem blacklist', async () => {
   const keywords = keywordsWithMockCms(
-    [contentWithKeyword(Callback.ofPayload('p1'), ['pedido'])],
+    [contentWithKeyword(testContentId(), ['pedido'])],
     ES_CONTEXT,
     { es: [new StemmingBlackList('pedido', [])] }
   )
@@ -99,11 +98,14 @@ test('TEST: searchContentsFromInput with stem blacklist', async () => {
   expect(contents).toHaveLength(1)
 })
 
-export function contentWithKeyword(callback: Callback, keywords: string[]) {
+export function contentWithKeyword(
+  contentId: TopContentId,
+  keywords: string[]
+) {
   return new SearchResult(
-    callback,
-    new CommonFields(rndStr(), callback.payload!, {
-      shortText: 'shortText' + callback.payload,
+    contentId,
+    new CommonFields(contentId.id, contentId.id, {
+      shortText: 'shortText' + contentId.id,
       keywords,
     })
   )
@@ -112,7 +114,7 @@ export function contentWithKeyword(callback: Callback, keywords: string[]) {
 export function chitchatContent(keywords: string[]) {
   const id = Math.random().toString()
   return new SearchResult(
-    new ContentCallback(ContentType.TEXT, id),
+    new TopContentId(ContentType.TEXT, id),
     new CommonFields(id, id, { shortText: 'chitchat', keywords })
   )
 }

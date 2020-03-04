@@ -2,11 +2,11 @@ import {
   Button,
   Callback,
   CommonFields,
-  ContentCallback,
   ContentType,
   TopContentType,
   Queue,
   Text,
+  ContentCallback,
 } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
 
@@ -68,19 +68,14 @@ test('TEST: contentful contentsWithKeywords', async () => {
   )
 
   // assert
-  expect(
-    results.filter(result => !(result.callback instanceof ContentCallback))
-  ).toHaveLength(1)
-  const contentResults = results.filter(
-    result => result.callback instanceof ContentCallback
-  )
+  expect(results).toHaveLength(19)
   const ofType = (model: TopContentType) =>
-    contentResults.filter(r => (r.callback as ContentCallback).model == model)
+    results.filter(r => r.contentId.model == model)
 
   expect(ofType(ContentType.CAROUSEL)).toHaveLength(1)
   expect(ofType(ContentType.TEXT)).toHaveLength(15)
   expect(ofType(ContentType.CHITCHAT)).toHaveLength(0)
-  expect(ofType(ContentType.URL)).toHaveLength(0)
+  expect(ofType(ContentType.URL)).toHaveLength(1)
   expect(ofType(ContentType.SCHEDULE)).toHaveLength(0)
   expect(ofType(ContentType.DATE_RANGE)).toHaveLength(0)
   expect(ofType(ContentType.IMAGE)).toHaveLength(0)

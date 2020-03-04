@@ -1,11 +1,8 @@
 import * as contentful from 'contentful'
 import { Entry, EntryCollection } from 'contentful'
-import * as cms from '../cms'
 import {
-  Callback,
   CommonFields,
   Content,
-  ContentCallback,
   ContentType,
   Context,
   SearchableBy,
@@ -13,7 +10,6 @@ import {
   TopContentType,
 } from '../cms'
 import { QueueDelivery } from './contents/queue'
-import { UrlFields } from './contents/url'
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields,
@@ -158,20 +154,12 @@ export interface CommonEntryFields extends ContentWithNameFields {
 export type FollowUpFields = CommonEntryFields
 
 export class ContentfulEntryUtils {
-  static getContentModel(entry: contentful.Entry<any>): cms.ContentType {
+  static getContentModel<T extends ContentType = ContentType>(
+    entry: contentful.Entry<any>
+  ): T {
     // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
     const typ = entry.sys.contentType.sys.id
-    return typ as cms.ContentType
-  }
-
-  static callbackFromEntry(entry: contentful.Entry<any>): Callback {
-    const modelType = ContentfulEntryUtils.getContentModel(
-      entry
-    ) as TopContentType
-    if (modelType === ContentType.URL) {
-      return Callback.ofUrl((entry.fields as UrlFields).url)
-    }
-    return new ContentCallback(modelType, entry.sys.id)
+    return typ as T
   }
 
   static urlFromAsset(assetField: contentful.Asset): string {

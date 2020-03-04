@@ -1,6 +1,5 @@
 import { Locale, MatchType } from '../nlp'
 import BotonicPluginContentful from '../plugin'
-import { ContentCallback } from '../cms'
 
 export type SearchEvaluator = (
   /** Starting with 0. Undefined if not found */
@@ -32,9 +31,7 @@ export class SearchRegression {
         matchType,
         { locale }
       )
-      const pos = res.findIndex(
-        res => (res.callback as ContentCallback).id == gt.contentId
-      )
+      const pos = res.findIndex(res => res.contentId.id == gt.contentId)
       sumEvals += this.evaluator(pos >= 0 ? pos : undefined, res.length)
     }
     return sumEvals / count

@@ -1,5 +1,4 @@
-import { ContentCallback, ContentType } from '../../src/cms'
-import { SearchResult } from '../../src/search'
+import { ContentType } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
 import { TEST_POST_FAQ1_ID } from './contents/text.test'
 import 'jest-extended'
@@ -9,19 +8,10 @@ test('TEST: contentful contentsWithKeywords', async () => {
     testContext([{ locale: 'en' }, {}, undefined])
   )
 
-  const queues: SearchResult[] = []
-  const contentsWithKeywords: SearchResult[] = []
-  results
-    .filter(result => result.callback instanceof ContentCallback)
-    .map(result => {
-      switch ((result.callback as ContentCallback).model) {
-        case ContentType.QUEUE:
-          queues.push(result)
-          break
-        default:
-          contentsWithKeywords.push(result)
-      }
-    })
+  const queues = results.filter(r => r.contentId.model === ContentType.QUEUE)
+  const searchResults = results.filter(
+    r => r.contentId.model !== ContentType.QUEUE
+  )
   expect(queues).toHaveLength(2)
   const keywordsByPrio: { [priority: number]: string[] } = {}
   for (const queue of queues) {
@@ -32,10 +22,10 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(keywordsByPrio[10]).toEqual(['low1', 'low2'])
   expect(keywordsByPrio[99]).toEqual(['high1', 'high2'])
 
-  expect(contentsWithKeywords).toHaveLength(16)
+  expect(searchResults).toHaveLength(17)
 
-  const postFaq1 = contentsWithKeywords.find(
-    content => (content.callback as ContentCallback).id == TEST_POST_FAQ1_ID
+  const postFaq1 = searchResults.find(
+    result => result.contentId.id == TEST_POST_FAQ1_ID
   )
   expect(postFaq1!.common.name).toEqual('POST_FAQ1')
   expect(postFaq1!.common.shortText).toEqual('Find my command')
