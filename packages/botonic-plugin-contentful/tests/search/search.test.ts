@@ -1,7 +1,7 @@
 import { instance, mock, when } from 'ts-mockito'
 import {
   CommonFields,
-  ContentCallback,
+  TopContentId,
   DummyCMS,
   ContentType,
   Text,
@@ -21,12 +21,12 @@ test('TEST: respondFoundContents text with buttons', async () => {
   const sut = new Search(instance(cms), instance(mock(Normalizer)))
 
   const urlContent = new SearchResult(
-    new ContentCallback(ContentType.URL, 'urlCmsId'),
+    new TopContentId(ContentType.URL, 'urlCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'url shortText' })
   )
 
   const textContent = new SearchResult(
-    new ContentCallback(ContentType.TEXT, 'textCmsId'),
+    new TopContentId(ContentType.TEXT, 'textCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'text shortText' })
   )
 
@@ -48,8 +48,8 @@ test('TEST: respondFoundContents text with buttons', async () => {
   expect(response.buttons[0].callback.url).toEqual('http:/mocked_url')
 
   expect(response.buttons[1].text).toEqual('text shortText')
-  expect(response.buttons[1].callback.payload).toEqual(
-    textContent.callback.payload
+  expect(response.buttons[1].callback.asContentId()).toEqual(
+    textContent.contentId
   )
 })
 
@@ -60,7 +60,7 @@ test('TEST: respondFoundContents text with chitchat', async () => {
   const chitchat = instance(mock(Text))
   when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat)
   const chitchatCallback = new SearchResult(
-    new ContentCallback(ContentType.CHITCHAT, 'chitchatCmsId'),
+    new TopContentId(ContentType.CHITCHAT, 'chitchatCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'chitchat' })
   )
 

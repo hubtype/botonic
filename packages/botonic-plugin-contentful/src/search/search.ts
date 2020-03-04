@@ -46,9 +46,8 @@ export class Search {
       return this.cms.chitchat(chitchatCallback.id, context)
     }
     const buttonPromises = results.map(async result => {
-      const urlCallback = result.getCallbackIfContentIs(ContentType.URL)
-      if (urlCallback) {
-        const url = await this.cms.url(urlCallback.id, context)
+      if (result.contentId.model == ContentType.URL) {
+        const url = await this.cms.url(result.contentId.id, context)
         return new Button(
           result.common.id,
           result.common.name,

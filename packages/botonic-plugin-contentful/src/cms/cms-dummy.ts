@@ -109,7 +109,7 @@ export class DummyCMS implements CMS {
       const button = DummyCMS.buttonFromCallback(cb)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       return new SearchResult(
-        cb,
+        cb.asContentId(),
         new CommonFields(String(id), button.name, {
           shortText: button.text,
           keywords: [

@@ -4,8 +4,8 @@ import {
   Callback,
   CommonFields,
   ContentCallback,
+  TopContentId,
   Text,
-  MessageContentType,
 } from '../index'
 import { TextBuilder } from '../factories'
 import { ContentType } from '../cms'
@@ -19,25 +19,15 @@ export function rndBool(): boolean {
 }
 
 export class ContentCallbackBuilder {
-  callback: ContentCallback | undefined
-  contentType: MessageContentType | undefined
-  contentId = rndStr()
+  callback: Callback | undefined
 
-  withContentType(contentType: MessageContentType): ContentCallbackBuilder {
-    this.contentType = contentType
+  withContentId(contentId: TopContentId): ContentCallbackBuilder {
+    this.callback = ContentCallback.ofContentId(contentId)
     return this
   }
 
-  withContentId(contentId: string): ContentCallbackBuilder {
-    this.contentId = contentId
-    return this
-  }
-
-  build(): ContentCallback {
-    return new ContentCallback(
-      this.contentType || ContentType.TEXT,
-      this.contentId || rndStr()
-    )
+  build(): Callback {
+    return this.callback || new ContentCallback(ContentType.TEXT, rndStr())
   }
 }
 

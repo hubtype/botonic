@@ -15,3 +15,7 @@ export interface Context {
    */
   ignoreFallbackLocale?: boolean
 }
+
+export interface ContextWithLocale extends Context {
+  locale: Locale
+}

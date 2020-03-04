@@ -5,6 +5,8 @@ export class RenderOptions {
   followUpDelaySeconds = 4
   maxButtons = 3
   maxQuickReplies = 5
+  /** Some integrations fail when a field is empty*/
+  replaceEmptyStringsWith?: string
 }
 
 // TODO consider moving it to @botonic/core
@@ -24,7 +26,11 @@ export interface BotonicText extends BotonicMsg {
 }
 
 export class BotonicMsgConverter {
-  constructor(readonly options = new RenderOptions()) {}
+  readonly options: RenderOptions
+
+  constructor(options: Partial<RenderOptions> = {}) {
+    this.options = { ...new RenderOptions(), ...options }
+  }
 
   carousel(carousel: cms.Carousel, delayS = 0): BotonicMsgs {
     return {
@@ -39,8 +45,8 @@ export class BotonicMsgConverter {
   private element(cmsElement: cms.Element): any {
     return {
       img: cmsElement.imgUrl,
-      title: cmsElement.title,
-      subtitle: cmsElement.subtitle,
+      title: this.str(cmsElement.title),
+      subtitle: this.str(cmsElement.subtitle),
       buttons: this.convertButtons(cmsElement.buttons, ButtonStyle.BUTTON),
     }
   }
@@ -60,9 +66,9 @@ export class BotonicMsgConverter {
         url: cmsButton.callback.url,
       } as any
       if (style == ButtonStyle.BUTTON) {
-        msgButton['title'] = cmsButton.text
+        msgButton['title'] = this.str(cmsButton.text)
       } else {
-        msgButton['text'] = cmsButton.text
+        msgButton['text'] = this.str(cmsButton.text)
       }
       return msgButton
     })
@@ -72,7 +78,7 @@ export class BotonicMsgConverter {
     const msg: any = {
       type: 'text',
       delay: delayS,
-      data: { text: text.text },
+      data: { text: this.str(text.text) },
     }
     const buttons = this.convertButtons(text.buttons, text.buttonsStyle)
     if (text.buttonsStyle == ButtonStyle.QUICK_REPLY) {
@@ -90,7 +96,7 @@ export class BotonicMsgConverter {
     }
     const text: BotonicText = {
       type: 'text',
-      data: { text: startUp.text },
+      data: { text: this.str(startUp.text) },
       buttons: this.convertButtons(startUp.buttons, ButtonStyle.BUTTON),
     }
     return this.appendFollowUp([img, text], startUp)
@@ -137,5 +143,12 @@ export class BotonicMsgConverter {
     } else {
       throw new Error('Unexpected followUp type ' + typeof followUp)
     }
+  }
+
+  private str(str: string): string {
+    if (this.options.replaceEmptyStringsWith == undefined) {
+      return str
+    }
+    return str || ' '
   }
 }

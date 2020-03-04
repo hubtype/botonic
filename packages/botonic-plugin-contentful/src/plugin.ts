@@ -1,5 +1,5 @@
 import * as cms from './cms'
-import Contentful from './contentful'
+import { Contentful } from './contentful'
 import { KeywordsOptions, Normalizer, StemmingBlackList } from './nlp'
 import { Search } from './search'
 import { BotonicMsgConverter } from './render'

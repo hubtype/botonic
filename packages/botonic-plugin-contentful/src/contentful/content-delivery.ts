@@ -2,7 +2,7 @@ import { Context, isSameModel, TopContentType } from '../cms'
 import * as contentful from 'contentful'
 import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
 
-//  move to AdaptorDeliveryApi ?
+// TODO move to AdaptorDeliveryApi ot to contents folder
 export abstract class ContentDelivery {
   constructor(
     readonly modelType: TopContentType,

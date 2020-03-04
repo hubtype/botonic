@@ -1,5 +1,5 @@
 import * as time from '../time'
-import { Callback } from './callback'
+import { Callback, TopContentId } from './callback'
 import { SearchableBy } from './fields'
 import { ContentType, MessageContentType, TopContentType } from './cms'
 import { shallowClone } from '../util/objects'
@@ -60,8 +60,13 @@ export abstract class TopContent extends Content {
   get name(): string {
     return this.common.name
   }
+
   get id(): string {
     return this.common.id
+  }
+
+  get contentId(): TopContentId {
+    return new TopContentId(this.contentType, this.id)
   }
 
   cloneWithFollowUp(newFollowUp: FollowUp): TopContent {
@@ -87,6 +92,7 @@ export abstract class MessageContent extends TopContent {
 /**
  * When any {@link keywords} is detected on a user input, we can use display the {@link shortText} for users
  * to confirm their interest on this content
+ * TODO move contentId o ContentType here?
  */
 export class CommonFields {
   readonly shortText: string

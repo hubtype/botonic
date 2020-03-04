@@ -3,10 +3,11 @@ import {
   ContentType,
   MESSAGE_CONTENT_TYPES,
   MessageContentType,
+  TopContentType,
 } from './cms'
 import escapeStringRegexp from 'escape-string-regexp'
 import { Context } from './context'
-import { TopContent } from './contents'
+import { Content, TopContent } from './contents'
 
 export class Callback {
   // TODO add path
@@ -14,7 +15,7 @@ export class Callback {
    * @param payload may contain the reference of a {@link Content}. See {@link ContentCallback}
    * @param url for hardcoded URLs (otherwise, use a {@link Url})
    */
-  constructor(readonly payload?: string, readonly url?: string) {}
+  protected constructor(readonly payload?: string, readonly url?: string) {}
 
   static ofPayload(payload: string): Callback {
     if (ContentCallback.payloadReferencesContent(payload)) {
@@ -27,13 +28,21 @@ export class Callback {
   static ofUrl(url: string): Callback {
     return new Callback(undefined, url)
   }
+
+  asContentId(): TopContentId | undefined {
+    return undefined
+  }
 }
 
 export class ContentCallback extends Callback {
   private static PAYLOAD_SEPARATOR = '$'
 
-  constructor(readonly model: ContentType, readonly id: string) {
+  constructor(readonly model: TopContentType, readonly id: string) {
     super(model + ContentCallback.PAYLOAD_SEPARATOR + id)
+  }
+
+  asContentId(): TopContentId {
+    return new TopContentId(this.model, this.id)
   }
 
   static payloadReferencesContent(payload: string): boolean {
@@ -50,7 +59,11 @@ export class ContentCallback extends Callback {
     return new ContentCallback(ContentCallback.checkDeliverableModel(type), id)
   }
 
-  static regexForModel(modelType: MessageContentType): RegExp {
+  static ofContentId(contentId: TopContentId): ContentCallback {
+    return new ContentCallback(contentId.model, contentId.id)
+  }
+
+  static regexForModel(modelType: ContentType): RegExp {
     return new RegExp(
       '^' +
         escapeStringRegexp(modelType + ContentCallback.PAYLOAD_SEPARATOR) +
@@ -67,6 +80,10 @@ export class ContentCallback extends Callback {
       )
     }
   }
+}
+
+export class ContentId {
+  constructor(readonly model: ContentType, readonly id: string) {}
 
   deliverPayloadContent(cms: CMS, context?: Context): Promise<TopContent> {
     switch (this.model) {

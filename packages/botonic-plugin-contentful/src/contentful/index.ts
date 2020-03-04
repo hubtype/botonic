@@ -34,7 +34,7 @@ import { CachedClientApi } from './delivery/cache'
 import { CreateClientParams } from 'contentful'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 
-export default class Contentful implements cms.CMS {
+export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
   private readonly _contents: ContentsApi
   private readonly _carousel: CarouselDelivery
@@ -177,6 +177,7 @@ export default class Contentful implements cms.CMS {
     }
   }
 
+  // TODO move all delivery instances to a class
   async contentFromEntry(
     entry: contentful.Entry<any>,
     context: Context
