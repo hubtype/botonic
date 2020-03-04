@@ -3,6 +3,7 @@ import { Context } from './context'
 import {
   Asset,
   Carousel,
+  Element,
   Image,
   Text,
   Url,
@@ -14,6 +15,7 @@ import {
   DateRangeContent,
   TopContent,
   Content,
+  Button,
 } from './contents'
 import { enumValues } from '../util/enums'
 
@@ -80,8 +82,10 @@ export function isSameModel(model1: ContentType, model2: ContentType): boolean {
  * to the fallback locale for those fields not available in the specified locale.
  */
 export interface CMS {
+  button(id: string, context?: Context): Promise<Button>
   carousel(id: string, context?: Context): Promise<Carousel>
   chitchat(id: string, context?: Context): Promise<Chitchat>
+  element(id: string, context?: Context): Promise<Element>
   image(id: string, context?: Context): Promise<Image>
   queue(id: string, context?: Context): Promise<Queue>
   startUp(id: string, context?: Context): Promise<StartUp>

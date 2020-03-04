@@ -2,18 +2,20 @@ import { SearchResult } from '../search/search-result'
 import { CMS, ContentType, TopContentType } from './cms'
 import {
   Asset,
+  Button,
   Carousel,
-  Text,
-  Url,
-  Image,
   Chitchat,
-  Queue,
-  Content,
-  StartUp,
   CommonFields,
-  ScheduleContent,
+  Content,
   DateRangeContent,
+  Element,
+  Image,
+  Queue,
+  ScheduleContent,
+  StartUp,
+  Text,
   TopContent,
+  Url,
 } from './contents'
 import { Context } from './context'
 
@@ -77,6 +79,20 @@ export class ErrorReportingCMS implements CMS {
       .then(this.validate)
   }
 
+  button(id: string, context?: Context): Promise<Button> {
+    return this.cms
+      .button(id, context)
+      .catch(this.handleError(ContentType.BUTTON, id))
+      .then(this.validate)
+  }
+
+  element(id: string, context?: Context): Promise<Element> {
+    return this.cms
+      .element(id, context)
+      .catch(this.handleError(ContentType.ELEMENT, id))
+      .then(this.validate)
+  }
+
   contentsWithKeywords(context?: Context): Promise<SearchResult[]> {
     return this.cms
       .contentsWithKeywords(context)
@@ -118,7 +134,7 @@ export class ErrorReportingCMS implements CMS {
     return this.cms.asset(id).catch(this.handleError('asset', id))
   }
 
-  private handleError(modelType: string, id?: string): (reason: any) => never {
+  private handleError(method: string, id?: string): (reason: any) => never {
     return (reason: any) => {
       const withId = id ? ` with id '${id}'` : ''
       if (reason.response && reason.response.data) {
@@ -126,7 +142,7 @@ export class ErrorReportingCMS implements CMS {
           reason.response.status + ': ' + JSON.stringify(reason.response.data)
       }
       // eslint-disable-next-line no-console
-      console.error(`Error fetching ${modelType}${withId}:`, reason)
+      console.error(`Error fetching ${method}${withId}:`, reason)
       throw reason
     }
   }
