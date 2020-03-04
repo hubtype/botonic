@@ -88,7 +88,7 @@ export class RndTextBuilder extends TextBuilder {
     return super.build()
   }
 
-  withRandomFields(): RndTextBuilder {
+  withRandomFields(): this {
     if (!this.buttonsBuilder) {
       this.buttonsBuilder = new RndButtonsBuilder().addButton().addButton()
     }
