@@ -94,6 +94,16 @@ export class Contentful implements cms.CMS {
     this._dateRange = new DateRangeDelivery(delivery)
   }
 
+  button(id: string, context: Context = DEFAULT_CONTEXT): Promise<cms.Button> {
+    return this._button.button(id, context)
+  }
+  element(
+    id: string,
+    context: Context = DEFAULT_CONTEXT
+  ): Promise<cms.Element> {
+    return this._carousel.element(id, context)
+  }
+
   async carousel(id: string, context = DEFAULT_CONTEXT): Promise<cms.Carousel> {
     return this._carousel.carousel(id, context)
   }

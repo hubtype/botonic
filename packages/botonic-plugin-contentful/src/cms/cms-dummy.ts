@@ -1,5 +1,5 @@
 import { SearchResult } from '../search/search-result'
-import { Callback } from './callback'
+import { Callback, ContentCallback } from './callback'
 import { CMS, ContentType, TopContentType } from './cms'
 import {
   Asset,
@@ -30,11 +30,19 @@ export class DummyCMS implements CMS {
    *
    * @param buttonCallbacks models which contain buttons will return one per each specified callback
    */
-  constructor(readonly buttonCallbacks: Callback[]) {}
+  constructor(readonly buttonCallbacks: ContentCallback[]) {}
+
+  button(id: string, context?: Context | undefined): Promise<Button> {
+    throw new Error('Method not implemented.')
+  }
+
+  element(id: string, context?: Context | undefined): Promise<Element> {
+    throw new Error('Method not implemented.')
+  }
 
   async carousel(id: string, {} = DEFAULT_CONTEXT): Promise<Carousel> {
     const elements = this.buttonCallbacks.map(callback =>
-      this.element(Math.random().toString(), callback)
+      this.createElement(Math.random().toString(), callback)
     )
     return Promise.resolve(new Carousel(new CommonFields(id, id), elements))
   }
@@ -69,7 +77,7 @@ export class DummyCMS implements CMS {
     return new Button(id, id, 'button text for ' + id, callback)
   }
 
-  private element(id: string, callback: Callback): Element {
+  private createElement(id: string, callback: Callback): Element {
     return new Element(
       id,
       [DummyCMS.buttonFromCallback(callback)],

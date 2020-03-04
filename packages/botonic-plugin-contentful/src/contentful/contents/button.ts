@@ -16,15 +16,18 @@ export class ButtonDelivery {
   private static PAYLOAD_CONTENT_TYPE = 'payload'
   constructor(private readonly delivery: DeliveryApi) {}
 
-  public fromReference(
-    reference: contentful.Entry<any>,
-    context: cms.Context
-  ): Promise<cms.Button> {
-    return this.fromId(reference.sys.id, context)
+  public async button(id: string, context: cms.Context): Promise<cms.Button> {
+    const entry = await this.delivery.getEntry<ButtonFields>(id, context)
+    return this.fromEntry(entry, context)
   }
 
-  private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
-    const entry = await this.delivery.getEntry(id, context)
+  public async fromReference(
+    entry: contentful.Entry<any>,
+    context: cms.Context
+  ): Promise<cms.Button> {
+    if (!entry.sys.contentType) {
+      entry = await this.delivery.getEntry(entry.sys.id, context)
+    }
     const entryType = ContentfulEntryUtils.getContentModel(entry)
     switch (entryType as string) {
       case cms.ContentType.CAROUSEL:
@@ -34,7 +37,16 @@ export class ButtonDelivery {
           entry as contentful.Entry<CommonEntryFields>
         )
       case ButtonDelivery.BUTTON_CONTENT_TYPE: {
-        const buttonEntry = entry as contentful.Entry<ButtonFields>
+        let buttonEntry = entry as contentful.Entry<ButtonFields>
+        if (
+          buttonEntry.fields.target &&
+          !buttonEntry.fields.target?.sys.contentType
+        ) {
+          buttonEntry = await this.delivery.getEntry<ButtonFields>(
+            entry.sys.id,
+            context
+          )
+        }
         return await this.fromEntry(buttonEntry, context)
       }
       default:
@@ -72,8 +84,18 @@ export class ButtonDelivery {
       entry.sys.id,
       fields.name,
       text,
-      ContentfulEntryUtils.callbackFromEntry(entry)
+      ButtonDelivery.callbackFromEntry(entry)
     )
+  }
+
+  private static callbackFromEntry(entry: contentful.Entry<any>): cms.Callback {
+    const modelType = ContentfulEntryUtils.getContentModel(
+      entry
+    ) as cms.TopContentType
+    if (modelType === ContentType.URL) {
+      return cms.Callback.ofUrl((entry.fields as UrlFields).url)
+    }
+    return new cms.ContentCallback(modelType, entry.sys.id)
   }
 
   private getTargetCallback(target: ButtonTarget): cms.Callback {

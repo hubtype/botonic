@@ -1,16 +1,17 @@
 import { CsvExport, skipEmptyStrings } from './csv-export'
 import { Locale } from '../../nlp'
-import Contentful from '../../contentful'
+import { Contentful } from '../../contentful'
 
 async function writeCsvForTranslators(
   spaceId: string,
+  environment: string,
   accessToken: string,
   locales: Locale[]
 ) {
   const cms = new Contentful({
-    spaceId: spaceId,
-    accessToken: accessToken,
-    environment: 'master',
+    spaceId,
+    accessToken,
+    environment,
   })
   const exporter = new CsvExport({
     stringFilter: skipEmptyStrings,
@@ -32,7 +33,7 @@ if (process.argv.length < 5) {
 
 async function main() {
   try {
-    await writeCsvForTranslators(spaceId, token, locales)
+    await writeCsvForTranslators(spaceId, 'master', token, locales)
     console.log('done')
   } catch (e) {
     console.error(e)

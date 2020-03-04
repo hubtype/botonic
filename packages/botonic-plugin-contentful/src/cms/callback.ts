@@ -85,7 +85,24 @@ export class ContentCallback extends Callback {
 export class ContentId {
   constructor(readonly model: ContentType, readonly id: string) {}
 
-  deliverPayloadContent(cms: CMS, context?: Context): Promise<TopContent> {
+  deliver(cms: CMS, context?: Context): Promise<Content> {
+    switch (this.model) {
+      case ContentType.BUTTON:
+        return cms.button(this.id, context)
+      case ContentType.ELEMENT:
+        return cms.element(this.id, context)
+      default:
+        return new TopContentId(this.model, this.id).deliver(cms, context)
+    }
+  }
+}
+
+export class TopContentId extends ContentId {
+  constructor(readonly model: TopContentType, id: string) {
+    super(model, id)
+  }
+
+  deliver(cms: CMS, context?: Context): Promise<TopContent> {
     switch (this.model) {
       case ContentType.CAROUSEL:
         return cms.carousel(this.id, context)
@@ -97,6 +114,14 @@ export class ContentId {
         return cms.startUp(this.id, context)
       case ContentType.IMAGE:
         return cms.image(this.id, context)
+      case ContentType.DATE_RANGE:
+        return cms.dateRange(this.id)
+      case ContentType.QUEUE:
+        return cms.queue(this.id, context)
+      case ContentType.URL:
+        return cms.url(this.id, context)
+      case ContentType.SCHEDULE:
+        return cms.schedule(this.id)
       default:
         throw new Error(
           `Type '${this.model}' not supported for callback with id '${this.id}'`
