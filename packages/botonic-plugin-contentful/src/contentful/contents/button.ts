@@ -25,9 +25,13 @@ export class ButtonDelivery {
     entry: contentful.Entry<any>,
     context: cms.Context
   ): Promise<cms.Button> {
-    if (!entry.sys.contentType) {
-      entry = await this.delivery.getEntry(entry.sys.id, context)
-    }
+    // we could pass the entry to fromId to avoid fetching it again, but it makes
+    // the code more complex when the reference is a button
+    return this.fromId(entry.sys.id, context)
+  }
+
+  private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
+    const entry = await this.delivery.getEntry(id, context)
     const entryType = ContentfulEntryUtils.getContentModel(entry)
     switch (entryType as string) {
       case cms.ContentType.CAROUSEL:
@@ -37,16 +41,7 @@ export class ButtonDelivery {
           entry as contentful.Entry<CommonEntryFields>
         )
       case ButtonDelivery.BUTTON_CONTENT_TYPE: {
-        let buttonEntry = entry as contentful.Entry<ButtonFields>
-        if (
-          buttonEntry.fields.target &&
-          !buttonEntry.fields.target?.sys.contentType
-        ) {
-          buttonEntry = await this.delivery.getEntry<ButtonFields>(
-            entry.sys.id,
-            context
-          )
-        }
+        const buttonEntry = entry as contentful.Entry<ButtonFields>
         return await this.fromEntry(buttonEntry, context)
       }
       default:
