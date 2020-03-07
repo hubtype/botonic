@@ -10,16 +10,17 @@ import {
 } from '../../index'
 import { Locale } from '../../nlp'
 import { Text } from '../../cms'
-import stringify from 'csv-stringify'
 import * as stream from 'stream'
 import * as fs from 'fs'
 import { promisify } from 'util'
 import sort from 'sort-stream'
+import stringify from 'csv-stringify'
+import { ContentField, ContentFieldType } from '../../manage-cms/fields'
 
 const finished = promisify(stream.finished)
 
 class I18nField {
-  constructor(readonly name: string, readonly value: string) {}
+  constructor(readonly name: ContentFieldType, readonly value: string) {}
 }
 
 type CsvLine = string[]
@@ -40,18 +41,6 @@ export class CsvExport {
     this.toFields = new ContentToCsvLines(options)
   }
 
-  create_stringifier() {
-    return stringify({
-      escape: '"',
-      delimiter: ';',
-      quote: '"',
-      quoted: true,
-      record_delimiter: 'windows',
-      header: true,
-      columns: ['Model', 'Code', 'Id', 'Field', 'From', 'To'],
-    })
-  }
-
   static sortRows(a: string[], b: string[]): number {
     for (const i in a) {
       const cmp = a[i].localeCompare(b[i])
@@ -63,7 +52,7 @@ export class CsvExport {
   }
 
   async write(fname: string, cms: CMS, locale: Locale): Promise<void> {
-    const stringifier = this.create_stringifier()
+    const stringifier = create_stringifier()
     const readable = stream.Readable.from(this.generate(cms, locale))
     const writable = readable
       .pipe(sort(CsvExport.sortRows))
@@ -111,21 +100,21 @@ export class ContentToCsvLines {
 
   getFields(content: Content): I18nField[] {
     if (content instanceof Button) {
-      return [new I18nField('Text', content.text)]
+      return [new I18nField(ContentFieldType.TEXT, content.text)]
     } else if (content instanceof StartUp) {
       return [
         ...this.getCommonFields(content.common),
-        new I18nField('Text', content.text),
+        new I18nField(ContentFieldType.TEXT, content.text),
       ]
     } else if (content instanceof Text) {
       return [
         ...this.getCommonFields(content.common),
-        new I18nField('Text', content.text),
+        new I18nField(ContentFieldType.TEXT, content.text),
       ]
     } else if (content instanceof Element) {
       return [
-        new I18nField('Title', content.title),
-        new I18nField('Subtitle', content.subtitle),
+        new I18nField(ContentFieldType.TITLE, content.title),
+        new I18nField(ContentFieldType.SUBTITLE, content.subtitle),
       ]
     } else if (content instanceof TopContent) {
       return this.getCommonFields(content.common)
@@ -134,6 +123,25 @@ export class ContentToCsvLines {
   }
 
   getCommonFields(common: CommonFields): I18nField[] {
-    return [new I18nField('Short text', common.shortText)]
+    return [
+      new I18nField(ContentFieldType.SHORT_TEXT, common.shortText),
+      // TODO process value based on ContentField.valueType
+      new I18nField(
+        ContentFieldType.KEYWORDS,
+        common.keywords.join(ContentField.STRING_ARRAY_SEPARATOR)
+      ),
+    ]
   }
+}
+
+export function create_stringifier() {
+  return stringify({
+    escape: '"',
+    delimiter: ';',
+    quote: '"',
+    quoted: true,
+    record_delimiter: 'windows',
+    header: true,
+    columns: ['Model', 'Code', 'Id', 'Field', 'From', 'To'],
+  })
 }
