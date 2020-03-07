@@ -95,6 +95,9 @@ export class ContentId {
         return new TopContentId(this.model, this.id).deliver(cms, context)
     }
   }
+  toString(): string {
+    return `${this.model} with id '${this.id}'`
+  }
 }
 
 export class TopContentId extends ContentId {
