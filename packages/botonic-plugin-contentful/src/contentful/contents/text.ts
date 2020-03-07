@@ -58,6 +58,6 @@ export interface TextFields extends CommonEntryFields {
   // Full text
   text: string
   // typed as any because we might only get the entry.sys but not the fields
-  buttons: contentful.Entry<any>[]
+  buttons?: contentful.Entry<any>[]
   buttonsStyle?: string
 }

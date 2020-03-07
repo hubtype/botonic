@@ -34,7 +34,7 @@ const FALLBACK_TESTS = [
 ]
 
 test.each<any>(FALLBACK_TESTS)(
-  'TEST: IgnoreFallbackDecorator.getEntry uses fallback locale',
+  'TEST: IgnoreFallbackDecorator.getEntry<ButtonFields> uses fallback locale',
   async (context: Context, expectedText: string) => {
     const sut = createIgnoreFallbackDecorator()
 
@@ -83,7 +83,7 @@ test.each<any>([ENGLISH, SPANISH])(
   }
 )
 
-test('TEST: IgnoreFallbackDecorator.getEntry<TextFields> uses fallback locale ', async () => {
+test('TEST: IgnoreFallbackDecorator.getEntry<TextFields> uses fallback locale for texts', async () => {
   const sut = createIgnoreFallbackDecorator()
 
   // act
@@ -95,7 +95,8 @@ test('TEST: IgnoreFallbackDecorator.getEntry<TextFields> uses fallback locale ',
   // assert
   expect(entry.fields.text).toEqual('')
   expect(entry.fields.name).toEqual('POST_FAQ1')
-  expect(entry.fields.buttons.length).toEqual(1)
+  // references do not fallback
+  expect(entry.fields.buttons).toBeUndefined()
 })
 
 test.each<any>(FALLBACK_TESTS)(
