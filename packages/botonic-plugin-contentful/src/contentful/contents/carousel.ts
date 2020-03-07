@@ -46,7 +46,8 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     context: cms.Context
   ): Promise<cms.Element> {
     const fields = entry.fields
-    const buttonsPromises = entry.fields.buttons.map(reference =>
+    const buttons = entry.fields.buttons || []
+    const buttonsPromises = buttons.map(reference =>
       this.button.fromReference(reference, context)
     )
 
@@ -68,7 +69,7 @@ interface ElementFields {
   subtitle: string
   pic?: contentful.Asset
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  buttons: contentful.Entry<any>[]
+  buttons?: contentful.Entry<any>[]
 }
 
 export interface CarouselFields extends CommonEntryFields {
