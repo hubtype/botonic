@@ -68,12 +68,12 @@ test('TEST: contentful contentsWithKeywords', async () => {
   )
 
   // assert
-  expect(results).toHaveLength(19)
+  expect(results.length).toBeGreaterThanOrEqual(20)
   const ofType = (model: TopContentType) =>
     results.filter(r => r.contentId.model == model)
 
   expect(ofType(ContentType.CAROUSEL)).toHaveLength(1)
-  expect(ofType(ContentType.TEXT)).toHaveLength(15)
+  expect(ofType(ContentType.TEXT).length).toBeGreaterThanOrEqual(15)
   expect(ofType(ContentType.CHITCHAT)).toHaveLength(0)
   expect(ofType(ContentType.URL)).toHaveLength(1)
   expect(ofType(ContentType.SCHEDULE)).toHaveLength(0)
