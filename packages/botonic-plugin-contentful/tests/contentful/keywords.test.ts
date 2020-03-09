@@ -22,7 +22,7 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(keywordsByPrio[10]).toEqual(['low1', 'low2'])
   expect(keywordsByPrio[99]).toEqual(['high1', 'high2'])
 
-  expect(searchResults).toHaveLength(17)
+  expect(searchResults.length).toBeGreaterThanOrEqual(17)
 
   const postFaq1 = searchResults.find(
     result => result.contentId.id == TEST_POST_FAQ1_ID
