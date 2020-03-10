@@ -10,8 +10,8 @@ import { PrevButton } from '../components/prevButton.tsx'
 
 ## **What is Botonic Plugin Contentful?**
 
-Botonic Plugin Contentful is one of the [available](https://github.com/hubtype/botonic/tree/master/packages) plugins for Botonic. 
-[Contentful](http://www.contentful.com) is a CMS (Content Management System) which manages contents of a great variety 
+Botonic Plugin Contentful is one of the [available](https://github.com/hubtype/botonic/tree/master/packages) plugins for Botonic.
+[Contentful](http://www.contentful.com) is a CMS (Content Management System) which manages contents of a great variety
 of types, such as text, dates, numerics, images, ... These simple contents can be combined into custom complex contents
 (eg. a carousel or a message box) which can be queried over APIs. Among others, Contentful offers the following features:
 
@@ -24,7 +24,7 @@ of types, such as text, dates, numerics, images, ... These simple contents can b
 
 Managing the bot contents in an external tool offers the following advantages:
 
-* The contents and navigation of static menus, images and texts can be easily defined from a user-friendly UI. 
+* The contents and navigation of static menus, images and texts can be easily defined from a user-friendly UI.
 * Benefiting from of a best in breed CMS solution.
 * Updating the bot contents does not require redeploying the bot.
 * Users will need to download a much lighter bundle to start using the bot.
@@ -32,11 +32,11 @@ Managing the bot contents in an external tool offers the following advantages:
 Currently the Contentful plugin allows your bot to easily access these kind of contents:
 
 * Combinations of the following Botonic UI components: Start up messages, Carousels and Texts. Their buttons can be configured
-to trigger other botonic components as well as opening external URLs. 
-* Images, which optionally can be assigned to different assets depending on the user language. 
+to trigger other botonic components as well as opening external URLs.
+* Images, which optionally can be assigned to different assets depending on the user language.
 * Information about Botonic desk queues, such as its name and schedule.
 
-For the previous content, the dashboard allows assigning a list of tags to your contents, so that your bot can query 
+For the previous content, the dashboard allows assigning a list of tags to your contents, so that your bot can query
 them by a given tag value.
 
 * Schedules with configurable timing per week day, as well as exception for bank holidays or sales periods.
@@ -80,7 +80,7 @@ Execute the following script to create content models required by the plugin. Re
 the space id and token that you obtained in the previous section.
 ```
 CONTENTFUL_SPACEID=<YOUR_ID> CONTENTFUL_TOKEN=<CONTENT_MANAGEMENT_TOKEN> node_modules/@botonic/plugin-contentful/bin/import-contentful-models.sh
-``` 
+```
 
 ### **Defining your contents**
 
@@ -132,6 +132,10 @@ You will see now that you can assign multiple values for the internationalizable
   src="https://botonic-doc-static.netlify.com/images/contentful/multilanguage-edit.png"
   style={{ display: 'block', margin: 'auto', maxWidth: '30%' }}
 />
+
+The value of referenced contents (eg. a list of Button's) are not defined for a given locale,
+the plugin will deliver them as defined for the locale's fallback locale. In that case, the
+referenced contents will be delivered in the same locale as the referring content.
 
 
 ### **Programming your bot**
@@ -220,7 +224,7 @@ import * as cms from '@botonic/plugin-contentful';
   {
     payload: cms.ContentCallback.regexForModel(cms.ModelType.CAROUSEL),
     action: Carousel
-  }, 
+  },
 ```
 
 And define an action for each route like this:
@@ -235,22 +239,22 @@ export default class Text extends React.Component {
     let text = await botoplugin.cms.text(callback.id);
     return { text };
   }
-  
+
    render() {
     return renderText(this.props['text']);
   }
-``` 
+```
 
 
 
 #### Search by keywords
 
 Apart from fetching your contents by ID, you can also search them. From www.contentful.com, you can assign keywords to your contents of type *StartUp*, *Text*, *Carousel*, *URL* and *Queue*. Each keyword is a string
-of words that can be used to search your contents. To make the search more flexible, the plugin will perform the 
+of words that can be used to search your contents. To make the search more flexible, the plugin will perform the
 following preprocessing in both the content keywords and the search keywords:
 
 * Conversion to lowercase.
-* Removal of spaces and other separators (eg. commas) 
+* Removal of spaces and other separators (eg. commas)
 * [Stemming](https://en.wikipedia.org/wiki/Stemming), to remove suffixes without semantics.
 * Removal of stop words (eg. "the", "and",...)
 
@@ -268,7 +272,7 @@ import * as cms from '@botonic/plugin-contentful';
     	console.log(result);
 	 }
   }
-  
+
 ```
 
 #### Keyword edition in contenful.com
@@ -287,7 +291,7 @@ remember to alway press RETURN after typing a new keyword. Otherwise, it will be
 * **ONLY\_KEYWORDS\_FOUND**: the content must have a keyword with all the words from the search text.
 * **KEYWORDS\_AND\_OTHERS\_FOUND**: The keyword may be preceded and followed by other words in the search text.
 * **ALL\_WORDS\_IN\_KEYWORDS\_MIXED_UP**: All the words in the keyword must appear on the search text, even if mixed up with other words in any order.
- 
+
 
 #### Schedule
 
@@ -318,7 +322,7 @@ To define an empty day (such as bank holidays), just create the *Day Schedule* b
   style={{ display: 'block', margin: 'auto', maxWidth: '60%' }}
 />
 
-For days with exceptional schedule (such as sales days), create the *Day Schedule* and specify the special *Hour range*. 
+For days with exceptional schedule (such as sales days), create the *Day Schedule* and specify the special *Hour range*.
 <img
   src="https://botonic-doc-static.netlify.com/images/contentful/schedule-exceptions-dif-hours.png"
   style={{ display: 'block', margin: 'auto', maxWidth: '60%' }}

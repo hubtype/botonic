@@ -26,7 +26,7 @@ export function testContentfulOptions(
   }
 }
 
-export const TEST_DEFAULT_CONTEXT = ENGLISH
+export const TEST_DEFAULT_LOCALE = ENGLISH
 
 export function testContext(
   contexts: (Context | undefined)[] = [

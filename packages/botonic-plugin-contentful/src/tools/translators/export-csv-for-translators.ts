@@ -1,39 +1,42 @@
 import { CsvExport, skipEmptyStrings } from './csv-export'
 import { Locale } from '../../nlp'
 import { Contentful } from '../../contentful'
+import { ContentfulOptions } from '../../plugin'
 
 async function writeCsvForTranslators(
-  spaceId: string,
-  environment: string,
-  accessToken: string,
-  locales: Locale[]
+  options: ContentfulOptions,
+  locale: Locale,
+  fileName: string
 ) {
-  const cms = new Contentful({
-    spaceId,
-    accessToken,
-    environment,
-  })
+  const cms = new Contentful(options)
   const exporter = new CsvExport({
     stringFilter: skipEmptyStrings,
   })
-  const promises = locales.map((from: string) =>
-    exporter.write(`contentful_${from}.csv`, cms, from)
-  )
-  await Promise.all(promises)
+  return await exporter.write(fileName, cms, locale)
 }
 
-const spaceId = process.argv[2]
-const token = process.argv[3]
-const locales = process.argv.slice(4) as Locale[]
-console.log(process.execArgv)
-if (process.argv.length < 5) {
-  console.error(`Usage: space_id access_token language`)
+if (process.argv.length < 7 || process.argv[2] == '--help') {
+  console.error(`Usage: space_id environment access_token locale filename`)
   process.exit(1)
 }
 
+const spaceId = process.argv[2]
+const environment = process.argv[3]
+const accessToken = process.argv[4]
+const locale = process.argv[5]
+const fileName = process.argv[6]
+
 async function main() {
   try {
-    await writeCsvForTranslators(spaceId, 'master', token, locales)
+    await writeCsvForTranslators(
+      {
+        spaceId,
+        accessToken,
+        environment,
+      },
+      locale,
+      fileName
+    )
     console.log('done')
   } catch (e) {
     console.error(e)
