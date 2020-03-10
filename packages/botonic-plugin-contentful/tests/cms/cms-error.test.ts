@@ -1,5 +1,16 @@
 import { instance, mock, when } from 'ts-mockito'
-import { Carousel, DummyCMS, ErrorReportingCMS } from '../../src'
+import { Carousel, CmsException, DummyCMS, ErrorReportingCMS } from '../../src'
+import { testContentful } from '../contentful/contentful.helper'
+
+test('TEST: ErrorReportingCMS integration test', async () => {
+  const contentful = testContentful()
+  const sut = new ErrorReportingCMS(contentful)
+  expect.assertions(1)
+  await sut.text('invalid_id').catch(error => {
+    console.log('in!')
+    expect(error).toBeInstanceOf(CmsException)
+  })
+})
 
 test('TEST: ErrorReportingCMS carousel delivery failed', async () => {
   const mockCms = mock(DummyCMS)
@@ -13,7 +24,9 @@ test('TEST: ErrorReportingCMS carousel delivery failed', async () => {
       fail('should have thrown')
     })
     .catch((error2: any) => {
-      expect(error2).toBe(error)
+      expect(error2).toEqual(
+        new CmsException("Error calling CMS.carousel with id 'id1'.", error)
+      )
     })
 })
 
