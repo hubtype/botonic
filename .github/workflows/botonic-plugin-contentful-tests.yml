@@ -30,6 +30,7 @@ jobs:
       env:
         CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
         CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
+        CONTENTFUL_TEST_MANAGE_TOKEN: ${{ secrets.CONTENTFUL_TEST_MANAGE_TOKEN }}
       run: (cd ./packages/$PACKAGE && npm run test)
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
