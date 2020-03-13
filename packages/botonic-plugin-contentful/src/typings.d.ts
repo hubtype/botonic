@@ -45,34 +45,54 @@ declare module '@nlpjs/core/src' {
   }
 }
 
-declare module '@nlpjs/lang-en/src' {
-  import { BaseStemmer, Tokenizer } from '@nlpjs/core/src'
-
-  export class TokenizerEn extends Tokenizer {}
-
-  export class StemmerEn extends BaseStemmer {}
-}
-
-declare module '@nlpjs/lang-es/src' {
-  import { BaseStemmer, Tokenizer } from '@nlpjs/core/src'
-
-  export class TokenizerEs extends Tokenizer {}
-
-  export class StemmerEs extends BaseStemmer {}
-}
-
-declare module '@nlpjs/lang-pt/src' {
-  import { BaseStemmer, Tokenizer } from '@nlpjs/core/src'
-
-  export class TokenizerPt extends Tokenizer {}
-
-  export class StemmerPt extends BaseStemmer {}
-}
-
-declare module '@nlpjs/lang-ca/src' {
+declare module '@nlpjs/lang-en-min/src/stemmer-en' {
   import { BaseStemmer } from '@nlpjs/core/src'
 
-  export class StemmerCa extends BaseStemmer {}
+  class StemmerEn extends BaseStemmer {}
+  export = StemmerEn
+}
+
+declare module '@nlpjs/lang-en-min/src/tokenizer-en' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerEn extends Tokenizer {}
+
+  export = TokenizerEn
+}
+
+declare module '@nlpjs/lang-es/src/stemmer-es' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerEs extends BaseStemmer {}
+  export = StemmerEs
+}
+
+declare module '@nlpjs/lang-es/src/tokenizer-es' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerEs extends Tokenizer {}
+  export = TokenizerEs
+}
+
+declare module '@nlpjs/lang-pt/src/stemmer-pt' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerPt extends BaseStemmer {}
+  export = StemmerPt
+}
+
+declare module '@nlpjs/lang-pt/src/tokenizer-pt' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerPt extends Tokenizer {}
+  export = TokenizerPt
+}
+
+declare module '@nlpjs/lang-ca/src/stemmer-ca' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerCa extends BaseStemmer {}
+  export = StemmerCa
 }
 
 declare module 'sort-stream' {
