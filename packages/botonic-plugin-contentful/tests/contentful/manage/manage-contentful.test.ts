@@ -56,7 +56,7 @@ describe('ManageContentful', () => {
       expect(restored).toEqual(old)
     }
     console.log('ManageContentful1 end')
-  })
+  }, 10000)
 
   test('TEST: updateField by default does not allow overwrites', async () => {
     console.log('ManageContentful2 start')
@@ -83,7 +83,7 @@ describe('ManageContentful', () => {
       }
     }
     console.log('ManageContentful2 end')
-  })
+  }, 10000)
 
   test('TEST: copyField buttons', async () => {
     console.log('ManageContentful3 start')
@@ -128,5 +128,5 @@ describe('ManageContentful', () => {
       expect(restored.buttons).toEqual([])
     }
     console.log('ManageContentful3 end')
-  })
+  }, 10000)
 })
