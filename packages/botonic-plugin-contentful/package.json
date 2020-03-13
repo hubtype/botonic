@@ -7,19 +7,24 @@
     "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
     "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm test && npm run lint",
+    "prepublishOnly": "npm run build && npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.11.0-alpha.3",
+  "version": "0.11.0-alpha.5",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hubtype/botonic.git"
   },
+  "files": [
+    "lib/**",
+    "doc/**",
+    "README.md"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {

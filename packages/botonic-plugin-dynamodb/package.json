@@ -7,13 +7,13 @@
     "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
     "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm test && npm run lint",
+    "prepublishOnly": "npm run build && npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.11.0-alpha.1",
+  "version": "0.11.0-alpha.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
@@ -22,6 +22,11 @@
   },
   "author": "",
   "license": "MIT",
+  "files": [
+    "lib/**",
+    "doc/**",
+    "README.md"
+  ],
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
