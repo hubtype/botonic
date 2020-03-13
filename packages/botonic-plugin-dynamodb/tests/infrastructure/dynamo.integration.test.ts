@@ -1,9 +1,8 @@
 import { testConfig } from '../helpers/dynamo'
-import { Env } from '../../src/infrastructure/dynamo'
 import { Track as DynamoTrack } from '../../src/infrastructure/track'
 import { Track, UserEvent } from '../../src/domain'
 import time from '../../src/domain/time'
-import BotonicPluginDynamoDB, { DynamoDbOptions } from '../../src'
+import BotonicPluginDynamoDB, { DynamoDbOptions, Env } from '../../src'
 
 test('TEST: Track serialization', () => {
   DynamoTrack.testSerialization()

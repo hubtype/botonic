@@ -1,16 +1,9 @@
 import { UpdateItemInput } from 'aws-sdk/clients/dynamodb'
 import * as domain from '../domain'
-import { Track, TABLE_NAME } from './track'
+import { TABLE_NAME, Track } from './track'
 import { DataMapper } from '@aws/dynamodb-data-mapper'
+import { Env } from './config'
 import DynamoDB = require('aws-sdk/clients/dynamodb')
-
-/**
- * Env affects the name of the table were the tracks will be stored
- */
-export enum Env {
-  PRO = 'pro',
-  DEV = 'dev',
-}
 
 export class Dynamo {
   static tableName(name: string, env: Env): string {

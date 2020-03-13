@@ -7,8 +7,9 @@ import {
   TrackStorage,
   UserEvent,
 } from './domain'
-import { DynamoTrackStorage, Env } from './infrastructure/dynamo'
+import { DynamoTrackStorage } from './infrastructure/dynamo'
 import time from './domain/time'
+import { Env } from './infrastructure/config'
 
 export * from './domain/dummy'
 export * from './infrastructure'
