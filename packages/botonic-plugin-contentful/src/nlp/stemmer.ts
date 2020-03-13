@@ -1,8 +1,8 @@
 import { BaseStemmer } from '@nlpjs/core/src'
-import { StemmerCa } from '@nlpjs/lang-ca/src'
-import { StemmerEn } from '@nlpjs/lang-en/src'
-import { StemmerEs } from '@nlpjs/lang-es/src'
-import { StemmerPt } from '@nlpjs/lang-pt/src'
+import StemmerCa from '@nlpjs/lang-ca/src/stemmer-ca'
+import StemmerEn from '@nlpjs/lang-en-min/src/stemmer-en'
+import StemmerEs from '@nlpjs/lang-es/src/stemmer-es'
+import StemmerPt from '@nlpjs/lang-pt/src/stemmer-pt'
 import { StemmerPl } from './stemmers/polish-stemmer'
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
