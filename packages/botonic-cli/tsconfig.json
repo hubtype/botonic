@@ -3,5 +3,11 @@
 	"compilerOptions": {
 		"rootDir": "src",
 		"outDir": "lib"
-	}
+	},
+  "include": [
+    ".eslintrc.js",
+    "babel.config.js",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

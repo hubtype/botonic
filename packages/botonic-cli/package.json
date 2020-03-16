@@ -59,7 +59,7 @@
     "postinstall": "node scripts/postinstall.js",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' 'src/**/*.ts*'"
   },
   "types": "lib/index.d.ts"
 }
