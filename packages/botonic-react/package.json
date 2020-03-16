@@ -16,6 +16,11 @@
   ],
   "author": "",
   "license": "MIT",
+  "files": [
+    "src/**",
+    "index.d.ts",
+    "MIGRATION_GUIDE.md"
+  ],
   "dependencies": {
     "@botonic/core": "0.11.0-alpha.0",
     "@rehooks/local-storage": "^2.1.1",

@@ -19,6 +19,10 @@
   "bugs": {
     "url": "https://github.com/hubtype/botonic/issues"
   },
+  "files": [
+    "src/**",
+    "index.d.ts"
+  ],
   "dependencies": {
     "axios": "^0.19.2",
     "pusher-js": "^5.0.3"
