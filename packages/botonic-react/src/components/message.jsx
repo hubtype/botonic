@@ -52,6 +52,7 @@ export const Message = props => {
     children,
     json,
     style,
+    imageStyle,
     ...otherProps
   } = props
 
@@ -157,7 +158,8 @@ export const Message = props => {
           {isFromBot() && BotMessageImage && (
             <BotMessageImageContainer
               style={{
-                ...getThemeProperty('message.bot.imageStyle'),
+                ...getThemeProperty('message.bot.imageStyle'), 
+                ...imageStyle
               }}
             >
               <img
