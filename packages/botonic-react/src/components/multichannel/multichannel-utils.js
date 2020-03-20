@@ -44,4 +44,4 @@ export function getMultichannelReplies(node) {
 export const isWhatsapp = context =>
   context.session &&
   context.session.user &&
-  context.session.user.provider == Providers.Messaging.WHATSAPPNEW
+  context.session.user.provider == Providers.Messaging.WHATSAPP

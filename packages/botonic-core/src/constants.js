@@ -9,7 +9,6 @@ export const Providers = Object.freeze({
     WHATSAPP: 'whatsapp',
     SMOOCH: 'smooch',
     SMOOCH_WEB: 'smooch_web',
-    WHATSAPPNEW: 'whatsappnew',
     IMBEE: 'imbee',
     WEBCHAT: 'webchat',
   },

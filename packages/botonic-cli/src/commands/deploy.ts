@@ -266,7 +266,7 @@ Uploading...
   async displayProviders(providers: any) {
     console.log('Your bot is published on:')
     providers.map((p: any) => {
-      if (p.provider === 'whatsappnew')
+      if (p.provider === 'whatsapp')
         console.log(`💬  [whatsapp] https://wa.me/${p.username}`)
       if (p.provider === 'facebook')
         console.log(`💬  [facebook] https://m.me/${p.username}`)

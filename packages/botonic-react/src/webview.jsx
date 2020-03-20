@@ -41,7 +41,7 @@ class App extends React.Component {
         console.log(e)
       }
     }
-    if (this.state.session.user.provider === 'whatsappnew') {
+    if (this.state.session.user.provider === 'whatsapp') {
       location.href = 'https://wa.me/' + this.state.session.user.imp_id
     } else {
       try {
