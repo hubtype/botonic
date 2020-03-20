@@ -24,5 +24,5 @@ export function withRequestContext(node, context = {}) {
 
 export const whatsappRenderer = sut =>
   TestRenderer.create(
-    withRequestContext(sut, { session: { user: { provider: 'whatsappnew' } } })
+    withRequestContext(sut, { session: { user: { provider: 'whatsapp' } } })
   )
