@@ -173,13 +173,15 @@ export class ContentfulExceptionWrapper {
       content += ` with id '${contentId}'`
     }
     const msg = `Error calling ${this.wrappee}.${method}${content}.`
+    const exception = new CmsException(msg, contentfulError)
     if (this.logErrors) {
-      // eslint-disable-next-line no-console
-      console.error(msg, contentfulError.toString())
+      if (this.logStack) {
+        console.error(exception)
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(exception.toString())
+      }
     }
-    if (this.logStack) {
-      console.error(msg, contentfulError.stack || 'No callstack')
-    }
-    throw new CmsException(msg, contentfulError)
+    throw exception
   }
 }

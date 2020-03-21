@@ -7,7 +7,6 @@ test('TEST: ErrorReportingCMS integration test', async () => {
   const sut = new ErrorReportingCMS(contentful)
   expect.assertions(1)
   await sut.text('invalid_id').catch(error => {
-    console.log('in!')
     expect(error).toBeInstanceOf(CmsException)
   })
 })
