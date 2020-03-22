@@ -37,7 +37,7 @@
     "memoizee": "^0.4.14",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
-    "node-nlp": "^4.0.2",
+    "node-nlp": "^4.2.1",
     "sort-stream": "^1.0.1"
   },
   "devDependencies": {
