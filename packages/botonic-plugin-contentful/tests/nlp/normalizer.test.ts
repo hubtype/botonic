@@ -37,7 +37,7 @@ test.each<any>([
     [Word.StopWord('gdziekolwiek'), new Word('jesc', 'je')],
   ],
 ])(
-  'TEST: stemmer removes stopwords (%s) =>%j',
+  'TEST: stemmer removes stopwords: lang=%s input="%j"',
   (locale: string, raw: string, words: Word[]) => {
     const sut = new Normalizer()
     expect(sut.normalize(locale, raw)).toEqual(

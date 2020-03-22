@@ -25,10 +25,21 @@ export function countOccurrences(haystack: string, needle: string): number {
 }
 
 /**
- * Identical to TokenizerEs, except that it maintains ç & Ç
+ * Not using TokenizerCa from node-nlp because it does not stem correctly some
+ * "pronoms febles" (eg. adonar-se'n)
+ * It maintains ç & Ç, but maybe we should only do it when normalize=true?
  */
-class TokenizerCa implements Tokenizer {
+export class TokenizerCa implements Tokenizer {
   static RESTORE_CEDIL = new RegExp('c' + String.fromCharCode(807), 'gi')
+  static SPLIT_REGEX = TokenizerCa.splitRegex()
+
+  static splitRegex(): RegExp {
+    const aLetter = 'a-zA-Zá-úÁ-ÚñÑüÜ'
+    const pronomFebleEnding = `[-'](?=[${aLetter}])`
+    const separator = `\\s,.!?;:([\\]'"¡¿)`
+    const slashNotNumber = `/(?=[^0-9])`
+    return new RegExp(`${pronomFebleEnding}|[${separator}]+|${slashNotNumber}+`)
+  }
 
   static restoreAfterTokenizer(text: string) {
     return text.replace(TokenizerCa.RESTORE_CEDIL, 'ç')
@@ -41,7 +52,7 @@ class TokenizerCa implements Tokenizer {
       normalized = TokenizerCa.restoreAfterTokenizer(normalized)
       normalized = normalized.replace(/[\u0300-\u036f]/g, '')
     }
-    return this.trim(normalized.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/))
+    return this.trim(normalized.split(TokenizerCa.SPLIT_REGEX))
   }
 
   private trim(arr: string[]): string[] {
