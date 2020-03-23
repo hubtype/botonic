@@ -92,6 +92,15 @@ export const Message = props => {
   const textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
+
+  const getTimestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
+  moment.locale(getTimestampLocale)
+
+  const getTimestampFormat = getThemeProperty(
+    `message.timestamps.format`,
+    false
+  )
+
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
@@ -100,6 +109,7 @@ export const Message = props => {
         id: state.id,
         type,
         data: decomposedChildren ? decomposedChildren : textChildren,
+        timestamp: moment().format(getTimestampFormat),
         from,
         buttons: buttons.map(b => ({
           payload: b.props.payload,
@@ -149,14 +159,6 @@ export const Message = props => {
       : getThemeProperty('message.user.style')
 
   const getBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
-
-  const getTimestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
-  moment.locale(getTimestampLocale)
-
-  const getTimestampFormat = getThemeProperty(
-    `message.timestamps.format`,
-    false
-  )
 
   const renderBrowser = () => {
     const m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -253,7 +255,7 @@ export const Message = props => {
                 ...getThemeProperty('message.timestamps.style'),
               }}
             >
-              {moment().format(getTimestampFormat)}
+              {m.timestamp}
             </TimestampText>
           )}
         </TimestampContainer>
