@@ -1,17 +1,23 @@
 export class CmsException extends Error {
   /**
-   * @param msg description of the problem
+   * @param message description of the problem
    * @param reason what caused the exception (normally a low level exception)
    */
   constructor(message: string, readonly reason?: any) {
-    super(message)
+    super(CmsException.mergeMessages(message, reason))
   }
 
-  toString(): string {
-    if (!this.reason) {
-      return this.message
+  /**
+   * Reason's string is merged into message because many tools (eg. jest)
+   * only report Error.message and not Error.toString()
+   */
+  private static mergeMessages(
+    message: string,
+    reason: any | undefined
+  ): string {
+    if (!reason) {
+      return message
     }
-    const reason = this.reason.message || String(this.reason)
-    return `${this.message} due to: ${reason}`
+    return `${message} due to: ${reason.message || String(reason)}`
   }
 }

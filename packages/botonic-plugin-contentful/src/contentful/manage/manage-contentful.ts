@@ -75,9 +75,10 @@ export class ManageContentful implements ManageCms {
       )
     }
     if (!context.allowOverwrites) {
-      if (entry.fields[field.cmsName][context.locale]) {
+      const value = entry.fields[field.cmsName][context.locale]
+      if (value) {
         throw new CmsException(
-          `Cannot overwrite field ${field.cmsName} of entry ${entry.sys.id} because ManageContext.allowOverwrites is enabled`
+          `Cannot overwrite field $'{field.cmsName}' of entry '${entry.sys.id}' (has value '${value}) because ManageContext.allowOverwrites is false`
         )
       }
     }
