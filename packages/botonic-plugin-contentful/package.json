@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "build_with_tests": "tsc -b tests/tsconfig.json",
     "test": "../../node_modules/.bin/jest",
     "lint": "npm run lint_core -- --fix",

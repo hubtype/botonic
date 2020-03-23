@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-nlu",
-  "version": "0.10.1",
+  "version": "0.11.0-alpha.0",
   "main": "src/index.js",
   "scripts": {
     "build": "rm -rf dist && babel src -d dist",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@botonic/nlu": "^0.10.1",
+    "@botonic/nlu": "alpha",
     "@tensorflow/tfjs": "^1.5.1",
     "axios": "latest",
     "node-fetch": "^2.6.0"
