@@ -270,6 +270,11 @@ export const Webchat = forwardRef((props, ref) => {
     props.persistentMenu
   )
 
+  const CustomPersistentMenu = getThemeProperty(
+    'userInput.customPersistentMenu',
+    undefined
+  )
+
   const checkBlockInput = input => {
     const blockInputs = getThemeProperty(
       'userInput.blockInputs',
@@ -677,10 +682,19 @@ export const Webchat = forwardRef((props, ref) => {
                 Object.keys(webchatState.replies).length > 0 &&
                 webchatReplies()}
               {persistentMenuIsOpened && (
-                <OpenedPersistentMenu
-                  onClick={closeMenu}
-                  options={persistentMenuOptions}
-                />
+                <div>
+                  {CustomPersistentMenu ? (
+                    <CustomPersistentMenu
+                      onClick={closeMenu}
+                      options={persistentMenuOptions}
+                    />
+                  ) : (
+                    <OpenedPersistentMenu
+                      onClick={closeMenu}
+                      options={persistentMenuOptions}
+                    />
+                  )}
+                </div>
               )}
               {!webchatState.handoff && userInputArea()}
               {webchatState.webview && webchatWebview()}

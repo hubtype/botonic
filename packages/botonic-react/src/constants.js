@@ -85,6 +85,7 @@ export const WEBCHAT = {
     enableSendButton: 'userInput.sendButton.enable',
     customSendButton: 'userInput.sendButton.custom',
     persistentMenu: 'userInput.persistentMenu',
+    customPersistentMenu: 'userInput.customPersistentMenu',
     customMenuButton: 'userInput.menuButton.custom',
     blockInputs: 'userInput.blockInputs',
     scrollbar: 'scrollbar',
