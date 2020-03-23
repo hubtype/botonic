@@ -8,12 +8,14 @@ import { Button } from './button'
 import { Reply } from './reply'
 import { WEBCHAT, COLORS } from '../constants'
 import Fade from 'react-reveal/Fade'
+import moment from 'moment'
 
 const MessageContainer = styled.div`
   display: flex;
   justify-content: ${props => (props.isfromuser ? 'flex-end' : 'flex-start')};
   position: relative;
   padding-left: 5px;
+  padding-right: ${props => props.userPadding};
 `
 
 const BotMessageImageContainer = styled.div`
@@ -41,6 +43,22 @@ const BlobText = styled.div`
   white-space: pre-line;
 `
 
+const TimestampContainer = styled.div`
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+`
+
+const TimestampText = styled.div`
+  @import url('https://fonts.googleapis.com/css?family=Lato');
+  font-family: Lato;
+  font-size: 12px;
+  color: black;
+  width: 100%;
+  text-align: ${props => (props.isfromuser ? 'right' : 'left')};
+  padding: ${props => (props.isfromuser ? '0px 15px' : '0px 50px')};
+`
+
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
   const {
@@ -53,6 +71,7 @@ export const Message = props => {
     json,
     style,
     imageStyle,
+    timestamps = true,
     ...otherProps
   } = props
 
@@ -131,6 +150,14 @@ export const Message = props => {
 
   const getBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
 
+  const getTimestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
+  moment.locale(getTimestampLocale)
+
+  const getTimestampFormat = getThemeProperty(
+    `message.timestamps.format`,
+    false
+  )
+
   const renderBrowser = () => {
     const m = webchatState.messagesJSON.find(m => m.id === state.id)
     if (!m || !m.display) return <></>
@@ -154,12 +181,15 @@ export const Message = props => {
         condition={animationsEnabled}
         wrapper={children => <Fade>{children}</Fade>}
       >
-        <MessageContainer isfromuser={isFromUser()}>
+        <MessageContainer
+          isfromuser={isFromUser()}
+          userPadding={getThemeProperty('message.user.padding')}
+        >
           {isFromBot() && BotMessageImage && (
             <BotMessageImageContainer
               style={{
-                ...getThemeProperty('message.bot.imageStyle'), 
-                ...imageStyle
+                ...getThemeProperty('message.bot.imageStyle'),
+                ...imageStyle,
               }}
             >
               <img
@@ -215,6 +245,18 @@ export const Message = props => {
             )}
           </Blob>
         </MessageContainer>
+        <TimestampContainer>
+          {getTimestampFormat && timestamps && (
+            <TimestampText
+              isfromuser={isFromUser()}
+              style={{
+                ...getThemeProperty('message.timestamps.style'),
+              }}
+            >
+              {moment().format(getTimestampFormat)}
+            </TimestampText>
+          )}
+        </TimestampContainer>
       </ConditionalWrapper>
     )
   }
