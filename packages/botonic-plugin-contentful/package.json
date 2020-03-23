@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "build_with_tests": "tsc -b tests/tsconfig.json",
     "test": "../../node_modules/.bin/jest",
     "lint": "npm run lint_core -- --fix",
@@ -13,7 +13,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.11.0-alpha.5",
+  "version": "0.11.0-alpha.6",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
