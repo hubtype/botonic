@@ -505,6 +505,10 @@ export const Webchat = forwardRef((props, ref) => {
     'userInput.sendButton.custom',
     undefined
   )
+  const CustomMenuButton = getThemeProperty(
+    'userInput.menuButton.custom',
+    undefined
+  )
 
   const ConditionalAnimation = props => (
     <ConditionalWrapper
@@ -532,9 +536,13 @@ export const Webchat = forwardRef((props, ref) => {
             />
           )}
           {persistentMenuOptions && (
-            <ConditionalAnimation>
-              <PersistentMenu onClick={handleMenu} />
-            </ConditionalAnimation>
+            <FeaturesWrapper>
+              <ConditionalAnimation>
+                <div onClick={handleMenu}>
+                  {CustomMenuButton ? <CustomMenuButton /> : <PersistentMenu />}
+                </div>
+              </ConditionalAnimation>
+            </FeaturesWrapper>
           )}
           <TextAreaContainer>
             <Textarea
