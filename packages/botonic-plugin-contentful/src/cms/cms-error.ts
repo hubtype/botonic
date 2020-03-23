@@ -156,7 +156,7 @@ export class ContentfulExceptionWrapper {
   constructor(
     readonly wrappee: string,
     readonly logErrors = true,
-    readonly logStack = false
+    readonly logStack = true
   ) {}
 
   wrap(

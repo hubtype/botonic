@@ -9,7 +9,9 @@ describe('CMSException', () => {
     'TEST: CMSException',
     (msg: string, reason: any, expectedToString: string) => {
       const sut = new CmsException(msg, reason)
-      expect(sut.toString()).toEqual(expectedToString)
+      expect(sut.message).toEqual(expectedToString)
+      expect(sut.toString()).toEqual(`Error: ${expectedToString}`)
+      expect(String(sut)).toEqual(`Error: ${expectedToString}`)
     }
   )
 })
