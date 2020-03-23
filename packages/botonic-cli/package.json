@@ -1,7 +1,7 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.11.0-alpha.0",
+  "version": "0.11.0-alpha.1",
   "bin": {
     "botonic": "./bin/run"
   },
@@ -52,7 +52,7 @@
   "repository": "hubtype/botonic",
   "scripts": {
     "prepare": "node ../../preinstall.js",
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
     "prepack": "oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
     "version": "oclif-dev readme && git add README.md",
