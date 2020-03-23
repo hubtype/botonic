@@ -37,7 +37,7 @@
     "react-textarea-autosize": "^7.1.2",
     "rebass": "^4.0.7",
     "simplebar-react": "^2.1.0",
-    "styled-components": "^4.4.1",
+    "styled-components": "^5.0.1",
     "ua-parser-js": "^0.7.20",
     "unescape": "^1.0.1",
     "uuid": "^3.3.3"
