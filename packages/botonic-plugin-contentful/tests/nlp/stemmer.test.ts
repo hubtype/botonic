@@ -38,7 +38,7 @@ describe('Stemmers', () => {
     'TEST numbers in words are kept for locale %s',
     (locale: Locale) => {
       // TODO remove when node-nlp PR is merged
-      if (locale == PORTUGUESE) {
+      if (locale === PORTUGUESE) {
         console.error(
           'Skipping PT due to https://github.com/axa-group/nlp.js/pull/419'
         )
