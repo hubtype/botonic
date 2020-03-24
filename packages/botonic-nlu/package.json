@@ -1,6 +1,6 @@
 {
   "name": "@botonic/nlu",
-  "version": "0.11.0-alpha.1",
+  "version": "0.11.0",
   "main": "lib/index",
   "scripts": {
     "build": "rm -rf lib && babel src -d lib",

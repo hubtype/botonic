@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
-    "@botonic/react": "alpha",
+    "@botonic/react": "~0.11.0",
     "react-calendar": "2.19.2"
   },
   "devDependencies": {
