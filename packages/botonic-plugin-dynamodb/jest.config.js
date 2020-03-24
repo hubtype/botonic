@@ -1,17 +1,17 @@
 module.exports = {
   roots: ['tests/'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
   },
   globals: {
     'ts-jest': {
-      tsConfig: '<rootDir>/tests/tsconfig.json'
-    }
+      tsConfig: '<rootDir>/tests/tsconfig.json',
+    },
   },
   preset: 'ts-jest',
   // regex works fine with "find tests | egrep ..." but incorrectly gets files with names without 'test' or 'spec
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
-  testPathIgnorePatterns: ['lib', '.*\.d\.ts', 'tests/helpers'],
+  testPathIgnorePatterns: ['lib', '.*.d.ts', 'tests/helpers'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   snapshotSerializers: [],

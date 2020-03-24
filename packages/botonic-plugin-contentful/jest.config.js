@@ -3,12 +3,12 @@ module.exports = {
   roots: ['tests/'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
-    '^.+\\.jsx?$': 'ts-jest'
+    '^.+\\.jsx?$': 'ts-jest',
   },
   globals: {
     'ts-jest': {
-      tsConfig: '<rootDir>/tests/tsconfig.json'
-    }
+      tsConfig: '<rootDir>/tests/tsconfig.json',
+    },
   },
   preset: 'ts-jest',
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',

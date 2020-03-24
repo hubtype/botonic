@@ -5,8 +5,8 @@
 		"outDir": "lib"
 	},
   "include": [
-    ".eslintrc.js",
-    "babel.config.js",
+    ".*.js",
+    "*.js",
     "**/*.ts",
     "**/*.tsx"
   ]
