@@ -60,16 +60,18 @@ const StyledWebchat = styled.div`
 
 const StyledTriggerButton = styled.div`
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   background: ${COLORS.SOLID_WHITE};
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   width: 65px;
   height: 65px;
   bottom: 20px;
   right: 10px;
+  padding: 8px;
 `
 
 const UserInputContainer = styled.div`
