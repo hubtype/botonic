@@ -17,7 +17,7 @@ test('TEST: CsvExport integration test', async () => {
   // running for ENGLISH to test contents with empty fields
   const from = ENGLISH
   await exporter.write(`/tmp/contentful_${from}.csv`, cms, from)
-}, 10000)
+}, 30000)
 
 test('TEST: ContentToCsvLines.getCsvLines Text', () => {
   const exporter = new ContentToCsvLines({})

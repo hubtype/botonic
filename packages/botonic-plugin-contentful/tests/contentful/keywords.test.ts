@@ -34,4 +34,4 @@ test('TEST: contentful contentsWithKeywords', async () => {
     "can't find my order",
     'where is my order',
   ])
-})
+}, 10000)

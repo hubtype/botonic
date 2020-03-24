@@ -6,20 +6,18 @@ import { CmsException } from '../../../src/cms/'
 import { ENGLISH, SPANISH } from '../../../src/nlp'
 import { ContentFieldType } from '../../../src/manage-cms/fields'
 import { ManageContext } from '../../../src/manage-cms/manage-context'
+import { repeatWithBackoff } from '../../../src/util/backoff'
 
 function ctxt(ctx: Partial<ManageContext>): ManageContext {
   return { ...ctx, preview: false } as ManageContext
 }
 
-// Using ManageContentful to ensure that tests are run sequentially to avoid race
-// since they modify the same content
+// Since the tests modify contentful contents, they might fail if executed
+// more than once simultaneously (eg from 2 different branches from CI)
 describe('ManageContentful', () => {
   const TEST_MANAGE_CMS_ID = '627QkyJrFo3grJryj0vu6L'
 
-  // hidden because it fails from CI, not sure why. Maybe when executed
-  // simultaneously from 2 different git branches?
-  test.skip('TEST: updateField on an empty field', async () => {
-    console.log('ManageContentful1 start')
+  test('TEST: updateField on an empty field', async () => {
     const cms = testContentful({ disableCache: true })
     const old = await cms.text(TEST_MANAGE_CMS_ID, ctxt({ locale: SPANISH }))
     const sut = testManageContentful()
@@ -39,12 +37,13 @@ describe('ManageContentful', () => {
         ContentFieldType.TEXT,
         newValue
       )
-      const newContent = await cms.text(old.id, {
-        locale: SPANISH,
+      await repeatWithBackoff(async () => {
+        const newContent = await cms.text(old.id, {
+          locale: SPANISH,
+        })
+        expect(newContent).toEqual(old.cloneWithText(newValue))
       })
-      expect(newContent).toEqual(old.cloneWithText(newValue))
     } finally {
-      console.log('restoring')
       // RESTORE
       await sut.updateField<cms.Text>(
         ctxt({ locale: SPANISH, allowOverwrites: true }),
@@ -52,16 +51,16 @@ describe('ManageContentful', () => {
         ContentFieldType.TEXT,
         ''
       )
-      const restored = await cms.text(old.id, {
-        locale: SPANISH,
+      await repeatWithBackoff(async () => {
+        const restored = await cms.text(old.id, {
+          locale: SPANISH,
+        })
+        expect(restored).toEqual(old)
       })
-      expect(restored).toEqual(old)
     }
-    console.log('ManageContentful1 end')
-  }, 10000)
+  }, 40000)
 
   test('TEST: updateField by default does not allow overwrites', async () => {
-    console.log('ManageContentful2 start')
     const sut = testManageContentful()
 
     try {
@@ -77,18 +76,16 @@ describe('ManageContentful', () => {
       expect(e).toBeInstanceOf(CmsException)
       if (e instanceof CmsException) {
         // eslint-disable-next-line jest/no-try-expect
-        expect(e.message).toEqual(
+        expect(e.message).toInclude(
           "Error calling ManageCms.updateField on 'button' with id '627QkyJrFo3grJryj0vu6L'."
         )
         // eslint-disable-next-line jest/no-try-expect
         expect(e.reason.message).toInclude('Cannot overwrite')
       }
     }
-    console.log('ManageContentful2 end')
-  }, 10000)
+  }, 40000)
 
   test('TEST: copyField buttons', async () => {
-    console.log('ManageContentful3 start')
     const cms = testContentful({ disableCache: true })
     const oldContent = await cms.text(TEST_MANAGE_CMS_ID)
     const sut = testManageContentful()
@@ -110,25 +107,28 @@ describe('ManageContentful', () => {
         ContentFieldType.BUTTONS,
         FROM_LOCALE
       )
-      const newContent = await cms.text(oldContent.id, {
-        locale: TO_LOCALE,
+      // wait until CDNs provide the new value
+      await repeatWithBackoff(async () => {
+        const newContent = await cms.text(oldContent.id, {
+          locale: TO_LOCALE,
+        })
+        expect(newContent.buttons.length).toEqual(fromButtons.length)
       })
-      expect(newContent.buttons.length).toEqual(fromButtons.length)
     } finally {
       // RESTORE
-      console.log('restoring')
       await sut.updateField<cms.Text>(
         ctxt({ locale: TO_LOCALE, allowOverwrites: true }),
         oldContent.contentId,
         ContentFieldType.BUTTONS,
         []
       )
-      const restored = await cms.text(oldContent.id, {
-        locale: TO_LOCALE,
-        ignoreFallbackLocale: true,
+      await repeatWithBackoff(async () => {
+        const restored = await cms.text(oldContent.id, {
+          locale: TO_LOCALE,
+          ignoreFallbackLocale: true,
+        })
+        expect(restored.buttons).toEqual([])
       })
-      expect(restored.buttons).toEqual([])
     }
-    console.log('ManageContentful3 end')
-  }, 10000)
+  }, 40000)
 })

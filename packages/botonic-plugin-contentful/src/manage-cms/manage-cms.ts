@@ -4,6 +4,10 @@ import { ContentId } from '../cms'
 import * as nlp from '../nlp'
 import { ContentFieldType } from './fields'
 
+/**
+ * Take into account that if you request a content immediately after updating it
+ * you might get the old version
+ */
 export interface ManageCms {
   updateField<T extends cms.Content>(
     context: ManageContext,

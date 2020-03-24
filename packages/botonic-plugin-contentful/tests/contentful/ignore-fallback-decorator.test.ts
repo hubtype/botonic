@@ -81,7 +81,7 @@ test.each<any>([ENGLISH, SPANISH])(
       }
     }
   },
-  10000
+  20000
 )
 
 test('TEST: IgnoreFallbackDecorator.getEntry<TextFields> uses fallback locale', async () => {
