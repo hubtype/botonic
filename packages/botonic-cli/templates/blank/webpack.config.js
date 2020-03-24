@@ -18,6 +18,19 @@ const terserPlugin = new TerserPlugin({
   },
 })
 
+const resolveConfig = {
+  extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
+  alias: {
+    BotonicProject: path.resolve(__dirname, 'src'),
+    react: path.resolve(__dirname, 'node_modules', 'react'),
+    'styled-components': path.resolve(
+      __dirname,
+      'node_modules',
+      'styled-components'
+    ),
+  },
+}
+
 const babelLoaderConfig = {
   test: /\.(js|jsx)$/,
   exclude: /node_modules[\/\\](?!(@botonic)[\/\\])/,
@@ -90,12 +103,7 @@ const botonicDevConfig = {
     libraryExport: 'app',
     publicPath: './',
   },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-    alias: {
-      BotonicProject: path.resolve(__dirname, 'src'),
-    },
-  },
+  resolve: resolveConfig,
   devServer: {
     contentBase: [
       path.join(__dirname, 'dist'),
@@ -138,12 +146,7 @@ const botonicWebchatConfig = {
     libraryExport: 'app',
     publicPath: './',
   },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-    alias: {
-      BotonicProject: path.resolve(__dirname, 'src'),
-    },
-  },
+  resolve: resolveConfig,
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(botonicPath, 'src', 'webchat.template.html'),
@@ -190,12 +193,7 @@ const botonicWebviewsConfig = {
       stylesLoaderConfig,
     ],
   },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-    alias: {
-      BotonicProject: path.resolve(__dirname, 'src'),
-    },
-  },
+  resolve: resolveConfig,
   devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
@@ -227,12 +225,7 @@ const botonicServerConfig = {
   module: {
     rules: [babelLoaderConfig, fileLoaderConfig, nullLoaderConfig],
   },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-    alias: {
-      BotonicProject: path.resolve(__dirname, 'src'),
-    },
-  },
+  resolve: resolveConfig,
   devtool: 'source-map',
   plugins: [
     new CleanWebpackPlugin({}),
