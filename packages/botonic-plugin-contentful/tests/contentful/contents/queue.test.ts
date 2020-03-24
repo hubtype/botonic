@@ -19,7 +19,7 @@ test('TEST: contentful Queue', async () => {
   expect(queue).toEqual(
     new Queue(
       new CommonFields(TEST_QUEUE_ID, 'TEST_QUEUE', {
-        shortText: 'Short Text',
+        shortText: 'Queue Short Text',
         searchableBy,
       }),
       'queueName',

@@ -16,7 +16,7 @@ test('TEST: contentful contentsWithKeywords', async () => {
   const keywordsByPrio: { [priority: number]: string[] } = {}
   for (const queue of queues) {
     expect(queue.common.name).toEqual('TEST_QUEUE')
-    expect(queue.common.shortText).toEqual('Short Text')
+    expect(queue.common.shortText).toEqual('Queue Short Text')
     keywordsByPrio[queue.priority] = queue.common.keywords
   }
   expect(keywordsByPrio[10]).toEqual(['low1', 'low2'])
