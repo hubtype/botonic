@@ -37,5 +37,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "version": "0.11.0-alpha.8"
 }
