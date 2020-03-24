@@ -7,13 +7,14 @@ export const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt'
 const TEST_FBK_MSG = '1U7XKJccDSsI3mP0yX04Mj'
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O'
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D'
+const TEST_TEXT_QUEUE_BUTTON = '7Liwyx92Yna3fzHvh9AGut'
 const TEST_TEXT_URL_BUTTON = '2N9HQ960BdUVlDDQjpTA6I'
 const TEST_TEXT_IMAGE_FOLLOWUP = '35aCTbYevK13TAXqqCdY8t'
 const TEXT_TEXT_FOLLOWUP = '6qkqu4uXc4FMSVm8grtiBR'
 export const KEYWORDS_OK = 'GbIpKJu8kW6PqMGAUYkoS'
 export const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm'
 
-test('TEST: contentful text without followup', async () => {
+test('TEST: contentful text with callback to MessageContentType without followup', async () => {
   const sut = testContentful()
 
   // act
@@ -29,6 +30,20 @@ test('TEST: contentful text without followup', async () => {
     new cms.ContentCallback(cms.ContentType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
   )
   expect(text.common.followUp).toBeUndefined()
+})
+
+test('TEST: contentful text with callback to NonMessageContentType without followup', async () => {
+  const sut = testContentful()
+
+  // act
+  const text = await sut.text(TEST_TEXT_QUEUE_BUTTON, { locale: cms.ENGLISH }) // actually returns the fallback language (es)
+
+  // assert
+  expect(text.buttons).toHaveLength(1)
+  expect(text.buttons[0].text).toEqual('Queue Short Text')
+  expect(text.buttons[0].callback).toEqual(
+    new cms.ContentCallback(cms.ContentType.QUEUE, '62ILnVxLHOEp7aVvPMpCO8')
+  )
 })
 
 test('TEST: contentful text with URL button with followup', async () => {

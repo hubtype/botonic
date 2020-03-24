@@ -1,13 +1,8 @@
-import {
-  CMS,
-  ContentType,
-  MESSAGE_CONTENT_TYPES,
-  MessageContentType,
-  TopContentType,
-} from './cms'
+import { CMS, ContentType, TopContentType } from './cms'
 import escapeStringRegexp from 'escape-string-regexp'
 import { Context } from './context'
 import { Content, TopContent } from './contents'
+import { isOfType } from '../util/enums'
 
 export class Callback {
   // TODO add path
@@ -71,9 +66,9 @@ export class ContentCallback extends Callback {
     )
   }
 
-  private static checkDeliverableModel(modelType: string): MessageContentType {
-    if (MESSAGE_CONTENT_TYPES.includes(modelType as MessageContentType)) {
-      return modelType as MessageContentType
+  private static checkDeliverableModel(modelType: string): TopContentType {
+    if (isOfType(modelType, TopContentType)) {
+      return modelType as TopContentType
     } else {
       throw new Error(
         `${modelType} is not a model type than can be delivered from CMS`

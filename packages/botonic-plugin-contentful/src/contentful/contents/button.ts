@@ -10,6 +10,11 @@ import {
 } from '../delivery-api'
 import { TextFields } from './text'
 import { UrlFields } from './url'
+import { StartUpFields } from './startup'
+import { QueueFields } from './queue'
+import { HourRangeFields, ScheduleFields } from './schedule'
+import { isOfType } from '../../util/enums'
+import { TopContentType } from '../../cms/cms'
 
 export class ButtonDelivery {
   public static BUTTON_CONTENT_TYPE = 'button'
@@ -33,20 +38,16 @@ export class ButtonDelivery {
   private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
     const entry = await this.delivery.getEntry(id, context)
     const entryType = ContentfulEntryUtils.getContentModel(entry)
-    switch (entryType as string) {
-      case cms.ContentType.CAROUSEL:
-      case cms.ContentType.TEXT:
-      case cms.ContentType.URL:
-        return ButtonDelivery.fromContentReference(
-          entry as contentful.Entry<CommonEntryFields>
-        )
-      case ButtonDelivery.BUTTON_CONTENT_TYPE: {
-        const buttonEntry = entry as contentful.Entry<ButtonFields>
-        return await this.fromEntry(buttonEntry, context)
-      }
-      default:
-        throw new Error(`Unexpected type ${entryType}`)
+    if (isOfType(entryType, TopContentType)) {
+      return ButtonDelivery.fromContentReference(
+        entry as contentful.Entry<CommonEntryFields>
+      )
     }
+    if (entryType === ButtonDelivery.BUTTON_CONTENT_TYPE) {
+      const buttonEntry = entry as contentful.Entry<ButtonFields>
+      return await this.fromEntry(buttonEntry, context)
+    }
+    throw new Error(`Unexpected type ${entryType}`)
   }
 
   public async fromEntry(
@@ -96,10 +97,6 @@ export class ButtonDelivery {
   private getTargetCallback(target: ButtonTarget): cms.Callback {
     const model = ContentfulEntryUtils.getContentModel(target) as string
     switch (model) {
-      case ContentType.STARTUP:
-      case ContentType.CAROUSEL:
-      case ContentType.TEXT:
-        return new cms.ContentCallback(model, target.sys.id)
       case ContentType.URL: {
         const urlFields = target as contentful.Entry<UrlFields>
         return cms.Callback.ofUrl(urlFields.fields.url)
@@ -108,9 +105,11 @@ export class ButtonDelivery {
         const payloadFields = target as contentful.Entry<PayloadFields>
         return cms.Callback.ofPayload(payloadFields.fields.payload)
       }
-      default:
-        throw new Error('Unexpected type: ' + model)
     }
+    if (isOfType(model, TopContentType)) {
+      return new cms.ContentCallback(model, target.sys.id)
+    }
+    throw new Error('Unexpected type: ' + model)
   }
 }
 
@@ -119,7 +118,14 @@ export interface PayloadFields {
 }
 
 type ButtonTarget = contentful.Entry<
-  CarouselFields | TextFields | UrlFields | PayloadFields
+  | CarouselFields
+  | TextFields
+  | UrlFields
+  | PayloadFields
+  | StartUpFields
+  | QueueFields
+  | HourRangeFields
+  | ScheduleFields
 >
 
 export interface ButtonFields extends ContentWithNameFields {
