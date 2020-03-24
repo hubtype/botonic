@@ -32,9 +32,10 @@ export const WebchatReplies = props => {
     ...getThemeProperty('scrollbar'),
   }
   let justifyContent = 'center'
-  const flexWrap = getThemeProperty('replies.wrap', 'nowrap')
+  const flexWrap = getThemeProperty('replies.wrap', 'wrap')
   if (flexWrap == 'nowrap') justifyContent = 'flex-start'
-  else justifyContent = options[getThemeProperty('replies.align')]
+  else if (getThemeProperty('replies.align'))
+    justifyContent = options[getThemeProperty('replies.align')]
 
   return (
     <StyledScrollbar
