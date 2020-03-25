@@ -89,7 +89,7 @@ export class Track extends TrackKey {
 
     // https://metisai.atlassian.net/browse/HTYPE-1881
     const proto = Object.getPrototypeOf(this)
-    const sym = Object.getOwnPropertySymbols(proto).find(function(s) {
+    const sym = Object.getOwnPropertySymbols(proto).find(function (s) {
       return String(s) === DynamoDbSchema.toString()
     }) as symbol
     schema = (proto as any)[sym]
