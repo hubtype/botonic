@@ -148,7 +148,7 @@ Uploading...
       }
       // Show the current bot in credentials at top of the list
       const first_id = this.botonicApiService.bot.id
-      bots.sort(function(x, y) {
+      bots.sort(function (x, y) {
         return x.id == first_id ? -1 : y.id == first_id ? 1 : 0
       })
       return this.selectExistentBot(bots)

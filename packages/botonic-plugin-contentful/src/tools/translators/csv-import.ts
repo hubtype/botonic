@@ -66,8 +66,9 @@ export class CsvImport {
         continue
       }
       console.log(
-        `Importing '${record.Model}' field '${record.Code.trim() ||
-          record.Id}.${record.Field}'`
+        `Importing '${record.Model}' field '${
+          record.Code.trim() || record.Id
+        }.${record.Field}'`
       )
       await this.importer.consume(record)
     }
