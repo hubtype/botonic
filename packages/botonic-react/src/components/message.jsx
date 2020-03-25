@@ -33,7 +33,12 @@ const Blob = styled.div`
   border-radius: 8px;
   background-color: ${props => props.bgcolor};
   color: ${props => props.color};
-  max-width: ${props => (props.blob ? '60%' : 'calc(100% - 16px)')};
+  max-width: ${props =>
+    props.blob
+      ? props.blobWidth
+        ? props.blobWidth
+        : '60%'
+      : 'calc(100% - 16px)'};
 `
 
 const BlobText = styled.div`
@@ -204,6 +209,7 @@ export const Message = props => {
           <Blob
             bgcolor={getBgColor()}
             color={isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
+            blobWidth={getThemeProperty('message.bot.blobWidth')}
             blob={blob}
             style={{
               border: `1px solid ${getThemeProperty(

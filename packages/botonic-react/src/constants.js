@@ -51,6 +51,7 @@ export const WEBCHAT = {
     botMessageBlobTick: 'message.bot.blobTick',
     botMessageStyle: 'message.bot.style',
     botMessageBackground: 'message.bot.style.background',
+    botBlobWidth: 'message.bot.blobWidth',
     userMessageStyle: 'message.user.style',
     userMessageBlobTick: 'message.user.blobTick',
     userMessageBackground: 'message.user.style.background',
