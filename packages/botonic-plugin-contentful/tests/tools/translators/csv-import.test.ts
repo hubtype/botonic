@@ -26,7 +26,6 @@ test('TEST: CsvImport read text & carousel', async () => {
   const mockFieldImporter = mock<StringFieldImporter>()
   const readLines: Record[] = []
   when(mockFieldImporter.consume(anything())).thenCall((record: Record) => {
-    console.log(record.Code, record.Field, record.to)
     readLines.push(record)
   })
   const importer = new CsvImport(instance(mockFieldImporter))
