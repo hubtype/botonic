@@ -33,6 +33,7 @@ import {
   _getThemeProperty,
   ConditionalWrapper,
   scrollToBottom,
+  getParsedAction,
 } from '../utils'
 import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
 import { motion } from 'framer-motion'
@@ -392,8 +393,8 @@ export const Webchat = forwardRef((props, ref) => {
       prevSession._botonic_action &&
       !webchatState.session._botonic_action
     ) {
-      const action = prevSession._botonic_action.split(':')
-      sendPayload(action[action.length - 1])
+      const action = getParsedAction(prevSession._botonic_action)
+      if (action && action.on_finish) sendPayload(action.on_finish)
     }
   }, [webchatState.session._botonic_action])
 
