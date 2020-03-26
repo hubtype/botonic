@@ -77,3 +77,10 @@ export const scrollToBottom = (timeout = 100) => {
     setTimeout(() => (frame.scrollTop = frame.scrollHeight), timeout)
   }
 }
+
+export const getParsedAction = botonicAction => {
+  if (botonicAction.split('create_case:').length > 1) {
+    return JSON.parse(botonicAction.split('create_case:')[1])
+  }
+  return undefined
+}
