@@ -40,7 +40,7 @@ export class HandOffBuilder {
   }
 
   withAgentId(agentId) {
-    this._agent_id = agentId
+    this._agentId = agentId
     return this
   }
 
@@ -65,7 +65,7 @@ export class HandOffBuilder {
       this._queue,
       this._onFinish,
       this._email,
-      this._agent_id,
+      this._agentId,
       this._caseInfo,
       this._note,
       this._shadowing
