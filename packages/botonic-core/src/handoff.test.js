@@ -47,6 +47,13 @@ describe('handOff', () => {
         }),
       new HandOffBuilder({}).withOnFinishPath('path1'),
     ],
+    [
+      `create_case:` +
+        JSON.stringify({
+          agent_id: '1234',
+        }),
+      new HandOffBuilder({}).withAgentId('1234'),
+    ],
   ])('HandOffBuilder', (expected, builder) => {
     builder.handOff()
     expect(builder._session._botonic_action).toEqual(expected)

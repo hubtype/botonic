@@ -39,6 +39,11 @@ export class HandOffBuilder {
     return this
   }
 
+  withAgentId(agentId) {
+    this._agent_id = agentId
+    return this
+  }
+
   withNote(note) {
     this._note = note
     return this
@@ -60,6 +65,7 @@ export class HandOffBuilder {
       this._queue,
       this._onFinish,
       this._email,
+      this._agent_id,
       this._caseInfo,
       this._note,
       this._shadowing
@@ -92,6 +98,7 @@ async function _humanHandOff(
   queueNameOrId = '',
   onFinish,
   agentEmail = '',
+  agentId = '',
   caseInfo = '',
   note = '',
   shadowing = false
@@ -105,6 +112,9 @@ async function _humanHandOff(
   }
   if (agentEmail) {
     params.agent_email = agentEmail
+  }
+  if (agentId) {
+    params.agent_id = agentId
   }
   if (caseInfo) {
     params.case_info = caseInfo

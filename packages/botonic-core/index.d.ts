@@ -83,6 +83,7 @@ export class HandOffBuilder {
   withOnFinishPayload(payload: string): HandOffBuilder
   withOnFinishPath(path: string): HandOffBuilder
   withAgentEmail(email: string): HandOffBuilder
+  withAgentId(agentId: string): HandOffBuilder
   withNoteURL(note: string): HandOffBuilder
   withCaseInfoURL(caseInfo: string): HandOffBuilder
   withShadowing(shadowing?: boolean): HandOffBuilder
