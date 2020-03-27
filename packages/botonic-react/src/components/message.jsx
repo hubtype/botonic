@@ -15,7 +15,7 @@ const MessageContainer = styled.div`
   justify-content: ${props => (props.isfromuser ? 'flex-end' : 'flex-start')};
   position: relative;
   padding-left: 5px;
-  padding-right: ${props => props.userPadding};
+  padding-right: ${props => props.userRightPadding};
 `
 
 const BotMessageImageContainer = styled.div`
@@ -190,7 +190,7 @@ export const Message = props => {
       >
         <MessageContainer
           isfromuser={isFromUser()}
-          userPadding={getThemeProperty('message.user.padding')}
+          userRightPadding={getThemeProperty('message.user.rightPadding')}
         >
           {isFromBot() && BotMessageImage && (
             <BotMessageImageContainer

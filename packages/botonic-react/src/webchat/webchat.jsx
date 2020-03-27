@@ -271,7 +271,7 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const CustomPersistentMenu = getThemeProperty(
-    'userInput.customPersistentMenu',
+    'userInput.menu.custom',
     undefined
   )
 
@@ -475,10 +475,33 @@ export const Webchat = forwardRef((props, ref) => {
     undefined
   )
 
+  const [hover, setHover] = useState(false)
+
+  const TriggerButtonHoverOpacity = hover
+    ? getThemeProperty(
+        'triggerButton.hoverOpacity',
+        getThemeProperty('triggerButton.style.opacity', 1)
+      )
+    : getThemeProperty('triggerButton.style.opacity', 1)
+  const TriggerButtonHoverColor = hover
+    ? getThemeProperty(
+        'triggerButton.hoverColor',
+        getThemeProperty('triggerButton.style.background', COLORS.SOLID_WHITE)
+      )
+    : getThemeProperty('triggerButton.style.background', COLORS.SOLID_WHITE)
+
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
   ) : (
-    <StyledTriggerButton style={{ ...triggerButtonStyle }}>
+    <StyledTriggerButton
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        ...triggerButtonStyle,
+        opacity: TriggerButtonHoverOpacity,
+        background: TriggerButtonHoverColor,
+      }}
+    >
       {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
     </StyledTriggerButton>
   )
@@ -513,6 +536,11 @@ export const Webchat = forwardRef((props, ref) => {
   const CustomMenuButton = getThemeProperty(
     'userInput.menuButton.custom',
     undefined
+  )
+
+  const darkBackgroundMenu = getThemeProperty(
+    'userInput.menu.darkBackground',
+    false
   )
 
   const ConditionalAnimation = props => (
@@ -683,6 +711,21 @@ export const Webchat = forwardRef((props, ref) => {
                 webchatReplies()}
               {persistentMenuIsOpened && (
                 <div>
+                  {darkBackgroundMenu && (
+                    <div
+                      onClick={closeMenu}
+                      style={{
+                        backgroundColor: '#000000',
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        opacity: 0.3,
+                        zIndex: 1,
+                        right: 0,
+                        bottom: 0,
+                      }}
+                    />
+                  )}
                   {CustomPersistentMenu ? (
                     <CustomPersistentMenu
                       onClick={closeMenu}
