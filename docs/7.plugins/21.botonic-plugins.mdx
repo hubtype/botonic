@@ -1,23 +1,23 @@
 ---
-name: 1. Botonic Plugins
-route: /plugins/botonic-plugins
-menu: 5. Plugins
+name: Botonic Plugins
+route: /plugins/21.botonic-plugins
+menu: Plugins
 ---
 import { NextButton } from '../components/nextButton.tsx'
 
 import { PrevButton } from '../components/prevButton.tsx'
 
-# **Botonic Plugins**
+# Botonic Plugins
 
 Sometimes you may need a specific feature according to your needs and you want to build 
 your particular plugin that doesn't exist yet. In order to achieve this, we have to review some important aspects.
 
-## ** Fundamental Concepts **
+## Fundamental Concepts
 * You can create your own plugins to be used locally in your project or as a npm package.
 * `package.json` is mandatory.
 * Each plugin have to implement the methods we describe in this guidelines.
 
-## ** Plugin Conventions **
+## Plugin Conventions
 
 Every plugin you create for botonic has to be under a directory named as  
 **`botonic-plugin-{YOUR_PLUGIN_NAME}`**.  
@@ -30,7 +30,7 @@ botonic-plugin-{my-plugin-name}
 └── src
     └── index.js <-- This is the entry point of your code
     └── MY_USEFUL_CODE
-```  
+```
 
 >The required fields in your **package.json** must be the following:
 >  * **name**: we suggest you to put the same name as the directory, for simplicity and maintainability.
@@ -55,7 +55,7 @@ botonic-plugin-{my-plugin-name}
 }
 ```
 
-## ** How to create a plugin? **
+## How to Create a Plugin? 
 For a better understanding, we will start with the most essential parts our plugin must have.  
 In order to develop a plugin for Botonic, you will have to create a new directory structured as explained before.
 Once created, you will have to copy this boilerplate code in your **`index.js`**:

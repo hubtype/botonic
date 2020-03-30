@@ -1,14 +1,14 @@
 ---
-name: 3. Deploying
-route: /getting-started/deploying
-menu: 2. Getting Started
+name: Deployment
+route: /9.test-deploy/2.deployment
+menu: Test and Deploy
 ---
 
 
 import { PrevButton } from '../components/prevButton.tsx'
 import { NextButton } from '../components/nextButton.tsx'
 
-# **Deploying**
+# Deployment
 
 Testing your bot in the terminal with `botonic serve` is fast, easy and convenient when your bot is in development, but eventually you're going to have to test on a messaging platform. Not only is it the only way to accurately test how your bot will behave and perform, but many special features, like requesting location and sending files, will only work when they are run on the actual messaging platforms. Likewise, many features may look and work differently on different platforms.
 
@@ -32,24 +32,8 @@ Botonic will also store metadata about your bot in the file `.botonic.json` at t
 
 There's one last step before our users can talk to our bot, which is connecting it to a messaging channel.
 
-## Connect with messaging channels
 
-In this tutorial we're going to show you how to connect a Facebook Messenger account. Other messaging platforms have similar processes and you'll find the required steps in Hubtype's dashboard.
 
-- Login to [app.hubtype.com](https://app.hubtype.com).
-
-* Click on your bot and go to the "integrations" tab.
-
-- Click on the Facebook Messenger icon.
-
-* Connect your Facebook account to Hubtype and accept the permissions.
-
-- Select which of your Facebook Pages you want to connect. If you don't have one, [create one here](https://www.facebook.com/pages/create/) and click on "refresh".
-
-* Click on "Connect Page"
-
-That's it. You'll see that a new integration appears on the left side. Click on the link to Facebook Messenger and start talking to your bot!
-  
 <div style={{display:"flex", justifyContent:"space-between"}}>
   <PrevButton title="Creating Your First Bot" href="/getting-started/creating-your-first-bot"/>
   <NextButton title='Main Concepts: Routes' href='/main-concepts/routes' />

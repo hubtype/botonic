@@ -1,14 +1,14 @@
 ---
-name: 4. NLU
-route: /main-concepts/nlu
-menu: 3. Main Concepts
+name: NLU
+route: /5.concepts/16.nlu
+menu: Concepts
 ---
 
 
 import { PrevButton } from '../components/prevButton.tsx'
 import { NextButton } from '../components/nextButton.tsx'
 
-# **NLU**
+# NLU
 
 NLUs can be used by your app, product, or service to transform natural user requests into actionable data. This transformation occurs when a user input matches one of the intents in your bot.
 **Botonic NLU** allows us to create different `intents` and assign keywords or phrases. These will match with the `intent` and direct to the corresponding route.
@@ -23,7 +23,7 @@ Alternatively, if you already have a project, you can follow the steps below to 
 
 ## Setup
 
-### **1. Installing the plugin for Botonic NLU**
+### **1. Installing the Botonic NLU Plugin**
 
 From within your project, enter the following command: 
 
@@ -39,7 +39,7 @@ This command will install everything necessary to start working with your intent
 
 Under the src files of your project, create a folder named `nlu`.  
 
-### **2. Adding a configuration file**
+### **2. Adding a Configuration File**
 Under `nlu`, create a new file called `nlu.config.json`. This file defines which languages you want enabled and
  configures the training phase parameters. You must have at least this much in your file:
 
@@ -56,7 +56,7 @@ Under `nlu`, create a new file called `nlu.config.json`. This file defines which
 
 See the last section of this documentation for further details about the configuration.
 
-### **3. Requiring the plugin**
+### **3. Requiring the Plugin**
 
 After setting all your necessary parameters, require the plugin in `src/plugins.js`. You must set its `id` to **nlu** for the plugin to function.
 
@@ -70,8 +70,8 @@ export const plugins = [
     options: nluConfig
   }
 ]
-```  
-### **4. Defining your intents and entities**  
+```
+### **4. Defining your Intents and Entities**  
 ### **Intents**  
 
 Under the `nlu` folder, create a folder called `utterances`, which will contain your multilingual intents. For every language you want to support, 
@@ -99,7 +99,7 @@ Good afternoon!
 How are you?
 morning
 hello
-```  
+```
 
 ### **Entities**
 Botonic NLU also has `entities` which are used for extracting parameter values from natural language inputs. You can define your entities within an utterance like this: `[ENTITY_NAME](type)`.  
@@ -122,7 +122,7 @@ With this notation we are telling Botonic NLU that `Times Square` is the value f
 The entity recognition system is based on [spencermountain/compromise](https://github.com/spencermountain/compromise), so this is the [full list](https://observablehq.com/@spencermountain/compromise-tags) of 
 entity tags which are supported by default.  
 
-## Training phase
+## Training Phase
 Now it's time to order Botonic NLU to deal with all the examples we have added so far. To do this, you have to type the following command:
 ```bash
 botonic train
@@ -132,7 +132,7 @@ After this, the bot will be able to run predictions on new inputs.
 
 ## Usage
 
-### **Defining routes with intents**
+### **Defining Routes with Intents**
 Once you've defined your intents, you can use them in the routes in the same way you use `text`, `payloads`, and the like. 
 Below, we see how we might use them:
 
@@ -149,9 +149,9 @@ export const routes = [
       { intent: 'Greetings', action: Start },
 	  { intent: 'BookRestaurant', action: ShowRestaurants },
 ]
-```  
+```
 
-### **Using entities within Actions**
+### **Using Entities within Actions**
 
 Sometimes, you will need to capture custom entities, like `Restaurant`.
 You can access your custom entitites with the method `input.entities.tags`. This list will contain all the custom tagged entity types with its values.
@@ -210,9 +210,9 @@ export default class extends React.Component {
   }
 }
 ```
-## Going live
+## Going Live
 
-You can now run `botonic serve` to see how the bot runs in the development environment. You can also open the `Botonic Dev Console` by clicking the tab you see in the top-left corner for futher details of the variables stored during the execution.
+You can now run `botonic serve` to see how the bot runs in the development environment. You can also open the `Botonic Dev Console` by clicking the tab you see in the top-left corner for further details of the variables stored during the execution.
 
 Finally, deploy your bot with `botonic deploy` and you will have a bot with a customized intent and entity recognition system!  
 
@@ -224,7 +224,7 @@ Finally, deploy your bot with `botonic deploy` and you will have a bot with a cu
 _Example of how it looks in FB Messenger (Production)_
 
 
-## Hyperparameters tuning and multilingual support
+## Hyperparameters Tuning and Multilingual Support
 
 You can add more languages by specifying their language codes in the `langs` array after creating a new directory under `src/nlu/utterances/{newLanguageCode}` for the corresponding language. 
 Additionally, if you wish to change your training parameters from the default, you can adjust them here. 
@@ -270,6 +270,7 @@ If the plugin is not able to correctly identify the language of a new input, it 
 
 > Currently the following pre-trained word embeddings are supported, so you can only train your bot in these languages. 
 > We expect to support more in the near future. For more information, feel free to contact us at [Slack](http://botonic.slack.com).
+>
 > * You can also generate your own word embeddings following these [instructions](https://github.com/hubtype/botonic/tree/master/scripts).  
 
 | Language   |      Language Code     | Type*           |      Dimensions     |                               Source                                                                                          |

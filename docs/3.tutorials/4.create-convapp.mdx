@@ -1,0 +1,231 @@
+---
+name: Create a Conversational App from Scratch
+route: /3.tutorials/4.create-convapp
+---
+
+import { NextButton } from '../components/nextButton.tsx'
+import { PrevButton } from '../components/prevButton.tsx'
+
+# Create a Conversational App from Scratch
+
+In the following example, we’ll build together a chatbot from scratch that takes food orders.
+
+## Install Botonic 
+
+See [Getting Started](/2.getting-started/2.getting-started).
+
+## Create a Blank Project 
+
+- [ ] Name your project by running:
+     `botonic new <botname>` 
+- [ ] Select the blank template and run`cd <botname>`. 
+- [ ] Test it in your browser with `npm run start`  or `botonic serve`.
+
+Your blank project is created with its basic structure. See [Project Structure](8.Project/project-structure).
+
+## Add a Welcome Message
+
+Let's say we want our chatbot answers just after the user says “hi”.
+
+- [ ] Open the `src/action` folder and create a first action file: `welcome.js`.
+- [ ] In the `welcome.js` file, import the react element by entering:
+
+```javascript
+import React from "react";
+```
+- [ ] Import the `Text` component of `@botonic/react`.
+```javascript
+import { Text } from "@botonic/react";
+```
+- [ ] Create a `React` class.
+```javascript
+export default class extends React.Component {
+```
+- [ ] Add your component in the `render` method.
+```javascript
+ render() {
+  return (
+   <>
+     <Text>Welcome to our food service!</Text>
+     <Text>
+      What do you want to eat today?
+     </Text>
+   </>
+  );
+ }
+```
+- [ ] Now open the `src/routes.js` file to add a route to this action:
+```javascript
+import Welcome from "./actions/welcome"; 
+```
+- [ ] Go back to the `welcome.js` file and import the `Reply` component.
+```javascript
+import { Text, Reply } from "@botonic/react";
+```
+
+## Add two buttons to choose either pizza or pasta
+
+Just after greeting the user, let's say that the bot lets the user choose one option among pizza or pasta.
+
+- [ ] In the `welcome.js`, add the following elements to make the connection:
+
+```javascript
+<Reply payload="pizza">Pizza</Reply>
+<Reply payload="pasta">Pasta</Reply>
+```
+- [ ] Open the `src` folder and create two files: `chosen-pasta.js` and `chosen-pizza.js`. 
+- [ ] Import the react element and the `Text` component. Let’s take the example of the `chosen-pasta.js` file:
+```javascript
+import React from "react";
+import { Text } from "@botonic/react";
+export default class extends React.Component {
+ render() {
+  return (
+   <>
+     <Text>Pasta is always a good choice!</Text>
+   </>
+  );
+ }
+}
+```
+- [ ] Repeat the same procedure for the `chosen-pizza.js` file.
+- [ ] Back to the route files, add : 
+
+```javascript
+import ChosenPizza from "./actions/chosen-pizza";
+import ChosenPasta from "./actions/chosen-pasta";
+```
+- [ ] Then in section `export const routes = [`, add several information:
+
+- A payload to capture the answer once the user has clicked on the button: `{ payload: "pizza", action: ChosenPizza }`
+- A sub-flow where you can select between two options via `childRoutes`. **Note:** When using childRoutes, at least the main action must have been previously passed. 
+
+Such as:
+```javascript
+ {
+  path: "welcome",
+  text: /hi|hello/, // Para añadir más opciones, se debe usar una regular expression
+  action: Welcome,
+  childRoutes: [
+   {
+     path: "chosen-pizza",
+     payload: "pizza",
+     action: ChosenPizza
+   },
+   {
+     path: "chosen-pasta",
+     payload: "pasta",
+     action: ChosenPasta
+   }
+  ]
+ },
+```
+
+- [ ] To end the flow, add:
+```javascript
+ { path: "end-of-flow", payload: “end”, action: FinalAction }, 
+ { path: "help-action", intent: "help", action: HelpAction }
+];
+```
+## Transfer the Conversation to an Agent
+
+Now let’s say that the user wants to get help from an agent just after his selection.
+
+- [ ] Create a `help-action.js` file.
+- [ ] Enter the following information:
+
+```javascript
+import React from "react";
+import { Text } from "@botonic/react";
+import { humanHandOff } from "@botonic/core";
+Export default class extends React.Component {
+  static async botonicInit({ session }) {
+```
+**Note:** To do a transfer, only the session is necessary. 
+
+```javascript
+    await humanHandOff(session, "HUBTYPE_DESK_QUEUE_ID", {
+```
+**Note:** This is the queue name in Hubtype Desk.
+
+```javascript
+      payload: "end"
+    });
+  }
+  render() {
+    return (
+      <Text>You will be transfered to an agent to solve your issues.</Text>
+    );
+  }
+}
+```
+- [ ] In the `route.js` files, add:
+```javascript
+import HelpAction from "./actions/help-action";
+```
+## Add NLU
+
+- [ ] In the bot directory, enter `npm install @botonic/plugin-nlu`.
+- [ ] Add two types of intentions: a **chitchat** (with content like "Good morning!/Hello!/Hi!/Good afternoon/Good night") and a **help file** (with content like "I'm lost/ I don't know what to do/I don't understand/I need help").
+- [ ] Create two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en`. You must create at least two files.
+- [ ] Add the content and run `botonic train`.
+- [ ] Open  `src/plugins.js`and add your plugin:
+```javascript
+import nluConfig from "./nlu/nlu.config.json";
+export const plugins = [
+{
+id: "nlu",
+resolve: require("@botonic/plugin-nlu"),
+options: nluConfig
+}
+];
+```
+- [ ] Add the route to get `{ path: "help-action", intent: "help", action: HelpAction }`
+- [ ] Add the NLU in the plugins code:
+```javascript  
+import nluConfig from "./nlu/nlu.config.json";
+export const plugins = [
+  {
+    id: "nlu",
+    resolve: require("@botonic/plugin-nlu"),
+    options: nluConfig
+  }
+];
+```
+
+## Say Goodbye
+
+To end the conversation:
+- [ ] Create a `final-action.js` file.
+- [ ] Enter the following:
+```javascript
+import React from "react";
+import { Text } from "@botonic/react";
+export default class extends React.Component {
+  render() {
+    return (
+      <>
+        <Text>I hope you enjoyed our service!</Text>
+        <Text>Have a nice day!</Text>
+      </>
+    );
+  }
+}
+```
+- [ ] In the `routes.js` files, add:
+```javascript
+import FinalAction from "./actions/final-action";
+```
+
+You bot is ready so let's try and deploy it! See the [Getting Started](/2.getting-started/2.getting-started) and follow the instruction.
+
+
+
+
+
+
+
+<div style={{display:"flex", justifyContent:"space-between"}}>
+  <PrevButton title="Dynamic Carousel" href="/tutorials-and-examples/dynamic-carousel" />
+  <NextButton title="Testing Your Components" href="/tutorials-and-examples/testing-your-components" />
+</div>
