@@ -274,6 +274,10 @@ export const Webchat = forwardRef((props, ref) => {
     'userInput.menu.custom',
     undefined
   )
+  const darkBackgroundMenu = getThemeProperty(
+    'userInput.menu.darkBackground',
+    false
+  )
 
   const checkBlockInput = input => {
     const blockInputs = getThemeProperty(
@@ -538,11 +542,6 @@ export const Webchat = forwardRef((props, ref) => {
     undefined
   )
 
-  const darkBackgroundMenu = getThemeProperty(
-    'userInput.menu.darkBackground',
-    false
-  )
-
   const ConditionalAnimation = props => (
     <ConditionalWrapper
       condition={animationsEnabled}
@@ -680,6 +679,7 @@ export const Webchat = forwardRef((props, ref) => {
           onClick={event => {
             toggleWebchat(true)
             event.preventDefault()
+            setHover(false)
           }}
         >
           {triggerButton}
