@@ -40,7 +40,7 @@
     "styled-components": "^4.4.1",
     "ua-parser-js": "^0.7.20",
     "unescape": "^1.0.1",
-    "uuid": "^3.3.3"
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
