@@ -1,10 +1,5 @@
 import { stemmerFor } from '../../src/nlp/stemmer'
-import {
-  Locale,
-  PORTUGUESE,
-  SUPPORTED_LOCALES,
-  tokenizerPerLocale,
-} from '../../src/nlp'
+import { Locale, SUPPORTED_LOCALES, tokenizerPerLocale } from '../../src/nlp'
 
 test.each<any>([
   ['es', 'ponerse', ['pon']],
@@ -35,15 +30,8 @@ test.each<any>([
 
 describe('Stemmers', () => {
   test.each<any>(SUPPORTED_LOCALES)(
-    'TEST numbers in words are kept for locale %s',
+    "TEST numbers in words are kept for locale '%s'",
     (locale: Locale) => {
-      // TODO remove when node-nlp PR is merged
-      if (locale === PORTUGUESE) {
-        console.error(
-          'Skipping PT due to https://github.com/axa-group/nlp.js/pull/419'
-        )
-        return
-      }
       const stemmer = stemmerFor(locale)
       for (const word of ['covid19', 'covid-19']) {
         const stemmed = stemmer.stem(
