@@ -6,11 +6,6 @@ export const customMessage = ({
   component: CustomMessageComponent,
   defaultProps,
 }) => {
-  // const CustomMessage = props => (
-  //   <Message id={props.id} json={props.json} type='custom' style={style}>
-  //     {props.children}
-  //   </Message>
-  // )
   const CustomMessage = props => (
     <Message {...defaultProps} {...props} type='custom' />
   )

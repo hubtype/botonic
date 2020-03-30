@@ -15,7 +15,6 @@ const MessageContainer = styled.div`
   justify-content: ${props => (props.isfromuser ? 'flex-end' : 'flex-start')};
   position: relative;
   padding-left: 5px;
-  padding-right: ${props => props.userRightPadding};
 `
 
 const BotMessageImageContainer = styled.div`
@@ -58,7 +57,7 @@ const TimestampText = styled.div`
   @import url('https://fonts.googleapis.com/css?family=Lato');
   font-family: Lato;
   font-size: 12px;
-  color: black;
+  color: ${COLORS.SOLID_BLACK};
   width: 100%;
   text-align: ${props => (props.isfromuser ? 'right' : 'left')};
   padding: ${props => (props.isfromuser ? '0px 15px' : '0px 50px')};
@@ -190,7 +189,9 @@ export const Message = props => {
       >
         <MessageContainer
           isfromuser={isFromUser()}
-          userRightPadding={getThemeProperty('message.user.rightPadding')}
+          style={{
+            ...getThemeProperty('message.style'),
+          }}
         >
           {isFromBot() && BotMessageImage && (
             <BotMessageImageContainer

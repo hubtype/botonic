@@ -108,6 +108,17 @@ const ErrorMessageContainer = styled.div`
   font-family: Arial, Helvetica, sans-serif;
 `
 
+const DarkBackgroundMenu = styled.div`
+  background: ${COLORS.SOLID_BLACK};
+  position: 'absolute';
+  width: '100%';
+  height: '100%';
+  opacity: 0.3;
+  zindex: 1;
+  right: 0;
+  bottom: 0;
+`
+
 const createUser = () => {
   const parser = new UAParser()
   const ua = parser.getResult()
@@ -479,33 +490,10 @@ export const Webchat = forwardRef((props, ref) => {
     undefined
   )
 
-  const [hover, setHover] = useState(false)
-
-  const TriggerButtonHoverOpacity = hover
-    ? getThemeProperty(
-        'triggerButton.hoverOpacity',
-        getThemeProperty('triggerButton.style.opacity', 1)
-      )
-    : getThemeProperty('triggerButton.style.opacity', 1)
-  const TriggerButtonHoverColor = hover
-    ? getThemeProperty(
-        'triggerButton.hoverColor',
-        getThemeProperty('triggerButton.style.background', COLORS.SOLID_WHITE)
-      )
-    : getThemeProperty('triggerButton.style.background', COLORS.SOLID_WHITE)
-
   const triggerButton = CustomTriggerButton ? (
     <CustomTriggerButton />
   ) : (
-    <StyledTriggerButton
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        ...triggerButtonStyle,
-        opacity: TriggerButtonHoverOpacity,
-        background: TriggerButtonHoverColor,
-      }}
-    >
+    <StyledTriggerButton style={{ ...triggerButtonStyle }}>
       {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
     </StyledTriggerButton>
   )
@@ -679,7 +667,6 @@ export const Webchat = forwardRef((props, ref) => {
           onClick={event => {
             toggleWebchat(true)
             event.preventDefault()
-            setHover(false)
           }}
         >
           {triggerButton}
@@ -712,19 +699,7 @@ export const Webchat = forwardRef((props, ref) => {
               {persistentMenuIsOpened && (
                 <div>
                   {darkBackgroundMenu && (
-                    <div
-                      onClick={closeMenu}
-                      style={{
-                        backgroundColor: '#000000',
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        opacity: 0.3,
-                        zIndex: 1,
-                        right: 0,
-                        bottom: 0,
-                      }}
-                    />
+                    <DarkBackgroundMenu onClick={closeMenu} />
                   )}
                   {CustomPersistentMenu ? (
                     <CustomPersistentMenu
