@@ -110,11 +110,8 @@ const ErrorMessageContainer = styled.div`
 
 const DarkBackgroundMenu = styled.div`
   background: ${COLORS.SOLID_BLACK};
-  position: 'absolute';
-  width: '100%';
-  height: '100%';
   opacity: 0.3;
-  zindex: 1;
+  z-index: 1;
   right: 0;
   bottom: 0;
 `
@@ -289,6 +286,7 @@ export const Webchat = forwardRef((props, ref) => {
     'userInput.menu.darkBackground',
     false
   )
+  console.log('ertyui', darkBackgroundMenu)
 
   const checkBlockInput = input => {
     const blockInputs = getThemeProperty(
@@ -699,7 +697,14 @@ export const Webchat = forwardRef((props, ref) => {
               {persistentMenuIsOpened && (
                 <div>
                   {darkBackgroundMenu && (
-                    <DarkBackgroundMenu onClick={closeMenu} />
+                    <DarkBackgroundMenu
+                      onClick={closeMenu}
+                      style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
                   )}
                   {CustomPersistentMenu ? (
                     <CustomPersistentMenu
