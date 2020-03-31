@@ -286,7 +286,6 @@ export const Webchat = forwardRef((props, ref) => {
     'userInput.menu.darkBackground',
     false
   )
-  console.log('ertyui', darkBackgroundMenu)
 
   const checkBlockInput = input => {
     const blockInputs = getThemeProperty(
