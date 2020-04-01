@@ -42,18 +42,28 @@ export class RndButtonsBuilder {
     return this.buttons
   }
 
-  withCallback(callback: Callback): RndButtonsBuilder {
+  withCallback(callback: Callback): this {
     this.callback = callback
     return this
   }
 
-  addButton(): RndButtonsBuilder {
+  withName(name: string): this {
+    this.name = name
+    return this
+  }
+
+  withText(text: string): this {
+    this.text = text
+    return this
+  }
+
+  addButton(): this {
     this.buttons.push(
       new Button(
         rndStr(),
-        this.name || rndStr(),
-        this.text || rndStr(),
-        this.callback || this.callbackBuilder.build()
+        this.name ?? rndStr(),
+        this.text ?? rndStr(),
+        this.callback ?? this.callbackBuilder.build()
       )
     )
     return this

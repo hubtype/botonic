@@ -149,6 +149,6 @@ export class BotonicMsgConverter {
     if (this.options.replaceEmptyStringsWith == undefined) {
       return str
     }
-    return str || ' '
+    return str || this.options.replaceEmptyStringsWith
   }
 }
