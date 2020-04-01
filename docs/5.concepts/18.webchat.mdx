@@ -1,8 +1,11 @@
 ---
 name: Webchat
-route: /5.concepts/18.webchat
+route: /concepts/webchat
 menu: Concepts
 ---
+
+import { PrevButton } from '../components/prevButton.tsx'
+import { NextButton } from '../components/nextButton.tsx'
 
 # Webchat
 
@@ -23,7 +26,7 @@ _Webchat's look. Embedded Webchats can be triggered by clicking the chat bubble.
 
 ## Webchat SDK API
 
-Once you have your Webchat integrated ([see Webchat channel integration](/main-concepts/channels)), you will be provided with a snippet of code to be embedded in your page.
+Once your Webchat is integrated, you are provided with a code snippet to be embedded in your page.
 This snippet will load your bot's code and will allow managing it through the following JS functions (you can test it in your current browser's developers console).
 
 These methods are:
@@ -87,4 +90,9 @@ export const webchat = {
 
 ## Customizing the Webchat
 Another great advantage of Webchat is that you can customize its components. This can be done by changing the values of a set of attributes 
-or you can let your imagination run free to achieve great results by creating your own components from scratch! Check [Custom Webchat section](/tutorials-and-examples/custom-webchat) for further details.
+or you can let your imagination run free to achieve great results by creating your own components from scratch! 
+
+<div style={{display:"flex", justifyContent:"space-between"}}>
+  <PrevButton title='Routes' href='/concepts/routes' />
+  <NextButton title="Webviews" href="/concepts/webviews" />
+</div>
