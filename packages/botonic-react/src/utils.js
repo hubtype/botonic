@@ -33,6 +33,7 @@ export const getProperty = (obj, property) => {
   const properties = property.split('.')
   for (let i = 0; i < properties.length; i++) {
     const prop = properties[i]
+    // eslint-disable-next-line no-prototype-builtins
     if (!obj || !obj.hasOwnProperty(prop)) {
       return undefined
     } else {

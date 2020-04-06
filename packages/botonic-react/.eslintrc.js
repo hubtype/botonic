@@ -11,6 +11,10 @@ module.exports = {
   rules: {
     // REACT
     'react/prop-types': ['error', { skipUndeclared: true }],
+    '@typescript-eslint/no-use-before-define': [
+      'error', // we have many variables which are actually functions
+      { variables: false, functions: false, classes: false },
+    ],
   },
   settings: {
     react: {
