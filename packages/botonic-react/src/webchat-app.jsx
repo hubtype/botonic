@@ -49,7 +49,7 @@ export class WebchatApp {
 
   async onUserInput({ user, input }) {
     this.onMessage && this.onMessage(this, { from: 'user', message: input })
-    this.hubtypeService.postMessage(user, input)
+    return this.hubtypeService.postMessage(user, input)
   }
 
   onStateChange({ user, messagesJSON }) {
