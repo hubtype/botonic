@@ -58,6 +58,7 @@ export function getIntentName(fileName) {
     console.log(
       `${fileName} is not a valid. File must be of type IntentName.txt`
     )
+    return null
   }
 }
 
@@ -73,7 +74,11 @@ export function loadConfigAndTrainingData(nluPath, languages) {
       const devIntents = { intentsDict: {}, intents: [] }
       const devEntities = { words: {}, tags: {}, tagList: [] }
       for (const [idx, file] of utterancesFiles.entries()) {
-        devIntents.intentsDict[idx] = getIntentName(file)
+        const filename = getIntentName(file)
+        if (!filename) {
+          continue
+        }
+        devIntents.intentsDict[idx] = filename
         const utterances = readFile(path.join(utterancesDir, file)).split('\n')
         for (const utterance of utterances) {
           const { parsedUtterance, parsedEntities } = parseUtterance(utterance)
@@ -137,5 +142,6 @@ export async function downloadFileToDisk({ url, downloadPath }) {
   } catch (e) {
     console.log(colors.red(`Error downloading the file.`))
     console.log(colors.red(`${e.response.status}: ${e.response.statusText}`))
+    throw e
   }
 }
