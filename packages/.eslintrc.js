@@ -1,45 +1,78 @@
 module.exports = {
-  parser: "@typescript-eslint/parser", // Specifies the ESLint parser
+  parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   extends: [
-    "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-    "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
-    "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+    'plugin:prettier/recommended', // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+    'eslint:recommended',
+    'plugin:jest/recommended',
+    // typescript
+    'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    'plugin:@typescript-eslint/eslint-recommended',
+    'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
-  plugins: [
-    "no-null"
-  ],
+  plugins: ['jest', 'no-null', 'filenames', '@typescript-eslint'],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
-    sourceType: "module", // Allows for the use of imports
+    sourceType: 'module', // Allows for the use of imports
     ecmaFeatures: {
       jsx: true // Allows for the parsing of JSX
     }
   },
-// npm run lint runs eslint with --quiet --fix so that only errors are fixed
+  // npm run lint runs eslint with --quiet --fix so that only errors are fixed
   rules: {
     // style. Soon a precommit githook will fix prettier errors
-    "prettier/prettier": "error",
+    'prettier/prettier': 'error',
+    'filenames/match-regex': ['error', '^[a-z-.]+$', true],
+
     complexity: ['error', { max: 18 }],
 
-    "dot-notation": "warn", // in typescript we must use obj.field when we have the types, and obj['field'] when we don't
+    // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
+    // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
+    'dot-notation': 'off',
+    'no-console': 'off',
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-    "node/no-unsupported-features/es-syntax": "off", //babel will take care of ES compatibility
+    'node/no-unsupported-features/es-syntax': 'off', //babel will take care of ES compatibility
+    'unicorn/no-abusive-eslint-disable': 'off',
+    '@typescript-eslint/camelcase': 'warn',
+    'consistent-return': 'error',
+    'jest/no-export': 'warn',
+    'no-empty': 'warn',
+    "prefer-const": ["error", { "destructuring": "all"}],
 
-    // compatibility with botonic style
-    "no-null/no-null": "off",
-
-    "prefer-const" : ["error", {"destructuring": "all"}],
-//    "@typescript-eslint/no-use-before-define": ["error", { "variables": true, "functions": false, "classes": false }],
-    "@typescript-eslint/no-use-before-define": "warn", //not an error due to our heavy use of const functions
-    "@typescript-eslint/camelcase": "warn", // TODO add comments to allow backend ids but forbid elsewhere
-    "@typescript-eslint/no-var-requires": "off", // TODO only enable for TS code
-    "@typescript-eslint/no-empty-function": "warn",
-
-    // for d.ts
-    "@typescript-eslint/explicit-member-accessibility": "off",
+    // special for TYPESCRIPT
+    '@typescript-eslint/ban-ts-ignore': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off', // annoying for tests
+    '@typescript-eslint/explicit-member-accessibility': 'off', //we think defaulting to public is a good default
+    '@typescript-eslint/no-empty-function': 'warn',
+    '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }], // to encapsulate types in namespace with same name as Class
+    '@typescript-eslint/no-non-null-assertion': 'warn', // specially useful in tests, and "when you know what you're doing"
+    '@typescript-eslint/no-parameter-properties': 'off', // opinionated: parameter properties make data classes shorter
+    // allow public functions/classes to call private functions/classes declared below.
+    // otoh, variables (typically constants) should be declared at the top
+    '@typescript-eslint/no-use-before-define': [
+      'error',
+      { variables: true, functions: false, classes: false },
+    ],
+    '@typescript-eslint/no-useless-constructor': 'warn',
+    'no-empty-pattern': 'off',
+    // 'no-null/no-null': 'warn', // fields declared with ? are undefined, not null (be aware that React uses null)
+    'unicorn/prevent-abbreviations': 'off', // the plugin removes removes type annotations from typescript code :-(
+    'unicorn/filename-case': 'off', // React convention is in CamelCase
+    'valid-jsdoc': 'off', // function comments hide code complexity (and typescript already have type specifications),
   },
+  overrides: [
+    {
+      files: [
+        'tests/**/*.ts', // to be able to skip required fields when not used in a particular test
+      ],
+    },
+  ],
   env: {
-    jest: true
-  }
-};
+    jest: true,
+    'jest/globals': true,
+    es6: true,
+    // browser/node to prevent "'console' is not defined  no-undef"
+    browser: true,
+    node: true,
+  },
+}
