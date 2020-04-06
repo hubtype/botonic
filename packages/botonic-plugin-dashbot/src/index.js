@@ -1,4 +1,4 @@
-let dashbot = require('dashbot')
+import dashbot from 'dashbot'
 
 export default class BotonicPluginDashbot {
   constructor(options) {

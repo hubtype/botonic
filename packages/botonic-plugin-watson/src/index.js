@@ -1,5 +1,5 @@
-const AssistantV1 = require('ibm-watson/assistant/v1')
-const { IamAuthenticator } = require('ibm-watson/auth')
+import AssistantV1 from 'ibm-watson/assistant/v1'
+import IamAuthenticator from 'ibm-watson/auth'
 
 export default class BotonicPluginWatson {
   constructor(options) {
