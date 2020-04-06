@@ -25,6 +25,7 @@ export const MultichannelText = props => {
     } else if (Array.isArray(props.children)) {
       return [props.children[0]]
     }
+    return null
   }
 
   const getButtonsAndReplies = () =>

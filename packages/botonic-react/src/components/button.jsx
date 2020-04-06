@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { isBrowser, isNode, params2queryString } from '@botonic/core'
+import { params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { COLORS } from '../constants'
 import { renderComponent } from '../utils'
@@ -89,8 +89,10 @@ export const Button = props => {
         onMouseLeave={() => setHover(false)}
         onClick={e => handleClick(e)}
         style={{
+          // TODO remove?
           color: getThemeProperty('brand.color', COLORS.SOLID_BLACK),
           ...buttonStyle,
+          // eslint-disable-next-line no-dupe-keys
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
         }}
@@ -118,6 +120,7 @@ export const Button = props => {
     } else if (props.url) {
       return <button url={props.url}>{props.children}</button>
     }
+    throw new Error('Button missing payload, path, webviews or url')
   }
 
   return renderComponent({ renderBrowser, renderNode })

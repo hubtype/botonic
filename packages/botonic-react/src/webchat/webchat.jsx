@@ -274,7 +274,7 @@ export const Webchat = forwardRef((props, ref) => {
       'userInput.blockInputs',
       props.blockInputs
     )
-    if (!Array.isArray(blockInputs)) return
+    if (!Array.isArray(blockInputs)) return false
     for (const rule of blockInputs) {
       if (rule.match.some(regex => regex.test(input.data))) {
         addMessageComponent(
@@ -293,6 +293,7 @@ export const Webchat = forwardRef((props, ref) => {
         return true
       }
     }
+    return false
   }
   const closeMenu = () => {
     setPersistentMenuIsOpened(false)

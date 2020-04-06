@@ -77,6 +77,8 @@ export function msgToBotonic(msg, customMessageTypes) {
       </>
     )
   }
+  console.warn(`Not converting message of type ${msg.type}`)
+  return null
 }
 
 /**
