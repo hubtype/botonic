@@ -1,4 +1,4 @@
-const { humanHandOff, HandOffBuilder } = require('./handoff')
+import { humanHandOff, HandOffBuilder } from './handoff'
 
 describe('handOff', () => {
   test.each([

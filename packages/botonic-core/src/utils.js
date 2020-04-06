@@ -30,11 +30,11 @@ export const params2queryString = params =>
 // Joins path segments.  Preserves initial "/" and resolves ".." and "."
 // Does not support using ".." to go above/outside the root.
 // This means that join("foo", "../../bar") will not resolve to "../bar"
-export const join = (/* path segments */) => {
+export const join = (...segments) => {
   // Split the inputs into a list of path commands.
   let parts = []
-  for (let i = 0, l = arguments.length; i < l; i++) {
-    parts = parts.concat(arguments[i].split('/'))
+  for (let i = 0, l = segments.length; i < l; i++) {
+    parts = parts.concat(segments[i].split('/'))
   }
   // Interpret the path commands to get the new resolved path.
   const newParts = []

@@ -16,7 +16,7 @@ export class HubtypeService {
   init(user, lastMessageId) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
-    if (this.pusher || !this.user.id || !this.appId) return
+    if (this.pusher || !this.user.id || !this.appId) return null
     this.pusher = new Pusher(PUSHER_KEY, {
       cluster: 'eu',
       authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
@@ -31,6 +31,7 @@ export class HubtypeService {
     this.channel = this.pusher.subscribe(this.pusherChannel)
     const connectionPromise = new Promise((resolve, reject) => {
       const cleanAndReject = msg => {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         clearTimeout(connectTimeout)
         this.pusher.connection.unbind()
         this.channel.unbind()
@@ -70,7 +71,7 @@ export class HubtypeService {
       await this.init(user)
     } catch (e) {
       this.onEvent({ isError: true, errorMessage: String(e) })
-      return
+      return Promise.resolve()
     }
     return axios.post(
       `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
