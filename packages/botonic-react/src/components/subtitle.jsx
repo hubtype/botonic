@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { isBrowser, isNode } from '@botonic/core'
 import { COLORS } from '../constants'
+import { renderComponent } from '../utils'
 
 const SubtitleContainer = styled.div`
   font-size: 12px;
@@ -20,8 +20,7 @@ export const Subtitle = props => {
   )
   const renderNode = () => <desc>{props.children}</desc>
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
 
 Subtitle.serialize = subtitleProps => {

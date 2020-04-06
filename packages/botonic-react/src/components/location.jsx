@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { isBrowser, isNode } from '@botonic/core'
 import { Message } from './message'
+import { renderComponent } from '../utils'
 
 const Link = styled.a`
   text-decoration: none;
@@ -36,8 +36,7 @@ export const Location = props => {
     )
   }
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
 
 Location.serialize = serialize

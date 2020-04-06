@@ -1,6 +1,6 @@
 import React from 'react'
 import { Message } from './message'
-import { isBrowser, isNode } from '@botonic/core'
+import { renderComponent } from '../utils'
 
 export const WhatsappTemplate = props => {
   const renderBrowser = () => {
@@ -30,6 +30,5 @@ export const WhatsappTemplate = props => {
     )
   }
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
