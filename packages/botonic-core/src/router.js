@@ -8,6 +8,7 @@ export class Router {
     this.routeInspector = routeInspector || new RouteInspector()
   }
 
+  // eslint-disable-next-line complexity
   processInput(input, session = {}, lastRoutePath = null) {
     let routeParams = {}
     const pathParams = this.getOnFinishParams(input)
@@ -130,9 +131,8 @@ export class Router {
       if (pathParams.length > 1) {
         return pathParams[1]
       }
-    } catch (e) {
-      return undefined
-    }
+    } catch (e) {}
+    return undefined
   }
 
   getRoute(input, routes, session) {

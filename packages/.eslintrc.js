@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     // style. Soon a precommit githook will fix prettier errors
     "prettier/prettier": "error",
+    complexity: ['error', { max: 18 }],
 
     "dot-notation": "warn", // in typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs

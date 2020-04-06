@@ -1,34 +1,14 @@
 export function webchatReducer(state, action) {
   switch (action.type) {
     case 'addMessage':
-      if (
-        state.messagesJSON &&
-        state.messagesJSON.find(m => m.id === action.payload.id)
-      )
-        return state
-      return {
-        ...state,
-        messagesJSON: [...(state.messagesJSON || []), { ...action.payload }],
-      }
+      return addMessageReducer(state, action)
     case 'addMessageComponent':
       return {
         ...state,
         messagesComponents: [...state.messagesComponents, action.payload],
       }
     case 'updateMessage':
-      const msgIndex = state.messagesJSON
-        .map(m => m.id)
-        .indexOf(action.payload.id)
-      if (msgIndex > -1)
-        return {
-          ...state,
-          messagesJSON: [
-            ...state.messagesJSON.slice(0, msgIndex),
-            { ...action.payload },
-            ...state.messagesJSON.slice(msgIndex + 1),
-          ],
-        }
-      return state
+      return updateMessageReducer(state, action)
     case 'updateReplies':
       return { ...state, replies: action.payload }
     case 'updateLatestInput':
@@ -61,5 +41,31 @@ export function webchatReducer(state, action) {
       }
     default:
       throw new Error()
+  }
+}
+
+function updateMessageReducer(state, action) {
+  const msgIndex = state.messagesJSON.map(m => m.id).indexOf(action.payload.id)
+  if (msgIndex > -1)
+    return {
+      ...state,
+      messagesJSON: [
+        ...state.messagesJSON.slice(0, msgIndex),
+        { ...action.payload },
+        ...state.messagesJSON.slice(msgIndex + 1),
+      ],
+    }
+  return state
+}
+
+function addMessageReducer(state, action) {
+  if (
+    state.messagesJSON &&
+    state.messagesJSON.find(m => m.id === action.payload.id)
+  )
+    return state
+  return {
+    ...state,
+    messagesJSON: [...(state.messagesJSON || []), { ...action.payload }],
   }
 }

@@ -30,25 +30,7 @@ export function msgToBotonic(msg, customMessageTypes) {
       console.log(e)
     }
   } else if (msg.type === 'text') {
-    const txt = msg.data.text != undefined ? msg.data.text : String(msg.data)
-    if (
-      (msg.replies && msg.replies.length) ||
-      (msg.keyboard && msg.keyboard.length)
-    )
-      return (
-        <Text {...msg}>
-          {txt}
-          {quickrepliesParse(msg)}
-        </Text>
-      )
-    if (msg.buttons && msg.buttons.length)
-      return (
-        <Text {...msg}>
-          {txt}
-          {buttonsParse(msg.buttons)}
-        </Text>
-      )
-    return <Text {...msg}>{txt}</Text>
+    return textToBotonic(msg)
   } else if (msg.type === 'carousel') {
     const elements = msg.elements || msg.data.elements
     return <Carousel {...msg}>{elementsParse(elements)}</Carousel>
@@ -116,6 +98,28 @@ export function msgsToBotonic(msgs, customMessageTypes) {
     )
   }
   return msgToBotonic(msgs, customMessageTypes)
+}
+
+function textToBotonic(msg) {
+  const txt = msg.data.text != undefined ? msg.data.text : String(msg.data)
+  if (
+    (msg.replies && msg.replies.length) ||
+    (msg.keyboard && msg.keyboard.length)
+  )
+    return (
+      <Text {...msg}>
+        {txt}
+        {quickrepliesParse(msg)}
+      </Text>
+    )
+  if (msg.buttons && msg.buttons.length)
+    return (
+      <Text {...msg}>
+        {txt}
+        {buttonsParse(msg.buttons)}
+      </Text>
+    )
+  return <Text {...msg}>{txt}</Text>
 }
 
 function elementsParse(elements) {
