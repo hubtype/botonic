@@ -51,7 +51,7 @@ class App extends React.Component {
         )
       } catch (e) {}
       try {
-        parent.postMessage('botonicCloseWebview', '*')
+        await parent.postMessage('botonicCloseWebview', '*')
       } catch (e) {}
     }
   }
