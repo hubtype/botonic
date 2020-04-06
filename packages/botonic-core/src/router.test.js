@@ -1,4 +1,4 @@
-const { Router } = require('./router')
+import { Router } from './router'
 
 const textInput = { type: 'text', data: 'hi' }
 const textInputComplex = { type: 'text', data: 'Cömplêx input &% 🚀' }
