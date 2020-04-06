@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { isBrowser, isNode } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { COLORS } from '../constants'
+import { renderComponent } from '../utils'
 
 const StyledButton = styled.button`
   width: 100%;
@@ -60,8 +60,7 @@ export const Reply = props => {
     return <reply payload={props.payload}>{props.children}</reply>
   }
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
 
 Reply.serialize = replyProps => {

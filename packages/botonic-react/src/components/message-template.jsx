@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { isBrowser, isNode } from '@botonic/core'
-import { WebchatContext } from '../contexts'
+import { renderComponent } from '../utils'
 
 export const MessageTemplate = props => {
   const renderBrowser = () => null
@@ -12,6 +11,5 @@ export const MessageTemplate = props => {
       />
     </message>
   )
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }

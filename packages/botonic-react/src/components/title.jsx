@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { isBrowser, isNode } from '@botonic/core'
+import { renderComponent } from '../utils'
 
 const TitleContainer = styled.div`
   font-size: 14px;
@@ -13,8 +13,7 @@ export const Title = props => {
   )
   const renderNode = () => <title>{props.children}</title>
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
 
 Title.serialize = titleProps => {

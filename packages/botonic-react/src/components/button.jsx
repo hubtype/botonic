@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { isBrowser, isNode, params2queryString } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { COLORS } from '../constants'
+import { renderComponent } from '../utils'
 
 const StyledButton = styled.button`
   display: flex;
@@ -119,8 +120,7 @@ export const Button = props => {
     }
   }
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
 
 Button.serialize = buttonProps => {

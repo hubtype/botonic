@@ -1,4 +1,5 @@
 import { WEBCHAT } from './constants'
+import { isBrowser, isNode } from '@botonic/core'
 export function isDev() {
   return process.env.NODE_ENV == 'development'
 }
@@ -60,6 +61,7 @@ export const _getThemeProperty = theme => (
       return defaultValue
     }
   }
+  return undefined
 }
 
 export const ConditionalWrapper = ({ condition, wrapper, children }) =>
@@ -82,4 +84,10 @@ export const getParsedAction = botonicAction => {
   const splittedAction = botonicAction.split('create_case:')
   if (splittedAction.length <= 1) return undefined
   return JSON.parse(splittedAction[1])
+}
+
+export function renderComponent({ renderBrowser, renderNode }) {
+  if (isBrowser()) return renderBrowser()
+  else if (isNode()) return renderNode()
+  throw new Error('Unexpected process type. Not recognized as browser nor node')
 }

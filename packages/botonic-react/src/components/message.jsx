@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import uuid from 'uuid/v4'
 import { isBrowser, isNode } from '@botonic/core'
-import { staticAsset, ConditionalWrapper } from '../utils'
+import { staticAsset, ConditionalWrapper, renderComponent } from '../utils'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
@@ -230,6 +230,5 @@ export const Message = props => {
       </message>
     )
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { isBrowser, isNode } from '@botonic/core'
 import { COLORS } from '../constants'
+import { renderComponent } from '../utils'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -20,8 +20,7 @@ export const Element = props => {
 
   const renderNode = () => <element>{props.children}</element>
 
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
 
 Element.serialize = elementProps => {

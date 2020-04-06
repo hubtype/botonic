@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { isBrowser, isNode } from '@botonic/core'
 import styled from 'styled-components'
 import { COLORS } from '../constants'
+import { renderComponent } from '../utils'
 
 const PicStyled = styled.div`
   border-top-left-radius: 8px;
@@ -17,8 +17,7 @@ const PicStyled = styled.div`
 export const Pic = props => {
   const renderBrowser = () => <PicStyled src={props.src} />
   const renderNode = () => <pic>{props.src}</pic>
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  return renderComponent({ renderBrowser, renderNode })
 }
 
 Pic.serialize = picProps => {
