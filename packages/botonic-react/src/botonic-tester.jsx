@@ -70,6 +70,7 @@ export class BotonicOutputTester {
         ReactDOMServer.renderToStaticMarkup(<Reply path={path}>{text}</Reply>)
       )
     }
+    throw new Error('reply should contain a payload or a path')
   }
 
   replies(...args) {

@@ -11,6 +11,7 @@ export const MultichannelReply = props => {
 
   if (isWhatsapp(requestContext)) {
     if (hasPath() || hasPayload()) return `${getText()}`
+    return null
   } else {
     return <Reply {...props}>{props.children}</Reply>
   }
