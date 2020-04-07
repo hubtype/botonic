@@ -97,13 +97,17 @@ export const Message = props => {
     e => ![Button, Reply].includes(e.type)
   )
 
-  const timestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
-  moment.locale(timestampLocale)
+  const getTimestampFormat = () => {
+    const timestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
+    moment.locale(timestampLocale)
+    const timestampFormat = getThemeProperty(
+      `message.timestamps.format`,
+      undefined
+    )
+    return timestampFormat
+  }
 
-  const timestampFormat = getThemeProperty(
-    `message.timestamps.format`,
-    undefined
-  )
+  const timestampFormat = timestamps && getTimestampFormat()
 
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -255,7 +259,7 @@ export const Message = props => {
           </Blob>
         </MessageContainer>
         <TimestampContainer>
-          {timestampFormat && timestamps && (
+          {timestampFormat && (
             <TimestampText
               isfromuser={isFromUser()}
               style={{
