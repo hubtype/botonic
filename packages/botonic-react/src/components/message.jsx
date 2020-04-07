@@ -97,12 +97,12 @@ export const Message = props => {
     e => ![Button, Reply].includes(e.type)
   )
 
-  const getTimestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
-  moment.locale(getTimestampLocale)
+  const timestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
+  moment.locale(timestampLocale)
 
-  const getTimestampFormat = getThemeProperty(
+  const timestampFormat = getThemeProperty(
     `message.timestamps.format`,
-    false
+    undefined
   )
 
   if (isBrowser()) {
@@ -113,7 +113,7 @@ export const Message = props => {
         id: state.id,
         type,
         data: decomposedChildren ? decomposedChildren : textChildren,
-        timestamp: moment().format(getTimestampFormat),
+        timestamp: moment().format(timestampFormat),
         from,
         buttons: buttons.map(b => ({
           payload: b.props.payload,
@@ -255,7 +255,7 @@ export const Message = props => {
           </Blob>
         </MessageContainer>
         <TimestampContainer>
-          {getTimestampFormat && timestamps && (
+          {timestampFormat && timestamps && (
             <TimestampText
               isfromuser={isFromUser()}
               style={{
