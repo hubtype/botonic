@@ -104,9 +104,6 @@ async function _humanHandOff(
   shadowing = false
 ) {
   const params = {}
-  if (!queueNameOrId && agentEmail) {
-    throw 'You must provide a queue ID'
-  }
   if (queueNameOrId) {
     params.queue = queueNameOrId
   }
@@ -125,7 +122,6 @@ async function _humanHandOff(
   if (shadowing) {
     params.shadowing = shadowing
   }
-
   if (onFinish) {
     params.on_finish = onFinish
   }
