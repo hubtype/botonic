@@ -9,7 +9,7 @@ import { NextButton } from '../components/nextButton.tsx'
 
 # Actions
 
-Actions consist of simple units of logic that your bot can perform and the response that your bot will generate.
+Actions consist of simple units of logic that your bot can perform and the response that your bot generates.
 
 ## Simple Actions
 
@@ -26,9 +26,9 @@ export default class extends React.Component {
 }
 ```
 
-With some small modifications, we can also pass variables or external responses to the render method.
+With only a few modifications, we can also pass variables or external responses to the render method.
 
-The `botonicInit` function is always called before the `render()` and it's asynchronous. This means that you can do all type of external api calls here and use the responses in the `render()` method, as an example.
+The `botonicInit` function is always called before the `render()` and it's asynchronous, which means that you can do all type of external API calls and use the responses in the `render()` method as an example.
 
 In the example below, we are storing as a session variable the name that a user would have typed. Also we are declaring the variable `reminder` which we want to use inside the `render()` method.  
 The session variables can be accessed within `render()` with `this.context.session`, and the ones declared inside `botonicInit()` scope with `this.props.{variableName}`.
@@ -60,28 +60,30 @@ export default class extends React.Component {
 }
 ```
 
-This will produce the following output in Facebook Messenger:
+<details>
+<summary>Example in Facebook Messenger</summary>
 
 <img
   src="https://botonic-doc-static.netlify.com/images/john_doe.png"
   style={{ display: 'block', margin: 'auto', maxWidth: '100%' }}
 />
+</details>
 
-## Data Persistance
+## Data Persistence
 
-We can access different types of information inside the `botonicInit` function.
+We can access different types of information within the `botonicInit` function.
 
 - **input:** the type of data and the user input.  
   `{'type': 'text', 'data': 'Hello, it's my first interaction'}`
-- **session**: the session is a group of variables that is always available at any action of the bot. It's recalculated every time there is an user input, so if a variable is updated in any state of the bot, this variable is going to be available and updated in all the others actions.
+- **session**: the session is a group of variables that is always available for any bot action. It is recalculated every time there is a user input. So if a variable is updated in any state of the bot, this variable is going to be available and updated in all the others actions.
 - **params**: when a button redirects you to an action, you can pass attributes (parameters) to that action. The params store this information.
 - **lastRoutePath**: the last path that the user has gone through.
 
-The `render()` method describes what will be returned as an output of the bot using components.
+The `render()` method defines what is returned as an output of the bot using components.
 
 ## Complex Actions
 
-Sometimes it's helpful to pull information from an external site. You can do this within the `botonicInit()` method.
+Sometimes it is helpful to pull information from an external site. You can do this within the `botonicInit()` method.
 
 **./actions/example.js**
 
@@ -126,7 +128,7 @@ export default class extends React.Component {
 
 > #### NOTE:
 >
-> In order to import the `fetch` function from `isomorphic-fetch`, you need to install it into your bot. Please do: `npm install isomorphic-fetch` 
+> To import the `fetch` function from `isomorphic-fetch`, you need to install it into your bot. Please do: `npm install isomorphic-fetch` 
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
   <NextButton title="Botonic Settings" href="/concepts/botonic-settings" />
