@@ -178,6 +178,10 @@ export class Contentful implements cms.CMS {
           return await this._url.fromEntry(entry, context)
         case ContentType.STARTUP:
           return await this._startUp.fromEntry(entry, context)
+        case ContentType.SCHEDULE:
+          return await ScheduleDelivery.fromEntry(entry)
+        case ContentType.DATE_RANGE:
+          return await DateRangeDelivery.fromEntry(entry)
         default:
           throw new Error(`${model} is not a Content type`)
       }
