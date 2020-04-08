@@ -1,8 +1,8 @@
 import { Search } from '../../src/search'
 import { testContentful } from '../contentful/contentful.helper'
-import { KeywordsOptions, MatchType, Normalizer } from '../../src/nlp'
+import { ENGLISH, KeywordsOptions, MatchType, Normalizer } from '../../src/nlp'
 
-test('TEST search: ', async () => {
+test('INTEGRATION TEST: searchByKeywords', async () => {
   const contentful = testContentful()
   const normalizer = new Normalizer()
   const sut = new Search(contentful, normalizer, {
@@ -17,4 +17,24 @@ test('TEST search: ', async () => {
   )
   expect(res.length).toBeGreaterThanOrEqual(1)
   expect(res.filter(res => res.common.name == 'POST_FAQ1')).toHaveLength(1)
+})
+
+test('INTEGRATION TEST: searchByKeywords with numbers', async () => {
+  const locale = ENGLISH
+  const cms = testContentful()
+  const search = new Search(cms, new Normalizer())
+
+  const exactKeyword = await search.searchByKeywords(
+    '11',
+    MatchType.ONLY_KEYWORDS_FOUND,
+    { locale }
+  )
+  expect(exactKeyword.map(c => c.common.name)).toEqual(['TEST_NUMBER_KEYWORDS'])
+
+  const substringNotFound = await search.searchByKeywords(
+    '22',
+    MatchType.ONLY_KEYWORDS_FOUND,
+    { locale }
+  )
+  expect(substringNotFound).toHaveLength(0)
 })
