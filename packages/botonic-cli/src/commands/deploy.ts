@@ -58,7 +58,6 @@ Uploading...
   async run() {
     const { args, flags } = this.parse(Run)
     track('Deployed Botonic CLI')
-
     force = flags.force || false
     npmCommand = flags.command
     this.botName = flags.botName
@@ -283,6 +282,7 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar',
     }).start()
+    if (fs.existsSync('tmp')) fs.rmdirSync('tmp')
     fs.mkdirSync(join('tmp'))
     copySync('dist', join('tmp', 'dist'))
     const zipRes = await zip('tmp', join(BOTONIC_BUNDLE_FILE))
