@@ -1,5 +1,5 @@
 import * as cms from '../../cms'
-import { ContentType } from '../../cms'
+import { CmsException, ContentType } from '../../cms'
 import { Entry } from 'contentful/index'
 import { ContentDelivery } from '../content-delivery'
 import { TextDelivery, TextFields } from './text'
@@ -36,7 +36,6 @@ export class FollowUpDelivery {
     private readonly startUp: StartUpDelivery
   ) {}
 
-  // TODO we should detect cycles to avoid infinite recursion
   async fromEntry(
     followUp: Entry<FollowUpFields> | undefined,
     context: cms.Context
@@ -44,6 +43,21 @@ export class FollowUpDelivery {
     if (!followUp) {
       return Promise.resolve(undefined)
     }
+    try {
+      return this.fromEntryCore(followUp, context)
+    } catch (e) {
+      throw new CmsException(
+        `Error loading followup with id '${followUp.sys.id}'`,
+        e
+      )
+    }
+  }
+
+  // TODO we should detect cycles to avoid infinite recursion
+  async fromEntryCore(
+    followUp: Entry<FollowUpFields>,
+    context: cms.Context
+  ): Promise<cms.FollowUp | undefined> {
     if (!followUp.sys.contentType) {
       followUp = await this.delivery.getEntry(followUp.sys.id, context)
     }

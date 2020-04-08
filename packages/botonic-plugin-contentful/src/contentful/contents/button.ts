@@ -1,6 +1,6 @@
 import * as contentful from 'contentful/index'
 import { DeliveryApi } from '../index'
-import { ContentType } from '../../cms'
+import { ContentType, CmsException } from '../../cms'
 import * as cms from '../../cms'
 import { CarouselFields } from './carousel'
 import {
@@ -32,7 +32,14 @@ export class ButtonDelivery {
   ): Promise<cms.Button> {
     // we could pass the entry to fromId to avoid fetching it again, but it makes
     // the code more complex when the reference is a button
-    return this.fromId(entry.sys.id, context)
+    try {
+      return await this.fromId(entry.sys.id, context)
+    } catch (e) {
+      throw new CmsException(
+        `Error loading button with id '${entry.sys.id}'`,
+        e
+      )
+    }
   }
 
   private async fromId(id: string, context: cms.Context): Promise<cms.Button> {
