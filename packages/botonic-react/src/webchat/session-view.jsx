@@ -98,6 +98,7 @@ const KeepSessionContainer = styled.div`
 `
 
 export const SessionView = props => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { webchatState, updateDevSettings } = props.webchatHooks || useWebchat()
   const { latestInput: input, session, lastRoutePath } = webchatState
   const toggleSessionView = () =>

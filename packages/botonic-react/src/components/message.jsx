@@ -73,6 +73,7 @@ export const Message = props => {
     e => ![Button, Reply].includes(e.type)
   )
   if (isBrowser()) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const decomposedChildren = json
       const message = {
@@ -100,6 +101,7 @@ export const Message = props => {
       addMessage(message)
     }, [])
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const msg = webchatState.messagesJSON.find(m => m.id === state.id)
       if (

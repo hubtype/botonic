@@ -8,9 +8,12 @@ module.exports = {
       jsx: true, // Allows for the parsing of JSX
     },
   },
+  plugins: ['react-hooks'],
   rules: {
     // REACT
     'react/prop-types': ['error', { skipUndeclared: true }],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     '@typescript-eslint/no-use-before-define': [
       'error', // we have many variables which are actually functions
       { variables: false, functions: false, classes: false },
