@@ -1,4 +1,12 @@
-import { Button, Callback, CMS, ContentType, Text, Context } from '../cms'
+import {
+  Button,
+  Callback,
+  CMS,
+  ContentType,
+  Text,
+  Context,
+  ContextWithLocale,
+} from '../cms'
 import { KeywordsOptions, MatchType, Normalizer, checkLocale } from '../nlp'
 import { SearchByKeywords } from './search-by-keywords'
 import { SearchResult } from './search-result'
@@ -20,7 +28,7 @@ export class Search {
   async searchByKeywords(
     inputText: string,
     matchType: MatchType,
-    context: Context
+    context: ContextWithLocale
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale)
     const utterance = this.normalizer.normalize(locale, inputText)
