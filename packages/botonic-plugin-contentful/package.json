@@ -13,7 +13,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.11.2",
+  "version": "0.11.3-alpha.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
@@ -30,23 +30,23 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.8.3",
-    "contentful": "^7.14.0",
-    "contentful-management": "^5.13.0",
+    "contentful": "^7.14.2",
+    "contentful-management": "^5.19.0",
     "csv-parse": "^4.8.6",
     "csv-stringify": "^5.3.6",
     "escape-string-regexp": "^2.0.0",
     "memoizee": "^0.4.14",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.27",
+    "moment-timezone": "^0.5.28",
     "node-nlp": "^4.3.0",
     "sort-stream": "^1.0.1"
   },
   "devDependencies": {
     "@types/memoizee": "^0.4.3",
     "@types/moment-timezone": "^0.5.12",
-    "@types/node": "^13.7.2",
+    "@types/node": "^13.11.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest-extended": "^0.11.4"
+    "jest-extended": "^0.11.5"
   },
   "engines": {
     "node": ">=12.0.0"
