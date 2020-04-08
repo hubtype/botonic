@@ -200,7 +200,7 @@ export class I18nEntryTraverser {
     if (
       !val.fields ||
       val.fields.payload ||
-      val.sys.contentType.sys.id == ButtonDelivery.BUTTON_CONTENT_TYPE
+      val.sys.contentType?.sys.id == ButtonDelivery.BUTTON_CONTENT_TYPE
     ) {
       return val
     }
