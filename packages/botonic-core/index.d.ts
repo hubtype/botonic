@@ -57,7 +57,7 @@ type RouteMatcher =
 
 export interface Route {
   path?: StringMatcher
-  action?: React.ReactNode
+  action?: any
   redirect?: string
   childRoutes?: Route[]
 
@@ -71,7 +71,7 @@ export interface Route {
   session?: SessionMatcher
 }
 
-type Routes = Route[] | ((_: { input: Input; session: Session }) => Route[])
+type Routes<R = Route> = R[] | ((_: { input: Input; session: Session }) => R[])
 
 // Desk
 
