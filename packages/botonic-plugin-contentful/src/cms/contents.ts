@@ -69,7 +69,7 @@ export abstract class TopContent extends Content {
     return new TopContentId(this.contentType, this.id)
   }
 
-  cloneWithFollowUp(newFollowUp: FollowUp): TopContent {
+  cloneWithFollowUp(newFollowUp: FollowUp): this {
     const clone = shallowClone(this)
     ;(clone as any).common = shallowClone(clone.common)
     ;(clone as any).common.followUp = newFollowUp
@@ -219,13 +219,13 @@ export class Text extends MessageContent {
     return Content.validateContents(this.buttons)
   }
 
-  cloneWithButtons(buttons: Button[]): Text {
+  cloneWithButtons(buttons: Button[]): this {
     const clone = shallowClone(this)
     ;(clone as any).buttons = buttons
-    return clone as Text
+    return clone
   }
 
-  cloneWithText(newText: string): Text {
+  cloneWithText(newText: string): this {
     const clone = shallowClone(this)
     ;(clone as any).text = newText
     return clone

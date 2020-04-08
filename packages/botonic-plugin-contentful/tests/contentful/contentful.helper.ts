@@ -1,5 +1,5 @@
 import { Contentful } from '../../src/contentful'
-import { Context } from '../../src/cms'
+import { CMS, Context, ErrorReportingCMS } from '../../src/cms'
 import { ContentfulOptions, ENGLISH } from '../../src'
 
 export function testSpaceId(): string {
@@ -7,9 +7,14 @@ export function testSpaceId(): string {
 }
 
 export function testContentful(
-  options: Partial<ContentfulOptions> = {}
-): Contentful {
-  return new Contentful(testContentfulOptions(options))
+  options: Partial<ContentfulOptions> = {},
+  errorReporting = true
+): CMS {
+  const contentful = new Contentful(testContentfulOptions(options))
+  if (!errorReporting) {
+    return contentful
+  }
+  return new ErrorReportingCMS(contentful)
 }
 
 export function testContentfulOptions(
