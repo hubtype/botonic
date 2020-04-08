@@ -7,6 +7,7 @@ import { zip } from 'zip-a-folder'
 
 import * as fs from 'fs'
 import * as ora from 'ora'
+import * as rimraf from 'rimraf'
 
 import { BotonicAPIService } from '../botonicapiservice'
 import { track, sleep } from '../utils'
@@ -282,7 +283,7 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar',
     }).start()
-    if (fs.existsSync('tmp')) fs.rmdirSync('tmp')
+    if (fs.existsSync('tmp')) rimraf.sync('tmp')
     fs.mkdirSync(join('tmp'))
     copySync('dist', join('tmp', 'dist'))
     const zipRes = await zip('tmp', join(BOTONIC_BUNDLE_FILE))
