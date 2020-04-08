@@ -20,7 +20,7 @@ export class SearchByKeywords {
   async searchContentsFromInput(
     inputText: NormalizedUtterance,
     matchType: MatchType,
-    context: cms.Context
+    context: cms.ContextWithLocale
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale)
     const contentsWithKeywords = await this.cms.contentsWithKeywords(context)
