@@ -7,11 +7,27 @@ export interface BotResponse extends core.BotRequest {
   response: [React.ReactNode]
 }
 
+export interface Route extends core.Route {
+  action?: typeof React.Component
+}
+type Routes = core.Routes<Route>
+
+export interface BotOptions extends core.BotOptions {
+  routes: Routes
+}
+
+export class ReactBot extends core.CoreBot {
+  renderReactActions({
+    request: ActionRequest,
+    actions,
+  }): Promise<React.ReactNode>
+}
+
 export class NodeApp {
-  constructor(options: core.BotOptions)
+  constructor(options: BotOptions)
+  bot: ReactBot
 
   renderNode(args): string
-
   input(request: core.BotRequest): BotResponse
 }
 
