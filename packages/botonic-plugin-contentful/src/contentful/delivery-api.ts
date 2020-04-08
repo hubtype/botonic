@@ -1,6 +1,7 @@
 import * as contentful from 'contentful'
 import { Entry, EntryCollection } from 'contentful'
 import {
+  CmsException,
   CommonFields,
   Content,
   ContentType,
@@ -158,6 +159,11 @@ export class ContentfulEntryUtils {
     entry: contentful.Entry<any>
   ): T {
     // https://blog.oio.de/2014/02/28/typescript-accessing-enum-values-via-a-string/
+    if (!entry.sys.contentType) {
+      throw new CmsException(
+        `Entry '${entry.sys.id}' not fully loaded or referencing a deleted content`
+      )
+    }
     const typ = entry.sys.contentType.sys.id
     return typ as T
   }
