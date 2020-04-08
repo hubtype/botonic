@@ -10,10 +10,7 @@ export const POLISH = 'pl'
 
 export const SUPPORTED_LOCALES = [SPANISH, CATALAN, ENGLISH, PORTUGUESE, POLISH]
 
-export function checkLocale(locale?: Locale): Locale {
-  if (!locale) {
-    throw new Error('Context.locale must be specified')
-  }
+export function checkLocale(locale: Locale): Locale {
   // check it's supported
   stemmerFor(locale)
   return locale
