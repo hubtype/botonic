@@ -140,6 +140,7 @@ export const Webchat = forwardRef((props, ref) => {
     clearMessages,
     openWebviewT,
     closeWebviewT,
+    // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
