@@ -4,4 +4,4 @@
 // In the future we should run independently integration and unit tests
 jest.setTimeout(15000)
 // uncomment to extend jest test timeout while debugging from IDE
-// jest.setTimeout(3000000)
+jest.setTimeout(3000000)
