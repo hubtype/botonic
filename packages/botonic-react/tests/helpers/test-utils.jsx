@@ -8,11 +8,17 @@ import { MultichannelContext } from '../../src/components/multichannel/multichan
  * @param node {React.ReactNode}
  * @param context to be merged into default RequestContext value
  */
-export function withRequestContext(node, context = {}) {
+export function withRequestContext(
+  node,
+  context = {},
+  multichannelContext = {}
+) {
   return (
     <RequestContext.Consumer>
       {value => (
-        <MultichannelContext.Provider value={{ currentIndex: 1 }}>
+        <MultichannelContext.Provider
+          value={{ currentIndex: 1, ...multichannelContext }}
+        >
           <RequestContext.Provider value={{ ...value, ...context }}>
             {node}
           </RequestContext.Provider>
@@ -22,7 +28,11 @@ export function withRequestContext(node, context = {}) {
   )
 }
 
-export const whatsappRenderer = sut =>
+export const whatsappRenderer = (sut, multichannelContext = {}) =>
   TestRenderer.create(
-    withRequestContext(sut, { session: { user: { provider: 'whatsapp' } } })
+    withRequestContext(
+      sut,
+      { session: { user: { provider: 'whatsapp' } } },
+      multichannelContext
+    )
   )
