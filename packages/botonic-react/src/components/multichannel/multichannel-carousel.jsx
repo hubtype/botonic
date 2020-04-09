@@ -16,8 +16,17 @@ export const MultichannelCarousel = props => {
   const getButtons = node =>
     [].concat(getFilteredElements(node, isMultichannelButton))
 
+  const compactElements = elementsAsTexts => {
+    if (elementsAsTexts.length == 0) {
+      return elementsAsTexts
+    }
+    const first = elementsAsTexts[0]
+    const children = [].concat(...elementsAsTexts.map(e => e.props.children))
+    return <MultichannelText {...first.props}>{children}</MultichannelText>
+  }
+
   if (isWhatsapp(requestContext)) {
-    return props.children
+    const elementsAsTexts = props.children
       .map(e => e.props.children)
       .map((element, i) => {
         let imageProps = undefined
@@ -39,23 +48,27 @@ export const MultichannelCarousel = props => {
           if (isNodeKind(node, 'MultichannelButton')) {
             buttons.push(node)
           }
+          //TODO support fragment containing an array
           if (Array.isArray(node)) {
             buttons.push(getButtons(node))
           }
         }
 
-        let header = `${title ? `*${title}*` : ''}`
-        if (title && subtitle) {
-          header += ' '
+        let header = ''
+        if (props.showTitle && title) {
+          header += `${title ? `*${title}*` : ''}`
+          if (title && subtitle) {
+            header += ' '
+          }
         }
-        if (subtitle) {
+        if (props.showSubtitle && subtitle) {
           header += `_${subtitle}_`
         }
 
         return (
           // TODO: newkey only for 1 nested button
-          <MultichannelText key={i} newkey={i}>
-            {header}
+          <MultichannelText key={i} newkey={i} indexMode={props.indexMode}>
+            {header || null}
             {buttons}
           </MultichannelText>
         )
@@ -78,6 +91,10 @@ export const MultichannelCarousel = props => {
         // )
         // }
       })
+    if (props.oneMessagePerElement) {
+      return elementsAsTexts
+    }
+    return compactElements(elementsAsTexts)
   } else {
     return <Carousel {...props}>{props.children}</Carousel>
   }
