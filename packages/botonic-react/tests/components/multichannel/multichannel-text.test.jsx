@@ -9,6 +9,7 @@ import { MultichannelReply } from '../../../src/components/multichannel/multicha
 
 const LEGACY_CONTEXT = {
   indexSeparator: '.',
+  oneMessagePerComponent: true,
 }
 const LEGACY_PROPS = {
   indexMode: 'number',

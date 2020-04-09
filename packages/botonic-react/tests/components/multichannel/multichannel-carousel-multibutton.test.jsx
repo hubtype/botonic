@@ -8,13 +8,13 @@ import { whatsappRenderer } from '../../helpers/test-utils'
 
 export const LEGACY_CONTEXT = {
   indexSeparator: '.',
+  oneMessagePerComponent: true,
 }
 
 export const LEGACY_PROPS = {
   indexMode: 'number',
   showTitle: true,
   showSubtitle: true,
-  oneMessagePerElement: true,
 }
 
 const movies = [
