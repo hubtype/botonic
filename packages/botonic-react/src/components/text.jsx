@@ -10,7 +10,11 @@ const serialize = textProps => {
   */
   if (Array.isArray(textProps.children)) {
     text = textProps.children.filter(n => !n.type).join(' ')
-    if (typeof textProps.children[1] != 'string') text = textProps.children[0]
+    if (
+      typeof textProps.children[1] != 'string' &&
+      typeof textProps.children[0] == 'string'
+    )
+      text = textProps.children[0]
   }
   return { text }
 }
