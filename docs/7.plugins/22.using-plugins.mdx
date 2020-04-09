@@ -1,21 +1,21 @@
 ---
-name: 2. Using Botonic Plugins
+name: Using Botonic Plugins
 route: /plugins/using-plugins
-menu: 5. Plugins
+menu: Plugins
 ---
 
 import { NextButton } from '../components/nextButton.tsx'
 import { PrevButton } from '../components/prevButton.tsx'
 
-# **How to use Botonic Plugins?**
+# Using Botonic Plugins
 
----  
+---
 * [@botonic/plugin-dialogflow](#botonic-plugin-dialogflow)
 * [@botonic/plugin-luis](#botonic-plugin-luis)
 * [@botonic/plugin-segment](#botonic-plugin-segment)
 * [@botonic/plugin-nlu](/main-concepts/nlu)
 * [@botonic/plugin-contentful](/plugins/plugin-contentful)
---- 
+---
 
 In order to use one of the [available](#Plugins) Botonic plugins, 
 you will need to:
@@ -50,7 +50,7 @@ export const plugins = [
 ```
 
 After this is done, you will have your plugins running!  
-## ** Accessing plugins within your Actions **
+## Accessing Plugins Within Your Actions 
 If for any scenario you need to access the plugin within your bot actions, you can also access and run them by the `id` you have defined when requiring your plugins, as shown in the example:
 
 ```javascript
@@ -90,7 +90,7 @@ export const plugins = [
 
 ** /src/routes.js**
 ```
-```javascript
+​```javascript
 import Hi from './actions/hi'
 import Bye from './actions/bye'
 
@@ -162,13 +162,13 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
 
     await segment.track({ input, session, userId: userId, event, properties })
   }
-```  
+```
 
 ### [botonic-plugin-nlu](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-nlu)
 
 ### [botonic-plugin-contentful](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful)
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
-  <PrevButton title="Plugins" href="/plugins/botonic-plugins" />
-  <NextButton title="Plugin Contentful" href="/plugins/plugin-contentful" />
+  <PrevButton title="Botonic Plugins" href="/plugins/botonic-plugins" />
+  <NextButton title="Botonic Plugin Contentful" href="/plugins/plugin-contentful" />
 </div>

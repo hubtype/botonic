@@ -1,13 +1,13 @@
 ---
-name: 5. Webviews
-route: /main-concepts/webviews
-menu: 3. Main Concepts
+name: Webviews
+route: /concepts/webviews
+menu: Concepts
 ---
 import { NextButton } from '../components/nextButton.tsx'
 
 import { PrevButton } from '../components/prevButton.tsx'
 
-# **Webviews**
+# Webviews
 
 Webviews are an essential part of Botonic and chatbots. They allow you to open standard webpages during a chat conversation, offering a rich experience and a set of features that are difficult to create with simple components messages.
 
@@ -15,7 +15,7 @@ For example, you can create a webview for choosing different products, selecting
 
 With Botonic, it's easier to create a webview than developing your own a webpage and integrating it with the Facebook app, inserting the Facebook SDK, keeping the bot conversation flow, etc.
 
-## Structure of webviews directory
+## Structure of `webviews` Directory
 
 All the code related to webviews resides in its respective `src/webviews` directory. These are the essential elements it has to contain:
 
@@ -29,11 +29,11 @@ All the code related to webviews resides in its respective `src/webviews` direct
 
 Now, let's integrate the bot with the webviews.
 
-## Invoking the webview
+## Invoking the Webview
 
 You can only open a webview with a `button`. Create an action to invoke the webviews, as shown in the example. In this case, we named a route which will be resolved by `src/webviews/index.js`.
 
-We can pass params into the new component as shown below.
+We can pass parameters into the new component as shown below.
 
 **src/actions/invoking_webviews.js**
 
@@ -80,7 +80,7 @@ export default class extends React.Component {
 >
 > You can also set the [dimensions](https://developers.facebook.com/docs/messenger-platform/webview/#height) of the webview (available on Messenger phone version).
 
-## Creating a webview component
+## Creating a Webview Component
 
 First of all, we create a new component inside `src/webviews`.
 
@@ -120,7 +120,7 @@ export default class Example extends React.Component {
 > The closeWebview function allows you to send data back to the bot in order to continue with the conversation flow.
 > In this example, you can see that we have a button, and when it's triggered we send the `path` to the bot with a params object which contains a new Date.
 
-## Adding components into routes
+## Adding Components Into Routes
 
 After having our component created, move to `src/webviews/index.js` and simply add the new Component that was just created.
 
@@ -130,21 +130,24 @@ import Example from './example'
 export const webviews = [Example]
 ```
 
-_This an element to invoke the webview:_
+<details>
+<summary>Example</summary>
+
+This an element to invoke the webview:
 
 <img
   src="https://botonic-doc-static.netlify.com/images/webview_carrousel.png"
   style={{ display: 'block', margin: 'auto', maxWidth: '60%' }}
 />
 
-_This is how the webview looks on Facebook Messenger:_
+This is how the webview looks on Facebook Messenger:
 
 <img
   src="https://botonic-doc-static.netlify.com/images/webview_view.png"
   style={{ display: 'block', margin: 'auto', maxWidth: '50%' }}
-/>  
+/> 
+</details>
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
-  <PrevButton title="NLU" href="/main-concepts/nlu" />
-  <NextButton title="Human Handoff" href="/main-concepts/human-handoff" />
+  <PrevButton title="Webchat" href="/concepts/webchat" />
 </div>

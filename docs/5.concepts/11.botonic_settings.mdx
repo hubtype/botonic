@@ -1,7 +1,7 @@
 ---
-name: 8. Botonic Settings
-route: /main-concepts/botonic-settings
-menu: 3. Main Concepts
+name: Botonic Settings
+route: /concepts/botonic-settings
+menu: Concepts
 ---
 
 import { NextButton } from '../components/nextButton.tsx'
@@ -9,12 +9,12 @@ import { NextButton } from '../components/nextButton.tsx'
 import { PrevButton } from '../components/prevButton.tsx'
 
 
-# **Botonic Settings**
+# Botonic Settings
 
 ## NLU Integrations
-Integrate your bots with your preferred NLU services. For further information see the [NLU section](/main-concepts/nlu).
+Integrate your bots with your preferred NLU services. For further information see the [NLU section](/concepts/nlu).
 
-## Typing options
+## Typing Options
 
 `index.js` is the main file where all the stuff is exported for Botonic in order to get it working. 
 Additionally, you can specify inside a `config` object a global value which will be applied to all the messages processed by the bot.
@@ -33,7 +33,7 @@ export const config = { defaultDelay: 1, defaultTyping: 1 }
 - **defaultDelay**: Specifies the seconds that pass before sending the order to process the user input.
 
 Both options are set to 0 by default. Feel free to tune these parameters to obtain the expected behaviour of your bot.
-  
+
 You can also define these settings inside your messages. In this case, the values defined inside a message will have preference over the global settings.
 
 ```javascript
@@ -60,6 +60,6 @@ export default class extends React.Component {
 ```
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
-  <PrevButton title="Internationalization" href="/main-concepts/i18n" />
-  <NextButton title="Channels" href="/main-concepts/channels" />
+  <PrevButton title="Actions" href="/concepts/actions" />
+  <NextButton title="Components" href="/concepts/components" />
 </div>

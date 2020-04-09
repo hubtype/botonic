@@ -1,12 +1,12 @@
 ---
-name: 3. Components
-route: /main-concepts/components
-menu: 3. Main Concepts
+name: Components
+route: /concepts/components
+menu: Concepts
 ---
 import { NextButton } from '../components/nextButton.tsx'
 import { PrevButton } from '../components/prevButton.tsx'
 
-# **Components**
+# Components
 
 Components are based on React Components that allows you to create intuitive and powerful conversations for your bots with different type of messages. It supports different types of outputs for messaging apps, like [quickreplies](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies), [carousels](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic?locale=en_US#carousel), [message buttons](https://core.telegram.org/bots/2-0-intro#callback-buttons), etc.
 
@@ -20,7 +20,7 @@ The "Hello World!" output would be defined as below:
 <Text>Hello World!</Text>
 ```
 
-In order to create a line break, you need to use `{'\\n'}`.
+In order to create a line break, you must use `{'\\n'}`.
 
 ```javascript
 <Text>
@@ -40,12 +40,14 @@ In order to create a line break, you need to use `{'\\n'}`.
 <Text>
 ```
 
-_Example of how it looks in the Messenger platform:_
+<details>
+<summary>Example in the Messenger platform</summary>
 
 <img
   src='https://botonic-doc-static.netlify.com/images/buttons.png'
   style={{ display: 'block', margin: 'auto', maxWidth: '50%' }}
 />
+</details>
 
 ## Quickreplies
 
@@ -59,12 +61,15 @@ _Example of how it looks in the Messenger platform:_
 </Text>
 ```
 
-_Example of how it looks in the Messenger platform:_
+<details>
+<summary>Example in the Messenger platform</summary>
 
 <img
   src='https://botonic-doc-static.netlify.com/images/quickreplies.png'
   style={{ display: 'block', margin: 'auto', maxWidth: '60%' }}
 />
+</details>
+
 
 > #### NOTE:
 >
@@ -128,12 +133,15 @@ export default class extends React.Component {
 }
 ```
 
-_Example of how it looks in the Messenger app:_
+<details>
+<summary>Example in the Messenger App</summary>
 
 <img
   src='https://botonic-doc-static.netlify.com/images/carrousel.gif'
   style={{ display: 'block', margin: 'auto' }}
 />
+</details>
+
 
 ## Media Files
 
@@ -148,7 +156,8 @@ You can send all these types of media files:
 </>
 ```
 
-_Example of the media types:_
+<details>
+<summary>Example of the media types</summary>
 
 <img
   src='https://botonic-doc-static.netlify.com/images/media_files.png'
@@ -159,6 +168,7 @@ _Example of the media types:_
     maxHeight: '500px'
   }}
 />
+</details>
 
 ## Location
 
@@ -171,12 +181,14 @@ In `botonic serve` the text 'Open Location' will be displayed by default. You ca
 <Location text={'Check location'} lat='41.3894058' long='2.1568464' />
 ```
 
-_Example in Facebook Messenger:_
+<details>
+<summary>Example in Facebook Messenger</summary>
 
 <img
   src='https://botonic-doc-static.netlify.com/images/doc_location.png'
   style={{ display: 'block', margin: 'auto' }}
 />
+</details>
 
 ## Share Button
 
@@ -224,26 +236,30 @@ export default class extends React.Component {
 }
 ```
 
-_This will produce the following output in Facebook Messenger:_
+<details>
+<summary>Example</summary>
+
+This will produce the following output in Facebook Messenger:
 
 <img
   src='https://botonic-doc-static.netlify.com/images/share_1.png'
   style={{ display: 'block', margin: 'auto' }}
 />
 
-_After clicking on it, your defined elements will be displayed:_
+After clicking on it, your defined elements will be displayed:
 
 <img
   src='https://botonic-doc-static.netlify.com/images/share_2.png'
   style={{ display: 'block', margin: 'auto' }}
 />
 
-_This is how it looks for the recipient:_
+This is how it looks for the recipient:
 
 <img
   src='https://botonic-doc-static.netlify.com/images/share_3.png'
   style={{ display: 'block', margin: 'auto' }}
 />
+</details>
 
 ## Message Templates
 
@@ -328,17 +344,20 @@ export default class extends React.Component {
 }
 ```
 
-_In this case, this template will produce this nice boarding pass._
+<details>
+<summary>In this case, this template generates a nice boarding pass.</summary>
 
 <img
   src='https://botonic-doc-static.netlify.com/images/message_template.png'
   style={{ display: 'block', margin: 'auto' }}
 />
+</details>
+
 
 Facebook supports many different [templates](https://developers.facebook.com/docs/messenger-platform/send-messages/templates).
 
 
 <div style={{display:"flex", justifyContent:"space-between"}}>
-  <PrevButton title="Actions" href="/main-concepts/actions" />
-  <NextButton title="NLU" href="/main-concepts/nlu" />
+  <PrevButton title="Botonic Settings" href="/concepts/botonic-settings" />
+  <NextButton title="Human Handoff" href="/concepts/humanhandoff" />
 </div>

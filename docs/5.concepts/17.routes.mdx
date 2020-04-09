@@ -1,18 +1,18 @@
 ---
-name: 1. Routes
-route: /main-concepts/routes
-menu: 3. Main Concepts
+name: Routes
+route: /concepts/routes
+menu: Concepts
 ---
 
 
 import { PrevButton } from '../components/prevButton.tsx'
 import { NextButton } from '../components/nextButton.tsx'
 
-# **Routes**
+# Routes
 
 Basically, routes map user inputs to actions which are in fact React Components.
 
-## User inputs
+## User Inputs
 
 The user input is captured as an object with the following fields:
 
@@ -34,7 +34,7 @@ The user input is captured as an object with the following fields:
 }
 ```
 
-## Mapping user inputs into actions
+## Mapping User Inputs Into Actions
 
 Every route, which is an entry in the routes' array can be defined in `src/routes.js`:
 
@@ -127,6 +127,6 @@ export function routes({input, session}) {
 }
 ```
 <div style={{display:"flex", justifyContent:"space-between"}}>
-  <PrevButton title='Deploying' href='/getting-started/deploying' />
-  <NextButton title="Actions" href="/main-concepts/actions" />
+  <PrevButton title='NLU' href='/concepts/nlu' />
+  <NextButton title="Webchat" href="/concepts/webchat" />
 </div>
