@@ -12,3 +12,6 @@ ij_typescript_use_double_quotes = false
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.snap]
+trim_trailing_whitespace = false

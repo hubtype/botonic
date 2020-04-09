@@ -4,23 +4,21 @@ exports[`Multichannel carousel COMPACT mode dynamic carousel (just text in butto
 Array [
   <message
     delay={0}
+    indexMode="number"
     newkey={0}
     type="text"
     typing={0}
   >
-    
-    
-1. Previo a la compra
+    1. Previo a la compra
   </message>,
   <message
     delay={0}
+    indexMode="number"
     newkey={1}
     type="text"
     typing={0}
   >
-    
-    
-2. Durante la compra
+    2. Durante la compra
   </message>,
 ]
 `;
@@ -29,6 +27,7 @@ exports[`Multichannel carousel COMPACT mode dynamic carousel with payload/path b
 Array [
   <message
     delay={0}
+    indexMode="number"
     newkey={0}
     type="text"
     typing={0}
@@ -39,6 +38,7 @@ Array [
   </message>,
   <message
     delay={0}
+    indexMode="number"
     newkey={1}
     type="text"
     typing={0}
@@ -54,6 +54,7 @@ exports[`Multichannel carousel COMPACT mode dynamic carousel with url buttons 1`
 Array [
   <message
     delay={0}
+    indexMode="number"
     newkey={0}
     type="text"
     typing={0}
@@ -64,6 +65,7 @@ Array [
   </message>,
   <message
     delay={0}
+    indexMode="number"
     newkey={1}
     type="text"
     typing={0}

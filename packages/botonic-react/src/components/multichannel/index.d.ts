@@ -1,19 +1,44 @@
 import * as React from 'react'
 
-export const Multichannel: React.FunctionComponent<{
-  firstIndex?: number
+type IndexMode = 'number' | 'letter' | undefined //undefined means no index
+
+export interface MultichannelViewOptions {
   boldIndex?: boolean
-}>
+  indexSeparator?: string // after it, a space will always be added
+}
+
+export interface MultichannelContextType extends MultichannelViewOptions {
+  currentIndex: number | string // can be letter or number
+}
 
 // Text
-export interface MultichannelTextProps {
+export interface MultichannelTextProps extends MultichannelViewOptions {
   index?: string
+  indexMode?: IndexMode
 }
 
 export const MultichannelText: React.FunctionComponent<MultichannelTextProps>
 
 // Carousel
-export interface MultichannelCarouselProps {
+export interface MultichannelCarouselProps extends MultichannelViewOptions {
   enableURL?: boolean
+  indexMode?: IndexMode
+  oneMessagePerElement?: boolean
+  showTitle?: boolean
+  showSubtitle?: boolean
 }
 export const MultichannelCarousel: React.FunctionComponent<MultichannelCarouselProps>
+
+// Button
+export interface MultichannelButtonProps {
+  newLine?: boolean
+}
+export const MultichannelButton: React.FunctionComponent<MultichannelButtonProps>
+
+export interface MultichannelProps extends MultichannelViewOptions {
+  firstIndex?: number
+  carousel?: MultichannelCarouselProps
+  text?: MultichannelTextProps
+}
+
+export const Multichannel: React.FunctionComponent<MultichannelProps>

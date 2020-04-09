@@ -7,13 +7,22 @@ import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 import { MultichannelReply } from '../../../src/components/multichannel/multichannel-reply'
 
+const LEGACY_CONTEXT = {
+  indexSeparator: '.',
+}
+const LEGACY_PROPS = {
+  indexMode: 'number',
+}
+
 describe('Multichannel text', () => {
   test('just text', () => {
     const text = <Text>Some text</Text>
     const sut = (
-      <MultichannelText {...text.props}>{text.props.children}</MultichannelText>
+      <MultichannelText {...LEGACY_PROPS}>
+        {text.props.children}
+      </MultichannelText>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -34,9 +43,11 @@ describe('Multichannel text', () => {
       </Text>
     )
     const sut = (
-      <MultichannelText {...text.props}>{text.props.children}</MultichannelText>
+      <MultichannelText {...LEGACY_PROPS}>
+        {text.props.children}
+      </MultichannelText>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -60,9 +71,11 @@ describe('Multichannel text', () => {
     )
 
     const sut = (
-      <MultichannelText {...text.props}>{text.props.children}</MultichannelText>
+      <MultichannelText {...LEGACY_PROPS}>
+        {text.props.children}
+      </MultichannelText>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -80,9 +93,11 @@ describe('Multichannel text', () => {
       </Text>
     )
     const sut = (
-      <MultichannelText {...text.props}>{text.props.children}</MultichannelText>
+      <MultichannelText {...LEGACY_PROPS}>
+        {text.props.children}
+      </MultichannelText>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -103,9 +118,11 @@ describe('Multichannel text', () => {
     )
 
     const sut = (
-      <MultichannelText {...text.props}>{text.props.children}</MultichannelText>
+      <MultichannelText {...LEGACY_PROPS}>
+        {text.props.children}
+      </MultichannelText>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
