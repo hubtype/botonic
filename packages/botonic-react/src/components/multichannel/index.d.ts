@@ -9,6 +9,7 @@ export interface MultichannelViewOptions {
 
 export interface MultichannelContextType extends MultichannelViewOptions {
   currentIndex: number | string // can be letter or number
+  oneMessagePerComponent?: boolean
 }
 
 // Text
@@ -23,7 +24,6 @@ export const MultichannelText: React.FunctionComponent<MultichannelTextProps>
 export interface MultichannelCarouselProps extends MultichannelViewOptions {
   enableURL?: boolean
   indexMode?: IndexMode
-  oneMessagePerElement?: boolean
   showTitle?: boolean
   showSubtitle?: boolean
 }
@@ -36,9 +36,10 @@ export interface MultichannelButtonProps {
 export const MultichannelButton: React.FunctionComponent<MultichannelButtonProps>
 
 export interface MultichannelProps extends MultichannelViewOptions {
-  firstIndex?: number
+  firstIndex?: number | string
   carousel?: MultichannelCarouselProps
   text?: MultichannelTextProps
+  oneMessagePerComponent?: boolean
 }
 
 export const Multichannel: React.FunctionComponent<MultichannelProps>

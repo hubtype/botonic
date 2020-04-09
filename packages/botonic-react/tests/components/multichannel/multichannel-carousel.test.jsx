@@ -22,13 +22,13 @@ const movies = [
 
 export const LEGACY_CONTEXT = {
   indexSeparator: '.',
+  oneMessagePerComponent: true,
 }
 
 export const LEGACY_PROPS = {
   indexMode: 'number',
   showTitle: true,
   showSubtitle: true,
-  oneMessagePerElement: true,
 }
 
 describe('Multichannel carousel COMPACT mode', () => {
