@@ -68,7 +68,7 @@ export class ButtonDelivery {
     return new cms.Button(
       buttonEntry.sys.id,
       buttonEntry.fields.name,
-      buttonEntry.fields.text,
+      buttonEntry.fields.text ?? '',
       callback
     )
   }
@@ -136,6 +136,6 @@ type ButtonTarget = contentful.Entry<
 >
 
 export interface ButtonFields extends ContentWithNameFields {
-  text: string
+  text?: string
   target?: ButtonTarget
 }
