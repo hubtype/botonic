@@ -149,6 +149,12 @@ export class Button extends Content {
     }
     return undefined
   }
+
+  cloneWithText(newText: string): this {
+    const clone = shallowClone(this)
+    ;(clone as any).text = newText
+    return clone
+  }
 }
 
 export class StartUp extends MessageContent {
@@ -177,6 +183,12 @@ export class Carousel extends MessageContent {
   validate(): string | undefined {
     return Content.validateContents(this.elements)
   }
+
+  cloneWithElements(elements: Element[]): this {
+    const clone = shallowClone(this)
+    ;(clone as any).elements = elements
+    return clone
+  }
 }
 
 /** Part of a carousel */
@@ -195,6 +207,12 @@ export class Element extends Content {
 
   validate(): string | undefined {
     return Content.validateContents(this.buttons)
+  }
+
+  cloneWithButtons(buttons: Button[]): this {
+    const clone = shallowClone(this)
+    ;(clone as any).buttons = buttons
+    return clone
   }
 }
 

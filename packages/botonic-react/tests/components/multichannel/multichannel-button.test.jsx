@@ -19,7 +19,7 @@ describe('Multichannel buttons:', () => {
       </MultichannelButton>
     )
 
-    const rendered = whatsappRenderer(sut).toJSON()
+    const rendered = whatsappRenderer(sut, { indexSeparator: '-' }).toJSON()
     expect(rendered).toMatchSnapshot()
   })
 
@@ -30,7 +30,7 @@ describe('Multichannel buttons:', () => {
       </MultichannelButton>
     )
 
-    const rendered = whatsappRenderer(sut).toJSON()
+    const rendered = whatsappRenderer(sut, { indexSeparator: '.-' }).toJSON()
     expect(rendered).toMatchSnapshot()
   })
 
