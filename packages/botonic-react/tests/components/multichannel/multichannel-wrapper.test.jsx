@@ -12,10 +12,23 @@ import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 import { Multichannel } from '../../../src/components/multichannel/multichannel'
 
+const LEGACY_PROPS = {
+  carousel: {
+    indexMode: 'number',
+    oneMessagePerElement: true,
+    showTitle: true,
+    showSubtitle: true,
+  },
+  text: {
+    indexMode: 'number',
+  },
+  indexSeparator: '.',
+}
+
 describe('Multichannel wrapper', () => {
   test('just text', () => {
     const sut = (
-      <Multichannel>
+      <Multichannel {...LEGACY_PROPS}>
         <Text>Some text</Text>
       </Multichannel>
     )
@@ -26,7 +39,7 @@ describe('Multichannel wrapper', () => {
   })
   test('text with buttons', () => {
     const sut = (
-      <Multichannel>
+      <Multichannel {...LEGACY_PROPS}>
         <Text>
           Some with buttons
           {[
@@ -51,7 +64,7 @@ describe('Multichannel wrapper', () => {
 
   test('text with replies', () => {
     const sut = (
-      <Multichannel>
+      <Multichannel {...LEGACY_PROPS}>
         <Text>
           Some text with replies
           {[
@@ -97,9 +110,9 @@ describe('Multichannel wrapper', () => {
       buttons: [{ payload: 'Payload3', text: 'Posterior a la compra' }],
     },
   ]
-  test('text and carousel', () => {
+  test('text and carousel legacy', () => {
     const sut = (
-      <Multichannel>
+      <Multichannel {...LEGACY_PROPS}>
         <Text>This is a multichannel Carousel</Text>
 
         <Carousel>
@@ -124,10 +137,40 @@ describe('Multichannel wrapper', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('text and carousel only button text', () => {
+    const sut = (
+      <Multichannel indexSeparator={'.'} carousel={{ indexMode: 'letter' }}>
+        <Text>This is a multichannel Carousel</Text>
+
+        <Carousel>
+          <Element key={0}>
+            <Subtitle>Subtitle will not appear</Subtitle>
+            {[
+              <Button key={1} payload='Payload1'>
+                {'Previo'}
+              </Button>,
+            ]}
+          </Element>
+          <Element key={1}>
+            {[
+              <Button key={2} payload='Payload2'>
+                {'Durante'}
+              </Button>,
+            ]}
+          </Element>
+        </Carousel>
+      </Multichannel>
+    )
+
+    const renderer = whatsappRenderer(sut)
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
   test('many multichannels', () => {
     const sut = (
       <>
-        <Multichannel>
+        <Multichannel {...LEGACY_PROPS}>
           <Text>
             Some text with replies
             {[
@@ -151,7 +194,7 @@ describe('Multichannel wrapper', () => {
             ]}
           </Text>
         </Multichannel>
-        <Multichannel>
+        <Multichannel {...LEGACY_PROPS}>
           <Text>
             Some text with replies
             {[

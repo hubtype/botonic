@@ -44,7 +44,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
       common.followUp = followUp
       return new cms.Text(
         common,
-        fields.text,
+        fields.text || '',
         buttons,
         fields.buttonsStyle == 'QuickReplies'
           ? cms.ButtonStyle.QUICK_REPLY
@@ -56,7 +56,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
 
 export interface TextFields extends CommonEntryFields {
   // Full text
-  text: string
+  text?: string
   // typed as any because we might only get the entry.sys but not the fields
   buttons?: contentful.Entry<any>[]
   buttonsStyle?: string

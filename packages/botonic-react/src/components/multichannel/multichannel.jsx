@@ -29,14 +29,14 @@ export const Multichannel = props => {
       }
       if (child && child.type && child.type.name === 'Text') {
         return (
-          <MultichannelText {...child.props}>
+          <MultichannelText {...child.props} {...props.text}>
             {child.props.children}
           </MultichannelText>
         )
       }
       if (child && child.type && child.type.name === 'Carousel') {
         return (
-          <MultichannelCarousel {...child.props}>
+          <MultichannelCarousel {...child.props} {...props.carousel}>
             {child.props.children}
           </MultichannelCarousel>
         )
@@ -49,6 +49,7 @@ export const Multichannel = props => {
         value={{
           currentIndex: props.firstIndex == undefined ? 1 : props.firstIndex,
           boldIndex: props.boldIndex,
+          indexSeparator: props.indexSeparator,
         }}
       >
         {newChildren}

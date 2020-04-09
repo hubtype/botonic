@@ -52,9 +52,9 @@ export const MultichannelText = props => {
     if (props.indexMode == undefined) {
       return undefined
     }
-    if (multichannelContext.currentIndex != null) {
-      return multichannelContext.currentIndex
-    }
+    // if (multichannelContext.currentIndex != null) {
+    //   return multichannelContext.currentIndex
+    // }
     return props.indexMode == 'letter' ? 'a' : 1
   }
 
@@ -67,7 +67,6 @@ export const MultichannelText = props => {
     return (
       <Text {...props}>
         {elements.map((element, i) => {
-          console.log(i, element)
           if (isMultichannelButton(element) || isMultichannelReply(element)) {
             return (
               <MultichannelButton key={i} newline={i > 0} {...element.props}>
