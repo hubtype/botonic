@@ -28,7 +28,6 @@ export const LEGACY_PROPS = {
   indexMode: 'number',
   showTitle: true,
   showSubtitle: true,
-  oneMessagePerElement: true,
 }
 
 describe('Multichannel carousel COMPACT mode', () => {

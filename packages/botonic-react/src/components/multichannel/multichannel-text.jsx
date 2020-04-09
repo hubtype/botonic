@@ -67,7 +67,6 @@ export const MultichannelText = props => {
     return (
       <Text {...props}>
         {elements.map((element, i) => {
-          console.log(i, element)
           if (isMultichannelButton(element) || isMultichannelReply(element)) {
             return (
               <MultichannelButton key={i} newline={i > 0} {...element.props}>

@@ -3,6 +3,7 @@
 exports[`Multichannel wrapper just text 1`] = `
 <message
   delay={0}
+  indexMode="number"
   type="text"
   typing={0}
 >
@@ -14,6 +15,7 @@ exports[`Multichannel wrapper many multichannels 1`] = `
 Array [
   <message
     delay={0}
+    indexMode="number"
     type="text"
     typing={0}
   >
@@ -25,6 +27,7 @@ Array [
   </message>,
   <message
     delay={0}
+    indexMode="number"
     type="text"
     typing={0}
   >
@@ -36,6 +39,7 @@ Array [
   </message>,
   <message
     delay={0}
+    indexMode="number"
     type="text"
     typing={0}
   >
@@ -52,6 +56,7 @@ exports[`Multichannel wrapper text and carousel 1`] = `
 Array [
   <message
     delay={0}
+    indexMode="number"
     type="text"
     typing={0}
   >
@@ -92,9 +97,81 @@ Array [
 ]
 `;
 
+exports[`Multichannel wrapper text and carousel legacy 1`] = `
+Array [
+  <message
+    delay={0}
+    indexMode="number"
+    type="text"
+    typing={0}
+  >
+    This is a multichannel Carousel
+  </message>,
+  <message
+    delay={0}
+    indexMode="number"
+    newkey={0}
+    type="text"
+    typing={0}
+  >
+    *Title1* _Subtitle1_
+    
+1. Previo a la compra
+  </message>,
+  <message
+    delay={0}
+    indexMode="number"
+    newkey={1}
+    type="text"
+    typing={0}
+  >
+    *Title2* _Subtitle2_
+    
+2. Durante la compra
+    
+3. Durante la compra2
+  </message>,
+  <message
+    delay={0}
+    indexMode="number"
+    newkey={2}
+    type="text"
+    typing={0}
+  >
+    *Title3* _Subtitle3_
+    
+4. Posterior a la compra
+  </message>,
+]
+`;
+
+exports[`Multichannel wrapper text and carousel only button text 1`] = `
+Array [
+  <message
+    delay={0}
+    type="text"
+    typing={0}
+  >
+    This is a multichannel Carousel
+  </message>,
+  <message
+    delay={0}
+    indexMode="letter"
+    newkey={0}
+    type="text"
+    typing={0}
+  >
+    a. Previo
+    
+b. Durante
+  </message>,
+]
+`;
+
 exports[`Multichannel wrapper text with buttons 1`] = `
 <message
   delay={0}
+  indexMode="number"
   type="text"
   typing={0}
 >
@@ -111,6 +188,7 @@ exports[`Multichannel wrapper text with buttons 1`] = `
 exports[`Multichannel wrapper text with replies 1`] = `
 <message
   delay={0}
+  indexMode="number"
   type="text"
   typing={0}
 >
