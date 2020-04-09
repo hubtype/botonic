@@ -130,7 +130,7 @@ interface VacationRange {
   start_date: number // timestamp
   end_date: number // timestamp
 }
-export declare function getAgentVacationsRanges(
+export declare function getAgentVacationRanges(
   session: Session,
   agentParams: { agentId?: string; agentEmail?: string }
 ): Promise<{ vacation_ranges: VacationRange[] }>

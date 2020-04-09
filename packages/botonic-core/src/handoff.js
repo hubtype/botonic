@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const HUBTYPE_API_URL = 'https://api.hubtype.com'
+
 export async function getOpenQueues(session) {
-  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
   const resp = await axios({
     headers: {
@@ -129,7 +131,7 @@ async function _humanHandOff(
 }
 
 export async function storeCaseRating(session, rating) {
-  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const chatId = session.user.id
   const resp = await axios({
     headers: {
@@ -143,7 +145,7 @@ export async function storeCaseRating(session, rating) {
 }
 
 export async function getAvailableAgentsByQueue(session, queueId) {
-  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
@@ -156,7 +158,7 @@ export async function getAvailableAgentsByQueue(session, queueId) {
 }
 
 export async function getAvailableAgents(session) {
-  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const botId = session.bot.id
   const resp = await axios({
     headers: {
@@ -168,18 +170,15 @@ export async function getAvailableAgents(session) {
   return resp.data
 }
 
-export async function getAgentVacationsRanges(
-  session,
-  { agentId, agentEmail }
-) {
-  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+export async function getAgentVacationRanges(session, { agentId, agentEmail }) {
+  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const botId = session.bot.id
   const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
     method: 'get',
-    url: `${baseUrl}/v1/bots/${botId}/get_agent_vacations_ranges/`,
+    url: `${baseUrl}/v1/bots/${botId}/get_agent_vacation_ranges/`,
     params: { agent_id: agentId, agent_email: agentEmail },
   })
   return resp.data
