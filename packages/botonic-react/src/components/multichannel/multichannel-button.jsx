@@ -21,6 +21,17 @@ export const MultichannelButton = props => {
   const getUrl = () => props.url
   const getWebview = () => props.webview
 
+  const increaseCurrentIndex = () => {
+    if (typeof multichannelContext.currentIndex === 'number') {
+      multichannelContext.currentIndex += 1
+    } else if (typeof multichannelContext.currentIndex === 'string') {
+      const lastChar = multichannelContext.currentIndex.charCodeAt(
+        multichannelContext.currentIndex.length - 1
+      )
+      multichannelContext.currentIndex = String.fromCharCode(lastChar + 1)
+    }
+  }
+
   const formatIndex = index => {
     const boldIndex =
       multichannelContext.boldIndex == null
@@ -32,8 +43,9 @@ export const MultichannelButton = props => {
   const getText = () => {
     let text = props.children
     const newLine = props.newline ? '\n' : ''
+    const separator = multichannelContext.indexSeparator || ' '
     const index = multichannelContext.currentIndex
-      ? `${formatIndex(multichannelContext.currentIndex + '.')} `
+      ? `${formatIndex(multichannelContext.currentIndex + separator)} `
       : ''
     if (hasPostback()) {
       text = newLine + `${index}${text}`
@@ -48,7 +60,7 @@ export const MultichannelButton = props => {
       return `${getText()}: ${getUrl()}`
     } else if (hasPath() || hasPayload()) {
       const text = getText()
-      multichannelContext.currentIndex += 1
+      increaseCurrentIndex()
       return `${text}`
     } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
     else return <Button {...props}>{props.children}</Button>
