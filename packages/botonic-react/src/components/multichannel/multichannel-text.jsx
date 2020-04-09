@@ -20,12 +20,16 @@ export const MultichannelText = props => {
   let elements = []
 
   const getText = () => {
+    let text = undefined
     if (typeof props.children == 'string') {
-      return [props.children]
+      text = props.children
     } else if (Array.isArray(props.children)) {
-      return [props.children[0]]
+      text = props.children[0]
     }
-    return null
+    if (text == undefined) {
+      return []
+    }
+    return [text]
   }
 
   const getButtonsAndReplies = () =>
@@ -55,27 +59,25 @@ export const MultichannelText = props => {
   }
 
   if (isWhatsapp(requestContext)) {
-    const text = getText(props.children) || []
+    const text = getText(props.children)
     const { postbackButtons, urlButtons } = getWhatsappButtons()
 
     elements = [].concat([...text], [...postbackButtons], [...urlButtons])
-
     multichannelContext.currentIndex = getDefaultIndex()
     return (
       <Text {...props}>
-        {elements
-          .filter(element => element != null)
-          .map((element, i) => {
-            if (isMultichannelButton(element) || isMultichannelReply(element)) {
-              return (
-                <MultichannelButton key={i} newline={i > 0} {...element.props}>
-                  {element.props.children}
-                </MultichannelButton>
-              )
-            } else {
-              return element
-            }
-          })}
+        {elements.map((element, i) => {
+          console.log(i, element)
+          if (isMultichannelButton(element) || isMultichannelReply(element)) {
+            return (
+              <MultichannelButton key={i} newline={i > 0} {...element.props}>
+                {element.props.children}
+              </MultichannelButton>
+            )
+          } else {
+            return element
+          }
+        })}
       </Text>
     )
   } else {
