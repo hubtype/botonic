@@ -125,6 +125,16 @@ export declare function getAvailableAgents(
   session: Session
 ): Promise<{ agents: HubtypeAgentsInfo[] }>
 
+interface VacationRange {
+  id: number
+  start_date: number // timestamp
+  end_date: number // timestamp
+}
+export declare function getAgentVacationsRanges(
+  session: Session,
+  agentParams: { agentId?: string; agentEmail?: string }
+): Promise<{ vacation_ranges: VacationRange[] }>
+
 export declare function cancelHandoff(
   session: Session,
   typification?: string

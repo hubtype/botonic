@@ -168,6 +168,23 @@ export async function getAvailableAgents(session) {
   return resp.data
 }
 
+export async function getAgentVacationsRanges(
+  session,
+  { agentId, agentEmail }
+) {
+  const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+  const botId = session.bot.id
+  const resp = await axios({
+    headers: {
+      Authorization: `Bearer ${session._access_token}`,
+    },
+    method: 'get',
+    url: `${baseUrl}/v1/bots/${botId}/get_agent_vacations_ranges/`,
+    params: { agent_id: agentId, agent_email: agentEmail },
+  })
+  return resp.data
+}
+
 export function cancelHandoff(session, typification = null) {
   let action = 'discard_case'
   if (typification) action = `${action}:${JSON.stringify({ typification })}`

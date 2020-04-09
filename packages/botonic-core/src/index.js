@@ -6,6 +6,7 @@ export {
   HandOffBuilder,
   storeCaseRating,
   getAvailableAgents,
+  getAgentVacationsRanges,
   cancelHandoff,
   deleteUser,
 } from './handoff'
