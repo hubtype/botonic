@@ -283,6 +283,7 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar',
     }).start()
+    // Why using rimraf instead of fs.rmdirSync?: https://stackoverflow.com/a/57834155/145289
     if (fs.existsSync('tmp')) rimraf.sync('tmp')
     fs.mkdirSync(join('tmp'))
     copySync('dist', join('tmp', 'dist'))
