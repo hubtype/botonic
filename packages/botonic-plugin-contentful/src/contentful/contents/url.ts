@@ -17,11 +17,11 @@ export class UrlDelivery extends DeliveryWithFollowUp {
   async fromEntry(entry: contentful.Entry<UrlFields>, context: Context) {
     return new cms.Url(
       await this.getFollowUp().commonFields(entry, context),
-      entry.fields.url
+      entry.fields.url || ''
     )
   }
 }
 
 export interface UrlFields extends CommonEntryFields {
-  url: string
+  url?: string
 }

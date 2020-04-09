@@ -68,7 +68,7 @@ export class ButtonDelivery {
     return new cms.Button(
       buttonEntry.sys.id,
       buttonEntry.fields.name,
-      buttonEntry.fields.text,
+      buttonEntry.fields.text ?? '',
       callback
     )
   }
@@ -96,7 +96,7 @@ export class ButtonDelivery {
       entry
     ) as cms.TopContentType
     if (modelType === ContentType.URL) {
-      return cms.Callback.ofUrl((entry.fields as UrlFields).url)
+      return cms.Callback.ofUrl((entry.fields as UrlFields).url || '')
     }
     return new cms.ContentCallback(modelType, entry.sys.id)
   }
@@ -106,7 +106,7 @@ export class ButtonDelivery {
     switch (model) {
       case ContentType.URL: {
         const urlFields = target as contentful.Entry<UrlFields>
-        return cms.Callback.ofUrl(urlFields.fields.url)
+        return cms.Callback.ofUrl(urlFields.fields.url || '')
       }
       case ButtonDelivery.PAYLOAD_CONTENT_TYPE: {
         const payloadFields = target as contentful.Entry<PayloadFields>
@@ -136,6 +136,6 @@ type ButtonTarget = contentful.Entry<
 >
 
 export interface ButtonFields extends ContentWithNameFields {
-  text: string
+  text?: string
   target?: ButtonTarget
 }

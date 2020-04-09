@@ -56,8 +56,8 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
         new cms.Element(
           entry.sys.id,
           buttons,
-          fields.title,
-          fields.subtitle,
+          fields.title ?? '',
+          fields.subtitle ?? '',
           fields.pic && ContentfulEntryUtils.urlFromAsset(fields.pic)
         )
     )
@@ -65,8 +65,8 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
 }
 
 interface ElementFields {
-  title: string
-  subtitle: string
+  title?: string
+  subtitle?: string
   pic?: contentful.Asset
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   buttons?: contentful.Entry<any>[]
