@@ -41,7 +41,7 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
     return new cms.StartUp(
       await this.getFollowUp().commonFields(entry, context),
       img,
-      fields.text,
+      fields.text ?? '',
       buttons
     )
   }
@@ -49,7 +49,7 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
 
 export interface StartUpFields extends CommonEntryFields {
   pic?: contentful.Asset
-  text: string
+  text?: string
   // typed as any because we might only get the entry.sys but not the fields
   buttons?: contentful.Entry<any>[]
 }
