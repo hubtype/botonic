@@ -64,21 +64,21 @@ export const MultichannelText = props => {
 
     elements = [].concat([...text], [...postbackButtons], [...urlButtons])
     multichannelContext.currentIndex = getDefaultIndex()
-    return (
-      <Text {...props}>
-        {elements.map((element, i) => {
-          if (isMultichannelButton(element) || isMultichannelReply(element)) {
-            return (
-              <MultichannelButton key={i} newline={i > 0} {...element.props}>
-                {element.props.children}
-              </MultichannelButton>
-            )
-          } else {
-            return element
-          }
-        })}
-      </Text>
-    )
+    elements = elements.map((element, i) => {
+      if (isMultichannelButton(element) || isMultichannelReply(element)) {
+        return (
+          <MultichannelButton key={i} newline={true} {...element.props}>
+            {element.props.children}
+          </MultichannelButton>
+        )
+      } else {
+        return element
+      }
+    })
+    if (!multichannelContext.oneMessagePerElement) {
+      return elements
+    }
+    return <Text {...props}>{elements}</Text>
   } else {
     return <Text {...props}>{props.children}</Text>
   }

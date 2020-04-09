@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
+import { Text } from '../text'
 import { isWhatsapp } from './multichannel-utils'
 import { deepMap } from 'react-children-utilities'
 import { MultichannelContext } from './multichannel-context'
@@ -11,14 +12,14 @@ import { MultichannelReply } from './multichannel-reply'
 export const Multichannel = props => {
   const requestContext = useContext(RequestContext)
 
-  const compactElements = elementsAsTexts => {
-    if (elementsAsTexts.length == 0) {
-      return elementsAsTexts
-    }
-    const first = elementsAsTexts[0]
-    const children = [].concat(...elementsAsTexts.map(e => e.props.children))
-    return <MultichannelText {...first.props}>{children}</MultichannelText>
-  }
+  // const compactElements = elementsAsTexts => {
+  //   // if (elementsAsTexts.length == 0) {
+  //   //   return elementsAsTexts
+  //   // }
+  //   // const first = elementsAsTexts[0]
+  //   // const children = [].concat(...elementsAsTexts.map(e => e.props.children))
+  //   return <Text {...props}>{elementsAsTexts}</Text>
+  // }
 
   if (isWhatsapp(requestContext)) {
     let newChildren = deepMap(props.children, child => {
@@ -44,6 +45,7 @@ export const Multichannel = props => {
         )
       }
       if (child && child.type && child.type.name === 'Carousel') {
+        console.log('wrapper indexMode', props.carousel)
         return (
           <MultichannelCarousel {...child.props} {...props.carousel}>
             {child.props.children}
@@ -53,7 +55,7 @@ export const Multichannel = props => {
       return child
     })
     if (!props.oneMessagePerElement) {
-      newChildren = compactElements(newChildren)
+      newChildren = <Text {...props}>{newChildren}</Text>
     }
     return (
       <MultichannelContext.Provider
@@ -61,6 +63,7 @@ export const Multichannel = props => {
           currentIndex: props.firstIndex,
           boldIndex: props.boldIndex,
           indexSeparator: props.indexSeparator,
+          oneMessagePerElement: props.oneMessagePerElement,
         }}
       >
         {newChildren}

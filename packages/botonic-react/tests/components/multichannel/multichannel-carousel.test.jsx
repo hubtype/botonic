@@ -22,6 +22,7 @@ const movies = [
 
 export const LEGACY_CONTEXT = {
   indexSeparator: '.',
+  oneMessagePerElement: true,
 }
 
 export const LEGACY_PROPS = {

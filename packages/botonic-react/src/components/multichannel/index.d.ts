@@ -9,6 +9,7 @@ export interface MultichannelViewOptions {
 
 export interface MultichannelContextType extends MultichannelViewOptions {
   currentIndex: number | string // can be letter or number
+  oneMessagePerElement?: boolean
 }
 
 // Text

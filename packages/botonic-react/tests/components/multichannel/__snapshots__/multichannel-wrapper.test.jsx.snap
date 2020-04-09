@@ -146,26 +146,23 @@ Array [
 `;
 
 exports[`Multichannel wrapper text and carousel only button text 1`] = `
-Array [
-  <message
-    delay={0}
-    type="text"
-    typing={0}
-  >
-    This is a multichannel Carousel
-  </message>,
-  <message
-    delay={0}
-    indexMode="letter"
-    newkey={0}
-    type="text"
-    typing={0}
-  >
-    a. Previo
-    
+<message
+  carousel={
+    Object {
+      "indexMode": "letter",
+    }
+  }
+  delay={0}
+  indexSeparator="."
+  type="text"
+  typing={0}
+>
+  This is a multichannel Carousel
+  
+a. Previo
+  
 b. Durante
-  </message>,
-]
+</message>
 `;
 
 exports[`Multichannel wrapper text with buttons 1`] = `
