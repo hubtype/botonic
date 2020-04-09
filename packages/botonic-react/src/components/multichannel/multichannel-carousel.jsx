@@ -16,15 +16,6 @@ export const MultichannelCarousel = props => {
   const getButtons = node =>
     [].concat(getFilteredElements(node, isMultichannelButton))
 
-  const compactElements = elementsAsTexts => {
-    if (elementsAsTexts.length == 0) {
-      return elementsAsTexts
-    }
-    const first = elementsAsTexts[0]
-    const children = [].concat(...elementsAsTexts.map(e => e.props.children))
-    return <MultichannelText {...first.props}>{children}</MultichannelText>
-  }
-
   if (isWhatsapp(requestContext)) {
     const elementsAsTexts = props.children
       .map(e => e.props.children)
@@ -91,10 +82,7 @@ export const MultichannelCarousel = props => {
         // )
         // }
       })
-    if (props.oneMessagePerElement) {
-      return elementsAsTexts
-    }
-    return compactElements(elementsAsTexts)
+    return elementsAsTexts
   } else {
     return <Carousel {...props}>{props.children}</Carousel>
   }

@@ -55,7 +55,7 @@ export const MultichannelText = props => {
     if (multichannelContext.currentIndex != null) {
       return multichannelContext.currentIndex
     }
-    return props.indexMode == 'letter' ? 'a' : 1
+    return props.indexMode === 'letter' ? 'a' : 1
   }
 
   if (isWhatsapp(requestContext)) {
@@ -64,22 +64,22 @@ export const MultichannelText = props => {
 
     elements = [].concat([...text], [...postbackButtons], [...urlButtons])
     multichannelContext.currentIndex = getDefaultIndex()
-    return (
-      <Text {...props}>
-        {elements.map((element, i) => {
-          console.log(i, element)
-          if (isMultichannelButton(element) || isMultichannelReply(element)) {
-            return (
-              <MultichannelButton key={i} newline={i > 0} {...element.props}>
-                {element.props.children}
-              </MultichannelButton>
-            )
-          } else {
-            return element
-          }
-        })}
-      </Text>
-    )
+    elements = elements.map((element, i) => {
+      const newLine = multichannelContext.oneMessagePerComponent ? i > 0 : true
+      if (isMultichannelButton(element) || isMultichannelReply(element)) {
+        return (
+          <MultichannelButton key={i} newline={newLine} {...element.props}>
+            {element.props.children}
+          </MultichannelButton>
+        )
+      } else {
+        return element
+      }
+    })
+    if (!multichannelContext.oneMessagePerComponent) {
+      return elements
+    }
+    return <Text {...props}>{elements}</Text>
   } else {
     return <Text {...props}>{props.children}</Text>
   }

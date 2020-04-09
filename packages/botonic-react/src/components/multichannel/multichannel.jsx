@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
+import { Text } from '../text'
 import { isWhatsapp } from './multichannel-utils'
 import { deepMap } from 'react-children-utilities'
 import { MultichannelContext } from './multichannel-context'
@@ -12,7 +13,7 @@ export const Multichannel = props => {
   const requestContext = useContext(RequestContext)
 
   if (isWhatsapp(requestContext)) {
-    const newChildren = deepMap(props.children, child => {
+    let newChildren = deepMap(props.children, child => {
       if (child && child.type && child.type.name === 'Button') {
         return (
           <MultichannelButton {...child.props}>
@@ -29,26 +30,30 @@ export const Multichannel = props => {
       }
       if (child && child.type && child.type.name === 'Text') {
         return (
-          <MultichannelText {...child.props}>
+          <MultichannelText {...child.props} {...props.text}>
             {child.props.children}
           </MultichannelText>
         )
       }
       if (child && child.type && child.type.name === 'Carousel') {
         return (
-          <MultichannelCarousel {...child.props}>
+          <MultichannelCarousel {...child.props} {...props.carousel}>
             {child.props.children}
           </MultichannelCarousel>
         )
       }
       return child
     })
-
+    if (!props.oneMessagePerComponent) {
+      newChildren = <Text {...props}>{newChildren}</Text>
+    }
     return (
       <MultichannelContext.Provider
         value={{
-          currentIndex: props.firstIndex == undefined ? 1 : props.firstIndex,
+          currentIndex: props.firstIndex,
           boldIndex: props.boldIndex,
+          indexSeparator: props.indexSeparator,
+          oneMessagePerComponent: props.oneMessagePerComponent,
         }}
       >
         {newChildren}
