@@ -242,3 +242,22 @@ describe('Process input (v<0.9)', () => {
     )
   })
 })
+
+test.each([
+  ['', undefined, undefined],
+  ['bad_input', undefined, undefined],
+  ['__PATH_PAYLOAD__', '', undefined],
+  ['xx__PATH_PAYLOAD__path1', 'path1', undefined],
+  ['xx__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
+])(
+  'getOnFinishParams(%s)=>%s',
+  (inputPayload, expectedPath, expectedParams) => {
+    const router = new Router([])
+    const input = { payload: inputPayload }
+    expect(router.getOnFinishParams(input)).toEqual(expectedParams)
+    expect(input.path).toEqual(expectedPath)
+    if (input.path) {
+      expect(input.payload).toBeUndefined()
+    }
+  }
+)

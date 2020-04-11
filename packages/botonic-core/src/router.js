@@ -123,7 +123,11 @@ export class Router {
 
   getOnFinishParams(input) {
     try {
-      const pathParams = input.payload.split('__PATH_PAYLOAD__')[1].split('?')
+      const params = input.payload.split('__PATH_PAYLOAD__')
+      if (params.length < 2) {
+        return undefined
+      }
+      const pathParams = params[1].split('?')
       if (pathParams.length > 0) {
         input.path = pathParams[0]
         delete input.payload
@@ -131,7 +135,9 @@ export class Router {
       if (pathParams.length > 1) {
         return pathParams[1]
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('ERROR getOnFinishParams', e)
+    }
     return undefined
   }
 
