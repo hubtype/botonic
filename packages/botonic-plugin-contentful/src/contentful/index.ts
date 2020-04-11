@@ -168,7 +168,7 @@ export class Contentful implements cms.CMS {
         case ContentType.CAROUSEL:
           return await this._carousel.fromEntry(entry, context)
         case ContentType.QUEUE:
-          return await QueueDelivery.fromEntry(entry)
+          return QueueDelivery.fromEntry(entry)
         case ContentType.CHITCHAT:
         case ContentType.TEXT:
           return await this._text.fromEntry(entry, context)
@@ -179,9 +179,9 @@ export class Contentful implements cms.CMS {
         case ContentType.STARTUP:
           return await this._startUp.fromEntry(entry, context)
         case ContentType.SCHEDULE:
-          return await ScheduleDelivery.fromEntry(entry)
+          return ScheduleDelivery.fromEntry(entry)
         case ContentType.DATE_RANGE:
-          return await DateRangeDelivery.fromEntry(entry)
+          return DateRangeDelivery.fromEntry(entry)
         default:
           throw new Error(`${model} is not a Content type`)
       }

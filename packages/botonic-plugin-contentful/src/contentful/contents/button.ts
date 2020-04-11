@@ -52,18 +52,18 @@ export class ButtonDelivery {
     }
     if (entryType === ButtonDelivery.BUTTON_CONTENT_TYPE) {
       const buttonEntry = entry as contentful.Entry<ButtonFields>
-      return await this.fromEntry(buttonEntry, context)
+      return this.fromEntry(buttonEntry, context)
     }
     throw new Error(`Unexpected type ${entryType}`)
   }
 
-  public async fromEntry(
+  public fromEntry(
     buttonEntry: contentful.Entry<ButtonFields>,
     context: cms.Context
-  ) {
+  ): cms.Button {
     // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
     const callback = buttonEntry.fields.target
-      ? await this.getTargetCallback(buttonEntry.fields.target)
+      ? this.getTargetCallback(buttonEntry.fields.target)
       : context.callbacks!.getCallback(buttonEntry.sys.id)
     return new cms.Button(
       buttonEntry.sys.id,

@@ -34,7 +34,7 @@ export class SearchByKeywords {
       this.keywordsOptions[locale] || new KeywordsOptions()
     )
     contentsWithKeywords.forEach(content =>
-      kws.addCandidate(content, content.common.keywords!)
+      kws.addCandidate(content, content.common.keywords)
     )
     const results = kws.findCandidatesWithKeywordsAt(inputText)
     return results.map(res => {

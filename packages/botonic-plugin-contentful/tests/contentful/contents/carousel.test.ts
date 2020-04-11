@@ -11,7 +11,7 @@ function assertElementDudasPrevias(element: cms.Element) {
   expect(element.subtitle).toBe(
     'Le ayudaré con sus compras en la tienda online.'
   )
-  expectImgUrlIs(element.imgUrl!, 'blue.jpg')
+  expectImgUrlIs(element.imgUrl, 'blue.jpg')
   expect(element.buttons).toHaveLength(1)
   expect(element.buttons[0].callback.payload).toBe(
     'text$79aRfznNCyN2VGdGDQZBf3'
