@@ -3,14 +3,22 @@ import escapeStringRegexp from 'escape-string-regexp'
 import { Context } from './context'
 import { Content, TopContent } from './contents'
 import { isOfType } from '../util/enums'
+import { Equatable, ValueObject } from '../util/objects'
+import { CmsException } from './exceptions'
 
-export class Callback {
+export class Callback implements ValueObject {
   // TODO add path
   /**
    * @param payload may contain the reference of a {@link Content}. See {@link ContentCallback}
    * @param url for hardcoded URLs (otherwise, use a {@link Url})
    */
-  protected constructor(readonly payload?: string, readonly url?: string) {}
+  protected constructor(readonly payload?: string, readonly url?: string) {
+    if (!payload && !url) {
+      throw new CmsException(
+        `Callback cannot have both 'URL' and 'payload' fields empty`
+      )
+    }
+  }
 
   static ofPayload(payload: string): Callback {
     if (ContentCallback.payloadReferencesContent(payload)) {
@@ -27,9 +35,20 @@ export class Callback {
   asContentId(): TopContentId | undefined {
     return undefined
   }
+
+  equals(other: Callback): boolean {
+    return this.payload === other.payload && this.url === other.url
+  }
+
+  toString(): string {
+    if (this.payload) {
+      return `payload:${this.payload}`
+    }
+    return `URL:${this.url}`
+  }
 }
 
-export class ContentCallback extends Callback {
+export class ContentCallback extends Callback implements Equatable {
   private static PAYLOAD_SEPARATOR = '$'
 
   constructor(readonly model: TopContentType, readonly id: string) {
@@ -77,7 +96,7 @@ export class ContentCallback extends Callback {
   }
 }
 
-export class ContentId {
+export class ContentId implements ValueObject {
   constructor(readonly model: ContentType, readonly id: string) {}
 
   deliver(cms: CMS, context?: Context): Promise<Content> {
@@ -90,8 +109,13 @@ export class ContentId {
         return new TopContentId(this.model, this.id).deliver(cms, context)
     }
   }
+
   toString(): string {
     return `${this.model} with id '${this.id}'`
+  }
+
+  equals(other: ContentId): boolean {
+    return this.model === other.model && this.id === other.id
   }
 }
 

@@ -51,3 +51,13 @@ export const deepClone = <T>(target: T, alreadyCloned: object[] = []): T => {
   }
   return target
 }
+
+export interface Equatable {
+  equals(other: Equatable): boolean
+}
+
+export interface Stringable {
+  toString(): string
+}
+
+export interface ValueObject extends Equatable, Stringable {}
