@@ -69,7 +69,7 @@ export abstract class TopContent extends Content {
     return new TopContentId(this.contentType, this.id)
   }
 
-  cloneWithFollowUp(newFollowUp: FollowUp): this {
+  cloneWithFollowUp(newFollowUp: FollowUp | undefined): this {
     const clone = shallowClone(this)
     ;(clone as any).common = shallowClone(clone.common)
     ;(clone as any).common.followUp = newFollowUp
@@ -102,7 +102,8 @@ export class CommonFields {
    */
   readonly partitions: string[]
   readonly dateRange?: DateRangeContent
-  followUp?: FollowUp
+  readonly followUp?: FollowUp // TODO move to MessageContent
+
   constructor(
     readonly id: string,
     readonly name: string,
@@ -169,6 +170,12 @@ export class StartUp extends MessageContent {
 
   validate(): string | undefined {
     return Content.validateContents(this.buttons)
+  }
+
+  cloneWithText(newText: string): this {
+    const clone = shallowClone(this)
+    ;(clone as any).text = newText
+    return clone
   }
 }
 
@@ -286,4 +293,4 @@ export class ScheduleContent extends TopContent {
 /**
  * A {@link Content} which is automatically displayed after another one
  */
-export type FollowUp = Text | Carousel | Image | StartUp
+export type FollowUp = MessageContent
