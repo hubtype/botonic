@@ -8,7 +8,7 @@ import {
   ContentfulEntryUtils,
 } from '../delivery-api'
 
-// TODO remove DeliveryWithFollowUp
+// TODO does not yet load the followU p
 export class CarouselDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi, readonly button: ButtonDelivery) {
     super(cms.ContentType.CAROUSEL, delivery)
