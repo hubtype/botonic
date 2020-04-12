@@ -3,6 +3,7 @@ import { Callback, TopContentId } from './callback'
 import { SearchableBy } from './fields'
 import { ContentType, MessageContentType, TopContentType } from './cms'
 import { shallowClone } from '../util/objects'
+import { CmsException } from './exceptions'
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -205,10 +206,15 @@ export class Element extends Content {
     readonly id: string,
     readonly buttons: Button[],
     readonly title: string,
-    readonly subtitle: string,
-    readonly imgUrl?: string
+    readonly subtitle = '',
+    readonly imgUrl = ''
   ) {
     super(ContentType.ELEMENT)
+    if (!title && !subtitle && !imgUrl) {
+      throw new CmsException(
+        `Element '${id}' should have title, subtitle or image URL`
+      )
+    }
     this.name = title || ''
   }
 
