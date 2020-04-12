@@ -6,6 +6,7 @@ import {
   Content,
   ContentType,
   Context,
+  FollowUp,
   SearchableBy,
   TopContent,
   TopContentType,
@@ -172,7 +173,10 @@ export class ContentfulEntryUtils {
     return 'https:' + assetField.fields.file.url
   }
 
-  static commonFieldsFromEntry(entry: Entry<CommonEntryFields>): CommonFields {
+  static commonFieldsFromEntry(
+    entry: Entry<CommonEntryFields>,
+    followUp?: FollowUp
+  ): CommonFields {
     const fields = entry.fields
 
     const searchableBy =
@@ -192,6 +196,7 @@ export class ContentfulEntryUtils {
       partitions: fields.partitions,
       searchableBy,
       dateRange,
+      followUp,
     })
   }
 }

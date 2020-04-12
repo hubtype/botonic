@@ -77,7 +77,14 @@ export class FollowUpDelivery {
   }
 
   async commonFields(entry: Entry<CommonEntryFields>, context: cms.Context) {
-    const common = ContentfulEntryUtils.commonFieldsFromEntry(entry)
+    const followUp = await this.getFollowUp(entry, context)
+    return ContentfulEntryUtils.commonFieldsFromEntry(entry, followUp)
+  }
+
+  private async getFollowUp(
+    entry: Entry<CommonEntryFields>,
+    context: cms.Context
+  ): Promise<cms.FollowUp | undefined> {
     if (entry.fields.followup) {
       const followUp = entry.fields.followup.sys.contentType
         ? entry.fields.followup
@@ -85,10 +92,8 @@ export class FollowUpDelivery {
             entry.fields.followup.sys.id,
             context
           )
-
-      common.followUp = await this.fromEntry(followUp, context)
-      return common
+      return (await this.fromEntry(followUp, context)) as cms.FollowUp
     }
-    return common
+    return undefined
   }
 }
