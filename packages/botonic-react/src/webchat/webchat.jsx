@@ -114,6 +114,7 @@ const DarkBackgroundMenu = styled.div`
   z-index: 1;
   right: 0;
   bottom: 0;
+  border-radius: 25px 25px 0px 0px;
 `
 
 const createUser = () => {
