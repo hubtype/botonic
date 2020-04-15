@@ -20,10 +20,21 @@ const movies = [
   },
 ]
 
+export const LEGACY_CONTEXT = {
+  indexSeparator: '.',
+}
+
+export const LEGACY_PROPS = {
+  indexMode: 'number',
+  showTitle: true,
+  showSubtitle: true,
+  oneMessagePerElement: true,
+}
+
 describe('Multichannel carousel COMPACT mode', () => {
   test('dynamic carousel with url buttons', () => {
     const sut = (
-      <MultichannelCarousel>
+      <MultichannelCarousel {...LEGACY_PROPS}>
         {movies.map((e, i) => (
           <Element key={e.name}>
             <Pic src={e.pic} />
@@ -34,7 +45,7 @@ describe('Multichannel carousel COMPACT mode', () => {
         ))}
       </MultichannelCarousel>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -60,7 +71,7 @@ describe('Multichannel carousel COMPACT mode', () => {
 
   test('dynamic carousel with payload/path buttons', () => {
     const sut = (
-      <MultichannelCarousel>
+      <MultichannelCarousel {...LEGACY_PROPS}>
         {options.map((e, i) => (
           <Element key={e.name}>
             <Pic src={e.pic} />
@@ -73,7 +84,7 @@ describe('Multichannel carousel COMPACT mode', () => {
         ))}
       </MultichannelCarousel>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -99,7 +110,7 @@ describe('Multichannel carousel COMPACT mode', () => {
 
   test('dynamic carousel (just text in button) with payload/path buttons', () => {
     const sut = (
-      <MultichannelCarousel>
+      <MultichannelCarousel {...LEGACY_PROPS}>
         {optionsNoTitleNoSubtitle.map((e, i) => (
           <Element key={e.name}>
             <Pic src={e.pic} />
@@ -112,7 +123,7 @@ describe('Multichannel carousel COMPACT mode', () => {
         ))}
       </MultichannelCarousel>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
