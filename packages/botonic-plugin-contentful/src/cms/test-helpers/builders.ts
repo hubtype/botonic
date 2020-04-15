@@ -4,10 +4,18 @@ import {
   Callback,
   CommonFields,
   ContentCallback,
+  Element,
   TopContentId,
   Text,
+  CmsException,
 } from '../index'
-import { TextBuilder } from '../factories'
+import {
+  CarouselBuilder,
+  ElementBuilder,
+  StartUpBuilder,
+  TextBuilder,
+  TopContentBuilder,
+} from '../factories'
 import { ContentType } from '../cms'
 
 export function rndStr(): string {
@@ -70,44 +78,112 @@ export class RndButtonsBuilder {
   }
 }
 
-export class RndKeywordsBuilder {
-  keywords = [rndStr(), rndStr()]
+export class RndTopContentBuilder {
+  keywords = []
 
-  build(): string[] {
-    return this.keywords
+  withRandomFields(builder: TopContentBuilder) {
+    builder.shortText = rndStr()
+    builder.keywords = [rndStr(), rndStr()]
+    builder.followUp = rndBool()
+      ? undefined
+      : new Text(new CommonFields(rndStr(), rndStr()), rndStr(), [])
   }
 }
 
 export class RndTextBuilder extends TextBuilder {
-  private buttonsBuilder: RndButtonsBuilder | undefined
-  readonly keywordsBuilder = new RndKeywordsBuilder()
+  public buttonsBuilder = new RndButtonsBuilder()
+  readonly topComponentBuilder = new RndTopContentBuilder()
 
   constructor(name: string = rndStr(), text: string = rndStr()) {
     super(rndStr(), name, text)
   }
 
+  /** @deprecated use buttonsBuilder */
   withButtonsBuilder(): RndButtonsBuilder {
-    this.buttonsBuilder = new RndButtonsBuilder()
     return this.buttonsBuilder
   }
 
   build(): Text {
-    if (this.buttonsBuilder) {
-      this.buttons = this.buttonsBuilder.build()
+    const buttons = this.buttonsBuilder.build()
+    if (buttons.length > 0) {
+      if (this.buttons.length > 0) {
+        throw new CmsException(
+          'Not supported to add buttons with both .buttons & buttonsBuilder'
+        )
+      }
+      this.buttonsBuilder.buttons = []
+      this.buttons = buttons
     }
     return super.build()
+  }
+
+  withRandomFields(): this {
+    this.buttonsBuilder.addButton().addButton()
+    this.topComponentBuilder.withRandomFields(this)
+    this.buttonsStyle = rndBool() ? ButtonStyle.QUICK_REPLY : ButtonStyle.BUTTON
+    return this
+  }
+}
+
+export class RndElementBuilder extends ElementBuilder {
+  private buttonsBuilder = new RndButtonsBuilder()
+
+  constructor() {
+    super(rndStr())
   }
 
   withRandomFields(): this {
     if (!this.buttonsBuilder) {
       this.buttonsBuilder = new RndButtonsBuilder().addButton().addButton()
     }
-    this.shortText = rndStr()
-    this.keywords = this.keywordsBuilder.build()
-    this.followUp = rndBool()
-      ? undefined
-      : new Text(new CommonFields(rndStr(), rndStr()), rndStr(), [])
-    this.buttonsStyle = rndBool() ? ButtonStyle.QUICK_REPLY : ButtonStyle.BUTTON
+    this.title = rndStr()
+    this.subtitle = rndStr()
+    this.imgUrl = rndStr()
+    return this
+  }
+
+  build(): Element {
+    if (this.buttonsBuilder) {
+      this.buttons = this.buttonsBuilder.build()
+    }
+    return super.build()
+  }
+}
+
+export class RndCarouselBuilder extends CarouselBuilder {
+  readonly topComponentBuilder = new RndTopContentBuilder()
+  readonly elementBuilder = new RndElementBuilder()
+
+  constructor(name: string = rndStr(), text: string = rndStr()) {
+    super(rndStr(), name, text)
+  }
+
+  withRandomFields(): this {
+    this.elements.push(this.elementBuilder.withRandomFields().build())
+    this.elements.push(this.elementBuilder.withRandomFields().build())
+
+    this.topComponentBuilder.withRandomFields(this)
+    return this
+  }
+
+  addElement(): this {
+    this.elements.push(this.elementBuilder.withRandomFields().build())
+    return this
+  }
+}
+
+export class RndStartUpBuilder extends StartUpBuilder {
+  readonly topComponentBuilder = new RndTopContentBuilder()
+  readonly buttonsBuilder = new RndButtonsBuilder()
+
+  constructor(name: string = rndStr(), text: string = rndStr()) {
+    super(rndStr(), name, text)
+  }
+
+  withRandomFields(): this {
+    this.buttons = this.buttonsBuilder.addButton().addButton().build()
+
+    this.topComponentBuilder.withRandomFields(this)
     return this
   }
 }
