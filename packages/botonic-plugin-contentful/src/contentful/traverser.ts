@@ -1,6 +1,6 @@
 import * as cf from 'contentful'
 
-import { Context } from '../cms'
+import { Context, ContextWithLocale } from '../cms'
 import { DeliveryApi } from './delivery-api'
 import { Locale } from '../nlp'
 import { ButtonDelivery } from './contents/button'
@@ -22,6 +22,8 @@ export interface ContentfulVisitor {
 
   visitStringField(field: VisitedField<string>): I18nValue<string>
 
+  visitOtherField(vf: VisitedField<any>): I18nValue<any>
+
   visitMultipleStringField(field: VisitedField<string[]>): I18nValue<string[]>
 
   visitSingleReference(
@@ -38,6 +40,7 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
   name(): string {
     return this.visitor.name()
   }
+
   visitEntry<T>(entry: cf.Entry<T>): cf.Entry<T> {
     this.log('visitEntry', entry)
     return this.visitor.visitEntry(entry)
@@ -53,6 +56,11 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
   ): I18nValue<string[]> {
     this.log('visitMultipleStringField', field.entry, field.field)
     return this.visitor.visitMultipleStringField(field)
+  }
+
+  visitOtherField(field: VisitedField<any>): I18nValue<any> {
+    this.log('visitOtherField', field.entry, field.field)
+    return this.visitor.visitOtherField(field)
   }
 
   visitSingleReference<T>(
@@ -91,7 +99,9 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
 
 /**
  * Traverser a contentful Entry which has been requested for all locales.
- * Limitations. It does not fetch entries from references which have not yet been delivered
+ * Limitations. It does not fetch entries from references which have not yet been delivered.
+ * ATTENTION Due to the complexity of traversing links with potential circular references, it stops recursion on button
+ * callbacks. This causes some entries to get wrong values.
  */
 export class I18nEntryTraverser {
   private visited = new Set<string>()
@@ -107,14 +117,14 @@ export class I18nEntryTraverser {
     //in the future we might extending to traverse all locales
     console.assert(context.locale)
     console.assert(context.ignoreFallbackLocale)
-    const promise = this.traverseCore(entry, context)
+    const promise = this.traverseCore(entry, context as ContextWithLocale)
     this.visited.add(entry.sys.id)
     return promise
   }
 
   async traverseCore<T>(
     entry: cf.Entry<T>,
-    context: Context
+    context: ContextWithLocale
   ): Promise<cf.Entry<T>> {
     entry = { ...entry, fields: { ...entry.fields } }
     const fields = (entry.fields as unknown) as {
@@ -141,7 +151,7 @@ export class I18nEntryTraverser {
   }
 
   async traverseField<E>(
-    context: Context,
+    context: ContextWithLocale,
     vf: VisitedField<any>
   ): Promise<I18nValue<any>> {
     let val = vf.value[vf.locale]
@@ -172,13 +182,7 @@ export class I18nEntryTraverser {
     } else if (this.isArrayOfType(vf.field, 'Symbol')) {
       return this.visitor.visitMultipleStringField(vf)
     } else {
-      console.log(
-        `Not traversing ${LoggerContentfulVisitor.describeField(
-          vf.entry,
-          vf.field.id
-        )}'}`
-      )
-      return vf.value
+      return this.visitor.visitOtherField(vf)
     }
   }
 
@@ -187,7 +191,7 @@ export class I18nEntryTraverser {
   }
 
   /**
-   * When a content has a button with another content reference, we just need the referered content id
+   * When a content has a button with another content reference, we just need the referred content id
    * to create the content. Hence, we stop traversing.
    */
   private stopRecursionOnButtonCallbacks(

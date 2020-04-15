@@ -14,8 +14,14 @@ export class Callback implements ValueObject {
    */
   protected constructor(readonly payload?: string, readonly url?: string) {
     if (!payload && !url) {
-      throw new CmsException(
+      // TODO throw an exception when CsvExport is fixed (@see IgnoreFallbackDecorator)
+      console.error(
         `Callback cannot have both 'URL' and 'payload' fields empty`
+      )
+    }
+    if (payload && url) {
+      throw new CmsException(
+        `Callback cannot have both 'URL' and 'payload' fields informed`
       )
     }
   }
