@@ -8,6 +8,9 @@ import {
   VisitedField,
 } from './traverser'
 
+/**
+ * It requests contentful to deliver all locales for each entry, and we discard all except the one in the context
+ */
 export class IgnoreFallbackDecorator implements DeliveryApi {
   constructor(private readonly api: DeliveryApi) {}
 
@@ -88,9 +91,14 @@ class IgnoreFallbackVisitor implements ContentfulVisitor {
     return entry
   }
 
+  visitOtherField(vf: VisitedField<any>): I18nValue<any> {
+    return this.hackType(vf.value[vf.locale], undefined)
+  }
+
   visitStringField(vf: VisitedField<string>): I18nValue<string> {
     return this.hackType(vf.value[vf.locale], '')
   }
+
   hackType<T>(t: T, defaultValue?: T): I18nValue<T> {
     if (defaultValue != undefined) {
       t = t ?? defaultValue

@@ -3,7 +3,6 @@ import { Callback, TopContentId } from './callback'
 import { SearchableBy } from './fields'
 import { ContentType, MessageContentType, TopContentType } from './cms'
 import { shallowClone } from '../util/objects'
-import { CmsException } from './exceptions'
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -178,6 +177,12 @@ export class StartUp extends MessageContent {
     ;(clone as any).text = newText
     return clone
   }
+
+  cloneWithButtons(buttons: Button[]): this {
+    const clone = shallowClone(this)
+    ;(clone as any).buttons = buttons
+    return clone
+  }
 }
 
 export class Carousel extends MessageContent {
@@ -211,9 +216,8 @@ export class Element extends Content {
   ) {
     super(ContentType.ELEMENT)
     if (!title && !subtitle && !imgUrl) {
-      throw new CmsException(
-        `Element '${id}' should have title, subtitle or image URL`
-      )
+      // TODO throw an exception when CsvExport is fixed (@see IgnoreFallbackDecorator)
+      console.error(`Element '${id}' should have title, subtitle or image URL`)
     }
     this.name = title || ''
   }
