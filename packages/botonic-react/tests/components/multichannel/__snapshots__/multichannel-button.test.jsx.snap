@@ -2,6 +2,6 @@
 
 exports[`Multichannel buttons: with URL 1`] = `"- button text with URL: https://docs.botonic.io/"`;
 
-exports[`Multichannel buttons: with path 1`] = `"1. button text with path1"`;
+exports[`Multichannel buttons: with path 1`] = `"1.- button text with path1"`;
 
-exports[`Multichannel buttons: with payload 1`] = `"1. button text with payload1"`;
+exports[`Multichannel buttons: with payload 1`] = `"1- button text with payload1"`;

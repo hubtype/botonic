@@ -6,6 +6,17 @@ import {
 import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
+export const LEGACY_CONTEXT = {
+  indexSeparator: '.',
+}
+
+export const LEGACY_PROPS = {
+  indexMode: 'number',
+  showTitle: true,
+  showSubtitle: true,
+  oneMessagePerElement: true,
+}
+
 const movies = [
   {
     name: 'Snatch',
@@ -45,11 +56,11 @@ describe('Multichannel carousel COMPACT mode N Buttons', () => {
       </Carousel>
     )
     const sut = (
-      <MultichannelCarousel {...carousel.props}>
+      <MultichannelCarousel {...carousel.props} {...LEGACY_PROPS}>
         {carousel.props.children}
       </MultichannelCarousel>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -94,11 +105,11 @@ describe('Multichannel carousel COMPACT mode N Buttons', () => {
       </Carousel>
     )
     const sut = (
-      <MultichannelCarousel {...carousel.props}>
+      <MultichannelCarousel {...carousel.props} {...LEGACY_PROPS}>
         {carousel.props.children}
       </MultichannelCarousel>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
@@ -143,11 +154,11 @@ describe('Multichannel carousel COMPACT mode N Buttons', () => {
       </Carousel>
     )
     const sut = (
-      <MultichannelCarousel {...carousel.props}>
+      <MultichannelCarousel {...carousel.props} {...LEGACY_PROPS}>
         {carousel.props.children}
       </MultichannelCarousel>
     )
-    const renderer = whatsappRenderer(sut)
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
