@@ -10,7 +10,7 @@ import {
   Context,
 } from '../../src/cms'
 import { IgnoreFallbackDecorator } from '../../src/contentful/ignore-fallback-decorator'
-import { TEST_POST_FAQ1_ID } from './contents/text.test'
+import { TEST_NO_SPANISH_TEXT } from './contents/text.test'
 import { TextFields } from '../../src/contentful/contents/text'
 import {
   TEST_CAROUSEL_MAIN_ID,
@@ -88,14 +88,14 @@ test('TEST: IgnoreFallbackDecorator.getEntry<TextFields> uses fallback locale', 
   const sut = createIgnoreFallbackDecorator()
 
   // act
-  const entry = await sut.getEntry<TextFields>(TEST_POST_FAQ1_ID, {
+  const entry = await sut.getEntry<TextFields>(TEST_NO_SPANISH_TEXT, {
     locale: SPANISH,
     ignoreFallbackLocale: true,
   })
 
   // assert
   expect(entry.fields.text).toEqual('')
-  expect(entry.fields.name).toEqual('POST_FAQ1')
+  expect(entry.fields.name).toEqual('TEST_NO_SPANISH_TEXT')
   // references do not fallback
   expect(entry.fields.buttons).toBeUndefined()
 })
