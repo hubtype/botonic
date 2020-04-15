@@ -33,13 +33,14 @@ export class BotonicMsgConverter {
   }
 
   carousel(carousel: cms.Carousel, delayS = 0): BotonicMsgs {
-    return {
+    const msg = {
       type: 'carousel',
       delay: delayS,
       data: {
         elements: carousel.elements.map(e => this.element(e)),
       },
     } as BotonicMsg
+    return this.appendFollowUp(msg, carousel)
   }
 
   private element(cmsElement: cms.Element): any {
