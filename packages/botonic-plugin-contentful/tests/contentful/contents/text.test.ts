@@ -1,9 +1,11 @@
 import { expectImgUrlIs } from './image.test'
 import { testContentful, testContext } from '../contentful.helper'
 import * as cms from '../../../src'
+import { SPANISH } from '../../../src'
 
 export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip'
 export const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt'
+export const TEST_NO_SPANISH_TEXT = '429vGzREpGXhiV24yvggTp'
 const TEST_FBK_MSG = '1U7XKJccDSsI3mP0yX04Mj'
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O'
 const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D'
@@ -50,7 +52,7 @@ test('TEST: contentful text with URL button with followup', async () => {
   const sut = testContentful()
 
   // act
-  const ctx = testContext()
+  const ctx = testContext([{ locale: SPANISH }])
   const text = await sut.text(TEST_POST_FAQ1_ID, ctx)
 
   // assert
