@@ -32,6 +32,8 @@ interface CsvExportOptions {
 
 export const skipEmptyStrings = (str: string) => Boolean(str && str.trim())
 /***
+ * @see I18nEntryTraverser limitations.
+ * It should be reimplemented without traversing field references.
  * Uses https://csv.js.org/stringify/api/
  */
 export class CsvExport {
