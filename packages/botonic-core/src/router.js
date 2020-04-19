@@ -123,6 +123,9 @@ export class Router {
 
   getOnFinishParams(input) {
     try {
+      if (!input.payload) {
+        return undefined
+      }
       const params = input.payload.split('__PATH_PAYLOAD__')
       if (params.length < 2) {
         return undefined
