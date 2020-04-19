@@ -33,10 +33,15 @@ export function msgToBotonic(msg, customMessageTypes) {
     return textToBotonic(msg)
   } else if (msg.type === 'carousel') {
     const elements = msg.elements || msg.data.elements
-    return <Carousel {...msg}>{elementsParse(elements)}</Carousel>
+    return (
+      <Carousel {...msg} key={msg.key}>
+        {elementsParse(elements)}
+      </Carousel>
+    )
   } else if (msg.type === 'image') {
     return (
       <Image
+        key={msg.key}
         {...msg}
         src={msg.data.image != undefined ? msg.data.image : msg.data}
       />
@@ -81,6 +86,10 @@ export function msgToBotonic(msg, customMessageTypes) {
   return null
 }
 
+function rndStr() {
+  return Math.random().toString()
+}
+
 /**
  * @param msgs {object|object[]}
  * @param customMessageTypes {{customTypeName}[]?}
@@ -109,19 +118,23 @@ function textToBotonic(msg) {
     (msg.keyboard && msg.keyboard.length)
   )
     return (
-      <Text {...msg}>
+      <Text {...msg} key={msg.key}>
         {txt}
         {quickrepliesParse(msg)}
       </Text>
     )
   if (msg.buttons && msg.buttons.length)
     return (
-      <Text {...msg}>
+      <Text {...msg} key={msg.key}>
         {txt}
         {buttonsParse(msg.buttons)}
       </Text>
     )
-  return <Text {...msg}>{txt}</Text>
+  return (
+    <Text {...msg} key={msg.key}>
+      {txt}
+    </Text>
+  )
 }
 
 function elementsParse(elements) {
