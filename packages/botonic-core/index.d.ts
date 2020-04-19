@@ -58,6 +58,7 @@ type RouteMatcher =
 export interface Route {
   path?: StringMatcher
   action?: any
+  retryAction?: any
   redirect?: string
   childRoutes?: Route[]
 
