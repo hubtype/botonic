@@ -244,6 +244,7 @@ describe('Process input (v<0.9)', () => {
 })
 
 test.each([
+  [undefined, undefined, undefined],
   ['', undefined, undefined],
   ['bad_input', undefined, undefined],
   ['__PATH_PAYLOAD__', '', undefined],
