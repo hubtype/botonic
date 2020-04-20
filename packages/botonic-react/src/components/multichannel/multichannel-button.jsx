@@ -42,15 +42,15 @@ export const MultichannelButton = props => {
 
   const getText = () => {
     let text = props.children
-    const newLine = props.newline ? '\n' : ''
+    const newline = props.newline ? '\n' : ''
     const separator = multichannelContext.indexSeparator || ' '
     const index = multichannelContext.currentIndex
       ? `${formatIndex(multichannelContext.currentIndex + separator)} `
       : ''
     if (hasPostback()) {
-      text = newLine + `${index}${text}`
+      text = newline + `${index}${text}`
     } else if (hasUrl()) {
-      text = newLine + `- ${text}`
+      text = newline + `- ${text}`
     }
     return text
   }
