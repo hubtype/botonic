@@ -16,6 +16,7 @@ export interface MultichannelContextType extends MultichannelViewOptions {
 export interface MultichannelTextProps extends MultichannelViewOptions {
   index?: string
   indexMode?: IndexMode
+  newline?: boolean
 }
 
 export const MultichannelText: React.FunctionComponent<MultichannelTextProps>
@@ -31,7 +32,7 @@ export const MultichannelCarousel: React.FunctionComponent<MultichannelCarouselP
 
 // Button
 export interface MultichannelButtonProps {
-  newLine?: boolean
+  newline?: boolean
 }
 export const MultichannelButton: React.FunctionComponent<MultichannelButtonProps>
 
