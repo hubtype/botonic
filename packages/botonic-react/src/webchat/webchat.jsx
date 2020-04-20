@@ -488,13 +488,16 @@ export const Webchat = forwardRef((props, ref) => {
     undefined
   )
 
-  const triggerButton = CustomTriggerButton ? (
-    <CustomTriggerButton />
-  ) : (
-    <StyledTriggerButton style={{ ...triggerButtonStyle }}>
-      {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
-    </StyledTriggerButton>
-  )
+  const triggerButton = () => {
+    if (CustomTriggerButton) {
+      return <CustomTriggerButton />
+    }
+    return (
+      <StyledTriggerButton style={{ ...triggerButtonStyle }}>
+        {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
+      </StyledTriggerButton>
+    )
+  }
 
   const webchatMessageList = () => (
     <WebchatMessageList
@@ -667,7 +670,7 @@ export const Webchat = forwardRef((props, ref) => {
             event.preventDefault()
           }}
         >
-          {triggerButton}
+          {triggerButton()}
         </div>
       )}
       {webchatState.isWebchatOpen && (
