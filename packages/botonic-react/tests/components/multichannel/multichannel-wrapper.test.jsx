@@ -175,6 +175,31 @@ describe('Multichannel wrapper', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('2 text in 1 single message. Default props', () => {
+    const sut = (
+      <Multichannel>
+        <Text>Text1</Text>
+        <Text>Text2</Text>
+      </Multichannel>
+    )
+
+    const renderer = whatsappRenderer(sut)
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('1 text in 1 single message. Default props', () => {
+    const sut = (
+      <Multichannel>
+        <Text>Text1</Text>
+      </Multichannel>
+    )
+
+    const renderer = whatsappRenderer(sut)
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
   test('many multichannels', () => {
     const sut = (
       <>

@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Multichannel wrapper 1 text in 1 single message. Default props 1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Text1
+</message>
+`;
+
+exports[`Multichannel wrapper 2 text in 1 single message. Default props 1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Text1
+  
+Text2
+</message>
+`;
+
 exports[`Multichannel wrapper just text 1`] = `
 <message
   delay={0}
