@@ -8,6 +8,7 @@ import { Button } from './button'
 import { Reply } from './reply'
 import { WEBCHAT, COLORS } from '../constants'
 import Fade from 'react-reveal/Fade'
+import moment from 'moment'
 
 const MessageContainer = styled.div`
   display: flex;
@@ -31,7 +32,12 @@ const Blob = styled.div`
   border-radius: 8px;
   background-color: ${props => props.bgcolor};
   color: ${props => props.color};
-  max-width: ${props => (props.blob ? '60%' : 'calc(100% - 16px)')};
+  max-width: ${props =>
+    props.blob
+      ? props.blobWidth
+        ? props.blobWidth
+        : '60%'
+      : 'calc(100% - 16px)'};
 `
 
 const BlobText = styled.div`
@@ -39,6 +45,22 @@ const BlobText = styled.div`
   display: flex;
   flex-direction: column;
   white-space: pre-line;
+`
+
+const TimestampContainer = styled.div`
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+`
+
+const TimestampText = styled.div`
+  @import url('https://fonts.googleapis.com/css?family=Lato');
+  font-family: Lato;
+  font-size: 12px;
+  color: ${COLORS.SOLID_BLACK};
+  width: 100%;
+  text-align: ${props => (props.isfromuser ? 'right' : 'left')};
+  padding: ${props => (props.isfromuser ? '0px 15px' : '0px 50px')};
 `
 
 export const Message = props => {
@@ -52,6 +74,8 @@ export const Message = props => {
     children,
     json,
     style,
+    imageStyle,
+    timestamps = true,
     ...otherProps
   } = props
 
@@ -72,6 +96,19 @@ export const Message = props => {
   const textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
+
+  const getTimestampFormat = () => {
+    const timestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
+    moment.locale(timestampLocale)
+    const timestampFormat = getThemeProperty(
+      `message.timestamps.format`,
+      undefined
+    )
+    return timestampFormat
+  }
+
+  const timestampFormat = timestamps && getTimestampFormat()
+
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
@@ -80,6 +117,7 @@ export const Message = props => {
         id: state.id,
         type,
         data: decomposedChildren ? decomposedChildren : textChildren,
+        timestamp: moment().format(timestampFormat),
         from,
         buttons: buttons.map(b => ({
           payload: b.props.payload,
@@ -153,11 +191,17 @@ export const Message = props => {
         condition={animationsEnabled}
         wrapper={children => <Fade>{children}</Fade>}
       >
-        <MessageContainer isfromuser={isFromUser()}>
+        <MessageContainer
+          isfromuser={isFromUser()}
+          style={{
+            ...getThemeProperty('message.style'),
+          }}
+        >
           {isFromBot() && BotMessageImage && (
             <BotMessageImageContainer
               style={{
                 ...getThemeProperty('message.bot.imageStyle'),
+                ...imageStyle,
               }}
             >
               <img
@@ -170,6 +214,7 @@ export const Message = props => {
           <Blob
             bgcolor={getBgColor()}
             color={isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
+            blobWidth={getThemeProperty('message.bot.blobWidth')}
             blob={blob}
             style={{
               border: `1px solid ${getThemeProperty(
@@ -213,6 +258,18 @@ export const Message = props => {
             )}
           </Blob>
         </MessageContainer>
+        <TimestampContainer>
+          {timestampFormat && (
+            <TimestampText
+              isfromuser={isFromUser()}
+              style={{
+                ...getThemeProperty('message.timestamps.style'),
+              }}
+            >
+              {m.timestamp}
+            </TimestampText>
+          )}
+        </TimestampContainer>
       </ConditionalWrapper>
     )
   }

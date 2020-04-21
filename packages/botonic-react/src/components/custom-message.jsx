@@ -1,11 +1,13 @@
 import React from 'react'
 import { Message } from './message'
 
-export const customMessage = ({ name, component: CustomMessageComponent }) => {
+export const customMessage = ({
+  name,
+  component: CustomMessageComponent,
+  defaultProps,
+}) => {
   const CustomMessage = props => (
-    <Message id={props.id} json={props.json} type='custom'>
-      {props.children}
-    </Message>
+    <Message {...defaultProps} {...props} type='custom' />
   )
   const WrappedComponent = props => {
     const { id, ...customMessageProps } = props

@@ -108,6 +108,15 @@ const ErrorMessageContainer = styled.div`
   font-family: Arial, Helvetica, sans-serif;
 `
 
+const DarkBackgroundMenu = styled.div`
+  background: ${COLORS.SOLID_BLACK};
+  opacity: 0.3;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  border-radius: 25px 25px 0px 0px;
+`
+
 const createUser = () => {
   const parser = new UAParser()
   const ua = parser.getResult()
@@ -268,6 +277,15 @@ export const Webchat = forwardRef((props, ref) => {
   const persistentMenuOptions = getThemeProperty(
     'userInput.persistentMenu',
     props.persistentMenu
+  )
+
+  const CustomPersistentMenu = getThemeProperty(
+    'userInput.menu.custom',
+    undefined
+  )
+  const darkBackgroundMenu = getThemeProperty(
+    'userInput.menu.darkBackground',
+    false
   )
 
   const checkBlockInput = input => {
@@ -470,13 +488,16 @@ export const Webchat = forwardRef((props, ref) => {
     undefined
   )
 
-  const triggerButton = CustomTriggerButton ? (
-    <CustomTriggerButton />
-  ) : (
-    <StyledTriggerButton style={{ ...triggerButtonStyle }}>
-      {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
-    </StyledTriggerButton>
-  )
+  const triggerButton = () => {
+    if (CustomTriggerButton) {
+      return <CustomTriggerButton />
+    }
+    return (
+      <StyledTriggerButton style={{ ...triggerButtonStyle }}>
+        {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
+      </StyledTriggerButton>
+    )
+  }
 
   const webchatMessageList = () => (
     <WebchatMessageList
@@ -503,6 +524,10 @@ export const Webchat = forwardRef((props, ref) => {
   )
   const CustomSendButton = getThemeProperty(
     'userInput.sendButton.custom',
+    undefined
+  )
+  const CustomMenuButton = getThemeProperty(
+    'userInput.menuButton.custom',
     undefined
   )
 
@@ -532,9 +557,13 @@ export const Webchat = forwardRef((props, ref) => {
             />
           )}
           {persistentMenuOptions && (
-            <ConditionalAnimation>
-              <PersistentMenu onClick={handleMenu} />
-            </ConditionalAnimation>
+            <FeaturesWrapper>
+              <ConditionalAnimation>
+                <div onClick={handleMenu}>
+                  {CustomMenuButton ? <CustomMenuButton /> : <PersistentMenu />}
+                </div>
+              </ConditionalAnimation>
+            </FeaturesWrapper>
           )}
           <TextAreaContainer>
             <Textarea
@@ -641,7 +670,7 @@ export const Webchat = forwardRef((props, ref) => {
             event.preventDefault()
           }}
         >
-          {triggerButton}
+          {triggerButton()}
         </div>
       )}
       {webchatState.isWebchatOpen && (
@@ -669,10 +698,29 @@ export const Webchat = forwardRef((props, ref) => {
                 Object.keys(webchatState.replies).length > 0 &&
                 webchatReplies()}
               {persistentMenuIsOpened && (
-                <OpenedPersistentMenu
-                  onClick={closeMenu}
-                  options={persistentMenuOptions}
-                />
+                <div>
+                  {darkBackgroundMenu && (
+                    <DarkBackgroundMenu
+                      onClick={closeMenu}
+                      style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
+                  )}
+                  {CustomPersistentMenu ? (
+                    <CustomPersistentMenu
+                      onClick={closeMenu}
+                      options={persistentMenuOptions}
+                    />
+                  ) : (
+                    <OpenedPersistentMenu
+                      onClick={closeMenu}
+                      options={persistentMenuOptions}
+                    />
+                  )}
+                </div>
               )}
               {!webchatState.handoff && userInputArea()}
               {webchatState.webview && webchatWebview()}
