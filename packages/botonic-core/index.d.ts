@@ -2,9 +2,28 @@ export interface Locales {
   [id: string]: string | string[] | Locales
 }
 
+interface PluginConstructor<T> {
+  new (arg: T): Plugin
+}
+
+export interface PluginConfig<T> {
+  id: string
+  resolve: { default: PluginConstructor<T> }
+  options?: T
+}
+
+export type InputType =
+  | 'text'
+  | 'postback'
+  | 'audio'
+  | 'image'
+  | 'video'
+  | 'document'
+  | 'location'
+  | 'contact'
+
 export interface Input {
-  // text, postback...
-  type: string
+  type: InputType
   payload?: string
   data?: string
   path?: string

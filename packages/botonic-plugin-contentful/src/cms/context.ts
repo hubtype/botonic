@@ -6,6 +6,13 @@ import { CallbackMap } from './callback'
  */
 export const DEFAULT_CONTEXT: Context = {}
 
+/* markdown where bold is '*' */
+export const MARKUP_WHATSAPP = 'whatsapp'
+/*markdown where bold is '__' */
+export const MARKUP_CONTENTFUL = 'contentful'
+
+export type MarkupType = typeof MARKUP_WHATSAPP | typeof MARKUP_CONTENTFUL
+
 export interface Context {
   locale?: Locale
   callbacks?: CallbackMap
@@ -14,6 +21,7 @@ export interface Context {
    * NOT applying it so far for assets because cms.Asset does not support blank assets
    */
   ignoreFallbackLocale?: boolean
+  markup?: MarkupType
 }
 
 export interface ContextWithLocale extends Context {

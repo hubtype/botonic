@@ -3,6 +3,12 @@ import { Contentful } from './contentful'
 import { KeywordsOptions, Normalizer, StemmingBlackList } from './nlp'
 import { Search } from './search'
 import { BotonicMsgConverter } from './render'
+import { MarkdownCMS } from './markup/markdown-cms'
+import {
+  RecursiveMessageContentFilter,
+  textUpdaterFilter,
+} from './cms/message-content-filters'
+import { contentfulToWhatsApp } from './markup/markdown'
 
 interface NlpOptions {
   blackList: { [locale: string]: StemmingBlackList[] }
@@ -11,6 +17,7 @@ interface NlpOptions {
 interface OptionsBase {
   renderer?: BotonicMsgConverter
   search?: Search
+  normalizer?: Normalizer
   nlpOptions?: NlpOptions
   keywordsOptions?: { [locale: string]: KeywordsOptions }
 }
@@ -46,6 +53,8 @@ export default class BotonicPluginContentful {
 
   readonly search: Search
 
+  readonly normalizer?: Normalizer
+
   constructor(opt: CmsOptions | ContentfulOptions) {
     const optionsAny = opt as any
     if (optionsAny.cms) {
@@ -55,15 +64,20 @@ export default class BotonicPluginContentful {
       this.cms = new Contentful(contOptions)
     }
     this.cms = new cms.ErrorReportingCMS(this.cms)
+    this.cms = new MarkdownCMS(
+      this.cms,
+      new RecursiveMessageContentFilter(textUpdaterFilter(contentfulToWhatsApp))
+    )
     this.renderer = opt.renderer || new BotonicMsgConverter()
 
     if (opt.search) {
       this.search = opt.search
+      this.normalizer = opt.normalizer
     } else {
-      const normalizer = opt.nlpOptions
+      this.normalizer = opt.nlpOptions
         ? new Normalizer(opt.nlpOptions.blackList)
         : new Normalizer()
-      this.search = new Search(this.cms, normalizer, opt.keywordsOptions)
+      this.search = new Search(this.cms, this.normalizer, opt.keywordsOptions)
     }
   }
 

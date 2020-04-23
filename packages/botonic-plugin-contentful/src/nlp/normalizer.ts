@@ -5,6 +5,7 @@ import {
   tokenizerPerLocale,
 } from './tokens'
 import { Locale } from './locales'
+import { equalArrays } from '../util/arrays'
 
 /**
  * Both tokens and stem will be converted to the <code>stem</code>
@@ -70,6 +71,10 @@ export class NormalizedUtterance {
 
   hasOnlyStopWords(): boolean {
     return this.onlyStopWords
+  }
+
+  hasSameStems(other: NormalizedUtterance): boolean {
+    return equalArrays(this.stems, other.stems)
   }
 }
 
