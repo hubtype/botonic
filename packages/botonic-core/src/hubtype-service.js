@@ -5,17 +5,19 @@ const PUSHER_KEY = process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c'
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 export class HubtypeService {
-  constructor({ appId, user, lastMessageId, onEvent }) {
+  constructor({ appId, user, lastMessageId, lastMessageUpdateDate, onEvent }) {
     this.appId = appId
     this.user = user || {}
     this.lastMessageId = lastMessageId
+    this.lastMessageUpdateDate = lastMessageUpdateDate
     this.onEvent = onEvent
     if (user.id && lastMessageId) this.init()
   }
 
-  init(user, lastMessageId) {
+  init(user, lastMessageId, lastMessageUpdate) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
+    if (lastMessageUpdate) this.lastMessageUpdate = lastMessageUpdate
     if (this.pusher || !this.user.id || !this.appId) return null
     this.pusher = new Pusher(PUSHER_KEY, {
       cluster: 'eu',
@@ -25,6 +27,7 @@ export class HubtypeService {
         headers: {
           'X-BOTONIC-USER-ID': this.user.id,
           'X-BOTONIC-LAST-MESSAGE-ID': this.lastMessageId,
+          'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': this.lastMessageUpdate,
         },
       },
     })

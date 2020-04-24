@@ -30,6 +30,7 @@ export const webchatInitialState = {
   error: {},
   devSettings: {},
   isWebchatOpen: false,
+  lastMessageUpdate: undefined,
 }
 
 export function useWebchat() {
@@ -101,6 +102,12 @@ export function useWebchat() {
       type: 'clearMessages',
     })
   }
+  const updateLastMessageDate = date => {
+    webchatDispatch({
+      type: 'updateLastMessageDate',
+      payload: date,
+    })
+  }
 
   return {
     webchatState,
@@ -121,6 +128,7 @@ export function useWebchat() {
     toggleWebchat,
     setError,
     clearMessages,
+    updateLastMessageDate,
   }
 }
 

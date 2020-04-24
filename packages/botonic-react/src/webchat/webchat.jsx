@@ -149,6 +149,7 @@ export const Webchat = forwardRef((props, ref) => {
     clearMessages,
     openWebviewT,
     closeWebviewT,
+    updateLastMessageDate,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const { theme } = webchatState
@@ -174,8 +175,14 @@ export const Webchat = forwardRef((props, ref) => {
 
   // Load initial state from localStorage
   useEffect(() => {
-    let { user, messages, session, lastRoutePath, devSettings } =
-      botonicState || {}
+    let {
+      user,
+      messages,
+      session,
+      lastRoutePath,
+      devSettings,
+      lastMessageUpdate,
+    } = botonicState || {}
     if (!user || Object.keys(user).length == 0) user = createUser()
     updateUser(user)
     if (
@@ -200,6 +207,7 @@ export const Webchat = forwardRef((props, ref) => {
     } else updateSession(initialSession)
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
+    if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
@@ -218,6 +226,7 @@ export const Webchat = forwardRef((props, ref) => {
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
         devSettings: webchatState.devSettings,
+        lastMessageUpdate: webchatState.lastMessageUpdate,
       })
     )
   }, [
@@ -226,6 +235,7 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.session,
     webchatState.lastRoutePath,
     webchatState.devSettings,
+    webchatState.lastMessageUpdate,
   ])
 
   useTyping({ webchatState, updateTyping, updateMessage })
@@ -356,6 +366,7 @@ export const Webchat = forwardRef((props, ref) => {
         lastRoutePath: webchatState.lastRoutePath,
       })
     updateLatestInput(input)
+    updateLastMessageDate(new Date())
     updateReplies(false)
     setPersistentMenuIsOpened(false)
     setEmojiPickerIsOpened(false)
@@ -378,6 +389,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateHandoff(handoff)
       }
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+      updateLastMessageDate(new Date())
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
@@ -397,6 +409,7 @@ export const Webchat = forwardRef((props, ref) => {
     clearMessages: () => {
       clearMessages()
     },
+    getLastMessageUpdate: () => webchatState.lastMessageUpdate,
   }))
 
   const resolveCase = () => {
