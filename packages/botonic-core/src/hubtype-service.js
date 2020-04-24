@@ -11,7 +11,7 @@ export class HubtypeService {
     this.lastMessageId = lastMessageId
     this.lastMessageUpdateDate = lastMessageUpdateDate
     this.onEvent = onEvent
-    if (user.id && lastMessageId) this.init()
+    if (user.id && (lastMessageId || lastMessageUpdateDate)) this.init()
   }
 
   init(user, lastMessageId, lastMessageUpdate) {

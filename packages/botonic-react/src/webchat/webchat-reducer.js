@@ -42,7 +42,7 @@ export function webchatReducer(state, action) {
     case 'updateLastMessageDate':
       return {
         ...state,
-        lastMessageUpdate: action.payload || undefined,
+        lastMessageUpdate: action.payload,
       }
     default:
       throw new Error()
