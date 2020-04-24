@@ -59,6 +59,7 @@ export class WebchatApp {
         appId: this.appId,
         user,
         lastMessageId: lastMessage && lastMessage.id,
+        lastMessageUpdateDate: this.getLastMessageUpdate(),
         onEvent: event => this.onServiceEvent(event),
       })
     }
@@ -124,6 +125,10 @@ export class WebchatApp {
 
   clearMessages() {
     this.webchatRef.current.clearMessages()
+  }
+
+  getLastMessageUpdate() {
+    return this.webchatRef.current.getLastMessageUpdate()
   }
 
   getComponent(optionsAtRuntime = {}) {

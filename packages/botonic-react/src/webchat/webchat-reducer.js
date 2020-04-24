@@ -39,6 +39,11 @@ export function webchatReducer(state, action) {
         messagesJSON: [],
         messagesComponents: [],
       }
+    case 'updateLastMessageDate':
+      return {
+        ...state,
+        lastMessageUpdate: action.payload || undefined,
+      }
     default:
       throw new Error()
   }
