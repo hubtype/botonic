@@ -200,6 +200,29 @@ describe('Multichannel wrapper', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('2 texts with buttons. Default props', () => {
+    const sut = (
+      <Multichannel>
+        <Text>
+          Text1
+          <Button key={'1'} payload='payload1'>
+            Button 1
+          </Button>
+        </Text>
+        <Text>
+          Text2
+          <Button key={'2'} payload='payload2'>
+            Button 2
+          </Button>
+        </Text>
+      </Multichannel>
+    )
+
+    const renderer = whatsappRenderer(sut)
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
   test('many multichannels', () => {
     const sut = (
       <>

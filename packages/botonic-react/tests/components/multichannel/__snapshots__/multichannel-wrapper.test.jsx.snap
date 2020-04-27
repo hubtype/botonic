@@ -22,6 +22,22 @@ Text2
 </message>
 `;
 
+exports[`Multichannel wrapper 2 texts with buttons. Default props 1`] = `
+<message
+  delay={0}
+  type="text"
+  typing={0}
+>
+  Text1
+  
+Button 1
+  
+Text2
+  
+Button 2
+</message>
+`;
+
 exports[`Multichannel wrapper just text 1`] = `
 <message
   delay={0}
