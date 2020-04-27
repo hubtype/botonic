@@ -14,8 +14,8 @@ module.exports = {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
     sourceType: 'module', // Allows for the use of imports
     ecmaFeatures: {
-      jsx: true // Allows for the parsing of JSX
-    }
+      jsx: true, // Allows for the parsing of JSX
+    },
   },
   // npm run lint runs eslint with --quiet --fix so that only errors are fixed
   rules: {
@@ -23,7 +23,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'filenames/match-regex': ['error', '^[a-z-.]+$', true],
 
-    complexity: ['error', { max: 18 }],
+    complexity: ['error', { max: 19 }],
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
@@ -37,7 +37,7 @@ module.exports = {
     'consistent-return': 'error',
     'jest/no-export': 'warn',
     'no-empty': 'warn',
-    "prefer-const": ["error", { "destructuring": "all"}],
+    'prefer-const': ['error', { destructuring: 'all' }],
 
     // special for TYPESCRIPT
     '@typescript-eslint/ban-ts-ignore': 'warn',
