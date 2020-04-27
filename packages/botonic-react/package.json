@@ -29,7 +29,7 @@
     "framer-motion": "^1.8.3",
     "moment": "^2.24.0",
     "react": "^16.13.0",
-    "react-children-utilities": "^2.0.13",
+    "react-children-utilities": "^2.1.0",
     "react-dom": "^16.13.0",
     "react-frame-component": "^4.1.1",
     "react-json-tree": "^0.11.2",
