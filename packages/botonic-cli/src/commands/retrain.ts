@@ -24,41 +24,65 @@ export default class Run extends Command {
   private botonicApiService: BotonicAPIService = new BotonicAPIService();
 
   async run() {
-    console.log("Retraining...");
+    console.log("Retraining...\n");
 
     let resp = await this.botonicApiService.getRetrainData();
 
-    const botonicNLUPath: string = path.join(
+    const utterancesPath: string = path.join(
       process.cwd(),
       "src",
       "nlu",
       "utterances",
       "en"
     );
-    console.log(resp.data);
-    if (resp.data.length > 0) {
-      resp.data.forEach((element) => {
-        element.intent = element.intent + ".txt";
-        fs.open(botonicNLUPath + "/" + element.intent, "a", function (err) {
-          if (err) throw err;
-          fs.appendFileSync(
-            botonicNLUPath + "/" + element.intent,
-            element.sentence + "\n",
-            "UTF-8",
-            { flags: "a+" },
-            function (err) {
-              if (err) throw err;
-            }
-          );
-        });
-      });
-      const today = new Date();
-      const date = today.toUTCString();
-      this.botonicApiService.lastRetrainingDate = date;
-      this.botonicApiService.beforeExit();
-      console.log("YOUR BOT HAS BEEN RETRAINED SUCCESSFULY!!!!");
-    } else {
-      console.log("There is no new data to retrain!");
+
+    const botonicNLUPath: string = path.join(
+      process.cwd(),
+      "node_modules",
+      "@botonic",
+      "nlu"
+    );
+
+    try {
+      const { BotonicNLU, CONSTANTS } = await import(botonicNLUPath);
+      if (resp.data.length > 0) {
+        console.log(
+          "******** THIS IS THE DATA WITH YOU ARE GOING TO RETRAIN *********\n "
+        );
+
+        console.log(resp.data);
+        this.writeIntents(resp.data, utterancesPath);
+        const today = new Date();
+        const date = today.toUTCString();
+        const botonicNLU = new BotonicNLU();
+        const nluPath = path.join(process.cwd(), "src", CONSTANTS.NLU_DIRNAME);
+        console.log("NLU_PATH", nluPath);
+        await botonicNLU.train({ nluPath });
+        this.botonicApiService.lastRetrainingDate = date;
+        this.botonicApiService.beforeExit();
+        console.log("YOUR BOT HAS BEEN RETRAINED SUCCESSFULY!!!! \n");
+      } else {
+        console.log("THERE IS NO NEW DATA TO RETRAIN!");
+      }
+    } catch (e) {
+      console.log(e);
     }
+  }
+  writeIntents(retrainData, filePath) {
+    retrainData.forEach((element) => {
+      element.intent = element.intent + ".txt";
+      fs.open(filePath + "/" + element.intent, "a", function (err) {
+        if (err) throw err;
+        fs.appendFileSync(
+          filePath + "/" + element.intent,
+          element.sentence + "\n",
+          "UTF-8",
+          { flags: "a+" },
+          function (err) {
+            if (err) throw err;
+          }
+        );
+      });
+    });
   }
 }

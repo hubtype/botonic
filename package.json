@@ -19,5 +19,16 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@oclif/command": "^1.5.19",
+    "adm-zip": "^0.4.14",
+    "analytics-node": "^3.4.0-beta.1",
+    "axios": "^0.19.2",
+    "colors": "^1.4.0",
+    "folder-hash": "^3.3.0",
+    "ora": "^4.0.3",
+    "unzipper": "^0.10.10",
+    "zip-a-folder": "0.0.12"
+  }
 }
