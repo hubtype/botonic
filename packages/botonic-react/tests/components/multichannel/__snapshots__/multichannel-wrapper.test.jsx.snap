@@ -1,8 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Multichannel wrapper 1 text in 1 single message. Default props 1`] = `
+exports[`Multichannel wrapper 1 text in 1 single message 1`] = `
 <message
   delay={0}
+  messageSeparator="
+"
   type="text"
   typing={0}
 >
@@ -10,9 +12,11 @@ exports[`Multichannel wrapper 1 text in 1 single message. Default props 1`] = `
 </message>
 `;
 
-exports[`Multichannel wrapper 2 text in 1 single message. Default props 1`] = `
+exports[`Multichannel wrapper 2 text in 1 single message 1`] = `
 <message
   delay={0}
+  messageSeparator="
+"
   type="text"
   typing={0}
 >
@@ -22,9 +26,11 @@ Text2
 </message>
 `;
 
-exports[`Multichannel wrapper 2 texts with buttons. Default props 1`] = `
+exports[`Multichannel wrapper 2 texts with buttons 1`] = `
 <message
   delay={0}
+  messageSeparator="
+"
   type="text"
   typing={0}
 >
@@ -149,7 +155,8 @@ exports[`Multichannel wrapper text and carousel only show button text, 1 single 
   }
   delay={0}
   indexSeparator="."
-  oneMessagePerComponent={false}
+  messageSeparator="
+"
   type="text"
   typing={0}
 >

@@ -42,7 +42,7 @@ export const MultichannelButton = props => {
 
   const getText = () => {
     let text = props.children
-    const newline = props.newline ? '\n' : ''
+    const newline = props.newline || ''
     const separator = multichannelContext.indexSeparator || ' '
     const index = multichannelContext.currentIndex
       ? `${formatIndex(multichannelContext.currentIndex + separator)} `

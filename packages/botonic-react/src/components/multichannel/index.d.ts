@@ -9,14 +9,16 @@ export interface MultichannelViewOptions {
 
 export interface MultichannelContextType extends MultichannelViewOptions {
   currentIndex: number | string // can be letter or number
-  oneMessagePerComponent?: boolean
+  /** @see same field at MultichannelProps */
+  messageSeparator?: string
 }
 
 // Text
 export interface MultichannelTextProps extends MultichannelViewOptions {
   index?: string
   indexMode?: IndexMode
-  newline?: boolean
+  /** Defaults to no separator between lines*/
+  newline?: string
 }
 
 export const MultichannelText: React.FunctionComponent<MultichannelTextProps>
@@ -32,7 +34,7 @@ export const MultichannelCarousel: React.FunctionComponent<MultichannelCarouselP
 
 // Button
 export interface MultichannelButtonProps {
-  newline?: boolean
+  newline?: string
 }
 export const MultichannelButton: React.FunctionComponent<MultichannelButtonProps>
 
@@ -40,7 +42,13 @@ export interface MultichannelProps extends MultichannelViewOptions {
   firstIndex?: number | string
   carousel?: MultichannelCarouselProps
   text?: MultichannelTextProps
-  oneMessagePerComponent?: boolean
+  /**
+   * If undefined, each component will be served in a different botonic message
+   * '' will concatenate in the same line
+   * '\n' will split in different lines
+   * '\n\n' will separate with an empty line
+   **/
+  messageSeparator?: string
 }
 
 export const Multichannel: React.FunctionComponent<MultichannelProps>

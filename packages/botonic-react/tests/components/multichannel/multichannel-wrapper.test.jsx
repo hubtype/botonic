@@ -22,7 +22,7 @@ const LEGACY_PROPS = {
     indexMode: 'number',
   },
   indexSeparator: '.',
-  oneMessagePerComponent: true,
+  messageSeparator: null,
 }
 
 describe('Multichannel wrapper', () => {
@@ -146,7 +146,7 @@ describe('Multichannel wrapper', () => {
           showTitle: false,
           showSubtitle: false,
         }}
-        oneMessagePerComponent={false}
+        messageSeparator={'\n'}
       >
         <Text>This is a multichannel Carousel</Text>
 
@@ -175,9 +175,9 @@ describe('Multichannel wrapper', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('2 text in 1 single message. Default props', () => {
+  test('2 text in 1 single message', () => {
     const sut = (
-      <Multichannel>
+      <Multichannel messageSeparator={'\n'}>
         <Text>Text1</Text>
         <Text>Text2</Text>
       </Multichannel>
@@ -188,9 +188,9 @@ describe('Multichannel wrapper', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('1 text in 1 single message. Default props', () => {
+  test('1 text in 1 single message', () => {
     const sut = (
-      <Multichannel>
+      <Multichannel messageSeparator={'\n'}>
         <Text>Text1</Text>
       </Multichannel>
     )
@@ -200,9 +200,9 @@ describe('Multichannel wrapper', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('2 texts with buttons. Default props', () => {
+  test('2 texts with buttons', () => {
     const sut = (
-      <Multichannel>
+      <Multichannel messageSeparator={'\n'}>
         <Text>
           Text1
           <Button key={'1'} payload='payload1'>

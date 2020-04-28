@@ -1,5 +1,16 @@
-import { MultichannelButton, Element, Pic, Subtitle, Title } from '../../../src'
-import { MultichannelCarousel } from '../../../src/components/multichannel'
+import {
+  MultichannelButton,
+  Element,
+  Pic,
+  Subtitle,
+  Title,
+  Carousel,
+  Button,
+} from '../../../src'
+import {
+  Multichannel,
+  MultichannelCarousel,
+} from '../../../src/components/multichannel'
 import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
@@ -22,7 +33,7 @@ const movies = [
 
 export const LEGACY_CONTEXT = {
   indexSeparator: '.',
-  oneMessagePerComponent: true,
+  messageSeparator: null,
 }
 
 export const LEGACY_PROPS = {
@@ -124,6 +135,34 @@ describe('Multichannel carousel COMPACT mode', () => {
       </MultichannelCarousel>
     )
     const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('all elements in same message', () => {
+    const sut = (
+      <MultichannelCarousel>
+        {[
+          <Element key={0}>
+            <Subtitle>Subtitle will not appear</Subtitle>
+            {[
+              <MultichannelButton key={1} payload='Payload1'>
+                {'Previo'}
+              </MultichannelButton>,
+            ]}
+          </Element>,
+          <Element key={1}>
+            <Subtitle>Subtitle will not appear</Subtitle>
+            {[
+              <MultichannelButton key={1} payload='Payload2'>
+                {'Durante'}
+              </MultichannelButton>,
+            ]}
+          </Element>,
+        ]}
+      </MultichannelCarousel>
+    )
+    const renderer = whatsappRenderer(sut, { messageSeparator: '\n' })
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })
