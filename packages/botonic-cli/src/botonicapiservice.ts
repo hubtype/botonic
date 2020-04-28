@@ -35,6 +35,7 @@ export class BotonicAPIService {
   public lastBuildHash: any
   public bot: any = null
   public headers: object | null = null
+  public lastRetrainingDate: string | null = null
 
   constructor() {
     this.loadGlobalCredentials()
@@ -84,10 +85,12 @@ export class BotonicAPIService {
       if (credentials.hasOwnProperty('bot')) {
         this.bot = credentials.bot
         this.lastBuildHash = credentials.lastBuildHash
+        this.lastRetrainingDate = credentials.lastRetrainingDate
       } else {
         // Allow users < v0.1.12 to upgrade smoothly
         this.bot = credentials
         this.lastBuildHash = ''
+        this.lastRetrainingDate = ''
       }
     }
   }
@@ -110,7 +113,11 @@ export class BotonicAPIService {
   }
 
   saveBotCredentials() {
-    const bc = { bot: this.bot, lastBuildHash: this.lastBuildHash }
+    const bc = {
+      bot: this.bot,
+      lastBuildHash: this.lastBuildHash,
+      lastRetrainingDate: this.lastRetrainingDate,
+    }
     fs.writeFileSync(this.botCredentialsPath, JSON.stringify(bc))
   }
 
@@ -343,6 +350,23 @@ export class BotonicAPIService {
         )
         resolve(headers)
       })
+    })
+  }
+
+  async getRetrainData() {
+    const botId = this.bot.id
+    let date = this.lastRetrainingDate
+    if (!date) {
+      const bots = await this.getBots()
+      const bot_createdAt = bots.data.results.filter(
+        bot => bot.id == this.bot.id
+      )[0].created_at
+      const initialDate = new Date(bot_createdAt)
+      date = initialDate.toUTCString()
+    }
+    return this.api(`bots/${this.bot.id}/retrain/`, null, 'get', null, {
+      botId,
+      date,
     })
   }
 }
