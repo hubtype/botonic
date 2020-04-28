@@ -1,5 +1,5 @@
 import * as cms from '../cms'
-import { ButtonStyle, TopContent } from '../cms'
+import { ButtonStyle, CmsException, TopContent } from '../cms'
 
 export class RenderOptions {
   followUpDelaySeconds = 4
@@ -30,6 +30,22 @@ export class BotonicMsgConverter {
 
   constructor(options: Partial<RenderOptions> = {}) {
     this.options = { ...new RenderOptions(), ...options }
+  }
+
+  convert(content: cms.MessageContent, delayS = 0): BotonicMsgs {
+    if (content instanceof cms.Carousel) {
+      return this.carousel(content, delayS)
+    }
+    if (content instanceof cms.Text) {
+      return this.text(content, delayS)
+    }
+    if (content instanceof cms.StartUp) {
+      return this.startUp(content, delayS)
+    }
+    if (content instanceof cms.Image) {
+      return this.image(content, delayS)
+    }
+    throw new CmsException(`Unsupported content type ${content.contentType}`)
   }
 
   carousel(carousel: cms.Carousel, delayS = 0): BotonicMsgs {
@@ -90,9 +106,10 @@ export class BotonicMsgConverter {
     return this.appendFollowUp(msg, text)
   }
 
-  startUp(startUp: cms.StartUp): BotonicMsgs {
+  startUp(startUp: cms.StartUp, delayS = 0): BotonicMsgs {
     const img: BotonicMsg = {
       type: 'image',
+      delay: delayS,
       data: { image: startUp.imgUrl },
     }
     const text: BotonicText = {
@@ -103,9 +120,10 @@ export class BotonicMsgConverter {
     return this.appendFollowUp([img, text], startUp)
   }
 
-  image(img: cms.Image): BotonicMsgs {
+  image(img: cms.Image, delayS = 0): BotonicMsgs {
     const msg: BotonicMsg = {
       type: 'image',
+      delay: delayS,
       data: {
         image: img.imgUrl,
       },
