@@ -1,5 +1,6 @@
 export * from './cms'
 export * from './contentful'
+export * from './markup'
 export * from './nlp'
 export * from './render'
 export * from './search'
