@@ -80,6 +80,7 @@ export function isSameModel(model1: ContentType, model2: ContentType): boolean {
 /**
  * Except for {@link topContents} and {@link contentsWithKeywords}, when {@link Context.locale} is specified it will default
  * to the fallback locale for those fields not available in the specified locale.
+ * TODO split in several interfaces. One only for delivering single Content? or only MessageContents? Rename to Delivery
  */
 export interface CMS {
   button(id: string, context?: Context): Promise<Button>
