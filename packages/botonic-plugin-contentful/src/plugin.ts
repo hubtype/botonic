@@ -37,6 +37,8 @@ export interface ContentfulOptions extends OptionsBase {
    */
   cacheTtlMs?: number
   disableCache?: boolean
+
+  cmsDecorator?: (cms: cms.CMS) => cms.CMS
 }
 
 export default class BotonicPluginContentful {
@@ -53,6 +55,9 @@ export default class BotonicPluginContentful {
     } else {
       const contOptions = opt as ContentfulOptions
       this.cms = new Contentful(contOptions)
+      if (contOptions.cmsDecorator) {
+        this.cms = contOptions.cmsDecorator(this.cms)
+      }
     }
     this.cms = new cms.ErrorReportingCMS(this.cms)
     this.renderer = opt.renderer || new BotonicMsgConverter()
