@@ -105,6 +105,7 @@ export class RndTextBuilder extends TextBuilder {
 
   build(): Text {
     const buttons = this.buttonsBuilder.build()
+    // TODO too complex. resurrect withButtonsBuilder?
     if (buttons.length > 0) {
       if (this.buttons.length > 0) {
         throw new CmsException(
@@ -126,10 +127,32 @@ export class RndTextBuilder extends TextBuilder {
 }
 
 export class RndElementBuilder extends ElementBuilder {
-  private buttonsBuilder = new RndButtonsBuilder()
+  // move aa ButtonsBuilder to ElementBuilder?
+  private buttonsBuilder: RndButtonsBuilder | undefined
 
   constructor() {
     super(rndStr())
+  }
+
+  withButtonsBuilder(): RndButtonsBuilder {
+    if (this.buttons.length > 0) {
+      throw new CmsException(
+        'cannot use withButtonsBuilder if addButtons was previously called'
+      )
+    }
+    if (!this.buttonsBuilder) {
+      this.buttonsBuilder = new RndButtonsBuilder()
+    }
+    return this.buttonsBuilder
+  }
+
+  withButtons(buttons: Button[]): this {
+    if (this.buttonsBuilder) {
+      throw new CmsException(
+        'cannot use addButtons if withButtonsBuilder was previously called'
+      )
+    }
+    return super.withButtons(buttons)
   }
 
   withRandomFields(): this {
@@ -158,16 +181,12 @@ export class RndCarouselBuilder extends CarouselBuilder {
     super(rndStr(), name, text)
   }
 
-  withRandomFields(): this {
-    this.elements.push(this.elementBuilder.withRandomFields().build())
-    this.elements.push(this.elementBuilder.withRandomFields().build())
-
+  withRandomFields(numElements = 2): this {
+    for (let i = 0; i < numElements; i++) {
+      this.elementBuilder.withRandomFields()
+      this.addElement()
+    }
     this.topComponentBuilder.withRandomFields(this)
-    return this
-  }
-
-  addElement(): this {
-    this.elements.push(this.elementBuilder.withRandomFields().build())
     return this
   }
 }
