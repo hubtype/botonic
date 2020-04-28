@@ -8,7 +8,7 @@ import { whatsappRenderer } from '../../helpers/test-utils'
 
 export const LEGACY_CONTEXT = {
   indexSeparator: '.',
-  oneMessagePerComponent: true,
+  messageSeparator: null,
 }
 
 export const LEGACY_PROPS = {

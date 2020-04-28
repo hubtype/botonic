@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Multichannel carousel COMPACT mode all elements in same message 1`] = `
+Array [
+  "
+Previo",
+  "
+Durante",
+]
+`;
+
 exports[`Multichannel carousel COMPACT mode dynamic carousel (just text in button) with payload/path buttons 1`] = `
 Array [
   <message

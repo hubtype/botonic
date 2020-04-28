@@ -37,7 +37,8 @@ export const Multichannel = props => {
           {...child.props}
           {...props.text}
           key={props.key}
-          {...(!props.oneMessagePerComponent && index > 0 && { newline: true })}
+          {...(props.messageSeparator &&
+            index > 0 && { newline: props.messageSeparator })}
         >
           {child.props.children}
         </MultichannelText>
@@ -56,9 +57,9 @@ export const Multichannel = props => {
     }
     return child
   })
-  if (!props.oneMessagePerComponent) {
+  if (props.messageSeparator != null) {
     newChildren = newChildren.map((c, index) =>
-      index > 0 && typeof c === 'string' ? '\n' + c : c
+      index > 0 && typeof c === 'string' ? props.messageSeparator + c : c
     )
     newChildren = (
       <Text {...props} key={props.key}>
@@ -72,7 +73,7 @@ export const Multichannel = props => {
         currentIndex: props.firstIndex,
         boldIndex: props.boldIndex,
         indexSeparator: props.indexSeparator,
-        oneMessagePerComponent: props.oneMessagePerComponent,
+        messageSeparator: props.messageSeparator,
       }}
     >
       {newChildren}

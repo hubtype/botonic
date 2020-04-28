@@ -30,7 +30,7 @@
     "moment": "^2.24.0",
     "react": "^16.13.0",
     "react-children-utilities": "^2.1.0",
-    "react-dom": "^16.13.0",
+    "react-dom": "^16.13.1",
     "react-frame-component": "^4.1.1",
     "react-json-tree": "^0.11.2",
     "react-reveal": "^1.2.2",
