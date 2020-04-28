@@ -30,14 +30,8 @@ export class Markdown extends MarkUp {
 
   renderToken(token: Token): string {
     throw new Error('Not implemented')
-    // if (token.items) {
-    //   return this.render(token.items, '\n')
-    // }
-    // if (token.tokens && token.tokens.length > 1) {
-    //   return this.render(token.tokens, '')
-    // }
-    // return token.raw || token.text || ''
   }
+
   wrapWithInline(input: string, inlineType: TokenType): string {
     if (inlineType === TokenType.EMPHASIS) {
       return `_${input}_`
@@ -48,42 +42,3 @@ export class Markdown extends MarkUp {
     throw new Error(`wrapWithInline does not support inline ${inlineType}`)
   }
 }
-
-// /**
-//  * Converts markdown from contentful flavour to whatsapp one
-//  */
-// export function contentfulToWhatsApp(txt: string): string {
-//   return txt.replace(
-//     new RegExp(CONTENTFUL_MARKDOWN.BOLD, 'g'),
-//     WHATSAPP_MARKDOWN.BOLD
-//   )
-// }
-
-// /**
-//  * Returns the chunks of text highlighted as bold
-//  * TODO find both markdown bold syntaxes
-//  */
-// export function oldFindContentfulBold(txt: string): string[] {
-//   const mark = `\\${WHATSAPP_MARKDOWN.BOLD}`
-//   let matches = txt.match(new RegExp(`${mark}.*${mark}`))
-//   if (!matches) {
-//     const mark = CONTENTFUL_MARKDOWN.BOLD
-//     matches = txt.match(new RegExp(`${mark}.*${mark}`))
-//     if (!matches) {
-//       return []
-//     }
-//   }
-//   const len = (txt: string) => {
-//     for (const sep of [WHATSAPP_MARKDOWN.BOLD, CONTENTFUL_MARKDOWN.BOLD]) {
-//       if (txt.startsWith(sep)) {
-//         return sep.length
-//       }
-//     }
-//     return 0
-//   }
-//
-//   return matches.map(m => {
-//     const length = len(m)
-//     return m.substr(length, m.length - 2 * length)
-//   })
-// }
