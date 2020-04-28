@@ -133,7 +133,8 @@ export class ElementBuilder {
 }
 
 export class CarouselBuilder extends MessageContentBuilder {
-  elements: Element[] = []
+  private elements: Element[] = []
+  elementBuilder: ElementBuilder | undefined
 
   constructor(id: string, name: string, public text: string) {
     super(id, name)
@@ -141,6 +142,21 @@ export class CarouselBuilder extends MessageContentBuilder {
 
   withText(text: string): this {
     this.text = text
+    return this
+  }
+
+  withElementBuilder(elementId: string): ElementBuilder {
+    if (!this.elementBuilder) {
+      this.elementBuilder = new ElementBuilder(elementId)
+    }
+    return this.elementBuilder
+  }
+
+  addElement(): this {
+    if (!this.elementBuilder) {
+      throw new Error('You need to previously call withElementBuilder')
+    }
+    this.elements.push(this.elementBuilder.build())
     return this
   }
 
