@@ -11,6 +11,7 @@ interface NlpOptions {
 interface OptionsBase {
   renderer?: BotonicMsgConverter
   search?: Search
+  normalizer?: Normalizer
   nlpOptions?: NlpOptions
   keywordsOptions?: { [locale: string]: KeywordsOptions }
 }
@@ -48,6 +49,8 @@ export default class BotonicPluginContentful {
 
   readonly search: Search
 
+  readonly normalizer?: Normalizer
+
   constructor(opt: CmsOptions | ContentfulOptions) {
     const optionsAny = opt as any
     if (optionsAny.cms) {
@@ -64,11 +67,12 @@ export default class BotonicPluginContentful {
 
     if (opt.search) {
       this.search = opt.search
+      this.normalizer = opt.normalizer
     } else {
-      const normalizer = opt.nlpOptions
+      this.normalizer = opt.nlpOptions
         ? new Normalizer(opt.nlpOptions.blackList)
         : new Normalizer()
-      this.search = new Search(this.cms, normalizer, opt.keywordsOptions)
+      this.search = new Search(this.cms, this.normalizer, opt.keywordsOptions)
     }
   }
 
