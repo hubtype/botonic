@@ -268,6 +268,7 @@ export class Text extends MessageContent {
 }
 
 export type Chitchat = Text
+export const Chitchat = Text
 
 export class Url extends TopContent {
   constructor(readonly common: CommonFields, readonly url: string) {
