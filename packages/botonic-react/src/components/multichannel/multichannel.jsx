@@ -19,14 +19,14 @@ export const Multichannel = props => {
   let newChildren = deepMapWithIndex(props.children, (child, index) => {
     if (child && child.type && child.type.name === 'Button') {
       return (
-        <MultichannelButton {...child.props}>
+        <MultichannelButton {...child.props} key={child.key}>
           {child.props.children}
         </MultichannelButton>
       )
     }
     if (child && child.type && child.type.name === 'Reply') {
       return (
-        <MultichannelReply {...child.props}>
+        <MultichannelReply {...child.props} key={child.key}>
           {child.props.children}
         </MultichannelReply>
       )
@@ -36,7 +36,7 @@ export const Multichannel = props => {
         <MultichannelText
           {...child.props}
           {...props.text}
-          key={props.key}
+          key={child.key}
           {...(props.messageSeparator &&
             index > 0 && { newline: props.messageSeparator })}
         >
@@ -49,7 +49,7 @@ export const Multichannel = props => {
         <MultichannelCarousel
           {...child.props}
           {...props.carousel}
-          key={props.key}
+          key={child.key}
         >
           {child.props.children}
         </MultichannelCarousel>
