@@ -61,11 +61,7 @@ export const Multichannel = props => {
     newChildren = newChildren.map((c, index) =>
       index > 0 && typeof c === 'string' ? props.messageSeparator + c : c
     )
-    newChildren = (
-      <Text {...props} key={props.key}>
-        {newChildren}
-      </Text>
-    )
+    newChildren = <Text key={props.key}>{newChildren}</Text>
   }
   return (
     <MultichannelContext.Provider
