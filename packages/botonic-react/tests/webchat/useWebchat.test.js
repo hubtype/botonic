@@ -28,23 +28,6 @@ describe('Testing useWebchat ', () => {
       testMessage,
     ])
   })
-  it('updateMessage: replace testMessage with testUpdateMessage in webchatState: { messagesComponents }', () => {
-    //falla funcionament ??
-    const { result } = renderHook(() => useWebchat())
-    const testUpdateMessage = {
-      id: '345gh-89jn9',
-      type: 'text',
-      data: {
-        text: 'Hola',
-      },
-      from: 'user',
-    }
-    act(() => {
-      result.current.addMessage(testMessage)
-      result.current.updateMessage(testUpdateMessage)
-    })
-    expect(result.current.webchatState.messagesJSON).toStrictEqual([])
-  })
   it('updateReplies: assigne false to webchatState: { replies }', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
@@ -157,16 +140,15 @@ describe('Testing useWebchat ', () => {
       },
     })
   })
-  it('updateDevSettings: assigne dev to webchatState: { devSettings }', () => {
+  it('updateDevSettings: assigne devSettings to webchatState: { devSettings }', () => {
     const { result } = renderHook(() => useWebchat())
+    const devSettings = {
+      keepSessionOnReload: true,
+    }
     act(() => {
-      result.current.updateDevSettings('dev')
+      result.current.updateDevSettings(devSettings)
     })
-    expect(result.current.webchatState.devSettings).toStrictEqual({
-      '0': 'd',
-      '1': 'e',
-      '2': 'v',
-    })
+    expect(result.current.webchatState.devSettings).toStrictEqual(devSettings)
   })
   it('toggleWebchat: assigne true to webchatState: { isWebchatOpen }', () => {
     const { result } = renderHook(() => useWebchat())
@@ -191,5 +173,4 @@ describe('Testing useWebchat ', () => {
     expect(result.current.webchatState.messagesJSON).toStrictEqual([])
   })
 })
-
-// messagesComponents, replies, webview, error, devSettings -> canviar input
+//missing test of updateMessage
