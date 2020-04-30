@@ -14,10 +14,11 @@ export class HubtypeService {
     if (user.id && (lastMessageId || lastMessageUpdateDate)) this.init()
   }
 
-  init(user, lastMessageId, lastMessageUpdate) {
+  init(user, lastMessageId, lastMessageUpdateDate) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
-    if (lastMessageUpdate) this.lastMessageUpdate = lastMessageUpdate
+    if (lastMessageUpdateDate)
+      this.lastMessageUpdateDate = lastMessageUpdateDate
     if (this.pusher || !this.user.id || !this.appId) return null
     this.pusher = new Pusher(PUSHER_KEY, {
       cluster: 'eu',
@@ -27,7 +28,7 @@ export class HubtypeService {
         headers: {
           'X-BOTONIC-USER-ID': this.user.id,
           'X-BOTONIC-LAST-MESSAGE-ID': this.lastMessageId,
-          'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': this.lastMessageUpdate,
+          'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': this.lastMessageUpdateDate,
         },
       },
     })
