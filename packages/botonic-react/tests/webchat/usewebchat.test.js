@@ -40,7 +40,7 @@ describe('TEST: useWebchat ', () => {
     ])
   })
 
-  it('updateReplies: assigne false to webchatState.replies', () => {
+  it('updateReplies: assign false to webchatState.replies', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.updateReplies(false)
@@ -48,7 +48,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.replies).toEqual(false)
   })
 
-  it('updateLatestInput: assigne latestInput to webchatState.latestInput', () => {
+  it('updateLatestInput: assign latestInput to webchatState.latestInput', () => {
     const { result } = renderHook(() => useWebchat())
     const latestInput = {
       id: 'f65feb4e-9',
@@ -61,7 +61,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.latestInput).toStrictEqual(latestInput)
   })
 
-  it('updateTyping: assigne true to webchatState.typing', () => {
+  it('updateTyping: assign true to webchatState.typing', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.updateTyping(true)
@@ -69,7 +69,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.typing).toEqual(true)
   })
 
-  it('updateWebview: assigne webview to webchatState.webview', () => {
+  it('updateWebview: assign webview to webchatState.webview', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.updateWebview('webview')
@@ -77,7 +77,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.webview).toEqual('webview')
   })
 
-  it('updateSession: assigne initialSession to webchatState.session', () => {
+  it('updateSession: assign initialSession to webchatState.session', () => {
     const { result } = renderHook(() => useWebchat())
     const initialSession = {
       is_first_interaction: true,
@@ -95,7 +95,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.session).toStrictEqual(initialSession)
   })
 
-  it('updateUser: assigne testUser to webchatState.user', () => {
+  it('updateUser: assign testUser to webchatState.user', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.updateUser(testUser)
@@ -103,7 +103,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.user).toStrictEqual(testUser)
   })
 
-  it('updateLastRoutePath: assigne the string route_path to webchatState.lastRoutePath', () => {
+  it('updateLastRoutePath: assign the string route_path to webchatState.lastRoutePath', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.updateLastRoutePath('route_path')
@@ -111,7 +111,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.lastRoutePath).toEqual('route_path')
   })
 
-  it('updateHandoff: assigne true to webchatState.handoff', () => {
+  it('updateHandoff: assign true to webchatState.handoff', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.updateHandoff(true)
@@ -119,7 +119,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.handoff).toEqual(true)
   })
 
-  it('updateTheme: assigne theme to webchatState.theme', () => {
+  it('updateTheme: assign theme to webchatState.theme', () => {
     const { result } = renderHook(() => useWebchat())
     const theme = {
       style: {
@@ -136,7 +136,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.theme).toStrictEqual(theme)
   })
 
-  it('updateDevSettings: assigne devSettings to webchatState.devSettings', () => {
+  it('updateDevSettings: assign devSettings to webchatState.devSettings', () => {
     const { result } = renderHook(() => useWebchat())
     const devSettings = {
       keepSessionOnReload: true,
@@ -147,7 +147,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.devSettings).toStrictEqual(devSettings)
   })
 
-  it('toggleWebchat: assigne true to webchatState.isWebchatOpen', () => {
+  it('toggleWebchat: assign true to webchatState.isWebchatOpen', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.toggleWebchat(true)
@@ -155,7 +155,7 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.isWebchatOpen).toEqual(true)
   })
 
-  it('setError: assigne the string error to webchatState.error', () => {
+  it('setError: assign the string error to webchatState.error', () => {
     const { result } = renderHook(() => useWebchat())
     act(() => {
       result.current.setError('error')
