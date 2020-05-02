@@ -4,6 +4,17 @@ import { countOccurrences } from './tokens'
 import { NormalizedUtterance, Word } from './normalizer'
 import { leven } from '@nlpjs/similarity/src'
 
+export const enum WordSimilarityAlgorithm {
+  LEVENSHTEIN,
+}
+
+export class WordsDistance {
+  constructor(readonly algorithm = WordSimilarityAlgorithm.LEVENSHTEIN) {}
+  distance(left: string, right: string): number {
+    return leven(left, right)
+  }
+}
+
 export class SimilarWordResult<M> {
   constructor(
     readonly candidate: M,
