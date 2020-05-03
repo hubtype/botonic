@@ -1,5 +1,10 @@
 import path from 'path'
-import { readJSON, readDir } from './file-utils'
+import {
+  readJSON,
+  readDir,
+  loadConfigAndTrainingData,
+  saveConfigAndTrainingData,
+} from './file-utils'
 import { detectLang, preprocessData } from './preprocessing'
 import { getEmbeddingMatrix } from './word-embeddings'
 import * as tf from '@tensorflow/tfjs-node'
@@ -11,10 +16,7 @@ import {
   MODEL_FILENAME,
   DEFAULT_HYPERPARAMETERS,
 } from './constants'
-import {
-  loadConfigAndTrainingData,
-  saveConfigAndTrainingData,
-} from './file-utils'
+
 import { getPrediction, getIntent } from './prediction'
 import { getEntities } from './ner'
 
