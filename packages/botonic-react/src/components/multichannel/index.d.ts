@@ -35,8 +35,15 @@ export const MultichannelCarousel: React.FunctionComponent<MultichannelCarouselP
 // Button
 export interface MultichannelButtonProps {
   newline?: string
+  path?: string
+  payload?: string
+  url?: string
+  webview?: string
 }
 export const MultichannelButton: React.FunctionComponent<MultichannelButtonProps>
+
+// Reply
+export const MultichannelReply: React.FunctionComponent<MultichannelButtonProps>
 
 export interface MultichannelProps extends MultichannelViewOptions {
   firstIndex?: number | string

@@ -25,6 +25,10 @@ export interface MessageProps {
 
 export const Message: React.FunctionComponent<MessageProps>
 
+export const Audio: React.FunctionComponent<MessageProps>
+export const Document: React.FunctionComponent<MessageProps>
+export const Video: React.FunctionComponent<MessageProps>
+
 export const Text: React.FunctionComponent<MessageProps>
 
 export interface Webview {

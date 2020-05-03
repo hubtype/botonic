@@ -10,7 +10,7 @@
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' '**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
   },
   "sideEffects": [
     "*.(scss|css)"
@@ -27,10 +27,10 @@
     "@rehooks/local-storage": "^2.2.3",
     "axios": "^0.19.2",
     "emoji-picker-react": "^3.1.7",
-    "framer-motion": "^1.8.3",
+    "framer-motion": "^1.8.4",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
-    "react": "^16.13.0",
+    "react": "^16.13.1",
     "react-children-utilities": "^2.1.0",
     "react-dom": "^16.13.1",
     "react-frame-component": "^4.1.1",
@@ -43,24 +43,25 @@
     "styled-components": "^4.4.1",
     "ua-parser-js": "^0.7.20",
     "unescape": "^1.0.1",
-    "uuid": "^3.3.3"
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.7",
+    "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/preset-react": "^7.8.3",
-    "@babel/register": "^7.8.6",
-    "@babel/runtime": "^7.8.7",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/register": "^7.9.0",
+    "@babel/runtime": "^7.9.6",
     "@testing-library/react-hooks": "^3.2.1",
     "@types/react": "16.9.34",
     "babel-dts-generator": "^0.6.3",
     "babel-plugin-add-module-exports": "^1.0.2",
     "html-react-parser": "^0.10.1",
     "identity-obj-proxy": "^3.0.0",
-    "react-hot-loader": "^4.12.20",
+    "react-hot-loader": "^4.12.21",
     "react-test-renderer": "^16.13.1"
   },
   "engines": {
