@@ -1,4 +1,4 @@
-import { Entry, EntryCollection } from 'contentful/index'
+import { Entry, EntryCollection } from 'contentful'
 import * as cms from '../../cms'
 import { CommonFields, TopContentId, Context, TopContentType } from '../../cms'
 import { SearchCandidate } from '../../search'

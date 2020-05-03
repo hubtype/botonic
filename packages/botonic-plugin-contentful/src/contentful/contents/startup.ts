@@ -1,4 +1,4 @@
-import * as contentful from 'contentful/index'
+import * as contentful from 'contentful'
 import * as cms from '../../cms'
 import { ButtonDelivery } from './button'
 import {

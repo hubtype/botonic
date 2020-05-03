@@ -1,4 +1,4 @@
-import { Entry } from 'contentful/index'
+import { Entry } from 'contentful'
 import { DEFAULT_CONTEXT, ContentType, ScheduleContent } from '../../cms'
 import * as time from '../../time'
 import { ContentDelivery } from '../content-delivery'

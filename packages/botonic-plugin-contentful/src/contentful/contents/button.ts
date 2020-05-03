@@ -1,4 +1,4 @@
-import * as contentful from 'contentful/index'
+import * as contentful from 'contentful'
 import { DeliveryApi } from '../index'
 import { ContentType, CmsException } from '../../cms'
 import * as cms from '../../cms'

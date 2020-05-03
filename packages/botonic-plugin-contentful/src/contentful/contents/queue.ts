@@ -1,6 +1,6 @@
 import { Context } from '../../cms'
 import * as cms from '../../cms'
-import * as contentful from 'contentful/index'
+import * as contentful from 'contentful'
 import { ContentDelivery } from '../content-delivery'
 import {
   CommonEntryFields,

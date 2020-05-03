@@ -1,5 +1,5 @@
-import * as contentful from 'contentful/index'
-import { ContentType, Entry } from 'contentful/index'
+import * as contentful from 'contentful'
+import { ContentType, Entry } from 'contentful'
 import memoize from 'memoizee'
 import { ReducedClientApi } from './client-api'
 
