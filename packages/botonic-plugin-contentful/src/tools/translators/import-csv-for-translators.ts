@@ -22,6 +22,7 @@ const fileName = process.argv[6]
 
 if (process.argv.length < 7 || process.argv[2] == '--help') {
   console.error(`Usage: space_id environment access_token locale filename`)
+  // eslint-disable-next-line no-process-exit
   process.exit(1)
 }
 

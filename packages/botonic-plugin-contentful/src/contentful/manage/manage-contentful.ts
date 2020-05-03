@@ -1,8 +1,10 @@
 import { ManageCms } from '../../manage-cms/manage-cms'
 import * as cms from '../../cms'
 import * as nlp from '../../nlp'
-import * as contentfulm from 'contentful-management'
+import contentfulm from 'contentful-management'
+// eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/typings/environment'
+// eslint-disable-next-line node/no-missing-import
 import { Entry } from 'contentful-management/typings/entry'
 import { ContentfulOptions } from '../../plugin'
 import { ManageContext } from '../../manage-cms/manage-context'
@@ -14,7 +16,7 @@ import {
 } from '../../manage-cms/fields'
 
 export class ManageContentful implements ManageCms {
-  readonly manage: contentfulm.ClientAPI
+  readonly manage: contentfulManagementStatic.ClientAPI
   environment: Environment | undefined
 
   constructor(readonly options: ContentfulOptions) {
