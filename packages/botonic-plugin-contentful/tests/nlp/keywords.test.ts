@@ -1,11 +1,12 @@
 import 'jest-extended'
 import {
-  KeywordsParser,
-  Normalizer,
-  KeywordsOptions,
-  MatchType,
-  StemmingBlackList,
   Keyword,
+  KeywordsOptions,
+  KeywordsParser,
+  MatchType,
+  Normalizer,
+  SPANISH,
+  StemmingBlackList,
   Word,
 } from '../../src/nlp'
 
@@ -53,6 +54,29 @@ function testFindKeywords(
     expect(results.map(r => r.candidate)).toIncludeSameMembers(expectedMatch)
   }
 }
+
+test('TEST findCandidatesWithKeywordsAt matches tokens instead of stems if match is longer', () => {
+  const normalizer = new Normalizer()
+  const parser = new KeywordsParser<string>(
+    SPANISH,
+    MatchType.ONLY_KEYWORDS_FOUND,
+    normalizer,
+    new KeywordsOptions()
+  )
+
+  parser.addCandidate('candidate2', ['saluda'])
+  parser.addCandidate('candidate1', ['saludos'])
+
+  const tokens = normalizer.normalize(SPANISH, 'soludos')
+
+  const results = parser.findCandidatesWithKeywordsAt(tokens)
+
+  expect(results).toHaveLength(2)
+  expect(results[0].match).toEqual('soludos')
+  expect(results[0].distance).toEqual(1)
+  expect(results[1].match).toEqual('solud')
+  expect(results[1].distance).toEqual(1)
+})
 
 test.each<any>([
   ['quiero realiSar un pedido', { A: ['realizar pedido', 'comprar'] }, ['A']],

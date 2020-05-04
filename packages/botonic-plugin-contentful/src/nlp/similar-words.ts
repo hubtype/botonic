@@ -200,17 +200,46 @@ class FindIfOnlyWordsFromKeyword extends CandidateFinder {
       .filter(match => match.distance != TOO_DISTANT)
   }
 
-  getDistance(
+  protected getDistance(
     utterance: NormalizedUtterance,
     keyword: Keyword,
     maxDistance: number
   ): PartialMatch {
     const utteranceText = this.utteranceText(utterance, keyword)
-    return new PartialMatch(
+    const stemmedDistance = this.getDistanceCore(
+      utterance,
+      utteranceText,
+      keyword,
+      maxDistance
+    )
+    const stemmedMatch = new PartialMatch(
       keyword,
       utteranceText,
-      this.getDistanceCore(utterance, utteranceText, keyword, maxDistance)
+      stemmedDistance
     )
+    // give priority to unstemmed match because it will involve more matching character
+    const tokensMatch = this.getTokensMatch(utterance, keyword, maxDistance)
+    if (tokensMatch && tokensMatch.distance <= stemmedDistance) {
+      return tokensMatch
+    }
+    return stemmedMatch
+  }
+
+  private getTokensMatch(
+    utterance: NormalizedUtterance,
+    keyword: Keyword,
+    maxDistance: number
+  ): PartialMatch | undefined {
+    const withStopWords = keyword.hasOnlyStopWords
+    const utteranceTokens = utterance.joinedTokens(withStopWords)
+    const keywordTokens = keyword.joinedTokens(withStopWords)
+    if (
+      Math.abs(utteranceTokens.length - keywordTokens.length) <= maxDistance
+    ) {
+      const tokensDistance = leven(utteranceTokens, keywordTokens)
+      return new PartialMatch(keyword, utteranceTokens, tokensDistance)
+    }
+    return undefined
   }
 }
 
