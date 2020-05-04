@@ -583,8 +583,9 @@ export const Webchat = forwardRef((props, ref) => {
         >
           {emojiPickerIsOpened && (
             <OpenedEmojiPicker
-              width={theme.width}
-              onClick={handleSelectedEmoji}
+              height={webchatState.theme.style.height}
+              onEmojiClick={handleSelectedEmoji}
+              onClick={handleEmojiClick}
             />
           )}
           {persistentMenuOptions && (

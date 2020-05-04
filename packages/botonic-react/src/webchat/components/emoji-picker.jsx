@@ -12,19 +12,29 @@ export const EmojiPicker = props => (
   </IconContainer>
 )
 
+const Background = styled.div`
+  width: 100%;
+  height: ${props => props.height}px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+`
+
 const Container = styled.div`
-  width: ${props => props.width || '100%'};
-  max-width: 400px;
   display: flex;
   justify-content: flex-end;
   position: absolute;
   right: 0px;
   top: -332px;
 `
+
 export const OpenedEmojiPicker = props => {
   return (
-    <Container width={props.width}>
-      <EmojiPickerComponent onEmojiClick={props.onClick} />
-    </Container>
+    <>
+      <Background onClick={props.onClick} height={props.height}></Background>
+      <Container>
+        <EmojiPickerComponent onEmojiClick={props.onEmojiClick} />
+      </Container>
+    </>
   )
 }
