@@ -76,6 +76,10 @@ export class NormalizedUtterance {
   hasSameStems(other: NormalizedUtterance): boolean {
     return equalArrays(this.stems, other.stems)
   }
+
+  joinedTokens(withStopWords: boolean): string {
+    return Word.joinedTokens(this.words, withStopWords)
+  }
 }
 
 export class Normalizer {

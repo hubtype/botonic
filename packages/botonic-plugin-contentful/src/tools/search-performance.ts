@@ -35,7 +35,7 @@ function ut(text: string): NormalizedUtterance {
   )
 }
 
-function perfom() {
+function perform() {
   const sut = new SimilarWordFinder<TestCandidate>(true)
   for (let i = 0; i < 50; i++) {
     sut.addCandidate(candidate([`kw${i}`]))
@@ -50,4 +50,4 @@ function perfom() {
   console.log(new Date())
 }
 
-perfom()
+perform()

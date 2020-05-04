@@ -49,6 +49,10 @@ export class Keyword {
     }
     return this.words.map(w => new Keyword(w.token, [w], w.isStopWord))
   }
+
+  joinedTokens(withStopWords: boolean): string {
+    return Word.joinedTokens(this.words, withStopWords)
+  }
 }
 
 export class CandidateWithKeywords<M> {
