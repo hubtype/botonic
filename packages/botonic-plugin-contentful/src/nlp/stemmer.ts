@@ -3,6 +3,7 @@ import StemmerCa from '@nlpjs/lang-ca/src/stemmer-ca'
 import StemmerEn from '@nlpjs/lang-en-min/src/stemmer-en'
 import StemmerEs from '@nlpjs/lang-es/src/stemmer-es'
 import StemmerPt from '@nlpjs/lang-pt/src/stemmer-pt'
+import StemmerRu from '@nlpjs/lang-ru/src/stemmer-ru'
 import { StemmerPl } from './stemmers/polish-stemmer'
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
@@ -16,6 +17,7 @@ export const stemmers: { [key: string]: BaseStemmer } = {
   es: new StemmerEs(),
   pl: new StemmerPl(),
   pt: new StemmerPt(),
+  ru: new StemmerRu(),
   //node-nlp does not support polish
 }
 

@@ -95,6 +95,20 @@ declare module '@nlpjs/lang-ca/src/stemmer-ca' {
   export = StemmerCa
 }
 
+declare module '@nlpjs/lang-ru/src/stemmer-ru' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerRu extends BaseStemmer {}
+  export = StemmerRu
+}
+
+declare module '@nlpjs/lang-ru/src/tokenizer-ru' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerRu extends Tokenizer {}
+  export = TokenizerRu
+}
+
 declare module 'sort-stream' {
   function sort(func: (a: any, b: any) => number): any
   export = sort

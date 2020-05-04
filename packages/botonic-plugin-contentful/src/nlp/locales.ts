@@ -7,8 +7,16 @@ export const CATALAN = 'ca'
 export const ENGLISH = 'en'
 export const PORTUGUESE = 'pt'
 export const POLISH = 'pl'
+export const RUSSIAN = 'ru'
 
-export const SUPPORTED_LOCALES = [SPANISH, CATALAN, ENGLISH, PORTUGUESE, POLISH]
+export const SUPPORTED_LOCALES = [
+  SPANISH,
+  CATALAN,
+  ENGLISH,
+  PORTUGUESE,
+  POLISH,
+  RUSSIAN,
+]
 
 export function checkLocale(locale: Locale): Locale {
   // check it's supported
