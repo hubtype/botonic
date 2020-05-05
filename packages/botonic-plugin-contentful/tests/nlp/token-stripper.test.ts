@@ -1,8 +1,6 @@
 import { TokenStripper, TokenRange } from '../../src/nlp/token-stripper'
 import { DEFAULT_SEPARATORS_REGEX, Normalizer, preprocess } from '../../src/nlp'
 
-test('hack because webstorm does not recognize test.each', () => {})
-
 const LOCALE = 'es'
 const normalizer = new Normalizer()
 
@@ -49,7 +47,8 @@ test.each<any>([
 )
 
 test.each<any>([
-  [TokenStripper.END_POSITION, ['Thank you'], "I'm? Thank you.", "I'm?"],
+  // strip is not case sensitive
+  [TokenStripper.END_POSITION, ['Thank you'], "I'm? THANK you.", "I'm?"],
   [
     TokenStripper.START_POSITION,
     ['buenos días', 'ey'],
