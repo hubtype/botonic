@@ -1,7 +1,5 @@
 import { TokenSkipper } from '../../src/nlp'
 
-test('hack because webstorm does not recognize test.each', () => {})
-
 test.each<any>([
   ['hola!!, como va?', 2, 'va?'],
   ['hola!!, como va?', 3, ''],

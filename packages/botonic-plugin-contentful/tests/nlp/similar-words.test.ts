@@ -11,8 +11,6 @@ import {
 import { NormalizedUtterance, Word } from '../../src/nlp'
 import { leven } from '@nlpjs/similarity/src'
 
-test('hack because webstorm does not recognize test.each', () => {})
-
 class TestCandidate {}
 
 function candidate(

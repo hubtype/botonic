@@ -1,8 +1,6 @@
 import { StemmerPl } from '../../../src/nlp/stemmers/polish-stemmer'
 import { tokenizerPerLocale } from '../../../src/nlp'
 
-test('hack because webstorm does not recognize test.each', () => {})
-
 test.each<any>([
   ['Organizacji', 'organiz'],
   ['organizacja', 'organiz'],
