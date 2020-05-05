@@ -9,6 +9,7 @@ describe('TEST: useWebchat ', () => {
       text: 'Hey!',
     },
     from: 'bot',
+    display: false,
   }
 
   const testUser = {
@@ -27,6 +28,17 @@ describe('TEST: useWebchat ', () => {
     })
     expect(result.current.webchatState.messagesJSON).toStrictEqual([
       testMessage,
+    ])
+  })
+
+  it('updateMessage: updates a message with the given properties', () => {
+    const { result } = renderHook(() => useWebchat())
+    act(() => {
+      result.current.addMessage(testMessage)
+      result.current.updateMessage({ ...testMessage, display: true })
+    })
+    expect(result.current.webchatState.messagesJSON).toStrictEqual([
+      { ...testMessage, display: true },
     ])
   })
 
@@ -172,4 +184,3 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.messagesJSON).toEqual([])
   })
 })
-//missing test of updateMessage
