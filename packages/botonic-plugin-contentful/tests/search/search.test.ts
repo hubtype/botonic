@@ -6,8 +6,9 @@ import {
   ContentType,
   Text,
   Url,
+  SCORE_MAX,
 } from '../../src/cms'
-import { Search, SearchResult } from '../../src/search'
+import { Search, SearchCandidate } from '../../src/search'
 import { Normalizer } from '../../src/nlp'
 import { rndStr } from '../../src/cms/test-helpers/builders'
 
@@ -20,15 +21,15 @@ test('TEST: respondFoundContents text with buttons', async () => {
   )
   const sut = new Search(instance(cms), instance(mock(Normalizer)))
 
-  const urlContent = new SearchResult(
+  const urlContent = new SearchCandidate(
     new TopContentId(ContentType.URL, 'urlCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'url shortText' })
-  )
+  ).withResult('match', SCORE_MAX)
 
-  const textContent = new SearchResult(
+  const textContent = new SearchCandidate(
     new TopContentId(ContentType.TEXT, 'textCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'text shortText' })
-  )
+  ).withResult('match', SCORE_MAX)
 
   // sut
   when(cms.text('foundId', CONTEXT)).thenResolve(
@@ -59,10 +60,10 @@ test('TEST: respondFoundContents text with chitchat', async () => {
 
   const chitchat = instance(mock(Text))
   when(cms.chitchat('chitchatCmsId', CONTEXT)).thenResolve(chitchat)
-  const chitchatCallback = new SearchResult(
+  const chitchatCallback = new SearchCandidate(
     new TopContentId(ContentType.CHITCHAT, 'chitchatCmsId'),
     new CommonFields(rndStr(), 'name', { shortText: 'chitchat' })
-  )
+  ).withResult('match', SCORE_MAX)
 
   when(cms.text('foundId', CONTEXT)).thenResolve(
     new Text(new CommonFields(rndStr(), 'foundName'), 'foundText', [])

@@ -8,7 +8,7 @@ import {
   NormalizedUtterance,
   Word,
 } from '../nlp'
-import { SearchResult } from './search-result'
+import { SearchCandidate, SearchResult } from './search-result'
 
 export class SearchByKeywords {
   constructor(
@@ -17,6 +17,9 @@ export class SearchByKeywords {
     readonly keywordsOptions: { [locale: string]: KeywordsOptions } = {}
   ) {}
 
+  /**
+   * It will assign a score based on the ratio of the matched substring length wit respect to the input length
+   */
   async searchContentsFromInput(
     inputText: NormalizedUtterance,
     matchType: MatchType,
@@ -24,7 +27,7 @@ export class SearchByKeywords {
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale)
     const contentsWithKeywords = await this.cms.contentsWithKeywords(context)
-    const kws = new KeywordsParser<SearchResult>(
+    const kws = new KeywordsParser<SearchCandidate>(
       locale,
       matchType,
       this.normalizer,

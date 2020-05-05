@@ -1,4 +1,4 @@
-import { SearchResult } from '../search/search-result'
+import { SearchCandidate } from '../search/search-result'
 import { Callback, ContentCallback } from './callback'
 import { CMS, ContentType, TopContentType } from './cms'
 import {
@@ -112,11 +112,11 @@ export class DummyCMS implements CMS {
     return Promise.resolve([])
   }
 
-  contentsWithKeywords({} = DEFAULT_CONTEXT): Promise<SearchResult[]> {
+  contentsWithKeywords({} = DEFAULT_CONTEXT): Promise<SearchCandidate[]> {
     const contents = this.buttonCallbacks.map((cb, id) => {
       const button = DummyCMS.buttonFromCallback(cb)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      return new SearchResult(
+      return new SearchCandidate(
         cb.asContentId(),
         new CommonFields(String(id), button.name, {
           shortText: button.text,

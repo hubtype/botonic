@@ -1,4 +1,4 @@
-import { SearchResult } from '../search/search-result'
+import { SearchCandidate } from '../search/search-result'
 import { Context } from './context'
 import {
   Asset,
@@ -110,7 +110,7 @@ export interface CMS {
    * For contents with 'Searchable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
    * @param context If locale specified, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
-  contentsWithKeywords(context?: Context): Promise<SearchResult[]>
+  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]>
   schedule(id: string): Promise<ScheduleContent>
   dateRange(id: string): Promise<DateRangeContent>
   asset(id: string): Promise<Asset>
