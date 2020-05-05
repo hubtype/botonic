@@ -1,15 +1,15 @@
 import 'jest-extended'
 import { deepEqual, instance, mock, when } from 'ts-mockito'
 import {
-  SearchResult,
   TopContentId,
   DummyCMS,
   ContentType,
   SearchByKeywords,
   Context,
   CommonFields,
+  SearchCandidate,
+  SearchResult,
 } from '../../src'
-import { SearchResult as CallbackToContentWithKeywords1 } from '../../src/search/search-result'
 import { Normalizer, StemmingBlackList, MatchType } from '../../src/nlp'
 import { testContentId } from '../helpers/test-data'
 
@@ -36,7 +36,8 @@ test('TEST: searchContentsFromInput keywords found', async () => {
   )
 
   // assert
-  expect(suggested).toIncludeSameMembers(contents)
+  expectCandidates(contents, suggested, false)
+  // TODO check score & match
 })
 
 test('TEST: searchContentsFromInput similar', async () => {
@@ -102,7 +103,7 @@ export function contentWithKeyword(
   contentId: TopContentId,
   keywords: string[]
 ) {
-  return new SearchResult(
+  return new SearchCandidate(
     contentId,
     new CommonFields(contentId.id, contentId.id, {
       shortText: 'shortText' + contentId.id,
@@ -113,14 +114,14 @@ export function contentWithKeyword(
 
 export function chitchatContent(keywords: string[]) {
   const id = Math.random().toString()
-  return new SearchResult(
+  return new SearchCandidate(
     new TopContentId(ContentType.TEXT, id),
     new CommonFields(id, id, { shortText: 'chitchat', keywords })
   )
 }
 
 export function keywordsWithMockCms(
-  allContents: CallbackToContentWithKeywords1[],
+  allContents: SearchCandidate[],
   context: Context,
   stemBlackList: { [locale: string]: StemmingBlackList[] } = {}
 ): SearchByKeywords {
@@ -130,4 +131,18 @@ export function keywordsWithMockCms(
   )
   const normalizer = new Normalizer(stemBlackList)
   return new SearchByKeywords(instance(mockCms), normalizer)
+}
+
+function expectCandidates(
+  candidates: SearchCandidate[],
+  results: SearchResult[],
+  inSameOrder: boolean
+) {
+  const candCommons = candidates.map(res => res.common)
+  const resCommons = results.map(res => res.common)
+  if (inSameOrder) {
+    expect(resCommons).toEqual(candCommons)
+  } else {
+    expect(resCommons).toIncludeSameMembers(candCommons)
+  }
 }

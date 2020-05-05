@@ -21,7 +21,7 @@ import {
   TopContentType,
   Url,
 } from '../index'
-import { SearchResult } from '../../search'
+import { SearchCandidate } from '../../search'
 import { RecursiveMessageContentFilter } from './message-content-filters'
 
 /**
@@ -103,7 +103,7 @@ export class FilteredCMS implements CMS {
     return this.cms.element(id, context)
   }
 
-  contentsWithKeywords(context?: Context): Promise<SearchResult[]> {
+  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
     return this.cms.contentsWithKeywords(context)
   }
 

@@ -3,26 +3,38 @@ import {
   CommonFields,
   TopContentId,
   PRIORITY_MAX,
-  SCORE_MAX,
   ContentCallback,
 } from '../cms'
 import { ContentType } from '../cms/cms'
 
-export class SearchResult {
-  static CHITCHAT_SHORT_TEXT = 'chitchat'
-
+export class SearchCandidate {
   /**
    * @param contentId It may be a {@link Callback}'s with an URL instead of payload
-   * @param match part of the input which match against a recognized text
-   * TODO group args about content & args about match separately. make match compulsory
    */
   constructor(
     readonly contentId: TopContentId,
     readonly common: CommonFields,
-    readonly priority = PRIORITY_MAX,
-    readonly score = SCORE_MAX,
-    readonly match?: string
+    readonly priority = PRIORITY_MAX
   ) {}
+
+  withResult(match: string, score: number): SearchResult {
+    return new SearchResult(this, match, score)
+  }
+}
+
+export class SearchResult extends SearchCandidate {
+  static CHITCHAT_SHORT_TEXT = 'chitchat'
+
+  /**
+   * @param match part of the input which match against a recognized text
+   */
+  constructor(
+    candidate: SearchCandidate,
+    readonly match: string,
+    readonly score: number
+  ) {
+    super(candidate.contentId, candidate.common, candidate.priority)
+  }
 
   toButton(): Button {
     let shortText = this.common.shortText

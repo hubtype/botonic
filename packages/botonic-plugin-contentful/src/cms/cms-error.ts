@@ -1,4 +1,3 @@
-import { SearchResult } from '../search/search-result'
 import { CMS, ContentType, TopContentType } from './cms'
 import {
   Asset,
@@ -19,6 +18,7 @@ import {
 } from './contents'
 import { Context } from './context'
 import { CmsException } from './exceptions'
+import { SearchCandidate } from '../search'
 
 export class ErrorReportingCMS implements CMS {
   exceptionWrapper = new ContentfulExceptionWrapper('CMS')
@@ -95,7 +95,7 @@ export class ErrorReportingCMS implements CMS {
       .then(this.validate)
   }
 
-  contentsWithKeywords(context?: Context): Promise<SearchResult[]> {
+  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
     return this.cms
       .contentsWithKeywords(context)
       .catch(this.handleError('contentsWithKeywords'))

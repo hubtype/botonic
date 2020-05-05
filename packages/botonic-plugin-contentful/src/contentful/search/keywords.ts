@@ -1,7 +1,7 @@
 import { Entry, EntryCollection } from 'contentful/index'
 import * as cms from '../../cms'
 import { CommonFields, TopContentId, Context, TopContentType } from '../../cms'
-import { SearchResult } from '../../search'
+import { SearchCandidate } from '../../search'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
@@ -21,7 +21,7 @@ export class KeywordsDelivery {
       ContentType.URL,
     ],
     modelsWithSearchableByKeywords = [ContentType.QUEUE]
-  ): Promise<SearchResult[]> {
+  ): Promise<SearchCandidate[]> {
     // TODO maybe it's more efficient to get all contents (since most have keywords anyway and we normally have few non
     //  TopContents such as Buttons)
     const fromKeywords = this.entriesWithKeywords(context, modelsWithKeywords)
@@ -32,11 +32,11 @@ export class KeywordsDelivery {
     return (await fromKeywords).concat(await fromSearchable)
   }
 
-  private static resultFromEntry(
+  private static candidateFromEntry(
     entry: Entry<CommonEntryFields>,
     keywords: string[],
     priority?: number
-  ): SearchResult {
+  ): SearchCandidate {
     const contentModel = ContentfulEntryUtils.getContentModel<TopContentType>(
       entry
     )
@@ -48,7 +48,7 @@ export class KeywordsDelivery {
     }
 
     const contentId = new TopContentId(contentModel, entry.sys.id)
-    return new SearchResult(
+    return new SearchCandidate(
       contentId,
       new CommonFields(contentId.id, entry.fields.name, {
         shortText: entry.fields.shortText,
@@ -61,7 +61,7 @@ export class KeywordsDelivery {
   private async entriesWithSearchableByKeywords(
     context: Context,
     models: TopContentType[]
-  ): Promise<SearchResult[]> {
+  ): Promise<SearchCandidate[]> {
     const getWithKeywords = (contentType: cms.TopContentType) =>
       this.delivery.getEntries<QueueFields>(context, {
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -74,10 +74,12 @@ export class KeywordsDelivery {
       promises.push(getWithKeywords(contentType))
     }
     const queues = await Promise.all(promises)
-    const results: SearchResult[] = []
+    const results: SearchCandidate[] = []
     for (const q of queues) {
       for (const queueFields of q.items) {
-        for (const result of KeywordsDelivery.resultsFromQueue(queueFields)) {
+        for (const result of KeywordsDelivery.candidatesFromQueue(
+          queueFields
+        )) {
           results.push(result)
         }
       }
@@ -85,9 +87,11 @@ export class KeywordsDelivery {
     return results
   }
 
-  private static resultsFromQueue(queue: Entry<QueueFields>): SearchResult[] {
+  private static candidatesFromQueue(
+    queue: Entry<QueueFields>
+  ): SearchCandidate[] {
     return queue.fields.searchableBy!.map(searchable =>
-      this.resultFromEntry(
+      this.candidateFromEntry(
         queue,
         searchable.fields.keywords,
         searchable.fields.priority
@@ -98,7 +102,7 @@ export class KeywordsDelivery {
   private entriesWithKeywords(
     context: Context,
     models: TopContentType[]
-  ): Promise<SearchResult[]> {
+  ): Promise<SearchCandidate[]> {
     const getWithKeywords = (contentType: cms.TopContentType) =>
       this.delivery.getEntries<CommonEntryFields>(context, {
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -112,7 +116,7 @@ export class KeywordsDelivery {
     }
     return Promise.all(promises).then(entryCollections =>
       KeywordsDelivery.flatMapEntryCollection(entryCollections).map(entry =>
-        KeywordsDelivery.resultFromEntry(entry, entry.fields.keywords || [])
+        KeywordsDelivery.candidateFromEntry(entry, entry.fields.keywords || [])
       )
     )
   }

@@ -1,5 +1,4 @@
 import { DEFAULT_CONTEXT, Context } from '../cms/context'
-import { SearchResult } from '../search'
 import { AssetDelivery } from './contents/asset'
 import { DateRangeDelivery } from './contents/date-range'
 import { ImageDelivery } from './contents/image'
@@ -33,6 +32,7 @@ import { ContentfulOptions } from '../plugin'
 import { CachedClientApi } from './delivery/cache'
 import { CreateClientParams } from 'contentful'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
+import { SearchCandidate } from '../search'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
@@ -209,7 +209,7 @@ export class Contentful implements cms.CMS {
 
   async contentsWithKeywords(
     context = DEFAULT_CONTEXT
-  ): Promise<SearchResult[]> {
+  ): Promise<SearchCandidate[]> {
     return this._keywords.contentsWithKeywords(context)
   }
 
