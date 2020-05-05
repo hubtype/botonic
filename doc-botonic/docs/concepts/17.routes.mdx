@@ -1,0 +1,132 @@
+---
+name: Routes
+route: /concepts/routes
+menu: Concepts
+---
+
+
+import { PrevButton } from '../components/prevButton.tsx'
+import { NextButton } from '../components/nextButton.tsx'
+
+# Routes
+
+Basically, routes map user inputs to actions which are in fact React Components.
+
+## User Inputs
+
+The user input is captured as an object with the following fields:
+
+- **Type:** the input type, which can be one of the following:
+`text`, `postback`, `audio`, `image`,  `video`, `document`, `location`, `referral`
+
+* **Data:** the raw text (or attachment URL if it's a media type).
+
+- **Payload:** the input caused by the user clicking on a button or quick reply.
+
+* **Intent:** the intent of the user according to your bot's NLU
+
+```javascript
+{
+    type: 'text',
+    data: 'Hello!'
+    payload: '',
+    intent: 'Greetings'
+}
+```
+
+## Mapping User Inputs Into Actions
+
+Every route, which is an entry in the routes' array can be defined in `src/routes.js`:
+
+```javascript
+export const routes = []
+```
+
+Conceptually, a route is composed by a matching rule and an action. A matching rule looks like this: `{attribute: test}`,
+which basically means: "take that attribute from the user input and apply the test" if test passes, the action defined in that route will be triggered.
+
+There are 5 different ways of passing these tests:
+* **String:** Perfect match
+* **Regexp:** Pass the regular expression
+* **Function:** Passes if the function returns true
+* **Input:** Passes if the input satisfies the condition
+* **Session:** Passes if the condition of the session is met
+
+> The rules will be tested in order so if the 1st rule matches, Botonic won't test
+> other routes and will execute the 1st action.
+> If there are several matching rules in the same route, all of them have to pass
+> to consider a match.
+
+In the following example, the first rule matches if and only if we get the text `start` and will trigger the action defined in `src/actions/start.js`
+
+```javascript
+{path: 'start', text: 'start', action: Start}
+```
+Below, another text rule (perfect match) to trigger the `end` action
+```javascript
+{path: 'end', text: 'end', action: End}
+```
+These rules use a case insensitive regexp to match text messages that contain
+a certain text. For the example below, will capture 'BUTTONS', 'Buttons', etc.
+
+```javascript
+{path: 'buttons', text: /^buttons$/i, action: Buttons}
+```
+If you want to use regexp with grouped values, you need to upgrade Node to `v.10`
+or ahead. This regular expression match `age-{NUMBER}` where NUMBER can be any digit.
+Then, in your component `bye`, you can access to this in `req.params`
+```javascript
+{path: 'age', text: /^age-(?<age>\d*)/, action: Age}
+```
+Below, few examples of how to capture different payloads
+```javascript
+{path: 'carousel', payload: 'carousel', action: Carousel},
+{path: 'quickreply', payload: /^(yes|no)$/, action: QuickreplyResponse}
+```
+It is posible to use a function test to capture any text that starts with `bye`
+```javascript
+{path: 'bye', text: (t) => t.startsWith('bye'), action: Bye}
+```
+You can move to a new action if a condition over the user input is met
+```javascript
+{path: 'greet', input: (i) => i.type === 'text' && i.intent === 'greetings', action: Greet}
+```
+Otherwise, you can move forward to new actions depending on session values
+```javascript
+{ path: 'promotion', session: (s) => s.user.id < 150000, action: Promotion }
+```
+Below, we see how to captures different intents
+```javascript
+  { path: 'greetings', intent: 'Greetings', action: Start },
+  { path: 'book-restaurant', intent: 'BookRestaurant', action: ShowRestaurants },
+  { path: 'get-directions', intent: 'GetDirections', action: ShowDirections }
+```
+There's an implicit rule that captures any other input and maps it to
+the `404` action, it would be equivalent to:
+```javascript
+{path: '404', type: /^.*$/, action: NotFound}
+```
+
+## Dynamic Routes
+At times, you might want to render only some routes in function of a certain condition,
+so you can define optionally them as a function receiving the input and the session object.
+
+```javascript
+import { MainFlowRoutes } from './actions/main_flow/main_flow.routes'
+
+export function routes({input, session}) {
+  if (session.is_first_interaction) {
+    return [
+      {
+        path: 'userWelcome',
+        text: /.*/,
+        action: UserWelcome
+      }
+    ]
+  } else return [ ...MainFlowRoutes ]
+}
+```
+<div style={{display:"flex", justifyContent:"space-between"}}>
+  <PrevButton title='NLU' href='/concepts/nlu' />
+  <NextButton title="Webchat" href="/concepts/webchat" />
+</div>

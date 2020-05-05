@@ -1,0 +1,99 @@
+---
+name: Webchat
+route: /concepts/webchat
+menu: Concepts
+---
+
+import { PrevButton } from '../components/prevButton.tsx'
+import { NextButton } from '../components/nextButton.tsx'
+
+# Webchat
+
+## What is Webchat?
+
+Bots developed with Botonic can be easily deployed to different messaging channels. 
+This is due to the fact that Botonic components are specifically treated in order to be executed in a server environment such as Node.Js. 
+As they are based on React, Botonic components are the perfect fit in order to offer you applications such as Webchat. Webchat is a system that allows you to embed your bots in a web page without requiring any third party messaging provider.
+
+<details>
+<summary>Example  where embedded Webchats can be triggered by clicking the chat bubble.</summary>
+
+<img
+	src="https://botonic-doc-static.netlify.com/images/webchat_usage.png"
+	style={{ display: 'block', margin: 'auto', maxWidth: '50%' }}
+/>
+</details>
+
+
+## Webchat SDK API
+
+Once your Webchat is integrated, you are provided with a code snippet to be embedded in your page.
+This snippet will load your bot's code and will allow managing it through the following JS functions (you can test it in your current browser's developers console).
+
+These methods are:
+* `Botonic.open()`: Opens the webchat window if it's closed.
+* `Botonic.close()`: Closes the webchat window if it's open.
+* `Botonic.toggle()`: Opens or closes the webchat window depending on current state.
+* `Botonic.setTyping(boolean)`: Sets the visibility of the typing indicator.
+* `Botonic.addUserText(string)`: Sends a text to the bot as if the user sent it.
+* `Botonic.addUserPayload(string)`: Sends a payload to the bot as if the user sent it.
+* `Botonic.addBotText(string)`: Adds a new message in the webchat window as if the bot sent it.
+* `Botonic.updateUser(Object)`: Updates the attributes of the user. `({id: '1234', name: 'Pepito'})`
+
+### Webchat Listeners
+In the same way, sometimes you would want to react to some of the events that take place when some actions occur in the Webchat. To react to the actions that occur in the Webchat, you can define the following event listeners:
+
+**`Snippet to be embedded`**
+```html
+<html>
+  <head>
+    <script
+      type="text/javascript"
+      src="{BOT_DOMAIN}/webchat.botonic.js"
+    ></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function(event) {
+        Botonic.render(document.getElementById('root'), {
+          appId: 'YOUR_APP_ID',
+          	onInit: app => console.log('Webchat initialized!'),
+          	onOpen: app => console.log('Webchat opened!'),
+          	onClose: app => console.log('Webchat closed!'),
+          	onMessage: (app, msg) => console.log('Current message', msg)
+        })
+      })
+    </script>
+  </body>
+</html>
+```
+It can be used as well in **`src/webchat/index.js`**.
+```javascript
+export const webchat = {
+  onInit: app => {
+    // You can combine webchat listeners with the Webchat SDK's Api in order
+    // to obtain extra functionalities. This will open automatically the webchat once the site is loaded.
+    app.open()
+  },
+  onOpen: app => {
+    app.addUserPayload('INITIAL_PAYLOAD')
+  },
+  onClose: app => {
+    console.log('Webchat closed!')
+  },
+  onMessage: app => {
+    // Your stuff here
+  }
+}
+```
+
+## Customizing the Webchat
+Another great advantage of Webchat is that you can customize its components. This can be done by changing the values of a set of attributes 
+or you can let your imagination run free to achieve great results by creating your own components from scratch! 
+
+<div style={{display:"flex", justifyContent:"space-between"}}>
+  <PrevButton title='Routes' href='/concepts/routes' />
+  <NextButton title="Webviews" href="/concepts/webviews" />
+</div>

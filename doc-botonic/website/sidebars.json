@@ -1,0 +1,42 @@
+{
+  "docs": {
+    "Getting Started": [
+	"welcome",
+	"getting-started",
+	"create-convapp",
+	"project-structure",
+	"supported-platforms"
+	],
+	
+	"Templates": [
+	"templates/list-templates",
+	"templates/custom-webchat",
+	"templates/child",
+	"templates/carousel",
+	"templates/handoff",
+	"templates/nlu"
+	],
+	
+	"Plugins": [
+	"plugins/botonic-plugins",
+	"plugins/plugins",
+	"plugins/contentful"
+	]
+	
+  },
+  
+
+  
+  "": {
+    "Botonic FAQ": [
+	"faq"
+	]
+	
+
+	
+  }
+}
+
+
+
+
