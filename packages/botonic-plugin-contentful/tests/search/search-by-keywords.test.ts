@@ -52,7 +52,9 @@ test('TEST: searchContentsFromInput similar', async () => {
   )
 
   // assert
-  expect(suggested).toEqual(contents)
+  expectCandidates(contents, suggested, false)
+  expect(suggested[0].match).toEqual('tas fre')
+  expect(suggested[0].score).toBeWithin(0.35, 0.4)
 })
 
 test('TEST: searchContentsFromInput no keywords found', async () => {

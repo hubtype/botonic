@@ -38,11 +38,8 @@ export class SearchByKeywords {
     )
     const results = kws.findCandidatesWithKeywordsAt(inputText)
     return results.map(res => {
-      const candidate = res.candidate as SearchResult
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      candidate.match = res.match
-      return candidate
+      const score = res.match.length / inputText.raw.length
+      return res.candidate.withResult(res.match, score)
     })
   }
 
