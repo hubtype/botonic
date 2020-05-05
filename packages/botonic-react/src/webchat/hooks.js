@@ -2,6 +2,25 @@ import { useEffect, useReducer, useRef, useState } from 'react'
 import { COLORS, WEBCHAT } from '../constants'
 import { scrollToBottom } from '../utils'
 import { webchatReducer } from './webchat-reducer'
+import {
+  ADD_MESSAGE,
+  ADD_MESSAGE_COMPONENT,
+  UPDATE_MESSAGE,
+  UPDATE_REPLIES,
+  UPDATE_LATEST_INPUT,
+  UPDATE_TYPING,
+  UPDATE_WEBVIEW,
+  UPDATE_SESSION,
+  UPDATE_USER,
+  UPDATE_LAST_ROUTE_PATH,
+  UPDATE_HANDOFF,
+  UPDATE_THEME,
+  UPDATE_DEV_SETTINGS,
+  TOGGLE_WEBCHAT,
+  SET_ERROR,
+  CLEAR_MESSAGES,
+  UPDATE_LAST_MESSAGE_DATE,
+} from './actions'
 
 export const webchatInitialState = {
   width: WEBCHAT.DEFAULTS.WIDTH,
@@ -40,71 +59,71 @@ export function useWebchat() {
   )
 
   const addMessage = message =>
-    webchatDispatch({ type: 'addMessage', payload: message })
+    webchatDispatch({ type: ADD_MESSAGE, payload: message })
   const addMessageComponent = message =>
-    webchatDispatch({ type: 'addMessageComponent', payload: message })
+    webchatDispatch({ type: ADD_MESSAGE_COMPONENT, payload: message })
   const updateMessage = message =>
-    webchatDispatch({ type: 'updateMessage', payload: message })
+    webchatDispatch({ type: UPDATE_MESSAGE, payload: message })
   const updateReplies = replies =>
-    webchatDispatch({ type: 'updateReplies', payload: replies })
+    webchatDispatch({ type: UPDATE_REPLIES, payload: replies })
   const updateLatestInput = input =>
-    webchatDispatch({ type: 'updateLatestInput', payload: input })
+    webchatDispatch({ type: UPDATE_LATEST_INPUT, payload: input })
   const updateTyping = typing =>
-    webchatDispatch({ type: 'updateTyping', payload: typing })
+    webchatDispatch({ type: UPDATE_TYPING, payload: typing })
   const updateWebview = (webview, params) =>
     webchatDispatch({
-      type: 'updateWebview',
+      type: UPDATE_WEBVIEW,
       payload: { webview, webviewParams: params },
     })
   const updateSession = session =>
     webchatDispatch({
-      type: 'updateSession',
+      type: UPDATE_SESSION,
       payload: session,
     })
   const updateUser = user =>
     webchatDispatch({
-      type: 'updateUser',
+      type: UPDATE_USER,
       payload: user,
     })
   const updateLastRoutePath = path =>
     webchatDispatch({
-      type: 'updateLastRoutePath',
+      type: UPDATE_LAST_ROUTE_PATH,
       payload: path,
     })
   const updateHandoff = handoff =>
     webchatDispatch({
-      type: 'updateHandoff',
+      type: UPDATE_HANDOFF,
       payload: handoff,
     })
   const updateTheme = theme =>
     webchatDispatch({
-      type: 'updateTheme',
+      type: UPDATE_THEME,
       payload: theme,
     })
   const updateDevSettings = settings =>
     webchatDispatch({
-      type: 'updateDevSettings',
+      type: UPDATE_DEV_SETTINGS,
       payload: settings,
     })
   const toggleWebchat = toggle =>
     webchatDispatch({
-      type: 'toggleWebchat',
+      type: TOGGLE_WEBCHAT,
       payload: toggle,
     })
   const setError = error =>
     webchatDispatch({
-      type: 'setError',
+      type: SET_ERROR,
       payload: error,
     })
 
   const clearMessages = () => {
     webchatDispatch({
-      type: 'clearMessages',
+      type: CLEAR_MESSAGES,
     })
   }
   const updateLastMessageDate = date => {
     webchatDispatch({
-      type: 'updateLastMessageDate',
+      type: UPDATE_LAST_MESSAGE_DATE,
       payload: date,
     })
   }
