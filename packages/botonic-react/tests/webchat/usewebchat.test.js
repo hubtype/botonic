@@ -1,5 +1,5 @@
-import { useWebchat } from '../../src/webchat/hooks'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { act } from '@testing-library/react-hooks'
+import { renderUseWebchatHook } from '../helpers/test-utils'
 
 describe('TEST: useWebchat ', () => {
   const testMessage = {
@@ -22,7 +22,7 @@ describe('TEST: useWebchat ', () => {
   }
 
   it('addMessage: add testMessage to webchatState.messagesJSON', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.addMessage(testMessage)
     })
@@ -32,7 +32,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateMessage: updates a message with the given properties', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.addMessage(testMessage)
       result.current.updateMessage({ ...testMessage, display: true })
@@ -43,7 +43,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('addMessageComponent: add testMessage to webchatState.messagesComponents', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.addMessageComponent(testMessage)
     })
@@ -53,7 +53,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateReplies: assign false to webchatState.replies', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.updateReplies(false)
     })
@@ -61,7 +61,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateLatestInput: assign latestInput to webchatState.latestInput', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     const latestInput = {
       id: 'f65feb4e-9',
       payload: 'greetings',
@@ -74,7 +74,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateTyping: assign true to webchatState.typing', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.updateTyping(true)
     })
@@ -82,7 +82,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateWebview: assign webview to webchatState.webview', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.updateWebview('webview')
     })
@@ -90,7 +90,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateSession: assign initialSession to webchatState.session', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     const initialSession = {
       is_first_interaction: true,
       last_session: {},
@@ -108,7 +108,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateUser: assign testUser to webchatState.user', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.updateUser(testUser)
     })
@@ -116,7 +116,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateLastRoutePath: assign the string route_path to webchatState.lastRoutePath', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.updateLastRoutePath('route_path')
     })
@@ -124,7 +124,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateHandoff: assign true to webchatState.handoff', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.updateHandoff(true)
     })
@@ -132,7 +132,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateTheme: assign theme to webchatState.theme', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     const theme = {
       style: {
         position: 'fixed',
@@ -149,7 +149,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('updateDevSettings: assign devSettings to webchatState.devSettings', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     const devSettings = {
       keepSessionOnReload: true,
     }
@@ -160,7 +160,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('toggleWebchat: assign true to webchatState.isWebchatOpen', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.toggleWebchat(true)
     })
@@ -168,7 +168,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('setError: assign the string error to webchatState.error', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.setError('error')
     })
@@ -176,7 +176,7 @@ describe('TEST: useWebchat ', () => {
   })
 
   it('clearMessages: delete testMessage from webchatState.messagesJSON', () => {
-    const { result } = renderHook(() => useWebchat())
+    const { result } = renderUseWebchatHook()
     act(() => {
       result.current.addMessage(testMessage)
       result.current.clearMessages()
