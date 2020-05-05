@@ -1,45 +1,65 @@
+import {
+  ADD_MESSAGE,
+  ADD_MESSAGE_COMPONENT,
+  UPDATE_MESSAGE,
+  UPDATE_REPLIES,
+  UPDATE_LATEST_INPUT,
+  UPDATE_TYPING,
+  UPDATE_WEBVIEW,
+  UPDATE_SESSION,
+  UPDATE_USER,
+  UPDATE_LAST_ROUTE_PATH,
+  UPDATE_HANDOFF,
+  UPDATE_THEME,
+  UPDATE_DEV_SETTINGS,
+  TOGGLE_WEBCHAT,
+  SET_ERROR,
+  CLEAR_MESSAGES,
+  UPDATE_LAST_MESSAGE_DATE,
+} from './actions'
+
 export function webchatReducer(state, action) {
   switch (action.type) {
-    case 'addMessage':
+    case ADD_MESSAGE:
       return addMessageReducer(state, action)
-    case 'addMessageComponent':
+    case ADD_MESSAGE_COMPONENT:
       return {
         ...state,
         messagesComponents: [...state.messagesComponents, action.payload],
       }
-    case 'updateMessage':
+    case UPDATE_MESSAGE:
       return updateMessageReducer(state, action)
-    case 'updateReplies':
+    case UPDATE_REPLIES:
       return { ...state, replies: action.payload }
-    case 'updateLatestInput':
+    case UPDATE_LATEST_INPUT:
       return { ...state, latestInput: action.payload }
-    case 'updateTyping':
+    case UPDATE_TYPING:
       return { ...state, typing: action.payload }
-    case 'updateWebview':
+    case UPDATE_WEBVIEW:
       return { ...state, ...action.payload }
-    case 'updateSession':
+    case UPDATE_SESSION:
       return { ...state, session: { ...action.payload } }
-    case 'updateUser':
+    case UPDATE_USER:
       return { ...state, user: { ...action.payload } }
-    case 'updateLastRoutePath':
+    case UPDATE_LAST_ROUTE_PATH:
       return { ...state, lastRoutePath: action.payload }
-    case 'updateHandoff':
+    case UPDATE_HANDOFF:
       return { ...state, handoff: action.payload }
-    case 'updateTheme':
+    case UPDATE_THEME:
       return { ...state, theme: { ...action.payload } }
-    case 'updateDevSettings':
+    case UPDATE_DEV_SETTINGS:
       return { ...state, devSettings: { ...action.payload } }
-    case 'toggleWebchat':
+    case TOGGLE_WEBCHAT:
       return { ...state, isWebchatOpen: action.payload }
-    case 'setError':
+    case SET_ERROR:
       return { ...state, error: action.payload || {} }
-    case 'clearMessages':
+    case CLEAR_MESSAGES:
       return {
         ...state,
         messagesJSON: [],
         messagesComponents: [],
       }
-    case 'updateLastMessageDate':
+    case UPDATE_LAST_MESSAGE_DATE:
       return {
         ...state,
         lastMessageUpdate: action.payload,
