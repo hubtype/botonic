@@ -23,7 +23,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'filenames/match-regex': ['error', '^[a-z-.]+$', true],
 
-    complexity: ['error', { max: 19 }],
+    complexity: ['error', { max: 18 }],
 
     // In typescript we must use obj.field when we have the types, and obj['field'] when we don't
     // Not set to warn because Webstorm cannot fix eslint rules with --quiet https://youtrack.jetbrains.com/issue/WEB-39246
