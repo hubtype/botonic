@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
+    "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepare": "node ../../preinstall.js",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
     "lint": "npm run lint_core -- --fix",

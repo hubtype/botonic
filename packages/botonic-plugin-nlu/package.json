@@ -3,6 +3,7 @@
   "version": "0.11.0",
   "main": "src/index.js",
   "scripts": {
+    "cloc": "../../scripts/qa/cloc-package.sh .",
     "build": "rm -rf dist && babel src -d dist",
     "test": "jest",
     "prepare": "node ../../preinstall.js",
