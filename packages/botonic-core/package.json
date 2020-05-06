@@ -8,7 +8,8 @@
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_ci -- --fix",
     "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' '**/*.d.ts'",
-    "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files"
+    "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
+    "cloc": "../../scripts/qa/cloc-package.sh ."
   },
   "repository": {
     "type": "git",
