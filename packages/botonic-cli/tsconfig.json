@@ -2,8 +2,12 @@
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "lib"
-	},
+		"outDir": "lib",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true
+//    "noUnusedLocals": true added after eslint plugin-import branch merged
+  },
   "include": [
     ".*.js",
     "*.js",
