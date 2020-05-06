@@ -92,3 +92,37 @@ export function renderComponent({ renderBrowser, renderNode }) {
   else if (isNode()) return renderNode()
   throw new Error('Unexpected process type. Not recognized as browser nor node')
 }
+
+export const isIphone = () => {
+  // Detecting iOS solution, relying on navigator.platform: https://stackoverflow.com/a/9039885
+  return !!navigator.platform && /iPhone/.test(navigator.platform)
+}
+
+const getWebchatElement = () => document.getElementById('botonic-webchat')
+
+const setWebchatElementHeight = newHeight => {
+  getWebchatElement().style.height = newHeight
+}
+
+export const handleIphoneOnFocus = () => {
+  /*
+    Based on Tip #4 from https://blog.opendigerati.com/the-eccentric-ways-of-ios-safari-with-the-keyboard-b5aa3f34228d,
+    taking window.innerHeight as the amount of pixels the virtual keyboard adds
+  */
+  const waitUntilKeyboardIsShown = 200
+  const calculateNewWebchatElementHeight = () => {
+    const keyboardOffset = window.innerHeight
+    const webchatHeight = getWebchatElement().clientHeight
+    let newWebchatPercentualHeight = keyboardOffset / webchatHeight
+    const toTwoDecimal = toRound => Number(Math.round(toRound + 'e2') + 'e-2')
+    newWebchatPercentualHeight = toTwoDecimal(newWebchatPercentualHeight) * 100
+    return newWebchatPercentualHeight
+  }
+  setTimeout(() => {
+    setWebchatElementHeight(`${calculateNewWebchatElementHeight()}%`)
+    scrollToBottom()
+  }, waitUntilKeyboardIsShown)
+}
+export const handleIphoneOnBlur = () => {
+  setWebchatElementHeight('100%')
+}
