@@ -34,6 +34,9 @@ import {
   ConditionalWrapper,
   scrollToBottom,
   getParsedAction,
+  isIphone,
+  handleIphoneOnFocus,
+  handleIphoneOnBlur,
 } from '../utils'
 import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
 import { motion } from 'framer-motion'
@@ -581,6 +584,8 @@ export const Webchat = forwardRef((props, ref) => {
           <TextAreaContainer>
             <Textarea
               name='text'
+              onFocus={() => isIphone() && handleIphoneOnFocus()}
+              onBlur={() => isIphone() && handleIphoneOnBlur()}
               maxRows={4}
               wrap='soft'
               maxLength='1000'
@@ -593,7 +598,8 @@ export const Webchat = forwardRef((props, ref) => {
               onKeyDown={e => onKeyDown(e)}
               style={{
                 display: 'flex',
-                fontSize: 14,
+                // Disabling auto-zoom on input (iPhone devices): https://stackoverflow.com/a/25614477
+                fontSize: isIphone() ? 'initial' : 14,
                 width: '100%',
                 border: 'none',
                 resize: 'none',
@@ -688,6 +694,7 @@ export const Webchat = forwardRef((props, ref) => {
       )}
       {webchatState.isWebchatOpen && (
         <StyledWebchat
+          id={'botonic-webchat'}
           width={webchatState.width}
           height={webchatState.height}
           style={{
