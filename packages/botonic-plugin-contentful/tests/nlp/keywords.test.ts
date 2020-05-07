@@ -133,7 +133,6 @@ test.each<any>([
 
   // does not false positive with keywords which only contain stopwords
   ['something else', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
-  ['', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
 
   // a keyword is shared by 2 contents
   ['informacion kw1', { A: ['kw1', 'unKw'], B: ['kw1', 'otroKw'] }, ['A', 'B']],
@@ -155,7 +154,6 @@ test.each<any>([
 
   // does not false positive with keywords which only contain stopwords
   ['other', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
-  ['', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
 
   // a keyword is shared by 2 contents
   ['kw1 kw2', { A: ['kw1 kw2', 'unKw'], B: ['kw1 kw2', 'otroKw'] }, ['A', 'B']],
@@ -201,7 +199,6 @@ test.each<any>([
 
   // does not false positive with keywords which only contain stopwords
   ['something else', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
-  ['', { ONLY_STOPWORD: ['kw1', 'otro'] }, []],
 
   // a keyword is shared by 2 contents
   [

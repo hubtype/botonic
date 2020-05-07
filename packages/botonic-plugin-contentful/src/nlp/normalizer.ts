@@ -54,12 +54,18 @@ export class Word {
   }
 }
 
+export class EmptyTextException extends Error {
+  constructor(txt: string) {
+    super(`'${txt}' not accepted because it only contains separators`)
+  }
+}
+
 export class NormalizedUtterance {
   /** Without stopwords */
   stems: string[]
 
-  /*
-   * onlyStopWords tokens are all stop words
+  /**
+   * @param onlyStopWords: true iff all tokens are stop words
    */
   constructor(
     readonly raw: string,
@@ -108,9 +114,16 @@ export class Normalizer {
     }
   }
 
-  normalize(locale: Locale, txt: string): NormalizedUtterance {
-    txt = txt.trim().toLowerCase()
-    txt = txt.replace(this.separatorsRegex, ' ')
+  /**
+   * @throws EmptyTextException if the text is empty or only contains separators
+   */
+  normalize(locale: Locale, raw: string): NormalizedUtterance {
+    let txt = raw.replace(this.separatorsRegex, ' ')
+    txt = txt.trim().toLowerCase() // TODO use preprocess without normalization? move to NormalizedUtterance constructor?
+    if (!txt) {
+      throw new EmptyTextException(raw)
+    }
+
     const stemmer = stemmerFor(locale)
     // tokenizer will replace i18n characters
     const tokens = this.tokenizer(locale).tokenize(txt, true)

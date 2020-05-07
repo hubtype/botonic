@@ -5,6 +5,7 @@ import {
   Locale,
   NormalizedUtterance,
   Word,
+  EmptyTextException,
 } from '../../src/nlp'
 
 test('TEST: sut.normalize stopWord', () => {
@@ -45,6 +46,12 @@ test.each<any>([
     )
   }
 )
+
+test('TEST: sut.normalize empty text', () => {
+  const loc = 'es'
+  const sut = new Normalizer()
+  expect(() => sut.normalize(loc, ' ./ ')).toThrow(EmptyTextException)
+})
 
 test('TEST: sut.normalize es', () => {
   const loc = 'es'

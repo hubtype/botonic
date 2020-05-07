@@ -104,6 +104,7 @@ export class KeywordsParser<M> {
    * @param candidate
    * @param rawKeywords a candidate may be associated to multiple keywords, and each one of them may contain multiple
    * words (which must appear together in the same order). The keywords will be stemmed.
+   * @throws EmptyTextException
    */
   addCandidate(candidate: M, rawKeywords: string[]): void {
     const stemmedKeywords = rawKeywords.map(rawKeyword => {
