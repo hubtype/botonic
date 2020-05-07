@@ -49,7 +49,7 @@ export default class BotonicPluginContentful {
 
   readonly search: Search
 
-  readonly normalizer?: Normalizer
+  readonly normalizer: Normalizer
 
   constructor(opt: CmsOptions | ContentfulOptions) {
     const optionsAny = opt as any
@@ -67,7 +67,7 @@ export default class BotonicPluginContentful {
 
     if (opt.search) {
       this.search = opt.search
-      this.normalizer = opt.normalizer
+      this.normalizer = opt.normalizer || new Normalizer()
     } else {
       this.normalizer = opt.nlpOptions
         ? new Normalizer(opt.nlpOptions.blackList)
