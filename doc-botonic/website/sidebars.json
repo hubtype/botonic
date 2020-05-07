@@ -17,10 +17,27 @@
 	"templates/nlu"
 	],
 	
+	"Concepts": [
+	"concepts/co-actions",
+	"concepts/co-settings",
+	"concepts/co-components",
+	"concepts/co-handoff",
+	"concepts/co-inter",
+	"concepts/co-nlu",
+	"concepts/co-routes",
+	"concepts/co-webchat",
+	"concepts/co-webviews"
+	],
+	
 	"Plugins": [
 	"plugins/botonic-plugins",
 	"plugins/plugins",
 	"plugins/contentful"
+	],
+	
+	"Test and Deploy": [
+	"test-deploy/test-components",
+	"test-deploy/deploy"
 	]
 	
   },

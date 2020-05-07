@@ -18,6 +18,10 @@ This action is not possible except for webviews as some of these apps (like Face
 Hubtype provides support for web chat (JS SDK) and in-app chat (iOS/Android SDK). In these cases, you can customize the look and feel of the chat window.
 </details>
 
+><details><summary><b>How do I delete a bot?</b></summary>
+Go to https://app.hubtype.com/bots/all and select your bot. Then click on the **Settings** tab and on **Delete this bot**.
+</details>
+
 ><details><summary><b>How to deal with NLP/NLU?</b></summary>
 You must integrate Dialogflow or Watson. The integration allows you to use regular expressions to route intents to actions. Check out the NLU example in our github repo.
 </details>

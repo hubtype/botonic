@@ -45,11 +45,3 @@ Congratulations: Your bot is created!
 5. Enjoy the conversation.
 
 Congratulations! You’ve installed and deployed your first bot!
-
-
-
->## Optional - Delete Your bot
-
-1. Go to https://app.hubtype.com/bots/all
-2. Select your bot.
-3. Click on the **Setting**s tab and then on **Delete this bot**.
