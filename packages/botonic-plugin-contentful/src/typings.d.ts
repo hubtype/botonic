@@ -113,3 +113,9 @@ declare module 'sort-stream' {
   function sort(func: (a: any, b: any) => number): any
   export = sort
 }
+
+declare namespace jest {
+  interface Expect {
+    <T = any>(actual: T, message?: string): JestMatchers<T>
+  }
+}

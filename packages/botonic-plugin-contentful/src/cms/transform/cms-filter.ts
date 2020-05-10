@@ -25,7 +25,7 @@ import { SearchCandidate } from '../../search'
 import { RecursiveMessageContentFilter } from './message-content-filters'
 
 /**
- * Decorator which applied a recursive transformation to MessageContent before being delivered by CMS
+ * Decorator which applies a recursive transformation to MessageContent before being delivered by CMS
  */
 export class FilteredCMS implements CMS {
   constructor(
