@@ -68,13 +68,6 @@ export abstract class TopContent extends Content {
   get contentId(): TopContentId {
     return new TopContentId(this.contentType, this.id)
   }
-
-  cloneWithFollowUp(newFollowUp: FollowUp | undefined): this {
-    const clone = shallowClone(this)
-    ;(clone as any).common = shallowClone(clone.common)
-    ;(clone as any).common.followUp = newFollowUp
-    return clone
-  }
 }
 
 /**
@@ -86,6 +79,33 @@ export abstract class MessageContent extends TopContent {
     readonly contentType: MessageContentType
   ) {
     super(common, contentType)
+  }
+
+  findRecursively(
+    predicate: (c: MessageContent) => boolean
+  ): MessageContent | undefined {
+    if (predicate(this)) {
+      return this
+    }
+    if (!this.common.followUp) {
+      return undefined
+    }
+    return this.common.followUp.findRecursively(predicate)
+  }
+
+  cloneWithFollowUp(newFollowUp: FollowUp | undefined): this {
+    const clone = shallowClone(this)
+    ;(clone as any).common = shallowClone(clone.common)
+    ;(clone as any).common.followUp = newFollowUp
+    return clone
+  }
+
+  cloneWithFollowUpLast(lastContent: FollowUp): this {
+    if (!this.common.followUp) {
+      return this.cloneWithFollowUp(lastContent)
+    }
+    const followUp = this.common.followUp.cloneWithFollowUpLast(lastContent)
+    return this.cloneWithFollowUp(followUp)
   }
 }
 

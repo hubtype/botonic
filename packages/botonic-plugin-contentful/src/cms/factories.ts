@@ -54,7 +54,7 @@ export abstract class TopContentBuilder extends ContentBuilder {
 }
 
 abstract class MessageContentBuilder extends TopContentBuilder {
-  withFollowUp(followUp: FollowUp): this {
+  withFollowUp(followUp?: FollowUp): this {
     this.followUp = followUp
     return this
   }

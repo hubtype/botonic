@@ -1,10 +1,13 @@
+import 'jest-expect-message'
+
 export function expectEqualExceptOneField(
-  o1: any,
-  o2: any,
-  fieldName: string
+  actual: any,
+  expected: any,
+  exceptField: string
 ): void {
-  for (const f of Object.keys(o1)) {
-    if (f == fieldName) continue
-    expect(o2[f]).toEqual(o1[f])
+  for (const f of Object.keys(actual)) {
+    if (f == exceptField) continue
+    // eslint-disable-next-line jest/valid-expect
+    expect(expected[f], `Fields '${f}' don't match`).toEqual(actual[f])
   }
 }
