@@ -12,7 +12,7 @@ const ButtonsContainer = styled.div`
   text-align: center;
 `
 
-export const OpenedPersistentMenu = ({ onClick, options }) => {
+export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
   let closeLabel = 'Cancel'
   try {
     closeLabel = options.filter(opt => opt.closeLabel !== undefined)[0]
@@ -35,7 +35,9 @@ export const OpenedPersistentMenu = ({ onClick, options }) => {
           )
         )
       })}
-      <Button onClick={onClick}>{closeLabel}</Button>
+      <Button onClick={onClick} bottom={borderRadius}>
+        {closeLabel}
+      </Button>
     </ButtonsContainer>
   )
 }

@@ -114,7 +114,7 @@ const DarkBackgroundMenu = styled.div`
   z-index: 1;
   right: 0;
   bottom: 0;
-  border-radius: 25px 25px 0px 0px;
+  border-radius: ${props => props.borderRadius || '25px'};
 `
 
 const createUser = () => {
@@ -715,6 +715,7 @@ export const Webchat = forwardRef((props, ref) => {
                   {darkBackgroundMenu && (
                     <DarkBackgroundMenu
                       onClick={closeMenu}
+                      borderRadius={webchatState.theme.style.borderRadius}
                       style={{
                         position: 'absolute',
                         width: '100%',
@@ -731,6 +732,9 @@ export const Webchat = forwardRef((props, ref) => {
                     <OpenedPersistentMenu
                       onClick={closeMenu}
                       options={persistentMenuOptions}
+                      borderRadius={
+                        webchatState.theme.style.borderRadius || '10px'
+                      }
                     />
                   )}
                 </div>
