@@ -41,7 +41,7 @@ export const webchatInitialState = {
     headerTitle: WEBCHAT.DEFAULTS.TITLE,
     brandColor: COLORS.BOTONIC_BLUE,
     brandImage: WEBCHAT.DEFAULTS.LOGO,
-    triggerButtonImage: WEBCHAT.DEFAULTS.LOGO,
+    triggerButtonImage: undefined,
     textPlaceholder: WEBCHAT.DEFAULTS.PLACEHOLDER,
     style: {
       fontFamily: WEBCHAT.DEFAULTS.FONT_FAMILY,
