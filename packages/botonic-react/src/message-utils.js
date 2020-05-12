@@ -22,6 +22,8 @@ export const MEDIA_TYPES = [
 export const isMedia = message =>
   MEDIA_TYPES.some(type => isType(message.type, type))
 
+// TODO: Centralize handling attachments in class
+
 export const toBase64 = file =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -29,3 +31,10 @@ export const toBase64 = file =>
     reader.onload = () => resolve(reader.result)
     reader.onerror = error => reject(error)
   })
+
+export const isAllowedSize = fileSize => {
+  const MAX_MB_SIZE_ALLOWED = 10
+  const maxAllowedBytesSize = MAX_MB_SIZE_ALLOWED * 1024 * 1024
+  if (fileSize > maxAllowedBytesSize) return false
+  return true
+}

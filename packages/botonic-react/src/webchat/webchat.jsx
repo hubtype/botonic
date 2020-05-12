@@ -47,6 +47,7 @@ import {
   isDocument,
   isMedia,
   toBase64,
+  isAllowedSize,
 } from '../message-utils'
 
 const getAttachmentType = fileType => {
@@ -160,6 +161,7 @@ export const Webchat = forwardRef((props, ref) => {
     openWebviewT,
     closeWebviewT,
     updateLastMessageDate,
+    setCurrentAttachment,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const { theme } = webchatState
@@ -167,13 +169,13 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const [persistentMenuIsOpened, setPersistentMenuIsOpened] = useState(false)
   const [emojiPickerIsOpened, setEmojiPickerIsOpened] = useState(false)
-  const [attachment, setAttachment] = useState({})
   const keyboardResizer = new KeyboardResizer()
 
   const getThemeProperty = _getThemeProperty(theme)
 
   const handleAttachment = event => {
-    setAttachment({
+    if (!isAllowedSize(event.target.files[0].size)) return
+    setCurrentAttachment({
       fileName: event.target.files[0].name,
       file: event.target.files[0], // TODO: Attach more files?
       attachmentType: getAttachmentType(event.target.files[0].type),
@@ -181,8 +183,9 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
-    sendAttachment(attachment)
-  }, [attachment])
+    if (webchatState.currentAttachment)
+      sendAttachment(webchatState.currentAttachment)
+  }, [webchatState.currentAttachment])
 
   // Load initial state from localStorage
   useEffect(() => {
@@ -471,6 +474,7 @@ export const Webchat = forwardRef((props, ref) => {
         data: attachment.file,
       }
       await sendInput(input)
+      setCurrentAttachment(undefined)
     }
   }
 

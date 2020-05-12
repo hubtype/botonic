@@ -20,6 +20,7 @@ import {
   SET_ERROR,
   CLEAR_MESSAGES,
   UPDATE_LAST_MESSAGE_DATE,
+  SET_CURRENT_ATTACHMENT,
 } from './actions'
 
 export const webchatInitialState = {
@@ -50,6 +51,7 @@ export const webchatInitialState = {
   devSettings: {},
   isWebchatOpen: false,
   lastMessageUpdate: undefined,
+  currentAttachment: undefined,
 }
 
 export function useWebchat() {
@@ -127,6 +129,12 @@ export function useWebchat() {
       payload: date,
     })
   }
+  const setCurrentAttachment = attachment => {
+    webchatDispatch({
+      type: SET_CURRENT_ATTACHMENT,
+      payload: attachment,
+    })
+  }
 
   return {
     webchatState,
@@ -148,6 +156,7 @@ export function useWebchat() {
     setError,
     clearMessages,
     updateLastMessageDate,
+    setCurrentAttachment,
   }
 }
 
