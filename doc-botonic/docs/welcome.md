@@ -4,14 +4,6 @@ title: Welcome to Botonic User Guide
 sidebar_label: Welcome to Botonic User Guide  
 ---
 
-You will:
-
-* Understand why you need Botonic in your life.
-* Get started with a 5 step quick start guide. 
-* Create a small but complete conversational app thanks to a detailed tutorial.
-* Learn the common concepts. 
-* Refer to the rest of the documentation that describes Botonic components.
-
 > ## Chatbot vs Conversational App
 
 Before going any further, let us explain why Botonic is your best ally.

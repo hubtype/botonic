@@ -1,9 +1,9 @@
 ---
 id: getting-started
-title: Getting Started in 5 Steps
+title: Installation and Quick Start
 ---
 
-Let's create our first Botonic bot!
+Let's install and create our first Botonic bot!
 
 > ## Step 1 – Install the Botonic Command Line Interface
 

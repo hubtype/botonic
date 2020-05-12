@@ -17,10 +17,21 @@
 	"templates/nlu"
 	],
 	
+	"Components": [
+	"components/co-components",
+	"components/co-text",
+	"components/co-buttons",
+	"components/co-replies",
+	"components/co-carousel",
+	"components/co-media",
+	"components/co-location",
+	"components/co-sharebutton",
+	"components/co-messagetemplate"
+	],
+	
 	"Concepts": [
 	"concepts/co-actions",
 	"concepts/co-settings",
-	"concepts/co-components",
 	"concepts/co-handoff",
 	"concepts/co-inter",
 	"concepts/co-nlu",
@@ -32,6 +43,10 @@
 	"Plugins": [
 	"plugins/botonic-plugins",
 	"plugins/plugins",
+	"plugins/plugin-dialogflow",
+	"plugins/plugin-luis",
+	"plugins/plugin-segment",
+	"plugins/plugin-nlu",
 	"plugins/contentful"
 	],
 	

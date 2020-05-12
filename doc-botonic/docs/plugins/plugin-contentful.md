@@ -1,7 +1,14 @@
 ---
-title: Botonic Plugin Contentful
+title: Contentful Plugin
 id: contentful
 ---
+
+---
+
+For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful).
+
+---
+
 
 > ## What is Botonic Plugin Contentful?
 

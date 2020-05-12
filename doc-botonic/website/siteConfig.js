@@ -23,7 +23,7 @@ const users = [
 const siteConfig = {
   title: 'Botonic Help', // Title for your website.
   tagline: 'Documentation Portal',
-  url: 'https://your-docusaurus-test-site.com', // Your website URL
+  url: 'https://botonic.io/', // Your website URL
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
@@ -79,7 +79,10 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: ['https://buttons.github.io/buttons.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js',
+  '/js/code-block-buttons.js',
+],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',

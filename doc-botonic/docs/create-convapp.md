@@ -7,7 +7,7 @@ In the following example, we’re going to build a chatbot from scratch that tak
 
 >## Install Botonic 
 
-See the [Getting Started](getting-started).
+See the [**Installation section**](getting-started).
 
 >## Create a Blank Project 
 
@@ -40,87 +40,86 @@ Let's say we want our chatbot to answer just after the user says “hi”.
 	  render() {
  	   return (
  	     <>
-  	      <Text>Welcome to our food service!</Text>
+    	      <Text>Welcome to our food service!</Text>
    	     <Text>What do you want to eat today?</Text>
    	   </>
  	   );
 	  }
 	}
 	```
-1. Now open the `src/routes.js` file to add a rule for this action. For example:
+5. Now open the `src/routes.js` file to add a rule for this action. For example:
 
-```javascript
-import Welcome from "./actions/welcome";
-
-export const routes = [
-  {
-    path: "welcome",
-    text: /hi|hello/,
-    action: Welcome,
-  },
-];
-```
+   ```javascript
+   import Welcome from "./actions/welcome";
+   
+   export const routes = [
+     {
+       path: "welcome",
+       text: /hi|hello/,
+       action: Welcome,
+     },
+   ];
+   ```
 
 
 >## Add Two Buttons to Give the Choice to the User 
 
 Just after greeting the user, let's say that the bot lets the user choose one option among pizza or pasta.
 
-- [ ] Go back to the `welcome.js` file and import the `Reply` component.
+1. Go back to the `welcome.js` file and import the `Reply` component.
 
-```javascript
-import { Text, Reply } from "@botonic/react";
-```
+   ```javascript
+   import { Text, Reply } from "@botonic/react";
+   ```
+1. In the render method you were previously using in `welcome.js` , add the replies. 
 
-- [ ] In the render method you were previously using in `welcome.js` , add the replies. 
+   **Your final `welcome.js` should look like this:**
 
-**Your final `welcome.js` should look like this:**
+   ```javascript
+   import React from "react";
+   import { Text, Reply } from "@botonic/react";
+   
+   export default class extends React.Component {
+     render() {
+       return (
+         <>
+           <Text>Welcome to our food service!</Text>
+           <Text>
+             What do you want to eat today?
+             <Reply payload="pizza">Pizza</Reply>
+             <Reply payload="pasta">Pasta</Reply>
+           </Text>
+         </>
+       );
+     }
+   }
+   ```
 
-```javascript
-import React from "react";
-import { Text, Reply } from "@botonic/react";
+1. Open the `src` folder and create two files: `chosen-pasta.js` and `chosen-pizza.js`. 
 
-export default class extends React.Component {
-  render() {
-    return (
-      <>
-        <Text>Welcome to our food service!</Text>
-        <Text>
-          What do you want to eat today?
-          <Reply payload="pizza">Pizza</Reply>
-          <Reply payload="pasta">Pasta</Reply>
-        </Text>
-      </>
-    );
-  }
-}
-```
+1. Import the react element and the `Text` component. Let’s take the example of the `chosen-pasta.js` file.
 
-- [ ] Open the `src` folder and create two files: `chosen-pasta.js` and `chosen-pizza.js`. 
-- [ ] Import the react element and the `Text` component. Let’s take the example of the `chosen-pasta.js` file.
+   **Your final `chosen-pasta.js` should look like this:**  
 
-**Your final `chosen-pasta.js` should look like this:**  
+   ```javascript
+   import React from "react";
+   import { Text } from "@botonic/react";
+   export default class extends React.Component {
+     render() {
+       return <Text>Pasta is always a good choice!</Text>;
+     }
+   }
+   ```
+1. Repeat the same procedure for the `chosen-pizza.js` file.
+6. Back to the `routes.js` file, add : 
 
-```javascript
-import React from "react";
-import { Text } from "@botonic/react";
-export default class extends React.Component {
-  render() {
-    return <Text>Pasta is always a good choice!</Text>;
-  }
-}
-```
+   ```javascript
+   import ChosenPizza from "./actions/chosen-pizza";
+   import ChosenPasta from "./actions/chosen-pasta";
+   ```
 
-- [ ] Repeat the same procedure for the `chosen-pizza.js` file.
-- [ ] Back to the `routes.js` file, add : 
-
-```javascript
-import ChosenPizza from "./actions/chosen-pizza";
-import ChosenPasta from "./actions/chosen-pasta";
-```
-
-- [ ] Then in `routes.js`, you can add rules to make the user follow a logical path such as a **payload** to capture the answer once the user has clicked on the button `{ payload: "pizza", action: ChosenPizza }` or a **sub-flow** where you can select between two options via `childRoutes`.  
-  **Note:** When using `childRoutes`, at least the main action must have been previously passed. 
+7. Then in `routes.js`, you can add rules to make the user follow a logical path such as a **payload** to capture the answer once the user has clicked on the button `{ payload: "pizza", action: ChosenPizza }` or a **sub-flow** where you can select between two options via `childRoutes`.  
+   **Note:** When using `childRoutes`, at least the main action must have been previously passed. 
 
 Such as:
 
@@ -152,137 +151,138 @@ export const routes = [
 
 >## Add NLU
 
-- [ ] In the bot directory, enter `npm install @botonic/plugin-nlu`.
-- [ ] Create two types of intentions, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en`. You must create at least two files.
-- [ ] Enter the content of your choice: A **chitchat** (with content like "Good morning!/Hello!/Hi!/Good afternoon/Good night") and a **help file** (with content like "I'm lost/ I don't know what to do/I don't understand/I need help"). 
-- [ ] Open  `src/plugins.js` and add your plugin. 
+1. In the bot directory, enter `npm install @botonic/plugin-nlu`.
 
-**Your final `plugins.js` file should look like this:**
+2. Create two types of intentions, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en`. You must create at least two files.
 
-```javascript
-import nluConfig from "./nlu/nlu.config.json";
-export const plugins = [
-  {
-    id: "nlu",
-    resolve: require("@botonic/plugin-nlu"),
-    options: nluConfig,
-  },
-];
-```
+3. Enter the content of your choice: A **chitchat** (with content like "Good morning!/Hello!/Hi!/Good afternoon/Good night") and a **help file** (with content like "I'm lost/ I don't know what to do/I don't understand/I need help"). 
 
-- [ ] Run `botonic train`.
-- [ ] Wait for the model to be trained.  
-  In the next section you are going to create an action: `HelpAction` to answer to the intent.
+4. Open  `src/plugins.js` and add your plugin. 
+   **Your final `plugins.js` file should look like this:**
+
+   ```javascript
+   import nluConfig from "./nlu/nlu.config.json";
+   export const plugins = [
+     {
+       id: "nlu",
+       resolve: require("@botonic/plugin-nlu"),
+       options: nluConfig,
+     },
+   ];
+   ```
+1. Run `botonic train`.
+2. Wait for the model to be trained.  
+   In the next section you are going to create an action: `HelpAction` to answer to the intent.
 
 >## Transfer the Conversation to an Agent
 
 Now let’s say that the user wants to get help from an agent just after his selection.
 
-- [ ] Create a `help-action.js` file.
-- [ ] Import the `HumanHandoff` method from `@botonic/core`.
-- [ ] Add the `botonicInit` method that allows you to perform tasks before sending back the response: `static async botonicInit({ session })`.
-- [ ] Add a `Text` to let the user know that a human agent is going to help.
+1. Create a `help-action.js` file.
 
-**Notes:** To do a transfer with the `humanHandOff` method, only the `session` is necessary. This is the queue name that displays in Hubtype Desk.
+2. Import the `HumanHandoff` method from `@botonic/core`.
 
-**Your final `help-action.js` should look like this:**
+3. Add the `botonicInit` method that allows you to perform tasks before sending back the response: `static async botonicInit({ session })`.
 
-```javascript
-import React from "react";
-import { Text } from "@botonic/react";
-import { humanHandOff } from "@botonic/core";
+4. Add a `Text` to let the user know that a human agent is going to help.
 
-export default class extends React.Component {
-  static async botonicInit({ session }) {
-    await humanHandOff(session, "HUBTYPE_DESK_QUEUE_ID", {
-      payload: "end",
-    });
-  }
-  render() {
-    return (
-      <Text>You will be transfered to an agent to solve your issues.</Text>
-    );
-  }
-}
-```
+   **Notes:** To do a transfer with the `humanHandOff` method, only the `session` is necessary. This is the queue name that displays in Hubtype Desk.
+   
+   **Your final `help-action.js` should look like this:**
+   
+   ```javascript
+   import React from "react";
+   import { Text } from "@botonic/react";
+   import { humanHandOff } from "@botonic/core";
+   
+   export default class extends React.Component {
+     static async botonicInit({ session }) {
+       await humanHandOff(session, "HUBTYPE_DESK_QUEUE_ID", {
+         payload: "end",
+       });
+     }
+     render() {
+       return (
+         <Text>You will be transfered to an agent to solve your issues.</Text>
+       );
+     }
+   }
+   ```
+   
+5. In the `routes.js` files, import `HelpAction`:
 
-- [ ] In the `routes.js` files, import `HelpAction`:
+   ```javascript
+   import HelpAction from "./actions/help-action";
+   ```
+6. To capture the previously added intent, add a new rule in `routes`:
 
-```javascript
-import HelpAction from "./actions/help-action";
-```
-
-- [ ] To capture the previously added intent, add a new rule in `routes`:
-
-```javascript
- { path: "help-action", intent: "help", action: HelpAction }
-```
+   ```javascript
+    { path: "help-action", intent: "help", action: HelpAction }
+   ```
 
 >## Say Goodbye
 
 To end the conversation:
 
-- [ ] Create a `final-action.js` file and the content.
+1. Create a `final-action.js` file and the content.
 
-**Your final `final-action.js` file should look like this:**
+   **Your final `final-action.js` file should look like this:**
 
-```javascript
-import React from "react";
-import { Text } from "@botonic/react";
-export default class extends React.Component {
-  render() {
-    return (
-      <>
-        <Text>I hope you enjoyed our service!</Text>
-        <Text>Have a nice day!</Text>
-      </>
-    );
-  }
-}
-```
+   ```javascript
+   import React from "react";
+   import { Text } from "@botonic/react";
+   export default class extends React.Component {
+     render() {
+       return (
+         <>
+           <Text>I hope you enjoyed our service!</Text>
+           <Text>Have a nice day!</Text>
+         </>
+       );
+     }
+   }
+   ```
+1. In the `routes.js` files, import:
 
-- [ ] In the `routes.js` files, import:
+   ```javascript
+   import FinalAction from "./actions/final-action";
+   ```
+3. To capture the previously added action, add a new rule in `routes`:
 
-```javascript
-import FinalAction from "./actions/final-action";
-```
+   ```javascript
+    { path: "end-of-flow", payload: "end", action: FinalAction }
+   ```
 
-- [ ] To capture the previously added action, add a new rule in `routes`:
+   **Your final `routes.js` file should look like this:**
 
-```javascript
- { path: "end-of-flow", payload: "end", action: FinalAction }
-```
+   ```javascript
+   import Welcome from "./actions/welcome";
+   import ChosenPizza from "./actions/chosen-pizza";
+   import ChosenPasta from "./actions/chosen-pasta";
+   import HelpAction from "./actions/help-action";
+   import FinalAction from "./actions/final-action";
+   
+   export const routes = [
+     {
+       path: "welcome",
+       text: /hi|hello/,
+       action: Welcome,
+       childRoutes: [
+         {
+           path: "chosen-pizza",
+           payload: "pizza",
+           action: ChosenPizza,
+         },
+         {
+           path: "chosen-pasta",
+           payload: "pasta",
+           action: ChosenPasta,
+         },
+       ],
+     },
+     { path: "help-action", intent: "help", action: HelpAction },
+     { path: "end-of-flow", payload: "end", action: FinalAction },
+   ];
+   ```
 
-**Your final `routes.js` file should look like this:**
-
-```javascript
-import Welcome from "./actions/welcome";
-import ChosenPizza from "./actions/chosen-pizza";
-import ChosenPasta from "./actions/chosen-pasta";
-import HelpAction from "./actions/help-action";
-import FinalAction from "./actions/final-action";
-
-export const routes = [
-  {
-    path: "welcome",
-    text: /hi|hello/,
-    action: Welcome,
-    childRoutes: [
-      {
-        path: "chosen-pizza",
-        payload: "pizza",
-        action: ChosenPizza,
-      },
-      {
-        path: "chosen-pasta",
-        payload: "pasta",
-        action: ChosenPasta,
-      },
-    ],
-  },
-  { path: "help-action", intent: "help", action: HelpAction },
-  { path: "end-of-flow", payload: "end", action: FinalAction },
-];
-```
-
-You bot is ready so let's try and deploy it! See the [Getting Started](getting-started) and follow the instructions.
+You bot is ready so let's try and deploy it! See the [**Quick Start section**](getting-started) and follow the instructions.
