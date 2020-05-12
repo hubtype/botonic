@@ -12,15 +12,26 @@ export interface PluginConfig<T> {
   options?: T
 }
 
+export const INPUT: {
+  TEXT: 'text'
+  POSTBACK: 'postback'
+  AUDIO: 'audio'
+  IMAGE: 'image'
+  VIDEO: 'video'
+  DOCUMENT: 'document'
+  LOCATION: 'location'
+  CONTACT: 'contact'
+}
+
 export type InputType =
-  | 'text'
-  | 'postback'
-  | 'audio'
-  | 'image'
-  | 'video'
-  | 'document'
-  | 'location'
-  | 'contact'
+  | typeof INPUT.TEXT
+  | typeof INPUT.POSTBACK
+  | typeof INPUT.AUDIO
+  | typeof INPUT.IMAGE
+  | typeof INPUT.VIDEO
+  | typeof INPUT.DOCUMENT
+  | typeof INPUT.LOCATION
+  | typeof INPUT.CONTACT
 
 export interface Input {
   type: InputType
@@ -37,6 +48,31 @@ export interface Input {
   entities?: any
 }
 
+export const PROVIDER: {
+  DEV: 'dev'
+  FACEBOOK: 'facebook'
+  GENERIC: 'generic'
+  INTERCOM: 'intercom'
+  SMOOCH: 'smooch'
+  TELEGRAM: 'telegram'
+  TWITTER: 'twitter'
+  WEBCHAT: 'webchat'
+  WECHAT: 'wechat'
+  WHATSAPP: 'whatsapp'
+}
+
+export type ProviderType =
+  | typeof PROVIDER.DEV
+  | typeof PROVIDER.FACEBOOK
+  | typeof PROVIDER.GENERIC
+  | typeof PROVIDER.INTERCOM
+  | typeof PROVIDER.SMOOCH
+  | typeof PROVIDER.TELEGRAM
+  | typeof PROVIDER.TWITTER
+  | typeof PROVIDER.WEBCHAT
+  | typeof PROVIDER.WECHAT
+  | typeof PROVIDER.WHATSAPP
+
 export interface SessionUser {
   id: string
   // login
@@ -44,7 +80,7 @@ export interface SessionUser {
   // person name
   name?: string
   // whatsapp, telegram,...
-  provider: string
+  provider: ProviderType
   // The provider's user id
   provider_id?: string
   extra_data?: any
