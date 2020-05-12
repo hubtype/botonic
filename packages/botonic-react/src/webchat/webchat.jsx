@@ -34,13 +34,11 @@ import {
   ConditionalWrapper,
   scrollToBottom,
   getParsedAction,
-  isIphone,
-  handleIphoneOnFocus,
-  handleIphoneOnBlur,
 } from '../utils'
 import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
+import { KeyboardResizer } from '../keyboard-resizer'
 
 const getAttachmentType = fileType => {
   return Object.entries(MIME_WHITELIST)
@@ -161,6 +159,7 @@ export const Webchat = forwardRef((props, ref) => {
   const [persistentMenuIsOpened, setPersistentMenuIsOpened] = useState(false)
   const [emojiPickerIsOpened, setEmojiPickerIsOpened] = useState(false)
   const [attachment, setAttachment] = useState({})
+  const keyboardResizer = new KeyboardResizer()
 
   const getThemeProperty = _getThemeProperty(theme)
 
@@ -216,6 +215,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (!webchatState.isWebchatOpen) return
+    keyboardResizer.limitScrollbarBoundaries()
     scrollToBottom()
   }, [webchatState.isWebchatOpen])
 
@@ -584,8 +584,8 @@ export const Webchat = forwardRef((props, ref) => {
           <TextAreaContainer>
             <Textarea
               name='text'
-              onFocus={() => isIphone() && handleIphoneOnFocus()}
-              onBlur={() => isIphone() && handleIphoneOnBlur()}
+              onFocus={() => keyboardResizer.onFocus()}
+              onBlur={() => keyboardResizer.onBlur()}
               maxRows={4}
               wrap='soft'
               maxLength='1000'
@@ -598,8 +598,7 @@ export const Webchat = forwardRef((props, ref) => {
               onKeyDown={e => onKeyDown(e)}
               style={{
                 display: 'flex',
-                // Disabling auto-zoom on input (iPhone devices): https://stackoverflow.com/a/25614477
-                fontSize: isIphone() ? 'initial' : 14,
+                fontSize: keyboardResizer.fontSize(14),
                 width: '100%',
                 border: 'none',
                 resize: 'none',
@@ -694,6 +693,7 @@ export const Webchat = forwardRef((props, ref) => {
       )}
       {webchatState.isWebchatOpen && (
         <StyledWebchat
+          // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           id={'botonic-webchat'}
           width={webchatState.width}
           height={webchatState.height}
