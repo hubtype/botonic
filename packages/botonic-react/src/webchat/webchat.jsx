@@ -41,9 +41,9 @@ import styled from 'styled-components'
 import { KeyboardResizer } from '../keyboard-resizer'
 
 const getAttachmentType = fileType => {
-  return Object.entries(MIME_WHITELIST)
-    .filter(([k, v]) => v.includes(fileType))
-    .map(([k, v]) => k)[0]
+  let type = fileType.split('/')[0]
+  if (type == 'application') type = 'document'
+  return type
 }
 
 const StyledWebchat = styled.div`
@@ -344,23 +344,28 @@ export const Webchat = forwardRef((props, ref) => {
           {input.data}
         </Text>
       )
+    } else {
+      const mediaProps = {
+        id: input.id,
+        from: 'user',
+        src: URL.createObjectURL(input.data),
+      }
+
+      if (input.type == 'image') inputMessage = <Image {...mediaProps} />
+
+      if (input.type == 'audio') inputMessage = <Audio {...mediaProps} />
+
+      if (input.type == 'video') inputMessage = <Video {...mediaProps} />
+
+      if (input.type == 'document') inputMessage = <Document {...mediaProps} />
+
+      if (input.data && input.type != 'text') {
+        input.data = await toBase64(input.data)
+      }
     }
-    if (input.type == 'image') {
-      inputMessage = <Image id={input.id} src={input.data} from='user' />
-    }
-    if (input.type == 'audio') {
-      inputMessage = <Audio id={input.id} src={input.data} from='user' />
-    }
-    if (input.type == 'video') {
-      // This is set willfully since if we set this 'src' to video data will surpass the limits of localStorage
-      inputMessage = <Video id={input.id} src={''} from='user' />
-    }
-    if (input.type == 'document') {
-      inputMessage = <Document id={input.id} src={input.data} from='user' />
-    }
-    if (inputMessage) {
-      addMessageComponent(inputMessage)
-    }
+
+    if (inputMessage) addMessageComponent(inputMessage)
+
     props.onUserInput &&
       props.onUserInput({
         user: webchatState.user,
@@ -413,6 +418,12 @@ export const Webchat = forwardRef((props, ref) => {
       clearMessages()
     },
     getLastMessageUpdate: () => webchatState.lastMessageUpdate,
+    updateMessageInfo: (msgId, messageInfo) => {
+      const messageToUpdate = webchatState.messagesJSON.filter(
+        m => m.id == msgId
+      )[0]
+      updateMessage({ ...messageToUpdate, ...messageInfo })
+    },
   }))
 
   const resolveCase = () => {
@@ -459,7 +470,7 @@ export const Webchat = forwardRef((props, ref) => {
       if (!attachmentType) return
       const input = {
         type: attachmentType,
-        data: await toBase64(attachment.file),
+        data: attachment.file,
       }
       await sendInput(input)
     }
@@ -622,9 +633,7 @@ export const Webchat = forwardRef((props, ref) => {
               <ConditionalAnimation>
                 <Attachment
                   onChange={handleAttachment}
-                  accept={Object.values(MIME_WHITELIST)
-                    .map(v => v.join(','))
-                    .join(',')}
+                  accept={'audio/*,video/*,image/*,.pdf'}
                 />
               </ConditionalAnimation>
             )}
