@@ -10,6 +10,7 @@ import {
   SET_ERROR,
   UPDATE_TYPING,
   UPDATE_HANDOFF,
+  SET_CURRENT_ATTACHMENT,
 } from './actions'
 
 import { messagesReducer } from './messages-reducer'
@@ -38,6 +39,8 @@ export function webchatReducer(state, action) {
       return { ...state, latestInput: action.payload }
     case UPDATE_LAST_ROUTE_PATH:
       return { ...state, lastRoutePath: action.payload }
+    case SET_CURRENT_ATTACHMENT:
+      return { ...state, currentAttachment: action.payload }
     default:
       return messagesReducer(state, action)
   }

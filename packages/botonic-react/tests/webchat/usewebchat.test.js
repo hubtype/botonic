@@ -183,4 +183,14 @@ describe('TEST: useWebchat ', () => {
     })
     expect(result.current.webchatState.messagesJSON).toEqual([])
   })
+  it('setCurrentAttachment: sets current attachment to given object', () => {
+    const { result } = renderUseWebchatHook()
+    const attachmentObject = { file: 'whatever' }
+    act(() => {
+      result.current.setCurrentAttachment(attachmentObject)
+    })
+    expect(result.current.webchatState.currentAttachment).toEqual(
+      attachmentObject
+    )
+  })
 })
