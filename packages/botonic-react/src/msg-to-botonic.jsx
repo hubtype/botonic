@@ -12,6 +12,7 @@ import { Audio } from './components/audio'
 import { Document } from './components/document'
 import { Location } from './components/location'
 import { Reply } from './components/reply'
+import { INPUT } from '@botonic/core'
 
 /**
  *
@@ -21,7 +22,7 @@ import { Reply } from './components/reply'
  */
 export function msgToBotonic(msg, customMessageTypes) {
   delete msg.display
-  if (msg.type === 'custom') {
+  if (msg.type === INPUT.CUSTOM) {
     try {
       return customMessageTypes
         .find(mt => mt.customTypeName === msg.data.customTypeName)
@@ -29,16 +30,16 @@ export function msgToBotonic(msg, customMessageTypes) {
     } catch (e) {
       console.log(e)
     }
-  } else if (msg.type === 'text') {
+  } else if (msg.type === INPUT.TEXT) {
     return textToBotonic(msg)
-  } else if (msg.type === 'carousel') {
+  } else if (msg.type === INPUT.CAROUSEL) {
     const elements = msg.elements || msg.data.elements
     return (
       <Carousel {...msg} key={msg.key}>
         {elementsParse(elements)}
       </Carousel>
     )
-  } else if (msg.type === 'image') {
+  } else if (msg.type === INPUT.IMAGE) {
     return (
       <Image
         key={msg.key}
@@ -46,32 +47,32 @@ export function msgToBotonic(msg, customMessageTypes) {
         src={msg.data.image != undefined ? msg.data.image : msg.data}
       />
     )
-  } else if (msg.type === 'video') {
+  } else if (msg.type === INPUT.VIDEO) {
     return (
       <Video
         {...msg}
         src={msg.data.video != undefined ? msg.data.video : msg.data}
       />
     )
-  } else if (msg.type === 'audio') {
+  } else if (msg.type === INPUT.AUDIO) {
     return (
       <Audio
         {...msg}
         src={msg.data.audio != undefined ? msg.data.audio : msg.data}
       />
     )
-  } else if (msg.type === 'document') {
+  } else if (msg.type === INPUT.DOCUMENT) {
     return (
       <Document
         {...msg}
         src={msg.data.document != undefined ? msg.data.document : msg.data}
       />
     )
-  } else if (msg.type === 'location') {
+  } else if (msg.type === INPUT.LOCATION) {
     const lat = msg.data ? msg.data.location.lat : msg.latitude
     const long = msg.data ? msg.data.location.long : msg.longitude
     return <Location {...msg} lat={lat} long={long} />
-  } else if (msg.type === 'buttonmessage') {
+  } else if (msg.type === INPUT.BUTTON_MESSAGE) {
     const buttons = buttonsParse(msg.buttons)
     return (
       <>

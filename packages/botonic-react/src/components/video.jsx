@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Message } from './message'
-import { isBrowser } from '@botonic/core'
+import { isBrowser, INPUT } from '@botonic/core'
 import { COLORS } from '../constants'
 
 const StyledVideo = styled.video`
@@ -25,7 +25,7 @@ export const Video = props => {
       </StyledVideo>
     )
   return (
-    <Message json={serialize(props)} {...props} type='video'>
+    <Message json={serialize(props)} {...props} type={INPUT.VIDEO}>
       {content}
     </Message>
   )

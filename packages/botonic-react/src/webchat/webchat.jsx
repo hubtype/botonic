@@ -9,7 +9,7 @@ import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
 import uuid from 'uuid/v4'
 import UAParser from 'ua-parser-js'
-import { isMobile, params2queryString } from '@botonic/core'
+import { isMobile, params2queryString, INPUT } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Text, Document, Image, Video, Audio } from '../components'
 import { TypingIndicator } from './components/typing-indicator'
@@ -39,11 +39,20 @@ import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 import { KeyboardResizer } from '../keyboard-resizer'
+import {
+  isText,
+  isImage,
+  isAudio,
+  isVideo,
+  isDocument,
+  isMedia,
+  toBase64,
+} from '../message-utils'
 
 const getAttachmentType = fileType => {
-  let type = fileType.split('/')[0]
-  if (type == 'application') type = 'document'
-  return type
+  return Object.entries(MIME_WHITELIST)
+    .filter(([_, formatsForType]) => formatsForType.includes(fileType))
+    .map(([type, _]) => type)[0]
 }
 
 const StyledWebchat = styled.div`
@@ -331,40 +340,37 @@ export const Webchat = forwardRef((props, ref) => {
     setPersistentMenuIsOpened(false)
   }
 
-  const sendInput = async input => {
-    let inputMessage = null
-    if (!input || Object.keys(input).length == 0) return
-    if (!input.id) input.id = uuid()
-    //if is a text we check if it is a RE
-    if (input.type === 'text') {
-      if (!input.data) return
-      if (checkBlockInput(input)) return
-      inputMessage = (
+  const messageComponentFromInput = input => {
+    let messageComponent = null
+    if (isText(input)) {
+      messageComponent = (
         <Text id={input.id} payload={input.payload} from='user'>
           {input.data}
         </Text>
       )
-    } else {
+    } else if (isMedia(input)) {
+      const temporaryDisplayUrl = URL.createObjectURL(input.data)
       const mediaProps = {
         id: input.id,
         from: 'user',
-        src: URL.createObjectURL(input.data),
+        src: temporaryDisplayUrl,
       }
-
-      if (input.type == 'image') inputMessage = <Image {...mediaProps} />
-
-      if (input.type == 'audio') inputMessage = <Audio {...mediaProps} />
-
-      if (input.type == 'video') inputMessage = <Video {...mediaProps} />
-
-      if (input.type == 'document') inputMessage = <Document {...mediaProps} />
-
-      if (input.data && input.type != 'text') {
-        input.data = await toBase64(input.data)
-      }
+      if (isImage(input)) messageComponent = <Image {...mediaProps} />
+      if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
+      if (isVideo(input)) messageComponent = <Video {...mediaProps} />
+      if (isDocument(input)) messageComponent = <Document {...mediaProps} />
     }
+    return messageComponent
+  }
 
-    if (inputMessage) addMessageComponent(inputMessage)
+  const sendInput = async input => {
+    if (!input || Object.keys(input).length == 0) return
+    if (isText(input) && !input.data) return
+    if (isText(input) && checkBlockInput(input)) return //if is a text we check if it is a RE
+    if (!input.id) input.id = uuid()
+    const messageComponent = messageComponentFromInput(input)
+    if (messageComponent) addMessageComponent(messageComponent)
+    if (isMedia(input)) input.data = await toBase64(input.data)
 
     props.onUserInput &&
       props.onUserInput({
@@ -446,23 +452,15 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendText = async (text, payload) => {
     if (!text) return
-    const input = { type: 'text', data: text, payload }
+    const input = { type: INPUT.TEXT, data: text, payload }
     await sendInput(input)
   }
 
   const sendPayload = async payload => {
     if (!payload) return
-    const input = { type: 'postback', payload }
+    const input = { type: INPUT.POSTBACK, payload }
     await sendInput(input)
   }
-
-  const toBase64 = file =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = error => reject(error)
-    })
 
   const sendAttachment = async attachment => {
     if (attachment.file) {
@@ -633,7 +631,11 @@ export const Webchat = forwardRef((props, ref) => {
               <ConditionalAnimation>
                 <Attachment
                   onChange={handleAttachment}
-                  accept={'audio/*,video/*,image/*,.pdf'}
+                  accept={Object.values(MIME_WHITELIST)
+                    .map(acceptedFormatsForType =>
+                      acceptedFormatsForType.join(',')
+                    )
+                    .join(',')}
                 />
               </ConditionalAnimation>
             )}

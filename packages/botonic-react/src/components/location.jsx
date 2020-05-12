@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Message } from './message'
 import { renderComponent } from '../utils'
+import { INPUT } from '@botonic/core'
 
 const Link = styled.a`
   text-decoration: none;
@@ -19,7 +20,7 @@ export const Location = props => {
   const renderBrowser = () => {
     const locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
     return (
-      <Message json={serialize(props)} {...props} type='location'>
+      <Message json={serialize(props)} {...props} type={INPUT.LOCATION}>
         <Link href={locationUrl} target='_blank' rel='noopener noreferrer'>
           {props.text || 'Open Location'}
         </Link>
@@ -29,7 +30,7 @@ export const Location = props => {
 
   const renderNode = () => {
     return (
-      <message type='location'>
+      <message type={INPUT.LOCATION}>
         <lat>{lat}</lat>
         <long>{long}</long>
       </message>

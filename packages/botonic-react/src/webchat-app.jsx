@@ -4,7 +4,7 @@ import { render } from 'react-dom'
 import { Webchat } from './webchat'
 import { HubtypeService } from '@botonic/core'
 import { msgToBotonic } from './msg-to-botonic'
-
+import { INPUT } from '@botonic/core'
 export class WebchatApp {
   constructor({
     theme = {},
@@ -90,7 +90,7 @@ export class WebchatApp {
   }
 
   addBotText(text) {
-    this.addBotMessage({ type: 'text', data: text })
+    this.addBotMessage({ type: INPUT.TEXT, data: text })
   }
 
   addUserMessage(message) {
@@ -98,11 +98,11 @@ export class WebchatApp {
   }
 
   addUserText(text) {
-    this.webchatRef.current.addUserMessage({ type: 'text', data: text })
+    this.webchatRef.current.addUserMessage({ type: INPUT.TEXT, data: text })
   }
 
   addUserPayload(payload) {
-    this.webchatRef.current.addUserMessage({ type: 'postback', payload })
+    this.webchatRef.current.addUserMessage({ type: INPUT.POSTBACK, payload })
   }
 
   setTyping(typing) {

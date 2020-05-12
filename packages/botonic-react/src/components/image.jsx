@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Message } from './message'
-import { isBrowser } from '@botonic/core'
+import { isBrowser, INPUT } from '@botonic/core'
 import styled from 'styled-components'
 
 const StyledImage = styled.img`
@@ -19,7 +19,7 @@ export const Image = props => {
   let content = props.children
   if (isBrowser()) content = <StyledImage src={props.src} />
   return (
-    <Message json={serialize(props)} {...props} type='image'>
+    <Message json={serialize(props)} {...props} type={INPUT.IMAGE}>
       {content}
     </Message>
   )

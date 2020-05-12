@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Message } from './message'
-import { isBrowser } from '@botonic/core'
+import { isBrowser, INPUT } from '@botonic/core'
 import styled from 'styled-components'
 
 const StyledEmbed = styled.embed`
@@ -18,7 +18,7 @@ export const Document = props => {
   let content = props.children
   if (isBrowser()) content = <StyledEmbed src={props.src} />
   return (
-    <Message json={serialize(props)} {...props} type='document'>
+    <Message json={serialize(props)} {...props} type={INPUT.DOCUMENT}>
       {content}
     </Message>
   )

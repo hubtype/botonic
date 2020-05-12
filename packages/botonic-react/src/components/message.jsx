@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import uuid from 'uuid/v4'
-import { isBrowser, isNode } from '@botonic/core'
+import { isBrowser, isNode, INPUT } from '@botonic/core'
 import { staticAsset, ConditionalWrapper, renderComponent } from '../utils'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
@@ -276,7 +276,7 @@ export const Message = props => {
 
   const { blob: _blob, json: _json, ...nodeProps } = props
   const renderNode = () =>
-    type === 'custom' ? (
+    type === INPUT.CUSTOM ? (
       <message
         json={JSON.stringify(_json)}
         typing={typing}

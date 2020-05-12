@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Message } from './message'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
-import { isBrowser } from '@botonic/core'
+import { isBrowser, INPUT } from '@botonic/core'
 import styled from 'styled-components'
 import { COLORS } from '../constants'
 
@@ -23,7 +23,7 @@ const serialize = carouselProps => {
   let carouselChildren = carouselProps.children
   if (!Array.isArray(carouselChildren)) carouselChildren = [carouselChildren]
   return {
-    type: 'carousel',
+    type: INPUT.CAROUSEL,
     elements: carouselChildren.map(
       e => e && e.type && e.type.serialize && e.type.serialize(e.props)
     ),
@@ -54,7 +54,7 @@ export const Carousel = props => {
       style={{ width: '85%', padding: 0, backgroundColor: COLORS.TRANSPARENT }}
       blob={false}
       json={serialize(props)}
-      type='carousel'
+      type={INPUT.CAROUSEL}
       {...props}
     >
       {content}

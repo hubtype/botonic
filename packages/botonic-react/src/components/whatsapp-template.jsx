@@ -1,6 +1,7 @@
 import React from 'react'
 import { Message } from './message'
 import { renderComponent } from '../utils'
+import { INPUT } from '@botonic/core'
 
 export const WhatsappTemplate = props => {
   const renderBrowser = () => {
@@ -10,7 +11,7 @@ export const WhatsappTemplate = props => {
     }
     // Return a dummy message for browser
     return (
-      <Message {...props} type='text'>
+      <Message {...props} type={INPUT.TEXT}>
         Template {props.name} would be send to the user with parameters:&quot;
         {params} and namespace {props.namespace}
       </Message>
@@ -23,7 +24,7 @@ export const WhatsappTemplate = props => {
       params = params + ', ' + props.parameters[param]
     }
     return (
-      <Message {...props} type='text'>
+      <Message {...props} type={INPUT.TEXT}>
         &[Fallback text]({props.namespace}, {props.name}
         {params})
       </Message>
