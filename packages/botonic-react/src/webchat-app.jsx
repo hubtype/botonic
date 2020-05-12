@@ -68,6 +68,8 @@ export class WebchatApp {
   onServiceEvent(event) {
     if (event.isError)
       this.webchatRef.current.setError({ message: event.errorMessage })
+    else if (event.action === 'update_message_info')
+      this.updateMessageInfo(event.message.id, event.message)
     else if (event.message.type === 'sender_action')
       this.setTyping(event.message.data === 'typing_on')
     else this.addBotMessage(event.message)
@@ -129,6 +131,10 @@ export class WebchatApp {
 
   getLastMessageUpdate() {
     return this.webchatRef.current.getLastMessageUpdate()
+  }
+
+  updateMessageInfo(msgId, messageInfo) {
+    return this.webchatRef.current.updateMessageInfo(msgId, messageInfo)
   }
 
   getComponent(optionsAtRuntime = {}) {

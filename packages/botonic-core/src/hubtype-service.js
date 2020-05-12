@@ -59,6 +59,7 @@ export class HubtypeService {
       })
     })
     this.channel.bind('botonic_response', data => this.onPusherEvent(data))
+    this.channel.bind('update_message_info', data => this.onPusherEvent(data))
     return connectionPromise
   }
 

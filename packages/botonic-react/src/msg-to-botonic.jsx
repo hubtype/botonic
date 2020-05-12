@@ -112,7 +112,8 @@ export function msgsToBotonic(msgs, customMessageTypes) {
 }
 
 function textToBotonic(msg) {
-  const txt = msg.data.text != undefined ? msg.data.text : String(msg.data)
+  const txt =
+    msg.data && msg.data.text != undefined ? msg.data.text : String(msg.data)
   if (
     (msg.replies && msg.replies.length) ||
     (msg.keyboard && msg.keyboard.length)
