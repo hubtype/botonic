@@ -35,7 +35,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
           )
         )
       })}
-      <Button onClick={onClick} bottom={borderRadius}>
+      <Button onClick={onClick} bottomRadius={borderRadius}>
         {closeLabel}
       </Button>
     </ButtonsContainer>
