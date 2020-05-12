@@ -1,5 +1,5 @@
 import React from 'react'
-import { isBrowser } from '@botonic/core'
+import { isBrowser, INPUT } from '@botonic/core'
 import { Message } from './message'
 
 const serialize = audioProps => {
@@ -16,7 +16,7 @@ export const Audio = props => {
       </audio>
     )
   return (
-    <Message json={serialize(props)} {...props} type='audio'>
+    <Message json={serialize(props)} {...props} type={INPUT.AUDIO}>
       {content}
     </Message>
   )

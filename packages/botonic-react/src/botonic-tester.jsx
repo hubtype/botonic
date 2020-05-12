@@ -4,6 +4,7 @@ import decode from 'unescape'
 
 import { Text } from './components/text'
 import { Reply } from './components/reply'
+import { INPUT } from '@botonic/core'
 
 export class BotonicInputTester {
   constructor(bot) {
@@ -11,7 +12,7 @@ export class BotonicInputTester {
   }
   async text(inp, session = {}, lastRoutePath = '') {
     const res = await this.bot.input({
-      input: { type: 'text', data: inp },
+      input: { type: INPUT.TEXT, data: inp },
       session: session,
       lastRoutePath: lastRoutePath,
     })
@@ -20,7 +21,7 @@ export class BotonicInputTester {
 
   async payload(inp, session = {}, lastRoutePath = '') {
     const res = await this.bot.input({
-      input: { type: 'postback', payload: inp },
+      input: { type: INPUT.POSTBACK, payload: inp },
       session: session,
       lastRoutePath: lastRoutePath,
     })
@@ -29,7 +30,7 @@ export class BotonicInputTester {
 
   async path(inp, session = {}, lastRoutePath = '') {
     const res = await this.bot.input({
-      input: { type: 'text', payload: `__PATH_PAYLOAD__${inp}` },
+      input: { type: INPUT.TEXT, payload: `__PATH_PAYLOAD__${inp}` },
       session: session,
       lastRoutePath: lastRoutePath,
     })

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useWebchat } from './hooks'
 import { Webchat } from './webchat'
 import { SessionView } from './session-view'
+import { PROVIDER } from '@botonic/core'
 
 export const FixedTab = styled.div`
   position: fixed;
@@ -19,7 +20,7 @@ const initialSession = {
     id: '000001',
     username: 'johndoe',
     name: 'John Doe',
-    provider: 'dev',
+    provider: PROVIDER.DEV,
     provider_id: '0000000',
     extra_data: {},
   },

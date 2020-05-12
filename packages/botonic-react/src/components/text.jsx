@@ -1,6 +1,6 @@
 import React from 'react'
 import { Message } from './message'
-
+import { INPUT } from '@botonic/core'
 const serialize = textProps => {
   let text = String(textProps.children)
   /* As text message can have multiple children ( a text with buttons or quickreplies )
@@ -20,7 +20,7 @@ const serialize = textProps => {
 }
 
 export const Text = props => (
-  <Message json={serialize(props)} {...props} type='text'>
+  <Message json={serialize(props)} {...props} type={INPUT.TEXT}>
     {props.children}
   </Message>
 )

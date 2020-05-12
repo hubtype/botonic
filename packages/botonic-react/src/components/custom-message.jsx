@@ -1,5 +1,6 @@
 import React from 'react'
 import { Message } from './message'
+import { INPUT } from '@botonic/core'
 
 export const customMessage = ({
   name,
@@ -7,7 +8,7 @@ export const customMessage = ({
   defaultProps,
 }) => {
   const CustomMessage = props => (
-    <Message {...defaultProps} {...props} type='custom' />
+    <Message {...defaultProps} {...props} type={INPUT.CUSTOM} />
   )
   const WrappedComponent = props => {
     const { id, ...customMessageProps } = props

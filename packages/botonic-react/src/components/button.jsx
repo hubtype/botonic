@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { params2queryString } from '@botonic/core'
+import { params2queryString, INPUT } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { COLORS } from '../constants'
 import { renderComponent } from '../utils'
@@ -43,18 +43,18 @@ export const Button = props => {
     const type = getThemeProperty('button.messageType', 'postback')
     if (props.webview) openWebview(props.webview, props.params)
     else if (props.path) {
-      type == 'postback'
+      type == INPUT.POSTBACK
         ? sendPayload(`__PATH_PAYLOAD__${props.path}`)
         : sendInput({
-            type: 'text',
+            type: INPUT.TEXT,
             data: String(props.children),
             payload: `__PATH_PAYLOAD__${props.path}`,
           })
     } else if (props.payload) {
-      type == 'postback'
+      type == INPUT.POSTBACK
         ? sendPayload(props.payload)
         : sendInput({
-            type: 'text',
+            type: INPUT.TEXT,
             data: String(props.children),
             payload: props.payload,
           })

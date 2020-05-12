@@ -97,6 +97,6 @@ export const WEBCHAT = {
 export const MIME_WHITELIST = {
   document: ['application/pdf'],
   image: ['image/jpeg', 'image/png'],
-  video: ['video/mp4'],
+  video: ['video/mp4', 'video/quicktime'],
   audio: ['audio/mpeg', 'audio/mp3'],
 }
