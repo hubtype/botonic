@@ -96,6 +96,7 @@ export const Button = props => {
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
         }}
+        bottom={props.bottomRadius}
       >
         {props.children}
       </StyledButton>
