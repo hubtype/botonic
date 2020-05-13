@@ -35,7 +35,7 @@ import {
   scrollToBottom,
   getParsedAction,
 } from '../utils'
-import { WEBCHAT, MIME_WHITELIST, COLORS } from '../constants'
+import { WEBCHAT, COLORS } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 import { KeyboardResizer } from '../keyboard-resizer'
@@ -48,13 +48,9 @@ import {
   isMedia,
   toBase64,
   isAllowedSize,
+  getAttachmentType,
+  getAcceptedFormats,
 } from '../message-utils'
-
-const getAttachmentType = fileType => {
-  return Object.entries(MIME_WHITELIST)
-    .filter(([_, formatsForType]) => formatsForType.includes(fileType))
-    .map(([type, _]) => type)[0]
-}
 
 const StyledWebchat = styled.div`
   position: fixed;
@@ -635,11 +631,7 @@ export const Webchat = forwardRef((props, ref) => {
               <ConditionalAnimation>
                 <Attachment
                   onChange={handleAttachment}
-                  accept={Object.values(MIME_WHITELIST)
-                    .map(acceptedFormatsForType =>
-                      acceptedFormatsForType.join(',')
-                    )
-                    .join(',')}
+                  accept={getAcceptedFormats()}
                 />
               </ConditionalAnimation>
             )}

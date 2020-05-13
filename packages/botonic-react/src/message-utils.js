@@ -1,4 +1,5 @@
 import { INPUT } from '@botonic/core'
+import { MIME_WHITELIST } from './constants'
 
 export const isType = (msgType, type) => msgType === type
 export const isText = msg => isType(msg.type, INPUT.TEXT)
@@ -11,6 +12,7 @@ export const isLocation = msg => isType(msg.type, INPUT.LOCATION)
 export const isContact = msg => isType(msg.type, INPUT.CONTACT)
 export const isCarousel = msg => isType(msg.type, INPUT.CAROUSEL)
 export const isCustom = msg => isType(msg.type, INPUT.CUSTOM)
+export const isButtonMessage = msg => isType(msg.type, INPUT.BUTTON_MESSAGE)
 
 export const MEDIA_TYPES = [
   INPUT.AUDIO,
@@ -38,3 +40,14 @@ export const isAllowedSize = fileSize => {
   if (fileSize > maxAllowedBytesSize) return false
   return true
 }
+
+export const getAttachmentType = fileType => {
+  return Object.entries(MIME_WHITELIST)
+    .filter(([_, formatsForType]) => formatsForType.includes(fileType))
+    .map(([type, _]) => type)[0]
+}
+
+export const getAcceptedFormats = () =>
+  Object.values(MIME_WHITELIST)
+    .map(acceptedFormatsForType => acceptedFormatsForType.join(','))
+    .join(',')
