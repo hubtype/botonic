@@ -69,6 +69,7 @@ const StyledWebchat = styled.div`
 const StyledTriggerButton = styled.div`
   cursor: pointer;
   position: fixed;
+  background: ${COLORS.SOLID_WHITE};
   border-radius: 50%;
   display: flex;
   align-items: center;
