@@ -39,4 +39,7 @@ export const INPUT = Object.freeze({
   DOCUMENT: 'document',
   LOCATION: 'location',
   CONTACT: 'contact',
+  BUTTON_MESSAGE: 'buttonmessage',
+  CAROUSEL: 'carousel',
+  CUSTOM: 'custom',
 })
