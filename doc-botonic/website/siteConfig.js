@@ -21,7 +21,7 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'Botonic Help', // Title for your website.
+  title: 'Botonic', // Title for your website.
   tagline: 'Documentation Portal',
   url: 'https://botonic.io/', // Your website URL
   baseUrl: '/', // Base URL for your project */
@@ -30,7 +30,7 @@ const siteConfig = {
   //   baseUrl: '/test-site/',
 
   // Used for publishing and more
-  projectName: 'test-site',
+  projectName: 'botonic-docs',
   organizationName: 'facebook',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
