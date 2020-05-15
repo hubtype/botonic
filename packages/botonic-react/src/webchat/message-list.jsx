@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './components/styled-scrollbar'
-import { staticAsset, ConditionalWrapper } from '../utils'
+import { resolveImage, ConditionalWrapper } from '../utils'
 import Fade from 'react-reveal/Fade'
 import styled from 'styled-components'
 
@@ -36,7 +36,7 @@ export const WebchatMessageList = props => {
       style={{
         ...introStyle,
       }}
-      src={staticAsset(introImage)}
+      src={resolveImage(introImage)}
     />
   )
 

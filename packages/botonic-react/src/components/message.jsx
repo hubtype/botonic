@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import uuid from 'uuid/v4'
+
 import { isBrowser, isNode, INPUT } from '@botonic/core'
-import { staticAsset, ConditionalWrapper, renderComponent } from '../utils'
+import { resolveImage, ConditionalWrapper, renderComponent } from '../utils'
+
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
@@ -206,7 +208,7 @@ export const Message = props => {
             >
               <img
                 style={{ width: '100%' }}
-                src={staticAsset(BotMessageImage)}
+                src={resolveImage(BotMessageImage)}
               />
             </BotMessageImageContainer>
           )}

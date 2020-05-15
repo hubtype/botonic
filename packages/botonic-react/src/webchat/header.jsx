@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
-import { staticAsset, ConditionalWrapper } from '../utils'
+import { resolveImage, ConditionalWrapper } from '../utils'
 import styled from 'styled-components'
 import { WEBCHAT, COLORS } from '../constants'
 import { Flex } from 'rebass'
@@ -68,7 +68,7 @@ export const DefaultHeader = props => {
     <Header color={props.color} style={{ ...getThemeProperty('header.style') }}>
       {headerImage && (
         <ImageContainer>
-          <Image src={staticAsset(headerImage)} />
+          <Image src={resolveImage(headerImage)} />
         </ImageContainer>
       )}
       <TextContainer ml={headerImage ? '0px' : '16px'}>
