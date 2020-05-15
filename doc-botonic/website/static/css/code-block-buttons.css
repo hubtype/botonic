@@ -10,10 +10,10 @@ pre .btnIcon {
   cursor: pointer;
   border: 1px solid transparent;
   padding: 1000;
-  color: #fff;
+  color: black;
   background-color: transparent;
   height: 30px;
-  transition: all .25s ease-out;
+  transition: all 0.25s ease-out;
 }
 
 pre .btnIcon:hover {
@@ -27,7 +27,7 @@ pre .btnIcon:hover {
 
 .btnIcon svg {
   fill: currentColor;
-  margin-right: .4em;
+  margin-right: 0.4em;
 }
 
 .btnIcon__label {
