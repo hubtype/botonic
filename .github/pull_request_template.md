@@ -25,6 +25,13 @@ _Remember to tag the PR with **WIP** tag if it's not ready to be merged_.
 - If it's a complex solution, try to provide a sketch.
 -->
 
+## To documentate / Usage example
+
+<!--
+- How this is used?
+- If possible, provide a snippet of code with a usage example.
+-->
+
 ## Testing
 
 The pull request...
