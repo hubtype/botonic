@@ -29,7 +29,7 @@ import { WebviewContainer } from './webview'
 import { msgToBotonic } from '../msg-to-botonic'
 import {
   isDev,
-  staticAsset,
+  resolveImage,
   _getThemeProperty,
   ConditionalWrapper,
   scrollToBottom,
@@ -525,7 +525,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
     return (
       <StyledTriggerButton style={{ ...triggerButtonStyle }}>
-        {triggerImage && <TriggerImage src={staticAsset(triggerImage)} />}
+        {triggerImage && <TriggerImage src={resolveImage(triggerImage)} />}
       </StyledTriggerButton>
     )
   }

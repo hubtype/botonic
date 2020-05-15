@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { staticAsset } from '../../utils'
+import { resolveImage } from '../../utils'
 
 const PointerImage = styled.img`
   cursor: pointer;
 `
-export const Icon = props => <PointerImage src={staticAsset(props.src)} />
+export const Icon = props => <PointerImage src={resolveImage(props.src)} />
 
 export const IconContainer = styled.div`
   display: flex;

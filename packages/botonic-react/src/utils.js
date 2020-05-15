@@ -21,6 +21,18 @@ export const staticAsset = path => {
   }
 }
 
+export const isURL = urlPath => {
+  // @stephenhay (38 chars) from: https://mathiasbynens.be/demo/url-regex
+  const URL_PATTERN = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/
+  const pattern = new RegExp(URL_PATTERN)
+  return !!pattern.test(urlPath)
+}
+
+export const resolveImage = src => {
+  if (isURL(src)) return src
+  return staticAsset(src)
+}
+
 /**
  * given an object and a property, returns the property if exists (recursively), else undefined
  * ex:
