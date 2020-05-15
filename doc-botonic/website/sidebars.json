@@ -46,6 +46,7 @@
 	"plugins/plugin-dialogflow",
 	"plugins/plugin-luis",
 	"plugins/plugin-segment",
+	"plugins/plugin-inbenta",
 	"plugins/plugin-nlu",
 	"plugins/contentful"
 	],
