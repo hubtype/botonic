@@ -40,3 +40,16 @@ export const whatsappRenderer = (sut, multichannelContext = {}) =>
   )
 
 export const renderUseWebchatHook = () => renderHook(() => useWebchat())
+
+export const toMB = size => size * 1024 * 1024
+export const createFile = ({ fakeData, fileName, mimeType, size }) => {
+  const file = new File([fakeData], fileName, { type: mimeType })
+  if (size) {
+    // https://stackoverflow.com/a/55638956
+    Object.defineProperty(file, 'size', {
+      value: size,
+      writable: false,
+    })
+  }
+  return file
+}

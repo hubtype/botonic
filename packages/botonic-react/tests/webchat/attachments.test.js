@@ -1,56 +1,32 @@
 import {
   isAllowedSize,
-  getAttachmentType,
-  getAcceptedFormats,
+  getMediaType,
+  getFullMimeWhitelist,
 } from '../../src/message-utils'
 
-describe('TEST: attachments ', () => {
-  const createFile = ({ fakeData, fileName, mimeType, sizeInMB }) => {
-    const file = new File([fakeData], fileName, { type: mimeType })
-    if (sizeInMB) {
-      // https://stackoverflow.com/a/55638956
-      Object.defineProperty(file, 'size', {
-        value: sizeInMB * 1024 * 1024,
-        writable: false,
-      })
-    }
-    return file
-  }
+import { toMB } from '../helpers/test-utils'
 
+describe('TEST: attachments ', () => {
   it('Gets correctly the attachment type', () => {
-    const file = createFile({
-      fakeData: 'video_data',
-      fileName: 'video_filename.mp4',
-      mimeType: 'video/mp4',
-    })
-    const sut = getAttachmentType(file.type)
+    const mimeType = 'video/mp4'
+    const sut = getMediaType(mimeType)
     expect(sut).toEqual('video')
   })
 
   it('Accepts allowed files with size', () => {
-    const file = createFile({
-      fakeData: 'video_data',
-      fileName: 'video_filename.mp4',
-      mimeType: 'video/mp4',
-      sizeInMB: 10,
-    })
-    const sut = isAllowedSize(file.size)
+    const size = toMB(10)
+    const sut = isAllowedSize(size)
     expect(sut).toEqual(true)
   })
 
   it('Rejects large files', () => {
-    const file = createFile({
-      fakeData: 'video_data',
-      fileName: 'video_filename.mp4',
-      mimeType: 'video/mp4',
-      sizeInMB: 15,
-    })
-    const sut = isAllowedSize(file.size)
+    const size = toMB(15)
+    const sut = isAllowedSize(size)
     expect(sut).toEqual(false)
   })
 
   it('Returns a string (comma separated) with accepted mime types', () => {
-    const sut = getAcceptedFormats()
+    const sut = getFullMimeWhitelist().join(',')
     expect(sut).toEqual(
       'application/pdf,image/jpeg,image/png,video/mp4,video/quicktime,audio/mpeg,audio/mp3'
     )

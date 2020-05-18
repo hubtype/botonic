@@ -35,7 +35,7 @@ import {
   scrollToBottom,
   getParsedAction,
 } from '../utils'
-import { WEBCHAT, COLORS } from '../constants'
+import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 import { KeyboardResizer } from '../keyboard-resizer'
@@ -46,10 +46,10 @@ import {
   isVideo,
   isDocument,
   isMedia,
-  toBase64,
+  readDataURL,
   isAllowedSize,
-  getAttachmentType,
-  getAcceptedFormats,
+  getMediaType,
+  getFullMimeWhitelist,
 } from '../message-utils'
 
 const StyledWebchat = styled.div`
@@ -170,11 +170,15 @@ export const Webchat = forwardRef((props, ref) => {
   const getThemeProperty = _getThemeProperty(theme)
 
   const handleAttachment = event => {
-    if (!isAllowedSize(event.target.files[0].size)) return
+    if (!isAllowedSize(event.target.files[0].size)) {
+      throw new Error(
+        `The file is too large. A maximum of ${MAX_ALLOWED_SIZE_MB}MB is allowed.`
+      )
+    }
     setCurrentAttachment({
       fileName: event.target.files[0].name,
       file: event.target.files[0], // TODO: Attach more files?
-      attachmentType: getAttachmentType(event.target.files[0].type),
+      attachmentType: getMediaType(event.target.files[0].type),
     })
   }
 
@@ -310,6 +314,7 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const checkBlockInput = input => {
+    // if is a text we check if it is a RE
     const blockInputs = getThemeProperty(
       'userInput.blockInputs',
       props.blockInputs
@@ -355,9 +360,10 @@ export const Webchat = forwardRef((props, ref) => {
         src: temporaryDisplayUrl,
       }
       if (isImage(input)) messageComponent = <Image {...mediaProps} />
-      if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
-      if (isVideo(input)) messageComponent = <Video {...mediaProps} />
-      if (isDocument(input)) messageComponent = <Document {...mediaProps} />
+      else if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
+      else if (isVideo(input)) messageComponent = <Video {...mediaProps} />
+      else if (isDocument(input))
+        messageComponent = <Document {...mediaProps} />
     }
     return messageComponent
   }
@@ -365,11 +371,11 @@ export const Webchat = forwardRef((props, ref) => {
   const sendInput = async input => {
     if (!input || Object.keys(input).length == 0) return
     if (isText(input) && !input.data) return
-    if (isText(input) && checkBlockInput(input)) return //if is a text we check if it is a RE
+    if (isText(input) && checkBlockInput(input)) return
     if (!input.id) input.id = uuid()
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
-    if (isMedia(input)) input.data = await toBase64(input.data)
+    if (isMedia(input)) input.data = await readDataURL(input.data)
 
     props.onUserInput &&
       props.onUserInput({
@@ -463,7 +469,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendAttachment = async attachment => {
     if (attachment.file) {
-      const attachmentType = getAttachmentType(attachment.file.type)
+      const attachmentType = getMediaType(attachment.file.type)
       if (!attachmentType) return
       const input = {
         type: attachmentType,
@@ -631,7 +637,7 @@ export const Webchat = forwardRef((props, ref) => {
               <ConditionalAnimation>
                 <Attachment
                   onChange={handleAttachment}
-                  accept={getAcceptedFormats()}
+                  accept={getFullMimeWhitelist().join(',')}
                 />
               </ConditionalAnimation>
             )}

@@ -100,3 +100,5 @@ export const MIME_WHITELIST = {
   video: ['video/mp4', 'video/quicktime'],
   audio: ['audio/mpeg', 'audio/mp3'],
 }
+
+export const MAX_ALLOWED_SIZE_MB = 10
