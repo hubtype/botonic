@@ -95,6 +95,7 @@ export const WEBCHAT = {
     customMenuButton: 'userInput.menuButton.custom',
     blockInputs: 'userInput.blockInputs',
     scrollbar: 'scrollbar',
+    markdownStyle: 'markdownStyle',
   },
 }
 
