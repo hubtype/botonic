@@ -11,6 +11,7 @@ import { Reply } from './reply'
 import { WEBCHAT, COLORS } from '../constants'
 import Fade from 'react-reveal/Fade'
 import moment from 'moment'
+import { renderMarkdown, getMarkdownStyle } from './markdown'
 
 const MessageContainer = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ const BlobText = styled.div`
   display: flex;
   flex-direction: column;
   white-space: pre-line;
+  ${props => props.markdownstyle}
 `
 
 const TimestampContainer = styled.div`
@@ -93,9 +95,9 @@ export const Message = props => {
     style,
     imageStyle,
     timestamps = true,
+    markdown = true,
     ...otherProps
   } = props
-
   const {
     webchatState,
     addMessage,
@@ -135,6 +137,7 @@ export const Message = props => {
         type,
         data: decomposedChildren ? decomposedChildren : textChildren,
         timestamp: moment().format(timestampFormat),
+        markdown,
         from,
         buttons: buttons.map(b => ({
           payload: b.props.payload,
@@ -171,14 +174,12 @@ export const Message = props => {
 
   const isFromUser = () => from === 'user'
   const isFromBot = () => from === 'bot'
+  const brandColor = getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
 
   const getBgColor = () => {
     if (!blob) return COLORS.TRANSPARENT
     if (isFromUser()) {
-      return getThemeProperty(
-        'message.user.style.background',
-        getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
-      )
+      return getThemeProperty('message.user.style.background', brandColor)
     }
     return getThemeProperty(
       'message.bot.style.background',
@@ -271,7 +272,20 @@ export const Message = props => {
             }}
             {...otherProps}
           >
-            <BlobText blob={blob}>{textChildren}</BlobText>
+            {markdown ? (
+              <BlobText
+                blob={blob}
+                dangerouslySetInnerHTML={{
+                  __html: renderMarkdown(textChildren),
+                }}
+                markdownstyle={getMarkdownStyle(
+                  getThemeProperty,
+                  isFromUser() ? COLORS.SEASHELL_WHITE : brandColor
+                )}
+              />
+            ) : (
+              <BlobText blob={blob}>{textChildren}</BlobText>
+            )}
             {buttons}
             {blob && hasBlobTick() && getBlobTick(6)}
             {blob && hasBlobTick() && getBlobTick(5)}

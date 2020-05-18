@@ -82,7 +82,12 @@ export const MultichannelText = props => {
     if (multichannelContext.messageSeparator != null) {
       return elements
     }
-    return <Text {...props}>{elements}</Text>
+    return (
+      // We don't want to handle markdown here as this will be done internally by WhatsApp
+      <Text {...props} markdown={false}>
+        {elements}
+      </Text>
+    )
   } else {
     return <Text {...props}>{props.children}</Text>
   }
