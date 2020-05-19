@@ -63,12 +63,18 @@ const TimestampText = styled.div`
   padding: ${props => (props.isfromuser ? '0px 15px' : '0px 50px')};
 `
 
-const BlobTick = styled.div`
+const BlobTickContainer = styled.div`
   position: absolute;
-  top: 50%;
-  width: 0;
-  height: 0;
-  margin-top: -${props => props.pointerSize}px;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 18px 0px 18px 0px;
+  display: flex;
+  top: 0;
+  align-items: center;
+`
+const BlobTick = styled.div`
+  position: relative;
+  margin: -${props => props.pointerSize}px 0px;
   border: ${props => props.pointerSize}px solid ${COLORS.TRANSPARENT};
 `
 
@@ -167,13 +173,15 @@ export const Message = props => {
   const getBgColor = () => {
     if (!blob) return COLORS.TRANSPARENT
     if (isFromUser()) {
-      const color = getThemeProperty('message.user.style.background', undefined)
-      return color
-        ? color
-        : getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
+      return getThemeProperty(
+        'message.user.style.background',
+        getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
+      )
     }
-    const color = getThemeProperty('message.bot.style.background', undefined)
-    return color ? color : COLORS.SEASHELL_WHITE
+    return getThemeProperty(
+      'message.bot.style.background',
+      COLORS.SEASHELL_WHITE
+    )
   }
 
   const getMessageStyle = () =>
@@ -188,42 +196,35 @@ export const Message = props => {
     if (!m || !m.display) return <></>
 
     const getBlobTick = pointerSize => {
-      let color = undefined
-      if (pointerSize == 5) {
-        color = getBgColor()
-      } else {
-        if (isFromUser()) {
-          let border = getThemeProperty('message.user.style.border', undefined)
-          border = border && border.split(' ')
-          color = border && border[2] ? border[2] : getBgColor()
-        } else {
-          let border = getThemeProperty('message.bot.style.border', undefined)
-          border = border && border.split(' ')
-          color = border && border[2] ? border[2] : getBgColor()
-        }
+      // to add a border to the blobTick we need to create two triangles and overlap them
+      // that is why the color depends on the pointerSize
+      // https://developpaper.com/realization-code-of-css-drawing-triangle-border-method/
+      const color =
+        pointerSize == 5
+          ? getBgColor()
+          : getThemeProperty(
+              `message.${from}.style.borderColor`,
+              COLORS.TRANSPARENT
+            )
+      const containerStyle = {
+        ...getThemeProperty(`message.${from}.blobTickStyle`),
       }
-      if (isFromUser())
-        return (
-          <BlobTick
-            pointerSize={pointerSize}
-            style={{
-              borderLeftColor: color,
-              right: 0,
-              borderRight: 0,
-              marginRight: -pointerSize,
-            }}
-          />
-        )
+      const blobTickStyle = {}
+      if (isFromUser()) {
+        containerStyle.right = 0
+        containerStyle.marginRight = -pointerSize
+        blobTickStyle.borderRight = 0
+        blobTickStyle.borderLeftColor = color
+      } else {
+        containerStyle.left = 0
+        containerStyle.marginLeft = -pointerSize
+        blobTickStyle.borderLeft = 0
+        blobTickStyle.borderRightColor = color
+      }
       return (
-        <BlobTick
-          pointerSize={pointerSize}
-          style={{
-            borderRightColor: color,
-            left: 0,
-            borderLeft: 0,
-            marginLeft: -pointerSize,
-          }}
-        />
+        <BlobTickContainer style={containerStyle}>
+          <BlobTick pointerSize={pointerSize} style={blobTickStyle} />
+        </BlobTickContainer>
       )
     }
 
