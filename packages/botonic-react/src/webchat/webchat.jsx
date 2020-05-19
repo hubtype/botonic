@@ -509,11 +509,17 @@ export const Webchat = forwardRef((props, ref) => {
 
   const textArea = useRef()
 
-  const triggerImage = getThemeProperty(
-    'triggerButton.image',
-    WEBCHAT.DEFAULTS.LOGO
-  )
+  const getTriggerImage = () => {
+    const triggerImage = getThemeProperty('triggerButton.image', null)
+    if (triggerImage === null) {
+      webchatState.theme.triggerButtonImage = WEBCHAT.DEFAULTS.LOGO
+      return null
+    }
+    return triggerImage
+  }
+
   const triggerButtonStyle = getThemeProperty('triggerButton.style')
+
   const CustomTriggerButton = getThemeProperty(
     'triggerButton.custom',
     undefined
@@ -525,7 +531,9 @@ export const Webchat = forwardRef((props, ref) => {
     }
     return (
       <StyledTriggerButton style={{ ...triggerButtonStyle }}>
-        {triggerImage && <TriggerImage src={resolveImage(triggerImage)} />}
+        {getTriggerImage() && (
+          <TriggerImage src={resolveImage(getTriggerImage())} />
+        )}
       </StyledTriggerButton>
     )
   }
