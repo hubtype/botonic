@@ -7,6 +7,8 @@ import {
   UPDATE_THEME,
   UPDATE_DEV_SETTINGS,
   TOGGLE_WEBCHAT,
+  TOGGLE_EMOJI_PICKER,
+  TOGGLE_PERSISTENT_MENU,
   SET_ERROR,
   UPDATE_TYPING,
   UPDATE_HANDOFF,
@@ -31,6 +33,10 @@ export function webchatReducer(state, action) {
       return { ...state, handoff: action.payload }
     case TOGGLE_WEBCHAT:
       return { ...state, isWebchatOpen: action.payload }
+    case TOGGLE_EMOJI_PICKER:
+      return { ...state, isEmojiPickerOpen: action.payload }
+    case TOGGLE_PERSISTENT_MENU:
+      return { ...state, isPersistentMenuOpen: action.payload }
     case SET_ERROR:
       return { ...state, error: action.payload || {} }
     case UPDATE_DEV_SETTINGS:

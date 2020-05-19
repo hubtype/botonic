@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import LogoEmoji from '../../assets/emojiButton.svg'
-import EmojiPickerComponent from 'emoji-picker-react'
+import Picker from 'emoji-picker-react'
 import { Icon, IconContainer } from './common'
+import { useComponentVisible, useWebchat } from '../hooks'
 
 export const EmojiPicker = props => (
   <IconContainer>
@@ -12,29 +13,23 @@ export const EmojiPicker = props => (
   </IconContainer>
 )
 
-const Background = styled.div`
-  width: 100%;
-  height: ${props => props.height}px;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-`
-
 const Container = styled.div`
   display: flex;
   justify-content: flex-end;
   position: absolute;
-  right: 0px;
-  top: -332px;
+  right: 3px;
+  top: -324px;
 `
 
 export const OpenedEmojiPicker = props => {
+  const { ref, isComponentVisible } = useComponentVisible(true, props.onClick)
   return (
-    <>
-      <Background onClick={props.onClick} height={props.height}></Background>
-      <Container>
-        <EmojiPickerComponent onEmojiClick={props.onEmojiClick} />
-      </Container>
-    </>
+    <div ref={ref}>
+      {isComponentVisible && (
+        <Container>
+          <Picker onEmojiClick={props.onEmojiClick} />
+        </Container>
+      )}
+    </div>
   )
 }

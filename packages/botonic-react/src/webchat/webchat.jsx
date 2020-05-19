@@ -1,5 +1,4 @@
 import React, {
-  useState,
   useRef,
   useEffect,
   useImperativeHandle,
@@ -99,6 +98,7 @@ const FeaturesWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 `
 
 const TriggerImage = styled.img`
@@ -152,6 +152,8 @@ export const Webchat = forwardRef((props, ref) => {
     updateTheme,
     updateDevSettings,
     toggleWebchat,
+    toggleEmojiPicker,
+    togglePersistentMenu,
     setError,
     clearMessages,
     openWebviewT,
@@ -163,8 +165,6 @@ export const Webchat = forwardRef((props, ref) => {
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
-  const [persistentMenuIsOpened, setPersistentMenuIsOpened] = useState(false)
-  const [emojiPickerIsOpened, setEmojiPickerIsOpened] = useState(false)
   const keyboardResizer = new KeyboardResizer()
 
   const getThemeProperty = _getThemeProperty(theme)
@@ -265,9 +265,8 @@ export const Webchat = forwardRef((props, ref) => {
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
-  const handleSelectedEmoji = code => {
-    const emoji = String.fromCodePoint(`0x${code}`)
-    textArea.current.value += emoji
+  const handleSelectedEmoji = (event, emojiObject) => {
+    textArea.current.value += emojiObject.emoji
     textArea.current.focus()
   }
 
@@ -286,16 +285,11 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const handleMenu = () => {
-    setEmojiPickerIsOpened(false)
-    persistentMenuIsOpened
-      ? setPersistentMenuIsOpened(false)
-      : setPersistentMenuIsOpened(true)
+    togglePersistentMenu(!webchatState.isPersistentMenuOpen)
   }
 
   const handleEmojiClick = () => {
-    emojiPickerIsOpened
-      ? setEmojiPickerIsOpened(false)
-      : setEmojiPickerIsOpened(true)
+    toggleEmojiPicker(!webchatState.isEmojiPickerOpen)
   }
 
   const animationsEnabled = getThemeProperty('animations.enable', true)
@@ -341,7 +335,7 @@ export const Webchat = forwardRef((props, ref) => {
     return false
   }
   const closeMenu = () => {
-    setPersistentMenuIsOpened(false)
+    togglePersistentMenu(false)
   }
 
   const messageComponentFromInput = input => {
@@ -387,8 +381,8 @@ export const Webchat = forwardRef((props, ref) => {
     updateLatestInput(input)
     updateLastMessageDate(new Date())
     updateReplies(false)
-    setPersistentMenuIsOpened(false)
-    setEmojiPickerIsOpened(false)
+    togglePersistentMenu(false)
+    toggleEmojiPicker(false)
   }
 
   /* This is the public API this component exposes to its parents
@@ -504,7 +498,11 @@ export const Webchat = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (webchatState.isWebchatOpen && props.onOpen) props.onOpen()
-    if (!webchatState.isWebchatOpen && props.onClose) props.onClose()
+    if (!webchatState.isWebchatOpen && props.onClose) {
+      props.onClose()
+      toggleEmojiPicker(false)
+      togglePersistentMenu(false)
+    }
   }, [webchatState.isWebchatOpen])
 
   const textArea = useRef()
@@ -581,7 +579,7 @@ export const Webchat = forwardRef((props, ref) => {
             ...getThemeProperty('userInput.style'),
           }}
         >
-          {emojiPickerIsOpened && (
+          {webchatState.isEmojiPickerOpen && (
             <OpenedEmojiPicker
               height={webchatState.theme.style.height}
               onEmojiClick={handleSelectedEmoji}
@@ -731,11 +729,10 @@ export const Webchat = forwardRef((props, ref) => {
               {webchatState.replies &&
                 Object.keys(webchatState.replies).length > 0 &&
                 webchatReplies()}
-              {persistentMenuIsOpened && (
+              {webchatState.isPersistentMenuOpen && (
                 <div>
                   {darkBackgroundMenu && (
                     <DarkBackgroundMenu
-                      onClick={closeMenu}
                       borderRadius={webchatState.theme.style.borderRadius}
                       style={{
                         position: 'absolute',

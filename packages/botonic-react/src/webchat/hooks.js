@@ -17,6 +17,8 @@ import {
   UPDATE_THEME,
   UPDATE_DEV_SETTINGS,
   TOGGLE_WEBCHAT,
+  TOGGLE_EMOJI_PICKER,
+  TOGGLE_PERSISTENT_MENU,
   SET_ERROR,
   CLEAR_MESSAGES,
   UPDATE_LAST_MESSAGE_DATE,
@@ -50,6 +52,8 @@ export const webchatInitialState = {
   error: {},
   devSettings: {},
   isWebchatOpen: false,
+  isEmojiPickerOpen: false,
+  isPersistentMenuOpen: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
 }
@@ -112,6 +116,16 @@ export function useWebchat() {
       type: TOGGLE_WEBCHAT,
       payload: toggle,
     })
+  const toggleEmojiPicker = toggle =>
+    webchatDispatch({
+      type: TOGGLE_EMOJI_PICKER,
+      payload: toggle,
+    })
+  const togglePersistentMenu = toggle =>
+    webchatDispatch({
+      type: TOGGLE_PERSISTENT_MENU,
+      payload: toggle,
+    })
   const setError = error =>
     webchatDispatch({
       type: SET_ERROR,
@@ -153,6 +167,8 @@ export function useWebchat() {
     updateTheme,
     updateDevSettings,
     toggleWebchat,
+    toggleEmojiPicker,
+    togglePersistentMenu,
     setError,
     clearMessages,
     updateLastMessageDate,
@@ -194,22 +210,20 @@ export function usePrevious(value) {
   return ref.current
 }
 
-export function useComponentVisible(initialIsVisible) {
+export function useComponentVisible(initialIsVisible, onClickOutside) {
   const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible)
   const ref = useRef(null)
-
   const handleClickOutside = event => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIsComponentVisible(false)
+      onClickOutside()
     }
   }
-
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true)
+    document.addEventListener('click', handleClickOutside, false)
     return () => {
-      document.removeEventListener('click', handleClickOutside, true)
+      document.removeEventListener('click', handleClickOutside, false)
     }
   })
-
   return { ref, isComponentVisible, setIsComponentVisible }
 }

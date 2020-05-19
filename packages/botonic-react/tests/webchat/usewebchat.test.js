@@ -167,6 +167,24 @@ describe('TEST: useWebchat ', () => {
     expect(result.current.webchatState.isWebchatOpen).toEqual(true)
   })
 
+  it('toggleEmojiPicker: assign true to webchatState.isEmojiPickerOpen', () => {
+    const { result } = renderUseWebchatHook()
+    expect(result.current.webchatState.isEmojiPickerOpen).toEqual(false)
+    act(() => {
+      result.current.toggleEmojiPicker(true)
+    })
+    expect(result.current.webchatState.isEmojiPickerOpen).toEqual(true)
+  })
+
+  it('togglePersistentMenu: assign true to webchatState.isPersistentMenuOpen', () => {
+    const { result } = renderUseWebchatHook()
+    expect(result.current.webchatState.isPersistentMenuOpen).toEqual(false)
+    act(() => {
+      result.current.togglePersistentMenu(true)
+    })
+    expect(result.current.webchatState.isPersistentMenuOpen).toEqual(true)
+  })
+
   it('setError: assign the string error to webchatState.error', () => {
     const { result } = renderUseWebchatHook()
     act(() => {
