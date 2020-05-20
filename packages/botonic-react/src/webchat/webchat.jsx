@@ -326,9 +326,11 @@ export const Webchat = forwardRef((props, ref) => {
           <Text
             id={input.id}
             from='user'
+            blob={false}
             style={{
               backgroundColor: COLORS.SCORPION_GRAY,
               borderColor: COLORS.SCORPION_GRAY,
+              padding: '8px 12px',
             }}
           >
             {rule.message}

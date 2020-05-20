@@ -65,6 +65,21 @@ const TimestampText = styled.div`
   padding: ${props => (props.isfromuser ? '0px 15px' : '0px 50px')};
 `
 
+const BlobTickContainer = styled.div`
+  position: absolute;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 18px 0px 18px 0px;
+  display: flex;
+  top: 0;
+  align-items: center;
+`
+const BlobTick = styled.div`
+  position: relative;
+  margin: -${props => props.pointerSize}px 0px;
+  border: ${props => props.pointerSize}px solid ${COLORS.TRANSPARENT};
+`
+
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
   const {
@@ -156,11 +171,19 @@ export const Message = props => {
 
   const isFromUser = () => from === 'user'
   const isFromBot = () => from === 'bot'
+
   const getBgColor = () => {
     if (!blob) return COLORS.TRANSPARENT
-    return isFromUser()
-      ? getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
-      : COLORS.SEASHELL_WHITE
+    if (isFromUser()) {
+      return getThemeProperty(
+        'message.user.style.background',
+        getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
+      )
+    }
+    return getThemeProperty(
+      'message.bot.style.background',
+      COLORS.SEASHELL_WHITE
+    )
   }
 
   const getMessageStyle = () =>
@@ -168,19 +191,43 @@ export const Message = props => {
       ? getThemeProperty('message.bot.style')
       : getThemeProperty('message.user.style')
 
-  const getBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
+  const hasBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
 
   const renderBrowser = () => {
     const m = webchatState.messagesJSON.find(m => m.id === state.id)
     if (!m || !m.display) return <></>
-    const pointerSize = 6
-    const pointerStyles = {
-      position: 'absolute',
-      top: '50%',
-      width: 0,
-      height: 0,
-      border: `${pointerSize}px solid ${COLORS.TRANSPARENT}`,
-      marginTop: -pointerSize,
+
+    const getBlobTick = pointerSize => {
+      // to add a border to the blobTick we need to create two triangles and overlap them
+      // that is why the color depends on the pointerSize
+      // https://developpaper.com/realization-code-of-css-drawing-triangle-border-method/
+      const color =
+        pointerSize == 5
+          ? getBgColor()
+          : getThemeProperty(
+              `message.${from}.style.borderColor`,
+              COLORS.TRANSPARENT
+            )
+      const containerStyle = {
+        ...getThemeProperty(`message.${from}.blobTickStyle`),
+      }
+      const blobTickStyle = {}
+      if (isFromUser()) {
+        containerStyle.right = 0
+        containerStyle.marginRight = -pointerSize
+        blobTickStyle.borderRight = 0
+        blobTickStyle.borderLeftColor = color
+      } else {
+        containerStyle.left = 0
+        containerStyle.marginLeft = -pointerSize
+        blobTickStyle.borderLeft = 0
+        blobTickStyle.borderRightColor = color
+      }
+      return (
+        <BlobTickContainer style={containerStyle}>
+          <BlobTick pointerSize={pointerSize} style={blobTickStyle} />
+        </BlobTickContainer>
+      )
     }
 
     const BotMessageImage = getThemeProperty(
@@ -219,10 +266,6 @@ export const Message = props => {
             blobWidth={getThemeProperty('message.bot.blobWidth')}
             blob={blob}
             style={{
-              border: `1px solid ${getThemeProperty(
-                'message.user.style.background',
-                getBgColor()
-              )}`,
               ...getMessageStyle(),
               ...style,
             }}
@@ -230,34 +273,8 @@ export const Message = props => {
           >
             <BlobText blob={blob}>{textChildren}</BlobText>
             {buttons}
-            {isFromUser() && blob && getBlobTick() && (
-              <div
-                style={{
-                  ...pointerStyles,
-                  borderLeftColor: getThemeProperty(
-                    'message.user.style.background',
-                    getBgColor()
-                  ),
-                  right: 0,
-                  borderRight: 0,
-                  marginRight: -pointerSize,
-                }}
-              />
-            )}
-            {isFromBot() && blob && getBlobTick() && (
-              <div
-                style={{
-                  ...pointerStyles,
-                  borderRightColor: getThemeProperty(
-                    'message.bot.style.background',
-                    getBgColor()
-                  ),
-                  left: 0,
-                  borderLeft: 0,
-                  marginLeft: -pointerSize + 1,
-                }}
-              />
-            )}
+            {blob && hasBlobTick() && getBlobTick(6)}
+            {blob && hasBlobTick() && getBlobTick(5)}
           </Blob>
         </MessageContainer>
         <TimestampContainer>
