@@ -80,18 +80,26 @@ export const _getThemeProperty = theme => (
 export const ConditionalWrapper = ({ condition, wrapper, children }) =>
   condition ? wrapper(children) : children
 
+export const getBotonicScrollableContent = () => {
+  return document.getElementById('botonic-scrollable-content')
+}
+
 export const getScrollableArea = () => {
-  const botonicScrollableContent = document.getElementById(
-    'botonic-scrollable-content'
-  )
-  const scrollableArea =
-    botonicScrollableContent &&
-    botonicScrollableContent.querySelectorAll('.simplebar-content-wrapper')[0]
-  return scrollableArea
+  const getArea = area => {
+    const botonicScrollableContent = getBotonicScrollableContent()
+    const scrollableArea =
+      botonicScrollableContent &&
+      botonicScrollableContent.getElementsByClassName(area)[0]
+    return scrollableArea
+  }
+  return {
+    full: getArea('simplebar-content'),
+    visible: getArea('simplebar-content-wrapper'),
+  }
 }
 
 export const scrollToBottom = (timeout = 200) => {
-  const frame = getScrollableArea()
+  const frame = getScrollableArea().visible
   if (frame) {
     frame.scrollTop = frame.scrollHeight
     setTimeout(() => (frame.scrollTop = frame.scrollHeight), timeout)
