@@ -37,7 +37,7 @@ import {
 import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
-import { KeyboardResizer } from '../keyboard-resizer'
+import { DeviceAdapter } from './devices/device-adapter'
 import {
   isText,
   isImage,
@@ -165,7 +165,7 @@ export const Webchat = forwardRef((props, ref) => {
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
-  const keyboardResizer = new KeyboardResizer()
+  const deviceAdapter = new DeviceAdapter()
 
   const getThemeProperty = _getThemeProperty(theme)
 
@@ -227,7 +227,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (!webchatState.isWebchatOpen) return
-    keyboardResizer.limitScrollbarBoundaries()
+    deviceAdapter.init()
     scrollToBottom()
   }, [webchatState.isWebchatOpen])
 
@@ -608,8 +608,8 @@ export const Webchat = forwardRef((props, ref) => {
           <TextAreaContainer>
             <Textarea
               name='text'
-              onFocus={() => keyboardResizer.onFocus()}
-              onBlur={() => keyboardResizer.onBlur()}
+              onFocus={() => deviceAdapter.onFocus()}
+              onBlur={() => deviceAdapter.onBlur()}
               maxRows={4}
               wrap='soft'
               maxLength='1000'
@@ -622,7 +622,7 @@ export const Webchat = forwardRef((props, ref) => {
               onKeyDown={e => onKeyDown(e)}
               style={{
                 display: 'flex',
-                fontSize: keyboardResizer.fontSize(14),
+                fontSize: deviceAdapter.fontSize(14),
                 width: '100%',
                 border: 'none',
                 resize: 'none',
