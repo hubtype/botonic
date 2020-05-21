@@ -9,10 +9,17 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 ---
 
-This Botonic plugin uses [Segment](https://segment.com/) to clean, collect and control customer data. 
-Don't forget to add colon `:` to your write key as specified in [Segment Docs](https://segment.com/docs/sources/server/http/#authentication).
+>## What Does This Plugin Do?
 
-**Usage**
+This plugin uses [Segment](https://segment.com/) to clean, collect and control customer data. It helps monitor performance, define decision-making processes and identify customers' interests. 
+
+>## Setup
+
+1. Run `npm install --save @botonic/plugin-segment` to install the plugin.
+2. Add it to the `src/plugins.js` file:
+
+**src/plugins.js**
+
 ```javascript
 export const plugins = [
   {
@@ -25,8 +32,15 @@ export const plugins = [
 ]
 ```
 
-The default behaviour of this plugin is to [identify](https://segment.com/docs/spec/identify/) the user in the first bot interaction and `track` a [page](https://segment.com/docs/spec/page/) event to Segment from then on.
-If you prefer to track your events manually, you can add the flag `trackManually: true` in your options. Once set you can use them inside the method `botonicInit` on each Botonic component you want to track:  
+>## Use
+
+The default behavior of this plugin is to:
+
+- [Identify](https://segment.com/docs/spec/identify/) the user during the first bot interaction. 
+- Track `track` a [page](https://segment.com/docs/spec/page/) event to Segment from then on.
+
+If you prefer to track your events manually, you can add the flag `trackManually: true` in your options. Once set, you can use them inside the method `botonicInit` on each Botonic component you want to track:  
+
 ```javascript
 static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
     

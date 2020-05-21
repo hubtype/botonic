@@ -9,50 +9,75 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 ---
 
+>## What Does This Plugin Do?
+
 This plugin uses [Dialogflow](https://dialogflow.com/) as NLU service. The variables `intent`, `confidence`, `entities`, `defaultFallback`, `dialogflowResponse` are automatically available inside the `input` object.
 
->## Install Botonic
+>## Setup
+
+### Install the Plugin
 
 To integrate your bot with Dialogflow, you must use the `intent` template, which comes with `@botonic/plugin-dialogflow` by default. 
 
 2. Install Botonic.
 2. Run `botonic new test-bot intent`.
 
->## Get a Service Account key in DialogFlow
+### Get a Service Account key in DialogFlow
 
 1. Click on the gear icon, to the right of the agent name.
-2. Under the **GOOGLE PROJECT** section, click on the name of the **Service Account**.
-   -->**SCREENSHOT**. This will take you to the Google Cloud Platform Service Accounts page, but you first need to update the Service Account's role.
-3. Click on the menu button in the upper left-hand corner and click on **IAM & admin**.
-4. Click on **Service Accounts** in the left-hand menu.
-5. Click on the **Create Service Account** button at the top of the page.
-6. In the pop up, enter a name for the service account.
-7. Click on **Role**. Under the **Dialogflow** category, select the desired role.
-   -->**SCREENSHOT**
 
->## Generate a JSON key
+2. Under the **GOOGLE PROJECT** section, click on the name of the **Service Account**.
+   
+   <details>
+      <summary>Service Account</summary>
+   ![](https://botonic-doc-static.netlify.com/images/dflow/dg1.png)
+   </details>
+3. This will take you to the Google Cloud Platform Service Accounts page, but you first need to update the Service Account's role.
+
+4. Click on the menu button in the upper left-hand corner and click on **IAM & admin**.
+
+5. Click on **Service Accounts** in the left-hand menu.
+
+6. Click on the **Create Service Account** button at the top of the page.
+
+7. In the pop up, enter a name for the service account.
+
+8. Click on **Role**. Under the **Dialogflow** category, select the desired role.
+
+    <details>
+         <summary>Role</summary>
+      ![](https://botonic-doc-static.netlify.com/images/dflow/dg2.png)
+      </details>
+
+
+### Generate a JSON key
 
 1. Check the **Furnish a new private key** option and make sure **JSON** is selected for **Key type**.
 
 2. Click the **Create** button.
-   -->**SCREENSHOT**
+   <details>
+      <summary>Create Service Account</summary>
+   ![](https://botonic-doc-static.netlify.com/images/dflow/dg3.png)
+   </details>
+   
 3. The JSON file is downloading. Select a location to save it and confirm. 
 
 **Note:** You can only download this JSON file once, so make sure to save the file and keep it somewhere safe. If you lose this key or it becomes compromised, you can use the same process to create another one.
 
->## Add the intent
+
+>## Use
+
+### Add the intent
 
 Add the intent in the **route.js** file:
 
 ```javascript
 export const routes = [
-
  { path: "hi", intent: "Default Welcome Intent", action: Hi },
-
 ];
 ```
 
->## Add the JSON content file
+### Add the JSON content file
 
 Under `resolve: require("@botonic/plugin-dialogflow"),`, add the JSON content key.
 
@@ -63,44 +88,26 @@ You should obtain something like this:
 ```javascript
 
 export const plugins = [
-
  {
-
   id: "dialogflow",
-
   resolve: require("@botonic/plugin-dialogflow"),
-
-
   options: {
-
    type: "",
-
    project_id: "",
-
    private_key_id: "",
-
    private_key: "",
-
    client_email: "",
-
    client_id: "",
-
    auth_uri: "",
-
    token_uri: "",
-
    auth_provider_x509_cert_url: "",
-
    client_x509_cert_url: "",
-
   },
-
  },
-
 ];
 ```
 
->## Run and Deploy
+### Run and Deploy
 
 Finally run `botonic serve` to test your intents locally, or `botonic deploy` to deploy the bot.
 

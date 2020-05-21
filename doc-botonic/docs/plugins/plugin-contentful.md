@@ -10,7 +10,7 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 ---
 
 
-> ## What is Botonic Plugin Contentful?
+>## What Does This Plugin Do?
 
 Botonic Plugin Contentful is one of the [available](https://github.com/hubtype/botonic/tree/master/packages) plugins for Botonic.
 [Contentful](http://www.contentful.com) is a CMS (Content Management System) which manages contents of a great variety
@@ -48,7 +48,7 @@ For the previous content, the dashboard allows assigning a list of tags to your 
 * Schedules with configurable timing per week day, as well as exception for bank holidays or sales periods.
 * Any kind of files uploaded to your Contentful account.
 
-> ## How to Use Botonic Plugin Contentful
+> ## Setup
 
 ### Create a Contentful Account
 
@@ -77,7 +77,7 @@ For the previous content, the dashboard allows assigning a list of tags to your 
 
 ### Install the Plugin
 
-Install the module with the following command in your bot's project:
+Install the plugin in your bot's project by running :
 
 ```bash
 npm install @botonic/plugin-contentful
@@ -85,14 +85,17 @@ npm install @botonic/plugin-contentful
 
 Execute the following script to create content models required by the plugin. Replaced YOUR\_ID and YOUR\_TOKEN with
 the space id and token that you obtained in the previous section.
+
 ```
 CONTENTFUL_SPACEID=<YOUR_ID> CONTENTFUL_TOKEN=<CONTENT_MANAGEMENT_TOKEN> node_modules/@botonic/plugin-contentful/bin/import-contentful-models.sh
 ```
 
+>## Use
+
 ### Define Your Contents
 
 #### Publishing Contents
-Go to contentful dashboard. Open the "Contents section" and create the contents required by your bot. Remember that they will not be available until you press the "publish" button and the button becomes green.
+Go to the Contentful dashboard. Open the "Contents section" and create the contents required by your bot. Remember that they will not be available until you press the "publish" button and the button becomes green.
 <details>
 <summary>Example</summary>
 ![](https://botonic-doc-static.netlify.com/images/contentful/publish-changes.png)

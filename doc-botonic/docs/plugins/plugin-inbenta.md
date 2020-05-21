@@ -9,7 +9,7 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 ---
 
->## Details
+>## What Does This Plugin Do?
 
 The Inbenta plugin allows you to integrate Inbenta Knowledge Management API in your Botonic project. It works any other AI/NLU services plugin, like Dialogflow, Watson, etc. 
 
@@ -17,9 +17,7 @@ Once installed within your project, this plugin sends all text inputs that users
 
 The plugin retrieves the call results to enhance the input object. You can then use this data in your routes and actions.
 
->## Examples
-
-Example of an input object received from a user:
+Here is an example of an input object received from a user:
 ```javascript
 {
     "type": "text",
@@ -59,12 +57,16 @@ Example of the same input object after being processed by the plugin:
      },
    ]
    ```
-3. Use it in your **routes** like any other NLU plugins:
+   
+>## Use   
+   
+You can use it in your **routes** like any other NLU plugins:
 
    ```javascript
    export const routes = [{ intent: 'order-location', action: OrderLocation }]
    ```
-4. Or use it in your **actions**:
+
+Or you can use it in your **actions**:
 
    ```javascript
    import React from 'react'

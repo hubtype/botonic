@@ -23,7 +23,7 @@ You can integrate your chatbot into your personal webpage. This integration is 1
 1. Give a name to this integration (as you can have multiple webchat integrations with the same bot) and click `Enable Webchat`.
 2. Some HTML code will be displayed. Inject this code in your webpage. Note that the script has to be injected in the `header` tag, and the bot initialization in the `body` tag.
 
-For more information, refer to the [Custom Webchat](/templates/template-custom-webchat) template description.
+For more information, refer to the [Custom Webchat](templates/custom-webchat) template description.
 
 <details>
 <summary>Example</summary>
