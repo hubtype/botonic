@@ -1,10 +1,13 @@
-import { renderMarkdown } from '../../src/components/markdown'
+import {
+  renderMarkdown,
+  ESCAPED_LINE_BREAK,
+} from '../../src/components/markdown'
 
 describe('Using renderMarkdown', () => {
-  // Markdown renderer adding an extra blank space after each render
-  // Examples taken from: https://markdown-it.github.io/
+  // MarkdownIt renderer adds an extra blank space after each tag, hence the trim.
   const render = text => renderMarkdown(text).trim()
 
+  // Examples taken from: https://markdown-it.github.io/
   it('Renders correctly a text', () => {
     const toRender = ['text']
     const sut = render(toRender)
@@ -14,8 +17,8 @@ describe('Using renderMarkdown', () => {
   it('Renders some links', () => {
     const toRender = [
       '## Links Examples',
-      '&lt;br&gt;',
-      '&lt;br&gt;',
+      ESCAPED_LINE_BREAK,
+      ESCAPED_LINE_BREAK,
       '\n',
       '---',
       '\n',
@@ -43,8 +46,8 @@ describe('Using renderMarkdown', () => {
   it('Renders headings', () => {
     const toRender = [
       '# Headings',
-      '&lt;br&gt;',
-      '&lt;br&gt;',
+      ESCAPED_LINE_BREAK,
+      ESCAPED_LINE_BREAK,
       '\n',
       '# h1 Heading',
       '\n',

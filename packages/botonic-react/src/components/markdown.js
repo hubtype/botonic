@@ -2,7 +2,7 @@ import MarkdownIt from 'markdown-it'
 
 const BR_STRING_TAG = '<br/>'
 const BR_STRING_TAG_REGEX = new RegExp('<br\\s*/?>', 'g')
-const ESCAPED_LINE_BREAK = '&lt;br&gt;'
+export const ESCAPED_LINE_BREAK = '&lt;br&gt;'
 const ESCAPED_LINE_BREAK_REGEX = new RegExp(ESCAPED_LINE_BREAK, 'g')
 const isLineBreakElement = element => element.type === 'br'
 

@@ -3,28 +3,22 @@ import { Text } from '../../src/components/text'
 import { Button } from '../../src/components/button'
 
 describe('Text serialization', () => {
-  it('Serializes a simple text', () => {
-    const text = <Text markdown={true}>Just text</Text>
-    const sut = Text.serialize(text.props)
-    expect(sut).toEqual({ text: 'Just text' })
-  })
-
-  it('Serializes a simple text (markdown={false})', () => {
-    const text = <Text markdown={false}>Just text</Text>
-    const sut = Text.serialize(text.props)
-    expect(sut).toEqual({ text: 'Just text' })
-  })
-
-  it('Serializes a simple markdown heading', () => {
-    const text = <Text markdown={true}># Heading 1</Text>
-    const sut = Text.serialize(text.props)
-    expect(sut).toEqual({ text: '# Heading 1' })
-  })
-
-  it('Serializes a simple markdown heading (markdown={false})', () => {
-    const text = <Text markdown={false}># Heading 1</Text>
-    const sut = Text.serialize(text.props)
-    expect(sut).toEqual({ text: '# Heading 1' })
+  test.each([
+    <Text key={'msgSimple1'} markdown={true}>
+      Just text
+    </Text>,
+    <Text key={'msgSimple2'} markdown={false}>
+      Just text
+    </Text>,
+    <Text key={'heading1Simple1'} markdown={true}>
+      # Heading 1
+    </Text>,
+    <Text key={'heading1Simple2'} markdown={false}>
+      # Heading 1
+    </Text>,
+  ])(`Simple text`, textComponent => {
+    const sut = Text.serialize(textComponent.props)
+    expect(sut).toEqual({ text: textComponent.props.children })
   })
 
   it('Not converted to Markdown as markdown={false}', () => {
