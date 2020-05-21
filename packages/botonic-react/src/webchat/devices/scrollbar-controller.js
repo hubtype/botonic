@@ -32,10 +32,9 @@ export class ScrollbarController {
     */
     const webchat = getWebchatElement()
     if (isMobileDevice()) {
-      if (this.currentDevice === DEVICES.MOBILE.IPHONE) {
-        this.limitScrollBoundaries()
-        webchat.ontouchmove = e => this.handleOnTouchMoveEvents(e)
-      }
+      if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
+      this.limitScrollBoundaries()
+      webchat.ontouchmove = e => this.handleOnTouchMoveEvents(e)
     } else {
       webchat.onmouseover = e => this.handleOnMouseOverEvents(e)
     }
@@ -80,23 +79,18 @@ export class ScrollbarController {
   }
 
   limitScrollBoundaries() {
+    if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
     /*
       It adds a bounce effect when top or bottom limits of the scrollbar are reached for iOS,
       as an alternative of overscroll-behavior (https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior)
     */
-    if (this.currentDevice === DEVICES.MOBILE.IPHONE) {
-      const frame = getScrollableArea().visible
-      const dStopAtScrollLimit = debounced(100, stopAtScrollLimit)
-      if (frame) {
-        if (window.addEventListener) {
-          frame.addEventListener(
-            'scroll',
-            () => dStopAtScrollLimit(frame),
-            true
-          )
-        } else if (window.attachEvent) {
-          frame.attachEvent('scroll', () => dStopAtScrollLimit(frame))
-        }
+    const frame = getScrollableArea().visible
+    const dStopAtScrollLimit = debounced(100, stopAtScrollLimit)
+    if (frame) {
+      if (window.addEventListener) {
+        frame.addEventListener('scroll', () => dStopAtScrollLimit(frame), true)
+      } else if (window.attachEvent) {
+        frame.attachEvent('scroll', () => dStopAtScrollLimit(frame))
       }
     }
   }
