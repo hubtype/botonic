@@ -14,25 +14,21 @@ export class DeviceAdapter {
   }
 
   onFocus() {
-    if (this.currentDevice === DEVICES.MOBILE.IPHONE) {
-      this.webchatResizer.onFocus(() =>
-        this.scrollbarController.handleOnTouchMoveEvents()
-      )
-    }
+    if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
+    this.webchatResizer.onFocus(() =>
+      this.scrollbarController.handleOnTouchMoveEvents()
+    )
   }
 
   onBlur() {
-    if (this.currentDevice === DEVICES.MOBILE.IPHONE) {
-      this.webchatResizer.onBlur()
-      this.scrollbarController.handleOnTouchMoveEvents()
-    }
+    if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
+    this.webchatResizer.onBlur()
+    this.scrollbarController.handleOnTouchMoveEvents()
   }
 
   fontSize(defaultFontSize = 14) {
-    if (this.currentDevice === DEVICES.MOBILE.IPHONE) {
-      // Disabling auto-zoom on input (iPhone devices): https://stackoverflow.com/a/25614477
-      return 'initial'
-    }
-    return defaultFontSize
+    if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return defaultFontSize
+    // Disabling auto-zoom on input (iPhone devices): https://stackoverflow.com/a/25614477
+    return 'initial'
   }
 }
