@@ -13,6 +13,7 @@ const StyledWebview = styled.div`
   width: 100%;
   height: 80%;
   background-color: ${COLORS.SOLID_WHITE};
+  z-index: 2;
 `
 
 const StyledWebviewHeader = styled.div`

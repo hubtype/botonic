@@ -14,6 +14,7 @@ const Header = styled(Flex)`
   );
   height: 55px;
   border-radius: 6px 6px 0px 0px;
+  z-index: 2;
 `
 
 const ImageContainer = styled(Flex)`

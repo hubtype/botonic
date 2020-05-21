@@ -3,42 +3,48 @@ import styled from 'styled-components'
 import { Button } from '../../components/button'
 import LogoMenu from '../../assets/menuButton.svg'
 import { Icon } from './common'
+import { useComponentVisible } from '../hooks'
 
 const ButtonsContainer = styled.div`
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   bottom: 0;
   text-align: center;
 `
 
 export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
+  const { ref, isComponentVisible } = useComponentVisible(true, onClick)
   let closeLabel = 'Cancel'
   try {
     closeLabel = options.filter(opt => opt.closeLabel !== undefined)[0]
       .closeLabel
   } catch (e) {}
   return (
-    <ButtonsContainer>
-      {Object.values(options).map((e, i) => {
-        return (
-          e.label && (
-            <Button
-              onClick={onClick}
-              url={e.url}
-              webview={e.webview}
-              payload={e.payload}
-              key={i}
-            >
-              {Object.values(e.label)}
-            </Button>
-          )
-        )
-      })}
-      <Button onClick={onClick} bottomRadius={borderRadius}>
-        {closeLabel}
-      </Button>
-    </ButtonsContainer>
+    <div ref={ref}>
+      {isComponentVisible && (
+        <ButtonsContainer>
+          {Object.values(options).map((e, i) => {
+            return (
+              e.label && (
+                <Button
+                  onClick={onClick}
+                  url={e.url}
+                  webview={e.webview}
+                  payload={e.payload}
+                  key={i}
+                >
+                  {Object.values(e.label)}
+                </Button>
+              )
+            )
+          })}
+          <Button onClick={onClick} bottomRadius={borderRadius}>
+            {closeLabel}
+          </Button>
+        </ButtonsContainer>
+      )}
+    </div>
   )
 }
 
