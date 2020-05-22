@@ -95,9 +95,9 @@ export const Message = props => {
     style,
     imageStyle,
     timestamps = true,
-    markdown = true,
     ...otherProps
   } = props
+  const markdown = props.markdown
   const {
     webchatState,
     addMessage,
