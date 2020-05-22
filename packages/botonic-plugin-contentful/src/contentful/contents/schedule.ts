@@ -38,16 +38,16 @@ export class ScheduleDelivery extends ContentDelivery {
     fields: ScheduleFields
   ): void {
     const days = [
-      fields.sundays || undefined,
-      fields.mondays || undefined,
-      fields.tuesdays || undefined,
-      fields.wednesdays || undefined,
-      fields.thursdays || undefined,
-      fields.fridays || undefined,
-      fields.saturdays || undefined,
+      fields.sundays,
+      fields.mondays,
+      fields.tuesdays,
+      fields.wednesdays,
+      fields.thursdays,
+      fields.fridays,
+      fields.saturdays,
     ]
     for (const day in days) {
-      if (!day || !days[day]) {
+      if (!days[day]) {
         continue
       }
       const daySchedule = ScheduleDelivery.createDaySchedule(

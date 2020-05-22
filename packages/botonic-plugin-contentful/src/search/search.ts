@@ -59,7 +59,7 @@ export class Search {
         return new Button(
           result.common.id,
           result.common.name,
-          result.common.shortText!,
+          result.common.shortText,
           Callback.ofUrl(url.url)
         )
       }

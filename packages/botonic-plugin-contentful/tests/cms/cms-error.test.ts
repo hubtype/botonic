@@ -19,7 +19,7 @@ test('TEST: ErrorReportingCMS carousel delivery failed', async () => {
 
   await sut
     .carousel('id1')
-    .then(({}) => {
+    .then(() => {
       fail('should have thrown')
     })
     .catch((error2: any) => {

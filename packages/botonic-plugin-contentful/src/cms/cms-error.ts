@@ -24,7 +24,7 @@ export class ErrorReportingCMS implements CMS {
   exceptionWrapper = new ContentfulExceptionWrapper('CMS')
   constructor(readonly cms: CMS) {}
 
-  private validate<C extends Content>(content: C): C {
+  private static validate<C extends Content>(content: C): C {
     const v = content.validate()
     if (v) {
       console.error(v)
@@ -36,63 +36,63 @@ export class ErrorReportingCMS implements CMS {
     return this.cms
       .carousel(id, context)
       .catch(this.handleDeliveryError(ContentType.CAROUSEL, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   text(id: string, context?: Context): Promise<Text> {
     return this.cms
       .text(id, context)
       .catch(this.handleDeliveryError(ContentType.TEXT, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   chitchat(id: string, context?: Context): Promise<Chitchat> {
     return this.cms
       .text(id, context)
       .catch(this.handleDeliveryError(ContentType.CHITCHAT, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   startUp(id: string, context?: Context): Promise<StartUp> {
     return this.cms
       .startUp(id, context)
       .catch(this.handleDeliveryError(ContentType.STARTUP, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   url(id: string, context?: Context): Promise<Url> {
     return this.cms
       .url(id, context)
       .catch(this.handleDeliveryError(ContentType.URL, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   image(id: string, context?: Context): Promise<Image> {
     return this.cms
       .image(id, context)
       .catch(this.handleDeliveryError(ContentType.IMAGE, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   queue(id: string, context?: Context): Promise<Queue> {
     return this.cms
       .queue(id, context)
       .catch(this.handleDeliveryError(ContentType.QUEUE, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   button(id: string, context?: Context): Promise<Button> {
     return this.cms
       .button(id, context)
       .catch(this.handleDeliveryError(ContentType.BUTTON, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   element(id: string, context?: Context): Promise<Element> {
     return this.cms
       .element(id, context)
       .catch(this.handleDeliveryError(ContentType.ELEMENT, id))
-      .then(this.validate)
+      .then(ErrorReportingCMS.validate)
   }
 
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
