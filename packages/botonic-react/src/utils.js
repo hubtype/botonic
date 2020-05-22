@@ -98,11 +98,13 @@ export const getScrollableArea = () => {
   }
 }
 
-export const scrollToBottom = (timeout = 200) => {
+export const scrollToBottom = ({ timeout = 200, behavior = 'smooth' } = {}) => {
   const frame = getScrollableArea().visible
   if (frame) {
-    frame.scrollTop = frame.scrollHeight
-    setTimeout(() => (frame.scrollTop = frame.scrollHeight), timeout)
+    setTimeout(
+      () => frame.scrollTo({ top: frame.scrollHeight, behavior: behavior }),
+      timeout
+    )
   }
 }
 

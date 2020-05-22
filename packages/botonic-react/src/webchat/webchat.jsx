@@ -228,7 +228,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     if (!webchatState.isWebchatOpen) return
     deviceAdapter.init()
-    scrollToBottom()
+    scrollToBottom({ behavior: 'auto' })
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
