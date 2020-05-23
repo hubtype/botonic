@@ -8,7 +8,7 @@ import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'
 
 import * as util from 'util'
-import * as ora from 'ora'
+import ora from 'ora'
 const exec = util.promisify(require('child_process').exec)
 
 export default class Run extends Command {
@@ -71,7 +71,7 @@ Creating...
 
   async run() {
     track('Created Botonic Bot CLI')
-    const { args, flags } = this.parse(Run)
+    const { args } = this.parse(Run)
     let template = ''
     if (!args.templateName) {
       await this.selectBotName().then(resp => {
@@ -95,7 +95,7 @@ Creating...
         return
       }
     }
-    const botPath = resolve(template)
+    const _botPath = resolve(template)
     const templatePath = join(__dirname, '..', '..', 'templates', template)
     let spinner = ora({
       text: 'Copying files...',

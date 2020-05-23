@@ -6,7 +6,7 @@ import { copySync, removeSync } from 'fs-extra'
 import { zip } from 'zip-a-folder'
 
 import * as fs from 'fs'
-import * as ora from 'ora'
+import ora from 'ora'
 import * as rimraf from 'rimraf'
 
 import { BotonicAPIService } from '../botonicapiservice'
@@ -57,7 +57,7 @@ Uploading...
   private botName: string | undefined = undefined
 
   async run() {
-    const { args, flags } = this.parse(Run)
+    const { flags } = this.parse(Run)
     track('Deployed Botonic CLI')
     force = flags.force || false
     npmCommand = flags.command
@@ -67,7 +67,7 @@ Uploading...
     if (email && password) await this.login(email, password)
     else if (!this.botonicApiService.oauth) await this.signupFlow()
     else if (this.botName) {
-      this.deployBotFromFlag(this.botName)
+      await this.deployBotFromFlag(this.botName)
     } else await this.deployBotFlow()
   }
 
@@ -85,11 +85,11 @@ Uploading...
       bots.map(b => console.log(` > ${b.name}`))
     } else {
       this.botonicApiService.setCurrentBot(bot)
-      this.deploy()
+      await this.deploy()
     }
   }
 
-  async signupFlow() {
+  signupFlow(): Promise<void> {
     const choices = [
       'No, I need to create a new one (Signup)',
       'Yes, I do. (Login)',
@@ -210,7 +210,7 @@ Uploading...
     const nextBots = resp.data.next
     const bots = resp.data.results
     if (nextBots) {
-      const new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
+      const _new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
     }
     if (!bots.length) {
       return this.createNewBot()

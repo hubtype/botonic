@@ -1,5 +1,4 @@
-import { resolve } from 'path'
-import { Command, flags } from '@oclif/command'
+import { Command } from '@oclif/command'
 import * as colors from 'colors'
 import { track } from '../utils'
 
@@ -31,7 +30,7 @@ Ran all test suites.`,
 
   run(): Promise<void> {
     track('botonic test')
-    const { args, flags } = this.parse(Run)
+    this.parse(Run)
     exec('npm run test', (error, _stdout, stderr) => {
       console.log(colors.blue('\n Executing tests...\n'))
       if (error) {

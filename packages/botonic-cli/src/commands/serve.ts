@@ -18,7 +18,7 @@ export default class Run extends Command {
 
   run(): Promise<void> {
     track('Served Botonic CLI')
-    const { args, flags } = this.parse(Run)
+    this.parse(Run)
 
     try {
       const serve = spawn('npm', ['run', 'start'])

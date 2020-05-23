@@ -22,9 +22,9 @@ export default class Run extends Command {
 
   run(): Promise<void> {
     track('Logged Out Botonic CLI')
-    const { args, flags } = this.parse(Run)
+    const { flags } = this.parse(Run)
 
-    const path = flags.path ? resolve(flags.path) : process.cwd()
+    const _path = flags.path ? resolve(flags.path) : process.cwd()
 
     this.botonicApiService.logout()
 

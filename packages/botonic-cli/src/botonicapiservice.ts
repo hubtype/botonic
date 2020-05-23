@@ -3,11 +3,11 @@ import * as fs from 'fs'
 import { homedir } from 'os'
 import axios, { Method } from 'axios'
 import * as colors from 'colors'
-import * as FormData from 'form-data'
+import FormData from 'form-data'
 import * as util from 'util'
 const exec = util.promisify(require('child_process').exec)
 import { hashElement } from 'folder-hash'
-import * as ora from 'ora'
+import ora from 'ora'
 
 const BOTONIC_CLIENT_ID: string =
   process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
@@ -141,7 +141,7 @@ export class BotonicAPIService {
       spinner: 'bouncingBar',
     }).start()
     try {
-      const build_out = await exec(`npm run ${npmCommand}`)
+      const _build_out = await exec(`npm run ${npmCommand}`)
     } catch (error) {
       spinner.fail()
       console.log(`${error.stdout}` + colors.red(`\n\nBuild error:\n${error}`))
@@ -303,9 +303,9 @@ export class BotonicAPIService {
 
   async deployBot(bundlePath: string, forceDeploy: boolean): Promise<any> {
     try {
-      const a = await this.getMe()
+      const _authenticated = await this.getMe()
     } catch (e) {
-      console.log(`Error deploying: ${e}`)
+      console.log(`Error authenticating: ${e}`)
     }
     const form = new FormData()
     const data = fs.createReadStream(bundlePath)
