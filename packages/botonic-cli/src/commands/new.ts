@@ -74,7 +74,7 @@ Creating...
     const { args, flags } = this.parse(Run)
     let template = ''
     if (!args.templateName) {
-      await this.selectBotName().then((resp: any) => {
+      await this.selectBotName().then(resp => {
         template = this.templates.filter(
           (t: any) => t.description === resp.botName
         )[0].name
@@ -109,7 +109,7 @@ Creating...
       spinner: 'bouncingBar',
     }).start()
     const dependencyCommand = `npm install`
-    const dependency = await exec(dependencyCommand)
+    await exec(dependencyCommand)
     spinner.succeed()
     await this.botonicApiService.buildIfChanged(false)
     this.botonicApiService.beforeExit()
@@ -124,7 +124,7 @@ Creating...
     )
   }
 
-  async selectBotName() {
+  selectBotName(): Promise<{ botName: string }> {
     return prompt([
       {
         type: 'list',

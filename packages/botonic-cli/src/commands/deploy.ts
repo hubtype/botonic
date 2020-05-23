@@ -108,7 +108,7 @@ Uploading...
     })
   }
 
-  async askEmailPassword() {
+  askEmailPassword(): Promise<{ email: string; password: string }> {
     return prompt([
       {
         type: 'input',
@@ -124,14 +124,14 @@ Uploading...
     ])
   }
 
-  async askLogin() {
-    await this.askEmailPassword().then((inp: any) =>
+  async askLogin(): Promise<void> {
+    await this.askEmailPassword().then(inp =>
       this.login(inp.email, inp.password)
     )
   }
 
-  async askSignup() {
-    await this.askEmailPassword().then((inp: any) =>
+  async askSignup(): Promise<void> {
+    await this.askEmailPassword().then(inp =>
       this.signup(inp.email, inp.password)
     )
   }
@@ -155,10 +155,10 @@ Uploading...
     }
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<void> {
     return this.botonicApiService.login(email, password).then(
       ({}) => this.deployBotFlow(),
-      (err: AxiosError) => {
+      async (err: AxiosError) => {
         if (
           err.response &&
           err.response.data &&
@@ -177,19 +177,19 @@ Uploading...
             )
           }
         }
-        this.askLogin()
+        await this.askLogin()
       }
     )
   }
 
-  async signup(email: string, password: string) {
+  async signup(email: string, password: string): Promise<void> {
     const org_name = email.split('@')[0]
     const campaign = { product: 'botonic' }
     return this.botonicApiService
       .signup(email, password, org_name, campaign)
       .then(
         ({}) => this.login(email, password),
-        err => {
+        async err => {
           if (err.response.data.email)
             console.log(colors.red(err.response.data.email[0]))
           if (err.response.data.password)
@@ -200,7 +200,7 @@ Uploading...
                 'There was an error trying to signup. Please, try again:'
               )
             )
-          this.askSignup()
+          await this.askSignup()
         }
       )
   }
@@ -232,7 +232,7 @@ Uploading...
     }
   }
 
-  async createNewBot() {
+  createNewBot(): Promise<void> {
     return prompt([
       {
         type: 'input',
@@ -248,7 +248,7 @@ Uploading...
     })
   }
 
-  async selectExistentBot(bots: any[]) {
+  selectExistentBot(bots: any[]): Promise<void> {
     return prompt([
       {
         type: 'list',
@@ -256,14 +256,14 @@ Uploading...
         message: 'Please, select a bot',
         choices: bots.map(b => b.name),
       },
-    ]).then((inp: any) => {
+    ]).then((inp: { bot_name: string }) => {
       const bot = bots.filter(b => b.name === inp.bot_name)[0]
       this.botonicApiService.setCurrentBot(bot)
-      this.deploy()
+      return this.deploy()
     })
   }
 
-  async displayProviders(providers: any) {
+  displayProviders(providers: any): void {
     console.log('Your bot is published on:')
     providers.map((p: any) => {
       if (p.provider === 'whatsapp')

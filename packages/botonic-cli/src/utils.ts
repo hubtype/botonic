@@ -1,10 +1,10 @@
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
-import * as Analytics from 'analytics-node'
 import { exec } from 'child_process'
+import Analytics from 'analytics-node'
 
-export let analytics: any
+export let analytics: Analytics
 
 export let credentials: any
 export const botonic_home_path: string = path.join(os.homedir(), '.botonic')

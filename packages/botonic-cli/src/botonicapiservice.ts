@@ -92,13 +92,13 @@ export class BotonicAPIService {
     }
   }
 
-  async checkGlobalCredentialsPath() {
+  checkGlobalCredentialsPath() {
     if (!fs.existsSync(this.globalConfigPath))
       fs.mkdirSync(this.globalConfigPath)
   }
 
-  async saveGlobalCredentials() {
-    await this.checkGlobalCredentialsPath()
+  saveGlobalCredentials() {
+    this.checkGlobalCredentialsPath()
     fs.writeFileSync(
       this.globalCredentialsPath,
       JSON.stringify({
@@ -160,7 +160,7 @@ export class BotonicAPIService {
     return true
   }
 
-  setCurrentBot(bot: any) {
+  setCurrentBot(bot: any): void {
     this.bot = bot
   }
 
@@ -223,7 +223,7 @@ export class BotonicAPIService {
       'content-type': 'application/json',
       'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
-    await this.saveGlobalCredentials()
+    this.saveGlobalCredentials()
     // eslint-disable-next-line consistent-return
     return resp
   }

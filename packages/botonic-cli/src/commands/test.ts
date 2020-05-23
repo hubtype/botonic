@@ -29,7 +29,7 @@ Ran all test suites.`,
 
   static args = []
 
-  async run() {
+  run(): Promise<void> {
     track('botonic test')
     const { args, flags } = this.parse(Run)
     exec('npm run test', (error, _stdout, stderr) => {
@@ -40,5 +40,6 @@ Ran all test suites.`,
       }
       console.log(colors.green(`${stderr}`))
     })
+    return Promise.resolve()
   }
 }

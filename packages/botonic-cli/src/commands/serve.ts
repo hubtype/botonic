@@ -1,4 +1,4 @@
-import { Command, flags } from '@oclif/command'
+import { Command } from '@oclif/command'
 
 import { track } from '../utils'
 import * as colors from 'colors'
@@ -16,9 +16,7 @@ export default class Run extends Command {
 
   static args = []
 
-  private botonic: any
-
-  async run() {
+  run(): Promise<void> {
     track('Served Botonic CLI')
     const { args, flags } = this.parse(Run)
 
@@ -37,5 +35,6 @@ export default class Run extends Command {
     } catch (e) {
       console.log(e)
     }
+    return Promise.resolve()
   }
 }
