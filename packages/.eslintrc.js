@@ -86,8 +86,23 @@ module.exports = {
   overrides: [
     {
       files: [
-        'tests/**/*.ts', // to be able to skip required fields when not used in a particular test
+        '**/*.js', // to be able to skip required fields when not used in a particular test
+        '**/*.jsx'
       ],
+      rules: {
+        // pending to mark unused vars with _...
+        //'no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }],
+      }
+    },
+    {
+      files: [
+        '**/*.ts', // to be able to skip required fields when not used in a particular test
+      ],
+      rules: {
+        "import/namespace": "off",
+        // pending to mark unused vars with _...
+        //'@typescript-eslint/no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }],
+      }
     },
   ],
   env: {
