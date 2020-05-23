@@ -3,10 +3,10 @@
 	"compilerOptions": {
 		"rootDir": "src",
 		"outDir": "lib",
+    "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true
-//    "noUnusedLocals": true added after eslint plugin-import branch merged
   },
   "include": [
     ".*.js",
