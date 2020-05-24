@@ -67,7 +67,7 @@ Creating...
     },
   ]
 
-  private botonicApiService: BotonicAPIService = new BotonicAPIService()
+  private botonicApiService = new BotonicAPIService()
 
   async run() {
     track('Created Botonic Bot CLI')

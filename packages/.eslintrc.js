@@ -45,7 +45,7 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     'node/no-unsupported-features/es-syntax': 'off', //babel will take care of ES compatibility
     'unicorn/no-abusive-eslint-disable': 'off',
-    '@typescript-eslint/camelcase': 'warn',
+    "@typescript-eslint/naming-convention": "warn",
     'consistent-return': 'error',
     'jest/no-export': 'warn',
     'no-empty': 'warn',
@@ -63,7 +63,7 @@ module.exports = {
     'node/no-extraneous-import': 'warn', // otherwise it does not find ts-mockito if only defined in parent project
 
     // special for TYPESCRIPT
-    '@typescript-eslint/ban-ts-ignore': 'warn',
+    '@typescript-eslint/ban-ts-comment': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off', // annoying for tests
     '@typescript-eslint/explicit-member-accessibility': 'off', //we think defaulting to public is a good default
     '@typescript-eslint/no-empty-function': 'warn',

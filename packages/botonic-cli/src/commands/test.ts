@@ -34,7 +34,7 @@ Ran all test suites.`,
     exec('npm run test', (error, _stdout, stderr) => {
       console.log(colors.blue('\n Executing tests...\n'))
       if (error) {
-        console.error(colors.red(`${error}`))
+        console.error(colors.red(`${String(error)}`))
         return
       }
       console.log(colors.green(`${stderr}`))

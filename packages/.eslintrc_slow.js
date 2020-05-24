@@ -13,4 +13,9 @@ base.rules["@typescript-eslint/unbound-method"] = ['error', {'ignoreStatic': tru
 base.rules['@typescript-eslint/no-for-in-array'] = 'warn' // sometimes index is necessary
 base.rules['@typescript-eslint/no-unnecessary-type-assertion'] = 'warn' //it has false positives
 
+base.rules['@typescript-eslint/no-unsafe-member-access'] = 'warn'
+base.rules['@typescript-eslint/no-unsafe-assignment'] = 'warn'
+base.rules['@typescript-eslint/no-unsafe-return'] = 'warn'
+base.rules['@typescript-eslint/no-unsafe-call'] = 'warn'
+
 module.exports = base

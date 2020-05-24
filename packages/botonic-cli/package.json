@@ -63,7 +63,7 @@
     "version": "oclif-dev readme && git add README.md",
     "postinstall": "node scripts/postinstall.js",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "types": "lib/index.d.ts"

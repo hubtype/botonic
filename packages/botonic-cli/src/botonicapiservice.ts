@@ -34,7 +34,7 @@ export class BotonicAPIService {
   public analytics: any
   public lastBuildHash: any
   public bot: any = null
-  public headers: object | null = null
+  public headers: Record<string, string> | null = null
 
   constructor() {
     this.loadGlobalCredentials()

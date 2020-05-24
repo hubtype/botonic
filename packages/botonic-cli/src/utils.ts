@@ -49,7 +49,7 @@ if (analytics_enabled()) {
   analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
 }
 
-export function track(event: string, properties: {} = {}) {
+export function track(event: string, properties = {}) {
   if (analytics_enabled() && analytics && credentials && credentials.analytics)
     analytics.track({
       event: event,

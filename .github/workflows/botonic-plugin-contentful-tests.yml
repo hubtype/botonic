@@ -25,7 +25,7 @@ jobs:
     - name: Install dev dependencies
       run: (cd ./packages/$PACKAGE && npm install -D)
     - name: Build
-      run: (cd ./packages/$PACKAGE && npm run build_with_tests)
+      run: (cd ./packages/$PACKAGE && npm run build_unit_tests)
     - name: Run tests
       env:
         CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
