@@ -1,5 +1,5 @@
 import { Command } from '@oclif/command'
-import * as colors from 'colors'
+import colors from 'colors'
 import { track } from '../utils'
 
 import { exec } from 'child_process'

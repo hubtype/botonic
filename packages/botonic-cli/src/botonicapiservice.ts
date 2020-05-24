@@ -2,7 +2,7 @@ import { join } from 'path'
 import * as fs from 'fs'
 import { homedir } from 'os'
 import axios, { Method } from 'axios'
-import * as colors from 'colors'
+import colors from 'colors'
 import FormData from 'form-data'
 import * as util from 'util'
 const exec = util.promisify(require('child_process').exec)

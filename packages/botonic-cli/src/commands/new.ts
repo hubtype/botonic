@@ -2,7 +2,7 @@ import { Command } from '@oclif/command'
 import { resolve, join } from 'path'
 import { copySync, moveSync } from 'fs-extra'
 import { prompt } from 'inquirer'
-import * as colors from 'colors'
+import colors from 'colors'
 
 import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'

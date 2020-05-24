@@ -1,6 +1,6 @@
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
-import * as colors from 'colors'
+import colors from 'colors'
 import { join } from 'path'
 import { copySync, removeSync } from 'fs-extra'
 import { zip } from 'zip-a-folder'

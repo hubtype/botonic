@@ -1,7 +1,7 @@
 import { Command } from '@oclif/command'
 
 import { track } from '../utils'
-import * as colors from 'colors'
+import colors from 'colors'
 
 import { spawn } from 'child_process'
 
