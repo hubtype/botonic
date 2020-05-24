@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function shallowClone<T extends object>(obj: T): T {
   if (obj == undefined) {
     return obj
@@ -20,6 +21,7 @@ export function shallowClone<T extends object>(obj: T): T {
  * @see Source project, ts-deepcopy https://github.com/ykdr2017/ts-deepcopy
  * @see Code pen https://codepen.io/erikvullings/pen/ejyBYg
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const deepClone = <T>(target: T, alreadyCloned: object[] = []): T => {
   if (alreadyCloned.includes(target as any)) {
     return target

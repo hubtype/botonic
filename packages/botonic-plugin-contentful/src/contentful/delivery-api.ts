@@ -71,7 +71,7 @@ export class AdaptorDeliveryApi implements DeliveryApi {
     try {
       return this.client.getContentType(id)
     } catch (e) {
-      console.error(`ERROR in getContentType for id ${id}: ${e}`)
+      console.error(`ERROR in getContentType for id ${id}:`, e)
       throw e
     }
   }
@@ -95,7 +95,7 @@ export class ContentsApi {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
       context,
       {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         content_type: contentType,
         include: this.maxReferencesInclude(),
       }
@@ -117,7 +117,7 @@ export class ContentsApi {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
       context,
       {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         content_type: model,
         include: this.maxReferencesInclude(),
       }

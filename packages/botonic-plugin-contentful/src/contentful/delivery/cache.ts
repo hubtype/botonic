@@ -18,7 +18,7 @@ export class CachedClientApi implements ReducedClientApi {
         normalizer: function (...args: any): string {
           return args
             .map((arg: any) => JSON.stringify(arg))
-            .reduce((a: any, b: any) => a + b)
+            .reduce((a: string, b: string) => a + b)
         },
       } as memoize.Options)
 

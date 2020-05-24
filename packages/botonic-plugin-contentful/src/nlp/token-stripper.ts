@@ -3,9 +3,18 @@ import { Normalizer } from './normalizer'
 import { Locale, preprocess } from './locales'
 import { TokenSkipper } from './token-skipper'
 import { DEFAULT_SEPARATORS_REGEX } from './tokens'
+import { ValueObject } from '../util'
 
-export class TokenRange {
+export class TokenRange implements ValueObject {
   constructor(readonly from: number, readonly to: number) {}
+
+  equals(other: TokenRange): boolean {
+    return this.from == other.from && this.to == other.to
+  }
+
+  toString(): string {
+    return `from ${this.from} to ${this.to}`
+  }
 }
 
 /**
@@ -86,7 +95,7 @@ export class TokenStripper {
           throw new Error(`Invalid search position ${pos}`)
       }
       if (last == haystack) {
-        console.error(`Could not skip ${range} from ${haystack}`)
+        console.error(`Could not skip ${range.toString()} from ${haystack}`)
         return haystack
       }
     }

@@ -11,6 +11,7 @@ export function createMarkUp(type: MarkupType): MarkUp {
     case MarkupType.WHATSAPP:
       return new WhatsApp()
     default:
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw Error(`Invalid markdup type: ${type}`)
   }
 }

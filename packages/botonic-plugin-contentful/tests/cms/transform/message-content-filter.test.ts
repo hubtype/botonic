@@ -17,7 +17,9 @@ test('TEST MessageContentFilter filtering all types except one', async () => {
   const filter = {
     text: (text: cms.Text, contextArg: Context) => {
       expect(contextArg).toEqual(context || {})
-      return Promise.resolve(text.cloneWithText(text.text + ++cloningOrder))
+      return Promise.resolve(
+        text.cloneWithText(text.text + String(++cloningOrder))
+      )
     },
     carousel: (carousel: cms.Carousel) => {
       ++cloningOrder
@@ -25,7 +27,7 @@ test('TEST MessageContentFilter filtering all types except one', async () => {
     },
     startUp: (startUp: cms.StartUp) => {
       return Promise.resolve(
-        startUp.cloneWithText(startUp.text + ++cloningOrder)
+        startUp.cloneWithText(startUp.text + String(++cloningOrder))
       )
     },
   }

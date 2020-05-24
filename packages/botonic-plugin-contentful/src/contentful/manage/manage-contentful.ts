@@ -1,7 +1,7 @@
 import { ManageCms } from '../../manage-cms/manage-cms'
 import * as cms from '../../cms'
 import * as nlp from '../../nlp'
-import contentfulm from 'contentful-management'
+import * as contentfulm from 'contentful-management'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/typings/environment'
 // eslint-disable-next-line node/no-missing-import
@@ -70,17 +70,23 @@ export class ManageContentful implements ManageCms {
       throw new Error('Context.locale must be defined')
     }
     if (!(field.cmsName in entry.fields)) {
+      const fields = Object.keys(entry.fields)
       throw new CmsException(
         `Field '${field.cmsName}' not found in entry of type '${
           entry.sys.contentType.sys.id
-        }. It only has ${Object.keys(entry.fields)}'`
+        }. It only has ${JSON.stringify(fields)}'`
       )
     }
     if (!context.allowOverwrites) {
       const value = entry.fields[field.cmsName][context.locale]
       if (value) {
         throw new CmsException(
-          `Cannot overwrite field '${field.cmsName}' of entry '${entry.sys.id}' (has value '${value}') because ManageContext.allowOverwrites is false`
+          `Cannot overwrite field '${field.cmsName}' of entry '${
+            entry.sys.id
+          }' "+
+          "(has value '${String(
+            value
+          )}') because ManageContext.allowOverwrites is false`
         )
       }
     }

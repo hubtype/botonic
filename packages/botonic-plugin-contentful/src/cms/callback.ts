@@ -50,6 +50,7 @@ export class Callback implements ValueObject {
     if (this.payload) {
       return `payload:${this.payload}`
     }
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return `URL:${this.url}`
   }
 }
@@ -152,6 +153,7 @@ export class TopContentId extends ContentId {
         return cms.schedule(this.id)
       default:
         throw new Error(
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           `Type '${this.model}' not supported for callback with id '${this.id}'`
         )
     }
