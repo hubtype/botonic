@@ -19,8 +19,8 @@ export interface MessageProps {
   delay?: number
   typing?: number
   /** Used to persist the state on the browser localstorage */
-  json?: object
-  style?: object
+  json?: Record<string, unknown>
+  style?: Record<string, unknown>
 }
 
 export const Message: React.FunctionComponent<MessageProps>

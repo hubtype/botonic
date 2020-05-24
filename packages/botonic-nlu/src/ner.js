@@ -1,4 +1,4 @@
-import { default as nlp } from 'compromise'
+import nlp from 'compromise'
 import { default as compromisePlugin } from 'compromise-plugin'
 import { DEFAULT_ENTITIES } from './constants'
 

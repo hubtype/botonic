@@ -33,7 +33,7 @@ class App extends React.Component {
         const resp = await axios({
           method: 'post',
           url: `${baseUrl}/v1/bots/${s.bot.id}/send_postback/`,
-          // eslint-disable-next-line @typescript-eslint/camelcase
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           data: { payload: payload, chat_id: s.user.id },
         })
       } catch (e) {
