@@ -1,7 +1,7 @@
-import { Command, flags } from '@oclif/command'
+import { Command } from '@oclif/command'
 
 import { track } from '../utils'
-import * as colors from 'colors'
+import colors from 'colors'
 
 import { spawn } from 'child_process'
 
@@ -16,11 +16,9 @@ export default class Run extends Command {
 
   static args = []
 
-  private botonic: any
-
-  async run() {
+  run(): Promise<void> {
     track('Served Botonic CLI')
-    const { args, flags } = this.parse(Run)
+    this.parse(Run)
 
     try {
       const serve = spawn('npm', ['run', 'start'])
@@ -37,5 +35,6 @@ export default class Run extends Command {
     } catch (e) {
       console.log(e)
     }
+    return Promise.resolve()
   }
 }

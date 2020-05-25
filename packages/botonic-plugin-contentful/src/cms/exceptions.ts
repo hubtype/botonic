@@ -18,6 +18,7 @@ export class CmsException extends Error {
     if (!reason) {
       return message
     }
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return `${message} due to: ${reason.message || String(reason)}`
   }
 }

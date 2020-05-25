@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as core from '@botonic/core'
+import * as core from '@botonic/core/src'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/

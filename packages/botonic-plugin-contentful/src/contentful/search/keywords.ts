@@ -1,4 +1,4 @@
-import { Entry, EntryCollection } from 'contentful/index'
+import { Entry, EntryCollection } from 'contentful'
 import * as cms from '../../cms'
 import { CommonFields, TopContentId, Context, TopContentType } from '../../cms'
 import { SearchCandidate } from '../../search'
@@ -64,7 +64,7 @@ export class KeywordsDelivery {
   ): Promise<SearchCandidate[]> {
     const getWithKeywords = (contentType: cms.TopContentType) =>
       this.delivery.getEntries<QueueFields>(context, {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         content_type: contentType,
         'fields.searchableBy[exists]': true,
         include: 1,
@@ -105,7 +105,7 @@ export class KeywordsDelivery {
   ): Promise<SearchCandidate[]> {
     const getWithKeywords = (contentType: cms.TopContentType) =>
       this.delivery.getEntries<CommonEntryFields>(context, {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         content_type: contentType,
         'fields.keywords[exists]': true,
         include: 0,

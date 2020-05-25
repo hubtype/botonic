@@ -2,12 +2,12 @@ import { join } from 'path'
 import * as fs from 'fs'
 import { homedir } from 'os'
 import axios, { Method } from 'axios'
-import * as colors from 'colors'
-import * as FormData from 'form-data'
+import colors from 'colors'
+import FormData from 'form-data'
 import * as util from 'util'
 const exec = util.promisify(require('child_process').exec)
 import { hashElement } from 'folder-hash'
-import * as ora from 'ora'
+import ora from 'ora'
 
 const BOTONIC_CLIENT_ID: string =
   process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
@@ -34,7 +34,7 @@ export class BotonicAPIService {
   public analytics: any
   public lastBuildHash: any
   public bot: any = null
-  public headers: object | null = null
+  public headers: Record<string, string> | null = null
 
   constructor() {
     this.loadGlobalCredentials()
@@ -92,13 +92,13 @@ export class BotonicAPIService {
     }
   }
 
-  async checkGlobalCredentialsPath() {
+  checkGlobalCredentialsPath() {
     if (!fs.existsSync(this.globalConfigPath))
       fs.mkdirSync(this.globalConfigPath)
   }
 
-  async saveGlobalCredentials() {
-    await this.checkGlobalCredentialsPath()
+  saveGlobalCredentials() {
+    this.checkGlobalCredentialsPath()
     fs.writeFileSync(
       this.globalCredentialsPath,
       JSON.stringify({
@@ -141,7 +141,7 @@ export class BotonicAPIService {
       spinner: 'bouncingBar',
     }).start()
     try {
-      const build_out = await exec(`npm run ${npmCommand}`)
+      const _build_out = await exec(`npm run ${npmCommand}`)
     } catch (error) {
       spinner.fail()
       console.log(`${error.stdout}` + colors.red(`\n\nBuild error:\n${error}`))
@@ -160,7 +160,7 @@ export class BotonicAPIService {
     return true
   }
 
-  setCurrentBot(bot: any) {
+  setCurrentBot(bot: any): void {
     this.bot = bot
   }
 
@@ -223,7 +223,7 @@ export class BotonicAPIService {
       'content-type': 'application/json',
       'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
-    await this.saveGlobalCredentials()
+    this.saveGlobalCredentials()
     // eslint-disable-next-line consistent-return
     return resp
   }
@@ -303,9 +303,9 @@ export class BotonicAPIService {
 
   async deployBot(bundlePath: string, forceDeploy: boolean): Promise<any> {
     try {
-      const a = await this.getMe()
+      const _authenticated = await this.getMe()
     } catch (e) {
-      console.log(`Error deploying: ${e}`)
+      console.log(`Error authenticating: ${e}`)
     }
     const form = new FormData()
     const data = fs.createReadStream(bundlePath)

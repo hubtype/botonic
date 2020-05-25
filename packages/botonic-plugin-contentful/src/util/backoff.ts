@@ -27,7 +27,9 @@ export async function repeatWithBackoff<T>(
     try {
       return await func()
     } catch (e) {
-      logger(`Retrying after exception at ${new Date()}: ${String(e)}`)
+      logger(
+        `Retrying after exception at ${new Date().toString()}: ${String(e)}`
+      )
       await backoff.backoff()
     }
   }

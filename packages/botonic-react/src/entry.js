@@ -1,4 +1,7 @@
-import { DevApp, NodeApp, WebchatApp, WebviewApp } from './index'
+import { DevApp } from './dev-app'
+import { NodeApp } from './index'
+import { WebchatApp } from './webchat-app'
+import { WebviewApp } from './webview'
 import {
   routes,
   plugins,
@@ -6,6 +9,7 @@ import {
   webchat,
   webviews,
   config,
+  // eslint-disable-next-line import/no-unresolved,node/no-missing-import
 } from 'BotonicProject'
 
 export let app

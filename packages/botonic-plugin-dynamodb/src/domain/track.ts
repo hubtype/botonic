@@ -57,7 +57,9 @@ export class ErrorReportingTrackStorage implements TrackStorage {
   handleError(doing: string, bot: string, time: Date): (reason: any) => never {
     return (reason: any) => {
       // eslint-disable-next-line no-console
-      const msg = `ERROR: ${doing} tracks of bot '${bot}' at '${time}': ${reason}`
+      const msg = `ERROR: ${doing} tracks of bot '${bot}' at '${time.toString()}': ${String(
+        reason
+      )}`
       console.error(msg)
       throw new TrackException(msg, reason)
     }

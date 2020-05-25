@@ -1,6 +1,6 @@
 import * as cms from '../../cms'
 import { CmsException, ContentType } from '../../cms'
-import { Entry } from 'contentful/index'
+import { Entry } from 'contentful'
 import { ContentDelivery } from '../content-delivery'
 import { TextDelivery, TextFields } from './text'
 import { CarouselDelivery } from './carousel'

@@ -1,12 +1,12 @@
 import { Command, flags } from '@oclif/command'
 import { prompt } from 'inquirer'
-import * as colors from 'colors'
+import colors from 'colors'
 import { join } from 'path'
 import { copySync, removeSync } from 'fs-extra'
 import { zip } from 'zip-a-folder'
 
 import * as fs from 'fs'
-import * as ora from 'ora'
+import ora from 'ora'
 import * as rimraf from 'rimraf'
 
 import { BotonicAPIService } from '../botonicapiservice'
@@ -57,7 +57,7 @@ Uploading...
   private botName: string | undefined = undefined
 
   async run() {
-    const { args, flags } = this.parse(Run)
+    const { flags } = this.parse(Run)
     track('Deployed Botonic CLI')
     force = flags.force || false
     npmCommand = flags.command
@@ -67,7 +67,7 @@ Uploading...
     if (email && password) await this.login(email, password)
     else if (!this.botonicApiService.oauth) await this.signupFlow()
     else if (this.botName) {
-      this.deployBotFromFlag(this.botName)
+      await this.deployBotFromFlag(this.botName)
     } else await this.deployBotFlow()
   }
 
@@ -85,11 +85,11 @@ Uploading...
       bots.map(b => console.log(` > ${b.name}`))
     } else {
       this.botonicApiService.setCurrentBot(bot)
-      this.deploy()
+      await this.deploy()
     }
   }
 
-  async signupFlow() {
+  signupFlow(): Promise<void> {
     const choices = [
       'No, I need to create a new one (Signup)',
       'Yes, I do. (Login)',
@@ -108,7 +108,7 @@ Uploading...
     })
   }
 
-  async askEmailPassword() {
+  askEmailPassword(): Promise<{ email: string; password: string }> {
     return prompt([
       {
         type: 'input',
@@ -124,14 +124,14 @@ Uploading...
     ])
   }
 
-  async askLogin() {
-    await this.askEmailPassword().then((inp: any) =>
+  async askLogin(): Promise<void> {
+    await this.askEmailPassword().then(inp =>
       this.login(inp.email, inp.password)
     )
   }
 
-  async askSignup() {
-    await this.askEmailPassword().then((inp: any) =>
+  async askSignup(): Promise<void> {
+    await this.askEmailPassword().then(inp =>
       this.signup(inp.email, inp.password)
     )
   }
@@ -155,10 +155,10 @@ Uploading...
     }
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<void> {
     return this.botonicApiService.login(email, password).then(
       ({}) => this.deployBotFlow(),
-      (err: AxiosError) => {
+      async (err: AxiosError) => {
         if (
           err.response &&
           err.response.data &&
@@ -177,19 +177,19 @@ Uploading...
             )
           }
         }
-        this.askLogin()
+        await this.askLogin()
       }
     )
   }
 
-  async signup(email: string, password: string) {
+  async signup(email: string, password: string): Promise<void> {
     const org_name = email.split('@')[0]
     const campaign = { product: 'botonic' }
     return this.botonicApiService
       .signup(email, password, org_name, campaign)
       .then(
         ({}) => this.login(email, password),
-        err => {
+        async err => {
           if (err.response.data.email)
             console.log(colors.red(err.response.data.email[0]))
           if (err.response.data.password)
@@ -200,7 +200,7 @@ Uploading...
                 'There was an error trying to signup. Please, try again:'
               )
             )
-          this.askSignup()
+          await this.askSignup()
         }
       )
   }
@@ -210,7 +210,7 @@ Uploading...
     const nextBots = resp.data.next
     const bots = resp.data.results
     if (nextBots) {
-      const new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
+      const _new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
     }
     if (!bots.length) {
       return this.createNewBot()
@@ -232,7 +232,7 @@ Uploading...
     }
   }
 
-  async createNewBot() {
+  createNewBot(): Promise<void> {
     return prompt([
       {
         type: 'input',
@@ -248,7 +248,7 @@ Uploading...
     })
   }
 
-  async selectExistentBot(bots: any[]) {
+  selectExistentBot(bots: any[]): Promise<void> {
     return prompt([
       {
         type: 'list',
@@ -256,14 +256,14 @@ Uploading...
         message: 'Please, select a bot',
         choices: bots.map(b => b.name),
       },
-    ]).then((inp: any) => {
+    ]).then((inp: { bot_name: string }) => {
       const bot = bots.filter(b => b.name === inp.bot_name)[0]
       this.botonicApiService.setCurrentBot(bot)
-      this.deploy()
+      return this.deploy()
     })
   }
 
-  async displayProviders(providers: any) {
+  displayProviders(providers: any): void {
     console.log('Your bot is published on:')
     providers.map((p: any) => {
       if (p.provider === 'whatsapp')

@@ -2,13 +2,13 @@ import { Command } from '@oclif/command'
 import { resolve, join } from 'path'
 import { copySync, moveSync } from 'fs-extra'
 import { prompt } from 'inquirer'
-import * as colors from 'colors'
+import colors from 'colors'
 
 import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'
 
 import * as util from 'util'
-import * as ora from 'ora'
+import ora from 'ora'
 const exec = util.promisify(require('child_process').exec)
 
 export default class Run extends Command {
@@ -67,14 +67,14 @@ Creating...
     },
   ]
 
-  private botonicApiService: BotonicAPIService = new BotonicAPIService()
+  private botonicApiService = new BotonicAPIService()
 
   async run() {
     track('Created Botonic Bot CLI')
-    const { args, flags } = this.parse(Run)
+    const { args } = this.parse(Run)
     let template = ''
     if (!args.templateName) {
-      await this.selectBotName().then((resp: any) => {
+      await this.selectBotName().then(resp => {
         template = this.templates.filter(
           (t: any) => t.description === resp.botName
         )[0].name
@@ -95,7 +95,7 @@ Creating...
         return
       }
     }
-    const botPath = resolve(template)
+    const _botPath = resolve(template)
     const templatePath = join(__dirname, '..', '..', 'templates', template)
     let spinner = ora({
       text: 'Copying files...',
@@ -109,7 +109,7 @@ Creating...
       spinner: 'bouncingBar',
     }).start()
     const dependencyCommand = `npm install`
-    const dependency = await exec(dependencyCommand)
+    await exec(dependencyCommand)
     spinner.succeed()
     await this.botonicApiService.buildIfChanged(false)
     this.botonicApiService.beforeExit()
@@ -124,7 +124,7 @@ Creating...
     )
   }
 
-  async selectBotName() {
+  selectBotName(): Promise<{ botName: string }> {
     return prompt([
       {
         type: 'list',

@@ -1,5 +1,4 @@
 import momentTz from 'moment-timezone'
-import { MomentZone } from 'moment-timezone/moment-timezone'
 
 /**
  * Manages ranges of hour/minutes for each day of a week.
@@ -9,7 +8,7 @@ import { MomentZone } from 'moment-timezone/moment-timezone'
  */
 export class Schedule {
   static TZ_CET = 'Europe/Madrid'
-  private readonly zone: MomentZone
+  private readonly zone: momentTz.MomentZone
   private readonly scheduleByDay = new Map<WeekDay, DaySchedule>()
   private readonly exceptions = [] as ExceptionSchedule[]
 
@@ -131,7 +130,7 @@ export class TimeRange {
 
 export class HourAndMinute {
   constructor(
-    readonly zone: MomentZone,
+    readonly zone: momentTz.MomentZone,
     readonly hour: number,
     readonly minute: number = 0
   ) {}

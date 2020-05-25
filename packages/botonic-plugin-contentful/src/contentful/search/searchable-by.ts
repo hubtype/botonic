@@ -1,4 +1,4 @@
-import { Entry } from 'contentful/index'
+import { Entry } from 'contentful'
 import * as cms from '../../cms'
 import { ContentWithNameFields } from '../delivery-api'
 

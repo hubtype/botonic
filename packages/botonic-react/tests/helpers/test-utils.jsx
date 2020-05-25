@@ -1,6 +1,6 @@
 import TestRenderer from 'react-test-renderer'
 import { RequestContext } from '../../src'
-import { default as React } from 'react'
+import * as React from 'react'
 import { MultichannelContext } from '../../src/components/multichannel/multichannel-context'
 import { useWebchat } from '../../src/webchat/hooks'
 import { renderHook } from '@testing-library/react-hooks'

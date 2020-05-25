@@ -1,7 +1,6 @@
 import { Command, flags } from '@oclif/command'
-import { track, getGlobalNodeModulesPath } from '../utils'
-import * as colors from 'colors'
 import * as path from 'path'
+import { track } from '../utils'
 
 export default class Run extends Command {
   static description = 'Serve your bot in your localhost'
@@ -19,7 +18,7 @@ export default class Run extends Command {
   static args = []
 
   async run() {
-    const { args, flags } = this.parse(Run)
+    const { flags } = this.parse(Run)
 
     const botonicNLUPath: string = path.join(
       process.cwd(),

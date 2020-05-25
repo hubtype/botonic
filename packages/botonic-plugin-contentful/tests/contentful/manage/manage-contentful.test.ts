@@ -18,8 +18,11 @@ describe('ManageContentful', () => {
   const TEST_MANAGE_CMS_ID = '627QkyJrFo3grJryj0vu6L'
 
   test('TEST: updateField on an empty field', async () => {
-    const cms = testContentful({ disableCache: true })
-    const old = await cms.text(TEST_MANAGE_CMS_ID, ctxt({ locale: SPANISH }))
+    const contentful = testContentful({ disableCache: true })
+    const old = await contentful.text(
+      TEST_MANAGE_CMS_ID,
+      ctxt({ locale: SPANISH })
+    )
     const sut = testManageContentful()
 
     const newValue = rndStr()
@@ -38,7 +41,7 @@ describe('ManageContentful', () => {
         newValue
       )
       await repeatWithBackoff(async () => {
-        const newContent = await cms.text(old.id, {
+        const newContent = await contentful.text(old.id, {
           locale: SPANISH,
         })
         expect(newContent).toEqual(old.cloneWithText(newValue))
@@ -52,7 +55,7 @@ describe('ManageContentful', () => {
         ''
       )
       await repeatWithBackoff(async () => {
-        const restored = await cms.text(old.id, {
+        const restored = await contentful.text(old.id, {
           locale: SPANISH,
         })
         expect(restored).toEqual(old)
@@ -86,14 +89,14 @@ describe('ManageContentful', () => {
   }, 40000)
 
   test('TEST: copyField buttons', async () => {
-    const cms = testContentful({ disableCache: true })
-    const oldContent = await cms.text(TEST_MANAGE_CMS_ID)
+    const contentful = testContentful({ disableCache: true })
+    const oldContent = await contentful.text(TEST_MANAGE_CMS_ID)
     const sut = testManageContentful()
     const FROM_LOCALE = ENGLISH
     const TO_LOCALE = SPANISH
 
     const fromButtons = (
-      await cms.text(oldContent.id, {
+      await contentful.text(oldContent.id, {
         locale: FROM_LOCALE,
       })
     ).buttons
@@ -109,7 +112,7 @@ describe('ManageContentful', () => {
       )
       // wait until CDNs provide the new value
       await repeatWithBackoff(async () => {
-        const newContent = await cms.text(oldContent.id, {
+        const newContent = await contentful.text(oldContent.id, {
           locale: TO_LOCALE,
         })
         expect(newContent.buttons.length).toEqual(fromButtons.length)
@@ -123,7 +126,7 @@ describe('ManageContentful', () => {
         []
       )
       await repeatWithBackoff(async () => {
-        const restored = await cms.text(oldContent.id, {
+        const restored = await contentful.text(oldContent.id, {
           locale: TO_LOCALE,
           ignoreFallbackLocale: true,
         })

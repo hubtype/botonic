@@ -2,13 +2,13 @@ import {
   ContentToCsvLines,
   CsvExport,
   skipEmptyStrings,
+  create_stringifier,
 } from '../../../src/tools/translators/csv-export'
 import { testContentful } from '../../../tests/contentful/contentful.helper'
 import { ENGLISH } from '../../../src/nlp'
 import { TextBuilder } from '../../../src/cms/factories'
 import sync from 'csv-stringify/lib/sync'
 import { RndButtonsBuilder } from '../../../src/cms/test-helpers'
-import { create_stringifier } from '../../../src/tools/translators/csv-export'
 
 test('TEST: CsvExport integration test', async () => {
   const cms = testContentful()

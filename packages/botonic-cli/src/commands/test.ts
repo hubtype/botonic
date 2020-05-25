@@ -1,6 +1,5 @@
-import { resolve } from 'path'
-import { Command, flags } from '@oclif/command'
-import * as colors from 'colors'
+import { Command } from '@oclif/command'
+import colors from 'colors'
 import { track } from '../utils'
 
 import { exec } from 'child_process'
@@ -29,16 +28,17 @@ Ran all test suites.`,
 
   static args = []
 
-  async run() {
+  run(): Promise<void> {
     track('botonic test')
-    const { args, flags } = this.parse(Run)
+    this.parse(Run)
     exec('npm run test', (error, _stdout, stderr) => {
       console.log(colors.blue('\n Executing tests...\n'))
       if (error) {
-        console.error(colors.red(`${error}`))
+        console.error(colors.red(`${String(error)}`))
         return
       }
       console.log(colors.green(`${stderr}`))
     })
+    return Promise.resolve()
   }
 }

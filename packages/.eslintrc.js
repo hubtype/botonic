@@ -4,17 +4,29 @@ module.exports = {
     'plugin:prettier/recommended', // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
     'eslint:recommended',
     'plugin:jest/recommended',
+    'plugin:node/recommended',
+    'plugin:import/recommended',
     // typescript
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
-  plugins: ['jest', 'no-null', 'filenames', '@typescript-eslint'],
+  plugins: ['jest', 'no-null', 'filenames', '@typescript-eslint', 'import'],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
     sourceType: 'module', // Allows for the use of imports
     ecmaFeatures: {
       jsx: true, // Allows for the parsing of JSX
+    },
+  },
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx', '.d.ts'],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+      },
     },
   },
   // npm run lint runs eslint with --quiet --fix so that only errors are fixed
@@ -33,14 +45,25 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     'node/no-unsupported-features/es-syntax': 'off', //babel will take care of ES compatibility
     'unicorn/no-abusive-eslint-disable': 'off',
-    '@typescript-eslint/camelcase': 'warn',
+    "@typescript-eslint/naming-convention": "warn",
     'consistent-return': 'error',
     'jest/no-export': 'warn',
     'no-empty': 'warn',
     'prefer-const': ['error', { destructuring: 'all' }],
 
+    // import rules
+    'node/no-missing-import': [
+      'error',
+      {
+        tryExtensions: ['.ts', '.tsx', '.js', '.jsx'],
+      },
+    ],
+    'import/no-unresolved': 'error',
+    'import/default': 'warn', // syntax "export = xxxx" is not supported
+    'node/no-extraneous-import': 'warn', // otherwise it does not find ts-mockito if only defined in parent project
+
     // special for TYPESCRIPT
-    '@typescript-eslint/ban-ts-ignore': 'warn',
+    '@typescript-eslint/ban-ts-comment': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off', // annoying for tests
     '@typescript-eslint/explicit-member-accessibility': 'off', //we think defaulting to public is a good default
     '@typescript-eslint/no-empty-function': 'warn',
@@ -63,8 +86,23 @@ module.exports = {
   overrides: [
     {
       files: [
-        'tests/**/*.ts', // to be able to skip required fields when not used in a particular test
+        '**/*.js', // to be able to skip required fields when not used in a particular test
+        '**/*.jsx'
       ],
+      rules: {
+        // pending to mark unused vars with _...
+        //'no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }],
+      }
+    },
+    {
+      files: [
+        '**/*.ts', // to be able to skip required fields when not used in a particular test
+      ],
+      rules: {
+        "import/namespace": "off",
+        // pending to mark unused vars with _...
+        //'@typescript-eslint/no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }],
+      }
     },
   ],
   env: {

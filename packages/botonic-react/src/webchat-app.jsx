@@ -2,9 +2,9 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import { Webchat } from './webchat'
-import { HubtypeService } from '@botonic/core'
+import { HubtypeService, INPUT } from '@botonic/core'
 import { msgToBotonic } from './msg-to-botonic'
-import { INPUT } from '@botonic/core'
+
 export class WebchatApp {
   constructor({
     theme = {},

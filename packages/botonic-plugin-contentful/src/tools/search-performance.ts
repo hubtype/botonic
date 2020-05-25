@@ -42,7 +42,7 @@ function perform() {
   }
   let utterance = ''
   for (let i = 0; i < 130; i++) {
-    utterance += i + ' '
+    utterance += String(i) + ' '
   }
   console.log(utterance.length)
   console.log(new Date())

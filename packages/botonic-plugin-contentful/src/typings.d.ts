@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates */
 declare module '@nlpjs/similarity/src' {
   export function leven(left: string, right: string): number
 }

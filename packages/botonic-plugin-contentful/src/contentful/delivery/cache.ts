@@ -1,5 +1,5 @@
-import * as contentful from 'contentful/index'
-import { ContentType, Entry } from 'contentful/index'
+import * as contentful from 'contentful'
+import { ContentType, Entry } from 'contentful'
 import memoize from 'memoizee'
 import { ReducedClientApi } from './client-api'
 
@@ -18,7 +18,7 @@ export class CachedClientApi implements ReducedClientApi {
         normalizer: function (...args: any): string {
           return args
             .map((arg: any) => JSON.stringify(arg))
-            .reduce((a: any, b: any) => a + b)
+            .reduce((a: string, b: string) => a + b)
         },
       } as memoize.Options)
 

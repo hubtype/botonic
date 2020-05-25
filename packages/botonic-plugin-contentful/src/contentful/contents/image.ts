@@ -5,7 +5,7 @@ import {
   ContentfulEntryUtils,
   DeliveryApi,
 } from '../delivery-api'
-import * as contentful from 'contentful/index'
+import * as contentful from 'contentful'
 import { DeliveryWithFollowUp } from './follow-up'
 
 export class ImageDelivery extends DeliveryWithFollowUp {

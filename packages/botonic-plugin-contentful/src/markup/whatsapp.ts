@@ -16,7 +16,9 @@ export class WhatsApp extends MarkUp {
     if (token.items) {
       return token.items.map(item => this.render(item.tokens!)).join('\n')
     }
-    const inner = token.tokens ? this.render(token.tokens, '') : token.text
+    const inner = token.tokens
+      ? this.render(token.tokens, '')
+      : token.text || ''
     if (token.type == TokenType.STRONG) {
       return `${this.STRONG}${inner}${this.STRONG}`
     }

@@ -23,9 +23,9 @@ export default class Run extends Command {
 
   async run() {
     track('Logged In Botonic CLI')
-    const { args, flags } = this.parse(Run)
+    const { flags } = this.parse(Run)
 
-    const path = flags.path ? resolve(flags.path) : process.cwd()
+    const _path = flags.path ? resolve(flags.path) : process.cwd()
 
     await this.logInUser()
   }

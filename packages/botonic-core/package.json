@@ -7,7 +7,7 @@
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_ci -- --fix",
-    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' '**/*.d.ts'",
+    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
     "cloc": "../../scripts/qa/cloc-package.sh ."
   },
@@ -22,21 +22,22 @@
   },
   "files": [
     "src/**",
-    "index.d.ts"
+    "src/index.d.ts"
   ],
   "dependencies": {
     "axios": "^0.19.2",
-    "pusher-js": "^5.0.3"
+    "pusher-js": "^5.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/register": "^7.8.3",
-    "@babel/runtime": "^7.8.4",
-    "babel-plugin-add-module-exports": "^1.0.0"
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/register": "^7.9.0",
+    "@babel/runtime": "^7.9.6",
+    "babel-plugin-add-module-exports": "^1.0.2"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
   "engines": {

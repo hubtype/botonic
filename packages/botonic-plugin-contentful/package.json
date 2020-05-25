@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
-    "build_with_tests": "tsc -b tests/tsconfig.json",
+    "build_unit_tests": "tsc -b tests/tsconfig.json",
     "test": "../../node_modules/.bin/jest --coverage",
     "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
     "cloc": "../../scripts/qa/cloc-package.sh .",
@@ -43,6 +43,14 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
     "node-nlp": "^4.3.0",
+    "@nlpjs/core": "^4.3.0",
+    "@nlpjs/lang-ca": "^4.3.0",
+    "@nlpjs/lang-en-min": "^4.3.0",
+    "@nlpjs/lang-es": "^4.3.0",
+    "@nlpjs/lang-pl": "^4.3.0",
+    "@nlpjs/lang-pt": "^4.3.0",
+    "@nlpjs/ner": "^4.3.0",
+    "@nlpjs/similarity": "^4.0.0-rc.4",
     "sort-stream": "^1.0.1"
   },
   "devDependencies": {
@@ -54,6 +62,6 @@
     "jest-extended": "^0.11.5"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=12.3.0"
   }
 }

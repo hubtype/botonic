@@ -1,4 +1,4 @@
-import * as contentful from 'contentful/index'
+import * as contentful from 'contentful'
 import { DeliveryWithFollowUp } from './follow-up'
 import { ButtonDelivery } from './button'
 import * as cms from '../../cms'
