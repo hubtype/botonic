@@ -11,6 +11,112 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.12.0] - 2020-26-05
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Added [ESLint Limit Cyclomatic Complexity](https://eslint.org/docs/rules/complexity) for all projects.
+  - Added Pull Request Templates.
+  - Scripts to count lines of code on each package.
+  - Added new documentation built with `Docusaurus`. Check it out at https://docs.botonic.io/.
+
+* [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - Enable more checks in `tsconfig.json`.
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Allow transferring conversations to an agent with its identifier (id or email) with `withAgentId(agentId)` or `withAgentEmail(agentEmail)` method of `HandOffBuilder`. Now `queue`is not mandatory. The case will be assigned to the first queue which agent belongs.
+  - Added `getAgentVacationRanges` to know availability of agents.
+  - Added more `router`tests.
+  - Type definitions improvement in `index.d.ts`.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - General features:
+
+    - Type definitions improvement in `index.d.ts`.
+    - Improved `Text.serialize` method.
+
+  - New webchat features:
+
+    - **Breaking change**: Now the text of a `Button/Reply` is sent along with its payload. You can use `button: {messageType: 'postback'}` in `webchat/index.js` to enable the previous behavior.
+    - **Breaking change**: Markdown will be rendered by default within all the `Text` components. If you want to disable it, you can declare the component as follows:  
+      `<Text markdown={false}>Your text</Text>`.
+    - Be able to pass additional styles to `Custom Messages`.
+    - Persistent Menu customizable with property `customPersistentMenu` in `webchat/index.js`.
+    - Persistent Menu button customizable with property `customMenuButton`.
+    - Possibility to enable timestamps in messages.
+    - Added unit tests for Webchat.
+    - More adaptable Webchat in iOS.
+
+  - Multichannel:
+
+    - Customize `Multichannel` visualization.
+    - `Multichannel` to support letter indexes.
+    - Compact `Multichannel` `Text` and `Carousel`.
+    - `Multichannel` to allow separating messages with custom string.
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+  - `Comment` and `Chitchat` typing improvements.
+  - Allow passing `Normalizer` to `CMS`.
+  - Added Markup (WhatsApp Support) and Markdown parsing.
+  - Added stemmers/tokens for Russian.
+
+* [@botonic/plugin-inbenta](https://www.npmjs.com/package/@botonic/plugin-inbenta)
+
+  - Added new package `@botonic/plugin-inbenta` to integrate the Inbenta Knowledge Management API. Please refer to its README for more information.
+
+### Changed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Move most `eslint` rules config to root `.eslintrc.js`.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Move `webchatReducer` to its own file.
+  - Split `webchatReducer` to reduce its complexity.
+  - Unify calls to `renderBrowser`/`renderNode`.
+  - Update `emoji-picker-react` to latest version `3.7.1` (it changes visually).
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Upgrade `node-nlp` dependency.
+  - Use `ContextWithLocale` if locale required.
+
+### Fixed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - `pre-commit` was not aborting when `lint` failed
+  - Fix several `eslint` warnings.
+
+* [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+  - Preserve `src/nlu` directories for all templates (added `.gitkeep` file). Remove them before running `botonic train`.
+  - Add missing calls with `await`.
+  - Use `rimraf` in favor of `fs.rmdirSync` which produced buggy behaviors.
+  - Templates: Call `CleanWebpackPlugin` with  
+    `{ cleanOnceBeforeBuildPatterns: ['dist'] }` to prevent occasional builds from crashing. We strongly suggest to add this line in your bot's `webpack.config.js` if updating from previous versions.
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Fixed sending wrong payloads when a handover was ended in `botonic serve` mode.
+  - `postMessage` promises were not forwarded.
+  - Better scrollbar handling when Webchat is hovered.
+  - Limit attachments sizes to 10MB.
+  - Fix attachments crashing in production build for Webchat (media messages will be no longer stored as binary data in local storage, so the content will only be available temporarily in `botonic serve` mode).
+  - Now the Webchat's theme properties `message.bot.image`, `header.image`, `intro.image` and `triggerButton.image` accept URLs.
+  - Fix issue causing Botonic Logo to be visible during few milliseconds in production.
+  - Handle parent page scrolling issues in Webchat for iOS.
+
+* [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+  - `BotonicMsgConverter` was not using `replaceEmptyStringsWith` option with value.
+  - Recursively transform `MessageContents`.
+  - Prefer tokens to stems when comparing to keywords.
+
 ## [0.11.0] - 2020-25-03
 
 ### Added
@@ -143,3 +249,4 @@ All notable changes to Botonic will be documented in this file.
 [0.10.0]: https://github.com/hubtype/botonic/releases/tag/v0.10.0
 [0.10.1]: https://github.com/hubtype/botonic/releases/tag/v0.10.1
 [0.11.0]: https://github.com/hubtype/botonic/releases/tag/v0.11.0
+[0.12.0]: https://github.com/hubtype/botonic/releases/tag/v0.12.0
