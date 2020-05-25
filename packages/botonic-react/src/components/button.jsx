@@ -40,7 +40,7 @@ export const Button = props => {
 
   const handleClick = event => {
     event.preventDefault()
-    const type = getThemeProperty('button.messageType', 'postback')
+    const type = getThemeProperty('button.messageType', INPUT.TEXT)
     if (props.webview) openWebview(props.webview, props.params)
     else if (props.path) {
       type == INPUT.POSTBACK
