@@ -228,7 +228,7 @@ const botonicServerConfig = {
   resolve: resolveConfig,
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin({}),
+    new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['dist'] }),
     imageminPlugin,
     new webpack.EnvironmentPlugin({
       HUBTYPE_API_URL: null,
@@ -238,7 +238,7 @@ const botonicServerConfig = {
   ],
 }
 
-module.exports = function(env) {
+module.exports = function (env) {
   if (env.target === 'all') {
     return [botonicServerConfig, botonicWebviewsConfig, botonicWebchatConfig]
   } else if (env.target === 'dev') {
