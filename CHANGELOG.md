@@ -60,10 +60,12 @@ All notable changes to Botonic will be documented in this file.
     - `Multichannel` to allow separating messages with custom string.
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
-  - `Comment` and `Chitchat` typing improvements.
+
   - Allow passing `Normalizer` to `CMS`.
-  - Added Markup (WhatsApp Support) and Markdown parsing.
+  - Added markup support for WhatsApp and Markdown.
   - Added stemmers/tokens for Russian.
+  - Now normalizer throws an exception for empty texts.
+  - Keyword search now sets the result's score field
 
 * [@botonic/plugin-inbenta](https://www.npmjs.com/package/@botonic/plugin-inbenta)
 
@@ -95,9 +97,9 @@ All notable changes to Botonic will be documented in this file.
   - Fix several `eslint` warnings.
 
 * [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
-  - Preserve `src/nlu` directories for all templates (added `.gitkeep` file). Remove them before running `botonic train`.
+  - Preserve `src/nlu` directories for all templates (added `.gitkeep` file). Remove these files before running `botonic train`.
   - Add missing calls with `await`.
-  - Use `rimraf` in favor of `fs.rmdirSync` which produced buggy behaviors.
+  - Use `rimraf` in favor of `fs.rmdirSync`.
   - Templates: Call `CleanWebpackPlugin` with  
     `{ cleanOnceBeforeBuildPatterns: ['dist'] }` to prevent occasional builds from crashing. We strongly suggest to add this line in your bot's `webpack.config.js` if updating from previous versions.
 
@@ -106,7 +108,7 @@ All notable changes to Botonic will be documented in this file.
   - Fixed sending wrong payloads when a handover was ended in `botonic serve` mode.
   - `postMessage` promises were not forwarded.
   - Better scrollbar handling when Webchat is hovered.
-  - Limit attachments sizes to 10MB.
+  - Limit attachment sizes to 10MB.
   - Fix attachments crashing in production build for Webchat (media messages will be no longer stored as binary data in local storage, so the content will only be available temporarily in `botonic serve` mode).
   - Now the Webchat's theme properties `message.bot.image`, `header.image`, `intro.image` and `triggerButton.image` accept URLs.
   - Fix issue causing Botonic Logo to be visible during few milliseconds in production.
@@ -114,8 +116,9 @@ All notable changes to Botonic will be documented in this file.
 
 * [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
   - `BotonicMsgConverter` was not using `replaceEmptyStringsWith` option with value.
-  - Recursively transform `MessageContents`.
-  - Prefer tokens to stems when comparing to keywords.
+  - New operations to clone Contents performing composable transformations.
+  - New operations which traverse the chain of followUp fields of MessageContent's
+  - When calculating the match substring and score between an utterance and a keyword, prefer tokens to stems when comparing to keywords.
 
 ## [0.11.0] - 2020-25-03
 
