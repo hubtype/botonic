@@ -1,5 +1,5 @@
 ---
-id: co-components
+id: components
 title: Components
 ---
 

@@ -1,5 +1,5 @@
 ---
-id: project-structure
+id: project
 title: Understanding the Project
 ---
 

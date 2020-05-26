@@ -24,6 +24,7 @@ const siteConfig = {
   title: 'Botonic', // Title for your website.
   tagline: 'Documentation Portal',
   url: 'https://botonic.io/', // Your website URL
+  docsUrl: '',
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',

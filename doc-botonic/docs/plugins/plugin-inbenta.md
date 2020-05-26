@@ -11,7 +11,7 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 >## What Does This Plugin Do?
 
-The Inbenta plugin allows you to integrate Inbenta Knowledge Management API in your Botonic project. It works any other AI/NLU services plugin, like Dialogflow, Watson, etc. 
+The Inbenta plugin allows you to integrate Inbenta Knowledge Management API in your Botonic project. It works like any other AI/NLU services plugin, like Dialogflow, Watson, etc. 
 
 Once installed within your project, this plugin sends all text inputs that users are sending to your bot and queries Inbenta API. 
 
@@ -59,7 +59,7 @@ Example of the same input object after being processed by the plugin:
    ```
    
 >## Use   
-   
+
 You can use it in your **routes** like any other NLU plugins:
 
    ```javascript

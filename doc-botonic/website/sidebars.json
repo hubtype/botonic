@@ -4,21 +4,21 @@
 	"welcome",
 	"getting-started",
 	"create-convapp",
-	"project-structure",
+	"project",
 	"supported-platforms"
 	],
 	
 	"Templates": [
-	"templates/list-templates",
-	"templates/custom-webchat",
-	"templates/child",
-	"templates/carousel",
-	"templates/handoff",
-	"templates/nlu"
+	"templates/templates",
+	"templates/template-custom-webchat",
+	"templates/childs",
+	"templates/template-dynamic-carousel",
+	"templates/template-human-handoff",
+	"templates/template-nlu"
 	],
 	
 	"Components": [
-	"components/co-components",
+	"components/components",
 	"components/co-text",
 	"components/co-buttons",
 	"components/co-replies",
@@ -30,30 +30,29 @@
 	],
 	
 	"Concepts": [
-	"concepts/co-actions",
-	"concepts/co-settings",
-	"concepts/co-handoff",
-	"concepts/co-inter",
-	"concepts/co-nlu",
-	"concepts/co-routes",
-	"concepts/co-webchat",
-	"concepts/co-webviews"
+	"concepts/actions",
+	"concepts/botonic-settings",
+	"concepts/humanhandoff",
+	"concepts/i18n",
+	"concepts/routes",
+	"concepts/webchat",
+	"concepts/webviews"
 	],
 	
 	"Plugins": [
 	"plugins/botonic-plugins",
-	"plugins/plugins",
+	"plugins/using-plugins",
 	"plugins/plugin-dialogflow",
 	"plugins/plugin-luis",
 	"plugins/plugin-segment",
 	"plugins/plugin-inbenta",
 	"plugins/plugin-nlu",
-	"plugins/contentful"
+	"plugins/plugin-contentful"
 	],
 	
 	"Test and Deploy": [
-	"test-deploy/test-components",
-	"test-deploy/deploy"
+	"test-deploy/testing-your-components",
+	"test-deploy/deployment"
 	]
 	
   },

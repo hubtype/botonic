@@ -13,7 +13,7 @@ Botonic supports several messaging platforms, such as:
 The first steps to embed a bot are common to all platforms:
 
 1. Once your bot is deployed, log in to [app.hubtype.com](https://app.hubtype.com/) and click on the Bot icon.
-2. Select your bot and click on Integrate a Messenger.
+2. Select your bot and click on **Integrate a Messenger**.
 3. Select the relevant messaging app as described below.
 
 > ## Webchat
@@ -23,22 +23,46 @@ You can integrate your chatbot into your personal webpage. This integration is 1
 1. Give a name to this integration (as you can have multiple webchat integrations with the same bot) and click `Enable Webchat`.
 2. Some HTML code will be displayed. Inject this code in your webpage. Note that the script has to be injected in the `header` tag, and the bot initialization in the `body` tag.
 
-For more information, refer to the [Custom Webchat](templates/custom-webchat) template description.
+For more information, refer to the [Custom Webchat](templates/template-custom-webchat) template description.
 
 <details>
 <summary>Example</summary>
 ![](https://botonic-doc-static.netlify.com/images/webchat_channel.png)
-/>  
 
 </details>
 
 > ## WhatsApp
 
-Coming soon.
+
+
+WhatsApp Playground allows you to test your bot with the **official WhatsApp Business API** without going to the approval process. 
+
+1. Click on the bot’s name and test the conversation in the Desk chat box.
+   <details>
+   <summary>Example</summary>
+   ![](https://botonic-doc-static.netlify.com/images/whatsplayground/whatsplayground2.png)
+</details>
+1. Enter a WhatsApp number in the Whitelist to test the WhatsApp Playground integration. Remember that you can have one number integrated with one bot only. 
+2. Once the number is inserted, it is displayed in the list of available bots.
+   <details>
+   <summary>Example</summary>
+   ![](https://botonic-doc-static.netlify.com/images/whatsplayground/whatsplayground1.png)
+</details>
+1. Click on the phone number to test it directly on WhatsApp.
+   <details>
+   <summary>Example</summary>
+   ![](https://botonic-doc-static.netlify.com/images/whatsplayground/whatsplayground3.png)
+</details>
+
+Note: WhatsApp Playground integration is intended for **demos and testing purposes only**, avoid using it for production applications.
+
+For more information about WhatsApp full integration, contact us via [Slack](https://slack.botonic.io/).
+
+
 
 > ## Facebook Messenger
 
-Facebook Messenger is one of the best messenger platforms for deploying chatbots with its variety of [components](/concepts/components) outputs.
+Facebook Messenger is one of the best messenger platforms for deploying chatbots with its variety of [components](/components/components) outputs.
 
 1. Connect your Facebook account to Hubtype and accept the permissions.
 2. Select which of your Facebook Pages you want to connect. If you don't have one, create one [here](https://www.facebook.com/pages/create/) and click on **refresh**.
@@ -49,7 +73,6 @@ A new integration appears on the left side. Click on the Facebook Messenger link
 <details>
 <summary>Example</summary>
 ![](https://botonic-doc-static.netlify.com/images/fb_channel.png)
-/>
 
 </details>
 

@@ -17,7 +17,7 @@ Botonic NLU allows you to create different `intents` and assign keywords or phra
 
 To use Botonic NLU, you can create a bot using the NLU template by running `botonic new {BOT_NAME} nlu`.
 
-Alternatively, if you already have a project, you can follow the steps below to setup Botonic NLU:
+Alternatively, if you already have a project, you can follow the steps below to setup Botonic NLU.
 
 
 >## Setup

@@ -15,6 +15,8 @@ The "Hello World!" output would be defined as below:
 <Text>Hello World!</Text>
 ```
 
+### Line break
+
 In order to create a line break, you must use `{'\\n'}`.
 
 ```javascript
@@ -24,5 +26,12 @@ In order to create a line break, you must use `{'\\n'}`.
 </Text>
 ```
 
+### Markdown support
 
+By default, the Text component supports markdown format for webchats.  If you want to remove it, you must set the markdown property to false.
 
+```javascript
+<Text markdown={false}> 
+{formattedText} 
+</Text>
+```

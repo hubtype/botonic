@@ -1,6 +1,6 @@
 ---
 title: Contentful Plugin
-id: contentful
+id: plugin-contentful
 ---
 
 ---
@@ -169,7 +169,7 @@ export const plugins = [
 
 #### Rendering a Contentful Content With Botonic React
 
-To render a botonic *StartUp*, *Texts* and *Carousels* with the contents configured at contentful space:
+To render a Botonic *StartUp*, *Texts* and *Carousels* with the contents configured on the Contentful space:
 
 1) Create the following functions, which convert the result from the Contentful plugin to react components (They are not
 implemented within the Contentful plugin to keep the plugin fully decoupled from React)
@@ -239,7 +239,7 @@ import * as cms from '@botonic/plugin-contentful';
   },
 ```
 
-And define an action for each route like this:
+And define an action for each route:
 
 ```
 export default class Text extends React.Component {
@@ -290,7 +290,7 @@ import * as cms from '@botonic/plugin-contentful';
 #### **Keyword Edition in contenful.com**
 
 Be careful when editing the keywords in contenful.com. If you select "Tag" as the Appearance configuration for your keywords,
-remember to alway press RETURN after typing a new keyword. Otherwise, it will be ignored.
+remember to always press RETURN after typing a new keyword. Otherwise, it will be ignored.
 
 <details>
 <summary>Example</summary>
