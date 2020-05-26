@@ -10,7 +10,7 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 ---
 
 
->## What Does This Plugin Do?
+## What Does This Plugin Do?
 
 Botonic Plugin Contentful is one of the [available](https://github.com/hubtype/botonic/tree/master/packages) plugins for Botonic.
 [Contentful](http://www.contentful.com) is a CMS (Content Management System) which manages contents of a great variety
@@ -48,7 +48,7 @@ For the previous content, the dashboard allows assigning a list of tags to your 
 * Schedules with configurable timing per week day, as well as exception for bank holidays or sales periods.
 * Any kind of files uploaded to your Contentful account.
 
-> ## Setup
+## Setup
 
 ### Create a Contentful Account
 
@@ -90,7 +90,7 @@ the space id and token that you obtained in the previous section.
 CONTENTFUL_SPACEID=<YOUR_ID> CONTENTFUL_TOKEN=<CONTENT_MANAGEMENT_TOKEN> node_modules/@botonic/plugin-contentful/bin/import-contentful-models.sh
 ```
 
->## Use
+## Use
 
 ### Define Your Contents
 

@@ -9,11 +9,11 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 ---
 
-> ## What Does This Plugin Do?
+## What Does This Plugin Do?
 
 Botonic plugin that use [LUIS](https://www.luis.ai/) as NLU service. The variables `intent`, `confidence`, `entities` and `intents` will be automatically available inside the `input` object.
 
->## Setup
+## Setup
 
 To integrate your bot with Luis, you must use the `intent` template, which comes with @botonic/plugin-luis by default.
 
@@ -34,7 +34,7 @@ export const plugins = [
 ]
 ```
 
->## Use  
+## Use  
 
 1. Import the plugin in **src/index.js**.
    **src/index.js**  

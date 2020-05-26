@@ -3,7 +3,7 @@ id: project
 title: Understanding the Project
 ---
 
-> ## The CLI
+## The CLI
 
 To start a new bot, you must run `botonic new testBot nlu`
 
@@ -11,11 +11,11 @@ To start a new bot, you must run `botonic new testBot nlu`
 - `testBot` will be the directory name for your project.
 - `nlu` will be the starter template for your project, which includes NLU capabilities.
 
-> ## Templates
+## Templates
 
 You must select a template to create a Botonic bot: Either blank or with components.
 
-> ## Project Structure
+## Project Structure
 
 - `routes.js`: Here you'll define routes, which maps user inputs and payloads to actions. You can use imported subroutes from other files.
 - `actions`: Actions are the units of logic that your bot can perform and where the responses of your bot are defined. You are free to organize them into subdirectories.
@@ -27,14 +27,14 @@ You must select a template to create a Botonic bot: Either blank or with compone
 - `plugins.js`: Define your botonic plugins.
 - `...`: The rest of the files are needed for [babel](https://babeljs.io/) and [Botonic](https://github.com/hubtype/botonic) project configuration. We recommend not modifying its contents, do so at your own risk!
 
->## Routes and Actions
+## Routes and Actions
 
 Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View [Routes](/concepts/routes) for more details.
 
 Actions are where you define the behavior of your bot. You can add an Action by creating a new .js file inside `src/actions`. View [Actions](/concepts/actions) and [Components](/components/components) for more details.
 
 
->## Natural Language Understanding
+## Natural Language Understanding
 
 You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot, you get to a point where you need Natural Language Understanding (NLU) capabilities.
 
@@ -42,12 +42,12 @@ NLU lets you capture user inputs by "intent" instead of parsing its raw text. An
 
 Botonic has its own [NLU module](/plugins/plugin-nlu) which covers intent and entity recognition tasks.
 
->## Utterances and Intents
+## Utterances and Intents
 
 There are many ways that a user can express his intent. For example the Utterances "Hello", "Hi", and "Good morning" are all examples of a Greeting intent. 
 To create an intent, simply add a new text file under `src/nlu/utterances/en/` such as `src/nlu/utterances/en/Greetings.txt` and add the utterances in the `Greetings.txt` file.
 
->## Routes for intents
+## Routes for intents
 
 You can add routes that capture different intents and their corresponding actions. For example, in your `routes.js` file:
 
@@ -68,6 +68,6 @@ export const routes = [
 
 Then you just have to create a couple of actions that respond to these intents in `src/actions`.
 
->## Botonic train
+## Botonic train
 
 Once you've added utterances to your intents, run `botonic train` in your command line. This will train your bot with the utterances in your directory.

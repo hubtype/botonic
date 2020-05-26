@@ -3,7 +3,7 @@ id: media
 title: Media
 ---
 
->## Purpose
+## Purpose
 
 Using media such as images, videos or attached files helps to visualize the conversation and draws attention. 
 
@@ -12,7 +12,7 @@ Using media such as images, videos or attached files helps to visualize the conv
 ![](https://botonic-doc-static.netlify.com/images/media_files.png)
 </details>
 
->## Code
+## Code
 
 You can send all these types of media files:
 

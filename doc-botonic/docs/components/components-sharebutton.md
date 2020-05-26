@@ -3,8 +3,8 @@ id: sharebutton
 title: Share Button
 ---
 
->## Purpose
->
+## Purpose
+
 The Share Button enables other users  to share your content in Messenger. Messages shared this way show a preview and text elements that are clickable.
 
 <details>
@@ -24,7 +24,7 @@ The recipient gets this type of visual link:
 
 </details>
 
->## Code
+## Code
 
 On Facebook Messenger, you can share your desired content with your friends and acquaintances with the following piece of code:
 

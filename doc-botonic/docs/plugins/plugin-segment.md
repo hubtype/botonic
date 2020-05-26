@@ -9,11 +9,11 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 ---
 
->## What Does This Plugin Do?
+## What Does This Plugin Do?
 
 This plugin uses [Segment](https://segment.com/) to clean, collect and control customer data. It helps monitor performance, define decision-making processes and identify customers' interests. 
 
->## Setup
+## Setup
 
 1. Run `npm install --save @botonic/plugin-segment` to install the plugin.
 2. Add it to the `src/plugins.js` file:
@@ -32,7 +32,7 @@ export const plugins = [
 ]
 ```
 
->## Use
+## Use
 
 The default behavior of this plugin is to:
 

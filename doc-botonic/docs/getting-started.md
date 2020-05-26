@@ -5,14 +5,14 @@ title: Installation and Quick Start
 
 Let's install and create our first Botonic bot!
 
-> ## Step 1 – Install the Botonic Command Line Interface
+## Step 1 – Install the Botonic Command Line Interface
 
 1. Install the LTS version of [NodeJS](https://nodejs.org/). 
 2. Verify the installation version by running `npm --version` and `node --version`. **Note:** You must have at least `node >= 10.0.0` version installed. You can also use [Yarn](https://yarnpkg.com/).
 3. Perform a global installation by running  `sudo npm install -g @botonic/cli` (Mac/Linux) or `npm install -g @botonic/cli` (as admin on Windows).
 4. Wait until the CLI is installed.
 
-> ## Step 2 – Create a Bot
+## Step 2 – Create a Bot
 
 1. Run `botonic new <bot_name>` 
 2. Select one of the [templates](/templates/templates) available. 
@@ -21,7 +21,7 @@ Congratulations: Your bot is created!
 
 **Note**: You can optionally pass the name of the template as a second argument such as `botonic new <bot_name> tutorial`
 
-> ## Step 3 – Test Your Bot
+## Step 3 – Test Your Bot
 
 1. Set yourself in the directory you created: `cd <bot_name>`.
 2. Test your bot in your browser by running `botonic serve` (Mac/Linux) or `npm run start` (Windows - For more details, run `npm run build`).
@@ -30,13 +30,13 @@ Congratulations: Your bot is created!
 
 **Note**: If you started with the "blank" template, the bot answers with "I don't understand you".
 
-> ## Step 4 – Deploy Your Bot 
+## Step 4 – Deploy Your Bot 
 
 1. From your command line, run `botonic deploy`.
 2. Enter your credentials (email/password) if you already signed up at [app.hubtype.com](https://app.hubtype.com/) or create a new account as recommended. 
 3. Give a name to your bot and wait for your project to build.
 
-> ## Step 5 – Publish Your Bot
+## Step 5 – Publish Your Bot
 
 1. Once the build is finished, go to the Hubtype dashboard at [app.hubtype.com](https://app.hubtype.com/).
 2. Click on the bot icon and search for your bot in the list.

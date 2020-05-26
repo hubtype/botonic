@@ -3,13 +3,13 @@ id: carousel
 title: Carousel
 ---
 
->## Purpose
+## Purpose
 
 A carousel is a sliding gallery of information displayed to the user. It helps to provide more information than that which fits the screen.
 
 ![](https://botonic-doc-static.netlify.com/images/carrousel.gif)
 
->## Code 
+## Code 
 You can render a carousel following the structure below:
 
 ```javascript

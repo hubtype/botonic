@@ -9,7 +9,7 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 ---
 
-> ## What Does This Plugin Do?
+## What Does This Plugin Do?
 
 Natural Language Understanding can be used by your app, product, or service to transform natural user requests into actionable data. This transformation occurs when a user input matches one of the intents in your bot.
 
@@ -20,7 +20,7 @@ To use Botonic NLU, you can create a bot using the NLU template by running `boto
 Alternatively, if you already have a project, you can follow the steps below to setup Botonic NLU.
 
 
->## Setup
+## Setup
 
 ### Install the plugin
 
@@ -59,7 +59,7 @@ export const plugins = [
   }
 ]
 ```
->## Use
+## Use
 
 ### Define Intents 
 

@@ -3,13 +3,13 @@ id: replies
 title: Quick Replies
 ---
 
->## Purpose
+## Purpose
 
 Quick Replies allow you to present options in a message to a bot user. 
 
 ![](https://botonic-doc-static.netlify.com/images/quickreplies.png)
 
->## Code
+## Code
 
 To insert quick replies,  
 

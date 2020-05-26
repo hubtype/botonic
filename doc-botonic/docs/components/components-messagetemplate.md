@@ -3,7 +3,7 @@ id: messagetemplate
 title: Message Templates
 ---
 
->## Purpose
+## Purpose
 
 Like the share button, Facebook Messenger allows you to define your templates.
 As an example, you can generate a nice boarding pass as below.
@@ -15,7 +15,7 @@ As an example, you can generate a nice boarding pass as below.
 
 
 
->## Code
+## Code
 
 **./actions/example.js**
 

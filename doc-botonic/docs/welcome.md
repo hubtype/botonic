@@ -4,7 +4,7 @@ title: Welcome to Botonic User Guide
 sidebar_label: Welcome to Botonic User Guide  
 ---
 
-> ## Chatbot vs Conversational App
+## Chatbot vs Conversational App
 
 Before going any further, let us explain why Botonic is your best ally.
 
@@ -22,7 +22,7 @@ Moreover, to make developers' lives easier, Botonic offers:
 * A comprehensive documentation.
 * A welcoming and helpful community.
 
-> ## Botonic and Hubtype 
+## Botonic and Hubtype 
 
 Botonic is a project created by the [Hubtype](https://hubtype.com) team. Hubtype is a platform that allows companies to attend their customers on messaging apps by combining bots and humans.
 The easiest way to put your botonic bot in production is to deploy it to Hubtype, as it offers:

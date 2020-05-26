@@ -16,7 +16,7 @@ The first steps to embed a bot are common to all platforms:
 2. Select your bot and click on **Integrate a Messenger**.
 3. Select the relevant messaging app as described below.
 
-> ## Webchat
+## Webchat
 
 You can integrate your chatbot into your personal webpage. This integration is 100% editable, i.e. you can display all messages with your own style.
 
@@ -31,7 +31,7 @@ For more information, refer to the [Custom Webchat](templates/template-custom-we
 
 </details>
 
-> ## WhatsApp
+## WhatsApp
 
 
 
@@ -60,7 +60,7 @@ For more information about WhatsApp full integration, contact us via [Slack](htt
 
 
 
-> ## Facebook Messenger
+## Facebook Messenger
 
 Facebook Messenger is one of the best messenger platforms for deploying chatbots with its variety of [components](/components/components) outputs.
 
@@ -76,7 +76,7 @@ A new integration appears on the left side. Click on the Facebook Messenger link
 
 </details>
 
-> ## Telegram
+## Telegram
 
 1. Create a bot from the Telegram app.
 2. Add the bot username and token and press the `Connect bot` button.
@@ -86,7 +86,7 @@ A new integration appears on the left side. Click on the Facebook Messenger link
 	![](https://botonic-doc-static.netlify.com/images/tg_channel.png)
 </details>
 
-> ## Twitter
+## Twitter
 
 - Follow the integration steps as displayed.
 

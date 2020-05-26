@@ -3,11 +3,11 @@ id: text
 title: Text
 ---
 
-> ## Purpose
+## Purpose
 
 Text is the simplest and easiest way to talk to the user.
 
-> ## Code
+## Code
 
 The "Hello World!" output would be defined as below:
 

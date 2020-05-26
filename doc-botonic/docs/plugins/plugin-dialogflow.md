@@ -9,11 +9,11 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 
 ---
 
->## What Does This Plugin Do?
+## What Does This Plugin Do?
 
 This plugin uses [Dialogflow](https://dialogflow.com/) as NLU service. The variables `intent`, `confidence`, `entities`, `defaultFallback`, `dialogflowResponse` are automatically available inside the `input` object.
 
->## Setup
+## Setup
 
 ### Install the Plugin
 
@@ -65,7 +65,7 @@ To integrate your bot with Dialogflow, you must use the `intent` template, which
 **Note:** You can only download this JSON file once, so make sure to save the file and keep it somewhere safe. If you lose this key or it becomes compromised, you can use the same process to create another one.
 
 
->## Use
+## Use
 
 ### Add the intent
 

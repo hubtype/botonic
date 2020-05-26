@@ -5,11 +5,11 @@ title: Create a Conversational App from Scratch
 
 In the following example, we’re going to build a chatbot from scratch that takes food orders.
 
->## Install Botonic 
+## Install Botonic 
 
 See the [**Installation section**](getting-started).
 
->## Create a Blank Project 
+## Create a Blank Project 
 
 1. Name your project by running:
    `botonic new <botname>` 
@@ -18,7 +18,7 @@ See the [**Installation section**](getting-started).
 
 Your blank project is created with its basic structure. For more information, see the [Understanding the Project](/project/) section.
 
->## Add a Welcome Message
+## Add a Welcome Message
 
 Let's say we want our chatbot to answer just after the user says “hi”.
 
@@ -62,7 +62,7 @@ Let's say we want our chatbot to answer just after the user says “hi”.
    ```
 
 
->## Add Two Buttons to Give the Choice to the User 
+## Add Two Buttons to Give the Choice to the User 
 
 Just after greeting the user, let's say that the bot lets the user choose one option among pizza or pasta.
 
@@ -149,7 +149,7 @@ export const routes = [
 ];
 ```
 
->## Add NLU
+## Add NLU
 
 1. In the bot directory, enter `npm install @botonic/plugin-nlu`.
 
@@ -174,7 +174,7 @@ export const routes = [
 2. Wait for the model to be trained.  
    In the next section you are going to create an action: `HelpAction` to answer to the intent.
 
->## Transfer the Conversation to an Agent
+## Transfer the Conversation to an Agent
 
 Now let’s say that the user wants to get help from an agent just after his selection.
 
@@ -220,7 +220,7 @@ Now let’s say that the user wants to get help from an agent just after his sel
     { path: "help-action", intent: "help", action: HelpAction }
    ```
 
->## Say Goodbye
+## Say Goodbye
 
 To end the conversation:
 
