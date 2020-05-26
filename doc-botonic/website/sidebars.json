@@ -1,0 +1,74 @@
+{
+  "docs": {
+    "Getting Started": [
+	"welcome",
+	"getting-started",
+	"create-convapp",
+	"project",
+	"supported-platforms"
+	],
+	
+	"Templates": [
+	"templates/templates",
+	"templates/template-custom-webchat",
+	"templates/childs",
+	"templates/template-dynamic-carousel",
+	"templates/template-human-handoff",
+	"templates/template-nlu"
+	],
+	
+	"Components": [
+	"components/components",
+	"components/text",
+	"components/buttons",
+	"components/replies",
+	"components/carousel",
+	"components/media",
+	"components/location",
+	"components/sharebutton",
+	"components/messagetemplate"
+	],
+	
+	"Concepts": [
+	"concepts/actions",
+	"concepts/botonic-settings",
+	"concepts/humanhandoff",
+	"concepts/i18n",
+	"concepts/routes",
+	"concepts/webchat",
+	"concepts/webviews"
+	],
+	
+	"Plugins": [
+	"plugins/botonic-plugins",
+	"plugins/using-plugins",
+	"plugins/plugin-dialogflow",
+	"plugins/plugin-luis",
+	"plugins/plugin-segment",
+	"plugins/plugin-inbenta",
+	"plugins/plugin-nlu",
+	"plugins/plugin-contentful"
+	],
+	
+	"Test and Deploy": [
+	"test-deploy/testing-your-components",
+	"test-deploy/deployment"
+	]
+	
+  },
+  
+
+  
+  "": {
+    "Botonic FAQ": [
+	"faq"
+	]
+	
+
+	
+  }
+}
+
+
+
+

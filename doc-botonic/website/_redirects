@@ -1,0 +1,22 @@
+/    /welcome   301!
+/tutorials-and-examples/guided-flow/ /create-convapp/ 301!
+
+/getting-started/installation/ /getting-started/ 301!
+/getting-started/creating-your-first-bot/ /create-convapp/ 301!
+/getting-started/deploying/ /test-deploy/deployment 301!
+
+/main-concepts/routes/ /concepts/routes/ 301!
+/main-concepts/actions/ /concepts/actions/ 301!
+/main-concepts/components/ /concepts/components/ 301!
+/main-concepts/nlu/ /concepts/nlu/ 301!
+/main-concepts/webviews/ /concepts/webviews/ 301!
+/main-concepts/human-handoff/ /concepts/humanhandoff/ 301!
+/main-concepts/i18n/ /concepts/i18n/ 301!
+/main-concepts/botonic-settings/ /concepts/botonic-settings/ 301!
+/main-concepts/webchat/ /concepts/webchat/ 301!
+/main-concepts/channels/ /supported-platforms/ 301!
+
+/tutorials-and-examples/human-handoff/ /templates/template-human-handoff/ 301!
+/tutorials-and-examples/dynamic-carousel/ /templates/template-dynamic-carousel/ 301!
+/tutorials-and-examples/custom-webchat/ /templates/template-custom-webchat/ 301!
+/tutorials-and-examples/testing-your-components/ /test-deploy/testing-your-components/ 301!
