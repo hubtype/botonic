@@ -1,5 +1,6 @@
 function escapeRegExp(str) {
-  return str.replace(/([.*+?^=!:${}()|[]\/\\])/g, '\\$1')
+  /* eslint-disable no-useless-escape */
+  return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1')
 }
 
 export function replaceAll(str, find, replace) {
