@@ -1,5 +1,5 @@
 ---
-id: co-location
+id: location
 title: Location
 ---
 

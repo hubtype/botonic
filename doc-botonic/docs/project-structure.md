@@ -31,7 +31,7 @@ You must select a template to create a Botonic bot: Either blank or with compone
 
 Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View [Routes](/concepts/routes) for more details.
 
-Actions are where you define the behavior of your bot. You can add an Action by creating a new .js file inside `src/actions`. View [Actions](/concepts/actions) and [Components](/concepts/components) for more details.
+Actions are where you define the behavior of your bot. You can add an Action by creating a new .js file inside `src/actions`. View [Actions](/concepts/actions) and [Components](/components/components) for more details.
 
 
 >## Natural Language Understanding
@@ -40,7 +40,7 @@ You can go a long way capturing user inputs using regular expressions, but it ob
 
 NLU lets you capture user inputs by "intent" instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California?" and "Do you know if it's sunny today in California?" to the intent `GetWeather` and the parameter `city=California`. You can then map that intent to an action using a route.
 
-Botonic has its own [NLU module](/concepts/nlu) which covers intent and entity recognition tasks.
+Botonic has its own [NLU module](/plugins/plugin-nlu) which covers intent and entity recognition tasks.
 
 >## Utterances and Intents
 

@@ -1,5 +1,5 @@
 ---
-id: co-replies
+id: replies
 title: Quick Replies
 ---
 

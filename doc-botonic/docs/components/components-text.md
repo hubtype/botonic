@@ -1,5 +1,5 @@
 ---
-id: co-text
+id: text
 title: Text
 ---
 

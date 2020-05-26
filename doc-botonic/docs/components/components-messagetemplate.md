@@ -1,5 +1,5 @@
 ---
-id: co-messagetemplate
+id: messagetemplate
 title: Message Templates
 ---
 

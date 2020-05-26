@@ -1,5 +1,5 @@
 ---
-id: co-media
+id: media
 title: Media
 ---
 

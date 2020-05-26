@@ -1,5 +1,5 @@
 ---
-id: co-buttons
+id: buttons
 title: Buttons
 ---
 

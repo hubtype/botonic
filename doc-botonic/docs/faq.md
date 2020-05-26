@@ -14,17 +14,17 @@ Once you deploy a bot,  you get a link to integrate different channels, includin
 </details>
 
 ><details><summary><b>Can I edit my chat  styles?</b></summary>
-This action is not possible except for webviews as some of these apps (like Facebook Messenger) allow you to embed html pages inside their chat window.
-Hubtype provides support for web chat (JS SDK) and in-app chat (iOS/Android SDK). In these cases, you can customize the look and feel of the chat window.
-</details>
+>Yes, you can edit your chat styles. Hubtype provides support for web chat (JS SDK) and in-app chat (iOS/Android SDK). 
+>You can't change the style of messaging apps like WhatsApp or Facebook Messenger though, as they embed html pages within their chat window. In this particular case, only webviews can be customized.
+></details>
 
 ><details><summary><b>How do I delete a bot?</b></summary>
 Go to https://app.hubtype.com/bots/all and select your bot. Then click on the **Settings** tab and on **Delete this bot**.
 </details>
 
 ><details><summary><b>How to deal with NLP/NLU?</b></summary>
-You must integrate Dialogflow or Watson. The integration allows you to use regular expressions to route intents to actions. Check out the NLU example in our github repo.
-</details>
+>To deal with NLP/NLU, you can use the Botonic NLU plugin. It allows you to create different intents and assign keywords or phrases. These will match with the intent and direct to the corresponding route. You can also integrate Dialogflow, Watson, Luis or Inbenta.
+></details>
 
 ><details><summary><b>Where can I deploy my Botonic bots?</b></summary>
 The easiest way is to deploy it to hubtype.com cloud. Hubtype sets up all the infrastructure you need, scales automatically and manages third-party integrations.
@@ -32,5 +32,5 @@ You can also to run it and deploy anywhere. You just need some developement to m
 </details>
 
 ><details><summary><b>How do I connect Botonic with Zendesk?</b></summary>
-Although Zendesk integration is not a Botonic open-source plugin like DialogFlow, you can do it by deploying your bot and contact the Botonic team on Slack. They will help you with the next steps.
-</details>
+>Although Zendesk integration is not a Botonic open-source plugin like DialogFlow, you can do it by deploying your bot and contact the Botonic team on Slack. They will help you with the next steps.
+></details>

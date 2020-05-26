@@ -19,14 +19,14 @@
 	
 	"Components": [
 	"components/components",
-	"components/co-text",
-	"components/co-buttons",
-	"components/co-replies",
-	"components/co-carousel",
-	"components/co-media",
-	"components/co-location",
-	"components/co-sharebutton",
-	"components/co-messagetemplate"
+	"components/text",
+	"components/buttons",
+	"components/replies",
+	"components/carousel",
+	"components/media",
+	"components/location",
+	"components/sharebutton",
+	"components/messagetemplate"
 	],
 	
 	"Concepts": [

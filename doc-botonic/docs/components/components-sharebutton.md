@@ -1,5 +1,5 @@
 ---
-id: co-sharebutton
+id: sharebutton
 title: Share Button
 ---
 

@@ -9,6 +9,6 @@ Different types of outputs for messaging apps are supported.
 
 ---
 
-**[Text](co-text) | [Buttons](co-buttons)  | [Quick Replies](facebook-messengerco-replies) | [Carousel](co-carousel) | [Media](co-media) | [Location](co-location) | [Share Button](co-sharebutton) | [Message Template](co-messagetemplate)** 
+**[Text](text) | [Buttons](buttons)  | [Quick Replies](replies) | [Carousel](carousel) | [Media](media) | [Location](location) | [Share Button](sharebutton) | [Message Template](messagetemplate)** 
 
 ---
