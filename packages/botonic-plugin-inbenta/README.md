@@ -1,12 +1,13 @@
 # Botonic Plugin Inbenta
 
-## How it works
+## What Does This Plugin Do?
 
-This plugin allows you to integrate [Inbenta Knowledge Management API](https://developers.inbenta.io/knowledge-management/km-api/api-setup) in your Botonic project.
+This plugin allows you to integrate [Inbenta Knowledge Management API](https://developers.inbenta.io/knowledge-management/km-api/api-setup) in your Botonic project. It works like any other AI/NLU services plugin, like Dialogflow, Watson, etc. 
 
-It works the same way that all the other plugins for AI/NLU services like Dialogflow, Watson, etc. Once installed in your project, this plugin will send all text inputs that users send your bot and will query Inbenta API. This plugin will use the results of that call to enhance the `input` object so you can use that data in your routes and actions.
+Once installed within your project, this plugin sends all text inputs that users are sending to your bot and queries Inbenta API. 
+The plugin retrieves the call results to enhance the `input` object. You can then use this data in your routes and actions.
 
-This is an example of an `input` object that is received from a user:
+Here is an example of an `input` object received from a user:
 
 ```
 {
@@ -15,7 +16,7 @@ This is an example of an `input` object that is received from a user:
 }
 ```
 
-This is the same `input` obejct after being processed by this plugin:
+Example of the same `input` object after being processed by this plugin:
 
 ```
 {
@@ -28,7 +29,7 @@ This is the same `input` obejct after being processed by this plugin:
 }
 ```
 
-## Install and configure
+## Setup
 
 1. Install the plugin from npm (or yarn):
 
@@ -36,7 +37,7 @@ This is the same `input` obejct after being processed by this plugin:
 npm i --save @botonic/plugin-inbenta
 ```
 
-2. Add it to the `src/plugins.js` file (you'll need the API_KEY and API_SECRET from Inbenta):
+2. Add it to the `src/plugins.js` file by using the API_KEY and API_SECRET from Inbenta:
 
 ```
 export const plugins = [
@@ -51,15 +52,15 @@ export const plugins = [
 ]
 ```
 
-## How to use
+## Use
 
-You can use it in you routes as you would with other NLU plugins:
+You can use it in your routes like any other NLU plugins:
 
 ```
 export const routes = [{ intent: 'order-location', action: OrderLocation }]
 ```
 
-Or in your actions:
+Or you can use it in your actions:
 
 ```
 import React from 'react'
