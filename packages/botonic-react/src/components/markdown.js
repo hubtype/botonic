@@ -6,29 +6,47 @@ export const ESCAPED_LINE_BREAK = '&lt;br&gt;'
 const ESCAPED_LINE_BREAK_REGEX = new RegExp(ESCAPED_LINE_BREAK, 'g')
 const isLineBreakElement = element => element.type === 'br'
 
+const withLinksTarget = (renderer, target = '_blank') => {
+  // Support opening links in new tabs: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
+  const newRenderer =
+    renderer.renderer.rules.link_open ||
+    function (tokens, idx, options, env, self) {
+      return self.renderToken(tokens, idx, options)
+    }
+  renderer.renderer.rules.link_open = function (
+    tokens,
+    idx,
+    options,
+    env,
+    self
+  ) {
+    const aIndex = tokens[idx].attrIndex('target')
+    if (aIndex < 0) tokens[idx].attrPush(['target', target])
+    else tokens[idx].attrs[aIndex][1] = target
+    return newRenderer(tokens, idx, options, env, self)
+  }
+}
+
+const configureLinksRenderer = () => {
+  // zero preset comes with all options disabled, only enabling links
+  const linksRenderer = new MarkdownIt('zero', { linkify: true }).enable([
+    'linkify',
+  ])
+  withLinksTarget(linksRenderer)
+  return linksRenderer
+}
+
 const configureMarkdownRenderer = () => {
-  const md = new MarkdownIt({
+  const markdownRenderer = new MarkdownIt({
     html: true,
     linkify: true,
     typographer: true,
   })
-  // Support opening links in new tabs: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
-  const renderer =
-    md.renderer.rules.link_open ||
-    function (tokens, idx, options, env, self) {
-      return self.renderToken(tokens, idx, options)
-    }
-  md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-    const aIndex = tokens[idx].attrIndex('target')
-    if (aIndex < 0) tokens[idx].attrPush(['target', '_blank'])
-    else tokens[idx].attrs[aIndex][1] = '_blank'
-    return renderer(tokens, idx, options, env, self)
-  }
-  return md
+  withLinksTarget(markdownRenderer)
+  return markdownRenderer
 }
 
-const md = configureMarkdownRenderer()
-
+const markdownRenderer = configureMarkdownRenderer()
 export const renderMarkdown = text => {
   // markdown-it renderer expects '<br/>' strings to render correctly line breaks
   // Supporting multiline: https://stackoverflow.com/a/20543835
@@ -42,7 +60,12 @@ export const renderMarkdown = text => {
       else return String(e)
     })
     .join('')
-  return md.render(text)
+  return markdownRenderer.render(text)
+}
+
+const linksRenderer = configureLinksRenderer()
+export const renderLinks = text => {
+  return linksRenderer.render(text)
 }
 
 export const serializeMarkdown = children => {

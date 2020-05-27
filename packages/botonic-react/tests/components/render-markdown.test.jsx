@@ -1,5 +1,6 @@
 import {
   renderMarkdown,
+  renderLinks,
   ESCAPED_LINE_BREAK,
 } from '../../src/components/markdown'
 
@@ -168,6 +169,26 @@ describe('Using renderMarkdown', () => {
         'console.log(foo(5));\n' +
         '</code></pre>\n' +
         '<h4>Was this useful?</h4>'
+    )
+  })
+})
+
+describe('Using renderMarkdown (only links mode):', () => {
+  const render = text => renderLinks(text).trim()
+
+  it('Renders only url', () => {
+    const toRender = 'This is a url www.google.com'
+    const sut = render(toRender)
+    expect(sut).toEqual(
+      '<p>This is a url <a href="http://www.google.com" target="_blank">www.google.com</a></p>'
+    )
+  })
+
+  it("Doesn't render common markdown", () => {
+    const toRender = '# I am a heading 1, but not gonna be rendered as <h1>'
+    const sut = render(toRender)
+    expect(sut).toEqual(
+      '<p># I am a heading 1, but not gonna be rendered as &lt;h1&gt;</p>'
     )
   })
 })
