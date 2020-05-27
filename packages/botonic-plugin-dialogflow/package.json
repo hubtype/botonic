@@ -13,7 +13,7 @@
     "@babel/runtime": "^7.4.2",
     "axios": "latest",
     "jsrsasign": "^8.0.12",
-    "uuid": "^3.3.3"
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "core-js": "^3.1.4"
