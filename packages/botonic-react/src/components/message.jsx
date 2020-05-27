@@ -11,7 +11,7 @@ import { Reply } from './reply'
 import { WEBCHAT, COLORS } from '../constants'
 import Fade from 'react-reveal/Fade'
 import moment from 'moment'
-import { renderMarkdown, getMarkdownStyle } from './markdown'
+import { renderMarkdown, getMarkdownStyle, renderLinks } from './markdown'
 
 const MessageContainer = styled.div`
   display: flex;
@@ -112,9 +112,10 @@ export const Message = props => {
   const buttons = React.Children.toArray(children).filter(
     e => e.type === Button
   )
-  const textChildren = React.Children.toArray(children).filter(
+  let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
+  if (from === 'user') textChildren = textChildren.map(e => renderLinks(e))
 
   const getTimestampFormat = () => {
     const timestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
