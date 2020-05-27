@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 
 import { isBrowser, isNode, INPUT } from '@botonic/core'
 import { resolveImage, ConditionalWrapper, renderComponent } from '../utils'
@@ -105,7 +105,7 @@ export const Message = props => {
     getThemeProperty,
   } = useContext(WebchatContext)
   const [state, setState] = useState({
-    id: props.id || uuid(),
+    id: props.id || uuidv4(),
   })
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)

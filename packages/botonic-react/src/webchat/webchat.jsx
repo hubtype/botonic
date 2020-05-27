@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
-import uuid from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import UAParser from 'ua-parser-js'
 import { isMobile, params2queryString, INPUT } from '@botonic/core'
 import { WebchatContext, RequestContext } from '../contexts'
@@ -130,7 +130,7 @@ const createUser = () => {
   let name = `${ua.os.name} ${ua.browser.name}`
   if (ua.device && ua.device.type) name = `${ua.device.type} ${name}`
   return {
-    id: uuid(),
+    id: uuidv4(),
     name,
   }
 }
@@ -368,7 +368,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (!input || Object.keys(input).length == 0) return
     if (isText(input) && !input.data) return
     if (isText(input) && checkBlockInput(input)) return
-    if (!input.id) input.id = uuid()
+    if (!input.id) input.id = uuidv4()
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
     if (isMedia(input)) input.data = await readDataURL(input.data)
