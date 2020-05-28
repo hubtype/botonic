@@ -34,7 +34,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
                   payload={e.payload}
                   key={i}
                 >
-                  {Object.values(e.label)}
+                  {e.label}
                 </Button>
               )
             )
