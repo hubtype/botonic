@@ -44,7 +44,7 @@ class App extends React.Component {
       location.href = 'https://wa.me/' + this.state.session.user.imp_id
     } else {
       try {
-        window.WebviewSdk.close(
+        window.MessengerExtensions.requestCloseBrowser(
           () => undefined,
           err => console.log(err)
         )
