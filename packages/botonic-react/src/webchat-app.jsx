@@ -20,6 +20,7 @@ export class WebchatApp {
     onClose,
     onMessage,
     appId,
+    visibility,
   }) {
     this.theme = theme
     this.persistentMenu = persistentMenu
@@ -33,6 +34,7 @@ export class WebchatApp {
     this.onOpen = onOpen
     this.onClose = onClose
     this.onMessage = onMessage
+    this.visibility = visibility
     this.webchatRef = React.createRef()
     this.appId = appId
   }
@@ -154,6 +156,7 @@ export class WebchatApp {
       onClose,
       onMessage,
       appId,
+      visibility,
       ...webchatOptions
     } = optionsAtRuntime
     theme = { ...this.theme, ...theme }
@@ -168,6 +171,7 @@ export class WebchatApp {
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
+    this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
     return (
       <Webchat
@@ -190,7 +194,33 @@ export class WebchatApp {
     )
   }
 
+  async isWebchatVisible({ appId }) {
+    try {
+      const { status } = await HubtypeService.getWebchatVisibility({
+        appId,
+      })
+      if (status === 200) return true
+      return false
+    } catch (e) {
+      return false
+    }
+  }
+
+  async resolveWebchatVisibility(optionsAtRuntime) {
+    let { appId, visibility } = optionsAtRuntime
+    visibility = visibility || this.visibility
+    if (visibility === undefined) {
+      if (await this.isWebchatVisible({ appId })) return true
+    }
+    if (visibility === true) return true
+    if (typeof visibility === 'function' && visibility()) return true
+    return false
+  }
+
   render(dest, optionsAtRuntime = {}) {
-    render(this.getComponent(optionsAtRuntime), dest)
+    ;(async () => {
+      const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
+      if (isVisible) render(this.getComponent(optionsAtRuntime), dest)
+    })()
   }
 }
