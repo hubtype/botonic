@@ -19,6 +19,7 @@ import {
   TOGGLE_WEBCHAT,
   TOGGLE_EMOJI_PICKER,
   TOGGLE_PERSISTENT_MENU,
+  TOGGLE_COVER_COMPONENT,
   SET_ERROR,
   CLEAR_MESSAGES,
   UPDATE_LAST_MESSAGE_DATE,
@@ -54,6 +55,7 @@ export const webchatInitialState = {
   isWebchatOpen: false,
   isEmojiPickerOpen: false,
   isPersistentMenuOpen: false,
+  isCoverComponent: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
 }
@@ -126,6 +128,11 @@ export function useWebchat() {
       type: TOGGLE_PERSISTENT_MENU,
       payload: toggle,
     })
+  const toggleCoverComponent = toggle =>
+    webchatDispatch({
+      type: TOGGLE_COVER_COMPONENT,
+      payload: toggle,
+    })
   const setError = error =>
     webchatDispatch({
       type: SET_ERROR,
@@ -169,6 +176,7 @@ export function useWebchat() {
     toggleWebchat,
     toggleEmojiPicker,
     togglePersistentMenu,
+    toggleCoverComponent,
     setError,
     clearMessages,
     updateLastMessageDate,
