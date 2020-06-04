@@ -133,6 +133,13 @@ export class WebchatApp {
     this.webchatRef.current.clearMessages()
   }
 
+  async getVisibility() {
+    return this.resolveWebchatVisibility({
+      appId: this.appId,
+      visibility: this.visibility,
+    })
+  }
+
   getLastMessageUpdate() {
     return this.webchatRef.current.getLastMessageUpdate()
   }
