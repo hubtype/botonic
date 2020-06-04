@@ -212,10 +212,9 @@ export class WebchatApp {
     return false
   }
 
-  render(dest, optionsAtRuntime = {}) {
-    ;(async () => {
-      const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
-      if (isVisible) render(this.getComponent(optionsAtRuntime), dest)
-    })()
+  async render(dest, optionsAtRuntime = {}) {
+    const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
+    if (isVisible) render(this.getComponent(optionsAtRuntime), dest)
+    return null
   }
 }
