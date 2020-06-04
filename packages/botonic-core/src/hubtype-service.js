@@ -89,7 +89,7 @@ export class HubtypeService {
 
   static async getWebchatVisibility({ appId }) {
     return axios.get(
-      `${HUBTYPE_API_URL}/v1/provider_accounts/${appId}/get_webchat_visibility/`
+      `${HUBTYPE_API_URL}/v1/provider_accounts/${appId}/visibility/`
     )
   }
 }
