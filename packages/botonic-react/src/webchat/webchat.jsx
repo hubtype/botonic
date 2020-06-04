@@ -121,7 +121,10 @@ const DarkBackgroundMenu = styled.div`
   z-index: 1;
   right: 0;
   bottom: 0;
-  border-radius: ${props => props.borderRadius || '25px'};
+  border-radius: 10px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 `
 
 const createUser = () => {
@@ -154,6 +157,7 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat,
     toggleEmojiPicker,
     togglePersistentMenu,
+    toggleCoverComponent,
     setError,
     clearMessages,
     openWebviewT,
@@ -340,6 +344,46 @@ export const Webchat = forwardRef((props, ref) => {
     togglePersistentMenu(false)
   }
 
+  const persistentMenu = () => {
+    if (CustomPersistentMenu)
+      return (
+        <CustomPersistentMenu
+          onClick={closeMenu}
+          options={persistentMenuOptions}
+        />
+      )
+    return (
+      <OpenedPersistentMenu
+        onClick={closeMenu}
+        options={persistentMenuOptions}
+        borderRadius={webchatState.theme.style.borderRadius || '10px'}
+      />
+    )
+  }
+
+  const CoverComponent = getThemeProperty(
+    'coverComponent',
+    props.coverComponent
+  )
+
+  const closeCoverComponent = () => {
+    toggleCoverComponent(false)
+  }
+
+  useEffect(() => {
+    if (
+      !botonicState ||
+      (botonicState.messages && botonicState.messages.length == 0)
+    )
+      toggleCoverComponent(true)
+  }, [])
+
+  const coverComponent = () => {
+    if (CoverComponent && webchatState.isCoverComponentOpen)
+      return <CoverComponent closeComponent={closeCoverComponent} />
+    return null
+  }
+
   const messageComponentFromInput = input => {
     let messageComponent = null
     if (isText(input)) {
@@ -397,7 +441,10 @@ export const Webchat = forwardRef((props, ref) => {
       if (Array.isArray(response)) response.map(r => addMessageComponent(r))
       else if (response) addMessageComponent(response)
       if (session) {
-        updateSession(session)
+        updateSession({
+          ...session,
+          user: { ...webchatState.session.user },
+        })
         const action = session._botonic_action || ''
         const handoff = action.startsWith('create_case')
         if (handoff && isDev()) addMessageComponent(<Handoff />)
@@ -685,6 +732,14 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
+  const updateAllUserReferences = user => {
+    updateUser({ ...webchatState.user, ...user })
+    updateSession({
+      ...webchatState.session,
+      user: { ...webchatState.session.user, ...user },
+    })
+  }
+
   return (
     <WebchatContext.Provider
       value={{
@@ -701,6 +756,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateMessage,
         updateReplies,
         updateLatestInput,
+        updateUser: updateAllUserReferences,
       }}
     >
       {!webchatState.isWebchatOpen && (
@@ -743,32 +799,17 @@ export const Webchat = forwardRef((props, ref) => {
                 <div>
                   {darkBackgroundMenu && (
                     <DarkBackgroundMenu
-                      borderRadius={webchatState.theme.style.borderRadius}
                       style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
+                        borderRadius: webchatState.theme.style.borderRadius,
                       }}
                     />
                   )}
-                  {CustomPersistentMenu ? (
-                    <CustomPersistentMenu
-                      onClick={closeMenu}
-                      options={persistentMenuOptions}
-                    />
-                  ) : (
-                    <OpenedPersistentMenu
-                      onClick={closeMenu}
-                      options={persistentMenuOptions}
-                      borderRadius={
-                        webchatState.theme.style.borderRadius || '10px'
-                      }
-                    />
-                  )}
+                  {persistentMenu()}
                 </div>
               )}
               {!webchatState.handoff && userInputArea()}
               {webchatState.webview && webchatWebview()}
+              {coverComponent()}
             </>
           )}
         </StyledWebchat>

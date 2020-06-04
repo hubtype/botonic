@@ -9,6 +9,7 @@ export class WebchatApp {
   constructor({
     theme = {},
     persistentMenu,
+    coverComponent,
     blockInputs,
     enableEmojiPicker,
     enableAttachments,
@@ -22,6 +23,7 @@ export class WebchatApp {
   }) {
     this.theme = theme
     this.persistentMenu = persistentMenu
+    this.coverComponent = coverComponent
     this.blockInputs = blockInputs
     this.enableEmojiPicker = enableEmojiPicker
     this.enableAttachments = enableAttachments
@@ -141,6 +143,7 @@ export class WebchatApp {
     let {
       theme = {},
       persistentMenu,
+      coverComponent,
       blockInputs,
       enableAttachments,
       enableEmojiPicker,
@@ -155,6 +158,7 @@ export class WebchatApp {
     } = optionsAtRuntime
     theme = { ...this.theme, ...theme }
     persistentMenu = persistentMenu || this.persistentMenu
+    coverComponent = coverComponent || this.coverComponent
     blockInputs = blockInputs || this.blockInputs
     enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
     enableAttachments = enableAttachments || this.enableAttachments
@@ -171,6 +175,7 @@ export class WebchatApp {
         {...webchatOptions}
         theme={theme}
         persistentMenu={persistentMenu}
+        coverComponent={coverComponent}
         blockInputs={blockInputs}
         enableEmojiPicker={enableEmojiPicker}
         enableAttachments={enableAttachments}

@@ -96,6 +96,7 @@ export const WEBCHAT = {
     blockInputs: 'userInput.blockInputs',
     scrollbar: 'scrollbar',
     markdownStyle: 'markdownStyle',
+    coverComponent: 'coverComponent',
   },
 }
 

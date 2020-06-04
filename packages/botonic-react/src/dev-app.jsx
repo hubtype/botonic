@@ -9,6 +9,7 @@ export class DevApp extends WebchatApp {
   constructor({
     theme = {},
     persistentMenu,
+    coverComponent,
     blockInputs,
     enableEmojiPicker,
     enableAttachments,
@@ -21,6 +22,7 @@ export class DevApp extends WebchatApp {
     super({
       theme,
       persistentMenu,
+      coverComponent,
       blockInputs,
       enableEmojiPicker,
       enableAttachments,
@@ -38,6 +40,7 @@ export class DevApp extends WebchatApp {
     let {
       theme = {},
       persistentMenu,
+      coverComponent,
       blockInputs,
       enableEmojiPicker,
       enableAttachments,
@@ -49,6 +52,7 @@ export class DevApp extends WebchatApp {
     } = optionsAtRuntime
     theme = { ...this.theme, ...theme }
     persistentMenu = persistentMenu || this.persistentMenu
+    coverComponent = coverComponent || this.coverComponent
     blockInputs = blockInputs || this.blockInputs
     enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
     enableAttachments = enableAttachments || this.enableAttachments
@@ -62,6 +66,7 @@ export class DevApp extends WebchatApp {
         {...webchatOptions}
         theme={theme}
         persistentMenu={persistentMenu}
+        coverComponent={coverComponent}
         blockInputs={blockInputs}
         enableEmojiPicker={enableEmojiPicker}
         enableAttachments={enableAttachments}

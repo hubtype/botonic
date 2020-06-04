@@ -9,6 +9,7 @@ import {
   TOGGLE_WEBCHAT,
   TOGGLE_EMOJI_PICKER,
   TOGGLE_PERSISTENT_MENU,
+  TOGGLE_COVER_COMPONENT,
   SET_ERROR,
   UPDATE_TYPING,
   UPDATE_HANDOFF,
@@ -37,6 +38,8 @@ export function webchatReducer(state, action) {
       return { ...state, isEmojiPickerOpen: action.payload }
     case TOGGLE_PERSISTENT_MENU:
       return { ...state, isPersistentMenuOpen: action.payload }
+    case TOGGLE_COVER_COMPONENT:
+      return { ...state, isCoverComponentOpen: action.payload }
     case SET_ERROR:
       return { ...state, error: action.payload || {} }
     case UPDATE_DEV_SETTINGS:
