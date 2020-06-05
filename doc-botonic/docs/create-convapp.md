@@ -95,7 +95,7 @@ Just after greeting the user, let's say that the bot lets the user choose one op
    }
    ```
 
-1. Open the `src` folder and create two files: `chosen-pasta.js` and `chosen-pizza.js`. 
+1. Open the `src/actions` folder and create two files: `chosen-pasta.js` and `chosen-pizza.js`. 
 
 1. Import the react element and the `Text` component. Let’s take the example of the `chosen-pasta.js` file.
 
