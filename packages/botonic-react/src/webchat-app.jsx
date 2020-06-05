@@ -201,8 +201,7 @@ export class WebchatApp {
       const { status } = await HubtypeService.getWebchatVisibility({
         appId,
       })
-      if (status === 200) return true
-      return false
+      return status === 200
     } catch (e) {
       return false
     }
