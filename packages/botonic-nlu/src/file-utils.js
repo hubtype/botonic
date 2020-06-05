@@ -18,7 +18,7 @@ const CONFIG_NOT_FOUND_EXCEPTION = flagLang =>
 
 export function readDir(dirPath) {
   try {
-    return fs.readdirSync(dirPath).filter(dirName => dirName !== '.DS_Store')
+    return fs.readdirSync(dirPath).filter(dirName => !dirName.startsWith('.'))
   } catch (e) {
     throw FILE_OPEN_EXCEPTION(e)
   }
