@@ -37,7 +37,7 @@ export const plugins = [
 The default behavior of this plugin is to:
 
 - [Identify](https://segment.com/docs/spec/identify/) the user during the first bot interaction. 
-- Track `track` a [page](https://segment.com/docs/spec/page/) event to Segment from then on.
+- `Track` a [page](https://segment.com/docs/spec/page/) event to Segment from then on.
 
 If you prefer to track your events manually, you can add the flag `trackManually: true` in your options. Once set, you can use them inside the method `botonicInit` on each Botonic component you want to track:  
 

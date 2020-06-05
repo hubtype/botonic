@@ -66,10 +66,7 @@ module.exports = {
               label: 'GitHub',
               href: 'https://github.com/hubtype/botonic',
             },
-            {
-              html:
-                '<a class="github-button" href="https://github.com/hubtype/botonic" target="_blank" data-icon="octicon-star" data-show-count="true" aria-label="Star hubtype/botonic on GitHub">Star</a>',
-            },
+            
           ],
         },
         {},

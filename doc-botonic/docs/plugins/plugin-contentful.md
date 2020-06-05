@@ -57,21 +57,27 @@ For the previous content, the dashboard allows assigning a list of tags to your 
 
    <details>
    <summary>Contentful General Settings</summary>
+
    ![](https://botonic-doc-static.netlify.com/images/contentful/menu-general-settings.png)
    ![](https://botonic-doc-static.netlify.com/images/contentful/space-id.png)
+
    </details>
 
 3. Create a Delivery API token and safely store its value (it grants read access to your account).
    <details>
    <summary>Creation of a Delivery API token</summary>
+
    ![](https://botonic-doc-static.netlify.com/images/contentful/delivery-api-key.png)
+
    </details>
 
 4. Create a Content Management token and click on **Generate personal token** to safely store its value (it grants write access to your account).
 
    <details>
    <summary>Creation of a Content Management token</summary>
+
    ![](https://botonic-doc-static.netlify.com/images/contentful/content-management-token.png)
+
    </details>
 
 
@@ -98,7 +104,9 @@ CONTENTFUL_SPACEID=<YOUR_ID> CONTENTFUL_TOKEN=<CONTENT_MANAGEMENT_TOKEN> node_mo
 Go to the Contentful dashboard. Open the "Contents section" and create the contents required by your bot. Remember that they will not be available until you press the "publish" button and the button becomes green.
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/publish-changes.png)
+
 </details>
 
 #### Buttons
@@ -111,19 +119,25 @@ The content buttons may trigger different behaviours depending on the type of it
 
 <details>
 <summary>To define a content button, you have two options:</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/buttons.png)
+
 </details>
 
 1. either create a new entry:
-<details>
-<summary>Example</summary>
-![](https://botonic-doc-static.netlify.com/images/contentful/button-create.png)
-</details>
+  <details>
+  <summary>Example</summary>
+
+  ![](https://botonic-doc-static.netlify.com/images/contentful/button-create.png)
+
+  </details>
 2. or link an existing one (which may be shared by other buttons):
-<details>
-<summary>Example</summary>
-![](https://botonic-doc-static.netlify.com/images/contentful/button-link.png)
-</details>
+  <details>
+  <summary>Example</summary>
+
+  ![](https://botonic-doc-static.netlify.com/images/contentful/button-link.png)
+
+  </details>
 
 
 In the case of Text's, you can also define *Follow Up* contents. This feature is used to automatically display a second message after a timeout. This can be used to ask the user to rate the bot, to display again the main carousel, ...
@@ -135,14 +149,18 @@ From the content edit page, click on "Change" at the translation section to enab
 
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/multilanguage.png)
+
 </details>
 
 You will see now that you can assign multiple values for the fields that can be internationalized (as defined at your content model).
 
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/multilanguage-edit.png)
+
 </details>
 
 The value of referenced contents (eg. a list of Button's) are not defined for a given locale,
@@ -171,7 +189,7 @@ export const plugins = [
 
 To render a Botonic *StartUp*, *Texts* and *Carousels* with the contents configured on the Contentful space:
 
-1) Create the following functions, which convert the result from the Contentful plugin to react components (They are not
+1. Create the following functions, which convert the result from the Contentful plugin to react components (They are not
 implemented within the Contentful plugin to keep the plugin fully decoupled from React)
 
 ```
@@ -196,7 +214,7 @@ export function renderStartUp(startUp: cms.StartUp): React.ReactNode {
 }
 ```
 
-2) render it from your actions. To obtain \<YOUR TEXT CONTENT ID\>, open the content at www.contentful.com and click the
+2. render it from your actions. To obtain \<YOUR TEXT CONTENT ID\>, open the content at www.contentful.com and click the
 "Info" button on the top right corner and copy the "ENTRY ID" value.
 
 ```
@@ -222,7 +240,7 @@ export default class Text extends React.Component {
 
 *plugin.cms.text(id)* returns an object with all the fields configured at www.contentful.com. Instead of directly passing it to the renderText function, you can also process them according to your requirements (eg. you could be just interested on the text field).
 
-3) to render the content assigned to the buttons at the Contentful dashboard,
+3. to render the content assigned to the buttons at the Contentful dashboard,
 you we'll need to assign these routes:
 
 ```
@@ -294,7 +312,9 @@ remember to always press RETURN after typing a new keyword. Otherwise, it will b
 
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/keywords.png)
+
 </details>
 
 #### **Types of Search**
@@ -310,9 +330,11 @@ The plugin allows configuring weekly schedules from the Contentful dashboard.
 
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/schedule-main.png)
 
 ![](https://botonic-doc-static.netlify.com/images/contentful/schedule-hour-range.png)
+
 </details>
 
 #### **Schedule Exceptions**
@@ -320,7 +342,9 @@ To define exceptions to the general weekly schedule, create a *Day Schedule* at 
 
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/schedule-exceptions.png)
+
 </details>
 
 #### **Empty day**
@@ -328,7 +352,9 @@ To define an empty day (such as bank holidays), just create the *Day Schedule* b
 
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/schedule-empty-day.png)
+
 </details>
 
 #### **Exceptional Schedule**
@@ -336,7 +362,9 @@ For days with exceptional schedule (such as sales days), create the *Day Schedul
 
 <details>
 <summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/contentful/schedule-exceptions-dif-hours.png)
+
 </details>
 
 

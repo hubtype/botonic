@@ -30,7 +30,9 @@ To integrate your bot with Dialogflow, you must use the `intent` template, which
    
    <details>
       <summary>Service Account</summary>
+
    ![](https://botonic-doc-static.netlify.com/images/dflow/dg1.png)
+
    </details>
 3. This will take you to the Google Cloud Platform Service Accounts page, but you first need to update the Service Account's role.
 
@@ -46,7 +48,9 @@ To integrate your bot with Dialogflow, you must use the `intent` template, which
 
     <details>
          <summary>Role</summary>
+
       ![](https://botonic-doc-static.netlify.com/images/dflow/dg2.png)
+      
       </details>
 
 
