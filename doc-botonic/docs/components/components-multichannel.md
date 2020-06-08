@@ -7,6 +7,8 @@ title: Multichannel
 
 The multichannel component allows you to provide a way to concatenate and unify messages and conversation for your WhatsApp bot.
 
+In this way, the bot can avoid "spamming" the conversation and just sends one long message with the relevant text only.
+
 ## Code
 
 Add the following code in your `action` files, under the `render` section.
