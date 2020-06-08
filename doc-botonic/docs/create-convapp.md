@@ -180,7 +180,7 @@ Now let’s say that the user wants to get help from an agent just after his sel
 
 1. Create a `help-action.js` file.
 
-2. Import the `HumanHandoff` method from `@botonic/core`.
+2. Import the `humanHandOff` method from `@botonic/core`.
 
 3. Add the `botonicInit` method that allows you to perform tasks before sending back the response: `static async botonicInit({ session })`.
 

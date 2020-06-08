@@ -9,6 +9,6 @@ Different types of outputs for messaging apps are supported.
 
 ---
 
-**[Text](text) | [Buttons](buttons)  | [Quick Replies](replies) | [Carousel](carousel) | [Media](media) | [Location](location) | [Share Button](sharebutton) | [Message Template](messagetemplate)** 
+**[Text](text) | [Buttons](buttons)  | [Quick Replies](replies) | [Carousel](carousel) | [Media](media) | [Location](location) | [Share Button](sharebutton) | [Message Template](messagetemplate)| [Multichannel](multichannel)** 
 
 ---
