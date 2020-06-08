@@ -20,7 +20,7 @@ export class CachedClientApi implements ReducedClientApi {
             .map((arg: any) => JSON.stringify(arg))
             .reduce((a: string, b: string) => a + b)
         },
-      } as memoize.Options)
+      } as memoize.Options<any>)
 
     this.getAsset = memoize(client.getAsset, options(2))
     this.getEntries = memoize(client.getEntries, options(1))

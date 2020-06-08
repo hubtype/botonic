@@ -1,7 +1,7 @@
 import { ManageCms } from '../../manage-cms/manage-cms'
 import * as cms from '../../cms'
 import * as nlp from '../../nlp'
-import * as contentfulm from 'contentful-management'
+import { ClientAPI, createClient } from 'contentful-management'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/typings/environment'
 // eslint-disable-next-line node/no-missing-import
@@ -16,7 +16,7 @@ import {
 } from '../../manage-cms/fields'
 
 export class ManageContentful implements ManageCms {
-  readonly manage: contentfulManagementStatic.ClientAPI
+  readonly manage: ClientAPI
   environment: Environment | undefined
 
   constructor(readonly options: ContentfulOptions) {
@@ -24,13 +24,13 @@ export class ManageContentful implements ManageCms {
   }
 
   private createClient() {
-    return contentfulm.createClient({
+    return createClient({
       accessToken: this.options.accessToken,
       timeout: this.options.timeoutMs,
     })
   }
 
-  private async getEnvironment() {
+  private async getEnvironment(): Promise<Environment> {
     if (!this.environment) {
       const space = await this.manage.getSpace(this.options.spaceId)
       if (!this.options.environment) {
