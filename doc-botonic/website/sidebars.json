@@ -26,7 +26,8 @@
       "components/media",
       "components/location",
       "components/sharebutton",
-      "components/messagetemplate"
+      "components/messagetemplate",
+      "components/multichannel"
     ],
 
     "Concepts": [

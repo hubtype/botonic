@@ -167,6 +167,13 @@ The value of referenced contents (eg. a list of Button's) are not defined for a 
 the plugin will deliver them as defined for the locale's fallback locale. In that case, the
 referenced contents will be delivered in the same locale as the referring content.
 
+#### **Markdown Support**
+
+While entering data through the Contentful dashboard visual editor, the user automatically generates markdown text. 
+
+The Contentful plugin provides functions to parse and transform the markdown formatting if further customization needs to be processed by the bot. 
+
+The plugin also provides a library to convert the markdown text into WhatsApp's specific markup format, the latter only supporting bold and italic formatting at the moment.
 
 ### Program Your Bot
 
