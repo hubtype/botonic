@@ -16,7 +16,7 @@ See the [**Installation section**](getting-started).
 2. Select the blank template and run `cd <botname>`. 
 3. Test it in your browser with `npm run start`  or `botonic serve`.
 
-Your blank project is created with its basic structure. For more information, see the [Understanding the Project](/project/) section.
+Your blank project is created with its basic structure. For more information, see the **[Understanding the Project](/project/)** section.
 
 ## Add a Welcome Message
 
@@ -242,7 +242,7 @@ To end the conversation:
      }
    }
    ```
-1. In the `routes.js` files, import:
+1. In the `routes.js` file, import:
 
    ```javascript
    import FinalAction from "./actions/final-action";

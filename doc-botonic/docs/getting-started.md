@@ -7,15 +7,15 @@ Let's install and create our first Botonic bot!
 
 ## Step 1 – Install the Botonic Command Line Interface
 
-1. Install the LTS version of [NodeJS](https://nodejs.org/). 
-2. Verify the installation version by running `npm --version` and `node --version`. **Note:** You must have at least `node >= 10.0.0` version installed. You can also use [Yarn](https://yarnpkg.com/).
+1. Install the LTS version of **[NodeJS](https://nodejs.org/)**. 
+2. Verify the installation version by running `npm --version` and `node --version`. **Note:** You must have at least `node >= 10.0.0` version installed. You can also use **[Yarn](https://yarnpkg.com/)**.
 3. Perform a global installation by running  `sudo npm install -g @botonic/cli` (Mac/Linux) or `npm install -g @botonic/cli` (as admin on Windows).
 4. Wait until the CLI is installed.
 
 ## Step 2 – Create a Bot
 
 1. Run `botonic new <bot_name>` 
-2. Select one of the [templates](/templates/templates) available. 
+2. Select one of the **[templates](/templates/templates)** available. 
 
 Congratulations: Your bot is created!
 
@@ -33,12 +33,12 @@ Congratulations: Your bot is created!
 ## Step 4 – Deploy Your Bot 
 
 1. From your command line, run `botonic deploy`.
-2. Enter your credentials (email/password) if you already signed up at [app.hubtype.com](https://app.hubtype.com/) or create a new account as recommended. 
+2. Enter your credentials (email/password) if you already signed up at **[app.hubtype.com](https://app.hubtype.com/)** or create a new account as recommended. 
 3. Give a name to your bot and wait for your project to build.
 
 ## Step 5 – Publish Your Bot
 
-1. Once the build is finished, go to the Hubtype dashboard at [app.hubtype.com](https://app.hubtype.com/).
+1. Once the build is finished, go to the Hubtype dashboard at **[app.hubtype.com](https://app.hubtype.com/)**.
 2. Click on the bot icon and search for your bot in the list.
 3. Click on **Integrate a messenger** and select an application.
 4. Follow the instructions to connect your bot to the application.
