@@ -34,6 +34,7 @@ import {
   scrollToBottom,
   getParsedAction,
   rehydrateRegex,
+  serializeRegexs,
 } from '../utils'
 import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB } from '../constants'
 import { motion } from 'framer-motion'
@@ -174,6 +175,22 @@ export const Webchat = forwardRef((props, ref) => {
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
+  const saveWebchatState = webchatState => {
+    saveState(
+      JSON.stringify(
+        {
+          user: webchatState.user,
+          messages: webchatState.messagesJSON,
+          session: webchatState.session,
+          lastRoutePath: webchatState.lastRoutePath,
+          devSettings: webchatState.devSettings,
+          lastMessageUpdate: webchatState.lastMessageUpdate,
+          themeUpdates: webchatState.themeUpdates,
+        },
+        serializeRegexs
+      )
+    )
+  }
   const deviceAdapter = new DeviceAdapter()
 
   const getThemeProperty = _getThemeProperty(theme)
@@ -205,6 +222,7 @@ export const Webchat = forwardRef((props, ref) => {
       lastRoutePath,
       devSettings,
       lastMessageUpdate,
+      themeUpdates,
     } = botonicState || {}
     if (!user || Object.keys(user).length == 0) user = createUser()
     updateUser(user)
@@ -231,6 +249,8 @@ export const Webchat = forwardRef((props, ref) => {
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
+    if (themeUpdates)
+      updateTheme(merge(props.theme, themeUpdates), themeUpdates)
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
@@ -243,16 +263,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     if (onStateChange && typeof onStateChange === 'function')
       onStateChange(webchatState)
-    saveState(
-      JSON.stringify({
-        user: webchatState.user,
-        messages: webchatState.messagesJSON,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-        devSettings: webchatState.devSettings,
-        lastMessageUpdate: webchatState.lastMessageUpdate,
-      })
-    )
+    saveWebchatState(webchatState)
   }, [
     webchatState.user,
     webchatState.messagesJSON,
@@ -486,8 +497,8 @@ export const Webchat = forwardRef((props, ref) => {
       updateMessage({ ...messageToUpdate, ...messageInfo })
     },
     updateWebchatSettings: settings => {
-      const themeWithUpdates = normalizeWebchatSettings(settings)
-      updateTheme(merge(webchatState.theme, themeWithUpdates))
+      const themeUpdates = normalizeWebchatSettings(settings)
+      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
     },
   }))
 
@@ -751,12 +762,17 @@ export const Webchat = forwardRef((props, ref) => {
     })
   }
 
+  useEffect(() => {
+    // Prod mode
+    saveWebchatState(webchatState)
+  }, [webchatState.themeUpdates])
+
   // Only needed for dev/serve mode
   const updateWebchatDevSettings = settings => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-      const themeWithUpdates = normalizeWebchatSettings(settings)
-      updateTheme(merge(webchatState.theme, themeWithUpdates))
+      const themeUpdates = normalizeWebchatSettings(settings)
+      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
     }, [webchatState.messagesJSON])
   }
 

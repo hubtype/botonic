@@ -103,10 +103,10 @@ export function useWebchat() {
       type: UPDATE_HANDOFF,
       payload: handoff,
     })
-  const updateTheme = theme =>
+  const updateTheme = (theme, themeUpdates = undefined) =>
     webchatDispatch({
       type: UPDATE_THEME,
-      payload: theme,
+      payload: { theme, themeUpdates },
     })
   const updateDevSettings = settings =>
     webchatDispatch({
