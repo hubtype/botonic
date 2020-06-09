@@ -5,7 +5,7 @@ title: NLU Plugin
 
 ---
 
-For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-nlu).
+For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-nlu)**.
 
 ---
 

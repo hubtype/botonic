@@ -5,7 +5,7 @@ id: plugin-contentful
 
 ---
 
-For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful).
+For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful)**.
 
 ---
 
@@ -13,7 +13,7 @@ For more information, refer to [<u>GitHub</u>](https://github.com/hubtype/botoni
 ## What Does This Plugin Do?
 
 Botonic Plugin Contentful is one of the [available](https://github.com/hubtype/botonic/tree/master/packages) plugins for Botonic.
-[Contentful](http://www.contentful.com) is a CMS (Content Management System) which manages contents of a great variety
+[Contentful](http://www.contentful.com) is a Content Management System (CMS)) which manages contents of a great variety
 of types, such as text, dates, numerics, images, ... These simple contents can be combined into custom complex contents (eg. a carousel or a message box) which can be queried over APIs. 
 
 <details>
@@ -52,7 +52,7 @@ For the previous content, the dashboard allows assigning a list of tags to your 
 
 ### Create a Contentful Account
 
-1. Create an account at www.contentful.com and select **Create an empty space**.
+1. Create an account on **www.contentful.com** and select **Create an empty space**.
 2. Go to the **General Settings** page and write down the space ID number.
 
    <details>
@@ -286,13 +286,13 @@ export default class Text extends React.Component {
 
 #### Search by Keywords
 
-Apart from fetching your contents by ID, you can also search them. From www.contentful.com, you can assign keywords to your contents of type *StartUp*, *Text*, *Carousel*, *URL* and *Queue*. Each keyword is a string
+Apart from fetching your contents by ID, you can also search them. From **www.contentful.com**, you can assign keywords to your contents of type *StartUp*, *Text*, *Carousel*, *URL* and *Queue*. Each keyword is a string
 of words that can be used to search your contents. To make the search more flexible, the plugin will perform the
 following preprocessing in both the content keywords and the search keywords:
 
 * Conversion to lowercase.
 * Removal of spaces and other separators (eg. commas)
-* [Stemming](https://en.wikipedia.org/wiki/Stemming), to remove suffixes without semantics.
+* **[Stemming](https://en.wikipedia.org/wiki/Stemming)** to remove suffixes without semantics.
 * Removal of stop words (eg. "the", "and",...)
 
 ```

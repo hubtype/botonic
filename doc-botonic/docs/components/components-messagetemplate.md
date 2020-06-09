@@ -8,7 +8,7 @@ title: Message Templates
 Like the share button, Facebook Messenger allows you to define your templates.
 As an example, you can generate a nice boarding pass as below.
 
-**Note:** Facebook supports many different [<u>**templates**</u>](https://developers.facebook.com/docs/messenger-platform/send-messages/templates).
+**Note:** Facebook supports many different [**templates**](https://developers.facebook.com/docs/messenger-platform/send-messages/templates).
 
 ![](https://botonic-doc-static.netlify.com/images/message_template.png)
 
