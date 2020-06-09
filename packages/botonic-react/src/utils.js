@@ -126,3 +126,14 @@ export const getWebchatElement = () =>
 export const setWebchatElementHeight = newHeight => {
   getWebchatElement().style.height = newHeight
 }
+
+export const serializeRegexs = (_, value) => {
+  if (value instanceof RegExp) return value.toString()
+  return value
+}
+
+export const rehydrateRegex = regex => {
+  const fragments = regex.match(/\/(.*?)\/([a-z]*)?$/i)
+  const rehydrated = new RegExp(fragments[1], fragments[2] || '')
+  return rehydrated
+}

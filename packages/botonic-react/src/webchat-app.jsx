@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { render } from 'react-dom'
 
 import { Webchat } from './webchat'
@@ -35,7 +35,7 @@ export class WebchatApp {
     this.onClose = onClose
     this.onMessage = onMessage
     this.visibility = visibility
-    this.webchatRef = React.createRef()
+    this.webchatRef = createRef()
     this.appId = appId
   }
 
@@ -74,6 +74,8 @@ export class WebchatApp {
       this.webchatRef.current.setError({ message: event.errorMessage })
     else if (event.action === 'update_message_info')
       this.updateMessageInfo(event.message.id, event.message)
+    else if (event.message.type === 'update_webchat_settings')
+      this.updateWebchatSettings(event.message.data)
     else if (event.message.type === 'sender_action')
       this.setTyping(event.message.data === 'typing_on')
     else this.addBotMessage(event.message)
@@ -146,6 +148,10 @@ export class WebchatApp {
 
   updateMessageInfo(msgId, messageInfo) {
     return this.webchatRef.current.updateMessageInfo(msgId, messageInfo)
+  }
+
+  updateWebchatSettings(settings) {
+    return this.webchatRef.current.updateWebchatSettings(settings)
   }
 
   getComponent(optionsAtRuntime = {}) {

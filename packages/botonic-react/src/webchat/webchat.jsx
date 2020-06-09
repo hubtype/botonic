@@ -33,6 +33,7 @@ import {
   ConditionalWrapper,
   scrollToBottom,
   getParsedAction,
+  rehydrateRegex,
 } from '../utils'
 import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB } from '../constants'
 import { motion } from 'framer-motion'
@@ -50,6 +51,10 @@ import {
   getMediaType,
   getFullMimeWhitelist,
 } from '../message-utils'
+
+import { normalizeWebchatSettings } from '../components/webchat-settings'
+
+import merge from 'lodash.merge'
 
 const StyledWebchat = styled.div`
   position: fixed;
@@ -260,10 +265,7 @@ export const Webchat = forwardRef((props, ref) => {
   useTyping({ webchatState, updateTyping, updateMessage })
 
   useEffect(() => {
-    if (props.theme && props.theme.style) {
-      props.theme.style = { ...theme.style, ...props.theme.style }
-    }
-    updateTheme({ ...theme, ...props.theme })
+    updateTheme(merge(props.theme, theme))
   }, [props.theme])
 
   const openWebview = (webviewComponent, params) =>
@@ -319,7 +321,12 @@ export const Webchat = forwardRef((props, ref) => {
     )
     if (!Array.isArray(blockInputs)) return false
     for (const rule of blockInputs) {
-      if (rule.match.some(regex => regex.test(input.data))) {
+      if (
+        rule.match.some(regex => {
+          if (typeof regex === 'string') regex = rehydrateRegex(regex)
+          return regex.test(input.data)
+        })
+      ) {
         addMessageComponent(
           <Text
             id={input.id}
@@ -477,6 +484,10 @@ export const Webchat = forwardRef((props, ref) => {
         m => m.id == msgId
       )[0]
       updateMessage({ ...messageToUpdate, ...messageInfo })
+    },
+    updateWebchatSettings: settings => {
+      const themeWithUpdates = normalizeWebchatSettings(settings)
+      updateTheme(merge(webchatState.theme, themeWithUpdates))
     },
   }))
 
@@ -740,6 +751,15 @@ export const Webchat = forwardRef((props, ref) => {
     })
   }
 
+  // Only needed for dev/serve mode
+  const updateWebchatDevSettings = settings => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const themeWithUpdates = normalizeWebchatSettings(settings)
+      updateTheme(merge(webchatState.theme, themeWithUpdates))
+    }, [webchatState.messagesJSON])
+  }
+
   return (
     <WebchatContext.Provider
       value={{
@@ -757,6 +777,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateReplies,
         updateLatestInput,
         updateUser: updateAllUserReferences,
+        updateWebchatDevSettings: updateWebchatDevSettings,
       }}
     >
       {!webchatState.isWebchatOpen && (
