@@ -14,7 +14,6 @@ import {
   UPDATE_TYPING,
   UPDATE_HANDOFF,
   SET_CURRENT_ATTACHMENT,
-  UPDATE_THEME_UPDATES,
 } from './actions'
 
 import { messagesReducer } from './messages-reducer'
@@ -32,8 +31,7 @@ export function webchatReducer(state, action) {
     case UPDATE_THEME:
       return {
         ...state,
-        theme: action.payload.theme,
-        themeUpdates: action.payload.themeUpdates,
+        ...action.payload,
       }
     case UPDATE_HANDOFF:
       return { ...state, handoff: action.payload }

@@ -250,8 +250,9 @@ export const Webchat = forwardRef((props, ref) => {
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
-    if (themeUpdates)
+    if (themeUpdates !== undefined)
       updateTheme(merge(props.theme, themeUpdates), themeUpdates)
+
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
@@ -766,6 +767,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
+    scrollToBottom()
   }, [webchatState.themeUpdates])
 
   // Only needed for dev/serve mode
