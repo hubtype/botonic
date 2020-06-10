@@ -146,6 +146,30 @@ describe('TEST: useWebchat ', () => {
       result.current.updateTheme(theme)
     })
     expect(result.current.webchatState.theme).toStrictEqual(theme)
+    expect(result.current.webchatState.themeUpdates).toStrictEqual(undefined)
+  })
+
+  it('updateTheme (adding themeUpdates): assign theme to webchatState.theme', () => {
+    const { result } = renderUseWebchatHook()
+    const theme = {
+      style: {
+        position: 'fixed',
+        right: 20,
+      },
+      header: {
+        title: 'My customized webchat',
+      },
+    }
+    const themeUpdates = {
+      brand: {
+        color: 'red',
+      },
+    }
+    act(() => {
+      result.current.updateTheme(theme, themeUpdates)
+    })
+    expect(result.current.webchatState.theme).toStrictEqual(theme)
+    expect(result.current.webchatState.themeUpdates).toStrictEqual(themeUpdates)
   })
 
   it('updateDevSettings: assign devSettings to webchatState.devSettings', () => {

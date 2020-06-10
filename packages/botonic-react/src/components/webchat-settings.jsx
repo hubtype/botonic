@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { renderComponent, serializeRegexs } from '../utils'
 import { WebchatContext } from '../contexts'
+import { INPUT } from '@botonic/core'
 
 export const WebchatSettings = ({
   theme,
@@ -29,13 +30,9 @@ export const WebchatSettings = ({
       enableEmojiPicker,
       enableAttachments,
     })
-    const serializeRegexs = (_, value) => {
-      if (value instanceof RegExp) return value.toString()
-      return value
-    }
     return (
       <message
-        type={'webchat_settings'}
+        type={INPUT.WEBCHAT_SETTINGS}
         settings={JSON.stringify({ theme: updatedTheme }, serializeRegexs)}
       ></message>
     )
@@ -52,15 +49,18 @@ export const normalizeWebchatSettings = settings => {
     enableAttachments,
   } = settings
   if (!theme.userInput) theme.userInput = {}
-  if (persistentMenu) theme.persistentMenu = persistentMenu
-  if (enableEmojiPicker) {
-    if (!theme.userInput.enableEmojiPicker) theme.userInput.emojiPicker = {}
+  if (persistentMenu !== undefined) {
+    if (!theme.userInput.persistentMenu) theme.userInput.persistentMenu = {}
+    theme.userInput.persistentMenu = persistentMenu
+  }
+  if (enableEmojiPicker !== undefined) {
+    if (!theme.userInput.emojiPicker) theme.userInput.emojiPicker = {}
     theme.userInput.emojiPicker.enable = enableEmojiPicker
   }
-  if (enableAttachments) {
+  if (enableAttachments !== undefined) {
     if (!theme.userInput.attachments) theme.userInput.attachments = {}
     theme.userInput.attachments.enable = enableAttachments
   }
-  if (blockInputs) theme.userInput.blockInputs = blockInputs
+  if (blockInputs !== undefined) theme.userInput.blockInputs = blockInputs
   return theme
 }

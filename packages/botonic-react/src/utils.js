@@ -132,8 +132,9 @@ export const serializeRegexs = (_, value) => {
   return value
 }
 
-export const rehydrateRegex = regex => {
-  const fragments = regex.match(/\/(.*?)\/([a-z]*)?$/i)
+export const rehydrateRegex = regexStr => {
+  /* eslint-disable no-useless-escape */
+  const fragments = regexStr.match(/\/(.[^\/]+)\/([a-z]{1})?$/i)
   const rehydrated = new RegExp(fragments[1], fragments[2] || '')
   return rehydrated
 }

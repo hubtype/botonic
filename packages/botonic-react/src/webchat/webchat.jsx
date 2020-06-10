@@ -176,6 +176,7 @@ export const Webchat = forwardRef((props, ref) => {
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const saveWebchatState = webchatState => {
+    // Serialization of regexs: https://stackoverflow.com/questions/12075927/serialization-of-regexp
     saveState(
       JSON.stringify(
         {
@@ -185,7 +186,7 @@ export const Webchat = forwardRef((props, ref) => {
           lastRoutePath: webchatState.lastRoutePath,
           devSettings: webchatState.devSettings,
           lastMessageUpdate: webchatState.lastMessageUpdate,
-          themeUpdates: webchatState.themeUpdates,
+          themeUpdates: webchatState.themeUpdates, // can contain regexs
         },
         serializeRegexs
       )

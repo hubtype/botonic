@@ -4,6 +4,7 @@ import { useWebchat } from './hooks'
 import { Webchat } from './webchat'
 import { SessionView } from './session-view'
 import { PROVIDER } from '@botonic/core'
+import merge from 'lodash.merge'
 
 export const FixedTab = styled.div`
   position: fixed;
@@ -39,14 +40,9 @@ export const WebchatDev = forwardRef((props, ref) => {
   /* TODO: webchatState.theme should be included in the dependencies array
   together with props.theme. The problem is that this effect modifies webchatState
   so we enter an infinite rerender loop. */
-  useEffect(
-    () =>
-      updateTheme({
-        ...webchatState.theme,
-        ...props.theme,
-      }),
-    [props.theme]
-  )
+  useEffect(() => {
+    updateTheme(merge(webchatState.theme, props.theme))
+  }, [props.theme])
 
   return (
     <div>
