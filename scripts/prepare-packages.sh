@@ -10,7 +10,7 @@ for package in botonic-*; do
   echo "Preparing $package..."
   echo "===================================="
   echo "Cleaning..."
-  nice rm -rf node_modules lib
+  nice rm -rf node_modules lib dist
   echo "Installing deps..."
   nice npm i -D > /dev/null
   echo "Building..."
