@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-segment",
-  "version": "0.12.0",
+  "version": "0.13.0-rc.0",
   "main": "src/index.js",
   "scripts": {
     "cloc": "../../scripts/qa/cloc-package.sh .",
