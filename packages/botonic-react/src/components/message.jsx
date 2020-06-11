@@ -115,7 +115,10 @@ export const Message = props => {
   let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
-  if (from === 'user') textChildren = textChildren.map(e => renderLinks(e))
+  if (from === 'user')
+    textChildren = textChildren.map(e =>
+      typeof e === 'string' ? renderLinks(e) : e
+    )
 
   const getTimestampFormat = () => {
     const timestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
