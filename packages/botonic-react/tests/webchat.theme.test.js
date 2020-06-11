@@ -1,4 +1,5 @@
 import { getProperty, _getThemeProperty } from '../src/utils'
+import { normalizeWebchatSettings } from '../src/components/webchat-settings'
 
 const theme = {
   message: {
@@ -56,5 +57,40 @@ describe('getThemeProperty', () => {
   const getThemeProperty = _getThemeProperty(theme)
   it('gives preference to nested property', () => {
     expect(getThemeProperty('message.bot.image')).toBe('DefaultLogoPathNested')
+  })
+})
+
+describe('Updating webchat properties with settings ', () => {
+  it('normalizes correctly to nested theme properties', () => {
+    const newTheme = { brand: { color: 'red' }, userInput: { enable: true } }
+    const newBlockInputs = [
+      {
+        match: [/ugly/i, /bastard/i],
+        message: 'We cannot tolerate these kind of words.',
+      },
+    ]
+    const newPersistentMenu = [
+      { label: 'option1', payload: 'payload1' },
+      { label: 'option2', payload: 'payload2' },
+    ]
+    const newEnableEmojiPicker = true
+    const newEnableAttachments = false
+    const settings = {
+      theme: newTheme,
+      blockInputs: newBlockInputs,
+      persistentMenu: newPersistentMenu,
+      enableEmojiPicker: newEnableEmojiPicker,
+      enableAttachments: newEnableAttachments,
+    }
+    const themeUpdates = normalizeWebchatSettings(settings)
+    expect(themeUpdates).toMatchObject(newTheme)
+    expect(themeUpdates.userInput.blockInputs).toEqual(newBlockInputs)
+    expect(themeUpdates.userInput.persistentMenu).toEqual(newPersistentMenu)
+    expect(themeUpdates.userInput.emojiPicker.enable).toEqual(
+      newEnableEmojiPicker
+    )
+    expect(themeUpdates.userInput.attachments.enable).toEqual(
+      newEnableAttachments
+    )
   })
 })

@@ -29,7 +29,10 @@ export function webchatReducer(state, action) {
     case UPDATE_TYPING:
       return { ...state, typing: action.payload }
     case UPDATE_THEME:
-      return { ...state, theme: { ...action.payload } }
+      return {
+        ...state,
+        ...action.payload,
+      }
     case UPDATE_HANDOFF:
       return { ...state, handoff: action.payload }
     case TOGGLE_WEBCHAT:

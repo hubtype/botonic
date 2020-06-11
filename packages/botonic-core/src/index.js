@@ -42,4 +42,5 @@ export const INPUT = Object.freeze({
   BUTTON_MESSAGE: 'buttonmessage',
   CAROUSEL: 'carousel',
   CUSTOM: 'custom',
+  WEBCHAT_SETTINGS: 'webchatsettings',
 })

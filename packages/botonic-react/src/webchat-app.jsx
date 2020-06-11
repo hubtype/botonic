@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { render } from 'react-dom'
 
 import { Webchat } from './webchat'
@@ -13,6 +13,7 @@ export class WebchatApp {
     blockInputs,
     enableEmojiPicker,
     enableAttachments,
+    enableUserInput,
     defaultDelay,
     defaultTyping,
     onInit,
@@ -28,6 +29,7 @@ export class WebchatApp {
     this.blockInputs = blockInputs
     this.enableEmojiPicker = enableEmojiPicker
     this.enableAttachments = enableAttachments
+    this.enableUserInput = enableUserInput
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
     this.onInit = onInit
@@ -35,7 +37,7 @@ export class WebchatApp {
     this.onClose = onClose
     this.onMessage = onMessage
     this.visibility = visibility
-    this.webchatRef = React.createRef()
+    this.webchatRef = createRef()
     this.appId = appId
   }
 
@@ -74,6 +76,8 @@ export class WebchatApp {
       this.webchatRef.current.setError({ message: event.errorMessage })
     else if (event.action === 'update_message_info')
       this.updateMessageInfo(event.message.id, event.message)
+    else if (event.message.type === 'update_webchat_settings')
+      this.updateWebchatSettings(event.message.data)
     else if (event.message.type === 'sender_action')
       this.setTyping(event.message.data === 'typing_on')
     else this.addBotMessage(event.message)
@@ -148,6 +152,10 @@ export class WebchatApp {
     return this.webchatRef.current.updateMessageInfo(msgId, messageInfo)
   }
 
+  updateWebchatSettings(settings) {
+    return this.webchatRef.current.updateWebchatSettings(settings)
+  }
+
   getComponent(optionsAtRuntime = {}) {
     let {
       theme = {},
@@ -155,6 +163,7 @@ export class WebchatApp {
       coverComponent,
       blockInputs,
       enableAttachments,
+      enableUserInput,
       enableEmojiPicker,
       defaultDelay,
       defaultTyping,
@@ -172,6 +181,7 @@ export class WebchatApp {
     blockInputs = blockInputs || this.blockInputs
     enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
     enableAttachments = enableAttachments || this.enableAttachments
+    enableUserInput = enableUserInput || this.enableUserInput
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
     this.onInit = onInit || this.onInit
@@ -190,6 +200,7 @@ export class WebchatApp {
         blockInputs={blockInputs}
         enableEmojiPicker={enableEmojiPicker}
         enableAttachments={enableAttachments}
+        enableUserInput={enableUserInput}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
         onInit={(...args) => this.onInitWebchat(...args)}

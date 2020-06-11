@@ -33,6 +33,8 @@ import {
   ConditionalWrapper,
   scrollToBottom,
   getParsedAction,
+  deserializeRegex,
+  stringifyWithRegexs,
 } from '../utils'
 import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB } from '../constants'
 import { motion } from 'framer-motion'
@@ -50,6 +52,10 @@ import {
   getMediaType,
   getFullMimeWhitelist,
 } from '../message-utils'
+
+import { normalizeWebchatSettings } from '../components/webchat-settings'
+
+import merge from 'lodash.merge'
 
 const StyledWebchat = styled.div`
   position: fixed;
@@ -169,6 +175,19 @@ export const Webchat = forwardRef((props, ref) => {
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
+  const saveWebchatState = webchatState => {
+    saveState(
+      stringifyWithRegexs({
+        user: webchatState.user,
+        messages: webchatState.messagesJSON,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath,
+        devSettings: webchatState.devSettings,
+        lastMessageUpdate: webchatState.lastMessageUpdate,
+        themeUpdates: webchatState.themeUpdates, // can contain regexs
+      })
+    )
+  }
   const deviceAdapter = new DeviceAdapter()
 
   const getThemeProperty = _getThemeProperty(theme)
@@ -200,6 +219,7 @@ export const Webchat = forwardRef((props, ref) => {
       lastRoutePath,
       devSettings,
       lastMessageUpdate,
+      themeUpdates,
     } = botonicState || {}
     if (!user || Object.keys(user).length == 0) user = createUser()
     updateUser(user)
@@ -226,6 +246,9 @@ export const Webchat = forwardRef((props, ref) => {
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
+    if (themeUpdates !== undefined)
+      updateTheme(merge(props.theme, themeUpdates), themeUpdates)
+
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
@@ -238,16 +261,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     if (onStateChange && typeof onStateChange === 'function')
       onStateChange(webchatState)
-    saveState(
-      JSON.stringify({
-        user: webchatState.user,
-        messages: webchatState.messagesJSON,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-        devSettings: webchatState.devSettings,
-        lastMessageUpdate: webchatState.lastMessageUpdate,
-      })
-    )
+    saveWebchatState(webchatState)
   }, [
     webchatState.user,
     webchatState.messagesJSON,
@@ -260,10 +274,7 @@ export const Webchat = forwardRef((props, ref) => {
   useTyping({ webchatState, updateTyping, updateMessage })
 
   useEffect(() => {
-    if (props.theme && props.theme.style) {
-      props.theme.style = { ...theme.style, ...props.theme.style }
-    }
-    updateTheme({ ...theme, ...props.theme })
+    updateTheme(merge(props.theme, theme))
   }, [props.theme])
 
   const openWebview = (webviewComponent, params) =>
@@ -311,15 +322,22 @@ export const Webchat = forwardRef((props, ref) => {
     false
   )
 
+  const getBlockInputs = (rule, inputData) => {
+    return rule.match.some(regex => {
+      if (typeof regex === 'string') regex = deserializeRegex(regex)
+      return regex.test(inputData)
+    })
+  }
+
   const checkBlockInput = input => {
-    // if is a text we check if it is a RE
+    // if is a text we check if it is a serialized RE
     const blockInputs = getThemeProperty(
       'userInput.blockInputs',
       props.blockInputs
     )
     if (!Array.isArray(blockInputs)) return false
     for (const rule of blockInputs) {
-      if (rule.match.some(regex => regex.test(input.data))) {
+      if (getBlockInputs(rule, input.data)) {
         addMessageComponent(
           <Text
             id={input.id}
@@ -478,6 +496,10 @@ export const Webchat = forwardRef((props, ref) => {
       )[0]
       updateMessage({ ...messageToUpdate, ...messageInfo })
     },
+    updateWebchatSettings: settings => {
+      const themeUpdates = normalizeWebchatSettings(settings)
+      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
+    },
   }))
 
   const resolveCase = () => {
@@ -595,7 +617,10 @@ export const Webchat = forwardRef((props, ref) => {
   )
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
 
-  const userInputEnabled = getThemeProperty('userInput.enable', true)
+  const userInputEnabled = getThemeProperty(
+    'userInput.enable',
+    props.enableUserInput !== undefined ? props.enableUserInput : true
+  )
   const emojiPickerEnabled = getThemeProperty(
     'userInput.emojiPicker.enable',
     props.enableEmojiPicker
@@ -740,6 +765,21 @@ export const Webchat = forwardRef((props, ref) => {
     })
   }
 
+  useEffect(() => {
+    // Prod mode
+    saveWebchatState(webchatState)
+    scrollToBottom()
+  }, [webchatState.themeUpdates])
+
+  // Only needed for dev/serve mode
+  const updateWebchatDevSettings = settings => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const themeUpdates = normalizeWebchatSettings(settings)
+      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
+    }, [webchatState.messagesJSON])
+  }
+
   return (
     <WebchatContext.Provider
       value={{
@@ -757,6 +797,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateReplies,
         updateLatestInput,
         updateUser: updateAllUserReferences,
+        updateWebchatDevSettings: updateWebchatDevSettings,
       }}
     >
       {!webchatState.isWebchatOpen && (

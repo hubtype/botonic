@@ -15,5 +15,6 @@ export { Location } from './location'
 export { ShareButton } from './share-button'
 export { MessageTemplate } from './message-template'
 export { customMessage } from './custom-message'
+export { WebchatSettings } from './webchat-settings'
 
 export * from './multichannel'

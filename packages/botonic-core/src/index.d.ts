@@ -21,6 +21,10 @@ export const INPUT: {
   DOCUMENT: 'document'
   LOCATION: 'location'
   CONTACT: 'contact'
+  BUTTON_MESSAGE: 'buttonmessage'
+  CAROUSEL: 'carousel'
+  CUSTOM: 'custom'
+  WEBCHAT_SETTINGS: 'webchatsettings'
 }
 
 export type InputType =
@@ -32,6 +36,10 @@ export type InputType =
   | typeof INPUT.DOCUMENT
   | typeof INPUT.LOCATION
   | typeof INPUT.CONTACT
+  | typeof INPUT.BUTTON_MESSAGE
+  | typeof INPUT.CAROUSEL
+  | typeof INPUT.CUSTOM
+  | typeof INPUT.WEBCHAT_SETTINGS
 
 export interface Input {
   type: InputType
