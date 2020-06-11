@@ -1,4 +1,4 @@
-import { serializeRegexs, rehydrateRegex } from '../src/utils'
+import { stringifyWithRegexs, deserializeRegex } from '../src/utils'
 
 describe('Regex serialization / rehydration', () => {
   const regexsItems = [
@@ -11,16 +11,16 @@ describe('Regex serialization / rehydration', () => {
   ]
   it('serializes json applying filter', () => {
     regexsItems.forEach(item => {
-      const sut = JSON.stringify(item.regex, serializeRegexs)
+      const sut = stringifyWithRegexs(item.regex)
       expect(sut).toEqual(item.string)
     })
   })
-  it('rehydrates regexs correctly', () => {
+  it('deserializes regexs correctly', () => {
     regexsItems.forEach(item => {
-      const rehydratedStringRegex = JSON.parse(item.string)
-      const rehydratedRegex = rehydrateRegex(rehydratedStringRegex)
+      const deserializedStringRegex = JSON.parse(item.string)
+      const deserializedRegex = deserializeRegex(deserializedStringRegex)
       item.samples.forEach(sample => {
-        const match = rehydratedRegex.test(sample)
+        const match = deserializedRegex.test(sample)
         expect(match).toBe(true)
       })
     })

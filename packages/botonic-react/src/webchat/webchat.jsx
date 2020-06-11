@@ -33,8 +33,8 @@ import {
   ConditionalWrapper,
   scrollToBottom,
   getParsedAction,
-  rehydrateRegex,
-  serializeRegexs,
+  deserializeRegex,
+  stringifyWithRegexs,
 } from '../utils'
 import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB } from '../constants'
 import { motion } from 'framer-motion'
@@ -176,20 +176,16 @@ export const Webchat = forwardRef((props, ref) => {
   const { initialSession, initialDevSettings, onStateChange } = props
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const saveWebchatState = webchatState => {
-    // Serialization of regexs: https://stackoverflow.com/questions/12075927/serialization-of-regexp
     saveState(
-      JSON.stringify(
-        {
-          user: webchatState.user,
-          messages: webchatState.messagesJSON,
-          session: webchatState.session,
-          lastRoutePath: webchatState.lastRoutePath,
-          devSettings: webchatState.devSettings,
-          lastMessageUpdate: webchatState.lastMessageUpdate,
-          themeUpdates: webchatState.themeUpdates, // can contain regexs
-        },
-        serializeRegexs
-      )
+      stringifyWithRegexs({
+        user: webchatState.user,
+        messages: webchatState.messagesJSON,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath,
+        devSettings: webchatState.devSettings,
+        lastMessageUpdate: webchatState.lastMessageUpdate,
+        themeUpdates: webchatState.themeUpdates, // can contain regexs
+      })
     )
   }
   const deviceAdapter = new DeviceAdapter()
@@ -326,20 +322,22 @@ export const Webchat = forwardRef((props, ref) => {
     false
   )
 
+  const getBlockInputs = (rule, inputData) => {
+    return rule.match.some(regex => {
+      if (typeof regex === 'string') regex = deserializeRegex(regex)
+      return regex.test(inputData)
+    })
+  }
+
   const checkBlockInput = input => {
-    // if is a text we check if it is a RE
+    // if is a text we check if it is a serialized RE
     const blockInputs = getThemeProperty(
       'userInput.blockInputs',
       props.blockInputs
     )
     if (!Array.isArray(blockInputs)) return false
     for (const rule of blockInputs) {
-      if (
-        rule.match.some(regex => {
-          if (typeof regex === 'string') regex = rehydrateRegex(regex)
-          return regex.test(input.data)
-        })
-      ) {
+      if (getBlockInputs(rule, input.data)) {
         addMessageComponent(
           <Text
             id={input.id}

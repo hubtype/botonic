@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { renderComponent, serializeRegexs } from '../utils'
+import { renderComponent, stringifyWithRegexs } from '../utils'
 import { WebchatContext } from '../contexts'
 import { INPUT } from '@botonic/core'
 
@@ -36,7 +36,7 @@ export const WebchatSettings = ({
     return (
       <message
         type={INPUT.WEBCHAT_SETTINGS}
-        settings={JSON.stringify({ theme: updatedTheme }, serializeRegexs)}
+        settings={stringifyWithRegexs({ theme: updatedTheme })}
       ></message>
     )
   }
