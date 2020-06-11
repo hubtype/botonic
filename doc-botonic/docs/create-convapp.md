@@ -153,9 +153,16 @@ export const routes = [
 
 1. In the bot directory, enter `npm install @botonic/plugin-nlu`.
 
-2. Create two types of intentions, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en`. You must create at least two files.
+2. Create two types of intentions, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en`. You must create at least **two files** to make the NLU plugin work.
 
-3. Enter the content of your choice: A **chitchat** (with content like "Good morning!/Hello!/Hi!/Good afternoon/Good night") and a **help file** (with content like "I'm lost/ I don't know what to do/I don't understand/I need help"). 
+3. Enter the content of your choice in both files. In our example, we are going to add content to the `help.txt` file. Make sure to add a line break between each intent.
+
+  **src/nlu/utterances/en/help.txt**
+  ```javascript
+  I'm lost
+  I don't understand
+  I need help
+  ```
 
 4. Open  `src/plugins.js` and add your plugin. 
    **Your final `plugins.js` file should look like this:**
