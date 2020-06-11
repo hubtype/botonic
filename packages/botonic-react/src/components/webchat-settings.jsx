@@ -9,6 +9,7 @@ export const WebchatSettings = ({
   persistentMenu,
   enableEmojiPicker,
   enableAttachments,
+  enableUserInput,
 }) => {
   const renderBrowser = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -19,6 +20,7 @@ export const WebchatSettings = ({
       persistentMenu,
       enableEmojiPicker,
       enableAttachments,
+      enableUserInput,
     })
     return null
   }
@@ -29,6 +31,7 @@ export const WebchatSettings = ({
       persistentMenu,
       enableEmojiPicker,
       enableAttachments,
+      enableUserInput,
     })
     return (
       <message
@@ -41,13 +44,15 @@ export const WebchatSettings = ({
 }
 
 export const normalizeWebchatSettings = settings => {
-  const {
+  let {
     theme,
     blockInputs,
     persistentMenu,
     enableEmojiPicker,
     enableAttachments,
+    enableUserInput,
   } = settings
+  if (!theme) theme = {}
   if (!theme.userInput) theme.userInput = {}
   if (persistentMenu !== undefined) {
     if (!theme.userInput.persistentMenu) theme.userInput.persistentMenu = {}
@@ -60,6 +65,10 @@ export const normalizeWebchatSettings = settings => {
   if (enableAttachments !== undefined) {
     if (!theme.userInput.attachments) theme.userInput.attachments = {}
     theme.userInput.attachments.enable = enableAttachments
+  }
+  if (enableUserInput !== undefined) {
+    if (!theme.userInput.enable) theme.userInput.enable = {}
+    theme.userInput.enable = enableUserInput
   }
   if (blockInputs !== undefined) theme.userInput.blockInputs = blockInputs
   return theme

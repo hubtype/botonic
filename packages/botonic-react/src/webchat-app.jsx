@@ -13,6 +13,7 @@ export class WebchatApp {
     blockInputs,
     enableEmojiPicker,
     enableAttachments,
+    enableUserInput,
     defaultDelay,
     defaultTyping,
     onInit,
@@ -28,6 +29,7 @@ export class WebchatApp {
     this.blockInputs = blockInputs
     this.enableEmojiPicker = enableEmojiPicker
     this.enableAttachments = enableAttachments
+    this.enableUserInput = enableUserInput
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
     this.onInit = onInit
@@ -161,6 +163,7 @@ export class WebchatApp {
       coverComponent,
       blockInputs,
       enableAttachments,
+      enableUserInput,
       enableEmojiPicker,
       defaultDelay,
       defaultTyping,
@@ -178,6 +181,7 @@ export class WebchatApp {
     blockInputs = blockInputs || this.blockInputs
     enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
     enableAttachments = enableAttachments || this.enableAttachments
+    enableUserInput = enableUserInput || this.enableUserInput
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
     this.onInit = onInit || this.onInit
@@ -196,6 +200,7 @@ export class WebchatApp {
         blockInputs={blockInputs}
         enableEmojiPicker={enableEmojiPicker}
         enableAttachments={enableAttachments}
+        enableUserInput={enableUserInput}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
         onInit={(...args) => this.onInitWebchat(...args)}
