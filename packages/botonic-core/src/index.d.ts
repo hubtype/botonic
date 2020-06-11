@@ -24,7 +24,7 @@ export const INPUT: {
   BUTTON_MESSAGE: 'buttonmessage'
   CAROUSEL: 'carousel'
   CUSTOM: 'custom'
-  WEBCHAT_SETTINGS: 'webchat_settings'
+  WEBCHAT_SETTINGS: 'webchatsettings'
 }
 
 export type InputType =
