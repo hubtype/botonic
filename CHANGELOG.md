@@ -11,6 +11,47 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.13.0] - 2020-12-06
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Scripts to upgrade dependencies, prepare botonic packages and update packages version.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - New webchat features:
+
+    - Added support for custom Cover Component which will be shown when the chat is initiated. You can use it in order to collect information from enduser just before to start the conversation.
+    - Now webchat will be displayed depending on the settings present in Hubtype Desk (default behavior). You can also pass a custom value or a custom function returning a boolean to handle webchat visbility (it can be defined with the property `visibility` in **webchat/index.js**.
+    - Added `Botonic.getVisibility()` function which returns a promise resolving to true or false depending on Hubtype Desk webchat visibility settings.
+    - Added new `WebchatSettings` component to allow changing webchat features and styles dynamically.
+
+### Changed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Updated breaking `uuid` dependencies.
+  - Migrated documentation from Docusaurus v1 to v2 for better support.
+
+### Fixed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Fixed enduser inputs to only process links instead of full markdown. Allow also custom messages defined with from `user` props.
+  - Fixed wrong value being send when button of persistent menu is clicked and its text is send to the chat.
+  - Fixed and updated Facebook `Messenger Extensions SDK` which was causing issues with Webviews.
+
+- [@botonic/nlu](https://www.npmjs.com/package/@botonic/nlu)
+
+  - Fixed nlu processing hidden files. This affected on the results obtained in development mode.
+  - Updated and freezed `@tensorflow/tfjs-node` and `@tensorflow/tfjs` dependencies to 1.7.3 which were automatically updating to higher versions with bugs, introducing bugs to training processes.
+
+* [@botonic/plugin-nlu](https://www.npmjs.com/package/@botonic/plugin-nlu)
+
+  - Updated and freezed `@tensorflow/tfjs` to 1.7.3.
+
 ## [0.12.0] - 2020-26-05
 
 ### Added
@@ -253,3 +294,4 @@ All notable changes to Botonic will be documented in this file.
 [0.10.1]: https://github.com/hubtype/botonic/releases/tag/v0.10.1
 [0.11.0]: https://github.com/hubtype/botonic/releases/tag/v0.11.0
 [0.12.0]: https://github.com/hubtype/botonic/releases/tag/v0.12.0
+[0.13.0]: https://github.com/hubtype/botonic/releases/tag/v0.13.0
