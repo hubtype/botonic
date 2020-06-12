@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "webpack --env.target=all --mode=production",
-    "start": "webpack-dev-server --env.target=dev",
+    "start": "webpack-dev-server --env.target=dev --mode=development",
     "test": "jest"
   },
   "jest": {
