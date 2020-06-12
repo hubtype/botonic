@@ -42,11 +42,16 @@ All notable changes to Botonic will be documented in this file.
   - Fixed enduser inputs to only process links instead of full markdown. Allow also custom messages defined with from `user` props.
   - Fixed wrong value being send when button of persistent menu is clicked and its text is send to the chat.
   - Fixed and updated Facebook `Messenger Extensions SDK` which was causing issues with Webviews.
+  - Added missing webchat property `enableUserInput`.p
 
 - [@botonic/nlu](https://www.npmjs.com/package/@botonic/nlu)
 
   - Fixed nlu processing hidden files. This affected on the results obtained in development mode.
   - Updated and freezed `@tensorflow/tfjs-node` and `@tensorflow/tfjs` dependencies to 1.7.3 which were automatically updating to higher versions with bugs, introducing bugs to training processes.
+
+* [@botonic/plugin-inbenta](https://www.npmjs.com/package/@botonic/plugin-inbenta)
+
+  - Added a session token to Inbenta search queries to track user actions.
 
 * [@botonic/plugin-nlu](https://www.npmjs.com/package/@botonic/plugin-nlu)
 
