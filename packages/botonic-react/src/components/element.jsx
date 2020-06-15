@@ -11,6 +11,7 @@ const ElementContainer = styled.div`
   border-radius: 6px;
   border: 1px solid ${COLORS.SEASHELL_WHITE};
   overflow: hidden;
+  justify-content: space-between;
 `
 
 export const Element = props => {
