@@ -25,11 +25,7 @@ export class HubtypeService {
       authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
       forceTLS: true,
       auth: {
-        headers: {
-          'X-BOTONIC-USER-ID': this.user.id,
-          'X-BOTONIC-LAST-MESSAGE-ID': this.lastMessageId,
-          'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': this.lastMessageUpdateDate,
-        },
+        headers: this.constructHeaders(),
       },
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
@@ -61,6 +57,16 @@ export class HubtypeService {
     this.channel.bind('botonic_response', data => this.onPusherEvent(data))
     this.channel.bind('update_message_info', data => this.onPusherEvent(data))
     return connectionPromise
+  }
+
+  constructHeaders() {
+    const headers = {}
+    if (this.user && this.user.id) headers['X-BOTONIC-USER-ID'] = this.user.id
+    if (this.lastMessageId)
+      headers['X-BOTONIC-LAST-MESSAGE-ID'] = this.lastMessageId
+    if (this.lastMessageUpdateDate)
+      headers['X-BOTONIC-LAST-MESSAGE-UPDATE-DATE'] = this.lastMessageUpdateDate
+    return headers
   }
 
   onPusherEvent(event) {
