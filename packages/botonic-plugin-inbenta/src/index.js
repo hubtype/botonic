@@ -1,13 +1,14 @@
 import axios from 'axios'
 
 export default class BotonicPluginInbenta {
-  constructor({ API_KEY, API_SECRET, env, ...rest }) {
+  constructor({ API_KEY, API_SECRET, env, source, ...rest }) {
     this.API_KEY = API_KEY
     this.API_SECRET = API_SECRET
     this.env = env || 'production'
+    this.source = source
   }
 
-  async pre({ input }) {
+  async pre({ input, session }) {
     if (input.type != 'text') return
 
     let intent = null
@@ -16,7 +17,7 @@ export default class BotonicPluginInbenta {
     let entities = []
 
     try {
-      const inbentaResponse = await this.knowledgeManagementAPI(input.data)
+      const inbentaResponse = await this.knowledgeManagementAPI(input.data, session)
       if (
         !inbentaResponse.data.results ||
         !inbentaResponse.data.results.length > 0
@@ -51,8 +52,27 @@ export default class BotonicPluginInbenta {
     }
   }
 
-  async knowledgeManagementAPI(query) {
+  async getSessionToken(session) {
+    if (session.inbentaSessionToken) return session.inbentaSessionToken
+    try {
+      const inbentaSession = await axios({
+        method: 'post',
+        url: `${this.apis.knowledge}/v1/tracking/session`,
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'X-Inbenta-Key': this.API_KEY,
+        }
+      })
+      session.inbentaSessionToken = inbentaSession.data.sessionToken;
+      return session.inbentaSessionToken
+    } catch (e) {
+      throw new Error(`Couldn't get session token: ${e}`)
+    }
+  }
+
+  async knowledgeManagementAPI(query, session) {
     const token = await this.getToken()
+    const sessionToken = await this.getSessionToken(session)
     return axios({
       method: 'post',
       url: `${this.apis.knowledge}/v1/search`,
@@ -61,6 +81,8 @@ export default class BotonicPluginInbenta {
         'Content-Type': 'application/json',
         'X-Inbenta-Key': this.API_KEY,
         'X-Inbenta-Env': this.env,
+        'X-Inbenta-Session': sessionToken,
+        'X-Inbenta-Source': this.source
       },
       data: JSON.stringify({ query }),
     })

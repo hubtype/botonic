@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "webpack --env.target=all --mode=production",
-    "start": "webpack-dev-server --env.target=dev",
+    "start": "webpack-dev-server --env.target=dev --mode=development",
     "test": "jest"
   },
   "jest": {
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
-    "@botonic/react": "~0.12.0",
+    "@botonic/react": "~0.13.0",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
@@ -40,6 +40,7 @@
     "imagemin-svgo": "^7.0.0",
     "imagemin-webpack": "^5.1.0",
     "jest": "^25.2.0",
+    "moment-locales-webpack-plugin": "^1.2.0",
     "node-sass": "^4.13.0",
     "null-loader": "^3.0.0",
     "react-hot-loader": "^4.12.18",

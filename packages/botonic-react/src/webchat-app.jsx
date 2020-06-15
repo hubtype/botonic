@@ -226,11 +226,10 @@ export class WebchatApp {
   async resolveWebchatVisibility(optionsAtRuntime) {
     let { appId, visibility } = optionsAtRuntime
     visibility = visibility || this.visibility
-    if (visibility === undefined) {
-      if (await this.isWebchatVisible({ appId })) return true
-    }
-    if (visibility === true) return true
+    if (visibility === undefined || visibility === true) return true
     if (typeof visibility === 'function' && visibility()) return true
+    if (visibility === 'dynamic' && (await this.isWebchatVisible({ appId })))
+      return true
     return false
   }
 

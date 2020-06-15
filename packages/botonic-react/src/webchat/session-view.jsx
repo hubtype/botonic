@@ -13,7 +13,7 @@ const AttributeContainer = styled.div`
   font-size: 12px;
   font-weight: 600;
   color: ${COLORS.SOLID_WHITE};
-  alignitems: center;
+  align-items: center;
 `
 
 const Label = styled.div`

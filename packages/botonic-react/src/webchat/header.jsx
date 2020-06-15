@@ -13,7 +13,7 @@ const Header = styled(Flex)`
     ${props => props.color} 100%
   );
   height: 55px;
-  border-radius: 6px 6px 0px 0px;
+  border-radius: ${WEBCHAT.DEFAULTS.BORDER_RADIUS_TOP_CORNERS};
   z-index: 2;
 `
 

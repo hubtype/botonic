@@ -15,8 +15,6 @@ const StyledCarousel = styled.div`
 
 const StyledItems = styled.div`
   display: flex;
-  flexdirection: row;
-  alignitems: start;
 `
 
 const serialize = carouselProps => {

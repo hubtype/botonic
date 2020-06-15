@@ -3,7 +3,7 @@ import Frame from 'react-frame-component'
 import { RequestContext, WebchatContext } from '../contexts'
 
 import styled from 'styled-components'
-import { COLORS } from '../constants'
+import { WEBCHAT, COLORS } from '../constants'
 
 const StyledWebview = styled.div`
   position: absolute;
@@ -11,9 +11,10 @@ const StyledWebview = styled.div`
   flex-direction: column;
   bottom: 0;
   width: 100%;
-  height: 80%;
+  height: 100%;
   background-color: ${COLORS.SOLID_WHITE};
   z-index: 2;
+  border-radius: ${WEBCHAT.DEFAULTS.BORDER_RADIUS_TOP_CORNERS};
 `
 
 const StyledWebviewHeader = styled.div`
@@ -21,6 +22,7 @@ const StyledWebviewHeader = styled.div`
   background-color: ${COLORS.WILD_SAND_WHITE};
   border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_2};
   border-bottom: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_2};
+  border-radius: ${WEBCHAT.DEFAULTS.BORDER_RADIUS_TOP_CORNERS};
 `
 const StyledCloseHeader = styled.div`
   display: inline-block;

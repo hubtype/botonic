@@ -34,6 +34,7 @@ export const WEBCHAT = {
     LOGO: BotonicLogo,
     PLACEHOLDER: 'Ask me something...',
     FONT_FAMILY: "'Noto Sans JP', sans-serif",
+    BORDER_RADIUS_TOP_CORNERS: '6px 6px 0px 0px',
   },
   CUSTOM_PROPERTIES: {
     webviewStyle: 'webview.style',
