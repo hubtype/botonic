@@ -6,7 +6,8 @@ title: Supported Platforms
 Botonic supports several messaging platforms, such as:
 
 ---
-**[Webchat](#webchat) | [WhatsApp](#whatsapp)  | [Facebook Messenger](#facebook-messenger) | [Telegram](#telegram) | [Twitter](#twitter)** 
+
+**[Webchat](#webchat) | [WhatsApp](#whatsapp) | [Facebook Messenger](#facebook-messenger) | [Telegram](#telegram) | [Twitter](#twitter)**
 
 ---
 
@@ -34,35 +35,33 @@ For more information, refer to the **[Custom Webchat](templates/template-custom-
 
 ## WhatsApp
 
-
-
-WhatsApp Playground allows you to test your bot with the official WhatsApp Business API without going to the approval process. 
+WhatsApp Playground allows you to test your bot with the official WhatsApp Business API without going to the approval process.
 
 1. Click on the bot’s name and test the conversation in the Hubtype Desk chat box.
-   <details>
-   <summary>Example</summary>
+      <details>
+      <summary>Example</summary>
 
    ![](https://botonic-doc-static.netlify.com/images/whatsplayground/whatsplayground2.png)
-</details>
-1. Enter a WhatsApp number in the Whitelist to test the WhatsApp Playground integration. Remember that you can have one number integrated with one bot only. 
-2. Once the number is inserted, it is displayed in the list of available bots.
-   <details>
-   <summary>Example</summary>
+   </details>
+
+1. Enter a WhatsApp number in the Whitelist to test the WhatsApp Playground integration. Remember that you can have one number integrated with one bot only.
+1. Once the number is inserted, it is displayed in the list of available bots.
+      <details>
+      <summary>Example</summary>
 
    ![](https://botonic-doc-static.netlify.com/images/whatsplayground/whatsplayground1.png)
-</details>
+   </details>
+
 1. Click on the phone number to test it directly on WhatsApp.
-   <details>
-   <summary>Example</summary>
+      <details>
+      <summary>Example</summary>
 
    ![](https://botonic-doc-static.netlify.com/images/whatsplayground/whatsplayground3.png)
-</details>
+   </details>
 
 Note: WhatsApp Playground integration is intended for **demos and testing purposes only**, avoid using it for production applications.
 
 For more information about WhatsApp full integration, contact us via **[Slack](https://slack.botonic.io/)**.
-
-
 
 ## Facebook Messenger
 
@@ -103,5 +102,5 @@ A new integration appears on the left side. Click on the Facebook Messenger link
 <summary>Example</summary>
 
 ![](https://botonic-doc-static.netlify.com/images/twitter_channel.png)
-</details>
 
+</details>

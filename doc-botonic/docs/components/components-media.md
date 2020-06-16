@@ -5,7 +5,7 @@ title: Media
 
 ## Purpose
 
-Using media such as images, videos or attached files helps to visualize the conversation and draws attention. 
+Using media such as images, videos or attached files helps to visualize the conversation and draws attention.
 
 <details>
 <summary>Example</summary>
@@ -26,4 +26,3 @@ You can send all these types of media files:
   <Document src='http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf' />
 </>
 ```
-

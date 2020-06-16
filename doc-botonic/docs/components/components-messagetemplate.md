@@ -12,9 +12,6 @@ As an example, you can generate a nice boarding pass as below.
 
 ![](https://botonic-doc-static.netlify.com/images/message_template.png)
 
-
-
-
 ## Code
 
 **./actions/example.js**
@@ -41,30 +38,30 @@ export default class extends React.Component {
           auxiliary_fields: [
             {
               label: 'Terminal',
-              value: 'T1'
+              value: 'T1',
             },
             {
               label: 'Departure',
-              value: '30OCT 19:05'
-            }
+              value: '30OCT 19:05',
+            },
           ],
           secondary_fields: [
             {
               label: 'Boarding',
-              value: '18:30'
+              value: '18:30',
             },
             {
               label: 'Gate',
-              value: 'D57'
+              value: 'D57',
             },
             {
               label: 'Seat',
-              value: '74J'
+              value: '74J',
             },
             {
               label: 'Sec.Nr.',
-              value: '003'
-            }
+              value: '003',
+            },
           ],
           flight_info: {
             flight_number: 'KL0642',
@@ -72,19 +69,19 @@ export default class extends React.Component {
               airport_code: 'JFK',
               city: 'New York',
               terminal: 'T1',
-              gate: 'D57'
+              gate: 'D57',
             },
             arrival_airport: {
               airport_code: 'AMS',
-              city: 'Amsterdam'
+              city: 'Amsterdam',
             },
             flight_schedule: {
               departure_time: '2016-01-02T19:05',
-              arrival_time: '2016-01-05T17:30'
-            }
-          }
-        }
-      ]
+              arrival_time: '2016-01-05T17:30',
+            },
+          },
+        },
+      ],
     }
     return (
       <Text>
@@ -95,6 +92,3 @@ export default class extends React.Component {
   }
 }
 ```
-
-
-

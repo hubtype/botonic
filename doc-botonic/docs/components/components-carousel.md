@@ -9,7 +9,8 @@ A carousel is a sliding gallery of information displayed to the user. It helps t
 
 ![](https://botonic-doc-static.netlify.com/images/carrousel.gif)
 
-## Code 
+## Code
+
 You can render a carousel following the structure below:
 
 ```javascript
@@ -21,7 +22,7 @@ import {
   Pic,
   Element,
   Title,
-  Subtitle
+  Subtitle,
 } from '@botonic/react'
 
 export default class extends React.Component {
@@ -32,20 +33,21 @@ export default class extends React.Component {
         desc: 'Le Big Mac',
         url: 'https://www.imdb.com/title/tt0110912',
         pic:
-          'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg'
+          'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg',
       },
       {
         name: 'The Big Lebowski',
         desc: 'Fuck it Dude',
         url: 'https://www.imdb.com/title/tt0118715',
-        pic: 'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'
+        pic:
+          'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg',
       },
       {
         name: 'Snatch',
         desc: 'Five minutes, Turkish',
         url: 'https://www.imdb.com/title/tt0208092',
-        pic: 'http://www.libertytuga.pt/wp-content/uploads/2011/11/snatch.jpg'
-      }
+        pic: 'http://www.libertytuga.pt/wp-content/uploads/2011/11/snatch.jpg',
+      },
     ]
     return (
       <>
@@ -65,5 +67,3 @@ export default class extends React.Component {
   }
 }
 ```
-
-

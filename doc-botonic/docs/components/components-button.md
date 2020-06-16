@@ -19,5 +19,3 @@ Buttons are usually sent during a conversation for the person to click and take 
   <Button payload='carousel'>Show me a carousel</Button>
 <Text>
 ```
-
-

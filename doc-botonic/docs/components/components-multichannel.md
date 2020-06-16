@@ -15,7 +15,7 @@ Add the following code in your `action` files, under the `render` section.
 
 ```javascript
 <Multichannel
-        firstIndex={'a'} 
+        firstIndex={'a'}
         boldIndex={true}
         carousel={{ indexMode: 'letter' }}
         text={{ indexMode: 'letter' }}
@@ -40,7 +40,7 @@ Add the following code in your `action` files, under the `render` section.
 
 ## Example
 
-```javascript
+````javascript
       <Multichannel {...LEGACY_PROPS}>
         <Text>
           Some with buttons
@@ -59,3 +59,4 @@ Add the following code in your `action` files, under the `render` section.
       </Multichannel>
     )
     ```
+````

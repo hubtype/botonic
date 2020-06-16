@@ -33,7 +33,6 @@ Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file
 
 Actions are where you define the behavior of your bot. You can add an Action by creating a new .js file inside `src/actions`. View **[Actions](/concepts/actions)** and **[Components](/components/components)** for more details.
 
-
 ## Natural Language Understanding
 
 You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot, you get to a point where you need Natural Language Understanding (NLU) capabilities.
@@ -44,7 +43,7 @@ Botonic has its own **[NLU module](/plugins/plugin-nlu)** which covers intent an
 
 ## Utterances and Intents
 
-There are many ways that a user can express his intent. For example the Utterances "Hello", "Hi", and "Good morning" are all examples of a Greeting intent. 
+There are many ways that a user can express his intent. For example the Utterances "Hello", "Hi", and "Good morning" are all examples of a Greeting intent.
 To create an intent, simply add a new text file under `src/nlu/utterances/en/` such as `src/nlu/utterances/en/Greetings.txt` and add the utterances in the `Greetings.txt` file.
 
 ## Routes for intents
@@ -57,11 +56,11 @@ import NotFound from './actions/not-found'
 
 export const routes = [
   { input: i => i.confidence < 0.7, action: NotFound },
-  { intent: 'Greetings', action: Start }
+  { intent: 'Greetings', action: Start },
 ]
 ```
 
-- `{ input: i => i.confidence < 0.7, action: NotFound }` i.confidence references the confidence value of the input. The confidence value is  between 0 and 1 and indicates the likelihood that an input has a certain intent. This route is used if the input doesn't match an intent with enough confidence.
+- `{ input: i => i.confidence < 0.7, action: NotFound }` i.confidence references the confidence value of the input. The confidence value is between 0 and 1 and indicates the likelihood that an input has a certain intent. This route is used if the input doesn't match an intent with enough confidence.
 - `{ intent: 'Greetings', action: Start }` will trigger the action `Start` when the user inputs a greeting.
 
 **Note**: Routes are checked in order. It is recommended to put the more specific ones first and the more generic at the end.

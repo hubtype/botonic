@@ -28,10 +28,8 @@ In order to create a line break, you must use `{'\\n'}`.
 
 ### Markdown support
 
-By default, the Text component supports markdown format for webchats.  If you want to remove it, you must set the markdown property to false.
+By default, the Text component supports markdown format for webchats. If you want to remove it, you must set the markdown property to false.
 
 ```javascript
-<Text markdown={false}> 
-{formattedText} 
-</Text>
+<Text markdown={false}>{formattedText}</Text>
 ```

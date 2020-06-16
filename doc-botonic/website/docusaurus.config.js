@@ -23,6 +23,7 @@ module.exports = {
     ],
   ],
   themeConfig: {
+    defaultDarkMode: false,
     navbar: {
       title: 'Botonic',
       logo: {
@@ -66,7 +67,6 @@ module.exports = {
               label: 'GitHub',
               href: 'https://github.com/hubtype/botonic',
             },
-            
           ],
         },
         {},
