@@ -13,7 +13,7 @@ See the [**Installation section**](getting-started).
 
 1. Name your project by running:
    `botonic new <botname>`
-2. Select the blank template and run `cd <botname>`.
+2. Select the **blank** template and run `cd <botname>`.
 3. Test it in your browser with `npm run start` or `botonic serve`.
 
 Your blank project is created with its basic structure. For more information, see the **[Understanding the Project](/project/)** section.
@@ -22,7 +22,7 @@ Your blank project is created with its basic structure. For more information, se
 
 Let's say we want our chatbot to answer just after the user says “hi”.
 
-1. Open the `src/action` folder and create a first action file: `welcome.js`.
+1. Open the `src/actions/` folder and create a first action file: `welcome.js`.
 2. In the `welcome.js` file, import the react library by entering:
 
    ```javascript
@@ -68,13 +68,13 @@ Let's say we want our chatbot to answer just after the user says “hi”.
 
 Just after greeting the user, let's say that the bot lets the user choose one option among pizza or pasta.
 
-1. Go back to the `welcome.js` file and import the `Reply` component.
+1. Go back to the `welcome.js` file and import also the `Reply` component.
 
    ```javascript
    import { Text, Reply } from '@botonic/react'
    ```
 
-1. In the render method you were previously using in `welcome.js` , add the replies.
+1. In the render method you were previously using in `welcome.js` , add the replies with `pizza` and `pasta` as options.
 
    **Your final `welcome.js` should look like this:**
 
@@ -98,7 +98,7 @@ Just after greeting the user, let's say that the bot lets the user choose one op
    }
    ```
 
-1. Open the `src/actions` folder and create two files: `chosen-pasta.js` and `chosen-pizza.js`.
+1. Open the `src/actions/` folder and create two files: `chosen-pasta.js` and `chosen-pizza.js`.
 
 1. Import the react element and the `Text` component. Let’s take the example of the `chosen-pasta.js` file.
 
@@ -107,6 +107,7 @@ Just after greeting the user, let's say that the bot lets the user choose one op
    ```javascript
    import React from 'react'
    import { Text } from '@botonic/react'
+
    export default class extends React.Component {
      render() {
        return <Text>Pasta is always a good choice!</Text>
@@ -114,15 +115,29 @@ Just after greeting the user, let's say that the bot lets the user choose one op
    }
    ```
 
-1. Repeat the same procedure for the `chosen-pizza.js` file.
-1. Back to the `routes.js` file, add :
+1. Repeat the same procedure for the `chosen-pizza.js` file, for example.
+
+   **`chosen-pizza.js`**
+
+   ```javascript
+   import React from 'react'
+   import { Text } from '@botonic/react'
+
+   export default class extends React.Component {
+     render() {
+       return <Text>Pizza is a really good option!</Text>
+     }
+   }
+   ```
+
+1. Back to the `src/routes.js` file, add these two new actions:
 
    ```javascript
    import ChosenPizza from './actions/chosen-pizza'
    import ChosenPasta from './actions/chosen-pasta'
    ```
 
-1. Then in `routes.js`, you can add rules to make the user follow a logical path such as a **payload** to capture the answer once the user has clicked on the button `{ payload: "pizza", action: ChosenPizza }` or a **sub-flow** where you can select between two options via `childRoutes`.  
+1. Then in `src/routes.js`, you can add rules to make the user follow a logical path such as a **payload** to capture the answer once the user has clicked on the button `{ payload: "pizza", action: ChosenPizza }` or a **sub-flow** where you can select between two options via `childRoutes`.  
    **Note:** When using `childRoutes`, at least the main action must have been previously passed.
 
 Such as:
@@ -157,7 +172,7 @@ export const routes = [
 
 1. In the bot directory, enter `npm install @botonic/plugin-nlu`.
 
-2. Create two types of intentions, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en`. You must create at least **two files** to make the NLU plugin work.
+2. Create two types of `intents`, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en` containing utterances related to an intention. You must create at least **two files** to make the NLU plugin work.
 
 3. Enter the content of your choice in both files. In our example, we are going to add content to the `help.txt` file. Make sure to add a line break between each intent.
 
@@ -169,11 +184,13 @@ I don't understand
 I need help
 ```
 
-4. Open `src/plugins.js` and add your plugin.
+4. Open `src/plugins.js` and add `@botonic/plugin-nlu` into your plugins array.
+
    **Your final `plugins.js` file should look like this:**
 
    ```javascript
    import nluConfig from './nlu/nlu.config.json'
+
    export const plugins = [
      {
        id: 'nlu',
@@ -183,15 +200,16 @@ I need help
    ]
    ```
 
-1. Run `botonic train`.
-1. Wait for the model to be trained.  
-   In the next section you are going to create an action: `HelpAction` to answer to the intent.
+1. Run `botonic train`. This will generate a prediction model based on the added examples.
+1. Wait until the model is fully trained.
+
+   In the next section you are going to create an action: `HelpAction` to answer to this intent.
 
 ## Transfer the Conversation to an Agent
 
 Now let’s say that the user wants to get help from an agent just after his selection.
 
-1. Create a `help-action.js` file.
+1. Create a `help-action.js` file in `src/actions/`.
 
 2. Import the `humanHandOff` method from `@botonic/core`.
 
@@ -222,7 +240,7 @@ Now let’s say that the user wants to get help from an agent just after his sel
    }
    ```
 
-5. In the `routes.js` files, import `HelpAction`:
+5. In the `src/routes.js` files, import `HelpAction`:
 
    ```javascript
    import HelpAction from './actions/help-action'
@@ -245,6 +263,7 @@ To end the conversation:
    ```javascript
    import React from 'react'
    import { Text } from '@botonic/react'
+
    export default class extends React.Component {
      render() {
        return (
@@ -257,7 +276,7 @@ To end the conversation:
    }
    ```
 
-1. In the `routes.js` file, import:
+1. In the `src/routes.js` file, import:
 
    ```javascript
    import FinalAction from './actions/final-action'
@@ -269,7 +288,7 @@ To end the conversation:
     { path: "end-of-flow", payload: "end", action: FinalAction }
    ```
 
-   **Your final `routes.js` file should look like this:**
+   **Your final `src/routes.js` file should look like this:**
 
    ```javascript
    import Welcome from './actions/welcome'
@@ -301,4 +320,6 @@ To end the conversation:
    ]
    ```
 
-You bot is ready so let's try and deploy it! See the [**Quick Start section**](getting-started) and follow the instructions.
+You bot is ready! Now try your bot with `botonic serve` and put it into production by running `botonic deploy`.
+
+**Note**: Remember to run `botonic` commands from bot's project root folder. See the [**Quick Start section**](getting-started) for further details.
