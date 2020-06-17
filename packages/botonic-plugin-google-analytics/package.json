@@ -1,0 +1,17 @@
+{
+  "name": "@botonic/plugin-google-analytics",
+  "version": "0.14.0",
+  "main": "src/index.js",
+  "scripts": {
+    "cloc": "../../scripts/qa/cloc-package.sh .",
+    "prepare": "node ../../preinstall.js",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
+  },
+  "dependencies": {
+    "@analytics/google-analytics": "^0.4.0",
+    "analytics": "^0.5.1"
+  },
+  "devDependencies": {}
+}
