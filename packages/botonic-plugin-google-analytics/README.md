@@ -26,24 +26,26 @@ export const plugins = [
 ## Use
 
 The tracking needs to be done manually, enabling this plugin doesn't track any user interaction or bot's behaviour by default.
-You can do the tracking inside the `botonicInit` method, `render` method or even inside the [Webchat listeners](https://docs.botonic.io/concepts/webchat#webchat-listeners)
+You can do the tracking inside the `botonicInit` method, `render` method or even inside the [Webchat listeners](https://docs.botonic.io/concepts/webchat#webchat-listeners).
 
+`eventFields` can contain these Google Analytic [event tracking fields](https://developers.google.com/analytics/devguides/collection/analyticsjs/events#event_fields)  :
+- `category`: eventCategory in Google Analytics (string, required)
+- `action`: eventAction in Google Analytics (string, required)
+- `label`: eventLabel in Google Analytics (string, optional)
+- `value`: eventValue in Google Analytics (numeric, optional)
 ```javascript
 static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
     const ga = plugins.google_analytics
     
-    const eventName = 'botEvent'
-    const eventData = {
+    const eventFields = {
       category: 'chatbot',
       action: 'user_message_sent',
       label: 'rating',
       value: 4
     }
-    const callback = () => {
-        console.log(`event ${eventName} sent`)
-    }
+    const callback = () => console.log('GA event sent')
 
-    await ga.track(eventName, eventData, callback)
+    ga.track(eventFields, callback)
   }
 ```
-<sub><sup>**Note:** The callback argument is not required</sub></sup>
+**Note:** The callback argument is not required.
