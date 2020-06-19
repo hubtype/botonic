@@ -59,7 +59,10 @@ export default class BotonicPluginGoogleAnalytics {
         'The eventFields object must contain the fields: action and category'
       )
 
-    await this.analytics.identify(this.userId({ session }), this.userTraits({ session }))
+    await this.analytics.identify(
+      this.userId({ session }),
+      this.userTraits({ session })
+    )
     return this.analytics.track(eventFields.action, eventFields)
   }
 }

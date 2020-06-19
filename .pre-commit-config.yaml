@@ -76,8 +76,8 @@ repos:
         files: ^packages/botonic-react/
 
       - id: google-analytics
-          name: google-analytics
-          entry: scripts/qa/lint-package.sh packages/botonic-plugin-google-analytics
-          language: system
-          files: ^packages/botonic-plugin-google-analytics/
+        name: google-analytics
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-google-analytics
+        language: system
+        files: ^packages/botonic-plugin-google-analytics/
 
