@@ -5,16 +5,16 @@ export default class BotonicPluginGoogleAnalytics {
   /**
    * @param {Object} options - Options for the plugin
    * @param {string} options.trackingId - Tracking ID for Google Analytics.
-   * @param {function({session: object}): string} [options.userId] - Method that returns a unique user ID as string.
-   * @param {function({session: object}): object} [options.userTraits] - Method that returns the user traits as object.
+   * @param {function({session: object}): string} [options.getUserId] - Method that returns a unique user ID as string.
+   * @param {function({session: object}): object} [options.getUserTraits] - Method that returns the user traits as object.
    * @param {boolean} [options.automaticTracking] - If set to false, no automatic tracking will be done in post method.
-   * @param {function({session: object, input: object, lastRoutePath: string}): object} [options.eventFields] - Method
-   *    that returns the eventFields to track as object (used only if automaticTracking is set to false).
+   * @param {function({session: object, input: object, lastRoutePath: string}): object} [options.getEventFields] - Method
+   *    that returns the eventFields to track as object (used only if automaticTracking is not set or set to true).
    */
   constructor(options) {
-    this.userId = options.userId ?? this.getUserId
-    this.userTraits = options.userTraits ?? this.getUserTraits
-    this.eventFields = options.eventFields ?? this.getEventFields
+    this.getUserId = options.getUserId ?? this.defaultGetUserId
+    this.getUserTraits = options.getUserTraits ?? this.defaultGetUserTraits
+    this.getEventFields = options.getEventFields ?? this.defaultGetEventFields
     this.automaticTracking = options.automaticTracking ?? true
     this.analytics = Analytics({
       plugins: [
@@ -31,20 +31,20 @@ export default class BotonicPluginGoogleAnalytics {
     if (this.automaticTracking) {
       await this.track({
         session,
-        eventFields: this.eventFields({ session, input, lastRoutePath }),
+        eventFields: this.getEventFields({ session, input, lastRoutePath }),
       })
     }
   }
 
-  getUserId = ({ session }) => session.user.id
+  defaultGetUserId = ({ session }) => session.user.id
 
-  getUserTraits = ({ session }) => ({
+  defaultGetUserTraits = ({ session }) => ({
     userName: session.user.username,
     channel: session.user.provider,
     channelId: session.user.provider_id,
   })
 
-  getEventFields = ({ session, input, lastRoutePath }) => ({
+  defaultGetEventFields = ({ session, input, lastRoutePath }) => ({
     category: session.bot.name,
     action: lastRoutePath,
     label: input.data,
@@ -67,8 +67,8 @@ export default class BotonicPluginGoogleAnalytics {
       )
 
     await this.analytics.identify(
-      this.userId({ session }),
-      this.userTraits({ session })
+      this.getUserId({ session }),
+      this.getUserTraits({ session })
     )
     return this.analytics.track(eventFields.action, eventFields)
   }
