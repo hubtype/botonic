@@ -10,8 +10,8 @@ export default class BotonicPluginGoogleAnalytics {
    * @param {boolean} [options.trackManually] - If set to true, no default tracking will be done in post method.
    */
   constructor(options) {
-    this.userId = options.userId ?? this.defaultUserId
-    this.userTraits = options.userTraits ?? this.defaultUserTraits
+    this.userId = options.userId ?? this.getUserId
+    this.userTraits = options.userTraits ?? this.getUserTraits
     this.trackManually = options.trackManually
     this.analytics = Analytics({
       plugins: [
@@ -35,9 +35,9 @@ export default class BotonicPluginGoogleAnalytics {
     }
   }
 
-  defaultUserId = ({ session }) => session.user.id
+  getUserId = ({ session }) => session.user.id
 
-  defaultUserTraits = ({ session }) => ({
+  getUserTraits = ({ session }) => ({
     userName: session.user.username,
     channel: session.user.provider,
     channelId: session.user.provider_id,
