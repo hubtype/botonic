@@ -17,18 +17,18 @@ export const plugins = [
     resolve: require('@botonic/plugin-google-analytics'),
     options: {
       trackingId: 'UA-XXXXXXXX-Y', // Your Google Analytics tracking ID
-      userId: ({session}) => session.user.extra_data.analyticsUserId, //Optional. Method that returns a unique user ID as string
-      userTraits: ({session}) => { userName: session.user.extra_data.analyticsUserName, userEmail: session.user.extra_data.analyticsUserEmail }, //Optional. Method that returns an object with the user Traits
+      getUserId: ({session}) => session.user.extra_data.analyticsUserId, //Optional. Method that returns a unique user ID as string
+      getUserTraits: ({session}) => { userName: session.user.extra_data.analyticsUserName, userEmail: session.user.extra_data.analyticsUserEmail }, //Optional. Method that returns an object with the user Traits
       automaticTracking: true, //Optional. Indicates if an automatic tracking will be executed on every user interaction (true by default)
-      eventFields: () => ({category: 'bot', action: 'user_interaction'}) //Optional. Set custom event fields to track if automatic tracking is enabled
+      getEventFields: () => ({category: 'bot', action: 'user_interaction'}) //Optional. Set custom event fields to track if automatic tracking is enabled
     }
   }
 ]
 ```
-If no `userId` is set, the plugin will use the bot's user ID (taken from the bot's session).  
-If no `userTraits` is set, the plugin will use as user traits some information about bot's user information (`username`, `provider` and `provider_id`).  
-If `automaticTracking` is set to false, the plugin will not track automatically in every user interaction.
-If no `eventFields` is set, the plugin will send a default set of fields to the automatic tracking. This option is used only if `automaticTracking` is not set or is set to true.  
+If no `getUserId` is set, the plugin will use the bot's user ID (taken from the bot's session).  
+If no `getUserTraits` is set, the plugin will use as user traits some information about bot's user information (`username`, `provider` and `provider_id`).  
+If `automaticTracking` is set to `false`, the plugin will not track automatically in every user interaction.
+If no `getEventFields` is set, the plugin will send a default set of fields to the automatic tracking. This option is used only if `automaticTracking` is not set or is set to `true`.  
 
 ## Use
 
