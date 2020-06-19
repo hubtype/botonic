@@ -7,15 +7,15 @@ export default class BotonicPluginGoogleAnalytics {
    * @param {string} options.trackingId - Tracking ID for Google Analytics.
    * @param {function({session: object}): string} [options.userId] - Method that returns a unique user ID as string.
    * @param {function({session: object}): object} [options.userTraits] - Method that returns the user traits as object.
-   * @param {boolean} [options.trackManually] - If set to true, no default tracking will be done in post method.
+   * @param {boolean} [options.automaticTracking] - If set to false, no automatic tracking will be done in post method.
    * @param {function({session: object, input: object, lastRoutePath: string}): object} [options.eventFields] - Method
-   *    that returns the eventFields to track as object (used only if trackManually is not set or set to false).
+   *    that returns the eventFields to track as object (used only if automaticTracking is set to false).
    */
   constructor(options) {
     this.userId = options.userId ?? this.getUserId
     this.userTraits = options.userTraits ?? this.getUserTraits
     this.eventFields = options.eventFields ?? this.getEventFields
-    this.trackManually = options.trackManually
+    this.automaticTracking = options.automaticTracking ?? true
     this.analytics = Analytics({
       plugins: [
         googleAnalytics({
@@ -28,7 +28,7 @@ export default class BotonicPluginGoogleAnalytics {
   async pre({ input, session, lastRoutePath }) {}
 
   async post({ input, session, lastRoutePath, response }) {
-    if (!this.trackManually) {
+    if (this.automaticTracking) {
       await this.track({
         session,
         eventFields: this.eventFields({ session, input, lastRoutePath }),
