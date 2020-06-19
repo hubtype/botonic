@@ -19,17 +19,20 @@ export const plugins = [
       trackingId: 'UA-XXXXXXXX-Y', // Your Google Analytics tracking ID
       userId: ({session}) => session.user.extra_data.analyticsUserId, //Optional. Method that returns a unique user ID as string
       userTraits: ({session}) => { userName: session.user.extra_data.analyticsUserName, userEmail: session.user.extra_data.analyticsUserEmail }, //Optional. Method that returns an object with the user Traits
-      trackManually: true //Optional. Indicates if the tracking will be done manually (set to true) or automatic (by default)
+      trackManually: true, //Optional. Indicates if the tracking will be done manually (set to true) or automatic (by default)
+      eventFields: () => ({category: 'bot', action: 'user_interaction'})
     }
   }
 ]
 ```
 If no `userId` is set, the plugin will use the bot's user ID (taken from the bot's session).  
 If no `userTraits` is set, the plugin will use as user traits some information about bot's user information (`username`, `provider` and `provider_id`).  
-If no `trackManually` is set, the plugin will track automatically in every user interaction (`post` method).  
+If no `trackManually` is set or is set to false, the plugin will track automatically in every user interaction (`post` method).    
+If no `eventFields` is set, the plugin will send a default set of fields to the automatic tracking. This option is used only if `trackManually` is not set or is set to false
 
 ## Use
 
+This plugin can also be used to track manually.  
 The tracking must be done inside the `botonicInit` method and make sure to call it with the `await` keyword to ensure its execution.
 For every tracking, the user will be identified with the `userId` and `userTraits` defined in the plugin's options or with its default values.
 
