@@ -16,19 +16,24 @@ export const plugins = [
     id: 'google_analytics',
     resolve: require('@botonic/plugin-google-analytics'),
     options: {
-      botName: 'YOUR_BOT_NAME',
-      trackingId: 'YOUR_TRACKING_ID'
+      trackingId: 'UA-XXXXXXXX-Y', // Your Google Analytics tracking ID
+      userId: ({session}) => session.user.extra_data.analyticsUserId, //Optional. Method that returns a unique user ID as string
+      userTraits: ({session}) => { userName: session.user.extra_data.analyticsUserName, userEmail: session.user.extra_data.analyticsUserEmail }, //Optional. Method that returns an object with the user Traits
+      trackManually: true //Optional. Indicates if the tracking will be done manually (set to true) or automatic (by default)
     }
   }
 ]
 ```
+If no `userId` is set, the plugin will use the bot's user ID (taken from the bot's session).  
+If no `userTraits` is set, the plugin will use as user traits some information about bot's user information (`username`, `provider` and `provider_id`).  
+If no `trackManually` is set, the plugin will track automatically in every user interaction (`post` method).  
 
 ## Use
 
-The tracking needs to be done manually, enabling this plugin doesn't track any user interaction or bot's behaviour by default.
-You can do the tracking inside the `botonicInit` method, `render` method or even inside the [Webchat listeners](https://docs.botonic.io/concepts/webchat#webchat-listeners).
+The tracking must be done inside the `botonicInit` method and make sure to call it with the `await` keyword to ensure its execution.
+For every tracking, the user will be identified with the `userId` and `userTraits` defined in the plugin's options or with its default values.
 
-`eventFields` can contain these Google Analytic [event tracking fields](https://developers.google.com/analytics/devguides/collection/analyticsjs/events#event_fields)  :
+`eventFields` contains these Google Analytic [event tracking fields](https://developers.google.com/analytics/devguides/collection/analyticsjs/events#event_fields)  :
 - `category`: eventCategory in Google Analytics (string, required)
 - `action`: eventAction in Google Analytics (string, required)
 - `label`: eventLabel in Google Analytics (string, optional)
@@ -43,9 +48,7 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
       label: 'rating',
       value: 4
     }
-    const callback = () => console.log('GA event sent')
-
-    ga.track(eventFields, callback)
-  }
+    
+    await ga.track({ session, eventFields })
+}
 ```
-**Note:** The callback argument is not required.
