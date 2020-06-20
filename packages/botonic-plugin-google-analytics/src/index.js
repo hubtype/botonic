@@ -6,14 +6,14 @@ export default class BotonicPluginGoogleAnalytics {
    * @param {Object} options - Options for the plugin
    * @param {string} options.trackingId - Tracking ID for Google Analytics.
    * @param {function({session: object}): string} [options.getUserId] - Method that returns a unique user ID as string.
-   * @param {function({session: object}): object} [options.getUserTraits] - Method that returns the user traits as object.
+   * @param {function({session: object}): object} [options.getUserTraits] - Method that returns the user traits as object. Used only if getUserId is set.
    * @param {boolean} [options.automaticTracking] - If set to false, no automatic tracking will be done in post method.
    * @param {function({session: object, input: object, lastRoutePath: string}): object} [options.getEventFields] - Method
    *    that returns the eventFields to track as object (used only if automaticTracking is not set or set to true).
    */
   constructor(options) {
-    this.getUserId = options.getUserId ?? this.defaultGetUserId
-    this.getUserTraits = options.getUserTraits ?? this.defaultGetUserTraits
+    this.getUserId = options.getUserId
+    this.getUserTraits = options.getUserTraits
     this.getEventFields = options.getEventFields ?? this.defaultGetEventFields
     this.automaticTracking = options.automaticTracking ?? true
     this.analytics = Analytics({
@@ -35,14 +35,6 @@ export default class BotonicPluginGoogleAnalytics {
       })
     }
   }
-
-  defaultGetUserId = ({ session }) => session.user.id
-
-  defaultGetUserTraits = ({ session }) => ({
-    userName: session.user.username,
-    channel: session.user.provider,
-    channelId: session.user.provider_id,
-  })
 
   defaultGetEventFields = ({ session, input, lastRoutePath }) => ({
     category: session.bot.name,
@@ -66,10 +58,15 @@ export default class BotonicPluginGoogleAnalytics {
         'The eventFields object must contain the fields: action and category'
       )
 
-    await this.analytics.identify(
-      this.getUserId({ session }),
-      this.getUserTraits({ session })
-    )
+    if (this.getUserId && this.getUserId({ session })) {
+      this.getUserTraits
+        ? await this.analytics.identify(
+            this.getUserId({ session }),
+            this.getUserTraits({ session })
+          )
+        : await this.analytics.identify(this.getUserId({ session }))
+    }
+
     return this.analytics.track(eventFields.action, eventFields)
   }
 }

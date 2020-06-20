@@ -25,8 +25,8 @@ export const plugins = [
   }
 ]
 ```
-If no `getUserId` is set, the plugin will use the bot's user ID (taken from the bot's session).  
-If no `getUserTraits` is set, the plugin will use as user traits some information about bot's user information (`username`, `provider` and `provider_id`).  
+If no `getUserId` is set, the plugin will not identify the userId (logged user) to Google Analytics. The clientId will be sent either way in all trackings. (see [clientId vs. userId](https://support.google.com/analytics/answer/6205850?hl=en#clientid-userid) for more information).  
+The user traits (`getUserTraits`) will be sent only if `getUserId` is set.    
 If `automaticTracking` is set to `false`, the plugin will not track automatically in every user interaction.
 If no `getEventFields` is set, the plugin will send a default set of fields to the automatic tracking. This option is used only if `automaticTracking` is not set or is set to `true`.  
 
