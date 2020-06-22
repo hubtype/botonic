@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@babel/runtime": "^7.5.5",
-    "eslint_d": "^8.0.0",
+    "eslint_d": "^9.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-no-null": "^1.0.2",
