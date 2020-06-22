@@ -5,6 +5,7 @@ import axios, { Method } from 'axios'
 import colors from 'colors'
 import FormData from 'form-data'
 import * as util from 'util'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec)
 import { hashElement } from 'folder-hash'
 import ora from 'ora'

@@ -9,6 +9,7 @@ import { track } from '../utils'
 
 import * as util from 'util'
 import ora from 'ora'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec)
 
 export default class Run extends Command {
