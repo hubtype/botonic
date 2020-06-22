@@ -1,11 +1,13 @@
 import { ManageCms } from '../../manage-cms/manage-cms'
 import * as cms from '../../cms'
 import * as nlp from '../../nlp'
-import { ClientAPI, createClient } from 'contentful-management'
+import { createClient } from 'contentful-management'
 // eslint-disable-next-line node/no-missing-import
-import { Environment } from 'contentful-management/typings/environment'
+import { ClientAPI } from 'contentful-management/dist/typings/create-contentful-api'
 // eslint-disable-next-line node/no-missing-import
-import { Entry } from 'contentful-management/typings/entry'
+import { Environment } from 'contentful-management/dist/typings/entities/environment'
+// eslint-disable-next-line node/no-missing-import
+import { Entry } from 'contentful-management/dist/typings/entities/entry'
 import { ContentfulOptions } from '../../plugin'
 import { ManageContext } from '../../manage-cms/manage-context'
 import { CmsException, ContentId } from '../../cms'
