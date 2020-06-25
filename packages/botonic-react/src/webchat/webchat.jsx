@@ -118,7 +118,7 @@ const ErrorMessageContainer = styled.div`
   position: relative;
   display: flex;
   z-index: 1;
-  margin-top: 5px;
+  margin-top: 10px;
   justify-content: center;
   width: 100%;
 `
@@ -126,15 +126,16 @@ const ErrorMessageContainer = styled.div`
 const ErrorMessage = styled.div`
   position: absolute;
   top: 0;
-  padding: 5px;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 4px 11px;
   display: flex;
-  background-color: ${COLORS.LIGHT_GRAY};
-  color: ${COLORS.SOLID_BLACK};
+  background-color: ${COLORS.ERROR_RED};
+  color: ${COLORS.CONCRETE_WHITE};
   border-radius: 5px;
-  border: 1px solid black;
   align-items: center;
   justify-content: center;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: ${WEBCHAT.DEFAULTS.FONT_FAMILY};
 `
 
 const DarkBackgroundMenu = styled.div`
@@ -320,7 +321,7 @@ export const Webchat = forwardRef((props, ref) => {
   useAsyncEffect(async () => {
     if (!isOnline)
       setError({
-        message: 'Connection issues.',
+        message: 'connection issues',
       })
     else {
       await resendUnsentMessages()

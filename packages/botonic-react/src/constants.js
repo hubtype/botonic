@@ -25,6 +25,7 @@ export const COLORS = {
   BLEACHED_CEDAR_PURPLE: 'rgba(46, 32, 59, 1)',
   WILD_SAND_WHITE: 'rgba(244, 244, 244, 1)',
   CURIOUS_BLUE: 'rgba(38, 139, 210, 1)',
+  ERROR_RED: 'rgba(255, 43, 94)',
 }
 
 export const WEBCHAT = {
