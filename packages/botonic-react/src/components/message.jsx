@@ -3,7 +3,12 @@ import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
 import { isBrowser, INPUT } from '@botonic/core'
-import { resolveImage, ConditionalWrapper, renderComponent } from '../utils'
+import {
+  resolveImage,
+  ConditionalWrapper,
+  renderComponent,
+  isDev,
+} from '../utils'
 
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
@@ -80,6 +85,8 @@ export const Message = props => {
     imageStyle,
     ...otherProps
   } = props
+  const isFromUser = () => from === 'user'
+  const isFromBot = () => from === 'bot'
   const markdown = props.markdown
   const {
     webchatState,
@@ -98,7 +105,7 @@ export const Message = props => {
   let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
-  if (from === 'user')
+  if (isFromUser())
     textChildren = textChildren.map(e =>
       typeof e === 'string' ? renderLinks(e) : e
     )
@@ -108,6 +115,14 @@ export const Message = props => {
     getFormattedTimestamp,
     timestampStyle,
   } = resolveMessageTimestamps(getThemeProperty)
+
+  let ack = 0
+  if (isDev()) {
+    ack = 1
+  } else {
+    if (props.ack !== undefined) ack = props.ack
+    else ack = isFromUser() ? 0 : 1
+  }
 
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -137,6 +152,7 @@ export const Message = props => {
         })),
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
+        ack: ack,
       }
       addMessage(message)
     }, [])
@@ -154,8 +170,6 @@ export const Message = props => {
     }, [webchatState.messagesJSON])
   }
 
-  const isFromUser = () => from === 'user'
-  const isFromBot = () => from === 'bot'
   const brandColor = getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
 
   const getBgColor = () => {
@@ -257,6 +271,7 @@ export const Message = props => {
               style={{
                 ...getMessageStyle(),
                 ...style,
+                ...{ opacity: ack === 0 ? 0.5 : 1 },
               }}
               {...otherProps}
             >

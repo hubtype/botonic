@@ -21,10 +21,15 @@ describe('TEST: useWebchat ', () => {
     extra_data: {},
   }
 
+  const addMessageAndMessageComponent = (useWebchatHook, message) => {
+    useWebchatHook.current.addMessage(message)
+    useWebchatHook.current.addMessageComponent(message)
+  }
+
   it('addMessage: add testMessage to webchatState.messagesJSON', () => {
     const { result } = renderUseWebchatHook()
     act(() => {
-      result.current.addMessage(testMessage)
+      addMessageAndMessageComponent(result, testMessage)
     })
     expect(result.current.webchatState.messagesJSON).toStrictEqual([
       testMessage,
@@ -34,21 +39,11 @@ describe('TEST: useWebchat ', () => {
   it('updateMessage: updates a message with the given properties', () => {
     const { result } = renderUseWebchatHook()
     act(() => {
-      result.current.addMessage(testMessage)
+      addMessageAndMessageComponent(result, testMessage)
       result.current.updateMessage({ ...testMessage, display: true })
     })
     expect(result.current.webchatState.messagesJSON).toStrictEqual([
       { ...testMessage, display: true },
-    ])
-  })
-
-  it('addMessageComponent: add testMessage to webchatState.messagesComponents', () => {
-    const { result } = renderUseWebchatHook()
-    act(() => {
-      result.current.addMessageComponent(testMessage)
-    })
-    expect(result.current.webchatState.messagesComponents).toStrictEqual([
-      testMessage,
     ])
   })
 

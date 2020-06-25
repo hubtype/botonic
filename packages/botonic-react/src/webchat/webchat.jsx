@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  useState,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
@@ -13,7 +14,7 @@ import { WebchatContext, RequestContext } from '../contexts'
 import { Text, Document, Image, Video, Audio } from '../components'
 import { TypingIndicator } from './components/typing-indicator'
 import { Handoff } from '../components/handoff'
-import { useWebchat, useTyping, usePrevious } from './hooks'
+import { useWebchat, useTyping, usePrevious, useNetwork } from './hooks'
 import { StyledWebchatHeader } from './header'
 import {
   PersistentMenu,
@@ -56,6 +57,7 @@ import {
 import { normalizeWebchatSettings } from '../components/webchat-settings'
 
 import merge from 'lodash.merge'
+import { useAsyncEffect } from 'use-async-effect'
 
 const StyledWebchat = styled.div`
   position: fixed;
@@ -113,9 +115,23 @@ const TriggerImage = styled.img`
 `
 
 const ErrorMessageContainer = styled.div`
-  flex: 1 1 auto;
+  position: relative;
   display: flex;
-  background-color: ${COLORS.SOLID_WHITE};
+  z-index: 1;
+  margin-top: 5px;
+  justify-content: center;
+  width: 100%;
+`
+
+const ErrorMessage = styled.div`
+  position: absolute;
+  top: 0;
+  padding: 5px;
+  display: flex;
+  background-color: ${COLORS.LIGHT_GRAY};
+  color: ${COLORS.SOLID_BLACK};
+  border-radius: 5px;
+  border: 1px solid black;
   align-items: center;
   justify-content: center;
   font-family: Arial, Helvetica, sans-serif;
@@ -172,8 +188,10 @@ export const Webchat = forwardRef((props, ref) => {
     setCurrentAttachment,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
+  const [processingMessages, setProcessingMessages] = useState([])
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
+  const isOnline = useNetwork()
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const saveWebchatState = webchatState => {
     saveState(
@@ -209,6 +227,18 @@ export const Webchat = forwardRef((props, ref) => {
     if (webchatState.currentAttachment)
       sendAttachment(webchatState.currentAttachment)
   }, [webchatState.currentAttachment])
+
+  const sendMessage = async input => {
+    return (
+      props.onUserInput &&
+      props.onUserInput({
+        user: webchatState.user,
+        input: input,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath,
+      })
+    )
+  }
 
   // Load initial state from localStorage
   useEffect(() => {
@@ -248,7 +278,6 @@ export const Webchat = forwardRef((props, ref) => {
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
     if (themeUpdates !== undefined)
       updateTheme(merge(props.theme, themeUpdates), themeUpdates)
-
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
@@ -270,6 +299,45 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.devSettings,
     webchatState.lastMessageUpdate,
   ])
+
+  const resolveMessageAck = (message, response) => {
+    if (response && response.status === 200) {
+      updateMessage({ ...message, ack: 1 })
+    }
+  }
+
+  const resendUnsentMessages = async () => {
+    const unsentMessages = webchatState.messagesJSON.filter(
+      msg => msg.ack === 0
+    )
+    while (unsentMessages.length) {
+      const msg = unsentMessages.shift()
+      const res = await sendMessage(msg)
+      resolveMessageAck(msg, res)
+    }
+  }
+
+  useAsyncEffect(async () => {
+    if (!isOnline)
+      setError({
+        message: 'Connection issues.',
+      })
+    else {
+      await resendUnsentMessages()
+      setError(undefined)
+    }
+  }, [isOnline])
+
+  useAsyncEffect(async () => {
+    while (processingMessages.length) {
+      const message = processingMessages.shift()
+      const messageToUpdate = webchatState.messagesJSON.filter(
+        m => m.id == message.id
+      )[0]
+      const res = await message.response
+      resolveMessageAck(messageToUpdate, res)
+    }
+  }, [webchatState.messagesJSON])
 
   useTyping({ webchatState, updateTyping, updateMessage })
 
@@ -423,14 +491,11 @@ export const Webchat = forwardRef((props, ref) => {
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
     if (isMedia(input)) input.data = await readDataURL(input.data)
-
-    props.onUserInput &&
-      props.onUserInput({
-        user: webchatState.user,
-        input,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-      })
+    const res = sendMessage(input)
+    setProcessingMessages([
+      ...processingMessages,
+      { id: input.id, response: res },
+    ])
     updateLatestInput(input)
     updateLastMessageDate(new Date())
     updateReplies(false)
@@ -597,10 +662,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const webchatMessageList = () => (
-    <WebchatMessageList
-      style={{ flex: 1 }}
-      messages={webchatState.messagesComponents}
-    >
+    <WebchatMessageList style={{ flex: 1 }}>
       {webchatState.typing && <TypingIndicator />}
     </WebchatMessageList>
   )
@@ -815,33 +877,30 @@ export const Webchat = forwardRef((props, ref) => {
               toggleWebchat(false)
             }}
           />
-          {webchatState.error.message ? (
+          {webchatState.error.message && (
             <ErrorMessageContainer>
-              Error: {webchatState.error.message}
+              <ErrorMessage>Error: {webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
-          ) : (
-            <>
-              {webchatMessageList()}
-              {webchatState.replies &&
-                Object.keys(webchatState.replies).length > 0 &&
-                webchatReplies()}
-              {webchatState.isPersistentMenuOpen && (
-                <div>
-                  {darkBackgroundMenu && (
-                    <DarkBackgroundMenu
-                      style={{
-                        borderRadius: webchatState.theme.style.borderRadius,
-                      }}
-                    />
-                  )}
-                  {persistentMenu()}
-                </div>
-              )}
-              {!webchatState.handoff && userInputArea()}
-              {webchatState.webview && webchatWebview()}
-              {coverComponent()}
-            </>
           )}
+          {webchatMessageList()}
+          {webchatState.replies &&
+            Object.keys(webchatState.replies).length > 0 &&
+            webchatReplies()}
+          {webchatState.isPersistentMenuOpen && (
+            <div>
+              {darkBackgroundMenu && (
+                <DarkBackgroundMenu
+                  style={{
+                    borderRadius: webchatState.theme.style.borderRadius,
+                  }}
+                />
+              )}
+              {persistentMenu()}
+            </div>
+          )}
+          {!webchatState.handoff && userInputArea()}
+          {webchatState.webview && webchatWebview()}
+          {coverComponent()}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>

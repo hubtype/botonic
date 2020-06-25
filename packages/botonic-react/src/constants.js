@@ -11,6 +11,7 @@ export const COLORS = {
   SOLID_WHITE_ALPHA_0_8: 'rgba(255, 255, 255, 0.8)',
   SOLID_WHITE_ALPHA_0_2: 'rgba(255, 255, 255, 0.2)',
   CONCRETE_WHITE: 'rgba(243, 243, 243, 1)',
+  LIGHT_GRAY: 'rgba(209, 209, 209, 1)',
   MID_GRAY: 'rgba(105, 105, 115, 1)',
   FRINGY_FLOWER_GREEN: 'rgba(198, 231, 192, 1)',
   TASMAN_GRAY: 'rgba(209, 216, 207, 1)',
