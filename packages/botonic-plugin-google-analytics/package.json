@@ -10,8 +10,8 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "@analytics/google-analytics": "~0.4.0",
-    "analytics": "~0.5.1"
+    "axios": "^0.19.2",
+    "uuid": "^8.2.0"
   },
   "devDependencies": {}
 }
