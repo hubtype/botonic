@@ -118,14 +118,13 @@ const ErrorMessageContainer = styled.div`
   position: relative;
   display: flex;
   z-index: 1;
-  margin-top: 10px;
   justify-content: center;
   width: 100%;
 `
 
 const ErrorMessage = styled.div`
   position: absolute;
-  top: 0;
+  top: 10px;
   font-size: 14px;
   line-height: 20px;
   padding: 4px 11px;
@@ -229,17 +228,49 @@ export const Webchat = forwardRef((props, ref) => {
       sendAttachment(webchatState.currentAttachment)
   }, [webchatState.currentAttachment])
 
-  const sendMessage = async input => {
-    return (
-      props.onUserInput &&
-      props.onUserInput({
-        user: webchatState.user,
-        input: input,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-      })
-    )
+  const sendUserInput = async input => {
+    props.onUserInput &&
+      props
+        .onUserInput({
+          user: webchatState.user,
+          input: input,
+          session: webchatState.session,
+          lastRoutePath: webchatState.lastRoutePath,
+        })
+        .then(res => {
+          setProcessingMessages([
+            ...processingMessages,
+            { id: input.id, input: input, response: res },
+          ])
+        })
+        .catch(e => {
+          console.error('Message cannot be sent.', e)
+          setProcessingMessages([
+            ...processingMessages,
+            { id: input.id, input: input, response: undefined },
+          ])
+        })
   }
+
+  useAsyncEffect(async () => {
+    if (processingMessages.length > 0) {
+      while (processingMessages.length) {
+        const message = processingMessages.shift()
+        const messageToUpdate = webchatState.messagesJSON.filter(
+          m => m.id === message.id
+        )[0]
+        const res = await message.response
+        if (!res || (res && res.status !== 200)) {
+          updateMessage({
+            ...messageToUpdate,
+            ...{ ack: 0, input: message.input },
+          })
+        } else {
+          resolveMessageAck(messageToUpdate, res)
+        }
+      }
+    }
+  }, [webchatState.messagesJSON, processingMessages])
 
   // Load initial state from localStorage
   useEffect(() => {
@@ -286,6 +317,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (!webchatState.isWebchatOpen) return
     deviceAdapter.init()
     scrollToBottom({ behavior: 'auto' })
+    resendUnsentUserInputs()
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
@@ -307,15 +339,17 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const resendUnsentMessages = async () => {
-    const unsentMessages = webchatState.messagesJSON.filter(
-      msg => msg.ack === 0
-    )
-    while (unsentMessages.length) {
-      const msg = unsentMessages.shift()
-      const res = await sendMessage(msg)
-      resolveMessageAck(msg, res)
-    }
+  const resendUnsentUserInputs = async () => {
+    setTimeout(async () => {
+      const unsentMessages = webchatState.messagesJSON.filter(
+        msg => msg.ack === 0
+      )
+      while (unsentMessages.length) {
+        const msg = unsentMessages.shift()
+        const res = await sendUserInput(msg.input)
+        resolveMessageAck(msg, res)
+      }
+    }, 2000)
   }
 
   useAsyncEffect(async () => {
@@ -324,21 +358,10 @@ export const Webchat = forwardRef((props, ref) => {
         message: 'connection issues',
       })
     else {
-      await resendUnsentMessages()
+      await resendUnsentUserInputs()
       setError(undefined)
     }
   }, [isOnline])
-
-  useAsyncEffect(async () => {
-    while (processingMessages.length) {
-      const message = processingMessages.shift()
-      const messageToUpdate = webchatState.messagesJSON.filter(
-        m => m.id == message.id
-      )[0]
-      const res = await message.response
-      resolveMessageAck(messageToUpdate, res)
-    }
-  }, [webchatState.messagesJSON])
 
   useTyping({ webchatState, updateTyping, updateMessage })
 
@@ -492,11 +515,7 @@ export const Webchat = forwardRef((props, ref) => {
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
     if (isMedia(input)) input.data = await readDataURL(input.data)
-    const res = sendMessage(input)
-    setProcessingMessages([
-      ...processingMessages,
-      { id: input.id, response: res },
-    ])
+    sendUserInput(input)
     updateLatestInput(input)
     updateLastMessageDate(new Date())
     updateReplies(false)

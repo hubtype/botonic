@@ -116,13 +116,17 @@ export const Message = props => {
     timestampStyle,
   } = resolveMessageTimestamps(getThemeProperty)
 
-  let ack = 0
-  if (isDev()) {
-    ack = 1
-  } else {
-    if (props.ack !== undefined) ack = props.ack
-    else ack = isFromUser() ? 0 : 1
+  const getEnvAck = () => {
+    let ack = 0
+    if (isDev()) ack = 1
+    else {
+      if (props.ack !== undefined) ack = props.ack
+      else ack = isFromUser() ? 0 : 1
+    }
+    return ack
   }
+
+  const ack = getEnvAck()
 
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -271,7 +275,7 @@ export const Message = props => {
               style={{
                 ...getMessageStyle(),
                 ...style,
-                ...{ opacity: ack === 0 ? 0.5 : 1 },
+                ...{ opacity: ack === 0 ? 0.6 : 1 },
               }}
               {...otherProps}
             >
