@@ -62,7 +62,7 @@ export const WEBCHAT = {
     userMessageBorderColor: 'message.user.style.borderColor',
     customMessageTypes: 'message.customTypes',
     messageStyle: 'message.style',
-    messageTimestampsLocale: 'message.timestamps.locale',
+    enableMessageTimestamps: 'message.timestamps.enable',
     messageTimestampsFormat: 'message.timestamps.format',
     messageTimestampsStyle: 'message.timestamps.style',
     introImage: 'intro.image',

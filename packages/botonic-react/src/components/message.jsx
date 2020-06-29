@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { isBrowser, isNode, INPUT } from '@botonic/core'
+import { isBrowser, INPUT } from '@botonic/core'
 import { resolveImage, ConditionalWrapper, renderComponent } from '../utils'
 
 import { WebchatContext, RequestContext } from '../contexts'
@@ -10,8 +10,8 @@ import { Button } from './button'
 import { Reply } from './reply'
 import { WEBCHAT, COLORS } from '../constants'
 import Fade from 'react-reveal/Fade'
-import moment from 'moment'
 import { renderMarkdown, getMarkdownStyle, renderLinks } from './markdown'
+import { resolveMessageTimestamps, MessageTimestamp } from './timestamps'
 
 const MessageContainer = styled.div`
   display: flex;
@@ -51,22 +51,6 @@ const BlobText = styled.div`
   ${props => props.markdownstyle}
 `
 
-const TimestampContainer = styled.div`
-  display: flex;
-  position: relative;
-  align-items: flex-start;
-`
-
-const TimestampText = styled.div`
-  @import url('https://fonts.googleapis.com/css?family=Lato');
-  font-family: Lato;
-  font-size: 12px;
-  color: ${COLORS.SOLID_BLACK};
-  width: 100%;
-  text-align: ${props => (props.isfromuser ? 'right' : 'left')};
-  padding: ${props => (props.isfromuser ? '0px 15px' : '0px 50px')};
-`
-
 const BlobTickContainer = styled.div`
   position: absolute;
   box-sizing: border-box;
@@ -94,7 +78,6 @@ export const Message = props => {
     json,
     style,
     imageStyle,
-    timestamps = true,
     ...otherProps
   } = props
   const markdown = props.markdown
@@ -120,17 +103,11 @@ export const Message = props => {
       typeof e === 'string' ? renderLinks(e) : e
     )
 
-  const getTimestampFormat = () => {
-    const timestampLocale = getThemeProperty(`message.timestamps.locale`, 'en')
-    moment.locale(timestampLocale)
-    const timestampFormat = getThemeProperty(
-      `message.timestamps.format`,
-      undefined
-    )
-    return timestampFormat
-  }
-
-  const timestampFormat = timestamps && getTimestampFormat()
+  const {
+    timestampsEnabled,
+    getFormattedTimestamp,
+    timestampStyle,
+  } = resolveMessageTimestamps(getThemeProperty)
 
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -140,7 +117,7 @@ export const Message = props => {
         id: state.id,
         type,
         data: decomposedChildren ? decomposedChildren : textChildren,
-        timestamp: moment().format(timestampFormat),
+        timestamp: props.timestamp || getFormattedTimestamp,
         markdown,
         from,
         buttons: buttons.map(b => ({
@@ -246,75 +223,70 @@ export const Message = props => {
       isFromBot() && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
 
     const className = `${type}-${from}${resolveCustomTypeName()}`
-
     return (
       <ConditionalWrapper
         condition={animationsEnabled}
         wrapper={children => <Fade>{children}</Fade>}
       >
-        <MessageContainer
-          isfromuser={isFromUser()}
-          style={{
-            ...getThemeProperty('message.style'),
-          }}
-        >
-          {isFromBot() && BotMessageImage && (
-            <BotMessageImageContainer
-              style={{
-                ...getThemeProperty('message.bot.imageStyle'),
-                ...imageStyle,
-              }}
-            >
-              <img
-                style={{ width: '100%' }}
-                src={resolveImage(BotMessageImage)}
-              />
-            </BotMessageImageContainer>
-          )}
-
-          <Blob
-            className={className}
-            bgcolor={getBgColor()}
-            color={isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
-            blobWidth={getThemeProperty('message.bot.blobWidth')}
-            blob={blob}
+        <>
+          <MessageContainer
+            isfromuser={isFromUser()}
             style={{
-              ...getMessageStyle(),
-              ...style,
+              ...getThemeProperty('message.style'),
             }}
-            {...otherProps}
           >
-            {markdown ? (
-              <BlobText
-                blob={blob}
-                dangerouslySetInnerHTML={{
-                  __html: renderMarkdown(textChildren),
+            {isFromBot() && BotMessageImage && (
+              <BotMessageImageContainer
+                style={{
+                  ...getThemeProperty('message.bot.imageStyle'),
+                  ...imageStyle,
                 }}
-                markdownstyle={getMarkdownStyle(
-                  getThemeProperty,
-                  isFromUser() ? COLORS.SEASHELL_WHITE : brandColor
-                )}
-              />
-            ) : (
-              <BlobText blob={blob}>{textChildren}</BlobText>
+              >
+                <img
+                  style={{ width: '100%' }}
+                  src={resolveImage(BotMessageImage)}
+                />
+              </BotMessageImageContainer>
             )}
-            {buttons}
-            {blob && hasBlobTick() && getBlobTick(6)}
-            {blob && hasBlobTick() && getBlobTick(5)}
-          </Blob>
-        </MessageContainer>
-        <TimestampContainer>
-          {timestampFormat && (
-            <TimestampText
-              isfromuser={isFromUser()}
+            <Blob
+              className={className}
+              bgcolor={getBgColor()}
+              color={isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
+              blobWidth={getThemeProperty('message.bot.blobWidth')}
+              blob={blob}
               style={{
-                ...getThemeProperty('message.timestamps.style'),
+                ...getMessageStyle(),
+                ...style,
               }}
+              {...otherProps}
             >
-              {m.timestamp}
-            </TimestampText>
+              {markdown ? (
+                <BlobText
+                  blob={blob}
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(textChildren),
+                  }}
+                  markdownstyle={getMarkdownStyle(
+                    getThemeProperty,
+                    isFromUser() ? COLORS.SEASHELL_WHITE : brandColor
+                  )}
+                />
+              ) : (
+                <BlobText blob={blob}>{textChildren}</BlobText>
+              )}
+              {buttons}
+              {blob && hasBlobTick() && getBlobTick(6)}
+              {blob && hasBlobTick() && getBlobTick(5)}
+            </Blob>
+          </MessageContainer>
+          {timestampsEnabled && (
+            <MessageTimestamp
+              timestamp={m.timestamp}
+              style={timestampStyle}
+              isfromuser={isFromUser()}
+            />
           )}
-        </TimestampContainer>
+        </>
       </ConditionalWrapper>
     )
   }
