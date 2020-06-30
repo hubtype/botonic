@@ -4,6 +4,7 @@ import { render } from 'react-dom'
 import { Webchat } from './webchat'
 import { HubtypeService, INPUT } from '@botonic/core'
 import { msgToBotonic } from './msg-to-botonic'
+import merge from 'lodash.merge'
 
 export class WebchatApp {
   constructor({
@@ -175,7 +176,7 @@ export class WebchatApp {
       visibility,
       ...webchatOptions
     } = optionsAtRuntime
-    theme = { ...this.theme, ...theme }
+    theme = merge(this.theme, theme)
     persistentMenu = persistentMenu || this.persistentMenu
     coverComponent = coverComponent || this.coverComponent
     blockInputs = blockInputs || this.blockInputs
