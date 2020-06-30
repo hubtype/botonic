@@ -114,3 +114,8 @@ module.exports = {
     node: true,
   },
 }
+if (typeof AVOID_IMPORT_CRASH !== 'undefined' && AVOID_IMPORT_CRASH) {
+  // avoid eslint-plugin-import crash https://github.com/benmosher/eslint-plugin-import/issues/1818#issuecomment-651547125
+  delete module.exports['settings']['import/parsers']
+}
+
