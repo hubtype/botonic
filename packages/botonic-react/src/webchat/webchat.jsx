@@ -313,10 +313,6 @@ export const Webchat = forwardRef((props, ref) => {
     props.persistentMenu
   )
 
-  const CustomPersistentMenu = getThemeProperty(
-    'userInput.menu.custom',
-    undefined
-  )
   const darkBackgroundMenu = getThemeProperty(
     'userInput.menu.darkBackground',
     false
@@ -363,13 +359,6 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const persistentMenu = () => {
-    if (CustomPersistentMenu)
-      return (
-        <CustomPersistentMenu
-          onClick={closeMenu}
-          options={persistentMenuOptions}
-        />
-      )
     return (
       <OpenedPersistentMenu
         onClick={closeMenu}
