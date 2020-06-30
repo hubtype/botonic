@@ -4,6 +4,7 @@ import { render } from 'react-dom'
 import { ReactBot } from './react-bot'
 import { WebchatApp } from './webchat-app'
 import { WebchatDev } from './webchat'
+import merge from 'lodash.merge'
 
 export class DevApp extends WebchatApp {
   constructor({
@@ -53,7 +54,7 @@ export class DevApp extends WebchatApp {
       onMessage,
       ...webchatOptions
     } = optionsAtRuntime
-    theme = { ...this.theme, ...theme }
+    theme = merge(this.theme, theme)
     persistentMenu = persistentMenu || this.persistentMenu
     coverComponent = coverComponent || this.coverComponent
     blockInputs = blockInputs || this.blockInputs
