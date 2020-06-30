@@ -24,6 +24,10 @@ module.exports = {
   ],
   themeConfig: {
     defaultDarkMode: false,
+    algolia: {
+      apiKey: process.env.ALGOLIA_API_KEY,
+      indexName: process.env.INDEX_NAME,
+    },
     navbar: {
       title: 'Botonic',
       logo: {
