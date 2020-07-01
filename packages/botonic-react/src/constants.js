@@ -98,6 +98,8 @@ export const WEBCHAT = {
     scrollbar: 'scrollbar',
     markdownStyle: 'markdownStyle',
     coverComponent: 'coverComponent',
+    mobileBreakpoint: 'mobileBreakpoint',
+    mobileStyle: 'mobileStyle',
   },
 }
 
