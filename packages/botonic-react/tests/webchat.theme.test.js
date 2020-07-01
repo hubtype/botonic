@@ -1,5 +1,6 @@
 import { getProperty, _getThemeProperty } from '../src/utils'
 import { normalizeWebchatSettings } from '../src/components/webchat-settings'
+import merge from 'lodash.merge'
 
 const theme = {
   message: {
@@ -92,5 +93,74 @@ describe('Updating webchat properties with settings ', () => {
     expect(themeUpdates.userInput.attachments.enable).toEqual(
       newEnableAttachments
     )
+  })
+})
+
+describe('Deep merging theme properties', () => {
+  it('Preserve theme deep properties', () => {
+    const theme1 = {
+      theme: {
+        userInput: { box: { placeholder: 'placeholder...' } },
+        header: {
+          title: 'title',
+        },
+        persistentMenu: [
+          {
+            label: 'Start',
+            payload: 'start',
+          },
+          {
+            label: 'Help',
+            payload: 'help',
+          },
+          { closeLabel: 'close' },
+        ],
+      },
+    }
+    const theme2 = {
+      theme: {
+        userInput: {
+          style: {
+            background: 'white',
+            minHeight: '45px',
+          },
+          box: {
+            style: {
+              border: 'none',
+              paddingLeft: 20,
+              marginRight: 10,
+            },
+            placeholder: 'another placeholder...',
+          },
+          menu: {
+            darkBackground: true,
+          },
+        },
+      },
+    }
+    const result = {
+      theme: {
+        userInput: {
+          box: {
+            placeholder: 'another placeholder...',
+            style: {
+              border: 'none',
+              paddingLeft: 20,
+              marginRight: 10,
+            },
+          },
+          style: { background: 'white', minHeight: '45px' },
+          menu: { darkBackground: true },
+        },
+        header: { title: 'title' },
+        persistentMenu: [
+          { label: 'Start', payload: 'start' },
+          { label: 'Help', payload: 'help' },
+          { closeLabel: 'close' },
+        ],
+      },
+    }
+    const sut = merge(theme1, theme2)
+    expect(sut).toMatchObject(result)
   })
 })
