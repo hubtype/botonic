@@ -64,12 +64,11 @@ export default class BotonicPluginGoogleAnalytics {
       el: eventFields.label,
       ev: eventFields.value,
     }
-    params.cid =
-      this.getGaClientId && this.getGaClientId({ session })
-        ? (params.cid = this.getGaClientId({ session }))
-        : uuidv4()
-    if (this.getUserId && this.getUserId({ session }))
-      params.uid = this.getUserId({ session })
+    const cid = this.getGaClientId && this.getGaClientId({ session })
+    params.cid = cid ?? uuidv4()
+
+    const uid = this.getUserId && this.getUserId({ session })
+    if (uid) params.uid = uid
 
     return await axios.get(this.GA_URL, { params })
   }
