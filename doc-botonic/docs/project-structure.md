@@ -2,6 +2,7 @@
 id: project
 title: Understanding the Project
 ---
+  
 
 ## The CLI
 
