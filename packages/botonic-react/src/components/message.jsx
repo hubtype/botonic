@@ -159,6 +159,7 @@ export const Message = props => {
           text: r.props.children,
         })),
         display: delay + typing == 0,
+        customTypeName: decomposedChildren.customTypeName,
       }
       addMessage(message)
     }, [])
@@ -240,6 +241,12 @@ export const Message = props => {
       getThemeProperty('brand.image', WEBCHAT.DEFAULTS.LOGO)
     )
     const animationsEnabled = getThemeProperty('animations.enable', true)
+
+    const resolveCustomTypeName = () =>
+      isFromBot() && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
+
+    const className = `${type}-${from}${resolveCustomTypeName()}`
+
     return (
       <ConditionalWrapper
         condition={animationsEnabled}
@@ -266,6 +273,7 @@ export const Message = props => {
           )}
 
           <Blob
+            className={className}
             bgcolor={getBgColor()}
             color={isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
             blobWidth={getThemeProperty('message.bot.blobWidth')}
