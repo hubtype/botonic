@@ -736,8 +736,8 @@ export const Webchat = forwardRef((props, ref) => {
     </RequestContext.Provider>
   )
   let mobileStyle = {}
-  if (isMobile(webchatState.theme.mobileBreakpoint)) {
-    mobileStyle = {
+  if (isMobile(getThemeProperty('mobileBreakpoint'))) {
+    mobileStyle = getThemeProperty('mobileStyle') || {
       width: '100%',
       height: '100%',
       right: 0,
