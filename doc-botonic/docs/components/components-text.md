@@ -17,7 +17,7 @@ The "Hello World!" output would be defined as below:
 
 ### Line break
 
-In order to create a line break, you must use `{'\\n'}`.
+In order to create a line break, you must use `{'\n'}`.
 
 ```javascript
 <Text>

@@ -17,5 +17,5 @@ Buttons are usually sent during a conversation for the person to click and take 
   and the second is a payload button:
   <Button url='https://botonic.io'>Visit botonic.io</Button>
   <Button payload='carousel'>Show me a carousel</Button>
-<Text>
+</Text>
 ```
