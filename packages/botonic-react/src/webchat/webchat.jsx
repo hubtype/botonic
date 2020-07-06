@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
-  useState,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import { useLocalStorage } from '@rehooks/local-storage'
@@ -188,7 +187,6 @@ export const Webchat = forwardRef((props, ref) => {
     setCurrentAttachment,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
-  const [processingMessages, setProcessingMessages] = useState([])
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
   const isOnline = useNetwork()
@@ -230,47 +228,16 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendUserInput = async input => {
     props.onUserInput &&
-      props
-        .onUserInput({
-          user: webchatState.user,
-          input: input,
-          session: webchatState.session,
-          lastRoutePath: webchatState.lastRoutePath,
-        })
-        .then(res => {
-          setProcessingMessages([
-            ...processingMessages,
-            { id: input.id, input: input, response: res },
-          ])
-        })
-        .catch(e => {
-          console.error('Message cannot be sent.', e)
-          setProcessingMessages([
-            ...processingMessages,
-            { id: input.id, input: input, response: undefined },
-          ])
-        })
+      props.onUserInput({
+        user: webchatState.user,
+        input: input,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath,
+      })
   }
 
-  useAsyncEffect(async () => {
-    if (processingMessages.length > 0) {
-      while (processingMessages.length) {
-        const message = processingMessages.shift()
-        const messageToUpdate = webchatState.messagesJSON.filter(
-          m => m.id === message.id
-        )[0]
-        const res = await message.response
-        if (!res || (res && res.status !== 200)) {
-          updateMessage({
-            ...messageToUpdate,
-            ...{ ack: 0, input: message.input },
-          })
-        } else {
-          resolveMessageAck(messageToUpdate, res)
-        }
-      }
-    }
-  }, [webchatState.messagesJSON, processingMessages])
+  const resendUnsentInputs = async () =>
+    props.resendUnsentInputs && props.resendUnsentInputs()
 
   // Load initial state from localStorage
   useEffect(() => {
@@ -313,11 +280,11 @@ export const Webchat = forwardRef((props, ref) => {
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (!webchatState.isWebchatOpen) return
     deviceAdapter.init()
     scrollToBottom({ behavior: 'auto' })
-    resendUnsentUserInputs()
+    await resendUnsentInputs()
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
@@ -333,32 +300,13 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.lastMessageUpdate,
   ])
 
-  const resolveMessageAck = (message, response) => {
-    if (response && response.status === 200) {
-      updateMessage({ ...message, ack: 1 })
-    }
-  }
-
-  const resendUnsentUserInputs = async () => {
-    setTimeout(async () => {
-      const unsentMessages = webchatState.messagesJSON.filter(
-        msg => msg.ack === 0
-      )
-      while (unsentMessages.length) {
-        const msg = unsentMessages.shift()
-        const res = await sendUserInput(msg.input)
-        resolveMessageAck(msg, res)
-      }
-    }, 2000)
-  }
-
   useAsyncEffect(async () => {
-    if (!isOnline)
+    if (!isOnline) {
       setError({
-        message: 'connection issues',
+        message: 'Connection issues',
       })
-    else {
-      await resendUnsentUserInputs()
+    } else {
+      await resendUnsentInputs()
       setError(undefined)
     }
   }, [isOnline])
@@ -899,7 +847,7 @@ export const Webchat = forwardRef((props, ref) => {
           />
           {webchatState.error.message && (
             <ErrorMessageContainer>
-              <ErrorMessage>Error: {webchatState.error.message}</ErrorMessage>
+              <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
           {webchatMessageList()}

@@ -59,6 +59,10 @@ export class WebchatApp {
     return this.hubtypeService.postMessage(user, input)
   }
 
+  async resendUnsentInputs() {
+    return this.hubtypeService.resendUnsentInputs()
+  }
+
   onStateChange({ user, messagesJSON }) {
     if (!this.hubtypeService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
@@ -68,6 +72,8 @@ export class WebchatApp {
         lastMessageId: lastMessage && lastMessage.id,
         lastMessageUpdateDate: this.getLastMessageUpdate(),
         onEvent: event => this.onServiceEvent(event),
+        unsentInputs: () =>
+          this.webchatRef.current.getMessages().filter(msg => msg.ack === 0),
       })
     }
   }
@@ -209,6 +215,9 @@ export class WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
+        resendUnsentInputs={() =>
+          this.hubtypeService && this.hubtypeService.resendUnsentInputs()
+        }
       />
     )
   }
