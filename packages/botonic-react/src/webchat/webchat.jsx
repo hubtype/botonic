@@ -418,11 +418,12 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
-    if (
-      !botonicState ||
-      (botonicState.messages && botonicState.messages.length == 0)
-    )
-      toggleCoverComponent(true)
+    if (CoverComponent)
+      if (
+        !botonicState ||
+        (botonicState.messages && botonicState.messages.length == 0)
+      )
+        toggleCoverComponent(true)
   }, [])
 
   const coverComponent = () => {
@@ -636,10 +637,11 @@ export const Webchat = forwardRef((props, ref) => {
   )
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
 
-  const userInputEnabled = getThemeProperty(
+  let userInputEnabled = getThemeProperty(
     'userInput.enable',
     props.enableUserInput !== undefined ? props.enableUserInput : true
   )
+  userInputEnabled = userInputEnabled && !webchatState.isCoverComponentOpen
   const emojiPickerEnabled = getThemeProperty(
     'userInput.emojiPicker.enable',
     props.enableEmojiPicker
