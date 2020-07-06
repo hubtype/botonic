@@ -1,6 +1,6 @@
 ---
 id: supported-platforms
-title: Supported Platforms
+title: Integrate a Bot with Webchat and Messaging Apps
 ---
 
 Botonic supports several messaging platforms, such as:

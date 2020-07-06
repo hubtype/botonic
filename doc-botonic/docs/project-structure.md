@@ -14,8 +14,18 @@ To start a new bot, you must run `botonic new testBot nlu`
 
 ## Templates
 
-You must select a template to create a Botonic bot. It can be either blank or with components.
+Botonic offers a list of templates to help you set up a chatbot rapidly.
 
+| Template | Description |
+|--|--|
+| **[Blank](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/blank)** | Template with empty actions. The bot will always responds with the default `404` action "I don't understand you" when you test it. |
+| **[Tutorial](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/tutorial)** | Template with comments to learn by reading the source files. |
+|**[Childs](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/childs)** | Simple example on how childRoutes work. It allows you to build a bot with deep flows and navigate a decision tree using interactive elements like buttons. It is useful when you want to guide the user through a conversation with predefined flows that consist of several steps, such as surveys, pre-qualifiers of leads before human handoff, on-boarding processes, FAQs (when you have a very limited set of options).|
+| **[Intent](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/intent)**| Bot that uses external AI like DialogFlow.|
+|**[Custom Webchat](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/custom-webchat)**| Customizable webchat that can be embedded in your website.|
+|**[Dynamic Carousel](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/dynamic-carousel)**| Bot that gets data from an external API and renders a Carousel. Carousels are horizontal scrollable elements with image, title and buttons for users to trigger an action.|
+|**[Human handoff](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/handoff)** |Simple bot that transfers the conversation to Hubtype Desk.|
+|**[NLU](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/nlu)**| Starter template for your project with NLU capabilities.| 
 ## Project Structure
 
 - `routes.js`: Here you'll define routes, which maps user inputs and payloads to actions. You can also use imported subroutes from other files.

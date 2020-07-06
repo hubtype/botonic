@@ -1,7 +1,7 @@
 ---
 id: welcome
-title: Welcome to Botonic User Guide
-sidebar_label: Welcome to Botonic User Guide
+title: Welcome to Botonic Documentation
+sidebar_label: Welcome to Botonic Documentation
 ---
 
 ## Chatbot vs Conversational App
