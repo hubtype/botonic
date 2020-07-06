@@ -30,7 +30,6 @@
     "framer-motion": "^1.8.4",
     "lodash.merge": "^4.6.2",
     "markdown-it": "^11.0.0",
-    "moment": "^2.24.0",
     "react": "^16.13.1",
     "react-children-utilities": "^2.1.0",
     "react-dom": "^16.13.1",

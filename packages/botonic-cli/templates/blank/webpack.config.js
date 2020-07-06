@@ -4,10 +4,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-// Optimizing locales bundle:
-// - npm: https://www.npmjs.com/package/moment-locales-webpack-plugin
-// - webpack config: https://medium.com/@Memija/less-is-more-with-moment-and-moment-timezone-d7afbab34df3
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 
 const webpack = require('webpack')
 
@@ -159,7 +155,6 @@ function botonicDevConfig(mode) {
         HUBTYPE_API_URL: null,
         BOTONIC_TARGET: BOTONIC_TARGETS.DEV,
       }),
-      new MomentLocalesPlugin(),
     ],
   }
 }
@@ -196,7 +191,6 @@ function botonicWebchatConfig(mode) {
         WEBCHAT_PUSHER_KEY: null,
         BOTONIC_TARGET: 'webchat',
       }),
-      new MomentLocalesPlugin(),
     ],
   }
 }
@@ -245,7 +239,6 @@ function botonicWebviewsConfig(mode) {
         HUBTYPE_API_URL: null,
         BOTONIC_TARGET: 'webviews',
       }),
-      new MomentLocalesPlugin(),
     ],
   }
 }
@@ -278,7 +271,6 @@ function botonicServerConfig(mode) {
         BOTONIC_TARGET: 'node',
       }),
       new CopyPlugin([{ from: 'nlu/models/', to: 'assets/models/' }]),
-      new MomentLocalesPlugin(),
     ],
   }
 }
