@@ -104,17 +104,6 @@ describe('Deep merging theme properties', () => {
         header: {
           title: 'title',
         },
-        persistentMenu: [
-          {
-            label: 'Start',
-            payload: 'start',
-          },
-          {
-            label: 'Help',
-            payload: 'help',
-          },
-          { closeLabel: 'close' },
-        ],
       },
     }
     const theme2 = {
@@ -124,17 +113,6 @@ describe('Deep merging theme properties', () => {
             background: 'white',
             minHeight: '45px',
           },
-          box: {
-            style: {
-              border: 'none',
-              paddingLeft: 20,
-              marginRight: 10,
-            },
-            placeholder: 'another placeholder...',
-          },
-          menu: {
-            darkBackground: true,
-          },
         },
       },
     }
@@ -142,22 +120,14 @@ describe('Deep merging theme properties', () => {
       theme: {
         userInput: {
           box: {
-            placeholder: 'another placeholder...',
-            style: {
-              border: 'none',
-              paddingLeft: 20,
-              marginRight: 10,
-            },
+            placeholder: 'placeholder...',
           },
-          style: { background: 'white', minHeight: '45px' },
-          menu: { darkBackground: true },
+          style: {
+            background: 'white',
+            minHeight: '45px',
+          },
         },
         header: { title: 'title' },
-        persistentMenu: [
-          { label: 'Start', payload: 'start' },
-          { label: 'Help', payload: 'help' },
-          { closeLabel: 'close' },
-        ],
       },
     }
     const sut = merge(theme1, theme2)
