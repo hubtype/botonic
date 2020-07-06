@@ -3,7 +3,12 @@ import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
 import { isBrowser, INPUT } from '@botonic/core'
-import { resolveImage, ConditionalWrapper, renderComponent } from '../utils'
+import {
+  resolveImage,
+  ConditionalWrapper,
+  renderComponent,
+  isDev,
+} from '../utils'
 
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
@@ -80,6 +85,8 @@ export const Message = props => {
     imageStyle,
     ...otherProps
   } = props
+  const isFromUser = from === 'user'
+  const isFromBot = from === 'bot'
   const markdown = props.markdown
   const {
     webchatState,
@@ -98,7 +105,7 @@ export const Message = props => {
   let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
-  if (from === 'user')
+  if (isFromUser)
     textChildren = textChildren.map(e =>
       typeof e === 'string' ? renderLinks(e) : e
     )
@@ -108,6 +115,18 @@ export const Message = props => {
     getFormattedTimestamp,
     timestampStyle,
   } = resolveMessageTimestamps(getThemeProperty)
+
+  const getEnvAck = () => {
+    let ack = 0
+    if (isDev()) ack = 1
+    else {
+      if (props.ack !== undefined) ack = props.ack
+      else ack = isFromUser ? 0 : 1
+    }
+    return ack
+  }
+
+  const ack = getEnvAck()
 
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -137,6 +156,7 @@ export const Message = props => {
         })),
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
+        ack: ack,
       }
       addMessage(message)
     }, [])
@@ -154,13 +174,11 @@ export const Message = props => {
     }, [webchatState.messagesJSON])
   }
 
-  const isFromUser = () => from === 'user'
-  const isFromBot = () => from === 'bot'
   const brandColor = getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
 
   const getBgColor = () => {
     if (!blob) return COLORS.TRANSPARENT
-    if (isFromUser()) {
+    if (isFromUser) {
       return getThemeProperty('message.user.style.background', brandColor)
     }
     return getThemeProperty(
@@ -170,7 +188,7 @@ export const Message = props => {
   }
 
   const getMessageStyle = () =>
-    isFromBot()
+    isFromBot
       ? getThemeProperty('message.bot.style')
       : getThemeProperty('message.user.style')
 
@@ -195,7 +213,7 @@ export const Message = props => {
         ...getThemeProperty(`message.${from}.blobTickStyle`),
       }
       const blobTickStyle = {}
-      if (isFromUser()) {
+      if (isFromUser) {
         containerStyle.right = 0
         containerStyle.marginRight = -pointerSize
         blobTickStyle.borderRight = 0
@@ -220,7 +238,7 @@ export const Message = props => {
     const animationsEnabled = getThemeProperty('animations.enable', true)
 
     const resolveCustomTypeName = () =>
-      isFromBot() && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
+      isFromBot && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
 
     const className = `${type}-${from}${resolveCustomTypeName()}`
     return (
@@ -230,12 +248,12 @@ export const Message = props => {
       >
         <>
           <MessageContainer
-            isfromuser={isFromUser()}
+            isfromuser={isFromUser}
             style={{
               ...getThemeProperty('message.style'),
             }}
           >
-            {isFromBot() && BotMessageImage && (
+            {isFromBot && BotMessageImage && (
               <BotMessageImageContainer
                 style={{
                   ...getThemeProperty('message.bot.imageStyle'),
@@ -251,12 +269,13 @@ export const Message = props => {
             <Blob
               className={className}
               bgcolor={getBgColor()}
-              color={isFromUser() ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
+              color={isFromUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
               blobWidth={getThemeProperty('message.bot.blobWidth')}
               blob={blob}
               style={{
                 ...getMessageStyle(),
                 ...style,
+                ...{ opacity: ack === 0 ? 0.6 : 1 },
               }}
               {...otherProps}
             >
@@ -268,7 +287,7 @@ export const Message = props => {
                   }}
                   markdownstyle={getMarkdownStyle(
                     getThemeProperty,
-                    isFromUser() ? COLORS.SEASHELL_WHITE : brandColor
+                    isFromUser ? COLORS.SEASHELL_WHITE : brandColor
                   )}
                 />
               ) : (
@@ -283,7 +302,7 @@ export const Message = props => {
             <MessageTimestamp
               timestamp={m.timestamp}
               style={timestampStyle}
-              isfromuser={isFromUser()}
+              isfromuser={isFromUser}
             />
           )}
         </>

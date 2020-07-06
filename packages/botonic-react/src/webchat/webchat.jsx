@@ -13,7 +13,7 @@ import { WebchatContext, RequestContext } from '../contexts'
 import { Text, Document, Image, Video, Audio } from '../components'
 import { TypingIndicator } from './components/typing-indicator'
 import { Handoff } from '../components/handoff'
-import { useWebchat, useTyping, usePrevious } from './hooks'
+import { useWebchat, useTyping, usePrevious, useNetwork } from './hooks'
 import { StyledWebchatHeader } from './header'
 import {
   PersistentMenu,
@@ -56,6 +56,7 @@ import {
 import { normalizeWebchatSettings } from '../components/webchat-settings'
 
 import merge from 'lodash.merge'
+import { useAsyncEffect } from 'use-async-effect'
 
 const StyledWebchat = styled.div`
   position: fixed;
@@ -113,12 +114,26 @@ const TriggerImage = styled.img`
 `
 
 const ErrorMessageContainer = styled.div`
-  flex: 1 1 auto;
+  position: relative;
   display: flex;
-  background-color: ${COLORS.SOLID_WHITE};
+  z-index: 1;
+  justify-content: center;
+  width: 100%;
+`
+
+const ErrorMessage = styled.div`
+  position: absolute;
+  top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 4px 11px;
+  display: flex;
+  background-color: ${COLORS.ERROR_RED};
+  color: ${COLORS.CONCRETE_WHITE};
+  border-radius: 5px;
   align-items: center;
   justify-content: center;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: ${WEBCHAT.DEFAULTS.FONT_FAMILY};
 `
 
 const DarkBackgroundMenu = styled.div`
@@ -174,6 +189,7 @@ export const Webchat = forwardRef((props, ref) => {
   } = props.webchatHooks || useWebchat()
   const { theme } = webchatState
   const { initialSession, initialDevSettings, onStateChange } = props
+  const isOnline = useNetwork()
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
   const saveWebchatState = webchatState => {
     saveState(
@@ -209,6 +225,19 @@ export const Webchat = forwardRef((props, ref) => {
     if (webchatState.currentAttachment)
       sendAttachment(webchatState.currentAttachment)
   }, [webchatState.currentAttachment])
+
+  const sendUserInput = async input => {
+    props.onUserInput &&
+      props.onUserInput({
+        user: webchatState.user,
+        input: input,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath,
+      })
+  }
+
+  const resendUnsentInputs = async () =>
+    props.resendUnsentInputs && props.resendUnsentInputs()
 
   // Load initial state from localStorage
   useEffect(() => {
@@ -248,14 +277,14 @@ export const Webchat = forwardRef((props, ref) => {
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
     if (themeUpdates !== undefined)
       updateTheme(merge(props.theme, themeUpdates), themeUpdates)
-
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (!webchatState.isWebchatOpen) return
     deviceAdapter.init()
     scrollToBottom({ behavior: 'auto' })
+    await resendUnsentInputs()
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
@@ -270,6 +299,17 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.devSettings,
     webchatState.lastMessageUpdate,
   ])
+
+  useAsyncEffect(async () => {
+    if (!isOnline) {
+      setError({
+        message: 'Connection issues',
+      })
+    } else {
+      await resendUnsentInputs()
+      setError(undefined)
+    }
+  }, [isOnline])
 
   useTyping({ webchatState, updateTyping, updateMessage })
 
@@ -423,14 +463,7 @@ export const Webchat = forwardRef((props, ref) => {
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
     if (isMedia(input)) input.data = await readDataURL(input.data)
-
-    props.onUserInput &&
-      props.onUserInput({
-        user: webchatState.user,
-        input,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-      })
+    sendUserInput(input)
     updateLatestInput(input)
     updateLastMessageDate(new Date())
     updateReplies(false)
@@ -597,10 +630,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const webchatMessageList = () => (
-    <WebchatMessageList
-      style={{ flex: 1 }}
-      messages={webchatState.messagesComponents}
-    >
+    <WebchatMessageList style={{ flex: 1 }}>
       {webchatState.typing && <TypingIndicator />}
     </WebchatMessageList>
   )
@@ -815,33 +845,30 @@ export const Webchat = forwardRef((props, ref) => {
               toggleWebchat(false)
             }}
           />
-          {webchatState.error.message ? (
+          {webchatState.error.message && (
             <ErrorMessageContainer>
-              Error: {webchatState.error.message}
+              <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
-          ) : (
-            <>
-              {webchatMessageList()}
-              {webchatState.replies &&
-                Object.keys(webchatState.replies).length > 0 &&
-                webchatReplies()}
-              {webchatState.isPersistentMenuOpen && (
-                <div>
-                  {darkBackgroundMenu && (
-                    <DarkBackgroundMenu
-                      style={{
-                        borderRadius: webchatState.theme.style.borderRadius,
-                      }}
-                    />
-                  )}
-                  {persistentMenu()}
-                </div>
-              )}
-              {!webchatState.handoff && userInputArea()}
-              {webchatState.webview && webchatWebview()}
-              {coverComponent()}
-            </>
           )}
+          {webchatMessageList()}
+          {webchatState.replies &&
+            Object.keys(webchatState.replies).length > 0 &&
+            webchatReplies()}
+          {webchatState.isPersistentMenuOpen && (
+            <div>
+              {darkBackgroundMenu && (
+                <DarkBackgroundMenu
+                  style={{
+                    borderRadius: webchatState.theme.style.borderRadius,
+                  }}
+                />
+              )}
+              {persistentMenu()}
+            </div>
+          )}
+          {!webchatState.handoff && userInputArea()}
+          {webchatState.webview && webchatWebview()}
+          {coverComponent()}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>

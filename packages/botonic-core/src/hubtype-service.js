@@ -5,13 +5,24 @@ const PUSHER_KEY = process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c'
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 export class HubtypeService {
-  constructor({ appId, user, lastMessageId, lastMessageUpdateDate, onEvent }) {
+  constructor({
+    appId,
+    user,
+    lastMessageId,
+    lastMessageUpdateDate,
+    onEvent,
+    unsentInputs,
+  }) {
     this.appId = appId
     this.user = user || {}
     this.lastMessageId = lastMessageId
     this.lastMessageUpdateDate = lastMessageUpdateDate
     this.onEvent = onEvent
-    if (user.id && (lastMessageId || lastMessageUpdateDate)) this.init()
+    this.unsentInputs = unsentInputs
+    if (user.id && (lastMessageId || lastMessageUpdateDate)) {
+      this.init()
+      this.resendUnsentInputs()
+    }
   }
 
   init(user, lastMessageId, lastMessageUpdateDate) {
@@ -77,25 +88,55 @@ export class HubtypeService {
     return `private-encrypted-${this.appId}-${this.user.id}`
   }
 
+  handleSentInput(message) {
+    this.onEvent({
+      action: 'update_message_info',
+      message: { id: message.id, ack: 1 },
+    })
+  }
+
+  handleUnsentInput(message) {
+    this.onEvent({
+      action: 'update_message_info',
+      message: { id: message.id, unsentInput: message },
+    })
+  }
+
+  // eslint-disable-next-line consistent-return
   async postMessage(user, message) {
     try {
       await this.init(user)
     } catch (e) {
-      this.onEvent({ isError: true, errorMessage: String(e) })
+      this.handleUnsentInput(message)
       return Promise.resolve()
     }
-    return axios.post(
-      `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
-      {
-        sender: this.user,
-        message: message,
-      }
-    )
+    try {
+      return axios
+        .post(
+          `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
+          {
+            sender: this.user,
+            message: message,
+          }
+        )
+        .then(res => {
+          if (res && res.status === 200) this.handleSentInput(message)
+        })
+        .catch(e => this.handleUnsentInput(message))
+    } catch (e) {
+      this.handleUnsentInput(message)
+    }
   }
 
   static async getWebchatVisibility({ appId }) {
     return axios.get(
       `${HUBTYPE_API_URL}/v1/provider_accounts/${appId}/visibility/`
     )
+  }
+
+  async resendUnsentInputs() {
+    for (const message of this.unsentInputs()) {
+      await this.postMessage(this.user, message.unsentInput)
+    }
   }
 }

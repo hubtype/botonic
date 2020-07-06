@@ -38,7 +38,24 @@ export const messagesReducer = (state, action) => {
 
 function updateMessageReducer(state, action) {
   const msgIndex = state.messagesJSON.map(m => m.id).indexOf(action.payload.id)
-  if (msgIndex > -1)
+  if (msgIndex > -1) {
+    const msgComponent = state.messagesComponents[msgIndex]
+    let updatedMessageComponents = {}
+    if (msgComponent) {
+      const updatedMsgComponent = {
+        ...msgComponent,
+        ...{
+          props: { ...msgComponent.props, ack: action.payload.ack },
+        },
+      }
+      updatedMessageComponents = {
+        messagesComponents: [
+          ...state.messagesComponents.slice(0, msgIndex),
+          { ...updatedMsgComponent },
+          ...state.messagesComponents.slice(msgIndex + 1),
+        ],
+      }
+    }
     return {
       ...state,
       messagesJSON: [
@@ -46,7 +63,10 @@ function updateMessageReducer(state, action) {
         { ...action.payload },
         ...state.messagesJSON.slice(msgIndex + 1),
       ],
+      ...updatedMessageComponents,
     }
+  }
+
   return state
 }
 
