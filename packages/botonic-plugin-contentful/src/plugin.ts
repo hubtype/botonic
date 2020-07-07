@@ -23,10 +23,13 @@ export interface CmsOptions extends OptionsBase {
 export const DEFAULT_TIMEOUT_MS = 30000
 export const DEFAULT_CACHE_TTL_MS = 10000
 
-export interface ContentfulOptions extends OptionsBase {
+export interface ContentfulCredentials {
   spaceId: string
   environment?: string
   accessToken: string
+}
+
+export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
   /**
    * does not work at least when there's no network during the first connection
    * Defaults to {@link DEFAULT_TIMEOUT_MS}
@@ -39,7 +42,7 @@ export interface ContentfulOptions extends OptionsBase {
   cacheTtlMs?: number
   disableCache?: boolean
 
-  cmsDecorator?: (cms: cms.CMS) => cms.CMS
+  contentfulFactory?: (opts: ContentfulOptions) => cms.CMS
 }
 
 export default class BotonicPluginContentful {
@@ -57,10 +60,8 @@ export default class BotonicPluginContentful {
       this.cms = optionsAny.cms
     } else {
       const contOptions = opt as ContentfulOptions
-      this.cms = new Contentful(contOptions)
-      if (contOptions.cmsDecorator) {
-        this.cms = contOptions.cmsDecorator(this.cms)
-      }
+      const factory = contOptions.contentfulFactory || (o => new Contentful(o))
+      this.cms = factory(contOptions)
     }
     this.cms = new cms.ErrorReportingCMS(this.cms)
     this.renderer = opt.renderer || new BotonicMsgConverter()
