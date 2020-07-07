@@ -110,7 +110,7 @@ export interface CMS {
    * @param context If locale specified, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]>
-  schedule(id: string): Promise<ScheduleContent>
-  dateRange(id: string): Promise<DateRangeContent>
-  asset(id: string): Promise<Asset>
+  schedule(id: string, context?: Context): Promise<ScheduleContent>
+  dateRange(id: string, context?: Context): Promise<DateRangeContent>
+  asset(id: string, context?: Context): Promise<Asset>
 }

@@ -130,18 +130,18 @@ export class DummyCMS implements CMS {
     return Promise.resolve(contents)
   }
 
-  schedule(id: string): Promise<ScheduleContent> {
+  schedule(id: string, context?: Context): Promise<ScheduleContent> {
     const schedule = new time.Schedule('Europe/Madrid')
     return Promise.resolve(
       new ScheduleContent(new CommonFields(id, 'name'), schedule)
     )
   }
 
-  asset(id: string): Promise<Asset> {
+  asset(id: string, context?: Context): Promise<Asset> {
     return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`))
   }
 
-  dateRange(id: string): Promise<DateRangeContent> {
+  dateRange(id: string, context?: Context): Promise<DateRangeContent> {
     const now = new Date()
     const dateRange = new time.DateRange('daterange name', now, now)
     return Promise.resolve(
