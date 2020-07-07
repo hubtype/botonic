@@ -1,6 +1,6 @@
 import { Contentful } from '../../src/contentful'
 import { CMS, Context, ErrorReportingCMS } from '../../src/cms'
-import { ContentfulOptions, ENGLISH } from '../../src'
+import { ContentfulOptions, ENGLISH, SPANISH } from '../../src'
 
 export function testSpaceId(): string {
   return process.env.CONTENTFUL_TEST_SPACE_ID!
@@ -32,6 +32,7 @@ export function testContentfulOptions(
 }
 
 export const TEST_DEFAULT_LOCALE = ENGLISH
+export const TEST_NON_DEFAULT_LOCALE = SPANISH
 
 export function testContext(
   contexts: (Context | undefined)[] = [
