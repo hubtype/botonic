@@ -120,20 +120,20 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleError('contents'))
   }
 
-  schedule(id: string): Promise<ScheduleContent> {
+  schedule(id: string, context?: Context): Promise<ScheduleContent> {
     return this.cms
-      .schedule(id)
+      .schedule(id, context)
       .catch(this.handleDeliveryError(ContentType.SCHEDULE, id))
   }
 
-  dateRange(id: string): Promise<DateRangeContent> {
+  dateRange(id: string, context?: Context): Promise<DateRangeContent> {
     return this.cms
-      .dateRange(id)
+      .dateRange(id, context)
       .catch(this.handleDeliveryError(ContentType.DATE_RANGE, id))
   }
 
-  asset(id: string): Promise<Asset> {
-    return this.cms.asset(id).catch(this.handleError('asset', id))
+  asset(id: string, context?: Context): Promise<Asset> {
+    return this.cms.asset(id, context).catch(this.handleError('asset', id))
   }
 
   private handleDeliveryError(

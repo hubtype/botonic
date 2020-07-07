@@ -124,15 +124,15 @@ export class FilteredCMS implements CMS {
     return this.filterContents(contents, context)
   }
 
-  schedule(id: string): Promise<ScheduleContent> {
-    return this.cms.schedule(id)
+  schedule(id: string, context?: Context): Promise<ScheduleContent> {
+    return this.cms.schedule(id, context)
   }
 
-  dateRange(id: string): Promise<DateRangeContent> {
-    return this.cms.dateRange(id)
+  dateRange(id: string, context?: Context): Promise<DateRangeContent> {
+    return this.cms.dateRange(id, context)
   }
 
-  asset(id: string): Promise<Asset> {
-    return this.cms.asset(id)
+  asset(id: string, context?: Context): Promise<Asset> {
+    return this.cms.asset(id, context)
   }
 }
