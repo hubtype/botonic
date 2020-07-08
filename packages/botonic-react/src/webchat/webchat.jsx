@@ -418,6 +418,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
+    if (!CoverComponent) return
     if (
       !botonicState ||
       (botonicState.messages && botonicState.messages.length == 0)
@@ -510,6 +511,7 @@ export const Webchat = forwardRef((props, ref) => {
     getMessages: () => webchatState.messagesJSON,
     clearMessages: () => {
       clearMessages()
+      updateReplies(false)
     },
     getLastMessageUpdate: () => webchatState.lastMessageUpdate,
     updateMessageInfo: (msgId, messageInfo) => {
@@ -636,10 +638,15 @@ export const Webchat = forwardRef((props, ref) => {
   )
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
 
-  const userInputEnabled = getThemeProperty(
-    'userInput.enable',
-    props.enableUserInput !== undefined ? props.enableUserInput : true
-  )
+  const isUserInputEnabled = () => {
+    const isUserInputEnabled = getThemeProperty(
+      'userInput.enable',
+      props.enableUserInput !== undefined ? props.enableUserInput : true
+    )
+    return isUserInputEnabled && !webchatState.isCoverComponentOpen
+  }
+
+  const userInputEnabled = isUserInputEnabled()
   const emojiPickerEnabled = getThemeProperty(
     'userInput.emojiPicker.enable',
     props.enableEmojiPicker
@@ -799,6 +806,21 @@ export const Webchat = forwardRef((props, ref) => {
     }, [webchatState.messagesJSON])
   }
 
+  const DarkenBackground = ({ component }) => {
+    return (
+      <div>
+        {darkBackgroundMenu && (
+          <DarkBackgroundMenu
+            style={{
+              borderRadius: webchatState.theme.style.borderRadius,
+            }}
+          />
+        )}
+        {component}
+      </div>
+    )
+  }
+
   return (
     <WebchatContext.Provider
       value={{
@@ -855,20 +877,13 @@ export const Webchat = forwardRef((props, ref) => {
             Object.keys(webchatState.replies).length > 0 &&
             webchatReplies()}
           {webchatState.isPersistentMenuOpen && (
-            <div>
-              {darkBackgroundMenu && (
-                <DarkBackgroundMenu
-                  style={{
-                    borderRadius: webchatState.theme.style.borderRadius,
-                  }}
-                />
-              )}
-              {persistentMenu()}
-            </div>
+            <DarkenBackground component={persistentMenu()} />
           )}
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
-          {coverComponent()}
+          {webchatState.isCoverComponentOpen && (
+            <DarkenBackground component={coverComponent()} />
+          )}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>

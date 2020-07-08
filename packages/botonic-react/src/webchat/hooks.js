@@ -55,7 +55,7 @@ export const webchatInitialState = {
   isWebchatOpen: false,
   isEmojiPickerOpen: false,
   isPersistentMenuOpen: false,
-  isCoverComponent: false,
+  isCoverComponentOpen: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
 }
