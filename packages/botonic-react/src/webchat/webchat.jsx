@@ -418,12 +418,12 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
-    if (CoverComponent)
-      if (
-        !botonicState ||
-        (botonicState.messages && botonicState.messages.length == 0)
-      )
-        toggleCoverComponent(true)
+    if (!CoverComponent) return
+    if (
+      !botonicState ||
+      (botonicState.messages && botonicState.messages.length == 0)
+    )
+      toggleCoverComponent(true)
   }, [])
 
   const coverComponent = () => {
@@ -511,6 +511,7 @@ export const Webchat = forwardRef((props, ref) => {
     getMessages: () => webchatState.messagesJSON,
     clearMessages: () => {
       clearMessages()
+      updateReplies(false)
     },
     getLastMessageUpdate: () => webchatState.lastMessageUpdate,
     updateMessageInfo: (msgId, messageInfo) => {
@@ -638,13 +639,11 @@ export const Webchat = forwardRef((props, ref) => {
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
 
   const isUserInputEnabled = () => {
-    let isUserInputEnabled = getThemeProperty(
+    const isUserInputEnabled = getThemeProperty(
       'userInput.enable',
       props.enableUserInput !== undefined ? props.enableUserInput : true
     )
-    isUserInputEnabled =
-      isUserInputEnabled && !webchatState.isCoverComponentOpen
-    return isUserInputEnabled
+    return isUserInputEnabled && !webchatState.isCoverComponentOpen
   }
 
   const userInputEnabled = isUserInputEnabled()
