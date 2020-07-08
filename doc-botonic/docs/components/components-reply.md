@@ -7,7 +7,12 @@ title: Quick Replies
 
 Quick Replies allow you to present options in a message to a bot user.
 
+<details>
+<summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/quickreplies.png)
+
+</details>
 
 ## Code
 

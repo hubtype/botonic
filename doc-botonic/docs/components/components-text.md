@@ -7,6 +7,13 @@ title: Text
 
 Text is the simplest and easiest way to talk to the user.
 
+<details>
+<summary>Example</summary>
+
+![](https://botonic-doc-static.netlify.com/images/components_text.png)
+
+</details>
+
 ## Code
 
 The "Hello World!" output would be defined as below:
@@ -28,7 +35,7 @@ In order to create a line break, you must use `{'\n'}`.
 
 ### Markdown support
 
-By default, the Text component supports markdown format for webchats. If you want to remove it, you must set the markdown property to false.
+By default, the Text component supports markdown format for webchats. If you want to remove it, you must set the `markdown` property to `false`.
 
 ```javascript
 <Text markdown={false}>{formattedText}</Text>

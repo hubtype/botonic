@@ -7,7 +7,12 @@ title: Buttons
 
 Buttons are usually sent during a conversation for the person to click and take specific actions instantly. It is very useful for audience interaction.
 
+<details>
+<summary>Example</summary>
+
 ![](https://botonic-doc-static.netlify.com/images/buttons.png)
+
+</details>
 
 ## Code
 

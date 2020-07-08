@@ -20,3 +20,10 @@ In `botonic serve` the text 'Open Location' will be displayed by default. You ca
 ```javascript
 <Location text={'Check location'} lat='41.3894058' long='2.1568464' />
 ```
+
+<details>
+<summary>Example</summary>
+
+![](https://botonic-doc-static.netlify.com/images/doc_location2.png)
+
+</details>
