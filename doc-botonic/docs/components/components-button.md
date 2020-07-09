@@ -10,7 +10,7 @@ Buttons are usually sent during a conversation for the person to click and take 
 <details>
 <summary>Example</summary>
 
-![](https://botonic-doc-static.netlify.com/images/buttons.png)
+<img src="https://botonic-doc-static.netlify.com/images/buttons.png" width="200">
 
 </details>
 

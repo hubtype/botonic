@@ -10,8 +10,8 @@ Using media such as images, videos or attached files helps to visualize the conv
 <details>
 <summary>Example</summary>
 
-![](https://botonic-doc-static.netlify.com/images/media_files.png)
-![](https://botonic-doc-static.netlify.com/images/media_files2.png)
+<img src="https://botonic-doc-static.netlify.com/images/media_files.png" width="200">
+<img src="https://botonic-doc-static.netlify.com/images/media_files2.png" width="200">
 
 </details>
 
