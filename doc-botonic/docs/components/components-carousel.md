@@ -5,7 +5,7 @@ title: Carousel
 
 ## Purpose
 
-A carousel is a sliding gallery of information displayed to the user. It helps to provide more information than that which fits the screen.
+Carousels show a collection of clickable items one at a time where the user can scroll images or articles from one side to the other.
 
 <details>
 <summary>Example</summary>
