@@ -1,5 +1,5 @@
 import * as contentful from 'contentful'
-import { Entry, EntryCollection } from 'contentful'
+import { CreateClientParams, Entry, EntryCollection } from 'contentful'
 import {
   CmsException,
   CommonFields,
@@ -19,6 +19,7 @@ import {
 import { ScheduleDelivery } from './contents/schedule'
 import { DateRangeDelivery, DateRangeFields } from './contents/date-range'
 import { ReducedClientApi } from './delivery/client-api'
+import { ContentfulOptions } from '../plugin'
 
 export interface DeliveryApi {
   getAsset(id: string, query?: any): Promise<contentful.Asset>
@@ -199,4 +200,19 @@ export class ContentfulEntryUtils {
       followUp,
     })
   }
+}
+
+export function createContentfulClientApi(
+  options: ContentfulOptions
+): contentful.ContentfulClientApi {
+  const params: CreateClientParams = {
+    space: options.spaceId,
+    accessToken: options.accessToken,
+    timeout: options.timeoutMs,
+  }
+  if (options.environment) {
+    params.environment = options.environment
+  }
+  const client = contentful.createClient(params)
+  return client
 }

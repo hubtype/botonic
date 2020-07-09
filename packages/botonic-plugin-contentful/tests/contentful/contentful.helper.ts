@@ -1,6 +1,6 @@
-import { Contentful } from '../../src/contentful'
 import { CMS, Context, ErrorReportingCMS } from '../../src/cms'
 import { ContentfulOptions, ENGLISH, SPANISH } from '../../src'
+import { Contentful } from '../../src/contentful/cms-contentful'
 
 export function testSpaceId(): string {
   return process.env.CONTENTFUL_TEST_SPACE_ID!
