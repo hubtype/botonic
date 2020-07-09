@@ -1,13 +1,13 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { COLORS } from '../constants'
+import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../utils'
 
 const PicStyled = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  width: 222px;
+  width: ${WEBCHAT.DEFAULTS.ELEMENT_WIDTH}px;
   height: 140px;
   background: ${COLORS.SOLID_WHITE} url(${props => props.src}) no-repeat
     center/cover;

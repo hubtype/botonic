@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS } from '../constants'
+import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../utils'
 
 const ElementContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 222px;
-  margin-right: 6px;
+  width: ${WEBCHAT.DEFAULTS.ELEMENT_WIDTH}px;
+  margin-right: ${WEBCHAT.DEFAULTS.ELEMENT_MARGIN_RIGHT}px;
   border-radius: 6px;
   border: 1px solid ${COLORS.SEASHELL_WHITE};
   overflow: hidden;
