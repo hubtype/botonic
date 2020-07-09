@@ -20,6 +20,7 @@ export const COLORS = {
   DAINTREE_BLUE: 'rgba(0, 43, 53, 1)',
   PIGEON_POST_BLUE_ALPHA_0_5: 'rgba(176, 196, 222, 0.5)',
   SEASHELL_WHITE: 'rgba(241, 240, 240, 1)',
+  SILVER: 'rgba(200, 200, 200, 1)',
   GRAY: 'rgba(129, 129, 129, 1)',
   SCORPION_GRAY: 'rgba(87, 87, 87, 1)',
   BLEACHED_CEDAR_PURPLE: 'rgba(46, 32, 59, 1)',
@@ -37,6 +38,8 @@ export const WEBCHAT = {
     PLACEHOLDER: 'Ask me something...',
     FONT_FAMILY: "'Noto Sans JP', sans-serif",
     BORDER_RADIUS_TOP_CORNERS: '6px 6px 0px 0px',
+    ELEMENT_WIDTH: 222,
+    ELEMENT_MARGIN_RIGHT: 6,
   },
   CUSTOM_PROPERTIES: {
     webviewStyle: 'webview.style',
@@ -102,6 +105,9 @@ export const WEBCHAT = {
     coverComponent: 'coverComponent',
     mobileBreakpoint: 'mobileBreakpoint',
     mobileStyle: 'mobileStyle',
+    enableCarouselArrows: 'carousel.enableArrows',
+    customCarouselLeftArrow: 'carousel.arrow.left',
+    customCarouselRightArrow: 'carousel.arrow.right',
   },
 }
 

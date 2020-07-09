@@ -22,7 +22,7 @@ const MessageContainer = styled.div`
   display: flex;
   justify-content: ${props => (props.isfromuser ? 'flex-end' : 'flex-start')};
   position: relative;
-  padding-left: 5px;
+  padding: 0px 6px;
 `
 
 const BotMessageImageContainer = styled.div`
