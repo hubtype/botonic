@@ -13,7 +13,6 @@ import {
 import {
   AdaptorDeliveryApi,
   ContentfulEntryUtils,
-  ContentsApi,
   createContentfulClientApi,
   DeliveryApi,
 } from './delivery-api'
@@ -34,10 +33,11 @@ import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 import { FollowUpDelivery } from './contents/follow-up'
 import * as contentful from 'contentful'
 import { SearchCandidate } from '../search'
+import { ContentsDelivery } from './contents/contents'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
-  private readonly _contents: ContentsApi
+  private readonly _contents: ContentsDelivery
   private readonly _carousel: CarouselDelivery
   private readonly _text: TextDelivery
   private readonly _startUp: StartUpDelivery
@@ -65,7 +65,7 @@ export class Contentful implements cms.CMS {
         : new CachedClientApi(client, options.cacheTtlMs)
     )
     const delivery = new IgnoreFallbackDecorator(deliveryApi)
-    this._contents = new ContentsApi(delivery)
+    this._contents = new ContentsDelivery(delivery)
 
     this._delivery = delivery
     this._button = new ButtonDelivery(delivery)
