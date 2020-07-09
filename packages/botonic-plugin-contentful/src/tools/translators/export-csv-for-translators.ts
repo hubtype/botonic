@@ -1,7 +1,7 @@
 import { CsvExport, skipEmptyStrings } from './csv-export'
 import { Locale } from '../../nlp'
-import { Contentful } from '../../contentful'
 import { ContentfulOptions } from '../../plugin'
+import { Contentful } from '../../contentful/cms-contentful'
 
 async function writeCsvForTranslators(
   options: ContentfulOptions,

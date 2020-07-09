@@ -2,8 +2,8 @@ import { MultiContextCms } from '../cms/cms-multilocale'
 import * as cms from '../cms'
 import { CMS } from '../cms'
 import { Locale } from '../nlp'
-import { Contentful } from './index'
 import { ContentfulCredentials, ContentfulOptions } from '../plugin'
+import { Contentful } from './cms-contentful'
 
 /**
  * Set it to ContentfulOptions.contentfulFactory to connect to

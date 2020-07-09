@@ -1,8 +1,8 @@
 import * as cms from './cms'
-import { Contentful } from './contentful'
 import { KeywordsOptions, Normalizer, StemmingBlackList } from './nlp'
 import { Search } from './search'
 import { BotonicMsgConverter } from './render'
+import { Contentful } from './contentful/cms-contentful'
 
 interface NlpOptions {
   blackList: { [locale: string]: StemmingBlackList[] }

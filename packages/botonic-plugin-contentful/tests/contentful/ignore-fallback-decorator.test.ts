@@ -1,6 +1,8 @@
 import { testContentful, testContentfulOptions } from './contentful.helper'
-import { AdaptorDeliveryApi } from '../../src/contentful/delivery-api'
-import { createContentfulClientApi } from '../../src/contentful'
+import {
+  AdaptorDeliveryApi,
+  createContentfulClientApi,
+} from '../../src/contentful/delivery-api'
 import { ButtonFields } from '../../src/contentful/contents/button'
 import { ENGLISH, Locale, SPANISH } from '../../src/nlp'
 import {
