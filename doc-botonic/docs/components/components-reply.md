@@ -10,7 +10,7 @@ Quick Replies allow you to present options in a message to a bot user.
 <details>
 <summary>Example</summary>
 
-<img src="https://botonic-doc-static.netlify.com/images/quickreplies.png" width="200">
+<img src="https://botonic-doc-static.netlify.com/images/quickreplies.png" width="200"/>
 
 </details>
 

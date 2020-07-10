@@ -7,8 +7,7 @@ title: Carousel
 
 Carousels show a collection of clickable items one at a time where the user can scroll images or articles from one side to the other.
 
-<img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200">
-
+<img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200"/>
 
 ## Code
 
@@ -73,11 +72,12 @@ export default class extends React.Component {
 
 You can disable or customize arrows displayed on the left and right sides of a carousel.
 
-<img src="https://botonic-doc-static.netlify.com/images/dynamic_carrousel_arrow.png" width="200">
+<img src="https://botonic-doc-static.netlify.com/images/dynamic_carrousel_arrow.png" width="200"/>
 
 To do so:
 
 Add the following code in `src/webchat/index.js`:
+
 ```javascript
 import {
   CustomCarouselLeftArrow,
