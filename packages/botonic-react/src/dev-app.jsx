@@ -15,6 +15,7 @@ export class DevApp extends WebchatApp {
     enableEmojiPicker,
     enableAttachments,
     enableUserInput,
+    enableAnimations,
     onInit,
     onOpen,
     onClose,
@@ -29,6 +30,7 @@ export class DevApp extends WebchatApp {
       enableEmojiPicker,
       enableAttachments,
       enableUserInput,
+      enableAnimations,
       onInit,
       onOpen,
       onClose,
@@ -48,6 +50,7 @@ export class DevApp extends WebchatApp {
       enableEmojiPicker,
       enableAttachments,
       enableUserInput,
+      enableAnimations,
       onInit,
       onOpen,
       onClose,
@@ -61,6 +64,7 @@ export class DevApp extends WebchatApp {
     enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
     enableAttachments = enableAttachments || this.enableAttachments
     enableUserInput = enableUserInput || this.enableUserInput
+    enableAnimations = enableAnimations || this.enableAnimations
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -76,6 +80,7 @@ export class DevApp extends WebchatApp {
         enableEmojiPicker={enableEmojiPicker}
         enableAttachments={enableAttachments}
         enableUserInput={enableUserInput}
+        enableAnimations={enableAnimations}
         getString={(stringId, session) => this.bot.getString(stringId, session)}
         setLocale={(locale, session) => this.bot.setLocale(locale, session)}
         onInit={(...args) => this.onInitWebchat(...args)}
