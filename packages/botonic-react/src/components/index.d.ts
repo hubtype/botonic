@@ -74,4 +74,104 @@ export const Subtitle: React.FunctionComponent<SubtitleProps>
 
 export const Element: React.FunctionComponent<MessageProps>
 
+type StyleProp = { style?: any }
+type ImageProp = { image?: string } // https URL or imported Image asset
+type EnableProp = { enable?: boolean }
+type CustomProp = { custom?: React.Component }
+type PersistentMenuOption = { label: string } & ButtonProps
+type PersistentMenuCloseOption = { closeLabel: string }
+
+export type PersistentMenuProps =
+  | PersistentMenuOption[]
+  | PersistentMenuCloseOption[]
+
+export type BlockInputOption = { message: string; match: RegExp[] }
+
+export interface BlobProps {
+  blobWidth?: string
+  imageStyle?: any
+  blobTick?: boolean
+  blobTickStyle?: any
+}
+
+export interface ScrollbarProps {
+  thumb?: {
+    color: string
+    bgcolor: string
+    border: string
+    opacity: string
+  }
+  track?: {
+    color: string
+    bgcolor: string
+    border: string
+  }
+}
+
+export interface ThemeProps {
+  mobileBreakpoint: number
+  mobileStyle: StyleProp
+  webview?: StyleProp & { header?: StyleProp }
+  animations?: EnableProp
+  intro?: StyleProp & ImageProp & CustomProp
+  brand?: { color?: string } & ImageProp
+  header?: { title?: string; subtitle?: string } & ImageProp &
+    StyleProp &
+    CustomProp
+  message?: {
+    bot?: BlobProps & ImageProp & StyleProp
+    user?: BlobProps & StyleProp
+    customTypes?: React.Component[]
+  } & StyleProp & {
+      timestamps?: {
+        enable: boolean
+        format(): string
+      } & StyleProp
+    }
+  button?: {
+    messageType?: 'text' | 'payload'
+    hoverBackground: string
+    hoverTextColor: string
+  } & StyleProp &
+    CustomProp
+  replies?: {
+    wrap?: 'wrap' | 'nowrap'
+    align?: 'left' | 'center' | 'right'
+  }
+  carousel?: {
+    enableArrows?: boolean
+    arrow?: {
+      left: CustomProp
+      right: CustomProp
+    }
+  }
+  reply?: StyleProp & CustomProp
+  triggerButton?: ImageProp & StyleProp & CustomProp
+  markdownStyle?: string // string template with css styles
+  scrollbar?: ScrollbarProps & EnableProp
+  userInput?: {
+    box?: { placeholder: string } & StyleProp
+    emojiPicker?: EnableProp
+    attachments?: EnableProp
+    sendButton?: EnableProp & CustomProp
+    persistentMenu?: PersistentMenuProps
+    blockInputs?: BlockInputOption[]
+    menu?: { darkBackground?: boolean } & CustomProp
+    menuButton?: CustomProp
+  } & EnableProp &
+    StyleProp
+}
+
+export interface WebchatSettingsProps {
+  theme?: ThemeProps
+  persistentMenu?: PersistentMenuProps
+  blockInputs?: BlockInputOption[]
+  enableUserInput?: boolean
+  enableEmojiPicker?: boolean
+  enableAttachments?: boolean
+  enableAnimations?: boolean
+}
+
+export const WebchatSettings: React.FunctionComponent<WebchatSettingsProps>
+
 export * from './multichannel'

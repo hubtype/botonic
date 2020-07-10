@@ -347,7 +347,10 @@ export const Webchat = forwardRef((props, ref) => {
     toggleEmojiPicker(!webchatState.isEmojiPickerOpen)
   }
 
-  const animationsEnabled = getThemeProperty('animations.enable', true)
+  const animationsEnabled = getThemeProperty(
+    'animations.enable',
+    props.enableAnimations !== undefined ? props.enableAnimations : true
+  )
   const persistentMenuOptions = getThemeProperty(
     'userInput.persistentMenu',
     props.persistentMenu
