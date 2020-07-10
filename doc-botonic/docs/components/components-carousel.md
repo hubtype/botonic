@@ -69,9 +69,9 @@ export default class extends React.Component {
 }
 ```
 
-## Add arrows to both sides of the carousel
+## Customize or disable arrows on both sides of the carousel
 
-You can add, disable and customize arrows displayed on the left and right sides of a carousel.
+You can disable or customize arrows displayed on the left and right sides of a carousel.
 
 <img src="https://botonic-doc-static.netlify.com/images/dynamic_carrousel_arrow.png" width="200">
 
