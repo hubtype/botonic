@@ -47,6 +47,7 @@
       "plugins/plugin-luis",
       "plugins/plugin-segment",
       "plugins/plugin-inbenta",
+      "plugins/plugin-analytics",
       "plugins/plugin-nlu",
       "plugins/plugin-contentful"
     ],

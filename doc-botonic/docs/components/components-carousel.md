@@ -5,11 +5,13 @@ title: Carousel
 
 ## Purpose
 
-A carousel is a sliding gallery of information displayed to the user. It helps to provide more information than that which fits the screen.
+Carousels show a collection of clickable items one at a time where the user can scroll images or articles from one side to the other.
 
-![](https://botonic-doc-static.netlify.com/images/carrousel.gif)
+<img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200">
 
-## Code 
+
+## Code
+
 You can render a carousel following the structure below:
 
 ```javascript
@@ -21,7 +23,7 @@ import {
   Pic,
   Element,
   Title,
-  Subtitle
+  Subtitle,
 } from '@botonic/react'
 
 export default class extends React.Component {
@@ -32,20 +34,21 @@ export default class extends React.Component {
         desc: 'Le Big Mac',
         url: 'https://www.imdb.com/title/tt0110912',
         pic:
-          'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg'
+          'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg',
       },
       {
         name: 'The Big Lebowski',
         desc: 'Fuck it Dude',
         url: 'https://www.imdb.com/title/tt0118715',
-        pic: 'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'
+        pic:
+          'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg',
       },
       {
         name: 'Snatch',
         desc: 'Five minutes, Turkish',
         url: 'https://www.imdb.com/title/tt0208092',
-        pic: 'http://www.libertytuga.pt/wp-content/uploads/2011/11/snatch.jpg'
-      }
+        pic: 'http://www.libertytuga.pt/wp-content/uploads/2011/11/snatch.jpg',
+      },
     ]
     return (
       <>
@@ -66,4 +69,75 @@ export default class extends React.Component {
 }
 ```
 
+## Customize or disable arrows on both sides of the carousel
 
+You can disable or customize arrows displayed on the left and right sides of a carousel.
+
+<img src="https://botonic-doc-static.netlify.com/images/dynamic_carrousel_arrow.png" width="200">
+
+To do so:
+
+Add the following code in `src/webchat/index.js`:
+```javascript
+import {
+  CustomCarouselLeftArrow,
+  CustomCarouselRightArrow,
+} from './custom-carousel-arrows'
+
+export const webchat = {
+  theme: {
+    enableCarouselArrows: {true|false},
+    customCarouselLeftArrow: CustomCarouselLeftArrow,
+    customCarouselRightArrow: CustomCarouselRightArrow,
+  },
+}
+```
+
+Add the following code in `src/webchat/custom-carousel-arrows.js`:
+
+```javascript
+import React from 'react'
+import styled from 'styled-components'
+
+const StyledArrowContainer = styled.div`
+  position: absolute;
+  box-sizing: border-box;
+  top: 10px;
+  height: calc(100% - 20px);
+  width: 22px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  left: ${(props) => props.left}px;
+  right: ${(props) => props.right}px;
+
+
+const StyledArrow = styled.img`
+  width: 18px;
+  height: 18px;
+`
+
+export const CustomCarouselLeftArrow = (props) => {
+  return (
+    <StyledArrowContainer left={0} onClick={() => props.scrollCarouselBy(-228)}>
+      <StyledArrow
+        src={'https://image.flaticon.com/icons/svg/860/860790.svg'}
+      />
+    </StyledArrowContainer>
+  )
+}
+
+export const CustomCarouselRightArrow = (props) => {
+  return (
+    <StyledArrowContainer right={0} onClick={() => props.scrollCarouselBy(228)}>
+      <StyledArrow
+        src={'https://image.flaticon.com/icons/svg/860/860828.svg'}
+      />
+    </StyledArrowContainer>
+  )
+}
+```
+
+**Note**: `scrollCarouselBy` allows you to define the carousel's movement distance in pixels when clicking on the arrow.

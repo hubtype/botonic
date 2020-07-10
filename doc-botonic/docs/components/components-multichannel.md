@@ -15,13 +15,13 @@ Add the following code in your `action` files, under the `render` section.
 
 ```javascript
 <Multichannel
-        firstIndex={'a'} 
-        boldIndex={true}
-        carousel={{ indexMode: 'letter' }}
-        text={{ indexMode: 'letter' }}
-        indexSeparator={'.'}
-        messageSeparator={'\n\n'}
-      >
+  firstIndex={'a'}
+  boldIndex={true}
+  carousel={{ indexMode: 'letter' }}
+  text={{ indexMode: 'letter' }}
+  indexSeparator={'.'}
+  messageSeparator={'\n\n'}
+>
 ```
 
 ## Description
@@ -41,21 +41,20 @@ Add the following code in your `action` files, under the `render` section.
 ## Example
 
 ```javascript
-      <Multichannel {...LEGACY_PROPS}>
-        <Text>
-          Some with buttons
-          {[
-            <Button key={'1'} payload='payload1'>
-              Button 1
-            </Button>,
-            <Button key={'2'} path='path1'>
-              Button 2
-            </Button>,
-            <Button key={'3'} url='http://testurl.com'>
-              Visit website
-            </Button>,
-          ]}
-        </Text>
-      </Multichannel>
-    )
-    ```
+<Multichannel {...LEGACY_PROPS}>
+  <Text>
+    Some with buttons
+    {[
+      <Button key={'1'} payload='payload1'>
+        Button 1
+      </Button>,
+      <Button key={'2'} path='path1'>
+        Button 2
+      </Button>,
+      <Button key={'3'} url='http://testurl.com'>
+        Visit website
+      </Button>,
+    ]}
+  </Text>
+</Multichannel>
+```

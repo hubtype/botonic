@@ -5,7 +5,7 @@ title: Share Button
 
 ## Purpose
 
-The Share Button enables other users  to share your content in Messenger. Messages shared this way show a preview and text elements that are clickable.
+The Share Button enables other users to share your content in Messenger. Messages shared this way show a preview and text elements that are clickable.
 
 <details>
 <summary>Example</summary>
@@ -46,19 +46,19 @@ export default class extends React.Component {
               image_url: 'http://pngimg.com/uploads/share/share_PNG24.png',
               default_action: {
                 type: 'web_url',
-                url: 'https://botonic.io/'
+                url: 'https://botonic.io/',
               },
               buttons: [
                 {
                   type: 'web_url',
                   url: 'https://botonic.io/',
-                  title: 'Welcome to Botonic!'
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  title: 'Welcome to Botonic!',
+                },
+              ],
+            },
+          ],
+        },
+      },
     }
     return (
       <Text>

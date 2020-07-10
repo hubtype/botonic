@@ -5,12 +5,13 @@ title: Media
 
 ## Purpose
 
-Using media such as images, videos or attached files helps to visualize the conversation and draws attention. 
+Using media such as images, videos or attached files helps to visualize the conversation and draws attention.
 
 <details>
 <summary>Example</summary>
 
-![](https://botonic-doc-static.netlify.com/images/media_files.png)
+<img src="https://botonic-doc-static.netlify.com/images/media_files.png" width="200">
+<img src="https://botonic-doc-static.netlify.com/images/media_files2.png" width="200">
 
 </details>
 
@@ -26,4 +27,3 @@ You can send all these types of media files:
   <Document src='http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf' />
 </>
 ```
-

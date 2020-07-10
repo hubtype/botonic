@@ -7,7 +7,12 @@ title: Buttons
 
 Buttons are usually sent during a conversation for the person to click and take specific actions instantly. It is very useful for audience interaction.
 
-![](https://botonic-doc-static.netlify.com/images/buttons.png)
+<details>
+<summary>Example</summary>
+
+<img src="https://botonic-doc-static.netlify.com/images/buttons.png" width="200">
+
+</details>
 
 ## Code
 
@@ -17,7 +22,5 @@ Buttons are usually sent during a conversation for the person to click and take 
   and the second is a payload button:
   <Button url='https://botonic.io'>Visit botonic.io</Button>
   <Button payload='carousel'>Show me a carousel</Button>
-<Text>
+</Text>
 ```
-
-
