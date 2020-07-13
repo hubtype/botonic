@@ -6,12 +6,13 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:node/recommended',
     'plugin:import/recommended',
+    'plugin:promise/recommended',
     // typescript
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
-  plugins: ['jest', 'no-null', 'filenames', '@typescript-eslint', 'import'],
+  plugins: ['jest', 'no-null', 'filenames', '@typescript-eslint', 'import', 'promise'],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
     sourceType: 'module', // Allows for the use of imports

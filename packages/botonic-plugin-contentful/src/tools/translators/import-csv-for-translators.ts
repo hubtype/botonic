@@ -50,7 +50,6 @@ async function main() {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-main().then(() => {
-  console.log('done')
-})
+// void tells linters that we don't want to wait for promise
+// await in main requires esnext
+void main()
