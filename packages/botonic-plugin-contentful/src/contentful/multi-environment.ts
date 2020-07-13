@@ -50,7 +50,7 @@ export class MultiEnvironmentFactory {
     const locale = ctx!.locale!
     let cms = this.cache.get(locale)
     if (!cms) {
-      const opts = {
+      const opts: ContentfulOptions = {
         ...contOptions,
         spaceId: credentials.spaceId,
         environment: credentials.environment,

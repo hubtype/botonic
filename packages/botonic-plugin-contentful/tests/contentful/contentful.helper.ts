@@ -6,6 +6,10 @@ export function testSpaceId(): string {
   return process.env.CONTENTFUL_TEST_SPACE_ID!
 }
 
+export function testAccessToken(): string {
+  return process.env.CONTENTFUL_TEST_TOKEN!
+}
+
 export function testContentful(
   options: Partial<ContentfulOptions> = {},
   errorReporting = true
@@ -22,11 +26,9 @@ export function testContentfulOptions(
 ): ContentfulOptions {
   // useful to have long timeouts so that we can send many requests simultaneously
   return {
-    ...{
-      spaceId: testSpaceId(),
-      accessToken: process.env.CONTENTFUL_TEST_TOKEN!,
-      environment: 'master',
-    },
+    spaceId: testSpaceId(),
+    accessToken: testAccessToken(),
+    environment: 'master',
     ...options,
   }
 }
