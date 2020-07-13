@@ -24,7 +24,7 @@ test('TEST: contentful startUp', async () => {
         new Button(
           TEST_CAROUSEL_MAIN_ID,
           'INICIO',
-          'Menú de Inicio',
+          'Start menu',
           new ContentCallback(ContentType.CAROUSEL, TEST_CAROUSEL_MAIN_ID)
         ),
       ]
