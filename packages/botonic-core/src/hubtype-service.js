@@ -121,6 +121,7 @@ export class HubtypeService {
         )
         .then(res => {
           if (res && res.status === 200) this.handleSentInput(message)
+          return
         })
         .catch(e => this.handleUnsentInput(message))
     } catch (e) {

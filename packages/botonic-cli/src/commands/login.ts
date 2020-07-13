@@ -48,13 +48,16 @@ export default class Run extends Command {
 
   async logInUser() {
     const user_data: any = await this.askLoginInfo()
-    this.botonicApiService.login(user_data.email, user_data.password).then(
-      () => {
-        console.log('Successful log in!'.green)
-      },
-      err => {
-        console.log('Error: '.red, err.response.data.error_description.red)
-      }
-    )
+    await this.botonicApiService
+      .login(user_data.email, user_data.password)
+      .then(
+        () => {
+          console.log('Successful log in!'.green)
+          return
+        },
+        err => {
+          console.log('Error: '.red, err.response.data.error_description.red)
+        }
+      )
   }
 }

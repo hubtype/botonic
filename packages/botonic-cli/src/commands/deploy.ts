@@ -240,7 +240,7 @@ Uploading...
         message: 'Bot name:',
       },
     ]).then((inp: any) => {
-      this.botonicApiService.saveBot(inp.bot_name).then(
+      return this.botonicApiService.saveBot(inp.bot_name).then(
         ({}) => this.deploy(),
         err =>
           console.log(colors.red(`There was an error saving the bot: ${err}`))

@@ -20,6 +20,7 @@ test('TEST: ErrorReportingCMS write rejected', async (done: DoneCallback) => {
   await promise
     .then(() => {
       done.fail('should have thrown')
+      return
     })
     .catch(error2 => {
       expect(error2).toBeInstanceOf(TrackException)
