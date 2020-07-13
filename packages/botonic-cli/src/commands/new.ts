@@ -79,6 +79,7 @@ Creating...
         template = this.templates.filter(
           (t: any) => t.description === resp.botName
         )[0].name
+        return
       })
     } else {
       const botExists = this.templates.filter(
