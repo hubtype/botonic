@@ -19,8 +19,8 @@ test('TEST: ErrorReportingCMS carousel delivery failed', async () => {
 
   await sut
     .carousel('id1')
-    .then(() => {
-      fail('should have thrown')
+    .then(carousel => {
+      throw Error('should have thrown')
     })
     .catch((error2: any) => {
       expect(error2).toEqual(
@@ -39,5 +39,6 @@ test('TEST: ErrorReportingCMS carousel delivery ok', async () => {
 
   await sut.carousel('id1').then(c => {
     expect(c).toEqual(instance(carousel))
+    return
   })
 })
