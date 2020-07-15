@@ -33,6 +33,8 @@ export class Markdown extends MarkUp {
   }
 
   wrapWithInline(input: string, inlineType: TokenType): string {
+    // emphasis & strong cannot have internal spaces
+    input = input.trim()
     if (inlineType === TokenType.EMPHASIS) {
       return `_${input}_`
     }
