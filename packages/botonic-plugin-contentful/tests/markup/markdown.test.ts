@@ -45,6 +45,7 @@ describe('TEST markdown', () => {
 
   test.each([
     ['hi', TokenType.EMPHASIS, '_hi_'],
+    [' hi ', TokenType.EMPHASIS, '_hi_'],
     ['hi \\*', TokenType.STRONG, '**hi \\***'],
   ])(
     'wrapWithInline (%s, %s) => %s',
