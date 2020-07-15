@@ -13,5 +13,4 @@ for package in botonic-*; do
 done
 
 # restart eslint_d in case any eslint plugin has been upgraded
-killall eslint_d 2> /dev/null
-killall -9 eslint_d 2> /dev/null
+eslint_d restart
