@@ -1,9 +1,9 @@
-import dashbot from 'dashbot'
+import rawDashbot from 'dashbot'
 
 export default class BotonicPluginDashbot {
   constructor(options) {
     this.options = options
-    dashbot = dashbot(this.options.apiKey).webchat
+    this.dashbot = rawDashbot(this.options.apiKey).webchat
   }
 
   async pre({ input, session, lastRoutePath }) {}
@@ -13,12 +13,12 @@ export default class BotonicPluginDashbot {
       text: input.data,
       userId: session.user.id,
     }
-    await dashbot.logIncoming(messageInDashbot)
+    await this.dashbot.logIncoming(messageInDashbot)
 
     const messageOutDashbot = {
       text: response,
       userId: session.user.id,
     }
-    await dashbot.logOutgoing(messageOutDashbot)
+    await this.dashbot.logOutgoing(messageOutDashbot)
   }
 }
