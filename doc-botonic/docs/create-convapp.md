@@ -64,11 +64,11 @@ Let's say we want our chatbot to answer just after the user says “hi”.
    ]
    ```
 
-## Add Two Buttons to Give the Choice to the User
+## Add Two Buttons to Give a Choice to the User
 
 Just after greeting the user, let's say that the bot lets the user choose one option among pizza or pasta.
 
-1. Go back to the `welcome.js` file and import also the `Reply` component.
+1. Go back to the `welcome.js` file and also import the `Reply` component.
 
    ```javascript
    import { Text, Reply } from '@botonic/react'
@@ -234,7 +234,7 @@ Now let’s say that the user wants to get help from an agent just after his sel
      }
      render() {
        return (
-         <Text>You will be transfered to an agent to solve your issues.</Text>
+         <Text>You will be transferred to an agent to solve your issues.</Text>
        )
      }
    }
@@ -320,6 +320,6 @@ To end the conversation:
    ]
    ```
 
-You bot is ready! Now try your bot with `botonic serve` and put it into production by running `botonic deploy`.
+Your bot is ready! Now try your bot with `botonic serve` and put it into production by running `botonic deploy`.
 
 **Note**: Remember to run `botonic` commands from bot's project root folder. See the [**Quick Start section**](getting-started) for further details.

@@ -47,4 +47,4 @@ Congratulations: Your bot is created!
 
 Congratulations! You’ve installed and deployed your first bot!
 
-> **Note**: If you experience any error while testing or deploying your bot, try to run `npm run build` for a more detailed trace.
+> **Note**: If you experience any errors whilst testing or deploying your bot, try to run `npm run build` for a more detailed trace.

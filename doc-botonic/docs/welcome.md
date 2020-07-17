@@ -12,7 +12,7 @@ Botonic is a React-based framework that allows you to build conversational exper
 
 A chatbot is an intelligent artificial agent that implies an AI-centric, text-only interaction with your bot.
 
-**Botonic** helps you create **Conversational Applications** to deliver a good user experience by using all the typical chatbot features like Guided flows, NLU, Multi-language, Media support (images, video, location...), Webviews, Human handoff or Webchat. Your Conversation app will learn fast, understand your need, know you and help for your transactions.  
+**Botonic** helps you create **Conversational Applications** to deliver a good user experience by using all the typical chatbot features like Guided flows, NLU, Multi-language, Media support (images, video, location...), Webviews, Human handoff or Webchat. Your Conversation app will learn fast, understand your needs, know you and help you for your transactions.  
 
 Moreover, to make developers' lives easier, Botonic offers:
 
@@ -24,7 +24,7 @@ Moreover, to make developers' lives easier, Botonic offers:
 
 ## Botonic and Hubtype
 
-Botonic is a project created by the [Hubtype](https://hubtype.com) team. Hubtype is a platform that allows companies to attend their customers on messaging apps by combining bots and humans.
+Botonic is a project created by the [Hubtype](https://hubtype.com) team. Hubtype is a platform that allows companies to attend to their customers on messaging apps by combining bots and humans.
 The easiest way to put your botonic bot in production is to deploy it to Hubtype, as it offers:
 
 - Easy deployments.
@@ -35,4 +35,4 @@ The easiest way to put your botonic bot in production is to deploy it to Hubtype
 
 Now, let's get started!
 
-**Note:** If you have questions or encounter a problem, do not hesitate to send us a [Slack](http://botonic.slack.com) or report them [here](https://github.com/hubtype/botonic/issues).
+**Note:** If you have any questions or encounter a problem, do not hesitate to send us a [Slack](http://botonic.slack.com) or report them [here](https://github.com/hubtype/botonic/issues).
