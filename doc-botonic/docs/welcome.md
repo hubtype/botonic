@@ -12,7 +12,7 @@ Botonic is a React-based framework that allows you to build conversational exper
 
 A chatbot is an intelligent artificial agent that implies an AI-centric, text-only interaction with your bot.
 
-**Botonic** helps you to create **Conversational Applications** to deliver a good user experience by using all the typical chatbot features like Guided flows, NLU, Multi-language, Media support (images, video, location...), Webviews, Human handoff or Webchat. Your Conversation app will learn fast, understand your need, know you and help for your transactions.
+**Botonic** helps you create **Conversational Applications** to deliver a good user experience by using all the typical chatbot features like Guided flows, NLU, Multi-language, Media support (images, video, location...), Webviews, Human handoff or Webchat. Your Conversation app will learn fast, understand your need, know you and help for your transactions.  
 
 Moreover, to make developers' lives easier, Botonic offers:
 
