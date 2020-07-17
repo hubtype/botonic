@@ -100,7 +100,7 @@ A new integration appears on the left side. Click on the Facebook Messenger link
 
 - Follow the integration steps as displayed.
 
-**Limitation**: in your Twitter App, you can only have a unique webhook per environment. So it's important to check this option when you want to integrate your bot into your Twitter App.
+**Limitation**: You can only have a unique webhook per environment. So it's important to check this option when you want to integrate your bot in your Twitter App.
 
 <details>
 <summary>Example</summary>

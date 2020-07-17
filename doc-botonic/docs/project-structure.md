@@ -18,7 +18,7 @@ Botonic offers a list of templates to help you set up a chatbot rapidly.
 
 | Template | Description |
 |--|--|
-| **[Blank](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/blank)** | Template with empty actions. The bot will always responds with the default `404` action "I don't understand you" when you test it. |
+| **[Blank](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/blank)** | Template with empty actions. The bot will always respond with the default `404` action "I don't understand you" when you test it. |
 | **[Tutorial](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/tutorial)** | Template with comments to learn by reading the source files. |
 |**[Childs](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/childs)** | Simple example on how childRoutes work. It allows you to build a bot with deep flows and navigate a decision tree using interactive elements like buttons. It is useful when you want to guide the user through a conversation with predefined flows that consist of several steps, such as surveys, pre-qualifiers of leads before human handoff, on-boarding processes, FAQs (when you have a very limited set of options).|
 | **[Intent](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/intent)**| Bot that uses external AI like DialogFlow.|
@@ -31,8 +31,8 @@ Botonic offers a list of templates to help you set up a chatbot rapidly.
 - `routes.js`: Here you'll define routes, which maps user inputs and payloads to actions. You can also use imported subroutes from other files.
 - `actions`: Actions are the units of logic that your bot can perform and where the responses of your bot are defined. You are free to organize them into subdirectories.
 - `locales`: Locales are objects from which your bot takes your multilanguage definitions. This is useful if you want your bot to address different audiences. The `locales/index.js` file is where all the languages are imported.
-- `webviews`: Webviews are small web pages that pop up in the middle of the conversation flow. This lets you offer experiences and features that might be difficult to offer with message bubbles, such as picking products to buy, seats to book, or dates to reserve.
-- `webchat`: Here reside all the styles and customized components for your webchat.
+- `webviews`: Webviews are small web pages that pop up in the middle of the conversation flow. This lets you offer experiences and features that might be difficult with message bubbles, such as picking products to buy, seats to book or appointments.
+- `webchat`: Here resides all the styles and customized components for your webchat.
 - `nlu`: Here you can define the utterances for every language you want to understand with `Botonic NLU`.
 - `assets`: Assets is where you can store all the media required for your bot.
 - `plugins.js`: Define your botonic plugins.
@@ -48,7 +48,7 @@ Actions are where you define the behavior of your bot. You can add an Action by 
 
 You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot, you get to a point where you need Natural Language Understanding (NLU) capabilities.
 
-NLU lets you capture user inputs by `intent` instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California?" and "Do you know if it's sunny today in California?" to the intent `GetWeather` and the parameter `city=California`. You can then map that intent to an action using a route.
+NLU lets you capture user inputs by `intent` instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California like?" and "Do you know if it's sunny today in California?" to the intent `GetWeather` and the parameter `city=California`. You can then map that intent to an action using a route.
 
 Botonic has its own **[NLU module](/plugins/plugin-nlu)** which covers intent and entity recognition tasks.
 
@@ -74,7 +74,7 @@ export const routes = [
 - `{ input: i => i.confidence < 0.7, action: NotFound }` i.confidence references the confidence value of the input. The confidence value is between 0 and 1 and indicates the likelihood that an input has a certain intent. This route is used if the input doesn't match an intent with enough confidence.
 - `{ intent: 'Greetings', action: Start }` will trigger the action `Start` when the user inputs a greeting.
 
-**Note**: Routes are checked in order. It is recommended to put the more specific ones first and the more generic at the end.
+**Note**: Routes are checked in order. It is recommended to put the more specific ones first and the more generic ones at the end.
 
 Then you just have to create a couple of actions that respond to these intents in `src/actions`.
 
