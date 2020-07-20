@@ -31,7 +31,7 @@ Alternatively, if you already have a project, you can follow the steps below to 
 
 ### Add a Configuration File
 
-Under `nlu`, create a new file called `nlu.config.json`. This file defines the languages to enable and configures the training phase parameters. You file must have the following content:
+Under `nlu`, create a new file called `nlu.config.json`. This file defines the languages to enable and configures the training phase parameters. Your file must have the following content:
 
 ** src/nlu/nlu.config.json **
 
@@ -68,7 +68,7 @@ export const plugins = [
 1. Under the `nlu` folder, create a folder called `utterances`, which will contain your multilingual intents.
 2. For every language you want to support, create a folder under `src/nlu/utterances` with its language code (it must be [ISO 639-1](https://iso639-3.sil.org/code_tables/639/data)). Ex: `en` for English.
 3. Add a text file for each intent you want to create by naming them `{YOUR_INTENT}.txt`.
-4. Fill them with possible ways to express each intent. **Every sentence must be on a different line of the file.**
+4. Fill them in with possible ways to express each intent. **Every sentence must be on a different line of the file.**
 
 For example, you could have the following files under **src/nlu/utterances/en**:
 
@@ -257,8 +257,8 @@ In the example below, the default values in the `default` section are changed. T
 
 **List of training parameters:**
 
-- **EMBEDDING**: Name of the embeddings type used. Set to `'10k-fasttext'` by default.
-- **EMBEDDING_DIM**: Dimensions of the embeddings used. Set to `300` by default.
+- **EMBEDDING**: Name of the embedding type used. Set to `'10k-fasttext'` by default.
+- **EMBEDDING_DIM**: Dimensions of the embedding used. Set to `300` by default.
 - **TRAINABLE_EMBEDDINGS**: Whether to let the algorithm train with the pre-trained embeddings weights or not. If you have less utterances, then it's better
   to set this options to `true`. Otherwise, set it to `false` to take advantage of what the embedding already knows. Set to `true`by default.
 - **LEARNING_RATE**: Specifies how much the weights are updated during training. Common values for this parameter are `0.01`, `0.03`, `0.1`. Set to `0.03` by default.
