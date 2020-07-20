@@ -784,11 +784,8 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const updateAllUserReferences = user => {
-    updateUser({ ...webchatState.user, ...user })
-    updateSession({
-      ...webchatState.session,
-      user: { ...webchatState.session.user, ...user },
-    })
+    Object.assign(webchatState.user, user)
+    Object.assign(webchatState.session.user, user)
   }
 
   useEffect(() => {
