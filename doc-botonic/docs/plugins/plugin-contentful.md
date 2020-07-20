@@ -144,7 +144,7 @@ In the case of Text's, you can also define *Follow Up* contents. This feature is
 
 #### **Internationalization**
 
-To internationalize your bot, first define the list of required languages at the Settings|Locales menu of you Contentful space. It's recommended to define fallback locales, in case that any content lacks the translation text for some reason.
+To internationalize your bot, first define the list of required languages at the Settings|Locales menu of your Contentful space. It's recommended to define fallback locales, in case that any content lacks the translation text for some reason.
 From the content edit page, click on "Change" at the translation section to enable the required languages.
 
 <details>
@@ -154,7 +154,7 @@ From the content edit page, click on "Change" at the translation section to enab
 
 </details>
 
-You will see now that you can assign multiple values for the fields that can be internationalized (as defined at your content model).
+You will see now that you can assign multiple values for the fields that can be internationalized (as defined in your content model).
 
 <details>
 <summary>Example</summary>
@@ -177,7 +177,7 @@ The plugin also provides a library to convert the markdown text into WhatsApp's 
 
 ### Program Your Bot
 
-Add the following to you bot's plugins.js file:
+Add the following to your bot's `plugins.js` file:
 ```
 export const plugins = [
 ...
@@ -345,7 +345,7 @@ The plugin allows configuring weekly schedules from the Contentful dashboard.
 </details>
 
 #### **Schedule Exceptions**
-To define exceptions to the general weekly schedule, create a *Day Schedule* at the *Exceptions* section. For these days, the corresponding weekday schedule will we ignored.
+To define exceptions to the general weekly schedule, create a *Day Schedule* at the *Exceptions* section. For these days, the corresponding weekday schedule will be ignored.
 
 <details>
 <summary>Example</summary>
