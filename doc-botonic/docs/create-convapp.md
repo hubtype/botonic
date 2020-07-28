@@ -137,7 +137,7 @@ Just after greeting the user, let's say that the bot lets the user choose one op
    import ChosenPasta from './actions/chosen-pasta'
    ```
 
-1. Then in `src/routes.js`, you can add rules to make the user follow a logical path such as a **payload** to capture the answer once the user has clicked on the button `{ payload: "pizza", action: ChosenPizza }` or a **sub-flow** where you can select between two options via `childRoutes`.  
+1. In `src/routes.js`, add rules to make the user follow a logical path. For example, you can use a **payload** to capture the answer once the user has clicked on the button `{ payload: "pizza", action: ChosenPizza }` or a **sub-flow** where you can select between two options via `childRoutes`.  
    **Note:** When using `childRoutes`, at least the main action must have been previously passed.
 
 Such as:
@@ -172,7 +172,7 @@ export const routes = [
 
 1. In the bot directory, enter `npm install @botonic/plugin-nlu`.
 
-2. Create two types of `intents`, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en` containing utterances related to an intention. You must create at least **two files** to make the NLU plugin work.
+2. Create two types of `intents`, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en` containing utterances related to an intent. You must create at least **two files** to make the NLU plugin work.
 
 3. Enter the content of your choice in both files. In our example, we are going to add content to the `help.txt` file. Make sure to add a line break between each intent.
 
@@ -322,4 +322,4 @@ To end the conversation:
 
 Your bot is ready! Now try your bot with `botonic serve` and put it into production by running `botonic deploy`.
 
-**Note**: Remember to run `botonic` commands from bot's project root folder. See the [**Quick Start section**](getting-started) for further details.
+**Note**: Remember to run `botonic` commands from the bot's project root folder. See the [**Quick Start section**](getting-started) for further details.
