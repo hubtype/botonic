@@ -5,7 +5,7 @@ title: Carousel
 
 ## Purpose
 
-Carousels show a collection of clickable items one at a time where the user can scroll images or articles from one side to the other.
+Carousels show a collection of images in a cyclic view. By displaying only a subset of images, the screen space is optimized. The navigation items, such as arrows, suggest additional content that is not currently visible, which encourages the user to continue exploring.
 
 <img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200"/>
 
