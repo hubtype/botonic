@@ -31,10 +31,10 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
     context: cms.Context
   ): Promise<cms.StartUp> {
     const fields = entry.fields
-    const promises = (fields.buttons || []).map(reference =>
-      this.button.fromReference(reference, context)
+    const buttons = await this.button.fromReferenceSkipErrors(
+      fields.buttons || [],
+      context
     )
-    const buttons = await Promise.all(promises)
     const img = fields.pic
       ? ContentfulEntryUtils.urlFromAsset(fields.pic)
       : undefined

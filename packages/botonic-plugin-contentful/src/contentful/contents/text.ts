@@ -28,28 +28,25 @@ export class TextDelivery extends DeliveryWithFollowUp {
     context: cms.Context
   ): Promise<cms.Text> {
     const fields = entry.fields
-    const buttons = fields.buttons || []
-    const followup: Promise<
-      cms.Content | undefined
-    > = this.getFollowUp().fromEntry(fields.followup, context)
-    const promises = [followup]
-    promises.push(
-      ...buttons.map(reference => this.button.fromReference(reference, context))
-    )
+    const buttonEntries = fields.buttons || []
+    const followup = this.getFollowUp().fromEntry(fields.followup, context)
+    const promises: Promise<any>[] = [
+      followup,
+      this.button.fromReferenceSkipErrors(buttonEntries, context),
+    ]
+    const followUpAndButtons = await Promise.all(promises)
 
-    return Promise.all(promises).then(followUpAndButtons => {
-      const followUp = followUpAndButtons.shift() as cms.FollowUp | undefined
-      const buttons = followUpAndButtons as cms.Button[]
-      const common = ContentfulEntryUtils.commonFieldsFromEntry(entry, followUp)
-      return new cms.Text(
-        common,
-        fields.text ?? '',
-        buttons,
-        fields.buttonsStyle == 'QuickReplies'
-          ? cms.ButtonStyle.QUICK_REPLY
-          : cms.ButtonStyle.BUTTON
-      )
-    })
+    const followUp = followUpAndButtons[0] as cms.FollowUp | undefined
+    const buttons = followUpAndButtons[1] as cms.Button[]
+    const common = ContentfulEntryUtils.commonFieldsFromEntry(entry, followUp)
+    return new cms.Text(
+      common,
+      fields.text ?? '',
+      buttons,
+      fields.buttonsStyle == 'QuickReplies'
+        ? cms.ButtonStyle.QUICK_REPLY
+        : cms.ButtonStyle.BUTTON
+    )
   }
 }
 

@@ -46,20 +46,18 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     context: cms.Context
   ): Promise<cms.Element> {
     const fields = entry.fields
-    const buttons = entry.fields.buttons || []
-    const buttonsPromises = buttons.map(reference =>
-      this.button.fromReference(reference, context)
+    const buttonEntries = entry.fields.buttons || []
+    const buttons = await this.button.fromReferenceSkipErrors(
+      buttonEntries,
+      context
     )
 
-    return Promise.all(buttonsPromises).then(
-      buttons =>
-        new cms.Element(
-          entry.sys.id,
-          buttons,
-          fields.title ?? '',
-          fields.subtitle ?? '',
-          fields.pic && ContentfulEntryUtils.urlFromAsset(fields.pic)
-        )
+    return new cms.Element(
+      entry.sys.id,
+      buttons,
+      fields.title ?? '',
+      fields.subtitle ?? '',
+      fields.pic && ContentfulEntryUtils.urlFromAsset(fields.pic)
     )
   }
 }

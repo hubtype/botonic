@@ -43,6 +43,14 @@ export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
   disableCache?: boolean
 
   contentfulFactory?: (opts: ContentfulOptions) => cms.CMS
+
+  /**
+   * If the delivery of a part of a content fails (eg. a referenced content),
+   * the flag defines whether the content should be partially delivered
+   * or an error should be raised.
+   * False by default
+   */
+  resumeErrors?: boolean
 }
 
 export default class BotonicPluginContentful {

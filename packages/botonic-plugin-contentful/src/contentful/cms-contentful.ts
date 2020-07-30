@@ -68,7 +68,7 @@ export class Contentful implements cms.CMS {
     this._contents = new ContentsDelivery(delivery)
 
     this._delivery = delivery
-    this._button = new ButtonDelivery(delivery)
+    this._button = new ButtonDelivery(delivery, options.resumeErrors || false)
     this._carousel = new CarouselDelivery(delivery, this._button)
     this._text = new TextDelivery(delivery, this._button)
     this._startUp = new StartUpDelivery(delivery, this._button)
