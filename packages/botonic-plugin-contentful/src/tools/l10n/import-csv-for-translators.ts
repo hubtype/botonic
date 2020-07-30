@@ -19,9 +19,12 @@ const environment = process.argv[3]
 const accessToken = process.argv[4]
 const locale = process.argv[5]
 const fileName = process.argv[6]
+const dryRun = Boolean(process.argv[7])
 
 if (process.argv.length < 7 || process.argv[2] == '--help') {
-  console.error(`Usage: space_id environment access_token locale filename`)
+  console.error(
+    `Usage: space_id environment access_token locale filename [dry_run]`
+  )
   // eslint-disable-next-line no-process-exit
   process.exit(1)
 }
@@ -40,7 +43,7 @@ async function main() {
       {
         locale,
         preview: true,
-        dryRun: true,
+        dryRun: dryRun,
       },
       fileName
     )
