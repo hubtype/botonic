@@ -3,7 +3,7 @@ import {
   CsvImport,
   Record,
   StringFieldImporter,
-} from '../../../src/tools/translators/csv-import'
+} from '../../../src/tools/l10n/csv-import'
 import { anything, instance, mock, when } from 'ts-mockito'
 import { testManageContentful } from '../../contentful/manage/manage-contentful.helper'
 import { SPANISH } from '../../../src/nlp'

@@ -4,34 +4,53 @@ import { MetaLinkProps } from 'contentful-management/dist/typings/common-types'
 import { EntryProp } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { LocaleProps } from 'contentful-management/dist/typings/entities/locale'
+// eslint-disable-next-line node/no-missing-import
+import { ContentTypeProps } from 'contentful-management/dist/typings/entities/content-type'
 import * as schema from 'contentful-import/dist/utils/schema'
 import fs from 'fs'
 import * as joi from 'joi'
 
 export type I18nFieldValues = { [locale: string]: string | MetaLinkProps }
 
-export class ExportObject {
+/**
+ * Allows modifying contentful spaces exported with "contentful space export"
+ */
+export class SpaceExport {
   payload: {
     entries: EntryProp[]
     locales?: LocaleProps[]
+    contentTypes?: ContentTypeProps[]
   }
 
   constructor(jsonObject: any) {
-    ExportObject.validate(jsonObject)
+    SpaceExport.validate(jsonObject)
     this.payload = jsonObject
   }
 
-  static validate(jsonObject: any) {
-    const err = joi.validate(jsonObject, schema.payloadSchema)
+  private static validate(jsonObject: any) {
+    const err = joi.validate(
+      SpaceExport.hideFieldsWithBadSchema(jsonObject),
+      schema.payloadSchema
+    )
     if (err.error) {
       throw new Error(err.error.message)
     }
   }
 
-  static fromJsonFile(filename: string): ExportObject {
+  private static hideFieldsWithBadSchema(jsonObject: any): any {
+    // contentTypes fails with types withs items
+    // see https://github.com/contentful/contentful-import/issues/262
+    const clone = { ...jsonObject }
+    for (const field of ['contentTypes', 'assets', 'editorInterfaces']) {
+      delete clone[field]
+    }
+    return clone
+  }
+
+  static fromJsonFile(filename: string): SpaceExport {
     //we could use Joi schemas in node_modules/contentful-import/dist/utils/schema.js
     const json = JSON.parse(fs.readFileSync(filename, 'utf8'))
-    return new ExportObject(json)
+    return new SpaceExport(json)
   }
 
   write(filename: string): void {

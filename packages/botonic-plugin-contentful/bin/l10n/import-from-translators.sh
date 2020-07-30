@@ -3,7 +3,7 @@ BIN_DIR=${0:a:h}
 cd "$BIN_DIR"/../.. || exit
 
 if [[ $# -lt 5 ]]; then
-	../../node_modules/.bin/ts-node --files	src/tools/translators/import-csv-for-translators.ts --help
+	../../node_modules/.bin/ts-node --files	src/tools/l10n/import-csv-for-translators.ts --help
 	exit 1
 fi
 
@@ -14,5 +14,5 @@ CONTENTFUL_MANAGEMENT_TOKEN=$3
 LOCALE=$4
 CSV_FILENAME=$5
 
-../../node_modules/.bin/ts-node --files	src/tools/translators/import-csv-for-translators.ts \
+../../node_modules/.bin/ts-node --files	src/tools/l10n/import-csv-for-translators.ts \
 	"$SPACE_ID" "$ENVIRONMENT" "$CONTENTFUL_MANAGEMENT_TOKEN" "$LOCALE" "$CSV_FILENAME"
