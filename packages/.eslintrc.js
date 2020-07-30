@@ -12,7 +12,14 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
-  plugins: ['jest', 'no-null', 'filenames', '@typescript-eslint', 'import', 'promise'],
+  plugins: [
+    'jest',
+    'no-null',
+    'filenames',
+    '@typescript-eslint',
+    'import',
+    'promise',
+  ],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
     sourceType: 'module', // Allows for the use of imports
@@ -46,7 +53,7 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     'node/no-unsupported-features/es-syntax': 'off', //babel will take care of ES compatibility
     'unicorn/no-abusive-eslint-disable': 'off',
-    "@typescript-eslint/naming-convention": "warn",
+    '@typescript-eslint/naming-convention': 'warn',
     'consistent-return': 'error',
     'jest/no-export': 'warn',
     'no-empty': 'warn',
@@ -62,7 +69,7 @@ module.exports = {
     'import/no-unresolved': 'error',
     'import/default': 'warn', // syntax "export = xxxx" is not supported
     'node/no-extraneous-import': 'warn', // otherwise it does not find ts-mockito if only defined in parent project
-
+    'array-callback-return': 'error',
     // special for TYPESCRIPT
     '@typescript-eslint/ban-ts-comment': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off', // annoying for tests
@@ -88,22 +95,22 @@ module.exports = {
     {
       files: [
         '**/*.js', // to be able to skip required fields when not used in a particular test
-        '**/*.jsx'
+        '**/*.jsx',
       ],
       rules: {
         // pending to mark unused vars with _...
         //'no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }],
-      }
+      },
     },
     {
       files: [
         '**/*.ts', // to be able to skip required fields when not used in a particular test
       ],
       rules: {
-        "import/namespace": "off",
+        'import/namespace': 'off',
         // pending to mark unused vars with _...
         //'@typescript-eslint/no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }],
-      }
+      },
     },
   ],
   env: {
@@ -119,4 +126,3 @@ if (typeof AVOID_IMPORT_CRASH !== 'undefined' && AVOID_IMPORT_CRASH) {
   // avoid eslint-plugin-import crash https://github.com/benmosher/eslint-plugin-import/issues/1818#issuecomment-651547125
   delete module.exports['settings']['import/parsers']
 }
-

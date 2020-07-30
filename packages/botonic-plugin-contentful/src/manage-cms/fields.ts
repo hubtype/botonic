@@ -17,6 +17,13 @@ export enum ContentFieldValueType {
 }
 
 export class ContentField {
+  /**
+   * Used for keywords.
+   * Maybe we should use instead a comma, since it's error prone that in Excel
+   * the array values are ; separated, but in contentful dashboard they must be
+   * separated by commas (a workaround is adding a validation on contentful dashboard
+   * to prevent ; on array fields)
+   */
   static STRING_ARRAY_SEPARATOR = ';'
 
   constructor(
