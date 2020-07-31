@@ -11,13 +11,20 @@ export class LocaleMigrator {
    */
   constructor(readonly fromLoc: string, readonly toLoc: string) {}
 
-  migrate(exportObj: SpaceExport): void {
-    this.migrateEntries(exportObj)
-    this.migrateLocales(exportObj)
   }
 
-  private migrateEntries(exportObj: SpaceExport): void {
-    for (const entry of exportObj.payload.entries) {
+  static getDefaultLocale(spaceExport: SpaceExport): string {
+    if (spaceExport.payload.locales) {
+      for
+    }
+  }
+  migrate(spaceExport: SpaceExport): void {
+    this.migrateEntries(spaceExport)
+    this.migrateLocales(spaceExport)
+  }
+
+  private migrateEntries(spaceExport: SpaceExport): void {
+    for (const entry of spaceExport.payload.entries) {
       for (const fieldName of Object.getOwnPropertyNames(entry.fields)) {
         try {
           const vals = entry.fields[fieldName] as I18nFieldValues
@@ -49,8 +56,8 @@ export class LocaleMigrator {
     delete value[this.fromLoc]
   }
 
-  private migrateLocales(exportObj: SpaceExport) {
-    let locales = exportObj.payload.locales
+  private migrateLocales(spaceExport: SpaceExport) {
+    let locales = spaceExport.payload.locales
     if (locales) {
       const fromLoc = locales.find(loc => loc.code == this.fromLoc)
       assert(fromLoc)
@@ -70,7 +77,7 @@ export class LocaleMigrator {
         fromLoc.code = this.toLoc
         fromLoc.name = this.toLoc
       }
-      exportObj.payload.locales = locales
+      spaceExport.payload.locales = locales
     }
   }
 }
@@ -81,13 +88,13 @@ export class LocaleRemover {
    */
   constructor(readonly removeLocs: string[]) {}
 
-  remove(exportObj: SpaceExport): void {
-    this.removeEntries(exportObj)
-    this.removeLocales(exportObj)
+  remove(spaceExport: SpaceExport): void {
+    this.removeEntries(spaceExport)
+    this.removeLocales(spaceExport)
   }
 
-  private removeEntries(exportObj: SpaceExport): void {
-    for (const entry of exportObj.payload.entries) {
+  private removeEntries(spaceExport: SpaceExport): void {
+    for (const entry of spaceExport.payload.entries) {
       for (const fieldName of Object.getOwnPropertyNames(entry.fields)) {
         const vals = entry.fields[fieldName] as I18nFieldValues
         for (const loc of this.removeLocs) {
@@ -97,14 +104,20 @@ export class LocaleRemover {
     }
   }
 
-  private removeLocales(exportObj: SpaceExport) {
-    assert(exportObj.payload.locales)
+  private findLocale(spaceExport: SpaceExport, locale: string): LocaleProps|undefined {
+    if (!spaceExport.payload.locales) {
+      return undefined
+    }
+    return spaceExport.payload.locales.find(loc => loc.code == locale)
+  }
+  private removeLocales(spaceExport: SpaceExport) {
+    assert(spaceExport.payload.locales)
     for (const removeLoc of this.removeLocs) {
-      if (!exportObj.payload.locales.find(loc => loc.code == removeLoc)) {
+      if (!this.findLocale(spaceExport, removeLoc)) {
         console.error(`Expecting to remove locale ${removeLoc} but not found`)
       }
     }
-    exportObj.payload.locales = exportObj.payload.locales.filter(
+    spaceExport.payload.locales = spaceExport.payload.locales.filter(
       loc => !this.removeLocs.includes(loc.code)
     )
   }

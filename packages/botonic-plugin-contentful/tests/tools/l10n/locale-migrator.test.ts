@@ -12,15 +12,15 @@ describe('LocaleMigrator', () => {
     // const toFile = '/tmp/entries_element_es_en_to_en.json'
     // const expectedFile =
     //   FIXTURES_BASE + '/entries_element_with_es_en_pt_expected.json'
-    const exportObj = SpaceExport.fromJsonFile(fromFile)
+    const spaceExport = SpaceExport.fromJsonFile(fromFile)
     const migrator = new LocaleMigrator('es', 'en')
     const remover = new LocaleRemover(['pt'])
 
     // act
-    migrator.migrate(exportObj)
-    remover.remove(exportObj)
+    migrator.migrate(spaceExport)
+    remover.remove(spaceExport)
 
-    exportObj.write('/tmp/kk.json')
+    spaceExport.write('/tmp/kk.json')
   })
 
   test('TEST End to end', () => {
@@ -28,16 +28,16 @@ describe('LocaleMigrator', () => {
     const toFile = '/tmp/entries_element_es_en_to_en.json'
     const expectedFile =
       FIXTURES_BASE + '/entries_element_with_es_en_pt_expected.json'
-    const exportObj = SpaceExport.fromJsonFile(fromFile)
+    const spaceExport = SpaceExport.fromJsonFile(fromFile)
     const migrator = new LocaleMigrator('es', 'en')
     const remover = new LocaleRemover(['pt'])
 
     // act
-    migrator.migrate(exportObj)
-    remover.remove(exportObj)
+    migrator.migrate(spaceExport)
+    remover.remove(spaceExport)
 
     // assert
-    exportObj.write(toFile)
+    spaceExport.write(toFile)
     const newExport = SpaceExport.fromJsonFile(toFile)
     const expected = SpaceExport.fromJsonFile(expectedFile)
     expect(newExport).toMatchObject(expected)
