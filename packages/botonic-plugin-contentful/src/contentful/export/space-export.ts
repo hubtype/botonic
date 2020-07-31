@@ -27,6 +27,25 @@ export class SpaceExport {
     this.payload = jsonObject
   }
 
+  getLocale(locale: string): LocaleProps | undefined {
+    if (!this.payload.locales) {
+      return undefined
+    }
+    return this.payload.locales.find(loc => loc.code == locale)
+  }
+
+  getDefaultLocale(): LocaleProps | undefined {
+    if (!this.payload.locales) {
+      return undefined
+    }
+    for (const loc of this.payload.locales) {
+      if (loc.default) {
+        return loc
+      }
+    }
+    return undefined
+  }
+
   private static validate(jsonObject: any) {
     const err = joi.validate(
       SpaceExport.hideFieldsWithBadSchema(jsonObject),

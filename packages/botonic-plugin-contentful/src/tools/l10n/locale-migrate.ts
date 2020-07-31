@@ -22,7 +22,8 @@ function main() {
   try {
     const spaceExport = SpaceExport.fromJsonFile(fromFile)
     const migrator = new LocaleMigrator(fromLocale, toLocale)
-    const remover = new LocaleRemover(removeLocales.split(','))
+    const remover = new LocaleRemover(removeLocales.split(','), toLocale)
+    console.log('Removing locales', remover.removeLocs)
 
     migrator.migrate(spaceExport)
     remover.remove(spaceExport)

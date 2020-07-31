@@ -1,24 +1,40 @@
-import { SpaceExport, I18nFieldValues } from './space-export'
+import { I18nFieldValues, SpaceExport } from './space-export'
 import assert from 'assert'
 
 /**
  * Useful to clone the contents flow from a space when the target locales are different.
  */
 export class LocaleMigrator {
+  defaultLoc: string | undefined
   /**
    * @param fromLoc The locale whose flow we want to maintain
    * @param toLoc The locale in which `fromLoc`'s flow will be converted
    */
-  constructor(readonly fromLoc: string, readonly toLoc: string) {}
+  constructor(
+    readonly fromLoc: string,
+    readonly toLoc: string,
+    readonly verbose = false
+  ) {}
 
-  }
-
-  static getDefaultLocale(spaceExport: SpaceExport): string {
+  private getDefaultLocale(spaceExport: SpaceExport): string | undefined {
     if (spaceExport.payload.locales) {
-      for
+      const fromLoc = spaceExport.getLocale(this.fromLoc)
+      if (fromLoc && fromLoc.fallbackCode) {
+        return fromLoc.fallbackCode
+      }
+      const defaultLoc = spaceExport.getDefaultLocale()
+      if (defaultLoc) {
+        return defaultLoc.code
+      }
     }
+    console.log(
+      `I don't know fallback for ${this.fromLoc}. Assuming any available locale`
+    )
+    return undefined
   }
+
   migrate(spaceExport: SpaceExport): void {
+    this.defaultLoc = this.getDefaultLocale(spaceExport)
     this.migrateEntries(spaceExport)
     this.migrateLocales(spaceExport)
   }
@@ -28,6 +44,9 @@ export class LocaleMigrator {
       for (const fieldName of Object.getOwnPropertyNames(entry.fields)) {
         try {
           const vals = entry.fields[fieldName] as I18nFieldValues
+          if (this.verbose) {
+            console.log(`Migrating ${entry}.${fieldName}`)
+          }
           this.migrateField(vals)
         } catch (e) {
           const cause = e as Error
@@ -41,27 +60,30 @@ export class LocaleMigrator {
     }
   }
 
-  private migrateField(value: I18nFieldValues): void {
+  private migrateField(values: I18nFieldValues): void {
     /**
      * Example: from es default to en default
      * [es: "payload"] => [en: "payload"]
      */
-    if (value[this.fromLoc] == undefined) {
-      // happens only for fields which are specific for a locale (eg. country stores)
-      return
+    let value = values[this.fromLoc]
+    if (!value) {
+      // TODO also get it if language being removed
+      if (this.defaultLoc && this.defaultLoc == this.fromLoc) {
+        value = values[this.defaultLoc]
+      }
     }
-    if (!(this.toLoc in value)) {
-      value[this.toLoc] = value[this.fromLoc]
+    if (!(this.toLoc in values)) {
+      values[this.toLoc] = value
     }
-    delete value[this.fromLoc]
+    delete values[this.fromLoc]
   }
 
   private migrateLocales(spaceExport: SpaceExport) {
     let locales = spaceExport.payload.locales
     if (locales) {
-      const fromLoc = locales.find(loc => loc.code == this.fromLoc)
+      const fromLoc = spaceExport.getLocale(this.fromLoc)
       assert(fromLoc)
-      const toLoc = locales.find(loc => loc.code == this.toLoc)
+      const toLoc = spaceExport.getLocale(this.toLoc)
       if (toLoc) {
         locales = locales.filter(loc => loc.code != this.fromLoc)
         if (fromLoc.fallbackCode == toLoc.fallbackCode) {
@@ -86,7 +108,7 @@ export class LocaleRemover {
   /**
    * @param removeLocs The locales to completely remove
    */
-  constructor(readonly removeLocs: string[]) {}
+  constructor(readonly removeLocs: string[], readonly newDefault?: string) {}
 
   remove(spaceExport: SpaceExport): void {
     this.removeEntries(spaceExport)
@@ -94,31 +116,48 @@ export class LocaleRemover {
   }
 
   private removeEntries(spaceExport: SpaceExport): void {
+    const defaultLoc = spaceExport.getDefaultLocale()
     for (const entry of spaceExport.payload.entries) {
       for (const fieldName of Object.getOwnPropertyNames(entry.fields)) {
         const vals = entry.fields[fieldName] as I18nFieldValues
         for (const loc of this.removeLocs) {
+          if (
+            this.newDefault &&
+            !vals[this.newDefault] &&
+            vals[loc] &&
+            defaultLoc?.code == loc
+          ) {
+            vals[this.newDefault] = vals[loc]
+          }
           delete vals[loc]
         }
       }
     }
   }
 
-  private findLocale(spaceExport: SpaceExport, locale: string): LocaleProps|undefined {
-    if (!spaceExport.payload.locales) {
-      return undefined
-    }
-    return spaceExport.payload.locales.find(loc => loc.code == locale)
-  }
   private removeLocales(spaceExport: SpaceExport) {
     assert(spaceExport.payload.locales)
     for (const removeLoc of this.removeLocs) {
-      if (!this.findLocale(spaceExport, removeLoc)) {
+      if (!spaceExport.getLocale(removeLoc)) {
         console.error(`Expecting to remove locale ${removeLoc} but not found`)
+        continue
+      }
+      for (const loc of spaceExport.payload.locales) {
+        if (this.removeLocs.includes(loc.code)) {
+          continue
+        }
+        if (loc.fallbackCode == removeLoc) {
+          console.log(`Fallback for ${loc.code} is now invalid. Please edit it`)
+        }
       }
     }
     spaceExport.payload.locales = spaceExport.payload.locales.filter(
       loc => !this.removeLocs.includes(loc.code)
     )
+    for (const loc of spaceExport.payload.locales) {
+      if (this.newDefault && loc.code == this.newDefault) {
+        loc.default = true
+      }
+    }
   }
 }

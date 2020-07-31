@@ -1,0 +1,85 @@
+{
+  "entries": [
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "s1zkp12rqz4o"
+          }
+        },
+        "id": "6aOPY3UVh8M4lihW9xe17E",
+        "type": "Entry",
+        "createdAt": "2019-05-09T12:23:40.847Z",
+        "updatedAt": "2020-02-12T20:37:39.744Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 31,
+        "publishedAt": "2020-02-12T20:37:39.744Z",
+        "firstPublishedAt": "2019-05-09T12:24:31.210Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "3MstbJCIUT0VdP4m5mvCEb"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "3MstbJCIUT0VdP4m5mvCEb"
+          }
+        },
+        "publishedCounter": 13,
+        "version": 32,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "3MstbJCIUT0VdP4m5mvCEb"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "type": "Link",
+            "linkType": "ContentType",
+            "id": "element"
+          }
+        }
+      },
+      "fields": {
+        "subtitle": {
+          "en": "Si ya ha realizado un pedido online, le ayudo con lo que necesite."
+        },
+        "pic": {
+          "en": {
+            "sys": {
+              "type": "Link",
+              "linkType": "Asset",
+              "id": "pic_es_id"
+            }
+          }
+        },
+        "buttons": {
+          "en": [
+            {
+              "sys": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "355OUqAjftJoMxMggs1vXj"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "locales": []
+}
