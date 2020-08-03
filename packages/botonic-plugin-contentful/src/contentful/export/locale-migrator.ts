@@ -1,5 +1,7 @@
 import { I18nFieldValues, SpaceExport } from './space-export'
 import assert from 'assert'
+// eslint-disable-next-line node/no-missing-import
+import { LocaleProps } from 'contentful-management/dist/typings/entities/locale'
 
 /**
  * Useful to clone the contents flow from a space when the target locales are different.
@@ -34,7 +36,12 @@ export class LocaleMigrator {
   }
 
   migrate(spaceExport: SpaceExport): void {
+    if (this.fromLoc == this.toLoc) {
+      console.warn('Source and target locale are the same')
+      return
+    }
     this.defaultLoc = this.getDefaultLocale(spaceExport)
+    this.migrateAssets(spaceExport)
     this.migrateEntries(spaceExport)
     this.migrateLocales(spaceExport)
   }
@@ -45,7 +52,7 @@ export class LocaleMigrator {
         try {
           const vals = entry.fields[fieldName] as I18nFieldValues
           if (this.verbose) {
-            console.log(`Migrating ${entry}.${fieldName}`)
+            console.log(`Migrating entry ${entry.sys.id}.${fieldName}`)
           }
           this.migrateField(vals)
         } catch (e) {
@@ -60,11 +67,31 @@ export class LocaleMigrator {
     }
   }
 
+  private migrateAssets(spaceExport: SpaceExport): void {
+    if (!spaceExport.payload.assets) {
+      return
+    }
+    for (const asset of spaceExport.payload.assets) {
+      for (const fieldName of Object.getOwnPropertyNames(asset.fields)) {
+        try {
+          const vals = (asset.fields as any)[fieldName] as I18nFieldValues
+          if (this.verbose) {
+            console.log(`Migrating asset ${asset.sys.id}.${fieldName}`)
+          }
+          this.migrateField(vals)
+        } catch (e) {
+          const cause = e as Error
+          throw Error(
+            `converting asset ${
+              asset.sys.id
+            } field '${fieldName}': ${cause.toString()}`
+          )
+        }
+      }
+    }
+  }
+
   private migrateField(values: I18nFieldValues): void {
-    /**
-     * Example: from es default to en default
-     * [es: "payload"] => [en: "payload"]
-     */
     let value = values[this.fromLoc]
     if (!value) {
       // TODO also get it if language being removed
@@ -112,6 +139,7 @@ export class LocaleRemover {
 
   remove(spaceExport: SpaceExport): void {
     this.removeEntries(spaceExport)
+    this.removeAssets(spaceExport)
     this.removeLocales(spaceExport)
   }
 
@@ -120,18 +148,35 @@ export class LocaleRemover {
     for (const entry of spaceExport.payload.entries) {
       for (const fieldName of Object.getOwnPropertyNames(entry.fields)) {
         const vals = entry.fields[fieldName] as I18nFieldValues
-        for (const loc of this.removeLocs) {
-          if (
-            this.newDefault &&
-            !vals[this.newDefault] &&
-            vals[loc] &&
-            defaultLoc?.code == loc
-          ) {
-            vals[this.newDefault] = vals[loc]
-          }
-          delete vals[loc]
-        }
+        this.removeField(vals, defaultLoc)
       }
+    }
+  }
+
+  private removeAssets(spaceExport: SpaceExport): void {
+    if (!spaceExport.payload.assets) {
+      return
+    }
+    const defaultLoc = spaceExport.getDefaultLocale()
+    for (const assets of spaceExport.payload.assets) {
+      for (const fieldName of Object.getOwnPropertyNames(assets.fields)) {
+        const vals = (assets.fields as any)[fieldName] as I18nFieldValues
+        this.removeField(vals, defaultLoc)
+      }
+    }
+  }
+
+  private removeField(vals: I18nFieldValues, defaultLoc?: LocaleProps) {
+    for (const loc of this.removeLocs) {
+      if (
+        this.newDefault &&
+        !vals[this.newDefault] &&
+        vals[loc] &&
+        defaultLoc?.code == loc
+      ) {
+        vals[this.newDefault] = vals[loc]
+      }
+      delete vals[loc]
     }
   }
 

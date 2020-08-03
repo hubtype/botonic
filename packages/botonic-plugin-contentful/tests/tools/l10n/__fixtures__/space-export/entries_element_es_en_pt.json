@@ -223,5 +223,77 @@
         "updatedAt": "2019-05-09T12:23:19Z"
       }
     }
+  ],
+  "assets": [
+    {
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "5wh7etpd1y84"
+          }
+        },
+        "id": "4yiuNsEcnINqDEfNEX2Ap2",
+        "type": "Asset",
+        "createdAt": "2019-04-29T11:25:44.944Z",
+        "updatedAt": "2019-11-19T14:50:44.220Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 20,
+        "publishedAt": "2019-11-19T14:50:44.220Z",
+        "firstPublishedAt": "2019-04-29T11:25:59.165Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "3MstbJCIUT0VdP4m5mvCEb"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "3MstbJCIUT0VdP4m5mvCEb"
+          }
+        },
+        "publishedCounter": 7,
+        "version": 21,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "3MstbJCIUT0VdP4m5mvCEb"
+          }
+        }
+      },
+      "fields": {
+        "title": {
+          "es": "PRE_MENU_CRSL"
+        },
+        "description": {
+          "es": "Dudas previas a la compra"
+        },
+        "file": {
+          "es": {
+            "url": "//images.ctfassets.net/5wh7etpd1y84/4yiuNsEcnINqDEfNEX2Ap2/a5da90e35b609732985b67c2643fafe1/img_01_comprar_new.png",
+            "details": {
+              "size": 394890,
+              "image": {
+                "width": 531,
+                "height": 600
+              }
+            },
+            "fileName": "img_01_comprar_new.png",
+            "contentType": "image/png"
+          }
+        }
+      }
+    }
   ]
 }

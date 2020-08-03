@@ -24,7 +24,7 @@ describe('LocaleMigrator', () => {
     spaceExport.write(toFile)
     const newExport = SpaceExport.fromJsonFile(toFile)
     const expected = SpaceExport.fromJsonFile(expectedFile)
-    expect(newExport).toMatchObject(expected)
+    expect(newExport).toEqual(expected)
   })
 
   test('TEST LocaleMigrator/Remover en->nl', () => {
@@ -44,7 +44,7 @@ describe('LocaleMigrator', () => {
     spaceExport.write(toFile)
     const newExport = SpaceExport.fromJsonFile(toFile)
     const expected = SpaceExport.fromJsonFile(expectedFile)
-    expect(newExport).toMatchObject(expected)
+    expect(newExport).toEqual(expected)
   })
 
   test('TEST LocaleMigrator/Remover en->en', () => {
@@ -64,6 +64,6 @@ describe('LocaleMigrator', () => {
     spaceExport.write(toFile)
     const newExport = SpaceExport.fromJsonFile(toFile)
     const expected = SpaceExport.fromJsonFile(expectedFile)
-    expect(newExport).toMatchObject(expected)
+    expect(newExport).toEqual(expected)
   })
 })

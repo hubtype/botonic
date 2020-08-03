@@ -1,16 +1,17 @@
 // eslint-disable-next-line node/no-missing-import
-import { MetaLinkProps } from 'contentful-management/dist/typings/common-types'
-// eslint-disable-next-line node/no-missing-import
 import { EntryProp } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { LocaleProps } from 'contentful-management/dist/typings/entities/locale'
 // eslint-disable-next-line node/no-missing-import
 import { ContentTypeProps } from 'contentful-management/dist/typings/entities/content-type'
+// eslint-disable-next-line node/no-missing-import
+import { AssetProps } from 'contentful-management/dist/typings/entities/asset'
+
 import * as schema from 'contentful-import/dist/utils/schema'
 import fs from 'fs'
 import * as joi from 'joi'
 
-export type I18nFieldValues = { [locale: string]: string | MetaLinkProps }
+export type I18nFieldValues = { [locale: string]: any }
 
 /**
  * Allows modifying contentful spaces exported with "contentful space export"
@@ -20,6 +21,7 @@ export class SpaceExport {
     entries: EntryProp[]
     locales?: LocaleProps[]
     contentTypes?: ContentTypeProps[]
+    assets?: AssetProps[]
   }
 
   constructor(jsonObject: any) {
