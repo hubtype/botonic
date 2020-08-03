@@ -265,7 +265,7 @@ Uploading...
 
   displayProviders(providers: any): void {
     console.log('Your bot is published on:')
-    providers.map((p: any) => {
+    providers.forEach(p => {
       if (p.provider === 'whatsapp')
         console.log(`💬  [whatsapp] https://wa.me/${p.username}`)
       if (p.provider === 'facebook')

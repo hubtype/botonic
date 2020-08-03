@@ -250,15 +250,15 @@ export const Webchat = forwardRef((props, ref) => {
       lastMessageUpdate,
       themeUpdates,
     } = botonicState || {}
-    if (!user || Object.keys(user).length == 0) user = createUser()
+    if (!user || Object.keys(user).length === 0) user = createUser()
     updateUser(user)
     if (
       !devSettings ||
-      Object.keys(devSettings).length == 0 ||
+      Object.keys(devSettings).length === 0 ||
       devSettings.keepSessionOnReload
     ) {
       if (messages) {
-        messages.map(m => {
+        messages.forEach(m => {
           addMessage(m)
           const newComponent = msgToBotonic(
             { ...m, delay: 0, typing: 0 },
