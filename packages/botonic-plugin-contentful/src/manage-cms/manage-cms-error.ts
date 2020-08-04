@@ -4,6 +4,7 @@ import { ManageCms } from './manage-cms'
 import { ManageContext } from './manage-context'
 import * as nlp from '../nlp'
 import { ContentFieldType } from './fields'
+import { Locale } from '../nlp'
 
 export class ErrorReportingManageCms implements ManageCms {
   exceptionWrapper = new ContentfulExceptionWrapper('ManageCms')
@@ -44,5 +45,11 @@ export class ErrorReportingManageCms implements ManageCms {
         contentId.id
       )
     }
+  }
+
+  getDefaultLocale(): Promise<Locale> {
+    return this.manageCms
+      .getDefaultLocale()
+      .catch(this.handleError('defaultLocale'))
   }
 }

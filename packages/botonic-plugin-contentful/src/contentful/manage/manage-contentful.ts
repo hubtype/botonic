@@ -32,6 +32,17 @@ export class ManageContentful implements ManageCms {
     })
   }
 
+  async getDefaultLocale(): Promise<Locale> {
+    const space = await this.manage.getSpace(this.options.spaceId)
+    const locales = await (await this.getEnvironment()).getLocales()
+    for (const locale of locales.items) {
+      if (locale.default) {
+        return locale.code
+      }
+    }
+    throw new Error(`No default locale found for space ${space.sys.id}`)
+  }
+
   private async getEnvironment(): Promise<Environment> {
     if (!this.environment) {
       const space = await this.manage.getSpace(this.options.spaceId)
