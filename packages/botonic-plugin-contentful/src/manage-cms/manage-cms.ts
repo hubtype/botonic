@@ -22,10 +22,12 @@ export interface ManageCms {
     value: any
   ): Promise<void>
 
+  /** Will not fail if source does not have this field */
   copyField<T extends cms.Content>(
     context: ManageContext,
     contentId: ContentId,
     field: ContentFieldType,
-    fromLocale: nlp.Locale
+    fromLocale: nlp.Locale,
+    onlyIfTargetEmpty: boolean
   ): Promise<void>
 }

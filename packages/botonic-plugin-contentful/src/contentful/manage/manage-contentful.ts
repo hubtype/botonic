@@ -16,6 +16,7 @@ import {
   ContentField,
   ContentFieldType,
 } from '../../manage-cms/fields'
+import { Locale } from '../../nlp'
 
 export class ManageContentful implements ManageCms {
   readonly manage: ClientAPI
@@ -62,7 +63,7 @@ export class ManageContentful implements ManageCms {
   ): Promise<void> {
     const environment = await this.getEnvironment()
     const oldEntry = await environment.getEntry(contentId.id)
-    const field = this.checkOverwrite(context, oldEntry, fieldType)
+    const field = this.checkOverwrite(context, oldEntry, fieldType, true)
     oldEntry.fields[field.cmsName][context.locale] = value
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
     // the multilocale fields returned by update()
@@ -72,7 +73,8 @@ export class ManageContentful implements ManageCms {
   private checkOverwrite(
     context: ManageContext,
     entry: Entry,
-    fieldType: ContentFieldType
+    fieldType: ContentFieldType,
+    failIfMissing: boolean
   ): ContentField {
     const field = CONTENT_FIELDS.get(fieldType)
     if (!field) {
@@ -83,6 +85,9 @@ export class ManageContentful implements ManageCms {
       throw new Error('Context.locale must be defined')
     }
     if (!(field.cmsName in entry.fields)) {
+      if (!failIfMissing) {
+        return field
+      }
       const fields = Object.keys(entry.fields)
       throw new CmsException(
         `Field '${field.cmsName}' not found in entry of type '${
@@ -110,14 +115,20 @@ export class ManageContentful implements ManageCms {
     context: ManageContext,
     contentId: ContentId,
     fieldType: ContentFieldType,
-    fromLocale: nlp.Locale
+    fromLocale: nlp.Locale,
+    onlyIfTargetEmpty: boolean
   ): Promise<void> {
     const environment = await this.getEnvironment()
-    // TODO fetch both entries in parallel
     const oldEntry = await environment.getEntry(contentId.id)
-    const field = this.checkOverwrite(context, oldEntry, fieldType)
+    const field = this.checkOverwrite(context, oldEntry, fieldType, false)
 
     const fieldEntry = oldEntry.fields[field.cmsName]
+    if (fieldEntry == undefined) {
+      return
+    }
+    if (onlyIfTargetEmpty && context.locale in fieldEntry) {
+      return
+    }
     fieldEntry[context.locale] = fieldEntry[fromLocale]
     await this.updateEntry(context, oldEntry)
   }

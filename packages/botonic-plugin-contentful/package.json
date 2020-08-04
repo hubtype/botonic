@@ -23,6 +23,7 @@
     "url": "git+https://github.com/hubtype/botonic.git"
   },
   "files": [
+    "bin/**",
     "lib/**",
     "src/**",
     "doc/**",

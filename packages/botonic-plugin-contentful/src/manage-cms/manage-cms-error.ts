@@ -26,23 +26,24 @@ export class ErrorReportingManageCms implements ManageCms {
     context: ManageContext,
     contentId: ContentId,
     field: ContentFieldType,
-    fromLocale: nlp.Locale
+    fromLocale: nlp.Locale,
+    onlyIfTargetEmpty: boolean
   ): Promise<void> {
     return this.manageCms
-      .copyField<T>(context, contentId, field, fromLocale)
+      .copyField<T>(context, contentId, field, fromLocale, onlyIfTargetEmpty)
       .catch(this.handleError('copyField', contentId))
   }
 
   private handleError(
     method: string,
-    contentId: ContentId
+    contentId?: ContentId
   ): (reason: any) => never {
     return (reason: any) => {
       throw this.exceptionWrapper.wrap(
         reason,
         method,
-        contentId.model,
-        contentId.id
+        contentId?.model,
+        contentId?.id
       )
     }
   }

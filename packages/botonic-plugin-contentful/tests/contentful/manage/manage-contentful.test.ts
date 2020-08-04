@@ -108,7 +108,8 @@ describe('ManageContentful', () => {
         ctxt({ locale: TO_LOCALE }),
         oldContent.contentId,
         ContentFieldType.BUTTONS,
-        FROM_LOCALE
+        FROM_LOCALE,
+        false
       )
       // wait until CDNs provide the new value
       await repeatWithBackoff(async () => {

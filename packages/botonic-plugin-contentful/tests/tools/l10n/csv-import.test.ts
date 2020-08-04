@@ -6,7 +6,7 @@ import {
 } from '../../../src/tools/l10n/csv-import'
 import { anything, instance, mock, when } from 'ts-mockito'
 import { testManageContentful } from '../../contentful/manage/manage-contentful.helper'
-import { SPANISH } from '../../../src/nlp'
+import { Locale, SPANISH } from '../../../src/nlp'
 import * as cms from '../../../src/cms'
 import { testContentful } from '../../contentful/contentful.helper'
 import { ManageCms } from '../../../src/manage-cms/manage-cms'
@@ -63,13 +63,18 @@ test('TEST: StringFieldImporter test', async () => {
   class MockCms implements ManageCms {
     numCalls = 0
 
+    getDefaultLocale(): Promise<Locale> {
+      fail("shouldn't be called")
+    }
+
     copyField<T extends cms.Content>(
       context: ManageContext,
       contentId: cms.ContentId,
       field: ContentFieldType,
-      fromLocale: string
+      fromLocale: string,
+      onlyIfTargetEmpty: boolean
     ): Promise<void> {
-      fail("sholdn't be called")
+      fail("shouldn't be called")
     }
 
     updateField<T extends cms.Content>(

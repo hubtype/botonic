@@ -1,8 +1,14 @@
 import { ManageCms } from '../../manage-cms/manage-cms'
 import * as cms from '../../cms'
+import {
+  BotonicContentType,
+  CMS,
+  CmsException,
+  ContentId,
+  ContentType,
+} from '../../cms'
 import * as fs from 'fs'
 import parser from 'csv-parse'
-import { BotonicContentType, CmsException, ContentType } from '../../cms'
 import { isOfType } from '../../util/enums'
 import { CONTENT_FIELDS, ContentFieldType } from '../../manage-cms/fields'
 import { ManageContext } from '../../manage-cms/manage-context'
@@ -59,17 +65,23 @@ export class CsvImport {
 
     const header = new CsvImport.HeaderSkipper()
     for await (const record of reader as AsyncIterable<Record>) {
+      const recordId = `'${record.Model}' field '${
+        record.Code.trim() || record.Id
+      }.${record.Field}'`
       if (header.skipFirst(record)) {
+        continue
+      }
+      if (record.from && !record.to) {
+        console.warn(`Missing translation for ${recordId}`)
+        console.warn(
+          'To remove the content for a locale, remove the keywords and any link to it'
+        )
         continue
       }
       if (this.options.nameFilter && !this.options.nameFilter(record.Code)) {
         continue
       }
-      console.log(
-        `Importing '${record.Model}' field '${
-          record.Code.trim() || record.Id
-        }.${record.Field}'`
-      )
+      console.log(`Importing ${recordId}`)
       await this.importer.consume(record)
     }
   }
@@ -104,5 +116,60 @@ export class StringFieldImporter {
       throw new CmsException(`Invalid field name ${record.Field}`)
     }
     return field.parse(record.to)
+  }
+}
+
+/**
+ * TODO duplicate non-text fields which don't have fallback
+ * instead of harcoding them.
+ * Does not duplicate CommonFields.followup
+ * Only duplicates if target field is empty
+ */
+export class ReferenceFieldDuplicator {
+  constructor(
+    readonly cms: CMS,
+    readonly manageCms: ManageCms,
+    readonly manageContext: ManageContext
+  ) {}
+
+  async duplicateReferenceFields() {
+    const defaultLocale = await this.manageCms.getDefaultLocale()
+    const fields = {
+      [ContentType.TEXT]: [ContentFieldType.BUTTONS],
+      [ContentType.STARTUP]: [ContentFieldType.BUTTONS],
+      [ContentType.ELEMENT]: [ContentFieldType.IMAGE],
+    }
+    for (const contentType of Object.keys(fields)) {
+      console.log(`***Duplicating contents of type ${contentType}`)
+      for (const fieldType of (fields as any)[contentType]) {
+        console.log(` **Duplicating field ${contentType}`)
+        await this.duplicate(
+          defaultLocale,
+          contentType as ContentType,
+          fieldType as ContentFieldType
+        )
+      }
+    }
+  }
+
+  private async duplicate(
+    defaultLocale: string,
+    contentType: cms.ContentType,
+    fields: ContentFieldType
+  ) {
+    const contents = await this.cms.contents(contentType, {
+      ...this.manageContext,
+      locale: defaultLocale,
+    })
+    for (const content of contents) {
+      console.log(`  *Duplicating ${content.id} (${content.name})`)
+      await this.manageCms.copyField(
+        this.manageContext,
+        new ContentId(contentType, content.id),
+        fields,
+        defaultLocale,
+        true
+      )
+    }
   }
 }
