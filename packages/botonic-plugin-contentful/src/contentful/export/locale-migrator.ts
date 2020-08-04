@@ -121,6 +121,8 @@ export class LocaleMigrator {
         if (fromLoc.default) {
           console.log(`Setting '${toLoc.code}' as default locale`)
           toLoc.default = true
+          // @ts-ignore
+          toLoc.fallbackCode = null
         }
       } else {
         fromLoc.code = this.toLoc
@@ -170,8 +172,8 @@ export class LocaleRemover {
     for (const loc of this.removeLocs) {
       if (
         this.newDefault &&
-        !vals[this.newDefault] &&
-        vals[loc] &&
+        vals[this.newDefault] == undefined &&
+        vals[loc] != undefined &&
         defaultLoc?.code == loc
       ) {
         vals[this.newDefault] = vals[loc]
@@ -181,7 +183,9 @@ export class LocaleRemover {
   }
 
   private removeLocales(spaceExport: SpaceExport) {
-    assert(spaceExport.payload.locales)
+    if (!spaceExport.payload.locales) {
+      return
+    }
     for (const removeLoc of this.removeLocs) {
       if (!spaceExport.getLocale(removeLoc)) {
         console.error(`Expecting to remove locale ${removeLoc} but not found`)
@@ -202,6 +206,9 @@ export class LocaleRemover {
     for (const loc of spaceExport.payload.locales) {
       if (this.newDefault && loc.code == this.newDefault) {
         loc.default = true
+        // @ts-ignore
+        loc.fallbackCode = null
+        loc.optional = false
       }
     }
   }

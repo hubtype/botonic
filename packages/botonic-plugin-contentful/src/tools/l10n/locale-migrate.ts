@@ -4,10 +4,8 @@ import {
 } from '../../contentful/export/locale-migrator'
 import { SpaceExport } from '../../contentful/export/space-export'
 
-if (process.argv.length != 7 || process.argv[2] == '--help') {
-  console.error(
-    `Usage: fromFile toFile fromLocale locale toLocale [removeLocales]`
-  )
+if (process.argv.length < 6 || process.argv[2] == '--help') {
+  console.error(`Usage: fromFile toFile fromLocale toLocale [removeLocales]`)
   // eslint-disable-next-line no-process-exit
   process.exit(1)
 }

@@ -85,11 +85,11 @@
     {
       "name": "English",
       "code": "en",
-      "fallbackCode": "es",
+      "fallbackCode": null,
       "default": true,
       "contentManagementApi": true,
       "contentDeliveryApi": true,
-      "optional": true,
+      "optional": false,
       "sys": {
         "type": "Locale",
         "id": "1bWHRp7NLvmKaYopPOPeOd",
