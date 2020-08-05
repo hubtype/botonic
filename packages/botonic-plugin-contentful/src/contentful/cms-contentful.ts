@@ -62,7 +62,8 @@ export class Contentful implements cms.CMS {
     const deliveryApi = new AdaptorDeliveryApi(
       options.disableCache
         ? client
-        : new CachedClientApi(client, options.cacheTtlMs)
+        : new CachedClientApi(client, options.cacheTtlMs),
+      options
     )
     const delivery = new IgnoreFallbackDecorator(deliveryApi)
     this._contents = new ContentsDelivery(delivery)

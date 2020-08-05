@@ -37,7 +37,10 @@ export interface DeliveryApi {
  * Manages the {@link Context}, parses Content's Id and ContentType from the Contentful entries...
  */
 export class AdaptorDeliveryApi implements DeliveryApi {
-  constructor(readonly client: ReducedClientApi) {}
+  constructor(
+    readonly client: ReducedClientApi,
+    readonly options: ContentfulOptions
+  ) {}
 
   async getAsset(id: string, query?: any): Promise<contentful.Asset> {
     return this.client.getAsset(id, query)
@@ -48,19 +51,14 @@ export class AdaptorDeliveryApi implements DeliveryApi {
     context: Context,
     query: any = {}
   ): Promise<contentful.Entry<T>> {
-    return this.client.getEntry<T>(
-      id,
-      AdaptorDeliveryApi.queryFromContext(context, query)
-    )
+    return this.client.getEntry<T>(id, this.queryFromContext(context, query))
   }
 
   async getEntries<T>(
     context: Context,
     query: any = {}
   ): Promise<contentful.EntryCollection<T>> {
-    return this.client.getEntries<T>(
-      AdaptorDeliveryApi.queryFromContext(context, query)
-    )
+    return this.client.getEntries<T>(this.queryFromContext(context, query))
   }
 
   async getContentType(id: string): Promise<contentful.ContentType> {
@@ -72,9 +70,12 @@ export class AdaptorDeliveryApi implements DeliveryApi {
     }
   }
 
-  private static queryFromContext(context: Context, query: any = {}): any {
-    if (context.locale) {
-      query['locale'] = context.locale
+  private queryFromContext(context: Context, query: any = {}): any {
+    const locale = this.options.cmsLocale
+      ? this.options.cmsLocale(context.locale)
+      : context.locale
+    if (locale) {
+      query['locale'] = locale
     }
     return query
   }
