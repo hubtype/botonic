@@ -7,6 +7,7 @@ import {
   I18nValue,
   VisitedField,
 } from './traverser'
+import * as contentful from 'contentful'
 
 /**
  * It requests contentful to deliver all locales for each entry, and we discard all except the one in the context
@@ -61,8 +62,21 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
     )
   }
 
-  getAsset(id: string, query?: any): Promise<Asset> {
-    return this.api.getAsset(id, query)
+  getAsset(id: string, context: Context, query?: any): Promise<Asset> {
+    console.warn(
+      'IgnoreFallbackDecorator does not any special traatment for getAsset'
+    )
+    return this.api.getAsset(id, context, query)
+  }
+
+  async getAssets(
+    context: Context,
+    query?: any
+  ): Promise<contentful.AssetCollection> {
+    console.warn(
+      'IgnoreFallbackDecorator does not any special traatment for getAssets'
+    )
+    return this.api.getAssets(context, query)
   }
 
   private i18nContext(context: Context) {
