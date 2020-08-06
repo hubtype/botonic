@@ -24,6 +24,10 @@ export function checkLocale(locale: Locale): Locale {
   return locale
 }
 
+export function rootLocale(locale: Locale): Locale {
+  return locale.substr(0, 2)
+}
+
 /**
  * Converts to lowercase, trims and removes accents
  */

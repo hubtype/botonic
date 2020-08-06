@@ -4,7 +4,7 @@ import {
   DEFAULT_STOP_WORDS,
   tokenizerPerLocale,
 } from './tokens'
-import { Locale } from './locales'
+import { Locale, rootLocale } from './locales'
 import { equalArrays } from '../util/arrays'
 
 /**
@@ -118,6 +118,7 @@ export class Normalizer {
    * @throws EmptyTextException if the text is empty or only contains separators
    */
   normalize(locale: Locale, raw: string): NormalizedUtterance {
+    locale = rootLocale(locale)
     let txt = raw.replace(this.separatorsRegex, ' ')
     txt = txt.trim().toLowerCase() // TODO use preprocess without normalization? move to NormalizedUtterance constructor?
     if (!txt) {

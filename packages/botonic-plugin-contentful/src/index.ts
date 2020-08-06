@@ -8,4 +8,9 @@ export * from './time'
 export * from './tools'
 export * from './util'
 
-export { default, CmsOptions, ContentfulOptions } from './plugin'
+export {
+  default,
+  CmsOptions,
+  ContentfulOptions,
+  ContentfulCredentials,
+} from './plugin'
