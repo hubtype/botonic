@@ -1,9 +1,8 @@
-import * as cms from '../cms'
-import { ManageContext } from './manage-context'
 import { ContentId } from '../cms'
+import { ManageContext } from './manage-context'
 import * as nlp from '../nlp'
-import { ContentFieldType } from './fields'
 import { Locale } from '../nlp'
+import { ContentFieldType } from './fields'
 
 /**
  * Take into account that if you request a content immediately after updating it
@@ -15,7 +14,7 @@ export interface ManageCms {
    */
   getDefaultLocale(): Promise<Locale>
 
-  updateField<T extends cms.Content>(
+  updateField(
     context: ManageContext,
     contentId: ContentId,
     fieldType: ContentFieldType,
@@ -23,11 +22,19 @@ export interface ManageCms {
   ): Promise<void>
 
   /** Will not fail if source does not have this field */
-  copyField<T extends cms.Content>(
+  copyField(
     context: ManageContext,
     contentId: ContentId,
     field: ContentFieldType,
     fromLocale: nlp.Locale,
     onlyIfTargetEmpty: boolean
   ): Promise<void>
+
+  copyAssetFile(
+    context: ManageContext,
+    assetId: string,
+    fromLocale: nlp.Locale
+  ): Promise<void>
+
+  removeAssetFile(context: ManageContext, assetId: string): Promise<void>
 }
