@@ -1,5 +1,6 @@
 import React from 'react'
 import { Message } from './message'
+import { Reply } from './reply'
 import { INPUT } from '@botonic/core'
 
 export const customMessage = ({
@@ -11,12 +12,27 @@ export const customMessage = ({
     <Message {...defaultProps} {...props} type={INPUT.CUSTOM} />
   )
   const WrappedComponent = props => {
-    const { id, ...customMessageProps } = props
+    const { id, children, ...customMessageProps } = props
+    const replies = React.Children.toArray(children).filter(
+      e => e.type === Reply
+    )
+    const childrenWithoutReplies = React.Children.toArray(children).filter(
+      e => ![Reply].includes(e.type)
+    )
     return (
-      <CustomMessage id={id} json={{ ...props, customTypeName: name }}>
+      <CustomMessage
+        id={id}
+        json={{
+          ...customMessageProps,
+          id,
+          children: childrenWithoutReplies,
+          customTypeName: name,
+        }}
+      >
         <CustomMessageComponent {...customMessageProps}>
-          {props.children}
+          {childrenWithoutReplies}
         </CustomMessageComponent>
+        {replies}
       </CustomMessage>
     )
   }
