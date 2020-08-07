@@ -75,6 +75,7 @@ async function main() {
       allowOverwrites: importType == ImportType.OVERWRITE,
     }
 
+    await readCsvForTranslators(manageOptions, manageContext, fileName)
     if (duplicateReferences) {
       console.log('Duplicating reference fields')
       await duplicateReferenceFields(
@@ -87,7 +88,6 @@ async function main() {
         manageContext
       )
     }
-    await readCsvForTranslators(manageOptions, manageContext, fileName)
     console.log('done')
   } catch (e) {
     console.error(e)
@@ -112,6 +112,7 @@ async function duplicateReferenceFields(
     manageContext
   )
   await referenceDuplicator.duplicateReferenceFields()
+  await referenceDuplicator.duplicateAssetFiles()
 }
 
 // void tells linters that we don't want to wait for promise

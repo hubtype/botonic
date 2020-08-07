@@ -19,3 +19,5 @@ REMOVE_LOCALES=$5
 
 ../../node_modules/.bin/ts-node --files	src/tools/l10n/locale-migrate.ts \
 	"$FROM_FILE" "$TO_FILE" "$FROM_LOCALE" "$TO_LOCALE" "$REMOVE_LOCALES"
+
+echo "Change Element.image so that it does not have 1 version per locale"

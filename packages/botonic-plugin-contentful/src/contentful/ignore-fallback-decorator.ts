@@ -64,7 +64,7 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
 
   getAsset(id: string, context: Context, query?: any): Promise<Asset> {
     console.warn(
-      'IgnoreFallbackDecorator does not any special traatment for getAsset'
+      'IgnoreFallbackDecorator does not any special treatment for getAsset'
     )
     return this.api.getAsset(id, context, query)
   }
@@ -74,7 +74,7 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
     query?: any
   ): Promise<contentful.AssetCollection> {
     console.warn(
-      'IgnoreFallbackDecorator does not any special traatment for getAssets'
+      'IgnoreFallbackDecorator does not any special treatment for getAssets'
     )
     return this.api.getAssets(context, query)
   }
