@@ -6,6 +6,9 @@ import { SpaceExport } from '../../contentful/export/space-export'
 
 if (process.argv.length < 6 || process.argv[2] == '--help') {
   console.error(`Usage: fromFile toFile fromLocale toLocale [removeLocales]`)
+  console.error(
+    'removeLocales: locales to remove, separated with commas. Eg: en,es'
+  )
   // eslint-disable-next-line no-process-exit
   process.exit(1)
 }
