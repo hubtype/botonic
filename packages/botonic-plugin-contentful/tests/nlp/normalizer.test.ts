@@ -10,7 +10,10 @@ import {
 
 test('TEST: sut.normalize stopWord', () => {
   const sut = new Normalizer(undefined, { es: ['stopWórd'] })
-  expect(sut.normalize('es', 'no digas STOPword').stems).toEqual(['no', 'dec'])
+  expect(sut.normalize('es_ES', 'no digas STOPword').stems).toEqual([
+    'no',
+    'dec',
+  ])
 })
 
 test.each<any>([

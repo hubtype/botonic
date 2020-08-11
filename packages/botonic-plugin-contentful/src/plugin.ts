@@ -1,5 +1,5 @@
 import * as cms from './cms'
-import { KeywordsOptions, Normalizer, StemmingBlackList } from './nlp'
+import { KeywordsOptions, Locale, Normalizer, StemmingBlackList } from './nlp'
 import { Search } from './search'
 import { BotonicMsgConverter } from './render'
 import { Contentful } from './contentful/cms-contentful'
@@ -43,6 +43,9 @@ export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
   disableCache?: boolean
 
   contentfulFactory?: (opts: ContentfulOptions) => cms.CMS
+
+  /** For locales not supported by the CMS (eg. English on a non-English country) */
+  cmsLocale?: (locale?: Locale) => Locale | undefined
 
   /**
    * If the delivery of a part of a content fails (eg. a referenced content),

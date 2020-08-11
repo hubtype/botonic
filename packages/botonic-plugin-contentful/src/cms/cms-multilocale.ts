@@ -46,6 +46,10 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).contents(contentType, context)
   }
 
+  assets(context?: Context): Promise<Asset[]> {
+    return this.cmsFromContext(context).assets(context)
+  }
+
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
     return this.cmsFromContext(context).contentsWithKeywords(context)
   }

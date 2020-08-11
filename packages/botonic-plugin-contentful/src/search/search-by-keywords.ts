@@ -7,6 +7,7 @@ import {
   Normalizer,
   NormalizedUtterance,
   Word,
+  rootLocale,
 } from '../nlp'
 import { SearchCandidate, SearchResult } from './search-result'
 
@@ -25,7 +26,7 @@ export class SearchByKeywords {
     matchType: MatchType,
     context: cms.ContextWithLocale
   ): Promise<SearchResult[]> {
-    const locale = checkLocale(context.locale)
+    const locale = rootLocale(checkLocale(context.locale))
     const contentsWithKeywords = await this.cms.contentsWithKeywords(context)
     const kws = new KeywordsParser<SearchCandidate>(
       locale,
