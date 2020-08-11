@@ -22,8 +22,9 @@ import {
 export const TEST_BUTTON_BLANK_SPANISH = '40buQOqp9jbwoxmMZhFO16'
 
 function createIgnoreFallbackDecorator() {
+  const options = testContentfulOptions()
   return new IgnoreFallbackDecorator(
-    new AdaptorDeliveryApi(createContentfulClientApi(testContentfulOptions()))
+    new AdaptorDeliveryApi(createContentfulClientApi(options), options)
   )
 }
 

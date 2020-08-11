@@ -14,7 +14,7 @@ function ctxt(ctx: Partial<ManageContext>): ManageContext {
 
 // Since the tests modify contentful contents, they might fail if executed
 // more than once simultaneously (eg from 2 different branches from CI)
-describe('ManageContentful', () => {
+describe('ManageContentful fields', () => {
   const TEST_MANAGE_CMS_ID = '627QkyJrFo3grJryj0vu6L'
 
   test('TEST: updateField on an empty field', async () => {
@@ -34,7 +34,7 @@ describe('ManageContentful', () => {
         )
       }
       // ACT
-      await sut.updateField<cms.Text>(
+      await sut.updateField(
         ctxt({ locale: SPANISH }),
         old.contentId,
         ContentFieldType.TEXT,
@@ -48,7 +48,7 @@ describe('ManageContentful', () => {
       })
     } finally {
       // RESTORE
-      await sut.updateField<cms.Text>(
+      await sut.updateField(
         ctxt({ locale: SPANISH, allowOverwrites: true }),
         old.contentId,
         ContentFieldType.TEXT,
@@ -104,11 +104,12 @@ describe('ManageContentful', () => {
 
     try {
       // ACT
-      await sut.copyField<cms.Text>(
+      await sut.copyField(
         ctxt({ locale: TO_LOCALE }),
         oldContent.contentId,
         ContentFieldType.BUTTONS,
-        FROM_LOCALE
+        FROM_LOCALE,
+        false
       )
       // wait until CDNs provide the new value
       await repeatWithBackoff(async () => {
@@ -119,7 +120,7 @@ describe('ManageContentful', () => {
       })
     } finally {
       // RESTORE
-      await sut.updateField<cms.Text>(
+      await sut.updateField(
         ctxt({ locale: TO_LOCALE, allowOverwrites: true }),
         oldContent.contentId,
         ContentFieldType.BUTTONS,
