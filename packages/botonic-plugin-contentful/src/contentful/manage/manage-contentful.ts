@@ -1,6 +1,7 @@
 import { ManageCms } from '../../manage-cms/manage-cms'
-import * as cms from '../../cms'
+import { CmsException, ContentId } from '../../cms'
 import * as nlp from '../../nlp'
+import { Locale } from '../../nlp'
 import { createClient } from 'contentful-management'
 // eslint-disable-next-line node/no-missing-import
 import { ClientAPI } from 'contentful-management/dist/typings/create-contentful-api'
@@ -8,15 +9,15 @@ import { ClientAPI } from 'contentful-management/dist/typings/create-contentful-
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
 // eslint-disable-next-line node/no-missing-import
 import { Entry } from 'contentful-management/dist/typings/entities/entry'
+// eslint-disable-next-line node/no-missing-import
+import { Asset } from 'contentful-management/dist/typings/entities/asset'
 import { ContentfulOptions } from '../../plugin'
 import { ManageContext } from '../../manage-cms/manage-context'
-import { CmsException, ContentId } from '../../cms'
 import {
   CONTENT_FIELDS,
   ContentField,
   ContentFieldType,
 } from '../../manage-cms/fields'
-import { Locale } from '../../nlp'
 
 export class ManageContentful implements ManageCms {
   readonly manage: ClientAPI
@@ -55,7 +56,7 @@ export class ManageContentful implements ManageCms {
     return this.environment
   }
 
-  async updateField<T extends cms.Content>(
+  async updateField(
     context: ManageContext,
     contentId: ContentId,
     fieldType: ContentFieldType,
@@ -67,7 +68,39 @@ export class ManageContentful implements ManageCms {
     oldEntry.fields[field.cmsName][context.locale] = value
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
     // the multilocale fields returned by update()
-    await this.updateEntry(context, oldEntry)
+    await this.writeEntry(context, oldEntry)
+  }
+
+  async removeAssetFile(
+    context: ManageContext,
+    assetId: string
+  ): Promise<void> {
+    const environment = await this.getEnvironment()
+    const asset = await environment.getAsset(assetId)
+    delete asset.fields.file[context.locale]
+    await this.writeAsset({ ...context, allowOverwrites: true }, asset)
+  }
+
+  async copyAssetFile(
+    context: ManageContext,
+    assetId: string,
+    fromLocale: nlp.Locale
+  ): Promise<void> {
+    const environment = await this.getEnvironment()
+    const oldAsset = await environment.getAsset(assetId)
+    if (!context.allowOverwrites && oldAsset.fields.file[context.locale]) {
+      throw new Error(
+        `Cannot overwrite asset '${assetId}' because it's not empty and ManageContext.allowOverwrites is false`
+      )
+    }
+    const fromFile = oldAsset.fields.file[fromLocale]
+    if (!fromFile) {
+      throw Error(`Asset '${assetId}' has no file for locale ${fromLocale}`)
+    }
+    oldAsset.fields.file[context.locale] = fromFile
+    // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
+    // the multilocale fields returned by update()
+    await this.writeAsset(context, oldAsset)
   }
 
   private checkOverwrite(
@@ -111,7 +144,7 @@ export class ManageContentful implements ManageCms {
     return field
   }
 
-  async copyField<T extends cms.Content>(
+  async copyField(
     context: ManageContext,
     contentId: ContentId,
     fieldType: ContentFieldType,
@@ -130,15 +163,32 @@ export class ManageContentful implements ManageCms {
       return
     }
     fieldEntry[context.locale] = fieldEntry[fromLocale]
-    await this.updateEntry(context, oldEntry)
+    await this.writeEntry(context, oldEntry)
   }
 
-  async updateEntry(context: ManageContext, entry: Entry): Promise<void> {
+  private async writeEntry(
+    context: ManageContext,
+    entry: Entry
+  ): Promise<void> {
     if (context.dryRun) {
       console.log('Not updating due to dryRun mode')
       return
     }
     const updated = await entry.update()
+    if (!context.preview) {
+      await updated.publish()
+    }
+  }
+
+  private async writeAsset(
+    context: ManageContext,
+    asset: Asset
+  ): Promise<void> {
+    if (context.dryRun) {
+      console.log('Not updating due to dryRun mode')
+      return
+    }
+    const updated = await asset.update()
     if (!context.preview) {
       await updated.publish()
     }

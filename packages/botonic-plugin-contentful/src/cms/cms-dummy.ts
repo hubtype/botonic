@@ -138,7 +138,7 @@ export class DummyCMS implements CMS {
   }
 
   asset(id: string, context?: Context): Promise<Asset> {
-    return Promise.resolve(new Asset(`name for ${id}`, `http://url.${id}`))
+    return Promise.resolve(new Asset(id, `name for ${id}`, `http://url.${id}`))
   }
 
   dateRange(id: string, context?: Context): Promise<DateRangeContent> {
@@ -154,6 +154,10 @@ export class DummyCMS implements CMS {
   }
 
   contents(contentType: ContentType, context?: Context): Promise<Content[]> {
+    return Promise.resolve([])
+  }
+
+  assets(context?: Context): Promise<Asset[]> {
     return Promise.resolve([])
   }
 }

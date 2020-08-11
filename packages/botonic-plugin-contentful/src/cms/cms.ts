@@ -104,6 +104,7 @@ export interface CMS {
    * TODO add filter by id or name
    */
   contents(contentType: ContentType, context?: Context): Promise<Content[]>
+  assets(context?: Context): Promise<Asset[]>
 
   /**
    * For contents with 'Searchable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry

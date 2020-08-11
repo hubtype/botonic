@@ -17,7 +17,9 @@ import { ReducedClientApi } from './delivery/client-api'
 import { ContentfulOptions } from '../plugin'
 
 export interface DeliveryApi {
-  getAsset(id: string, query?: any): Promise<contentful.Asset>
+  getAsset(id: string, context: Context, query?: any): Promise<contentful.Asset>
+
+  getAssets(context: Context, query?: any): Promise<contentful.AssetCollection>
 
   getEntry<T>(
     id: string,
@@ -42,8 +44,19 @@ export class AdaptorDeliveryApi implements DeliveryApi {
     readonly options: ContentfulOptions
   ) {}
 
-  async getAsset(id: string, query?: any): Promise<contentful.Asset> {
-    return this.client.getAsset(id, query)
+  async getAsset(
+    id: string,
+    context: Context,
+    query?: any
+  ): Promise<contentful.Asset> {
+    return this.client.getAsset(id, this.queryFromContext(context, query))
+  }
+
+  async getAssets(
+    context: Context,
+    query?: any
+  ): Promise<contentful.AssetCollection> {
+    return this.client.getAssets(this.queryFromContext(context, query))
   }
 
   async getEntry<T>(

@@ -61,6 +61,16 @@ test('TEST: CsvImport read text & carousel', async () => {
 test('TEST: StringFieldImporter test', async () => {
   // using manual mock because mockito was not recognizing the call. maybe because method returns Promise to void?
   class MockCms implements ManageCms {
+    copyAssetFile(
+      context: ManageContext,
+      assetId: string,
+      fromLocale: string
+    ): Promise<void> {
+      fail("shouldn't be called")
+    }
+    removeAssetFile(context: ManageContext, assetId: string): Promise<void> {
+      fail("shouldn't be called")
+    }
     numCalls = 0
 
     getDefaultLocale(): Promise<Locale> {

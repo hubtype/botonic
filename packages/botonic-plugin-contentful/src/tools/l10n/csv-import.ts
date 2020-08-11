@@ -132,7 +132,7 @@ export class ReferenceFieldDuplicator {
     readonly manageContext: ManageContext
   ) {}
 
-  async duplicateReferenceFields() {
+  async duplicateReferenceFields(): Promise<void> {
     const defaultLocale = await this.manageCms.getDefaultLocale()
     const fields = {
       [ContentType.TEXT]: [ContentFieldType.BUTTONS],
@@ -140,15 +140,37 @@ export class ReferenceFieldDuplicator {
       [ContentType.ELEMENT]: [ContentFieldType.IMAGE],
     }
     for (const contentType of Object.keys(fields)) {
-      console.log(`***Duplicating contents of type ${contentType}`)
+      console.log(`***Duplicating contents of type '${contentType}'`)
       for (const fieldType of (fields as any)[contentType]) {
-        console.log(` **Duplicating field ${contentType}`)
+        console.log(` **Duplicating '${contentType}' fields`)
         await this.duplicate(
           defaultLocale,
           contentType as ContentType,
           fieldType as ContentFieldType
         )
       }
+    }
+    this.warning()
+  }
+
+  async duplicateAssetFiles() {
+    const defaultLocale = await this.manageCms.getDefaultLocale()
+    console.log(`***Duplicating assets`)
+    const assets = await this.cms.assets({ locale: defaultLocale })
+    console.log(` **Duplicating ${assets.length} assets`)
+    for (const a of assets) {
+      await this.manageCms.copyAssetFile(
+        this.manageContext,
+        a.id,
+        defaultLocale
+      )
+    }
+    this.warning()
+  }
+
+  private warning() {
+    if (this.manageContext.preview) {
+      console.warn('Remember to publish the entries from contentful.com')
     }
   }
 
@@ -162,7 +184,7 @@ export class ReferenceFieldDuplicator {
       locale: defaultLocale,
     })
     for (const content of contents) {
-      console.log(`  *Duplicating ${content.id} (${content.name})`)
+      //console.log(`  *Duplicating ${content.id} (${content.name})`)
       await this.manageCms.copyField(
         this.manageContext,
         new ContentId(contentType, content.id),

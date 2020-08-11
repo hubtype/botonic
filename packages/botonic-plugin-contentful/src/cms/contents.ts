@@ -16,6 +16,7 @@ export class Asset {
    * @param details depends on the type. eg the image size
    */
   constructor(
+    readonly id: string,
     readonly name: string,
     readonly url: string,
     readonly type?: string,

@@ -5,6 +5,7 @@ import { ReducedClientApi } from './client-api'
 
 export class CachedClientApi implements ReducedClientApi {
   readonly getAsset: (id: string, query?: any) => Promise<contentful.Asset>
+  readonly getAssets: (query?: any) => Promise<contentful.AssetCollection>
   readonly getEntries: <T>(query: any) => Promise<contentful.EntryCollection<T>>
   readonly getEntry: <T>(id: string, query?: any) => Promise<Entry<T>>
   readonly getContentType: (id: string) => Promise<ContentType>
@@ -23,6 +24,7 @@ export class CachedClientApi implements ReducedClientApi {
       } as memoize.Options<any>)
 
     this.getAsset = memoize(client.getAsset, options(2))
+    this.getAssets = memoize(client.getAssets, options(1))
     this.getEntries = memoize(client.getEntries, options(1))
     this.getEntry = memoize(client.getEntry, options(2))
     this.getContentType = memoize(client.getContentType, options(1))

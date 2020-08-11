@@ -111,13 +111,14 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleError('topContents'))
   }
 
-  contents(
-    contentType: ContentType,
-    context?: Context | undefined
-  ): Promise<Content[]> {
+  contents(contentType: ContentType, context?: Context): Promise<Content[]> {
     return this.cms
       .contents(contentType, context)
       .catch(this.handleError('contents'))
+  }
+
+  assets(context?: Context): Promise<Asset[]> {
+    return this.cms.assets(context).catch(this.handleError('assets'))
   }
 
   schedule(id: string, context?: Context): Promise<ScheduleContent> {
