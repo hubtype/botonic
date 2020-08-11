@@ -19,11 +19,38 @@ import { TopContentType } from '../../cms/cms'
 export class ButtonDelivery {
   public static BUTTON_CONTENT_TYPE = 'button'
   private static PAYLOAD_CONTENT_TYPE = 'payload'
-  constructor(private readonly delivery: DeliveryApi) {}
+
+  constructor(
+    private readonly delivery: DeliveryApi,
+    private readonly resumeErrors: boolean
+  ) {}
 
   public async button(id: string, context: cms.Context): Promise<cms.Button> {
     const entry = await this.delivery.getEntry<ButtonFields>(id, context)
     return this.fromEntry(entry, context)
+  }
+
+  public async fromReferenceSkipErrors(
+    entries: contentful.Entry<any>[],
+    context: cms.Context
+  ): Promise<cms.Button[]> {
+    const buttons = entries.map(async entry => {
+      try {
+        return await this.fromReference(entry, context)
+      } catch (e) {
+        // will fail if a draft content is referenced
+        if (this.resumeErrors) {
+          console.error(
+            `Skipping failed reference to content ${entry.sys.id}`,
+            e
+          )
+          return undefined
+        }
+        throw e
+      }
+    })
+    const all = await Promise.all(buttons)
+    return all.filter(b => b !== undefined) as cms.Button[]
   }
 
   public async fromReference(

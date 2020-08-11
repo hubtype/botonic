@@ -1,5 +1,6 @@
 import * as cms from '../cms'
 import {
+  Asset,
   CommonFields,
   Content,
   ContentType,
@@ -62,13 +63,14 @@ export class Contentful implements cms.CMS {
     const deliveryApi = new AdaptorDeliveryApi(
       options.disableCache
         ? client
-        : new CachedClientApi(client, options.cacheTtlMs)
+        : new CachedClientApi(client, options.cacheTtlMs),
+      options
     )
     const delivery = new IgnoreFallbackDecorator(deliveryApi)
     this._contents = new ContentsDelivery(delivery)
 
     this._delivery = delivery
-    this._button = new ButtonDelivery(delivery)
+    this._button = new ButtonDelivery(delivery, options.resumeErrors || false)
     this._carousel = new CarouselDelivery(delivery, this._button)
     this._text = new TextDelivery(delivery, this._button)
     this._startUp = new StartUpDelivery(delivery, this._button)
@@ -219,8 +221,12 @@ export class Contentful implements cms.CMS {
     return this._schedule.schedule(id)
   }
 
-  asset(id: string): Promise<cms.Asset> {
-    return this._asset.asset(id)
+  asset(id: string, context = DEFAULT_CONTEXT): Promise<cms.Asset> {
+    return this._asset.asset(id, context)
+  }
+
+  assets(context = DEFAULT_CONTEXT): Promise<Asset[]> {
+    return this._asset.assets(context)
   }
 
   dateRange(id: string): Promise<DateRangeContent> {

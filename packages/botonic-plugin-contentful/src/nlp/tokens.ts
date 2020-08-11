@@ -6,7 +6,7 @@ import TokenizerRu from '@nlpjs/lang-ru/src/tokenizer-ru'
 import { esDefaultStopWords } from './stopwords/stopwords-es'
 import { caDefaultStopWords } from './stopwords/stopwords-ca'
 import { enDefaultStopWords } from './stopwords/stopwords-en'
-import { Locale } from './locales'
+import { Locale, rootLocale } from './locales'
 import { plDefaultStopWords } from './stopwords/stopwords-pl'
 import { ptDefaultStopWords } from './stopwords/stopwords-pt'
 import { ruDefaultStopWords } from './stopwords/stopwords-ru'
@@ -78,8 +78,9 @@ const tokenizers: { [locale: string]: Tokenizer } = {
 }
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
-  return tokenizers[locale]
+  return tokenizers[rootLocale(locale)]
 }
+
 export const DEFAULT_SEPARATORS = ';,./()!?" '
 export const DEFAULT_SEPARATORS_REGEX = new RegExp(
   '[' + DEFAULT_SEPARATORS + ']',

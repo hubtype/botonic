@@ -3,10 +3,10 @@ import {
   CsvImport,
   Record,
   StringFieldImporter,
-} from '../../../src/tools/translators/csv-import'
+} from '../../../src/tools/l10n/csv-import'
 import { anything, instance, mock, when } from 'ts-mockito'
 import { testManageContentful } from '../../contentful/manage/manage-contentful.helper'
-import { SPANISH } from '../../../src/nlp'
+import { Locale, SPANISH } from '../../../src/nlp'
 import * as cms from '../../../src/cms'
 import { testContentful } from '../../contentful/contentful.helper'
 import { ManageCms } from '../../../src/manage-cms/manage-cms'
@@ -61,15 +61,30 @@ test('TEST: CsvImport read text & carousel', async () => {
 test('TEST: StringFieldImporter test', async () => {
   // using manual mock because mockito was not recognizing the call. maybe because method returns Promise to void?
   class MockCms implements ManageCms {
+    copyAssetFile(
+      context: ManageContext,
+      assetId: string,
+      fromLocale: string
+    ): Promise<void> {
+      fail("shouldn't be called")
+    }
+    removeAssetFile(context: ManageContext, assetId: string): Promise<void> {
+      fail("shouldn't be called")
+    }
     numCalls = 0
+
+    getDefaultLocale(): Promise<Locale> {
+      fail("shouldn't be called")
+    }
 
     copyField<T extends cms.Content>(
       context: ManageContext,
       contentId: cms.ContentId,
       field: ContentFieldType,
-      fromLocale: string
+      fromLocale: string,
+      onlyIfTargetEmpty: boolean
     ): Promise<void> {
-      fail("sholdn't be called")
+      fail("shouldn't be called")
     }
 
     updateField<T extends cms.Content>(

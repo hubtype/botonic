@@ -15,7 +15,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.14.0-alpha.0",
+  "version": "0.14.0-alpha.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
@@ -23,6 +23,7 @@
     "url": "git+https://github.com/hubtype/botonic.git"
   },
   "files": [
+    "bin/**",
     "lib/**",
     "src/**",
     "doc/**",
@@ -32,8 +33,18 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.10.2",
+    "@nlpjs/core": "^4.6.0",
+    "@nlpjs/lang-ca": "^4.6.0",
+    "@nlpjs/lang-en-min": "^4.6.0",
+    "@nlpjs/lang-es": "^4.6.0",
+    "@nlpjs/lang-pl": "^4.6.0",
+    "@nlpjs/lang-pt": "^4.6.0",
+    "@nlpjs/ner": "^4.6.0",
+    "@nlpjs/similarity": "^4.0.0-rc.4",
+    "@types/joi": "^14.3.4",
     "@types/marked": "^1.1.0",
     "contentful": "^7.14.4",
+    "contentful-import": "^7.9.1",
     "contentful-management": "^5.27.1",
     "csv-parse": "^4.10.1",
     "csv-stringify": "^5.5.0",
@@ -43,19 +54,11 @@
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "node-nlp": "^4.6.3",
-    "@nlpjs/core": "^4.6.0",
-    "@nlpjs/lang-ca": "^4.6.0",
-    "@nlpjs/lang-en-min": "^4.6.0",
-    "@nlpjs/lang-es": "^4.6.0",
-    "@nlpjs/lang-pl": "^4.6.0",
-    "@nlpjs/lang-pt": "^4.6.0",
-    "@nlpjs/ner": "^4.6.0",
-    "@nlpjs/similarity": "^4.0.0-rc.4",
     "sort-stream": "^1.0.1"
   },
   "devDependencies": {
     "@types/memoizee": "^0.4.4",
-    "contentful-cli": "^1.4.14",
+    "contentful-cli": "^1.4.17",
     "identity-obj-proxy": "^3.0.0",
     "jest-extended": "^0.11.5"
   },

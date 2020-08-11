@@ -3,7 +3,7 @@ import {
   CsvExport,
   skipEmptyStrings,
   create_stringifier,
-} from '../../../src/tools/translators/csv-export'
+} from '../../../src/tools/l10n/csv-export'
 import { testContentful } from '../../../tests/contentful/contentful.helper'
 import { ENGLISH } from '../../../src/nlp'
 import { TextBuilder } from '../../../src/cms/factories'

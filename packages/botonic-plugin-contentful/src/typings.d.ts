@@ -120,3 +120,9 @@ declare namespace jest {
     <T = any>(actual: T, message?: string): JestMatchers<T>
   }
 }
+
+declare module 'contentful-import/dist/utils/schema' {
+  import { ObjectSchema } from 'joi'
+  const exports: { payloadSchema: ObjectSchema }
+  export = exports
+}

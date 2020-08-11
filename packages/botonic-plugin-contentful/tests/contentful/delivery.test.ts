@@ -1,5 +1,7 @@
-import { TopContentId, ContentType, MESSAGE_CONTENT_TYPES } from '../../src/cms'
+import { ContentType, MESSAGE_CONTENT_TYPES, TopContentId } from '../../src/cms'
 import { testContentful } from './contentful.helper'
+import { ENGLISH, SPANISH } from '../../src/nlp'
+import { TEST_POST_FAQ1_ID } from './contents/text.test'
 
 const TEST_IMAGE = '3xjvpC7d7PYBmiptEeygfd'
 
@@ -16,3 +18,11 @@ test('TEST: contentful delivery checks that we get the requested message type', 
     }
   }
 }, 10000)
+
+test('TEST: contentful cmsLocale', async () => {
+  const sut = testContentful({ cmsLocale: locale => ENGLISH })
+
+  const text = await sut.text(TEST_POST_FAQ1_ID, { locale: SPANISH })
+
+  expect(text.text).toEqual('How to find your order')
+})

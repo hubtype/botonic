@@ -5,6 +5,7 @@ import StemmerEs from '@nlpjs/lang-es/src/stemmer-es'
 import StemmerPt from '@nlpjs/lang-pt/src/stemmer-pt'
 import StemmerRu from '@nlpjs/lang-ru/src/stemmer-ru'
 import { StemmerPl } from './stemmers/polish-stemmer'
+import { Locale, rootLocale } from './locales'
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
 // and https://stackoverflow.com/a/11210358/145289
@@ -21,8 +22,8 @@ export const stemmers: { [key: string]: BaseStemmer } = {
   //node-nlp does not support polish
 }
 
-export function stemmerFor(locale: string): BaseStemmer {
-  const stem = stemmers[locale]
+export function stemmerFor(locale: Locale): BaseStemmer {
+  const stem = stemmers[rootLocale(locale)]
   if (!stem) {
     throw new Error(`No stemmer configured for locale '${locale}'`)
   }

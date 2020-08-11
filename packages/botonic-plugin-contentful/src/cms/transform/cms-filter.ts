@@ -124,6 +124,10 @@ export class FilteredCMS implements CMS {
     return this.filterContents(contents, context)
   }
 
+  assets(context?: Context): Promise<Asset[]> {
+    return this.cms.assets(context)
+  }
+
   schedule(id: string, context?: Context): Promise<ScheduleContent> {
     return this.cms.schedule(id, context)
   }

@@ -7,6 +7,7 @@ export enum ContentFieldType {
   TITLE = 'Title',
   SUBTITLE = 'Subtitle',
   BUTTONS = 'Buttons',
+  IMAGE = 'Image',
 }
 
 export enum ContentFieldValueType {
@@ -14,9 +15,17 @@ export enum ContentFieldValueType {
   STRING_ARRAY = 'string[]',
   REFERENCE = 'reference',
   REFERENCE_ARRAY = 'reference[]',
+  ASSET = 'asset',
 }
 
 export class ContentField {
+  /**
+   * Used for keywords.
+   * Maybe we should use instead a comma, since it's error prone that in Excel
+   * the array values are ; separated, but in contentful dashboard they must be
+   * separated by commas (a workaround is adding a validation on contentful dashboard
+   * to prevent ; on array fields)
+   */
   static STRING_ARRAY_SEPARATOR = ';'
 
   constructor(
@@ -49,6 +58,8 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     new ContentField(ContentFieldType.TITLE, 'title', ContentFieldValueType.STRING),
     new ContentField(ContentFieldType.SUBTITLE, 'subtitle', ContentFieldValueType.STRING),
     new ContentField(ContentFieldType.BUTTONS, 'buttons', ContentFieldValueType.REFERENCE_ARRAY),
+    new ContentField(ContentFieldType.IMAGE, 'pic', ContentFieldValueType.ASSET),
+
   ]))
 /* eslint-enable prettier/prettier*/
 
