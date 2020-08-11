@@ -24,6 +24,7 @@ export enum ImportType {
   DRY = 'DRY', //parse files but do write to CM
   NO_OVERWRITE = 'NO_OVERWRITE', // publishes the content, but fails if fields for this locale already have value
   OVERWRITE = 'OVERWRITE', // modifies previous value, but leaves it in UNPUBLISHED state
+  OVERWRITE_AND_PUBLISH = 'OVERWRITE_AND_PUBLISH', // overwrites previous value and publishes it (only for new spaces)
 }
 
 if (process.argv.length < 10 || process.argv[2] == '--help') {
@@ -72,7 +73,10 @@ async function main() {
       locale,
       preview: importType == ImportType.OVERWRITE,
       dryRun: importType == ImportType.DRY,
-      allowOverwrites: importType == ImportType.OVERWRITE,
+      allowOverwrites: [
+        ImportType.OVERWRITE,
+        ImportType.OVERWRITE_AND_PUBLISH,
+      ].includes(importType as ImportType),
     }
 
     await readCsvForTranslators(manageOptions, manageContext, fileName)
