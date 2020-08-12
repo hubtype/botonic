@@ -1,4 +1,5 @@
 import momentTz from 'moment-timezone'
+import { offsetWithTimeZone } from './timezones'
 
 /**
  * Manages ranges of hour/minutes for each day of a week.
@@ -21,7 +22,7 @@ export class Schedule {
   }
 
   createHourAndMinute(hour: number, minute = 0): HourAndMinute {
-    return new HourAndMinute(this.zone, hour, minute)
+    return new HourAndMinute(hour, minute)
   }
 
   addDaySchedule(weekday: WeekDay, daySchedule: DaySchedule): Schedule {
@@ -52,20 +53,21 @@ export class Schedule {
     return date.toLocaleTimeString(locales, options)
   }
 
-  contains(date: Date): boolean {
+  contains(inDate: Date): boolean {
+    const offset = offsetWithTimeZone(this.zone, inDate)
+    const scheduleZoneDate = new Date(inDate.getTime() + offset)
     const exception = this.exceptions.find(exception =>
-      isSameDay(date, exception.date)
+      isSameDay(scheduleZoneDate, exception.date)
     )
     if (exception) {
-      return exception.daySchedule.contains(date)
+      return exception.daySchedule.contains(scheduleZoneDate)
     }
-    // BUG should get date in Schedule's timezone
-    const weekDay = date.getDay() as WeekDay
+    const weekDay = scheduleZoneDate.getDay() as WeekDay
     const schedule = this.scheduleByDay.get(weekDay)
     if (!schedule) {
       return false
     }
-    return schedule.contains(date)
+    return schedule.contains(scheduleZoneDate)
   }
 }
 
@@ -114,7 +116,7 @@ export class TimeRange {
    */
   constructor(from: HourAndMinute, to: HourAndMinute) {
     this.from = from
-    this.to = to.isMidnight() ? new HourAndMinute(to.zone, 24, 0) : to
+    this.to = to.isMidnight() ? new HourAndMinute(24, 0) : to
     if (this.from.compare(this.to) >= 0) {
       throw new Error(`${from.toString()} should be before ${to.toString()}`)
     }
@@ -129,22 +131,13 @@ export class TimeRange {
 }
 
 export class HourAndMinute {
-  constructor(
-    readonly zone: momentTz.MomentZone,
-    readonly hour: number,
-    readonly minute: number = 0
-  ) {}
+  constructor(readonly hour: number, readonly minute: number = 0) {}
 
   compareToDate(date: Date): number {
-    // TODO this is error prone. Try to use string conversion as in function europeDate in schedule.test
-    const hourAndMinuteOffset = this.zone.utcOffset(date.getTime())
-    let hourAndMinuteUtc = this.toMinutes() + hourAndMinuteOffset
-    if (hourAndMinuteUtc <= 0) {
-      hourAndMinuteUtc += 24 * 60
-    }
-    const dateUtc = date.getUTCHours() * 60 + date.getUTCMinutes()
-
-    return HourAndMinute.compareNumber(hourAndMinuteUtc, dateUtc)
+    return HourAndMinute.compareNumber(
+      this.toMinutes(),
+      date.getHours() * 60 + date.getMinutes()
+    )
   }
 
   isMidnight(): boolean {
@@ -162,9 +155,6 @@ export class HourAndMinute {
   }
 
   compare(other: HourAndMinute): number {
-    if (this.zone != other.zone) {
-      throw new Error('Cannot compare HourAndMinute of different timezones')
-    }
     return HourAndMinute.compareNumber(this.toMinutes(), other.toMinutes())
   }
 

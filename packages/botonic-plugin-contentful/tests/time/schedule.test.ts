@@ -6,7 +6,6 @@ import {
   TimeRange,
   WeekDay,
 } from '../../src/time/schedule'
-import momentTz from 'moment-timezone'
 
 const MARCH = 2
 const APRIL = 3
@@ -16,6 +15,16 @@ test('TEST ScheduleAlwaysOn', () => {
   const sut = new ScheduleAlwaysOn()
   expect(sut.contains(new Date())).toEqual(true)
 })
+
+function utcDate(
+  year: number,
+  month: number,
+  day: number,
+  hour = 0,
+  minute = 0
+): Date {
+  return new Date(Date.UTC(year, month, day, hour, minute, 0))
+}
 
 function europeDate(
   year: number,
@@ -76,26 +85,11 @@ test.each<any>([
   expect(sut.contains(date)).toEqual(expected)
 })
 
-test('TEST: HourAndMinute.compareToDate CET', () => {
-  const zone = momentTz.tz.zone('Europe/Madrid')
-  const time = new HourAndMinute(zone!, 13, 45)
+test('TEST: HourAndMinute.compareToDate', () => {
+  const time = new HourAndMinute(13, 45)
 
   const date = europeDate(2019, 5, 29, 13, 46)
 
-  expect(time.compareToDate(date)).toEqual(-1)
-
-  date.setMinutes(45)
-  expect(time.compareToDate(date)).toEqual(0)
-
-  date.setMinutes(44)
-  expect(time.compareToDate(date)).toEqual(1)
-})
-
-test('TEST: HourAndMinute.compareToDate OTHER', () => {
-  const zone = momentTz.tz.zone('Europe/London')
-  const time = new HourAndMinute(zone!, 12, 45)
-
-  const date = europeDate(2019, 5, 29, 13, 46)
   expect(time.compareToDate(date)).toEqual(-1)
 
   date.setMinutes(45)
@@ -124,6 +118,22 @@ test('TEST: ends at midnight', () => {
   expect(sut.contains(date9h)).toBeFalsy()
   const date23h = europeDate(2019, NOVEMBER, 27, 23, 59)
   expect(sut.contains(date23h)).toBeTruthy()
+})
+
+test('TEST: ends at 1am', () => {
+  const sut = new Schedule('UTC')
+  sut.addDaySchedule(
+    WeekDay.THURSDAY,
+    new DaySchedule([
+      new TimeRange(sut.createHourAndMinute(23), sut.createHourAndMinute(0)),
+    ])
+  )
+  const midnight = utcDate(2019, NOVEMBER, 28, 23, 0)
+  expect(sut.contains(midnight)).toBeTruthy()
+  const lastMinute = utcDate(2019, NOVEMBER, 28, 23, 59)
+  expect(sut.contains(lastMinute)).toBeTruthy()
+  const after = utcDate(2019, NOVEMBER, 29, 0, 0)
+  expect(sut.contains(after)).toBeFalsy()
 })
 
 test('TEST: addException', () => {
@@ -204,10 +214,7 @@ test('TEST: addException end day', () => {
 })
 
 test('TEST: time.toString ', () => {
-  // tz does not affect toString
-  const zone = momentTz.tz.zone('Europe/London')
-
-  const time = new HourAndMinute(zone!, 13, 45)
+  const time = new HourAndMinute(13, 45)
   expect(time.toString()).toEqual('13:45h')
 })
 
