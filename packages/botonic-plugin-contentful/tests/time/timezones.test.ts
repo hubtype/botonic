@@ -1,6 +1,6 @@
 import momentTz from 'moment-timezone'
-import { cetDate } from '../contentful/contents/date-range.test'
 import { offsetWithTimeZone } from '../../src/time/timezones'
+import { cetDate } from './time.helper'
 
 test('TEST offsetWithTimeZone', () => {
   const date = cetDate(2020, 1, 1, 0)
