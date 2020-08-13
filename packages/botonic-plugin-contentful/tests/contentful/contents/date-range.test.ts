@@ -1,26 +1,7 @@
 import { testContentful } from '../contentful.helper'
+import { cetDate } from '../../time/time.helper'
 
 const TEST_DATE_RANGE_HUBTYPE_ID = '46taK0TceR2OZ8issCMhB7'
-
-export function cetDate(
-  year: number,
-  month: number,
-  day: number,
-  hour = 0,
-  minute = 0
-): Date {
-  const date = new Date(Date.UTC(year, month, day, hour, minute, 0))
-
-  const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }))
-  const tzDate = new Date(
-    date.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })
-  )
-  const offset = utcDate.getTime() - tzDate.getTime()
-
-  date.setTime(date.getTime() + offset)
-
-  return date
-}
 
 test('TEST: contentful dateRange', async () => {
   const dateRange = await testContentful().dateRange(TEST_DATE_RANGE_HUBTYPE_ID)
