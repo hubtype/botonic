@@ -1,9 +1,9 @@
 /**
  * From https://github.com/Tutanchamon/pl_stemmer/blob/master/pl_stemmer.py
  */
-import { BaseStemmer } from '@nlpjs/core/src'
+import { Stemmer } from '@nlpjs/core/src'
 
-export class StemmerPl implements BaseStemmer {
+export class StemmerPl implements Stemmer {
   stem(tokens: string[]): string[] {
     return tokens.map((stem: string) => {
       stem = stem.toLowerCase()

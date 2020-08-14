@@ -42,7 +42,7 @@
     "@nlpjs/lang-pl": "^4.10.1",
     "@nlpjs/lang-pt": "^4.10.1",
     "@nlpjs/lang-ru": "^4.10.1",
-    "dpinol/@nlpjs/lang-tr": "^4.10.1",
+    "@nlpjs/lang-tr": "^4.10.1",
     "@nlpjs/ner": "^4.10.1",
     "@nlpjs/similarity": "^4.9.1",
     "@types/joi": "^14.3.4",

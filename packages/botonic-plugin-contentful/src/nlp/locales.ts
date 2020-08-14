@@ -8,6 +8,7 @@ export const ENGLISH = 'en'
 export const PORTUGUESE = 'pt'
 export const POLISH = 'pl'
 export const RUSSIAN = 'ru'
+export const TURKISH = 'tr'
 
 export const SUPPORTED_LOCALES = [
   SPANISH,
@@ -16,6 +17,7 @@ export const SUPPORTED_LOCALES = [
   PORTUGUESE,
   POLISH,
   RUSSIAN,
+  TURKISH,
 ]
 
 export function checkLocale(locale: Locale): Locale {
