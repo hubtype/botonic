@@ -6,6 +6,7 @@ export {
   HandOffBuilder,
   storeCaseRating,
   getAvailableAgents,
+  getAvailableAgentsByQueue,
   getAgentVacationRanges,
   cancelHandoff,
   deleteUser,
