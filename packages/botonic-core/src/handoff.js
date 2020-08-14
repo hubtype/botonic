@@ -152,7 +152,6 @@ export async function getAvailableAgentsByQueue(session, queueId) {
     },
     method: 'post',
     url: `${baseUrl}/v1/queues/${queueId}/get_available_agents/`,
-    data: { queue_id: queueId },
   })
   return resp.data
 }
