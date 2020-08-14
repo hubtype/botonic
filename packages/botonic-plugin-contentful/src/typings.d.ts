@@ -124,6 +124,13 @@ declare module '@nlpjs/lang-tr/src/tokenizer-tr' {
   export = TokenizerTr
 }
 
+declare module '@nlpjs/lang-it/src/stemmer-it' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerIt extends BaseStemmer {}
+  export = StemmerIt
+}
+
 declare module 'sort-stream' {
   function sort(func: (a: any, b: any) => number): any
   export = sort
