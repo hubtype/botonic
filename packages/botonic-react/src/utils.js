@@ -1,5 +1,6 @@
 import { WEBCHAT } from './constants'
-import { isBrowser, isNode } from '@botonic/core'
+import { isBrowser, isNode, PROVIDER } from '@botonic/core'
+
 export function isDev() {
   return process.env.NODE_ENV == 'development'
 }
@@ -145,3 +146,8 @@ export const stringifyWithRegexs = object => {
   // Serialization of regexs: https://stackoverflow.com/questions/12075927/serialization-of-regexp
   return JSON.stringify(object, serializeRegex)
 }
+
+export const isWebchatOrDev = context =>
+  context.session &&
+  context.session.user &&
+  context.session.user.provider == (PROVIDER.WEBCHAT || PROVIDER.DEV)

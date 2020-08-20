@@ -8,6 +8,7 @@ import {
   ConditionalWrapper,
   renderComponent,
   isDev,
+  isWebchatOrDev,
 } from '../utils'
 
 import { WebchatContext, RequestContext } from '../contexts'
@@ -97,6 +98,7 @@ export const Message = props => {
   const [state, setState] = useState({
     id: props.id || uuidv4(),
   })
+  const requestContext = useContext(RequestContext)
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
@@ -279,7 +281,7 @@ export const Message = props => {
               }}
               {...otherProps}
             >
-              {markdown ? (
+              {markdown && (isWebchatOrDev(requestContext) || isFromUser) ? (
                 <BlobText
                   blob={blob}
                   dangerouslySetInnerHTML={{
