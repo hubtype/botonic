@@ -36,7 +36,7 @@ export default class extends React.Component {
     return (
       <>
         <Text>
-          Great! Here we can see a carrousel. It's a Facebook Messenger
+          Great! Here we can see a carousel. It's a Facebook Messenger
           component, and it's a group of elements which consists of an image, a
           title, a subtitle and a group of buttons. You can get more information
           here:
