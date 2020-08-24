@@ -29,7 +29,11 @@ export const Audio: React.FunctionComponent<MessageProps>
 export const Document: React.FunctionComponent<MessageProps>
 export const Video: React.FunctionComponent<MessageProps>
 
-export const Text: React.FunctionComponent<MessageProps>
+export interface TextProps extends MessageProps {
+  // converts markdown syntax to HTML
+  markdown?: boolean
+}
+export const Text: React.FunctionComponent<TextProps>
 
 export interface Webview {
   name: string

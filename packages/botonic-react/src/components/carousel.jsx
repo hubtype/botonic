@@ -52,6 +52,11 @@ const serialize = carouselProps => {
   }
 }
 
+/**
+ *
+ * @param {MessageProps} props
+ * @returns {JSX.Element}
+ */
 export const Carousel = props => {
   const { getThemeProperty } = useContext(WebchatContext)
   let content = props.children
