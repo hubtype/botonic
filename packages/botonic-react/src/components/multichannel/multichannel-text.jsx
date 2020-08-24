@@ -9,6 +9,7 @@ import {
   isMultichannelButton,
   isMultichannelReply,
   getMultichannelReplies,
+  MULTICHANNEL_WHATSAPP_PROPS,
 } from './multichannel-utils'
 import { MultichannelButton } from './multichannel-button'
 import { MultichannelContext } from './multichannel-context'
@@ -83,8 +84,7 @@ export const MultichannelText = props => {
       return elements
     }
     return (
-      // We don't want to handle markdown here as this will be done internally by WhatsApp
-      <Text {...props} markdown={false}>
+      <Text {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
         {elements}
       </Text>
     )
