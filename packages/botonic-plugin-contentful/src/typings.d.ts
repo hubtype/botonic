@@ -124,6 +124,13 @@ declare module '@nlpjs/lang-tr/src/tokenizer-tr' {
   export = TokenizerTr
 }
 
+declare module '@nlpjs/lang-it/src/tokenizer-it' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerIt extends Tokenizer {}
+  export = TokenizerIt
+}
+
 declare module '@nlpjs/lang-it/src/stemmer-it' {
   import { BaseStemmer } from '@nlpjs/core/src'
 
