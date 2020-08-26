@@ -11,9 +11,10 @@ import { DeliveryWithFollowUp } from './follow-up'
 export class StartUpDelivery extends DeliveryWithFollowUp {
   constructor(
     protected delivery: DeliveryApi,
-    private readonly button: ButtonDelivery
+    private readonly button: ButtonDelivery,
+    resumeErrors: boolean
   ) {
-    super(cms.ContentType.STARTUP, delivery)
+    super(cms.ContentType.STARTUP, delivery, resumeErrors)
   }
 
   async startUp(id: string, context: cms.Context): Promise<cms.StartUp> {

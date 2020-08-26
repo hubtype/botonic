@@ -9,8 +9,8 @@ import * as contentful from 'contentful'
 import { DeliveryWithFollowUp } from './follow-up'
 
 export class ImageDelivery extends DeliveryWithFollowUp {
-  constructor(delivery: DeliveryApi) {
-    super(cms.ContentType.IMAGE, delivery)
+  constructor(delivery: DeliveryApi, resumeErrors: boolean) {
+    super(cms.ContentType.IMAGE, delivery, resumeErrors)
   }
 
   async image(id: string, context: Context): Promise<cms.Image> {

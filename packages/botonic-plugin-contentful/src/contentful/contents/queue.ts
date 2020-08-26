@@ -12,8 +12,12 @@ import { ScheduleFields, ScheduleDelivery } from './schedule'
 export class QueueDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1
 
-  constructor(delivery: DeliveryApi) {
-    super(cms.ContentType.QUEUE, delivery)
+  constructor(
+    delivery: DeliveryApi,
+    private readonly schedule: ScheduleDelivery,
+    resumeErrors: boolean
+  ) {
+    super(cms.ContentType.QUEUE, delivery, resumeErrors)
   }
 
   async queue(id: string, context: Context): Promise<cms.Queue> {
