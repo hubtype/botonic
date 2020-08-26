@@ -1,7 +1,7 @@
-import { testContentfulOptions } from './contentful.helper'
+import { testContentful, testContentfulOptions } from './contentful.helper'
 import { CMS } from '../../src/cms'
 import { MultiEnvironmentFactory } from '../../src/contentful/multi-environment'
-import { ContentfulOptions } from '../../src'
+import { ContentfulOptions, Locale } from '../../src'
 import { instance, mock } from 'ts-mockito'
 
 test('TEST MultiEnvironmentFactory', () => {
@@ -40,4 +40,34 @@ test('TEST MultiEnvironmentFactory', () => {
 
   // Act/Assert no context returns default CMS
   expect(sut.get(opts, undefined)).toBe(defaultCMS)
+})
+
+test('TEST MultiEnvironmentFactory keeps functions in options', () => {
+  // Arrange
+  const cms = testContentful()
+  class MyContentfulOptions implements ContentfulOptions {
+    cmsLocale(locale?: Locale): Locale | undefined {
+      return locale
+    }
+
+    accessToken = 'token'
+    spaceId = 'spaceId'
+  }
+
+  const sut = new MultiEnvironmentFactory(
+    undefined,
+    (opts: ContentfulOptions) => {
+      // since MultiEnvironmentFactory clones the ContentfulOptions, we want to make
+      // sure that it keeps their functions
+      expect(opts.cmsLocale!('kk')).toEqual('kk')
+      return cms
+    }
+  )
+
+  // act
+  const created = sut.get(new MyContentfulOptions())
+
+  // assert
+  expect(created).toBe(cms)
+  expect.assertions(2)
 })

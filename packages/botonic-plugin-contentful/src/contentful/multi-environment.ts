@@ -4,6 +4,7 @@ import { CMS } from '../cms'
 import { Locale } from '../nlp'
 import { ContentfulCredentials, ContentfulOptions } from '../plugin'
 import { Contentful } from './cms-contentful'
+import { shallowClone } from '../util'
 
 /**
  * Set it to ContentfulOptions.contentfulFactory to connect to
@@ -50,12 +51,11 @@ export class MultiEnvironmentFactory {
     const locale = ctx!.locale!
     let cms = this.cache.get(locale)
     if (!cms) {
-      const opts: ContentfulOptions = {
-        ...contOptions,
-        spaceId: credentials.spaceId,
-        environment: credentials.environment,
-        accessToken: credentials.accessToken,
-      }
+      const opts = shallowClone(contOptions)
+      opts.spaceId = credentials.spaceId
+      opts.environment = credentials.environment
+      opts.accessToken = credentials.accessToken
+
       cms = this.contentfulFactory(opts)
       this.cache.set(locale, cms)
     }
