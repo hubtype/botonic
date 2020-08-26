@@ -1,4 +1,4 @@
-import { BaseStemmer, Stemmer } from '@nlpjs/core/src'
+import { Stemmer } from '@nlpjs/core/src'
 import StemmerCa from '@nlpjs/lang-ca/src/stemmer-ca'
 import StemmerEn from '@nlpjs/lang-en-min/src/stemmer-en'
 import StemmerEs from '@nlpjs/lang-es/src/stemmer-es'
@@ -8,20 +8,6 @@ import StemmerTr from '@nlpjs/lang-tr/src/stemmer-tr'
 import StemmerIt from '@nlpjs/lang-it/src/stemmer-it'
 import { StemmerPl } from './stemmers/polish-stemmer'
 import { Locale, rootLocale } from './locales'
-
-/**
- * Hack to workaround https://github.com/axa-group/nlp.js/pull/548
- */
-class TurkishStemmer extends StemmerTr {
-  stem(tokens: string[]): string[] {
-    return BaseStemmer.prototype.stem.call(this, tokens)
-  }
-
-  innerStem() {
-    // @ts-ignore
-    return StemmerTr.prototype.stem.call(this)
-  }
-}
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
 // and https://stackoverflow.com/a/11210358/145289
@@ -35,7 +21,7 @@ export const stemmers: { [key: string]: Stemmer } = {
   pl: new StemmerPl(),
   pt: new StemmerPt(),
   ru: new StemmerRu(),
-  tr: new TurkishStemmer(),
+  tr: new StemmerTr(),
   it: new StemmerIt(),
   //node-nlp does not support polish
 }
