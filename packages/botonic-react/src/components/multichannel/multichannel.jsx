@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { Text } from '../text'
-import { isWhatsapp } from './multichannel-utils'
+import { isWhatsapp, MULTICHANNEL_WHATSAPP_PROPS } from './multichannel-utils'
 import { MultichannelContext } from './multichannel-context'
 import { MultichannelButton } from './multichannel-button'
 import { MultichannelText } from './multichannel-text'
@@ -61,7 +61,11 @@ export const Multichannel = props => {
     newChildren = newChildren.map((c, index) =>
       index > 0 && typeof c === 'string' ? props.messageSeparator + c : c
     )
-    newChildren = <Text key={props.key}>{newChildren}</Text>
+    newChildren = (
+      <Text key={props.key} {...MULTICHANNEL_WHATSAPP_PROPS}>
+        {newChildren}
+      </Text>
+    )
   }
   return (
     <MultichannelContext.Provider

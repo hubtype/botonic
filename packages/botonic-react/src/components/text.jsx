@@ -25,6 +25,11 @@ const serialize = textProps => {
   return { text: serializeMarkdown(textProps.children) }
 }
 
+/**
+ *
+ * @param {TextProps} props
+ * @returns {JSX.Element}
+ */
 export const Text = props => {
   const defaultTextProps = {
     markdown: props.markdown === undefined ? true : props.markdown,

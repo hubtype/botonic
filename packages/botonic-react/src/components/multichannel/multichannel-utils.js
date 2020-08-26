@@ -1,5 +1,12 @@
 import { Providers } from '@botonic/core'
 
+/**
+ *
+ * Whatsapp does not support Markdown
+ * (its markup syntax is different)
+ */
+export const MULTICHANNEL_WHATSAPP_PROPS = { markdown: false }
+
 export function isMultichannelButton(node) {
   return isNodeKind(node, 'MultichannelButton')
 }
