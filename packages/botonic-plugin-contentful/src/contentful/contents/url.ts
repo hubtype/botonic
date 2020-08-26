@@ -5,8 +5,8 @@ import * as contentful from 'contentful'
 import { CommonEntryFields, DeliveryApi } from '../delivery-api'
 
 export class UrlDelivery extends DeliveryWithFollowUp {
-  constructor(delivery: DeliveryApi) {
-    super(cms.ContentType.URL, delivery)
+  constructor(delivery: DeliveryApi, resumeErrors: boolean) {
+    super(cms.ContentType.URL, delivery, resumeErrors)
   }
 
   async url(id: string, context: Context): Promise<cms.Url> {

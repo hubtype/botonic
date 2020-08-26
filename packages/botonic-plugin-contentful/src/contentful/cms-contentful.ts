@@ -66,16 +66,17 @@ export class Contentful implements cms.CMS {
         : new CachedClientApi(client, options.cacheTtlMs),
       options
     )
+    const resumeErrors = options.resumeErrors || false
     const delivery = new IgnoreFallbackDecorator(deliveryApi)
     this._contents = new ContentsDelivery(delivery)
 
     this._delivery = delivery
-    this._button = new ButtonDelivery(delivery, options.resumeErrors || false)
-    this._carousel = new CarouselDelivery(delivery, this._button)
-    this._text = new TextDelivery(delivery, this._button)
-    this._startUp = new StartUpDelivery(delivery, this._button)
-    this._url = new UrlDelivery(delivery)
-    this._image = new ImageDelivery(delivery)
+    this._button = new ButtonDelivery(delivery, resumeErrors)
+    this._carousel = new CarouselDelivery(delivery, this._button, resumeErrors)
+    this._text = new TextDelivery(delivery, this._button, resumeErrors)
+    this._startUp = new StartUpDelivery(delivery, this._button, resumeErrors)
+    this._url = new UrlDelivery(delivery, resumeErrors)
+    this._image = new ImageDelivery(delivery, resumeErrors)
     this._asset = new AssetDelivery(delivery)
     this._queue = new QueueDelivery(delivery)
     const followUp = new FollowUpDelivery(
@@ -93,8 +94,7 @@ export class Contentful implements cms.CMS {
       this._startUp,
     ].forEach(d => d.setFollowUp(followUp))
     this._keywords = new KeywordsDelivery(delivery)
-    this._schedule = new ScheduleDelivery(delivery)
-    this._dateRange = new DateRangeDelivery(delivery)
+    this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
   }
 
   button(id: string, context: Context = DEFAULT_CONTEXT): Promise<cms.Button> {

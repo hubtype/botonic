@@ -6,7 +6,8 @@ import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
 export abstract class ContentDelivery {
   constructor(
     readonly modelType: TopContentType,
-    protected readonly delivery: DeliveryApi
+    protected readonly delivery: DeliveryApi,
+    protected readonly resumeErrors: boolean
   ) {}
 
   async getEntry<T>(

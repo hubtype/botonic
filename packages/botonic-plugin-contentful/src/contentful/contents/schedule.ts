@@ -12,8 +12,8 @@ import {
 export class ScheduleDelivery extends ContentDelivery {
   static REFERENCES_INCLUDE = 2
 
-  constructor(delivery: DeliveryApi) {
-    super(ContentType.SCHEDULE, delivery)
+  constructor(delivery: DeliveryApi, resumeErrors: boolean) {
+    super(ContentType.SCHEDULE, delivery, resumeErrors)
   }
 
   async schedule(id: string): Promise<ScheduleContent> {
@@ -62,9 +62,9 @@ export class ScheduleDelivery extends ContentDelivery {
     sched: time.Schedule,
     hourRanges: Entry<HourRangeFields>[]
   ): time.DaySchedule {
-    const timeRanges = hourRanges.map(
-      hr =>
-        new time.TimeRange(
+    const timeRanges = hourRanges.map(hr => {
+      try {
+        return new time.TimeRange(
           sched.createHourAndMinute(hr.fields.fromHour, hr.fields.fromMinute),
           sched.createHourAndMinute(hr.fields.toHour, hr.fields.toMinute)
         )
@@ -82,13 +82,22 @@ export class ScheduleDelivery extends ContentDelivery {
       return
     }
     for (const exception of exceptions) {
-      const timeRanges = ScheduleDelivery.createDaySchedule(
-        schedule,
-        exception.fields.hourRanges || []
-      )
-      const dateStr = exception.fields.date.split('-')
-      const date = new Date(+dateStr[0], +dateStr[1] - 1, +dateStr[2])
-      schedule.addException(date, timeRanges)
+      try {
+        const timeRanges = this.createDaySchedule(
+          schedule,
+          exception.fields.hourRanges || []
+        )
+        const dateStr = exception.fields.date.split('-')
+        const date = new Date(+dateStr[0], +dateStr[1] - 1, +dateStr[2])
+        schedule.addException(date, timeRanges)
+      } catch (e) {
+        console.error(
+          `Error in Schedule Exception '${exception.sys.id}' (name '${exception.fields.name}')`
+        )
+        if (!this.resumeErrors) {
+          throw e
+        }
+      }
     }
   }
 }

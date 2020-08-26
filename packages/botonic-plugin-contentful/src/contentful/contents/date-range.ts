@@ -9,8 +9,8 @@ import {
 } from '../delivery-api'
 
 export class DateRangeDelivery extends ContentDelivery {
-  constructor(delivery: DeliveryApi) {
-    super(ContentType.DATE_RANGE, delivery)
+  constructor(delivery: DeliveryApi, resumeErrors: boolean) {
+    super(ContentType.DATE_RANGE, delivery, resumeErrors)
   }
 
   async dateRange(id: string): Promise<DateRangeContent> {

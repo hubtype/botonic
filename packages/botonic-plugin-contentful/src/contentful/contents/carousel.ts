@@ -10,8 +10,12 @@ import {
 
 // TODO does not yet load the followU p
 export class CarouselDelivery extends DeliveryWithFollowUp {
-  constructor(delivery: DeliveryApi, readonly button: ButtonDelivery) {
-    super(cms.ContentType.CAROUSEL, delivery)
+  constructor(
+    delivery: DeliveryApi,
+    readonly button: ButtonDelivery,
+    resumeErrors: boolean
+  ) {
+    super(cms.ContentType.CAROUSEL, delivery, resumeErrors)
   }
 
   async carousel(id: string, context: cms.Context): Promise<cms.Carousel> {
