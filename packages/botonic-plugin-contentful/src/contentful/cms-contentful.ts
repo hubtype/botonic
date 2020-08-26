@@ -78,7 +78,8 @@ export class Contentful implements cms.CMS {
     this._url = new UrlDelivery(delivery, resumeErrors)
     this._image = new ImageDelivery(delivery, resumeErrors)
     this._asset = new AssetDelivery(delivery)
-    this._queue = new QueueDelivery(delivery)
+    this._schedule = new ScheduleDelivery(delivery, resumeErrors)
+    this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
     const followUp = new FollowUpDelivery(
       this._delivery,
       this._carousel,
@@ -172,7 +173,7 @@ export class Contentful implements cms.CMS {
         case ContentType.CAROUSEL:
           return await this._carousel.fromEntry(entry, context)
         case ContentType.QUEUE:
-          return QueueDelivery.fromEntry(entry)
+          return this._queue.fromEntry(entry)
         case ContentType.CHITCHAT:
         case ContentType.TEXT:
           return await this._text.fromEntry(entry, context)
@@ -183,7 +184,7 @@ export class Contentful implements cms.CMS {
         case ContentType.STARTUP:
           return await this._startUp.fromEntry(entry, context)
         case ContentType.SCHEDULE:
-          return ScheduleDelivery.fromEntry(entry)
+          return this._schedule.fromEntry(entry)
         case ContentType.DATE_RANGE:
           return DateRangeDelivery.fromEntry(entry)
         default:

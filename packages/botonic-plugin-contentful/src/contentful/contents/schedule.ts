@@ -20,20 +20,20 @@ export class ScheduleDelivery extends ContentDelivery {
     const f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
       include: ScheduleDelivery.REFERENCES_INCLUDE,
     })
-    return ScheduleDelivery.fromEntry(f)
+    return this.fromEntry(f)
   }
 
-  static fromEntry(entry: Entry<ScheduleFields>): ScheduleContent {
+  fromEntry(entry: Entry<ScheduleFields>): ScheduleContent {
     const schedule = new time.Schedule(time.Schedule.TZ_CET) // TODO allow configuration
-    ScheduleDelivery.addDaySchedules(schedule, entry.fields)
-    ScheduleDelivery.addExceptions(schedule, entry.fields.exceptions)
+    this.addDaySchedules(schedule, entry.fields)
+    this.addExceptions(schedule, entry.fields.exceptions)
     return new ScheduleContent(
       ContentfulEntryUtils.commonFieldsFromEntry(entry),
       schedule
     )
   }
 
-  private static addDaySchedules(
+  private addDaySchedules(
     schedule: time.Schedule,
     fields: ScheduleFields
   ): void {
@@ -50,15 +50,12 @@ export class ScheduleDelivery extends ContentDelivery {
       if (!days[day]) {
         continue
       }
-      const daySchedule = ScheduleDelivery.createDaySchedule(
-        schedule,
-        days[day]!
-      )
+      const daySchedule = this.createDaySchedule(schedule, days[day]!)
       schedule.addDaySchedule(+day, daySchedule)
     }
   }
 
-  private static createDaySchedule(
+  private createDaySchedule(
     sched: time.Schedule,
     hourRanges: Entry<HourRangeFields>[]
   ): time.DaySchedule {
@@ -68,13 +65,15 @@ export class ScheduleDelivery extends ContentDelivery {
           sched.createHourAndMinute(hr.fields.fromHour, hr.fields.fromMinute),
           sched.createHourAndMinute(hr.fields.toHour, hr.fields.toMinute)
         )
-    )
+      } catch (e) {
+        console.error(`Error loading hour range`, hr)
+        throw e
+      }
+    })
     return new time.DaySchedule(timeRanges)
   }
 
-  // private static createTim
-
-  private static addExceptions(
+  private addExceptions(
     schedule: time.Schedule,
     exceptions?: Entry<DayScheduleFields>[]
   ) {

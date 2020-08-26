@@ -26,14 +26,13 @@ export class QueueDelivery extends ContentDelivery {
       context,
       { include: QueueDelivery.REFERENCES_INCLUDE }
     )
-    return QueueDelivery.fromEntry(entry)
+    return this.fromEntry(entry)
   }
 
-  static fromEntry(entry: contentful.Entry<QueueFields>): cms.Queue {
+  fromEntry(entry: contentful.Entry<QueueFields>): cms.Queue {
     const fields = entry.fields
 
-    const schedule =
-      fields.schedule && ScheduleDelivery.fromEntry(fields.schedule)
+    const schedule = fields.schedule && this.schedule.fromEntry(fields.schedule)
 
     return new cms.Queue(
       ContentfulEntryUtils.commonFieldsFromEntry(entry),
