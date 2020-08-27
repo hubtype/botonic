@@ -1,8 +1,20 @@
 import { instance, mock } from 'ts-mockito'
-import { ContentCallback, ContentType } from '../../src'
+import { CmsException, ContentCallback, ContentType } from '../../src'
 import * as cms from '../../src'
 
-test('TEST: ofPayload', () => {
+test('TEST: Callback.empty', () => {
+  const callback = cms.Callback.empty()
+  expect(callback.url).toBeUndefined()
+  expect(callback.payload).toBeUndefined()
+})
+
+test('TEST: Callback.ofUrl', () => {
+  const callback = cms.Callback.ofUrl('http:...')
+  expect(callback.url).toEqual('http:...')
+  expect(() => cms.Callback.ofUrl('')).toThrow(CmsException)
+})
+
+test('TEST: Callback.ofPayload', () => {
   const callback = cms.Callback.ofPayload('text$text1')
   expect(callback).toBeInstanceOf(ContentCallback)
   expect((callback as ContentCallback).id).toEqual('text1')
