@@ -11,12 +11,18 @@ export class Callback implements ValueObject {
   /**
    * @param payload may contain the reference of a {@link Content}. See {@link ContentCallback}
    * @param url for hardcoded URLs (otherwise, use a {@link Url})
+   * @param empty eg. if locale fallback is disabled, we may get empty
+   * fields.
    */
-  protected constructor(readonly payload?: string, readonly url?: string) {
-    if (!payload && !url) {
-      // TODO throw an exception when CsvExport is fixed (@see IgnoreFallbackDecorator)
-      console.error(
-        `Callback cannot have both 'URL' and 'payload' fields empty`
+  protected constructor(
+    readonly payload?: string,
+    readonly url?: string,
+    readonly empty = false
+  ) {
+    if (!empty && !payload && !url) {
+      throw new CmsException(
+        `Callback cannot have both 'URL' and 'payload' fields empty`,
+        undefined
       )
     }
     if (payload && url) {
@@ -36,6 +42,10 @@ export class Callback implements ValueObject {
 
   static ofUrl(url: string): Callback {
     return new Callback(undefined, url)
+  }
+
+  static empty(): Callback {
+    return new Callback(undefined, undefined, true)
   }
 
   asContentId(): TopContentId | undefined {

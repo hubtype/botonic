@@ -20,7 +20,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
   }
 
   async carousel(id: string, context: cms.Context): Promise<cms.Carousel> {
-    const entry: contentful.Entry<CarouselFields> = await this.delivery.getEntry(
+    const entry: contentful.Entry<CarouselFields> = await this.getEntry(
       id,
       context
     )

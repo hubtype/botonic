@@ -84,7 +84,7 @@ export class ButtonDelivery extends ContentDelivery {
   ): cms.Button {
     // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
     const callback = buttonEntry.fields.target
-      ? this.getTargetCallback(buttonEntry.fields.target)
+      ? this.getTargetCallback(buttonEntry.fields.target, context)
       : context.callbacks!.getCallback(buttonEntry.sys.id)
     return new cms.Button(
       buttonEntry.sys.id,

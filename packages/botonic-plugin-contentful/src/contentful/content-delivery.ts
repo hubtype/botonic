@@ -1,4 +1,4 @@
-import { Context, isSameModel, TopContentType } from '../cms'
+import { CmsException, ContentType, Context, isSameModel } from '../cms'
 import * as contentful from 'contentful'
 import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
 
