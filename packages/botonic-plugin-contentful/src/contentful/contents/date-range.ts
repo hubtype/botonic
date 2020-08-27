@@ -1,14 +1,14 @@
 import * as contentful from 'contentful'
 import { DateRangeContent, DEFAULT_CONTEXT, ContentType } from '../../cms'
 import * as time from '../../time'
-import { ContentDelivery } from '../content-delivery'
+import { TopContentDelivery } from '../content-delivery'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   DeliveryApi,
 } from '../delivery-api'
 
-export class DateRangeDelivery extends ContentDelivery {
+export class DateRangeDelivery extends TopContentDelivery {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(ContentType.DATE_RANGE, delivery, resumeErrors)
   }
