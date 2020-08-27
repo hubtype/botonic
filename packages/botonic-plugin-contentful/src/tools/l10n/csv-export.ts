@@ -68,6 +68,7 @@ export class CsvExport {
   }
 
   async *generate(cms: CMS, from: Locale): AsyncGenerator<CsvLine> {
+    console.error('TODO: pending to export URL models')
     for (const model of BOTONIC_CONTENT_TYPES) {
       console.log(`Exporting contents of type ${model}`)
       const contents = await cms.contents(model, {
