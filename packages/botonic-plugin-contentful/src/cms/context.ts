@@ -14,6 +14,12 @@ export interface Context {
    * NOT applying it so far for assets because cms.Asset does not support blank assets
    */
   ignoreFallbackLocale?: boolean
+
+  /**
+   * Useful for debugging. Limit how many contents are requested in parallel.
+   * If not specified, the contents will use as much parallelism as possible.
+   */
+  concurrency?: number
 }
 
 export interface ContextWithLocale extends Context {
