@@ -47,6 +47,7 @@
     "@nlpjs/similarity": "^4.9.1",
     "@types/joi": "^14.3.4",
     "@types/marked": "^1.1.0",
+    "async-parallel": "^1.2.3",
     "contentful": "^7.14.6",
     "contentful-import": "^7.9.6",
     "contentful-management": "^5.28.0",

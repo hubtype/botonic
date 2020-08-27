@@ -7,6 +7,7 @@ import {
   CommonEntryFields,
   ContentfulEntryUtils,
 } from '../delivery-api'
+import { asyncMap } from '../../util/async'
 
 // TODO does not yet load the followU p
 export class CarouselDelivery extends DeliveryWithFollowUp {
@@ -30,13 +31,16 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<CarouselFields>,
     context: cms.Context
   ) {
-    const elements = entry.fields.elements.map(async entry => {
-      return this.elementFromEntry(entry, context)
-    })
-    const e = await Promise.all(elements)
+    const elements = await asyncMap(
+      context,
+      entry.fields.elements,
+      async entry => {
+        return this.elementFromEntry(entry, context)
+      }
+    )
     return new cms.Carousel(
       ContentfulEntryUtils.commonFieldsFromEntry(entry),
-      e
+      elements
     )
   }
 

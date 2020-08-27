@@ -15,6 +15,7 @@ import {
   ContentfulEntryUtils,
   DeliveryApi,
 } from '../delivery-api'
+import { asyncMap } from '../../util/async'
 
 /**
  * Retrieve multiple contents in a single call
@@ -35,8 +36,8 @@ export class ContentsDelivery {
         include: this.maxReferencesInclude(),
       }
     )
-    return Promise.all(
-      entryCollection.items.map(entry => factory(entry, context))
+    return asyncMap(context, entryCollection.items, entry =>
+      factory(entry, context)
     )
   }
 
@@ -63,7 +64,7 @@ export class ContentsDelivery {
         filter(ContentfulEntryUtils.commonFieldsFromEntry(entry))
       )
     }
-    return Promise.all(entries.map(entry => factory(entry, context)))
+    return asyncMap(context, entries, entry => factory(entry, context))
   }
 
   private maxReferencesInclude() {

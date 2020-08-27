@@ -35,7 +35,7 @@ export class ButtonDelivery extends ContentDelivery {
     entries: contentful.Entry<any>[],
     context: cms.Context
   ): Promise<cms.Button[]> {
-    const buttons = entries.map(async entry => {
+    const buttons = await asyncMap(context, entries, async entry => {
       try {
         return await this.fromReference(entry, context)
       } catch (e) {
@@ -44,8 +44,7 @@ export class ButtonDelivery extends ContentDelivery {
         return undefined
       }
     })
-    const all = await Promise.all(buttons)
-    return all.filter(b => b !== undefined) as cms.Button[]
+    return buttons.filter(b => b !== undefined) as cms.Button[]
   }
 
   public async fromReference(
