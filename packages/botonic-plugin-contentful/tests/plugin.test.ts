@@ -1,6 +1,6 @@
 import BotonicPluginContentful, {
-  Contentful,
   ErrorReportingCMS,
+  LogCMS,
   multiEnvironmentFactory,
 } from '../src'
 import {
@@ -14,11 +14,18 @@ import {
 import { MultiContextCms } from '../src/cms/cms-multilocale'
 import { TEST_CAROUSEL_MAIN_ID } from './contentful/contents/carousel.test'
 
-test('TEST plugin', () => {
-  const sut = new BotonicPluginContentful(testContentfulOptions())
+test('TEST plugin with logCalls', async () => {
+  const sut = new BotonicPluginContentful(
+    testContentfulOptions({ logCalls: true })
+  )
   expect(sut.cms).toBeInstanceOf(ErrorReportingCMS)
   const contentful = (sut.cms as ErrorReportingCMS).cms
-  expect(contentful).toBeInstanceOf(Contentful)
+  expect(contentful).toBeInstanceOf(LogCMS)
+
+  const carousel = await sut.cms.carousel(TEST_CAROUSEL_MAIN_ID, {
+    locale: TEST_DEFAULT_LOCALE,
+  })
+  expect(carousel.common.id).toEqual(TEST_CAROUSEL_MAIN_ID)
 })
 
 test('INTEGRATION TEST plugin with contentfulFactory', async () => {
