@@ -3,6 +3,7 @@ import { KeywordsOptions, Locale, Normalizer, StemmingBlackList } from './nlp'
 import { Search } from './search'
 import { BotonicMsgConverter } from './render'
 import { Contentful } from './contentful/cms-contentful'
+import { LogCMS } from './cms'
 
 interface NlpOptions {
   blackList: { [locale: string]: StemmingBlackList[] }
@@ -54,6 +55,8 @@ export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
    * False by default
    */
   resumeErrors?: boolean
+
+  logCalls?: boolean
 }
 
 export default class BotonicPluginContentful {
@@ -71,7 +74,15 @@ export default class BotonicPluginContentful {
       this.cms = optionsAny.cms
     } else {
       const contOptions = opt as ContentfulOptions
-      const factory = contOptions.contentfulFactory || (o => new Contentful(o))
+      const factory =
+        contOptions.contentfulFactory ||
+        (o => {
+          let cms: cms.CMS = new Contentful(o)
+          if (contOptions.logCalls) {
+            cms = new LogCMS(cms, contOptions)
+          }
+          return cms
+        })
       this.cms = factory(contOptions)
     }
     this.cms = new cms.ErrorReportingCMS(this.cms)
