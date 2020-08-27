@@ -1,11 +1,11 @@
 import * as contentful from 'contentful'
 import { DeliveryApi } from '../index'
-import { ContentType, CmsException } from '../../cms'
 import * as cms from '../../cms'
+import { CmsException, ContentType } from '../../cms'
 import { CarouselFields } from './carousel'
 import {
-  ContentfulEntryUtils,
   CommonEntryFields,
+  ContentfulEntryUtils,
   ContentWithNameFields,
 } from '../delivery-api'
 import { TextFields } from './text'
@@ -15,15 +15,16 @@ import { QueueFields } from './queue'
 import { HourRangeFields, ScheduleFields } from './schedule'
 import { isOfType } from '../../util/enums'
 import { TopContentType } from '../../cms/cms'
+import { asyncMap } from '../../util/async'
+import { ContentDelivery } from '../content-delivery'
 
-export class ButtonDelivery {
+export class ButtonDelivery extends ContentDelivery {
   public static BUTTON_CONTENT_TYPE = 'button'
   private static PAYLOAD_CONTENT_TYPE = 'payload'
 
-  constructor(
-    private readonly delivery: DeliveryApi,
-    private readonly resumeErrors: boolean
-  ) {}
+  constructor(delivery: DeliveryApi, resumeErrors: boolean) {
+    super(cms.ContentType.BUTTON, delivery, resumeErrors)
+  }
 
   public async button(id: string, context: cms.Context): Promise<cms.Button> {
     const entry = await this.delivery.getEntry<ButtonFields>(id, context)
@@ -39,14 +40,8 @@ export class ButtonDelivery {
         return await this.fromReference(entry, context)
       } catch (e) {
         // will fail if a draft content is referenced
-        if (this.resumeErrors) {
-          console.error(
-            `Skipping failed reference to content ${entry.sys.id}`,
-            e
-          )
-          return undefined
-        }
-        throw e
+        this.logOrThrow(`Loading reference to content ${entry.sys.id}`, e)
+        return undefined
       }
     })
     const all = await Promise.all(buttons)
@@ -128,22 +123,35 @@ export class ButtonDelivery {
     return new cms.ContentCallback(modelType, entry.sys.id)
   }
 
-  private getTargetCallback(target: ButtonTarget): cms.Callback {
+  private getTargetCallback(
+    target: ButtonTarget,
+    context: cms.Context
+  ): cms.Callback {
     const model = ContentfulEntryUtils.getContentModel(target) as string
-    switch (model) {
-      case ContentType.URL: {
-        const urlFields = target as contentful.Entry<UrlFields>
-        return cms.Callback.ofUrl(urlFields.fields.url || '')
+    try {
+      switch (model) {
+        case ContentType.URL: {
+          const urlFields = target as contentful.Entry<UrlFields>
+          if (!urlFields.fields.url && context.ignoreFallbackLocale) {
+            return cms.Callback.empty()
+          }
+          return cms.Callback.ofUrl(urlFields.fields.url || '')
+        }
+        case ButtonDelivery.PAYLOAD_CONTENT_TYPE: {
+          const payloadFields = target as contentful.Entry<PayloadFields>
+          return cms.Callback.ofPayload(payloadFields.fields.payload)
+        }
       }
-      case ButtonDelivery.PAYLOAD_CONTENT_TYPE: {
-        const payloadFields = target as contentful.Entry<PayloadFields>
-        return cms.Callback.ofPayload(payloadFields.fields.payload)
+      if (isOfType(model, TopContentType)) {
+        return new cms.ContentCallback(model, target.sys.id)
       }
+      throw new Error('Unexpected type: ' + model)
+    } catch (e) {
+      throw new CmsException(
+        `Error delivering button with id ${target.sys.id}`,
+        e
+      )
     }
-    if (isOfType(model, TopContentType)) {
-      return new cms.ContentCallback(model, target.sys.id)
-    }
-    throw new Error('Unexpected type: ' + model)
   }
 }
 

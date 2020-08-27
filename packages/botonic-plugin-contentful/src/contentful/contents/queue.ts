@@ -1,7 +1,7 @@
 import { Context } from '../../cms'
 import * as cms from '../../cms'
 import * as contentful from 'contentful'
-import { ContentDelivery } from '../content-delivery'
+import { TopContentDelivery } from '../content-delivery'
 import {
   CommonEntryFields,
   DeliveryApi,
@@ -9,7 +9,7 @@ import {
 } from '../delivery-api'
 import { ScheduleFields, ScheduleDelivery } from './schedule'
 
-export class QueueDelivery extends ContentDelivery {
+export class QueueDelivery extends TopContentDelivery {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1
 
   constructor(

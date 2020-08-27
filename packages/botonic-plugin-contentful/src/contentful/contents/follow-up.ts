@@ -1,7 +1,7 @@
 import * as cms from '../../cms'
 import { CmsException, ContentType } from '../../cms'
 import { Entry } from 'contentful'
-import { ContentDelivery } from '../content-delivery'
+import { TopContentDelivery } from '../content-delivery'
 import { TextDelivery, TextFields } from './text'
 import { CarouselDelivery } from './carousel'
 import { ImageDelivery, ImageFields } from './image'
@@ -13,7 +13,7 @@ import {
 } from '../delivery-api'
 import { StartUpDelivery, StartUpFields } from './startup'
 
-export class DeliveryWithFollowUp extends ContentDelivery {
+export class DeliveryWithFollowUp extends TopContentDelivery {
   followUp: FollowUpDelivery | undefined
 
   // cannot be set in constructor because there's a circular dependency Model <-> Followup

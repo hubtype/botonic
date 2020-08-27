@@ -1,7 +1,7 @@
 import { Entry } from 'contentful'
 import { DEFAULT_CONTEXT, ContentType, ScheduleContent } from '../../cms'
 import * as time from '../../time'
-import { ContentDelivery } from '../content-delivery'
+import { TopContentDelivery } from '../content-delivery'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
@@ -9,7 +9,7 @@ import {
   DeliveryApi,
 } from '../delivery-api'
 
-export class ScheduleDelivery extends ContentDelivery {
+export class ScheduleDelivery extends TopContentDelivery {
   static REFERENCES_INCLUDE = 2
 
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
@@ -90,12 +90,10 @@ export class ScheduleDelivery extends ContentDelivery {
         const date = new Date(+dateStr[0], +dateStr[1] - 1, +dateStr[2])
         schedule.addException(date, timeRanges)
       } catch (e) {
-        console.error(
-          `Error in Schedule Exception '${exception.sys.id}' (name '${exception.fields.name}')`
+        this.logOrThrow(
+          `Loading Schedule Exception '${exception.sys.id}' (name '${exception.fields.name}')`,
+          e
         )
-        if (!this.resumeErrors) {
-          throw e
-        }
       }
     }
   }
