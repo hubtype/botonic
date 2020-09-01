@@ -19,6 +19,8 @@ import {
 import { Context } from './context'
 import { CmsException } from './exceptions'
 import { SearchCandidate } from '../search'
+import { MultiError } from 'async-parallel'
+import { reduceMultiError } from '../util/async'
 
 export class ErrorReportingCMS implements CMS {
   exceptionWrapper = new ContentfulExceptionWrapper('CMS')
@@ -179,7 +181,14 @@ export class ContentfulExceptionWrapper {
     if (this.logErrors) {
       console.error(exception.toString())
       if (this.logStack) {
-        console.error('due to', contentfulError)
+        if (contentfulError instanceof MultiError) {
+          console.error('due to:')
+          for (const e of reduceMultiError(contentfulError)) {
+            console.error(e.message)
+          }
+        } else {
+          console.error('due to', contentfulError)
+        }
       }
     }
     throw exception
