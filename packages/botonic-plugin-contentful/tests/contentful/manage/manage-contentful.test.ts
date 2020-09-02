@@ -80,7 +80,7 @@ describe('ManageContentful fields', () => {
       if (e instanceof CmsException) {
         // eslint-disable-next-line jest/no-try-expect
         expect(e.message).toInclude(
-          "Error calling ManageCms.updateField on 'button' with id '627QkyJrFo3grJryj0vu6L'."
+          "Error calling ManageCms.updateField on 'button' with locale 'en' with id '627QkyJrFo3grJryj0vu6L'."
         )
         // eslint-disable-next-line jest/no-try-expect
         expect(e.reason.message).toInclude('Cannot overwrite')
