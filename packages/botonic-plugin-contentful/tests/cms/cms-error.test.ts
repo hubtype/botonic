@@ -1,5 +1,11 @@
-import { instance, mock, when } from 'ts-mockito'
-import { Carousel, CmsException, DummyCMS, ErrorReportingCMS } from '../../src'
+import { anything, instance, mock, when } from 'ts-mockito'
+import {
+  Carousel,
+  CmsException,
+  DummyCMS,
+  ErrorReportingCMS,
+  SPANISH,
+} from '../../src'
 import { testContentful } from '../contentful/contentful.helper'
 
 test('TEST: ErrorReportingCMS integration test', async () => {
@@ -11,7 +17,7 @@ test('TEST: ErrorReportingCMS integration test', async () => {
   })
 })
 
-test('TEST: ErrorReportingCMS carousel delivery failed', async () => {
+test('TEST: ErrorReportingCMS content delivery failed', async () => {
   const mockCms = mock(DummyCMS)
   const error = new Error('mock error')
   when(mockCms.carousel('id1', undefined)).thenReject(error)
@@ -25,6 +31,21 @@ test('TEST: ErrorReportingCMS carousel delivery failed', async () => {
     .catch((error2: any) => {
       expect(error2).toEqual(
         new CmsException("Error calling CMS.carousel with id 'id1'.", error)
+      )
+    })
+
+  when(mockCms.text('id1', anything())).thenReject(error)
+  await sut
+    .text('id1', { locale: SPANISH })
+    .then(text => {
+      throw Error('should have thrown')
+    })
+    .catch((error2: any) => {
+      expect(error2).toEqual(
+        new CmsException(
+          "Error calling CMS.text with locale 'es' with id 'id1'.",
+          error
+        )
       )
     })
 })
