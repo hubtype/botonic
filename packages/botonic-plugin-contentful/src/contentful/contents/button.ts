@@ -147,7 +147,7 @@ export class ButtonDelivery extends ContentDelivery {
       throw new Error('Unexpected type: ' + model)
     } catch (e) {
       throw new CmsException(
-        `Error delivering button with id ${target.sys.id}`,
+        `Error delivering button with id '${target.sys.id}'`,
         e
       )
     }
