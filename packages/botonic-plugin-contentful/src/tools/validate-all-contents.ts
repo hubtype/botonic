@@ -1,5 +1,5 @@
 import { CMS, ContextWithLocale, TOP_CONTENT_TYPES } from '../cms'
-import * as Parallel from 'async-parallel'
+import { asyncEach } from '../util/async'
 
 export class ContentsValidator {
   constructor(readonly cms: CMS) {}
@@ -12,12 +12,12 @@ export class ContentsValidator {
    * - There's a bug on the CMS plugin
    */
   async validateAllTopContents(context: ContextWithLocale): Promise<void> {
-    // topContents will internally limit concurrency
-    const concurrency = context.concurrency && 1
-    await Parallel.each(
+    await asyncEach(
+      context,
       TOP_CONTENT_TYPES,
       ct => this.cms.topContents(ct, context),
-      concurrency
+      // topContents will internally manage concurrency
+      1
     )
   }
 }

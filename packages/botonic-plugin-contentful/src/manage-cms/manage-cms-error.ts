@@ -19,7 +19,7 @@ export class ErrorReportingManageCms implements ManageCms {
   ): Promise<void> {
     return this.manageCms
       .updateField(context, contentId, fieldType, value)
-      .catch(this.handleError('updateField', contentId))
+      .catch(this.handleError('updateField', context, contentId))
   }
 
   copyField<T extends cms.Content>(
@@ -31,11 +31,12 @@ export class ErrorReportingManageCms implements ManageCms {
   ): Promise<void> {
     return this.manageCms
       .copyField(context, contentId, field, fromLocale, onlyIfTargetEmpty)
-      .catch(this.handleError('copyField', contentId))
+      .catch(this.handleError('copyField', context, contentId))
   }
 
   private handleError(
     method: string,
+    context?: ManageContext,
     contentId?: ContentId
   ): (reason: any) => never {
     return (reason: any) => {
@@ -43,6 +44,7 @@ export class ErrorReportingManageCms implements ManageCms {
         reason,
         method,
         contentId?.model,
+        context,
         contentId?.id
       )
     }
