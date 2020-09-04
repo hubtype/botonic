@@ -56,6 +56,8 @@ module.exports = {
     '@typescript-eslint/naming-convention': 'warn',
     'consistent-return': 'error',
     'jest/no-export': 'warn',
+    // https://github.com/jest-community/eslint-plugin-jest/issues/657
+    'jest/no-jasmine-globals': 'warn',
     'no-empty': 'warn',
     'prefer-const': ['error', { destructuring: 'all' }],
 

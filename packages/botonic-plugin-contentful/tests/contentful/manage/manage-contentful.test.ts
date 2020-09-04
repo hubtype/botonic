@@ -75,14 +75,14 @@ describe('ManageContentful fields', () => {
         rndStr()
       )
     } catch (e) {
-      // eslint-disable-next-line jest/no-try-expect
+      // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
       expect(e).toBeInstanceOf(CmsException)
       if (e instanceof CmsException) {
-        // eslint-disable-next-line jest/no-try-expect
+        // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
         expect(e.message).toInclude(
           "Error calling ManageCms.updateField on 'button' with locale 'en' with id '627QkyJrFo3grJryj0vu6L'."
         )
-        // eslint-disable-next-line jest/no-try-expect
+        // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
         expect(e.reason.message).toInclude('Cannot overwrite')
       }
     }

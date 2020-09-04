@@ -4,8 +4,8 @@ import { ErrorReportingTrackStorage, Track } from '../../src/domain/track'
 import DoneCallback = jest.DoneCallback
 import { TrackException } from '../../src/domain/exceptions'
 
-// next line avoids refactor as per https://github.com/jest-community/eslint-plugin-jest/blob/master/docs/rules/no-test-callback.md
-// eslint-disable-next-line jest/no-test-callback
+// next line avoids refactor as per https://github.com/jest-community/eslint-plugin-jest/blob/master/docs/rules/no-done-callback.md
+// eslint-disable-next-line jest/no-done-callback
 test('TEST: ErrorReportingCMS write rejected', async (done: DoneCallback) => {
   const mockStorage = mock(DynamoTrackStorage)
   const error = new Error('mock error')

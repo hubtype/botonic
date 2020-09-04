@@ -13,7 +13,7 @@ describe('Text Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('Text with 1 button ', () => {
+  test('Text with 1 button', () => {
     const sut = (
       <Text>
         Text with 1 button
@@ -26,7 +26,7 @@ describe('Text Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('Text with N button ', () => {
+  test('Text with N button', () => {
     const sut = (
       <Text>
         Text with N button
@@ -44,7 +44,7 @@ describe('Text Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('N Text with N button ', () => {
+  test('N Text with N button', () => {
     const sut = (
       <>
         {[1, 2].map((e, i) => {
@@ -60,7 +60,7 @@ describe('Text Component', () => {
     const tree = renderToJSON(sut)
     expect(tree).toMatchSnapshot()
   })
-  test('Text with 1 reply ', () => {
+  test('Text with 1 reply', () => {
     const sut = (
       <Text>
         Text with 1 reply
@@ -73,7 +73,7 @@ describe('Text Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('Text with N replies ', () => {
+  test('Text with N replies', () => {
     const sut = (
       <Text>
         Text with N replies
@@ -91,7 +91,7 @@ describe('Text Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  test('N Text with N replies ', () => {
+  test('N Text with N replies', () => {
     const sut = (
       <>
         {[1, 2].map((e, i) => {

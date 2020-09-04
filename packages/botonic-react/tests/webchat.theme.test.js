@@ -61,7 +61,7 @@ describe('getThemeProperty', () => {
   })
 })
 
-describe('Updating webchat properties with settings ', () => {
+describe('Updating webchat properties with settings', () => {
   it('normalizes correctly to nested theme properties', () => {
     const newTheme = { brand: { color: 'red' }, userInput: { enable: true } }
     const newBlockInputs = [

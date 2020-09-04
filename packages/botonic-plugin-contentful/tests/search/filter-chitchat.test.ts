@@ -46,7 +46,7 @@ test.each<any>([
   }
 )
 
-test('TEST treatChitChat: chitchat and other keywords detected', async () => {
+test('TEST: treatChitChat: chitchat and other keywords detected', async () => {
   const keywords = keywordsWithMockCms(
     [
       chitchatContent(['hey', 'buenos dias']),
@@ -106,7 +106,7 @@ test.each<any>([
   }
 )
 
-test('TEST treatChitChat: no chitchat detected', async () => {
+test('TEST: treatChitChat: no chitchat detected', async () => {
   const keywords = keywordsWithMockCms(
     [
       chitchatContent(['hey']),
@@ -134,7 +134,7 @@ test('TEST treatChitChat: no chitchat detected', async () => {
   expect(filtered).toBe(contents)
 })
 
-test('TEST treatChitChat: keyword is a stopword', async () => {
+test('TEST: treatChitChat: keyword is a stopword', async () => {
   const keywords = keywordsWithMockCms(
     [
       chitchatContent(['hola']),

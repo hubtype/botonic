@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react-hooks'
 import { renderUseWebchatHook } from '../helpers/test-utils'
 
-describe('TEST: useWebchat ', () => {
+describe('TEST: useWebchat', () => {
   const testMessage = {
     id: '837da73-899',
     type: 'text',

@@ -4,7 +4,7 @@ import { MultiEnvironmentFactory } from '../../src/contentful/multi-environment'
 import { ContentfulOptions, Locale } from '../../src'
 import { instance, mock } from 'ts-mockito'
 
-test('TEST MultiEnvironmentFactory', () => {
+test('TEST: MultiEnvironmentFactory', () => {
   // Arrange
   const opts = testContentfulOptions()
   const cmsBySpaceId: {
@@ -42,7 +42,7 @@ test('TEST MultiEnvironmentFactory', () => {
   expect(sut.get(opts, undefined)).toBe(defaultCMS)
 })
 
-test('TEST MultiEnvironmentFactory keeps functions in options', () => {
+test('TEST: MultiEnvironmentFactory keeps functions in options', () => {
   // Arrange
   const cms = testContentful()
   class MyContentfulOptions implements ContentfulOptions {

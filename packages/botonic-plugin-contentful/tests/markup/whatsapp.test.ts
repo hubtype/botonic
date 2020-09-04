@@ -1,7 +1,7 @@
 import { MarkupType, WhatsApp } from '../../src/markup'
 import { createMarkUp } from '../../src/markup/factories'
 
-test('TEST whatsapp', () => {
+test('TEST: whatsapp', () => {
   const tokens = createMarkUp(MarkupType.MARKDOWN).parse(`# *italics* header
 * list with __bold__
 Escaped \\*`)
