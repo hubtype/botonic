@@ -8,6 +8,7 @@ export enum ContentFieldType {
   SUBTITLE = 'Subtitle',
   BUTTONS = 'Buttons',
   IMAGE = 'Image',
+  URL = 'URL',
 }
 
 export enum ContentFieldValueType {

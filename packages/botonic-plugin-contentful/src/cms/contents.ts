@@ -2,7 +2,7 @@ import * as time from '../time'
 import { Callback, TopContentId } from './callback'
 import { SearchableBy } from './fields'
 import { ContentType, MessageContentType, TopContentType } from './cms'
-import { shallowClone } from '../util/objects'
+import { shallowClone, Stringable } from '../util/objects'
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -27,7 +27,7 @@ export class Asset {
 /**
  * Any content deliverable from a CMS
  */
-export abstract class Content {
+export abstract class Content implements Stringable {
   protected constructor(readonly contentType: ContentType) {}
 
   /** @return message if any issue detected */
@@ -36,14 +36,25 @@ export abstract class Content {
   }
 
   abstract get id(): string
+
   abstract get name(): string
 
+  toString(): string {
+    return `'${this.id}/${this.name}'`
+  }
+
   static validateContents(contents: Content[]): string | undefined {
-    const invalids = contents.map(c => c.validate()).filter(v => v)
-    if (invalids.length == 0) {
+    return this.mergeValidations(contents.map(c => c.validate()))
+  }
+
+  static mergeValidations(
+    validations: (string | undefined)[]
+  ): string | undefined {
+    validations = validations.filter(v => v)
+    if (validations.length == 0) {
       return undefined
     }
-    return invalids.join('. ')
+    return validations.join('. ')
   }
 }
 
@@ -68,6 +79,10 @@ export abstract class TopContent extends Content {
 
   get contentId(): TopContentId {
     return new TopContentId(this.contentType, this.id)
+  }
+
+  isSearchable(): boolean {
+    return this.common.keywords.length > 0 || Boolean(this.common.searchableBy)
   }
 }
 
@@ -107,6 +122,13 @@ export abstract class MessageContent extends TopContent {
     }
     const followUp = this.common.followUp.cloneWithFollowUpLast(lastContent)
     return this.cloneWithFollowUp(followUp)
+  }
+
+  validate(): string | undefined {
+    if (this.isSearchable() && !this.common.shortText) {
+      return `Content ${this.toString()} is searchable but has no shortText`
+    }
+    return undefined
   }
 }
 
@@ -272,7 +294,16 @@ export class Text extends MessageContent {
   }
 
   validate(): string | undefined {
-    return Content.validateContents(this.buttons)
+    const noText =
+      this.isSearchable() && !this.text
+        ? `Content ${this.toString()} is searchable but has no text`
+        : undefined
+
+    return Content.mergeValidations([
+      noText,
+      super.validate(),
+      Content.validateContents(this.buttons),
+    ])
   }
 
   cloneWithButtons(buttons: Button[]): this {

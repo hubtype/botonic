@@ -67,8 +67,9 @@ export class ButtonDelivery extends ContentDelivery {
     const entry = await this.delivery.getEntry(id, context)
     const entryType = ContentfulEntryUtils.getContentModel(entry)
     if (isOfType(entryType, TopContentType)) {
-      return ButtonDelivery.fromContentReference(
-        entry as contentful.Entry<CommonEntryFields>
+      return this.fromContentReference(
+        entry as contentful.Entry<CommonEntryFields>,
+        context
       )
     }
     if (entryType === ButtonDelivery.BUTTON_CONTENT_TYPE) {
@@ -95,12 +96,14 @@ export class ButtonDelivery extends ContentDelivery {
   }
 
   // TODO move to a new CmsUtils.buttonToCallback(cms.ContentCallback)?
-  private static fromContentReference(
-    entry: contentful.Entry<CommonEntryFields>
+  private fromContentReference(
+    entry: contentful.Entry<CommonEntryFields>,
+    context: cms.Context
   ): cms.Button {
     const fields = entry.fields
     let text = fields.shortText
-    if (!text) {
+    const fixMissingData = context.fixMissingData ?? true
+    if (!text && fixMissingData) {
       text = fields.name
       console.error(`Text ${text} without short text`)
     }
