@@ -20,6 +20,12 @@ export interface Context {
    * If not specified, the contents will use as much parallelism as possible.
    */
   concurrency?: number
+
+  /**
+   * Eg. If a button cannot show any text because the content has no shortText, show its name
+   * True by default
+   */
+  fixMissingData?: boolean
 }
 
 export interface ContextWithLocale extends Context {
