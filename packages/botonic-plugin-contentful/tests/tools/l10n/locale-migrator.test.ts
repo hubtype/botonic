@@ -7,7 +7,7 @@ import { SpaceExport } from '../../../src/contentful/export/space-export'
 
 const FIXTURES_BASE = path.resolve(__dirname, '__fixtures__/space-export')
 describe('LocaleMigrator', () => {
-  test('TEST LocaleMigrator some fields are falsy', () => {
+  test('TEST: LocaleMigrator some fields are falsy', () => {
     const fromFile = FIXTURES_BASE + '/entries_hour_range.json'
     const toFile = '/tmp/entries_hour_range.json'
     const expectedFile = FIXTURES_BASE + '/entries_hour_range_expected.json'
@@ -26,7 +26,7 @@ describe('LocaleMigrator', () => {
     expect(newExport).toEqual(expected)
   })
 
-  test('TEST LocaleMigrator/Remover es->en', () => {
+  test('TEST: LocaleMigrator/Remover es->en', () => {
     const fromFile = FIXTURES_BASE + '/entries_element_es_en_pt.json'
     const toFile = '/tmp/entries_element_es_en_to_en.json'
     const expectedFile =
@@ -46,7 +46,7 @@ describe('LocaleMigrator', () => {
     expect(newExport).toEqual(expected)
   })
 
-  test('TEST LocaleMigrator/Remover en->nl', () => {
+  test('TEST: LocaleMigrator/Remover en->nl', () => {
     const fromFile = FIXTURES_BASE + '/entries_element_es_en_pt.json'
     const toFile = '/tmp/entries_element_with_es_en_pt_to_nl.json'
     const expectedFile =
@@ -66,7 +66,7 @@ describe('LocaleMigrator', () => {
     expect(newExport).toEqual(expected)
   })
 
-  test('TEST LocaleMigrator/Remover en->en', () => {
+  test('TEST: LocaleMigrator/Remover en->en', () => {
     const fromFile = FIXTURES_BASE + '/entries_element_es_en_pt.json'
     const toFile = '/tmp/entries_element_with_es_en_pt_to_en.json'
     const expectedFile =

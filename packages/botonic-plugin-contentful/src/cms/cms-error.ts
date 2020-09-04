@@ -23,6 +23,7 @@ import { MultiError } from 'async-parallel'
 import { reduceMultiError } from '../util/async'
 
 export class ErrorReportingCMS implements CMS {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   exceptionWrapper = new ContentfulExceptionWrapper('CMS')
   constructor(readonly cms: CMS) {}
 

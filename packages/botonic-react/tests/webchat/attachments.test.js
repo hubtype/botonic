@@ -6,7 +6,7 @@ import {
 
 import { toMB } from '../helpers/test-utils'
 
-describe('TEST: attachments ', () => {
+describe('TEST: attachments', () => {
   it('Gets correctly the attachment type', () => {
     const mimeType = 'video/mp4'
     const sut = getMediaType(mimeType)

@@ -1,6 +1,6 @@
 import { DateRange } from '../../src/time'
 
-test('TEST DateRange.contains', () => {
+test('TEST: DateRange.contains', () => {
   const from = new Date()
   const sut = new DateRange('name', from, new Date(from.getTime() + 1000))
 

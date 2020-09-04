@@ -14,6 +14,7 @@ test('TEST: contentful delivery checks that we get the requested message type', 
     if (model == ContentType.IMAGE) {
       await content
     } else {
+      // eslint-disable-next-line jest/no-conditional-expect
       await expect(content).rejects.toThrow()
     }
   }

@@ -53,7 +53,7 @@ test.each<any>(FALLBACK_TESTS)(
   }
 )
 
-test('TEST: ignoreFallbackLocale with a carousel with buttons to other carousels ', async () => {
+test('TEST: ignoreFallbackLocale with a carousel with buttons to other carousels', async () => {
   const contentful = testContentful()
   const carousel = await contentful.carousel(TEST_CAROUSEL_MAIN_ID, {
     locale: SPANISH,

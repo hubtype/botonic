@@ -14,7 +14,7 @@ import {
 import { MultiContextCms } from '../src/cms/cms-multilocale'
 import { TEST_CAROUSEL_MAIN_ID } from './contentful/contents/carousel.test'
 
-test('TEST plugin with logCalls', async () => {
+test('TEST: plugin with logCalls', async () => {
   const sut = new BotonicPluginContentful(
     testContentfulOptions({ logCalls: true })
   )

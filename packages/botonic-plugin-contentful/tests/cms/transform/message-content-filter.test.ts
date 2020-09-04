@@ -11,7 +11,7 @@ import {
 } from '../../../src/cms/test-helpers'
 import { testContext } from '../../contentful/contentful.helper'
 
-test('TEST MessageContentFilter filtering all types except one', async () => {
+test('TEST: MessageContentFilter filtering all types except one', async () => {
   let cloningOrder = 0
   const context = testContext()
   const filter = {

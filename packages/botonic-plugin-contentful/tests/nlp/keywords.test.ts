@@ -55,7 +55,7 @@ function testFindKeywords(
   }
 }
 
-test('TEST findCandidatesWithKeywordsAt matches tokens instead of stems if match is longer', () => {
+test('TEST: findCandidatesWithKeywordsAt matches tokens instead of stems if match is longer', () => {
   const normalizer = new Normalizer()
   const parser = new KeywordsParser<string>(
     SPANISH,

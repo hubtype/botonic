@@ -12,7 +12,7 @@ const MARCH = 2
 const APRIL = 3
 const NOVEMBER = 10
 
-test('TEST ScheduleAlwaysOn', () => {
+test('TEST: ScheduleAlwaysOn', () => {
   const sut = new ScheduleAlwaysOn()
   expect(sut.contains(new Date())).toEqual(true)
 })
@@ -70,7 +70,7 @@ test('TEST: HourAndMinute.compareToDate', () => {
   expect(time.compareToDate(date)).toEqual(1)
 })
 
-test('TEST: timeInThisTimezone ', () => {
+test('TEST: timeInThisTimezone', () => {
   const sut = new Schedule('Europe/London')
 
   const date = cetDate(2019, 5, 29, 0, 51)
@@ -184,7 +184,7 @@ test('TEST: addException end day', () => {
   expect(sut.contains(nyDate(2019, MARCH, 30, 23, 15))).toBeFalsy()
 })
 
-test('TEST: time.toString ', () => {
+test('TEST: time.toString', () => {
   const time = new HourAndMinute(13, 45)
   expect(time.toString()).toEqual('13:45h')
 })

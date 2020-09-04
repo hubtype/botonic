@@ -1,10 +1,10 @@
 import { preprocess, rootLocale } from '../../src/nlp/locales'
 
-test('TEST preprocess', () => {
+test('TEST: preprocess', () => {
   expect(preprocess('es_ES', ' ÑÇáü òL·l ')).toEqual('ncau ol·l')
 })
 
-test('TEST rootLocale', () => {
+test('TEST: rootLocale', () => {
   expect(rootLocale('es_ES')).toEqual('es')
   expect(rootLocale('en')).toEqual('en')
 })
