@@ -91,13 +91,17 @@ export class StringFieldImporter {
   constructor(readonly cms: ManageCms, readonly context: ManageContext) {}
 
   async consume(record: Record): Promise<void> {
-    if (!isOfType(record.Model, BotonicContentType)) {
-      console.error(`Bad model ${record.Model}`)
+    if (!isOfType(record.Model, ContentType)) {
+      console.error(
+        `Bad model '${String(record.Model)}'. Should be one of ${String(
+          Object.values(BotonicContentType)
+        )}`
+      )
       return
     }
     const field = CONTENT_FIELDS.get(record.Field)
     if (!field) {
-      console.error(`Bad field ${record.Field}`)
+      console.error(`Bad field '${record.Field}'`)
       return
     }
     const id = new cms.ContentId(record.Model, record.Id)
@@ -140,7 +144,7 @@ export class ReferenceFieldDuplicator {
       [ContentType.ELEMENT]: [ContentFieldType.IMAGE],
     }
     for (const contentType of Object.keys(fields)) {
-      console.log(`***Duplicating contents of type '${contentType}'`)
+      console.log(`***Duplicating reference field of type '${contentType}'`)
       for (const fieldType of (fields as any)[contentType]) {
         console.log(` **Duplicating '${contentType}' fields`)
         await this.duplicate(

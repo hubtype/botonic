@@ -7,9 +7,10 @@ import {
   Element,
   StartUp,
   TopContent,
+  Url,
 } from '../../index'
 import { Locale } from '../../nlp'
-import { Text } from '../../cms'
+import { Text, ContentType } from '../../cms'
 import * as stream from 'stream'
 import * as fs from 'fs'
 import { promisify } from 'util'
@@ -19,7 +20,7 @@ import { ContentField, ContentFieldType } from '../../manage-cms/fields'
 
 const finished = promisify(stream.finished)
 
-class I18nField {
+export class I18nField {
   constructor(readonly name: ContentFieldType, readonly value: string) {}
 }
 
@@ -39,8 +40,11 @@ export const skipEmptyStrings = (str: string) => Boolean(str && str.trim())
 export class CsvExport {
   private toFields: ContentToCsvLines
 
-  constructor(private readonly options: CsvExportOptions) {
-    this.toFields = new ContentToCsvLines(options)
+  constructor(
+    private readonly options: CsvExportOptions,
+    postprocessor = (field: I18nField) => field
+  ) {
+    this.toFields = new ContentToCsvLines(options, postprocessor)
   }
 
   static sortRows(a: string[], b: string[]): number {
@@ -68,8 +72,7 @@ export class CsvExport {
   }
 
   async *generate(cms: CMS, from: Locale): AsyncGenerator<CsvLine> {
-    console.error('TODO: pending to export URL models')
-    for (const model of BOTONIC_CONTENT_TYPES) {
+    for (const model of [...BOTONIC_CONTENT_TYPES, ContentType.URL]) {
       console.log(`Exporting contents of type ${model}`)
       const contents = await cms.contents(model, {
         locale: from,
@@ -90,11 +93,17 @@ export class CsvExport {
 }
 
 export class ContentToCsvLines {
-  constructor(private readonly options: CsvExportOptions) {}
+  constructor(
+    private readonly options: CsvExportOptions,
+    private readonly postprocessor?: (field: I18nField) => I18nField
+  ) {}
 
   getCsvLines(content: Content): CsvLine[] {
     const columns = [content.contentType, content.name, content.id]
     let fields = this.getFields(content)
+    if (this.postprocessor) {
+      fields = fields.map(this.postprocessor)
+    }
     if (this.options.stringFilter) {
       fields = fields.filter(f => this.options.stringFilter!(f.value))
     }
@@ -118,6 +127,11 @@ export class ContentToCsvLines {
       return [
         new I18nField(ContentFieldType.TITLE, content.title),
         new I18nField(ContentFieldType.SUBTITLE, content.subtitle),
+      ]
+    } else if (content instanceof Url) {
+      return [
+        ...this.getCommonFields(content.common),
+        new I18nField(ContentFieldType.URL, content.url),
       ]
     } else if (content instanceof TopContent) {
       return this.getCommonFields(content.common)

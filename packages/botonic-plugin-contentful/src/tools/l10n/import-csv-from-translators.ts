@@ -29,7 +29,7 @@ export enum ImportType {
 
 if (process.argv.length < 10 || process.argv[2] == '--help') {
   console.error(
-    `Usage: space_id environment access_token locale filename [${Object.values(
+    `Usage: space_id environment delivery_token mgmnt_token locale filename [${Object.values(
       ImportType
     ).join('|')}] duplicate_references`
   )

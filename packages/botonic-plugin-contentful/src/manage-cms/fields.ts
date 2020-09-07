@@ -60,7 +60,7 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     new ContentField(ContentFieldType.SUBTITLE, 'subtitle', ContentFieldValueType.STRING),
     new ContentField(ContentFieldType.BUTTONS, 'buttons', ContentFieldValueType.REFERENCE_ARRAY),
     new ContentField(ContentFieldType.IMAGE, 'pic', ContentFieldValueType.ASSET),
-
+    new ContentField(ContentFieldType.URL, 'url', ContentFieldValueType.STRING),
   ]))
 /* eslint-enable prettier/prettier*/
 

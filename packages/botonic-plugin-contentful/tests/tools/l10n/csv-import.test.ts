@@ -22,18 +22,18 @@ function ctxt(ctx: Partial<ManageContext>): ManageContext {
   return { ...ctx, preview: false } as ManageContext
 }
 
-test('TEST: CsvImport read text & carousel', async () => {
+test('TEST: CsvImport read text, URL & carousel', async () => {
   const mockFieldImporter = mock<StringFieldImporter>()
   const readLines: Record[] = []
   when(mockFieldImporter.consume(anything())).thenCall((record: Record) => {
     readLines.push(record)
   })
-  const importer = new CsvImport(instance(mockFieldImporter))
+  const importer = new CsvImport(instance(mockFieldImporter), undefined)
   // running for ENGLISH to test contents with empty fields
   await importer.import(`${FIXTURES_BASE}/contentful_es-pl.csv`)
-  expect(readLines.length).toEqual(3)
+  expect(readLines.length).toEqual(5)
   expect(readLines[0]).toEqual({
-    Model: 'text',
+    Model: cms.ContentType.TEXT,
     Code: 'POST_FAQ1',
     Id: 'id1',
     Field: ContentFieldType.SHORT_TEXT,
@@ -41,7 +41,7 @@ test('TEST: CsvImport read text & carousel', async () => {
     to: 'válor1',
   } as Record)
   expect(readLines[1]).toEqual({
-    Model: 'text',
+    Model: cms.ContentType.TEXT,
     Code: 'POST_FAQ1',
     Id: 'id1',
     Field: ContentFieldType.KEYWORDS,
@@ -49,12 +49,28 @@ test('TEST: CsvImport read text & carousel', async () => {
     to: 'kw1;hola,amigo',
   } as Record)
   expect(readLines[2]).toEqual({
-    Model: 'carousel',
+    Model: cms.ContentType.CAROUSEL,
     Code: 'POST_FAQ2',
     Id: 'id2',
     Field: ContentFieldType.TEXT,
     from: 'from',
     to: 'válor2',
+  } as Record)
+  expect(readLines[3]).toEqual({
+    Model: cms.ContentType.URL,
+    Code: 'URL1',
+    Id: 'id3',
+    Field: ContentFieldType.SHORT_TEXT,
+    from: 'from',
+    to: 'st1',
+  } as Record)
+  expect(readLines[4]).toEqual({
+    Model: cms.ContentType.URL,
+    Code: 'URL1',
+    Id: 'id3',
+    Field: ContentFieldType.URL,
+    from: 'http://url1',
+    to: 'http://url2',
   } as Record)
 }, 10000)
 
