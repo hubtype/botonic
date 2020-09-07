@@ -138,6 +138,20 @@ declare module '@nlpjs/lang-it/src/stemmer-it' {
   export = StemmerIt
 }
 
+declare module '@nlpjs/lang-fr/src/tokenizer-fr' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerFr extends Tokenizer {}
+  export = TokenizerFr
+}
+
+declare module '@nlpjs/lang-fr/src/stemmer-fr' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerFr extends BaseStemmer {}
+  export = StemmerFr
+}
+
 declare module 'sort-stream' {
   function sort(func: (a: any, b: any) => number): any
   export = sort

@@ -22,6 +22,7 @@ test.each<any>([
   ['ru', 'автомобилей', ['автомобил']],
   ['tr', 'onlar uyudum', ['on', 'uyudu']],
   ['it', 'questi', ['quest']],
+  ['fr', 'comprends', ['comprend']],
 ])(
   'TEST: stemmer removes final letters(%s) =>%j',
   (locale: string, raw: string, expected: string) => {
