@@ -1,5 +1,4 @@
 #!/bin/zsh
-set -x
 SPACE_ID=$1
 ENVIRONMENT=$2
 DELIVER_TOKEN=$3

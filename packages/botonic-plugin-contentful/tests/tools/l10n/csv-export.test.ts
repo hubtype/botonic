@@ -6,6 +6,7 @@ import {
 } from '../../../src/tools/l10n/csv-export'
 import { testContentful } from '../../../tests/contentful/contentful.helper'
 import { ENGLISH } from '../../../src/nlp'
+import { CommonFields, Url } from '../../../src/cms'
 import { TextBuilder } from '../../../src/cms/factories'
 import sync from 'csv-stringify/lib/sync'
 import { RndButtonsBuilder } from '../../../src/cms/test-helpers'
@@ -31,6 +32,21 @@ test('TEST: ContentToCsvLines.getCsvLines Text', () => {
     ['text', 'name1', 'id1', 'Short text', 'short1'],
     ['text', 'name1', 'id1', 'Keywords', 'kw1;kw2'],
     ['text', 'name1', 'id1', 'Text', 'long text'],
+  ])
+})
+
+test('TEST: ContentToCsvLines.getCsvLines URL', () => {
+  const exporter = new ContentToCsvLines({})
+  const fields = exporter.getCsvLines(
+    new Url(
+      new CommonFields('id1', 'url1name', { shortText: 'st1' }),
+      'http://url1'
+    )
+  )
+  expect(fields).toEqual([
+    ['url', 'url1name', 'id1', 'Short text', 'st1'],
+    ['url', 'url1name', 'id1', 'Keywords', ''],
+    ['url', 'url1name', 'id1', 'URL', 'http://url1'],
   ])
 })
 
