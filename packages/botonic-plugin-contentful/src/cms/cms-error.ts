@@ -198,17 +198,27 @@ export class ContentfulExceptionWrapper {
     const exception = new CmsException(msg, contentfulError)
     if (this.logErrors) {
       console.error(exception.toString())
-      if (this.logStack) {
-        if (contentfulError instanceof MultiError) {
-          console.error('due to:')
-          for (const e of reduceMultiError(contentfulError)) {
-            console.error(e.message)
-          }
-        } else {
-          console.error('due to', contentfulError)
+      this.processError(contentfulError)
+    }
+    throw exception
+  }
+
+  processError(contentfulError: Error) {
+    if (this.logStack) {
+      if (contentfulError instanceof MultiError) {
+        console.error('due to:')
+        for (const e of reduceMultiError(contentfulError)) {
+          this.processError(e)
+        }
+      } else {
+        console.error('due to', contentfulError)
+        if (contentfulError.stack) {
+          console.error(
+            'at',
+            contentfulError.stack.split('\n').slice(0, 3).join('\n')
+          )
         }
       }
     }
-    throw exception
   }
 }
