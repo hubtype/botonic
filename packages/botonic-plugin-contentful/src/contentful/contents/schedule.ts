@@ -1,5 +1,10 @@
 import { Entry } from 'contentful'
-import { DEFAULT_CONTEXT, ContentType, ScheduleContent } from '../../cms'
+import {
+  DEFAULT_CONTEXT,
+  ContentType,
+  ScheduleContent,
+  CmsException,
+} from '../../cms'
 import * as time from '../../time'
 import { TopContentDelivery } from '../content-delivery'
 import {
@@ -24,13 +29,17 @@ export class ScheduleDelivery extends TopContentDelivery {
   }
 
   fromEntry(entry: Entry<ScheduleFields>): ScheduleContent {
-    const schedule = new time.Schedule(time.Schedule.TZ_CET) // TODO allow configuration
-    this.addDaySchedules(schedule, entry.fields)
-    this.addExceptions(schedule, entry.fields.exceptions)
-    return new ScheduleContent(
-      ContentfulEntryUtils.commonFieldsFromEntry(entry),
-      schedule
-    )
+    try {
+      const schedule = new time.Schedule(time.Schedule.TZ_CET) // TODO allow configuration
+      this.addDaySchedules(schedule, entry.fields)
+      this.addExceptions(schedule, entry.fields.exceptions)
+      return new ScheduleContent(
+        ContentfulEntryUtils.commonFieldsFromEntry(entry),
+        schedule
+      )
+    } catch (e) {
+      throw new CmsException(`Error loading Scheduler '${entry.sys.id}'`, e)
+    }
   }
 
   private addDaySchedules(
@@ -90,8 +99,12 @@ export class ScheduleDelivery extends TopContentDelivery {
         const date = new Date(+dateStr[0], +dateStr[1] - 1, +dateStr[2])
         schedule.addException(date, timeRanges)
       } catch (e) {
+        if (exception.fields == undefined) {
+          // eslint-disable-next-line no-ex-assign
+          e = new CmsException(`Broken reference? Not published?`)
+        }
         this.logOrThrow(
-          `Loading Schedule Exception '${exception.sys.id}' (name '${exception.fields.name}')`,
+          `Loading Schedule Exception '${exception.sys.id}' (name '${exception.fields?.name}')`,
           e
         )
       }
