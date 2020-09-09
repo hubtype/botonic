@@ -37,6 +37,8 @@ module.exports = {
       },
       links: [
         { to: 'welcome', label: 'User Guide', position: 'right' },
+        { to: 'concepts/actions', label: 'Reference Guide', position: 'right' },
+        { to: 'plugins/botonic-plugins', label: 'Plugins', position: 'right' },
         { to: 'faq', label: 'FAQ', position: 'right' },
       ],
     },
