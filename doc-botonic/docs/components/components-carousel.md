@@ -9,6 +9,78 @@ Carousels show a collection of images in a cyclic view. By displaying only a sub
 
 <img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200"/>
 
+
+## Botonic template with Carousels
+
+A dynamic carousel is an object that has multiple images or videos where you can showcase your products or information.
+In the example below, taken from one of Botonic templates,  a simple bot will display five men or woman shirts and their price. The clothes information are retrieved from the `Shopstyle API`.
+
+First of all, we ask what are the user interests. When we get it, we generate the carousel of the products.
+
+Also, at the `botonicInit` necessary calls are made to grasp the values of api, which must be stored and returned so that they can be passed as parameters.
+
+To make the call, we need `import fetch from 'isomorphic-fetch'` which needs to pass the url, the method that in this case is a `GET method` and the parameters if needed. This call returns all the information on the `api`.
+When we have all the product information, we can display the carousel.
+The carousel can have at most ten elements, where each element will represent one product and will have its `name`, the `price`, an `image` and a `link` to the product page.
+
+For access to these values, we do a loop with all the products where we extract the values like `e.name`, `e.priceLabel`, etc.
+
+**Note:** In order to import the `fetch` function from `isomorphic-fetch`, you need to install it into your bot. Please do: `npm install isomorphic-fetch`
+
+**src/actions/carousel.js**
+
+```javascript
+import React from 'react'
+import { Carousel, Element, Pic, Title, Subtitle, Button } from '@botonic/React'
+import fetch from 'isomorphic-fetch'
+
+export default class extends React.Component {
+  static async botonicInit({ input, session, params, lastRoutePath }) {
+    const api_key = 'uid8900-40385330-57'
+    const url =
+      'http://api.shopstyle.com/api/v2/products?pid=' +
+      api_key +
+      '&fts=mens-shirts&offset=0&limit=5'
+    const res = await fetch(url, {
+      url: url,
+      method: 'GET',
+      params: {},
+    })
+
+    let resp = await res.json()
+    return { resp }
+  }
+
+  render() {
+    return (
+      <Carousel>
+        {this.props.resp.products.map((e, i) => (
+          <Element key={e.name}>
+            <Pic src={e.image.sizes.Best.url} />
+            <Title>{e.name}</Title>
+            <Subtitle>{e.priceLabel}</Subtitle>
+            <Button url={e.clickUrl}>Open Product</Button>
+          </Element>
+        ))}
+      </Carousel>
+    )
+  }
+}
+```
+
+**src/routes.js**
+
+```
+import Carousel from './actions/carousel'
+
+export const routes = [
+  { path: 'carousel', text: /^.*$/i, action: Carousel }
+]
+
+```
+
+
+
 ## Code
 
 You can render a carousel following the structure below:

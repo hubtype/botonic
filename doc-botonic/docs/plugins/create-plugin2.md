@@ -3,7 +3,6 @@ id: create-plugin2
 title: Create a Botonic Plugin
 ---
 
-
 For a better understanding, we will start with the most essential parts our plugin must have.  
 In order to develop a plugin for Botonic, you will have to create a new directory structured as explained before.
 Once created, you will have to copy this boilerplate code in your **`index.js`**:
@@ -11,7 +10,7 @@ Once created, you will have to copy this boilerplate code in your **`index.js`**
 **botonic-plugin-{my-plugin-name}/src/index.js**
 
 ```javascript
-// By default, we suggest that you name your class with UpperCamelCase
+// By default, we suggest you to name your class with UpperCamelCase
 export default class BotonicPluginMyPluginName {
   constructor(options) {
     this.options = options

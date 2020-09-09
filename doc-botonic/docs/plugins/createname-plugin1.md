@@ -3,7 +3,6 @@ id: createname-plugin1
 title: Prepare the Plugin
 ---
 
-
 ## Naming
 
 Every plugin you create for botonic has to be under a directory named:  
