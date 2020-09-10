@@ -101,7 +101,7 @@ export class ButtonDelivery extends ContentDelivery {
     context: cms.Context
   ): cms.Button {
     const fields = entry.fields
-    let text = fields.shortText
+    let text = fields.shortText || ''
     const fixMissingData = context.fixMissingData ?? true
     if (!text && fixMissingData) {
       text = fields.name

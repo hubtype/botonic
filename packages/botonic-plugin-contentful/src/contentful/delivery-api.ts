@@ -101,7 +101,7 @@ export interface ContentWithNameFields {
 
 export interface CommonEntryFields extends ContentWithNameFields {
   // Useful to display in buttons or reports
-  shortText: string
+  shortText?: string
   keywords?: string[]
   searchableBy?: contentful.Entry<SearchableByKeywordsFields>[]
   partitions?: string[]
