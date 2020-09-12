@@ -19,7 +19,7 @@
     "@botonic/nlu": "~0.13.0",
     "@tensorflow/tfjs": "1.7.3",
     "axios": "latest",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
