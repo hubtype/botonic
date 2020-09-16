@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { params2queryString, INPUT } from '@botonic/core'
 import { WebchatContext } from '../contexts'
-import { COLORS } from '../constants'
+import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../utils'
 
 const StyledButton = styled.button`
@@ -40,7 +40,10 @@ export const Button = props => {
 
   const handleClick = event => {
     event.preventDefault()
-    const type = getThemeProperty('button.messageType', INPUT.TEXT)
+    const type = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.buttonMessageType,
+      INPUT.TEXT
+    )
     if (props.webview) openWebview(props.webview, props.params)
     else if (props.path) {
       type == INPUT.POSTBACK
@@ -65,8 +68,10 @@ export const Button = props => {
   }
 
   const renderBrowser = () => {
-    const buttonStyle = getThemeProperty('button.style')
-    const CustomButton = getThemeProperty('button.custom')
+    const buttonStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.buttonStyle)
+    const CustomButton = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.customButton
+    )
     if (CustomButton) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -76,11 +81,23 @@ export const Button = props => {
     }
 
     const buttonBgColor = hover
-      ? getThemeProperty('button.hoverBackground', COLORS.CONCRETE_WHITE)
-      : getThemeProperty('button.style.background', COLORS.SOLID_WHITE)
+      ? getThemeProperty(
+          WEBCHAT.CUSTOM_PROPERTIES.buttonHoverBackground,
+          COLORS.CONCRETE_WHITE
+        )
+      : getThemeProperty(
+          WEBCHAT.CUSTOM_PROPERTIES.buttonStyleBackground,
+          COLORS.SOLID_WHITE
+        )
     const buttonTextColor = hover
-      ? getThemeProperty('button.hoverTextColor', COLORS.SOLID_BLACK)
-      : getThemeProperty('button.style.color', COLORS.SOLID_BLACK)
+      ? getThemeProperty(
+          WEBCHAT.CUSTOM_PROPERTIES.buttonHoverTextColor,
+          COLORS.SOLID_BLACK
+        )
+      : getThemeProperty(
+          WEBCHAT.CUSTOM_PROPERTIES.buttonStyleColor,
+          COLORS.SOLID_BLACK
+        )
 
     return (
       <StyledButton
@@ -90,7 +107,10 @@ export const Button = props => {
         onClick={e => handleClick(e)}
         style={{
           // TODO remove?
-          color: getThemeProperty('brand.color', COLORS.SOLID_BLACK),
+          color: getThemeProperty(
+            WEBCHAT.CUSTOM_PROPERTIES.brandColor,
+            COLORS.SOLID_BLACK
+          ),
           ...buttonStyle,
           // eslint-disable-next-line no-dupe-keys
           color: buttonTextColor,
