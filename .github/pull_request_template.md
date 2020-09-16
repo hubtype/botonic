@@ -1,5 +1,6 @@
-_Remember to tag the PR with **WIP** tag if it's not ready to be merged_.  
-[Reference](https://blog.codeminer42.com/on-writing-a-great-pull-request-37c60ce6f31d/)
+_Set as [Draft PR](https://github.blog/2019-02-14-introducing-draft-pull-requests/) if it's not ready to be merged_.  
+
+[PR best practices Reference](https://blog.codeminer42.com/on-writing-a-great-pull-request-37c60ce6f31d/)
 
 ## Description
 
@@ -25,7 +26,7 @@ _Remember to tag the PR with **WIP** tag if it's not ready to be merged_.
 - If it's a complex solution, try to provide a sketch.
 -->
 
-## To documentate / Usage example
+## To document / Usage example
 
 <!--
 - How this is used?
