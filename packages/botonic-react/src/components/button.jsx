@@ -79,7 +79,7 @@ export const Button = props => {
       ? getThemeProperty('button.hoverBackground', COLORS.CONCRETE_WHITE)
       : getThemeProperty('button.style.background', COLORS.SOLID_WHITE)
     const buttonTextColor = hover
-      ? getThemeProperty('button.hoverText', COLORS.SOLID_BLACK)
+      ? getThemeProperty('button.hoverTextColor', COLORS.SOLID_BLACK)
       : getThemeProperty('button.style.color', COLORS.SOLID_BLACK)
 
     return (
