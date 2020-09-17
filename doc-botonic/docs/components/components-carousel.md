@@ -13,7 +13,7 @@ Carousels show a collection of images in a cyclic view. By displaying only a sub
 ## Botonic template with Carousels
 
 A dynamic carousel is an object that has multiple images or videos where you can showcase your products or information.
-In the example below, taken from one of Botonic templates,  a simple bot will display five men or woman shirts and their price. The clothes information are retrieved from the `Shopstyle API`.
+In the example below, taken from one of Botonic templates,  a simple bot will display five men or women's shirts and their price. The clothes information are retrieved from the `Shopstyle API`.
 
 First of all, we ask what are the user interests. When we get it, we generate the carousel of the products.
 
@@ -70,13 +70,11 @@ export default class extends React.Component {
 
 **src/routes.js**
 
-```
+```javascript
 import Carousel from './actions/carousel'
-
 export const routes = [
   { path: 'carousel', text: /^.*$/i, action: Carousel }
 ]
-
 ```
 
 

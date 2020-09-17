@@ -10,7 +10,7 @@ Once created, you will have to copy this boilerplate code in your **`index.js`**
 **botonic-plugin-{my-plugin-name}/src/index.js**
 
 ```javascript
-// By default, we suggest you to name your class with UpperCamelCase
+// By default, we suggest that you name your class with UpperCamelCase
 export default class BotonicPluginMyPluginName {
   constructor(options) {
     this.options = options
