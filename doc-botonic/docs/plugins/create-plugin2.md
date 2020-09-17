@@ -11,7 +11,7 @@ Once created, you will have to copy this boilerplate code in your **`index.js`**
 **botonic-plugin-{my-plugin-name}/src/index.js**
 
 ```javascript
-// By default, we suggest you to name your class with UpperCamelCase
+// By default, we suggest that you name your class with UpperCamelCase
 export default class BotonicPluginMyPluginName {
   constructor(options) {
     this.options = options
@@ -27,11 +27,11 @@ export default class BotonicPluginMyPluginName {
 }
 ```
 
-As can be seen, in our plugin we will have three basic methods:
+As seen, in our plugin we have three basic methods:
 
-- `constructor`: which will be used in order to pass to our plugin the necessary options (JS Objects) needed to run our code,
+- `constructor`: used to give to our plugin the necessary options (JS Objects) needed to run our code,
   such as tokens, authentication keys, etc.
-- `pre`: stands for all these kind of operations that we want to preprocess of our input, such as applying NLU to extract intents or entities.
+- `pre`: stands for all these kinds of operations that we want to preprocess of our input, such as applying NLU to extract intents or entities.
 - `post`: stands for all these kind of operations that we want to process ex-post, such as adding a tracking id to our session.
 
 Botonic will look for pre and post methods and will execute them before or after the input is processed, correspondingly.
