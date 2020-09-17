@@ -1,18 +1,18 @@
-# Botonic Plugin Dynamo DB
+# Botonic Plugin Amazon DynamoDB
 
 ## What Does This Plugin Do?
 
-The plugin writes tracks about the user behaviour to a DynamoDB table
+This plugin writes tracks about the user's behavior to a DynamoDB table.
 
-### Setup / Installation
+### Setup
 
-Install
+1. Install the plugin from npm (or yarn):
 
 ```
 npm i  @botonic/plugin-dynamodb
 ```
 
-Configure
+2. Add it to the `src/plugins.js` file: 
 
 ```
 import * as dynamodb from '@botonic/plugin-dynamodb'
@@ -30,7 +30,8 @@ import * as dynamodb from '@botonic/plugin-dynamodb'
   },
 ```
 
-### How to use it
+### Use
+
 
 ```
 const dynamodb = plugins.dynamodb
