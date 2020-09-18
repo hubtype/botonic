@@ -80,6 +80,7 @@ export const Message = props => {
     delay = defaultDelay,
     typing = defaultTyping,
     children,
+    enableTimestamps,
     json,
     style,
     imageStyle,
@@ -114,7 +115,7 @@ export const Message = props => {
     timestampsEnabled,
     getFormattedTimestamp,
     timestampStyle,
-  } = resolveMessageTimestamps(getThemeProperty)
+  } = resolveMessageTimestamps(getThemeProperty, enableTimestamps)
 
   const getEnvAck = () => {
     let ack = 0

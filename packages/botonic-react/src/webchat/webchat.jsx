@@ -458,7 +458,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendInput = async input => {
     if (!input || Object.keys(input).length == 0) return
-    if (isText(input) && !input.data) return
+    if (isText(input) && (!input.data || !input.data.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.data)
     if (isText(input) && checkBlockInput(input)) return
     if (!input.id) input.id = uuidv4()
     const messageComponent = messageComponentFromInput(input)

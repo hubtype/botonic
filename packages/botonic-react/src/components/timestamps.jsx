@@ -2,13 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants'
 
-export const resolveMessageTimestamps = getThemeFn => {
+export const resolveMessageTimestamps = (
+  getThemeFn,
+  messageTimestampEnabled
+) => {
   const timestampsFormat = getThemeFn('message.timestamps.format')
   const timestampStyle = getThemeFn('message.timestamps.style')
-  const timestampsEnabled = getThemeFn(
-    'message.timestamps.enable',
-    Boolean(timestampStyle) || Boolean(timestampsFormat) || false
-  )
+  const timestampsEnabled =
+    messageTimestampEnabled !== undefined
+      ? messageTimestampEnabled
+      : getThemeFn(
+          'message.timestamps.enable',
+          Boolean(timestampStyle) || Boolean(timestampsFormat) || false
+        )
   const defaultTimestampFormat = {
     month: 'short',
     day: 'numeric',
