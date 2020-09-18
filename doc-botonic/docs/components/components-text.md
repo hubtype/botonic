@@ -3,20 +3,28 @@ id: text
 title: Text
 ---
 
-## Purpose
+The `Text`component is the simplest and easiest way to talk to the user.
 
-Text is the simplest and easiest way to talk to the user.
+
+## Properties
+
+| Property | Type    | Description                     | Required | Default value 
+|----------|---------|---------------------------------|----------|---------------|
+| markdown | Boolean | Enable/disable markdown support | No       | true 
+| children | String  | Show text                    | Yes      | - 
+         
+          
+
+## Examples
 
 <details>
-<summary>Example</summary>
+<summary>Output</summary>
 
 ![](https://botonic-doc-static.netlify.com/images/components_text.png)
 
 </details>
 
-## Code
-
-The "Hello World!" output would be defined as below:
+### Text
 
 ```javascript
 <Text>Hello World!</Text>
@@ -24,7 +32,7 @@ The "Hello World!" output would be defined as below:
 
 ### Line break
 
-In order to create a line break, you must use `{'\n'}`.
+To create a line break, you must use `{'\n'}`.
 
 ```javascript
 <Text>
