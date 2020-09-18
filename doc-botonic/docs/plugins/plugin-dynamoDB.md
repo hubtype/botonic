@@ -1,6 +1,5 @@
-
 ---
-title: DynamoDB Plugin
+title: Amazon DynamoDB Plugin
 id: plugin-dynamodb
 ---
 
@@ -9,8 +8,6 @@ id: plugin-dynamodb
 For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dynamodb)**.
 
 ---
-
-# Botonic Plugin Amazon DynamoDB
 
 ## What Does This Plugin Do?
 
