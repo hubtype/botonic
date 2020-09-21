@@ -13,6 +13,7 @@ import {
   Element,
   Image,
   MessageContent,
+  PagingOptions,
   Queue,
   ScheduleContent,
   StartUp,
@@ -110,17 +111,19 @@ export class FilteredCMS implements CMS {
   async topContents(
     model: TopContentType,
     context?: Context,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging?: PagingOptions
   ): Promise<TopContent[]> {
-    const contents = await this.cms.topContents(model, context, filter)
+    const contents = await this.cms.topContents(model, context, filter, paging)
     return this.filterContents(contents, context)
   }
 
   async contents(
     contentType: ContentType,
-    context?: Context | undefined
+    context?: Context | undefined,
+    paging?: PagingOptions
   ): Promise<Content[]> {
-    const contents = await this.cms.contents(contentType, context)
+    const contents = await this.cms.contents(contentType, context, paging)
     return this.filterContents(contents, context)
   }
 

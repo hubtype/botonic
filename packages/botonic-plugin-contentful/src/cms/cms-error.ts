@@ -1,4 +1,4 @@
-import { CMS, ContentType, TopContentType } from './cms'
+import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
   Asset,
   Button,
@@ -107,16 +107,21 @@ export class ErrorReportingCMS implements CMS {
   topContents(
     model: TopContentType,
     context?: Context,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging?: PagingOptions
   ): Promise<TopContent[]> {
     return this.cms
-      .topContents(model, context, filter)
+      .topContents(model, context, filter, paging)
       .catch(this.handleError('topContents'))
   }
 
-  contents(contentType: ContentType, context?: Context): Promise<Content[]> {
+  contents(
+    contentType: ContentType,
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<Content[]> {
     return this.cms
-      .contents(contentType, context)
+      .contents(contentType, context, paging)
       .catch(this.handleError('contents'))
   }
 

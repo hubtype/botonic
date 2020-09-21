@@ -1,4 +1,4 @@
-import { CMS, ContentType, TopContentType } from './cms'
+import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
   Asset,
   Button,
@@ -82,15 +82,20 @@ export class LogCMS implements CMS {
   topContents(
     model: TopContentType,
     context?: Context,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging?: PagingOptions
   ): Promise<TopContent[]> {
     this.logger(`topContents of model ${model}`)
-    return this.cms.topContents(model, context, filter)
+    return this.cms.topContents(model, context, filter, paging)
   }
 
-  contents(contentType: ContentType, context?: Context): Promise<Content[]> {
+  contents(
+    contentType: ContentType,
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<Content[]> {
     this.logger(`contents of model ${contentType}`)
-    return this.cms.contents(contentType, context)
+    return this.cms.contents(contentType, context, paging)
   }
 
   assets(context?: Context): Promise<Asset[]> {

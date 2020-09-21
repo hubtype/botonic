@@ -7,6 +7,7 @@ import {
   Context,
   DateRangeContent,
   DEFAULT_CONTEXT,
+  PagingOptions,
   ScheduleContent,
   TopContent,
   TopContentType,
@@ -140,20 +141,22 @@ export class Contentful implements cms.CMS {
   topContents(
     model: TopContentType,
     context = DEFAULT_CONTEXT,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging?: PagingOptions
   ): Promise<TopContent[]> {
     return this._contents.topContents(
       model,
       context,
-      (entry: contentful.Entry<any>, ctxt: Context) =>
-        this.topContentFromEntry(entry, ctxt),
-      filter
+      (entry, ctxt) => this.topContentFromEntry(entry, ctxt),
+      filter,
+      paging
     )
   }
 
   contents(
     contentType: ContentType,
-    context = DEFAULT_CONTEXT
+    context = DEFAULT_CONTEXT,
+    paging?: PagingOptions
   ): Promise<Content[]> {
     return this._contents.contents(
       contentType,

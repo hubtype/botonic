@@ -1,4 +1,4 @@
-import { CMS, ContentType, TopContentType } from './cms'
+import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
   Asset,
   Button,
@@ -42,8 +42,12 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).chitchat(id, context)
   }
 
-  contents(contentType: ContentType, context?: Context): Promise<Content[]> {
-    return this.cmsFromContext(context).contents(contentType, context)
+  contents(
+    contentType: ContentType,
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<Content[]> {
+    return this.cmsFromContext(context).contents(contentType, context, paging)
   }
 
   assets(context?: Context): Promise<Asset[]> {
@@ -85,9 +89,15 @@ export class MultiContextCms implements CMS {
   topContents(
     model: TopContentType,
     context?: Context,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging?: PagingOptions
   ): Promise<TopContent[]> {
-    return this.cmsFromContext(context).topContents(model, context, filter)
+    return this.cmsFromContext(context).topContents(
+      model,
+      context,
+      filter,
+      paging
+    )
   }
 
   url(id: string, context?: Context): Promise<Url> {

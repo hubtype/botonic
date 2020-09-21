@@ -76,6 +76,10 @@ export function isSameModel(model1: ContentType, model2: ContentType): boolean {
   }
 }
 
+export class PagingOptions {
+  constructor(readonly limit = 1000, readonly skip = 0) {}
+}
+
 /**
  * Except for {@link topContents} and {@link contentsWithKeywords}, when {@link Context.locale} is specified it will default
  * to the fallback locale for those fields not available in the specified locale.
@@ -97,14 +101,19 @@ export interface CMS {
   topContents(
     model: TopContentType,
     context?: Context,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging?: PagingOptions
   ): Promise<TopContent[]>
 
   /**
    * TODO add filter by id or name
    */
-  contents(contentType: ContentType, context?: Context): Promise<Content[]>
-  assets(context?: Context): Promise<Asset[]>
+  contents(
+    contentType: ContentType,
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<Content[]>
+  assets(context?: Context, paging?: PagingOptions): Promise<Asset[]>
 
   /**
    * For contents with 'Searchable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
