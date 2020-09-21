@@ -15,7 +15,6 @@ import { QueueFields } from './queue'
 import { HourRangeFields, ScheduleFields } from './schedule'
 import { isOfType } from '../../util/enums'
 import { TopContentType } from '../../cms/cms'
-import { asyncMap } from '../../util/async'
 import { ContentDelivery } from '../content-delivery'
 
 export class ButtonDelivery extends ContentDelivery {
@@ -35,16 +34,9 @@ export class ButtonDelivery extends ContentDelivery {
     entries: contentful.Entry<any>[],
     context: cms.Context
   ): Promise<cms.Button[]> {
-    const buttons = await asyncMap(context, entries, async entry => {
-      try {
-        return await this.fromReference(entry, context)
-      } catch (e) {
-        // will fail if a draft content is referenced
-        this.logOrThrow(`Loading reference to content ${entry.sys.id}`, e)
-        return undefined
-      }
-    })
-    return buttons.filter(b => b !== undefined) as cms.Button[]
+    return await this.asyncMap(context, entries, entry =>
+      this.fromReference(entry, context)
+    )
   }
 
   public async fromReference(

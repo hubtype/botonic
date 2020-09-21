@@ -11,30 +11,24 @@ import * as contentful from 'contentful'
 import { EntryCollection } from 'contentful'
 import { QueueDelivery } from './queue'
 import { ScheduleDelivery } from './schedule'
-import {
-  CommonEntryFields,
-  ContentfulEntryUtils,
-  DeliveryApi,
-} from '../delivery-api'
-import { asyncMap } from '../../util/async'
+import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-api'
+import { ResourceDelivery } from '../content-delivery'
 
 /**
  * Retrieve multiple contents in a single call
  */
-export class ContentsDelivery {
-  constructor(readonly api: DeliveryApi) {}
-
+export class ContentsDelivery extends ResourceDelivery {
   async contents(
     contentType: ContentType,
     context: Context,
     factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>,
     paging = new PagingOptions()
   ): Promise<Content[]> {
-    const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
       context,
       this.query(contentType, paging)
     )
-    return asyncMap(context, entryCollection.items, entry =>
+    return this.asyncMap(context, entryCollection.items, entry =>
       factory(entry, context)
     )
   }
@@ -49,7 +43,7 @@ export class ContentsDelivery {
     filter?: (cf: CommonFields) => boolean,
     paging = new PagingOptions()
   ): Promise<TopContent[]> {
-    const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
       context,
       this.query(model, paging)
     )
@@ -59,7 +53,7 @@ export class ContentsDelivery {
         filter(ContentfulEntryUtils.commonFieldsFromEntry(entry))
       )
     }
-    return asyncMap(context, entries, entry => factory(entry, context))
+    return this.asyncMap(context, entries, entry => factory(entry, context))
   }
 
   private maxReferencesInclude() {

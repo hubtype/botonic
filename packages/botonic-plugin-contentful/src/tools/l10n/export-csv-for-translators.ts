@@ -2,6 +2,7 @@ import { CsvExport, I18nField, skipEmptyStrings } from './csv-export'
 import { Locale } from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
 import { Contentful } from '../../contentful/cms-contentful'
+import { ErrorReportingCMS } from '../../cms'
 import { ContentFieldType } from '../../manage-cms'
 
 export class PostProcessor {
@@ -38,7 +39,7 @@ async function writeCsvForTranslators(
   fileName: string,
   targetLocale: Locale | undefined
 ) {
-  const cms = new Contentful(options)
+  const cms = new ErrorReportingCMS(new Contentful(options))
   const postProcess = targetLocale ? new PostProcessor(targetLocale) : undefined
   const exporter = new CsvExport(
     {
@@ -73,6 +74,7 @@ async function main() {
         spaceId,
         accessToken,
         environment,
+        resumeErrors: true,
       },
       locale,
       fileName,

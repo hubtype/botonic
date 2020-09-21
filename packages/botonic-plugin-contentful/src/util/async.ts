@@ -6,15 +6,44 @@ import { MultiError } from 'async-parallel'
  * async-parallel makes code simpler and allows limiting concurrency
  */
 
-export function asyncMap<T1, T2>(
+export async function asyncMap<T1, T2>(
   context: Context,
   list: T1[],
   action: {
     (value: T1, index: number, list: T1[]): Promise<T2>
   },
-  concurrency?: number
+  concurrency?: number,
+  errorTreatment?: (value: T1, e: any) => T2 | undefined
 ): Promise<T2[]> {
-  return Parallel.map(list, action, concurrency || context.concurrency)
+  const result = await Parallel.map(
+    list,
+    resumable(action, errorTreatment),
+    concurrency || context.concurrency
+  )
+  return result.filter((i): i is T2 => i !== undefined)
+}
+
+type AsyncMapFunction<T1, T2> = (
+  value: T1,
+  index: number,
+  list: T1[]
+) => Promise<T2 | undefined>
+
+export function resumable<T1, T2 = T1>(
+  action: AsyncMapFunction<T1, T2>,
+  errorTreatment?: (input: T1, e: any) => T2 | undefined
+): AsyncMapFunction<T1, T2 | undefined> {
+  const wrapped = async (value: T1, index: number, list: T1[]) => {
+    try {
+      return await action(value, index, list)
+    } catch (e) {
+      if (errorTreatment) {
+        return errorTreatment(value, e)
+      }
+      throw e
+    }
+  }
+  return wrapped
 }
 
 export async function asyncEach<T1, T2>(

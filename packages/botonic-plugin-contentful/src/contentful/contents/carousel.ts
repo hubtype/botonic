@@ -3,11 +3,10 @@ import { DeliveryWithFollowUp } from './follow-up'
 import { ButtonDelivery } from './button'
 import * as cms from '../../cms'
 import {
-  DeliveryApi,
   CommonEntryFields,
   ContentfulEntryUtils,
+  DeliveryApi,
 } from '../delivery-api'
-import { asyncMap } from '../../util/async'
 
 // TODO does not yet load the followU p
 export class CarouselDelivery extends DeliveryWithFollowUp {
@@ -31,7 +30,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<CarouselFields>,
     context: cms.Context
   ) {
-    const elements = await asyncMap(
+    const elements = await this.asyncMap(
       context,
       entry.fields.elements,
       async entry => {
