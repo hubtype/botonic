@@ -50,7 +50,7 @@
     "async-parallel": "^1.2.3",
     "contentful": "^7.14.6",
     "contentful-import": "^7.9.6",
-    "contentful-management": "^5.28.0",
+    "contentful-management": "^6.1.2",
     "csv-parse": "^4.12.0",
     "csv-stringify": "^5.5.1",
     "escape-string-regexp": "^2.0.0",
