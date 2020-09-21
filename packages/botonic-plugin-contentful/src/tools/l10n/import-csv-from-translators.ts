@@ -55,11 +55,16 @@ export enum ImportType {
 }
 
 if (process.argv.length < 10 || process.argv[2] == '--help') {
-  console.error(
+  console.log(
     `Usage: space_id environment delivery_token mgmnt_token locale filename [${Object.values(
       ImportType
     ).join('|')}] duplicate_references`
   )
+  console.log(
+    `duplicate_references: if 'true', it will copy also the buttons, element images and assets of all contents ` +
+      `(not only the ones in the input file)`
+  )
+
   // eslint-disable-next-line no-process-exit
   process.exit(1)
 }
@@ -75,9 +80,9 @@ if (!isOfType(importType, ImportType)) {
   throw Error(`${importType} is not a valid value`)
 }
 const duplicateReferences =
-  process.argv[9] == 'true'
+  process.argv[9].toLowerCase() == 'true'
     ? true
-    : process.argv[9] == 'false'
+    : process.argv[9].toLowerCase() == 'false'
     ? false
     : undefined
 if (duplicateReferences == undefined) {
