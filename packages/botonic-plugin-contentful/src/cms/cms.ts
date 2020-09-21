@@ -87,16 +87,28 @@ export class PagingOptions {
  */
 export interface CMS {
   button(id: string, context?: Context): Promise<Button>
+
+  /**
+   * If any image cannot be retrieved, it will be left undefined
+   */
   carousel(id: string, context?: Context): Promise<Carousel>
+
   chitchat(id: string, context?: Context): Promise<Chitchat>
   element(id: string, context?: Context): Promise<Element>
   image(id: string, context?: Context): Promise<Image>
   queue(id: string, context?: Context): Promise<Queue>
+
+  /**
+   * If the image cannot be retrieved, it will be left undefined
+   */
   startUp(id: string, context?: Context): Promise<StartUp>
   text(id: string, context?: Context): Promise<Text>
   url(id: string, context?: Context): Promise<Url>
+
   /**
    * If locale specified in context, it does not return contents without values for the locale (even if it has value for the fallback locale)
+   * If ContentfulOptions.resumeErrors is set, if some contents fail to be devilered,
+   * an error will be displayed but the result will be returned.
    */
   topContents(
     model: TopContentType,
@@ -106,13 +118,15 @@ export interface CMS {
   ): Promise<TopContent[]>
 
   /**
-   * TODO add filter by id or name
+   * If ContentfulOptions.resumeErrors is set, if some contents fail to be devilered,
+   * an error will be displayed but the result will be returned.
    */
   contents(
     contentType: ContentType,
     context?: Context,
     paging?: PagingOptions
   ): Promise<Content[]>
+
   assets(context?: Context, paging?: PagingOptions): Promise<Asset[]>
 
   /**

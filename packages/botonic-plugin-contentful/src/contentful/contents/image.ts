@@ -1,10 +1,6 @@
-import { Context } from '../../cms'
 import * as cms from '../../cms'
-import {
-  CommonEntryFields,
-  ContentfulEntryUtils,
-  DeliveryApi,
-} from '../delivery-api'
+import { Context } from '../../cms'
+import { CommonEntryFields, DeliveryApi } from '../delivery-api'
 import * as contentful from 'contentful'
 import { DeliveryWithFollowUp } from './follow-up'
 
@@ -27,7 +23,7 @@ export class ImageDelivery extends DeliveryWithFollowUp {
   ): Promise<cms.Image> {
     return new cms.Image(
       await this.getFollowUp().commonFields(entry, context),
-      ContentfulEntryUtils.urlFromAsset(entry.fields.image)
+      this.urlFromAssetRequired(entry.fields.image)
     )
   }
 }

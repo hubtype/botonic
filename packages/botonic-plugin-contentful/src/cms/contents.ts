@@ -137,7 +137,7 @@ export abstract class MessageContent extends TopContent {
  * to confirm their interest on this content
  * TODO move contentId o ContentType here?
  */
-export class CommonFields {
+export class CommonFields implements Stringable {
   readonly shortText: string
   readonly keywords: string[]
   readonly searchableBy?: SearchableBy
@@ -171,6 +171,10 @@ export class CommonFields {
       this.keywords = []
       this.partitions = []
     }
+  }
+
+  toString(): string {
+    return `'${this.id}/${this.name}'`
   }
 }
 

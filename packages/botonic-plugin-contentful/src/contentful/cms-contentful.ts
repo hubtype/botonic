@@ -78,7 +78,7 @@ export class Contentful implements cms.CMS {
     this._startUp = new StartUpDelivery(delivery, this._button, resumeErrors)
     this._url = new UrlDelivery(delivery, resumeErrors)
     this._image = new ImageDelivery(delivery, resumeErrors)
-    this._asset = new AssetDelivery(delivery)
+    this._asset = new AssetDelivery(delivery, resumeErrors)
     this._schedule = new ScheduleDelivery(delivery, resumeErrors)
     this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
     const followUp = new FollowUpDelivery(
