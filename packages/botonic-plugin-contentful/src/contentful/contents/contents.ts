@@ -3,6 +3,7 @@ import {
   Content,
   ContentType,
   Context,
+  PagingOptions,
   TopContent,
   TopContentType,
 } from '../../cms'
@@ -26,15 +27,12 @@ export class ContentsDelivery {
   async contents(
     contentType: ContentType,
     context: Context,
-    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>
+    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>,
+    paging = new PagingOptions()
   ): Promise<Content[]> {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
       context,
-      {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        content_type: contentType,
-        include: this.maxReferencesInclude(),
-      }
+      this.query(contentType, paging)
     )
     return asyncMap(context, entryCollection.items, entry =>
       factory(entry, context)
@@ -48,15 +46,12 @@ export class ContentsDelivery {
       entry: contentful.Entry<any>,
       ctxt: Context
     ) => Promise<TopContent>,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging = new PagingOptions()
   ): Promise<TopContent[]> {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.api.getEntries(
       context,
-      {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        content_type: model,
-        include: this.maxReferencesInclude(),
-      }
+      this.query(model, paging)
     )
     let entries = entryCollection.items
     if (filter) {
@@ -72,5 +67,15 @@ export class ContentsDelivery {
       QueueDelivery.REFERENCES_INCLUDE,
       ScheduleDelivery.REFERENCES_INCLUDE
     )
+  }
+
+  private query(contentType: ContentType, paging: PagingOptions) {
+    return {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      content_type: contentType,
+      include: this.maxReferencesInclude(),
+      limit: paging.limit,
+      skip: paging.skip,
+    }
   }
 }

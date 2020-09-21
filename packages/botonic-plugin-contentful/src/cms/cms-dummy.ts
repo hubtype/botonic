@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-pattern */
 import { SearchCandidate } from '../search/search-result'
 import { Callback, ContentCallback } from './callback'
-import { CMS, ContentType, TopContentType } from './cms'
+import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
   Asset,
   Button,
@@ -108,7 +108,8 @@ export class DummyCMS implements CMS {
   topContents(
     model: TopContentType,
     context?: Context,
-    filter?: (cf: CommonFields) => boolean
+    filter?: (cf: CommonFields) => boolean,
+    paging?: PagingOptions
   ): Promise<TopContent[]> {
     return Promise.resolve([])
   }
@@ -153,7 +154,11 @@ export class DummyCMS implements CMS {
     return this.buttonCallbacks.map(DummyCMS.buttonFromCallback)
   }
 
-  contents(contentType: ContentType, context?: Context): Promise<Content[]> {
+  contents(
+    contentType: ContentType,
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<Content[]> {
     return Promise.resolve([])
   }
 
