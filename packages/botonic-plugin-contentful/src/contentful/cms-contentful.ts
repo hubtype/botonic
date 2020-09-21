@@ -69,7 +69,7 @@ export class Contentful implements cms.CMS {
     )
     const resumeErrors = options.resumeErrors || false
     const delivery = new IgnoreFallbackDecorator(deliveryApi)
-    this._contents = new ContentsDelivery(delivery)
+    this._contents = new ContentsDelivery(delivery, resumeErrors)
 
     this._delivery = delivery
     this._button = new ButtonDelivery(delivery, resumeErrors)
@@ -158,11 +158,8 @@ export class Contentful implements cms.CMS {
     context = DEFAULT_CONTEXT,
     paging?: PagingOptions
   ): Promise<Content[]> {
-    return this._contents.contents(
-      contentType,
-      context,
-      (entry: contentful.Entry<any>, ctxt: Context) =>
-        this.contentFromEntry(entry, ctxt)
+    return this._contents.contents(contentType, context, (entry, ctxt) =>
+      this.contentFromEntry(entry, ctxt)
     )
   }
 

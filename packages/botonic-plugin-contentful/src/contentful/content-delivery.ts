@@ -1,6 +1,14 @@
-import { CmsException, ContentType, Context, isSameModel } from '../cms'
+import {
+  CmsException,
+  Content,
+  ContentType,
+  Context,
+  isSameModel,
+} from '../cms'
 import * as contentful from 'contentful'
+import { Entry } from 'contentful'
 import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
+import { asyncMap } from '../util/async'
 
 export abstract class ResourceDelivery {
   constructor(
@@ -35,6 +43,17 @@ export abstract class ResourceDelivery {
       return
     }
     throw new CmsException(doing, reason)
+  }
+
+  protected asyncMap<T extends Content>(
+    context: Context,
+    entries: Entry<any>[],
+    factory: (entry: Entry<any>) => Promise<T>
+  ): Promise<T[]> {
+    return asyncMap(context, entries, factory, undefined, (entry, e) => {
+      this.logOrThrow(`Loading ${entry.sys.type} '${entry.sys.id}'`, e)
+      return undefined
+    })
   }
 }
 

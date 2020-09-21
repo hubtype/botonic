@@ -89,17 +89,23 @@ export interface CMS {
   button(id: string, context?: Context): Promise<Button>
 
   /**
-   * If any image cannot be retrieved, it will be left undefined
+   * If ContentfulOptions.resumeErrors is set:
+   * - If any image cannot be retrieved, it will be left undefined
+   * - If any element cannot be retrieved, only the rest will be returned
    */
   carousel(id: string, context?: Context): Promise<Carousel>
 
   chitchat(id: string, context?: Context): Promise<Chitchat>
   element(id: string, context?: Context): Promise<Element>
+
+  /** Even if ContentfulOptions.resumeErrors is set, if the asset is not available
+   * the method will fail. */
   image(id: string, context?: Context): Promise<Image>
   queue(id: string, context?: Context): Promise<Queue>
 
   /**
-   * If the image cannot be retrieved, it will be left undefined
+   * If ContentfulOptions.resumeErrors is set: If the image cannot be retrieved,
+   * it will be left undefined
    */
   startUp(id: string, context?: Context): Promise<StartUp>
   text(id: string, context?: Context): Promise<Text>
@@ -107,7 +113,8 @@ export interface CMS {
 
   /**
    * If locale specified in context, it does not return contents without values for the locale (even if it has value for the fallback locale)
-   * If ContentfulOptions.resumeErrors is set, if some contents fail to be devilered,
+   *
+   * If ContentfulOptions.resumeErrors is set: if some contents fail to be devilered,
    * an error will be displayed but the result will be returned.
    */
   topContents(
@@ -118,7 +125,7 @@ export interface CMS {
   ): Promise<TopContent[]>
 
   /**
-   * If ContentfulOptions.resumeErrors is set, if some contents fail to be devilered,
+   * If ContentfulOptions.resumeErrors is set: if some contents fail to be delivered,
    * an error will be displayed but the result will be returned.
    */
   contents(

@@ -49,7 +49,7 @@ export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
   cmsLocale?: (locale?: Locale) => Locale | undefined
 
   /**
-   * If the delivery of a part of a content fails (eg. a referenced content),
+   * If the delivery of an optional part of a content fails (eg. a referenced content or assert),
    * the flag defines whether the content should be partially delivered
    * or an error should be raised.
    * False by default
