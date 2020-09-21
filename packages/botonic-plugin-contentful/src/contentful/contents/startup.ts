@@ -1,11 +1,7 @@
 import * as contentful from 'contentful'
 import * as cms from '../../cms'
 import { ButtonDelivery } from './button'
-import {
-  DeliveryApi,
-  CommonEntryFields,
-  ContentfulEntryUtils,
-} from '../delivery-api'
+import { CommonEntryFields, DeliveryApi } from '../delivery-api'
 import { DeliveryWithFollowUp } from './follow-up'
 
 export class StartUpDelivery extends DeliveryWithFollowUp {
@@ -36,12 +32,9 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
       fields.buttons || [],
       context
     )
-    const img = fields.pic
-      ? ContentfulEntryUtils.urlFromAsset(fields.pic)
-      : undefined
     return new cms.StartUp(
       await this.getFollowUp().commonFields(entry, context),
-      img,
+      this.urlFromAssetOptional(fields.pic),
       fields.text ?? '',
       buttons
     )

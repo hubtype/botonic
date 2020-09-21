@@ -2,12 +2,32 @@ import { CmsException, ContentType, Context, isSameModel } from '../cms'
 import * as contentful from 'contentful'
 import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
 
-export abstract class ContentDelivery {
+export abstract class ResourceDelivery {
   constructor(
-    readonly modelType: ContentType,
     protected readonly delivery: DeliveryApi,
     protected readonly resumeErrors: boolean
   ) {}
+
+  urlFromAssetRequired(assetField: contentful.Asset): string {
+    if (!assetField.fields.file) {
+      throw new CmsException(
+        `found empty ${assetField.sys.type} asset. Missing localization?`
+      )
+    }
+    return 'https:' + assetField.fields.file.url
+  }
+
+  urlFromAssetOptional(assetField?: contentful.Asset): string | undefined {
+    if (!assetField) {
+      return undefined
+    }
+    if (!assetField.fields.file) {
+      this.logOrThrow(`found empty asset. Missing localization?`, undefined)
+      return undefined
+    }
+
+    return this.urlFromAssetRequired(assetField)
+  }
 
   protected logOrThrow(doing: string, reason: any) {
     if (this.resumeErrors) {
@@ -15,6 +35,16 @@ export abstract class ContentDelivery {
       return
     }
     throw new CmsException(doing, reason)
+  }
+}
+
+export abstract class ContentDelivery extends ResourceDelivery {
+  constructor(
+    readonly modelType: ContentType,
+    delivery: DeliveryApi,
+    resumeErrors: boolean
+  ) {
+    super(delivery, resumeErrors)
   }
 }
 

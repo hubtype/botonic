@@ -16,6 +16,9 @@ import { DateRangeDelivery, DateRangeFields } from './contents/date-range'
 import { ReducedClientApi } from './delivery/client-api'
 import { ContentfulOptions } from '../plugin'
 
+/**
+ * https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
+ */
 export interface DeliveryApi {
   getAsset(id: string, context: Context, query?: any): Promise<contentful.Asset>
 
@@ -122,10 +125,6 @@ export class ContentfulEntryUtils {
     }
     const typ = entry.sys.contentType.sys.id
     return typ as T
-  }
-
-  static urlFromAsset(assetField: contentful.Asset): string {
-    return 'https:' + assetField.fields.file.url
   }
 
   static commonFieldsFromEntry(

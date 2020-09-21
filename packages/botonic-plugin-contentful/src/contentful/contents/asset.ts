@@ -1,20 +1,19 @@
 import * as cms from '../../cms'
-import { ContentfulEntryUtils, DeliveryApi } from '../delivery-api'
 import { Asset } from 'contentful'
+import { ResourceDelivery } from '../content-delivery'
 
-export class AssetDelivery {
-  constructor(protected delivery: DeliveryApi) {}
-
+export class AssetDelivery extends ResourceDelivery {
   async asset(id: string, context: cms.Context): Promise<cms.Asset> {
     const asset = await this.delivery.getAsset(id, context)
     return this.fromEntry(asset)
   }
 
   private fromEntry(asset: Asset) {
+    const url = this.urlFromAssetRequired(asset)
     return new cms.Asset(
       asset.sys.id,
       asset.fields.title,
-      ContentfulEntryUtils.urlFromAsset(asset),
+      url,
       asset.fields.file.contentType,
       asset.fields.file.details
     )
