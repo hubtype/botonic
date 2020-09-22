@@ -138,6 +138,18 @@ export class WebchatApp {
     this.webchatRef.current.toggleWebchat()
   }
 
+  openCoverComponent() {
+    this.webchatRef.current.openCoverComponent()
+  }
+
+  closeCoverComponent() {
+    this.webchatRef.current.closeCoverComponent()
+  }
+
+  toggleCoverComponent() {
+    this.webchatRef.current.toggleCoverComponent()
+  }
+
   getMessages() {
     return this.webchatRef.current.getMessages()
   }

@@ -509,6 +509,10 @@ export const Webchat = forwardRef((props, ref) => {
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
+    openCoverComponent: () => toggleCoverComponent(true),
+    closeCoverComponent: () => toggleCoverComponent(false),
+    toggleCoverComponent: () =>
+      toggleCoverComponent(!webchatState.isCoverComponentOpen),
     openWebviewApi: component => openWebviewT(component),
     setError,
     getMessages: () => webchatState.messagesJSON,
