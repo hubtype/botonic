@@ -5,7 +5,7 @@ title: Media
 
 ## Purpose
 
-Using media such as images, videos or attached files helps to visualize the conversation and draws attention.
+Using media such as images, videos, audios or attached files helps to visualize the conversation and draws attention.
 
 <details>
 <summary>Example</summary>
@@ -15,7 +15,28 @@ Using media such as images, videos or attached files helps to visualize the conv
 
 </details>
 
-## Code
+## Audio Properties
+
+The Audio component is used to make the conversation more dynamic and draw attention with the help of an audio element.
+
+| Property | Type          | Description                            | Required | Default value |
+|----------|---------------|----------------------------------------|----------|---------------|
+| children | String        | Show audio object                      | No       |               |
+| src      | URL or Object | Defines the type of audio files (mpeg) | Yes      | -             |
+
+
+## Image Properties
+
+The Image component is used to display different types of images, including network images, static resources, temporary local images, and images from local disk, such as the camera roll.
+
+| Property | Type   | Description                | Required         | Default value |
+|----------|--------|----------------------------|------------------|---------------|
+| children | String | Show image object          | No               |               |
+| src      | URL    | Defines the type of images | Yes  (PNG files) | -             |
+
+
+
+## Example
 
 You can send all these types of media files:
 

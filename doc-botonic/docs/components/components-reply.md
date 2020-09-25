@@ -14,6 +14,16 @@ Quick Replies allow you to present options in a message to a bot user.
 
 </details>
 
+
+## Properties
+
+| Property | Type           | Description                                            | Required | Default value |
+|----------|----------------|--------------------------------------------------------|----------|---------------|
+| children | String         | Show the reply                                         | Yes      |               |
+| path     | String         | URL of image to be displayed on the quick reply button |          |               |
+| payload  | String, Number | Custom data that are sent back                         |          |               |
+
+
 ## Code
 
 To insert quick replies,

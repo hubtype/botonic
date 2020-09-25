@@ -8,14 +8,14 @@ The `Text`component is the simplest and easiest way to talk to the user.
 
 ## Properties
 
-| Property | Type    | Description                     | Required | Default value 
+| Property | Type    | Description                     | Required | Default value |
 |----------|---------|---------------------------------|----------|---------------|
-| markdown | Boolean | Enable/disable markdown support | No       | true 
-| children | String  | Show text                    | Yes      | - 
+| markdown | Boolean | Enable/disable markdown support | No       | true          |
+| children | String  | Show text                       | Yes      | -             |
          
           
 
-## Examples
+## Example
 
 <details>
 <summary>Output</summary>
