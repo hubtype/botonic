@@ -1,6 +1,7 @@
 import { Intent, Utterance, Locale, Data, Example } from './types';
 import { isEmptyString } from './util/object-tools';
 import { Trainer } from './trainer';
+
 export class BotonicNLU {
   private readonly _data: Data;
   _trainers: Trainer[];

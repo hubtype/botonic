@@ -5,8 +5,8 @@ import {
   Index2Word,
   WordCount,
 } from './types';
-import * as tf from '@tensorflow/tfjs-node';
-import { Tensor1D, Tensor } from '@tensorflow/tfjs-node';
+
+import { Tensor1D, tensor1d, Tensor, stack } from '@tensorflow/tfjs-node';
 
 const UNKNOWN_TOKEN = '<UNK>';
 export class PreProcessing {
@@ -54,13 +54,13 @@ export class PreProcessing {
   padSequences(sequences: number[][], toPadLength: number): Tensor {
     const paddedSequences: Tensor1D[] = [];
     sequences.forEach((sequence) => {
-      const tensor: Tensor1D = tf
-        .tensor1d(sequence)
-        .pad([[toPadLength - sequence.length, 0]]);
+      const tensor: Tensor1D = tensor1d(sequence).pad([
+        [toPadLength - sequence.length, 0],
+      ]);
       // tensor.print();
       paddedSequences.push(tensor);
     });
-    return tf.stack(paddedSequences);
+    return stack(paddedSequences);
   }
 
   normalize(value: string): string {

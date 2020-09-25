@@ -1,8 +1,7 @@
-import * as tf from '@tensorflow/tfjs-node';
 import { Word2Index, WordEmbeddingsCompleteConfig } from '../types';
 
 import { WEmbeddingsDBHelper } from './wembeddings-db-helper';
-import { Tensor } from '@tensorflow/tfjs-node';
+import { Tensor, tensor } from '@tensorflow/tfjs-node';
 
 export class WordEmbeddingsMatrix {
   rowsSize: number;
@@ -40,7 +39,7 @@ export class WordEmbeddingsMatrix {
   }
 
   get tensorMatrix(): Tensor {
-    return tf.tensor(this._matrix);
+    return tensor(this._matrix);
   }
 
   async getEmbeddingForWord(

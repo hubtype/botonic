@@ -12,11 +12,17 @@ import {
   TrainingInfo,
 } from './types';
 import { flipObject, shuffle } from './util/object-tools';
-import * as tf from '@tensorflow/tfjs-node';
-
+import {
+  Sequential,
+  LayersModel,
+  Tensor,
+  tensor,
+  Rank,
+  oneHot,
+  tensor1d,
+} from '@tensorflow/tfjs-node';
 import { PreProcessing } from './preprocessing';
 import { WordEmbeddingsMatrix } from './embeddings/word-embeddings-matrix';
-import { Tensor } from '@tensorflow/tfjs-node';
 import { TreebankWordTokenizer } from 'natural';
 import { NNModel } from './nn-model';
 import { writeJSON, createDirIfNotExists } from './util/file-system';
@@ -45,8 +51,8 @@ export class Trainer {
   private _paddingSequenceLength: number;
   preprocessing: PreProcessing = undefined;
   private _params: HyperParameters = undefined;
-  private _model: tf.Sequential | tf.LayersModel = undefined;
-  private _wordEmbeddingsMatrix: tf.Tensor<tf.Rank> = undefined;
+  private _model: Sequential | LayersModel = undefined;
+  private _wordEmbeddingsMatrix: Tensor<Rank> = undefined;
 
   constructor(locale: Locale, intentsData: IntentData) {
     this._locale = locale;
@@ -130,7 +136,7 @@ export class Trainer {
       this._paddingSequenceLength = this.params.maxSequenceLength;
   }
 
-  async getEmbeddingMatrix(): Promise<tf.Tensor> {
+  async getEmbeddingMatrix(): Promise<Tensor> {
     const wordEmbeddings = new WordEmbeddingsMatrix(
       this._wordEmbeddingsConfig,
       this.preprocessing.vocabulary,
@@ -146,9 +152,9 @@ export class Trainer {
   }
 
   private _withModel(
-    model: tf.Sequential | tf.LayersModel,
-    embeddingsMatrix?: tf.Tensor,
-  ): tf.Sequential | tf.LayersModel {
+    model: Sequential | LayersModel,
+    embeddingsMatrix?: Tensor,
+  ): Sequential | LayersModel {
     return (
       model ??
       new NNModel(
@@ -172,15 +178,15 @@ export class Trainer {
   }
   private get _Y(): Tensor {
     const labels = this.samples.map((sample) => sample.label);
-    const Y = tf.oneHot(
-      tf.tensor1d(labels, 'int32'),
+    const Y = oneHot(
+      tensor1d(labels, 'int32'),
       Object.keys(this.labels).length,
     );
     console.debug(`Shape of Y: [${Y.shape}]`);
     return Y;
   }
 
-  async run(model?: any): Promise<void> {
+  async run(model?: Sequential | LayersModel): Promise<void> {
     if (Object.keys(this.labels).length < 2) {
       throw Error('You need at least two intents to train');
     }
@@ -211,12 +217,12 @@ export class Trainer {
     const paddedSequences = this.preprocessing
       .padSequences(sequences, this._paddingSequenceLength)
       .dataSync();
-    return tf.tensor([paddedSequences]);
+    return tensor([paddedSequences]);
   }
 
   predict(input: string): void {
     const paddedTensor = this._inputToSequence(input);
-    const prediction = this._model.predict(paddedTensor) as tf.Tensor;
+    const prediction = this._model.predict(paddedTensor) as Tensor;
     const intent: any = {};
     const intents = Array.from(prediction.dataSync())
       .map((confidence, i) => {
@@ -247,13 +253,14 @@ export class Trainer {
       maxSeqLength: this.sequenceLength,
       vocabulary: this.preprocessing.vocabulary,
     };
-    const trainingInfoPath = join(modelsPath, this._locale);
-    createDirIfNotExists(trainingInfoPath);
-    writeJSON(
-      join(trainingInfoPath, TRAINING_INFO_FILENAME, EXTENSIONS.JSON),
-      trainingInfo,
+    const trainingInfoDirPath = join(modelsPath, this._locale);
+    createDirIfNotExists(trainingInfoDirPath);
+    const trainingInfoFilePath = join(
+      trainingInfoDirPath,
+      `${TRAINING_INFO_FILENAME}${EXTENSIONS.JSON}`,
     );
-    console.debug('Saving model...');
-    await this._model.save(`file://${trainingInfoPath}`);
+    writeJSON(trainingInfoFilePath, trainingInfo);
+    console.debug('Saved model at', trainingInfoFilePath);
+    await this._model.save(`file://${trainingInfoDirPath}`);
   }
 }
