@@ -8,11 +8,11 @@ import {
   SUPPORTED_EMBEDDINGS,
   BOTONIC_WORD_EMBEDDINGS_URL,
 } from '../constants';
-import { WordEmbeddingKind, Locale, WordEmbeddingDimension } from '../types';
+import { WordEmbeddingKind, Language, WordEmbeddingDimension } from '../types';
 import { downloadIntoPath } from '../util/file-system';
 
 export const isSupportedWordEmbedding = (
-  locale: Locale,
+  locale: Language,
   kind: WordEmbeddingKind,
   dimension: WordEmbeddingDimension,
 ): boolean =>
@@ -29,7 +29,7 @@ export class WEmbeddingsDBHelper {
   constructor(
     kind: WordEmbeddingKind,
     dimension: WordEmbeddingDimension,
-    locale: Locale,
+    locale: Language,
   ) {
     if (!isSupportedWordEmbedding(locale, kind, dimension)) {
       this.isValidWEmbedding = false;

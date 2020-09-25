@@ -1,12 +1,12 @@
 {
   "language": "en",
-  "intentsDict": {
+  "intents": {
     "0": "BookRestaurant",
     "1": "GetDirections",
     "2": "Gratitude",
     "3": "Greetings"
   },
-  "maxSeqLength": 20,
+  "maxSeqLen": 20,
   "vocabulary": {
     "2": 176,
     "3": 70,
