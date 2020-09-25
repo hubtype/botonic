@@ -36,8 +36,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^1.7.3",
-    "@tensorflow/tfjs-node": "^1.7.3",
+    "@tensorflow/tfjs": "^2.4.0",
+    "@tensorflow/tfjs-node": "^2.4.0",
     "@types/better-sqlite3": "^5.4.0",
     "@types/natural": "^0.6.3",
     "@types/webgl2": "^0.0.5",
