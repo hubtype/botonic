@@ -13,7 +13,7 @@ export type WordEmbeddingsConfig = {
 };
 
 export type WordEmbeddingsCompleteConfig = WordEmbeddingsConfig & {
-  locale: Locale;
+  locale: Language;
 };
 export interface HyperParameters {
   maxSequenceLength?: number;
@@ -22,12 +22,26 @@ export interface HyperParameters {
   units?: number;
   validationSplit?: number;
   dropoutRegularization?: number;
-  locale?: Locale;
+  locale?: Language;
 }
 
-export interface TokenizerLike {
+export interface Normalizer {
+  normalize(text: string): string;
+}
+
+export interface Stemmer {
+  stem(text: string, language: Language): string;
+}
+
+export interface Tokenizer {
   tokenize(text: string): string[];
 }
+
+export type Vocabulary = { [word: string]: number };
+
+export type Intents = { [intent: number]: string };
+
+export type Prediction = { [intent: string]: number };
 
 export interface Word2Index {
   [word: string]: number;
@@ -51,7 +65,7 @@ export interface IntentData {
 }
 
 export interface Example {
-  locale: Locale;
+  locale: Language;
   intent: Intent;
   utterance: Utterance;
 }
@@ -59,7 +73,7 @@ export interface Example {
 export interface Sample {
   label: number;
   value: string;
-  locale: Locale;
+  locale: Language;
 }
 export interface CompleteSample extends Sample {
   tokenized: string[];
@@ -72,13 +86,13 @@ export interface ReversedLabels {
 }
 
 export interface TrainingInfo {
-  language: Locale;
+  language: Language;
   intentsDict: Labels;
   vocabulary: Word2Index;
   maxSeqLength: number;
 }
 
-export type Locale =
+export type Language =
   | 'aa'
   | 'ab'
   | 'ae'

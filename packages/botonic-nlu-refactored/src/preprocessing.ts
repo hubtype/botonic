@@ -1,17 +1,11 @@
-import {
-  Sample,
-  TokenizerLike,
-  Word2Index,
-  Index2Word,
-  WordCount,
-} from './types';
+import { Sample, Tokenizer, Word2Index, Index2Word, WordCount } from './types';
 
 import { Tensor1D, tensor1d, Tensor, stack } from '@tensorflow/tfjs-node';
 
 const UNKNOWN_TOKEN = '<UNK>';
 export class PreProcessing {
   private _samples: Sample[] = [];
-  private _tokenizer: TokenizerLike;
+  private _tokenizer: Tokenizer;
   vocabularyLength = 1;
   private _word2Index: Word2Index;
   index2Word: Index2Word;
@@ -19,7 +13,7 @@ export class PreProcessing {
   maxSentenceLength = 0;
   private _sequences: number[][];
 
-  constructor(samples: Sample[], tokenizer: TokenizerLike) {
+  constructor(samples: Sample[], tokenizer: Tokenizer) {
     this._samples = samples;
     this._tokenizer = tokenizer;
     this._word2Index = { [UNKNOWN_TOKEN]: 0 };
@@ -37,7 +31,7 @@ export class PreProcessing {
     return this._word2Index;
   }
 
-  get tokenizer(): TokenizerLike {
+  get tokenizer(): Tokenizer {
     return this._tokenizer;
   }
 

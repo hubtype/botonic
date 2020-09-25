@@ -39,12 +39,15 @@
     "@tensorflow/tfjs": "^2.4.0",
     "@tensorflow/tfjs-node": "^2.4.0",
     "@types/better-sqlite3": "^5.4.0",
+    "@types/d3": "^5.7.2",
     "@types/natural": "^0.6.3",
     "@types/webgl2": "^0.0.5",
     "axios": "^0.19.2",
     "better-sqlite3": "^7.0.1",
+    "d3": "^6.2.0",
     "install": "^0.13.0",
-    "natural": "^2.1.1",
+    "machinelearn": "^2.1.5",
+    "natural": "^2.1.5",
     "npm": "^6.14.5"
   },
   "resolutions": {

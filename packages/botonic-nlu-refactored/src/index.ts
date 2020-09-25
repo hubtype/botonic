@@ -1,6 +1,7 @@
-import { BotonicNLU } from './botonic-nlu';
-export { BotonicNLU };
-
+// import { BotonicNLU } from './botonic-nlu';
+import { NewBotonicNLU } from './new-botonic-nlu';
+// export { BotonicNLU };
+export { NewBotonicNLU };
 /*  
 // DEV (useful for development workflow)
 // NOTE: Do not add them when building the project to avoid generating more transpiled modules than necessary

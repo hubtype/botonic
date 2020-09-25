@@ -1,5 +1,5 @@
 import {
-  Locale,
+  Language,
   IntentData,
   Intent,
   Labels,
@@ -7,7 +7,7 @@ import {
   ReversedLabels,
   HyperParameters,
   WordEmbeddingsConfig,
-  TokenizerLike,
+  Tokenizer,
   WordEmbeddingsCompleteConfig,
   TrainingInfo,
 } from './types';
@@ -43,7 +43,7 @@ const DEFAULT_PARAMS: HyperParameters = {
 };
 
 export class Trainer {
-  private _locale: Locale;
+  private _locale: Language;
   private _wordEmbeddingsConfig: WordEmbeddingsCompleteConfig | undefined;
   private _index2Intent: Labels = {};
   private _intent2Index: ReversedLabels = {};
@@ -54,7 +54,7 @@ export class Trainer {
   private _model: Sequential | LayersModel = undefined;
   private _wordEmbeddingsMatrix: Tensor<Rank> = undefined;
 
-  constructor(locale: Locale, intentsData: IntentData) {
+  constructor(locale: Language, intentsData: IntentData) {
     this._locale = locale;
     this._prepareDataSamples(intentsData);
     shuffle(this._samples); // https://github.com/keras-team/keras/issues/4298#issuecomment-545554789
@@ -105,7 +105,7 @@ export class Trainer {
     });
   }
 
-  withTokenizer(tokenizer: TokenizerLike): this {
+  withTokenizer(tokenizer: Tokenizer): this {
     this.preprocessing = new PreProcessing(this.samples, tokenizer);
     this.preprocessing.preprocess();
     this._updatePaddingSequenceLength();
