@@ -187,7 +187,7 @@ export const Webchat = forwardRef((props, ref) => {
     setCurrentAttachment,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
-  const { theme } = webchatState
+  const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const isOnline = useNetwork()
   const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
