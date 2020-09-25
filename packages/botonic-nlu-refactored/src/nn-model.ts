@@ -1,5 +1,5 @@
 import { HyperParameters, Word2Index, ReversedLabels } from './types';
-import * as tf from '@tensorflow/tfjs-node';
+import { Sequential, sequential, train, layers } from '@tensorflow/tfjs-node';
 export class NNModel {
   private _params: HyperParameters;
   private _trainableEmbeddings: boolean;
@@ -7,7 +7,7 @@ export class NNModel {
   private _vocabulary: Word2Index;
   private _reversedLabels: ReversedLabels;
   private _sequenceLength: number;
-  private _model: tf.Sequential;
+  private _model: Sequential;
   constructor(
     sequenceLength: number,
     vocabulary: Word2Index,
@@ -24,24 +24,24 @@ export class NNModel {
     this._wordEmbeddingMatrix = wordEmbeddingMatrix;
     this._initModel();
   }
-  get model(): tf.Sequential {
+  get model(): Sequential {
     this._model.summary();
     this._model.compile({
-      optimizer: tf.train.adam(this._params.learningRate),
+      optimizer: train.adam(this._params.learningRate),
       loss: 'categoricalCrossentropy',
       metrics: ['accuracy'],
     });
     return this._model;
   }
   private _initModel(): void {
-    this._model = tf.sequential();
+    this._model = sequential();
     this._addEmbeddingLayer();
     this._addLSTMLayer();
     this._addDenseLayer();
   }
   private _addEmbeddingLayer(): void {
     this._model.add(
-      tf.layers.embedding({
+      layers.embedding({
         inputDim: this._wordEmbeddingMatrix.shape[0],
         outputDim: this._wordEmbeddingMatrix.shape[1],
         inputLength: this._sequenceLength,
@@ -52,7 +52,7 @@ export class NNModel {
   }
   private _addLSTMLayer(): void {
     this._model.add(
-      tf.layers.lstm({
+      layers.lstm({
         units: this._params.units,
         dropout: this._params.dropoutRegularization,
         recurrentDropout: this._params.dropoutRegularization,
@@ -61,7 +61,7 @@ export class NNModel {
   }
   private _addDenseLayer(): void {
     this._model.add(
-      tf.layers.dense({
+      layers.dense({
         units: Object.keys(this._reversedLabels).length,
         activation: 'softmax',
       }),
