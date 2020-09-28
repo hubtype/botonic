@@ -54,7 +54,7 @@ export class BotonicNLU {
     this._preprocessor.tokenizer = value;
   }
 
-  loadModelData(modelDataPath: string) {
+  loadModelData(modelDataPath: string): void {
     const info = readJSON(modelDataPath);
     this._preprocessor.language = info.language;
     this._preprocessor.maxSeqLen = info.maxSeqLen;
@@ -62,7 +62,7 @@ export class BotonicNLU {
     this._intentsProcessor.loadEncoderDecoder(info.intents);
   }
 
-  async loadModel(modelPath: string) {
+  async loadModel(modelPath: string): Promise<void> {
     await this._modelManager.loadModel(modelPath);
   }
 
@@ -88,13 +88,13 @@ export class BotonicNLU {
   }
 
   // TO DO: What to do if the path is not a csv.
-  loadData(path: string, language: Language, maxSeqLen: number) {
+  loadData(path: string, language: Language, maxSeqLen: number): void {
     this._data = this._dataReader.readData(path);
     this._preprocessor.language = language;
     this._preprocessor.maxSeqLen = maxSeqLen;
   }
 
-  splitData(testPercentage: number = 0.25) {
+  splitData(testPercentage = 0.25): void {
     if (testPercentage > 1 || testPercentage < 0) {
       throw new RangeError(
         'testPercentage should be a number between 0 and 1.',
@@ -117,8 +117,8 @@ export class BotonicNLU {
     learningRate: number,
     wordEmbeddingsType: WordEmbeddingType = '10k-fasttext',
     wordEmbeddingsDimension: WordEmbeddingDimension = 300,
-    trainableEmbeddings: boolean = true,
-  ) {
+    trainableEmbeddings = true,
+  ): Promise<void> {
     const wordEmbeddingsConfig: WordEmbeddingsConfig = {
       type: wordEmbeddingsType,
       dimension: wordEmbeddingsDimension,
@@ -139,8 +139,8 @@ export class BotonicNLU {
   async train(
     epochs: number,
     batchSize: number,
-    validationSplit: number = 0.1,
-  ) {
+    validationSplit = 0.1,
+  ): Promise<void> {
     const [xTrain, yTrain] = this._splitInputOutput(this._trainSet);
 
     const parameters: TrainingParameters = {
@@ -171,7 +171,7 @@ export class BotonicNLU {
     return [x, y];
   }
 
-  async saveModel() {
+  async saveModel(): Promise<void> {
     const modelDir = join(
       process.cwd(),
       'tests',
