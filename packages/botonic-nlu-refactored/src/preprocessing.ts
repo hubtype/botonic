@@ -1,7 +1,7 @@
 import {
   Sample,
   TokenizerLike,
-  Word2Index,
+  Word2Index as WordToIndex,
   Index2Word,
   WordCount,
 } from './types';
@@ -13,7 +13,7 @@ export class PreProcessing {
   private _samples: Sample[] = [];
   private _tokenizer: TokenizerLike;
   vocabularyLength = 1;
-  private _word2Index: Word2Index;
+  word2Index: WordToIndex;
   index2Word: Index2Word;
   private _wordCount: WordCount = {};
   maxSentenceLength = 0;
@@ -22,7 +22,7 @@ export class PreProcessing {
   constructor(samples: Sample[], tokenizer: TokenizerLike) {
     this._samples = samples;
     this._tokenizer = tokenizer;
-    this._word2Index = { [UNKNOWN_TOKEN]: 0 };
+    this.word2Index = { [UNKNOWN_TOKEN]: 0 };
     this.index2Word = { 0: `${UNKNOWN_TOKEN}` };
   }
 
@@ -33,8 +33,8 @@ export class PreProcessing {
     return this._sequences;
   }
 
-  get vocabulary(): Word2Index {
-    return this._word2Index;
+  get vocabulary(): WordToIndex {
+    return this.word2Index;
   }
 
   get tokenizer(): TokenizerLike {
@@ -81,8 +81,8 @@ export class PreProcessing {
   }
 
   private _addWord(word: string): void {
-    if (!(word in this._word2Index)) {
-      this._word2Index[word] = this.vocabularyLength;
+    if (!(word in this.word2Index)) {
+      this.word2Index[word] = this.vocabularyLength;
       this._wordCount[word] = 1;
       this.index2Word[this.vocabularyLength] = word;
       this.vocabularyLength++;
@@ -103,7 +103,7 @@ export class PreProcessing {
     tokenizedSamples.forEach((tokenizedSample) => {
       const sequence: number[] = [];
       tokenizedSample.forEach((word) => {
-        if (!(word in this._word2Index))
+        if (!(word in this.word2Index))
           sequence.push(this.toIndex(UNKNOWN_TOKEN));
         else sequence.push(this.toIndex(word));
       });
@@ -117,6 +117,6 @@ export class PreProcessing {
   }
 
   toIndex(word: string): number {
-    return this._word2Index[word];
+    return this.word2Index[word];
   }
 }

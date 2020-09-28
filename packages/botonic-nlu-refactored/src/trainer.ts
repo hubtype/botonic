@@ -20,12 +20,13 @@ import {
   Rank,
   oneHot,
   tensor1d,
+  loadLayersModel,
 } from '@tensorflow/tfjs-node';
 import { PreProcessing } from './preprocessing';
 import { WordEmbeddingsMatrix } from './embeddings/word-embeddings-matrix';
 import { TreebankWordTokenizer } from 'natural';
 import { NNModel } from './nn-model';
-import { writeJSON, createDirIfNotExists } from './util/file-system';
+import { writeJSON, createDirIfNotExists, readJSON } from './util/file-system';
 import { join } from 'path';
 import {
   MODELS_DIR,
@@ -58,6 +59,26 @@ export class Trainer {
     this._locale = locale;
     this._prepareDataSamples(intentsData);
     shuffle(this._samples); // https://github.com/keras-team/keras/issues/4298#issuecomment-545554789
+  }
+
+  static async _loadModel(
+    locale: Locale,
+    modelPath: string,
+    nluDataPath: string,
+    tokenizer: TokenizerLike,
+  ): Promise<Trainer> {
+    // TODO: Rethink initialization
+    const model = await loadLayersModel(`file://${modelPath}`);
+    const nluData = readJSON(nluDataPath);
+    const trainer = new this(locale, {});
+    trainer._index2Intent = nluData.intentsDict;
+    trainer._intent2Index = flipObject(trainer._index2Intent);
+    const preprocessing = new PreProcessing([], tokenizer);
+    preprocessing.word2Index = nluData.vocabulary;
+    trainer._paddingSequenceLength = nluData.maxSeqLength;
+    trainer.preprocessing = preprocessing;
+    trainer._model = model;
+    return trainer;
   }
 
   get labels(): Labels {
@@ -244,8 +265,8 @@ export class Trainer {
     );
   }
 
-  async save(): Promise<void> {
-    const modelsPath = join(process.cwd(), 'tests', NLU_DIR, MODELS_DIR);
+  async save(path: string): Promise<void> {
+    const modelsPath = path;
     createDirIfNotExists(modelsPath);
     const trainingInfo: TrainingInfo = {
       language: this._locale,

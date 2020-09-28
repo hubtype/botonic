@@ -1,6 +1,14 @@
-import { Intent, Utterance, Locale, Data, Example } from './types';
+import {
+  Intent,
+  Utterance,
+  Locale,
+  Data,
+  Example,
+  TokenizerLike,
+} from './types';
 import { isEmptyString } from './util/object-tools';
 import { Trainer } from './trainer';
+import { join } from 'path';
 
 export class BotonicNLU {
   private readonly _data: Data;
@@ -50,6 +58,23 @@ export class BotonicNLU {
   train(locale: Locale): Trainer {
     const trainer = new Trainer(locale, this._data[locale]);
     this._trainers.push(trainer);
+    return trainer;
+  }
+
+  async loadModel(
+    locale: Locale,
+    pathToModel: string,
+    tokenizer: TokenizerLike,
+  ): Promise<Trainer> {
+    const modelsPath = join(pathToModel, locale);
+    const modelPath = join(modelsPath, 'model.json');
+    const nluDataPath = join(modelsPath, 'nlu-data.json');
+    const trainer = Trainer._loadModel(
+      locale,
+      modelPath,
+      nluDataPath,
+      tokenizer,
+    );
     return trainer;
   }
 }
