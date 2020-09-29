@@ -5,7 +5,7 @@ import React, {
   forwardRef,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
-import { useLocalStorage } from '@rehooks/local-storage'
+import { useStorageState } from 'react-storage-hooks'
 import { v4 as uuidv4 } from 'uuid'
 import UAParser from 'ua-parser-js'
 import { isMobile, params2queryString, INPUT } from '@botonic/core'
@@ -190,10 +190,25 @@ export const Webchat = forwardRef((props, ref) => {
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const isOnline = useNetwork()
-  const [botonicState, saveState, deleteState] = useLocalStorage('botonicState')
+  const getThemeProperty = _getThemeProperty(theme)
+
+  const getStorage = () => {
+    const storage = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.storage,
+      props.storage
+    )
+    if (storage === undefined) return localStorage
+    return storage
+  }
+
+  const [botonicState, saveState, writeError] = useStorageState(
+    getStorage(),
+    'botonicState'
+  )
+
   const saveWebchatState = webchatState => {
-    saveState(
-      stringifyWithRegexs({
+    getStorage() &&
+      saveState({
         user: webchatState.user,
         messages: webchatState.messagesJSON,
         session: webchatState.session,
@@ -202,11 +217,8 @@ export const Webchat = forwardRef((props, ref) => {
         lastMessageUpdate: webchatState.lastMessageUpdate,
         themeUpdates: webchatState.themeUpdates, // can contain regexs
       })
-    )
   }
   const deviceAdapter = new DeviceAdapter()
-
-  const getThemeProperty = _getThemeProperty(theme)
 
   const handleAttachment = event => {
     if (!isAllowedSize(event.target.files[0].size)) {
@@ -239,7 +251,7 @@ export const Webchat = forwardRef((props, ref) => {
   const resendUnsentInputs = async () =>
     props.resendUnsentInputs && props.resendUnsentInputs()
 
-  // Load initial state from localStorage
+  // Load initial state from storage
   useEffect(() => {
     let {
       user,

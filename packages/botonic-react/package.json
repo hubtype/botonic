@@ -24,7 +24,6 @@
   ],
   "dependencies": {
     "@botonic/core": "0.14.0-alpha.0",
-    "@rehooks/local-storage": "^2.2.3",
     "axios": "^0.20.0",
     "emoji-picker-react": "^3.2.3",
     "framer-motion": "^2.6.6",
@@ -38,6 +37,7 @@
     "react-reveal": "^1.2.2",
     "react-router-dom": "^5.2.0",
     "react-textarea-autosize": "^8.2.0",
+    "react-storage-hooks": "^4.0.1",
     "rebass": "^4.0.7",
     "simplebar-react": "^2.2.1",
     "styled-components": "^5.1.1",
