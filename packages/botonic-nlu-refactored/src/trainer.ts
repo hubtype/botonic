@@ -28,12 +28,7 @@ import { TreebankWordTokenizer } from 'natural';
 import { NNModel } from './nn-model';
 import { writeJSON, createDirIfNotExists, readJSON } from './util/file-system';
 import { join } from 'path';
-import {
-  MODELS_DIR,
-  NLU_DIR,
-  TRAINING_INFO_FILENAME,
-  EXTENSIONS,
-} from './constants';
+import { TRAINING_INFO_FILENAME, EXTENSIONS } from './constants';
 
 const DEFAULT_PARAMS: HyperParameters = {
   learningRate: 0.01,
@@ -139,7 +134,6 @@ export class Trainer {
   }
 
   withParams(params?: HyperParameters): this {
-    // if (!this.preprocessing) this.withTokenizer(new TreebankWordTokenizer());
     this._params = Object.assign(DEFAULT_PARAMS, params);
     if (params?.maxSequenceLength >= this.preprocessing?.maxSentenceLength) {
       this.withTokenizer(this.preprocessing.tokenizer);
@@ -281,7 +275,7 @@ export class Trainer {
       `${TRAINING_INFO_FILENAME}${EXTENSIONS.JSON}`,
     );
     writeJSON(trainingInfoFilePath, trainingInfo);
-    console.debug('Saved model at', trainingInfoFilePath);
+    console.debug('Saved model at', trainingInfoDirPath);
     await this._model.save(`file://${trainingInfoDirPath}`);
   }
 }

@@ -1,9 +1,9 @@
 import * as os from 'os';
 import { join } from 'path';
 
-export const NLU_DIR = 'nlu';
-export const UTTERANCES_DIR = 'utterances';
-export const MODELS_DIR = 'models';
+export const NLU_DIRNAME = 'nlu';
+export const UTTERANCES_DIRNAME = 'utterances';
+export const MODELS_DIRNAME = 'models';
 export const TRAINING_INFO_FILENAME = 'nlu-data';
 
 export const WE_DB_FILE = Object.freeze({
@@ -15,14 +15,14 @@ export const WE_DB_FILE = Object.freeze({
 export const BOTONIC_WORD_EMBEDDINGS_URL =
   'https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com';
 
-export const BOTONIC_GLOBAL_DIR = '.botonic';
+export const BOTONIC_GLOBAL_DIRNAME = '.botonic';
 
-export const BOTONIC_GLOBAL_WE_DIR = 'word-embeddings';
+export const BOTONIC_GLOBAL_WE_DIRNAME = 'word-embeddings';
 
 export const GLOBAL_WORD_EMBEDDINGS_PATH = join(
   os.homedir(),
-  BOTONIC_GLOBAL_DIR,
-  BOTONIC_GLOBAL_WE_DIR,
+  BOTONIC_GLOBAL_DIRNAME,
+  BOTONIC_GLOBAL_WE_DIRNAME,
 );
 
 interface SupportedEmbeddings {
