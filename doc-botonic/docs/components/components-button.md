@@ -42,7 +42,7 @@ But never
 
 </details>
 
-## Code
+
 
 ```javascript
 <Text>

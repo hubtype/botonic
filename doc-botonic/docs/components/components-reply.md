@@ -17,7 +17,7 @@ The `Reply` component, or Quick Replies allows you to present options in a messa
 | payload  | String, Number | Custom data that are sent back                         | If `path` is defined, no need to  define `payload` |      -         |
 
 
-## Code
+## Example
 
 <details>
 <summary>Output</summary>
@@ -25,9 +25,6 @@ The `Reply` component, or Quick Replies allows you to present options in a messa
 <img src="https://botonic-doc-static.netlify.com/images/quickreplies.png" width="200"/>
 
 </details>
-
-ç
-To insert quick replies,
 
 ```javascript
 <Text>
