@@ -3,8 +3,8 @@ import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { Locale } from '../src/types';
 import {
-  UTTERANCES_DIR,
-  NLU_DIR,
+  UTTERANCES_DIRNAME,
+  NLU_DIRNAME,
   EXTENSIONS,
   ENCODINGS,
 } from '../src/constants';
@@ -15,7 +15,7 @@ export const GRATITUDE_UTTERANCES_LENGTH = 9;
 export const GREETINGS_UTTERANCES_LENGTH = 12;
 
 export const initFromDirectory = (filterBy: Locale): BotonicNLU => {
-  const utterancesPath = join(__dirname, NLU_DIR, UTTERANCES_DIR);
+  const utterancesPath = join(__dirname, NLU_DIRNAME, UTTERANCES_DIRNAME);
   const pathLangs = readdirSync(utterancesPath).filter(
     (locale) => locale == filterBy,
   );

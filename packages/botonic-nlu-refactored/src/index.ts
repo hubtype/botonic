@@ -1,2 +1,3 @@
 import { BotonicNLU } from './botonic-nlu';
-export { BotonicNLU };
+import * as CONSTANTS from './constants';
+export { BotonicNLU, CONSTANTS };

@@ -15,14 +15,14 @@ export const WE_DB_FILE = Object.freeze({
 export const BOTONIC_WORD_EMBEDDINGS_URL =
   'https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com';
 
-export const BOTONIC_GLOBAL_DIR = '.botonic';
+export const BOTONIC_GLOBAL_DIRNAME = '.botonic';
 
-export const BOTONIC_GLOBAL_WE_DIR = 'word-embeddings';
+export const BOTONIC_GLOBAL_WE_DIRNAME = 'word-embeddings';
 
 export const GLOBAL_WORD_EMBEDDINGS_PATH = join(
   os.homedir(),
-  BOTONIC_GLOBAL_DIR,
-  BOTONIC_GLOBAL_WE_DIR,
+  BOTONIC_GLOBAL_DIRNAME,
+  BOTONIC_GLOBAL_WE_DIRNAME,
 );
 
 interface SupportedEmbeddings {
