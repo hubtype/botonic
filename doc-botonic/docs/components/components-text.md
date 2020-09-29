@@ -3,7 +3,7 @@ id: text
 title: Text
 ---
 
-The `Text`component is the simplest and easiest way to talk to the user.
+The `Text` component is the simplest and easiest way to talk to the user.
 
 ## Properties
 
