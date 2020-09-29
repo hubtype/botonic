@@ -11,6 +11,79 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.14.0] - 2020-30-09
+
+### Added
+
+- [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - New bot template `dynamo` using botonic dynamoDB plugin from a JS bot.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Improved behavior when enduser messages are lost due to connection issues. Missed inputs will be resent when connection is regained.
+  - Enduser messages will be displayed with less opacity until they are correctly delivered to the server.
+  - Add classNames to blob messages by default, under the following format:
+    `{type}-{from} {customTypeName}`
+    e.g.: Text messages from user -> `text-user`
+    e.g.: Custom messages from bot -> `custom-bot my-custom-message-name`
+  - Allow passing `mobileStyle` in `webchat/index.js`.
+  - Add arrow buttons for better interaction with Webchat Carousels. They can be customized.
+  - Allow disabling timestamps in the custom Messages using the enableTimestamps prop.
+  - Define where to store the botonicState using the variable storage.
+  - Make the methods `openCoverComponent`, `closeCoverComponent` and `toggleCoverComponent` available through Botonic object in browser so the `coverComponent` can be shown/hide manually.
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Decorator for Contentful which can distribute the delivery requests amongst different spaces/environments.
+  - Added a new tool to modify contentful spaces exported as json file with "contentful space export".
+  - Tool to duplicate the value of reference fields into a new locale. Reference fields (assets or links to other contents) will typically be the same for all locales, but not always. So we initially link them all to the same target for all locales.
+  - Added support for locales which include the country (eg. es_ES). Now they are preprocessed as the root locale (without the country).
+  - Added an option for Contentful plugin to be able to transform the name of the locale when sent to Contentful.
+  - Added logCall flag to contentfulOptions in order to log creation config and calls performed to CMS.
+  - Added NLP support for Turkish.
+  - Added NLP support for Italian.
+  - Added Tokenizer, Lexer & Stop words for French.
+
+* [@botonic/plugin-google-analytics](https://www.npmjs.com/package/@botonic/plugin-google-analytics)
+
+  - New Botonic plugin to track user interaction or bot's behaviour to Google Analytics.
+
+### Changed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Upgrade typescript to 4.0.2
+  - Upgrade eslint plugins and fix new warnings.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Refactored timestamps. They can be enabled by setting: `theme.message.timestamps.enable` to `true`. (Default format will be as following `29 Jun, 12:40:07`). The content can be formatted by defining a function under `theme.message.timestamps.format` which returns a string with the formatted date and their styles under `theme.message.timestamps.style`.
+  - Improved `index.d.ts` definitions.
+
+### Fixed
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Added the export of `getAvailableAgentsByQueue` which was not accessible.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Removed `moment` dependency to reduce bundle size.
+  - Close `PersistentMenu` automatically when enduser click outside of its area.
+  - Fixed webchat properties not being read properly by deep merging properties.
+  - Disabled text input when `CoverComponent`is shown.
+  - Add missing `animationsEnabled` prop.
+  - Now Custom Message Types can be used together with Reply component.
+  - Deactivate markdown in webchat when visualizing messages using whatsapp provider.
+  - Avoid sending messages with only spaces.
+  - Rename theme property hoverText to hoverTextColor in button.jsx so changing button's text color on hover could work.
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+  - Fix bug in Contentful Schedule, where schedule was miscalculating around midnight. It was not taking the timezone offset into account to calculate the weekday.
+  - Flag so that ContentValidator only validates contents which are reachable.
+  - Check empty text in Text contents
+
 ## [0.13.0] - 2020-15-06
 
 ### Added
@@ -310,3 +383,4 @@ All notable changes to Botonic will be documented in this file.
 [0.11.0]: https://github.com/hubtype/botonic/releases/tag/v0.11.0
 [0.12.0]: https://github.com/hubtype/botonic/releases/tag/v0.12.0
 [0.13.0]: https://github.com/hubtype/botonic/releases/tag/v0.13.0
+[0.14.0]: https://github.com/hubtype/botonic/releases/tag/v0.14.0
