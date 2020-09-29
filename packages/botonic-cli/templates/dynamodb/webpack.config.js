@@ -51,6 +51,7 @@ const resolveConfig = {
   extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
   alias: {
     BotonicProject: path.resolve(__dirname, 'src'),
+    webchat: path.resolve(__dirname, 'src', 'webchat'),
     react: path.resolve(__dirname, 'node_modules', 'react'),
     'styled-components': path.resolve(
       __dirname,
@@ -171,7 +172,7 @@ function botonicWebchatConfig(mode) {
     mode: mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(botonicPath, 'src', 'entry.js'),
+    entry: path.resolve(botonicPath, 'src', 'webchat-entry.js'),
     module: {
       rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig],
     },
