@@ -17,72 +17,72 @@ All notable changes to Botonic will be documented in this file.
 
 - [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
 
-  - New bot template `dynamo` using botonic dynamoDB plugin from a JS bot.
+  - New bot template `dynamo` using Botonic dynamoDB plugin from a JS bot.
 
 * [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
-  - Improved behavior when enduser messages are lost due to connection issues. Missed inputs will be resent when connection is regained.
-  - Enduser messages will be displayed with less opacity until they are correctly delivered to the server.
-  - Add classNames to blob messages by default, under the following format:
+  - Improved behavior when end user messages are lost due to connection issues. Missed inputs will be resent when connection is regained.
+  - End user messages will be displayed with less opacity until they are correctly delivered to the server.
+  - Added classNames to blob messages by default, under the following format:
     `{type}-{from} {customTypeName}`
     e.g.: Text messages from user -> `text-user`
     e.g.: Custom messages from bot -> `custom-bot my-custom-message-name`
-  - Allow passing `mobileStyle` in `webchat/index.js`.
-  - Add arrow buttons for better interaction with Webchat Carousels. They can be customized.
-  - Allow disabling timestamps in the custom Messages using the enableTimestamps prop.
-  - Define where to store the botonicState using the variable storage.
-  - Make the methods `openCoverComponent`, `closeCoverComponent` and `toggleCoverComponent` available through Botonic object in browser so the `coverComponent` can be shown/hide manually.
+  - Passing `mobileStyle` in `webchat/index.js`is now allowed.
+  - Added arrow buttons for better interaction with Webchat Carousels. They can be customized.
+  - Disabling timestamps in the custom Messages using the `enableTimestamps` prop is now allowed.
+  - Defined where to store the botonicState using the variable storage.
+  - The methods `openCoverComponent`, `closeCoverComponent` and `toggleCoverComponent` are available in the browser, through the Botonic object, so that the `coverComponent` can be shown/hidden manually.
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
 
-  - Decorator for Contentful which can distribute the delivery requests amongst different spaces/environments.
-  - Added a new tool to modify contentful spaces exported as json file with "contentful space export".
-  - Tool to duplicate the value of reference fields into a new locale. Reference fields (assets or links to other contents) will typically be the same for all locales, but not always. So we initially link them all to the same target for all locales.
+  - Decorator for Contentful that can distribute the delivery requests amongst different spaces/environments.
+  - Added a new tool to modify Contentful spaces exported as json file with "contentful space export".
+  - Added a tool to duplicate the value of reference fields into a new locale. Reference fields (assets or links to other contents) will typically be the same for all locales, but not always. So we initially link them all to the same target for all locales.
   - Added support for locales which include the country (eg. es_ES). Now they are preprocessed as the root locale (without the country).
   - Added an option for Contentful plugin to be able to transform the name of the locale when sent to Contentful.
-  - Added logCall flag to contentfulOptions in order to log creation config and calls performed to CMS.
+  - Added `logCall` flag to `contentfulOptions` in order to log creation config and calls performed to CMS.
   - Added NLP support for Turkish.
   - Added NLP support for Italian.
   - Added Tokenizer, Lexer & Stop words for French.
 
 * [@botonic/plugin-google-analytics](https://www.npmjs.com/package/@botonic/plugin-google-analytics)
 
-  - New Botonic plugin to track user interaction or bot's behaviour to Google Analytics.
+  - New Botonic plugin to track user interaction or bot's behaviour in Google Analytics.
 
 ### Changed
 
 - [Project](https://github.com/hubtype/botonic)
 
-  - Upgrade typescript to 4.0.2
-  - Upgrade eslint plugins and fix new warnings.
+  - Upgraded typescript to 4.0.2.
+  - Upgraded eslint plugins and fixed new warnings.
 
 * [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
-  - Refactored timestamps. They can be enabled by setting: `theme.message.timestamps.enable` to `true`. (Default format will be as following `29 Jun, 12:40:07`). The content can be formatted by defining a function under `theme.message.timestamps.format` which returns a string with the formatted date and their styles under `theme.message.timestamps.style`.
+  - Refactored timestamps. They can be enabled by setting `theme.message.timestamps.enable` to `true`. (Default format will be as follows: `29 Jun, 12:40:07`). The content can be formatted by defining a function under `theme.message.timestamps.format` which returns a string with the formatted date and their styles under `theme.message.timestamps.style`.
   - Improved `index.d.ts` definitions.
 
 ### Fixed
 
 - [@botonic/core](https://www.npmjs.com/package/@botonic/core)
 
-  - Added the export of `getAvailableAgentsByQueue` which was not accessible.
+  - Added the export of `getAvailableAgentsByQueue`, which was not accessible.
 
 * [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
   - Removed `moment` dependency to reduce bundle size.
-  - Close `PersistentMenu` automatically when enduser click outside of its area.
-  - Fixed webchat properties not being read properly by deep merging properties.
+  - Closed `PersistentMenu` automatically when the end user clicks outside.
+  - Fixed webchat properties not being properly read by deep merging properties.
   - Disabled text input when `CoverComponent`is shown.
-  - Add missing `animationsEnabled` prop.
-  - Now Custom Message Types can be used together with Reply component.
-  - Deactivate markdown in webchat when visualizing messages using whatsapp provider.
-  - Avoid sending messages with only spaces.
-  - Rename theme property hoverText to hoverTextColor in button.jsx so changing button's text color on hover could work.
+  - Added missing `animationsEnabled` prop.
+  - Now Custom Message Types can be used together with the Reply component.
+  - Deactivated markdown in webchat when viewing messages using WhatsApp provider.
+  - Sending messages with only spaces is now avoided.
+  - Renamed theme property `hoverText` to `hoverTextColor` in button.jsx so that changing the text color of a button on hover can work.
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
-  - Fix bug in Contentful Schedule, where schedule was miscalculating around midnight. It was not taking the timezone offset into account to calculate the weekday.
-  - Flag so that ContentValidator only validates contents which are reachable.
-  - Check empty text in Text contents
+  - Fixed bug in Contentful Schedule, where schedule was miscalculating around midnight. It was not taking the timezone offset into account to calculate the weekday.
+  - Flag so that the `ContentValidator` only validates contents which are reachable.
+  - Check empty text in Text contents.
 
 ## [0.13.0] - 2020-15-06
 
