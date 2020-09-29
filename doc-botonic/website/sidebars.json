@@ -32,11 +32,17 @@
       "components/buttons",
       "components/replies",
       "components/carousel",
+      "components/element",
+      "components/subtitle",
+      "components/title",
+      "components/message",
       "components/media",
       "components/location",
       "components/sharebutton",
       "components/messagetemplate",
-      "components/multichannel"
+      "components/multichannel",
+      "components/webchatsettings"
+
     ],
 
 

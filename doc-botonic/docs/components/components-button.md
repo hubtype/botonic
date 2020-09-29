@@ -5,7 +5,7 @@ title: Buttons
 
 ## Purpose
 
-The Button component is used to display a button during a conversation. The user can click on it and take specific actions instantly.  Buttons are usually sent during a conversation for the person to click and take specific actions instantly. It is very useful for audience interaction. 
+The `Button` component is used to display a button during a conversation. The user can click on it and take specific actions instantly.  Buttons are usually sent during a conversation for the person to click and take specific actions instantly. It is very useful for audience interaction. 
 
 ## Properties
 
@@ -20,7 +20,20 @@ The Button component is used to display a button during a conversation. The user
 | onClick  | String         | Set the action                                                     | No       | -             |
 
 
-## Properties
+
+**Note**: Webview, payload and url are not strictly required. However, if `children` is set, one of the three properties must be defined as follows: 
+```javascript
+<Button payload="1">1</Button>
+<Button webview={MyWebview}>1</Button>
+<Button url="src.com">Check url</Button>
+```
+But never 
+```javascript
+<Button>Content</Button>
+```
+
+
+## Example
 
 <details>
 <summary>Output</summary>

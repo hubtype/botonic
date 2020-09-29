@@ -5,7 +5,7 @@ title: Share Button
 
 ## Purpose
 
-The Share Button enables other users to share your content in Messenger. Messages shared this way show a preview and text elements that are clickable. 
+The `Share Button`component enables other users to share your content in Messenger. Messages shared this way show a preview and text elements that are clickable. 
 
 <details>
 <summary>Example</summary>

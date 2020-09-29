@@ -5,13 +5,21 @@ title: Carousel
 
 ## Purpose
 
-Carousels show a collection of images in a cyclic view. By displaying only a subset of images, the screen space is optimized. The navigation items, such as arrows, suggest additional content that is not currently visible, which encourages the user to continue exploring.
+The `Carousel` component allows you to show a collection of images in a cyclic view. By displaying only a subset of images, the screen space is optimized. The navigation items, such as arrows, suggest additional content that is not currently visible, which encourages the user to continue exploring.
+
+## Properties
+
+| Property | Type             | Description | Required | Default value |
+|----------|------------------|-------------|----------|---------------|
+| children | Array of Element | Show text   | Yes      | -             |
+
+## Example
+
+To get this king of carousel:
 
 <img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200"/>
 
-## Code
-
-You can render a carousel following the structure below:
+You can render it following the structure below:
 
 ```javascript
 import React from 'react'
@@ -68,6 +76,8 @@ export default class extends React.Component {
 }
 ```
 
+
+
 ## Customize or disable arrows on both sides of the carousel
 
 You can disable or customize arrows displayed on the left and right sides of a carousel.
@@ -76,7 +86,7 @@ You can disable or customize arrows displayed on the left and right sides of a c
 
 To do so:
 
-Add the following code in `src/webchat/index.js`:
+1. Add the following code in `src/webchat/index.js`:
 
 ```javascript
 import {
@@ -93,7 +103,7 @@ export const webchat = {
 }
 ```
 
-Add the following code in `src/webchat/custom-carousel-arrows.js`:
+2. Add the following code in `src/webchat/custom-carousel-arrows.js`:
 
 ```javascript
 import React from 'react'

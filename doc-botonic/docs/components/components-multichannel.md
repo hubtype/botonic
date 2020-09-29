@@ -5,11 +5,28 @@ title: Multichannel
 
 ## Purpose
 
-The multichannel component allows you to provide a way to concatenate and unify messages and conversation for your WhatsApp bot.
+The `Multichannel` component is a wrapper component used to transform existing representations of a channel into another one that does not support it natively. 
+As an example, it can be used to adapt native representations of a Text with Buttons or Carousel (available in Facebook) for WhatsApp : the multichannel component allows you to provide a way to concatenate and unify messages and conversations for your WhatsApp bot.
 
-In this way, the bot can avoid "spamming" the conversation and just sends one long message with the relevant text only.
+## Properties
 
-## Code
+| Property               | Type                                 | Description                                                                                                                            | Required | Default value |
+|------------------------|--------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------|---------------|
+| children               | Botonic Component                    | Enable the multichannel                                                                                                                | Yes      | -             |
+| firstIndex             | Number, letter or undefined          | Enable the display of the list of options with numbers or letters. Examples: firstIndex={"a"} gives a.b. and firstIndex={1} gives 1.2. | No       | 1             |
+| boldIndex              | Boolean                              | Apply a bold format to the index element                                                                                               | No       | False         |
+| carousel: indexMode    | Number, letter, undefined (no index) | Add a letter or number to the index for a carousel                                                                                     | No       | Undefined     |
+| carousel: showTitle    | Boolean                              | -                                                                                                                                      | No       | -             |
+| carousel: showSubtitle | Boolean                              | -                                                                                                                                      | No       |         -      |
+| text: Index            | String                               |                                                                                                                                        | No       |       -        |
+| text: IndexMode        | Number, letter, undefined (no index) | Add a letter or number to the index for a text                                                                                         | No       | letter        |
+| text: Newline          | String                               |                                                                                                                                        | No       |    -           |
+| Indexseparator         |               String                       |        Add a character after the letter or number.  Example: a dot or dash                                                                                                                              |    No      |    ‘ . ‘           |
+|    Message separator                    |        String                              |       Add a space between the various messages. {'\n\n'} adds a line break between the index message and the selection option                                                                                                                                 |     No     |       ‘ \n ’        |
+                      
+
+
+## Example
 
 Add the following code in your `action` files, under the `render` section.
 
@@ -24,7 +41,7 @@ Add the following code in your `action` files, under the `render` section.
 >
 ```
 
-## Description
+### Description
 
 - `firstIndex` = The index is the option title of a choice. Ex: a. b. or 1. 2. etc.
 
@@ -38,7 +55,7 @@ Add the following code in your `action` files, under the `render` section.
 
 - `Message separator` : Adds a space between the various messages. `{'\n\n'}` adds a line break between the index message and the selection option.
 
-## Example
+### Output
 
 ```javascript
 <Multichannel {...LEGACY_PROPS}>

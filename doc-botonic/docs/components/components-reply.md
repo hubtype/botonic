@@ -5,27 +5,28 @@ title: Quick Replies
 
 ## Purpose
 
-Quick Replies allow you to present options in a message to a bot user.
+The `Reply` component, or Quick Replies allows you to present options in a message to a bot user.
+
+
+## Properties
+
+| Property | Type           | Description                                            | Required                                           | Default value |
+|----------|----------------|--------------------------------------------------------|----------------------------------------------------|---------------|
+| children | String         | Show the reply                                         | Yes                                                |      -         |
+| path     | String         | URL of image to be displayed on the quick reply button | If `payload` is defined, no need to  define `path` |          -     |
+| payload  | String, Number | Custom data that are sent back                         | If `path` is defined, no need to  define `payload` |      -         |
+
+
+## Code
 
 <details>
-<summary>Example</summary>
+<summary>Output</summary>
 
 <img src="https://botonic-doc-static.netlify.com/images/quickreplies.png" width="200"/>
 
 </details>
 
-
-## Properties
-
-| Property | Type           | Description                                            | Required | Default value |
-|----------|----------------|--------------------------------------------------------|----------|---------------|
-| children | String         | Show the reply                                         | Yes      |               |
-| path     | String         | URL of image to be displayed on the quick reply button |          |               |
-| payload  | String, Number | Custom data that are sent back                         |          |               |
-
-
-## Code
-
+ç
 To insert quick replies,
 
 ```javascript

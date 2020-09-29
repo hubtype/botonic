@@ -5,7 +5,8 @@ title: Location
 
 ## Purpose
 
-The Location component is used to display precise locations, for example if a user wants to book a restaurant.
+The `Location` component is used to display precise locations, for example if a user wants to book a restaurant.
+
 ![](https://botonic-doc-static.netlify.com/images/doc_location.png)
 
 
