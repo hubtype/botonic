@@ -108,6 +108,7 @@ export const WEBCHAT = {
     enableCarouselArrows: 'carousel.enableArrows',
     customCarouselLeftArrow: 'carousel.arrow.left',
     customCarouselRightArrow: 'carousel.arrow.right',
+    storage: 'storage',
   },
 }
 

@@ -16,6 +16,7 @@ export class DevApp extends WebchatApp {
     enableAttachments,
     enableUserInput,
     enableAnimations,
+    storage,
     onInit,
     onOpen,
     onClose,
@@ -31,6 +32,7 @@ export class DevApp extends WebchatApp {
       enableAttachments,
       enableUserInput,
       enableAnimations,
+      storage,
       onInit,
       onOpen,
       onClose,
@@ -51,6 +53,7 @@ export class DevApp extends WebchatApp {
       enableAttachments,
       enableUserInput,
       enableAnimations,
+      storage,
       onInit,
       onOpen,
       onClose,
@@ -65,6 +68,7 @@ export class DevApp extends WebchatApp {
     enableAttachments = enableAttachments || this.enableAttachments
     enableUserInput = enableUserInput || this.enableUserInput
     enableAnimations = enableAnimations || this.enableAnimations
+    storage = storage || this.storage
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -81,6 +85,7 @@ export class DevApp extends WebchatApp {
         enableAttachments={enableAttachments}
         enableUserInput={enableUserInput}
         enableAnimations={enableAnimations}
+        storage={storage}
         getString={(stringId, session) => this.bot.getString(stringId, session)}
         setLocale={(locale, session) => this.bot.setLocale(locale, session)}
         onInit={(...args) => this.onInitWebchat(...args)}
