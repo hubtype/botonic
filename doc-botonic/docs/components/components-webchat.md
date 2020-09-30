@@ -18,4 +18,32 @@ The `Webchat settings` component can be appended at the end of a message to chan
 | enableUserInput   | boolean | Enable user input                     | No       | -             |
 | enableAnimations  | boolean | Enable animated elements              | No       | -             |
 
-          
+## Example
+
+```javascript
+import React from "react";
+import { Text, WebchatSettings } from "@botonic/react";
+
+export default class extends React.Component {
+  render() {
+    return (
+      <>
+        <Text>Ok dude 😉</Text>
+        <WebchatSettings
+          theme={{
+            brand: { color: 'orange' },
+          }}
+          enableEmojiPicker={true}
+          persistentMenu={[
+            { label: 'option1', payload: 'opt1' },
+            { label: 'option2', payload: 'opt2' },
+          ]}
+          enableUserInput={true}
+        />
+      </>
+    )
+  }
+}
+```
+
+> Note: you can get a more detailed example in the **[Webchat](/concepts/webchat)** section.

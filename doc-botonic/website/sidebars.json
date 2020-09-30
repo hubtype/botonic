@@ -14,11 +14,9 @@
 
     "Concepts": [
       
-      "concepts/project",
       "concepts/actions",
       "concepts/botonic-settings",
       "concepts/humanhandoff",
-      "concepts/childs",
       "concepts/i18n",
       "concepts/routes",
       "concepts/webchat",
@@ -32,9 +30,6 @@
       "components/buttons",
       "components/replies",
       "components/carousel",
-      "components/element",
-      "components/subtitle",
-      "components/title",
       "components/message",
       "components/media",
       "components/location",

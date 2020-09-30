@@ -13,9 +13,49 @@ The `Carousel` component allows you to show a collection of images in a cyclic v
 |----------|------------------|-------------|----------|---------------|
 | children | Array of Element | Show text   | Yes      | -             |
 
+
+### Element 
+
+The `Element` component is part of the carousel. It refers to each element of the carousel and contains a title, a subtitle, an image and a button. 
+
+| Property | Type                                              | Description            | Required | Default value |
+|----------|---------------------------------------------------|------------------------|----------|---------------|
+| children | Botonic Components (Title, Subtitle, Pic, Button) | Define button elements | Yes      | -             |
+
+### Element Subcomponents
+
+#### Title
+
+The `Title` component is used to give a title to each carousel’s element.
+
+| Property | Type             | Description                   | Required | Default value  |
+|----------|------------------|-------------------------------|----------|----------------|
+| children | String           | Show the title                | Yes      | -              |
+| style    | String or number | Define the style of the title | No       | font-size 14px |
+
+#### Subtitle
+
+The `Subtitle` component is used to add a description of each carousel’s element.
+
+| Property | Type             | Description                      | Required | Default value                |
+|----------|------------------|----------------------------------|----------|------------------------------|
+| children | String           | Show the subtitle                | No       | -                            |
+| style    | String or number | Define the style of the subtitle | No       | color: gray, font-size: 12px |
+
+#### Pic
+
+The `Pic` component is used in a carousel to better visualize the conversation and draw attention with the help of an image.
+
+| Property | Type | Description    | Required | Default value |
+|----------|------|----------------|----------|---------------|
+| src      | URL  | Show the image | Yes      | -             |
+
+
+
+
 ## Example
 
-To get this king of carousel:
+To get this kind of carousel:
 
 <img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200"/>
 
