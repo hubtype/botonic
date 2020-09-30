@@ -91,6 +91,7 @@ export interface SessionUser {
   provider: ProviderType
   // The provider's user id
   provider_id?: string
+  imp_id?: string
   extra_data?: any
 }
 
