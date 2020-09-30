@@ -50,8 +50,6 @@ function sourceMap(mode) {
 const resolveConfig = {
   extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
   alias: {
-    BotonicProject: path.resolve(__dirname, 'src'),
-    webchat: path.resolve(__dirname, 'src', 'webchat'),
     react: path.resolve(__dirname, 'node_modules', 'react'),
     'styled-components': path.resolve(
       __dirname,
@@ -126,7 +124,7 @@ function botonicDevConfig(mode) {
     mode: mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(botonicPath, 'src', 'entry.js'),
+    entry: path.resolve('webpack-entries', 'dev-entry.js'),
     module: {
       rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig],
     },
@@ -172,7 +170,7 @@ function botonicWebchatConfig(mode) {
     mode: mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(botonicPath, 'src', 'webchat-entry.js'),
+    entry: path.resolve('webpack-entries', 'webchat-entry.js'),
     module: {
       rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig],
     },
@@ -208,7 +206,7 @@ function botonicWebviewsConfig(mode) {
     mode: mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(botonicPath, 'src', 'entry.js'),
+    entry: path.resolve('webpack-entries', 'webviews-entry.js'),
     output: {
       path: path.resolve(__dirname, 'dist/webviews'),
       filename: 'webviews.js',
@@ -257,7 +255,7 @@ function botonicServerConfig(mode) {
     mode: mode,
     devtool: sourceMap(mode),
     target: 'node',
-    entry: path.resolve(botonicPath, 'src', 'entry.js'),
+    entry: path.resolve('webpack-entries', 'node-entry.js'),
     output: {
       filename: 'bot.js',
       library: 'bot',
