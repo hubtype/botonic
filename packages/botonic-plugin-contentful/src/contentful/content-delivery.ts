@@ -25,21 +25,32 @@ export abstract class ResourceDelivery {
     return 'https:' + assetField.fields.file.url
   }
 
-  urlFromAssetOptional(assetField?: contentful.Asset): string | undefined {
+  urlFromAssetOptional(
+    assetField: contentful.Asset | undefined = undefined,
+    context: Context
+  ): string | undefined {
     if (!assetField) {
       return undefined
     }
     if (!assetField.fields.file) {
-      this.logOrThrow(`found empty asset. Missing localization?`, undefined)
+      this.logOrThrow(
+        `found empty asset. Missing localization?`,
+        context,
+        undefined
+      )
       return undefined
     }
 
     return this.urlFromAssetRequired(assetField)
   }
 
-  protected logOrThrow(doing: string, reason: any) {
+  protected logOrThrow(doing: string, context: Context, reason: any) {
     if (this.resumeErrors) {
-      console.error(`ERROR: ${doing}:`)
+      console.error(
+        `ERROR: ${doing} on locale '${String(
+          context.locale
+        )}'. Returning content with partial data.`
+      )
       return
     }
     throw new CmsException(doing, reason)
@@ -51,7 +62,7 @@ export abstract class ResourceDelivery {
     factory: (entry: Entry<any>) => Promise<T>
   ): Promise<T[]> {
     return asyncMap(context, entries, factory, undefined, (entry, e) => {
-      this.logOrThrow(`Loading ${entry.sys.type} '${entry.sys.id}'`, e)
+      this.logOrThrow(`Loading ${entry.sys.type} '${entry.sys.id}'`, context, e)
       return undefined
     })
   }
