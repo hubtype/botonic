@@ -14,10 +14,13 @@ export default class BotonicPluginInbenta {
     let intent = null
     let confidence = 0
     let intents = []
-    let entities = []
+    const entities = []
 
     try {
-      const inbentaResponse = await this.knowledgeManagementAPI(input.data, session)
+      const inbentaResponse = await this.knowledgeManagementAPI(
+        input.data,
+        session
+      )
       if (
         !inbentaResponse.data.results ||
         !inbentaResponse.data.results.length > 0
@@ -61,9 +64,9 @@ export default class BotonicPluginInbenta {
         headers: {
           Authorization: `Bearer ${this.token}`,
           'X-Inbenta-Key': this.API_KEY,
-        }
+        },
       })
-      session.inbentaSessionToken = inbentaSession.data.sessionToken;
+      session.inbentaSessionToken = inbentaSession.data.sessionToken
       return session.inbentaSessionToken
     } catch (e) {
       throw new Error(`Couldn't get session token: ${e}`)
@@ -82,7 +85,7 @@ export default class BotonicPluginInbenta {
         'X-Inbenta-Key': this.API_KEY,
         'X-Inbenta-Env': this.env,
         'X-Inbenta-Session': sessionToken,
-        'X-Inbenta-Source': this.source
+        'X-Inbenta-Source': this.source,
       },
       data: JSON.stringify({ query }),
     })
