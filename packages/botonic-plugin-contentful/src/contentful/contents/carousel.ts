@@ -64,7 +64,7 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
       buttons,
       fields.title ?? '',
       fields.subtitle ?? '',
-      this.urlFromAssetOptional(fields.pic)
+      this.urlFromAssetOptional(fields.pic, context)
     )
   }
 }

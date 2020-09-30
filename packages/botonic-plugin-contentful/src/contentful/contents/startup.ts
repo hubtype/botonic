@@ -34,7 +34,7 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
     )
     return new cms.StartUp(
       await this.getFollowUp().commonFields(entry, context),
-      this.urlFromAssetOptional(fields.pic),
+      this.urlFromAssetOptional(fields.pic, context),
       fields.text ?? '',
       buttons
     )
