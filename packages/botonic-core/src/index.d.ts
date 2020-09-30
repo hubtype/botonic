@@ -293,3 +293,9 @@ export class Inspector {
 
   getRouteInspector(): RouteInspector
 }
+
+export function isBrowser(): boolean
+
+export function isNode(): boolean
+
+export function isMobile(): boolean
