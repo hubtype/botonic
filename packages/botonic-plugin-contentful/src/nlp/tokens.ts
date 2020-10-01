@@ -9,6 +9,7 @@ import { esDefaultStopWords } from './stopwords/stopwords-es'
 import { caDefaultStopWords } from './stopwords/stopwords-ca'
 import { enDefaultStopWords } from './stopwords/stopwords-en'
 import { Locale, rootLocale } from './locales'
+import * as locales from './locales'
 import { plDefaultStopWords } from './stopwords/stopwords-pl'
 import { ptDefaultStopWords } from './stopwords/stopwords-pt'
 import { ruDefaultStopWords } from './stopwords/stopwords-ru'
@@ -16,6 +17,7 @@ import { trDefaultStopWords } from './stopwords/stopwords-tr'
 import { itDefaultStopWords } from './stopwords/stopwords-it'
 import TokenizerTr from '@nlpjs/lang-tr/src/tokenizer-tr'
 import { frDefaultStopWords } from './stopwords/stopwords-fr'
+import TokenizerPl from '@nlpjs/lang-pl/src/tokenizer-pl'
 
 export function countOccurrences(haystack: string, needle: string): number {
   let n = 0
@@ -75,15 +77,15 @@ export class TokenizerCa implements Tokenizer {
 }
 
 const tokenizers: { [locale: string]: Tokenizer } = {
-  es: new TokenizerEs(),
-  en: new TokenizerEn(),
-  ca: new TokenizerCa(),
-  pl: new Tokenizer(),
-  pt: new TokenizerPt(),
-  ru: new TokenizerRu(),
-  tr: new TokenizerTr(),
-  it: new TokenizerIt(),
-  fr: new TokenizerFr(),
+  [locales.SPANISH]: new TokenizerEs(),
+  [locales.ENGLISH]: new TokenizerEn(),
+  [locales.CATALAN]: new TokenizerCa(),
+  [locales.POLISH]: new TokenizerPl(),
+  [locales.PORTUGUESE]: new TokenizerPt(),
+  [locales.RUSSIAN]: new TokenizerRu(),
+  [locales.TURKISH]: new TokenizerTr(),
+  [locales.ITALIAN]: new TokenizerIt(),
+  [locales.FRENCH]: new TokenizerFr(),
 }
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
