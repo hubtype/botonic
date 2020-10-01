@@ -5,13 +5,61 @@ title: Carousel
 
 ## Purpose
 
-Carousels show a collection of images in a cyclic view. By displaying only a subset of images, the screen space is optimized. The navigation items, such as arrows, suggest additional content that is not currently visible, which encourages the user to continue exploring.
+The `Carousel` component allows you to show a collection of images in a cyclic view. By displaying only a subset of images, the screen space is optimized. The navigation items, such as arrows, suggest additional content that is not currently visible, which encourages the user to continue exploring.
+
+## Properties
+
+| Property | Type             | Description | Required | Default value |
+|----------|------------------|-------------|----------|---------------|
+| children | Array of Element | Show text   | Yes      | -             |
+
+
+### Element 
+
+The `Element` component is part of the carousel. It refers to each element of the carousel and contains a title, a subtitle, an image and a button. 
+
+| Property | Type                                              | Description            | Required | Default value |
+|----------|---------------------------------------------------|------------------------|----------|---------------|
+| children | Botonic Components (Title, Subtitle, Pic, Button) | Define button elements | Yes      | -             |
+
+### Element Subcomponents
+
+#### Title
+
+The `Title` component is used to give a title to each carousel’s element.
+
+| Property | Type             | Description                   | Required | Default value  |
+|----------|------------------|-------------------------------|----------|----------------|
+| children | String           | Show the title                | Yes      | -              |
+| style    | String or number | Define the style of the title | No       | font-size 14px |
+
+#### Subtitle
+
+The `Subtitle` component is used to add a description of each carousel’s element.
+
+| Property | Type             | Description                      | Required | Default value                |
+|----------|------------------|----------------------------------|----------|------------------------------|
+| children | String           | Show the subtitle                | No       | -                            |
+| style    | String or number | Define the style of the subtitle | No       | color: gray, font-size: 12px |
+
+#### Pic
+
+The `Pic` component is used in a carousel to better visualize the conversation and draw attention with the help of an image.
+
+| Property | Type | Description    | Required | Default value |
+|----------|------|----------------|----------|---------------|
+| src      | URL  | Show the image | Yes      | -             |
+
+
+
+
+## Example
+
+To get this kind of carousel:
 
 <img src="https://botonic-doc-static.netlify.com/images/carrousel.gif" width="200"/>
 
-## Code
-
-You can render a carousel following the structure below:
+You can render it following the structure below:
 
 ```javascript
 import React from 'react'
@@ -68,6 +116,8 @@ export default class extends React.Component {
 }
 ```
 
+
+
 ## Customize or disable arrows on both sides of the carousel
 
 You can disable or customize arrows displayed on the left and right sides of a carousel.
@@ -76,7 +126,7 @@ You can disable or customize arrows displayed on the left and right sides of a c
 
 To do so:
 
-Add the following code in `src/webchat/index.js`:
+1. Add the following code in `src/webchat/index.js`:
 
 ```javascript
 import {
@@ -93,7 +143,7 @@ export const webchat = {
 }
 ```
 
-Add the following code in `src/webchat/custom-carousel-arrows.js`:
+2. Add the following code in `src/webchat/custom-carousel-arrows.js`:
 
 ```javascript
 import React from 'react'

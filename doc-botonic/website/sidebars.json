@@ -2,19 +2,26 @@
   "docs": {
     "Getting Started": [
       "welcome",
+      "project",
       "getting-started",
       "create-convapp",
-      "project",
       "supported-platforms"
-    ],
+    ]
+    
+  },
 
-    "Templates": [
-      "templates/templates",
-      "templates/template-custom-webchat",
-      "templates/childs",
-      "templates/template-dynamic-carousel",
-      "templates/template-human-handoff",
-      "templates/template-nlu"
+  "Reference Guide": {
+
+    "Concepts": [
+      
+      "concepts/actions",
+      "concepts/botonic-settings",
+      "concepts/humanhandoff",
+      "concepts/i18n",
+      "concepts/routes",
+      "concepts/webchat",
+      "concepts/webviews",
+      "concepts/nlu"
     ],
 
     "Components": [
@@ -23,39 +30,47 @@
       "components/buttons",
       "components/replies",
       "components/carousel",
+      "components/message",
       "components/media",
       "components/location",
       "components/sharebutton",
       "components/messagetemplate",
-      "components/multichannel"
+      "components/multichannel",
+      "components/webchatsettings"
+
     ],
 
-    "Concepts": [
-      "concepts/actions",
-      "concepts/botonic-settings",
-      "concepts/humanhandoff",
-      "concepts/i18n",
-      "concepts/routes",
-      "concepts/webchat",
-      "concepts/webviews"
-    ],
 
-    "Plugins": [
+    "Testing and Deployment": [
+      "test-deploy/testing-your-components",
+      "test-deploy/deployment"
+    ]
+
+  },
+
+    "Plugins": {
+
+    "Plugins ": [
       "plugins/botonic-plugins",
-      "plugins/using-plugins",
+      "plugins/using-plugins"
+    ],
+
+    "Plugin Library": [
       "plugins/plugin-dialogflow",
+      "plugins/plugin-dynamodb",
       "plugins/plugin-luis",
+      "plugins/plugin-analytics",
       "plugins/plugin-segment",
       "plugins/plugin-inbenta",
-      "plugins/plugin-analytics",
       "plugins/plugin-nlu",
       "plugins/plugin-contentful"
     ],
 
-    "Test and Deploy": [
-      "test-deploy/testing-your-components",
-      "test-deploy/deployment"
+    "How to Create a Plugin": [
+      "plugins/createname-plugin1",
+      "plugins/create-plugin2"
     ]
+
   },
 
   "": {

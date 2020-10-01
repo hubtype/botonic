@@ -3,16 +3,22 @@ id: messagetemplate
 title: Message Templates
 ---
 
-## Purpose
-
-Like the share button, Facebook Messenger allows you to define your templates.
-As an example, you can generate a nice boarding pass as below.
+The `Message Templates` component allows you to use Facebook Messenger templates and define them, as with the `Share Button` component.
+As an example, you can generate a nice boarding pass as in the example below.
 
 **Note:** Facebook supports many different [**templates**](https://developers.facebook.com/docs/messenger-platform/send-messages/templates).
 
+## Properties
+
+| Property | Type      | Description               | Required | Default value |
+|----------|-----------|---------------------------|----------|---------------|
+| payload  | Component | Show the message template | Yes      | -             |
+
+
+## Example
+
 ![](https://botonic-doc-static.netlify.com/images/message_template.png)
 
-## Code
 
 **./actions/example.js**
 

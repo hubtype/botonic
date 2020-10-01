@@ -5,11 +5,29 @@ title: Location
 
 ## Purpose
 
-Thanks to this component, the bot can identify the locations accurately if a user wants to book a restaurant for example.
+The `Location` component is used to display precise locations, for example if a user wants to book a restaurant.
 
 ![](https://botonic-doc-static.netlify.com/images/doc_location.png)
 
-## Code
+
+## Properties
+
+| Property | Type   | Description                     | Required | Default value |
+|----------|--------|---------------------------------|----------|---------------|
+| text     | String | Show a text that can be clicked | No       | Open Location |
+| lat      | Number | Define the latitude             | Yes      | -             |
+| long     | Number | Define the longitude            | Yes      | -             |
+
+
+## Example
+
+<details>
+<summary>Output</summary>
+
+![](https://botonic-doc-static.netlify.com/images/doc_location2.png)
+
+</details>
+
 
 ```javascript
 <Location lat='41.3894058' long='2.1568464' />
@@ -21,9 +39,3 @@ In `botonic serve` the text 'Open Location' will be displayed by default. You ca
 <Location text={'Check location'} lat='41.3894058' long='2.1568464' />
 ```
 
-<details>
-<summary>Example</summary>
-
-![](https://botonic-doc-static.netlify.com/images/doc_location2.png)
-
-</details>
