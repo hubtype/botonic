@@ -105,6 +105,8 @@ export interface Session {
   }
   __locale?: string
   __retries?: number
+  organization?: string
+  _shadowing?: boolean
 }
 
 type StringMatcher = RegExp | string | ((data: string) => boolean)
