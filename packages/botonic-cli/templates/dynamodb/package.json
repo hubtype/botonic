@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
-    "@botonic/plugin-dynamodb": "^0.13.0",
-    "@botonic/react": "~0.13.0"
+    "@botonic/plugin-dynamodb": "~0.14.0",
+    "@botonic/react": "~0.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
