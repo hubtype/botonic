@@ -18,6 +18,7 @@ test.each<any>([
   ['pt', 'disse-me', ['diss', 'me']],
 
   ['pl', 'JeŚć', ['je']],
+  ['pl', 'gwiazd-o-zbiór', ['gwiazd-o-zbior']],
   ['ca', "adonar-se'n", ['adon', 'se', 'n']],
   ['ru', 'автомобилей', ['автомобил']],
   ['tr', 'onlar uyudum', ['on', 'uyudu']],

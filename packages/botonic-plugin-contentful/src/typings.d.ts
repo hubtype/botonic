@@ -96,6 +96,20 @@ declare module '@nlpjs/lang-ca/src/stemmer-ca' {
   export = StemmerCa
 }
 
+declare module '@nlpjs/lang-pl/src/stemmer-pl' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerPl extends BaseStemmer {}
+  export = StemmerPl
+}
+
+declare module '@nlpjs/lang-pl/src/tokenizer-pl' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerPl extends Tokenizer {}
+  export = TokenizerPl
+}
+
 declare module '@nlpjs/lang-ru/src/stemmer-ru' {
   import { BaseStemmer } from '@nlpjs/core/src'
 
