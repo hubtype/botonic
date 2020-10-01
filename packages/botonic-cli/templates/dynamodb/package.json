@@ -1,4 +1,6 @@
 {
+  "name": "dynamodb",
+  "version": "1.0.0",
   "scripts": {
     "build": "webpack --env.target=all --mode=production",
     "start": "webpack-dev-server --env.target=dev --mode=development",
