@@ -142,7 +142,7 @@ export class Contentful implements cms.CMS {
     model: TopContentType,
     context = DEFAULT_CONTEXT,
     filter?: (cf: CommonFields) => boolean,
-    paging?: PagingOptions
+    paging = new PagingOptions()
   ): Promise<TopContent[]> {
     return this._contents.topContents(
       model,
@@ -156,10 +156,13 @@ export class Contentful implements cms.CMS {
   contents(
     contentType: ContentType,
     context = DEFAULT_CONTEXT,
-    paging?: PagingOptions
+    paging = new PagingOptions()
   ): Promise<Content[]> {
-    return this._contents.contents(contentType, context, (entry, ctxt) =>
-      this.contentFromEntry(entry, ctxt)
+    return this._contents.contents(
+      contentType,
+      context,
+      (entry, ctxt) => this.contentFromEntry(entry, ctxt),
+      paging
     )
   }
 

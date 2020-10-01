@@ -22,7 +22,7 @@ export class ContentsDelivery extends ResourceDelivery {
     contentType: ContentType,
     context: Context,
     factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>,
-    paging = new PagingOptions()
+    paging: PagingOptions
   ): Promise<Content[]> {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
       context,
@@ -40,8 +40,8 @@ export class ContentsDelivery extends ResourceDelivery {
       entry: contentful.Entry<any>,
       ctxt: Context
     ) => Promise<TopContent>,
-    filter?: (cf: CommonFields) => boolean,
-    paging = new PagingOptions()
+    filter: ((cf: CommonFields) => boolean) | undefined,
+    paging: PagingOptions
   ): Promise<TopContent[]> {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
       context,
