@@ -50,6 +50,10 @@ Creating...
       description: 'Dynamic Carousel: See a dynamic carousel for Facebook',
     },
     {
+      name: 'dynamodb',
+      description: 'DynamoDB: Using AWS DynamoDB to track events.',
+    },
+    {
       name: 'handoff',
       description:
         'Handoff: Test how to transfer a conversation into Hubtype Desk',
