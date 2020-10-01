@@ -34,6 +34,13 @@ export function rootLocale(locale: Locale): Locale {
   return locale.substr(0, 2)
 }
 
+export function buildLocale(lang: string, country: string | undefined): Locale {
+  if (!country) {
+    return lang.toLowerCase()
+  }
+  return lang.toLowerCase() + '-' + country.toUpperCase()
+}
+
 /**
  * Converts to lowercase, trims and removes accents
  */
