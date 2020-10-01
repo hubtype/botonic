@@ -36,14 +36,15 @@ All notable changes to Botonic will be documented in this file.
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
 
   - Decorator for Contentful that can distribute the delivery requests amongst different spaces/environments.
-  - Added a new tool to modify Contentful spaces exported as json file with "contentful space export".
-  - Added a tool to duplicate the value of reference fields into a new locale. Reference fields (assets or links to other contents) will typically be the same for all locales, but not always. So we initially link them all to the same target for all locales.
-  - Added support for locales which include the country (eg. es_ES). Now they are preprocessed as the root locale (without the country).
-  - Added an option for Contentful plugin to be able to transform the name of the locale when sent to Contentful.
-  - Added `logCall` flag to `contentfulOptions` in order to log creation config and calls performed to CMS.
+  - Added a new tool to modify the locales of Contentful spaces exported as json file with "contentful space export". The tool is able to change the name of a locale without altering the contents and to remove unwanted locales.
+  - Added a tool to duplicate the value of reference fields into a new locale. Reference fields (assets or links to other contents) will typically be the same for all locales, but not always. So we initially link them all to the same target for all locales. The tool is useful to migrate a space where fallback locales are used to another where locales have no fallback.
+  - The NLP package now supports locales whose name include the country (eg. es_ES).
+  - Added an option for Contentful plugin to be able to change the name of the locale when sent to Contentful.
+  - Added `logCall` flag to `contentfulOptions` in order to log creation configuration, as well as all calls performed to the CMS.
+  - Added class ContentsValidator, which validates that all contents of a locale can be correctly delivered.
   - Added NLP support for Turkish.
   - Added NLP support for Italian.
-  - Added Tokenizer, Lexer & Stop words for French.
+  - Added NLP support for French.
 
 * [@botonic/plugin-google-analytics](https://www.npmjs.com/package/@botonic/plugin-google-analytics)
 
@@ -55,11 +56,30 @@ All notable changes to Botonic will be documented in this file.
 
   - Upgraded typescript to 4.0.2.
   - Upgraded eslint plugins and fixed new warnings.
+  - Improved documentation and reestructure.
+
+* [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - Improved `index.d.ts` definitions.
+  - **Breaking change**: Added `/webpack-entries` to every template to ensure that Webpack's tree-shaking is done and modified `webpack.config.js` as a consequence. This reduces the bundle sizes of every bot. From developers upgrading their projects from version `0.13.0` the following changes will be necessary:
+    1. Create a new directory called `webpack-entries` under bot project's root folder. Copy `dev-entry.js`, `node-entry.js`, `webchat-entry.js` and `webviews-entry.js` inside. You can find them [here](https://github.com/hubtype/botonic/tree/fix/add-webchat-entry/packages/botonic-cli/templates/blank/webpack-entries).
+    2. Modify the following lines in `webpack.config.js`:
+    - In `botonicDevConfig` modify the line for `entry` to be: `path.resolve('webpack-entries', 'dev-entry.js'),`
+    - In `botonicWebchatConfig` modify the line for `entry` to be: `path.resolve('webpack-entries', 'webchat-entry.js'),`
+    - In `botonicWebviewsConfig` modify the line for `entry` to be: `path.resolve('webpack-entries', 'webviews-entry.js'),`
+    - In `botonicServerConfig` modify the line for `entry` to be: `path.resolve('webpack-entries', 'node-entry.js'),`
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Improved `index.d.ts` definitions.
 
 * [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
   - Refactored timestamps. They can be enabled by setting `theme.message.timestamps.enable` to `true`. (Default format will be as follows: `29 Jun, 12:40:07`). The content can be formatted by defining a function under `theme.message.timestamps.format` which returns a string with the formatted date and their styles under `theme.message.timestamps.style`.
   - Improved `index.d.ts` definitions.
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+  - Check empty text in Text contents.
 
 ### Fixed
 
@@ -80,9 +100,8 @@ All notable changes to Botonic will be documented in this file.
   - Renamed theme property `hoverText` to `hoverTextColor` in button.jsx so that changing the text color of a button on hover can work.
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
   - Fixed bug in Contentful Schedule, where schedule was miscalculating around midnight. It was not taking the timezone offset into account to calculate the weekday.
-  - Flag so that the `ContentValidator` only validates contents which are reachable.
-  - Check empty text in Text contents.
 
 ## [0.13.0] - 2020-15-06
 
