@@ -38,6 +38,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
                 <Button
                   onClick={onClick}
                   url={e.url}
+                  target={e.target}
                   webview={e.webview}
                   payload={e.payload}
                   key={i}
