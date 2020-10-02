@@ -7,13 +7,10 @@
       "create-convapp",
       "supported-platforms"
     ]
-    
   },
 
   "Reference Guide": {
-
     "Concepts": [
-      
       "concepts/actions",
       "concepts/botonic-settings",
       "concepts/humanhandoff",
@@ -37,29 +34,22 @@
       "components/messagetemplate",
       "components/multichannel",
       "components/webchatsettings"
-
     ],
-
 
     "Testing and Deployment": [
       "test-deploy/testing-your-components",
       "test-deploy/deployment"
     ]
-
   },
 
-    "Plugins": {
-
-    "Plugins ": [
-      "plugins/botonic-plugins",
-      "plugins/using-plugins"
-    ],
+  "Plugins": {
+    "Plugins ": ["plugins/botonic-plugins", "plugins/using-plugins"],
 
     "Plugin Library": [
       "plugins/plugin-dialogflow",
       "plugins/plugin-dynamodb",
       "plugins/plugin-luis",
-      "plugins/plugin-analytics",
+      "plugins/plugin-google-analytics",
       "plugins/plugin-segment",
       "plugins/plugin-inbenta",
       "plugins/plugin-nlu",
@@ -70,7 +60,6 @@
       "plugins/createname-plugin1",
       "plugins/create-plugin2"
     ]
-
   },
 
   "": {

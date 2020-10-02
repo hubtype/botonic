@@ -1,6 +1,6 @@
 ---
 title: Google Analytics Plugin
-id: plugin-analytics
+id: plugin-google-analytics
 ---
 
 ---
@@ -27,21 +27,21 @@ export const plugins = [
     resolve: require('@botonic/plugin-google-analytics'),
     options: {
       botName: 'YOUR_BOT_NAME',
-      trackingId: 'YOUR_TRACKING_ID'
-    }
-  }
+      trackingId: 'YOUR_TRACKING_ID',
+    },
+  },
 ]
 ```
 
 ## Use
 
-The tracking needs to be done manually as enabling this plugin does not track any user interaction or bot's behaviour by default. 
-You can do the tracking inside the ` botonicInit ` method, ` render ` method or even inside the [Webchat listeners](webchat).
+The tracking needs to be done manually as enabling this plugin does not track any user interaction or bot's behaviour by default.
+You can do the tracking inside the `botonicInit` method, `render` method or even inside the [Webchat listeners](/concepts/webchat#webchat-listeners).
 
 ```javascript
 static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
     const ga = plugins.google_analytics
-    
+
     const eventName = 'botEvent'
     const eventData = {
       category: 'chatbot',
@@ -56,4 +56,5 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
     await ga.track(eventName, eventData, callback)
   }
 ```
+
 **Note**: The `callback ` argument is not required.
