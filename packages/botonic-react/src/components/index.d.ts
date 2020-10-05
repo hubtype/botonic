@@ -42,6 +42,7 @@ export interface Webview {
 export interface ButtonProps {
   payload?: string
   url?: string
+  target?: string
   path?: string
   webview?: Webview
   params?: any

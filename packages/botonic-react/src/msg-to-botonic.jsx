@@ -165,10 +165,17 @@ function buttonsParse(buttons) {
     let payload = props.payload
     if (props.path) payload = `__PATH_PAYLOAD__${props.path}`
     const url = props.messenger_extensions ? null : props.url
+    const target = props.messenger_extensions ? null : props.target
     const title = props.title
     const webview = props.messenger_extensions ? props.url : props.webview
     return (
-      <Button key={i} payload={payload} url={url} webview={webview}>
+      <Button
+        key={i}
+        payload={payload}
+        url={url}
+        target={target}
+        webview={webview}
+      >
         {title}
       </Button>
     )

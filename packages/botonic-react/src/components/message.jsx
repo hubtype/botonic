@@ -144,6 +144,7 @@ export const Message = props => {
           payload: b.props.payload,
           path: b.props.path,
           url: b.props.url,
+          target: b.props.target,
           webview: b.props.webview && String(b.props.webview),
           title: b.props.children,
         })),

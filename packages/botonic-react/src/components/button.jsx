@@ -62,7 +62,7 @@ export const Button = props => {
             payload: props.payload,
           })
     } else if (props.url) {
-      window.open(props.url)
+      window.open(props.url, props.target || '_blank')
     }
     if (props.onClick) props.onClick()
   }
@@ -139,7 +139,11 @@ export const Button = props => {
     } else if (props.payload) {
       return <button payload={props.payload}>{props.children}</button>
     } else if (props.url) {
-      return <button url={props.url}>{props.children}</button>
+      return (
+        <button url={props.url} target={props.target}>
+          {props.children}
+        </button>
+      )
     }
     throw new Error('Button missing payload, path, webviews or url')
   }
@@ -154,6 +158,7 @@ Button.serialize = buttonProps => {
     button: {
       payload,
       url: buttonProps.url,
+      target: buttonProps.target,
       webview: buttonProps.webview && String(buttonProps.webview),
       title: buttonProps.children && String(buttonProps.children),
     },
