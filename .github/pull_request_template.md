@@ -1,4 +1,4 @@
-_Set as [Draft PR](https://github.blog/2019-02-14-introducing-draft-pull-requests/) if it's not ready to be merged_.  
+_Set as [Draft PR](https://github.blog/2019-02-14-introducing-draft-pull-requests/) if it's not ready to be merged_.
 
 [PR best practices Reference](https://blog.codeminer42.com/on-writing-a-great-pull-request-37c60ce6f31d/)
 
@@ -37,6 +37,6 @@ _Set as [Draft PR](https://github.blog/2019-02-14-introducing-draft-pull-request
 
 The pull request...
 
-- [ ] has unit tests
-- [ ] has integration tests
-- [ ] doesn't need tests because... **[provide a description]**
+- has unit tests
+- has integration tests
+- doesn't need tests because... **[provide a description]**
