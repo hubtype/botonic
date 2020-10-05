@@ -505,16 +505,22 @@ export const Webchat = forwardRef((props, ref) => {
   https://stackoverflow.com/questions/37949981/call-child-method-from-parent
   */
 
+  const updateUserWithSession = userToUpdate => {
+    updateSession(
+      merge(webchatState.session, {
+        user: merge(webchatState.session.user, userToUpdate),
+      })
+    )
+    updateUser(merge(webchatState.user, userToUpdate))
+  }
+
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
       updateTyping(false)
       if (Array.isArray(response)) response.map(r => addMessageComponent(r))
       else if (response) addMessageComponent(response)
       if (session) {
-        updateSession({
-          ...session,
-          user: { ...webchatState.session.user },
-        })
+        updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
         const handoff = action.startsWith('create_case')
         if (handoff && isDev()) addMessageComponent(<Handoff />)
@@ -525,13 +531,7 @@ export const Webchat = forwardRef((props, ref) => {
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
-    updateUser: user => {
-      updateSession({
-        ...webchatState.session,
-        user: { ...webchatState.session.user, ...user },
-      })
-      updateUser({ ...webchatState.user, ...user })
-    },
+    updateUser: user => updateUserWithSession(user),
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
@@ -816,13 +816,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const updateAllUserReferences = user => {
-    updateUser({ ...webchatState.user, ...user })
-    updateSession({
-      ...webchatState.session,
-      user: { ...webchatState.session.user, ...user },
-    })
-  }
+  const updateAllUserReferences = user => updateUserWithSession(user)
 
   useEffect(() => {
     // Prod mode
