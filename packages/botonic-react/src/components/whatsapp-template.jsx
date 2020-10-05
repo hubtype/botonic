@@ -3,31 +3,30 @@ import { Message } from './message'
 import { renderComponent } from '../utils'
 import { INPUT } from '@botonic/core'
 
+const serialize = whatsappTemplateProps => {
+  return { text: whatsappTemplateProps }
+}
+
 export const WhatsappTemplate = props => {
   const renderBrowser = () => {
-    let params = ''
-    for (const param in props.parameters) {
-      params = params + " '" + props.parameters[param] + "', "
-    }
     // Return a dummy message for browser
+    const message = `Template ${props.name} with namespace ${props.namespace} would be sent to the user.`
     return (
-      <Message {...props} type={INPUT.TEXT}>
-        Template {props.name} would be send to the user with parameters:&quot;
-        {params} and namespace {props.namespace}
+      <Message json={serialize(message)} {...props} type={INPUT.TEXT}>
+        {message}
       </Message>
     )
   }
 
   const renderNode = () => {
-    let params = ''
-    for (const param in props.parameters) {
-      params = params + ', ' + props.parameters[param]
-    }
     return (
-      <Message {...props} type={INPUT.TEXT}>
-        &[Fallback text]({props.namespace}, {props.name}
-        {params})
-      </Message>
+      <message
+        {...props}
+        header={props.header && JSON.stringify(props.header)}
+        body={props.body && JSON.stringify(props.body)}
+        footer={props.footer && JSON.stringify(props.footer)}
+        type={INPUT.WHATSAPP_TEMPLATE}
+      />
     )
   }
 

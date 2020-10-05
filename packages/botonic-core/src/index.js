@@ -44,4 +44,5 @@ export const INPUT = Object.freeze({
   CAROUSEL: 'carousel',
   CUSTOM: 'custom',
   WEBCHAT_SETTINGS: 'webchatsettings',
+  WHATSAPP_TEMPLATE: 'whatsapptemplate',
 })
