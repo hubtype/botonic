@@ -91,12 +91,7 @@ export class ButtonDelivery extends ContentDelivery {
     context: cms.Context
   ): cms.Button {
     const fields = entry.fields
-    let text = fields.shortText || ''
-    const fixMissingData = context.fixMissingData ?? true
-    if (!text && fixMissingData) {
-      text = fields.name
-      console.error(`Text ${text} without short text`)
-    }
+    const text = fields.shortText || ''
     return new cms.Button(
       entry.sys.id,
       fields.name,
