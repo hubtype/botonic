@@ -38,7 +38,7 @@ nlu.stemmer = stemmer;
 nlu.tokenizer = tokenizer;
 
 const dataPath =
-  '/home/eric/Git/botonic/packages/botonic-nlu-refactored/tests/nlu/utterances/en/data.csv';
+  '/Users/mrabat/Documents/hubtype/botonic/packages/botonic-nlu-refactored/tests/nlu/utterances/en/data.csv';
 const language = 'en';
 const maxSeqLen = 20;
 nlu.loadData(dataPath, language, maxSeqLen);

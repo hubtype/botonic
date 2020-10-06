@@ -1,4 +1,4 @@
-import { initializers, tensor, Tensor } from '@tensorflow/tfjs';
+import { tensor, Tensor } from '@tensorflow/tfjs-node';
 import { WordEmbeddingsDBHelper } from './wembeddings-db-helper';
 import {
   Language,
