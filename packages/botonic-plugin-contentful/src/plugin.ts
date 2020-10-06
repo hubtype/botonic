@@ -15,6 +15,7 @@ interface OptionsBase {
   normalizer?: Normalizer
   nlpOptions?: NlpOptions
   keywordsOptions?: { [locale: string]: KeywordsOptions }
+  logger?: (msg: string) => void
 }
 
 export interface CmsOptions extends OptionsBase {
@@ -85,7 +86,7 @@ export default class BotonicPluginContentful {
         })
       this.cms = factory(contOptions)
     }
-    this.cms = new cms.ErrorReportingCMS(this.cms)
+    this.cms = new cms.ErrorReportingCMS(this.cms, opt.logger)
     this.renderer = opt.renderer || new BotonicMsgConverter()
 
     if (opt.search) {
