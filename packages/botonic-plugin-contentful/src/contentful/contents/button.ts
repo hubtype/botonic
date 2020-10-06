@@ -26,7 +26,7 @@ export class ButtonDelivery extends ContentDelivery {
   }
 
   public async button(id: string, context: cms.Context): Promise<cms.Button> {
-    const entry = await this.delivery.getEntry<ButtonFields>(id, context)
+    const entry = await this.getEntry<ButtonFields>(id, context)
     return this.fromEntry(entry, context)
   }
 
@@ -75,6 +75,11 @@ export class ButtonDelivery extends ContentDelivery {
     buttonEntry: contentful.Entry<ButtonFields>,
     context: cms.Context
   ): cms.Button {
+    if (!buttonEntry.fields.target) {
+      throw new CmsException(
+        `Button ${this.entryId(buttonEntry)} has no target`
+      )
+    }
     // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
     const callback = this.getTargetCallback(buttonEntry.fields.target, context)
     return new cms.Button(

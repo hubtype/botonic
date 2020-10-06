@@ -7,7 +7,11 @@ import {
 } from '../cms'
 import * as contentful from 'contentful'
 import { Entry } from 'contentful'
-import { ContentfulEntryUtils, DeliveryApi } from './delivery-api'
+import {
+  ContentfulEntryUtils,
+  ContentWithNameFields,
+  DeliveryApi,
+} from './delivery-api'
 import { asyncMap } from '../util/async'
 
 export abstract class ResourceDelivery {
@@ -76,9 +80,7 @@ export abstract class ContentDelivery extends ResourceDelivery {
   ) {
     super(delivery, resumeErrors)
   }
-}
 
-export abstract class TopContentDelivery extends ContentDelivery {
   async getEntry<T>(
     id: string,
     context: Context,
@@ -93,4 +95,10 @@ export abstract class TopContentDelivery extends ContentDelivery {
     }
     return entry
   }
+
+  entryId(entry: Entry<ContentWithNameFields>): string {
+    return entry.fields.name + '/' + entry.sys.id
+  }
 }
+
+export abstract class TopContentDelivery extends ContentDelivery {}
