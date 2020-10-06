@@ -34,7 +34,7 @@ describe('TEST BotonicMsgConverter', () => {
   test('text with empty texts', () => {
     const sut = new BotonicMsgConverter({ replaceEmptyStringsWith: 'x' })
     const builder = new RndTextBuilder()
-    builder.withButtonsBuilder().withText('').addButton()
+    builder.buttonsBuilder.withText('').withName('').addButton()
     const text = builder.withText('').build()
 
     // act

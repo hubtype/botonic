@@ -1,10 +1,4 @@
-import {
-  CMS,
-  Context,
-  MessageContent,
-  TOP_CONTENT_TYPES,
-  TopContent,
-} from '../cms'
+import { CMS, Context, MessageContent, TOP_CONTENT_TYPES } from '../cms'
 import { reachableFrom } from '../cms/visitors/message-visitors'
 
 export function defaultValidationReport(id: string, error: string) {
@@ -15,7 +9,7 @@ export class ContentsValidator {
   constructor(
     readonly cms: CMS,
     readonly report: (
-      id: string,
+      contentId: string,
       error: string
     ) => void = defaultValidationReport,
     readonly onlyValidateReachable = true
@@ -30,7 +24,6 @@ export class ContentsValidator {
    * - An URL has empty URL empty
    */
   async validateAllTopContents(context: Context): Promise<void> {
-    context = { ...context, fixMissingData: false }
     const contents: MessageContent[] = []
     for (const model of TOP_CONTENT_TYPES) {
       contents.push(
@@ -54,7 +47,7 @@ export class ContentsValidator {
     return reachable
   }
 
-  protected validate(content: TopContent) {
+  protected validate(content: MessageContent) {
     const res = content.validate()
     if (res) {
       this.report(content.id, res)
