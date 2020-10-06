@@ -25,6 +25,7 @@ export const INPUT: {
   CAROUSEL: 'carousel'
   CUSTOM: 'custom'
   WEBCHAT_SETTINGS: 'webchatsettings'
+  WHATSAPP_TEMPLATE: 'whatsapptemplate'
 }
 
 export type InputType =
@@ -40,6 +41,7 @@ export type InputType =
   | typeof INPUT.CAROUSEL
   | typeof INPUT.CUSTOM
   | typeof INPUT.WEBCHAT_SETTINGS
+  | typeof INPUT.WHATSAPP_TEMPLATE
 
 export interface Input {
   type: InputType
