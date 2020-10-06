@@ -1,4 +1,4 @@
-const { NewBotonicNLU } = require('./dist');
+const { BotonicNLU } = require('./dist');
 const natural = require('natural');
 
 const normalizer = {
@@ -31,21 +31,29 @@ const stemmer = {
 
 const tokenizer = new natural.TreebankWordTokenizer();
 
-const nlu = new NewBotonicNLU();
+const nlu = new BotonicNLU();
 
 nlu.normalizer = normalizer;
 nlu.stemmer = stemmer;
 nlu.tokenizer = tokenizer;
 
-const modelDataPath =
-  '/home/eric/Git/botonic/packages/botonic-nlu-refactored/tests/nlu/models/en/model-data.json';
-nlu.loadModelData(modelDataPath);
+const dataPath =
+  '/home/eric/Git/botonic/packages/botonic-nlu-refactored/tests/nlu/utterances/en/data.csv';
+const language = 'en';
+const maxSeqLen = 20;
+nlu.loadData(dataPath, language, maxSeqLen);
 
-const modelPath =
-  '/home/eric/Git/botonic/packages/botonic-nlu-refactored/tests/nlu/models/en/model.json';
+const testPercentage = 0.2;
+nlu.splitData(testPercentage);
 
+const learningRate = 0.00005;
+const epochs = 50;
+const batchSize = 8;
 (async () => {
-  await nlu.loadModel(modelPath);
-  const prediction = nlu.predict('Thank you very much!');
-  console.log(prediction);
+  await nlu.createModel(learningRate);
+  await nlu.train(epochs, batchSize);
+  const accuracy = await nlu.evaluate();
+  await nlu.saveModel();
 })();
+
+// nlu.train(language, maxSeqLen);

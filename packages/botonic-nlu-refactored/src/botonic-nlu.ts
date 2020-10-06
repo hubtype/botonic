@@ -1,80 +1,199 @@
-import { Intent, Utterance, Language, Data, Example } from './types';
-import { isEmptyString } from './util/object-tools';
-import { Trainer } from './trainer';
-import { csvParse, local } from 'd3';
-import { readFileSync } from 'fs';
+import { shuffle } from './util/object-tools';
+import { Preprocessor } from './preprocessor';
+import { ModelManager } from './model-manager';
+import { IntentsProcessor } from './intents-processor';
+import { DataReader } from './data-reader';
+import { mkdir, writeFileSync } from 'fs';
+import {
+  Normalizer,
+  Stemmer,
+  Tokenizer,
+  DecodedPrediction,
+  Language,
+  WordEmbeddingType,
+  WordEmbeddingDimension,
+  WordEmbeddingsConfig,
+  DataSet,
+  InputSet,
+  OutputSet,
+  ModelParameters,
+  TrainingParameters,
+  ModelData,
+} from './types';
+import { readJSON } from './util/file-system';
+import { tensor } from '@tensorflow/tfjs-node';
+import { join } from 'path';
+import { MODELS_DIR, MODEL_DATA_FILENAME, NLU_DIR } from './constants';
 
 export class BotonicNLU {
-  private readonly _data: Data;
-  _trainers: Trainer[];
+  private _preprocessor: Preprocessor;
+  private _modelManager: ModelManager;
+  private _intentsProcessor: IntentsProcessor;
+  private _dataReader: DataReader;
+
+  private _data: DataSet;
+  private _trainSet: DataSet;
+  private _testSet: DataSet;
 
   constructor() {
-    this._data = {};
-    this._trainers = [];
+    this._preprocessor = new Preprocessor();
+    this._modelManager = new ModelManager();
+    this._intentsProcessor = new IntentsProcessor();
+    this._dataReader = new DataReader();
   }
 
-  get data(): Data {
-    return this._data;
+  set normalizer(value: Normalizer) {
+    this._preprocessor.normalizer = value;
   }
 
-  get locales(): Language[] {
-    return Object.keys(this._data) as Language[];
+  set stemmer(value: Stemmer) {
+    this._preprocessor.stemmer = value;
   }
 
-  private _addLocale(locale: Language): void {
-    if (!(locale in this._data)) this._data[locale] = {};
+  set tokenizer(value: Tokenizer) {
+    this._preprocessor.tokenizer = value;
   }
 
-  private _addIntent(intent: Intent, locale: Language): void {
-    if (!(intent in this._data[locale])) this._data[locale][intent] = [];
+  loadModelData(modelDataPath: string) {
+    const info = readJSON(modelDataPath);
+    this._preprocessor.language = info.language;
+    this._preprocessor.maxSeqLen = info.maxSeqLen;
+    this._preprocessor.vocabulary = info.vocabulary;
+    this._intentsProcessor.loadEncoderDecoder(info.intents);
   }
 
-  private _addUtterance(
-    newUtterance: Utterance,
-    intent: Intent,
-    locale: Language,
-  ): void {
-    if (isEmptyString(newUtterance)) return;
-    if (
-      this._data[locale][intent].some((utterance) => utterance == newUtterance)
-    )
-      return;
-    this._data[locale][intent].push(newUtterance);
+  async loadModel(modelPath: string) {
+    await this._modelManager.loadModel(modelPath);
   }
 
-  addExample(example: Example): void {
-    const { locale, intent, utterance } = example;
-    this._addLocale(locale);
-    this._addIntent(intent, locale);
-    this._addUtterance(utterance, intent, locale);
+  predict(sentence: string): string {
+    const input = tensor([this._preprocessor.preprocess(sentence)]);
+    const intentId = this._modelManager.predict(input);
+    const intent = this._intentsProcessor.decode(intentId);
+    return intent;
   }
 
-  train(locale: Language): Trainer {
-    const trainer = new Trainer(locale, this._data[locale]);
-    this._trainers.push(trainer);
-    return trainer;
+  predictProbabilities(sentence: string): DecodedPrediction {
+    const input = tensor([this._preprocessor.preprocess(sentence)]);
+    const encodedPrediction = this._modelManager.predictProbabilities(input);
+    const decodedPrediction: DecodedPrediction = encodedPrediction.map(
+      (intentConfidence) => {
+        return {
+          intent: this._intentsProcessor.decode(intentConfidence.intentId),
+          confidence: intentConfidence.confidence,
+        };
+      },
+    );
+    return decodedPrediction;
   }
 
-  loadData(path: string, locale: Language): void {
-    const extension = path.split('.').pop();
-    if (extension == 'csv') {
-      this._readCSV(path, locale);
+  // TO DO: What to do if the path is not a csv.
+  loadData(path: string, language: Language, maxSeqLen: number) {
+    this._data = this._dataReader.readData(path);
+    this._preprocessor.language = language;
+    this._preprocessor.maxSeqLen = maxSeqLen;
+  }
+
+  splitData(testPercentage: number = 0.25) {
+    if (testPercentage > 1 || testPercentage < 0) {
+      throw new RangeError(
+        'testPercentage should be a number between 0 and 1.',
+      );
     }
+
+    const dataSize = this._data.length;
+    const testSize = Math.round(dataSize * testPercentage);
+
+    this._data = shuffle(this._data);
+
+    this._testSet = this._data.slice(0, testSize);
+    this._trainSet = this._data.slice(testSize, dataSize);
+
+    this._preprocessor.generateVocabulary(this._trainSet);
+    this._intentsProcessor.generateEncoderDecoder(this._trainSet);
   }
 
-  private _readCSV(path: string, locale: Language): void {
-    const text = readFileSync(path, 'utf-8');
-    const data = csvParse(text);
-    data.map((example) => {
-      this.addExample({
-        locale: locale,
-        intent: example.intent,
-        utterance: example.sentence,
-      });
+  async createModel(
+    learningRate: number,
+    wordEmbeddingsType: WordEmbeddingType = '10k-fasttext',
+    wordEmbeddingsDimension: WordEmbeddingDimension = 300,
+    trainableEmbeddings: boolean = true,
+  ) {
+    const wordEmbeddingsConfig: WordEmbeddingsConfig = {
+      type: wordEmbeddingsType,
+      dimension: wordEmbeddingsDimension,
+      language: this._preprocessor.language,
+      vocabulary: this._preprocessor.vocabulary,
+    };
+
+    const parameters: ModelParameters = {
+      maxSeqLen: this._preprocessor.maxSeqLen,
+      learningRate: learningRate,
+      intentsCount: this._intentsProcessor.intentsCount,
+      trainableEmbeddings: trainableEmbeddings,
+    };
+
+    await this._modelManager.createModel(wordEmbeddingsConfig, parameters);
+  }
+
+  async train(
+    epochs: number,
+    batchSize: number,
+    validationSplit: number = 0.1,
+  ) {
+    const [xTrain, yTrain] = this._splitInputOutput(this._trainSet);
+
+    const parameters: TrainingParameters = {
+      X: xTrain,
+      y: yTrain,
+      epochs: epochs,
+      batchSize: batchSize,
+      validationSplit: validationSplit,
+    };
+
+    await this._modelManager.train(parameters);
+  }
+
+  evaluate(): number {
+    const [xTest, yTest] = this._splitInputOutput(this._testSet);
+    const accuracy = this._modelManager.evaluate(xTest, yTest);
+    return accuracy;
+  }
+
+  private _splitInputOutput(data: DataSet): [InputSet, OutputSet] {
+    const x = tensor(
+      data.map((sample) => this._preprocessor.preprocess(sample.feature)),
+    );
+
+    const y = tensor(
+      data.map((sample) => this._intentsProcessor.encode(sample.label)),
+    );
+    return [x, y];
+  }
+
+  async saveModel() {
+    const modelDir = join(
+      process.cwd(),
+      'tests',
+      NLU_DIR,
+      MODELS_DIR,
+      this._preprocessor.language,
+    );
+
+    mkdir(modelDir, { recursive: true }, (err) => {
+      if (err) throw err;
     });
-  }
 
-  split_data(data: Data, test_prop: number) {
-    console.log(test_prop);
+    const modelDataPath = join(modelDir, MODEL_DATA_FILENAME);
+
+    const modelData: ModelData = {
+      language: this._preprocessor.language,
+      intents: this._intentsProcessor.decoder,
+      maxSeqLen: this._preprocessor.maxSeqLen,
+      vocabulary: this._preprocessor.vocabulary,
+    };
+    writeFileSync(modelDataPath, JSON.stringify(modelData));
+
+    await this._modelManager.saveModel(modelDir);
   }
 }

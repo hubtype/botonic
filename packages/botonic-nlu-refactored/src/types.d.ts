@@ -1,30 +1,16 @@
-import { Sequential } from '@tensorflow/tfjs-node';
-export type Intent = string;
-export type Utterance = string;
+import { Tensor } from '@tensorflow/tfjs-node';
 
-// https://medium.com/@pemagrg/nlp-for-beginners-using-nltk-f58ec22005cd
-export type WordEmbeddingKind = '10k-fasttext' | 'glove';
+/* Word Embeddings */
+export type WordEmbeddingType = '10k-fasttext' | 'glove';
 export type WordEmbeddingDimension = 50 | 300;
-
-export type WordEmbeddingsConfig = {
-  kind?: WordEmbeddingKind;
-  trainable?: true | false;
-  dimension?: WordEmbeddingDimension;
-};
-
-export type WordEmbeddingsCompleteConfig = WordEmbeddingsConfig & {
-  locale: Language;
-};
-export interface HyperParameters {
-  maxSequenceLength?: number;
-  learningRate?: number;
-  epochs?: number;
-  units?: number;
-  validationSplit?: number;
-  dropoutRegularization?: number;
-  locale?: Language;
+export interface WordEmbeddingsConfig {
+  type: WordEmbeddingType;
+  dimension: WordEmbeddingDimension;
+  language: Language;
+  vocabulary: Vocabulary;
 }
 
+/* Data preprocessing */
 export interface Normalizer {
   normalize(text: string): string;
 }
@@ -37,61 +23,43 @@ export interface Tokenizer {
   tokenize(text: string): string[];
 }
 
-export type Vocabulary = { [word: string]: number };
+/* Sets */
+export type DataSet = { label: string; feature: string }[];
+export type InputSet = Tensor;
+export type OutputSet = Tensor;
 
-export type Intents = { [intent: number]: string };
+/* Intents codification */
+export type IntentEncoder = { [intent: string]: number };
+export type IntentDecoder = { [id: number]: string };
+export type EncodedPrediction = { intentId: number; confidence: number }[];
+export type DecodedPrediction = { intent: string; confidence: number }[];
 
-export type Prediction = { [intent: string]: number };
-
-export interface Word2Index {
-  [word: string]: number;
-}
-export interface Index2Word {
-  [index: number]: string;
-}
-
-export interface WordCount {
-  [word: string]: number;
-}
-export interface LocaleModel {
-  [locale: string]: Sequential;
-}
-
-export interface Data {
-  [locale: string]: IntentData;
-}
-export interface IntentData {
-  [intent: string]: Utterance[];
-}
-
-export interface Example {
-  locale: Language;
-  intent: Intent;
-  utterance: Utterance;
-}
-
-export interface Sample {
-  label: number;
-  value: string;
-  locale: Language;
-}
-export interface CompleteSample extends Sample {
-  tokenized: string[];
-}
-export interface Labels {
-  [labelId: number]: string;
-}
-export interface ReversedLabels {
-  [labelName: string]: number;
-}
-
-export interface TrainingInfo {
+/* Model Creation */
+export interface ModelData {
   language: Language;
-  intentsDict: Labels;
-  vocabulary: Word2Index;
-  maxSeqLength: number;
+  intents: IntentDecoder;
+  maxSeqLen: number;
+  vocabulary: Vocabulary;
 }
 
+export interface ModelParameters {
+  maxSeqLen: number;
+  learningRate: number;
+  intentsCount: number;
+  trainableEmbeddings: boolean;
+}
+
+/* Model Training */
+export interface TrainingParameters {
+  X: InputSet;
+  y: OutputSet;
+  epochs: number;
+  batchSize: number;
+  validationSplit: number;
+}
+
+/* Language Data */
+export type Vocabulary = { [word: string]: number };
 export type Language =
   | 'aa'
   | 'ab'

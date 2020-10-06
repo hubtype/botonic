@@ -4,7 +4,7 @@ import { join } from 'path';
 export const NLU_DIR = 'nlu';
 export const UTTERANCES_DIR = 'utterances';
 export const MODELS_DIR = 'models';
-export const TRAINING_INFO_FILENAME = 'nlu-data';
+export const MODEL_DATA_FILENAME = 'model-data.json';
 
 export const WE_DB_FILE = Object.freeze({
   EXTENSION: '.db',
