@@ -3,7 +3,6 @@ import { Preprocessor } from './preprocessor';
 import { ModelManager } from './model-manager';
 import { IntentsProcessor } from './intents-processor';
 import { DataReader } from './data-reader';
-import { mkdir, writeFileSync } from 'fs';
 import {
   Normalizer,
   Stemmer,
@@ -29,7 +28,7 @@ import {
   NLU_DIR,
   UTTERANCES_DIR,
 } from './constants';
-import { readdirSync, readFileSync } from 'fs';
+import { readdirSync, readFileSync, mkdirSync, writeFileSync } from 'fs';
 
 export class BotonicNLU {
   private _preprocessor: Preprocessor;
@@ -198,15 +197,12 @@ export class BotonicNLU {
   async saveModel(): Promise<void> {
     const modelDir = join(
       process.cwd(),
-      'tests',
+      'src',
       NLU_DIR,
       MODELS_DIR,
       this._preprocessor.language,
     );
-
-    mkdir(modelDir, { recursive: true }, (err) => {
-      if (err) throw err;
-    });
+    mkdirSync(modelDir, { recursive: true });
 
     const modelDataPath = join(modelDir, MODEL_DATA_FILENAME);
 

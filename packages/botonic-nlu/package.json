@@ -1,6 +1,6 @@
 {
   "name": "@botonic/nlu",
-  "version": "0.15.0",
+  "version": "0.15.0-alpha.0",
   "main": "index.js",
   "scripts": {
     "postinstall": "npm run-script build",
@@ -36,8 +36,9 @@
   },
   "dependencies": {
     "@tensorflow/tfjs-node": "^2.4.0",
+    "@types/axios": "^0.14.0",
     "@types/better-sqlite3": "^5.4.0",
-    "@types/d3": "^5.7.2",
+    "@types/d3": "^5.16.3",
     "@types/natural": "^0.6.3",
     "@types/webgl2": "^0.0.5",
     "axios": "^0.19.2",

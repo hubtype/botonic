@@ -5,6 +5,8 @@ export const NLU_DIR = 'nlu';
 export const UTTERANCES_DIR = 'utterances';
 export const MODELS_DIR = 'models';
 export const MODEL_DATA_FILENAME = 'model-data.json';
+export const MODEL_FILENAME = 'model.json';
+export const ASSETS_DIR = 'assets';
 
 export const WE_DB_FILE = Object.freeze({
   EXTENSION: '.db',

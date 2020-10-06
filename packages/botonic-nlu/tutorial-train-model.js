@@ -38,7 +38,7 @@ nlu.stemmer = stemmer;
 nlu.tokenizer = tokenizer;
 
 const dataPath =
-  '/Users/mrabat/Documents/hubtype/botonic/packages/botonic-nlu-refactored/tests/nlu/utterances/en/data.csv';
+  '/Users/mrabat/Documents/hubtype/botonic/packages/botonic-nlu/tests/nlu/utterances/en/data.csv';
 const language = 'en';
 const maxSeqLen = 20;
 nlu.loadData(dataPath, language, maxSeqLen);
@@ -47,7 +47,7 @@ const testPercentage = 0.2;
 nlu.splitData(testPercentage);
 
 const learningRate = 0.00005;
-const epochs = 50;
+const epochs = 2;
 const batchSize = 8;
 (async () => {
   await nlu.createModel(learningRate);
