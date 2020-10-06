@@ -19,6 +19,8 @@
     "@botonic/nlu": "~0.13.0",
     "@tensorflow/tfjs": "1.7.3",
     "axios": "latest",
+    "franc": "^5.0.0",
+    "langs": "^2.0.0",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
