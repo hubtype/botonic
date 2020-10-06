@@ -1,7 +1,6 @@
 {
-  "name": "b-nlu",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@botonic/nlu",
+  "version": "0.15.0",
   "main": "index.js",
   "scripts": {
     "postinstall": "npm run-script build",
@@ -36,7 +35,6 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^2.4.0",
     "@tensorflow/tfjs-node": "^2.4.0",
     "@types/better-sqlite3": "^5.4.0",
     "@types/d3": "^5.7.2",
