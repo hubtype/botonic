@@ -8,18 +8,18 @@ import {
   SUPPORTED_EMBEDDINGS,
   BOTONIC_WORD_EMBEDDINGS_URL,
 } from '../constants';
-import { WordEmbeddingKind, Language, WordEmbeddingDimension } from '../types';
+import { WordEmbeddingType, Language, WordEmbeddingDimension } from '../types';
 import { downloadIntoPath } from '../util/file-system';
 
 export const isSupportedWordEmbedding = (
   locale: Language,
-  kind: WordEmbeddingKind,
+  kind: WordEmbeddingType,
   dimension: WordEmbeddingDimension,
 ): boolean =>
   SUPPORTED_EMBEDDINGS[locale] &&
   SUPPORTED_EMBEDDINGS[locale][kind].includes(dimension);
 
-export class WEmbeddingsDBHelper {
+export class WordEmbeddingsDBHelper {
   private _embeddingsFilename: string;
   private _embeddingsAbsolutePath: string;
   private _db: Database;
@@ -27,7 +27,7 @@ export class WEmbeddingsDBHelper {
   isValidWEmbedding: boolean;
 
   constructor(
-    kind: WordEmbeddingKind,
+    kind: WordEmbeddingType,
     dimension: WordEmbeddingDimension,
     locale: Language,
   ) {

@@ -1,10 +1,13 @@
-import { Tensor, tensor } from '@tensorflow/tfjs-node';
-import { Language, Vocabulary, Normalizer, Stemmer, Tokenizer } from './types';
+import {
+  DataSet,
+  Language,
+  Vocabulary,
+  Normalizer,
+  Stemmer,
+  Tokenizer,
+} from './types';
 
-type Sample = { label: string; feature: string };
-type Data = Sample[];
-
-export class NewPreprocessor {
+export class Preprocessor {
   private _normalizer: Normalizer;
   private _stemmer: Stemmer;
   private _tokenizer: Tokenizer;
@@ -36,6 +39,38 @@ export class NewPreprocessor {
     this._vocabulary = vocabulary;
   }
 
+  get vocabulary(): Vocabulary {
+    return this._vocabulary;
+  }
+
+  get language(): Language {
+    return this._language;
+  }
+
+  get maxSeqLen(): number {
+    return this._maxSeqLen;
+  }
+
+  // TO DO: Maybe vocabulary should be generated with a different data set than the train or test one.
+  generateVocabulary(data: DataSet) {
+    this._vocabulary = {};
+    let id = 1;
+    data.forEach((sample) => {
+      const normalizedSentence = this._normalizer.normalize(sample.feature);
+      const stemmedSentence = this._stemmer.stem(
+        normalizedSentence,
+        this._language,
+      );
+      const tokens = this._tokenizer.tokenize(stemmedSentence);
+      tokens.forEach((token) => {
+        if (!(token in this._vocabulary)) {
+          this._vocabulary[token] = id;
+          id++;
+        }
+      });
+    });
+  }
+
   preprocess(sentence: string) {
     const normalizedSentence = this._normalizer.normalize(sentence);
     const stemmedSentence = this._stemmer.stem(
@@ -46,8 +81,7 @@ export class NewPreprocessor {
     const sequence = this._computeSequence(tokens);
     const truncatedSequence = this._truncate(sequence);
     const paddedSequence = this._paddSequence(truncatedSequence);
-    const tensor = this._computeTensor(paddedSequence);
-    return tensor;
+    return paddedSequence;
   }
 
   private _computeSequence(tokens: string[]): number[] {
@@ -68,9 +102,5 @@ export class NewPreprocessor {
     const padd = Array(this._maxSeqLen - truncatedSequence.length).fill(0);
     const paddedSequence = padd.concat(truncatedSequence);
     return paddedSequence;
-  }
-
-  private _computeTensor(paddedSequence: number[]): Tensor {
-    return tensor([paddedSequence]);
   }
 }
