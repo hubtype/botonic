@@ -423,10 +423,14 @@ export const Webchat = forwardRef((props, ref) => {
     )
   }
 
-  const CoverComponent = getThemeProperty(
-    'coverComponent',
-    props.coverComponent
-  )
+  const getCoverComponent = () => {
+    return getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.coverComponent,
+      props.coverComponent &&
+        (props.coverComponent.component || props.coverComponent)
+    )
+  }
+  const CoverComponent = getCoverComponent()
 
   const closeCoverComponent = () => {
     toggleCoverComponent(false)
@@ -442,8 +446,18 @@ export const Webchat = forwardRef((props, ref) => {
   }, [])
 
   const coverComponent = () => {
+    const coverComponentProps = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.coverComponentProps,
+      props.coverComponent && props.coverComponent.props
+    )
+
     if (CoverComponent && webchatState.isCoverComponentOpen)
-      return <CoverComponent closeComponent={closeCoverComponent} />
+      return (
+        <CoverComponent
+          closeComponent={closeCoverComponent}
+          {...coverComponentProps}
+        />
+      )
     return null
   }
 
