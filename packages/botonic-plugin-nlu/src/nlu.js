@@ -1,21 +1,17 @@
 import { default as fetch } from 'node-fetch'
 import { resolveEnv, loadOption } from './utils'
-import { detectLang } from '@botonic/nlu/lib/preprocessing'
-import {
-  getIntent,
-  getEntities,
-  getPrediction,
-} from '@botonic/nlu/lib/prediction'
+import { detectLang, inputToTensor, predictionToIntent } from './prediction'
 
 global.fetch = fetch
 
 export class NLU {
-  constructor(languages) {
+  constructor(options) {
     return (async () => {
       this.env = await resolveEnv()
       this.languages = []
+      this.tokenizer = options.tokenizer
       this.models = {}
-      for (const language of languages) {
+      for (const language of options.langs) {
         this.languages.push(language)
         const { nluData, model } = loadOption(language, this.env)
         this.models[language] = {
@@ -50,9 +46,15 @@ export class NLU {
   predict(input) {
     const language = detectLang(input, this.languages)
     const { model, nluData } = this.models[language]
-    const prediction = getPrediction(input, model, nluData)
-    const intent = getIntent(prediction, nluData.intentsDict, language)
-    const entities = { entities: getEntities(input, nluData.devEntities) }
-    return { intent, entities }
+    const { maxSeqLength, vocabulary, intentsDict } = nluData
+    const tensor = inputToTensor(
+      input,
+      this.tokenizer,
+      vocabulary,
+      maxSeqLength
+    )
+    const prediction = model.predict(tensor).dataSync()
+    const intent = predictionToIntent(prediction, intentsDict, language)
+    return { intent }
   }
 }

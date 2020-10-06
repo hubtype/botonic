@@ -3,7 +3,7 @@ import { NLU } from './nlu'
 export default class BotonicPluginNLU {
   constructor(options) {
     return (async () => {
-      this.nlu = await new NLU(options.langs)
+      this.nlu = await new NLU(options)
       return this
     })()
   }
