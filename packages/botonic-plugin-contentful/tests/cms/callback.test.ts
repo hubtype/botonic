@@ -1,6 +1,5 @@
-import { instance, mock } from 'ts-mockito'
-import { CmsException, ContentCallback, ContentType } from '../../src'
 import * as cms from '../../src'
+import { CmsException, ContentCallback, ContentType } from '../../src'
 
 test('TEST: Callback.empty', () => {
   const callback = cms.Callback.empty()
@@ -19,22 +18,6 @@ test('TEST: Callback.ofPayload', () => {
   expect(callback).toBeInstanceOf(ContentCallback)
   expect((callback as ContentCallback).id).toEqual('text1')
   expect((callback as ContentCallback).model).toEqual(ContentType.TEXT)
-})
-
-test('TEST: callbackMap multiple callbacks', () => {
-  const callback1 = mock(cms.Callback)
-  const sut = new cms.CallbackMap().addCallback('id1', callback1)
-  expect(sut.getCallback('id1')).toBe(callback1)
-
-  const callback2 = mock(cms.Callback)
-  sut.addCallback('id2', callback2)
-  expect(sut.getCallback('id2')).toBe(callback2)
-})
-
-test('TEST: callbackMap fixed callback', () => {
-  const callback = instance(mock(cms.Callback))
-  const sut = cms.CallbackMap.forAllIds(callback)
-  expect(sut.getCallback(Math.random().toString())).toBe(callback)
 })
 
 test('TEST: regexForModel', () => {
