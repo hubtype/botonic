@@ -9,6 +9,13 @@ import {
 import { isEmptyString } from './util/object-tools';
 import { Trainer } from './trainer';
 import { join } from 'path';
+import {
+  ENCODINGS,
+  EXTENSIONS,
+  NLU_DIRNAME,
+  UTTERANCES_DIRNAME,
+} from './constants';
+import { readdirSync, readFileSync } from 'fs';
 
 export class BotonicNLU {
   private readonly _data: Data;
@@ -46,6 +53,25 @@ export class BotonicNLU {
     )
       return;
     this._data[locale][intent].push(newUtterance);
+  }
+
+  loadFromUtterances(path?: string): void {
+    const utterancesPath =
+      path || join(process.cwd(), NLU_DIRNAME, UTTERANCES_DIRNAME);
+    const pathLangs = readdirSync(utterancesPath);
+    pathLangs.forEach((locale: Locale) => {
+      const intentsForLang = readdirSync(join(utterancesPath, locale));
+      intentsForLang.forEach((filename) => {
+        const intent = filename.replace(EXTENSIONS.TXT, '');
+        const utterances = readFileSync(
+          join(utterancesPath, locale, filename),
+          ENCODINGS.UTF8,
+        ).split('\n');
+        utterances.forEach((utterance) => {
+          this.addExample({ locale, intent, utterance });
+        });
+      });
+    });
   }
 
   addExample(example: Example): void {
