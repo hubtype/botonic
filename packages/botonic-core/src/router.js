@@ -10,11 +10,16 @@ export class Router {
 
   // eslint-disable-next-line complexity
   processInput(input, session = {}, lastRoutePath = null) {
-    let routeParams = {}
+    let routeParams = undefined
+    if (input.payload && input.payload.includes('__PATH_PAYLOAD__')) {
+      const pathParam = input.payload.split('__PATH_PAYLOAD__')
+      const route = this.getRouteByPath(pathParam[1], this.routes)
+      routeParams = { route }
+    }
     const pathParams = this.getOnFinishParams(input)
     let brokenFlow = false
     const lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
-    if (lastRoute && lastRoute.childRoutes)
+    if (!routeParams && lastRoute && lastRoute.childRoutes)
       //get route depending of current ChildRoute
       routeParams = this.getRoute(input, lastRoute.childRoutes, session)
     if (!routeParams || !Object.keys(routeParams).length) {
