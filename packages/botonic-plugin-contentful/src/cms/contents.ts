@@ -125,8 +125,13 @@ export abstract class MessageContent extends TopContent {
   }
 
   validate(): string | undefined {
+    // shortText only validated when it's searchable, since
+    // it's only required so far to show text on buttons which
+    // refer to this content
     if (this.isSearchable() && !this.common.shortText) {
-      return `Content ${this.toString()} is searchable but has no shortText`
+      return `${
+        this.contentType
+      } ${this.toString()} is searchable but has no shortText`
     }
     return undefined
   }
@@ -179,21 +184,24 @@ export class CommonFields implements Stringable {
 }
 
 export class Button extends Content {
+  private readonly usingNameForText: boolean
+  public readonly text: string
   constructor(
     readonly id: string,
     readonly name: string,
-    readonly text: string,
+    text: string,
     readonly callback: Callback
   ) {
     super(ContentType.BUTTON)
+    this.usingNameForText = !text
+    this.text = text || this.name
   }
 
   validate(): string | undefined {
-    if (!this.text) {
-      return `Button '${this.name}' without text`
-    }
-    if (!this.name) {
-      return `Button with text '${this.text}' without name`
+    if (this.usingNameForText) {
+      return this.name
+        ? `Button to content ${this.toString()} without short text. Using instead 'name' field. `
+        : `Button to content ${this.toString()} without short text nor name.`
     }
     return undefined
   }
@@ -298,10 +306,9 @@ export class Text extends MessageContent {
   }
 
   validate(): string | undefined {
-    const noText =
-      this.isSearchable() && !this.text
-        ? `Content ${this.toString()} is searchable but has no text`
-        : undefined
+    const noText = !this.text
+      ? `${this.contentType} ${this.toString()} has no text`
+      : undefined
 
     return Content.mergeValidations([
       noText,
