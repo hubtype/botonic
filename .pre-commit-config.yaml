@@ -2,10 +2,16 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
+    rev: v3.2.0
     hooks:
       - id: check-yaml
       - id: check-added-large-files
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: debug-statements
+      - id: mixed-line-ending
 
   - repo: local
     hooks:
@@ -80,4 +86,10 @@ repos:
         entry: scripts/qa/lint-package.sh packages/botonic-plugin-google-analytics
         language: system
         files: ^packages/botonic-plugin-google-analytics/
+
+      - id: inbenta
+        name: inbenta
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-inbenta
+        language: system
+        files: ^packages/botonic-plugin-inbenta/
 
