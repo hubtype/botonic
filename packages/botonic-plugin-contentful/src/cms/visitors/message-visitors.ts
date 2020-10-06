@@ -12,6 +12,7 @@ export function getButtons(content: MessageContent): Button[] {
 }
 
 /**
+ * Goes through a content's buttons and followups
  * TODO add cache
  */
 export class MessageContentTraverser {
@@ -40,6 +41,10 @@ export class MessageContentTraverser {
         )) as MessageContent
         this.visitor(reference)
       }
+    }
+    while (content.common.followUp) {
+      this.visitor(content.common.followUp)
+      content = content.common.followUp
     }
   }
 }
