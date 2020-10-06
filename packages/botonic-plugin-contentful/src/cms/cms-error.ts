@@ -22,10 +22,16 @@ import { SearchCandidate } from '../search'
 import { MultiError } from 'async-parallel'
 import { reduceMultiError } from '../util/async'
 
+/**
+ * It validates the individually delivered contents, but not those fetched
+ * through contents/topContents
+ */
 export class ErrorReportingCMS implements CMS {
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  exceptionWrapper = new ContentfulExceptionWrapper('CMS')
-  constructor(readonly cms: CMS) {}
+  private exceptionWrapper: ContentfulExceptionWrapper
+
+  constructor(readonly cms: CMS, readonly logger?: (msg: string) => void) {
+    this.exceptionWrapper = new ContentfulExceptionWrapper('CMS', logger)
+  }
 
   private static validate<C extends Content>(content: C): C {
     const v = content.validate()
@@ -175,11 +181,13 @@ export class ErrorReportingCMS implements CMS {
 }
 
 export class ContentfulExceptionWrapper {
+  // TODO add logStack in plugin config
+  readonly logStack = true
   constructor(
     readonly wrappee: string,
-    readonly logErrors = true,
-    // TODO add logStack in plugin config
-    readonly logStack = true
+    readonly logger = (msg: string) => {
+      console.error(msg)
+    }
   ) {}
 
   wrap(
@@ -201,29 +209,24 @@ export class ContentfulExceptionWrapper {
     }
     const msg = `Error calling ${this.wrappee}.${method}${content}.`
     const exception = new CmsException(msg, contentfulError)
-    if (this.logErrors) {
-      console.error(exception.toString())
-      this.processError(contentfulError)
-    }
+    const err = this.processError(contentfulError)
+    this.logger(`${msg} Due to ${err}`)
+
     throw exception
   }
 
-  processError(contentfulError: Error) {
-    if (this.logStack) {
-      if (contentfulError instanceof MultiError) {
-        console.error('due to:')
-        for (const e of reduceMultiError(contentfulError)) {
-          this.processError(e)
-        }
-      } else {
-        console.error('due to', contentfulError)
-        if (contentfulError.stack) {
-          console.error(
-            'at',
-            contentfulError.stack.split('\n').slice(0, 3).join('\n')
-          )
-        }
+  processError(contentfulError: Error): string {
+    let err = ''
+    if (contentfulError instanceof MultiError) {
+      err += ' Due to:'
+      for (const e of reduceMultiError(contentfulError)) {
+        err += this.processError(e)
       }
+    } else if (this.logStack && contentfulError.stack) {
+      err += contentfulError.stack.split('\n').slice(0, 5).join('\n')
+    } else {
+      err += `Due to '${contentfulError.message}'`
     }
+    return err
   }
 }
