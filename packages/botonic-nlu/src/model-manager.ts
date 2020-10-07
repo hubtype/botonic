@@ -24,14 +24,14 @@ export class ModelManager {
     this._wordEmbeddingsManager = new WordEmbeddingsManager();
   }
 
-  async loadModel(modelPath: string) {
+  async loadModel(modelPath: string): Promise<void> {
     this._model = await loadLayersModel(`file://${modelPath}`);
   }
 
   async createModel(
     wordEmbeddingsConfig: WordEmbeddingsConfig,
     parameters: ModelParameters,
-  ) {
+  ): Promise<void> {
     await this._wordEmbeddingsManager.generateWordEmbeddingsMatrix(
       wordEmbeddingsConfig,
     );
@@ -41,7 +41,7 @@ export class ModelManager {
     this._model = new SimpleNN(parameters, wordEmbeddingsMatrix).model;
   }
 
-  async train(parameters: TrainingParameters) {
+  async train(parameters: TrainingParameters): Promise<void> {
     const { X, y, batchSize, epochs, validationSplit } = parameters;
     await this._model.fit(X, y, {
       epochs: epochs,
@@ -82,7 +82,7 @@ export class ModelManager {
     return accuracy;
   }
 
-  async saveModel(modelDir: string) {
+  async saveModel(modelDir: string): Promise<void> {
     await this._model.save(`file://${modelDir}`);
   }
 }

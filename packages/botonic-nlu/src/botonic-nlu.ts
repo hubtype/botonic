@@ -22,13 +22,8 @@ import {
 import { readJSON } from './util/file-system';
 import { tensor } from '@tensorflow/tfjs-node';
 import { join } from 'path';
-import {
-  MODELS_DIR,
-  MODEL_DATA_FILENAME,
-  NLU_DIR,
-  UTTERANCES_DIR,
-} from './constants';
-import { readdirSync, readFileSync, mkdirSync, writeFileSync } from 'fs';
+import { MODELS_DIR, MODEL_DATA_FILENAME, NLU_DIR } from './constants';
+import { mkdirSync, writeFileSync } from 'fs';
 
 export class BotonicNLU {
   private _preprocessor: Preprocessor;
@@ -91,26 +86,7 @@ export class BotonicNLU {
     );
     return decodedPrediction;
   }
-  // TODO: Add loaded info to data structure
-  loadFromUtterances(path?: string): void {
-    const utterancesPath = path || join(process.cwd(), NLU_DIR, UTTERANCES_DIR);
-    const pathLangs = readdirSync(utterancesPath);
-    pathLangs.forEach((locale: Language) => {
-      const intentsForLang = readdirSync(join(utterancesPath, locale));
-      intentsForLang.forEach((filename) => {
-        const intent = filename.replace('.txt', '');
-        const utterances = readFileSync(
-          join(utterancesPath, locale, filename),
-          'utf-8',
-        ).split('\n');
-        utterances.forEach((utterance) => {
-          // this.addExample({ locale, intent, utterance });
-        });
-      });
-    });
-  }
 
-  // TO DO: What to do if the path is not a csv.
   loadData(path: string, language: Language, maxSeqLen: number): void {
     this._data = this._dataReader.readData(path);
     this._preprocessor.language = language;

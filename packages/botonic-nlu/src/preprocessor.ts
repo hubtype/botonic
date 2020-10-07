@@ -53,7 +53,7 @@ export class Preprocessor {
   }
 
   // TO DO: Maybe vocabulary should be generated with a different data set than the train or test one.
-  generateVocabulary(data: DataSet) {
+  generateVocabulary(data: DataSet): void {
     this._vocabulary = {};
     this.vocabulary[UNKNOWN_TOKEN] = 0;
     let id = 1;
@@ -73,7 +73,7 @@ export class Preprocessor {
     });
   }
 
-  preprocess(sentence: string) {
+  preprocess(sentence: string): number[] {
     const normalizedSentence = this._normalizer.normalize(sentence);
     const stemmedSentence = this._stemmer.stem(
       normalizedSentence,

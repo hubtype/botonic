@@ -18,12 +18,12 @@ export class IntentsProcessor {
     return this._decoder;
   }
 
-  loadEncoderDecoder(decoder: IntentDecoder) {
+  loadEncoderDecoder(decoder: IntentDecoder): void {
     this._encoder = flipObject(decoder);
     this._decoder = decoder;
   }
 
-  generateEncoderDecoder(data: DataSet) {
+  generateEncoderDecoder(data: DataSet): void {
     let id = 0;
     data.forEach((sample) => {
       if (!(sample.label in this._encoder)) {

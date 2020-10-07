@@ -66,7 +66,7 @@ export class SimpleNN {
     );
   }
 
-  private _compile() {
+  private _compile(): void {
     this._model.compile({
       optimizer: train.adam(this._learningRate),
       loss: 'sparseCategoricalCrossentropy',
