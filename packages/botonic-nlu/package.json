@@ -1,6 +1,6 @@
 {
   "name": "@botonic/nlu",
-  "version": "0.15.0-alpha.1",
+  "version": "0.15.0-alpha.2",
   "main": "index.js",
   "scripts": {
     "build": "rimraf ./dist && tsc",
@@ -34,7 +34,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@tensorflow/tfjs-node": "^2.4.0",
+    "@tensorflow/tfjs-node": "2.4.0",
     "@types/axios": "^0.14.0",
     "@types/better-sqlite3": "^5.4.0",
     "@types/d3": "^5.16.3",

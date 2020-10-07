@@ -8,6 +8,8 @@ export const MODEL_DATA_FILENAME = 'model-data.json';
 export const MODEL_FILENAME = 'model.json';
 export const ASSETS_DIR = 'assets';
 
+export const UNKNOWN_TOKEN = '<UNK>';
+
 export const WE_DB_FILE = Object.freeze({
   EXTENSION: '.db',
   TABLE_NAME: 'embeddings',

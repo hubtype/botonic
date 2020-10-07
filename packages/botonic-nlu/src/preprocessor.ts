@@ -1,3 +1,4 @@
+import { UNKNOWN_TOKEN } from './constants';
 import {
   DataSet,
   Language,
@@ -54,6 +55,7 @@ export class Preprocessor {
   // TO DO: Maybe vocabulary should be generated with a different data set than the train or test one.
   generateVocabulary(data: DataSet) {
     this._vocabulary = {};
+    this.vocabulary[UNKNOWN_TOKEN] = 0;
     let id = 1;
     data.forEach((sample) => {
       const normalizedSentence = this._normalizer.normalize(sample.feature);
