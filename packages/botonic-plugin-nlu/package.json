@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-nlu",
-  "version": "0.14.0",
+  "version": "0.15.0-alpha.2",
   "main": "src/index.js",
   "scripts": {
     "cloc": "../../scripts/qa/cloc-package.sh .",
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@botonic/nlu": "~0.14.0",
-    "@tensorflow/tfjs": "1.7.3",
+    "@botonic/nlu": "0.15.0-alpha.2",
+    "@tensorflow/tfjs": "2.4.0",
     "axios": "latest",
     "franc": "^5.0.0",
     "langs": "^2.0.0",

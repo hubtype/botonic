@@ -26,13 +26,13 @@ export class NLU {
       ])
       for (const [_language, res] of Object.entries(this.models)) {
         const nluData = await res.nluData
-        const { intents, maxSeqLength, vocabulary, devEntities } =
+        const { intents, maxSeqLen, vocabulary, devEntities } =
           this.env.mode === 'node' ? nluData : nluData.data
         this.models[_language] = {
           nluData: {
             language: res.language,
             intents,
-            maxSeqLength,
+            maxSeqLen,
             vocabulary,
             devEntities,
           },
@@ -46,13 +46,8 @@ export class NLU {
   predict(input) {
     const language = detectLang(input, this.languages)
     const { model, nluData } = this.models[language]
-    const { maxSeqLength, vocabulary, intents } = nluData
-    const tensor = inputToTensor(
-      input,
-      this.tokenizer,
-      vocabulary,
-      maxSeqLength
-    )
+    const { maxSeqLen, vocabulary, intents } = nluData
+    const tensor = inputToTensor(input, this.tokenizer, vocabulary, maxSeqLen)
     const prediction = model.predict(tensor).dataSync()
     const intent = predictionToIntent(prediction, intents, language)
     return { intent }

@@ -1,9 +1,8 @@
 {
   "name": "@botonic/nlu",
-  "version": "0.15.0-alpha.0",
+  "version": "0.15.0-alpha.1",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm run-script build",
     "build": "rimraf ./dist && tsc",
     "start:dev": "nodemon",
     "start": "npm run build && node dist/index.js",

@@ -1,6 +1,7 @@
 import { tensor, tensor1d } from '@tensorflow/tfjs'
 import franc from 'franc'
 import langs from 'langs'
+import { UNKNOWN_TOKEN } from '@botonic/nlu/dist/constants'
 
 export function detectLang(input, languages) {
   const res = franc(input, {
@@ -30,7 +31,7 @@ export function inputToSequence(input, tokenizer, vocabulary, maxSeqLength) {
   const tokenized = tokenizer.tokenize(input)
   const sequence = []
   for (const token of tokenized) {
-    if (!(token in vocabulary)) sequence.push(vocabulary['<UNK>'])
+    if (!(token in vocabulary)) sequence.push(vocabulary[UNKNOWN_TOKEN])
     else sequence.push(vocabulary[token])
   }
   const paddedSequence = tensor1d(sequence).pad([
