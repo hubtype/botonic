@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { DataSet, IntentEncoder, IntentDecoder } from './types';
 import { flipObject } from './util/object-tools';
 

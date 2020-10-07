@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { shuffle } from './util/object-tools';
 import { Preprocessor } from './preprocessor';
 import { ModelManager } from './model-manager';
@@ -8,7 +9,6 @@ import {
   Stemmer,
   Tokenizer,
   DecodedPrediction,
-  Language,
   WordEmbeddingType,
   WordEmbeddingDimension,
   WordEmbeddingsConfig,
@@ -19,6 +19,7 @@ import {
   TrainingParameters,
   ModelData,
 } from './types';
+import { Language } from './language';
 import { readJSON } from './util/file-system';
 import { tensor } from '@tensorflow/tfjs-node';
 import { join } from 'path';
@@ -78,8 +79,9 @@ export class BotonicNLU {
     const encodedPrediction = this._modelManager.predictProbabilities(input);
     const decodedPrediction: DecodedPrediction = encodedPrediction.map(
       (intentConfidence) => {
+        const intent = this._intentsProcessor.decode(intentConfidence.intentId);
         return {
-          intent: this._intentsProcessor.decode(intentConfidence.intentId),
+          intent: intent,
           confidence: intentConfidence.confidence,
         };
       },

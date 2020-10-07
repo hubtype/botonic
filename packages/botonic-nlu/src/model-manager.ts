@@ -4,7 +4,7 @@ import {
   loadLayersModel,
   Tensor,
 } from '@tensorflow/tfjs-node';
-import { SimpleNN } from './simpleNN';
+import { SimpleNN } from './simple-nn';
 import { WordEmbeddingsManager } from './embeddings/word-embeddings-manager';
 import {
   EncodedPrediction,

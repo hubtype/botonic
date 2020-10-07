@@ -1,12 +1,7 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { UNKNOWN_TOKEN } from './constants';
-import {
-  DataSet,
-  Language,
-  Vocabulary,
-  Normalizer,
-  Stemmer,
-  Tokenizer,
-} from './types';
+import { DataSet, Vocabulary, Normalizer, Stemmer, Tokenizer } from './types';
+import { Language } from './language';
 
 export class Preprocessor {
   private _normalizer: Normalizer;

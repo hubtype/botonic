@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { tensor, Tensor } from '@tensorflow/tfjs-node';
 import { WordEmbeddingsDBHelper } from './wembeddings-db-helper';
 import {
-  Language,
   Vocabulary,
   WordEmbeddingDimension,
   WordEmbeddingType,
   WordEmbeddingsConfig,
 } from '../types';
+import { Language } from '../language';
 
 export class WordEmbeddingsManager {
   private _matrix: number[][];
@@ -17,7 +18,9 @@ export class WordEmbeddingsManager {
   private _vocabulary: Vocabulary;
   private _dbHelper: WordEmbeddingsDBHelper;
 
-  async generateWordEmbeddingsMatrix(config: WordEmbeddingsConfig) {
+  async generateWordEmbeddingsMatrix(
+    config: WordEmbeddingsConfig,
+  ): Promise<void> {
     this._type = config.type;
     this._dimension = config.dimension;
     this._vocabulary = config.vocabulary;

@@ -1,4 +1,4 @@
-import { Language } from '../src/types';
+import { Language } from '../src/language';
 
 export const normalizer = {
   normalize: (sentence: string): string => sentence.toLowerCase(),

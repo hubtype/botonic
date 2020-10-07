@@ -8,7 +8,8 @@ import {
   SUPPORTED_EMBEDDINGS,
   BOTONIC_WORD_EMBEDDINGS_URL,
 } from '../constants';
-import { WordEmbeddingType, Language, WordEmbeddingDimension } from '../types';
+import { WordEmbeddingType, WordEmbeddingDimension } from '../types';
+import { Language } from '../language';
 import { downloadIntoPath } from '../util/file-system';
 
 export const isSupportedWordEmbedding = (
@@ -59,7 +60,7 @@ export class WordEmbeddingsDBHelper {
         console.debug(`Downloading '${this._embeddingsFilename}'...`);
       logProcess &&
         console.debug(`Please, wait until the download finishes.\n`);
-      const res = await downloadIntoPath({
+      await downloadIntoPath({
         url: `${BOTONIC_WORD_EMBEDDINGS_URL}/${this._embeddingsFilename}`,
         downloadPath: this._embeddingsAbsolutePath,
       });

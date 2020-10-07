@@ -1,7 +1,7 @@
 export const EMPTY_STRING_REGEX = /^\s+$/;
 
 export const isEmptyString = (value: string): boolean =>
-  Boolean(value.match(EMPTY_STRING_REGEX)) || Boolean(value === '');
+  Boolean(EMPTY_STRING_REGEX.exec(value)) || Boolean(value === '');
 
 export const isNumber = (value: string): boolean => {
   return !isNaN(parseInt(value));

@@ -26,6 +26,7 @@ export async function downloadIntoPath({
   } catch (e) {
     console.error(`Error downloading the file.`);
     console.error(`${e.response.status}: ${e.response.statusText}`);
+    return null;
   }
 }
 
