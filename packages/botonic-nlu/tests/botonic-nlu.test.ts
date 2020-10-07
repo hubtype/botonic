@@ -1,11 +1,6 @@
-// import { BotonicNLU } from '../src';
-// import {
-//   initFromDirectory,
-//   BOOKRESTAURANT_UTTERANCES_LENGTH,
-//   GETDIRECTIONS_UTTERANCES_LENGTH,
-//   GRATITUDE_UTTERANCES_LENGTH,
-//   GREETINGS_UTTERANCES_LENGTH,
-// } from './utils';
+import { normalizer, stemmer, tokenizer } from './preprocessing-tools';
+import { join } from 'path';
+
 describe('new NLU', () => {
   it('should...', () => {
     expect(true).toBe(true);
