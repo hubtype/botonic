@@ -32,8 +32,16 @@ export class Preprocessor {
     this._language = value;
   }
 
+  get language(): Language {
+    return this._language;
+  }
+
   set maxSeqLen(value: number) {
     this._maxSeqLen = value;
+  }
+
+  get maxSeqLen(): number {
+    return this._maxSeqLen;
   }
 
   set vocabulary(vocabulary: Vocabulary) {
@@ -42,14 +50,6 @@ export class Preprocessor {
 
   get vocabulary(): Vocabulary {
     return this._vocabulary;
-  }
-
-  get language(): Language {
-    return this._language;
-  }
-
-  get maxSeqLen(): number {
-    return this._maxSeqLen;
   }
 
   // TO DO: Maybe vocabulary should be generated with a different data set than the train or test one.

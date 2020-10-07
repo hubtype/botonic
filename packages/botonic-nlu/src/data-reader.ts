@@ -37,9 +37,9 @@ export class DataReader {
   }
 
   private _getDataFromDirectory(path: string): DataSet {
-    var data: DataSet = [];
+    const data: DataSet = [];
 
-    var files = readdirSync(path).filter(
+    const files = readdirSync(path).filter(
       (fileName) => this._getExtension(fileName) == 'txt',
     );
 

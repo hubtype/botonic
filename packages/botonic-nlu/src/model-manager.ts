@@ -51,7 +51,7 @@ export class ModelManager {
   }
 
   predictProbabilities(input: Tensor): EncodedPrediction {
-    let prediction: EncodedPrediction = [];
+    const prediction: EncodedPrediction = [];
     const confidences = (this._model.predict(input) as Tensor).dataSync();
     confidences.forEach((confidence: number, intentId: number) => {
       prediction.push({ intentId: intentId, confidence: confidence });

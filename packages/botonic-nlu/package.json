@@ -7,7 +7,9 @@
     "start:dev": "nodemon",
     "start": "npm run build && node dist/index.js",
     "test": "jest",
-    "lint": "eslint . --ext .ts"
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'"
   },
   "keywords": [],
   "author": "",
