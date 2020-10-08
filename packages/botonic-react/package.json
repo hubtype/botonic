@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.14.1-alpha.0",
+  "version": "0.14.1-alpha.2",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "react-reveal": "^1.2.2",
     "react-router-dom": "^5.2.0",
     "react-storage-hooks": "^4.0.1",
-    "react-textarea-autosize": "^8.2.0",
+    "react-textarea-autosize": "^7.1.2",
     "rebass": "^4.0.7",
     "simplebar-react": "^2.2.1",
     "styled-components": "^5.1.1",

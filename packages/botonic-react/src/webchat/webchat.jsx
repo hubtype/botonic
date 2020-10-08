@@ -505,13 +505,13 @@ export const Webchat = forwardRef((props, ref) => {
   https://stackoverflow.com/questions/37949981/call-child-method-from-parent
   */
 
-  const updateUserWithSession = userToUpdate => {
-    updateSession(
-      merge(webchatState.session, {
-        user: merge(webchatState.session.user, userToUpdate),
-      })
-    )
-    updateUser(merge(webchatState.user, userToUpdate))
+  const updateSessionWithUser = userToUpdate => {
+    const mergedUser = merge(webchatState.user, userToUpdate)
+    const mergedSession = merge(webchatState.session, {
+      user: mergedUser,
+    })
+    updateSession(mergedSession)
+    updateUser(mergedUser)
   }
 
   useImperativeHandle(ref, () => ({
@@ -531,7 +531,7 @@ export const Webchat = forwardRef((props, ref) => {
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
-    updateUser: user => updateUserWithSession(user),
+    updateUser: updateSessionWithUser,
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
@@ -749,7 +749,7 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
               autoFocus={true}
-              ref={textArea}
+              inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
               style={{
                 display: 'flex',
@@ -816,8 +816,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const updateAllUserReferences = user => updateUserWithSession(user)
-
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
@@ -864,7 +862,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateMessage,
         updateReplies,
         updateLatestInput,
-        updateUser: updateAllUserReferences,
+        updateUser: updateSessionWithUser,
         updateWebchatDevSettings: updateWebchatDevSettings,
       }}
     >
