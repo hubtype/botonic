@@ -505,16 +505,22 @@ export const Webchat = forwardRef((props, ref) => {
   https://stackoverflow.com/questions/37949981/call-child-method-from-parent
   */
 
+  const updateSessionWithUser = userToUpdate => {
+    const mergedUser = merge(webchatState.user, userToUpdate)
+    const mergedSession = merge(webchatState.session, {
+      user: mergedUser,
+    })
+    updateSession(mergedSession)
+    updateUser(mergedUser)
+  }
+
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
       updateTyping(false)
       if (Array.isArray(response)) response.map(r => addMessageComponent(r))
       else if (response) addMessageComponent(response)
       if (session) {
-        updateSession({
-          ...session,
-          user: { ...webchatState.session.user },
-        })
+        updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
         const handoff = action.startsWith('create_case')
         if (handoff && isDev()) addMessageComponent(<Handoff />)
@@ -525,13 +531,7 @@ export const Webchat = forwardRef((props, ref) => {
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
-    updateUser: user => {
-      updateSession({
-        ...webchatState.session,
-        user: { ...webchatState.session.user, ...user },
-      })
-      updateUser({ ...webchatState.user, ...user })
-    },
+    updateUser: updateSessionWithUser,
     openWebchat: () => toggleWebchat(true),
     closeWebchat: () => toggleWebchat(false),
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
@@ -749,7 +749,7 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
               autoFocus={true}
-              ref={textArea}
+              inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
               style={{
                 display: 'flex',
@@ -816,14 +816,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const updateAllUserReferences = user => {
-    updateUser({ ...webchatState.user, ...user })
-    updateSession({
-      ...webchatState.session,
-      user: { ...webchatState.session.user, ...user },
-    })
-  }
-
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
@@ -870,7 +862,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateMessage,
         updateReplies,
         updateLatestInput,
-        updateUser: updateAllUserReferences,
+        updateUser: updateSessionWithUser,
         updateWebchatDevSettings: updateWebchatDevSettings,
       }}
     >
