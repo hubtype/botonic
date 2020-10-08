@@ -15,10 +15,11 @@ export class ErrorReportingManageCms implements ManageCms {
     context: ManageContext,
     contentId: ContentId,
     fieldType: ContentFieldType,
-    value: any
+    value: any,
+    code?: string
   ): Promise<void> {
     return this.manageCms
-      .updateField(context, contentId, fieldType, value)
+      .updateField(context, contentId, fieldType, value, code)
       .catch(this.handleError('updateField', context, contentId))
   }
 

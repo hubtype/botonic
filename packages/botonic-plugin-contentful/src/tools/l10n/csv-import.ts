@@ -87,8 +87,16 @@ export class CsvImport {
   }
 }
 
+export interface ImporterOptions {
+  overwriteCodes: boolean
+}
+
 export class StringFieldImporter {
-  constructor(readonly cms: ManageCms, readonly context: ManageContext) {}
+  constructor(
+    readonly cms: ManageCms,
+    readonly context: ManageContext,
+    readonly options?: ImporterOptions
+  ) {}
 
   async consume(record: Record): Promise<void> {
     if (!isOfType(record.Model, ContentType)) {
@@ -105,12 +113,13 @@ export class StringFieldImporter {
       return
     }
     const id = new cms.ContentId(record.Model, record.Id)
-
+    const code = this.options?.overwriteCodes ? record.Code : undefined
     await this.cms.updateField(
       this.context,
       id,
       field.fieldType,
-      this.value(record)
+      this.value(record),
+      code
     )
   }
 

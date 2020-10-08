@@ -18,7 +18,8 @@ export interface ManageCms {
     context: ManageContext,
     contentId: ContentId,
     fieldType: ContentFieldType,
-    value: any
+    value: any,
+    code?: string
   ): Promise<void>
 
   /** Will not fail if source does not have this field */

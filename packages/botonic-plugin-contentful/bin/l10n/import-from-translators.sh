@@ -25,7 +25,8 @@ WRITE_MODE=$7
 #  OVERWRITE_AND_PUBLISH: overwrites previous value and publishes it (only for new spaces!)
 
 DUPLICATE_REFERENCES=$8
+OVERWRITE_CODES=$9
 
 ../../node_modules/.bin/ts-node --files	src/tools/l10n/import-csv-from-translators.ts \
 	"$SPACE_ID" "$ENVIRONMENT" "$DELIVER_TOKEN" "$CONTENTFUL_MANAGEMENT_TOKEN" "$LOCALE" "$CSV_FILENAME" \
-	"$WRITE_MODE" "$DUPLICATE_REFERENCES"
+	"$WRITE_MODE" "$DUPLICATE_REFERENCES" "$OVERWRITE_CODES"

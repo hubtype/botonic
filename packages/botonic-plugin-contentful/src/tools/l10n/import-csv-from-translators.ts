@@ -1,5 +1,6 @@
 import {
   CsvImport,
+  ImporterOptions,
   ReferenceFieldDuplicator,
   StringFieldImporter,
 } from './csv-import'
@@ -12,10 +13,15 @@ import { Contentful } from '../../contentful'
 async function readCsvForTranslators(
   contentfulOptions: ContentfulOptions,
   context: ManageContext,
-  fname: string
+  fname: string,
+  importerOptions: ImporterOptions
 ) {
   const manageCms = new ManageContentful(contentfulOptions)
-  const fieldImporter = new StringFieldImporter(manageCms, context)
+  const fieldImporter = new StringFieldImporter(
+    manageCms,
+    context,
+    importerOptions
+  )
   const importer = new CsvImport(fieldImporter)
   await importer.import(fname)
 }
@@ -31,7 +37,17 @@ if (process.argv.length < 10 || process.argv[2] == '--help') {
   console.error(
     `Usage: space_id environment delivery_token mgmnt_token locale filename [${Object.values(
       ImportType
-    ).join('|')}] duplicate_references`
+    ).join('|')}] duplicate_references [overwriteCodes]\n`
+  )
+  console.error(
+    '- duplicate_references (true|false) is used to indicate that the buttons and assets need to be duplicated' +
+      ' (which is required when copying a space with locales with fallbacks, to one without fallbacks)'
+  )
+  console.error(
+    '- overwriteCodes (true|false) Optional (false by default). Is used to indicate that we want to overwrite' +
+      ' the Codes of the contents. Since the import file may contain multiple rows for the same content,' +
+      ' be sure to change the Codes of all the rows or at least the Code of the last row for each same content' +
+      ' in order to update it correctly'
   )
   // eslint-disable-next-line no-process-exit
   process.exit(1)
@@ -56,6 +72,7 @@ const duplicateReferences =
 if (duplicateReferences == undefined) {
   throw Error("duplicateReferences argument must be 'true' or 'false'")
 }
+const overwriteCodes = process.argv[10] == 'true'
 
 async function main() {
   try {
@@ -78,8 +95,16 @@ async function main() {
         ImportType.OVERWRITE_AND_PUBLISH,
       ].includes(importType as ImportType),
     }
+    const importerOptions = {
+      overwriteCodes: overwriteCodes,
+    }
 
-    await readCsvForTranslators(manageOptions, manageContext, fileName)
+    await readCsvForTranslators(
+      manageOptions,
+      manageContext,
+      fileName,
+      importerOptions
+    )
     if (duplicateReferences) {
       console.log('Duplicating reference fields')
       await duplicateReferenceFields(

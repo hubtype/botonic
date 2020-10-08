@@ -60,15 +60,25 @@ export class ManageContentful implements ManageCms {
     context: ManageContext,
     contentId: ContentId,
     fieldType: ContentFieldType,
-    value: any
+    value: any,
+    code?: string
   ): Promise<void> {
     const environment = await this.getEnvironment()
     const oldEntry = await environment.getEntry(contentId.id)
+
     const field = this.checkOverwrite(context, oldEntry, fieldType, true)
     oldEntry.fields[field.cmsName][context.locale] = value
+    if (code) this.replaceCode(code, oldEntry)
+
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
     // the multilocale fields returned by update()
     await this.writeEntry(context, oldEntry)
+  }
+
+  replaceCode(code: string, entry: Entry) {
+    for (const locale in entry.fields.name) {
+      entry.fields.name[locale] = code
+    }
   }
 
   async removeAssetFile(

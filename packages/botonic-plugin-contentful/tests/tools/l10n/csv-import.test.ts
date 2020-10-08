@@ -22,6 +22,55 @@ function ctxt(ctx: Partial<ManageContext>): ManageContext {
   return { ...ctx, preview: false } as ManageContext
 }
 
+function getMockedManageCms() {
+  // using manual mock because mockito was not recognizing the call. maybe because method returns Promise to void?
+  return new (class MockCms implements ManageCms {
+    copyAssetFile(
+      context: ManageContext,
+      assetId: string,
+      fromLocale: string
+    ): Promise<void> {
+      fail("shouldn't be called")
+    }
+    removeAssetFile(context: ManageContext, assetId: string): Promise<void> {
+      fail("shouldn't be called")
+    }
+    numCalls = 0
+
+    getDefaultLocale(): Promise<Locale> {
+      fail("shouldn't be called")
+    }
+
+    copyField<T extends cms.Content>(
+      context: ManageContext,
+      contentId: cms.ContentId,
+      field: ContentFieldType,
+      fromLocale: string,
+      onlyIfTargetEmpty: boolean
+    ): Promise<void> {
+      fail("shouldn't be called")
+    }
+
+    updateField<T extends cms.Content>(
+      context: ManageContext,
+      contentId: ContentId,
+      fieldType: ContentFieldType,
+      value: any,
+      code?: string
+    ): Promise<void> {
+      this.numCalls++
+      expect(context).toEqual(ctxt({ locale: SPANISH }))
+      expect(contentId).toEqual(
+        new cms.ContentId(cms.ContentType.TEXT, TEST_CSV_IMPORT_ID)
+      )
+      expect(fieldType).toEqual(ContentFieldType.KEYWORDS)
+      expect(value).toEqual(['kw1', 'hola, amigo'])
+      if (code) expect(code).toEqual('POST_FAQ1')
+      return Promise.resolve()
+    }
+  })()
+}
+
 test('TEST: CsvImport read text, URL & carousel', async () => {
   const mockFieldImporter = mock<StringFieldImporter>()
   const readLines: Record[] = []
@@ -75,53 +124,25 @@ test('TEST: CsvImport read text, URL & carousel', async () => {
 }, 10000)
 
 test('TEST: StringFieldImporter test', async () => {
-  // using manual mock because mockito was not recognizing the call. maybe because method returns Promise to void?
-  class MockCms implements ManageCms {
-    copyAssetFile(
-      context: ManageContext,
-      assetId: string,
-      fromLocale: string
-    ): Promise<void> {
-      fail("shouldn't be called")
-    }
-    removeAssetFile(context: ManageContext, assetId: string): Promise<void> {
-      fail("shouldn't be called")
-    }
-    numCalls = 0
-
-    getDefaultLocale(): Promise<Locale> {
-      fail("shouldn't be called")
-    }
-
-    copyField<T extends cms.Content>(
-      context: ManageContext,
-      contentId: cms.ContentId,
-      field: ContentFieldType,
-      fromLocale: string,
-      onlyIfTargetEmpty: boolean
-    ): Promise<void> {
-      fail("shouldn't be called")
-    }
-
-    updateField<T extends cms.Content>(
-      context: ManageContext,
-      contentId: ContentId,
-      fieldType: ContentFieldType,
-      value: any
-    ): Promise<void> {
-      this.numCalls++
-      expect(context).toEqual(ctxt({ locale: SPANISH }))
-      expect(contentId).toEqual(
-        new cms.ContentId(cms.ContentType.TEXT, TEST_CSV_IMPORT_ID)
-      )
-      expect(fieldType).toEqual(ContentFieldType.KEYWORDS)
-      expect(value).toEqual(['kw1', 'hola, amigo'])
-      return Promise.resolve()
-    }
-  }
-
-  const mock = new MockCms()
+  const mock = getMockedManageCms()
   const sut = new StringFieldImporter(mock, ctxt({ locale: SPANISH }))
+  await sut.consume({
+    Model: 'text',
+    Code: 'POST_FAQ1',
+    Id: TEST_CSV_IMPORT_ID,
+    Field: ContentFieldType.KEYWORDS,
+    from: 'from',
+    to: ' kw1;hola, amigo ',
+  } as Record)
+
+  expect(mock.numCalls).toEqual(1)
+}, 10000)
+
+test('TEST: StringFieldImporter with Code update test', async () => {
+  const mock = getMockedManageCms()
+  const sut = new StringFieldImporter(mock, ctxt({ locale: SPANISH }), {
+    overwriteCodes: true,
+  })
   await sut.consume({
     Model: 'text',
     Code: 'POST_FAQ1',
@@ -139,20 +160,35 @@ test('TEST: StringFieldImporter test', async () => {
 test('TEST: StringFieldImporter integration test', async () => {
   const manageCms = testManageContentful()
   try {
-    const sut = new StringFieldImporter(manageCms, ctxt({ locale: SPANISH }))
-    await sut.consume({
+    const record = {
       Model: 'text',
-      Code: 'POST_FAQ1',
+      Code: 'POST_FAQ1_TEST',
       Id: TEST_CSV_IMPORT_ID,
       Field: ContentFieldType.KEYWORDS,
       from: 'from',
       to: 'kw1; kw2 ',
-    } as Record)
+    } as Record
+    const sut = new StringFieldImporter(manageCms, ctxt({ locale: SPANISH }))
+    const sutCode = new StringFieldImporter(
+      manageCms,
+      ctxt({ locale: SPANISH, allowOverwrites: true }),
+      { overwriteCodes: true }
+    )
+    await sut.consume(record)
     await repeatWithBackoff(async () => {
-      expect(
-        (await testContentful().text(TEST_CSV_IMPORT_ID, { locale: SPANISH }))
-          .common.keywords
-      ).toEqual(['kw1', 'kw2'])
+      const text = await testContentful().text(TEST_CSV_IMPORT_ID, {
+        locale: SPANISH,
+      })
+      expect(text.common.keywords).toEqual(['kw1', 'kw2'])
+      expect(text.common.name).toEqual('TEST_CSV_IMPORT')
+    })
+    await sutCode.consume(record)
+    await repeatWithBackoff(async () => {
+      const text = await testContentful().text(TEST_CSV_IMPORT_ID, {
+        locale: SPANISH,
+      })
+      expect(text.common.keywords).toEqual(['kw1', 'kw2'])
+      expect(text.common.name).toEqual('POST_FAQ1_TEST')
     })
   } finally {
     await manageCms.updateField(
@@ -162,7 +198,8 @@ test('TEST: StringFieldImporter integration test', async () => {
       }),
       new cms.ContentId(cms.ContentType.TEXT, TEST_CSV_IMPORT_ID),
       ContentFieldType.KEYWORDS,
-      undefined
+      undefined,
+      'TEST_CSV_IMPORT'
     )
   }
 }, 40000)
