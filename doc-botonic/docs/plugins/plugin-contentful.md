@@ -12,8 +12,8 @@ For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tre
 
 ## What Does This Plugin Do?
 
-Botonic Plugin Contentful is one of the [available](https://github.com/hubtype/botonic/tree/master/packages) plugins for Botonic.
-[Contentful](http://www.contentful.com) is a Content Management System (CMS)) which manages contents of a great variety
+Botonic Plugin Contentful is one of the **[available](https://github.com/hubtype/botonic/tree/master/packages)** plugins for Botonic.
+**[Contentful](http://www.contentful.com)** is a Content Management System (CMS)) which manages contents of a great variety
 of types, such as text, dates, numerics, images, ... These simple contents can be combined into custom complex contents (eg. a carousel or a message box) which can be queried over APIs. 
 
 <details>
@@ -101,7 +101,11 @@ CONTENTFUL_SPACEID=<YOUR_ID> CONTENTFUL_TOKEN=<CONTENT_MANAGEMENT_TOKEN> node_mo
 ### Define Your Contents
 
 #### Publishing Contents
-Go to the Contentful dashboard. Open the "Contents section" and create the contents required by your bot. Remember that they will not be available until you press the "publish" button and the button becomes green.
+
+1. Go to the Contentful dashboard.
+2. Open the **Contents section** and create the contents required by your bot. 
+
+Remember that they will not be available until you press the "publish" button and the button becomes green.
 <details>
 <summary>Example</summary>
 
@@ -221,7 +225,7 @@ export function renderStartUp(startUp: cms.StartUp): React.ReactNode {
 }
 ```
 
-2. render it from your actions. To obtain \<YOUR TEXT CONTENT ID\>, open the content at www.contentful.com and click the
+2. render it from your actions. To obtain \<YOUR TEXT CONTENT ID\>, open the content at **www.contentful.com** and click the
 "Info" button on the top right corner and copy the "ENTRY ID" value.
 
 ```
@@ -245,7 +249,7 @@ export default class Text extends React.Component {
 }
 ```
 
-*plugin.cms.text(id)* returns an object with all the fields configured at www.contentful.com. Instead of directly passing it to the renderText function, you can also process them according to your requirements (eg. you could be just interested on the text field).
+*plugin.cms.text(id)* returns an object with all the fields configured at **www.contentful.com**. Instead of directly passing it to the renderText function, you can also process them according to your requirements (eg. you could be just interested on the text field).
 
 3. to render the content assigned to the buttons at the Contentful dashboard,
 you we'll need to assign these routes:

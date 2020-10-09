@@ -24,7 +24,7 @@ Moreover, to make developers' lives easier, Botonic offers:
 
 ## Botonic and Hubtype
 
-Botonic is a project created by the [Hubtype](https://hubtype.com) team. Hubtype is a platform that allows companies to attend to their customers on messaging apps by combining bots and humans.
+Botonic is a project created by the **[Hubtype](https://hubtype.com)** team. Hubtype is a platform that allows companies to attend to their customers on messaging apps by combining bots and humans.
 The easiest way to put your botonic bot in production is to deploy it to Hubtype, as it offers:
 
 - Easy deployments.

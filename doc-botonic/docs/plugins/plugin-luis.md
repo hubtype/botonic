@@ -11,7 +11,7 @@ For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tre
 
 ## What Does This Plugin Do?
 
-Botonic plugin that use [LUIS](https://www.luis.ai/) as NLU service. The variables `intent`, `confidence`, `entities` and `intents` will be automatically available inside the `input` object.
+Botonic plugin that use **[LUIS](https://www.luis.ai/)** as NLU service. The variables `intent`, `confidence`, `entities` and `intents` will be automatically available inside the `input` object.
 
 ## Setup
 

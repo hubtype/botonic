@@ -11,7 +11,7 @@ For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tre
 
 ## What Does This Plugin Do?
 
-This plugin uses [Segment](https://segment.com/) to clean, collect and control customer data. It helps monitor performance, define decision-making processes and identify customers' interests.
+This plugin uses **[Segment](https://segment.com/)** to clean, collect and control customer data. It helps monitor performance, define decision-making processes and identify customers' interests.
 
 ## Setup
 
@@ -36,8 +36,8 @@ export const plugins = [
 
 The default behavior of this plugin is to:
 
-- [Identify](https://segment.com/docs/spec/identify/) the user during the first bot interaction.
-- `Track` a [page](https://segment.com/docs/spec/page/) event to Segment from then on.
+- **[Identify](https://segment.com/docs/spec/identify/)** the user during the first bot interaction.
+- `Track` a **[page](https://segment.com/docs/spec/page/)** event to Segment from then on.
 
 If you prefer to track your events manually, you can add the flag `trackManually: true` in your options. Once set, you can use them inside the method `botonicInit` on each Botonic component you want to track:
 

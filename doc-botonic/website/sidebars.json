@@ -5,6 +5,7 @@
       "project",
       "getting-started",
       "create-convapp",
+      "test-deploy/deployment",
       "supported-platforms"
     ]
   },
@@ -36,9 +37,8 @@
       "components/webchatsettings"
     ],
 
-    "Testing and Deployment": [
-      "test-deploy/testing-your-components",
-      "test-deploy/deployment"
+    "Testing": [
+      "test-deploy/testing-your-components"
     ]
   },
 
