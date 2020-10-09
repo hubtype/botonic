@@ -47,7 +47,33 @@ describe('Preprocessor Tools', () => {
 });
 
 describe('Preprocessor', () => {
-  test('Preprocessing a sentence:', () => {
+  test('Generating a vocabulary', () => {
+    const preprocessor = new Preprocessor();
+    const data = [
+      { label: 'Greetings', feature: 'Hi!' },
+      { label: 'BookRestaurant', feature: 'I want to book a table' },
+      { label: 'BuyClothes', feature: 'I would like to buy these trousers' },
+    ];
+    const expectedVocabulary = {
+      '<UNK>': 0,
+      hi: 1,
+      '!': 2,
+      i: 3,
+      want: 4,
+      to: 5,
+      book: 6,
+      a: 7,
+      table: 8,
+      would: 9,
+      like: 10,
+      buy: 11,
+      these: 12,
+      trousers: 13,
+    };
+    const generatedVocabulary = preprocessor.generateVocabulary(data);
+    expect(generatedVocabulary).toEqual(expectedVocabulary);
+  });
+  test('Preprocessing a sentence', () => {
     const language = 'en';
     const maxSeqLen = 10;
     const vocabulary = {
@@ -63,7 +89,6 @@ describe('Preprocessor', () => {
     };
     const sentence = 'Today I am going to the office!';
     const expectedOutput = [0, 0, 2, 4, 5, 6, 7, 1, 3, 8];
-
     const preprocessor = new Preprocessor();
     preprocessor.language = language;
     preprocessor.maxSeqLen = maxSeqLen;

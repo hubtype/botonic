@@ -57,7 +57,7 @@ export class Preprocessor {
   }
 
   // TO DO: Maybe vocabulary should be generated with a different data set than the train or test one.
-  generateVocabulary(data: DataSet): void {
+  generateVocabulary(data: DataSet): Vocabulary {
     this._vocabulary = {};
     this.vocabulary[UNKNOWN_TOKEN] = 0;
     let id = 1;
@@ -74,6 +74,7 @@ export class Preprocessor {
         }
       });
     });
+    return this._vocabulary;
   }
 
   preprocess(sentence: string): number[] {
