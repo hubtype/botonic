@@ -140,7 +140,7 @@ export class BotonicNLU {
   async train(
     epochs: number,
     batchSize: number,
-    validationSplit = 0.1,
+    validationSplit = 0.2,
   ): Promise<void> {
     const [xTrain, yTrain] = this._splitInputOutput(this._trainSet);
 

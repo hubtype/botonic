@@ -1,23 +1,10 @@
-import { join } from 'path';
-import * as CONSTANTS from '../src/constants';
 import { IntentsProcessor } from '../src/intents-processor';
-import { readJSON } from '../src/util/file-system';
+import { INTENTS } from './constants';
+
+const intentsProcessor = new IntentsProcessor();
+intentsProcessor.loadEncoderDecoder(INTENTS);
 
 describe('Intent decoder.', () => {
-  const modelDataPath = join(
-    process.cwd(),
-    'tests',
-    CONSTANTS.NLU_DIR,
-    CONSTANTS.MODELS_DIR,
-    'test',
-    'model-data.json',
-  );
-
-  const modelData = readJSON(modelDataPath);
-
-  const intentsProcessor = new IntentsProcessor();
-  intentsProcessor.loadEncoderDecoder(modelData.intents);
-
   test('Checking decoder', () => {
     const expectedDecoder = {
       '0': 'Gratitude',
@@ -36,19 +23,6 @@ describe('Intent decoder.', () => {
 });
 
 describe('Intent encoder.', () => {
-  const modelDataPath = join(
-    process.cwd(),
-    'tests',
-    CONSTANTS.NLU_DIR,
-    CONSTANTS.MODELS_DIR,
-    'test',
-    'model-data.json',
-  );
-
-  const modelData = readJSON(modelDataPath);
-
-  const intentsProcessor = new IntentsProcessor();
-  intentsProcessor.loadEncoderDecoder(modelData.intents);
   test('Checking encoder', () => {
     const expectedEcoder = {
       Gratitude: 0,
