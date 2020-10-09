@@ -31,7 +31,7 @@ export class WordEmbeddingsManager {
     this._tensorMatrix = tensor(this._matrix);
   }
 
-  private async _initializeDBHelper() {
+  private async _initializeDBHelper(): Promise<void> {
     const dbHelper = new WordEmbeddingsDBHelper(
       this._type,
       this._dimension,
@@ -41,7 +41,7 @@ export class WordEmbeddingsManager {
     await this._dbHelper.initialize({ logProcess: true });
   }
 
-  private _initializeMatrix() {
+  private _initializeMatrix(): void {
     const maxInitValue = 1;
     const minInitValue = -1;
     const rowsCount = Object.keys(this._vocabulary).length;
@@ -57,7 +57,7 @@ export class WordEmbeddingsManager {
     }
   }
 
-  private async _fillMatrix() {
+  private async _fillMatrix(): Promise<void> {
     for (const [word, i] of Object.entries(this._vocabulary)) {
       const embedding = await this._dbHelper.select(word);
       if (embedding) this._matrix[i] = embedding.vector;
@@ -66,5 +66,8 @@ export class WordEmbeddingsManager {
 
   get wordEmbeddingsMatrix(): Tensor {
     return this._tensorMatrix;
+  }
+  get matrix(): number[][] {
+    return this._matrix;
   }
 }
