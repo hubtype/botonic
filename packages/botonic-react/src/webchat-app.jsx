@@ -67,7 +67,7 @@ export class WebchatApp {
     return this.hubtypeService.resendUnsentInputs()
   }
 
-  onStateChange({ user, messagesJSON }) {
+  onStateChange({ session: { user }, messagesJSON }) {
     if (!this.hubtypeService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
       this.hubtypeService = new HubtypeService({
