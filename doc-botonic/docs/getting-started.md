@@ -16,7 +16,7 @@ Let's install and create our first Botonic bot!
 ## Step 2 – Create a Bot
 
 1. Run `botonic new <bot_name>`
-2. Select one of the **[templates](/templates/templates)** available.
+2. Select one of the **[templates](/project)** available.
 
 Congratulations: Your bot is created!
 

@@ -27,7 +27,7 @@ You can integrate your chatbot into your webpage. This integration is 100% edita
 
 **Note**: If you want to enable visibility settings, you must add the `visibility` parameter set to `'dynamic'` as shown: `{appId: 'YOUR_APP_ID', visibility: 'dynamic'}`
 
-For more information, refer to the **[Custom Webchat](templates/template-custom-webchat)** template description.
+For more information, refer to the **[Webchat](/concepts/webchat)** section.
 
 <details>
 <summary>Example</summary>
@@ -39,7 +39,7 @@ For more information, refer to the **[Custom Webchat](templates/template-custom-
 
 ## WhatsApp
 
-WhatsApp Playground allows you to test your bot with the official [WhatsApp Business API](https://www.whatsapp.com/business/api) without going through the approval process.
+WhatsApp Playground allows you to test your bot with the official **[WhatsApp Business API](https://www.whatsapp.com/business/api)** without going through the approval process.
 
 1. Click on the bot’s name and test the conversation in the Hubtype Desk chat box.
       <details>
@@ -86,7 +86,7 @@ A new integration appears on the left side. Click on the Facebook Messenger link
 
 ## Telegram
 
-1. Create a Telegram bot. To do so, send the message `/newbot` to [@BotFather](https://t.me/botfather) and follow the steps.
+1. Create a Telegram bot. To do so, send the message `/newbot` to **[@BotFather](https://t.me/botfather)** and follow the steps.
 2. Add the bot username and token and press the `Connect bot` button.
 
 <details>

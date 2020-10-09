@@ -11,7 +11,7 @@ For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tre
 
 ## What Does This Plugin Do?
 
-This plugin allows you to track the user interaction with the bot or the bot's behaviour by sending the information to [Google Analytics](https://analytics.google.com/).
+This plugin allows you to track the user interaction with the bot or the bot's behaviour by sending the information to **[Google Analytics](https://analytics.google.com/)**.
 
 ## Setup
 
@@ -36,7 +36,7 @@ export const plugins = [
 ## Use
 
 The tracking needs to be done manually as enabling this plugin does not track any user interaction or bot's behaviour by default.
-You can do the tracking inside the `botonicInit` method, `render` method or even inside the [Webchat listeners](/concepts/webchat#webchat-listeners).
+You can do the tracking inside the `botonicInit` method, `render` method or even inside the **[Webchat listeners](/concepts/webchat#webchat-listeners)**.
 
 ```javascript
 static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
@@ -57,4 +57,4 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
   }
 ```
 
-**Note**: The `callback ` argument is not required.
+**Note**: The `callback` argument is not required.
