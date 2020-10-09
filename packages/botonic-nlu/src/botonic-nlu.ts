@@ -21,7 +21,7 @@ import {
 } from './types';
 import { Language } from './language';
 import { readJSON } from './util/file-system';
-import { tensor } from '@tensorflow/tfjs-node';
+import { LayersModel, Sequential, tensor } from '@tensorflow/tfjs-node';
 import { join } from 'path';
 import { MODELS_DIR, MODEL_DATA_FILENAME, NLU_DIR } from './constants';
 import { mkdirSync, writeFileSync } from 'fs';
@@ -53,6 +53,10 @@ export class BotonicNLU {
 
   set tokenizer(value: Tokenizer) {
     this._preprocessor.tokenizer = value;
+  }
+
+  set model(model: Sequential | LayersModel) {
+    this._modelManager.model = model;
   }
 
   loadModelData(modelDataPath: string): void {
@@ -172,14 +176,16 @@ export class BotonicNLU {
     return [x, y];
   }
 
-  async saveModel(): Promise<void> {
-    const modelDir = join(
-      process.cwd(),
-      'src',
-      NLU_DIR,
-      MODELS_DIR,
-      this._preprocessor.language,
-    );
+  async saveModel(path?: string): Promise<void> {
+    const modelDir =
+      path ||
+      join(
+        process.cwd(),
+        'src',
+        NLU_DIR,
+        MODELS_DIR,
+        this._preprocessor.language,
+      );
     mkdirSync(modelDir, { recursive: true });
 
     const modelDataPath = join(modelDir, MODEL_DATA_FILENAME);

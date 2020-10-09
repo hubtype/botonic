@@ -17,7 +17,7 @@ import {
 import { accuracyScore } from 'machinelearn/metrics';
 
 export class ModelManager {
-  private _model: Sequential | LayersModel;
+  model: Sequential | LayersModel;
   private _wordEmbeddingsManager: WordEmbeddingsManager;
 
   constructor() {
@@ -25,7 +25,7 @@ export class ModelManager {
   }
 
   async loadModel(modelPath: string): Promise<void> {
-    this._model = await loadLayersModel(`file://${modelPath}`);
+    this.model = await loadLayersModel(`file://${modelPath}`);
   }
 
   async createModel(
@@ -38,12 +38,12 @@ export class ModelManager {
     const wordEmbeddingsMatrix: Tensor = this._wordEmbeddingsManager
       .wordEmbeddingsMatrix;
 
-    this._model = new SimpleNN(parameters, wordEmbeddingsMatrix).model;
+    this.model = new SimpleNN(parameters, wordEmbeddingsMatrix).model;
   }
 
   async train(parameters: TrainingParameters): Promise<void> {
     const { X, y, batchSize, epochs, validationSplit } = parameters;
-    await this._model.fit(X, y, {
+    await this.model.fit(X, y, {
       epochs: epochs,
       batchSize: batchSize,
       validationSplit: validationSplit,
@@ -52,7 +52,7 @@ export class ModelManager {
 
   predictProbabilities(input: Tensor): EncodedPrediction {
     const prediction: EncodedPrediction = [];
-    const confidences = (this._model.predict(input) as Tensor).dataSync();
+    const confidences = (this.model.predict(input) as Tensor).dataSync();
     confidences.forEach((confidence: number, intentId: number) => {
       prediction.push({ intentId: intentId, confidence: confidence });
     });
@@ -60,7 +60,7 @@ export class ModelManager {
   }
 
   predict(input: Tensor): number {
-    const probabilities = (this._model.predict(
+    const probabilities = (this.model.predict(
       input,
     ) as Tensor).arraySync() as number[][];
     const intentId = probabilities[0].indexOf(Math.max(...probabilities[0]));
@@ -68,7 +68,7 @@ export class ModelManager {
   }
 
   evaluate(X: InputSet, y: OutputSet): number {
-    const prediction = (this._model.predict(
+    const prediction = (this.model.predict(
       X,
     ) as Tensor).arraySync() as number[][];
 
@@ -83,6 +83,6 @@ export class ModelManager {
   }
 
   async saveModel(modelDir: string): Promise<void> {
-    await this._model.save(`file://${modelDir}`);
+    await this.model.save(`file://${modelDir}`);
   }
 }
