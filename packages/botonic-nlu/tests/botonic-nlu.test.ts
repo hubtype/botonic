@@ -1,12 +1,3 @@
-import { normalizer, stemmer, tokenizer } from './preprocessing-tools';
-import { join } from 'path';
-
-describe('new NLU', () => {
-  it('should...', () => {
-    expect(true).toBe(true);
-  });
-});
-
 // describe('Botonic NLU API', () => {
 //   const nlu = new BotonicNLU();
 //   it('Adding one example', () => {

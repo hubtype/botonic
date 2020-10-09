@@ -1,0 +1,9 @@
+feature,label
+Show me the fastest itinerary to my Airbnb on a Friday night,GetDirections
+Book a table at the best chinese restaurant in town for today's lunch,BookRestaurant
+Get me directions to Las Vegas avoiding toll roads,GetDirections
+Hi!,Greetings
+Show me walking directions to MOMA,GetDirections
+okay! thanks for your attention!,Gratitude
+Good morning!,Greetings
+I need a reservation for five people at Galli for friday night,BookRestaurant

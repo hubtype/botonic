@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
+import { DefaultTokenizer } from './preprocessing-tools/tokenizer';
+import { DefaultStemmer } from './preprocessing-tools/stemmer';
+import { DefaultNormalizer } from './preprocessing-tools/normalizer';
 import { UNKNOWN_TOKEN } from './constants';
 import { DataSet, Vocabulary, Normalizer, Stemmer, Tokenizer } from './types';
 import { Language } from './language';
@@ -10,6 +13,12 @@ export class Preprocessor {
   private _language: Language;
   private _maxSeqLen: number;
   private _vocabulary: Vocabulary;
+
+  constructor() {
+    this._normalizer = new DefaultNormalizer();
+    this._tokenizer = new DefaultTokenizer();
+    this._stemmer = new DefaultStemmer();
+  }
 
   set normalizer(value: Normalizer) {
     this._normalizer = value;
@@ -54,12 +63,11 @@ export class Preprocessor {
     let id = 1;
     data.forEach((sample) => {
       const normalizedSentence = this._normalizer.normalize(sample.feature);
-      const stemmedSentence = this._stemmer.stem(
-        normalizedSentence,
-        this._language,
+      const tokens = this._tokenizer.tokenize(normalizedSentence);
+      const stemmedTokens = tokens.map((token) =>
+        this._stemmer.stem(token, this._language),
       );
-      const tokens = this._tokenizer.tokenize(stemmedSentence);
-      tokens.forEach((token) => {
+      stemmedTokens.forEach((token) => {
         if (!(token in this._vocabulary)) {
           this._vocabulary[token] = id;
           id++;
@@ -70,12 +78,11 @@ export class Preprocessor {
 
   preprocess(sentence: string): number[] {
     const normalizedSentence = this._normalizer.normalize(sentence);
-    const stemmedSentence = this._stemmer.stem(
-      normalizedSentence,
-      this._language,
+    const tokens = this._tokenizer.tokenize(normalizedSentence);
+    const stemmedTokens = tokens.map((token) =>
+      this._stemmer.stem(token, this._language),
     );
-    const tokens = this._tokenizer.tokenize(stemmedSentence);
-    const sequence = this._computeSequence(tokens);
+    const sequence = this._computeSequence(stemmedTokens);
     const truncatedSequence = this._truncate(sequence);
     const paddedSequence = this._paddSequence(truncatedSequence);
     return paddedSequence;

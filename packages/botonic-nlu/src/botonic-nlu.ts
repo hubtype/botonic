@@ -118,7 +118,7 @@ export class BotonicNLU {
     learningRate: number,
     wordEmbeddingsType: WordEmbeddingType = '10k-fasttext',
     wordEmbeddingsDimension: WordEmbeddingDimension = 300,
-    trainableEmbeddings = true,
+    trainableEmbeddings = false,
   ): Promise<void> {
     const wordEmbeddingsConfig: WordEmbeddingsConfig = {
       type: wordEmbeddingsType,

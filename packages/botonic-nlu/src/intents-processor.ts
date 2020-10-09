@@ -19,6 +19,10 @@ export class IntentsProcessor {
     return this._decoder;
   }
 
+  get encoder(): IntentEncoder {
+    return this._encoder;
+  }
+
   loadEncoderDecoder(decoder: IntentDecoder): void {
     this._encoder = flipObject(decoder);
     this._decoder = decoder;
