@@ -1,11 +1,11 @@
 import {
-  PorterStemmer,
-  PorterStemmerEs,
-  PorterStemmerFr,
-  PorterStemmerIt,
-  PorterStemmerNo,
-  PorterStemmerPt,
-  PorterStemmerRu,
+  PorterStemmer, // eslint-disable-line import/named
+  PorterStemmerEs, // eslint-disable-line import/named
+  PorterStemmerFr, // eslint-disable-line import/named
+  PorterStemmerIt, // eslint-disable-line import/named
+  PorterStemmerNo, // eslint-disable-line import/named
+  PorterStemmerPt, // eslint-disable-line import/named
+  PorterStemmerRu, // eslint-disable-line import/named
 } from 'natural';
 import { Language } from '../language';
 

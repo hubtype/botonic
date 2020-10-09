@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { WordEmbeddingsDBHelper } from '../../src/embeddings/wembeddings-db-helper';
 
 describe('Word Embeddings DB Helper', () => {
   const UNSUPPORTED_LANGUAGE = 'af';
   const SUPPORTED_LANGUAGE = 'en';
 
-  it('Word embedding not supported', async () => {
+  it('Word embedding not supported', () => {
     const dbHelper = new WordEmbeddingsDBHelper(
       '10k-fasttext',
       50,

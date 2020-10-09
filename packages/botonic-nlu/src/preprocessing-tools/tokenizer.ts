@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/named
 import { TreebankWordTokenizer } from 'natural';
 import { Tokenizer } from '../types';
 
