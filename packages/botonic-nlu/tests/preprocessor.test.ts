@@ -27,7 +27,7 @@ describe('Preprocessor Tools', () => {
     expect(tokenizer.tokenize(sentence)).toEqual(expectedOutput);
   });
   test('Stemming a sentence', () => {
-    const stemmer = new DefaultStemmer();
+    const stemmer = new DefaultStemmer(true);
     const language = 'en';
     const tokens = ['today', 'i', 'am', 'going', 'to', 'the', 'office', '!'];
     const expectedOutputs = [
@@ -79,11 +79,11 @@ describe('Preprocessor', () => {
     const vocabulary = {
       [CONSTANTS.UNKNOWN_TOKEN]: 0,
       the: 1,
-      todai: 2,
-      offic: 3,
+      today: 2,
+      office: 3,
       i: 4,
       am: 5,
-      go: 6,
+      going: 6,
       to: 7,
       '!': 8,
     };

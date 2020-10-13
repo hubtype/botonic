@@ -108,4 +108,12 @@ export class Preprocessor {
     const paddedSequence = padd.concat(truncatedSequence);
     return paddedSequence;
   }
+
+  tokenize(sentence: string): string[] {
+    return this._tokenizer.tokenize(sentence);
+  }
+
+  normalize(sentence: string): string {
+    return this._normalizer.normalize(sentence);
+  }
 }

@@ -93,21 +93,25 @@ export class BotonicNLU {
     return decodedPrediction;
   }
 
-  loadData(path: string, language: Language, maxSeqLen: number): void {
-    this._data = this._dataReader.readData(path);
-    this._preprocessor.language = language;
-    this._preprocessor.maxSeqLen = maxSeqLen;
+  loadData(options: {
+    path: string;
+    language: Language;
+    maxSeqLen: number;
+  }): void {
+    this._data = this._dataReader.readData(options.path);
+    this._preprocessor.language = options.language;
+    this._preprocessor.maxSeqLen = options.maxSeqLen;
   }
 
-  splitData(testPercentage = 0.25): void {
-    if (testPercentage > 1 || testPercentage < 0) {
+  splitData(options: { testPercentage: number }): void {
+    if (options.testPercentage > 1 || options.testPercentage < 0) {
       throw new RangeError(
         'testPercentage should be a number between 0 and 1.',
       );
     }
 
     const dataSize = this._data.length;
-    const testSize = Math.round(dataSize * testPercentage);
+    const testSize = Math.round(dataSize * options.testPercentage);
 
     this._data = shuffle(this._data);
 
@@ -118,42 +122,42 @@ export class BotonicNLU {
     this._intentsProcessor.generateEncoderDecoder(this._trainSet);
   }
 
-  async createModel(
-    learningRate: number,
-    wordEmbeddingsType: WordEmbeddingType = '10k-fasttext',
-    wordEmbeddingsDimension: WordEmbeddingDimension = 300,
-    trainableEmbeddings = false,
-  ): Promise<void> {
+  async createModel(options: {
+    learningRate: number;
+    wordEmbeddingsType?: WordEmbeddingType;
+    wordEmbeddingsDimension?: WordEmbeddingDimension;
+    trainableEmbeddings?: boolean;
+  }): Promise<void> {
     const wordEmbeddingsConfig: WordEmbeddingsConfig = {
-      type: wordEmbeddingsType,
-      dimension: wordEmbeddingsDimension,
+      type: options.wordEmbeddingsType || '10k-fasttext',
+      dimension: options.wordEmbeddingsDimension || 300,
       language: this._preprocessor.language,
       vocabulary: this._preprocessor.vocabulary,
     };
 
     const parameters: ModelParameters = {
       maxSeqLen: this._preprocessor.maxSeqLen,
-      learningRate: learningRate,
+      learningRate: options.learningRate,
       intentsCount: this._intentsProcessor.intentsCount,
-      trainableEmbeddings: trainableEmbeddings,
+      trainableEmbeddings: options.trainableEmbeddings || false,
     };
 
     await this._modelManager.createModel(wordEmbeddingsConfig, parameters);
   }
 
-  async train(
-    epochs: number,
-    batchSize: number,
-    validationSplit = 0.2,
-  ): Promise<void> {
+  async train(options?: {
+    epochs: number;
+    batchSize?: number;
+    validationSplit?: number;
+  }): Promise<void> {
     const [xTrain, yTrain] = this._splitInputOutput(this._trainSet);
 
     const parameters: TrainingParameters = {
       X: xTrain,
       y: yTrain,
-      epochs: epochs,
-      batchSize: batchSize,
-      validationSplit: validationSplit,
+      epochs: options?.epochs || 10,
+      batchSize: options?.batchSize || 8,
+      validationSplit: options?.validationSplit || 0.2,
     };
 
     await this._modelManager.train(parameters);
