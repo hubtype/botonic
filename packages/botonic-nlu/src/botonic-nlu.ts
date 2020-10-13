@@ -32,10 +32,6 @@ export class BotonicNLU {
   private _intentsProcessor: IntentsProcessor;
   private _dataReader: DataReader;
 
-  private _data: DataSet;
-  private _trainSet: DataSet;
-  private _testSet: DataSet;
-
   constructor() {
     this._preprocessor = new Preprocessor();
     this._modelManager = new ModelManager();
@@ -80,6 +76,7 @@ export class BotonicNLU {
 
   predictProbabilities(sentence: string): DecodedPrediction {
     const input = tensor([this._preprocessor.preprocess(sentence)]);
+    console.log(input.arraySync());
     const encodedPrediction = this._modelManager.predictProbabilities(input);
     const decodedPrediction: DecodedPrediction = encodedPrediction.map(
       (intentConfidence) => {
@@ -97,29 +94,48 @@ export class BotonicNLU {
     path: string;
     language: Language;
     maxSeqLen: number;
-  }): void {
-    this._data = this._dataReader.readData(options.path);
+  }): DataSet {
     this._preprocessor.language = options.language;
     this._preprocessor.maxSeqLen = options.maxSeqLen;
+    return this._dataReader.readData(options.path);
   }
 
-  splitData(options: { testPercentage: number }): void {
+  trainTestSplit(options: {
+    data: DataSet;
+    testPercentage: number;
+  }): [InputSet, InputSet, OutputSet, OutputSet] {
     if (options.testPercentage > 1 || options.testPercentage < 0) {
       throw new RangeError(
         'testPercentage should be a number between 0 and 1.',
       );
     }
 
-    const dataSize = this._data.length;
+    const data = shuffle(options.data);
+
+    const dataSize = options.data.length;
     const testSize = Math.round(dataSize * options.testPercentage);
 
-    this._data = shuffle(this._data);
+    const testSet = data.slice(0, testSize);
+    const trainSet = data.slice(testSize, dataSize);
 
-    this._testSet = this._data.slice(0, testSize);
-    this._trainSet = this._data.slice(testSize, dataSize);
+    this._preprocessor.generateVocabulary(trainSet);
+    this._intentsProcessor.generateEncoderDecoder(trainSet);
 
-    this._preprocessor.generateVocabulary(this._trainSet);
-    this._intentsProcessor.generateEncoderDecoder(this._trainSet);
+    const [xTrain, yTrain] = this._inputOutputSplit(trainSet);
+    const [xTest, yTest] = this._inputOutputSplit(testSet);
+
+    return [xTrain, xTest, yTrain, yTest];
+  }
+
+  private _inputOutputSplit(data: DataSet): [InputSet, OutputSet] {
+    const x = tensor(
+      data.map((sample) => this._preprocessor.preprocess(sample.feature)),
+    );
+
+    const y = tensor(
+      data.map((sample) => this._intentsProcessor.encode(sample.label)),
+    );
+    return [x, y];
   }
 
   async createModel(options: {
@@ -145,16 +161,18 @@ export class BotonicNLU {
     await this._modelManager.createModel(wordEmbeddingsConfig, parameters);
   }
 
-  async train(options?: {
-    epochs: number;
-    batchSize?: number;
-    validationSplit?: number;
-  }): Promise<void> {
-    const [xTrain, yTrain] = this._splitInputOutput(this._trainSet);
-
+  async train(
+    x: InputSet,
+    y: OutputSet,
+    options?: {
+      epochs: number;
+      batchSize?: number;
+      validationSplit?: number;
+    },
+  ): Promise<void> {
     const parameters: TrainingParameters = {
-      X: xTrain,
-      y: yTrain,
+      X: x,
+      y: y,
       epochs: options?.epochs || 10,
       batchSize: options?.batchSize || 8,
       validationSplit: options?.validationSplit || 0.2,
@@ -163,21 +181,9 @@ export class BotonicNLU {
     await this._modelManager.train(parameters);
   }
 
-  evaluate(): number {
-    const [xTest, yTest] = this._splitInputOutput(this._testSet);
-    const accuracy = this._modelManager.evaluate(xTest, yTest);
+  evaluate(x: InputSet, y: OutputSet): number {
+    const accuracy = this._modelManager.evaluate(x, y);
     return accuracy;
-  }
-
-  private _splitInputOutput(data: DataSet): [InputSet, OutputSet] {
-    const x = tensor(
-      data.map((sample) => this._preprocessor.preprocess(sample.feature)),
-    );
-
-    const y = tensor(
-      data.map((sample) => this._intentsProcessor.encode(sample.label)),
-    );
-    return [x, y];
   }
 
   async saveModel(path?: string): Promise<void> {

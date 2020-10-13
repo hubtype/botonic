@@ -2,22 +2,21 @@ const { BotonicNLU } = require('./dist');
 
 const nlu = new BotonicNLU();
 
-const dataPath =
-  '/home/eric/Git/botonic/packages/botonic-nlu/tests/nlu/utterances/simple-nn/data.csv';
-const language = 'en';
-const maxSeqLen = 20;
-nlu.loadData(dataPath, language, maxSeqLen);
+const data = nlu.loadData({
+  path: '/home/eric/Documents/Bots/nlu-refactor/src/nlu/utterances/en',
+  language: 'en',
+  maxSeqLen: 20,
+});
 
-const testPercentage = 0.2;
-nlu.splitData(testPercentage);
+const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
+  data: data,
+  testPercentage: 0.05,
+});
 
-const learningRate = 0.0001;
-const epochs = 70;
-const batchSize = 8;
 (async () => {
-  await nlu.createModel(learningRate);
-  await nlu.train(epochs, batchSize);
-  const accuracy = await nlu.evaluate();
+  await nlu.createModel({ learningRate: 0.0001 });
+  await nlu.train(xTrain, yTrain, { epochs: 50 });
+  const accuracy = await nlu.evaluate(xTest, yTest);
   console.log('Accuracy:', accuracy);
   await nlu.saveModel();
 })();
