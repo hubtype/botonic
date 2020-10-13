@@ -1,6 +1,7 @@
 import { default as fetch } from 'node-fetch'
 import { resolveEnv, loadOption } from './utils'
 import { detectLang, inputToTensor, predictionToIntent } from './prediction'
+import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
 
 global.fetch = fetch
 
@@ -9,9 +10,10 @@ export class NLU {
     return (async () => {
       this.env = await resolveEnv()
       this.languages = []
-      this.tokenizer = options.tokenizer
       this.models = {}
-      for (const _language of options.langs) {
+      this.preprocessors = {}
+      const langs = Object.keys(options)
+      for (const _language of langs) {
         this.languages.push(_language)
         const { nluData, model } = loadOption(_language, this.env)
         this.models[_language] = {
@@ -19,6 +21,14 @@ export class NLU {
           model,
           nluData,
         }
+        const preprocessor = new Preprocessor()
+        if (options[_language].tokenizer)
+          preprocessor.tokenizer = options[_language].tokenizer
+        if (options[_language].normalizer)
+          preprocessor.normalizer = options[_language].normalizer
+        if (options[_language].stemmer)
+          preprocessor.stemmer = options[_language].stemmer
+        this.preprocessors[_language] = preprocessor
       }
       await Promise.all([
         ...Object.values(this.models).map(nlu => nlu.model),
@@ -28,6 +38,8 @@ export class NLU {
         const nluData = await res.nluData
         const { intents, maxSeqLen, vocabulary, devEntities } =
           this.env.mode === 'node' ? nluData : nluData.data
+        this.preprocessors[_language].vocabulary = vocabulary
+        this.preprocessors[_language].maxSeqLen = maxSeqLen
         this.models[_language] = {
           nluData: {
             language: res.language,
@@ -46,10 +58,9 @@ export class NLU {
   predict(input) {
     const language = detectLang(input, this.languages)
     const { model, nluData } = this.models[language]
-    const { maxSeqLen, vocabulary, intents } = nluData
-    const tensor = inputToTensor(input, this.tokenizer, vocabulary, maxSeqLen)
+    const tensor = inputToTensor(input, this.preprocessors[language])
     const prediction = model.predict(tensor).dataSync()
-    const intent = predictionToIntent(prediction, intents, language)
+    const intent = predictionToIntent(prediction, nluData.intents, language)
     return { intent }
   }
 }
