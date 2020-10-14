@@ -23,7 +23,7 @@ export const customMessage = ({
       )
       return { replies, childrenWithoutReplies }
     } catch (e) {
-      return { replies: children, childrenWithoutReplies: [] }
+      return { replies: [], childrenWithoutReplies: children }
     }
   }
 
