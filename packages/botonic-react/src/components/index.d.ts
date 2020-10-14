@@ -163,6 +163,13 @@ export interface ThemeProps {
     StyleProp
 }
 
+export interface CoverComponentOptions {
+  coverComponent: {
+    component: React.Component
+    props: any
+  }
+}
+
 export interface WebchatSettingsProps {
   theme?: ThemeProps
   persistentMenu?: PersistentMenuProps
