@@ -170,7 +170,6 @@ export const Webchat = forwardRef((props, ref) => {
     updateTyping,
     updateWebview,
     updateSession,
-    updateUser,
     updateLastRoutePath,
     updateHandoff,
     updateTheme,
@@ -209,7 +208,6 @@ export const Webchat = forwardRef((props, ref) => {
   const saveWebchatState = webchatState => {
     getStorage() &&
       saveState({
-        user: webchatState.user,
         messages: webchatState.messagesJSON,
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
@@ -241,7 +239,7 @@ export const Webchat = forwardRef((props, ref) => {
   const sendUserInput = async input => {
     props.onUserInput &&
       props.onUserInput({
-        user: webchatState.user,
+        user: webchatState.session.user,
         input: input,
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
@@ -254,7 +252,6 @@ export const Webchat = forwardRef((props, ref) => {
   // Load initial state from storage
   useEffect(() => {
     let {
-      user,
       messages,
       session,
       lastRoutePath,
@@ -262,8 +259,10 @@ export const Webchat = forwardRef((props, ref) => {
       lastMessageUpdate,
       themeUpdates,
     } = botonicState || {}
-    if (!user || Object.keys(user).length === 0) user = createUser()
-    updateUser(user)
+    if (!session) session = {}
+    if (!session.user || Object.keys(session.user).length === 0)
+      session.user = createUser()
+    updateSession(session)
     if (
       !devSettings ||
       Object.keys(devSettings).length === 0 ||
@@ -280,10 +279,9 @@ export const Webchat = forwardRef((props, ref) => {
           if (newComponent) addMessageComponent(newComponent)
         })
       }
-      if (session) updateSession(session)
-      else if (initialSession) updateSession(initialSession)
+      if (initialSession) updateSession(merge(initialSession, session))
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-    } else updateSession(initialSession)
+    } else updateSession(merge(initialSession, session))
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
@@ -304,7 +302,6 @@ export const Webchat = forwardRef((props, ref) => {
       onStateChange(webchatState)
     saveWebchatState(webchatState)
   }, [
-    webchatState.user,
     webchatState.messagesJSON,
     webchatState.session,
     webchatState.lastRoutePath,
@@ -505,14 +502,8 @@ export const Webchat = forwardRef((props, ref) => {
   https://stackoverflow.com/questions/37949981/call-child-method-from-parent
   */
 
-  const updateSessionWithUser = userToUpdate => {
-    const mergedUser = merge(webchatState.user, userToUpdate)
-    const mergedSession = merge(webchatState.session, {
-      user: mergedUser,
-    })
-    updateSession(mergedSession)
-    updateUser(mergedUser)
-  }
+  const updateSessionWithUser = userToUpdate =>
+    updateSession(merge(webchatState.session, { user: userToUpdate }))
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {

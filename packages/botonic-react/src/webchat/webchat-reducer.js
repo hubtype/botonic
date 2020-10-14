@@ -2,7 +2,6 @@ import {
   UPDATE_LATEST_INPUT,
   UPDATE_WEBVIEW,
   UPDATE_SESSION,
-  UPDATE_USER,
   UPDATE_LAST_ROUTE_PATH,
   UPDATE_THEME,
   UPDATE_DEV_SETTINGS,
@@ -24,8 +23,6 @@ export function webchatReducer(state, action) {
       return { ...state, ...action.payload }
     case UPDATE_SESSION:
       return { ...state, session: { ...action.payload } }
-    case UPDATE_USER:
-      return { ...state, user: { ...action.payload } }
     case UPDATE_TYPING:
       return { ...state, typing: action.payload }
     case UPDATE_THEME:

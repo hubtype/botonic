@@ -102,14 +102,6 @@ describe('TEST: useWebchat', () => {
     expect(result.current.webchatState.session).toStrictEqual(initialSession)
   })
 
-  it('updateUser: assign testUser to webchatState.user', () => {
-    const { result } = renderUseWebchatHook()
-    act(() => {
-      result.current.updateUser(testUser)
-    })
-    expect(result.current.webchatState.user).toStrictEqual(testUser)
-  })
-
   it('updateLastRoutePath: assign the string route_path to webchatState.lastRoutePath', () => {
     const { result } = renderUseWebchatHook()
     act(() => {
