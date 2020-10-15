@@ -1,5 +1,14 @@
 import * as React from 'react'
 import * as core from '@botonic/core/src'
+import {
+  BlockInputOption,
+  ButtonProps,
+  CoverComponentOptions,
+  PersistentMenuProps,
+  ReplyProps,
+  ThemeProps,
+  WebchatSettingsProps,
+} from './components'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/
@@ -19,28 +28,27 @@ export interface BotOptions extends core.BotOptions {
 
 export class ReactBot extends core.CoreBot {
   renderReactActions({
-    request: ActionRequest,
     actions,
+    request: ActionRequest,
   }): Promise<React.ReactNode>
 }
 
 export class NodeApp {
   constructor(options: BotOptions)
   bot: ReactBot
-
-  renderNode(args): string
   input(request: core.BotRequest): BotResponse
+  renderNode(args): string
 }
 
 // Parameters of the actions' botonicInit method
 export interface ActionRequest {
-  session: core.Session
-  params: { [key: string]: string }
-  input: core.Input
-  plugins: { [id: string]: core.Plugin }
-  defaultTyping: number
   defaultDelay: number
+  defaultTyping: number
+  input: core.Input
   lastRoutePath: string
+  params: { [key: string]: string }
+  plugins: { [id: string]: core.Plugin }
+  session: core.Session
 }
 
 export class BotonicInputTester {
@@ -85,5 +93,109 @@ export function msgsToBotonic(
   msgs: any | any[],
   customMessageTypes?: CustomMessageType[]
 ): React.ReactNode
+
+export interface WebchatAppArgs {
+  appId?: string
+  blockInputs?: BlockInputOption[]
+  coverComponent?: CoverComponentOptions
+  defaultDelay?: number
+  defaultTyping?: number
+  enableAnimations?: boolean
+  enableAttachments?: boolean
+  enableEmojiPicker?: boolean
+  enableUserInput?: boolean
+  onClose?: (app: WebchatApp, args: any) => void
+  onInit?: (app: WebchatApp, args: any) => void
+  onMessage?: (app: WebchatApp, message: WebchatMessage) => void
+  onOpen?: (app: WebchatApp, args: any) => void
+  persistentMenu?: PersistentMenuProps
+  storage?: Storage
+  theme?: ThemeProps
+  visibility?: () => boolean
+}
+
+export interface WebchatMessage {
+  ack: 0 | 1
+  buttons: ButtonProps[]
+  data: any
+  delay: number
+  display: boolean
+  from: 'user' | 'bot'
+  id: string
+  markdown: boolean
+  replies: ReplyProps[]
+  timestamp: string
+  type: core.InputType
+  typing: number
+}
+
+export interface OnUserInputArgs {
+  input: core.Input
+  lastRoutePath?: string
+  session?: core.Session
+  user: core.SessionUser
+}
+
+export interface OnStateChangeArgs {
+  messagesJSON: WebchatMessage[]
+  user: core.SessionUser
+}
+
+export interface MessageInfo {
+  data: any | 'typing_on'
+  id: string
+  type: 'update_webchat_settings' | 'sender_action'
+}
+
+export interface Event {
+  action?: 'update_message_info'
+  isError?: boolean
+  message?: MessageInfo
+}
+
+export class WebchatApp {
+  constructor(options: WebchatAppArgs)
+  addBotMessage(message: WebchatMessage): void
+  addBotText(text: string): void
+  addUserMessage(message: WebchatMessage): void
+  addUserPayload(payload: string): void
+  addUserText(text: string): void
+  clearMessages(): void
+  close(): void
+  closeCoverComponent(): void
+  getComponent(
+    optionsAtRuntime?: WebchatAppArgs
+  ): React.ForwardRefExoticComponent<any>
+  getLastMessageUpdate(): Date
+  getMessages(): WebchatMessage[]
+  getVisibility(): Promise<boolean>
+  isWebchatVisible({ appId: string }): Promise<boolean>
+  onCloseWebchat(args: any): void
+  onInitWebchat(args: any): void
+  onOpenWebchat(args: any): void
+  onServiceEvent(event: Event): void
+  onStateChange(args: OnStateChangeArgs): void
+  onUserInput(args: OnUserInputArgs): Promise<void>
+  open(): void
+  openCoverComponent(): void
+  render(dest: HTMLElement, optionsAtRuntime: WebchatAppArgs): void
+  resendUnsentInputs(): Promise<void>
+  resolveWebchatVisibility(optionsAtRuntime: {
+    appId: string
+    visibility: () => boolean
+  }): Promise<boolean>
+  setTyping(typing: number): void
+  toggle(): void
+  toggleCoverComponent(): void
+  updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
+  updateUser(user: core.SessionUser): void
+  updateWebchatSettings(settings: WebchatSettingsProps): void
+}
+
+export class DevApp extends WebchatApp {
+  constructor(args: WebchatAppArgs)
+  onUserInput(args: OnUserInputArgs): Promise<void>
+  render(dest: HTMLElement, optionsAtRuntime: WebchatAppArgs): void
+}
 
 export * from './components'

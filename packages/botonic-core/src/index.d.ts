@@ -8,51 +8,51 @@ interface PluginConstructor<T> {
 
 export interface PluginConfig<T> {
   id: string
-  resolve: { default: PluginConstructor<T> }
   options?: T
+  resolve: { default: PluginConstructor<T> }
 }
 
 export const INPUT: {
-  TEXT: 'text'
-  POSTBACK: 'postback'
   AUDIO: 'audio'
-  IMAGE: 'image'
-  VIDEO: 'video'
-  DOCUMENT: 'document'
-  LOCATION: 'location'
-  CONTACT: 'contact'
   BUTTON_MESSAGE: 'buttonmessage'
   CAROUSEL: 'carousel'
+  CONTACT: 'contact'
   CUSTOM: 'custom'
+  DOCUMENT: 'document'
+  IMAGE: 'image'
+  LOCATION: 'location'
+  POSTBACK: 'postback'
+  TEXT: 'text'
+  VIDEO: 'video'
   WEBCHAT_SETTINGS: 'webchatsettings'
   WHATSAPP_TEMPLATE: 'whatsapptemplate'
 }
 
 export type InputType =
-  | typeof INPUT.TEXT
-  | typeof INPUT.POSTBACK
   | typeof INPUT.AUDIO
-  | typeof INPUT.IMAGE
-  | typeof INPUT.VIDEO
-  | typeof INPUT.DOCUMENT
-  | typeof INPUT.LOCATION
-  | typeof INPUT.CONTACT
   | typeof INPUT.BUTTON_MESSAGE
   | typeof INPUT.CAROUSEL
+  | typeof INPUT.CONTACT
   | typeof INPUT.CUSTOM
+  | typeof INPUT.DOCUMENT
+  | typeof INPUT.IMAGE
+  | typeof INPUT.LOCATION
+  | typeof INPUT.POSTBACK
+  | typeof INPUT.TEXT
+  | typeof INPUT.VIDEO
   | typeof INPUT.WEBCHAT_SETTINGS
   | typeof INPUT.WHATSAPP_TEMPLATE
 
 export interface Input {
-  type: InputType
-  payload?: string
   data?: string
   path?: string
+  payload?: string
+  type: InputType
 
   /** Fields set by NLU plugins: Luis, Dialogflow, ... **/
   // the name of the highest confidence intent
-  intent?: string
   confidence?: number
+  intent?: string
   intents?: [{ intent: string; confidence: number }]
   // entity recognition results in the format provided by the NLU engine
   entities?: any
@@ -92,23 +92,23 @@ export interface SessionUser {
   // whatsapp, telegram,...
   provider: ProviderType
   // The provider's user id
-  provider_id?: string
-  imp_id?: string
   extra_data?: any
+  imp_id?: string
+  provider_id?: string
 }
 
 export interface Session {
-  is_first_interaction?: boolean
-  last_session?: any
-  user: SessionUser
   bot: {
     id: string
     name?: string
   }
   __locale?: string
   __retries?: number
-  organization?: string
   _shadowing?: boolean
+  is_first_interaction?: boolean
+  last_session?: any
+  organization?: string
+  user: SessionUser
 }
 
 type StringMatcher = RegExp | string | ((data: string) => boolean)
@@ -118,26 +118,26 @@ type ParamsMatcher =
 type SessionMatcher = (session: Session) => boolean
 type InputMatcher = (input: Input) => boolean
 type RouteMatcher =
-  | StringMatcher
+  | InputMatcher
   | ParamsMatcher
   | SessionMatcher
-  | InputMatcher
+  | StringMatcher
 
 export interface Route {
-  path?: StringMatcher
   action?: any
-  retryAction?: any
-  redirect?: string
   childRoutes?: Route[]
+  path?: StringMatcher
+  redirect?: string
+  retryAction?: any
 
   // matchers
-  payload?: StringMatcher
-  text?: StringMatcher
-  params?: ParamsMatcher
-  type?: StringMatcher
-  intent?: StringMatcher
   input?: InputMatcher
+  intent?: StringMatcher
+  params?: ParamsMatcher
+  payload?: StringMatcher
   session?: SessionMatcher
+  text?: StringMatcher
+  type?: StringMatcher
 }
 
 type Routes<R = Route> = R[] | ((_: { input: Input; session: Session }) => R[])
@@ -146,18 +146,15 @@ type Routes<R = Route> = R[] | ((_: { input: Input; session: Session }) => R[])
 
 export class HandOffBuilder {
   constructor(session: Session)
-
-  withQueue(queueNameOrId: string): HandOffBuilder
-
-  withOnFinishPayload(payload: string): HandOffBuilder
-  withOnFinishPath(path: string): HandOffBuilder
+  handOff(): Promise<void>
   withAgentEmail(email: string): HandOffBuilder
   withAgentId(agentId: string): HandOffBuilder
-  withNote(note: string): HandOffBuilder
   withCaseInfo(caseInfo: string): HandOffBuilder
+  withNote(note: string): HandOffBuilder
+  withOnFinishPath(path: string): HandOffBuilder
+  withOnFinishPayload(payload: string): HandOffBuilder
+  withQueue(queueNameOrId: string): HandOffBuilder
   withShadowing(shadowing?: boolean): HandOffBuilder
-
-  handOff(): Promise<void>
 }
 
 /**
@@ -184,10 +181,10 @@ export declare function getAvailableAgentsByQueue(
 ): Promise<{ agents: string[] }>
 
 export interface HubtypeAgentsInfo {
-  email: string
   attending_count: number
-  status: string
+  email: string
   last_message_sent: string
+  status: string
 }
 
 export declare function getAvailableAgents(
@@ -195,9 +192,9 @@ export declare function getAvailableAgents(
 ): Promise<{ agents: HubtypeAgentsInfo[] }>
 
 interface VacationRange {
+  end_date: number // timestamp
   id: number
   start_date: number // timestamp
-  end_date: number // timestamp
 }
 export declare function getAgentVacationRanges(
   session: Session,
@@ -213,8 +210,8 @@ export declare function deleteUser(session: Session): void
 
 export interface BotRequest {
   input: Input
-  session: Session
   lastRoutePath: string
+  session: Session
 }
 
 /** The response of the bot for the triggered actions, which can be
@@ -229,41 +226,37 @@ export type PluginPreRequest = BotRequest
 export type PluginPostRequest = BotResponse
 
 export interface Plugin {
-  pre(pluginRequest: PluginPreRequest): void
-
   post(_: PluginPostRequest): void
+  pre(pluginRequest: PluginPreRequest): void
 }
 
 export interface BotOptions {
-  routes: Routes
-  locales: Locales
+  appId?: string
+  defaultDelay?: number
+  defaultRoutes?: Route[]
+  defaultTyping?: number
+  inspector?: Inspector
   integrations?: { [id: string]: any }
+  locales: Locales
+  routes: Routes
   theme?: string
   /** The plugin configurations */
   plugins?: { [id: string]: any }
-  appId?: string
-  defaultTyping?: number
-  defaultDelay?: number
-  defaultRoutes?: Route[]
-  inspector?: Inspector
 }
 
 export class CoreBot {
-  routes: Routes
-  locales: Locales
-  integrations?: { [id: string]: any }
-  theme?: string
-  plugins: { [id: string]: Plugin }
-  defaultTyping: number
   defaultDelay: number
+  defaultTyping: number
+  integrations?: { [id: string]: any }
+  locales: Locales
+  plugins: { [id: string]: Plugin }
+  routes: Routes
+  theme?: string
 
   constructor(options: BotOptions)
-
   getString(stringID: string, session: Session): string
-
-  setLocale(locale: string, session: Session): void
-
   input(request: BotRequest): BotResponse
+  setLocale(locale: string, session: Session): void
 }
 
 // Debug
@@ -297,7 +290,5 @@ export class Inspector {
 }
 
 export function isBrowser(): boolean
-
-export function isNode(): boolean
-
 export function isMobile(): boolean
+export function isNode(): boolean
