@@ -56,21 +56,21 @@ export class BotonicInputTester {
 
   text(
     inp: string,
-    lastRoutePath?: string,
-    session?: core.Session
+    session?: core.Session,
+    lastRoutePath?: string
   ): Promise<string>
 
   payload(
     inp: string,
-    lastRoutePath?: string,
-    session?: core.Session
+    session?: core.Session,
+    lastRoutePath?: string
   ): Promise<string>
 }
 
 export class BotonicOutputTester {
   constructor(app: NodeApp)
 
-  text(replies?: any, out: string): Promise<string>
+  text(out: string, replies?: any): Promise<string>
 }
 
 export interface RequestContextInterface extends ActionRequest {
@@ -85,13 +85,13 @@ export interface CustomMessageType {
 }
 
 export function msgToBotonic(
-  customMessageTypes?: CustomMessageType[],
-  msg: any
+  msg: any,
+  customMessageTypes?: CustomMessageType[]
 ): React.ReactNode
 
 export function msgsToBotonic(
-  customMessageTypes?: CustomMessageType[],
-  msgs: any | any[]
+  msgs: any | any[],
+  customMessageTypes?: CustomMessageType[]
 ): React.ReactNode
 
 export interface WebchatAppArgs {
