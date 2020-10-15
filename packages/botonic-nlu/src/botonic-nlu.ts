@@ -76,7 +76,6 @@ export class BotonicNLU {
 
   predictProbabilities(sentence: string): DecodedPrediction {
     const input = tensor([this._preprocessor.preprocess(sentence)]);
-    console.log(input.arraySync());
     const encodedPrediction = this._modelManager.predictProbabilities(input);
     const decodedPrediction: DecodedPrediction = encodedPrediction.map(
       (intentConfidence) => {
