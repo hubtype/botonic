@@ -18,6 +18,7 @@ The `Button` component is used to display a button during a conversation. The us
 | payload  | String, Number | Call to action                                                     | No       | -             |
 | url      | String         | This URL is opened in a mobile browser when the button is clicked. | No       | -             |
 | onClick  | String         | Set the action                                                     | No       | -             |
+| target  | String         | Opens the linked page in a new window **(_blank)** or same frame **(_self)** or parent frame **(_parent)** or full body of the window **(_top)** or **framename**                                                    | Yes       | _blank         |
 
 
 
@@ -25,7 +26,7 @@ The `Button` component is used to display a button during a conversation. The us
 ```javascript
 <Button payload="1">1</Button>
 <Button webview={MyWebview}>1</Button>
-<Button url="src.com">Check url</Button>
+<Button url='https://botonic.io' target={'blank'|'_self'|'_parent'|'_top'|'framename'}>Botonic</Button>
 ```
 But never 
 ```javascript
