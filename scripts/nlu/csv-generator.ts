@@ -29,7 +29,7 @@ export class CsvGenerator {
   }
 
   private getDataFromDirectory(path: string): string {
-    var data = 'feature' + this.SEPARATOR + 'label' + '\n'
+    var data = 'feature' + this.SEPARATOR + 'label'
     const files = readdirSync(path).filter(
       fileName => fileName.split('.').pop() == 'txt'
     )
@@ -39,7 +39,7 @@ export class CsvGenerator {
       content.forEach(sentence => {
         const normalizedSentence = sentence.replace(/[,"]/g, '')
         if (normalizedSentence != '') {
-          const sample = normalizedSentence + this.SEPARATOR + intent + '\n'
+          const sample = '\n' + normalizedSentence + this.SEPARATOR + intent
           data += sample
         }
       })

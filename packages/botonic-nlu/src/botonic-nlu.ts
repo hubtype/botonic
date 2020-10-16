@@ -102,6 +102,7 @@ export class BotonicNLU {
   trainTestSplit(options: {
     data: DataSet;
     testPercentage: number;
+    stratify: boolean;
   }): [InputSet, InputSet, OutputSet, OutputSet] {
     if (options.testPercentage > 1 || options.testPercentage < 0) {
       throw new RangeError(
@@ -109,13 +110,28 @@ export class BotonicNLU {
       );
     }
 
+    const stratify = options.stratify !== undefined ? options.stratify : true;
     const data = shuffle(options.data);
 
-    const dataSize = options.data.length;
-    const testSize = Math.round(dataSize * options.testPercentage);
+    let trainSet = [];
+    let testSet = [];
 
-    const testSet = data.slice(0, testSize);
-    const trainSet = data.slice(testSize, dataSize);
+    if (stratify) {
+      const intents = Array.from(new Set(data.map((sample) => sample.label)));
+
+      for (const intent of intents) {
+        const intentData = data.filter((sample) => sample.label == intent);
+        const intentSize = intentData.length;
+        const testSize = Math.round(intentSize * options.testPercentage);
+        testSet = testSet.concat(intentData.slice(0, testSize));
+        trainSet = trainSet.concat(intentData.slice(testSize, intentSize));
+      }
+    } else {
+      const dataSize = data.length;
+      const testSize = Math.round(dataSize * options.testPercentage);
+      testSet = testSet.concat(data.slice(0, testSize));
+      trainSet = trainSet.concat(data.slice(testSize, dataSize));
+    }
 
     this._preprocessor.generateVocabulary(trainSet);
     this._intentsProcessor.generateEncoderDecoder(trainSet);

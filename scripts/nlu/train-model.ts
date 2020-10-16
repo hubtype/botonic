@@ -21,12 +21,10 @@ const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
 
 ;(async () => {
   const EPOCHS = 25
-  const LEARNING_RATE = 5e-4
+  const LEARNING_RATE = 5e-3
   const MODEL_DIR = ''
   await nlu.createModel({
     learningRate: LEARNING_RATE,
-    wordEmbeddingsType: 'glove',
-    wordEmbeddingsDimension: 50,
   })
   await nlu.train(xTrain, yTrain, { epochs: EPOCHS })
   const accuracy = await nlu.evaluate(xTest, yTest)
