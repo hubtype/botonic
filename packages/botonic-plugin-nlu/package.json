@@ -1,23 +1,26 @@
 {
   "name": "@botonic/plugin-nlu",
   "version": "0.15.0-alpha.3",
-  "main": "src/index.js",
+  "main": "dist/index",
   "scripts": {
+    "clean_install": "npm i && npm run-script build",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "build": "rm -rf dist && babel src -d dist",
+    "build": "rm -rf dist && ../../node_modules/.bin/tsc",
     "test": "jest",
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "jest": {
     "testEnvironment": "node"
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
+    "@botonic/core": "^0.14.0",
     "@botonic/nlu": "0.15.0-alpha.3",
     "@tensorflow/tfjs": "2.4.0",
+    "@types/webgl2": "0.0.5",
     "axios": "latest",
     "franc": "^5.0.0",
     "langs": "^2.0.0",
@@ -34,5 +37,8 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-no-null": "^1.0.2",
     "prettier": "^2.0.5"
+  },
+  "resolutions": {
+    "@types/webgl2": "0.0.5"
   }
 }
