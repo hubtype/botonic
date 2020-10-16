@@ -10,7 +10,6 @@ import { Language } from '@botonic/nlu/dist/language'
 
 export const isProd = process.env.STATIC_URL !== undefined
 
-// TODO: type this
 export function getModelInfoForEnv(lang: Language): any {
   let uri = ''
   if (isProd) {
