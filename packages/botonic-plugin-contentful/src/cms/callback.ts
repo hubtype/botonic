@@ -58,10 +58,10 @@ export class Callback implements ValueObject {
 
   toString(): string {
     if (this.payload) {
-      return `payload:${this.payload}`
+      return `'payload:${this.payload}'`
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return `URL:${this.url}`
+    return `'URL:${this.url}'`
   }
 }
 

@@ -1,5 +1,5 @@
 import * as time from '../time'
-import { Callback, TopContentId } from './callback'
+import { Callback, ContentCallback, TopContentId } from './callback'
 import { SearchableBy } from './fields'
 import { ContentType, MessageContentType, TopContentType } from './cms'
 import { shallowClone, Stringable } from '../util/objects'
@@ -183,9 +183,22 @@ export class CommonFields implements Stringable {
   }
 }
 
+/**
+ * In CMS, it's possible both to have direct references to the target content
+ * opened by the button, or to have intermediate button contents which reference
+ * the target and allow the button to have a text different than the target content's
+ * shortText.
+ */
 export class Button extends Content {
   private readonly usingNameForText: boolean
   public readonly text: string
+
+  /**
+   * @param id If content having the button has a direct reference to the target
+   * content instead of a Button content, the id will be the id of the target.
+   * If content having the button has a reference to a Button content, id will
+   * be the id of the Button content
+   */
   constructor(
     readonly id: string,
     readonly name: string,
@@ -200,10 +213,23 @@ export class Button extends Content {
   validate(): string | undefined {
     if (this.usingNameForText) {
       return this.name
-        ? `Button to content ${this.toString()} without short text. Using instead 'name' field. `
-        : `Button to content ${this.toString()} without short text nor name.`
+        ? `Button ${this.toString()} without short text. Using instead 'name' field. `
+        : `Button ${this.toString()} without short text nor name.`
     }
     return undefined
+  }
+
+  isDirectReferenceToTarget(): boolean {
+    return (
+      this.callback instanceof ContentCallback && this.callback.id == this.id
+    )
+  }
+
+  toString(): string {
+    if (this.isDirectReferenceToTarget()) {
+      return `to ${this.callback.toString()}`
+    }
+    return `${super.toString()} to content ${this.callback.toString()}`
   }
 
   cloneWithText(newText: string): this {
