@@ -2,20 +2,20 @@ import { SearchCandidate } from '../search/search-result'
 import { Context } from './context'
 import {
   Asset,
+  Button,
   Carousel,
+  Chitchat,
+  CommonFields,
+  Content,
+  DateRangeContent,
   Element,
   Image,
-  Text,
-  Url,
-  Chitchat,
   Queue,
-  StartUp,
-  CommonFields,
   ScheduleContent,
-  DateRangeContent,
+  StartUp,
+  Text,
   TopContent,
-  Content,
-  Button,
+  Url,
 } from './contents'
 
 export enum MessageContentType {
@@ -123,6 +123,8 @@ export interface CMS {
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
   ): Promise<TopContent[]>
+
+  content(id: string, context?: Context): Promise<Content>
 
   /**
    * If ContentfulOptions.resumeErrors is set: if some contents fail to be delivered,

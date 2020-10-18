@@ -153,6 +153,11 @@ export class Contentful implements cms.CMS {
     )
   }
 
+  async content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
+    const entry = await this._delivery.getEntry(id, context)
+    return this.contentFromEntry(entry, context)
+  }
+
   contents(
     contentType: ContentType,
     context = DEFAULT_CONTEXT,

@@ -42,6 +42,10 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).chitchat(id, context)
   }
 
+  content(id: string, context?: Context): Promise<Content> {
+    return this.cmsFromContext(context).content(id, context)
+  }
+
   contents(
     contentType: ContentType,
     context?: Context,

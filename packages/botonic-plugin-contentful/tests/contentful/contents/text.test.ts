@@ -1,14 +1,14 @@
 import { expectImgUrlIs } from './image.test'
 import { testContentful, testContext } from '../contentful.helper'
 import * as cms from '../../../src'
-import { SPANISH } from '../../../src'
+import { Content, SPANISH } from '../../../src'
 
 export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip'
 export const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt'
 export const TEST_NO_SPANISH_TEXT = '429vGzREpGXhiV24yvggTp'
 const TEST_FBK_MSG = '1U7XKJccDSsI3mP0yX04Mj'
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O'
-const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D'
+export const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D'
 const TEST_TEXT_QUEUE_BUTTON = '7Liwyx92Yna3fzHvh9AGut'
 const TEST_TEXT_URL_BUTTON = '2N9HQ960BdUVlDDQjpTA6I'
 const TEST_TEXT_IMAGE_FOLLOWUP = '35aCTbYevK13TAXqqCdY8t'
@@ -18,11 +18,13 @@ export const KEYWORDS_NOT_FOUND = '4C2ghzuNPXIl0KqLaq1Qqm'
 
 test('TEST: contentful text with callback to MessageContentType without followup', async () => {
   const sut = testContentful()
-
-  // act
   const text = await sut.text(TEST_SORRY, testContext()) // actually returns the fallback language (es)
+  expectContentIsSorryText(text)
+})
 
-  // assert
+export function expectContentIsSorryText(content: Content) {
+  expect(content).toBeInstanceOf(cms.Text)
+  const text = content as cms.Text
   expect(text.text).toEqual(
     'Siento no haber podido ayudarle, le invitamos a contactar con uno de nuestros agentes.'
   )
@@ -32,7 +34,7 @@ test('TEST: contentful text with callback to MessageContentType without followup
     new cms.ContentCallback(cms.ContentType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
   )
   expect(text.common.followUp).toBeUndefined()
-})
+}
 
 test('TEST: contentful text with callback to NonMessageContentType without followup', async () => {
   const sut = testContentful()
