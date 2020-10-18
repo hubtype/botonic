@@ -30,6 +30,7 @@ export class ScheduleDelivery extends TopContentDelivery {
 
   fromEntry(entry: Entry<ScheduleFields>): ScheduleContent {
     try {
+      this.checkEntry(entry)
       const schedule = new time.Schedule(time.Schedule.TZ_CET) // TODO allow configuration
       this.addDaySchedules(schedule, entry.fields)
       this.addExceptions(schedule, entry.fields.exceptions)
@@ -70,13 +71,13 @@ export class ScheduleDelivery extends TopContentDelivery {
   ): time.DaySchedule {
     const timeRanges = hourRanges.map(hr => {
       try {
+        this.checkEntry(hr)
         return new time.TimeRange(
           sched.createHourAndMinute(hr.fields.fromHour, hr.fields.fromMinute),
           sched.createHourAndMinute(hr.fields.toHour, hr.fields.toMinute)
         )
       } catch (e) {
-        console.error(`Error loading hour range`, hr)
-        throw e
+        throw new CmsException(`Error loading hour range '${hr.sys.id}'`, e)
       }
     })
     return new time.DaySchedule(timeRanges)
@@ -91,6 +92,7 @@ export class ScheduleDelivery extends TopContentDelivery {
     }
     for (const exception of exceptions) {
       try {
+        this.checkEntry(exception)
         const timeRanges = this.createDaySchedule(
           schedule,
           exception.fields.hourRanges || []
@@ -99,10 +101,6 @@ export class ScheduleDelivery extends TopContentDelivery {
         const date = new Date(+dateStr[0], +dateStr[1] - 1, +dateStr[2])
         schedule.addException(date, timeRanges)
       } catch (e) {
-        if (exception.fields == undefined) {
-          // eslint-disable-next-line no-ex-assign
-          e = new CmsException(`Broken reference? Not published?`)
-        }
         this.logOrThrow(
           `Loading Schedule Exception '${exception.sys.id}' (name '${exception.fields?.name}')`,
           {},

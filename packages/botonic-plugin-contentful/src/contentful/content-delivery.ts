@@ -48,6 +48,12 @@ export abstract class ResourceDelivery {
     return this.urlFromAssetRequired(assetField)
   }
 
+  protected checkEntry(entry: Entry<any>) {
+    if (entry.fields == undefined) {
+      throw new CmsException(`Broken reference? Not published?`)
+    }
+  }
+
   protected logOrThrow(doing: string, context: Context, reason: any) {
     if (this.resumeErrors) {
       console.error(
@@ -66,7 +72,13 @@ export abstract class ResourceDelivery {
     factory: (entry: Entry<any>) => Promise<T>
   ): Promise<T[]> {
     return asyncMap(context, entries, factory, undefined, (entry, e) => {
-      this.logOrThrow(`Loading ${entry.sys.type} '${entry.sys.id}'`, context, e)
+      this.logOrThrow(
+        `Loading ${ContentfulEntryUtils.getContentModel(entry)} '${
+          entry.sys.id
+        }'`,
+        context,
+        e
+      )
       return undefined
     })
   }
