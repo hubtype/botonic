@@ -176,32 +176,29 @@ export class Contentful implements cms.CMS {
     context: Context
   ): Promise<TopContent> {
     const model = ContentfulEntryUtils.getContentModel(entry)
-    try {
-      switch (model) {
-        case ContentType.CAROUSEL:
-          return await this._carousel.fromEntry(entry, context)
-        case ContentType.QUEUE:
-          return this._queue.fromEntry(entry)
-        case ContentType.CHITCHAT:
-        case ContentType.TEXT:
-          return await this._text.fromEntry(entry, context)
-        case ContentType.IMAGE:
-          return await this._image.fromEntry(entry, context)
-        case ContentType.URL:
-          return await this._url.fromEntry(entry, context)
-        case ContentType.STARTUP:
-          return await this._startUp.fromEntry(entry, context)
-        case ContentType.SCHEDULE:
-          return this._schedule.fromEntry(entry)
-        case ContentType.DATE_RANGE:
-          return DateRangeDelivery.fromEntry(entry)
-        default:
-          throw new Error(`${model} is not a Content type`)
-      }
-    } catch (e) {
-      console.error(`Error creating ${model} with id: ${entry.sys.id}`)
-      throw e
+    switch (model) {
+      case ContentType.CAROUSEL:
+        return await this._carousel.fromEntry(entry, context)
+      case ContentType.QUEUE:
+        return this._queue.fromEntry(entry)
+      case ContentType.CHITCHAT:
+      case ContentType.TEXT:
+        return await this._text.fromEntry(entry, context)
+      case ContentType.IMAGE:
+        return await this._image.fromEntry(entry, context)
+      case ContentType.URL:
+        return await this._url.fromEntry(entry, context)
+      case ContentType.STARTUP:
+        return await this._startUp.fromEntry(entry, context)
+      case ContentType.SCHEDULE:
+        return this._schedule.fromEntry(entry)
+      case ContentType.DATE_RANGE:
+        return DateRangeDelivery.fromEntry(entry)
+      default:
+        throw new Error(`${model} is not a Content type`)
     }
+    // no need to wrap in an CMSException with the content id because asyncMap
+    // already does it
   }
 
   // TODO move all delivery instances to a class
