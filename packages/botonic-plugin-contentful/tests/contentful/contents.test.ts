@@ -7,10 +7,28 @@ import {
   Queue,
   Text,
   ContentCallback,
+  Content,
 } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
+import { expectContentIsSorryText, TEST_SORRY } from './contents/text.test'
+import { RATING_1STAR_ID } from './contents/button.test'
 
 const BUTTON_POST_FAQ3 = '40buQOqp9jbwoxmMZhFO16'
+
+test('TEST: contentful.content subContent', async () => {
+  const button = await testContentful().content(RATING_1STAR_ID, {
+    locale: 'en',
+  })
+  expect(button).toBeInstanceOf(Button)
+  expectIs1StarButton(button)
+})
+
+test('TEST: contentful.content topContent', async () => {
+  const content = await testContentful().content(TEST_SORRY, {
+    locale: 'en',
+  })
+  expectContentIsSorryText(content)
+})
 
 test('TEST: contentful contents buttons', async () => {
   const buttons = await testContentful().contents(ContentType.BUTTON, {
@@ -20,14 +38,7 @@ test('TEST: contentful contents buttons', async () => {
   expect(buttons.length).toEqual(32)
 
   const star = buttons.filter(b => b.id == '6JYiydi8JhveDAjDSQ2fp4')
-  expect(star[0]).toEqual(
-    new Button(
-      '6JYiydi8JhveDAjDSQ2fp4',
-      'STAR_1',
-      '⭐',
-      Callback.ofPayload('RATING_1')
-    )
-  )
+  expectIs1StarButton(star[0])
   const empezar = buttons.filter(b => b.id == BUTTON_POST_FAQ3)
   expect(empezar[0]).toEqual(
     new Button(
@@ -39,6 +50,16 @@ test('TEST: contentful contents buttons', async () => {
   )
 })
 
+function expectIs1StarButton(button: Content) {
+  expect(button).toEqual(
+    new Button(
+      '6JYiydi8JhveDAjDSQ2fp4',
+      'STAR_1',
+      '⭐',
+      Callback.ofPayload('RATING_1')
+    )
+  )
+}
 test('TEST: contentful topContents filter', async () => {
   const filter = (cf: CommonFields) => cf.name.startsWith('POST')
   const texts = await testContentful().topContents(

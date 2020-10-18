@@ -16,7 +16,7 @@ import {
   TopContent,
   Url,
 } from './contents'
-import { Context } from './context'
+import { Context, DEFAULT_CONTEXT } from './context'
 import { CmsException } from './exceptions'
 import { SearchCandidate } from '../search'
 import { MultiError } from 'async-parallel'
@@ -119,6 +119,12 @@ export class ErrorReportingCMS implements CMS {
     return this.cms
       .topContents(model, context, filter, paging)
       .catch(this.handleError('topContents'))
+  }
+
+  content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
+    return this.cms
+      .content(id, context)
+      .catch(this.handleDeliveryError('content' as ContentType, context, id))
   }
 
   contents(

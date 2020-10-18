@@ -39,7 +39,7 @@ export class ButtonDelivery extends ContentDelivery {
     )
   }
 
-  public async fromReference(
+  private async fromReference(
     entry: contentful.Entry<any>,
     context: cms.Context
   ): Promise<cms.Button> {

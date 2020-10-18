@@ -74,6 +74,11 @@ export class LogCMS implements CMS {
     return this.cms.element(id, context)
   }
 
+  content(id: string, context?: Context): Promise<Content> {
+    this.logContentDelivery('content' as ContentType, id, context)
+    return this.cms.content(id, context)
+  }
+
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
     this.logger('contentsWithKeywords')
     return this.cms.contentsWithKeywords(context)

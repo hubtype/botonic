@@ -104,6 +104,10 @@ export class FilteredCMS implements CMS {
     return this.cms.element(id, context)
   }
 
+  content(id: string, context?: Context): Promise<Content> {
+    return this.cms.content(id, context)
+  }
+
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
     return this.cms.contentsWithKeywords(context)
   }

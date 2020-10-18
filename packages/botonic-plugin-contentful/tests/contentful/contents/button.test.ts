@@ -2,6 +2,8 @@ import { testContentful } from '../contentful.helper'
 import { ENGLISH } from '../../../src/nlp'
 import { ContentCallback, ContentType } from '../../../src/cms'
 
+export const RATING_1STAR_ID = '6JYiydi8JhveDAjDSQ2fp4'
+
 test('TEST: contentful button', async () => {
   const sut = testContentful()
 
