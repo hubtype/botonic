@@ -34,7 +34,8 @@
       "components/sharebutton",
       "components/messagetemplate",
       "components/multichannel",
-      "components/webchatsettings"
+      "components/webchatsettings",
+      "components/whatsapptemp"
     ],
 
     "Testing": [
