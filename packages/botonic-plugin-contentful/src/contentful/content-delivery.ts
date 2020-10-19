@@ -81,15 +81,17 @@ export abstract class ResourceDelivery {
     factory: (entry: Entry<any>) => Promise<T>
   ): Promise<T[]> {
     return asyncMap(context, entries, factory, undefined, (entry, e) => {
-      const contentId = ContentfulEntryUtils.getContentId(entry)
-      this.logOrThrow(
-        `Loading ${contentId.toString()}`,
-        context,
-        e,
-        new ContentId(contentId.model, entry.sys.id)
-      )
+      const contentId = this.getContentIdForLogs(entry)
+      this.logOrThrow(`Loading ${contentId.toString()}`, context, e, contentId)
       return undefined
     })
+  }
+
+  private getContentIdForLogs(entry: contentful.Entry<any>): ContentId {
+    if (ContentfulEntryUtils.isFullEntry(entry)) {
+      return ContentfulEntryUtils.getContentId(entry)
+    }
+    return new ContentId('unknown' as ContentType, entry.sys.id)
   }
 }
 

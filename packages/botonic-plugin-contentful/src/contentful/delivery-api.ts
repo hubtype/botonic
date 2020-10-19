@@ -117,12 +117,19 @@ export type FollowUpFields = CommonEntryFields
 export class ContentfulEntryUtils {
   static getContentId<T extends ContentType = ContentType>(
     entry: contentful.Entry<any>
-  ): ContentId | undefined {
-    const model = entry.sys.contentType
-      ? ContentfulEntryUtils.getContentModel(entry)
-      : ('unknown' as ContentType)
+  ): ContentId {
+    return new ContentId(
+      ContentfulEntryUtils.getContentModel(entry),
+      entry.sys.id
+    )
+  }
 
-    return new ContentId(model, entry.sys.id)
+  /**
+   * Will be false for broken references, or when we have only fetched
+   * the full Entry tree
+   */
+  static isFullEntry(entry: contentful.Entry<any>): boolean {
+    return !!entry.fields
   }
 
   static getContentModel<T extends ContentType = ContentType>(
