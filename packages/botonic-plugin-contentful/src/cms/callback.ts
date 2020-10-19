@@ -113,8 +113,22 @@ export class ContentCallback extends Callback implements Equatable {
   }
 }
 
-export class ContentId implements ValueObject {
-  constructor(readonly model: ContentType, readonly id: string) {}
+export class ResourceId implements ValueObject {
+  constructor(readonly resourceType: string, readonly id: string) {}
+
+  toString(): string {
+    return `${this.resourceType} with id '${this.id}'`
+  }
+
+  equals(other: ContentId): boolean {
+    return this.resourceType === other.resourceType && this.id === other.id
+  }
+}
+
+export class ContentId extends ResourceId {
+  constructor(readonly model: ContentType, id: string) {
+    super(model, id)
+  }
 
   deliver(cms: CMS, context?: Context): Promise<Content> {
     switch (this.model) {
@@ -126,13 +140,11 @@ export class ContentId implements ValueObject {
         return new TopContentId(this.model, this.id).deliver(cms, context)
     }
   }
+}
 
-  toString(): string {
-    return `${this.model} with id '${this.id}'`
-  }
-
-  equals(other: ContentId): boolean {
-    return this.model === other.model && this.id === other.id
+export class AssetId extends ResourceId {
+  constructor(id: string, readonly assetType: string | undefined) {
+    super(`${String(assetType)} asset`, id)
   }
 }
 
