@@ -1,10 +1,10 @@
 import * as cms from '../cms'
-import { ContentfulExceptionWrapper, ContentId } from '../cms'
+import { ContentfulExceptionWrapper, ContentId, ResourceId } from '../cms'
 import { ManageCms } from './manage-cms'
 import { ManageContext } from './manage-context'
 import * as nlp from '../nlp'
-import { ContentFieldType } from './fields'
 import { Locale } from '../nlp'
+import { ContentFieldType } from './fields'
 
 export class ErrorReportingManageCms implements ManageCms {
   exceptionWrapper = new ContentfulExceptionWrapper('ManageCms')
@@ -37,16 +37,10 @@ export class ErrorReportingManageCms implements ManageCms {
   private handleError(
     method: string,
     context?: ManageContext,
-    contentId?: ContentId
+    resourceId?: ResourceId
   ): (reason: any) => never {
     return (reason: any) => {
-      throw this.exceptionWrapper.wrap(
-        reason,
-        method,
-        contentId?.model,
-        context,
-        contentId?.id
-      )
+      throw this.exceptionWrapper.wrap(reason, method, resourceId, context)
     }
   }
 

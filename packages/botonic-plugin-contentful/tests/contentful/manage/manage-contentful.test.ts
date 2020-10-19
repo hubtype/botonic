@@ -67,7 +67,7 @@ describe('ManageContentful fields', () => {
     const sut = testManageContentful()
 
     try {
-      expect.assertions(3)
+      expect.assertions(4)
       await sut.updateField(
         ctxt({ locale: TEST_DEFAULT_LOCALE }),
         new cms.ContentId(cms.ContentType.BUTTON, TEST_MANAGE_CMS_ID),
@@ -80,8 +80,13 @@ describe('ManageContentful fields', () => {
       if (e instanceof CmsException) {
         // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
         expect(e.message).toInclude(
-          "Error calling ManageCms.updateField on 'button' with locale 'en' with id '627QkyJrFo3grJryj0vu6L'."
+          "Error calling ManageCms.updateField with locale 'en' on 'button' with id '627QkyJrFo3grJryj0vu6L'. " +
+            "Due to: Cannot overwrite field 'text' of entry '627QkyJrFo3grJryj0vu6L'"
         )
+        expect(e.message).toInclude(
+          'because ManageContext.allowOverwrites is false'
+        )
+
         // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
         expect(e.reason.message).toInclude('Cannot overwrite')
       }

@@ -3,6 +3,7 @@ import { CreateClientParams, Entry } from 'contentful'
 import {
   CmsException,
   CommonFields,
+  ContentId,
   ContentType,
   Context,
   FollowUp,
@@ -114,6 +115,16 @@ export interface CommonEntryFields extends ContentWithNameFields {
 export type FollowUpFields = CommonEntryFields
 
 export class ContentfulEntryUtils {
+  static getContentId<T extends ContentType = ContentType>(
+    entry: contentful.Entry<any>
+  ): ContentId | undefined {
+    const model = entry.sys.contentType
+      ? ContentfulEntryUtils.getContentModel(entry)
+      : ('unknown' as ContentType)
+
+    return new ContentId(model, entry.sys.id)
+  }
+
   static getContentModel<T extends ContentType = ContentType>(
     entry: contentful.Entry<any>
   ): T {

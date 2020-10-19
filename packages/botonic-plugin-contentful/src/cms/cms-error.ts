@@ -21,6 +21,7 @@ import { CmsException } from './exceptions'
 import { SearchCandidate } from '../search'
 import { MultiError } from 'async-parallel'
 import { reduceMultiError } from '../util/async'
+import { AssetId, ContentId, ResourceId } from './callback'
 
 /**
  * It validates the individually delivered contents, but not those fetched
@@ -44,70 +45,70 @@ export class ErrorReportingCMS implements CMS {
   carousel(id: string, context?: Context): Promise<Carousel> {
     return this.cms
       .carousel(id, context)
-      .catch(this.handleDeliveryError(ContentType.CAROUSEL, context, id))
+      .catch(this.handleContentError(ContentType.CAROUSEL, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   text(id: string, context?: Context): Promise<Text> {
     return this.cms
       .text(id, context)
-      .catch(this.handleDeliveryError(ContentType.TEXT, context, id))
+      .catch(this.handleContentError(ContentType.TEXT, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   chitchat(id: string, context?: Context): Promise<Chitchat> {
     return this.cms
       .text(id, context)
-      .catch(this.handleDeliveryError(ContentType.CHITCHAT, context, id))
+      .catch(this.handleContentError(ContentType.CHITCHAT, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   startUp(id: string, context?: Context): Promise<StartUp> {
     return this.cms
       .startUp(id, context)
-      .catch(this.handleDeliveryError(ContentType.STARTUP, context, id))
+      .catch(this.handleContentError(ContentType.STARTUP, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   url(id: string, context?: Context): Promise<Url> {
     return this.cms
       .url(id, context)
-      .catch(this.handleDeliveryError(ContentType.URL, context, id))
+      .catch(this.handleContentError(ContentType.URL, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   image(id: string, context?: Context): Promise<Image> {
     return this.cms
       .image(id, context)
-      .catch(this.handleDeliveryError(ContentType.IMAGE, context, id))
+      .catch(this.handleContentError(ContentType.IMAGE, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   queue(id: string, context?: Context): Promise<Queue> {
     return this.cms
       .queue(id, context)
-      .catch(this.handleDeliveryError(ContentType.QUEUE, context, id))
+      .catch(this.handleContentError(ContentType.QUEUE, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   button(id: string, context?: Context): Promise<Button> {
     return this.cms
       .button(id, context)
-      .catch(this.handleDeliveryError(ContentType.BUTTON, context, id))
+      .catch(this.handleContentError(ContentType.BUTTON, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   element(id: string, context?: Context): Promise<Element> {
     return this.cms
       .element(id, context)
-      .catch(this.handleDeliveryError(ContentType.ELEMENT, context, id))
+      .catch(this.handleContentError(ContentType.ELEMENT, id, context))
       .then(ErrorReportingCMS.validate)
   }
 
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
     return this.cms
       .contentsWithKeywords(context)
-      .catch(this.handleError('contentsWithKeywords'))
+      .catch(this.handleError('contentsWithKeywords', context))
   }
 
   topContents(
@@ -118,13 +119,13 @@ export class ErrorReportingCMS implements CMS {
   ): Promise<TopContent[]> {
     return this.cms
       .topContents(model, context, filter, paging)
-      .catch(this.handleError('topContents'))
+      .catch(this.handleError('topContents', context))
   }
 
   content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
     return this.cms
       .content(id, context)
-      .catch(this.handleDeliveryError('content' as ContentType, context, id))
+      .catch(this.handleContentError('content' as ContentType, id, context))
   }
 
   contents(
@@ -134,54 +135,59 @@ export class ErrorReportingCMS implements CMS {
   ): Promise<Content[]> {
     return this.cms
       .contents(contentType, context, paging)
-      .catch(this.handleError('contents'))
+      .catch(this.handleError('contents', context))
   }
 
   assets(context?: Context): Promise<Asset[]> {
-    return this.cms.assets(context).catch(this.handleError('assets'))
+    return this.cms.assets(context).catch(this.handleError('assets', context))
   }
 
   schedule(id: string, context?: Context): Promise<ScheduleContent> {
     return this.cms
       .schedule(id, context)
-      .catch(this.handleDeliveryError(ContentType.SCHEDULE, context, id))
+      .catch(this.handleContentError(ContentType.SCHEDULE, id, context))
   }
 
   dateRange(id: string, context?: Context): Promise<DateRangeContent> {
     return this.cms
       .dateRange(id, context)
-      .catch(this.handleDeliveryError(ContentType.DATE_RANGE, context, id))
+      .catch(this.handleContentError(ContentType.DATE_RANGE, id, context))
   }
 
   asset(id: string, context?: Context): Promise<Asset> {
     return this.cms
       .asset(id, context)
-      .catch(this.handleError('asset', context, id))
+      .catch(this.handleResourceError(new AssetId(id, undefined), context))
   }
 
-  private handleDeliveryError(
+  private handleContentError(
     contentType: ContentType,
-    context: Context | undefined,
-    id: string
+    id: string,
+    context: Context | undefined
+  ): (reason: any) => never {
+    return this.handleResourceError(new ContentId(contentType, id), context)
+  }
+
+  private handleResourceError(
+    resourceId: ResourceId,
+    context: Context | undefined
   ): (reason: any) => never {
     return (reason: any) => {
       throw this.exceptionWrapper.wrap(
         reason,
-        contentType,
-        undefined,
-        context,
-        id
+        resourceId.resourceType,
+        resourceId,
+        context
       )
     }
   }
 
   private handleError(
     method: string,
-    context?: Context,
-    id?: string
+    context: Context | undefined
   ): (reason: any) => never {
     return (reason: any) => {
-      throw this.exceptionWrapper.wrap(reason, method, undefined, context, id)
+      throw this.exceptionWrapper.wrap(reason, method, undefined, context)
     }
   }
 }
@@ -199,22 +205,18 @@ export class ContentfulExceptionWrapper {
   wrap(
     contentfulError: any,
     method: string,
-    contentType?: ContentType,
-    context?: Context,
-    contentId?: string
+    resourceId?: ResourceId,
+    context?: Context
   ): CmsException {
     let content = ''
-    if (contentType) {
-      content += ` on '${contentType}'`
-    }
     if (context?.locale) {
       content += ` with locale '${context.locale}'`
     }
-    if (contentId) {
-      content += ` with id '${contentId}'`
+    if (resourceId) {
+      content += ` on '${resourceId.resourceType}' with id '${resourceId.id}'`
     }
     const msg = `Error calling ${this.wrappee}.${method}${content}.`
-    const exception = new CmsException(msg, contentfulError)
+    const exception = new CmsException(msg, contentfulError, resourceId)
     const err = this.processError(contentfulError)
     this.logger(`${msg} Due to ${err}`)
 

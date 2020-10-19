@@ -1,9 +1,12 @@
 import {
+  AssetId,
   CmsException,
   Content,
+  ContentId,
   ContentType,
   Context,
   isSameModel,
+  ResourceId,
 } from '../cms'
 import * as contentful from 'contentful'
 import { Entry } from 'contentful'
@@ -40,7 +43,8 @@ export abstract class ResourceDelivery {
       this.logOrThrow(
         `found empty asset. Missing localization?`,
         context,
-        undefined
+        undefined,
+        new AssetId(assetField.sys.id, assetField.sys.type)
       )
       return undefined
     }
@@ -54,7 +58,12 @@ export abstract class ResourceDelivery {
     }
   }
 
-  protected logOrThrow(doing: string, context: Context, reason: any) {
+  protected logOrThrow(
+    doing: string,
+    context: Context,
+    reason: any,
+    resourceId: ResourceId
+  ) {
     if (this.resumeErrors) {
       console.error(
         `ERROR: ${doing} on locale '${String(
@@ -63,7 +72,7 @@ export abstract class ResourceDelivery {
       )
       return
     }
-    throw new CmsException(doing, reason)
+    throw new CmsException(doing, reason, resourceId)
   }
 
   protected asyncMap<T extends Content>(
@@ -72,12 +81,12 @@ export abstract class ResourceDelivery {
     factory: (entry: Entry<any>) => Promise<T>
   ): Promise<T[]> {
     return asyncMap(context, entries, factory, undefined, (entry, e) => {
+      const contentId = ContentfulEntryUtils.getContentId(entry)
       this.logOrThrow(
-        `Loading ${ContentfulEntryUtils.getContentModel(entry)} '${
-          entry.sys.id
-        }'`,
+        `Loading ${contentId.toString()}`,
         context,
-        e
+        e,
+        new ContentId(contentId.model, entry.sys.id)
       )
       return undefined
     })

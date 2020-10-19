@@ -104,7 +104,8 @@ export class ScheduleDelivery extends TopContentDelivery {
         this.logOrThrow(
           `Loading Schedule Exception '${exception.sys.id}' (name '${exception.fields?.name}')`,
           {},
-          e
+          e,
+          ContentfulEntryUtils.getContentId(exception)
         )
       }
     }

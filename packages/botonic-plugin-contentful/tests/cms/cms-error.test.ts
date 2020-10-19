@@ -30,7 +30,10 @@ test('TEST: ErrorReportingCMS content delivery failed', async () => {
     })
     .catch((error2: any) => {
       expect(error2).toEqual(
-        new CmsException("Error calling CMS.carousel with id 'id1'.", error)
+        new CmsException(
+          "Error calling CMS.carousel on 'carousel' with id 'id1'.",
+          error
+        )
       )
     })
 
@@ -43,7 +46,7 @@ test('TEST: ErrorReportingCMS content delivery failed', async () => {
     .catch((error2: any) => {
       expect(error2).toEqual(
         new CmsException(
-          "Error calling CMS.text with locale 'es' with id 'id1'.",
+          "Error calling CMS.text with locale 'es' on 'text' with id 'id1'.",
           error
         )
       )
