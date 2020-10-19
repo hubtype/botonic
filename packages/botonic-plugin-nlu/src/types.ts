@@ -1,3 +1,4 @@
+import { AxiosPromise } from 'axios'
 import {
   Tokenizer,
   Normalizer,
@@ -6,7 +7,7 @@ import {
 } from '@botonic/nlu/dist/types'
 import { Language } from '@botonic/nlu/dist/language'
 import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
-import { LayersModel, Sequential } from '@tensorflow/tfjs'
+import { LayersModel } from '@tensorflow/tfjs'
 
 export interface PreprocessingOptions {
   tokenizer?: Tokenizer
@@ -20,21 +21,14 @@ export interface BotonicPluginNLUOptions {
 
 export interface ModelInformation {
   [language: string]: {
-    model?: Sequential | LayersModel
+    model?: LayersModel
     modelData?: ModelData
     language?: Language
     preprocessor?: Preprocessor
   }
 }
 
-export interface IntentResult {
-  intent: string
-  confidence: number
-}
-
-export interface Result {
-  intents: IntentResult[]
-  intent: string
-  confidence: number
-  language: Language
+export interface ModelInformationPromises {
+  modelData: AxiosPromise<ModelData>
+  model: Promise<LayersModel>
 }

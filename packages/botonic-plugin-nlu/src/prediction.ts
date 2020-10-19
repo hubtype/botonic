@@ -1,11 +1,10 @@
 import franc from 'franc'
 import langs from 'langs'
-import { Rank, Tensor, tensor, tensor1d } from '@tensorflow/tfjs'
+import { Tensor, tensor, tensor1d } from '@tensorflow/tfjs'
 import { Language } from '@botonic/nlu/dist/language'
 import { IntentDecoder } from '@botonic/nlu/dist/types'
 import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
-
-import { Result } from './types'
+import type { NluResult } from '@botonic/core'
 
 export function detectLang(input: string, languages: Language[]): Language {
   const res = franc(input, {
@@ -16,21 +15,22 @@ export function detectLang(input: string, languages: Language[]): Language {
 }
 
 export function predictionToIntent(
-  prediction: Tensor<Rank> | Tensor<Rank>[],
+  prediction: Tensor,
   intentsDecoder: IntentDecoder,
   language: Language
-): Result {
-  const intent: any = {}
-  intent.intents = Array.from((prediction as Tensor).dataSync())
+): NluResult {
+  const intents = Array.from(prediction.dataSync())
     .map((confidence, i) => ({
       intent: intentsDecoder[i],
       confidence: confidence,
     }))
-    .sort((a: any, b: any) => b.confidence - a.confidence)
-  intent.language = language
-  intent.intent = intent.intents[0].intent
-  intent.confidence = intent.intents[0].confidence
-  return intent
+    .sort((a, b) => b.confidence - a.confidence)
+  return {
+    language,
+    intents,
+    intent: intents[0].intent,
+    confidence: intents[0].confidence,
+  }
 }
 
 export function inputToTensor(

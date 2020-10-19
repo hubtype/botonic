@@ -8,9 +8,11 @@ import {
 } from '@botonic/nlu/dist/constants'
 import { Language } from '@botonic/nlu/dist/language'
 
+import { ModelInformationPromises } from './types'
+
 export const isProd = process.env.STATIC_URL !== undefined
 
-export function getModelInfoForEnv(lang: Language): any {
+export function getModelInfoFromEnv(lang: Language): ModelInformationPromises {
   let uri = ''
   if (isProd) {
     uri = `${process.env.STATIC_URL}/${ASSETS_DIR}/${MODELS_DIR}/`

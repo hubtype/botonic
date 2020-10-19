@@ -2,21 +2,24 @@ import { default as fetch } from 'node-fetch'
 import { Vocabulary } from '@botonic/nlu/dist/types'
 import { Language } from '@botonic/nlu/dist/language'
 import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
+import type { NluResult } from '@botonic/core'
+import { Tensor } from '@tensorflow/tfjs'
 
 import {
   BotonicPluginNLUOptions,
   ModelInformation,
+  ModelInformationPromises,
   PreprocessingOptions,
-  Result,
 } from './types'
-import { getModelInfoForEnv } from './environment-utils'
+import { getModelInfoFromEnv } from './environment-utils'
 import { detectLang, inputToTensor, predictionToIntent } from './prediction'
 
+// Support for fetch API in Node (Lambda Env): https://stackoverflow.com/a/48433898
 // @ts-ignore
 global.fetch = fetch
 
 export class ModelHandler {
-  private languages: Language[]
+  private languages: Language[] = []
   private modelInfo: ModelInformation = {}
 
   constructor(options: BotonicPluginNLUOptions) {
@@ -42,23 +45,19 @@ export class ModelHandler {
     return preprocessor
   }
 
-  async loadModelInformation(options: BotonicPluginNLUOptions): Promise<this> {
+  async loadModelInformation(
+    options: BotonicPluginNLUOptions
+  ): Promise<ModelHandler> {
+    const promises: { [lang: string]: ModelInformationPromises } = {}
+    for (const lang of this.languages) {
+      promises[lang] = getModelInfoFromEnv(lang)
+    }
     for (const lang of this.languages) {
       this.modelInfo[lang] = {}
       this.modelInfo[lang].language = lang
-      // Prepare model information promises to be waited in parallel
-      const { model, modelData } = getModelInfoForEnv(lang) as any
-      this.modelInfo[lang].model = model
-      this.modelInfo[lang].modelData = modelData
-    }
-    await Promise.all([
-      ...Object.values(this.modelInfo).map((info: any) => info.model),
-      ...Object.values(this.modelInfo).map((info: any) => info.modelData),
-    ])
-    for (const [lang, res] of Object.entries(this.modelInfo) as any) {
       // Resolving previous promises
-      this.modelInfo[lang].model = await res.model
-      const modelData = (await res.modelData).data
+      this.modelInfo[lang].model = await promises[lang].model
+      const modelData = (await promises[lang].modelData).data
       this.modelInfo[lang].modelData = modelData
       this.modelInfo[lang].preprocessor = this.initPreprocessor(
         options[lang],
@@ -69,12 +68,16 @@ export class ModelHandler {
     return await this // eslint-disable-line @typescript-eslint/await-thenable
   }
 
-  predict(input): Result {
+  predict(input: string): NluResult {
     const lang = detectLang(input, this.languages)
     const { model, modelData } = this.modelInfo[lang]
     const tensor = inputToTensor(input, this.modelInfo[lang].preprocessor)
     const prediction = model.predict(tensor)
-    const intent = predictionToIntent(prediction, modelData.intents, lang)
+    const intent = predictionToIntent(
+      prediction as Tensor,
+      modelData.intents,
+      lang
+    )
     return intent
   }
 }
