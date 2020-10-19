@@ -23,7 +23,7 @@ export default class extends React.Component {
         name: 'The Big Lebowski',
         desc: 'Fuck it Dude',
         url: 'https://www.imdb.com/title/tt0118715',
-        pic: 'https://www.thelinda.org/wp-content/uploads/2018/02/Big-L-2-1.jpg'
+        pic: 'https://upload.wikimedia.org/wikipedia/en/a/a7/Snatch_ver4.jpg'
       },
       {
         name: 'Snatch',
