@@ -18,11 +18,7 @@ import { accuracyScore } from 'machinelearn/metrics';
 
 export class ModelManager {
   model: Sequential | LayersModel;
-  private _wordEmbeddingsManager: WordEmbeddingsManager;
-
-  constructor() {
-    this._wordEmbeddingsManager = new WordEmbeddingsManager();
-  }
+  private wordEmbeddingsManager = new WordEmbeddingsManager();
 
   async loadModel(modelPath: string): Promise<void> {
     this.model = await loadLayersModel(`file://${modelPath}`);
@@ -32,10 +28,10 @@ export class ModelManager {
     wordEmbeddingsConfig: WordEmbeddingsConfig,
     parameters: ModelParameters,
   ): Promise<void> {
-    await this._wordEmbeddingsManager.generateWordEmbeddingsMatrix(
+    await this.wordEmbeddingsManager.generateWordEmbeddingsMatrix(
       wordEmbeddingsConfig,
     );
-    const wordEmbeddingsMatrix: Tensor = this._wordEmbeddingsManager
+    const wordEmbeddingsMatrix: Tensor = this.wordEmbeddingsManager
       .wordEmbeddingsMatrix;
 
     this.model = new SimpleNN(parameters, wordEmbeddingsMatrix).model;

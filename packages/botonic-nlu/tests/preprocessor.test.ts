@@ -6,29 +6,19 @@ import * as CONSTANTS from '../src/constants';
 
 describe('Preprocessor Tools', () => {
   test('Normalizing a sentence', () => {
-    const normalizer = new DefaultNormalizer();
-    const sentence = 'Today I am going to the office!';
-    const expectedOutput = 'today i am going to the office!';
-    expect(normalizer.normalize(sentence)).toEqual(expectedOutput);
+    expect(
+      new DefaultNormalizer().normalize('Today I am going to the office!'),
+    ).toEqual('today i am going to the office!');
   });
+
   test('Tokenizing a sentence', () => {
-    const tokenizer = new DefaultTokenizer();
-    const sentence = 'today i am going to the office!';
-    const expectedOutput = [
-      'today',
-      'i',
-      'am',
-      'going',
-      'to',
-      'the',
-      'office',
-      '!',
-    ];
-    expect(tokenizer.tokenize(sentence)).toEqual(expectedOutput);
+    expect(
+      new DefaultTokenizer().tokenize('today i am going to the office!'),
+    ).toEqual(['today', 'i', 'am', 'going', 'to', 'the', 'office', '!']);
   });
+
   test('Stemming a sentence', () => {
     const stemmer = new DefaultStemmer(true);
-    const language = 'en';
     const tokens = ['today', 'i', 'am', 'going', 'to', 'the', 'office', '!'];
     const expectedOutputs = [
       'todai',
@@ -41,20 +31,20 @@ describe('Preprocessor Tools', () => {
       '!',
     ];
     tokens.forEach((token, i) => {
-      expect(stemmer.stem(token, language)).toEqual(expectedOutputs[i]);
+      expect(stemmer.stem(token, 'en')).toEqual(expectedOutputs[i]);
     });
   });
 });
 
 describe('Preprocessor', () => {
   test('Generating a vocabulary', () => {
-    const preprocessor = new Preprocessor();
-    const data = [
-      { label: 'Greetings', feature: 'Hi!' },
-      { label: 'BookRestaurant', feature: 'I want to book a table' },
-      { label: 'BuyClothes', feature: 'I would like to buy these trousers' },
-    ];
-    const expectedVocabulary = {
+    expect(
+      new Preprocessor().generateVocabulary([
+        { label: 'Greetings', feature: 'Hi!' },
+        { label: 'BookRestaurant', feature: 'I want to book a table' },
+        { label: 'BuyClothes', feature: 'I would like to buy these trousers' },
+      ]),
+    ).toEqual({
       '<UNK>': 0,
       hi: 1,
       '!': 2,
@@ -69,14 +59,14 @@ describe('Preprocessor', () => {
       buy: 11,
       these: 12,
       trousers: 13,
-    };
-    const generatedVocabulary = preprocessor.generateVocabulary(data);
-    expect(generatedVocabulary).toEqual(expectedVocabulary);
+    });
   });
+
   test('Preprocessing a sentence', () => {
-    const language = 'en';
-    const maxSeqLen = 10;
-    const vocabulary = {
+    const preprocessor = new Preprocessor();
+    preprocessor.language = 'en';
+    preprocessor.maxSeqLen = 10;
+    preprocessor.vocabulary = {
       [CONSTANTS.UNKNOWN_TOKEN]: 0,
       the: 1,
       today: 2,
@@ -87,12 +77,17 @@ describe('Preprocessor', () => {
       to: 7,
       '!': 8,
     };
-    const sentence = 'Today I am going to the office!';
-    const expectedOutput = [0, 0, 2, 4, 5, 6, 7, 1, 3, 8];
-    const preprocessor = new Preprocessor();
-    preprocessor.language = language;
-    preprocessor.maxSeqLen = maxSeqLen;
-    preprocessor.vocabulary = vocabulary;
-    expect(preprocessor.preprocess(sentence)).toEqual(expectedOutput);
+    expect(preprocessor.preprocess('Today I am going to the office!')).toEqual([
+      0,
+      0,
+      2,
+      4,
+      5,
+      6,
+      7,
+      1,
+      3,
+      8,
+    ]);
   });
 });

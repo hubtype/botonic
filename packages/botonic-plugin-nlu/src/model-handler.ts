@@ -48,10 +48,7 @@ export class ModelHandler {
   async loadModelInformation(
     options: BotonicPluginNLUOptions
   ): Promise<ModelHandler> {
-    const promises: { [lang: string]: ModelInformationPromises } = {}
-    for (const lang of this.languages) {
-      promises[lang] = getModelInfoFromEnv(lang)
-    }
+    const promises = this.languages.map(lang => getModelInfoFromEnv(lang))
     for (const lang of this.languages) {
       this.modelInfo[lang] = {}
       this.modelInfo[lang].language = lang

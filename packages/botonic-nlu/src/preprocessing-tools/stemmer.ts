@@ -12,14 +12,12 @@ import * as PorterStemmerPt from 'natural/lib/natural/stemmers/porter_stemmer_pt
 // eslint-disable-next-line
 import * as PorterStemmerRu from 'natural/lib/natural/stemmers/porter_stemmer_ru';
 import { Language } from '../language';
+import { Stemmer } from '../types';
 
-export class DefaultStemmer {
-  private _active: boolean;
-  constructor(active = false) {
-    this._active = active;
-  }
+export class DefaultStemmer implements Stemmer {
+  constructor(private active = false) {}
   stem(token: string, language: Language): string {
-    if (!this._active) return token;
+    if (!this.active) return token;
     switch (language) {
       case 'en':
         return PorterStemmer.stem(token);

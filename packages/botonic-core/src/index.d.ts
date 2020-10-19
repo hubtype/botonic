@@ -48,8 +48,8 @@ export interface IntentResult {
   confidence: number
 }
 
+/** Fields set by NLU plugins: Luis, Dialogflow, ... **/
 export interface NluResult {
-  /** Fields set by NLU plugins: Luis, Dialogflow, ... **/
   // the name of the highest confidence intent
   confidence: number
   intent: string

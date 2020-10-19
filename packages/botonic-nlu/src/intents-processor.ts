@@ -1,49 +1,36 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { DataSet, IntentEncoder, IntentDecoder } from './types';
+import { DataSet, IntentDecoder } from './types';
 import { flipObject } from './util/object-tools';
 
 export class IntentsProcessor {
-  private _encoder: IntentEncoder;
-  private _decoder: IntentDecoder;
+  private constructor(readonly encoder, readonly decoder) {}
 
-  constructor() {
-    this._encoder = {};
-    this._decoder = {};
+  static fromDecoder(decoder: IntentDecoder): IntentsProcessor {
+    return new IntentsProcessor(flipObject(decoder), decoder);
   }
 
-  get intentsCount(): number {
-    return Object.entries(this._encoder).length;
-  }
-
-  get decoder(): IntentDecoder {
-    return this._decoder;
-  }
-
-  get encoder(): IntentEncoder {
-    return this._encoder;
-  }
-
-  loadEncoderDecoder(decoder: IntentDecoder): void {
-    this._encoder = flipObject(decoder);
-    this._decoder = decoder;
-  }
-
-  generateEncoderDecoder(data: DataSet): void {
+  static fromData(data: DataSet): IntentsProcessor {
     let id = 0;
+    const encoder = {};
     data.forEach((sample) => {
-      if (!(sample.label in this._encoder)) {
-        this._encoder[sample.label] = id;
+      if (!(sample.label in encoder)) {
+        encoder[sample.label] = id;
         id++;
       }
     });
-    this._decoder = flipObject(this._encoder);
+    const decoder = flipObject(encoder);
+    return new IntentsProcessor(encoder, decoder);
+  }
+
+  get intentsCount(): number {
+    return Object.entries(this.encoder).length;
   }
 
   encode(intents: string): number {
-    return this._encoder[intents];
+    return this.encoder[intents];
   }
 
   decode(intentId: number): string {
-    return this._decoder[intentId];
+    return this.decoder[intentId];
   }
 }

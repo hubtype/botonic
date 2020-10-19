@@ -24,7 +24,9 @@ export default class BotonicPluginNLU implements Plugin {
         const intent = this.modelHandler.predict(request.input.data)
         Object.assign(request.input, intent)
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log('Cannot predict the results', e)
+    }
   }
   post(request: PluginPostRequest): void {}
 }

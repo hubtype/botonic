@@ -67,6 +67,7 @@ export class WordEmbeddingsManager {
   get wordEmbeddingsMatrix(): Tensor {
     return this._tensorMatrix;
   }
+
   get matrix(): number[][] {
     return this._matrix;
   }

@@ -6,29 +6,29 @@ import { DataSet } from './types';
 export class DataReader {
   readData(path: string): DataSet {
     if (lstatSync(path).isFile()) {
-      return this._readFile(path);
+      return this.readFile(path);
     } else if (lstatSync(path).isDirectory()) {
-      return this._getDataFromDirectory(path);
+      return this.getDataFromDirectory(path);
     } else {
-      throw Error('Path must be a directory or a file.');
+      throw Error('Path must be a directory or a file. Path:"' + path + '".');
     }
   }
 
-  private _readFile(path: string): DataSet {
-    const extension = this._getExtension(path);
+  private readFile(path: string): DataSet {
+    const extension = this.getExtension(path);
     switch (extension) {
       case 'csv':
-        return this._readCSV(path);
+        return this.readCSV(path);
       default:
-        throw Error('File must be a csv.');
+        throw Error('File must be a csv. Path:"' + path + '".');
     }
   }
 
-  private _getExtension(path: string): string {
+  private getExtension(path: string): string {
     return path.split('.').pop();
   }
 
-  private _readCSV(path: string): DataSet {
+  private readCSV(path: string): DataSet {
     const text = readFileSync(path, 'utf-8');
     const info = csvParse(text);
     return info.map((sample) => {
@@ -36,15 +36,19 @@ export class DataReader {
     });
   }
 
-  private _getDataFromDirectory(path: string): DataSet {
+  private getDataFromDirectory(path: string): DataSet {
     const data: DataSet = [];
 
     const files = readdirSync(path).filter(
-      (fileName) => this._getExtension(fileName) == 'txt',
+      (fileName) => this.getExtension(fileName) == 'txt',
     );
 
     if (files.length == 0) {
-      throw Error('Directory must contain a txt file for each intent.');
+      throw Error(
+        'Directory must contain a txt file for each intent. Path:"' +
+          path +
+          '".',
+      );
     }
 
     files.forEach((fileName) => {

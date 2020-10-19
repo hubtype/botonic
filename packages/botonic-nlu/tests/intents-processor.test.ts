@@ -1,41 +1,34 @@
 import { IntentsProcessor } from '../src/intents-processor';
 import { INTENTS } from './constants';
 
-const intentsProcessor = new IntentsProcessor();
-intentsProcessor.loadEncoderDecoder(INTENTS);
+const intentsProcessor = IntentsProcessor.fromDecoder(INTENTS);
 
 describe('Intent decoder.', () => {
   test('Checking decoder', () => {
-    const expectedDecoder = {
-      '0': 'Gratitude',
-      '1': 'BookRestaurant',
-      '2': 'GetDirections',
+    expect(intentsProcessor.decoder).toEqual({
+      '0': 'BookRestaurant',
+      '1': 'GetWeather',
+      '2': 'PlayMusic',
       '3': 'Greetings',
-    };
-    expect(intentsProcessor.decoder).toEqual(expectedDecoder);
+    });
   });
 
   test('Decoding intentId', () => {
-    const intentId = 3;
-    const expectedOutput = 'Greetings';
-    expect(intentsProcessor.decode(intentId)).toEqual(expectedOutput);
+    expect(intentsProcessor.decode(3)).toEqual('Greetings');
   });
 });
 
 describe('Intent encoder.', () => {
   test('Checking encoder', () => {
-    const expectedEcoder = {
-      Gratitude: 0,
-      BookRestaurant: 1,
-      GetDirections: 2,
+    expect(intentsProcessor.encoder).toEqual({
+      BookRestaurant: 0,
+      GetWeather: 1,
+      PlayMusic: 2,
       Greetings: 3,
-    };
-    expect(intentsProcessor.encoder).toEqual(expectedEcoder);
+    });
   });
 
   test('Encoding intent', () => {
-    const intent = 'Greetings';
-    const expectedOutput = 3;
-    expect(intentsProcessor.encode(intent)).toEqual(expectedOutput);
+    expect(intentsProcessor.encode('Greetings')).toEqual(3);
   });
 });

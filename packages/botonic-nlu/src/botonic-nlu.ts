@@ -27,59 +27,52 @@ import { MODELS_DIR, MODEL_DATA_FILENAME, NLU_DIR } from './constants';
 import { mkdirSync, writeFileSync } from 'fs';
 
 export class BotonicNLU {
-  private _preprocessor: Preprocessor;
-  private _modelManager: ModelManager;
-  private _intentsProcessor: IntentsProcessor;
-  private _dataReader: DataReader;
-
-  constructor() {
-    this._preprocessor = new Preprocessor();
-    this._modelManager = new ModelManager();
-    this._intentsProcessor = new IntentsProcessor();
-    this._dataReader = new DataReader();
-  }
+  private dataReader = new DataReader();
+  private preprocessor = new Preprocessor();
+  private modelManager = new ModelManager();
+  private intentsProcessor: IntentsProcessor;
 
   set normalizer(value: Normalizer) {
-    this._preprocessor.normalizer = value;
+    this.preprocessor.normalizer = value;
   }
 
   set stemmer(value: Stemmer) {
-    this._preprocessor.stemmer = value;
+    this.preprocessor.stemmer = value;
   }
 
   set tokenizer(value: Tokenizer) {
-    this._preprocessor.tokenizer = value;
+    this.preprocessor.tokenizer = value;
   }
 
   set model(model: Sequential | LayersModel) {
-    this._modelManager.model = model;
+    this.modelManager.model = model;
   }
 
   loadModelData(modelDataPath: string): void {
     const info = readJSON(modelDataPath);
-    this._preprocessor.language = info.language;
-    this._preprocessor.maxSeqLen = info.maxSeqLen;
-    this._preprocessor.vocabulary = info.vocabulary;
-    this._intentsProcessor.loadEncoderDecoder(info.intents);
+    this.preprocessor.language = info.language;
+    this.preprocessor.maxSeqLen = info.maxSeqLen;
+    this.preprocessor.vocabulary = info.vocabulary;
+    this.intentsProcessor = IntentsProcessor.fromDecoder(info.intents);
   }
 
   async loadModel(modelPath: string): Promise<void> {
-    await this._modelManager.loadModel(modelPath);
+    await this.modelManager.loadModel(modelPath);
   }
 
   predict(sentence: string): string {
-    const input = tensor([this._preprocessor.preprocess(sentence)]);
-    const intentId = this._modelManager.predict(input);
-    const intent = this._intentsProcessor.decode(intentId);
+    const input = tensor([this.preprocessor.preprocess(sentence)]);
+    const intentId = this.modelManager.predict(input);
+    const intent = this.intentsProcessor.decode(intentId);
     return intent;
   }
 
   predictProbabilities(sentence: string): DecodedPrediction {
-    const input = tensor([this._preprocessor.preprocess(sentence)]);
-    const encodedPrediction = this._modelManager.predictProbabilities(input);
+    const input = tensor([this.preprocessor.preprocess(sentence)]);
+    const encodedPrediction = this.modelManager.predictProbabilities(input);
     const decodedPrediction: DecodedPrediction = encodedPrediction.map(
       (intentConfidence) => {
-        const intent = this._intentsProcessor.decode(intentConfidence.intentId);
+        const intent = this.intentsProcessor.decode(intentConfidence.intentId);
         return {
           intent: intent,
           confidence: intentConfidence.confidence,
@@ -94,9 +87,9 @@ export class BotonicNLU {
     language: Language;
     maxSeqLen: number;
   }): DataSet {
-    this._preprocessor.language = options.language;
-    this._preprocessor.maxSeqLen = options.maxSeqLen;
-    return this._dataReader.readData(options.path);
+    this.preprocessor.language = options.language;
+    this.preprocessor.maxSeqLen = options.maxSeqLen;
+    return this.dataReader.readData(options.path);
   }
 
   trainTestSplit(options: {
@@ -133,22 +126,22 @@ export class BotonicNLU {
       trainSet = trainSet.concat(data.slice(testSize, dataSize));
     }
 
-    this._preprocessor.generateVocabulary(trainSet);
-    this._intentsProcessor.generateEncoderDecoder(trainSet);
+    this.preprocessor.generateVocabulary(trainSet);
+    this.intentsProcessor = IntentsProcessor.fromData(trainSet);
 
-    const [xTrain, yTrain] = this._inputOutputSplit(trainSet);
-    const [xTest, yTest] = this._inputOutputSplit(testSet);
+    const [xTrain, yTrain] = this.inputOutputSplit(trainSet);
+    const [xTest, yTest] = this.inputOutputSplit(testSet);
 
     return [xTrain, xTest, yTrain, yTest];
   }
 
-  private _inputOutputSplit(data: DataSet): [InputSet, OutputSet] {
+  private inputOutputSplit(data: DataSet): [InputSet, OutputSet] {
     const x = tensor(
-      data.map((sample) => this._preprocessor.preprocess(sample.feature)),
+      data.map((sample) => this.preprocessor.preprocess(sample.feature)),
     );
 
     const y = tensor(
-      data.map((sample) => this._intentsProcessor.encode(sample.label)),
+      data.map((sample) => this.intentsProcessor.encode(sample.label)),
     );
     return [x, y];
   }
@@ -159,21 +152,21 @@ export class BotonicNLU {
     wordEmbeddingsDimension?: WordEmbeddingDimension;
     trainableEmbeddings?: boolean;
   }): Promise<void> {
-    const wordEmbeddingsConfig: WordEmbeddingsConfig = {
+    const wordEmbeddingsConfig = {
       type: options.wordEmbeddingsType || '10k-fasttext',
       dimension: options.wordEmbeddingsDimension || 300,
-      language: this._preprocessor.language,
-      vocabulary: this._preprocessor.vocabulary,
+      language: this.preprocessor.language,
+      vocabulary: this.preprocessor.vocabulary,
     };
 
-    const parameters: ModelParameters = {
-      maxSeqLen: this._preprocessor.maxSeqLen,
+    const parameters = {
+      maxSeqLen: this.preprocessor.maxSeqLen,
       learningRate: options.learningRate,
-      intentsCount: this._intentsProcessor.intentsCount,
+      intentsCount: this.intentsProcessor.intentsCount,
       trainableEmbeddings: options.trainableEmbeddings || false,
     };
 
-    await this._modelManager.createModel(wordEmbeddingsConfig, parameters);
+    await this.modelManager.createModel(wordEmbeddingsConfig, parameters);
   }
 
   async train(
@@ -185,7 +178,7 @@ export class BotonicNLU {
       validationSplit?: number;
     },
   ): Promise<void> {
-    const parameters: TrainingParameters = {
+    const parameters = {
       X: x,
       y: y,
       epochs: options?.epochs || 10,
@@ -193,11 +186,11 @@ export class BotonicNLU {
       validationSplit: options?.validationSplit || 0.2,
     };
 
-    await this._modelManager.train(parameters);
+    await this.modelManager.train(parameters);
   }
 
   evaluate(x: InputSet, y: OutputSet): number {
-    const accuracy = this._modelManager.evaluate(x, y);
+    const accuracy = this.modelManager.evaluate(x, y);
     return accuracy;
   }
 
@@ -209,20 +202,20 @@ export class BotonicNLU {
         'src',
         NLU_DIR,
         MODELS_DIR,
-        this._preprocessor.language,
+        this.preprocessor.language,
       );
     mkdirSync(modelDir, { recursive: true });
 
     const modelDataPath = join(modelDir, MODEL_DATA_FILENAME);
 
-    const modelData: ModelData = {
-      language: this._preprocessor.language,
-      intents: this._intentsProcessor.decoder,
-      maxSeqLen: this._preprocessor.maxSeqLen,
-      vocabulary: this._preprocessor.vocabulary,
+    const modelData = {
+      language: this.preprocessor.language,
+      intents: this.intentsProcessor.decoder,
+      maxSeqLen: this.preprocessor.maxSeqLen,
+      vocabulary: this.preprocessor.vocabulary,
     };
     writeFileSync(modelDataPath, JSON.stringify(modelData));
 
-    await this._modelManager.saveModel(modelDir);
+    await this.modelManager.saveModel(modelDir);
   }
 }

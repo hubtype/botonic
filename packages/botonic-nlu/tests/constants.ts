@@ -10,8 +10,8 @@ export const SIMPLE_NN_MODEL_PATH = join(SIMPLE_NN_DIR, 'model.json');
 export const UTTERANCES_DIR = join(NLU_DIR, 'utterances');
 
 export const INTENTS = {
-  '0': 'Gratitude',
-  '1': 'BookRestaurant',
-  '2': 'GetDirections',
+  '0': 'BookRestaurant',
+  '1': 'GetWeather',
+  '2': 'PlayMusic',
   '3': 'Greetings',
 };
