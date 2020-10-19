@@ -1,17 +1,22 @@
-import { CMS, Context, MessageContent, TOP_CONTENT_TYPES } from '../cms'
+import {
+  CMS,
+  CmsException,
+  ContentId,
+  ContentType,
+  Context,
+  MessageContent,
+  ResourceId,
+  TOP_CONTENT_TYPES,
+  TopContent,
+} from '../cms'
 import { reachableFrom } from '../cms/visitors/message-visitors'
-
-export function defaultValidationReport(id: string, error: string) {
-  console.log(`${id}: ${error}`)
-}
+import { ensureError } from '../util/exceptions'
+import { MultiError } from 'async-parallel'
 
 export class ContentsValidator {
   constructor(
     readonly cms: CMS,
-    readonly report: (
-      contentId: string,
-      error: string
-    ) => void = defaultValidationReport,
+    readonly report = new DefaultContentsValidatorReports(),
     readonly onlyValidateReachable = true
   ) {}
 
@@ -24,18 +29,54 @@ export class ContentsValidator {
    * - An URL has empty URL empty
    */
   async validateAllTopContents(context: Context): Promise<void> {
-    const contents: MessageContent[] = []
+    const messageContents: MessageContent[] = []
+    // TODO also validate non TopContent contents
     for (const model of TOP_CONTENT_TYPES) {
-      contents.push(
-        ...((await this.cms.topContents(model, context)) as MessageContent[])
-      )
+      try {
+        // TODO use async to improve concurrency
+        const modelContents = await this.cms.topContents(model, context)
+        for (const content of modelContents) {
+          if (content instanceof MessageContent) {
+            messageContents.push(content)
+          } else {
+            this.validate(content)
+          }
+        }
+      } catch (e) {
+        this.processException(model, e)
+      }
     }
-    const contentsToValidate = this.onlyValidateReachable
-      ? await this.reachableContents(contents, context)
-      : contents
-    for (const c of contentsToValidate) {
+    const messageContentsToValidate = this.onlyValidateReachable
+      ? await this.reachableContents(messageContents, context)
+      : messageContents
+    for (const c of messageContentsToValidate) {
       this.validate(c)
     }
+  }
+
+  private processException(model: ContentType, e: any): void {
+    const resourceId = e instanceof CmsException && e.resourceId
+
+    const multiError = this.getMultiError(e)
+    if (multiError && !resourceId) {
+      for (const e1 of multiError.list) {
+        this.processException(model, e1)
+      }
+    } else {
+      this.report.deliveryError(
+        resourceId || new ContentId(model, '??'),
+        ensureError(e)
+      )
+    }
+  }
+  private getMultiError(e: any): MultiError | undefined {
+    if (e instanceof MultiError) {
+      return e
+    }
+    if (e instanceof CmsException && e.reason instanceof MultiError) {
+      return e.reason
+    }
+    return undefined
   }
 
   protected async reachableContents(
@@ -47,10 +88,54 @@ export class ContentsValidator {
     return reachable
   }
 
-  protected validate(content: MessageContent) {
+  protected validate(content: TopContent) {
     const res = content.validate()
     if (res) {
-      this.report(content.id, res)
+      this.report.validationError(content.contentId, res)
     }
+  }
+}
+
+export interface ContentsValidatorReports {
+  deliveryError(resourceId: ResourceId, exception: Error): void
+  validationError(resourceId: ResourceId, error: string): void
+}
+
+type ResourceError = {
+  resourceId: ResourceId
+  msg: string
+  critical: boolean
+}
+
+export class DefaultContentsValidatorReports
+  implements ContentsValidatorReports {
+  errors: ResourceError[] = []
+
+  constructor(readonly logErrors = true) {}
+
+  deliveryError(resourceId: ResourceId, exception: Error) {
+    let msg = exception.message
+    if (exception instanceof CmsException) {
+      msg += exception.messageFromReason()
+    }
+    this.processError(resourceId, msg, true)
+  }
+
+  validationError(resourceId: ResourceId, error: string) {
+    this.processError(resourceId, error, false)
+  }
+
+  private processError(
+    resourceId: ResourceId,
+    msg: string,
+    critical: boolean
+  ): void {
+    if (this.logErrors) {
+      if (!msg.includes(resourceId.id)) {
+        msg = `${resourceId.toString()}: msg`
+      }
+      console.log(msg)
+    }
+    this.errors.push({ resourceId, msg, critical })
   }
 }
