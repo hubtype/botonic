@@ -2,16 +2,12 @@ import { ContentsValidator } from '../../src/tools/validate-all-contents'
 import { testContentful } from '../contentful/contentful.helper'
 
 test('TEST: ContentsValidator.validateAllTopContents', async () => {
-  const contentful = testContentful({})
-  const errors: string[] = []
-  const report = (contentId: string, error: string) => {
-    errors.push(contentId + '/' + error)
-  }
-  const sut = new ContentsValidator(contentful, report)
+  const contentful = testContentful()
+  const sut = new ContentsValidator(contentful)
 
   // act
-  await sut.validateAllTopContents({ locale: 'en' })
+  await sut.validateAllTopContents({ locale: 'es' })
 
   // assert
-  expect(errors).toEqual([])
-})
+  expect(sut.report.errors).toEqual([])
+}, 60000)
