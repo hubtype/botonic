@@ -2,21 +2,15 @@ const { BotonicNLU } = require('../../packages/botonic-nlu/dist')
 
 const nlu = new BotonicNLU()
 
-const DATA_PATH = ''
-const LANGUAGE = 'en'
-const MAX_SEQ_LEN = 20
-
 var data = nlu.loadData({
-  path: DATA_PATH,
-  language: LANGUAGE,
-  maxSeqLen: MAX_SEQ_LEN,
+  path: '',
+  language: 'en',
+  maxSeqLen: 20,
 })
-
-const TEST_PERCENTAGE = 0.2
 
 var [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
   data: data,
-  testPercentage: TEST_PERCENTAGE,
+  testPercentage: 0.2,
 })
 
 const BEST_MODEL_DIR = ''
@@ -41,7 +35,7 @@ var bestResult: Result = {
     for (const ep of PARAMS.EPOCHS) {
       console.log('Learning rate:', lr)
       console.log('Epochs:', ep)
-      await nlu.createModel({ learningRate: lr })
+      await nlu.createModel({ template: 'simple-nn', learningRate: lr })
       await nlu.train(xTrain, yTrain, { epochs: ep })
       const acc = await nlu.evaluate(xTest, yTest)
       const result: Result = { learningRate: lr, epochs: ep, accuracy: acc }

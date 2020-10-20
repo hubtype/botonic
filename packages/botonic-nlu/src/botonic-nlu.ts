@@ -11,13 +11,11 @@ import {
   DecodedPrediction,
   WordEmbeddingType,
   WordEmbeddingDimension,
-  WordEmbeddingsConfig,
   DataSet,
   InputSet,
   OutputSet,
-  ModelParameters,
-  TrainingParameters,
-  ModelData,
+  ModelTemplates,
+  Vocabulary,
 } from './types';
 import { Language } from './language';
 import { readJSON } from './util/file-system';
@@ -25,39 +23,49 @@ import { LayersModel, Sequential, tensor } from '@tensorflow/tfjs-node';
 import { join } from 'path';
 import { MODELS_DIR, MODEL_DATA_FILENAME, NLU_DIR } from './constants';
 import { mkdirSync, writeFileSync } from 'fs';
+import { DefaultTokenizer } from './preprocessing-tools/tokenizer';
+import { DefaultNormalizer } from './preprocessing-tools/normalizer';
+import { DefaultStemmer } from './preprocessing-tools/stemmer';
 
 export class BotonicNLU {
-  private dataReader = new DataReader();
-  private preprocessor = new Preprocessor();
-  private modelManager = new ModelManager();
+  language: Language;
+  maxSeqLen: number;
+  vocabulary: Vocabulary;
+  private modelManager: ModelManager;
+  private preprocessor: Preprocessor;
   private intentsProcessor: IntentsProcessor;
+  private dataReader = new DataReader();
 
-  set normalizer(value: Normalizer) {
-    this.preprocessor.normalizer = value;
-  }
-
-  set stemmer(value: Stemmer) {
-    this.preprocessor.stemmer = value;
-  }
-
-  set tokenizer(value: Tokenizer) {
-    this.preprocessor.tokenizer = value;
-  }
+  constructor(
+    readonly normalizer: Normalizer = new DefaultNormalizer(),
+    readonly tokenizer: Tokenizer = new DefaultTokenizer(),
+    readonly stemmer: Stemmer = new DefaultStemmer(),
+  ) {}
 
   set model(model: Sequential | LayersModel) {
-    this.modelManager.model = model;
+    this.modelManager = ModelManager.fromModel(model);
   }
 
-  loadModelData(modelDataPath: string): void {
-    const info = readJSON(modelDataPath);
-    this.preprocessor.language = info.language;
-    this.preprocessor.maxSeqLen = info.maxSeqLen;
-    this.preprocessor.vocabulary = info.vocabulary;
-    this.intentsProcessor = IntentsProcessor.fromDecoder(info.intents);
-  }
+  async loadModel(modelPath: string, modelDataPath: string): Promise<void> {
+    const modelData = readJSON(modelDataPath);
+    this.language = modelData.language;
+    this.maxSeqLen = modelData.maxSeqLen;
+    this.vocabulary = modelData.vocabulary;
 
-  async loadModel(modelPath: string): Promise<void> {
-    await this.modelManager.loadModel(modelPath);
+    this.intentsProcessor = IntentsProcessor.fromDecoder(modelData.intents);
+
+    const preprocessorEngines = {
+      tokenizer: this.tokenizer,
+      normalizer: this.normalizer,
+      stemmer: this.stemmer,
+    };
+
+    this.preprocessor = Preprocessor.fromModelData(
+      modelDataPath,
+      preprocessorEngines,
+    );
+
+    this.modelManager = await ModelManager.fromModelPath(modelPath);
   }
 
   predict(sentence: string): string {
@@ -87,8 +95,8 @@ export class BotonicNLU {
     language: Language;
     maxSeqLen: number;
   }): DataSet {
-    this.preprocessor.language = options.language;
-    this.preprocessor.maxSeqLen = options.maxSeqLen;
+    this.language = options.language;
+    this.maxSeqLen = options.maxSeqLen;
     return this.dataReader.readData(options.path);
   }
 
@@ -126,7 +134,20 @@ export class BotonicNLU {
       trainSet = trainSet.concat(data.slice(testSize, dataSize));
     }
 
-    this.preprocessor.generateVocabulary(trainSet);
+    const preprocessorEngines = {
+      tokenizer: this.tokenizer,
+      normalizer: this.normalizer,
+      stemmer: this.stemmer,
+    };
+
+    this.preprocessor = Preprocessor.fromData(
+      trainSet,
+      this.language,
+      this.maxSeqLen,
+      preprocessorEngines,
+    );
+
+    this.vocabulary = this.preprocessor.vocabulary;
     this.intentsProcessor = IntentsProcessor.fromData(trainSet);
 
     const [xTrain, yTrain] = this.inputOutputSplit(trainSet);
@@ -147,6 +168,7 @@ export class BotonicNLU {
   }
 
   async createModel(options: {
+    template: ModelTemplates;
     learningRate: number;
     wordEmbeddingsType?: WordEmbeddingType;
     wordEmbeddingsDimension?: WordEmbeddingDimension;
@@ -155,18 +177,21 @@ export class BotonicNLU {
     const wordEmbeddingsConfig = {
       type: options.wordEmbeddingsType || '10k-fasttext',
       dimension: options.wordEmbeddingsDimension || 300,
-      language: this.preprocessor.language,
-      vocabulary: this.preprocessor.vocabulary,
+      language: this.language,
+      vocabulary: this.vocabulary,
     };
 
     const parameters = {
-      maxSeqLen: this.preprocessor.maxSeqLen,
+      maxSeqLen: this.maxSeqLen,
       learningRate: options.learningRate,
       intentsCount: this.intentsProcessor.intentsCount,
       trainableEmbeddings: options.trainableEmbeddings || false,
     };
-
-    await this.modelManager.createModel(wordEmbeddingsConfig, parameters);
+    this.modelManager = await ModelManager.fromModelTemplate(
+      options.template,
+      wordEmbeddingsConfig,
+      parameters,
+    );
   }
 
   async train(

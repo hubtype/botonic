@@ -27,6 +27,12 @@ export interface Tokenizer {
   tokenize(text: string): string[];
 }
 
+export interface PreprocessorEngines {
+  normalizer: Normalizer;
+  tokenizer: Tokenizer;
+  stemmer: Stemmer;
+}
+
 /* Sets */
 export type DataSet = { label: string; feature: string }[];
 export type InputSet = Tensor;
@@ -51,6 +57,10 @@ export interface ModelParameters {
   learningRate: number;
   intentsCount: number;
   trainableEmbeddings: boolean;
+}
+
+export enum ModelTemplates {
+  SIMPLE_NN = 'simple-nn',
 }
 
 /* Model Training */

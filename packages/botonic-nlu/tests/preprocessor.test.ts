@@ -2,7 +2,6 @@ import { DefaultNormalizer } from '../src/preprocessing-tools/normalizer';
 import { DefaultStemmer } from '../src/preprocessing-tools/stemmer';
 import { DefaultTokenizer } from '../src/preprocessing-tools/tokenizer';
 import { Preprocessor } from '../src/preprocessor';
-import * as CONSTANTS from '../src/constants';
 
 describe('Preprocessor Tools', () => {
   test('Normalizing a sentence', () => {
@@ -37,14 +36,26 @@ describe('Preprocessor Tools', () => {
 });
 
 describe('Preprocessor', () => {
-  test('Generating a vocabulary', () => {
-    expect(
-      new Preprocessor().generateVocabulary([
-        { label: 'Greetings', feature: 'Hi!' },
-        { label: 'BookRestaurant', feature: 'I want to book a table' },
-        { label: 'BuyClothes', feature: 'I would like to buy these trousers' },
-      ]),
-    ).toEqual({
+  const preprocessor = Preprocessor.fromData(
+    [
+      { label: 'Greetings', feature: 'Hi!' },
+      { label: 'BookRestaurant', feature: 'I want to book a table' },
+      {
+        label: 'BuyClothes',
+        feature: 'I would like to buy these trousers',
+      },
+    ],
+    'en',
+    10,
+    {
+      normalizer: new DefaultNormalizer(),
+      tokenizer: new DefaultTokenizer(),
+      stemmer: new DefaultStemmer(),
+    },
+  );
+
+  test('Generating vocabulary from data', () => {
+    expect(preprocessor.vocabulary).toEqual({
       '<UNK>': 0,
       hi: 1,
       '!': 2,
@@ -63,31 +74,17 @@ describe('Preprocessor', () => {
   });
 
   test('Preprocessing a sentence', () => {
-    const preprocessor = new Preprocessor();
-    preprocessor.language = 'en';
-    preprocessor.maxSeqLen = 10;
-    preprocessor.vocabulary = {
-      [CONSTANTS.UNKNOWN_TOKEN]: 0,
-      the: 1,
-      today: 2,
-      office: 3,
-      i: 4,
-      am: 5,
-      going: 6,
-      to: 7,
-      '!': 8,
-    };
-    expect(preprocessor.preprocess('Today I am going to the office!')).toEqual([
+    expect(preprocessor.preprocess('I want to book a big table.')).toEqual([
       0,
       0,
-      2,
+      3,
       4,
       5,
       6,
       7,
-      1,
-      3,
+      0,
       8,
+      0,
     ]);
   });
 });

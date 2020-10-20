@@ -1,38 +1,73 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { DefaultTokenizer } from './preprocessing-tools/tokenizer';
-import { DefaultStemmer } from './preprocessing-tools/stemmer';
-import { DefaultNormalizer } from './preprocessing-tools/normalizer';
 import { UNKNOWN_TOKEN } from './constants';
-import { DataSet, Vocabulary, Normalizer, Stemmer, Tokenizer } from './types';
+import {
+  DataSet,
+  Vocabulary,
+  Normalizer,
+  Stemmer,
+  Tokenizer,
+  PreprocessorEngines,
+} from './types';
 import { Language } from './language';
+import { readJSON } from './util/file-system';
 
 export class Preprocessor {
-  normalizer: Normalizer = new DefaultNormalizer();
-  stemmer: Stemmer = new DefaultStemmer();
-  tokenizer: Tokenizer = new DefaultTokenizer();
-  language: Language;
-  maxSeqLen: number;
-  vocabulary: Vocabulary;
+  protected constructor(
+    readonly language: Language,
+    readonly maxSeqLen: number,
+    readonly vocabulary: Vocabulary,
+    readonly normalizer: Normalizer,
+    readonly tokenizer: Tokenizer,
+    readonly stemmer: Stemmer,
+  ) {}
 
-  // TODO: Maybe vocabulary should be generated with a different data set than the train or test one.
-  generateVocabulary(data: DataSet): Vocabulary {
-    this.vocabulary = {};
-    this.vocabulary[UNKNOWN_TOKEN] = 0;
-    let id = 1;
+  static fromModelData(
+    path: string,
+    engines: PreprocessorEngines,
+  ): Preprocessor {
+    const modelData = readJSON(path);
+    return new Preprocessor(
+      modelData.language,
+      modelData.maxSeqLen,
+      modelData.vocabulary,
+      engines.normalizer,
+      engines.tokenizer,
+      engines.stemmer,
+    );
+  }
+
+  static fromData(
+    data: DataSet,
+    language: Language,
+    maxSeqLen: number,
+    engines: PreprocessorEngines,
+  ): Preprocessor {
+    let id = 0;
+    const vocabulary = {};
+    vocabulary[UNKNOWN_TOKEN] = id;
+    id++;
     data.forEach((sample) => {
-      const normalizedSentence = this.normalizer.normalize(sample.feature);
-      const tokens = this.tokenizer.tokenize(normalizedSentence);
+      const normalizedSentence = engines.normalizer.normalize(sample.feature);
+      const tokens = engines.tokenizer.tokenize(normalizedSentence);
       const stemmedTokens = tokens.map((token) =>
-        this.stemmer.stem(token, this.language),
+        engines.stemmer.stem(token, language),
       );
       stemmedTokens.forEach((token) => {
-        if (!(token in this.vocabulary)) {
-          this.vocabulary[token] = id;
+        if (!(token in vocabulary)) {
+          vocabulary[token] = id;
           id++;
         }
       });
     });
-    return this.vocabulary;
+
+    return new Preprocessor(
+      language,
+      maxSeqLen,
+      vocabulary,
+      engines.normalizer,
+      engines.tokenizer,
+      engines.stemmer,
+    );
   }
 
   preprocess(sentence: string): number[] {

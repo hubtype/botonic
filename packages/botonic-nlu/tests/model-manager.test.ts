@@ -6,12 +6,13 @@ describe('Model Manager predictions', () => {
   const input = tensor([
     [0, 0, 0, 0, 0, 0, 0, 117, 0, 1, 2, 35, 90, 19, 7, 8, 2776, 959, 95, 26],
   ]);
-  const modelManager = new ModelManager();
 
   test('Predicting intent Id', () => {
     const expectedOutput = 0;
     (async () => {
-      await modelManager.loadModel(SIMPLE_NN_MODEL_PATH);
+      const modelManager = await ModelManager.fromModelPath(
+        SIMPLE_NN_MODEL_PATH,
+      );
       expect(modelManager.predict(input)).toEqual(expectedOutput);
     })();
   });
@@ -24,7 +25,9 @@ describe('Model Manager predictions', () => {
       { intentId: 3, confidence: 7.528678480639428e-8 },
     ];
     (async () => {
-      await modelManager.loadModel(SIMPLE_NN_MODEL_PATH);
+      const modelManager = await ModelManager.fromModelPath(
+        SIMPLE_NN_MODEL_PATH,
+      );
       expect(modelManager.predictProbabilities(input)).toEqual(expectedOutput);
     })();
   });

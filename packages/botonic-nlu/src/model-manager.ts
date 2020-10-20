@@ -13,28 +13,39 @@ import {
   OutputSet,
   ModelParameters,
   TrainingParameters,
+  ModelTemplates,
 } from './types';
 import { accuracyScore } from 'machinelearn/metrics';
 
 export class ModelManager {
-  model: Sequential | LayersModel;
-  private wordEmbeddingsManager = new WordEmbeddingsManager();
+  protected constructor(readonly model: Sequential | LayersModel) {}
 
-  async loadModel(modelPath: string): Promise<void> {
-    this.model = await loadLayersModel(`file://${modelPath}`);
+  static fromModel(model: Sequential | LayersModel): ModelManager {
+    return new ModelManager(model);
   }
 
-  async createModel(
+  static async fromModelPath(path: string): Promise<ModelManager> {
+    const model = await loadLayersModel(`file://${path}`);
+    return new ModelManager(model);
+  }
+
+  static async fromModelTemplate(
+    template: ModelTemplates,
     wordEmbeddingsConfig: WordEmbeddingsConfig,
     parameters: ModelParameters,
-  ): Promise<void> {
-    await this.wordEmbeddingsManager.generateWordEmbeddingsMatrix(
+  ): Promise<ModelManager> {
+    const wordEmbeddingsManager = await WordEmbeddingsManager.withConfig(
       wordEmbeddingsConfig,
     );
-    const wordEmbeddingsMatrix: Tensor = this.wordEmbeddingsManager
-      .wordEmbeddingsMatrix;
+    const wordEmbeddingsMatrix = wordEmbeddingsManager.matrix;
 
-    this.model = new SimpleNN(parameters, wordEmbeddingsMatrix).model;
+    switch (template) {
+      case ModelTemplates.SIMPLE_NN:
+      default:
+        return new ModelManager(
+          new SimpleNN(parameters, wordEmbeddingsMatrix).model,
+        );
+    }
   }
 
   async train(parameters: TrainingParameters): Promise<void> {

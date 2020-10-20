@@ -9,13 +9,12 @@ import {
 import { ModelParameters } from './types';
 
 export class SimpleNN {
-  private parameters: ModelParameters;
-  private _wordEmbeddingsMatrix: Tensor;
   model: Sequential;
 
-  constructor(parameters: ModelParameters, wordEmbeddingsMatrix: Tensor) {
-    this.parameters = parameters;
-    this._wordEmbeddingsMatrix = wordEmbeddingsMatrix;
+  constructor(
+    private parameters: ModelParameters,
+    private wordEmbeddingsMatrix: Tensor,
+  ) {
     this._createModel();
   }
 
@@ -30,11 +29,11 @@ export class SimpleNN {
   private _addEmbeddingLayer(): void {
     this.model.add(
       layers.embedding({
-        inputDim: this._wordEmbeddingsMatrix.shape[0],
-        outputDim: this._wordEmbeddingsMatrix.shape[1],
+        inputDim: this.wordEmbeddingsMatrix.shape[0],
+        outputDim: this.wordEmbeddingsMatrix.shape[1],
         inputLength: this.parameters.maxSeqLen,
         trainable: this.parameters.trainableEmbeddings,
-        weights: [this._wordEmbeddingsMatrix],
+        weights: [this.wordEmbeddingsMatrix],
       }),
     );
   }
