@@ -2,7 +2,7 @@ import { join } from 'path'
 import { DataReader } from '../src/data-reader'
 import { UTTERANCES_DIR } from './constants'
 
-const SPECIFIC_SAMPLE = {
+const TEST_SAMPLE = {
   feature: 'How is it going?',
   label: 'Greetings',
 }
@@ -17,7 +17,7 @@ describe('Reading data.', () => {
 
   test('Data from csv contains a specific sample.', () => {
     expect(dataReader.readData(csvPath)).toContainEqual(
-      expect.objectContaining(SPECIFIC_SAMPLE)
+      expect.objectContaining(TEST_SAMPLE)
     )
   })
 
@@ -27,7 +27,7 @@ describe('Reading data.', () => {
 
   test('Data from directory contains a specific sample.', () => {
     expect(dataReader.readData(UTTERANCES_DIR)).toContainEqual(
-      expect.objectContaining(SPECIFIC_SAMPLE)
+      expect.objectContaining(TEST_SAMPLE)
     )
   })
 })

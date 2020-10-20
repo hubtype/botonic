@@ -28,9 +28,9 @@ export interface Tokenizer {
 }
 
 export interface PreprocessorEngines {
-  normalizer: Normalizer
-  tokenizer: Tokenizer
-  stemmer: Stemmer
+  normalizer?: Normalizer
+  tokenizer?: Tokenizer
+  stemmer?: Stemmer
 }
 
 /* Sets */
@@ -60,7 +60,7 @@ export interface ModelParameters {
 }
 
 export enum ModelTemplatesType {
-  SIMPLE_NN = 'simple-nn',
+  SIMPLE_NN,
 }
 
 /* Model Training */

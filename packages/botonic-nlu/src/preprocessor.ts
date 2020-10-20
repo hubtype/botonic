@@ -7,25 +7,27 @@ import {
   Stemmer,
   Tokenizer,
   PreprocessorEngines,
+  ModelData,
 } from './types'
 import { Language } from './language'
-import { readJSON } from './util/file-system'
+import { DefaultTokenizer } from './preprocessing-tools/tokenizer'
+import { DefaultNormalizer } from './preprocessing-tools/normalizer'
+import { DefaultStemmer } from './preprocessing-tools/stemmer'
 
 export class Preprocessor {
   constructor(
     readonly language: Language,
     readonly maxSeqLen: number,
     readonly vocabulary: Vocabulary,
-    readonly normalizer: Normalizer,
-    readonly tokenizer: Tokenizer,
-    readonly stemmer: Stemmer
+    readonly normalizer: Normalizer = new DefaultNormalizer(),
+    readonly tokenizer: Tokenizer = new DefaultTokenizer(),
+    readonly stemmer: Stemmer = new DefaultStemmer()
   ) {}
 
   static fromModelData(
-    path: string,
+    modelData: ModelData,
     engines: PreprocessorEngines
   ): Preprocessor {
-    const modelData = readJSON(path)
     return new Preprocessor(
       modelData.language,
       modelData.maxSeqLen,

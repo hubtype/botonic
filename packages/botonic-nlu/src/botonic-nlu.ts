@@ -5,9 +5,6 @@ import { ModelManager } from './model-manager'
 import { IntentsProcessor } from './intents-processor'
 import { DataReader } from './data-reader'
 import {
-  Normalizer,
-  Stemmer,
-  Tokenizer,
   DecodedPrediction,
   WordEmbeddingType,
   WordEmbeddingDimension,
@@ -16,6 +13,10 @@ import {
   OutputSet,
   ModelTemplatesType,
   Vocabulary,
+  PreprocessorEngines,
+  Tokenizer,
+  Normalizer,
+  Stemmer,
 } from './types'
 import { Language } from './language'
 import { readJSON } from './util/file-system'
@@ -31,16 +32,25 @@ export class BotonicNLU {
   language: Language
   maxSeqLen: number
   vocabulary: Vocabulary
+  engines: PreprocessorEngines = {}
   private modelManager: ModelManager
   private preprocessor: Preprocessor
   private intentsProcessor: IntentsProcessor
   private dataReader = new DataReader()
 
-  constructor(
-    readonly normalizer: Normalizer = new DefaultNormalizer(),
-    readonly tokenizer: Tokenizer = new DefaultTokenizer(),
-    readonly stemmer: Stemmer = new DefaultStemmer()
-  ) {}
+  constructor({
+    normalizer = new DefaultNormalizer(),
+    tokenizer = new DefaultTokenizer(),
+    stemmer = new DefaultStemmer(),
+  }: {
+    normalizer?: Normalizer
+    tokenizer?: Tokenizer
+    stemmer?: Stemmer
+  }) {
+    this.engines.normalizer = normalizer
+    this.engines.tokenizer = tokenizer
+    this.engines.stemmer = stemmer
+  }
 
   set model(model: Sequential | LayersModel) {
     this.modelManager = ModelManager.fromModel(model)
@@ -53,18 +63,7 @@ export class BotonicNLU {
     this.vocabulary = modelData.vocabulary
 
     this.intentsProcessor = IntentsProcessor.fromDecoder(modelData.intents)
-
-    const preprocessorEngines = {
-      tokenizer: this.tokenizer,
-      normalizer: this.normalizer,
-      stemmer: this.stemmer,
-    }
-
-    this.preprocessor = Preprocessor.fromModelData(
-      modelDataPath,
-      preprocessorEngines
-    )
-
+    this.preprocessor = Preprocessor.fromModelData(modelData, this.engines)
     this.modelManager = await ModelManager.fromModelPath(modelPath)
   }
 
@@ -100,21 +99,18 @@ export class BotonicNLU {
   trainTestSplit(options: {
     data: DataSet
     testPercentage: number
-    stratify: boolean
+    stratify?: boolean
   }): [InputSet, InputSet, OutputSet, OutputSet] {
     if (options.testPercentage > 1 || options.testPercentage < 0) {
       throw new RangeError('testPercentage should be a number between 0 and 1.')
     }
-
-    const stratify = options.stratify !== undefined ? options.stratify : true
     const data = shuffle(options.data)
 
     let trainSet = []
     let testSet = []
 
-    if (stratify) {
+    if (options.stratify !== false) {
       const intents = Array.from(new Set(data.map(sample => sample.label)))
-
       for (const intent of intents) {
         const intentData = data.filter(sample => sample.label == intent)
         const intentSize = intentData.length
@@ -129,17 +125,11 @@ export class BotonicNLU {
       trainSet = trainSet.concat(data.slice(testSize, dataSize))
     }
 
-    const preprocessorEngines = {
-      tokenizer: this.tokenizer,
-      normalizer: this.normalizer,
-      stemmer: this.stemmer,
-    }
-
     this.preprocessor = Preprocessor.fromData(
       trainSet,
       this.language,
       this.maxSeqLen,
-      preprocessorEngines
+      this.engines
     )
 
     this.vocabulary = this.preprocessor.vocabulary
@@ -193,7 +183,7 @@ export class BotonicNLU {
     x: InputSet,
     y: OutputSet,
     options?: {
-      epochs: number
+      epochs?: number
       batchSize?: number
       validationSplit?: number
     }

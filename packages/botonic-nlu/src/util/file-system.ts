@@ -24,12 +24,12 @@ export async function downloadIntoPath({
       fileWriter.on('error', reject)
     })
   } catch (e) {
-    console.error(`Error downloading the file.`)
+    console.error(`Error downloading the file from: ${url}`)
     console.error(
       `${e.response.status as string}: ${e.response.statusText as string}`
     )
-    return null
   }
+  return null
 }
 
 export function createDir(path: string): void {

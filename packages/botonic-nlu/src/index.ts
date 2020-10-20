@@ -1,3 +1,4 @@
-import { BotonicNLU } from './botonic-nlu'
+export { BotonicNLU } from './botonic-nlu'
 import * as CONSTANTS from './constants'
-export { BotonicNLU, CONSTANTS }
+export { ModelTemplatesType } from './types'
+export { CONSTANTS }

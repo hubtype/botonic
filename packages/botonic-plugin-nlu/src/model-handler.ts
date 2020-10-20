@@ -31,31 +31,34 @@ export class ModelHandler {
   }
 
   initPreprocessor(
+    language: Language,
     options: PreprocessingOptions,
     vocabulary: Vocabulary,
     maxSeqLen: number
   ): Preprocessor {
-    const preprocessor = new Preprocessor()
-    if (options.tokenizer) preprocessor.tokenizer = options.tokenizer
-    if (options.normalizer) preprocessor.normalizer = options.normalizer
-    if (options.stemmer) preprocessor.stemmer = options.stemmer
-    preprocessor.vocabulary = vocabulary
-    preprocessor.maxSeqLen = maxSeqLen
-    return preprocessor
+    return new Preprocessor(
+      language,
+      maxSeqLen,
+      vocabulary,
+      options.normalizer,
+      options.tokenizer,
+      options.stemmer
+    )
   }
 
   async loadModelInformation(
     options: BotonicPluginNLUOptions
   ): Promise<ModelHandler> {
-    const promises = this.languages.map(lang => getModelInfoFromEnv(lang))
+    const promises = {}
+    this.languages.forEach(lang => (promises[lang] = getModelInfoFromEnv(lang)))
     for (const lang of this.languages) {
       this.modelInfo[lang] = {}
       this.modelInfo[lang].language = lang
-      // Resolving previous promises
       this.modelInfo[lang].model = await promises[lang].model
       const modelData = (await promises[lang].modelData).data
       this.modelInfo[lang].modelData = modelData
       this.modelInfo[lang].preprocessor = this.initPreprocessor(
+        lang,
         options[lang],
         modelData.vocabulary,
         modelData.maxSeqLen
