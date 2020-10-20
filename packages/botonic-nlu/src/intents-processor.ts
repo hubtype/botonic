@@ -9,7 +9,7 @@ export class IntentsProcessor {
     return new IntentsProcessor(flipObject(decoder), decoder)
   }
 
-  static fromData(data: DataSet): IntentsProcessor {
+  static fromDataset(data: DataSet): IntentsProcessor {
     let id = 0
     const encoder = {}
     data.forEach(sample => {

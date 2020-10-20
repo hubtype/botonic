@@ -12,7 +12,7 @@ import { Language } from './language'
 import { readJSON } from './util/file-system'
 
 export class Preprocessor {
-  protected constructor(
+  constructor(
     readonly language: Language,
     readonly maxSeqLen: number,
     readonly vocabulary: Vocabulary,
@@ -81,9 +81,7 @@ export class Preprocessor {
   }
 
   private computeSequence(tokens: string[]): number[] {
-    let sequence = tokens.map(token =>
-      token in this.vocabulary ? this.vocabulary[token] : 0
-    )
+    let sequence = tokens.map(token => this.vocabulary[token] ?? 0)
     sequence = sequence.slice(0, this.maxSeqLen)
     return Array(this.maxSeqLen - sequence.length)
       .fill(0)

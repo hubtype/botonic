@@ -41,8 +41,8 @@ export type OutputSet = Tensor
 /* Intents codification */
 export type IntentEncoder = { [intent: string]: number }
 export type IntentDecoder = { [id: number]: string }
-export type EncodedPrediction = { intentId: number; confidence: number }[]
-export type DecodedPrediction = { intent: string; confidence: number }[]
+export type EncodedPrediction = { intentId: number; confidence: number }
+export type DecodedPrediction = { intent: string; confidence: number }
 
 /* Model Creation */
 export interface ModelData {
@@ -59,7 +59,7 @@ export interface ModelParameters {
   trainableEmbeddings: boolean
 }
 
-export enum ModelTemplates {
+export enum ModelTemplatesType {
   SIMPLE_NN = 'simple-nn',
 }
 

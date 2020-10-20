@@ -12,13 +12,16 @@ import { WordEmbeddingType, WordEmbeddingDimension } from '../types'
 import { Language } from '../language'
 import { downloadIntoPath } from '../util/file-system'
 
-export const isSupportedWordEmbedding = (
+export function isSupportedWordEmbedding(
   locale: Language,
   kind: WordEmbeddingType,
   dimension: WordEmbeddingDimension
-): boolean =>
-  SUPPORTED_EMBEDDINGS[locale] &&
-  SUPPORTED_EMBEDDINGS[locale][kind].includes(dimension)
+): boolean {
+  return (
+    SUPPORTED_EMBEDDINGS[locale] &&
+    SUPPORTED_EMBEDDINGS[locale][kind].includes(dimension)
+  )
+}
 
 export class WordEmbeddingsDBHelper {
   private _embeddingsFilename: string
@@ -36,9 +39,7 @@ export class WordEmbeddingsDBHelper {
       this.isValidWEmbedding = false
       return
     }
-    this._embeddingsFilename = `${kind}-${dimension}d-${locale}`.concat(
-      WE_DB_FILE.EXTENSION
-    )
+    this._embeddingsFilename = `${kind}-${dimension}d-${locale}${WE_DB_FILE.EXTENSION}`
     this._embeddingsAbsolutePath = join(
       GLOBAL_WORD_EMBEDDINGS_PATH,
       this._embeddingsFilename
@@ -47,25 +48,23 @@ export class WordEmbeddingsDBHelper {
   }
 
   private async _downloadIfNotExists(logProcess: boolean): Promise<void> {
+    const log = (msg: string) => logProcess && console.debug(msg)
     if (!existsSync(this._embeddingsAbsolutePath)) {
-      logProcess &&
-        console.debug(
-          `The file '${this._embeddingsFilename}' was not found in your machine.`
-        )
-      logProcess && console.debug('An automatic download will start in brief.')
+      log(
+        `The file '${this._embeddingsFilename}' was not found in your machine.`
+      )
+      log('An automatic download will start in brief.')
       if (!existsSync(GLOBAL_WORD_EMBEDDINGS_PATH)) {
         mkdirSync(GLOBAL_WORD_EMBEDDINGS_PATH)
       }
-      logProcess &&
-        console.debug(`Downloading '${this._embeddingsFilename}'...`)
-      logProcess && console.debug(`Please, wait until the download finishes.\n`)
+      log(`Downloading '${this._embeddingsFilename}'...`)
+      log(`Please, wait until the download finishes.\n`)
       await downloadIntoPath({
         url: `${BOTONIC_WORD_EMBEDDINGS_URL}/${this._embeddingsFilename}`,
         downloadPath: this._embeddingsAbsolutePath,
       })
-      // logProcess && console.debug(res);
     } else {
-      logProcess && console.debug(`Found '${this._embeddingsFilename}'.`)
+      log(`Found '${this._embeddingsFilename}'.`)
     }
   }
 
@@ -91,7 +90,9 @@ export class WordEmbeddingsDBHelper {
     return this._db
   }
 
-  async select(word: string): Promise<{ token: string; vector: number[] }> {
+  async select(
+    word: string
+  ): Promise<{ token: string; vector: number[] } | undefined> {
     const res = await this._statement.get(word)
     if (!res) return undefined
 

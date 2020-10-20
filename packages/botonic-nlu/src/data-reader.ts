@@ -20,7 +20,7 @@ export class DataReader {
       case 'csv':
         return this.readCSV(path)
       default:
-        throw Error('File must be a csv. Path:"' + path + '".')
+        throw Error(`File must be a csv. Path: "${path}".`)
     }
   }
 

@@ -13,7 +13,7 @@ import {
   OutputSet,
   ModelParameters,
   TrainingParameters,
-  ModelTemplates,
+  ModelTemplatesType,
 } from './types'
 import { accuracyScore } from 'machinelearn/metrics'
 
@@ -30,7 +30,7 @@ export class ModelManager {
   }
 
   static async fromModelTemplate(
-    template: ModelTemplates,
+    template: ModelTemplatesType,
     wordEmbeddingsConfig: WordEmbeddingsConfig,
     parameters: ModelParameters
   ): Promise<ModelManager> {
@@ -40,7 +40,7 @@ export class ModelManager {
     const wordEmbeddingsMatrix = wordEmbeddingsManager.matrix
 
     switch (template) {
-      case ModelTemplates.SIMPLE_NN:
+      case ModelTemplatesType.SIMPLE_NN:
       default:
         return new ModelManager(
           new SimpleNN(parameters, wordEmbeddingsMatrix).model
@@ -51,19 +51,20 @@ export class ModelManager {
   async train(parameters: TrainingParameters): Promise<void> {
     const { X, y, batchSize, epochs, validationSplit } = parameters
     await this.model.fit(X, y, {
-      epochs: epochs,
-      batchSize: batchSize,
-      validationSplit: validationSplit,
+      epochs,
+      batchSize,
+      validationSplit,
     })
   }
 
-  predictProbabilities(input: Tensor): EncodedPrediction {
-    const prediction: EncodedPrediction = []
-    const confidences = (this.model.predict(input) as Tensor).dataSync()
-    confidences.forEach((confidence: number, intentId: number) => {
-      prediction.push({ intentId: intentId, confidence: confidence })
-    })
-    return prediction
+  predictProbabilities(input: Tensor): EncodedPrediction[] {
+    const confidences = Array.from(
+      (this.model.predict(input) as Tensor).dataSync()
+    )
+    return confidences.map((confidence: number, intentId: number) => ({
+      intentId,
+      confidence,
+    }))
   }
 
   predict(input: Tensor): number {

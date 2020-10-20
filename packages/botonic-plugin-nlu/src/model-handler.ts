@@ -8,7 +8,6 @@ import { Tensor } from '@tensorflow/tfjs'
 import {
   BotonicPluginNLUOptions,
   ModelInformation,
-  ModelInformationPromises,
   PreprocessingOptions,
 } from './types'
 import { getModelInfoFromEnv } from './environment-utils'

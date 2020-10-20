@@ -14,7 +14,7 @@ import {
   DataSet,
   InputSet,
   OutputSet,
-  ModelTemplates,
+  ModelTemplatesType,
   Vocabulary,
 } from './types'
 import { Language } from './language'
@@ -75,19 +75,16 @@ export class BotonicNLU {
     return intent
   }
 
-  predictProbabilities(sentence: string): DecodedPrediction {
+  predictProbabilities(sentence: string): DecodedPrediction[] {
     const input = tensor([this.preprocessor.preprocess(sentence)])
     const encodedPrediction = this.modelManager.predictProbabilities(input)
-    const decodedPrediction: DecodedPrediction = encodedPrediction.map(
-      intentConfidence => {
-        const intent = this.intentsProcessor.decode(intentConfidence.intentId)
-        return {
-          intent: intent,
-          confidence: intentConfidence.confidence,
-        }
+    return encodedPrediction.map(intentConfidence => {
+      const intent = this.intentsProcessor.decode(intentConfidence.intentId)
+      return {
+        intent: intent,
+        confidence: intentConfidence.confidence,
       }
-    )
-    return decodedPrediction
+    })
   }
 
   loadData(options: {
@@ -146,7 +143,7 @@ export class BotonicNLU {
     )
 
     this.vocabulary = this.preprocessor.vocabulary
-    this.intentsProcessor = IntentsProcessor.fromData(trainSet)
+    this.intentsProcessor = IntentsProcessor.fromDataset(trainSet)
 
     const [xTrain, yTrain] = this.inputOutputSplit(trainSet)
     const [xTest, yTest] = this.inputOutputSplit(testSet)
@@ -166,7 +163,7 @@ export class BotonicNLU {
   }
 
   async createModel(options: {
-    template: ModelTemplates
+    template: ModelTemplatesType
     learningRate: number
     wordEmbeddingsType?: WordEmbeddingType
     wordEmbeddingsDimension?: WordEmbeddingDimension
