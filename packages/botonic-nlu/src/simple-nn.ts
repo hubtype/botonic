@@ -5,25 +5,25 @@ import {
   train,
   layers,
   Tensor,
-} from '@tensorflow/tfjs-node';
-import { ModelParameters } from './types';
+} from '@tensorflow/tfjs-node'
+import { ModelParameters } from './types'
 
 export class SimpleNN {
-  model: Sequential;
+  model: Sequential
 
   constructor(
     private parameters: ModelParameters,
-    private wordEmbeddingsMatrix: Tensor,
+    private wordEmbeddingsMatrix: Tensor
   ) {
-    this._createModel();
+    this._createModel()
   }
 
   private _createModel(): void {
-    this.model = sequential();
-    this._addEmbeddingLayer();
-    this._addLSTMLayer();
-    this._addDenseLayer();
-    this._compile();
+    this.model = sequential()
+    this._addEmbeddingLayer()
+    this._addLSTMLayer()
+    this._addDenseLayer()
+    this._compile()
   }
 
   private _addEmbeddingLayer(): void {
@@ -34,8 +34,8 @@ export class SimpleNN {
         inputLength: this.parameters.maxSeqLen,
         trainable: this.parameters.trainableEmbeddings,
         weights: [this.wordEmbeddingsMatrix],
-      }),
-    );
+      })
+    )
   }
 
   private _addLSTMLayer(): void {
@@ -44,8 +44,8 @@ export class SimpleNN {
         units: 128,
         dropout: 0.3,
         recurrentDropout: 0.3,
-      }),
-    );
+      })
+    )
   }
 
   private _addDenseLayer(): void {
@@ -53,8 +53,8 @@ export class SimpleNN {
       layers.dense({
         units: this.parameters.intentsCount,
         activation: 'softmax',
-      }),
-    );
+      })
+    )
   }
 
   private _compile(): void {
@@ -62,6 +62,6 @@ export class SimpleNN {
       optimizer: train.adam(this.parameters.learningRate),
       loss: 'sparseCategoricalCrossentropy',
       metrics: ['accuracy'],
-    });
+    })
   }
 }

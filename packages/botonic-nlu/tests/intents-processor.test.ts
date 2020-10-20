@@ -1,7 +1,7 @@
-import { IntentsProcessor } from '../src/intents-processor';
-import { INTENTS } from './constants';
+import { IntentsProcessor } from '../src/intents-processor'
+import { INTENTS } from './constants'
 
-const intentsProcessor = IntentsProcessor.fromDecoder(INTENTS);
+const intentsProcessor = IntentsProcessor.fromDecoder(INTENTS)
 
 describe('Intent decoder.', () => {
   test('Checking decoder', () => {
@@ -10,13 +10,13 @@ describe('Intent decoder.', () => {
       '1': 'GetWeather',
       '2': 'PlayMusic',
       '3': 'Greetings',
-    });
-  });
+    })
+  })
 
   test('Decoding intentId', () => {
-    expect(intentsProcessor.decode(3)).toEqual('Greetings');
-  });
-});
+    expect(intentsProcessor.decode(3)).toEqual('Greetings')
+  })
+})
 
 describe('Intent encoder.', () => {
   test('Checking encoder', () => {
@@ -25,10 +25,10 @@ describe('Intent encoder.', () => {
       GetWeather: 1,
       PlayMusic: 2,
       Greetings: 3,
-    });
-  });
+    })
+  })
 
   test('Encoding intent', () => {
-    expect(intentsProcessor.encode('Greetings')).toEqual(3);
-  });
-});
+    expect(intentsProcessor.encode('Greetings')).toEqual(3)
+  })
+})

@@ -1,17 +1,17 @@
-var sqlite3 = require('sqlite3').verbose()
-var fs = require('fs')
+const sqlite3 = require('sqlite3').verbose()
+const fs = require('fs')
 try {
   process.argv[2].match(/.*-.*d-.*.txt/)
   let input = process.argv[2]
   let inputFileName = input.split('.txt')[0]
-  var db = new sqlite3.Database(`./${inputFileName}.db`)
+  const db = new sqlite3.Database(`./${inputFileName}.db`)
   let f = fs.readFileSync(input, 'utf-8')
   let embeddings = f.split('\n')
 
-  db.serialize(function() {
+  db.serialize(function () {
     let table = 'embeddings'
     db.run(`CREATE TABLE ${table} (token TEXT, vector TEXT)`)
-    var stmt = db.prepare(`INSERT INTO ${table} VALUES (?, ?)`)
+    const stmt = db.prepare(`INSERT INTO ${table} VALUES (?, ?)`)
     for (let i = 0; i < embeddings.length; i++) {
       console.log('Current IDX: ', i)
       let splitted = embeddings[i].split(' ')
@@ -21,7 +21,7 @@ try {
       if (token.includes("'")) {
         d = '"'
       }
-      stmt.run(token, vector, function(err, lala) {
+      stmt.run(token, vector, function (err, lala) {
         if (err != null) {
           console.log(`\n\nERR(${token})`, err)
         }

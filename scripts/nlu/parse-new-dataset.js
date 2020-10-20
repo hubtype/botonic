@@ -25,11 +25,11 @@ files.forEach(filePath => {
   })
 })
 
-var csvData = 'feature' + SEPARATOR + 'label' + '\n'
+let csvData = 'feature' + SEPARATOR + 'label' + '\n'
 
 Object.keys(dataset).forEach(intent => {
   const txtPath = join(dirPath, intent + '.txt')
-  var txtData = ''
+  let txtData = ''
   dataset[intent].forEach(sentence => {
     csvData += sentence + SEPARATOR + intent + '\n'
     txtData += sentence + '\n'

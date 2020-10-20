@@ -182,4 +182,4 @@ export type Language =
   | 'yo'
   | 'za'
   | 'zh'
-  | 'zu';
+  | 'zu'

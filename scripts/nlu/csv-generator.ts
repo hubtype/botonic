@@ -20,7 +20,6 @@ export class CsvGenerator {
   }
 
   private getDataFromFile(path: string): string {
-    var data = []
     const extension = path.split('.').pop()
     switch (extension) {
       default:
@@ -29,7 +28,7 @@ export class CsvGenerator {
   }
 
   private getDataFromDirectory(path: string): string {
-    var data = 'feature' + this.SEPARATOR + 'label'
+    let data = 'feature' + this.SEPARATOR + 'label'
     const files = readdirSync(path).filter(
       fileName => fileName.split('.').pop() == 'txt'
     )

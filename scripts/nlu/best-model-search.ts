@@ -2,13 +2,13 @@ const { BotonicNLU } = require('../../packages/botonic-nlu/dist')
 
 const nlu = new BotonicNLU()
 
-var data = nlu.loadData({
+const data = nlu.loadData({
   path: '',
   language: 'en',
   maxSeqLen: 20,
 })
 
-var [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
+const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
   data: data,
   testPercentage: 0.2,
 })
@@ -23,8 +23,8 @@ interface Result {
   accuracy: number
 }
 
-var results: Result[] = []
-var bestResult: Result = {
+const results: Result[] = []
+let bestResult: Result = {
   learningRate: 0.005,
   epochs: 75,
   accuracy: 0.9891485809682805,

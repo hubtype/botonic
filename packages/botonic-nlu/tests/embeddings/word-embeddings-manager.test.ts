@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { CONSTANTS } from '../../src';
-import { WordEmbeddingsManager } from '../../src/embeddings/word-embeddings-manager';
-import { WordEmbeddingsConfig } from '../../src/types';
+import { tensor } from '@tensorflow/tfjs-node'
+import { CONSTANTS } from '../../src'
+import { WordEmbeddingsManager } from '../../src/embeddings/word-embeddings-manager'
+import { WordEmbeddingsConfig } from '../../src/types'
 
 describe('new embeddings matrix', () => {
   it('should generate tensor matrix', async () => {
-    const wordEmbeddingsManager = new WordEmbeddingsManager();
     const config = {
       type: 'glove',
       dimension: 50,
@@ -18,66 +18,65 @@ describe('new embeddings matrix', () => {
         i: 4,
         '!': 5,
       },
-    } as WordEmbeddingsConfig;
-    await wordEmbeddingsManager.generateWordEmbeddingsMatrix(config);
-    const matrix = wordEmbeddingsManager.matrix;
-    const tensorMatrix = wordEmbeddingsManager.wordEmbeddingsMatrix;
+    } as WordEmbeddingsConfig
+    const matrix = (await WordEmbeddingsManager.withConfig(config)).matrix
+
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    expect(matrix[1]).toEqual(todayEmbedding);
-    expect(tensorMatrix.shape[0]).toBe(Object.keys(config.vocabulary).length);
-    expect(tensorMatrix.shape[1]).toBe(config.dimension);
-  });
-});
+    expect(matrix.arraySync()[1]).toEqual(todayEmbedding)
+    expect(matrix.shape[0]).toBe(Object.keys(config.vocabulary).length)
+    expect(matrix.shape[1]).toBe(config.dimension)
+  })
+})
 
 const todayEmbedding = [
-  0.00027751,
-  0.42673,
-  -0.082938,
-  0.27601,
-  0.64721,
-  -0.91728,
-  -0.63471,
-  -0.28023,
-  -0.66653,
-  -0.28436,
-  -0.064249,
-  -0.43626,
-  -0.1083,
-  -0.35818,
-  0.72311,
-  0.65368,
-  -0.29573,
-  0.12007,
-  -0.029959,
-  -0.20594,
-  0.20017,
-  0.16421,
-  0.15202,
-  -0.024855,
-  0.52887,
-  -1.3625,
-  -0.56036,
-  0.17777,
-  -0.091003,
-  0.097549,
-  3.5102,
-  0.10631,
-  0.065602,
-  -0.080777,
-  -0.12553,
-  -0.69932,
-  -0.015068,
-  0.39353,
-  -0.0028195,
-  0.20635,
-  -0.47726,
-  -0.12639,
-  0.29399,
-  0.1,
-  0.00034015,
-  0.62769,
-  -0.45344,
-  0.39615,
-  0.018857,
-  0.17536,
-];
+  0.00027751000015996397,
+  0.4267300069332123,
+  -0.08293800055980682,
+  0.27601000666618347,
+  0.6472100019454956,
+  -0.9172800183296204,
+  -0.6347100138664246,
+  -0.28022998571395874,
+  -0.6665300130844116,
+  -0.28435999155044556,
+  -0.06424900144338608,
+  -0.43626001477241516,
+  -0.10830000042915344,
+  -0.3581799864768982,
+  0.723110020160675,
+  0.6536800265312195,
+  -0.29572999477386475,
+  0.12007000297307968,
+  -0.029959000647068024,
+  -0.20593999326229095,
+  0.20016999542713165,
+  0.1642100065946579,
+  0.15202000737190247,
+  -0.024855000898241997,
+  0.5288699865341187,
+  -1.3624999523162842,
+  -0.5603600144386292,
+  0.1777700036764145,
+  -0.09100300073623657,
+  0.09754899889230728,
+  3.510200023651123,
+  0.10631000250577927,
+  0.06560199707746506,
+  -0.08077699691057205,
+  -0.12553000450134277,
+  -0.6993200182914734,
+  -0.015068000182509422,
+  0.393530011177063,
+  -0.002819499932229519,
+  0.20634999871253967,
+  -0.4772599935531616,
+  -0.1263899952173233,
+  0.29398998618125916,
+  0.10000000149011612,
+  0.0003401499998290092,
+  0.6276900172233582,
+  -0.45344001054763794,
+  0.39614999294281006,
+  0.018857000395655632,
+  0.17535999417304993,
+]

@@ -1,36 +1,36 @@
-import * as os from 'os';
-import { join } from 'path';
+import * as os from 'os'
+import { join } from 'path'
 
-export const NLU_DIR = 'nlu';
-export const UTTERANCES_DIR = 'utterances';
-export const MODELS_DIR = 'models';
-export const MODEL_DATA_FILENAME = 'model-data.json';
-export const MODEL_FILENAME = 'model.json';
-export const ASSETS_DIR = 'assets';
+export const NLU_DIR = 'nlu'
+export const UTTERANCES_DIR = 'utterances'
+export const MODELS_DIR = 'models'
+export const MODEL_DATA_FILENAME = 'model-data.json'
+export const MODEL_FILENAME = 'model.json'
+export const ASSETS_DIR = 'assets'
 
-export const UNKNOWN_TOKEN = '<UNK>';
+export const UNKNOWN_TOKEN = '<UNK>'
 
 export const WE_DB_FILE = Object.freeze({
   EXTENSION: '.db',
   TABLE_NAME: 'embeddings',
   COLUMN_NAME: 'token',
-});
+})
 
 export const BOTONIC_WORD_EMBEDDINGS_URL =
-  'https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com';
+  'https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com'
 
-export const BOTONIC_GLOBAL_DIRNAME = '.botonic';
+export const BOTONIC_GLOBAL_DIRNAME = '.botonic'
 
-export const BOTONIC_GLOBAL_WE_DIRNAME = 'word-embeddings';
+export const BOTONIC_GLOBAL_WE_DIRNAME = 'word-embeddings'
 
 export const GLOBAL_WORD_EMBEDDINGS_PATH = join(
   os.homedir(),
   BOTONIC_GLOBAL_DIRNAME,
-  BOTONIC_GLOBAL_WE_DIRNAME,
-);
+  BOTONIC_GLOBAL_WE_DIRNAME
+)
 
 interface SupportedEmbeddings {
-  [locale: string]: { [kind: string]: number[] };
+  [locale: string]: { [kind: string]: number[] }
 }
 
 export const SUPPORTED_EMBEDDINGS: SupportedEmbeddings = {
@@ -71,13 +71,13 @@ export const SUPPORTED_EMBEDDINGS: SupportedEmbeddings = {
   zh: {
     '10k-fasttext': [300],
   },
-};
+}
 
 export const EXTENSIONS = {
   TXT: '.txt',
   JSON: '.json',
-};
+}
 
 export const ENCODINGS = {
   UTF8: 'utf-8',
-};
+}

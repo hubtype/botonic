@@ -1,24 +1,24 @@
-import { DefaultNormalizer } from '../src/preprocessing-tools/normalizer';
-import { DefaultStemmer } from '../src/preprocessing-tools/stemmer';
-import { DefaultTokenizer } from '../src/preprocessing-tools/tokenizer';
-import { Preprocessor } from '../src/preprocessor';
+import { DefaultNormalizer } from '../src/preprocessing-tools/normalizer'
+import { DefaultStemmer } from '../src/preprocessing-tools/stemmer'
+import { DefaultTokenizer } from '../src/preprocessing-tools/tokenizer'
+import { Preprocessor } from '../src/preprocessor'
 
 describe('Preprocessor Tools', () => {
   test('Normalizing a sentence', () => {
     expect(
-      new DefaultNormalizer().normalize('Today I am going to the office!'),
-    ).toEqual('today i am going to the office!');
-  });
+      new DefaultNormalizer().normalize('Today I am going to the office!')
+    ).toEqual('today i am going to the office!')
+  })
 
   test('Tokenizing a sentence', () => {
     expect(
-      new DefaultTokenizer().tokenize('today i am going to the office!'),
-    ).toEqual(['today', 'i', 'am', 'going', 'to', 'the', 'office', '!']);
-  });
+      new DefaultTokenizer().tokenize('today i am going to the office!')
+    ).toEqual(['today', 'i', 'am', 'going', 'to', 'the', 'office', '!'])
+  })
 
   test('Stemming a sentence', () => {
-    const stemmer = new DefaultStemmer(true);
-    const tokens = ['today', 'i', 'am', 'going', 'to', 'the', 'office', '!'];
+    const stemmer = new DefaultStemmer(true)
+    const tokens = ['today', 'i', 'am', 'going', 'to', 'the', 'office', '!']
     const expectedOutputs = [
       'todai',
       'i',
@@ -28,12 +28,12 @@ describe('Preprocessor Tools', () => {
       'the',
       'offic',
       '!',
-    ];
+    ]
     tokens.forEach((token, i) => {
-      expect(stemmer.stem(token, 'en')).toEqual(expectedOutputs[i]);
-    });
-  });
-});
+      expect(stemmer.stem(token, 'en')).toEqual(expectedOutputs[i])
+    })
+  })
+})
 
 describe('Preprocessor', () => {
   const preprocessor = Preprocessor.fromData(
@@ -51,8 +51,8 @@ describe('Preprocessor', () => {
       normalizer: new DefaultNormalizer(),
       tokenizer: new DefaultTokenizer(),
       stemmer: new DefaultStemmer(),
-    },
-  );
+    }
+  )
 
   test('Generating vocabulary from data', () => {
     expect(preprocessor.vocabulary).toEqual({
@@ -70,8 +70,8 @@ describe('Preprocessor', () => {
       buy: 11,
       these: 12,
       trousers: 13,
-    });
-  });
+    })
+  })
 
   test('Preprocessing a sentence', () => {
     expect(preprocessor.preprocess('I want to book a big table.')).toEqual([
@@ -85,6 +85,6 @@ describe('Preprocessor', () => {
       0,
       8,
       0,
-    ]);
-  });
-});
+    ])
+  })
+})
