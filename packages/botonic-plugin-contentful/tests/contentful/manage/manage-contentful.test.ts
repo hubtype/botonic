@@ -83,6 +83,7 @@ describe('ManageContentful fields', () => {
           "Error calling ManageCms.updateField with locale 'en' on 'button' with id '627QkyJrFo3grJryj0vu6L'. " +
             "Due to: Cannot overwrite field 'text' of entry '627QkyJrFo3grJryj0vu6L'"
         )
+        // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
         expect(e.message).toInclude(
           'because ManageContext.allowOverwrites is false'
         )

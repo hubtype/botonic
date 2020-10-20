@@ -62,7 +62,7 @@ export class EmptyTextException extends Error {
 
 export class NormalizedUtterance {
   /** Without stopwords */
-  stems: string[]
+  readonly stems: string[]
 
   /**
    * @param onlyStopWords: true iff all tokens are stop words

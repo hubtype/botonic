@@ -1,12 +1,28 @@
 import {
   DEFAULT_STOP_WORDS,
-  Normalizer,
-  StemmingBlackList,
+  EmptyTextException,
   Locale,
   NormalizedUtterance,
+  Normalizer,
+  StemmingBlackList,
+  SUPPORTED_LOCALES,
   Word,
-  EmptyTextException,
 } from '../../src/nlp'
+
+test.each<any>(SUPPORTED_LOCALES)(
+  'TEST: consecutive separators %s',
+  (locale: Locale) => {
+    const sut = new Normalizer()
+
+    const utterances = sut.normalize(locale, 'xx!! yy!!')
+
+    expect(utterances.stems).toHaveLength(2)
+    expect(utterances.words).toEqual([
+      new Word('xx', 'xx'),
+      new Word('yy', 'yy'),
+    ])
+  }
+)
 
 test('TEST: sut.normalize stopWord', () => {
   const sut = new Normalizer(undefined, { es: ['stopWórd'] })
