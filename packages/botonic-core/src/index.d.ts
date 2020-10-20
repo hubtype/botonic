@@ -140,7 +140,8 @@ export interface Route {
   type?: StringMatcher
 }
 
-type Routes<R = Route> = R[] | ((_: { input: Input; session: Session }) => R[])
+type RouteRequest = { input: Input; session: Session }
+type Routes<R = Route> = R[] | ((_: RouteRequest) => R[])
 
 // Desk
 
@@ -173,7 +174,7 @@ export declare function getOpenQueues(
 export declare function storeCaseRating(
   session: Session,
   rating: number
-): Promise<any>
+): Promise<{ status: string }>
 
 export declare function getAvailableAgentsByQueue(
   session: Session,
@@ -183,6 +184,7 @@ export declare function getAvailableAgentsByQueue(
 export interface HubtypeAgentsInfo {
   attending_count: number
   email: string
+  idle_count: number
   last_message_sent: string
   status: string
 }
@@ -196,6 +198,7 @@ interface VacationRange {
   id: number
   start_date: number // timestamp
 }
+
 export declare function getAgentVacationRanges(
   session: Session,
   agentParams: { agentId?: string; agentEmail?: string }
