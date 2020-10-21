@@ -5,9 +5,9 @@ title: Prepare the Plugin
 
 Sometimes you may need a specific feature according to your needs and build your own plugin that doesn't exist yet. In order to achieve this:
 
-- You can create your own plugins to be used locally in your project or as a npm package.
-- `package.json` is mandatory.
-- Each plugin has to implement the methods described in this guide.
+- You can create your own plugin with an independent `node.js` package.
+- Each plugin will be a class which needs to implement the two methods described in this guide.
+
 
 ## Naming
 
