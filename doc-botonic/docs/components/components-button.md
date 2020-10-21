@@ -5,7 +5,7 @@ title: Buttons
 
 ## Purpose
 
-The `Button` component is used to display a button during a conversation. The user can click on it and take specific actions instantly. It is very useful for audience interaction. 
+The `Button` component is used to display a button during a conversation. The user can click on it and trigger specific actions instantly. It is very useful for audience interaction as it saves the user the time to manually enter text. 
 
 ## Properties
 

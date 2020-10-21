@@ -11,7 +11,7 @@ For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tre
 
 ## What Does This Plugin Do?
 
-This plugin uses **[Segment](https://segment.com/)** to clean, collect and control customer data. It helps monitor performance, define decision-making processes and identify customers' interests.
+This plugin uses **[Segment](https://segment.com/)** to clean, collect and control customer data. It helps you to monitor performance, define decision-making processes and identify customers' interests.
 
 ## Setup
 
