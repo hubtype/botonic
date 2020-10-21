@@ -1,7 +1,6 @@
 import { Command, flags } from '@oclif/command'
-import { spawn } from 'child_process'
 import * as path from 'path'
-import { track } from '../utils'
+import { track, spawnNpmScript } from '../utils'
 
 export default class Run extends Command {
   static description = 'Serve your bot in your localhost'
@@ -18,7 +17,7 @@ export default class Run extends Command {
 
   static args = []
 
-  async run() {
+  async run(): Promise<void> {
     const botonicNLUPath: string = path.join(
       process.cwd(),
       'node_modules',
@@ -36,16 +35,6 @@ export default class Run extends Command {
       return
     }
     track('Trained with Botonic train')
-    const trainProcess = spawn('npm', ['run', 'train'])
-    trainProcess.stdout.on('data', out => {
-      process.stdout.write(out)
-    })
-    trainProcess.stderr.on('data', stderr => {
-      console.log(`${stderr}`)
-    })
-    trainProcess.on('close', code => {
-      console.log('Finished training')
-      console.log(`Training process exited with code ${code}`)
-    })
+    spawnNpmScript('train', () => 'Finished training')
   }
 }

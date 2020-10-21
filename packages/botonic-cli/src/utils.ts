@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
-import { exec } from 'child_process'
+import { exec, spawn } from 'child_process'
 import Analytics from 'analytics-node'
 
 export let analytics: Analytics
@@ -88,4 +88,26 @@ export async function getGlobalNodeModulesPath() {
     CROSS_PLATFORM_REGEX,
     ''
   )
+}
+
+export function spawnProcess(
+  command: string,
+  args: string[],
+  onClose?: () => string
+): void {
+  const childProcess = spawn(command, args)
+  childProcess.stdout.on('data', out => {
+    process.stdout.write(out)
+  })
+  childProcess.stderr.on('data', stderr => {
+    process.stderr.write(stderr)
+  })
+  childProcess.on('close', code => {
+    onClose && onClose()
+    process.stdout.write(`child process exited with code ${code}`)
+  })
+}
+
+export function spawnNpmScript(script: string, onClose?: () => string): void {
+  spawnProcess('npm', ['run', script], onClose)
 }
