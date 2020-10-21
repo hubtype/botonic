@@ -4,7 +4,8 @@
   "scripts": {
     "build": "webpack --env.target=all --mode=production",
     "start": "webpack-dev-server --env.target=dev --mode=development",
-    "test": "jest"
+    "test": "jest",
+    "train": "ts-node src/nlu/train-model.ts"
   },
   "jest": {
     "rootDir": "tests",
