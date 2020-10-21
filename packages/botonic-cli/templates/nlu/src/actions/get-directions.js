@@ -1,5 +1,5 @@
 import React from 'react'
-import { RequestContext, Text, Location } from '@botonic/react'
+import { RequestContext, Text } from '@botonic/react'
 
 export default class extends React.Component {
   static contextType = RequestContext
@@ -7,12 +7,9 @@ export default class extends React.Component {
   render() {
     return (
       <>
-        <Text>I see that you are quite near from there</Text>
-        <Location>
-          <lat>40.6976701</lat>
-          <long>74.2598702</long>
-        </Location>
+        <Text>I see that you are quite near from there.📍</Text>
         <Text>So i suggest you to take the bus N85 to reach it!</Text>
+        <Text>And remind to put your mask on! 😷</Text>
       </>
     )
   }

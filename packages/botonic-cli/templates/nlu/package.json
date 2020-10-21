@@ -4,7 +4,8 @@
   "scripts": {
     "build": "webpack --env.target=all --mode=production",
     "start": "webpack-dev-server --env.target=dev --mode=development",
-    "test": "jest"
+    "test": "jest",
+    "train": "ts-node src/nlu/train-model.ts"
   },
   "jest": {
     "rootDir": "tests",
@@ -19,7 +20,8 @@
   "dependencies": {
     "@babel/runtime": "^7.6.2",
     "@botonic/plugin-nlu": "~0.14.0",
-    "@botonic/react": "~0.14.0"
+    "@botonic/react": "~0.14.0",
+    "natural": "^2.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

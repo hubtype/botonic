@@ -4,14 +4,16 @@ import { RequestContext } from '@botonic/react'
 
 export default class extends React.Component {
   static contextType = RequestContext
-
+  static async botonicInit({ input }) {
+    return { input }
+  }
   render() {
     return (
       <>
-        <Text>You're welcome human!</Text>
-        <Text>Just let me know if you need anything else!</Text>
+        <Text>It seems today is a rainny day. 🌧</Text>
         <Text>
-          See you, and remember to play with lots of training phrases! 🤗
+          But hey! Don't be sad, rainny days are perfect for staying home
+          enjoying a good movie! 🎬
         </Text>
       </>
     )
