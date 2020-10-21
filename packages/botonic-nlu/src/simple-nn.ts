@@ -24,6 +24,7 @@ export class SimpleNN {
     this._addLSTMLayer()
     this._addDenseLayer()
     this._compile()
+    this.model.summary()
   }
 
   private _addEmbeddingLayer(): void {

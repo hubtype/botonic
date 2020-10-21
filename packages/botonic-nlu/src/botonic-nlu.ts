@@ -170,7 +170,7 @@ export class BotonicNLU {
       maxSeqLen: this.maxSeqLen,
       learningRate: options.learningRate,
       intentsCount: this.intentsProcessor.intentsCount,
-      trainableEmbeddings: options.trainableEmbeddings || false,
+      trainableEmbeddings: options.trainableEmbeddings || true,
     }
     this.modelManager = await ModelManager.fromModelTemplate(
       options.template,
