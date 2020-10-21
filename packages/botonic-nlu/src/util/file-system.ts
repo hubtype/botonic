@@ -24,11 +24,11 @@ export async function downloadIntoPath({
       fileWriter.on('error', reject)
     })
   } catch (e) {
-    let error =
+    throw new Error(
       `${e.response.status as string}: ${e.response.statusText as string}` +
-      '\n'
-    error += `Cannot download url "${url}" into path "${downloadPath}"`
-    throw new Error(error)
+        '\n' +
+        `Cannot download url "${url}" into path "${downloadPath}"`
+    )
   }
 }
 

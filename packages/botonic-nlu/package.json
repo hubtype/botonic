@@ -3,13 +3,14 @@
   "version": "0.15.0-alpha.7",
   "main": "dist/index.js",
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
+    "build": "rm -rf dist && ../../node_modules/.bin/tsc",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
     "start:dev": "nodemon",
     "start": "npm run build && node dist/index.js",
     "test": "jest",
-    "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'"
+    "prepare": "node ../../preinstall.js"
   },
   "keywords": [],
   "author": "",
