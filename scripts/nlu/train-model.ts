@@ -1,6 +1,7 @@
-const { BotonicNLU } = require('../../packages/botonic-nlu/dist')
+import { BotonicNLU } from '../../packages/botonic-nlu/src/botonic-nlu'
+import { ModelTemplatesType } from '../../packages/botonic-nlu/src/types'
 
-const nlu = new BotonicNLU()
+const nlu = new BotonicNLU({})
 
 const data = nlu.loadData({
   path: '',
@@ -15,7 +16,7 @@ const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
 
 ;(async () => {
   await nlu.createModel({
-    template: 'simple-nn',
+    template: ModelTemplatesType.SIMPLE_NN,
     learningRate: 5e-3,
   })
   await nlu.train(xTrain, yTrain, { epochs: 25 })

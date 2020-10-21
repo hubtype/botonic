@@ -1,6 +1,7 @@
-const { BotonicNLU } = require('../../packages/botonic-nlu/dist')
+import { BotonicNLU } from '../../packages/botonic-nlu/src/botonic-nlu'
+import { ModelTemplatesType } from '../../packages/botonic-nlu/src/types'
 
-const nlu = new BotonicNLU()
+const nlu = new BotonicNLU({})
 
 const data = nlu.loadData({
   path: '',
@@ -35,7 +36,10 @@ let bestResult: Result = {
     for (const ep of PARAMS.EPOCHS) {
       console.log('Learning rate:', lr)
       console.log('Epochs:', ep)
-      await nlu.createModel({ template: 'simple-nn', learningRate: lr })
+      await nlu.createModel({
+        template: ModelTemplatesType.SIMPLE_NN,
+        learningRate: lr,
+      })
       await nlu.train(xTrain, yTrain, { epochs: ep })
       const acc = await nlu.evaluate(xTest, yTest)
       const result: Result = { learningRate: lr, epochs: ep, accuracy: acc }

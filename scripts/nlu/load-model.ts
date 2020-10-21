@@ -1,8 +1,8 @@
 import { join } from 'path'
 
-const { BotonicNLU } = require('../../packages/botonic-nlu/dist')
+import { BotonicNLU } from '../../packages/botonic-nlu/src/botonic-nlu'
 
-const nlu = new BotonicNLU()
+const nlu = new BotonicNLU({})
 
 const MODEL_DIR = ''
 const MODEL_DATA_PATH = join(MODEL_DIR, 'model-data.json')
