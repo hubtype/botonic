@@ -15,7 +15,7 @@ export class WordEmbeddingsManager {
       config.dimension,
       config.language
     )
-    if (!dbHelper.isValidWEmbedding) throw Error('Word Embedding not valid.')
+
     await dbHelper.initialize({ logProcess: true })
 
     const maxInitValue = 1

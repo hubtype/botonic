@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { tensor } from '@tensorflow/tfjs-node'
 import { CONSTANTS } from '../../src'
 import { WordEmbeddingsManager } from '../../src/embeddings/word-embeddings-manager'
 import { WordEmbeddingsConfig } from '../../src/types'

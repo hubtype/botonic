@@ -28,7 +28,6 @@ export class WordEmbeddingsDBHelper {
   private _embeddingsAbsolutePath: string
   private _db: Database
   private _statement: Statement
-  isValidWEmbedding: boolean
 
   constructor(
     kind: WordEmbeddingType,
@@ -36,15 +35,15 @@ export class WordEmbeddingsDBHelper {
     locale: Language
   ) {
     if (!isSupportedWordEmbedding(locale, kind, dimension)) {
-      this.isValidWEmbedding = false
-      return
+      throw new Error(
+        `Word embedding config not supported for: ${locale} ${kind} ${dimension}`
+      )
     }
     this._embeddingsFilename = `${kind}-${dimension}d-${locale}${WE_DB_FILE.EXTENSION}`
     this._embeddingsAbsolutePath = join(
       GLOBAL_WORD_EMBEDDINGS_PATH,
       this._embeddingsFilename
     )
-    this.isValidWEmbedding = true
   }
 
   private async _downloadIfNotExists(logProcess: boolean): Promise<void> {
@@ -68,12 +67,14 @@ export class WordEmbeddingsDBHelper {
     }
   }
 
-  async initialize({ logProcess }: { logProcess?: boolean }): Promise<void> {
-    if (this.isValidWEmbedding) {
-      await this._downloadIfNotExists(logProcess)
-      this._connect()
-      this._prepareStatement()
-    }
+  async initialize({
+    logProcess = true,
+  }: {
+    logProcess: boolean
+  }): Promise<void> {
+    await this._downloadIfNotExists(logProcess)
+    this._connect()
+    this._prepareStatement()
   }
 
   private _connect(): void {

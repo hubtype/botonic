@@ -24,12 +24,12 @@ export async function downloadIntoPath({
       fileWriter.on('error', reject)
     })
   } catch (e) {
-    console.error(`Error downloading the file from: ${url}`)
-    console.error(
-      `${e.response.status as string}: ${e.response.statusText as string}`
-    )
+    let error =
+      `${e.response.status as string}: ${e.response.statusText as string}` +
+      '\n'
+    error += `Cannot download url "${url}" into path "${downloadPath}"`
+    throw new Error(error)
   }
-  return null
 }
 
 export function createDir(path: string): void {

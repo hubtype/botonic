@@ -10,7 +10,7 @@ export class DataReader {
     } else if (lstatSync(path).isDirectory()) {
       return this.getDataFromDirectory(path)
     } else {
-      throw Error('Path must be a directory or a file. Path:"' + path + '".')
+      throw new Error(`Path must be a directory or a file. Path: "${path}".`)
     }
   }
 
@@ -20,7 +20,7 @@ export class DataReader {
       case 'csv':
         return this.readCSV(path)
       default:
-        throw Error(`File must be a csv. Path: "${path}".`)
+        throw new Error(`File must be a csv. Path: "${path}".`)
     }
   }
 
@@ -44,10 +44,8 @@ export class DataReader {
     )
 
     if (files.length == 0) {
-      throw Error(
-        'Directory must contain a txt file for each intent. Path:"' +
-          path +
-          '".'
+      throw new Error(
+        `Directory must contain a txt file for each intent. Path: "${path}".`
       )
     }
 
