@@ -5,7 +5,7 @@
     "build": "webpack --env.target=all --mode=production",
     "start": "webpack-dev-server --env.target=dev --mode=development",
     "test": "jest",
-    "train": "ts-node src/nlu/train-model.ts"
+    "train": "node_modules/.bin/ts-node src/nlu/train-model.ts"
   },
   "jest": {
     "rootDir": "tests",
@@ -18,9 +18,9 @@
     }
   },
   "dependencies": {
-    "@botonic/plugin-dialogflow": "~0.14.0",
+    "@botonic/plugin-dialogflow": "0.15.0-alpha.7",
     "@babel/runtime": "^7.6.2",
-    "@botonic/react": "~0.14.0"
+    "@botonic/react": "0.15.0-alpha.7"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
