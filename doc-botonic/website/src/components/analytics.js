@@ -8,6 +8,9 @@ function Analytics() {
   return (
     <Head>
       <script type='text/javascript'>{segmentSnippet()}</script>
+      <script
+        src={`https://www.googleoptimize.com/optimize.js?id=${process.env.GOOGLE_OPTIMIZE_ID}`}
+      ></script>
     </Head>
   )
 }
