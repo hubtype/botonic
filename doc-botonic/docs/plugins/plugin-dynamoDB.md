@@ -16,7 +16,7 @@ This plugin writes tracks about the user's behavior to a DynamoDB table.
 ### Setup
 
 1. Run `npm i @botonic/plugin-dynamodb` to install the plugin.
-2. Add it to the `src/plugins.js` file:
+2. Add it to the `src/docs/plugins.js` file:
 
 ```javascript
 import * as dynamodb from '@botonic/plugin-dynamodb'

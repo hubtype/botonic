@@ -1,8 +1,7 @@
 ---
-id: project 
+id: project
 title: Understanding the Project
 ---
-  
 
 ## The CLI
 
@@ -16,16 +15,17 @@ To start a new bot, you must run `botonic new testBot nlu`
 
 Botonic offers a list of templates to help you set up a chatbot rapidly.
 
-| Template | Description |
-|--|--|
-| **[Blank](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/blank)** | Template with empty actions. The bot will always respond with the default `404` action "I don't understand you" when you test it. |
-| **[Tutorial](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/tutorial)** | Template with comments to learn by reading the source files. |
-|**[Childs](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/childs)** | Simple example on how childRoutes work. It allows you to build a bot with deep flows and navigate a decision tree using interactive elements like buttons. It is useful when you want to guide the user through a conversation with predefined flows that consist of several steps, such as surveys, pre-qualifiers of leads before human handoff, on-boarding processes, FAQs (when you have a very limited set of options).|
-| **[Intent](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/intent)**| Bot that uses external AI like DialogFlow.|
-|**[Custom Webchat](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/custom-webchat)**| Customizable webchat that can be embedded in your website.|
-|**[Dynamic Carousel](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/dynamic-carousel)**| Bot that gets data from an external API and renders a Carousel. Carousels are horizontal scrollable elements with image, title and buttons for users to trigger an action.|
-|**[Human handoff](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/handoff)** |Simple bot that transfers the conversation to Hubtype Desk.|
-|**[NLU](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/nlu)**| Starter template for your project with NLU capabilities.| 
+| Template                                                                                                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **[Blank](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/blank)**                       | Template with empty actions. The bot will always respond with the default `404` action "I don't understand you" when you test it.                                                                                                                                                                                                                                                                                             |
+| **[Tutorial](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/tutorial)**                 | Template with comments to learn by reading the source files.                                                                                                                                                                                                                                                                                                                                                                  |
+| **[Childs](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/childs)**                     | Simple example on how childRoutes work. It allows you to build a bot with deep flows and navigate a decision tree using interactive elements like buttons. It is useful when you want to guide the user through a conversation with predefined flows that consist of several steps, such as surveys, pre-qualifiers of leads before human handoff, on-boarding processes, FAQs (when you have a very limited set of options). |
+| **[Intent](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/intent)**                     | Bot that uses external AI like DialogFlow.                                                                                                                                                                                                                                                                                                                                                                                    |
+| **[Custom Webchat](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/custom-webchat)**     | Customizable webchat that can be embedded in your website.                                                                                                                                                                                                                                                                                                                                                                    |
+| **[Dynamic Carousel](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/dynamic-carousel)** | Bot that gets data from an external API and renders a Carousel. Carousels are horizontal scrollable elements with image, title and buttons for users to trigger an action.                                                                                                                                                                                                                                                    |
+| **[Human handoff](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/handoff)**             | Simple bot that transfers the conversation to Hubtype Desk.                                                                                                                                                                                                                                                                                                                                                                   |
+| **[NLU](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/nlu)**                           | Starter template for your project with NLU capabilities.                                                                                                                                                                                                                                                                                                                                                                      |
+
 ## Project Structure
 
 - `routes.js`: Here you'll define routes, which maps user inputs and payloads to actions. You can also use imported subroutes from other files.
@@ -40,9 +40,9 @@ Botonic offers a list of templates to help you set up a chatbot rapidly.
 
 ## Routes and Actions
 
-Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View **[Routes](/concepts/routes)** for more details.
+Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View **[Routes](/docs/concepts/routes)** for more details.
 
-Actions are where you define the behavior of your bot. You can add an Action by creating a new `.js` file inside `src/actions`. View **[Actions](/concepts/actions)** and **[Components](/components/components)** for more details.
+Actions are where you define the behavior of your bot. You can add an Action by creating a new `.js` file inside `src/actions`. View **[Actions](/docs/concepts/actions)** and **[Components](/docs/components/components)** for more details.
 
 ## Natural Language Understanding
 
@@ -50,7 +50,7 @@ You can go a long way capturing user inputs using regular expressions, but it ob
 
 NLU lets you capture user inputs by `intent` instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California like?" and "Do you know if it's sunny today in California?" to the intent `GetWeather` and the parameter `city=California`. You can then map that intent to an action using a route.
 
-Botonic has its own **[NLU module](/plugins/plugin-nlu)** which covers intent and entity recognition tasks.
+Botonic has its own **[NLU module](/docs/plugins/plugin-nlu)** which covers intent and entity recognition tasks.
 
 ### Utterances and Intents
 

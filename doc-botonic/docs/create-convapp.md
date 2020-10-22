@@ -16,7 +16,7 @@ See the [**Installation section**](getting-started).
 2. Select the **blank** template and run `cd <botname>`.
 3. Test it in your browser with `npm run start` or `botonic serve`.
 
-Your blank project is created with its basic structure. For more information, see the **[Understanding the Project](/project/)** section.
+Your blank project is created with its basic structure. For more information, see the **[Understanding the Project](/docs/concepts/project)** section.
 
 ## Add a Welcome Message
 
@@ -184,7 +184,7 @@ I don't understand
 I need help
 ```
 
-4. Open `src/plugins.js` and add `@botonic/plugin-nlu` into your plugins array.
+4. Open `src/docs/plugins.js` and add `@botonic/plugin-nlu` into your plugins array.
 
    **Your final `plugins.js` file should look like this:**
 

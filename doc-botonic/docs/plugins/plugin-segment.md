@@ -16,9 +16,9 @@ This plugin uses **[Segment](https://segment.com/)** to clean, collect and contr
 ## Setup
 
 1. Run `npm install --save @botonic/plugin-segment` to install the plugin.
-2. Add it to the `src/plugins.js` file:
+2. Add it to the `src/docs/plugins.js` file:
 
-**src/plugins.js**
+**src/docs/plugins.js**
 
 ```javascript
 export const plugins = [

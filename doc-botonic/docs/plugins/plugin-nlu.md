@@ -46,9 +46,9 @@ Under `nlu`, create a new file called `nlu.config.json`. This file defines the l
 
 ### Require the Plugin
 
-After setting all your necessary parameters, require the plugin in `src/plugins.js`. You must set its `id` to **nlu** for the plugin to function.
+After setting all your necessary parameters, require the plugin in `src/docs/plugins.js`. You must set its `id` to **nlu** for the plugin to function.
 
-**src/plugins.js**
+**src/docs/plugins.js**
 
 ```javascript
 import nluConfig from './nlu/nlu.config.json'
