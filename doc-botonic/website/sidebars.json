@@ -35,7 +35,7 @@
       "components/messagetemplate",
       "components/multichannel",
       "components/webchatsettings",
-      "components/whatsapptemp"
+      "components/whatsapp-template"
     ],
 
     "Testing": [
