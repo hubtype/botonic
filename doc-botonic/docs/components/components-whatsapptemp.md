@@ -1,5 +1,5 @@
 ---
-id: whatsapptemp
+id: whatsapp-template
 title: WhatsApp Template
 ---
 
@@ -18,7 +18,7 @@ The `whatsapptemplate` component allows you to send WhatsApp templates in the bo
 
 ## Example
 
-Example of `./actions/example-whatsappTemplate.js` 
+Example of `./actions/example-whatsapp-template.js` 
 
 ```javascript
 import React from 'react'
