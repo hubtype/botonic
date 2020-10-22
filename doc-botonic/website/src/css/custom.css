@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Inter:wght@400;500;600;700;800;900&display=fallback');
+
 /**
  * You can override the default Infima variables here.
  * Note: this is not a complete list of --ifm- variables.
@@ -11,3 +13,66 @@
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
 }
+
+@tailwind base;
+
+@tailwind components;
+
+// Typography
+.h1 {
+  @apply text-4xl font-extrabold leading-tight tracking-tighter;
+}
+
+.h2 {
+  @apply text-3xl font-extrabold leading-tight tracking-tighter;
+}
+
+.h3 {
+  @apply text-3xl font-bold leading-tight;
+}
+
+.h4 {
+  @apply text-2xl font-bold leading-snug tracking-tight;
+}
+
+@screen md {
+  .h1 {
+    @apply text-5xl;
+  }
+
+  .h2 {
+    @apply text-4xl;
+  }
+}
+
+// Buttons
+:focus,
+button:focus,
+.btn:focus,
+.btn-sm:focus {
+  @apply outline-none shadow-outline;
+}
+.btn,
+.btn-sm {
+  @apply font-medium inline-flex items-center justify-center border border-transparent rounded-sm leading-snug transition duration-150 ease-in-out;
+}
+
+.btn {
+  @apply px-8 py-3;
+}
+
+.btn-sm {
+  @apply px-4 py-2;
+}
+
+@responsive {
+  .rtl {
+    direction: rtl;
+  }
+}
+
+[x-cloak] {
+  display: none;
+}
+
+@tailwind utilities;
