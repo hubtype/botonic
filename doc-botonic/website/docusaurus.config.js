@@ -5,7 +5,7 @@ module.exports = {
   title: 'Botonic Docs',
   tagline: 'Botonic Documentation',
   url: 'https://botonic.io/',
-  favicon: 'img/favicon.ico',
+  favicon: 'favicon.ico',
   organizationName: 'hubtype',
   projectName: 'Botonic Docs',
   scripts: ['https://buttons.github.io/buttons.js'],
