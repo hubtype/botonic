@@ -7,12 +7,23 @@
     "deploy": "docusaurus deploy"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-alpha.56",
-    "@docusaurus/preset-classic": "^2.0.0-alpha.56",
+    "@botonic/react": "^0.14.0",
+    "@docusaurus/core": "^2.0.0-alpha.66",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.66",
     "@material-ui/core": "^4.10.2",
+    "aos": "^2.3.4",
+    "autoprefixer": "^10.0.1",
     "classnames": "^2.2.6",
+    "dotenv-webpack": "^4.0.0",
+    "file-loader": "^6.1.1",
+    "postcss-import": "^12.0.1",
     "react": "^16.10.2",
-    "react-dom": "^16.10.2"
+    "react-dom": "^16.10.2",
+    "react-syntax-highlighter": "^15.2.1",
+    "sass": "^1.27.0",
+    "sass-loader": "^10.0.3",
+    "style-loader": "^2.0.0",
+    "tailwindcss": "^1.9.2"
   },
   "browserslist": {
     "production": [

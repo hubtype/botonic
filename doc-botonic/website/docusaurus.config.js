@@ -1,19 +1,22 @@
+const path = require('path')
+
 module.exports = {
   baseUrl: '/',
   title: 'Botonic Docs',
   tagline: 'Botonic Documentation',
   url: 'https://botonic.io/',
-  favicon: 'img/botonic-logo.png',
+  favicon: 'img/favicon.ico',
   organizationName: 'hubtype',
   projectName: 'Botonic Docs',
   scripts: ['https://buttons.github.io/buttons.js'],
+  onBrokenLinks: 'warn',
   presets: [
     [
       '@docusaurus/preset-classic',
       {
         docs: {
           path: '../docs',
-          routeBasePath: '',
+          routeBasePath: '/docs',
           sidebarPath: require.resolve('./sidebars.json'),
         },
         theme: {
@@ -22,8 +25,8 @@ module.exports = {
       },
     ],
   ],
+  plugins: [path.resolve(__dirname, 'custom-webpack-config-plugin')],
   themeConfig: {
-    defaultDarkMode: false,
     algolia: {
       apiKey: process.env.ALGOLIA_API_KEY,
       indexName: process.env.INDEX_NAME,
@@ -33,19 +36,26 @@ module.exports = {
       logo: {
         alt: 'Botonic Logo',
         src: 'img/botonic-logo.png',
-        href: 'https://botonic.io',
+        href: '/',
       },
-      links: [
-        { to: 'welcome', label: 'User Guide', position: 'right' },
-        { to: 'concepts/actions', label: 'Reference Guide', position: 'right' },
-        { to: 'plugins/botonic-plugins', label: 'Plugins', position: 'right' },
-        { to: 'faq', label: 'FAQ', position: 'right' },
+      items: [
+        { to: '/docs/welcome', label: 'User Guide', position: 'right' },
+        {
+          to: '/docs/concepts/actions',
+          label: 'Reference Guide',
+          position: 'right',
+        },
+        {
+          to: '/docs/plugins/botonic-plugins',
+          label: 'Plugins',
+          position: 'right',
+        },
+        { to: '/docs/faq', label: 'FAQ', position: 'right' },
       ],
     },
     footer: {
       style: 'dark',
       links: [
-        {},
         {
           title: 'About Us',
           items: [
@@ -59,9 +69,6 @@ module.exports = {
             },
           ],
         },
-        {},
-        {},
-        {},
         {
           title: 'Community',
           items: [
@@ -75,7 +82,6 @@ module.exports = {
             },
           ],
         },
-        {},
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Hubtype. Built with Docusaurus.`,
     },
