@@ -14,7 +14,7 @@ export default class extends React.Component {
       <>
         <Text>Hey! What a nice pic! Thanks 😊</Text>
         <Text>Let me share some files with you:</Text>
-        <Image src='https://botonic.io/images/botonic_react_logo-p-500.png'>
+        <Image src='https://botonic.io/img/botonic-logo.png'>
           <Button url='https://botonic.io'>Visit Botonic</Button>
         </Image>
         <Image src='https://media3.giphy.com/media/gtPaaCbkxpmWk/giphy.gif' />

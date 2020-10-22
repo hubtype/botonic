@@ -1,4 +1,7 @@
-import { routes, locales, config } from '../src/'
+import { config } from '../src/'
+import { routes } from '../src/routes'
+import { locales } from '../src/locales'
+
 import {
   BotonicInputTester,
   BotonicOutputTester,

@@ -30,3 +30,32 @@ jobs:
       run: (cd ./packages/$PACKAGE && npm run build)
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
+  botonic-cli-templates-tutorial-tests:
+    name: Botonic cli template tests
+    runs-on: ubuntu-latest
+    env:
+      PACKAGE: botonic-cli
+    steps:
+      - name: Checking out to current branch
+        uses: actions/checkout@v1
+      - name: Setting up node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Setting up cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: tutorial blank build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/$PACKAGE/templates/blank
+        run: (cd TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial template build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/$PACKAGE/templates/tutorial
+        run: (cd TEST_PATH && npm install -D && npm run build && npm run test)

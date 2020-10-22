@@ -1,4 +1,8 @@
-import { routes, plugins, locales, config } from '../src/'
+import { config } from '../src/'
+import { routes } from '../src/routes'
+import { locales } from '../src/locales'
+import { plugins } from '../src/plugins'
+
 import {
   BotonicInputTester,
   BotonicOutputTester,
