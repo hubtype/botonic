@@ -1,5 +1,6 @@
 import * as cms from '@botonic/plugin-contentful'
 import { msgsToBotonic } from '@botonic/react'
+import React from 'react'
 
 const converter = new cms.BotonicMsgConverter()
 

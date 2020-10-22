@@ -52,10 +52,50 @@ jobs:
       - name: tutorial blank build & test
         env:
           BOTONIC_DISABLE_MIXPANEL: 1
-          TEST_PATH: packages/$PACKAGE/templates/blank
-        run: (cd TEST_PATH && npm install -D && npm run build && npm run test)
+          TEST_PATH: packages/botonic-cli/templates/blank
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial childs build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/childs
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial custom-webchat build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/custom-webchat
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial dynamic-carousel build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/dynamic-carousel
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial dynamic-carousel build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/dynamic-carousel
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial dynamodb build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/dynamodb
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial handoff build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/handoff
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial intent build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/intent
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
+      - name: tutorial nlu build & test
+        env:
+          BOTONIC_DISABLE_MIXPANEL: 1
+          TEST_PATH: packages/botonic-cli/templates/nlu
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)
       - name: tutorial template build & test
         env:
           BOTONIC_DISABLE_MIXPANEL: 1
-          TEST_PATH: packages/$PACKAGE/templates/tutorial
-        run: (cd TEST_PATH && npm install -D && npm run build && npm run test)
+          TEST_PATH: packages/botonic-cli/templates/tutorial
+        run: (cd $TEST_PATH && npm install -D && npm run build && npm run test)

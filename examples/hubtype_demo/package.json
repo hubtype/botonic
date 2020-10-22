@@ -2,7 +2,7 @@
   "scripts": {
     "build": "webpack --env.target=all --mode=production",
     "build_development": "webpack --env.target=node --mode=development",
-    "build_unit_tests": "tsc -b tests/tsconfig.json",
+    "build_ts": "tsc",
     "lint": "node_modules/.bin/eslint_d --cache --fix --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
     "start": "webpack-dev-server --env.target=dev  --mode=development",
     "test": "jest"
