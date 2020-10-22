@@ -5,11 +5,10 @@ title: Webchat Settings
 
 The `Webchat settings` component can be appended at the end of a message to change Webchat properties dynamically.
 
-
 ## Properties
 
 | Property          | Type    | Description                           | Required | Default value |
-|-------------------|---------|---------------------------------------|----------|---------------|
+| ----------------- | ------- | ------------------------------------- | -------- | ------------- |
 | theme             | Object  | Refer theme options                   | No       | -             |
 | blockInputs       | Object  | Refer to block inputs                 | No       | -             |
 | persistentMenu    | Object  | Refer to persistent menu              | No       | -             |
@@ -21,8 +20,8 @@ The `Webchat settings` component can be appended at the end of a message to chan
 ## Example
 
 ```javascript
-import React from "react";
-import { Text, WebchatSettings } from "@botonic/react";
+import React from 'react'
+import { Text, WebchatSettings } from '@botonic/react'
 
 export default class extends React.Component {
   render() {
@@ -46,4 +45,4 @@ export default class extends React.Component {
 }
 ```
 
-> Note: you can get a more detailed example in the **[Webchat](/concepts/webchat)** section.
+> Note: you can get a more detailed example in the **[Webchat](/docs/concepts/webchat)** section.

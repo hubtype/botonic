@@ -16,9 +16,9 @@ This plugin allows you to track the user interaction with the bot or the bot's b
 ## Setup
 
 1. Run `npm install --save @botonic/plugin-google-analytics` to install the plugin.
-2. Add it to the `src/plugins.js` file:
+2. Add it to the `src/docs/plugins.js` file:
 
-**src/plugins.js**
+**src/docs/plugins.js**
 
 ```javascript
 export const plugins = [
@@ -36,7 +36,7 @@ export const plugins = [
 ## Use
 
 The tracking needs to be done manually as enabling this plugin does not track any user interaction or bot's behaviour by default.
-You can do the tracking inside the `botonicInit` method, `render` method or even inside the **[Webchat listeners](/concepts/webchat#webchat-listeners)**.
+You can do the tracking inside the `botonicInit` method, `render` method or even inside the **[Webchat listeners](/docs/concepts/webchat#webchat-listeners)**.
 
 ```javascript
 static async botonicInit({ input, session, params, lastRoutePath, plugins }) {

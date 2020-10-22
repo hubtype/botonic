@@ -47,7 +47,7 @@ Example of the same input object after being processed by the plugin:
    npm i --save @botonic/plugin-inbenta
    ```
 
-2. Add it to the `src/plugins.js` file by using the **API_KEY** and **API_SECRET** from Inbenta:
+2. Add it to the `src/docs/plugins.js` file by using the **API_KEY** and **API_SECRET** from Inbenta:
 
    ```javascript
    export const plugins = [
