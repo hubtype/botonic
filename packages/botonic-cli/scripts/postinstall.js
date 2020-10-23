@@ -21,12 +21,12 @@ try {
   //Some users don't have the right permissions to
   //create dirs at instal time. We delay it until
   //they run their first command.
-  if (process.env.BOTONIC_DISABLE_MIXPANEL !== '1') {
+  if (process.env.BOTONIC_DISABLE_ANALYTICS !== '1') {
     const Analytics = require('analytics-node')
     var analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
     analytics.track({
       event: 'Installed Botonic CLI',
-      anonymousId: Math.round(Math.random() * 100000000)
+      anonymousId: Math.round(Math.random() * 100000000),
     })
   }
 }
