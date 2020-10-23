@@ -1,7 +1,7 @@
 import React, { createRef } from 'react'
 import { render } from 'react-dom'
 
-import { Webchat } from './webchat'
+import { Webchat } from './webchat/webchat'
 import { HubtypeService, INPUT } from '@botonic/core'
 import { msgToBotonic } from './msg-to-botonic'
 import merge from 'lodash.merge'

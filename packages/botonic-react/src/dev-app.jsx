@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 
 import { ReactBot } from './react-bot'
 import { WebchatApp } from './webchat-app'
-import { WebchatDev } from './webchat'
+import { WebchatDev } from './webchat/webchat-dev'
 import merge from 'lodash.merge'
 
 export class DevApp extends WebchatApp {
