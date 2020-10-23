@@ -30,7 +30,7 @@ You can load your dataset with Botonic NLU from two different sources:
   see you soon!
   ```
 
-- A CSV file containing each sentence under a column named `features` and each intent under a column named `label`. **Important:** Separator must be a comma.
+- A CSV file containing each sentence under a column named `features` and each intent under a column named `label`. **Important:** Separator can be specified when reading the data.
 
   > **E.g:**
 
@@ -61,7 +61,12 @@ const dataPath = `path/to/your/dataset-directory/`
 // or alternatively
 // const dataPath = 'path/to/your/dataset/file.csv'
 
-const data = nlu.loadData({ path: dataPath, language: 'en', maxSeqLen: 20 })
+const data = nlu.readData({
+  path: dataPath,
+  language: 'en',
+  maxSeqLen: 20,
+  csvSeparator: ',',
+})
 
 const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
   data: data,
@@ -115,16 +120,20 @@ function createCustomModel(maxSeqLen: number): Sequential | LayersModel {
 }
 
 const nlu = new BotonicNLU({ tokenizer: tokenizer })
-const data = nlu.loadData({
-  path: join(process.cwd(), 'src', 'nlu', 'utterances', 'en'),
+
+const data = nlu.readData({
+  path: dataPath,
   language: 'en',
   maxSeqLen: 20,
+  csvSeparator: ',',
 })
+
 const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
   data: data,
   testPercentage: 0.1,
   stratify: true,
 })
+
 nlu.model = createCustomModel(20)
 ;(async () => {
   await nlu.train(xTrain, yTrain, { epochs: 8 })
@@ -155,7 +164,7 @@ const nlu = new BotonicNLU({})
 
 Alternatively, BotonicNLU can be initialized with your own preprocessing engines. Each of these **must** be a class or object implementing the corresponding methods:
 
-- **Normalizer**
+- **Normalizer**: transforms text into a single canonical form that guarantees consistency before applying more data preprocessing.
 
 ```ts
 interface Normalizer {
@@ -163,7 +172,7 @@ interface Normalizer {
 }
 ```
 
-- **Tokenizer**
+- **Tokenizer**: splits the text into smaller units called tokens.
 
 ```ts
 interface Tokenizer {
@@ -171,7 +180,7 @@ interface Tokenizer {
 }
 ```
 
-- **Stemmer**
+- **Stemmer**: reduces a word to its stem or root format.
 
 ```ts
 interface Stemmer {
@@ -204,15 +213,16 @@ type DataSet = {
 
 ---
 
-#### **BotonicNLU.loadData**
+#### **BotonicNLU.readData**
 
-It allows you to read your data and convert it into the default structure.
+It reads your data and converts it into the default structure.
 
 ```ts
-loadData(options: {
+readData(options: {
     path: string;
     language: Language;
     maxSeqLen: number;
+    csvSeparator: string;
 }): DataSet;
 ```
 
@@ -220,7 +230,8 @@ Parameters:
 
 - **`path`**: path to your dataset directory (or file).
 - **`language`**: main language of the data.
-- **`maxSeqLen`**: number specifying the maximum length of each sequence to be trained.
+- **`maxSeqLen`**: number specifying the maximum length of each sequence of tokens.
+- **`csvSeparator`**: column separator for csv files ('`,`' as default).
 
 Returns:
 
@@ -240,7 +251,7 @@ const data = nlu.loadData({
 
 #### **BotonicNLU.trainTestSplit**
 
-It splits the loaded dataset in two sets: one for training the model and the other for evaluating it.
+It splits the loaded dataset in two sets: one for training the model and the other for testing it.
 
 ```ts
 trainTestSplit(options: {
@@ -271,8 +282,8 @@ const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
 
 ### Handling your model
 
-The core of Botonic NLU resides in generating new models by using neural networks. You can use predefined NN templates or create your own networks based on tfjs.
-Once a model has been trained, the generated results to be used later to run new predictions are stored under a directory holding the following information:
+Botonic NLU generates NLU model using neural networks (NN). You can use predefined NN templates or create your own networks based on tfjs.
+Once a model has been trained, it will be stored in a directory to enable running new predictions in future sessions. The directory will hold the following information:
 
 > - **model.json**: topology of the neural network.
 > - **weights.bin**: weights of the trained model.
@@ -287,7 +298,7 @@ export interface ModelData {
   maxSeqLen: number
   vocabulary: Vocabulary
 }
-// where Vocabulary and IntentDecoder are:
+// ... where Vocabulary and IntentDecoder are:
 export declare type Vocabulary = {
   [word: string]: number
 }
@@ -300,7 +311,11 @@ export declare type IntentDecoder = {
 
 #### **BotonicNLU.createModel**
 
-It initializes a model given one of the default templates.
+It creates a model from the chosen Botonic NLU Model template.
+
+The available Botonic NLU Model templates are:
+
+- **simple-nn**: a simple Neural Network that uses Word Embeddings to create an embedding layer followed by an LSTM layer.
 
 ```ts
 createModel(options: {
@@ -317,8 +332,8 @@ Parameters:
 - **`template`**: a constant from `ModelTemplatesType` to load a predefined neural network template.
 - **`learningRate`**: the amount that the weights are updated during training. Typical values range from 0.0001 up to 1.
 - **`wordEmbeddingsType`**: training with `glove` or `fasttext` pretrained embeddings.
-- **`wordEmbeddingsDimension`**: dimension of word embeddings (`50` for glove, `300` for fasttext).
-- **`trainableEmbeddings`**: whether to froze or not values of word embeddings matrix. If you have a large dataset, we suggest you to set this to `false`.
+- **`wordEmbeddingsDimension`**: dimension of word embeddings (defaults are `50` for `glove` and `300` for `fasttext`).
+- **`trainableEmbeddings`**: whether the values of word embeddings matrix will be frozen (default is `false`). If you have a large dataset, we suggest you to set this to `false`.
 
 Returns:
 
@@ -412,7 +427,7 @@ await nlu.loadModel('path/to/model.json', 'path/to/model-data.json')
 
 #### **BotonicNLU.saveModel**
 
-Save generated results into directory.
+Save generated model in the specified path.
 
 ```ts
 saveModel(path?: string): Promise<void>
@@ -420,7 +435,7 @@ saveModel(path?: string): Promise<void>
 
 Parameters:
 
-- **`path`**: path to directory to contain the generated model. _By default will be stored under the directory `/nlu/models/` from within the directory you are running the script._
+- **`path`**: path to directory where the model will be stored. _By default will be stored under the directory `/nlu/models/` from within the directory you are running the script._
 
 Returns:
 
