@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { DataReader } from '../src/data-reader'
+import { DatasetReader } from '../src/data-reader'
 import { UTTERANCES_DIR } from './constants'
 
 const TEST_SAMPLE = {
@@ -8,26 +8,29 @@ const TEST_SAMPLE = {
 }
 
 describe('Reading data.', () => {
-  const dataReader = new DataReader()
   const csvPath = join(UTTERANCES_DIR, 'data.csv')
 
   test('Number of samples read from csv.', () => {
-    expect(dataReader.readData(csvPath)).toHaveLength(30)
+    expect(DatasetReader.readData(csvPath, { csvSeparator: ',' })).toHaveLength(
+      30
+    )
   })
 
   test('Data from csv contains a specific sample.', () => {
-    expect(dataReader.readData(csvPath)).toContainEqual(
-      expect.objectContaining(TEST_SAMPLE)
-    )
+    expect(
+      DatasetReader.readData(csvPath, { csvSeparator: ',' })
+    ).toContainEqual(expect.objectContaining(TEST_SAMPLE))
   })
 
   test('Number of samples read from directory.', () => {
-    expect(dataReader.readData(UTTERANCES_DIR)).toHaveLength(30)
+    expect(
+      DatasetReader.readData(UTTERANCES_DIR, { csvSeparator: ',' })
+    ).toHaveLength(30)
   })
 
   test('Data from directory contains a specific sample.', () => {
-    expect(dataReader.readData(UTTERANCES_DIR)).toContainEqual(
-      expect.objectContaining(TEST_SAMPLE)
-    )
+    expect(
+      DatasetReader.readData(UTTERANCES_DIR, { csvSeparator: ',' })
+    ).toContainEqual(expect.objectContaining(TEST_SAMPLE))
   })
 })

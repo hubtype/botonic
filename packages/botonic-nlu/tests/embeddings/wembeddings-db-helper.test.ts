@@ -6,12 +6,9 @@ describe('Word Embeddings DB Helper', () => {
   const SUPPORTED_LANGUAGE = 'en'
 
   it('Word embedding not supported', () => {
-    const dbHelper = new WordEmbeddingsDBHelper(
-      '10k-fasttext',
-      50,
-      UNSUPPORTED_LANGUAGE
-    )
-    expect(dbHelper.isValidWEmbedding).toBe(false)
+    expect(() => {
+      new WordEmbeddingsDBHelper('10k-fasttext', 50, UNSUPPORTED_LANGUAGE)
+    }).toThrowError(Error)
   })
 
   it('Word embedding supported, connection to DB initialized', async () => {
