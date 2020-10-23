@@ -5,7 +5,7 @@ Array [
   <message
     delay={0}
     indexMode="number"
-    markdown={false}
+    markdown={0}
     newkey={0}
     type="text"
     typing={0}
@@ -17,7 +17,7 @@ Array [
   <message
     delay={0}
     indexMode="number"
-    markdown={false}
+    markdown={0}
     newkey={1}
     type="text"
     typing={0}
@@ -34,7 +34,7 @@ Array [
   <message
     delay={0}
     indexMode="number"
-    markdown={false}
+    markdown={0}
     newkey={0}
     type="text"
     typing={0}
@@ -48,7 +48,7 @@ Array [
   <message
     delay={0}
     indexMode="number"
-    markdown={false}
+    markdown={0}
     newkey={1}
     type="text"
     typing={0}
@@ -67,7 +67,7 @@ Array [
   <message
     delay={0}
     indexMode="number"
-    markdown={false}
+    markdown={0}
     newkey={0}
     type="text"
     typing={0}
@@ -81,7 +81,7 @@ Array [
   <message
     delay={0}
     indexMode="number"
-    markdown={false}
+    markdown={0}
     newkey={1}
     type="text"
     typing={0}

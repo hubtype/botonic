@@ -4,7 +4,7 @@ exports[`Multichannel text just text 1`] = `
 <message
   delay={0}
   indexMode="number"
-  markdown={false}
+  markdown={0}
   type="text"
   typing={0}
 >
@@ -16,7 +16,7 @@ exports[`Multichannel text with buttons as array 1`] = `
 <message
   delay={0}
   indexMode="number"
-  markdown={false}
+  markdown={0}
   type="text"
   typing={0}
 >
@@ -34,7 +34,7 @@ exports[`Multichannel text with buttons plain 1`] = `
 <message
   delay={0}
   indexMode="number"
-  markdown={false}
+  markdown={0}
   type="text"
   typing={0}
 >
@@ -52,7 +52,7 @@ exports[`Multichannel text with replies as array 1`] = `
 <message
   delay={0}
   indexMode="number"
-  markdown={false}
+  markdown={0}
   type="text"
   typing={0}
 >
@@ -68,7 +68,7 @@ exports[`Multichannel text with replies plain 1`] = `
 <message
   delay={0}
   indexMode="number"
-  markdown={false}
+  markdown={0}
   type="text"
   typing={0}
 >

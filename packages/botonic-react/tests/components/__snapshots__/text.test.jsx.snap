@@ -3,7 +3,7 @@
 exports[`Text Component Just one Text 1`] = `
 <message
   delay={0}
-  markdown={true}
+  markdown={1}
   type="text"
   typing={0}
 >
@@ -15,7 +15,7 @@ exports[`Text Component N Text with N button 1`] = `
 Array [
   <message
     delay={0}
-    markdown={true}
+    markdown={1}
     type="text"
     typing={0}
   >
@@ -30,7 +30,7 @@ Array [
   </message>,
   <message
     delay={0}
-    markdown={true}
+    markdown={1}
     type="text"
     typing={0}
   >
@@ -50,7 +50,7 @@ exports[`Text Component N Text with N replies 1`] = `
 Array [
   <message
     delay={0}
-    markdown={true}
+    markdown={1}
     type="text"
     typing={0}
   >
@@ -65,7 +65,7 @@ Array [
   </message>,
   <message
     delay={0}
-    markdown={true}
+    markdown={1}
     type="text"
     typing={0}
   >
@@ -84,7 +84,7 @@ Array [
 exports[`Text Component Text with 1 button 1`] = `
 <message
   delay={0}
-  markdown={true}
+  markdown={1}
   type="text"
   typing={0}
 >
@@ -100,7 +100,7 @@ exports[`Text Component Text with 1 button 1`] = `
 exports[`Text Component Text with 1 reply 1`] = `
 <message
   delay={0}
-  markdown={true}
+  markdown={1}
   type="text"
   typing={0}
 >
@@ -116,7 +116,7 @@ exports[`Text Component Text with 1 reply 1`] = `
 exports[`Text Component Text with N button 1`] = `
 <message
   delay={0}
-  markdown={true}
+  markdown={1}
   type="text"
   typing={0}
 >
@@ -137,7 +137,7 @@ exports[`Text Component Text with N button 1`] = `
 exports[`Text Component Text with N replies 1`] = `
 <message
   delay={0}
-  markdown={true}
+  markdown={1}
   type="text"
   typing={0}
 >
