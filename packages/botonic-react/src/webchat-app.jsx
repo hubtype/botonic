@@ -195,6 +195,7 @@ export class WebchatApp {
       defaultDelay,
       defaultTyping,
       storage,
+      storageKey,
       onInit,
       onOpen,
       onClose,
@@ -214,6 +215,7 @@ export class WebchatApp {
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
     storage = storage || this.storage
+    storageKey = storageKey || this.storageKey
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -233,6 +235,7 @@ export class WebchatApp {
         enableUserInput={enableUserInput}
         enableAnimations={enableAnimations}
         storage={storage}
+        storageKey={storageKey}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
         onInit={(...args) => this.onInitWebchat(...args)}

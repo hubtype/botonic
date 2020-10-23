@@ -159,6 +159,7 @@ const createUser = () => {
   }
 }
 
+// eslint-disable-next-line complexity
 export const Webchat = forwardRef((props, ref) => {
   const {
     webchatState,
@@ -191,22 +192,18 @@ export const Webchat = forwardRef((props, ref) => {
   const isOnline = useNetwork()
   const getThemeProperty = _getThemeProperty(theme)
 
-  const getStorage = () => {
-    const storage = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.storage,
-      props.storage
-    )
-    if (storage === undefined) return localStorage
-    return storage
-  }
-
+  const storage = props.storage === undefined ? localStorage : props.storage
+  const storageKey =
+    typeof props.storageKey === 'function'
+      ? props.storageKey()
+      : props.storageKey
   const [botonicState, saveState, writeError] = useStorageState(
-    getStorage(),
-    'botonicState'
+    storage,
+    storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
   )
 
   const saveWebchatState = webchatState => {
-    getStorage() &&
+    storage &&
       saveState({
         messages: webchatState.messagesJSON,
         session: webchatState.session,

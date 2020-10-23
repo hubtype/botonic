@@ -111,6 +111,7 @@ export interface WebchatArgs {
   persistentMenu?: PersistentMenuProps
   setLocale: (locale: string, session: core.Session) => string
   storage?: Storage
+  storageKey?: any
   theme?: ThemeProps
 }
 

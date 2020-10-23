@@ -45,3 +45,34 @@ describe('TEST: storage', () => {
     expect(sessionStorage.getItem('botonicState')).toBeNull()
   })
 })
+
+describe('TEST: storageKey', () => {
+  afterEach(() => {
+    localStorage.clear()
+    sessionStorage.clear()
+  })
+
+  it('Stores botonicState in the localStorage key defined in the settings', async () => {
+    await act(async () => {
+      TestRenderer.create(<Webchat storageKey='myCustomKey' />)
+    })
+    expect(localStorage.getItem('botonicState')).toBeNull()
+    expect(localStorage.getItem('myCustomKey')).not.toBeNull()
+  })
+
+  it('Stores botonicState in the localStorage key returned if storageKey is a function', async () => {
+    await act(async () => {
+      TestRenderer.create(<Webchat storageKey={() => 'myCustomKey'} />)
+    })
+    expect(localStorage.getItem('botonicState')).toBeNull()
+    expect(localStorage.getItem('myCustomKey')).not.toBeNull()
+  })
+
+  it('Stores botonicState in the default localStorage key if storageKey is null', async () => {
+    await act(async () => {
+      TestRenderer.create(<Webchat storageKey={null} />)
+    })
+    expect(localStorage.getItem('botonicState')).not.toBeNull()
+    expect(localStorage.getItem('myCustomKey')).toBeNull()
+  })
+})
