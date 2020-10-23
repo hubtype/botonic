@@ -94,8 +94,7 @@ export function msgsToBotonic(
   customMessageTypes?: CustomMessageType[]
 ): React.ReactNode
 
-export interface WebchatAppArgs {
-  appId?: string
+export interface WebchatArgs {
   blockInputs?: BlockInputOption[]
   coverComponent?: CoverComponentOptions
   defaultDelay?: number
@@ -104,13 +103,19 @@ export interface WebchatAppArgs {
   enableAttachments?: boolean
   enableEmojiPicker?: boolean
   enableUserInput?: boolean
+  getString?: (stringId: string, session: core.Session) => string
   onClose?: (app: WebchatApp, args: any) => void
   onInit?: (app: WebchatApp, args: any) => void
   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
   onOpen?: (app: WebchatApp, args: any) => void
   persistentMenu?: PersistentMenuProps
+  setLocale: (locale: string, session: core.Session) => string
   storage?: Storage
   theme?: ThemeProps
+}
+
+export interface WebchatAppArgs extends WebchatArgs {
+  appId?: string
   visibility?: () => boolean
 }
 
@@ -199,3 +204,4 @@ export class DevApp extends WebchatApp {
 }
 
 export * from './components'
+export * from './webchat'

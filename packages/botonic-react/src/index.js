@@ -1,4 +1,4 @@
-export { Webchat } from './webchat'
+export { Webchat, getBotonicApp } from './webchat/index.js'
 export { RequestContext, WebchatContext } from './contexts'
 export { NodeApp } from './node-app'
 export { DevApp } from './dev-app'
