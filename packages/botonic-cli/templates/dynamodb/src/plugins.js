@@ -7,7 +7,7 @@ export const plugins = [
       env: 'dev',
       accessKeyId: 'YOUR AWS ACCESS KEY HERE',
       secretAccessKey: 'YOUR AWS SECRET KEY HERE',
-      region: 'FOR EXAMPLE:eu-west-1',
+      region: 'eu-west-1',
     },
   },
 ]

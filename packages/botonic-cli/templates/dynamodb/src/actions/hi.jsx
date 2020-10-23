@@ -6,7 +6,11 @@ export default class extends React.Component {
     const user = session.user.id
     const botId = session.bot.id
 
-    plugins.track.track(botId, user, { arg1: 'val1' })
+    try {
+      await plugins.track.track(botId, user, { arg1: 'val1' })
+    } catch (e) {
+      console.error(e)
+    }
   }
   render() {
     return <Text>Hi</Text>
