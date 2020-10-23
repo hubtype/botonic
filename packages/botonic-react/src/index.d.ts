@@ -110,6 +110,7 @@ export interface WebchatAppArgs {
   onOpen?: (app: WebchatApp, args: any) => void
   persistentMenu?: PersistentMenuProps
   storage?: Storage
+  storageKey?: any
   theme?: ThemeProps
   visibility?: () => boolean
 }

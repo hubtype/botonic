@@ -40,6 +40,7 @@ export const WEBCHAT = {
     BORDER_RADIUS_TOP_CORNERS: '6px 6px 0px 0px',
     ELEMENT_WIDTH: 222,
     ELEMENT_MARGIN_RIGHT: 6,
+    STORAGE_KEY: 'botonicState',
   },
   CUSTOM_PROPERTIES: {
     webviewStyle: 'webview.style',
@@ -109,7 +110,6 @@ export const WEBCHAT = {
     enableCarouselArrows: 'carousel.enableArrows',
     customCarouselLeftArrow: 'carousel.arrow.left',
     customCarouselRightArrow: 'carousel.arrow.right',
-    storage: 'storage',
   },
 }
 
