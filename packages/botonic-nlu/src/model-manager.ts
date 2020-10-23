@@ -48,12 +48,11 @@ export class ModelManager {
     }
   }
 
-  async train(parameters: TrainingParameters): Promise<void> {
-    const { X, y, batchSize, epochs, validationSplit } = parameters
-    await this.model.fit(X, y, {
-      epochs,
-      batchSize,
-      validationSplit,
+  async train(params: TrainingParameters): Promise<void> {
+    await this.model.fit(params.x, params.y, {
+      epochs: params.epochs,
+      batchSize: params.batchSize,
+      validationSplit: params.validationSplit,
     })
   }
 
@@ -75,9 +74,9 @@ export class ModelManager {
     return intentId
   }
 
-  evaluate(X: InputSet, y: OutputSet): number {
+  evaluate(x: InputSet, y: OutputSet): number {
     const prediction = (this.model.predict(
-      X
+      x
     ) as Tensor).arraySync() as number[][]
 
     const yPred: number[] = prediction.map(confidences =>

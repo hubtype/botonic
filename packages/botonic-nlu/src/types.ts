@@ -65,7 +65,7 @@ export enum ModelTemplatesType {
 
 /* Model Training */
 export interface TrainingParameters {
-  X: InputSet
+  x: InputSet
   y: OutputSet
   epochs: number
   batchSize: number

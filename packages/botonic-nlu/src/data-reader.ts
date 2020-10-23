@@ -1,12 +1,15 @@
-import { csvParse } from 'd3'
 import { lstatSync, readFileSync, readdirSync } from 'fs'
 import { join } from 'path'
 import { DataSet } from './types'
 
-export class DataReader {
-  readData(path: string): DataSet {
+export interface Configuration {
+  csvSeparator?: string
+}
+
+export class DatasetReader {
+  static readData(path: string, config: Configuration): DataSet {
     if (lstatSync(path).isFile()) {
-      return this.readFile(path)
+      return this.readFile(path, config)
     } else if (lstatSync(path).isDirectory()) {
       return this.getDataFromDirectory(path)
     } else {
@@ -14,29 +17,46 @@ export class DataReader {
     }
   }
 
-  private readFile(path: string): DataSet {
+  private static readFile(path: string, config: Configuration): DataSet {
     const extension = this.getExtension(path)
     switch (extension) {
       case 'csv':
-        return this.readCSV(path)
+        return this.readCSV(path, config.csvSeparator)
       default:
-        throw new Error(`File must be a csv. Path: "${path}".`)
+        throw new Error(`Unable to read ${extension} files.`)
     }
   }
 
-  private getExtension(path: string): string {
+  private static getExtension(path: string): string {
     return path.split('.').pop()
   }
 
-  private readCSV(path: string): DataSet {
-    const text = readFileSync(path, 'utf-8')
-    const info = csvParse(text)
-    return info.map(sample => {
-      return { label: sample.label, feature: sample.feature }
-    })
+  static readCSV(path: string, separator = ';'): DataSet {
+    const content = readFileSync(path, 'utf-8')
+    const lines = content.split('\n')
+    const columns = lines[0].split(separator)
+
+    const data = lines.slice(1).map((line, lineNum) => {
+      const values = line.split(separator)
+
+      if (values.length != columns.length) {
+        throw Error(
+          `Invalid number of columns at line: ${lineNum + 2} (Expected: ${
+            columns.length
+          }, Recieved: ${values.length}).`
+        )
+      } else {
+        const lineData = {}
+        columns.forEach((column, i) => {
+          lineData[column] = values[i]
+        })
+        return lineData
+      }
+    }) as DataSet
+    return data
   }
 
-  private getDataFromDirectory(path: string): DataSet {
+  static getDataFromDirectory(path: string): DataSet {
     const data: DataSet = []
 
     const files = readdirSync(path).filter(

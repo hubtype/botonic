@@ -3,7 +3,7 @@ import { shuffle } from './util/object-tools'
 import { Preprocessor } from './preprocessor'
 import { ModelManager } from './model-manager'
 import { IntentsProcessor } from './intents-processor'
-import { DataReader } from './data-reader'
+import { DatasetReader } from './data-reader'
 import {
   DecodedPrediction,
   WordEmbeddingType,
@@ -36,7 +36,6 @@ export class BotonicNLU {
   private modelManager: ModelManager
   private preprocessor: Preprocessor
   private intentsProcessor: IntentsProcessor
-  private dataReader = new DataReader()
 
   constructor({
     normalizer = new DefaultNormalizer(),
@@ -86,14 +85,17 @@ export class BotonicNLU {
     })
   }
 
-  loadData(options: {
+  readData(options: {
     path: string
     language: Language
     maxSeqLen: number
+    csvSeparator?: string
   }): DataSet {
     this.language = options.language
     this.maxSeqLen = options.maxSeqLen
-    return this.dataReader.readData(options.path)
+    return DatasetReader.readData(options.path, {
+      csvSeparator: options.csvSeparator,
+    })
   }
 
   trainTestSplit(options: {
@@ -189,7 +191,7 @@ export class BotonicNLU {
     }
   ): Promise<void> {
     const parameters = {
-      X: x,
+      x: x,
       y: y,
       epochs: options?.epochs || 10,
       batchSize: options?.batchSize || 8,

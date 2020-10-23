@@ -1,6 +1,6 @@
 import { join } from 'path'
 
-import { BotonicNLU } from '../../packages/botonic-nlu/src/botonic-nlu'
+import { BotonicNLU } from '../../packages/botonic-nlu'
 
 const nlu = new BotonicNLU({})
 
