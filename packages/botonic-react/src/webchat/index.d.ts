@@ -1,4 +1,4 @@
-import { WebchatArgs } from '../index'
+import { WebchatApp, WebchatArgs } from '../index'
 import * as React from 'react'
 import { RefObject } from 'react'
 
@@ -15,3 +15,5 @@ export interface WebchatDevProps extends WebchatProps {
   }
 }
 export const WebChatDev: React.ForwardRefExoticComponent<WebchatDevProps>
+
+export function getBotonicApp(): WebchatApp
