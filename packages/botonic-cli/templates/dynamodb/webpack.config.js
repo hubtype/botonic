@@ -67,8 +67,6 @@ const babelLoaderConfig = {
   use: {
     loader: 'babel-loader',
     options: {
-      //to avoid "exports is not defined" (https://github.com/babel/babel/issues/8900 )
-      sourceType: 'unambiguous',
       cacheDirectory: true,
       presets: ['@babel/preset-env', '@babel/react'],
       plugins: [
