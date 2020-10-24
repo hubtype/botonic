@@ -17,6 +17,7 @@ export class DevApp extends WebchatApp {
     enableAttachments,
     enableUserInput,
     enableAnimations,
+    shadowDOM,
     storage,
     storageKey,
     onInit,
@@ -34,6 +35,7 @@ export class DevApp extends WebchatApp {
       enableAttachments,
       enableUserInput,
       enableAnimations,
+      shadowDOM,
       storage,
       storageKey,
       onInit,
@@ -56,6 +58,7 @@ export class DevApp extends WebchatApp {
       enableAttachments,
       enableUserInput,
       enableAnimations,
+      shadowDOM,
       storage,
       storageKey,
       onInit,
@@ -72,6 +75,7 @@ export class DevApp extends WebchatApp {
     enableAttachments = enableAttachments || this.enableAttachments
     enableUserInput = enableUserInput || this.enableUserInput
     enableAnimations = enableAnimations || this.enableAnimations
+    shadowDOM = shadowDOM || this.shadowDOM
     storage = storage || this.storage
     storageKey = storageKey || this.storageKey
     this.onInit = onInit || this.onInit
@@ -90,6 +94,7 @@ export class DevApp extends WebchatApp {
         enableAttachments={enableAttachments}
         enableUserInput={enableUserInput}
         enableAnimations={enableAnimations}
+        shadowDOM={shadowDOM}
         storage={storage}
         storageKey={storageKey}
         getString={(stringId, session) => this.bot.getString(stringId, session)}
