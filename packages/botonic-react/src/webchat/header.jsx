@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import React, { useContext } from 'react'
-import { Flex } from 'rebass'
 import styled from 'styled-components'
 
 import { COLORS, ROLES, WEBCHAT } from '../constants'
@@ -8,7 +7,8 @@ import { WebchatContext } from '../contexts'
 import { resolveImage } from '../util/environment'
 import { ConditionalWrapper } from '../util/react'
 
-const Header = styled(Flex)`
+const Header = styled.div`
+  display: flex;
   background: linear-gradient(
     90deg,
     ${COLORS.BLEACHED_CEDAR_PURPLE} 0%,
@@ -19,7 +19,7 @@ const Header = styled(Flex)`
   z-index: 2;
 `
 
-const ImageContainer = styled(Flex)`
+const ImageContainer = styled.div`
   padding: 10px;
   align-items: center;
 `
@@ -29,20 +29,23 @@ const Image = styled.img`
   border-radius: 50%;
 `
 
-const TextContainer = styled(Flex)`
+const TextContainer = styled.div`
+  display: flex;
   flex-direction: column;
   justify-content: center;
   flex: 1 1 auto;
 `
 
-const Title = styled(Flex)`
+const Title = styled.div`
+  display: flex;
   font-family: inherit;
   font-size: 15px;
   font-weight: bold;
   color: ${COLORS.SOLID_WHITE};
 `
 
-const Subtitle = styled(Flex)`
+const Subtitle = styled.div`
+  display: flex;
   font-family: inherit;
   font-size: 11px;
   color: ${COLORS.SOLID_WHITE};
