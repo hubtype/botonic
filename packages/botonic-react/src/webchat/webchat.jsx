@@ -12,8 +12,11 @@ import styled from 'styled-components'
 import UAParser from 'ua-parser-js'
 import { useAsyncEffect } from 'use-async-effect'
 import { v4 as uuidv4 } from 'uuid'
-
+import root from 'react-shadow/styled-components'
 import { Audio, Document, Image, Text, Video } from '../components'
+import { isMobile, params2queryString, INPUT } from '@botonic/core'
+import { WebchatContext, RequestContext } from '../contexts'
+import { TypingIndicator } from './components/typing-indicator'
 import { Handoff } from '../components/handoff'
 import { normalizeWebchatSettings } from '../components/webchat-settings'
 import {
@@ -887,7 +890,7 @@ export const Webchat = forwardRef((props, ref) => {
     )
   }
 
-  return (
+  const WebchatComponent = (
     <WebchatContext.Provider
       value={{
         sendText,
@@ -955,4 +958,8 @@ export const Webchat = forwardRef((props, ref) => {
       )}
     </WebchatContext.Provider>
   )
+
+  const shadowDOM =
+    typeof props.shadowDOM === 'function' ? props.shadowDOM() : props.shadowDOM
+  return shadowDOM ? <root.div>{WebchatComponent}</root.div> : WebchatComponent
 })

@@ -17,6 +17,7 @@ export class WebchatApp {
     enableAttachments,
     enableUserInput,
     enableAnimations,
+    shadowDOM,
     defaultDelay,
     defaultTyping,
     storage,
@@ -36,6 +37,7 @@ export class WebchatApp {
     this.enableAttachments = enableAttachments
     this.enableUserInput = enableUserInput
     this.enableAnimations = enableAnimations
+    this.shadowDOM = shadowDOM
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
     this.storage = storage
@@ -199,6 +201,7 @@ export class WebchatApp {
       enableUserInput,
       enableAnimations,
       enableEmojiPicker,
+      shadowDOM,
       defaultDelay,
       defaultTyping,
       storage,
@@ -219,6 +222,7 @@ export class WebchatApp {
     enableAttachments = enableAttachments || this.enableAttachments
     enableUserInput = enableUserInput || this.enableUserInput
     enableAnimations = enableAnimations || this.enableAnimations
+    shadowDOM = shadowDOM || this.shadowDOM
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
     storage = storage || this.storage
@@ -241,6 +245,7 @@ export class WebchatApp {
         enableAttachments={enableAttachments}
         enableUserInput={enableUserInput}
         enableAnimations={enableAnimations}
+        shadowDOM={shadowDOM}
         storage={storage}
         storageKey={storageKey}
         defaultDelay={defaultDelay}
