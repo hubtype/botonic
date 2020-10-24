@@ -107,7 +107,7 @@ export interface WebchatArgs {
   enableAttachments?: boolean
   enableEmojiPicker?: boolean
   enableUserInput?: boolean
-  shadowDOM?: boolean
+  shadowDOM?: boolean | (() => boolean)
   getString?: (stringId: string, session: core.Session) => string
   onClose?: (app: WebchatApp, args: any) => void
   onInit?: (app: WebchatApp, args: any) => void
