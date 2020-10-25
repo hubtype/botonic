@@ -11,6 +11,70 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.15.0] - 2020-26-10
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - New botonic.io [website](https://github.com/hubtype/botonic/pull/1014).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - New webchat features:
+
+    - Added new [`target`](https://github.com/hubtype/botonic/pull/970) prop to `Button` component to define the behavior to open links.
+    - Added new [`WhatsappTemplate`](https://github.com/hubtype/botonic/pull/972) component for Webchat.
+    - New [`getBotonicApp()`](https://github.com/hubtype/botonic/pull/1018) to access `Botonic` methods.
+    - Add a new webchat setting [shadowDOM](https://github.com/hubtype/botonic/pull/1020) that indicates whether the whole webchat component should be encapsulated in a shadow DOM node.
+    - Add a new webchat setting [`storageKey`](https://github.com/hubtype/botonic/pull/1019) that indicates what key name to use in order to store the webchat state in localStorage (or sessionStorage).
+    
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+  - [Improvements](https://github.com/hubtype/botonic/pull/985) in Content.validate of text & shortText fields
+    - Validate text.text also if content has no keywords (it could be accessed through a button)
+    - Before, when shortText was empty, the contentful driver set it with the value of the name field (to ensure buttons did not show blank texts). Now this is managed by the Button model, so that MessageContent.validate() can report it.
+    - New [CMS method](https://github.com/hubtype/botonic/pull/1002) to deliver a content from id when type is unknown.
+    - Improved [ContentsValidator](https://github.com/hubtype/botonic/pull/1001). Better logs and get a list of errors.
+    - Added NLP support for German.
+
+### Changed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - [Improved script](https://github.com/hubtype/botonic/pull/971) to automatically bump versions for Botonic packages (it also updates references to other Botonic dependencies).
+  - Improved documentation
+
+* [@botonic/nlu](https://www.npmjs.com/package/@botonic/nlu)
+
+  - Refactored and migrated NLU engine to Typescript. Read the new docs [here](https://github.com/hubtype/botonic/blob/master/packages/botonic-nlu/README.md).
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+  - Allow passing properties to [CoverComponent](https://github.com/hubtype/botonic/pull/899).
+  - Remove Webchat `user` references in favor of [`session.user`](https://github.com/hubtype/botonic/pull/988).
+  - Improved [types](https://github.com/hubtype/botonic/pull/999) for Webchat and Webchat Context.
+
+
+- [@botonic/plugin-nlu](https://www.npmjs.com/package/@botonic/plugin-nlu)
+
+  - Refactored and migrated plugin to Typescript. Read the new docs [here](https://github.com/hubtype/botonic/blob/master/packages/botonic-plugin-nlu/README.md).
+
+### Fixed
+
+- [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - [Fixed](https://github.com/hubtype/botonic/pull/1015) imports in templates which were broken after 0.14.0 change in entry files.
+  - Added validation of templates and examples in CI
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - `session` properties now are [merged and updated](https://github.com/hubtype/botonic/pull/973) correctly.
+  - Avoid [customMessage to crash](https://github.com/hubtype/botonic/pull/1000) if they have bad children. Some bots may store no-react objects in children.
+  - [Fixed](https://github.com/hubtype/botonic/pull/1017/) error appearing in some tests: `Received true for a non-boolean attribute markdown`. Caused by styled-components.
+
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+  - Check that contentful button targets are available.  
+
 ## [0.14.0] - 2020-01-10
 
 ### Added
@@ -403,3 +467,4 @@ All notable changes to Botonic will be documented in this file.
 [0.12.0]: https://github.com/hubtype/botonic/releases/tag/v0.12.0
 [0.13.0]: https://github.com/hubtype/botonic/releases/tag/v0.13.0
 [0.14.0]: https://github.com/hubtype/botonic/releases/tag/v0.14.0
+[0.15.0]: https://github.com/hubtype/botonic/releases/tag/v0.15.0
