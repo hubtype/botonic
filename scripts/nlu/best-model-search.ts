@@ -1,13 +1,15 @@
 import { BotonicNLU, ModelTemplatesType } from '../../packages/botonic-nlu/'
 
-const nlu = new BotonicNLU({})
+const nlu = new BotonicNLU()
 
-const data = nlu.readData({
-  path: '',
-  language: 'en',
-  maxSeqLen: 20,
-  csvSeparator: ',',
-})
+const data = nlu.readData(
+  {
+    path: '',
+    language: 'en',
+    maxSeqLen: 20,
+  },
+  { csvSeparator: ',' }
+)
 
 const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
   data: data,

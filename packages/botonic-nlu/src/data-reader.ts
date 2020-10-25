@@ -2,12 +2,12 @@ import { lstatSync, readFileSync, readdirSync } from 'fs'
 import { join } from 'path'
 import { DataSet } from './types'
 
-export interface Configuration {
-  csvSeparator?: string
+export interface DataSetReaderConfig {
+  csvSeparator?: string // ';' is the default separator
 }
 
 export class DatasetReader {
-  static readData(path: string, config: Configuration): DataSet {
+  static readData(path: string, config: DataSetReaderConfig): DataSet {
     if (lstatSync(path).isFile()) {
       return this.readFile(path, config)
     } else if (lstatSync(path).isDirectory()) {
@@ -17,11 +17,11 @@ export class DatasetReader {
     }
   }
 
-  private static readFile(path: string, config: Configuration): DataSet {
+  private static readFile(path: string, config: DataSetReaderConfig): DataSet {
     const extension = this.getExtension(path)
     switch (extension) {
       case 'csv':
-        return this.readCSV(path, config.csvSeparator)
+        return this.readCSV(path, config?.csvSeparator)
       default:
         throw new Error(`Unable to read ${extension} files.`)
     }

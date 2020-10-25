@@ -2,15 +2,15 @@
 
 ## What Does This Plugin Do?
 
-Botonic Plugin NLU allows you to use the trained models with [Botonic NLU](https://github.com/hubtype/botonic/tree/master/packages/botonic-nlu) and use them to predict intents from the user inputs for your bot.
+Botonic Plugin NLU allows you to predict intents from the user inputs for your bot.
 
-To set up a template using Botonic NLU with Botonic Plugin NLU, you can create a bot by running the following command:
+To set up a new template using Botonic Plugin NLU, you can create a bot by running the following command:
 
 ```shell
 $ botonic new {BOT_NAME} nlu
 ```
 
-Alternatively, if you already have a project, you can follow the steps below to setup Botonic Plugin NLU.
+Alternatively, if you already have a project, you can follow the steps below to setup it up.
 
 ## Setup
 
@@ -20,7 +20,6 @@ Alternatively, if you already have a project, you can follow the steps below to 
 2. Under the `src` files of your project, create a folder called `nlu`.  
    **Note**: Windows users should first use the command
    `npm install --global --production windows-build-tools --vs2015` followed by `npm install @botonic/plugin-nlu`
-3. Then create a folder called `utterances` with your `.txt` files for each intent.
 
 ### Require the Plugin
 
@@ -73,14 +72,14 @@ export const plugins = [
 ### Define Intents
 
 1. Under the `nlu` folder, create a folder called `utterances`, which will contain your multilingual intents.
-2. For every language you want to support, create a folder under `src/nlu/utterances` with its language code (it must be [ISO 639-1](https://iso639-3.sil.org/code_tables/639/data)). Ex: `en` for English.
+2. For every language you want to support, create a folder under `/src/nlu/utterances` with its language code (it must be [ISO 639-1](https://iso639-3.sil.org/code_tables/639/data)). Ex: Training for English (`en`), will result in the following path: `/src/nlu/utterances/en/`.
 3. Add a text file for each intent you want to create by naming them `IntentName.txt`.
 4. Fill them with possible ways to express each intent. **Every sentence must be on a different line of the file.**
    See [Natural Language Understanding section](https://botonic.io/docs/concepts/nlu) for more information.
 
 ### Train the Bot
 
-Now it's time to order Botonic NLU to deal with all the examples we have added so far. To do this, you have to type the following command:
+Now it's time to order Botonic NLU to train each intent with the provided sentences:
 
 ```bash
 botonic train

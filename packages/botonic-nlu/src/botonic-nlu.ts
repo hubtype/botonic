@@ -3,7 +3,7 @@ import { shuffle } from './util/object-tools'
 import { Preprocessor } from './preprocessor'
 import { ModelManager } from './model-manager'
 import { IntentsProcessor } from './intents-processor'
-import { DatasetReader } from './data-reader'
+import { DatasetReader, DataSetReaderConfig } from './data-reader'
 import {
   DecodedPrediction,
   WordEmbeddingType,
@@ -84,16 +84,18 @@ export class BotonicNLU {
     })
   }
 
-  readData(options: {
-    path: string
-    language: Language
-    maxSeqLen: number
-    csvSeparator?: string
-  }): DataSet {
+  readData(
+    options: {
+      path: string
+      language: Language
+      maxSeqLen: number
+    },
+    readerConfig?: DataSetReaderConfig
+  ): DataSet {
     this.language = options.language
     this.maxSeqLen = options.maxSeqLen
     return DatasetReader.readData(options.path, {
-      csvSeparator: options.csvSeparator,
+      csvSeparator: readerConfig?.csvSeparator,
     })
   }
 

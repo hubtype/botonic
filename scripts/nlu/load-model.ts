@@ -2,7 +2,7 @@ import { join } from 'path'
 
 import { BotonicNLU } from '../../packages/botonic-nlu'
 
-const nlu = new BotonicNLU({})
+const nlu = new BotonicNLU()
 
 const MODEL_DIR = ''
 const MODEL_DATA_PATH = join(MODEL_DIR, 'model-data.json')

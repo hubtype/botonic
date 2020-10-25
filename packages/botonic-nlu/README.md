@@ -61,12 +61,14 @@ const dataPath = `path/to/your/dataset-directory/`
 // or alternatively
 // const dataPath = 'path/to/your/dataset/file.csv'
 
-const data = nlu.readData({
-  path: dataPath,
-  language: 'en',
-  maxSeqLen: 20,
-  csvSeparator: ',',
-})
+const data = nlu.readData(
+  {
+    path: dataPath,
+    language: 'en',
+    maxSeqLen: 20,
+  },
+  { csvSeparator: ',' }
+)
 
 const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
   data: data,
@@ -121,12 +123,14 @@ function createCustomModel(maxSeqLen: number): Sequential | LayersModel {
 
 const nlu = new BotonicNLU({ tokenizer: tokenizer })
 
-const data = nlu.readData({
-  path: dataPath,
-  language: 'en',
-  maxSeqLen: 20,
-  csvSeparator: ',',
-})
+const data = nlu.readData(
+  {
+    path: dataPath,
+    language: 'en',
+    maxSeqLen: 20,
+  },
+  { csvSeparator: ',' }
+)
 
 const [xTrain, xTest, yTrain, yTest] = nlu.trainTestSplit({
   data: data,
@@ -147,10 +151,10 @@ nlu.model = createCustomModel(20)
 ### Initialization
 
 ```ts
-constructor({ normalizer, tokenizer, stemmer }: {
-        normalizer?: Normalizer;
-        tokenizer?: Tokenizer;
-        stemmer?: Stemmer;
+constructor({ normalizer, tokenizer, stemmer }: ?{
+  normalizer?: Normalizer;
+  tokenizer?: Tokenizer;
+  stemmer?: Stemmer;
 })
 ```
 
@@ -219,19 +223,22 @@ It reads your data and converts it into the default structure.
 
 ```ts
 readData(options: {
-    path: string;
-    language: Language;
-    maxSeqLen: number;
-    csvSeparator?: string;
-}): DataSet;
+  path: string;
+  language: Language;
+  maxSeqLen: number;
+},
+readerConfig?: DataSetReaderConfig
+): DataSet
 ```
 
 Parameters:
 
-- **`path`**: path to your dataset directory (or file).
-- **`language`**: main language of the data.
-- **`maxSeqLen`**: number specifying the maximum length of each sequence of tokens.
-- **`csvSeparator`**: column separator for csv files ('`,`' as default).
+- **`options`**:
+  - **`path`**: path to your dataset directory (or file).
+  - **`language`**: main language of the data.
+  - **`maxSeqLen`**: number specifying the maximum length of each sequence of tokens.
+- **`readerConfig`**:
+  - **`csvSeparator`**: column separator for csv files ('`;`' as default).
 
 Returns:
 
@@ -255,17 +262,18 @@ It splits the loaded dataset in two sets: one for training the model and the oth
 
 ```ts
 trainTestSplit(options: {
-    data: DataSet;
-    testPercentage: number;
-    stratify?: boolean;
+  data: DataSet;
+  testPercentage: number;
+  stratify?: boolean;
 }): [InputSet, InputSet, OutputSet, OutputSet];
 ```
 
 Parameters:
 
-- **`data`**: a variable holding the dataset structure.
-- **`testPercentage`**: a number between 0 and 1 to split the data.
-- **`stratify`**: whether to maintain the data distribution of the different classes.
+- **`options`**:
+  - **`data`**: a variable holding the dataset structure.
+  - **`testPercentage`**: a number between 0 and 1 to split the data.
+  - **`stratify`**: whether to maintain the data distribution of the different classes.
 
 Returns:
 
@@ -319,21 +327,22 @@ The available Botonic NLU Model templates are:
 
 ```ts
 createModel(options: {
-    template: ModelTemplatesType
-    learningRate: number
-    wordEmbeddingsType?: WordEmbeddingType
-    wordEmbeddingsDimension?: WordEmbeddingDimension
-    trainableEmbeddings?: boolean
+  template: ModelTemplatesType
+  learningRate: number
+  wordEmbeddingsType?: WordEmbeddingType
+  wordEmbeddingsDimension?: WordEmbeddingDimension
+  trainableEmbeddings?: boolean
 }): Promise<void>
 ```
 
 Parameters:
 
-- **`template`**: a constant from `ModelTemplatesType` to load a predefined neural network template.
-- **`learningRate`**: the amount that the weights are updated during training. Typical values range from 0.0001 up to 1.
-- **`wordEmbeddingsType`**: training with `glove` or `fasttext` pretrained embeddings.
-- **`wordEmbeddingsDimension`**: dimension of word embeddings (defaults are `50` for `glove` and `300` for `fasttext`).
-- **`trainableEmbeddings`**: whether the values of word embeddings matrix will be frozen (default is `false`). If you have a large dataset, we suggest you to set this to `false`.
+- **`options`**:
+  - **`template`**: a constant from `ModelTemplatesType` to load a predefined neural network template.
+  - **`learningRate`**: the amount that the weights are updated during training. Typical values range from 0.0001 up to 1.
+  - **`wordEmbeddingsType`**: training with `glove` or `fasttext` pretrained embeddings.
+  - **`wordEmbeddingsDimension`**: dimension of word embeddings (defaults are `50` for `glove` and `300` for `fasttext`).
+  - **`trainableEmbeddings`**: whether the values of word embeddings matrix will be frozen (default is `false`). If you have a large dataset, we suggest you to set this to `false`.
 
 Returns:
 
@@ -462,14 +471,14 @@ Train a model.
 
 ```ts
 train(
-    x: InputSet,
-    y: OutputSet,
-    options?: {
-      epochs?: number
-      batchSize?: number
-      validationSplit?: number
-    }
-  ): Promise<void>
+  x: InputSet,
+  y: OutputSet,
+  options?: {
+    epochs?: number
+    batchSize?: number
+    validationSplit?: number
+  }
+): Promise<void>
 ```
 
 Parameters:
