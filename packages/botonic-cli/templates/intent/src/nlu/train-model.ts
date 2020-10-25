@@ -1,9 +1,9 @@
 import { BotonicNLU, ModelTemplatesType } from '@botonic/nlu'
 import { join } from 'path'
 
-const nlu = new BotonicNLU({})
+const nlu = new BotonicNLU()
 const LANGUAGE = 'en'
-const data = nlu.loadData({
+const data = nlu.readData({
   path: join(process.cwd(), 'src', 'nlu', 'utterances', LANGUAGE),
   language: LANGUAGE,
   maxSeqLen: 20,

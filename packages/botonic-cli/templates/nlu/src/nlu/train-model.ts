@@ -4,7 +4,7 @@ import { tokenizer } from './preprocessing-tools/tokenizer'
 
 const nlu = new BotonicNLU({ tokenizer: tokenizer })
 const LANGUAGE = 'en'
-const data = nlu.loadData({
+const data = nlu.readData({
   path: join(process.cwd(), 'src', 'nlu', 'utterances', LANGUAGE),
   language: LANGUAGE,
   maxSeqLen: 20,

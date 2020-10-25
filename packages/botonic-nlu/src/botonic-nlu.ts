@@ -36,7 +36,6 @@ export class BotonicNLU {
   private modelManager: ModelManager
   private preprocessor: Preprocessor
   private intentsProcessor: IntentsProcessor
-
   constructor({
     normalizer = new DefaultNormalizer(),
     tokenizer = new DefaultTokenizer(),
@@ -45,7 +44,7 @@ export class BotonicNLU {
     normalizer?: Normalizer
     tokenizer?: Tokenizer
     stemmer?: Stemmer
-  }) {
+  } = {}) {
     this.engines.normalizer = normalizer
     this.engines.tokenizer = tokenizer
     this.engines.stemmer = stemmer

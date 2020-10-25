@@ -55,7 +55,7 @@ Once you have defined your dataset, you can import `BotonicNLU` in order to load
 ```ts
 import { BotonicNLU, CONSTANTS, ModelTemplatesType } from '@botonic/nlu'
 
-const nlu = new BotonicNLU({})
+const nlu = new BotonicNLU()
 
 const dataPath = `path/to/your/dataset-directory/`
 // or alternatively
@@ -159,7 +159,7 @@ An instance of Botonic NLU can be initialized with default preprocessing engines
 > **E.g:**
 
 ```ts
-const nlu = new BotonicNLU({})
+const nlu = new BotonicNLU()
 ```
 
 Alternatively, BotonicNLU can be initialized with your own preprocessing engines. Each of these **must** be a class or object implementing the corresponding methods:
@@ -222,7 +222,7 @@ readData(options: {
     path: string;
     language: Language;
     maxSeqLen: number;
-    csvSeparator: string;
+    csvSeparator?: string;
 }): DataSet;
 ```
 
@@ -240,7 +240,7 @@ Returns:
 > **E.g:**
 
 ```ts
-const data = nlu.loadData({
+const data = nlu.readData({
   path: `path/to/your/dataset-directory/`,
   language: 'en',
   maxSeqLen: 20,
@@ -374,7 +374,7 @@ Returns:
 > **E.g:**
 
 ```ts
-const nlu = new BotonicNLU({})
+const nlu = new BotonicNLU()
 
 const myCustomModel = tf.sequential()
 myCustomModel.add(tf.layers.dense({ units: 32, inputShape: [50] }))
@@ -386,7 +386,7 @@ nlu.model = myCustomModel
 > **E.g:**
 
 ```ts
-const nlu = new BotonicNLU({})
+const nlu = new BotonicNLU()
 
 const input = tf.input({shape: [5]});
 const denseLayer1 = tf.layers.dense({units: 10, activation: 'relu'});
