@@ -84,21 +84,21 @@ export class LogCMS implements CMS {
     return this.cms.contentsWithKeywords(context)
   }
 
-  topContents(
+  topContents<T extends TopContent>(
     model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
-  ): Promise<TopContent[]> {
+  ): Promise<T[]> {
     this.logger(`topContents of model ${model}`)
     return this.cms.topContents(model, context, filter, paging)
   }
 
-  contents(
+  contents<T extends Content>(
     contentType: ContentType,
     context?: Context,
     paging?: PagingOptions
-  ): Promise<Content[]> {
+  ): Promise<T[]> {
     this.logger(`contents of model ${contentType}`)
     return this.cms.contents(contentType, context, paging)
   }

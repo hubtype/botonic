@@ -112,22 +112,27 @@ export class FilteredCMS implements CMS {
     return this.cms.contentsWithKeywords(context)
   }
 
-  async topContents(
+  async topContents<T extends TopContent>(
     model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
-  ): Promise<TopContent[]> {
-    const contents = await this.cms.topContents(model, context, filter, paging)
+  ): Promise<T[]> {
+    const contents = await this.cms.topContents<T>(
+      model,
+      context,
+      filter,
+      paging
+    )
     return this.filterContents(contents, context)
   }
 
-  async contents(
+  async contents<T extends Content>(
     contentType: ContentType,
     context?: Context | undefined,
     paging?: PagingOptions
-  ): Promise<Content[]> {
-    const contents = await this.cms.contents(contentType, context, paging)
+  ): Promise<T[]> {
+    const contents = await this.cms.contents<T>(contentType, context, paging)
     return this.filterContents(contents, context)
   }
 

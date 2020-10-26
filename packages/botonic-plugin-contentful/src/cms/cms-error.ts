@@ -111,14 +111,14 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleError('contentsWithKeywords', context))
   }
 
-  topContents(
+  topContents<T extends TopContent>(
     model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
-  ): Promise<TopContent[]> {
+  ): Promise<T[]> {
     return this.cms
-      .topContents(model, context, filter, paging)
+      .topContents<T>(model, context, filter, paging)
       .catch(this.handleError('topContents', context))
   }
 
@@ -128,13 +128,13 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleContentError('content' as ContentType, id, context))
   }
 
-  contents(
+  contents<T extends Content>(
     contentType: ContentType,
     context?: Context,
     paging?: PagingOptions
-  ): Promise<Content[]> {
+  ): Promise<T[]> {
     return this.cms
-      .contents(contentType, context, paging)
+      .contents<T>(contentType, context, paging)
       .catch(this.handleError('contents', context))
   }
 

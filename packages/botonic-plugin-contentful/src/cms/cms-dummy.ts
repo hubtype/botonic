@@ -105,12 +105,12 @@ export class DummyCMS implements CMS {
     return Promise.resolve(new Queue(new CommonFields(id, id), id))
   }
 
-  topContents(
+  topContents<T extends TopContent>(
     model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
-  ): Promise<TopContent[]> {
+  ): Promise<T[]> {
     return Promise.resolve([])
   }
 
@@ -158,11 +158,11 @@ export class DummyCMS implements CMS {
     return this.text(id, context)
   }
 
-  contents(
+  contents<T extends Content>(
     contentType: ContentType,
     context?: Context,
     paging?: PagingOptions
-  ): Promise<Content[]> {
+  ): Promise<T[]> {
     return Promise.resolve([])
   }
 

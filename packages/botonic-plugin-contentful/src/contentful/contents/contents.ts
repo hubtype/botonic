@@ -18,12 +18,12 @@ import { ResourceDelivery } from '../content-delivery'
  * Retrieve multiple contents in a single call
  */
 export class ContentsDelivery extends ResourceDelivery {
-  async contents(
+  async contents<T extends Content>(
     contentType: ContentType,
     context: Context,
-    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<Content>,
+    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<T>,
     paging: PagingOptions
-  ): Promise<Content[]> {
+  ): Promise<T[]> {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
       context,
       this.query(contentType, paging)
@@ -33,16 +33,13 @@ export class ContentsDelivery extends ResourceDelivery {
     )
   }
 
-  async topContents(
+  async topContents<T extends TopContent>(
     model: TopContentType,
     context: Context,
-    factory: (
-      entry: contentful.Entry<any>,
-      ctxt: Context
-    ) => Promise<TopContent>,
+    factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<T>,
     filter: ((cf: CommonFields) => boolean) | undefined,
     paging: PagingOptions
-  ): Promise<TopContent[]> {
+  ): Promise<T[]> {
     const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
       context,
       this.query(model, paging)
