@@ -46,11 +46,11 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).content(id, context)
   }
 
-  contents(
+  contents<T extends Content>(
     contentType: ContentType,
     context?: Context,
     paging?: PagingOptions
-  ): Promise<Content[]> {
+  ): Promise<T[]> {
     return this.cmsFromContext(context).contents(contentType, context, paging)
   }
 
@@ -90,12 +90,12 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).text(id, context)
   }
 
-  topContents(
+  topContents<T extends TopContent>(
     model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
-  ): Promise<TopContent[]> {
+  ): Promise<T[]> {
     return this.cmsFromContext(context).topContents(
       model,
       context,

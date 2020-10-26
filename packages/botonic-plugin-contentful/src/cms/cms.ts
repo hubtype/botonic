@@ -117,12 +117,12 @@ export interface CMS {
    * If ContentfulOptions.resumeErrors is set: if some contents fail to be devilered,
    * an error will be displayed but the result will be returned.
    */
-  topContents(
+  topContents<T extends TopContent>(
     model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
-  ): Promise<TopContent[]>
+  ): Promise<T[]>
 
   content(id: string, context?: Context): Promise<Content>
 
@@ -130,11 +130,11 @@ export interface CMS {
    * If ContentfulOptions.resumeErrors is set: if some contents fail to be delivered,
    * an error will be displayed but the result will be returned.
    */
-  contents(
+  contents<T extends Content>(
     contentType: ContentType,
     context?: Context,
     paging?: PagingOptions
-  ): Promise<Content[]>
+  ): Promise<T[]>
 
   assets(context?: Context, paging?: PagingOptions): Promise<Asset[]>
 

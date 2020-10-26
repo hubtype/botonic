@@ -138,12 +138,12 @@ export class Contentful implements cms.CMS {
     return this._text.text(id, context)
   }
 
-  topContents(
+  topContents<T extends TopContent>(
     model: TopContentType,
     context = DEFAULT_CONTEXT,
     filter?: (cf: CommonFields) => boolean,
     paging = new PagingOptions()
-  ): Promise<TopContent[]> {
+  ): Promise<T[]> {
     return this._contents.topContents(
       model,
       context,
@@ -158,11 +158,11 @@ export class Contentful implements cms.CMS {
     return this.contentFromEntry(entry, context)
   }
 
-  contents(
+  contents<T extends Content>(
     contentType: ContentType,
     context = DEFAULT_CONTEXT,
     paging = new PagingOptions()
-  ): Promise<Content[]> {
+  ): Promise<T[]> {
     return this._contents.contents(
       contentType,
       context,
@@ -171,29 +171,30 @@ export class Contentful implements cms.CMS {
     )
   }
 
-  async topContentFromEntry(
+  async topContentFromEntry<T extends TopContent>(
     entry: contentful.Entry<any>,
     context: Context
-  ): Promise<TopContent> {
+  ): Promise<T> {
     const model = ContentfulEntryUtils.getContentModel(entry)
+    const retype = (c: TopContent) => c as T
     switch (model) {
       case ContentType.CAROUSEL:
-        return await this._carousel.fromEntry(entry, context)
+        return retype(await this._carousel.fromEntry(entry, context))
       case ContentType.QUEUE:
-        return this._queue.fromEntry(entry)
+        return retype(this._queue.fromEntry(entry))
       case ContentType.CHITCHAT:
       case ContentType.TEXT:
-        return await this._text.fromEntry(entry, context)
+        return retype(await this._text.fromEntry(entry, context))
       case ContentType.IMAGE:
-        return await this._image.fromEntry(entry, context)
+        return retype(await this._image.fromEntry(entry, context))
       case ContentType.URL:
-        return await this._url.fromEntry(entry, context)
+        return retype(await this._url.fromEntry(entry, context))
       case ContentType.STARTUP:
-        return await this._startUp.fromEntry(entry, context)
+        return retype(await this._startUp.fromEntry(entry, context))
       case ContentType.SCHEDULE:
-        return this._schedule.fromEntry(entry)
+        return retype(this._schedule.fromEntry(entry))
       case ContentType.DATE_RANGE:
-        return DateRangeDelivery.fromEntry(entry)
+        return retype(DateRangeDelivery.fromEntry(entry))
       default:
         throw new Error(`${model} is not a Content type`)
     }
@@ -202,18 +203,19 @@ export class Contentful implements cms.CMS {
   }
 
   // TODO move all delivery instances to a class
-  async contentFromEntry(
+  async contentFromEntry<T extends Content>(
     entry: contentful.Entry<any>,
     context: Context
-  ): Promise<Content> {
+  ): Promise<T> {
     const model = ContentfulEntryUtils.getContentModel(entry)
+    const retype = (c: Content) => c as T
     switch (model) {
       case ContentType.BUTTON:
-        return this._button.fromEntry(entry, context)
+        return retype(this._button.fromEntry(entry, context))
       case ContentType.ELEMENT:
-        return this._carousel.elementFromEntry(entry, context)
+        return retype(await this._carousel.elementFromEntry(entry, context))
       default:
-        return this.topContentFromEntry(entry, context)
+        return retype(await this.topContentFromEntry(entry, context))
     }
   }
 
