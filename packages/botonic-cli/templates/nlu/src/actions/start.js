@@ -4,15 +4,16 @@ import { RequestContext } from '@botonic/react'
 
 export default class extends React.Component {
   static contextType = RequestContext
-  static async botonicInit({ input }) {
-    return { input }
-  }
 
   render() {
     return (
       <>
         <Text>Hi human! 👋</Text>
-        <Text>What can I do for you today? 💃</Text>
+        <Text>
+          I have been trained to recognize intents for booking tables and asking
+          for weather or directions.
+        </Text>
+        <Text>Ask me something related! 😊</Text>
       </>
     )
   }

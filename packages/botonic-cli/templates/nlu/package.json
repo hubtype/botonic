@@ -4,7 +4,8 @@
   "scripts": {
     "build": "webpack --env.target=all --mode=production",
     "start": "webpack-dev-server --env.target=dev --mode=development",
-    "test": "jest"
+    "test": "jest",
+    "train": "node_modules/.bin/ts-node src/nlu/train-model.ts"
   },
   "jest": {
     "rootDir": "tests",
@@ -18,8 +19,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
-    "@botonic/plugin-nlu": "~0.14.0",
-    "@botonic/react": "~0.14.0"
+    "@botonic/plugin-nlu": "0.15.0-alpha.7",
+    "@botonic/react": "0.15.0-alpha.7",
+    "natural": "^2.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -32,6 +34,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-preset-es2015": "^6.24.1",
+    "chokidar": "^3.4.2",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.5",
     "css-loader": "^3.3.0",

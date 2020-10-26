@@ -43,19 +43,27 @@ export type InputType =
   | typeof INPUT.WEBCHAT_SETTINGS
   | typeof INPUT.WHATSAPP_TEMPLATE
 
-export interface Input {
+export interface IntentResult {
+  intent: string
+  confidence: number
+}
+
+/** Fields set by NLU plugins: Luis, Dialogflow, ... **/
+export interface NluResult {
+  // the name of the highest confidence intent
+  confidence: number
+  intent: string
+  intents: IntentResult[]
+  language: string
+  // entity recognition results in the format provided by the NLU engine
+  entities?: any
+}
+
+export interface Input extends Partial<NluResult> {
   data?: string
   path?: string
   payload?: string
   type: InputType
-
-  /** Fields set by NLU plugins: Luis, Dialogflow, ... **/
-  // the name of the highest confidence intent
-  confidence?: number
-  intent?: string
-  intents?: [{ intent: string; confidence: number }]
-  // entity recognition results in the format provided by the NLU engine
-  entities?: any
 }
 
 export const PROVIDER: {
