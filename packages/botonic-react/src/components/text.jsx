@@ -32,7 +32,7 @@ const serialize = textProps => {
  */
 export const Text = props => {
   const defaultTextProps = {
-    markdown: props.markdown === undefined ? true : props.markdown,
+    markdown: Number(props.markdown === undefined ? true : props.markdown), // https://github.com/styled-components/styled-components/issues/1198#issue-262022540
   }
   const textProps = {
     ...props,
