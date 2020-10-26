@@ -27,7 +27,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
       .closeLabel
   } catch (e) {}
   return (
-    <div ref={ref}>
+    <div ref={ref} role='persistent-menu'>
       {isComponentVisible && CustomPersistentMenu ? (
         <CustomPersistentMenu onClick={onClick} options={options} />
       ) : (
@@ -65,7 +65,7 @@ const IconContainer = styled.div`
 `
 
 export const PersistentMenu = props => (
-  <IconContainer onClick={props.onClick}>
+  <IconContainer role='persistent-menu-icon' onClick={props.onClick}>
     <Icon src={LogoMenu} />
   </IconContainer>
 )

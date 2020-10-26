@@ -42,6 +42,7 @@ export const WebchatMessageList = props => {
 
   return (
     <StyledScrollbar
+      role='message-list'
       // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-scrollable`
       id='botonic-scrollable-content'
       scrollbar={scrollbarOptions}

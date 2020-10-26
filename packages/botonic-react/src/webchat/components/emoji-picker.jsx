@@ -6,7 +6,7 @@ import { Icon, IconContainer } from './common'
 import { useComponentVisible, useWebchat } from '../hooks'
 
 export const EmojiPicker = props => (
-  <IconContainer>
+  <IconContainer role='emoji-picker-icon'>
     <div onClick={props.onClick}>
       <Icon src={LogoEmoji} />
     </div>
@@ -26,7 +26,7 @@ export const OpenedEmojiPicker = props => {
   return (
     <div ref={ref}>
       {isComponentVisible && (
-        <Container>
+        <Container role='emoji-picker'>
           <Picker onEmojiClick={props.onEmojiClick} disableAutoFocus={true} />
         </Container>
       )}

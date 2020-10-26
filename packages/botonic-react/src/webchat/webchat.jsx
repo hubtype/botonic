@@ -644,7 +644,10 @@ export const Webchat = forwardRef((props, ref) => {
       return <CustomTriggerButton />
     }
     return (
-      <StyledTriggerButton style={{ ...triggerButtonStyle }}>
+      <StyledTriggerButton
+        role='trigger-button'
+        style={{ ...triggerButtonStyle }}
+      >
         {getTriggerImage() && (
           <TriggerImage src={resolveImage(getTriggerImage())} />
         )}
@@ -867,6 +870,7 @@ export const Webchat = forwardRef((props, ref) => {
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
+          role='styled-webchat'
           id={'botonic-webchat'}
           width={webchatState.width}
           height={webchatState.height}

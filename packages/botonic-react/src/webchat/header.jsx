@@ -66,7 +66,11 @@ export const DefaultHeader = props => {
   const headerSubtitle = getThemeProperty('header.subtitle', '')
 
   return (
-    <Header color={props.color} style={{ ...getThemeProperty('header.style') }}>
+    <Header
+      role='header'
+      color={props.color}
+      style={{ ...getThemeProperty('header.style') }}
+    >
       {headerImage && (
         <ImageContainer>
           <Image src={resolveImage(headerImage)} />
