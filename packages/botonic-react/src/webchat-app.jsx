@@ -91,7 +91,10 @@ export class WebchatApp {
       this.updateWebchatSettings(event.message.data)
     else if (event.message.type === 'sender_action')
       this.setTyping(event.message.data === 'typing_on')
-    else this.addBotMessage(event.message)
+    else {
+      this.onMessage(this, { from: 'bot', message: event.message })
+      this.addBotMessage(event.message)
+    }
   }
 
   updateUser(user) {
