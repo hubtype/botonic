@@ -26,15 +26,15 @@ All notable changes to Botonic will be documented in this file.
     - Added new [`target`](https://github.com/hubtype/botonic/pull/970) prop to `Button` component to define the behavior to open links.
     - Added new [`WhatsappTemplate`](https://github.com/hubtype/botonic/pull/972) component for Webchat.
     - New [`getBotonicApp()`](https://github.com/hubtype/botonic/pull/1018) to access `Botonic` methods.
-    - Add a new webchat setting [shadowDOM](https://github.com/hubtype/botonic/pull/1020) that indicates whether the whole webchat component should be encapsulated in a shadow DOM node.
-    - Add a new webchat setting [`storageKey`](https://github.com/hubtype/botonic/pull/1019) that indicates what key name to use in order to store the webchat state in localStorage (or sessionStorage).
-    
+    - Added a new webchat setting [shadowDOM](https://github.com/hubtype/botonic/pull/1020) that indicates whether the whole webchat component should be encapsulated in a shadow DOM node.
+    - Added a new webchat setting [`storageKey`](https://github.com/hubtype/botonic/pull/1019) that indicates the key name to use in order to store the webchat state in `localStorage` (or `sessionStorage`).
+
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
   - [Improvements](https://github.com/hubtype/botonic/pull/985) in Content.validate of text & shortText fields
     - Validate text.text also if content has no keywords (it could be accessed through a button)
     - Before, when shortText was empty, the contentful driver set it with the value of the name field (to ensure buttons did not show blank texts). Now this is managed by the Button model, so that MessageContent.validate() can report it.
-    - New [CMS method](https://github.com/hubtype/botonic/pull/1002) to deliver a content from id when type is unknown.
-    - Improved [ContentsValidator](https://github.com/hubtype/botonic/pull/1001). Better logs and get a list of errors.
+    - New [CMS method](https://github.com/hubtype/botonic/pull/1002) to deliver content from `id` when `type` is unknown.
+    - Improved [ContentsValidator](https://github.com/hubtype/botonic/pull/1001). Better logs through which you can get a list of errors.
     - Added NLP support for German.
 
 ### Changed
@@ -49,10 +49,10 @@ All notable changes to Botonic will be documented in this file.
   - Refactored and migrated NLU engine to Typescript. Read the new docs [here](https://github.com/hubtype/botonic/blob/master/packages/botonic-nlu/README.md).
 
 - [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
   - Allow passing properties to [CoverComponent](https://github.com/hubtype/botonic/pull/899).
   - Remove Webchat `user` references in favor of [`session.user`](https://github.com/hubtype/botonic/pull/988).
   - Improved [types](https://github.com/hubtype/botonic/pull/999) for Webchat and Webchat Context.
-
 
 - [@botonic/plugin-nlu](https://www.npmjs.com/package/@botonic/plugin-nlu)
 
@@ -71,9 +71,8 @@ All notable changes to Botonic will be documented in this file.
   - Avoid [customMessage to crash](https://github.com/hubtype/botonic/pull/1000) if they have bad children. Some bots may store no-react objects in children.
   - [Fixed](https://github.com/hubtype/botonic/pull/1017/) error appearing in some tests: `Received true for a non-boolean attribute markdown`. Caused by styled-components.
 
-
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
-  - Check that contentful button targets are available.  
+  - Check that contentful button targets are available.
 
 ## [0.14.0] - 2020-01-10
 

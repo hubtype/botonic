@@ -48,9 +48,9 @@ Actions are where you define the behavior of your bot. You can add an Action by 
 
 You can go a long way capturing user inputs using regular expressions, but it obviously has its limitations. As you find yourself adding more and more functionality to your bot, you get to a point where you need Natural Language Understanding (NLU) capabilities.
 
-NLU lets you capture user inputs by `intent` instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot. For example, you can group the sentences "What's the weather in California like?" and "Do you know if it's sunny today in California?" to the intent `GetWeather` and the parameter `city=California`. You can then map that intent to an action using a route.
+NLU lets you capture user inputs by `intent` instead of parsing its raw text. An intent represents all the different ways users can express a unit of meaning that is valid for your bot.<!-- For example, you can group the sentences "What's the weather in California like?" and "Do you know if it's sunny today in California?" to the intent `GetWeather` and the parameter `city=California`. --> You can then map that intent to an action using a route.
 
-Botonic has its own **[NLU module](/docs/plugins/plugin-nlu)** which covers intent and entity recognition tasks.
+Botonic has its own **[NLU plugin](/docs/plugins/plugin-nlu)** which covers intent and entity recognition tasks.
 
 ### Utterances and Intents
 
