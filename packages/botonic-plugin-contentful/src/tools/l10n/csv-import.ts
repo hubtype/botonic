@@ -1,9 +1,7 @@
 import parser from 'csv-parse'
 import * as fs from 'fs'
 
-import * as cms from '../../cms'
-import { CMS, ContentId, ContentType } from '../../cms'
-import { BotonicContentType } from '../../cms/cms'
+import { ContentType } from '../../cms'
 import {
   CONTENT_FIELDS,
   ContentField,
@@ -11,10 +9,8 @@ import {
   ContentFieldValueType,
   FIELDS_PER_CONTENT_TYPE,
 } from '../../manage-cms/fields'
-import { ManageCms } from '../../manage-cms/manage-cms'
-import { ManageContext } from '../../manage-cms/manage-context'
 import { replaceAll, trim } from '../../nlp/util/strings'
-import { isOfType } from '../../util/enums'
+import { StringFieldImporter } from './string-field-importer'
 
 export const PARSE_OPTIONS: parser.Options = {
   escape: '"',
@@ -162,162 +158,5 @@ export class RecordFixer {
   }
   complain(msg: string) {
     console.error(`Problem in ${this.record.Id} / ${this.record.Code}: ${msg}`)
-  }
-}
-
-export class StringFieldImporter {
-  pending: Record[] = []
-  constructor(readonly cms: ManageCms, readonly context: ManageContext) {}
-
-  async consume(record: Record): Promise<void> {
-    if (!isOfType(record.Model, ContentType)) {
-      console.error(
-        `Bad model '${String(record.Model)}'. Should be one of ${String(
-          Object.values(BotonicContentType)
-        )}`
-      )
-      return
-    }
-
-    const field = CONTENT_FIELDS.get(record.Field)
-    if (!field) {
-      console.error(`Bad field '${record.Field}'`)
-      return
-    }
-    if (!this.checkLast(record)) {
-      return
-    }
-    const last = this.last()
-    if (last) {
-      if (last.Id != record.Id) {
-        await this.flush()
-      }
-    }
-    this.pending.push(record)
-  }
-
-  checkLast(record: Record): boolean {
-    const last = this.last()
-    if (!last) return true
-    let diffField = undefined
-
-    if (last.Model != record.Model) {
-      diffField = 'model'
-    }
-    if (last.Code != record.Code) {
-      diffField = 'code'
-    }
-    if (diffField) {
-      console.error(
-        `Records ${recordId(record)} & ${recordId(
-          last
-        )} with same id have different ${diffField}`
-      )
-      return false
-    }
-    return true
-  }
-
-  async flush(): Promise<void> {
-    const last = this.last()
-    if (!last) return
-    const id = new cms.ContentId(last.Model, last.Id)
-    const fields: { [contentFieldType: string]: any } = {}
-    for (const r of this.pending) {
-      fields[r.Field] = this.value(r)
-    }
-
-    await this.cms.updateFields(this.context, id, fields)
-    this.pending = []
-  }
-
-  private last(): Record | undefined {
-    if (!this.pending.length) return undefined
-
-    return this.pending[this.pending.length - 1]
-  }
-
-  private value(record: Record): any {
-    const field = CONTENT_FIELDS.get(record.Field)!
-    const fixer = new RecordFixer(record)
-    fixer.fix()
-    return field.parse(record.to)
-  }
-}
-
-/**
- * TODO duplicate non-text fields which don't have fallback
- * instead of harcoding them.
- * Does not duplicate CommonFields.followup
- * Only duplicates if target field is empty
- */
-export class ReferenceFieldDuplicator {
-  constructor(
-    readonly cms: CMS,
-    readonly manageCms: ManageCms,
-    readonly manageContext: ManageContext
-  ) {}
-
-  async duplicateReferenceFields(): Promise<void> {
-    const defaultLocale = await this.manageCms.getDefaultLocale()
-    const fields = {
-      [ContentType.TEXT]: [ContentFieldType.BUTTONS],
-      [ContentType.STARTUP]: [ContentFieldType.BUTTONS],
-      [ContentType.ELEMENT]: [ContentFieldType.IMAGE],
-    }
-    for (const contentType of Object.keys(fields)) {
-      console.log(`***Duplicating reference field of type '${contentType}'`)
-      for (const fieldType of (fields as any)[contentType]) {
-        console.log(` **Duplicating '${contentType}' fields`)
-        await this.duplicate(
-          defaultLocale,
-          contentType as ContentType,
-          fieldType as ContentFieldType
-        )
-      }
-    }
-    this.warning()
-  }
-
-  async duplicateAssetFiles() {
-    const defaultLocale = await this.manageCms.getDefaultLocale()
-    console.log(`***Duplicating assets`)
-    const assets = await this.cms.assets({ locale: defaultLocale })
-    console.log(` **Duplicating ${assets.length} assets`)
-    for (const a of assets) {
-      await this.manageCms.copyAssetFile(
-        this.manageContext,
-        a.id,
-        defaultLocale
-      )
-    }
-    this.warning()
-  }
-
-  private warning() {
-    if (this.manageContext.preview) {
-      console.warn('Remember to publish the entries from contentful.com')
-    }
-  }
-
-  private async duplicate(
-    defaultLocale: string,
-    contentType: cms.ContentType,
-    fields: ContentFieldType
-  ) {
-    const contents = await this.cms.contents(contentType, {
-      ...this.manageContext,
-      locale: defaultLocale,
-    })
-    for (const content of contents) {
-      //console.log(`  *Duplicating ${content.id} (${content.name})`)
-      await this.manageCms.copyField(
-        this.manageContext,
-        new ContentId(contentType, content.id),
-        fields,
-        defaultLocale,
-        true
-      )
-    }
   }
 }
