@@ -10,19 +10,19 @@ import {
   Url,
 } from '../../index'
 import { Locale } from '../../nlp'
-import { Text, ContentType } from '../../cms'
+import { ContentType, Text } from '../../cms'
 import * as stream from 'stream'
 import * as fs from 'fs'
 import { promisify } from 'util'
 import sort from 'sort-stream'
 import stringify from 'csv-stringify'
-import { ContentField, ContentFieldType } from '../../manage-cms/fields'
+import {
+  ContentField,
+  ContentFieldType,
+  I18nField,
+} from '../../manage-cms/fields'
 
 const finished = promisify(stream.finished)
-
-export class I18nField {
-  constructor(readonly name: ContentFieldType, readonly value: string) {}
-}
 
 type CsvLine = string[]
 
