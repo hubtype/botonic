@@ -26,7 +26,6 @@ All notable changes to Botonic will be documented in this file.
     - Added new [`target`](https://github.com/hubtype/botonic/pull/970) prop to `Button` component to define the behavior to open links.
     - Added new [`WhatsappTemplate`](https://github.com/hubtype/botonic/pull/972) component for Webchat.
     - New [`getBotonicApp()`](https://github.com/hubtype/botonic/pull/1018) to access `Botonic` methods.
-    - Added a new webchat setting [shadowDOM](https://github.com/hubtype/botonic/pull/1020) that indicates whether the whole webchat component should be encapsulated in a shadow DOM node.
     - Added a new webchat setting [`storageKey`](https://github.com/hubtype/botonic/pull/1019) that indicates the key name to use in order to store the webchat state in `localStorage` (or `sessionStorage`).
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
