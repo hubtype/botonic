@@ -1,11 +1,11 @@
-import { Contentful } from '../../contentful'
+import { CsvImport } from './csv-import'
 import { ManageContentful } from '../../contentful/manage'
 import { ManageContext } from '../../manage-cms'
 import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
-import { CsvImport } from './csv-import'
+import { Contentful } from '../../contentful'
+import { ImportContentUpdater, ImportRecordReducer } from './import-updater'
 import { ReferenceFieldDuplicator } from './reference-field-duplicator'
-import { StringFieldImporter } from './string-field-importer'
 
 async function readCsvForTranslators(
   contentfulOptions: ContentfulOptions,
@@ -13,7 +13,8 @@ async function readCsvForTranslators(
   fname: string
 ) {
   const manageCms = new ManageContentful(contentfulOptions)
-  const fieldImporter = new StringFieldImporter(manageCms, context)
+  const updater = new ImportContentUpdater(manageCms, context)
+  const fieldImporter = new ImportRecordReducer(updater)
   const importer = new CsvImport(fieldImporter)
   await importer.import(fname)
 }

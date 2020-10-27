@@ -7,10 +7,9 @@ import {
   ContentField,
   ContentFieldType,
   ContentFieldValueType,
-  FIELDS_PER_CONTENT_TYPE,
 } from '../../manage-cms/fields'
 import { replaceAll, trim } from '../../nlp/util/strings'
-import { StringFieldImporter } from './string-field-importer'
+import { ImportRecordReducer } from './import-updater'
 
 export const PARSE_OPTIONS: parser.Options = {
   escape: '"',
@@ -32,47 +31,13 @@ export function recordId(record: Record): string {
   return `${record.Id}/${record.Code}`
 }
 
-export class ContentToImport {
-  readonly toDelete: boolean
-  constructor(
-    readonly model: ContentType,
-    readonly code: string,
-    readonly id: string,
-    readonly fields: { [field: string]: Record }
-  ) {
-    if (
-      Object.keys(fields).length === 1 &&
-      fields[ContentFieldType.SHORT_TEXT]
-    ) {
-      this.toDelete = true
-    } else {
-      this.toDelete = false
-      for (const field of FIELDS_PER_CONTENT_TYPE[this.model]) {
-        if (!fields[field]) {
-          console.error(`Missing row for ${this.contentId()}`)
-        }
-      }
-    }
-  }
-
-  contentId(): string {
-    return `${this.model} ${this.id}/${this.code}`
-  }
-}
-
-export interface FieldToImport {
-  Field: ContentFieldType
-  from: string
-  to: string
-}
-
 export interface CsvImportOptions {
   readonly nameFilter?: (contentName: string) => boolean
 }
 
 export class CsvImport {
   constructor(
-    private readonly importer: StringFieldImporter,
+    private readonly importer: ImportRecordReducer,
     private readonly options: CsvImportOptions = {}
   ) {}
 

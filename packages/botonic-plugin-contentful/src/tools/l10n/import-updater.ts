@@ -1,14 +1,52 @@
-import * as cms from '../../cms'
-import { BotonicContentType, ContentType } from '../../cms'
-import { ManageCms, ManageContext } from '../../manage-cms'
-import { CONTENT_FIELDS } from '../../manage-cms/fields'
+import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
 import { isOfType } from '../../util/enums'
+import { BotonicContentType, ContentId, ContentType } from '../../cms'
+import {
+  CONTENT_FIELDS,
+  FIELDS_PER_CONTENT_TYPE,
+} from '../../manage-cms/fields'
 import { Record, RecordFixer, recordId } from './csv-import'
 
-export class StringFieldImporter {
+export class ContentToImport {
+  readonly toDelete: boolean
+  constructor(
+    readonly contentId: ContentId,
+    readonly name: string,
+    readonly fields: { [field: string]: any }
+  ) {
+    if (
+      Object.keys(fields).length === 1 &&
+      fields[ContentFieldType.SHORT_TEXT]
+    ) {
+      this.toDelete = true
+    } else {
+      this.toDelete = false
+      for (const field of FIELDS_PER_CONTENT_TYPE[this.contentId.model]) {
+        if (!fields[field]) {
+          console.error(`Missing row for ${this.contentId.toString()}`)
+        }
+      }
+    }
+  }
+}
+
+export class ImportContentUpdater {
+  constructor(readonly cms: ManageCms, readonly context: ManageContext) {}
+
+  async update(content: ContentToImport): Promise<void> {
+    await this.cms.updateFields(this.context, content.contentId, content.fields)
+  }
+}
+
+/**
+ * Reduce all the records read from a csv into ContentToImport's
+ * and delegates to ContentUpdater.
+ * It also checks consistency of all records of a given content
+ */
+export class ImportRecordReducer {
   pending: Record[] = []
 
-  constructor(readonly cms: ManageCms, readonly context: ManageContext) {}
+  constructor(readonly importer: ImportContentUpdater) {}
 
   async consume(record: Record): Promise<void> {
     if (!isOfType(record.Model, ContentType)) {
@@ -40,7 +78,7 @@ export class StringFieldImporter {
   checkLast(record: Record): boolean {
     const last = this.last()
     if (!last) return true
-    let diffField = undefined
+    let diffField: string | undefined = undefined
 
     if (last.Model != record.Model) {
       diffField = 'model'
@@ -62,13 +100,17 @@ export class StringFieldImporter {
   async flush(): Promise<void> {
     const last = this.last()
     if (!last) return
-    const id = new cms.ContentId(last.Model, last.Id)
     const fields: { [contentFieldType: string]: any } = {}
     for (const r of this.pending) {
       fields[r.Field] = this.value(r)
     }
 
-    await this.cms.updateFields(this.context, id, fields)
+    const contentImport = new ContentToImport(
+      new ContentId(last.Model, last.Id),
+      last.Code,
+      fields
+    )
+    await this.importer.update(contentImport)
     this.pending = []
   }
 
