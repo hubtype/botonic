@@ -15,6 +15,6 @@ export const routes = [
     input: i => i.payload == 'replies' || i.data == 'replies',
     action: ShowReplies,
   },
-  { path: 'start', text: /hi|start|hello/, action: Start },
+  { path: 'start', text: /^(hi|start|hello)$/i, action: Start },
   { path: '404', text: /.*/, action: NotFound },
 ]
