@@ -11,7 +11,7 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
-## [0.15.0] - 2020-26-10
+## [0.15.0] - 2020-27-10
 
 ### Added
 
