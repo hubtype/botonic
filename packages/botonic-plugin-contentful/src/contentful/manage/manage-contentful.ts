@@ -18,6 +18,7 @@ import {
   ContentField,
   ContentFieldType,
 } from '../../manage-cms/fields'
+import { isOfType } from '../../util/enums'
 
 export class ManageContentful implements ManageCms {
   readonly manage: ClientAPI
@@ -56,16 +57,25 @@ export class ManageContentful implements ManageCms {
     return this.environment
   }
 
-  async updateField(
+  async updateFields(
     context: ManageContext,
     contentId: ContentId,
-    fieldType: ContentFieldType,
-    value: any
+    fields: { [contentFieldType: string]: any }
   ): Promise<void> {
     const environment = await this.getEnvironment()
     const oldEntry = await environment.getEntry(contentId.id)
-    const field = this.checkOverwrite(context, oldEntry, fieldType, true)
-    oldEntry.fields[field.cmsName][context.locale] = value
+    for (const key of Object.keys(fields)) {
+      if (!isOfType(key, ContentFieldType)) {
+        throw new CmsException(`'${key}' is not a valid content type`)
+      }
+      const field = this.checkOverwrite(
+        context,
+        oldEntry,
+        key as ContentFieldType,
+        true
+      )
+      oldEntry.fields[field.cmsName][context.locale] = fields[key]
+    }
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
     // the multilocale fields returned by update()
     await this.writeEntry(context, oldEntry)

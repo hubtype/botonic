@@ -14,11 +14,10 @@ export interface ManageCms {
    */
   getDefaultLocale(): Promise<Locale>
 
-  updateField(
+  updateFields(
     context: ManageContext,
     contentId: ContentId,
-    fieldType: ContentFieldType,
-    value: any
+    fields: { [contentFieldType: string]: any }
   ): Promise<void>
 
   /** Will not fail if source does not have this field */
