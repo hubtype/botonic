@@ -139,4 +139,4 @@ You can also generate your own word embeddings following these **[instructions](
 
 _\*10k-fasttext word embeddings contain the 10k most commons words of the language._
 
-**Note:** All the word embeddings are stored by default in `~/.botonic/word-embeddings/`. If you encounter any issues when automatically downloading word embeddings, you can download them manually and store it in the mentioned directory.
+**Note:** All the word embeddings are stored by default in `~/.botonic/word-embeddings/`. If you encounter any issues when automatically downloading word embeddings, you can download them manually and store them in the mentioned directory.
