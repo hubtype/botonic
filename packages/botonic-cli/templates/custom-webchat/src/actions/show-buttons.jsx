@@ -13,7 +13,7 @@ export default class extends React.Component {
       <>
         <Text>
           What about these buttons?
-          <Button url={'https://docs.botonic.io/main-concepts/webviews'}>
+          <Button url={'https://botonic.io/docs/concepts/webviews'}>
             You can use me to open links
           </Button>
           <Button webview={MyWebview}>To open a webview</Button>

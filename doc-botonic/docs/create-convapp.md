@@ -188,17 +188,17 @@ I need help
 
    **Your final `plugins.js` file should look like this:**
 
-   ```javascript
-   import nluConfig from './nlu/nlu.config.json'
-
-   export const plugins = [
-     {
-       id: 'nlu',
-       resolve: require('@botonic/plugin-nlu'),
-       options: nluConfig,
-     },
-   ]
-   ```
+```javascript
+export const plugins = [
+  {
+    id: 'nlu',
+    resolve: require('@botonic/plugin-nlu'),
+    options: {
+      en: {},
+    },
+  },
+]
+```
 
 1. Run `botonic train`. This will generate a prediction model based on the added examples.
 1. Wait until the model is fully trained.

@@ -17,9 +17,9 @@ Alternatively, if you already have a project, you can follow the steps below to 
 ### Install the plugin
 
 1. From your project, enter the command `npm install @botonic/plugin-nlu`. This command installs everything necessary to start working with your intents and entities.
-2. Under the `src` files of your project, create a folder called `nlu`.  
    **Note**: Windows users should first use the command
    `npm install --global --production windows-build-tools --vs2015` followed by `npm install @botonic/plugin-nlu`
+2. Under the `src` files of your project, create a folder called `nlu`.
 
 ### Require the Plugin
 
@@ -115,6 +115,28 @@ export const routes = [
 3. Deploy your bot with `botonic deploy`.
    You got a bot with a customized intent and entity recognition system!
 
-### Training Parameters and Multilingual Support
+### Multilingual Support
 
-To know more about Training Parameters and Multilingual Support, refer to [Botonic Plugin NLU section](https://botonic.io/docs/plugins/plugin-nlu).
+The pre-trained word embeddings below are supported, which means that you can train your bot in these specific languages.
+For more information about other supported languages, feel free to contact us on **[Slack](http://botonic.slack.com)**.
+
+You can also generate your own word embeddings following these **[instructions](https://github.com/hubtype/botonic/tree/master/scripts)**.
+
+|  Language  | Language Code |    Type\*    | Dimensions |                                                       Source                                                       |
+| :--------: | :-----------: | :----------: | :--------: | :----------------------------------------------------------------------------------------------------------------: |
+|  English   |      en       |    glove     |     50     |         **[glove-50d-en](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/glove-50d-en.db)**         |
+|  English   |      en       | 10k-fasttext |    300     | **[10k-fasttext-300d-en](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-en.db)** |
+|  Spanish   |      es       | 10k-fasttext |    300     | **[10k-fasttext-300d-es](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-es.db)** |
+|  Catalan   |      ca       | 10k-fasttext |    300     | **[10k-fasttext-300d-ca](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ca.db)** |
+|   French   |      fr       | 10k-fasttext |    300     | **[10k-fasttext-300d-fr](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-fr.db)** |
+| Portuguese |      pt       | 10k-fasttext |    300     | **[10k-fasttext-300d-pt](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-pt.db)** |
+|   German   |      de       | 10k-fasttext |    300     | **[10k-fasttext-300d-de](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-de.db)** |
+|  Italian   |      it       | 10k-fasttext |    300     | **[10k-fasttext-300d-it](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-it.db)** |
+|   Hindi    |      hi       | 10k-fasttext |    300     | **[10k-fasttext-300d-hi](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-hi.db)** |
+| Indonesian |      id       | 10k-fasttext |    300     | **[10k-fasttext-300d-id](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-id.db)** |
+|  Russian   |      ru       | 10k-fasttext |    300     | **[10k-fasttext-300d-ru](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-ru.db)** |
+|  Turkish   |      tr       | 10k-fasttext |    300     | **[10k-fasttext-300d-tr](https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com/10k-fasttext-300d-tr.db)** |
+
+_\*10k-fasttext word embeddings contain the 10k most commons words of the language._
+
+**Note:** All the word embeddings are stored by default in `~/.botonic/word-embeddings/`. If you encounter any issues when automatically downloading word embeddings, you can download them manually and store them in the mentioned directory.

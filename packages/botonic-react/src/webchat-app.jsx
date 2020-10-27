@@ -92,7 +92,7 @@ export class WebchatApp {
     else if (event.message.type === 'sender_action')
       this.setTyping(event.message.data === 'typing_on')
     else {
-      this.onMessage(this, { from: 'bot', message: event.message })
+      // this.onMessage(this, { from: 'bot', message: event.message }) // TODO: to be fixed in next version
       this.addBotMessage(event.message)
     }
   }

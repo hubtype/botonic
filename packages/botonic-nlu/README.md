@@ -459,7 +459,7 @@ await saveModel('path/to/new-model-directory/')
 await saveModel()
 ```
 
-## Methods to train and evaluate your model.
+### Methods to train and evaluate your model
 
 Training and evaluating the model.
 

@@ -150,7 +150,7 @@ export const webchat = {
         { label: 'Help', payload: 'help' },
         {
           label: 'See docs',
-          url: 'https://docs.botonic.io',
+          url: 'https://botonic.io/docs/welcome/',
         },
         { closeLabel: 'Close' },
       ],
