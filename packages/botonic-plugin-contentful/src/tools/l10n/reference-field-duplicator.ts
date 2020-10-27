@@ -1,0 +1,80 @@
+import * as cms from '../../cms'
+import { CMS, ContentId, ContentType } from '../../cms'
+import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
+
+/**
+ * TODO duplicate non-text fields which don't have fallback
+ * instead of harcoding them.
+ * Does not duplicate CommonFields.followup
+ * Only duplicates if target field is empty
+ */
+export class ReferenceFieldDuplicator {
+  constructor(
+    readonly cms: CMS,
+    readonly manageCms: ManageCms,
+    readonly manageContext: ManageContext
+  ) {}
+
+  async duplicateReferenceFields(): Promise<void> {
+    const defaultLocale = await this.manageCms.getDefaultLocale()
+    const fields = {
+      [ContentType.TEXT]: [ContentFieldType.BUTTONS],
+      [ContentType.STARTUP]: [ContentFieldType.BUTTONS],
+      [ContentType.ELEMENT]: [ContentFieldType.IMAGE],
+    }
+    for (const contentType of Object.keys(fields)) {
+      console.log(`***Duplicating reference field of type '${contentType}'`)
+      for (const fieldType of (fields as any)[contentType]) {
+        console.log(` **Duplicating '${contentType}' fields`)
+        await this.duplicate(
+          defaultLocale,
+          contentType as ContentType,
+          fieldType as ContentFieldType
+        )
+      }
+    }
+    this.warning()
+  }
+
+  async duplicateAssetFiles() {
+    const defaultLocale = await this.manageCms.getDefaultLocale()
+    console.log(`***Duplicating assets`)
+    const assets = await this.cms.assets({ locale: defaultLocale })
+    console.log(` **Duplicating ${assets.length} assets`)
+    for (const a of assets) {
+      await this.manageCms.copyAssetFile(
+        this.manageContext,
+        a.id,
+        defaultLocale
+      )
+    }
+    this.warning()
+  }
+
+  private warning() {
+    if (this.manageContext.preview) {
+      console.warn('Remember to publish the entries from contentful.com')
+    }
+  }
+
+  private async duplicate(
+    defaultLocale: string,
+    contentType: cms.ContentType,
+    fields: ContentFieldType
+  ) {
+    const contents = await this.cms.contents(contentType, {
+      ...this.manageContext,
+      locale: defaultLocale,
+    })
+    for (const content of contents) {
+      //console.log(`  *Duplicating ${content.id} (${content.name})`)
+      await this.manageCms.copyField(
+        this.manageContext,
+        new ContentId(contentType, content.id),
+        fields,
+        defaultLocale,
+        true
+      )
+    }
+  }
+}
