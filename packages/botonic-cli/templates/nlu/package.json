@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
-    "@botonic/plugin-nlu": "0.15.0-alpha.7",
-    "@botonic/react": "0.15.0-alpha.7",
+    "@botonic/plugin-nlu": "0.15.0-rc.0",
+    "@botonic/react": "0.15.0-rc.0",
     "natural": "^2.1.5"
   },
   "devDependencies": {

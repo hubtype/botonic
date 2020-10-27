@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-nlu",
-  "version": "0.15.0-alpha.8",
+  "version": "0.15.0-rc.0",
   "main": "dist/index",
   "scripts": {
     "clean_install": "npm i && npm run-script build",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@botonic/core": "0.15.0-alpha.7",
-    "@botonic/nlu": "0.15.0-alpha.7",
+    "@botonic/core": "0.15.0-rc.0",
+    "@botonic/nlu": "0.15.0-rc.0",
     "@tensorflow/tfjs": "2.4.0",
     "@types/webgl2": "0.0.5",
     "axios": "latest",
