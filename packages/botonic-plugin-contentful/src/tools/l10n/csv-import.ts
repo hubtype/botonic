@@ -1,22 +1,20 @@
 import { ManageCms } from '../../manage-cms/manage-cms'
 import * as cms from '../../cms'
-import {
-  BotonicContentType,
-  CMS,
-  CmsException,
-  ContentId,
-  ContentType,
-} from '../../cms'
+import { CMS, ContentId, ContentType } from '../../cms'
 import * as fs from 'fs'
 import parser from 'csv-parse'
-import { isOfType } from '../../util/enums'
-import { CONTENT_FIELDS, ContentFieldType } from '../../manage-cms/fields'
+import {
+  CONTENT_FIELDS,
+  ContentField,
+  ContentFieldType,
+  ContentFieldValueType,
+  FIELDS_PER_CONTENT_TYPE,
+} from '../../manage-cms/fields'
 import { ManageContext } from '../../manage-cms/manage-context'
+import { isOfType } from '../../util/enums'
+import { BotonicContentType } from '../../cms/cms'
+import { replaceAll, trim } from '../../nlp/util/strings'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// export interface CsvImportOptions {}
-
-// type CsvLine = string[]
 export const PARSE_OPTIONS: parser.Options = {
   escape: '"',
   delimiter: ';',
@@ -28,6 +26,44 @@ export interface Record {
   Model: ContentType
   Code: string
   Id: string
+  Field: ContentFieldType
+  from: string
+  to: string
+}
+
+export function recordId(record: Record): string {
+  return `${record.Id}/${record.Code}`
+}
+
+export class ContentToImport {
+  readonly toDelete: boolean
+  constructor(
+    readonly model: ContentType,
+    readonly code: string,
+    readonly id: string,
+    readonly fields: { [field: string]: Record }
+  ) {
+    if (
+      Object.keys(fields).length === 1 &&
+      fields[ContentFieldType.SHORT_TEXT]
+    ) {
+      this.toDelete = true
+    } else {
+      this.toDelete = false
+      for (const field of FIELDS_PER_CONTENT_TYPE[this.model]) {
+        if (!fields[field]) {
+          console.error(`Missing row for ${this.contentId()}`)
+        }
+      }
+    }
+  }
+
+  contentId(): string {
+    return `${this.model} ${this.id}/${this.code}`
+  }
+}
+
+export interface FieldToImport {
   Field: ContentFieldType
   from: string
   to: string
@@ -84,10 +120,52 @@ export class CsvImport {
       console.log(`Importing ${recordId}`)
       await this.importer.consume(record)
     }
+    await this.importer.flush()
+  }
+}
+
+export class RecordFixer {
+  readonly field: ContentField
+  constructor(readonly record: Record) {
+    this.field = CONTENT_FIELDS.get(record.Field)!
+  }
+
+  fix(): void {
+    this.fixExcelNewLine()
+    if (this.field.valueType == ContentFieldValueType.STRING_ARRAY) {
+      this.checkKeywordLen()
+    }
+  }
+
+  fixTrimmingQuotes(): void {
+    //it's typical to forget a " at the first character of the value
+    this.record.to = trim(this.record.to, '" ')
+  }
+
+  fixExcelNewLine(): void {
+    //https://bugs.documentfoundation.org/show_bug.cgi?id=118470
+    this.record.to = replaceAll(this.record.to, '_x000D_', '')
+  }
+
+  checkKeywordLen(): void {
+    if (this.field.valueType == ContentFieldValueType.STRING_ARRAY) {
+      const fromLen: number = this.field.parse(this.record.from).length
+      const toLen: number = this.field.parse(this.record.to).length
+      if (toLen != fromLen) {
+        this.complain(
+          `'From' has ${fromLen} keywords:\n${this.record.from}\n ` +
+            `but 'to' has ${toLen}:\n${this.record.to}`
+        )
+      }
+    }
+  }
+  complain(msg: string) {
+    console.error(`Problem in ${this.record.Id} / ${this.record.Code}: ${msg}`)
   }
 }
 
 export class StringFieldImporter {
+  pending: Record[] = []
   constructor(readonly cms: ManageCms, readonly context: ManageContext) {}
 
   async consume(record: Record): Promise<void> {
@@ -99,26 +177,69 @@ export class StringFieldImporter {
       )
       return
     }
+
     const field = CONTENT_FIELDS.get(record.Field)
     if (!field) {
       console.error(`Bad field '${record.Field}'`)
       return
     }
-    const id = new cms.ContentId(record.Model, record.Id)
-
-    await this.cms.updateField(
-      this.context,
-      id,
-      field.fieldType,
-      this.value(record)
-    )
+    if (!this.checkLast(record)) {
+      return
+    }
+    const last = this.last()
+    if (last) {
+      if (last.Id != record.Id) {
+        await this.flush()
+      }
+    }
+    this.pending.push(record)
   }
 
-  value(record: Record): any {
-    const field = CONTENT_FIELDS.get(record.Field)
-    if (!field) {
-      throw new CmsException(`Invalid field name ${record.Field}`)
+  checkLast(record: Record): boolean {
+    const last = this.last()
+    if (!last) return true
+    let diffField = undefined
+
+    if (last.Model != record.Model) {
+      diffField = 'model'
     }
+    if (last.Code != record.Code) {
+      diffField = 'code'
+    }
+    if (diffField) {
+      console.error(
+        `Records ${recordId(record)} & ${recordId(
+          last
+        )} with same id have different ${diffField}`
+      )
+      return false
+    }
+    return true
+  }
+
+  async flush(): Promise<void> {
+    const last = this.last()
+    if (!last) return
+    const id = new cms.ContentId(last.Model, last.Id)
+    const fields: { [contentFieldType: string]: any } = {}
+    for (const r of this.pending) {
+      fields[r.Field] = this.value(r)
+    }
+
+    await this.cms.updateFields(this.context, id, fields)
+    this.pending = []
+  }
+
+  private last(): Record | undefined {
+    if (!this.pending.length) return undefined
+
+    return this.pending[this.pending.length - 1]
+  }
+
+  private value(record: Record): any {
+    const field = CONTENT_FIELDS.get(record.Field)!
+    const fixer = new RecordFixer(record)
+    fixer.fix()
     return field.parse(record.to)
   }
 }
