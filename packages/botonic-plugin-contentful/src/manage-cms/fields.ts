@@ -1,4 +1,4 @@
-import { CmsException } from '../cms'
+import { CmsException, ContentType } from '../cms'
 
 export enum ContentFieldType {
   TEXT = 'Text',
@@ -66,4 +66,16 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
 
 function pairs(cfs: ContentField[]): [ContentFieldType, ContentField][] {
   return cfs.map(cf => [cf.fieldType, cf])
+}
+
+export class I18nField {
+  constructor(readonly name: ContentFieldType, readonly value: string) {}
+}
+
+export const FIELDS_PER_CONTENT_TYPE: { [type: string]: ContentFieldType[] } = {
+  [ContentType.BUTTON]: [ContentFieldType.TEXT],
+  [ContentType.STARTUP]: [ContentFieldType.SHORT_TEXT, ContentFieldType.TEXT],
+  [ContentType.TEXT]: [ContentFieldType.SHORT_TEXT, ContentFieldType.TEXT],
+  [ContentType.ELEMENT]: [ContentFieldType.TITLE, ContentFieldType.SUBTITLE],
+  [ContentType.URL]: [ContentFieldType.SHORT_TEXT, ContentFieldType.URL],
 }
