@@ -11,15 +11,14 @@ export class ErrorReportingManageCms implements ManageCms {
 
   constructor(readonly manageCms: ManageCms, readonly logErrors = true) {}
 
-  updateField<T extends cms.Content>(
+  updateFields<T extends cms.Content>(
     context: ManageContext,
     contentId: ContentId,
-    fieldType: ContentFieldType,
-    value: any
+    fields: { [contentFieldType: string]: any }
   ): Promise<void> {
     return this.manageCms
-      .updateField(context, contentId, fieldType, value)
-      .catch(this.handleError('updateField', context, contentId))
+      .updateFields(context, contentId, fields)
+      .catch(this.handleError('updateFields', context, contentId))
   }
 
   copyField<T extends cms.Content>(

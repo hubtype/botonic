@@ -17,7 +17,7 @@ function ctxt(ctx: Partial<ManageContext>): ManageContext {
 describe('ManageContentful fields', () => {
   const TEST_MANAGE_CMS_ID = '627QkyJrFo3grJryj0vu6L'
 
-  test('TEST: updateField on an empty field', async () => {
+  test('TEST: updateFields on an empty field', async () => {
     const contentful = testContentful({ disableCache: true })
     const old = await contentful.text(
       TEST_MANAGE_CMS_ID,
@@ -34,12 +34,9 @@ describe('ManageContentful fields', () => {
         )
       }
       // ACT
-      await sut.updateField(
-        ctxt({ locale: SPANISH }),
-        old.contentId,
-        ContentFieldType.TEXT,
-        newValue
-      )
+      await sut.updateFields(ctxt({ locale: SPANISH }), old.contentId, {
+        [ContentFieldType.TEXT]: newValue,
+      })
       await repeatWithBackoff(async () => {
         const newContent = await contentful.text(old.id, {
           locale: SPANISH,
@@ -48,11 +45,10 @@ describe('ManageContentful fields', () => {
       })
     } finally {
       // RESTORE
-      await sut.updateField(
+      await sut.updateFields(
         ctxt({ locale: SPANISH, allowOverwrites: true }),
         old.contentId,
-        ContentFieldType.TEXT,
-        ''
+        { [ContentFieldType.TEXT]: '' }
       )
       await repeatWithBackoff(async () => {
         const restored = await contentful.text(old.id, {
@@ -63,16 +59,15 @@ describe('ManageContentful fields', () => {
     }
   }, 40000)
 
-  test('TEST: updateField by default does not allow overwrites', async () => {
+  test('TEST: updateFields by default does not allow overwrites', async () => {
     const sut = testManageContentful()
 
     try {
       expect.assertions(4)
-      await sut.updateField(
+      await sut.updateFields(
         ctxt({ locale: TEST_DEFAULT_LOCALE }),
         new cms.ContentId(cms.ContentType.BUTTON, TEST_MANAGE_CMS_ID),
-        ContentFieldType.TEXT,
-        rndStr()
+        { [ContentFieldType.TEXT]: rndStr() }
       )
     } catch (e) {
       // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
@@ -80,7 +75,7 @@ describe('ManageContentful fields', () => {
       if (e instanceof CmsException) {
         // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
         expect(e.message).toInclude(
-          "Error calling ManageCms.updateField with locale 'en' on 'button' with id '627QkyJrFo3grJryj0vu6L'. " +
+          "Error calling ManageCms.updateFields with locale 'en' on 'button' with id '627QkyJrFo3grJryj0vu6L'. " +
             "Due to: Cannot overwrite field 'text' of entry '627QkyJrFo3grJryj0vu6L'"
         )
         // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
@@ -126,11 +121,10 @@ describe('ManageContentful fields', () => {
       })
     } finally {
       // RESTORE
-      await sut.updateField(
+      await sut.updateFields(
         ctxt({ locale: TO_LOCALE, allowOverwrites: true }),
         oldContent.contentId,
-        ContentFieldType.BUTTONS,
-        []
+        { [ContentFieldType.BUTTONS]: [] }
       )
       await repeatWithBackoff(async () => {
         const restored = await contentful.text(oldContent.id, {
