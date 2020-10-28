@@ -69,12 +69,7 @@ export class ManageContentful implements ManageCms {
       if (!isOfType(key, ContentFieldType)) {
         throw new CmsException(`'${key}' is not a valid content field type`)
       }
-      const field = this.checkOverwrite(
-        context,
-        oldEntry,
-        key as ContentFieldType,
-        true
-      )
+      const field = this.checkOverwrite(context, oldEntry, key, false)
       oldEntry.fields[field.cmsName][context.locale] = fields[key]
     }
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
@@ -130,6 +125,7 @@ export class ManageContentful implements ManageCms {
     }
     if (!(field.cmsName in entry.fields)) {
       if (!failIfMissing) {
+        entry.fields[field.cmsName] = {}
         return field
       }
       const fields = Object.keys(entry.fields)
