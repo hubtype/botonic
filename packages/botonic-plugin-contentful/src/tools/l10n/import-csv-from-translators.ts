@@ -1,9 +1,9 @@
-import { CsvImport } from './csv-import'
+import { Contentful } from '../../contentful'
 import { ManageContentful } from '../../contentful/manage'
 import { ManageContext } from '../../manage-cms'
 import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
-import { Contentful } from '../../contentful'
+import { CsvImport } from './csv-import'
 import { ImportContentUpdater, ImportRecordReducer } from './import-updater'
 import { ReferenceFieldDuplicator } from './reference-field-duplicator'
 

@@ -67,7 +67,7 @@ export class ManageContentful implements ManageCms {
     const oldEntry = await environment.getEntry(contentId.id)
     for (const key of Object.keys(fields)) {
       if (!isOfType(key, ContentFieldType)) {
-        throw new CmsException(`'${key}' is not a valid content type`)
+        throw new CmsException(`'${key}' is not a valid content field type`)
       }
       const field = this.checkOverwrite(
         context,

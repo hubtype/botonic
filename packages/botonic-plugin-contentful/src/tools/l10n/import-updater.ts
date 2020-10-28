@@ -1,10 +1,10 @@
-import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
-import { isOfType } from '../../util/enums'
 import { BotonicContentType, ContentId, ContentType } from '../../cms'
+import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
 import {
   CONTENT_FIELDS,
   FIELDS_PER_CONTENT_TYPE,
 } from '../../manage-cms/fields'
+import { isOfType } from '../../util/enums'
 import { Record, RecordFixer, recordId } from './csv-import'
 
 export class ContentToImport {
@@ -106,7 +106,7 @@ export class ImportRecordReducer {
     }
 
     const contentImport = new ContentToImport(
-      new ContentId(last.Model, last.Id),
+      ContentId.create(last.Model, last.Id),
       last.Code,
       fields
     )

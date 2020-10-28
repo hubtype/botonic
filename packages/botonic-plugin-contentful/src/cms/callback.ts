@@ -124,11 +124,25 @@ export class ResourceId implements ValueObject {
   equals(other: ContentId): boolean {
     return this.resourceType === other.resourceType && this.id === other.id
   }
+
+  static create(resourceType: string, id: string): ResourceId {
+    if (isOfType(resourceType, ContentType)) {
+      return ContentId.create(resourceType, id)
+    }
+    return new ResourceId(resourceType, id)
+  }
 }
 
 export class ContentId extends ResourceId {
   constructor(readonly model: ContentType, id: string) {
     super(model, id)
+  }
+
+  static create(model: ContentType, id: string): ContentId {
+    if (isOfType(model, TopContentType)) {
+      return new TopContentId(model, id)
+    }
+    return new ContentId(model, id)
   }
 
   deliver(cms: CMS, context?: Context): Promise<Content> {

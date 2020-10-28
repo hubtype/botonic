@@ -70,7 +70,7 @@ export class ReferenceFieldDuplicator {
       //console.log(`  *Duplicating ${content.id} (${content.name})`)
       await this.manageCms.copyField(
         this.manageContext,
-        new ContentId(contentType, content.id),
+        ContentId.create(contentType, content.id),
         fields,
         defaultLocale,
         true
