@@ -7,6 +7,7 @@ import {
   ManageCms,
   ManageContext,
 } from '../../../src/manage-cms'
+import { ContentDeleter } from '../../../src/manage-cms/content-deleter'
 import { Locale, SPANISH } from '../../../src/nlp'
 import {
   ContentToImport,
@@ -68,7 +69,8 @@ test('TEST: ImportRecordReducer integration test', async () => {
   try {
     const updater = new ImportContentUpdater(
       manageCms,
-      ctxt({ locale: SPANISH })
+      ctxt({ locale: SPANISH }),
+      instance(mock(ContentDeleter))
     )
     const sut = new ImportRecordReducer(updater)
     await sut.consume({
@@ -142,8 +144,12 @@ test('TEST: ContentUpdater', async () => {
       return Promise.resolve()
     }
   }
-  const mock = new MockCms()
-  const sut = new ImportContentUpdater(mock, ctxt({ locale: SPANISH }))
+  const mockCms = new MockCms()
+  const sut = new ImportContentUpdater(
+    mockCms,
+    ctxt({ locale: SPANISH }),
+    instance(mock(ContentDeleter))
+  )
   await sut.update(
     new ContentToImport(contentId, 'CONTENT_NAME', {
       [ContentFieldType.TEXT]: 'new text',

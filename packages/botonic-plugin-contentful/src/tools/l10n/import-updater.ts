@@ -1,41 +1,25 @@
-import { BotonicContentType, ContentId, ContentType } from '../../cms'
+import {
+  BotonicContentType,
+  ContentId,
+  ContentType,
+  MessageContentType,
+  TopContentId,
+} from '../../cms'
 import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
+import { ContentDeleter } from '../../manage-cms/content-deleter'
 import {
   CONTENT_FIELDS,
-  FIELDS_PER_CONTENT_TYPE,
+  getFieldsForContentType,
 } from '../../manage-cms/fields'
 import { isOfType } from '../../util/enums'
 import { Record, RecordFixer, recordId } from './csv-import'
 
 export class ContentToImport {
-  readonly toDelete: boolean
   constructor(
     readonly contentId: ContentId,
     readonly name: string,
     readonly fields: { [field: string]: any }
-  ) {
-    if (
-      Object.keys(fields).length === 1 &&
-      fields[ContentFieldType.SHORT_TEXT]
-    ) {
-      this.toDelete = true
-    } else {
-      this.toDelete = false
-      for (const field of FIELDS_PER_CONTENT_TYPE[this.contentId.model]) {
-        if (!fields[field]) {
-          console.error(`Missing row for ${this.contentId.toString()}`)
-        }
-      }
-    }
-  }
-}
-
-export class ImportContentUpdater {
-  constructor(readonly cms: ManageCms, readonly context: ManageContext) {}
-
-  async update(content: ContentToImport): Promise<void> {
-    await this.cms.updateFields(this.context, content.contentId, content.fields)
-  }
+  ) {}
 }
 
 /**
@@ -125,5 +109,51 @@ export class ImportRecordReducer {
     const fixer = new RecordFixer(record)
     fixer.fix()
     return field.parse(record.to)
+  }
+}
+
+/**
+ * - If ContentToImport only has shortText, it'll assume that the content
+ * needs to be removed for this locale. Its fields will be deleted and all
+ * buttons which target it will be removed.
+ * - Otherwise, the specified fields will be overwritten
+ */
+export class ImportContentUpdater {
+  constructor(
+    readonly manageCms: ManageCms,
+    readonly context: ManageContext,
+    readonly deleter: ContentDeleter
+  ) {}
+
+  async update(content: ContentToImport): Promise<void> {
+    if (this.mustBeDeleted(content)) {
+      await this.deleter.deleteContent(content.contentId as TopContentId)
+    } else {
+      await this.updateFields(content)
+    }
+  }
+
+  async updateFields(content: ContentToImport) {
+    for (const field of getFieldsForContentType(content.contentId.model)) {
+      if (!content.fields[field]) {
+        console.warn(
+          `Missing field '${field}' for ${content.contentId.toString()}`
+        )
+      }
+    }
+
+    await this.manageCms.updateFields(
+      this.context,
+      content.contentId,
+      content.fields
+    )
+  }
+
+  mustBeDeleted(content: ContentToImport): boolean {
+    return (
+      isOfType(content.contentId.model, MessageContentType) &&
+      Object.keys(content.fields).length === 1 &&
+      content.fields[ContentFieldType.SHORT_TEXT]
+    )
   }
 }
