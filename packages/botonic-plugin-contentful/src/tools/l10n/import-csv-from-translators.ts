@@ -1,6 +1,8 @@
+import { MessageContentInverseTraverser } from '../../cms/visitors/message-visitors'
 import { Contentful } from '../../contentful'
 import { ManageContentful } from '../../contentful/manage'
 import { ManageContext } from '../../manage-cms'
+import { ContentDeleter } from '../../manage-cms/content-deleter'
 import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
 import { CsvImport } from './csv-import'
@@ -12,8 +14,11 @@ async function readCsvForTranslators(
   context: ManageContext,
   fname: string
 ) {
+  const cms = new Contentful(contentfulOptions)
   const manageCms = new ManageContentful(contentfulOptions)
-  const updater = new ImportContentUpdater(manageCms, context)
+  const reachableFrom = new MessageContentInverseTraverser(cms, context)
+  const deleter = new ContentDeleter(manageCms, reachableFrom, context)
+  const updater = new ImportContentUpdater(manageCms, context, deleter)
   const fieldImporter = new ImportRecordReducer(updater)
   const importer = new CsvImport(fieldImporter)
   await importer.import(fname)

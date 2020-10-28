@@ -1,15 +1,15 @@
-import { ManageCms } from './manage-cms'
+import { ContentCallback, TopContentId } from '../cms'
 import {
   getButtons,
   MessageContentInverseTraverser,
 } from '../cms/visitors/message-visitors'
-import { ManageContext } from './manage-context'
-import { ContentCallback, TopContentId } from '../cms'
 import {
   CONTENT_FIELDS,
   ContentFieldType,
   getFieldsForContentType,
 } from './fields'
+import { ManageCms } from './manage-cms'
+import { ManageContext } from './manage-context'
 
 /**
  * Deletes fields and the references from other contents that reference the
@@ -23,6 +23,7 @@ export class ContentDeleter {
   ) {}
 
   async deleteContent(contentId: TopContentId) {
+    console.log(`Deleting ${contentId.toString()}`)
     await this.deleteFields(contentId)
     await this.deleteReferencesTo(contentId)
   }
