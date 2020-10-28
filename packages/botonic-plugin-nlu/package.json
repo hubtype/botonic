@@ -43,5 +43,12 @@
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"
-  }
+  },
+  "keywords": [
+    "typescript",
+    "chatbots",
+    "conversational apps",
+    "nlp",
+    "nlu"
+  ]
 }

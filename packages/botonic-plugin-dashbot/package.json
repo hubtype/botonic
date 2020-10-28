@@ -14,5 +14,11 @@
     "axios": "latest",
     "dashbot": "^11.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "keywords": [
+    "javascript",
+    "chatbots",
+    "conversational apps",
+    "dashbot"
+  ]
 }

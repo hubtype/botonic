@@ -18,5 +18,12 @@
   },
   "devDependencies": {
     "core-js": "^3.1.4"
-  }
+  },
+  "keywords": [
+    "javascript",
+    "chatbots",
+    "conversational apps",
+    "dialogflow",
+    "nlp"
+  ]
 }

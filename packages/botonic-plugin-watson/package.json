@@ -13,5 +13,11 @@
   "dependencies": {
     "ibm-watson": "^5.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "keywords": [
+    "javascript",
+    "chatbots",
+    "conversational apps",
+    "watson"
+  ]
 }

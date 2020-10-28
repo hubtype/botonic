@@ -12,5 +12,12 @@
   "dependencies": {
     "axios": "^0.19.2"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "keywords": [
+    "javascript",
+    "chatbots",
+    "conversational apps",
+    "inbenta",
+    "nlp"
+  ]
 }

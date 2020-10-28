@@ -14,5 +14,12 @@
     "axios": "latest",
     "btoa": "^1.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "keywords": [
+    "javascript",
+    "chatbots",
+    "conversational apps",
+    "analytics",
+    "segment"
+  ]
 }

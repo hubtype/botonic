@@ -70,5 +70,12 @@
   },
   "engines": {
     "node": ">=12.3.0"
-  }
+  },
+  "keywords": [
+    "typescript",
+    "chatbots",
+    "conversational apps",
+    "contentful",
+    "cms"
+  ]
 }

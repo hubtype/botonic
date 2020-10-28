@@ -63,5 +63,11 @@
   },
   "engines": {
     "node": ">=10.0.0"
-  }
+  },
+  "keywords": [
+    "javascript",
+    "chatbots",
+    "conversational apps",
+    "react"
+  ]
 }

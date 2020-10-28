@@ -14,5 +14,12 @@
     "axios": "^0.19.2",
     "uuid": "^8.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "keywords": [
+    "javascript",
+    "chatbots",
+    "conversational apps",
+    "analytics",
+    "google analytics"
+  ]
 }
