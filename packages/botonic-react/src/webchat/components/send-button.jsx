@@ -3,7 +3,7 @@ import SendButtonIcon from '../../assets/send-button.svg'
 import { Icon, IconContainer } from './common'
 
 export const SendButton = () => (
-  <IconContainer>
+  <IconContainer role='send-button-icon'>
     <Icon src={SendButtonIcon} />
   </IconContainer>
 )
