@@ -26,7 +26,9 @@ export class MessageContentTraverser {
     readonly depth = 1
   ) {
     if (depth > 1) {
-      throw new CmsException('Not supported yet')
+      throw new CmsException(
+        'Depth>1 not supported yet for MessageContentTraverser'
+      )
     }
   }
 
@@ -63,4 +65,74 @@ export async function reachableFrom(
     await traverser.traverse(fromContent, context)
   }
   return reachable
+}
+
+/**
+ * To obtain which contents have references (eg. buttons) to a given
+ * content
+ */
+export class MessageContentInverseTraverser {
+  private readonly referencesTo = new Map<string, Set<MessageContent>>()
+
+  constructor(
+    readonly cms: CMS,
+    readonly context: Context,
+    readonly depth = 1
+  ) {
+    if (depth > 1) {
+      throw new CmsException(
+        'Depth>1 not supported yet for MessageContentInverseTraverser'
+      )
+    }
+  }
+
+  isLoaded(): boolean {
+    return this.referencesTo.size > 0
+  }
+
+  async load(fromContents?: MessageContent[]) {
+    fromContents =
+      fromContents ||
+      (await allContents<MessageContent>(
+        this.cms,
+        this.context,
+        MESSAGE_CONTENT_TYPES
+      ))
+
+    for (const fromContent of fromContents) {
+      const reachable = await reachableFrom(
+        this.cms,
+        [fromContent as MessageContent],
+        this.context
+      )
+      for (const r of reachable) {
+        const set = this.referencesTo.get(r.id)
+        if (set) {
+          set.add(fromContent)
+        } else {
+          this.referencesTo.set(
+            r.id,
+            new Set<MessageContent>([fromContent])
+          )
+        }
+      }
+    }
+  }
+  getReferencesTo(contentId: ContentId): Set<MessageContent> {
+    return this.referencesTo.get(contentId.id) || new Set<MessageContent>()
+  }
+}
+
+export async function allContents<T extends Content>(
+  cms: CMS,
+  context: Context,
+  contentTypes: ContentType[]
+): Promise<T[]> {
+  const contents: T[] = []
+  for (const model of contentTypes) {
+    for (const c of await cms.contents(model, context)) {
+      contents.push(c as T)
+    }
+  }
+  return contents
 }
