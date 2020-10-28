@@ -11,7 +11,7 @@ import {
   CONTENT_FIELDS,
   getFieldsForContentType,
 } from '../../manage-cms/fields'
-import { isOfType } from '../../util/enums'
+import { isOfType, isOfType } from '../../util/enums'
 import { Record, RecordFixer, recordId } from './csv-import'
 
 export class ContentToImport {
