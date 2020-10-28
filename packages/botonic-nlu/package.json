@@ -1,6 +1,7 @@
 {
   "name": "@botonic/nlu",
   "version": "0.15.0",
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist && ../../node_modules/.bin/tsc",
@@ -14,7 +15,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",

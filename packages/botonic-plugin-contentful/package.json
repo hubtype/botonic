@@ -16,6 +16,7 @@
   },
   "name": "@botonic/plugin-contentful",
   "version": "0.15.0",
+  "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
@@ -30,7 +31,6 @@
     "README.md"
   ],
   "author": "",
-  "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "@nlpjs/core": "^4.14.0",

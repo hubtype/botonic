@@ -1,6 +1,7 @@
 {
   "name": "@botonic/core",
   "version": "0.15.0",
+  "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
   "scripts": {
@@ -16,7 +17,6 @@
     "url": "git+https://github.com/hubtype/botonic.git"
   },
   "author": "",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/hubtype/botonic/issues"
   },

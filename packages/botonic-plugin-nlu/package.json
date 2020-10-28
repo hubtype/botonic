@@ -1,6 +1,7 @@
 {
   "name": "@botonic/plugin-nlu",
   "version": "0.15.0",
+  "license": "MIT",
   "main": "dist/index",
   "scripts": {
     "clean_install": "npm i && npm run-script build",

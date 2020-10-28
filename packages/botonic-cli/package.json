@@ -2,6 +2,7 @@
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
   "version": "0.15.0",
+  "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
   },
@@ -43,7 +44,6 @@
   "keywords": [
     "oclif"
   ],
-  "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
