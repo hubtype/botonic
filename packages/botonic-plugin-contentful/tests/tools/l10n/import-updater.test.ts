@@ -1,20 +1,21 @@
+import { anything, instance, mock, when } from 'ts-mockito'
+
+import * as cms from '../../../src/cms'
+import { ContentId, ContentType } from '../../../src/cms'
 import {
   ContentFieldType,
   ManageCms,
   ManageContext,
 } from '../../../src/manage-cms'
 import { Locale, SPANISH } from '../../../src/nlp'
-import * as cms from '../../../src/cms'
-import { ContentId, ContentType } from '../../../src/cms'
-import { testManageContentful } from '../../contentful/manage/manage-contentful.helper'
-import { repeatWithBackoff } from '../../../src/util/backoff'
-import { testContentful } from '../../contentful/contentful.helper'
 import {
   ContentToImport,
   ImportContentUpdater,
   ImportRecordReducer,
 } from '../../../src/tools/l10n/import-updater'
-import { anything, instance, mock, when } from 'ts-mockito'
+import { repeatWithBackoff } from '../../../src/util/backoff'
+import { testContentful } from '../../contentful/contentful.helper'
+import { testManageContentful } from '../../contentful/manage/manage-contentful.helper'
 
 const TEST_CSV_IMPORT_ID = '3LOUB5Udmxw7rh87G5Ob9b'
 function ctxt(ctx: Partial<ManageContext>): ManageContext {
@@ -37,7 +38,9 @@ test('TEST: ImportRecordReducer test check updateFields calls', async () => {
   when(contentUpdater.update(anything())).thenCall(
     (content: ContentToImport) => {
       numCalls++
-      expect(content.contentId).toEqual(new ContentId(record.Model, record.Id))
+      expect(content.contentId).toEqual(
+        ContentId.create(record.Model, record.Id)
+      )
       expect(content.name).toEqual(record.Code)
       expect(content.fields).toEqual({
         [ContentFieldType.TEXT]: 'new text',

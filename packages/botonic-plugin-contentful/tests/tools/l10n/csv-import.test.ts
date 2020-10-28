@@ -1,8 +1,9 @@
 import path from 'path'
-import { CsvImport, Record } from '../../../src/tools/l10n/csv-import'
 import { anything, instance, mock, when } from 'ts-mockito'
+
 import * as cms from '../../../src/cms'
 import { ContentFieldType } from '../../../src/manage-cms/fields'
+import { CsvImport, Record } from '../../../src/tools/l10n/csv-import'
 import { ImportRecordReducer } from '../../../src/tools/l10n/import-updater'
 
 const FIXTURES_BASE = path.resolve(__dirname, '__fixtures__')

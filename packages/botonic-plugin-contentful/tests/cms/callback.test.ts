@@ -1,5 +1,12 @@
 import * as cms from '../../src'
-import { CmsException, ContentCallback, ContentType } from '../../src'
+import {
+  CmsException,
+  ContentCallback,
+  ContentId,
+  ContentType,
+  ResourceId,
+  TopContentId,
+} from '../../src'
 
 test('TEST: Callback.empty', () => {
   const callback = cms.Callback.empty()
@@ -28,4 +35,15 @@ test('TEST: regexForModel', () => {
       callback.payload!
     )
   ).toBeTruthy()
+})
+
+test('TEST: ResourceId.create', () => {
+  expect(ResourceId.create(ContentType.TEXT, 'id')).toBeInstanceOf(TopContentId)
+
+  expect(ResourceId.create(ContentType.BUTTON, 'id')).toBeInstanceOf(ContentId)
+  expect(ResourceId.create(ContentType.BUTTON, 'id')).not.toBeInstanceOf(
+    TopContentId
+  )
+
+  expect(ResourceId.create('resource', 'id')).not.toBeInstanceOf(ContentId)
 })

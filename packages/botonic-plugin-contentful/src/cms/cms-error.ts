@@ -166,7 +166,7 @@ export class ErrorReportingCMS implements CMS {
     id: string,
     context: Context | undefined
   ): (reason: any) => never {
-    return this.handleResourceError(new ContentId(contentType, id), context)
+    return this.handleResourceError(ContentId.create(contentType, id), context)
   }
 
   private handleResourceError(
