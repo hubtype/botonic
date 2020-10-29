@@ -1,6 +1,7 @@
 {
   "name": "@botonic/plugin-nlu",
   "version": "0.15.0",
+  "license": "MIT",
   "main": "dist/index",
   "scripts": {
     "clean_install": "npm i && npm run-script build",
@@ -42,5 +43,14 @@
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"
-  }
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "nlp",
+    "nlu",
+    "typescript"
+  ]
 }

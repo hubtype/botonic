@@ -2,6 +2,7 @@
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
   "version": "0.15.0",
+  "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
   },
@@ -40,10 +41,6 @@
     "/templates"
   ],
   "homepage": "https://github.com/hubtype/botonic",
-  "keywords": [
-    "oclif"
-  ],
-  "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
@@ -66,5 +63,14 @@
     "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/index.d.ts",
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "cli",
+    "conversational-app",
+    "conversational-ui",
+    "oclif",
+    "typescript"
+  ]
 }

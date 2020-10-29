@@ -1,6 +1,7 @@
 {
   "name": "@botonic/plugin-dialogflow",
   "version": "0.15.0",
+  "license": "MIT",
   "main": "src/index.js",
   "scripts": {
     "cloc": "../../scripts/qa/cloc-package.sh .",
@@ -17,5 +18,14 @@
   },
   "devDependencies": {
     "core-js": "^3.1.4"
-  }
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "dialogflow",
+    "javascript",
+    "nlp"
+  ]
 }

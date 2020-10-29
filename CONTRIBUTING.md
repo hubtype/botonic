@@ -13,7 +13,7 @@ If you have any suggestions or just want to let us know what you think of Botoni
 ## What about Botonic?
 <p align="center">
   <a  href="https://botonic.io/">
-    <img alt="Node.js" src="https://botonic.io/images/botonic_react_logo-p-500.png" width="150"/>
+    <img alt="Node.js" src="https://botonic.io/img/botonic-logo.png" width="150"/>
   </a>
 </p>
 

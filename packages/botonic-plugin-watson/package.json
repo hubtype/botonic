@@ -1,6 +1,7 @@
 {
   "name": "@botonic/plugin-watson",
   "version": "0.15.0",
+  "license": "MIT",
   "main": "src/index.js",
   "scripts": {
     "cloc": "../../scripts/qa/cloc-package.sh .",
@@ -12,5 +13,13 @@
   "dependencies": {
     "ibm-watson": "^5.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "javascript",
+    "watson"
+  ]
 }

@@ -1,6 +1,7 @@
 {
   "name": "@botonic/nlu",
   "version": "0.15.0",
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist && ../../node_modules/.bin/tsc",
@@ -12,9 +13,7 @@
     "test": "jest",
     "prepare": "node ../../preinstall.js"
   },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
@@ -36,5 +35,14 @@
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"
-  }
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "nlp",
+    "nlu",
+    "typescript"
+  ]
 }

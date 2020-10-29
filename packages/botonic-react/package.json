@@ -1,6 +1,7 @@
 {
   "name": "@botonic/react",
   "version": "0.15.1",
+  "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
   "scripts": {
@@ -16,7 +17,6 @@
     "*.(scss|css)"
   ],
   "author": "",
-  "license": "MIT",
   "files": [
     "src/**",
     "index.d.ts",
@@ -63,5 +63,13 @@
   },
   "engines": {
     "node": ">=10.0.0"
-  }
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "javascript",
+    "react"
+  ]
 }
