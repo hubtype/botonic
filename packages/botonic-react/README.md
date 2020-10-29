@@ -1,4 +1,5 @@
 # Botonic
+
 ### Build Chatbots and Conversational Apps Using React
 
 [![botonic](https://img.shields.io/badge/cli-botonic-brightgreen.svg)](https://botonic.io)
@@ -34,7 +35,7 @@
     <img
       alt="Node.js"
       src="https://botonic.io/img/botonic-logo.png"
-      width="350"
+      width="150"
     />
 </p>
 
