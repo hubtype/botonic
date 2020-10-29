@@ -5,7 +5,7 @@ import React, {
   forwardRef,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
-import { useStorageState } from 'react-storage-hooks'
+import { useStorageState } from './use-storage-state-hook'
 import { v4 as uuidv4 } from 'uuid'
 import UAParser from 'ua-parser-js'
 import { isMobile, params2queryString, INPUT } from '@botonic/core'
@@ -197,7 +197,8 @@ export const Webchat = forwardRef((props, ref) => {
     typeof props.storageKey === 'function'
       ? props.storageKey()
       : props.storageKey
-  const [botonicState, saveState, writeError] = useStorageState(
+
+  const [botonicState, saveState] = useStorageState(
     storage,
     storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
   )
