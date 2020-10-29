@@ -44,5 +44,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "version": "0.15.1"
 }
