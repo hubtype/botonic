@@ -19,6 +19,7 @@ export class WebchatApp {
     defaultDelay,
     defaultTyping,
     storage,
+    storageKey,
     onInit,
     onOpen,
     onClose,
@@ -37,6 +38,7 @@ export class WebchatApp {
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
     this.storage = storage
+    this.storageKey = storageKey
     this.onInit = onInit
     this.onOpen = onOpen
     this.onClose = onClose
