@@ -22,9 +22,11 @@
     "prettier": "^2.0.5"
   },
   "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
     "javascript",
-    "chatbots",
-    "conversational apps",
     "luis",
     "nlp"
   ]

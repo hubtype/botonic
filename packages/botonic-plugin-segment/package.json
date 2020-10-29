@@ -16,10 +16,12 @@
   },
   "devDependencies": {},
   "keywords": [
-    "javascript",
-    "chatbots",
-    "conversational apps",
     "analytics",
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "javascript",
     "segment"
   ]
 }

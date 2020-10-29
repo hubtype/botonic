@@ -45,10 +45,12 @@
     "@types/webgl2": "0.0.5"
   },
   "keywords": [
-    "typescript",
-    "chatbots",
-    "conversational apps",
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
     "nlp",
-    "nlu"
+    "nlu",
+    "typescript"
   ]
 }

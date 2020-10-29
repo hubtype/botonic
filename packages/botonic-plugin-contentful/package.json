@@ -72,10 +72,12 @@
     "node": ">=12.3.0"
   },
   "keywords": [
-    "typescript",
-    "chatbots",
-    "conversational apps",
+    "bot-framework",
+    "chatbot",
+    "cms",
     "contentful",
-    "cms"
+    "conversational-app",
+    "conversational-ui",
+    "typescript"
   ]
 }

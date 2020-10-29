@@ -15,9 +15,11 @@
   },
   "devDependencies": {},
   "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
     "javascript",
-    "chatbots",
-    "conversational apps",
     "watson"
   ]
 }

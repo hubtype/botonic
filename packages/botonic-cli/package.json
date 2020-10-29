@@ -65,10 +65,12 @@
   },
   "types": "lib/index.d.ts",
   "keywords": [
-    "oclif",
+    "bot-framework",
+    "chatbot",
     "cli",
-    "typescript",
-    "chatbots",
-    "conversational apps"
+    "conversational-app",
+    "conversational-ui",
+    "oclif",
+    "typescript"
   ]
 }

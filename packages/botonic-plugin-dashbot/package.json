@@ -16,9 +16,11 @@
   },
   "devDependencies": {},
   "keywords": [
-    "javascript",
-    "chatbots",
-    "conversational apps",
-    "dashbot"
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "dashbot",
+    "javascript"
   ]
 }

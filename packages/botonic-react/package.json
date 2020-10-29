@@ -65,9 +65,11 @@
     "node": ">=10.0.0"
   },
   "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
     "javascript",
-    "chatbots",
-    "conversational apps",
     "react"
   ]
 }

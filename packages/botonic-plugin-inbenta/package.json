@@ -14,10 +14,12 @@
   },
   "devDependencies": {},
   "keywords": [
-    "javascript",
-    "chatbots",
-    "conversational apps",
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
     "inbenta",
+    "javascript",
     "nlp"
   ]
 }
