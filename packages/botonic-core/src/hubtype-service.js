@@ -98,7 +98,7 @@ export class HubtypeService {
   handleUnsentInput(message) {
     this.onEvent({
       action: 'update_message_info',
-      message: { id: message.id, unsentInput: message },
+      message: { id: message.id, ack: 0, unsentInput: message },
     })
   }
 
