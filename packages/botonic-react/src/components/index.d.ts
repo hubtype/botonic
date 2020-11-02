@@ -92,15 +92,15 @@ export interface BlobProps {
 
 export interface ScrollbarProps {
   thumb?: {
-    bgcolor: string
-    border: string
-    color: string
-    opacity: string
+    bgcolor?: string
+    border?: string
+    color?: string
+    opacity?: string
   }
   track?: {
-    bgcolor: string
-    border: string
-    color: string
+    bgcolor?: string
+    border?: string
+    color?: string
   }
 }
 
