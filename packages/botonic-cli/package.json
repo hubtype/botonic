@@ -15,7 +15,7 @@
     "analytics-node": "^3.4.0-beta.1",
     "axios": "^0.19.2",
     "colors": "^1.4.0",
-    "folder-hash": "^3.3.0",
+    "folder-hash": "^4.0.0",
     "form-data": "^3.0.0",
     "fs-extra": "^9.0.0",
     "inquirer": "^7.0.4",
