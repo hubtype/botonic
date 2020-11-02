@@ -110,7 +110,7 @@ function Header() {
                   : { maxHeight: 0, opacity: 0.8 }
               }
             >
-              <ul className='bg-gray-800 px-4 py-2 w-40'>
+              <ul className='bg-gray-800 px-4 py-2 w-40 list-none'>
                 <li>
                   <Link
                     to={useBaseUrl('/docs/welcome')}
