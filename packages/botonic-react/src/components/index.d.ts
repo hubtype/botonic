@@ -120,7 +120,7 @@ export interface ThemeProps {
     customTypes?: React.Component[]
   } & StyleProp & {
       timestamps?: {
-        enable: boolean
+        enable?: boolean
         format(): string
       } & StyleProp
     }
