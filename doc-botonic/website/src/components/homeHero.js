@@ -34,10 +34,16 @@ function HomeHero() {
               >
                 <div>
                   <a
-                    className='btn text-white hover:text-white bg-blue-600 hover:bg-blue-700 w-full mb-4 sm:w-auto sm:mb-0 hover:no-underline'
+                    className='btn text-white hover:text-white bg-blue-600 hover:bg-blue-700 w-full mb-4 sm:w-48 sm:mb-0 hover:no-underline'
                     href='/docs/getting-started'
                   >
                     Start building
+                  </a>
+                  <a
+                    className='btn text-blue-600 visited:text-blue-600 hover:text-blue-600 hover:bg-blue-100 border-2 border-solid border-blue-600 w-full mb-4 ml-8 sm:w-48 sm:mb-0 hover:no-underline'
+                    href='https://github.com/hubtype/botonic'
+                  >
+                    GitHub
                   </a>
                 </div>
                 {/*<div>
