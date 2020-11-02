@@ -301,5 +301,5 @@ export class Inspector {
 }
 
 export function isBrowser(): boolean
-export function isMobile(): boolean
+export function isMobile(mobileBreakpoint?: number): boolean
 export function isNode(): boolean
