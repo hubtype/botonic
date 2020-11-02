@@ -91,6 +91,7 @@ export interface BlobProps {
 }
 
 export interface ScrollbarProps {
+  autoHide?: boolean
   thumb?: {
     bgcolor?: string
     border?: string
