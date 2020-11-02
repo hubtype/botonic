@@ -106,7 +106,7 @@ export interface ScrollbarProps {
 
 export interface ThemeProps {
   mobileBreakpoint: number
-  mobileStyle: StyleProp
+  mobileStyle: any
   webview?: StyleProp & { header?: StyleProp }
   animations?: EnableProp
   intro?: StyleProp & ImageProp & CustomProp
@@ -125,8 +125,8 @@ export interface ThemeProps {
       } & StyleProp
     }
   button?: {
-    hoverBackground: string
-    hoverTextColor: string
+    hoverBackground?: string
+    hoverTextColor?: string
     messageType?: 'text' | 'payload'
   } & StyleProp &
     CustomProp
