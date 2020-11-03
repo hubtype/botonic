@@ -105,7 +105,7 @@ export interface ScrollbarProps {
   }
 }
 
-export interface ThemeProps {
+export interface ThemeProps extends StyleProp {
   mobileBreakpoint: number
   mobileStyle: any
   webview?: StyleProp & { header?: StyleProp }
