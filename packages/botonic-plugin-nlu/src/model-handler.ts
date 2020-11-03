@@ -71,9 +71,9 @@ export class ModelHandler {
     const lang = detectLang(input, this.languages)
     const { model, modelData } = this.modelInfo[lang]
     const tensor = inputToTensor(input, this.modelInfo[lang].preprocessor)
-    const prediction = model.predict(tensor)
+    const prediction = model.predict(tensor as any)
     const intent = predictionToIntent(
-      prediction as Tensor,
+      (prediction as any) as Tensor,
       modelData.intents,
       lang
     )
