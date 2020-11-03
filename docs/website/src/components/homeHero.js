@@ -13,7 +13,10 @@ function HomeHero() {
               data-aos='zoom-y-out'
             >
               The React Framework to Build{' '}
-              <span className='bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400'>
+              <span
+                style={{ letterSpacing: '-0.02em' }}
+                className='bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400'
+              >
                 Conversational Apps
               </span>
             </h1>

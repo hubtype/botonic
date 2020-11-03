@@ -40,10 +40,9 @@ export const WasPageUseful = () => {
 
         const shouldShowWasPageUseful = () => {
           const url = new URL(location)
-          let pathName = url.pathname
+          let pathName = url.pathname.split('/docs')[1]
           pathName = pathName.endsWith('/') ? pathName : `${pathName}/`
-          if (ALL_PATH_NAMES.includes(pathName)) return true
-          return false
+          return ALL_PATH_NAMES.includes(pathName)
         }
         // Don't render component in 404 not found pages
         if (!shouldShowWasPageUseful()) return null
