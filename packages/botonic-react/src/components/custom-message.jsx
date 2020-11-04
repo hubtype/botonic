@@ -1,7 +1,10 @@
 import React from 'react'
+import { INPUT } from '@botonic/core'
+import merge from 'lodash.merge'
+
 import { Message } from './message'
 import { Reply } from './reply'
-import { INPUT } from '@botonic/core'
+import { mapObjectNonBooleanValues } from '../utils'
 
 export const customMessage = ({
   name,
@@ -9,7 +12,10 @@ export const customMessage = ({
   defaultProps,
 }) => {
   const CustomMessage = props => (
-    <Message {...defaultProps} {...props} type={INPUT.CUSTOM} />
+    <Message
+      {...merge(mapObjectNonBooleanValues(defaultProps), props)}
+      type={INPUT.CUSTOM}
+    />
   )
 
   const SplitChildren = props => {
