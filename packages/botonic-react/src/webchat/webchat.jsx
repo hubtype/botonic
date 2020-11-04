@@ -219,7 +219,7 @@ export const Webchat = forwardRef((props, ref) => {
             lastRoutePath: webchatState.lastRoutePath,
             devSettings: webchatState.devSettings,
             lastMessageUpdate: webchatState.lastMessageUpdate,
-            themeUpdates: webchatState.themeUpdates, // can contain regexs
+            themeUpdates: webchatState.themeUpdates,
           })
         )
       )
