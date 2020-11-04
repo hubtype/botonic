@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
+
 import { WebchatContext } from '../contexts'
-import { COLORS } from '../constants'
+import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../utils'
 
 const StyledButton = styled.button`
@@ -25,8 +26,8 @@ export const Reply = props => {
   }
 
   const renderBrowser = () => {
-    const replyStyle = getThemeProperty('reply.style')
-    const CustomReply = getThemeProperty('reply.custom')
+    const replyStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.replyStyle)
+    const CustomReply = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.customReply)
     if (CustomReply) {
       return (
         <div onClick={e => handleClick(e)}>
@@ -39,10 +40,13 @@ export const Reply = props => {
       <StyledButton
         style={{
           border: `1px solid ${getThemeProperty(
-            'brand.color',
+            WEBCHAT.CUSTOM_PROPERTIES.brandColor,
             COLORS.BOTONIC_BLUE
           )}`,
-          color: getThemeProperty('brand.color', COLORS.BOTONIC_BLUE),
+          color: getThemeProperty(
+            WEBCHAT.CUSTOM_PROPERTIES.brandColor,
+            COLORS.BOTONIC_BLUE
+          ),
           ...replyStyle,
         }}
         onClick={e => handleClick(e)}

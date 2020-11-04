@@ -1,7 +1,9 @@
 import React, { useContext } from 'react'
+import styled from 'styled-components'
+
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
-import styled from 'styled-components'
+import { WEBCHAT } from '../constants'
 
 const RepliesContainer = styled.div`
   display: flex;
@@ -29,13 +31,17 @@ export const WebchatReplies = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
-    ...getThemeProperty('scrollbar'),
+    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
   }
   let justifyContent = 'center'
-  const flexWrap = getThemeProperty('replies.wrap', 'wrap')
+  const flexWrap = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.wrapReplies,
+    'wrap'
+  )
   if (flexWrap == 'nowrap') justifyContent = 'flex-start'
-  else if (getThemeProperty('replies.align'))
-    justifyContent = options[getThemeProperty('replies.align')]
+  else if (getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies))
+    justifyContent =
+      options[getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies)]
 
   return (
     <StyledScrollbar

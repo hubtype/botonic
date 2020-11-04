@@ -56,20 +56,32 @@ const CloseHeader = styled.div`
 
 export const DefaultHeader = props => {
   const { getThemeProperty } = props
-  const animationsEnabled = getThemeProperty('animations.enable', true)
+  const animationsEnabled = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
+    true
+  )
   const headerImage = getThemeProperty(
-    'header.image',
-    getThemeProperty('brand.image', WEBCHAT.DEFAULTS.LOGO)
+    WEBCHAT.CUSTOM_PROPERTIES.headerImage,
+    getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.brandImage,
+      WEBCHAT.DEFAULTS.LOGO
+    )
   )
 
-  const headerTitle = getThemeProperty('header.title', 'Botonic')
-  const headerSubtitle = getThemeProperty('header.subtitle', '')
+  const headerTitle = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.headerTitle,
+    WEBCHAT.DEFAULTS.TITLE
+  )
+  const headerSubtitle = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.headerSubtitle,
+    ''
+  )
 
   return (
     <Header
       role='header'
       color={props.color}
-      style={{ ...getThemeProperty('header.style') }}
+      style={{ ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.headerStyle) }}
     >
       {headerImage && (
         <ImageContainer>
@@ -98,7 +110,7 @@ export const WebchatHeader = props => {
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }
-  const CustomHeader = getThemeProperty('header.custom')
+  const CustomHeader = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.customHeader)
   if (CustomHeader) {
     return <CustomHeader onCloseClick={handleCloseWebchat} />
   }
@@ -106,7 +118,10 @@ export const WebchatHeader = props => {
     <DefaultHeader
       webchatState={webchatState}
       getThemeProperty={getThemeProperty}
-      color={getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)}
+      color={getThemeProperty(
+        WEBCHAT.CUSTOM_PROPERTIES.brandColor,
+        COLORS.BOTONIC_BLUE
+      )}
       onCloseClick={handleCloseWebchat}
     />
   )

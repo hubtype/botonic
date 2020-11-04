@@ -62,20 +62,23 @@ export const Carousel = props => {
   let content = props.children
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
-    ...getThemeProperty('scrollbar'),
+    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
   }
   const [hasLeftArrow, setLeftArrow] = useState(false)
   const [hasRightArrow, setRightArrow] = useState(true)
   const carouselRef = useRef(null)
   const CustomCarouselLeftArrow = getThemeProperty(
-    'carousel.arrow.left',
+    WEBCHAT.CUSTOM_PROPERTIES.customCarouselLeftArrow,
     undefined
   )
   const CustomCarouselRightArrow = getThemeProperty(
-    'carousel.arrow.right',
+    WEBCHAT.CUSTOM_PROPERTIES.customCarouselRightArrow,
     undefined
   )
-  const carouselArrowsEnabled = getThemeProperty('carousel.enableArrows', true)
+  const carouselArrowsEnabled = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.enableCarouselArrows,
+    true
+  )
 
   const scrollCarouselBy = value => {
     carouselRef.current.scrollBy({

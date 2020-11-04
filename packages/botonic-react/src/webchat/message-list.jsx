@@ -1,9 +1,11 @@
 import React, { useContext } from 'react'
+import Fade from 'react-reveal/Fade'
+import styled from 'styled-components'
+
+import { WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './components/styled-scrollbar'
 import { resolveImage, ConditionalWrapper } from '../utils'
-import Fade from 'react-reveal/Fade'
-import styled from 'styled-components'
 
 const StyledMessages = styled.div`
   display: flex;
@@ -21,14 +23,17 @@ const DefaultIntroImage = styled.img`
 
 export const WebchatMessageList = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
-  const animationsEnabled = getThemeProperty('animations.enable', true)
-  const CustomIntro = getThemeProperty('intro.custom')
-  const introImage = getThemeProperty('intro.image')
-  const introStyle = getThemeProperty('intro.style')
+  const animationsEnabled = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
+    true
+  )
+  const CustomIntro = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.customIntro)
+  const introImage = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.introImage)
+  const introStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.introStyle)
 
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
-    ...getThemeProperty('scrollbar'),
+    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
   }
 
   const DefaultIntro = introImage && (

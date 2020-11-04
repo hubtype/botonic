@@ -1,6 +1,7 @@
 import { getProperty, _getThemeProperty } from '../src/utils'
 import { normalizeWebchatSettings } from '../src/components/webchat-settings'
 import merge from 'lodash.merge'
+import { WEBCHAT } from '../src/constants'
 
 const theme = {
   message: {
@@ -36,7 +37,7 @@ describe('getProperty', () => {
   })
 
   it('founds the nested property', () => {
-    expect(getProperty(theme, 'message.bot.image')).toBe(
+    expect(getProperty(theme, WEBCHAT.CUSTOM_PROPERTIES.botMessageImage)).toBe(
       'DefaultLogoPathNested'
     )
   })
@@ -46,18 +47,24 @@ describe('getProperty', () => {
   })
 
   it("returns undefined if theme doesn't exist", () => {
-    expect(getProperty(undefined, 'message.bot.image')).toBe(undefined)
+    expect(
+      getProperty(undefined, WEBCHAT.CUSTOM_PROPERTIES.botMessageImage)
+    ).toBe(undefined)
   })
 
   it('returns null if property is set to null', () => {
-    expect(getProperty(anotherTheme, 'message.bot.image')).toBe(null)
+    expect(
+      getProperty(anotherTheme, WEBCHAT.CUSTOM_PROPERTIES.botMessageImage)
+    ).toBe(null)
   })
 })
 
 describe('getThemeProperty', () => {
   const getThemeProperty = _getThemeProperty(theme)
   it('gives preference to nested property', () => {
-    expect(getThemeProperty('message.bot.image')).toBe('DefaultLogoPathNested')
+    expect(getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.botMessageImage)).toBe(
+      'DefaultLogoPathNested'
+    )
   })
 })
 
