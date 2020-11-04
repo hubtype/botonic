@@ -205,14 +205,18 @@ export const Webchat = forwardRef((props, ref) => {
 
   const saveWebchatState = webchatState => {
     storage &&
-      saveState({
-        messages: webchatState.messagesJSON,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-        devSettings: webchatState.devSettings,
-        lastMessageUpdate: webchatState.lastMessageUpdate,
-        themeUpdates: webchatState.themeUpdates, // can contain regexs
-      })
+      saveState(
+        JSON.parse(
+          stringifyWithRegexs({
+            messages: webchatState.messagesJSON,
+            session: webchatState.session,
+            lastRoutePath: webchatState.lastRoutePath,
+            devSettings: webchatState.devSettings,
+            lastMessageUpdate: webchatState.lastMessageUpdate,
+            themeUpdates: webchatState.themeUpdates, // can contain regexs
+          })
+        )
+      )
   }
   const deviceAdapter = new DeviceAdapter()
 
