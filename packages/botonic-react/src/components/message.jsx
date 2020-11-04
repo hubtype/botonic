@@ -176,23 +176,29 @@ export const Message = props => {
     }, [webchatState.messagesJSON])
   }
 
-  const brandColor = getThemeProperty('brand.color', COLORS.BOTONIC_BLUE)
+  const brandColor = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.brandColor,
+    COLORS.BOTONIC_BLUE
+  )
 
   const getBgColor = () => {
     if (!blob) return COLORS.TRANSPARENT
     if (isFromUser) {
-      return getThemeProperty('message.user.style.background', brandColor)
+      return getThemeProperty(
+        WEBCHAT.CUSTOM_PROPERTIES.userMessageBackground,
+        brandColor
+      )
     }
     return getThemeProperty(
-      'message.bot.style.background',
+      WEBCHAT.CUSTOM_PROPERTIES.botMessageBackground,
       COLORS.SEASHELL_WHITE
     )
   }
 
   const getMessageStyle = () =>
     isFromBot
-      ? getThemeProperty('message.bot.style')
-      : getThemeProperty('message.user.style')
+      ? getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.botMessageStyle)
+      : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userMessageStyle)
 
   const hasBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
 
@@ -234,10 +240,16 @@ export const Message = props => {
     }
 
     const BotMessageImage = getThemeProperty(
-      'message.bot.image',
-      getThemeProperty('brand.image', WEBCHAT.DEFAULTS.LOGO)
+      WEBCHAT.CUSTOM_PROPERTIES.botMessageImage,
+      getThemeProperty(
+        WEBCHAT.CUSTOM_PROPERTIES.brandImage,
+        WEBCHAT.DEFAULTS.LOGO
+      )
     )
-    const animationsEnabled = getThemeProperty('animations.enable', true)
+    const animationsEnabled = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
+      true
+    )
 
     const resolveCustomTypeName = () =>
       isFromBot && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
@@ -252,13 +264,15 @@ export const Message = props => {
           <MessageContainer
             isfromuser={isFromUser}
             style={{
-              ...getThemeProperty('message.style'),
+              ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.messageStyle),
             }}
           >
             {isFromBot && BotMessageImage && (
               <BotMessageImageContainer
                 style={{
-                  ...getThemeProperty('message.bot.imageStyle'),
+                  ...getThemeProperty(
+                    WEBCHAT.CUSTOM_PROPERTIES.botMessageImageStyle
+                  ),
                   ...imagestyle,
                 }}
               >
@@ -272,7 +286,9 @@ export const Message = props => {
               className={className}
               bgcolor={getBgColor()}
               color={isFromUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
-              blobwidth={getThemeProperty('message.bot.blobWidth')}
+              blobwidth={getThemeProperty(
+                WEBCHAT.CUSTOM_PROPERTIES.botMessageBlobWidth
+              )}
               blob={blob}
               style={{
                 ...getMessageStyle(),
