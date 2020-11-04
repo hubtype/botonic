@@ -1,9 +1,10 @@
 import React from 'react'
 import AttachmentIcon from '../../assets/attachment-icon.svg'
+import { ROLES } from '../../constants'
 import { Icon, IconContainer } from './common'
 
 export const Attachment = ({ onChange, accept }) => (
-  <IconContainer role='attachment-icon'>
+  <IconContainer role={ROLES.ATTACHMENT_ICON}>
     <label htmlFor='attachment' style={{ marginTop: 4 }}>
       <Icon src={AttachmentIcon} />
     </label>

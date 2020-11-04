@@ -36,7 +36,13 @@ import {
   deserializeRegex,
   stringifyWithRegexs,
 } from '../utils'
-import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB, SENDERS } from '../constants'
+import {
+  WEBCHAT,
+  COLORS,
+  MAX_ALLOWED_SIZE_MB,
+  SENDERS,
+  ROLES,
+} from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 import { DeviceAdapter } from './devices/device-adapter'
@@ -655,7 +661,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
     return (
       <StyledTriggerButton
-        role='trigger-button'
+        role={ROLES.TRIGGER_BUTTON}
         style={{ ...triggerButtonStyle }}
       >
         {getTriggerImage() && (
@@ -882,7 +888,7 @@ export const Webchat = forwardRef((props, ref) => {
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
-          role='styled-webchat'
+          role={ROLES.STYLED_WEBCHAT}
           id={'botonic-webchat'}
           width={webchatState.width}
           height={webchatState.height}

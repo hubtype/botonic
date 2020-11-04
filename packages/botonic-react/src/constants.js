@@ -141,3 +141,18 @@ export const MIME_WHITELIST = {
 }
 
 export const MAX_ALLOWED_SIZE_MB = 10
+
+export const ROLES = {
+  ATTACHMENT_ICON: 'attachment-icon',
+  EMOJI_PICKER_ICON: 'emoji-picker-icon',
+  EMOJI_PICKER: 'emoji-picker',
+  HEADER: 'header',
+  MESSAGE_LIST: 'message-list',
+  PERSISTENT_MENU_ICON: 'persistent-menu-icon',
+  PERSISTENT_MENU: 'persistent-menu',
+  SEND_BUTTON_ICON: 'send-button-icon',
+  STYLED_WEBCHAT: 'styled-webchat',
+  TRIGGER_BUTTON: 'trigger-button',
+  TYPING_INDICATOR: 'typing-indicator',
+  TEXT_BOX: 'textbox',
+}
