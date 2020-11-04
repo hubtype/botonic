@@ -8,13 +8,14 @@ export const resolveMessageTimestamps = (
 ) => {
   const timestampsFormat = getThemeFn('message.timestamps.format')
   const timestampStyle = getThemeFn('message.timestamps.style')
-  const timestampsEnabled =
+  const timestampsEnabled = Boolean(
     messageTimestampEnabled !== undefined
       ? messageTimestampEnabled
       : getThemeFn(
           'message.timestamps.enable',
           Boolean(timestampStyle) || Boolean(timestampsFormat) || false
         )
+  )
   const defaultTimestampFormat = {
     month: 'short',
     day: 'numeric',
@@ -25,7 +26,11 @@ export const resolveMessageTimestamps = (
   const getFormattedTimestamp =
     (timestampsFormat && timestampsFormat()) ||
     new Date().toLocaleString(undefined, defaultTimestampFormat)
-  return { timestampsEnabled, getFormattedTimestamp, timestampStyle }
+  return {
+    timestampsEnabled,
+    getFormattedTimestamp,
+    timestampStyle,
+  }
 }
 
 const TimestampContainer = styled.div`

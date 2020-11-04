@@ -145,3 +145,22 @@ export const stringifyWithRegexs = object => {
   // Serialization of regexs: https://stackoverflow.com/questions/12075927/serialization-of-regexp
   return JSON.stringify(object, serializeRegex)
 }
+
+export const mapObject = (obj, conversion = ([key, value]) => [key, value]) => {
+  return Object.entries(obj)
+    .map(conversion)
+    .reduce(function (prev, curr) {
+      prev[curr[0]] = curr[1]
+      return prev
+    }, {})
+}
+
+export const nonBooleanValues = ([key, value]) => {
+  if (typeof value === 'boolean') return [key, Number(value)]
+  return [key, value]
+}
+
+export const mapObjectNonBooleanValues = obj => {
+  // to avoid React SSR warnings: https://github.com/styled-components/styled-components/issues/1198#issue-262022540
+  return mapObject(obj, nonBooleanValues)
+}

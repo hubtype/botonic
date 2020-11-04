@@ -80,10 +80,10 @@ export const Message = props => {
     delay = defaultDelay,
     typing = defaultTyping,
     children,
-    enableTimestamps,
+    enabletimestamps = props.enabletimestamps || props.enableTimestamps,
     json,
     style,
-    imageStyle,
+    imagestyle = props.imagestyle || props.imageStyle,
     ...otherProps
   } = props
   const isFromUser = from === 'user'
@@ -115,7 +115,7 @@ export const Message = props => {
     timestampsEnabled,
     getFormattedTimestamp,
     timestampStyle,
-  } = resolveMessageTimestamps(getThemeProperty, enableTimestamps)
+  } = resolveMessageTimestamps(getThemeProperty, enabletimestamps)
 
   const getEnvAck = () => {
     let ack = 0
@@ -259,7 +259,7 @@ export const Message = props => {
               <BotMessageImageContainer
                 style={{
                   ...getThemeProperty('message.bot.imageStyle'),
-                  ...imageStyle,
+                  ...imagestyle,
                 }}
               >
                 <img
