@@ -1,4 +1,5 @@
 # Botonic
+
 ### Build Chatbots and Conversational Apps Using React
 
 [![botonic](https://img.shields.io/badge/cli-botonic-brightgreen.svg)](https://botonic.io)
@@ -12,35 +13,53 @@
   </a>
 </p>
 
-[Botonic](https://botonic.io) is the open source framework developed by [Hubtype](https://www.hubtype.com) for building amazing Chatbots for any Platform with React. [Botonic](https://botonic.io) is an easy to learn, open-source framework that lets you create powerful conversational interfaces that work on the most popular messaging apps (Whatsapp, Facebook Messenger, Telegram and more), your website or even your native mobile apps (Android/iOS).
-
 <!-- toc -->
 
-- [⚛️ Why React](#-why-react)
+# What's in this document
 
-- [🚀 Getting Started](#-getting-started)
-
-- [📌 Requirements](#-requirements)
-
-- [📚 Related Links](#-related-links)
-
-- [📣 Feedback](#-feedback)
+- [Introduction](#-introduction)
+- [Getting Started](#-getting-started)
+- [Supporting and contributing](#-supporting-and-contributing)
+- [Related Links](#-related-links)
 
 <!-- tocstop -->
 
-# ️️️ ⚛️ Why React
+# 🐣 Introduction
 
-<p align="center">
-    <img
-      alt="Node.js"
-      src="https://botonic.io/img/botonic-logo.png"
-      width="350"
-    />
-</p>
+[Botonic](https://botonic.io) is a full-stack framework to create chatbots and modern [conversational apps](https://www.hubtype.com/blog/what-are-conversational-apps/).
 
-Building chatbots is a lot like building websites, that's why Botonic uses the same abstractions used in React, like routes, components and JSX, so you can build modern conversational interfaces (with text, NLP, rich interactive messages and webviews) using technology you already know and love.
+It's built on top of:
+
+⚛️ [React](https://reactjs.org/)
+
+⚡ [Serverless](https://www.serverless.com/)
+
+💡 [Tensorflow.js](https://www.tensorflow.org/js)
+
+And it works on:
+
+💬 Messaging apps: **Whatsapp**, **Facebook Messenger**, **Telegram**, **Twitter DMs**
+
+🌐 Your website
+
+📱 Your mobile app
+
+With Botonic you can focus on creating the best conversational experience for your users instead of dealing with different messaging APIs, AI/NLP complexity or managing and scaling infrastructure.
+It also comes with a battery of plugins so you can easily integrate popular services into your project, for instance:
+
+- Analytics ([Google Analytics](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-google-analytics), [Segment](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-segment), [Dashbot](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dashbot))
+- CMS ([Contentful](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful), Sanity)
+- NLU ([Dialogflow](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dialogflow), [Watson](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-watson), [Luis](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-luis), [Inbenta](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-inbenta))
+
+_If you'd like to see more plugins/integrations, please submit an issue or a pull request_
 
 # 🚀 Getting Started
+
+### Requirements
+
+Node (v10 or above) and NPM are required. LTS version of [NodeJS Installer](https://nodejs.org/) is recommended.
+
+You can verify the installation running `npm --version` and `node --version` on a terminal.
 
 ### Install
 
@@ -71,26 +90,23 @@ $> botonic serve
 $> botonic deploy
 ```
 
-Check out the [Getting Started Tutorial](https://botonic.io/docs/getting-started.html) is a step-by-step guide to start building high quality conversational apps.
+Check out the [Getting Started Tutorial](https://botonic.io/docs/getting-started): a step-by-step guide to start building high quality conversational apps.
 
-[See the docs for more information](https://botonic.io/docs.html).
+[See the docs for more information](https://botonic.io/docs).
 
-# 📌 Requirements
+# 🤝 Supporting and contributing
 
-Node and NPM are required. LTS version of [NodeJS Installer](https://nodejs.org/) is recommended.
-
-You can verify the installation running `npm --version` and `node --version` on a terminal.
+- **⭐⭐ Give us a Star on GitHub ⭐⭐**
+- Submit an [issue](https://github.com/hubtype/botonic/issues) if you find a bug or want to request a feature.
+- Join our [Slack](https://slack.botonic.io/) community, let us know what you're building and give us feedback.
+- PRs are welcome! Just follow our [Code of Conduct](https://github.com/hubtype/botonic/blob/master/CODE_OF_CONDUCT.md) and [Contributing Guide](https://github.com/hubtype/botonic/blob/master/CONTRIBUTING.md)
 
 # 📚 Related Links
 
 - [Botonic](https://botonic.io) - Botonic Website
 
-- [Hubtype](https://hubtype.com) - Who is behind Botonic?
+- [Hubtype](https://hubtype.com) - Botonic was created with ❤️ by Hubtype
 
 - [Slack](https://slack.botonic.io/) - Slack channel
 
 - [Twitter](https://twitter.com/botonic_) - Twitter
-
-# 📣 Feedback
-
-If you have any suggestions or just want to let us know what you think of Botonic, feel free to contact us on [Slack](https://slack.botonic.io/)!
