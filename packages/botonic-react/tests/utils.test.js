@@ -1,6 +1,6 @@
 import { stringifyWithRegexs, deserializeRegex } from '../src/utils'
 
-describe('Regex serialization / rehydration', () => {
+describe('Regex serialization / deserialization', () => {
   const regexsItems = [
     { regex: /regex/i, string: '"/regex/i"', samples: ['Regex', 'regex'] },
     {
