@@ -5,6 +5,7 @@ import LogoMenu from '../../assets/menuButton.svg'
 import { Icon } from './common'
 import { useComponentVisible } from '../hooks'
 import { WebchatContext } from '../../contexts'
+import { ROLES, WEBCHAT } from '../../constants'
 
 const ButtonsContainer = styled.div`
   position: absolute;
@@ -18,7 +19,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
   const { ref, isComponentVisible } = useComponentVisible(true, onClick)
   const { getThemeProperty } = useContext(WebchatContext)
   const CustomPersistentMenu = getThemeProperty(
-    'userInput.menu.custom',
+    WEBCHAT.CUSTOM_PROPERTIES.customPersistentMenu,
     undefined
   )
   let closeLabel = 'Cancel'
@@ -27,7 +28,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
       .closeLabel
   } catch (e) {}
   return (
-    <div ref={ref} role='persistent-menu'>
+    <div ref={ref} role={ROLES.PERSISTENT_MENU}>
       {isComponentVisible && CustomPersistentMenu ? (
         <CustomPersistentMenu onClick={onClick} options={options} />
       ) : (
@@ -65,7 +66,7 @@ const IconContainer = styled.div`
 `
 
 export const PersistentMenu = props => (
-  <IconContainer role='persistent-menu-icon' onClick={props.onClick}>
+  <IconContainer role={ROLES.PERSISTENT_MENU_ICON} onClick={props.onClick}>
     <Icon src={LogoMenu} />
   </IconContainer>
 )

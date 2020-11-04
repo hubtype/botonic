@@ -1,10 +1,10 @@
 import React from 'react'
 import './typing-indicator.scss'
-import { COLORS } from '../../constants'
+import { COLORS, ROLES } from '../../constants'
 
 export const TypingIndicator = props => (
   <div
-    role='typing-indicator'
+    role={ROLES.TYPING_INDICATOR}
     className='typing-indicator'
     style={{ backgroundColor: COLORS.SEASHELL_WHITE }}
   >

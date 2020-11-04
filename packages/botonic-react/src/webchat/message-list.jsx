@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import Fade from 'react-reveal/Fade'
 import styled from 'styled-components'
 
-import { WEBCHAT } from '../constants'
+import { ROLES, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './components/styled-scrollbar'
 import { resolveImage, ConditionalWrapper } from '../utils'
@@ -47,7 +47,7 @@ export const WebchatMessageList = props => {
 
   return (
     <StyledScrollbar
-      role='message-list'
+      role={ROLES.MESSAGE_LIST}
       // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-scrollable`
       id='botonic-scrollable-content'
       scrollbar={scrollbarOptions}

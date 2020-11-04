@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { WebchatContext } from '../contexts'
 import { resolveImage, ConditionalWrapper } from '../utils'
 import styled from 'styled-components'
-import { WEBCHAT, COLORS } from '../constants'
+import { WEBCHAT, COLORS, ROLES } from '../constants'
 import { Flex } from 'rebass'
 import { motion } from 'framer-motion'
 
@@ -79,7 +79,7 @@ export const DefaultHeader = props => {
 
   return (
     <Header
-      role='header'
+      role={ROLES.HEADER}
       color={props.color}
       style={{ ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.headerStyle) }}
     >

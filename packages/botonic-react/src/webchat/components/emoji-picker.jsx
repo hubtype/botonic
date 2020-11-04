@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import LogoEmoji from '../../assets/emojiButton.svg'
 import Picker from 'emoji-picker-react'
 import { Icon, IconContainer } from './common'
-import { useComponentVisible, useWebchat } from '../hooks'
+import { useComponentVisible } from '../hooks'
+import { ROLES } from '../../constants'
 
 export const EmojiPicker = props => (
-  <IconContainer role='emoji-picker-icon'>
+  <IconContainer role={ROLES.EMOJI_PICKER_ICON}>
     <div onClick={props.onClick}>
       <Icon src={LogoEmoji} />
     </div>
@@ -26,7 +27,7 @@ export const OpenedEmojiPicker = props => {
   return (
     <div ref={ref}>
       {isComponentVisible && (
-        <Container role='emoji-picker'>
+        <Container role={ROLES.EMOJI_PICKER}>
           <Picker onEmojiClick={props.onEmojiClick} disableAutoFocus={true} />
         </Container>
       )}

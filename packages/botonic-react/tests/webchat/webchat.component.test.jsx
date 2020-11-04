@@ -3,6 +3,7 @@ import { Webchat } from '../../src/webchat/webchat'
 import { act } from 'react-test-renderer'
 import { renderUseWebchatHook } from '../helpers/test-utils'
 import { render, screen } from '@testing-library/react'
+import { ROLES } from '../../src/constants'
 
 describe('TEST: webchat component', () => {
   const theme = {
@@ -25,8 +26,8 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('trigger-button')).toBeTruthy()
-    expect(screen.queryByRole('styled-webchat')).toBeNull()
+    expect(screen.queryByRole(ROLES.TRIGGER_BUTTON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.STYLED_WEBCHAT)).toBeNull()
   })
 
   it('Opened webchat by default has StyledWebchat, Header, MessageList area, Textbox and SendButtonIcon', async () => {
@@ -37,11 +38,11 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('styled-webchat')).toBeTruthy()
-    expect(screen.queryByRole('header')).toBeTruthy()
-    expect(screen.queryByRole('message-list')).toBeTruthy()
-    expect(screen.queryByRole('textbox')).toBeTruthy()
-    expect(screen.queryByRole('send-button-icon')).toBeTruthy()
+    expect(screen.queryByRole(ROLES.STYLED_WEBCHAT)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.HEADER)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.MESSAGE_LIST)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.TEXT_BOX)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.SEND_BUTTON_ICON)).toBeTruthy()
   })
 
   it('Opened webchat by default has no TriggerButton, PersistentMenuIcon, EmojiPickerIcon and AttachmentIcon', async () => {
@@ -52,10 +53,10 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('trigger-button')).toBeNull()
-    expect(screen.queryByRole('persistent-menu-icon')).toBeNull()
-    expect(screen.queryByRole('emoji-picker-icon')).toBeNull()
-    expect(screen.queryByRole('attachment-icon')).toBeNull()
+    expect(screen.queryByRole(ROLES.TRIGGER_BUTTON)).toBeNull()
+    expect(screen.queryByRole(ROLES.PERSISTENT_MENU_ICON)).toBeNull()
+    expect(screen.queryByRole(ROLES.EMOJI_PICKER_ICON)).toBeNull()
+    expect(screen.queryByRole(ROLES.ATTACHMENT_ICON)).toBeNull()
   })
 
   it('Opened webchat has a TypingIndicator when typing is true', async () => {
@@ -67,7 +68,7 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('typing-indicator')).toBeTruthy()
+    expect(screen.queryByRole(ROLES.TYPING_INDICATOR)).toBeTruthy()
   })
 
   it('Opened webchat has EmojiPicker, Attachments and PersistentMenu when they are enabled in the theme', async () => {
@@ -80,11 +81,11 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('textbox')).toBeTruthy()
-    expect(screen.queryByRole('persistent-menu-icon')).toBeTruthy()
-    expect(screen.queryByRole('emoji-picker-icon')).toBeTruthy()
-    expect(screen.queryByRole('attachment-icon')).toBeTruthy()
-    expect(screen.queryByRole('send-button-icon')).toBeTruthy()
+    expect(screen.queryByRole(ROLES.TEXT_BOX)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.PERSISTENT_MENU_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.EMOJI_PICKER_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.ATTACHMENT_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.SEND_BUTTON_ICON)).toBeTruthy()
   })
 
   it.skip('Open EmojiPicker', async () => {
@@ -97,12 +98,12 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('persistent-menu-icon')).toBeTruthy()
-    expect(screen.queryByRole('emoji-picker-icon')).toBeTruthy()
-    expect(screen.queryByRole('emoji-picker')).toBeTruthy()
-    expect(screen.queryByRole('attachment-icon')).toBeTruthy()
-    expect(screen.queryByRole('send-button-icon')).toBeTruthy()
-    expect(screen.queryByRole('textbox')).toBeTruthy()
+    expect(screen.queryByRole(ROLES.PERSISTENT_MENU_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.EMOJI_PICKER_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.EMOJI_PICKER)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.ATTACHMENT_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.SEND_BUTTON_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.TEXT_BOX)).toBeTruthy()
   })
 
   it.skip('Open PersistentMenu', async () => {
@@ -116,12 +117,12 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('persistent-menu-icon')).toBeTruthy()
-    expect(screen.queryByRole('emoji-picker-icon')).toBeTruthy()
-    expect(screen.queryByRole('persistent-menu')).toBeTruthy()
-    expect(screen.queryByRole('attachment-icon')).toBeTruthy()
-    expect(screen.queryByRole('send-button-icon')).toBeTruthy()
-    expect(screen.queryByRole('textbox')).toBeTruthy()
+    expect(screen.queryByRole(ROLES.PERSISTENT_MENU_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.EMOJI_PICKER_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.PERSISTENT_MENU)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.ATTACHMENT_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.SEND_BUTTON_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.TEXT_BOX)).toBeTruthy()
   })
 
   it('Opened webchat has no SendButton if we disable it in the theme', async () => {
@@ -135,11 +136,11 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('send-button-icon')).toBeNull()
-    expect(screen.queryByRole('persistent-menu-icon')).toBeTruthy()
-    expect(screen.queryByRole('emoji-picker-icon')).toBeTruthy()
-    expect(screen.queryByRole('attachment-icon')).toBeTruthy()
-    expect(screen.queryByRole('textbox')).toBeTruthy()
+    expect(screen.queryByRole(ROLES.SEND_BUTTON_ICON)).toBeNull()
+    expect(screen.queryByRole(ROLES.PERSISTENT_MENU_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.EMOJI_PICKER_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.ATTACHMENT_ICON)).toBeTruthy()
+    expect(screen.queryByRole(ROLES.TEXT_BOX)).toBeTruthy()
   })
 
   it('If the UserInput is disabled opened webchat has no PersistentMenuIcon, EmojiPickerIcon, AttachmentIcon, SendButtonIcon and Textbox', async () => {
@@ -154,10 +155,10 @@ describe('TEST: webchat component', () => {
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
     })
-    expect(screen.queryByRole('persistent-menu-icon')).toBeNull()
-    expect(screen.queryByRole('emoji-picker-icon')).toBeNull()
-    expect(screen.queryByRole('send-button-icon')).toBeNull()
-    expect(screen.queryByRole('attachment-icon')).toBeNull()
-    expect(screen.queryByRole('textbox')).toBeNull()
+    expect(screen.queryByRole(ROLES.PERSISTENT_MENU_ICON)).toBeNull()
+    expect(screen.queryByRole(ROLES.EMOJI_PICKER_ICON)).toBeNull()
+    expect(screen.queryByRole(ROLES.SEND_BUTTON_ICON)).toBeNull()
+    expect(screen.queryByRole(ROLES.ATTACHMENT_ICON)).toBeNull()
+    expect(screen.queryByRole(ROLES.TEXT_BOX)).toBeNull()
   })
 })

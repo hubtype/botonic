@@ -28,7 +28,7 @@ describe('TEST: attachments', () => {
   it('Returns a string (comma separated) with accepted mime types', () => {
     const sut = getFullMimeWhitelist().join(',')
     expect(sut).toEqual(
-      'application/pdf,image/jpeg,image/png,video/mp4,video/quicktime,audio/mpeg,audio/mp3'
+      'audio/mpeg,audio/mp3,application/pdf,image/jpeg,image/png,video/mp4,video/quicktime'
     )
   })
 })
