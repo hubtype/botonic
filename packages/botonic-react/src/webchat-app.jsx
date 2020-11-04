@@ -1,10 +1,11 @@
 import React, { createRef } from 'react'
 import { render } from 'react-dom'
+import merge from 'lodash.merge'
 
 import { Webchat } from './webchat/webchat'
 import { HubtypeService, INPUT } from '@botonic/core'
 import { msgToBotonic } from './msg-to-botonic'
-import merge from 'lodash.merge'
+import { SENDERS } from './constants'
 
 export class WebchatApp {
   constructor({
@@ -61,7 +62,8 @@ export class WebchatApp {
   }
 
   async onUserInput({ user, input }) {
-    this.onMessage && this.onMessage(this, { from: 'user', message: input })
+    this.onMessage &&
+      this.onMessage(this, { from: SENDERS.user, message: input })
     return this.hubtypeService.postMessage(user, input)
   }
 
@@ -95,7 +97,7 @@ export class WebchatApp {
       this.setTyping(event.message.data === 'typing_on')
     else {
       this.onMessage &&
-        this.onMessage(this, { from: 'bot', message: event.message })
+        this.onMessage(this, { from: SENDERS.bot, message: event.message })
       this.addBotMessage(event.message)
     }
   }

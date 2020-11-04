@@ -1,10 +1,11 @@
 import React from 'react'
 import { render } from 'react-dom'
+import merge from 'lodash.merge'
 
 import { ReactBot } from './react-bot'
 import { WebchatApp } from './webchat-app'
 import { WebchatDev } from './webchat/webchat-dev'
-import merge from 'lodash.merge'
+import { SENDERS } from './constants'
 
 export class DevApp extends WebchatApp {
   constructor({
@@ -103,10 +104,13 @@ export class DevApp extends WebchatApp {
   }
 
   async onUserInput({ input, session, lastRoutePath }) {
-    this.onMessage && this.onMessage(this, { from: 'user', message: input })
+    this.onMessage &&
+      this.onMessage(this, { from: SENDERS.user, message: input })
     const resp = await this.bot.input({ input, session, lastRoutePath })
     this.onMessage &&
-      resp.response.map(r => this.onMessage(this, { from: 'bot', message: r }))
+      resp.response.map(r =>
+        this.onMessage(this, { from: SENDERS.bot, message: r })
+      )
     this.webchatRef.current.addBotResponse(resp)
   }
 }
