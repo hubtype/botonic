@@ -42,8 +42,8 @@ const Blob = styled.div`
   color: ${props => props.color};
   max-width: ${props =>
     props.blob
-      ? props.blobWidth
-        ? props.blobWidth
+      ? props.blobwidth
+        ? props.blobwidth
         : '60%'
       : 'calc(100% - 16px)'};
 `
@@ -272,7 +272,7 @@ export const Message = props => {
               className={className}
               bgcolor={getBgColor()}
               color={isFromUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
-              blobWidth={getThemeProperty('message.bot.blobWidth')}
+              blobwidth={getThemeProperty('message.bot.blobWidth')}
               blob={blob}
               style={{
                 ...getMessageStyle(),
@@ -296,8 +296,8 @@ export const Message = props => {
                 <BlobText blob={blob}>{textChildren}</BlobText>
               )}
               {buttons}
-              {blob && hasBlobTick() && getBlobTick(6)}
-              {blob && hasBlobTick() && getBlobTick(5)}
+              {Boolean(blob) && hasBlobTick() && getBlobTick(6)}
+              {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
             </Blob>
           </MessageContainer>
           {timestampsEnabled && (
