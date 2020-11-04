@@ -5,8 +5,12 @@
       "project",
       "getting-started",
       "create-convapp",
-      "test-deploy/deployment",
       "supported-platforms"
+    ],
+    "Deployment": [
+      "deployment/hubtype",
+      "deployment/aws",
+      "deployment/standalone-js-bundle"
     ]
   },
 
@@ -38,9 +42,7 @@
       "components/whatsapp-template"
     ],
 
-    "Testing": [
-      "test-deploy/testing-your-components"
-    ]
+    "Testing": ["test-deploy/testing-your-components"]
   },
 
   "Plugins": {
