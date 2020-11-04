@@ -5,18 +5,22 @@ import merge from 'lodash.merge'
 import { Message } from './message'
 import { Reply } from './reply'
 import { mapObjectNonBooleanValues } from '../utils'
+import { warnDeprecatedProps } from '../util/logs'
 
 export const customMessage = ({
   name,
   component: CustomMessageComponent,
   defaultProps,
 }) => {
-  const CustomMessage = props => (
-    <Message
-      {...merge(mapObjectNonBooleanValues(defaultProps), props)}
-      type={INPUT.CUSTOM}
-    />
-  )
+  const CustomMessage = props => {
+    warnDeprecatedProps(defaultProps, 'customMessage:')
+    return (
+      <Message
+        {...merge(mapObjectNonBooleanValues(defaultProps), props)}
+        type={INPUT.CUSTOM}
+      />
+    )
+  }
 
   const SplitChildren = props => {
     const { children } = props

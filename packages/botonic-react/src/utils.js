@@ -1,5 +1,6 @@
 import { WEBCHAT } from './constants'
 import { isBrowser, isNode } from '@botonic/core'
+
 export function isDev() {
   return process.env.NODE_ENV == 'development'
 }
