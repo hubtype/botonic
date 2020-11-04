@@ -1,4 +1,5 @@
 import { act } from '@testing-library/react-hooks'
+import { SENDERS } from '../../src/constants'
 import { renderUseWebchatHook } from '../helpers/test-utils'
 
 describe('TEST: useWebchat', () => {
@@ -8,7 +9,7 @@ describe('TEST: useWebchat', () => {
     data: {
       text: 'Hey!',
     },
-    from: 'bot',
+    from: SENDERS.bot,
     display: false,
   }
 

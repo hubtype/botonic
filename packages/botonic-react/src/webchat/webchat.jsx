@@ -36,7 +36,7 @@ import {
   deserializeRegex,
   stringifyWithRegexs,
 } from '../utils'
-import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB } from '../constants'
+import { WEBCHAT, COLORS, MAX_ALLOWED_SIZE_MB, SENDERS } from '../constants'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 import { DeviceAdapter } from './devices/device-adapter'
@@ -391,7 +391,7 @@ export const Webchat = forwardRef((props, ref) => {
         addMessageComponent(
           <Text
             id={input.id}
-            from='user'
+            from={SENDERS.user}
             blob={false}
             style={{
               backgroundColor: COLORS.SCORPION_GRAY,
@@ -464,7 +464,7 @@ export const Webchat = forwardRef((props, ref) => {
     let messageComponent = null
     if (isText(input)) {
       messageComponent = (
-        <Text id={input.id} payload={input.payload} from='user'>
+        <Text id={input.id} payload={input.payload} from={SENDERS.user}>
           {input.data}
         </Text>
       )
@@ -472,7 +472,7 @@ export const Webchat = forwardRef((props, ref) => {
       const temporaryDisplayUrl = URL.createObjectURL(input.data)
       const mediaProps = {
         id: input.id,
-        from: 'user',
+        from: SENDERS.user,
         src: temporaryDisplayUrl,
       }
       if (isImage(input)) messageComponent = <Image {...mediaProps} />

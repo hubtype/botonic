@@ -13,7 +13,7 @@ import {
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
-import { WEBCHAT, COLORS } from '../constants'
+import { WEBCHAT, COLORS, SENDERS } from '../constants'
 import Fade from 'react-reveal/Fade'
 import { renderMarkdown, getMarkdownStyle, renderLinks } from './markdown'
 import { resolveMessageTimestamps, MessageTimestamp } from './timestamps'
@@ -76,7 +76,7 @@ export const Message = props => {
   const {
     type = '',
     blob = true,
-    from = 'bot',
+    from = SENDERS.bot,
     delay = defaultDelay,
     typing = defaultTyping,
     children,
@@ -86,8 +86,8 @@ export const Message = props => {
     imagestyle = props.imagestyle || props.imageStyle,
     ...otherProps
   } = props
-  const isFromUser = from === 'user'
-  const isFromBot = from === 'bot'
+  const isFromUser = from === SENDERS.user
+  const isFromBot = from === SENDERS.bot
   const markdown = props.markdown
   const {
     webchatState,
