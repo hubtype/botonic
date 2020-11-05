@@ -44,6 +44,7 @@ export interface ButtonProps {
   target?: string
   url?: string
   webview?: Webview
+  onClick?: () => void
 }
 
 export const Button: React.FunctionComponent<ButtonProps>
@@ -70,16 +71,22 @@ export const Subtitle: React.FunctionComponent<SubtitleProps>
 export const Title: React.FunctionComponent<TitleProps>
 export type SubtitleProps = TitleProps
 
-type CustomProp = { custom?: React.Component }
+type CustomProp = { custom?: React.ComponentType }
 type EnableProp = { enable?: boolean }
 type ImageProp = { image?: string } // https URL or imported Image asset
 type PersistentMenuCloseOption = { closeLabel: string }
 type PersistentMenuOption = { label: string } & ButtonProps
 type StyleProp = { style?: any }
 
-export type PersistentMenuProps =
-  | PersistentMenuCloseOption[]
-  | PersistentMenuOption[]
+export type PersistentMenuTheme = (
+  | PersistentMenuCloseOption
+  | PersistentMenuOption
+)[]
+
+export interface PersistentMenuProps {
+  onClick: () => void
+  options: any
+}
 
 export type BlockInputOption = { match: RegExp[]; message: string }
 
@@ -151,9 +158,11 @@ export interface ThemeProps extends StyleProp {
     blockInputs?: BlockInputOption[]
     box?: { placeholder: string } & StyleProp
     emojiPicker?: EnableProp
-    menu?: { darkBackground?: boolean } & CustomProp
+    menu?: { darkBackground?: boolean } & {
+      custom?: React.ComponentType<PersistentMenuProps>
+    }
     menuButton?: CustomProp
-    persistentMenu?: PersistentMenuProps
+    persistentMenu?: PersistentMenuTheme
     sendButton?: EnableProp & CustomProp
   } & EnableProp &
     StyleProp
@@ -172,7 +181,7 @@ export interface WebchatSettingsProps {
   enableAttachments?: boolean
   enableEmojiPicker?: boolean
   enableUserInput?: boolean
-  persistentMenu?: PersistentMenuProps
+  persistentMenu?: PersistentMenuTheme
   theme?: ThemeProps
 }
 export const WebchatSettings: React.FunctionComponent<WebchatSettingsProps>
