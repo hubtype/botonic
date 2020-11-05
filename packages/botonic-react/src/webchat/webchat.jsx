@@ -543,7 +543,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
         const handoff = action.startsWith('create_case')
-        if (handoff && isDev()) addMessageComponent(<Handoff />)
+        if (handoff && isDev) addMessageComponent(<Handoff />)
         updateHandoff(handoff)
       }
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)

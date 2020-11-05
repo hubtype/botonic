@@ -114,7 +114,7 @@ export const Message = props => {
 
   const getEnvAck = () => {
     let ack = 0
-    if (isDev()) ack = 1
+    if (isDev) ack = 1
     else {
       if (props.ack !== undefined) ack = props.ack
       else ack = isFromUser ? 0 : 1
