@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import { ROLES, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { StyledScrollbar } from './components/styled-scrollbar'
-import { resolveImage, ConditionalWrapper } from '../utils'
+import { ConditionalWrapper } from '../util/react'
+import { resolveImage } from '../util/environment'
 
 const StyledMessages = styled.div`
   display: flex;

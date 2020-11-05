@@ -1,7 +1,9 @@
-import { getProperty, _getThemeProperty } from '../src/utils'
-import { normalizeWebchatSettings } from '../src/components/webchat-settings'
 import merge from 'lodash.merge'
+
 import { WEBCHAT } from '../src/constants'
+import { getProperty } from '../src/util/objects'
+import { _getThemeProperty } from '../src/webchat/webchat'
+import { normalizeWebchatSettings } from '../src/components/webchat-settings'
 
 const theme = {
   message: {

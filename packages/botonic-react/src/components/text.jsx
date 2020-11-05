@@ -3,7 +3,7 @@ import { INPUT } from '@botonic/core'
 
 import { Message } from './message'
 import { serializeMarkdown, toMarkdownChildren } from './markdown'
-import { mapObjectNonBooleanValues } from '../utils'
+import { mapObjectNonBooleanValues } from '../util/react'
 
 const serializeText = children => {
   children = Array.isArray(children) ? children : [children]

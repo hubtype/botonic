@@ -1,5 +1,5 @@
 import { DEVICES, isMobileDevice } from '.'
-import { getWebchatElement, getScrollableArea } from '../../utils'
+import { getWebchatElement, getScrollableArea } from '../../util/dom'
 
 const debounced = (delay, fn) => {
   let timerId

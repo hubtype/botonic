@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { WebchatContext } from '../contexts'
 import { COLORS, WEBCHAT } from '../constants'
-import { renderComponent } from '../utils'
+import { renderComponent } from '../util/react'
 
 const StyledButton = styled.button`
   width: 100%;

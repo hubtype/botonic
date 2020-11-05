@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS } from '../constants'
-import { renderComponent } from '../utils'
+import { renderComponent } from '../util/react'
 
 const SubtitleContainer = styled.div`
   font-size: 12px;

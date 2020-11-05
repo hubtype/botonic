@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderComponent } from '../utils'
+import { renderComponent } from '../util/react'
 
 export const ShareButton = props => {
   const renderBrowser = () => null

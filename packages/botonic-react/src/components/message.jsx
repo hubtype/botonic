@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
-
+import Fade from 'react-reveal/Fade'
 import { isBrowser, INPUT } from '@botonic/core'
-import {
-  resolveImage,
-  ConditionalWrapper,
-  renderComponent,
-  isDev,
-} from '../utils'
 
+import { ConditionalWrapper, renderComponent } from '../util/react'
+import { isDev, resolveImage } from '../util/environment'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Button } from './button'
 import { Reply } from './reply'
 import { WEBCHAT, COLORS, SENDERS } from '../constants'
-import Fade from 'react-reveal/Fade'
 import { renderMarkdown, getMarkdownStyle, renderLinks } from './markdown'
 import { resolveMessageTimestamps, MessageTimestamp } from './timestamps'
 

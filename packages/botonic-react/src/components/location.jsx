@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Message } from './message'
-import { renderComponent } from '../utils'
+import { renderComponent } from '../util/react'
 import { INPUT } from '@botonic/core'
 
 const Link = styled.a`

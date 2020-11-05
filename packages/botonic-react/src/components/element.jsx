@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { COLORS, WEBCHAT } from '../constants'
-import { renderComponent } from '../utils'
+import { renderComponent } from '../util/react'
 
 const ElementContainer = styled.div`
   display: flex;
