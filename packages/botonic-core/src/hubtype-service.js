@@ -137,7 +137,8 @@ export class HubtypeService {
 
   async resendUnsentInputs() {
     for (const message of this.unsentInputs()) {
-      await this.postMessage(this.user, message.unsentInput)
+      message.unsentInput &&
+        (await this.postMessage(this.user, message.unsentInput))
     }
   }
 }
