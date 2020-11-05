@@ -2,8 +2,9 @@
   "scripts": {
     "examples": "docusaurus-examples",
     "start": "docusaurus start",
-    "build": "npm run bump_readmes && docusaurus build && cp _redirects build",
-    "bump_readmes": "./node_modules/.bin/ts-node ./scripts/bump-readmes-to-docs.ts",
+    "build": "update_plugins_docs && docusaurus build && cp _redirects build",
+    "update_plugins_docs": "./node_modules/.bin/ts-node ./scripts/update-plugins-docs.ts; npm run prettify_plugins_docs;",
+    "prettify_plugins_docs": "../../node_modules/.bin/prettier --write --config ../../.prettierrc ./sidebars.json ./i18n/en.json ../docs/plugins",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy"
   },
