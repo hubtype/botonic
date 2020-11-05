@@ -1,6 +1,6 @@
 ---
+title: Plugin NLU
 id: plugin-nlu
-title: NLU Plugin
 ---
 
 ---
@@ -25,7 +25,7 @@ Alternatively, if you already have a project, you can follow the steps below to 
 
 ### Install the plugin
 
-1. From your project, enter the command `npm install @botonic/plugin-nlu`. This command installs everything necessary to start working with your intents and entities.  
+1. From your project, enter the command `npm install @botonic/plugin-nlu`. This command installs everything necessary to start working with your intents and entities.
    **Note**: Windows users should first use the command
    `npm install --global --production windows-build-tools --vs2015` followed by `npm install @botonic/plugin-nlu`
 2. Under the `src` files of your project, create a folder called `nlu`.
@@ -148,4 +148,4 @@ You can also generate your own word embeddings following these **[instructions](
 
 _\*10k-fasttext word embeddings contain the 10k most commons words of the language._
 
-**Note:** All the word embeddings are stored by default in `~/.botonic/word-embeddings/`. If you encounter any issues when automatically downloading word embeddings, you can download them manually and store it in the mentioned directory.
+**Note:** All the word embeddings are stored by default in `~/.botonic/word-embeddings/`. If you encounter any issues when automatically downloading word embeddings, you can download them manually and store them in the mentioned directory.

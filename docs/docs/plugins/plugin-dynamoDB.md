@@ -1,5 +1,5 @@
 ---
-title: Amazon DynamoDB Plugin
+title: Plugin Dynamodb
 id: plugin-dynamodb
 ---
 
@@ -15,10 +15,15 @@ This plugin writes tracks about the user's behavior to a DynamoDB table.
 
 ### Setup
 
-1. Run `npm i @botonic/plugin-dynamodb` to install the plugin.
-2. Add it to the `src/docs/plugins.js` file:
+1. Install the plugin from npm (or yarn):
 
-```javascript
+```
+npm i  @botonic/plugin-dynamodb
+```
+
+2. Add it to the `src/plugins.js` file:
+
+```
 import * as dynamodb from '@botonic/plugin-dynamodb'
   {
     id: 'dynamodb',
@@ -36,7 +41,7 @@ import * as dynamodb from '@botonic/plugin-dynamodb'
 
 ### Use
 
-```javascript
+```
 const dynamodb = plugins.dynamodb
 dynamodb.track((botId, user, 'login', {country: 'ES'})
 ```

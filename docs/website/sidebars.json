@@ -13,7 +13,6 @@
       "deployment/standalone-js-bundle"
     ]
   },
-
   "Reference Guide": {
     "Concepts": [
       "concepts/actions",
@@ -25,7 +24,6 @@
       "concepts/webviews",
       "concepts/nlu"
     ],
-
     "Components": [
       "components/components",
       "components/text",
@@ -41,30 +39,27 @@
       "components/webchatsettings",
       "components/whatsapp-template"
     ],
-
     "Testing": ["test/testing-your-components"]
   },
-
   "Plugins": {
     "Plugins ": ["plugins/botonic-plugins", "plugins/using-plugins"],
-
     "Plugin Library": [
+      "plugins/plugin-contentful",
+      "plugins/plugin-dashbot",
       "plugins/plugin-dialogflow",
       "plugins/plugin-dynamodb",
-      "plugins/plugin-luis",
       "plugins/plugin-google-analytics",
-      "plugins/plugin-segment",
       "plugins/plugin-inbenta",
+      "plugins/plugin-luis",
       "plugins/plugin-nlu",
-      "plugins/plugin-contentful"
+      "plugins/plugin-segment",
+      "plugins/plugin-watson"
     ],
-
     "How to Create a Plugin": [
       "plugins/createname-plugin1",
       "plugins/create-plugin2"
     ]
   },
-
   "": {
     "Botonic FAQ": ["faq"]
   }

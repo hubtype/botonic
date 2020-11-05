@@ -1,5 +1,5 @@
 ---
-title: DialogFlow Plugin
+title: Plugin Dialogflow
 id: plugin-dialogflow
 ---
 
@@ -11,7 +11,7 @@ For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tre
 
 ## What Does This Plugin Do?
 
-This plugin uses **[Dialogflow](https://dialogflow.com/)** as NLU service. The variables `intent`, `confidence`, `entities`, `defaultFallback`, `dialogflowResponse` are automatically available inside the `input` object.
+This plugin uses [Dialogflow](https://dialogflow.com/) as NLU service. The variables `intent`, `confidence`, `entities`, `defaultFallback`, `dialogflowResponse` are automatically available inside the `input` object.
 
 ## Setup
 
@@ -27,14 +27,6 @@ To integrate your bot with Dialogflow, you must use the `intent` template, which
 1. Click on the gear icon, to the right of the agent name.
 
 2. Under the **GOOGLE PROJECT** section, click on the name of the **Service Account**.
-
-   <details>
-      <summary>Service Account</summary>
-
-   ![](https://botonic-doc-static.netlify.com/images/dflow/dg1.png)
-
-   </details>
-
 3. This will take you to the Google Cloud Platform Service Accounts page, but you first need to update the Service Account's role.
 
 4. Click on the menu button in the upper left-hand corner and click on **IAM & admin**.
@@ -47,23 +39,11 @@ To integrate your bot with Dialogflow, you must use the `intent` template, which
 
 8. Click on **Role**. Under the **Dialogflow** category, select the desired role.
 
-   <details>
-        <summary>Role</summary>
-
-   ![](https://botonic-doc-static.netlify.com/images/dflow/dg2.png)
-
-     </details>
-
 ### Generate a JSON key
 
 1. Check the **Furnish a new private key** option and make sure **JSON** is selected for **Key type**.
 
 2. Click the **Create** button.
-   <details>
-      <summary>Create Service Account</summary>
-   ![](https://botonic-doc-static.netlify.com/images/dflow/dg3.png)
-   </details>
-
 3. The JSON file is downloading. Select a location to save it and confirm.
 
 **Note:** You can only download this JSON file once, so make sure to save the file and keep it somewhere safe. If you lose this key or it becomes compromised, you can use the same process to create another one.
@@ -113,4 +93,4 @@ export const plugins = [
 
 Finally run `botonic serve` to test your intents locally, or `botonic deploy` to deploy the bot.
 
-**Note:** Refer to Dialogflow to **[migrate your agents to V2](https://dialogflow.com/docs/reference/v1-v2-migration-guide)** and to get the **[JSON key](https://dialogflow.com/docs/reference/v2-auth-setup)**.
+**Note:** Refer to Dialogflow to [migrate your agents to V2](<(https://dialogflow.com/docs/reference/v1-v2-migration-guide#switch_your_agent_from_v1_to_v2)>) and to get the [JSON key](https://dialogflow.com/docs/reference/v2-auth-setup).

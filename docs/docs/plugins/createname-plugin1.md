@@ -8,7 +8,6 @@ Sometimes you may need a specific feature according to your needs and build your
 - You can create your own plugin with an independent `node.js` package.
 - Each plugin will be a class which needs to implement the two methods described in this guide.
 
-
 ## Naming
 
 Every plugin you create for botonic has to be under a directory named:  
