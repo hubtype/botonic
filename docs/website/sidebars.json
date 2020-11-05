@@ -42,7 +42,7 @@
       "components/whatsapp-template"
     ],
 
-    "Testing": ["test-deploy/testing-your-components"]
+    "Testing": ["test/testing-your-components"]
   },
 
   "Plugins": {
