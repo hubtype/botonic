@@ -4,7 +4,7 @@ import {
   BlockInputOption,
   ButtonProps,
   CoverComponentOptions,
-  PersistentMenuProps,
+  PersistentMenuTheme,
   ReplyProps,
   ThemeProps,
   WebchatSettingsProps,
@@ -108,8 +108,7 @@ export interface WebchatArgs {
   onInit?: (app: WebchatApp, args: any) => void
   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
   onOpen?: (app: WebchatApp, args: any) => void
-  persistentMenu?: PersistentMenuProps
-  setLocale: (locale: string, session: core.Session) => string
+  persistentMenu?: PersistentMenuTheme
   storage?: Storage
   storageKey?: any
   theme?: ThemeProps
