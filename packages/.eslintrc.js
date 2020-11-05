@@ -13,12 +13,13 @@ module.exports = {
     'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
   plugins: [
+    '@typescript-eslint',
+    'filenames',
+    'import',
     'jest',
     'no-null',
-    'filenames',
-    '@typescript-eslint',
-    'import',
     'promise',
+    'simple-import-sort',
   ],
   parserOptions: {
     ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
@@ -60,7 +61,7 @@ module.exports = {
     'jest/no-jasmine-globals': 'warn',
     'no-empty': 'warn',
     'prefer-const': ['error', { destructuring: 'all' }],
-
+    'simple-import-sort/sort': 'error',
     // import rules
     'node/no-missing-import': [
       'error',
