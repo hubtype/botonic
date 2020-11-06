@@ -30,6 +30,26 @@ const extractPluginInfo = (packageName: string) => {
   return { id, title }
 }
 
+export const generateHeader = (
+  packageName: string,
+  id: string,
+  title: string
+) => {
+  const header = `---
+  title: ${title}
+  id: ${id}
+  ---
+  
+  ---
+  
+  For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/${packageName})**.
+  
+  ---
+  
+  `
+  return header
+}
+
 export const bumpPackageReadmesToPluginsDocs = (
   packagesPath: string,
   pluginsDocsPath: string
@@ -55,24 +75,4 @@ export const bumpPackageReadmesToPluginsDocs = (
     writeFile(pluginDocPath, data)
   })
   return pluginsInfo
-}
-
-export const generateHeader = (
-  packageName: string,
-  id: string,
-  title: string
-) => {
-  const header = `---
-  title: ${title}
-  id: ${id}
-  ---
-  
-  ---
-  
-  For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/${packageName})**.
-  
-  ---
-  
-  `
-  return header
 }

@@ -93,3 +93,8 @@ repos:
         language: system
         files: ^packages/botonic-plugin-inbenta/
 
+      - id: docs
+        name: docs
+        entry: scripts/qa/lint-package.sh docs/website
+        language: system
+        files: ^docs/website/

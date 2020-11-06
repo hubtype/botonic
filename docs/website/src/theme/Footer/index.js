@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable node/no-missing-import */
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *

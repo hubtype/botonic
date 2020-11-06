@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable node/no-missing-import */
 import React, { useState } from 'react'
 import classnames from 'classnames'
 import Layout from '@theme/Layout'
