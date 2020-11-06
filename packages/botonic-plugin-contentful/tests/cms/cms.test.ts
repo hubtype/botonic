@@ -1,4 +1,4 @@
-import { TOP_CONTENT_TYPES, ContentType } from '../../src/cms'
+import { ContentType, TOP_CONTENT_TYPES } from '../../src/cms'
 
 test('TEST: ALL_TYPES', () => {
   expect(TOP_CONTENT_TYPES.length).toBeGreaterThanOrEqual(8)

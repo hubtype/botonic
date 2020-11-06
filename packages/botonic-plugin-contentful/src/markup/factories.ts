@@ -1,5 +1,5 @@
-import { MarkUp, MarkupType } from './markup'
 import { Markdown } from './markdown'
+import { MarkUp, MarkupType } from './markup'
 import { WhatsApp } from './whatsapp'
 
 export function createMarkUp(type: MarkupType): MarkUp {

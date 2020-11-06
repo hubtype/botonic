@@ -1,6 +1,6 @@
-import { SimilarWordFinder, SimilarWordResult } from './similar-words'
-import { NormalizedUtterance, Normalizer, Word } from './normalizer'
 import { Locale } from './locales'
+import { NormalizedUtterance, Normalizer, Word } from './normalizer'
+import { SimilarWordFinder, SimilarWordResult } from './similar-words'
 
 /**
  * May contain multiple words

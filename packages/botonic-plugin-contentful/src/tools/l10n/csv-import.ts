@@ -1,8 +1,9 @@
-import { ManageCms } from '../../manage-cms/manage-cms'
+import parser from 'csv-parse'
+import * as fs from 'fs'
+
 import * as cms from '../../cms'
 import { CMS, ContentId, ContentType } from '../../cms'
-import * as fs from 'fs'
-import parser from 'csv-parse'
+import { BotonicContentType } from '../../cms/cms'
 import {
   CONTENT_FIELDS,
   ContentField,
@@ -10,10 +11,10 @@ import {
   ContentFieldValueType,
   FIELDS_PER_CONTENT_TYPE,
 } from '../../manage-cms/fields'
+import { ManageCms } from '../../manage-cms/manage-cms'
 import { ManageContext } from '../../manage-cms/manage-context'
-import { isOfType } from '../../util/enums'
-import { BotonicContentType } from '../../cms/cms'
 import { replaceAll, trim } from '../../nlp/util/strings'
+import { isOfType } from '../../util/enums'
 
 export const PARSE_OPTIONS: parser.Options = {
   escape: '"',

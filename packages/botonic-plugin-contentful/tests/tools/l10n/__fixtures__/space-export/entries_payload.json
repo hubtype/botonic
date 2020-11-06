@@ -61,9 +61,6 @@
       }
     }
   ],
-  "assets": [
-  ],
-  "webhooks": [
-  ]
-
+  "assets": [],
+  "webhooks": []
 }

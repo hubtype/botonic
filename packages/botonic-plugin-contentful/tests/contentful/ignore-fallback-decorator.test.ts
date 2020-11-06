@@ -1,23 +1,23 @@
-import { testContentful, testContentfulOptions } from './contentful.helper'
-import {
-  AdaptorDeliveryApi,
-  createContentfulClientApi,
-} from '../../src/contentful/delivery-api'
-import { ButtonFields } from '../../src/contentful/contents/button'
-import { ENGLISH, Locale, SPANISH } from '../../src/nlp'
 import {
   BOTONIC_CONTENT_TYPES,
   ContentCallback,
   ContentType,
   Context,
 } from '../../src/cms'
-import { IgnoreFallbackDecorator } from '../../src/contentful/ignore-fallback-decorator'
-import { TEST_NO_SPANISH_TEXT } from './contents/text.test'
+import { ButtonFields } from '../../src/contentful/contents/button'
 import { TextFields } from '../../src/contentful/contents/text'
+import {
+  AdaptorDeliveryApi,
+  createContentfulClientApi,
+} from '../../src/contentful/delivery-api'
+import { IgnoreFallbackDecorator } from '../../src/contentful/ignore-fallback-decorator'
+import { ENGLISH, Locale, SPANISH } from '../../src/nlp'
+import { testContentful, testContentfulOptions } from './contentful.helper'
 import {
   TEST_CAROUSEL_MAIN_ID,
   TEST_POST_MENU_CRSL,
 } from './contents/carousel.test'
+import { TEST_NO_SPANISH_TEXT } from './contents/text.test'
 
 export const TEST_BUTTON_BLANK_SPANISH = '40buQOqp9jbwoxmMZhFO16'
 

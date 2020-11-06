@@ -1,3 +1,6 @@
+import * as contentful from 'contentful'
+import { EntryCollection } from 'contentful'
+
 import {
   CommonFields,
   Content,
@@ -7,12 +10,10 @@ import {
   TopContent,
   TopContentType,
 } from '../../cms'
-import * as contentful from 'contentful'
-import { EntryCollection } from 'contentful'
+import { ResourceDelivery } from '../content-delivery'
+import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-api'
 import { QueueDelivery } from './queue'
 import { ScheduleDelivery } from './schedule'
-import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-api'
-import { ResourceDelivery } from '../content-delivery'
 
 /**
  * Retrieve multiple contents in a single call

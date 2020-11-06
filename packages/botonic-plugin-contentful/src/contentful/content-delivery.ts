@@ -1,3 +1,6 @@
+import * as contentful from 'contentful'
+import { Entry } from 'contentful'
+
 import {
   AssetId,
   CmsException,
@@ -8,14 +11,12 @@ import {
   isSameModel,
   ResourceId,
 } from '../cms'
-import * as contentful from 'contentful'
-import { Entry } from 'contentful'
+import { asyncMap } from '../util/async'
 import {
   ContentfulEntryUtils,
   ContentWithNameFields,
   DeliveryApi,
 } from './delivery-api'
-import { asyncMap } from '../util/async'
 
 export abstract class ResourceDelivery {
   constructor(

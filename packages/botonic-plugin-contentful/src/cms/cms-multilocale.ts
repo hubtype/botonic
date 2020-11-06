@@ -1,3 +1,4 @@
+import { SearchCandidate } from '../search'
 import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
   Asset,
@@ -17,7 +18,6 @@ import {
   Url,
 } from './contents'
 import { Context } from './context'
-import { SearchCandidate } from '../search'
 
 /**
  * CMS decorator which allows delegating each method call to a different

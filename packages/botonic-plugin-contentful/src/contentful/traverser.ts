@@ -1,9 +1,9 @@
 import * as cf from 'contentful'
 
 import { Context, ContextWithLocale } from '../cms'
-import { DeliveryApi } from './delivery-api'
 import { Locale } from '../nlp'
 import { ButtonDelivery } from './contents/button'
+import { DeliveryApi } from './delivery-api'
 
 export type I18nValue<T> = { [locale: string]: T }
 

@@ -1,9 +1,10 @@
-import { CMS, ContentType, TopContentType } from './cms'
 import escapeStringRegexp from 'escape-string-regexp'
-import { Context } from './context'
-import { Content, TopContent } from './contents'
+
 import { isOfType } from '../util/enums'
 import { Equatable, ValueObject } from '../util/objects'
+import { CMS, ContentType, TopContentType } from './cms'
+import { Content, TopContent } from './contents'
+import { Context } from './context'
 import { CmsException } from './exceptions'
 
 export class Callback implements ValueObject {

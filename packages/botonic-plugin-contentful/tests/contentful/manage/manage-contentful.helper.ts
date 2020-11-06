@@ -1,7 +1,7 @@
 import { ContentfulOptions } from '../../../src'
-import { testContentfulOptions } from '../contentful.helper'
 import { ManageContentful } from '../../../src/contentful/manage/manage-contentful'
 import { ErrorReportingManageCms } from '../../../src/manage-cms/manage-cms-error'
+import { testContentfulOptions } from '../contentful.helper'
 
 export function testManageContentful(options: Partial<ContentfulOptions> = {}) {
   const manage = new ManageContentful(

@@ -1,6 +1,6 @@
 import { ContentType, MESSAGE_CONTENT_TYPES, TopContentId } from '../../src/cms'
-import { testContentful } from './contentful.helper'
 import { ENGLISH, SPANISH } from '../../src/nlp'
+import { testContentful } from './contentful.helper'
 import { TEST_POST_FAQ1_ID } from './contents/text.test'
 
 const TEST_IMAGE = '3xjvpC7d7PYBmiptEeygfd'

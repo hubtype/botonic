@@ -53,15 +53,44 @@ export class ContentField {
 /* eslint-disable prettier/prettier*/
 export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
   pairs([
-    new ContentField(ContentFieldType.TEXT, 'text', ContentFieldValueType.STRING),
-    new ContentField(ContentFieldType.SHORT_TEXT, 'shortText', ContentFieldValueType.STRING),
-    new ContentField(ContentFieldType.KEYWORDS, 'keywords', ContentFieldValueType.STRING_ARRAY),
-    new ContentField(ContentFieldType.TITLE, 'title', ContentFieldValueType.STRING),
-    new ContentField(ContentFieldType.SUBTITLE, 'subtitle', ContentFieldValueType.STRING),
-    new ContentField(ContentFieldType.BUTTONS, 'buttons', ContentFieldValueType.REFERENCE_ARRAY),
-    new ContentField(ContentFieldType.IMAGE, 'pic', ContentFieldValueType.ASSET),
+    new ContentField(
+      ContentFieldType.TEXT,
+      'text',
+      ContentFieldValueType.STRING
+    ),
+    new ContentField(
+      ContentFieldType.SHORT_TEXT,
+      'shortText',
+      ContentFieldValueType.STRING
+    ),
+    new ContentField(
+      ContentFieldType.KEYWORDS,
+      'keywords',
+      ContentFieldValueType.STRING_ARRAY
+    ),
+    new ContentField(
+      ContentFieldType.TITLE,
+      'title',
+      ContentFieldValueType.STRING
+    ),
+    new ContentField(
+      ContentFieldType.SUBTITLE,
+      'subtitle',
+      ContentFieldValueType.STRING
+    ),
+    new ContentField(
+      ContentFieldType.BUTTONS,
+      'buttons',
+      ContentFieldValueType.REFERENCE_ARRAY
+    ),
+    new ContentField(
+      ContentFieldType.IMAGE,
+      'pic',
+      ContentFieldValueType.ASSET
+    ),
     new ContentField(ContentFieldType.URL, 'url', ContentFieldValueType.STRING),
-  ]))
+  ])
+)
 /* eslint-enable prettier/prettier*/
 
 function pairs(cfs: ContentField[]): [ContentFieldType, ContentField][] {

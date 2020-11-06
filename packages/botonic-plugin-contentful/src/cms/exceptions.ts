@@ -1,5 +1,6 @@
-import { ResourceId } from './callback'
 import { MultiError } from 'async-parallel'
+
+import { ResourceId } from './callback'
 
 export class CmsException extends Error {
   /**

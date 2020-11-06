@@ -1,7 +1,7 @@
-import { expectImgUrlIs } from './image.test'
-import { testContentful, testContext } from '../contentful.helper'
 import * as cms from '../../../src'
 import { Content, SPANISH } from '../../../src'
+import { testContentful, testContext } from '../contentful.helper'
+import { expectImgUrlIs } from './image.test'
 
 export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip'
 export const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt'

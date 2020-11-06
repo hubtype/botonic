@@ -1,5 +1,6 @@
 import * as contentful from 'contentful'
-import { DateRangeContent, DEFAULT_CONTEXT, ContentType } from '../../cms'
+
+import { ContentType, DateRangeContent, DEFAULT_CONTEXT } from '../../cms'
 import * as time from '../../time'
 import { TopContentDelivery } from '../content-delivery'
 import {
