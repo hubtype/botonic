@@ -69,22 +69,22 @@
         "title": "Use Botonic Plugins"
       },
       "plugins/plugin-contentful": {
-        "title": "Contentful Plugin"
+        "title": "Plugin Contentful"
       },
       "plugins/plugin-dialogflow": {
-        "title": "DialogFlow Plugin"
+        "title": "Plugin Dialogflow"
       },
       "plugins/plugin-inbenta": {
-        "title": "Inbenta Plugin"
+        "title": "Plugin Inbenta"
       },
       "plugins/plugin-luis": {
-        "title": "Luis Plugin"
+        "title": "Plugin Luis"
       },
       "plugins/plugin-nlu": {
-        "title": "NLU Plugin"
+        "title": "Plugin NLU"
       },
       "plugins/plugin-segment": {
-        "title": "Segment Plugin"
+        "title": "Plugin Segment"
       },
       "project": {
         "title": "Understanding the Project"
@@ -119,6 +119,18 @@
       "welcome": {
         "title": "Welcome to Botonic User Guide",
         "sidebar_label": "Welcome to Botonic User Guide"
+      },
+      "plugins/plugin-dashbot": {
+        "title": "Plugin Dashbot"
+      },
+      "plugins/plugin-dynamodb": {
+        "title": "Plugin Dynamodb"
+      },
+      "plugins/plugin-google-analytics": {
+        "title": "Plugin Google Analytics"
+      },
+      "plugins/plugin-watson": {
+        "title": "Plugin Watson"
       }
     },
     "links": {

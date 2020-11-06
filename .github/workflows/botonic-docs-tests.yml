@@ -1,0 +1,35 @@
+name: Botonic docs tests
+
+on: [push]
+
+jobs:
+  botonic-core-tests:
+    name: Botonic docs tests
+    runs-on: ubuntu-latest
+    env:
+      DOCS: docs
+      WEBSITE: website
+      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+      INDEX_NAME: ${{ secrets.INDEX_NAME }}
+      GOOGLE_OPTIMIZE_ID: ${{ secrets.GOOGLE_OPTIMIZE_ID }}
+      SEGMENT_DOCS_API_KEY: ${{ secrets.SEGMENT_DOCS_API_KEY }}
+    steps:
+      - name: Checking out to current branch
+        uses: actions/checkout@v1
+      - name: Setting up node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Setting up cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dev dependencies
+        run: (cd ./$DOCS/$WEBSITE && npm install -D)
+      - name: Build
+        run: (cd ./$DOCS/$WEBSITE && npm run build)
+      - name: Verify lint
+        run: (cd ./$DOCS/$WEBSITE && npm run lint_ci)

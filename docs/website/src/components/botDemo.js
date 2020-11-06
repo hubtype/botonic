@@ -2,6 +2,7 @@ import React from 'react'
 
 let app
 if (typeof window !== 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { WebchatApp } = require('@botonic/react')
 
   app = new WebchatApp({
