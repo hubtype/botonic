@@ -2,9 +2,9 @@
 
 ## What Does This Plugin Do?
 
-This plugin allows you to integrate [Inbenta Knowledge Management API](https://developers.inbenta.io/knowledge-management/km-api/api-setup) in your Botonic project. It works like any other AI/NLU services plugin, like Dialogflow, Watson, etc. 
+This plugin allows you to integrate [Inbenta Knowledge Management API](https://developers.inbenta.io/knowledge-management/km-api/api-setup) in your Botonic project. It works like any other AI/NLU services plugin, like Dialogflow, Watson, etc.
 
-Once installed within your project, this plugin sends all text inputs that users are sending to your bot and queries Inbenta API. 
+Once installed within your project, this plugin sends all text inputs that users are sending to your bot and queries Inbenta API.
 The plugin retrieves the call results to enhance the `input` object. You can then use this data in your routes and actions.
 
 Here is an example of an `input` object received from a user:
