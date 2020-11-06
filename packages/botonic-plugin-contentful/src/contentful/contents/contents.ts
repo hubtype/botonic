@@ -11,7 +11,7 @@ import {
   TopContentType,
 } from '../../cms'
 import { ResourceDelivery } from '../content-delivery'
-import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-api'
+import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
 import { QueueDelivery } from './queue'
 import { ScheduleDelivery } from './schedule'
 

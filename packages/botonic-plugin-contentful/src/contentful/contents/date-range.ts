@@ -1,13 +1,9 @@
 import * as contentful from 'contentful'
 
 import { ContentType, DateRangeContent, DEFAULT_CONTEXT } from '../../cms'
-import * as time from '../../time'
 import { TopContentDelivery } from '../content-delivery'
-import {
-  CommonEntryFields,
-  ContentfulEntryUtils,
-  DeliveryApi,
-} from '../delivery-api'
+import { DeliveryApi } from '../delivery-api'
+import { ContentfulEntryUtils, DateRangeFields } from '../delivery-utils'
 
 export class DateRangeDelivery extends TopContentDelivery {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
@@ -23,19 +19,6 @@ export class DateRangeDelivery extends TopContentDelivery {
   }
 
   static fromEntry(entry: contentful.Entry<DateRangeFields>): DateRangeContent {
-    const dateRange = new time.DateRange(
-      entry.fields.name,
-      new Date(Date.parse(entry.fields.from)),
-      new Date(Date.parse(entry.fields.to))
-    )
-    return new DateRangeContent(
-      ContentfulEntryUtils.commonFieldsFromEntry(entry),
-      dateRange
-    )
+    return ContentfulEntryUtils.fromDateRangeEntry(entry)
   }
-}
-
-export interface DateRangeFields extends CommonEntryFields {
-  from: string
-  to: string
 }

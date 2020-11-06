@@ -12,11 +12,8 @@ import {
   ResourceId,
 } from '../cms'
 import { asyncMap } from '../util/async'
-import {
-  ContentfulEntryUtils,
-  ContentWithNameFields,
-  DeliveryApi,
-} from './delivery-api'
+import { DeliveryApi } from './delivery-api'
+import { ContentfulEntryUtils, ContentWithNameFields } from './delivery-utils'
 
 export abstract class ResourceDelivery {
   constructor(

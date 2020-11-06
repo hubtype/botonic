@@ -3,11 +3,8 @@ import * as contentful from 'contentful'
 import { Context } from '../../cms'
 import * as cms from '../../cms'
 import { TopContentDelivery } from '../content-delivery'
-import {
-  CommonEntryFields,
-  ContentfulEntryUtils,
-  DeliveryApi,
-} from '../delivery-api'
+import { DeliveryApi } from '../delivery-api'
+import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
 import { ScheduleDelivery, ScheduleFields } from './schedule'
 
 export class QueueDelivery extends TopContentDelivery {

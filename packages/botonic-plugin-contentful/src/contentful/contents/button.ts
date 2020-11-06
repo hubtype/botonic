@@ -9,7 +9,7 @@ import {
   CommonEntryFields,
   ContentfulEntryUtils,
   ContentWithNameFields,
-} from '../delivery-api'
+} from '../delivery-utils'
 import { DeliveryApi } from '../index'
 import { CarouselFields } from './carousel'
 import { QueueFields } from './queue'

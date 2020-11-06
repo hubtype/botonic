@@ -5,11 +5,8 @@ import { CommonFields, Context, TopContentId, TopContentType } from '../../cms'
 import { ContentType } from '../../cms/cms'
 import { SearchCandidate } from '../../search'
 import { QueueFields } from '../contents/queue'
-import {
-  CommonEntryFields,
-  ContentfulEntryUtils,
-  DeliveryApi,
-} from '../delivery-api'
+import { DeliveryApi } from '../delivery-api'
+import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
 
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}

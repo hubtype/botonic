@@ -3,12 +3,12 @@ import { Entry } from 'contentful'
 import * as cms from '../../cms'
 import { CmsException, ContentType } from '../../cms'
 import { TopContentDelivery } from '../content-delivery'
+import { DeliveryApi } from '../delivery-api'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
-  DeliveryApi,
   FollowUpFields,
-} from '../delivery-api'
+} from '../delivery-utils'
 import { CarouselDelivery } from './carousel'
 import { ImageDelivery, ImageFields } from './image'
 import { StartUpDelivery, StartUpFields } from './startup'

@@ -6,10 +6,8 @@ import {
 } from '../../src/cms'
 import { ButtonFields } from '../../src/contentful/contents/button'
 import { TextFields } from '../../src/contentful/contents/text'
-import {
-  AdaptorDeliveryApi,
-  createContentfulClientApi,
-} from '../../src/contentful/delivery-api'
+import { AdaptorDeliveryApi } from '../../src/contentful/delivery-api'
+import { createContentfulClientApi } from '../../src/contentful/delivery-utils'
 import { IgnoreFallbackDecorator } from '../../src/contentful/ignore-fallback-decorator'
 import { ENGLISH, Locale, SPANISH } from '../../src/nlp'
 import { testContentful, testContentfulOptions } from './contentful.helper'
