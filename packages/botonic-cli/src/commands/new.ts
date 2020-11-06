@@ -1,14 +1,13 @@
 import { Command } from '@oclif/command'
-import { resolve, join } from 'path'
+import colors from 'colors'
 import { copySync, moveSync } from 'fs-extra'
 import { prompt } from 'inquirer'
-import colors from 'colors'
+import ora from 'ora'
+import { join, resolve } from 'path'
+import * as util from 'util'
 
 import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'
-
-import * as util from 'util'
-import ora from 'ora'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec)
 

@@ -1,5 +1,5 @@
-import { resolve } from 'path'
 import { Command, flags } from '@oclif/command'
+import { resolve } from 'path'
 
 import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'

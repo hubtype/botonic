@@ -1,9 +1,9 @@
-import { join } from 'path'
-import * as fs from 'fs'
-import { homedir } from 'os'
 import axios, { Method } from 'axios'
 import colors from 'colors'
 import FormData from 'form-data'
+import * as fs from 'fs'
+import { homedir } from 'os'
+import { join } from 'path'
 import * as util from 'util'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec)

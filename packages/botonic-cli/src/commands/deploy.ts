@@ -1,17 +1,16 @@
 import { Command, flags } from '@oclif/command'
-import { prompt } from 'inquirer'
+import { AxiosError } from 'axios'
 import colors from 'colors'
-import { join } from 'path'
+import * as fs from 'fs'
 import { copySync, removeSync } from 'fs-extra'
+import { prompt } from 'inquirer'
+import ora from 'ora'
+import { join } from 'path'
+import * as rimraf from 'rimraf'
 import { zip } from 'zip-a-folder'
 
-import * as fs from 'fs'
-import ora from 'ora'
-import * as rimraf from 'rimraf'
-
 import { BotonicAPIService } from '../botonicapiservice'
-import { track, sleep } from '../utils'
-import { AxiosError } from 'axios'
+import { sleep, track } from '../utils'
 
 let force = false
 let npmCommand: string | undefined
