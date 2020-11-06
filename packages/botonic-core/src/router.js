@@ -1,6 +1,7 @@
 import * as url from 'url'
-import { isBrowser, isNode, isFunction } from './utils'
+
 import { RouteInspector } from './debug/inspector'
+import { isBrowser, isFunction, isNode } from './utils'
 
 export class Router {
   constructor(routes, routeInspector = undefined) {

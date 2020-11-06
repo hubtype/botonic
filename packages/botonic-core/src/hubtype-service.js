@@ -1,5 +1,5 @@
-import Pusher from 'pusher-js'
 import axios from 'axios'
+import Pusher from 'pusher-js'
 
 const PUSHER_KEY = process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c'
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'

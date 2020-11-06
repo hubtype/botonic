@@ -1,9 +1,9 @@
-import { Router } from './router'
-import { getNLU } from './nlu'
-import { getString } from './i18n'
-import { loadPlugins, runPlugins } from './plugins'
-import { isFunction } from './utils'
 import { Inspector } from './debug/inspector'
+import { getString } from './i18n'
+import { getNLU } from './nlu'
+import { loadPlugins, runPlugins } from './plugins'
+import { Router } from './router'
+import { isFunction } from './utils'
 
 export class CoreBot {
   constructor({

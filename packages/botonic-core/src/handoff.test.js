@@ -1,4 +1,4 @@
-import { humanHandOff, HandOffBuilder } from './handoff'
+import { HandOffBuilder, humanHandOff } from './handoff'
 
 describe('handOff', () => {
   test.each([
