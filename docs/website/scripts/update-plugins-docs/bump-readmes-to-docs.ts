@@ -2,7 +2,7 @@ import { join } from 'path'
 import { PluginInfo } from '.'
 import { readDir, readFile, writeFile } from './file-system'
 
-const capitalize = (string: string) =>
+const toCamelCase = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
 
 const PACKAGES = {
@@ -19,12 +19,12 @@ const getPluginName = (packageName: string): string =>
 
 const extractPluginInfo = (packageName: string) => {
   const id = getPluginName(packageName)
-  const title = getPluginName(packageName)
+  const title = id
     .split(PACKAGES.PLUGIN_NAME_SEPARATOR)
     .map(part =>
       part.includes(PACKAGES.PLUGIN_NLU_LOWERCASE)
         ? PACKAGES.PLUGIN_NLU_UPPERCASE
-        : capitalize(part)
+        : toCamelCase(part)
     )
     .join(' ')
   return { id, title }

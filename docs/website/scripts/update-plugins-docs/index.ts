@@ -1,6 +1,6 @@
 import { join, resolve } from 'path'
 import { bumpPackageReadmesToPluginsDocs } from './bump-readmes-to-docs'
-import { updatei18EN, updateSidebars } from './update-docs-references'
+import { updateI18en, updateSidebars } from './update-docs-references'
 
 export interface PluginInfo {
   id: string
@@ -17,4 +17,4 @@ const pluginsInfo = bumpPackageReadmesToPluginsDocs(
 const sidebarsPath = join(cwd, 'sidebars.json')
 updateSidebars(sidebarsPath, pluginsInfo)
 const i18ENPath = join(cwd, 'i18n', 'en.json')
-updatei18EN(i18ENPath, pluginsInfo)
+updateI18en(i18ENPath, pluginsInfo)

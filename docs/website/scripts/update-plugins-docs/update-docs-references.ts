@@ -23,7 +23,7 @@ export const updateSidebars = (
   writeJSON(sidebarsPath, sidebarsJSON)
 }
 
-export const updatei18EN = (i18ENPath: string, pluginsInfo: PluginInfo[]) => {
+export const updateI18en = (i18ENPath: string, pluginsInfo: PluginInfo[]) => {
   const i18nENJSON = readJSON(i18ENPath)
   pluginsInfo.forEach(p => {
     const pluginDocs = i18nENJSON[i18EN.LOCALIZED_STRINGS][i18EN.DOCS]
