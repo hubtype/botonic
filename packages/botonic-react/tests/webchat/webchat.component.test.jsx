@@ -1,15 +1,16 @@
-import React from 'react'
-import { Webchat } from '../../src/webchat/webchat'
-import { act } from 'react-test-renderer'
-import {
-  renderUseWebchatHook,
-  expectToHaveRoles,
-  expectNotToHaveRoles,
-} from '../helpers/test-utils'
 import { render, screen } from '@testing-library/react'
-import { ROLES } from '../../src/constants'
+import React from 'react'
+import { act } from 'react-test-renderer'
 
-describe('Webchat Component', () => {
+import { ROLES } from '../../src/constants'
+import { Webchat } from '../../src/webchat/webchat'
+import {
+  expectNotToHaveRoles,
+  expectToHaveRoles,
+  renderUseWebchatHook,
+} from '../helpers/test-utils'
+
+describe('TEST: Webchat Component', () => {
   const theme = {
     persistentMenu: [
       { label: 'Help', payload: 'help' },

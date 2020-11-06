@@ -1,9 +1,9 @@
-import React, { Children } from 'react'
 import { INPUT } from '@botonic/core'
+import React, { Children } from 'react'
 
-import { Message } from './message'
-import { serializeMarkdown, toMarkdownChildren } from './markdown'
 import { mapObjectNonBooleanValues } from '../util/react'
+import { serializeMarkdown, toMarkdownChildren } from './markdown'
+import { Message } from './message'
 
 const serializeText = children => {
   children = Array.isArray(children) ? children : [children]

@@ -1,10 +1,10 @@
 import {
   ADD_MESSAGE,
   ADD_MESSAGE_COMPONENT,
-  UPDATE_MESSAGE,
-  UPDATE_REPLIES,
   CLEAR_MESSAGES,
   UPDATE_LAST_MESSAGE_DATE,
+  UPDATE_MESSAGE,
+  UPDATE_REPLIES,
 } from './actions'
 
 export const messagesReducer = (state, action) => {

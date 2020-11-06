@@ -1,4 +1,4 @@
-import { stringifyWithRegexs, deserializeRegex } from '../src/util/regexs'
+import { deserializeRegex, stringifyWithRegexs } from '../src/util/regexs'
 
 describe('Regex serialization / deserialization', () => {
   const regexsItems = [

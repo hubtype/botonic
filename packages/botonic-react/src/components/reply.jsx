@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import { WebchatContext } from '../contexts'
 import { COLORS, WEBCHAT } from '../constants'
+import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
 
 const StyledButton = styled.button`

@@ -1,5 +1,6 @@
-import * as React from 'react'
 import * as core from '@botonic/core/src'
+import * as React from 'react'
+
 import {
   BlockInputOption,
   ButtonProps,

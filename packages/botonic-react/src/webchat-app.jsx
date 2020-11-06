@@ -1,11 +1,11 @@
+import { HubtypeService, INPUT } from '@botonic/core'
+import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { render } from 'react-dom'
-import merge from 'lodash.merge'
 
-import { Webchat } from './webchat/webchat'
-import { HubtypeService, INPUT } from '@botonic/core'
-import { msgToBotonic } from './msg-to-botonic'
 import { SENDERS } from './constants'
+import { msgToBotonic } from './msg-to-botonic'
+import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
   constructor({

@@ -1,10 +1,11 @@
+import Picker from 'emoji-picker-react'
 import React from 'react'
 import styled from 'styled-components'
+
 import LogoEmoji from '../../assets/emojiButton.svg'
-import Picker from 'emoji-picker-react'
-import { Icon, IconContainer } from './common'
-import { useComponentVisible } from '../hooks'
 import { ROLES } from '../../constants'
+import { useComponentVisible } from '../hooks'
+import { Icon, IconContainer } from './common'
 
 export const EmojiPicker = props => (
   <IconContainer role={ROLES.EMOJI_PICKER_ICON}>

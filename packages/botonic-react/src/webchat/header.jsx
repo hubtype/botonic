@@ -1,12 +1,12 @@
+import { motion } from 'framer-motion'
 import React, { useContext } from 'react'
 import { Flex } from 'rebass'
 import styled from 'styled-components'
-import { motion } from 'framer-motion'
 
+import { COLORS, ROLES, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
-import { ConditionalWrapper } from '../util/react'
 import { resolveImage } from '../util/environment'
-import { WEBCHAT, COLORS, ROLES } from '../constants'
+import { ConditionalWrapper } from '../util/react'
 
 const Header = styled(Flex)`
   background: linear-gradient(

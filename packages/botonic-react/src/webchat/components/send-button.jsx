@@ -1,4 +1,5 @@
 import React from 'react'
+
 import SendButtonIcon from '../../assets/send-button.svg'
 import { ROLES } from '../../constants'
 import { Icon, IconContainer } from './common'

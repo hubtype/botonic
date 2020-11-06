@@ -1,5 +1,6 @@
 import { INPUT } from '@botonic/core'
-import { MIME_WHITELIST, MAX_ALLOWED_SIZE_MB } from './constants'
+
+import { MAX_ALLOWED_SIZE_MB, MIME_WHITELIST } from './constants'
 
 export const isOfType = (msgType, type) => msgType === type
 

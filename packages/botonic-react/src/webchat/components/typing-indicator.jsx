@@ -1,5 +1,7 @@
-import React from 'react'
 import './typing-indicator.scss'
+
+import React from 'react'
+
 import { COLORS, ROLES } from '../../constants'
 
 export const TypingIndicator = props => (

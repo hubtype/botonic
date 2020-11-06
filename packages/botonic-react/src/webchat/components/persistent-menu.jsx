@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { Button } from '../../components/button'
+
 import LogoMenu from '../../assets/menuButton.svg'
-import { Icon } from './common'
-import { useComponentVisible } from '../hooks'
-import { WebchatContext } from '../../contexts'
+import { Button } from '../../components/button'
 import { ROLES, WEBCHAT } from '../../constants'
+import { WebchatContext } from '../../contexts'
+import { useComponentVisible } from '../hooks'
+import { Icon } from './common'
 
 const ButtonsContainer = styled.div`
   position: absolute;

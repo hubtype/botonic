@@ -1,5 +1,6 @@
 import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
+
 import { Webchat } from '../../src/webchat/webchat'
 
 describe('TEST: storage', () => {

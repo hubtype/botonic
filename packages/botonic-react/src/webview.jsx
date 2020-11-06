@@ -1,9 +1,9 @@
+import { getString, params2queryString, PROVIDER } from '@botonic/core'
 import axios from 'axios'
 import React from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import { getString, params2queryString, PROVIDER } from '@botonic/core'
 import { RequestContext } from './contexts'
 
 class App extends React.Component {

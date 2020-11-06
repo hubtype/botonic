@@ -1,6 +1,6 @@
 import { DEVICES } from '.'
-import { WebchatResizer } from './webchat-resizer'
 import { ScrollbarController } from './scrollbar-controller'
+import { WebchatResizer } from './webchat-resizer'
 
 export class DeviceAdapter {
   constructor() {

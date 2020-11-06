@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { renderComponent } from '../util/react'
 
 export const ShareButton = props => {

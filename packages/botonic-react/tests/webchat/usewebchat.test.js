@@ -1,4 +1,5 @@
 import { act } from '@testing-library/react-hooks'
+
 import { SENDERS } from '../../src/constants'
 import { renderUseWebchatHook } from '../helpers/test-utils'
 

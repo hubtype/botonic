@@ -2,8 +2,8 @@ import React from 'react'
 import JSONTree from 'react-json-tree'
 import styled from 'styled-components'
 
-import { useWebchat } from './hooks'
 import { COLORS } from '../constants'
+import { useWebchat } from './hooks'
 
 const AttributeContainer = styled.div`
   display: flex;

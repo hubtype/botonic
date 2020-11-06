@@ -1,15 +1,16 @@
 import React from 'react'
-import { msgsToBotonic } from '../src/msg-to-botonic'
+
 import {
-  Text,
-  Carousel,
-  Reply,
   Button,
+  Carousel,
   Element,
   Pic,
+  Reply,
   Subtitle,
+  Text,
   Title,
 } from '../src'
+import { msgsToBotonic } from '../src/msg-to-botonic'
 
 describe('msgsToBotonic carousel', () => {
   test('with pic, title & subtitle', () => {

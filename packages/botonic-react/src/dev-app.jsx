@@ -1,11 +1,11 @@
+import merge from 'lodash.merge'
 import React from 'react'
 import { render } from 'react-dom'
-import merge from 'lodash.merge'
 
+import { SENDERS } from './constants'
 import { ReactBot } from './react-bot'
 import { WebchatApp } from './webchat-app'
 import { WebchatDev } from './webchat/webchat-dev'
-import { SENDERS } from './constants'
 
 export class DevApp extends WebchatApp {
   constructor({

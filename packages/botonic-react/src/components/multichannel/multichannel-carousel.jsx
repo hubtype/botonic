@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
+
 import { RequestContext } from '../../contexts'
 import { Carousel } from '../carousel'
 // import { Image } from '../image'
 import { MultichannelText } from './multichannel-text'
 import {
-  isWhatsapp,
-  isNodeKind,
   getFilteredElements,
   isMultichannelButton,
+  isNodeKind,
+  isWhatsapp,
 } from './multichannel-utils'
 
 export const MultichannelCarousel = props => {

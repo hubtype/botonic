@@ -1,6 +1,6 @@
 import React from 'react'
-
 import styled from 'styled-components'
+
 import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../util/react'
 

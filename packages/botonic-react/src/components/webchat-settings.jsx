@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
 import { INPUT } from '@botonic/core'
+import React, { useContext } from 'react'
 
+import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
 import { stringifyWithRegexs } from '../util/regexs'
-import { WebchatContext } from '../contexts'
 
 export const WebchatSettings = ({
   theme,

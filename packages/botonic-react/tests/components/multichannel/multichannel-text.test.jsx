@@ -1,11 +1,12 @@
+import React from 'react'
+
 import { Text } from '../../../src'
 import {
-  MultichannelText,
   MultichannelButton,
+  MultichannelText,
 } from '../../../src/components/multichannel'
-import React from 'react'
-import { whatsappRenderer } from '../../helpers/test-utils'
 import { MultichannelReply } from '../../../src/components/multichannel/multichannel-reply'
+import { whatsappRenderer } from '../../helpers/test-utils'
 
 const LEGACY_CONTEXT = {
   indexSeparator: '.',
