@@ -98,7 +98,7 @@ export class HubtypeService {
   handleUnsentInput(message) {
     this.onEvent({
       action: 'update_message_info',
-      message: { id: message.id, unsentInput: message },
+      message: { id: message.id, ack: 0, unsentInput: message },
     })
   }
 
@@ -137,7 +137,8 @@ export class HubtypeService {
 
   async resendUnsentInputs() {
     for (const message of this.unsentInputs()) {
-      await this.postMessage(this.user, message.unsentInput)
+      message.unsentInput &&
+        (await this.postMessage(this.user, message.unsentInput))
     }
   }
 }

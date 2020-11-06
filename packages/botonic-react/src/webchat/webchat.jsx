@@ -550,7 +550,9 @@ export const Webchat = forwardRef((props, ref) => {
       const messageToUpdate = webchatState.messagesJSON.filter(
         m => m.id == msgId
       )[0]
-      updateMessage({ ...messageToUpdate, ...messageInfo })
+      const updatedMsg = merge(messageToUpdate, messageInfo)
+      if (updatedMsg.ack === 1) delete updatedMsg.unsentInput
+      updateMessage(updatedMsg)
     },
     updateWebchatSettings: settings => {
       const themeUpdates = normalizeWebchatSettings(settings)

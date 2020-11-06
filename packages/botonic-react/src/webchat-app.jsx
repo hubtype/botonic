@@ -81,7 +81,9 @@ export class WebchatApp {
         lastMessageUpdateDate: this.getLastMessageUpdate(),
         onEvent: event => this.onServiceEvent(event),
         unsentInputs: () =>
-          this.webchatRef.current.getMessages().filter(msg => msg.ack === 0),
+          this.webchatRef.current
+            .getMessages()
+            .filter(msg => msg.ack === 0 && msg.unsentInput),
       })
     }
   }
