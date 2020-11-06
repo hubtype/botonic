@@ -1,10 +1,10 @@
+import type { NluResult } from '@botonic/core'
+import { Language } from '@botonic/nlu/dist/language'
+import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
+import { IntentDecoder } from '@botonic/nlu/dist/types'
+import { Tensor, tensor, tensor1d } from '@tensorflow/tfjs'
 import franc from 'franc'
 import langs from 'langs'
-import { Tensor, tensor, tensor1d } from '@tensorflow/tfjs'
-import { Language } from '@botonic/nlu/dist/language'
-import { IntentDecoder } from '@botonic/nlu/dist/types'
-import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
-import type { NluResult } from '@botonic/core'
 
 export function detectLang(input: string, languages: Language[]): Language {
   const res = franc(input, {

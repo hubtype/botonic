@@ -1,12 +1,12 @@
-import axios from 'axios'
-import { loadLayersModel } from '@tensorflow/tfjs'
 import {
   ASSETS_DIR,
-  MODELS_DIR,
   MODEL_DATA_FILENAME,
   MODEL_FILENAME,
+  MODELS_DIR,
 } from '@botonic/nlu/dist/constants'
 import { Language } from '@botonic/nlu/dist/language'
+import { loadLayersModel } from '@tensorflow/tfjs'
+import axios from 'axios'
 
 import { ModelInformationPromises } from './types'
 

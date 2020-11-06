@@ -1,8 +1,8 @@
+import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
-import type { Plugin, PluginPreRequest, PluginPostRequest } from '@botonic/core'
 
-import { BotonicPluginNLUOptions } from './types'
 import { ModelHandler } from './model-handler'
+import { BotonicPluginNLUOptions } from './types'
 
 export default class BotonicPluginNLU implements Plugin {
   private modelHandler: ModelHandler
