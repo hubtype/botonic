@@ -10,6 +10,7 @@ export const staticAsset = path => {
     const basePath = scriptBaseURL.replace('/' + scriptName, '/')
     return basePath + path
   } catch (e) {
+    console.error(`Could not resolve path: '${path}'`, e)
     return path
   }
 }
@@ -21,7 +22,6 @@ export const resolveImage = src => {
 
 export const isURL = urlPath => {
   // @stephenhay (38 chars) from: https://mathiasbynens.be/demo/url-regex
-  const URL_PATTERN = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/
-  const pattern = new RegExp(URL_PATTERN)
+  const pattern = new RegExp(/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/)
   return !!pattern.test(urlPath)
 }

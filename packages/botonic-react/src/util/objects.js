@@ -21,10 +21,13 @@ export const getProperty = (obj, property) => {
 }
 
 export const mapObject = (obj, conversion = ([key, value]) => [key, value]) => {
-  return Object.entries(obj)
-    .map(conversion)
-    .reduce(function (prev, curr) {
-      prev[curr[0]] = curr[1]
-      return prev
-    }, {})
+  return (
+    obj &&
+    Object.entries(obj)
+      .map(conversion)
+      .reduce(function (prev, curr) {
+        prev[curr[0]] = curr[1]
+        return prev
+      }, {})
+  )
 }
