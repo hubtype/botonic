@@ -1,15 +1,16 @@
 // Exports
 
 import { DynamoDB } from 'aws-sdk'
+
 import {
   ErrorReportingTrackStorage,
   Track,
   TrackStorage,
   UserEvent,
 } from './domain'
-import { DynamoTrackStorage } from './infrastructure/dynamo'
 import time from './domain/time'
 import { Env } from './infrastructure/config'
+import { DynamoTrackStorage } from './infrastructure/dynamo'
 
 export * from './domain/dummy'
 export * from './infrastructure'

@@ -1,6 +1,7 @@
 import { instance, mock, when } from 'ts-mockito'
-import { DynamoTrackStorage } from '../../src/infrastructure/dynamo'
+
 import { ErrorReportingTrackStorage, Track } from '../../src/domain/track'
+import { DynamoTrackStorage } from '../../src/infrastructure/dynamo'
 import DoneCallback = jest.DoneCallback
 import { TrackException } from '../../src/domain/exceptions'
 
