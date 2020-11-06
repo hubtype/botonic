@@ -1,13 +1,14 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable node/no-missing-import */
-import React from 'react'
 import Head from '@docusaurus/Head'
-import Analytics from '../components/analytics'
-import HomeHeader from '../components/homeHeader'
-import PageIllustration from '../components/pageIllustration'
-import HomeHero from '../components/homeHero'
+import React from 'react'
+
 import MessagingAppsLeft from '../../static/img/MessagingAppsLeft.svg'
 import MessagingAppsRight from '../../static/img/MessagingAppsRight.svg'
+import Analytics from '../components/analytics'
+import HomeHeader from '../components/homeHeader'
+import HomeHero from '../components/homeHero'
+import PageIllustration from '../components/pageIllustration'
 
 function Home() {
   return (

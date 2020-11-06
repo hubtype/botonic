@@ -1,4 +1,5 @@
 import { join } from 'path'
+
 import { PluginInfo } from '.'
 import { readDir, readFile, writeFile } from './file-system'
 

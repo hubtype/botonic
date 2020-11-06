@@ -1,14 +1,15 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable node/no-missing-import */
-import React, { useState } from 'react'
-import classnames from 'classnames'
-import Layout from '@theme/Layout'
 import Link from '@docusaurus/Link'
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
-import styles from './styles.module.css'
-import PerspectiveCodeHighlighter from '../components/perspectiveCodeHighlighter'
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+import Layout from '@theme/Layout'
+import classnames from 'classnames'
+import React, { useState } from 'react'
+
 import BotDemo from '../components/botDemo'
+import PerspectiveCodeHighlighter from '../components/perspectiveCodeHighlighter'
+import styles from './styles.module.css'
 
 function Home() {
   // TODO: Add new Botonic docs index.js showcase/playground

@@ -1,4 +1,5 @@
 import { join, resolve } from 'path'
+
 import { bumpPackageReadmesToPluginsDocs } from './bump-readmes-to-docs'
 import { updateI18en, updateSidebars } from './update-docs-references'
 

@@ -7,15 +7,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react'
-import classnames from 'classnames'
-
 import Link from '@docusaurus/Link'
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+import classnames from 'classnames'
+import React from 'react'
+
+import Analytics from '../../components/analytics'
 import styles from './styles.module.css'
 import { WasPageUseful } from './was-page-useful'
-import Analytics from '../../components/analytics'
 
 function FooterLink({ to, href, label, prependBaseUrlToHref, ...props }) {
   const toUrl = useBaseUrl(to)
