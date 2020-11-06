@@ -1,12 +1,12 @@
+import { testManageContentful } from './manage-contentful.helper'
+import { TEST_DEFAULT_LOCALE, testContentful } from '../contentful.helper'
+import { rndStr } from '../../../src/cms/test-helpers'
 import * as cms from '../../../src/cms/'
 import { CmsException } from '../../../src/cms/'
-import { rndStr } from '../../../src/cms/test-helpers'
+import { ENGLISH, SPANISH } from '../../../src/nlp'
 import { ContentFieldType } from '../../../src/manage-cms/fields'
 import { ManageContext } from '../../../src/manage-cms/manage-context'
-import { ENGLISH, SPANISH } from '../../../src/nlp'
 import { repeatWithBackoff } from '../../../src/util/backoff'
-import { TEST_DEFAULT_LOCALE, testContentful } from '../contentful.helper'
-import { testManageContentful } from './manage-contentful.helper'
 
 function ctxt(ctx: Partial<ManageContext>): ManageContext {
   return { ...ctx, preview: false } as ManageContext

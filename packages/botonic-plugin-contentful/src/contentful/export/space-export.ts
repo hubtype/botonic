@@ -1,13 +1,13 @@
 // eslint-disable-next-line node/no-missing-import
-import * as schema from 'contentful-import/dist/utils/schema'
-// eslint-disable-next-line node/no-missing-import
-import { AssetProps } from 'contentful-management/dist/typings/entities/asset'
-// eslint-disable-next-line node/no-missing-import
-import { ContentTypeProps } from 'contentful-management/dist/typings/entities/content-type'
-// eslint-disable-next-line node/no-missing-import
 import { EntryProp } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { LocaleProps } from 'contentful-management/dist/typings/entities/locale'
+// eslint-disable-next-line node/no-missing-import
+import { ContentTypeProps } from 'contentful-management/dist/typings/entities/content-type'
+// eslint-disable-next-line node/no-missing-import
+import { AssetProps } from 'contentful-management/dist/typings/entities/asset'
+
+import * as schema from 'contentful-import/dist/utils/schema'
 import fs from 'fs'
 import * as joi from 'joi'
 

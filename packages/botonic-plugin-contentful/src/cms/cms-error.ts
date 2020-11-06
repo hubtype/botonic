@@ -1,8 +1,3 @@
-import { MultiError } from 'async-parallel'
-
-import { SearchCandidate } from '../search'
-import { reduceMultiError } from '../util/async'
-import { AssetId, ContentId, ResourceId } from './callback'
 import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
   Asset,
@@ -23,6 +18,10 @@ import {
 } from './contents'
 import { Context, DEFAULT_CONTEXT } from './context'
 import { CmsException } from './exceptions'
+import { SearchCandidate } from '../search'
+import { MultiError } from 'async-parallel'
+import { reduceMultiError } from '../util/async'
+import { AssetId, ContentId, ResourceId } from './callback'
 
 /**
  * It validates the individually delivered contents, but not those fetched

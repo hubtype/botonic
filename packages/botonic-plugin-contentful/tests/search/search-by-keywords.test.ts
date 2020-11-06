@@ -1,18 +1,16 @@
 import 'jest-extended'
-
 import { deepEqual, instance, mock, when } from 'ts-mockito'
-
 import {
-  CommonFields,
-  ContentType,
-  Context,
+  TopContentId,
   DummyCMS,
+  ContentType,
   SearchByKeywords,
+  Context,
+  CommonFields,
   SearchCandidate,
   SearchResult,
-  TopContentId,
 } from '../../src'
-import { MatchType, Normalizer, StemmingBlackList } from '../../src/nlp'
+import { Normalizer, StemmingBlackList, MatchType } from '../../src/nlp'
 import { testContentId } from '../helpers/test-data'
 
 const ES_CONTEXT = { locale: 'es' }

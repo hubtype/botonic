@@ -1,10 +1,10 @@
-import { ErrorReportingCMS } from '../../cms'
-import { Contentful } from '../../contentful/cms-contentful'
-import { ContentFieldType } from '../../manage-cms'
-import { I18nField } from '../../manage-cms/fields'
+import { CsvExport, skipEmptyStrings } from './csv-export'
 import { Locale } from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
-import { CsvExport, skipEmptyStrings } from './csv-export'
+import { Contentful } from '../../contentful/cms-contentful'
+import { ErrorReportingCMS } from '../../cms'
+import { ContentFieldType } from '../../manage-cms'
+import { I18nField } from '../../manage-cms/fields'
 
 export class PostProcessor {
   constructor(readonly targetLocale: string) {}

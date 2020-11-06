@@ -1,12 +1,11 @@
-import { anyString, anything, instance, mock, when } from 'ts-mockito'
-
 import { CMS, StartUp } from '../../../src/cms'
-import { RndTextBuilder } from '../../../src/cms/test-helpers'
-import { FilteredCMS } from '../../../src/cms/transform/cms-filter'
 import {
   RecursiveMessageContentFilter,
   stringsFilter,
 } from '../../../src/cms/transform/message-content-filters'
+import { anyString, anything, instance, mock, when } from 'ts-mockito'
+import { RndTextBuilder } from '../../../src/cms/test-helpers'
+import { FilteredCMS } from '../../../src/cms/transform/cms-filter'
 
 test('TEST: FilteredCMS filter', async () => {
   const theCms = mock<CMS>()

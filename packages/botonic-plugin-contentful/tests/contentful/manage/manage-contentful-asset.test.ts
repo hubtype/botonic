@@ -1,7 +1,7 @@
-import { ManageContext } from '../../../src/manage-cms'
 import { ENGLISH, SPANISH } from '../../../src/nlp'
-import { TEST_ASSET_ID } from '../contents/asset.test'
 import { testManageContentful } from './manage-contentful.helper'
+import { ManageContext } from '../../../src/manage-cms'
+import { TEST_ASSET_ID } from '../contents/asset.test'
 
 // Since the tests modify contentful contents, they might fail if executed
 // more than once simultaneously (eg from 2 different branches from CI)

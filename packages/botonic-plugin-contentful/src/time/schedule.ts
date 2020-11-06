@@ -1,5 +1,4 @@
 import momentTz from 'moment-timezone'
-
 import { offsetWithTimeZone } from './timezones'
 
 /**

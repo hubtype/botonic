@@ -1,8 +1,7 @@
-import * as contentful from 'contentful'
-
 import * as cms from '../../cms'
 import { Context } from '../../cms'
 import { CommonEntryFields, DeliveryApi } from '../delivery-api'
+import * as contentful from 'contentful'
 import { DeliveryWithFollowUp } from './follow-up'
 
 export class ImageDelivery extends DeliveryWithFollowUp {

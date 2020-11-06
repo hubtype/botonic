@@ -1,4 +1,3 @@
-import { SearchCandidate } from '../../search'
 import {
   Asset,
   Button,
@@ -23,6 +22,7 @@ import {
   TopContentType,
   Url,
 } from '../index'
+import { SearchCandidate } from '../../search'
 import { RecursiveMessageContentFilter } from './message-content-filters'
 
 /**

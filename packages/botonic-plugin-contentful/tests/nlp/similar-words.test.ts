@@ -1,6 +1,3 @@
-import { leven } from '@nlpjs/similarity/src'
-
-import { NormalizedUtterance, Word } from '../../src/nlp'
 import {
   CandidateWithKeywords,
   Keyword,
@@ -11,6 +8,8 @@ import {
   SimilarWordFinder,
   SimilarWordResult,
 } from '../../src/nlp/similar-words'
+import { NormalizedUtterance, Word } from '../../src/nlp'
+import { leven } from '@nlpjs/similarity/src'
 
 class TestCandidate {}
 
@@ -138,37 +137,13 @@ test.each<any>([
 
 test.each<any>([
   // eslint-disable-next-line prettier/prettier
-  [
-    [
-      ['loooooooooong_match', 2],
-      ['short_match', 2],
-    ],
-    -8,
-  ],
+  [[['loooooooooong_match', 2], ['short_match', 2]], -8],
   // eslint-disable-next-line prettier/prettier
-  [
-    [
-      ['short_match', 2],
-      ['loooooooooong_match', 2],
-    ],
-    8,
-  ],
+  [[['short_match', 2], ['loooooooooong_match', 2]], 8],
   // eslint-disable-next-line prettier/prettier
-  [
-    [
-      ['loooooooooong_match', 3],
-      ['short_match', 1],
-    ],
-    2,
-  ],
+  [[['loooooooooong_match', 3], ['short_match', 1]], 2],
   // eslint-disable-next-line prettier/prettier
-  [
-    [
-      ['short_match', 1],
-      ['loooooooooong_match', 3],
-    ],
-    -2,
-  ],
+  [[['short_match', 1], ['loooooooooong_match', 3]], -2],
 ])(
   'SimilarWordResult.compare',
   (results: [string, number][], expected: number) => {

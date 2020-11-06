@@ -137,4 +137,4 @@ export const ruDefaultStopWords = [
   // '9',
   // '0',
   // '_',
-]
+  ];

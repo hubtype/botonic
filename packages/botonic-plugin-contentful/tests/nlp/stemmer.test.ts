@@ -1,5 +1,5 @@
-import { Locale, SUPPORTED_LOCALES, tokenizerPerLocale } from '../../src/nlp'
 import { stemmerFor } from '../../src/nlp/stemmer'
+import { Locale, SUPPORTED_LOCALES, tokenizerPerLocale } from '../../src/nlp'
 
 test.each<any>([
   ['es', 'ponerse', ['pon']],

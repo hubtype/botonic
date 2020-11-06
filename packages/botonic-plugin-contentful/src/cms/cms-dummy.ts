@@ -1,6 +1,5 @@
 /* eslint-disable no-empty-pattern */
 import { SearchCandidate } from '../search/search-result'
-import * as time from '../time'
 import { Callback, ContentCallback } from './callback'
 import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
@@ -8,18 +7,19 @@ import {
   Button,
   Carousel,
   Chitchat,
-  CommonFields,
-  Content,
-  DateRangeContent,
   Element,
   Image,
-  Queue,
-  ScheduleContent,
-  StartUp,
   Text,
-  TopContent,
   Url,
+  Queue,
+  StartUp,
+  CommonFields,
+  ScheduleContent,
+  DateRangeContent,
+  TopContent,
+  Content,
 } from './contents'
+import * as time from '../time'
 import { Context, DEFAULT_CONTEXT } from './context'
 
 /**

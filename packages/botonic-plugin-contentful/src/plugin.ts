@@ -1,9 +1,9 @@
 import * as cms from './cms'
-import { LogCMS } from './cms'
-import { Contentful } from './contentful/cms-contentful'
 import { KeywordsOptions, Locale, Normalizer, StemmingBlackList } from './nlp'
-import { BotonicMsgConverter } from './render'
 import { Search } from './search'
+import { BotonicMsgConverter } from './render'
+import { Contentful } from './contentful/cms-contentful'
+import { LogCMS } from './cms'
 
 interface NlpOptions {
   blackList: { [locale: string]: StemmingBlackList[] }

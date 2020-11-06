@@ -1,7 +1,7 @@
-import * as cms from '../../../src'
-import { SPANISH } from '../../../src'
 import { testContentful, testContext } from '../contentful.helper'
+import * as cms from '../../../src'
 import { expectImgUrlIs } from './image.test'
+import { SPANISH } from '../../../src'
 
 export const TEST_CAROUSEL_MAIN_ID = '2yR9f3stNAEqdamUr8VtfD'
 export const TEST_POST_MENU_CRSL = '7ATP377r6Nb8VqNtRKAS4J'

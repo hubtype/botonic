@@ -1,14 +1,13 @@
 import { Asset, ContentType, Entry, EntryCollection } from 'contentful'
-import * as contentful from 'contentful'
-
-import { Context } from '../cms'
 import { DeliveryApi } from './delivery-api'
+import { Context } from '../cms'
 import {
   ContentfulVisitor,
   I18nEntryTraverser,
   I18nValue,
   VisitedField,
 } from './traverser'
+import * as contentful from 'contentful'
 
 /**
  * It requests contentful to deliver all locales for each entry, and we discard all except the one in the context

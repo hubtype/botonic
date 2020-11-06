@@ -1,5 +1,3 @@
-import * as contentful from 'contentful'
-
 import * as cms from '../cms'
 import {
   Asset,
@@ -14,29 +12,30 @@ import {
   TopContent,
   TopContentType,
 } from '../cms'
-import { ContentfulOptions } from '../plugin'
-import { SearchCandidate } from '../search'
-import { AssetDelivery } from './contents/asset'
-import { ButtonDelivery } from './contents/button'
-import { CarouselDelivery } from './contents/carousel'
-import { ContentsDelivery } from './contents/contents'
-import { DateRangeDelivery } from './contents/date-range'
-import { FollowUpDelivery } from './contents/follow-up'
-import { ImageDelivery } from './contents/image'
-import { QueueDelivery } from './contents/queue'
-import { ScheduleDelivery } from './contents/schedule'
-import { StartUpDelivery } from './contents/startup'
-import { TextDelivery } from './contents/text'
-import { UrlDelivery } from './contents/url'
 import {
   AdaptorDeliveryApi,
   ContentfulEntryUtils,
   createContentfulClientApi,
   DeliveryApi,
 } from './delivery-api'
+import { CarouselDelivery } from './contents/carousel'
+import { TextDelivery } from './contents/text'
+import { StartUpDelivery } from './contents/startup'
+import { UrlDelivery } from './contents/url'
+import { KeywordsDelivery } from './search/keywords'
+import { ScheduleDelivery } from './contents/schedule'
+import { DateRangeDelivery } from './contents/date-range'
+import { ImageDelivery } from './contents/image'
+import { AssetDelivery } from './contents/asset'
+import { QueueDelivery } from './contents/queue'
+import { ButtonDelivery } from './contents/button'
+import { ContentfulOptions } from '../plugin'
 import { CachedClientApi } from './delivery/cache'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
-import { KeywordsDelivery } from './search/keywords'
+import { FollowUpDelivery } from './contents/follow-up'
+import * as contentful from 'contentful'
+import { SearchCandidate } from '../search'
+import { ContentsDelivery } from './contents/contents'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi

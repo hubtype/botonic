@@ -1,16 +1,15 @@
-import sync from 'csv-stringify/lib/sync'
-
-import { CommonFields, Url } from '../../../src/cms'
-import { TextBuilder } from '../../../src/cms/factories'
-import { RndButtonsBuilder } from '../../../src/cms/test-helpers'
-import { ENGLISH } from '../../../src/nlp'
 import {
   ContentToCsvLines,
-  create_stringifier,
   CsvExport,
   skipEmptyStrings,
+  create_stringifier,
 } from '../../../src/tools/l10n/csv-export'
 import { testContentful } from '../../../tests/contentful/contentful.helper'
+import { ENGLISH } from '../../../src/nlp'
+import { CommonFields, Url } from '../../../src/cms'
+import { TextBuilder } from '../../../src/cms/factories'
+import sync from 'csv-stringify/lib/sync'
+import { RndButtonsBuilder } from '../../../src/cms/test-helpers'
 
 test('TEST: CsvExport integration test', async () => {
   const cms = testContentful()

@@ -2,16 +2,16 @@ import {
   Button,
   Callback,
   CommonFields,
-  Content,
-  ContentCallback,
   ContentType,
+  TopContentType,
   Queue,
   Text,
-  TopContentType,
+  ContentCallback,
+  Content,
 } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
-import { RATING_1STAR_ID } from './contents/button.test'
 import { expectContentIsSorryText, TEST_SORRY } from './contents/text.test'
+import { RATING_1STAR_ID } from './contents/button.test'
 
 const BUTTON_POST_FAQ3 = '40buQOqp9jbwoxmMZhFO16'
 

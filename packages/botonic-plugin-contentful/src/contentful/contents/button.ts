@@ -1,22 +1,21 @@
 import * as contentful from 'contentful'
-
+import { DeliveryApi } from '../index'
 import * as cms from '../../cms'
 import { CmsException, ContentType } from '../../cms'
-import { TopContentType } from '../../cms/cms'
-import { isOfType } from '../../util/enums'
-import { ContentDelivery } from '../content-delivery'
+import { CarouselFields } from './carousel'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   ContentWithNameFields,
 } from '../delivery-api'
-import { DeliveryApi } from '../index'
-import { CarouselFields } from './carousel'
-import { QueueFields } from './queue'
-import { HourRangeFields, ScheduleFields } from './schedule'
-import { StartUpFields } from './startup'
 import { TextFields } from './text'
 import { UrlFields } from './url'
+import { StartUpFields } from './startup'
+import { QueueFields } from './queue'
+import { HourRangeFields, ScheduleFields } from './schedule'
+import { isOfType } from '../../util/enums'
+import { TopContentType } from '../../cms/cms'
+import { ContentDelivery } from '../content-delivery'
 
 export class ButtonDelivery extends ContentDelivery {
   public static BUTTON_CONTENT_TYPE = 'button'

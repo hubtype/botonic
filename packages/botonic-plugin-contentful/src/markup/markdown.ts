@@ -1,5 +1,4 @@
 import * as marked from 'marked'
-
 import { MarkUp, MarkupType, Token, TokenType } from './markup'
 
 /**

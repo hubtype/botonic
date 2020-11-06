@@ -57,7 +57,8 @@
           "type": "Symbol",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -86,12 +87,14 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Symbol",
-            "validations": []
+            "validations": [
+            ]
           }
         },
         {
@@ -100,7 +103,8 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         }
@@ -163,7 +167,8 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -175,7 +180,9 @@
           "required": true,
           "validations": [
             {
-              "linkMimetypeGroup": ["image"],
+              "linkMimetypeGroup": [
+                "image"
+              ],
               "message": "Not supported image type"
             },
             {
@@ -197,7 +204,12 @@
           "required": false,
           "validations": [
             {
-              "linkContentType": ["carousel", "image", "text", "url"]
+              "linkContentType": [
+                "carousel",
+                "image",
+                "text",
+                "url"
+              ]
             }
           ],
           "disabled": false,
@@ -277,7 +289,8 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -287,7 +300,8 @@
           "type": "Text",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -297,7 +311,8 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
@@ -326,7 +341,10 @@
           "required": false,
           "validations": [
             {
-              "in": ["Buttons", "QuickReplies"]
+              "in": [
+                "Buttons",
+                "QuickReplies"
+              ]
             }
           ],
           "disabled": false,
@@ -340,7 +358,11 @@
           "required": false,
           "validations": [
             {
-              "linkContentType": ["text", "carousel", "image"]
+              "linkContentType": [
+                "text",
+                "carousel",
+                "image"
+              ]
             }
           ],
           "disabled": false,
@@ -353,7 +375,8 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
@@ -442,7 +465,8 @@
           "type": "Symbol",
           "localized": true,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -454,7 +478,12 @@
           "required": true,
           "validations": [
             {
-              "linkContentType": ["carousel", "payload", "text", "url"]
+              "linkContentType": [
+                "carousel",
+                "payload",
+                "text",
+                "url"
+              ]
             }
           ],
           "disabled": false,
@@ -534,7 +563,8 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -558,7 +588,9 @@
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["element"]
+                "linkContentType": [
+                  "element"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -570,7 +602,8 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
@@ -645,7 +678,8 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -655,7 +689,8 @@
           "type": "Text",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -667,7 +702,9 @@
           "required": false,
           "validations": [
             {
-              "linkMimetypeGroup": ["image"],
+              "linkMimetypeGroup": [
+                "image"
+              ],
               "message": "Unsupported Image format"
             },
             {
@@ -687,14 +724,20 @@
           "type": "Array",
           "localized": false,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["button", "text", "url", "carousel"]
+                "linkContentType": [
+                  "button",
+                  "text",
+                  "url",
+                  "carousel"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -775,7 +818,9 @@
           "required": true,
           "validations": [
             {
-              "linkContentType": ["text"]
+              "linkContentType": [
+                "text"
+              ]
             }
           ],
           "disabled": false,
@@ -790,7 +835,9 @@
           "required": true,
           "validations": [
             {
-              "linkContentType": ["text"]
+              "linkContentType": [
+                "text"
+              ]
             }
           ],
           "disabled": false,
@@ -937,14 +984,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -956,14 +1006,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -975,14 +1028,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -994,14 +1050,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -1013,14 +1072,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -1032,14 +1094,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -1051,14 +1116,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -1070,14 +1138,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["daySchedule"]
+                "linkContentType": [
+                  "daySchedule"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -1091,7 +1162,9 @@
           "required": false,
           "validations": [
             {
-              "linkContentType": ["partition"]
+              "linkContentType": [
+                "partition"
+              ]
             }
           ],
           "disabled": false,
@@ -1310,7 +1383,8 @@
           "type": "Date",
           "localized": false,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -1320,14 +1394,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["hourRange"]
+                "linkContentType": [
+                  "hourRange"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -1406,12 +1483,14 @@
           "type": "Array",
           "localized": true,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Symbol",
-            "validations": []
+            "validations": [
+            ]
           }
         },
         {
@@ -1504,7 +1583,8 @@
           "type": "Symbol",
           "localized": true,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -1514,7 +1594,8 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -1526,7 +1607,9 @@
           "required": false,
           "validations": [
             {
-              "linkContentType": ["schedule"]
+              "linkContentType": [
+                "schedule"
+              ]
             }
           ],
           "disabled": false,
@@ -1539,14 +1622,17 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["searchableByKeywords"]
+                "linkContentType": [
+                  "searchableByKeywords"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -1625,7 +1711,8 @@
           "type": "Date",
           "localized": false,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -1635,7 +1722,8 @@
           "type": "Date",
           "localized": false,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         }
@@ -1714,7 +1802,9 @@
           "required": false,
           "validations": [
             {
-              "linkMimetypeGroup": ["image"]
+              "linkMimetypeGroup": [
+                "image"
+              ]
             },
             {
               "assetFileSize": {
@@ -1733,7 +1823,8 @@
           "type": "Text",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -1743,7 +1834,8 @@
           "type": "Array",
           "localized": false,
           "required": true,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
@@ -1768,7 +1860,8 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -1778,12 +1871,14 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Symbol",
-            "validations": []
+            "validations": [
+            ]
           }
         }
       ]
@@ -1850,7 +1945,10 @@
               "unique": true
             },
             {
-              "in": ["partition1", "partition2"]
+              "in": [
+                "partition1",
+                "partition2"
+              ]
             }
           ],
           "disabled": false,
@@ -3959,7 +4057,11 @@
           ]
         },
         "keywords": {
-          "en": ["Inicio", "menu", "empezar"]
+          "en": [
+            "Inicio",
+            "menu",
+            "empezar"
+          ]
         }
       }
     },
@@ -4213,8 +4315,14 @@
           }
         },
         "keywords": {
-          "en": ["can't find my order", "where is my order"],
-          "es": ["no encuentro mi pedido", "donde esta mi pedido"]
+          "en": [
+            "can't find my order",
+            "where is my order"
+          ],
+          "es": [
+            "no encuentro mi pedido",
+            "donde esta mi pedido"
+          ]
         }
       }
     },
@@ -9833,8 +9941,14 @@
           "es": "https://www.hubtype.com/es"
         },
         "keywords": {
-          "en": ["hubtypeEn", "botonicEn"],
-          "es": ["hubtype", "botonic"]
+          "en": [
+            "hubtypeEn",
+            "botonicEn"
+          ],
+          "es": [
+            "hubtype",
+            "botonic"
+          ]
         },
         "shortText": {
           "en": "Web de Hubtype"
@@ -10127,7 +10241,10 @@
           "en": "HIGH_PRIO"
         },
         "keywords": {
-          "en": ["high1", "high2"]
+          "en": [
+            "high1",
+            "high2"
+          ]
         },
         "priority": {
           "en": 99
@@ -10193,7 +10310,10 @@
           "en": "LOW_PRIO"
         },
         "keywords": {
-          "en": ["low1", "low2"]
+          "en": [
+            "low1",
+            "low2"
+          ]
         },
         "priority": {
           "en": 10
@@ -10444,7 +10564,9 @@
           "en": "Bienvenida"
         },
         "keywords": {
-          "en": ["keyword1"]
+          "en": [
+            "keyword1"
+          ]
         }
       }
     },
@@ -11114,7 +11236,10 @@
           "en": "TEST_NUMBER_KEYWORDS"
         },
         "keywords": {
-          "en": ["11", "2211"]
+          "en": [
+            "11",
+            "2211"
+          ]
         }
       }
     },
@@ -11204,8 +11329,14 @@
           }
         },
         "keywords": {
-          "en": ["can't find my order", "where is my order"],
-          "es": ["no encuentro mi pedido", "donde esta mi pedido"]
+          "en": [
+            "can't find my order",
+            "where is my order"
+          ],
+          "es": [
+            "no encuentro mi pedido",
+            "donde esta mi pedido"
+          ]
         }
       }
     }
@@ -11512,6 +11643,8 @@
       }
     }
   ],
-  "webhooks": [],
-  "roles": []
+  "webhooks": [
+  ],
+  "roles": [
+  ]
 }

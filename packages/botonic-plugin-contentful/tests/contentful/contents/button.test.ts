@@ -1,6 +1,6 @@
-import { ContentCallback, ContentType } from '../../../src/cms'
-import { ENGLISH } from '../../../src/nlp'
 import { testContentful, testContext } from '../contentful.helper'
+import { ENGLISH } from '../../../src/nlp'
+import { ContentCallback, ContentType } from '../../../src/cms'
 import { TEST_SORRY } from './text.test'
 
 export const RATING_1STAR_ID = '6JYiydi8JhveDAjDSQ2fp4'

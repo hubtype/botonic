@@ -1,8 +1,8 @@
 import { ContentId } from '../cms'
+import { ManageContext } from './manage-context'
 import * as nlp from '../nlp'
 import { Locale } from '../nlp'
 import { ContentFieldType } from './fields'
-import { ManageContext } from './manage-context'
 
 /**
  * Take into account that if you request a content immediately after updating it

@@ -61,17 +61,7 @@ export class StemmerPl implements Stemmer {
       word.length > 5 &&
       [
         // eslint-disable-next-line prettier/prettier
-        'esz',
-        'asz',
-        'cie',
-        'eść',
-        'esc',
-        'aść',
-        'asc',
-        'łem',
-        'lem',
-        'amy',
-        'emy',
+        'esz', 'asz', 'cie', 'eść', 'esc','aść', 'asc','łem', 'lem','amy', 'emy'
       ].includes(word.substr(-3))
     ) {
       return word.substr(0, word.length - 3)
@@ -101,18 +91,7 @@ export class StemmerPl implements Stemmer {
       word.length > 3 &&
       [
         // eslint-disable-next-line prettier/prettier
-        'ać',
-        'ac',
-        'em',
-        'am',
-        'ał',
-        'al',
-        'ił',
-        'il',
-        'ić',
-        'ic',
-        'ąc',
-        'ac',
+        'ać', 'ac', 'em', 'am', 'ał', 'al','ił', 'il', 'ić', 'ic','ąc','ac'
       ].includes(word.substr(-2))
     ) {
       return word.substr(0, word.length - 2)

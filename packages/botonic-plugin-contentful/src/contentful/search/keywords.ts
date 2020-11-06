@@ -1,15 +1,14 @@
 import { Entry, EntryCollection } from 'contentful'
-
 import * as cms from '../../cms'
-import { CommonFields, Context, TopContentId, TopContentType } from '../../cms'
-import { ContentType } from '../../cms/cms'
+import { CommonFields, TopContentId, Context, TopContentType } from '../../cms'
 import { SearchCandidate } from '../../search'
-import { QueueFields } from '../contents/queue'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   DeliveryApi,
 } from '../delivery-api'
+import { QueueFields } from '../contents/queue'
+import { ContentType } from '../../cms/cms'
 
 export class KeywordsDelivery {
   constructor(private readonly delivery: DeliveryApi) {}

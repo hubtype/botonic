@@ -1,10 +1,10 @@
 import * as cms from '../cms'
 import { ContentfulExceptionWrapper, ContentId, ResourceId } from '../cms'
+import { ManageCms } from './manage-cms'
+import { ManageContext } from './manage-context'
 import * as nlp from '../nlp'
 import { Locale } from '../nlp'
 import { ContentFieldType } from './fields'
-import { ManageCms } from './manage-cms'
-import { ManageContext } from './manage-context'
 
 export class ErrorReportingManageCms implements ManageCms {
   exceptionWrapper = new ContentfulExceptionWrapper('ManageCms')

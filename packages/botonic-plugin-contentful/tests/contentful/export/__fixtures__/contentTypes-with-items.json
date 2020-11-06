@@ -71,7 +71,8 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -95,7 +96,9 @@
             "type": "Link",
             "validations": [
               {
-                "linkContentType": ["element"]
+                "linkContentType": [
+                  "element"
+                ]
               }
             ],
             "linkType": "Entry"
@@ -107,7 +110,8 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [],
+          "validations": [
+          ],
           "disabled": false,
           "omitted": false,
           "items": {

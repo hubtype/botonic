@@ -1,13 +1,13 @@
 import * as cms from '../cms'
 import {
-  checkLocale,
   KeywordsOptions,
   KeywordsParser,
   MatchType,
-  NormalizedUtterance,
+  checkLocale,
   Normalizer,
-  rootLocale,
+  NormalizedUtterance,
   Word,
+  rootLocale,
 } from '../nlp'
 import { SearchCandidate, SearchResult } from './search-result'
 

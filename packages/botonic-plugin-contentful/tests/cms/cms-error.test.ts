@@ -1,5 +1,4 @@
 import { anything, instance, mock, when } from 'ts-mockito'
-
 import {
   Carousel,
   CmsException,

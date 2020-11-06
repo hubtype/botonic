@@ -1,7 +1,6 @@
 import * as contentful from 'contentful'
 import { ContentType, Entry } from 'contentful'
 import memoize from 'memoizee'
-
 import { ReducedClientApi } from './client-api'
 
 export class CachedClientApi implements ReducedClientApi {

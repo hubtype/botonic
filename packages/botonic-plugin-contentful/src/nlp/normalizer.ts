@@ -1,11 +1,11 @@
-import { equalArrays } from '../util/arrays'
-import { Locale, rootLocale } from './locales'
 import { stemmerFor } from './stemmer'
 import {
   DEFAULT_SEPARATORS_REGEX,
   DEFAULT_STOP_WORDS,
   tokenizerPerLocale,
 } from './tokens'
+import { Locale, rootLocale } from './locales'
+import { equalArrays } from '../util/arrays'
 
 /**
  * Both tokens and stem will be converted to the <code>stem</code>

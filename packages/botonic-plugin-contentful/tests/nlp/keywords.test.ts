@@ -1,5 +1,4 @@
 import 'jest-extended'
-
 import {
   Keyword,
   KeywordsOptions,

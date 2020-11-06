@@ -1,5 +1,3 @@
-import { MultiError } from 'async-parallel'
-
 import {
   CMS,
   CmsException,
@@ -13,6 +11,7 @@ import {
 } from '../cms'
 import { reachableFrom } from '../cms/visitors/message-visitors'
 import { ensureError } from '../util/exceptions'
+import { MultiError } from 'async-parallel'
 
 export class ContentsValidator {
   constructor(

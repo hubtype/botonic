@@ -3,7 +3,6 @@ import BotonicPluginContentful, {
   LogCMS,
   multiEnvironmentFactory,
 } from '../src'
-import { MultiContextCms } from '../src/cms/cms-multilocale'
 import {
   TEST_DEFAULT_LOCALE,
   TEST_NON_DEFAULT_LOCALE,
@@ -12,6 +11,7 @@ import {
   testContentfulOptions,
   testSpaceId,
 } from './contentful/contentful.helper'
+import { MultiContextCms } from '../src/cms/cms-multilocale'
 import { TEST_CAROUSEL_MAIN_ID } from './contentful/contents/carousel.test'
 
 test('TEST: plugin with logCalls', async () => {

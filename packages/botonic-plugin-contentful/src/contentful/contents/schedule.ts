@@ -1,10 +1,9 @@
 import { Entry } from 'contentful'
-
 import {
-  CmsException,
-  ContentType,
   DEFAULT_CONTEXT,
+  ContentType,
   ScheduleContent,
+  CmsException,
 } from '../../cms'
 import * as time from '../../time'
 import { TopContentDelivery } from '../content-delivery'

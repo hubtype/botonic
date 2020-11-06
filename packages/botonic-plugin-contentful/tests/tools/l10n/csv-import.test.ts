@@ -1,20 +1,19 @@
 import path from 'path'
-import { anything, instance, mock, when } from 'ts-mockito'
-
-import * as cms from '../../../src/cms'
-import { ContentId, ContentType } from '../../../src/cms'
-import { ContentFieldType } from '../../../src/manage-cms/fields'
-import { ManageCms } from '../../../src/manage-cms/manage-cms'
-import { ManageContext } from '../../../src/manage-cms/manage-context'
-import { Locale, SPANISH } from '../../../src/nlp'
 import {
   CsvImport,
   Record,
   StringFieldImporter,
 } from '../../../src/tools/l10n/csv-import'
-import { repeatWithBackoff } from '../../../src/util/backoff'
-import { testContentful } from '../../contentful/contentful.helper'
+import { anything, instance, mock, when } from 'ts-mockito'
 import { testManageContentful } from '../../contentful/manage/manage-contentful.helper'
+import { Locale, SPANISH } from '../../../src/nlp'
+import * as cms from '../../../src/cms'
+import { ContentId, ContentType } from '../../../src/cms'
+import { testContentful } from '../../contentful/contentful.helper'
+import { ManageCms } from '../../../src/manage-cms/manage-cms'
+import { ContentFieldType } from '../../../src/manage-cms/fields'
+import { ManageContext } from '../../../src/manage-cms/manage-context'
+import { repeatWithBackoff } from '../../../src/util/backoff'
 
 const TEST_CSV_IMPORT_ID = '3LOUB5Udmxw7rh87G5Ob9b'
 const FIXTURES_BASE = path.resolve(__dirname, '__fixtures__')

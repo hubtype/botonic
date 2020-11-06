@@ -1,5 +1,6 @@
 //TODO convert to a unit test
 // test('TEST: SimilarWordFinder performance', () => {
+import { SimilarWordFinder } from '../nlp/similar-words'
 import {
   CandidateWithKeywords,
   Keyword,
@@ -7,7 +8,6 @@ import {
   NormalizedUtterance,
   Word,
 } from '../nlp'
-import { SimilarWordFinder } from '../nlp/similar-words'
 
 class TestCandidate {}
 

@@ -1,6 +1,5 @@
 import * as contentful from 'contentful'
 import { CreateClientParams, Entry } from 'contentful'
-
 import {
   CmsException,
   CommonFields,
@@ -10,13 +9,13 @@ import {
   FollowUp,
   SearchableBy,
 } from '../cms'
-import { ContentfulOptions } from '../plugin'
-import { DateRangeDelivery, DateRangeFields } from './contents/date-range'
-import { ReducedClientApi } from './delivery/client-api'
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields,
 } from './search/searchable-by'
+import { DateRangeDelivery, DateRangeFields } from './contents/date-range'
+import { ReducedClientApi } from './delivery/client-api'
+import { ContentfulOptions } from '../plugin'
 
 /**
  * https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
