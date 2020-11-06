@@ -1,6 +1,7 @@
-import Icon from '../assets/trigger-button.png'
 import { staticAsset } from '@botonic/react'
 import React from 'react'
+
+import Icon from '../assets/trigger-button.png'
 
 export const CustomTrigger = () => {
   return (

@@ -1,13 +1,13 @@
-import React from 'react'
 import {
   Button,
   Carousel,
   Element,
   Pic,
   RequestContext,
-  Title,
   Subtitle,
+  Title,
 } from '@botonic/react'
+import React from 'react'
 
 export default class extends React.Component {
   static contextType = RequestContext

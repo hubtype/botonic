@@ -1,5 +1,5 @@
-import React from 'react'
 import { RequestContext, Text } from '@botonic/react'
+import React from 'react'
 
 export default class extends React.Component {
   static contextType = RequestContext

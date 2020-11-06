@@ -1,5 +1,6 @@
 import { BotonicNLU, ModelTemplatesType } from '@botonic/nlu'
 import { join } from 'path'
+
 import { tokenizer } from './preprocessing-tools/tokenizer'
 
 const nlu = new BotonicNLU({ tokenizer: tokenizer })

@@ -1,5 +1,4 @@
 import NotFound from './actions/404'
-import Start from './actions/start'
 import Age from './actions/age'
 import Buttons from './actions/buttons'
 import Bye from './actions/bye'
@@ -11,6 +10,7 @@ import Media from './actions/media'
 import Multilanguage from './actions/multilanguage'
 import Quickreply from './actions/quickreply'
 import QuickreplyResponse from './actions/quickreply_response'
+import Start from './actions/start'
 import Webviews from './actions/webviews'
 import WebviewsResponse from './actions/webviews_response'
 
@@ -62,7 +62,7 @@ export const routes = [
   {
     path: 'quickreply_resp',
     payload: /^(yes|no)$/,
-    action: QuickreplyResponse
+    action: QuickreplyResponse,
   },
 
   /* Here is an example of how you can integrate Facebook Webviews with your bot */
@@ -85,7 +85,7 @@ export const routes = [
   { path: 'funny', intent: 'smalltalk.agent.funny', action: Funny },
   { path: 'good', intent: 'smalltalk.agent.good', action: Funny },
   { path: 'agent', intent: 'smalltalk.user.likes_agent', action: Funny },
-  { path: 'not_found', type: /.*/, action: NotFound }
+  { path: 'not_found', type: /.*/, action: NotFound },
 
   /* There's an implicit rule that captures any other input and maps it to
         the 404 action, it would be equivalent to:

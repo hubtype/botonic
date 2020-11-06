@@ -1,5 +1,5 @@
+import { Reply, Text } from '@botonic/react'
 import React from 'react'
-import { Text, Reply } from '@botonic/react'
 
 export default class extends React.Component {
   render() {

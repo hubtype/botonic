@@ -1,10 +1,10 @@
-import React from 'react'
-import { Text } from '@botonic/react'
 import {
-  getOpenQueues,
   getAvailableAgents,
+  getOpenQueues,
   HandOffBuilder,
 } from '@botonic/core'
+import { Text } from '@botonic/react'
+import React from 'react'
 
 export default class extends React.Component {
   static async botonicInit({ input, session, params, lastRoutePath }) {
@@ -15,15 +15,14 @@ export default class extends React.Component {
     // let openQueues = await getOpenQueues(session)
     let agentEmail = ''
     try {
-      agentEmail = (await getAvailableAgents(
-        session,
-        'HUBTYPE_DESK_QUEUE_ID'
-      )).filter(agent => agent == 'agent-name@hubtype.com')[0]
+      agentEmail = (
+        await getAvailableAgents(session, 'HUBTYPE_DESK_QUEUE_ID')
+      ).filter(agent => agent == 'agent-name@hubtype.com')[0]
     } catch (e) {}
 
     let isHandOff = false
     // if (openQueues.queues.indexOf('Customer Support') !== -1) {
-    let handOffBuilder = new HandOffBuilder(session)
+    const handOffBuilder = new HandOffBuilder(session)
     handOffBuilder.withQueue('HUBTYPE_DESK_QUEUE_ID')
     handOffBuilder.withAgentEmail('agent-1@hubtype.com')
     handOffBuilder.withOnFinishPath('thanks-for-contacting') // or handOffBuilder.withOnFinishPayload('thanks-for-contacting')

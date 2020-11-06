@@ -1,10 +1,10 @@
-import React from 'react'
 import { RequestContext } from '@botonic/react'
+import React from 'react'
 
 export default class MyWebview extends React.Component {
   static contextType = RequestContext
   state = {
-    counter: 0
+    counter: 0,
   }
 
   componentDidMount() {
@@ -13,7 +13,7 @@ export default class MyWebview extends React.Component {
 
   handleClick() {
     this.setState({
-      counter: this.state.counter + 1
+      counter: this.state.counter + 1,
     })
   }
 
@@ -24,7 +24,7 @@ export default class MyWebview extends React.Component {
     but be aware that no data will be passed back to the bot.
     */
     this.context.closeWebview({
-      payload: 'closed_webview'
+      payload: 'closed_webview',
     })
   }
 

@@ -1,5 +1,6 @@
-import React from 'react'
 import { staticAsset } from '@botonic/react'
+import React from 'react'
+
 import Icon from '../assets/r2d2-logo.png'
 
 export const CustomHeader = () => {

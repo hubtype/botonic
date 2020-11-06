@@ -1,37 +1,37 @@
-import React from 'react'
 import {
-  Text,
+  Button,
   Carousel,
   Element,
   Pic,
-  Button,
+  Subtitle,
+  Text,
   Title,
-  Subtitle
 } from '@botonic/react'
+import React from 'react'
 
 export default class extends React.Component {
   render() {
-    let movies = [
+    const movies = [
       {
         name: 'Pulp Fiction',
         desc: 'Le Big Mac',
         url: 'https://www.imdb.com/title/tt0110912',
         pic:
-          'https://ia.media-imdb.com/images/M/MV5BMTkxMTA5OTAzMl5BMl5BanBnXkFtZTgwNjA5MDc3NjE@._V1_SY1000_CR0,0,673,1000_AL_.jpg'
+          'https://ia.media-imdb.com/images/M/MV5BMTkxMTA5OTAzMl5BMl5BanBnXkFtZTgwNjA5MDc3NjE@._V1_SY1000_CR0,0,673,1000_AL_.jpg',
       },
       {
         name: 'The Big Lebowski',
         desc: 'Fuck it Dude',
         url: 'https://www.imdb.com/title/tt0118715',
-        pic: 'https://upload.wikimedia.org/wikipedia/en/a/a7/Snatch_ver4.jpg'
+        pic: 'https://upload.wikimedia.org/wikipedia/en/a/a7/Snatch_ver4.jpg',
       },
       {
         name: 'Snatch',
         desc: 'Five minutes, Turkish',
         url: 'https://www.imdb.com/title/tt0208092',
         pic:
-          'https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA='
-      }
+          'https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA=',
+      },
     ]
     return (
       <>

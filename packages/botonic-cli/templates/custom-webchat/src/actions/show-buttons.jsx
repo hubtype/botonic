@@ -1,5 +1,6 @@
+import { Button, RequestContext, Text } from '@botonic/react'
 import React from 'react'
-import { Text, Button, RequestContext } from '@botonic/react'
+
 import { MyWebview } from '../webviews/my-webview'
 
 export default class extends React.Component {

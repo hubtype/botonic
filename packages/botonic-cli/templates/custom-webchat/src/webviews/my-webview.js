@@ -1,10 +1,10 @@
-import React from 'react'
 import { RequestContext } from '@botonic/react'
+import React from 'react'
 
 export class MyWebview extends React.Component {
   static contextType = RequestContext
   state = {
-    counter: 0
+    counter: 0,
   }
 
   componentDidMount() {
@@ -13,14 +13,14 @@ export class MyWebview extends React.Component {
 
   handleClick() {
     this.setState({
-      counter: this.state.counter + 1
+      counter: this.state.counter + 1,
     })
   }
 
   close() {
     // Here we want to explicitly emit a message after closing a webview.
     this.context.closeWebview({
-      payload: 'closed_webview'
+      payload: 'closed_webview',
     })
   }
 
@@ -31,7 +31,7 @@ export class MyWebview extends React.Component {
           display: 'flex',
           flexDirection: 'column',
           width: '100%',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <h1>This is a Botonic Webview!</h1>
