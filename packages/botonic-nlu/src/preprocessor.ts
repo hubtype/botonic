@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { UNKNOWN_TOKEN } from './constants'
-import {
-  DataSet,
-  Vocabulary,
-  Normalizer,
-  Stemmer,
-  Tokenizer,
-  PreprocessorEngines,
-  ModelData,
-} from './types'
 import { Language } from './language'
-import { DefaultTokenizer } from './preprocessing-tools/tokenizer'
 import { DefaultNormalizer } from './preprocessing-tools/normalizer'
 import { DefaultStemmer } from './preprocessing-tools/stemmer'
+import { DefaultTokenizer } from './preprocessing-tools/tokenizer'
+import {
+  DataSet,
+  ModelData,
+  Normalizer,
+  PreprocessorEngines,
+  Stemmer,
+  Tokenizer,
+  Vocabulary,
+} from './types'
 
 export class Preprocessor {
   constructor(

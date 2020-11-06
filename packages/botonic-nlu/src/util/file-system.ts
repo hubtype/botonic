@@ -1,11 +1,12 @@
 import axios from 'axios'
 import {
   createWriteStream,
+  existsSync,
+  mkdirSync,
   readFileSync,
   writeFileSync,
-  mkdirSync,
-  existsSync,
 } from 'fs'
+
 import { ENCODINGS } from '../constants'
 
 export async function downloadIntoPath({
