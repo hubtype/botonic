@@ -10,11 +10,16 @@ export class Router {
 
   // eslint-disable-next-line complexity
   processInput(input, session = {}, lastRoutePath = null) {
-    let routeParams = {}
+    let routeParams = undefined
+    if (input.payload && input.payload.includes('__PATH_PAYLOAD__')) {
+      const pathParam = input.payload.split('__PATH_PAYLOAD__')
+      const route = this.getRouteByPath(pathParam[1], this.routes)
+      routeParams = { route }
+    }
     const pathParams = this.getOnFinishParams(input)
     let brokenFlow = false
     const lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
-    if (lastRoute && lastRoute.childRoutes)
+    if (!routeParams && lastRoute && lastRoute.childRoutes)
       //get route depending of current ChildRoute
       routeParams = this.getRoute(input, lastRoute.childRoutes, session)
     if (!routeParams || !Object.keys(routeParams).length) {
@@ -144,24 +149,34 @@ export class Router {
     return undefined
   }
 
-  getRoute(input, routes, session) {
+  getRoute(input, routes, session, previousValue) {
     const computedRoutes = isFunction(routes)
       ? routes({ input, session })
       : routes
     /* Find the route that matches the given input, if it match with some of the entries,
       return the whole Route of the entry with optional params captured if matcher was a regex */
     let params = {}
-    const route = computedRoutes.find(r =>
+    let childRoute = undefined
+    let route = computedRoutes.find(r =>
       Object.entries(r)
         .filter(([key, {}]) => key != 'action' && key != 'childRoutes')
         .some(([key, value]) => {
-          const match = this.matchRoute(r, key, value, input, session)
-          try {
-            params = match.groups
-          } catch (e) {}
+          let currentValue = value
+          if (previousValue) currentValue = previousValue.concat('/', value)
+          const match = this.matchRoute(r, key, currentValue, input, session)
+          if (!match && r.childRoutes && !childRoute) {
+            childRoute = this.getRoute(
+              input,
+              r.childRoutes,
+              session,
+              currentValue
+            )
+          }
+          if (match) params = match.groups
           return Boolean(match)
         })
     )
+    if (childRoute) route = childRoute.route
     if (route) {
       return { route, params }
     }

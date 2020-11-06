@@ -217,7 +217,7 @@ describe('Process input (v<0.9)', () => {
       'Flow1'
     )
   })
-  test.skip('old protocol:path payload input, root level route (should be ignored)', () => {
+  test('old protocol:path payload input, root level route with composed path', () => {
     const input = { type: 'postback', path: 'initial/2' }
     const session = {}
     const lastRoutePath = ''
@@ -225,7 +225,7 @@ describe('Process input (v<0.9)', () => {
       'Flow1.2'
     )
   })
-  test.skip('path payload input with deprecated protocol, root level route (should be ignored)', () => {
+  test('path payload input with deprecated protocol, root level route', () => {
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
     const session = {}
     const lastRoutePath = ''
@@ -233,7 +233,7 @@ describe('Process input (v<0.9)', () => {
       'Flow1.2'
     )
   })
-  test.skip('old protocol:path payload input with deprecated protocol, 2nd level route (should be ignored)', () => {
+  test('old protocol:path payload input with deprecated protocol, 2nd level route', () => {
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
     const session = {}
     const lastRoutePath = 'initial'
