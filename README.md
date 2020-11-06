@@ -92,7 +92,7 @@ $> botonic deploy
 
 Check out the [Getting Started Tutorial](https://botonic.io/docs/getting-started): a step-by-step guide to start building high quality conversational apps.
 
-[See the docs for more information](https://botonic.io/docs).
+[See the docs for more information](https://botonic.io/docs/welcome).
 
 # 🤝 Supporting and contributing
 
