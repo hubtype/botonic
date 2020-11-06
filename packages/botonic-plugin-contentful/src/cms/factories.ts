@@ -1,13 +1,13 @@
 import {
   Button,
   ButtonStyle,
+  Carousel,
+  CommonFields,
+  Content,
   Element,
   FollowUp,
-  Content,
-  Text,
-  CommonFields,
-  Carousel,
   StartUp,
+  Text,
 } from './contents'
 
 abstract class ContentBuilder {

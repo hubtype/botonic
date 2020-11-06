@@ -1,5 +1,5 @@
-import { StemmerPl } from '../../../src/nlp/stemmers/polish-stemmer'
 import { tokenizerPerLocale } from '../../../src/nlp'
+import { StemmerPl } from '../../../src/nlp/stemmers/polish-stemmer'
 
 test.each<any>([
   ['Organizacji', 'organiz'],

@@ -1,9 +1,9 @@
+import { ValueObject } from '../util'
 import { equalArrays } from '../util/arrays'
-import { Normalizer } from './normalizer'
 import { Locale, preprocess } from './locales'
+import { Normalizer } from './normalizer'
 import { TokenSkipper } from './token-skipper'
 import { DEFAULT_SEPARATORS_REGEX } from './tokens'
-import { ValueObject } from '../util'
 
 export class TokenRange implements ValueObject {
   constructor(readonly from: number, readonly to: number) {}

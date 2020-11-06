@@ -1,5 +1,5 @@
-import { CMS, Context, ErrorReportingCMS } from '../../src/cms'
 import { ContentfulOptions, ENGLISH, SPANISH } from '../../src'
+import { CMS, Context, ErrorReportingCMS } from '../../src/cms'
 import { Contentful } from '../../src/contentful/cms-contentful'
 
 export function testSpaceId(): string {

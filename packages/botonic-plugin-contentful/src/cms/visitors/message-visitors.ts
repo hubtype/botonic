@@ -1,5 +1,5 @@
-import { Carousel, MessageContent, Text, StartUp, Button } from '../contents'
 import { CMS, CmsException, Context } from '../'
+import { Button, Carousel, MessageContent, StartUp, Text } from '../contents'
 
 export function getButtons(content: MessageContent): Button[] {
   if (content instanceof Carousel) {

@@ -1,6 +1,7 @@
-import { CachedClientApi } from '../../../src/contentful/delivery/cache'
-import { instance, mock, verify, when } from 'ts-mockito'
 import { Entry, EntryCollection } from 'contentful'
+import { instance, mock, verify, when } from 'ts-mockito'
+
+import { CachedClientApi } from '../../../src/contentful/delivery/cache'
 import { ReducedClientApi } from '../../../src/contentful/delivery/client-api'
 
 test('TEST: CachedDelivery getEntries', async () => {

@@ -1,7 +1,7 @@
-import { MarkupType, TokenType } from '../../src/markup/markup'
-import { testContentful } from '../contentful/contentful.helper'
 import { Markdown } from '../../src/markup'
 import { createMarkUp } from '../../src/markup/factories'
+import { MarkupType, TokenType } from '../../src/markup/markup'
+import { testContentful } from '../contentful/contentful.helper'
 
 describe('TEST markdown', () => {
   test('parse', () => {

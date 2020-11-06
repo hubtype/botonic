@@ -1,10 +1,10 @@
-import { MultiContextCms } from '../cms/cms-multilocale'
 import * as cms from '../cms'
 import { CMS } from '../cms'
+import { MultiContextCms } from '../cms/cms-multilocale'
 import { Locale } from '../nlp'
 import { ContentfulCredentials, ContentfulOptions } from '../plugin'
-import { Contentful } from './cms-contentful'
 import { shallowClone } from '../util'
+import { Contentful } from './cms-contentful'
 
 /**
  * Set it to ContentfulOptions.contentfulFactory to connect to

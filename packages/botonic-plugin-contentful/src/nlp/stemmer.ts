@@ -1,15 +1,16 @@
 import { Stemmer } from '@nlpjs/core/src'
 import StemmerCa from '@nlpjs/lang-ca/src/stemmer-ca'
+import StemmerDe from '@nlpjs/lang-de/src/stemmer-de'
 import StemmerEn from '@nlpjs/lang-en-min/src/stemmer-en'
 import StemmerEs from '@nlpjs/lang-es/src/stemmer-es'
+import StemmerFr from '@nlpjs/lang-fr/src/stemmer-fr'
+import StemmerIt from '@nlpjs/lang-it/src/stemmer-it'
 import StemmerPt from '@nlpjs/lang-pt/src/stemmer-pt'
 import StemmerRu from '@nlpjs/lang-ru/src/stemmer-ru'
 import StemmerTr from '@nlpjs/lang-tr/src/stemmer-tr'
-import StemmerIt from '@nlpjs/lang-it/src/stemmer-it'
-import StemmerFr from '@nlpjs/lang-fr/src/stemmer-fr'
-import StemmerDe from '@nlpjs/lang-de/src/stemmer-de'
-import { StemmerPl } from './stemmers/polish-stemmer'
+
 import { Locale, rootLocale } from './locales'
+import { StemmerPl } from './stemmers/polish-stemmer'
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
 // and https://stackoverflow.com/a/11210358/145289

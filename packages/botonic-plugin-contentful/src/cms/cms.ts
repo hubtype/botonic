@@ -1,5 +1,4 @@
 import { SearchCandidate } from '../search/search-result'
-import { Context } from './context'
 import {
   Asset,
   Button,
@@ -17,6 +16,7 @@ import {
   TopContent,
   Url,
 } from './contents'
+import { Context } from './context'
 
 export enum MessageContentType {
   CAROUSEL = 'carousel',

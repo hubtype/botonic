@@ -1,12 +1,13 @@
 import * as contentful from 'contentful'
-import { DeliveryWithFollowUp } from './follow-up'
-import { ButtonDelivery } from './button'
+
 import * as cms from '../../cms'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   DeliveryApi,
 } from '../delivery-api'
+import { ButtonDelivery } from './button'
+import { DeliveryWithFollowUp } from './follow-up'
 
 // TODO does not yet load the followU p
 export class CarouselDelivery extends DeliveryWithFollowUp {

@@ -1,16 +1,17 @@
 import { instance, mock, when } from 'ts-mockito'
+
 import {
   CommonFields,
-  TopContentId,
-  DummyCMS,
   ContentType,
-  Text,
-  Url,
+  DummyCMS,
   SCORE_MAX,
+  Text,
+  TopContentId,
+  Url,
 } from '../../src/cms'
-import { Search, SearchCandidate } from '../../src/search'
-import { Normalizer } from '../../src/nlp'
 import { rndStr } from '../../src/cms/test-helpers/builders'
+import { Normalizer } from '../../src/nlp'
+import { Search, SearchCandidate } from '../../src/search'
 
 const CONTEXT = { locale: 'es' }
 

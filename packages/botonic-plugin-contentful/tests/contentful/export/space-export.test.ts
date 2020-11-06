@@ -1,4 +1,5 @@
 import path from 'path'
+
 import { SpaceExport } from '../../../src/contentful/export/space-export'
 
 const FIXTURES_BASE = path.resolve(__dirname, '__fixtures__')

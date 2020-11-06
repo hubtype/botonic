@@ -1,23 +1,24 @@
-import { ManageCms } from '../../manage-cms/manage-cms'
-import { CmsException, ContentId } from '../../cms'
-import * as nlp from '../../nlp'
-import { Locale } from '../../nlp'
 import { createClient } from 'contentful-management'
 // eslint-disable-next-line node/no-missing-import
 import { ClientAPI } from 'contentful-management/dist/typings/create-contentful-api'
 // eslint-disable-next-line node/no-missing-import
-import { Environment } from 'contentful-management/dist/typings/entities/environment'
+import { Asset } from 'contentful-management/dist/typings/entities/asset'
 // eslint-disable-next-line node/no-missing-import
 import { Entry } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
-import { Asset } from 'contentful-management/dist/typings/entities/asset'
-import { ContentfulOptions } from '../../plugin'
-import { ManageContext } from '../../manage-cms/manage-context'
+import { Environment } from 'contentful-management/dist/typings/entities/environment'
+
+import { CmsException, ContentId } from '../../cms'
 import {
   CONTENT_FIELDS,
   ContentField,
   ContentFieldType,
 } from '../../manage-cms/fields'
+import { ManageCms } from '../../manage-cms/manage-cms'
+import { ManageContext } from '../../manage-cms/manage-context'
+import * as nlp from '../../nlp'
+import { Locale } from '../../nlp'
+import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
 
 export class ManageContentful implements ManageCms {

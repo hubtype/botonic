@@ -3,11 +3,11 @@ import {
   Callback,
   CMS,
   ContentType,
-  Text,
   Context,
   ContextWithLocale,
+  Text,
 } from '../cms'
-import { KeywordsOptions, MatchType, Normalizer, checkLocale } from '../nlp'
+import { checkLocale, KeywordsOptions, MatchType, Normalizer } from '../nlp'
 import { SearchByKeywords } from './search-by-keywords'
 import { SearchResult } from './search-result'
 
