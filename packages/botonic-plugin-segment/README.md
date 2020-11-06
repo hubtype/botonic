@@ -2,7 +2,7 @@
 
 ## What Does This Plugin Do?
 
-This plugin uses [Segment](https://segment.com/) to clean, collect and control customer data. It helps monitor performance, define decision-making processes and identify customers' interests. 
+This plugin uses [Segment](https://segment.com/) to clean, collect and control customer data. It helps monitor performance, define decision-making processes and identify customers' interests.
 
 ## Setup
 
@@ -17,9 +17,9 @@ export const plugins = [
     id: 'segment',
     resolve: require('@botonic/plugin-segment'),
     options: {
-      writeKey: 'YOUR_WRITE_KEY'
-    }
-  }
+      writeKey: 'YOUR_WRITE_KEY',
+    },
+  },
 ]
 ```
 
@@ -27,20 +27,20 @@ export const plugins = [
 
 The default behavior of this plugin is to:
 
-- [Identify](https://segment.com/docs/spec/identify/) the user during the first bot interaction. 
+- [Identify](https://segment.com/docs/spec/identify/) the user during the first bot interaction.
 - Track `track` a [page](https://segment.com/docs/spec/page/) event to Segment from then on.
 
-If you prefer to track your events manually, you can add the flag `trackManually: true` in your options. Once set, you can use them inside the method `botonicInit` on each Botonic component you want to track:  
+If you prefer to track your events manually, you can add the flag `trackManually: true` in your options. Once set, you can use them inside the method `botonicInit` on each Botonic component you want to track:
 
 ```javascript
 static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
-    
+
     let { segment } = plugins
 
     let userId = session.user.id
     let event = 'This is the name of the current event I'm tracking'
     let traits = { name: 'Peter', email: 'peter@domain.com', plan: 'premium' }
-    
+
     await segment.identify({
       input,
       session,
@@ -49,7 +49,7 @@ static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
     })
 
     let properties = {
-      name: "Some interesting data", 
+      name: "Some interesting data",
       value: "14.99"
     }
 
