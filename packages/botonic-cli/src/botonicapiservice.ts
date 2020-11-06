@@ -9,6 +9,7 @@ import * as util from 'util'
 const exec = util.promisify(require('child_process').exec)
 import { hashElement } from 'folder-hash'
 import ora from 'ora'
+import qs from 'qs'
 
 const BOTONIC_CLIENT_ID: string =
   process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
@@ -18,7 +19,7 @@ const BOTONIC_CLIENT_SECRET: string =
 const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
 export class BotonicAPIService {
-  public cliendId: string = BOTONIC_CLIENT_ID
+  public clientId: string = BOTONIC_CLIENT_ID
   public clientSecret: string = BOTONIC_CLIENT_SECRET
   public baseUrl: string = BOTONIC_URL
   public baseApiUrl = this.baseUrl + '/v1/'
@@ -206,16 +207,21 @@ export class BotonicAPIService {
   }
 
   async refreshToken(): Promise<any> {
+    const data = qs.stringify({
+      callback: 'none',
+      grant_type: 'refresh_token',
+      refresh_token: this.oauth.refresh_token,
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+    })
+
     const resp = await axios({
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
       method: 'post',
       url: this.loginUrl,
-      params: {
-        callback: 'none',
-        grant_type: 'refresh_token',
-        refresh_token: this.oauth.refresh_token,
-        client_id: this.cliendId,
-        client_secret: this.clientSecret,
-      },
+      data: data,
     })
     if (!resp) return
     this.oauth = resp.data
@@ -230,16 +236,21 @@ export class BotonicAPIService {
   }
 
   async login(email: any, password: any): Promise<any> {
+    const data = qs.stringify({
+      username: email,
+      password: password,
+      grant_type: 'password',
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+    })
+
     let resp = await axios({
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
       method: 'post',
       url: this.loginUrl,
-      params: {
-        username: email,
-        password: password,
-        client_id: this.cliendId,
-        client_secret: this.clientSecret,
-        grant_type: 'password',
-      },
+      data: data,
     })
     this.oauth = resp.data
     this.headers = {
