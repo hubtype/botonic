@@ -1,4 +1,4 @@
-import { getProperty } from '../utils'
+import { getProperty } from '../util/objects'
 
 export function warnDeprecated(legacyCode, newCode, extraInfo = undefined) {
   console.warn(

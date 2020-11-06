@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { COLORS, WEBCHAT } from '../constants'
 import LeftArrow from '../assets/leftArrow.svg'
 import RightArrow from '../assets/rightArrow.svg'
-import { resolveImage } from '../utils'
+import { resolveImage } from '../util/environment'
 
 const StyledCarousel = styled.div`
   padding: 10px 0px;

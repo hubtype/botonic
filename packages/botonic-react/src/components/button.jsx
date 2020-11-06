@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { params2queryString, INPUT } from '@botonic/core'
 import { WebchatContext } from '../contexts'
 import { COLORS, WEBCHAT } from '../constants'
-import { renderComponent } from '../utils'
+import { renderComponent } from '../util/react'
 
 const StyledButton = styled.button`
   display: flex;

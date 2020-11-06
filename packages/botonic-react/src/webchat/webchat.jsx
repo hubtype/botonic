@@ -5,10 +5,15 @@ import React, {
   forwardRef,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
-import { useStorageState } from './use-storage-state-hook'
+import merge from 'lodash.merge'
 import { v4 as uuidv4 } from 'uuid'
 import UAParser from 'ua-parser-js'
 import { isMobile, params2queryString, INPUT } from '@botonic/core'
+import { motion } from 'framer-motion'
+import styled from 'styled-components'
+
+import { useAsyncEffect } from 'use-async-effect'
+import { useStorageState } from './use-storage-state-hook'
 import { WebchatContext, RequestContext } from '../contexts'
 import { Text, Document, Image, Video, Audio } from '../components'
 import { TypingIndicator } from './components/typing-indicator'
@@ -26,16 +31,10 @@ import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { WebviewContainer } from './webview'
 import { msgToBotonic } from '../msg-to-botonic'
-import {
-  isDev,
-  resolveImage,
-  _getThemeProperty,
-  ConditionalWrapper,
-  scrollToBottom,
-  getParsedAction,
-  deserializeRegex,
-  stringifyWithRegexs,
-} from '../utils'
+import { scrollToBottom } from '../util/dom'
+import { isDev, resolveImage } from '../util/environment'
+import { ConditionalWrapper } from '../util/react'
+import { stringifyWithRegexs, deserializeRegex } from '../util/regexs'
 import {
   WEBCHAT,
   COLORS,
@@ -43,8 +42,6 @@ import {
   SENDERS,
   ROLES,
 } from '../constants'
-import { motion } from 'framer-motion'
-import styled from 'styled-components'
 import { DeviceAdapter } from './devices/device-adapter'
 import {
   isText,
@@ -58,11 +55,35 @@ import {
   getMediaType,
   getFullMimeWhitelist,
 } from '../message-utils'
-
 import { normalizeWebchatSettings } from '../components/webchat-settings'
+import { getProperty } from '../util/objects'
 
-import merge from 'lodash.merge'
-import { useAsyncEffect } from 'use-async-effect'
+export const getParsedAction = botonicAction => {
+  const splittedAction = botonicAction.split('create_case:')
+  if (splittedAction.length <= 1) return undefined
+  return JSON.parse(splittedAction[1])
+}
+
+/**
+ * Returns the value of a property defined in bot's theme based on WEBCHAT.CUSTOM_PROPERTIES dictionary.
+ * It gives preference to nested defined properties (e.g.: header.style) over plain properties (e.g.: headerStyle).
+ * If property doesn't exist, returns the defaultValue.
+ */
+export const _getThemeProperty = theme => (
+  property,
+  defaultValue = undefined
+) => {
+  for (const [k, v] of Object.entries(WEBCHAT.CUSTOM_PROPERTIES)) {
+    if (v == property) {
+      const nestedProperty = getProperty(theme, v)
+      if (nestedProperty !== undefined) return nestedProperty
+      const plainProperty = getProperty(theme, k)
+      if (plainProperty !== undefined) return plainProperty
+      return defaultValue
+    }
+  }
+  return undefined
+}
 
 const StyledWebchat = styled.div`
   position: fixed;
@@ -522,7 +543,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
         const handoff = action.startsWith('create_case')
-        if (handoff && isDev()) addMessageComponent(<Handoff />)
+        if (handoff && isDev) addMessageComponent(<Handoff />)
         updateHandoff(handoff)
       }
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)

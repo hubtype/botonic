@@ -4,7 +4,7 @@ import merge from 'lodash.merge'
 
 import { Message } from './message'
 import { Reply } from './reply'
-import { mapObjectNonBooleanValues } from '../utils'
+import { mapObjectNonBooleanValues } from '../util/react'
 import { warnDeprecatedProps } from '../util/logs'
 
 export const customMessage = ({

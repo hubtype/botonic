@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { COLORS, WEBCHAT } from '../constants'
-import { scrollToBottom } from '../utils'
+import { scrollToBottom } from '../util/dom'
 import { webchatReducer } from './webchat-reducer'
 import {
   ADD_MESSAGE,

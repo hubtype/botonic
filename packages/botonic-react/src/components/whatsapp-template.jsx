@@ -1,7 +1,8 @@
 import React from 'react'
-import { Message } from './message'
-import { renderComponent } from '../utils'
 import { INPUT } from '@botonic/core'
+
+import { Message } from './message'
+import { renderComponent } from '../util/react'
 
 const serialize = whatsappTemplateProps => {
   return { text: whatsappTemplateProps }

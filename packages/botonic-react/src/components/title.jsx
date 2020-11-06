@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { renderComponent } from '../utils'
+import { renderComponent } from '../util/react'
 
 const TitleContainer = styled.div`
   font-size: 14px;
