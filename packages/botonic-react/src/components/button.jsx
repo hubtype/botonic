@@ -106,13 +106,7 @@ export const Button = props => {
         onMouseLeave={() => setHover(false)}
         onClick={e => handleClick(e)}
         style={{
-          // TODO remove?
-          color: getThemeProperty(
-            WEBCHAT.CUSTOM_PROPERTIES.brandColor,
-            COLORS.SOLID_BLACK
-          ),
           ...buttonStyle,
-          // eslint-disable-next-line no-dupe-keys
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
         }}
