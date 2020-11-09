@@ -66,7 +66,9 @@ export const WebchatMessageList = props => {
         </ConditionalWrapper>
       )}
       {webchatState.messagesComponents.map((e, i) => (
-        <StyledMessages key={i}>{e}</StyledMessages>
+        <StyledMessages role={ROLES.MESSAGE} key={i}>
+          {e}
+        </StyledMessages>
       ))}
       {props.children}
     </StyledScrollbar>

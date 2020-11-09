@@ -888,7 +888,7 @@ export const Webchat = forwardRef((props, ref) => {
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
-          role={ROLES.STYLED_WEBCHAT}
+          role={ROLES.WEBCHAT}
           id={'botonic-webchat'}
           width={webchatState.width}
           height={webchatState.height}

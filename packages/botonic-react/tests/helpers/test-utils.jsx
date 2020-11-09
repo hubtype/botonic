@@ -53,3 +53,15 @@ export const createFile = ({ fakeData, fileName, mimeType, size }) => {
   }
   return file
 }
+
+export function expectToHaveRoles(roles, screen) {
+  roles.forEach(r => {
+    expect(screen.queryByRole(r)).toBeTruthy()
+  })
+}
+
+export function expectNotToHaveRoles(roles, screen) {
+  roles.forEach(r => {
+    expect(screen.queryByRole(r)).toBeNull()
+  })
+}

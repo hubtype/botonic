@@ -1,6 +1,7 @@
 import React from 'react'
 import { isBrowser, INPUT } from '@botonic/core'
 import { Message } from './message'
+import { ROLES } from '../constants'
 
 const serialize = audioProps => {
   return { audio: audioProps.src }
@@ -16,7 +17,12 @@ export const Audio = props => {
       </audio>
     )
   return (
-    <Message json={serialize(props)} {...props} type={INPUT.AUDIO}>
+    <Message
+      role={ROLES.AUDIO_MESSAGE}
+      json={serialize(props)}
+      {...props}
+      type={INPUT.AUDIO}
+    >
       {content}
     </Message>
   )

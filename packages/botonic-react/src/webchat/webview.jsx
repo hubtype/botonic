@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
 import Frame from 'react-frame-component'
 import { RequestContext, WebchatContext } from '../contexts'
+import { ROLES, WEBCHAT, COLORS } from '../constants'
 
 import styled from 'styled-components'
-import { WEBCHAT, COLORS } from '../constants'
 
 const StyledWebview = styled.div`
   position: absolute;
@@ -66,6 +66,7 @@ export const WebviewHeader = () => {
   const { getThemeProperty } = useContext(WebchatContext)
   return (
     <StyledWebviewHeader
+      role={ROLES.WEBVIEW_HEADER}
       style={{
         ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.webviewHeaderStyle),
       }}
@@ -93,6 +94,7 @@ export const WebviewContainer = props => {
 
   return (
     <StyledWebview
+      role={ROLES.WEBVIEW}
       style={{
         ...props.style,
       }}
