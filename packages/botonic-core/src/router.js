@@ -47,7 +47,7 @@ export class Router {
       //get in childRoute if one has path ''
       let defaultAction
       if (
-        !routeParams.route.path &&
+        !(routeParams.route && routeParams.route.path) &&
         routeParams.route &&
         routeParams.route.childRoutes &&
         routeParams.route.childRoutes.length
@@ -58,7 +58,7 @@ export class Router {
           session
         )
       }
-      if ('action' in routeParams.route) {
+      if (routeParams.route && 'action' in routeParams.route) {
         if (
           brokenFlow &&
           routeParams.route.ignoreRetry != true &&
@@ -94,7 +94,7 @@ export class Router {
           params: defaultAction.params,
           lastRoutePath: lastRoutePath,
         }
-      } else if ('redirect' in routeParams.route) {
+      } else if (routeParams.route && 'redirect' in routeParams.route) {
         lastRoutePath = routeParams.route.redirect
         const redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
         if (redirectRoute) {
