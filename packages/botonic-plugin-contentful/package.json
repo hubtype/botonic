@@ -55,7 +55,7 @@
     "contentful-management": "^6.1.2",
     "csv-parse": "^4.12.0",
     "csv-stringify": "^5.5.1",
-    "escape-string-regexp": "^2.0.0",
+    "escape-string-regexp": "^4.0.0",
     "marked": "^1.1.0",
     "memoizee": "^0.4.14",
     "moment": "^2.27.0",
