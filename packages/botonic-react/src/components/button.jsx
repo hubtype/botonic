@@ -138,8 +138,10 @@ export const Button = props => {
           {props.children}
         </button>
       )
+    } else if (props.onClick) {
+      return null
     }
-    throw new Error('Button missing payload, path, webviews or url')
+    throw new Error('Button missing payload, path, webviews, url or onClick')
   }
 
   return renderComponent({ renderBrowser, renderNode })
