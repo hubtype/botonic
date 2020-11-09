@@ -225,6 +225,14 @@ describe('Process input (v<0.9)', () => {
       'Flow1.2'
     )
   })
+  test('old protocol: path payload input, 2nd level route with lastRoutePath', () => {
+    const input = { type: 'postback', payload: '__PATH_PAYLOAD__2' }
+    const session = {}
+    const lastRoutePath = 'initial'
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
+      'Flow1.2'
+    )
+  })
   test('path payload input with deprecated protocol, root level route', () => {
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
     const session = {}
