@@ -51,63 +51,64 @@ export class Router {
     if (routeParams && Object.keys(routeParams).length) {
       //get in childRoute if one has path ''
       let defaultAction
-      if (
-        !(routeParams.route && routeParams.route.path) &&
-        routeParams.route &&
-        routeParams.route.childRoutes &&
-        routeParams.route.childRoutes.length
-      ) {
-        defaultAction = this.getRoute(
-          { path: '' },
-          routeParams.route.childRoutes,
-          session,
-          lastRoutePath
-        )
-      }
-      if (routeParams.route && 'action' in routeParams.route) {
+      if (routeParams.route) {
         if (
-          brokenFlow &&
-          routeParams.route.ignoreRetry != true &&
-          lastRoute &&
-          session.__retries < lastRoute.retry &&
-          routeParams.route.path != lastRoute.action
+          !routeParams.route.path &&
+          routeParams.route.childRoutes &&
+          routeParams.route.childRoutes.length
         ) {
-          session.__retries = session.__retries ? session.__retries + 1 : 1
-          // The flow was broken, but we want to recover it
+          defaultAction = this.getRoute(
+            { path: '' },
+            routeParams.route.childRoutes,
+            session,
+            lastRoutePath
+          )
+        }
+        if ('action' in routeParams.route) {
+          if (
+            brokenFlow &&
+            routeParams.route.ignoreRetry != true &&
+            lastRoute &&
+            session.__retries < lastRoute.retry &&
+            routeParams.route.path != lastRoute.action
+          ) {
+            session.__retries = session.__retries ? session.__retries + 1 : 1
+            // The flow was broken, but we want to recover it
+            return {
+              action: routeParams.route.action,
+              params: routeParams.params,
+              retryAction: lastRoute ? lastRoute.action : null,
+              defaultAction: defaultAction ? defaultAction.route.action : null,
+              lastRoutePath: lastRoutePath,
+            }
+          } else {
+            session.__retries = 0
+            if (lastRoutePath && !brokenFlow)
+              lastRoutePath = `${lastRoutePath}/${routeParams.route.path}`
+            else lastRoutePath = routeParams.route.path
+            return {
+              action: routeParams.route.action,
+              params: routeParams.params,
+              retryAction: null,
+              defaultAction: defaultAction ? defaultAction.route.action : null,
+              lastRoutePath: lastRoutePath,
+            }
+          }
+        } else if (defaultAction) {
           return {
-            action: routeParams.route.action,
-            params: routeParams.params,
-            retryAction: lastRoute ? lastRoute.action : null,
-            defaultAction: defaultAction ? defaultAction.route.action : null,
+            action: defaultAction.route.action,
+            params: defaultAction.params,
             lastRoutePath: lastRoutePath,
           }
-        } else {
-          session.__retries = 0
-          if (lastRoutePath && !brokenFlow)
-            lastRoutePath = `${lastRoutePath}/${routeParams.route.path}`
-          else lastRoutePath = routeParams.route.path
-          return {
-            action: routeParams.route.action,
-            params: routeParams.params,
-            retryAction: null,
-            defaultAction: defaultAction ? defaultAction.route.action : null,
-            lastRoutePath: lastRoutePath,
-          }
-        }
-      } else if (defaultAction) {
-        return {
-          action: defaultAction.route.action,
-          params: defaultAction.params,
-          lastRoutePath: lastRoutePath,
-        }
-      } else if (routeParams.route && 'redirect' in routeParams.route) {
-        lastRoutePath = routeParams.route.redirect
-        const redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
-        if (redirectRoute) {
-          return {
-            action: redirectRoute.action,
-            params: redirectRoute.params,
-            lastRoutePath: lastRoutePath,
+        } else if ('redirect' in routeParams.route) {
+          lastRoutePath = routeParams.route.redirect
+          const redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
+          if (redirectRoute) {
+            return {
+              action: redirectRoute.action,
+              params: redirectRoute.params,
+              lastRoutePath: lastRoutePath,
+            }
           }
         }
       }
