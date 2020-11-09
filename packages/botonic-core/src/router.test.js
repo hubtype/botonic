@@ -7,7 +7,8 @@ const postbackInput = { type: 'postback', payload: 'foo' }
 const route = 'route'
 const requestInput = {
   input: textInput,
-  session: { organization: '' },
+  session: { organization: 'myOrg' },
+  lastRoutePath: 'initial',
 }
 
 describe('Bad router initialization', () => {
@@ -34,7 +35,14 @@ describe('Match route by MATCHER <> INPUT', () => {
   const matchPayloadProp = (matcher, payload) =>
     router.matchRoute(route, 'payload', matcher, payload)
   const matchRequestProp = (matcher, request) =>
-    router.matchRoute(route, 'request', matcher, request.input, request.session)
+    router.matchRoute(
+      route,
+      'request',
+      matcher,
+      request.input,
+      request.session,
+      request.lastRoutePath
+    )
   test('text <> text', () => {
     expect(matchTextProp('hi', textInput)).toBeTruthy()
     expect(matchTextProp('hii', textInput)).toBeFalsy()
@@ -109,14 +117,18 @@ describe('Match route by MATCHER <> INPUT', () => {
     expect(
       matchRequestProp(
         request =>
-          request.input.data === 'hi' && request.session.organization === '',
+          request.input.data === 'hi' &&
+          request.session.organization === 'myOrg' &&
+          request.lastRoutePath === 'initial',
         requestInput
       )
     ).toBeTruthy()
     expect(
       matchRequestProp(
         request =>
-          request.input.data === 'hello' && request.session.organization === '',
+          request.input.data === 'hello' &&
+          request.session.organization === 'myOrg' &&
+          request.lastRoutePath === 'initial',
         requestInput
       )
     ).toBeFalsy()

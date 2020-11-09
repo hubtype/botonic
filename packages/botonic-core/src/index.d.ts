@@ -124,7 +124,7 @@ type ParamsMatcher =
   | { [key: string]: string }
   | ((params: { [key: string]: string }) => boolean)
 type SessionMatcher = (session: Session) => boolean
-type RequestMatcher = (input: Input, session: Session) => boolean
+type RequestMatcher = (request: BotRequest) => boolean
 type StringMatcher = RegExp | string | ((data: string) => boolean)
 
 type RouteMatcher =
@@ -146,6 +146,7 @@ export interface Route {
   intent?: StringMatcher
   params?: ParamsMatcher
   payload?: StringMatcher
+  request?: RequestMatcher
   session?: SessionMatcher
   text?: StringMatcher
   type?: StringMatcher
