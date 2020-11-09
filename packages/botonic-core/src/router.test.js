@@ -5,6 +5,10 @@ const textInputComplex = { type: 'text', data: 'Cömplêx input &% 🚀' }
 const textPayloadInput = { type: 'text', data: 'hi', payload: 'foo' }
 const postbackInput = { type: 'postback', payload: 'foo' }
 const route = 'route'
+const requestInput = {
+  input: textInput,
+  session: { organization: '' },
+}
 
 describe('Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
@@ -29,6 +33,8 @@ describe('Match route by MATCHER <> INPUT', () => {
     router.matchRoute(route, 'text', matcher, textInput)
   const matchPayloadProp = (matcher, payload) =>
     router.matchRoute(route, 'payload', matcher, payload)
+  const matchRequestProp = (matcher, request) =>
+    router.matchRoute(route, 'request', matcher, request.input, request.session)
   test('text <> text', () => {
     expect(matchTextProp('hi', textInput)).toBeTruthy()
     expect(matchTextProp('hii', textInput)).toBeFalsy()
@@ -97,6 +103,22 @@ describe('Match route by MATCHER <> INPUT', () => {
     ).toBeTruthy()
     expect(
       matchPayloadProp(v => !v.startsWith('fo'), postbackInput)
+    ).toBeFalsy()
+  })
+  test('function <> request', () => {
+    expect(
+      matchRequestProp(
+        request =>
+          request.input.data === 'hi' && request.session.organization === '',
+        requestInput
+      )
+    ).toBeTruthy()
+    expect(
+      matchRequestProp(
+        request =>
+          request.input.data === 'hello' && request.session.organization === '',
+        requestInput
+      )
     ).toBeFalsy()
   })
 })

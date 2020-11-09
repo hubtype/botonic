@@ -195,7 +195,7 @@ export class Router {
 
   matchRoute(route, prop, matcher, input, session) {
     /*
-        prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' |...)
+        prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' | 'request' ...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
         input: user input object, ex: {type: 'text', data: 'Hi'}
       */
@@ -205,6 +205,7 @@ export class Router {
       if (input.type == 'text') value = input.data
     } else if (prop == 'input') value = input
     else if (prop == 'session') value = session
+    else if (prop == 'request') value = { input, session }
     const matched = this.matchValue(matcher, value)
     if (matched) {
       this.routeInspector.routeMatched(route, prop, matcher, value)

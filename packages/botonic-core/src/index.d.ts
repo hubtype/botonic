@@ -119,15 +119,18 @@ export interface Session {
   user: SessionUser
 }
 
-type StringMatcher = RegExp | string | ((data: string) => boolean)
+type InputMatcher = (input: Input) => boolean
 type ParamsMatcher =
   | { [key: string]: string }
   | ((params: { [key: string]: string }) => boolean)
 type SessionMatcher = (session: Session) => boolean
-type InputMatcher = (input: Input) => boolean
+type RequestMatcher = (input: Input, session: Session) => boolean
+type StringMatcher = RegExp | string | ((data: string) => boolean)
+
 type RouteMatcher =
   | InputMatcher
   | ParamsMatcher
+  | RequestMatcher
   | SessionMatcher
   | StringMatcher
 
