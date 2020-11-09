@@ -7,7 +7,7 @@ import { Content, TopContent } from './contents'
 import { Context } from './context'
 import { CmsException } from './exceptions'
 
-export class Callback implements ValueObject {
+export class Callback implements ValueObject, Equatable {
   // TODO add path
   /**
    * @param payload may contain the reference of a {@link Content}. See {@link ContentCallback}
@@ -66,7 +66,7 @@ export class Callback implements ValueObject {
   }
 }
 
-export class ContentCallback extends Callback implements Equatable {
+export class ContentCallback extends Callback {
   private static PAYLOAD_SEPARATOR = '$'
 
   constructor(readonly model: TopContentType, readonly id: string) {
