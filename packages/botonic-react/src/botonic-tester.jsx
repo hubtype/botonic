@@ -1,10 +1,10 @@
+import { INPUT } from '@botonic/core'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import decode from 'unescape'
 
-import { Text } from './components/text'
 import { Reply } from './components/reply'
-import { INPUT } from '@botonic/core'
+import { Text } from './components/text'
 
 export class BotonicInputTester {
   constructor(bot) {

@@ -1,15 +1,16 @@
-import { join } from 'path'
-import { existsSync, mkdirSync } from 'fs'
 import * as db from 'better-sqlite3'
 import { Database, Statement } from 'better-sqlite3'
+import { existsSync, mkdirSync } from 'fs'
+import { join } from 'path'
+
 import {
-  GLOBAL_WORD_EMBEDDINGS_PATH,
-  WE_DB_FILE,
-  SUPPORTED_EMBEDDINGS,
   BOTONIC_WORD_EMBEDDINGS_URL,
+  GLOBAL_WORD_EMBEDDINGS_PATH,
+  SUPPORTED_EMBEDDINGS,
+  WE_DB_FILE,
 } from '../constants'
-import { WordEmbeddingType, WordEmbeddingDimension } from '../types'
 import { Language } from '../language'
+import { WordEmbeddingDimension, WordEmbeddingType } from '../types'
 import { downloadIntoPath } from '../util/file-system'
 
 export function isSupportedWordEmbedding(

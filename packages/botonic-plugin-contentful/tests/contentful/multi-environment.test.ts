@@ -1,8 +1,9 @@
-import { testContentful, testContentfulOptions } from './contentful.helper'
+import { instance, mock } from 'ts-mockito'
+
+import { ContentfulOptions, Locale } from '../../src'
 import { CMS } from '../../src/cms'
 import { MultiEnvironmentFactory } from '../../src/contentful/multi-environment'
-import { ContentfulOptions, Locale } from '../../src'
-import { instance, mock } from 'ts-mockito'
+import { testContentful, testContentfulOptions } from './contentful.helper'
 
 test('TEST: MultiEnvironmentFactory', () => {
   // Arrange

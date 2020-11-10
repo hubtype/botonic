@@ -1,7 +1,7 @@
-import NotFound from './actions/not-found'
-import ShowWeather from './actions/show-weather'
 import BookRestaurant from './actions/book-restaurant'
 import GetDirections from './actions/get-directions'
+import NotFound from './actions/not-found'
+import ShowWeather from './actions/show-weather'
 import Start from './actions/start'
 
 export const routes = [

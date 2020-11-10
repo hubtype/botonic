@@ -8,7 +8,7 @@ export const CustomReply = props => (
       backgroundColor: 'white',
       borderRadius: 30,
       padding: 8,
-      cursor: 'pointer'
+      cursor: 'pointer',
     }}
   >
     {props.children}

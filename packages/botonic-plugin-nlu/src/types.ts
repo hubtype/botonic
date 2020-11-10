@@ -1,13 +1,13 @@
-import { AxiosPromise } from 'axios'
-import {
-  Tokenizer,
-  Normalizer,
-  Stemmer,
-  ModelData,
-} from '@botonic/nlu/dist/types'
 import { Language } from '@botonic/nlu/dist/language'
 import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
+import {
+  ModelData,
+  Normalizer,
+  Stemmer,
+  Tokenizer,
+} from '@botonic/nlu/dist/types'
 import { LayersModel } from '@tensorflow/tfjs'
+import { AxiosPromise } from 'axios'
 
 export interface PreprocessingOptions {
   tokenizer?: Tokenizer

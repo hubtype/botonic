@@ -1,14 +1,4 @@
-import {
-  Button,
-  ButtonStyle,
-  Callback,
-  CommonFields,
-  ContentCallback,
-  Element,
-  TopContentId,
-  Text,
-  CmsException,
-} from '../index'
+import { ContentType } from '../cms'
 import {
   CarouselBuilder,
   ElementBuilder,
@@ -16,7 +6,17 @@ import {
   TextBuilder,
   TopContentBuilder,
 } from '../factories'
-import { ContentType } from '../cms'
+import {
+  Button,
+  ButtonStyle,
+  Callback,
+  CmsException,
+  CommonFields,
+  ContentCallback,
+  Element,
+  Text,
+  TopContentId,
+} from '../index'
 
 export function rndStr(): string {
   return Math.random().toString()

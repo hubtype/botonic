@@ -1,28 +1,29 @@
-import { Element } from './components/element'
-import { Pic } from './components/pic'
-import { Title } from './components/title'
-import { Subtitle } from './components/subtitle'
 import React from 'react'
-import { Button } from './components/button'
-import { Text } from './components/text'
-import { Carousel } from './components/carousel'
-import { Image } from './components/image'
-import { Video } from './components/video'
-import { Audio } from './components/audio'
-import { Document } from './components/document'
-import { Location } from './components/location'
-import { Reply } from './components/reply'
+
 import {
-  isCustom,
-  isText,
-  isCarousel,
-  isImage,
-  isVideo,
   isAudio,
-  isDocument,
-  isLocation,
   isButtonMessage,
+  isCarousel,
+  isCustom,
+  isDocument,
+  isImage,
+  isLocation,
+  isText,
+  isVideo,
 } from '../src/message-utils'
+import { Audio } from './components/audio'
+import { Button } from './components/button'
+import { Carousel } from './components/carousel'
+import { Document } from './components/document'
+import { Element } from './components/element'
+import { Image } from './components/image'
+import { Location } from './components/location'
+import { Pic } from './components/pic'
+import { Reply } from './components/reply'
+import { Subtitle } from './components/subtitle'
+import { Text } from './components/text'
+import { Title } from './components/title'
+import { Video } from './components/video'
 /**
  *
  * @param msg {object}

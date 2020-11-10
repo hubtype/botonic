@@ -1,4 +1,5 @@
 import btoa from 'btoa'
+
 import { segmentAPI } from './utils'
 
 export default class BotonicPluginSegment {

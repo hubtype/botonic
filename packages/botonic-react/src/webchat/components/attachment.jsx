@@ -1,4 +1,5 @@
 import React from 'react'
+
 import AttachmentIcon from '../../assets/attachment-icon.svg'
 import { ROLES } from '../../constants'
 import { Icon, IconContainer } from './common'

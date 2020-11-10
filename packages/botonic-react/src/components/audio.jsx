@@ -1,7 +1,8 @@
+import { INPUT, isBrowser } from '@botonic/core'
 import React from 'react'
-import { isBrowser, INPUT } from '@botonic/core'
-import { Message } from './message'
+
 import { ROLES } from '../constants'
+import { Message } from './message'
 
 const serialize = audioProps => {
   return { audio: audioProps.src }

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
 import Frame from 'react-frame-component'
-import { RequestContext, WebchatContext } from '../contexts'
-import { ROLES, WEBCHAT, COLORS } from '../constants'
-
 import styled from 'styled-components'
+
+import { COLORS, ROLES, WEBCHAT } from '../constants'
+import { RequestContext, WebchatContext } from '../contexts'
 
 const StyledWebview = styled.div`
   position: absolute;

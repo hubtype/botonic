@@ -1,18 +1,19 @@
 import { Entry } from 'contentful'
+
 import {
-  DEFAULT_CONTEXT,
-  ContentType,
-  ScheduleContent,
   CmsException,
+  ContentType,
+  DEFAULT_CONTEXT,
+  ScheduleContent,
 } from '../../cms'
 import * as time from '../../time'
 import { TopContentDelivery } from '../content-delivery'
+import { DeliveryApi } from '../delivery-api'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
   ContentWithNameFields,
-  DeliveryApi,
-} from '../delivery-api'
+} from '../delivery-utils'
 
 export class ScheduleDelivery extends TopContentDelivery {
   static REFERENCES_INCLUDE = 2

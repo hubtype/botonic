@@ -1,6 +1,7 @@
 import { Command, flags } from '@oclif/command'
 import * as path from 'path'
-import { track, spawnNpmScript } from '../utils'
+
+import { spawnNpmScript, track } from '../utils'
 
 export default class Run extends Command {
   static description = 'Serve your bot in your localhost'

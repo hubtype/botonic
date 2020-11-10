@@ -1,4 +1,5 @@
 import { instance, mock, when } from 'ts-mockito'
+
 import { Content, Text } from '../../src/cms'
 import {
   RndStartUpBuilder,

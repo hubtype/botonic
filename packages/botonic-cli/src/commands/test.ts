@@ -1,8 +1,8 @@
 import { Command } from '@oclif/command'
-import colors from 'colors'
-import { track } from '../utils'
-
 import { exec } from 'child_process'
+import colors from 'colors'
+
+import { track } from '../utils'
 
 export default class Run extends Command {
   static description = 'Test your Botonic components'

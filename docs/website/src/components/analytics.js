@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable node/no-missing-import */
-import React from 'react'
 import Head from '@docusaurus/Head'
+import React from 'react'
 
 function Analytics() {
   const segmentSnippet = () => {

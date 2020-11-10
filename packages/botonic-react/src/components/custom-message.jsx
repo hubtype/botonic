@@ -1,11 +1,11 @@
-import React from 'react'
 import { INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
+import React from 'react'
 
+import { warnDeprecatedProps } from '../util/logs'
+import { mapObjectNonBooleanValues } from '../util/react'
 import { Message } from './message'
 import { Reply } from './reply'
-import { mapObjectNonBooleanValues } from '../util/react'
-import { warnDeprecatedProps } from '../util/logs'
 
 export const customMessage = ({
   name,

@@ -1,8 +1,10 @@
+import * as contentful from 'contentful'
+
 import * as cms from '../../cms'
 import { Context } from '../../cms'
+import { DeliveryApi } from '../delivery-api'
+import { CommonEntryFields } from '../delivery-utils'
 import { DeliveryWithFollowUp } from './follow-up'
-import * as contentful from 'contentful'
-import { CommonEntryFields, DeliveryApi } from '../delivery-api'
 
 export class UrlDelivery extends DeliveryWithFollowUp {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {

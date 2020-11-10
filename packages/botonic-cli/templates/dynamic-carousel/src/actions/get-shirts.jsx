@@ -1,15 +1,15 @@
-import React from 'react'
-import fetch from 'isomorphic-fetch'
 import {
-  Text,
-  Pic,
+  Button,
   Carousel,
   Element,
+  Pic,
+  RequestContext,
   Subtitle,
+  Text,
   Title,
-  Button,
-  RequestContext
 } from '@botonic/react'
+import fetch from 'isomorphic-fetch'
+import React from 'react'
 
 export default class extends React.Component {
   static contextType = RequestContext
@@ -28,7 +28,7 @@ export default class extends React.Component {
     const res = await fetch(url, {
       url: url,
       method: 'GET',
-      params: {}
+      params: {},
     })
     session.resp = await res.json()
   }

@@ -1,32 +1,33 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { shuffle } from './util/object-tools'
-import { Preprocessor } from './preprocessor'
-import { ModelManager } from './model-manager'
-import { IntentsProcessor } from './intents-processor'
-import { DatasetReader, DataSetReaderConfig } from './data-reader'
-import {
-  DecodedPrediction,
-  WordEmbeddingType,
-  WordEmbeddingDimension,
-  DataSet,
-  InputSet,
-  OutputSet,
-  ModelTemplatesType,
-  Vocabulary,
-  PreprocessorEngines,
-  Tokenizer,
-  Normalizer,
-  Stemmer,
-} from './types'
-import { Language } from './language'
-import { readJSON } from './util/file-system'
 import { LayersModel, Sequential, tensor } from '@tensorflow/tfjs-node'
-import { join } from 'path'
-import { MODELS_DIR, MODEL_DATA_FILENAME, NLU_DIR } from './constants'
 import { mkdirSync, writeFileSync } from 'fs'
-import { DefaultTokenizer } from './preprocessing-tools/tokenizer'
+import { join } from 'path'
+
+import { MODEL_DATA_FILENAME, MODELS_DIR, NLU_DIR } from './constants'
+import { DatasetReader, DataSetReaderConfig } from './data-reader'
+import { IntentsProcessor } from './intents-processor'
+import { Language } from './language'
+import { ModelManager } from './model-manager'
 import { DefaultNormalizer } from './preprocessing-tools/normalizer'
 import { DefaultStemmer } from './preprocessing-tools/stemmer'
+import { DefaultTokenizer } from './preprocessing-tools/tokenizer'
+import { Preprocessor } from './preprocessor'
+import {
+  DataSet,
+  DecodedPrediction,
+  InputSet,
+  ModelTemplatesType,
+  Normalizer,
+  OutputSet,
+  PreprocessorEngines,
+  Stemmer,
+  Tokenizer,
+  Vocabulary,
+  WordEmbeddingDimension,
+  WordEmbeddingType,
+} from './types'
+import { readJSON } from './util/file-system'
+import { shuffle } from './util/object-tools'
 
 export class BotonicNLU {
   language: Language

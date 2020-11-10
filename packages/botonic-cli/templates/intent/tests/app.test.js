@@ -1,12 +1,12 @@
-import { config } from '../src/'
-import { routes } from '../src/routes'
-import { locales } from '../src/locales'
-
 import {
   BotonicInputTester,
   BotonicOutputTester,
   NodeApp,
 } from '@botonic/react'
+
+import { config } from '../src/'
+import { locales } from '../src/locales'
+import { routes } from '../src/routes'
 
 const app = new NodeApp({ routes, locales, ...config })
 

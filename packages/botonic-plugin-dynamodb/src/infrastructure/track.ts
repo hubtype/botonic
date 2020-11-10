@@ -8,9 +8,9 @@ import {
 import { marshallItem, Schema } from '@aws/dynamodb-data-marshaller'
 import { DynamoDB } from 'aws-sdk'
 import { AttributeValue } from 'aws-sdk/clients/dynamodb'
+
 import { UserEvent } from '../domain'
 import * as domain from '../domain'
-
 import Time from '../domain/time'
 
 export const TABLE_NAME = 'track'

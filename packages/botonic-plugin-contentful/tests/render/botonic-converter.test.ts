@@ -1,5 +1,5 @@
-import { BotonicMsgConverter } from '../../src/render'
 import { RndTextBuilder } from '../../src/cms/test-helpers'
+import { BotonicMsgConverter } from '../../src/render'
 
 describe('TEST BotonicMsgConverter', () => {
   test('text', () => {

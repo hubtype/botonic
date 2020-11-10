@@ -1,6 +1,6 @@
-import { resolve } from 'path'
-import { prompt } from 'inquirer'
 import { Command, flags } from '@oclif/command'
+import { prompt } from 'inquirer'
+import { resolve } from 'path'
 
 import { BotonicAPIService } from '../botonicapiservice'
 import { track } from '../utils'

@@ -1,16 +1,17 @@
+import React from 'react'
+
 import {
-  Text,
   Button,
-  Reply,
   Carousel,
   Element,
   Pic,
-  Title,
+  Reply,
   Subtitle,
+  Text,
+  Title,
 } from '../../../src'
-import React from 'react'
-import { whatsappRenderer } from '../../helpers/test-utils'
 import { Multichannel } from '../../../src/components/multichannel/multichannel'
+import { whatsappRenderer } from '../../helpers/test-utils'
 
 const LEGACY_PROPS = {
   carousel: {

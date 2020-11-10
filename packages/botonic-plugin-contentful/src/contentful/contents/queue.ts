@@ -1,13 +1,11 @@
+import * as contentful from 'contentful'
+
 import { Context } from '../../cms'
 import * as cms from '../../cms'
-import * as contentful from 'contentful'
 import { TopContentDelivery } from '../content-delivery'
-import {
-  CommonEntryFields,
-  DeliveryApi,
-  ContentfulEntryUtils,
-} from '../delivery-api'
-import { ScheduleFields, ScheduleDelivery } from './schedule'
+import { DeliveryApi } from '../delivery-api'
+import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
+import { ScheduleDelivery, ScheduleFields } from './schedule'
 
 export class QueueDelivery extends TopContentDelivery {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1

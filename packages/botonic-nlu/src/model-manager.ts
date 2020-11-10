@@ -1,21 +1,22 @@
 import {
-  Sequential,
   LayersModel,
   loadLayersModel,
+  Sequential,
   Tensor,
 } from '@tensorflow/tfjs-node'
-import { SimpleNN } from './simple-nn'
+import { accuracyScore } from 'machinelearn/metrics'
+
 import { WordEmbeddingsManager } from './embeddings/word-embeddings-manager'
+import { SimpleNN } from './simple-nn'
 import {
   EncodedPrediction,
-  WordEmbeddingsConfig,
   InputSet,
-  OutputSet,
   ModelParameters,
-  TrainingParameters,
   ModelTemplatesType,
+  OutputSet,
+  TrainingParameters,
+  WordEmbeddingsConfig,
 } from './types'
-import { accuracyScore } from 'machinelearn/metrics'
 
 export class ModelManager {
   protected constructor(readonly model: Sequential | LayersModel) {}

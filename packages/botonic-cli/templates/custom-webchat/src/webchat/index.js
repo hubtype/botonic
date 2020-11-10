@@ -1,13 +1,13 @@
-import launcherIcon from '../assets/launcher-logo.png'
-import IntroImage from '../assets/intro-image.jpg'
 import C3POLogo from '../assets/c3po-logo.png'
+import IntroImage from '../assets/intro-image.jpg'
+import launcherIcon from '../assets/launcher-logo.png'
 import R2D2Logo from '../assets/r2d2-logo.png'
 import CalendarMessage from './calendar-message'
-import { CustomTrigger } from './custom-trigger'
+import { CustomButton } from './custom-button'
 import { CustomHeader } from './custom-header'
 import { CustomIntro } from './custom-intro'
 import { CustomReply } from './custom-reply'
-import { CustomButton } from './custom-button'
+import { CustomTrigger } from './custom-trigger'
 
 export const webchat = {
   theme: {

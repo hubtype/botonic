@@ -1,5 +1,5 @@
+import { customMessage, WebchatContext } from '@botonic/react'
 import React from 'react'
-import { WebchatContext, customMessage } from '@botonic/react'
 import Calendar from 'react-calendar'
 
 class CalendarMessage extends React.Component {
@@ -21,5 +21,5 @@ class CalendarMessage extends React.Component {
 
 export default customMessage({
   name: 'calendar',
-  component: CalendarMessage
+  component: CalendarMessage,
 })

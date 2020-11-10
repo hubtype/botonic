@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
+
 import { RequestContext } from '../../contexts'
 import { Text } from '../text'
-import { isWhatsapp, MULTICHANNEL_WHATSAPP_PROPS } from './multichannel-utils'
-import { MultichannelContext } from './multichannel-context'
-import { MultichannelButton } from './multichannel-button'
-import { MultichannelText } from './multichannel-text'
-import { MultichannelCarousel } from './multichannel-carousel'
-import { MultichannelReply } from './multichannel-reply'
 import { deepMapWithIndex } from './deepmap-with-index'
+import { MultichannelButton } from './multichannel-button'
+import { MultichannelCarousel } from './multichannel-carousel'
+import { MultichannelContext } from './multichannel-context'
+import { MultichannelReply } from './multichannel-reply'
+import { MultichannelText } from './multichannel-text'
+import { isWhatsapp, MULTICHANNEL_WHATSAPP_PROPS } from './multichannel-utils'
 
 export const Multichannel = props => {
   const requestContext = useContext(RequestContext)

@@ -1,11 +1,12 @@
 import 'jest-extended'
+
 import { MatchType } from '../../src/nlp'
+import { testContentId } from '../helpers/test-data'
 import {
   chitchatContent,
   contentWithKeyword,
   keywordsWithMockCms,
 } from './search-by-keywords.test'
-import { testContentId } from '../helpers/test-data'
 
 const LOCALE = 'es'
 const CONTEXT = { locale: LOCALE }

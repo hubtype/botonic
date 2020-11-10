@@ -1,6 +1,6 @@
-import Hi from './actions/hi'
-import Bye from './actions/bye'
 import NotFound from './actions/404'
+import Bye from './actions/bye'
+import Hi from './actions/hi'
 
 export const routes = [
   // Captures different intents (enable Dialogflow in src/plugins.js)

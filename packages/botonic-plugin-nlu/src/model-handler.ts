@@ -1,17 +1,17 @@
-import { default as fetch } from 'node-fetch'
-import { Vocabulary } from '@botonic/nlu/dist/types'
+import type { NluResult } from '@botonic/core'
 import { Language } from '@botonic/nlu/dist/language'
 import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
-import type { NluResult } from '@botonic/core'
+import { Vocabulary } from '@botonic/nlu/dist/types'
 import { Tensor } from '@tensorflow/tfjs'
+import { default as fetch } from 'node-fetch'
 
+import { getModelInfoFromEnv } from './environment-utils'
+import { detectLang, inputToTensor, predictionToIntent } from './prediction'
 import {
   BotonicPluginNLUOptions,
   ModelInformation,
   PreprocessingOptions,
 } from './types'
-import { getModelInfoFromEnv } from './environment-utils'
-import { detectLang, inputToTensor, predictionToIntent } from './prediction'
 
 // Support for fetch API in Node (Lambda Env): https://stackoverflow.com/a/48433898
 // @ts-ignore

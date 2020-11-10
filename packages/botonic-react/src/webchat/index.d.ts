@@ -1,6 +1,7 @@
-import { WebchatApp, WebchatArgs } from '../index'
 import * as React from 'react'
 import { RefObject } from 'react'
+
+import { WebchatApp, WebchatArgs } from '../index'
 
 export interface WebchatProps extends WebchatArgs {
   ref: RefObject<any>

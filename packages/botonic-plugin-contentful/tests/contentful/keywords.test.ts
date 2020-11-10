@@ -1,7 +1,8 @@
+import 'jest-extended'
+
 import { ContentType } from '../../src/cms'
 import { testContentful, testContext } from './contentful.helper'
 import { TEST_POST_FAQ1_ID } from './contents/text.test'
-import 'jest-extended'
 
 test('TEST: contentful contentsWithKeywords', async () => {
   const results = await testContentful().contentsWithKeywords(

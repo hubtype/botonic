@@ -1,5 +1,6 @@
+import { Button, Reply, Text } from '@botonic/react'
 import React from 'react'
-import { Text, Button, Reply } from '@botonic/react'
+
 import CalendarMessage from '../webchat/calendar-message'
 
 export default class extends React.Component {

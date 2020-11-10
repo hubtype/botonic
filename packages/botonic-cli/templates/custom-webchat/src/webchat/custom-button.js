@@ -8,7 +8,7 @@ export const CustomButton = props => (
       backgroundColor: 'blue',
       borderRadius: 20,
       cursor: 'pointer',
-      paddingLeft: 15
+      paddingLeft: 15,
     }}
   >
     {props.children}

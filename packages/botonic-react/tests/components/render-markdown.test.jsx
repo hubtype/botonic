@@ -1,7 +1,7 @@
 import {
-  renderMarkdown,
-  renderLinks,
   ESCAPED_LINE_BREAK,
+  renderLinks,
+  renderMarkdown,
 } from '../../src/components/markdown'
 
 describe('Using renderMarkdown', () => {

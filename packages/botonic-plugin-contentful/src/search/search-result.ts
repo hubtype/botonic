@@ -1,9 +1,9 @@
 import {
   Button,
   CommonFields,
-  TopContentId,
-  PRIORITY_MAX,
   ContentCallback,
+  PRIORITY_MAX,
+  TopContentId,
 } from '../cms'
 import { ContentType } from '../cms/cms'
 

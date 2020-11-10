@@ -1,18 +1,19 @@
 import React, { useContext } from 'react'
+
 import { RequestContext } from '../../contexts'
 import { Text } from '../text'
-import {
-  elementHasUrl,
-  getMultichannelButtons,
-  isWhatsapp,
-  elementHasPostback,
-  isMultichannelButton,
-  isMultichannelReply,
-  getMultichannelReplies,
-  MULTICHANNEL_WHATSAPP_PROPS,
-} from './multichannel-utils'
 import { MultichannelButton } from './multichannel-button'
 import { MultichannelContext } from './multichannel-context'
+import {
+  elementHasPostback,
+  elementHasUrl,
+  getMultichannelButtons,
+  getMultichannelReplies,
+  isMultichannelButton,
+  isMultichannelReply,
+  isWhatsapp,
+  MULTICHANNEL_WHATSAPP_PROPS,
+} from './multichannel-utils'
 
 export const MultichannelText = props => {
   const requestContext = useContext(RequestContext)

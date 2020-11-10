@@ -1,10 +1,11 @@
-import React, { forwardRef, useEffect } from 'react'
-import styled from 'styled-components'
-import { useWebchat } from './hooks'
-import { Webchat } from './webchat'
-import { SessionView } from './session-view'
 import { PROVIDER } from '@botonic/core'
 import merge from 'lodash.merge'
+import React, { forwardRef, useEffect } from 'react'
+import styled from 'styled-components'
+
+import { useWebchat } from './hooks'
+import { SessionView } from './session-view'
+import { Webchat } from './webchat'
 
 export const FixedTab = styled.div`
   position: fixed;

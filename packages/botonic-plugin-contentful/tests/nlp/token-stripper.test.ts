@@ -1,5 +1,5 @@
-import { TokenStripper, TokenRange } from '../../src/nlp/token-stripper'
 import { DEFAULT_SEPARATORS_REGEX, Normalizer, preprocess } from '../../src/nlp'
+import { TokenRange, TokenStripper } from '../../src/nlp/token-stripper'
 
 const LOCALE = 'es'
 const normalizer = new Normalizer()

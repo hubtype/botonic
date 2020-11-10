@@ -1,17 +1,18 @@
+import { Entry } from 'contentful'
+
 import * as cms from '../../cms'
 import { CmsException, ContentType } from '../../cms'
-import { Entry } from 'contentful'
 import { TopContentDelivery } from '../content-delivery'
-import { TextDelivery, TextFields } from './text'
-import { CarouselDelivery } from './carousel'
-import { ImageDelivery, ImageFields } from './image'
+import { DeliveryApi } from '../delivery-api'
 import {
   CommonEntryFields,
   ContentfulEntryUtils,
-  DeliveryApi,
   FollowUpFields,
-} from '../delivery-api'
+} from '../delivery-utils'
+import { CarouselDelivery } from './carousel'
+import { ImageDelivery, ImageFields } from './image'
 import { StartUpDelivery, StartUpFields } from './startup'
+import { TextDelivery, TextFields } from './text'
 
 export class DeliveryWithFollowUp extends TopContentDelivery {
   followUp: FollowUpDelivery | undefined

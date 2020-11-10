@@ -1,10 +1,9 @@
-import { DEVICES } from '.'
-
 import {
   getWebchatElement,
-  setWebchatElementHeight,
   scrollToBottom,
+  setWebchatElementHeight,
 } from '../../util/dom'
+import { DEVICES } from '.'
 
 export class WebchatResizer {
   constructor(currentDevice) {

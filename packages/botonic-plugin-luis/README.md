@@ -19,16 +19,16 @@ export const plugins = [
     options: {
       region: 'YOUR_REGION',
       appID: 'YOUR_APP_ID',
-      endpointKey: 'YOUR_ENDPOINT_KEY'
-    }
-  }
+      endpointKey: 'YOUR_ENDPOINT_KEY',
+    },
+  },
 ]
 ```
 
-## Use  
+## Use
 
 1. Import the plugin in **src/index.js**.
-   **src/index.js**  
+   **src/index.js**
    ```javascript
    export { routes } from './routes'
    export { locales } from './locales'

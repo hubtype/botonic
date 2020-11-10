@@ -12,7 +12,7 @@ This plugin writes tracks about the user's behavior to a DynamoDB table.
 npm i  @botonic/plugin-dynamodb
 ```
 
-2. Add it to the `src/plugins.js` file: 
+2. Add it to the `src/plugins.js` file:
 
 ```
 import * as dynamodb from '@botonic/plugin-dynamodb'
@@ -31,7 +31,6 @@ import * as dynamodb from '@botonic/plugin-dynamodb'
 ```
 
 ### Use
-
 
 ```
 const dynamodb = plugins.dynamodb

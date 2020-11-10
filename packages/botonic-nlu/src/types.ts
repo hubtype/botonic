@@ -1,4 +1,5 @@
 import { Tensor } from '@tensorflow/tfjs-node'
+
 import { Language } from './language'
 
 /* Language Data */

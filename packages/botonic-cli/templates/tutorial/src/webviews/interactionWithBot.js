@@ -1,5 +1,5 @@
-import React from 'react'
 import { RequestContext } from '@botonic/react'
+import React from 'react'
 
 export default class InteractionWithBot extends React.Component {
   static contextType = RequestContext
@@ -17,7 +17,7 @@ export default class InteractionWithBot extends React.Component {
           <button
             onClick={() =>
               this.context.closeWebview({
-                payload: 'DATA_I am a string coming from webviews!'
+                payload: 'DATA_I am a string coming from webviews!',
               })
             }
           >

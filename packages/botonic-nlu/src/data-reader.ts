@@ -1,5 +1,6 @@
-import { lstatSync, readFileSync, readdirSync } from 'fs'
+import { lstatSync, readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
+
 import { DataSet } from './types'
 
 export interface DataSetReaderConfig {

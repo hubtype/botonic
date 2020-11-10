@@ -1,17 +1,18 @@
+import React from 'react'
+
 import {
-  MultichannelButton,
+  Button,
+  Carousel,
   Element,
+  MultichannelButton,
   Pic,
   Subtitle,
   Title,
-  Carousel,
-  Button,
 } from '../../../src'
 import {
   Multichannel,
   MultichannelCarousel,
 } from '../../../src/components/multichannel'
-import React from 'react'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 const movies = [

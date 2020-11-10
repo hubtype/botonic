@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 import { KJUR } from 'jsrsasign'
+import { v4 as uuidv4 } from 'uuid'
 
 export default class BotonicPluginDialogflow {
   constructor(creds) {

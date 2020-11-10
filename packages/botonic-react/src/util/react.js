@@ -1,4 +1,5 @@
 import { isBrowser, isNode } from '@botonic/core'
+
 import { mapObject } from './objects'
 
 export const ConditionalWrapper = ({ condition, wrapper, children }) =>

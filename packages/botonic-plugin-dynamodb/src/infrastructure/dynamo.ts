@@ -1,8 +1,9 @@
-import { UpdateItemInput } from 'aws-sdk/clients/dynamodb'
-import * as domain from '../domain'
-import { TABLE_NAME, Track } from './track'
 import { DataMapper } from '@aws/dynamodb-data-mapper'
+import { UpdateItemInput } from 'aws-sdk/clients/dynamodb'
+
+import * as domain from '../domain'
 import { Env } from './config'
+import { TABLE_NAME, Track } from './track'
 import DynamoDB = require('aws-sdk/clients/dynamodb')
 
 export class Dynamo {

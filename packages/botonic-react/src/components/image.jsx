@@ -1,8 +1,9 @@
+import { INPUT, isBrowser } from '@botonic/core'
 import React from 'react'
-import { Message } from './message'
-import { isBrowser, INPUT } from '@botonic/core'
 import styled from 'styled-components'
+
 import { ROLES } from '../constants'
+import { Message } from './message'
 
 const StyledImage = styled.img`
   border-radius: 8px;

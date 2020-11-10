@@ -1,10 +1,10 @@
-import React from 'react'
 import { Text } from '@botonic/react'
+import React from 'react'
 
 export default class extends React.Component {
   static async botonicInit({ input, session, params, lastRoutePath }) {
     //With this example, you can get an idea of how to capture the data received.
-    let returned_data = input.payload.match(/^DATA_(.*)$/)[1]
+    const returned_data = input.payload.match(/^DATA_(.*)$/)[1]
     return { returned_data }
   }
 

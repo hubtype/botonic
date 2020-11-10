@@ -1,8 +1,9 @@
 import React from 'react'
-import { Text } from '../../src/components/text'
+import TestRenderer from 'react-test-renderer'
+
 import { Button } from '../../src/components/button'
 import { Reply } from '../../src/components/reply'
-import TestRenderer from 'react-test-renderer'
+import { Text } from '../../src/components/text'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()
 

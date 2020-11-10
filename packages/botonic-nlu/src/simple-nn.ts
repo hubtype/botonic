@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import {
+  layers,
   Sequential,
   sequential,
-  train,
-  layers,
   Tensor,
+  train,
 } from '@tensorflow/tfjs-node'
+
 import { ModelParameters } from './types'
 
 export class SimpleNN {

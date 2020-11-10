@@ -1,62 +1,62 @@
+import { INPUT, isMobile, params2queryString } from '@botonic/core'
+import { motion } from 'framer-motion'
+import merge from 'lodash.merge'
 import React, {
-  useRef,
+  forwardRef,
   useEffect,
   useImperativeHandle,
-  forwardRef,
+  useRef,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
-import merge from 'lodash.merge'
-import { v4 as uuidv4 } from 'uuid'
-import UAParser from 'ua-parser-js'
-import { isMobile, params2queryString, INPUT } from '@botonic/core'
-import { motion } from 'framer-motion'
 import styled from 'styled-components'
-
+import UAParser from 'ua-parser-js'
 import { useAsyncEffect } from 'use-async-effect'
-import { useStorageState } from './use-storage-state-hook'
-import { WebchatContext, RequestContext } from '../contexts'
-import { Text, Document, Image, Video, Audio } from '../components'
-import { TypingIndicator } from './components/typing-indicator'
+import { v4 as uuidv4 } from 'uuid'
+
+import { Audio, Document, Image, Text, Video } from '../components'
 import { Handoff } from '../components/handoff'
-import { useWebchat, useTyping, usePrevious, useNetwork } from './hooks'
-import { StyledWebchatHeader } from './header'
+import { normalizeWebchatSettings } from '../components/webchat-settings'
 import {
-  PersistentMenu,
-  OpenedPersistentMenu,
-} from './components/persistent-menu'
-import { Attachment } from './components/attachment'
-import { SendButton } from './components/send-button'
-import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
-import { WebchatMessageList } from './message-list'
-import { WebchatReplies } from './replies'
-import { WebviewContainer } from './webview'
+  COLORS,
+  MAX_ALLOWED_SIZE_MB,
+  ROLES,
+  SENDERS,
+  WEBCHAT,
+} from '../constants'
+import { RequestContext, WebchatContext } from '../contexts'
+import {
+  getFullMimeWhitelist,
+  getMediaType,
+  isAllowedSize,
+  isAudio,
+  isDocument,
+  isImage,
+  isMedia,
+  isText,
+  isVideo,
+  readDataURL,
+} from '../message-utils'
 import { msgToBotonic } from '../msg-to-botonic'
 import { scrollToBottom } from '../util/dom'
 import { isDev, resolveImage } from '../util/environment'
-import { ConditionalWrapper } from '../util/react'
-import { stringifyWithRegexs, deserializeRegex } from '../util/regexs'
-import {
-  WEBCHAT,
-  COLORS,
-  MAX_ALLOWED_SIZE_MB,
-  SENDERS,
-  ROLES,
-} from '../constants'
-import { DeviceAdapter } from './devices/device-adapter'
-import {
-  isText,
-  isImage,
-  isAudio,
-  isVideo,
-  isDocument,
-  isMedia,
-  readDataURL,
-  isAllowedSize,
-  getMediaType,
-  getFullMimeWhitelist,
-} from '../message-utils'
-import { normalizeWebchatSettings } from '../components/webchat-settings'
 import { getProperty } from '../util/objects'
+import { ConditionalWrapper } from '../util/react'
+import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
+import { Attachment } from './components/attachment'
+import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
+import {
+  OpenedPersistentMenu,
+  PersistentMenu,
+} from './components/persistent-menu'
+import { SendButton } from './components/send-button'
+import { TypingIndicator } from './components/typing-indicator'
+import { DeviceAdapter } from './devices/device-adapter'
+import { StyledWebchatHeader } from './header'
+import { useNetwork, usePrevious, useTyping, useWebchat } from './hooks'
+import { WebchatMessageList } from './message-list'
+import { WebchatReplies } from './replies'
+import { useStorageState } from './use-storage-state-hook'
+import { WebviewContainer } from './webview'
 
 export const getParsedAction = botonicAction => {
   const splittedAction = botonicAction.split('create_case:')

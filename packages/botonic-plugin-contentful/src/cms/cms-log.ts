@@ -1,3 +1,5 @@
+import { ContentfulOptions } from '../plugin'
+import { SearchCandidate } from '../search'
 import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
 import {
   Asset,
@@ -17,8 +19,6 @@ import {
   Url,
 } from './contents'
 import { Context } from './context'
-import { SearchCandidate } from '../search'
-import { ContentfulOptions } from '../plugin'
 
 export class LogCMS implements CMS {
   constructor(

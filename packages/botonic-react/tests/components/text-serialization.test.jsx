@@ -1,6 +1,7 @@
 import React from 'react'
-import { Text } from '../../src/components/text'
+
 import { Button } from '../../src/components/button'
+import { Text } from '../../src/components/text'
 
 describe('Text serialization', () => {
   test.each([

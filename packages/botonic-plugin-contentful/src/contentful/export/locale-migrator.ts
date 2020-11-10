@@ -1,7 +1,8 @@
-import { I18nFieldValues, SpaceExport } from './space-export'
 import assert from 'assert'
 // eslint-disable-next-line node/no-missing-import
 import { LocaleProps } from 'contentful-management/dist/typings/entities/locale'
+
+import { I18nFieldValues, SpaceExport } from './space-export'
 
 /**
  * Useful to clone the contents flow from a space when the target locales are different.

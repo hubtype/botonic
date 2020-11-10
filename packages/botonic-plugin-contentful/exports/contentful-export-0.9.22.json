@@ -57,8 +57,7 @@
           "type": "Symbol",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -87,14 +86,12 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Symbol",
-            "validations": [
-            ]
+            "validations": []
           }
         },
         {
@@ -103,8 +100,7 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         }
@@ -167,8 +163,7 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -180,9 +175,7 @@
           "required": true,
           "validations": [
             {
-              "linkMimetypeGroup": [
-                "image"
-              ],
+              "linkMimetypeGroup": ["image"],
               "message": "Not supported image type"
             },
             {
@@ -269,8 +262,7 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -280,8 +272,7 @@
           "type": "Text",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -291,20 +282,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "button",
-                  "text",
-                  "url",
-                  "carousel"
-                ]
+                "linkContentType": ["button", "text", "url", "carousel"]
               }
             ],
             "linkType": "Entry"
@@ -318,10 +303,7 @@
           "required": false,
           "validations": [
             {
-              "in": [
-                "Buttons",
-                "QuickReplies"
-              ]
+              "in": ["Buttons", "QuickReplies"]
             }
           ],
           "disabled": false,
@@ -335,11 +317,7 @@
           "required": false,
           "validations": [
             {
-              "linkContentType": [
-                "text",
-                "carousel",
-                "image"
-              ]
+              "linkContentType": ["text", "carousel", "image"]
             }
           ],
           "disabled": false,
@@ -352,8 +330,7 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
@@ -442,8 +419,7 @@
           "type": "Symbol",
           "localized": true,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -455,12 +431,7 @@
           "required": true,
           "validations": [
             {
-              "linkContentType": [
-                "carousel",
-                "payload",
-                "text",
-                "url"
-              ]
+              "linkContentType": ["carousel", "payload", "text", "url"]
             }
           ],
           "disabled": false,
@@ -540,8 +511,7 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -565,9 +535,7 @@
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "element"
-                ]
+                "linkContentType": ["element"]
               }
             ],
             "linkType": "Entry"
@@ -579,8 +547,7 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
@@ -655,8 +622,7 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -666,8 +632,7 @@
           "type": "Text",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -679,9 +644,7 @@
           "required": false,
           "validations": [
             {
-              "linkMimetypeGroup": [
-                "image"
-              ],
+              "linkMimetypeGroup": ["image"],
               "message": "Unsupported Image format"
             },
             {
@@ -701,20 +664,14 @@
           "type": "Array",
           "localized": false,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "button",
-                  "text",
-                  "url",
-                  "carousel"
-                ]
+                "linkContentType": ["button", "text", "url", "carousel"]
               }
             ],
             "linkType": "Entry"
@@ -795,9 +752,7 @@
           "required": true,
           "validations": [
             {
-              "linkContentType": [
-                "text"
-              ]
+              "linkContentType": ["text"]
             }
           ],
           "disabled": false,
@@ -812,9 +767,7 @@
           "required": true,
           "validations": [
             {
-              "linkContentType": [
-                "text"
-              ]
+              "linkContentType": ["text"]
             }
           ],
           "disabled": false,
@@ -961,17 +914,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -983,17 +933,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -1005,17 +952,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -1027,17 +971,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -1049,17 +990,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -1071,17 +1009,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -1093,17 +1028,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -1115,17 +1047,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "daySchedule"
-                ]
+                "linkContentType": ["daySchedule"]
               }
             ],
             "linkType": "Entry"
@@ -1139,9 +1068,7 @@
           "required": false,
           "validations": [
             {
-              "linkContentType": [
-                "partition"
-              ]
+              "linkContentType": ["partition"]
             }
           ],
           "disabled": false,
@@ -1360,8 +1287,7 @@
           "type": "Date",
           "localized": false,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -1371,17 +1297,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "hourRange"
-                ]
+                "linkContentType": ["hourRange"]
               }
             ],
             "linkType": "Entry"
@@ -1460,14 +1383,12 @@
           "type": "Array",
           "localized": true,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Symbol",
-            "validations": [
-            ]
+            "validations": []
           }
         },
         {
@@ -1560,8 +1481,7 @@
           "type": "Symbol",
           "localized": true,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -1571,8 +1491,7 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -1584,9 +1503,7 @@
           "required": false,
           "validations": [
             {
-              "linkContentType": [
-                "schedule"
-              ]
+              "linkContentType": ["schedule"]
             }
           ],
           "disabled": false,
@@ -1599,17 +1516,14 @@
           "type": "Array",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Link",
             "validations": [
               {
-                "linkContentType": [
-                  "searchableByKeywords"
-                ]
+                "linkContentType": ["searchableByKeywords"]
               }
             ],
             "linkType": "Entry"
@@ -1688,8 +1602,7 @@
           "type": "Date",
           "localized": false,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -1699,8 +1612,7 @@
           "type": "Date",
           "localized": false,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         }
@@ -1779,9 +1691,7 @@
           "required": false,
           "validations": [
             {
-              "linkMimetypeGroup": [
-                "image"
-              ]
+              "linkMimetypeGroup": ["image"]
             },
             {
               "assetFileSize": {
@@ -1800,8 +1710,7 @@
           "type": "Text",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -1811,8 +1720,7 @@
           "type": "Array",
           "localized": false,
           "required": true,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
@@ -1837,8 +1745,7 @@
           "type": "Symbol",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false
         },
@@ -1848,14 +1755,12 @@
           "type": "Array",
           "localized": true,
           "required": false,
-          "validations": [
-          ],
+          "validations": [],
           "disabled": false,
           "omitted": false,
           "items": {
             "type": "Symbol",
-            "validations": [
-            ]
+            "validations": []
           }
         }
       ]
@@ -1922,10 +1827,7 @@
               "unique": true
             },
             {
-              "in": [
-                "partition1",
-                "partition2"
-              ]
+              "in": ["partition1", "partition2"]
             }
           ],
           "disabled": false,
@@ -3165,6 +3067,5 @@
       }
     }
   ],
-  "webhooks": [
-  ]
+  "webhooks": []
 }

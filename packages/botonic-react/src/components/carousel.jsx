@@ -1,13 +1,14 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Message } from './message'
-import { WebchatContext } from '../contexts'
-import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
-import { isBrowser, INPUT } from '@botonic/core'
+import { INPUT, isBrowser } from '@botonic/core'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { COLORS, WEBCHAT } from '../constants'
+
 import LeftArrow from '../assets/leftArrow.svg'
 import RightArrow from '../assets/rightArrow.svg'
+import { COLORS, WEBCHAT } from '../constants'
+import { WebchatContext } from '../contexts'
 import { resolveImage } from '../util/environment'
+import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
+import { Message } from './message'
 
 const StyledCarousel = styled.div`
   padding: 10px 0px;

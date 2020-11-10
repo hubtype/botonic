@@ -1,8 +1,9 @@
+import { INPUT } from '@botonic/core'
 import React from 'react'
 import styled from 'styled-components'
-import { Message } from './message'
+
 import { renderComponent } from '../util/react'
-import { INPUT } from '@botonic/core'
+import { Message } from './message'
 
 const Link = styled.a`
   text-decoration: none;

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { tensor, Tensor } from '@tensorflow/tfjs-node'
-import { WordEmbeddingsDBHelper } from './wembeddings-db-helper'
+import { Tensor, tensor } from '@tensorflow/tfjs-node'
+
 import { WordEmbeddingsConfig } from '../types'
+import { WordEmbeddingsDBHelper } from './wembeddings-db-helper'
 
 export class WordEmbeddingsManager {
   constructor(readonly matrix: Tensor) {}

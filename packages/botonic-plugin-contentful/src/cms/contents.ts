@@ -1,8 +1,8 @@
 import * as time from '../time'
-import { Callback, ContentCallback, TopContentId } from './callback'
-import { SearchableBy } from './fields'
-import { ContentType, MessageContentType, TopContentType } from './cms'
 import { shallowClone, Stringable } from '../util/objects'
+import { Callback, ContentCallback, TopContentId } from './callback'
+import { ContentType, MessageContentType, TopContentType } from './cms'
+import { SearchableBy } from './fields'
 
 export enum ButtonStyle {
   BUTTON = 0,

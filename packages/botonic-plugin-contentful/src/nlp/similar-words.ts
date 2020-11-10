@@ -1,8 +1,9 @@
 import { BestSubstringResult, ExtractorEnum } from '@nlpjs/ner/src'
-import { CandidateWithKeywords, Keyword, MatchType } from './keywords'
-import { countOccurrences } from './tokens'
-import { NormalizedUtterance, Word } from './normalizer'
 import { leven } from '@nlpjs/similarity/src'
+
+import { CandidateWithKeywords, Keyword, MatchType } from './keywords'
+import { NormalizedUtterance, Word } from './normalizer'
+import { countOccurrences } from './tokens'
 
 export const enum WordSimilarityAlgorithm {
   LEVENSHTEIN,

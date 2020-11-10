@@ -1,8 +1,9 @@
+import { INPUT, isBrowser } from '@botonic/core'
 import React from 'react'
 import styled from 'styled-components'
-import { Message } from './message'
-import { isBrowser, INPUT } from '@botonic/core'
+
 import { COLORS, ROLES } from '../constants'
+import { Message } from './message'
 
 const StyledVideo = styled.video`
   background-color: ${COLORS.SOLID_BLACK_ALPHA_0_5};

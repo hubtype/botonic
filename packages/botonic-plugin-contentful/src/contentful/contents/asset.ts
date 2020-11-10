@@ -1,5 +1,6 @@
-import * as cms from '../../cms'
 import { Asset } from 'contentful'
+
+import * as cms from '../../cms'
 import { ResourceDelivery } from '../content-delivery'
 
 export class AssetDelivery extends ResourceDelivery {

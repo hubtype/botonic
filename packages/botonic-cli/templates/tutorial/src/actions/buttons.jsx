@@ -1,5 +1,5 @@
+import { Button, Text } from '@botonic/react'
 import React from 'react'
-import { Text, Button } from '@botonic/react'
 
 export default class extends React.Component {
   render() {

@@ -1,8 +1,8 @@
-import NotFound from './actions/not-found'
-import Start from './actions/start'
 import Help from './actions/help'
+import NotFound from './actions/not-found'
 import ShowButtons from './actions/show-buttons'
 import ShowReplies from './actions/show-replies'
+import Start from './actions/start'
 export const routes = [
   { path: 'help', payload: 'help', action: Help },
   {

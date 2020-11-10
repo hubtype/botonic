@@ -1,4 +1,5 @@
 import { tensor } from '@tensorflow/tfjs-node'
+
 import { ModelManager } from '../src/model-manager'
 import { SIMPLE_NN_MODEL_PATH } from './constants'
 

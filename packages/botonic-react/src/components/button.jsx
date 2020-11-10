@@ -1,9 +1,9 @@
+import { INPUT, params2queryString } from '@botonic/core'
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 
-import { params2queryString, INPUT } from '@botonic/core'
-import { WebchatContext } from '../contexts'
 import { COLORS, WEBCHAT } from '../constants'
+import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
 
 const StyledButton = styled.button`

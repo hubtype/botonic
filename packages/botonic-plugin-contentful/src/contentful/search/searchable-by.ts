@@ -1,6 +1,7 @@
 import { Entry } from 'contentful'
+
 import * as cms from '../../cms'
-import { ContentWithNameFields } from '../delivery-api'
+import { ContentWithNameFields } from '../delivery-utils'
 
 export class SearchableByKeywordsDelivery {
   static fromEntry(

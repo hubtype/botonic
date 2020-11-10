@@ -1,5 +1,5 @@
-import Hi from './actions/hi'
 import GetShirts from './actions/get-shirts'
+import Hi from './actions/hi'
 
 export const routes = [
   /* The first rule matches if and only if we get the text 'hi' and will execute the 
@@ -7,5 +7,5 @@ export const routes = [
   { path: 'hi', text: 'hi', action: Hi },
 
   /* These rules capture different payloads */
-  { path: 'shirts', payload: /(women-shirts|men-shirts)/, action: GetShirts }
+  { path: 'shirts', payload: /(women-shirts|men-shirts)/, action: GetShirts },
 ]

@@ -1,18 +1,18 @@
-import React from 'react'
 import {
-  Text,
+  Button,
   Carousel,
   Element,
   Pic,
-  Button,
+  Subtitle,
+  Text,
   Title,
-  Subtitle
 } from '@botonic/react'
+import React from 'react'
 
-import MyWebview from '../webviews/myWebview'
-import InteractionWithBot from '../webviews/interactionWithBot'
 import BotVader from '../assets/bot_vader.jpg'
 import InteractWithBot from '../assets/interact_with_bot.jpg'
+import InteractionWithBot from '../webviews/interactionWithBot'
+import MyWebview from '../webviews/myWebview'
 
 export default class extends React.Component {
   render() {

@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react'
+import { INPUT, isBrowser } from '@botonic/core'
+import React, { useContext, useEffect, useState } from 'react'
+import Fade from 'react-reveal/Fade'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
-import Fade from 'react-reveal/Fade'
-import { isBrowser, INPUT } from '@botonic/core'
 
-import { ConditionalWrapper, renderComponent } from '../util/react'
+import { COLORS, SENDERS, WEBCHAT } from '../constants'
+import { RequestContext, WebchatContext } from '../contexts'
 import { isDev, resolveImage } from '../util/environment'
-import { WebchatContext, RequestContext } from '../contexts'
+import { ConditionalWrapper, renderComponent } from '../util/react'
 import { Button } from './button'
+import { getMarkdownStyle, renderLinks, renderMarkdown } from './markdown'
 import { Reply } from './reply'
-import { WEBCHAT, COLORS, SENDERS } from '../constants'
-import { renderMarkdown, getMarkdownStyle, renderLinks } from './markdown'
-import { resolveMessageTimestamps, MessageTimestamp } from './timestamps'
+import { MessageTimestamp, resolveMessageTimestamps } from './timestamps'
 
 const MessageContainer = styled.div`
   display: flex;

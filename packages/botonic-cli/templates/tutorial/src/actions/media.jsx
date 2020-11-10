@@ -1,13 +1,13 @@
-import React from 'react'
 import {
-  Text,
-  Button,
-  Image,
-  Video,
   Audio,
+  Button,
   Document,
-  Location
+  Image,
+  Location,
+  Text,
+  Video,
 } from '@botonic/react'
+import React from 'react'
 export default class extends React.Component {
   render() {
     return (

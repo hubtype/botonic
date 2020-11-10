@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Button } from '../../../src'
 import { MultichannelButton } from '../../../src/components/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'

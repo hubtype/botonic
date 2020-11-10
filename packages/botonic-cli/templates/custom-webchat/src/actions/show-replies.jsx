@@ -1,5 +1,5 @@
+import { Reply, RequestContext, Text } from '@botonic/react'
 import React from 'react'
-import { Text, Reply, RequestContext } from '@botonic/react'
 
 export default class extends React.Component {
   constructor(props) {

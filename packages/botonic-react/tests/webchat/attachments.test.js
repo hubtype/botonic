@@ -1,9 +1,8 @@
 import {
-  isAllowedSize,
-  getMediaType,
   getFullMimeWhitelist,
+  getMediaType,
+  isAllowedSize,
 } from '../../src/message-utils'
-
 import { toMB } from '../helpers/test-utils'
 
 describe('TEST: attachments', () => {

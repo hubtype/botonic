@@ -1,6 +1,6 @@
+import { ENGLISH, KeywordsOptions, MatchType, Normalizer } from '../../src/nlp'
 import { Search } from '../../src/search'
 import { testContentful } from '../contentful/contentful.helper'
-import { ENGLISH, KeywordsOptions, MatchType, Normalizer } from '../../src/nlp'
 
 test('INTEGRATION TEST: searchByKeywords', async () => {
   const contentful = testContentful()

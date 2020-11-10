@@ -10,9 +10,9 @@ import {
   StartUp,
   Text,
 } from '../contents'
+import { Context } from '../context'
 import { CmsException } from '../exceptions'
 import { ElementBuilder } from '../factories'
-import { Context } from '../context'
 
 export type MessageContentFilter<T> = (
   t: T,

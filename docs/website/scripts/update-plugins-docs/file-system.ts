@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from 'fs'
+import { readdirSync, readFileSync, writeFileSync } from 'fs'
 
 const UTF8: BufferEncoding = 'utf-8'
 

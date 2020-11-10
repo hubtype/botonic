@@ -1,11 +1,9 @@
 import * as contentful from 'contentful'
+
 import * as cms from '../../cms'
+import { DeliveryApi } from '../delivery-api'
+import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
 import { ButtonDelivery } from './button'
-import {
-  DeliveryApi,
-  CommonEntryFields,
-  ContentfulEntryUtils,
-} from '../delivery-api'
 import { DeliveryWithFollowUp } from './follow-up'
 
 export class TextDelivery extends DeliveryWithFollowUp {
