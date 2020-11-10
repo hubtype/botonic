@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { SearchCandidate } from '../search/search-result'
 import * as time from '../time'
 import { Callback, ContentCallback } from './callback'
@@ -42,8 +41,8 @@ export class DummyCMS implements CMS {
   }
 
   async carousel(id: string, {} = DEFAULT_CONTEXT): Promise<Carousel> {
-    const elements = this.buttonCallbacks.map(callback =>
-      this.createElement(Math.random().toString(), callback)
+    const elements = this.buttonCallbacks.map((callback, i) =>
+      this.createElement(String(i), callback)
     )
     return Promise.resolve(new Carousel(new CommonFields(id, id), elements))
   }
