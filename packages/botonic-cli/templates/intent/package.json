@@ -18,9 +18,9 @@
     }
   },
   "dependencies": {
-    "@botonic/plugin-dialogflow": "~0.15.0",
+    "@botonic/plugin-dialogflow": "0.16.0-alpha.0",
     "@babel/runtime": "^7.6.2",
-    "@botonic/react": "~0.15.0"
+    "@botonic/react": "0.16.0-alpha.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

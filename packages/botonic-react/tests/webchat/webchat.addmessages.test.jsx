@@ -1,14 +1,15 @@
-import React from 'react'
-import { Webchat } from '../../src/webchat/webchat'
-import { Document, Image, Video, Audio } from '../../src/components'
-import { act } from 'react-test-renderer'
-import {
-  renderUseWebchatHook,
-  expectToHaveRoles,
-  expectNotToHaveRoles,
-} from '../helpers/test-utils'
 import { render, screen } from '@testing-library/react'
+import React from 'react'
+import { act } from 'react-test-renderer'
+
+import { Audio, Document, Image, Video } from '../../src/components'
 import { ROLES } from '../../src/constants'
+import { Webchat } from '../../src/webchat/webchat'
+import {
+  expectNotToHaveRoles,
+  expectToHaveRoles,
+  renderUseWebchatHook,
+} from '../helpers/test-utils'
 
 describe('Adding webchat messageComponent', () => {
   // To avoid TypeError: frame.scrollTo is not a function
