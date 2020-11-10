@@ -22,14 +22,19 @@ export class Router {
       routeParams.route = this.getRouteByPath(input.path, this.routes)
     if (lastRoute && lastRoute.childRoutes && !routeParams.route)
       //get route depending of current ChildRoute
-      routeParams = this.getRoute(input, lastRoute.childRoutes, session)
+      routeParams = this.getRoute(
+        input,
+        lastRoute.childRoutes,
+        session,
+        lastRoutePath
+      )
     if (!routeParams || !Object.keys(routeParams).length) {
       /*
           we couldn't find a route in the state of the lastRoute, so let's find in
           the general conf.route
         */
       brokenFlow = Boolean(lastRoutePath)
-      routeParams = this.getRoute(input, this.routes, session)
+      routeParams = this.getRoute(input, this.routes, session, lastRoutePath)
     }
     try {
       if (pathParams) {
@@ -46,62 +51,64 @@ export class Router {
     if (routeParams && Object.keys(routeParams).length) {
       //get in childRoute if one has path ''
       let defaultAction
-      if (
-        !routeParams.route.path &&
-        routeParams.route &&
-        routeParams.route.childRoutes &&
-        routeParams.route.childRoutes.length
-      ) {
-        defaultAction = this.getRoute(
-          { path: '' },
-          routeParams.route.childRoutes,
-          session
-        )
-      }
-      if ('action' in routeParams.route) {
+      if (routeParams.route) {
         if (
-          brokenFlow &&
-          routeParams.route.ignoreRetry != true &&
-          lastRoute &&
-          session.__retries < lastRoute.retry &&
-          routeParams.route.path != lastRoute.action
+          !routeParams.route.path &&
+          routeParams.route.childRoutes &&
+          routeParams.route.childRoutes.length
         ) {
-          session.__retries = session.__retries ? session.__retries + 1 : 1
-          // The flow was broken, but we want to recover it
+          defaultAction = this.getRoute(
+            { path: '' },
+            routeParams.route.childRoutes,
+            session,
+            lastRoutePath
+          )
+        }
+        if ('action' in routeParams.route) {
+          if (
+            brokenFlow &&
+            routeParams.route.ignoreRetry != true &&
+            lastRoute &&
+            session.__retries < lastRoute.retry &&
+            routeParams.route.path != lastRoute.action
+          ) {
+            session.__retries = session.__retries ? session.__retries + 1 : 1
+            // The flow was broken, but we want to recover it
+            return {
+              action: routeParams.route.action,
+              params: routeParams.params,
+              retryAction: lastRoute ? lastRoute.action : null,
+              defaultAction: defaultAction ? defaultAction.route.action : null,
+              lastRoutePath: lastRoutePath,
+            }
+          } else {
+            session.__retries = 0
+            if (lastRoutePath && !brokenFlow)
+              lastRoutePath = `${lastRoutePath}/${routeParams.route.path}`
+            else lastRoutePath = routeParams.route.path
+            return {
+              action: routeParams.route.action,
+              params: routeParams.params,
+              retryAction: null,
+              defaultAction: defaultAction ? defaultAction.route.action : null,
+              lastRoutePath: lastRoutePath,
+            }
+          }
+        } else if (defaultAction) {
           return {
-            action: routeParams.route.action,
-            params: routeParams.params,
-            retryAction: lastRoute ? lastRoute.action : null,
-            defaultAction: defaultAction ? defaultAction.route.action : null,
+            action: defaultAction.route.action,
+            params: defaultAction.params,
             lastRoutePath: lastRoutePath,
           }
-        } else {
-          session.__retries = 0
-          if (lastRoutePath && !brokenFlow)
-            lastRoutePath = `${lastRoutePath}/${routeParams.route.path}`
-          else lastRoutePath = routeParams.route.path
-          return {
-            action: routeParams.route.action,
-            params: routeParams.params,
-            retryAction: null,
-            defaultAction: defaultAction ? defaultAction.route.action : null,
-            lastRoutePath: lastRoutePath,
-          }
-        }
-      } else if (defaultAction) {
-        return {
-          action: defaultAction.route.action,
-          params: defaultAction.params,
-          lastRoutePath: lastRoutePath,
-        }
-      } else if ('redirect' in routeParams.route) {
-        lastRoutePath = routeParams.route.redirect
-        const redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
-        if (redirectRoute) {
-          return {
-            action: redirectRoute.action,
-            params: redirectRoute.params,
-            lastRoutePath: lastRoutePath,
+        } else if ('redirect' in routeParams.route) {
+          lastRoutePath = routeParams.route.redirect
+          const redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
+          if (redirectRoute) {
+            return {
+              action: redirectRoute.action,
+              params: redirectRoute.params,
+              lastRoutePath: lastRoutePath,
+            }
           }
         }
       }
@@ -150,9 +157,9 @@ export class Router {
     return undefined
   }
 
-  getRoute(input, routes, session) {
+  getRoute(input, routes, session, lastRoutePath) {
     const computedRoutes = isFunction(routes)
-      ? routes({ input, session })
+      ? routes({ input, session, lastRoutePath })
       : routes
     /* Find the route that matches the given input, if it match with some of the entries,
       return the whole Route of the entry with optional params captured if matcher was a regex */
@@ -161,7 +168,14 @@ export class Router {
       Object.entries(r)
         .filter(([key, {}]) => key != 'action' && key != 'childRoutes')
         .some(([key, value]) => {
-          const match = this.matchRoute(r, key, value, input, session)
+          const match = this.matchRoute(
+            r,
+            key,
+            value,
+            input,
+            session,
+            lastRoutePath
+          )
           try {
             params = match.groups
           } catch (e) {}
@@ -193,9 +207,9 @@ export class Router {
     return null
   }
 
-  matchRoute(route, prop, matcher, input, session) {
+  matchRoute(route, prop, matcher, input, session, lastRoutePath) {
     /*
-        prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' |...)
+        prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' | 'request' ...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
         input: user input object, ex: {type: 'text', data: 'Hi'}
       */
@@ -205,6 +219,7 @@ export class Router {
       if (input.type == 'text') value = input.data
     } else if (prop == 'input') value = input
     else if (prop == 'session') value = session
+    else if (prop == 'request') value = { input, session, lastRoutePath }
     const matched = this.matchValue(matcher, value)
     if (matched) {
       this.routeInspector.routeMatched(route, prop, matcher, value)

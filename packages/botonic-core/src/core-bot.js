@@ -66,7 +66,10 @@ export class CoreBot {
 
     if (isFunction(this.routes)) {
       this.router = new Router(
-        [...(await this.routes({ input, session })), ...this.defaultRoutes],
+        [
+          ...(await this.routes({ input, session, lastRoutePath })),
+          ...this.defaultRoutes,
+        ],
         this.inspector.routeInspector
       )
     }
