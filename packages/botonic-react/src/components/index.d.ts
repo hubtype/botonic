@@ -186,4 +186,28 @@ export interface WebchatSettingsProps {
 }
 export const WebchatSettings: React.FunctionComponent<WebchatSettingsProps>
 
+export type WrappedComponent<Props> = React.FunctionComponent<Props> & {
+  customTypeName: string
+}
+
+export class ErrorBoundary<Props> extends React.Component<Props> {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void
+}
+
+export function createErrorBoundary<Props>(_?: {
+  errorComponent: React.ComponentType
+}): ErrorBoundary<Props>
+
+export function customMessage<
+  Props,
+  CustomMessageComponent extends React.ComponentType<Props>
+>(_: {
+  name: string
+  component: CustomMessageComponent
+  defaultProps?: Record<string, unknown>
+  errorBoundary?: ErrorBoundary<Props>
+}): WrappedComponent<Props>
+
+export function getDisplayName(component: React.ComponentType): string
+
 export * from './multichannel'

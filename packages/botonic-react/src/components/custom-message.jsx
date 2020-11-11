@@ -2,15 +2,24 @@ import { INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
 import React from 'react'
 
+import { createErrorBoundary } from '../util/error-boundary'
 import { warnDeprecatedProps } from '../util/logs'
 import { mapObjectNonBooleanValues } from '../util/react'
 import { Message } from './message'
 import { Reply } from './reply'
 
+/**
+ *
+ * @param name as it appears at ThemeProps' message.customTypes key
+ * @param CustomMessageComponent
+ * @param defaultProps Props for the wrapper Message
+ * @param ErrorBoundary to recover in case it fails
+ */
 export const customMessage = ({
   name,
   component: CustomMessageComponent,
-  defaultProps,
+  defaultProps = {},
+  errorBoundary: ErrorBoundary = createErrorBoundary(),
 }) => {
   const CustomMessage = props => {
     warnDeprecatedProps(defaultProps, 'customMessage:')
@@ -54,9 +63,11 @@ export const customMessage = ({
           customTypeName: name,
         }}
       >
-        <CustomMessageComponent {...customMessageProps}>
-          {childrenWithoutReplies}
-        </CustomMessageComponent>
+        <ErrorBoundary key={'errorBoundary'} {...customMessageProps}>
+          <CustomMessageComponent {...customMessageProps}>
+            {childrenWithoutReplies}
+          </CustomMessageComponent>
+        </ErrorBoundary>
         {replies}
       </CustomMessage>
     )
