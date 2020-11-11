@@ -1,6 +1,9 @@
 #!/bin/bash
 cd "$1" || exit
+
+# quick lint. Not running slow lint to avoid penalizing pre-commit
 npm run lint
+
 EXIT_CODE=$?
 # when lint can fix all errors, npm will return 0
 # In this case, we want to see which files were changed

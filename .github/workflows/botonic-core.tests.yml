@@ -30,3 +30,5 @@ jobs:
       run: (cd ./packages/$PACKAGE && npm run test)
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
+    - name: Verify index.d.ts
+      run: scripts/qa/lint-d-ts.sh packages/botonic-core
