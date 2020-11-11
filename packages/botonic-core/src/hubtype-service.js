@@ -59,12 +59,19 @@ export class HubtypeService {
     }
   }
 
+  /**
+   * @returns {Promise<void>}
+   */
   init(user, lastMessageId, lastMessageUpdateDate) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (lastMessageUpdateDate)
       this.lastMessageUpdateDate = lastMessageUpdateDate
-    if (this.pusher || !this.user.id || !this.appId) return null
+    if (this.pusher) return Promise.resolve()
+    if (!this.user.id || !this.appId) {
+      // TODO recover user & appId somehow
+      return Promise.reject('No User or appId. Clear cache and reload')
+    }
     this.pusher = new Pusher(_WEBCHAT_PUSHER_KEY_, {
       cluster: 'eu',
       authEndpoint: `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
@@ -168,6 +175,7 @@ export class HubtypeService {
     } catch (e) {
       this.handleUnsentInput(message)
     }
+    return Promise.resolve()
   }
 
   static async getWebchatVisibility({ appId }) {
