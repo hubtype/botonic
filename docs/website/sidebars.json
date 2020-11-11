@@ -1,18 +1,31 @@
 {
-  "docs": {
-    "Getting Started": [
-      "welcome",
-      "project",
-      "getting-started",
-      "create-convapp",
-      "supported-platforms"
-    ],
-    "Deployment": [
-      "deployment/hubtype",
-      "deployment/aws",
-      "deployment/standalone-js-bundle"
-    ]
-  },
+  "docs": [
+    {
+      "type": "doc",
+      "id": "welcome"
+    },
+    {
+      "label": "Getting Started",
+      "type": "category",
+      "collapsed": false,
+      "items": [
+        "getting-started",
+        "project",
+        "create-convapp",
+        "supported-platforms"
+      ]
+    },
+    {
+      "label": "Deployment",
+      "type": "category",
+      "collapsed": false,
+      "items": [
+        "deployment/hubtype",
+        "deployment/aws",
+        "deployment/standalone-js-bundle"
+      ]
+    }
+  ],
   "Reference Guide": {
     "Concepts": [
       "concepts/actions",
