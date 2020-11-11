@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CustomMessage failing TEST: ErrorBoundary different errorComponent which gets the props 1`] = `
+<message
+  delay={0}
+  json="{\\"bang\\":\\"Bang!\\",\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    Boom!Bang!: Forced exception
+  </message>
+</message>
+`;
+
+exports[`CustomMessage failing TEST: ErrorBoundary on a failing component 1`] = `
+<message
+  delay={0}
+  json="{\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+  wrapperProp="wrapperPropV"
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    The message cannot be displayed
+  </message>
+</message>
+`;
+
+exports[`CustomMessage replies TEST: replies are moved outside the custom component Button 1`] = `
+<message
+  delay={0}
+  json="{\\"children\\":{\\"key\\":null,\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payloadundefined\\",\\"children\\":[\\"button\\",null]},\\"_owner\\":null,\\"_store\\":{}},\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    <button
+      payload="payloadundefined"
+    >
+      button
+    </button>
+  </message>
+</message>
+`;
+
+exports[`CustomMessage replies TEST: replies are moved outside the custom component Button,Button 1`] = `
+<message
+  delay={0}
+  json="{\\"children\\":[{\\"key\\":\\".$1\\",\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payload1\\",\\"children\\":[\\"button\\",1]},\\"_owner\\":null,\\"_store\\":{}},{\\"key\\":\\".$2\\",\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payload2\\",\\"children\\":[\\"button\\",2]},\\"_owner\\":null,\\"_store\\":{}}],\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    <button
+      payload="payload1"
+    >
+      button
+      1
+    </button>
+    <button
+      payload="payload2"
+    >
+      button
+      2
+    </button>
+  </message>
+</message>
+`;
+
+exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply 1`] = `
+<message
+  delay={0}
+  json="{\\"children\\":[],\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  />
+  <reply
+    payload="payloadundefined"
+  >
+    reply
+  </reply>
+</message>
+`;
+
+exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply,Button 1`] = `
+<message
+  delay={0}
+  json="{\\"children\\":[{\\"key\\":\\".$2\\",\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payload2\\",\\"children\\":[\\"button\\",2]},\\"_owner\\":null,\\"_store\\":{}}],\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    <button
+      payload="payload2"
+    >
+      button
+      2
+    </button>
+  </message>
+  <reply
+    payload="payload1"
+  >
+    reply
+    1
+  </reply>
+</message>
+`;
+
+exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply,Reply 1`] = `
+<message
+  delay={0}
+  json="{\\"children\\":[],\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  />
+  <reply
+    payload="payload1"
+  >
+    reply
+    1
+  </reply>
+  <reply
+    payload="payload2"
+  >
+    reply
+    2
+  </reply>
+</message>
+`;
+
+exports[`TEST: CustomMessage defaultProps, props and children are injected into the component 1`] = `
+<message
+  delay={0}
+  json="{\\"wrappedProp\\":\\"wrappedPropV\\",\\"children\\":\\"body\\",\\"customTypeName\\":\\"test1\\"}"
+  type="custom"
+  typing={0}
+  wrapperProp="wrapperPropV"
+>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    wrappedPropVbody
+  </message>
+</message>
+`;
