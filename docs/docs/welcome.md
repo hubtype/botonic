@@ -4,35 +4,159 @@ title: Welcome to Botonic Documentation
 sidebar_label: Welcome to Botonic Documentation
 ---
 
-## Chatbot vs Conversational App
+## What is Botonic?
 
-Before going any further, let us explain why Botonic is your best ally.
+Botonic is a full-stack Javascript framework to create chatbots and modern conversational apps that work on multiple platforms: web, mobile and messaging apps (Messenger, Whatsapp, Telegram, etc).
 
-Botonic is a React-based framework that allows you to build conversational experiences.
+It's built on top of:
 
-A chatbot is an intelligent artificial agent that implies an AI-centric, text-only interaction with your bot.
+⚛️ [React](https://reactjs.org/)
 
-**Botonic** helps you create **Conversational Applications** to deliver a good user experience by using all the typical chatbot features like Guided flows, NLU, Multi-language, Media support (images, video, location...), Webviews, Human handoff or Webchat. Your Conversation app will learn fast, understand your needs, know you and help you for your transactions.  
+⚡ [Serverless](https://www.serverless.com/)
 
-Moreover, to make developers' lives easier, Botonic offers:
+💡 [Tensorflow.js](https://www.tensorflow.org/js)
 
-- CLI tools.
-- A typical development workflow (git, CI, CD, etc).
-- An open-source and testable code.
-- A comprehensive documentation.
-- A welcoming and helpful community.
+## Features
 
-## Botonic and Hubtype
+### Conversational Apps
 
-Botonic is a project created by the **[Hubtype](https://hubtype.com)** team. Hubtype is a platform that allows companies to attend to their customers on messaging apps by combining bots and humans.
-The easiest way to put your botonic bot in production is to deploy it to Hubtype, as it offers:
+**Beyond traditional text-based chatbots**
 
-- Easy deployments.
-- Automatic scaling.
-- Debug tools.
-- NLU retraining assistance.
-- 1-click integrations including Messaging / Voice channels, Analytics, Helpdesks, NLU as a service.
+With Botonic you can create conversational applications that incorporate the best out of **text interfaces** (simplicity, natural language interaction) and **graphical interfaces** (multimedia, visual context, rich interaction). This is a powerful combination that provides better user experience than traditional chatbots, which rely only on text and NLP.
 
-Now, let's get started!
+You can learn more about [conversational apps here](https://www.hubtype.com/blog/what-are-conversational-apps/).
 
-**Note:** If you have any questions or encounter a problem, do not hesitate to send us a [Slack](http://botonic.slack.com) or report them [here](https://github.com/hubtype/botonic/issues).
+### Omnichannel React Components
+
+Botonic adds an abstraction layer on top of messaging platforms so you don't have to worry about different API specifications. Whenever is possible, we unify similar concepts under a simple component that works across different channels. For example, [Messenger Quick Replies](https://developers.facebook.com/docs/messenger-platform/send-messages/quick-replies/) and [Telegram Custom Keyboards](https://irazasyed.github.io/telegram-bot-sdk/usage/keyboards/) work in a very similar way. In Botonic you would just use our [Reply](/docs/components/replies) component as follows:
+
+```html
+<Text>
+  What's you favorite color?
+  <Reply payload="purple">Purple</Reply>
+  <Reply payload="orange">Orange</Reply>
+  <Reply payload="other">Other</Reply>
+</Text>
+```
+
+Sometimes messaging apps support elements that don't exist in other platforms so we can't make this straightforward standarization. For instance [Messenger's Carousel](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic/#carousel) has no equivalent on Whatsapp. In this case, you can use our [Multichannel](/docs/components/multichannel) component, which offers a sane transformation using available elements in the destination platform.
+
+In this sense, **Botonic is to messaging platforms what React Native is to mobile platforms**.
+
+Checkout the supported [components](/docs/components/components).
+
+### Fully Customizable Webchat SDK
+
+Messaging apps offer a limited set of interactive elements, so there's only so much you can do in terms of UI as you're not in full control. However, if you're building for the web, you can use the full power of React. Our [Webchat SDK](/docs/concepts/webchat) allows you to easily customize the behaviour and styles using properties like `enableEmojiPicker: true` or `brandColor: 'blue'`. You can also tailor your bot in a more advanced way with **custom components** and [custom message types](/docs/concepts/webchat#custom-message-styles). With the latter, you can **embed complex UI elements** right in the middle of the conversation, like forms or calendars.
+
+### Webviews
+
+[Webviews](/docs/concepts/webviews) allow you to work around the fact that you can't control messaging apps UI, so you can't embed your custom components in, say, a Whatsapp conversation. However, you can open a **browser window as an extension of the current conversation** (aware of the context), let the user perform some complex task there, and return to the messaging UI to continue the conversation. Some platforms like [Facebook Messenger support webviews](https://developers.facebook.com/docs/messenger-platform/webview/) in a native way, but for the rest, Botonic manages it with deep links.
+
+Webviews are great when you need complex components or when data privacy/security is important, for instance:
+
+- Login flows
+- Checkout processes
+- Browsing a catalog
+- Selecting seats on a flight
+
+### Full-stack Serverless
+
+Botonic is not just a set of UI components or a frontend framework, it's a fullstack framework that covers **backend logic** (we call those "[actions](/docs/concepts/actions)"), keeping conversations in a **database** and managing a **scalable API**. Check out our [deployment guide](/docs/deployment/hubtype) to learn more about it.
+
+### Natural Language Understanding
+
+In the last years we've witnessed an amazing progress in machine learning and NLP techniques that allows us to understand our users better. Botonic offers a simple yet powerful solution that allows you to add NLU features to your project without being a deep learning expert. **Just define some intents and examples and you'll be good to go!**
+
+Additionally, we allow you to fully customize the NLU pipeline by defining your own neural network or tokenizer. The [@botonic/plugin-nlu](/docs/plugins/plugin-nlu) package is based on [Tensorflow.js](https://www.tensorflow.org/js), so the only limit is your imagination!
+
+### Seamless Human Handoff
+
+Bots are cool, but let's be honest: they can't solve every problem and users can get frustrated if their expectations are not managed properly. That's why having a human backup is always a good idea. However, managing bot-human-bot transitions is challenging, especially if you want to keep the user in the same conversation.
+
+**With Botonic, it is a matter of adding a few lines of code:**
+
+```javascript
+export default class extends React.Component {
+  static async botonicInit({ input, session, params, lastRoutePath }) {
+    await humanHandOff(session))
+  }
+
+  render() {
+    return (
+      <Text>
+        Thanks for contacting us! One of our agents
+        will attend you as soon as possible.
+      </Text>
+    )
+  }
+}
+```
+
+Check out our [human handoff guide](/docs/concepts/humanhandoff).
+
+### Plugins
+
+Botonic comes with a battery of plugins so you can easily integrate popular services into your project, for instance:
+
+- **Analytics** ([Google Analytics](/docs/plugins/plugin-google-analytics), [Segment](/docs/plugins/plugin-segment), [Dashbot](/docs/plugins/plugin-dashbot))
+- **CMS** ([Contentful](/docs/plugins/plugin-contentful), Sanity)
+- **NLU** ([Dialogflow](/docs/plugins/plugin-dialogflow), [Watson](/docs/plugins/plugin-watson), [Luis](/docs/plugins/plugin-luis), [Inbenta](/docs/plugins/plugin-inbenta))
+
+You can also create your own plugins, just follow [our guide](/docs/plugins/createname-plugin1).
+
+### CLI
+
+We offer a command line interface tool that allows you to:
+
+- **Scaffold** new projects with `botonic new <botName> <template>`
+- **Run** your project locally with `botonic serve`
+- **Deploy** your project with `botonic deploy`
+
+### Typescript Support
+
+You can build your bot either with plain Javascript or with Typescript. **We provide TS typings!**
+
+Typescript examples coming soon...
+
+## Alternatives
+
+Botonic is an open-source alternative to...
+
+...Live-chat propietary tools:
+
+- [Intercom](https://www.intercom.com/)
+- [Liveperson](https://www.liveperson.com/)
+- [Freshchat](https://www.freshworks.com/live-chat-software/)
+- [Drift](https://www.drift.com/)
+- [Landbot](http://landbot.io/)
+- [Olark](https://www.olark.com/)
+
+...Messaging channels aggregators like:
+
+- [Zendesk Sunshine](https://www.zendesk.com/platform/conversations/outbound-messaging/) (formerly [Smooch](https://smooch.io/))
+
+...NLU closed services like:
+
+- [Dialogflow](https://cloud.google.com/dialogflow)
+- [Watson](https://www.ibm.com/watson)
+- [Luis](https://www.luis.ai/)
+- [Inbenta](https://www.inbenta.com/en/)
+
+Botonic's goal is not to fully replace all these amazing products feature by feature, but to provide a free and open-source option that covers most use cases. We also want to give you freedom to choose your own stack, by providing plugins to integrate many of these services in your project: you want to use Dialogflow NLU? That's easy, just add our [@botonic/plugin-dialogflow](/docs/plugins/plugin-dialogflow) and you're done.
+
+## Who uses Botonic
+
+- EPSON
+- Michael Kors
+- Levi
+- Massimo Dutti
+- Zurich
+- Bershka
+- Decathlon
+- Privalia
+- Stradivarius
+- Bankia
+- Caixabank
+
+Want to see your name here? Please [submit a pull request](https://github.com/hubtype/botonic/pulls) with your use case!
