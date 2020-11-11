@@ -126,7 +126,7 @@ describe('Using renderMarkdown', () => {
 
   it('Renders tables', () => {
     const toRender = [
-      '## Tables\n| Option | Description |\n| ------ | ----------- |\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n<br/><br/>\n',
+      '## Tables\n| Option | Description |\n| ------ | ----------- |\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |',
     ]
     const sut = render(toRender)
     expect(sut).toEqual(
@@ -152,8 +152,7 @@ describe('Using renderMarkdown', () => {
         '<td>extension to be used for dest files.</td>\n' +
         '</tr>\n' +
         '</tbody>\n' +
-        '</table>\n' +
-        '<p><br/><br/></p>'
+        '</table>'
     )
   })
 
