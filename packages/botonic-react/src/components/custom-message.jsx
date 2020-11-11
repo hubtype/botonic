@@ -22,24 +22,28 @@ export const customMessage = ({
     )
   }
 
-  const SplitChildren = props => {
+  const splitChildren = props => {
     const { children } = props
+    const isReply = e => e.type === Reply
     try {
-      const replies = React.Children.toArray(children).filter(
-        e => e.type === Reply
-      )
-      const childrenWithoutReplies = React.Children.toArray(children).filter(
-        e => ![Reply].includes(e.type)
-      )
-      return { replies, childrenWithoutReplies }
+      if (!Array.isArray(children) && !isReply(children)) {
+        return { replies: null, childrenWithoutReplies: children }
+      }
+      const childrenArray = React.Children.toArray(children)
+      const replies = childrenArray.filter(isReply)
+      const childrenWithoutReplies = childrenArray.filter(e => !isReply(e))
+      return {
+        replies: replies,
+        childrenWithoutReplies,
+      }
     } catch (e) {
-      return { replies: [], childrenWithoutReplies: children }
+      return { replies: null, childrenWithoutReplies: children }
     }
   }
 
   const WrappedComponent = props => {
     const { id, children, ...customMessageProps } = props
-    const { replies, childrenWithoutReplies } = SplitChildren(props)
+    const { replies, childrenWithoutReplies } = splitChildren(props)
     return (
       <CustomMessage
         id={id}
