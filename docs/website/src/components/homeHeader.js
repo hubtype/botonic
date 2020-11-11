@@ -71,6 +71,9 @@ function Header() {
                 <HeaderLink to={useBaseUrl('/docs/welcome')}>Docs</HeaderLink>
               </li>
               <li className='list-none'>
+                <HeaderLink to={useBaseUrl('/examples/')}>Examples</HeaderLink>
+              </li>
+              <li className='list-none'>
                 <HeaderLink to='https://github.com/hubtype/botonic'>
                   GitHub
                 </HeaderLink>
