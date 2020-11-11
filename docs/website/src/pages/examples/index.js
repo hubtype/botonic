@@ -15,7 +15,7 @@ const cards = [
       description: 'Description of this example',
     },
     links: {
-      example: 'link to example',
+      example: 'examples/example-1',
       github: 'link to github',
     },
   },
@@ -25,7 +25,7 @@ const cards = [
       description: 'Description of this example',
     },
     links: {
-      example: 'link to example',
+      example: 'examples/example-1',
       github: 'link to github',
     },
   },
@@ -46,6 +46,10 @@ const Examples = () => {
     <>
       <Head>
         <title>Botonic Examples</title>
+        <script
+          type='text/javascript'
+          src='https://test-website-3189778e-d66c-42a2-884d-7f5b8d3c078a.netlify.com/webchat.botonic.js'
+        ></script>
       </Head>
       <Analytics />
       <div className='flex flex-col min-h-screen overflow-hidden'>
@@ -60,7 +64,6 @@ const Examples = () => {
           >
             <PageIllustration />
           </div>
-
           <ExamplesSection cards={cards} />
         </main>
       </div>
