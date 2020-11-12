@@ -214,6 +214,7 @@ export const Webchat = forwardRef((props, ref) => {
     setCurrentAttachment,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
+  const firstUpdate = useRef(true)
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const isOnline = useNetwork()
@@ -647,6 +648,10 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
     if (webchatState.isWebchatOpen && props.onOpen) props.onOpen()
     if (!webchatState.isWebchatOpen && props.onClose) {
       props.onClose()
