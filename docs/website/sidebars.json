@@ -1,31 +1,18 @@
 {
-  "docs": [
-    {
-      "type": "doc",
-      "id": "welcome"
-    },
-    {
-      "label": "Getting Started",
-      "type": "category",
-      "collapsed": false,
-      "items": [
-        "getting-started",
-        "project",
-        "create-convapp",
-        "supported-platforms"
-      ]
-    },
-    {
-      "label": "Deployment",
-      "type": "category",
-      "collapsed": false,
-      "items": [
-        "deployment/hubtype",
-        "deployment/aws",
-        "deployment/standalone-js-bundle"
-      ]
-    }
-  ],
+  "docs": {
+    "Getting Started": [
+      "welcome",
+      "getting-started",
+      "project",
+      "create-convapp",
+      "supported-platforms"
+    ],
+    "Deployment": [
+      "deployment/hubtype",
+      "deployment/aws",
+      "deployment/standalone-js-bundle"
+    ]
+  },
   "Reference Guide": {
     "Concepts": [
       "concepts/actions",
@@ -52,6 +39,18 @@
       "components/webchatsettings",
       "components/whatsapp-template"
     ],
+    "Custom Webchat": [
+      "webchat/webchat-api",
+      "webchat/webchat-enable",
+      "webchat/webchat-style",
+      "webchat/webchat-covercomponent",
+      "webchat/webchat-persistentmenu",
+      "webchat/webchat-markdown",
+      "webchat/webchat-blockinput",
+      "webchat/webchat-timestamp",
+      "webchat/webchat-updates",
+      "webchat/webchat-window"
+    ],
     "Testing": ["test/testing-your-components"]
   },
   "Plugins": {
@@ -71,6 +70,18 @@
     "How to Create a Plugin": [
       "plugins/createname-plugin1",
       "plugins/create-plugin2"
+    ]
+  },
+  "Releases": {
+    "Releases": [
+      "releases/releases-intro",
+      "releases/v0-15-0",
+      "releases/v0-14-0",
+      "releases/v0-13-0",
+      "releases/v0-12-0",
+      "releases/v0-11-0",
+      "releases/v0-10-1",
+      "releases/v0-10-0"
     ]
   },
   "": {

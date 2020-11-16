@@ -17,4 +17,6 @@ yalc.lock
 .eslintcache
 coverage.data
 coverage/
+.docusaurus
 .idea
+docs/website/package-lock.json
