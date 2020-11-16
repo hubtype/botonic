@@ -653,7 +653,7 @@ export const Webchat = forwardRef((props, ref) => {
       return
     }
     if (webchatState.isWebchatOpen && props.onOpen) props.onOpen()
-    if (!webchatState.isWebchatOpen && props.onClose) {
+    if (!webchatState.isWebchatOpen && props.onClose && !firstUpdate.current) {
       props.onClose()
       toggleEmojiPicker(false)
       togglePersistentMenu(false)
