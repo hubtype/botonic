@@ -55,6 +55,8 @@ module.exports = {
           label: 'Plugins',
           position: 'right',
         },
+        { to: '/docs/releases/releases-intro', label: 'Releases', position: 'right' },
+
         { to: '/docs/faq', label: 'FAQ', position: 'right' },
       ],
     },

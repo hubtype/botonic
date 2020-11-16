@@ -11,6 +11,9 @@ To start a new bot, you must run `botonic new testBot nlu`
 - `testBot` will be your bot's project name.
 - `nlu` will be the starter template for your project. This template comes with NLU capabilities by default.
 
+<img src="https://botonic-doc-static.netlify.app/images/general/CLI.png"/>
+
+
 ## Templates
 
 Botonic offers a list of templates to help you set up a chatbot rapidly.
@@ -43,6 +46,9 @@ Botonic offers a list of templates to help you set up a chatbot rapidly.
 Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View **[Routes](/docs/concepts/routes)** for more details.
 
 Actions are where you define the behavior of your bot. You can add an Action by creating a new `.js` file inside `src/actions`. View **[Actions](/docs/concepts/actions)** and **[Components](/docs/components/components)** for more details.
+
+<img src="https://botonic-doc-static.netlify.app/images/general/understanding-project.png"/>
+
 
 ## Natural Language Understanding
 
