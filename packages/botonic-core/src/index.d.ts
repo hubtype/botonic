@@ -112,11 +112,14 @@ export interface Session {
   }
   __locale?: string
   __retries?: number
-  _shadowing?: boolean
   is_first_interaction?: boolean
   last_session?: any
   organization?: string
   user: SessionUser
+  // after handoff
+  _hubtype_case_status?: CaseStatusType
+  _hubtype_case_typification?: string
+  _shadowing?: boolean
 }
 
 type InputMatcher = (input: Input) => boolean
@@ -156,6 +159,32 @@ type RouteRequest = { input: Input; session: Session }
 type Routes<R = Route> = R[] | ((_: RouteRequest) => R[])
 
 // Desk
+
+export const CASE_STATUS: {
+  ATTENDING: 'status_attending'
+  IDLE: 'status_idle'
+  RESOLVED: 'status_resolved'
+  WAITING: 'status_waiting'
+}
+
+export type CaseStatusType =
+  | typeof CASE_STATUS.ATTENDING
+  | typeof CASE_STATUS.IDLE
+  | typeof CASE_STATUS.RESOLVED
+  | typeof CASE_STATUS.WAITING
+
+export const CASE_RESOLUTION: {
+  BANNED: 'result_banned'
+  NOK: 'result_nok'
+  NOT_SOLVED: 'result_not_solved'
+  OK: 'result_ok'
+}
+
+export type CaseResolution =
+  | typeof CASE_RESOLUTION.BANNED
+  | typeof CASE_RESOLUTION.NOK
+  | typeof CASE_RESOLUTION.NOT_SOLVED
+  | typeof CASE_RESOLUTION.OK
 
 export class HandOffBuilder {
   constructor(session: Session)

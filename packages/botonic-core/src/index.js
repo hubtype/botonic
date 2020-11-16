@@ -46,3 +46,17 @@ export const INPUT = Object.freeze({
   WEBCHAT_SETTINGS: 'webchatsettings',
   WHATSAPP_TEMPLATE: 'whatsapptemplate',
 })
+
+export const CASE_STATUS = Object.freeze({
+  WAITING: 'status_waiting',
+  ATTENDING: 'status_attending',
+  IDLE: 'status_idle',
+  RESOLVED: 'status_resolved',
+})
+
+export const CASE_RESOLUTION = Object.freeze({
+  OK: 'result_ok',
+  NOK: 'result_nok',
+  NOT_SOLVED: 'result_not_solved',
+  BANNED: 'result_banned',
+})
