@@ -1,6 +1,6 @@
 ---
 id: webchat-enable
-title: Enabling and Disabling
+title: Enabling and Disabling Webchat Visibility
 ---
 
 You can allow the Hubtype Desk user to enable or disable its webchat whenever he wants. An API call to the backend will be done to determine if the webchat should be shown or not.

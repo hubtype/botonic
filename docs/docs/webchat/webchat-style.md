@@ -149,6 +149,44 @@ Take a look at the infographics below to know exactly what are the parts that ar
 
 **E.g.:** `<MyCustomCalendarMessage alt="2019 Calendar" />` would display a calendar to the final user and the text "2019 calendar" to the agent.
 
+
+It is also possible to **customize the border and pointer of a conversation window** (also called blobTick) as in this example:
+
+<img src="https://botonic-doc-static.netlify.com/images/concepts_wblobtick.png" width="200"/>
+
+
+- The border of the blobTick is displayed if the message border color is defined by using `borderColor`.
+- `blobTickStyle` can be used to set the position of the pointer.
+
+
+
+```javascript
+message: {
+ bot: {
+  style: {
+   border: '1px solid black',
+   borderColor: 'black',
+  },
+  blobTickStyle: {
+   alignItems: 'flex-end',
+  },
+ },
+},
+```
+
+- You can define a top or bottom padding element to set an exact position.
+
+```javascript
+blobTickStyle: {
+ alignItems: 'flex-end',
+ paddingBottom: '30px',
+},
+```
+
+**Note:** You cannot use `blobTick` for `blockInputs`.
+
+
+
 ## Custom Component
 
 <details>

@@ -20,10 +20,23 @@
       "concepts/humanhandoff",
       "concepts/i18n",
       "concepts/routes",
-      "concepts/webchat",
       "concepts/webviews",
-      "concepts/nlu"
+      "concepts/nlu",
+      "concepts/webchat"
     ],
+
+    "Custom Webchat": [
+      "webchat/webchat-api",
+      "webchat/webchat-enable",
+      "webchat/webchat-style",
+      "webchat/webchat-covercomponent",
+      "webchat/webchat-persistentmenu",
+      "webchat/webchat-markdown",
+      "webchat/webchat-blockinput",
+      "webchat/webchat-timestamp",
+      "webchat/webchat-updates"
+    ],
+
     "Components": [
       "components/components",
       "components/text",
@@ -39,18 +52,7 @@
       "components/webchatsettings",
       "components/whatsapp-template"
     ],
-    "Custom Webchat": [
-      "webchat/webchat-api",
-      "webchat/webchat-enable",
-      "webchat/webchat-style",
-      "webchat/webchat-covercomponent",
-      "webchat/webchat-persistentmenu",
-      "webchat/webchat-markdown",
-      "webchat/webchat-blockinput",
-      "webchat/webchat-timestamp",
-      "webchat/webchat-updates",
-      "webchat/webchat-window"
-    ],
+    
     "Testing": ["test/testing-your-components"]
   },
   "Plugins": {
