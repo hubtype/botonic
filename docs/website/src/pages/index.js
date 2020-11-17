@@ -1,6 +1,9 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable node/no-missing-import */
 import Head from '@docusaurus/Head'
+import AnnouncementBar from '@theme/AnnouncementBar'
+import LayoutHead from '@theme/LayoutHead'
+import LayoutProviders from '@theme/LayoutProviders'
 import React from 'react'
 
 import MessagingAppsLeft from '../../static/img/MessagingAppsLeft.svg'
@@ -12,14 +15,10 @@ import PageIllustration from '../components/pageIllustration'
 
 function Home() {
   return (
-    <>
-      <Head>
-        <title>
-          An open-source framework to build chatbots and conversational apps |
-          Botonic
-        </title>
-      </Head>
+    <LayoutProviders>
+      <LayoutHead title='An open-source framework to build chatbots and conversational apps | Botonic' />
       <Analytics />
+      <AnnouncementBar />
       <div className='flex flex-col min-h-screen overflow-hidden'>
         {/*  Site header */}
         <HomeHeader />
@@ -40,7 +39,7 @@ function Home() {
           <HomeHero />
         </main>
       </div>
-    </>
+    </LayoutProviders>
   )
 }
 
