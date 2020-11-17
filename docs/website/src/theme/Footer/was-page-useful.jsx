@@ -8,7 +8,7 @@ import { ALL_PATH_NAMES } from '../../constants'
 export const WasPageUseful = () => {
   return (
     <BrowserOnly
-      fallback={<div>The fallback content to display on prerendering</div>}
+      fallback={<div>Was this article useful?</div>}
     >
       {() => {
         const initialState = {
@@ -39,14 +39,6 @@ export const WasPageUseful = () => {
           window.analytics.track('Was page useful?', data)
         }
 
-        const shouldShowWasPageUseful = () => {
-          const url = new URL(location)
-          let pathName = url.pathname.split('/docs')[1]
-          pathName = pathName.endsWith('/') ? pathName : `${pathName}/`
-          return ALL_PATH_NAMES.includes(pathName)
-        }
-        // Don't render component in 404 not found pages
-        if (!shouldShowWasPageUseful()) return null
         return (
           <div
             style={{
@@ -63,7 +55,7 @@ export const WasPageUseful = () => {
                 alignItems: 'center',
               }}
             >
-              <h4>Was this page useful?</h4>
+              <h4>Was this article useful?</h4>
               <div
                 style={{
                   display: 'flex',
