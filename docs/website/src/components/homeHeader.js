@@ -127,6 +127,14 @@ function Header() {
                 </li>
                 <li>
                   <Link
+                    to={useBaseUrl('/examples')}
+                    className='flex text-gray-300 hover:text-gray-200 py-2'
+                  >
+                    Examples
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to='https://github.com/hubtype/botonic'
                     className='flex text-gray-300 hover:text-gray-200 py-2'
                   >

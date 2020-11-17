@@ -24,7 +24,7 @@ const BotonicExample = ({ title, rootId, runtimeOptions, src }) => {
       }
     }
     removejscssfile('styles.css', 'css') // Dev
-    removejscssfile('styles.d019ff52.css', 'css') // Prod
+    removejscssfile('styles.9c057c15.css', 'css') // Prod
     window.onload = () => {
       setTimeout(() => {
         // eslint-disable-next-line no-undef
