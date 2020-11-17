@@ -31,6 +31,11 @@ module.exports = {
       apiKey: process.env.ALGOLIA_API_KEY,
       indexName: process.env.INDEX_NAME,
     },
+    announcementBar: {
+      id: 'supportus',
+      content:
+        '⭐️ If you like Botonic, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/hubtype/botonic">GitHub</a>! ⭐️',
+    },
     navbar: {
       title: 'Botonic',
       logo: {
