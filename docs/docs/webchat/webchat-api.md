@@ -23,7 +23,7 @@ These methods are:
 
 ## Webchat Listeners
 
-In the same way, sometimes you would want to react to some of the events that take place when some actions occur in the Webchat. To react to the actions that occur in the Webchat, you can define the following event listeners:
+In the same way, sometimes you may want to react to some of the events that take place when some actions occur in the Webchat. To do so, you can define the following event listeners:
 
 **`Snippet to be embedded`**
 

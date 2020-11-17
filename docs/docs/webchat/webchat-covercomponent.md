@@ -7,12 +7,7 @@ title: Cover Component
 
 The Cover component enables the user to authenticate when starting a conversation. In that way, you can retrieve relevant information at the very beginning of the interaction, such as the user's name or e-mail address.
 
-<details>
-<summary>Example</summary>
-
-![](https://botonic-doc-static.netlify.com/images/webchat/covercomponent.png)
-
-</details>
+<img src="https://botonic-doc-static.netlify.com/images/webchat/covercomponent2.png" width="200" />
 
 **Note:** In this example, we are using `@material-ui/core` so make sure to install it by running `npm i @material-ui/core`.
 
@@ -130,18 +125,12 @@ export const webchat = {
 }
 ```
 
-<details>
-<summary>Example</summary>
-
-![](https://botonic-doc-static.netlify.com/images/webchat/covercomponent2.png)
-
-</details>
 
 When the user authenticates:
 
 - The information is stored in the user information (`session.user` and `user`).
 
-- The component is closing.
+- The component closes.
 
 - The **START** user message is displayed and the action with a **PAYLOAD** is called.
 

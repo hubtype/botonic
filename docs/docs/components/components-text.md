@@ -14,12 +14,8 @@ The `Text` component is the simplest and easiest way to talk to the user.
 
 ## Example
 
-<details>
-<summary>Output</summary>
+ <img src="https://botonic-doc-static.netlify.com/images/components_text.png" width="200" />
 
-![](https://botonic-doc-static.netlify.com/images/components_text.png)
-
-</details>
 
 ### Text
 

@@ -39,12 +39,10 @@ By default, webchat supports markdown syntax.
    }
    ```
 
-   <details>
-   <summary>Output example</summary>
+Example:
 
-   ![](https://botonic-doc-static.netlify.com/images/markdown/mdwebchat1.png)
-
-   </details>
+   <img src="https://botonic-doc-static.netlify.com/images/markdown/mdwebchat1.png" width="200" />
+   
 
 2. Customize the style in the `index.js` file.
 
@@ -72,18 +70,15 @@ By default, webchat supports markdown syntax.
      },
    ```
 
-   <details>
-   <summary>Output example</summary>
+Example:
 
-   ![](https://botonic-doc-static.netlify.com/images/markdown/mdwebchat2.png)
+ <img src="https://botonic-doc-static.netlify.com/images/markdown/mdwebchat2.png" width="200" />
 
-   </details>
 
 **Multiline Support**
 
-To use multiple line breaks, you must add
-`</br>` tags in your `js` file, or use a function which returns `</br>` tags in the string.
-You get an additional line break between "## Links Examples" and "---" separator.
+To use multiple line breaks, you must add `</br>` tags in your `js` file, or use a function which returns `</br>` tags in the string.
+In the example below, you get an additional line break between "## Links Examples" and "---" separator.
 
 ```javascript
 return (
@@ -103,9 +98,5 @@ return (
 )
 ```
 
-<details>
-<summary>Example</summary>
-
-![](https://botonic-doc-static.netlify.app/images/concepts_wmultiline.png)
-
-</details>
+Example:
+ <img src="https://botonic-doc-static.netlify.app/images/concepts_wmultiline.png" width="200" />

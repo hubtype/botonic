@@ -3,7 +3,7 @@ id: webchat-blockinput
 title: Block Inputs
 ---
 
-For security reasons or to avoid harmful or threatening messages, you can block these inputs:
+For security reasons or to avoid harmful or threatening messages, you can block inputs based on the exclusion rules:
 
 ```javascript
 blockInputs: [
