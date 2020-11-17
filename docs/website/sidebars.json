@@ -24,7 +24,6 @@
       "concepts/nlu",
       "concepts/webchat"
     ],
-
     "Custom Webchat": [
       "webchat/webchat-api",
       "webchat/webchat-enable",
@@ -36,7 +35,6 @@
       "webchat/webchat-timestamp",
       "webchat/webchat-updates"
     ],
-
     "Components": [
       "components/components",
       "components/text",
@@ -52,7 +50,6 @@
       "components/webchatsettings",
       "components/whatsapp-template"
     ],
-    
     "Testing": ["test/testing-your-components"]
   },
   "Plugins": {
