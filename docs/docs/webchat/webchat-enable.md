@@ -3,7 +3,7 @@ id: webchat-enable
 title: Enabling and Disabling Webchat Visibility
 ---
 
-You can allow the Hubtype Desk user to enable or disable its webchat whenever he wants. An API call to the backend will be done to determine if the webchat should be shown or not.
+You can allow the Hubtype Desk user to hide the webchat at any time. By calling an API to the backend, you can indicate whether the webchat must be shown.
 
 **Note:** This functionality is available from Botonic v0.13.0 and above.
 
@@ -13,7 +13,7 @@ You can allow the Hubtype Desk user to enable or disable its webchat whenever he
 export const webchat = { visibility: true }
 ```
 
-2. To be able to enable or disable the webchat, you can define the webchat view with a function that returns `true` (visible) or `false` (not visible).
+2. To control the webchat visibility, you can define the webchat view with a function that returns `true` (visible) or `false` (not visible).
 
 ```javascript
 Botonic.render(document.getElementById('root'), {

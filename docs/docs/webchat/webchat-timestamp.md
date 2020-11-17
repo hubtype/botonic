@@ -3,7 +3,7 @@ id: webchat-timestamp
 title: Timestamp
 ---
 
-Timestamps are used to add and customize the time and date (color, position, locale) below the chat message. They are disabled by default.
+Timestamps are used to display the time and date (with customizable color, position and locale) below the chat message. They are disabled by default. 
 
 To enable timestamps:
 

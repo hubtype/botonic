@@ -21,12 +21,9 @@ The `Location` component is used to display precise locations, for example if a 
 
 ## Example
 
-<details>
-<summary>Output</summary>
 
-![](https://botonic-doc-static.netlify.com/images/doc_location2.png)
+ <img src="https://botonic-doc-static.netlify.com/images/doc_location2.png" width="200" />
 
-</details>
 
 
 ```javascript

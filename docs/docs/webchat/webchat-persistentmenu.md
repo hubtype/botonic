@@ -12,26 +12,18 @@ persistentMenu: [
   { closeLabel: "Close Menu" },
 ],
 ```
+Example:
 
-<details>
-<summary>Example</summary>
+ <img src="https://botonic-doc-static.netlify.com/images/webchat_persistent_menu.png" width="200" />
 
-![](https://botonic-doc-static.netlify.com/images/webchat_persistent_menu.png)
-
-</details>
 
 The persistent menu accepts the same properties as Botonic Buttons, e.g.: `payload` and `url`.
 
-**If you want to darken the webchat in the background** and focus on the persistent menu only, you can use a Dark Background. It can be defined under the properties `theme.darkBackgroundMenu` or `theme.menu.darkBackground`.
+**To darken the webchat in the background** and focus on the persistent menu only, you can use a Dark Background. It can be defined under the properties `theme.darkBackgroundMenu` or `theme.menu.darkBackground`.
 
-<details>
-<summary>Example</summary>
 
-![](https://botonic-doc-static.netlify.com/images/webchat/darkbg.png)
+ <img src="https://botonic-doc-static.netlify.com/images/webchat/darkbg.png" width="200" />
 
-</details>
-
-This is how it should look like in your final webchat file.
 
 **src/webchat/index.js**
 
@@ -65,12 +57,10 @@ export const webchat = {
 
 You can customize the persistent menu button with the `theme.customMenuButton` or `theme.userInput.menuButton.custom` properties.
 
-<details>
-<summary>Example</summary>
+Example:
 
-![](https://botonic-doc-static.netlify.com/images/webchat/persmenu-button.png)
+ <img src="https://botonic-doc-static.netlify.com/images/webchat/persmenu-button.png" width="200" />
 
-</details>
 
 To do so:
 
@@ -104,7 +94,7 @@ export const CustomMenuButton = () => (
 
 ### Menu
 
-In order to have your entire persistent menu customized, first you will need to create a unitary button for each of the options. To do so, you can create a component like this one:
+In order to have your entire persistent menu customized, first you will need to create a button for each of the options. To do so, you can create a component like this one:
 
 **src/webchat/custom-persistent-menu-button.js**
 
@@ -204,10 +194,7 @@ export const CustomPersistentMenu = ({ onClick, options }) => {
 }
 ```
 
-<details>
-<summary>Example</summary>
+Example:
 
-![](https://botonic-doc-static.netlify.com/images/webchat/webchat_custommenu.png)
-
-</details>
+ <img src="https://botonic-doc-static.netlify.com/images/webchat/webchat_custommenu.png" width="200" />
 

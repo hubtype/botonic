@@ -3,7 +3,9 @@ id: webchat-updates
 title: Dynamic Updates
 ---
 
-The `WebchatSettings` component offers a dynamic bot interaction, where webchat properties can be updated on the run depending on the conversation.
+The `WebchatSettings` component offers a dynamic bot interaction, where webchat properties can be updated on the fly depending on the conversation.
+
+## Example 1
 
 Let's say you want to prepare the following behavior when starting the conversation:
 
@@ -12,7 +14,7 @@ Let's say you want to prepare the following behavior when starting the conversat
 - Attachements are enabled.
 - There is a `blockInputs`.
 
-1. Add the following content in your **action** file.
+Add the following content in your **action** file.
 
 ```javascript
 import React, { useContext } from 'react'
@@ -45,12 +47,11 @@ export default class extends React.Component {
 }
 ```
 
-<details>
-<summary>Example</summary>
 
-![](https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates1.png)
+ <img src="https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates1.png" width="200" />
 
-</details>
+
+## Example 2
 
 Now you want to get the following behavior during the conversation:
 
@@ -60,7 +61,7 @@ Now you want to get the following behavior during the conversation:
 - The `emojiPicker` is enabled.
 - A `persistentMenu` is dynamically added.
 
-2. Add the following content in your **action** file.
+Add the following content in your **action** file.
 
 ```javascript
 import React from 'react'
@@ -88,16 +89,13 @@ export default class extends React.Component {
 }
 ```
 
-<details>
-<summary>Example</summary>
 
-![](https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates2.png)
+ <img src="https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates2.png" width="200" />
+ <img src="https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates3.png" width="200" />
 
-![](https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates3.png)
+## Example 3
 
-</details>
-
-3. Finally, a simple action can be added just to change the color (as `WebchatSettings` only returns visual changes):
+Finally, a simple action can be added just to change the color (as `WebchatSettings` only returns visual changes):
 
 ```javascript
 export default class extends React.Component {
@@ -107,9 +105,5 @@ export default class extends React.Component {
 }
 ```
 
-<details>
-<summary>Example</summary>
 
-![](https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates4.png)
-
-</details>
+ <img src="https://botonic-doc-static.netlify.com/images/webchat/dynamic_updates4.png" width="200" />
