@@ -22,13 +22,18 @@ function HomeHero() {
             </h1>
             <div className='max-w-3xl mx-auto'>
               <p
-                className='text-xl text-gray-600 mb-8'
+                className='text-xl text-gray-600 mb-8 mx-auto max-w-2xl'
                 data-aos='zoom-y-out'
                 data-aos-delay='150'
               >
-                Botonic is an open-source, full-stack serverless framework to
-                create chatbots and modern chat-based applications for the web
-                and messaging apps.
+                Building modern applications on top of messaging apps like
+                Whatsapp or Messenger is much more than creating simple
+                text-based chatbots.
+                <br />
+                Botonic is a <b>full-stack serverless</b> framework that
+                combines the power of <b>React</b> and <b>Tensorflow.js</b> to
+                create amazing experiences at the intersection of text and
+                graphical interfaces.
               </p>
               <div
                 className='max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center'
