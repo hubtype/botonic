@@ -3,6 +3,8 @@
 import Head from '@docusaurus/Head'
 import React from 'react'
 
+import nluImage from '../../../static/img/examples/nlu.png'
+import bookingImage from '../../../static/img/examples/reservation.png'
 import Analytics from '../../components/analytics'
 import { ExamplesSection } from '../../components/examples'
 import HomeHeader from '../../components/homeHeader'
@@ -11,32 +13,28 @@ import PageIllustration from '../../components/pageIllustration'
 const cards = [
   {
     project: {
-      title: 'Title',
-      description: 'Description of this example',
+      title: 'Booking Platform',
+      description:
+        'Use custom messages and webviews in order to book a reservation in a hotel',
+      asset: bookingImage,
     },
     links: {
-      example: 'examples/example-1',
-      github: 'link to github',
+      github:
+        'https://github.com/hubtype/botonic-examples/tree/master/example-hotel-reservation',
+      example: '/examples/booking-platform',
     },
   },
   {
     project: {
-      title: 'Title',
-      description: 'Description of this example',
+      title: 'NLU Assistant',
+      description:
+        'Train your own NLU model in order to understand your user intents',
+      asset: nluImage,
     },
     links: {
-      example: 'examples/example-1',
-      github: 'link to github',
-    },
-  },
-  {
-    project: {
-      title: 'Title',
-      description: 'Description of this example',
-    },
-    links: {
-      example: 'link to example',
-      github: 'link to github',
+      github:
+        'https://github.com/hubtype/botonic-examples/tree/master/example-nlu',
+      example: '/examples/nlu-assistant',
     },
   },
 ]
@@ -46,10 +44,6 @@ const Examples = () => {
     <>
       <Head>
         <title>Botonic Examples</title>
-        <script
-          type='text/javascript'
-          src='https://test-website-3189778e-d66c-42a2-884d-7f5b8d3c078a.netlify.com/webchat.botonic.js'
-        ></script>
       </Head>
       <Analytics />
       <div className='flex flex-col min-h-screen overflow-hidden'>
