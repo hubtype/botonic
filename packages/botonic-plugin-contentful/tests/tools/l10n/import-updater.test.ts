@@ -1,7 +1,7 @@
 import { anything, instance, mock, when } from 'ts-mockito'
 
 import * as cms from '../../../src/cms'
-import { ContentId, ContentType } from '../../../src/cms'
+import { AssetId, ContentId, ContentType } from '../../../src/cms'
 import {
   ContentFieldType,
   ManageCms,
@@ -108,12 +108,12 @@ test('TEST: ContentUpdater', async () => {
   class MockCms implements ManageCms {
     copyAssetFile(
       context: ManageContext,
-      assetId: string,
+      assetId: AssetId,
       fromLocale: string
     ): Promise<void> {
       fail("shouldn't be called")
     }
-    removeAssetFile(context: ManageContext, assetId: string): Promise<void> {
+    removeAssetFile(context: ManageContext, assetId: AssetId): Promise<void> {
       fail("shouldn't be called")
     }
     numCalls = 0

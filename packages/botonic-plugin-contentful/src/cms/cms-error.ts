@@ -109,7 +109,7 @@ export class ErrorReportingCMS implements CMS {
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
     return this.cms
       .contentsWithKeywords(context)
-      .catch(this.handleError('contentsWithKeywords', context))
+      .catch(this.handleError('contentsWithKeywords', {}, context))
   }
 
   topContents<T extends TopContent>(
@@ -120,7 +120,7 @@ export class ErrorReportingCMS implements CMS {
   ): Promise<T[]> {
     return this.cms
       .topContents<T>(model, context, filter, paging)
-      .catch(this.handleError('topContents', context))
+      .catch(this.handleError('topContents', { model }, context))
   }
 
   content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
@@ -130,17 +130,19 @@ export class ErrorReportingCMS implements CMS {
   }
 
   contents<T extends Content>(
-    contentType: ContentType,
+    model: ContentType,
     context?: Context,
     paging?: PagingOptions
   ): Promise<T[]> {
     return this.cms
-      .contents<T>(contentType, context, paging)
-      .catch(this.handleError('contents', context))
+      .contents<T>(model, context, paging)
+      .catch(this.handleError('contents', { model }, context))
   }
 
   assets(context?: Context): Promise<Asset[]> {
-    return this.cms.assets(context).catch(this.handleError('assets', context))
+    return this.cms
+      .assets(context)
+      .catch(this.handleError('assets', {}, context))
   }
 
   schedule(id: string, context?: Context): Promise<ScheduleContent> {
@@ -178,6 +180,7 @@ export class ErrorReportingCMS implements CMS {
         reason,
         resourceId.resourceType,
         resourceId,
+        {},
         context
       )
     }
@@ -185,10 +188,11 @@ export class ErrorReportingCMS implements CMS {
 
   private handleError(
     method: string,
+    args: Record<string, any>,
     context: Context | undefined
   ): (reason: any) => never {
     return (reason: any) => {
-      throw this.exceptionWrapper.wrap(reason, method, undefined, context)
+      throw this.exceptionWrapper.wrap(reason, method, undefined, args, context)
     }
   }
 }
@@ -206,8 +210,9 @@ export class ContentfulExceptionWrapper {
   wrap(
     contentfulError: any,
     method: string,
-    resourceId?: ResourceId,
-    context?: Context
+    resourceId: ResourceId | undefined,
+    args: Record<string, any>,
+    context: Context | undefined
   ): CmsException {
     let content = ''
     if (context?.locale) {
@@ -215,6 +220,9 @@ export class ContentfulExceptionWrapper {
     }
     if (resourceId) {
       content += ` on '${resourceId.resourceType}' with id '${resourceId.id}'`
+    }
+    if (Object.keys(args).length) {
+      content += ` with args '${JSON.stringify(args)}'`
     }
     const msg = `Error calling ${this.wrappee}.${method}${content}.`
     const exception = new CmsException(msg, contentfulError, resourceId)

@@ -2,7 +2,7 @@ import { ErrorReportingCMS } from '../../cms'
 import { Contentful } from '../../contentful/cms-contentful'
 import { ContentFieldType } from '../../manage-cms'
 import { I18nField } from '../../manage-cms/fields'
-import { Locale } from '../../nlp'
+import { checkLocale, Locale } from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
 import { CsvExport, skipEmptyStrings } from './csv-export'
 

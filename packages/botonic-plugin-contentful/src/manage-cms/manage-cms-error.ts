@@ -1,5 +1,10 @@
 import * as cms from '../cms'
-import { ContentfulExceptionWrapper, ContentId, ResourceId } from '../cms'
+import {
+  AssetId,
+  ContentfulExceptionWrapper,
+  ContentId,
+  ResourceId,
+} from '../cms'
 import * as nlp from '../nlp'
 import { Locale } from '../nlp'
 import { ContentFieldType } from './fields'
@@ -18,7 +23,7 @@ export class ErrorReportingManageCms implements ManageCms {
   ): Promise<FieldsValues> {
     return this.manageCms
       .updateFields(context, contentId, fields)
-      .catch(this.handleError('updateFields', context, contentId))
+      .catch(this.handleError('updateFields', context, contentId, fields))
   }
 
   copyField<T extends cms.Content>(
@@ -30,38 +35,53 @@ export class ErrorReportingManageCms implements ManageCms {
   ): Promise<void> {
     return this.manageCms
       .copyField(context, contentId, field, fromLocale, onlyIfTargetEmpty)
-      .catch(this.handleError('copyField', context, contentId))
+      .catch(
+        this.handleError('copyField', context, contentId, {
+          field,
+          fromLocale,
+          onlyIfTargetEmpty,
+        })
+      )
   }
 
   private handleError(
     method: string,
-    context?: ManageContext,
-    resourceId?: ResourceId
+    context: ManageContext | undefined,
+    resourceId: ResourceId | undefined,
+    args: Record<string, any>
   ): (reason: any) => never {
     return (reason: any) => {
-      throw this.exceptionWrapper.wrap(reason, method, resourceId, context)
+      throw this.exceptionWrapper.wrap(
+        reason,
+        method,
+        resourceId,
+        args,
+        context
+      )
     }
   }
 
   getDefaultLocale(): Promise<Locale> {
     return this.manageCms
       .getDefaultLocale()
-      .catch(this.handleError('defaultLocale'))
+      .catch(this.handleError('defaultLocale', undefined, undefined, {}))
   }
 
   copyAssetFile(
     context: ManageContext,
-    assetId: string,
+    assetId: AssetId,
     fromLocale: Locale
   ): Promise<void> {
     return this.manageCms
       .copyAssetFile(context, assetId, fromLocale)
-      .catch(this.handleError('copyAssetFile'))
+      .catch(
+        this.handleError('copyAssetFile', context, assetId, { fromLocale })
+      )
   }
 
-  removeAssetFile(context: ManageContext, assetId: string): Promise<void> {
+  removeAssetFile(context: ManageContext, assetId: AssetId): Promise<void> {
     return this.manageCms
       .removeAssetFile(context, assetId)
-      .catch(this.handleError('removeAssetFile'))
+      .catch(this.handleError('removeAssetFile', context, assetId, {}))
   }
 }

@@ -8,7 +8,7 @@ import { Entry } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
 
-import { CmsException, ContentId } from '../../cms'
+import { AssetId, CmsException, ContentId } from '../../cms'
 import { ResourceNotFoundCmsException } from '../../cms/exceptions'
 import {
   CONTENT_FIELDS,
@@ -96,29 +96,31 @@ export class ManageContentful implements ManageCms {
 
   async removeAssetFile(
     context: ManageContext,
-    assetId: string
+    assetId: AssetId
   ): Promise<void> {
     const environment = await this.getEnvironment()
-    const asset = await environment.getAsset(assetId)
+    const asset = await environment.getAsset(assetId.id)
     delete asset.fields.file[context.locale]
     await this.writeAsset({ ...context, allowOverwrites: true }, asset)
   }
 
   async copyAssetFile(
     context: ManageContext,
-    assetId: string,
+    assetId: AssetId,
     fromLocale: nlp.Locale
   ): Promise<void> {
     const environment = await this.getEnvironment()
-    const oldAsset = await environment.getAsset(assetId)
+    const oldAsset = await environment.getAsset(assetId.id)
     if (!context.allowOverwrites && oldAsset.fields.file[context.locale]) {
       throw new Error(
-        `Cannot overwrite asset '${assetId}' because it's not empty and ManageContext.allowOverwrites is false`
+        `Cannot overwrite asset '${assetId.toString()}' because it's not empty and ManageContext.allowOverwrites is false`
       )
     }
     const fromFile = oldAsset.fields.file[fromLocale]
     if (!fromFile) {
-      throw Error(`Asset '${assetId}' has no file for locale ${fromLocale}`)
+      throw Error(
+        `Asset '${assetId.toString()}' has no file for locale ${fromLocale}`
+      )
     }
     oldAsset.fields.file[context.locale] = fromFile
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
