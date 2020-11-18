@@ -179,6 +179,21 @@ declare module '@nlpjs/lang-de/src/stemmer-de' {
   class StemmerDe extends BaseStemmer {}
   export = StemmerDe
 }
+
+declare module '@nlpjs/lang-ro/src/tokenizer-ro' {
+  import { Tokenizer } from '@nlpjs/core/src'
+
+  class TokenizerRo extends Tokenizer {}
+  export = TokenizerRo
+}
+
+declare module '@nlpjs/lang-ro/src/stemmer-ro' {
+  import { BaseStemmer } from '@nlpjs/core/src'
+
+  class StemmerRo extends BaseStemmer {}
+  export = StemmerRo
+}
+
 declare module 'sort-stream' {
   function sort(func: (a: any, b: any) => number): any
   export = sort

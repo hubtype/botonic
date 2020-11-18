@@ -6,6 +6,7 @@ import TokenizerFr from '@nlpjs/lang-fr/src/tokenizer-fr'
 import TokenizerIt from '@nlpjs/lang-it/src/tokenizer-it'
 import TokenizerPl from '@nlpjs/lang-pl/src/tokenizer-pl'
 import TokenizerPt from '@nlpjs/lang-pt/src/tokenizer-pt'
+import TokenizerRo from '@nlpjs/lang-ro/src/tokenizer-ro'
 import TokenizerRu from '@nlpjs/lang-ru/src/tokenizer-ru'
 import TokenizerTr from '@nlpjs/lang-tr/src/tokenizer-tr'
 
@@ -19,6 +20,7 @@ import { frDefaultStopWords } from './stopwords/stopwords-fr'
 import { itDefaultStopWords } from './stopwords/stopwords-it'
 import { plDefaultStopWords } from './stopwords/stopwords-pl'
 import { ptDefaultStopWords } from './stopwords/stopwords-pt'
+import { roDefaultStopWords } from './stopwords/stopwords-ro'
 import { ruDefaultStopWords } from './stopwords/stopwords-ru'
 import { trDefaultStopWords } from './stopwords/stopwords-tr'
 
@@ -90,6 +92,7 @@ const tokenizers: { [locale: string]: Tokenizer } = {
   [locales.ITALIAN]: new TokenizerIt(),
   [locales.FRENCH]: new TokenizerFr(),
   [locales.GERMAN]: new TokenizerDe(),
+  [locales.ROMANIAN]: new TokenizerRo(),
 }
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
@@ -117,4 +120,5 @@ export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   it: itDefaultStopWords,
   fr: frDefaultStopWords,
   de: deDefaultStopWords,
+  ro: roDefaultStopWords,
 }
