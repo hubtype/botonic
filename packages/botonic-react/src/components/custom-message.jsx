@@ -2,6 +2,7 @@ import { INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
 import React from 'react'
 
+import { SENDERS } from '../constants'
 import { createErrorBoundary } from '../util/error-boundary'
 import { warnDeprecatedProps } from '../util/logs'
 import { mapObjectNonBooleanValues } from '../util/react'
@@ -23,6 +24,7 @@ export const customMessage = ({
 }) => {
   const CustomMessage = props => {
     warnDeprecatedProps(defaultProps, 'customMessage:')
+    if (defaultProps.from === SENDERS.user) defaultProps.ack = 1
     return (
       <Message
         {...merge(mapObjectNonBooleanValues(defaultProps), props)}
