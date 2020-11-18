@@ -135,7 +135,7 @@ describe('TEST: useWebchat', () => {
       result.current.updateTheme(theme)
     })
     expect(result.current.webchatState.theme).toStrictEqual(theme)
-    expect(result.current.webchatState.themeUpdates).toStrictEqual(undefined)
+    expect(result.current.webchatState.themeUpdates).toStrictEqual({})
   })
 
   it('updateTheme (adding themeUpdates): assign theme to webchatState.theme', () => {

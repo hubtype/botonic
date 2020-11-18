@@ -353,8 +353,8 @@ export const Webchat = forwardRef((props, ref) => {
   useTyping({ webchatState, updateTyping, updateMessage })
 
   useEffect(() => {
-    updateTheme(merge(props.theme, theme))
-  }, [props.theme])
+    updateTheme(merge(props.theme, theme, webchatState.themeUpdates))
+  }, [props.theme, webchatState.themeUpdates])
 
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)

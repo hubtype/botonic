@@ -49,6 +49,7 @@ export const webchatInitialState = {
       fontFamily: WEBCHAT.DEFAULTS.FONT_FAMILY,
     },
   },
+  themeUpdates: {},
   error: {},
   devSettings: {},
   isWebchatOpen: false,
