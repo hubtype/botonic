@@ -256,7 +256,6 @@ export class ContentfulInfo implements CmsInfo {
         if (isOfType(m.sys.id, ContentType)) {
           return m.sys.id
         }
-        console.log(`Unexpected content types '${m.sys.id}'`)
         return undefined
       })
       .filter(m => !!m) as ContentType[]

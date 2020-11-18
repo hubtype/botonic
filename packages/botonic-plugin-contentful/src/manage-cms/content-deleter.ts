@@ -22,8 +22,12 @@ export class ContentDeleter {
     readonly context: ManageContext
   ) {}
 
-  async deleteContent(contentId: TopContentId): Promise<void> {
-    console.log(`Deleting ${contentId.toString()}`)
+  async deleteContent(contentId: TopContentId, name?: string): Promise<void> {
+    console.log(
+      `Deleting fields and references to ${contentId.toString()} ${String(
+        name
+      )} for locale ${this.context.locale}`
+    )
     await this.deleteFields(contentId)
     await this.deleteReferencesTo(contentId)
   }
@@ -59,7 +63,7 @@ export class ContentDeleter {
           .length
       ) {
         console.error(
-          `${referenceStr} cannot be updated because a buttons contains a payload.` +
+          `${referenceStr} cannot be updated because a button contains a payload.` +
             ' Remove it manually'
         )
         continue
