@@ -28,8 +28,10 @@ const BotonicExample = ({ title, rootId, runtimeOptions, src }) => {
     window.onload = () => {
       setTimeout(() => {
         // eslint-disable-next-line no-undef
-        Botonic.render(document.getElementById(rootId), runtimeOptions)
-      }, 0)
+        Botonic &&
+          // eslint-disable-next-line no-undef
+          Botonic.render(document.getElementById(rootId), runtimeOptions)
+      }, 500)
     }
   }
 
