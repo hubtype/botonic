@@ -1,5 +1,7 @@
+export const isBrowser = typeof window !== 'undefined'
+
 export const removejscssfile = (filename, filetype) => {
-  if (typeof window !== 'undefined') {
+  if (isBrowser) {
     const targetelement =
       filetype == 'js' ? 'script' : filetype == 'css' ? 'link' : 'none' //determine element type to create nodelist from
     const targetattr =

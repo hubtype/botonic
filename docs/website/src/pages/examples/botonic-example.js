@@ -4,10 +4,10 @@ import Head from '@docusaurus/Head'
 import React from 'react'
 
 import Analytics from '../../components/analytics'
-import { removejscssfile } from '../../util/dom'
+import { isBrowser, removejscssfile } from '../../util/dom'
 
 const BotonicExample = ({ title, rootId, runtimeOptions, src }) => {
-  if (typeof window !== 'undefined') {
+  if (isBrowser) {
     removejscssfile('styles.css', 'css') // Dev
     removejscssfile('styles.9c057c15.css', 'css') // Prod
     window.onload = () => {

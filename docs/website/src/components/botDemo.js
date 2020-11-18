@@ -1,7 +1,9 @@
 import React from 'react'
 
+import { isBrowser } from '../util/dom'
+
 let app
-if (typeof window !== 'undefined') {
+if (isBrowser) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { WebchatApp } = require('@botonic/react')
 
@@ -46,7 +48,7 @@ if (typeof window !== 'undefined') {
 }
 
 const BotDemo = React.memo(({ onMessageSent }) => {
-  if (typeof window !== 'undefined') {
+  if (isBrowser) {
     return app.getComponent({
       onMessage: (app, message) => {
         console.log(message)

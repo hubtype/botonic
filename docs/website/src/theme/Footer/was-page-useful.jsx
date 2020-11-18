@@ -3,13 +3,11 @@ import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment'
 import Button from '@material-ui/core/Button'
 import React, { useEffect, useState } from 'react'
 
-import { ALL_PATH_NAMES } from '../../constants'
+import { isBrowser } from '../../util/dom'
 
 export const WasPageUseful = () => {
   return (
-    <BrowserOnly
-      fallback={<div>Was this article useful?</div>}
-    >
+    <BrowserOnly fallback={<div>Was this article useful?</div>}>
       {() => {
         const initialState = {
           disabled: false,
@@ -30,7 +28,7 @@ export const WasPageUseful = () => {
         }, [location])
 
         const sendWasPageUseful = wasUseful => {
-          if (typeof window === 'undefined') return
+          if (isBrowser) return
           const data = {
             category: 'Was page useful?',
             label: `${location}`,
