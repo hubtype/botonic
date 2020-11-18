@@ -152,7 +152,10 @@ export class ImportContentUpdater {
 
   async update(content: ContentToImport): Promise<void> {
     if (this.mustBeDeleted(content)) {
-      await this.deleter.deleteContent(content.contentId as TopContentId)
+      await this.deleter.deleteContent(
+        content.contentId as TopContentId,
+        content.name
+      )
     } else {
       await this.updateFields(content)
     }
