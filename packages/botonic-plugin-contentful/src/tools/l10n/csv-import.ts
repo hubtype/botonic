@@ -106,7 +106,6 @@ export class CsvImport {
         console.warn(
           'To remove the content for a locale, remove the keywords and any link to it'
         )
-        continue
       }
       if (this.options.nameFilter && !this.options.nameFilter(record.Code)) {
         continue

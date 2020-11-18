@@ -135,9 +135,9 @@ export class ImportRecordReducer {
 }
 
 /**
- * - If ContentToImport only has shortText, it'll assume that the content
- * needs to be removed for this locale. Its fields will be deleted and all
- * buttons which target it will be removed.
+ * - If ContentToImport only has shortText and its value is empty,
+ * it'll assume that the content needs to be removed for this locale.
+ * Its fields will be deleted and all buttons which target it will be removed.
  * - Otherwise, the specified fields will be overwritten
  */
 export class ImportContentUpdater {
@@ -227,7 +227,8 @@ export class ImportContentUpdater {
     return (
       isOfType(content.contentId.model, MessageContentType) &&
       Object.keys(content.fields).length === 1 &&
-      ContentFieldType.SHORT_TEXT in content.fields
+      ContentFieldType.SHORT_TEXT in content.fields &&
+      content.fields[ContentFieldType.SHORT_TEXT].trim() === ''
     )
   }
 }
