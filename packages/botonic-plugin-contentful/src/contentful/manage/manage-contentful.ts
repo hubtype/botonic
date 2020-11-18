@@ -69,7 +69,7 @@ export class ManageContentful implements ManageCms {
       try {
         return await environment.getEntry(contentId.id)
       } catch (e) {
-        throw new ResourceNotFoundCmsException(e, contentId)
+        throw new ResourceNotFoundCmsException(contentId, e)
       }
     }
     const oldEntry = await getEntry()

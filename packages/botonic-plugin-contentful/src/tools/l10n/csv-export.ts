@@ -5,6 +5,7 @@ import * as stream from 'stream'
 import { promisify } from 'util'
 
 import { BOTONIC_CONTENT_TYPES, ContentType, Text } from '../../cms'
+import { ResourceTypeNotFoundCmsException } from '../../cms/exceptions'
 import {
   Button,
   CMS,
@@ -74,18 +75,29 @@ export class CsvExport {
   async *generate(cms: CMS, from: Locale): AsyncGenerator<CsvLine> {
     for (const model of [...BOTONIC_CONTENT_TYPES, ContentType.URL]) {
       console.log(`Exporting contents of type ${model}`)
-      const contents = await cms.contents(model, {
-        locale: from,
-        ignoreFallbackLocale: true,
-      })
-      for (const content of contents) {
-        if (this.options.nameFilter && !this.options.nameFilter(content.name)) {
-          continue
+      try {
+        const contents = await cms.contents(model, {
+          locale: from,
+          ignoreFallbackLocale: true,
+        })
+        for (const content of contents) {
+          if (
+            this.options.nameFilter &&
+            !this.options.nameFilter(content.name)
+          ) {
+            continue
+          }
+          console.log('Exporting content', content.name.trim() || content.id)
+          for (const field of this.toFields.getCsvLines(content)) {
+            const TO_COLUMN = ''
+            yield [...field, TO_COLUMN]
+          }
         }
-        console.log('Exporting content', content.name.trim() || content.id)
-        for (const field of this.toFields.getCsvLines(content)) {
-          const TO_COLUMN = ''
-          yield [...field, TO_COLUMN]
+      } catch (e) {
+        if (e instanceof ResourceTypeNotFoundCmsException) {
+          console.error(
+            `The space has no model '${e.resourceType}'. Skipping it.`
+          )
         }
       }
     }

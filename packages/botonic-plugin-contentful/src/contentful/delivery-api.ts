@@ -12,6 +12,7 @@ import {
 } from '../cms'
 import { ContentfulOptions } from '../plugin'
 import { DateRangeDelivery } from './contents/date-range'
+import { convertContentfulException, DateRangeFields } from './delivery-utils'
 import { ReducedClientApi } from './delivery/client-api'
 import { DateRangeFields } from './delivery-utils'
 import {
@@ -77,7 +78,11 @@ export class AdaptorDeliveryApi implements DeliveryApi {
     context: Context,
     query: any = {}
   ): Promise<contentful.EntryCollection<T>> {
-    return this.client.getEntries<T>(this.queryFromContext(context, query))
+    try {
+      return this.client.getEntries<T>(this.queryFromContext(context, query))
+    } catch (e) {
+      throw convertContentfulException(e, query)
+    }
   }
 
   async getContentType(id: string): Promise<contentful.ContentType> {

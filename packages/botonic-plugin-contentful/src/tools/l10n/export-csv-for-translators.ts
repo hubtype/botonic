@@ -48,6 +48,7 @@ async function writeCsvForTranslators(
   fileName: string,
   targetLocaleOrCountry: Locale | undefined
 ) {
+  checkLocale(locale)
   const cms = new ErrorReportingCMS(new Contentful(options))
   const postProcess = targetLocaleOrCountry
     ? new PostProcessor(targetLocaleOrCountry)

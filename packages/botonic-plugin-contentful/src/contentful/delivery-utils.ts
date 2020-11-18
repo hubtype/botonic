@@ -9,6 +9,7 @@ import {
   FollowUp,
   SearchableBy,
 } from '../cms'
+import { ResourceTypeNotFoundCmsException } from '../cms/exceptions'
 import { ContentfulOptions } from '../plugin'
 import * as time from '../time'
 import {
@@ -127,4 +128,19 @@ export function createContentfulClientApi(
 export interface DateRangeFields extends CommonEntryFields {
   from: string
   to: string
+}
+
+export function convertContentfulException(e: any, query: any): any {
+  const errors = e?.details?.errors
+  if (
+    Array.isArray(errors) &&
+    errors.length &&
+    errors[0].name === 'unknownContentType'
+  ) {
+    return new ResourceTypeNotFoundCmsException(
+      query['content_type'] || 'not set',
+      e
+    )
+  }
+  return e
 }

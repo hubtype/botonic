@@ -59,6 +59,18 @@ export const CONTENT_TYPES = [
   ...Object.values(SubContentType),
 ]
 
+export enum AssetType {
+  AUDIO = 'image',
+  IMAGE = 'image',
+  VIDEO = 'video',
+  DOCUMENT = 'document',
+  SPREADSHEET = 'spreadsheet',
+  OTHER = 'other',
+}
+
+export type ResourceType = ContentType | AssetType
+export const ResourceType = { ...ContentType, ...AssetType }
+
 export type BotonicContentType = MessageContentType | SubContentType
 export const BotonicContentType = { ...MessageContentType, ...SubContentType }
 export const BOTONIC_CONTENT_TYPES = [

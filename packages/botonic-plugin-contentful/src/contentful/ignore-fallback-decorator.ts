@@ -3,6 +3,7 @@ import * as contentful from 'contentful'
 
 import { Context } from '../cms'
 import { DeliveryApi } from './delivery-api'
+import { convertContentfulException } from './delivery-utils'
 import {
   ContentfulVisitor,
   I18nEntryTraverser,
@@ -27,11 +28,18 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
     if (!context.ignoreFallbackLocale) {
       return this.api.getEntries(context, query)
     }
-    let entries = await this.api.getEntries<T>(this.i18nContext(context), query)
+    try {
+      let entries = await this.api.getEntries<T>(
+        this.i18nContext(context),
+        query
+      )
 
-    entries = { ...entries }
-    entries.items = await this.traverseEntries(context, entries.items)
-    return entries
+      entries = { ...entries }
+      entries.items = await this.traverseEntries(context, entries.items)
+      return entries
+    } catch (e) {
+      throw convertContentfulException(e, query)
+    }
   }
 
   async getEntry<T>(
