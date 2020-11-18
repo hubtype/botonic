@@ -2,6 +2,7 @@ import { MultiError } from 'async-parallel'
 
 import { isError } from '../util/exceptions'
 import { ResourceId } from './callback'
+import { ResourceType } from './cms'
 
 export class CmsException extends Error {
   /**
@@ -46,8 +47,20 @@ export class CmsException extends Error {
 }
 
 export class ResourceNotFoundCmsException extends CmsException {
-  constructor(readonly reason?: any, readonly resourceId?: ResourceId) {
+  constructor(
+    readonly resourceId?: ResourceId,
+    readonly reason?: any | undefined
+  ) {
     super('CMS resource not found', reason, resourceId)
+  }
+}
+
+export class ResourceTypeNotFoundCmsException extends CmsException {
+  constructor(
+    readonly resourceType: ResourceType,
+    readonly reason: any | undefined
+  ) {
+    super(`CMS resource type '${resourceType}' not found`, reason, undefined)
   }
 }
 
