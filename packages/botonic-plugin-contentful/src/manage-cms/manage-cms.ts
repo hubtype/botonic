@@ -1,4 +1,4 @@
-import { ContentId } from '../cms'
+import { AssetId, ContentId } from '../cms'
 import * as nlp from '../nlp'
 import { Locale } from '../nlp'
 import { ContentFieldType } from './fields'
@@ -35,9 +35,9 @@ export interface ManageCms {
 
   copyAssetFile(
     context: ManageContext,
-    assetId: string,
+    assetId: AssetId,
     fromLocale: nlp.Locale
   ): Promise<void>
 
-  removeAssetFile(context: ManageContext, assetId: string): Promise<void>
+  removeAssetFile(context: ManageContext, assetId: AssetId): Promise<void>
 }

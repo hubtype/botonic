@@ -131,7 +131,7 @@ export interface CMS {
    * an error will be displayed but the result will be returned.
    */
   contents<T extends Content>(
-    contentType: ContentType,
+    model: ContentType,
     context?: Context,
     paging?: PagingOptions
   ): Promise<T[]>

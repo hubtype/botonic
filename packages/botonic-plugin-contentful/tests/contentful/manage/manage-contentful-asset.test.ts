@@ -1,3 +1,4 @@
+import { AssetId } from '../../../src/cms'
 import { ManageContext } from '../../../src/manage-cms'
 import { ENGLISH, SPANISH } from '../../../src/nlp'
 import { TEST_ASSET_ID } from '../contents/asset.test'
@@ -12,13 +13,13 @@ describe('ManageContentful assets', () => {
 
   test('TEST: copyAssetFile', async () => {
     const sut = testManageContentful()
-
+    const id = new AssetId(TEST_ASSET_ID, undefined)
     try {
       // ACT
-      await sut.copyAssetFile(ctxt({ locale: SPANISH }), TEST_ASSET_ID, ENGLISH)
+      await sut.copyAssetFile(ctxt({ locale: SPANISH }), id, ENGLISH)
     } finally {
       // RESTORE
-      await sut.removeAssetFile(ctxt({ locale: SPANISH }), TEST_ASSET_ID)
+      await sut.removeAssetFile(ctxt({ locale: SPANISH }), id)
     }
   })
 })

@@ -1,5 +1,5 @@
 import * as cms from '../../cms'
-import { CMS, ContentId, ContentType } from '../../cms'
+import { AssetId, CMS, ContentId, ContentType } from '../../cms'
 import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
 import { asyncEach } from '../../util/async'
 
@@ -45,7 +45,7 @@ export class ReferenceFieldDuplicator {
     for (const a of assets) {
       await this.manageCms.copyAssetFile(
         this.manageContext,
-        a.id,
+        new AssetId(a.id, undefined),
         defaultLocale
       )
     }
