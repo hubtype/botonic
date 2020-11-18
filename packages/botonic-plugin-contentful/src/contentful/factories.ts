@@ -1,8 +1,9 @@
 import { CMS, ErrorReportingCMS } from '../cms'
+import { CmsInfo } from '../cms/cms-info'
 import { ManageCms } from '../manage-cms'
 import { ErrorReportingManageCms } from '../manage-cms/manage-cms-error'
 import { ContentfulOptions } from '../plugin'
-import { Contentful } from './cms-contentful'
+import { Contentful, ContentfulInfo } from './cms-contentful'
 import { ManageContentful } from './manage'
 
 export function createCms(
@@ -25,4 +26,8 @@ export function createManageCms(
     return contentful
   }
   return new ErrorReportingManageCms(contentful)
+}
+
+export function createCmsInfo(options: ContentfulOptions): CmsInfo {
+  return new ContentfulInfo(options)
 }

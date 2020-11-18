@@ -73,6 +73,7 @@ export class CsvExport {
   }
 
   async *generate(cms: CMS, from: Locale): AsyncGenerator<CsvLine> {
+    // TODO use CmsInfo to restrict the types
     for (const model of [...BOTONIC_CONTENT_TYPES, ContentType.URL]) {
       console.log(`Exporting contents of type ${model}`)
       try {

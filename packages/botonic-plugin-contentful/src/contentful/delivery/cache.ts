@@ -1,5 +1,5 @@
 import * as contentful from 'contentful'
-import { ContentType, Entry } from 'contentful'
+import { ContentfulCollection, ContentType, Entry } from 'contentful'
 import memoize from 'memoizee'
 
 import { ReducedClientApi } from './client-api'
@@ -10,6 +10,7 @@ export class CachedClientApi implements ReducedClientApi {
   readonly getEntries: <T>(query: any) => Promise<contentful.EntryCollection<T>>
   readonly getEntry: <T>(id: string, query?: any) => Promise<Entry<T>>
   readonly getContentType: (id: string) => Promise<ContentType>
+  readonly getContentTypes: () => Promise<ContentfulCollection<ContentType>>
 
   constructor(readonly client: ReducedClientApi, readonly cacheTtlMs = 10000) {
     const options = (length: number) =>
@@ -29,5 +30,6 @@ export class CachedClientApi implements ReducedClientApi {
     this.getEntries = memoize(client.getEntries, options(1))
     this.getEntry = memoize(client.getEntry, options(2))
     this.getContentType = memoize(client.getContentType, options(1))
+    this.getContentTypes = memoize(client.getContentTypes, options(0))
   }
 }

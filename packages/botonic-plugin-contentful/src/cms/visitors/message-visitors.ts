@@ -5,8 +5,10 @@ import {
   ContentId,
   ContentType,
   Context,
-  MESSAGE_CONTENT_TYPES,
 } from '../'
+import { EXPORTABLE_CONTENT_TYPES } from '../../tools/l10n/fields'
+import { andArrays } from '../../util/arrays'
+import { CmsInfo } from '../cms-info'
 import { Button, Carousel, MessageContent, StartUp, Text } from '../contents'
 
 export function getButtons(content: MessageContent): Button[] {
@@ -26,7 +28,6 @@ export function getButtons(content: MessageContent): Button[] {
 export class MessageContentTraverser {
   /**
    * It does not take care of circular loops
-   * @param depth
    */
   constructor(
     readonly cms: CMS,
@@ -84,6 +85,7 @@ export class MessageContentInverseTraverser {
 
   constructor(
     readonly cms: CMS,
+    readonly info: CmsInfo,
     readonly context: Context,
     readonly depth = 1
   ) {
@@ -98,13 +100,17 @@ export class MessageContentInverseTraverser {
     return this.referencesTo.size > 0
   }
 
+  async contentTypes(): Promise<ContentType[]> {
+    return andArrays(await this.info.contentTypes(), EXPORTABLE_CONTENT_TYPES)
+  }
+
   async load(fromContents?: MessageContent[]) {
     fromContents =
       fromContents ||
-      (await allContents<MessageContent>(
+      (await allMessageContents(
         this.cms,
         this.context,
-        MESSAGE_CONTENT_TYPES
+        await this.contentTypes()
       ))
 
     for (const fromContent of fromContents) {

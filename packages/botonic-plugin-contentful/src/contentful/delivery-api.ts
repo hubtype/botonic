@@ -1,5 +1,5 @@
 import * as contentful from 'contentful'
-import { CreateClientParams, Entry } from 'contentful'
+import { ContentfulCollection, CreateClientParams, Entry } from 'contentful'
 
 import {
   CmsException,
@@ -39,6 +39,7 @@ export interface DeliveryApi {
   ): Promise<contentful.EntryCollection<T>>
 
   getContentType(id: string): Promise<contentful.ContentType>
+  getContentTypes(): Promise<ContentfulCollection<contentful.ContentType>>
 }
 
 /**
@@ -91,6 +92,10 @@ export class AdaptorDeliveryApi implements DeliveryApi {
       console.error(`ERROR in getContentType for id ${id}:`, e)
       throw e
     }
+  }
+
+  getContentTypes(): Promise<ContentfulCollection<contentful.ContentType>> {
+    return this.client.getContentTypes()
   }
 
   private queryFromContext(context: Context, query: any = {}): any {
