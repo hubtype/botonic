@@ -26,8 +26,13 @@ async function readCsvForTranslators(
   context: ManageContext,
   options: ReadCsvOptions
 ) {
-  const reachableFrom = new MessageContentInverseTraverser(cms, info, context)
-  const deleter = new ContentDeleter(manageCms, reachableFrom, context)
+  const reachableFromButtons = new MessageContentInverseTraverser(
+    cms,
+    info,
+    context,
+    { ignoreFollowUps: true }
+  )
+  const deleter = new ContentDeleter(manageCms, reachableFromButtons, context)
   const updater = new ImportContentUpdater(
     manageCms,
     cms,

@@ -5,8 +5,11 @@ import {
   ContentId,
   ContentType,
   Context,
+  MESSAGE_CONTENT_TYPES,
+  MessageContentType,
+  TOP_CONTENT_TYPES,
+  TopContent,
 } from '../'
-import { EXPORTABLE_CONTENT_TYPES } from '../../tools/l10n/fields'
 import { andArrays } from '../../util/arrays'
 import { CmsInfo } from '../cms-info'
 import { Button, Carousel, MessageContent, StartUp, Text } from '../contents'
@@ -21,27 +24,56 @@ export function getButtons(content: MessageContent): Button[] {
   return []
 }
 
+export interface MessageContentTraverserOptions {
+  /** default is 1 */
+  depth: number
+  /** true to ignore button references */
+  ignoreButtons: boolean
+  /** true to ignore followUp references */
+  ignoreFollowUps: boolean
+}
 /**
  * Goes through a content's buttons and followups
  * TODO add cache
  */
 export class MessageContentTraverser {
+  options: MessageContentTraverserOptions
   /**
    * It does not take care of circular loops
    */
   constructor(
     readonly cms: CMS,
     readonly visitor: (content: MessageContent) => void,
-    readonly depth = 1
+    options: Partial<MessageContentTraverserOptions> = {}
   ) {
-    if (depth > 1) {
+    this.options = {
+      depth: 1,
+      ignoreButtons: false,
+      ignoreFollowUps: false,
+      ...options,
+    }
+    if (this.options.depth > 1) {
       throw new CmsException(
         'Depth>1 not supported yet for MessageContentTraverser'
       )
     }
   }
 
-  async traverse(content: MessageContent, context: Context) {
+  async traverse(content: MessageContent, context: Context): Promise<void> {
+    const promises: Promise<void>[] = []
+    if (!this.options.ignoreButtons) {
+      promises.push(this.traverseButtons(content, context))
+    }
+    if (!this.options.ignoreFollowUps) {
+      this.traverseFollowUps(content)
+    }
+    await Promise.all(promises)
+  }
+
+  async traverseButtons(
+    content: MessageContent,
+    context: Context
+  ): Promise<void> {
     const buttons = getButtons(content)
     for (const button of buttons) {
       const contentId = button.callback.asContentId()
@@ -53,7 +85,10 @@ export class MessageContentTraverser {
         this.visitor(reference)
       }
     }
-    while (content.common.followUp) {
+  }
+
+  traverseFollowUps(content: MessageContent): void {
+    while (content.common?.followUp) {
       this.visitor(content.common.followUp)
       content = content.common.followUp
     }
@@ -63,13 +98,14 @@ export class MessageContentTraverser {
 export async function reachableFrom(
   cms: CMS,
   fromContents: MessageContent[],
-  context: Context
+  context: Context,
+  options: Partial<MessageContentTraverserOptions> = {}
 ): Promise<Set<MessageContent>> {
   const reachable = new Set<MessageContent>()
   const visitor = (content: MessageContent) => {
     reachable.add(content)
   }
-  const traverser = new MessageContentTraverser(cms, visitor)
+  const traverser = new MessageContentTraverser(cms, visitor, options)
   for (const fromContent of fromContents) {
     await traverser.traverse(fromContent, context)
   }
@@ -87,9 +123,9 @@ export class MessageContentInverseTraverser {
     readonly cms: CMS,
     readonly info: CmsInfo,
     readonly context: Context,
-    readonly depth = 1
+    readonly options: Partial<MessageContentTraverserOptions> = {}
   ) {
-    if (depth > 1) {
+    if (options.depth && options.depth > 1) {
       throw new CmsException(
         'Depth>1 not supported yet for MessageContentInverseTraverser'
       )
@@ -100,8 +136,8 @@ export class MessageContentInverseTraverser {
     return this.referencesTo.size > 0
   }
 
-  async contentTypes(): Promise<ContentType[]> {
-    return andArrays(await this.info.contentTypes(), EXPORTABLE_CONTENT_TYPES)
+  async messageContentTypes(): Promise<MessageContentType[]> {
+    return andArrays(MESSAGE_CONTENT_TYPES, await this.info.contentTypes())
   }
 
   async load(fromContents?: MessageContent[]) {
@@ -110,14 +146,15 @@ export class MessageContentInverseTraverser {
       (await allMessageContents(
         this.cms,
         this.context,
-        await this.contentTypes()
+        await this.messageContentTypes()
       ))
 
     for (const fromContent of fromContents) {
       const reachable = await reachableFrom(
         this.cms,
-        [fromContent as MessageContent],
-        this.context
+        [fromContent],
+        this.context,
+        this.options
       )
       for (const r of reachable) {
         const set = this.referencesTo.get(r.id)
@@ -149,4 +186,20 @@ export async function allContents<T extends Content>(
     }
   }
   return contents
+}
+
+export async function allTopContents(
+  cms: CMS,
+  context: Context,
+  contentTypes = TOP_CONTENT_TYPES
+): Promise<TopContent[]> {
+  return allContents(cms, context, contentTypes)
+}
+
+export async function allMessageContents(
+  cms: CMS,
+  context: Context,
+  contentTypes = MESSAGE_CONTENT_TYPES
+): Promise<MessageContent[]> {
+  return allContents(cms, context, contentTypes)
 }
