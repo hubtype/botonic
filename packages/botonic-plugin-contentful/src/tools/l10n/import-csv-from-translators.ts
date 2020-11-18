@@ -1,6 +1,11 @@
 import { CMS } from '../../cms'
+import { CmsInfo } from '../../cms/cms-info'
 import { MessageContentInverseTraverser } from '../../cms/visitors/message-visitors'
-import { createCms, createManageCms } from '../../contentful/factories'
+import {
+  createCms,
+  createCmsInfo,
+  createManageCms,
+} from '../../contentful/factories'
 import { ManageCms, ManageContext } from '../../manage-cms'
 import { ContentDeleter } from '../../manage-cms/content-deleter'
 import { isOfType } from '../../util/enums'
@@ -17,12 +22,19 @@ export interface ReadCsvOptions {
 async function readCsvForTranslators(
   manageCms: ManageCms,
   cms: CMS,
+  info: CmsInfo,
   context: ManageContext,
   options: ReadCsvOptions
 ) {
-  const reachableFrom = new MessageContentInverseTraverser(cms, context)
+  const reachableFrom = new MessageContentInverseTraverser(cms, info, context)
   const deleter = new ContentDeleter(manageCms, reachableFrom, context)
-  const updater = new ImportContentUpdater(manageCms, cms, context, deleter)
+  const updater = new ImportContentUpdater(
+    manageCms,
+    cms,
+    info,
+    context,
+    deleter
+  )
   const fieldImporter = new ImportRecordReducer(updater, {
     resumeErrors: options.resumeErrors,
   })
@@ -85,12 +97,14 @@ async function main() {
       ].includes(importType as ImportType),
     }
 
-    const cms = createCms({
+    const cmsOptions = {
       spaceId,
       accessToken: deliverAccessToken,
       environment,
       resumeErrors: true,
-    })
+    }
+    const cms = createCms(cmsOptions)
+    const info = createCmsInfo(cmsOptions)
     const manageCms = createManageCms({
       spaceId,
       accessToken: manageAccessToken,
@@ -101,7 +115,7 @@ async function main() {
       console.log('Duplicating reference fields')
       await duplicateReferenceFields(manageCms, cms, manageContext)
     }
-    await readCsvForTranslators(manageCms, cms, manageContext, {
+    await readCsvForTranslators(manageCms, cms, info, manageContext, {
       fname: fileName,
       resumeErrors: true,
       ignoreContentIds: [],

@@ -16,7 +16,10 @@ import {
   ImportRecordReducer,
 } from '../../../src/tools/l10n/import-updater'
 import { repeatWithBackoff } from '../../../src/util/backoff'
-import { testContentful } from '../../contentful/contentful.helper'
+import {
+  testContentful,
+  testContentfulInfo,
+} from '../../contentful/contentful.helper'
 import { testManageContentful } from '../../contentful/manage/manage-contentful.helper'
 
 const TEST_CSV_IMPORT_ID = '3LOUB5Udmxw7rh87G5Ob9b'
@@ -72,6 +75,7 @@ test('TEST: ImportRecordReducer integration test', async () => {
     const updater = new ImportContentUpdater(
       manageCms,
       contentful,
+      testContentfulInfo(),
       ctxt({ locale: SPANISH }),
       instance(mock(ContentDeleter))
     )
@@ -151,6 +155,7 @@ test('TEST: ContentUpdater', async () => {
   const sut = new ImportContentUpdater(
     mockCms,
     testContentful(),
+    testContentfulInfo(),
     ctxt({ locale: SPANISH }),
     instance(mock(ContentDeleter))
   )

@@ -5,7 +5,10 @@ import { ContentDeleter } from '../../src/manage-cms/content-deleter'
 import { getFieldsForContentType } from '../../src/manage-cms/fields'
 import { ENGLISH, SPANISH } from '../../src/nlp'
 import { repeatWithBackoff } from '../../src/util/backoff'
-import { testContentful } from '../contentful/contentful.helper'
+import {
+  testContentful,
+  testContentfulInfo,
+} from '../contentful/contentful.helper'
 import { testManageContentful } from '../contentful/manage/manage-contentful.helper'
 
 const TEST_DELETER_ID = '1gYR6JNTdBpHBFVDhpQjyD'
@@ -13,6 +16,7 @@ const TEST_DELETER_SOURCE_ID = '7jgIsjPRD3fHzEYZbpaewT'
 
 test('interactive ContentDeleter', async () => {
   const contentful = testContentful({ disableCache: true })
+  const info = testContentfulInfo()
   const manage = testManageContentful()
   const context = {
     locale: SPANISH,
@@ -22,7 +26,11 @@ test('interactive ContentDeleter', async () => {
   } as ManageContext
   const targetId = new TopContentId(ContentType.TEXT, TEST_DELETER_ID)
   const sourceId = new TopContentId(ContentType.TEXT, TEST_DELETER_SOURCE_ID)
-  const traverser = new MessageContentInverseTraverser(contentful, context)
+  const traverser = new MessageContentInverseTraverser(
+    contentful,
+    info,
+    context
+  )
 
   console.log('Copying from English to Spanish')
   await manage.copyField(

@@ -1,6 +1,7 @@
 import { ContentfulOptions, ENGLISH, SPANISH } from '../../src'
 import { CMS, Context } from '../../src/cms'
-import { createCms } from '../../src/contentful/factories'
+import { CmsInfo } from '../../src/cms/cms-info'
+import { createCms, createCmsInfo } from '../../src/contentful/factories'
 
 export function testSpaceId(): string {
   return process.env.CONTENTFUL_TEST_SPACE_ID!
@@ -15,6 +16,12 @@ export function testContentful(
   errorReporting = true
 ): CMS {
   return createCms(testContentfulOptions(options), errorReporting)
+}
+
+export function testContentfulInfo(
+  options: Partial<ContentfulOptions> = {}
+): CmsInfo {
+  return createCmsInfo(testContentfulOptions(options))
 }
 
 export function testContentfulOptions(

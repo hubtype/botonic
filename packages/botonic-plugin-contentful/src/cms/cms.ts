@@ -43,7 +43,7 @@ export const TopContentType = {
   ...MessageContentType,
   ...NonMessageTopContentType,
 }
-export const TOP_CONTENT_TYPES = [
+export const TOP_CONTENT_TYPES: TopContentType[] = [
   ...MESSAGE_CONTENT_TYPES,
   ...Object.values(NonMessageTopContentType),
 ]
@@ -54,7 +54,7 @@ export enum SubContentType {
 }
 export type ContentType = TopContentType | SubContentType
 export const ContentType = { ...TopContentType, ...SubContentType }
-export const CONTENT_TYPES = [
+export const CONTENT_TYPES: ContentType[] = [
   ...TOP_CONTENT_TYPES,
   ...Object.values(SubContentType),
 ]
@@ -73,7 +73,7 @@ export const ResourceType = { ...ContentType, ...AssetType }
 
 export type BotonicContentType = MessageContentType | SubContentType
 export const BotonicContentType = { ...MessageContentType, ...SubContentType }
-export const BOTONIC_CONTENT_TYPES = [
+export const BOTONIC_CONTENT_TYPES: BotonicContentType[] = [
   ...MESSAGE_CONTENT_TYPES,
   ...Object.values(SubContentType),
 ]

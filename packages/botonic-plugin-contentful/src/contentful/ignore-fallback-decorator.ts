@@ -1,4 +1,10 @@
-import { Asset, ContentType, Entry, EntryCollection } from 'contentful'
+import {
+  Asset,
+  ContentfulCollection,
+  ContentType,
+  Entry,
+  EntryCollection,
+} from 'contentful'
 import * as contentful from 'contentful'
 
 import { Context } from '../cms'
@@ -16,10 +22,6 @@ import {
  */
 export class IgnoreFallbackDecorator implements DeliveryApi {
   constructor(private readonly api: DeliveryApi) {}
-
-  getContentType(id: string): Promise<ContentType> {
-    return this.api.getContentType(id)
-  }
 
   async getEntries<T>(
     context: Context,
@@ -86,6 +88,14 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
       'IgnoreFallbackDecorator does not any special treatment for getAssets'
     )
     return this.api.getAssets(context, query)
+  }
+
+  getContentType(id: string): Promise<ContentType> {
+    return this.api.getContentType(id)
+  }
+
+  getContentTypes(): Promise<ContentfulCollection<ContentType>> {
+    return this.api.getContentTypes()
   }
 
   private i18nContext(context: Context) {

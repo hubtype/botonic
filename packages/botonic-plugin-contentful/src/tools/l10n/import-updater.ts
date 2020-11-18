@@ -7,6 +7,7 @@ import {
   MessageContentType,
   TopContentId,
 } from '../../cms'
+import { CmsInfo } from '../../cms/cms-info'
 import { ExceptionUnpacker } from '../../cms/exceptions'
 import { allContents } from '../../cms/visitors/message-visitors'
 import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
@@ -17,6 +18,7 @@ import {
   getFieldsForContentType,
 } from '../../manage-cms/fields'
 import { FieldsValues } from '../../manage-cms/manage-cms'
+import { andArrays } from '../../util/arrays'
 import { isOfType } from '../../util/enums'
 import { Record, RecordFixer, recordId } from './csv-import'
 import { EXPORTABLE_CONTENT_TYPES } from './fields'
@@ -143,6 +145,7 @@ export class ImportContentUpdater {
   constructor(
     readonly manageCms: ManageCms,
     readonly cms: CMS,
+    readonly info: CmsInfo,
     readonly context: ManageContext,
     readonly deleter: ContentDeleter
   ) {}
@@ -174,6 +177,10 @@ export class ImportContentUpdater {
     await this.warnMissingFields(content, newVal)
   }
 
+  async contentTypes(): Promise<ContentType[]> {
+    return andArrays(await this.info.contentTypes(), EXPORTABLE_CONTENT_TYPES)
+  }
+
   async warnMissingFields(
     content: ContentToImport,
     newVals: FieldsValues
@@ -182,7 +189,7 @@ export class ImportContentUpdater {
       this.defaultLocaleContents = await allContents<MessageContent>(
         this.cms,
         {},
-        EXPORTABLE_CONTENT_TYPES
+        await this.contentTypes()
       )
     }
 

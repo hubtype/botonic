@@ -14,8 +14,10 @@ import {
   TopContent,
   TopContentType,
 } from '../cms'
+import { CmsInfo } from '../cms/cms-info'
 import { ContentfulOptions } from '../plugin'
 import { SearchCandidate } from '../search'
+import { isOfType } from '../util/enums'
 import { AssetDelivery } from './contents/asset'
 import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
@@ -239,5 +241,24 @@ export class Contentful implements cms.CMS {
 
   dateRange(id: string): Promise<DateRangeContent> {
     return this._dateRange.dateRange(id)
+  }
+}
+
+export class ContentfulInfo implements CmsInfo {
+  client: contentful.ContentfulClientApi
+  constructor(readonly options: ContentfulOptions) {
+    this.client = createContentfulClientApi(options)
+  }
+  async contentTypes(): Promise<ContentType[]> {
+    const models = await this.client.getContentTypes()
+    return models.items
+      .map(m => {
+        if (isOfType(m.sys.id, ContentType)) {
+          return m.sys.id
+        }
+        console.log(`Unexpected content types '${m.sys.id}'`)
+        return undefined
+      })
+      .filter(m => !!m) as ContentType[]
   }
 }

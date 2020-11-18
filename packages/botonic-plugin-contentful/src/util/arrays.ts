@@ -8,3 +8,8 @@ export function equalArrays<T>(a1: T[], a2: T[]): boolean {
   }
   return true
 }
+
+export function andArrays<T1 extends T2, T2>(a1: T1[], a2: T2[]): T1[] {
+  const s2 = new Set(a2)
+  return a1.filter(i => s2.has(i))
+}
