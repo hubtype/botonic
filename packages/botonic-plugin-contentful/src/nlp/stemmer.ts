@@ -1,6 +1,7 @@
 import { Stemmer } from '@nlpjs/core/src'
 import StemmerCa from '@nlpjs/lang-ca/src/stemmer-ca'
 import StemmerDe from '@nlpjs/lang-de/src/stemmer-de'
+import StemmerEl from '@nlpjs/lang-el/src/stemmer-el'
 import StemmerEn from '@nlpjs/lang-en-min/src/stemmer-en'
 import StemmerEs from '@nlpjs/lang-es/src/stemmer-es'
 import StemmerFr from '@nlpjs/lang-fr/src/stemmer-fr'
@@ -30,6 +31,7 @@ export const stemmers: { [key: string]: Stemmer } = {
   fr: new StemmerFr(),
   de: new StemmerDe(),
   ro: new StemmerRo(),
+  el: new StemmerEl(),
 }
 
 export function stemmerFor(locale: Locale): Stemmer {
