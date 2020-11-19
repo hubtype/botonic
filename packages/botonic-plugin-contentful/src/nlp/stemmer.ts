@@ -11,6 +11,7 @@ import StemmerPt from '@nlpjs/lang-pt/src/stemmer-pt'
 import StemmerRo from '@nlpjs/lang-ro/src/stemmer-ro'
 import StemmerRu from '@nlpjs/lang-ru/src/stemmer-ru'
 import StemmerTr from '@nlpjs/lang-tr/src/stemmer-tr'
+import StemmerUk from '@nlpjs/lang-uk/src/stemmer-uk'
 
 import { Locale, rootLocale } from './locales'
 import { StemmerPl } from './stemmers/polish-stemmer'
@@ -34,6 +35,7 @@ export const stemmers: { [key: string]: Stemmer } = {
   ro: new StemmerRo(),
   el: new StemmerEl(),
   cs: new StemmerCs(),
+  uk: new StemmerUk(),
 }
 
 export function stemmerFor(locale: Locale): Stemmer {
