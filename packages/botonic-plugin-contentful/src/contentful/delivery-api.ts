@@ -1,5 +1,5 @@
 import * as contentful from 'contentful'
-import { ContentfulCollection, CreateClientParams, Entry } from 'contentful'
+import { CreateClientParams, Entry } from 'contentful'
 
 import {
   CmsException,
@@ -12,9 +12,8 @@ import {
 } from '../cms'
 import { ContentfulOptions } from '../plugin'
 import { DateRangeDelivery } from './contents/date-range'
-import { convertContentfulException, DateRangeFields } from './delivery-utils'
 import { ReducedClientApi } from './delivery/client-api'
-import { DateRangeFields } from './delivery-utils'
+import { convertContentfulException, DateRangeFields } from './delivery-utils'
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields,
@@ -40,7 +39,6 @@ export interface DeliveryApi {
   ): Promise<contentful.EntryCollection<T>>
 
   getContentType(id: string): Promise<contentful.ContentType>
-  getContentTypes(): Promise<ContentfulCollection<contentful.ContentType>>
 }
 
 /**
@@ -93,10 +91,6 @@ export class AdaptorDeliveryApi implements DeliveryApi {
       console.error(`ERROR in getContentType for id ${id}:`, e)
       throw e
     }
-  }
-
-  getContentTypes(): Promise<ContentfulCollection<contentful.ContentType>> {
-    return this.client.getContentTypes()
   }
 
   private queryFromContext(context: Context, query: any = {}): any {

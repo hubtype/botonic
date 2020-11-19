@@ -9,7 +9,7 @@ import {
 } from '../../../src/manage-cms'
 import { ContentDeleter } from '../../../src/manage-cms/content-deleter'
 import { FieldsValues } from '../../../src/manage-cms/manage-cms'
-import { Locale, SPANISH } from '../../../src/nlp'
+import { SPANISH } from '../../../src/nlp'
 import { Record } from '../../../src/tools/l10n/csv-import'
 import {
   ContentToImport,
@@ -175,10 +175,6 @@ test('TEST: ContentUpdater', async () => {
       fail("shouldn't be called")
     }
     numCalls = 0
-
-    getDefaultLocale(): Promise<Locale> {
-      fail("shouldn't be called")
-    }
 
     copyField<T extends cms.Content>(
       context: ManageContext,

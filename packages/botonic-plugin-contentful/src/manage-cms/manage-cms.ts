@@ -1,6 +1,5 @@
 import { AssetId, ContentId } from '../cms'
 import * as nlp from '../nlp'
-import { Locale } from '../nlp'
 import { ContentFieldType } from './fields'
 import { ManageContext } from './manage-context'
 
@@ -13,11 +12,6 @@ export interface FieldsValues {
  * you might get the old version
  */
 export interface ManageCms {
-  /**
-   * @deprecated should be implemented in CMS interface instead
-   */
-  getDefaultLocale(): Promise<Locale>
-
   updateFields(
     context: ManageContext,
     contentId: ContentId,
