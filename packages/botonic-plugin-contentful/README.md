@@ -73,7 +73,7 @@ Remember that they will not be available until you press the "publish" button an
 
 The content buttons may trigger different behaviours depending on the type of its _target_ field:
 
-- If you assign a _StartUp_, _Text_ or _Carousel_, the button text will be automatically assigned to the _Short Text_ field of the target content. When the button is pressed, it will send your bot a payload with value "\<MODEL_TYPE\>\$\<ID\>". \<MODEL_TYPE\> may be _startUp_, _text_ or _carousel_ , whereas \<ID\> will be the ID of the target.
+- If you assign a _StartUp_, _Text_ or _Carousel_, the button text will be automatically assigned to the _Short Text_ field of the target content. When the button is pressed, it will send your bot a payload with value "\<MODEL*TYPE\>\$\<ID\>". \<MODEL_TYPE\> may be \_startUp*, _text_ or _carousel_ , whereas \<ID\> will be the ID of the target.
 - If you assign a URL, the browser will open it when the button is pressed.
 - In two cases you should assign a _Button_ target. 1) When you want the button to have a text different than the target content's _Short Text_. 2) When you want to assign a custom _Payload_ to trigger a bot action.
 
@@ -271,12 +271,12 @@ remember to always press RETURN after typing a new keyword. Otherwise, it will b
 
 **Types of Search** `searchByKeywords` allows 3 different match types, all of them performing the previously specified preprocessing:
 
-- NLY_KEYWORDS_FOUND: the content must have a keyword with all the words from the search text.
+- ONLY_KEYWORDS_FOUND: the content must have a keyword with only the words from the search text.
 - KEYWORDS_AND_OTHERS_FOUND: The keyword may be preceded and followed by other words in the search text.
 - ALL_WORDS_IN_KEYWORDS_MIXED_UP: All the words in the keyword must appear on the search text, even if mixed up with other words in any order.
 
 **Schedule**
-The plugin allows configuring weekly schedules from the Contentful dashboard.
+The plugin allows you to use the Customer Support queues in a more flexible way.
 
 **Schedule Exceptions**
 To define exceptions to the general weekly schedule, create a _Day Schedule_ at the _Exceptions_ section. For these days, the corresponding weekday schedule will be ignored.

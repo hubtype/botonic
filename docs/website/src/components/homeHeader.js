@@ -71,6 +71,9 @@ function Header() {
                 <HeaderLink to={useBaseUrl('/docs/welcome')}>Docs</HeaderLink>
               </li>
               <li className='list-none'>
+                <HeaderLink to={useBaseUrl('/examples/')}>Examples</HeaderLink>
+              </li>
+              <li className='list-none'>
                 <HeaderLink to='https://github.com/hubtype/botonic'>
                   GitHub
                 </HeaderLink>
@@ -120,6 +123,14 @@ function Header() {
                     className='flex text-gray-300 hover:text-gray-200 py-2'
                   >
                     Docs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={useBaseUrl('/examples')}
+                    className='flex text-gray-300 hover:text-gray-200 py-2'
+                  >
+                    Examples
                   </Link>
                 </li>
                 <li>
