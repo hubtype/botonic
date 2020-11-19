@@ -55,6 +55,23 @@ export class ContentField {
         throw new CmsException(`${this.valueType} cannot be parsed yet`)
     }
   }
+
+  getValue(content: Content): any {
+    if (this.fieldType == ContentFieldType.SHORT_TEXT) {
+      return (content as TopContent).common.shortText
+    } else if (this.fieldType == ContentFieldType.KEYWORDS) {
+      return (content as TopContent).common.keywords
+    }
+    return (content as any)[this.cmsName]
+  }
+
+  isDefinedAt(content: Content): boolean {
+    const val = this.getValue(content)
+    if (Array.isArray(val)) {
+      return val.length > 0
+    }
+    return val
+  }
 }
 
 /* eslint-disable prettier/prettier*/
@@ -90,22 +107,15 @@ export class I18nField {
 
 const FIELDS_PER_CONTENT_TYPE: { [type: string]: ContentFieldType[] } = {
   [ContentType.BUTTON]: [ContentFieldType.TEXT],
-  [ContentType.STARTUP]: [
-    ContentFieldType.SHORT_TEXT,
-    ContentFieldType.TEXT,
-    ContentFieldType.BUTTONS,
-  ],
-  [ContentType.TEXT]: [
-    ContentFieldType.SHORT_TEXT,
-    ContentFieldType.TEXT,
-    ContentFieldType.BUTTONS,
-  ],
+  [ContentType.CAROUSEL]: [],
   [ContentType.ELEMENT]: [
     ContentFieldType.TITLE,
     ContentFieldType.SUBTITLE,
     ContentFieldType.BUTTONS,
   ],
-  [ContentType.URL]: [ContentFieldType.SHORT_TEXT, ContentFieldType.URL],
+  [ContentType.STARTUP]: [ContentFieldType.TEXT, ContentFieldType.BUTTONS],
+  [ContentType.TEXT]: [ContentFieldType.TEXT, ContentFieldType.BUTTONS],
+  [ContentType.URL]: [ContentFieldType.URL],
 }
 
 export function getFieldsForContentType(
@@ -118,6 +128,7 @@ export function getFieldsForContentType(
   fields = [...fields]
   if (isOfType(contentType, TopContentType)) {
     fields.push(ContentFieldType.KEYWORDS)
+    fields.push(ContentFieldType.SHORT_TEXT)
   }
   return fields
 }
