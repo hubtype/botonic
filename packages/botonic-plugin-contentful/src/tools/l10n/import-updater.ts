@@ -5,6 +5,8 @@ import {
   MessageContentType,
   TopContentId,
 } from '../../cms'
+import { ExceptionUnpacker } from '../../cms/exceptions'
+import { allContents } from '../../cms/visitors/message-visitors'
 import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
 import { ContentDeleter } from '../../manage-cms/content-deleter'
 import {
@@ -94,7 +96,18 @@ export class ImportRecordReducer {
       last.Code,
       fields
     )
-    await this.importer.update(contentImport)
+    try {
+      await this.importer.update(contentImport)
+    } catch (e) {
+      if (this.options.resumeErrors) {
+        const msgs = new ExceptionUnpacker().unpack(e).join('\n')
+        console.error(
+          `Skipping after error when importing ${contentImport.contentId.toString()}:\n${msgs}`
+        )
+      } else {
+        throw e
+      }
+    }
     this.pending = []
   }
 

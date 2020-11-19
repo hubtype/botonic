@@ -11,8 +11,8 @@ import {
   TOP_CONTENT_TYPES,
   TopContent,
 } from '../cms'
+import { ensureError } from '../cms/exceptions'
 import { reachableFrom } from '../cms/visitors/message-visitors'
-import { ensureError } from '../util/exceptions'
 
 export class ContentsValidator {
   constructor(
@@ -126,7 +126,7 @@ export class DefaultContentsValidatorReports
     this.processError(resourceId, error, false)
   }
 
-  private processError(
+  protected processError(
     resourceId: ResourceId,
     msg: string,
     critical: boolean
