@@ -4,6 +4,10 @@ import { Locale } from '../nlp'
 import { ContentFieldType } from './fields'
 import { ManageContext } from './manage-context'
 
+export interface FieldsValues {
+  [contentFieldType: string]: any
+}
+
 /**
  * Take into account that if you request a content immediately after updating it
  * you might get the old version
@@ -17,8 +21,8 @@ export interface ManageCms {
   updateFields(
     context: ManageContext,
     contentId: ContentId,
-    fields: { [contentFieldType: string]: any }
-  ): Promise<void>
+    fields: FieldsValues
+  ): Promise<FieldsValues>
 
   /** Will not fail if source does not have this field */
   copyField(

@@ -17,19 +17,19 @@ export class ReferenceFieldDuplicator {
 
   async duplicateReferenceFields(): Promise<void> {
     const defaultLocale = await this.manageCms.getDefaultLocale()
-    const fields = {
+    const fields: { [type: string]: ContentFieldType[] } = {
       [ContentType.TEXT]: [ContentFieldType.BUTTONS],
       [ContentType.STARTUP]: [ContentFieldType.BUTTONS],
       [ContentType.ELEMENT]: [ContentFieldType.IMAGE],
     }
     for (const contentType of Object.keys(fields)) {
       console.log(`***Duplicating reference field of type '${contentType}'`)
-      for (const fieldType of (fields as any)[contentType]) {
+      for (const fieldType of fields[contentType]) {
         console.log(` **Duplicating '${contentType}' fields`)
         await this.duplicate(
           defaultLocale,
           contentType as ContentType,
-          fieldType as ContentFieldType
+          fieldType
         )
       }
     }
@@ -60,7 +60,7 @@ export class ReferenceFieldDuplicator {
   private async duplicate(
     defaultLocale: string,
     contentType: cms.ContentType,
-    fields: ContentFieldType
+    field: ContentFieldType
   ) {
     const contents = await this.cms.contents(contentType, {
       ...this.manageContext,
@@ -71,7 +71,7 @@ export class ReferenceFieldDuplicator {
       await this.manageCms.copyField(
         this.manageContext,
         ContentId.create(contentType, content.id),
-        fields,
+        field,
         defaultLocale,
         true
       )

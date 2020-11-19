@@ -22,13 +22,13 @@ export class ContentDeleter {
     readonly context: ManageContext
   ) {}
 
-  async deleteContent(contentId: TopContentId) {
+  async deleteContent(contentId: TopContentId): Promise<void> {
     console.log(`Deleting ${contentId.toString()}`)
     await this.deleteFields(contentId)
     await this.deleteReferencesTo(contentId)
   }
 
-  private async deleteFields(contentId: TopContentId) {
+  private async deleteFields(contentId: TopContentId): Promise<void> {
     const fields = getFieldsForContentType(contentId.model)
     const newVal: { [field: string]: any } = {}
     for (const field of fields) {
@@ -67,9 +67,11 @@ export class ContentDeleter {
       const buttons = originalButtons
         .filter(b => !b.callback.equals(ContentCallback.ofContentId(contentId)))
         .map(b => ({
-          type: 'Link',
-          linkType: 'Entry',
-          id: (b.callback as ContentCallback).id,
+          sys: {
+            type: 'Link',
+            linkType: 'Entry',
+            id: (b.callback as ContentCallback).id,
+          },
         }))
       if (buttons.length == originalButtons.length) {
         console.error(`${referenceStr} not found`)

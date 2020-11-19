@@ -79,7 +79,7 @@ export class MultiEnvironmentFactory {
     const credentials = this.environmentByLocale![ctx.locale]
     if (!credentials) {
       this.logger(
-        `MultiLocaleCmsFactory has no credentials for locale ${ctx.locale}. Using default credentials`
+        `MultiLocaleCmsFactory has no credentials for locale '${ctx.locale}'. Trying with default credentials`
       )
       return undefined
     }

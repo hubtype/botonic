@@ -13,14 +13,15 @@ import {
   CONTENT_FIELDS,
   getFieldsForContentType,
 } from '../../manage-cms/fields'
-import { isOfType, isOfType } from '../../util/enums'
+import { FieldsValues } from '../../manage-cms/manage-cms'
+import { isOfType } from '../../util/enums'
 import { Record, RecordFixer, recordId } from './csv-import'
 
 export class ContentToImport {
   constructor(
     readonly contentId: ContentId,
     readonly name: string,
-    readonly fields: { [field: string]: any }
+    readonly fields: FieldsValues
   ) {}
 }
 
