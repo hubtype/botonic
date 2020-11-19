@@ -7,24 +7,32 @@ import { ContentfulOptions } from '../../plugin'
 import { CsvExport, skipEmptyStrings } from './csv-export'
 
 export class PostProcessor {
-  constructor(readonly targetLocale: string) {}
+  constructor(readonly targetLocaleOrCountry: string) {}
 
   urlAutoTrans(field: I18nField): I18nField {
-    if (!this.targetLocale || this.targetLocale.length < 5) {
+    if (!this.targetLocaleOrCountry) {
       return field
     }
     if (field.name != ContentFieldType.URL) {
       return field
     }
-    const convertCountry = (chunk: string) => {
-      if (chunk.length != 2) {
-        return chunk
+    const convertCountry = (urlChunk: string) => {
+      if (urlChunk.length != 2) {
+        return urlChunk
       }
-      const country = this.targetLocale.substr(3).toLowerCase()
+      const path = () => {
+        const lang = this.targetLocaleOrCountry.substr(0, 2).toLowerCase()
+        if (this.targetLocaleOrCountry.length == 2) {
+          return lang
+        }
+        const country = this.targetLocaleOrCountry.substr(3).toLowerCase()
+        return `${country}/${lang}`
+      }
+      const newChunk = path()
       console.log(
-        `Replacing part of URL '${field.value}': from '${chunk}' to '${country}'`
+        `Replacing part of URL '${field.value}': from '${urlChunk}' to '${newChunk}'`
       )
-      return country
+      return newChunk
     }
 
     return new I18nField(
@@ -38,10 +46,10 @@ async function writeCsvForTranslators(
   options: ContentfulOptions,
   locale: Locale,
   fileName: string,
-  targetLocale: Locale | undefined
+  targetLocaleOrCountry: Locale | undefined
 ) {
   const cms = new ErrorReportingCMS(new Contentful(options))
-  const postProcess = targetLocale ? new PostProcessor(targetLocale) : undefined
+  const postProcess = targetLocaleOrCountry ? new PostProcessor(targetLocaleOrCountry) : undefined
   const exporter = new CsvExport(
     {
       stringFilter: skipEmptyStrings,
@@ -66,7 +74,7 @@ const environment = process.argv[3]
 const accessToken = process.argv[4]
 const locale = process.argv[5]
 const fileName = process.argv[6]
-const targetLocale = process.argv[7]
+const targetLocaleOrCountry = process.argv[7]
 
 async function main() {
   try {
@@ -79,7 +87,7 @@ async function main() {
       },
       locale,
       fileName,
-      targetLocale
+      targetLocaleOrCountry
     )
     console.log('done')
   } catch (e) {
