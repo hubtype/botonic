@@ -4,12 +4,19 @@ ENVIRONMENT=$2
 DELIVER_TOKEN=$3
 CONTENTFUL_MANAGEMENT_TOKEN=$4
 LOCALE=$5
-CSV_FILENAME=$6
-CSV_FILENAME="$( cd "$( dirname "$CSV_FILENAME" )" && pwd )/$(basename $CSV_FILENAME)"
-
+SOURCE=$6
+SOURCE="$( cd "$( dirname "$SOURCE" )" && pwd )/$(basename $SOURCE)"
 
 BIN_DIR=${0:a:h}
 cd "$BIN_DIR"/../.. || exit
+
+EXTENSION="${SOURCE##*.}"
+if [[ "$EXTENSION" != "csv" && "$EXTENSION" != "CSV" ]]; then
+  CSV_FILENAME="contentful_${LOCALE}.csv"
+  "$BIN_DIR"/xls-to-csv.sh "$SOURCE" "$LOCALE" "$CSV_FILENAME"
+else
+  CSV_FILENAME=$SOURCE
+fi
 
 if [[ $# -lt 8 ]]; then
 	../../node_modules/.bin/ts-node --files	src/tools/l10n/import-csv-from-translators.ts --help
