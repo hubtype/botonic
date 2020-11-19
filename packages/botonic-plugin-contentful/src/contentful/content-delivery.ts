@@ -89,7 +89,7 @@ export abstract class ResourceDelivery {
     if (ContentfulEntryUtils.isFullEntry(entry)) {
       return ContentfulEntryUtils.getContentId(entry)
     }
-    return new ContentId('unknown' as ContentType, entry.sys.id)
+    return new ContentId('<UNKNOWN MODEL TYPE>' as ContentType, entry.sys.id)
   }
 }
 

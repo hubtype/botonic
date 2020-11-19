@@ -28,7 +28,7 @@ export interface Record {
 }
 
 export function recordId(record: Record): string {
-  return `${record.Id}/${record.Code}`
+  return `'${record.Id}/${record.Code}'`
 }
 
 export interface CsvImportOptions {

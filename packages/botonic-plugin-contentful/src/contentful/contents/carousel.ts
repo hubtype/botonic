@@ -50,8 +50,9 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<ElementFields>,
     context: cms.Context
   ): Promise<cms.Element> {
+    this.checkEntry(entry)
     const fields = entry.fields
-    const buttonEntries = entry.fields.buttons || []
+    const buttonEntries = fields.buttons || []
     const buttons = await this.button.fromReferenceSkipErrors(
       buttonEntries,
       context
