@@ -8,6 +8,7 @@ import {
   ManageContext,
 } from '../../../src/manage-cms'
 import { ContentDeleter } from '../../../src/manage-cms/content-deleter'
+import { FieldsValues } from '../../../src/manage-cms/manage-cms'
 import { Locale, SPANISH } from '../../../src/nlp'
 import {
   ContentToImport,
@@ -31,7 +32,7 @@ test('TEST: ImportRecordReducer test check updateFields calls', async () => {
     Code: 'POST_FAQ1',
     Id: TEST_CSV_IMPORT_ID,
     Field: ContentFieldType.KEYWORDS,
-    from: 'from',
+    from: 'kw1;hello, my friend',
     to: ' kw1;hola, amigo ',
   }
 
@@ -50,7 +51,7 @@ test('TEST: ImportRecordReducer test check updateFields calls', async () => {
       return Promise.resolve()
     }
   )
-  const sut = new ImportRecordReducer(instance(contentUpdater))
+  const sut = new ImportRecordReducer(instance(contentUpdater), {})
   await sut.consume({ ...record })
 
   record.Field = ContentFieldType.TEXT
@@ -66,13 +67,15 @@ test('TEST: ImportRecordReducer test check updateFields calls', async () => {
 // more than once simultaneously (eg from 2 different branches from CI)
 test('TEST: ImportRecordReducer integration test', async () => {
   const manageCms = testManageContentful()
+  const contentful = testContentful()
   try {
     const updater = new ImportContentUpdater(
       manageCms,
+      contentful,
       ctxt({ locale: SPANISH }),
       instance(mock(ContentDeleter))
     )
-    const sut = new ImportRecordReducer(updater)
+    const sut = new ImportRecordReducer(updater, {})
     await sut.consume({
       Model: 'text' as ContentType,
       Code: 'POST_FAQ1',
@@ -132,8 +135,8 @@ test('TEST: ContentUpdater', async () => {
     updateFields<T extends cms.Content>(
       context: ManageContext,
       contentId: ContentId,
-      fields: { [contentFieldType: string]: any }
-    ): Promise<void> {
+      fields: FieldsValues
+    ): Promise<FieldsValues> {
       this.numCalls++
       expect(context).toEqual(ctxt({ locale: SPANISH }))
       expect(contentId).toEqual(contentId)
@@ -141,12 +144,13 @@ test('TEST: ContentUpdater', async () => {
         [ContentFieldType.TEXT]: 'new text',
         [ContentFieldType.KEYWORDS]: ['kw1', 'hola, amigo'],
       })
-      return Promise.resolve()
+      return Promise.resolve(fields)
     }
   }
   const mockCms = new MockCms()
   const sut = new ImportContentUpdater(
     mockCms,
+    testContentful(),
     ctxt({ locale: SPANISH }),
     instance(mock(ContentDeleter))
   )
