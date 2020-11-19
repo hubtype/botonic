@@ -4,9 +4,8 @@ import sort from 'sort-stream'
 import * as stream from 'stream'
 import { promisify } from 'util'
 
-import { ContentType, Text } from '../../cms'
+import { BOTONIC_CONTENT_TYPES, ContentType, Text } from '../../cms'
 import {
-  BOTONIC_CONTENT_TYPES,
   Button,
   CMS,
   CommonFields,
@@ -102,13 +101,19 @@ export class ContentToCsvLines {
   getCsvLines(content: Content): CsvLine[] {
     const columns = [content.contentType, content.name, content.id]
     let fields = this.getFields(content)
-    if (this.postprocessor) {
-      fields = fields.map(this.postprocessor)
-    }
     if (this.options.stringFilter) {
       fields = fields.filter(f => this.options.stringFilter!(f.value))
     }
-    return fields.map(f => [...columns, f.name, f.value!])
+    const lines = fields.map(f => [...columns, f.name, f.value!])
+    if (this.postprocessor) {
+      const processed = fields.map(this.postprocessor)
+      for (let i = 0; i < processed.length; i++) {
+        if (processed[i].value != fields[i].value) {
+          lines[i].push(processed[i].value)
+        }
+      }
+    }
+    return lines
   }
 
   getFields(content: Content): I18nField[] {
