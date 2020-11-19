@@ -1,6 +1,6 @@
 import { ContentfulOptions, ENGLISH, SPANISH } from '../../src'
-import { CMS, Context, ErrorReportingCMS } from '../../src/cms'
-import { Contentful } from '../../src/contentful/cms-contentful'
+import { CMS, Context } from '../../src/cms'
+import { createCms } from '../../src/contentful/factories'
 
 export function testSpaceId(): string {
   return process.env.CONTENTFUL_TEST_SPACE_ID!
@@ -14,11 +14,7 @@ export function testContentful(
   options: Partial<ContentfulOptions> = {},
   errorReporting = true
 ): CMS {
-  const contentful = new Contentful(testContentfulOptions(options))
-  if (!errorReporting) {
-    return contentful
-  }
-  return new ErrorReportingCMS(contentful)
+  return createCms(testContentfulOptions(options), errorReporting)
 }
 
 export function testContentfulOptions(

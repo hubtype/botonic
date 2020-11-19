@@ -8,7 +8,7 @@ import {
   FollowUp,
   StartUp,
   Text,
-} from './contents'
+} from '../contents'
 
 abstract class ContentBuilder {
   protected constructor(public id: string, public name: string) {}

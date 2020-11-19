@@ -12,7 +12,7 @@ import {
 } from '../contents'
 import { Context } from '../context'
 import { CmsException } from '../exceptions'
-import { ElementBuilder } from '../factories'
+import { ElementBuilder } from '../factories/content-factories'
 
 export type MessageContentFilter<T> = (
   t: T,

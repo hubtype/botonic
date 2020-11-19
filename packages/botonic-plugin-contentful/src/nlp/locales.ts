@@ -45,7 +45,19 @@ export function checkLocale(locale: Locale): Locale {
 }
 
 export function rootLocale(locale: Locale): Locale {
-  return locale.substr(0, 2)
+  return locale.substr(0, 2).toLowerCase()
+}
+
+export function languageFromLocale(locale: Locale): string {
+  return rootLocale(locale)
+}
+
+export function countryFromLocale(locale: Locale): string {
+  return locale.substr(3).toUpperCase()
+}
+
+export function fixLocale(locale: Locale): Locale {
+  return buildLocale(languageFromLocale(locale), countryFromLocale(locale))
 }
 
 export function buildLocale(lang: string, country: string | undefined): Locale {

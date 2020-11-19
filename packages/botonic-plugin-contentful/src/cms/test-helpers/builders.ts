@@ -5,7 +5,7 @@ import {
   StartUpBuilder,
   TextBuilder,
   TopContentBuilder,
-} from '../factories'
+} from '../factories/content-factories'
 import {
   Button,
   ButtonStyle,
