@@ -33,7 +33,10 @@ export class ContentToImport {
 export class ImportRecordReducer {
   pending: Record[] = []
 
-  constructor(readonly importer: ImportContentUpdater) {}
+  constructor(
+    readonly importer: ImportContentUpdater,
+    readonly options: { resumeErrors?: boolean }
+  ) {}
 
   async consume(record: Record): Promise<void> {
     if (!isOfType(record.Model, ContentType)) {
@@ -50,21 +53,20 @@ export class ImportRecordReducer {
       console.error(`Bad field '${record.Field}'`)
       return
     }
-    if (!this.checkLast(record)) {
-      return
-    }
     const last = this.last()
     if (last) {
-      if (last.Id != record.Id) {
+      if (last.Id == record.Id) {
+        if (!this.checkLast(record, last)) {
+          return
+        }
+      } else {
         await this.flush()
       }
     }
     this.pending.push(record)
   }
 
-  checkLast(record: Record): boolean {
-    const last = this.last()
-    if (!last) return true
+  checkLast(record: Record, last: Record): boolean {
     let diffField: string | undefined = undefined
 
     if (last.Model != record.Model) {
