@@ -8,4 +8,5 @@ export type ReducedClientApi = Pick<
   | 'getEntry'
   | 'getContentType'
   | 'getContentTypes'
+  | 'getLocales'
 >
