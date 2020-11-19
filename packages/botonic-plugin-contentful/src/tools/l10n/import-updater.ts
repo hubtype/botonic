@@ -1,7 +1,9 @@
 import {
   BotonicContentType,
+  CMS,
   ContentId,
   ContentType,
+  MessageContent,
   MessageContentType,
   TopContentId,
 } from '../../cms'
@@ -11,11 +13,13 @@ import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
 import { ContentDeleter } from '../../manage-cms/content-deleter'
 import {
   CONTENT_FIELDS,
+  ContentFieldValueType,
   getFieldsForContentType,
 } from '../../manage-cms/fields'
 import { FieldsValues } from '../../manage-cms/manage-cms'
 import { isOfType } from '../../util/enums'
 import { Record, RecordFixer, recordId } from './csv-import'
+import { EXPORTABLE_CONTENT_TYPES } from './fields'
 
 export class ContentToImport {
   constructor(
@@ -135,8 +139,10 @@ export class ImportRecordReducer {
  * - Otherwise, the specified fields will be overwritten
  */
 export class ImportContentUpdater {
+  private defaultLocaleContents: MessageContent[] | undefined
   constructor(
     readonly manageCms: ManageCms,
+    readonly cms: CMS,
     readonly context: ManageContext,
     readonly deleter: ContentDeleter
   ) {}
@@ -151,25 +157,67 @@ export class ImportContentUpdater {
 
   async updateFields(content: ContentToImport) {
     for (const field of getFieldsForContentType(content.contentId.model)) {
-      if (!content.fields[field]) {
-        console.warn(
-          `Missing field '${field}' for ${content.contentId.toString()}`
-        )
+      const f = CONTENT_FIELDS.get(field)!
+      switch (f.valueType) {
+        case ContentFieldValueType.STRING_ARRAY:
+        case ContentFieldValueType.STRING:
+          break
+        default:
+          continue
       }
     }
-
-    await this.manageCms.updateFields(
+    const newVal = await this.manageCms.updateFields(
       this.context,
       content.contentId,
       content.fields
     )
+    await this.warnMissingFields(content, newVal)
+  }
+
+  async warnMissingFields(
+    content: ContentToImport,
+    newVals: FieldsValues
+  ): Promise<void> {
+    if (!this.defaultLocaleContents) {
+      this.defaultLocaleContents = await allContents<MessageContent>(
+        this.cms,
+        {},
+        EXPORTABLE_CONTENT_TYPES
+      )
+    }
+
+    for (const field of getFieldsForContentType(content.contentId.model)) {
+      const f = CONTENT_FIELDS.get(field)!
+      if (
+        ![
+          ContentFieldValueType.STRING,
+          ContentFieldValueType.STRING_ARRAY,
+        ].includes(f.valueType)
+      ) {
+        continue
+      }
+      const defaultContent = this.defaultLocaleContents.find(
+        c => c.id == content.contentId.id
+      )!
+      if (
+        !content.fields[field] &&
+        defaultContent &&
+        f.isDefinedAt(defaultContent)
+      ) {
+        console.warn(
+          `Missing field '${field}' for ${content.contentId.toString()} (${
+            content.name
+          })`
+        )
+      }
+    }
   }
 
   mustBeDeleted(content: ContentToImport): boolean {
     return (
       isOfType(content.contentId.model, MessageContentType) &&
       Object.keys(content.fields).length === 1 &&
-      content.fields[ContentFieldType.SHORT_TEXT]
+      ContentFieldType.SHORT_TEXT in content.fields
     )
   }
 }
