@@ -1,8 +1,9 @@
 #!/bin/zsh
 BIN_DIR=${0:a:h}
+cd "$BIN_DIR"/.. || exit
 
 if [[ "$CONTENTFUL_SPACEID" == "" ]]; then
-  echo "Assign your contentful account spaceid to environment variable CONTENTFUL_SPACEID"
+  echo "Assign your contentful account space id to environment variable CONTENTFUL_SPACEID"
   exit 1
 fi
 
@@ -11,6 +12,13 @@ if [[ "$CONTENTFUL_TOKEN" == "" ]]; then
   exit 1
 fi
 
-contentful space import --space-id=$CONTENTFUL_SPACEID \
+JSON_FILE=$1
+
+if [[ "$JSON_FILE" == "" ]]; then
+  echo "Usage: $0 file_to_import "
+  exit 1
+fi
+
+./node_modules/.bin/contentful space import --space-id=$CONTENTFUL_SPACEID \
     --management-token=$CONTENTFUL_TOKEN \
-    --content-file "$BIN_DIR/../exports/contentful-export-0.9.20.json"
+    --content-file "$JSON_FILE"
