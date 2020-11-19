@@ -46,6 +46,7 @@
     "@nlpjs/lang-ru": "^4.14.0",
     "@nlpjs/lang-tr": "^4.14.0",
     "@nlpjs/lang-el": "^4.14.0",
+    "@nlpjs/lang-cs": "^4.14.0",
     "@nlpjs/ner": "^4.14.0",
     "@nlpjs/similarity": "^4.14.0",
     "@types/joi": "^14.3.4",
