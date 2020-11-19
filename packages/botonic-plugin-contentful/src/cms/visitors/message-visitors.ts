@@ -1,3 +1,5 @@
+import { andArrays } from '../../util/arrays'
+import { asyncEach } from '../../util/async'
 import {
   CMS,
   CmsException,
@@ -10,8 +12,6 @@ import {
   TOP_CONTENT_TYPES,
   TopContent,
 } from '../'
-import { andArrays } from '../../util/arrays'
-import { asyncEach } from '../../util/async'
 import { CmsInfo } from '../cms-info'
 import { Button, Carousel, MessageContent, StartUp, Text } from '../contents'
 

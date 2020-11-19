@@ -118,7 +118,7 @@ async function main() {
 
     if (duplicateReferences) {
       console.log('Duplicating reference fields')
-      await duplicateReferenceFields(manageCms, cms, manageContext)
+      await duplicateReferenceFields(manageCms, cms, info, manageContext)
     }
     await readCsvForTranslators(manageCms, cms, info, manageContext, {
       fname: fileName,
@@ -139,10 +139,12 @@ async function main() {
 async function duplicateReferenceFields(
   manageCms: ManageCms,
   cms: CMS,
+  info: CmsInfo,
   manageContext: ManageContext
 ) {
   const referenceDuplicator = new ReferenceFieldDuplicator(
     cms,
+    info,
     manageCms,
     manageContext
   )

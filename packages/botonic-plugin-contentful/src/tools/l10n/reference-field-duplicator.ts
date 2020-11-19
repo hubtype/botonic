@@ -1,5 +1,6 @@
 import * as cms from '../../cms'
 import { AssetId, CMS, ContentId, ContentType } from '../../cms'
+import { CmsInfo } from '../../cms/cms-info'
 import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
 import { asyncEach } from '../../util/async'
 
@@ -12,12 +13,13 @@ import { asyncEach } from '../../util/async'
 export class ReferenceFieldDuplicator {
   constructor(
     readonly cms: CMS,
+    readonly info: CmsInfo,
     readonly manageCms: ManageCms,
     readonly manageContext: ManageContext
   ) {}
 
   async duplicateReferenceFields(): Promise<void> {
-    const defaultLocale = await this.manageCms.getDefaultLocale()
+    const defaultLocale = await this.info.defaultLocale()
     const fields: { [type: string]: ContentFieldType[] } = {
       [ContentType.TEXT]: [ContentFieldType.BUTTONS],
       [ContentType.STARTUP]: [ContentFieldType.BUTTONS],
@@ -28,7 +30,7 @@ export class ReferenceFieldDuplicator {
       for (const fieldType of fields[contentType]) {
         console.log(` **Duplicating '${contentType}' fields`)
         await this.duplicate(
-          defaultLocale,
+          defaultLocale.name,
           contentType as ContentType,
           fieldType
         )
@@ -38,15 +40,15 @@ export class ReferenceFieldDuplicator {
   }
 
   async duplicateAssetFiles() {
-    const defaultLocale = await this.manageCms.getDefaultLocale()
+    const defaultLocale = await this.info.defaultLocale()
     console.log(`***Duplicating assets`)
-    const assets = await this.cms.assets({ locale: defaultLocale })
+    const assets = await this.cms.assets({ locale: defaultLocale.name })
     console.log(` **Duplicating ${assets.length} assets`)
     for (const a of assets) {
       await this.manageCms.copyAssetFile(
         this.manageContext,
         new AssetId(a.id, undefined),
-        defaultLocale
+        defaultLocale.name
       )
     }
     this.warning()

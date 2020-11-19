@@ -3,7 +3,8 @@ import { CmsInfo } from '../cms/cms-info'
 import { ManageCms } from '../manage-cms'
 import { ErrorReportingManageCms } from '../manage-cms/manage-cms-error'
 import { ContentfulOptions } from '../plugin'
-import { Contentful, ContentfulInfo } from './cms-contentful'
+import { Contentful } from './cms-contentful'
+import { ContentfulInfo } from './info-contentful'
 import { ManageContentful } from './manage'
 
 export function createCms(

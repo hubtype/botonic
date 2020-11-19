@@ -18,7 +18,6 @@ import {
 import { ManageCms } from '../../manage-cms/manage-cms'
 import { ManageContext } from '../../manage-cms/manage-context'
 import * as nlp from '../../nlp'
-import { Locale } from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
 
@@ -35,17 +34,6 @@ export class ManageContentful implements ManageCms {
       accessToken: this.options.accessToken,
       timeout: this.options.timeoutMs,
     })
-  }
-
-  async getDefaultLocale(): Promise<Locale> {
-    const space = await this.manage.getSpace(this.options.spaceId)
-    const locales = await (await this.getEnvironment()).getLocales()
-    for (const locale of locales.items) {
-      if (locale.default) {
-        return locale.code
-      }
-    }
-    throw new Error(`No default locale found for space ${space.sys.id}`)
   }
 
   private async getEnvironment(): Promise<Environment> {

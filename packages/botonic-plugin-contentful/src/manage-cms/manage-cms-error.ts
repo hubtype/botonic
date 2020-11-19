@@ -61,12 +61,6 @@ export class ErrorReportingManageCms implements ManageCms {
     }
   }
 
-  getDefaultLocale(): Promise<Locale> {
-    return this.manageCms
-      .getDefaultLocale()
-      .catch(this.handleError('defaultLocale', undefined, undefined, {}))
-  }
-
   copyAssetFile(
     context: ManageContext,
     assetId: AssetId,
