@@ -1,5 +1,6 @@
 import { MultiError } from 'async-parallel'
 
+import { isError } from '../util/exceptions'
 import { ResourceId } from './callback'
 
 export class CmsException extends Error {
@@ -41,5 +42,50 @@ export class CmsException extends Error {
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return `${message} Due to: ${reason.message || String(reason)}`
+  }
+}
+
+export class ResourceNotFoundCmsException extends CmsException {
+  constructor(readonly reason?: any, readonly resourceId?: ResourceId) {
+    super('CMS resource not found', reason, resourceId)
+  }
+}
+
+export function ensureError(e: any): Error {
+  if (isError(e)) {
+    return e
+  }
+  return new CmsException(String(e), undefined)
+}
+
+export class ExceptionUnpacker {
+  constructor(readonly indent = '    ', readonly prependSubErrorIndex = true) {}
+
+  public unpack(e: any): string[] {
+    return this.processException(ensureError(e))
+  }
+
+  private getMultiError(e: any): MultiError | undefined {
+    if (e instanceof MultiError) {
+      return e
+    }
+    if (e instanceof CmsException && e.reason instanceof MultiError) {
+      return e.reason
+    }
+    return undefined
+  }
+
+  private processException(e: Error, index?: number): string[] {
+    const multiError = this.getMultiError(e)
+    if (multiError) {
+      const msgLists = multiError.list.map((e1, i) =>
+        this.processException(e1, i + 1)
+      )
+      const flat = Array.prototype.concat(...msgLists)
+      return flat
+    } else {
+      const indexPre = index ? [`${this.indent}${index}:`] : []
+      return indexPre.concat([this.indent + e.message])
+    }
   }
 }
