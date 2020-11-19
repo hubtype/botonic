@@ -9,6 +9,7 @@ import { Entry } from 'contentful-management/dist/typings/entities/entry'
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
 
 import { CmsException, ContentId } from '../../cms'
+import { ResourceNotFoundCmsException } from '../../cms/exceptions'
 import {
   CONTENT_FIELDS,
   ContentField,
@@ -62,19 +63,35 @@ export class ManageContentful implements ManageCms {
     context: ManageContext,
     contentId: ContentId,
     fields: { [contentFieldType: string]: any }
-  ): Promise<void> {
+  ): Promise<{ [contentFieldType: string]: any }> {
     const environment = await this.getEnvironment()
-    const oldEntry = await environment.getEntry(contentId.id)
+    const getEntry = async () => {
+      try {
+        return await environment.getEntry(contentId.id)
+      } catch (e) {
+        throw new ResourceNotFoundCmsException(e, contentId)
+      }
+    }
+    const oldEntry = await getEntry()
+    let needUpdate = false
     for (const key of Object.keys(fields)) {
       if (!isOfType(key, ContentFieldType)) {
         throw new CmsException(`'${key}' is not a valid content field type`)
       }
       const field = this.checkOverwrite(context, oldEntry, key, false)
+      if (oldEntry.fields[field.cmsName][context.locale] === fields[key]) {
+        continue
+      }
+      needUpdate = true
       oldEntry.fields[field.cmsName][context.locale] = fields[key]
+    }
+    if (!needUpdate) {
+      return oldEntry.fields
     }
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
     // the multilocale fields returned by update()
     await this.writeEntry(context, oldEntry)
+    return oldEntry.fields
   }
 
   async removeAssetFile(
@@ -115,6 +132,9 @@ export class ManageContentful implements ManageCms {
     fieldType: ContentFieldType,
     failIfMissing: boolean
   ): ContentField {
+    if (entry.isArchived()) {
+      throw new CmsException(`Cannot update an archived entry`)
+    }
     const field = CONTENT_FIELDS.get(fieldType)
     if (!field) {
       throw new CmsException(`Invalid field type ${fieldType}`)

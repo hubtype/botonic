@@ -3,7 +3,7 @@ import { ContentfulExceptionWrapper, ContentId, ResourceId } from '../cms'
 import * as nlp from '../nlp'
 import { Locale } from '../nlp'
 import { ContentFieldType } from './fields'
-import { ManageCms } from './manage-cms'
+import { FieldsValues, ManageCms } from './manage-cms'
 import { ManageContext } from './manage-context'
 
 export class ErrorReportingManageCms implements ManageCms {
@@ -14,8 +14,8 @@ export class ErrorReportingManageCms implements ManageCms {
   updateFields<T extends cms.Content>(
     context: ManageContext,
     contentId: ContentId,
-    fields: { [contentFieldType: string]: any }
-  ): Promise<void> {
+    fields: FieldsValues
+  ): Promise<FieldsValues> {
     return this.manageCms
       .updateFields(context, contentId, fields)
       .catch(this.handleError('updateFields', context, contentId))

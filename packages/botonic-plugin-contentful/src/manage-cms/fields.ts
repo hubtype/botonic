@@ -1,4 +1,10 @@
-import { CmsException, ContentType, TopContentType } from '../cms'
+import {
+  CmsException,
+  Content,
+  ContentType,
+  TopContent,
+  TopContentType,
+} from '../cms'
 import { isOfType } from '../util/enums'
 
 export enum ContentFieldType {
@@ -105,7 +111,11 @@ const FIELDS_PER_CONTENT_TYPE: { [type: string]: ContentFieldType[] } = {
 export function getFieldsForContentType(
   contentType: ContentType
 ): ContentFieldType[] {
-  const fields = [...FIELDS_PER_CONTENT_TYPE[contentType]]
+  let fields = FIELDS_PER_CONTENT_TYPE[contentType]
+  if (!fields) {
+    throw new CmsException(`Invalid content type ${contentType}`)
+  }
+  fields = [...fields]
   if (isOfType(contentType, TopContentType)) {
     fields.push(ContentFieldType.KEYWORDS)
   }

@@ -39,7 +39,7 @@ export const SUPPORTED_LOCALES = [
 ]
 
 export function checkLocale(locale: Locale): Locale {
-  // check it's supported
+  // will throw exception if not supported
   stemmerFor(locale)
   return locale
 }
