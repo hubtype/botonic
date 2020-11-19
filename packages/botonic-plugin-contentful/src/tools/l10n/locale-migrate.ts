@@ -22,7 +22,7 @@ const removeLocales = process.argv.length > 6 ? process.argv[6] : ''
 function main() {
   const spaceExport = SpaceExport.fromJsonFile(fromFile)
   const migrator = new LocaleMigrator(fromLocale, toLocale)
-  const remover = new LocaleRemover(removeLocales.split(','), toLocale)
+  const remover = new LocaleRemover(removeLocales.split(/[, ;]/), toLocale)
   console.log('Removing locales', remover.removeLocs)
 
   migrator.migrate(spaceExport)

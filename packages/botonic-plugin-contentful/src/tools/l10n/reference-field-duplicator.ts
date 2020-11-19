@@ -1,6 +1,7 @@
 import * as cms from '../../cms'
 import { CMS, ContentId, ContentType } from '../../cms'
 import { ContentFieldType, ManageCms, ManageContext } from '../../manage-cms'
+import { asyncEach } from '../../util/async'
 
 /**
  * TODO duplicate non-text fields which don't have fallback
@@ -66,8 +67,8 @@ export class ReferenceFieldDuplicator {
       ...this.manageContext,
       locale: defaultLocale,
     })
-    for (const content of contents) {
-      //console.log(`  *Duplicating ${content.id} (${content.name})`)
+    await asyncEach({ concurrency: 5 }, contents, async content => {
+      console.log(`  *Duplicating ${content.id} (${content.name})`)
       await this.manageCms.copyField(
         this.manageContext,
         ContentId.create(contentType, content.id),
@@ -75,6 +76,6 @@ export class ReferenceFieldDuplicator {
         defaultLocale,
         true
       )
-    }
+    })
   }
 }
