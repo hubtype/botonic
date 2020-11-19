@@ -49,7 +49,9 @@ async function writeCsvForTranslators(
   targetLocaleOrCountry: Locale | undefined
 ) {
   const cms = new ErrorReportingCMS(new Contentful(options))
-  const postProcess = targetLocaleOrCountry ? new PostProcessor(targetLocaleOrCountry) : undefined
+  const postProcess = targetLocaleOrCountry
+    ? new PostProcessor(targetLocaleOrCountry)
+    : undefined
   const exporter = new CsvExport(
     {
       stringFilter: skipEmptyStrings,
