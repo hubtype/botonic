@@ -1,14 +1,12 @@
 import { ContentfulOptions } from '../../../src'
-import { ManageContentful } from '../../../src/contentful/manage/manage-contentful'
-import { ErrorReportingManageCms } from '../../../src/manage-cms/manage-cms-error'
+import { createManageCms } from '../../../src/contentful/factories'
 import { testContentfulOptions } from '../contentful.helper'
 
 export function testManageContentful(options: Partial<ContentfulOptions> = {}) {
-  const manage = new ManageContentful(
+  return createManageCms(
     testContentfulOptions({
       ...options,
       accessToken: process.env.CONTENTFUL_TEST_MANAGE_TOKEN!,
     })
   )
-  return new ErrorReportingManageCms(manage)
 }
