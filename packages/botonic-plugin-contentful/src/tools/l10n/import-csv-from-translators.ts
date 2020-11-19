@@ -1,27 +1,33 @@
+import { CMS } from '../../cms'
 import { MessageContentInverseTraverser } from '../../cms/visitors/message-visitors'
-import { Contentful } from '../../contentful'
-import { ManageContentful } from '../../contentful/manage'
-import { ManageContext } from '../../manage-cms'
+import { createCms, createManageCms } from '../../contentful/factories'
+import { ManageCms, ManageContext } from '../../manage-cms'
 import { ContentDeleter } from '../../manage-cms/content-deleter'
-import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
 import { CsvImport } from './csv-import'
 import { ImportContentUpdater, ImportRecordReducer } from './import-updater'
 import { ReferenceFieldDuplicator } from './reference-field-duplicator'
 
-async function readCsvForTranslators(
-  contentfulOptions: ContentfulOptions,
-  context: ManageContext,
+export interface ReadCsvOptions {
   fname: string
+  ignoreContentIds?: string[]
+  resumeErrors?: boolean
+}
+
+async function readCsvForTranslators(
+  manageCms: ManageCms,
+  cms: CMS,
+  context: ManageContext,
+  options: ReadCsvOptions
 ) {
-  const cms = new Contentful(contentfulOptions)
-  const manageCms = new ManageContentful(contentfulOptions)
   const reachableFrom = new MessageContentInverseTraverser(cms, context)
   const deleter = new ContentDeleter(manageCms, reachableFrom, context)
-  const updater = new ImportContentUpdater(manageCms, context, deleter)
-  const fieldImporter = new ImportRecordReducer(updater)
+  const updater = new ImportContentUpdater(manageCms, cms, context, deleter)
+  const fieldImporter = new ImportRecordReducer(updater, {
+    resumeErrors: options.resumeErrors,
+  })
   const importer = new CsvImport(fieldImporter)
-  await importer.import(fname)
+  await importer.import(options)
 }
 
 export enum ImportType {
@@ -68,11 +74,6 @@ async function main() {
         'Contents will be left in preview mode. Publish them from contentful.com'
       )
     }
-    const manageOptions = {
-      spaceId,
-      accessToken: manageAccessToken,
-      environment,
-    }
     const manageContext = {
       locale,
       preview: importType == ImportType.OVERWRITE,
@@ -80,22 +81,31 @@ async function main() {
       allowOverwrites: [
         ImportType.OVERWRITE,
         ImportType.OVERWRITE_AND_PUBLISH,
+        ImportType.DRY,
       ].includes(importType as ImportType),
     }
 
-    await readCsvForTranslators(manageOptions, manageContext, fileName)
+    const cms = createCms({
+      spaceId,
+      accessToken: deliverAccessToken,
+      environment,
+      resumeErrors: true,
+    })
+    const manageCms = createManageCms({
+      spaceId,
+      accessToken: manageAccessToken,
+      environment,
+    })
+
     if (duplicateReferences) {
       console.log('Duplicating reference fields')
-      await duplicateReferenceFields(
-        manageOptions,
-        {
-          spaceId,
-          accessToken: deliverAccessToken,
-          environment,
-        },
-        manageContext
-      )
+      await duplicateReferenceFields(manageCms, cms, manageContext)
     }
+    await readCsvForTranslators(manageCms, cms, manageContext, {
+      fname: fileName,
+      resumeErrors: true,
+      ignoreContentIds: [],
+    })
     console.log('done')
   } catch (e) {
     console.error(e)
@@ -108,12 +118,10 @@ async function main() {
 }
 
 async function duplicateReferenceFields(
-  manageOptions: ContentfulOptions,
-  deliverOptions: ContentfulOptions,
+  manageCms: ManageCms,
+  cms: CMS,
   manageContext: ManageContext
 ) {
-  const manageCms = new ManageContentful(manageOptions)
-  const cms = new Contentful(deliverOptions)
   const referenceDuplicator = new ReferenceFieldDuplicator(
     cms,
     manageCms,
