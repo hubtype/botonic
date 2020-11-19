@@ -80,16 +80,6 @@ test.each<any>([
     ],
   ],
   [
-    'el',
-    'Είναι μια καλή μέρα',
-    [
-      Word.StopWord('ειναι'),
-      new Word('μια', 'μια'),
-      new Word('καλη', 'καλ'),
-      new Word('μερα', 'μερ'),
-    ],
-  ],
-  [
     'cs',
     'Chystám se to koupit',
     [
