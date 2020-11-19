@@ -1,5 +1,6 @@
 import { CmsException } from '../../src/cms'
-import { ensureError, isError } from '../../src/util/exceptions'
+import { ensureError } from '../../src/cms/exceptions'
+import { isError } from '../../src/util/exceptions'
 
 test('TEST: isError', () => {
   expect(isError(new Error('msg'))).toBe(true)
