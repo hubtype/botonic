@@ -15,7 +15,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.16.0-alpha.4",
+  "version": "0.16.0-rc.0",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
