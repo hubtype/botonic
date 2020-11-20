@@ -23,7 +23,7 @@
     "MIGRATION_GUIDE.md"
   ],
   "dependencies": {
-    "@botonic/core": "0.16.0-alpha.1",
+    "@botonic/core": "0.16.0-alpha.2",
     "axios": "^0.20.0",
     "emoji-picker-react": "^3.2.3",
     "framer-motion": "^2.6.6",
