@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dialogflow",
-  "version": "0.16.0-alpha.1",
+  "version": "0.16.0",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
