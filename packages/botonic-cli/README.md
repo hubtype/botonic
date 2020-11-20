@@ -21,7 +21,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.16.0-rc.0 darwin-x64 node-v10.23.0
+@botonic/cli/0.16.0 darwin-x64 node-v10.23.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -62,7 +62,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.16.0-rc.0/lib/commands/deploy.js)_
+_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/deploy.js)_
 
 ## `botonic help [COMMAND]`
 
@@ -89,7 +89,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.16.0-rc.0/lib/commands/login.js)_
+_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/login.js)_
 
 ## `botonic logout`
 
@@ -101,7 +101,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.16.0-rc.0/lib/commands/logout.js)_
+_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/logout.js)_
 
 ## `botonic new NAME [TEMPLATENAME]`
 
@@ -119,7 +119,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.16.0-rc.0/lib/commands/new.js)_
+_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/new.js)_
 
 ## `botonic serve`
 
@@ -132,7 +132,7 @@ EXAMPLE
   > Project is running at http://localhost:8080/
 ```
 
-_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.16.0-rc.0/lib/commands/serve.js)_
+_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/serve.js)_
 
 ## `botonic test`
 
@@ -157,7 +157,7 @@ EXAMPLE
   Ran all test suites.
 ```
 
-_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.16.0-rc.0/lib/commands/test.js)_
+_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/test.js)_
 
 ## `botonic train`
 
@@ -173,5 +173,5 @@ EXAMPLE
        TRAINING MODEL FOR {LANGUAGE}...
 ```
 
-_See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v0.16.0-rc.0/lib/commands/train.js)_
+_See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/train.js)_
 <!-- commandsstop -->

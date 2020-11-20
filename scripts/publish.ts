@@ -114,7 +114,6 @@ const publish = async version => {
       }
     )
   } else {
-    if (version === 'final') return
     await spawnProcess('npm', ['publish', '--access=public'], {
       onSuccess: () => console.log(green('   Published successfully.\n')),
     })

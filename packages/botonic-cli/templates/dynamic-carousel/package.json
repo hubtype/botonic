@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.6.2",
-    "@botonic/react": "0.16.0-rc.0",
+    "@botonic/react": "~0.16.0",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
