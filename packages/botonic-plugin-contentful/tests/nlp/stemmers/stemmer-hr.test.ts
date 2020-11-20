@@ -8,7 +8,7 @@ test.each<any>([
   ['pješački', ['pjesack']],
   ['Kartografija', ['kartografij']],
   ['Matematika', ['matematik']],
-  ['Potrebno', ['potrebn']],
+  ['Potrebno', ['potreb']],
   ['Najbolje', ['najbolj']],
   ['najbolji', ['najbolj']],
   ['prevariti', ['prevari']],
@@ -20,7 +20,7 @@ test.each<any>([
   ['tablica', ['tablic']],
   ['bombon', ['bombon']],
   ['poljoprivrednik', ['poljoprivrednik']],
-  ['sretno', ['sretn']],
+  ['sretno', ['sret']],
   ['roditeljski', ['roditeljsk']],
 ])('TEST: Croatian stemmer("%s")->"%s"', (word: string, expected: string) => {
   const tokenizer = tokenizerPerLocale('hr')
