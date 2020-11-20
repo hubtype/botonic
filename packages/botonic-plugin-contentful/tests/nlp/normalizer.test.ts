@@ -99,6 +99,11 @@ test.each<any>([
       new Word('розмовляю', 'розмовля'),
     ],
   ],
+  [
+    'hr',
+    'ja ću pjevati',
+    [Word.StopWord('ja'), Word.StopWord('cu'), new Word('pjevati', 'pjeva')],
+  ],
 ])(
   'TEST: stemmer removes stopwords: lang=%s input="%j"',
   (locale: string, raw: string, words: Word[]) => {
