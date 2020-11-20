@@ -11,6 +11,95 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.16.0] - 2020-20-11
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Added [license MIT and keywords](https://github.com/hubtype/botonic/pull/1037) to every package.
+  - Enabled [code scaning](https://github.com/hubtype/botonic/commit/36c3d848cec3339da6b40d943eab8ca79254f5b5).
+  - Updated [Botonic's README](https://github.com/hubtype/botonic/commit/f5d684a5c4600826278c3e9fd3f6b31f635041b0).
+  - Added [Deployment Guide](https://botonic.io/docs/deployment/hubtype).
+  - Improved [Continuous Integration](https://github.com/hubtype/botonic/pull/1065) for Docs.
+  - [Configured eslint import sorter](https://github.com/hubtype/botonic/commit/685f15d2f7004fbf118300e9d353c36b1b3ba155).
+  - Added [Botonic Examples](https://botonic.io/examples/) section [#1091](https://github.com/hubtype/botonic/pull/1091).
+  - Added auto publish script.
+
+* [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Added **new** matcher `request matcher` and pass `lastRoutePath` to current bot context. [#1086](https://github.com/hubtype/botonic/pull/1086)
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Added [webchat component tests](https://github.com/hubtype/botonic/pull/1023)
+  - **New webchat features**:
+    - Added [Error Boundary](https://github.com/hubtype/botonic/commit/7a71b3dad31841fea96d800a0369c3c41cabc9d4) for `customMessage`.
+
+### Changed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Renamed [`doc-botonic` to `docs`](https://github.com/hubtype/botonic/commit/82ef75b89f1f064ba62912d1fac8a572871eb882).
+  - [Rewritten webchat docs and added several updates](https://github.com/hubtype/botonic/pull/1071).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Improved types:
+    - [Fixed types for isMobile, mobileStyle & webchat button](https://github.com/hubtype/botonic/commit/ffd5c4faff7ffe29577a127913bc95437615542c)
+    - [Made ScrollbarProps field types optional](https://github.com/hubtype/botonic/commit/776ad92d450c7bcc6103be8c4642fb039945db03)
+    - [Typed message.timestamps.enable](https://github.com/hubtype/botonic/commit/d10cd5a9e1a7133691adbc19c5ba92680b08272a)
+    - [Added type for ScrollbarProps.autoHide](https://github.com/hubtype/botonic/commit/10f4b15bbeea66ad16333d9a5a0f4c8bf2f617b1)
+    - [Added style field to ThemeProps](https://github.com/hubtype/botonic/commit/592427539a0e5d223531186b5c94949f38db74da)
+    - [Fixed TS types](https://github.com/hubtype/botonic/pull/1069)
+    - [Added `_hubtype_case_status` and `typification` fields](https://github.com/hubtype/botonic/pull/1104)
+  - [Refactored utils](https://github.com/hubtype/botonic/pull/1067) for better maintainability.
+  - [Improved webchat tests](https://github.com/hubtype/botonic/pull/1066).
+
+- [@botonic/nlu](https://www.npmjs.com/package/@botonic/nlu)
+
+  - Upgrade `tfjs` to [2.7.0](https://github.com/hubtype/botonic/commit/3d42d12562ab5196b5f8a113387a60feb90b3fed).
+
+* [@botonic/plugin-nlu](https://www.npmjs.com/package/@botonic/plugin-nlu)
+
+  - Upgrade `tfjs` to [2.7.0](https://github.com/hubtype/botonic/commit/3d42d12562ab5196b5f8a113387a60feb90b3fed).
+
+### Fixed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Fixed [broken links](https://github.com/hubtype/botonic/pull/1037) in READMEs.
+  - Fixed [`Was this article useful?` widget](https://github.com/hubtype/botonic/commit/4d1ea02836c4f29a4d51d9aff1081afa7647dc3f).
+
+* [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - [Fixed params request](https://github.com/hubtype/botonic/pull/1070) failing in `Oauth 3.1.0+`.
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Now `getRoute` [checks correctly](https://github.com/hubtype/botonic/pull/903) if the input matches with a `childRoute`.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Added [missing storage key in constructor](https://github.com/hubtype/botonic/pull/1039), now `storageKey` works as expected.
+  - Automatically [call `onMessage`](https://github.com/hubtype/botonic/pull/1056) when receiveng messages coming from server-side.
+  - Added missing call to `stringifyWithRegexs` causing some regexes not being updated in local/session storages. Fixed react warnings (produced by `npm run test`), log deprecated props in custom messages. [#1063](https://github.com/hubtype/botonic/pull/1063)
+    Deprecated props:
+    - **`enableTimestamps` => `enabletimestamps`**
+    - **`imagesStyle` => `imagestyle`**
+  - Fixed sending of unsent inputs to be [more consistent](https://github.com/hubtype/botonic/pull/1041).
+  - [Fixed `onClose`](https://github.com/hubtype/botonic/commit/03ce2ec264181df537fd9c8c3695e362f48bfd05) being called on the very first render of the app.
+  - [Fixed](https://github.com/hubtype/botonic/pull/1108) `WebchatSettings` component not updating settings correctly.
+  - [Set ack to 1](https://github.com/hubtype/botonic/commit/03e2fa3cac6ee40bb5a83388a5b40b082f26d0ce) for custom user messages by default.
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - The csv importer of texts, which was coming from content translator, now groups all the fields from the same content. [#1036](https://github.com/hubtype/botonic/pull/1036).
+  - Added NLP support [for Romanian](https://github.com/hubtype/botonic/pull/1109).
+  - Added NLP support [for Greek](https://github.com/hubtype/botonic/pull/1110).
+  - Added NLP support [for Czech](https://github.com/hubtype/botonic/pull/1113).
+  - Added NLP support [for Ukrainian](https://github.com/hubtype/botonic/pull/1114).
+
 ## [0.15.0] - 2020-27-10
 
 ### Added
@@ -29,12 +118,15 @@ All notable changes to Botonic will be documented in this file.
     - Added a new webchat setting [`storageKey`](https://github.com/hubtype/botonic/pull/1019) that indicates the key name to use in order to store the webchat state in `localStorage` (or `sessionStorage`).
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
   - [Improvements](https://github.com/hubtype/botonic/pull/985) in Content.validate of text & shortText fields
-    - Validate text.text also if content has no keywords (it could be accessed through a button)
-    - Before, when shortText was empty, the contentful driver set it with the value of the name field (to ensure buttons did not show blank texts). Now this is managed by the Button model, so that MessageContent.validate() can report it.
-    - New [CMS method](https://github.com/hubtype/botonic/pull/1002) to deliver content by id when the content type is unknown.
+
+    - Validate text.text even if the content has no keyword (it could be accessed through a button)
+    - Before, when shortText was empty, the Contentful driver used to set it with the value of the name field (to ensure buttons did not show blank texts). Now this is managed by the Button model, so that MessageContent.validate() can report it.
     - Improved [ContentsValidator](https://github.com/hubtype/botonic/pull/1001). Now it's possible to report the detected errors into a callback.
-    - Added NLP support for German.
+
+  - New [CMS method](https://github.com/hubtype/botonic/pull/1002) to deliver content by id when the content type is unknown.
+  - Added NLP support for German.
 
 ### Changed
 
@@ -463,3 +555,4 @@ All notable changes to Botonic will be documented in this file.
 [0.13.0]: https://github.com/hubtype/botonic/releases/tag/v0.13.0
 [0.14.0]: https://github.com/hubtype/botonic/releases/tag/v0.14.0
 [0.15.0]: https://github.com/hubtype/botonic/releases/tag/v0.15.0
+[0.16.0]: https://github.com/hubtype/botonic/releases/tag/v0.16.0
