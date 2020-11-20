@@ -1,19 +1,15 @@
 import { readdirSync, readFileSync, writeFileSync } from 'fs'
-import { join, resolve } from 'path'
+import { join } from 'path'
 import { chdir } from 'process'
-import { prompt, Separator } from 'inquirer'
+import { prompt } from 'inquirer'
 import * as spawn from 'await-spawn'
 import { blue, green, red } from 'colors'
 
-const readJSON = (jsonPath: string): any => {
-  return JSON.parse(
-    readFileSync(jsonPath, { encoding: 'utf-8' as BufferEncoding })
-  )
-}
+const readJSON = (jsonPath: string): any =>
+  JSON.parse(readFileSync(jsonPath, { encoding: 'utf-8' as BufferEncoding }))
 
-const writeJSON = (jsonPath: string, object: any): void => {
+const writeJSON = (jsonPath: string, object: any): void =>
   writeFileSync(jsonPath, JSON.stringify(object, null, 2) + '\n')
-}
 
 const fromEntries = (xs: [string | number | symbol, any][]) =>
   xs.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
@@ -27,7 +23,9 @@ const spawnProcess = async (
     await spawn(command, args)
     log?.onSuccess()
   } catch (e) {
-    console.error(`Failed on running commmand ${command} ${args.join(' ')}`)
+    console.log(
+      red(`   Failed on running commmand ${command} ${args.join(' ')}\n`)
+    )
   }
 }
 
@@ -54,14 +52,14 @@ const bumpVersion = async (version, packagePath) => {
       onSuccess: logBumpedVersion,
     })
   } else {
-    await spawnProcess('npm', ['version', 'prerelease'], {
+    await spawnProcess('npm', ['version', 'prerelease', `--preid=${version}`], {
       onSuccess: logBumpedVersion,
     })
   }
   return getPkgVersion(packagePath)
 }
 
-const updateCliTemplates = (packagePath: string, bumpedVersion: any) => {
+const updateCliTemplates = async (packagePath: string, bumpedVersion: any) => {
   const templatesDir = join(packagePath, 'templates')
   chdir(templatesDir)
   const templates = readdirSync(templatesDir).filter(
@@ -69,19 +67,26 @@ const updateCliTemplates = (packagePath: string, bumpedVersion: any) => {
   )
   for (const template of templates) {
     const templatePath = join(templatesDir, template)
-    changeBotonicDeps(templatePath, bumpedVersion)
+    console.log(` Replacing deps for template: ${template}`)
+    await changeBotonicDeps(templatePath, bumpedVersion)
   }
 }
 
-const changeBotonicDeps = (packagePath, withVersion) => {
-  const packageJSON = getPackageJSON(packagePath)
-  const newDependencies = fromEntries(
-    Object.entries(packageJSON.dependencies).map(([k, v]) =>
-      k.includes('@botonic') ? [k, withVersion] : [k, v]
+const changeBotonicDeps = async (packagePath, withVersion) => {
+  console.log(' - Replacing botonic dependencies...')
+  try {
+    const packageJSON = getPackageJSON(packagePath)
+    const newDependencies = fromEntries(
+      Object.entries(packageJSON.dependencies).map(([k, v]) =>
+        k.includes('@botonic') ? [k, withVersion] : [k, v]
+      )
     )
-  )
-  packageJSON.dependencies = newDependencies
-  writeJSON(join(packagePath, 'package.json'), packageJSON)
+    packageJSON.dependencies = newDependencies
+    writeJSON(join(packagePath, 'package.json'), packageJSON)
+    console.log(green('   Replaced botonic deps successfully.\n'))
+  } catch (e) {
+    console.log(red('   Failed at replacing botonic deps.'))
+  }
 }
 
 const installDeps = async () => {
@@ -96,6 +101,24 @@ const build = async () => {
   await spawnProcess('npm', ['run', 'build'], {
     onSuccess: () => console.log(green('   Built successfully.\n')),
   })
+}
+
+const publish = async version => {
+  console.log(` - Publishing ${version} version...`)
+  if (version === 'rc' || version === 'alpha') {
+    await spawnProcess(
+      'npm',
+      ['publish', '--access=public', '--tag', version],
+      {
+        onSuccess: () => console.log(green('   Published successfully.\n')),
+      }
+    )
+  } else {
+    if (version === 'final') return
+    await spawnProcess('npm', ['publish', '--access=public'], {
+      onSuccess: () => console.log(green('   Published successfully.\n')),
+    })
+  }
 }
 
 process.chdir('..')
@@ -127,22 +150,23 @@ packagesList.push(String(packagesList.shift())) // ['botonic-core', 'botonic-nlu
   confirmation = res.confirmation
   if (!confirmation) return
 
-  console.log(blue(`Publishing new Botonic version:`))
+  console.log(blue(`Publishing new Botonic ${version} version:`))
 
   for (const p of packagesList) {
     const packagePath = join(packagesDir, p)
     chdir(packagePath)
     console.log(`Preparing ${p}...`)
     console.log('====================================')
-    // await clean()
+    await clean()
+    await installDeps()
+    await build()
     const bumpedVersion = await bumpVersion(version, packagePath)
     const botonicDepsVersion =
       version === 'final' ? `~${bumpedVersion}` : bumpedVersion
 
     if (p === 'botonic-cli') {
-      updateCliTemplates(packagePath, botonicDepsVersion)
-    } else changeBotonicDeps(packagePath, botonicDepsVersion)
-    // await installDeps()
-    // await build()
+      await updateCliTemplates(packagePath, botonicDepsVersion)
+    } else await changeBotonicDeps(packagePath, botonicDepsVersion)
+    await publish(version)
   }
 })()
