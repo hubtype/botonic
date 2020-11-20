@@ -1,10 +1,11 @@
 {
-  "name": "scripts",
+  "name": "botonic-scripts",
   "version": "1.0.0",
-  "description": "",
-  "main": "dump_word_embedding_to_db.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cloc-all": "./qa/cloc-all-packages.sh",
+    "lint-all": "./qa/lint-all-packages.sh",
+    "prepare-all": "./ci/prepare-package.sh",
+    "publish-all": "ts-node ./ci/publish.ts"
   },
   "keywords": [],
   "author": "",
