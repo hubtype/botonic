@@ -15,6 +15,7 @@ import StemmerUk from '@nlpjs/lang-uk/src/stemmer-uk'
 
 import { Locale, rootLocale } from './locales'
 import { StemmerPl } from './stemmers/polish-stemmer'
+import { StemmerHr } from './stemmers/stemmer-hr'
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
 // and https://stackoverflow.com/a/11210358/145289
@@ -36,6 +37,7 @@ export const stemmers: { [key: string]: Stemmer } = {
   el: new StemmerEl(),
   cs: new StemmerCs(),
   uk: new StemmerUk(),
+  hr: new StemmerHr(),
 }
 
 export function stemmerFor(locale: Locale): Stemmer {

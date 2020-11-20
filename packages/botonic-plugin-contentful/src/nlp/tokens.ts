@@ -22,6 +22,7 @@ import { elDefaultStopWords } from './stopwords/stopwords-el'
 import { enDefaultStopWords } from './stopwords/stopwords-en'
 import { esDefaultStopWords } from './stopwords/stopwords-es'
 import { frDefaultStopWords } from './stopwords/stopwords-fr'
+import { hrDefaultStopWords } from './stopwords/stopwords-hr'
 import { itDefaultStopWords } from './stopwords/stopwords-it'
 import { plDefaultStopWords } from './stopwords/stopwords-pl'
 import { ptDefaultStopWords } from './stopwords/stopwords-pt'
@@ -29,6 +30,7 @@ import { roDefaultStopWords } from './stopwords/stopwords-ro'
 import { ruDefaultStopWords } from './stopwords/stopwords-ru'
 import { trDefaultStopWords } from './stopwords/stopwords-tr'
 import { ukDefaultStopWords } from './stopwords/stopwords-uk'
+import { TokenizerHr } from './tokenizers/tokenizer-hr'
 
 export function countOccurrences(haystack: string, needle: string): number {
   let n = 0
@@ -102,6 +104,7 @@ const tokenizers: { [locale: string]: Tokenizer } = {
   [locales.GREEK]: new TokenizerEl(),
   [locales.CZECH]: new TokenizerCs(),
   [locales.UKRAINIAN]: new TokenizerUk(),
+  [locales.CROATIAN]: new TokenizerHr(),
 }
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
@@ -133,4 +136,5 @@ export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   el: elDefaultStopWords,
   cs: csDefaultStopWords,
   uk: ukDefaultStopWords,
+  hr: hrDefaultStopWords,
 }
