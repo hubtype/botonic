@@ -10,7 +10,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.21.0"
   },
   "devDependencies": {},
   "keywords": [
