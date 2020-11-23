@@ -1,15 +1,19 @@
 import { Command } from '@oclif/command'
+import { exec as childProcessExec } from 'child_process'
 import colors from 'colors'
-import { copySync, moveSync } from 'fs-extra'
-import { prompt } from 'inquirer'
+import fetchRepoDir from 'fetch-repo-dir'
+import { moveSync } from 'fs-extra'
+import { prompt, Separator } from 'inquirer'
 import ora from 'ora'
-import { join, resolve } from 'path'
-import * as util from 'util'
+import { join } from 'path'
+import { promisify } from 'util'
 
 import { BotonicAPIService } from '../botonic-api-service'
+import { EXAMPLES, TEMPLATES } from '../botonic-projects'
 import { track } from '../utils'
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const exec = util.promisify(require('child_process').exec)
+const exec = promisify(childProcessExec)
 
 export default class Run extends Command {
   static description = 'Create a new Botonic project'
@@ -24,89 +28,65 @@ Creating...
   static args = [
     { name: 'name', description: 'name of the bot folder', required: true },
     {
-      name: 'templateName',
-      description: 'OPTIONAL name of the bot template',
+      name: 'projectName',
+      description: 'OPTIONAL name of the bot project',
       required: false,
     },
   ]
-  //private templates: any = ['introduction_bot', 'basic_bot', 'basic_actions', 'AI_bot']
-  private templates: any = [
-    {
-      name: 'tutorial',
-      description:
-        'Tutorial: A template with different examples that help you get started fast',
-    },
-    {
-      name: 'blank',
-      description: 'Blank: A minimal template to start from scratch',
-    },
-    {
-      name: 'childs',
-      description: 'Childs: Understand how childRoutes works',
-    },
-    {
-      name: 'dynamic-carousel',
-      description: 'Dynamic Carousel: See a dynamic carousel for Facebook',
-    },
-    {
-      name: 'dynamodb',
-      description: 'DynamoDB: Using AWS DynamoDB to track events.',
-    },
-    {
-      name: 'handoff',
-      description:
-        'Handoff: Test how to transfer a conversation into Hubtype Desk',
-    },
-    {
-      name: 'intent',
-      description: 'Intent: Integrate NLU and see the magic!',
-    },
-    {
-      name: 'custom-webchat',
-      description: 'Custom Webchat: See how it looks like a custom webchat',
-    },
-    {
-      name: 'nlu',
-      description: 'NLU: Train with your own intents with @botonic/plugin-nlu!',
-    },
-  ]
+
+  private templates = TEMPLATES
+
+  private examples = EXAMPLES
+
+  private allProjects = [...this.templates, ...this.examples]
 
   private botonicApiService = new BotonicAPIService()
 
-  async run() {
+  async run(): Promise<void> {
     track('Created Botonic Bot CLI')
     const { args } = this.parse(Run)
-    let template = ''
-    if (!args.templateName) {
+    let selectedProjectName = ''
+    if (!args.projectName) {
       await this.selectBotName().then(resp => {
-        template = this.templates.filter(
-          (t: any) => t.description === resp.botName
+        selectedProjectName = this.allProjects.filter(
+          p => p.description === resp.botName
         )[0].name
         return
       })
     } else {
-      const botExists = this.templates.filter(
-        (t: any) => t.name === args.templateName
+      const botExists = this.allProjects.filter(
+        p => p.name === args.projectName
       )
       if (botExists.length) {
-        template = args.templateName
+        selectedProjectName = args.projectName
       } else {
-        const template_names = this.templates.map((t: any) => t.name)
+        const projectNames = this.allProjects.map(p => p.name)
         console.log(
           colors.red(
-            `Template ${args.templateName} does not exist, please choose one of ${template_names}.`
+            `Template ${args.projectName} does not exist, please choose one of ${projectNames}.`
           )
         )
         return
       }
     }
-    const _botPath = resolve(template)
-    const templatePath = join(__dirname, '..', '..', 'templates', template)
+
     let spinner = ora({
-      text: 'Copying files...',
+      text: 'Downloading files...',
       spinner: 'bouncingBar',
     }).start()
-    copySync(templatePath, args.name)
+
+    const selectedProject = this.allProjects.filter(
+      project => project.name === selectedProjectName
+    )[0]
+
+    try {
+      await fetchRepoDir({
+        src: selectedProject.uri,
+        dir: `${args.name}`,
+      })
+    } catch (e) {
+      console.log({ e })
+    }
     spinner.succeed()
     process.chdir(args.name)
     spinner = ora({
@@ -119,13 +99,13 @@ Creating...
     await this.botonicApiService.buildIfChanged(false)
     this.botonicApiService.beforeExit()
     moveSync(join('..', '.botonic.json'), join(process.cwd(), '.botonic.json'))
-    const cd_cmd = colors.bold(`cd ${args.name}`)
-    const run_cmd = colors.bold('botonic serve')
-    const deploy_cmd = colors.bold('botonic deploy')
+    const chdirCmd = colors.bold(`cd ${args.name}`)
+    const runCmd = colors.bold('botonic serve')
+    const deployCmd = colors.bold('botonic deploy')
     console.log(
       `\n✨  Bot ${colors.bold(
         args.name
-      )} was successfully created!\n\nNext steps:\n${cd_cmd}\n${run_cmd} (test your bot locally from the browser)\n${deploy_cmd} (publish your bot to the world!)`
+      )} was successfully created!\n\nNext steps:\n${chdirCmd}\n${runCmd} (test your bot locally from the browser)\n${deployCmd} (publish your bot to the world!)`
     )
   }
 
@@ -135,7 +115,12 @@ Creating...
         type: 'list',
         name: 'botName',
         message: 'Select a bot template',
-        choices: this.templates.map((t: any) => t.description),
+        choices: [
+          new Separator('\n----- Templates -----'),
+          ...this.templates.map(p => p.description),
+          new Separator('\n----- Examples -----'),
+          ...this.examples.map(p => p.description),
+        ],
       },
     ])
   }
