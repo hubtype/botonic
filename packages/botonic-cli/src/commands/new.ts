@@ -6,7 +6,7 @@ import ora from 'ora'
 import { join, resolve } from 'path'
 import * as util from 'util'
 
-import { BotonicAPIService } from '../botonicapiservice'
+import { BotonicAPIService } from '../botonic-api-service'
 import { track } from '../utils'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec)
