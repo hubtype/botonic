@@ -30,7 +30,7 @@ export class StemmerSk implements Stemmer {
     }
 
     if (length > 6) {
-      if (token.endsWith('aťom')) {
+      if (token.endsWith('atom')) {
         return this.palatalise(token.slice(0, length - 3))
       }
     }
@@ -38,29 +38,30 @@ export class StemmerSk implements Stemmer {
     if (length > 5) {
       const tokenEnding = token.slice(-3)
       if (
-        tokenEnding in
         [
-          'och',
-          'ich',
-          'ích',
-          'ého',
           'ami',
+          'ata',
+          'eho',
           'emi',
-          'ému',
+          'emu',
           'ete',
           'eti',
+          'ich',
+          'ich',
           'iho',
-          'ího',
-          'ími',
+          'iho',
+          'imi',
           'imu',
-          'aťa',
-        ]
+          'och',
+        ].includes(tokenEnding)
       ) {
         return this.palatalise(token.slice(0, length - 2))
       }
 
       if (
-        tokenEnding in ['ách', 'ata', 'aty', 'ých', 'ami', 'ové', 'ovi', 'ými']
+        ['ach', 'ami', 'ata', 'aty', 'ove', 'ovi', 'ych', 'ymi'].includes(
+          tokenEnding
+        )
       ) {
         return token.slice(0, length - 3)
       }
@@ -73,12 +74,14 @@ export class StemmerSk implements Stemmer {
 
       const tokenEnding = token.slice(-2)
 
-      if (tokenEnding in ['es', 'ém', 'ím']) {
+      if (['em', 'es', 'im'].includes(tokenEnding)) {
         return this.palatalise(token.slice(0, length - 2))
       }
 
       if (
-        tokenEnding in ['úm', 'at', 'ám', 'os', 'us', 'ým', 'mi', 'ou', 'ej']
+        ['am', 'at', 'ej', 'mi', 'os', 'ou', 'um', 'us', 'ym'].includes(
+          tokenEnding
+        )
       ) {
         return token.slice(0, length - 2)
       }
@@ -86,10 +89,10 @@ export class StemmerSk implements Stemmer {
 
     if (length > 3) {
       const tokenLastCharacter = token.slice(-1)
-      if (tokenLastCharacter in ['e', 'i', 'í']) {
+      if (['e', 'i'].includes(tokenLastCharacter)) {
         return this.palatalise(token)
       }
-      if (tokenLastCharacter in ['ú', 'y', 'a', 'o', 'á', 'é', 'ý']) {
+      if (['a', 'e', 'o', 'u', 'y'].includes(tokenLastCharacter)) {
         return token.slice(0, length - 1)
       }
     }
@@ -103,22 +106,22 @@ export class StemmerSk implements Stemmer {
     let lastCharacters = token.slice(-2)
     let substring = token.slice(0, length - 2)
 
-    if (lastCharacters in ['ci', 'ce', 'či', 'če']) {
+    if (['ce', 'ci'].includes(lastCharacters)) {
       return substring + 'k'
     }
 
-    if (lastCharacters in ['zi', 'ze', 'ži', 'že']) {
+    if (['ze', 'zi'].includes(lastCharacters)) {
       return substring + 'h'
     }
 
     lastCharacters = token.slice(-3)
     substring = token.slice(0, length - 3)
 
-    if (lastCharacters in ['čte', 'čti', 'čtí']) {
+    if (['cte', 'cti'].includes(lastCharacters)) {
       return substring + 'ck'
     }
 
-    if (lastCharacters in ['šte', 'šti', 'ští']) {
+    if (['ste', 'sti'].includes(lastCharacters)) {
       return substring + 'sk'
     }
 
@@ -141,8 +144,7 @@ export class StemmerSk implements Stemmer {
   private removeComparative(token: string): string {
     const length = token.length
     if (length > 5) {
-      const tokenEnding = token.slice(-3)
-      if (tokenEnding in ['ejš', 'ějš']) {
+      if (token.endsWith('ejs')) {
         return this.palatalise(token.slice(0, length - 2))
       }
     }
@@ -152,23 +154,19 @@ export class StemmerSk implements Stemmer {
   private removeDiminutive(token: string): string {
     const length = token.length
 
-    if (length > 7 && token.endsWith('oušok')) {
+    if (length > 7 && token.endsWith('ousok')) {
       return token.slice(0, length - 5)
     }
 
     if (length > 6) {
       const tokenEnding = token.slice(-4)
 
-      if (
-        tokenEnding in
-        ['ečok', 'éčok', 'ičok', 'íčok', 'enok', 'énok', 'inok', 'ínok']
-      ) {
+      if (['ecok', 'enok', 'icok', 'inok'].includes(tokenEnding)) {
         return this.palatalise(token.slice(0, length - 3))
       }
 
       if (
-        tokenEnding in
-        ['áčok', 'ačok', 'očok', 'učok', 'anok', 'onok', 'unok', 'ánok']
+        ['acok', 'anok', 'ocok', 'onok', 'ucok', 'unok'].includes(tokenEnding)
       ) {
         return this.palatalise(token.slice(0, length - 4))
       }
@@ -177,15 +175,14 @@ export class StemmerSk implements Stemmer {
     if (length > 5) {
       const tokenEnding = token.slice(-3)
 
-      if (
-        tokenEnding in ['ečk', 'éčk', 'ičk', 'íčk', 'enk', 'énk', 'ink', 'ínk']
-      ) {
+      if (['eck', 'enk', 'ick', 'ink'].includes(tokenEnding)) {
         return this.palatalise(token.slice(0, length - 3))
       }
 
       if (
-        tokenEnding in
-        ['áčk', 'ačk', 'očk', 'učk', 'ank', 'onk', 'unk', 'átk', 'ánk', 'ušk']
+        ['ack', 'ank', 'atk', 'ock', 'onk', 'uck', 'unk', 'usk'].includes(
+          tokenEnding
+        )
       ) {
         return token.slice(0, length - 3)
       }
@@ -194,16 +191,16 @@ export class StemmerSk implements Stemmer {
     if (length > 4) {
       const tokenEnding = token.slice(-2)
 
-      if (tokenEnding in ['ek', 'ék', 'ík', 'ik']) {
+      if (['ek', 'ik'].includes(tokenEnding)) {
         return this.palatalise(token.slice(0, length - 1))
       }
 
-      if (tokenEnding in ['ák', 'ak', 'ok', 'uk']) {
+      if (['ak', 'ok', 'uk'].includes(tokenEnding)) {
         return token.slice(0, length - 1)
       }
     }
 
-    if (length > 3 && token.slice(-1) == 'k') {
+    if (length > 3 && token.endsWith('k')) {
       return token.slice(0, length - 1)
     }
 
@@ -217,11 +214,11 @@ export class StemmerSk implements Stemmer {
       return token.slice(0, length - 4)
     }
 
-    if (length > 5 && token.slice(-3) in ['izn', 'isk']) {
+    if (length > 5 && ['izn', 'isk'].includes(token.slice(-3))) {
       return this.palatalise(token.slice(0, length - 2))
     }
 
-    if (length > 4 && token.endsWith('ák')) {
+    if (length > 4 && token.endsWith('ak')) {
       return token.slice(0, length - 2)
     }
 
@@ -237,11 +234,11 @@ export class StemmerSk implements Stemmer {
     }
 
     if (length > 7) {
-      if (token.endsWith('ionár')) {
+      if (token.endsWith('ionar')) {
         return this.palatalise(token.slice(0, length - 4))
       }
 
-      if (token.slice(-5) in ['ovisk', 'ovstv', 'ovišt', 'ovník']) {
+      if (['ovisk', 'ovist', 'ovnik', 'ovstv'].includes(token.slice(-5))) {
         return token.slice(0, length - 5)
       }
     }
@@ -250,87 +247,93 @@ export class StemmerSk implements Stemmer {
       const tokenEnding = token.slice(-4)
 
       if (
-        tokenEnding in
-        ['ások', 'nosť', 'teln', 'ovec', 'ovík', 'ovtv', 'ovin', 'štin']
+        [
+          'asok',
+          'nost',
+          'ovec',
+          'ovik',
+          'ovin',
+          'ovtv',
+          'stin',
+          'teln',
+        ].includes(tokenEnding)
       ) {
         return token.slice(0, length - 4)
       }
 
-      if (tokenEnding in ['enic', 'inec', 'itel']) {
+      if (['enic', 'inec', 'itel'].includes(tokenEnding)) {
         return this.palatalise(token.slice(0, length - 3))
       }
     }
 
     if (length > 5) {
-      if (token.endsWith('árn')) {
+      if (token.endsWith('arn')) {
         return token.slice(0, length - 3)
       }
 
       const tokenEnding = token.slice(-3)
 
-      if (tokenEnding in ['enk', 'ián', 'ist', 'isk', 'išt', 'itb', 'írn']) {
+      if (['enk', 'ian', 'irn', 'isk', 'ist', 'itb'].includes(tokenEnding)) {
         return this.palatalise(token.slice(0, length - 2))
       }
 
       if (
-        tokenEnding in
         [
+          'can',
+          'ctv',
+          'kar',
+          'kyn',
+          'ner',
+          'nik',
           'och',
           'ost',
-          'ovn',
           'oun',
+          'ous',
           'out',
-          'ouš',
-          'ušk',
-          'kyn',
-          'čan',
-          'kář',
-          'néř',
-          'ník',
-          'ctv',
+          'ovn',
           'stv',
-        ]
+          'usk',
+        ].includes(tokenEnding)
       ) {
         return token.slice(0, length - 3)
       }
     }
 
     if (length > 4) {
-      const tokenEnding = token.length
+      const tokenEnding = token.slice(-2)
 
-      if (tokenEnding in ['áč', 'ač', 'án', 'an', 'ár', 'ar', 'ás', 'as']) {
+      if (['ac', 'an', 'ar', 'as'].includes(tokenEnding)) {
         return token.slice(0, length - 2)
       }
 
       if (
-        tokenEnding in ['ec', 'en', 'ér', 'ír', 'ic', 'in', 'ín', 'it', 'iv']
+        ['ec', 'en', 'er', 'ic', 'in', 'ir', 'it', 'iv'].includes(tokenEnding)
       ) {
         return this.palatalise(token.slice(0, length - 1))
       }
 
       if (
-        tokenEnding in
         [
-          'ob',
-          'ot',
-          'ov',
-          'oň',
-          'ul',
-          'yn',
-          'čk',
-          'čn',
+          'ck',
+          'cn',
           'dl',
           'nk',
-          'tv',
+          'ob',
+          'on',
+          'ot',
+          'ov',
           'tk',
+          'tv',
+          'ul',
           'vk',
-        ]
+          'yn',
+        ].includes(tokenEnding)
       ) {
         return token.slice(0, length - 2)
       }
     }
 
-    if (length > 3 && token.slice(-1) in ['c', 'č', 'k', 'l', 'n', 't']) {
+    if (length > 3 && ['c', 'k', 'l', 'n', 't'].includes(token.slice(-1))) {
       return token.slice(0, length - 1)
     }
     return token
