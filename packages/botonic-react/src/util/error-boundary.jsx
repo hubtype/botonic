@@ -1,7 +1,7 @@
 import { isNode } from '@botonic/core'
 import React from 'react'
 
-import { Text } from '../components'
+import { Text } from '../components/text'
 
 /**
  * Replaces crashed children with the provided fallback component.
