@@ -5,7 +5,7 @@ title: Styles
 
 ## Custom Webchat Template
 
-[**View on Github**](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli/templates/custom-webchat)
+[**View on Github**](https://github.com/hubtype/botonic-examples/tree/master/templates/custom-webchat)
 
 This template allows you to create custom elements for Webchat. All custom components are stored in `src/webchat`.
 
@@ -37,22 +37,21 @@ export const webchat = {
 
 This Webchat template allows definitions that enable you to configure the example.
 
-| Property | Description   |
-|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `theme`             | Define your **[webchat styles](#webchat-styles)**                                                                                                              |                                                                                                               |
-| `persistentMenu`    | A persistent menu can be accessed from a small button in the input text box. It allows the user to access popular functionalities anywhere in the conversation |    
-|`blockInputs` |Enables you to define which user input is forbidden. It is useful to prevent the user from entering a credit card number.|
-|`enableEmojiPicker`| Enables the emoji picker. It can also be defined in `theme.userInput.enableEmojiPicker`. The false value is set by default.|
-|`enableAttachments`| Authorizes user media attachments or not (true|false). It can also be defined in `theme.userInput.attachments.enable`. The `false` value is set by default.|
-|`enableUserInput`| Enables the user typing zone (true or false). It can also be defined in `theme.userInput.enable`. `true` by default.|
-|`enableAnimations`| Enables webchat animations (true or false). true by default. It can also be defined in `theme.animations.enable`.|
-|`visibility`| To make webchat visible or not. If you want to use the settings defined in Hubtype Desk, you must set this value to 'dynamic'. You can pass a boolean `true` to make it visible or false to make it invisible, or you can define a function returning a boolean resolving the visibility.|
-|`coverComponent`| A `React.Component` shown the first time a user interacts with the Webchat.|
-|`onInit`| This event is triggered once the webchat is loaded in the webpage.|
-|`onOpen`| This event is triggered once the webchat has been opened.|
-|`onClose`| This event is triggered once the webchat has been closed.|
-|`onMessage`| This event is triggered once a message is sent by the enduser or the bot.
-
+| Property            | Description                                                                                                                                                                                                                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`             | Define your **[webchat styles](#webchat-styles)**                                                                                                                                                                                                                                         |  |
+| `persistentMenu`    | A persistent menu can be accessed from a small button in the input text box. It allows the user to access popular functionalities anywhere in the conversation                                                                                                                            |
+| `blockInputs`       | Enables you to define which user input is forbidden. It is useful to prevent the user from entering a credit card number.                                                                                                                                                                 |
+| `enableEmojiPicker` | Enables the emoji picker. It can also be defined in `theme.userInput.enableEmojiPicker`. The false value is set by default.                                                                                                                                                               |
+| `enableAttachments` | Authorizes user media attachments or not (true                                                                                                                                                                                                                                            | false). It can also be defined in `theme.userInput.attachments.enable`. The `false` value is set by default. |
+| `enableUserInput`   | Enables the user typing zone (true or false). It can also be defined in `theme.userInput.enable`. `true` by default.                                                                                                                                                                      |
+| `enableAnimations`  | Enables webchat animations (true or false). true by default. It can also be defined in `theme.animations.enable`.                                                                                                                                                                         |
+| `visibility`        | To make webchat visible or not. If you want to use the settings defined in Hubtype Desk, you must set this value to 'dynamic'. You can pass a boolean `true` to make it visible or false to make it invisible, or you can define a function returning a boolean resolving the visibility. |
+| `coverComponent`    | A `React.Component` shown the first time a user interacts with the Webchat.                                                                                                                                                                                                               |
+| `onInit`            | This event is triggered once the webchat is loaded in the webpage.                                                                                                                                                                                                                        |
+| `onOpen`            | This event is triggered once the webchat has been opened.                                                                                                                                                                                                                                 |
+| `onClose`           | This event is triggered once the webchat has been closed.                                                                                                                                                                                                                                 |
+| `onMessage`         | This event is triggered once a message is sent by the enduser or the bot.                                                                                                                                                                                                                 |
 
 **Note:** Listeners are useful to react to some events when using the webchat.
 
@@ -60,52 +59,48 @@ This Webchat template allows definitions that enable you to configure the exampl
 
 Here is a list of available styles. You need to modify them inside **src/webchat/index.js**'s `theme` object:
 
-
-| Property         | Type                                                                           |
-|------------------|--------------------------------------------------------------------------------|
-| `mobileBreakpoint` | Width (in pixels) for mobile responsive design. Set to `460` pixels by default |
-| `style`|  The main characteristics of webchat such as size, background color, etc.| 
-| `webviewStyle` |  The main characteristics of your webviews such as size, background color, etc. It can also be defined in `webview.style`.| 
-| `webviewHeaderStyle`|  Styles for the webview header. It can also be defined in `webview.header.style`.| 
-| `triggerButtonImage`|  Launcher icon to toggle the webchat. It can also be defined in `triggerButton.image`.| 
-| `triggerButtonStyle`|  Launcher icon styles. It can also be defined in `triggerButton.style`.| 
-| `brandColor`|  The main color palette of the webchat widget. It can also be defined in `brand.color`.| 
-| `brandImage`|  It sets an image for both `headerImage` and `botMessageImage`. It can also be defined in `brand.image`.| 
-| `headerImage`|  The image displayed in the header. Overwrites the one set in brandImage. You can set it to `null` to disable it. It can also be defined in `header.image`.| 
-| `headerTitle`|  Displays webchat title. It can also be defined in `header.title`.| 
-| `headerSubtitle`|  Displays webchat subtitle. It can also be defined in `header.subtitle`.| 
-| `headerStyle`|  Header styles. It can also be defined in `header.style`.| 
-| `buttonStyle`|  Button styles. It can also be defined in `button.style`.| 
-| `buttonHoverBackground`| Background color when hovering over a button. It can also be defined in `button.hoverBackground`.| 
-| `buttonHoverTextColor`| Text color when hovering over a button. It can also be defined in `button.hoverTextColor`.| 
-| `replyStyle`|  Styles for replies. It can also be defined in `reply.style`.| 
-| `alignReplies`|  Aligns replies at `left`, `center` or `right`. It can also be defined in `replies.align`.| 
-| `wrapReplies`|  Whether replies be displayed on a single row `nowrap` (horizontal scrolling is displayed when required) or it is wrapped in different lines `wrap`. It can also be defined in `replies.wrap`.| 
-| `botMessageImage`|  The image displayed next to the bot's chat bubble. Overwrites the one set in brandImage. You can set it to `null` to disable it. It can also be defined in `message.bot.image`.| 
-| `botMessageStyle`|  Styles of bot message. It can also be defined in `message.bot.style`.| 
-| `userMessageStyle`|  Styles of user message. It can also be defined in `message.user.style`.| 
-| `introImage`|  An introductory image shown the first time the conversation is initialized. It can also be defined in `intro.image`.| 
-| `introStyle`|  Styles of the introductory image. It can also be defined in `intro.style`.| 
-| `textPlaceholder`|  Text placeholder in the input text. It can also be defined in `userInput.box.placeholder`.| 
-| `enableUserInput`|  Set it to `false` if you want to disable text input. It can also be defined in `userInput.enable`. `true` by default.| 
-`userInputStyle` | Styles for the bottom area of the user input. It can also be defined in `userInput.style`.| 
-| `userInputBoxStyle`|  Styles for the text input box. It can also be defined in `userInput.box.style`.| 
-| `emojiPicker`|  Set it to `true` to enable the emoji picker. It can also be defined in `userInput.emojiPicker`. `false` by default.| 
-| `blockInputs`|  The inputs not allowed by the bot. It can also be defined in `userInput.blockInputs`.| 
-| `persistentMenu`|  An array containing the options of your persistent menu. It can also be defined in `userInput.persistentMenu`.| 
-| `enableAttachments`|  Whether to allow user media attachments or not (`true|false`). It can also be defined in `userInput.attachments.enable`. `false` by default.| 
-| `scrollbar`|  Refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.| 
+| Property                | Type                                                                                                                                                                                          |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mobileBreakpoint`      | Width (in pixels) for mobile responsive design. Set to `460` pixels by default                                                                                                                |
+| `style`                 | The main characteristics of webchat such as size, background color, etc.                                                                                                                      |
+| `webviewStyle`          | The main characteristics of your webviews such as size, background color, etc. It can also be defined in `webview.style`.                                                                     |
+| `webviewHeaderStyle`    | Styles for the webview header. It can also be defined in `webview.header.style`.                                                                                                              |
+| `triggerButtonImage`    | Launcher icon to toggle the webchat. It can also be defined in `triggerButton.image`.                                                                                                         |
+| `triggerButtonStyle`    | Launcher icon styles. It can also be defined in `triggerButton.style`.                                                                                                                        |
+| `brandColor`            | The main color palette of the webchat widget. It can also be defined in `brand.color`.                                                                                                        |
+| `brandImage`            | It sets an image for both `headerImage` and `botMessageImage`. It can also be defined in `brand.image`.                                                                                       |
+| `headerImage`           | The image displayed in the header. Overwrites the one set in brandImage. You can set it to `null` to disable it. It can also be defined in `header.image`.                                    |
+| `headerTitle`           | Displays webchat title. It can also be defined in `header.title`.                                                                                                                             |
+| `headerSubtitle`        | Displays webchat subtitle. It can also be defined in `header.subtitle`.                                                                                                                       |
+| `headerStyle`           | Header styles. It can also be defined in `header.style`.                                                                                                                                      |
+| `buttonStyle`           | Button styles. It can also be defined in `button.style`.                                                                                                                                      |
+| `buttonHoverBackground` | Background color when hovering over a button. It can also be defined in `button.hoverBackground`.                                                                                             |
+| `buttonHoverTextColor`  | Text color when hovering over a button. It can also be defined in `button.hoverTextColor`.                                                                                                    |
+| `replyStyle`            | Styles for replies. It can also be defined in `reply.style`.                                                                                                                                  |
+| `alignReplies`          | Aligns replies at `left`, `center` or `right`. It can also be defined in `replies.align`.                                                                                                     |
+| `wrapReplies`           | Whether replies be displayed on a single row `nowrap` (horizontal scrolling is displayed when required) or it is wrapped in different lines `wrap`. It can also be defined in `replies.wrap`. |
+| `botMessageImage`       | The image displayed next to the bot's chat bubble. Overwrites the one set in brandImage. You can set it to `null` to disable it. It can also be defined in `message.bot.image`.               |
+| `botMessageStyle`       | Styles of bot message. It can also be defined in `message.bot.style`.                                                                                                                         |
+| `userMessageStyle`      | Styles of user message. It can also be defined in `message.user.style`.                                                                                                                       |
+| `introImage`            | An introductory image shown the first time the conversation is initialized. It can also be defined in `intro.image`.                                                                          |
+| `introStyle`            | Styles of the introductory image. It can also be defined in `intro.style`.                                                                                                                    |
+| `textPlaceholder`       | Text placeholder in the input text. It can also be defined in `userInput.box.placeholder`.                                                                                                    |
+| `enableUserInput`       | Set it to `false` if you want to disable text input. It can also be defined in `userInput.enable`. `true` by default.                                                                         |
+| `userInputStyle`        | Styles for the bottom area of the user input. It can also be defined in `userInput.style`.                                                                                                    |
+| `userInputBoxStyle`     | Styles for the text input box. It can also be defined in `userInput.box.style`.                                                                                                               |
+| `emojiPicker`           | Set it to `true` to enable the emoji picker. It can also be defined in `userInput.emojiPicker`. `false` by default.                                                                           |
+| `blockInputs`           | The inputs not allowed by the bot. It can also be defined in `userInput.blockInputs`.                                                                                                         |
+| `persistentMenu`        | An array containing the options of your persistent menu. It can also be defined in `userInput.persistentMenu`.                                                                                |
+| `enableAttachments`     | Whether to allow user media attachments or not (`true                                                                                                                                         | false`). It can also be defined in `userInput.attachments.enable`. `false` by default. |
+| `scrollbar`             | Refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.                                                                      |
 
 **Note**: By specifying the `fontFamily` attribute in `style` property, you can overwrite your webchat entire typography.
-
 
 ## Custom Message
 
 You can create the kind of messages you want:
 
 - **customMessageTypes:** Array of React components representing your messages. It can also be defined in `message.customTypes`.
-
-
 
 **src/webchat/calendar-message.js**
 
@@ -143,22 +138,16 @@ Take a look at the infographics below to know exactly what are the parts that ar
 
 <img src="https://botonic-doc-static.netlify.com/images/customization2.png"/>
 
-
-
 **Note:** If you're using Hubtype Desk, add an `alt` property in your `customMessage` so that the text sent to the bot user is displayed to the agents in the Hubtype Desk platform.
 
 **E.g.:** `<MyCustomCalendarMessage alt="2019 Calendar" />` would display a calendar to the final user and the text "2019 calendar" to the agent.
-
 
 It is also possible to **customize the border and pointer of a conversation window** (also called blobTick) as in this example:
 
 <img src="https://botonic-doc-static.netlify.com/images/concepts_wblobtick.png" width="200"/>
 
-
 - The border of the blobTick is displayed if the message border color is defined by using `borderColor`.
 - `blobTickStyle` can be used to set the position of the pointer.
-
-
 
 ```javascript
 message: {
@@ -185,8 +174,6 @@ blobTickStyle: {
 
 **Note:** You cannot use `blobTick` for `blockInputs`.
 
-
-
 ## Custom Component
 
 <details>
@@ -204,7 +191,6 @@ You can also create your own components from scratch.
 **Note**: Custom components redefine completely the components that are replacing, so the styles in conflicts with these components are overridden.
 
 </details>
-
 
 In this example, we are putting CSS styles into a custom 'quickreply'.
 It's very important to put `{props.children}` inside the container, in this case the `<div>` tag:
