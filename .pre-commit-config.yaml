@@ -15,6 +15,11 @@ repos:
 
   - repo: local
     hooks:
+      - id: cli
+        name: cli
+        entry: scripts/qa/lint-package.sh packages/botonic-cli
+        language: system
+        files: ^packages/botonic-cli/
       - id: core
         name: core
         entry: scripts/qa/lint-package.sh packages/botonic-core
