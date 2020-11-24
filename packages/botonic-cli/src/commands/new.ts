@@ -2,10 +2,12 @@ import { Command } from '@oclif/command'
 import { exec as childProcessExec } from 'child_process'
 import colors from 'colors'
 import fetchRepoDir from 'fetch-repo-dir'
+import { existsSync } from 'fs'
 import { moveSync } from 'fs-extra'
 import { prompt, Separator } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
+import rimraf from 'rimraf'
 import { promisify } from 'util'
 
 import { BotonicAPIService } from '../botonic-api-service'
@@ -45,6 +47,7 @@ Creating...
   async run(): Promise<void> {
     track('Created Botonic Bot CLI')
     const { args } = this.parse(Run)
+    const userProjectName = args.name
     let selectedProjectName = ''
     if (!args.projectName) {
       await this.selectBotName().then(resp => {
@@ -70,6 +73,10 @@ Creating...
       }
     }
 
+    if (existsSync(userProjectName)) {
+      rimraf.sync(userProjectName)
+    }
+
     let spinner = ora({
       text: 'Downloading files...',
       spinner: 'bouncingBar',
@@ -82,10 +89,10 @@ Creating...
     try {
       await fetchRepoDir({
         src: selectedProject.uri,
-        dir: `${args.name}`,
+        dir: userProjectName,
       })
     } catch (e) {
-      console.log({ e })
+      throw new Error(`Error downloading ${selectedProjectName}: ${String(e)}`)
     }
     spinner.succeed()
     process.chdir(args.name)
@@ -116,9 +123,9 @@ Creating...
         name: 'botName',
         message: 'Select a bot template',
         choices: [
-          new Separator('\n----- Templates -----'),
+          new Separator('----- Templates -----'),
           ...this.templates.map(p => p.description),
-          new Separator('\n----- Examples -----'),
+          new Separator('----- Examples -----'),
           ...this.examples.map(p => p.description),
         ],
       },
