@@ -1,4 +1,4 @@
-import { anything, instance, mock, when } from 'ts-mockito'
+import { anything, capture, instance, mock, when } from 'ts-mockito'
 
 import * as cms from '../../../src/cms'
 import { AssetId, ContentId, ContentType } from '../../../src/cms'
@@ -10,6 +10,7 @@ import {
 import { ContentDeleter } from '../../../src/manage-cms/content-deleter'
 import { FieldsValues } from '../../../src/manage-cms/manage-cms'
 import { Locale, SPANISH } from '../../../src/nlp'
+import { Record } from '../../../src/tools/l10n/csv-import'
 import {
   ContentToImport,
   ImportContentUpdater,
@@ -64,6 +65,59 @@ test('TEST: ImportRecordReducer test check updateFields calls', async () => {
   await sut.flush()
 
   expect(numCalls).toEqual(1)
+})
+
+test('TEST: ImportRecordReducer', async () => {
+  const records: Record[] = [
+    {
+      Model: cms.ContentType.TEXT,
+      Code: 'POST_FAQ1',
+      Id: 'id1',
+      Field: ContentFieldType.SHORT_TEXT,
+      from: 'from',
+      to: 'válor1',
+    },
+    {
+      Model: cms.ContentType.TEXT,
+      Code: 'POST_FAQ1',
+      Id: 'id1',
+      Field: ContentFieldType.KEYWORDS,
+      from: 'from',
+      to: 'kw1;hola,amigo',
+    },
+    {
+      Model: cms.ContentType.CAROUSEL,
+      Code: 'POST_FAQ2',
+      Id: 'id2',
+      Field: ContentFieldType.TEXT,
+      from: 'from',
+      to: 'válor2',
+    },
+  ]
+  const mockUpdater = mock(ImportContentUpdater)
+
+  const sut = new ImportRecordReducer(instance(mockUpdater), {})
+  for (const record of records) {
+    await sut.consume(record)
+  }
+  await sut.flush()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  expect(capture(mockUpdater.update).first()).toEqual([
+    new ContentToImport(new ContentId(ContentType.TEXT, 'id1'), 'POST_FAQ1', {
+      [ContentFieldType.SHORT_TEXT]: 'válor1',
+      [ContentFieldType.KEYWORDS]: ['kw1', 'hola', 'amigo'],
+    }),
+  ])
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  expect(capture(mockUpdater.update).second()).toEqual([
+    new ContentToImport(
+      new ContentId(ContentType.CAROUSEL, 'id2'),
+      'POST_FAQ2',
+      {
+        [ContentFieldType.TEXT]: 'válor2',
+      }
+    ),
+  ])
 })
 
 // Since the test modifies contentful contents, it might fail if executed

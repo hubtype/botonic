@@ -20,15 +20,23 @@ import {
 import { FieldsValues } from '../../manage-cms/manage-cms'
 import { andArrays } from '../../util/arrays'
 import { isOfType } from '../../util/enums'
+import { Stringable } from '../../util/objects'
 import { Record, RecordFixer, recordId } from './csv-import'
 import { EXPORTABLE_CONTENT_TYPES } from './fields'
 
-export class ContentToImport {
+export class ContentToImport implements Stringable {
   constructor(
     readonly contentId: ContentId,
     readonly name: string,
     readonly fields: FieldsValues
   ) {}
+
+  toString(): string {
+    const fields = Object.keys(this.fields)
+      .map(k => `${k}:${String(this.fields[k])}`)
+      .join('/')
+    return [this.contentId, this.name, fields].join('/')
+  }
 }
 
 /**
@@ -161,7 +169,7 @@ export class ImportContentUpdater {
     }
   }
 
-  async updateFields(content: ContentToImport) {
+  private async updateFields(content: ContentToImport) {
     for (const field of getFieldsForContentType(content.contentId.model)) {
       const f = CONTENT_FIELDS.get(field)!
       switch (f.valueType) {
