@@ -11,6 +11,7 @@ import {
   TopContent,
 } from '../'
 import { andArrays } from '../../util/arrays'
+import { asyncEach } from '../../util/async'
 import { CmsInfo } from '../cms-info'
 import { Button, Carousel, MessageContent, StartUp, Text } from '../contents'
 
@@ -106,9 +107,9 @@ export async function reachableFrom(
     reachable.add(content)
   }
   const traverser = new MessageContentTraverser(cms, visitor, options)
-  for (const fromContent of fromContents) {
-    await traverser.traverse(fromContent, context)
-  }
+  await asyncEach(context, fromContents, fromContent =>
+    traverser.traverse(fromContent, context)
+  )
   return reachable
 }
 

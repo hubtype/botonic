@@ -38,14 +38,7 @@ export class ContentDeleter {
     for (const field of fields) {
       const f = CONTENT_FIELDS.get(field)!
       if (!f.isLocalized) continue
-      // const fieldType = contentFiedByCmsName(field).fieldType
       newVal[field] = undefined
-      // switch (f.valueType) {
-      //   case ContentFieldValueType.STRING:
-      //     newVal[f.cmsName] = ''
-      //   case ContentFieldValueType.STRING:
-      //     newVal[f.cmsName] = ''
-      // }
     }
     await this.manageCms.updateFields(this.context, contentId, newVal)
   }
