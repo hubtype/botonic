@@ -153,8 +153,7 @@ export class ContentfulEntryUtils {
         `Entry '${entry.sys.id}' not fully loaded or referencing a deleted content`
       )
     }
-    const typ = entry.sys.contentType.sys.id
-    return typ as T
+    return entry.sys.contentType.sys.id as T
   }
 
   static commonFieldsFromEntry(
