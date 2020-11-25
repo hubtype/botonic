@@ -3,11 +3,11 @@ id: webchat-style
 title: Styles
 ---
 
-## Custom Webchat Template
+## Custom Webchat Example
 
-[**View on Github**](https://github.com/hubtype/botonic-examples/tree/master/templates/custom-webchat)
+[**View on Github**](https://github.com/hubtype/botonic-examples/tree/master/custom-webchat)
 
-This template allows you to create custom elements for Webchat. All custom components are stored in `src/webchat`.
+This example allows you to create custom elements for Webchat. All custom components are stored in `src/webchat`.
 
 **src/webchat/index.js**
 
@@ -35,7 +35,7 @@ export const webchat = {
 }
 ```
 
-This Webchat template allows definitions that enable you to configure the example.
+This Webchat example allows definitions that enable you to configure the example.
 
 | Property            | Description                                                                                                                                                                                                                                                                               |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
