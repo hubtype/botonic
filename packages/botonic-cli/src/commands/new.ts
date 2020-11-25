@@ -4,14 +4,14 @@ import colors from 'colors'
 import fetchRepoDir from 'fetch-repo-dir'
 import { existsSync } from 'fs'
 import { moveSync } from 'fs-extra'
-import { prompt, Separator } from 'inquirer'
+import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
 import rimraf from 'rimraf'
 import { promisify } from 'util'
 
 import { BotonicAPIService } from '../botonic-api-service'
-import { EXAMPLES, TEMPLATES } from '../botonic-projects'
+import { EXAMPLES } from '../botonic-examples'
 import { track } from '../utils'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -36,11 +36,7 @@ Creating...
     },
   ]
 
-  private templates = TEMPLATES
-
   private examples = EXAMPLES
-
-  private allProjects = [...this.templates, ...this.examples]
 
   private botonicApiService = new BotonicAPIService()
 
@@ -51,22 +47,20 @@ Creating...
     let selectedProjectName = ''
     if (!args.projectName) {
       await this.selectBotName().then(resp => {
-        selectedProjectName = this.allProjects.filter(
+        selectedProjectName = this.examples.filter(
           p => p.description === resp.botName
         )[0].name
         return
       })
     } else {
-      const botExists = this.allProjects.filter(
-        p => p.name === args.projectName
-      )
+      const botExists = this.examples.filter(p => p.name === args.projectName)
       if (botExists.length) {
         selectedProjectName = args.projectName
       } else {
-        const projectNames = this.allProjects.map(p => p.name)
+        const projectNames = this.examples.map(p => p.name)
         console.log(
           colors.red(
-            `Template ${args.projectName} does not exist, please choose one of ${projectNames}.`
+            `Example ${args.projectName} does not exist, please choose one of ${projectNames}.`
           )
         )
         return
@@ -82,7 +76,7 @@ Creating...
       spinner: 'bouncingBar',
     }).start()
 
-    const selectedProject = this.allProjects.filter(
+    const selectedProject = this.examples.filter(
       project => project.name === selectedProjectName
     )[0]
 
@@ -121,13 +115,8 @@ Creating...
       {
         type: 'list',
         name: 'botName',
-        message: 'Select a bot template',
-        choices: [
-          new Separator('----- Templates -----'),
-          ...this.templates.map(p => p.description),
-          new Separator('----- Examples -----'),
-          ...this.examples.map(p => p.description),
-        ],
+        message: 'Select a bot example',
+        choices: this.examples.map(p => p.description),
       },
     ])
   }
