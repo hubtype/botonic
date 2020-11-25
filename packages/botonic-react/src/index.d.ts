@@ -9,7 +9,9 @@ import {
   ReplyProps,
   ThemeProps,
   WebchatSettingsProps,
+  Webview,
 } from './components'
+import { WebchatState } from './webchat'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/
@@ -80,6 +82,7 @@ export interface RequestContextInterface extends ActionRequest {
 }
 
 export const RequestContext: React.Context<RequestContextInterface>
+export type RequestContext = React.Context<RequestContextInterface>
 
 export interface CustomMessageType {
   customTypeName: string
@@ -198,6 +201,31 @@ export class WebchatApp {
   updateWebchatSettings(settings: WebchatSettingsProps): void
 }
 
+export interface WebchatContextProps {
+  sendText: (text: string) => void
+  sendAttachment: (attachment: File) => void
+  sendPayload: (payload: string) => void
+  sendInput: (input: core.Input) => void
+  openWebview: (webviewComponent: Webview) => void
+  addMessage: (message: WebchatMessage) => void
+  updateMessage: (message: WebchatMessage) => void
+  updateReplies: (replies: boolean) => void
+  updateLatestInput: (input: core.Input) => void
+  closeWebview: () => void
+  toggleWebchat: () => void
+  getThemeProperty: (
+    property: string,
+    defaultValue?: string
+  ) => string | undefined
+  resolveCase: () => string
+  theme: ThemeProps
+  webchatState: WebchatState
+  updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
+  updateUser: (user: core.SessionUser) => string
+}
+export const WebchatContext: React.Context<WebchatContextProps>
+export type WebchatContext = React.Context<WebchatContextProps>
+
 export class DevApp extends WebchatApp {
   constructor(args: WebchatAppArgs)
   onUserInput(args: OnUserInputArgs): Promise<void>
@@ -205,4 +233,5 @@ export class DevApp extends WebchatApp {
 }
 
 export * from './components'
+export * from './util'
 export * from './webchat'
