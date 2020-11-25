@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { ErrorInfo } from 'react'
 
+import { CoverComponentProps } from '../webchat'
+
 export type MessageType =
   | 'audio'
   | 'buttonmessage'
@@ -25,7 +27,9 @@ export interface MessageProps {
 
 export const Audio: React.FunctionComponent<MessageProps>
 export const Document: React.FunctionComponent<MessageProps>
+
 export const Message: React.FunctionComponent<MessageProps>
+export type Message = React.FunctionComponent<MessageProps>
 export const Video: React.FunctionComponent<MessageProps>
 
 export interface TextProps extends MessageProps {
@@ -50,8 +54,13 @@ export interface ButtonProps {
 
 export const Button: React.FunctionComponent<ButtonProps>
 
+export interface ReplyProps {
+  path?: string
+  payload?: string
+  children: string
+}
 export const Reply: React.FunctionComponent<ReplyProps>
-export type ReplyProps = ButtonProps
+export type Reply = React.FunctionComponent<ReplyProps>
 
 export interface PicProps {
   src: string
@@ -126,7 +135,7 @@ export interface ThemeProps extends StyleProp {
   message?: {
     bot?: BlobProps & ImageProp & StyleProp
     user?: BlobProps & StyleProp
-    customTypes?: React.Component[]
+    customTypes?: React.ComponentType[]
   } & StyleProp & {
       timestamps?: {
         enable?: boolean
@@ -170,10 +179,8 @@ export interface ThemeProps extends StyleProp {
 }
 
 export interface CoverComponentOptions {
-  coverComponent: {
-    component: React.Component
-    props: any
-  }
+  component: React.Component<CoverComponentProps>
+  props?: any
 }
 
 export interface WebchatSettingsProps {
@@ -199,12 +206,9 @@ export function createErrorBoundary<Props>(_?: {
   errorComponent: React.ComponentType
 }): ErrorBoundary<Props>
 
-export function customMessage<
-  Props,
-  CustomMessageComponent extends React.ComponentType<Props>
->(_: {
+export function customMessage<Props>(_: {
   name: string
-  component: CustomMessageComponent
+  component: React.ComponentType<Props>
   defaultProps?: Record<string, unknown>
   errorBoundary?: ErrorBoundary<Props>
 }): WrappedComponent<Props>
