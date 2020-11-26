@@ -20,7 +20,7 @@ const cards = [
     },
     links: {
       github:
-        'https://github.com/hubtype/botonic-examples/tree/master/examples/booking-platform',
+        'https://github.com/hubtype/botonic-examples/tree/master/example-hotel-reservation',
       example: '/examples/booking-platform',
     },
   },
@@ -33,7 +33,7 @@ const cards = [
     },
     links: {
       github:
-        'https://github.com/hubtype/botonic-examples/tree/master/examples/nlu-assistant',
+        'https://github.com/hubtype/botonic-examples/tree/master/example-nlu',
       example: '/examples/nlu-assistant',
     },
   },

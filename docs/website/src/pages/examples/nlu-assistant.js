@@ -16,6 +16,7 @@ const NluAssistant = () => {
           runtimeOptions={{
             appId: '500ec89c-63c1-4b29-89a4-2994d87002b0',
           }}
+          markdownSrc={'example-nlu/README.md'}
         />
       )}
     </BrowserOnly>
