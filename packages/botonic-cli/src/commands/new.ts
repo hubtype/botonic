@@ -101,12 +101,16 @@ Creating...
     this.botonicApiService.beforeExit()
     moveSync(join('..', '.botonic.json'), join(process.cwd(), '.botonic.json'))
     const chdirCmd = colors.bold(`cd ${args.name}`)
-    const runCmd = colors.bold('botonic serve')
+    const trainCmd =
+      selectedProjectName === 'nlu' ? colors.bold(`\nbotonic train`) : undefined
+    const serveCmd = colors.bold('botonic serve')
     const deployCmd = colors.bold('botonic deploy')
     console.log(
       `\n✨  Bot ${colors.bold(
         args.name
-      )} was successfully created!\n\nNext steps:\n${chdirCmd}\n${runCmd} (test your bot locally from the browser)\n${deployCmd} (publish your bot to the world!)`
+      )} was successfully created!\n\nNext steps:\n${chdirCmd}\n${serveCmd}${
+        trainCmd || ''
+      } (test your bot locally from the browser)\n${deployCmd} (publish your bot to the world!)`
     )
   }
 
