@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { Text } from '../text'
+import { MultichannelFacebook } from './facebook/facebook'
 import { MultichannelButton } from './multichannel-button'
 import { MultichannelContext } from './multichannel-context'
 import {
@@ -9,6 +10,7 @@ import {
   elementHasUrl,
   getMultichannelButtons,
   getMultichannelReplies,
+  isFacebook,
   isMultichannelButton,
   isMultichannelReply,
   isWhatsapp,
@@ -21,17 +23,19 @@ export const MultichannelText = props => {
 
   let elements = []
 
-  const getText = () => {
-    let text = undefined
-    if (typeof props.children == 'string') {
-      text = props.children
-    } else if (Array.isArray(props.children)) {
-      text = props.children[0]
-    }
+  const getText = children => {
+    children = Array.isArray(children) ? children : [children]
+    const text = children
+      .filter(e => e && !e.type)
+      .map(e => {
+        if (Array.isArray(e)) return getText(e)
+        else return String(e)
+      })
+      .join('')
     if (text == undefined) {
       return []
     }
-    return [text]
+    return [text].filter(t => t !== '') // to avoid line breaks when the carousel doesn't have title or subtitle
   }
 
   const getButtonsAndReplies = () =>
@@ -88,6 +92,26 @@ export const MultichannelText = props => {
       <Text {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
         {elements}
       </Text>
+    )
+  }
+  if (isFacebook(requestContext)) {
+    const text = getText(props.children)
+    const multichannelFacebook = new MultichannelFacebook()
+    const {
+      texts,
+      propsLastText,
+      propsWithoutChildren,
+    } = multichannelFacebook.convertText(props, text[0])
+    return (
+      <>
+        {texts &&
+          texts.map((e, i) => (
+            <Text key={i} {...propsWithoutChildren}>
+              {e}
+            </Text>
+          ))}
+        <Text {...propsLastText}>{propsLastText.children}</Text>
+      </>
     )
   } else {
     return <Text {...props}>{props.children}</Text>

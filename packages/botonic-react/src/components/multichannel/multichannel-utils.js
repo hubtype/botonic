@@ -52,3 +52,8 @@ export const isWhatsapp = context =>
   context.session &&
   context.session.user &&
   context.session.user.provider == Providers.Messaging.WHATSAPP
+
+export const isFacebook = context =>
+  context.session &&
+  context.session.user &&
+  context.session.user.provider == Providers.Messaging.FACEBOOK

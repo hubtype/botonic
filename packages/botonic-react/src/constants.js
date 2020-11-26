@@ -163,3 +163,10 @@ export const ROLES = {
   VIDEO_MESSAGE: 'video-message',
   DOCUMENT_MESSAGE: 'document-message',
 }
+
+export const COMPONENT_TYPE = {
+  TEXT: 'Text',
+  BUTTON: 'Button',
+  REPLY: 'Reply',
+  CAROUSEL: 'Carousel',
+}
