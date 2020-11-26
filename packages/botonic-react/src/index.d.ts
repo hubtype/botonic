@@ -217,11 +217,11 @@ export interface WebchatContextProps {
     property: string,
     defaultValue?: string
   ) => string | undefined
-  resolveCase: () => string
+  resolveCase: () => void
   theme: ThemeProps
   webchatState: WebchatState
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
-  updateUser: (user: core.SessionUser) => string
+  updateUser: (user: core.SessionUser) => void
 }
 export const WebchatContext: React.Context<WebchatContextProps>
 export type WebchatContext = React.Context<WebchatContextProps>
