@@ -12,6 +12,8 @@
   --ifm-color-primary-light: rgb(70, 203, 174);
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-color-success: rgb(180, 146, 224);
+  --ifm-code-background: rgb(216 220 226);
 }
 
 @tailwind base;

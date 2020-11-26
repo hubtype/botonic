@@ -58,6 +58,8 @@ module.exports = {
         { to: '/docs/releases/releases-intro', label: 'Releases', position: 'right' },
 
         { to: '/docs/faq', label: 'FAQ', position: 'right' },
+
+        { to: '/examples', label: 'Examples', position: 'right' },
       ],
     },
     footer: {
