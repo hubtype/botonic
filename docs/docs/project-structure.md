@@ -25,7 +25,7 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
   </tr>
   <tr>
     <td align="center">
-      <a href="https://github.com/hubtype/botonic-examples/tree/master/example-hotel-reservation">
+      <a href="https://github.com/hubtype/botonic-examples/tree/master/booking-platform">
         Booking Platform
       </a>
     </td>
@@ -39,7 +39,7 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
   </tr>
   <tr>
     <td align="center">
-      <a href="https://github.com/hubtype/botonic-examples/tree/master/example-nlu">
+      <a href="https://github.com/hubtype/botonic-examples/tree/master/nlu-assistant">
         NLU Assistant
       </a>
     </td>

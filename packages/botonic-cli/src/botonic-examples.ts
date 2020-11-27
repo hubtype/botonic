@@ -11,13 +11,13 @@ export const EXAMPLES: BotonicProject[] = [
     name: 'booking-platform',
     description:
       'Booking Platform: Use custom messages and webviews in order to book a reservation in a hotel',
-    uri: `${GITHUB_EXAMPLES_PATH}/example-hotel-reservation`,
+    uri: `${GITHUB_EXAMPLES_PATH}/booking-platform`,
   },
   {
     name: 'nlu-assistant',
     description:
       'NLU Assistant: Train your own NLU model in order to understand your user intents',
-    uri: `${GITHUB_EXAMPLES_PATH}/example-nlu`,
+    uri: `${GITHUB_EXAMPLES_PATH}/nlu-assistant`,
   },
   {
     name: 'blank',
