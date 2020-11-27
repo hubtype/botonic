@@ -35,7 +35,7 @@ const BotonicExample = ({
   const [error, setError] = useState(false)
   if (isBrowser) {
     removejscssfile('styles.css', 'css') // Dev
-    removejscssfile('styles.9c057c15.css', 'css') // Prod
+    removejscssfile('styles.14d0f803.css', 'css') // Prod
     window.onload = () => {
       setTimeout(() => {
         try {

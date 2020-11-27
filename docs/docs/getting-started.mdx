@@ -16,10 +16,9 @@ npm install -g @botonic/cli
 ```
 
 :::note
-
-- **[NodeJS](https://nodejs.org/)** version >= 10 required
-- Mac/Linux users might need to run this command with `sudo`
-  :::
+* **[NodeJS](https://nodejs.org/)** version >= 10 required
+* Mac/Linux users might need to run this command with `sudo`
+:::
 
 :::tip Don't want to install?
 You can use botonic with `npx @botonic/cli <command>`
@@ -36,17 +35,15 @@ botonic new myBot blank
 This command will scaffold a new Botonic project in `myBot` folder and install its dependencies.
 
 :::note
-
 - It might take 2-3 minutes to complete
 - You can run this command without the last argument to see the list of all templates available: `botonic new myBot`
-  :::
+:::
 
 ## Step 3 – Run Your Bot
 
 Now everything is ready to run your bot:
 
 1. Start the local development server:
-
 ```bash
 cd myBot
 botonic serve
@@ -58,22 +55,16 @@ Windows users might need to use the alternative `npm run start`
 
 2. Open [http://localhost:8080/](http://localhost:8080/) in your web browser. You'll see the Botonic logo at the bottom-right corner, click on it to open the chat interface and start talking.
 
-<div className='flex flex-col md:flex-row mb-4'>
-  <div className='flex-1'>
+<div className="flex flex-col md:flex-row mb-4">
+  <div className="flex-1">
     <img
-      src={
-        require('../website/static/img/botonic_getting_started_1.png').default
-      }
-      alt='Example banner'
+      width="350px"
+      src={require('../website/static/img/botonic_getting_started_1.png').default}
+      alt="Example banner"
     />
   </div>
-  <p className='flex-1 md:pl-4'>
-    You'll notice that the bot doesn't understand anything you say, that's fine.
-    In Botonic there are two main concepts that need to be defined in order to
-    add functionality to your bot: <a href='/docs/concepts/routes'>routes</a>{' '}
-    and <a href='/docs/concepts/actions'>actions</a>. If those are not defined,
-    any user input will fallback to the "404" route that responds "I don't
-    understand you" by default.
+  <p className="flex-1 md:pl-4">
+    You'll notice that the bot doesn't understand anything you say, that's fine. In Botonic there are two main concepts that need to be defined in order to add functionality to your bot: <a href="/docs/concepts/routes">routes</a> and <a href="/docs/concepts/actions">actions</a>. If those are not defined, any user input will fallback to the "404" route that responds "I don't understand you" by default.
   </p>
 </div>
 
@@ -98,44 +89,37 @@ export const routes = [
         <Text>Hello! Nice to meet you ;)</Text>
         <Text>
           How can I help you?
-          <Reply payload='search'>Search product</Reply>
-          <Reply payload='track'>Track my order</Reply>
+          <Reply payload="search">Search product</Reply>
+          <Reply payload="track">Track my order</Reply>
         </Text>
       </>
-    ),
-  },
+    )
+  }
 ]
 ```
 
+
 2. Go back to the browser and try typing "Hi there!":
 
-<div className='flex flex-col md:flex-row mb-4'>
-  <div className='flex-1'>
+<div className="flex flex-col md:flex-row mb-4">
+  <div className="flex-1">
     <img
-      src={
-        require('../website/static/img/botonic_getting_started_2.png').default
-      }
-      alt='Example banner'
+      width="350px"
+      src={require('../website/static/img/botonic_getting_started_2.png').default}
+      alt="Example banner"
     />
   </div>
-  <p className='flex-1 md:pl-4'>
-    The route we just defined indicates that any input text matching the regex{' '}
-    <code>/hi/i</code> will be responded by the text "Hello! Nice to meet you
-    ;)", defined in the <code>action</code> attribute.
-    <br />
-    <br />
-    Actions are just React components that can run random JS code (fetching data
-    from APIs, etc) and return components supported by messaging channels, like <code>
-      Text
-    </code> or <code>Reply</code>
+  <p className="flex-1 md:pl-4">
+  The route we just defined indicates that any input text matching the regex <code>/hi/i</code> will be responded by the text "Hello! Nice to meet you ;)", defined in the <code>action</code> attribute.
+  <br/><br/>
+  Actions are just React components that can run random JS code (fetching data from APIs, etc) and return components supported by messaging channels, like <code>Text</code> or <code>Reply</code>
   </p>
 </div>
 
 :::note
-
 - Routes are not limited only to regex, you can also use functions, intents trained by NLU models and more.
 - For simplicity sake we've defined everything in the same file, but typically actions live in their own file under `src/actions`.
-  :::
+:::
 
 ## Where to go from here
 

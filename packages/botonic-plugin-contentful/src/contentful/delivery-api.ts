@@ -12,8 +12,8 @@ import {
 } from '../cms'
 import { ContentfulOptions } from '../plugin'
 import { DateRangeDelivery } from './contents/date-range'
-import { DateRangeFields } from './delivery-utils'
 import { ReducedClientApi } from './delivery/client-api'
+import { DateRangeFields } from './delivery-utils'
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields,
