@@ -1,22 +1,22 @@
-export { Router } from './router'
-export { getString } from './i18n'
+export { Providers } from './constants'
+export { CoreBot } from './core-bot'
+export * from './debug'
 export {
-  getOpenQueues,
-  humanHandOff,
-  HandOffBuilder,
-  storeCaseRating,
-  getAvailableAgents,
-  getAvailableAgentsByQueue,
-  getAgentVacationRanges,
   cancelHandoff,
   deleteUser,
+  getAgentVacationRanges,
+  getAvailableAgents,
+  getAvailableAgentsByQueue,
+  getOpenQueues,
+  HandOffBuilder,
+  humanHandOff,
+  storeCaseRating,
 } from './handoff'
-export { getNLU } from './nlu'
-export { isBrowser, isNode, isMobile, params2queryString } from './utils'
-export { CoreBot } from './core-bot'
 export { HubtypeService } from './hubtype-service'
-export { Providers } from './constants'
-export * from './debug'
+export { getString } from './i18n'
+export { getNLU } from './nlu'
+export { Router } from './router'
+export { isBrowser, isMobile, isNode, params2queryString } from './utils'
 
 export const PROVIDER = Object.freeze({
   DEV: 'dev',

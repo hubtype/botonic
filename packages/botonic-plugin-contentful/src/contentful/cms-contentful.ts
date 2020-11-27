@@ -28,12 +28,12 @@ import { ScheduleDelivery } from './contents/schedule'
 import { StartUpDelivery } from './contents/startup'
 import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
+import { CachedClientApi } from './delivery/cache'
 import { AdaptorDeliveryApi, DeliveryApi } from './delivery-api'
 import {
   ContentfulEntryUtils,
   createContentfulClientApi,
 } from './delivery-utils'
-import { CachedClientApi } from './delivery/cache'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 import { KeywordsDelivery } from './search/keywords'
 
