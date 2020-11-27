@@ -16,7 +16,6 @@ export enum Versions {
 export const CONSTANTS = {
   PACKAGES_DIRNAME: 'packages',
   BOTONIC_PACKAGES_REF: 'botonic-',
-  BOTONIC_CLI: 'botonic-cli',
 }
 
 /**
@@ -84,22 +83,6 @@ export const bumpVersion = async (version, packagePath) => {
     })
   }
   return getPkgVersion(packagePath)
-}
-
-export const updateCliTemplates = async (
-  packagePath: string,
-  bumpedVersion: any
-) => {
-  const templatesDir = join(packagePath, 'templates')
-  chdir(templatesDir)
-  const templates = readdirSync(templatesDir).filter(
-    file => !file.startsWith('.')
-  )
-  for (const template of templates) {
-    const templatePath = join(templatesDir, template)
-    console.log(` Replacing deps for template: ${template}`)
-    await changeBotonicDeps(templatePath, bumpedVersion)
-  }
 }
 
 export const changeBotonicDeps = async (packagePath, withVersion) => {
