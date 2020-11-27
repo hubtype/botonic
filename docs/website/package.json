@@ -3,7 +3,7 @@
     "examples": "docusaurus-examples",
     "prepare": "node ../../preinstall.js",
     "start": "docusaurus start",
-    "build": "npm run update_plugins_docs && docusaurus build && cp _redirects build",
+    "build": "npm run update-docs && docusaurus build && cp _redirects build",
     "update-docs": "./node_modules/.bin/ts-node ./scripts/update-plugins-docs/index.ts; npm run prettify-updated-docs;",
     "prettify-updated-docs": "../../node_modules/.bin/prettier --write --config ../../.prettierrc ./sidebars.json ./i18n/en.json ../docs/plugins ../docs/releases",
     "swizzle": "docusaurus swizzle",
