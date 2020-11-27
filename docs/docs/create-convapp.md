@@ -13,7 +13,7 @@ See the [**Installation section**](getting-started).
 
 1. Name your project by running:
    `botonic new <botName>`
-2. Select the **blank** example and run `cd <botName>`.
+2. Select the **blank** template and run `cd <botName>`.
 3. Test it in your browser with `npm run start` or `botonic serve`.
 
 Your blank project is created with its basic structure. For more information, see the **[Understanding the Project](/docs/concepts/project)** section.

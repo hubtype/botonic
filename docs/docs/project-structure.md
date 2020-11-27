@@ -59,7 +59,7 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
     </td>
     <td align="center"></td>
     <td>
-      Example with empty actions. The bot will always respond with the
+      Template with empty actions. The bot will always respond with the
       default `404` action "I don't understand you" when you test it.
     </td>
   </tr>

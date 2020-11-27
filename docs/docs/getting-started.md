@@ -29,7 +29,7 @@ Congratulations: Your bot is created!
 3. Copy the development server URL (generally [http://localhost:8080/](http://localhost:8080/)) and paste it in your browser.
 4. Try chatting with your bot!
 
-**Note**: If you started with the "blank" example, the bot answers with "I don't understand you".
+**Note**: If you started with the "blank" template, the bot answers with "I don't understand you".
 
 ## Step 4 – Deploy Your Bot
 

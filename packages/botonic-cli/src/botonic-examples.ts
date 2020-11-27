@@ -21,7 +21,7 @@ export const EXAMPLES: BotonicProject[] = [
   },
   {
     name: 'blank',
-    description: 'Blank: A minimal example to start from scratch',
+    description: 'Blank: A minimal template to start from scratch',
     uri: `${GITHUB_EXAMPLES_PATH}/blank`,
   },
   {
