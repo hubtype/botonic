@@ -1,6 +1,6 @@
 export {
-  Inspector,
-  RouteInspector,
   FocusRouteInspector,
+  Inspector,
   LogRouteInspector,
+  RouteInspector,
 } from './inspector'
