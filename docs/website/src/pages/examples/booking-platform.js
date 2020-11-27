@@ -16,6 +16,7 @@ const BookingPlatform = () => {
           runtimeOptions={{
             appId: 'fa9c6b42-5984-4b46-8bbb-954796641b9e',
           }}
+          markdownSrc={'booking-platform/README.md'}
         />
       )}
     </BrowserOnly>

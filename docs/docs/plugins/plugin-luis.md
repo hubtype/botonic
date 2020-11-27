@@ -17,7 +17,7 @@ Botonic plugin that use [LUIS](https://www.luis.ai/) as NLU service. The variabl
 
 ## Setup
 
-To integrate your bot with Luis, you must use the `intent` template, which comes with @botonic/plugin-luis by default.
+To integrate your bot with Luis, you must use the `intent` example, which comes with @botonic/plugin-luis by default.
 
 1. Run `botonic new test-bot intent` to install the plugin automatically.
 2. Add the plugin to the `src/plugins.js` file.

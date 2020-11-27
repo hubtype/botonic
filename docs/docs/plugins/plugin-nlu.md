@@ -15,7 +15,7 @@ For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tre
 
 Botonic Plugin NLU allows you to predict intents from the user inputs for your bot.
 
-To set up a new template using Botonic Plugin NLU, you can create a bot by running the following command:
+To set up a new example using Botonic Plugin NLU, you can create a bot by running the following command:
 
 ```shell
 $ botonic new {BOT_NAME} nlu

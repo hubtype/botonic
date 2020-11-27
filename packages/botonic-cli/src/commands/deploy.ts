@@ -9,7 +9,7 @@ import { join } from 'path'
 import * as rimraf from 'rimraf'
 import { zip } from 'zip-a-folder'
 
-import { BotonicAPIService } from '../botonicapiservice'
+import { BotonicAPIService } from '../botonic-api-service'
 import { sleep, track } from '../utils'
 
 let force = false

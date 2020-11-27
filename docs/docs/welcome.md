@@ -109,7 +109,7 @@ You can also create your own plugins, just follow [our guide](/docs/plugins/crea
 
 We offer a command line interface tool that allows you to:
 
-- **Scaffold** new projects with `botonic new <botName> <template>`
+- **Scaffold** new projects with `botonic new <botName> <example>`
 - **Run** your project locally with `botonic serve`
 - **Deploy** your project with `botonic deploy`
 

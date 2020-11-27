@@ -19,7 +19,7 @@ This plugin uses [Dialogflow](https://dialogflow.com/) as NLU service. The varia
 
 ### Install the Plugin
 
-To integrate your bot with Dialogflow, you must use the `intent` template, which comes with `@botonic/plugin-dialogflow` by default.
+To integrate your bot with Dialogflow, you must use the `intent` example, which comes with `@botonic/plugin-dialogflow` by default.
 
 > `$ botonic new test-bot intent`
 

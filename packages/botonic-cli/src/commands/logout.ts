@@ -1,7 +1,7 @@
 import { Command, flags } from '@oclif/command'
 import { resolve } from 'path'
 
-import { BotonicAPIService } from '../botonicapiservice'
+import { BotonicAPIService } from '../botonic-api-service'
 import { track } from '../utils'
 
 export default class Run extends Command {

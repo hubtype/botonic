@@ -10,7 +10,6 @@ import {
   doAskVersionToPublish,
   installDeps,
   publish,
-  updateCliTemplates,
   CONSTANTS as C,
   Versions,
   sortPackagesByPreference,
@@ -38,9 +37,7 @@ const packagesList = sortPackagesByPreference(packagesDir)
     const bumpedVersion = await bumpVersion(version, packagePath)
     const botonicDepsVersion =
       version === Versions.FINAL ? `~${bumpedVersion}` : bumpedVersion
-    if (pkg === C.BOTONIC_CLI) {
-      await updateCliTemplates(packagePath, botonicDepsVersion)
-    } else await changeBotonicDeps(packagePath, botonicDepsVersion)
+    await changeBotonicDeps(packagePath, botonicDepsVersion)
     await publish(version)
   }
 })()

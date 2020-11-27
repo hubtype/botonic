@@ -3,9 +3,9 @@
     "examples": "docusaurus-examples",
     "prepare": "node ../../preinstall.js",
     "start": "docusaurus start",
-    "build": "npm run update_plugins_docs && docusaurus build && cp _redirects build",
-    "update_plugins_docs": "./node_modules/.bin/ts-node ./scripts/update-plugins-docs/index.ts; npm run prettify_plugins_docs;",
-    "prettify_plugins_docs": "../../node_modules/.bin/prettier --write --config ../../.prettierrc ./sidebars.json ./i18n/en.json ../docs/plugins",
+    "build": "npm run update-docs && docusaurus build && cp _redirects build",
+    "update-docs": "./node_modules/.bin/ts-node ./scripts/update-plugins-docs/index.ts; npm run prettify-updated-docs;",
+    "prettify-updated-docs": "../../node_modules/.bin/prettier --write --config ../../.prettierrc ./sidebars.json ./i18n/en.json ../docs/plugins ../docs/releases",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "lint": "npm run lint_core -- --fix",
@@ -22,6 +22,7 @@
     "classnames": "^2.2.6",
     "dotenv-webpack": "^4.0.0",
     "file-loader": "^6.1.1",
+    "markdown-it": "^12.0.2",
     "postcss-import": "^12.0.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/markdown-it": "^10.0.3",
     "@types/node": "^14.14.6",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5"

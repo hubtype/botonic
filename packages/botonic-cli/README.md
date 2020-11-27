@@ -8,14 +8,16 @@ Build Chatbots Using React
 [![License](https://img.shields.io/npm/l/@botonic/cli.svg)](https://github.com/hubtype/botonic/blob/master/package.json)
 
 <!-- toc -->
-* [@botonic/cli](#botoniccli)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [@botonic/cli](#botoniccli)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @botonic/cli
 $ botonic COMMAND
@@ -27,19 +29,21 @@ USAGE
   $ botonic COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`botonic deploy [BOT_NAME]`](#botonic-deploy-bot_name)
-* [`botonic help [COMMAND]`](#botonic-help-command)
-* [`botonic login`](#botonic-login)
-* [`botonic logout`](#botonic-logout)
-* [`botonic new NAME [TEMPLATENAME]`](#botonic-new-name-templatename)
-* [`botonic serve`](#botonic-serve)
-* [`botonic test`](#botonic-test)
-* [`botonic train`](#botonic-train)
+
+- [`botonic deploy [BOT_NAME]`](#botonic-deploy-bot_name)
+- [`botonic help [COMMAND]`](#botonic-help-command)
+- [`botonic login`](#botonic-login)
+- [`botonic logout`](#botonic-logout)
+- [`botonic new NAME [TEMPLATENAME]`](#botonic-new-name-templatename)
+- [`botonic serve`](#botonic-serve)
+- [`botonic test`](#botonic-test)
+- [`botonic train`](#botonic-train)
 
 ## `botonic deploy [BOT_NAME]`
 
@@ -111,7 +115,7 @@ USAGE
 
 ARGUMENTS
   NAME          name of the bot folder
-  TEMPLATENAME  OPTIONAL name of the bot template
+  TEMPLATENAME  OPTIONAL name of the bot example
 
 EXAMPLE
   $ botonic new test_bot
@@ -174,4 +178,5 @@ EXAMPLE
 ```
 
 _See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v0.16.0/lib/commands/train.js)_
+
 <!-- commandsstop -->
