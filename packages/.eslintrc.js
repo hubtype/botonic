@@ -61,7 +61,8 @@ module.exports = {
     'jest/no-jasmine-globals': 'warn',
     'no-empty': 'warn',
     'prefer-const': ['error', { destructuring: 'all' }],
-    'simple-import-sort/sort': 'error',
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
     // import rules
     'node/no-missing-import': [
       'error',
