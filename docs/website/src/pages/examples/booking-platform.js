@@ -12,9 +12,9 @@ const BookingPlatform = () => {
         <BotonicExample
           title='Botonic Booking Platform'
           rootId='botonic-booking-platform'
-          src='https://hotel-reservation-7e73471a-80ee-40ec-a7e1-955d69cd94a4.netlify.com/webchat.botonic.js'
+          src='https://example-booking-platform-5e3802b9-c5c8-4905-8035-a1839a751fe0.netlify.com/webchat.botonic.js'
           runtimeOptions={{
-            appId: 'fa9c6b42-5984-4b46-8bbb-954796641b9e',
+            appId: 'bdd53814-cfe1-4e94-8fbb-c408c1296416',
           }}
           markdownSrc={'booking-platform/README.md'}
         />

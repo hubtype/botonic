@@ -5,22 +5,22 @@ import React from 'react'
 
 import BotonicExample from './botonic-example'
 
-const NluAssistant = () => {
+const TelcoOffers = () => {
   return (
     <BrowserOnly>
       {() => (
         <BotonicExample
-          title='Botonic NLU Assistant'
-          rootId='botonic-nlu'
-          src='https://example-nlu-assistant-dcab1a9c-dbe8-4a85-8bc2-50687fc22b8b.netlify.com/webchat.botonic.js'
+          title='Botonic Telco Offers'
+          rootId='botonic-telco-offers'
+          src='https://example-telco-offers-b3666954-41a5-430c-909f-3970ea9bdba5.netlify.com/webchat.botonic.js'
           runtimeOptions={{
-            appId: '89ce1496-ba5a-432e-89c7-4b853a8c7e29',
+            appId: '258b9edb-b632-41cc-a05d-f509eaa7202f',
           }}
-          markdownSrc={'nlu-assistant/README.md'}
+          markdownSrc={'telco-offers/README.md'}
         />
       )}
     </BrowserOnly>
   )
 }
 
-export default NluAssistant
+export default TelcoOffers
