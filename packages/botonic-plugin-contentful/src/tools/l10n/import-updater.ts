@@ -196,13 +196,13 @@ export class ImportContentUpdater {
       ) {
         continue
       }
-      const defaultContent = this.defaultLocaleContents.find(
+      const defaultLocaleContent = this.defaultLocaleContents.find(
         c => c.id == content.contentId.id
       )!
       if (
         !content.fields[field] &&
-        defaultContent &&
-        f.isDefinedAt(defaultContent)
+        defaultLocaleContent &&
+        f.isNotEmptyAt(defaultLocaleContent)
       ) {
         console.warn(
           `Missing field '${field}' for ${content.contentId.toString()} (${

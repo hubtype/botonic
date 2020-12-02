@@ -150,8 +150,7 @@ export class RecordFixer {
     if (firstChar === firstChar.toLowerCase()) {
       return
     }
-    this.record.Model = (firstChar.toLowerCase() +
-      this.record.Model.substr(1).toLowerCase()) as ContentType
+    this.record.Model = this.record.Model.toLowerCase() as ContentType
   }
 
   fixTrimmingQuotes(): void {

@@ -1,11 +1,11 @@
 import * as fs from 'fs'
 import { join } from 'path'
-import * as XLSX from 'xlsx'
+import { readFile as readXls, stream as xlsStream } from 'xlsx'
 
 import { fixLocale } from '../../../nlp'
 
-if (process.argv.length < 3 || process.argv[2] == '--help') {
-  console.error(`Usage: xlsName locale [targetPath]`)
+if (process.argv.length < 4 || process.argv[2] == '--help') {
+  console.warn(`Usage: xlsName locale [targetPath]`)
   // eslint-disable-next-line no-process-exit
   process.exit(1)
 }
@@ -23,10 +23,10 @@ function getCsvName(csvPath: string): string {
 
 function main(): string {
   const csvName = getCsvName(csvPath)
-  const workBook = XLSX.readFile(xslName)
+  const workBook = readXls(xslName)
   const sheetName = workBook.SheetNames[0]
   const sheet = workBook.Sheets[sheetName]
-  const stream = XLSX.stream.to_csv(sheet, { FS: ';' })
+  const stream = xlsStream.to_csv(sheet, { FS: ';' })
   stream.pipe(fs.createWriteStream(csvName))
   console.log(`CSV written to ${csvName}`)
   return csvName

@@ -36,6 +36,18 @@ export class SpaceManager {
   }
 }
 
+if (process.argv.length < 7 || process.argv[2] == '--help') {
+  console.warn(
+    `Usage: space_id environment access_token locale_name locale_code`
+  )
+  console.warn(
+    'It creates a new locale without fallback in contentful.com with the specified name' +
+      '. Useful for locales not available such as English on a non-English speaking country'
+  )
+  // eslint-disable-next-line no-process-exit
+  process.exit(1)
+}
+
 const spaceId = process.argv[2]
 const environment = process.argv[3]
 const accessToken = process.argv[4]
