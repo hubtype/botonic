@@ -20,6 +20,12 @@ export const EXAMPLES: BotonicProject[] = [
     uri: `${GITHUB_EXAMPLES_PATH}/nlu-assistant`,
   },
   {
+    name: 'telco-offers',
+    description:
+      'Telco Offers: Flow to acquire an Internet or a cell phone rate using buttons and replies',
+    uri: `${GITHUB_EXAMPLES_PATH}/telco-offers`,
+  },
+  {
     name: 'blank',
     description: 'Blank: A minimal template to start from scratch',
     uri: `${GITHUB_EXAMPLES_PATH}/blank`,
