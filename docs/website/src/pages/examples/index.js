@@ -5,6 +5,7 @@ import React from 'react'
 
 import nluImage from '../../../static/img/examples/nlu.png'
 import bookingImage from '../../../static/img/examples/reservation.png'
+import telcoImage from '../../../static/img/examples/telco.png'
 import Analytics from '../../components/analytics'
 import { ExamplesSection } from '../../components/examples'
 import HomeHeader from '../../components/homeHeader'
@@ -35,6 +36,19 @@ const cards = [
       github:
         'https://github.com/hubtype/botonic-examples/tree/master/nlu-assistant',
       example: '/examples/nlu-assistant',
+    },
+  },
+  {
+    project: {
+      title: 'Telco Offers',
+      description:
+        'Flow to acquire an Internet or a cell phone rate using buttons and replies',
+      asset: telcoImage,
+    },
+    links: {
+      github:
+        'https://github.com/hubtype/botonic-examples/tree/master/telco-offers',
+      example: '/examples/telco-offers',
     },
   },
 ]
