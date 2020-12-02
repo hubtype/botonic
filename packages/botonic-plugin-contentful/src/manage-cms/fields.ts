@@ -65,7 +65,7 @@ export class ContentField {
     return (content as any)[this.cmsName]
   }
 
-  isDefinedAt(content: Content): boolean {
+  isNotEmptyAt(content: Content): boolean {
     const val = this.getValue(content)
     if (Array.isArray(val)) {
       return val.length > 0
