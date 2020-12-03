@@ -1,6 +1,6 @@
 // From http://nlp.ffzg.hr/resources/tools/stemmer-for-croatian/
 
-import { Stemmer } from '@nlpjs/core/src'
+import Stemmer from '@nlpjs/core/src/stemmer'
 
 import { hrDefaultStopWords } from '../stopwords/stopwords-hr'
 import { hrRules } from './rules/rules-hr'

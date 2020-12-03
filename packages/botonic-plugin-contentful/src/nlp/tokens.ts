@@ -1,4 +1,4 @@
-import { Tokenizer } from '@nlpjs/core/src'
+import Tokenizer from '@nlpjs/core/src/tokenizer'
 
 import { SingletonMap } from '../util'
 import { languageFromLocale, Locale } from './locales'
