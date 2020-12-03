@@ -1,6 +1,13 @@
 name: Botonic plugin-contentful tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - '*'
+      - '.github/**'
+      - 'packages/*'
+      - 'packages/botonic-plugin-contentful/**'
+      - 'scripts/*'
 
 jobs:
   botonic-plugin-contentful-tests:
