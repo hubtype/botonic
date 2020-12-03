@@ -10,7 +10,7 @@ import {
 } from '../../src/nlp'
 
 test.each<any>(SUPPORTED_LOCALES)(
-  'TEST: consecutive separators %s',
+  'TEST: consecutive separators %s are removed',
   (locale: Locale) => {
     const sut = new Normalizer()
 
@@ -24,12 +24,15 @@ test.each<any>(SUPPORTED_LOCALES)(
   }
 )
 
-test('TEST: sut.normalize stopWord', () => {
-  const sut = new Normalizer(undefined, { es: ['stopWórd'] })
-  expect(sut.normalize('es_ES', 'no digas STOPword').stems).toEqual([
-    'no',
-    'dec',
-  ])
+test('TEST: sut.normalize stopWords can be customized', () => {
+  const stopWords: { [locale: string]: string[] } = {
+    es: ['noCountry'],
+    es_ES: ['withCountry'],
+  }
+  const sut = new Normalizer(undefined, locale => stopWords[locale] || [])
+  const input = 'digas withCountry noCountry'
+  expect(sut.normalize('es', input).stems).toEqual(['dec', 'withcountry'])
+  expect(sut.normalize('es_ES', input).stems).toEqual(['dec', 'nocountry'])
 })
 
 test.each<any>([
@@ -172,6 +175,11 @@ test('TEST: sut.normalize en', () => {
     'realiz',
     'token',
   ])
+})
+
+test('TEST: sut.normalize on locale with country', () => {
+  const sut = new Normalizer()
+  expect(sut.normalize('en_GB', 'realizing').stems).toEqual(['realiz'])
 })
 
 test.each<any>([['es'], ['ca'], ['en']])(

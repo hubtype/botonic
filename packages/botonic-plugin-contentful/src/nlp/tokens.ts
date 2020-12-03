@@ -1,19 +1,7 @@
 import { Tokenizer } from '@nlpjs/core/src'
-import TokenizerCs from '@nlpjs/lang-cs/src/tokenizer-cs'
-import TokenizerDe from '@nlpjs/lang-de/src/tokenizer-de'
-import TokenizerEl from '@nlpjs/lang-el/src/tokenizer-el'
-import TokenizerEn from '@nlpjs/lang-en-min/src/tokenizer-en'
-import TokenizerEs from '@nlpjs/lang-es/src/tokenizer-es'
-import TokenizerFr from '@nlpjs/lang-fr/src/tokenizer-fr'
-import TokenizerIt from '@nlpjs/lang-it/src/tokenizer-it'
-import TokenizerPl from '@nlpjs/lang-pl/src/tokenizer-pl'
-import TokenizerPt from '@nlpjs/lang-pt/src/tokenizer-pt'
-import TokenizerRo from '@nlpjs/lang-ro/src/tokenizer-ro'
-import TokenizerRu from '@nlpjs/lang-ru/src/tokenizer-ru'
-import TokenizerTr from '@nlpjs/lang-tr/src/tokenizer-tr'
-import TokenizerUk from '@nlpjs/lang-uk/src/tokenizer-uk'
 
-import { Locale, rootLocale } from './locales'
+import { SingletonMap } from '../util'
+import { languageFromLocale, Locale } from './locales'
 import * as locales from './locales'
 import { caDefaultStopWords } from './stopwords/stopwords-ca'
 import { csDefaultStopWords } from './stopwords/stopwords-cs'
@@ -91,27 +79,81 @@ export class TokenizerCa implements Tokenizer {
   }
 }
 
-const tokenizers: { [locale: string]: Tokenizer } = {
-  [locales.SPANISH]: new TokenizerEs(),
-  [locales.ENGLISH]: new TokenizerEn(),
-  [locales.CATALAN]: new TokenizerCa(),
-  [locales.POLISH]: new TokenizerPl(),
-  [locales.PORTUGUESE]: new TokenizerPt(),
-  [locales.RUSSIAN]: new TokenizerRu(),
-  [locales.TURKISH]: new TokenizerTr(),
-  [locales.ITALIAN]: new TokenizerIt(),
-  [locales.FRENCH]: new TokenizerFr(),
-  [locales.GERMAN]: new TokenizerDe(),
-  [locales.ROMANIAN]: new TokenizerRo(),
-  [locales.GREEK]: new TokenizerEl(),
-  [locales.CZECH]: new TokenizerCs(),
-  [locales.UKRAINIAN]: new TokenizerUk(),
-  [locales.CROATIAN]: new TokenizerHr(),
-  [locales.SLOVAK]: new TokenizerSk(),
-}
+const lazyTokenizers = new SingletonMap<Tokenizer>({
+  [locales.SPANISH]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerEs = require('@nlpjs/lang-es/src/tokenizer-es')
+    return new TokenizerEs()
+  },
+  [locales.ENGLISH]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerEn = require('@nlpjs/lang-en-min/src/tokenizer-en')
+    return new TokenizerEn()
+  },
+  [locales.CATALAN]: () => {
+    return new TokenizerCa()
+  },
+  [locales.POLISH]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerPl = require('@nlpjs/lang-pl/src/tokenizer-pl')
+    return new TokenizerPl()
+  },
+  [locales.PORTUGUESE]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerPt = require('@nlpjs/lang-pt/src/tokenizer-pt')
+    return new TokenizerPt()
+  },
+  [locales.RUSSIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerRu = require('@nlpjs/lang-ru/src/tokenizer-ru')
+    return new TokenizerRu()
+  },
+  [locales.TURKISH]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerTr = require('@nlpjs/lang-tr/src/tokenizer-tr')
+    return new TokenizerTr()
+  },
+  [locales.ITALIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerIt = require('@nlpjs/lang-it/src/tokenizer-it')
+    return new TokenizerIt()
+  },
+  [locales.FRENCH]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerFr = require('@nlpjs/lang-fr/src/tokenizer-fr')
+    return new TokenizerFr()
+  },
+  [locales.GERMAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerDe = require('@nlpjs/lang-de/src/tokenizer-de')
+    return new TokenizerDe()
+  },
+  [locales.ROMANIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerRo = require('@nlpjs/lang-ro/src/tokenizer-ro')
+    return new TokenizerRo()
+  },
+  [locales.GREEK]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerEl = require('@nlpjs/lang-el/src/tokenizer-el')
+    return new TokenizerEl()
+  },
+  [locales.CZECH]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerCs = require('@nlpjs/lang-cs/src/tokenizer-cs')
+    return new TokenizerCs()
+  },
+  [locales.UKRAINIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerUk = require('@nlpjs/lang-uk/src/tokenizer-uk')
+    return new TokenizerUk()
+  },
+  [locales.CROATIAN]: () => new TokenizerHr(),
+  [locales.SLOVAK]: () => new TokenizerSk(),
+})
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
-  return tokenizers[rootLocale(locale)]
+  return lazyTokenizers.value(languageFromLocale(locale))
 }
 
 export const DEFAULT_SEPARATORS = ';,./()!?" '
@@ -141,4 +183,8 @@ export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   uk: ukDefaultStopWords,
   hr: hrDefaultStopWords,
   sk: skDefaultStopWords,
+}
+
+export function stopWordsFor(locale: string): string[] {
+  return DEFAULT_STOP_WORDS[languageFromLocale(locale)]
 }
