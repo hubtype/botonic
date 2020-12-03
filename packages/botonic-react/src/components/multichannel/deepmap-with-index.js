@@ -1,5 +1,6 @@
 import { Children, cloneElement, isValidElement } from 'react'
-import { hasComplexChildren } from 'react-children-utilities'
+
+import { hasComplexChildren } from '../../util/react'
 
 // react-children-utilities 2.1.0 fixes the issue in one deepMapFn call,
 // but not in the other one
