@@ -13,7 +13,7 @@ import StemmerRu from '@nlpjs/lang-ru/src/stemmer-ru'
 import StemmerTr from '@nlpjs/lang-tr/src/stemmer-tr'
 import StemmerUk from '@nlpjs/lang-uk/src/stemmer-uk'
 
-import { Locale, rootLocale } from './locales'
+import { languageFromLocale, Locale } from './locales'
 import { StemmerPl } from './stemmers/polish-stemmer'
 import { StemmerHr } from './stemmers/stemmer-hr'
 import { StemmerSk } from './stemmers/stemmer-sk'
@@ -23,7 +23,7 @@ import { StemmerSk } from './stemmers/stemmer-sk'
 // snowball algorithm inspired from https://github.com/MihaiValentin/lunr-languages, based on
 // https://github.com/fortnightlabs/snowball-js/blob/master/stemmer/src/ext/SpanishStemmer.js based on
 // java version at http://snowball.tartarus.org/download.html
-export const stemmers: { [key: string]: Stemmer } = {
+const stemmers: { [key: string]: Stemmer } = {
   ca: new StemmerCa(),
   en: new StemmerEn(),
   es: new StemmerEs(),
@@ -43,7 +43,7 @@ export const stemmers: { [key: string]: Stemmer } = {
 }
 
 export function stemmerFor(locale: Locale): Stemmer {
-  const stem = stemmers[rootLocale(locale)]
+  const stem = stemmers[languageFromLocale(locale)]
   if (!stem) {
     throw new Error(`No stemmer configured for locale '${locale}'`)
   }

@@ -44,14 +44,13 @@ export function checkLocale(locale: Locale): Locale {
   return locale
 }
 
-export function rootLocale(locale: Locale): Locale {
+export function languageFromLocale(locale: Locale): string {
   return locale.substr(0, 2).toLowerCase()
 }
 
-export function languageFromLocale(locale: Locale): string {
-  return rootLocale(locale)
-}
-
+/**
+ * @return "" when no country available
+ */
 export function countryFromLocale(locale: Locale): string {
   return locale.substr(3).toUpperCase()
 }
