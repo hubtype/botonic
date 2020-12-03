@@ -1,5 +1,9 @@
 export const isBrowser = () => {
-  return typeof window !== 'undefined' && !window.process
+  return (
+    typeof window !== 'undefined' &&
+    window &&
+    typeof window.document !== 'undefined'
+  )
 }
 
 export const isNode = () => {
