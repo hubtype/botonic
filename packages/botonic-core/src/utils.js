@@ -1,7 +1,6 @@
 export const isBrowser =
   typeof window !== 'undefined' &&
-  window &&
-  typeof window.document !== 'undefined'
+  !(window.process && Object.keys(window.process.env).length)
 
 export const isNode = !isBrowser && typeof process !== 'undefined'
 
