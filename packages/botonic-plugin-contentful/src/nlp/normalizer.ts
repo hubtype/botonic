@@ -1,9 +1,10 @@
+import { DynamicSingletonMap } from '../util'
 import { equalArrays } from '../util/arrays'
-import { Locale, rootLocale } from './locales'
+import { Locale } from './locales'
 import { stemmerFor } from './stemmer'
 import {
   DEFAULT_SEPARATORS_REGEX,
-  DEFAULT_STOP_WORDS,
+  stopWordsFor,
   tokenizerPerLocale,
 } from './tokens'
 
@@ -14,6 +15,7 @@ import {
 export class StemmingBlackList {
   readonly stem: string
   readonly tokens: string[]
+
   constructor(stem: string, tokens: string[]) {
     this.stem = stem.toLowerCase()
     this.tokens = tokens.map(t => t.toLowerCase())
@@ -89,36 +91,33 @@ export class NormalizedUtterance {
 }
 
 export class Normalizer {
-  private stopWordsPerLocale: typeof DEFAULT_STOP_WORDS = {}
-  private stemmingBlackListPerLocale: {
-    [locale: string]: StemmingBlackList[]
-  } = {}
+  private stopWordsPerLocale: DynamicSingletonMap<string[]>
+  private stemmingBlackListPerLocale: DynamicSingletonMap<StemmingBlackList[]>
 
   constructor(
-    stemmingBlackListPerLocale: { [locale: string]: StemmingBlackList[] } = {},
-    stopWordsPerLocale = DEFAULT_STOP_WORDS,
+    stemmingBlackListPerLocale: {
+      [locale: string]: StemmingBlackList[]
+    } = {},
+    stopWordsForLocale = stopWordsFor,
     private readonly tokenizer = tokenizerPerLocale,
     private readonly separatorsRegex = DEFAULT_SEPARATORS_REGEX
   ) {
-    for (const locale in stemmingBlackListPerLocale) {
-      const blacks = stemmingBlackListPerLocale[locale].map(black =>
-        black.normalize(txt => this.normalizeWord(locale, txt))
+    this.stopWordsPerLocale = new DynamicSingletonMap<string[]>(locale =>
+      stopWordsForLocale(locale).map(w => this.normalizeWord(locale, w))
+    )
+    this.stemmingBlackListPerLocale = new DynamicSingletonMap<
+      StemmingBlackList[]
+    >(l =>
+      (stemmingBlackListPerLocale[l] || []).map(bl =>
+        bl.normalize(w => this.normalizeWord(l, w))
       )
-      this.stemmingBlackListPerLocale[locale] = blacks
-    }
-
-    for (const locale in stopWordsPerLocale) {
-      this.stopWordsPerLocale[locale] = stopWordsPerLocale[locale].map(sw =>
-        this.normalizeWord(locale, sw)
-      )
-    }
+    )
   }
 
   /**
    * @throws EmptyTextException if the text is empty or only contains separators
    */
   normalize(locale: Locale, raw: string): NormalizedUtterance {
-    locale = rootLocale(locale)
     let txt = raw.replace(this.separatorsRegex, ' ')
     txt = txt.trim().toLowerCase() // TODO use preprocess without normalization? move to NormalizedUtterance constructor?
     if (!txt) {
@@ -129,7 +128,7 @@ export class Normalizer {
     // tokenizer will replace i18n characters
     const tokens = this.tokenizer(locale).tokenize(txt, true)
     let words: Word[] = []
-    const stopWords = this.stopWordsPerLocale[locale]
+    const stopWords = this.stopWordsPerLocale.value(locale)
     let numStopWords = 0
     for (const token of tokens) {
       const blacklistedStem = this.getBlackListStem(locale, token)
@@ -156,7 +155,7 @@ export class Normalizer {
   }
 
   private getBlackListStem(locale: Locale, word: string): string | undefined {
-    const blacks = this.stemmingBlackListPerLocale[locale] || []
+    const blacks = this.stemmingBlackListPerLocale.value(locale)
     for (const black of blacks) {
       if (black.isBlackListed(word)) {
         return black.stem

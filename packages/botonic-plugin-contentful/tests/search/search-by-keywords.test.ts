@@ -16,7 +16,11 @@ import { MatchType, Normalizer, StemmingBlackList } from '../../src/nlp'
 import { testContentId } from '../helpers/test-data'
 
 const ES_CONTEXT = { locale: 'es' }
-test('TEST: searchContentsFromInput keywords found', async () => {
+test.each([
+  ES_CONTEXT,
+  // test locales with country
+  { locale: 'es_ES' },
+])('TEST: searchContentsFromInput keywords found', async () => {
   const contents = [
     contentWithKeyword(testContentId(), ['kw1', 'devolucion plazo']),
     contentWithKeyword(testContentId(), ['devolución', 'kw2']),

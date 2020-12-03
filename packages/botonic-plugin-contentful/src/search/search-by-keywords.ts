@@ -3,10 +3,10 @@ import {
   checkLocale,
   KeywordsOptions,
   KeywordsParser,
+  languageFromLocale,
   MatchType,
   NormalizedUtterance,
   Normalizer,
-  rootLocale,
   Word,
 } from '../nlp'
 import { SearchCandidate, SearchResult } from './search-result'
@@ -26,13 +26,17 @@ export class SearchByKeywords {
     matchType: MatchType,
     context: cms.ContextWithLocale
   ): Promise<SearchResult[]> {
-    const locale = rootLocale(checkLocale(context.locale))
+    checkLocale(context.locale)
     const contentsWithKeywords = await this.cms.contentsWithKeywords(context)
+    const options =
+      this.keywordsOptions[context.locale] ||
+      this.keywordsOptions[languageFromLocale(context.locale)] ||
+      new KeywordsOptions()
     const kws = new KeywordsParser<SearchCandidate>(
-      locale,
+      context.locale,
       matchType,
       this.normalizer,
-      this.keywordsOptions[locale] || new KeywordsOptions()
+      options
     )
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.common.keywords)
