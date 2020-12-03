@@ -1,8 +1,11 @@
+// Only used for verifying the code
+// use noEmit to have faster builds
 {
   "extends": "../tsconfig",
   "include": ["**/*.ts", "**/*.tsx", "../src/**/*.ts", "../src/**/*.tsx"],
   "compilerOptions": {
-    "rootDir": "../"
+    "rootDir": "../",
+    "noEmit": true
   },
   // test options
   "types": ["@types/jest"]
