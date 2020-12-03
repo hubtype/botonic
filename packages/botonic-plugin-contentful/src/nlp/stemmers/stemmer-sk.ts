@@ -1,4 +1,4 @@
-import { Stemmer } from '@nlpjs/core/src'
+import Stemmer from '@nlpjs/core/src/stemmer'
 
 // from https://github.com/mrshu/stemm-sk/blob/master/stemmsk/__init__.py
 export class StemmerSk implements Stemmer {

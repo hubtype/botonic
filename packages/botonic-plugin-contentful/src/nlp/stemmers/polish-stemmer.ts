@@ -1,7 +1,7 @@
 /**
  * From https://github.com/Tutanchamon/pl_stemmer/blob/master/pl_stemmer.py
  */
-import { Stemmer } from '@nlpjs/core/src'
+import Stemmer from '@nlpjs/core/src/stemmer'
 
 export class StemmerPl implements Stemmer {
   stem(tokens: string[]): string[] {
