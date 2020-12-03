@@ -10,7 +10,7 @@ const serialize = audioProps => {
 
 export const Audio = props => {
   let content = props.children
-  if (isBrowser())
+  if (isBrowser)
     content = (
       <audio style={{ maxWidth: '100%' }} id='myAudio' controls>
         <source src={props.src} type='audio/mpeg' />

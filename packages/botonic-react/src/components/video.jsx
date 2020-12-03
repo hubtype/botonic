@@ -19,7 +19,7 @@ const serialize = videoProps => {
 
 export const Video = props => {
   let content = props.children
-  if (isBrowser())
+  if (isBrowser)
     content = (
       <StyledVideo controls>
         <source src={props.src} />

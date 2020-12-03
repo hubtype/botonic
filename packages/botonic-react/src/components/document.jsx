@@ -17,7 +17,7 @@ const serialize = documentProps => {
 
 export const Document = props => {
   let content = props.children
-  if (isBrowser()) content = <StyledEmbed src={props.src} />
+  if (isBrowser) content = <StyledEmbed src={props.src} />
   return (
     <Message
       role={ROLES.DOCUMENT_MESSAGE}

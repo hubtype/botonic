@@ -124,7 +124,7 @@ export const Message = props => {
 
   const ack = getEnvAck()
 
-  if (isBrowser()) {
+  if (isBrowser) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const decomposedChildren = json

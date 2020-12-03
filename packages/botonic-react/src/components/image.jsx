@@ -18,7 +18,7 @@ const serialize = imageProps => {
 
 export const Image = props => {
   let content = props.children
-  if (isBrowser()) content = <StyledImage src={props.src} />
+  if (isBrowser) content = <StyledImage src={props.src} />
   return (
     <Message
       role={ROLES.IMAGE_MESSAGE}

@@ -24,7 +24,7 @@ export const createErrorBoundary = ({
     componentDidCatch(error, errorInfo) {
       // No need to log the error because at least chrome & firefox already show
       // both component and call stacks
-      if (isNode()) {
+      if (isNode) {
         // In node, only the component stack is displayed
         console.error(`Failure at:`, error)
       }

@@ -1,17 +1,12 @@
-export const isBrowser = () => {
-  return (
-    typeof window !== 'undefined' &&
-    window &&
-    typeof window.document !== 'undefined'
-  )
-}
+export const isBrowser =
+  typeof window !== 'undefined' &&
+  window &&
+  typeof window.document !== 'undefined'
 
-export const isNode = () => {
-  return !isBrowser() && typeof process !== 'undefined'
-}
+export const isNode = !isBrowser && typeof process !== 'undefined'
 
 export const isMobile = (mobileBreakpoint = 460) => {
-  if (isBrowser()) {
+  if (isBrowser) {
     const w = Math.max(
       document.documentElement.clientWidth,
       window.innerWidth || 0

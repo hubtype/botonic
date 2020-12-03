@@ -40,8 +40,8 @@ export class Router {
     try {
       if (pathParams) {
         let searchParams = ''
-        if (isBrowser()) searchParams = new URLSearchParams(pathParams)
-        if (isNode()) searchParams = new url.URLSearchParams(pathParams)
+        if (isBrowser) searchParams = new URLSearchParams(pathParams)
+        if (isNode) searchParams = new url.URLSearchParams(pathParams)
         for (const [key, value] of searchParams) {
           routeParams.params
             ? (routeParams.params[key] = value)

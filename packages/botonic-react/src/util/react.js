@@ -6,8 +6,8 @@ export const ConditionalWrapper = ({ condition, wrapper, children }) =>
   condition ? wrapper(children) : children
 
 export function renderComponent({ renderBrowser, renderNode }) {
-  if (isBrowser()) return renderBrowser()
-  else if (isNode()) return renderNode()
+  if (isBrowser) return renderBrowser()
+  else if (isNode) return renderNode()
   throw new Error('Unexpected process type. Not recognized as browser nor node')
 }
 

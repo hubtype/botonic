@@ -333,6 +333,6 @@ export class Inspector {
   getRouteInspector(): RouteInspector
 }
 
-export function isBrowser(): boolean
+export const isBrowser: boolean
 export function isMobile(mobileBreakpoint?: number): boolean
-export function isNode(): boolean
+export const isNode: boolean

@@ -142,7 +142,7 @@ export const Carousel = props => {
     }
   }, [carouselRef.current])
 
-  if (isBrowser()) {
+  if (isBrowser) {
     content = (
       <StyledScrollbar
         scrollbar={scrollbarOptions}
