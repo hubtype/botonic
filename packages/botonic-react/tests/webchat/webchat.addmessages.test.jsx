@@ -24,7 +24,7 @@ describe('Adding webchat messageComponent', () => {
       )
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [ROLES.WEBCHAT, ROLES.MESSAGE_LIST, ROLES.MESSAGE, ROLES.IMAGE_MESSAGE],
@@ -45,7 +45,7 @@ describe('Adding webchat messageComponent', () => {
       )
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [ROLES.WEBCHAT, ROLES.MESSAGE_LIST, ROLES.MESSAGE, ROLES.AUDIO_MESSAGE],
@@ -66,7 +66,7 @@ describe('Adding webchat messageComponent', () => {
       )
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [ROLES.WEBCHAT, ROLES.MESSAGE_LIST, ROLES.MESSAGE, ROLES.VIDEO_MESSAGE],
@@ -87,7 +87,7 @@ describe('Adding webchat messageComponent', () => {
       )
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [

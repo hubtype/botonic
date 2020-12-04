@@ -30,7 +30,7 @@ describe('TEST: Webchat Component', () => {
   it('TEST: Webchat by default has TriggerButton', async () => {
     const { result } = renderUseWebchatHook()
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles([ROLES.TRIGGER_BUTTON], screen)
     expectNotToHaveRoles([ROLES.WEBCHAT], screen)
@@ -42,7 +42,7 @@ describe('TEST: Webchat Component', () => {
       result.current.toggleWebchat(true)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [
@@ -62,7 +62,7 @@ describe('TEST: Webchat Component', () => {
       result.current.toggleWebchat(true)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectNotToHaveRoles(
       [
@@ -82,7 +82,7 @@ describe('TEST: Webchat Component', () => {
       result.current.updateTyping(true)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(['typing-indicator'], screen)
   })
@@ -95,7 +95,7 @@ describe('TEST: Webchat Component', () => {
       result.current.updateTheme(theme)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [
@@ -117,7 +117,7 @@ describe('TEST: Webchat Component', () => {
       result.current.toggleEmojiPicker(true)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [
@@ -141,7 +141,7 @@ describe('TEST: Webchat Component', () => {
       result.current.togglePersistentMenu(true)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [
@@ -164,7 +164,7 @@ describe('TEST: Webchat Component', () => {
       result.current.updateTheme(theme)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [
@@ -188,7 +188,7 @@ describe('TEST: Webchat Component', () => {
       result.current.updateTheme(theme)
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectNotToHaveRoles(
       [
@@ -209,7 +209,7 @@ describe('TEST: Webchat Component', () => {
       result.current.updateWebview('webview')
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      render(<Webchat host={document.body} webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [ROLES.WEBVIEW, ROLES.WEBVIEW_HEADER, ROLES.WEBCHAT],
