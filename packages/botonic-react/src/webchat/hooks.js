@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from 'react'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { scrollToBottom } from '../util/dom'
@@ -183,10 +183,10 @@ export function useWebchat() {
   }
 }
 
-export function useTyping({ webchatState, updateTyping, updateMessage }) {
+export function useTyping({ webchatState, updateTyping, updateMessage, host }) {
   useEffect(() => {
     let delayTimeout, typingTimeout
-    scrollToBottom()
+    scrollToBottom({ host })
     try {
       const nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
       if (nextMsg.delay && nextMsg.typing) {
@@ -249,4 +249,8 @@ export function useNetwork() {
     }
   })
   return isOnline
+}
+
+export const useComponentWillMount = func => {
+  useMemo(func, [])
 }

@@ -46,6 +46,7 @@ export const WEBCHAT = {
     ELEMENT_WIDTH: 222,
     ELEMENT_MARGIN_RIGHT: 6,
     STORAGE_KEY: 'botonicState',
+    HOST_ID: 'root',
   },
   CUSTOM_PROPERTIES: {
     // General

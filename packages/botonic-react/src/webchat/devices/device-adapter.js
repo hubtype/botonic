@@ -3,13 +3,10 @@ import { ScrollbarController } from './scrollbar-controller'
 import { WebchatResizer } from './webchat-resizer'
 
 export class DeviceAdapter {
-  constructor() {
+  init(host) {
     this.currentDevice = navigator.platform
-    this.webchatResizer = new WebchatResizer(this.currentDevice)
-    this.scrollbarController = new ScrollbarController(this.currentDevice)
-  }
-
-  init() {
+    this.webchatResizer = new WebchatResizer(this.currentDevice, host)
+    this.scrollbarController = new ScrollbarController(this.currentDevice, host)
     this.scrollbarController.handleScrollEvents()
   }
 

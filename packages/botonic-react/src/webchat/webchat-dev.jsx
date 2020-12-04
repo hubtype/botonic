@@ -1,19 +1,30 @@
 import { PROVIDER } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { forwardRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import { useWebchat } from './hooks'
 import { SessionView } from './session-view'
 import { Webchat } from './webchat'
 
-export const FixedTab = styled.div`
+export const DebugTab = styled.div`
   position: fixed;
   left: 0;
   top: 0;
   width: ${props => (props.show ? '350px' : '32px')};
   height: ${props => (props.show ? '100%' : '42px')};
 `
+
+// We want the debug tab to be rendered in the <body> even if the
+// webchat is being rendered in a shadowDOM, that's why we need a portal
+export const DebugTabPortal = ({ webchatHooks, ...props }) =>
+  createPortal(
+    <DebugTab {...props}>
+      <SessionView webchatHooks={webchatHooks} />
+    </DebugTab>,
+    document.body
+  )
 
 const initialSession = {
   is_first_interaction: true,
@@ -46,7 +57,7 @@ export const WebchatDev = forwardRef((props, ref) => {
   }, [props.theme])
 
   return (
-    <div>
+    <>
       <Webchat
         style={{ flex: 1, position: 'relative' }}
         {...props}
@@ -58,9 +69,10 @@ export const WebchatDev = forwardRef((props, ref) => {
           showSessionView: webchatState.devSettings.showSessionView,
         }}
       />
-      <FixedTab show={webchatState.devSettings.showSessionView}>
-        <SessionView webchatHooks={webchatHooks} />
-      </FixedTab>
-    </div>
+      <DebugTabPortal
+        show={webchatState.devSettings.showSessionView}
+        webchatHooks={webchatHooks}
+      />
+    </>
   )
 })

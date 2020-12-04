@@ -18,6 +18,7 @@ export class DevApp extends WebchatApp {
     enableUserInput,
     enableAnimations,
     shadowDOM,
+    hostId,
     storage,
     storageKey,
     onInit,
@@ -36,6 +37,7 @@ export class DevApp extends WebchatApp {
       enableUserInput,
       enableAnimations,
       shadowDOM,
+      hostId,
       storage,
       storageKey,
       onInit,
@@ -49,6 +51,12 @@ export class DevApp extends WebchatApp {
   }
 
   render(dest, optionsAtRuntime = {}) {
+    if (!this.host) {
+      // The DOM is not ready, render later
+      this.shouldRender = true
+      this.shouldRenderOptionsAtRuntime = optionsAtRuntime
+      return
+    }
     let {
       theme = {},
       persistentMenu,
@@ -58,7 +66,6 @@ export class DevApp extends WebchatApp {
       enableAttachments,
       enableUserInput,
       enableAnimations,
-      shadowDOM,
       storage,
       storageKey,
       onInit,
@@ -75,7 +82,6 @@ export class DevApp extends WebchatApp {
     enableAttachments = enableAttachments || this.enableAttachments
     enableUserInput = enableUserInput || this.enableUserInput
     enableAnimations = enableAnimations || this.enableAnimations
-    shadowDOM = shadowDOM || this.shadowDOM
     storage = storage || this.storage
     storageKey = storageKey || this.storageKey
     this.onInit = onInit || this.onInit
@@ -84,8 +90,10 @@ export class DevApp extends WebchatApp {
     this.onMessage = onMessage || this.onMessage
     render(
       <WebchatDev
-        ref={this.webchatRef}
         {...webchatOptions}
+        ref={this.webchatRef}
+        host={this.host}
+        shadowDOM={this.shadowDOM}
         theme={theme}
         persistentMenu={persistentMenu}
         coverComponent={coverComponent}
@@ -94,7 +102,6 @@ export class DevApp extends WebchatApp {
         enableAttachments={enableAttachments}
         enableUserInput={enableUserInput}
         enableAnimations={enableAnimations}
-        shadowDOM={shadowDOM}
         storage={storage}
         storageKey={storageKey}
         getString={(stringId, session) => this.bot.getString(stringId, session)}
@@ -104,7 +111,7 @@ export class DevApp extends WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
       />,
-      dest
+      this.getReactMountNode(dest)
     )
   }
 
