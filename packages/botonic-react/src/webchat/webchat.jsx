@@ -8,15 +8,12 @@ import React, {
   useRef,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
-import styled from 'styled-components'
+import styled, { StyleSheetManager } from 'styled-components'
 import UAParser from 'ua-parser-js'
 import { useAsyncEffect } from 'use-async-effect'
 import { v4 as uuidv4 } from 'uuid'
-import root from 'react-shadow/styled-components'
+
 import { Audio, Document, Image, Text, Video } from '../components'
-import { isMobile, params2queryString, INPUT } from '@botonic/core'
-import { WebchatContext, RequestContext } from '../contexts'
-import { TypingIndicator } from './components/typing-indicator'
 import { Handoff } from '../components/handoff'
 import { normalizeWebchatSettings } from '../components/webchat-settings'
 import {
@@ -55,7 +52,13 @@ import { SendButton } from './components/send-button'
 import { TypingIndicator } from './components/typing-indicator'
 import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
-import { useNetwork, usePrevious, useTyping, useWebchat } from './hooks'
+import {
+  useComponentWillMount,
+  useNetwork,
+  usePrevious,
+  useTyping,
+  useWebchat,
+} from './hooks'
 import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { useStorageState } from './use-storage-state-hook'
@@ -288,6 +291,35 @@ export const Webchat = forwardRef((props, ref) => {
   const resendUnsentInputs = async () =>
     props.resendUnsentInputs && props.resendUnsentInputs()
 
+  // Load styles stored in window._botonicInsertStyles by Webpack
+  useComponentWillMount(() => {
+    if (!window._botonicInsertStyles || !window._botonicInsertStyles.length)
+      return
+
+    if (props.shadowDOM) {
+      // emoji-picker-react injects styles in head, so we need to
+      // re-inject them in our host node to make it work with shadowDOM
+      for (const style of document.querySelectorAll('style')) {
+        if (
+          style.textContent &&
+          style.textContent.includes('emoji-picker-react')
+        )
+          props.host.appendChild(style.cloneNode(true))
+      }
+    }
+
+    for (const botonicStyle of window._botonicInsertStyles) {
+      // Injecting styles at head is needed even if we use shadowDOM
+      // as some dependencies like simplebar rely on creating ephemeral elements
+      // on document.body and assume styles will be available globally
+      document.head.appendChild(botonicStyle)
+
+      // injecting styles in host node too so that shadowDOM works
+      if (props.shadowDOM) props.host.appendChild(botonicStyle.cloneNode(true))
+    }
+    delete window._botonicInsertStyles
+  })
+
   // Load initial state from storage
   useEffect(() => {
     let {
@@ -329,8 +361,8 @@ export const Webchat = forwardRef((props, ref) => {
 
   useAsyncEffect(async () => {
     if (!webchatState.isWebchatOpen) return
-    deviceAdapter.init()
-    scrollToBottom({ behavior: 'auto' })
+    deviceAdapter.init(props.host)
+    scrollToBottom({ behavior: 'auto', host: props.host })
     await resendUnsentInputs()
   }, [webchatState.isWebchatOpen])
 
@@ -357,7 +389,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [isOnline])
 
-  useTyping({ webchatState, updateTyping, updateMessage })
+  useTyping({ webchatState, updateTyping, updateMessage, host: props.host })
 
   useEffect(() => {
     updateTheme(merge(props.theme, theme, webchatState.themeUpdates))
@@ -863,7 +895,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
-    scrollToBottom()
+    scrollToBottom({ host: props.host })
   }, [webchatState.themeUpdates])
 
   // Only needed for dev/serve mode
@@ -958,8 +990,11 @@ export const Webchat = forwardRef((props, ref) => {
       )}
     </WebchatContext.Provider>
   )
-
-  const shadowDOM =
-    typeof props.shadowDOM === 'function' ? props.shadowDOM() : props.shadowDOM
-  return shadowDOM ? <root.div>{WebchatComponent}</root.div> : WebchatComponent
+  return props.shadowDOM ? (
+    <StyleSheetManager target={props.host}>
+      {WebchatComponent}
+    </StyleSheetManager>
+  ) : (
+    WebchatComponent
+  )
 })

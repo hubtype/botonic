@@ -3,8 +3,9 @@ import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { render } from 'react-dom'
 
-import { SENDERS } from './constants'
+import { SENDERS, WEBCHAT } from './constants'
 import { msgToBotonic } from './msg-to-botonic'
+import { onDOMLoaded } from './util/dom'
 import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
@@ -17,6 +18,7 @@ export class WebchatApp {
     enableAttachments,
     enableUserInput,
     enableAnimations,
+    hostId,
     shadowDOM,
     defaultDelay,
     defaultTyping,
@@ -38,6 +40,7 @@ export class WebchatApp {
     this.enableUserInput = enableUserInput
     this.enableAnimations = enableAnimations
     this.shadowDOM = shadowDOM
+    this.hostId = hostId || WEBCHAT.DEFAULTS.HOST_ID
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
     this.storage = storage
@@ -49,6 +52,36 @@ export class WebchatApp {
     this.visibility = visibility
     this.webchatRef = createRef()
     this.appId = appId
+    this.shouldRender = false
+    this.shouldRenderOptionsAtRuntime = {}
+
+    onDOMLoaded(() => {
+      this.createRootElement()
+      if (this.shouldRender) {
+        this.render(this.getReactMountNode(), this.shouldRenderOptionsAtRuntime)
+        this.shouldRender = false
+        this.shouldRenderOptionsAtRuntime = {}
+      }
+    })
+  }
+
+  createRootElement() {
+    // Create root element <div id='root'> if not exists
+    // Create shadowDOM to root element if needed
+    let host = document.getElementById(this.hostId)
+    if (!host) {
+      host = document.createElement('div')
+      host.id = this.hostId
+      if (document.body.firstChild)
+        document.body.insertBefore(host, document.body.firstChild)
+      else document.body.appendChild(host)
+    }
+    this.host = this.shadowDOM ? host.attachShadow({ mode: 'open' }) : host
+  }
+
+  getReactMountNode(node) {
+    if (!node) node = this.host
+    return node.shadowRoot ? node.shadowRoot : node
   }
 
   onInitWebchat(...args) {
@@ -201,7 +234,6 @@ export class WebchatApp {
       enableUserInput,
       enableAnimations,
       enableEmojiPicker,
-      shadowDOM,
       defaultDelay,
       defaultTyping,
       storage,
@@ -222,7 +254,6 @@ export class WebchatApp {
     enableAttachments = enableAttachments || this.enableAttachments
     enableUserInput = enableUserInput || this.enableUserInput
     enableAnimations = enableAnimations || this.enableAnimations
-    shadowDOM = shadowDOM || this.shadowDOM
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
     storage = storage || this.storage
@@ -235,8 +266,10 @@ export class WebchatApp {
     this.appId = appId || this.appId
     return (
       <Webchat
-        ref={this.webchatRef}
         {...webchatOptions}
+        ref={this.webchatRef}
+        host={this.host}
+        shadowDOM={this.shadowDOM}
         theme={theme}
         persistentMenu={persistentMenu}
         coverComponent={coverComponent}
@@ -245,7 +278,6 @@ export class WebchatApp {
         enableAttachments={enableAttachments}
         enableUserInput={enableUserInput}
         enableAnimations={enableAnimations}
-        shadowDOM={shadowDOM}
         storage={storage}
         storageKey={storageKey}
         defaultDelay={defaultDelay}
@@ -284,8 +316,14 @@ export class WebchatApp {
   }
 
   async render(dest, optionsAtRuntime = {}) {
+    if (!this.host) {
+      // The DOM is not ready, render later
+      this.shouldRender = true
+      this.shouldRenderOptionsAtRuntime = optionsAtRuntime
+      return
+    }
     const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
-    if (isVisible) render(this.getComponent(optionsAtRuntime), dest)
-    return null
+    if (isVisible)
+      render(this.getComponent(optionsAtRuntime), this.getReactMountNode(dest))
   }
 }

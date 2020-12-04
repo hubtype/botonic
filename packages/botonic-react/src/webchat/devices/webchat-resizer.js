@@ -1,14 +1,13 @@
-import {
-  getWebchatElement,
-  scrollToBottom,
-  setWebchatElementHeight,
-} from '../../util/dom'
+import { getWebchatElement, scrollToBottom } from '../../util/dom'
 import { DEVICES } from '.'
 
 export class WebchatResizer {
-  constructor(currentDevice) {
+  constructor(currentDevice, host) {
     this.currentDevice = currentDevice
+    this.host = host
+    this.webchat = getWebchatElement(host)
   }
+
   onFocus(onKeyboardShownFn) {
     if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
     /*
@@ -17,7 +16,7 @@ export class WebchatResizer {
     */
     const waitUntilKeyboardIsShown = 400
     const calculateNewWebchatElementHeight = () => {
-      const webchatHeight = getWebchatElement().clientHeight
+      const webchatHeight = this.webchat.clientHeight
       // Some iOS versions keep track of this height with VisualViewport API: https://stackoverflow.com/a/59056851
       const keyboardOffset =
         (window.visualViewport && window.visualViewport.height) ||
@@ -29,13 +28,18 @@ export class WebchatResizer {
       return newWebchatPercentualHeight
     }
     setTimeout(() => {
-      setWebchatElementHeight(`${calculateNewWebchatElementHeight()}%`)
-      scrollToBottom()
+      this.setWebchatElementHeight(`${calculateNewWebchatElementHeight()}%`)
+      scrollToBottom(this.host)
       onKeyboardShownFn()
     }, waitUntilKeyboardIsShown)
   }
+
   onBlur() {
     if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
-    setWebchatElementHeight('100%')
+    this.setWebchatElementHeight('100%')
+  }
+
+  setWebchatElementHeight(newHeight) {
+    this.webchat.style.height = newHeight
   }
 }
