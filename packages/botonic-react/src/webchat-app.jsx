@@ -39,7 +39,7 @@ export class WebchatApp {
     this.enableAttachments = enableAttachments
     this.enableUserInput = enableUserInput
     this.enableAnimations = enableAnimations
-    this.shadowDOM = shadowDOM
+    this.shadowDOM = typeof shadowDOM === 'function' ? shadowDOM() : shadowDOM
     this.hostId = hostId || WEBCHAT.DEFAULTS.HOST_ID
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
