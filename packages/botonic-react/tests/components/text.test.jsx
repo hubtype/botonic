@@ -14,6 +14,30 @@ describe('Text Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('Text with <BR>: markdown disabled', () => {
+    const sut = (
+      <Text markdown={0}>
+        hi
+        <br />
+        bye
+      </Text>
+    )
+    const tree = renderToJSON(sut)
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('Text with <BR>: markdown enabled', () => {
+    const sut = (
+      <Text>
+        hi
+        <br />
+        bye
+      </Text>
+    )
+    const tree = renderToJSON(sut)
+    expect(tree).toMatchSnapshot()
+  })
+
   test('Text with 1 button', () => {
     const sut = (
       <Text>
