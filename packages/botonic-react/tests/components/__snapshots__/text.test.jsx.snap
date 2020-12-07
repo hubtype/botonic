@@ -81,6 +81,32 @@ Array [
 ]
 `;
 
+exports[`Text Component Text with <BR>: markdown disabled 1`] = `
+<message
+  delay={0}
+  markdown={0}
+  type="text"
+  typing={0}
+>
+  hi
+  <br />
+  bye
+</message>
+`;
+
+exports[`Text Component Text with <BR>: markdown enabled 1`] = `
+<message
+  delay={0}
+  markdown={1}
+  type="text"
+  typing={0}
+>
+  hi
+  &lt;br&gt;
+  bye
+</message>
+`;
+
 exports[`Text Component Text with 1 button 1`] = `
 <message
   delay={0}
