@@ -1,4 +1,5 @@
 import { isBrowser, isNode } from '@botonic/core'
+import { Children, isValidElement } from 'react'
 
 import { mapObject } from './objects'
 
@@ -18,3 +19,13 @@ export const mapObjectNonBooleanValues = obj => {
     return [key, value]
   })
 }
+
+const hasChildren = element =>
+  isValidElement(element) && Boolean(element.props.children)
+
+export const hasComplexChildren = element =>
+  hasChildren(element) &&
+  Children.toArray(element.props.children).reduce(
+    (response, child) => response || isValidElement(child),
+    false
+  )
