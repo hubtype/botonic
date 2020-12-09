@@ -10,7 +10,7 @@ export const staticAsset = path => {
     const basePath = scriptBaseURL.replace('/' + scriptName, '/')
     return basePath + path
   } catch (e) {
-    console.error(`Could not resolve path: '${path}'`, e)
+    console.error(`Could not resolve path: '${path}'`)
     return path
   }
 }
