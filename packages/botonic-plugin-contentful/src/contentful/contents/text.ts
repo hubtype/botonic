@@ -38,14 +38,14 @@ export class TextDelivery extends DeliveryWithFollowUp {
     const followUp = followUpAndButtons[0] as cms.FollowUp | undefined
     const buttons = followUpAndButtons[1] as cms.Button[]
     const common = ContentfulEntryUtils.commonFieldsFromEntry(entry, followUp)
-    return new cms.Text(
-      common,
-      fields.text ?? '',
-      buttons,
-      fields.buttonsStyle == 'QuickReplies'
-        ? cms.ButtonStyle.QUICK_REPLY
-        : cms.ButtonStyle.BUTTON
-    )
+    const buttonsStyle = this.getButtonsStyle(fields.buttonsStyle)
+    return new cms.Text(common, fields.text ?? '', buttons, buttonsStyle)
+  }
+
+  getButtonsStyle(buttonsStyle?: string): cms.ButtonStyle | undefined {
+    if (buttonsStyle == 'QuickReplies') return cms.ButtonStyle.QUICK_REPLY
+    if (buttonsStyle == 'Buttons') return cms.ButtonStyle.BUTTON
+    return undefined
   }
 }
 

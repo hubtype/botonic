@@ -326,7 +326,7 @@ export class Text extends MessageContent {
     // Full text
     readonly text: string,
     readonly buttons: Button[],
-    readonly buttonsStyle = ButtonStyle.BUTTON
+    readonly buttonsStyle?: ButtonStyle
   ) {
     super(common, ContentType.TEXT)
   }
