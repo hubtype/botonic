@@ -7,6 +7,7 @@ export class RenderOptions {
   maxQuickReplies = 5
   /** Some integrations fail when a field is empty*/
   replaceEmptyStringsWith?: string
+  defaultButtonsStyle?: ButtonStyle = ButtonStyle.BUTTON
 }
 
 // TODO consider moving it to @botonic/core
@@ -97,8 +98,9 @@ export class BotonicMsgConverter {
       delay: delayS,
       data: { text: this.str(text.text) },
     }
-    const buttons = this.convertButtons(text.buttons, text.buttonsStyle)
-    if (text.buttonsStyle == ButtonStyle.QUICK_REPLY) {
+    const buttonsStyle = text.buttonsStyle || this.options.defaultButtonsStyle
+    const buttons = this.convertButtons(text.buttons, buttonsStyle!)
+    if (buttonsStyle == ButtonStyle.QUICK_REPLY) {
       msg['replies'] = buttons
     } else {
       msg['buttons'] = buttons
