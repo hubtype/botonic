@@ -1,3 +1,4 @@
+import { ButtonStyle } from '../../src/cms'
 import { RndTextBuilder } from '../../src/cms/test-helpers'
 import { BotonicMsgConverter } from '../../src/render'
 
@@ -43,5 +44,21 @@ describe('TEST BotonicMsgConverter', () => {
     // assert
     expect((msg as any)['data']['text']).toEqual('x')
     expect((msg as any)['buttons'][0]['title']).toEqual('x')
+  })
+
+  test('text with reply as default buttonsStyle', () => {
+    const sut = new BotonicMsgConverter({
+      defaultButtonsStyle: ButtonStyle.QUICK_REPLY,
+    })
+    const builder = new RndTextBuilder()
+    builder.buttonsBuilder.withText('Test').addButton()
+    const text = builder.build()
+
+    // act
+    const msg = sut.text(text, 42)
+
+    // assert
+    expect((msg as any)['replies'].length).toEqual(1)
+    expect((msg as any)['buttons']).toBeUndefined()
   })
 })
