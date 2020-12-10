@@ -1,6 +1,10 @@
 name: Botonic core tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-core/**'
+      - '.github/workflows/botonic-core-tests.yml'
 
 jobs:
   botonic-core-tests:
@@ -31,4 +35,13 @@ jobs:
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
     - name: Verify index.d.ts
-      run: scripts/qa/lint-d-ts.sh packages/botonic-core
+      run: scripts/qa/lint-d-ts.sh packages/$PACKAGE
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: ${{env.PACKAGE}}
+        file: ./packages/${{env.PACKAGE}}/coverage/clover.xml
+        name: ${{env.PACKAGE}}
+        env_vars: ${{env.PACKAGE}}

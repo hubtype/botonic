@@ -3,11 +3,8 @@ name: Botonic plugin-contentful tests
 on:
   push:
     paths:
-      - '*'
-      - '.github/**'
-      - 'packages/*'
       - 'packages/botonic-plugin-contentful/**'
-      - 'scripts/*'
+      - '.github/workflows/botonic-plugin-contentful-tests.yml'
 
 jobs:
   botonic-plugin-contentful-tests:
@@ -41,3 +38,11 @@ jobs:
       run: (cd ./packages/$PACKAGE && npm run test)
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: ${{env.PACKAGE}}
+        file: ./packages/${{env.PACKAGE}}/coverage/clover.xml
+        name: ${{env.PACKAGE}}

@@ -1,6 +1,10 @@
 name: Botonic docs tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - '.github/workflows/botonic-docs-tests.yml'
 
 jobs:
   botonic-core-tests:

@@ -1,6 +1,10 @@
 name: Botonic plugin-google-analytics tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-plugin-google-analytics/**'
+      - '.github/workflows/botonic-plugin-google-analytics-tests.yml'
 
 jobs:
   botonic-plugin-google-analytics-tests:

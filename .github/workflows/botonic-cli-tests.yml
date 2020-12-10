@@ -1,6 +1,10 @@
 name: Botonic cli tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-cli/**'
+      - '.github/workflows/botonic-cli-tests.yml'
 
 jobs:
   botonic-cli-tests:

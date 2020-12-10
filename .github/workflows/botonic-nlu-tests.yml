@@ -1,6 +1,10 @@
 name: Botonic nlu tests
  
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-nlu/**'
+      - '.github/workflows/botonic-nlu-tests.yml'
  
 jobs:
   botonic-plugin-nlu-tests:

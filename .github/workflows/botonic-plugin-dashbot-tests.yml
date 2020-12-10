@@ -1,11 +1,17 @@
 name: Botonic plugin-dashbot tests
  
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-plugin-dashbot/**'
+      - '.github/workflows/botonic-plugin-dashbot-tests.yml'
  
 jobs:
   botonic-plugin-dashbot-tests:
     name: Botonic plugin-dashbot tests
     runs-on: ubuntu-latest
+    env:
+      PACKAGE: botonic-plugin-dashbot
     steps:
     - name: Checking out to current branch (Step 1 of 6)
       uses: actions/checkout@v1
@@ -21,8 +27,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - name: Install botonic-plugin-dashbot (Step 4 of 6)
-      run: (cd ./packages/botonic-plugin-dashbot && npm install -D)
+      run: (cd ./packages/$PACKAGE && npm install -D)
     - name: Install common packages dependencies (Step 5 of 6)
       run: npm install -D
     - name: Verify lint botonic-plugin-dashbot (Step 6 of 6)
-      run: (cd ./packages/botonic-plugin-dashbot && npm run lint_ci)
+      run: (cd ./packages/$PACKAGE && npm run lint_ci)

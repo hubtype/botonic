@@ -1,6 +1,10 @@
 name: Botonic plugin-dialogflow tests
  
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-plugin-dialogflow/**'
+      - '.github/workflows/botonic-plugin-dialogflow-tests.yml'
  
 jobs:
   botonic-plugin-dialogflow-tests:

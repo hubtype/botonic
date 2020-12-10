@@ -1,6 +1,10 @@
 name: Botonic plugin-segment tests
  
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-plugin-segment/**'
+      - '.github/workflows/botonic-plugin-segment-tests.yml'
  
 jobs:
   botonic-plugin-segment-tests:

@@ -1,6 +1,10 @@
 name: Botonic plugin-inbenta tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-plugin-inbenta/**'
+      - '.github/workflows/botonic-plugin-inbenta-tests.yml'
 
 jobs:
   botonic-plugin-inbenta-tests:

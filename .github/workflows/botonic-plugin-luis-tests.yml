@@ -1,6 +1,10 @@
 name: Botonic plugin-luis tests
  
-on: [push]
+on:
+  push:
+    paths:
+      - 'packages/botonic-plugin-luis/**'
+      - '.github/workflows/botonic-plugin-luis-tests.yml'
  
 jobs:
   botonic-plugin-luis-tests:
