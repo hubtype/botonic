@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'packages/botonic-plugin-dynamodb/**'
-      - '.github/workflows/botonic-plugin-dynamodb-tests.yml'
+      - '.github/workflows/botonic-plugin-dynamo-tests.yml'
 
 jobs:
   botonic-plugin-dynamodb-tests:
