@@ -95,7 +95,7 @@ export function spawnProcess(
   args: string[],
   onClose?: () => string
 ): void {
-  const childProcess = spawn(command, args)
+  const childProcess = spawn(command, args, { shell: true }) // https://nodejs.org/api/child_process.html#child_process_spawning_bat_and_cmd_files_on_windows
   childProcess.stdout.on('data', out => {
     process.stdout.write(out)
   })
