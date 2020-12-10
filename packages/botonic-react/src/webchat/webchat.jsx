@@ -185,7 +185,13 @@ const createUser = () => {
     name,
   }
 }
-
+const initSession = session => {
+  if (!session) session = {}
+  const hasUserId = session.user && session.user.id !== undefined
+  if (!session.user || Object.keys(session.user).length === 0 || !hasUserId)
+    session.user = !hasUserId ? merge(session.user, createUser()) : createUser()
+  return session
+}
 // eslint-disable-next-line complexity
 export const Webchat = forwardRef((props, ref) => {
   const {
@@ -289,9 +295,7 @@ export const Webchat = forwardRef((props, ref) => {
       lastMessageUpdate,
       themeUpdates,
     } = botonicState || {}
-    if (!session) session = {}
-    if (!session.user || Object.keys(session.user).length === 0)
-      session.user = createUser()
+    session = initSession(session)
     updateSession(session)
     if (
       !devSettings ||

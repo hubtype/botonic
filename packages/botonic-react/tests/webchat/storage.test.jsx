@@ -76,4 +76,17 @@ describe('TEST: storageKey', () => {
     expect(localStorage.getItem('botonicState')).not.toBeNull()
     expect(localStorage.getItem('myCustomKey')).toBeNull()
   })
+
+  it('Inits session correctly with user id (corrupted localStorage)', async () => {
+    localStorage.setItem(
+      'botonicState',
+      '{"user":{"extra_data":{"url":"https://www.some-domain.com/","lang":"GB_en"}},"messages":[],"session":{"user":{"extra_data":{"url":"https://www.some-domain.com/","lang":"GB_en"}}},"lastRoutePath":null,"devSettings":{},"lastMessageUpdate":"2020-12-04T16:30:11.833Z"}'
+    )
+    await act(async () => {
+      TestRenderer.create(<Webchat storage={localStorage} />)
+    })
+    const botonicState = JSON.parse(localStorage.getItem('botonicState'))
+    expect(localStorage.getItem('botonicState')).not.toBeNull()
+    expect(botonicState.session.user.id).not.toBeFalsy()
+  })
 })
