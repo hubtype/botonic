@@ -1,4 +1,5 @@
 import { Command, flags } from '@oclif/command'
+import colors from 'colors'
 import * as path from 'path'
 
 import { spawnNpmScript, track } from '../utils'
@@ -29,8 +30,9 @@ export default class Run extends Command {
       await import(botonicNLUPath)
     } catch (e) {
       console.log(
-        `You don't have @botonic/plugin-nlu installed.\nPlease, install it by typing the following command:`
-          .red
+        colors.red(
+          `You don't have @botonic/plugin-nlu installed.\nPlease, install it with the following command:`
+        )
       )
       console.log(`$ npm install @botonic/plugin-nlu`)
       return
