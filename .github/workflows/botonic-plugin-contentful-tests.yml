@@ -3,6 +3,8 @@ name: Botonic plugin-contentful tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-plugin-contentful/**'
       - '.github/workflows/botonic-plugin-contentful-tests.yml'
 
