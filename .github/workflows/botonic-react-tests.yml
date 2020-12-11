@@ -3,6 +3,8 @@ name: Botonic react tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-react/**'
       - '.github/workflows/botonic-react-tests.yml'
 

@@ -3,6 +3,8 @@ name: Botonic plugin-dynamodb tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-plugin-dynamodb/**'
       - '.github/workflows/botonic-plugin-dynamo-tests.yml'
 

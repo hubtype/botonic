@@ -3,6 +3,8 @@ name: Botonic nlu tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-nlu/**'
       - '.github/workflows/botonic-nlu-tests.yml'
  

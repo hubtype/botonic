@@ -3,6 +3,8 @@ name: Botonic plugin-inbenta tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-plugin-inbenta/**'
       - '.github/workflows/botonic-plugin-inbenta-tests.yml'
 

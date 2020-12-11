@@ -3,6 +3,8 @@ name: Botonic docs tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'docs/**'
       - '.github/workflows/botonic-docs-tests.yml'
 

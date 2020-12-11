@@ -3,6 +3,8 @@ name: Botonic plugin-watson tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-plugin-watson/**'
       - '.github/workflows/botonic-plugin-watson-tests.yml'
  

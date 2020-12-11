@@ -3,6 +3,8 @@ name: Botonic plugin-dashbot tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-plugin-dashbot/**'
       - '.github/workflows/botonic-plugin-dashbot-tests.yml'
  

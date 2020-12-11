@@ -3,6 +3,8 @@ name: Botonic plugin-luis tests
 on:
   push:
     paths:
+      - '*'
+      - 'packages/*'
       - 'packages/botonic-plugin-luis/**'
       - '.github/workflows/botonic-plugin-luis-tests.yml'
  
