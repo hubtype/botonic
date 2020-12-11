@@ -14,13 +14,13 @@ jobs:
       PACKAGE: botonic-plugin-dialogflow
     steps:
     - name: Checking out to current branch (Step 1 of 6)
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     - name: Setting up node (Step 2 of 6)
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2-beta
       with:
         node-version: '12'
     - name: Setting up cache (Step 3 of 6)
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
