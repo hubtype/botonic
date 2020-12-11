@@ -31,7 +31,7 @@ export default class Run extends Command {
     } catch (e) {
       console.log(
         colors.red(
-          `You don't have @botonic/plugin-nlu installed.\nPlease, install it by typing the following command:`
+          `You don't have @botonic/plugin-nlu installed.\nPlease, install it with the following command:`
         )
       )
       console.log(`$ npm install @botonic/plugin-nlu`)

@@ -49,13 +49,33 @@ if (analytics_enabled()) {
   analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
 }
 
+function getSystemInformation() {
+  return {
+    platform: os.platform(),
+    version: os.version(),
+    arch: os.arch(),
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    timestamp: new Date().toISOString(),
+  }
+}
+
 export function track(event: string, properties = {}) {
-  if (analytics_enabled() && analytics && credentials && credentials.analytics)
+  if (
+    analytics_enabled() &&
+    analytics &&
+    credentials &&
+    credentials.analytics
+  ) {
+    properties = {
+      ...properties,
+      ...getSystemInformation(),
+    }
     analytics.track({
       event: event,
       anonymousId: credentials.analytics.anonymous_id,
       properties: properties,
     })
+  }
 }
 
 export function botonicPostInstall() {
