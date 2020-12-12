@@ -4,8 +4,8 @@ import * as schema from 'contentful-import/dist/utils/schema'
 import { AssetProps } from 'contentful-management/dist/typings/entities/asset'
 // eslint-disable-next-line node/no-missing-import
 import { ContentTypeProps } from 'contentful-management/dist/typings/entities/content-type'
-// eslint-disable-next-line node/no-missing-import
-import { EntryProp } from 'contentful-management/dist/typings/entities/entry'
+// eslint-disable-next-line node/no-missing-import,import/named
+import { EntryProps } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { LocaleProps } from 'contentful-management/dist/typings/entities/locale'
 import fs from 'fs'
@@ -18,7 +18,7 @@ export type I18nFieldValues = { [locale: string]: any }
  */
 export class SpaceExport {
   payload: {
-    entries: EntryProp[]
+    entries: EntryProps[]
     locales?: LocaleProps[]
     contentTypes?: ContentTypeProps[]
     assets?: AssetProps[]
