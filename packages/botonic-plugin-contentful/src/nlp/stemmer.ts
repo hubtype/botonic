@@ -1,9 +1,8 @@
 import Stemmer from '@nlpjs/core/src/stemmer'
 
 import { SingletonMap } from '../util'
+import * as locales from './locales'
 import { languageFromLocale, Locale } from './locales'
-import { StemmerHr } from './stemmers/stemmer-hr'
-import { StemmerSk } from './stemmers/stemmer-sk'
 
 // see https://github.com/axa-group/nlp.js/blob/HEAD/docs/language-support.md
 // and https://stackoverflow.com/a/11210358/145289
@@ -11,78 +10,86 @@ import { StemmerSk } from './stemmers/stemmer-sk'
 // https://github.com/fortnightlabs/snowball-js/blob/master/stemmer/src/ext/SpanishStemmer.js based on
 // java version at http://snowball.tartarus.org/download.html
 const stemmers = new SingletonMap<Stemmer>({
-  ca: () => {
+  [locales.CATALAN]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerCa = require('@nlpjs/lang-ca/src/stemmer-ca')
     return new StemmerCa()
   },
-  en: () => {
+  [locales.ENGLISH]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerEn = require('@nlpjs/lang-en-min/src/stemmer-en')
     return new StemmerEn()
   },
-  es: () => {
+  [locales.SPANISH]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerEs = require('@nlpjs/lang-es/src/stemmer-es')
     return new StemmerEs()
   },
-  pl: () => {
+  [locales.POLISH]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerPl = require('@nlpjs/lang-pl/src/stemmer-pl')
     return new StemmerPl()
   },
-  pt: () => {
+  [locales.PORTUGUESE]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerPt = require('@nlpjs/lang-pt/src/stemmer-pt')
     return new StemmerPt()
   },
-  ru: () => {
+  [locales.RUSSIAN]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerRu = require('@nlpjs/lang-ru/src/stemmer-ru')
     return new StemmerRu()
   },
-  tr: () => {
+  [locales.TURKISH]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerTr = require('@nlpjs/lang-tr/src/stemmer-tr')
     return new StemmerTr()
   },
-  it: () => {
+  [locales.ITALIAN]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerIt = require('@nlpjs/lang-it/src/stemmer-it')
     return new StemmerIt()
   },
-  fr: () => {
+  [locales.FRENCH]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerFr = require('@nlpjs/lang-fr/src/stemmer-fr')
     return new StemmerFr()
   },
-  de: () => {
+  [locales.GERMAN]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerDe = require('@nlpjs/lang-de/src/stemmer-de')
     return new StemmerDe()
   },
-  ro: () => {
+  [locales.ROMANIAN]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerRo = require('@nlpjs/lang-ro/src/stemmer-ro')
     return new StemmerRo()
   },
-  el: () => {
+  [locales.GREEK]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerEl = require('@nlpjs/lang-el/src/stemmer-el')
     return new StemmerEl()
   },
-  cs: () => {
+  [locales.CZECH]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerCs = require('@nlpjs/lang-cs/src/stemmer-cs')
     return new StemmerCs()
   },
-  uk: () => {
+  [locales.UKRAINIAN]: () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const StemmerUk = require('@nlpjs/lang-uk/src/stemmer-uk')
     return new StemmerUk()
   },
-  hr: () => new StemmerHr(),
-  sk: () => new StemmerSk(),
+  [locales.CROATIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { StemmerHr } = require('./stemmers/stemmer-hr.ts')
+    return new StemmerHr()
+  },
+  [locales.SLOVAK]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { StemmerSk } = require('./stemmers/stemmer-sk.ts')
+    return new StemmerSk()
+  },
 })
 
 export function stemmerFor(locale: Locale): Stemmer {

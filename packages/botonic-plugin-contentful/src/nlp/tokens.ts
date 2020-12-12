@@ -19,8 +19,6 @@ import { ruDefaultStopWords } from './stopwords/stopwords-ru'
 import { skDefaultStopWords } from './stopwords/stopwords-sk'
 import { trDefaultStopWords } from './stopwords/stopwords-tr'
 import { ukDefaultStopWords } from './stopwords/stopwords-uk'
-import { TokenizerHr } from './tokenizers/tokenizer-hr'
-import { TokenizerSk } from './tokenizers/tokenizer-sk'
 
 export function countOccurrences(haystack: string, needle: string): number {
   let n = 0
@@ -148,8 +146,16 @@ const lazyTokenizers = new SingletonMap<Tokenizer>({
     const TokenizerUk = require('@nlpjs/lang-uk/src/tokenizer-uk')
     return new TokenizerUk()
   },
-  [locales.CROATIAN]: () => new TokenizerHr(),
-  [locales.SLOVAK]: () => new TokenizerSk(),
+  [locales.CROATIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { TokenizerHr } = require('./tokenizers/tokenizer-hr.ts')
+    return new TokenizerHr()
+  },
+  [locales.SLOVAK]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { TokenizerSk } = require('./tokenizers/tokenizer-sk.ts')
+    return new TokenizerSk()
+  },
 })
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
