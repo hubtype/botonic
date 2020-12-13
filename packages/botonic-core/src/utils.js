@@ -1,9 +1,16 @@
-export const isBrowser = () => {
-  return typeof window !== 'undefined' && !window.process
-}
-
 export const isNode = () => {
-  return !isBrowser() && typeof process !== 'undefined'
+  return typeof IS_NODE !== 'undefined'
+    ? // eslint-disable-next-line no-undef
+      IS_NODE
+    : typeof process !== 'undefined' &&
+        process.versions !== null &&
+        process.versions.node !== null
+}
+export const isBrowser = () => {
+  return typeof IS_BROWSER !== 'undefined'
+    ? // eslint-disable-next-line no-undef
+      IS_BROWSER
+    : typeof window !== 'undefined' && typeof window.document !== 'undefined'
 }
 
 export const isMobile = (mobileBreakpoint = 460) => {
