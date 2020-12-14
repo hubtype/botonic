@@ -6,11 +6,14 @@ export const isNode = () => {
         process.versions !== null &&
         process.versions.node !== null
 }
+
 export const isBrowser = () => {
   return typeof IS_BROWSER !== 'undefined'
     ? // eslint-disable-next-line no-undef
       IS_BROWSER
-    : typeof window !== 'undefined' && typeof window.document !== 'undefined'
+    : typeof window !== 'undefined' &&
+        typeof window.document !== 'undefined' &&
+        !window.process
 }
 
 export const isMobile = (mobileBreakpoint = 460) => {
