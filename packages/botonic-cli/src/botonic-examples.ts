@@ -31,6 +31,11 @@ export const EXAMPLES: BotonicProject[] = [
     uri: `${GITHUB_EXAMPLES_PATH}/blank`,
   },
   {
+    name: 'blank-typescript',
+    description: 'Blank (TypeScript): A minimal template to start from scratch',
+    uri: `${GITHUB_EXAMPLES_PATH}/blank-typescript`,
+  },
+  {
     name: 'tutorial',
     description:
       'Tutorial: An example with different examples that help you get started fast',
