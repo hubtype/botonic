@@ -20,9 +20,14 @@ const packagesDir = join(process.cwd(), C.PACKAGES_DIRNAME)
 const packagesList = sortPackagesByPreference(packagesDir)
 
 ;(async () => {
-  const version = await doAskVersionToPublish()
-  const confirmation = await doAskForConfirmation(version)
-  if (!confirmation) return
+  let version = ''
+  if (process.argv[2]) {
+    version = process.argv[2]
+  } else {
+    version = await doAskVersionToPublish()
+    const confirmation = await doAskForConfirmation(version)
+    if (!confirmation) return
+  }
 
   console.log(blue(`Publishing new Botonic ${version} version:`))
 

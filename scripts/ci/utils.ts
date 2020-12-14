@@ -77,8 +77,12 @@ export const bumpVersion = async (version, packagePath) => {
     await spawnProcess('npm', ['version', 'minor'], {
       onSuccess: logBumpedVersion,
     })
-  } else {
+  } else if (version === 'alpha' || version === 'rc') {
     await spawnProcess('npm', ['version', 'prerelease', `--preid=${version}`], {
+      onSuccess: logBumpedVersion,
+    })
+  } else {
+    await spawnProcess('npm', ['version', version], {
       onSuccess: logBumpedVersion,
     })
   }
@@ -118,6 +122,7 @@ export const build = async () => {
 
 export const publish = async version => {
   console.log(` - Publishing ${version} version...`)
+
   if (version === 'rc' || version === 'alpha') {
     await spawnProcess(
       'npm',
@@ -126,11 +131,11 @@ export const publish = async version => {
         onSuccess: () => console.log(green('   Published successfully.\n')),
       }
     )
-  } else {
+  } else if (version === 'final') {
     await spawnProcess('npm', ['publish', '--access=public'], {
       onSuccess: () => console.log(green('   Published successfully.\n')),
     })
-  }
+  } else return
 }
 
 export const doAskVersionToPublish = async (): Promise<string> => {
