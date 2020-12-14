@@ -147,13 +147,13 @@ const lazyTokenizers = new SingletonMap<Tokenizer>({
     return new TokenizerUk()
   },
   [locales.CROATIAN]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { TokenizerHr } = require('./tokenizers/tokenizer-hr.ts')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
+    const { TokenizerHr } = require('./tokenizers/tokenizer-hr')
     return new TokenizerHr()
   },
   [locales.SLOVAK]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { TokenizerSk } = require('./tokenizers/tokenizer-sk.ts')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
+    const { TokenizerSk } = require('./tokenizers/tokenizer-sk')
     return new TokenizerSk()
   },
 })
