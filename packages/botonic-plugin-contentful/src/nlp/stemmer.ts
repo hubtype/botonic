@@ -81,13 +81,13 @@ const stemmers = new SingletonMap<Stemmer>({
     return new StemmerUk()
   },
   [locales.CROATIAN]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { StemmerHr } = require('./stemmers/stemmer-hr.ts')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
+    const { StemmerHr } = require('./stemmers/stemmer-hr')
     return new StemmerHr()
   },
   [locales.SLOVAK]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { StemmerSk } = require('./stemmers/stemmer-sk.ts')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
+    const { StemmerSk } = require('./stemmers/stemmer-sk')
     return new StemmerSk()
   },
 })
