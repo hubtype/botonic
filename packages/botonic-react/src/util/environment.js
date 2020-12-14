@@ -3,6 +3,7 @@ export const isProd = process.env.NODE_ENV === 'production'
 
 export const staticAsset = path => {
   try {
+    if (isURL(path)) return path // Webpack 5 >= fully resolves absolute path to assets
     const scriptBaseURL = document
       .querySelector('script[src$="webchat.botonic.js"]')
       .getAttribute('src')
