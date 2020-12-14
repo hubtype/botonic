@@ -1,20 +1,28 @@
 name: Botonic nlu tests
  
-on: [push]
+on:
+  push:
+    paths:
+      - '*'
+      - 'packages/*'
+      - 'packages/botonic-nlu/**'
+      - '.github/workflows/botonic-nlu-tests.yml'
  
 jobs:
   botonic-plugin-nlu-tests:
     name: Botonic nlu tests
     runs-on: ubuntu-latest
+    env:
+      PACKAGE: botonic-nlu
     steps:
     - name: Checking out to current branch (Step 1 of 7)
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     - name: Setting up node (Step 2 of 7)
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2-beta
       with:
         node-version: '12'
     - name: Setting up cache (Step 3 of 7)
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -23,8 +31,8 @@ jobs:
     - name: Install botonic-nlu (Step 4 of 7)
       run: (cd ./packages/botonic-nlu && npm install -D)
     - name: Build botonic-nlu (Step 5 of 7)
-      run: (cd ./packages/botonic-nlu && npm run build)
+      run: (cd ./packages/$PACKAGE && npm run build)
     - name: Install common packages dependencies (Step 6 of 7)
       run: npm install -D
     - name: Verify lint botonic-nlu (Step 7 of 7)
-      run: (cd ./packages/botonic-nlu && npm run lint_ci)
+      run: (cd ./packages/$PACKAGE && npm run lint_ci)

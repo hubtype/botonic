@@ -1,6 +1,12 @@
 name: Botonic react tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - '*'
+      - 'packages/*'
+      - 'packages/botonic-react/**'
+      - '.github/workflows/botonic-react-tests.yml'
 
 jobs:
   botonic-react-tests:
@@ -10,13 +16,13 @@ jobs:
       PACKAGE: botonic-react
     steps:
     - name: Checking out to current branch
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     - name: Setting up node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2-beta
       with:
         node-version: '12'
     - name: Setting up cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -31,4 +37,12 @@ jobs:
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
     - name: Verify index.d.ts
-      run: scripts/qa/lint-d-ts.sh packages/botonic-core
+      run: scripts/qa/lint-d-ts.sh ./packages/$PACKAGE
+    
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: ${{env.PACKAGE}}
+        file: ./packages/${{env.PACKAGE}}/coverage/clover.xml
+        name: ${{env.PACKAGE}}

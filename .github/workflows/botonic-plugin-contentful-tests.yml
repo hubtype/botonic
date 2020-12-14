@@ -4,10 +4,9 @@ on:
   push:
     paths:
       - '*'
-      - '.github/**'
       - 'packages/*'
       - 'packages/botonic-plugin-contentful/**'
-      - 'scripts/*'
+      - '.github/workflows/botonic-plugin-contentful-tests.yml'
 
 jobs:
   botonic-plugin-contentful-tests:
@@ -17,13 +16,13 @@ jobs:
       PACKAGE: botonic-plugin-contentful
     steps:
     - name: Checking out to current branch
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     - name: Setting up node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2-beta
       with:
         node-version: '12'
     - name: Setting up cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -41,3 +40,11 @@ jobs:
       run: (cd ./packages/$PACKAGE && npm run test)
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
+
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: ${{env.PACKAGE}}
+        file: ./packages/${{env.PACKAGE}}/coverage/clover.xml
+        name: ${{env.PACKAGE}}

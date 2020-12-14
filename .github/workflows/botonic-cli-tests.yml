@@ -1,6 +1,12 @@
 name: Botonic cli tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - '*'
+      - 'packages/*'
+      - 'packages/botonic-cli/**'
+      - '.github/workflows/botonic-cli-tests.yml'
 
 jobs:
   botonic-cli-tests:
@@ -10,13 +16,13 @@ jobs:
       PACKAGE: botonic-cli
     steps:
       - name: Checking out to current branch
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Setting up node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2-beta
         with:
           node-version: '12'
       - name: Setting up cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
