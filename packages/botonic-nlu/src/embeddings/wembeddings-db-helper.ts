@@ -1,17 +1,25 @@
 import * as db from 'better-sqlite3'
 import { Database, Statement } from 'better-sqlite3'
 import { existsSync, mkdirSync } from 'fs'
+import { homedir } from 'os'
 import { join } from 'path'
 
 import {
+  BOTONIC_GLOBAL_DIRNAME,
+  BOTONIC_GLOBAL_WE_DIRNAME,
   BOTONIC_WORD_EMBEDDINGS_URL,
-  GLOBAL_WORD_EMBEDDINGS_PATH,
   SUPPORTED_EMBEDDINGS,
   WE_DB_FILE,
 } from '../constants'
 import { Language } from '../language'
 import { WordEmbeddingDimension, WordEmbeddingType } from '../types'
 import { downloadIntoPath } from '../util/file-system'
+
+const GLOBAL_WORD_EMBEDDINGS_PATH = join(
+  homedir(),
+  BOTONIC_GLOBAL_DIRNAME,
+  BOTONIC_GLOBAL_WE_DIRNAME
+)
 
 export function isSupportedWordEmbedding(
   locale: Language,
