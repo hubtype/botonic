@@ -31,7 +31,7 @@ export class SpaceManager {
           optional: true,
         })
       )
-      .then(locale => console.log(`Created locale ${locale.name}`))
+      .then(locale => console.log(`Created locale ${locale.code}`))
       .catch(console.error)
   }
 }
