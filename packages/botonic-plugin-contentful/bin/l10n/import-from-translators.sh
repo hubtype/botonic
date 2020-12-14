@@ -5,10 +5,17 @@ DELIVER_TOKEN=$3
 CONTENTFUL_MANAGEMENT_TOKEN=$4
 LOCALE=$5
 SOURCE=$6
-SOURCE="$( cd "$( dirname "$SOURCE" )" && pwd )/$(basename $SOURCE)"
+if [[ "$SOURCE" != "" ]]; then
+  SOURCE="$( cd "$( dirname "$SOURCE" )" && pwd )/$(basename $SOURCE)"
+fi
 
 BIN_DIR=${0:a:h}
 cd "$BIN_DIR"/../.. || exit
+
+if [[ $# -lt 8 ]]; then
+	../../node_modules/.bin/ts-node --files	src/tools/l10n/import-csv-from-translators.ts --help
+	exit 1
+fi
 
 EXTENSION="${SOURCE##*.}"
 if [[ "$EXTENSION" != "csv" && "$EXTENSION" != "CSV" ]]; then
@@ -18,10 +25,6 @@ else
   CSV_FILENAME=$SOURCE
 fi
 
-if [[ $# -lt 8 ]]; then
-	../../node_modules/.bin/ts-node --files	src/tools/l10n/import-csv-from-translators.ts --help
-	exit 1
-fi
 
 
 

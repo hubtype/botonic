@@ -30,7 +30,7 @@ export class ReferenceFieldDuplicator {
       for (const fieldType of fields[contentType]) {
         console.log(` **Duplicating '${contentType}' fields`)
         await this.duplicate(
-          defaultLocale.name,
+          defaultLocale.code,
           contentType as ContentType,
           fieldType
         )
@@ -42,13 +42,13 @@ export class ReferenceFieldDuplicator {
   async duplicateAssetFiles() {
     const defaultLocale = await this.info.defaultLocale()
     console.log(`***Duplicating assets`)
-    const assets = await this.cms.assets({ locale: defaultLocale.name })
+    const assets = await this.cms.assets({ locale: defaultLocale.code })
     console.log(` **Duplicating ${assets.length} assets`)
     for (const a of assets) {
       await this.manageCms.copyAssetFile(
         this.manageContext,
         new AssetId(a.id, undefined),
-        defaultLocale.name
+        defaultLocale.code
       )
     }
     this.warning()
