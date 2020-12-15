@@ -43,3 +43,11 @@ export const onDOMLoaded = f => {
     document.addEventListener('DOMContentLoaded', f, false)
   }
 }
+
+export const isShadowDOMSupported = () => {
+  try {
+    return document.head.createShadowRoot || document.head.attachShadow
+  } catch (e) {
+    return false
+  }
+}

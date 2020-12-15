@@ -5,7 +5,7 @@ import { render } from 'react-dom'
 
 import { SENDERS, WEBCHAT } from './constants'
 import { msgToBotonic } from './msg-to-botonic'
-import { onDOMLoaded } from './util/dom'
+import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
@@ -39,7 +39,13 @@ export class WebchatApp {
     this.enableAttachments = enableAttachments
     this.enableUserInput = enableUserInput
     this.enableAnimations = enableAnimations
-    this.shadowDOM = typeof shadowDOM === 'function' ? shadowDOM() : shadowDOM
+    this.shadowDOM = Boolean(
+      typeof shadowDOM === 'function' ? shadowDOM() : shadowDOM
+    )
+    if (this.shadowDOM && !isShadowDOMSupported()) {
+      console.warn('[botonic] ShadowDOM not supported on this browser')
+      this.shadowDOM = false
+    }
     this.hostId = hostId || WEBCHAT.DEFAULTS.HOST_ID
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
@@ -52,23 +58,24 @@ export class WebchatApp {
     this.visibility = visibility
     this.webchatRef = createRef()
     this.appId = appId
-    this.shouldRender = false
-    this.shouldRenderOptionsAtRuntime = {}
-
-    onDOMLoaded(() => {
-      this.createRootElement()
-      if (this.shouldRender) {
-        this.render(this.getReactMountNode(), this.shouldRenderOptionsAtRuntime)
-        this.shouldRender = false
-        this.shouldRenderOptionsAtRuntime = {}
-      }
-    })
   }
 
-  createRootElement() {
+  createRootElement(host) {
     // Create root element <div id='root'> if not exists
     // Create shadowDOM to root element if needed
-    let host = document.getElementById(this.hostId)
+    if (host) {
+      if (host.id && this.hostId) {
+        if (host.id != this.hostId) {
+          console.warn(
+            `[botonic] Host ID "${host.id}" don't match 'hostId' option: ${this.hostId}. Using value: ${host.id}.`
+          )
+          this.hostId = host.id
+        }
+      } else if (host.id) this.hostId = host.id
+      else if (this.hostId) host.id = this.hostId
+    } else {
+      host = document.getElementById(this.hostId)
+    }
     if (!host) {
       host = document.createElement('div')
       host.id = this.hostId
@@ -316,14 +323,14 @@ export class WebchatApp {
   }
 
   async render(dest, optionsAtRuntime = {}) {
-    if (!this.host) {
-      // The DOM is not ready, render later
-      this.shouldRender = true
-      this.shouldRenderOptionsAtRuntime = optionsAtRuntime
-      return
-    }
-    const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
-    if (isVisible)
-      render(this.getComponent(optionsAtRuntime), this.getReactMountNode(dest))
+    onDOMLoaded(async () => {
+      this.createRootElement(dest)
+      const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
+      if (isVisible)
+        render(
+          this.getComponent(optionsAtRuntime),
+          this.getReactMountNode(dest)
+        )
+    })
   }
 }
