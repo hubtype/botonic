@@ -129,9 +129,7 @@ export abstract class MessageContent extends TopContent {
     // it's only required so far to show text on buttons which
     // refer to this content
     if (this.isSearchable() && !this.common.shortText) {
-      return `${
-        this.contentType
-      } ${this.toString()} is searchable but has no shortText`
+      return `is searchable but has no shortText`
     }
     return undefined
   }
@@ -213,8 +211,8 @@ export class Button extends Content {
   validate(): string | undefined {
     if (this.usingNameForText) {
       return this.name
-        ? `Button ${this.toString()} without short text. Using instead 'name' field. `
-        : `Button ${this.toString()} without short text nor name.`
+        ? `without short text. Using instead 'name' field. `
+        : `without short text nor name.`
     }
     return undefined
   }
@@ -275,6 +273,9 @@ export class Carousel extends MessageContent {
   }
 
   validate(): string | undefined {
+    if (this.elements.length == 0) {
+      return 'has no elements'
+    }
     return Content.validateContents(this.elements)
   }
 
@@ -332,9 +333,7 @@ export class Text extends MessageContent {
   }
 
   validate(): string | undefined {
-    const noText = !this.text
-      ? `${this.contentType} ${this.toString()} has no text`
-      : undefined
+    const noText = !this.text ? `has no text` : undefined
 
     return Content.mergeValidations([
       noText,
