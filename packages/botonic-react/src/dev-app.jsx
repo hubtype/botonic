@@ -4,6 +4,7 @@ import { render } from 'react-dom'
 
 import { SENDERS } from './constants'
 import { ReactBot } from './react-bot'
+import { onDOMLoaded } from './util/dom'
 import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
 
@@ -50,13 +51,7 @@ export class DevApp extends WebchatApp {
     })
   }
 
-  render(dest, optionsAtRuntime = {}) {
-    if (!this.host) {
-      // The DOM is not ready, render later
-      this.shouldRender = true
-      this.shouldRenderOptionsAtRuntime = optionsAtRuntime
-      return
-    }
+  getComponent(optionsAtRuntime = {}) {
     let {
       theme = {},
       persistentMenu,
@@ -88,7 +83,7 @@ export class DevApp extends WebchatApp {
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
-    render(
+    return (
       <WebchatDev
         {...webchatOptions}
         ref={this.webchatRef}
@@ -110,9 +105,15 @@ export class DevApp extends WebchatApp {
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
-      />,
-      this.getReactMountNode(dest)
+      />
     )
+  }
+
+  render(dest, optionsAtRuntime = {}) {
+    onDOMLoaded(() => {
+      this.createRootElement(dest)
+      render(this.getComponent(optionsAtRuntime), this.getReactMountNode(dest))
+    })
   }
 
   async onUserInput({ input, session, lastRoutePath }) {
