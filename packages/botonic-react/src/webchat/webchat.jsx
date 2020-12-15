@@ -956,7 +956,7 @@ export const Webchat = forwardRef((props, ref) => {
         <StyledWebchat
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           role={ROLES.WEBCHAT}
-          id={'botonic-webchat'}
+          id={WEBCHAT.DEFAULTS.ID}
           width={webchatState.width}
           height={webchatState.height}
           style={{
