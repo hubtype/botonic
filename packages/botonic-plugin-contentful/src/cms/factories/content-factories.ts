@@ -136,13 +136,8 @@ export class CarouselBuilder extends MessageContentBuilder {
   private elements: Element[] = []
   elementBuilder: ElementBuilder | undefined
 
-  constructor(id: string, name: string, public text: string) {
+  constructor(id: string, name: string) {
     super(id, name)
-  }
-
-  withText(text: string): this {
-    this.text = text
-    return this
   }
 
   withElementBuilder(elementId: string): ElementBuilder {

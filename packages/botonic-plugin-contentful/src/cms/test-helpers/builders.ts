@@ -177,8 +177,8 @@ export class RndCarouselBuilder extends CarouselBuilder {
   readonly topComponentBuilder = new RndTopContentBuilder()
   readonly elementBuilder = new RndElementBuilder()
 
-  constructor(name: string = rndStr(), text: string = rndStr()) {
-    super(rndStr(), name, text)
+  constructor(name: string = rndStr()) {
+    super(rndStr(), name)
   }
 
   withRandomFields(numElements = 2): this {
