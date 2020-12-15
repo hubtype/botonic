@@ -243,6 +243,8 @@ export const Webchat = forwardRef((props, ref) => {
     storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
   )
 
+  const host = props.host || document.body
+
   const saveWebchatState = webchatState => {
     storage &&
       saveState(
@@ -301,8 +303,7 @@ export const Webchat = forwardRef((props, ref) => {
         document.head.appendChild(botonicStyle)
 
         // injecting styles in host node too so that shadowDOM works
-        if (props.shadowDOM)
-          props.host.appendChild(botonicStyle.cloneNode(true))
+        if (props.shadowDOM) host.appendChild(botonicStyle.cloneNode(true))
       }
       delete window._botonicInsertStyles
     }
@@ -315,7 +316,7 @@ export const Webchat = forwardRef((props, ref) => {
           style.textContent &&
           style.textContent.includes('emoji-picker-react')
         )
-          props.host.appendChild(style.cloneNode(true))
+          host.appendChild(style.cloneNode(true))
       }
     }
   })
@@ -361,8 +362,8 @@ export const Webchat = forwardRef((props, ref) => {
 
   useAsyncEffect(async () => {
     if (!webchatState.isWebchatOpen) return
-    deviceAdapter.init(props.host)
-    scrollToBottom({ behavior: 'auto', host: props.host })
+    deviceAdapter.init(host)
+    scrollToBottom({ behavior: 'auto', host })
     await resendUnsentInputs()
   }, [webchatState.isWebchatOpen])
 
@@ -389,7 +390,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [isOnline])
 
-  useTyping({ webchatState, updateTyping, updateMessage, host: props.host })
+  useTyping({ webchatState, updateTyping, updateMessage, host })
 
   useEffect(() => {
     updateTheme(merge(props.theme, theme, webchatState.themeUpdates))
@@ -895,7 +896,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
-    scrollToBottom({ host: props.host })
+    scrollToBottom({ host })
   }, [webchatState.themeUpdates])
 
   // Only needed for dev/serve mode
@@ -991,9 +992,7 @@ export const Webchat = forwardRef((props, ref) => {
     </WebchatContext.Provider>
   )
   return props.shadowDOM ? (
-    <StyleSheetManager target={props.host}>
-      {WebchatComponent}
-    </StyleSheetManager>
+    <StyleSheetManager target={host}>{WebchatComponent}</StyleSheetManager>
   ) : (
     WebchatComponent
   )

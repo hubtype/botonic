@@ -15,16 +15,19 @@ describe('TEST: Webchat App', () => {
 
   it('TEST: WebchatApp adds <div id="root"> to DOM on initialize', async () => {
     const webchatApp = new WebchatApp({})
+    webchatApp.render()
     expect(document.body.querySelector('#root')).toBeTruthy()
   })
 
   it('TEST: WebchatApp custom hostId', async () => {
     const webchatApp = new WebchatApp({ hostId: 'myCustomId' })
+    webchatApp.render()
     expect(document.body.querySelector('#myCustomId')).toBeTruthy()
   })
 
   it('TEST: WebchatApp renders webchat', async () => {
     const webchatApp = new WebchatApp({})
+    webchatApp.createRootElement()
     await act(async () => {
       const WebchatComponent = webchatApp.getComponent()
       render(WebchatComponent, webchatApp.getReactMountNode())
@@ -37,6 +40,7 @@ describe('TEST: Webchat App', () => {
 
   it('TEST: WebchatApp renders webchat in shadowDOM', async () => {
     const webchatApp = new WebchatApp({ shadowDOM: true })
+    webchatApp.createRootElement()
     await act(async () => {
       const WebchatComponent = webchatApp.getComponent()
       render(WebchatComponent, webchatApp.getReactMountNode())
