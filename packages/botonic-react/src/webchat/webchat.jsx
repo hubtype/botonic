@@ -293,8 +293,19 @@ export const Webchat = forwardRef((props, ref) => {
 
   // Load styles stored in window._botonicInsertStyles by Webpack
   useComponentWillMount(() => {
-    if (!window._botonicInsertStyles || !window._botonicInsertStyles.length)
-      return
+    if (window._botonicInsertStyles && window._botonicInsertStyles.length) {
+      for (const botonicStyle of window._botonicInsertStyles) {
+        // Injecting styles at head is needed even if we use shadowDOM
+        // as some dependencies like simplebar rely on creating ephemeral elements
+        // on document.body and assume styles will be available globally
+        document.head.appendChild(botonicStyle)
+
+        // injecting styles in host node too so that shadowDOM works
+        if (props.shadowDOM)
+          props.host.appendChild(botonicStyle.cloneNode(true))
+      }
+      delete window._botonicInsertStyles
+    }
 
     if (props.shadowDOM) {
       // emoji-picker-react injects styles in head, so we need to
@@ -307,17 +318,6 @@ export const Webchat = forwardRef((props, ref) => {
           props.host.appendChild(style.cloneNode(true))
       }
     }
-
-    for (const botonicStyle of window._botonicInsertStyles) {
-      // Injecting styles at head is needed even if we use shadowDOM
-      // as some dependencies like simplebar rely on creating ephemeral elements
-      // on document.body and assume styles will be available globally
-      document.head.appendChild(botonicStyle)
-
-      // injecting styles in host node too so that shadowDOM works
-      if (props.shadowDOM) props.host.appendChild(botonicStyle.cloneNode(true))
-    }
-    delete window._botonicInsertStyles
   })
 
   // Load initial state from storage
