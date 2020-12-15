@@ -1,15 +1,17 @@
+import { WEBCHAT } from '../constants'
+
 export const getScrollableArea = webchatElement => {
   const getArea = area => {
     const botonicScrollableContent = webchatElement.querySelector(
-      '#botonic-scrollable-content'
+      WEBCHAT.SELECTORS.SCROLLABLE_CONTENT
     )
     const scrollableArea =
       botonicScrollableContent && botonicScrollableContent.querySelector(area)
     return scrollableArea
   }
   return {
-    full: getArea('.simplebar-content'),
-    visible: getArea('.simplebar-content-wrapper'),
+    full: getArea(WEBCHAT.SELECTORS.SIMPLEBAR_CONTENT),
+    visible: getArea(WEBCHAT.SELECTORS.SIMPLEBAR_WRAPPER),
   }
 }
 
@@ -30,17 +32,17 @@ export const scrollToBottom = ({
 }
 
 export const getWebchatElement = host =>
-  host && host.querySelector('#botonic-webchat')
+  host && host.querySelector(`#${WEBCHAT.DEFAULTS.ID}`)
 
 // https://stackoverflow.com/questions/9457891/how-to-detect-if-domcontentloaded-was-fired
-export const onDOMLoaded = f => {
+export const onDOMLoaded = callback => {
   if (/complete|interactive|loaded/.test(document.readyState)) {
     // In case the document has finished parsing, document's readyState will
     // be one of "complete", "interactive" or (non-standard) "loaded".
-    f()
+    callback()
   } else {
     // The document is not ready yet, so wait for the DOMContentLoaded event
-    document.addEventListener('DOMContentLoaded', f, false)
+    document.addEventListener('DOMContentLoaded', callback, false)
   }
 }
 

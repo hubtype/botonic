@@ -47,6 +47,12 @@ export const WEBCHAT = {
     ELEMENT_MARGIN_RIGHT: 6,
     STORAGE_KEY: 'botonicState',
     HOST_ID: 'root',
+    ID: 'botonic-webchat',
+  },
+  SELECTORS: {
+    SCROLLABLE_CONTENT: '#botonic-scrollable-content',
+    SIMPLEBAR_CONTENT: '.simplebar-content',
+    SIMPLEBAR_WRAPPER: '.simplebar-content-wrapper',
   },
   CUSTOM_PROPERTIES: {
     // General
