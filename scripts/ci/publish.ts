@@ -6,13 +6,12 @@ import {
   bumpVersion,
   changeBotonicDeps,
   clean,
-  doAskForConfirmation,
-  doAskVersionToPublish,
   installDeps,
   publish,
   CONSTANTS as C,
   Versions,
   sortPackagesByPreference,
+  getVersionAndConfirmation,
 } from './utils'
 
 process.chdir('..')
@@ -20,15 +19,8 @@ const packagesDir = join(process.cwd(), C.PACKAGES_DIRNAME)
 const packagesList = sortPackagesByPreference(packagesDir)
 
 ;(async () => {
-  let version = ''
-  if (process.argv[2]) {
-    version = process.argv[2]
-  } else {
-    version = await doAskVersionToPublish()
-    const confirmation = await doAskForConfirmation(version)
-    if (!confirmation) return
-  }
-
+  const { version, confirmation } = await getVersionAndConfirmation()
+  if (!confirmation) return
   console.log(blue(`Publishing new Botonic ${version} version:`))
 
   for (const pkg of packagesList) {

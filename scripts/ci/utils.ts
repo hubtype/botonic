@@ -5,13 +5,17 @@ import { readdirSync } from 'fs'
 import { writeFileSync } from 'fs'
 import { readFileSync } from 'fs'
 import { join } from 'path'
-import { chdir } from 'process'
 
 export enum Versions {
   ALPHA = 'alpha',
+  BETA = 'beta',
   RC = 'rc',
   FINAL = 'final',
 }
+
+const nonFinalVersions = Object.values(Versions).filter(
+  v => v !== Versions.FINAL
+)
 
 export const CONSTANTS = {
   PACKAGES_DIRNAME: 'packages',
@@ -73,11 +77,11 @@ export const bumpVersion = async (version, packagePath) => {
   const logBumpedVersion = () => {
     console.log(green(`   Version bumped to ${getPkgVersion(packagePath)}.\n`))
   }
-  if (version === 'final') {
+  if (version === Versions.FINAL) {
     await spawnProcess('npm', ['version', 'minor'], {
       onSuccess: logBumpedVersion,
     })
-  } else if (version === 'alpha' || version === 'rc') {
+  } else if (nonFinalVersions.includes(version)) {
     await spawnProcess('npm', ['version', 'prerelease', `--preid=${version}`], {
       onSuccess: logBumpedVersion,
     })
@@ -123,7 +127,7 @@ export const build = async () => {
 export const publish = async version => {
   console.log(` - Publishing ${version} version...`)
 
-  if (version === 'rc' || version === 'alpha') {
+  if (nonFinalVersions.includes(version)) {
     await spawnProcess(
       'npm',
       ['publish', '--access=public', '--tag', version],
@@ -131,7 +135,7 @@ export const publish = async version => {
         onSuccess: () => console.log(green('   Published successfully.\n')),
       }
     )
-  } else if (version === 'final') {
+  } else if (version === Versions.FINAL) {
     await spawnProcess('npm', ['publish', '--access=public'], {
       onSuccess: () => console.log(green('   Published successfully.\n')),
     })
@@ -144,7 +148,7 @@ export const doAskVersionToPublish = async (): Promise<string> => {
       type: 'list',
       name: 'version',
       message: 'What version do you want to publish?',
-      choices: [Versions.ALPHA, Versions.RC, Versions.FINAL],
+      choices: [Versions.ALPHA, Versions.BETA, Versions.RC, Versions.FINAL],
     },
   ])
   return version
@@ -167,4 +171,13 @@ export const doAskForConfirmation = async (
   ])
   confirmation = res.confirmation
   return Boolean(confirmation)
+}
+
+export const getVersionAndConfirmation = async () => {
+  if (process.argv[2]) return { version: process.argv[2], confirmation: true }
+  else {
+    const version = await doAskVersionToPublish()
+    const confirmation = await doAskForConfirmation(version)
+    return { version, confirmation }
+  }
 }
