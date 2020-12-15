@@ -1,17 +1,11 @@
 import { anything, instance, mock, when } from 'ts-mockito'
 
-import {
-  Carousel,
-  CmsException,
-  DummyCMS,
-  ErrorReportingCMS,
-  SPANISH,
-} from '../../src'
+import { CmsException, DummyCMS, ErrorReportingCMS, SPANISH } from '../../src'
+import { CarouselBuilder } from '../../src/cms/factories'
 import { testContentful } from '../contentful/contentful.helper'
 
 test('TEST: ErrorReportingCMS integration test', async () => {
-  const contentful = testContentful()
-  const sut = new ErrorReportingCMS(contentful)
+  const sut = testContentful({}, true)
   expect.assertions(1)
   await sut.text('invalid_id').catch(error => {
     expect(error).toBeInstanceOf(CmsException)
@@ -54,16 +48,17 @@ test('TEST: ErrorReportingCMS content delivery failed', async () => {
     })
 })
 
-test('TEST: ErrorReportingCMS carousel delivery ok', async () => {
+test('TEST: ErrorReportingCMS carousel delivery ok validation fails', async () => {
   const mockCms = mock(DummyCMS)
-  const carousel = mock(Carousel)
-  when(carousel.validate()).thenReturn('invalid carousel')
+  const builder = new CarouselBuilder('id', 'name')
+  builder.withElementBuilder('elementId').withButtons([])
+  const carousel = builder.build()
 
-  when(mockCms.carousel('id1', undefined)).thenResolve(instance(carousel))
+  when(mockCms.carousel('id1', undefined)).thenResolve(carousel)
   const sut = new ErrorReportingCMS(instance(mockCms))
 
   await sut.carousel('id1').then(c => {
-    expect(c).toEqual(instance(carousel))
+    expect(c).toEqual(carousel)
     return
   })
 })

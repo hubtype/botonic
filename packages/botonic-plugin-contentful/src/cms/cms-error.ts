@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { MultiError } from 'async-parallel'
 
 import { SearchCandidate } from '../search'
@@ -35,75 +36,112 @@ export class ErrorReportingCMS implements CMS {
     this.exceptionWrapper = new ContentfulExceptionWrapper('CMS', logger)
   }
 
-  private static validate<C extends Content>(content: C): C {
-    const v = content.validate()
-    if (v) {
-      console.error(v)
+  private validate<C extends Content>(
+    content: C,
+    context: Context | undefined
+  ): C {
+    const validation = content.validate()
+    if (validation) {
+      const locale = context?.locale ? ` on locale '${context.locale}` : ''
+      const msg = `${
+        content.contentType
+      } ${content.toString()}${locale}: ${validation}`
+      if (this.logger) this.logger(msg)
+      else console.error(msg)
     }
     return content
   }
 
+  catchAndValidate<T extends Content>(
+    id: string,
+    context: Context | undefined,
+    contentType: ContentType,
+    promise: Promise<T>
+  ): Promise<T> {
+    return promise
+      .catch(this.handleContentError(contentType, id, context))
+      .then(c => this.validate(c, context))
+  }
+
   carousel(id: string, context?: Context): Promise<Carousel> {
-    return this.cms
-      .carousel(id, context)
-      .catch(this.handleContentError(ContentType.CAROUSEL, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.CAROUSEL,
+      this.cms.carousel(id, context)
+    )
   }
 
   text(id: string, context?: Context): Promise<Text> {
-    return this.cms
-      .text(id, context)
-      .catch(this.handleContentError(ContentType.TEXT, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.TEXT,
+      this.cms.text(id, context)
+    )
   }
 
   chitchat(id: string, context?: Context): Promise<Chitchat> {
-    return this.cms
-      .text(id, context)
-      .catch(this.handleContentError(ContentType.CHITCHAT, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.CHITCHAT,
+      this.cms.chitchat(id, context)
+    )
   }
 
   startUp(id: string, context?: Context): Promise<StartUp> {
-    return this.cms
-      .startUp(id, context)
-      .catch(this.handleContentError(ContentType.STARTUP, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.STARTUP,
+      this.cms.startUp(id, context)
+    )
   }
 
   url(id: string, context?: Context): Promise<Url> {
-    return this.cms
-      .url(id, context)
-      .catch(this.handleContentError(ContentType.URL, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.URL,
+      this.cms.url(id, context)
+    )
   }
 
   image(id: string, context?: Context): Promise<Image> {
-    return this.cms
-      .image(id, context)
-      .catch(this.handleContentError(ContentType.IMAGE, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.IMAGE,
+      this.cms.image(id, context)
+    )
   }
 
   queue(id: string, context?: Context): Promise<Queue> {
-    return this.cms
-      .queue(id, context)
-      .catch(this.handleContentError(ContentType.QUEUE, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.QUEUE,
+      this.cms.queue(id, context)
+    )
   }
 
   button(id: string, context?: Context): Promise<Button> {
-    return this.cms
-      .button(id, context)
-      .catch(this.handleContentError(ContentType.BUTTON, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.BUTTON,
+      this.cms.button(id, context)
+    )
   }
 
   element(id: string, context?: Context): Promise<Element> {
-    return this.cms
-      .element(id, context)
-      .catch(this.handleContentError(ContentType.ELEMENT, id, context))
-      .then(ErrorReportingCMS.validate)
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.ELEMENT,
+      this.cms.element(id, context)
+    )
   }
 
   contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
