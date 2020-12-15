@@ -16,6 +16,14 @@ export const isBrowser = () => {
         !window.process
 }
 
+export function getWebpackEnvVar(resolveWebpackEnv, name, defaultValue) {
+  return (
+    resolveWebpackEnv() ||
+    (typeof process !== 'undefined' && process.env[name]) ||
+    defaultValue
+  )
+}
+
 export const isMobile = (mobileBreakpoint = 460) => {
   if (isBrowser()) {
     const w = Math.max(
