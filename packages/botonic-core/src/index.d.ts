@@ -337,7 +337,7 @@ export function isBrowser(): boolean
 export function isMobile(mobileBreakpoint?: number): boolean
 export function isNode(): boolean
 export function getWebpackEnvVar(
-  resolveWebpackEnv: () => boolean,
-  name: string,
+  webpackEnvVar: string | boolean,
+  name: string | boolean,
   defaultValue: string
 ): string
