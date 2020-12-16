@@ -14,7 +14,9 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
   },
   "sideEffects": [
-    "*.(scss|css)"
+    "*.scss",
+    "*.css",
+    "*.sass"
   ],
   "author": "",
   "files": [
