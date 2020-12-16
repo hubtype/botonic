@@ -6,7 +6,10 @@ import MarkdownIt from 'markdown-it'
 import React, { useEffect, useState } from 'react'
 
 import Analytics from '../../components/analytics'
-import { isBrowser, removejscssfile } from '../../util/dom'
+import HomeHeader from '../../components/homeHeader'
+import { isBrowser } from '../../util/dom'
+
+const ROOT = 'root'
 
 const removeTableOfContents = markdownString => {
   // Remove ToC as after passing markdown to html it doesn't work
@@ -22,27 +25,19 @@ const markdownRenderer = new MarkdownIt({
   typographer: true,
 })
 
-const BotonicExample = ({
-  title,
-  rootId,
-  runtimeOptions,
-  src,
-  markdownSrc,
-}) => {
+const BotonicExample = ({ title, runtimeOptions, src, markdownSrc }) => {
   const [loading, setLoading] = useState(true)
   const errorMsg =
     'Error loading bot script. Please refresh the page and try again.'
   const [error, setError] = useState(false)
   if (isBrowser) {
-    removejscssfile('styles.css', 'css') // Dev
-    removejscssfile('styles.14d0f803.css', 'css') // Prod
     window.onload = () => {
       setTimeout(() => {
         try {
           // eslint-disable-next-line no-undef
           Botonic &&
             // eslint-disable-next-line no-undef
-            Botonic.render(document.getElementById(rootId), runtimeOptions)
+            Botonic.render(document.getElementById(ROOT), runtimeOptions)
         } catch (e) {
           setError(errorMsg)
           console.error(errorMsg)
@@ -76,35 +71,31 @@ const BotonicExample = ({
         {/* Dev sourcing from /static/css/, Prod from /css/  */}
         <link rel='stylesheet' href='/css/markdown.module.css'></link>
       </Head>
-      <Analytics />
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
-        <a
-          style={{
-            textDecoration: 'none',
-            color: 'black',
-          }}
-          href='/examples'
-        >
-          Go back to Examples
-        </a>
-        {loading && <p>Loading...</p>}
-        {error && <p>{error}</p>}
-      </div>
-      {markdown && (
+      <div className='flex flex-col min-h-screen overflow-hidden'>
+        <HomeHeader />
+        <Analytics />
         <div
-          className='markdown-body'
-          dangerouslySetInnerHTML={{
-            __html: markdownRenderer.render(markdown),
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+            marginTop: 75,
+            marginBottom: -25,
           }}
-        />
-      )}
-      <div id={rootId}></div>
+        >
+          {loading && <p>Loading example...</p>}
+          {error && <p>{error}</p>}
+        </div>
+        {markdown && (
+          <div
+            className='markdown-body'
+            dangerouslySetInnerHTML={{
+              __html: markdownRenderer.render(markdown),
+            }}
+          />
+        )}
+        <div id={ROOT}></div>
+      </div>
     </>
   )
 }

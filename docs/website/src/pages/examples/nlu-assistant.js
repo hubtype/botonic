@@ -11,7 +11,6 @@ const NluAssistant = () => {
       {() => (
         <BotonicExample
           title='Botonic NLU Assistant'
-          rootId='botonic-nlu'
           src='https://example-nlu-assistant-dcab1a9c-dbe8-4a85-8bc2-50687fc22b8b.netlify.com/webchat.botonic.js'
           runtimeOptions={{
             appId: '89ce1496-ba5a-432e-89c7-4b853a8c7e29',
