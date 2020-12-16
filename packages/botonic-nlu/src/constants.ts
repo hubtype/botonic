@@ -1,6 +1,3 @@
-import * as os from 'os'
-import { join } from 'path'
-
 export const NLU_DIR = 'nlu'
 export const UTTERANCES_DIR = 'utterances'
 export const MODELS_DIR = 'models'
@@ -22,12 +19,6 @@ export const BOTONIC_WORD_EMBEDDINGS_URL =
 export const BOTONIC_GLOBAL_DIRNAME = '.botonic'
 
 export const BOTONIC_GLOBAL_WE_DIRNAME = 'word-embeddings'
-
-export const GLOBAL_WORD_EMBEDDINGS_PATH = join(
-  os.homedir(),
-  BOTONIC_GLOBAL_DIRNAME,
-  BOTONIC_GLOBAL_WE_DIRNAME
-)
 
 interface SupportedEmbeddings {
   [locale: string]: { [kind: string]: number[] }

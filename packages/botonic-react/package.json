@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.16.1-alpha.1",
+  "version": "0.17.0-alpha.4",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
@@ -14,7 +14,9 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
   },
   "sideEffects": [
-    "*.(scss|css)"
+    "*.scss",
+    "*.css",
+    "*.sass"
   ],
   "author": "",
   "files": [
@@ -23,7 +25,7 @@
     "MIGRATION_GUIDE.md"
   ],
   "dependencies": {
-    "@botonic/core": "~0.16.0",
+    "@botonic/core": "0.17.0-alpha.4",
     "axios": "^0.21.0",
     "emoji-picker-react": "^3.2.3",
     "framer-motion": "^2.6.6",

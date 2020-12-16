@@ -1,9 +1,18 @@
 import axios from 'axios'
 import Pusher from 'pusher-js'
 
-const PUSHER_KEY = process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c'
-const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+import { getWebpackEnvVar } from './utils'
 
+const WEBCHAT_PUSHER_KEY = getWebpackEnvVar(
+  () => typeof WEBCHAT_PUSHER_KEY !== 'undefined' && WEBCHAT_PUSHER_KEY,
+  'WEBCHAT_PUSHER_KEY',
+  '434ca667c8e6cb3f641c'
+)
+const HUBTYPE_API_URL = getWebpackEnvVar(
+  () => typeof HUBTYPE_API_URL !== 'undefined' && HUBTYPE_API_URL,
+  'HUBTYPE_API_URL',
+  'https://api.hubtype.com'
+)
 export class HubtypeService {
   constructor({
     appId,
@@ -31,7 +40,7 @@ export class HubtypeService {
     if (lastMessageUpdateDate)
       this.lastMessageUpdateDate = lastMessageUpdateDate
     if (this.pusher || !this.user.id || !this.appId) return null
-    this.pusher = new Pusher(PUSHER_KEY, {
+    this.pusher = new Pusher(WEBCHAT_PUSHER_KEY, {
       cluster: 'eu',
       authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
       forceTLS: true,
