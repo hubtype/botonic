@@ -50,7 +50,7 @@ function Header() {
           <div className='grid grid-cols-1 justify-center content-center items-center place-content-center place-items-center'>
             {/* Logo */}
             <Link
-              to={useBaseUrl('/')}
+              to={useBaseUrl('')}
               className='flex items-center hover:no-underline'
               aria-label='Botonic'
             >
