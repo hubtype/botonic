@@ -52,7 +52,6 @@ if (analytics_enabled()) {
 function getSystemInformation() {
   return {
     platform: os.platform(),
-    version: os.version(),
     arch: os.arch(),
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     timestamp: new Date().toISOString(),

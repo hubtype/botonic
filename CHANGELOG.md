@@ -11,6 +11,62 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.17.0] - 2020-17-12
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Improved [Getting started](https://github.com/hubtype/botonic/pull/1138) docs.
+  - Moved templates and examples to [botonic-examples](https://github.com/hubtype/botonic-examples) repo.
+  - Added [script](https://github.com/hubtype/botonic/pull/1134) to update releases in docs.
+  - Set up `Codecov` for Botonic and trigger Github Workflows only when necessary. [#1177](https://github.com/hubtype/botonic/pull/1177).
+  - [Adapted code for Botonic packages](https://github.com/hubtype/botonic/pull/1183) in order to support **Webpack 5** and [upgraded examples](https://github.com/hubtype/botonic-examples/pull/5) to this version.
+
+* [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - Botonic CLI to [download examples](https://github.com/hubtype/botonic/pull/1134) directly from [botonic-examples](https://github.com/hubtype/botonic-examples).
+  - Improved analytics and fixed spawn processes in Windows (`botonic serve`, `botonic train`). Now it will be not necessary to run `npm run start`. [#1176](https://github.com/hubtype/botonic/pull/1176)
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Added NLP support [for Croatian](https://github.com/hubtype/botonic/pull/1120).
+  - Added NLP support [for Slovak](https://github.com/hubtype/botonic/pull/1132).
+  - Added [new method](https://github.com/hubtype/botonic/pull/1118) to get all the locales of a contentful space.
+  - Lazy loading of language engines. [#1160](https://github.com/hubtype/botonic/pull/1160) and [#1194](https://github.com/hubtype/botonic/pull/1194)
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - **New webchat features**:
+    - Added [new Shadow DOM feature](https://github.com/hubtype/botonic/pull/1020) to avoid webchat's CSS conflict with the host page of your website.
+    - Added [Facebook's multichannel](https://github.com/hubtype/botonic/pull/1133) converter for texts.
+
+### Changed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - [Refactored](https://github.com/hubtype/botonic/pull/1121) project scripts and organization.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Improved types](https://github.com/hubtype/botonic/pull/1136).
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Improved CSV handling [#1116](https://github.com/hubtype/botonic/pull/1116) and [#1117](https://github.com/hubtype/botonic/pull/1117).
+  - Made `buttonStyle` undefined if not specified and added new `renderOption` to specify default `buttonStyle`. [#1174](https://github.com/hubtype/botonic/pull/1174)
+
+### Fixed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Fixed [broken links](https://github.com/hubtype/botonic/pull/1172).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Avoid [circular dependencies](https://github.com/hubtype/botonic/pull/1135).
+  - [Fixed webchat behavior](https://github.com/hubtype/botonic/pull/1175) when `user ID` was lost, causing some webchat's to not load correctly.
+
 ## [0.16.0] - 2020-20-11
 
 ### Added
@@ -21,7 +77,7 @@ All notable changes to Botonic will be documented in this file.
   - Enabled [code scaning](https://github.com/hubtype/botonic/commit/36c3d848cec3339da6b40d943eab8ca79254f5b5).
   - Updated [Botonic's README](https://github.com/hubtype/botonic/commit/f5d684a5c4600826278c3e9fd3f6b31f635041b0).
   - Added [Deployment Guide](https://botonic.io/docs/deployment/hubtype).
-  - Improved [Continuous Integration](https://github.com/hubtype/botonic/pull/1065) for Docs.
+  - Improved [Continuous Integration](https://github.com/hubtype/botonic/pull/1065) docs.
   - [Configured eslint import sorter](https://github.com/hubtype/botonic/commit/685f15d2f7004fbf118300e9d353c36b1b3ba155).
   - Added [Botonic Examples](https://botonic.io/examples/) section [#1091](https://github.com/hubtype/botonic/pull/1091).
   - Added auto publish script.
@@ -30,7 +86,14 @@ All notable changes to Botonic will be documented in this file.
 
   - Added **new** matcher `request matcher` and pass `lastRoutePath` to current bot context. [#1086](https://github.com/hubtype/botonic/pull/1086)
 
-- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Added NLP support [for Romanian](https://github.com/hubtype/botonic/pull/1109).
+  - Added NLP support [for Greek](https://github.com/hubtype/botonic/pull/1110).
+  - Added NLP support [for Czech](https://github.com/hubtype/botonic/pull/1113).
+  - Added NLP support [for Ukrainian](https://github.com/hubtype/botonic/pull/1114).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
   - Added [webchat component tests](https://github.com/hubtype/botonic/pull/1023)
   - **New webchat features**:
@@ -95,10 +158,6 @@ All notable changes to Botonic will be documented in this file.
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
 
   - The csv importer of texts, which was coming from content translator, now groups all the fields from the same content. [#1036](https://github.com/hubtype/botonic/pull/1036).
-  - Added NLP support [for Romanian](https://github.com/hubtype/botonic/pull/1109).
-  - Added NLP support [for Greek](https://github.com/hubtype/botonic/pull/1110).
-  - Added NLP support [for Czech](https://github.com/hubtype/botonic/pull/1113).
-  - Added NLP support [for Ukrainian](https://github.com/hubtype/botonic/pull/1114).
 
 ## [0.15.0] - 2020-27-10
 
@@ -556,3 +615,4 @@ All notable changes to Botonic will be documented in this file.
 [0.14.0]: https://github.com/hubtype/botonic/releases/tag/v0.14.0
 [0.15.0]: https://github.com/hubtype/botonic/releases/tag/v0.15.0
 [0.16.0]: https://github.com/hubtype/botonic/releases/tag/v0.16.0
+[0.17.0]: https://github.com/hubtype/botonic/releases/tag/v0.17.0
