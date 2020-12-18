@@ -15,10 +15,18 @@ import { ensureError } from '../cms/exceptions'
 import { reachableFrom } from '../cms/visitors/message-visitors'
 
 export class ContentsValidator {
+  /**
+   *
+   * @param onlyValidateReachable only validate searchable contents (with keywords) or
+   * which are linked from other contents
+   * @param initialContentIds contents to be validated even if they're not
+   * reachable
+   */
   constructor(
     readonly cms: CMS,
     readonly report = new DefaultContentsValidatorReports(),
-    readonly onlyValidateReachable = true
+    readonly onlyValidateReachable = true,
+    readonly initialContentIds: string[] = []
   ) {}
 
   /**
@@ -30,6 +38,16 @@ export class ContentsValidator {
    * - An URL has empty URL empty
    */
   async validateAllTopContents(context: Context): Promise<void> {
+    const messageContents = await this.cacheMessageContents(context)
+    const messageContentsToValidate = this.onlyValidateReachable
+      ? await this.reachableContents(messageContents, context)
+      : messageContents
+    for (const c of messageContentsToValidate) {
+      this.validate(c)
+    }
+  }
+
+  private async cacheMessageContents(context: Context) {
     const messageContents: MessageContent[] = []
     // TODO also validate non TopContent contents
     for (const model of TOP_CONTENT_TYPES) {
@@ -47,12 +65,7 @@ export class ContentsValidator {
         this.processException(model, e)
       }
     }
-    const messageContentsToValidate = this.onlyValidateReachable
-      ? await this.reachableContents(messageContents, context)
-      : messageContents
-    for (const c of messageContentsToValidate) {
-      this.validate(c)
-    }
+    return messageContents
   }
 
   private processException(model: ContentType, e: any): void {
@@ -86,6 +99,7 @@ export class ContentsValidator {
   ): Promise<Iterable<MessageContent>> {
     const reachable = await reachableFrom(this.cms, allContents, context)
     allContents.filter(c => c.isSearchable()).forEach(c => reachable.add(c))
+    this.addInitialContents(allContents, reachable)
     return reachable
   }
 
@@ -93,6 +107,22 @@ export class ContentsValidator {
     const res = content.validate()
     if (res) {
       this.report.validationError(content.contentId, res)
+    } else {
+      this.report.successfulValidation(content.contentId)
+    }
+  }
+
+  private addInitialContents(
+    allContents: MessageContent[],
+    reachable: Set<MessageContent>
+  ) {
+    if (this.initialContentIds.length == 0) {
+      return
+    }
+    for (const c of allContents) {
+      if (this.initialContentIds.includes(c.id)) {
+        reachable.add(c)
+      }
     }
   }
 }
@@ -100,6 +130,7 @@ export class ContentsValidator {
 export interface ContentsValidatorReports {
   deliveryError(resourceId: ResourceId, exception: Error): void
   validationError(resourceId: ResourceId, error: string): void
+  successfulValidation(resourceId: ResourceId): void
 }
 
 type ResourceError = {
@@ -111,8 +142,13 @@ type ResourceError = {
 export class DefaultContentsValidatorReports
   implements ContentsValidatorReports {
   errors: ResourceError[] = []
+  successContents: ResourceId[] = []
 
   constructor(readonly logErrors = true) {}
+
+  successfulValidation(resourceId: ResourceId): void {
+    this.successContents.push(resourceId)
+  }
 
   deliveryError(resourceId: ResourceId, exception: Error) {
     let msg = exception.message
@@ -133,7 +169,7 @@ export class DefaultContentsValidatorReports
   ): void {
     if (this.logErrors) {
       if (!msg.includes(resourceId.id)) {
-        msg = `${resourceId.toString()}: msg`
+        msg = `${resourceId.toString()}: ${msg}`
       }
       console.log(msg)
     }
