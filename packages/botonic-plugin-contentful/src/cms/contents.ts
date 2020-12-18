@@ -44,7 +44,14 @@ export abstract class Content implements Stringable {
   }
 
   static validateContents(contents: Content[]): string | undefined {
-    return this.mergeValidations(contents.map(c => c.validate()))
+    const validations = contents.map(c => {
+      const validation = c.validate()
+      if (!validation) {
+        return validation
+      }
+      return `${c.contentType} ${c.toString()}: ${validation}`
+    })
+    return this.mergeValidations(validations)
   }
 
   static mergeValidations(
@@ -248,7 +255,16 @@ export class StartUp extends MessageContent {
   }
 
   validate(): string | undefined {
-    return Content.validateContents(this.buttons)
+    const noText = !this.text ? `has no text` : undefined
+    const noButtonsNoFollowUp =
+      !this.buttons.length && !this.common.followUp
+        ? 'has no buttons nor follow up'
+        : undefined
+    return Content.mergeValidations([
+      noText,
+      noButtonsNoFollowUp,
+      Content.validateContents(this.buttons),
+    ])
   }
 
   cloneWithText(newText: string): this {

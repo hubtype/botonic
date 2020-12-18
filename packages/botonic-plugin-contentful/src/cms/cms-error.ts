@@ -42,7 +42,7 @@ export class ErrorReportingCMS implements CMS {
   ): C {
     const validation = content.validate()
     if (validation) {
-      const locale = context?.locale ? ` on locale '${context.locale}` : ''
+      const locale = context?.locale ? ` on locale '${context.locale}'` : ''
       const msg = `${
         content.contentType
       } ${content.toString()}${locale}: ${validation}`

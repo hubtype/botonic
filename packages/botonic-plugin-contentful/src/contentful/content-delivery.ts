@@ -64,7 +64,7 @@ export abstract class ResourceDelivery {
   ) {
     if (this.resumeErrors) {
       console.error(
-        `ERROR: ${doing} on locale '${String(
+        `ERROR: ${doing} on content ${resourceId.toString()} on locale '${String(
           context.locale
         )}'. Returning content with partial data.`
       )
@@ -80,7 +80,7 @@ export abstract class ResourceDelivery {
   ): Promise<T[]> {
     return asyncMap(context, entries, factory, undefined, (entry, e) => {
       const contentId = this.getContentIdForLogs(entry)
-      this.logOrThrow(`Loading ${contentId.toString()}`, context, e, contentId)
+      this.logOrThrow(`Loading content failed`, context, e, contentId)
       return undefined
     })
   }
