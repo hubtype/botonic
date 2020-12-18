@@ -16,9 +16,9 @@ export const isBrowser = () => {
         !window.process
 }
 
-export function getWebpackEnvVar(resolveWebpackEnv, name, defaultValue) {
+export function getWebpackEnvVar(webpackEnvVar, name, defaultValue) {
   return (
-    resolveWebpackEnv() ||
+    webpackEnvVar ||
     (typeof process !== 'undefined' && process.env[name]) ||
     defaultValue
   )

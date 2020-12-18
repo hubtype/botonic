@@ -5,7 +5,7 @@ import * as path from 'path'
 import { spawnNpmScript, track } from '../utils'
 
 export default class Run extends Command {
-  static description = 'Serve your bot in your localhost'
+  static description = 'Train your bot with NLU'
 
   static examples = [
     `$ botonic train
