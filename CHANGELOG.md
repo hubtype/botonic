@@ -11,7 +11,7 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
-## [0.17.0] - 2020-17-12
+## [0.17.0] - 2020-18-12
 
 ### Added
 
@@ -26,7 +26,7 @@ All notable changes to Botonic will be documented in this file.
 * [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
 
   - Botonic CLI to [download examples](https://github.com/hubtype/botonic/pull/1134) directly from [botonic-examples](https://github.com/hubtype/botonic-examples).
-  - Improved analytics and fixed spawn processes in Windows (`botonic serve`, `botonic train`). Now it will be not necessary to run `npm run start`. [#1176](https://github.com/hubtype/botonic/pull/1176)
+  - Improved analytics and fixed spawn processes in Windows (`botonic serve`, `botonic train`). Now it is no longer necessary to run `npm run start`. [#1176](https://github.com/hubtype/botonic/pull/1176)
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
 
