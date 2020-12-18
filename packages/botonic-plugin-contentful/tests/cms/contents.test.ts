@@ -1,5 +1,3 @@
-import { instance, mock, when } from 'ts-mockito'
-
 import { Content, Text } from '../../src/cms'
 import {
   RndStartUpBuilder,
@@ -98,21 +96,23 @@ test('TEST: findRecursively', () => {
 })
 
 test('TEST: validateContents', () => {
-  const invalidContent = mock(Content)
-  when(invalidContent.validate()).thenReturn('wrong button')
+  const invalidContent = new RndTextBuilder('INVALID', '')
+    .withId('invalid_id')
+    .build()
 
-  const validContent = mock(Content)
-  when(validContent.validate()).thenReturn(undefined)
+  const validContent = new RndTextBuilder('VALID', 'text')
+    .withId('valid_id')
+    .build()
 
-  expect(
-    Content.validateContents([instance(validContent), instance(validContent)])
-  ).toBeUndefined()
+  expect(Content.validateContents([validContent, validContent])).toBeUndefined()
   expect(
     Content.validateContents([
-      instance(validContent),
-      instance(invalidContent),
-      instance(validContent),
-      instance(invalidContent),
+      validContent,
+      invalidContent,
+      validContent,
+      invalidContent,
     ])
-  ).toEqual('wrong button. wrong button')
+  ).toEqual(
+    "text 'invalid_id/INVALID': has no text. text 'invalid_id/INVALID': has no text"
+  )
 })
