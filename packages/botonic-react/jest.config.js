@@ -1,6 +1,6 @@
 // Options about JS are for compiling @botonic .js/jsx files
 module.exports = {
-  roots: ['tests/'],
+  roots: ['src/', 'tests/'],
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx)$',
   testPathIgnorePatterns: [
     'lib',
