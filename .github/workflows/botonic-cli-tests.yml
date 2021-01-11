@@ -30,7 +30,7 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dev dependencies
         env:
-          BOTONIC_DISABLE_MIXPANEL: 1
+          BOTONIC_DISABLE_ANALYTICS: ${{ secrets.BOTONIC_DISABLE_ANALYTICS }}
         run: (cd ./packages/$PACKAGE && npm install -D)
       - name: Build
         run: (cd ./packages/$PACKAGE && npm run build)
