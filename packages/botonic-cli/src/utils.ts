@@ -1,5 +1,5 @@
 import Analytics from 'analytics-node'
-import { exec, spawn } from 'child_process'
+import { exec, execSync, spawn } from 'child_process'
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
@@ -7,29 +7,36 @@ import * as path from 'path'
 export let analytics: Analytics
 
 export let credentials: any
-export const botonic_home_path: string = path.join(os.homedir(), '.botonic')
-export const botonic_credentials_path = path.join(
-  botonic_home_path,
+export const botonicHomePath: string = path.join(os.homedir(), '.botonic')
+export const botonicCredentialsPath = path.join(
+  botonicHomePath,
   'credentials.json'
 )
 
-export function initializeCredentials() {
-  if (!fs.existsSync(botonic_home_path)) fs.mkdirSync(botonic_home_path)
-  const anonymous_id = Math.round(Math.random() * 100000000)
-  fs.writeFileSync(
-    botonic_credentials_path,
-    JSON.stringify({ analytics: { anonymous_id } })
-  )
+export function readJSON(path: string): JSON {
+  return JSON.parse(fs.readFileSync(path, 'utf8'))
+}
+
+export function writeJSON(path: string, object: any): void {
+  fs.writeFileSync(path, JSON.stringify(object))
+}
+
+export function initializeCredentials(): void {
+  if (!fs.existsSync(botonicHomePath)) fs.mkdirSync(botonicHomePath)
+  const anonymousId = Math.round(Math.random() * 100000000)
+  writeJSON(botonicCredentialsPath, {
+    analytics: { anonymous_id: anonymousId },
+  })
 }
 
 function readCredentials() {
-  if (!fs.existsSync(botonic_credentials_path)) {
+  if (!fs.existsSync(botonicCredentialsPath)) {
     initializeCredentials()
   }
   try {
-    credentials = JSON.parse(fs.readFileSync(botonic_credentials_path, 'utf8'))
+    credentials = readJSON(botonicCredentialsPath)
   } catch (e) {
-    if (fs.existsSync(botonic_credentials_path)) {
+    if (fs.existsSync(botonicCredentialsPath)) {
       console.warn('Credentials could not be loaded', e)
     }
   }
@@ -41,12 +48,32 @@ try {
   console.warn('Credentials could not be loaded', e)
 }
 
-function analytics_enabled() {
+function isAnalyticsEnabled(): boolean {
   return process.env.BOTONIC_DISABLE_ANALYTICS !== '1'
 }
 
-if (analytics_enabled()) {
+if (isAnalyticsEnabled()) {
   analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
+}
+
+function getBotonicCliVersion(): string | undefined {
+  try {
+    return String(execSync('botonic --version')).trim()
+  } catch (e) {
+    return undefined
+  }
+}
+
+function getBotonicDependencies(): any[] | undefined {
+  try {
+    const packageJSON = readJSON('package.json')
+    const botonicDependencies = Object.entries(
+      (packageJSON as any).dependencies
+    ).filter(([k, _]) => k.includes('@botonic'))
+    return botonicDependencies
+  } catch (e) {
+    return undefined
+  }
 }
 
 function getSystemInformation() {
@@ -55,12 +82,14 @@ function getSystemInformation() {
     arch: os.arch(),
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     timestamp: new Date().toISOString(),
+    botonic_cli_version: getBotonicCliVersion(),
+    botonic_dependencies: getBotonicDependencies(),
   }
 }
 
-export function track(event: string, properties = {}) {
+export function track(event: string, properties = {}): void {
   if (
-    analytics_enabled() &&
+    isAnalyticsEnabled() &&
     analytics &&
     credentials &&
     credentials.analytics
@@ -77,19 +106,19 @@ export function track(event: string, properties = {}) {
   }
 }
 
-export function botonicPostInstall() {
-  if (analytics_enabled()) {
+export function botonicPostInstall(): void {
+  if (isAnalyticsEnabled()) {
     initializeCredentials()
     readCredentials()
     track('Installed Botonic CLI')
   }
 }
 
-export function sleep(ms: number) {
+export function sleep(ms: number): Promise<number> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-async function sh(cmd) {
+async function sh(cmd: string) {
   return new Promise(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
       if (err) {
@@ -101,7 +130,7 @@ async function sh(cmd) {
   })
 }
 
-export async function getGlobalNodeModulesPath() {
+export async function getGlobalNodeModulesPath(): Promise<string> {
   const CROSS_PLATFORM_REGEX = /\r?\n|\r/g
   return ((await sh('npm root -g')) as any).stdout.replace(
     CROSS_PLATFORM_REGEX,
