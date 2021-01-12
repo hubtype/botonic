@@ -21,3 +21,7 @@ flags:
     paths:
       - packages/botonic-plugin-dynamodb
     carryforward: true
+  botonic-nlu:
+    paths:
+      - packages/botonic-nlu
+    carryforward: true
