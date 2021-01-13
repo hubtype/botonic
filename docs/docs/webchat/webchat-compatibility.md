@@ -1,22 +1,9 @@
 ---
-id: webchat
-title: Webchat
+id: webchat-compatibility
+title: Browser Compatibility
 ---
 
-## What is Webchat?
-
-Bots developed with Botonic can be easily deployed to different messaging channels.
-Indeed, Botonic's components are specifically treated in order to be executed in a server environment such as Node.Js.
-As they are based on React, Botonic components are the perfect fit in order to offer you applications such as Webchat. Webchat is a system that allows you to embed your bots in a web page without requiring any third-party messaging provider.
-
-<details>
-<summary>Examples  where embedded Webchats can be triggered by clicking the chat bubble.</summary>
-
-![](https://botonic-doc-static.netlify.com/images/webchat_usage.png)
-
-</details>
-
-## Browser Versions Supported by Default
+## Supported Browsers
 
 Botonic supports the following browsers:
 
@@ -31,11 +18,11 @@ Botonic supports the following browsers:
 | Internet Explorer     | **[11 (with polyfills)](#how-to-make-your-bot-compatible-with-ie11)** |
 
 
-## How to make your bot compatible with IE11
+
+## IE 11 Compatibility
 
 To make a bot compatible with IE11, its javascript code must be compliant with ES5. To do so, babel is used to transpile all the code.
 
-### Prepare the bot
 
 To make the bot work in IE11:
 
@@ -143,7 +130,7 @@ Before: `exclude: /node_modules[\/\\](?!(styled-components|@emotion|@rehooks|@bo
 
 After: `exclude: /node_modules[\/\\](?!(axios|styled-components|@emotion|@rehooks|@botonic\/(core|react|plugin-google-analytics))[\/\\])/,`
 
-### Known IE11 issues
+## Known IE11 issues
 
 - **SCRIPT445: Object doesn't support this action:** This error may appear due to the use of the `babel-plugin-add-module-exports` plugin. If the bot is using this plugin try to remove it and see if the error disappears"
 - **Parameter properties (typescript):** If [parameter properties](https://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties) are used in the bot's implementation, they must be removed. All the attributes must be explicitly initialized in the constructor itself to work properly in IE11.
@@ -178,21 +165,3 @@ After: `exclude: /node_modules[\/\\](?!(axios|styled-components|@emotion|@rehook
   ```
 
 - **SCRIPT5009**: 'Proxy' is not defined: `framer-motion` doesn't have IE11 support in newer versions ^2.6.6 so an older version has to be installed (^1.11.1 for example) in the project itself and aliased in `resolveConfig`: `'framer-motion': path.resolve(__dirname, 'node_modules', 'framer-motion'),`
-
-## Storage
-
-By default, Botonic stores its state in the [**localStorage**](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) browser where the data doesn't expire.
-
-However, for security and privacy reasons, you may have to avoid storing bot data.
-
-That's why Botonic also allows you to store on the [**sessionStorage**](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) where everything is cleared once the webchat window is closed or reloaded.
-
-If you don't want to store anything in the browser, the **`null`** variable is recommended.
-
-To specify the required storage type, add:
-
-```javascript
-export const webchat = {
-  storage: {localStorage|sessionStorage|null}
-}
-```

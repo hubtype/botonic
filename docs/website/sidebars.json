@@ -34,11 +34,11 @@
       "concepts/i18n",
       "concepts/routes",
       "concepts/webviews",
-      "concepts/nlu",
-      "concepts/webchat"
+      "concepts/nlu"
     ],
     "Custom Webchat": [
-      "webchat/webchat-api",
+      "webchat/webchat",
+      "webchat/webchat-compatibility",
       "webchat/webchat-enable",
       "webchat/webchat-style",
       "webchat/webchat-covercomponent",
@@ -46,7 +46,9 @@
       "webchat/webchat-markdown",
       "webchat/webchat-blockinput",
       "webchat/webchat-timestamp",
-      "webchat/webchat-updates"
+      "webchat/webchat-updates",
+      "webchat/webchat-api",
+      "webchat/webchat-storage"
     ],
     "Components": [
       "components/components",
