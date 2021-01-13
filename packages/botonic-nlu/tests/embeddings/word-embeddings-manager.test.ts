@@ -4,7 +4,7 @@ import { WordEmbeddingsManager } from '../../src/embeddings/word-embeddings-mana
 import { WordEmbeddingsConfig } from '../../src/types'
 
 describe('new embeddings matrix', () => {
-  it('should generate tensor matrix', async () => {
+  it.skip('should generate tensor matrix', async () => {
     const config = {
       type: 'glove',
       dimension: 50,
