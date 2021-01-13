@@ -63,7 +63,7 @@ export class WordEmbeddingsDBHelper {
       )
       log('An automatic download will start in brief.')
       if (!existsSync(GLOBAL_WORD_EMBEDDINGS_PATH)) {
-        mkdirSync(GLOBAL_WORD_EMBEDDINGS_PATH)
+        mkdirSync(GLOBAL_WORD_EMBEDDINGS_PATH, { recursive: true })
       }
       log(`Downloading '${this._embeddingsFilename}'...`)
       log(`Please, wait until the download finishes.\n`)
