@@ -36,9 +36,7 @@ function readCredentials() {
   try {
     credentials = readJSON(botonicCredentialsPath)
   } catch (e) {
-    if (fs.existsSync(botonicCredentialsPath)) {
-      console.warn('Credentials could not be loaded', e)
-    }
+    console.warn('Credentials could not be loaded', e)
   }
 }
 
@@ -56,15 +54,15 @@ if (isAnalyticsEnabled()) {
   analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
 }
 
-function getBotonicCliVersion(): string | undefined {
+function getBotonicCliVersion(): string {
   try {
     return String(execSync('botonic --version')).trim()
   } catch (e) {
-    return undefined
+    return String(e)
   }
 }
 
-function getBotonicDependencies(): any[] | undefined {
+function getBotonicDependencies(): any[] | string {
   try {
     const packageJSON = readJSON('package.json')
     const botonicDependencies = Object.entries(
@@ -72,7 +70,7 @@ function getBotonicDependencies(): any[] | undefined {
     ).filter(([k, _]) => k.includes('@botonic'))
     return botonicDependencies
   } catch (e) {
-    return undefined
+    return String(e)
   }
 }
 
@@ -118,7 +116,7 @@ export function sleep(ms: number): Promise<number> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-async function sh(cmd: string) {
+async function sh(cmd: string): Promise<{ stdout: string; stderr: string }> {
   return new Promise(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
       if (err) {
