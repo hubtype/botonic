@@ -11,6 +11,8 @@ import { hashElement } from 'folder-hash'
 import ora from 'ora'
 import qs from 'qs'
 
+import { readJSON, writeJSON } from './utils'
+
 const BOTONIC_CLIENT_ID: string =
   process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
 const BOTONIC_CLIENT_SECRET: string =
@@ -51,9 +53,7 @@ export class BotonicAPIService {
   loadGlobalCredentials() {
     let credentials
     try {
-      credentials = JSON.parse(
-        fs.readFileSync(this.globalCredentialsPath, 'utf8')
-      )
+      credentials = readJSON(this.globalCredentialsPath)
     } catch (e) {
       if (fs.existsSync(this.globalCredentialsPath)) {
         console.warn('Credentials could not be loaded', e)
@@ -75,7 +75,7 @@ export class BotonicAPIService {
   loadBotCredentials() {
     let credentials
     try {
-      credentials = JSON.parse(fs.readFileSync(this.botCredentialsPath, 'utf8'))
+      credentials = readJSON(this.botCredentialsPath)
     } catch (e) {
       if (fs.existsSync(this.botCredentialsPath)) {
         console.warn('Credentials could not be loaded', e)
@@ -101,19 +101,19 @@ export class BotonicAPIService {
 
   saveGlobalCredentials() {
     this.checkGlobalCredentialsPath()
-    fs.writeFileSync(
-      this.globalCredentialsPath,
-      JSON.stringify({
-        oauth: this.oauth,
-        me: this.me,
-        analytics: this.analytics,
-      })
-    )
+    writeJSON(this.globalCredentialsPath, {
+      oauth: this.oauth,
+      me: this.me,
+      analytics: this.analytics,
+    })
   }
 
   saveBotCredentials() {
-    const bc = { bot: this.bot, lastBuildHash: this.lastBuildHash }
-    fs.writeFileSync(this.botCredentialsPath, JSON.stringify(bc))
+    const botCredentials = {
+      bot: this.bot,
+      lastBuildHash: this.lastBuildHash,
+    }
+    writeJSON(this.botCredentialsPath, botCredentials)
   }
 
   async getCurrentBuildHash() {
