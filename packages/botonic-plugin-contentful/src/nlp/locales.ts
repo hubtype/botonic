@@ -19,6 +19,7 @@ export const UKRAINIAN = 'uk'
 export const CROATIAN = 'hr'
 export const SLOVAK = 'sk'
 export const SLOVENIAN = 'sl'
+export const HUNGARIAN = 'hu'
 
 export const SUPPORTED_LOCALES = [
   SPANISH,
@@ -38,6 +39,7 @@ export const SUPPORTED_LOCALES = [
   CROATIAN,
   SLOVAK,
   SLOVENIAN,
+  HUNGARIAN,
 ]
 
 export function checkLocale(locale: Locale): Locale {
