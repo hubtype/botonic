@@ -170,8 +170,8 @@ const lazyTokenizers = new SingletonMap<Tokenizer>({
     return new TokenizerHu()
   },
   [locales.DUTCH]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
-    const { TokenizerNl } = require('@nlpjs/lang-nl/src/tokenizer-nl')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerNl = require('@nlpjs/lang-nl/src/tokenizer-nl')
     return new TokenizerNl()
   },
 })

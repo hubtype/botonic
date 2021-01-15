@@ -101,8 +101,8 @@ const stemmers = new SingletonMap<Stemmer>({
     return new StemmerHu()
   },
   [locales.DUTCH]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
-    const { StemmerNl } = require('@nlpjs/lang-nl/src/stemmer-nl')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const StemmerNl = require('@nlpjs/lang-nl/src/stemmer-nl')
     return new StemmerNl()
   },
 })
