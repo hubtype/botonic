@@ -195,7 +195,7 @@ module.exports = function (env) {
 ```
   "scripts": {
     ...
-    "build:self-hosted": "webpack --env.target=self-hosted --mode=production",
+    "build:self-hosted": "webpack --env target=self-hosted --mode=production",
   },
 ```
 
