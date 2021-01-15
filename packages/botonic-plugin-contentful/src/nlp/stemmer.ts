@@ -105,6 +105,11 @@ const stemmers = new SingletonMap<Stemmer>({
     const StemmerNl = require('@nlpjs/lang-nl/src/stemmer-nl')
     return new StemmerNl()
   },
+  [locales.BULGARIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
+    const { StemmerBg } = require('./stemmers/stemmer-bg')
+    return new StemmerBg()
+  },
 })
 
 export function stemmerFor(locale: Locale): Stemmer {
