@@ -1,4 +1,4 @@
-// from
+// from https://raw.githubusercontent.com/stopwords-iso/stopwords-bg/master/stopwords-bg.json
 export const bgDefaultStopWords = [
   'а',
   'автентичен',
