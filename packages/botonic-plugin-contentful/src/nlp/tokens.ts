@@ -17,6 +17,7 @@ import { ptDefaultStopWords } from './stopwords/stopwords-pt'
 import { roDefaultStopWords } from './stopwords/stopwords-ro'
 import { ruDefaultStopWords } from './stopwords/stopwords-ru'
 import { skDefaultStopWords } from './stopwords/stopwords-sk'
+import { slDefaultStopWords } from './stopwords/stopwords-sl'
 import { trDefaultStopWords } from './stopwords/stopwords-tr'
 import { ukDefaultStopWords } from './stopwords/stopwords-uk'
 
@@ -156,6 +157,11 @@ const lazyTokenizers = new SingletonMap<Tokenizer>({
     const { TokenizerSk } = require('./tokenizers/tokenizer-sk')
     return new TokenizerSk()
   },
+  [locales.SLOVENIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const TokenizerSl = require('@nlpjs/lang-sl/src/tokenizer-sl')
+    return new TokenizerSl()
+  },
 })
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
@@ -189,6 +195,7 @@ export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   uk: ukDefaultStopWords,
   hr: hrDefaultStopWords,
   sk: skDefaultStopWords,
+  sl: slDefaultStopWords,
 }
 
 export function stopWordsFor(locale: string): string[] {
