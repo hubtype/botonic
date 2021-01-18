@@ -3,6 +3,7 @@ import Tokenizer from '@nlpjs/core/src/tokenizer'
 import { SingletonMap } from '../util'
 import { languageFromLocale, Locale } from './locales'
 import * as locales from './locales'
+import { bgDefaultStopWords } from './stopwords/stopwords-bg'
 import { caDefaultStopWords } from './stopwords/stopwords-ca'
 import { csDefaultStopWords } from './stopwords/stopwords-cs'
 import { deDefaultStopWords } from './stopwords/stopwords-de'
@@ -174,6 +175,11 @@ const lazyTokenizers = new SingletonMap<Tokenizer>({
     const TokenizerNl = require('@nlpjs/lang-nl/src/tokenizer-nl')
     return new TokenizerNl()
   },
+  [locales.BULGARIAN]: () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
+    const { TokenizerBg } = require('./tokenizers/tokenizer-bg')
+    return new TokenizerBg()
+  },
 })
 
 export function tokenizerPerLocale(locale: Locale): Tokenizer {
@@ -210,6 +216,7 @@ export const DEFAULT_STOP_WORDS: { [key: string]: string[] } = {
   sl: slDefaultStopWords,
   hu: huDefaultStopWords,
   nl: nlDefaultStopWords,
+  bg: bgDefaultStopWords,
 }
 
 export function stopWordsFor(locale: string): string[] {
