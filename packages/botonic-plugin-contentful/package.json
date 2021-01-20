@@ -53,7 +53,7 @@
     "@nlpjs/lang-nl": "^4.19.1",
     "@nlpjs/ner": "^4.19.1",
     "@nlpjs/similarity": "^4.17.0",
-    "@types/joi": "^14.3.4",
+    "@types/joi": "^17.2.3",
     "@types/marked": "^1.2.1",
     "async-parallel": "^1.2.3",
     "contentful": "^8.1.7",
