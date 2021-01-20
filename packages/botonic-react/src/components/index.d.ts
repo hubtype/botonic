@@ -123,8 +123,8 @@ export interface ScrollbarProps {
 }
 
 export interface ThemeProps extends StyleProp {
-  mobileBreakpoint: number
-  mobileStyle: any
+  mobileBreakpoint?: number
+  mobileStyle?: any
   webview?: StyleProp & { header?: StyleProp }
   animations?: EnableProp
   intro?: StyleProp & ImageProp & CustomProp
