@@ -814,7 +814,7 @@ export const Webchat = forwardRef((props, ref) => {
           <TextAreaContainer>
             <Textarea
               name='text'
-              onFocus={() => deviceAdapter.onFocus()}
+              onFocus={() => deviceAdapter.onFocus(host)}
               onBlur={() => deviceAdapter.onBlur()}
               maxRows={4}
               wrap='soft'
