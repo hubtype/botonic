@@ -59,7 +59,7 @@ This Webchat example allows definitions that enable you to configure the example
 
 Here is a list of available styles. You need to modify them inside **src/webchat/index.js**'s `theme` object:
 
-| Property                | Type                                                                                                                                                                                          |
+| Property                | Description                                                                                                                                                                                          |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mobileBreakpoint`      | Width (in pixels) for mobile responsive design. Set to `460` pixels by default                                                                                                                |
 | `style`                 | The main characteristics of webchat such as size, background color, etc.                                                                                                                      |
@@ -176,21 +176,20 @@ blobTickStyle: {
 
 ## Custom Component
 
-<details>
-<summary>Custom Components</summary>
 You can also create your own components from scratch.
 
-- **customIntro:** React component that is injected where introImage is displayed. It can also be defined in`intro.custom`.
-- **customTrigger:** React component that is injected in the Launcher icon. It can also be defined in`triggerButton.custom`.
-- **customHeader:** React Component that is injected in the Header of the widget. It can also be defined in`header.custom`.
-- **customReply:** React Component that is injected in the Reply components of the widget. It can also be defined in`reply.custom`.
-- **customButton:** React Component that is injected in the Button components of the widget. It can also be defined in`button.custom`.
-- **customSendButton:** A fully customizable send button. It can also be defined in`userInput.sendButton.custom`.
-- **customMenuButton:** A fully customizable button for trigger the persistent menu. It can also be defined in`userInput.menuButton.custom`.
+| Property                | Description                                                                                                                                                                                          |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `customIntro` | React component that is injected where introImage is displayed. It can also be defined in `intro.custom`.| 
+| `customTrigger`| React component that is injected in the Launcher icon. It can also be defined in `triggerButton.custom`.| 
+| `customHeader` | React Component that is injected in the Header of the widget. It can also be defined in `header.custom`.| 
+| `customReply`| React Component that is injected in the Reply components of the widget. It can also be defined in `reply.custom`.| 
+| `customButton` | React Component that is injected in the Button components of the widget. It can also be defined in `button.custom`.| 
+| `customSendButton` | A fully customizable send button. It can also be defined in `userInput.sendButton.custom`.| 
+| `customMenuButton` | A fully customizable button for trigger the persistent menu. It can also be defined in `userInput.menuButton.custom`.| 
 
 **Note**: Custom components redefine completely the components that are replacing, so the styles in conflicts with these components are overridden.
 
-</details>
 
 In this example, we are putting CSS styles into a custom 'quickreply'.
 It's very important to put `{props.children}` inside the container, in this case the `<div>` tag:
