@@ -51,12 +51,21 @@ For the previous content, the dashboard allows assigning a list of tags to your 
 npm install @botonic/plugin-contentful
 ```
 
-2. Execute the following script to create content models required by the plugin. Replaced YOUR_ID and YOUR_TOKEN with
-   the space id and token that you obtained in the previous section.
+2. Install the contentful-cli
+
+```javascript```
+npm install -g contentful-cli
+```
+
+3. Execute the following command to create content models required by the plugin. Replaced YOUR_ID and YOUR_TOKEN with
+   the space id and contentful delivery token that you obtained in the previous section. You can find
+the export files in the [package exports directory](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful/exports)
 
 ```javascript
-CONTENTFUL_SPACEID=<YOUR_ID> CONTENTFUL_TOKEN=<CONTENT_MANAGEMENT_TOKEN> node_modules/@botonic/plugin-contentful/bin/import-contentful-models.sh
+contentful space import --space-id={SPACE_ID} --management-token={TOKEN} --content-file {EXPORT_FILE}.json
 ```
+
+*note* you will need to ensure your contentful locales are changed from `en-US` to `en` 
 
 ## Use
 
@@ -110,10 +119,10 @@ export const plugins = [
 ...
   {
     id: 'contentful',
-    resolve: contentful,
+    resolve: require('@botonic/plugin-contentful'),
     options: {
-               spaceId = <YOUR_CONTENTFUL_SPACEID>;
-               accessToken = <DELIVERY_API_TOKEN>;
+               spaceId: <YOUR_CONTENTFUL_SPACEID>,
+               accessToken: <DELIVERY_API_TOKEN>
              }
   },
 ...
@@ -124,7 +133,8 @@ export const plugins = [
 To render a botonic _StartUp_, _Texts_ and _Carousels_ with the contents configured at contentful space:
 
 1. Create the following functions, which convert the result from the Contentful plugin to react components (They are not
-   implemented within the Contentful plugin to keep the plugin fully decoupled from React)
+   implemented within the Contentful plugin to keep the plugin fully decoupled from React). Note
+   that the code shown below contains TypeScript annotations.
 
 ```javascript
 import * as cms from '@botonic/plugin-contentful'
@@ -181,11 +191,11 @@ import * as cms from '@botonic/plugin-contentful';
 ....
 
  {
-    payload: cms.ContentCallback.regexForModel(cms.ModelType.TEXT),
+    payload: cms.ContentCallback.regexForModel(cms.TopContentType.TEXT),
     action: Text
   },
   {
-    payload: cms.ContentCallback.regexForModel(cms.ModelType.CAROUSEL),
+    payload: cms.ContentCallback.regexForModel(cms.TopContentType.CAROUSEL),
     action: Carousel
   },
 ```
