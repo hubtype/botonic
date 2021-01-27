@@ -24,7 +24,6 @@ import { Subtitle } from './components/subtitle'
 import { Text } from './components/text'
 import { Title } from './components/title'
 import { Video } from './components/video'
-import { WEBCHAT } from './constants'
 import { strToBool } from './util/objects'
 import { ButtonsDisabler } from './util/webchat'
 
@@ -173,13 +172,7 @@ function buttonsParse(buttons) {
     const target = props.messenger_extensions ? null : props.target
     const title = props.title
     const webview = props.messenger_extensions ? props.url : props.webview
-    const disabledProps = {}
-    if (props.autodisable !== undefined)
-      disabledProps.autodisable = strToBool(props.autodisable)
-    if (props.disabledstyle !== undefined)
-      disabledProps.disabledstyle = props.disabledstyle
-    const disabled =
-      props.disabled !== undefined ? strToBool(props.disabled) : undefined
+    const disabledProps = ButtonsDisabler.constructBrowserProps(props)
     return (
       <Button
         key={i}
@@ -187,7 +180,6 @@ function buttonsParse(buttons) {
         url={url}
         target={target}
         webview={webview}
-        disabled={disabled}
         {...disabledProps}
       >
         {title}

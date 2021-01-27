@@ -7,11 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { COLORS, SENDERS, WEBCHAT } from '../constants'
 import { RequestContext, WebchatContext } from '../contexts'
 import { isDev, resolveImage } from '../util/environment'
-import {
-  ConditionalWrapper,
-  deepMapWithIndex,
-  renderComponent,
-} from '../util/react'
+import { ConditionalWrapper, renderComponent } from '../util/react'
 import { ButtonsDisabler } from '../util/webchat'
 import { Button } from './button'
 import { getMarkdownStyle, renderLinks, renderMarkdown } from './markdown'
@@ -98,36 +94,12 @@ export const Message = props => {
   const [state, setState] = useState({
     id: props.id || uuidv4(),
   })
+
   const [disabled, setDisabled] = useState(false)
-
-  const updateButtons = n => {
-    return {
-      ...n,
-      props: {
-        ...n.props,
-        parentId: state.id,
-        disabled: n.props.disabled === true ? n.props.disabled : disabled,
-        autodisable: n.props.autodisable,
-        disabledstyle: n.props.disabledstyle,
-        setDisabled,
-      },
-    }
-  }
-
-  children = deepMapWithIndex(children, n => {
-    if (n.type === Button) return updateButtons(n)
-    if (n.props && n.props.children) {
-      return {
-        ...n,
-        ...{
-          props: {
-            ...n.props,
-            ...{ children: deepMapWithIndex(n.props.children, n => n) },
-          },
-        },
-      }
-    }
-    return n
+  children = ButtonsDisabler.updateChildrenButtons(children, {
+    parentId: state.id,
+    disabled,
+    setDisabled,
   })
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
@@ -174,15 +146,13 @@ export const Message = props => {
         from,
         buttons: buttons.map(b => ({
           parentId: b.props.parentId,
-          disabled: b.props.disabled,
-          autodisable: b.props.autodisable,
-          disabledstyle: b.props.disabledstyle,
           payload: b.props.payload,
           path: b.props.path,
           url: b.props.url,
           target: b.props.target,
           webview: b.props.webview && String(b.props.webview),
           title: b.props.children,
+          ...ButtonsDisabler.withDisabledProps(b.props),
         })),
         delay,
         typing,

@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
-import { strToBool } from '../util/objects'
 import { renderComponent } from '../util/react'
 import { ButtonsDisabler } from '../util/webchat'
 
@@ -40,16 +39,10 @@ export const Button = props => {
   } = useContext(WebchatContext)
   const [hover, setHover] = useState(false)
   const { theme } = webchatState
-  let {
-    buttonsAutoDisable,
-    buttonsDisabledStyle,
-  } = ButtonsDisabler.getPropertiesFromTheme(webchatState.theme)
-  buttonsAutoDisable =
-    props.autodisable !== undefined ? props.autodisable : buttonsAutoDisable
-  buttonsDisabledStyle =
-    props.disabledstyle !== undefined
-      ? props.disabledstyle
-      : buttonsDisabledStyle
+  const { autoDisable, disabledStyle } = ButtonsDisabler.resolveDisabling(
+    webchatState.theme,
+    props
+  )
   const handleClick = event => {
     event.preventDefault()
     const type = getThemeProperty(
@@ -82,55 +75,11 @@ export const Button = props => {
       const messageToUpdate = webchatState.messagesJSON.filter(
         m => m.id == props.parentId
       )[0]
-      if (messageToUpdate.type === INPUT.CAROUSEL) {
-        messageToUpdate.data.elements = messageToUpdate.data.elements.map(
-          e => ({
-            ...e,
-            ...{
-              buttons: e.buttons.map(b => {
-                return {
-                  ...b,
-                  ...{
-                    disabled: true,
-                    autodisable:
-                      b.autodisable !== undefined
-                        ? b.autodisable
-                        : buttonsAutoDisable,
-                    disabledstyle:
-                      b.disabledstyle !== undefined
-                        ? b.disabledstyle
-                        : buttonsDisabledStyle,
-                  },
-                }
-              }),
-            },
-          })
-        )
-        updateMessage(messageToUpdate)
-      } else {
-        const updatedMsg = {
-          ...messageToUpdate,
-          ...{
-            buttons: messageToUpdate.buttons.map(b => {
-              return {
-                ...b,
-                ...{
-                  disabled: true,
-                  autodisable:
-                    b.autodisable !== undefined
-                      ? b.autodisable
-                      : buttonsAutoDisable,
-                  disabledstyle:
-                    b.disabledstyle !== undefined
-                      ? b.disabledstyle
-                      : buttonsDisabledStyle,
-                },
-              }
-            }),
-          },
-        }
-        updateMessage(updatedMsg)
-      }
+      const updatedMsg = ButtonsDisabler.getUpdatedMessage(messageToUpdate, {
+        autoDisable,
+        disabledStyle,
+      })
+      updateMessage(updatedMsg)
     }
   }
 
@@ -177,9 +126,9 @@ export const Button = props => {
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
           ...(props.disabled &&
-            buttonsAutoDisable && {
+            autoDisable && {
               ...WEBCHAT.DEFAULTS.BUTTON_DISABLED_STYLE,
-              ...buttonsDisabledStyle,
+              ...disabledStyle,
             }),
         }}
         bottom={props.bottomRadius}
@@ -190,11 +139,7 @@ export const Button = props => {
   }
 
   const renderNode = () => {
-    const disabledProps = {}
-    if (props.autodisable !== undefined)
-      disabledProps.autodisable = String(props.autodisable)
-    if (props.disabledstyle !== undefined)
-      disabledProps.disabledstyle = JSON.stringify(props.disabledstyle)
+    const disabledProps = ButtonsDisabler.constructNodeProps(props)
     if (props.webview) {
       const Webview = props.webview
       let params = ''
@@ -242,9 +187,7 @@ Button.serialize = buttonProps => {
       target: buttonProps.target,
       webview: buttonProps.webview && String(buttonProps.webview),
       title: buttonProps.children && String(buttonProps.children),
-      disabled: buttonProps.disabled,
-      autodisable: buttonProps.autodisable,
-      disabledstyle: buttonProps.disabledstyle,
+      ...ButtonsDisabler.withDisabledProps(buttonProps),
     },
   }
 }

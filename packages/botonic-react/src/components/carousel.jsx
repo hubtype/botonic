@@ -7,10 +7,8 @@ import RightArrow from '../assets/rightArrow.svg'
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { resolveImage } from '../util/environment'
-import { deepMapWithIndex } from '../util/react'
 import { ButtonsDisabler } from '../util/webchat'
 import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
-import { Button } from './button'
 import { Message } from './message'
 
 const StyledCarousel = styled.div`
@@ -62,7 +60,7 @@ const serialize = carouselProps => {
  * @returns {JSX.Element}
  */
 export const Carousel = props => {
-  const { getThemeProperty, webchatState } = useContext(WebchatContext)
+  const { getThemeProperty } = useContext(WebchatContext)
   let content = props.children
   const scrollbarOptions = {
     ...{ enable: true, autoHide: true },
@@ -145,44 +143,10 @@ export const Carousel = props => {
     }
   }, [carouselRef.current])
 
-  const {
-    buttonsAutoDisable,
-    buttonsDisabledStyle,
-  } = ButtonsDisabler.getPropertiesFromTheme(webchatState.theme)
-
-  const updateButtons = n => {
-    return {
-      ...n,
-      props: {
-        ...n.props,
-        autodisable:
-          n.props.autodisable !== undefined
-            ? n.props.autodisable
-            : buttonsAutoDisable,
-        disabledstyle:
-          n.props.disabledstyle !== undefined
-            ? n.props.disabledstyle
-            : buttonsDisabledStyle,
-      },
-    }
+  const carouselProps = {
+    ...props,
+    children: ButtonsDisabler.updateChildrenButtons(props.children),
   }
-  const newChildren = deepMapWithIndex(props.children, n => {
-    if (n.type === Button) return updateButtons(n)
-    if (n.props && n.props.children) {
-      return {
-        ...n,
-        ...{
-          props: {
-            ...n.props,
-            ...{ children: deepMapWithIndex(n.props.children, n => n) },
-          },
-        },
-      }
-    }
-    return n
-  })
-
-  const newProps = { ...props, children: newChildren }
 
   if (isBrowser()) {
     content = (
@@ -194,7 +158,7 @@ export const Carousel = props => {
           ref={carouselRef}
           carouselArrowsEnabled={carouselArrowsEnabled}
         >
-          <StyledItems>{newProps.children}</StyledItems>
+          <StyledItems>{carouselProps.children}</StyledItems>
           {carouselArrowsEnabled && getArrows()}
         </StyledCarousel>
       </StyledScrollbar>
@@ -205,9 +169,9 @@ export const Carousel = props => {
     <Message
       style={{ width: '85%', padding: 0, backgroundColor: COLORS.TRANSPARENT }}
       blob={false}
-      json={serialize(newProps)}
+      json={serialize(carouselProps)}
       type={INPUT.CAROUSEL}
-      {...newProps}
+      {...carouselProps}
     >
       {content}
     </Message>
