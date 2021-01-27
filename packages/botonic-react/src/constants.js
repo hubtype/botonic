@@ -48,6 +48,11 @@ export const WEBCHAT = {
     STORAGE_KEY: 'botonicState',
     HOST_ID: 'root',
     ID: 'botonic-webchat',
+    BUTTON_DISABLED_STYLE: {
+      opacity: 0.5,
+      cursor: 'auto',
+      pointerEvents: 'none',
+    },
   },
   SELECTORS: {
     SCROLLABLE_CONTENT: '#botonic-scrollable-content',
@@ -104,6 +109,8 @@ export const WEBCHAT = {
     buttonHoverTextColor: 'button.hoverTextColor',
     buttonMessageType: 'button.messageType',
     buttonStyle: 'button.style',
+    buttonDisabledStyle: 'button.disabledstyle',
+    buttonAutoDisable: 'button.autodisable',
     buttonStyleBackground: 'button.style.background',
     buttonStyleColor: 'button.style.color',
     customButton: 'button.custom',

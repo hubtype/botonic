@@ -143,6 +143,8 @@ export interface ThemeProps extends StyleProp {
       } & StyleProp
     }
   button?: {
+    autodisable?: boolean
+    disabledstyle?: any
     hoverBackground?: string
     hoverTextColor?: string
     messageType?: 'text' | 'payload'

@@ -7,7 +7,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { COLORS, SENDERS, WEBCHAT } from '../constants'
 import { RequestContext, WebchatContext } from '../contexts'
 import { isDev, resolveImage } from '../util/environment'
-import { ConditionalWrapper, renderComponent } from '../util/react'
+import {
+  ConditionalWrapper,
+  deepMapWithIndex,
+  renderComponent,
+} from '../util/react'
+import { ButtonsDisabler } from '../util/webchat'
 import { Button } from './button'
 import { getMarkdownStyle, renderLinks, renderMarkdown } from './markdown'
 import { Reply } from './reply'
@@ -68,7 +73,7 @@ const BlobTick = styled.div`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
-  const {
+  let {
     type = '',
     blob = true,
     from = SENDERS.bot,
@@ -93,11 +98,43 @@ export const Message = props => {
   const [state, setState] = useState({
     id: props.id || uuidv4(),
   })
+  const [disabled, setDisabled] = useState(false)
+
+  const updateButtons = n => {
+    return {
+      ...n,
+      props: {
+        ...n.props,
+        parentId: state.id,
+        disabled: n.props.disabled === true ? n.props.disabled : disabled,
+        autodisable: n.props.autodisable,
+        disabledstyle: n.props.disabledstyle,
+        setDisabled,
+      },
+    }
+  }
+
+  children = deepMapWithIndex(children, n => {
+    if (n.type === Button) return updateButtons(n)
+    if (n.props && n.props.children) {
+      return {
+        ...n,
+        ...{
+          props: {
+            ...n.props,
+            ...{ children: deepMapWithIndex(n.props.children, n => n) },
+          },
+        },
+      }
+    }
+    return n
+  })
 
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
     e => e.type === Button
   )
+
   let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
@@ -136,6 +173,10 @@ export const Message = props => {
         markdown,
         from,
         buttons: buttons.map(b => ({
+          parentId: b.props.parentId,
+          disabled: b.props.disabled,
+          autodisable: b.props.autodisable,
+          disabledstyle: b.props.disabledstyle,
           payload: b.props.payload,
           path: b.props.path,
           url: b.props.url,

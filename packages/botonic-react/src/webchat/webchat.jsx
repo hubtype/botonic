@@ -39,9 +39,9 @@ import {
 import { msgToBotonic } from '../msg-to-botonic'
 import { scrollToBottom } from '../util/dom'
 import { isDev, resolveImage } from '../util/environment'
-import { getProperty } from '../util/objects'
 import { ConditionalWrapper } from '../util/react'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
+import { _getThemeProperty } from '../util/webchat'
 import { Attachment } from './components/attachment'
 import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
 import {
@@ -68,27 +68,6 @@ export const getParsedAction = botonicAction => {
   const splittedAction = botonicAction.split('create_case:')
   if (splittedAction.length <= 1) return undefined
   return JSON.parse(splittedAction[1])
-}
-
-/**
- * Returns the value of a property defined in bot's theme based on WEBCHAT.CUSTOM_PROPERTIES dictionary.
- * It gives preference to nested defined properties (e.g.: header.style) over plain properties (e.g.: headerStyle).
- * If property doesn't exist, returns the defaultValue.
- */
-export const _getThemeProperty = theme => (
-  property,
-  defaultValue = undefined
-) => {
-  for (const [k, v] of Object.entries(WEBCHAT.CUSTOM_PROPERTIES)) {
-    if (v == property) {
-      const nestedProperty = getProperty(theme, v)
-      if (nestedProperty !== undefined) return nestedProperty
-      const plainProperty = getProperty(theme, k)
-      if (plainProperty !== undefined) return plainProperty
-      return defaultValue
-    }
-  }
-  return undefined
 }
 
 const StyledWebchat = styled.div`

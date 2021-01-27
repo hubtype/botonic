@@ -4,7 +4,9 @@ import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
+import { strToBool } from '../util/objects'
 import { renderComponent } from '../util/react'
+import { ButtonsDisabler } from '../util/webchat'
 
 const StyledButton = styled.button`
   display: flex;
@@ -34,10 +36,20 @@ export const Button = props => {
     sendPayload,
     sendInput,
     getThemeProperty,
+    updateMessage,
   } = useContext(WebchatContext)
   const [hover, setHover] = useState(false)
   const { theme } = webchatState
-
+  let {
+    buttonsAutoDisable,
+    buttonsDisabledStyle,
+  } = ButtonsDisabler.getPropertiesFromTheme(webchatState.theme)
+  buttonsAutoDisable =
+    props.autodisable !== undefined ? props.autodisable : buttonsAutoDisable
+  buttonsDisabledStyle =
+    props.disabledstyle !== undefined
+      ? props.disabledstyle
+      : buttonsDisabledStyle
   const handleClick = event => {
     event.preventDefault()
     const type = getThemeProperty(
@@ -65,6 +77,61 @@ export const Button = props => {
       window.open(props.url, props.target || '_blank')
     }
     if (props.onClick) props.onClick()
+    if (props.setDisabled) {
+      props.setDisabled(true)
+      const messageToUpdate = webchatState.messagesJSON.filter(
+        m => m.id == props.parentId
+      )[0]
+      if (messageToUpdate.type === INPUT.CAROUSEL) {
+        messageToUpdate.data.elements = messageToUpdate.data.elements.map(
+          e => ({
+            ...e,
+            ...{
+              buttons: e.buttons.map(b => {
+                return {
+                  ...b,
+                  ...{
+                    disabled: true,
+                    autodisable:
+                      b.autodisable !== undefined
+                        ? b.autodisable
+                        : buttonsAutoDisable,
+                    disabledstyle:
+                      b.disabledstyle !== undefined
+                        ? b.disabledstyle
+                        : buttonsDisabledStyle,
+                  },
+                }
+              }),
+            },
+          })
+        )
+        updateMessage(messageToUpdate)
+      } else {
+        const updatedMsg = {
+          ...messageToUpdate,
+          ...{
+            buttons: messageToUpdate.buttons.map(b => {
+              return {
+                ...b,
+                ...{
+                  disabled: true,
+                  autodisable:
+                    b.autodisable !== undefined
+                      ? b.autodisable
+                      : buttonsAutoDisable,
+                  disabledstyle:
+                    b.disabledstyle !== undefined
+                      ? b.disabledstyle
+                      : buttonsDisabledStyle,
+                },
+              }
+            }),
+          },
+        }
+        updateMessage(updatedMsg)
+      }
+    }
   }
 
   const renderBrowser = () => {
@@ -109,6 +176,11 @@ export const Button = props => {
           ...buttonStyle,
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
+          ...(props.disabled &&
+            buttonsAutoDisable && {
+              ...WEBCHAT.DEFAULTS.BUTTON_DISABLED_STYLE,
+              ...buttonsDisabledStyle,
+            }),
         }}
         bottom={props.bottomRadius}
       >
@@ -118,23 +190,36 @@ export const Button = props => {
   }
 
   const renderNode = () => {
+    const disabledProps = {}
+    if (props.autodisable !== undefined)
+      disabledProps.autodisable = String(props.autodisable)
+    if (props.disabledstyle !== undefined)
+      disabledProps.disabledstyle = JSON.stringify(props.disabledstyle)
     if (props.webview) {
       const Webview = props.webview
       let params = ''
       if (props.params) params = params2queryString(props.params)
       return (
-        <button url={`/webviews/${Webview.name}?${params}`}>
+        <button url={`/webviews/${Webview.name}?${params}`} {...disabledProps}>
           {props.children}
         </button>
       )
     } else if (props.path) {
       const payload = `__PATH_PAYLOAD__${props.path}`
-      return <button payload={payload}>{props.children}</button>
+      return (
+        <button payload={payload} {...disabledProps}>
+          {props.children}
+        </button>
+      )
     } else if (props.payload) {
-      return <button payload={props.payload}>{props.children}</button>
+      return (
+        <button payload={props.payload} {...disabledProps}>
+          {props.children}
+        </button>
+      )
     } else if (props.url) {
       return (
-        <button url={props.url} target={props.target}>
+        <button url={props.url} target={props.target} {...disabledProps}>
           {props.children}
         </button>
       )
@@ -157,6 +242,9 @@ Button.serialize = buttonProps => {
       target: buttonProps.target,
       webview: buttonProps.webview && String(buttonProps.webview),
       title: buttonProps.children && String(buttonProps.children),
+      disabled: buttonProps.disabled,
+      autodisable: buttonProps.autodisable,
+      disabledstyle: buttonProps.disabledstyle,
     },
   }
 }

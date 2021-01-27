@@ -5,7 +5,10 @@ import { ReactBot } from './react-bot'
 export class NodeApp {
   constructor(options) {
     this.bot = new ReactBot({
-      renderer: args => this.renderNode(args),
+      renderer: args => {
+        args.request.theme = options.theme
+        return this.renderNode(args)
+      },
       ...options,
     })
   }
