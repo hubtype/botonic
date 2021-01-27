@@ -423,3 +423,45 @@ All these changes can be tested using the `botonic serve` command (`npm run star
 ![](https://botonic-doc-static.netlify.com/images/webchat_example.png)
 
 </details>
+
+## Style Compliance
+
+To keep the code nice and clean, and to avoid style conflicts, encapsulation is recommmended: the markup structure, style, and behavior can be hidden and separated from the rest of the code.
+
+To do so, you only need a slight change in your `webpack.config.js` file and replace the `stylesLoaderConfig` by the following one:
+
+```javascript
+const stylesLoaderConfig = {
+  test: /\.(scss|css)$/,
+  use: [{loader: 'style-loader', options: {
+    insert: function(element) {
+      if(!window._botonicInsertStyles)
+        window._botonicInsertStyles = []
+      window._botonicInsertStyles.push(element)
+    }
+  }}, 'css-loader', 'sass-loader'],
+}
+```
+
+To avoid conflicts between bot styles and your host page, you can indicate if you want to enable the `shadowDOM` feature. This parameter must be defined in the webchat object in `src/webchat/index.js`:
+
+```javascript
+export const webchat = {
+  shadowDOM: true, // false by default
+  theme: {...},
+  ...
+}
+```
+
+When set to `true`, Botonic renders the webchat inside a `shadowDOM` node so that the webchat styles are isolated from the rest of the host page.
+
+```javascript
+export const webchat = {
+  shadowDOM: true, // false by default
+  hostId: 'myWebsiteRoot'
+  theme: {...},
+  ...
+}
+```
+
+The `hostId` option allows you to define on which element the `shadowRoot` must be created, used along with the `shadowDOM` property. By default, "root" is used. If using root is not possible, another id must be used and passed with the new option.
