@@ -24,7 +24,6 @@ import { Subtitle } from './components/subtitle'
 import { Text } from './components/text'
 import { Title } from './components/title'
 import { Video } from './components/video'
-import { strToBool } from './util/objects'
 import { ButtonsDisabler } from './util/webchat'
 
 /**
