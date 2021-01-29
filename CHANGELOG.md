@@ -11,6 +11,42 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.18.0] - 2020-29-01
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Added configuration to measure code coverage with LCOV [#1232](https://github.com/hubtype/botonic/pull/1232) and [#1233](https://github.com/hubtype/botonic/pull/1233).
+  - Updated documentation for `Shadow DOM`, `Webchat Storage` and `Handoff` functionalities, [#1246](https://github.com/hubtype/botonic/pull/1246).
+
+* [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - [Improved Botonic CLI's telemetry](https://github.com/hubtype/botonic/pull/1243) to track usage of installed CLI and botonic dependencies.
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Added NLP support [for Slovenian](https://github.com/hubtype/botonic/pull/1247).
+  - Added NLP support [for Hungarian](https://github.com/hubtype/botonic/pull/1248).
+  - Added NLP support [for Dutch](https://github.com/hubtype/botonic/pull/1249).
+  - Added NLP support [for Bulgarian](https://github.com/hubtype/botonic/pull/1250).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - **New webchat features**:
+    - Added [disabling buttons](https://github.com/hubtype/botonic/pull/1245). Configurable at:
+      - **Theme level**: `theme.button.autodisable` and `theme.button.disabledstyle`.
+      - **Component level**: by passing the props `autodisable` and `disabledstyle` to `Button` components.
+
+### Changed
+
+### Fixed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Fixed typings](https://github.com/hubtype/botonic/pull/1262).
+  - Fixed scroll to bottom for [mobile devices](https://github.com/hubtype/botonic/pull/1263).
+
 ## [0.17.0] - 2020-18-12
 
 ### Added
@@ -616,3 +652,4 @@ All notable changes to Botonic will be documented in this file.
 [0.15.0]: https://github.com/hubtype/botonic/releases/tag/v0.15.0
 [0.16.0]: https://github.com/hubtype/botonic/releases/tag/v0.16.0
 [0.17.0]: https://github.com/hubtype/botonic/releases/tag/v0.17.0
+[0.18.0]: https://github.com/hubtype/botonic/releases/tag/v0.18.0
