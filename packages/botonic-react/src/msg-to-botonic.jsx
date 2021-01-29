@@ -13,6 +13,7 @@ import {
 } from '../src/message-utils'
 import { Audio } from './components/audio'
 import { Button } from './components/button'
+import { ButtonsDisabler } from './components/buttons-disabler'
 import { Carousel } from './components/carousel'
 import { Document } from './components/document'
 import { Element } from './components/element'
@@ -24,7 +25,6 @@ import { Subtitle } from './components/subtitle'
 import { Text } from './components/text'
 import { Title } from './components/title'
 import { Video } from './components/video'
-import { ButtonsDisabler } from './util/webchat'
 
 /**
  *

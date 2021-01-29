@@ -10,8 +10,8 @@ import {
   Text,
   Title,
 } from '../../src/components'
+import { ButtonsDisabler } from '../../src/components/buttons-disabler'
 import { msgToBotonic } from '../../src/msg-to-botonic'
-import { ButtonsDisabler } from '../../src/util/webchat'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()
 

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
-import { ButtonsDisabler } from '../util/webchat'
+import { ButtonsDisabler } from './buttons-disabler'
 
 const StyledButton = styled.button`
   display: flex;
@@ -125,11 +125,7 @@ export const Button = props => {
           ...buttonStyle,
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
-          ...(props.disabled &&
-            autoDisable && {
-              ...WEBCHAT.DEFAULTS.BUTTON_DISABLED_STYLE,
-              ...disabledStyle,
-            }),
+          ...(props.disabled && autoDisable && disabledStyle),
         }}
         bottom={props.bottomRadius}
       >

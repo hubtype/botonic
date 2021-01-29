@@ -7,8 +7,8 @@ import RightArrow from '../assets/rightArrow.svg'
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { resolveImage } from '../util/environment'
-import { ButtonsDisabler } from '../util/webchat'
 import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
+import { ButtonsDisabler } from './buttons-disabler'
 import { Message } from './message'
 
 const StyledCarousel = styled.div`
