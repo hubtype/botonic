@@ -426,23 +426,6 @@ All these changes can be tested using the `botonic serve` command (`npm run star
 
 ## Style Compliance
 
-To keep the code nice and clean, and to avoid style conflicts, encapsulation is recommmended: the markup structure, style, and behavior can be hidden and separated from the rest of the code.
-
-To do so, you only need a slight change in your `webpack.config.js` file and replace the `stylesLoaderConfig` by the following one:
-
-```javascript
-const stylesLoaderConfig = {
-  test: /\.(scss|css)$/,
-  use: [{loader: 'style-loader', options: {
-    insert: function(element) {
-      if(!window._botonicInsertStyles)
-        window._botonicInsertStyles = []
-      window._botonicInsertStyles.push(element)
-    }
-  }}, 'css-loader', 'sass-loader'],
-}
-```
-
 To avoid conflicts between bot styles and your host page, you can indicate if you want to enable the `shadowDOM` feature. This parameter must be defined in the webchat object in `src/webchat/index.js`:
 
 ```javascript
