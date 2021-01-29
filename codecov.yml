@@ -5,23 +5,33 @@ coverage:
         # if the coverage is under this value the Codecov GitHub check will fail
         threshold: 40%
 flags:
-  botonic-plugin-contentful:
+  botonic-cli:
     paths:
-      - packages/botonic-plugin-contentful
+      - packages/botonic-cli
     carryforward: true
-  botonic-react:
-    paths:
-      - packages/botonic-react
-    carryforward: true
+    
   botonic-core:
     paths:
       - packages/botonic-core
     carryforward: true
-  botonic-plugin-dynamodb:
-    paths:
-      - packages/botonic-plugin-dynamodb
-    carryforward: true
+
   botonic-nlu:
     paths:
       - packages/botonic-nlu
     carryforward: true
+    
+  botonic-plugin-contentful:
+    paths:
+      - packages/botonic-plugin-contentful
+    carryforward: true
+
+  botonic-plugin-dynamodb:
+    paths:
+      - packages/botonic-plugin-dynamodb
+    carryforward: true
+  
+  botonic-react:
+    paths:
+      - packages/botonic-react
+    carryforward: true
+    
