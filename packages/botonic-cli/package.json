@@ -65,7 +65,7 @@
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
-    "test": "../../node_modules/.bin/jest --coverage --passWithNoTests"
+    "test": "../../node_modules/.bin/jest --coverage"
   },
   "types": "lib/index.d.ts",
   "keywords": [
