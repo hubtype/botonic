@@ -13,6 +13,7 @@ import {
 } from '../src/message-utils'
 import { Audio } from './components/audio'
 import { Button } from './components/button'
+import { ButtonsDisabler } from './components/buttons-disabler'
 import { Carousel } from './components/carousel'
 import { Document } from './components/document'
 import { Element } from './components/element'
@@ -24,6 +25,7 @@ import { Subtitle } from './components/subtitle'
 import { Text } from './components/text'
 import { Title } from './components/title'
 import { Video } from './components/video'
+
 /**
  *
  * @param msg {object}
@@ -169,6 +171,7 @@ function buttonsParse(buttons) {
     const target = props.messenger_extensions ? null : props.target
     const title = props.title
     const webview = props.messenger_extensions ? props.url : props.webview
+    const disabledProps = ButtonsDisabler.constructBrowserProps(props)
     return (
       <Button
         key={i}
@@ -176,6 +179,7 @@ function buttonsParse(buttons) {
         url={url}
         target={target}
         webview={webview}
+        {...disabledProps}
       >
         {title}
       </Button>

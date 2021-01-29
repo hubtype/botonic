@@ -20,6 +20,12 @@ export const getProperty = (obj, property) => {
   return obj
 }
 
+export function strToBool(string) {
+  const regex = /^\s*(true|1|on)\s*$/i
+  string = String(string)
+  return regex.test(string)
+}
+
 export const mapObject = (obj, conversion = ([key, value]) => [key, value]) => {
   return (
     obj &&

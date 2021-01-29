@@ -9,6 +9,7 @@ import { RequestContext, WebchatContext } from '../contexts'
 import { isDev, resolveImage } from '../util/environment'
 import { ConditionalWrapper, renderComponent } from '../util/react'
 import { Button } from './button'
+import { ButtonsDisabler } from './buttons-disabler'
 import { getMarkdownStyle, renderLinks, renderMarkdown } from './markdown'
 import { Reply } from './reply'
 import { MessageTimestamp, resolveMessageTimestamps } from './timestamps'
@@ -68,7 +69,7 @@ const BlobTick = styled.div`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
-  const {
+  let {
     type = '',
     blob = true,
     from = SENDERS.bot,
@@ -94,10 +95,18 @@ export const Message = props => {
     id: props.id || uuidv4(),
   })
 
+  const [disabled, setDisabled] = useState(false)
+  children = ButtonsDisabler.updateChildrenButtons(children, {
+    parentId: state.id,
+    disabled,
+    setDisabled,
+  })
+
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
     e => e.type === Button
   )
+
   let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
@@ -136,12 +145,14 @@ export const Message = props => {
         markdown,
         from,
         buttons: buttons.map(b => ({
+          parentId: b.props.parentId,
           payload: b.props.payload,
           path: b.props.path,
           url: b.props.url,
           target: b.props.target,
           webview: b.props.webview && String(b.props.webview),
           title: b.props.children,
+          ...ButtonsDisabler.withDisabledProps(b.props),
         })),
         delay,
         typing,

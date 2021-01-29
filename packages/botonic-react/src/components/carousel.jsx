@@ -8,6 +8,7 @@ import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { resolveImage } from '../util/environment'
 import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
+import { ButtonsDisabler } from './buttons-disabler'
 import { Message } from './message'
 
 const StyledCarousel = styled.div`
@@ -142,6 +143,11 @@ export const Carousel = props => {
     }
   }, [carouselRef.current])
 
+  const carouselProps = {
+    ...props,
+    children: ButtonsDisabler.updateChildrenButtons(props.children),
+  }
+
   if (isBrowser()) {
     content = (
       <StyledScrollbar
@@ -152,19 +158,20 @@ export const Carousel = props => {
           ref={carouselRef}
           carouselArrowsEnabled={carouselArrowsEnabled}
         >
-          <StyledItems>{props.children}</StyledItems>
+          <StyledItems>{carouselProps.children}</StyledItems>
           {carouselArrowsEnabled && getArrows()}
         </StyledCarousel>
       </StyledScrollbar>
     )
   }
+
   return (
     <Message
       style={{ width: '85%', padding: 0, backgroundColor: COLORS.TRANSPARENT }}
       blob={false}
-      json={serialize(props)}
+      json={serialize(carouselProps)}
       type={INPUT.CAROUSEL}
-      {...props}
+      {...carouselProps}
     >
       {content}
     </Message>
