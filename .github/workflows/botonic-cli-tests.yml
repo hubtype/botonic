@@ -35,7 +35,15 @@ jobs:
       - name: Build
         run: (cd ./packages/$PACKAGE && npm run build)
       - name: Test
-        run: (cd ./packages/$PACKAGE && npm test)
+        run: (cd ./packages/$PACKAGE && npm run test_ci)
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: ./packages/${{env.PACKAGE}}/junit.xml
+
       - name: Verify lint
         run: (cd ./packages/$PACKAGE && npm run lint_ci)
 
