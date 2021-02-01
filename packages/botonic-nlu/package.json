@@ -1,6 +1,6 @@
 {
   "name": "@botonic/nlu",
-  "version": "0.17.0",
+  "version": "0.18.0-rc.0",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
