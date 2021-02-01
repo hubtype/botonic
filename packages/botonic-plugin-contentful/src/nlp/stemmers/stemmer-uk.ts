@@ -6,7 +6,7 @@ export class StemmerUk implements Stemmer {
   }
 
   private stemToken(token: string): string {
-    const vowelMatch = token.match(/[аеиоуюяіїє]/)
+    const vowelMatch = /[аеиоуюяіїє]/.exec(token)
     if (!vowelMatch) {
       return token
     } else if (vowelMatch.index != undefined) {
@@ -69,7 +69,7 @@ export class StemmerUk implements Stemmer {
 
   private step3(token: string): string {
     if (
-      /[^аеиоуюяіїє][аеиоуюяіїє]+[^аеиоуюяіїє]+[аеиоуюяіїє].*oсть/g.test(token)
+      /[^аеиоуюяіїє][аеиоуюяіїє]+[^аеиоуюяіїє]+[аеиоуюяіїє].*oсть/g.exec(token)
     ) {
       token = this.replace(token, /ость$/)
     }
