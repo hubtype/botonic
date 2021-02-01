@@ -18,7 +18,9 @@ describe('TEST: storage', () => {
     expect(botonicState).toHaveProperty('messages', [])
     expect(botonicState).toHaveProperty('session')
     expect(botonicState).toHaveProperty('lastRoutePath', null)
-    expect(botonicState).toHaveProperty('devSettings', {})
+    expect(botonicState).toHaveProperty('devSettings', {
+      keepSessionOnReload: false,
+    })
     expect(sessionStorage.getItem('botonicState')).toBeNull()
   })
 
