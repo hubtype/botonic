@@ -26,7 +26,7 @@
   ],
   "dependencies": {
     "axios": "^0.21.0",
-    "pusher-js": "^5.1.1"
+    "pusher-js": "^7.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.11.5",
