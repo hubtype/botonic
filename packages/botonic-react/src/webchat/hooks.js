@@ -51,7 +51,7 @@ export const webchatInitialState = {
   },
   themeUpdates: {},
   error: {},
-  devSettings: {},
+  devSettings: { keepSessionOnReload: false },
   isWebchatOpen: false,
   isEmojiPickerOpen: false,
   isPersistentMenuOpen: false,
