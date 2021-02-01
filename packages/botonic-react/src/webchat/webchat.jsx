@@ -313,9 +313,8 @@ export const Webchat = forwardRef((props, ref) => {
     session = initSession(session)
     updateSession(session)
     if (
-      !devSettings ||
-      Object.keys(devSettings).length === 0 ||
-      devSettings.keepSessionOnReload
+      !initialDevSettings ||
+      (devSettings && devSettings.keepSessionOnReload)
     ) {
       if (messages) {
         messages.forEach(m => {
