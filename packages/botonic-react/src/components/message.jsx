@@ -101,7 +101,6 @@ export const Message = props => {
     disabled,
     setDisabled,
   })
-
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
     e => e.type === Button

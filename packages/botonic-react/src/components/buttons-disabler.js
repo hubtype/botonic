@@ -1,7 +1,6 @@
-import { INPUT } from '@botonic/core'
-
 import { Button } from '../components/button'
 import { WEBCHAT } from '../constants'
+import { isCarousel } from '../message-utils'
 import { strToBool } from '../util/objects'
 import { deepMapWithIndex } from '../util/react'
 import { _getThemeProperty } from '../util/webchat'
@@ -54,17 +53,6 @@ export class ButtonsDisabler {
   static updateChildrenButtons(children, additionalProps = undefined) {
     return deepMapWithIndex(children, n => {
       if (n.type === Button) return this.updateButtons(n, additionalProps)
-      if (n.props && n.props.children) {
-        return {
-          ...n,
-          ...{
-            props: {
-              ...n.props,
-              ...{ children: deepMapWithIndex(n.props.children, n => n) },
-            },
-          },
-        }
-      }
       return n
     })
   }
@@ -96,17 +84,11 @@ export class ButtonsDisabler {
         ...button,
         ...{
           disabled: true,
-          autodisable:
-            button.autodisable !== undefined ? button.autodisable : autoDisable,
-          disabledstyle:
-            button.disabledstyle !== undefined
-              ? button.disabledstyle
-              : disabledStyle,
         },
       }
     }
     if (
-      messageToUpdate.type === INPUT.CAROUSEL &&
+      isCarousel(messageToUpdate) &&
       messageToUpdate.data &&
       messageToUpdate.data.elements
     ) {
