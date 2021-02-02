@@ -1,4 +1,5 @@
 import Stemmer from '@nlpjs/core/src/stemmer'
+// Replaced the orginal lookbehind regex because they were not supported by Safari
 
 export class StemmerUk implements Stemmer {
   public stem(tokens: string[]): string[] {

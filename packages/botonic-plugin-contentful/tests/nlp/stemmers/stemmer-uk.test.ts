@@ -7,6 +7,7 @@ test.each<any>([
   ['парковка', ['парковк']],
   ['експеримент', ['експеримент']],
   ['зустрічі', ['зустріч']],
+  ['потурбувавши', ['потурбува']], //Solved without lookbehind regex
 ])('TEST: Ukrainian stemmer("%s")->"%s"', (word: string, expected: string) => {
   const tokenizer = tokenizerPerLocale('hr')
   const sut = new StemmerUk()
