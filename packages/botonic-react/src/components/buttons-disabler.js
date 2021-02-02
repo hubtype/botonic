@@ -40,13 +40,15 @@ export class ButtonsDisabler {
             WEBCHAT.CUSTOM_PROPERTIES.buttonAutoDisable,
             WEBCHAT.DEFAULTS.BUTTON_AUTO_DISABLE
           )
-    const disabledStyle =
+    const computedDisabledStyle =
       props.disabledstyle !== undefined
         ? props.disabledstyle
-        : getThemeProperty(
-            WEBCHAT.CUSTOM_PROPERTIES.buttonDisabledStyle,
-            WEBCHAT.DEFAULTS.BUTTON_DISABLED_STYLE
-          )
+        : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.buttonDisabledStyle, {})
+
+    const disabledStyle = {
+      ...WEBCHAT.DEFAULTS.BUTTON_DISABLED_STYLE,
+      ...computedDisabledStyle,
+    }
     return { autoDisable, disabledStyle }
   }
 
