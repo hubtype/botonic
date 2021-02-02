@@ -76,8 +76,8 @@ const stemmers = new SingletonMap<Stemmer>({
     return new StemmerCs()
   },
   [locales.UKRAINIAN]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const StemmerUk = require('@nlpjs/lang-uk/src/stemmer-uk')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,node/no-missing-require
+    const { StemmerUk } = require('./stemmers/stemmer-uk')
     return new StemmerUk()
   },
   [locales.CROATIAN]: () => {

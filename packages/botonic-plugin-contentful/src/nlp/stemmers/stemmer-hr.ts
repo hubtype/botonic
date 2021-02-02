@@ -38,7 +38,7 @@ export class StemmerHr implements Stemmer {
   private getRoot(token: string): string {
     for (const rule of hrRules) {
       const match = new RegExp(rule).exec(token)
-      if (match != undefined) {
+      if (match) {
         const root = match[1]
         if (this.containsVocal(root) && root.length > 1) {
           return root

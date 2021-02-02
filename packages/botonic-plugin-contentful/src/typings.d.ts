@@ -238,13 +238,6 @@ declare module '@nlpjs/lang-uk/src/tokenizer-uk' {
   export = TokenizerUk
 }
 
-declare module '@nlpjs/lang-uk/src/stemmer-uk' {
-  import BaseStemmer from '@nlpjs/core/src/base-stemmer'
-
-  class StemmerUk extends BaseStemmer {}
-  export = StemmerUk
-}
-
 declare module '@nlpjs/lang-sl/src/tokenizer-sl' {
   import Tokenizer from '@nlpjs/core/src/tokenizer'
 
