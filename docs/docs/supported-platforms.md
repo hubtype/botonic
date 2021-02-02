@@ -27,7 +27,7 @@ You can integrate your chatbot into your webpage. This integration is 100% edita
 
 **Note**: If you want to enable visibility settings, you must add the `visibility` parameter set to `'dynamic'` as shown: `{appId: 'YOUR_APP_ID', visibility: 'dynamic'}`
 
-For more information, refer to the **[Webchat](/docs/concepts/webchat)** section.
+For more information, refer to the **[Webchat](/docs/webchat/webchat)** section.
 
 <details>
 <summary>Example</summary>

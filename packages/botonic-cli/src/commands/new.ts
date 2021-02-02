@@ -12,7 +12,7 @@ import { promisify } from 'util'
 
 import { BotonicAPIService } from '../botonic-api-service'
 import { EXAMPLES } from '../botonic-examples'
-import { track } from '../utils'
+import { track, trackError } from '../utils'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = promisify(childProcessExec)
@@ -41,7 +41,6 @@ Creating...
   private botonicApiService = new BotonicAPIService()
 
   async run(): Promise<void> {
-    track('Created Botonic Bot CLI')
     const { args } = this.parse(Run)
     const userProjectName = args.name
     let selectedProjectName = ''
@@ -66,7 +65,9 @@ Creating...
         return
       }
     }
-
+    track('Created Botonic Bot CLI', {
+      selected_project_name: selectedProjectName,
+    })
     if (existsSync(userProjectName)) {
       rimraf.sync(userProjectName)
     }
@@ -86,7 +87,9 @@ Creating...
         dir: userProjectName,
       })
     } catch (e) {
-      throw new Error(`Error downloading ${selectedProjectName}: ${String(e)}`)
+      const error = `Downloading Project: ${selectedProjectName}: ${String(e)}`
+      trackError(error)
+      throw new Error(error)
     }
     spinner.succeed()
     process.chdir(args.name)
@@ -95,9 +98,14 @@ Creating...
       spinner: 'bouncingBar',
     }).start()
     const dependencyCommand = `npm install`
-    await exec(dependencyCommand)
+    try {
+      await exec(dependencyCommand)
+    } catch (e) {
+      const error = `Installing dependencies: ${String(e)}`
+      trackError(error)
+      throw new Error(error)
+    }
     spinner.succeed()
-    await this.botonicApiService.buildIfChanged(false)
     this.botonicApiService.beforeExit()
     moveSync(join('..', '.botonic.json'), join(process.cwd(), '.botonic.json'))
     const chdirCmd = colors.bold(`cd ${args.name}`)

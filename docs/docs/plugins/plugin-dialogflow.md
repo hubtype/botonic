@@ -94,4 +94,4 @@ export const plugins = [
 
 Finally run `botonic serve` to test your intents locally, or `botonic deploy` to deploy the bot.
 
-**Note:** Refer to Dialogflow to [migrate your agents to V2](<(https://dialogflow.com/docs/reference/v1-v2-migration-guide#switch_your_agent_from_v1_to_v2)>) and to get the [JSON key](https://dialogflow.com/docs/reference/v2-auth-setup).
+**Note:** Refer to Dialogflow to [migrate your agents to V2](https://dialogflow.com/docs/reference/v1-v2-migration-guide) and to get the [JSON key](https://dialogflow.com/docs/reference/v2-auth-setup).

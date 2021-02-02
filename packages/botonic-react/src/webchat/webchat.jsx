@@ -9,7 +9,6 @@ import React, {
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import styled, { StyleSheetManager } from 'styled-components'
-import UAParser from 'ua-parser-js'
 import { useAsyncEffect } from 'use-async-effect'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -41,7 +40,11 @@ import { scrollToBottom } from '../util/dom'
 import { isDev, resolveImage } from '../util/environment'
 import { ConditionalWrapper } from '../util/react'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
-import { _getThemeProperty } from '../util/webchat'
+import {
+  _getThemeProperty,
+  initSession,
+  shouldKeepSessionOnReload,
+} from '../util/webchat'
 import { Attachment } from './components/attachment'
 import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
 import {
@@ -160,23 +163,6 @@ const DarkBackgroundMenu = styled.div`
   height: 100%;
 `
 
-const createUser = () => {
-  const parser = new UAParser()
-  const ua = parser.getResult()
-  let name = `${ua.os.name} ${ua.browser.name}`
-  if (ua.device && ua.device.type) name = `${ua.device.type} ${name}`
-  return {
-    id: uuidv4(),
-    name,
-  }
-}
-const initSession = session => {
-  if (!session) session = {}
-  const hasUserId = session.user && session.user.id !== undefined
-  if (!session.user || Object.keys(session.user).length === 0 || !hasUserId)
-    session.user = !hasUserId ? merge(session.user, createUser()) : createUser()
-  return session
-}
 // eslint-disable-next-line complexity
 export const Webchat = forwardRef((props, ref) => {
   const {
@@ -312,11 +298,7 @@ export const Webchat = forwardRef((props, ref) => {
     } = botonicState || {}
     session = initSession(session)
     updateSession(session)
-    if (
-      !devSettings ||
-      Object.keys(devSettings).length === 0 ||
-      devSettings.keepSessionOnReload
-    ) {
+    if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
       if (messages) {
         messages.forEach(m => {
           addMessage(m)

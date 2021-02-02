@@ -1,7 +1,6 @@
-import { INPUT } from '@botonic/core'
-
 import { Button } from '../components/button'
 import { WEBCHAT } from '../constants'
+import { isCarousel } from '../message-utils'
 import { strToBool } from '../util/objects'
 import { deepMapWithIndex } from '../util/react'
 import { _getThemeProperty } from '../util/webchat'
@@ -41,30 +40,21 @@ export class ButtonsDisabler {
             WEBCHAT.CUSTOM_PROPERTIES.buttonAutoDisable,
             WEBCHAT.DEFAULTS.BUTTON_AUTO_DISABLE
           )
-    const disabledStyle =
+    const computedDisabledStyle =
       props.disabledstyle !== undefined
         ? props.disabledstyle
-        : getThemeProperty(
-            WEBCHAT.CUSTOM_PROPERTIES.buttonDisabledStyle,
-            WEBCHAT.DEFAULTS.BUTTON_DISABLED_STYLE
-          )
+        : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.buttonDisabledStyle, {})
+
+    const disabledStyle = {
+      ...WEBCHAT.DEFAULTS.BUTTON_DISABLED_STYLE,
+      ...computedDisabledStyle,
+    }
     return { autoDisable, disabledStyle }
   }
 
   static updateChildrenButtons(children, additionalProps = undefined) {
     return deepMapWithIndex(children, n => {
       if (n.type === Button) return this.updateButtons(n, additionalProps)
-      if (n.props && n.props.children) {
-        return {
-          ...n,
-          ...{
-            props: {
-              ...n.props,
-              ...{ children: deepMapWithIndex(n.props.children, n => n) },
-            },
-          },
-        }
-      }
       return n
     })
   }
@@ -96,17 +86,11 @@ export class ButtonsDisabler {
         ...button,
         ...{
           disabled: true,
-          autodisable:
-            button.autodisable !== undefined ? button.autodisable : autoDisable,
-          disabledstyle:
-            button.disabledstyle !== undefined
-              ? button.disabledstyle
-              : disabledStyle,
         },
       }
     }
     if (
-      messageToUpdate.type === INPUT.CAROUSEL &&
+      isCarousel(messageToUpdate) &&
       messageToUpdate.data &&
       messageToUpdate.data.elements
     ) {

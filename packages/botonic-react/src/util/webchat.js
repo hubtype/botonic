@@ -1,3 +1,7 @@
+import merge from 'lodash.merge'
+import UAParser from 'ua-parser-js'
+import { v4 as uuidv4 } from 'uuid'
+
 import { WEBCHAT } from '../constants'
 import { getProperty } from './objects'
 
@@ -21,3 +25,26 @@ export const _getThemeProperty = theme => (
   }
   return undefined
 }
+
+export const createUser = () => {
+  const parser = new UAParser()
+  const ua = parser.getResult()
+  let name = `${ua.os.name} ${ua.browser.name}`
+  if (ua.device && ua.device.type) name = `${ua.device.type} ${name}`
+  return {
+    id: uuidv4(),
+    name,
+  }
+}
+export const initSession = session => {
+  if (!session) session = {}
+  const hasUserId = session.user && session.user.id !== undefined
+  if (!session.user || Object.keys(session.user).length === 0 || !hasUserId)
+    session.user = !hasUserId ? merge(session.user, createUser()) : createUser()
+  return session
+}
+
+export const shouldKeepSessionOnReload = ({
+  initialDevSettings,
+  devSettings,
+}) => !initialDevSettings || (devSettings && devSettings.keepSessionOnReload)

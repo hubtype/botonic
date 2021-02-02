@@ -89,6 +89,7 @@
   "Releases": {
     "Releases": [
       "releases/releases-intro",
+      "releases/v0-18-0",
       "releases/v0-17-0",
       "releases/v0-16-0",
       "releases/v0-15-0",
