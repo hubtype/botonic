@@ -47,7 +47,7 @@ Checkout the supported [components](/docs/components/components).
 
 ### Fully Customizable Webchat SDK
 
-Messaging apps offer a limited set of interactive elements, so there's only so much you can do in terms of UI as you're not in full control. However, if you're building for the web, you can use the full power of React. Our [Webchat SDK](/docs/concepts/webchat) allows you to easily customize the behaviour and styles using properties like `enableEmojiPicker: true` or `brandColor: 'blue'`. You can also tailor your bot in a more advanced way with **custom components** and [custom message types](/docs/concepts/webchat#custom-message-styles). With the latter, you can **embed complex UI elements** right in the middle of the conversation, like forms or calendars.
+Messaging apps offer a limited set of interactive elements, so there's only so much you can do in terms of UI as you're not in full control. However, if you're building for the web, you can use the full power of React. Our [Webchat SDK](/docs/webchat/webchat) allows you to easily customize the behaviour and styles using properties like `enableEmojiPicker: true` or `brandColor: 'blue'`. You can also tailor your bot in a more advanced way with **custom components** and [custom message types](/docs/webchat/webchat-style#custom-message). With the latter, you can **embed complex UI elements** right in the middle of the conversation, like forms or calendars.
 
 ### Webviews
 

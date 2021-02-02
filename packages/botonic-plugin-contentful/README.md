@@ -218,7 +218,7 @@ such as using the plugins `moment-locales-webpack-plugin` and `moment-timezone-d
 
 ### Design
 
-See **[diagram](/packages/botonic-plugin-contentful/doc/class-diagram.png)**. Exported from **https://www.draw.io/#G1fMaHqDYF-DsGWC6JrCWvo6f7Psx7Vpzw**
+See **[diagram](https://github.com/hubtype/botonic/blob/master/packages/botonic-plugin-contentful/doc/class-diagram.png)**. Exported from **https://www.draw.io/#G1fMaHqDYF-DsGWC6JrCWvo6f7Psx7Vpzw**
 
 ### Content Management
 
