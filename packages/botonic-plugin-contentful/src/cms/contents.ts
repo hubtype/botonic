@@ -4,7 +4,7 @@ import { SearchableBy } from './fields';
 
 export enum ButtonStyle {
   BUTTON = 0,
-  QUICK_REPLY = 1
+  QUICK_REPLY = 1,
 }
 
 /** Not a Content because it cannot have custom fields */
@@ -34,7 +34,7 @@ export abstract class Content {
   }
 
   static validateContents(contents: Content[]): string | undefined {
-    const invalids = contents.map(c => c.validate()).filter(v => v);
+    const invalids = contents.map((c) => c.validate()).filter((v) => v);
     if (invalids.length == 0) {
       return undefined;
     }
@@ -172,7 +172,8 @@ export class Queue extends Content implements ContentWithKeywords {
     readonly queue: string,
     readonly shortText?: string,
     readonly schedule?: Schedule,
-    readonly searchableBy: SearchableBy = new SearchableBy()
+    readonly searchableBy: SearchableBy = new SearchableBy(),
+    readonly indicationText?: string
   ) {
     super(name);
   }

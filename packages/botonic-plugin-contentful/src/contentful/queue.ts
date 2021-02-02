@@ -6,7 +6,7 @@ import { ContentWithNameFields, DeliveryApi } from './delivery-api';
 import { ScheduleFields, ScheduleDelivery } from './schedule';
 import {
   SearchableByKeywordsDelivery,
-  SearchableByKeywordsFields
+  SearchableByKeywordsFields,
 } from './searchable-by';
 
 export class QueueDelivery extends ContentDelivery {
@@ -35,7 +35,7 @@ export class QueueDelivery extends ContentDelivery {
 
     const searchableBy =
       fields.searchableBy &&
-      fields.searchableBy.map(searchableBy =>
+      fields.searchableBy.map((searchableBy) =>
         SearchableByKeywordsDelivery.fromEntry(searchableBy)
       );
     return new cms.Queue(
@@ -43,7 +43,8 @@ export class QueueDelivery extends ContentDelivery {
       fields.shortText,
       fields.queue,
       schedule,
-      new cms.SearchableBy(searchableBy)
+      new cms.SearchableBy(searchableBy),
+      fields.indicationText
     );
   }
 }
@@ -53,4 +54,5 @@ export interface QueueFields extends ContentWithNameFields {
   queue: string;
   schedule?: contentful.Entry<ScheduleFields>;
   searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
+  indicationText: string;
 }
