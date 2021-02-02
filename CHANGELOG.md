@@ -11,7 +11,7 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
-## [0.18.0] - 2020-29-01
+## [0.18.0] - 2020-02-02
 
 ### Added
 
@@ -22,7 +22,7 @@ All notable changes to Botonic will be documented in this file.
 
 * [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
 
-  - [Improved Botonic CLI's telemetry](https://github.com/hubtype/botonic/pull/1243) to track usage of installed CLI and botonic dependencies.
+  - [Improved Botonic CLI's telemetry](https://github.com/hubtype/botonic/pull/1243) to track usage of installed CLI and botonic dependencies and [keep track of errors](https://github.com/hubtype/botonic/pull/1290) on project initialization.
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
 
@@ -42,7 +42,11 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 
-- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - [Reimplemented `StemmerUK`](https://github.com/hubtype/botonic/pull/1289) to provide support for Safari browser.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
   - [Fixed typings](https://github.com/hubtype/botonic/pull/1262).
   - Fixed scroll to bottom for [mobile devices](https://github.com/hubtype/botonic/pull/1263).
