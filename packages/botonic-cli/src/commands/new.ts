@@ -88,9 +88,7 @@ Creating...
       })
     } catch (e) {
       const error = `Downloading Project: ${selectedProjectName}: ${String(e)}`
-      trackError('Created Botonic Bot CLI', {
-        error,
-      })
+      trackError(error)
       throw new Error(error)
     }
     spinner.succeed()
@@ -104,9 +102,7 @@ Creating...
       await exec(dependencyCommand)
     } catch (e) {
       const error = `Installing dependencies: ${String(e)}`
-      trackError('Created Botonic Bot CLI', {
-        error,
-      })
+      trackError(error)
       throw new Error(error)
     }
     spinner.succeed()

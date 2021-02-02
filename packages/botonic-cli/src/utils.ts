@@ -84,11 +84,10 @@ function getSystemInformation() {
     botonic_dependencies: getBotonicDependencies(),
   }
 }
-export function trackError(event: string, properties = {}): void {
-  track(`Error: ${event}`, properties)
+export function trackError(type: string, properties = {}): void {
+  track('Error Botonic CLI', { ...properties, error_type: type })
 }
 export function track(event: string, properties = {}): void {
-  console.log({ event }, { properties })
   if (
     isAnalyticsEnabled() &&
     analytics &&
