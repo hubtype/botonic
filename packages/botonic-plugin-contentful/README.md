@@ -53,19 +53,20 @@ npm install @botonic/plugin-contentful
 
 2. Install the contentful-cli
 
-```javascript```
+```javascript
 npm install -g contentful-cli
+
 ```
 
-3. Execute the following command to create content models required by the plugin. Replaced YOUR_ID and YOUR_TOKEN with
+3. Execute the following command to create content models required by the plugin. Replace YOUR_ID and YOUR_TOKEN with
    the space id and contentful delivery token that you obtained in the previous section. You can find
-the export files in the [package exports directory](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful/exports)
+   the export files in the [package exports directory](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful/exports)
 
 ```javascript
 contentful space import --space-id={SPACE_ID} --management-token={TOKEN} --content-file {EXPORT_FILE}.json
 ```
 
-*note* you will need to ensure your contentful locales are changed from `en-US` to `en` 
+> Note you will need to ensure your contentful locales are changed from `en-US` to `en`
 
 ## Use
 
@@ -116,16 +117,17 @@ Add the following to you bot's `plugins.js` file:
 
 ```javascript
 export const plugins = [
-...
+  ...
   {
     id: 'contentful',
     resolve: require('@botonic/plugin-contentful'),
     options: {
-               spaceId: <YOUR_CONTENTFUL_SPACEID>,
-               accessToken: <DELIVERY_API_TOKEN>
-             }
+      spaceId: YOUR_CONTENTFUL_SPACEID,
+      accessToken: DELIVERY_API_TOKEN,
+    },
   },
-...
+  ...
+]
 ```
 
 #### Rendering a Contentful Content With Botonic React
