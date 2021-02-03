@@ -280,7 +280,6 @@ export interface BotOptions {
   defaultRoutes?: Route[]
   defaultTyping?: number
   inspector?: Inspector
-  integrations?: { [id: string]: any }
   locales: Locales
   routes: Routes
   theme?: string
@@ -291,7 +290,6 @@ export interface BotOptions {
 export class CoreBot {
   defaultDelay: number
   defaultTyping: number
-  integrations?: { [id: string]: any }
   locales: Locales
   plugins: { [id: string]: Plugin }
   routes: Routes

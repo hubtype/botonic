@@ -14,7 +14,6 @@ export {
 } from './handoff'
 export { HubtypeService } from './hubtype-service'
 export { getString } from './i18n'
-export { getNLU } from './nlu'
 export { Router } from './router'
 export { isBrowser, isMobile, isNode, params2queryString } from './utils'
 

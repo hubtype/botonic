@@ -1,6 +1,5 @@
 import { Inspector } from './debug/inspector'
 import { getString } from './i18n'
-import { getNLU } from './nlu'
 import { loadPlugins, runPlugins } from './plugins'
 import { Router } from './router'
 import { isFunction } from './utils'
@@ -10,7 +9,6 @@ export class CoreBot {
     renderer,
     routes,
     locales,
-    integrations,
     theme,
     plugins,
     appId,
@@ -26,7 +24,6 @@ export class CoreBot {
       typeof defaultTyping !== 'undefined' ? defaultTyping : 0.6
     this.defaultDelay = typeof defaultDelay !== 'undefined' ? defaultDelay : 0.4
     this.locales = locales
-    this.integrations = integrations
     if (appId) {
       this.appId = appId
       return
@@ -57,11 +54,6 @@ export class CoreBot {
 
     if (this.plugins) {
       await runPlugins(this.plugins, 'pre', input, session, lastRoutePath)
-    } else if (this.integrations && input.type == 'text') {
-      try {
-        const nlu = await getNLU(input, this.integrations)
-        Object.assign(input, nlu)
-      } catch (e) {}
     }
 
     if (isFunction(this.routes)) {
