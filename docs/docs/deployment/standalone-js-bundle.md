@@ -32,6 +32,7 @@ import { render } from 'react-dom'
 import { ReactBot } from '@botonic/react/src/react-bot'
 import { WebchatApp } from '@botonic/react/src/webchat-app'
 import { Webchat } from '@botonic/react/src/webchat'
+import {webchat} from "../webchat";  // pass in your webchat values, remove if not applicable.
 
 export class SelfHostedApp extends WebchatApp {
   constructor({
@@ -62,7 +63,7 @@ export class SelfHostedApp extends WebchatApp {
     })
   }
 
-  render(dest, optionsAtRuntime = {}) {
+  render(dest, optionsAtRuntime = webchat) {
     let {
       theme = {},
       persistentMenu,
@@ -124,8 +125,7 @@ import { locales } from '../src/locales'
 import { plugins } from '../src/plugins'
 import { webchat } from '../src/webchat'
 import { config } from '../src'
-​
-​
+
 export const app = new SelfHostedApp({
   routes,
   locales,
@@ -140,15 +140,13 @@ export const app = new SelfHostedApp({
 ```javascript
 function botonicSelfHostedConfig(mode) {
   return {
-    optimization: {
-      minimizer: [terserPlugin],
-    },
+    optimization: optimizationConfig,
     mode: mode,
     devtool: sourceMap(mode),
     target: 'web',
     entry: path.resolve('webpack-entries', 'self-hosted-entry.js'),
     module: {
-      rules: [babelLoaderConfig, fileLoaderConfig, stylesLoaderConfig],
+      rules: [babelLoaderConfig, fileLoaderConfig(path.join('..', ASSETS_DIRNAME)), stylesLoaderConfig],
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -161,10 +159,13 @@ function botonicSelfHostedConfig(mode) {
     resolve: resolveConfig,
     plugins: [
       imageminPlugin,
-      new webpack.EnvironmentPlugin({
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        IS_BROWSER: true,
+        IS_NODE: true,
         HUBTYPE_API_URL: null,
         BOTONIC_TARGET: BOTONIC_TARGETS.DEV,
-      }),
+      })
     ],
   }
 }
@@ -173,19 +174,25 @@ function botonicSelfHostedConfig(mode) {
 and also replace the exported function at the end of `webpack.config.js` by:
 
 ```javascript
-module.exports = function (env) {
-  if (env.target === 'all') {
-    return [botonicServerConfig, botonicWebviewsConfig, botonicWebchatConfig]
-  } else if (env.target === 'dev') {
-    return [botonicDevConfig]
-  } else if (env.target === 'node') {
-    return [botonicServerConfig]
-  } else if (env.target === 'webviews') {
-    return [botonicWebviewsConfig]
-  } else if (env.target === 'webchat') {
-    return [botonicWebchatConfig]
+module.exports = (env, argv) => {
+  if (env.target === BOTONIC_TARGETS.ALL) {
+    return [
+      botonicNodeConfig(argv.mode),
+      botonicWebviewsConfig(argv.mode),
+      botonicWebchatConfig(argv.mode),
+    ]
+  } else if (env.target === BOTONIC_TARGETS.DEV) {
+    return [botonicDevConfig(argv.mode)]
+  } else if (env.target === BOTONIC_TARGETS.NODE) {
+    return [botonicNodeConfig(argv.mode)]
+  } else if (env.target === BOTONIC_TARGETS.WEBVIEWS) {
+    return [botonicWebviewsConfig(argv.mode)]
+  } else if (env.target === BOTONIC_TARGETS.WEBCHAT) {
+    return [botonicWebchatConfig(argv.mode)]
   } else if (env.target === 'self-hosted') {
-    return [botonicSelfHostedConfig]
+    return [botonicSelfHostedConfig(argv.mode)]
+  } else {
+    return null
   }
 }
 ```
@@ -200,3 +207,27 @@ module.exports = function (env) {
 ```
 
 Now you can run `npm run build:self-hosted` that will generate a `dist/webchat.botonic.js` file that you can host anywhere and load in your html with `<script src="webchat.botonic.js"></script>`.
+
+Once you have your generated bundle, your `index.html` will look something like:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>title</title>
+    <script src="webchat.botonic.js"></script>
+</head>
+<body>
+<h1>Basic Example</h1>
+<div id="root"></div>
+<script> type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function(event) {
+        Botonic.render(document.getElementById('root'), )
+    })
+</script>
+</body>
+</html>
+```
+
+In production, consider serving the `webchat.botonic.js` file via a CDN.
