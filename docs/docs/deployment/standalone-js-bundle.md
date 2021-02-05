@@ -32,7 +32,7 @@ import { render } from 'react-dom'
 import { ReactBot } from '@botonic/react/src/react-bot'
 import { WebchatApp } from '@botonic/react/src/webchat-app'
 import { Webchat } from '@botonic/react/src/webchat'
-import {webchat} from "../webchat";  // pass in your webchat values, remove if not applicable.
+import { webchat } from '../webchat' // pass in your webchat values, remove if not applicable.
 
 export class SelfHostedApp extends WebchatApp {
   constructor({
@@ -146,7 +146,11 @@ function botonicSelfHostedConfig(mode) {
     target: 'web',
     entry: path.resolve('webpack-entries', 'self-hosted-entry.js'),
     module: {
-      rules: [babelLoaderConfig, fileLoaderConfig(path.join('..', ASSETS_DIRNAME)), stylesLoaderConfig],
+      rules: [
+        babelLoaderConfig,
+        fileLoaderConfig(path.join('..', ASSETS_DIRNAME)),
+        stylesLoaderConfig,
+      ],
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -162,10 +166,9 @@ function botonicSelfHostedConfig(mode) {
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production'),
         IS_BROWSER: true,
-        IS_NODE: true,
         HUBTYPE_API_URL: null,
         BOTONIC_TARGET: BOTONIC_TARGETS.DEV,
-      })
+      }),
     ],
   }
 }
@@ -208,25 +211,40 @@ module.exports = (env, argv) => {
 
 Now you can run `npm run build:self-hosted` that will generate a `dist/webchat.botonic.js` file that you can host anywhere and load in your html with `<script src="webchat.botonic.js"></script>`.
 
-Once you have your generated bundle, your `index.html` will look something like:
+Once you have generated your bundle, you can ship your application in a directory like this:
+
+```
+├── public/
+│   └── index.html
+│   └── webchat.botonic.js
+│   └── assets/
+```
+
+> **Note**: Remember to include the `assets` folder you used during development if necessary.
+
+Your `index.html` should look like this:
+
+**public/index.html**
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>title</title>
     <script src="webchat.botonic.js"></script>
-</head>
-<body>
-<h1>Basic Example</h1>
-<div id="root"></div>
-<script> type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function(event) {
-        Botonic.render(document.getElementById('root'), )
-    })
-</script>
-</body>
+  </head>
+  <body>
+    <h1>Basic Example</h1>
+    <div id="root"></div>
+    <script>
+      type =
+        'text/javascript' >
+        document.addEventListener('DOMContentLoaded', function (event) {
+          Botonic.render(document.getElementById('root'))
+        })
+    </script>
+  </body>
 </html>
 ```
 
