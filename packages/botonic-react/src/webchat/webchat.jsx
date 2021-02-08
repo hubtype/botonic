@@ -321,11 +321,10 @@ export const Webchat = forwardRef((props, ref) => {
     if (props.onInit) setTimeout(() => props.onInit(), 100)
   }, [])
 
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (!webchatState.isWebchatOpen) return
     deviceAdapter.init(host)
     scrollToBottom({ behavior: 'auto', host })
-    await resendUnsentInputs()
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
@@ -346,8 +345,10 @@ export const Webchat = forwardRef((props, ref) => {
         message: 'Connection issues',
       })
     } else {
-      await resendUnsentInputs()
-      setError(undefined)
+      if (!firstUpdate.current) {
+        await resendUnsentInputs()
+        setError(undefined)
+      }
     }
   }, [isOnline])
 

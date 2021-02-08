@@ -1,3 +1,8 @@
+import {
+  ConnectionEvent,
+  ConnectionState,
+  startChecker,
+} from 'connection-checker'
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 
 import { COLORS, WEBCHAT } from '../constants'
@@ -236,16 +241,19 @@ export function useComponentVisible(initialIsVisible, onClickOutside) {
 }
 
 export function useNetwork() {
-  const [isOnline, setNetwork] = useState(window.navigator.onLine)
-  const updateNetwork = () => {
-    setNetwork(window.navigator.onLine)
+  startChecker()
+  const [isOnline, setNetwork] = useState(true)
+  const updateNetwork = ({ detail: { from, to } }) => {
+    if (to === ConnectionState.DISCONNECTED) setNetwork(false)
+    if (to === ConnectionState.CONNECTED) setNetwork(true)
   }
   useEffect(() => {
-    window.addEventListener('offline', updateNetwork)
-    window.addEventListener('online', updateNetwork)
+    window.addEventListener(ConnectionEvent.ON_NETWORK_CHANGED, updateNetwork)
     return () => {
-      window.removeEventListener('offline', updateNetwork)
-      window.removeEventListener('online', updateNetwork)
+      window.removeEventListener(
+        ConnectionEvent.ON_NETWORK_CHANGED,
+        updateNetwork
+      )
     }
   })
   return isOnline
