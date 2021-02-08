@@ -32,7 +32,7 @@
     "better-sqlite3": "^7.0.1",
     "d3": "^6.2.0",
     "machinelearn": "^2.1.5",
-    "natural": "^2.1.5"
+    "natural": "^3.0.0"
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"
