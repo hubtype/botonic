@@ -54,9 +54,13 @@ if (isAnalyticsEnabled()) {
   analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
 }
 
-function getBotonicCliVersion(): string {
+function isWindows() {
+  return process.platform === 'win32'
+}
+
+function execCommand(command: string) {
   try {
-    return String(execSync('botonic --version')).trim()
+    return String(execSync(command)).trim()
   } catch (e) {
     return String(e)
   }
@@ -80,7 +84,12 @@ function getSystemInformation() {
     arch: os.arch(),
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     timestamp: new Date().toISOString(),
-    botonic_cli_version: getBotonicCliVersion(),
+    is_tty: process.stdout.isTTY,
+    binary_path: isWindows()
+      ? execCommand('where botonic')
+      : execCommand('which botonic'),
+    node_version: execCommand('node --version'),
+    botonic_cli_version: execCommand('botonic --version'),
     botonic_dependencies: getBotonicDependencies(),
   }
 }
