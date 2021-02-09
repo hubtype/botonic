@@ -41,6 +41,7 @@ Creating...
   private botonicApiService = new BotonicAPIService()
 
   async run(): Promise<void> {
+    track('Created Botonic Bot CLI')
     try {
       const { args } = this.parse(Run)
       const userProjectName = args.name
