@@ -54,5 +54,5 @@ export interface QueueFields extends ContentWithNameFields {
   queue: string;
   schedule?: contentful.Entry<ScheduleFields>;
   searchableBy?: contentful.Entry<SearchableByKeywordsFields>[];
-  indicationText: string;
+  indicationText?: string;
 }
