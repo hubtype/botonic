@@ -88,6 +88,10 @@ function getSystemInformation() {
     binary_path: isWindows()
       ? execCommand('where botonic')
       : execCommand('which botonic'),
+    system_path: isWindows()
+      ? execCommand('echo %PATH%')
+      : execCommand('echo $PATH'),
+    framework_path: isWindows() ? execCommand('cd') : execCommand('pwd'),
     node_version: execCommand('node --version'),
     botonic_cli_version: execCommand('botonic --version'),
     botonic_dependencies: getBotonicDependencies(),
