@@ -21,6 +21,7 @@
   "author": "",
   "files": [
     "src/**",
+    "lib/**",
     "index.d.ts",
     "MIGRATION_GUIDE.md"
   ],
