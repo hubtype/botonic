@@ -41,85 +41,99 @@ Creating...
   private botonicApiService = new BotonicAPIService()
 
   async run(): Promise<void> {
-    const { args } = this.parse(Run)
-    const userProjectName = args.name
-    let selectedProjectName = ''
-    if (!args.projectName) {
-      await this.selectBotName().then(resp => {
-        selectedProjectName = this.examples.filter(
-          p => p.description === resp.botName
-        )[0].name
-        return
-      })
-    } else {
-      const botExists = this.examples.filter(p => p.name === args.projectName)
-      if (botExists.length) {
-        selectedProjectName = args.projectName
+    track('Created Botonic Bot CLI')
+    try {
+      const { args } = this.parse(Run)
+      const userProjectName = args.name
+      let selectedProjectName = ''
+      if (!args.projectName) {
+        await this.selectBotName().then(resp => {
+          selectedProjectName = this.examples.filter(
+            p => p.description === resp.botName
+          )[0].name
+          return
+        })
       } else {
-        const projectNames = this.examples.map(p => p.name)
-        console.log(
-          colors.red(
-            `Example ${args.projectName} does not exist, please choose one of ${projectNames}.`
+        const botExists = this.examples.filter(p => p.name === args.projectName)
+        if (botExists.length) {
+          selectedProjectName = args.projectName
+        } else {
+          const projectNames = this.examples.map(p => p.name)
+          console.log(
+            colors.red(
+              `Example ${args.projectName} does not exist, please choose one of ${projectNames}.`
+            )
           )
-        )
-        return
+          return
+        }
       }
-    }
-    track('Created Botonic Bot CLI', {
-      selected_project_name: selectedProjectName,
-    })
-    if (existsSync(userProjectName)) {
-      rimraf.sync(userProjectName)
-    }
-
-    let spinner = ora({
-      text: 'Downloading files...',
-      spinner: 'bouncingBar',
-    }).start()
-
-    const selectedProject = this.examples.filter(
-      project => project.name === selectedProjectName
-    )[0]
-
-    try {
-      await fetchRepoDir({
-        src: selectedProject.uri,
-        dir: userProjectName,
+      track('Created Botonic Bot CLI', {
+        selected_project_name: selectedProjectName,
       })
+      if (existsSync(userProjectName)) {
+        rimraf.sync(userProjectName)
+      }
+
+      let spinner = ora({
+        text: 'Downloading files...',
+        spinner: 'bouncingBar',
+      }).start()
+
+      const selectedProject = this.examples.filter(
+        project => project.name === selectedProjectName
+      )[0]
+
+      try {
+        await fetchRepoDir({
+          src: selectedProject.uri,
+          dir: userProjectName,
+        })
+      } catch (e) {
+        const error = `Downloading Project: ${selectedProjectName}: ${String(
+          e
+        )}`
+        trackError(error)
+        throw new Error(error)
+      }
+      spinner.succeed()
+      process.chdir(args.name)
+      spinner = ora({
+        text: 'Installing dependencies...',
+        spinner: 'bouncingBar',
+      }).start()
+      const dependencyCommand = `npm install`
+      try {
+        await exec(dependencyCommand)
+      } catch (e) {
+        const error = `Installing dependencies: ${String(e)}`
+        trackError(error)
+        throw new Error(error)
+      }
+      spinner.succeed()
+      this.botonicApiService.beforeExit()
+      moveSync(
+        join('..', '.botonic.json'),
+        join(process.cwd(), '.botonic.json')
+      )
+      const chdirCmd = colors.bold(`cd ${args.name}`)
+      const trainCmd =
+        selectedProjectName === 'nlu'
+          ? colors.bold(`\nbotonic train`)
+          : undefined
+      const serveCmd = colors.bold('botonic serve')
+      const deployCmd = colors.bold('botonic deploy')
+      console.log(
+        `\n✨  Bot ${colors.bold(
+          args.name
+        )} was successfully created!\n\nNext steps:\n${chdirCmd}\n${serveCmd}${
+          trainCmd || ''
+        } (test your bot locally from the browser)\n${deployCmd} (publish your bot to the world!)`
+      )
     } catch (e) {
-      const error = `Downloading Project: ${selectedProjectName}: ${String(e)}`
+      const error = `botonic new error: ${String(e)}`
       trackError(error)
       throw new Error(error)
     }
-    spinner.succeed()
-    process.chdir(args.name)
-    spinner = ora({
-      text: 'Installing dependencies...',
-      spinner: 'bouncingBar',
-    }).start()
-    const dependencyCommand = `npm install`
-    try {
-      await exec(dependencyCommand)
-    } catch (e) {
-      const error = `Installing dependencies: ${String(e)}`
-      trackError(error)
-      throw new Error(error)
-    }
-    spinner.succeed()
-    this.botonicApiService.beforeExit()
-    moveSync(join('..', '.botonic.json'), join(process.cwd(), '.botonic.json'))
-    const chdirCmd = colors.bold(`cd ${args.name}`)
-    const trainCmd =
-      selectedProjectName === 'nlu' ? colors.bold(`\nbotonic train`) : undefined
-    const serveCmd = colors.bold('botonic serve')
-    const deployCmd = colors.bold('botonic deploy')
-    console.log(
-      `\n✨  Bot ${colors.bold(
-        args.name
-      )} was successfully created!\n\nNext steps:\n${chdirCmd}\n${serveCmd}${
-        trainCmd || ''
-      } (test your bot locally from the browser)\n${deployCmd} (publish your bot to the world!)`
-    )
   }
 
   selectBotName(): Promise<{ botName: string }> {
