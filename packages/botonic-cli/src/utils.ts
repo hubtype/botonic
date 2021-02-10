@@ -55,7 +55,7 @@ if (isAnalyticsEnabled()) {
 }
 
 function isWindows() {
-  return process.platform === 'win32'
+  return os.platform() === 'win32'
 }
 
 function execCommand(command: string) {
@@ -85,13 +85,10 @@ function getSystemInformation() {
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     timestamp: new Date().toISOString(),
     is_tty: process.stdout.isTTY,
-    binary_path: isWindows()
-      ? execCommand('where botonic')
-      : execCommand('which botonic'),
+    framework_path: __dirname,
     system_path: isWindows()
       ? execCommand('echo %PATH%')
       : execCommand('echo $PATH'),
-    framework_path: isWindows() ? execCommand('cd') : execCommand('pwd'),
     node_version: execCommand('node --version'),
     botonic_cli_version: execCommand('botonic --version'),
     botonic_dependencies: getBotonicDependencies(),
