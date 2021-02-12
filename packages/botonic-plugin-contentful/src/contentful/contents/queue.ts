@@ -35,7 +35,8 @@ export class QueueDelivery extends TopContentDelivery {
     return new cms.Queue(
       ContentfulEntryUtils.commonFieldsFromEntry(entry),
       fields.queue,
-      schedule && schedule.schedule
+      schedule && schedule.schedule,
+      fields.handoffMessage
     )
   }
 }
@@ -43,4 +44,5 @@ export class QueueDelivery extends TopContentDelivery {
 export interface QueueFields extends CommonEntryFields {
   queue: string
   schedule?: contentful.Entry<ScheduleFields>
+  handoffMessage?: string
 }
