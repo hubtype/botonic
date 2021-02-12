@@ -3,7 +3,14 @@ import {
   ConnectionState,
   startChecker,
 } from 'connection-checker'
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { scrollToBottom } from '../util/dom'
@@ -243,9 +250,10 @@ export function useComponentVisible(initialIsVisible, onClickOutside) {
 export function useNetwork() {
   startChecker()
   const [isOnline, setNetwork] = useState(true)
+  const { CONNECTED, DISCONNECTED } = ConnectionState
   const updateNetwork = ({ detail: { from, to } }) => {
-    if (to === ConnectionState.DISCONNECTED) setNetwork(false)
-    if (to === ConnectionState.CONNECTED) setNetwork(true)
+    if (to === DISCONNECTED) setNetwork(false)
+    if (to === CONNECTED) setNetwork(true)
   }
   useEffect(() => {
     window.addEventListener(ConnectionEvent.ON_NETWORK_CHANGED, updateNetwork)
@@ -256,7 +264,13 @@ export function useNetwork() {
       )
     }
   })
-  return isOnline
+  const updateNetworkWithState = state =>
+    updateNetwork({
+      detail: { to: state },
+    })
+  const connect = useCallback(() => updateNetworkWithState(CONNECTED), [])
+  const disconnect = useCallback(() => updateNetworkWithState(DISCONNECTED), [])
+  return { isOnline, connect, disconnect }
 }
 
 export const useComponentWillMount = func => {

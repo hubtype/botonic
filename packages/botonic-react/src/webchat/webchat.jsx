@@ -194,7 +194,7 @@ export const Webchat = forwardRef((props, ref) => {
   const firstUpdate = useRef(true)
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
-  const isOnline = useNetwork()
+  const { isOnline } = useNetwork()
   const getThemeProperty = _getThemeProperty(theme)
 
   const storage = props.storage === undefined ? localStorage : props.storage
