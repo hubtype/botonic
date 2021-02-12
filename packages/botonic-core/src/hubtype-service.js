@@ -71,7 +71,7 @@ export class HubtypeService {
       this.pusher.connection.bind('error', error => {
         const errorMsg =
           error.error && error.error.data
-            ? error.error.data.code || error.data.message
+            ? error.error.data.code || error.error.data.message
             : 'Connection error'
         cleanAndReject(`Pusher error (${errorMsg})`)
       })

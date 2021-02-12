@@ -1,4 +1,16 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import {
+  ConnectionEvent,
+  ConnectionState,
+  startChecker,
+} from 'connection-checker'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { scrollToBottom } from '../util/dom'
@@ -236,19 +248,29 @@ export function useComponentVisible(initialIsVisible, onClickOutside) {
 }
 
 export function useNetwork() {
-  const [isOnline, setNetwork] = useState(window.navigator.onLine)
-  const updateNetwork = () => {
-    setNetwork(window.navigator.onLine)
+  startChecker()
+  const [isOnline, setNetwork] = useState(true)
+  const { CONNECTED, DISCONNECTED } = ConnectionState
+  const updateNetwork = ({ detail: { from, to } }) => {
+    if (to === DISCONNECTED) setNetwork(false)
+    if (to === CONNECTED) setNetwork(true)
   }
   useEffect(() => {
-    window.addEventListener('offline', updateNetwork)
-    window.addEventListener('online', updateNetwork)
+    window.addEventListener(ConnectionEvent.ON_NETWORK_CHANGED, updateNetwork)
     return () => {
-      window.removeEventListener('offline', updateNetwork)
-      window.removeEventListener('online', updateNetwork)
+      window.removeEventListener(
+        ConnectionEvent.ON_NETWORK_CHANGED,
+        updateNetwork
+      )
     }
   })
-  return isOnline
+  const updateNetworkWithState = state =>
+    updateNetwork({
+      detail: { to: state },
+    })
+  const connect = useCallback(() => updateNetworkWithState(CONNECTED), [])
+  const disconnect = useCallback(() => updateNetworkWithState(DISCONNECTED), [])
+  return { isOnline, connect, disconnect }
 }
 
 export const useComponentWillMount = func => {

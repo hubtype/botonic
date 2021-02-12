@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
@@ -28,6 +28,7 @@
   "dependencies": {
     "@botonic/core": "~0.18.0",
     "axios": "^0.21.0",
+    "connection-checker": "^1.4.0",
     "emoji-picker-react": "^3.2.3",
     "framer-motion": "^3.1.1",
     "lodash.merge": "^4.6.2",

@@ -4,7 +4,7 @@ import TestRenderer from 'react-test-renderer'
 
 import { RequestContext } from '../../src'
 import { MultichannelContext } from '../../src/components/multichannel/multichannel-context'
-import { useWebchat } from '../../src/webchat/hooks'
+import { useNetwork, useWebchat } from '../../src/webchat/hooks'
 
 /**
  *
@@ -40,7 +40,8 @@ export const whatsappRenderer = (sut, multichannelContext = {}) =>
     )
   )
 
-export const renderUseWebchatHook = () => renderHook(() => useWebchat())
+export const renderCustomHook = hook => renderHook(() => hook())
+export const renderUseWebchatHook = () => renderCustomHook(useWebchat)
 
 export const toMB = size => size * 1024 * 1024
 export const createFile = ({ fakeData, fileName, mimeType, size }) => {
