@@ -23,7 +23,8 @@ test('TEST: contentful Queue', async () => {
         searchableBy,
       }),
       'queueName',
-      testSchedule()
+      testSchedule(),
+      'handoffMessage'
     )
   )
 })

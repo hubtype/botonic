@@ -384,7 +384,8 @@ export class Queue extends TopContent {
   constructor(
     readonly common: CommonFields,
     readonly queue: string,
-    readonly schedule?: time.Schedule
+    readonly schedule?: time.Schedule,
+    readonly handoffMessage?: string
   ) {
     super(common, ContentType.QUEUE)
   }
