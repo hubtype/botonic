@@ -66,6 +66,10 @@ function execCommand(command: string) {
   }
 }
 
+function getBotonicCLIVersion(): string {
+  return (readJSON(path.join(__dirname, '..', 'package.json')) as any).version
+}
+
 function getBotonicDependencies(): any[] | string {
   try {
     const packageJSON = readJSON('package.json')
@@ -90,7 +94,7 @@ function getSystemInformation() {
       ? execCommand('echo %PATH%')
       : execCommand('echo $PATH'),
     node_version: execCommand('node --version'),
-    botonic_cli_version: execCommand('botonic --version'),
+    botonic_cli_version: getBotonicCLIVersion(),
     botonic_dependencies: getBotonicDependencies(),
   }
 }
@@ -105,8 +109,8 @@ export function track(event: string, properties = {}): void {
     credentials.analytics
   ) {
     properties = {
-      ...properties,
       ...getSystemInformation(),
+      ...properties,
     }
     analytics.track({
       event: event,
