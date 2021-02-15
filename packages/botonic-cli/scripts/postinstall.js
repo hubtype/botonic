@@ -23,7 +23,9 @@ try {
   //they run their first command.
   if (process.env.BOTONIC_DISABLE_ANALYTICS !== '1') {
     const Analytics = require('analytics-node')
-    var analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
+    var analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu', {
+      flushAt: 1,
+    })
     analytics.track({
       event: 'Installed Botonic CLI',
       anonymousId: Math.round(Math.random() * 100000000),

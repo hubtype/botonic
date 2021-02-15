@@ -51,7 +51,7 @@ function isAnalyticsEnabled(): boolean {
 }
 
 if (isAnalyticsEnabled()) {
-  analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu')
+  analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu', { flushAt: 1 })
 }
 
 function isWindows() {
