@@ -1,14 +1,27 @@
 import { INPUT, isBrowser } from '@botonic/core'
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import { ROLES } from '../constants'
+import { ROLES, WEBCHAT } from '../constants'
+import { WebchatContext } from '../contexts'
 import { Message } from './message'
 
-const StyledEmbed = styled.embed`
-  border-radius: 8px;
-  height: 300px;
-  margin: 10px;
+const StyledButton = styled.a`
+  display: block;
+  height: 25px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  font-weight: bold;
+  line-height: 25px;
+  text-decoration: none;
+  border: 1px solid black;
+  opacity: 0.9;
+  &:hover {
+    opacity: 1;
+  }
 `
 
 const serialize = documentProps => {
@@ -17,7 +30,30 @@ const serialize = documentProps => {
 
 export const Document = props => {
   let content = props.children
-  if (isBrowser()) content = <StyledEmbed src={props.src} />
+
+  const { getThemeProperty } = useContext(WebchatContext)
+  let documentDownload = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.documentDownload,
+    {}
+  )
+  if (typeof documentDownload === 'function')
+    documentDownload = documentDownload(props.from)
+
+  if (isBrowser()) {
+    content = (
+      <StyledButton
+        href={props.src}
+        target='_blank'
+        rel='noreferrer'
+        style={{
+          ...documentDownload.style,
+        }}
+      >
+        {documentDownload.text || 'Download'}
+      </StyledButton>
+    )
+  }
+
   return (
     <Message
       role={ROLES.DOCUMENT_MESSAGE}
