@@ -126,6 +126,7 @@ export const WEBCHAT = {
     triggerButtonStyle: 'triggerButton.style',
     // User Input
     blockInputs: 'userInput.blockInputs',
+    documentDownload: 'documentDownload',
     customMenuButton: 'userInput.menuButton.custom',
     customPersistentMenu: 'userInput.menu.custom',
     customSendButton: 'userInput.sendButton.custom',
