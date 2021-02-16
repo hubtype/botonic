@@ -297,7 +297,7 @@ export class CoreBot {
 
   constructor(options: BotOptions)
   getString(stringID: string, session: Session): string
-  input(request: BotRequest): BotResponse
+  input(request: BotRequest): Promise<BotResponse>
   setLocale(locale: string, session: Session): void
 }
 
