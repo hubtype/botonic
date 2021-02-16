@@ -39,7 +39,7 @@ export class ReactBot extends core.CoreBot {
 export class NodeApp {
   constructor(options: BotOptions)
   bot: ReactBot
-  input(request: core.BotRequest): BotResponse
+  input(request: core.BotRequest): Promise<BotResponse>
   renderNode(args): string
 }
 
