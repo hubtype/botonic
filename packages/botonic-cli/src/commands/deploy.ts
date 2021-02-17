@@ -12,7 +12,6 @@ import { zip } from 'zip-a-folder'
 import { BotonicAPIService } from '../botonic-api-service'
 import { sleep, track } from '../utils'
 
-let force = false
 let npmCommand: string | undefined
 const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 
@@ -28,10 +27,6 @@ Uploading...
 `,
   ]
   static flags = {
-    force: flags.boolean({
-      char: 'f',
-      description: 'Force deploy despite of no changes. Disabled by default',
-    }),
     command: flags.string({
       char: 'c',
       description: 'Command to execute from the package "scripts" object',
@@ -58,7 +53,6 @@ Uploading...
   async run() {
     const { flags } = this.parse(Run)
     track('Deployed Botonic CLI')
-    force = flags.force || false
     npmCommand = flags.command
     this.botName = flags.botName
     const email = flags.email
@@ -311,8 +305,7 @@ Uploading...
     }).start()
     try {
       const deploy = await this.botonicApiService.deployBot(
-        join(process.cwd(), BOTONIC_BUNDLE_FILE),
-        force
+        join(process.cwd(), BOTONIC_BUNDLE_FILE)
       )
       if (
         (deploy.response && deploy.response.status == 403) ||
@@ -368,11 +361,8 @@ Uploading...
 
   async deploy() {
     try {
-      const build_out = await this.botonicApiService.buildIfChanged(
-        force,
-        npmCommand
-      )
-      if (!build_out) {
+      const buildOut = await this.botonicApiService.build()
+      if (!buildOut) {
         track('Deploy Botonic Build Error')
         console.log(colors.red('There was a problem building the bot'))
         return
