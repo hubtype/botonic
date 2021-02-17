@@ -24,6 +24,7 @@ export const webchat = {
   enableUserInput: {true|false},
   enableAttachments: {true|false},
   enableAnimations: {true|false},
+  autodisable: {true|false},
   visibility: {true|false|'dynamic'|() => Boolean()},
   coverComponent: React.Component,
 
@@ -42,10 +43,11 @@ This Webchat example allows definitions that enable you to configure the example
 | `theme`             | Define your **[webchat styles](#webchat-styles)**                                                                                                                                                                                                                                         |  |
 | `persistentMenu`    | A persistent menu can be accessed from a small button in the input text box. It allows the user to access popular functionalities anywhere in the conversation                                                                                                                            |
 | `blockInputs`       | Enables you to define which user input is forbidden. It is useful to prevent the user from entering a credit card number.                                                                                                                                                                 |
-| `enableEmojiPicker` | Enables the emoji picker. It can also be defined in `theme.userInput.enableEmojiPicker`. The false value is set by default.                                                                                                                                                               |
-| `enableAttachments` | Authorizes user media attachments or not (true                                                                                                                                                                                                                                            | false). It can also be defined in `theme.userInput.attachments.enable`. The `false` value is set by default. |
-| `enableUserInput`   | Enables the user typing zone (true or false). It can also be defined in `theme.userInput.enable`. `true` by default.                                                                                                                                                                      |
-| `enableAnimations`  | Enables webchat animations (true or false). true by default. It can also be defined in `theme.animations.enable`.                                                                                                                                                                         |
+| `enableEmojiPicker` | Enables the emoji picker. It can also be defined in `theme.userInput.enableEmojiPicker`. Default value: `false`.                                                                                                                                                               |
+| `enableAttachments` | Authorizes user media attachments or not (`true` or `false`). It can also be defined in `theme.userInput.attachments.enable`. Default value: `false`. |
+| `enableUserInput`   | Enables the user typing zone (true or false). It can also be defined in `theme.userInput.enable`. Default value:`true`.                                                                                                                                                                      |
+| `enableAnimations`  | Enables webchat animations (true or false). Default value:`true`. It can also be defined in `theme.animations.enable`.                                                                                                                                                                         |
+| `autodisable`    | Disables a button once the user has clicked on it. Default value:`true`. The style of a disabled button once clicked can be customized with `disabledstyle`. |
 | `visibility`        | To make webchat visible or not. If you want to use the settings defined in Hubtype Desk, you must set this value to 'dynamic'. You can pass a boolean `true` to make it visible or false to make it invisible, or you can define a function returning a boolean resolving the visibility. |
 | `coverComponent`    | A `React.Component` shown the first time a user interacts with the Webchat.                                                                                                                                                                                                               |
 | `onInit`            | This event is triggered once the webchat is loaded in the webpage.                                                                                                                                                                                                                        |
@@ -92,7 +94,6 @@ Here is a list of available styles. You need to modify them inside **src/webchat
 | `blockInputs`           | The inputs not allowed by the bot. It can also be defined in `userInput.blockInputs`.                                                                                                         |
 | `persistentMenu`        | An array containing the options of your persistent menu. It can also be defined in `userInput.persistentMenu`.                                                                                |
 | `enableAttachments`     | Whether to allow user media attachments or not (`true | false`). It can also be defined in `userInput.attachments.enable`. `false` by default. |
- `disabledstyle`     | Style of a disabled button once clicked. To be defined only if the `autodisable` property is set to `true`. |
 | `scrollbar`             | Refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.                                                                      |
 
 **Note**: By specifying the `fontFamily` attribute in `style` property, you can overwrite your webchat entire typography.
