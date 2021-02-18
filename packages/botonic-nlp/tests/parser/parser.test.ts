@@ -19,7 +19,7 @@ describe('Parsing Botonic NLP input file', () => {
               text: 't-shirt',
             },
           ],
-          text: 'Is this t-shirt available in Pull&Bear?',
+          text: 'Is this t-shirt available in Mango?',
         },
         {
           entities: [
@@ -41,7 +41,7 @@ describe('Parsing Botonic NLP input file', () => {
               text: 't-shirt',
             },
           ],
-          text: 'Is this t-shirt available in Mango?',
+          text: 'Is this t-shirt available in Pull&Bear?',
         },
       ],
     })

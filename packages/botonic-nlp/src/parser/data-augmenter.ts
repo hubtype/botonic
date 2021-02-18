@@ -1,12 +1,12 @@
-import { Augmenter } from './types'
+import { AugmenterMap } from './types'
 
 export class DataAugmenter {
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  static KEYWORD_PATTERN = /\[([^\[\]\(\)]*?)\][^\(]/
+  private static readonly KEYWORD_PATTERN = /\[([^\[\]\(\)]*?)\][^\(]/
 
   static augment(
     samples: string[],
-    augmenter: Augmenter,
+    augmenter: AugmenterMap,
     entities: string[]
   ): string[] {
     let augmentedSamples: string[] = []
@@ -23,7 +23,7 @@ export class DataAugmenter {
 
   private static generateVariations(
     sample: string,
-    augmenter: Augmenter,
+    augmenter: AugmenterMap,
     entities: string[]
   ): string[] {
     const inprocessSamples = [sample]

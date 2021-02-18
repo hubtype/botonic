@@ -4,14 +4,10 @@ entities:
   - product
 
 data-augmentation:
-  product:
-    - jacket
-    - coat
-
   store:
-    - Mango
-    - Stradivarius
     - Pull&Bear
+    - Stradivarius
+    - Mango
 
 samples:
   - Is this [t-shirt](product) available in [store]?
