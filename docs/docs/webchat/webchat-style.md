@@ -94,6 +94,7 @@ Here is a list of available styles. You need to modify them inside **src/webchat
 | `blockInputs`           | The inputs not allowed by the bot. It can also be defined in `userInput.blockInputs`.                                                                                                         |
 | `persistentMenu`        | An array containing the options of your persistent menu. It can also be defined in `userInput.persistentMenu`.                                                                                |
 | `enableAttachments`     | Whether to allow user media attachments or not (`true | false`). It can also be defined in `userInput.attachments.enable`. `false` by default. |
+| `documentDownload`      | Styles of the button displayed to download a document sent via the webchat.   |
 | `scrollbar`             | Refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.                                                                      |
 
 **Note**: By specifying the `fontFamily` attribute in `style` property, you can overwrite your webchat entire typography.
