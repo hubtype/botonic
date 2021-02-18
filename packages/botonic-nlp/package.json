@@ -21,18 +21,14 @@
     "@babel/preset-typescript": "^7.9.0",
     "@types/axios": "^0.14.0",
     "@types/better-sqlite3": "^5.4.0",
-    "@types/d3": "^6.0.0",
-    "@types/natural": "^2.1.0",
-    "@types/webgl2": "^0.0.5",
-    "nodemon": "^2.0.3"
+    "@types/webgl2": "^0.0.5"
   },
   "dependencies": {
     "@tensorflow/tfjs-node": "^2.7.0",
     "axios": "^0.21.0",
     "better-sqlite3": "^7.0.1",
-    "machinelearn": "^2.1.5",
-    "natural": "^2.1.5",
-    "js-yaml": "4.0.0"
+    "js-yaml": "4.0.0",
+    "natural": "^3.0.3"
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"

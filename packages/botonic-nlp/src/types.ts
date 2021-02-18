@@ -3,7 +3,6 @@ export type Locale =
   | 'es'
   | 'ca'
   | 'de'
-  | 'es'
   | 'fr'
   | 'hi'
   | 'id'
