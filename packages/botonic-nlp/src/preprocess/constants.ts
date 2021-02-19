@@ -1,1 +1,1 @@
-export const UNKOWN_TOKEN = '<UNK>'
+export const UNKNOWN_TOKEN = '<UNK>'

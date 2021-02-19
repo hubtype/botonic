@@ -15,4 +15,6 @@ export interface Tokenizer {
   tokenize(text: string): string[]
 }
 
+export type Stopwords = string[]
+
 export type SequencePosition = 'pre' | 'post'
