@@ -24,7 +24,6 @@ export const webchat = {
   enableUserInput: {true|false},
   enableAttachments: {true|false},
   enableAnimations: {true|false},
-  autodisable: {true|false},
   visibility: {true|false|'dynamic'|() => Boolean()},
   coverComponent: React.Component,
 
