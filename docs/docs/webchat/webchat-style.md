@@ -47,7 +47,6 @@ This Webchat example allows definitions that enable you to configure the example
 | `enableAttachments` | Authorizes user media attachments or not (`true` or `false`). It can also be defined in `theme.userInput.attachments.enable`. Default value: `false`. |
 | `enableUserInput`   | Enables the user typing zone (true or false). It can also be defined in `theme.userInput.enable`. Default value:`true`.                                                                                                                                                                      |
 | `enableAnimations`  | Enables webchat animations (true or false). Default value:`true`. It can also be defined in `theme.animations.enable`.                                                                                                                                                                         |
-| `autodisable`    | Disables a button once the user has clicked on it. Default value:`true`. The style of a disabled button once clicked can be customized with `disabledstyle`. |
 | `visibility`        | To make webchat visible or not. If you want to use the settings defined in Hubtype Desk, you must set this value to 'dynamic'. You can pass a boolean `true` to make it visible or false to make it invisible, or you can define a function returning a boolean resolving the visibility. |
 | `coverComponent`    | A `React.Component` shown the first time a user interacts with the Webchat.                                                                                                                                                                                                               |
 | `onInit`            | This event is triggered once the webchat is loaded in the webpage.                                                                                                                                                                                                                        |
@@ -78,6 +77,8 @@ Here is a list of available styles. You need to modify them inside **src/webchat
 | `buttonStyle`           | Button styles. It can also be defined in `button.style`.                                                                                                                                      |
 | `buttonHoverBackground` | Background color when hovering over a button. It can also be defined in `button.hoverBackground`.                                                                                             |
 | `buttonHoverTextColor`  | Text color when hovering over a button. It can also be defined in `button.hoverTextColor`.                                                                                                    |
+| `buttonAutoDisable`    | Disables a button once the user has clicked on it. Default value:`true`. It can also be defined in `button.autodisable`. |
+| `buttonDisabledStyle`   | Styles of a disabled button once clicked. It can also be defined in `button.disabledstyle`.|
 | `replyStyle`            | Styles for replies. It can also be defined in `reply.style`.                                                                                                                                  |
 | `alignReplies`          | Aligns replies at `left`, `center` or `right`. It can also be defined in `replies.align`.                                                                                                     |
 | `wrapReplies`           | Whether replies be displayed on a single row `nowrap` (horizontal scrolling is displayed when required) or it is wrapped in different lines `wrap`. It can also be defined in `replies.wrap`. |
@@ -93,8 +94,8 @@ Here is a list of available styles. You need to modify them inside **src/webchat
 | `emojiPicker`           | Set it to `true` to enable the emoji picker. It can also be defined in `userInput.emojiPicker`. `false` by default.                                                                           |
 | `blockInputs`           | The inputs not allowed by the bot. It can also be defined in `userInput.blockInputs`.                                                                                                         |
 | `persistentMenu`        | An array containing the options of your persistent menu. It can also be defined in `userInput.persistentMenu`.                                                                                |
-| `enableAttachments`     | Whether to allow user media attachments or not (`true | false`). It can also be defined in `userInput.attachments.enable`. `false` by default. |
-| `documentDownload`      | Styles of the button displayed to download a document sent via the webchat.   |
+| `enableAttachments`     | Whether to allow user media attachments or not (`true` or `false`). It can also be defined in `userInput.attachments.enable`. `false` by default. |
+| `documentDownload`      | Styles of the button displayed to download a document sent via webchat.   |
 | `scrollbar`             | Refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.                                                                      |
 
 **Note**: By specifying the `fontFamily` attribute in `style` property, you can overwrite your webchat entire typography.

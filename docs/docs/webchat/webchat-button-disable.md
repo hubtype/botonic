@@ -9,7 +9,7 @@ Remember that:
 - To add this property by default, you must set `autodisable: true` in the webchat `index.js`.
 - The button style can be customized thanks to the `disabledstyle` property.
 - These properties can be applied to buttons that are embedded in a carousel. 
-- If you define the property as a component, the property defined in `index.js` is overwritten. 
+- If you define the property in a specific component, the property defined in `index.js` is overwritten. 
 
 **index.js**
 
