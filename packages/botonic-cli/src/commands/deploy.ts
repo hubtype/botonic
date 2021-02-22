@@ -355,7 +355,7 @@ Uploading...
     }
   }
 
-  async deploy() {
+  async deploy(): Promise<void> {
     try {
       const buildOut = await this.botonicApiService.build()
       if (!buildOut) {
