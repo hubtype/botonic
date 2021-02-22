@@ -324,34 +324,30 @@ Uploading...
           if (deploy_status.data.status == 'deploy_status_completed_ok') {
             spinner.succeed()
             console.log(colors.green('\n🚀  Bot deployed!\n'))
-            break
-          } else {
-            spinner.fail()
-            console.log(colors.red('There was a problem in the deploy:'))
-            console.log(deploy_status.data.error)
-            track('Deploy Botonic Error', { error: deploy_status.data.error })
-            return
-          }
+            return { hasDeployErrors: false }
+          } else throw deploy_status.data.error
         }
       }
     } catch (err) {
       spinner.fail()
       console.log(colors.red('There was a problem in the deploy:'))
-      console.log(err)
+      console.log(colors.red(err))
       track('Deploy Botonic Error', { error: err })
-      return
+      return { hasDeployErrors: true }
     }
   }
 
-  async displayDeployResults() {
+  async displayDeployResults({ hasDeployErrors }) {
     try {
       const providers_resp = await this.botonicApiService.getProviders()
       const providers = providers_resp.data.results
-      if (!providers.length) {
-        const links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
-        console.log(links)
-      } else {
-        this.displayProviders(providers)
+      if (!hasDeployErrors) {
+        if (!providers.length) {
+          const links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
+          console.log(links)
+        } else {
+          this.displayProviders(providers)
+        }
       }
     } catch (e) {
       track('Deploy Botonic Provider Error', { error: e })
@@ -368,8 +364,8 @@ Uploading...
         return
       }
       await this.createBundle()
-      await this.deployBundle()
-      await this.displayDeployResults()
+      const { hasDeployErrors } = await this.deployBundle()
+      await this.displayDeployResults({ hasDeployErrors })
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)
     } finally {
