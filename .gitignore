@@ -20,3 +20,6 @@ coverage/
 .docusaurus
 .idea
 junit.xml
+packages/botonic-cli/tests/dummy-project/package-lock.json
+.botonic.json
+.vscode
