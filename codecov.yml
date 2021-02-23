@@ -29,6 +29,11 @@ flags:
     paths:
       - packages/botonic-plugin-dynamodb
     carryforward: true
+
+  botonic-plugin-nlu:
+    paths:
+      - packages/botonic-plugin-nlu
+    carryforward: true
   
   botonic-react:
     paths:

@@ -29,7 +29,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - name: Install dev dependencies 
-      run: (cd ./packages/botonic-nlu && npm install -D)
+      run: (cd ./packages/$PACKAGE && npm install -D)
     - name: Build botonic-nlu 
       run: (cd ./packages/$PACKAGE && npm run build)
       
@@ -42,13 +42,6 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         files: ./packages/${{env.PACKAGE}}/junit.xml
-
-    # - name: Jest Github Action Reporter
-    #   uses: IgnusG/jest-report-action@v2.3.3
-    #   if: always() 
-    #   with:
-    #     access-token: ${{ secrets.GITHUB_TOKEN }}
-    #     working-directory: ./packages/${{env.PACKAGE}}
     
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
