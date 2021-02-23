@@ -1,19 +1,9 @@
-import {
-  Normalizer,
-  SequencePosition,
-  Stemmer,
-  Stopwords,
-  Tokenizer,
-} from './types'
+import { PreprocessEngines, SequencePosition } from './types'
+
 export class Preprocessor {
   constructor(
     public readonly maxLength: number,
-    private readonly engines: {
-      normalizer?: Normalizer
-      tokenizer?: Tokenizer
-      stopwords?: Stopwords
-      stemmer?: Stemmer
-    }
+    private readonly engines: PreprocessEngines
   ) {}
 
   protected normalize(text: string): string {
