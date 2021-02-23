@@ -15,24 +15,43 @@ jobs:
     env:
       PACKAGE: botonic-plugin-nlu
     steps:
-    - name: Checking out to current branch (Step 1 of 7)
+    - name: Checking out to current branch 
       uses: actions/checkout@v2
-    - name: Setting up node (Step 2 of 7)
+    - name: Setting up node
       uses: actions/setup-node@v2-beta
       with:
         node-version: '12'
-    - name: Setting up cache (Step 3 of 7)
+    - name: Setting up cache
       uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Install botonic-plugin-nlu (Step 4 of 7)
-      run: (cd ./packages/botonic-plugin-nlu && npm install -D)
-    - name: Build botonic-plugin-nlu (Step 5 of 7)
+    - name: Install dev dependencies 
+      run: (cd ./packages/$PACKAGE && npm install -D)
+    - name: Build botonic-plugin-nlu
       run: (cd ./packages/$PACKAGE && npm run build)
-    - name: Install common packages dependencies (Step 6 of 7)
-      run: npm install -D
-    - name: Verify lint botonic-plugin-nlu (Step 6 of 7)
+      
+    - name: Run tests 
+      run: (cd ./packages/$PACKAGE && npm run test_ci)
+    
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1.6
+      if: always()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        files: ./packages/${{env.PACKAGE}}/junit.xml
+    
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      if: always()
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: ${{env.PACKAGE}}
+        file: ./packages/${{env.PACKAGE}}/coverage/lcov.info
+        name: ${{env.PACKAGE}}
+        env_vars: ${{env.PACKAGE}}
+
+    - name: Verify lint botonic-nlu 
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
