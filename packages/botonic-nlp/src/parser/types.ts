@@ -5,9 +5,9 @@ export type FoundEntity = {
   start: number
   end: number
 }
-export type Sample = { text: string; entities: FoundEntity[] }
+export type Sample = { text: string; entities: FoundEntity[]; class: string }
 export type ParsedData = {
-  class: string
+  classes: string[]
   entities: string[]
   samples: Sample[]
 }
