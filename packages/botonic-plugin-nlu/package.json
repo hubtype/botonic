@@ -8,14 +8,13 @@
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "build": "rm -rf dist && ../../node_modules/.bin/tsc",
     "test": "jest",
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
+  
   "dependencies": {
     "@babel/runtime": "^7.5.5",
     "@botonic/core": "~0.18.0",

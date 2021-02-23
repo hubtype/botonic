@@ -19,3 +19,4 @@ coverage.data
 coverage/
 .docusaurus
 .idea
+junit.xml
