@@ -298,7 +298,7 @@ Uploading...
     }
   }
 
-  async deployBundle() {
+  async deployBundle(): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
       spinner: 'bouncingBar',
@@ -330,28 +330,30 @@ Uploading...
       }
     } catch (err) {
       spinner.fail()
+      const error = String(err)
       console.log(colors.red('There was a problem in the deploy:'))
-      console.log(colors.red(err))
-      track('Deploy Botonic Error', { error: err })
+      console.log(colors.red(error))
+      track('Deploy Botonic Error', { error })
       return { hasDeployErrors: true }
     }
   }
 
-  async displayDeployResults({ hasDeployErrors }) {
+  async displayDeployResults({ hasDeployErrors }): Promise<boolean> {
     try {
-      const providers_resp = await this.botonicApiService.getProviders()
-      const providers = providers_resp.data.results
-      if (!hasDeployErrors) {
-        if (!providers.length) {
-          const links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
-          console.log(links)
-        } else {
-          this.displayProviders(providers)
-        }
+      const providersRes = await this.botonicApiService.getProviders()
+      const providers = providersRes.data.results
+      if (hasDeployErrors) return false
+      if (!providers.length) {
+        const links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
+        console.log(links)
+      } else {
+        this.displayProviders(providers)
       }
+      return true
     } catch (e) {
-      track('Deploy Botonic Provider Error', { error: e })
+      track('Deploy Botonic Provider Error', { error: String(e) })
       console.log(colors.red(`There was an error getting the providers: ${e}`))
+      return false
     }
   }
 
