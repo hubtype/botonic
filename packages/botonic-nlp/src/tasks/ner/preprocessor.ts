@@ -4,7 +4,7 @@ import { Preprocessor } from '../../preprocess/preprocessor'
 import { SequencePosition } from '../../preprocess/types'
 import { NEUTRAL_ENTITY } from './constants'
 
-export class EntityRecognitionPreprocessor extends Preprocessor {
+export class NerPreprocessor extends Preprocessor {
   preprocess(
     samples: Sample[],
     sequencePosition: SequencePosition = 'pre'

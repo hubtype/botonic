@@ -20,12 +20,12 @@ import { BotonicTaskTemplate } from '../botonic-task-template'
 import { ModelEvaluation } from '../types'
 import { NEUTRAL_ENTITY } from './constants'
 import { createBiLstmModel } from './models/bilstm-model'
-import { EntityRecognitionPreprocessor } from './preprocessor'
+import { NerPreprocessor } from './preprocessor'
 import { Entity, ModelTemplate } from './types'
 
 export class BotonicNer extends BotonicTaskTemplate {
   entities: string[]
-  private preprocessor: EntityRecognitionPreprocessor
+  private preprocessor: NerPreprocessor
   private tokensCodifier: Codifier
   private entitiesCodifier: Codifier
   private model: LayersModel
@@ -40,7 +40,7 @@ export class BotonicNer extends BotonicTaskTemplate {
 
     const { train, test } = trainTestSplit(data.samples, testSize, shuffle)
 
-    this.preprocessor = new EntityRecognitionPreprocessor(
+    this.preprocessor = new NerPreprocessor(
       this.maxLength,
       this.preprocessEngines
     )
