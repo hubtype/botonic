@@ -1,7 +1,7 @@
 import { UNKNOWN_TOKEN } from './constants'
 
 export class Codifier {
-  constructor(
+  private constructor(
     readonly vocabulary: string[],
     readonly categorical: boolean,
     readonly allowUnknown: boolean
