@@ -4,7 +4,7 @@ export interface BotonicProject {
   uri: string
 }
 
-const GITHUB_EXAMPLES_PATH = 'hubtype/botonic-examples/'
+const GITHUB_EXAMPLES_PATH = 'hubtype/botonic-examples'
 
 export const EXAMPLES: BotonicProject[] = [
   {

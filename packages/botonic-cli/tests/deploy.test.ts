@@ -1,12 +1,11 @@
 import { Config } from '@oclif/config'
 import { readdirSync } from 'fs'
+import { removeSync } from 'fs-extra'
 import { join } from 'path'
 import { chdir, cwd } from 'process'
-import rimraf from 'rimraf'
-import { removeSync } from 'fs-extra'
 
-import { default as DeployCommand } from '../src/commands/deploy'
 import { BotonicAPIService } from '../src/botonic-api-service'
+import { default as DeployCommand } from '../src/commands/deploy'
 
 const workingDirectory = cwd()
 const pathToBotonicProject = join(workingDirectory, 'tests', 'dummy-project')

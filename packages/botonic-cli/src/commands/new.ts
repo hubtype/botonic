@@ -1,6 +1,6 @@
 import { Command } from '@oclif/command'
 import { exec as childProcessExec } from 'child_process'
-import colors from 'colors'
+import { bold, red } from 'colors'
 import fetchRepoDir from 'fetch-repo-dir'
 import { existsSync } from 'fs'
 import { moveSync } from 'fs-extra'
@@ -11,11 +11,16 @@ import rimraf from 'rimraf'
 import { promisify } from 'util'
 
 import { BotonicAPIService } from '../botonic-api-service'
-import { EXAMPLES } from '../botonic-examples'
+import { BotonicProject, EXAMPLES } from '../botonic-examples'
 import { track, trackError } from '../utils'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = promisify(childProcessExec)
+
+interface NewCommandArgs {
+  name: string
+  projectName?: string
+}
 
 export default class Run extends Command {
   static description = 'Create a new Botonic project'
@@ -43,92 +48,36 @@ Creating...
   async run(): Promise<void> {
     track('Created Botonic Bot CLI')
     try {
-      const { args } = this.parse(Run)
-      const userProjectName = args.name
-      let selectedProjectName = ''
-      if (!args.projectName) {
-        await this.selectBotName().then(resp => {
-          selectedProjectName = this.examples.filter(
-            p => p.description === resp.botName
-          )[0].name
-          return
-        })
-      } else {
-        const botExists = this.examples.filter(p => p.name === args.projectName)
-        if (botExists.length) {
-          selectedProjectName = args.projectName
-        } else {
-          const projectNames = this.examples.map(p => p.name)
-          console.log(
-            colors.red(
-              `Example ${args.projectName} does not exist, please choose one of ${projectNames}.`
-            )
+      const args = this.parse(Run).args as NewCommandArgs
+      const selectedProjectName = args.projectName
+      const userProjectDirName = args.name
+
+      const selectedProject = await this.resolveSelectedProject(
+        selectedProjectName
+      )
+      if (!selectedProject) {
+        console.log(
+          red(
+            `Example ${selectedProjectName} does not exist, please choose one of the following:\n` +
+              `${this.examples.map(p => p.name).join(', ')}`
           )
-          return
-        }
+        )
+        return
       }
       track('Created Botonic Bot CLI', {
         selected_project_name: selectedProjectName,
       })
-      if (existsSync(userProjectName)) {
-        rimraf.sync(userProjectName)
-      }
-
-      let spinner = ora({
-        text: 'Downloading files...',
-        spinner: 'bouncingBar',
-      }).start()
-
-      const selectedProject = this.examples.filter(
-        project => project.name === selectedProjectName
-      )[0]
-
-      try {
-        await fetchRepoDir({
-          src: selectedProject.uri,
-          dir: userProjectName,
-        })
-      } catch (e) {
-        const error = `Downloading Project: ${selectedProjectName}: ${String(
-          e
-        )}`
-        trackError(error)
-        throw new Error(error)
-      }
-      spinner.succeed()
-      process.chdir(args.name)
-      spinner = ora({
-        text: 'Installing dependencies...',
-        spinner: 'bouncingBar',
-      }).start()
-      const dependencyCommand = `npm install`
-      try {
-        await exec(dependencyCommand)
-      } catch (e) {
-        const error = `Installing dependencies: ${String(e)}`
-        trackError(error)
-        throw new Error(error)
-      }
-      spinner.succeed()
+      await this.downloadSelectedProjectIntoPath(
+        selectedProject,
+        userProjectDirName
+      )
+      await this.installProjectDependencies(userProjectDirName)
       this.botonicApiService.beforeExit()
       moveSync(
         join('..', '.botonic.json'),
         join(process.cwd(), '.botonic.json')
       )
-      const chdirCmd = colors.bold(`cd ${args.name}`)
-      const trainCmd =
-        selectedProjectName === 'nlu'
-          ? colors.bold(`\nbotonic train`)
-          : undefined
-      const serveCmd = colors.bold('botonic serve')
-      const deployCmd = colors.bold('botonic deploy')
-      console.log(
-        `\n✨  Bot ${colors.bold(
-          args.name
-        )} was successfully created!\n\nNext steps:\n${chdirCmd}\n${serveCmd}${
-          trainCmd || ''
-        } (test your bot locally from the browser)\n${deployCmd} (publish your bot to the world!)`
-      )
+      this.showFeedback(selectedProject, userProjectDirName)
     } catch (e) {
       const error = `botonic new error: ${String(e)}`
       trackError(error)
@@ -145,5 +94,74 @@ Creating...
         choices: this.examples.map(p => p.description),
       },
     ])
+  }
+
+  async resolveSelectedProject(
+    projectName: string | undefined
+  ): Promise<BotonicProject | undefined> {
+    if (!projectName)
+      return await this.selectBotName().then(userInput =>
+        this.examples.find(p => p.description === userInput.botName)
+      )
+    return this.examples.find(p => p.name === projectName)
+  }
+
+  async downloadSelectedProjectIntoPath(
+    selectedProject: BotonicProject,
+    path: string
+  ): Promise<void> {
+    if (existsSync(path)) rimraf.sync(path)
+    const spinner = ora({
+      text: 'Downloading files...',
+      spinner: 'bouncingBar',
+    }).start()
+    try {
+      await fetchRepoDir({
+        src: selectedProject.uri,
+        dir: path,
+      })
+      spinner.succeed()
+    } catch (e) {
+      spinner.fail()
+      const error = `Downloading Project: ${selectedProject.name}: ${String(e)}`
+      trackError(error)
+      throw new Error(error)
+    }
+  }
+
+  async installProjectDependencies(path: string): Promise<void> {
+    process.chdir(path)
+    const spinner = ora({
+      text: 'Installing dependencies...',
+      spinner: 'bouncingBar',
+    }).start()
+    try {
+      await exec('npm install')
+      spinner.succeed()
+    } catch (e) {
+      spinner.fail()
+      const error = `Installing dependencies: ${String(e)}`
+      trackError(error)
+      throw new Error(error)
+    }
+  }
+
+  showFeedback(selectedProject: BotonicProject, path: string): void {
+    const chdirCmd = bold(`cd ${path}`)
+    const trainCmd =
+      selectedProject.name === 'nlu' ? bold(`botonic train`) : undefined
+    const serveCmd = `${bold(
+      'botonic serve'
+    )} (test your bot locally from the browser)`
+    const deployCmd = `${bold(
+      'botonic deploy'
+    )} (publish your bot to the world!)`
+    const successText = `\n✨  Bot ${bold(path)} was successfully created!\n`
+    console.log(successText)
+    console.log('Next steps:')
+    console.log(chdirCmd)
+    console.log(serveCmd)
+    trainCmd && console.log(trainCmd)
+    console.log(deployCmd)
   }
 }

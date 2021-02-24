@@ -8,5 +8,5 @@
     "noImplicitReturns": true
   },
   "include": [".*.js", "*.js", "**/*.ts", "**/*.tsx"],
-  "exclude": ["templates", "tests"]
+  "exclude": ["templates", "tests", "lib"]
 }
