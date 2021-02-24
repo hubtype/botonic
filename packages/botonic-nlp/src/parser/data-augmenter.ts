@@ -2,7 +2,7 @@ import { AugmenterMap } from './types'
 
 export class DataAugmenter {
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  private static readonly KEYWORD_PATTERN = /\[([^\[\]\(\)]*?)\][^\(]/
+  private static readonly KEYWORD_PATTERN = /(\[([^\[\]\(\)]*?)\])(?:[^\(]|$)/
 
   static augment(
     samples: string[],
@@ -33,7 +33,7 @@ export class DataAugmenter {
       const tmpSample = inprocessSamples.pop() as string
       const match = DataAugmenter.KEYWORD_PATTERN.exec(tmpSample)
       if (match) {
-        const keyword = match[1]
+        const keyword = match[2]
         if (keyword in augmenter) {
           const isEntity = entities.includes(keyword)
           augmenter[keyword].forEach(word => {
@@ -42,7 +42,7 @@ export class DataAugmenter {
               .slice(0, match.index)
               .concat(
                 replacement,
-                tmpSample.slice(match.index + match[0].length - 1)
+                tmpSample.slice(match.index + match[1].length)
               )
             inprocessSamples.push(variation)
           })
