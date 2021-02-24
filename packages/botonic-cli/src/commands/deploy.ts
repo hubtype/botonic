@@ -271,7 +271,7 @@ Uploading...
     })
   }
 
-  async createBundle() {
+  async createBundle(): Promise<void> {
     const spinner = ora({
       text: 'Creating bundle...',
       spinner: 'bouncingBar',

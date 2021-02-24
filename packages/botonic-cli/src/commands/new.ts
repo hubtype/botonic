@@ -77,7 +77,7 @@ Creating...
         join('..', '.botonic.json'),
         join(process.cwd(), '.botonic.json')
       )
-      this.showFeedback(selectedProject, userProjectDirName)
+      console.log(this.getProcessFeedback(selectedProject, userProjectDirName))
     } catch (e) {
       const error = `botonic new error: ${String(e)}`
       trackError(error)
@@ -129,14 +129,17 @@ Creating...
     }
   }
 
-  async installProjectDependencies(path: string): Promise<void> {
+  async installProjectDependencies(
+    path: string,
+    commmand = 'npm install'
+  ): Promise<void> {
     process.chdir(path)
     const spinner = ora({
       text: 'Installing dependencies...',
       spinner: 'bouncingBar',
     }).start()
     try {
-      await exec('npm install')
+      await exec(commmand)
       spinner.succeed()
     } catch (e) {
       spinner.fail()
@@ -146,22 +149,23 @@ Creating...
     }
   }
 
-  showFeedback(selectedProject: BotonicProject, path: string): void {
-    const chdirCmd = bold(`cd ${path}`)
+  getProcessFeedback(selectedProject: BotonicProject, path: string): string {
+    const chdirCmd = bold(`cd ${path}\n`)
     const trainCmd =
-      selectedProject.name === 'nlu' ? bold(`botonic train`) : undefined
+      selectedProject.name === 'nlu' ? bold(`botonic train\n`) : ''
     const serveCmd = `${bold(
       'botonic serve'
-    )} (test your bot locally from the browser)`
+    )} (test your bot locally from the browser)\n`
     const deployCmd = `${bold(
       'botonic deploy'
     )} (publish your bot to the world!)`
-    const successText = `\n✨  Bot ${bold(path)} was successfully created!\n`
-    console.log(successText)
-    console.log('Next steps:')
-    console.log(chdirCmd)
-    console.log(serveCmd)
-    trainCmd && console.log(trainCmd)
-    console.log(deployCmd)
+    const successText = `\n✨  Bot ${bold(path)} was successfully created!\n\n`
+    let feedback = successText
+    feedback += 'Next steps:\n'
+    feedback += chdirCmd
+    feedback += trainCmd
+    feedback += serveCmd
+    feedback += deployCmd
+    return feedback
   }
 }
