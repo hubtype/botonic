@@ -2,6 +2,7 @@ import { Config } from '@oclif/config'
 import { assert } from 'console'
 import { mkdtempSync, readdirSync } from 'fs'
 import { join } from 'path'
+import { chdir } from 'process'
 import rimraf from 'rimraf'
 
 import { EXAMPLES } from '../src/botonic-examples'
@@ -53,11 +54,12 @@ describe('TEST: New command (installing project)', () => {
   it('Succeeds to install', async () => {
     const tmpPath = mkdtempSync('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
-    await newCommand.installProjectDependencies(tmpPath)
+    chdir(tmpPath)
+    await newCommand.installDependencies()
     const sut = readdirSync('.')
     expect(sut).toContain('node_modules')
     expect(sut).toContain('package-lock.json')
-    process.chdir('..')
+    chdir('..')
     rimraf.sync(tmpPath)
   })
 
@@ -65,7 +67,7 @@ describe('TEST: New command (installing project)', () => {
     const tmpPath = mkdtempSync('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     await expect(
-      newCommand.installProjectDependencies(tmpPath, 'npm instal-typo')
+      newCommand.installDependencies('npm instal-typo')
     ).rejects.toThrow(Error)
     rimraf.sync(tmpPath)
   })

@@ -1,7 +1,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testTimeout: 100000,
+  testTimeout: 1000000,
   roots: ['<rootDir>'],
   testMatch: [
     '**/tests/**/*.+(ts|tsx|js)',
@@ -11,7 +11,6 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
-  modulePathIgnorePatterns: ['tests/dummy-project/*'],
   testPathIgnorePatterns: [
     'lib',
     '.*.d.ts',

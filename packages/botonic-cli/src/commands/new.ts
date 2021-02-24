@@ -49,8 +49,8 @@ Creating...
     track('Created Botonic Bot CLI')
     try {
       const args = this.parse(Run).args as NewCommandArgs
-      const selectedProjectName = args.projectName
       const userProjectDirName = args.name
+      const selectedProjectName = args.projectName
 
       const selectedProject = await this.resolveSelectedProject(
         selectedProjectName
@@ -71,7 +71,8 @@ Creating...
         selectedProject,
         userProjectDirName
       )
-      await this.installProjectDependencies(userProjectDirName)
+      process.chdir(userProjectDirName)
+      await this.installDependencies()
       this.botonicApiService.beforeExit()
       moveSync(
         join('..', '.botonic.json'),
@@ -129,11 +130,7 @@ Creating...
     }
   }
 
-  async installProjectDependencies(
-    path: string,
-    commmand = 'npm install'
-  ): Promise<void> {
-    process.chdir(path)
+  async installDependencies(commmand = 'npm install'): Promise<void> {
     const spinner = ora({
       text: 'Installing dependencies...',
       spinner: 'bouncingBar',

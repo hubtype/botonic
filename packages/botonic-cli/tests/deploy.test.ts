@@ -1,20 +1,29 @@
 import { Config } from '@oclif/config'
-import { readdirSync } from 'fs'
+import { assert } from 'console'
+import { mkdtempSync, readdirSync } from 'fs'
 import { removeSync } from 'fs-extra'
 import { join } from 'path'
 import { chdir, cwd } from 'process'
+import rimraf from 'rimraf'
 
 import { BotonicAPIService } from '../src/botonic-api-service'
+import { EXAMPLES } from '../src/botonic-examples'
 import { default as DeployCommand } from '../src/commands/deploy'
+import { default as NewCommand } from '../src/commands/new'
 
-const workingDirectory = cwd()
-const pathToBotonicProject = join(workingDirectory, 'tests', 'dummy-project')
-const deployCommand = new DeployCommand(process.argv, new Config({ root: '' }))
 const botonicApiService = new BotonicAPIService()
+const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
+const deployCommand = new DeployCommand(process.argv, new Config({ root: '' }))
+
+const BLANK_EXAMPLE = EXAMPLES[3]
+assert(BLANK_EXAMPLE.name === 'blank')
+
 describe('TEST: Deploy pipeline', () => {
   test('Deploy', async () => {
-    chdir(pathToBotonicProject)
-    await deployCommand.createBundle()
+    const tmpPath = mkdtempSync('botonic-tmp')
+    await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
+    chdir(tmpPath)
+    await newCommand.installDependencies()
 
     const spyDeployBundle = jest
       .spyOn(deployCommand, 'deployBundle')
@@ -27,21 +36,22 @@ describe('TEST: Deploy pipeline', () => {
       .mockImplementation(async () => {
         await botonicApiService.build()
         await deployCommand.createBundle()
-        const onceBundled = readdirSync(pathToBotonicProject)
+        const onceBundled = readdirSync('.')
         expect(onceBundled).toContain('botonic_bundle.zip')
         expect(onceBundled).toContain('tmp')
         const { hasDeployErrors } = await deployCommand.deployBundle()
         expect(hasDeployErrors).toBe(false)
-        removeSync(join(pathToBotonicProject, 'botonic_bundle.zip'))
-        removeSync(join(pathToBotonicProject, 'tmp'))
+        removeSync(join('.', 'botonic_bundle.zip'))
+        removeSync(join('.', 'tmp'))
       })
 
     await deployCommand.deploy()
-    const onceDeployed = readdirSync(pathToBotonicProject)
+    const onceDeployed = readdirSync('.')
     expect(onceDeployed).not.toContain('botonic_bundle.zip')
     expect(onceDeployed).not.toContain('tmp')
-    chdir(workingDirectory)
+    chdir('..')
 
+    rimraf.sync(tmpPath)
     spyDeployBundle.mockRestore()
     spyDeploy.mockRestore()
   })

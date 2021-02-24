@@ -65,8 +65,7 @@
     "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
     "test": "../../node_modules/.bin/jest --coverage",
-    "install_dummy_project": "cd tests/dummy-project; npm i; cd ../..;",
-    "test_ci": "npm run install_dummy_project && ../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"
   },
   "types": "lib/index.d.ts",
   "keywords": [

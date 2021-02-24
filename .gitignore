@@ -21,5 +21,6 @@ coverage/
 .idea
 junit.xml
 packages/botonic-cli/tests/dummy-project/package-lock.json
+packages/botonic-cli/botonic-tmp*
 .botonic.json
 .vscode
