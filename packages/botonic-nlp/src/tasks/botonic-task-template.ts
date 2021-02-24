@@ -47,6 +47,10 @@ export class BotonicTaskTemplate {
     this.preprocessEngines.stopwords = engine
   }
 
+  get stopwords(): string[] {
+    return this.preprocessEngines.stopwords
+  }
+
   set stemmer(engine: Stemmer) {
     this.preprocessEngines.stemmer = engine
   }
