@@ -45,6 +45,7 @@ Creating...
 
   private botonicApiService = new BotonicAPIService()
 
+  /* istanbul ignore next */
   async run(): Promise<void> {
     track('Created Botonic Bot CLI')
     try {
@@ -146,6 +147,7 @@ Creating...
     }
   }
 
+  /* istanbul ignore next */
   getProcessFeedback(selectedProject: BotonicProject, path: string): string {
     const chdirCmd = bold(`cd ${path}\n`)
     const trainCmd =

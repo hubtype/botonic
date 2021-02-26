@@ -50,6 +50,7 @@ Uploading...
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
   private botName: string | undefined = undefined
 
+  /* istanbul ignore next */
   async run() {
     const { flags } = this.parse(Run)
     track('Deployed Botonic CLI')
@@ -297,7 +298,7 @@ Uploading...
       return
     }
   }
-
+  /* istanbul ignore next */
   async deployBundle(): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
@@ -338,6 +339,7 @@ Uploading...
     }
   }
 
+  /* istanbul ignore next */
   async displayDeployResults({ hasDeployErrors }): Promise<boolean> {
     try {
       const providersRes = await this.botonicApiService.getProviders()
@@ -357,6 +359,7 @@ Uploading...
     }
   }
 
+  /* istanbul ignore next */
   async deploy(): Promise<void> {
     try {
       const buildOut = await this.botonicApiService.build()
