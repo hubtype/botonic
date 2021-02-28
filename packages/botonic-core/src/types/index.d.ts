@@ -1,3 +1,14 @@
+/* eslint-disable node/no-missing-import */
+export { Providers } from './constants'
+export { CoreBot } from './core-bot'
+export * from './debug'
+import { Inspector } from './debug'
+export * from './handoff'
+export { HubtypeService } from './hubtype-service'
+export { getString } from './i18n'
+export { Router } from './router'
+export * from './utils'
+
 export interface Locales {
   [id: string]: string | string[] | Locales
 }
@@ -12,7 +23,7 @@ export interface PluginConfig<T> {
   resolve: { default: PluginConstructor<T> }
 }
 
-export const INPUT: {
+export const INPUT: Readonly<{
   AUDIO: 'audio'
   BUTTON_MESSAGE: 'buttonmessage'
   CAROUSEL: 'carousel'
@@ -26,7 +37,7 @@ export const INPUT: {
   VIDEO: 'video'
   WEBCHAT_SETTINGS: 'webchatsettings'
   WHATSAPP_TEMPLATE: 'whatsapptemplate'
-}
+}>
 
 export type InputType =
   | typeof INPUT.AUDIO
@@ -66,7 +77,7 @@ export interface Input extends Partial<NluResult> {
   type: InputType
 }
 
-export const PROVIDER: {
+export const PROVIDER: Readonly<{
   DEV: 'dev'
   FACEBOOK: 'facebook'
   GENERIC: 'generic'
@@ -77,7 +88,7 @@ export const PROVIDER: {
   WEBCHAT: 'webchat'
   WECHAT: 'wechat'
   WHATSAPP: 'whatsapp'
-}
+}>
 
 export type ProviderType =
   | typeof PROVIDER.DEV
@@ -162,16 +173,16 @@ export interface Route {
 }
 
 type RouteRequest = { input: Input; session: Session }
-type Routes<R = Route> = R[] | ((_: RouteRequest) => R[])
+export type Routes<R = Route> = R[] | ((_: RouteRequest) => R[])
 
 // Desk
 
-export const CASE_STATUS: {
+export const CASE_STATUS: Readonly<{
   ATTENDING: 'status_attending'
   IDLE: 'status_idle'
   RESOLVED: 'status_resolved'
   WAITING: 'status_waiting'
-}
+}>
 
 export type CaseStatusType =
   | typeof CASE_STATUS.ATTENDING
@@ -179,84 +190,18 @@ export type CaseStatusType =
   | typeof CASE_STATUS.RESOLVED
   | typeof CASE_STATUS.WAITING
 
-export const CASE_RESOLUTION: {
+export const CASE_RESOLUTION: Readonly<{
   BANNED: 'result_banned'
   NOK: 'result_nok'
   NOT_SOLVED: 'result_not_solved'
   OK: 'result_ok'
-}
+}>
 
 export type CaseResolution =
   | typeof CASE_RESOLUTION.BANNED
   | typeof CASE_RESOLUTION.NOK
   | typeof CASE_RESOLUTION.NOT_SOLVED
   | typeof CASE_RESOLUTION.OK
-
-export class HandOffBuilder {
-  constructor(session: Session)
-  handOff(): Promise<void>
-  withAgentEmail(email: string): HandOffBuilder
-  withAgentId(agentId: string): HandOffBuilder
-  withCaseInfo(caseInfo: string): HandOffBuilder
-  withNote(note: string): HandOffBuilder
-  withOnFinishPath(path: string): HandOffBuilder
-  withOnFinishPayload(payload: string): HandOffBuilder
-  withQueue(queueNameOrId: string): HandOffBuilder
-  withShadowing(shadowing?: boolean): HandOffBuilder
-}
-
-/**
- * @deprecated use {@link HandOffBuilder} class instead
- */
-export declare function humanHandOff(
-  session: Session,
-  queueNameOrId: string, // queue_name for backward compatibility, queue_id for new versions
-  onFinish: { payload?: string; path?: string }
-): Promise<void>
-
-export declare function getOpenQueues(
-  session: Session
-): Promise<{ queues: string[] }>
-
-export declare function storeCaseRating(
-  session: Session,
-  rating: number
-): Promise<{ status: string }>
-
-export declare function getAvailableAgentsByQueue(
-  session: Session,
-  queueId: string
-): Promise<{ agents: string[] }>
-
-export interface HubtypeAgentsInfo {
-  attending_count: number
-  email: string
-  idle_count: number
-  last_message_sent: string
-  status: string
-}
-
-export declare function getAvailableAgents(
-  session: Session
-): Promise<{ agents: HubtypeAgentsInfo[] }>
-
-interface VacationRange {
-  end_date: number // timestamp
-  id: number
-  start_date: number // timestamp
-}
-
-export declare function getAgentVacationRanges(
-  session: Session,
-  agentParams: { agentId?: string; agentEmail?: string }
-): Promise<{ vacation_ranges: VacationRange[] }>
-
-export declare function cancelHandoff(
-  session: Session,
-  typification?: string
-): void
-
-export declare function deleteUser(session: Session): void
 
 export interface BotRequest {
   input: Input
@@ -283,69 +228,14 @@ export interface Plugin {
 export interface BotOptions {
   appId?: string
   defaultDelay?: number
-  defaultRoutes?: Route[]
+  defaultRoutes?: Routes
   defaultTyping?: number
   inspector?: Inspector
   locales: Locales
   routes: Routes
   theme?: string
   /** The plugin configurations */
-  plugins?: { [id: string]: any }
+  plugins?: PluginConfig<any>
 }
-
-export class CoreBot {
-  defaultDelay: number
-  defaultTyping: number
-  locales: Locales
-  plugins: { [id: string]: Plugin }
-  routes: Routes
-  theme?: string
-
-  constructor(options: BotOptions)
-  getString(stringID: string, session: Session): string
-  input(request: BotRequest): Promise<BotResponse>
-  setLocale(locale: string, session: Session): void
-}
-
-// Debug
-
-export class RouteInspector {
-  routeMatched(
-    route: Route,
-    routeKey: string,
-    routeValue: RouteMatcher,
-    input: Input
-  ): void
-  routeNotMatched(
-    route: Route,
-    routeKey: string,
-    routeValue: RouteMatcher,
-    input: Input
-  ): void
-}
-
-export class FocusRouteInspector extends RouteInspector {
-  focusOnlyOnRoutes(focusRoutePaths: string[]): FocusRouteInspector
-  focusOnlyOnMatches(): FocusRouteInspector
-}
-
-export class LogRouteInspector extends FocusRouteInspector {}
-
-export class Inspector {
-  constructor(routeInspector: RouteInspector | undefined)
-
-  getRouteInspector(): RouteInspector
-}
-
-export function isBrowser(): boolean
-export function isMobile(mobileBreakpoint?: number): boolean
-export function isNode(): boolean
-export function getWebpackEnvVar(
-  webpackEnvVar: string | boolean,
-  name: string | boolean,
-  defaultValue: string
-): string
 
 export type Params = { [key: string]: string }
-
-export function params2queryString(params: Params): string
