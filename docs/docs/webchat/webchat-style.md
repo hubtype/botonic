@@ -76,7 +76,7 @@ Here is a list of available styles. You need to modify them inside **src/webchat
 | `buttonStyle`           | Button styles. It can also be defined in `button.style`.                                                                                                                                      |
 | `buttonHoverBackground` | Background color when hovering over a button. It can also be defined in `button.hoverBackground`.                                                                                             |
 | `buttonHoverTextColor`  | Text color when hovering over a button. It can also be defined in `button.hoverTextColor`.                                                                                                    |
-| `buttonAutoDisable`    | Disables a button once the user has clicked on it. Default value:`true`. It can also be defined in `button.autodisable`. |
+| `buttonAutoDisable`    | Disables a button once the user has clicked on it. Default value:`false`. It can also be defined in `button.autodisable`. |
 | `buttonDisabledStyle`   | Styles of a disabled button once clicked. It can also be defined in `button.disabledstyle`.|
 | `replyStyle`            | Styles for replies. It can also be defined in `reply.style`.                                                                                                                                  |
 | `alignReplies`          | Aligns replies at `left`, `center` or `right`. It can also be defined in `replies.align`.                                                                                                     |
