@@ -8,6 +8,8 @@ data-augmentation:
     - Pull&Bear
     - Stradivarius
     - Mango
+    - Zara
+    - Bershka
 
 samples:
   - Is this [t-shirt](product) available in [store]?

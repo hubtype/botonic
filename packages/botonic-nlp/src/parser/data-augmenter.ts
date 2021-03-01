@@ -5,12 +5,12 @@ export class DataAugmenter {
   private static readonly KEYWORD_PATTERN = /(\[([^\[\]\(\)]*?)\])(?:[^\(]|$)/
 
   static augment(
-    samples: string[],
+    sentences: string[],
     augmenter: AugmenterMap,
     entities: string[]
   ): string[] {
     let augmentedSamples: string[] = []
-    samples.forEach(sample => {
+    sentences.forEach(sample => {
       const variations = DataAugmenter.generateVariations(
         sample,
         augmenter,

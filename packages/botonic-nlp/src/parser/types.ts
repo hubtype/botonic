@@ -6,7 +6,7 @@ export type FoundEntity = {
   end: number
 }
 export type Sample = { text: string; entities: FoundEntity[]; class: string }
-export type ParsedData = {
+export type Data = {
   classes: string[]
   entities: string[]
   samples: Sample[]

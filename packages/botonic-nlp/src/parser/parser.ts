@@ -5,7 +5,7 @@ import { join } from 'path'
 
 import { DataAugmenter } from './data-augmenter'
 import { EntitiesParser } from './entities-parser'
-import { ParsedData, Sample } from './types'
+import { Data, Sample } from './types'
 
 export class Parser {
   private static CLASS_FIELD = 'class'
@@ -13,7 +13,7 @@ export class Parser {
   private static DATA_AUGMENTATION_FIELD = 'data-augmentation'
   private static SAMPLES_FIELD = 'samples'
 
-  static parse(path: string): ParsedData {
+  static parse(path: string): Data {
     const stat = lstatSync(path)
     if (stat.isFile()) {
       return Parser.parseFile(path)
@@ -24,7 +24,7 @@ export class Parser {
     }
   }
 
-  private static parseDirectory(path: string): ParsedData {
+  private static parseDirectory(path: string): Data {
     let classes: string[] = []
     let entities: string[] = []
     let samples: Sample[] = []
@@ -44,35 +44,41 @@ export class Parser {
     }
   }
 
-  private static parseFile(path: string): ParsedData {
+  private static parseFile(path: string): Data {
     const content = yaml.load(readFileSync(path))
 
-    const hasClass = Parser.CLASS_FIELD in content
-    const hasEntities = Parser.ENTITIES_FIELD in content
-    const hasDataAugmentation = Parser.DATA_AUGMENTATION_FIELD in content
-    const hasSamples = Parser.SAMPLES_FIELD in content
+    if (this.SAMPLES_FIELD in content) {
+      const className =
+        this.CLASS_FIELD in content ? content[this.CLASS_FIELD] : ''
 
-    const className = hasClass ? content[Parser.CLASS_FIELD] : ''
-    const entities = hasEntities ? content[Parser.ENTITIES_FIELD] : []
+      const entities =
+        this.ENTITIES_FIELD in content ? content[this.ENTITIES_FIELD] : []
 
-    let tmpSamples: string[] = content[Parser.SAMPLES_FIELD]
+      let sentences = content[this.SAMPLES_FIELD]
 
-    if (hasDataAugmentation && hasSamples) {
-      const augmenter = content[Parser.DATA_AUGMENTATION_FIELD]
-      tmpSamples = DataAugmenter.augment(tmpSamples, augmenter, entities)
-    }
+      if (this.DATA_AUGMENTATION_FIELD in content) {
+        sentences = DataAugmenter.augment(
+          sentences,
+          content[this.DATA_AUGMENTATION_FIELD],
+          entities
+        )
+      }
 
-    let samples: Sample[] = tmpSamples.map(sample => {
-      return { text: sample, entities: [], class: className } as Sample
-    })
+      let samples: Sample[] = sentences.map(s => {
+        return { text: s, class: className, entities: [] }
+      })
 
-    if (hasEntities) {
-      samples = EntitiesParser.parse(samples, entities)
-    }
-    return {
-      classes: className == '' ? [] : [className],
-      entities: entities,
-      samples: samples,
+      if (this.ENTITIES_FIELD in content) {
+        samples = EntitiesParser.parse(samples, entities)
+      }
+
+      return {
+        classes: this.CLASS_FIELD in content ? [className] : [],
+        entities,
+        samples,
+      }
+    } else {
+      throw new Error('File must contain "samples" field')
     }
   }
 }

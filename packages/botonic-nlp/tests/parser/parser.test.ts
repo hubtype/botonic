@@ -5,11 +5,35 @@ import { Parser } from '../../src/parser/parser'
 describe('Parsing Botonic NLP input file', () => {
   test('Parsing file', () => {
     expect(
-      Parser.parse(join(__dirname, '..', 'utils', 'shopping-example.yaml'))
+      Parser.parse(join(__dirname, '..', 'utils', 'data', 'shopping.yaml'))
     ).toEqual({
       classes: ['shopping'],
       entities: ['product'],
       samples: [
+        {
+          class: 'shopping',
+          entities: [
+            {
+              end: 15,
+              label: 'product',
+              start: 8,
+              text: 't-shirt',
+            },
+          ],
+          text: 'Is this t-shirt available in Bershka?',
+        },
+        {
+          class: 'shopping',
+          entities: [
+            {
+              end: 15,
+              label: 'product',
+              start: 8,
+              text: 't-shirt',
+            },
+          ],
+          text: 'Is this t-shirt available in Zara?',
+        },
         {
           class: 'shopping',
           entities: [
@@ -51,7 +75,7 @@ describe('Parsing Botonic NLP input file', () => {
   })
 
   test('Parsing directory files', () => {
-    expect(Parser.parse(join(__dirname, '..', 'utils'))).toEqual({
+    expect(Parser.parse(join(__dirname, '..', 'utils', 'data'))).toEqual({
       classes: ['booking', 'shopping'],
       entities: ['restaurant', 'product'],
       samples: [
@@ -90,6 +114,30 @@ describe('Parsing Botonic NLP input file', () => {
             },
           ],
           text: 'Please, book me a table at Koyo',
+        },
+        {
+          class: 'shopping',
+          entities: [
+            {
+              end: 15,
+              label: 'product',
+              start: 8,
+              text: 't-shirt',
+            },
+          ],
+          text: 'Is this t-shirt available in Bershka?',
+        },
+        {
+          class: 'shopping',
+          entities: [
+            {
+              end: 15,
+              label: 'product',
+              start: 8,
+              text: 't-shirt',
+            },
+          ],
+          text: 'Is this t-shirt available in Zara?',
         },
         {
           class: 'shopping',
