@@ -24,4 +24,4 @@ export type PreprocessEngines = {
   stemmer?: Stemmer
 }
 
-export type SequencePosition = 'pre' | 'post'
+export type PaddingPosition = 'pre' | 'post'
