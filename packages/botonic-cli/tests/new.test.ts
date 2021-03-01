@@ -22,7 +22,7 @@ describe('TEST: New command (resolving project)', () => {
   })
   it('Resolves correctly an unexisting one (argv)', async () => {
     const sut = await newCommand.resolveSelectedProject('unexistingProject')
-    expect(sut).toEqual(undefined)
+    expect(sut).toBeUndefined()
   })
 })
 

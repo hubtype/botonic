@@ -149,21 +149,17 @@ Creating...
 
   /* istanbul ignore next */
   getProcessFeedback(selectedProject: BotonicProject, path: string): string {
-    const chdirCmd = bold(`cd ${path}\n`)
-    const trainCmd =
-      selectedProject.name === 'nlu' ? bold(`botonic train\n`) : ''
+    let feedback = `\n✨  Bot ${bold(path)} was successfully created!\n\n`
+    feedback += 'Next steps:\n'
+    feedback += bold(`cd ${path}\n`)
+    feedback += selectedProject.name === 'nlu' ? bold(`botonic train\n`) : ''
     const serveCmd = `${bold(
       'botonic serve'
     )} (test your bot locally from the browser)\n`
+    feedback += serveCmd
     const deployCmd = `${bold(
       'botonic deploy'
     )} (publish your bot to the world!)`
-    const successText = `\n✨  Bot ${bold(path)} was successfully created!\n\n`
-    let feedback = successText
-    feedback += 'Next steps:\n'
-    feedback += chdirCmd
-    feedback += trainCmd
-    feedback += serveCmd
     feedback += deployCmd
     return feedback
   }

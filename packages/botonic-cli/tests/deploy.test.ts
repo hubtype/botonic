@@ -19,7 +19,7 @@ const BLANK_EXAMPLE = EXAMPLES[3]
 assert(BLANK_EXAMPLE.name === 'blank')
 
 describe('TEST: Deploy pipeline', () => {
-  test('Deploy', async () => {
+  test('Download, install, build and deploy a project', async () => {
     const tmpPath = mkdtempSync('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     chdir(tmpPath)
