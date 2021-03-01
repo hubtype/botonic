@@ -2,86 +2,35 @@ import { Codifier } from '../../src/preprocess/codifier'
 
 describe('Codifier', () => {
   test('Initialize codifier with vocabulary', () => {
-    const codifier = Codifier.with(['this', 'is', 'a', 'test'], false, false)
+    const codifier = new Codifier(['this', 'is', 'a', 'test'], false)
     expect(codifier.vocabulary).toEqual(['this', 'is', 'a', 'test'])
   })
 
-  test('Initialize codifier without vocabulary', () => {
-    const codifier = Codifier.fit(
-      [
-        ['this', 'is', 'a', 'test'],
-        ['i', 'want', 'this', 'car'],
-      ],
-      false,
-      false
-    )
-    expect(codifier.vocabulary).toEqual([
-      'this',
-      'is',
-      'a',
-      'test',
-      'i',
-      'want',
-      'car',
-    ])
-  })
-
-  test('Initialize codifier with default tokens but no vocabulary', () => {
-    const codifier = Codifier.fit(
-      [
-        ['this', 'is', 'a', 'test'],
-        ['i', 'want', 'this', 'car'],
-      ],
-      false,
-      false,
-      ['default', 'words']
-    )
-    expect(codifier.vocabulary).toEqual([
-      'default',
-      'words',
-      'this',
-      'is',
-      'a',
-      'test',
-      'i',
-      'want',
-      'car',
-    ])
-  })
-
-  test('Encode: not unknown tokens allowed.', () => {
-    const codifier = Codifier.with(
-      ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
-      false,
-      false
-    )
-    expect(codifier.encode(['i', 'want', 'this', 't-shirt'])).toEqual([
-      4,
-      1,
-      0,
-      2,
-    ])
+  test('Unknown token error', () => {
+    const codifier = new Codifier(['this', 'is', 'a', 'test'], false)
     expect(() => {
-      codifier.encode(['this', 'is', 'not', 'allowed'])
+      codifier.encode(['throw', 'error'])
+    }).toThrowError()
+    expect(() => {
+      codifier.decode([4, 5])
     }).toThrowError()
   })
 
-  test('Encode: unknown tokens allowed.', () => {
-    const codifier = Codifier.with(
-      ['this', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
-      false,
-      true
+  test('Encoding', () => {
+    const codifier = new Codifier(
+      ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
+      false
     )
     expect(codifier.encode(['i', 'want', 'this', 't-shirt'])).toEqual([
       4,
-      0,
       1,
+      0,
       2,
     ])
   })
 
-  test('Encode: categorical encoding.', () => {
-    const codifier = Codifier.with(['O', 'product', 'shop'], true, false)
+  test('Categorical encoding', () => {
+    const codifier = new Codifier(['O', 'product', 'shop'], true)
     expect(codifier.encode(['O', 'O', 'shop', 'O', 'product'])).toEqual([
       [1, 0, 0],
       [1, 0, 0],
@@ -89,15 +38,11 @@ describe('Codifier', () => {
       [1, 0, 0],
       [0, 1, 0],
     ])
-    expect(() => {
-      codifier.encode(['O', 'O', 'material', 'product'])
-    }).toThrowError()
   })
 
-  test('Decode: not unknown tokens allowed.', () => {
-    const codifier = Codifier.with(
+  test('Decoding', () => {
+    const codifier = new Codifier(
       ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
-      false,
       false
     )
     expect(codifier.decode([4, 1, 0, 2])).toEqual([
@@ -108,22 +53,8 @@ describe('Codifier', () => {
     ])
   })
 
-  test('Decode: unknown tokens allowed.', () => {
-    const codifier = Codifier.with(
-      ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
-      false,
-      true
-    )
-    expect(codifier.decode([5, 2, 1, 3])).toEqual([
-      'i',
-      'want',
-      'this',
-      't-shirt',
-    ])
-  })
-
-  test('Decode: categorical decoding.', () => {
-    const codifier = Codifier.with(['O', 'product', 'shop'], true, false)
+  test('Categorical decoding', () => {
+    const codifier = new Codifier(['O', 'product', 'shop'], true)
     expect(
       codifier.decode([
         [0.98, 0.2, 0],

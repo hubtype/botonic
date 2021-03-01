@@ -1,36 +1,6 @@
-import { UNKNOWN_TOKEN } from './constants'
-
 export class Codifier {
-  private constructor(
-    readonly vocabulary: string[],
-    readonly categorical: boolean,
-    readonly allowUnknown: boolean
-  ) {}
-
-  static with(
-    vocabulary: string[],
-    categorical: boolean,
-    allowUnknown: boolean
-  ): Codifier {
-    if (allowUnknown) {
-      vocabulary = [UNKNOWN_TOKEN].concat(vocabulary)
-    }
-    vocabulary = Array.from(new Set(vocabulary))
-    return new Codifier(vocabulary, categorical, allowUnknown)
-  }
-
-  static fit(
-    sequences: string[][],
-    categorical: boolean,
-    allowUnknown: boolean,
-    defaultVocabulary: string[] = []
-  ): Codifier {
-    if (allowUnknown) {
-      defaultVocabulary.push(UNKNOWN_TOKEN)
-    }
-    sequences.forEach(s => (defaultVocabulary = defaultVocabulary.concat(s)))
-    const vocabulary = Array.from(new Set(defaultVocabulary))
-    return new Codifier(vocabulary, categorical, allowUnknown)
+  constructor(public vocabulary: string[], readonly categorical: boolean) {
+    this.vocabulary = Array.from(new Set(vocabulary))
   }
 
   encode(sequence: string[]): number[] | number[][] {
@@ -43,11 +13,7 @@ export class Codifier {
     return sequence.map(t => {
       const i = this.vocabulary.indexOf(t)
       if (i == -1) {
-        if (this.allowUnknown) {
-          return this.vocabulary.indexOf(UNKNOWN_TOKEN)
-        } else {
-          throw new Error(`Token "${t}" not included in the vocabulary.`)
-        }
+        throw new Error(`Token "${t}" not included in the vocabulary.`)
       } else {
         return i
       }
@@ -73,6 +39,13 @@ export class Codifier {
   }
 
   private decodeSequence(sequence: number[]): string[] {
-    return sequence.map(t => this.vocabulary[t])
+    return sequence.map(id => {
+      const token = this.vocabulary[id]
+      if (token) {
+        return token
+      } else {
+        throw new RangeError(`Token id "${id}" out of range.`)
+      }
+    })
   }
 }
