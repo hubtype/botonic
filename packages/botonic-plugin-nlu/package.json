@@ -20,7 +20,7 @@
     "@babel/runtime": "^7.5.5",
     "@botonic/core": "~0.18.0",
     "@botonic/nlu": "~0.18.0",
-    "@tensorflow/tfjs": "^2.7.0",
+    "@tensorflow/tfjs": "^3.2.0",
     "@types/webgl2": "0.0.5",
     "axios": "latest",
     "franc": "^5.0.0",
