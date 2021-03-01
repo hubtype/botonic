@@ -16,9 +16,11 @@ The `Button` component is used to display a button during a conversation. The us
 | path     | String         |                                                                    | No       | -             |
 | children | String         | Show the button                                                    | Yes      | -             |
 | payload  | String, Number | Call to action                                                     | No       | -             |
-| url      | String         | This URL is opened in a mobile browser when the button is clicked. | No       | -             |
+| url      | String         | This URL is opened in a mobile browser when the button is clicked | No       | -             |
 | onClick  | String         | Set the action                                                     | No       | -             |
 | target  | String         | Opens the linked page in a new window **(_blank)** or same frame **(_self)** or parent frame **(_parent)** or full body of the window **(_top)** or **framename**                                                    | No       | _blank         |
+| autodisable  | Boolean         | Disable a button once the user has clicked on it        | No       | false          |
+| disabledstyle  | String     | Visual appearance of the button once it is disabled        | No       | -          |
 
 
 
