@@ -1,6 +1,7 @@
 import * as cms from '../../../src/cms/'
-import { CmsException } from '../../../src/cms/'
+import { CmsException, TopContentId } from '../../../src/cms/'
 import { rndStr } from '../../../src/cms/test-helpers'
+import { ManageCms } from '../../../src/manage-cms'
 import { ContentFieldType } from '../../../src/manage-cms/fields'
 import { ManageContext } from '../../../src/manage-cms/manage-context'
 import { ENGLISH, SPANISH } from '../../../src/nlp'
@@ -15,49 +16,89 @@ function ctxt(ctx: Partial<ManageContext>): ManageContext {
 // Since the tests modify contentful contents, they might fail if executed
 // more than once simultaneously (eg from 2 different branches from CI)
 describe('ManageContentful fields', () => {
-  const TEST_MANAGE_CMS_ID = '627QkyJrFo3grJryj0vu6L'
+  const TEST_CONTENT_ID = new TopContentId(
+    cms.ContentType.TEXT,
+    '627QkyJrFo3grJryj0vu6L' //TEST_MANAGE_CMS
+  )
+  const RESTORE_TEXT_VALUE = undefined // so that it fallbacks to English
+  const contentful = testContentful({ disableCache: true })
+  // @ts-ignore
+  let fallbackLocaleContent: cms.Text = undefined
 
-  test('TEST: updateFields on an empty field', async () => {
+  beforeAll(async () => {
+    fallbackLocaleContent = await contentful.text(
+      TEST_CONTENT_ID.id,
+      ctxt({ locale: ENGLISH })
+    )
+  })
+
+  test('TEST: updateFields with empty ("") value does not fallback', async () => {
+    await updateEmptyField('', '')
+  }, 400000)
+
+  test('TEST: updateFields with undefined value falls back to other locale', async () => {
+    await updateEmptyField(undefined, fallbackLocaleContent.text)
+  }, 40000)
+
+  test('TEST: updateFields non empty', async () => {
+    const newValue = rndStr()
+    await updateEmptyField(newValue, newValue)
+  }, 40000)
+
+  async function updateEmptyField(
+    newValue: string | undefined,
+    expectedValue: string
+  ) {
     const contentful = testContentful({ disableCache: true })
-    const old = await contentful.text(
-      TEST_MANAGE_CMS_ID,
+    const oldTextValue = (
+      await contentful.text(
+        TEST_CONTENT_ID.id,
+        ctxt({ locale: SPANISH, ignoreFallbackLocale: true })
+      )
+    ).text
+    const oldSpanishContent = await contentful.text(
+      TEST_CONTENT_ID.id,
       ctxt({ locale: SPANISH })
     )
+
     const sut = testManageContentful()
 
-    const newValue = rndStr()
     try {
-      if (old.text) {
+      if (oldTextValue) {
         throw new CmsException(
-          `Text field from text ${TEST_MANAGE_CMS_ID} should be blank but is '${old.text}'.
+          `Text field from ${TEST_CONTENT_ID.toString()} should be blank but is '${oldTextValue}'.
         The test will fail and remove its value`
         )
       }
       // ACT
-      await sut.updateFields(ctxt({ locale: SPANISH }), old.contentId, {
+      await sut.updateFields(ctxt({ locale: SPANISH }), TEST_CONTENT_ID, {
         [ContentFieldType.TEXT]: newValue,
       })
       await repeatWithBackoff(async () => {
-        const newContent = await contentful.text(old.id, {
+        const newContent = await contentful.text(TEST_CONTENT_ID.id, {
           locale: SPANISH,
         })
-        expect(newContent).toEqual(old.cloneWithText(newValue))
+        const expected = oldSpanishContent.cloneWithText(expectedValue)
+        expect(newContent).toEqual(expected)
       })
     } finally {
-      // RESTORE
-      await sut.updateFields(
-        ctxt({ locale: SPANISH, allowOverwrites: true }),
-        old.contentId,
-        { [ContentFieldType.TEXT]: '' }
-      )
-      await repeatWithBackoff(async () => {
-        const restored = await contentful.text(old.id, {
-          locale: SPANISH,
-        })
-        expect(restored).toEqual(old)
-      })
+      await restoreValue(sut)
     }
-  }, 40000)
+  }
+
+  async function restoreValue(manage: ManageCms) {
+    await manage.updateFields(
+      ctxt({ locale: SPANISH, allowOverwrites: true }),
+      TEST_CONTENT_ID,
+      { [ContentFieldType.TEXT]: RESTORE_TEXT_VALUE }
+    )
+    await repeatWithBackoff(async () => {
+      const restored = await contentful.text(TEST_CONTENT_ID.id, {
+        locale: SPANISH,
+      })
+      expect(restored.text).toEqual(fallbackLocaleContent.text)
+    })
+  }
 
   test('TEST: updateFields by default does not allow overwrites', async () => {
     const sut = testManageContentful()
@@ -67,7 +108,7 @@ describe('ManageContentful fields', () => {
       expect.assertions(4)
       await sut.updateFields(
         ctxt({ locale: TEST_DEFAULT_LOCALE }),
-        new cms.ContentId(cms.ContentType.BUTTON, TEST_MANAGE_CMS_ID),
+        TEST_CONTENT_ID,
         newFields
       )
     } catch (e) {
@@ -76,7 +117,7 @@ describe('ManageContentful fields', () => {
       if (e instanceof CmsException) {
         // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
         expect(e.message).toInclude(
-          "Error calling ManageCms.updateFields with locale 'en' on 'button' with id '627QkyJrFo3grJryj0vu6L' " +
+          "Error calling ManageCms.updateFields with locale 'en' on 'text' with id '627QkyJrFo3grJryj0vu6L' " +
             `with args '${JSON.stringify(newFields)}'. ` +
             "Due to: Cannot overwrite field 'text' of entry '627QkyJrFo3grJryj0vu6L'"
         )
@@ -93,7 +134,7 @@ describe('ManageContentful fields', () => {
 
   test('TEST: copyField buttons', async () => {
     const contentful = testContentful({ disableCache: true })
-    const oldContent = await contentful.text(TEST_MANAGE_CMS_ID)
+    const oldContent = await contentful.text(TEST_CONTENT_ID.id)
     const sut = testManageContentful()
     const FROM_LOCALE = ENGLISH
     const TO_LOCALE = SPANISH
