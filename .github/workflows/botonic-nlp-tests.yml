@@ -39,7 +39,7 @@ jobs:
         run: (cd ./packages/$PACKAGE && npm run test_ci)
 
       - name: Verify lint
-        run: (cd ./packages/$PACKAGE && npm run lint_ci)
+        run: (cd ./packages/$PACKAGE && npm run lint)
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v1

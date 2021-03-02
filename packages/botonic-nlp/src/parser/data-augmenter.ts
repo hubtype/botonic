@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { AugmenterMap } from './types'
 
 export class DataAugmenter {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+  // eslint-disable-next-line no-useless-escape
   private static readonly KEYWORD_PATTERN = /(\[([^\[\]\(\)]*?)\])(?:[^\(]|$)/
 
   static augment(
