@@ -1,6 +1,6 @@
 import * as time from '../time'
 import { shallowClone, Stringable } from '../util/objects'
-import { Callback, ContentCallback, TopContentId } from './callback'
+import { Callback, ContentCallback, ContentId, TopContentId } from './callback'
 import { ContentType, MessageContentType, TopContentType } from './cms'
 import { SearchableBy } from './fields'
 
@@ -38,6 +38,10 @@ export abstract class Content implements Stringable {
   abstract get id(): string
 
   abstract get name(): string
+
+  get contentId(): ContentId {
+    return new ContentId(this.contentType, this.id)
+  }
 
   toString(): string {
     return `'${this.id}/${this.name}'`

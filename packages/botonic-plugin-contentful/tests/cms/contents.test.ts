@@ -1,9 +1,23 @@
-import { Content, Text } from '../../src/cms'
+import {
+  Content,
+  ContentId,
+  ContentType,
+  Text,
+  TopContentId,
+} from '../../src/cms'
 import {
   RndStartUpBuilder,
   RndTextBuilder,
 } from '../../src/cms/test-helpers/builders'
 import { expectEqualExceptOneField } from '../helpers/expect'
+
+test('TEST: contentId', () => {
+  const t1 = new RndTextBuilder().withRandomFields().build()
+  expect(t1.contentId).toEqual(new TopContentId(ContentType.TEXT, t1.id))
+  expect(t1.buttons[0].contentId).toEqual(
+    new ContentId(ContentType.BUTTON, t1.buttons[0].id)
+  )
+})
 
 test('TEST: cloneWithButtons copies all fields except buttons', () => {
   const t1 = new RndTextBuilder().withRandomFields().build()
