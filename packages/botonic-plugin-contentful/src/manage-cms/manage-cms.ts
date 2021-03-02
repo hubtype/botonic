@@ -4,6 +4,11 @@ import { ContentFieldType } from './fields'
 import { ManageContext } from './manage-context'
 
 export interface FieldsValues {
+  /**
+   * If the field has a fallback locale, after a undefined/null value is set,
+   * the fallback locale's value will be delivered. However, if a '' is set,
+   * an empty string will be delivered.
+   */
   [contentFieldType: string]: any
 }
 
