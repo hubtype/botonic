@@ -1,0 +1,50 @@
+name: Botonic nlp tests
+
+on:
+  push:
+    paths:
+      - '*'
+      - 'packages/*'
+      - 'packages/botonic-nlp/**'
+      - '.github/workflows/botonic-nlp-tests.yml'
+
+jobs:
+  botonic-plugin-contentful-tests:
+    name: Botonic nlp tests
+    runs-on: ubuntu-latest
+    env:
+      PACKAGE: botonic-nlp
+    steps:
+      - name: Checking out to current branch
+        uses: actions/checkout@v2
+      - name: Setting up node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - name: Setting up cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dev dependencies
+        run: (cd ./packages/$PACKAGE && npm install -D)
+
+      - name: Build botonic-nlp
+        run: (cd ./packages/$PACKAGE && npm run build)
+
+      - name: Run tests
+        run: (cd ./packages/$PACKAGE && npm run test_ci)
+
+      - name: Verify lint
+        run: (cd ./packages/$PACKAGE && npm run lint_ci)
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{env.PACKAGE}}
+          file: ./packages/${{env.PACKAGE}}/coverage/lcov.info
+          name: ${{env.PACKAGE}}
