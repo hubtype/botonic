@@ -5,7 +5,7 @@ import { DataLoader } from '../../src/loaders/data-loader'
 describe('Parsing Botonic NLP input file', () => {
   test('Parsing file', () => {
     const loader = new DataLoader(
-      join(__dirname, '..', 'utils', 'data', 'shopping.yaml')
+      join(__dirname, '..', 'helpers', 'data', 'shopping.yaml')
     )
     expect(loader.data).toEqual({
       classes: ['shopping'],
@@ -76,7 +76,7 @@ describe('Parsing Botonic NLP input file', () => {
   })
 
   test('Parsing directory files', () => {
-    const loader = new DataLoader(join(__dirname, '..', 'utils', 'data'))
+    const loader = new DataLoader(join(__dirname, '..', 'helpers', 'data'))
     expect(loader.data).toEqual({
       classes: ['booking', 'shopping'],
       entities: ['restaurant', 'product'],
