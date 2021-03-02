@@ -18,7 +18,7 @@ test('TEST: contentful startUp', async () => {
         keywords: ['keyword1'],
       }),
 
-      'https://images.ctfassets.net/p2iyhzd1u4a7/1T0ntgNJnDUSwz59zGMZO6/ed6772d3a7b426025540c879b9d95347/red.jpg',
+      'https://images.ctfassets.net/p2iyhzd1u4a7/1T0ntgNJnDUSwz59zGMZO6/8f114c3d3fe8f541fefbec5a539dad35/red.jpg',
       'Le damos la bienvenida a su nuevo asistente virtual.',
       [
         new Button(
