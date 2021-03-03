@@ -143,7 +143,7 @@ export class BotonicAPIService {
       spinner: 'bouncingBar',
     }).start()
     try {
-      const _build_out = await exec(`npm run ${npmCommand}`)
+      await exec(`npm run ${npmCommand}`)
     } catch (error) {
       spinner.fail()
       console.log(`${error.stdout}` + colors.red(`\n\nBuild error:\n${error}`))
@@ -313,7 +313,7 @@ export class BotonicAPIService {
     })
   }
 
-  async deployBot(bundlePath: string, forceDeploy: boolean): Promise<any> {
+  async deployBot(bundlePath: string): Promise<any> {
     try {
       const _authenticated = await this.getMe()
     } catch (e) {
@@ -328,7 +328,7 @@ export class BotonicAPIService {
       form,
       'post',
       { ...this.headers, ...headers },
-      { forceDeploy: forceDeploy, version: '0.7' }
+      { version: '0.7' }
     )
   }
 

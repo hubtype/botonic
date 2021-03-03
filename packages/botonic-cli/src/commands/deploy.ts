@@ -12,7 +12,6 @@ import { zip } from 'zip-a-folder'
 import { BotonicAPIService } from '../botonic-api-service'
 import { sleep, track } from '../utils'
 
-let force = false
 let npmCommand: string | undefined
 const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 
@@ -28,10 +27,6 @@ Uploading...
 `,
   ]
   static flags = {
-    force: flags.boolean({
-      char: 'f',
-      description: 'Force deploy despite of no changes. Disabled by default',
-    }),
     command: flags.string({
       char: 'c',
       description: 'Command to execute from the package "scripts" object',
@@ -55,10 +50,10 @@ Uploading...
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
   private botName: string | undefined = undefined
 
+  /* istanbul ignore next */
   async run() {
     const { flags } = this.parse(Run)
     track('Deployed Botonic CLI')
-    force = flags.force || false
     npmCommand = flags.command
     this.botName = flags.botName
     const email = flags.email
@@ -277,7 +272,7 @@ Uploading...
     })
   }
 
-  async createBundle() {
+  async createBundle(): Promise<void> {
     const spinner = ora({
       text: 'Creating bundle...',
       spinner: 'bouncingBar',
@@ -303,16 +298,15 @@ Uploading...
       return
     }
   }
-
-  async deployBundle() {
+  /* istanbul ignore next */
+  async deployBundle(): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
       spinner: 'bouncingBar',
     }).start()
     try {
       const deploy = await this.botonicApiService.deployBot(
-        join(process.cwd(), BOTONIC_BUNDLE_FILE),
-        force
+        join(process.cwd(), BOTONIC_BUNDLE_FILE)
       )
       if (
         (deploy.response && deploy.response.status == 403) ||
@@ -331,55 +325,52 @@ Uploading...
           if (deploy_status.data.status == 'deploy_status_completed_ok') {
             spinner.succeed()
             console.log(colors.green('\n🚀  Bot deployed!\n'))
-            break
-          } else {
-            spinner.fail()
-            console.log(colors.red('There was a problem in the deploy:'))
-            console.log(deploy_status.data.error)
-            track('Deploy Botonic Error', { error: deploy_status.data.error })
-            return
-          }
+            return { hasDeployErrors: false }
+          } else throw deploy_status.data.error
         }
       }
     } catch (err) {
       spinner.fail()
+      const error = String(err)
       console.log(colors.red('There was a problem in the deploy:'))
-      console.log(err)
-      track('Deploy Botonic Error', { error: err })
-      return
+      console.log(colors.red(error))
+      track('Deploy Botonic Error', { error })
+      return { hasDeployErrors: true }
     }
   }
 
-  async displayDeployResults() {
+  /* istanbul ignore next */
+  async displayDeployResults({ hasDeployErrors }): Promise<boolean> {
     try {
-      const providers_resp = await this.botonicApiService.getProviders()
-      const providers = providers_resp.data.results
+      const providersRes = await this.botonicApiService.getProviders()
+      const providers = providersRes.data.results
+      if (hasDeployErrors) return false
       if (!providers.length) {
         const links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
         console.log(links)
       } else {
         this.displayProviders(providers)
       }
+      return true
     } catch (e) {
-      track('Deploy Botonic Provider Error', { error: e })
+      track('Deploy Botonic Provider Error', { error: String(e) })
       console.log(colors.red(`There was an error getting the providers: ${e}`))
+      return false
     }
   }
 
-  async deploy() {
+  /* istanbul ignore next */
+  async deploy(): Promise<void> {
     try {
-      const build_out = await this.botonicApiService.buildIfChanged(
-        force,
-        npmCommand
-      )
-      if (!build_out) {
+      const buildOut = await this.botonicApiService.build()
+      if (!buildOut) {
         track('Deploy Botonic Build Error')
         console.log(colors.red('There was a problem building the bot'))
         return
       }
       await this.createBundle()
-      await this.deployBundle()
-      await this.displayDeployResults()
+      const { hasDeployErrors } = await this.deployBundle()
+      await this.displayDeployResults({ hasDeployErrors })
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)
     } finally {

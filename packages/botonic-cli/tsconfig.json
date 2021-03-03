@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
     "outDir": "lib",
     "esModuleInterop": true,
     "strict": true,
@@ -9,5 +8,5 @@
     "noImplicitReturns": true
   },
   "include": [".*.js", "*.js", "**/*.ts", "**/*.tsx"],
-  "exclude": ["templates"]
+  "exclude": ["templates", "tests", "lib"]
 }
