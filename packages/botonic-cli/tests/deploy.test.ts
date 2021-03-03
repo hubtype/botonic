@@ -1,15 +1,13 @@
 import { Config } from '@oclif/config'
 import { assert } from 'console'
-import { mkdtempSync, readdirSync } from 'fs'
-import { removeSync } from 'fs-extra'
 import { join } from 'path'
-import { chdir, cwd } from 'process'
-import rimraf from 'rimraf'
+import { chdir } from 'process'
 
 import { BotonicAPIService } from '../src/botonic-api-service'
 import { EXAMPLES } from '../src/botonic-examples'
 import { default as DeployCommand } from '../src/commands/deploy'
 import { default as NewCommand } from '../src/commands/new'
+import { createTemp, readDir, remove } from '../src/util/file-system'
 
 const botonicApiService = new BotonicAPIService()
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
@@ -20,7 +18,7 @@ assert(BLANK_EXAMPLE.name === 'blank')
 
 describe('TEST: Deploy pipeline', () => {
   test('Download, install, build and deploy a project', async () => {
-    const tmpPath = mkdtempSync('botonic-tmp')
+    const tmpPath = createTemp('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
@@ -36,22 +34,22 @@ describe('TEST: Deploy pipeline', () => {
       .mockImplementation(async () => {
         await botonicApiService.build()
         await deployCommand.createBundle()
-        const onceBundled = readdirSync('.')
+        const onceBundled = readDir('.')
         expect(onceBundled).toContain('botonic_bundle.zip')
         expect(onceBundled).toContain('tmp')
         const { hasDeployErrors } = await deployCommand.deployBundle()
         expect(hasDeployErrors).toBe(false)
-        removeSync(join('.', 'botonic_bundle.zip'))
-        removeSync(join('.', 'tmp'))
+        remove(join('.', 'botonic_bundle.zip'))
+        remove(join('.', 'tmp'))
       })
 
     await deployCommand.deploy()
-    const onceDeployed = readdirSync('.')
+    const onceDeployed = readDir('.')
     expect(onceDeployed).not.toContain('botonic_bundle.zip')
     expect(onceDeployed).not.toContain('tmp')
     chdir('..')
+    remove(tmpPath)
 
-    rimraf.sync(tmpPath)
     spyDeployBundle.mockRestore()
     spyDeploy.mockRestore()
   })

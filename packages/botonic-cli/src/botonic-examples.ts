@@ -1,8 +1,4 @@
-export interface BotonicProject {
-  name: string
-  description: string
-  uri: string
-}
+import { BotonicProject } from './interfaces'
 
 const GITHUB_EXAMPLES_PATH = 'hubtype/botonic-examples'
 

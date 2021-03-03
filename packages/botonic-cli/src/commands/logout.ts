@@ -1,8 +1,8 @@
 import { Command, flags } from '@oclif/command'
 import { resolve } from 'path'
 
+import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
-import { track } from '../utils'
 
 export default class Run extends Command {
   static description = 'Log out of Botonic'
@@ -19,9 +19,10 @@ export default class Run extends Command {
   static args = []
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
+  private telemetry = new Telemetry()
 
-  run(): Promise<void> {
-    track('Logged Out Botonic CLI')
+  async run(): Promise<void> {
+    this.telemetry.trackLoggedOut()
     const { flags } = this.parse(Run)
 
     const _path = flags.path ? resolve(flags.path) : process.cwd()

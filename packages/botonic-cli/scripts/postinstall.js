@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*console.log(`
  ________  ________  _________  ________  ________   ___  ________     
 |\   __  \|\   __  \|\___   ___\\   __  \|\   ___  \|\  \|\   ____\    
@@ -15,8 +13,9 @@ Build chatbots with React
 `)*/
 
 try {
-  var utils = require('../lib/utils')
-  utils.botonicPostInstall()
+  const { Tracker } = require('../lib/analytics/tracker.js')
+  const tracker = new Tracker()
+  tracker.trackInstalledBotonic()
 } catch (e) {
   //Some users don't have the right permissions to
   //create dirs at instal time. We delay it until

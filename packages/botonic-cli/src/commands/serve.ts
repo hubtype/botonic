@@ -1,7 +1,8 @@
 import { Command } from '@oclif/command'
 import colors from 'colors'
 
-import { spawnNpmScript, track } from '../utils'
+import { Telemetry } from '../analytics/telemetry'
+import { spawnNpmScript } from '../util/processes'
 
 export default class Run extends Command {
   static description = 'Serve your bot in your localhost'
@@ -14,8 +15,10 @@ export default class Run extends Command {
 
   static args = []
 
-  run(): Promise<void> {
-    track('Served Botonic CLI')
+  private telemetry = new Telemetry()
+
+  async run(): Promise<void> {
+    this.telemetry.trackServed()
     this.parse(Run)
     try {
       console.log(colors.blue('\nServing Botonic...'))

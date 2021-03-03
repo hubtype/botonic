@@ -2,7 +2,7 @@ import { Command } from '@oclif/command'
 import { exec } from 'child_process'
 import colors from 'colors'
 
-import { track } from '../utils'
+import { Telemetry } from '../analytics/telemetry'
 
 export default class Run extends Command {
   static description = 'Test your Botonic components'
@@ -28,8 +28,10 @@ Ran all test suites.`,
 
   static args = []
 
-  run(): Promise<void> {
-    track('botonic test')
+  private telemetry = new Telemetry()
+
+  async run(): Promise<void> {
+    this.telemetry.trackTested()
     this.parse(Run)
     exec('npm run test', (error, _stdout, stderr) => {
       console.log(colors.blue('\n Executing tests...\n'))

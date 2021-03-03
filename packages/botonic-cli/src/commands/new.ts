@@ -2,17 +2,17 @@ import { Command } from '@oclif/command'
 import { exec as childProcessExec } from 'child_process'
 import { bold, red } from 'colors'
 import fetchRepoDir from 'fetch-repo-dir'
-import { existsSync } from 'fs'
 import { moveSync } from 'fs-extra'
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
-import rimraf from 'rimraf'
 import { promisify } from 'util'
 
+import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
-import { BotonicProject, EXAMPLES } from '../botonic-examples'
-import { track, trackError } from '../utils'
+import { EXAMPLES } from '../botonic-examples'
+import { BotonicProject } from '../interfaces'
+import { pathExists, remove } from '../util/file-system'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = promisify(childProcessExec)
@@ -44,10 +44,11 @@ Creating...
   private examples = EXAMPLES
 
   private botonicApiService = new BotonicAPIService()
+  private telemetry = new Telemetry()
 
   /* istanbul ignore next */
   async run(): Promise<void> {
-    track('Created Botonic Bot CLI')
+    this.telemetry.trackCreated()
     try {
       const args = this.parse(Run).args as NewCommandArgs
       const userProjectDirName = args.name
@@ -65,8 +66,8 @@ Creating...
         )
         return
       }
-      track('Created Botonic Bot CLI', {
-        selected_project_name: selectedProjectName,
+      this.telemetry.trackCreated({
+        selected_project_name: selectedProject.name,
       })
       await this.downloadSelectedProjectIntoPath(
         selectedProject,
@@ -82,7 +83,7 @@ Creating...
       console.log(this.getProcessFeedback(selectedProject, userProjectDirName))
     } catch (e) {
       const error = `botonic new error: ${String(e)}`
-      trackError(error)
+      this.telemetry.trackError(error)
       throw new Error(error)
     }
   }
@@ -112,7 +113,7 @@ Creating...
     selectedProject: BotonicProject,
     path: string
   ): Promise<void> {
-    if (existsSync(path)) rimraf.sync(path)
+    if (pathExists(path)) remove(path)
     const spinner = ora({
       text: 'Downloading files...',
       spinner: 'bouncingBar',
@@ -126,7 +127,7 @@ Creating...
     } catch (e) {
       spinner.fail()
       const error = `Downloading Project: ${selectedProject.name}: ${String(e)}`
-      trackError(error)
+      this.telemetry.trackError(error)
       throw new Error(error)
     }
   }
@@ -142,7 +143,7 @@ Creating...
     } catch (e) {
       spinner.fail()
       const error = `Installing dependencies: ${String(e)}`
-      trackError(error)
+      this.telemetry.trackError(error)
       throw new Error(error)
     }
   }
