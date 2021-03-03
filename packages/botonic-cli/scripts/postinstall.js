@@ -13,9 +13,9 @@ Build chatbots with React
 `)*/
 
 try {
-  const { Tracker } = require('../lib/analytics/tracker.js')
-  const tracker = new Tracker()
-  tracker.trackInstalledBotonic()
+  const { Telemetry } = require('../lib/analytics/telemetry')
+  const telemetry = new Telemetry()
+  telemetry.trackInstalledBotonic()
 } catch (e) {
   //Some users don't have the right permissions to
   //create dirs at instal time. We delay it until
