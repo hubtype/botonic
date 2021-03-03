@@ -1,2 +1,3 @@
-export type EmbeddingsType = 'glove' | '10k-fasttext'
-export type EmbeddingsDimension = 50 | 300
+export interface WordEmbeddingManager {
+  getWordEmbedding(word: string): Promise<number[]>
+}

@@ -4,7 +4,7 @@ import { join } from 'path'
 import {
   BOTONIC_GLOBAL_DIRNAME,
   BOTONIC_GLOBAL_EMBEDDINGS_DIRNAME,
-} from '../constants'
+} from '../../constants'
 
 export const SUPPORTED_EMBEDDINGS = {
   en: {
@@ -51,6 +51,7 @@ export const GLOBAL_EMBEDDINGS_PATH = join(
   BOTONIC_GLOBAL_DIRNAME,
   BOTONIC_GLOBAL_EMBEDDINGS_DIRNAME
 )
+
 export const EMBEDDINGS_URL =
   'https://s3-eu-west-1.amazonaws.com/word-embeddings.hubtype.com'
 
