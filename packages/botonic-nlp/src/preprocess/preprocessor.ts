@@ -12,6 +12,7 @@ export class Preprocessor {
     this.loadEngine('normalizer')
     this.loadEngine('tokenizer')
     this.loadEngine('stopwords')
+    // TODO: In the future, if embeddings are disabled, stemmer should be loaded.
     //   this.loadEngine('stemmer')
   }
 
@@ -23,7 +24,6 @@ export class Preprocessor {
       this.engines[engineName] =
         engineName == 'stopwords' ? engine.stopwords : new engine()
     } catch {
-      //TODO: display that default engine is going to be used in a more efficient way.
       console.warn(
         `Engine "${engineName}" not implemented for locale "${this.locale}". Using default.`
       )
