@@ -3,59 +3,60 @@ import { AugmenterMap } from './types'
 
 export class DataAugmenter {
   // eslint-disable-next-line no-useless-escape
-  private static readonly KEYWORD_PATTERN = /(\[([^\[\]\(\)]*?)\])(?:[^\(]|$)/
+  private readonly KEYWORD_PATTERN = /(\[([^\[\]\(\)]*?)\])(?:[^\(]|$)/
 
-  static augment(
-    sentences: string[],
-    augmenter: AugmenterMap,
-    entities: string[]
-  ): string[] {
-    let augmentedSamples: string[] = []
-    sentences.forEach(sample => {
-      const variations = DataAugmenter.generateVariations(
-        sample,
-        augmenter,
-        entities
-      )
-      augmentedSamples = augmentedSamples.concat(variations)
+  constructor(readonly augmenter: AugmenterMap, readonly entities: string[]) {}
+
+  augment(sentences: string[]): string[] {
+    let augmentedSentences: string[] = []
+    sentences.forEach(s => {
+      augmentedSentences = augmentedSentences.concat(this.augmentSentence(s))
     })
-    return augmentedSamples
+    return augmentedSentences
   }
 
-  private static generateVariations(
-    sample: string,
-    augmenter: AugmenterMap,
-    entities: string[]
-  ): string[] {
-    const inprocessSamples = [sample]
-    const variations: string[] = []
-
-    while (inprocessSamples.length > 0) {
-      const tmpSample = inprocessSamples.pop() as string
-      const match = DataAugmenter.KEYWORD_PATTERN.exec(tmpSample)
-      if (match) {
-        const keyword = match[2]
-        if (keyword in augmenter) {
-          const isEntity = entities.includes(keyword)
-          augmenter[keyword].forEach(word => {
-            const replacement = isEntity ? `[${word}](${keyword})` : word
-            const variation = tmpSample
-              .slice(0, match.index)
-              .concat(
-                replacement,
-                tmpSample.slice(match.index + match[1].length)
-              )
-            inprocessSamples.push(variation)
-          })
-        } else {
-          throw new Error(
-            `Unable to augment the data. Undefined keyword: ${keyword}`
-          )
-        }
+  private augmentSentence(sentence: string): string[] {
+    const finalSentences: string[] = []
+    let unprocessedSentences: string[] = [sentence]
+    while (unprocessedSentences.length > 0) {
+      const processedSentence = unprocessedSentences.pop()
+      const variations = this.generateVariations(processedSentence)
+      if (variations.length == 0) {
+        finalSentences.push(processedSentence)
       } else {
-        variations.push(tmpSample)
+        unprocessedSentences = unprocessedSentences.concat(variations)
       }
     }
-    return variations
+    return finalSentences
+  }
+
+  private generateVariations(sentence: string): string[] {
+    const match = this.KEYWORD_PATTERN.exec(sentence)
+    if (match) {
+      const keyword = match[2]
+      if (keyword in this.augmenter) {
+        return this.augmenter[keyword].map(word =>
+          this.createVariation(sentence, word, match)
+        )
+      } else {
+        throw new Error(
+          `Unable to augment the data. Undefined keyword: ${keyword}`
+        )
+      }
+    }
+    return []
+  }
+
+  private createVariation(
+    sentence: string,
+    word: string,
+    match: RegExpExecArray
+  ): string {
+    return sentence
+      .slice(0, match.index)
+      .concat(
+        this.entities.includes(match[2]) ? `[${word}](${match[2]})` : word,
+        sentence.slice(match.index + match[1].length)
+      )
   }
 }

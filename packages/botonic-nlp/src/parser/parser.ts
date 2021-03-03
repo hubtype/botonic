@@ -15,13 +15,16 @@ export class Parser {
 
   static parse(path: string): Data {
     const stat = lstatSync(path)
+
     if (stat.isFile()) {
       return Parser.parseFile(path)
-    } else if (stat.isDirectory()) {
-      return Parser.parseDirectory(path)
-    } else {
-      throw new Error(`path "${path}" must be a directory or a file.`)
     }
+
+    if (stat.isDirectory()) {
+      return Parser.parseDirectory(path)
+    }
+
+    throw new Error(`path "${path}" must be a directory or file.`)
   }
 
   private static parseDirectory(path: string): Data {
@@ -57,11 +60,11 @@ export class Parser {
       let sentences = content[this.SAMPLES_FIELD]
 
       if (this.DATA_AUGMENTATION_FIELD in content) {
-        sentences = DataAugmenter.augment(
-          sentences,
+        const augmenter = new DataAugmenter(
           content[this.DATA_AUGMENTATION_FIELD],
           entities
         )
+        sentences = augmenter.augment(sentences)
       }
 
       let samples: Sample[] = sentences.map(s => {
