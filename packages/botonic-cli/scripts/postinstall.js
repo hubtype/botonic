@@ -26,9 +26,10 @@ try {
     var analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu', {
       flushAt: 1,
     })
+    const { v4 } = require('uuid')
     analytics.track({
       event: 'Installed Botonic CLI',
-      anonymousId: Math.round(Math.random() * 100000000),
+      anonymousId: v4(),
       properties: { error: `postinstall exception: ${String(e)}` },
     })
   }

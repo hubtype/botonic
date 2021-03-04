@@ -1,5 +1,6 @@
 import { homedir } from 'os'
 import { join } from 'path'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   BOT_CREDS_FILENAME,
@@ -29,8 +30,8 @@ export class CredentialsHandler {
     this.createIfNotExists()
   }
 
-  generateId(): number {
-    return Math.round(Math.random() * 100000000)
+  generateId(): string {
+    return uuidv4()
   }
 
   createIfNotExists(): void {
@@ -43,7 +44,7 @@ export class CredentialsHandler {
         pathExists(this.pathToCredentials) && readJSON(this.pathToCredentials)
       )
     } catch (e) {
-      console.warn('Credentials could not be loaded', e)
+      console.warn('Credentials could not be loaded')
       return undefined
     }
   }
@@ -52,7 +53,7 @@ export class CredentialsHandler {
     try {
       writeJSON(this.pathToCredentials, obj)
     } catch (e) {
-      console.warn('Credentials could not be overwritten', e)
+      console.warn('Credentials could not be overwritten')
     }
   }
 }

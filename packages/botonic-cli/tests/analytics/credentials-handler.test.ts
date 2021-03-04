@@ -9,7 +9,7 @@ describe('TEST: GlobalCredentialsHandler', () => {
     const credentialsHandler = new GlobalCredentialsHandler()
     expect(pathExists(credentialsHandler.pathToCredentials)).toBeTruthy()
     expect(credentialsHandler.read()).toMatchObject({
-      analytics: { anonymous_id: expect.any(Number) },
+      analytics: { anonymous_id: expect.any(String) },
     })
     remove(path)
   })

@@ -43,7 +43,7 @@ interface Me {
 }
 
 interface AnalyticsInfo {
-  anonymous_id: number
+  anonymous_id: string
 }
 
 export interface GlobalCredentials {
