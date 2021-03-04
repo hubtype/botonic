@@ -1,8 +1,9 @@
+import { homedir } from 'os'
 import { join } from 'path'
 
 import {
   BOT_CREDS_FILENAME,
-  BOTONIC_HOME_DIR,
+  BOTONIC_HOME_DIRNAME,
   BOTONIC_PROJECT_PATH,
   GLOBAL_CREDS_FILENAME,
 } from '../constants'
@@ -12,6 +13,7 @@ import {
   GlobalCredentials,
 } from '../interfaces'
 import { create, pathExists, readJSON, writeJSON } from '../util/file-system'
+import { execCommand, isWindows } from '../util/processes'
 
 export class CredentialsHandler {
   homePath: string
@@ -57,8 +59,11 @@ export class CredentialsHandler {
 
 export class GlobalCredentialsHandler extends CredentialsHandler {
   constructor() {
+    const homeDirectory = isWindows()
+      ? homedir()
+      : execCommand('eval echo ~${SUDO_USER}')
     super({
-      homePath: BOTONIC_HOME_DIR,
+      homePath: join(homeDirectory, BOTONIC_HOME_DIRNAME),
       filename: GLOBAL_CREDS_FILENAME,
     })
   }

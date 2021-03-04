@@ -21,17 +21,15 @@ try {
     'Create your first chatbot with:\n\x1b[1mbotonic new myBot\x1b[0m\n'
   )
 } catch (e) {
-  const { getSystemInformation } = require('../lib/util/processes')
   if (process.env.BOTONIC_DISABLE_ANALYTICS !== '1') {
     const Analytics = require('analytics-node')
     var analytics = new Analytics('YD0jpJHNGW12uhLNbgB4wbdTRQ4Cy1Zu', {
       flushAt: 1,
     })
-    const properties = { ...getSystemInformation(), error: String(e) }
     analytics.track({
       event: 'Installed Botonic CLI',
       anonymousId: Math.round(Math.random() * 100000000),
-      properties,
+      properties: { error: `postinstall exception: ${String(e)}` },
     })
   }
 }

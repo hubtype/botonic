@@ -1,7 +1,6 @@
-import { homedir } from 'os'
 import { join } from 'path'
 
-export const BOTONIC_HOME_DIR = join(homedir(), '.botonic')
+export const BOTONIC_HOME_DIRNAME = '.botonic'
 export const GLOBAL_CREDS_FILENAME = 'credentials.json'
 export const BOTONIC_PROJECT_PATH = process.cwd()
 export const BOT_CREDS_FILENAME = '.botonic.json'
