@@ -3,9 +3,14 @@ import { assert } from 'console'
 import { join } from 'path'
 import { chdir } from 'process'
 
-import { EXAMPLES } from '../src/botonic-examples'
-import { default as NewCommand } from '../src/commands/new'
-import { createTemp, readDir, readJSON, remove } from '../src/util/file-system'
+import { EXAMPLES } from '../../src/botonic-examples'
+import { default as NewCommand } from '../../src/commands/new'
+import {
+  createTemp,
+  readDir,
+  readJSON,
+  remove,
+} from '../../src/util/file-system'
 
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
 

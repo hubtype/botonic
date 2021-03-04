@@ -3,11 +3,11 @@ import { assert } from 'console'
 import { join } from 'path'
 import { chdir } from 'process'
 
-import { BotonicAPIService } from '../src/botonic-api-service'
-import { EXAMPLES } from '../src/botonic-examples'
-import { default as DeployCommand } from '../src/commands/deploy'
-import { default as NewCommand } from '../src/commands/new'
-import { createTemp, readDir, remove } from '../src/util/file-system'
+import { BotonicAPIService } from '../../src/botonic-api-service'
+import { EXAMPLES } from '../../src/botonic-examples'
+import { default as DeployCommand } from '../../src/commands/deploy'
+import { default as NewCommand } from '../../src/commands/new'
+import { createTemp, readDir, remove } from '../../src/util/file-system'
 
 const botonicApiService = new BotonicAPIService()
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))

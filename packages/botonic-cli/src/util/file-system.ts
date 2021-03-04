@@ -18,7 +18,9 @@ export function readDir(path: string): string[] {
 }
 
 export function readJSON(path: string): any {
-  return JSON.parse(readFileSync(path, 'utf8'))
+  const fileContent = readFileSync(path, 'utf8')
+  if (!fileContent) return undefined
+  return JSON.parse(fileContent)
 }
 
 export function writeJSON(path: string, object: any): void {

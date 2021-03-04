@@ -72,8 +72,8 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
 
   hasAnonymousId(): boolean {
     if (!pathExists(this.pathToCredentials)) return false
-    const { analytics } = this.read()
-    return Boolean(analytics && analytics.anonymous_id)
+    const content = this.read()
+    return Boolean(content?.analytics?.anonymous_id)
   }
 
   refreshAnonymousId(): void {
