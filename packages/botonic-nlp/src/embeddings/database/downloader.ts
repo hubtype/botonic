@@ -13,14 +13,14 @@ export class DatabaseDownloader {
     dimension: EmbeddingsDimension
   ): Promise<void> {
     const filename = `${type}-${dimension}d-${locale}.db`
-    this.checkDirectory()
+    this.createDirectory()
     await this.downloadIntoPath(
       `${EMBEDDINGS_URL}/${filename}`,
       join(GLOBAL_EMBEDDINGS_PATH, filename)
     )
   }
 
-  private static checkDirectory(): void {
+  private static createDirectory(): void {
     if (!existsSync(GLOBAL_EMBEDDINGS_PATH)) {
       mkdirSync(GLOBAL_EMBEDDINGS_PATH, { recursive: true })
     }
