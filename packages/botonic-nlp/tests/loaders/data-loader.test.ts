@@ -1,12 +1,11 @@
 import { join } from 'path'
 
 import { DataLoader } from '../../src/loaders/data-loader'
+import * as helper from '../helpers/helper'
 
 describe('Parsing Botonic NLP input file', () => {
   test('Parsing file', () => {
-    const loader = new DataLoader(
-      join(__dirname, '..', 'helpers', 'data', 'shopping.yaml')
-    )
+    const loader = new DataLoader(helper.SHOPPING_DATA_PATH)
     expect(loader.data).toEqual({
       classes: ['shopping'],
       entities: ['product'],

@@ -1,16 +1,12 @@
 import { NerSampleProcessor } from '../../../../src/tasks/ner/process/ner-sample-processor'
-import {
-  entitiesCodifier,
-  preprocessor,
-  sequenceCodifier,
-} from '../../../helpers/tasks/ner/test-helper'
+import * as helper from '../../../helpers/tasks/ner/helper'
 
 describe('NER Sample Processor', () => {
   test('Process sample', () => {
     const processor = new NerSampleProcessor(
-      preprocessor,
-      sequenceCodifier,
-      entitiesCodifier
+      helper.preprocessor,
+      helper.sequenceCodifier,
+      helper.entitiesCodifier
     )
     expect(
       processor

@@ -1,13 +1,11 @@
-import { DatabaseManager } from '../../../../src/embeddings/database-manager'
-import { Embedder } from '../../../../src/embeddings/embedder'
 import { createBiLstmModel } from '../../../../src/tasks/ner/models/bilstm-model'
-import { MODEL_NAME } from '../../../helpers/tasks/ner/test-helper'
+import { MODEL_NAME } from '../../../helpers/tasks/ner/helper'
+import * as helper from '../../../helpers/tasks/ner/helper'
 
 describe('Bidirectional LSTM Model', () => {
   test('Creating model', async () => {
     // arrange
-    const manager = new DatabaseManager('en', 'glove', 50)
-    const embedder = await Embedder.with(manager)
+    const embedder = await helper.getEmbedder()
     const embeddingsMatrix = await embedder.generateEmbeddingsMatrix([
       'where',
       'order',

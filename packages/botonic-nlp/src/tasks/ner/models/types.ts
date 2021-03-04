@@ -1,1 +1,1 @@
-export type ModelTemplate = 'biLstm'
+export type NerModelTemplates = 'biLstm'

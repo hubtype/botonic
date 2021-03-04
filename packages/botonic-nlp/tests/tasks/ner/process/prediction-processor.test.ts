@@ -1,11 +1,11 @@
 import { tensor, Tensor3D } from '@tensorflow/tfjs-node'
 
 import { PredictionProcessor } from '../../../../src/tasks/ner/process/prediction-processor'
-import { ENTITIES } from '../../../helpers/tasks/ner/test-helper'
+import * as helper from '../../../helpers/tasks/ner/helper'
 
 describe('Prediction processor', () => {
   test('process prediction', async () => {
-    const predictionProcessor = new PredictionProcessor(ENTITIES)
+    const predictionProcessor = new PredictionProcessor(helper.ENTITIES)
     const predictions: Tensor3D = tensor([
       [
         [

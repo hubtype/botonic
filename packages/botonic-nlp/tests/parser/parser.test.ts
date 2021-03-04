@@ -1,12 +1,11 @@
 import { join } from 'path'
 
 import { Parser } from '../../src/parser/parser'
+import * as helper from '../helpers/helper'
 
 describe('Parsing Botonic NLP input file', () => {
   test('Parsing file', () => {
-    expect(
-      Parser.parse(join(__dirname, '..', 'helpers', 'data', 'shopping.yaml'))
-    ).toEqual({
+    expect(Parser.parse(helper.SHOPPING_DATA_PATH)).toEqual({
       classes: ['shopping'],
       entities: ['product'],
       samples: [
@@ -75,7 +74,7 @@ describe('Parsing Botonic NLP input file', () => {
   })
 
   test('Parsing directory files', () => {
-    expect(Parser.parse(join(__dirname, '..', 'helpers', 'data'))).toEqual({
+    expect(Parser.parse(helper.DATA_DIR_PATH)).toEqual({
       classes: ['booking', 'shopping'],
       entities: ['restaurant', 'product'],
       samples: [

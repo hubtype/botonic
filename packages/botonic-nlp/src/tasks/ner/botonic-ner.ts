@@ -1,10 +1,9 @@
-import { LayersModel, Scalar, Tensor3D } from '@tensorflow/tfjs-node'
-import { mkdirSync, writeFileSync } from 'fs'
-import { join } from 'path'
+import { Tensor3D } from '@tensorflow/tfjs-node'
 
-import { DatabaseManager } from '../../embeddings/database-manager'
 import { Embedder } from '../../embeddings/embedder'
-import { MODEL_CONFIG_FILENAME } from '../../loaders/constants'
+import { WordEmbeddingManager } from '../../embeddings/types'
+import { ModelHandler } from '../../handlers/model-handler'
+import { ModelEvaluation } from '../../handlers/types'
 import { DataLoader } from '../../loaders/data-loader'
 import { Sample } from '../../parser/types'
 import { Codifier } from '../../preprocess/codifier'
@@ -19,10 +18,9 @@ import {
 } from '../../preprocess/types'
 import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
 import { Locale } from '../../types'
+import { NerConfigHandler } from '../ner/handlers/config-handler'
 import { createBiLstmModel } from '../ner/models/bilstm-model'
-import { ModelEvaluation } from '../types'
-import { NerModelLoader } from './loaders/ner-model-loader'
-import { ModelTemplate } from './models/types'
+import { NerModelTemplates } from './models/types'
 import { NEUTRAL_ENTITY } from './process/constants'
 import { NerSampleProcessor } from './process/ner-sample-processor'
 import { PredictionProcessor } from './process/prediction-processor'
@@ -31,12 +29,12 @@ import { Entity } from './process/types'
 export class BotonicNer {
   entities: string[]
   vocabulary: string[]
-  preprocessor: Preprocessor
-  sequenceCodifier: Codifier
-  entitiesCodifier: Codifier
-  sampleProcessor: NerSampleProcessor
-  predictionProcessor: PredictionProcessor
-  model: LayersModel
+  private preprocessor: Preprocessor
+  private sequenceCodifier: Codifier
+  private entitiesCodifier: Codifier
+  private sampleProcessor: NerSampleProcessor
+  private predictionProcessor: PredictionProcessor
+  private modelHandler: ModelHandler
 
   private constructor(readonly locale: Locale, readonly maxLength: number) {}
 
@@ -44,11 +42,12 @@ export class BotonicNer {
     return new BotonicNer(locale, maxLength)
   }
 
-  static from(loader: NerModelLoader): BotonicNer {
-    const ner = new BotonicNer(loader.locale, loader.maxLength)
-    ner.entities = loader.entities
-    ner.vocabulary = loader.vocabulary
-    ner.model = loader.model
+  static async load(path: string): Promise<BotonicNer> {
+    const config = NerConfigHandler.load(path)
+    const ner = new BotonicNer(config.locale, config.maxLength)
+    ner.vocabulary = config.vocabulary
+    ner.entities = config.entities
+    ner.modelHandler = await ModelHandler.load(path)
     return ner
   }
 
@@ -88,20 +87,18 @@ export class BotonicNer {
   }
 
   async createModel(
-    template: ModelTemplate,
-    manager: DatabaseManager
+    template: NerModelTemplates,
+    manager: WordEmbeddingManager
   ): Promise<void> {
-    const embedder = await Embedder.with(manager)
-    const embeddingsMatrix = await embedder.generateEmbeddingsMatrix(
-      this.vocabulary
-    )
+    // TODO: set embeddings as optional
+    const embeddingsMatrix = await new Embedder(
+      manager
+    ).generateEmbeddingsMatrix(this.vocabulary)
 
     switch (template) {
       case 'biLstm':
-        this.model = createBiLstmModel(
-          this.maxLength,
-          this.entities,
-          embeddingsMatrix
+        this.modelHandler = new ModelHandler(
+          createBiLstmModel(this.maxLength, this.entities, embeddingsMatrix)
         )
         break
       default:
@@ -115,37 +112,28 @@ export class BotonicNer {
     batchSize: number
   ): Promise<void> {
     const { x, y } = this.sampleProcessor.process(samples)
-    await this.model.fit(x, y, { epochs, batchSize })
+    await this.modelHandler.train(x, y, { epochs, batchSize })
   }
 
   async evaluate(samples: Sample[]): Promise<ModelEvaluation> {
     const { x, y } = this.sampleProcessor.process(samples)
-    const [loss, accuracy] = (await this.model.evaluate(x, y)) as Scalar[]
-    return {
-      loss: loss.arraySync(),
-      accuracy: accuracy.arraySync(),
-    }
+    return await this.modelHandler.evaluate(x, y)
   }
 
   recognizeEntities(text: string): Entity[] {
     const { sequence, input } = this.sampleProcessor.processInput(text)
-    const prediction = this.model.predict(input) as Tensor3D
+    const prediction = this.modelHandler.predict(input) as Tensor3D
     return this.predictionProcessor.process(sequence, prediction)
   }
 
   async saveModel(path: string): Promise<void> {
-    //TODO: maybe create a ModelWritter
-    mkdirSync(path, { recursive: true })
-    writeFileSync(
-      join(path, MODEL_CONFIG_FILENAME),
-      JSON.stringify({
-        locale: this.locale,
-        maxLength: this.maxLength,
-        vocabulary: this.vocabulary,
-        entities: this.entities,
-      })
-    )
-    await this.model.save(`file://${path}`)
+    NerConfigHandler.save(path, {
+      locale: this.locale,
+      maxLength: this.maxLength,
+      vocabulary: this.vocabulary,
+      entities: this.entities,
+    })
+    await this.modelHandler.save(path)
   }
 
   set normalizer(engine: Normalizer) {
