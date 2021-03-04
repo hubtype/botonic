@@ -8,11 +8,13 @@ export class DataAugmenter {
   constructor(readonly augmenter: AugmenterMap, readonly entities: string[]) {}
 
   augment(sentences: string[]): string[] {
-    let augmentedSentences: string[] = []
-    sentences.forEach(s => {
-      augmentedSentences = augmentedSentences.concat(this.augmentSentence(s))
-    })
-    return augmentedSentences
+    return sentences
+      .map(s => this.augmentSentence(s))
+      .reduce(
+        (augmentedSentences, augmentations) =>
+          augmentedSentences.concat(augmentations),
+        []
+      )
   }
 
   private augmentSentence(sentence: string): string[] {
@@ -33,10 +35,12 @@ export class DataAugmenter {
   private generateVariations(sentence: string): string[] {
     const match = this.KEYWORD_PATTERN.exec(sentence)
     if (match) {
+      const start = match.index
+      const definition = match[1]
       const keyword = match[2]
       if (keyword in this.augmenter) {
         return this.augmenter[keyword].map(word =>
-          this.createVariation(sentence, word, match)
+          this.createVariation(sentence, word, start, definition, keyword)
         )
       } else {
         throw new Error(
@@ -50,13 +54,15 @@ export class DataAugmenter {
   private createVariation(
     sentence: string,
     word: string,
-    match: RegExpExecArray
+    start: number,
+    definition: string,
+    keyword: string
   ): string {
     return sentence
-      .slice(0, match.index)
+      .slice(0, start)
       .concat(
-        this.entities.includes(match[2]) ? `[${word}](${match[2]})` : word,
-        sentence.slice(match.index + match[1].length)
+        this.entities.includes(keyword) ? `[${word}](${keyword})` : word,
+        sentence.slice(start + definition.length)
       )
   }
 }
