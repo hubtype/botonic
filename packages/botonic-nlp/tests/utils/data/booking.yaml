@@ -1,0 +1,9 @@
+class: booking
+
+entities:
+  - restaurant
+
+samples:
+  - I would like to book a table at [Ginos](restaurant)
+  - I want to book a table at [Goiko](restaurant) for tomorrow
+  - Please, book me a table at [Koyo](restaurant)
