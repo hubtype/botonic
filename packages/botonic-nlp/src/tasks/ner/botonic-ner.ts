@@ -20,10 +20,10 @@ import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
 import { Locale } from '../../types'
 import { NerConfigHandler } from '../ner/handlers/config-handler'
 import { createBiLstmModel } from '../ner/models/bilstm-model'
-import { NerModelTemplates } from './models/types'
+import { NerModelParameters, NerModelTemplate } from './models/types'
 import { NEUTRAL_ENTITY } from './process/constants'
-import { NerSampleProcessor } from './process/ner-sample-processor'
 import { PredictionProcessor } from './process/prediction-processor'
+import { NerSampleProcessor } from './process/sample-processor'
 import { Entity } from './process/types'
 
 export class BotonicNer {
@@ -76,8 +76,12 @@ export class BotonicNer {
   }
 
   compile(): void {
-    this.sequenceCodifier = new Codifier(this.vocabulary, false)
-    this.entitiesCodifier = new Codifier(this.entities, true)
+    this.sequenceCodifier = new Codifier(this.vocabulary, {
+      categorical: false,
+    })
+    this.entitiesCodifier = new Codifier(this.entities, {
+      categorical: true,
+    })
     this.sampleProcessor = new NerSampleProcessor(
       this.preprocessor,
       this.sequenceCodifier,
@@ -87,8 +91,9 @@ export class BotonicNer {
   }
 
   async createModel(
-    template: NerModelTemplates,
-    manager: WordEmbeddingManager
+    template: NerModelTemplate,
+    manager: WordEmbeddingManager,
+    params?: NerModelParameters
   ): Promise<void> {
     // TODO: set embeddings as optional
     const embeddingsMatrix = await new Embedder(
@@ -98,7 +103,12 @@ export class BotonicNer {
     switch (template) {
       case 'biLstm':
         this.modelHandler = new ModelHandler(
-          createBiLstmModel(this.maxLength, this.entities, embeddingsMatrix)
+          createBiLstmModel(
+            this.maxLength,
+            this.entities,
+            embeddingsMatrix,
+            params
+          )
         )
         break
       default:

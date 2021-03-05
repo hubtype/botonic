@@ -9,11 +9,26 @@ import {
   train,
 } from '@tensorflow/tfjs-node'
 
+import { NerModelParameters } from './types'
+
+const DEFAULT_DROPOUT = 0.1
+const DEFAULT_UNITS = 128
+const DEFAULT_LEARNING_RATE = 0.001
+
 export function createBiLstmModel(
   maxLength: number,
   entities: string[],
-  embeddingsMatrix: Tensor2D
+  embeddingsMatrix: Tensor2D,
+  params: NerModelParameters = {
+    dropout: DEFAULT_DROPOUT,
+    units: DEFAULT_UNITS,
+    learningRate: DEFAULT_LEARNING_RATE,
+  }
 ): LayersModel {
+  console.log(params)
+  console.log(params.dropout ? params.dropout : 0.1)
+  console.log(params.units ? params.units : 128)
+  console.log(params.learningRate ? params.learningRate : 0.001)
   const inputs = input({ name: 'InputLayer', shape: [maxLength] })
 
   const embeddingsLayer = layers.embedding({
@@ -25,12 +40,15 @@ export function createBiLstmModel(
     trainable: true,
   })
 
-  const dropout = layers.dropout({ name: 'DropoutLayer', rate: 0.1 })
+  const dropoutLayer = layers.dropout({
+    name: 'DropoutLayer',
+    rate: params.dropout ? params.dropout : DEFAULT_DROPOUT,
+  })
 
   const bidirectionalLSTM = layers.bidirectional({
     name: 'BidirectionalLayer',
     layer: layers.lstm({
-      units: 128,
+      units: params.units ? params.units : DEFAULT_UNITS,
       returnSequences: true,
       recurrentDropout: 0.1,
     }) as RNN,
@@ -45,12 +63,14 @@ export function createBiLstmModel(
   })
 
   const outputs = timeDistributedLayer.apply(
-    bidirectionalLSTM.apply(dropout.apply(embeddingsLayer.apply(inputs)))
+    bidirectionalLSTM.apply(dropoutLayer.apply(embeddingsLayer.apply(inputs)))
   ) as SymbolicTensor
 
   const nerModel = model({ name: 'BiLstmNerModel', inputs, outputs })
   nerModel.compile({
-    optimizer: train.adam(0.001),
+    optimizer: train.adam(
+      params.learningRate ? params.learningRate : DEFAULT_LEARNING_RATE
+    ),
     loss: 'categoricalCrossentropy',
     metrics: ['acc'],
   })

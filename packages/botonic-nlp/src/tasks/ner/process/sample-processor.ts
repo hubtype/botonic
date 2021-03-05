@@ -17,16 +17,11 @@ export class NerSampleProcessor extends SampleProcessor {
   }
 
   process(samples: Sample[]): Set {
-    const x: number[][] = []
-    const y: number[][][] = []
-
-    samples.forEach(s => {
-      const preprocessedSample = this.processSample(s)
-      x.push(preprocessedSample.x)
-      y.push(preprocessedSample.y)
-    })
-
-    return { x: tensor(x), y: tensor(y) }
+    const processedSamples = samples.map(s => this.processSample(s))
+    return {
+      x: tensor(processedSamples.map(s => s.x)),
+      y: tensor(processedSamples.map(s => s.y)),
+    }
   }
 
   private processSample(sample: Sample): { x: number[]; y: number[][] } {

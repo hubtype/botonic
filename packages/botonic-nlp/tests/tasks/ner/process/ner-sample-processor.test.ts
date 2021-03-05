@@ -1,4 +1,4 @@
-import { NerSampleProcessor } from '../../../../src/tasks/ner/process/ner-sample-processor'
+import { NerSampleProcessor } from '../../../../src/tasks/ner/process/sample-processor'
 import * as helper from '../../../helpers/tasks/ner/helper'
 
 describe('NER Sample Processor', () => {
