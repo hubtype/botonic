@@ -1,6 +1,9 @@
 export class Codifier {
-  constructor(public vocabulary: string[], readonly categorical: boolean) {
+  categorical: boolean
+
+  constructor(public vocabulary: string[], args = { categorical: false }) {
     this.vocabulary = Array.from(new Set(vocabulary))
+    this.categorical = args.categorical
   }
 
   encode(sequence: string[]): number[] | number[][] {
