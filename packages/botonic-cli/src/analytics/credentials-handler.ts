@@ -1,5 +1,5 @@
 import { homedir } from 'os'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
 import {
@@ -21,7 +21,7 @@ export class CredentialsHandler {
   pathToCredentials: string
 
   constructor(args: CredentialsHandlerArgs) {
-    this.homePath = args.homePath
+    this.homePath = resolve(args.homePath)
     this.pathToCredentials = join(this.homePath, args.filename)
     this.initialize()
   }
@@ -38,7 +38,7 @@ export class CredentialsHandler {
     if (!pathExists(this.homePath)) create(this.homePath)
   }
 
-  read(): any {
+  load(): any {
     try {
       return (
         pathExists(this.pathToCredentials) && readJSON(this.pathToCredentials)
@@ -49,7 +49,7 @@ export class CredentialsHandler {
     }
   }
 
-  write(obj: any): void {
+  dump(obj: any): void {
     try {
       writeJSON(this.pathToCredentials, obj)
     } catch (e) {
@@ -76,24 +76,32 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
     }
   }
 
+  getAnonymousId(): string {
+    try {
+      const content = this.load()
+      return content?.analytics?.anonymous_id
+    } catch (e) {
+      return ''
+    }
+  }
+
   hasAnonymousId(): boolean {
     if (!pathExists(this.pathToCredentials)) return false
-    const content = this.read()
-    return Boolean(content?.analytics?.anonymous_id)
+    return Boolean(this.getAnonymousId())
   }
 
   refreshAnonymousId(): void {
-    this.write({
+    this.dump({
       analytics: { anonymous_id: this.generateId() },
     })
   }
 
-  read(): GlobalCredentials {
-    return super.read() as GlobalCredentials
+  load(): GlobalCredentials {
+    return super.load() as GlobalCredentials
   }
 
-  write(obj: GlobalCredentials): void {
-    return super.write(obj)
+  dump(obj: GlobalCredentials): void {
+    return super.dump(obj)
   }
 }
 
@@ -105,11 +113,11 @@ export class BotCredentialsHandler extends CredentialsHandler {
     })
   }
 
-  read(): BotCredentials {
-    return super.read() as BotCredentials
+  load(): BotCredentials {
+    return super.load() as BotCredentials
   }
 
-  write(obj: BotCredentials): void {
-    return super.write(obj)
+  dump(obj: BotCredentials): void {
+    return super.dump(obj)
   }
 }

@@ -2,6 +2,8 @@ import { execSync, spawn } from 'child_process'
 import { arch, platform } from 'os'
 import { join } from 'path'
 
+import { BOTONIC_NPM_NAMESPACE } from '../constants'
+import { SystemInformation } from '../interfaces'
 import { readJSON } from './file-system'
 
 export async function sleep(ms: number): Promise<number> {
@@ -56,14 +58,14 @@ export function getBotonicDependencies(): any[] | string {
     const packageJSON = readJSON('package.json')
     const botonicDependencies = Object.entries(
       (packageJSON as any).dependencies
-    ).filter(([k, _]) => k.includes('@botonic'))
+    ).filter(([k, _]) => k.includes(BOTONIC_NPM_NAMESPACE))
     return botonicDependencies
   } catch (e) {
     return String(e)
   }
 }
 
-export function getSystemInformation(): any {
+export function getSystemInformation(): SystemInformation {
   return {
     platform: platform(),
     arch: arch(),

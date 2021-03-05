@@ -65,10 +65,35 @@ interface BotInfo {
   organization: string
   last_update: BotLastUpdate
   created_at: string
-  provider_accounts: string[]
+  provider_accounts: ProviderAccountsInfo[]
   is_debug: boolean
   is_published: boolean
-  active_users: string
+  active_users: number
+}
+
+interface ProviderAccountsInfo {
+  id: string
+  queue_id: string
+  bot_id: string
+  provider: string
+  name: string
+  username: string
+  credentials: string
+  credentials_json: {
+    name: string
+    bot_id: string
+    settings: {
+      visible: boolean
+      whitelisted_urls: string[]
+      scheduled_queue_id: string
+    }
+  }
+  netlify_url: string
+  is_playground: boolean
+  created_by_id: string
+  chat_count: number
+  is_active: boolean
+  imp_id: string
 }
 
 export interface BotCredentials {
@@ -77,4 +102,17 @@ export interface BotCredentials {
 
 export interface AnalyticsService {
   track: (any) => any
+}
+
+export interface SystemInformation {
+  platform: string
+  arch: string
+  timezone: string
+  timestamp: string
+  is_tty: boolean
+  framework_path: string
+  system_path: string
+  node_version: string
+  botonic_cli_version: string
+  botonic_dependencies: any[] | string
 }

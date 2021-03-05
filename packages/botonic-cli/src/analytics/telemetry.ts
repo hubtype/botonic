@@ -16,26 +16,28 @@ export class Telemetry {
     this.globalCredentialsHandler = new GlobalCredentialsHandler()
   }
 
-  createAnonymousIdIfNotExists(): void {
+  createAnonymousIdIfNotExists(): string | undefined {
     if (!this.globalCredentialsHandler.hasAnonymousId()) {
       this.globalCredentialsHandler.refreshAnonymousId()
+    }
+    const credentials = this.globalCredentialsHandler.load()
+    return credentials?.analytics?.anonymous_id
+  }
+
+  getTelemetryProperties(properties: any): any {
+    return {
+      ...getSystemInformation(),
+      ...properties,
     }
   }
 
   track(event: string, properties = {}): void {
     if (this.isAnalyticsEnabled) {
-      this.createAnonymousIdIfNotExists()
-      const {
-        analytics: { anonymous_id },
-      } = this.globalCredentialsHandler.read()
-      properties = {
-        ...getSystemInformation(),
-        ...properties,
-      }
+      const anonymousId = this.createAnonymousIdIfNotExists()
       this.analyticsService.track({
         event: event,
-        anonymousId: anonymous_id,
-        properties: properties,
+        anonymousId: anonymousId,
+        properties: this.getTelemetryProperties(properties),
       })
     }
   }

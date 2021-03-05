@@ -46,7 +46,7 @@ export class BotonicAPIService {
   }
 
   loadGlobalCredentials(): void {
-    const credentials = this.globalCredentialsHandler.read()
+    const credentials = this.globalCredentialsHandler.load()
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
@@ -61,7 +61,7 @@ export class BotonicAPIService {
   }
 
   loadBotCredentials(): void {
-    const credentials = this.botCredentialsHandler.read()
+    const credentials = this.botCredentialsHandler.load()
     if (credentials) {
       // eslint-disable-next-line no-prototype-builtins
       if (credentials.hasOwnProperty('bot')) {
@@ -75,7 +75,7 @@ export class BotonicAPIService {
 
   saveGlobalCredentials(): void {
     this.globalCredentialsHandler.createIfNotExists()
-    this.globalCredentialsHandler.write({
+    this.globalCredentialsHandler.dump({
       oauth: this.oauth,
       me: this.me,
       analytics: this.analytics,
@@ -83,7 +83,7 @@ export class BotonicAPIService {
   }
 
   saveBotCredentials(): void {
-    this.botCredentialsHandler.write({
+    this.botCredentialsHandler.dump({
       bot: this.bot,
     })
   }

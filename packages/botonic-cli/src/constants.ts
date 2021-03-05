@@ -1,5 +1,4 @@
-import { join } from 'path'
-
+export const BOTONIC_NPM_NAMESPACE = '@botonic'
 export const BOTONIC_HOME_DIRNAME = '.botonic'
 export const GLOBAL_CREDS_FILENAME = 'credentials.json'
 export const BOTONIC_PROJECT_PATH = process.cwd()
