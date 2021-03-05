@@ -1,29 +1,14 @@
 import axios from 'axios'
 import { createWriteStream, existsSync, mkdirSync } from 'fs'
-import { join } from 'path'
+import { dirname } from 'path'
 
-import { Locale } from '../../types'
-import { EMBEDDINGS_URL, GLOBAL_EMBEDDINGS_PATH } from './constants'
-import { EmbeddingsDimension, EmbeddingsType } from './types'
-
-export class DatabaseDownloader {
-  static async download(
-    locale: Locale,
-    type: EmbeddingsType,
-    dimension: EmbeddingsDimension
-  ): Promise<void> {
-    const filename = `${type}-${dimension}d-${locale}.db`
-    this.createDirectory()
-    await this.downloadIntoPath(
-      `${EMBEDDINGS_URL}/${filename}`,
-      join(GLOBAL_EMBEDDINGS_PATH, filename)
-    )
-  }
-
-  private static createDirectory(): void {
-    if (!existsSync(GLOBAL_EMBEDDINGS_PATH)) {
-      mkdirSync(GLOBAL_EMBEDDINGS_PATH, { recursive: true })
+export class Downloader {
+  static async download(url: string, path: string): Promise<void> {
+    const dirPath = dirname(path)
+    if (!existsSync(dirPath)) {
+      mkdirSync(dirPath, { recursive: true })
     }
+    await this.downloadIntoPath(url, path)
   }
 
   private static async downloadIntoPath(

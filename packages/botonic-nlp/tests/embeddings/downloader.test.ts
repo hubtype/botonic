@@ -1,17 +1,21 @@
 import { existsSync, unlinkSync } from 'fs'
 import { join } from 'path'
 
-import { GLOBAL_EMBEDDINGS_PATH } from '../../../src/embeddings/database/constants'
-import { DatabaseDownloader } from '../../../src/embeddings/database/downloader'
+import {
+  EMBEDDINGS_URL,
+  GLOBAL_EMBEDDINGS_PATH,
+} from '../../src/embeddings/database/constants'
+import { Downloader } from '../../src/embeddings/downloader'
 
-describe('Database Downloader', () => {
+describe('Downloader', () => {
   test('Download embeddings file', async () => {
+    const url = `${EMBEDDINGS_URL}/10k-fasttext-300d-en.db`
     const path = join(GLOBAL_EMBEDDINGS_PATH, '10k-fasttext-300d-en.db')
     if (existsSync(path)) {
       unlinkSync(path)
     }
     expect(existsSync(path)).toEqual(false)
-    await DatabaseDownloader.download('en', '10k-fasttext', 300)
+    await Downloader.download(url, path)
     expect(existsSync(path)).toEqual(true)
   })
 })

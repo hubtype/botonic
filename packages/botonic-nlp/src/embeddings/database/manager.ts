@@ -4,14 +4,15 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 
 import { Locale } from '../../types'
+import { Downloader } from '../downloader'
 import { WordEmbeddingManager } from '../types'
 import {
   DB_COLUMN_NAME,
   DB_TABLE_NAME,
+  EMBEDDINGS_URL,
   GLOBAL_EMBEDDINGS_PATH,
   SUPPORTED_EMBEDDINGS,
 } from './constants'
-import { DatabaseDownloader } from './downloader'
 import { EmbeddingsDimension, EmbeddingsType } from './types'
 
 export class DatabaseManager implements WordEmbeddingManager {
@@ -74,7 +75,8 @@ export class DatabaseManager implements WordEmbeddingManager {
       log('An automatic download will start in brief.')
       log(`Downloading '${filename}'...`)
       log(`Please, wait until the download finishes.\n`)
-      await DatabaseDownloader.download(this.locale, this.type, this.dimension)
+      const url = `${EMBEDDINGS_URL}/${filename}`
+      await Downloader.download(url, path)
       log('Download successfully completed.')
     }
     log(`Found '${filename}'.`)
