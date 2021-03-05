@@ -38,6 +38,12 @@ repos:
         language: system
         files: ^packages/botonic-plugin-nlu/
 
+      - id: nlp
+        name: nlp
+        entry: scripts/qa/lint-package.sh packages/botonic-nlp
+        language: system
+        files: ^packages/botonic-nlp
+
       - id: contentful
         name: contentful
         entry: scripts/qa/lint-package.sh packages/botonic-plugin-contentful
