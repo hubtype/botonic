@@ -5,8 +5,8 @@ export interface BotonicProject {
 }
 
 export interface CredentialsHandlerArgs {
-  homePath: string
-  filename: string
+  homeDir: string
+  filename: string // only filename, it does not contain the path to folder
 }
 
 interface OAuth {

@@ -31,7 +31,7 @@ Ran all test suites.`,
   private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackTested()
+    this.telemetry.trackTest()
     this.parse(Run)
     exec('npm run test', (error, _stdout, stderr) => {
       console.log(colors.blue('\n Executing tests...\n'))

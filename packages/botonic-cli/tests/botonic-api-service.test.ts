@@ -5,7 +5,7 @@ import { chdir } from 'process'
 import { BotonicAPIService } from '../src/botonic-api-service'
 import { EXAMPLES } from '../src/botonic-examples'
 import { default as NewCommand } from '../src/commands/new'
-import { createTemp, remove } from '../src/util/file-system'
+import { createTempDir, removeRecursively } from '../src/util/file-system'
 
 describe('TEST: BotonicApiService', () => {
   const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
@@ -13,7 +13,7 @@ describe('TEST: BotonicApiService', () => {
   assert(BLANK_EXAMPLE.name === 'blank')
 
   it('Builds correctly a project', async () => {
-    const tmpPath = createTemp('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
@@ -21,6 +21,6 @@ describe('TEST: BotonicApiService', () => {
     const buildOut = await botonicApiService.build()
     expect(buildOut).toBe(true)
     chdir('..')
-    remove(tmpPath)
+    removeRecursively(tmpPath)
   })
 })

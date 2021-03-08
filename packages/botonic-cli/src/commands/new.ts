@@ -12,7 +12,7 @@ import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { EXAMPLES } from '../botonic-examples'
 import { BotonicProject } from '../interfaces'
-import { pathExists, remove } from '../util/file-system'
+import { pathExists, removeRecursively } from '../util/file-system'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = promisify(childProcessExec)
@@ -48,7 +48,7 @@ Creating...
 
   /* istanbul ignore next */
   async run(): Promise<void> {
-    this.telemetry.trackCreated()
+    this.telemetry.trackCreate()
     try {
       const args = this.parse(Run).args as NewCommandArgs
       const userProjectDirName = args.name
@@ -66,7 +66,7 @@ Creating...
         )
         return
       }
-      this.telemetry.trackCreated({
+      this.telemetry.trackCreate({
         selected_project_name: selectedProject.name,
       })
       await this.downloadSelectedProjectIntoPath(
@@ -113,7 +113,7 @@ Creating...
     selectedProject: BotonicProject,
     path: string
   ): Promise<void> {
-    if (pathExists(path)) remove(path)
+    if (pathExists(path)) removeRecursively(path)
     const spinner = ora({
       text: 'Downloading files...',
       spinner: 'bouncingBar',

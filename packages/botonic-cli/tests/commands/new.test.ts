@@ -6,10 +6,10 @@ import { chdir } from 'process'
 import { EXAMPLES } from '../../src/botonic-examples'
 import { default as NewCommand } from '../../src/commands/new'
 import {
-  createTemp,
+  createTempDir,
   readDir,
   readJSON,
-  remove,
+  removeRecursively,
 } from '../../src/util/file-system'
 
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
@@ -31,14 +31,14 @@ describe('TEST: New command (resolving project)', () => {
 
 describe('TEST: New command (downloading project)', () => {
   it('Succeeds to download into path', async () => {
-    const tmpPath = createTemp('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     const packageJSON = readJSON(join(tmpPath, 'package.json'))
     expect((packageJSON as any).name).toEqual('blank')
-    remove(tmpPath)
+    removeRecursively(tmpPath)
   })
   it('Fails to download into path', async () => {
-    const tmpPath = createTemp('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await expect(
       newCommand.downloadSelectedProjectIntoPath(
         {
@@ -49,13 +49,13 @@ describe('TEST: New command (downloading project)', () => {
         tmpPath
       )
     ).rejects.toThrow(Error)
-    remove(tmpPath)
+    removeRecursively(tmpPath)
   })
 })
 
 describe('TEST: New command (installing project)', () => {
   it('Succeeds to install', async () => {
-    const tmpPath = createTemp('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
@@ -63,15 +63,15 @@ describe('TEST: New command (installing project)', () => {
     expect(sut).toContain('node_modules')
     expect(sut).toContain('package-lock.json')
     chdir('..')
-    remove(tmpPath)
+    removeRecursively(tmpPath)
   })
 
   it('Fails to install', async () => {
-    const tmpPath = createTemp('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     await expect(
       newCommand.installDependencies('npm instal-typo')
     ).rejects.toThrow(Error)
-    remove(tmpPath)
+    removeRecursively(tmpPath)
   })
 })

@@ -9,11 +9,18 @@ import { zip } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
-import { copy, create, pathExists, remove } from '../util/file-system'
+import {
+  copy,
+  createDir,
+  pathExists,
+  removeRecursively,
+} from '../util/file-system'
 import { sleep } from '../util/processes'
 
 let npmCommand: string | undefined
+
 const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
+const BOTONIC_TEMP_DIRNAME = 'tmp'
 
 export default class Run extends Command {
   static description = 'Deploy Botonic project to hubtype.com'
@@ -54,7 +61,7 @@ Uploading...
   /* istanbul ignore next */
   async run(): Promise<void> {
     const { flags } = this.parse(Run)
-    this.telemetry.trackDeployed()
+    this.telemetry.trackDeploy()
     npmCommand = flags.command
     this.botName = flags.botName
     const email = flags.email
@@ -278,10 +285,11 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar',
     }).start()
-    if (pathExists('tmp')) remove('tmp')
-    create(join('tmp'))
-    copy('dist', join('tmp', 'dist'))
-    const zipRes = await zip('tmp', join(BOTONIC_BUNDLE_FILE))
+    if (pathExists(BOTONIC_TEMP_DIRNAME))
+      removeRecursively(BOTONIC_TEMP_DIRNAME)
+    createDir(join(process.cwd(), BOTONIC_TEMP_DIRNAME))
+    copy('dist', join(BOTONIC_TEMP_DIRNAME, 'dist'))
+    const zipRes = await zip(BOTONIC_TEMP_DIRNAME, join(BOTONIC_BUNDLE_FILE))
     if (zipRes instanceof Error) {
       throw Error
     }
@@ -322,15 +330,15 @@ Uploading...
       // eslint-disable-next-line no-constant-condition
       while (true) {
         await sleep(500)
-        const deploy_status = await this.botonicApiService.deployStatus(
+        const deployStatus = await this.botonicApiService.deployStatus(
           deploy.data.deploy_id
         )
-        if (deploy_status.data.is_completed) {
-          if (deploy_status.data.status == 'deploy_status_completed_ok') {
+        if (deployStatus.data.is_completed) {
+          if (deployStatus.data.status == 'deploy_status_completed_ok') {
             spinner.succeed()
             console.log(colors.green('\n🚀  Bot deployed!\n'))
             return { hasDeployErrors: false }
-          } else throw deploy_status.data.error
+          } else throw deployStatus.data.error
         }
       }
     } catch (err) {
@@ -380,8 +388,8 @@ Uploading...
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)
     } finally {
-      remove(BOTONIC_BUNDLE_FILE)
-      remove('tmp')
+      removeRecursively(BOTONIC_BUNDLE_FILE)
+      removeRecursively(BOTONIC_TEMP_DIRNAME)
       this.botonicApiService.beforeExit()
     }
   }

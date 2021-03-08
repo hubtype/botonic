@@ -74,7 +74,7 @@ export class BotonicAPIService {
   }
 
   saveGlobalCredentials(): void {
-    this.globalCredentialsHandler.createIfNotExists()
+    this.globalCredentialsHandler.createDirIfNotExists()
     this.globalCredentialsHandler.dump({
       oauth: this.oauth,
       me: this.me,
@@ -109,7 +109,7 @@ export class BotonicAPIService {
   }
 
   logout(): void {
-    const globalCredentialsPath = this.globalCredentialsHandler.homePath
+    const globalCredentialsPath = this.globalCredentialsHandler.homeDir
     if (pathExists(globalCredentialsPath)) unlinkSync(globalCredentialsPath)
   }
 
@@ -217,11 +217,7 @@ export class BotonicAPIService {
   }
 
   async saveBot(botName: string): Promise<AxiosPromise> {
-    const resp = await this.api(
-      'bots/',
-      { name: botName, framework: 'framework_botonic' },
-      'post'
-    )
+    const resp = await this.api('bots/', { name: botName }, 'post')
     if (resp.data) this.setCurrentBot(resp.data)
     return resp
   }

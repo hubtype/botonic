@@ -1,4 +1,3 @@
-import { homedir } from 'os'
 import { join, resolve } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -13,36 +12,40 @@ import {
   CredentialsHandlerArgs,
   GlobalCredentials,
 } from '../interfaces'
-import { create, pathExists, readJSON, writeJSON } from '../util/file-system'
-import { execCommand, isWindows } from '../util/processes'
+import {
+  createDir,
+  getHomeDirectory,
+  pathExists,
+  readJSON,
+  writeJSON,
+} from '../util/file-system'
 
 export class CredentialsHandler {
-  homePath: string
+  homeDir: string
   pathToCredentials: string
 
   constructor(args: CredentialsHandlerArgs) {
-    this.homePath = resolve(args.homePath)
-    this.pathToCredentials = join(this.homePath, args.filename)
+    this.homeDir = resolve(args.homeDir)
+    this.pathToCredentials = join(this.homeDir, args.filename)
     this.initialize()
   }
 
   initialize(): void {
-    this.createIfNotExists()
+    this.createDirIfNotExists()
   }
 
   generateId(): string {
     return uuidv4()
   }
 
-  createIfNotExists(): void {
-    if (!pathExists(this.homePath)) create(this.homePath)
+  createDirIfNotExists(): void {
+    if (!pathExists(this.homeDir)) createDir(this.homeDir)
   }
 
   load(): any {
     try {
-      return (
-        pathExists(this.pathToCredentials) && readJSON(this.pathToCredentials)
-      )
+      if (!pathExists(this.pathToCredentials)) return undefined
+      return readJSON(this.pathToCredentials)
     } catch (e) {
       console.warn('Credentials could not be loaded')
       return undefined
@@ -60,29 +63,22 @@ export class CredentialsHandler {
 
 export class GlobalCredentialsHandler extends CredentialsHandler {
   constructor() {
-    const homeDirectory = isWindows()
-      ? homedir()
-      : execCommand('eval echo ~${SUDO_USER}')
     super({
-      homePath: join(homeDirectory, BOTONIC_HOME_DIRNAME),
+      homeDir: join(getHomeDirectory(), BOTONIC_HOME_DIRNAME),
       filename: GLOBAL_CREDS_FILENAME,
     })
   }
 
   initialize(): void {
-    this.createIfNotExists()
+    this.createDirIfNotExists()
     if (!pathExists(this.pathToCredentials) || !this.hasAnonymousId()) {
       this.refreshAnonymousId()
     }
   }
 
   getAnonymousId(): string {
-    try {
-      const content = this.load()
-      return content?.analytics?.anonymous_id
-    } catch (e) {
-      return ''
-    }
+    const content = this.load()
+    return content?.analytics.anonymous_id
   }
 
   hasAnonymousId(): boolean {
@@ -108,7 +104,7 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
 export class BotCredentialsHandler extends CredentialsHandler {
   constructor() {
     super({
-      homePath: BOTONIC_PROJECT_PATH,
+      homeDir: BOTONIC_PROJECT_PATH,
       filename: BOT_CREDS_FILENAME,
     })
   }

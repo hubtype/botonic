@@ -23,16 +23,11 @@ export default class Run extends Command {
   private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackLoggedIn()
-
-    const { flags } = this.parse(Run)
-
-    const _path = flags.path ? resolve(flags.path) : process.cwd()
-
+    this.telemetry.trackLogin()
     await this.logInUser()
   }
 
-  askLoginInfo(): Promise<any> {
+  askLoginInfo(): Promise<{ email: string; password: string }> {
     return prompt([
       {
         type: 'input',

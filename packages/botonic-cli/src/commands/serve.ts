@@ -18,7 +18,7 @@ export default class Run extends Command {
   private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackServed()
+    this.telemetry.trackServe()
     this.parse(Run)
     try {
       console.log(colors.blue('\nServing Botonic...'))

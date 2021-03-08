@@ -3,25 +3,29 @@ import {
   CredentialsHandler,
   GlobalCredentialsHandler,
 } from '../../src/analytics/credentials-handler'
-import { createTemp, pathExists, remove } from '../../src/util/file-system'
+import {
+  createTempDir,
+  pathExists,
+  removeRecursively,
+} from '../../src/util/file-system'
 
 describe('TEST: CredentialsHandler', () => {
   let tempDir = ''
   let credentialsHandler: CredentialsHandler
 
   beforeEach(() => {
-    tempDir = createTemp('botonic-tmp')
+    tempDir = createTempDir('botonic-tmp')
     credentialsHandler = new CredentialsHandler({
-      homePath: tempDir,
+      homeDir: tempDir,
       filename: '.botonic-creds',
     })
   })
 
   afterEach(() => {
-    remove(tempDir)
+    removeRecursively(tempDir)
   })
   it('Initializes correctly the given path', () => {
-    const sut = pathExists(credentialsHandler.homePath)
+    const sut = pathExists(credentialsHandler.homeDir)
     expect(sut).toBeTruthy()
   })
   it('Loads/Dumps correctly the data', () => {
@@ -47,7 +51,7 @@ describe('TEST: GlobalCredentialsHandler', () => {
   afterEach(() => {})
 
   it('Initializes correctly', () => {
-    const sut = pathExists(globalCredsHandler.homePath)
+    const sut = pathExists(globalCredsHandler.homeDir)
     expect(sut).toBeTruthy()
     const hasAnonymousId = globalCredsHandler.hasAnonymousId()
     expect(hasAnonymousId).toBeTruthy()
@@ -73,11 +77,11 @@ describe('TEST: BotCredentialsHandler', () => {
   })
 
   afterEach(() => {
-    remove(botCredentialsHandler.pathToCredentials)
+    removeRecursively(botCredentialsHandler.pathToCredentials)
   })
 
   it('Initializes correctly', () => {
-    const sut = pathExists(botCredentialsHandler.homePath)
+    const sut = pathExists(botCredentialsHandler.homeDir)
     expect(sut).toBeTruthy()
   })
   it('Loads/Dumps correclty', () => {

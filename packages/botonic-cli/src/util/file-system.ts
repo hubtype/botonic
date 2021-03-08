@@ -8,6 +8,9 @@ import {
   writeFileSync,
 } from 'fs'
 import { copySync } from 'fs-extra'
+import { homedir } from 'os'
+
+import { execCommand, isWindows } from './processes'
 
 export function pathExists(path: string): boolean {
   return existsSync(path)
@@ -27,18 +30,28 @@ export function writeJSON(path: string, object: any): void {
   writeFileSync(path, JSON.stringify(object))
 }
 
-export function create(path: string): void {
+export function createDir(path: string): void {
+  // If directory already exists, it will throw an error.
   return mkdirSync(path)
 }
 
-export function createTemp(name: string): string {
+export function createTempDir(name: string): string {
   return mkdtempSync(name)
 }
 
 export function copy(from: string, to: string): void {
+  /*
+   * Copy a file or directory.
+   * src: if src is a directory it will copy everything inside of this directory, not the entire directory itself.
+   * dest: Note that if src is a file, dest cannot be a directory
+   */
   copySync(from, to)
 }
 
-export function remove(path: string): void {
+export function removeRecursively(path: string): void {
   rmdirSync(path, { recursive: true })
+}
+
+export function getHomeDirectory(): string {
+  return isWindows() ? homedir() : execCommand('eval echo ~${SUDO_USER}')
 }

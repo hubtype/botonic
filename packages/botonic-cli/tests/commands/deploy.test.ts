@@ -7,7 +7,11 @@ import { BotonicAPIService } from '../../src/botonic-api-service'
 import { EXAMPLES } from '../../src/botonic-examples'
 import { default as DeployCommand } from '../../src/commands/deploy'
 import { default as NewCommand } from '../../src/commands/new'
-import { createTemp, readDir, remove } from '../../src/util/file-system'
+import {
+  createTempDir,
+  readDir,
+  removeRecursively,
+} from '../../src/util/file-system'
 
 const botonicApiService = new BotonicAPIService()
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
@@ -18,7 +22,7 @@ assert(BLANK_EXAMPLE.name === 'blank')
 
 describe('TEST: Deploy pipeline', () => {
   test('Download, install, build and deploy a project', async () => {
-    const tmpPath = createTemp('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
@@ -39,8 +43,8 @@ describe('TEST: Deploy pipeline', () => {
         expect(onceBundled).toContain('tmp')
         const { hasDeployErrors } = await deployCommand.deployBundle()
         expect(hasDeployErrors).toBe(false)
-        remove(join('.', 'botonic_bundle.zip'))
-        remove(join('.', 'tmp'))
+        removeRecursively(join('.', 'botonic_bundle.zip'))
+        removeRecursively(join('.', 'tmp'))
       })
 
     await deployCommand.deploy()
@@ -48,7 +52,7 @@ describe('TEST: Deploy pipeline', () => {
     expect(onceDeployed).not.toContain('botonic_bundle.zip')
     expect(onceDeployed).not.toContain('tmp')
     chdir('..')
-    remove(tmpPath)
+    removeRecursively(tmpPath)
 
     spyDeployBundle.mockRestore()
     spyDeploy.mockRestore()

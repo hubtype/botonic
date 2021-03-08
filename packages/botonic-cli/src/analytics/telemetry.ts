@@ -1,9 +1,23 @@
 import Analytics from 'analytics-node'
 
-import { ANALYTICS_WRITE_KEY, TRACKING_EVENTS } from '../constants'
+import { ANALYTICS_WRITE_KEY } from '../constants'
 import { AnalyticsService } from '../interfaces'
 import { getSystemInformation } from '../util/processes'
 import { GlobalCredentialsHandler } from './credentials-handler'
+
+const TRACKING_EVENTS = {
+  // BEWARE: Changing these names will screw analytics
+  // Despite the event is written in past tense, events are tracked at the very beginning of the action.
+  INSTALL_BOTONIC: 'Installed Botonic CLI',
+  LOGIN: 'Logged In Botonic CLI',
+  LOGOUT: 'Logged Out Botonic CLI',
+  CREATE_BOT: 'Created Botonic Bot CLI',
+  SERVE_BOT: 'Served Botonic CLI',
+  TEST_BOT: 'botonic test',
+  TRAIN_BOT: 'Trained with Botonic train',
+  DEPLOY_BOT: 'Deployed Botonic CLI',
+  ERROR_BOTONIC_CLI: 'Error Botonic CLI',
+}
 
 export class Telemetry {
   analyticsService: AnalyticsService
@@ -42,36 +56,36 @@ export class Telemetry {
     }
   }
 
-  trackLoggedIn(properties = {}): void {
-    this.track(this.events.LOGGED_IN, properties)
+  trackLogin(properties = {}): void {
+    this.track(this.events.LOGIN, properties)
   }
 
-  trackLoggedOut(properties = {}): void {
-    this.track(this.events.LOGGED_OUT, properties)
+  trackLogout(properties = {}): void {
+    this.track(this.events.LOGOUT, properties)
   }
 
-  trackCreated(properties = {}): void {
-    this.track(this.events.CREATED_BOT, properties)
+  trackCreate(properties = {}): void {
+    this.track(this.events.CREATE_BOT, properties)
   }
 
-  trackServed(properties = {}): void {
-    this.track(this.events.SERVED_BOT, properties)
+  trackServe(properties = {}): void {
+    this.track(this.events.SERVE_BOT, properties)
   }
 
-  trackTested(properties = {}): void {
-    this.track(this.events.TESTED_BOT, properties)
+  trackTest(properties = {}): void {
+    this.track(this.events.TEST_BOT, properties)
   }
 
-  trackTrained(properties = {}): void {
-    this.track(this.events.TRAINED_BOT, properties)
+  trackTrain(properties = {}): void {
+    this.track(this.events.TRAIN_BOT, properties)
   }
 
-  trackInstalledBotonic(properties = {}): void {
-    this.track(this.events.INSTALLED_BOTONIC, properties)
+  trackInstallBotonic(properties = {}): void {
+    this.track(this.events.INSTALL_BOTONIC, properties)
   }
 
-  trackDeployed(properties = {}): void {
-    this.track(this.events.DEPLOYED_BOT, properties)
+  trackDeploy(properties = {}): void {
+    this.track(this.events.DEPLOY_BOT, properties)
   }
 
   trackError(type: string, properties = {}): void {

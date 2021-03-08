@@ -3,12 +3,12 @@ import { join } from 'path'
 
 import {
   copy,
-  create,
-  createTemp,
+  createDir,
+  createTempDir,
   pathExists,
   readDir,
   readJSON,
-  remove,
+  removeRecursively,
   writeJSON,
 } from '../../src/util/file-system'
 import { execCommand } from '../../src/util/processes'
@@ -19,24 +19,24 @@ const dirToTest = join(process.cwd(), 'botonic-tmp')
 
 const withDirToTest = (
   toTest: () => any,
-  { createDir } = { createDir: true }
+  { createDirectory } = { createDirectory: true }
 ): boolean => {
   let success = false
   try {
-    createDir && create(dirToTest)
+    createDirectory && createDir(dirToTest)
     toTest()
     success = true
   } catch (e) {
     success = false
   } finally {
-    remove(dirToTest)
+    removeRecursively(dirToTest)
   }
   return success
 }
 const withTempDir = (toTest: (tempDir: string) => any) => {
-  const tempDir = createTemp('botonic-tmp')
+  const tempDir = createTempDir('botonic-tmp')
   toTest(tempDir)
-  remove(tempDir)
+  removeRecursively(tempDir)
 }
 
 const createFile = (path: string, content: string) => {
@@ -70,10 +70,10 @@ describe('TEST: File System utilities', () => {
     expect(
       withDirToTest(
         () => {
-          const sut = () => remove(unexistingPath)
+          const sut = () => removeRecursively(unexistingPath)
           expect(sut).toThrowError()
         },
-        { createDir: false }
+        { createDirectory: false }
       )
     ).toBeFalsy()
   })
@@ -85,7 +85,7 @@ describe('TEST: File System utilities', () => {
   })
   it('Creates a directory in the given path (already exists)', () => {
     withDirToTest(() => {
-      const sut = () => create(dirToTest)
+      const sut = () => createDir(dirToTest)
       expect(sut).toThrow()
     })
   })
@@ -97,16 +97,16 @@ describe('TEST: File System utilities', () => {
     })
   })
   it('Copy content', () => {
-    const tmp1 = createTemp('botonic-tmp1')
+    const tmp1 = createTempDir('botonic-tmp1')
     createFile(join(tmp1, 'dummy-file.txt'), 'dummy content')
-    const tmp2 = createTemp('botonic-tmp2')
+    const tmp2 = createTempDir('botonic-tmp2')
     copy(tmp1, tmp2)
     expect(readDir(tmp2)).toContain('dummy-file.txt')
-    remove(tmp1)
-    remove(tmp2)
+    removeRecursively(tmp1)
+    removeRecursively(tmp2)
   })
   it('Reads/Writes JSON correctly', () => {
-    const tmpDir = createTemp('botonic-tmp')
+    const tmpDir = createTempDir('botonic-tmp')
     const path = join(tmpDir, 'dummy.json')
     writeJSON(path, {
       dummy: 'content',
@@ -118,6 +118,6 @@ describe('TEST: File System utilities', () => {
     execCommand(`touch ${tmpDir}/another.json`)
     const noContent = readJSON(join(tmpDir, 'another.json'))
     expect(noContent).toBeUndefined()
-    remove(tmpDir)
+    removeRecursively(tmpDir)
   })
 })

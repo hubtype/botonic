@@ -23,7 +23,7 @@ export default class Run extends Command {
   private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackTrained()
+    this.telemetry.trackTrain()
     const botonicNLUPath: string = path.join(
       process.cwd(),
       'node_modules',

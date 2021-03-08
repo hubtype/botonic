@@ -22,13 +22,8 @@ export default class Run extends Command {
   private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackLoggedOut()
-    const { flags } = this.parse(Run)
-
-    const _path = flags.path ? resolve(flags.path) : process.cwd()
-
+    this.telemetry.trackLogout()
     this.botonicApiService.logout()
-
     console.log('You have been log out!')
     return Promise.resolve()
   }

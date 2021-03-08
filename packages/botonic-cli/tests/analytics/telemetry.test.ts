@@ -3,7 +3,6 @@ import { assert } from 'console'
 import { Telemetry } from '../../src/analytics/telemetry'
 import { pathExists } from '../../src/util/file-system'
 
-process.env.BOTONIC_DISABLE_ANALYTICS = '1'
 assert(process.env.BOTONIC_DISABLE_ANALYTICS === '1')
 
 describe('TEST: Telemetry', () => {
@@ -16,7 +15,7 @@ describe('TEST: Telemetry', () => {
   it('Initializes correctly Telemetry', () => {
     expect(telemetry.isAnalyticsEnabled).toBe(false)
     expect(telemetry.analyticsService).toBeTruthy()
-    expect(pathExists(telemetry.globalCredentialsHandler.homePath)).toBeTruthy()
+    expect(pathExists(telemetry.globalCredentialsHandler.homeDir)).toBeTruthy()
   })
   it('Creates anonymousId if not exists', () => {
     const currentInfo = telemetry.globalCredentialsHandler.load()
@@ -49,37 +48,44 @@ describe('TEST: Telemetry', () => {
   })
   it('Do telemetry calls properly', () => {
     const track = (Telemetry.prototype.track = jest.fn())
-    const trackLoggedIn = (Telemetry.prototype.trackLoggedIn = jest.fn())
-    const trackLoggedOut = (Telemetry.prototype.trackLoggedOut = jest.fn())
-    const trackCreated = (Telemetry.prototype.trackCreated = jest.fn())
-    const trackServed = (Telemetry.prototype.trackServed = jest.fn())
-    const trackTested = (Telemetry.prototype.trackTested = jest.fn())
-    const trackTrained = (Telemetry.prototype.trackTrained = jest.fn())
-    const trackInstalledBotonic = (Telemetry.prototype.trackInstalledBotonic = jest.fn())
-    const trackDeployed = (Telemetry.prototype.trackDeployed = jest.fn())
+    const trackLogin = (Telemetry.prototype.trackLogin = jest.fn())
+    const trackLogout = (Telemetry.prototype.trackLogout = jest.fn())
+    const trackCreate = (Telemetry.prototype.trackCreate = jest.fn())
+    const trackServe = (Telemetry.prototype.trackServe = jest.fn())
+    const trackTest = (Telemetry.prototype.trackTest = jest.fn())
+    const trackTrain = (Telemetry.prototype.trackTrain = jest.fn())
+    const trackInstallBotonic = (Telemetry.prototype.trackInstallBotonic = jest.fn())
+    const trackDeploy = (Telemetry.prototype.trackDeploy = jest.fn())
     const trackError = (Telemetry.prototype.trackError = jest.fn())
 
     telemetry.track('some event', {})
-    telemetry.trackLoggedIn()
-    telemetry.trackLoggedOut()
-    telemetry.trackCreated()
-    telemetry.trackServed()
-    telemetry.trackTested()
-    telemetry.trackTrained()
-    telemetry.trackInstalledBotonic()
-    telemetry.trackDeployed()
-    telemetry.trackError('error')
-
     expect(track).toHaveBeenCalledTimes(1)
-    expect(trackLoggedIn).toHaveBeenCalledTimes(1)
-    expect(trackLoggedOut).toHaveBeenCalledTimes(1)
-    expect(trackCreated).toHaveBeenCalledTimes(1)
-    expect(trackServed).toHaveBeenCalledTimes(1)
-    expect(trackTested).toHaveBeenCalledTimes(1)
-    expect(trackLoggedIn).toHaveBeenCalledTimes(1)
-    expect(trackTrained).toHaveBeenCalledTimes(1)
-    expect(trackInstalledBotonic).toHaveBeenCalledTimes(1)
-    expect(trackDeployed).toHaveBeenCalledTimes(1)
+
+    telemetry.trackLogin()
+    expect(trackLogin).toHaveBeenCalledTimes(1)
+
+    telemetry.trackLogout()
+    expect(trackLogout).toHaveBeenCalledTimes(1)
+
+    telemetry.trackCreate()
+    expect(trackCreate).toHaveBeenCalledTimes(1)
+
+    telemetry.trackServe()
+    expect(trackServe).toHaveBeenCalledTimes(1)
+
+    telemetry.trackTest()
+    expect(trackTest).toHaveBeenCalledTimes(1)
+
+    telemetry.trackTrain()
+    expect(trackTrain).toHaveBeenCalledTimes(1)
+
+    telemetry.trackInstallBotonic()
+    expect(trackInstallBotonic).toHaveBeenCalledTimes(1)
+
+    telemetry.trackDeploy()
+    expect(trackDeploy).toHaveBeenCalledTimes(1)
+
+    telemetry.trackError('error')
     expect(trackError).toHaveBeenCalledTimes(1)
   })
 })
