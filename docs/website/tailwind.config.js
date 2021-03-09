@@ -18,7 +18,12 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-  purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx'],
+  purge: {
+    content: ['./src/**/*.html', './src/**/*.js', './src/**/*.jsx'],
+    options: {
+      whitelist: ['bg-purple-200', 'bg-purple-600', 'text-purple-100'],
+    }
+  },
   variants: {
     textColor: ['responsive', 'hover', 'focus', 'group-hover'],
   },
