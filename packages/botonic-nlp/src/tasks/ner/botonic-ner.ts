@@ -1,17 +1,17 @@
 import { Tensor3D } from '@tensorflow/tfjs-node'
 
-import { Sample } from '../../dataset/types'
+import { Dataset, Sample } from '../../dataset/types'
 import { Embedder } from '../../embeddings/embedder'
 import { WordEmbeddingManager } from '../../embeddings/types'
 import { ModelHandler } from '../../handlers/model-handler'
 import { ModelEvaluation } from '../../handlers/types'
-import { DataLoader } from '../../loaders/data-loader'
 import { Codifier } from '../../preprocess/codifier'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
 import { trainTestSplit } from '../../preprocess/selection'
 import {
   Normalizer,
+  PaddingPosition,
   Stemmer,
   Stopwords,
   Tokenizer,
@@ -29,41 +29,48 @@ import { Entity } from './process/types'
 export class BotonicNer {
   entities: string[]
   vocabulary: string[]
-  private preprocessor: Preprocessor
   private sequenceCodifier: Codifier
   private entitiesCodifier: Codifier
   private sampleProcessor: NerSampleProcessor
   private predictionProcessor: PredictionProcessor
   private modelHandler: ModelHandler
 
-  private constructor(readonly locale: Locale, readonly maxLength: number) {}
+  private constructor(
+    readonly locale: Locale,
+    readonly maxLength: number,
+    private preprocessor: Preprocessor
+  ) {}
 
   static with(locale: Locale, maxLength: number): BotonicNer {
-    return new BotonicNer(locale, maxLength)
+    return new BotonicNer(
+      locale,
+      maxLength,
+      new Preprocessor(locale, maxLength)
+    )
   }
 
   static async load(path: string): Promise<BotonicNer> {
     const config = NerConfigHandler.load(path)
-    const ner = new BotonicNer(config.locale, config.maxLength)
+    const ner = new BotonicNer(
+      config.locale,
+      config.maxLength,
+      new Preprocessor(config.locale, config.maxLength)
+    )
     ner.vocabulary = config.vocabulary
     ner.entities = config.entities
     ner.modelHandler = await ModelHandler.load(path)
     return ner
   }
 
-  loadData(
-    loader: DataLoader,
+  splitDataset(
+    dataset: Dataset,
     testSize = 0.2,
     shuffle = true
   ): { train: Sample[]; test: Sample[] } {
     this.entities = Array.from(
-      new Set([NEUTRAL_ENTITY].concat(loader.data.entities))
+      new Set([NEUTRAL_ENTITY].concat(dataset.entities))
     )
-    return trainTestSplit(loader.data.samples, testSize, shuffle)
-  }
-
-  loadPreprocessor(preprocessor: Preprocessor): void {
-    this.preprocessor = preprocessor
+    return trainTestSplit(dataset.samples, testSize, shuffle)
   }
 
   generateVocabulary(samples: Sample[]): void {
@@ -164,5 +171,9 @@ export class BotonicNer {
 
   set stemmer(engine: Stemmer) {
     this.preprocessor.engines.stemmer = engine
+  }
+
+  set paddingPosition(position: PaddingPosition) {
+    this.preprocessor.paddingPosition = position
   }
 }

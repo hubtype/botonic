@@ -1,5 +1,3 @@
-import { join } from 'path'
-
 import { BotonicNer } from '../../../src/tasks/ner/botonic-ner'
 import * as helper from '../../helpers/tasks/ner/helper'
 
@@ -14,7 +12,7 @@ describe('Botonic NER', () => {
 
   test('Load data', () => {
     const ner = BotonicNer.with(helper.LOCALE, helper.MAX_LENGTH)
-    const { train, test } = ner.loadData(helper.dataLoader)
+    const { train, test } = ner.splitDataset(helper.DATASET)
     expect(train.length).toEqual(4)
     expect(test.length).toEqual(1)
   })
@@ -22,7 +20,6 @@ describe('Botonic NER', () => {
   test('Generate vocabulary', () => {
     // arrange
     const ner = BotonicNer.with(helper.LOCALE, helper.MAX_LENGTH)
-    ner.loadPreprocessor(helper.preprocessor)
 
     // act
     ner.generateVocabulary([
@@ -36,8 +33,7 @@ describe('Botonic NER', () => {
   test('Evaluate model', async () => {
     // arrange
     const ner = BotonicNer.with(helper.LOCALE, helper.MAX_LENGTH)
-    const { train, test } = ner.loadData(helper.dataLoader)
-    ner.loadPreprocessor(helper.preprocessor)
+    const { train, test } = ner.splitDataset(helper.DATASET)
     ner.generateVocabulary(train)
     ner.compile()
     await ner.createModel('biLstm', await helper.getDatabaseManager())
@@ -54,8 +50,7 @@ describe('Botonic NER', () => {
   test('Recognize entities', async () => {
     // arrange
     const ner = BotonicNer.with(helper.LOCALE, helper.MAX_LENGTH)
-    const { train } = ner.loadData(helper.dataLoader)
-    ner.loadPreprocessor(helper.preprocessor)
+    const { train } = ner.splitDataset(helper.DATASET)
     ner.generateVocabulary(train)
     ner.compile()
     await ner.createModel('biLstm', await helper.getDatabaseManager())

@@ -7,7 +7,7 @@ export class Preprocessor {
   constructor(
     public readonly locale: Locale,
     public readonly maxLength: number,
-    public readonly paddingPosition: PaddingPosition = 'post'
+    public paddingPosition: PaddingPosition = 'post'
   ) {
     this.loadEngine('normalizer')
     this.loadEngine('tokenizer')

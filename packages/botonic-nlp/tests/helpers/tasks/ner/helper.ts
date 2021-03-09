@@ -1,12 +1,12 @@
 import { join } from 'path'
 
+import { DatasetLoader } from '../../../../src/dataset/loader'
 import { DatabaseManager } from '../../../../src/embeddings/database/manager'
 import {
   EmbeddingsDimension,
   EmbeddingsType,
 } from '../../../../src/embeddings/database/types'
 import { Embedder } from '../../../../src/embeddings/embedder'
-import { DataLoader } from '../../../../src/loaders/data-loader'
 import { Codifier } from '../../../../src/preprocess/codifier'
 import { Preprocessor } from '../../../../src/preprocess/preprocessor'
 import { Locale } from '../../../../src/types'
@@ -80,6 +80,8 @@ export const VOCABULARY = [
 
 export const ENTITIES = ['O', 'product', 'color', 'material', 'size']
 
+export const DATASET = DatasetLoader.load(SHOPPING_DATA_PATH)
+
 export const EMBEDDINGS_TYPE: EmbeddingsType = 'glove'
 export const EMBEDDINGS_DIMENSION: EmbeddingsDimension = 50
 
@@ -93,8 +95,6 @@ export const entitiesCodifier = new Codifier(ENTITIES, {
 })
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_LENGTH)
-
-export const dataLoader = new DataLoader(SHOPPING_DATA_PATH)
 
 export async function getDatabaseManager(): Promise<DatabaseManager> {
   return await DatabaseManager.with(
