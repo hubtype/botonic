@@ -1,11 +1,11 @@
 import { Tensor3D } from '@tensorflow/tfjs-node'
 
+import { Sample } from '../../dataset/types'
 import { Embedder } from '../../embeddings/embedder'
 import { WordEmbeddingManager } from '../../embeddings/types'
 import { ModelHandler } from '../../handlers/model-handler'
 import { ModelEvaluation } from '../../handlers/types'
 import { DataLoader } from '../../loaders/data-loader'
-import { Sample } from '../../parser/types'
 import { Codifier } from '../../preprocess/codifier'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'

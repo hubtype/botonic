@@ -1,4 +1,4 @@
-import { EntitiesParser } from '../../src/parser/entities-parser'
+import { EntitiesParser } from '../../src/dataset/entities-parser'
 
 describe('Entity definitions Parser', () => {
   test('Parsing entities of a given text', () => {

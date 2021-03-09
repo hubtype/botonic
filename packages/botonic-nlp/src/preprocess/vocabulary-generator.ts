@@ -1,4 +1,4 @@
-import { Sample } from '../parser/types'
+import { Sample } from '../dataset/types'
 import { PADDING_TOKEN } from './constants'
 import { Preprocessor } from './preprocessor'
 

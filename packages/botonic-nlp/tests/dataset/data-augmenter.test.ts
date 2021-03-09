@@ -1,4 +1,4 @@
-import { DataAugmenter } from '../../src/parser/data-augmenter'
+import { DataAugmenter } from '../../src/dataset/data-augmenter'
 
 describe('Data augmentation', () => {
   test('Generating variations of the given samples', () => {

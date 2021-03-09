@@ -1,11 +1,9 @@
-import { join } from 'path'
-
-import { Parser } from '../../src/parser/parser'
+import { DatasetLoader } from '../../src/dataset/loader'
 import * as helper from '../helpers/helper'
 
-describe('Parsing Botonic NLP input file', () => {
-  test('Parsing file', () => {
-    expect(Parser.parse(helper.SHOPPING_DATA_PATH)).toEqual({
+describe('Dataset Loader', () => {
+  test('Loading Dataset from file', () => {
+    expect(DatasetLoader.load(helper.SHOPPING_DATA_PATH)).toEqual({
       classes: ['shopping'],
       entities: ['product'],
       samples: [
@@ -73,8 +71,8 @@ describe('Parsing Botonic NLP input file', () => {
     })
   })
 
-  test('Parsing directory files', () => {
-    expect(Parser.parse(helper.DATA_DIR_PATH)).toEqual({
+  test('Loading Dataset from directory', () => {
+    expect(DatasetLoader.load(helper.DATA_DIR_PATH)).toEqual({
       classes: ['booking', 'shopping'],
       entities: ['restaurant', 'product'],
       samples: [

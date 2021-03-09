@@ -1,6 +1,6 @@
 import { tensor } from '@tensorflow/tfjs-node'
 
-import { Sample } from '../../../parser/types'
+import { Sample } from '../../../dataset/types'
 import { Codifier } from '../../../preprocess/codifier'
 import { Preprocessor } from '../../../preprocess/preprocessor'
 import { SampleProcessor } from '../../../process/sample-processor'

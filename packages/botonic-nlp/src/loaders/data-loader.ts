@@ -1,9 +1,9 @@
-import { Parser } from '../parser/parser'
-import { Data } from '../parser/types'
+import { DatasetLoader } from '../dataset/loader'
+import { Dataset } from '../dataset/types'
 
 export class DataLoader {
-  data: Data
+  data: Dataset
   constructor(path: string) {
-    this.data = Parser.parse(path)
+    this.data = DatasetLoader.load(path)
   }
 }

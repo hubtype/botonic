@@ -1,4 +1,4 @@
-import { Sample } from '../parser/types'
+import { Sample } from '../dataset/types'
 
 export function trainTestSplit(
   samples: Sample[],
