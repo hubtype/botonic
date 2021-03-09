@@ -2,7 +2,7 @@ import Analytics from 'analytics-node'
 
 import { ANALYTICS_WRITE_KEY } from '../constants'
 import { AnalyticsService } from '../interfaces'
-import { getSystemInformation } from '../util/processes'
+import { getSystemInformation } from '../util/environment-info'
 import { GlobalCredentialsHandler } from './credentials-handler'
 
 const TRACKING_EVENTS = {

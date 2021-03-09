@@ -3,7 +3,7 @@ import { assert } from 'console'
 import { Telemetry } from '../../src/analytics/telemetry'
 import { pathExists } from '../../src/util/file-system'
 
-assert(process.env.BOTONIC_DISABLE_ANALYTICS === '1')
+process.env.BOTONIC_DISABLE_ANALYTICS = '1'
 
 describe('TEST: Telemetry', () => {
   let telemetry: Telemetry

@@ -10,7 +10,8 @@ import {
 import { copySync } from 'fs-extra'
 import { homedir } from 'os'
 
-import { execCommand, isWindows } from './processes'
+import { isWindows } from './environment-info'
+import { execCommand } from './system'
 
 export function pathExists(path: string): boolean {
   return existsSync(path)

@@ -15,7 +15,7 @@ import {
   pathExists,
   removeRecursively,
 } from '../util/file-system'
-import { sleep } from '../util/processes'
+import { sleep } from '../util/system'
 
 let npmCommand: string | undefined
 

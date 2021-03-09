@@ -3,7 +3,7 @@ import colors from 'colors'
 import * as path from 'path'
 
 import { Telemetry } from '../analytics/telemetry'
-import { spawnNpmScript } from '../util/processes'
+import { spawnNpmScript } from '../util/system'
 
 export default class Run extends Command {
   static description = 'Train your bot with NLU'

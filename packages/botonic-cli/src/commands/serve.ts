@@ -2,7 +2,7 @@ import { Command } from '@oclif/command'
 import colors from 'colors'
 
 import { Telemetry } from '../analytics/telemetry'
-import { spawnNpmScript } from '../util/processes'
+import { spawnNpmScript } from '../util/system'
 
 export default class Run extends Command {
   static description = 'Serve your bot in your localhost'

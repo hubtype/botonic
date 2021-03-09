@@ -11,7 +11,7 @@ import {
   removeRecursively,
   writeJSON,
 } from '../../src/util/file-system'
-import { execCommand } from '../../src/util/processes'
+import { execCommand } from '../../src/util/system'
 
 const existingPath = process.cwd()
 const unexistingPath = 'unexistingPath'
@@ -106,18 +106,18 @@ describe('TEST: File System utilities', () => {
     removeRecursively(tmp2)
   })
   it('Reads/Writes JSON correctly', () => {
-    const tmpDir = createTempDir('botonic-tmp')
-    const path = join(tmpDir, 'dummy.json')
-    writeJSON(path, {
-      dummy: 'content',
+    withTempDir(tempDir => {
+      const path = join(tempDir, 'dummy.json')
+      writeJSON(path, {
+        dummy: 'content',
+      })
+      const writtenContent = String(readFileSync(path))
+      expect(writtenContent).toEqual('{"dummy":"content"}')
+      const readContent = readJSON(path)
+      expect(readContent).toEqual({ dummy: 'content' })
+      execCommand(`touch ${tempDir}/another.json`)
+      const noContent = readJSON(join(tempDir, 'another.json'))
+      expect(noContent).toBeUndefined()
     })
-    const writtenContent = String(readFileSync(path))
-    expect(writtenContent).toEqual('{"dummy":"content"}')
-    const readContent = readJSON(path)
-    expect(readContent).toEqual({ dummy: 'content' })
-    execCommand(`touch ${tmpDir}/another.json`)
-    const noContent = readJSON(join(tmpDir, 'another.json'))
-    expect(noContent).toBeUndefined()
-    removeRecursively(tmpDir)
   })
 })
