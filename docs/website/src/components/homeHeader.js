@@ -66,12 +66,15 @@ function Header() {
           {/* Desktop navigation */}
           <nav className='invisible md:visible'>
             {/* Desktop menu links */}
-            <ul className='flex justify-end flex-wrap items-center'>
+            <ul className='flex justify-end flex-none items-center'>
               <li className='list-none'>
                 <HeaderLink to={useBaseUrl('/docs/welcome')}>Docs</HeaderLink>
               </li>
               <li className='list-none'>
                 <HeaderLink to={useBaseUrl('/examples/')}>Examples</HeaderLink>
+              </li>
+              <li className='list-none'>
+                <HeaderLink to={useBaseUrl('/blog/')}>Blog</HeaderLink>
               </li>
               <li className='list-none'>
                 <HeaderLink to='https://github.com/hubtype/botonic'>

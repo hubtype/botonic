@@ -20,7 +20,7 @@ module.exports = function (context, options) {
       try {
         config.module.rules[4].use[2].options.plugins = postCSSPlugins
       } catch (e) {
-        console.log('error ', e)
+        //console.log('error ', e)
       }
       config.module.rules.push({
         test: /\.(scss)$/,

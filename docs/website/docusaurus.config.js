@@ -22,6 +22,11 @@ module.exports = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        blog: {
+          path: '../blog',
+          blogTitle: 'Botonic Blog',
+          blogDescription: 'News and technical articles about building React based Conversational Apps with Botonic',
+        },
       },
     ],
   ],
@@ -64,6 +69,7 @@ module.exports = {
         { to: '/docs/faq', label: 'FAQ', position: 'right' },
 
         { to: '/examples', label: 'Examples', position: 'right' },
+        { to: '/blog', label: 'Blog', position: 'right' },
       ],
     },
     footer: {
