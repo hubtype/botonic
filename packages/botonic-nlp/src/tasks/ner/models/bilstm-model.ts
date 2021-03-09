@@ -25,10 +25,6 @@ export function createBiLstmModel(
     learningRate: DEFAULT_LEARNING_RATE,
   }
 ): LayersModel {
-  console.log(params)
-  console.log(params.dropout ? params.dropout : 0.1)
-  console.log(params.units ? params.units : 128)
-  console.log(params.learningRate ? params.learningRate : 0.001)
   const inputs = input({ name: 'InputLayer', shape: [maxLength] })
 
   const embeddingsLayer = layers.embedding({
@@ -42,13 +38,13 @@ export function createBiLstmModel(
 
   const dropoutLayer = layers.dropout({
     name: 'DropoutLayer',
-    rate: params.dropout ? params.dropout : DEFAULT_DROPOUT,
+    rate: params.dropout ?? DEFAULT_DROPOUT,
   })
 
   const bidirectionalLSTM = layers.bidirectional({
     name: 'BidirectionalLayer',
     layer: layers.lstm({
-      units: params.units ? params.units : DEFAULT_UNITS,
+      units: params.units ?? DEFAULT_UNITS,
       returnSequences: true,
       recurrentDropout: 0.1,
     }) as RNN,
@@ -68,9 +64,7 @@ export function createBiLstmModel(
 
   const nerModel = model({ name: 'BiLstmNerModel', inputs, outputs })
   nerModel.compile({
-    optimizer: train.adam(
-      params.learningRate ? params.learningRate : DEFAULT_LEARNING_RATE
-    ),
+    optimizer: train.adam(params.learningRate ?? DEFAULT_LEARNING_RATE),
     loss: 'categoricalCrossentropy',
     metrics: ['acc'],
   })
