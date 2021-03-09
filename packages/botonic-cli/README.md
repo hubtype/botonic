@@ -21,7 +21,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.18.3 darwin-x64 node-v12.20.1
+@botonic/cli/0.18.4 darwin-x64 node-v12.21.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -53,7 +53,6 @@ OPTIONS
   -b, --botName=botName    Name of the bot from Hubtype where you want to deploy
   -c, --command=command    Command to execute from the package "scripts" object
   -e, --email=email        Email from Hubtype Organization
-  -f, --force              Force deploy despite of no changes. Disabled by default
   -p, --password=password  Password from Hubtype Organization
 
 EXAMPLE
@@ -64,7 +63,7 @@ EXAMPLE
   🚀 Bot deployed!
 ```
 
-_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.18.3/lib/commands/deploy.js)_
+_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.18.4/lib/commands/deploy.js)_
 
 ## `botonic help [COMMAND]`
 
@@ -95,7 +94,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.18.3/lib/commands/login.js)_
+_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.18.4/lib/commands/login.js)_
 
 ## `botonic logout`
 
@@ -109,7 +108,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.18.3/lib/commands/logout.js)_
+_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.18.4/lib/commands/logout.js)_
 
 ## `botonic new NAME [PROJECTNAME]`
 
@@ -129,7 +128,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.18.3/lib/commands/new.js)_
+_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.18.4/lib/commands/new.js)_
 
 ## `botonic serve`
 
@@ -144,7 +143,7 @@ EXAMPLE
   > Project is running at http://localhost:8080/
 ```
 
-_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.18.3/lib/commands/serve.js)_
+_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.18.4/lib/commands/serve.js)_
 
 ## `botonic test`
 
@@ -171,7 +170,7 @@ EXAMPLE
   Ran all test suites.
 ```
 
-_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.18.3/lib/commands/test.js)_
+_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.18.4/lib/commands/test.js)_
 
 ## `botonic train`
 
@@ -189,5 +188,5 @@ EXAMPLE
        TRAINING MODEL FOR {LANGUAGE}...
 ```
 
-_See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v0.18.3/lib/commands/train.js)_
+_See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v0.18.4/lib/commands/train.js)_
 <!-- commandsstop -->

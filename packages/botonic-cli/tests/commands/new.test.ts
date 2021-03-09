@@ -1,13 +1,16 @@
 import { Config } from '@oclif/config'
 import { assert } from 'console'
-import { mkdtempSync, readdirSync } from 'fs'
 import { join } from 'path'
 import { chdir } from 'process'
-import rimraf from 'rimraf'
 
-import { EXAMPLES } from '../src/botonic-examples'
-import { default as NewCommand } from '../src/commands/new'
-import { readJSON } from '../src/utils'
+import { EXAMPLES } from '../../src/botonic-examples'
+import { default as NewCommand } from '../../src/commands/new'
+import {
+  createTempDir,
+  readDir,
+  readJSON,
+  removeRecursively,
+} from '../../src/util/file-system'
 
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
 
@@ -28,14 +31,14 @@ describe('TEST: New command (resolving project)', () => {
 
 describe('TEST: New command (downloading project)', () => {
   it('Succeeds to download into path', async () => {
-    const tmpPath = mkdtempSync('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     const packageJSON = readJSON(join(tmpPath, 'package.json'))
     expect((packageJSON as any).name).toEqual('blank')
-    rimraf.sync(tmpPath)
+    removeRecursively(tmpPath)
   })
   it('Fails to download into path', async () => {
-    const tmpPath = mkdtempSync('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await expect(
       newCommand.downloadSelectedProjectIntoPath(
         {
@@ -46,29 +49,29 @@ describe('TEST: New command (downloading project)', () => {
         tmpPath
       )
     ).rejects.toThrow(Error)
-    rimraf.sync(tmpPath)
+    removeRecursively(tmpPath)
   })
 })
 
 describe('TEST: New command (installing project)', () => {
   it('Succeeds to install', async () => {
-    const tmpPath = mkdtempSync('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
-    const sut = readdirSync('.')
+    const sut = readDir('.')
     expect(sut).toContain('node_modules')
     expect(sut).toContain('package-lock.json')
     chdir('..')
-    rimraf.sync(tmpPath)
+    removeRecursively(tmpPath)
   })
 
   it('Fails to install', async () => {
-    const tmpPath = mkdtempSync('botonic-tmp')
+    const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     await expect(
       newCommand.installDependencies('npm instal-typo')
     ).rejects.toThrow(Error)
-    rimraf.sync(tmpPath)
+    removeRecursively(tmpPath)
   })
 })

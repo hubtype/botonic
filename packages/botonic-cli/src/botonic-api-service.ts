@@ -1,17 +1,18 @@
-import axios, { Method } from 'axios'
+import axios, { AxiosPromise, Method } from 'axios'
 import colors from 'colors'
 import FormData from 'form-data'
-import * as fs from 'fs'
-import { homedir } from 'os'
-import { join } from 'path'
+import { createReadStream, unlinkSync } from 'fs'
 import * as util from 'util'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec)
-import { hashElement } from 'folder-hash'
 import ora from 'ora'
 import qs from 'qs'
 
-import { readJSON, writeJSON } from './utils'
+import {
+  BotCredentialsHandler,
+  GlobalCredentialsHandler,
+} from './analytics/credentials-handler'
+import { pathExists } from './util/file-system'
 
 const BOTONIC_CLIENT_ID: string =
   process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
@@ -21,44 +22,31 @@ const BOTONIC_CLIENT_SECRET: string =
 const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
 export class BotonicAPIService {
-  public clientId: string = BOTONIC_CLIENT_ID
-  public clientSecret: string = BOTONIC_CLIENT_SECRET
-  public baseUrl: string = BOTONIC_URL
-  public baseApiUrl = this.baseUrl + '/v1/'
-  public loginUrl: string = this.baseUrl + '/o/token/'
-  public botPath: string = process.cwd()
-  public botCredentialsPath: string = join(this.botPath, '.botonic.json')
-  public globalConfigPath: string = join(homedir(), '.botonic')
-  public globalCredentialsPath: string = join(
-    this.globalConfigPath,
-    'credentials.json'
-  )
-  public oauth: any
-  public me: any
-  public analytics: any
-  public lastBuildHash: any
-  public bot: any = null
-  public headers: Record<string, string> | null = null
+  clientId: string = BOTONIC_CLIENT_ID
+  clientSecret: string = BOTONIC_CLIENT_SECRET
+  baseUrl: string = BOTONIC_URL
+  baseApiUrl = this.baseUrl + '/v1/'
+  loginUrl: string = this.baseUrl + '/o/token/'
+  botCredentialsHandler = new BotCredentialsHandler()
+  globalCredentialsHandler = new GlobalCredentialsHandler()
+  oauth: any
+  me: any
+  analytics: any
+  bot: any = null
+  headers: Record<string, string> | null = null
 
   constructor() {
     this.loadGlobalCredentials()
     this.loadBotCredentials()
   }
 
-  beforeExit() {
+  beforeExit(): void {
     this.saveGlobalCredentials()
     this.saveBotCredentials()
   }
 
-  loadGlobalCredentials() {
-    let credentials
-    try {
-      credentials = readJSON(this.globalCredentialsPath)
-    } catch (e) {
-      if (fs.existsSync(this.globalCredentialsPath)) {
-        console.warn('Credentials could not be loaded', e)
-      }
-    }
+  loadGlobalCredentials(): void {
+    const credentials = this.globalCredentialsHandler.load()
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
@@ -72,72 +60,35 @@ export class BotonicAPIService {
     }
   }
 
-  loadBotCredentials() {
-    let credentials
-    try {
-      credentials = readJSON(this.botCredentialsPath)
-    } catch (e) {
-      if (fs.existsSync(this.botCredentialsPath)) {
-        console.warn('Credentials could not be loaded', e)
-      }
-    }
+  loadBotCredentials(): void {
+    const credentials = this.botCredentialsHandler.load()
     if (credentials) {
       // eslint-disable-next-line no-prototype-builtins
       if (credentials.hasOwnProperty('bot')) {
         this.bot = credentials.bot
-        this.lastBuildHash = credentials.lastBuildHash
       } else {
         // Allow users < v0.1.12 to upgrade smoothly
         this.bot = credentials
-        this.lastBuildHash = ''
       }
     }
   }
 
-  checkGlobalCredentialsPath() {
-    if (!fs.existsSync(this.globalConfigPath))
-      fs.mkdirSync(this.globalConfigPath)
-  }
-
-  saveGlobalCredentials() {
-    this.checkGlobalCredentialsPath()
-    writeJSON(this.globalCredentialsPath, {
+  saveGlobalCredentials(): void {
+    this.globalCredentialsHandler.createDirIfNotExists()
+    this.globalCredentialsHandler.dump({
       oauth: this.oauth,
       me: this.me,
       analytics: this.analytics,
     })
   }
 
-  saveBotCredentials() {
-    const botCredentials = {
+  saveBotCredentials(): void {
+    this.botCredentialsHandler.dump({
       bot: this.bot,
-      lastBuildHash: this.lastBuildHash,
-    }
-    writeJSON(this.botCredentialsPath, botCredentials)
+    })
   }
 
-  async getCurrentBuildHash() {
-    const options = {
-      folders: { exclude: ['.*', 'node_modules', 'dist'] },
-      files: {
-        include: [
-          '*.js',
-          '*.jsx',
-          '*.ts',
-          '*.tsx',
-          '*.css',
-          '*.scss',
-          'webpack.config.js',
-          '.babelrc',
-          'tsconfig.json',
-        ],
-      },
-    }
-    const hash = await hashElement('.', options)
-    return hash.hash
-  }
-
-  async build(npmCommand = 'build') {
+  async build(npmCommand = 'build'): Promise<boolean> {
     const spinner = ora({
       text: 'Building...',
       spinner: 'bouncingBar',
@@ -153,22 +104,13 @@ export class BotonicAPIService {
     return true
   }
 
-  async buildIfChanged(force: boolean, npmCommand?: string) {
-    const hash = await this.getCurrentBuildHash()
-    if (force || hash != this.lastBuildHash) {
-      this.lastBuildHash = hash
-      return await this.build(npmCommand)
-    }
-    return true
-  }
-
   setCurrentBot(bot: any): void {
     this.bot = bot
   }
 
-  logout() {
-    if (fs.existsSync(this.globalCredentialsPath))
-      fs.unlinkSync(this.globalCredentialsPath)
+  logout(): void {
+    const globalCredentialsPath = this.globalCredentialsHandler.homeDir
+    if (pathExists(globalCredentialsPath)) unlinkSync(globalCredentialsPath)
   }
 
   async api(
@@ -235,7 +177,7 @@ export class BotonicAPIService {
     return resp
   }
 
-  async login(email: any, password: any): Promise<any> {
+  async login(email: string, password: string): Promise<any> {
     const data = qs.stringify({
       username: email,
       password: password,
@@ -274,21 +216,17 @@ export class BotonicAPIService {
     return axios({ method: 'post', url: url, data: signup_data })
   }
 
-  async saveBot(bot_name: string) {
-    const resp = await this.api(
-      'bots/',
-      { name: bot_name, framework: 'framework_botonic' },
-      'post'
-    )
+  async saveBot(botName: string): Promise<AxiosPromise> {
+    const resp = await this.api('bots/', { name: botName }, 'post')
     if (resp.data) this.setCurrentBot(resp.data)
     return resp
   }
 
-  async getMe() {
+  async getMe(): Promise<AxiosPromise> {
     return this.api('users/me/')
   }
 
-  async getBots() {
+  async getBots(): Promise<AxiosPromise> {
     return this.api('bots/bots_paginator/', null, 'get', null, {
       organization_id: this.me.organization_id,
     })
@@ -307,7 +245,7 @@ export class BotonicAPIService {
     return this.getMoreBots(bots, nextBots)
   }
 
-  async getProviders() {
+  async getProviders(): Promise<AxiosPromise> {
     return this.api('provider_accounts/', null, 'get', null, {
       bot_id: this.bot.id,
     })
@@ -320,7 +258,7 @@ export class BotonicAPIService {
       console.log(`Error authenticating: ${e}`)
     }
     const form = new FormData()
-    const data = fs.createReadStream(bundlePath)
+    const data = createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
     const headers = await this.getHeaders(form)
     return await this.api(
@@ -332,13 +270,13 @@ export class BotonicAPIService {
     )
   }
 
-  async deployStatus(deploy_id: string): Promise<any> {
+  async deployStatus(deployId: string): Promise<AxiosPromise> {
     return this.api(
       `bots/${this.bot.id}/deploy_botonic_status/`,
       null,
       'get',
       null,
-      { deploy_id }
+      { deploy_id: deployId }
     )
   }
 

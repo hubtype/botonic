@@ -1,19 +1,26 @@
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
-import * as fs from 'fs'
-import { copySync, removeSync } from 'fs-extra'
+import { statSync } from 'fs'
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
-import * as rimraf from 'rimraf'
 import { zip } from 'zip-a-folder'
 
+import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
-import { sleep, track } from '../utils'
+import {
+  copy,
+  createDir,
+  pathExists,
+  removeRecursively,
+} from '../util/file-system'
+import { sleep } from '../util/system'
 
 let npmCommand: string | undefined
+
 const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
+const BOTONIC_TEMP_DIRNAME = 'tmp'
 
 export default class Run extends Command {
   static description = 'Deploy Botonic project to hubtype.com'
@@ -49,11 +56,12 @@ Uploading...
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
   private botName: string | undefined = undefined
+  private telemetry = new Telemetry()
 
   /* istanbul ignore next */
-  async run() {
+  async run(): Promise<void> {
     const { flags } = this.parse(Run)
-    track('Deployed Botonic CLI')
+    this.telemetry.trackDeploy()
     npmCommand = flags.command
     this.botName = flags.botName
     const email = flags.email
@@ -277,24 +285,25 @@ Uploading...
       text: 'Creating bundle...',
       spinner: 'bouncingBar',
     }).start()
-    // Why using rimraf instead of fs.rmdirSync?: https://stackoverflow.com/a/57834155/145289
-    if (fs.existsSync('tmp')) rimraf.sync('tmp')
-    fs.mkdirSync(join('tmp'))
-    copySync('dist', join('tmp', 'dist'))
-    const zipRes = await zip('tmp', join(BOTONIC_BUNDLE_FILE))
+    if (pathExists(BOTONIC_TEMP_DIRNAME))
+      removeRecursively(BOTONIC_TEMP_DIRNAME)
+    createDir(join(process.cwd(), BOTONIC_TEMP_DIRNAME))
+    copy('dist', join(BOTONIC_TEMP_DIRNAME, 'dist'))
+    const zipRes = await zip(BOTONIC_TEMP_DIRNAME, join(BOTONIC_BUNDLE_FILE))
     if (zipRes instanceof Error) {
       throw Error
     }
-    const zip_stats = fs.statSync(BOTONIC_BUNDLE_FILE)
+    const zipStats = statSync(BOTONIC_BUNDLE_FILE)
     spinner.succeed()
-    if (zip_stats.size >= 10 * 10 ** 6) {
+    if (zipStats.size >= 10 * 10 ** 6) {
       spinner.fail()
       console.log(
         colors.red(
-          `Deploy failed. Bundle size too big ${zip_stats.size} (max 10Mb).`
+          `Deploy failed. Bundle size too big ${zipStats.size} (max 10Mb).`
         )
       )
-      track('Deploy Botonic Zip Error')
+      const error = 'Deploy Botonic Zip Error'
+      this.telemetry.trackError(error)
       return
     }
   }
@@ -312,21 +321,24 @@ Uploading...
         (deploy.response && deploy.response.status == 403) ||
         !deploy.data.deploy_id
       ) {
-        track('Deploy Botonic Error', { error: deploy.response.data.status })
+        const error = `Deploy Botonic Error: ${String(
+          deploy.response.data.status
+        )}`
+        this.telemetry.trackError(error)
         throw deploy.response.data.status
       }
       // eslint-disable-next-line no-constant-condition
       while (true) {
         await sleep(500)
-        const deploy_status = await this.botonicApiService.deployStatus(
+        const deployStatus = await this.botonicApiService.deployStatus(
           deploy.data.deploy_id
         )
-        if (deploy_status.data.is_completed) {
-          if (deploy_status.data.status == 'deploy_status_completed_ok') {
+        if (deployStatus.data.is_completed) {
+          if (deployStatus.data.status == 'deploy_status_completed_ok') {
             spinner.succeed()
             console.log(colors.green('\n🚀  Bot deployed!\n'))
             return { hasDeployErrors: false }
-          } else throw deploy_status.data.error
+          } else throw deployStatus.data.error
         }
       }
     } catch (err) {
@@ -334,7 +346,7 @@ Uploading...
       const error = String(err)
       console.log(colors.red('There was a problem in the deploy:'))
       console.log(colors.red(error))
-      track('Deploy Botonic Error', { error })
+      this.telemetry.trackError(`Deploy Botonic Error: ${error}`)
       return { hasDeployErrors: true }
     }
   }
@@ -353,7 +365,8 @@ Uploading...
       }
       return true
     } catch (e) {
-      track('Deploy Botonic Provider Error', { error: String(e) })
+      const error = `Deploy Botonic Provider Error: ${String(e)}`
+      this.telemetry.trackError(error)
       console.log(colors.red(`There was an error getting the providers: ${e}`))
       return false
     }
@@ -364,7 +377,8 @@ Uploading...
     try {
       const buildOut = await this.botonicApiService.build()
       if (!buildOut) {
-        track('Deploy Botonic Build Error')
+        const error = 'Deploy Botonic Build Error'
+        this.telemetry.trackError(error)
         console.log(colors.red('There was a problem building the bot'))
         return
       }
@@ -374,8 +388,8 @@ Uploading...
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)
     } finally {
-      removeSync(BOTONIC_BUNDLE_FILE)
-      removeSync('tmp')
+      removeRecursively(BOTONIC_BUNDLE_FILE)
+      removeRecursively(BOTONIC_TEMP_DIRNAME)
       this.botonicApiService.beforeExit()
     }
   }
