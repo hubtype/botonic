@@ -11,7 +11,7 @@ import {
   removeRecursively,
   writeJSON,
 } from '../../src/util/file-system'
-import { execCommand } from '../../src/util/system'
+import { execCommandSafe } from '../../src/util/system'
 
 const existingPath = process.cwd()
 const unexistingPath = 'unexistingPath'
@@ -115,7 +115,7 @@ describe('TEST: File System utilities', () => {
       expect(writtenContent).toEqual('{"dummy":"content"}')
       const readContent = readJSON(path)
       expect(readContent).toEqual({ dummy: 'content' })
-      execCommand(`touch ${tempDir}/another.json`)
+      execCommandSafe(`touch ${tempDir}/another.json`)
       const noContent = readJSON(join(tempDir, 'another.json'))
       expect(noContent).toBeUndefined()
     })

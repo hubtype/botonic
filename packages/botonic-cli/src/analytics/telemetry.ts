@@ -21,20 +21,25 @@ const TRACKING_EVENTS = {
 
 export class Telemetry {
   analyticsService: AnalyticsService
-  globalCredentialsHandler: GlobalCredentialsHandler
+  globalCredentialsHandler: GlobalCredentialsHandler | undefined
   isAnalyticsEnabled = process.env.BOTONIC_DISABLE_ANALYTICS !== '1'
   events = TRACKING_EVENTS
 
   constructor() {
     this.analyticsService = new Analytics(ANALYTICS_WRITE_KEY, { flushAt: 1 })
-    this.globalCredentialsHandler = new GlobalCredentialsHandler()
+    try {
+      this.globalCredentialsHandler = new GlobalCredentialsHandler()
+    } catch (e) {
+      this.isAnalyticsEnabled = false
+      console.error(e)
+    }
   }
 
   createAnonymousIdIfNotExists(): string | undefined {
-    if (!this.globalCredentialsHandler.hasAnonymousId()) {
-      this.globalCredentialsHandler.refreshAnonymousId()
+    if (!this.globalCredentialsHandler?.hasAnonymousId()) {
+      this.globalCredentialsHandler?.refreshAnonymousId()
     }
-    const credentials = this.globalCredentialsHandler.load()
+    const credentials = this.globalCredentialsHandler?.load()
     return credentials?.analytics?.anonymous_id
   }
 

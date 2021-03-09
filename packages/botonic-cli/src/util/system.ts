@@ -5,8 +5,12 @@ export async function sleep(ms: number): Promise<number> {
 }
 
 export function execCommand(command: string): string {
+  return String(execSync(command)).trim()
+}
+
+export function execCommandSafe(command: string): string {
   try {
-    return String(execSync(command)).trim()
+    return execCommand(command)
   } catch (e) {
     return String(e)
   }

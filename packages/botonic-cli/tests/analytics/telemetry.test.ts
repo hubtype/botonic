@@ -7,6 +7,7 @@ process.env.BOTONIC_DISABLE_ANALYTICS = '1'
 
 describe('TEST: Telemetry', () => {
   let telemetry: Telemetry
+
   beforeEach(() => {
     telemetry = new Telemetry()
   })
@@ -15,18 +16,25 @@ describe('TEST: Telemetry', () => {
   it('Initializes correctly Telemetry', () => {
     expect(telemetry.isAnalyticsEnabled).toBe(false)
     expect(telemetry.analyticsService).toBeTruthy()
-    expect(pathExists(telemetry.globalCredentialsHandler.homeDir)).toBeTruthy()
+    let homeDir = ''
+    if (telemetry.globalCredentialsHandler) {
+      homeDir = telemetry.globalCredentialsHandler.homeDir
+    }
+    expect(pathExists(homeDir)).toBeTruthy()
   })
   it('Creates anonymousId if not exists', () => {
-    const currentInfo = telemetry.globalCredentialsHandler.load()
-    telemetry.globalCredentialsHandler.dump({
-      analytics: { anonymous_id: '' },
-    })
-    telemetry.globalCredentialsHandler.load()
-    assert(!telemetry.globalCredentialsHandler.getAnonymousId())
-    const anonymousId = telemetry.createAnonymousIdIfNotExists()
+    let anonymousId: string | undefined = undefined
+    if (telemetry.globalCredentialsHandler) {
+      const currentInfo = telemetry.globalCredentialsHandler.load()
+      telemetry.globalCredentialsHandler.dump({
+        analytics: { anonymous_id: '' },
+      })
+      telemetry.globalCredentialsHandler.load()
+      assert(!telemetry.globalCredentialsHandler.getAnonymousId())
+      anonymousId = telemetry.createAnonymousIdIfNotExists()
+      telemetry.globalCredentialsHandler.dump(currentInfo)
+    }
     expect(anonymousId).toBeTruthy()
-    telemetry.globalCredentialsHandler.dump(currentInfo)
   })
   it('Generates the correct properties', () => {
     const sut = Object.keys(

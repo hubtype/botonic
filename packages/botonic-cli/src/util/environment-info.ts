@@ -4,7 +4,7 @@ import { join } from 'path'
 import { BOTONIC_NPM_NAMESPACE } from '../constants'
 import { SystemInformation } from '../interfaces'
 import { readJSON } from './file-system'
-import { execCommand } from './system'
+import { execCommandSafe } from './system'
 
 export function isWindows(): boolean {
   return platform() === 'win32'
@@ -40,9 +40,9 @@ export function getSystemInformation(): SystemInformation {
     is_tty: Boolean(process.stdout.isTTY),
     framework_path: join(__dirname, '..'),
     system_path: isWindows()
-      ? execCommand('echo %PATH%')
-      : execCommand('echo $PATH'),
-    node_version: execCommand('node --version'),
+      ? execCommandSafe('echo %PATH%')
+      : execCommandSafe('echo $PATH'),
+    node_version: execCommandSafe('node --version'),
     botonic_cli_version: getBotonicCLIVersion(),
     botonic_dependencies: getBotonicDependencies(),
   }
