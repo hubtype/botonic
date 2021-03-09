@@ -100,8 +100,13 @@ export interface BotCredentials {
   bot: BotInfo | null
 }
 
+export interface TrackArgs {
+  event: string
+  anonymousId: string
+  properties?: any
+}
 export interface AnalyticsService {
-  track: (any) => any
+  track: (args: TrackArgs) => void
 }
 
 export interface SystemInformation {

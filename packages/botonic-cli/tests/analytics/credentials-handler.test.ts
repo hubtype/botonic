@@ -62,8 +62,7 @@ describe('TEST: GlobalCredentialsHandler', () => {
   })
   it('Handles ids properly', () => {
     const currentAnonymousId = globalCredsHandler.getAnonymousId()
-    globalCredsHandler.refreshAnonymousId()
-    const refreshedAnonymousId = globalCredsHandler.getAnonymousId()
+    const refreshedAnonymousId = globalCredsHandler.refreshAnonymousId()
     expect(currentAnonymousId).not.toEqual(refreshedAnonymousId)
     globalCredsHandler.dump({ analytics: { anonymous_id: currentAnonymousId } })
   })

@@ -86,10 +86,12 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
     return Boolean(this.getAnonymousId())
   }
 
-  refreshAnonymousId(): void {
+  refreshAnonymousId(): string {
+    const newId = this.generateId()
     this.dump({
-      analytics: { anonymous_id: this.generateId() },
+      analytics: { anonymous_id: newId },
     })
+    return newId
   }
 
   load(): GlobalCredentials {
