@@ -96,7 +96,9 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
   }
 
   load(): GlobalCredentials | undefined {
-    return (this.loadJSON() as unknown) as GlobalCredentials
+    const json = this.loadJSON()
+    if (!json) return undefined
+    return (json as unknown) as GlobalCredentials
   }
 
   dump(obj: GlobalCredentials): void {
@@ -113,7 +115,9 @@ export class BotCredentialsHandler extends CredentialsHandler {
   }
 
   load(): BotCredentials | undefined {
-    return (this.loadJSON() as unknown) as BotCredentials
+    const json = this.loadJSON()
+    if (!json) return undefined
+    return (json as unknown) as BotCredentials
   }
 
   dump(obj: BotCredentials): void {
