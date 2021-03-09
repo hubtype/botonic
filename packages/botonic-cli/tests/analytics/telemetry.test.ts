@@ -32,7 +32,7 @@ describe('TEST: Telemetry', () => {
       telemetry.globalCredentialsHandler.load()
       assert(!telemetry.globalCredentialsHandler.getAnonymousId())
       anonymousId = telemetry.createAnonymousIdIfNotExists()
-      telemetry.globalCredentialsHandler.dump(currentInfo)
+      if (currentInfo) telemetry.globalCredentialsHandler.dump(currentInfo)
     }
     expect(anonymousId).toBeTruthy()
   })

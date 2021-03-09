@@ -30,10 +30,10 @@ describe('TEST: CredentialsHandler', () => {
   })
   it('Loads/Dumps correctly the data', () => {
     expect(pathExists(credentialsHandler.pathToCredentials)).toBeFalsy()
-    credentialsHandler.dump({ dummy: 'content' })
+    credentialsHandler.dumpJSON({ dummy: 'content' })
     expect(pathExists(credentialsHandler.pathToCredentials)).toBeTruthy()
-    const { dummy } = credentialsHandler.load()
-    expect(dummy).toEqual('content')
+    const content = credentialsHandler.loadJSON()
+    expect(content?.dummy).toEqual('content')
   })
   it('Generates a random id', () => {
     const sut = credentialsHandler.generateId()
@@ -64,7 +64,10 @@ describe('TEST: GlobalCredentialsHandler', () => {
     const currentAnonymousId = globalCredsHandler.getAnonymousId()
     const refreshedAnonymousId = globalCredsHandler.refreshAnonymousId()
     expect(currentAnonymousId).not.toEqual(refreshedAnonymousId)
-    globalCredsHandler.dump({ analytics: { anonymous_id: currentAnonymousId } })
+    if (currentAnonymousId)
+      globalCredsHandler.dump({
+        analytics: { anonymous_id: currentAnonymousId },
+      })
   })
 })
 

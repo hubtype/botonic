@@ -10,6 +10,7 @@ import {
 import { copySync } from 'fs-extra'
 import { homedir } from 'os'
 
+import { JSONObject } from '../interfaces'
 import { isWindows } from './environment-info'
 import { execCommand } from './system'
 
@@ -21,7 +22,7 @@ export function readDir(path: string): string[] {
   return readdirSync(path)
 }
 
-export function readJSON(path: string): any {
+export function readJSON(path: string): JSONObject | undefined {
   const fileContent = readFileSync(path, 'utf8')
   if (!fileContent) return undefined
   return JSON.parse(fileContent)

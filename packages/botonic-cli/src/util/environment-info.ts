@@ -22,8 +22,9 @@ export function getBotonicCLIVersion(): string {
 export function getBotonicDependencies(): any[] | string {
   try {
     const packageJSON = readJSON('package.json')
+    if (!packageJSON) return 'No package.json found.'
     const botonicDependencies = Object.entries(
-      (packageJSON as any).dependencies
+      packageJSON.dependencies as any
     ).filter(([k, _]) => k.includes(BOTONIC_NPM_NAMESPACE))
     return botonicDependencies
   } catch (e) {

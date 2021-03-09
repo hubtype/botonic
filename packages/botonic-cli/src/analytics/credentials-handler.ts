@@ -11,6 +11,7 @@ import {
   BotCredentials,
   CredentialsHandlerArgs,
   GlobalCredentials,
+  JSONObject,
 } from '../interfaces'
 import {
   createDir,
@@ -42,7 +43,7 @@ export class CredentialsHandler {
     if (!pathExists(this.homeDir)) createDir(this.homeDir)
   }
 
-  load(): any {
+  loadJSON(): JSONObject | undefined {
     try {
       if (!pathExists(this.pathToCredentials)) return undefined
       return readJSON(this.pathToCredentials)
@@ -52,7 +53,7 @@ export class CredentialsHandler {
     }
   }
 
-  dump(obj: any): void {
+  dumpJSON(obj: JSONObject): void {
     try {
       writeJSON(this.pathToCredentials, obj)
     } catch (e) {
@@ -76,7 +77,7 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
     }
   }
 
-  getAnonymousId(): string {
+  getAnonymousId(): string | undefined {
     const content = this.load()
     return content?.analytics.anonymous_id
   }
@@ -94,12 +95,12 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
     return newId
   }
 
-  load(): GlobalCredentials {
-    return super.load() as GlobalCredentials
+  load(): GlobalCredentials | undefined {
+    return (this.loadJSON() as unknown) as GlobalCredentials
   }
 
   dump(obj: GlobalCredentials): void {
-    return super.dump(obj)
+    return this.dumpJSON((obj as unknown) as JSONObject)
   }
 }
 
@@ -111,11 +112,11 @@ export class BotCredentialsHandler extends CredentialsHandler {
     })
   }
 
-  load(): BotCredentials {
-    return super.load() as BotCredentials
+  load(): BotCredentials | undefined {
+    return (this.loadJSON() as unknown) as BotCredentials
   }
 
   dump(obj: BotCredentials): void {
-    return super.dump(obj)
+    return this.dumpJSON((obj as unknown) as JSONObject)
   }
 }
