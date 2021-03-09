@@ -23,7 +23,7 @@ import { createBiLstmModel } from '../ner/models/bilstm-model'
 import { NerModelParameters, NerModelTemplate } from './models/types'
 import { NEUTRAL_ENTITY } from './process/constants'
 import { PredictionProcessor } from './process/prediction-processor'
-import { NerSampleProcessor } from './process/sample-processor'
+import { Processor } from './process/processor'
 import { Entity } from './process/types'
 
 export class BotonicNer {
@@ -31,7 +31,7 @@ export class BotonicNer {
   vocabulary: string[]
   private sequenceCodifier: Codifier
   private entitiesCodifier: Codifier
-  private sampleProcessor: NerSampleProcessor
+  private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelHandler: ModelHandler
 
@@ -89,7 +89,7 @@ export class BotonicNer {
     this.entitiesCodifier = new Codifier(this.entities, {
       categorical: true,
     })
-    this.sampleProcessor = new NerSampleProcessor(
+    this.processor = new Processor(
       this.preprocessor,
       this.sequenceCodifier,
       this.entitiesCodifier
@@ -128,17 +128,17 @@ export class BotonicNer {
     epochs: number,
     batchSize: number
   ): Promise<void> {
-    const { x, y } = this.sampleProcessor.process(samples)
+    const { x, y } = this.processor.process(samples)
     await this.modelHandler.train(x, y, { epochs, batchSize })
   }
 
   async evaluate(samples: Sample[]): Promise<ModelEvaluation> {
-    const { x, y } = this.sampleProcessor.process(samples)
+    const { x, y } = this.processor.process(samples)
     return await this.modelHandler.evaluate(x, y)
   }
 
   recognizeEntities(text: string): Entity[] {
-    const { sequence, input } = this.sampleProcessor.processInput(text)
+    const { sequence, input } = this.processor.generateInput(text)
     const prediction = this.modelHandler.predict(input) as Tensor3D
     return this.predictionProcessor.process(sequence, prediction)
   }
