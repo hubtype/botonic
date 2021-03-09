@@ -1,12 +1,20 @@
 import React from 'react'
 
+import HomeNewsBanner from './homeNewsBanner'
+
 function HomeHero() {
   return (
     <section>
       <div className='max-w-6xl mx-auto px-4 sm:px-6 relative'>
         {/* Hero content */}
-        <div className='relative pt-32 pb-10 md:pt-40 md:pb-16'>
+        <div className='relative pt-24 pb-10 md:pt-32 md:pb-16'>
           {/* Section header */}
+          <HomeNewsBanner
+            className='max-w-3xl mx-auto text-center pb-8 md:pb-12'
+            link='/blog/2021/03/10/introducing-botonic-office-hours/'
+          >
+            Friday Office Hours
+          </HomeNewsBanner>
           <div className='max-w-3xl mx-auto text-center pb-12 md:pb-16'>
             <h1
               className='text-5xl md:text-5xl font-extrabold leading-tighter tracking-tighter mb-4'

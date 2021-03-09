@@ -34,7 +34,6 @@ function Home() {
             <MessagingAppsLeft className='absolute top-20 left-0 opacity-25 lg:opacity-75' />
             <MessagingAppsRight className='absolute top-50 right-0 invisible lg:visible opacity-75' />
           </div>
-
           {/*  Page sections */}
           <HomeHero />
         </main>
