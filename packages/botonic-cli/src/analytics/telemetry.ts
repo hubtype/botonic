@@ -37,10 +37,11 @@ export class Telemetry {
   }
 
   createAnonymousIdIfNotExists(): string | undefined {
-    if (!this.globalCredentialsHandler?.hasAnonymousId()) {
-      return this.globalCredentialsHandler?.refreshAnonymousId()
+    if (!this.globalCredentialsHandler) return undefined
+    if (!this.globalCredentialsHandler.hasAnonymousId()) {
+      return this.globalCredentialsHandler.refreshAnonymousId()
     }
-    const credentials = this.globalCredentialsHandler?.load()
+    const credentials = this.globalCredentialsHandler.load()
     return credentials?.analytics.anonymous_id
   }
 

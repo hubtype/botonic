@@ -1,5 +1,6 @@
 import { assert } from 'console'
 
+import { GlobalCredentialsHandler } from '../../src/analytics/credentials-handler'
 import { Telemetry } from '../../src/analytics/telemetry'
 import { pathExists } from '../../src/util/file-system'
 
@@ -7,33 +8,31 @@ process.env.BOTONIC_DISABLE_ANALYTICS = '1'
 
 describe('TEST: Telemetry', () => {
   let telemetry: Telemetry
+  let globalCredentialsHandler: GlobalCredentialsHandler
 
   beforeEach(() => {
     telemetry = new Telemetry()
+    if (telemetry.globalCredentialsHandler)
+      globalCredentialsHandler = telemetry.globalCredentialsHandler
   })
 
   afterEach(() => {})
   it('Initializes correctly Telemetry', () => {
     expect(telemetry.isAnalyticsEnabled).toBe(false)
     expect(telemetry.analyticsService).toBeTruthy()
-    let homeDir = ''
-    if (telemetry.globalCredentialsHandler) {
-      homeDir = telemetry.globalCredentialsHandler.homeDir
-    }
+    const homeDir = globalCredentialsHandler.homeDir
     expect(pathExists(homeDir)).toBeTruthy()
   })
   it('Creates anonymousId if not exists', () => {
     let anonymousId: string | undefined = undefined
-    if (telemetry.globalCredentialsHandler) {
-      const currentInfo = telemetry.globalCredentialsHandler.load()
-      telemetry.globalCredentialsHandler.dump({
-        analytics: { anonymous_id: '' },
-      })
-      telemetry.globalCredentialsHandler.load()
-      assert(!telemetry.globalCredentialsHandler.getAnonymousId())
-      anonymousId = telemetry.createAnonymousIdIfNotExists()
-      if (currentInfo) telemetry.globalCredentialsHandler.dump(currentInfo)
-    }
+    const currentInfo = globalCredentialsHandler.load()
+    globalCredentialsHandler.dump({
+      analytics: { anonymous_id: '' },
+    })
+    globalCredentialsHandler.load()
+    assert(!globalCredentialsHandler.getAnonymousId())
+    anonymousId = telemetry.createAnonymousIdIfNotExists()
+    if (currentInfo) globalCredentialsHandler.dump(currentInfo)
     expect(anonymousId).toBeTruthy()
   })
   it('Generates the correct properties', () => {
