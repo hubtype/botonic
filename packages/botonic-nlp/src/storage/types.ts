@@ -1,6 +1,6 @@
 import { Locale } from '../types'
 
-export type ModelConfig = {
+export type NlpConfig = {
   locale: Locale
   maxLength: number
   vocabulary: string[]

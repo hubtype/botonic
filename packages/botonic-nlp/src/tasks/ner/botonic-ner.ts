@@ -3,8 +3,8 @@ import { Tensor3D } from '@tensorflow/tfjs-node'
 import { Dataset, Sample } from '../../dataset/types'
 import { Embedder } from '../../embeddings/embedder'
 import { WordEmbeddingManager } from '../../embeddings/types'
-import { ModelHandler } from '../../handlers/model-handler'
-import { ModelEvaluation } from '../../handlers/types'
+import { ModelManager } from '../../model/manager'
+import { ModelEvaluation } from '../../model/types'
 import { Codifier } from '../../preprocess/codifier'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
@@ -17,14 +17,15 @@ import {
   Tokenizer,
 } from '../../preprocess/types'
 import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
+import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
-import { NerConfigHandler } from '../ner/handlers/config-handler'
 import { createBiLstmModel } from '../ner/models/bilstm-model'
 import { NerModelParameters, NerModelTemplate } from './models/types'
 import { NEUTRAL_ENTITY } from './process/constants'
 import { PredictionProcessor } from './process/prediction-processor'
 import { Processor } from './process/processor'
 import { Entity } from './process/types'
+import { NerConfigStorage } from './storage/config-storage'
 
 export class BotonicNer {
   entities: string[]
@@ -33,7 +34,7 @@ export class BotonicNer {
   private entitiesCodifier: Codifier
   private processor: Processor
   private predictionProcessor: PredictionProcessor
-  private modelHandler: ModelHandler
+  private modelManager: ModelManager
 
   private constructor(
     readonly locale: Locale,
@@ -50,7 +51,7 @@ export class BotonicNer {
   }
 
   static async load(path: string): Promise<BotonicNer> {
-    const config = NerConfigHandler.load(path)
+    const config = NerConfigStorage.load(path)
     const ner = new BotonicNer(
       config.locale,
       config.maxLength,
@@ -58,7 +59,7 @@ export class BotonicNer {
     )
     ner.vocabulary = config.vocabulary
     ner.entities = config.entities
-    ner.modelHandler = await ModelHandler.load(path)
+    ner.modelManager = new ModelManager(await ModelStorage.load(path))
     return ner
   }
 
@@ -109,7 +110,7 @@ export class BotonicNer {
 
     switch (template) {
       case 'biLstm':
-        this.modelHandler = new ModelHandler(
+        this.modelManager = new ModelManager(
           createBiLstmModel(
             this.maxLength,
             this.entities,
@@ -129,28 +130,28 @@ export class BotonicNer {
     batchSize: number
   ): Promise<void> {
     const { x, y } = this.processor.process(samples)
-    await this.modelHandler.train(x, y, { epochs, batchSize })
+    await this.modelManager.train(x, y, { epochs, batchSize })
   }
 
   async evaluate(samples: Sample[]): Promise<ModelEvaluation> {
     const { x, y } = this.processor.process(samples)
-    return await this.modelHandler.evaluate(x, y)
+    return await this.modelManager.evaluate(x, y)
   }
 
   recognizeEntities(text: string): Entity[] {
     const { sequence, input } = this.processor.generateInput(text)
-    const prediction = this.modelHandler.predict(input) as Tensor3D
+    const prediction = this.modelManager.predict(input) as Tensor3D
     return this.predictionProcessor.process(sequence, prediction)
   }
 
   async saveModel(path: string): Promise<void> {
-    NerConfigHandler.save(path, {
+    NerConfigStorage.save(path, {
       locale: this.locale,
       maxLength: this.maxLength,
       vocabulary: this.vocabulary,
       entities: this.entities,
     })
-    await this.modelHandler.save(path)
+    await this.modelManager.save(path)
   }
 
   set normalizer(engine: Normalizer) {

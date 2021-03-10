@@ -1,19 +1,10 @@
-import {
-  LayersModel,
-  loadLayersModel,
-  Scalar,
-  Tensor,
-} from '@tensorflow/tfjs-node'
-import { mkdirSync } from 'fs'
+import { LayersModel, Scalar, Tensor } from '@tensorflow/tfjs-node'
 
+import { ModelStorage } from '../storage/model-storage'
 import { ModelEvaluation } from './types'
 
-export class ModelHandler {
+export class ModelManager {
   constructor(readonly model: LayersModel) {}
-
-  static async load(path: string): Promise<ModelHandler> {
-    return new ModelHandler(await loadLayersModel(`file://${path}/model.json`))
-  }
 
   async train(
     x: Tensor,
@@ -36,7 +27,6 @@ export class ModelHandler {
   }
 
   async save(path: string): Promise<void> {
-    mkdirSync(path, { recursive: true })
-    await this.model.save(`file://${path}`)
+    ModelStorage.save(this.model, path)
   }
 }
