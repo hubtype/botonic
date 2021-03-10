@@ -1,5 +1,6 @@
 import { Tensor3D } from '@tensorflow/tfjs-node'
 
+import { DatasetLoader } from '../../dataset/loader'
 import { Dataset, Sample } from '../../dataset/types'
 import { Embedder } from '../../embeddings/embedder'
 import { WordEmbeddingManager } from '../../embeddings/types'
@@ -30,8 +31,6 @@ import { NerConfigStorage } from './storage/config-storage'
 export class BotonicNer {
   entities: string[]
   vocabulary: string[]
-  private sequenceCodifier: Codifier
-  private entitiesCodifier: Codifier
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
@@ -63,37 +62,37 @@ export class BotonicNer {
     return ner
   }
 
+  loadDataset(path: string): Dataset {
+    const dataset = DatasetLoader.load(path)
+    this.entities = Array.from(
+      new Set([NEUTRAL_ENTITY].concat(dataset.entities))
+    )
+    return dataset
+  }
+
   splitDataset(
     dataset: Dataset,
     testSize = 0.2,
     shuffle = true
   ): { train: Sample[]; test: Sample[] } {
-    this.entities = Array.from(
-      new Set([NEUTRAL_ENTITY].concat(dataset.entities))
-    )
     return trainTestSplit(dataset.samples, testSize, shuffle)
   }
 
   generateVocabulary(samples: Sample[]): void {
-    const generator = new VocabularyGenerator(this.preprocessor)
     this.vocabulary = Array.from(
       new Set(
-        [PADDING_TOKEN, UNKNOWN_TOKEN].concat(generator.generate(samples))
+        [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
+          VocabularyGenerator.using(this.preprocessor).generate(samples)
+        )
       )
     )
   }
 
   compile(): void {
-    this.sequenceCodifier = new Codifier(this.vocabulary, {
-      categorical: false,
-    })
-    this.entitiesCodifier = new Codifier(this.entities, {
-      categorical: true,
-    })
     this.processor = new Processor(
       this.preprocessor,
-      this.sequenceCodifier,
-      this.entitiesCodifier
+      new Codifier(this.vocabulary, { categorical: false }),
+      new Codifier(this.entities, { categorical: true })
     )
     this.predictionProcessor = new PredictionProcessor(this.entities)
   }
@@ -145,12 +144,13 @@ export class BotonicNer {
   }
 
   async saveModel(path: string): Promise<void> {
-    NerConfigStorage.save(path, {
+    const config = {
       locale: this.locale,
       maxLength: this.maxLength,
       vocabulary: this.vocabulary,
       entities: this.entities,
-    })
+    }
+    NerConfigStorage.save(path, config)
     await this.modelManager.save(path)
   }
 
