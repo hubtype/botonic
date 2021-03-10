@@ -4,7 +4,7 @@ import { join } from 'path'
 import { ModelStorage } from '../../src/storage/model-storage'
 import * as helper from '../helpers/tasks/ner/helper'
 
-describe('Model handler', () => {
+describe('Model Storage', () => {
   test('Load model', async () => {
     const model = await ModelStorage.load(helper.MODEL_DIR_PATH)
     expect(model.name).toEqual('BiLstmNerModel')

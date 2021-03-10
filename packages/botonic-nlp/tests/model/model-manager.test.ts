@@ -4,7 +4,7 @@ import { ModelManager } from '../../src/model/manager'
 import { ModelStorage } from '../../src/storage/model-storage'
 import * as helper from '../helpers/tasks/ner/helper'
 
-describe('Model handler', () => {
+describe('Model Manager', () => {
   test('Predict', async () => {
     const manager = new ModelManager(
       await ModelStorage.load(helper.MODEL_DIR_PATH)
