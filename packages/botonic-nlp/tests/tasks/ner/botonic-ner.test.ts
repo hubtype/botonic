@@ -36,7 +36,7 @@ describe('Botonic NER', () => {
     const { train, test } = ner.splitDataset(helper.DATASET)
     ner.generateVocabulary(train)
     ner.compile()
-    await ner.createModel('biLstm', await helper.getDatabaseManager())
+    await ner.createModel('biLstm', helper.testWordEmbeddingManager)
     await ner.train(train, 4, 8)
 
     // act
@@ -53,7 +53,7 @@ describe('Botonic NER', () => {
     const { train } = ner.splitDataset(helper.DATASET)
     ner.generateVocabulary(train)
     ner.compile()
-    await ner.createModel('biLstm', await helper.getDatabaseManager())
+    await ner.createModel('biLstm', helper.testWordEmbeddingManager)
     await ner.train(train, 4, 8)
 
     // act

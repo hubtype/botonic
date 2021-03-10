@@ -1,16 +1,16 @@
 import { join } from 'path'
 
 import { DatasetLoader } from '../../../../src/dataset/loader'
-import { DatabaseManager } from '../../../../src/embeddings/database/manager'
 import {
   EmbeddingsDimension,
   EmbeddingsType,
 } from '../../../../src/embeddings/database/types'
-import { Embedder } from '../../../../src/embeddings/embedder'
+import { WordEmbeddingManager } from '../../../../src/embeddings/types'
 import { Codifier } from '../../../../src/preprocess/codifier'
 import { Preprocessor } from '../../../../src/preprocess/preprocessor'
 import { Locale } from '../../../../src/types'
 import { SHOPPING_DATA_PATH } from '../../helper'
+export { EMBEDDINGS_MATRIX } from './embeddings-matrix'
 
 export const LOCALE: Locale = 'en'
 
@@ -96,14 +96,12 @@ export const entitiesCodifier = new Codifier(ENTITIES, {
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_LENGTH)
 
-export async function getDatabaseManager(): Promise<DatabaseManager> {
-  return await DatabaseManager.with(
-    LOCALE,
-    EMBEDDINGS_TYPE,
-    EMBEDDINGS_DIMENSION
-  )
+class Manager implements WordEmbeddingManager {
+  constructor(readonly dimension: EmbeddingsDimension) {}
+
+  async getWordEmbedding(word: string): Promise<number[]> {
+    return Array(this.dimension).fill(Math.random() * 2 - 1)
+  }
 }
 
-export async function getEmbedder(): Promise<Embedder> {
-  return new Embedder(await getDatabaseManager())
-}
+export const testWordEmbeddingManager = new Manager(EMBEDDINGS_DIMENSION)

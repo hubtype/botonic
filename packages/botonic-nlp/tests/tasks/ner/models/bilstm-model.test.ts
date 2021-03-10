@@ -4,28 +4,11 @@ import * as helper from '../../../helpers/tasks/ner/helper'
 
 describe('Bidirectional LSTM Model', () => {
   test('Creating model', async () => {
-    // arrange
-    const embedder = await helper.getEmbedder()
-    const embeddingsMatrix = await embedder.generateEmbeddingsMatrix([
-      'where',
-      'order',
-      '?',
-      'i',
-      'want',
-      'return',
-      'products',
-      "n't",
-      't-shirt',
-    ])
-
-    // act
     const model = createBiLstmModel(
       12,
       ['O', 'product', 'material'],
-      embeddingsMatrix
+      helper.EMBEDDINGS_MATRIX
     )
-
-    // assert
     expect(model.name).toEqual(MODEL_NAME)
   })
 })
