@@ -1,4 +1,5 @@
-import * as PorterStemmer from 'natural/lib/natural/stemmers/porter_stemmer_es'
+// eslint-disable-next-line import/no-unresolved
+import { StemmerEs as PorterStemmer } from '@nlpjs/lang-es/src/stemmer-es'
 
 import { Stemmer } from '../../types'
 

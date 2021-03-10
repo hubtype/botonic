@@ -3,6 +3,7 @@
   "version": "0.19.0",
   "license": "MIT",
   "main": "dist/index.js",
+  "types": "./dist/types",
   "scripts": {
     "build": "rm -rf dist && ../../node_modules/.bin/tsc",
     "lint": "npm run lint_core -- --fix",
@@ -28,7 +29,7 @@
     "axios": "^0.21.0",
     "better-sqlite3": "^7.0.1",
     "js-yaml": "4.0.0",
-    "natural": "^3.0.3"
+    "node-nlp": "^4.21.3"
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"

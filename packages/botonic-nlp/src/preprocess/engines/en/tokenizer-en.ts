@@ -1,4 +1,5 @@
-import * as TreebankWordTokenizer from 'natural/lib/natural/tokenizers/treebank_word_tokenizer'
+// eslint-disable-next-line import/no-unresolved
+import { TokenizerEn as TreebankWordTokenizer } from '@nlpjs/lang-en-min/src/tokenizer-en'
 
 import { Tokenizer } from '../../types'
 

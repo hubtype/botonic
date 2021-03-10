@@ -1,0 +1,45 @@
+{
+  "name": "@botonic/plugin-ner",
+  "version": "0.18.0",
+  "license": "MIT",
+  "main": "dist/index",
+  "scripts": {
+    "clean_install": "npm i && npm run-script build",
+    "cloc": "../../scripts/qa/cloc-package.sh .",
+    "build": "rm -rf dist && ../../node_modules/.bin/tsc",
+    "test": "jest",
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
+    "prepare": "node ../../preinstall.js",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "@botonic/core": "~0.18.0",
+    "@types/webgl2": "0.0.5",
+    "axios": "latest",
+    "node-fetch": "^2.6.1",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
+    "@babel/preset-env": "^7.5.5",
+    "core-js": "^3.1.4"
+  },
+  "resolutions": {
+    "@types/webgl2": "0.0.5"
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "nlp",
+    "nlu",
+    "typescript"
+  ]
+}
