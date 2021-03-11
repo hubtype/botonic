@@ -88,10 +88,10 @@ export const EMBEDDINGS_DIMENSION: EmbeddingsDimension = 50
 export const MODEL_DIR_PATH = join(__dirname, 'model')
 
 export const sequenceCodifier = new Codifier(VOCABULARY, {
-  categorical: false,
+  isCategorical: false,
 })
 export const entitiesCodifier = new Codifier(ENTITIES, {
-  categorical: true,
+  isCategorical: true,
 })
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_LENGTH)
