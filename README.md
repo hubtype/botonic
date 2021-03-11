@@ -3,7 +3,7 @@
 <p align="center">
 <img src="https://botonic-doc-static.netlify.com/images/banner.png"/>
 </p>
-
+<p align="center" style="text-align: center;"><a href="https://botonic.io">Website</a> |  <a href="https://botonic.io/blog">Blog</a>  |  <a href="https://botonic.io/docs/welcome">Docs</a> |  <a href="https://botonic.io/examples">Examples</a>  |  <a href="https://botonic.io/blog/2021/03/10/introducing-botonic-office-hours">Friday Office Hours</a></p>
 <hr>
 
 ## <center>Build Chatbots and Conversational Apps Using React</center>
