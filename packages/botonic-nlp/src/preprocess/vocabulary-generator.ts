@@ -3,11 +3,7 @@ import { PADDING_TOKEN } from './constants'
 import { Preprocessor } from './preprocessor'
 
 export class VocabularyGenerator {
-  private constructor(private preprocessor: Preprocessor) {}
-
-  static using(preprocessor: Preprocessor): VocabularyGenerator {
-    return new VocabularyGenerator(preprocessor)
-  }
+  constructor(private preprocessor: Preprocessor) {}
 
   generate(samples: Sample[]): string[] {
     let vocabulary: string[] = []

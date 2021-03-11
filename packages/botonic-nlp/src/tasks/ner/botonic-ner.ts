@@ -82,7 +82,7 @@ export class BotonicNer {
     this.vocabulary = Array.from(
       new Set(
         [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
-          VocabularyGenerator.using(this.preprocessor).generate(samples)
+          new VocabularyGenerator(this.preprocessor).generate(samples)
         )
       )
     )
