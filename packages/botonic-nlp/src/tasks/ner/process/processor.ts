@@ -9,7 +9,7 @@ import { InputData, OutputData } from './types'
 
 export class Processor {
   constructor(
-    public preprocessor: Preprocessor,
+    readonly preprocessor: Preprocessor,
     readonly tokenCodifier: Codifier,
     readonly entityCodifier: Codifier
   ) {}
