@@ -1,11 +1,8 @@
-// eslint-disable-next-line import/no-unresolved
-import { TokenizerEs as TreebankWordTokenizer } from '@nlpjs/lang-es/src/tokenizer-es'
-
 import { Tokenizer } from '../../types'
 
-export default class TokenizerEs implements Tokenizer {
-  readonly locale = 'es'
-  private tokenizer = new TreebankWordTokenizer()
+export class TokenizerEs implements Tokenizer {
+  readonly locale = 'en'
+  private tokenizer = new (require('@nlpjs/lang-es/src/tokenizer-es'))()
 
   tokenize(text: string): string[] {
     return this.tokenizer.tokenize(text)
