@@ -3,6 +3,7 @@ import { lstatSync, readdirSync, readFileSync } from 'fs'
 import * as yaml from 'js-yaml'
 import { extname, join } from 'path'
 
+import { unique } from '../utils/array-utils'
 import { DataAugmenter } from './data-augmenter'
 import { EntitiesParser } from './entities-parser'
 import { Dataset, Sample } from './types'
@@ -44,9 +45,9 @@ export class DatasetLoader {
     )
 
     return {
-      classes: Array.from(new Set(classes)),
-      entities: Array.from(new Set(entities)),
-      samples: Array.from(new Set(samples)),
+      classes: unique(classes),
+      entities: unique(entities),
+      samples: unique(samples),
     }
   }
 

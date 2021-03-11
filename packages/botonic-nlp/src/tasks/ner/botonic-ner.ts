@@ -20,6 +20,7 @@ import {
 import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
 import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
+import { unique } from '../../utils/array-utils'
 import { createBiLstmModel } from '../ner/models/bilstm-model'
 import { NerModelParameters, NerModelTemplate } from './models/types'
 import { NEUTRAL_ENTITY } from './process/constants'
@@ -64,9 +65,7 @@ export class BotonicNer {
 
   loadDataset(path: string): Dataset {
     const dataset = DatasetLoader.load(path)
-    this.entities = Array.from(
-      new Set([NEUTRAL_ENTITY].concat(dataset.entities))
-    )
+    this.entities = unique([NEUTRAL_ENTITY].concat(dataset.entities))
     return dataset
   }
 
@@ -79,11 +78,9 @@ export class BotonicNer {
   }
 
   generateVocabulary(samples: Sample[]): void {
-    this.vocabulary = Array.from(
-      new Set(
-        [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
-          new VocabularyGenerator(this.preprocessor).generate(samples)
-        )
+    this.vocabulary = unique(
+      [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
+        new VocabularyGenerator(this.preprocessor).generate(samples)
       )
     )
   }
