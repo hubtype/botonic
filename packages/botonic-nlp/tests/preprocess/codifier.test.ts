@@ -3,14 +3,14 @@ import { Codifier } from '../../src/preprocess/codifier'
 describe('Codifier', () => {
   test('Initialize codifier with vocabulary', () => {
     const codifier = new Codifier(['this', 'is', 'a', 'test'], {
-      categorical: false,
+      isCategorical: false,
     })
     expect(codifier.vocabulary).toEqual(['this', 'is', 'a', 'test'])
   })
 
   test('Unknown token error', () => {
     const codifier = new Codifier(['this', 'is', 'a', 'test'], {
-      categorical: false,
+      isCategorical: false,
     })
     expect(() => {
       codifier.encode(['throw', 'error'])
@@ -24,7 +24,7 @@ describe('Codifier', () => {
     const codifier = new Codifier(
       ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
       {
-        categorical: false,
+        isCategorical: false,
       }
     )
     expect(codifier.encode(['i', 'want', 'this', 't-shirt'])).toEqual([
@@ -37,7 +37,7 @@ describe('Codifier', () => {
 
   test('Categorical encoding', () => {
     const codifier = new Codifier(['O', 'product', 'shop'], {
-      categorical: true,
+      isCategorical: true,
     })
     expect(codifier.encode(['O', 'O', 'shop', 'O', 'product'])).toEqual([
       [1, 0, 0],
@@ -52,7 +52,7 @@ describe('Codifier', () => {
     const codifier = new Codifier(
       ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
       {
-        categorical: false,
+        isCategorical: false,
       }
     )
     expect(codifier.decode([4, 1, 0, 2])).toEqual([
@@ -65,7 +65,7 @@ describe('Codifier', () => {
 
   test('Categorical decoding', () => {
     const codifier = new Codifier(['O', 'product', 'shop'], {
-      categorical: true,
+      isCategorical: true,
     })
     expect(
       codifier.decode([

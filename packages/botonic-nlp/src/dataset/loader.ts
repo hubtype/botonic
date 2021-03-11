@@ -56,7 +56,7 @@ export class DatasetLoader {
   }
 
   private static loadFile(path: string): Dataset {
-    if (this.ALLOWED_FILE_EXTENSIONS.includes(extname(path))) {
+    if (!this.ALLOWED_FILE_EXTENSIONS.includes(extname(path))) {
       throw new Error(
         `File '${path}' must be a ${this.ALLOWED_FILE_EXTENSIONS.join(',')}.`
       )
