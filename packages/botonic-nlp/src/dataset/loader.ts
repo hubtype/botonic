@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { lstatSync, readdirSync, readFileSync } from 'fs'
-import * as yaml from 'js-yaml'
+import { load as loadYaml } from 'js-yaml'
 import { extname, join } from 'path'
 
 import { unique } from '../utils/array-utils'
@@ -8,7 +8,11 @@ import { DataAugmenter } from './data-augmenter'
 import { EntitiesParser } from './entities-parser'
 import { Dataset, Sample } from './types'
 
+const YAML_EXTENSION = '.yaml'
+const YML_EXTENSION = '.yml'
+
 export class DatasetLoader {
+  private static ALLOWED_FILE_EXTENSIONS = [YAML_EXTENSION, YML_EXTENSION]
   private static CLASS_FIELD = 'class'
   private static ENTITIES_FIELD = 'entities'
   private static DATA_AUGMENTATION_FIELD = 'data-augmentation'
@@ -52,11 +56,13 @@ export class DatasetLoader {
   }
 
   private static loadFile(path: string): Dataset {
-    if (extname(path) != '.yaml') {
-      throw new Error(`File '${path}' must be a yaml.`)
+    if (this.ALLOWED_FILE_EXTENSIONS.includes(extname(path))) {
+      throw new Error(
+        `File '${path}' must be a ${this.ALLOWED_FILE_EXTENSIONS.join(',')}.`
+      )
     }
 
-    const content = yaml.load(readFileSync(path))
+    const content = loadYaml(readFileSync(path))
 
     if (!(this.SAMPLES_FIELD in content)) {
       throw new Error('File must contain "samples" field')
