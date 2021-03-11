@@ -3,9 +3,9 @@ import { unique } from '../utils/array-utils'
 export class Codifier {
   categorical: boolean
 
-  constructor(public vocabulary: string[], args = { categorical: false }) {
+  constructor(public vocabulary: string[], args = { isCategorical: false }) {
     this.vocabulary = unique(vocabulary)
-    this.categorical = args.categorical
+    this.categorical = args.isCategorical
   }
 
   encode(sequence: string[]): number[] | number[][] {

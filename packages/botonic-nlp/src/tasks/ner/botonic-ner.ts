@@ -88,8 +88,8 @@ export class BotonicNer {
   compile(): void {
     this.processor = new Processor(
       this.preprocessor,
-      new Codifier(this.vocabulary, { categorical: false }),
-      new Codifier(this.entities, { categorical: true })
+      new Codifier(this.vocabulary, { isCategorical: false }),
+      new Codifier(this.entities, { isCategorical: true })
     )
     this.predictionProcessor = new PredictionProcessor(this.entities)
   }
