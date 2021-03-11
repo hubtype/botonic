@@ -3,12 +3,14 @@ import { PaddingPosition, PreprocessEngines } from './types'
 
 export class Preprocessor {
   engines: PreprocessEngines = {}
+  paddingPosition: PaddingPosition
 
   constructor(
-    public readonly locale: Locale,
-    public readonly maxLength: number,
-    public paddingPosition: PaddingPosition = 'post'
+    readonly locale: Locale,
+    readonly maxLength: number,
+    paddingPosition: PaddingPosition = 'post'
   ) {
+    this.paddingPosition = paddingPosition
     this.loadEngine('normalizer')
     this.loadEngine('tokenizer')
     this.loadEngine('stopwords')
