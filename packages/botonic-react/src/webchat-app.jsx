@@ -111,25 +111,33 @@ export class WebchatApp {
     return this.hubtypeService.postMessage(user, input)
   }
 
-  async resendUnsentInputs() {
-    return this.hubtypeService.resendUnsentInputs()
+  async onConnectionRegained() {
+    return this.hubtypeService.onConnectionRegained()
   }
 
   onStateChange({ session: { user }, messagesJSON }) {
-    if (!this.hubtypeService && user) {
-      const lastMessage = messagesJSON[messagesJSON.length - 1]
-      this.hubtypeService = new HubtypeService({
-        appId: this.appId,
-        user,
-        lastMessageId: lastMessage && lastMessage.id,
-        lastMessageUpdateDate: this.getLastMessageUpdate(),
-        onEvent: event => this.onServiceEvent(event),
-        unsentInputs: () =>
-          this.webchatRef.current
-            .getMessages()
-            .filter(msg => msg.ack === 0 && msg.unsentInput),
-        server: this.server,
-      })
+    const lastMessage = messagesJSON[messagesJSON.length - 1]
+    const lastMessageId = lastMessage && lastMessage.id
+    const lastMessageUpdateDate = this.getLastMessageUpdate()
+    if (!this.hubtypeService) {
+      if (user) {
+        this.hubtypeService = new HubtypeService({
+          appId: this.appId,
+          user,
+          lastMessageId,
+          lastMessageUpdateDate,
+          onEvent: event => this.onServiceEvent(event),
+          unsentInputs: () =>
+            this.webchatRef.current
+              .getMessages()
+              .filter(msg => msg.ack === 0 && msg.unsentInput),
+          server: this.server,
+        })
+      }
+    } else {
+      this.hubtypeService.lastMessageId = lastMessageId
+      this.hubtypeService.lastMessageUpdateDate = lastMessageUpdateDate
+      this.hubtypeService.user = user
     }
   }
 
@@ -300,8 +308,8 @@ export class WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
-        resendUnsentInputs={() =>
-          this.hubtypeService && this.hubtypeService.resendUnsentInputs()
+        onConnectionRegained={() =>
+          this.hubtypeService && this.hubtypeService.onConnectionRegained()
         }
         server={server}
       />

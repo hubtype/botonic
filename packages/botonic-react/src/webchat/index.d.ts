@@ -43,7 +43,7 @@ export interface WebchatState {
 
 export interface WebchatProps extends WebchatArgs {
   ref: RefObject<any>
-  resendUnsentInputs?: () => Promise<void>
+  onConnectionRegained?: () => Promise<void>
 }
 export const WebChat: React.ForwardRefExoticComponent<WebchatProps>
 

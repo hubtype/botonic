@@ -255,8 +255,8 @@ export const Webchat = forwardRef((props, ref) => {
       })
   }
 
-  const resendUnsentInputs = async () =>
-    props.resendUnsentInputs && props.resendUnsentInputs()
+  const onConnectionRegained = async () =>
+    props.onConnectionRegained && props.onConnectionRegained()
 
   // Load styles stored in window._botonicInsertStyles by Webpack
   useComponentWillMount(() => {
@@ -346,7 +346,7 @@ export const Webchat = forwardRef((props, ref) => {
       })
     } else {
       if (!firstUpdate.current) {
-        await resendUnsentInputs()
+        await onConnectionRegained()
         setError(undefined)
       }
     }
@@ -524,7 +524,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (isMedia(input)) input.data = await readDataURL(input.data)
     sendUserInput(input)
     updateLatestInput(input)
-    updateLastMessageDate(new Date())
+    isOnline && updateLastMessageDate(new Date().toISOString())
     updateReplies(false)
     togglePersistentMenu(false)
     toggleEmojiPicker(false)
@@ -550,7 +550,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateHandoff(handoff)
       }
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-      updateLastMessageDate(new Date())
+      isOnline && updateLastMessageDate(new Date().toISOString())
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),

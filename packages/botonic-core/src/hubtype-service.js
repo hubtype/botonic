@@ -19,6 +19,10 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
 const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
 const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
 export class HubtypeService {
+  user
+  lastMessageId
+  lastMessageUpdateDate
+
   constructor({
     appId,
     user,
@@ -175,6 +179,20 @@ export class HubtypeService {
     return axios.get(
       `${_HUBTYPE_API_URL_}/v1/provider_accounts/${appId}/visibility/`
     )
+  }
+
+  destroyPusher() {
+    if (!this.pusher) return
+    this.pusher.disconnect()
+    this.pusher.unsubscribe(this.pusherChannel)
+    this.pusher.unbind_all()
+    this.pusher = null
+  }
+
+  async onConnectionRegained() {
+    this.destroyPusher()
+    this.init()
+    this.resendUnsentInputs()
   }
 
   async resendUnsentInputs() {
