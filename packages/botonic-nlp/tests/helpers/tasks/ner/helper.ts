@@ -96,7 +96,7 @@ export const entitiesCodifier = new Codifier(ENTITIES, {
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_LENGTH)
 
-class Manager implements WordEmbeddingManager {
+class TestWordEmbeddingManager implements WordEmbeddingManager {
   constructor(readonly dimension: EmbeddingsDimension) {}
 
   async getWordEmbedding(word: string): Promise<number[]> {
@@ -104,4 +104,6 @@ class Manager implements WordEmbeddingManager {
   }
 }
 
-export const testWordEmbeddingManager = new Manager(EMBEDDINGS_DIMENSION)
+export const testWordEmbeddingManager = new TestWordEmbeddingManager(
+  EMBEDDINGS_DIMENSION
+)
