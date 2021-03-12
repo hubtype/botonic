@@ -1,15 +1,13 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'fs'
+import { mkdirSync, writeFileSync } from 'fs'
 import { join } from 'path'
 
 import { CONFIG_FILENAME } from '../../../storage/constants'
+import { readJSON } from '../../../utils/file-utils'
 import { NerConfig } from './types'
 
 export class NerConfigStorage {
   static load(path: string): NerConfig {
-    const config = JSON.parse(
-      readFileSync(join(path, CONFIG_FILENAME), { encoding: 'utf-8' })
-    )
-    return config
+    return readJSON(join(path, CONFIG_FILENAME)) as NerConfig
   }
 
   static save(path: string, config: NerConfig): void {
