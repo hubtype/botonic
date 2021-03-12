@@ -1,4 +1,5 @@
-import { Sample } from '../parser/types'
+import { Sample } from '../dataset/types'
+import { unique } from '../utils/array-utils'
 import { PADDING_TOKEN } from './constants'
 import { Preprocessor } from './preprocessor'
 
@@ -20,6 +21,6 @@ export class VocabularyGenerator {
       )
     })
     vocabulary = vocabulary.filter(t => t != PADDING_TOKEN)
-    return Array.from(new Set(vocabulary))
+    return unique(vocabulary)
   }
 }
