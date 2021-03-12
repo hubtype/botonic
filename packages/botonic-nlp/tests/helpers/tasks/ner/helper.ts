@@ -5,7 +5,7 @@ import {
   EmbeddingsDimension,
   EmbeddingsType,
 } from '../../../../src/embeddings/database/types'
-import { WordEmbeddingManager } from '../../../../src/embeddings/types'
+import { WordEmbeddingStorage } from '../../../../src/embeddings/types'
 import { Codifier } from '../../../../src/preprocess/codifier'
 import { Preprocessor } from '../../../../src/preprocess/preprocessor'
 import { Locale } from '../../../../src/types'
@@ -96,7 +96,7 @@ export const entitiesCodifier = new Codifier(ENTITIES, {
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_LENGTH)
 
-class TestWordEmbeddingManager implements WordEmbeddingManager {
+class TestWordEmbeddingStorage implements WordEmbeddingStorage {
   constructor(readonly dimension: EmbeddingsDimension) {}
 
   async getWordEmbedding(word: string): Promise<number[]> {
@@ -104,6 +104,6 @@ class TestWordEmbeddingManager implements WordEmbeddingManager {
   }
 }
 
-export const testWordEmbeddingManager = new TestWordEmbeddingManager(
+export const testWordEmbeddingStorage = new TestWordEmbeddingStorage(
   EMBEDDINGS_DIMENSION
 )

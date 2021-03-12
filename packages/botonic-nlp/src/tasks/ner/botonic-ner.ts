@@ -2,8 +2,8 @@ import { Tensor3D } from '@tensorflow/tfjs-node'
 
 import { DatasetLoader } from '../../dataset/loader'
 import { Dataset, Sample } from '../../dataset/types'
-import { Embedder } from '../../embeddings/embedder'
-import { WordEmbeddingManager } from '../../embeddings/types'
+import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
+import { WordEmbeddingStorage } from '../../embeddings/types'
 import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
 import { Codifier } from '../../preprocess/codifier'
@@ -96,13 +96,14 @@ export class BotonicNer {
 
   async createModel(
     template: NerModelTemplate,
-    manager: WordEmbeddingManager,
+    storage: WordEmbeddingStorage,
     params?: NerModelParameters
   ): Promise<void> {
     // TODO: set embeddings as optional
-    const embeddingsMatrix = await new Embedder(
-      manager
-    ).generateEmbeddingsMatrix(this.vocabulary)
+    const embeddingsMatrix = await generateEmbeddingsMatrix(
+      storage,
+      this.vocabulary
+    )
 
     switch (template) {
       case 'biLstm':

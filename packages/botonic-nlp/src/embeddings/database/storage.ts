@@ -5,7 +5,7 @@ import { join } from 'path'
 
 import { Locale } from '../../types'
 import { Downloader } from '../downloader'
-import { WordEmbeddingManager } from '../types'
+import { WordEmbeddingStorage } from '../types'
 import {
   DB_COLUMN_NAME,
   DB_TABLE_NAME,
@@ -15,7 +15,7 @@ import {
 } from './constants'
 import { EmbeddingsDimension, EmbeddingsType } from './types'
 
-export class DatabaseManager implements WordEmbeddingManager {
+export class DatabaseStorage implements WordEmbeddingStorage {
   private database: Database
   private statement: Statement
   public compatible: boolean
@@ -32,8 +32,8 @@ export class DatabaseManager implements WordEmbeddingManager {
     locale: Locale,
     type: EmbeddingsType,
     dimension: EmbeddingsDimension
-  ): Promise<DatabaseManager> {
-    const manager = new DatabaseManager(locale, type, dimension)
+  ): Promise<DatabaseStorage> {
+    const manager = new DatabaseStorage(locale, type, dimension)
     if (manager.compatible) {
       await manager.initialize()
     }
