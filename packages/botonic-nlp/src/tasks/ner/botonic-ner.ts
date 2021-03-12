@@ -73,7 +73,7 @@ export class BotonicNer {
     dataset: Dataset,
     testSize = 0.2,
     shuffle = true
-  ): { train: Sample[]; test: Sample[] } {
+  ): { trainSet: Sample[]; testSet: Sample[] } {
     return trainTestSplit(dataset.samples, testSize, shuffle)
   }
 

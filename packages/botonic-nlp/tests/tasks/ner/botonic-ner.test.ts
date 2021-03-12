@@ -13,9 +13,9 @@ describe('Botonic NER', () => {
 
   test('Load data', () => {
     const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_LENGTH)
-    const { train, test } = ner.splitDataset(nerHelper.DATASET)
-    expect(train.length).toEqual(4)
-    expect(test.length).toEqual(1)
+    const { trainSet, testSet } = ner.splitDataset(nerHelper.DATASET)
+    expect(trainSet.length).toEqual(4)
+    expect(testSet.length).toEqual(1)
   })
 
   test('Generate vocabulary', () => {
@@ -35,14 +35,14 @@ describe('Botonic NER', () => {
     // arrange
     const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_LENGTH)
     const dataset = ner.loadDataset(nlpHelper.SHOPPING_DATA_PATH)
-    const { train, test } = ner.splitDataset(dataset)
-    ner.generateVocabulary(train)
+    const { trainSet, testSet } = ner.splitDataset(dataset)
+    ner.generateVocabulary(trainSet)
     ner.compile()
     await ner.createModel('biLstm', nerHelper.testWordEmbeddingStorage)
-    await ner.train(train, 4, 8)
+    await ner.train(trainSet, 4, 8)
 
     // act
-    const { loss, accuracy } = await ner.evaluate(test)
+    const { loss, accuracy } = await ner.evaluate(testSet)
 
     // assert
     expect(loss).toBeDefined()
@@ -53,11 +53,11 @@ describe('Botonic NER', () => {
     // arrange
     const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_LENGTH)
     const dataset = ner.loadDataset(nlpHelper.SHOPPING_DATA_PATH)
-    const { train } = ner.splitDataset(dataset)
-    ner.generateVocabulary(train)
+    const { trainSet } = ner.splitDataset(dataset)
+    ner.generateVocabulary(trainSet)
     ner.compile()
     await ner.createModel('biLstm', nerHelper.testWordEmbeddingStorage)
-    await ner.train(train, 4, 8)
+    await ner.train(trainSet, 4, 8)
 
     // act
     const entities = ner.recognizeEntities('I love this t-shirt')
