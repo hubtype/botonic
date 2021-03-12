@@ -1,6 +1,11 @@
+import { unique } from '../utils/array-utils'
+
 export class Codifier {
-  constructor(public vocabulary: string[], readonly categorical: boolean) {
-    this.vocabulary = Array.from(new Set(vocabulary))
+  categorical: boolean
+
+  constructor(public vocabulary: string[], args = { isCategorical: false }) {
+    this.vocabulary = unique(vocabulary)
+    this.categorical = args.isCategorical
   }
 
   encode(sequence: string[]): number[] | number[][] {

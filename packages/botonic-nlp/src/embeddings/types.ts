@@ -1,3 +1,3 @@
-export interface WordEmbeddingManager {
+export interface WordEmbeddingStorage {
   getWordEmbedding(word: string): Promise<number[]>
 }

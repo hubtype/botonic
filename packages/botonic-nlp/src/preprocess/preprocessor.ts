@@ -5,9 +5,9 @@ export class Preprocessor {
   engines: PreprocessEngines = {}
 
   constructor(
-    public readonly locale: Locale,
-    public readonly maxLength: number,
-    public readonly paddingPosition: PaddingPosition = 'post'
+    readonly locale: Locale,
+    readonly maxLength: number,
+    public paddingPosition: PaddingPosition = 'post'
   ) {
     this.loadEngine('normalizer')
     this.loadEngine('tokenizer')

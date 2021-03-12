@@ -2,12 +2,16 @@ import { Codifier } from '../../src/preprocess/codifier'
 
 describe('Codifier', () => {
   test('Initialize codifier with vocabulary', () => {
-    const codifier = new Codifier(['this', 'is', 'a', 'test'], false)
+    const codifier = new Codifier(['this', 'is', 'a', 'test'], {
+      isCategorical: false,
+    })
     expect(codifier.vocabulary).toEqual(['this', 'is', 'a', 'test'])
   })
 
   test('Unknown token error', () => {
-    const codifier = new Codifier(['this', 'is', 'a', 'test'], false)
+    const codifier = new Codifier(['this', 'is', 'a', 'test'], {
+      isCategorical: false,
+    })
     expect(() => {
       codifier.encode(['throw', 'error'])
     }).toThrowError()
@@ -19,7 +23,9 @@ describe('Codifier', () => {
   test('Encoding', () => {
     const codifier = new Codifier(
       ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
-      false
+      {
+        isCategorical: false,
+      }
     )
     expect(codifier.encode(['i', 'want', 'this', 't-shirt'])).toEqual([
       4,
@@ -30,7 +36,9 @@ describe('Codifier', () => {
   })
 
   test('Categorical encoding', () => {
-    const codifier = new Codifier(['O', 'product', 'shop'], true)
+    const codifier = new Codifier(['O', 'product', 'shop'], {
+      isCategorical: true,
+    })
     expect(codifier.encode(['O', 'O', 'shop', 'O', 'product'])).toEqual([
       [1, 0, 0],
       [1, 0, 0],
@@ -43,7 +51,9 @@ describe('Codifier', () => {
   test('Decoding', () => {
     const codifier = new Codifier(
       ['this', 'want', 't-shirt', 'is', 'i', 'the', 'given', 'vocabulary'],
-      false
+      {
+        isCategorical: false,
+      }
     )
     expect(codifier.decode([4, 1, 0, 2])).toEqual([
       'i',
@@ -54,7 +64,9 @@ describe('Codifier', () => {
   })
 
   test('Categorical decoding', () => {
-    const codifier = new Codifier(['O', 'product', 'shop'], true)
+    const codifier = new Codifier(['O', 'product', 'shop'], {
+      isCategorical: true,
+    })
     expect(
       codifier.decode([
         [0.98, 0.2, 0],
