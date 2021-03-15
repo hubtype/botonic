@@ -1,42 +1,71 @@
+import { NoMatchingRouteError } from './errors'
+import { Input, PROVIDER, Route, Session } from './index'
 import { Router } from './router'
 
+/** @type Input */
 const textInput = { type: 'text', data: 'hi' }
+/** @type Input */
 const textInputComplex = { type: 'text', data: 'Cömplêx input &% 🚀' }
+/** @type Input */
 const textPayloadInput = { type: 'text', data: 'hi', payload: 'foo' }
+/** @type Input */
 const postbackInput = { type: 'postback', payload: 'foo' }
-const route = 'route'
+
 const requestInput = {
   input: textInput,
   session: { organization: 'myOrg' },
   lastRoutePath: 'initial',
 }
 
+/**
+ * @return {Route}
+ */
+function testRoute() {
+  return {}
+}
+
+/**
+ * @return {Session}
+ */
+function testSession() {
+  return {
+    user: { id: 'userid', provider: PROVIDER.DEV },
+    bot: { id: 'bot_id' },
+    is_first_interaction: true,
+  }
+}
+
 describe('Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
     const router = new Router([])
-    expect(() => router.processInput(textInput)).toThrow(TypeError)
+    expect(() => router.processInput(textInput, testSession())).toThrow(
+      NoMatchingRouteError
+    )
   })
   test('null routes throw TypeError', () => {
+    // @ts-ignore
     const router = new Router()
-    expect(() => router.processInput(textInput)).toThrow(TypeError)
+    expect(() => router.processInput(textInput, testSession())).toThrow(
+      TypeError
+    )
   })
 })
 
 test('Router returns 404', () => {
   const router = new Router([{ path: '404', action: '404Action' }])
-  const { action } = router.processInput(textInput)
+  const { action } = router.processInput(textInput, testSession())
   expect(action).toBe('404Action')
 })
 
 describe('Match route by MATCHER <> INPUT', () => {
-  const router = new Router()
+  const router = new Router([])
   const matchTextProp = (matcher, textInput) =>
-    router.matchRoute(route, 'text', matcher, textInput)
+    router.matchRoute(testRoute(), 'text', matcher, textInput, testSession())
   const matchPayloadProp = (matcher, payload) =>
-    router.matchRoute(route, 'payload', matcher, payload)
+    router.matchRoute(testRoute(), 'payload', matcher, payload, testSession())
   const matchRequestProp = (matcher, request) =>
     router.matchRoute(
-      route,
+      testRoute(),
       'request',
       matcher,
       request.input,
@@ -64,14 +93,21 @@ describe('Match route by MATCHER <> INPUT', () => {
   })
   test('input <> text', () => {
     expect(
-      router.matchRoute(route, 'input', i => i.data.startsWith('hi'), textInput)
+      router.matchRoute(
+        testRoute(),
+        'input',
+        i => i.data.startsWith('hi'),
+        textInput,
+        testSession()
+      )
     ).toBeTruthy()
     expect(
       router.matchRoute(
-        route,
+        testRoute(),
         'input',
         i => !i.data.startsWith('hi'),
-        textInput
+        textInput,
+        testSession()
       )
     ).toBeFalsy()
   })
@@ -169,14 +205,18 @@ describe('Get route by path', () => {
     },
     { path: '404', action: '404Action' },
   ])
+  function getRouteActionByPath(path) {
+    // @ts-ignore
+    return router.getRouteByPath(path).action
+  }
   test('path exists', () => {
-    expect(router.getRouteByPath('initial').action).toBe('Initial')
-    expect(router.getRouteByPath('flow-1/1').action).toBe('Flow1.1')
-    expect(router.getRouteByPath('flow-1/3/2').action).toBe('Flow1.3.2')
+    expect(getRouteActionByPath('initial')).toBe('Initial')
+    expect(getRouteActionByPath('flow-1/1')).toBe('Flow1.1')
+    expect(getRouteActionByPath('flow-1/3/2')).toBe('Flow1.3.2')
   })
   test('path exists in composed child routes', () => {
-    expect(router.getRouteByPath('flow-1/2').action).toBe('Flow1.2')
-    expect(router.getRouteByPath('flow-1/2/child').action).toBe('ChildAction')
+    expect(getRouteActionByPath('flow-1/2')).toBe('Flow1.2')
+    expect(getRouteActionByPath('flow-1/2/child')).toBe('ChildAction')
   })
   test('path does not exist', () => {
     expect(router.getRouteByPath('')).toBeNull()
@@ -228,60 +268,60 @@ describe('Process input (v<0.9)', () => {
     { path: '404', action: '404Action' },
   ])
   test('text input, root level route', () => {
+    /** @type Input */
     const input = { type: 'text', data: 'hi', intent: 'greeting' }
-    const session = {}
     const lastRoutePath = null
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1'
-    )
+    expect(
+      router.processInput(input, testSession(), lastRoutePath).action
+    ).toBe('Flow1')
   })
   test('payload input, 2nd level route', () => {
+    /** @type Input */
     const input = { type: 'postback', payload: '2' }
-    const session = {}
     const lastRoutePath = 'initial'
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1.2'
-    )
+    expect(
+      router.processInput(input, testSession(), lastRoutePath).action
+    ).toBe('Flow1.2')
   })
   test('old protocol:path payload input, root level route', () => {
+    /** @type Input */
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial' }
-    const session = {}
     const lastRoutePath = ''
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1'
-    )
+    expect(
+      router.processInput(input, testSession(), lastRoutePath).action
+    ).toBe('Flow1')
   })
   test('old protocol:path payload input, root level route with composed path', () => {
+    /** @type Input */
     const input = { type: 'postback', path: 'initial/2' }
-    const session = {}
     const lastRoutePath = ''
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1.2'
-    )
+    expect(
+      router.processInput(input, testSession(), lastRoutePath).action
+    ).toBe('Flow1.2')
   })
   test('old protocol: path payload input, 2nd level route with lastRoutePath', () => {
+    /** @type Input */
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__2' }
-    const session = {}
     const lastRoutePath = 'initial'
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1.2'
-    )
+    expect(
+      router.processInput(input, testSession(), lastRoutePath).action
+    ).toBe('Flow1.2')
   })
   test('path payload input with deprecated protocol, root level route', () => {
+    /** @type Input */
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
-    const session = {}
     const lastRoutePath = ''
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1.2'
-    )
+    expect(
+      router.processInput(input, testSession(), lastRoutePath).action
+    ).toBe('Flow1.2')
   })
   test('old protocol:path payload input with deprecated protocol, 2nd level route', () => {
+    /** @type Input */
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
-    const session = {}
     const lastRoutePath = 'initial'
-    expect(router.processInput(input, session, lastRoutePath).action).toBe(
-      'Flow1.2'
-    )
+    expect(
+      router.processInput(input, testSession(), lastRoutePath).action
+    ).toBe('Flow1.2')
   })
 })
 
@@ -296,7 +336,8 @@ test.each([
   'getOnFinishParams(%s)=>%s',
   (inputPayload, expectedPath, expectedParams) => {
     const router = new Router([])
-    const input = { payload: inputPayload }
+    /** @type Input */
+    const input = { type: 'postback', payload: inputPayload }
     expect(router.getOnFinishParams(input)).toEqual(expectedParams)
     expect(input.path).toEqual(expectedPath)
     if (input.path) {
