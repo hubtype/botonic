@@ -1,7 +1,13 @@
+import { Input, Params, Route } from './'
 import { RouteInspector } from './debug/inspector'
-import { isBrowser, isFunction, isNode } from './utils'
+import { NoMatchingRouteError } from './errors'
+import { isFunction } from './utils'
 
 export class Router {
+  /**
+   * @param {Route[]} routes
+   * @param routeInspector
+   */
   constructor(routes, routeInspector = undefined) {
     this.routes = routes
     this.routeInspector = routeInspector || new RouteInspector()
@@ -66,7 +72,7 @@ export class Router {
             brokenFlow &&
             routeParams.route.ignoreRetry != true &&
             lastRoute &&
-            session.__retries < lastRoute.retry &&
+            (session.__retries || 0) < (lastRoute.retry || 0) &&
             routeParams.route.path != lastRoute.action
           ) {
             session.__retries = session.__retries ? session.__retries + 1 : 1
@@ -111,7 +117,8 @@ export class Router {
       }
     }
     const notFound = this.getRouteByPath('404', this.routes)
-    if (lastRoute && session.__retries < lastRoute.retry) {
+    if (!notFound) throw new NoMatchingRouteError(input)
+    if (lastRoute && (session.__retries || 0) < (lastRoute.retry || 0)) {
       session.__retries = session.__retries ? session.__retries + 1 : 1
       return {
         action: notFound.action,
@@ -131,6 +138,10 @@ export class Router {
     }
   }
 
+  /**
+   * @param {Input} input
+   * @return {string|undefined}
+   */
   getOnFinishParams(input) {
     try {
       if (!input.payload) {
@@ -154,12 +165,16 @@ export class Router {
     return undefined
   }
 
+  /**
+   * @return {null|RouteParams}
+   */
   getRoute(input, routes, session, lastRoutePath) {
     const computedRoutes = isFunction(routes)
       ? routes({ input, session, lastRoutePath })
       : routes
     /* Find the route that matches the given input, if it match with some of the entries,
       return the whole Route of the entry with optional params captured if matcher was a regex */
+    /** @type {{ [key: string]: string }}*/
     let params = {}
     const route = computedRoutes.find(r =>
       Object.entries(r)
@@ -185,7 +200,12 @@ export class Router {
     return null
   }
 
-  getRouteByPath(path, routeList) {
+  /**
+   * @param {string|null} path
+   * @param {Route[]?} routeList
+   * @return {null|Route}
+   */
+  getRouteByPath(path, routeList = null) {
     if (!path) return null
     let route = null
     routeList = routeList || this.routes
@@ -198,25 +218,29 @@ export class Router {
           //evaluate childroute over next actions
           route = this.getRouteByPath(childPath.join('/'), r.childRoutes)
           if (route) return route
-        } else if (childPath.length == 0) return route //last action and found route
+        } else if (childPath.length === 0) return route //last action and found route
       }
     }
     return null
   }
 
+  /**
+   * @return {Params|boolean}
+   */
   matchRoute(route, prop, matcher, input, session, lastRoutePath) {
     /*
         prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' | 'request' ...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
         input: user input object, ex: {type: 'text', data: 'Hi'}
       */
+    /** @type {any} */
     let value = ''
     if (Object.keys(input).indexOf(prop) > -1) value = input[prop]
-    if (prop == 'text') {
-      if (input.type == 'text') value = input.data
-    } else if (prop == 'input') value = input
-    else if (prop == 'session') value = session
-    else if (prop == 'request') value = { input, session, lastRoutePath }
+    if (prop === 'text') {
+      if (input.type === 'text') value = input.data
+    } else if (prop === 'input') value = input
+    else if (prop === 'session') value = session
+    else if (prop === 'request') value = { input, session, lastRoutePath }
     const matched = this.matchValue(matcher, value)
     if (matched) {
       this.routeInspector.routeMatched(route, prop, matcher, value)
@@ -226,8 +250,13 @@ export class Router {
     return matched
   }
 
+  /**
+   *
+   * @return {*|boolean|Params}
+   */
   matchValue(matcher, value) {
     if (typeof matcher === 'string') {
+      // TODO should this be === to avoid matching '' with undefined?
       return value == matcher
     }
     if (matcher instanceof RegExp) {
