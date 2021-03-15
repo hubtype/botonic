@@ -12,12 +12,12 @@ export const RequestContext = React.createContext({
   defaultTyping: 0,
 })
 
+/** @type WebchatContext */
 export const WebchatContext = React.createContext({
   sendText: text => {},
   sendAttachment: attachment => {},
   sendPayload: payload => {},
   sendInput: input => {},
-  setReplies: replies => {},
   openWebview: webviewComponent => {},
   addMessage: message => {},
   updateMessage: message => {},
@@ -29,8 +29,6 @@ export const WebchatContext = React.createContext({
   resolveCase: () => {},
   theme: {},
   webchatState: webchatInitialState,
-  updateWebchatDevSettings: settings => {
-    return {}
-  },
+  updateWebchatDevSettings: settings => '',
   updateUser: user => {},
 })

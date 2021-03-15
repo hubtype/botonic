@@ -201,8 +201,31 @@ export class WebchatApp {
   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
   updateLastMessageDate(date: string): void
   updateUser(user: core.SessionUser): void
-  updateWebchatSettings(settings: WebchatSettingsProps): void
+  updateWebchatSettings(settings: (props: WebchatSettingsProps) => void): void
 }
+
+export const WebchatContext: React.Context<{
+  sendText: (text: string) => string
+  sendAttachment: (attachment: File) => string
+  sendPayload: (payload: string) => string
+  sendInput: (input: core.Input) => string
+  openWebview: (webviewComponent: Webview) => string
+  addMessage: (message: WebchatMessage) => string
+  updateMessage: (message: WebchatMessage) => string
+  updateReplies: (replies: boolean) => string
+  updateLatestInput: (input: core.Input) => string
+  closeWebview: () => string
+  toggleWebchat: () => string
+  getThemeProperty: (
+    property: string,
+    defaultValue?: string
+  ) => string | undefined
+  resolveCase: () => string
+  theme: ThemeProps
+  webchatState: WebchatState
+  updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
+  updateUser: (user: core.SessionUser) => string
+}>
 
 export interface WebchatContextProps {
   sendText: (text: string) => void

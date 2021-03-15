@@ -71,6 +71,7 @@ export class HubtypeService {
       forceTLS: true,
       auth: {
         headers: this.constructHeaders(),
+        params: null,
       },
       ...this.resolveServerConfig(),
     })
@@ -86,6 +87,10 @@ export class HubtypeService {
         () => cleanAndReject('Connection Timeout'),
         10000
       )
+      if (!this.pusher || !this.channel) {
+        reject('Cannot bind pusher because connection was reset')
+        return
+      }
       this.channel.bind('pusher:subscription_succeeded', () => {
         // Once subscribed, we know that authentication has been done: https://pusher.com/docs/channels/server_api/authenticating-users
         this.onConnectionRegained()

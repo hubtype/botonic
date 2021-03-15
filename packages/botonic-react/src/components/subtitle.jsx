@@ -9,6 +9,11 @@ const SubtitleContainer = styled.div`
   padding: 0px 15px 10px 15px;
   color: ${COLORS.MID_GRAY};
 `
+
+/**
+ * @param {SubtitleProps} props
+ * @return {JSX.Element}
+ */
 export const Subtitle = props => {
   const renderBrowser = () => (
     <SubtitleContainer

@@ -14,6 +14,10 @@ const StyledButton = styled.button`
   outline: 0;
 `
 
+/**
+ * @param {ReplyProps} props
+ * @return {JSX.Element}
+ */
 export const Reply = props => {
   const { sendText, getThemeProperty } = useContext(WebchatContext)
   const handleClick = event => {
@@ -67,6 +71,9 @@ export const Reply = props => {
   return renderComponent({ renderBrowser, renderNode })
 }
 
+/**
+ * @param {ReplyProps} replyProps
+ */
 Reply.serialize = replyProps => {
   let payload = replyProps.payload
   if (replyProps.path) payload = `__PATH_PAYLOAD__${replyProps.path}`

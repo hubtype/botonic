@@ -1,3 +1,5 @@
+import * as url from 'url'
+
 export const isNode = () => {
   return typeof IS_NODE !== 'undefined'
     ? // eslint-disable-next-line no-undef
@@ -75,3 +77,12 @@ export const join = (...segments) => {
 // A simple function to get the dirname of a path
 // Trailing slashes are ignored. Leading slash is preserved.
 export const dirname = path => join(path, '..')
+
+/**
+ * @return {Iterable<[string, string]>}
+ */
+export function getURLSearchParams(pathParams) {
+  if (isBrowser()) return new URLSearchParams(pathParams).entries()
+  if (isNode()) return new url.URLSearchParams(pathParams)
+  throw new Error('Unexpected process type. Not recognized as browser nor node')
+}

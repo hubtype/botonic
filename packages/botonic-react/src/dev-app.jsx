@@ -9,6 +9,9 @@ import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
 
 export class DevApp extends WebchatApp {
+  /**
+   * @param {WebchatAppArgs}
+   */
   constructor({
     theme = {},
     persistentMenu,
@@ -101,9 +104,9 @@ export class DevApp extends WebchatApp {
         storageKey={storageKey}
         getString={(stringId, session) => this.bot.getString(stringId, session)}
         setLocale={(locale, session) => this.bot.setLocale(locale, session)}
-        onInit={(...args) => this.onInitWebchat(...args)}
-        onOpen={(...args) => this.onOpenWebchat(...args)}
-        onClose={(...args) => this.onCloseWebchat(...args)}
+        onInit={() => this.onInitWebchat()}
+        onOpen={() => this.onOpenWebchat()}
+        onClose={() => this.onCloseWebchat()}
         onUserInput={(...args) => this.onUserInput(...args)}
       />
     )

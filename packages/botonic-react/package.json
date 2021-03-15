@@ -9,9 +9,13 @@
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepare": "node ../../preinstall.js",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
-    "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
+    "lint": "npm run lint_core -- --fix &&  ../../node_modules/.bin/tsc",
+    "lint_ci": "npm run lint_core &&  ",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'",
+    "prepublishOnly": "npm run build_ci && npm test && npm run lint_ci",
+    "preversion": "npm run lint",
+    "version": "git add -A src tests",
+    "postversion": "git push && git push --tags"
   },
   "sideEffects": [
     "*.scss",

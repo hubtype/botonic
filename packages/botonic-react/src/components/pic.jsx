@@ -14,6 +14,10 @@ const PicStyled = styled.div`
   border-bottom: 1px solid ${COLORS.SEASHELL_WHITE};
 `
 
+/**
+ * @param {PicProps} props
+ * @return {JSX.Element}
+ */
 export const Pic = props => {
   const renderBrowser = () => <PicStyled src={props.src} />
   const renderNode = () => <pic>{props.src}</pic>

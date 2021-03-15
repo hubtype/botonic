@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "build": "../../node_modules/.bin/tsc",
+    "build_ci": "rm -rf lib && ../../node_modules/.bin/tsc --skipLibCheck false --incremental false",
     "build_unit_tests": "tsc -b tests/tsconfig.json",
     "test": "../../node_modules/.bin/jest --coverage",
     "ts-node": "../../node_modules/.bin/ts-node -O '{ \"noUnusedLocals\":false}'",
@@ -9,7 +10,7 @@
     "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
     "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm run build && npm test && npm run lint",
+    "prepublishOnly": "npm run build_ci && npm test && npm run lint_ci",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"

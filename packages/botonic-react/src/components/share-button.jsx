@@ -2,6 +2,10 @@ import React from 'react'
 
 import { renderComponent } from '../util/react'
 
+/**
+ * @param {ShareProps} props
+ * @return {JSX.Element}
+ */
 export const ShareButton = props => {
   const renderBrowser = () => null
   const renderNode = () => (

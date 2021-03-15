@@ -4,11 +4,15 @@ import React, { createRef } from 'react'
 import { render } from 'react-dom'
 
 import { SENDERS, WEBCHAT } from './constants'
+import { Event, WebchatMessage } from './index'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
+  /**
+   * @param {ThemeProps}  theme
+   */
   constructor({
     theme = {},
     persistentMenu,
@@ -93,16 +97,16 @@ export class WebchatApp {
     return node.shadowRoot ? node.shadowRoot : node
   }
 
-  onInitWebchat(...args) {
-    this.onInit && this.onInit(this, ...args)
+  onInitWebchat() {
+    this.onInit && this.onInit(this)
   }
 
-  onOpenWebchat(...args) {
-    this.onOpen && this.onOpen(this, ...args)
+  onOpenWebchat() {
+    this.onOpen && this.onOpen(this)
   }
 
-  onCloseWebchat(...args) {
-    this.onClose && this.onClose(this, ...args)
+  onCloseWebchat() {
+    this.onClose && this.onClose(this)
   }
 
   async onUserInput({ user, input }) {
@@ -115,6 +119,9 @@ export class WebchatApp {
     return this.hubtypeService.onConnectionRegained()
   }
 
+  /**
+   * @param messagesJSON: WebchatMessage[]
+   */
   onStateChange({ session: { user }, messagesJSON }) {
     const lastMessage = messagesJSON[messagesJSON.length - 1]
     const lastMessageId = lastMessage && lastMessage.id
@@ -138,6 +145,9 @@ export class WebchatApp {
     }
   }
 
+  /**
+   * @param {Event} event
+   */
   onServiceEvent(event) {
     if (event.action === 'connectionChange')
       this.webchatRef.current.setOnline(event.online)
@@ -300,9 +310,9 @@ export class WebchatApp {
         storageKey={storageKey}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
-        onInit={(...args) => this.onInitWebchat(...args)}
-        onOpen={(...args) => this.onOpenWebchat(...args)}
-        onClose={(...args) => this.onCloseWebchat(...args)}
+        onInit={() => this.onInitWebchat()}
+        onOpen={() => this.onOpenWebchat()}
+        onClose={() => this.onCloseWebchat()}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
         server={server}

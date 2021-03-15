@@ -2,7 +2,6 @@
   // start of path dependent configuration
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "compilerOptions": {
-    "allowUnreachableCode": false,
     "baseUrl": "src",
     "paths": {
       "*": ["src/*", "lib/src/*", "types/*"]
@@ -20,11 +19,17 @@
     // without typeRoots, it also checks @types of parent folders
     //"typeRoots" : ["node_modules/@types"],
 
+    //cache & performance
+    "incremental": true,
+    "skipLibCheck" : true,
+    //"disableSourceOfProjectReferenceRedirect": true is not faster
+
     // lint options
+    "allowUnreachableCode": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
   },
   // test options
   "types": [

@@ -15,6 +15,10 @@ const ElementContainer = styled.div`
   justify-content: space-between;
 `
 
+/**
+ * @param {ElementProps} props
+ * @return {JSX.Element}
+ */
 export const Element = props => {
   const renderBrowser = () => (
     <ElementContainer>{props.children}</ElementContainer>

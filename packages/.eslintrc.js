@@ -73,6 +73,7 @@ module.exports = {
     'import/no-unresolved': 'error',
     'import/default': 'warn', // syntax "export = xxxx" is not supported
     'node/no-extraneous-import': 'warn', // otherwise it does not find ts-mockito if only defined in parent project
+    'import/no-absolute-path': 'error',
     'array-callback-return': 'error',
     // special for TYPESCRIPT
     '@typescript-eslint/ban-ts-comment': 'warn',

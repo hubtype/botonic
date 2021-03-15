@@ -20,11 +20,22 @@ repos:
         entry: scripts/qa/lint-package.sh packages/botonic-cli
         language: system
         files: ^packages/botonic-cli/
-      - id: core
-        name: core
-        entry: scripts/qa/lint-package.sh packages/botonic-core
+
+      - id: core-quick
+        name: core-quick
+        # quick lint to avoid penalizing pre-commit
+        entry: scripts/qa/lint-package.sh packages/botonic-core lint
         language: system
         files: ^packages/botonic-core/
+        #stages: [commit]
+
+      - id: core-slow
+        name: core-slow
+        # slow lint
+        entry: scripts/qa/lint-package.sh packages/botonic-core lint_ci
+        language: system
+        files: ^packages/botonic-core/
+        stages: [push]
 
       - id: core-d-ts
         name: core-d-ts
@@ -91,12 +102,6 @@ repos:
         entry: scripts/qa/lint-package.sh packages/botonic-react
         language: system
         files: ^packages/botonic-react/
-
-      - id: react-d-ts
-        name: react-d-ts
-        entry: scripts/qa/lint-d-ts.sh packages/botonic-react
-        language: system
-        files: ^packages/botonic-react/src/.*\.d\.ts
 
       - id: google-analytics
         name: google-analytics

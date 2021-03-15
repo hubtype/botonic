@@ -16,6 +16,10 @@ const serialize = imageProps => {
   return { image: imageProps.src }
 }
 
+/**
+ * @param {ImageProps} props
+ * @return {JSX.Element}
+ */
 export const Image = props => {
   let content = props.children
   if (isBrowser()) content = <StyledImage src={props.src} />

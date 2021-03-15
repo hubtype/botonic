@@ -11,6 +11,7 @@ import {
   isText,
   isVideo,
 } from '../src/message-utils'
+import { WrappedComponent } from './components/'
 import { Audio } from './components/audio'
 import { Button } from './components/button'
 import { ButtonsDisabler } from './components/buttons-disabler'
@@ -29,18 +30,31 @@ import { Video } from './components/video'
 /**
  *
  * @param msg {object}
- * @param customMessageTypes {{customTypeName}[]?}
- * @return {React.ReactNode}
+ * @param customMessageTypes {WrappedComponent[]?}
+ * @return {React.ReactNode|undefined}
  */
 export function msgToBotonic(msg, customMessageTypes) {
   delete msg.display
   if (isCustom(msg)) {
+    const customType = customMessageTypes.find(
+      mt => mt.customTypeName === msg.data.customTypeName
+    )
+    if (!customType) {
+      console.error(
+        `No class registered for Custom message with type ${msg.data.customTypeName}. ` +
+          `Registered types: ${customMessageTypes.map(c => c.customTypeName)}`
+      )
+      return null
+    }
     try {
-      return customMessageTypes
-        .find(mt => mt.customTypeName === msg.data.customTypeName)
-        .deserialize(msg)
+      return customType.deserialize(msg)
     } catch (e) {
-      console.log(e)
+      console.error(
+        `Deserializing ${JSON.stringify(msg)}`,
+        customMessageTypes,
+        e
+      )
+      return null
     }
   } else if (isText(msg)) {
     return textToBotonic(msg)
@@ -105,8 +119,8 @@ function rndStr() {
 
 /**
  * @param msgs {object|object[]}
- * @param customMessageTypes {{customTypeName}[]?}
- * @return {React.ReactNode}
+ * @param customMessageTypes {WrappedComponent}[]?}
+ * @return {React.ReactNode|undefined}
  */
 export function msgsToBotonic(msgs, customMessageTypes) {
   if (Array.isArray(msgs)) {

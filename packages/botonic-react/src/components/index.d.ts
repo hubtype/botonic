@@ -18,41 +18,62 @@ export interface MessageProps {
   blob?: boolean
   children: React.ReactNode
   delay?: number
+  enabletimestamps?: boolean
   from?: 'user' | 'bot'
+  imagestyle?: Record<string, unknown>
   json?: Record<string, unknown>
   style?: Record<string, unknown>
   type?: MessageType
   typing?: number
 }
 
-export const Audio: React.FunctionComponent<MessageProps>
-export const Document: React.FunctionComponent<MessageProps>
+export interface MediaProps extends MessageProps {
+  src: string
+}
 
+export type AudioProps = MediaProps
+export const Audio: React.FunctionComponent<AudioProps>
+export type Audio = React.FunctionComponent<AudioProps>
+
+export type DocumentProps = MediaProps
+export const Document: React.FunctionComponent<DocumentProps>
+export type Document = React.FunctionComponent<DocumentProps>
 export const Message: React.FunctionComponent<MessageProps>
 export type Message = React.FunctionComponent<MessageProps>
-export const Video: React.FunctionComponent<MessageProps>
+
+export type VideoProps = MediaProps
+export const Video: React.FunctionComponent<VideoProps>
+export type Video = React.FunctionComponent<VideoProps>
 
 export interface TextProps extends MessageProps {
-  // converts markdown syntax to HTML
+  // Whether to convert markdown syntax to HTML (true by default)
   markdown?: boolean
 }
-export const Text: React.FunctionComponent<TextProps>
+export const Text: React.ComponentType<TextProps>
+export type Text = React.ComponentType<TextProps>
 
 export interface Webview {
   name: string
 }
 
 export interface ButtonProps {
+  children: string
   params?: any
   path?: string
   payload?: string
   target?: string
   url?: string
   webview?: Webview
+  // calllbacks
   onClick?: () => void
+  // style
+  /** For both https://www.w3schools.com/cssref/css3_pr_border-bottom-right-radius.asp and bottom left radius*/
+  bottomRadius?: string
+  /** For both https://www.w3schools.com/cssref/css3_pr_border-top-right-radius.asp and top left radius*/
+  topRadius?: string
 }
-
 export const Button: React.FunctionComponent<ButtonProps>
+export type Button = React.FunctionComponent<ButtonProps>
 
 export interface ReplyProps {
   path?: string
@@ -66,20 +87,48 @@ export interface PicProps {
   src: string
 }
 
+export type CarouselProps = MessageProps
 export const Carousel: React.FunctionComponent<MessageProps>
+export type Carousel = React.FunctionComponent<MessageProps>
+
 export const Image: React.FunctionComponent<ImageProps>
+export type Image = React.FunctionComponent<ImageProps>
+
 export const Pic: React.FunctionComponent<PicProps>
+export type Pic = React.FunctionComponent<PicProps>
+
 export type ImageProps = PicProps
 
-export interface TitleProps {
-  children: React.ReactNode
-  style: string
-}
+export type ElementProps = MessageProps
+export const Element: React.FunctionComponent<ElementProps>
+export type Element = React.FunctionComponent<ElementProps>
 
-export const Element: React.FunctionComponent<MessageProps>
-export const Subtitle: React.FunctionComponent<SubtitleProps>
+export interface TitleProps {
+  children: string
+  style?: any
+}
 export const Title: React.FunctionComponent<TitleProps>
-export type SubtitleProps = TitleProps
+export type Title = React.FunctionComponent<TitleProps>
+
+// using interface because Webstorm does not parse it properly with type
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface SubtitleProps extends TitleProps {}
+export const Subtitle: React.FunctionComponent<SubtitleProps>
+export type Subtitle = React.FunctionComponent<SubtitleProps>
+
+export interface LocationProps {
+  lat: string
+  long: string
+  text?: string
+}
+export const Location: React.FunctionComponent<LocationProps>
+export type Location = React.FunctionComponent<LocationProps>
+
+export interface ShareProps {
+  payload: string
+}
+export const Share: React.FunctionComponent<ShareProps>
+export type Share = React.FunctionComponent<ShareProps>
 
 type CustomProp = { custom?: React.ComponentType }
 type EnableProp = { enable?: boolean }
@@ -135,7 +184,7 @@ export interface ThemeProps extends StyleProp {
   message?: {
     bot?: BlobProps & ImageProp & StyleProp
     user?: BlobProps & StyleProp
-    customTypes?: React.ComponentType[]
+    customTypes?: WrappedComponent<any>[]
   } & StyleProp & {
       timestamps?: {
         enable?: boolean
@@ -205,7 +254,7 @@ export class ErrorBoundary<Props> extends React.Component<Props> {
 }
 
 export function createErrorBoundary<Props>(_?: {
-  errorComponent: React.ComponentType
+  errorComponent: React.ComponentType<Props & { errorMessage: string }>
 }): ErrorBoundary<Props>
 
 export function customMessage<Props>(_: {

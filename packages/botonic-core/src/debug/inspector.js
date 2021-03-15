@@ -1,5 +1,7 @@
 export class RouteInspector {
+  // @ts-ignore
   routeMatched(route, routeKey, routeValue, input) {}
+  // @ts-ignore
   routeNotMatched(route, routeKey, routeValue, inputValue) {}
 }
 

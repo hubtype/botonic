@@ -5,6 +5,9 @@ import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
 import { stringifyWithRegexs } from '../util/regexs'
 
+/**
+ * @type React.FunctionComponent<WebchatSettingsProps>
+ */
 export const WebchatSettings = ({
   theme,
   blockInputs,
@@ -48,6 +51,10 @@ export const WebchatSettings = ({
   return renderComponent({ renderBrowser, renderNode })
 }
 
+/**
+ * @param { WebchatSettingsProps} settings
+ * @return ThemeProps
+ */
 export const normalizeWebchatSettings = settings => {
   let {
     theme,

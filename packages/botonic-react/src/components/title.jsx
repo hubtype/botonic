@@ -8,6 +8,10 @@ const TitleContainer = styled.div`
   padding: 10px 15px;
 `
 
+/**
+ * @param {TitleProps} props
+ * @return {JSX.Element}
+ */
 export const Title = props => {
   const renderBrowser = () => (
     <TitleContainer style={{ ...props.style }}>{props.children}</TitleContainer>

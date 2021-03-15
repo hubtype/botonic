@@ -18,6 +18,12 @@ export class ReactBot extends CoreBot {
     })
   }
 
+  /**
+   *
+   * @param {ActionRequest} request
+   * @param {Action[]} actions
+   * @return {Promise<[]>}
+   */
   async renderReactActions({ request, actions }) {
     const renderedActions = []
     let props

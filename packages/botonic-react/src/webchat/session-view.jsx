@@ -97,6 +97,10 @@ const KeepSessionContainer = styled.div`
   font-size: 12px;
 `
 
+/**
+ *
+ * @type React.FunctionComponent<{webchatHooks:{}}>
+ */
 export const SessionView = props => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { webchatState, updateDevSettings } = props.webchatHooks || useWebchat()

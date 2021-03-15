@@ -1,7 +1,8 @@
-import { Input, Params, Route } from './'
+import { Input, Params, Route, Session } from './'
 import { RouteInspector } from './debug/inspector'
 import { NoMatchingRouteError } from './errors'
-import { isFunction } from './utils'
+import { RouteParams } from './router'
+import { getURLSearchParams, isFunction } from './utils'
 
 export class Router {
   /**
@@ -13,27 +14,42 @@ export class Router {
     this.routeInspector = routeInspector || new RouteInspector()
   }
 
-  // eslint-disable-next-line complexity
-  processInput(input, session = {}, lastRoutePath = null) {
-    let routeParams = {}
-    if (input.payload && input.payload.includes('__PATH_PAYLOAD__')) {
-      const pathParam = input.payload.split('__PATH_PAYLOAD__')
-      routeParams.route = this.getRouteByPath(pathParam[1], this.routes)
+  /**
+   * @return {[RouteParams|null, Route|null]}
+   */
+  getRouteParams(input, session = {}, lastRoutePath = null) {
+    let route = null
+    if (input.path) {
+      route = this.getRouteByPath(input.path, this.routes)
     }
-    const pathParams = this.getOnFinishParams(input)
-    let brokenFlow = false
     const lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (!lastRoute && input.path)
-      routeParams.route = this.getRouteByPath(input.path, this.routes)
-    if (lastRoute && lastRoute.childRoutes && !routeParams.route)
+      route = this.getRouteByPath(input.path, this.routes)
+    if (lastRoute && lastRoute.childRoutes && !route)
       //get route depending of current ChildRoute
-      routeParams = this.getRoute(
-        input,
-        lastRoute.childRoutes,
-        session,
-        lastRoutePath
-      )
-    if (!routeParams || !Object.keys(routeParams).length) {
+      return [
+        this.getRoute(input, lastRoute.childRoutes, session, lastRoutePath),
+        lastRoute,
+      ]
+    return [route ? { route } : null, lastRoute]
+  }
+
+  /**
+   * @param {Input} input
+   * @param {Session} session
+   * @param lastRoutePath
+   * @return {Route}
+   */
+  // eslint-disable-next-line complexity
+  processInput(input, session, lastRoutePath = null) {
+    let brokenFlow = false
+    const pathParams = this.getOnFinishParams(input)
+    let [routeParams, lastRoute] = this.getRouteParams(
+      input,
+      session,
+      lastRoutePath
+    )
+    if (!routeParams) {
       /*
           we couldn't find a route in the state of the lastRoute, so let's find in
           the general conf.route
@@ -41,17 +57,15 @@ export class Router {
       brokenFlow = Boolean(lastRoutePath)
       routeParams = this.getRoute(input, this.routes, session, lastRoutePath)
     }
-    try {
-      if (pathParams) {
-        const searchParams = new URLSearchParams(pathParams)
-        for (const [key, value] of searchParams) {
-          routeParams.params
-            ? (routeParams.params[key] = value)
-            : (routeParams.params = { [key]: value })
-        }
+    if (routeParams && pathParams) {
+      const searchParams = getURLSearchParams(pathParams)
+      for (const [key, value] of searchParams) {
+        routeParams.params
+          ? (routeParams.params[key] = value)
+          : (routeParams.params = { [key]: value })
       }
-    } catch (e) {}
-    if (routeParams && Object.keys(routeParams).length) {
+    }
+    if (routeParams) {
       //get in childRoute if one has path ''
       let defaultAction
       if (routeParams.route) {
@@ -188,9 +202,9 @@ export class Router {
             session,
             lastRoutePath
           )
-          try {
-            params = match.groups
-          } catch (e) {}
+          if (typeof match === 'object') {
+            params = match
+          }
           return Boolean(match)
         })
     )

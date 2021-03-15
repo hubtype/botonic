@@ -15,8 +15,16 @@ import {
   UPDATE_TYPING,
   UPDATE_WEBVIEW,
 } from './actions'
+import { Ac } from './components'
+import { WebchatState } from './index'
 import { messagesReducer } from './messages-reducer'
 
+/**
+ *
+ * @param {WebchatState} state
+ * @param {Action} action
+ * @return {WebchatState}
+ */
 export function webchatReducer(state, action) {
   switch (action.type) {
     case UPDATE_WEBVIEW:

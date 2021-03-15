@@ -1,3 +1,4 @@
+import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 import { ReactBot } from './react-bot'
@@ -10,12 +11,22 @@ export class NodeApp {
     })
   }
 
+  /**
+   *
+   * @param {(ActionRequest, Action[])} args
+   * @return {Promise<string>}
+   */
   async renderNode(args) {
     return (await this.bot.renderReactActions(args))
       .map(action => renderToStaticMarkup(action))
       .join('\n')
   }
 
+  /**
+   * Method called from serverless handler
+   * @param {BotRequest} args
+   * @return {BotResponse}
+   */
   input(args) {
     return this.bot.input(args)
   }
@@ -25,4 +36,12 @@ export class NodeApp {
       return { id: plugin.id, name: plugin.name, config: plugin.config }
     })
   }
+}
+
+/**
+ * Actions are not required to subclass Action, only added in case somebody
+ * decides to do it.
+ */
+export class Action extends React.Component {
+  static botonicInit(request) {}
 }

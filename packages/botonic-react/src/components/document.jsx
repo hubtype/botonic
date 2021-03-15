@@ -28,6 +28,10 @@ const serialize = documentProps => {
   return { document: documentProps.src }
 }
 
+/**
+ * @param {DocumentProps} props
+ * @return {JSX.Element}
+ */
 export const Document = props => {
   let content = props.children
 

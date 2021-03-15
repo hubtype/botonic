@@ -26,9 +26,8 @@ const serialize = textProps => {
 }
 
 /**
- *
  * @param {TextProps} props
- * @returns {JSX.Element}
+ * @return {JSX.Element}
  */
 export const Text = props => {
   const defaultTextProps = {

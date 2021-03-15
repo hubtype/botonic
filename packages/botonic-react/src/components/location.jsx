@@ -15,6 +15,11 @@ const serialize = locationProps => {
   return { location: { lat: locationProps.lat, long: locationProps.long } }
 }
 
+/**
+ * @param {LocationProps} props
+ * @return {undefined}
+ * @constructor
+ */
 export const Location = props => {
   const lat = parseFloat(props.lat)
   const long = parseFloat(props.long)

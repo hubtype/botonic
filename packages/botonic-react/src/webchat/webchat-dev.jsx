@@ -45,34 +45,39 @@ const initialSession = {
 }
 
 // eslint-disable-next-line react/display-name
-export const WebchatDev = forwardRef((props, ref) => {
-  const webchatHooks = useWebchat()
-  const { webchatState, updateTheme } = webchatHooks
+export const WebchatDev = forwardRef(
+  /**
+   * @param {WebchatAppArgs} props
+   */
+  (props, ref) => {
+    const webchatHooks = useWebchat()
+    const { webchatState, updateTheme } = webchatHooks
 
-  /* TODO: webchatState.theme should be included in the dependencies array
+    /* TODO: webchatState.theme should be included in the dependencies array
   together with props.theme. The problem is that this effect modifies webchatState
   so we enter an infinite rerender loop. */
-  useEffect(() => {
-    updateTheme(merge(webchatState.theme, props.theme))
-  }, [props.theme])
+    useEffect(() => {
+      updateTheme(merge(webchatState.theme, props.theme))
+    }, [props.theme])
 
-  return (
-    <>
-      <Webchat
-        style={{ flex: 1, position: 'relative' }}
-        {...props}
-        ref={ref}
-        webchatHooks={webchatHooks}
-        initialSession={initialSession}
-        initialDevSettings={{
-          keepSessionOnReload: webchatState.devSettings.keepSessionOnReload,
-          showSessionView: webchatState.devSettings.showSessionView,
-        }}
-      />
-      <DebugTabPortal
+    return (
+      <>
+        <Webchat
+          style={{ flex: 1, position: 'relative' }}
+          {...props}
+          ref={ref}
+          webchatHooks={webchatHooks}
+          initialSession={initialSession}
+          initialDevSettings={{
+            keepSessionOnReload: webchatState.devSettings.keepSessionOnReload,
+            showSessionView: webchatState.devSettings.showSessionView,
+          }}
+        />
+        <DebugTabPortal
         show={webchatState.devSettings.showSessionView}
-        webchatHooks={webchatHooks}
-      />
-    </>
-  )
-})
+          webchatHooks={webchatHooks}
+        />
+      </>
+    )
+  }
+)

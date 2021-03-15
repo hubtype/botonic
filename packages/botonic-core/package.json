@@ -7,8 +7,11 @@
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
-    "lint": "npm run lint_ci -- --fix",
-    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'",
+    "lint": "date && echo xxxx && pwd && touch babel.config.js && ../../node_modules/.bin/eslint_d --fix --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'",
+    "lintx": "npm run lint_core -- --fix && ../../node_modules/.bin/tsc",
+    "lint_ts": "../../node_modules/.bin/tsc --incremental false --skipLibCheck false",
+    "lint_ci": "npm run lint_core && npm run lint_ts",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
     "cloc": "../../scripts/qa/cloc-package.sh ."
   },

@@ -1,3 +1,4 @@
+export { staticAsset } from './environment'
 import { ReactElement, ReactNode } from 'react'
 
 export function staticAsset(path: string): string

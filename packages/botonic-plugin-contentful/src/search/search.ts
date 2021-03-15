@@ -1,12 +1,7 @@
-import {
-  Button,
-  Callback,
-  CMS,
-  ContentType,
-  Context,
-  ContextWithLocale,
-  Text,
-} from '../cms'
+import { Callback } from '../cms/callback'
+import { CMS, ContentType } from '../cms/cms'
+import { Button, Text } from '../cms/contents'
+import { Context, ContextWithLocale } from '../cms/context'
 import { checkLocale, KeywordsOptions, MatchType, Normalizer } from '../nlp'
 import { SearchByKeywords } from './search-by-keywords'
 import { SearchResult } from './search-result'

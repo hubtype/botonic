@@ -1,7 +1,7 @@
 import * as Parallel from 'async-parallel'
 import { MultiError } from 'async-parallel'
 
-import { Context } from '../cms'
+import { Context } from '../cms/context'
 
 /**
  * async-parallel makes code simpler and allows limiting concurrency

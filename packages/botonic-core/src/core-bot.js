@@ -56,7 +56,7 @@ export class CoreBot {
       await runPlugins(this.plugins, 'pre', input, session, lastRoutePath)
     }
 
-    if (isFunction(this.routes)) {
+    if (!this.router) {
       this.router = new Router(
         [
           ...(await this.routes({ input, session, lastRoutePath })),

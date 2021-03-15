@@ -2,7 +2,7 @@ export { Webchat } from './webchat'
 export { WebchatDev } from './webchat-dev'
 
 /**
- * @returns {WebChatApp}
+ * @return {WebChatApp}
  */
 export function getBotonicApp() {
   // Botonic is exported from your bot
