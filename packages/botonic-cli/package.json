@@ -17,7 +17,7 @@
     "fetch-repo-dir": "^1.0.4",
     "form-data": "^3.0.0",
     "fs-extra": "^9.0.0",
-    "inquirer": "^7.0.4",
+    "inquirer": "^8.0.0",
     "ora": "^5.1.0",
     "qs": "^6.9.4",
     "tslib": "^2.0.1",
