@@ -4,7 +4,7 @@ import TestRenderer from 'react-test-renderer'
 
 import { RequestContext } from '../../src'
 import { MultichannelContext } from '../../src/components/multichannel/multichannel-context'
-import { useNetwork, useWebchat } from '../../src/webchat/hooks'
+import { useWebchat } from '../../src/webchat/hooks'
 
 /**
  *
