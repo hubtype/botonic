@@ -34,7 +34,12 @@ export class ScrollbarController {
     if (isMobileDevice()) {
       if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
       this.limitScrollBoundaries()
-      this.webchat.ontouchmove = e => this.handleOnTouchMoveEvents(e)
+      this.webchat.ontouchstart = e => {
+        this.handleOnTouchMoveEvents(e)
+      }
+      this.webchat.ontouchmove = e => {
+        this.handleOnTouchMoveEvents(e)
+      }
     } else {
       this.webchat.onmouseover = e => this.handleOnMouseOverEvents(e)
     }
@@ -70,6 +75,7 @@ export class ScrollbarController {
   toggleOnTouchMoveEvents() {
     if (this.hasScrollbar()) {
       this.webchat.ontouchmove = {}
+      this.webchat.ontouchstart = {}
       return
     }
     this.webchat.ontouchmove = e => e.preventDefault()
