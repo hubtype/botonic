@@ -30,6 +30,7 @@ export class WebchatApp {
     onMessage,
     appId,
     visibility,
+    server,
   }) {
     this.theme = theme
     this.persistentMenu = persistentMenu
@@ -56,6 +57,7 @@ export class WebchatApp {
     this.onClose = onClose
     this.onMessage = onMessage
     this.visibility = visibility
+    this.server = server
     this.webchatRef = createRef()
     this.appId = appId
   }
@@ -126,6 +128,7 @@ export class WebchatApp {
           this.webchatRef.current
             .getMessages()
             .filter(msg => msg.ack === 0 && msg.unsentInput),
+        server: this.server,
       })
     }
   }

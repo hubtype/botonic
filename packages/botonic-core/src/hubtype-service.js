@@ -16,8 +16,8 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
   'https://api.hubtype.com'
 )
 
-const ACTIVITY_TIMEOUT = 20 * 1000
-const PONG_TIMEOUT = 5 * 1000
+const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
+const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
 export class HubtypeService {
   constructor({
     appId,
@@ -26,6 +26,7 @@ export class HubtypeService {
     lastMessageUpdateDate,
     onEvent,
     unsentInputs,
+    server,
   }) {
     this.appId = appId
     this.user = user || {}
@@ -33,6 +34,7 @@ export class HubtypeService {
     this.lastMessageUpdateDate = lastMessageUpdateDate
     this.onEvent = onEvent
     this.unsentInputs = unsentInputs
+    this.server = server
     if (user.id && (lastMessageId || lastMessageUpdateDate)) {
       this.init()
       this.resendUnsentInputs()
@@ -45,6 +47,7 @@ export class HubtypeService {
     if (lastMessageUpdateDate)
       this.lastMessageUpdateDate = lastMessageUpdateDate
     if (this.pusher || !this.user.id || !this.appId) return null
+    const { activityTimeout, pongTimeout } = this.server
     this.pusher = new Pusher(_WEBCHAT_PUSHER_KEY_, {
       cluster: 'eu',
       authEndpoint: `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
@@ -52,8 +55,8 @@ export class HubtypeService {
       auth: {
         headers: this.constructHeaders(),
       },
-      activityTimeout: ACTIVITY_TIMEOUT,
-      pongTimeout: PONG_TIMEOUT,
+      activityTimeout: activityTimeout || ACTIVITY_TIMEOUT,
+      pongTimeout: pongTimeout || PONG_TIMEOUT,
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
     const connectionPromise = new Promise((resolve, reject) => {
