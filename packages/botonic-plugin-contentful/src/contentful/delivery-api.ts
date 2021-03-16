@@ -1,23 +1,11 @@
 import * as contentful from 'contentful'
-import { CreateClientParams, Entry } from 'contentful'
+import { CreateClientParams } from 'contentful'
 
-import {
-  CmsException,
-  CommonFields,
-  ContentId,
-  ContentType,
-  Context,
-  FollowUp,
-  SearchableBy,
-} from '../cms'
+import { CmsException, ContentId, ContentType, Context } from '../cms'
 import { ContentfulOptions } from '../plugin'
-import { DateRangeDelivery } from './contents/date-range'
 import { ReducedClientApi } from './delivery/client-api'
 import { convertContentfulException, DateRangeFields } from './delivery-utils'
-import {
-  SearchableByKeywordsDelivery,
-  SearchableByKeywordsFields,
-} from './search/searchable-by'
+import { SearchableByKeywordsFields } from './search/searchable-by'
 
 /**
  * https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
@@ -148,33 +136,6 @@ export class ContentfulEntryUtils {
       )
     }
     return entry.sys.contentType.sys.id as T
-  }
-
-  static commonFieldsFromEntry(
-    entry: Entry<CommonEntryFields>,
-    followUp?: FollowUp
-  ): CommonFields {
-    const fields = entry.fields
-
-    const searchableBy =
-      fields.searchableBy &&
-      new SearchableBy(
-        fields.searchableBy.map(searchableBy =>
-          SearchableByKeywordsDelivery.fromEntry(searchableBy)
-        )
-      )
-
-    const dateRange =
-      fields.dateRange && DateRangeDelivery.fromEntry(fields.dateRange)
-
-    return new CommonFields(entry.sys.id, fields.name || '', {
-      keywords: fields.keywords,
-      shortText: fields.shortText,
-      partitions: fields.partitions,
-      searchableBy,
-      dateRange,
-      followUp,
-    })
   }
 }
 
