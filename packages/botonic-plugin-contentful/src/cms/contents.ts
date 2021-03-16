@@ -160,6 +160,7 @@ export class CommonFields implements Stringable {
   readonly partitions: string[]
   readonly dateRange?: DateRangeContent
   readonly followUp?: FollowUp // TODO move to MessageContent
+  readonly customFields: Record<string, unknown>
 
   constructor(
     readonly id: string,
@@ -171,6 +172,7 @@ export class CommonFields implements Stringable {
       partitions?: string[]
       dateRange?: DateRangeContent
       followUp?: FollowUp
+      customFields?: Record<string, unknown>
     }
   ) {
     if (opt) {
@@ -185,6 +187,7 @@ export class CommonFields implements Stringable {
       this.keywords = []
       this.partitions = []
     }
+    this.customFields = opt?.customFields || {}
   }
 
   toString(): string {
