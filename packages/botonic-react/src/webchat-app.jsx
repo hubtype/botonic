@@ -131,8 +131,8 @@ export class WebchatApp {
   }
 
   onServiceEvent(event) {
-    if (event.isError)
-      this.webchatRef.current.setError({ message: event.errorMessage })
+    if (event.action == 'connectionChange')
+      this.webchatRef.current.setOnline(event.online)
     else if (event.action === 'update_message_info')
       this.updateMessageInfo(event.message.id, event.message)
     else if (event.message.type === 'update_webchat_settings')
