@@ -565,6 +565,7 @@ export const Webchat = forwardRef((props, ref) => {
     setError,
     setOnline,
     getMessages: () => webchatState.messagesJSON,
+    isOnline: () => webchatState.online,
     clearMessages: () => {
       clearMessages()
       updateReplies(false)

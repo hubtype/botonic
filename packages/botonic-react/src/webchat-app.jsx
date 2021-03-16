@@ -315,6 +315,10 @@ export class WebchatApp {
     }
   }
 
+  isOnline() {
+    return this.webchatRef.current.isOnline()
+  }
+
   async resolveWebchatVisibility(optionsAtRuntime) {
     let { appId, visibility } = optionsAtRuntime
     visibility = visibility || this.visibility
