@@ -42,6 +42,7 @@ import { ConditionalWrapper } from '../util/react'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
 import {
   _getThemeProperty,
+  getServerErrorMessage,
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
@@ -57,7 +58,6 @@ import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
 import {
   useComponentWillMount,
-  useNetwork,
   usePrevious,
   useTyping,
   useWebchat,
@@ -184,6 +184,7 @@ export const Webchat = forwardRef((props, ref) => {
     togglePersistentMenu,
     toggleCoverComponent,
     setError,
+    setOnline,
     clearMessages,
     openWebviewT,
     closeWebviewT,
@@ -194,7 +195,6 @@ export const Webchat = forwardRef((props, ref) => {
   const firstUpdate = useRef(true)
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
-  const { isOnline } = useNetwork()
   const getThemeProperty = _getThemeProperty(theme)
 
   const storage = props.storage === undefined ? localStorage : props.storage
@@ -340,9 +340,9 @@ export const Webchat = forwardRef((props, ref) => {
   ])
 
   useAsyncEffect(async () => {
-    if (!isOnline) {
+    if (!webchatState.online) {
       setError({
-        message: 'Connection issues',
+        message: getServerErrorMessage(props.server),
       })
     } else {
       if (!firstUpdate.current) {
@@ -350,7 +350,7 @@ export const Webchat = forwardRef((props, ref) => {
         setError(undefined)
       }
     }
-  }, [isOnline])
+  }, [webchatState.online])
 
   useTyping({ webchatState, updateTyping, updateMessage, host })
 
@@ -564,7 +564,9 @@ export const Webchat = forwardRef((props, ref) => {
       toggleCoverComponent(!webchatState.isCoverComponentOpen),
     openWebviewApi: component => openWebviewT(component),
     setError,
+    setOnline,
     getMessages: () => webchatState.messagesJSON,
+    isOnline: () => webchatState.online,
     clearMessages: () => {
       clearMessages()
       updateReplies(false)

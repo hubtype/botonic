@@ -1,6 +1,7 @@
 import {
   SET_CURRENT_ATTACHMENT,
   SET_ERROR,
+  SET_ONLINE,
   TOGGLE_COVER_COMPONENT,
   TOGGLE_EMOJI_PICKER,
   TOGGLE_PERSISTENT_MENU,
@@ -41,6 +42,8 @@ export function webchatReducer(state, action) {
       return { ...state, isCoverComponentOpen: action.payload }
     case SET_ERROR:
       return { ...state, error: action.payload || {} }
+    case SET_ONLINE:
+      return { ...state, online: action.payload }
     case UPDATE_DEV_SETTINGS:
       return { ...state, devSettings: { ...action.payload } }
     case UPDATE_LATEST_INPUT:

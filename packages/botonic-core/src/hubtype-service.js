@@ -15,6 +15,9 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
   'HUBTYPE_API_URL',
   'https://api.hubtype.com'
 )
+
+const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
+const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
 export class HubtypeService {
   constructor({
     appId,
@@ -23,6 +26,7 @@ export class HubtypeService {
     lastMessageUpdateDate,
     onEvent,
     unsentInputs,
+    server,
   }) {
     this.appId = appId
     this.user = user || {}
@@ -30,9 +34,20 @@ export class HubtypeService {
     this.lastMessageUpdateDate = lastMessageUpdateDate
     this.onEvent = onEvent
     this.unsentInputs = unsentInputs
+    this.server = server
     if (user.id && (lastMessageId || lastMessageUpdateDate)) {
       this.init()
       this.resendUnsentInputs()
+    }
+  }
+
+  resolveServerConfig() {
+    if (!this.server) {
+      return { activityTimeout: ACTIVITY_TIMEOUT, pongTimeout: PONG_TIMEOUT }
+    }
+    return {
+      activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
+      pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
     }
   }
 
@@ -49,6 +64,7 @@ export class HubtypeService {
       auth: {
         headers: this.constructHeaders(),
       },
+      ...this.resolveServerConfig(),
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
     const connectionPromise = new Promise((resolve, reject) => {
@@ -68,14 +84,24 @@ export class HubtypeService {
         clearTimeout(connectTimeout)
         resolve()
       })
-      this.pusher.connection.bind('error', error => {
+      this.pusher.connection.bind('error', event => {
+        if (event.type == 'WebSocketError') this.handleConnectionChange(false)
         const errorMsg =
-          error.error && error.error.data
-            ? error.error.data.code || error.error.data.message
+          event.error && event.error.data
+            ? event.error.data.code || event.error.data.message
             : 'Connection error'
         cleanAndReject(`Pusher error (${errorMsg})`)
       })
     })
+    this.pusher.connection.bind('connected', () =>
+      this.handleConnectionChange(true)
+    )
+    this.pusher.connection.bind('disconnected', () =>
+      this.handleConnectionChange(false)
+    )
+    this.pusher.connection.bind('unavailable', () =>
+      this.handleConnectionChange(false)
+    )
     this.channel.bind('botonic_response', data => this.onPusherEvent(data))
     this.channel.bind('update_message_info', data => this.onPusherEvent(data))
     return connectionPromise
@@ -89,6 +115,10 @@ export class HubtypeService {
     if (this.lastMessageUpdateDate)
       headers['X-BOTONIC-LAST-MESSAGE-UPDATE-DATE'] = this.lastMessageUpdateDate
     return headers
+  }
+
+  handleConnectionChange(online) {
+    this.onPusherEvent({ action: 'connectionChange', online })
   }
 
   onPusherEvent(event) {
@@ -119,6 +149,7 @@ export class HubtypeService {
       await this.init(user)
     } catch (e) {
       this.handleUnsentInput(message)
+      this.handleConnectionChange(false)
       return Promise.resolve()
     }
     try {

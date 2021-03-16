@@ -1,16 +1,4 @@
-import {
-  ConnectionEvent,
-  ConnectionState,
-  startChecker,
-} from 'connection-checker'
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from 'react'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { scrollToBottom } from '../util/dom'
@@ -20,6 +8,7 @@ import {
   CLEAR_MESSAGES,
   SET_CURRENT_ATTACHMENT,
   SET_ERROR,
+  SET_ONLINE,
   TOGGLE_COVER_COMPONENT,
   TOGGLE_EMOJI_PICKER,
   TOGGLE_PERSISTENT_MENU,
@@ -63,6 +52,7 @@ export const webchatInitialState = {
   },
   themeUpdates: {},
   error: {},
+  online: true,
   devSettings: { keepSessionOnReload: false },
   isWebchatOpen: false,
   isEmojiPickerOpen: false,
@@ -150,6 +140,11 @@ export function useWebchat() {
       type: SET_ERROR,
       payload: error,
     })
+  const setOnline = online =>
+    webchatDispatch({
+      type: SET_ONLINE,
+      payload: online,
+    })
 
   const clearMessages = () => {
     webchatDispatch({
@@ -189,6 +184,7 @@ export function useWebchat() {
     togglePersistentMenu,
     toggleCoverComponent,
     setError,
+    setOnline,
     clearMessages,
     updateLastMessageDate,
     setCurrentAttachment,
@@ -245,32 +241,6 @@ export function useComponentVisible(initialIsVisible, onClickOutside) {
     }
   })
   return { ref, isComponentVisible, setIsComponentVisible }
-}
-
-export function useNetwork() {
-  startChecker()
-  const [isOnline, setNetwork] = useState(true)
-  const { CONNECTED, DISCONNECTED } = ConnectionState
-  const updateNetwork = ({ detail: { from, to } }) => {
-    if (to === DISCONNECTED) setNetwork(false)
-    if (to === CONNECTED) setNetwork(true)
-  }
-  useEffect(() => {
-    window.addEventListener(ConnectionEvent.ON_NETWORK_CHANGED, updateNetwork)
-    return () => {
-      window.removeEventListener(
-        ConnectionEvent.ON_NETWORK_CHANGED,
-        updateNetwork
-      )
-    }
-  })
-  const updateNetworkWithState = state =>
-    updateNetwork({
-      detail: { to: state },
-    })
-  const connect = useCallback(() => updateNetworkWithState(CONNECTED), [])
-  const disconnect = useCallback(() => updateNetworkWithState(DISCONNECTED), [])
-  return { isOnline, connect, disconnect }
 }
 
 export const useComponentWillMount = func => {

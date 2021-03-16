@@ -30,6 +30,7 @@ export class WebchatApp {
     onMessage,
     appId,
     visibility,
+    server,
   }) {
     this.theme = theme
     this.persistentMenu = persistentMenu
@@ -56,6 +57,7 @@ export class WebchatApp {
     this.onClose = onClose
     this.onMessage = onMessage
     this.visibility = visibility
+    this.server = server
     this.webchatRef = createRef()
     this.appId = appId
   }
@@ -126,13 +128,14 @@ export class WebchatApp {
           this.webchatRef.current
             .getMessages()
             .filter(msg => msg.ack === 0 && msg.unsentInput),
+        server: this.server,
       })
     }
   }
 
   onServiceEvent(event) {
-    if (event.isError)
-      this.webchatRef.current.setError({ message: event.errorMessage })
+    if (event.action === 'connectionChange')
+      this.webchatRef.current.setOnline(event.online)
     else if (event.action === 'update_message_info')
       this.updateMessageInfo(event.message.id, event.message)
     else if (event.message.type === 'update_webchat_settings')
@@ -231,6 +234,7 @@ export class WebchatApp {
     return this.webchatRef.current.updateWebchatSettings(settings)
   }
 
+  // eslint-disable-next-line complexity
   getComponent(optionsAtRuntime = {}) {
     let {
       theme = {},
@@ -251,6 +255,7 @@ export class WebchatApp {
       onMessage,
       appId,
       visibility,
+      server,
       ...webchatOptions
     } = optionsAtRuntime
     theme = merge(this.theme, theme)
@@ -265,6 +270,7 @@ export class WebchatApp {
     defaultTyping = defaultTyping || this.defaultTyping
     storage = storage || this.storage
     storageKey = storageKey || this.storageKey
+    server = server || this.server
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -297,6 +303,7 @@ export class WebchatApp {
         resendUnsentInputs={() =>
           this.hubtypeService && this.hubtypeService.resendUnsentInputs()
         }
+        server={server}
       />
     )
   }
@@ -310,6 +317,10 @@ export class WebchatApp {
     } catch (e) {
       return false
     }
+  }
+
+  isOnline() {
+    return this.webchatRef.current.isOnline()
   }
 
   async resolveWebchatVisibility(optionsAtRuntime) {
