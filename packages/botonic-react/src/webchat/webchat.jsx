@@ -42,6 +42,7 @@ import { ConditionalWrapper } from '../util/react'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
 import {
   _getThemeProperty,
+  getServerErrorMessage,
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
@@ -341,7 +342,7 @@ export const Webchat = forwardRef((props, ref) => {
   useAsyncEffect(async () => {
     if (!webchatState.online) {
       setError({
-        message: 'Connection issues',
+        message: getServerErrorMessage(props.server),
       })
     } else {
       if (!firstUpdate.current) {

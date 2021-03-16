@@ -41,13 +41,22 @@ export class HubtypeService {
     }
   }
 
+  resolveServerConfig() {
+    if (!this.server) {
+      return { activityTimeout: ACTIVITY_TIMEOUT, pongTimeout: PONG_TIMEOUT }
+    }
+    return {
+      activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
+      pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
+    }
+  }
+
   init(user, lastMessageId, lastMessageUpdateDate) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (lastMessageUpdateDate)
       this.lastMessageUpdateDate = lastMessageUpdateDate
     if (this.pusher || !this.user.id || !this.appId) return null
-    const { activityTimeout, pongTimeout } = this.server
     this.pusher = new Pusher(_WEBCHAT_PUSHER_KEY_, {
       cluster: 'eu',
       authEndpoint: `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
@@ -55,8 +64,7 @@ export class HubtypeService {
       auth: {
         headers: this.constructHeaders(),
       },
-      activityTimeout: activityTimeout || ACTIVITY_TIMEOUT,
-      pongTimeout: pongTimeout || PONG_TIMEOUT,
+      ...this.resolveServerConfig(),
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
     const connectionPromise = new Promise((resolve, reject) => {

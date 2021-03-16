@@ -48,3 +48,11 @@ export const shouldKeepSessionOnReload = ({
   initialDevSettings,
   devSettings,
 }) => !initialDevSettings || (devSettings && devSettings.keepSessionOnReload)
+
+export const getServerErrorMessage = serverConfig => {
+  if (!serverConfig || !serverConfig.errorMessage) return 'Connection issues'
+  if (typeof serverConfig.errorMessage === 'function') {
+    return serverConfig.errorMessage()
+  }
+  return serverConfig.errorMessage
+}

@@ -234,6 +234,7 @@ export class WebchatApp {
     return this.webchatRef.current.updateWebchatSettings(settings)
   }
 
+  // eslint-disable-next-line complexity
   getComponent(optionsAtRuntime = {}) {
     let {
       theme = {},
@@ -254,6 +255,7 @@ export class WebchatApp {
       onMessage,
       appId,
       visibility,
+      server,
       ...webchatOptions
     } = optionsAtRuntime
     theme = merge(this.theme, theme)
@@ -268,6 +270,7 @@ export class WebchatApp {
     defaultTyping = defaultTyping || this.defaultTyping
     storage = storage || this.storage
     storageKey = storageKey || this.storageKey
+    server = server || this.server
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -300,6 +303,7 @@ export class WebchatApp {
         resendUnsentInputs={() =>
           this.hubtypeService && this.hubtypeService.resendUnsentInputs()
         }
+        server={server}
       />
     )
   }
