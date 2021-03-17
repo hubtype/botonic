@@ -9,4 +9,9 @@ test('TEST: contentful dateRange', async () => {
   expect(dateRange.common.name).toEqual('Test DateRange name')
   expect(dateRange.dateRange.from).toEqual(cetDate(2019, 4, 26, 20, 30))
   expect(dateRange.dateRange.to).toEqual(cetDate(2019, 8, 1))
+  expect(dateRange.common.customFields).toEqual({
+    customFieldText: "Hi, I'm a text!",
+    customFieldNumber: 555,
+    customFieldBoolean: true,
+  })
 })
