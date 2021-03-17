@@ -3,7 +3,7 @@ import * as contentful from 'contentful'
 import * as cms from '../../cms'
 import { Context } from '../../cms'
 import { DeliveryApi } from '../delivery-api'
-import { CommonEntryFields } from '../delivery-utils'
+import { addCustomFields, CommonEntryFields } from '../delivery-utils'
 import { DeliveryWithFollowUp } from './follow-up'
 
 export class ImageDelivery extends DeliveryWithFollowUp {
@@ -23,9 +23,12 @@ export class ImageDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<ImageFields>,
     context: cms.Context
   ): Promise<cms.Image> {
-    return new cms.Image(
-      await this.getFollowUp().commonFields(entry, context),
-      this.urlFromAssetRequired(entry.fields.image)
+    return addCustomFields(
+      new cms.Image(
+        await this.getFollowUp().commonFields(entry, context),
+        this.urlFromAssetRequired(entry.fields.image)
+      ),
+      entry.fields
     )
   }
 }
