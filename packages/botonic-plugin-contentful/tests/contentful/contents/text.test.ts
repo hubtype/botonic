@@ -148,3 +148,11 @@ test('TEST: contentful text with URL button', async () => {
     cms.Callback.ofUrl('https://www.hubtype.com/en')
   )
 })
+
+test('Test: contentful text with custom field of type text', async () => {
+  const sut = testContentful()
+  const text = await sut.text(TEST_SORRY, testContext())
+  expect(text.common.customFields).toEqual({
+    customFieldText: 'This text is from a custom field',
+  })
+})

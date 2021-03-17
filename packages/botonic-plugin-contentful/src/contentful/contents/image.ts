@@ -23,14 +23,13 @@ export class ImageDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<ImageFields>,
     context: cms.Context
   ): Promise<cms.Image> {
-    const ignoreFields: string[] = ['followup', 'image']
     return addCustomFields(
       new cms.Image(
         await this.getFollowUp().commonFields(entry, context),
         this.urlFromAssetRequired(entry.fields.image)
       ),
       entry.fields,
-      ignoreFields
+      ['followup', 'image']
     )
   }
 }

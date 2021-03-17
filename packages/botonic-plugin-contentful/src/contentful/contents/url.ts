@@ -3,7 +3,7 @@ import * as contentful from 'contentful'
 import * as cms from '../../cms'
 import { Context } from '../../cms'
 import { DeliveryApi } from '../delivery-api'
-import { CommonEntryFields } from '../delivery-utils'
+import { addCustomFields, CommonEntryFields } from '../delivery-utils'
 import { DeliveryWithFollowUp } from './follow-up'
 
 export class UrlDelivery extends DeliveryWithFollowUp {
@@ -17,9 +17,12 @@ export class UrlDelivery extends DeliveryWithFollowUp {
   }
 
   async fromEntry(entry: contentful.Entry<UrlFields>, context: Context) {
-    return new cms.Url(
-      await this.getFollowUp().commonFields(entry, context),
-      entry.fields.url || ''
+    return addCustomFields(
+      new cms.Url(
+        await this.getFollowUp().commonFields(entry, context),
+        entry.fields.url || ''
+      ),
+      entry.fields
     )
   }
 }

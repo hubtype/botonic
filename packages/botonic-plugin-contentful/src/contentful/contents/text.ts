@@ -2,7 +2,11 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import { DeliveryApi } from '../delivery-api'
-import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
+import {
+  addCustomFields,
+  CommonEntryFields,
+  ContentfulEntryUtils,
+} from '../delivery-utils'
 import { ButtonDelivery } from './button'
 import { DeliveryWithFollowUp } from './follow-up'
 
@@ -39,7 +43,10 @@ export class TextDelivery extends DeliveryWithFollowUp {
     const buttons = followUpAndButtons[1] as cms.Button[]
     const common = ContentfulEntryUtils.commonFieldsFromEntry(entry, followUp)
     const buttonsStyle = this.getButtonsStyle(fields.buttonsStyle)
-    return new cms.Text(common, fields.text ?? '', buttons, buttonsStyle)
+    return addCustomFields(
+      new cms.Text(common, fields.text ?? '', buttons, buttonsStyle),
+      fields
+    )
   }
 
   getButtonsStyle(buttonsStyle?: string): cms.ButtonStyle | undefined {
