@@ -7,4 +7,4 @@ export type ModelInfo = {
   model: LayersModel
 }
 
-export type PluginOptions = { locale: Locale }
+export type PluginOptions = { locales: Locale[] }

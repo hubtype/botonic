@@ -2,12 +2,12 @@ import { Codifier } from '@botonic/nlp/dist/preprocess/codifier'
 import { Preprocessor } from '@botonic/nlp/dist/preprocess/preprocessor'
 import { Entity } from '@botonic/nlp/dist/tasks/ner/process/types'
 import { NerConfig } from '@botonic/nlp/dist/tasks/ner/storage/types'
+import { Locale } from '@botonic/nlp/dist/types'
 import { LayersModel } from '@tensorflow/tfjs'
 import { Tensor3D } from '@tensorflow/tfjs-core/dist/tensor'
 
 import { PredictionProcessor } from '../process/prediction-processor'
 import { Processor } from '../process/processor'
-import { PluginOptions } from '../types'
 import { getModelInfo } from '../utils/environment-utils'
 
 export class ModelHandler {
@@ -16,16 +16,16 @@ export class ModelHandler {
   processor: Processor
   predictionProcessor: PredictionProcessor
 
-  constructor(options: PluginOptions) {
+  constructor(readonly locale: Locale) {
     // @ts-ignore
     return (async () => {
-      await this.init(options)
+      await this.init()
       return this
     })()
   }
 
-  private async init(options: PluginOptions): Promise<void> {
-    const { model, config } = await getModelInfo(options.locale)
+  private async init(): Promise<void> {
+    const { model, config } = await getModelInfo(this.locale)
     this.model = model
     this.config = config
     this.processor = new Processor(
