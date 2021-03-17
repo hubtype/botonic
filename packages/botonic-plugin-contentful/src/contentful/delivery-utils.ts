@@ -145,7 +145,7 @@ export function convertContentfulException(e: any, query: any): any {
   }
   return e
 }
-
+//supported types: string, number and boolean
 export function addCustomFields<T extends TopContent>(
   content: T,
   entryFields: CommonEntryFields
@@ -154,7 +154,7 @@ export function addCustomFields<T extends TopContent>(
     f =>
       !Object.keys(content).includes(f) &&
       !Object.keys(content.common).includes(f) &&
-      //this are fields from CommonFields.dateRange
+      //CommonFields.dateRange fields
       !['from', 'to'].includes(f)
   )
   for (const customKey of customKeys) {
