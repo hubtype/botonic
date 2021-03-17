@@ -6,10 +6,12 @@ test('TEST: contentful schedule', async () => {
 
   // act
   const schedule = await sut.schedule('71twiV4wcaFwhK6tSYuIKy')
-
   // assert
   expect(schedule.schedule).toEqual(testSchedule())
   expect(schedule.common.name).toEqual('SUPPORT_SCHEDULE1')
+  expect(schedule.common.customFields).toEqual({
+    customFieldText: 'This is text!!!',
+  })
 })
 
 export function testSchedule(): Schedule {

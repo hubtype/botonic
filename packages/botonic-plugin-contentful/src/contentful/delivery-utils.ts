@@ -148,16 +148,14 @@ export function convertContentfulException(e: any, query: any): any {
 //supported types: string, number and boolean
 export function addCustomFields<T extends TopContent>(
   content: T,
-  entryFields: CommonEntryFields
+  entryFields: CommonEntryFields,
+  ignoreFields?: string[]
 ): T {
   const customKeys = Object.keys(entryFields).filter(
     f =>
       !Object.keys(content).includes(f) &&
       !Object.keys(content.common).includes(f) &&
-      //CommonFields.dateRange fields
-      !['from', 'to'].includes(f) &&
-      //CMS names for followUp and imgUrl image fields
-      !['followup', 'image'].includes(f)
+      !ignoreFields?.includes(f)
   )
   for (const customKey of customKeys) {
     content.common.customFields[customKey] = (entryFields as any)[customKey]
