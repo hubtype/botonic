@@ -23,9 +23,11 @@ export class DateRangeDelivery extends TopContentDelivery {
   }
 
   static fromEntry(entry: contentful.Entry<DateRangeFields>): DateRangeContent {
+    const ignoreFields: string[] = ['from,to']
     return addCustomFields(
       ContentfulEntryUtils.fromDateRangeEntry(entry),
-      entry.fields
+      entry.fields,
+      ignoreFields
     )
   }
 }
