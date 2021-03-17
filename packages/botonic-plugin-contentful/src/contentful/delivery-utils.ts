@@ -155,7 +155,9 @@ export function addCustomFields<T extends TopContent>(
       !Object.keys(content).includes(f) &&
       !Object.keys(content.common).includes(f) &&
       //CommonFields.dateRange fields
-      !['from', 'to'].includes(f)
+      !['from', 'to'].includes(f) &&
+      //CMS names for followUp and imgUrl image fields
+      !['followup', 'image'].includes(f)
   )
   for (const customKey of customKeys) {
     content.common.customFields[customKey] = (entryFields as any)[customKey]
