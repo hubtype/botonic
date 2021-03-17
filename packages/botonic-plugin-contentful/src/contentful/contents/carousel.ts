@@ -2,7 +2,11 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import { DeliveryApi } from '../delivery-api'
-import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
+import {
+  addCustomFields,
+  CommonEntryFields,
+  ContentfulEntryUtils,
+} from '../delivery-utils'
 import { ButtonDelivery } from './button'
 import { DeliveryWithFollowUp } from './follow-up'
 
@@ -35,9 +39,12 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
         return this.elementFromEntry(entry, context)
       }
     )
-    return new cms.Carousel(
-      ContentfulEntryUtils.commonFieldsFromEntry(entry),
-      elements
+    return addCustomFields(
+      new cms.Carousel(
+        ContentfulEntryUtils.commonFieldsFromEntry(entry),
+        elements
+      ),
+      entry.fields
     )
   }
 
