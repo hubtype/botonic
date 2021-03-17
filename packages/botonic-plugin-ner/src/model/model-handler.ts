@@ -7,6 +7,7 @@ import { Tensor3D } from '@tensorflow/tfjs-core/dist/tensor'
 
 import { PredictionProcessor } from '../process/prediction-processor'
 import { Processor } from '../process/processor'
+import { PluginOptions } from '../types'
 import { getModelInfo } from '../utils/environment-utils'
 
 export class ModelHandler {
@@ -15,16 +16,16 @@ export class ModelHandler {
   processor: Processor
   predictionProcessor: PredictionProcessor
 
-  constructor() {
+  constructor(options: PluginOptions) {
     // @ts-ignore
     return (async () => {
-      await this.init()
+      await this.init(options)
       return this
     })()
   }
 
-  private async init(): Promise<void> {
-    const { model, config } = await getModelInfo()
+  private async init(options: PluginOptions): Promise<void> {
+    const { model, config } = await getModelInfo(options.locale)
     this.model = model
     this.config = config
     this.processor = new Processor(

@@ -7,4 +7,4 @@ export type ModelInfo = {
   model: LayersModel
 }
 
-export type BotonicPluginNerOptions = { locale: Locale }
+export type PluginOptions = { locale: Locale }
