@@ -153,7 +153,9 @@ export function addCustomFields<T extends TopContent>(
   const customKeys = Object.keys(entryFields).filter(
     f =>
       !Object.keys(content).includes(f) &&
-      !Object.keys(content.common).includes(f)
+      !Object.keys(content.common).includes(f) &&
+      //this are fields from CommonFields.dateRange
+      !['from', 'to'].includes(f)
   )
   for (const customKey of customKeys) {
     content.common.customFields[customKey] = (entryFields as any)[customKey]
