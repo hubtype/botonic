@@ -83,8 +83,6 @@ export class ContentfulEntryUtils {
       fields.dateRange &&
       ContentfulEntryUtils.fromDateRangeEntry(fields.dateRange)
 
-    const customFields: Record<string, unknown> = {}
-
     return new CommonFields(entry.sys.id, fields.name || '', {
       keywords: fields.keywords,
       shortText: fields.shortText,
@@ -92,7 +90,7 @@ export class ContentfulEntryUtils {
       searchableBy,
       dateRange,
       followUp,
-      customFields,
+      //customFields cannot be easily diferenciated from standard fields until the content is created. see addCustomFields
     })
   }
 

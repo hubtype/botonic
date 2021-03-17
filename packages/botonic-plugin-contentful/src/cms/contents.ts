@@ -172,6 +172,7 @@ export class CommonFields implements Stringable {
       partitions?: string[]
       dateRange?: DateRangeContent
       followUp?: FollowUp
+      //customFields are any fields found in CMS but not expected in the corresponding model
       customFields?: Record<string, unknown>
     }
   ) {
