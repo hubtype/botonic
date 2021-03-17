@@ -392,7 +392,7 @@ export class Queue extends TopContent {
     readonly common: CommonFields,
     readonly queue: string,
     readonly schedule?: time.Schedule,
-    readonly handoffMessage?: string,
+    readonly handoffMessage?: string
   ) {
     super(common, ContentType.QUEUE)
   }
