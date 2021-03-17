@@ -61,17 +61,15 @@ Add the following code in your `action` files, under the `render` section.
 <Multichannel {...LEGACY_PROPS}>
   <Text>
     Some with buttons
-    {[
       <Button key={'1'} payload='payload1'>
         Button 1
-      </Button>,
+      </Button>
       <Button key={'2'} path='path1'>
         Button 2
-      </Button>,
+      </Button>
       <Button key={'3'} url='http://testurl.com'>
         Visit website
-      </Button>,
-    ]}
+      </Button>
   </Text>
 </Multichannel>
 ```

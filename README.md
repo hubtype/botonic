@@ -6,7 +6,7 @@
 <p align="center" style="text-align: center;"><a href="https://botonic.io">Website</a> |  <a href="https://botonic.io/blog">Blog</a>  |  <a href="https://botonic.io/docs/welcome">Docs</a> |  <a href="https://botonic.io/examples">Examples</a>  |  <a href="https://botonic.io/blog/2021/03/10/introducing-botonic-office-hours">Friday Office Hours</a></p>
 <hr>
 
-## <center>Build Chatbots and Conversational Apps Using React</center>
+# <center>Build Chatbots and Conversational Apps Using React</center>
 
 [![botonic](https://img.shields.io/badge/cli-botonic-brightgreen.svg)](https://botonic.io)
 [![Version](https://img.shields.io/npm/v/@botonic/cli.svg)](https://npmjs.org/package/@botonic/cli)
@@ -15,7 +15,7 @@
 <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/intent/follow?screen_name=botonic_"><img src="https://camo.githubusercontent.com/9e04e9647d574f9e2ad27f93d6eade8f5e9d6b9fed6c50ad6399742b7713ba1f/68747470733a2f2f696d672e736869656c64732e696f2f747769747465722f666f6c6c6f772f626f746f6e69635f3f7374796c653d736f6369616c" alt="Twitter Follow" data-canonical-src="https://img.shields.io/twitter/follow/botonic_?style=social" style="max-width:100%;"></a>
 
 
-# 🐣 What is Botonic?
+# 🐣 What is Botonic Open Source Framework?
 
 [Botonic](https://botonic.io) is a full-stack framework to create chatbots and modern conversational apps made with ❤️ by [Hubtype](https://www.hubtype.com/).
 
