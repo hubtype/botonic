@@ -21,7 +21,8 @@
     "axios": "latest",
     "node-fetch": "^2.6.1",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "@tensorflow/tfjs": "^2.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
