@@ -19,10 +19,6 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
 const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
 const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
 export class HubtypeService {
-  user
-  lastMessageId
-  lastMessageUpdateDate
-
   constructor({
     appId,
     user,

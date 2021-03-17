@@ -137,7 +137,6 @@ export class WebchatApp {
     } else {
       this.hubtypeService.lastMessageId = lastMessageId
       this.hubtypeService.lastMessageUpdateDate = lastMessageUpdateDate
-      this.hubtypeService.user = user
     }
   }
 
@@ -308,9 +307,7 @@ export class WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
-        onConnectionRegained={() =>
-          this.hubtypeService && this.hubtypeService.onConnectionRegained()
-        }
+        onConnectionRegained={() => this.onConnectionRegained()}
         server={server}
       />
     )
