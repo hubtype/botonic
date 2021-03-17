@@ -25,7 +25,10 @@ export class Processor {
 
   // Generates the Input data and the unmasked sequence.
   generateInput(text: string): { sequence: string[]; input: InputData } {
-    const sequence = this.processText(text)
+    const sequence = this.preprocessor.pad(
+      this.processText(text),
+      PADDING_TOKEN
+    )
     const input = tensor([this.processTokens(sequence)]) as Tensor2D
     return { sequence, input }
   }
