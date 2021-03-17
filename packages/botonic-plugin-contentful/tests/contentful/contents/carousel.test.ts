@@ -20,6 +20,9 @@ test('TEST: contentful carousel', async () => {
   expect(carousel.common.name).toEqual('INICIO')
   expect(carousel.common.keywords).toEqual(['Inicio', 'menu', 'empezar'])
   expect(carousel.common.shortText).toEqual('Menú de Inicio')
+  expect(carousel.common.customFields).toEqual({
+    customFieldNumber: 3.14159265389,
+  })
   assertElementDudasPrevias(carousel.elements[0])
 })
 
