@@ -34,7 +34,6 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
       fields.buttons || [],
       context
     )
-    const ignoreFields: string[] = ['pic', 'followup']
     return addCustomFields(
       new cms.StartUp(
         await this.getFollowUp().commonFields(entry, context),
@@ -43,7 +42,7 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
         buttons
       ),
       fields,
-      ignoreFields
+      ['pic', 'followup']
     )
   }
 }

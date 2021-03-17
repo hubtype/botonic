@@ -36,24 +36,23 @@ export class ScheduleDelivery extends TopContentDelivery {
       const schedule = new time.Schedule(time.Schedule.TZ_CET) // TODO allow configuration
       this.addDaySchedules(schedule, entry.fields)
       this.addExceptions(schedule, entry.fields.exceptions)
-      const ignoreFields: string[] = [
-        'exceptions',
-        'partition',
-        'mondays',
-        'tuesdays',
-        'wednesdays',
-        'thursdays',
-        'fridays',
-        'saturdays',
-        'sundays',
-      ]
       return addCustomFields(
         new ScheduleContent(
           ContentfulEntryUtils.commonFieldsFromEntry(entry),
           schedule
         ),
         entry.fields,
-        ignoreFields
+        [
+          'exceptions',
+          'partition',
+          'mondays',
+          'tuesdays',
+          'wednesdays',
+          'thursdays',
+          'fridays',
+          'saturdays',
+          'sundays',
+        ]
       )
     } catch (e) {
       throw new CmsException(`Error loading Scheduler '${entry.sys.id}'`, e)

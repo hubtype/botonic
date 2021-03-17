@@ -10,6 +10,7 @@ test('TEST: contentful url', async () => {
       new CommonFields(TEST_URL_HUBTYPE_ID, 'URL_HUBTYPE', {
         shortText: 'Web de Hubtype',
         keywords: ['hubtypeEn', 'botonicEn'],
+        customFields: { customFieldText: 'Url text' },
       }),
       'https://www.hubtype.com/en'
     )
