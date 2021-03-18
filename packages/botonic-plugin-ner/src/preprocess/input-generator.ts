@@ -7,14 +7,14 @@ import { Preprocessor } from '@botonic/nlp/dist/preprocess/preprocessor'
 import { tensor } from '@tensorflow/tfjs-core/dist/ops/tensor'
 import { Tensor2D } from '@tensorflow/tfjs-core/dist/tensor'
 
-export class Processor {
+export class InputGenerator {
   constructor(
     readonly preprocessor: Preprocessor,
     readonly tokenCodifier: Codifier,
     readonly entityCodifier: Codifier
   ) {}
 
-  generateInput(text: string): { sequence: string[]; input: Tensor2D } {
+  generate(text: string): { sequence: string[]; input: Tensor2D } {
     const sequence = this.processText(text)
     const input = tensor([this.processTokens(sequence)]) as Tensor2D
     return { sequence, input }

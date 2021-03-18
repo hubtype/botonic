@@ -1,12 +1,12 @@
 import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
 
-import { ModelHandler } from './model/model-handler'
+import { NamedEntityRecognizer } from './model/ner'
 import { PluginOptions } from './types'
 import { detectLocale } from './utils/locale-utils'
 
 export default class BotonicPluginNER implements Plugin {
-  private modelHandlers: { [locale: string]: ModelHandler } = {}
+  private recognizers: { [locale: string]: NamedEntityRecognizer } = {}
 
   constructor(readonly options: PluginOptions) {
     // @ts-ignore
@@ -18,7 +18,7 @@ export default class BotonicPluginNER implements Plugin {
 
   private async init(options: PluginOptions): Promise<void> {
     options.locales.forEach(async locale => {
-      this.modelHandlers[locale] = await new ModelHandler(locale)
+      this.recognizers[locale] = await new NamedEntityRecognizer(locale)
     })
   }
 
@@ -26,9 +26,7 @@ export default class BotonicPluginNER implements Plugin {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const locale = detectLocale(request.input.data, this.options.locales)
-        const entities = this.modelHandlers[locale].recognizeEntities(
-          request.input.data
-        )
+        const entities = this.recognizers[locale].recognize(request.input.data)
         Object.assign(request.input, entities)
       }
     } catch (e) {

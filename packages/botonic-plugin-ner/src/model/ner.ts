@@ -6,14 +6,14 @@ import { Locale } from '@botonic/nlp/dist/types'
 import { LayersModel } from '@tensorflow/tfjs'
 import { Tensor3D } from '@tensorflow/tfjs-core/dist/tensor'
 
-import { PredictionProcessor } from '../process/prediction-processor'
-import { Processor } from '../process/processor'
+import { PredictionProcessor } from '../postprocess/prediction-processor'
+import { InputGenerator } from '../preprocess/input-generator'
 import { getModelInfo } from '../utils/environment-utils'
 
-export class ModelHandler {
+export class NamedEntityRecognizer {
   model: LayersModel
   config: NerConfig
-  processor: Processor
+  inputGenerator: InputGenerator
   predictionProcessor: PredictionProcessor
 
   constructor(readonly locale: Locale) {
@@ -28,7 +28,7 @@ export class ModelHandler {
     const { model, config } = await getModelInfo(this.locale)
     this.model = model
     this.config = config
-    this.processor = new Processor(
+    this.inputGenerator = new InputGenerator(
       new Preprocessor(config.locale, config.maxLength),
       new Codifier(config.vocabulary, { isCategorical: false }),
       new Codifier(config.entities, { isCategorical: true })
@@ -36,8 +36,8 @@ export class ModelHandler {
     this.predictionProcessor = new PredictionProcessor(config.entities)
   }
 
-  recognizeEntities(text: string): Entity[] {
-    const { sequence, input } = this.processor.generateInput(text)
+  recognize(text: string): Entity[] {
+    const { sequence, input } = this.inputGenerator.generate(text)
     const prediction = this.model.predict(input) as Tensor3D
     const entities = this.predictionProcessor.process(sequence, prediction)
     return entities
