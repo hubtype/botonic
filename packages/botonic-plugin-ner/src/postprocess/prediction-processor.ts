@@ -13,14 +13,14 @@ export class PredictionProcessor {
     return entities.filter(e => e.text != PADDING_TOKEN)
   }
 
-  private getEntity(token, confidences): Entity {
+  private getEntity(token: string, confidences: number[]): Entity {
     const confidence = Math.max(...confidences)
     const label = this.entities[confidences.indexOf(confidence)]
     const predictions = this.getPredictions(confidences)
     return { text: token, label, confidence, predictions }
   }
 
-  private getPredictions(confidences): Prediction[] {
+  private getPredictions(confidences: number[]): Prediction[] {
     return confidences.map((c, i) => {
       return { label: this.entities[i], confidence: c }
     })
