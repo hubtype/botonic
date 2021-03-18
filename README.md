@@ -17,7 +17,7 @@
 
 # 🐣 Introducing Botonic Open Source Framework
 
-[Botonic](https://botonic.io) is a full-stack framework to create chatbots and modern conversational apps made with ❤️ by [Hubtype](https://www.hubtype.com/).
+[Botonic](https://botonic.io) is an open source full-stack framework to create chatbots and modern conversational apps made with ❤️ by [Hubtype](https://www.hubtype.com/).
 
 It's built on top of:
 
