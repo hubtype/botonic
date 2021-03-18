@@ -36,13 +36,8 @@ export default class Run extends Command {
   }
 
   private runAllTasks(): void {
-    if (
-      this.isPackageInstalled(`plugin-${TASKS.NER}`) &&
-      this.isPackageInstalled(`plugin-${TASKS.TEXT_CLASSIFICATION}`)
-    ) {
-      track('Trained with Botonic train')
-      spawnNpmScript('train', () => `Finished training `)
-    }
+    this.runNerTask()
+    this.runTextClassificationTask()
   }
 
   private async runSpecificTask(task: string): Promise<void> {
