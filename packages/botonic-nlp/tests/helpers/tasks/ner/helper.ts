@@ -14,7 +14,7 @@ export { EMBEDDINGS_MATRIX } from './embeddings-matrix'
 
 export const LOCALE: Locale = 'en'
 
-export const MAX_LENGTH = 12
+export const MAX_SEQUENCE_LENGTH = 12
 
 export const MODEL_NAME = 'BiLstmNerModel'
 
@@ -94,7 +94,7 @@ export const entitiesCodifier = new Codifier(ENTITIES, {
   isCategorical: true,
 })
 
-export const preprocessor = new Preprocessor(LOCALE, MAX_LENGTH)
+export const preprocessor = new Preprocessor(LOCALE, MAX_SEQUENCE_LENGTH)
 
 class TestWordEmbeddingStorage implements WordEmbeddingStorage {
   constructor(readonly dimension: EmbeddingsDimension) {}
