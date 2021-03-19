@@ -8,6 +8,19 @@ title: Multichannel
 The `Multichannel` component is a wrapper component used to transform existing representations of a channel into another one that does not support it natively. 
 As an example, it can be used to adapt native representations of a Text with Buttons or Carousel (available in Facebook) for WhatsApp : the multichannel component allows you to provide a way to concatenate and unify messages and conversations for your WhatsApp bot.
 
+To use it, you just have to add the following code in your `action` files, under the `render` section.
+
+```javascript
+<Multichannel
+  firstIndex={'a'}
+  boldIndex={true}
+  carousel={{ indexMode: 'letter' }}
+  text={{ indexMode: 'letter' }}
+  indexSeparator={'.'}
+  messageSeparator={'\n\n'}
+>
+```
+
 ## Properties
 
 | Property               | Type                                 | Description                                                                                                                            | Required | Default value |
@@ -26,39 +39,17 @@ As an example, it can be used to adapt native representations of a Text with But
                       
 
 
-## Example
+### Example
 
-Add the following code in your `action` files, under the `render` section.
+As an output, you would get something like this: 
 
 ```javascript
 <Multichannel
-  firstIndex={'a'}
-  boldIndex={true}
-  carousel={{ indexMode: 'letter' }}
-  text={{ indexMode: 'letter' }}
-  indexSeparator={'.'}
-  messageSeparator={'\n\n'}
->
-```
-
-### Description
-
-- `firstIndex` = The index is the option title of a choice. Ex: a. b. or 1. 2. etc.
-
-- `boldIndex`: Applies a bold format to the index element. True or False.
-
-- `Carousel`: Adds a letter or number to the index for a carousel.
-
-- `Text` : Adds a letter or number to the index for a text.
-
-- `Indexseparator`: Adds a dot or dash after the letter or number.
-
-- `Message separator` : Adds a space between the various messages. `{'\n\n'}` adds a line break between the index message and the selection option.
-
-### Output
-
-```javascript
-<Multichannel {...LEGACY_PROPS}>
+        text={{ indexMode: 'number' }}
+        carousel={{ showTitle: true, ... }}
+        indexSeparator='.'
+        messageSeparator={null}
+      >
   <Text>
     Some with buttons
       <Button key={'1'} payload='payload1'>
