@@ -16,12 +16,11 @@ describe('Vocabulary Generator', () => {
     ).toEqual([
       'where',
       'order',
-      '?',
       'i',
       'want',
       'return',
       'products',
-      "n't",
+      'not',
       't-shirt',
     ])
   })
