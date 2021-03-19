@@ -71,9 +71,7 @@ export class HubtypeService {
       const cleanAndReject = msg => {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         clearTimeout(connectTimeout)
-        this.pusher.connection.unbind()
-        this.channel.unbind()
-        this.pusher = null
+        this.destroyPusher()
         reject(msg)
       }
       const connectTimeout = setTimeout(
@@ -86,18 +84,17 @@ export class HubtypeService {
       })
       this.pusher.connection.bind('error', event => {
         if (event.type == 'WebSocketError') this.handleConnectionChange(false)
-        const errorMsg =
-          event.error && event.error.data
-            ? event.error.data.code || event.error.data.message
-            : 'Connection error'
-        cleanAndReject(`Pusher error (${errorMsg})`)
+        else {
+          const errorMsg =
+            event.error && event.error.data
+              ? event.error.data.code || event.error.data.message
+              : 'Connection error'
+          cleanAndReject(`Pusher error (${errorMsg})`)
+        }
       })
     })
     this.pusher.connection.bind('connected', () =>
       this.handleConnectionChange(true)
-    )
-    this.pusher.connection.bind('disconnected', () =>
-      this.handleConnectionChange(false)
     )
     this.pusher.connection.bind('unavailable', () =>
       this.handleConnectionChange(false)
@@ -149,7 +146,6 @@ export class HubtypeService {
       await this.init(user)
     } catch (e) {
       this.handleUnsentInput(message)
-      this.handleConnectionChange(false)
       return Promise.resolve()
     }
     try {
@@ -182,13 +178,14 @@ export class HubtypeService {
     this.pusher.disconnect()
     this.pusher.unsubscribe(this.pusherChannel)
     this.pusher.unbind_all()
+    this.pusher.channels = {}
     this.pusher = null
   }
 
   async onConnectionRegained() {
     this.destroyPusher()
-    this.init()
-    this.resendUnsentInputs()
+    await this.init()
+    await this.resendUnsentInputs()
   }
 
   async resendUnsentInputs() {
