@@ -29,7 +29,7 @@ export class ImageDelivery extends DeliveryWithFollowUp {
         this.urlFromAssetRequired(entry.fields.image)
       ),
       entry.fields,
-      ['followup', 'image']
+      ['image']
     )
   }
 }

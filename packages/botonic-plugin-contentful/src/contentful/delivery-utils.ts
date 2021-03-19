@@ -155,7 +155,9 @@ export function addCustomFields<T extends TopContent>(
     f =>
       !Object.keys(content).includes(f) &&
       !Object.keys(content.common).includes(f) &&
-      !ignoreFields?.includes(f)
+      !ignoreFields?.includes(f) &&
+      //contentful: followup, plugin: followUp
+      'followup' != f
   )
   for (const customKey of customKeys) {
     content.common.customFields[customKey] = (entryFields as any)[customKey]
