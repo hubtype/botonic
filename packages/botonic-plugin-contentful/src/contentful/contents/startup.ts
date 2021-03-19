@@ -42,7 +42,7 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
         buttons
       ),
       fields,
-      ['pic', 'followup']
+      ['pic']
     )
   }
 }
