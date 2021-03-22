@@ -58,19 +58,25 @@ export default class Run extends Command {
   }
 
   private runNerTask(): void {
-    if (this.isPackageInstalled(`plugin-${TASKS.NER}`)) {
+    const packageName = `plugin-${TASKS.NER}`
+    if (this.isPackageInstalled(packageName)) {
       track(`Trained with Botonic train:${TASKS.NER}`)
       spawnNpmScript(`train:${TASKS.NER}`, () => `Finished training `)
+    } else {
+      this.logPackageNotInstalled(packageName)
     }
   }
 
   private runTextClassificationTask(): void {
-    if (this.isPackageInstalled(`plugin-${TASKS.TEXT_CLASSIFICATION}`)) {
+    const packageName = `plugin-${TASKS.TEXT_CLASSIFICATION}`
+    if (this.isPackageInstalled(packageName)) {
       track(`Trained with Botonic train:${TASKS.TEXT_CLASSIFICATION}`)
       spawnNpmScript(
         `train:${TASKS.TEXT_CLASSIFICATION}`,
         () => `Finished training `
       )
+    } else {
+      this.logPackageNotInstalled(packageName)
     }
   }
 
@@ -85,23 +91,16 @@ export default class Run extends Command {
   }
 
   private isPackageInstalled(packageName: string): boolean {
-    const path = join(
-      process.cwd(),
-      'node_modules',
-      '@botonic',
-      packageName,
-      'dist'
-    )
-    if (existsSync(path)) {
-      return true
-    } else {
-      console.log(
-        colors.red(
-          `Training process has been stopped because you don't have @botonic/${packageName} installed.\nPlease, install it with the following command:`
-        )
+    const path = join(process.cwd(), 'node_modules', '@botonic', packageName)
+    return existsSync(path)
+  }
+
+  private logPackageNotInstalled(packageName: string): void {
+    console.log(
+      colors.red(
+        `Training process has been stopped because you don't have @botonic/${packageName} installed.\nPlease, install it with the following command:`
       )
-      console.log(`$ npm install @botonic/${packageName}`)
-      return false
-    }
+    )
+    console.log(`$ npm install @botonic/${packageName}`)
   }
 }
