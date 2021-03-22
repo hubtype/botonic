@@ -6,13 +6,13 @@ describe('Botonic NER', () => {
   test('Loading model', async () => {
     const ner = await BotonicNer.load(nerHelper.MODEL_DIR_PATH)
     expect(ner.locale).toEqual(nerHelper.LOCALE)
-    expect(ner.maxLength).toEqual(nerHelper.MAX_LENGTH)
+    expect(ner.maxLength).toEqual(nerHelper.MAX_SEQUENCE_LENGTH)
     expect(ner.entities).toEqual(nerHelper.ENTITIES)
     expect(ner.vocabulary).toEqual(nerHelper.VOCABULARY)
   })
 
   test('Load data', () => {
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_LENGTH)
+    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
     const { trainSet, testSet } = ner.splitDataset(nerHelper.DATASET)
     expect(trainSet.length).toEqual(4)
     expect(testSet.length).toEqual(1)
@@ -20,7 +20,7 @@ describe('Botonic NER', () => {
 
   test('Generate vocabulary', () => {
     // arrange
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_LENGTH)
+    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
 
     // act
     ner.generateVocabulary([
@@ -33,7 +33,7 @@ describe('Botonic NER', () => {
 
   test('Evaluate model', async () => {
     // arrange
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_LENGTH)
+    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
     const dataset = ner.loadDataset(nlpHelper.SHOPPING_DATA_PATH)
     const { trainSet, testSet } = ner.splitDataset(dataset)
     ner.generateVocabulary(trainSet)
@@ -51,7 +51,7 @@ describe('Botonic NER', () => {
 
   test('Recognize entities', async () => {
     // arrange
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_LENGTH)
+    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
     const dataset = ner.loadDataset(nlpHelper.SHOPPING_DATA_PATH)
     const { trainSet } = ner.splitDataset(dataset)
     ner.generateVocabulary(trainSet)
