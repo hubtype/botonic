@@ -1,4 +1,8 @@
 import { Locale } from '../types'
+import { getNormalizer } from './engines/normalizer'
+// import { getStemmer } from './engines/stemmer'
+import { getStopwords } from './engines/stopwords'
+import { getTokenizer } from './engines/tokenizer'
 import { PaddingPosition, PreprocessEngines } from './types'
 
 export class Preprocessor {
@@ -9,23 +13,18 @@ export class Preprocessor {
     readonly maxLength: number,
     public paddingPosition: PaddingPosition = 'post'
   ) {
-    this.loadEngine('normalizer')
-    this.loadEngine('tokenizer')
-    this.loadEngine('stopwords')
-    // TODO: In the future, if embeddings are disabled, stemmer should be loaded.
-    //   this.loadEngine('stemmer')
+    this.loadEngines()
   }
 
-  private loadEngine(engineName: string) {
+  private loadEngines() {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const engine = require(`./engines/${this.locale}/${engineName}-${this.locale}`)
-        .default
-      this.engines[engineName] =
-        engineName == 'stopwords' ? engine.stopwords : new engine()
+      this.engines.normalizer = getNormalizer(this.locale)
+      this.engines.tokenizer = getTokenizer(this.locale)
+      this.engines.stopwords = getStopwords(this.locale)
+      // this.engines.stemmer = getStemmer(this.locale)
     } catch {
       console.warn(
-        `Engine "${engineName}" not implemented for locale "${this.locale}". Using default.`
+        `Engines not implemented for locale "${this.locale}". Using default.`
       )
     }
   }
@@ -49,9 +48,7 @@ export class Preprocessor {
   }
 
   stem(tokens: string[]): string[] {
-    return this.engines.stemmer
-      ? tokens.map(t => this.engines.stemmer.stem(t))
-      : tokens
+    return this.engines.stemmer ? this.engines.stemmer.stem(tokens) : tokens
   }
 
   pad(tokens: string[], value: string): string[] {

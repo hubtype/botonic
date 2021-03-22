@@ -7,7 +7,7 @@ export interface Normalizer {
 
 export interface Stemmer {
   readonly locale: Locale
-  stem(text: string): string
+  stem(tokens: string[]): string[]
 }
 
 export interface Tokenizer {

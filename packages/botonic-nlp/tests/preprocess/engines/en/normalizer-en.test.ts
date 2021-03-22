@@ -1,4 +1,4 @@
-import NormalizerEn from '../../../../src/preprocess/engines/en/normalizer-en'
+import { NormalizerEn } from '../../../../src/preprocess/engines/en/normalizer-en'
 
 describe('English normalizer', () => {
   test.each([
