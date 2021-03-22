@@ -20,7 +20,7 @@ These methods are:
 - `Botonic.openCoverComponent()`: Opens an authentication window.
 - `Botonic.closeCoverComponent()`: Closes the authentication window.
 - `Botonic.toggleCoverComponent()`: Opens or closes the authentication window depending on the current state.
-- `Botonic.isOnline(boolean)`: Sets the webchat connection status.
+- `Botonic.isOnline(boolean)`: Gets the webchat connection status to know whether it is connected (true) or not (false).
 
 
 ## Webchat Listeners

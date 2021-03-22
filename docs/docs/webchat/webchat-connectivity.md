@@ -3,14 +3,13 @@ id: webchat-connectivity
 title: Connectivity
 ---
 
-Sometimes, the connection can be lost between the server and the chatbot. To handle this situation, you can set specific parameters to quickly detect the connection issue.
+Sometimes, the connection can be lost between the server and the chatbot. To handle this situation, you can set specific parameters to detect the connection issue.
+Moreover, for a better user experience, you can warn the user by configuring a customized error message to be displayed within the webchat interface.
 
-For a better user experience, you can also warn the user by configuring a customized error message to be displayed within the webchat interface.
+## Configure the server options
 
-To do so:
+In `webchat/index.js`, configure the server options and time periods to solve webchat connection issues.
 
-1. Set the `Botonic.isOnline()` method. Values are `true` or `false` depending on your server configuration.
-2. In `webchat/index.js`, configure the server options to set a time limit and get the information from the server.
 
 ```javascript
 export const webchat = {
@@ -25,7 +24,9 @@ export const webchat = {
 
 - `pongTimeout`: After pinging the server, time to wait (in ms) before assuming the connection is lost and closing it. Default value: 5 * 1000.
 
-3. Add the `errorMessage` variable to change the warning message when a connection issue occurs.
+## Warn the user
+
+To define the message to be displayed when connectivity issues occur, you can use `errorMessage`.
 
 ```javascript
 export const webchat = {
@@ -36,7 +37,7 @@ export const webchat = {
   },
 }
 ```
-You can use a function if you prefer. For example, if you want to display the warning message in various languages:
+You can use a function if you prefer. For example, if you want to display a warning message depending on the language:
 
 ```javascript
 export const webchat = {
