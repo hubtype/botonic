@@ -1,11 +1,8 @@
-import StemmerEn from '../../../../src/preprocess/engines/en/stemmer-en'
+import { StemmerEn } from '../../../../src/preprocess/engines/en/stemmer-en'
 
 describe('English stemmer', () => {
-  test.each([
-    ['testing', 'test'],
-    ['booked', 'book'],
-  ])('stemming sentence', (raw: string, expected: string) => {
+  test('stemming sentence', () => {
     const stemmer = new StemmerEn()
-    expect(stemmer.stem(raw)).toEqual(expected)
+    expect(stemmer.stem(['testing', 'booked'])).toEqual(['test', 'book'])
   })
 })

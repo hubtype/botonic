@@ -1,10 +1,10 @@
-import * as PorterStemmer from 'natural/lib/natural/stemmers/porter_stemmer'
-
 import { Stemmer } from '../../types'
 
-export default class StemmerEn implements Stemmer {
+export class StemmerEn implements Stemmer {
   readonly locale = 'en'
-  stem(text: string): string {
-    return PorterStemmer.stem(text)
+  private stemmer = new (require('@nlpjs/lang-en-min/src/stemmer-en'))()
+
+  stem(tokens: string[]): string[] {
+    return this.stemmer.stem(tokens)
   }
 }
