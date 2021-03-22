@@ -1,7 +1,8 @@
 import { Normalizer } from '../../types'
 
-export default class NormalizerEs implements Normalizer {
+export class NormalizerEs implements Normalizer {
   readonly locale = 'es'
+
   normalize(text: string): string {
     return this.removeDiacritics(text.trim().toLowerCase())
   }
