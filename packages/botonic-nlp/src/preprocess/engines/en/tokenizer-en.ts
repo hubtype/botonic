@@ -1,10 +1,8 @@
-import * as TreebankWordTokenizer from 'natural/lib/natural/tokenizers/treebank_word_tokenizer'
-
 import { Tokenizer } from '../../types'
 
-export default class TokenizerEn implements Tokenizer {
+export class TokenizerEn implements Tokenizer {
   readonly locale = 'en'
-  private tokenizer = new TreebankWordTokenizer()
+  private tokenizer = new (require('@nlpjs/lang-en-min/src/tokenizer-en'))()
 
   tokenize(text: string): string[] {
     return this.tokenizer.tokenize(text)

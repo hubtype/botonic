@@ -28,7 +28,8 @@
     "axios": "^0.21.0",
     "better-sqlite3": "^7.0.1",
     "js-yaml": "4.0.0",
-    "natural": "^3.0.3"
+    "@nlpjs/lang-en-min": "^4.19.1",
+    "@nlpjs/lang-es": "^4.19.1"
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"
