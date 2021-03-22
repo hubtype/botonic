@@ -54,8 +54,9 @@ export const spawnProcess = async (
     log?.onSuccess()
   } catch (e) {
     console.log(
-      red(`   Failed on running commmand ${command} ${args.join(' ')}\n`)
+      red(`   Failed on running command ${command} ${args.join(' ')}:\n${e.stderr.toString()}`)
     )
+    process.exit(1)
   }
 }
 
