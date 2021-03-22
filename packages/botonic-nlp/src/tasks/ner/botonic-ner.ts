@@ -1,4 +1,5 @@
 import { Tensor3D } from '@tensorflow/tfjs-node'
+import { join } from 'path'
 
 import { DatasetLoader } from '../../dataset/loader'
 import { Dataset, Sample } from '../../dataset/types'
@@ -142,6 +143,7 @@ export class BotonicNer {
   }
 
   async saveModel(path: string): Promise<void> {
+    path = join(path, this.locale)
     const config = {
       locale: this.locale,
       maxLength: this.maxLength,
