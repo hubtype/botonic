@@ -9,7 +9,7 @@ describe('Config handler', () => {
   test('Load config', () => {
     const config = NerConfigStorage.load(helper.MODEL_DIR_PATH)
     expect(config.locale).toEqual(helper.LOCALE)
-    expect(config.maxLength).toEqual(helper.MAX_LENGTH)
+    expect(config.maxLength).toEqual(helper.MAX_SEQUENCE_LENGTH)
     expect(config.vocabulary).toEqual(helper.VOCABULARY)
     expect(config.entities).toEqual(helper.ENTITIES)
   })
@@ -27,7 +27,7 @@ describe('Config handler', () => {
     )
     NerConfigStorage.save(path, {
       locale: helper.LOCALE,
-      maxLength: helper.MAX_LENGTH,
+      maxLength: helper.MAX_SEQUENCE_LENGTH,
       vocabulary: helper.VOCABULARY,
       entities: helper.ENTITIES,
     })
