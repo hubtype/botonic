@@ -111,8 +111,8 @@ export const changeBotonicDeps = async (packagePath, withVersion) => {
   }
 }
 
-export const installDeps = async () => {
-  console.log(' - Installing dependencies...')
+export const installDeps = async (project: string) => {
+  console.log(` - Installing ${project} dependencies...`)
   await spawnProcess('npm', ['install', '-D'], {
     onSuccess: () => console.log(green('   Installed successfully.\n')),
   })
