@@ -6,16 +6,45 @@ import { join } from 'path'
 import { Telemetry } from '../analytics/telemetry'
 import { spawnNpmScript } from '../util/system'
 
-enum TASKS {
-  NER = 'ner',
-  TEXT_CLASSIFICATION = 'text-classification',
+class Task {
+  constructor(readonly name: string) {}
+
+  run(): void {
+    if (this.isTaskPluginInstalled()) {
+      track(`Trained with Botonic train:${this.name}`)
+      spawnNpmScript(`train:${this.name}`, () => `Finished training `)
+    } else {
+      this.logTaskPluginNotInstalled()
+    }
+  }
+
+  private isTaskPluginInstalled(): boolean {
+    const path = join(
+      process.cwd(),
+      'node_modules',
+      '@botonic',
+      `plugin-${this.name}`
+    )
+    return existsSync(path)
+  }
+
+  private logTaskPluginNotInstalled(): void {
+    console.error(
+      colors.red(
+        `Training process has been stopped because you don't have @botonic/plugin-${this.name} installed.\nPlease, install it with the following command:`
+      )
+    )
+    console.log(colors.bold(`$ npm install @botonic/plugin-${this.name}`))
+  }
 }
+
+const TASK_NAMES = ['ner', 'text-classification']
 
 export default class Run extends Command {
   static description = 'Train your bot with NLP'
 
   static examples = [
-    `$ botonic train [--task=<${Object.values(TASKS).join('|')}>]
+    `$ botonic train [--task=<${TASK_NAMES.join('|')}>]
     TRAINING MODEL...
     `,
   ]
@@ -30,77 +59,32 @@ export default class Run extends Command {
 
   async run(): Promise<void> {
     const { flags } = this.parse(Run)
-    const task = flags.task
-    if (task) {
-      this.runSpecificTask(task)
-    } else {
-      this.runAllTasks()
-    }
+    flags.task ? this.runSpecificTask(flags.task) : this.runAllTasks()
   }
 
   private runAllTasks(): void {
-    this.runNerTask()
-    this.runTextClassificationTask()
+    TASK_NAMES.forEach(name => new Task(name).run())
   }
 
-  private runSpecificTask(task: string): void {
-    switch (task) {
-      case TASKS.NER:
-        this.runNerTask()
-        break
-      case TASKS.TEXT_CLASSIFICATION:
-        this.runTextClassificationTask()
-        break
-      default:
-        this.logInvalidTask(task)
-        break
-    }
-  }
-
-  private runNerTask(): void {
-    const packageName = `plugin-${TASKS.NER}`
-    if (this.isPackageInstalled(packageName)) {
-      track(`Trained with Botonic train:${TASKS.NER}`)
-      spawnNpmScript(`train:${TASKS.NER}`, () => `Finished training `)
+  private runSpecificTask(taskName: string): void {
+    if (this.isInvalidTask(taskName)) {
+      this.logInvalidTask(taskName)
     } else {
-      this.logPackageNotInstalled(packageName)
+      new Task(taskName).run()
     }
   }
 
-  private runTextClassificationTask(): void {
-    const packageName = `plugin-${TASKS.TEXT_CLASSIFICATION}`
-    if (this.isPackageInstalled(packageName)) {
-      track(`Trained with Botonic train:${TASKS.TEXT_CLASSIFICATION}`)
-      spawnNpmScript(
-        `train:${TASKS.TEXT_CLASSIFICATION}`,
-        () => `Finished training `
-      )
-    } else {
-      this.logPackageNotInstalled(packageName)
-    }
+  private isInvalidTask(taskName: string): boolean {
+    return !TASK_NAMES.includes(taskName)
   }
 
   private logInvalidTask(task: string): void {
-    console.log(
+    console.error(
       colors.red(
         `Unsupported task '${task}'. Available tasks: '${Object.values(
-          TASKS
+          TASK_NAMES
         ).join("', '")}'.`
       )
     )
-  }
-
-  private isPackageInstalled(packageName: string): boolean {
-    const path = join(process.cwd(), 'node_modules', '@botonic', packageName)
-    return existsSync(path)
-  }
-
-  private logPackageNotInstalled(packageName: string): void {
-    console.log(
-      colors.red(
-        `Training process has been stopped because you don't have @botonic/${packageName} installed.\nPlease, install it with the following command:`
-      )
-    )
-    console.log(`$ npm install @botonic/${packageName}`)
   }
 }
