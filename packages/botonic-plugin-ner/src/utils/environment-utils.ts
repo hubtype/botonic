@@ -12,11 +12,11 @@ import {
 import { ModelInfo } from '../types'
 
 export async function getModelInfo(locale: Locale): Promise<ModelInfo> {
-  const isProd = process.env.STATIC_URL !== undefined
-  const domain = isProd ? process.env.STATIC_URL : window.location.href
-  const uri = isProd
-    ? `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${NER_DIR}/${locale}`
-    : `${domain}/${NER_DIR}/${MODELS_DIR}/${locale}`
+  const isLocalModel = process.env.STATIC_URL === undefined
+  const domain = isLocalModel ? window.location.href : process.env.STATIC_URL
+  const uri = isLocalModel
+    ? `${domain}/${NER_DIR}/${MODELS_DIR}/${locale}`
+    : `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${NER_DIR}/${locale}`
   return {
     config: (await axios({ url: `${uri}/${CONFIG_FILENAME}` })).data,
     model: await loadLayersModel(`${uri}/${MODEL_FILENAME}`),
