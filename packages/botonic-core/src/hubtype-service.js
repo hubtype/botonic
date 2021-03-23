@@ -151,28 +151,20 @@ export class HubtypeService {
     })
   }
 
-  // eslint-disable-next-line consistent-return
   async postMessage(user, message) {
     try {
       await this.init(user)
-    } catch (e) {
-      this.handleUnsentInput(message)
-      return Promise.resolve()
-    }
-    try {
-      return axios
-        .post(
-          `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
-          {
-            sender: this.user,
-            message: message,
-          }
-        )
-        .then(res => {
-          if (res && res.status === 200) this.handleSentInput(message)
-          return
-        })
-        .catch(e => this.handleUnsentInput(message))
+      await axios.post(
+        `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
+        {
+          sender: this.user,
+          message: message,
+        },
+        {
+          validateStatus: status => status === 200,
+        }
+      )
+      this.handleSentInput(message)
     } catch (e) {
       this.handleUnsentInput(message)
     }
