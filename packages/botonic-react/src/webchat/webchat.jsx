@@ -194,8 +194,6 @@ export const Webchat = forwardRef((props, ref) => {
   } = props.webchatHooks || useWebchat()
   const firstUpdate = useRef(true)
   const isOnline = () => webchatState.online
-  const updateLastMessageDateIfOnline = () =>
-    isOnline() && updateLastMessageDate(new Date().toISOString())
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
@@ -257,9 +255,6 @@ export const Webchat = forwardRef((props, ref) => {
         lastRoutePath: webchatState.lastRoutePath,
       })
   }
-
-  const onConnectionRegained = async () =>
-    props.onConnectionRegained && props.onConnectionRegained()
 
   // Load styles stored in window._botonicInsertStyles by Webpack
   useComponentWillMount(() => {
@@ -349,7 +344,6 @@ export const Webchat = forwardRef((props, ref) => {
       })
     } else {
       if (!firstUpdate.current) {
-        await onConnectionRegained()
         setError(undefined)
       }
     }
@@ -527,7 +521,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (isMedia(input)) input.data = await readDataURL(input.data)
     sendUserInput(input)
     updateLatestInput(input)
-    updateLastMessageDateIfOnline()
+    isOnline() && updateLastMessageDate(new Date().toISOString())
     updateReplies(false)
     togglePersistentMenu(false)
     toggleEmojiPicker(false)
@@ -553,7 +547,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateHandoff(handoff)
       }
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-      updateLastMessageDateIfOnline()
+      updateLastMessageDate(new Date().toISOString())
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),

@@ -37,7 +37,6 @@ export class HubtypeService {
     this.server = server
     if (user.id && (lastMessageId || lastMessageUpdateDate)) {
       this.init()
-      this.resendUnsentInputs()
     }
   }
 
@@ -48,6 +47,15 @@ export class HubtypeService {
     return {
       activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
       pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
+    }
+  }
+
+  updateAuthHeaders() {
+    if (this.pusher) {
+      this.pusher.config.auth.headers = {
+        ...this.pusher.config.auth.headers,
+        ...this.constructHeaders(),
+      }
     }
   }
 
@@ -79,9 +87,14 @@ export class HubtypeService {
         10000
       )
       this.channel.bind('pusher:subscription_succeeded', () => {
+        // Once subscribed, we know that authentication has been done: https://pusher.com/docs/channels/server_api/authenticating-users
+        this.onConnectionRegained()
         clearTimeout(connectTimeout)
         resolve()
       })
+      this.channel.bind('botonic_response', data => this.onPusherEvent(data))
+      this.channel.bind('update_message_info', data => this.onPusherEvent(data))
+
       this.pusher.connection.bind('error', event => {
         if (event.type == 'WebSocketError') this.handleConnectionChange(false)
         else {
@@ -93,14 +106,12 @@ export class HubtypeService {
         }
       })
     })
-    this.pusher.connection.bind('connected', () =>
-      this.handleConnectionChange(true)
-    )
-    this.pusher.connection.bind('unavailable', () =>
-      this.handleConnectionChange(false)
-    )
-    this.channel.bind('botonic_response', data => this.onPusherEvent(data))
-    this.channel.bind('update_message_info', data => this.onPusherEvent(data))
+    this.pusher.connection.bind('state_change', states => {
+      if (states.current === 'connecting') this.updateAuthHeaders()
+      if (states.current === 'connected') this.handleConnectionChange(true)
+      if (states.current === 'unavailable') this.handleConnectionChange(false)
+    })
+
     return connectionPromise
   }
 
@@ -183,8 +194,6 @@ export class HubtypeService {
   }
 
   async onConnectionRegained() {
-    this.destroyPusher()
-    await this.init()
     await this.resendUnsentInputs()
   }
 

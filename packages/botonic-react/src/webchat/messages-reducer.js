@@ -14,7 +14,10 @@ export const messagesReducer = (state, action) => {
     case ADD_MESSAGE_COMPONENT:
       return {
         ...state,
-        messagesComponents: [...state.messagesComponents, action.payload],
+        messagesComponents: [
+          ...(state.messagesComponents || []),
+          action.payload,
+        ],
       }
     case UPDATE_MESSAGE:
       return updateMessageReducer(state, action)
@@ -78,6 +81,6 @@ function addMessageReducer(state, action) {
     return state
   return {
     ...state,
-    messagesJSON: [...(state.messagesJSON || []), { ...action.payload }],
+    messagesJSON: [...(state.messagesJSON || []), action.payload],
   }
 }
