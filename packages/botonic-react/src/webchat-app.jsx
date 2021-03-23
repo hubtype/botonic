@@ -307,7 +307,6 @@ export class WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
-        onConnectionRegained={() => this.onConnectionRegained()}
         server={server}
       />
     )

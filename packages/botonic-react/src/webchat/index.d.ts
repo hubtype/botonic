@@ -37,7 +37,7 @@ export interface WebchatState {
   isEmojiPickerOpen: boolean
   isPersistentMenuOpen: boolean
   isCoverComponentOpen: boolean
-  lastMessageUpdate: undefined
+  lastMessageUpdate: string
   currentAttachment: File | undefined
 }
 
