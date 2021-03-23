@@ -1,36 +1,24 @@
 import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
 
-import { NamedEntityRecognizer } from './model/ner'
+import { ModelsRouter } from './model/models-router'
 import { PluginOptions } from './types'
-import { detectLocale } from './utils/locale-utils'
 
 export default class BotonicPluginNER implements Plugin {
-  private recognizers: { [locale: string]: NamedEntityRecognizer } = {}
+  private modelsRouter: ModelsRouter
 
   constructor(readonly options: PluginOptions) {
     // @ts-ignore
     return (async () => {
-      await this.init()
+      this.modelsRouter = await new ModelsRouter(this.options.locales)
       return this
     })()
-  }
-
-  async init(): Promise<void> {
-    this.options.locales.forEach(async locale => {
-      this.recognizers[locale] = await new NamedEntityRecognizer(locale)
-    })
   }
 
   pre(request: PluginPreRequest): void {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
-        const locale = detectLocale(request.input.data, this.options.locales)
-        const ner = this.recognizers[locale]
-        if (!ner) {
-          throw new Error('NER Model not ready.')
-        }
-        const entities = ner.recognize(request.input.data)
+        const entities = this.modelsRouter.recognizeEntities(request.input.data)
         Object.assign(request.input, { entities })
       }
     } catch (e) {
