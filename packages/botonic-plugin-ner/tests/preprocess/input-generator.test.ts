@@ -6,8 +6,7 @@ describe('Input generator', () => {
   test('generate input', () => {
     const generator = new InputGenerator(
       toolsHelper.preprocessor,
-      toolsHelper.tokenCodifier,
-      toolsHelper.entitiesCodifier
+      toolsHelper.tokenCodifier
     )
 
     const sut = generator.generate(constantsHelper.SENTENCE)

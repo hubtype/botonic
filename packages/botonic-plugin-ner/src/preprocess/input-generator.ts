@@ -4,14 +4,12 @@ import {
   UNKNOWN_TOKEN,
 } from '@botonic/nlp/dist/preprocess/constants'
 import { Preprocessor } from '@botonic/nlp/dist/preprocess/preprocessor'
-import { tensor } from '@tensorflow/tfjs-core/dist/ops/tensor'
-import { Tensor2D } from '@tensorflow/tfjs-core/dist/tensor'
+import { tensor, Tensor2D } from '@tensorflow/tfjs'
 
 export class InputGenerator {
   constructor(
     readonly preprocessor: Preprocessor,
-    readonly tokenCodifier: Codifier,
-    readonly entityCodifier: Codifier
+    readonly tokenCodifier: Codifier
   ) {}
 
   generate(text: string): { sequence: string[]; input: Tensor2D } {

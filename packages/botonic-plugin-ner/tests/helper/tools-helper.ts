@@ -1,8 +1,7 @@
 import { Codifier } from '@botonic/nlp/dist/preprocess/codifier'
 import { Preprocessor } from '@botonic/nlp/dist/preprocess/preprocessor'
 
-import { ENTITIES, LOCALE, MAX_LENGTH, VOCABULARY } from './constants-helper'
+import { LOCALE, MAX_LENGTH, VOCABULARY } from './constants-helper'
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_LENGTH)
 export const tokenCodifier = new Codifier(VOCABULARY, { isCategorical: false })
-export const entitiesCodifier = new Codifier(ENTITIES, { isCategorical: true })
