@@ -109,8 +109,8 @@ export class BotonicAPIService {
   }
 
   logout(): void {
-    const globalCredentialsPath = this.globalCredentialsHandler.homeDir
-    if (pathExists(globalCredentialsPath)) unlinkSync(globalCredentialsPath)
+    const pathToCredentials = this.globalCredentialsHandler.pathToCredentials
+    if (pathExists(pathToCredentials)) unlinkSync(pathToCredentials)
   }
 
   async api(
