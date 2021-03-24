@@ -121,13 +121,10 @@ export const Message = props => {
   } = resolveMessageTimestamps(getThemeProperty, enabletimestamps)
 
   const getEnvAck = () => {
-    let ack = 0
-    if (isDev) ack = 1
-    else {
-      if (props.ack !== undefined) ack = props.ack
-      else ack = isFromUser ? 0 : 1
-    }
-    return ack
+    if (isDev) return 1
+    if (!isFromUser) return 1
+    if (props.ack !== undefined) return props.ack
+    return 0
   }
 
   const ack = getEnvAck()

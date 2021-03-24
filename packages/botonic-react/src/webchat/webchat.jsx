@@ -193,6 +193,8 @@ export const Webchat = forwardRef((props, ref) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const firstUpdate = useRef(true)
+  const isOnline = () => webchatState.online
+  const currentDateString = () => new Date().toISOString()
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
@@ -254,9 +256,6 @@ export const Webchat = forwardRef((props, ref) => {
         lastRoutePath: webchatState.lastRoutePath,
       })
   }
-
-  const resendUnsentInputs = async () =>
-    props.resendUnsentInputs && props.resendUnsentInputs()
 
   // Load styles stored in window._botonicInsertStyles by Webpack
   useComponentWillMount(() => {
@@ -346,7 +345,6 @@ export const Webchat = forwardRef((props, ref) => {
       })
     } else {
       if (!firstUpdate.current) {
-        await resendUnsentInputs()
         setError(undefined)
       }
     }
@@ -524,7 +522,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (isMedia(input)) input.data = await readDataURL(input.data)
     sendUserInput(input)
     updateLatestInput(input)
-    updateLastMessageDate(new Date())
+    isOnline() && updateLastMessageDate(currentDateString())
     updateReplies(false)
     togglePersistentMenu(false)
     toggleEmojiPicker(false)
@@ -550,7 +548,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateHandoff(handoff)
       }
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-      updateLastMessageDate(new Date())
+      updateLastMessageDate(currentDateString())
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
@@ -566,7 +564,7 @@ export const Webchat = forwardRef((props, ref) => {
     setError,
     setOnline,
     getMessages: () => webchatState.messagesJSON,
-    isOnline: () => webchatState.online,
+    isOnline,
     clearMessages: () => {
       clearMessages()
       updateReplies(false)

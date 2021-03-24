@@ -111,18 +111,23 @@ export class WebchatApp {
     return this.hubtypeService.postMessage(user, input)
   }
 
-  async resendUnsentInputs() {
-    return this.hubtypeService.resendUnsentInputs()
+  async onConnectionRegained() {
+    return this.hubtypeService.onConnectionRegained()
   }
 
   onStateChange({ session: { user }, messagesJSON }) {
-    if (!this.hubtypeService && user) {
-      const lastMessage = messagesJSON[messagesJSON.length - 1]
+    const lastMessage = messagesJSON[messagesJSON.length - 1]
+    const lastMessageId = lastMessage && lastMessage.id
+    const lastMessageUpdateDate = this.getLastMessageUpdate()
+    if (this.hubtypeService) {
+      this.hubtypeService.lastMessageId = lastMessageId
+      this.hubtypeService.lastMessageUpdateDate = lastMessageUpdateDate
+    } else if (!this.hubtypeService && user) {
       this.hubtypeService = new HubtypeService({
         appId: this.appId,
         user,
-        lastMessageId: lastMessage && lastMessage.id,
-        lastMessageUpdateDate: this.getLastMessageUpdate(),
+        lastMessageId,
+        lastMessageUpdateDate,
         onEvent: event => this.onServiceEvent(event),
         unsentInputs: () =>
           this.webchatRef.current
@@ -300,9 +305,6 @@ export class WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
-        resendUnsentInputs={() =>
-          this.hubtypeService && this.hubtypeService.resendUnsentInputs()
-        }
         server={server}
       />
     )

@@ -37,7 +37,6 @@ export class HubtypeService {
     this.server = server
     if (user.id && (lastMessageId || lastMessageUpdateDate)) {
       this.init()
-      this.resendUnsentInputs()
     }
   }
 
@@ -48,6 +47,15 @@ export class HubtypeService {
     return {
       activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
       pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
+    }
+  }
+
+  updateAuthHeaders() {
+    if (this.pusher) {
+      this.pusher.config.auth.headers = {
+        ...this.pusher.config.auth.headers,
+        ...this.constructHeaders(),
+      }
     }
   }
 
@@ -71,9 +79,7 @@ export class HubtypeService {
       const cleanAndReject = msg => {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         clearTimeout(connectTimeout)
-        this.pusher.connection.unbind()
-        this.channel.unbind()
-        this.pusher = null
+        this.destroyPusher()
         reject(msg)
       }
       const connectTimeout = setTimeout(
@@ -81,29 +87,31 @@ export class HubtypeService {
         10000
       )
       this.channel.bind('pusher:subscription_succeeded', () => {
+        // Once subscribed, we know that authentication has been done: https://pusher.com/docs/channels/server_api/authenticating-users
+        this.onConnectionRegained()
         clearTimeout(connectTimeout)
         resolve()
       })
+      this.channel.bind('botonic_response', data => this.onPusherEvent(data))
+      this.channel.bind('update_message_info', data => this.onPusherEvent(data))
+
       this.pusher.connection.bind('error', event => {
         if (event.type == 'WebSocketError') this.handleConnectionChange(false)
-        const errorMsg =
-          event.error && event.error.data
-            ? event.error.data.code || event.error.data.message
-            : 'Connection error'
-        cleanAndReject(`Pusher error (${errorMsg})`)
+        else {
+          const errorMsg =
+            event.error && event.error.data
+              ? event.error.data.code || event.error.data.message
+              : 'Connection error'
+          cleanAndReject(`Pusher error (${errorMsg})`)
+        }
       })
     })
-    this.pusher.connection.bind('connected', () =>
-      this.handleConnectionChange(true)
-    )
-    this.pusher.connection.bind('disconnected', () =>
-      this.handleConnectionChange(false)
-    )
-    this.pusher.connection.bind('unavailable', () =>
-      this.handleConnectionChange(false)
-    )
-    this.channel.bind('botonic_response', data => this.onPusherEvent(data))
-    this.channel.bind('update_message_info', data => this.onPusherEvent(data))
+    this.pusher.connection.bind('state_change', states => {
+      if (states.current === 'connecting') this.updateAuthHeaders()
+      if (states.current === 'connected') this.handleConnectionChange(true)
+      if (states.current === 'unavailable') this.handleConnectionChange(false)
+    })
+
     return connectionPromise
   }
 
@@ -143,29 +151,20 @@ export class HubtypeService {
     })
   }
 
-  // eslint-disable-next-line consistent-return
   async postMessage(user, message) {
     try {
       await this.init(user)
-    } catch (e) {
-      this.handleUnsentInput(message)
-      this.handleConnectionChange(false)
-      return Promise.resolve()
-    }
-    try {
-      return axios
-        .post(
-          `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
-          {
-            sender: this.user,
-            message: message,
-          }
-        )
-        .then(res => {
-          if (res && res.status === 200) this.handleSentInput(message)
-          return
-        })
-        .catch(e => this.handleUnsentInput(message))
+      await axios.post(
+        `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
+        {
+          sender: this.user,
+          message: message,
+        },
+        {
+          validateStatus: status => status === 200,
+        }
+      )
+      this.handleSentInput(message)
     } catch (e) {
       this.handleUnsentInput(message)
     }
@@ -175,6 +174,19 @@ export class HubtypeService {
     return axios.get(
       `${_HUBTYPE_API_URL_}/v1/provider_accounts/${appId}/visibility/`
     )
+  }
+
+  destroyPusher() {
+    if (!this.pusher) return
+    this.pusher.disconnect()
+    this.pusher.unsubscribe(this.pusherChannel)
+    this.pusher.unbind_all()
+    this.pusher.channels = {}
+    this.pusher = null
+  }
+
+  async onConnectionRegained() {
+    await this.resendUnsentInputs()
   }
 
   async resendUnsentInputs() {

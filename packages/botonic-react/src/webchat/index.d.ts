@@ -37,13 +37,13 @@ export interface WebchatState {
   isEmojiPickerOpen: boolean
   isPersistentMenuOpen: boolean
   isCoverComponentOpen: boolean
-  lastMessageUpdate: undefined
+  lastMessageUpdate: string
   currentAttachment: File | undefined
 }
 
 export interface WebchatProps extends WebchatArgs {
   ref: RefObject<any>
-  resendUnsentInputs?: () => Promise<void>
+  onConnectionRegained?: () => Promise<void>
 }
 export const WebChat: React.ForwardRefExoticComponent<WebchatProps>
 

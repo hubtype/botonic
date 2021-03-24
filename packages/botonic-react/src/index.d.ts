@@ -177,7 +177,7 @@ export class WebchatApp {
   getComponent(
     optionsAtRuntime?: WebchatAppArgs
   ): React.ForwardRefExoticComponent<any>
-  getLastMessageUpdate(): Date
+  getLastMessageUpdate(): string
   getMessages(): WebchatMessage[]
   getVisibility(): Promise<boolean>
   isWebchatVisible({ appId: string }): Promise<boolean>
@@ -199,6 +199,7 @@ export class WebchatApp {
   toggle(): void
   toggleCoverComponent(): void
   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
+  updateLastMessageDate(date: string): void
   updateUser(user: core.SessionUser): void
   updateWebchatSettings(settings: WebchatSettingsProps): void
 }
