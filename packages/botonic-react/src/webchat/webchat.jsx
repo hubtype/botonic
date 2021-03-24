@@ -194,6 +194,7 @@ export const Webchat = forwardRef((props, ref) => {
   } = props.webchatHooks || useWebchat()
   const firstUpdate = useRef(true)
   const isOnline = () => webchatState.online
+  const currentDateString = () => new Date().toISOString()
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
@@ -521,7 +522,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (isMedia(input)) input.data = await readDataURL(input.data)
     sendUserInput(input)
     updateLatestInput(input)
-    isOnline() && updateLastMessageDate(new Date().toISOString())
+    isOnline() && updateLastMessageDate(currentDateString())
     updateReplies(false)
     togglePersistentMenu(false)
     toggleEmojiPicker(false)
@@ -547,7 +548,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateHandoff(handoff)
       }
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-      updateLastMessageDate(new Date().toISOString())
+      updateLastMessageDate(currentDateString())
     },
     setTyping: typing => updateTyping(typing),
     addUserMessage: message => sendInput(message),
