@@ -121,3 +121,9 @@ repos:
         entry: scripts/qa/lint-package.sh docs/website
         language: system
         files: ^docs/website/
+
+      - id: plugin-ner
+        name: plugin-ner
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-ner
+        language: system
+        files: ^packages/botonic-plugin-ner/
