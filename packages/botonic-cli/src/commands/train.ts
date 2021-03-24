@@ -4,6 +4,7 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 
 import { Telemetry } from '../analytics/telemetry'
+import { BOTONIC_NPM_NAMESPACE, BOTONIC_PROJECT_PATH } from '../constants'
 import { spawnNpmScript } from '../util/system'
 
 class Task {
@@ -11,7 +12,6 @@ class Task {
 
   run(): void {
     if (this.isTaskPluginInstalled()) {
-      track(`Trained with Botonic train:${this.name}`)
       spawnNpmScript(`train:${this.name}`, () => `Finished training `)
     } else {
       this.logTaskPluginNotInstalled()
@@ -20,9 +20,9 @@ class Task {
 
   private isTaskPluginInstalled(): boolean {
     const path = join(
-      process.cwd(),
+      BOTONIC_PROJECT_PATH,
       'node_modules',
-      '@botonic',
+      BOTONIC_NPM_NAMESPACE,
       `plugin-${this.name}`
     )
     return existsSync(path)
@@ -58,6 +58,7 @@ export default class Run extends Command {
   private telemetry = new Telemetry()
 
   async run(): Promise<void> {
+    this.telemetry.trackTrain()
     const { flags } = this.parse(Run)
     flags.task ? this.runSpecificTask(flags.task) : this.runAllTasks()
   }
