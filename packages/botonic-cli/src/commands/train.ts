@@ -38,13 +38,35 @@ class Task {
   }
 }
 
-const TASK_NAMES = ['ner', 'text-classification']
+class Tasks {
+  static tasks = {
+    ner: new Task('ner'),
+    'text-classification': new Task('text-classification'),
+  }
+
+  static getByName(taskName: string): Task {
+    if (this.isInvalidTask(taskName)) {
+      throw new Error(this.getInvalidTaskMessage(taskName))
+    }
+    return this.tasks[taskName]
+  }
+
+  private static isInvalidTask(taskName: string): boolean {
+    return !Object.keys(this.tasks).includes(taskName)
+  }
+
+  private static getInvalidTaskMessage(taskName: string): string {
+    return `Unsupported task '${taskName}'. Available tasks: '${Object.keys(
+      this.tasks
+    ).join("', '")}'.`
+  }
+}
 
 export default class Run extends Command {
   static description = 'Train your bot with NLP'
 
   static examples = [
-    `$ botonic train [--task=<${TASK_NAMES.join('|')}>]
+    `$ botonic train [--task=<${Object.keys(Tasks.tasks).join('|')}>]
     TRAINING MODEL...
     `,
   ]
@@ -58,34 +80,17 @@ export default class Run extends Command {
   private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackTrain()
-    const { flags } = this.parse(Run)
-    flags.task ? this.runSpecificTask(flags.task) : this.runAllTasks()
-  }
-
-  private runAllTasks(): void {
-    TASK_NAMES.forEach(name => new Task(name).run())
-  }
-
-  private runSpecificTask(taskName: string): void {
-    if (this.isInvalidTask(taskName)) {
-      this.logInvalidTask(taskName)
-    } else {
-      new Task(taskName).run()
+    try {
+      this.telemetry.trackTrain()
+      const { flags } = this.parse(Run)
+      const tasks = this.getTasks(flags.task)
+      tasks.forEach(task => task.run())
+    } catch (e) {
+      console.error(e)
     }
   }
 
-  private isInvalidTask(taskName: string): boolean {
-    return !TASK_NAMES.includes(taskName)
-  }
-
-  private logInvalidTask(task: string): void {
-    console.error(
-      colors.red(
-        `Unsupported task '${task}'. Available tasks: '${Object.values(
-          TASK_NAMES
-        ).join("', '")}'.`
-      )
-    )
+  private getTasks(taskName: string | undefined): Task[] {
+    return taskName ? [Tasks.getByName(taskName)] : Object.values(Tasks.tasks)
   }
 }
