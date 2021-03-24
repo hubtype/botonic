@@ -31,15 +31,15 @@ export class InputGenerator {
     )
   }
 
-  private maskUnknownTokens(tokens: string[]): string[] {
-    return tokens.map(t =>
-      this.tokenCodifier.vocabulary.includes(t) ? t : UNKNOWN_TOKEN
-    )
-  }
-
   private processTokens(sequence: string[]): number[] {
     return this.tokenCodifier.encode(
       this.maskUnknownTokens(sequence)
     ) as number[]
+  }
+
+  private maskUnknownTokens(tokens: string[]): string[] {
+    return tokens.map(t =>
+      this.tokenCodifier.vocabulary.includes(t) ? t : UNKNOWN_TOKEN
+    )
   }
 }
