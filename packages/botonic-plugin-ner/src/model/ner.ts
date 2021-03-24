@@ -30,8 +30,7 @@ export class NamedEntityRecognizer {
     this.config = config
     this.inputGenerator = new InputGenerator(
       new Preprocessor(config.locale, config.maxLength),
-      new Codifier(config.vocabulary, { isCategorical: false }),
-      new Codifier(config.entities, { isCategorical: true })
+      new Codifier(config.vocabulary, { isCategorical: false })
     )
     this.predictionProcessor = new PredictionProcessor(config.entities)
   }
