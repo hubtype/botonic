@@ -581,6 +581,7 @@ export const Webchat = forwardRef((props, ref) => {
     updateWebchatSettings: settings => {
       const themeUpdates = normalizeWebchatSettings(settings)
       updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
+      updateLastMessageDate(currentDateString())
     },
   }))
 
