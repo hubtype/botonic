@@ -7,24 +7,11 @@ import {
   UPDATE_REPLIES,
 } from './actions'
 
-const getMsgComponentId = m => {
-  if (m.props.id) return m.props.id
-  if (m.props.value) return m.props.value.input && m.props.value.input.id
-  return undefined
-}
-
 export const messagesReducer = (state, action) => {
   switch (action.type) {
     case ADD_MESSAGE:
       return addMessageReducer(state, action)
     case ADD_MESSAGE_COMPONENT:
-      if (
-        state.messagesComponents &&
-        state.messagesComponents.find(
-          m => getMsgComponentId(m) === action.payload.id
-        )
-      )
-        return state
       return {
         ...state,
         messagesComponents: [
