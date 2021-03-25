@@ -38,6 +38,16 @@ class Task {
   }
 }
 
+class InvalidTaskError extends Error {
+  constructor(taskName: string, availableTasks: string[]) {
+    super(
+      `Unsupported task '${taskName}'. Available tasks: '${availableTasks.join(
+        "', '"
+      )}'.`
+    )
+  }
+}
+
 class Tasks {
   static tasks = {
     ner: new Task('ner'),
@@ -46,19 +56,13 @@ class Tasks {
 
   static getByName(taskName: string): Task {
     if (this.isInvalidTask(taskName)) {
-      throw new Error(this.getInvalidTaskMessage(taskName))
+      throw new InvalidTaskError(taskName, Object.keys(this.tasks))
     }
     return this.tasks[taskName]
   }
 
   private static isInvalidTask(taskName: string): boolean {
     return !Object.keys(this.tasks).includes(taskName)
-  }
-
-  private static getInvalidTaskMessage(taskName: string): string {
-    return `Unsupported task '${taskName}'. Available tasks: '${Object.keys(
-      this.tasks
-    ).join("', '")}'.`
   }
 }
 
