@@ -55,14 +55,14 @@ export class Tasks {
   }
 
   static getByName(taskName: string): Task {
-    if (this.isInvalidTask(taskName)) {
+    if (!this.isValidTask(taskName)) {
       throw new InvalidTaskError(taskName, Object.keys(this.tasks))
     }
     return this.tasks[taskName]
   }
 
-  private static isInvalidTask(taskName: string): boolean {
-    return !Object.keys(this.tasks).includes(taskName)
+  private static isValidTask(taskName: string): boolean {
+    return Object.keys(this.tasks).includes(taskName)
   }
 }
 
