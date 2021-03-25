@@ -48,7 +48,7 @@ class InvalidTaskError extends Error {
   }
 }
 
-class Tasks {
+export class Tasks {
   static tasks = {
     ner: new Task('ner'),
     'text-classification': new Task('text-classification'),
