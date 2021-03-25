@@ -11,9 +11,12 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "ibm-watson": "^6.0.0"
+    "@babel/runtime": "^7.13.10",
+    "axios": "^0.21.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/axios": "^0.14.0"
+  },
   "keywords": [
     "bot-framework",
     "chatbot",
