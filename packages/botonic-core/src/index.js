@@ -15,6 +15,7 @@ export {
 export { HubtypeService } from './hubtype-service'
 export { getString } from './i18n'
 export { Router } from './router'
+export { Router2 } from './router-another'
 export { isBrowser, isMobile, isNode, params2queryString } from './utils'
 
 export const PROVIDER = Object.freeze({
