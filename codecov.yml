@@ -27,6 +27,11 @@ flags:
     paths:
       - packages/botonic-plugin-contentful
     carryforward: true
+  
+  botonic-plugin-dialogflow:
+    paths:
+      - packages/botonic-plugin-dialogflow
+    carryforward: true
 
   botonic-plugin-dynamodb:
     paths:
