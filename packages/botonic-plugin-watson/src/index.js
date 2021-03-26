@@ -2,8 +2,19 @@ import axios from 'axios'
 
 // TODO: Documentate changes
 
-const REQUIRED_OPTIONS = ['apikey', 'url', 'assistant_id']
 export default class BotonicPluginWatson {
+  REQUIRED_OPTION_FIELDS = ['apikey', 'url', 'assistant_id']
+
+  EXPECTED_SESSION_ID_REQUEST_STATUS = 201
+  EXPECTED_OUTPUT_REQUEST_STATUS = 200
+
+  UNKNOWN_INTENT_LABEL = 'unknown'
+  UNKNOWN_INTENT_CONFIDENCE = 1
+  UNKNOWN_INTENT = {
+    label: this.UNKNOWN_INTENT_LABEL,
+    confidence: this.UNKNOWN_INTENT_CONFIDENCE,
+  }
+
   constructor(options) {
     try {
       this.validateOptions(options)
@@ -11,6 +22,30 @@ export default class BotonicPluginWatson {
     } catch (e) {
       console.error(String(e))
     }
+  }
+
+  validateOptions(options) {
+    if (!options) throw new Error('No options provided.')
+    if (!this.areRequiredOptionsProvided(options))
+      throw new Error('Missing one or more fields.')
+    if (!this.areRequiredOptionsDefined(options))
+      throw new Error('One or more fields are not defined.')
+  }
+
+  areRequiredOptionsProvided(options) {
+    const requiredOptionsFieldsProvided = Object.keys(options).filter(field =>
+      this.REQUIRED_OPTION_FIELDS.includes(field)
+    )
+    return (
+      requiredOptionsFieldsProvided.length == this.REQUIRED_OPTION_FIELDS.length
+    )
+  }
+
+  areRequiredOptionsDefined(options) {
+    const requiredOptionsProvided = Object.entries(
+      options
+    ).filter(([field, _]) => this.REQUIRED_OPTION_FIELDS.includes(field))
+    return !requiredOptionsProvided.some(([_, value]) => value === undefined)
   }
 
   init(options) {
@@ -21,72 +56,74 @@ export default class BotonicPluginWatson {
     this.sessionId = this.getSessionId()
   }
 
-  validateOptions(options) {
-    if (!options) throw new Error('No options provided.')
-    const requiredOptionsProvided = Object.entries(options).filter(([k, _]) =>
-      REQUIRED_OPTIONS.includes(k)
+  async getSessionId() {
+    const { data } = await axios.post(
+      `${this.getAssistantEndpoint()}/sessions?version=${this.version}`,
+      {},
+      {
+        auth: this.getAuthentication(),
+        validateStatus: status =>
+          status === this.EXPECTED_SESSION_ID_REQUEST_STATUS,
+      }
     )
-    if (requiredOptionsProvided.length !== REQUIRED_OPTIONS.length)
-      throw new Error('Missing one or more fields.')
-    if (requiredOptionsProvided.some(([_, v]) => v === undefined))
-      throw new Error('One or more fields are not defined.')
+    return data.session_id
   }
 
   getAssistantEndpoint() {
     return `${this.url}/v2/assistants/${this.assistantId}`
   }
 
-  async getSessionId() {
-    const {
-      data: { session_id },
-    } = await axios.post(
-      `${this.getAssistantEndpoint()}/sessions?version=${this.version}`,
-      {},
-      {
-        auth: { username: 'apikey', password: this.apiKey },
-        validateStatus: status => status === 201,
-      }
-    )
-    return session_id
+  getAuthentication() {
+    return { username: 'apikey', password: this.apiKey }
   }
 
   async pre({ input }) {
-    let intent = null
-    let confidence = 0
-    let intents = []
-    let entities = []
     try {
-      // TODO: Understand sessionId logic/api-limits
-      const sessionId = await this.sessionId
-      const {
-        data: { output },
-      } = await axios.post(
-        `${this.getAssistantEndpoint()}/sessions/${sessionId}/message?version=${
-          this.version
-        }`,
-        { input: { text: input.data } },
-        {
-          auth: { username: 'apikey', password: this.apiKey },
-          headers: { 'Content-Type': 'application/json' },
-          validateStatus: status => status === 200,
-        }
-      )
-      // TODO: Convert results to our Botonic standard
-      intent = output.intents[0].intent
-      confidence = output.intents[0].confidence
-      intents = output.intents
-      entities = output.entities
-      const defaultFallback = output.generic //example in dialogflow plugin, decide which name?
-      Object.assign(input, {
-        intent,
-        confidence,
-        intents,
-        entities,
-        defaultFallback,
-      })
+      const output = await this.getWatsonOutput(input.data)
+      Object.assign(input, this.parseOutput(output))
     } catch (e) {
       console.error(String(e))
     }
+  }
+
+  async getWatsonOutput(text) {
+    const sessionId = await this.sessionId
+    const { data } = await axios.post(
+      `${this.getAssistantEndpoint()}/sessions/${sessionId}/message?version=${
+        this.version
+      }`,
+      { input: { text } },
+      {
+        auth: this.getAuthentication(),
+        headers: { 'Content-Type': 'application/json' },
+        validateStatus: status =>
+          status === this.EXPECTED_OUTPUT_REQUEST_STATUS,
+      }
+    )
+    return data.output
+  }
+
+  parseOutput(output) {
+    return {
+      intent: this.parseIntents(output.intents),
+      entities: this.parseEntities(output.entities),
+      defaultFallback: output.generic,
+    }
+  }
+
+  parseIntents(intents) {
+    if (intents.length == 0) return this.UNKNOWN_INTENT
+    intents.sort((i1, i2) => (i1.confidence > i2.confidence ? -1 : 1))
+    return {
+      label: intents[0].intent,
+      confidence: intents[0].confidence,
+    }
+  }
+
+  parseEntities(entities) {
+    return entities.map(e => {
+      return { value: e.value, entity: e.entity, confidence: e.confidence }
+    })
   }
 
   post({ input, session, lastRoutePath, response }) {}
