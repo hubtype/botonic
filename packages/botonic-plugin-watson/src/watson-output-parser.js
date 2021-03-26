@@ -6,7 +6,7 @@ export default class WatsonOutputParser {
     confidence: this.UNKNOWN_INTENT_CONFIDENCE,
   }
 
-  static parse(output) {
+  static parseToBotonicFormat(output) {
     return {
       intent: this.parseIntents(output.intents),
       entities: this.parseEntities(output.entities),

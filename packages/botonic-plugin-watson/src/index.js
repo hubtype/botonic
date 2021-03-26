@@ -80,7 +80,7 @@ export default class BotonicPluginWatson {
   async pre({ input }) {
     try {
       const output = await this.getWatsonOutput(input.data)
-      Object.assign(input, WatsonOutputParser.parse(output))
+      Object.assign(input, WatsonOutputParser.parseToBotonicFormat(output))
     } catch (e) {
       console.error(String(e))
     }
