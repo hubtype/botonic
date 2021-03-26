@@ -4,6 +4,9 @@ coverage:
       default:
         # if the coverage is under this value the Codecov GitHub check will fail
         threshold: 40%
+
+comment: false #https://docs.codecov.io/docs/pull-request-comments
+
 flags:
   botonic-cli:
     paths:
