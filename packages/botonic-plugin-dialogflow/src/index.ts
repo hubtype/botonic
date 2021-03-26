@@ -1,40 +1,44 @@
-import axios from 'axios'
+// eslint-disable-next-line import/named
+import { BotRequest } from '@botonic/core'
+import axios, { AxiosResponse } from 'axios'
 import { KJUR } from 'jsrsasign'
 import { v4 as uuidv4 } from 'uuid'
 
+import { Credentials } from './types'
+
 export default class BotonicPluginDialogflow {
-  constructor(creds) {
-    this.projectID = creds.project_id
-    this.sessionID = uuidv4()
+  sessionId: string
+  creds: Credentials
+  token: string
+  constructor(creds: Credentials) {
+    this.sessionId = uuidv4()
     this.creds = creds
-    this.token = null
   }
 
-  async getToken() {
-    if (!this.token) {
+  async getToken(): Promise<string> {
+    if (this.token == null) {
       this.token = await this.generateToken(this.creds)
     }
     return this.token
   }
 
-  async pre({ input, session, lastRoutePath }) {
+  async pre(botRequest: BotRequest): Promise<BotRequest> {
     try {
-      await this.dialogflowToInput({ input, session, lastRoutePath })
+      await this.dialogflowToInput(botRequest)
     } catch (error) {
-      console.log(error.response)
       await this.refreshToken()
-      await this.dialogflowToInput({ input, session, lastRoutePath })
+      await this.dialogflowToInput(botRequest)
     }
-    return { input, session, lastRoutePath }
+    return botRequest
   }
 
-  async post({ input, session, lastRoutePath, response }) {}
+  async post(): Promise<void> {}
 
-  async refreshToken() {
+  async refreshToken(): Promise<void> {
     this.token = await this.generateToken(this.creds)
   }
 
-  async generateToken(creds) {
+  async generateToken(creds: Credentials): Promise<string> {
     const header = {
       alg: 'RS256',
       typ: 'JWT',
@@ -48,7 +52,6 @@ export default class BotonicPluginDialogflow {
       aud:
         'https://dialogflow.googleapis.com/google.cloud.dialogflow.v2.Sessions',
     }
-
     const stringHeader = JSON.stringify(header)
     const stringPayload = JSON.stringify(payload)
     const token = KJUR.jws.JWS.sign(
@@ -60,11 +63,15 @@ export default class BotonicPluginDialogflow {
     return token
   }
 
-  async query(queryData, languageCode = 'en-US') {
+  async query(
+    queryData: string,
+    languageCode = 'en-US'
+  ): Promise<AxiosResponse> {
     return axios({
       method: 'post',
-      url: `https://dialogflow.googleapis.com/v2/projects/${this.projectID}/agent/sessions/${this.sessionID}:detectIntent`,
+      url: `https://dialogflow.googleapis.com/v2/projects/${this.creds.project_id}/agent/sessions/${this.sessionId}:detectIntent`,
       headers: {
+        /* eslint-disable @typescript-eslint/naming-convention */
         Authorization: `Bearer ${await this.getToken()}`,
         'Content-Type': 'application/json',
       },
@@ -79,17 +86,16 @@ export default class BotonicPluginDialogflow {
     })
   }
 
-  async dialogflowToInput({ input, session, lastRoutePath }) {
+  async dialogflowToInput(request: BotRequest): Promise<BotRequest> {
     let confidence = 0
     let intent = null
     const intents = []
     let entities = []
     let defaultFallback = ''
-    let dialogflowResponse = null
+    let dialogflowResponse: AxiosResponse
 
-    const queryData = input.data || input.payload || null
+    const queryData = request.input.data || request.input.payload || null
     dialogflowResponse = await this.query(queryData)
-
     const queryResult = dialogflowResponse.data.queryResult
     intent = queryResult.intent.displayName
     confidence = queryResult.intentDetectionConfidence
@@ -97,7 +103,7 @@ export default class BotonicPluginDialogflow {
     defaultFallback = queryResult.fulfillmentText
     dialogflowResponse = dialogflowResponse.data
 
-    Object.assign(input, {
+    Object.assign(request.input, {
       intent,
       confidence,
       intents,
@@ -105,6 +111,6 @@ export default class BotonicPluginDialogflow {
       defaultFallback,
       dialogflowResponse,
     })
-    return { input, session, lastRoutePath }
+    return request
   }
 }
