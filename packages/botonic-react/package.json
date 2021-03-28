@@ -4,6 +4,7 @@
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
@@ -23,7 +24,8 @@
     "src/**",
     "lib/**",
     "index.d.ts",
-    "MIGRATION_GUIDE.md"
+    "MIGRATION_GUIDE.md",
+    "README.md"
   ],
   "dependencies": {
     "@botonic/core": "~0.18.0",
