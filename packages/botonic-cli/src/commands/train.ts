@@ -29,22 +29,12 @@ class Task {
   }
 
   private logTaskPluginNotInstalled(): void {
-    console.error(
+    console.log(
       colors.red(
         `Training process has been stopped because you don't have @botonic/plugin-${this.name} installed.\nPlease, install it with the following command:`
       )
     )
     console.log(colors.bold(`$ npm install @botonic/plugin-${this.name}`))
-  }
-}
-
-class InvalidTaskError extends Error {
-  constructor(taskName: string, availableTasks: string[]) {
-    super(
-      `Unsupported task '${taskName}'. Available tasks: '${availableTasks.join(
-        "', '"
-      )}'.`
-    )
   }
 }
 
@@ -56,7 +46,11 @@ export class Tasks {
 
   static getByName(taskName: string): Task {
     if (!this.isValidTask(taskName)) {
-      throw new InvalidTaskError(taskName, Object.keys(this.tasks))
+      throw new Error(
+        `Unsupported task '${taskName}'. Available tasks: '${Object.keys(
+          this.tasks
+        ).join("', '")}'.`
+      )
     }
     return this.tasks[taskName]
   }
