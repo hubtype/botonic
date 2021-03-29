@@ -2,7 +2,7 @@
 
 ## What Does This Plugin Do?
 
-This plugin allows you to integrate [Watson Assistant v2](https://cloud.ibm.com/apidocs/assistant/assistant-v2) in your Botonic project. It works like any other AI/NLU services plugin, like Dialogflow, LUIS, etc.
+This plugin allows you to integrate [Watson Assistant v2](https://cloud.ibm.com/apidocs/assistant/assistant-v2) in your Botonic project.
 
 Once installed within your project, this plugin will send the user input to a workspace and receive a response.
 
