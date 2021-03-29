@@ -3,49 +3,40 @@ import axios from 'axios'
 import WatsonOutputParser from './watson-output-parser'
 
 export default class BotonicPluginWatson {
-  REQUIRED_OPTION_FIELDS = ['apikey', 'url', 'assistant_id']
+  REQUIRED_OPTIONS = ['apikey', 'url', 'assistant_id']
 
   EXPECTED_SESSION_ID_REQUEST_STATUS = 201
   EXPECTED_OUTPUT_REQUEST_STATUS = 200
 
   constructor(options) {
     try {
-      this.validateOptions(options)
-      this.init(options)
+      this.options = options
+      this.validateOptions()
+      this.init()
     } catch (e) {
       console.error(e)
     }
   }
 
-  validateOptions(options) {
-    if (!options) throw new Error('No options provided.')
-    if (!this.areRequiredOptionsProvided(options))
-      throw new Error('Missing one or more fields.')
-    if (!this.areRequiredOptionsDefined(options))
-      throw new Error('One or more fields are not defined.')
+  validateOptions() {
+    if (!this.options) throw new Error('No options provided.')
+    this.REQUIRED_OPTIONS.forEach(o => this.checkRequiredOption(o))
   }
 
-  areRequiredOptionsProvided(options) {
-    const requiredOptionsFieldsProvided = Object.keys(options).filter(field =>
-      this.REQUIRED_OPTION_FIELDS.includes(field)
-    )
-    return (
-      requiredOptionsFieldsProvided.length == this.REQUIRED_OPTION_FIELDS.length
-    )
+  checkRequiredOption(optionName) {
+    if (!Object.keys(this.options).includes(optionName)) {
+      throw new Error(`Missing required option '${optionName}'.`)
+    }
+    if (!this.options[optionName]) {
+      throw new Error(`Undefined value for '${optionName}'.`)
+    }
   }
 
-  areRequiredOptionsDefined(options) {
-    const requiredOptionsProvided = Object.entries(
-      options
-    ).filter(([field, _]) => this.REQUIRED_OPTION_FIELDS.includes(field))
-    return !requiredOptionsProvided.some(([_, value]) => value === undefined)
-  }
-
-  init(options) {
-    this.apiKey = options.apikey
-    this.url = options.url
-    this.assistantId = options.assistant_id
-    this.version = options.version || '2020-04-01'
+  init() {
+    this.apiKey = this.options.apikey
+    this.url = this.options.url
+    this.assistantId = this.options.assistant_id
+    this.version = this.options.version || '2020-04-01'
     this.sessionId = this.getSessionId()
   }
 
