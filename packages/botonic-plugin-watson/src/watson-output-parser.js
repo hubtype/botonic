@@ -1,25 +1,24 @@
 export default class WatsonOutputParser {
   static UNKNOWN_INTENT_LABEL = null
   static UNKNOWN_INTENT_CONFIDENCE = 0
+  static UNKNOWN_INTENT = {
+    intent: this.UNKNOWN_INTENT_LABEL,
+    confidence: this.UNKNOWN_INTENT_CONFIDENCE,
+  }
 
   static parseToBotonicFormat(output) {
-    output.intents.sort((i1, i2) => (i1.confidence > i2.confidence ? -1 : 1))
+    const intent = this.getIntentWithMaxConfidence(output.intents)
     return {
-      intent: this.getIntentWithMaxConfidence(output.intents),
-      confidence: this.getMaxConfidence(output.intents),
+      intent: intent.intent,
+      confidence: intent.confidence,
       intents: output.intents,
       entities: this.parseEntities(output.entities),
     }
   }
 
   static getIntentWithMaxConfidence(intents) {
-    return intents.length == 0 ? this.UNKNOWN_INTENT_LABEL : intents[0].intent
-  }
-
-  static getMaxConfidence(intents) {
-    return intents.length == 0
-      ? this.UNKNOWN_INTENT_CONFIDENCE
-      : intents[0].confidence
+    intents.sort((i1, i2) => (i1.confidence > i2.confidence ? -1 : 1))
+    return intents.length == 0 ? this.UNKNOWN_INTENT : intents[0]
   }
 
   static parseEntities(entities) {
