@@ -81,6 +81,9 @@ export default class BotonicPluginWatson {
 
   async getWatsonOutput(text) {
     const sessionId = await this.sessionId
+    if (!sessionId) {
+      throw new Error('Not executing Watson because initialization failed.')
+    }
     const { data } = await axios.post(
       `${this.getAssistantEndpoint()}/sessions/${sessionId}/message?version=${
         this.version
