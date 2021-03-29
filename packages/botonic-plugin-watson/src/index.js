@@ -13,7 +13,7 @@ export default class BotonicPluginWatson {
       this.validateOptions(options)
       this.init(options)
     } catch (e) {
-      console.error(String(e))
+      console.error(e)
     }
   }
 
