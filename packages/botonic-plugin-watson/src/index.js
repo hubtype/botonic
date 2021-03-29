@@ -8,13 +8,6 @@ export default class BotonicPluginWatson {
   EXPECTED_SESSION_ID_REQUEST_STATUS = 201
   EXPECTED_OUTPUT_REQUEST_STATUS = 200
 
-  UNKNOWN_INTENT_LABEL = 'unknown'
-  UNKNOWN_INTENT_CONFIDENCE = 1
-  UNKNOWN_INTENT = {
-    label: this.UNKNOWN_INTENT_LABEL,
-    confidence: this.UNKNOWN_INTENT_CONFIDENCE,
-  }
-
   constructor(options) {
     try {
       this.validateOptions(options)

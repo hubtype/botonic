@@ -23,14 +23,10 @@ Example of the same `input` object after being processed by this plugin:
 {
   type: 'text',
   data: 'I want to return this jacket.',
-  intent: { label: 'return-product', confidence: 0.9556 },
-  entities: [{ value: 'jacket', entity: 'product', confidence: 1 }],
-  defaultFallback: [
-    {
-      response_type: 'text',
-      text: "I didn't understand. You can try rephrasing.",
-    },
-  ],
+  intent: 'return-product',
+  confidence: 0.9556,
+  intents: [{ intent: 'return-product', confidence: 0.9556 }]
+  entities: [{ entity: 'product', value: 'jacket', confidence: 1 }],
 }
 ```
 
@@ -64,5 +60,5 @@ export const plugins = [
 You can use it in your routes like any other NLU plugins:
 
 ```typescript
-export const routes = [{ intent: 'getWeather', action: ShowForecast }]
+export const routes = [{ intent: 'return-product', action: ReturnProduct }]
 ```

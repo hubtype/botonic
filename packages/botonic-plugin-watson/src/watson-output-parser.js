@@ -1,31 +1,30 @@
 export default class WatsonOutputParser {
-  UNKNOWN_INTENT_LABEL = 'unknown'
-  UNKNOWN_INTENT_CONFIDENCE = 1
-  UNKNOWN_INTENT = {
-    label: this.UNKNOWN_INTENT_LABEL,
-    confidence: this.UNKNOWN_INTENT_CONFIDENCE,
-  }
+  static UNKNOWN_INTENT_LABEL = null
+  static UNKNOWN_INTENT_CONFIDENCE = 0
 
   static parseToBotonicFormat(output) {
+    output.intents.sort((i1, i2) => (i1.confidence > i2.confidence ? -1 : 1))
     return {
-      intent: this.parseIntents(output.intents),
+      intent: this.getIntentWithMaxConfidence(output.intents),
+      confidence: this.getMaxConfidence(output.intents),
+      intents: output.intents,
       entities: this.parseEntities(output.entities),
-      defaultFallback: output.generic,
     }
   }
 
-  static parseIntents(intents) {
-    if (intents.length == 0) return this.UNKNOWN_INTENT
-    intents.sort((i1, i2) => (i1.confidence > i2.confidence ? -1 : 1))
-    return {
-      label: intents[0].intent,
-      confidence: intents[0].confidence,
-    }
+  static getIntentWithMaxConfidence(intents) {
+    return intents.length == 0 ? this.UNKNOWN_INTENT_LABEL : intents[0].intent
+  }
+
+  static getMaxConfidence(intents) {
+    return intents.length == 0
+      ? this.UNKNOWN_INTENT_CONFIDENCE
+      : intents[0].confidence
   }
 
   static parseEntities(entities) {
     return entities.map(e => {
-      return { value: e.value, entity: e.entity, confidence: e.confidence }
+      return { entity: e.entity, value: e.value, confidence: e.confidence }
     })
   }
 }
