@@ -44,6 +44,10 @@ export class Tasks {
     'text-classification': new Task('text-classification'),
   }
 
+  static getAll(): Task[] {
+    return Object.values(this.tasks)
+  }
+
   static getByName(taskName: string): Task {
     if (!this.isValidTask(taskName)) {
       throw new Error(
@@ -81,14 +85,10 @@ export default class Run extends Command {
     try {
       this.telemetry.trackTrain()
       const { flags } = this.parse(Run)
-      const tasks = this.getTasks(flags.task)
+      const tasks = flags.task ? [Tasks.getByName(flags.task)] : Tasks.getAll()
       tasks.forEach(task => task.run())
     } catch (e) {
       console.error(e)
     }
-  }
-
-  private getTasks(taskName: string | undefined): Task[] {
-    return taskName ? [Tasks.getByName(taskName)] : Object.values(Tasks.tasks)
   }
 }
