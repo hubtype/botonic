@@ -47,3 +47,8 @@ flags:
     paths:
       - packages/botonic-react
     carryforward: true
+
+  botonic-plugin-ner:
+    paths:
+      - packages/botonic-plugin-ner
+    carryforward: true
