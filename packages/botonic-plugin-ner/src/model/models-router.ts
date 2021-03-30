@@ -53,6 +53,6 @@ export class ModelsRouter {
   }
 
   private isRecognizerReady(locale: Locale): boolean {
-    return this.recognizers[locale] ? true : false
+    return Boolean(this.recognizers[locale])
   }
 }
