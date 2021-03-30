@@ -7,9 +7,9 @@ export class PredictionProcessor {
 
   process(sequence: string[], prediction: Tensor3D): Entity[] {
     const confidences = prediction.arraySync()[0]
-    const entities = sequence.map((token, idx) => {
-      return this.getEntity(token, confidences[idx])
-    })
+    const entities = sequence.map((token, idx) =>
+      this.getEntity(token, confidences[idx])
+    )
     return entities.filter(e => e.text != PADDING_TOKEN)
   }
 
