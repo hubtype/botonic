@@ -172,6 +172,8 @@ export class TopContentId extends ContentId {
     switch (this.model) {
       case ContentType.CAROUSEL:
         return cms.carousel(this.id, context)
+      case ContentType.DOCUMENT:
+        return cms.document(this.id, context)
       case ContentType.TEXT:
         return cms.text(this.id, context)
       case ContentType.CHITCHAT:

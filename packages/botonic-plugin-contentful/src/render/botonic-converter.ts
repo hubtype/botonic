@@ -12,7 +12,7 @@ export class RenderOptions {
 
 // TODO consider moving it to @botonic/core
 export interface BotonicMsg {
-  type: 'carousel' | 'text' | 'image'
+  type: 'carousel' | 'text' | 'image' | 'document'
   delay?: number
   data: any
 }
@@ -24,6 +24,10 @@ export interface BotonicMsgArray extends Array<BotonicMsgs> {}
 
 export interface BotonicText extends BotonicMsg {
   buttons: any
+}
+
+export interface BotonicDocument extends BotonicMsg {
+  src: string
 }
 
 export class BotonicMsgConverter {
@@ -45,6 +49,9 @@ export class BotonicMsgConverter {
     }
     if (content instanceof cms.Image) {
       return this.image(content, delayS)
+    }
+    if (content instanceof cms.Document) {
+      return this.document(content, delayS)
     }
     throw new CmsException(`Unsupported content type ${content.contentType}`)
   }
@@ -128,6 +135,17 @@ export class BotonicMsgConverter {
       delay: delayS,
       data: {
         image: img.imgUrl,
+      },
+    }
+    return this.appendFollowUp(msg, img)
+  }
+
+  document(img: cms.Document, delayS = 0): BotonicMsgs {
+    const msg: BotonicMsg = {
+      type: 'document',
+      delay: delayS,
+      data: {
+        document: img.docUrl,
       },
     }
     return this.appendFollowUp(msg, img)

@@ -13,6 +13,7 @@ import {
   CommonFields,
   Content,
   DateRangeContent,
+  Document,
   Element,
   Image,
   Queue,
@@ -72,6 +73,14 @@ export class ErrorReportingCMS implements CMS {
     )
   }
 
+  document(id: string, context?: Context): Promise<Document> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.DOCUMENT,
+      this.cms.document(id, context)
+    )
+  }
   text(id: string, context?: Context): Promise<Text> {
     return this.catchAndValidate(
       id,

@@ -10,6 +10,7 @@ import {
   CommonFields,
   Content,
   DateRangeContent,
+  Document,
   Element,
   Image,
   Queue,
@@ -25,7 +26,8 @@ import { Context, DEFAULT_CONTEXT } from './context'
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
  */
 export class DummyCMS implements CMS {
-  static IMG = '../assets/img_home_bg.png'
+  static IMG = 'this_image_does_not_exist.png'
+  static PDF = 'this_doc_does_not_exist.pdf'
   /**
    *
    * @param buttonCallbacks models which contain buttons will return one per each specified callback
@@ -45,6 +47,10 @@ export class DummyCMS implements CMS {
       this.createElement(String(i), callback)
     )
     return Promise.resolve(new Carousel(new CommonFields(id, id), elements))
+  }
+
+  async document(id: string, {} = DEFAULT_CONTEXT): Promise<Document> {
+    return Promise.resolve(new Document(new CommonFields(id, id), DummyCMS.PDF))
   }
 
   async text(id: string, {} = DEFAULT_CONTEXT): Promise<Text> {
