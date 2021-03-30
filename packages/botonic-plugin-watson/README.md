@@ -38,7 +38,12 @@ Example of the same `input` object after being processed by this plugin:
 npm i --save @botonic/plugin-watson
 ```
 
-2. Add it to the `src/plugins.js` file by using the `apikey`, the `url`, the `assistant_id` and `workspace_id` from Watson:
+2. Add it to the `src/plugins.js` file by using the following options from Watson:
+
+- `apikey`
+- `url`
+- `assistant_id`
+- `version` (optional)
 
 ```typescript
 export const plugins = [
