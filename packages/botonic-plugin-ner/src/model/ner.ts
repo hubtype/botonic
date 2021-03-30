@@ -16,11 +16,7 @@ export class NamedEntityRecognizer {
   predictionProcessor: PredictionProcessor
 
   constructor(readonly locale: Locale) {
-    // @ts-ignore
-    return (async () => {
-      await this.init()
-      return this
-    })()
+    this.init()
   }
 
   private async init(): Promise<void> {
