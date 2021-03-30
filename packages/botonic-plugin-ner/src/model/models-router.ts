@@ -11,13 +11,7 @@ type ModelInfoPerLocale = { [locale: string]: ModelInfoPromise }
 export class ModelsRouter {
   private recognizers: { [locale: string]: NamedEntityRecognizer } = {}
 
-  constructor(readonly locales: Locale[]) {
-    // @ts-ignore
-    return (async () => {
-      await this.init()
-      return this
-    })()
-  }
+  private constructor(readonly locales: Locale[]) {}
 
   private async init(): Promise<void> {
     const modelsInfo = this.getModelInfoForLocales()
@@ -34,10 +28,15 @@ export class ModelsRouter {
 
   private async loadRecognizers(modelsInfo: ModelInfoPerLocale): Promise<void> {
     for (const locale of this.locales) {
-      this.recognizers[locale] = await new NamedEntityRecognizer(
-        modelsInfo[locale]
-      )
+      const modelInfo = modelsInfo[locale]
+      this.recognizers[locale] = await NamedEntityRecognizer.load(modelInfo)
     }
+  }
+
+  static async build(locales: Locale[]): Promise<ModelsRouter> {
+    const router = new ModelsRouter(locales)
+    await router.init()
+    return router
   }
 
   recognizeEntities(text: string): Entity[] {

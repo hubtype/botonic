@@ -14,23 +14,26 @@ import { ModelInfoPromise } from '../types'
 global.fetch = fetch
 
 export class NamedEntityRecognizer {
-  model: LayersModel
-  config: NerConfig
   inputGenerator: InputGenerator
   predictionProcessor: PredictionProcessor
 
-  constructor(modelInfoPromise: ModelInfoPromise) {
-    this.init(modelInfoPromise)
-  }
-
-  private async init(modelInfoPromise: ModelInfoPromise): Promise<void> {
-    this.model = await modelInfoPromise.model
-    this.config = (await modelInfoPromise.config).data
+  private constructor(
+    private readonly model: LayersModel,
+    private readonly config: NerConfig
+  ) {
     this.inputGenerator = new InputGenerator(
       new Preprocessor(this.config.locale, this.config.maxLength),
       new Codifier(this.config.vocabulary, { isCategorical: false })
     )
     this.predictionProcessor = new PredictionProcessor(this.config.entities)
+  }
+
+  static async load(
+    modelInfoPromise: ModelInfoPromise
+  ): Promise<NamedEntityRecognizer> {
+    const model = await modelInfoPromise.model
+    const config = (await modelInfoPromise.config).data
+    return new NamedEntityRecognizer(model, config)
   }
 
   recognize(text: string): Entity[] {

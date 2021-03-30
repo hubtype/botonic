@@ -5,20 +5,18 @@ import { ModelsRouter } from './model/models-router'
 import { PluginOptions } from './types'
 
 export default class BotonicPluginNER implements Plugin {
-  private modelsRouter: ModelsRouter
+  private modelsRouter: Promise<ModelsRouter>
 
   constructor(readonly options: PluginOptions) {
-    // @ts-ignore
-    return (async () => {
-      this.modelsRouter = await new ModelsRouter(this.options.locales)
-      return this
-    })()
+    this.modelsRouter = ModelsRouter.build(this.options.locales)
   }
 
-  pre(request: PluginPreRequest): void {
+  async pre(request: PluginPreRequest): Promise<void> {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
-        const entities = this.modelsRouter.recognizeEntities(request.input.data)
+        const entities = (await this.modelsRouter).recognizeEntities(
+          request.input.data
+        )
         Object.assign(request.input, { entities })
       }
     } catch (e) {
