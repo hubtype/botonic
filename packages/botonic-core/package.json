@@ -3,7 +3,7 @@
   "version": "0.18.2",
   "license": "MIT",
   "description": "Build Chatbots using React",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
@@ -49,5 +49,5 @@
     "conversational-ui",
     "javascript"
   ],
-  "types": "./lib/types"
+  "types": "./src/types"
 }
