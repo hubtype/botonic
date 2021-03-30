@@ -1,9 +1,7 @@
 export default class WatsonOutputParser {
-  static UNKNOWN_INTENT_LABEL = null
-  static UNKNOWN_INTENT_CONFIDENCE = 0
   static UNKNOWN_INTENT = {
-    intent: this.UNKNOWN_INTENT_LABEL,
-    confidence: this.UNKNOWN_INTENT_CONFIDENCE,
+    intent: null,
+    confidence: 0,
   }
 
   static parseToBotonicFormat(output) {
