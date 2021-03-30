@@ -20,9 +20,9 @@ export class ModelsRouter {
 
   private getModelInfoForLocales(): ModelInfoPerLocale {
     const modelsInfo: ModelInfoPerLocale = {}
-    this.locales.forEach(locale => {
+    for (const locale of this.locales) {
       modelsInfo[locale] = getModelInfo(locale)
-    })
+    }
     return modelsInfo
   }
 
