@@ -1,7 +1,8 @@
 import { tensor, Tensor2D } from '@tensorflow/tfjs-node'
 
+import { Codifier } from '../../../codify/codifier'
+import { OneHotCodifier } from '../../../codify/one-hot-codifier'
 import { Sample } from '../../../dataset/types'
-import { Codifier } from '../../../preprocess/codifier'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../preprocess/constants'
 import { Preprocessor } from '../../../preprocess/preprocessor'
 import { NEUTRAL_ENTITY } from './constants'
@@ -11,7 +12,7 @@ export class Processor {
   constructor(
     readonly preprocessor: Preprocessor,
     readonly tokenCodifier: Codifier,
-    readonly entityCodifier: Codifier
+    readonly entityCodifier: OneHotCodifier
   ) {}
 
   // Processes samples and generates the Input and Output data.
@@ -89,12 +90,12 @@ export class Processor {
   private processTokens(sequence: string[]): number[] {
     return this.tokenCodifier.encode(
       this.preprocessor.pad(this.maskUnknownTokens(sequence), PADDING_TOKEN)
-    ) as number[]
+    )
   }
 
   private processEntities(sequence: string[]): number[][] {
     return this.entityCodifier.encode(
       this.preprocessor.pad(sequence, NEUTRAL_ENTITY)
-    ) as number[][]
+    )
   }
 }
