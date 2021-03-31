@@ -35,9 +35,6 @@ export class OneHotCodifier {
 
   private decodeCategorical(categorical: number[]): string {
     const id = this.categoricalToTokenId(categorical)
-    if (!this.isValidTokenId(id)) {
-      throw new Error(`Invalid token id '${id}'`)
-    }
     return this.vocabulary[id]
   }
 
@@ -50,9 +47,5 @@ export class OneHotCodifier {
 
   private isValidCategorical(categorical: number[]): boolean {
     return categorical.length == this.vocabulary.length
-  }
-
-  private isValidTokenId(id: number) {
-    return this.vocabulary.length > id && id >= 0
   }
 }
