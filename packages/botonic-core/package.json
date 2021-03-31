@@ -48,5 +48,6 @@
     "conversational-app",
     "conversational-ui",
     "javascript"
-  ]
+  ],
+  "types": "./src/types"
 }

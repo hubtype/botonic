@@ -1,4 +1,3 @@
-import { Input, Params, Route } from './'
 import { RouteInspector } from './debug/inspector'
 import { NoMatchingRouteError } from './errors'
 import { isFunction } from './utils'
