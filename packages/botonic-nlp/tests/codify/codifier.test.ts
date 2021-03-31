@@ -10,4 +10,16 @@ describe('Codifier', () => {
   test('Decoding', () => {
     expect(codifier.decode([3, 6, 2])).toEqual(['yes', 'it', 'is'])
   })
+
+  test('Invalid Token', () => {
+    expect(() => {
+      codifier.encode(['is', 'this', 'nlp', '?'])
+    }).toThrowError()
+  })
+
+  test('Invalid Token Id', () => {
+    expect(() => {
+      codifier.decode([-1, 0, 10])
+    }).toThrowError()
+  })
 })
