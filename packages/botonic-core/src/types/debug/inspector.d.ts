@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import { Input, Route, RouteMatcher } from '..'
 
 export declare class RouteInspector {

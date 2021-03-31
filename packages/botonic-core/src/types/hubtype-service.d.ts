@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import { AxiosResponse } from 'axios'
 import Pusher, { Channel } from 'pusher-js'
 

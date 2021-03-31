@@ -1,4 +1,3 @@
-/* eslint-disable node/no-missing-import */
 import { Input, Route, RouteMatcher, Routes, Session } from '.'
 import { RouteInspector } from './debug'
 
