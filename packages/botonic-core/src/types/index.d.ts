@@ -1,7 +1,6 @@
 export { Providers } from './constants'
-export { CoreBot } from './core-bot'
+export { BotOptions, CoreBot } from './core-bot'
 export * from './debug'
-import { Inspector } from './debug'
 export * from './handoff'
 export { HubtypeService } from './hubtype-service'
 export { getString } from './i18n'
@@ -171,7 +170,7 @@ export interface Route {
   type?: StringMatcher
 }
 
-type RouteRequest = { input: Input; session: Session }
+export type RouteRequest = { input: Input; session: Session }
 export type Routes<R = Route> = R[] | ((_: RouteRequest) => R[])
 
 // Desk
@@ -222,19 +221,6 @@ export type PluginPostRequest = BotResponse
 export interface Plugin {
   post(_: PluginPostRequest): void
   pre(pluginRequest: PluginPreRequest): void
-}
-
-export interface BotOptions {
-  appId?: string
-  defaultDelay?: number
-  defaultRoutes?: Routes
-  defaultTyping?: number
-  inspector?: Inspector
-  locales: Locales
-  routes: Routes
-  theme?: string
-  /** The plugin configurations */
-  plugins?: PluginConfig<any>
 }
 
 export type Params = { [key: string]: string }

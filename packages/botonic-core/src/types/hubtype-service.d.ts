@@ -25,7 +25,7 @@ export declare class HubtypeService {
   lastMessageId: string
   lastMessageUpdateDate: string
   onEvent: any
-  unsentInputs: { id: string; ack: number; unsentInput: Input }
+  unsentInputs: UnsentInput[]
   init(
     user: SessionUser,
     lastMessageId: string,
