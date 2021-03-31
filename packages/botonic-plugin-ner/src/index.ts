@@ -1,27 +1,30 @@
 import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
 
-import { ModelsRouter } from './model/models-router'
+import { ModelSelector } from './model/model-selector'
 import { PluginOptions } from './types'
+import { detectLocale } from './utils/locale-utils'
 
 export default class BotonicPluginNER implements Plugin {
-  private modelsRouter: Promise<ModelsRouter>
+  private modelsSelector: Promise<ModelSelector>
 
   constructor(readonly options: PluginOptions) {
-    this.modelsRouter = ModelsRouter.build(this.options.locales)
+    this.modelsSelector = ModelSelector.build(this.options.locales)
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
-        const entities = (await this.modelsRouter).recognizeEntities(
-          request.input.data
-        )
+        const inputText = request.input.data
+        const detectedLocale = detectLocale(inputText, this.options.locales)
+        const ner = (await this.modelsSelector).select(detectedLocale)
+        const entities = ner.recognize(inputText)
         Object.assign(request.input, { entities })
       }
     } catch (e) {
       console.log('Cannot recognize entities', e)
     }
   }
+
   post(request: PluginPostRequest): void {}
 }

@@ -1,24 +1,33 @@
 import { Locale } from '@botonic/nlp/dist/types'
-import { loadLayersModel } from '@tensorflow/tfjs'
-import axios from 'axios'
 
-import {
-  ASSETS_DIR,
-  CONFIG_FILENAME,
-  MODEL_FILENAME,
-  MODELS_DIR,
-  NER_DIR,
-} from '../constants'
-import { ModelInfoPromise } from '../types'
+import { ASSETS_DIR, MODELS_DIR, NER_DIR } from '../constants'
 
-export function getModelInfo(locale: Locale): ModelInfoPromise {
-  const isProd = process.env.STATIC_URL !== undefined
-  const domain = isProd ? process.env.STATIC_URL : window.location.href
-  const uri = isProd
-    ? `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${NER_DIR}/${locale}`
-    : `${domain}/${NER_DIR}/${MODELS_DIR}/${locale}`
-  return {
-    config: axios({ url: `${uri}/${CONFIG_FILENAME}` }),
-    model: loadLayersModel(`${uri}/${MODEL_FILENAME}`),
+export enum ENVIRONMENT {
+  PRODUCTION,
+  LOCAL,
+}
+
+export function getEnvironment(): ENVIRONMENT {
+  if (process.env.STATIC_URL !== undefined) {
+    return ENVIRONMENT.PRODUCTION
+  } else {
+    return ENVIRONMENT.LOCAL
+  }
+}
+
+export function getDomain(): string {
+  if (getEnvironment() == ENVIRONMENT.PRODUCTION) {
+    return process.env.STATIC_URL
+  } else {
+    return window.location.href
+  }
+}
+
+export function getUri(locale: Locale): string {
+  const domain = getDomain()
+  if (getEnvironment() === ENVIRONMENT.PRODUCTION) {
+    return `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${NER_DIR}/${locale}`
+  } else {
+    return `${domain}/${NER_DIR}/${MODELS_DIR}/${locale}`
   }
 }
