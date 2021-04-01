@@ -1,36 +1,93 @@
-import AssistantV1 from 'ibm-watson/assistant/v1'
-import IamAuthenticator from 'ibm-watson/auth'
+import axios from 'axios'
+
+import WatsonOutputParser from './watson-output-parser'
 
 export default class BotonicPluginWatson {
+  REQUIRED_OPTIONS = ['apikey', 'url', 'assistant_id']
+
+  EXPECTED_SESSION_ID_REQUEST_STATUS = 201
+  EXPECTED_OUTPUT_REQUEST_STATUS = 200
+
   constructor(options) {
-    this.options = options
+    try {
+      this.options = options
+      this.validateOptions()
+      this.init()
+    } catch (e) {
+      console.error(e)
+    }
   }
 
-  async pre({ input, session, lastRoutePath }) {
-    let intent = null
-    let confidence = 0
-    let intents = []
-    let entities = []
+  validateOptions() {
+    if (!this.options) throw new Error('No options provided.')
+    this.REQUIRED_OPTIONS.forEach(o => this.checkRequiredOption(o))
+  }
 
-    try {
-      const assistant = new AssistantV1({
-        authenticator: new IamAuthenticator({ apikey: this.options.apiKey }),
-        url: this.options.url,
-        version: '2018-09-19',
-      })
-
-      const res = await assistant.message({
-        input: { text: input.data },
-        workspaceId: this.options.workspaceId,
-      })
-      intent = res.result.intents[0].intent
-      confidence = res.result.intents[0].intent.confidence
-      intents = res.result.intents
-      entities = res.result.entities
-    } catch (error) {
-      console.log(error)
+  checkRequiredOption(optionName) {
+    if (!Object.keys(this.options).includes(optionName)) {
+      throw new Error(`Missing required option '${optionName}'.`)
     }
-    Object.assign(input, { intent, confidence, intents, entities })
+    if (!this.options[optionName]) {
+      throw new Error(`Undefined value for '${optionName}'.`)
+    }
+  }
+
+  init() {
+    this.apiKey = this.options.apikey
+    this.url = this.options.url
+    this.assistantId = this.options.assistant_id
+    this.version = this.options.version || '2020-04-01'
+    this.sessionId = this.getSessionId()
+  }
+
+  async getSessionId() {
+    const { data } = await axios.post(
+      `${this.getAssistantEndpoint()}/sessions?version=${this.version}`,
+      {},
+      {
+        auth: this.getAuthentication(),
+        validateStatus: status =>
+          status === this.EXPECTED_SESSION_ID_REQUEST_STATUS,
+      }
+    )
+    return data.session_id
+  }
+
+  getAssistantEndpoint() {
+    return `${this.url}/v2/assistants/${this.assistantId}`
+  }
+
+  getAuthentication() {
+    return { username: 'apikey', password: this.apiKey }
+  }
+
+  async pre({ input }) {
+    try {
+      const output = await this.getWatsonOutput(input.data)
+      Object.assign(input, WatsonOutputParser.parseToBotonicFormat(output))
+    } catch (e) {
+      console.error(String(e))
+    }
+  }
+
+  async getWatsonOutput(text) {
+    const sessionId = await this.sessionId
+    if (!sessionId) {
+      throw new Error('Not executing Watson because initialization failed.')
+    }
+    const { data } = await axios.post(
+      `${this.getAssistantEndpoint()}/sessions/${sessionId}/message?version=${
+        this.version
+      }`,
+      { input: { text } },
+      {
+        auth: this.getAuthentication(),
+        headers: { 'Content-Type': 'application/json' },
+        validateStatus: status =>
+          status === this.EXPECTED_OUTPUT_REQUEST_STATUS,
+      }
+    )
+    return data.output
   }
 
   post({ input, session, lastRoutePath, response }) {}
