@@ -26,7 +26,7 @@ Example of the same `input` object after being processed by this plugin:
   intent: 'return-product',
   confidence: 0.9556,
   intents: [{ intent: 'return-product', confidence: 0.9556 }]
-  entities: [{ entity: 'product', value: 'jacket', confidence: 1 }],
+  entities: [{ entity: 'product', location: [22, 28], value: 'jacket', confidence: 1 }],
 }
 ```
 
