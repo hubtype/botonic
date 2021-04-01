@@ -7,13 +7,17 @@ export class PredictionProcessor {
 
   process(sequence: string[], prediction: Tensor3D): Entity[] {
     const confidences = prediction.arraySync()[0]
-    const entities = sequence.map((token, idx) =>
-      this.getEntity(token, confidences[idx])
-    )
-    return entities.filter(e => e.text != PADDING_TOKEN)
+    return this.getEntities(sequence, confidences)
   }
 
-  private getEntity(token: string, confidences: number[]): Entity {
+  private getEntities(sequence: string[], confidences: number[][]): Entity[] {
+    const entities = sequence.map((token, idx) =>
+      this.generateEntity(token, confidences[idx])
+    )
+    return this.filterEntities(entities)
+  }
+
+  private generateEntity(token: string, confidences: number[]): Entity {
     const confidence = Math.max(...confidences)
     const label = this.entities[confidences.indexOf(confidence)]
     const predictions = this.getPredictions(confidences)
@@ -24,5 +28,9 @@ export class PredictionProcessor {
     return confidences.map((c, i) => {
       return { label: this.entities[i], confidence: c }
     })
+  }
+
+  private filterEntities(entities: Entity[]): Entity[] {
+    return entities.filter(entity => entity.text != PADDING_TOKEN)
   }
 }
