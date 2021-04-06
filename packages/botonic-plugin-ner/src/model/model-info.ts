@@ -10,10 +10,6 @@ export class ModelInfo {
   private model: Promise<LayersModel>
 
   constructor(readonly locale: Locale, readonly uri: string) {
-    this.init()
-  }
-
-  private init() {
     this.config = axios({ url: `${this.uri}/${CONFIG_FILENAME}` })
     this.model = loadLayersModel(`${this.uri}/${MODEL_FILENAME}`)
   }
