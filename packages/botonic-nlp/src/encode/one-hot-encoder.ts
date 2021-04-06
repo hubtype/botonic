@@ -1,5 +1,7 @@
 import { unique } from '../utils/array-utils'
 
+type OneHotVector = number[]
+
 export class OneHotEncoder {
   vocabulary: string[]
 
@@ -7,37 +9,37 @@ export class OneHotEncoder {
     this.vocabulary = unique(vocabulary)
   }
 
-  encode(sequence: string[]): number[][] {
+  encode(sequence: string[]): OneHotVector[] {
     return sequence.map(token => this.encodeToken(token))
   }
 
-  private encodeToken(token: string): number[] {
+  private encodeToken(token: string): OneHotVector {
     if (!this.vocabulary.includes(token)) {
       throw new Error(`Invalid Token '${token}'.`)
     }
     const id = this.vocabulary.indexOf(token)
-    return this.tokenIdToCategorical(id)
+    return this.tokenIdToOneHotVector(id)
   }
 
-  private tokenIdToCategorical(id: number): number[] {
-    const categorical = Array(this.vocabulary.length).fill(0)
-    categorical[id] = 1
-    return categorical
+  private tokenIdToOneHotVector(id: number): OneHotVector {
+    const vector = Array(this.vocabulary.length).fill(0)
+    vector[id] = 1
+    return vector
   }
 
-  decode(sequence: number[][]): string[] {
-    return sequence.map(categorical => this.decodeCategorical(categorical))
+  decode(sequence: OneHotVector[]): string[] {
+    return sequence.map(vector => this.decodeOneHotVector(vector))
   }
 
-  private decodeCategorical(categorical: number[]): string {
-    const id = this.categoricalToTokenId(categorical)
+  private decodeOneHotVector(vector: OneHotVector): string {
+    const id = this.oneHotVectorToTokenId(vector)
     return this.vocabulary[id]
   }
 
-  private categoricalToTokenId(categorical: number[]): number {
-    if (categorical.length !== this.vocabulary.length) {
-      throw new Error(`Invalid categorical length '${categorical.length}'.`)
+  private oneHotVectorToTokenId(vector: OneHotVector): number {
+    if (vector.length !== this.vocabulary.length) {
+      throw new Error(`Invalid categorical length '${vector.length}'.`)
     }
-    return categorical.indexOf(Math.max(...categorical))
+    return vector.indexOf(Math.max(...vector))
   }
 }
