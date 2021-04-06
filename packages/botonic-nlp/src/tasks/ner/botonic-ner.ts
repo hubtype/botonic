@@ -1,12 +1,12 @@
 import { Tensor3D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
-import { Codifier } from '../../codify/codifier'
-import { OneHotCodifier } from '../../codify/one-hot-codifier'
 import { DatasetLoader } from '../../dataset/loader'
 import { Dataset, Sample } from '../../dataset/types'
 import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
 import { WordEmbeddingStorage } from '../../embeddings/types'
+import { LabelEncoder } from '../../encode/label-encoder'
+import { OneHotEncoder } from '../../encode/one-hot-encoder'
 import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
@@ -90,8 +90,8 @@ export class BotonicNer {
   compile(): void {
     this.processor = new Processor(
       this.preprocessor,
-      new Codifier(this.vocabulary),
-      new OneHotCodifier(this.entities)
+      new LabelEncoder(this.vocabulary),
+      new OneHotEncoder(this.entities)
     )
     this.predictionProcessor = new PredictionProcessor(this.entities)
   }

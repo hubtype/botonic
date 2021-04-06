@@ -1,10 +1,10 @@
-import { OneHotCodifier } from '../../src/codify/one-hot-codifier'
+import { OneHotEncoder } from '../../src/encode/one-hot-encoder'
 
-describe('One Hot Codifier', () => {
-  const codifier = new OneHotCodifier(['product', 'material', 'size'])
+describe('One Hot Encoder', () => {
+  const encoder = new OneHotEncoder(['product', 'material', 'size'])
 
   test('Encoding', () => {
-    expect(codifier.encode(['product', 'product', 'size'])).toEqual([
+    expect(encoder.encode(['product', 'product', 'size'])).toEqual([
       [1, 0, 0],
       [1, 0, 0],
       [0, 0, 1],
@@ -13,7 +13,7 @@ describe('One Hot Codifier', () => {
 
   test('Decoding', () => {
     expect(
-      codifier.decode([
+      encoder.decode([
         [0, 1, 0],
         [1, 0, 0],
         [0, 0, 1],
@@ -23,13 +23,13 @@ describe('One Hot Codifier', () => {
 
   test('Invalid Token', () => {
     expect(() => {
-      codifier.encode(['product', 'product', 'material', 'color'])
+      encoder.encode(['product', 'product', 'material', 'color'])
     }).toThrowError()
   })
 
   test('Invalid Categorical Length', () => {
     expect(() => {
-      codifier.decode([
+      encoder.decode([
         [0, 1, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1],

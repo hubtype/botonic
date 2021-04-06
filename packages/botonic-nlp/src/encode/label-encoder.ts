@@ -1,6 +1,6 @@
 import { unique } from '../utils/array-utils'
 
-export class Codifier {
+export class LabelEncoder {
   vocabulary: string[]
 
   constructor(vocabulary: string[]) {

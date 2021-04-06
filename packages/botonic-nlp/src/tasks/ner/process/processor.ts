@@ -1,8 +1,8 @@
 import { tensor, Tensor2D } from '@tensorflow/tfjs-node'
 
-import { Codifier } from '../../../codify/codifier'
-import { OneHotCodifier } from '../../../codify/one-hot-codifier'
 import { Sample } from '../../../dataset/types'
+import { LabelEncoder } from '../../../encode/label-encoder'
+import { OneHotEncoder } from '../../../encode/one-hot-encoder'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../preprocess/constants'
 import { Preprocessor } from '../../../preprocess/preprocessor'
 import { NEUTRAL_ENTITY } from './constants'
@@ -11,8 +11,8 @@ import { InputData, OutputData } from './types'
 export class Processor {
   constructor(
     readonly preprocessor: Preprocessor,
-    readonly tokenCodifier: Codifier,
-    readonly entityCodifier: OneHotCodifier
+    readonly tokenCodifier: LabelEncoder,
+    readonly entityCodifier: OneHotEncoder
   ) {}
 
   // Processes samples and generates the Input and Output data.

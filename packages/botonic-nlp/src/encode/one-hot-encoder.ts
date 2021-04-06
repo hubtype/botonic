@@ -1,6 +1,6 @@
 import { unique } from '../utils/array-utils'
 
-export class OneHotCodifier {
+export class OneHotEncoder {
   vocabulary: string[]
 
   constructor(vocabulary: string[]) {
