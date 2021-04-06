@@ -1,16 +1,16 @@
 {
   "name": "@botonic/nlp",
-  "version": "0.19.0",
+  "version": "0.19.0-alpha.0",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build": "rm -rf dist && ../../node_modules/.bin/tsc",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*' 'tests/**/*.ts*'",
     "start:dev": "nodemon",
-    "start": "npm run build && node dist/index.js",
-    "test": "jest",
+    "start": "npm run build && node lib/index.js",
+    "test": "../../node_modules/.bin/jest",
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
     "prepare": "node ../../preinstall.js"
   },
