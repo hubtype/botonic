@@ -12,8 +12,8 @@ import { TextProcessor } from '../process/text-processor'
 global.fetch = fetch
 
 export class NamedEntityRecognizer {
-  private textProcessor: TextProcessor
-  private predictionProcessor: PredictionProcessor
+  private readonly textProcessor: TextProcessor
+  private readonly predictionProcessor: PredictionProcessor
 
   constructor(
     private readonly config: NerConfig,
