@@ -18,7 +18,12 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
 
 const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
 const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
+
+/**
+ * Calls Hubtype APIs from Webchat
+ */
 export class HubtypeService {
+  PUSHER_CONNECT_TIMEOUT_MS = 10000
   constructor({
     appId,
     user,
@@ -35,36 +40,34 @@ export class HubtypeService {
     this.onEvent = onEvent
     this.unsentInputs = unsentInputs
     this.server = server
-    if (user.id && (lastMessageId || lastMessageUpdateDate)) {
+    if (this.user.id && (lastMessageId || lastMessageUpdateDate)) {
+      // It's safe not awaiting Promise because:
+      // * it will never be called from AWS lambda
+      // * though init() is called again from postMesage, it does nothing if Pusher already created
       this.init()
     }
   }
 
-  resolveServerConfig() {
-    if (!this.server) {
-      return { activityTimeout: ACTIVITY_TIMEOUT, pongTimeout: PONG_TIMEOUT }
-    }
-    return {
-      activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
-      pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
-    }
-  }
-
-  updateAuthHeaders() {
-    if (this.pusher) {
-      this.pusher.config.auth.headers = {
-        ...this.pusher.config.auth.headers,
-        ...this.constructHeaders(),
-      }
-    }
-  }
-
+  /**
+   * @returns {Promise<void>}
+   */
   init(user, lastMessageId, lastMessageUpdateDate) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (lastMessageUpdateDate)
       this.lastMessageUpdateDate = lastMessageUpdateDate
-    if (this.pusher || !this.user.id || !this.appId) return null
+    return this._initPusher()
+  }
+
+  /**
+   * @returns {Promise<void>}
+   */
+  _initPusher() {
+    if (this.pusher) return Promise.resolve()
+    if (!this.user.id || !this.appId) {
+      // TODO recover user & appId somehow
+      return Promise.reject('No User or appId. Clear cache and reload')
+    }
     this.pusher = new Pusher(_WEBCHAT_PUSHER_KEY_, {
       cluster: 'eu',
       authEndpoint: `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
@@ -84,7 +87,7 @@ export class HubtypeService {
       }
       const connectTimeout = setTimeout(
         () => cleanAndReject('Connection Timeout'),
-        10000
+        this.PUSHER_CONNECT_TIMEOUT_MS
       )
       this.channel.bind('pusher:subscription_succeeded', () => {
         // Once subscribed, we know that authentication has been done: https://pusher.com/docs/channels/server_api/authenticating-users
@@ -125,6 +128,25 @@ export class HubtypeService {
     return headers
   }
 
+  resolveServerConfig() {
+    if (!this.server) {
+      return { activityTimeout: ACTIVITY_TIMEOUT, pongTimeout: PONG_TIMEOUT }
+    }
+    return {
+      activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
+      pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
+    }
+  }
+
+  updateAuthHeaders() {
+    if (this.pusher) {
+      this.pusher.config.auth.headers = {
+        ...this.pusher.config.auth.headers,
+        ...this.constructHeaders(),
+      }
+    }
+  }
+
   handleConnectionChange(online) {
     this.onPusherEvent({ action: 'connectionChange', online })
   }
@@ -151,6 +173,9 @@ export class HubtypeService {
     })
   }
 
+  /**
+   * @return {Promise<void>}
+   */
   async postMessage(user, message) {
     try {
       await this.init(user)
@@ -168,6 +193,7 @@ export class HubtypeService {
     } catch (e) {
       this.handleUnsentInput(message)
     }
+    return Promise.resolve()
   }
 
   static async getWebchatVisibility({ appId }) {
