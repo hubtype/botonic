@@ -12,14 +12,10 @@ export class LabelEncoder {
   }
 
   private encodeToken(token: string): number {
-    if (!this.isValidToken(token)) {
+    if (!this.vocabulary.includes(token)) {
       throw new Error(`Invalid Token '${token}'.`)
     }
     return this.vocabulary.indexOf(token)
-  }
-
-  private isValidToken(token: string): boolean {
-    return this.vocabulary.includes(token)
   }
 
   decode(sequence: number[]): string[] {
@@ -27,13 +23,9 @@ export class LabelEncoder {
   }
 
   private decodeTokenId(id: number): string {
-    if (!this.isValidTokenId(id)) {
+    if (id < 0 || id >= this.vocabulary.length) {
       throw new Error(`Invalid Token id '${id}'.`)
     }
     return this.vocabulary[id]
-  }
-
-  private isValidTokenId(id: number) {
-    return this.vocabulary.length > id && id >= 0
   }
 }

@@ -12,15 +12,11 @@ export class OneHotEncoder {
   }
 
   private encodeToken(token: string): number[] {
-    if (!this.isValidToken(token)) {
+    if (!this.vocabulary.includes(token)) {
       throw new Error(`Invalid Token '${token}'.`)
     }
     const id = this.vocabulary.indexOf(token)
     return this.tokenIdToCategorical(id)
-  }
-
-  private isValidToken(token: string): boolean {
-    return this.vocabulary.includes(token)
   }
 
   private tokenIdToCategorical(id: number): number[] {
@@ -39,13 +35,9 @@ export class OneHotEncoder {
   }
 
   private categoricalToTokenId(categorical: number[]): number {
-    if (!this.isValidCategorical(categorical)) {
+    if (categorical.length !== this.vocabulary.length) {
       throw new Error(`Invalid categorical length '${categorical.length}'.`)
     }
     return categorical.indexOf(Math.max(...categorical))
-  }
-
-  private isValidCategorical(categorical: number[]): boolean {
-    return categorical.length == this.vocabulary.length
   }
 }
