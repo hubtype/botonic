@@ -6,8 +6,8 @@ import axios, { AxiosPromise } from 'axios'
 import { CONFIG_FILENAME, MODEL_FILENAME } from '../constants'
 
 export class ModelInfo {
-  private config: AxiosPromise<NerConfig>
-  private model: Promise<LayersModel>
+  private readonly config: AxiosPromise<NerConfig>
+  private readonly model: Promise<LayersModel>
 
   constructor(readonly locale: Locale, readonly uri: string) {
     this.config = axios({ url: `${this.uri}/${CONFIG_FILENAME}` })
