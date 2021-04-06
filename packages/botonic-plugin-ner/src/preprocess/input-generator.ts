@@ -1,9 +1,9 @@
-import { Codifier } from '@botonic/nlp/dist/preprocess/codifier'
+import { Codifier } from '@botonic/nlp/lib/preprocess/codifier'
 import {
   PADDING_TOKEN,
   UNKNOWN_TOKEN,
-} from '@botonic/nlp/dist/preprocess/constants'
-import { Preprocessor } from '@botonic/nlp/dist/preprocess/preprocessor'
+} from '@botonic/nlp/lib/preprocess/constants'
+import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
 import { tensor, Tensor2D } from '@tensorflow/tfjs'
 
 export class InputGenerator {

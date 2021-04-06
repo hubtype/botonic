@@ -1,5 +1,5 @@
-import { PADDING_TOKEN } from '@botonic/nlp/dist/preprocess/constants'
-import { Entity, Prediction } from '@botonic/nlp/dist/tasks/ner/process/types'
+import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess/constants'
+import { Entity, Prediction } from '@botonic/nlp/lib/tasks/ner/process/types'
 import { Tensor3D } from '@tensorflow/tfjs'
 
 export class PredictionProcessor {

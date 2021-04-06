@@ -1,4 +1,4 @@
-import { Locale } from '@botonic/nlp/dist/types'
+import { Locale } from '@botonic/nlp/lib/types'
 import franc from 'franc'
 import langs from 'langs'
 

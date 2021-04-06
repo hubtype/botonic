@@ -1,13 +1,13 @@
 {
   "name": "@botonic/plugin-ner",
-  "version": "0.18.0",
+  "version": "0.19.0-alpha.0",
   "license": "MIT",
-  "main": "dist/index",
+  "main": "lib/index.js",
   "scripts": {
     "clean_install": "npm i && npm run-script build",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "build": "rm -rf dist && ../../node_modules/.bin/tsc",
-    "test": "jest",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "test": "../../node_modules/.bin/jest",
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_core -- --fix",
@@ -17,6 +17,7 @@
   "dependencies": {
     "@babel/runtime": "^7.5.5",
     "@botonic/core": "~0.18.0",
+    "@botonic/nlp": "^0.19.0-alpha.0",
     "@tensorflow/tfjs": "^2.7.0",
     "axios": "^0.21.1",
     "franc": "^5.0.0",
@@ -24,12 +25,7 @@
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
-    "@babel/preset-env": "^7.5.5",
-    "@types/webgl2": "0.0.5",
-    "core-js": "^3.1.4"
+    "@types/webgl2": "0.0.5"
   },
   "resolutions": {
     "@types/webgl2": "0.0.5"

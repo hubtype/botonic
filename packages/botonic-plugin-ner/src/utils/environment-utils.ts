@@ -1,24 +1,33 @@
-import { Locale } from '@botonic/nlp/dist/types'
-import { loadLayersModel } from '@tensorflow/tfjs'
-import axios from 'axios'
+import { Locale } from '@botonic/nlp/lib/types'
 
-import {
-  ASSETS_DIR,
-  CONFIG_FILENAME,
-  MODEL_FILENAME,
-  MODELS_DIR,
-  NER_DIR,
-} from '../constants'
-import { ModelInfo } from '../types'
+import { ASSETS_DIR, MODELS_DIR, NER_DIR } from '../constants'
 
-export async function getModelInfo(locale: Locale): Promise<ModelInfo> {
-  const isLocalModel = process.env.STATIC_URL === undefined
-  const domain = isLocalModel ? window.location.href : process.env.STATIC_URL
-  const uri = isLocalModel
-    ? `${domain}/${NER_DIR}/${MODELS_DIR}/${locale}`
-    : `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${NER_DIR}/${locale}`
-  return {
-    config: (await axios({ url: `${uri}/${CONFIG_FILENAME}` })).data,
-    model: await loadLayersModel(`${uri}/${MODEL_FILENAME}`),
+export enum ENVIRONMENT {
+  DEPLOYED,
+  LOCAL,
+}
+
+export function getEnvironment(): ENVIRONMENT {
+  if (process.env.STATIC_URL !== undefined) {
+    return ENVIRONMENT.DEPLOYED
+  } else {
+    return ENVIRONMENT.LOCAL
+  }
+}
+
+export function getDomain(): string {
+  if (getEnvironment() == ENVIRONMENT.DEPLOYED) {
+    return process.env.STATIC_URL
+  } else {
+    return window.location.href
+  }
+}
+
+export function getUri(locale: Locale): string {
+  const domain = getDomain()
+  if (getEnvironment() === ENVIRONMENT.DEPLOYED) {
+    return `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${NER_DIR}/${locale}`
+  } else {
+    return `${domain}/${NER_DIR}/${MODELS_DIR}/${locale}`
   }
 }
