@@ -1,5 +1,5 @@
-import { NerConfig } from '@botonic/nlp/dist/tasks/ner/storage/types'
-import { Locale } from '@botonic/nlp/dist/types'
+import { NerConfig } from '@botonic/nlp/lib/tasks/ner/storage/types'
+import { Locale } from '@botonic/nlp/lib/types'
 import { LayersModel, loadLayersModel } from '@tensorflow/tfjs'
 import axios, { AxiosPromise } from 'axios'
 

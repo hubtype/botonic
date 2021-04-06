@@ -1,4 +1,4 @@
-import { Locale } from '@botonic/nlp/dist/types'
+import { Locale } from '@botonic/nlp/lib/types'
 
 import { ASSETS_DIR, MODELS_DIR, NER_DIR } from '../constants'
 

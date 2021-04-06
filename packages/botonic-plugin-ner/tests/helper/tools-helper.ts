@@ -1,5 +1,5 @@
-import { Codifier } from '@botonic/nlp/dist/preprocess/codifier'
-import { Preprocessor } from '@botonic/nlp/dist/preprocess/preprocessor'
+import { Codifier } from '@botonic/nlp/lib/preprocess/codifier'
+import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
 
 import { LOCALE, MAX_LENGTH, VOCABULARY } from './constants-helper'
 

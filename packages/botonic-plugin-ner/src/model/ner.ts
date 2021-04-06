@@ -1,7 +1,7 @@
-import { Codifier } from '@botonic/nlp/dist/preprocess/codifier'
-import { Preprocessor } from '@botonic/nlp/dist/preprocess/preprocessor'
-import { Entity } from '@botonic/nlp/dist/tasks/ner/process/types'
-import { NerConfig } from '@botonic/nlp/dist/tasks/ner/storage/types'
+import { Codifier } from '@botonic/nlp/lib/preprocess/codifier'
+import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
+import { Entity } from '@botonic/nlp/lib/tasks/ner/process/types'
+import { NerConfig } from '@botonic/nlp/lib/tasks/ner/storage/types'
 import { LayersModel, Tensor3D } from '@tensorflow/tfjs'
 import { default as fetch } from 'node-fetch'
 

@@ -1,4 +1,4 @@
-import { Locale } from '@botonic/nlp/dist/types'
+import { Locale } from '@botonic/nlp/lib/types'
 
 import { getUri } from '../utils/environment-utils'
 import { ModelInfo } from './model-info'
