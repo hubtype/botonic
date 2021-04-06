@@ -1,4 +1,4 @@
-import { PredictionProcessor } from '../../src/postprocess/prediction-processor'
+import { PredictionProcessor } from '../../src/process/prediction-processor'
 import * as constantsHelper from '../helper/constants-helper'
 
 describe('Prediction processor', () => {
