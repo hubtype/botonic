@@ -1,4 +1,4 @@
-import { Codifier } from '@botonic/nlp/lib/preprocess/codifier'
+import { LabelEncoder } from '@botonic/nlp/lib/encode/label-encoder'
 import {
   PADDING_TOKEN,
   UNKNOWN_TOKEN,
@@ -35,7 +35,7 @@ export class TextProcessor {
   }
 
   private encodeSequence(sequence: string[]): number[] {
-    const codifier = new Codifier(this.vocabulary, { isCategorical: false })
-    return codifier.encode(sequence) as number[]
+    const codifier = new LabelEncoder(this.vocabulary)
+    return codifier.encode(sequence)
   }
 }
