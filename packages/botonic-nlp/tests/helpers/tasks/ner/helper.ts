@@ -6,7 +6,8 @@ import {
   EmbeddingsType,
 } from '../../../../src/embeddings/database/types'
 import { WordEmbeddingStorage } from '../../../../src/embeddings/types'
-import { Codifier } from '../../../../src/preprocess/codifier'
+import { LabelEncoder } from '../../../../src/encode/label-encoder'
+import { OneHotEncoder } from '../../../../src/encode/one-hot-encoder'
 import { Preprocessor } from '../../../../src/preprocess/preprocessor'
 import { Locale } from '../../../../src/types'
 import { SHOPPING_DATA_PATH } from '../../helper'
@@ -87,12 +88,8 @@ export const EMBEDDINGS_DIMENSION: EmbeddingsDimension = 50
 
 export const MODEL_DIR_PATH = join(__dirname, 'model')
 
-export const sequenceCodifier = new Codifier(VOCABULARY, {
-  isCategorical: false,
-})
-export const entitiesCodifier = new Codifier(ENTITIES, {
-  isCategorical: true,
-})
+export const sequenceCodifier = new LabelEncoder(VOCABULARY)
+export const entitiesCodifier = new OneHotEncoder(ENTITIES)
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_SEQUENCE_LENGTH)
 
