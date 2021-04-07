@@ -9,11 +9,14 @@ module.exports = {
     '.*.helper.js',
     'tests/__mocks__',
   ],
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
-  transformIgnorePatterns: [
-    'node_modules/(?!@botonic|react-children-utilities).+\\.(js|jsx)$',
-  ],
-  moduleFileExtensions: ['js', 'jsx', 'json'],
+  transform: {
+    '\\.js?$': 'babel-jest',
+    '\\.ts$': 'ts-jest',
+  },
+  collectCoverageFrom: ['src/**/*.{js,ts}', '!/node_modules/'],
+  transformIgnorePatterns: ['node_modules/(?!@botonic).+\\.(ts|js)$'],
+  moduleFileExtensions: ['ts', 'js', 'json'],
+  coveragePathIgnorePatterns: ['.d.ts'],
   snapshotSerializers: [],
   modulePaths: ['node_modules', 'src'],
   moduleNameMapper: {

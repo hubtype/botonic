@@ -9,7 +9,7 @@
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_ci -- --fix",
     "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'",
-    "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc;",
     "cloc": "../../scripts/qa/cloc-package.sh ."
   },
   "repository": {
@@ -32,10 +32,12 @@
   "devDependencies": {
     "@babel/cli": "^7.11.5",
     "@babel/core": "^7.11.6",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
+    "@types/axios": "^0.14.0",
+    "@types/pusher-js": "^4.2.2",
     "babel-plugin-add-module-exports": "^1.0.2"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
@@ -48,6 +50,5 @@
     "conversational-app",
     "conversational-ui",
     "javascript"
-  ],
-  "types": "./src/types"
+  ]
 }
