@@ -3,36 +3,57 @@ import Pusher, { Channel } from 'pusher-js'
 
 import { Input, SessionUser } from '.'
 
-interface UnsentInput {
+export interface UnsentInput {
   id: string
   ack: number
   unsentInput: Input
 }
 
-interface HubtypeServiceArgs {
+export interface HubtypeServiceArgs {
   appId: string
   user: SessionUser
   lastMessageId: string
   lastMessageUpdateDate: string
   onEvent: any
-  unsentInputs: UnsentInput[]
+  unsentInputs: () => UnsentInput[]
+  server: ServerConfig
 }
 
+export interface BotonicHeaders {
+  'X-BOTONIC-USER-ID'?: string
+  'X-BOTONIC-USER-LAST-MESSAGE-ID'?: string
+  'X-BOTONIC-USER-LAST-MESSAGE-UPDATE-DATE'?: string
+}
+
+export interface ServerConfig {
+  activityTimeout?: number
+  pongTimeout?: number
+  errorMessage?: string
+}
+
+export interface InitArgs {
+  user?: SessionUser | Record<string, never>
+  lastMessageId?: string
+  lastMessageUpdateDate?: string
+}
 export declare class HubtypeService {
-  constructor(args: HubtypeServiceArgs)
   appId: string
   user: SessionUser
   lastMessageId: string
   lastMessageUpdateDate: string
   onEvent: any
   unsentInputs: UnsentInput[]
+  pusher: Pusher
+  channel: Channel
+
+  constructor(args: HubtypeServiceArgs)
+
   init(
     user: SessionUser,
     lastMessageId: string,
     lastMessageUpdateDate: string
   ): Promise<any>
-  pusher: Pusher
-  channel: Channel
+  _initPusher(): Promise<unknown>
   constructHeaders(): {
     'X-BOTONIC-USER-ID': string
     'X-BOTONIC-LAST-MESSAGE-ID': string

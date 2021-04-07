@@ -1,4 +1,4 @@
-// Options about JS are for compiling @botonic .js/jsx files
+// Options about JS are for compiling @botonic/core .js/ts files
 module.exports = {
   roots: ['src/'],
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx)$',
@@ -11,7 +11,7 @@ module.exports = {
   ],
   transform: {
     '\\.js?$': 'babel-jest',
-    '\\.ts$': 'ts-jest',
+    '\\.ts?$': 'ts-jest',
   },
   collectCoverageFrom: ['src/**/*.{js,ts}', '!/node_modules/'],
   transformIgnorePatterns: ['node_modules/(?!@botonic).+\\.(ts|js)$'],
