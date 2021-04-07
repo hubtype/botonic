@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { render as tlRender, screen } from '@testing-library/react'
 import React from 'react'
 import { act } from 'react-test-renderer'
+import { RecoilRoot } from 'recoil'
 
 import { ROLES } from '../../src/constants'
 import { Webchat } from '../../src/webchat/webchat'
@@ -9,6 +10,8 @@ import {
   expectToHaveRoles,
   renderUseWebchatHook,
 } from '../helpers/test-utils'
+
+const render = node => tlRender(node, { wrapper: RecoilRoot })
 
 describe('TEST: Webchat Component', () => {
   const theme = {

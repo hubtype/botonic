@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks'
 import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
+import { RecoilRoot } from 'recoil'
 
 import { RequestContext } from '../../src'
 import { MultichannelContext } from '../../src/components/multichannel/multichannel-context'
@@ -32,7 +33,7 @@ export function withRequestContext(
 }
 
 export const whatsappRenderer = (sut, multichannelContext = {}) =>
-  TestRenderer.create(
+  RecoilRenderer(
     withRequestContext(
       sut,
       { session: { user: { provider: 'whatsapp' } } },
@@ -40,7 +41,8 @@ export const whatsappRenderer = (sut, multichannelContext = {}) =>
     )
   )
 
-export const renderCustomHook = hook => renderHook(() => hook())
+export const renderCustomHook = hook =>
+  renderHook(() => hook(), { wrapper: RecoilRoot })
 export const renderUseWebchatHook = () => renderCustomHook(useWebchat)
 
 export const toMB = size => size * 1024 * 1024
@@ -67,3 +69,6 @@ export function expectNotToHaveRoles(roles, screen) {
     expect(screen.queryByRole(r)).toBeNull()
   })
 }
+
+export const RecoilRenderer = node =>
+  TestRenderer.create(<RecoilRoot>{node}</RecoilRoot>)

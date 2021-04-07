@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { render as tlRender, screen } from '@testing-library/react'
 import React from 'react'
 import { act } from 'react-test-renderer'
+import { RecoilRoot } from 'recoil'
 
 import { Audio, Document, Image, Video } from '../../src/components'
 import { ROLES } from '../../src/constants'
@@ -10,6 +11,8 @@ import {
   expectToHaveRoles,
   renderUseWebchatHook,
 } from '../helpers/test-utils'
+
+const render = node => tlRender(node, { wrapper: RecoilRoot })
 
 describe('Adding webchat messageComponent', () => {
   // To avoid TypeError: frame.scrollTo is not a function

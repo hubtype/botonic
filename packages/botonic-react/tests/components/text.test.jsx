@@ -1,11 +1,11 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
 
 import { Button } from '../../src/components/button'
 import { Reply } from '../../src/components/reply'
 import { Text } from '../../src/components/text'
+import { RecoilRenderer } from '../helpers/test-utils'
 
-const renderToJSON = sut => TestRenderer.create(sut).toJSON()
+const renderToJSON = sut => RecoilRenderer(sut).toJSON()
 
 describe('Text Component', () => {
   test('Just one Text', () => {

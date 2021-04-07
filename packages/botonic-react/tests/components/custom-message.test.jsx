@@ -1,11 +1,11 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
 
 import { Button, customMessage, Reply, Text } from '../../src/components'
 import { getElementName } from '../../src/components/components'
 import { createErrorBoundary } from '../../src/util/error-boundary'
+import { RecoilRenderer } from '../helpers/test-utils'
 
-const renderToJSON = sut => TestRenderer.create(sut).toJSON()
+const renderToJSON = sut => RecoilRenderer(sut).toJSON()
 
 test('TEST: CustomMessage defaultProps, props and children are injected into the component', () => {
   class CustomComponent extends React.Component {

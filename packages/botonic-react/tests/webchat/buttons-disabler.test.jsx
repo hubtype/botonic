@@ -1,5 +1,4 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
 
 import {
   Button,
@@ -12,8 +11,9 @@ import {
 } from '../../src/components'
 import { ButtonsDisabler } from '../../src/components/buttons-disabler'
 import { msgToBotonic } from '../../src/msg-to-botonic'
+import { RecoilRenderer } from '../helpers/test-utils'
 
-const renderToJSON = sut => TestRenderer.create(sut).toJSON()
+const renderToJSON = sut => RecoilRenderer(sut).toJSON()
 
 describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
   it('Appends the disabling props to a component', () => {
