@@ -4,13 +4,13 @@
     "allowUnreachableCode": false,
     "baseUrl": "src",
     "paths": {
-      "*": ["src/*", "dist/src/*", "types/*"]
+      "*": ["src/*", "lib/src/*", "types/*"]
     },
     "moduleResolution": "node",
     "rootDir": "src",
     "outDir": "lib",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "lib",
     "sourceMap": true,
     "target": "es6",
     "allowSyntheticDefaultImports": true,
