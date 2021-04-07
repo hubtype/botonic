@@ -5,6 +5,7 @@ import {
   BotonicHeaders,
   HubtypeServiceArgs,
   InitArgs,
+  Input,
   ServerConfig,
   SessionUser,
   UnsentInput,
@@ -171,14 +172,14 @@ export class HubtypeService {
     return `private-encrypted-${this.appId}-${this.user.id}`
   }
 
-  handleSentInput(message): void {
+  handleSentInput(message: Input): void {
     this.onEvent({
       action: 'update_message_info',
       message: { id: message.id, ack: 1 },
     })
   }
 
-  handleUnsentInput(message): void {
+  handleUnsentInput(message: Input): void {
     this.onEvent({
       action: 'update_message_info',
       message: { id: message.id, ack: 0, unsentInput: message },
@@ -190,7 +191,7 @@ export class HubtypeService {
    */
   async postMessage(
     user: SessionUser | Record<string, never>,
-    message
+    message: Input
   ): Promise<void> {
     try {
       await this.init({ user })

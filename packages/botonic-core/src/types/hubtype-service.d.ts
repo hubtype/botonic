@@ -61,8 +61,8 @@ export declare class HubtypeService {
   }
   onPusherEvent(event: any): void
   get pusherChannel(): string
-  handleSentInput(message: any): void
-  handleUnsentInput(message: any): void
+  handleSentInput(message: Input): void
+  handleUnsentInput(message: Input): void
   postMessage(user: SessionUser, message: any): Promise<void>
   resendUnsentInputs(): Promise<void>
   static getWebchatVisibility({

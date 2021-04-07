@@ -72,6 +72,7 @@ export interface Input extends Partial<NluResult> {
   data?: string
   path?: string
   payload?: string
+  id: string
   type: InputType
 }
 
