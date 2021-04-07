@@ -2,6 +2,7 @@ import { HubtypeService, INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { render } from 'react-dom'
+import { RecoilRoot } from 'recoil'
 
 import { SENDERS, WEBCHAT } from './constants'
 import { msgToBotonic } from './msg-to-botonic'
@@ -283,30 +284,32 @@ export class WebchatApp {
     this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
     return (
-      <Webchat
-        {...webchatOptions}
-        ref={this.webchatRef}
-        host={this.host}
-        shadowDOM={this.shadowDOM}
-        theme={theme}
-        persistentMenu={persistentMenu}
-        coverComponent={coverComponent}
-        blockInputs={blockInputs}
-        enableEmojiPicker={enableEmojiPicker}
-        enableAttachments={enableAttachments}
-        enableUserInput={enableUserInput}
-        enableAnimations={enableAnimations}
-        storage={storage}
-        storageKey={storageKey}
-        defaultDelay={defaultDelay}
-        defaultTyping={defaultTyping}
-        onInit={(...args) => this.onInitWebchat(...args)}
-        onOpen={(...args) => this.onOpenWebchat(...args)}
-        onClose={(...args) => this.onCloseWebchat(...args)}
-        onUserInput={(...args) => this.onUserInput(...args)}
-        onStateChange={webchatState => this.onStateChange(webchatState)}
-        server={server}
-      />
+      <RecoilRoot>
+        <Webchat
+          {...webchatOptions}
+          ref={this.webchatRef}
+          host={this.host}
+          shadowDOM={this.shadowDOM}
+          theme={theme}
+          persistentMenu={persistentMenu}
+          coverComponent={coverComponent}
+          blockInputs={blockInputs}
+          enableEmojiPicker={enableEmojiPicker}
+          enableAttachments={enableAttachments}
+          enableUserInput={enableUserInput}
+          enableAnimations={enableAnimations}
+          storage={storage}
+          storageKey={storageKey}
+          defaultDelay={defaultDelay}
+          defaultTyping={defaultTyping}
+          onInit={(...args) => this.onInitWebchat(...args)}
+          onOpen={(...args) => this.onOpenWebchat(...args)}
+          onClose={(...args) => this.onCloseWebchat(...args)}
+          onUserInput={(...args) => this.onUserInput(...args)}
+          onStateChange={webchatState => this.onStateChange(webchatState)}
+          server={server}
+        />
+      </RecoilRoot>
     )
   }
 

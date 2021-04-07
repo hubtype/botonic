@@ -20,7 +20,6 @@ import {
   UPDATE_LATEST_INPUT,
   UPDATE_MESSAGE,
   UPDATE_REPLIES,
-  UPDATE_SESSION,
   UPDATE_THEME,
   UPDATE_TYPING,
   UPDATE_WEBVIEW,
@@ -85,13 +84,6 @@ export function useWebchat() {
       type: UPDATE_WEBVIEW,
       payload: { webview, webviewParams: params },
     })
-  const updateSession = session => {
-    webchatDispatch({
-      type: UPDATE_SESSION,
-      payload: session,
-    })
-  }
-
   const updateLastRoutePath = path =>
     webchatDispatch({
       type: UPDATE_LAST_ROUTE_PATH,
@@ -174,7 +166,6 @@ export function useWebchat() {
     updateLatestInput,
     updateTyping,
     updateWebview,
-    updateSession,
     updateLastRoutePath,
     updateHandoff,
     updateTheme,

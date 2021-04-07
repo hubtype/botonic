@@ -40,6 +40,8 @@
     "react-router-dom": "^5.2.0",
     "react-textarea-autosize": "^7.1.2",
     "react-use-storage": "^0.4.3",
+    "recoil": "^0.2.0",
+    "recoil-persist": "^2.5.0",
     "simplebar-react": "^2.2.1",
     "styled-components": "^5.1.1",
     "ua-parser-js": "^0.7.21",

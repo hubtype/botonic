@@ -8,6 +8,7 @@ import React, {
   useRef,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
+import { RecoilRoot, useRecoilState, useResetRecoilState } from 'recoil'
 import styled, { StyleSheetManager } from 'styled-components'
 import { useAsyncEffect } from 'use-async-effect'
 import { v4 as uuidv4 } from 'uuid'
@@ -63,6 +64,7 @@ import {
   useWebchat,
 } from './hooks'
 import { WebchatMessageList } from './message-list'
+import { sessionState } from './recoil/atoms'
 import { WebchatReplies } from './replies'
 import { useStorageState } from './use-storage-state-hook'
 import { WebviewContainer } from './webview'
@@ -165,6 +167,8 @@ const DarkBackgroundMenu = styled.div`
 
 // eslint-disable-next-line complexity
 export const Webchat = forwardRef((props, ref) => {
+  let [session, setSession] = useRecoilState(sessionState)
+  const resetSession = useResetRecoilState(sessionState)
   const {
     webchatState,
     addMessage,
@@ -174,7 +178,6 @@ export const Webchat = forwardRef((props, ref) => {
     updateLatestInput,
     updateTyping,
     updateWebview,
-    updateSession,
     updateLastRoutePath,
     updateHandoff,
     updateTheme,
@@ -218,7 +221,6 @@ export const Webchat = forwardRef((props, ref) => {
         JSON.parse(
           stringifyWithRegexs({
             messages: webchatState.messagesJSON,
-            session: webchatState.session,
             lastRoutePath: webchatState.lastRoutePath,
             devSettings: webchatState.devSettings,
             lastMessageUpdate: webchatState.lastMessageUpdate,
@@ -250,9 +252,9 @@ export const Webchat = forwardRef((props, ref) => {
   const sendUserInput = async input => {
     props.onUserInput &&
       props.onUserInput({
-        user: webchatState.session.user,
+        user: session.user,
         input: input,
-        session: webchatState.session,
+        session: session,
         lastRoutePath: webchatState.lastRoutePath,
       })
   }
@@ -287,16 +289,15 @@ export const Webchat = forwardRef((props, ref) => {
 
   // Load initial state from storage
   useEffect(() => {
-    let {
+    const {
       messages,
-      session,
       lastRoutePath,
       devSettings,
       lastMessageUpdate,
       themeUpdates,
     } = botonicState || {}
     session = initSession(session)
-    updateSession(session)
+    setSession(session)
     if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
       if (messages) {
         messages.forEach(m => {
@@ -309,9 +310,11 @@ export const Webchat = forwardRef((props, ref) => {
           if (newComponent) addMessageComponent(newComponent)
         })
       }
-      if (initialSession) updateSession(merge(initialSession, session))
+      if (initialSession)
+        setSession(merge({ ...initialSession }, { ...session }))
+
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-    } else updateSession(merge(initialSession, session))
+    } else setSession(initialSession)
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
@@ -332,7 +335,6 @@ export const Webchat = forwardRef((props, ref) => {
     saveWebchatState(webchatState)
   }, [
     webchatState.messagesJSON,
-    webchatState.session,
     webchatState.lastRoutePath,
     webchatState.devSettings,
     webchatState.lastMessageUpdate,
@@ -533,7 +535,7 @@ export const Webchat = forwardRef((props, ref) => {
   */
 
   const updateSessionWithUser = userToUpdate =>
-    updateSession(merge(webchatState.session, { user: userToUpdate }))
+    setSession(merge({ ...session }, { user: userToUpdate }))
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
@@ -541,7 +543,7 @@ export const Webchat = forwardRef((props, ref) => {
       if (Array.isArray(response)) response.map(r => addMessageComponent(r))
       else if (response) addMessageComponent(response)
       if (session) {
-        updateSession(merge(session, { user: webchatState.session.user }))
+        setSession(merge({ ...session }, { user: session.user }))
         const action = session._botonic_action || ''
         const handoff = action.startsWith('create_case')
         if (handoff && isDev) addMessageComponent(<Handoff />)
@@ -586,21 +588,21 @@ export const Webchat = forwardRef((props, ref) => {
 
   const resolveCase = () => {
     updateHandoff(false)
-    updateSession({ ...webchatState.session, _botonic_action: null })
+    setSession({ ...session, _botonic_action: null })
   }
 
-  const prevSession = usePrevious(webchatState.session)
+  const prevSession = usePrevious(session)
   useEffect(() => {
     // Resume conversation after handoff
     if (
       prevSession &&
       prevSession._botonic_action &&
-      !webchatState.session._botonic_action
+      !session._botonic_action
     ) {
       const action = getParsedAction(prevSession._botonic_action)
       if (action && action.on_finish) sendPayload(action.on_finish)
     }
-  }, [webchatState.session._botonic_action])
+  }, [session._botonic_action])
 
   const sendText = async (text, payload) => {
     if (!text) return
@@ -640,9 +642,9 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const webviewRequestContext = {
-    getString: stringId => props.getString(stringId, webchatState.session),
-    setLocale: locale => props.getString(locale, webchatState.session),
-    session: webchatState.session || {},
+    getString: stringId => props.getString(stringId, session),
+    setLocale: locale => props.getString(locale, session),
+    session: session || {},
     params: webchatState.webviewParams || {},
     closeWebview: closeWebview,
     defaultDelay: props.defaultDelay || 0,

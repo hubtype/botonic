@@ -1,9 +1,11 @@
 import React from 'react'
 import JSONTree from 'react-json-tree'
+import { useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 
 import { COLORS } from '../constants'
 import { useWebchat } from './hooks'
+import { sessionState } from './recoil/atoms'
 
 const AttributeContainer = styled.div`
   display: flex;
@@ -100,7 +102,8 @@ const KeepSessionContainer = styled.div`
 export const SessionView = props => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { webchatState, updateDevSettings } = props.webchatHooks || useWebchat()
-  const { latestInput: input, session, lastRoutePath } = webchatState
+  const { latestInput: input, lastRoutePath } = webchatState
+  const session = useRecoilValue(sessionState)
   const toggleSessionView = () =>
     updateDevSettings({
       ...webchatState.devSettings,

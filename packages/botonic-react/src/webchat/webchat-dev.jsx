@@ -2,6 +2,7 @@ import { PROVIDER } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { forwardRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { RecoilRoot } from 'recoil'
 import styled from 'styled-components'
 
 import { useWebchat } from './hooks'
@@ -57,7 +58,7 @@ export const WebchatDev = forwardRef((props, ref) => {
   }, [props.theme])
 
   return (
-    <>
+    <RecoilRoot>
       <Webchat
         style={{ flex: 1, position: 'relative' }}
         {...props}
@@ -73,6 +74,6 @@ export const WebchatDev = forwardRef((props, ref) => {
         show={webchatState.devSettings.showSessionView}
         webchatHooks={webchatHooks}
       />
-    </>
+    </RecoilRoot>
   )
 })
