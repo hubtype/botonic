@@ -17,7 +17,7 @@ import { TextClassifierParameters } from './types'
 
 export function createSimpleNN(
   maxLength: number,
-  intents: string[],
+  numClasses: number,
   embeddingsMatrix: Tensor2D,
   params: TextClassifierParameters = {
     dropout: DEFAULT_DROPOUT,
@@ -45,7 +45,7 @@ export function createSimpleNN(
 
   const denseLayer = layers.dense({
     name: 'DenseLayer',
-    units: intents.length,
+    units: numClasses,
     activation: 'softmax',
   })
 
