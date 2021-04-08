@@ -23,7 +23,10 @@ export interface ManageCms {
     fields: FieldsValues
   ): Promise<FieldsValues>
 
-  /** Will not fail if source does not have this field */
+  /**
+   * Will not fail if source does not have this field set
+   * onlyIfTargetEmpty: set to true to avoid overwriting existing data (it will not throw)
+   * */
   copyField(
     context: ManageContext,
     contentId: ContentId,

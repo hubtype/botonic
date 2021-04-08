@@ -176,6 +176,7 @@ export class ManageContentful implements ManageCms {
     if (fieldEntry == undefined) {
       return
     }
+    // TODO shouldn't this check be done before checkOverwrite?
     if (onlyIfTargetEmpty && context.locale in fieldEntry) {
       return
     }
