@@ -2,6 +2,7 @@ import { tensor } from '@tensorflow/tfjs-node'
 
 import { Sample } from '../../../dataset/types'
 import { LabelEncoder } from '../../../encode/label-encoder'
+import { OneHotEncoder } from '../../../encode/one-hot-encoder'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../preprocess/constants'
 import { Preprocessor } from '../../../preprocess/preprocessor'
 import { InputData, OutputData } from './types'
@@ -10,7 +11,7 @@ export class Processor {
   constructor(
     readonly preprocessor: Preprocessor,
     readonly tokensEncoder: LabelEncoder,
-    readonly classEncoder: LabelEncoder
+    readonly classEncoder: OneHotEncoder
   ) {}
 
   process(samples: Sample[]): { x: InputData; y: OutputData } {
@@ -21,7 +22,7 @@ export class Processor {
     }
   }
 
-  private processSample(sample: Sample): { x: number[]; y: number } {
+  private processSample(sample: Sample): { x: number[]; y: number[] } {
     return {
       x: this.generateSampleInput(sample.text),
       y: this.generateSampleOutput(sample.class),
@@ -49,8 +50,8 @@ export class Processor {
     )
   }
 
-  //TODO: modify encoders so it is possible just to encode one token.
-  private generateSampleOutput(className: string): number {
+  //TODO: modify encoders to just encode one token (not sequences).
+  private generateSampleOutput(className: string): number[] {
     return this.classEncoder.encode([className])[0]
   }
 

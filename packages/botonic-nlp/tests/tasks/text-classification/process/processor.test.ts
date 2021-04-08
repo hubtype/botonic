@@ -24,7 +24,10 @@ describe('Text Classification Processor', () => {
       [2, 37, 36, 26, 0, 0, 0, 0, 0, 0, 0, 0],
       [2, 37, 38, 17, 0, 0, 0, 0, 0, 0, 0, 0],
     ])
-    expect(sut.y.arraySync()).toEqual([1, 0])
+    expect(sut.y.arraySync()).toEqual([
+      [0, 1, 0],
+      [1, 0, 0],
+    ])
   })
 
   test('Input Generation', () => {
