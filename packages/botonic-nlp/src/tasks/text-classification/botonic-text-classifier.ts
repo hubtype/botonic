@@ -4,6 +4,8 @@ import { DatasetLoader } from '../../dataset/loader'
 import { Dataset, Sample } from '../../dataset/types'
 import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
 import { WordEmbeddingStorage } from '../../embeddings/types'
+import { LabelEncoder } from '../../encode/label-encoder'
+import { OneHotEncoder } from '../../encode/one-hot-encoder'
 import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
@@ -25,12 +27,14 @@ import {
   TEXT_CLASSIFIER_TEMPLATE,
   TextClassifierParameters,
 } from './models/types'
+import { Processor } from './process/processor'
 import { TextClassificationConfigStorage } from './storage/config-storage'
 
 export class BotonicTextClassifier {
   vocabulary: string[]
   classes: string[]
   private preprocessor: Preprocessor
+  private processor: Processor
   private modelManager: ModelManager
 
   constructor(readonly locale: Locale, readonly maxLength: number) {
@@ -74,7 +78,12 @@ export class BotonicTextClassifier {
   }
 
   compile(): void {
-    throw new Error('Processor and PredictionProcessor not implemented.')
+    this.processor = new Processor(
+      this.preprocessor,
+      new LabelEncoder(this.vocabulary),
+      new OneHotEncoder(this.classes)
+    )
+    throw new Error('PredictionProcessor not implemented.')
   }
 
   async createModel(
@@ -104,15 +113,19 @@ export class BotonicTextClassifier {
     epochs: number,
     batchSize: number
   ): Promise<void> {
-    throw new Error('Processor not implemented.')
+    const { x, y } = this.processor.process(samples)
+    await this.modelManager.train(x, y, { epochs, batchSize })
   }
 
   async evaluate(samples: Sample[]): Promise<ModelEvaluation> {
-    throw new Error('Processor not implemented.')
+    const { x, y } = this.processor.process(samples)
+    return await this.modelManager.evaluate(x, y)
   }
 
   classify(text: string): any[] {
-    throw new Error('Processor and PredictionProcessor not implemented.')
+    const input = this.processor.generateInput(text)
+    const prediction = this.modelManager.predict(input)
+    throw new Error('PredictionProcessor not implemented.')
   }
 
   async saveModel(path: string): Promise<void> {
