@@ -3,8 +3,8 @@ id: webchat-connectivity
 title: Connectivity
 ---
 
-Sometimes, the connection can be lost between the server and the chatbot. To handle this situation, you can set specific parameters to detect the connection issue.
-Moreover, for a better user experience, you can warn the user by configuring a customized error message to be displayed within the webchat interface.
+Botonic comes with offline support, meaning that the messages sent/received while the user loses connection are not lost. Instead, they're stored in a queue and are re-sent once the connection is recovered. Botonic detects if the user is online/offline by sending ping-pong messages through the websocket connection with the server. 
+By default, Botonic sends a "ping" every 20 seconds and waits for a "pong" response for 5 seconds. If there is no response, then a "Connection issues" warning message is displayed. You can customize this behavior.
 
 ## Configure the server options
 
@@ -20,9 +20,9 @@ export const webchat = {
 }
 ```
 
-- `activityTimeout`: Time to wait (in ms) before pinging the server to know if the connection is still working. Default value: 20 * 1000.
+- `activityTimeout`: Time to wait (in ms) before pinging the server to know if the connection is still working. Default value: 20*1000.
 
-- `pongTimeout`: After pinging the server, time to wait (in ms) before assuming the connection is lost and closing it. Default value: 5 * 1000.
+- `pongTimeout`: After pinging the server, time to wait (in ms) before assuming the connection is lost and closing it. Default value: 5*1000.
 
 ## Warn the user
 
@@ -37,9 +37,12 @@ export const webchat = {
   },
 }
 ```
-You can use a function if you prefer. For example, if you want to display a warning message depending on the language:
+You can use a function if you prefer. For example, if you want to display a warning message depending on the language, assuming that you are using `localeStorage`:
 
 ```javascript
+const session = JSON.parse(localeStorage.getItem('botonicState')).session
+const locale = session.__locale
+
 export const webchat = {
   server: {
     activityTimeout: 20 * 1000,
@@ -51,4 +54,3 @@ export const webchat = {
   },
 }
 ```
-
