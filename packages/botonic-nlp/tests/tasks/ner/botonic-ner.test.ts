@@ -1,5 +1,5 @@
 import { BotonicNer } from '../../../src/tasks/ner/botonic-ner'
-import * as nlpHelper from '../../helpers/helper'
+import * as generalHelper from '../../helpers/general-helper'
 import * as nerHelper from '../../helpers/tasks/ner/helper'
 
 describe('Botonic NER', () => {
@@ -34,7 +34,7 @@ describe('Botonic NER', () => {
   test('Evaluate model', async () => {
     // arrange
     const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
-    const dataset = ner.loadDataset(nlpHelper.SHOPPING_DATA_PATH)
+    const dataset = ner.loadDataset(generalHelper.SHOPPING_DATA_PATH)
     const { trainSet, testSet } = ner.splitDataset(dataset)
     ner.generateVocabulary(trainSet)
     ner.compile()
@@ -52,7 +52,7 @@ describe('Botonic NER', () => {
   test('Recognize entities', async () => {
     // arrange
     const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
-    const dataset = ner.loadDataset(nlpHelper.SHOPPING_DATA_PATH)
+    const dataset = ner.loadDataset(generalHelper.SHOPPING_DATA_PATH)
     const { trainSet } = ner.splitDataset(dataset)
     ner.generateVocabulary(trainSet)
     ner.compile()

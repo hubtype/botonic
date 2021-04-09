@@ -1,5 +1,5 @@
 import { DatasetLoader } from '../../src/dataset/loader'
-import * as helper from '../helpers/helper'
+import * as helper from '../helpers/general-helper'
 
 describe('Dataset Loader', () => {
   test('Loading Dataset from file', () => {
