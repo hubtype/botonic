@@ -9,11 +9,11 @@ export class PredictionProcessor {
 
   process(prediction: OutputData): Intent[] {
     const confidences = prediction.arraySync()[0]
-    const intents = this.generateIntents(confidences)
+    const intents = this.computeIntents(confidences)
     return this.sortIntentsByConfidence(intents)
   }
 
-  private generateIntents(confidences: number[]): Intent[] {
+  private computeIntents(confidences: number[]): Intent[] {
     return confidences.map(
       (confidence, idx) => new Intent(this.classes[idx], confidence)
     )
