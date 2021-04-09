@@ -32,9 +32,9 @@ describe('Text Classification Processor', () => {
   })
 
   test('Input Generation', () => {
-    const input = sut.generateInput(
-      'I want to create a order with this leather jacket?'
-    )
+    const input = sut.generateInput([
+      'I want to create a order with this leather jacket?',
+    ])
     expect(input.arraySync()).toEqual([[2, 37, 1, 4, 1, 20, 17, 0, 0, 0, 0, 0]])
   })
 })

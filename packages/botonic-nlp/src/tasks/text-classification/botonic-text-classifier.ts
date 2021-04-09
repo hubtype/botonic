@@ -123,7 +123,7 @@ export class BotonicTextClassifier {
   }
 
   classify(text: string): any[] {
-    const input = this.processor.generateInput(text)
+    const input = this.processor.generateInput([text])
     const prediction = this.modelManager.predict(input)
     throw new Error('PredictionProcessor not implemented.')
   }

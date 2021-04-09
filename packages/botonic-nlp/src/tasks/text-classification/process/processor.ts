@@ -15,21 +15,17 @@ export class Processor {
   ) {}
 
   process(samples: Sample[]): { x: InputData; y: OutputData } {
-    const processedSamples = samples.map(s => this.processSample(s))
-    return {
-      x: tensor(processedSamples.map(s => s.x)),
-      y: tensor(processedSamples.map(s => s.y)),
-    }
+    const texts = samples.map(sample => sample.text)
+    const classes = samples.map(sample => sample.class)
+
+    return { x: this.generateInput(texts), y: this.generateOutput(classes) }
   }
 
-  private processSample(sample: Sample): { x: number[]; y: number[] } {
-    return {
-      x: this.generateSampleInput(sample.text),
-      y: this.generateSampleOutput(sample.class),
-    }
+  generateInput(texts: string[]): InputData {
+    return tensor(texts.map(text => this.processText(text)))
   }
 
-  private generateSampleInput(text: string): number[] {
+  private processText(text: string): number[] {
     const sequence = this.generateSequence(text)
     return this.tokensEncoder.encode(sequence)
   }
@@ -39,9 +35,9 @@ export class Processor {
     const sequence = this.preprocessor.tokenize(normalizedText)
     const filteredSequence = this.preprocessor.removeStopwords(sequence)
     const stemmedSequence = this.preprocessor.stem(filteredSequence)
-    const maskedSequence = this.maskUnknownTokens(stemmedSequence)
-    const paddedSequence = this.preprocessor.pad(maskedSequence, PADDING_TOKEN)
-    return paddedSequence
+    const paddedSequence = this.preprocessor.pad(stemmedSequence, PADDING_TOKEN)
+    const maskedSequence = this.maskUnknownTokens(paddedSequence)
+    return maskedSequence
   }
 
   private maskUnknownTokens(sequence: string[]): string[] {
@@ -51,11 +47,7 @@ export class Processor {
   }
 
   //TODO: modify encoders to just encode one token (not sequences).
-  private generateSampleOutput(className: string): number[] {
-    return this.classEncoder.encode([className])[0]
-  }
-
-  generateInput(text: string): InputData {
-    return tensor([this.generateSampleInput(text)])
+  private generateOutput(classes: string[]): OutputData {
+    return tensor(this.classEncoder.encode(classes))
   }
 }
