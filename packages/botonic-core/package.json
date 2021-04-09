@@ -4,6 +4,7 @@
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
@@ -23,7 +24,8 @@
   "files": [
     "src/**",
     "lib/**",
-    "src/index.d.ts"
+    "index.d.ts",
+    "README.md"
   ],
   "dependencies": {
     "axios": "^0.21.0",
