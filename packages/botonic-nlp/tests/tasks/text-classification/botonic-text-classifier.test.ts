@@ -30,29 +30,6 @@ describe('Botonic Text Classifier', () => {
     expect(classifier.vocabulary.length).toEqual(8)
   })
 
-  test('Train and Evaluate Model', async () => {
-    const dataset = classifier.loadDataset(generalHelper.DATA_DIR_PATH)
-    const { trainSet, testSet } = classifier.splitDataset(dataset, 0.5, false)
-    classifier.generateVocabulary(trainSet)
-    try {
-      classifier.compile()
-    } catch (e) {
-      console.log(e)
-    }
-    await classifier.createModel(
-      TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
-      await DatabaseStorage.with(
-        helper.LOCALE,
-        helper.EMBEDDINGS_TYPE,
-        helper.EMBEDDINGS_DIMENSION
-      )
-    )
-    await classifier.train(trainSet, 4, 8)
-    const sut = await classifier.evaluate(testSet)
-    expect(sut.accuracy).toBeDefined()
-    expect(sut.loss).toBeDefined()
-  })
-
   test('Save Model', async () => {
     const dataset = classifier.loadDataset(generalHelper.DATA_DIR_PATH)
     const { trainSet } = classifier.splitDataset(dataset, 0.5, false)
