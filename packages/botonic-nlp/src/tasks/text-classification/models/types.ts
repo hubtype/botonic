@@ -3,3 +3,7 @@ export type TextClassifierParameters = {
   units?: number
   learningRate?: number
 }
+
+export enum TEXT_CLASSIFIER_TEMPLATE {
+  SIMPLE_NN,
+}
