@@ -19,7 +19,7 @@
     "@botonic/core": "~0.18.0",
     "@botonic/nlu": "~0.18.0",
     "@tensorflow/tfjs": "^2.7.0",
-    "@types/webgl2": "0.0.5",
+    "@types/webgl2": "0.0.6",
     "axios": "latest",
     "franc": "^5.0.0",
     "langs": "^2.0.0",
@@ -35,7 +35,7 @@
     "core-js": "^3.1.4"
   },
   "resolutions": {
-    "@types/webgl2": "0.0.5"
+    "@types/webgl2": "0.0.6"
   },
   "keywords": [
     "bot-framework",

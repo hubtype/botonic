@@ -21,7 +21,7 @@
     "@babel/preset-typescript": "^7.9.0",
     "@types/axios": "^0.14.0",
     "@types/better-sqlite3": "^5.4.0",
-    "@types/webgl2": "^0.0.5"
+    "@types/webgl2": "^0.0.6"
   },
   "dependencies": {
     "@tensorflow/tfjs-node": "^2.7.0",
@@ -32,7 +32,7 @@
     "@nlpjs/lang-es": "^4.19.1"
   },
   "resolutions": {
-    "@types/webgl2": "0.0.5"
+    "@types/webgl2": "0.0.6"
   },
   "keywords": [
     "bot-framework",
