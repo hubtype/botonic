@@ -9,7 +9,7 @@ describe('Text Classification Processor', () => {
   )
 
   test('Sample Processing', () => {
-    const { x, y } = sut.process([
+    const { x, y } = sut.processSamples([
       {
         text: 'I want to buy this shirt',
         class: 'BuyProduct',
@@ -31,8 +31,8 @@ describe('Text Classification Processor', () => {
     ])
   })
 
-  test('Input Generation', () => {
-    const input = sut.generateInput([
+  test('Texts Processing', () => {
+    const input = sut.processTexts([
       'I want to create a order with this leather jacket?',
     ])
     expect(input.arraySync()).toEqual([[2, 37, 1, 4, 1, 20, 17, 0, 0, 0, 0, 0]])

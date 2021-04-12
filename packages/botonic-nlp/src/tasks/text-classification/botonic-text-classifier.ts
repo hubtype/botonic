@@ -113,17 +113,17 @@ export class BotonicTextClassifier {
     epochs: number,
     batchSize: number
   ): Promise<void> {
-    const { x, y } = this.processor.process(samples)
+    const { x, y } = this.processor.processSamples(samples)
     await this.modelManager.train(x, y, { epochs, batchSize })
   }
 
   async evaluate(samples: Sample[]): Promise<ModelEvaluation> {
-    const { x, y } = this.processor.process(samples)
+    const { x, y } = this.processor.processSamples(samples)
     return await this.modelManager.evaluate(x, y)
   }
 
   classify(text: string): any[] {
-    const input = this.processor.generateInput([text])
+    const input = this.processor.processTexts([text])
     const prediction = this.modelManager.predict(input)
     throw new Error('PredictionProcessor not implemented.')
   }

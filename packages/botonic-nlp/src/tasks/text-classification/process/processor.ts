@@ -14,14 +14,14 @@ export class Processor {
     readonly classEncoder: OneHotEncoder
   ) {}
 
-  process(samples: Sample[]): { x: InputData; y: OutputData } {
+  processSamples(samples: Sample[]): { x: InputData; y: OutputData } {
     const texts = samples.map(sample => sample.text)
     const classes = samples.map(sample => sample.class)
 
-    return { x: this.generateInput(texts), y: this.generateOutput(classes) }
+    return { x: this.processTexts(texts), y: this.generateOutput(classes) }
   }
 
-  generateInput(texts: string[]): InputData {
+  processTexts(texts: string[]): InputData {
     return tensor(texts.map(text => this.processText(text)))
   }
 
