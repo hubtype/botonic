@@ -23,7 +23,7 @@
     "@types/better-sqlite3": "^5.4.0",
     "@types/d3": "^6.0.0",
     "@types/natural": "^2.1.0",
-    "@types/webgl2": "^0.0.5",
+    "@types/webgl2": "^0.0.6",
     "nodemon": "^2.0.3"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "natural": "^2.1.5"
   },
   "resolutions": {
-    "@types/webgl2": "0.0.5"
+    "@types/webgl2": "0.0.6"
   },
   "keywords": [
     "bot-framework",

@@ -25,10 +25,10 @@
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "@types/webgl2": "0.0.5"
+    "@types/webgl2": "0.0.6"
   },
   "resolutions": {
-    "@types/webgl2": "0.0.5"
+    "@types/webgl2": "0.0.6"
   },
   "keywords": [
     "bot-framework",
