@@ -1,8 +1,7 @@
 import { Tensor3D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
-import { DatasetLoader } from '../../dataset/loader'
-import { Dataset, Sample } from '../../dataset/types'
+import { Dataset } from '../../dataset/dataset'
 import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
 import { WordEmbeddingStorage } from '../../embeddings/types'
 import { LabelEncoder } from '../../encode/label-encoder'
@@ -11,7 +10,6 @@ import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
-import { trainTestSplit } from '../../preprocess/selection'
 import {
   Normalizer,
   PaddingPosition,
@@ -32,7 +30,6 @@ import { Entity } from './process/types'
 import { NerConfigStorage } from './storage/config-storage'
 
 export class BotonicNer {
-  entities: string[]
   vocabulary: string[]
   private processor: Processor
   private predictionProcessor: PredictionProcessor
@@ -41,13 +38,19 @@ export class BotonicNer {
   private constructor(
     readonly locale: Locale,
     readonly maxLength: number,
+    readonly entities: string[],
     private preprocessor: Preprocessor
   ) {}
 
-  static with(locale: Locale, maxLength: number): BotonicNer {
+  static with(
+    locale: Locale,
+    maxLength: number,
+    entities: string[]
+  ): BotonicNer {
     return new BotonicNer(
       locale,
       maxLength,
+      unique([NEUTRAL_ENTITY].concat(entities)),
       new Preprocessor(locale, maxLength)
     )
   }
@@ -57,32 +60,18 @@ export class BotonicNer {
     const ner = new BotonicNer(
       config.locale,
       config.maxLength,
+      config.entities,
       new Preprocessor(config.locale, config.maxLength)
     )
     ner.vocabulary = config.vocabulary
-    ner.entities = config.entities
     ner.modelManager = new ModelManager(await ModelStorage.load(path))
     return ner
   }
 
-  loadDataset(path: string): Dataset {
-    const dataset = DatasetLoader.load(path)
-    this.entities = unique([NEUTRAL_ENTITY].concat(dataset.entities))
-    return dataset
-  }
-
-  splitDataset(
-    dataset: Dataset,
-    testSize = 0.2,
-    shuffle = true
-  ): { trainSet: Sample[]; testSet: Sample[] } {
-    return trainTestSplit(dataset.samples, testSize, shuffle)
-  }
-
-  generateVocabulary(samples: Sample[]): void {
+  generateVocabulary(dataset: Dataset): void {
     this.vocabulary = unique(
       [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
-        new VocabularyGenerator(this.preprocessor).generate(samples)
+        new VocabularyGenerator(this.preprocessor).generate(dataset.samples)
       )
     )
   }
@@ -124,16 +113,16 @@ export class BotonicNer {
   }
 
   async train(
-    samples: Sample[],
+    dataset: Dataset,
     epochs: number,
     batchSize: number
   ): Promise<void> {
-    const { x, y } = this.processor.process(samples)
+    const { x, y } = this.processor.process(dataset.samples)
     await this.modelManager.train(x, y, { epochs, batchSize })
   }
 
-  async evaluate(samples: Sample[]): Promise<ModelEvaluation> {
-    const { x, y } = this.processor.process(samples)
+  async evaluate(dataset: Dataset): Promise<ModelEvaluation> {
+    const { x, y } = this.processor.process(dataset.samples)
     return await this.modelManager.evaluate(x, y)
   }
 
