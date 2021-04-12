@@ -6,7 +6,7 @@ import { extname, join } from 'path'
 import { unique } from '../utils/array-utils'
 import { DataAugmenter } from './data-augmenter'
 import { EntitiesParser } from './entities-parser'
-import { Dataset, Sample } from './types'
+import { DatasetInfo, Sample } from './types'
 
 const YAML_EXTENSION = '.yaml'
 const YML_EXTENSION = '.yml'
@@ -18,7 +18,7 @@ export class DatasetLoader {
   private static DATA_AUGMENTATION_FIELD = 'data-augmentation'
   private static SAMPLES_FIELD = 'samples'
 
-  static load(path: string): Dataset {
+  static load(path: string): DatasetInfo {
     const stat = lstatSync(path)
 
     if (stat.isFile()) {
@@ -32,7 +32,7 @@ export class DatasetLoader {
     throw new Error(`path "${path}" must be a directory or file.`)
   }
 
-  private static loadDirectory(path: string): Dataset {
+  private static loadDirectory(path: string): DatasetInfo {
     const files = readdirSync(path)
     const datasets = files.map(filePath => this.loadFile(join(path, filePath)))
     const classes = datasets.reduce(
@@ -55,7 +55,7 @@ export class DatasetLoader {
     }
   }
 
-  private static loadFile(path: string): Dataset {
+  private static loadFile(path: string): DatasetInfo {
     if (!this.ALLOWED_FILE_EXTENSIONS.includes(extname(path))) {
       throw new Error(
         `File '${path}' must be a ${this.ALLOWED_FILE_EXTENSIONS.join(',')}.`

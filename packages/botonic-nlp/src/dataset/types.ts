@@ -6,7 +6,7 @@ export type FoundEntity = {
   end: number
 }
 export type Sample = { text: string; entities: FoundEntity[]; class: string }
-export type Dataset = {
+export type DatasetInfo = {
   classes: string[]
   entities: string[]
   samples: Sample[]
