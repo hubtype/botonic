@@ -22,7 +22,7 @@
     "qs": "^6.9.4",
     "tslib": "^2.0.1",
     "uuid": "^8.3.2",
-    "zip-a-folder": "0.0.12"
+    "zip-a-folder": "1.0.1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
