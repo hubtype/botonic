@@ -1,3 +1,4 @@
+import { Tensor2D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
 import { DatasetLoader } from '../../dataset/loader'
@@ -22,6 +23,10 @@ import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
 import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils/array-utils'
+import {
+  Intent,
+  PredictionProcessor,
+} from '../text-classification/process/prediction-processor'
 import { createSimpleNN } from './models/simple-nn'
 import {
   TEXT_CLASSIFIER_TEMPLATE,
@@ -35,6 +40,7 @@ export class BotonicTextClassifier {
   classes: string[]
   private preprocessor: Preprocessor
   private processor: Processor
+  private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
   constructor(readonly locale: Locale, readonly maxLength: number) {
@@ -83,15 +89,15 @@ export class BotonicTextClassifier {
       new LabelEncoder(this.vocabulary),
       new OneHotEncoder(this.classes)
     )
-    throw new Error('PredictionProcessor not implemented.')
+    this.predictionProcessor = new PredictionProcessor(this.classes)
   }
 
+  // TODO: set embeddings as optional
   async createModel(
     template: TEXT_CLASSIFIER_TEMPLATE,
     storage: WordEmbeddingStorage,
     params?: TextClassifierParameters
   ): Promise<void> {
-    // TODO: set embeddings as optional
     const embeddingsMatrix = await generateEmbeddingsMatrix(
       storage,
       this.vocabulary
@@ -122,10 +128,11 @@ export class BotonicTextClassifier {
     return await this.modelManager.evaluate(x, y)
   }
 
-  classify(text: string): any[] {
+  classify(text: string): Intent[] {
     const input = this.processor.processTexts([text])
-    const prediction = this.modelManager.predict(input)
-    throw new Error('PredictionProcessor not implemented.')
+    const prediction = this.modelManager.predict(input) as Tensor2D
+    const intents = this.predictionProcessor.process(prediction)
+    return intents
   }
 
   async saveModel(path: string): Promise<void> {
