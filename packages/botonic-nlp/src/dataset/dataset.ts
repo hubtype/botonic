@@ -1,4 +1,5 @@
 import { randomSort } from '../utils/array-utils'
+import { DatasetLoader } from './loader'
 import { Sample } from './types'
 
 export class Dataset {
@@ -7,6 +8,11 @@ export class Dataset {
     readonly entities: string[],
     readonly samples: Sample[]
   ) {}
+
+  static load(path: string): Dataset {
+    const { classes, entities, samples } = DatasetLoader.load(path)
+    return new Dataset(classes, entities, samples)
+  }
 
   split(
     testProportion = 0.2,
