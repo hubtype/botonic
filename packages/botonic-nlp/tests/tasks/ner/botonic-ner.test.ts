@@ -1,3 +1,4 @@
+import { Dataset } from '../../../src/dataset/dataset'
 import { BotonicNer } from '../../../src/tasks/ner/botonic-ner'
 import * as generalHelper from '../../helpers/general-helper'
 import * as nerHelper from '../../helpers/tasks/ner/helper'
@@ -11,31 +12,41 @@ describe('Botonic NER', () => {
     expect(ner.vocabulary).toEqual(nerHelper.VOCABULARY)
   })
 
-  test('Load data', () => {
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
-    const { trainSet, testSet } = ner.splitDataset(nerHelper.DATASET)
-    expect(trainSet.length).toEqual(4)
-    expect(testSet.length).toEqual(1)
-  })
-
   test('Generate vocabulary', () => {
     // arrange
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
+    const ner = BotonicNer.with(
+      nerHelper.LOCALE,
+      nerHelper.MAX_SEQUENCE_LENGTH,
+      nerHelper.ENTITIES
+    )
+    const dataset = Dataset.load(generalHelper.SHOPPING_DATA_PATH)
 
     // act
-    ner.generateVocabulary([
-      { text: 'this is a simple test', class: '', entities: [] },
-    ])
+    ner.generateVocabulary(dataset)
 
     // assert
-    expect(ner.vocabulary).toEqual(['<PAD>', '<UNK>', 'a', 'simple', 'test'])
+    expect(ner.vocabulary).toEqual([
+      '<PAD>',
+      '<UNK>',
+      't-shirt',
+      'available',
+      'bershka',
+      'zara',
+      'mango',
+      'stradivarius',
+      'pull&bear',
+    ])
   })
 
   test('Evaluate model', async () => {
     // arrange
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
-    const dataset = ner.loadDataset(generalHelper.SHOPPING_DATA_PATH)
-    const { trainSet, testSet } = ner.splitDataset(dataset)
+    const ner = BotonicNer.with(
+      nerHelper.LOCALE,
+      nerHelper.MAX_SEQUENCE_LENGTH,
+      nerHelper.ENTITIES
+    )
+    const dataset = Dataset.load(generalHelper.SHOPPING_DATA_PATH)
+    const { trainSet, testSet } = dataset.split()
     ner.generateVocabulary(trainSet)
     ner.compile()
     await ner.createModel('biLstm', nerHelper.testWordEmbeddingStorage)
@@ -51,16 +62,20 @@ describe('Botonic NER', () => {
 
   test('Recognize entities', async () => {
     // arrange
-    const ner = BotonicNer.with(nerHelper.LOCALE, nerHelper.MAX_SEQUENCE_LENGTH)
-    const dataset = ner.loadDataset(generalHelper.SHOPPING_DATA_PATH)
-    const { trainSet } = ner.splitDataset(dataset)
+    const ner = BotonicNer.with(
+      nerHelper.LOCALE,
+      nerHelper.MAX_SEQUENCE_LENGTH,
+      nerHelper.ENTITIES
+    )
+    const dataset = Dataset.load(generalHelper.SHOPPING_DATA_PATH)
+    const { trainSet } = dataset.split()
     ner.generateVocabulary(trainSet)
     ner.compile()
     await ner.createModel('biLstm', nerHelper.testWordEmbeddingStorage)
     await ner.train(trainSet, 4, 8)
 
     // act
-    const entities = ner.recognizeEntities('I love this t-shirt')
+    const entities = ner.recognizeEntities('I love this tshirt')
 
     // assert
     expect(entities.length).toEqual(3)
