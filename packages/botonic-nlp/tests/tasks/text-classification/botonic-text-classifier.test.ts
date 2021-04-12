@@ -9,32 +9,51 @@ import * as generalHelper from '../../helpers/general-helper'
 import * as helper from '../../helpers/tasks/text-classification/constants-helper'
 
 describe('Botonic Text Classifier', () => {
-  const classifier = new BotonicTextClassifier(helper.LOCALE, helper.MAX_LENGTH)
+  const sut = new BotonicTextClassifier(helper.LOCALE, helper.MAX_LENGTH)
 
   test('Load Dataset', () => {
-    const sut = classifier.loadDataset(generalHelper.DATA_DIR_PATH)
-    expect(sut.classes).toEqual(['booking', 'shopping'])
+    const dataset = sut.loadDataset(generalHelper.DATA_DIR_PATH)
+    expect(dataset.classes).toEqual(['booking', 'shopping'])
   })
 
   test('Split Dataset', () => {
-    const dataset = classifier.loadDataset(generalHelper.DATA_DIR_PATH)
-    const sut = classifier.splitDataset(dataset, 0.5, false)
-    expect(sut.trainSet.length).toEqual(4)
-    expect(sut.testSet.length).toEqual(4)
+    const dataset = sut.loadDataset(generalHelper.DATA_DIR_PATH)
+    const { trainSet, testSet } = sut.splitDataset(dataset, 0.5, false)
+    expect(trainSet.length).toEqual(4)
+    expect(testSet.length).toEqual(4)
   })
 
   test('Generate Vocabulary', () => {
-    const dataset = classifier.loadDataset(generalHelper.DATA_DIR_PATH)
-    const { trainSet } = classifier.splitDataset(dataset, 0.5, false)
-    classifier.generateVocabulary(trainSet)
-    expect(classifier.vocabulary.length).toEqual(8)
+    const dataset = sut.loadDataset(generalHelper.DATA_DIR_PATH)
+    const { trainSet } = sut.splitDataset(dataset, 0.5, false)
+    sut.generateVocabulary(trainSet)
+    expect(sut.vocabulary.length).toEqual(8)
+  })
+
+  test('Train and Evaluate model', async () => {
+    const dataset = sut.loadDataset(generalHelper.DATA_DIR_PATH)
+    const { trainSet, testSet } = sut.splitDataset(dataset, 0.5, false)
+    sut.generateVocabulary(trainSet)
+    sut.compile()
+    await sut.createModel(
+      TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
+      await DatabaseStorage.with(
+        helper.LOCALE,
+        helper.EMBEDDINGS_TYPE,
+        helper.EMBEDDINGS_DIMENSION
+      )
+    )
+    await sut.train(trainSet, 4, 8)
+    const evaluation = await sut.evaluate(testSet)
+    expect(evaluation.accuracy).toBeGreaterThan(0.01)
+    expect(evaluation.loss).toBeLessThan(2)
   })
 
   test('Save Model', async () => {
-    const dataset = classifier.loadDataset(generalHelper.DATA_DIR_PATH)
-    const { trainSet } = classifier.splitDataset(dataset, 0.5, false)
-    classifier.generateVocabulary(trainSet)
-    await classifier.createModel(
+    const dataset = sut.loadDataset(generalHelper.DATA_DIR_PATH)
+    const { trainSet } = sut.splitDataset(dataset, 0.5, false)
+    sut.generateVocabulary(trainSet)
+    await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
         helper.LOCALE,
@@ -46,20 +65,20 @@ describe('Botonic Text Classifier', () => {
       helper.TEXT_CLASSIFICATION_DIR_PATH,
       'test-botonic-text-classifier'
     )
-    await classifier.saveModel(path)
+    await sut.saveModel(path)
     expect(existsSync(path)).toBeTruthy()
     rmdirSync(path, { recursive: true })
     expect(existsSync(path)).toBeFalsy()
   })
 
   test('Get Stopwords', () => {
-    const sut = classifier.stopwords
-    expect(sut).toEqual(STOPWORDS_EN)
+    const stopwords = sut.stopwords
+    expect(stopwords).toEqual(STOPWORDS_EN)
   })
 
   test('Set Stopwords', () => {
-    classifier.stopwords = ['this', 'is']
-    const sut = classifier.stopwords
-    expect(sut).toEqual(['this', 'is'])
+    sut.stopwords = ['this', 'is']
+    const stopwords = sut.stopwords
+    expect(stopwords).toEqual(['this', 'is'])
   })
 })
