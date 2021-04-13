@@ -3,16 +3,16 @@ import { getNormalizer } from './engines/normalizer'
 // import { getStemmer } from './engines/stemmer'
 import { getStopwords } from './engines/stopwords'
 import { getTokenizer } from './engines/tokenizer'
-import { PaddingPosition, PreprocessEngines } from './types'
+import { PreprocessEngines } from './types'
 
+export enum SEQUENCE_POSITION {
+  PRE,
+  POST,
+}
 export class Preprocessor {
   engines: PreprocessEngines = {}
 
-  constructor(
-    readonly locale: Locale,
-    readonly maxLength: number,
-    public paddingPosition: PaddingPosition = 'post'
-  ) {
+  constructor(readonly locale: Locale, readonly maxLength: number) {
     this.loadEngines()
   }
 
@@ -51,19 +51,31 @@ export class Preprocessor {
     return this.engines.stemmer ? this.engines.stemmer.stem(tokens) : tokens
   }
 
-  pad(tokens: string[], value: string): string[] {
+  pad(
+    tokens: string[],
+    value: string,
+    position: SEQUENCE_POSITION = SEQUENCE_POSITION.POST
+  ): string[] {
     const difference = this.maxLength - tokens.length
     if (difference > 0) {
       const padd = Array(difference).fill(value)
-      return this.paddingPosition == 'pre'
+      return position === SEQUENCE_POSITION.PRE
         ? padd.concat(tokens)
         : tokens.concat(padd)
-    } else if (difference < 0) {
-      return this.paddingPosition == 'pre'
+    }
+    return tokens
+  }
+
+  truncate(
+    tokens: string[],
+    position: SEQUENCE_POSITION = SEQUENCE_POSITION.POST
+  ): string[] {
+    const difference = this.maxLength - tokens.length
+    if (difference < 0) {
+      return position === SEQUENCE_POSITION.PRE
         ? tokens.slice(-this.maxLength)
         : tokens.slice(0, this.maxLength)
-    } else {
-      return tokens
     }
+    return tokens
   }
 }

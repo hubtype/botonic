@@ -163,8 +163,4 @@ export class BotonicNer {
   set stemmer(engine: Stemmer) {
     this.preprocessor.engines.stemmer = engine
   }
-
-  set paddingPosition(position: PaddingPosition) {
-    this.preprocessor.paddingPosition = position
-  }
 }
