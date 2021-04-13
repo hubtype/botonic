@@ -1,6 +1,6 @@
 import { Dataset } from '../../../src/dataset/dataset'
 import { BotonicNer } from '../../../src/tasks/ner/botonic-ner'
-import * as generalHelper from '../../helpers/general-helper'
+import * as constantsHelper from '../../helpers/constants-helper'
 import * as nerHelper from '../../helpers/tasks/ner/helper'
 
 describe('Botonic NER', () => {
@@ -19,7 +19,7 @@ describe('Botonic NER', () => {
       nerHelper.MAX_SEQUENCE_LENGTH,
       nerHelper.ENTITIES
     )
-    const dataset = Dataset.load(generalHelper.SHOPPING_DATA_PATH)
+    const dataset = Dataset.load(constantsHelper.SHOPPING_DATA_PATH)
 
     // act
     ner.generateVocabulary(dataset)
@@ -45,7 +45,7 @@ describe('Botonic NER', () => {
       nerHelper.MAX_SEQUENCE_LENGTH,
       nerHelper.ENTITIES
     )
-    const dataset = Dataset.load(generalHelper.SHOPPING_DATA_PATH)
+    const dataset = Dataset.load(constantsHelper.SHOPPING_DATA_PATH)
     const { trainSet, testSet } = dataset.split()
     ner.generateVocabulary(trainSet)
     ner.compile()
@@ -67,7 +67,7 @@ describe('Botonic NER', () => {
       nerHelper.MAX_SEQUENCE_LENGTH,
       nerHelper.ENTITIES
     )
-    const dataset = Dataset.load(generalHelper.SHOPPING_DATA_PATH)
+    const dataset = Dataset.load(constantsHelper.SHOPPING_DATA_PATH)
     const { trainSet } = dataset.split()
     ner.generateVocabulary(trainSet)
     ner.compile()
