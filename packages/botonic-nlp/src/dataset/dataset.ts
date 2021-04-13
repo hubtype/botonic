@@ -19,7 +19,7 @@ export class Dataset {
     shuffle = true
   ): { trainSet: Dataset; testSet: Dataset } {
     if (1 < testProportion || testProportion < 0) {
-      throw new RangeError(`testsize must be a number between 0 and 1.`)
+      throw new RangeError(`testProportion must be a number between 0 and 1.`)
     }
     const samples = shuffle ? randomSort(this.samples) : this.samples
     const trainSamples = samples.slice(testProportion * samples.length)
