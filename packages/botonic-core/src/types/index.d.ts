@@ -170,8 +170,7 @@ export interface Route {
   type?: StringMatcher
 }
 
-export type RouteRequest = { input: Input; session: Session }
-export type Routes<R = Route> = R[] | ((_: RouteRequest) => R[])
+export type Routes<R = Route> = R[] | ((_: BotRequest) => R[])
 
 // Desk
 
