@@ -90,7 +90,7 @@ export class ContentfulEntryUtils {
       searchableBy,
       dateRange,
       followUp,
-      //customFields cannot be easily diferenciated from standard fields until the content is created. see addCustomFields
+      //customFields cannot be easily told apart from standard fields until the content is created. see addCustomFields
     })
   }
 
