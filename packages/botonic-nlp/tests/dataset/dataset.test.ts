@@ -21,4 +21,10 @@ describe('Dataset', () => {
     expect(trainSet.length).toEqual(3)
     expect(testSet.length).toEqual(1)
   })
+
+  test('Wrong Split Proportions', () => {
+    expect(() => {
+      sut.split(2)
+    }).toThrowError()
+  })
 })
