@@ -32,7 +32,7 @@ export class Preprocessor {
   normalize(text: string): string {
     return this.engines.normalizer
       ? this.engines.normalizer.normalize(text)
-      : text
+      : text.toLowerCase()
   }
 
   tokenize(text: string): string[] {
