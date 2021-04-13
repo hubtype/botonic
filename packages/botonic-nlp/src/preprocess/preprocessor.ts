@@ -29,6 +29,16 @@ export class Preprocessor {
     }
   }
 
+  preprocess(text: string, paddingValue: string): string[] {
+    const normalizedText = this.normalize(text)
+    const tokens = this.tokenize(normalizedText)
+    const filteredTokens = this.removeStopwords(tokens)
+    const stemmedTokens = this.stem(filteredTokens)
+    const paddedSequence = this.pad(stemmedTokens, paddingValue)
+    const truncatedSequence = this.truncate(paddedSequence)
+    return truncatedSequence
+  }
+
   normalize(text: string): string {
     return this.engines.normalizer
       ? this.engines.normalizer.normalize(text)
