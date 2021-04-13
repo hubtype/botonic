@@ -1,8 +1,7 @@
 import { Tensor2D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
-import { DatasetLoader } from '../../dataset/loader'
-import { Dataset, Sample } from '../../dataset/types'
+import { Dataset } from '../../dataset/dataset'
 import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
 import { WordEmbeddingStorage } from '../../embeddings/types'
 import { LabelEncoder } from '../../encode/label-encoder'
@@ -11,7 +10,6 @@ import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
-import { trainTestSplit } from '../../preprocess/selection'
 import {
   Normalizer,
   PaddingPosition,
@@ -37,13 +35,16 @@ import { TextClassificationConfigStorage } from './storage/config-storage'
 
 export class BotonicTextClassifier {
   vocabulary: string[]
-  classes: string[]
   private preprocessor: Preprocessor
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
-  constructor(readonly locale: Locale, readonly maxLength: number) {
+  constructor(
+    readonly locale: Locale,
+    readonly maxLength: number,
+    readonly classes: string[]
+  ) {
     this.preprocessor = new Preprocessor(locale, maxLength)
   }
 
@@ -51,34 +52,20 @@ export class BotonicTextClassifier {
     const config = new TextClassificationConfigStorage().load(path)
     const textClassification = new BotonicTextClassifier(
       config.locale,
-      config.maxLength
+      config.maxLength,
+      config.classes
     )
     textClassification.vocabulary = config.vocabulary
-    textClassification.classes = config.classes
     textClassification.modelManager = new ModelManager(
       await ModelStorage.load(path)
     )
     return textClassification
   }
 
-  loadDataset(path: string): Dataset {
-    const dataset = DatasetLoader.load(path)
-    this.classes = dataset.classes
-    return dataset
-  }
-
-  splitDataset(
-    dataset: Dataset,
-    testSize = 0.2,
-    shuffle = true
-  ): { trainSet: Sample[]; testSet: Sample[] } {
-    return trainTestSplit(dataset.samples, testSize, shuffle)
-  }
-
-  generateVocabulary(samples: Sample[]): void {
+  generateVocabulary(dataset: Dataset): void {
     this.vocabulary = unique(
       [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
-        new VocabularyGenerator(this.preprocessor).generate(samples)
+        new VocabularyGenerator(this.preprocessor).generate(dataset.samples)
       )
     )
   }
@@ -115,16 +102,16 @@ export class BotonicTextClassifier {
   }
 
   async train(
-    samples: Sample[],
+    dataset: Dataset,
     epochs: number,
     batchSize: number
   ): Promise<void> {
-    const { x, y } = this.processor.processSamples(samples)
+    const { x, y } = this.processor.processSamples(dataset.samples)
     await this.modelManager.train(x, y, { epochs, batchSize })
   }
 
-  async evaluate(samples: Sample[]): Promise<ModelEvaluation> {
-    const { x, y } = this.processor.processSamples(samples)
+  async evaluate(dataset: Dataset): Promise<ModelEvaluation> {
+    const { x, y } = this.processor.processSamples(dataset.samples)
     return await this.modelManager.evaluate(x, y)
   }
 
