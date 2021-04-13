@@ -12,7 +12,6 @@ import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
 import {
   Normalizer,
-  PaddingPosition,
   Stemmer,
   Stopwords,
   Tokenizer,
