@@ -1,4 +1,4 @@
-import { randomSort } from '../utils/array-utils'
+import { shuffle as shuffleArray } from '../utils/array-utils'
 import { DatasetLoader } from './loader'
 import { Sample } from './types'
 
@@ -21,7 +21,7 @@ export class Dataset {
     if (1 < testProportion || testProportion < 0) {
       throw new RangeError(`testProportion must be a number between 0 and 1.`)
     }
-    const samples = shuffle ? randomSort(this.samples) : this.samples
+    const samples = shuffle ? shuffleArray(this.samples) : this.samples
     const trainSamples = samples.slice(testProportion * samples.length)
     const testSamples = samples.slice(0, testProportion * samples.length)
     return {
