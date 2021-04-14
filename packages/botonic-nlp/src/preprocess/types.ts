@@ -16,10 +16,3 @@ export interface Tokenizer {
 }
 
 export type Stopwords = string[]
-
-export type PreprocessEngines = {
-  normalizer?: Normalizer
-  tokenizer?: Tokenizer
-  stopwords?: Stopwords
-  stemmer?: Stemmer
-}

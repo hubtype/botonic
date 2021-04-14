@@ -3,14 +3,22 @@ import { getNormalizer } from './engines/normalizer'
 // import { getStemmer } from './engines/stemmer'
 import { getStopwords } from './engines/stopwords'
 import { getTokenizer } from './engines/tokenizer'
-import { PreprocessEngines } from './types'
+import { Normalizer, Stemmer, Stopwords, Tokenizer } from './types'
 
 export enum SEQUENCE_POSITION {
   PRE,
   POST,
 }
+
+export type Engines = {
+  normalizer?: Normalizer
+  tokenizer?: Tokenizer
+  stopwords?: Stopwords
+  stemmer?: Stemmer
+}
+
 export class Preprocessor {
-  engines: PreprocessEngines = {}
+  engines: Engines = {}
 
   constructor(readonly locale: Locale, readonly maxLength: number) {
     this.loadEngines()
