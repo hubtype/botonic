@@ -1,6 +1,6 @@
-import Migration from 'contentful-migration'
+import Migration, { MigrationContext } from 'contentful-migration'
 
-import { createFieldButtons, createFieldFollowUp } from '../factories'
+import { createCommonFields, createFieldButtons } from '../factories'
 
 function createCarousel(migration: Migration) {
   // TODO WIP
@@ -11,5 +11,9 @@ function createCarousel(migration: Migration) {
   createFieldButtons(element)
 
   const carousel = migration.createContentType('carousel')
-  createFieldFollowUp(carousel)
+  createCommonFields(carousel, { shortText: true, keywords: true })
+}
+
+module.exports = function (migration: Migration, _: MigrationContext) {
+  createCarousel(migration)
 }

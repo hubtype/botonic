@@ -85,3 +85,15 @@ export function createFieldFollowUp(contentType: ContentType): Field {
       { linkContentType: ['text', 'carousel', 'image', 'document', 'startUp'] },
     ])
 }
+
+export function createCommonFields(
+  contentType: ContentType,
+  requireFields: { shortText: boolean; keywords: boolean }
+): ContentType {
+  createFieldName(contentType)
+  createFieldShortText(contentType, requireFields.shortText)
+
+  createFieldKeywords(contentType, requireFields.keywords)
+  createFieldFollowUp(contentType)
+  return contentType
+}

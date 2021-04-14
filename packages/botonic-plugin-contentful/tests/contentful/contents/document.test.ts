@@ -7,13 +7,13 @@ test('TEST: contentful document', async () => {
   const document = await sut.document(TEST_DOCUMENT, {
     locale: TEST_DEFAULT_LOCALE,
   })
-  expectImgUrlIs(document.docUrl, 'srp.pdf')
+  expectDocUrlIs(document.docUrl, 'srp.pdf')
   expect(document.common.customFields).toEqual({
     customFieldText: 'Custom data',
   })
 })
 
-export function expectImgUrlIs(url: string, expectedFileName: string): void {
+export function expectDocUrlIs(url: string, expectedFileName: string): void {
   const urlChunks = url.split('/')
   expect(urlChunks[0]).toBe('https:')
   expect(urlChunks[urlChunks.length - 1]).toBe(expectedFileName)

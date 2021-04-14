@@ -1,6 +1,6 @@
 import Migration, { MigrationContext } from 'contentful-migration'
 
-import { createFieldKeywords, createFieldShortText } from '../factories'
+import { createCommonFields } from '../factories'
 
 module.exports = function (migration: Migration, _: MigrationContext) {
   // TODO WIP
@@ -8,6 +8,5 @@ module.exports = function (migration: Migration, _: MigrationContext) {
     .createContentType('startUp')
     .name('Start Up')
     .description('Flow initial content. Image, text & buttons')
-  createFieldShortText(startUp, false)
-  createFieldKeywords(startUp, false)
+  createCommonFields(startUp, { shortText: false, keywords: false })
 }

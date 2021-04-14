@@ -140,15 +140,15 @@ export class BotonicMsgConverter {
     return this.appendFollowUp(msg, img)
   }
 
-  document(img: cms.Document, delayS = 0): BotonicMsgs {
+  document(doc: cms.Document, delayS = 0): BotonicMsgs {
     const msg: BotonicMsg = {
       type: 'document',
       delay: delayS,
       data: {
-        document: img.docUrl,
+        document: doc.docUrl,
       },
     }
-    return this.appendFollowUp(msg, img)
+    return this.appendFollowUp(msg, doc)
   }
 
   private appendFollowUp(

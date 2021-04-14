@@ -1,6 +1,10 @@
-import Migration from 'contentful-migration'
+import Migration, { MigrationContext } from 'contentful-migration'
 
-import { createFieldButtons, createFieldFollowUp } from '../factories'
+import {
+  createCommonFields,
+  createFieldButtons,
+  createFieldFollowUp,
+} from '../factories'
 
 function createText(migration: Migration) {
   // TODO WIP
@@ -8,6 +12,11 @@ function createText(migration: Migration) {
     .createContentType('text')
     .name('Text')
     .description('A text optionally with buttons')
+  createCommonFields(text, { shortText: true, keywords: true })
   createFieldButtons(text)
   createFieldFollowUp(text)
+}
+
+module.exports = function (migration: Migration, _: MigrationContext) {
+  createText(migration)
 }
