@@ -1,7 +1,7 @@
 import { Locale } from '../../types'
-import { Normalizer } from '../types'
 import { NormalizerEn } from './en/normalizer-en'
 import { NormalizerEs } from './es/normalizer-es'
+import { Normalizer } from './types'
 
 const NORMALIZERS = {
   en: new NormalizerEn(),

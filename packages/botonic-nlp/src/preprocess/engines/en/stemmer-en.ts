@@ -1,4 +1,4 @@
-import { Stemmer } from '../../types'
+import { Stemmer } from '../types'
 
 export class StemmerEn implements Stemmer {
   readonly locale = 'en'

@@ -1,7 +1,7 @@
 import { Locale } from '../../types'
-import { Stemmer } from '../types'
 import { StemmerEn } from './en/stemmer-en'
 import { StemmerEs } from './es/stemmer-es'
+import { Stemmer } from './types'
 
 const STEMMERS = {
   en: new StemmerEn(),

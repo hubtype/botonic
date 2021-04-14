@@ -1,7 +1,7 @@
 import { Locale } from '../../types'
-import { Tokenizer } from '../types'
 import { TokenizerEn } from './en/tokenizer-en'
 import { TokenizerEs } from './es/tokenizer-es'
+import { Tokenizer } from './types'
 
 const TOKENIZERS = {
   en: new TokenizerEn(),

@@ -1,4 +1,4 @@
-import { Tokenizer } from '../../types'
+import { Tokenizer } from '../types'
 
 export class TokenizerEn implements Tokenizer {
   readonly locale = 'en'

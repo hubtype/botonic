@@ -9,13 +9,13 @@ import { OneHotEncoder } from '../../encode/one-hot-encoder'
 import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
-import { Preprocessor } from '../../preprocess/preprocessor'
 import {
   Normalizer,
   Stemmer,
   Stopwords,
   Tokenizer,
-} from '../../preprocess/types'
+} from '../../preprocess/engines/types'
+import { Preprocessor } from '../../preprocess/preprocessor'
 import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
 import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'

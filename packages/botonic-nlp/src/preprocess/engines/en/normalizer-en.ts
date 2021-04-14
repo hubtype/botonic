@@ -1,4 +1,4 @@
-import { Normalizer } from '../../types'
+import { Normalizer } from '../types'
 
 export class NormalizerEn implements Normalizer {
   readonly locale = 'en'

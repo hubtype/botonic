@@ -3,7 +3,7 @@ import { getNormalizer } from './engines/normalizer'
 // import { getStemmer } from './engines/stemmer'
 import { getStopwords } from './engines/stopwords'
 import { getTokenizer } from './engines/tokenizer'
-import { Normalizer, Stemmer, Stopwords, Tokenizer } from './types'
+import { Normalizer, Stemmer, Stopwords, Tokenizer } from './engines/types'
 
 export enum SEQUENCE_POSITION {
   PRE,

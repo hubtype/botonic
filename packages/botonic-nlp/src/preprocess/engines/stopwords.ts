@@ -1,7 +1,7 @@
 import { Locale } from '../../types'
-import { Stopwords } from '../types'
 import { STOPWORDS_EN } from './en/stopwords-en'
 import { STOPWORDS_ES } from './es/stopwords-es'
+import { Stopwords } from './types'
 
 const STOPWORDS = {
   en: STOPWORDS_EN,
