@@ -10,8 +10,7 @@ export class Dataset {
   ) {}
 
   static load(path: string): Dataset {
-    const { classes, entities, samples } = DatasetLoader.load(path)
-    return new Dataset(classes, entities, samples)
+    return DatasetLoader.load(path)
   }
 
   split(
