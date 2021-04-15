@@ -64,7 +64,7 @@ export class Preprocessor {
   pad(
     tokens: string[],
     value: string,
-    position: SEQUENCE_POSITION = SEQUENCE_POSITION.POST
+    position = SEQUENCE_POSITION.POST
   ): string[] {
     const difference = this.maxLength - tokens.length
     if (difference > 0) {
