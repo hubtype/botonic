@@ -12,7 +12,6 @@ import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
 import {
   Normalizer,
-  PaddingPosition,
   Stemmer,
   Stopwords,
   Tokenizer,
@@ -152,9 +151,5 @@ export class BotonicTextClassifier {
 
   set stemmer(engine: Stemmer) {
     this.preprocessor.engines.stemmer = engine
-  }
-
-  set paddingPosition(position: PaddingPosition) {
-    this.preprocessor.paddingPosition = position
   }
 }

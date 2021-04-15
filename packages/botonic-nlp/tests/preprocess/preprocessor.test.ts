@@ -1,63 +1,62 @@
-import { Preprocessor } from '../../src/preprocess/preprocessor'
+import {
+  Preprocessor,
+  SEQUENCE_POSITION,
+} from '../../src/preprocess/preprocessor'
 
-describe('Preprocessor', () => {
-  const preprocessor = new Preprocessor('ca', 6)
+describe('Preprocessor with loaded engines', () => {
+  const sut = new Preprocessor('en', 6)
 
-  test('Locale without engines implementations', () => {
-    expect(preprocessor.engines).toEqual({})
-  })
-  test('Default normalize', () => {
-    expect(preprocessor.normalize('testing')).toEqual('testing')
-  })
-
-  test('Default tokenize', () => {
-    expect(preprocessor.tokenize('Split by space!')).toEqual([
-      'Split',
-      'by',
-      'space!',
+  test('Preprocess', () => {
+    expect(sut.preprocess('This is a test', '<PAD>')).toEqual([
+      'a',
+      'test',
+      '<PAD>',
+      '<PAD>',
+      '<PAD>',
+      '<PAD>',
     ])
   })
 
-  test('Default stopwords removal', () => {
-    expect(
-      preprocessor.removeStopwords(['I', 'am', 'testing', 'stopwords'])
-    ).toEqual(['I', 'am', 'testing', 'stopwords'])
+  test('Normalize', () => {
+    expect(sut.normalize('This')).toEqual('this')
   })
 
-  test('Default stem', () => {
-    expect(preprocessor.stem(['Testing', 'stemmers'])).toEqual([
-      'Testing',
-      'stemmers',
+  test('Tokenize', () => {
+    expect(sut.tokenize('this is a test')).toEqual(['this', 'is', 'a', 'test'])
+  })
+
+  test('Stopwords removal', () => {
+    expect(sut.removeStopwords(['this', 'is', 'a', 'test'])).toEqual([
+      'a',
+      'test',
     ])
   })
 
-  test('Padding too short sequence', () => {
-    expect(
-      new Preprocessor('en', 6, 'pre').pad(
-        ['I', 'need', 'some', 'padding'],
-        '<PAD>'
-      )
-    ).toEqual(['<PAD>', '<PAD>', 'I', 'need', 'some', 'padding'])
-    expect(
-      new Preprocessor('en', 6, 'post').pad(
-        ['I', 'need', 'some', 'padding'],
-        '<PAD>'
-      )
-    ).toEqual(['I', 'need', 'some', 'padding', '<PAD>', '<PAD>'])
+  test('Stem', () => {
+    expect(sut.stem(['testing', 'stemmer'])).toEqual(['testing', 'stemmer'])
   })
 
-  test('Padding too long sequence', () => {
+  test('Pad', () => {
     expect(
-      new Preprocessor('en', 6, 'pre').pad(
-        ['I', 'need', 'some', 'padding', 'for', 'this', 'sentence'],
-        '<PAD>'
-      )
-    ).toEqual(['need', 'some', 'padding', 'for', 'this', 'sentence'])
+      sut.pad(['This', 'is', 'a', 'test'], '<PAD>', SEQUENCE_POSITION.PRE)
+    ).toEqual(['<PAD>', '<PAD>', 'This', 'is', 'a', 'test'])
     expect(
-      new Preprocessor('en', 6, 'post').pad(
-        ['I', 'need', 'some', 'padding', 'for', 'this', 'sentence'],
-        '<PAD>'
+      sut.pad(['This', 'is', 'a', 'test'], '<PAD>', SEQUENCE_POSITION.POST)
+    ).toEqual(['This', 'is', 'a', 'test', '<PAD>', '<PAD>'])
+  })
+
+  test('Truncate', () => {
+    expect(
+      sut.truncate(
+        ['This', 'is', 'a', 'long', 'test', 'sentence', 'to', 'truncate'],
+        SEQUENCE_POSITION.PRE
       )
-    ).toEqual(['I', 'need', 'some', 'padding', 'for', 'this'])
+    ).toEqual(['a', 'long', 'test', 'sentence', 'to', 'truncate'])
+    expect(
+      sut.truncate(
+        ['This', 'is', 'a', 'long', 'test', 'sentence', 'to', 'truncate'],
+        SEQUENCE_POSITION.POST
+      )
+    ).toEqual(['This', 'is', 'a', 'long', 'test', 'sentence'])
   })
 })

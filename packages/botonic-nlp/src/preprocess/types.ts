@@ -23,5 +23,3 @@ export type PreprocessEngines = {
   stopwords?: Stopwords
   stemmer?: Stemmer
 }
-
-export type PaddingPosition = 'pre' | 'post'
