@@ -10,7 +10,7 @@ import { LabelEncoder } from '../../../../src/encode/label-encoder'
 import { OneHotEncoder } from '../../../../src/encode/one-hot-encoder'
 import { Preprocessor } from '../../../../src/preprocess/preprocessor'
 import { Locale } from '../../../../src/types'
-import { SHOPPING_DATA_PATH } from '../../general-helper'
+import { SHOPPING_DATA_PATH } from '../../constants-helper'
 export { EMBEDDINGS_MATRIX } from './embeddings-matrix'
 
 export const LOCALE: Locale = 'en'

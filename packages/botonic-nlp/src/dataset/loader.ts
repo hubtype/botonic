@@ -5,8 +5,9 @@ import { extname, join } from 'path'
 
 import { unique } from '../utils/array-utils'
 import { DataAugmenter } from './data-augmenter'
+import { Dataset } from './dataset'
 import { EntitiesParser } from './entities-parser'
-import { Dataset, Sample } from './types'
+import { Sample } from './types'
 
 const YAML_EXTENSION = '.yaml'
 const YML_EXTENSION = '.yml'
@@ -35,24 +36,21 @@ export class DatasetLoader {
   private static loadDirectory(path: string): Dataset {
     const files = readdirSync(path)
     const datasets = files.map(filePath => this.loadFile(join(path, filePath)))
-    const classes = datasets.reduce(
-      (classes, dataset) => classes.concat(dataset.classes),
-      []
+    const classes: string[] = unique(
+      datasets.reduce((classes, dataset) => classes.concat(dataset.classes), [])
     )
-    const entities = datasets.reduce(
-      (entities, dataset) => entities.concat(dataset.entities),
-      []
+    const entities: string[] = unique(
+      datasets.reduce(
+        (entities, dataset) => entities.concat(dataset.entities),
+        []
+      )
     )
-    const samples = datasets.reduce(
+    const samples: Sample[] = datasets.reduce(
       (samples, dataset) => samples.concat(dataset.samples),
       []
     )
 
-    return {
-      classes: unique(classes),
-      entities: unique(entities),
-      samples: unique(samples),
-    }
+    return new Dataset(classes, entities, samples)
   }
 
   private static loadFile(path: string): Dataset {
@@ -71,8 +69,9 @@ export class DatasetLoader {
     const className =
       this.CLASS_FIELD in content ? content[this.CLASS_FIELD] : ''
 
-    const entities =
-      this.ENTITIES_FIELD in content ? content[this.ENTITIES_FIELD] : []
+    const classes: string[] = this.CLASS_FIELD in content ? [className] : []
+    const entities: string[] =
+      this.ENTITIES_FIELD in content ? unique(content[this.ENTITIES_FIELD]) : []
 
     let sentences = content[this.SAMPLES_FIELD]
 
@@ -92,10 +91,6 @@ export class DatasetLoader {
       samples = EntitiesParser.parse(samples, entities)
     }
 
-    return {
-      classes: this.CLASS_FIELD in content ? [className] : [],
-      entities,
-      samples,
-    }
+    return new Dataset(classes, entities, samples)
   }
 }
