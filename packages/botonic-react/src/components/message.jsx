@@ -101,18 +101,14 @@ export const Message = props => {
     disabled,
     setDisabled,
   })
+
+  const textChildren = React.Children.toArray(children)
+    .filter(e => ![Button, Reply].includes(e.type))
+    .join('')
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
     e => e.type === Button
   )
-
-  let textChildren = React.Children.toArray(children).filter(
-    e => ![Button, Reply].includes(e.type)
-  )
-  if (isFromUser)
-    textChildren = textChildren.map(e =>
-      typeof e === 'string' ? renderLinks(e) : e
-    )
 
   const {
     timestampsEnabled,
@@ -136,7 +132,8 @@ export const Message = props => {
       const message = {
         id: state.id,
         type,
-        data: decomposedChildren ? decomposedChildren : textChildren,
+        // data: decomposedChildren ? decomposedChildren : textChildren,
+        text: props.text || textChildren,
         timestamp: props.timestamp || getFormattedTimestamp,
         markdown,
         from,
@@ -147,7 +144,7 @@ export const Message = props => {
           url: b.props.url,
           target: b.props.target,
           webview: b.props.webview && String(b.props.webview),
-          title: b.props.children,
+          text: b.props.children,
           ...ButtonsDisabler.withDisabledProps(b.props),
         })),
         delay,
@@ -303,7 +300,9 @@ export const Message = props => {
                 <BlobText
                   blob={blob}
                   dangerouslySetInnerHTML={{
-                    __html: renderMarkdown(textChildren),
+                    __html: renderMarkdown(
+                      isFromUser ? renderLinks(textChildren) : textChildren
+                    ),
                   }}
                   markdownstyle={getMarkdownStyle(
                     getThemeProperty,

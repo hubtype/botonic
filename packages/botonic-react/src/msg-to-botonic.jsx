@@ -125,28 +125,27 @@ export function msgsToBotonic(msgs, customMessageTypes) {
 }
 
 function textToBotonic(msg) {
-  const txt =
-    msg.data && msg.data.text != undefined ? msg.data.text : String(msg.data)
+  const text = msg.text
   if (
     (msg.replies && msg.replies.length) ||
     (msg.keyboard && msg.keyboard.length)
   )
     return (
       <Text {...msg} key={msg.key}>
-        {txt}
+        {text}
         {quickrepliesParse(msg)}
       </Text>
     )
   if (msg.buttons && msg.buttons.length)
     return (
       <Text {...msg} key={msg.key}>
-        {txt}
+        {text}
         {buttonsParse(msg.buttons)}
       </Text>
     )
   return (
     <Text {...msg} key={msg.key}>
-      {txt}
+      {text}
     </Text>
   )
 }
@@ -164,14 +163,13 @@ function elementsParse(elements) {
 
 function buttonsParse(buttons) {
   return buttons.map((b, i) => {
-    const props = b.props || b
-    let payload = props.payload
-    if (props.path) payload = `__PATH_PAYLOAD__${props.path}`
-    const url = props.messenger_extensions ? null : props.url
-    const target = props.messenger_extensions ? null : props.target
-    const title = props.title
-    const webview = props.messenger_extensions ? props.url : props.webview
-    const disabledProps = ButtonsDisabler.constructBrowserProps(props)
+    let payload = b.payload
+    if (b.path) payload = `__PATH_PAYLOAD__${b.path}`
+    const url = b.messenger_extensions ? null : b.url
+    const target = b.messenger_extensions ? null : b.target
+    const text = b.text
+    const webview = b.messenger_extensions ? b.url : b.webview
+    const disabledProps = ButtonsDisabler.constructBrowserProps(b)
     return (
       <Button
         key={i}
@@ -181,7 +179,7 @@ function buttonsParse(buttons) {
         webview={webview}
         {...disabledProps}
       >
-        {title}
+        {text}
       </Button>
     )
   })

@@ -29,9 +29,9 @@ const withLinksTarget = (renderer, target = '_blank') => {
 
 const configureLinksRenderer = () => {
   // zero preset comes with all options disabled, only enabling links
-  const linksRenderer = new MarkdownIt('zero', { linkify: true }).enable([
-    'linkify',
-  ])
+  const linksRenderer = new MarkdownIt('zero', {
+    linkify: true,
+  }).enable(['linkify'])
   withLinksTarget(linksRenderer)
   return linksRenderer
 }
@@ -47,21 +47,7 @@ const configureMarkdownRenderer = () => {
 }
 
 const markdownRenderer = configureMarkdownRenderer()
-export const renderMarkdown = text => {
-  // markdown-it renderer expects '<br/>' strings to render correctly line breaks
-  // Supporting multiline: https://stackoverflow.com/a/20543835
-  text = text
-    .map(e => {
-      if (isLineBreakElement(e)) return BR_STRING_TAG
-      else if (typeof e === 'string')
-        return e
-          .replace(BR_STRING_TAG_REGEX, BR_STRING_TAG)
-          .replace(ESCAPED_LINE_BREAK_REGEX, BR_STRING_TAG)
-      else return String(e)
-    })
-    .join('')
-  return markdownRenderer.render(text)
-}
+export const renderMarkdown = text => markdownRenderer.render(text)
 
 const linksRenderer = configureLinksRenderer()
 export const renderLinks = text => {
