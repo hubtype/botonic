@@ -4,8 +4,10 @@ import {
   Carousel,
   CommonFields,
   Content,
+  Document,
   Element,
   FollowUp,
+  Image,
   StartUp,
   Text,
 } from '../contents'
@@ -185,5 +187,35 @@ export class StartUpBuilder extends MessageContentBuilder {
       this.text,
       this.buttons
     )
+  }
+}
+
+export class ImageBuilder extends MessageContentBuilder {
+  constructor(id: string, name: string, public imgUrl: string) {
+    super(id, name)
+  }
+
+  withUrl(url: string): this {
+    this.imgUrl = url
+    return this
+  }
+
+  build(): Image {
+    return new Image(this.buildCommonFields(), this.imgUrl)
+  }
+}
+
+export class DocumentBuilder extends MessageContentBuilder {
+  constructor(id: string, name: string, public docUrl: string) {
+    super(id, name)
+  }
+
+  withUrl(url: string): this {
+    this.docUrl = url
+    return this
+  }
+
+  build(): Document {
+    return new Document(this.buildCommonFields(), this.docUrl)
   }
 }

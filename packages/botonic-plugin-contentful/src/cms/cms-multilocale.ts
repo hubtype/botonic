@@ -8,6 +8,7 @@ import {
   CommonFields,
   Content,
   DateRangeContent,
+  Document,
   Element,
   Image,
   Queue,
@@ -64,6 +65,10 @@ export class MultiContextCms implements CMS {
 
   dateRange(id: string, context?: Context): Promise<DateRangeContent> {
     return this.cmsFromContext(context).dateRange(id, context)
+  }
+
+  document(id: string, context?: Context): Promise<Document> {
+    return this.cmsFromContext(context).document(id, context)
   }
 
   element(id: string, context?: Context): Promise<Element> {

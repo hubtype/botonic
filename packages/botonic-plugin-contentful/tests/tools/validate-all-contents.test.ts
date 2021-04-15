@@ -20,5 +20,5 @@ test('TEST: ContentsValidator.validateAllTopContents', async () => {
   expect(sut.report.successContents.length).toEqual(
     new Set(sut.report.successContents).size
   )
-  expect(sut.report.successContents.length).toEqual(83)
+  expect(sut.report.successContents.length).toBeGreaterThanOrEqual(83)
 }, 60000)

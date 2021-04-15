@@ -21,6 +21,7 @@ import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
 import { ContentsDelivery } from './contents/contents'
 import { DateRangeDelivery } from './contents/date-range'
+import { DocumentDelivery } from './contents/document'
 import { FollowUpDelivery } from './contents/follow-up'
 import { ImageDelivery } from './contents/image'
 import { QueueDelivery } from './contents/queue'
@@ -41,6 +42,7 @@ export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
   private readonly _contents: ContentsDelivery
   private readonly _carousel: CarouselDelivery
+  private readonly _document: DocumentDelivery
   private readonly _text: TextDelivery
   private readonly _startUp: StartUpDelivery
   private readonly _url: UrlDelivery
@@ -74,6 +76,7 @@ export class Contentful implements cms.CMS {
     this._delivery = delivery
     this._button = new ButtonDelivery(delivery, resumeErrors)
     this._carousel = new CarouselDelivery(delivery, this._button, resumeErrors)
+    this._document = new DocumentDelivery(delivery, resumeErrors)
     this._text = new TextDelivery(delivery, this._button, resumeErrors)
     this._startUp = new StartUpDelivery(delivery, this._button, resumeErrors)
     this._url = new UrlDelivery(delivery, resumeErrors)
@@ -89,6 +92,7 @@ export class Contentful implements cms.CMS {
       this._startUp
     )
     ;[
+      this._document,
       this._text,
       this._url,
       this._carousel,
@@ -112,6 +116,10 @@ export class Contentful implements cms.CMS {
 
   async carousel(id: string, context = DEFAULT_CONTEXT): Promise<cms.Carousel> {
     return this._carousel.carousel(id, context)
+  }
+
+  document(id: string, context = DEFAULT_CONTEXT): Promise<cms.Document> {
+    return this._document.document(id, context)
   }
 
   async text(id: string, context = DEFAULT_CONTEXT): Promise<cms.Text> {
@@ -180,6 +188,8 @@ export class Contentful implements cms.CMS {
     switch (model) {
       case ContentType.CAROUSEL:
         return retype(await this._carousel.fromEntry(entry, context))
+      case ContentType.DOCUMENT:
+        return retype(await this._document.fromEntry(entry, context))
       case ContentType.QUEUE:
         return retype(this._queue.fromEntry(entry))
       case ContentType.CHITCHAT:

@@ -11,6 +11,7 @@ import {
   ContentType,
   Context,
   DateRangeContent,
+  Document,
   Element,
   Image,
   MessageContent,
@@ -64,6 +65,11 @@ export class FilteredCMS implements CMS {
   async carousel(id: string, context?: Context): Promise<Carousel> {
     const content = await this.cms.carousel(id, context)
     return this.filterContent(content, Carousel, context)
+  }
+
+  async document(id: string, context?: Context): Promise<Document> {
+    const content = await this.cms.document(id, context)
+    return this.filterContent(content, Document, context)
   }
 
   async text(id: string, context?: Context): Promise<Text> {

@@ -339,6 +339,12 @@ export class Element extends Content {
   }
 }
 
+export class Document extends MessageContent {
+  constructor(readonly common: CommonFields, readonly docUrl: string) {
+    super(common, ContentType.DOCUMENT)
+  }
+}
+
 export class Image extends MessageContent {
   constructor(readonly common: CommonFields, readonly imgUrl: string) {
     super(common, ContentType.IMAGE)
