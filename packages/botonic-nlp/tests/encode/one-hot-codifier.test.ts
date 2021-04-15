@@ -1,10 +1,10 @@
 import { OneHotEncoder } from '../../src/encode/one-hot-encoder'
 
 describe('One Hot Encoder', () => {
-  const encoder = new OneHotEncoder(['product', 'material', 'size'])
+  const sut = new OneHotEncoder(['product', 'material', 'size'])
 
   test('Encoding', () => {
-    expect(encoder.encode(['product', 'product', 'size'])).toEqual([
+    expect(sut.encode(['product', 'product', 'size'])).toEqual([
       [1, 0, 0],
       [1, 0, 0],
       [0, 0, 1],
@@ -13,7 +13,7 @@ describe('One Hot Encoder', () => {
 
   test('Decoding', () => {
     expect(
-      encoder.decode([
+      sut.decode([
         [0, 1, 0],
         [1, 0, 0],
         [0, 0, 1],
@@ -23,13 +23,13 @@ describe('One Hot Encoder', () => {
 
   test('Invalid Token', () => {
     expect(() => {
-      encoder.encode(['product', 'product', 'material', 'color'])
+      sut.encode(['product', 'product', 'material', 'color'])
     }).toThrowError()
   })
 
   test('Invalid Categorical Length', () => {
     expect(() => {
-      encoder.decode([
+      sut.decode([
         [0, 1, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1],

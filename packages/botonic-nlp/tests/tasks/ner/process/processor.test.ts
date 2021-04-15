@@ -1,25 +1,25 @@
 import { PADDING_TOKEN } from '../../../../src/preprocess/constants'
 import { Processor } from '../../../../src/tasks/ner/process/processor'
-import * as helper from '../../../helpers/tasks/ner/helper'
+import * as helper from '../../../helpers/tools-helper'
 
 describe('NER Processor', () => {
-  const processor = new Processor(
+  const sut = new Processor(
     helper.preprocessor,
-    helper.sequenceCodifier,
-    helper.entitiesCodifier
+    helper.tokenEncoder,
+    helper.entitiesEncoder
   )
   test('Process sample', () => {
     expect(
-      processor
+      sut
         .process([
           { class: '', entities: [], text: 'I love this leather jacket' },
         ])
         .x.arraySync()
-    ).toEqual([[2, 28, 20, 17, 0, 0, 0, 0, 0, 0, 0, 0]])
+    ).toEqual([[6, 11, 1, 27, 0, 0, 0, 0, 0, 0, 0, 0]])
   })
 
   test('Generate Input data', () => {
-    const { sequence, input } = processor.generateInput('I love this t-shirt')
+    const { sequence, input } = sut.generateInput('I love this t-shirt')
     expect(sequence).toEqual([
       'i',
       'love',
@@ -34,6 +34,6 @@ describe('NER Processor', () => {
       PADDING_TOKEN,
       PADDING_TOKEN,
     ])
-    expect(input.arraySync()).toEqual([[2, 28, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+    expect(input.arraySync()).toEqual([[6, 11, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
   })
 })

@@ -1,27 +1,18 @@
-import { Preprocessor } from '../../src/preprocess/preprocessor'
 import { VocabularyGenerator } from '../../src/preprocess/vocabulary-generator'
+import * as helper from '../helpers/tools-helper'
 
 describe('Vocabulary Generator', () => {
   test('Generation of the vocabulary', () => {
+    const sut = new VocabularyGenerator(helper.preprocessor)
     expect(
-      new VocabularyGenerator(new Preprocessor('en', 4)).generate([
-        { text: 'Where is my order?', entities: [], class: '' },
+      sut.generate([
+        { text: 'this is a test', entities: [], class: 'BuyProduct' },
         {
-          text: 'I want to return the products of this order',
+          text: 'testing vocabulary generator',
           entities: [],
-          class: '',
+          class: 'ReturnProduct',
         },
-        { text: "I don't like this t-shirt?", entities: [], class: '' },
       ])
-    ).toEqual([
-      'where',
-      'order',
-      'i',
-      'want',
-      'return',
-      'products',
-      'not',
-      't-shirt',
-    ])
+    ).toEqual(['a', 'test', 'testing', 'vocabulary', 'generator'])
   })
 })

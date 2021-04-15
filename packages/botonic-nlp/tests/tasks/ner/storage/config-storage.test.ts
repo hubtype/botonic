@@ -3,15 +3,15 @@ import { join } from 'path'
 
 import { CONFIG_FILENAME } from '../../../../src/storage/constants'
 import { NerConfigStorage } from '../../../../src/tasks/ner/storage/config-storage'
-import * as helper from '../../../helpers/tasks/ner/helper'
+import * as helper from '../../../helpers/constants-helper'
 
 describe('Config handler', () => {
   test('Load config', () => {
-    const config = NerConfigStorage.load(helper.MODEL_DIR_PATH)
+    const config = NerConfigStorage.load(helper.NER_MODEL_DIR_PATH)
     expect(config.locale).toEqual(helper.LOCALE)
     expect(config.maxLength).toEqual(helper.MAX_SEQUENCE_LENGTH)
     expect(config.vocabulary).toEqual(helper.VOCABULARY)
-    expect(config.entities).toEqual(helper.ENTITIES)
+    expect(config.entities).toEqual(['O'].concat(helper.ENTITIES))
   })
 
   test('Save config', () => {
