@@ -1,5 +1,5 @@
 {
-  "extends": "node_modules/botonic-ci/impl/tsconfig.json",
+  "extends": "node_modules/botonic-ci/baseline/tsconfig.json",
   "compilerOptions": {
     // @types/node imports NODE_ENV="production/development"
     "types": ["@types/node"]

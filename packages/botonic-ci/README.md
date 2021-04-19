@@ -16,7 +16,14 @@ This package simplifies the configuration of all CI tasks for projects which use
 ```
 npm run -D @botonic/ci
 ```
-* Copy the contents of the `sample-config` folder to the root of your projects
+* Copy the contents of the `sample-config` folder to the root of your project 
+  (Merge this package.json's scripts into your project ones)
+* These files just import the configuration maintained within this project. 
+  To adapt them to your project needs, you just need to patch the specific options after importing the baseline.
+  See instructions on each of these files.
+
+
+## Usage
 
 ### eslint
 
