@@ -30,38 +30,22 @@ import { NerConfigStorage } from './storage/config-storage'
 
 export class BotonicNer {
   vocabulary: string[]
+  private preprocessor: Preprocessor
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
-  private constructor(
+  constructor(
     readonly locale: Locale,
     readonly maxLength: number,
-    readonly entities: string[],
-    private preprocessor: Preprocessor
-  ) {}
-
-  static with(
-    locale: Locale,
-    maxLength: number,
-    entities: string[]
-  ): BotonicNer {
-    return new BotonicNer(
-      locale,
-      maxLength,
-      unique([NEUTRAL_ENTITY].concat(entities)),
-      new Preprocessor(locale, maxLength)
-    )
+    readonly entities: string[]
+  ) {
+    this.preprocessor = new Preprocessor(locale, maxLength)
   }
 
   static async load(path: string): Promise<BotonicNer> {
     const config = NerConfigStorage.load(path)
-    const ner = new BotonicNer(
-      config.locale,
-      config.maxLength,
-      config.entities,
-      new Preprocessor(config.locale, config.maxLength)
-    )
+    const ner = new BotonicNer(config.locale, config.maxLength, config.entities)
     ner.vocabulary = config.vocabulary
     ner.modelManager = new ModelManager(await ModelStorage.load(path))
     return ner

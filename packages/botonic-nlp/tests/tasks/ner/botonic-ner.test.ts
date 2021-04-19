@@ -15,7 +15,7 @@ describe('Botonic NER', () => {
 
   test('Generate vocabulary', () => {
     // arrange
-    const sut = BotonicNer.with(
+    const sut = new BotonicNer(
       constantsHelper.LOCALE,
       constantsHelper.MAX_SEQUENCE_LENGTH,
       constantsHelper.ENTITIES
@@ -33,7 +33,7 @@ describe('Botonic NER', () => {
 
   test('Evaluate model', async () => {
     // arrange
-    const sut = BotonicNer.with(
+    const sut = new BotonicNer(
       constantsHelper.LOCALE,
       constantsHelper.MAX_SEQUENCE_LENGTH,
       constantsHelper.ENTITIES
@@ -58,7 +58,10 @@ describe('Botonic NER', () => {
 
   test('Recognize entities', async () => {
     // arrange
-    const sut = await BotonicNer.load(constantsHelper.NER_MODEL_DIR_PATH)
+    const sut = await BotonicNer.load(
+      constantsHelper.NER_MODEL_DIR_PATH,
+      toolsHelper.preprocessor
+    )
     sut.compile()
 
     // act
