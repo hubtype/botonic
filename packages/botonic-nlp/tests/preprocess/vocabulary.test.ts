@@ -1,5 +1,4 @@
 import { Vocabulary } from '../../src/preprocess/vocabulary'
-import * as helper from '../helpers/tools-helper'
 
 describe('Vocabulary', () => {
   const sut = new Vocabulary(['hat', 'shirt', 'jeans', 'hat', 'jacket'])
@@ -35,10 +34,5 @@ describe('Vocabulary', () => {
     expect(() => {
       sut.getToken(10)
     }).toThrowError()
-  })
-
-  test('Fit Vocabulary', () => {
-    const sut = Vocabulary.fit(helper.dataset, helper.preprocessor)
-    expect(sut.tokens.length).toBeGreaterThan(5)
   })
 })

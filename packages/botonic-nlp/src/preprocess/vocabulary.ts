@@ -1,7 +1,4 @@
-import { Dataset } from '../dataset/dataset'
-import { flatten, unique } from '../utils/array-utils'
-import { PADDING_TOKEN } from './constants'
-import { Preprocessor } from './preprocessor'
+import { unique } from '../utils/array-utils'
 
 export class Vocabulary {
   readonly tokens: string[]
@@ -10,16 +7,6 @@ export class Vocabulary {
   constructor(tokens: string[]) {
     this.tokens = unique(tokens)
     this.length = this.tokens.length
-  }
-
-  static fit(dataset: Dataset, preprocessor: Preprocessor): Vocabulary {
-    const sequences = dataset.samples.map(sample =>
-      preprocessor.preprocess(sample.text, PADDING_TOKEN)
-    )
-    const tokens = flatten(sequences)
-    const uniqueTokens = unique(tokens)
-    const filteredTokens = uniqueTokens.filter(token => token !== PADDING_TOKEN)
-    return new Vocabulary(filteredTokens)
   }
 
   includes(token: string): boolean {
