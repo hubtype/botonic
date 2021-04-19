@@ -1,0 +1,35 @@
+// see https://www.notion.so/Typescript-performance-7aa77701970d4d49b8399efcee1b0754
+{
+  // start of path dependent configuration
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "baseUrl": "src",
+    "paths": {
+      "*": ["src/*", "lib/src/*", "types/*"]
+    },
+    "rootDir": "src",
+    // end of path dependent configuration
+    "outDir": "lib",
+    "declaration": true,
+    "declarationDir": "lib",
+    "sourceMap": true,
+    "target": "es2015",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    // without typeRoots, it also checks @types of parent folders, which is desirable if you you want to have
+    // common development dependencies on a parent package in a monorepo.
+    //"typeRoots" : ["node_modules/@types"],
+
+    //performance
+    "incremental": true,
+    "types": [], //https://github.com/microsoft/TypeScript/wiki/Performance#controlling-types-inclusion
+
+    // lint options
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+  }
+}

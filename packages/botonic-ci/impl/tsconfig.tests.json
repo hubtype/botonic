@@ -1,0 +1,20 @@
+// Only used for verifying the code (& by jest)
+// It uses noEmit to have faster builds (up to 30%)
+{
+  "extends": "./tsconfig.json",
+  // include: [] makes jest faster,
+  // but it needs to be set for tsc to find the files to verify them. See https://www.notion.so/Typescript-performance-7aa77701970d4d49b8399efcee1b0754
+  "include": ["**/*.ts", "**/*.tsx", "../src/**/*.ts", "../src/**/*.tsx"],
+  "compilerOptions": {
+    "rootDir": "../",
+    // Options below are for compiling @botonic js/jsx files
+    "allowJs": true, //when set, jest does not validate types anymore https://github.com/kulshekhar/ts-jest/issues/740#issuecomment-424123303
+    "declaration": false,
+    "declarationDir": null,
+    "noEmit": true,
+    "types": [
+      // "@types/jest" //not sure if required
+    ]
+
+  }
+}
