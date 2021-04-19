@@ -14,10 +14,11 @@ export class Vocabulary {
   }
 
   getTokenId(token: string): number {
-    if (!this.includes(token)) {
+    const id = this.tokens.indexOf(token)
+    if (id === -1) {
       throw new Error(`Token '${token}' not found in vocabulary.`)
     }
-    return this.tokens.indexOf(token)
+    return id
   }
 
   getToken(id: number): string {
