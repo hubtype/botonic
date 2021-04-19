@@ -1,8 +1,10 @@
+import { IndexedItems } from '../../src/encode/indexed-items'
 import { OneHotEncoder } from '../../src/encode/one-hot-encoder'
-import { Vocabulary } from '../../src/preprocess/vocabulary'
 
 describe('One Hot Encoder', () => {
-  const sut = new OneHotEncoder(new Vocabulary(['product', 'material', 'size']))
+  const sut = new OneHotEncoder(
+    new IndexedItems(['product', 'material', 'size'])
+  )
 
   test('Encoding', () => {
     expect(sut.encode(['product', 'product', 'size'])).toEqual([

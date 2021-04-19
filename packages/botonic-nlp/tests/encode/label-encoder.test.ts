@@ -1,9 +1,9 @@
+import { IndexedItems } from '../../src/encode/indexed-items'
 import { LabelEncoder } from '../../src/encode/label-encoder'
-import { Vocabulary } from '../../src/preprocess/vocabulary'
 
 describe('Label Encoder', () => {
   const sut = new LabelEncoder(
-    new Vocabulary(['this', 'test', 'is', 'yes', 'no', 'a', 'it'])
+    new IndexedItems(['this', 'test', 'is', 'yes', 'no', 'a', 'it'])
   )
 
   test('Encoding', () => {
