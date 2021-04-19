@@ -2,16 +2,16 @@ import { existsSync, rmdirSync } from 'fs'
 import { join } from 'path'
 
 import { ModelStorage } from '../../src/storage/model-storage'
-import * as helper from '../helpers/tasks/ner/helper'
+import * as helper from '../helpers/constants-helper'
 
 describe('Model Storage', () => {
   test('Load model', async () => {
-    const model = await ModelStorage.load(helper.MODEL_DIR_PATH)
+    const model = await ModelStorage.load(helper.NER_MODEL_DIR_PATH)
     expect(model.name).toEqual('BiLstmNerModel')
   })
 
   test('Save model', async () => {
-    const model = await ModelStorage.load(helper.MODEL_DIR_PATH)
+    const model = await ModelStorage.load(helper.NER_MODEL_DIR_PATH)
     const path = join(
       __dirname,
       '..',

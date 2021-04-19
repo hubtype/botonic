@@ -1,10 +1,10 @@
 import { Processor } from '../../../../src/tasks/text-classification/process/processor'
-import * as helper from '../../../helpers/tasks/text-classification/tools-helper'
+import * as helper from '../../../helpers/tools-helper'
 
 describe('Text Classification Processor', () => {
   const sut = new Processor(
     helper.preprocessor,
-    helper.tokensEncoder,
+    helper.tokenEncoder,
     helper.classEncoder
   )
 
@@ -22,12 +22,12 @@ describe('Text Classification Processor', () => {
       },
     ])
     expect(x.arraySync()).toEqual([
-      [2, 37, 36, 26, 0, 0, 0, 0, 0, 0, 0, 0],
-      [2, 37, 38, 17, 0, 0, 0, 0, 0, 0, 0, 0],
+      [6, 7, 9, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+      [6, 7, 8, 27, 0, 0, 0, 0, 0, 0, 0, 0],
     ])
     expect(y.arraySync()).toEqual([
-      [0, 1, 0],
-      [1, 0, 0],
+      [1, 0],
+      [0, 1],
     ])
   })
 
@@ -35,6 +35,6 @@ describe('Text Classification Processor', () => {
     const input = sut.processTexts([
       'I want to create a order with this leather jacket?',
     ])
-    expect(input.arraySync()).toEqual([[2, 37, 1, 4, 1, 20, 17, 0, 0, 0, 0, 0]])
+    expect(input.arraySync()).toEqual([[6, 7, 1, 16, 1, 1, 27, 0, 0, 0, 0, 0]])
   })
 })

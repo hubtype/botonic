@@ -2,41 +2,44 @@ import { existsSync, rmdirSync } from 'fs'
 import { join } from 'path'
 
 import { DatabaseStorage } from '../../../src/embeddings/database/storage'
+import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../src/preprocess/constants'
 import { STOPWORDS_EN } from '../../../src/preprocess/engines/en/stopwords-en'
 import { BotonicTextClassifier } from '../../../src/tasks/text-classification/botonic-text-classifier'
 import { TEXT_CLASSIFIER_TEMPLATE } from '../../../src/tasks/text-classification/models/types'
-import * as textClassificationConstantsHelper from '../../helpers/tasks/text-classification/constants-helper'
+import * as constantsHelper from '../../helpers/constants-helper'
 import * as toolsHelper from '../../helpers/tools-helper'
 
 describe('Botonic Text Classifier', () => {
   const sut = new BotonicTextClassifier(
-    textClassificationConstantsHelper.LOCALE,
-    textClassificationConstantsHelper.MAX_LENGTH,
-    ['booking', 'shopping']
+    constantsHelper.LOCALE,
+    constantsHelper.MAX_SEQUENCE_LENGTH,
+    constantsHelper.CLASSES
   )
 
   test('Generate Vocabulary', () => {
-    const { trainSet } = toolsHelper.dataset.split(0.5, false)
+    const { trainSet } = toolsHelper.dataset.split()
     sut.generateVocabulary(trainSet)
-    expect(sut.vocabulary.length).toEqual(8)
+    expect(sut.vocabulary.length).toBeGreaterThan(2)
+    expect(sut.vocabulary.includes(PADDING_TOKEN)).toBeTruthy()
+    expect(sut.vocabulary.includes(UNKNOWN_TOKEN)).toBeTruthy()
   })
 
   test('Train and Evaluate model', async () => {
-    const { trainSet, testSet } = toolsHelper.dataset.split(0.5, false)
+    const { trainSet, testSet } = toolsHelper.dataset.split()
     sut.generateVocabulary(trainSet)
     sut.compile()
     await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
-        textClassificationConstantsHelper.LOCALE,
-        textClassificationConstantsHelper.EMBEDDINGS_TYPE,
-        textClassificationConstantsHelper.EMBEDDINGS_DIMENSION
+        constantsHelper.LOCALE,
+        constantsHelper.EMBEDDINGS_TYPE,
+        constantsHelper.EMBEDDINGS_DIMENSION
       )
     )
     await sut.train(trainSet, 4, 8)
-    const evaluation = await sut.evaluate(testSet)
-    expect(evaluation.accuracy).toBeGreaterThan(0.01)
-    expect(evaluation.loss).toBeLessThan(2)
+    const { accuracy, loss } = await sut.evaluate(testSet)
+    expect(accuracy).toBeGreaterThan(0.01)
+    expect(loss).toBeLessThan(2)
   })
 
   test('Save Model', async () => {
@@ -45,15 +48,12 @@ describe('Botonic Text Classifier', () => {
     await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
-        textClassificationConstantsHelper.LOCALE,
-        textClassificationConstantsHelper.EMBEDDINGS_TYPE,
-        textClassificationConstantsHelper.EMBEDDINGS_DIMENSION
+        constantsHelper.LOCALE,
+        constantsHelper.EMBEDDINGS_TYPE,
+        constantsHelper.EMBEDDINGS_DIMENSION
       )
     )
-    const path = join(
-      textClassificationConstantsHelper.TEXT_CLASSIFICATION_DIR_PATH,
-      'test-botonic-text-classifier'
-    )
+    const path = join(constantsHelper.HELPER_DIR, 'tmp-botonic-text-classifier')
     await sut.saveModel(path)
     expect(existsSync(path)).toBeTruthy()
     rmdirSync(path, { recursive: true })

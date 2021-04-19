@@ -1,18 +1,15 @@
 import { tensor } from '@tensorflow/tfjs-node'
 
-import {
-  Intent,
-  PredictionProcessor,
-} from '../../../../src/tasks/text-classification/process/prediction-processor'
+import { PredictionProcessor } from '../../../../src/tasks/text-classification/process/prediction-processor'
 import { OutputData } from '../../../../src/tasks/text-classification/process/types'
-import * as helper from '../../../helpers/tasks/text-classification/constants-helper'
+import * as helper from '../../../helpers/constants-helper'
 
 describe('Prediction Processor', () => {
   test('Process Prediction', () => {
-    const prediction = tensor([[0.4, 0.5, 0.1]]) as OutputData
-    const processor = new PredictionProcessor(helper.CLASSES)
-    const sut = processor.process(prediction)
-    expect(sut.length).toEqual(helper.CLASSES.length)
-    expect(sut[0]).toEqual(new Intent(helper.CLASSES[1], 0.5))
+    const prediction = tensor([[0.3, 0.7]]) as OutputData
+    const sut = new PredictionProcessor(helper.CLASSES)
+    const intents = sut.process(prediction)
+    expect(intents.length).toEqual(helper.CLASSES.length)
+    expect(intents[0].label).toEqual(helper.CLASSES[1])
   })
 })
