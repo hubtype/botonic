@@ -32,14 +32,18 @@ export class Dataset {
     }
   }
 
-  extractVocabulary(preprocessor: Preprocessor): Vocabulary {
+  extractVocabulary(
+    preprocessor: Preprocessor,
+    additionalTokens: string[] = []
+  ): Vocabulary {
     const sequences = this.samples.map(sample =>
       preprocessor.preprocess(sample.text, PADDING_TOKEN)
     )
     const tokens = flatten(sequences)
     const uniqueTokens = unique(tokens)
     const filteredTokens = uniqueTokens.filter(token => token !== PADDING_TOKEN)
-    return new Vocabulary(filteredTokens)
+    const finalTokens = additionalTokens.concat(filteredTokens)
+    return new Vocabulary(finalTokens)
   }
 
   get length(): number {
