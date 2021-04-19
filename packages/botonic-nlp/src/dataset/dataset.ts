@@ -1,5 +1,5 @@
 import { Preprocessor } from '../preprocess'
-import { PADDING_TOKEN } from '../preprocess/constants'
+import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../preprocess/constants'
 import { Vocabulary } from '../preprocess/vocabulary'
 import { flatten, shuffle as shuffleArray, unique } from '../utils/array-utils'
 import { DatasetLoader } from './loader'
@@ -32,18 +32,13 @@ export class Dataset {
     }
   }
 
-  extractVocabulary(
-    preprocessor: Preprocessor,
-    additionalTokens: string[] = []
-  ): Vocabulary {
+  extractVocabulary(preprocessor: Preprocessor): Vocabulary {
     const sequences = this.samples.map(sample =>
       preprocessor.preprocess(sample.text, PADDING_TOKEN)
     )
-    const tokens = flatten(sequences)
-    const uniqueTokens = unique(tokens)
-    const filteredTokens = uniqueTokens.filter(token => token !== PADDING_TOKEN)
-    const finalTokens = additionalTokens.concat(filteredTokens)
-    return new Vocabulary(finalTokens)
+    const datasetTokens = flatten(sequences)
+    const tokens = [PADDING_TOKEN, UNKNOWN_TOKEN].concat(datasetTokens)
+    return new Vocabulary(unique(tokens))
   }
 
   get length(): number {

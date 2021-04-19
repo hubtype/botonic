@@ -31,10 +31,7 @@ describe('Dataset', () => {
   })
 
   test('Vocabulary Extraction', () => {
-    const vocabulary = helper.dataset.extractVocabulary(helper.preprocessor, [
-      PADDING_TOKEN,
-      UNKNOWN_TOKEN,
-    ])
+    const vocabulary = helper.dataset.extractVocabulary(helper.preprocessor)
     expect(vocabulary.length).toBeGreaterThan(2)
     expect(vocabulary.includes(PADDING_TOKEN)).toBeTruthy()
     expect(vocabulary.includes(UNKNOWN_TOKEN)).toBeTruthy()
