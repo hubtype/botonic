@@ -30,7 +30,8 @@ Please check the [eslint user guide](https://eslint.org/docs/user-guide/) for ad
 
 ### Typescript
 
-In case your project uses typescript, add the scripts starting with `build` sample-config/package.json to your package.json
+In case your project uses typescript (or contains .d.ts files), add the scripts starting with 
+`build` from sample-config/package.json to your package.json
 * `npm run build` will transpile into JS.
 * `npm run build-ci` will validate your project source code and tests using your tsconfig.test.json configuration
 ```    

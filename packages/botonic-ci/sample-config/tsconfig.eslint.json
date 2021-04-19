@@ -1,0 +1,3 @@
+{
+  "extends": "node_modules/botonic-ci/impl/tsconfig.eslint.json",
+}

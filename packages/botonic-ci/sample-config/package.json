@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "build": "tsc",
+    "build-ci": "tsc -b tsconfig.tests.json",
+
+    "lint": "npm run lint-core -- --fix",
+    "lint-ci": "npm run lint-core -- -c ../.eslintrc-ci.js",
+    "lint-core": "eslint_d --cache --quiet '*.js' 'src/**/*.js*' 'src/**/*.ts*' 'tests/**/*.ts*'",
+
+    "test": "jest --coverage",
+    "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
+    "prepublishOnly": "npm run build && npm run lint-ci && npm test",
+    "preversion": "npm run lint",
+    "version": "git add -A src tests",
+    "postversion": "git push && git push --tags"
+
+  }
+}
