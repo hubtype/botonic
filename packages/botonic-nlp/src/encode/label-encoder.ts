@@ -1,13 +1,13 @@
-import { Vocabulary } from '../preprocess/vocabulary'
+import { IndexedItems } from './indexed-items'
 
 export class LabelEncoder {
-  constructor(readonly vocabulary: Vocabulary) {}
+  constructor(readonly items: IndexedItems) {}
 
   encode(sequence: string[]): number[] {
-    return sequence.map(token => this.vocabulary.getTokenId(token))
+    return sequence.map(item => this.items.getIndex(item))
   }
 
   decode(sequence: number[]): string[] {
-    return sequence.map(id => this.vocabulary.getToken(id))
+    return sequence.map(idx => this.items.getItem(idx))
   }
 }
