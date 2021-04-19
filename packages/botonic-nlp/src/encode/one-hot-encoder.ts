@@ -1,23 +1,16 @@
-import { unique } from '../utils/array-utils'
+import { Vocabulary } from '../preprocess/vocabulary'
 
 type OneHotVector = number[]
 
 export class OneHotEncoder {
-  vocabulary: string[]
-
-  constructor(vocabulary: string[]) {
-    this.vocabulary = unique(vocabulary)
-  }
+  constructor(readonly vocabulary: Vocabulary) {}
 
   encode(sequence: string[]): OneHotVector[] {
     return sequence.map(token => this.encodeToken(token))
   }
 
   private encodeToken(token: string): OneHotVector {
-    if (!this.vocabulary.includes(token)) {
-      throw new Error(`Invalid Token '${token}'.`)
-    }
-    const id = this.vocabulary.indexOf(token)
+    const id = this.vocabulary.getTokenId(token)
     return this.tokenIdToOneHotVector(id)
   }
 
@@ -33,7 +26,7 @@ export class OneHotEncoder {
 
   private decodeOneHotVector(vector: OneHotVector): string {
     const id = this.oneHotVectorToTokenId(vector)
-    return this.vocabulary[id]
+    return this.vocabulary.getToken(id)
   }
 
   private oneHotVectorToTokenId(vector: OneHotVector): number {

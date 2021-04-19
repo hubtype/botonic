@@ -1,7 +1,10 @@
 import { LabelEncoder } from '../../src/encode/label-encoder'
+import { Vocabulary } from '../../src/preprocess/vocabulary'
 
 describe('Label Encoder', () => {
-  const sut = new LabelEncoder(['this', 'test', 'is', 'yes', 'no', 'a', 'it'])
+  const sut = new LabelEncoder(
+    new Vocabulary(['this', 'test', 'is', 'yes', 'no', 'a', 'it'])
+  )
 
   test('Encoding', () => {
     expect(sut.encode(['is', 'this', 'a', 'test'])).toEqual([2, 0, 5, 1])
