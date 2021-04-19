@@ -11,8 +11,8 @@ import { InputData, OutputData } from './types'
 export class Processor {
   constructor(
     readonly preprocessor: Preprocessor,
-    readonly tokenCodifier: LabelEncoder,
-    readonly entityCodifier: OneHotEncoder
+    readonly tokenEncoder: LabelEncoder,
+    readonly entityEncoder: OneHotEncoder
   ) {}
 
   // Processes samples and generates the Input and Output data.
@@ -81,20 +81,20 @@ export class Processor {
     )
   }
 
-  private maskUnknownTokens(tokens: string[]): string[] {
-    return tokens.map(t =>
-      this.tokenCodifier.vocabulary.includes(t) ? t : UNKNOWN_TOKEN
-    )
-  }
-
   private processTokens(sequence: string[]): number[] {
-    return this.tokenCodifier.encode(
+    return this.tokenEncoder.encode(
       this.preprocessor.pad(this.maskUnknownTokens(sequence), PADDING_TOKEN)
     )
   }
 
+  private maskUnknownTokens(tokens: string[]): string[] {
+    return tokens.map(t =>
+      this.tokenEncoder.items.includes(t) ? t : UNKNOWN_TOKEN
+    )
+  }
+
   private processEntities(sequence: string[]): number[][] {
-    return this.entityCodifier.encode(
+    return this.entityEncoder.encode(
       this.preprocessor.pad(sequence, NEUTRAL_ENTITY)
     )
   }
