@@ -31,13 +31,8 @@ export class Processor {
   }
 
   private generateSequence(text: string): string[] {
-    const normalizedText = this.preprocessor.normalize(text)
-    const sequence = this.preprocessor.tokenize(normalizedText)
-    const filteredSequence = this.preprocessor.removeStopwords(sequence)
-    const stemmedSequence = this.preprocessor.stem(filteredSequence)
-    const paddedSequence = this.preprocessor.pad(stemmedSequence, PADDING_TOKEN)
-    const maskedSequence = this.maskUnknownTokens(paddedSequence)
-    return maskedSequence
+    const sequence = this.preprocessor.preprocess(text, PADDING_TOKEN)
+    return this.maskUnknownTokens(sequence)
   }
 
   private maskUnknownTokens(sequence: string[]): string[] {
