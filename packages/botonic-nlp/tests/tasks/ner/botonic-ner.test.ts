@@ -1,5 +1,6 @@
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../src/preprocess/constants'
 import { BotonicNer } from '../../../src/tasks/ner/botonic-ner'
+import { NER_TEMPLATE } from '../../../src/tasks/ner/models/types'
 import * as constantsHelper from '../../helpers/constants-helper'
 import * as toolsHelper from '../../helpers/tools-helper'
 
@@ -40,7 +41,11 @@ describe('Botonic NER', () => {
     const { trainSet, testSet } = toolsHelper.dataset.split()
     sut.generateVocabulary(trainSet)
     sut.compile()
-    await sut.createModel('biLstm', toolsHelper.wordEmbeddingStorage)
+    const model = await sut.createModel(
+      NER_TEMPLATE.BILSTM,
+      toolsHelper.wordEmbeddingStorage
+    )
+    sut.importModel(model)
     await sut.train(trainSet, 4, 8)
 
     // act
@@ -61,7 +66,11 @@ describe('Botonic NER', () => {
     const { trainSet } = toolsHelper.dataset.split()
     sut.generateVocabulary(trainSet)
     sut.compile()
-    await sut.createModel('biLstm', toolsHelper.wordEmbeddingStorage)
+    const model = await sut.createModel(
+      NER_TEMPLATE.BILSTM,
+      toolsHelper.wordEmbeddingStorage
+    )
+    sut.importModel(model)
     await sut.train(trainSet, 4, 8)
 
     // act
