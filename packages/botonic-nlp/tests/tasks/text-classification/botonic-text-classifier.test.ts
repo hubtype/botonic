@@ -3,7 +3,6 @@ import { join } from 'path'
 
 import { DatabaseStorage } from '../../../src/embeddings/database/storage'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../src/preprocess/constants'
-import { STOPWORDS_EN } from '../../../src/preprocess/engines/en/stopwords-en'
 import { BotonicTextClassifier } from '../../../src/tasks/text-classification/botonic-text-classifier'
 import { TEXT_CLASSIFIER_TEMPLATE } from '../../../src/tasks/text-classification/models/types'
 import * as constantsHelper from '../../helpers/constants-helper'
@@ -58,16 +57,5 @@ describe('Botonic Text Classifier', () => {
     expect(existsSync(path)).toBeTruthy()
     rmdirSync(path, { recursive: true })
     expect(existsSync(path)).toBeFalsy()
-  })
-
-  test('Get Stopwords', () => {
-    const stopwords = sut.stopwords
-    expect(stopwords).toEqual(STOPWORDS_EN)
-  })
-
-  test('Set Stopwords', () => {
-    sut.stopwords = ['this', 'is']
-    const stopwords = sut.stopwords
-    expect(stopwords).toEqual(['this', 'is'])
   })
 })

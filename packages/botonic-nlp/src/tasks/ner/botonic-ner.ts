@@ -142,24 +142,4 @@ export class BotonicNer {
     NerConfigStorage.save(path, config)
     await this.modelManager.save(path)
   }
-
-  set normalizer(engine: Normalizer) {
-    this.preprocessor.engines.normalizer = engine
-  }
-
-  set tokenizer(engine: Tokenizer) {
-    this.preprocessor.engines.tokenizer = engine
-  }
-
-  set stopwords(engine: Stopwords) {
-    this.preprocessor.engines.stopwords = engine
-  }
-
-  get stopwords(): Stopwords {
-    return this.preprocessor.engines.stopwords
-  }
-
-  set stemmer(engine: Stemmer) {
-    this.preprocessor.engines.stemmer = engine
-  }
 }
