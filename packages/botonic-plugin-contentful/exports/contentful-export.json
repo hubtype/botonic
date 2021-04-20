@@ -3602,135 +3602,6 @@
             "id": "p2iyhzd1u4a7"
           }
         },
-        "id": "6VVm70b0WNuGwHuB6xZT0W",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:54.520Z",
-        "updatedAt": "2021-02-25T10:20:48.695Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:20:48.695Z",
-        "firstPublishedAt": "2019-05-23T13:39:44.880Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "url"
-          }
-        }
-      },
-      "fields": {
-        "url": {
-          "en": "https://www.massimodutti.com/es/help.html#/orders/make-an-order"
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "3LQueLBzq355LLKA7ZZIg3",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:54.523Z",
-        "updatedAt": "2021-02-25T10:21:47.192Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 15,
-        "publishedAt": "2021-02-25T10:21:47.192Z",
-        "firstPublishedAt": "2019-05-23T13:39:01.568Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 6,
-        "version": 16,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "url"
-          }
-        }
-      },
-      "fields": {
-        "url": {
-          "en": "https://www.massimodutti.com/en/help.html#/availability/items-availability",
-          "es": "https://www.massimodutti.com/es/help.html#/availability/items-availability"
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
         "id": "4gQibYQxmZN9UsTqwFGQpw",
         "type": "Entry",
         "createdAt": "2019-05-23T13:38:54.589Z",
@@ -3791,71 +3662,6 @@
               "id": "63lakRZRu1AJ1DqlbZZb9O"
             }
           }
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "3ePsGfyLHBHsrxtU7IkPh9",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:54.642Z",
-        "updatedAt": "2021-02-25T10:21:46.870Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 52,
-        "publishedAt": "2021-02-25T10:21:46.870Z",
-        "firstPublishedAt": "2019-05-23T13:39:45.522Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 9,
-        "version": 53,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "url"
-          }
-        }
-      },
-      "fields": {
-        "url": {
-          "en": "https://shop.com/en/",
-          "es": "https://shop.com/es/"
         }
       }
     },
@@ -4519,7 +4325,7 @@
         "id": "2yR9f3stNAEqdamUr8VtfD",
         "type": "Entry",
         "createdAt": "2019-05-23T13:38:55.993Z",
-        "updatedAt": "2021-03-17T11:56:28.992Z",
+        "updatedAt": "2021-04-20T17:19:24.871Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -4527,8 +4333,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 41,
-        "publishedAt": "2021-03-17T11:56:28.992Z",
+        "publishedVersion": 43,
+        "publishedAt": "2021-04-20T17:19:24.871Z",
         "firstPublishedAt": "2019-05-23T13:39:07.185Z",
         "createdBy": {
           "sys": {
@@ -4544,8 +4350,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 8,
-        "version": 42,
+        "publishedCounter": 9,
+        "version": 44,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -4576,13 +4382,6 @@
                 "type": "Link",
                 "linkType": "Entry",
                 "id": "714AB6c5NZoHLku5NoYVPE"
-              }
-            },
-            {
-              "sys": {
-                "type": "Link",
-                "linkType": "Entry",
-                "id": "1XCzVrUroTW1bypOIcof1L"
               }
             },
             {
@@ -4977,7 +4776,7 @@
         "id": "79aRfznNCyN2VGdGDQZBf3",
         "type": "Entry",
         "createdAt": "2019-05-23T13:38:56.794Z",
-        "updatedAt": "2021-02-25T10:20:56.353Z",
+        "updatedAt": "2021-04-20T17:16:50.726Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -4985,8 +4784,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:20:56.353Z",
+        "publishedVersion": 7,
+        "publishedAt": "2021-04-20T17:16:50.726Z",
         "firstPublishedAt": "2019-05-23T13:39:13.908Z",
         "createdBy": {
           "sys": {
@@ -5002,8 +4801,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 8,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -5040,13 +4839,6 @@
                 "type": "Link",
                 "linkType": "Entry",
                 "id": "6LKWV9U9jdFj2893zfN7DT"
-              }
-            },
-            {
-              "sys": {
-                "type": "Link",
-                "linkType": "Entry",
-                "id": "qoMCF1Pd4jO8VcsaxMdnz"
               }
             }
           ]
@@ -5145,7 +4937,7 @@
         "id": "22h2Vba7v92MadcL5HeMrt",
         "type": "Entry",
         "createdAt": "2019-05-23T13:38:56.822Z",
-        "updatedAt": "2021-02-25T10:20:57.115Z",
+        "updatedAt": "2021-04-20T17:13:30.588Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -5153,8 +4945,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 9,
-        "publishedAt": "2021-02-25T10:20:57.115Z",
+        "publishedVersion": 13,
+        "publishedAt": "2021-04-20T17:13:30.588Z",
         "firstPublishedAt": "2019-05-23T13:39:10.412Z",
         "createdBy": {
           "sys": {
@@ -5170,8 +4962,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 4,
-        "version": 10,
+        "publishedCounter": 5,
+        "version": 14,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -5195,7 +4987,7 @@
           "en": "Fecha de entrega"
         },
         "text": {
-          "en": "El coste depende del tipo de envío elegido cuando haga la compra:\n\n1. - Recoger en tienda: (GRATIS) 3-5 días laborables*\n2. - Recoger en MRW/Correos: 2,95€  3-5 días laborables*\n3. - Estándar domicilio: 3,95 €  2-4 días laborables*\n4. - Express domicilio: 5,95 €  1-2 días laborables*\n\n*Los plazos de entrega se entienden a partir de las 24h laborales siguientes a la fecha de compra. Los días laborales se entienden de lunes a viernes y no festivos."
+          "en": "Texto de fecha de entrega"
         },
         "followup": {
           "en": {
@@ -5208,17 +5000,7 @@
         },
         "keywords": {
           "en": [
-            "Cuándo llegará mi pedido",
-            "llegada pedido",
-            "llegada compra",
-            "entrega pedido",
-            "entrega compra",
-            "recogida pedido",
-            "recogida compra",
-            "fecha prevista entrega",
-            "demora de entrega",
-            "tiempo de entrega",
-            "previsión de entrega"
+            "Cuándo llegará mi pedido"
           ]
         }
       }
@@ -5391,7 +5173,7 @@
         "id": "22KtvolAqhpMbqzdO6S1gg",
         "type": "Entry",
         "createdAt": "2019-05-23T13:38:57.347Z",
-        "updatedAt": "2021-02-25T10:20:58.606Z",
+        "updatedAt": "2021-04-20T17:15:01.037Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -5399,8 +5181,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:20:58.606Z",
+        "publishedVersion": 9,
+        "publishedAt": "2021-04-20T17:15:01.037Z",
         "firstPublishedAt": "2019-05-23T13:39:17.479Z",
         "createdBy": {
           "sys": {
@@ -5416,8 +5198,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 10,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -5441,7 +5223,7 @@
           "en": "Hacer un pedido"
         },
         "text": {
-          "en": "1. Elija en las secciones principales de la web. Una vez allí, escoja por tipo de artículo o por colección.\n2. Una vez encuentre el artículo que le interese en el listado, haga clic en él para acceder al detalle del producto.\n3. Seleccione la talla y el color del artículo que desee y añádalo a la cesta. Una vez añadido, podrá elegir entre dos opciones: 'seguir comprando' o 'tramitar pedido'. \n4. Cuando haya seleccionado todos los artículos que desea adquirir, puede registrarse o acceder con su usuario o comprar como invitado. \n5. Escoja el método de pago y envio que mejor se adapte a sus necesidades y confirme el pedido."
+          "en": "Cómo hacer un pedido"
         },
         "buttons": {
           "en": [
@@ -5465,198 +5247,8 @@
         },
         "keywords": {
           "en": [
-            "comprar",
-            "realizar compra",
-            "hacer compra",
             "realizar pedido",
-            "hacer pedido",
-            "tramitar pedido",
-            "tramitar compra",
-            "pedido",
-            "hago pedido",
-            "realizado pedido",
-            "cómo comprar"
-          ]
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "qoMCF1Pd4jO8VcsaxMdnz",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:57.368Z",
-        "updatedAt": "2021-02-25T10:20:59.088Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:20:59.088Z",
-        "firstPublishedAt": "2019-05-23T13:39:19.432Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "button"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "PRE_FAQ3"
-        },
-        "text": {
-          "en": "Encontrar una tienda"
-        },
-        "target": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Entry",
-              "id": "1NFHA0vspFcmLTPcQfOuqv"
-            }
-          }
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "1NFHA0vspFcmLTPcQfOuqv",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:57.412Z",
-        "updatedAt": "2021-02-25T10:20:59.517Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:20:59.517Z",
-        "firstPublishedAt": "2019-05-23T13:39:20.044Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "text"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "PRE_FAQ3"
-        },
-        "shortText": {
-          "en": "Encontrar una tienda"
-        },
-        "text": {
-          "en": "Le puedo indicar las tiendas más cercanas si comparte su ubicación. No utilizaré estos datos con ninguna finalidad adicional."
-        },
-        "buttons": {
-          "en": [
-            {
-              "sys": {
-                "type": "Link",
-                "linkType": "Entry",
-                "id": "5lnGa5ZjFt8zdcUFwo9T3N"
-              }
-            }
-          ]
-        },
-        "followup": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Entry",
-              "id": "1U7XKJccDSsI3mP0yX04Mj"
-            }
-          }
-        },
-        "keywords": {
-          "en": [
-            "tiendas",
-            "localizar tienda",
-            "localizar tiendas",
-            "tiendas cercanas",
-            "ubicación tienda",
-            "ubicación tiendas",
-            "situación tienda",
-            "situación tiendas",
-            "tienda próxima",
-            "donde esta la tienda",
-            "encontrar tienda"
+            "hacer pedido"
           ]
         }
       }
@@ -5762,7 +5354,7 @@
         "id": "5lnGa5ZjFt8zdcUFwo9T3N",
         "type": "Entry",
         "createdAt": "2019-05-23T13:38:57.686Z",
-        "updatedAt": "2021-02-25T10:21:00.260Z",
+        "updatedAt": "2021-04-20T18:00:08.592Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -5770,8 +5362,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:00.260Z",
+        "publishedVersion": 8,
+        "publishedAt": "2021-04-20T18:00:08.592Z",
         "firstPublishedAt": "2019-05-23T13:39:20.661Z",
         "createdBy": {
           "sys": {
@@ -5787,8 +5379,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 9,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -5816,332 +5408,7 @@
             "sys": {
               "type": "Link",
               "linkType": "Entry",
-              "id": "279uSy77Nj9yhcoSHlP5hx"
-            }
-          }
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "1XCzVrUroTW1bypOIcof1L",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:57.907Z",
-        "updatedAt": "2021-02-25T10:21:00.693Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 37,
-        "publishedAt": "2021-02-25T10:21:00.693Z",
-        "firstPublishedAt": "2019-05-23T13:39:21.275Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 6,
-        "version": 38,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "element"
-          }
-        }
-      },
-      "fields": {
-        "title": {
-          "en": "Doubts during purchase"
-        },
-        "subtitle": {
-          "en": "Le acompaño en todo momento mientras compra en la tienda online",
-          "es": "I'll help you during purchase"
-        },
-        "pic": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Asset",
-              "id": "5PhfCpBpMK01RuBxhMAYv"
-            }
-          }
-        },
-        "buttons": {
-          "en": [
-            {
-              "sys": {
-                "type": "Link",
-                "linkType": "Entry",
-                "id": "5fgXCBj0cIwdlqzkp89kmJ"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "4Axqyx5d34ejhfuMfklkci",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:58.144Z",
-        "updatedAt": "2021-02-25T10:21:01.150Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 7,
-        "publishedAt": "2021-02-25T10:21:01.150Z",
-        "firstPublishedAt": "2019-05-23T13:39:22.714Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 8,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "text"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "DURING_MENU_CRSL"
-        },
-        "text": {
-          "en": "Seleccione una opción"
-        },
-        "buttons": {
-          "en": [
-            {
-              "sys": {
-                "type": "Link",
-                "linkType": "Entry",
-                "id": "50jUe1yLZ5wBTPy5jNw5ft"
-              }
-            },
-            {
-              "sys": {
-                "type": "Link",
-                "linkType": "Entry",
-                "id": "s5R1V6VzjNv4JWiEQN0no"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "5fgXCBj0cIwdlqzkp89kmJ",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:58.153Z",
-        "updatedAt": "2021-02-25T10:21:46.143Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:46.143Z",
-        "firstPublishedAt": "2019-05-23T13:39:21.921Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "button"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "DURING_MENU_CRSL"
-        },
-        "text": {
-          "en": "Ver opciones"
-        },
-        "target": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Entry",
-              "id": "4Axqyx5d34ejhfuMfklkci"
-            }
-          }
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "50jUe1yLZ5wBTPy5jNw5ft",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:58.237Z",
-        "updatedAt": "2021-02-25T10:21:01.523Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:01.523Z",
-        "firstPublishedAt": "2019-05-23T13:39:23.334Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "button"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "DURING_FAQ1"
-        },
-        "text": {
-          "en": "Plazo y coste envío"
-        },
-        "target": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Entry",
-              "id": "94LxFmpXInTjpZBYliyCT"
+              "id": "7mbZi4kg6FAoGYGPdOE77c"
             }
           }
         }
@@ -6294,82 +5561,6 @@
               "type": "Link",
               "linkType": "Entry",
               "id": "C39lEROUgJl9hHSXKOEXS"
-            }
-          }
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "s5R1V6VzjNv4JWiEQN0no",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:58.705Z",
-        "updatedAt": "2021-02-25T10:21:04.040Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:04.040Z",
-        "firstPublishedAt": "2019-05-23T13:39:27.862Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "button"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "DURING_FAQ2"
-        },
-        "text": {
-          "en": "Eliminar artículos"
-        },
-        "target": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Entry",
-              "id": "4QMNasIHHIrFgCJPUEMow1"
             }
           }
         }
@@ -6768,256 +5959,6 @@
         },
         "text": {
           "en": "Seleccione una de estas opciones "
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "279uSy77Nj9yhcoSHlP5hx",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:59.293Z",
-        "updatedAt": "2021-02-25T10:21:45.307Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 11,
-        "publishedAt": "2021-02-25T10:21:45.307Z",
-        "firstPublishedAt": "2019-05-23T13:39:30.538Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 4,
-        "version": 12,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "url"
-          }
-        }
-      },
-      "fields": {
-        "url": {
-          "en": "https://www.massimodutti.com/en/store-locator.html",
-          "es": "https://www.massimodutti.com/es/store-locator.html"
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "94LxFmpXInTjpZBYliyCT",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:59.369Z",
-        "updatedAt": "2021-02-25T10:21:44.676Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:44.676Z",
-        "firstPublishedAt": "2019-05-23T13:39:31.195Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "text"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "DURING_FAQ1"
-        },
-        "shortText": {
-          "en": "Plazo y coste envío"
-        },
-        "text": {
-          "en": "El coste depende del tipo de envío elegido cuando haga la compra:\n\n1. - Recoger en tienda: (GRATIS) 3-5 días laborables*\n2. - Recoger en MRW/Correos: 2,95€  3-5 días laborables*\n3. - Estándar domicilio: 3,95 €  2-4 días laborables*\n4. - Express domicilio: 5,95 €  1-2 días laborables*\n\n*Los plazos de entrega se entienden a partir de las 24h laborales siguientes a la fecha de compra. Los días laborales se entienden de lunes a viernes y no festivos."
-        },
-        "followup": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Entry",
-              "id": "1U7XKJccDSsI3mP0yX04Mj"
-            }
-          }
-        },
-        "keywords": {
-          "en": [
-            "envío",
-            "coste",
-            "coste de envío",
-            "gastos de envío",
-            "plazo envío",
-            "tiempo entrega",
-            "fecha de entrega",
-            "tiempo estimado",
-            "demora de entrega"
-          ]
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "4QMNasIHHIrFgCJPUEMow1",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:38:59.417Z",
-        "updatedAt": "2021-02-25T10:21:44.171Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:44.171Z",
-        "firstPublishedAt": "2019-05-23T13:39:32.386Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 3,
-        "version": 6,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "text"
-          }
-        }
-      },
-      "fields": {
-        "name": {
-          "en": "DURING_FAQ2"
-        },
-        "shortText": {
-          "en": "Eliminar artículos"
-        },
-        "text": {
-          "en": "Puede suprimir los artículos de la cesta de compra cuando desee si todavía no ha tramitado su pedido."
-        },
-        "followup": {
-          "en": {
-            "sys": {
-              "type": "Link",
-              "linkType": "Entry",
-              "id": "1U7XKJccDSsI3mP0yX04Mj"
-            }
-          }
-        },
-        "keywords": {
-          "en": [
-            "eliminar artículo",
-            "modificar pedido",
-            "cesta de compra",
-            "carrito de compra",
-            "eliminar producto",
-            "quitar artículo",
-            "quiero quitar",
-            "quiero eliminar",
-            "me gustaria quitar",
-            "me gustaria eliminar"
-          ]
         }
       }
     },
@@ -7485,7 +6426,7 @@
         "id": "793EOCG1840B2trwKVTkdx",
         "type": "Entry",
         "createdAt": "2019-05-23T13:39:00.059Z",
-        "updatedAt": "2021-02-25T10:21:08.845Z",
+        "updatedAt": "2021-04-20T16:34:27.255Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -7493,8 +6434,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:08.845Z",
+        "publishedVersion": 9,
+        "publishedAt": "2021-04-20T16:34:27.255Z",
         "firstPublishedAt": "2019-05-23T13:39:36.897Z",
         "createdBy": {
           "sys": {
@@ -7510,8 +6451,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 10,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -7535,7 +6476,7 @@
           "en": "Modificar mi pedido"
         },
         "text": {
-          "en": "Tiene dos opciones, aunque sólo puede modificar la talla y/o color de su artículo y no debe superar el importe inicial de su pedido.\n1. A través del formulario de contacto de la web de Massimo Dutti.\n2. Contacte con el equipo de Atención al cliente a través de teléfono o email.\nNOTA: No será posible ningún tipo de modificación para los pedidos pagados en tienda."
+          "en": "Cómo modificar el pedido"
         },
         "buttons": {
           "en": [
@@ -7566,16 +6507,7 @@
         },
         "keywords": {
           "en": [
-            "modificar pedido",
-            "modificar compra",
-            "gestionar pedido",
-            "gestionar compra",
-            "modificar pedido",
-            "modificar compra",
-            "gestionar pedido",
-            "gestionar compra",
-            "cambiar articulos",
-            "añadir articulos"
+            "modificar pedido"
           ]
         }
       }
@@ -7694,7 +6626,7 @@
         "id": "6LI6VqtOUzOmFjc9mAgsj9",
         "type": "Entry",
         "createdAt": "2019-05-23T13:39:00.375Z",
-        "updatedAt": "2021-02-25T10:21:42.537Z",
+        "updatedAt": "2021-04-20T17:27:04.800Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -7702,8 +6634,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:42.537Z",
+        "publishedVersion": 14,
+        "publishedAt": "2021-04-20T17:27:04.800Z",
         "firstPublishedAt": "2019-05-23T13:39:39.036Z",
         "createdBy": {
           "sys": {
@@ -7719,8 +6651,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 5,
+        "version": 15,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -7748,7 +6680,7 @@
             "sys": {
               "type": "Link",
               "linkType": "Entry",
-              "id": "3ePsGfyLHBHsrxtU7IkPh9"
+              "id": "7mbZi4kg6FAoGYGPdOE77c"
             }
           }
         }
@@ -7872,7 +6804,7 @@
         "id": "1ZKKQC7Hy9dP5JY9WSMl7d",
         "type": "Entry",
         "createdAt": "2019-05-23T13:39:00.423Z",
-        "updatedAt": "2021-02-25T10:21:09.890Z",
+        "updatedAt": "2021-04-20T17:56:54.761Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -7880,8 +6812,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:09.890Z",
+        "publishedVersion": 8,
+        "publishedAt": "2021-04-20T17:56:54.761Z",
         "firstPublishedAt": "2019-05-23T13:39:39.721Z",
         "createdBy": {
           "sys": {
@@ -7897,8 +6829,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 9,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -7922,7 +6854,7 @@
           "en": "Disponible en tienda"
         },
         "text": {
-          "en": "Tanto en nuestra web como en las tiendas, únicamente están a la venta artículos de la temporada actual. Si un artículo está agotado, intentaremos reponerlo tan pronto como sea posible. Cuando esté agotado, lo eliminaremos de nuestro sitio web. Cuando una talla de un artículo que desea comprar aparece sombreados en gris más claro y, por lo tanto, no puede seleccionarse, significa que no está disponible actualmente. \nPara comprobar desde nuestra página web la disponibilidad de un artículo en su tienda más cercana deberá seleccionar la opción “Disponibilidad en Tienda” en la ficha del producto."
+          "en": "Disponibilidad"
         },
         "buttons": {
           "en": [
@@ -7946,15 +6878,7 @@
         },
         "keywords": {
           "en": [
-            "disponibilidad",
-            "stock",
-            "localizar artículo en tienda",
-            "realizar pedido",
-            "disponible",
-            "localizar producto",
-            "buscar articulo",
-            "encontrar articulo",
-            "encuentro articulo"
+            "disponibilidad"
           ]
         }
       }
@@ -7975,7 +6899,7 @@
         "id": "4X32t9s76M3Kt6V1bJdbeG",
         "type": "Entry",
         "createdAt": "2019-05-23T13:39:00.619Z",
-        "updatedAt": "2021-02-25T10:21:41.517Z",
+        "updatedAt": "2021-04-20T17:59:01.051Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -7983,8 +6907,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:41.517Z",
+        "publishedVersion": 10,
+        "publishedAt": "2021-04-20T17:59:01.051Z",
         "firstPublishedAt": "2019-05-23T13:39:40.454Z",
         "createdBy": {
           "sys": {
@@ -8000,8 +6924,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 11,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -8029,7 +6953,7 @@
             "sys": {
               "type": "Link",
               "linkType": "Entry",
-              "id": "3LQueLBzq355LLKA7ZZIg3"
+              "id": "7mbZi4kg6FAoGYGPdOE77c"
             }
           }
         }
@@ -8051,7 +6975,7 @@
         "id": "4ym2T4BT3sIDmt3aAodFNo",
         "type": "Entry",
         "createdAt": "2019-05-23T13:39:00.634Z",
-        "updatedAt": "2021-02-25T10:21:39.983Z",
+        "updatedAt": "2021-04-20T17:43:57.221Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -8059,8 +6983,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:39.983Z",
+        "publishedVersion": 8,
+        "publishedAt": "2021-04-20T17:43:57.221Z",
         "firstPublishedAt": "2019-05-23T13:39:41.068Z",
         "createdBy": {
           "sys": {
@@ -8076,8 +7000,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 9,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -8105,7 +7029,7 @@
             "sys": {
               "type": "Link",
               "linkType": "Entry",
-              "id": "6VVm70b0WNuGwHuB6xZT0W"
+              "id": "7mbZi4kg6FAoGYGPdOE77c"
             }
           }
         }
@@ -8203,7 +7127,7 @@
         "id": "3lzJqY4sI3VDgMRFsgvtvT",
         "type": "Entry",
         "createdAt": "2019-05-23T13:39:00.996Z",
-        "updatedAt": "2021-02-25T10:21:11.278Z",
+        "updatedAt": "2021-04-20T16:37:37.122Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -8211,8 +7135,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 5,
-        "publishedAt": "2021-02-25T10:21:11.278Z",
+        "publishedVersion": 7,
+        "publishedAt": "2021-04-20T16:37:37.122Z",
         "firstPublishedAt": "2019-05-23T13:39:42.305Z",
         "createdBy": {
           "sys": {
@@ -8228,8 +7152,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3,
-        "version": 6,
+        "publishedCounter": 4,
+        "version": 8,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -8253,7 +7177,7 @@
           "en": "Contactar con agente"
         },
         "text": {
-          "en": "Envíenos un email a contact@massimodutti.com o llámenos al 900456000. Estaremos encantados de ayudarle a resolver sus dudas. Le recordamos que nuestro horario de atención al cliente es de lunes a viernes: 9-19h y sábado de 10-16h."
+          "en": "Envíenos un email"
         },
         "buttons": {
           "en": [
@@ -9232,7 +8156,7 @@
         "id": "6PrAVM9oo86ZyVBwuJ3U6k",
         "type": "Entry",
         "createdAt": "2019-05-23T13:41:30.634Z",
-        "updatedAt": "2021-02-25T10:21:39.253Z",
+        "updatedAt": "2021-04-20T16:38:37.344Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -9240,8 +8164,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 3,
-        "publishedAt": "2021-02-25T10:21:39.253Z",
+        "publishedVersion": 5,
+        "publishedAt": "2021-04-20T16:38:37.344Z",
         "firstPublishedAt": "2019-05-23T13:42:13.139Z",
         "createdBy": {
           "sys": {
@@ -9257,8 +8181,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 2,
-        "version": 4,
+        "publishedCounter": 3,
+        "version": 6,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -9279,7 +8203,7 @@
           "en": "FBK_KO_MSG_SUPPORT_CLOSED"
         },
         "text": {
-          "en": "Siento no haber podido ayudarle. Le informamos que nuestro horario de atención al cliente es de lunes a viernes de 9h a 19h y sábados de 10h a 16h. Si lo desea, puede enviarnos un email a contact@massimodutti.com y le responderemos lo antes posible."
+          "en": "Siento no haber podido ayudarle."
         }
       }
     },
@@ -9840,7 +8764,7 @@
         "id": "1DithqCBOLcgLM9n3cBsPo",
         "type": "Entry",
         "createdAt": "2019-05-23T13:41:31.790Z",
-        "updatedAt": "2021-02-25T10:21:34.363Z",
+        "updatedAt": "2021-04-20T16:39:17.579Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -9848,8 +8772,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 3,
-        "publishedAt": "2021-02-25T10:21:34.363Z",
+        "publishedVersion": 6,
+        "publishedAt": "2021-04-20T16:39:17.579Z",
         "firstPublishedAt": "2019-05-23T13:42:19.692Z",
         "createdBy": {
           "sys": {
@@ -9865,8 +8789,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 2,
-        "version": 4,
+        "publishedCounter": 3,
+        "version": 7,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -9887,7 +8811,7 @@
           "en": "KEYWORDS_KO_SUPPORT_CLOSED"
         },
         "text": {
-          "en": "Lamento no haberle entendido. Le informamos que nuestro horario de atención al cliente es de lunes a viernes de 9h a 19h y sábados de 10h a 16h. Si lo desea, puede enviarnos un email a contact@massimodutti.com y le responderemos lo antes posible"
+          "en": "No le he entendido"
         }
       }
     },
@@ -9952,70 +8876,6 @@
       "fields": {
         "payload": {
           "en": "humanHandOff"
-        }
-      }
-    },
-    {
-      "metadata": {
-        "tags": [
-        ]
-      },
-      "sys": {
-        "space": {
-          "sys": {
-            "type": "Link",
-            "linkType": "Space",
-            "id": "p2iyhzd1u4a7"
-          }
-        },
-        "id": "4I9zdHNlTtIU0j1U20ZcQC",
-        "type": "Entry",
-        "createdAt": "2019-05-23T13:41:32.089Z",
-        "updatedAt": "2021-02-25T10:21:31.855Z",
-        "environment": {
-          "sys": {
-            "id": "master",
-            "type": "Link",
-            "linkType": "Environment"
-          }
-        },
-        "publishedVersion": 3,
-        "publishedAt": "2021-02-25T10:21:31.855Z",
-        "firstPublishedAt": "2019-05-23T13:42:21.891Z",
-        "createdBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "updatedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "publishedCounter": 2,
-        "version": 4,
-        "publishedBy": {
-          "sys": {
-            "type": "Link",
-            "linkType": "User",
-            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
-          }
-        },
-        "contentType": {
-          "sys": {
-            "type": "Link",
-            "linkType": "ContentType",
-            "id": "url"
-          }
-        }
-      },
-      "fields": {
-        "url": {
-          "en": "http://www.contact_agent.com"
         }
       }
     },
@@ -11840,7 +10700,7 @@
         "id": "627QkyJrFo3grJryj0vu6L",
         "type": "Entry",
         "createdAt": "2020-03-05T09:16:16.137Z",
-        "updatedAt": "2021-04-12T09:16:44.282Z",
+        "updatedAt": "2021-04-20T19:07:40.019Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -11848,8 +10708,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 24127,
-        "publishedAt": "2021-04-12T09:16:44.282Z",
+        "publishedVersion": 24719,
+        "publishedAt": "2021-04-20T19:07:40.019Z",
         "firstPublishedAt": "2020-03-05T09:18:44.951Z",
         "createdBy": {
           "sys": {
@@ -11865,8 +10725,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 12005,
-        "version": 24128,
+        "publishedCounter": 12301,
+        "version": 24720,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -11946,7 +10806,7 @@
         "id": "3LOUB5Udmxw7rh87G5Ob9b",
         "type": "Entry",
         "createdAt": "2020-03-06T18:56:46.614Z",
-        "updatedAt": "2021-04-12T09:16:10.711Z",
+        "updatedAt": "2021-04-20T19:07:48.327Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -11954,8 +10814,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 11510,
-        "publishedAt": "2021-04-12T09:16:10.711Z",
+        "publishedVersion": 11697,
+        "publishedAt": "2021-04-20T19:07:48.327Z",
         "firstPublishedAt": "2020-03-06T18:57:57.309Z",
         "createdBy": {
           "sys": {
@@ -11971,8 +10831,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 5747,
-        "version": 11511,
+        "publishedCounter": 5840,
+        "version": 11698,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -12451,7 +11311,7 @@
         "id": "1gYR6JNTdBpHBFVDhpQjyD",
         "type": "Entry",
         "createdAt": "2020-10-28T14:48:20.942Z",
-        "updatedAt": "2021-04-12T09:17:19.320Z",
+        "updatedAt": "2021-04-20T19:07:23.471Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -12459,8 +11319,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 7596,
-        "publishedAt": "2021-04-12T09:17:19.320Z",
+        "publishedVersion": 8079,
+        "publishedAt": "2021-04-20T19:07:23.471Z",
         "firstPublishedAt": "2020-10-28T14:49:40.027Z",
         "createdBy": {
           "sys": {
@@ -12476,8 +11336,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3793,
-        "version": 7597,
+        "publishedCounter": 4034,
+        "version": 8080,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -12538,7 +11398,7 @@
         "id": "7jgIsjPRD3fHzEYZbpaewT",
         "type": "Entry",
         "createdAt": "2020-10-28T14:49:53.437Z",
-        "updatedAt": "2021-04-12T09:17:26.967Z",
+        "updatedAt": "2021-04-20T19:07:36.523Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -12546,8 +11406,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 2974,
-        "publishedAt": "2021-04-12T09:17:26.967Z",
+        "publishedVersion": 3166,
+        "publishedAt": "2021-04-20T19:07:36.523Z",
         "firstPublishedAt": "2020-10-28T14:50:43.341Z",
         "createdBy": {
           "sys": {
@@ -12563,8 +11423,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 1484,
-        "version": 2975,
+        "publishedCounter": 1580,
+        "version": 3167,
         "publishedBy": {
           "sys": {
             "type": "Link",
@@ -12690,6 +11550,74 @@
         },
         "customFieldText": {
           "en": "Custom data"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "tags": [
+        ]
+      },
+      "sys": {
+        "space": {
+          "sys": {
+            "type": "Link",
+            "linkType": "Space",
+            "id": "p2iyhzd1u4a7"
+          }
+        },
+        "id": "7mbZi4kg6FAoGYGPdOE77c",
+        "type": "Entry",
+        "createdAt": "2021-04-20T17:26:24.608Z",
+        "updatedAt": "2021-04-20T17:26:58.517Z",
+        "environment": {
+          "sys": {
+            "id": "master",
+            "type": "Link",
+            "linkType": "Environment"
+          }
+        },
+        "publishedVersion": 3,
+        "publishedAt": "2021-04-20T17:26:58.517Z",
+        "firstPublishedAt": "2021-04-20T17:26:58.517Z",
+        "createdBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "updatedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "publishedCounter": 1,
+        "version": 4,
+        "publishedBy": {
+          "sys": {
+            "type": "Link",
+            "linkType": "User",
+            "id": "1EiLDCdP8qW3vpBWcJTOGJ"
+          }
+        },
+        "contentType": {
+          "sys": {
+            "type": "Link",
+            "linkType": "ContentType",
+            "id": "url"
+          }
+        }
+      },
+      "fields": {
+        "name": {
+          "en": "SHOP_URL"
+        },
+        "url": {
+          "en": "https://shop.com/en/",
+          "es": "https://shop.com/es/"
         }
       }
     }
@@ -12859,7 +11787,7 @@
         "id": "1T0ntgNJnDUSwz59zGMZO6",
         "type": "Asset",
         "createdAt": "2019-06-04T09:46:22.451Z",
-        "updatedAt": "2021-04-12T09:17:57.274Z",
+        "updatedAt": "2021-04-20T19:07:54.691Z",
         "environment": {
           "sys": {
             "id": "master",
@@ -12867,8 +11795,8 @@
             "linkType": "Environment"
           }
         },
-        "publishedVersion": 6702,
-        "publishedAt": "2021-04-12T09:17:57.274Z",
+        "publishedVersion": 6886,
+        "publishedAt": "2021-04-20T19:07:54.691Z",
         "firstPublishedAt": "2019-06-04T09:46:39.939Z",
         "createdBy": {
           "sys": {
@@ -12884,8 +11812,8 @@
             "id": "1EiLDCdP8qW3vpBWcJTOGJ"
           }
         },
-        "publishedCounter": 3342,
-        "version": 6703,
+        "publishedCounter": 3434,
+        "version": 6887,
         "publishedBy": {
           "sys": {
             "type": "Link",

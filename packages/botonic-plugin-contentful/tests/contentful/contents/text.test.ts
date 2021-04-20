@@ -98,7 +98,7 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
 
   // assert
   expect(text.buttons).toHaveLength(0)
-  expect((text.common.followUp as cms.Carousel).elements).toHaveLength(3)
+  expect((text.common.followUp as cms.Carousel).elements).toHaveLength(2)
 })
 
 test('TEST: contentful text without buttons with image followup with text followup', async () => {
