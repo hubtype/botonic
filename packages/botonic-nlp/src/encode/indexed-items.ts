@@ -26,6 +26,12 @@ export class IndexedItems {
     return this.items[idx]
   }
 
+  maskUnknownItems(sequence: string[], unknownItem: string): string[] {
+    return sequence.map(item =>
+      this.items.includes(item) ? item : unknownItem
+    )
+  }
+
   private isValidIndex(idx: number): boolean {
     return 0 <= idx && idx < this.length
   }
