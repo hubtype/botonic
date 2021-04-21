@@ -58,25 +58,15 @@ describe('Botonic NER', () => {
 
   test('Recognize entities', async () => {
     // arrange
-    const sut = BotonicNer.with(
-      constantsHelper.LOCALE,
-      constantsHelper.MAX_SEQUENCE_LENGTH,
-      constantsHelper.ENTITIES
-    )
-    const { trainSet } = toolsHelper.dataset.split()
-    sut.generateVocabulary(trainSet)
+    const sut = await BotonicNer.load(constantsHelper.NER_MODEL_DIR_PATH)
     sut.compile()
-    const model = await sut.createModel(
-      NER_TEMPLATE.BILSTM,
-      toolsHelper.wordEmbeddingStorage
-    )
-    sut.setModel(model)
-    await sut.train(trainSet, 4, 8)
 
     // act
-    const entities = sut.recognizeEntities('I love this tshirt')
+    const entities = sut.recognizeEntities('I want to return this jacket')
 
     // assert
-    expect(entities.length).toEqual(3)
+    expect(entities.length).toEqual(1)
+    expect(entities.map(e => e.label)).toEqual(['product'])
+    expect(entities.map(e => e.text)).toEqual(['jacket'])
   })
 })
