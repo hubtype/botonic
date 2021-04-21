@@ -25,14 +25,14 @@ describe('NER Processor', () => {
       },
     ])
     expect(x.shape).toEqual([2, constantsHelper.MAX_SEQUENCE_LENGTH])
+    expect(x.arraySync()).toEqual([
+      [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+      [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
+    ])
     expect(y.shape).toEqual([
       2,
       constantsHelper.MAX_SEQUENCE_LENGTH,
       constantsHelper.ENTITIES.length + 1,
-    ])
-    expect(x.arraySync()).toEqual([
-      [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-      [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
     ])
     expect(y.arraySync()).toEqual([
       [
@@ -71,7 +71,6 @@ describe('NER Processor', () => {
       'I want to buy this pair of shoes.'
     )
     expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
-    expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
     expect(sequence).toEqual([
       'i',
       'want',
@@ -86,6 +85,7 @@ describe('NER Processor', () => {
       PADDING_TOKEN,
       PADDING_TOKEN,
     ])
+    expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
     expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0]])
   })
 
@@ -94,7 +94,6 @@ describe('NER Processor', () => {
       'I want to buy this pair of shoes, this t-shirt and also, this jacket. I also want to know if this fur coat is on sale, because I love it!'
     )
     expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
-    expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
     expect(sequence).toEqual([
       'i',
       'want',
@@ -109,6 +108,7 @@ describe('NER Processor', () => {
       'fur',
       'coat',
     ])
+    expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
     expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21]])
   })
 })

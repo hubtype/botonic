@@ -24,11 +24,11 @@ describe('Text Classification Processor', () => {
       },
     ])
     expect(x.shape).toEqual([2, constantsHelper.MAX_SEQUENCE_LENGTH])
-    expect(y.shape).toEqual([2, constantsHelper.CLASSES.length])
     expect(x.arraySync()).toEqual([
       [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
       [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
     ])
+    expect(y.shape).toEqual([2, constantsHelper.CLASSES.length])
     expect(y.arraySync()).toEqual([
       [1, 0],
       [1, 0],
