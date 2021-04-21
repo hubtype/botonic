@@ -8,17 +8,18 @@ import * as constantsHelper from '../../helpers/constants-helper'
 import * as toolsHelper from '../../helpers/tools-helper'
 
 describe('Botonic Text Classifier', () => {
+  const { trainSet, testSet } = toolsHelper.dataset.split()
+  const vocabulary = trainSet.extractVocabulary(toolsHelper.preprocessor)
+  const sut = new BotonicTextClassifier(
+    constantsHelper.LOCALE,
+    constantsHelper.MAX_SEQUENCE_LENGTH,
+    constantsHelper.CLASSES,
+    vocabulary,
+    toolsHelper.preprocessor
+  )
+  sut.compile()
+
   test('Train and Evaluate model', async () => {
-    const { trainSet, testSet } = toolsHelper.dataset.split()
-    const vocabulary = trainSet.extractVocabulary(toolsHelper.preprocessor)
-    const sut = new BotonicTextClassifier(
-      constantsHelper.LOCALE,
-      constantsHelper.MAX_SEQUENCE_LENGTH,
-      constantsHelper.CLASSES,
-      vocabulary,
-      toolsHelper.preprocessor
-    )
-    sut.compile()
     const model = await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
@@ -35,15 +36,6 @@ describe('Botonic Text Classifier', () => {
   })
 
   test('Save Model', async () => {
-    const { trainSet } = toolsHelper.dataset.split()
-    const vocabulary = trainSet.extractVocabulary(toolsHelper.preprocessor)
-    const sut = new BotonicTextClassifier(
-      constantsHelper.LOCALE,
-      constantsHelper.MAX_SEQUENCE_LENGTH,
-      constantsHelper.CLASSES,
-      vocabulary,
-      toolsHelper.preprocessor
-    )
     const model = await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
