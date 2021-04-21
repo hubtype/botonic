@@ -1,31 +1,83 @@
 import { PADDING_TOKEN } from '../../../../src/preprocess/constants'
 import { Processor } from '../../../../src/tasks/ner/process/processor'
-import * as helper from '../../../helpers/tools-helper'
+import * as constantsHelper from '../../../helpers/constants-helper'
+import * as toolsHelper from '../../../helpers/tools-helper'
 
 describe('NER Processor', () => {
   const sut = new Processor(
-    helper.preprocessor,
-    helper.tokenEncoder,
-    helper.entitiesEncoder
+    toolsHelper.preprocessor,
+    toolsHelper.tokenEncoder,
+    toolsHelper.entitiesEncoder
   )
-  test('Process sample', () => {
-    expect(
-      sut
-        .process([
-          { class: '', entities: [], text: 'I love this leather jacket' },
-        ])
-        .x.arraySync()
-    ).toEqual([[6, 11, 1, 27, 0, 0, 0, 0, 0, 0, 0, 0]])
+  // The samples text has been chosen so we have a short and a long sentence.
+  test('Process samples', () => {
+    const { x, y } = sut.process([
+      {
+        class: 'BuyProduct',
+        entities: [{ start: 27, end: 32, text: 'shoes', label: 'product' }],
+        text: 'I want to buy this pair of shoes.',
+      },
+      {
+        class: 'BuyProduct',
+        entities: [{ start: 27, end: 32, text: 'shoes', label: 'product' }],
+        text:
+          'I want to buy this pair of shoes, this t-shirt and also, this jacket. I also want to know if this fur coat is on sale, because I love it!',
+      },
+    ])
+    expect(x.shape).toEqual([2, constantsHelper.MAX_SEQUENCE_LENGTH])
+    expect(y.shape).toEqual([
+      2,
+      constantsHelper.MAX_SEQUENCE_LENGTH,
+      constantsHelper.ENTITIES.length + 1,
+    ])
+    expect(x.arraySync()).toEqual([
+      [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+      [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
+    ])
+    expect(y.arraySync()).toEqual([
+      [
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+      ],
+      [
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+      ],
+    ])
   })
 
-  test('Generate Input data', () => {
-    const { sequence, input } = sut.generateInput('I love this t-shirt')
+  test('Generate Sequence and Input of short text', () => {
+    const { sequence, input } = sut.generateInput(
+      'I want to buy this pair of shoes.'
+    )
+    expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
+    expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
     expect(sequence).toEqual([
       'i',
-      'love',
-      't-shirt',
-      PADDING_TOKEN,
-      PADDING_TOKEN,
+      'want',
+      'buy',
+      'pair',
+      'shoes',
       PADDING_TOKEN,
       PADDING_TOKEN,
       PADDING_TOKEN,
@@ -34,6 +86,29 @@ describe('NER Processor', () => {
       PADDING_TOKEN,
       PADDING_TOKEN,
     ])
-    expect(input.arraySync()).toEqual([[6, 11, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+    expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0]])
+  })
+
+  test('Generate Sequence and Input of long text', () => {
+    const { sequence, input } = sut.generateInput(
+      'I want to buy this pair of shoes, this t-shirt and also, this jacket. I also want to know if this fur coat is on sale, because I love it!'
+    )
+    expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
+    expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
+    expect(sequence).toEqual([
+      'i',
+      'want',
+      'buy',
+      'pair',
+      'shoes',
+      't-shirt',
+      'jacket',
+      'i',
+      'want',
+      'know',
+      'fur',
+      'coat',
+    ])
+    expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21]])
   })
 })
