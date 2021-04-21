@@ -1,7 +1,7 @@
 import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess/constants'
+import { NEUTRAL_ENTITY } from '@botonic/nlp/lib/tasks/ner/process/constants'
 import { Entity, Prediction } from '@botonic/nlp/lib/tasks/ner/process/types'
 import { Tensor3D } from '@tensorflow/tfjs'
-
 export class PredictionProcessor {
   constructor(private readonly entities: string[]) {}
 
@@ -31,6 +31,8 @@ export class PredictionProcessor {
   }
 
   private filterEntities(entities: Entity[]): Entity[] {
-    return entities.filter(entity => entity.text != PADDING_TOKEN)
+    return entities.filter(
+      entity => entity.text != PADDING_TOKEN && entity.label != NEUTRAL_ENTITY
+    )
   }
 }
