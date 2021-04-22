@@ -1,4 +1,6 @@
 import { Dataset } from '../../src/dataset/dataset'
+import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../src/preprocess/constants'
+import * as helper from '../helpers/tools-helper'
 
 describe('Dataset', () => {
   const sut = new Dataset(
@@ -26,5 +28,12 @@ describe('Dataset', () => {
     expect(() => {
       sut.split(2)
     }).toThrowError()
+  })
+
+  test('Vocabulary Extraction', () => {
+    const vocabulary = helper.dataset.extractVocabulary(helper.preprocessor)
+    expect(vocabulary.length).toBeGreaterThan(2)
+    expect(vocabulary.includes(PADDING_TOKEN)).toBeTruthy()
+    expect(vocabulary.includes(UNKNOWN_TOKEN)).toBeTruthy()
   })
 })
