@@ -1,4 +1,4 @@
-import { Tensor3D } from '@tensorflow/tfjs-node'
+import { LayersModel, Tensor3D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
 import { Dataset } from '../../dataset/dataset'
@@ -21,7 +21,7 @@ import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils/array-utils'
 import { createBiLstmModel } from '../ner/models/bilstm-model'
-import { NerModelParameters, NerModelTemplate } from './models/types'
+import { NER_TEMPLATE, NerModelParameters } from './models/types'
 import { NEUTRAL_ENTITY } from './process/constants'
 import { PredictionProcessor } from './process/prediction-processor'
 import { Processor } from './process/processor'
@@ -85,10 +85,10 @@ export class BotonicNer {
   }
 
   async createModel(
-    template: NerModelTemplate,
+    template: NER_TEMPLATE,
     storage: WordEmbeddingStorage,
     params?: NerModelParameters
-  ): Promise<void> {
+  ): Promise<LayersModel> {
     // TODO: set embeddings as optional
     const embeddingsMatrix = await generateEmbeddingsMatrix(
       storage,
@@ -96,19 +96,20 @@ export class BotonicNer {
     )
 
     switch (template) {
-      case 'biLstm':
-        this.modelManager = new ModelManager(
-          createBiLstmModel(
-            this.maxLength,
-            this.entities,
-            embeddingsMatrix,
-            params
-          )
+      case NER_TEMPLATE.BILSTM:
+        return createBiLstmModel(
+          this.maxLength,
+          this.entities,
+          embeddingsMatrix,
+          params
         )
-        break
       default:
         throw new Error(`"${template}" is an invalid model template.`)
     }
+  }
+
+  setModel(model: LayersModel): void {
+    this.modelManager = new ModelManager(model)
   }
 
   async train(

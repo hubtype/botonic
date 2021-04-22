@@ -27,7 +27,7 @@ describe('Botonic Text Classifier', () => {
     const { trainSet, testSet } = toolsHelper.dataset.split()
     sut.generateVocabulary(trainSet)
     sut.compile()
-    await sut.createModel(
+    const model = await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
         constantsHelper.LOCALE,
@@ -35,6 +35,7 @@ describe('Botonic Text Classifier', () => {
         constantsHelper.EMBEDDINGS_DIMENSION
       )
     )
+    sut.setModel(model)
     await sut.train(trainSet, 4, 8)
     const { accuracy, loss } = await sut.evaluate(testSet)
     expect(accuracy).toBeGreaterThan(0.01)
@@ -44,7 +45,7 @@ describe('Botonic Text Classifier', () => {
   test('Save Model', async () => {
     const { trainSet } = toolsHelper.dataset.split(0.5, false)
     sut.generateVocabulary(trainSet)
-    await sut.createModel(
+    const model = await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
         constantsHelper.LOCALE,
@@ -52,6 +53,7 @@ describe('Botonic Text Classifier', () => {
         constantsHelper.EMBEDDINGS_DIMENSION
       )
     )
+    sut.setModel(model)
     const path = join(constantsHelper.HELPER_DIR, 'tmp-botonic-text-classifier')
     await sut.saveModel(path)
     expect(existsSync(path)).toBeTruthy()

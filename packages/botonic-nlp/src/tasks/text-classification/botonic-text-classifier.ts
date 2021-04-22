@@ -1,4 +1,4 @@
-import { Tensor2D } from '@tensorflow/tfjs-node'
+import { LayersModel, Tensor2D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
 import { Dataset } from '../../dataset/dataset'
@@ -83,21 +83,27 @@ export class BotonicTextClassifier {
     template: TEXT_CLASSIFIER_TEMPLATE,
     storage: WordEmbeddingStorage,
     params?: TextClassifierParameters
-  ): Promise<void> {
+  ): Promise<LayersModel> {
     const embeddingsMatrix = await generateEmbeddingsMatrix(
       storage,
       this.vocabulary
     )
 
-    if (template == TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN) {
-      const model = createSimpleNN(
-        this.maxLength,
-        this.classes.length,
-        embeddingsMatrix,
-        params
-      )
-      this.modelManager = new ModelManager(model)
+    switch (template) {
+      case TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN:
+        return createSimpleNN(
+          this.maxLength,
+          this.classes.length,
+          embeddingsMatrix,
+          params
+        )
+      default:
+        throw new Error(`"${template}" is an invalid model template.`)
     }
+  }
+
+  setModel(model: LayersModel): void {
+    this.modelManager = new ModelManager(model)
   }
 
   async train(
