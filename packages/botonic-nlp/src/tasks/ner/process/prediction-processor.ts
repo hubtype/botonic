@@ -1,6 +1,7 @@
 import { Tensor3D } from '@tensorflow/tfjs-node'
 
 import { PADDING_TOKEN } from '../../../preprocess/constants'
+import { NEUTRAL_ENTITY } from './constants'
 import { Entity, Prediction } from './types'
 
 export class PredictionProcessor {
@@ -11,7 +12,9 @@ export class PredictionProcessor {
     const entities = sequence.map((token, idx) => {
       return this.getEntity(token, confidences[idx])
     })
-    return entities.filter(e => e.text != PADDING_TOKEN)
+    return entities.filter(
+      e => e.text != PADDING_TOKEN && e.label != NEUTRAL_ENTITY
+    )
   }
 
   private getEntity(token, confidences): Entity {
