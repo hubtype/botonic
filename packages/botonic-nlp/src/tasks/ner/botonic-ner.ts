@@ -108,7 +108,7 @@ export class BotonicNer {
     }
   }
 
-  importModel(model: LayersModel): void {
+  setModel(model: LayersModel): void {
     this.modelManager = new ModelManager(model)
   }
 

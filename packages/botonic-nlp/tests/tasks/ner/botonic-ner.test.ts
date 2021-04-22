@@ -45,7 +45,7 @@ describe('Botonic NER', () => {
       NER_TEMPLATE.BILSTM,
       toolsHelper.wordEmbeddingStorage
     )
-    sut.importModel(model)
+    sut.setModel(model)
     await sut.train(trainSet, 4, 8)
 
     // act
@@ -70,7 +70,7 @@ describe('Botonic NER', () => {
       NER_TEMPLATE.BILSTM,
       toolsHelper.wordEmbeddingStorage
     )
-    sut.importModel(model)
+    sut.setModel(model)
     await sut.train(trainSet, 4, 8)
 
     // act

@@ -35,7 +35,7 @@ describe('Botonic Text Classifier', () => {
         constantsHelper.EMBEDDINGS_DIMENSION
       )
     )
-    sut.importModel(model)
+    sut.setModel(model)
     await sut.train(trainSet, 4, 8)
     const { accuracy, loss } = await sut.evaluate(testSet)
     expect(accuracy).toBeGreaterThan(0.01)
@@ -53,7 +53,7 @@ describe('Botonic Text Classifier', () => {
         constantsHelper.EMBEDDINGS_DIMENSION
       )
     )
-    sut.importModel(model)
+    sut.setModel(model)
     const path = join(constantsHelper.HELPER_DIR, 'tmp-botonic-text-classifier')
     await sut.saveModel(path)
     expect(existsSync(path)).toBeTruthy()
