@@ -9,10 +9,10 @@ export default class BotonicPluginTextClassification implements Plugin {
   async pre(request: PluginPreRequest): Promise<void> {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
-        //   Pending to be implemented.
+        //   TODO: Pending to be implemented.
       }
     } catch (e) {
-      console.log('Cannot classify the input text')
+      console.error(`Cannot classify the input: ${request.input}`)
     }
   }
 
