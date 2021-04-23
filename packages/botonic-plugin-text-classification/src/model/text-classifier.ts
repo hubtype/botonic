@@ -1,7 +1,7 @@
 import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
 import { Intent } from '@botonic/nlp/lib/tasks/text-classification/process/prediction-processor'
 import type { TextClassificationConfig } from '@botonic/nlp/lib/tasks/text-classification/storage/types'
-import type { Tensor3D } from '@tensorflow/tfjs'
+import type { Tensor2D } from '@tensorflow/tfjs'
 import { LayersModel } from '@tensorflow/tfjs'
 
 import { PredictionProcessor } from '../process/prediction-processor'
@@ -27,7 +27,7 @@ export class TextClassifier {
 
   classify(text: string): Intent[] {
     const { input } = this.textProcessor.process(text)
-    const prediction = this.model.predict(input) as Tensor3D
+    const prediction = this.model.predict(input) as Tensor2D
     const intents = this.predictionProcessor.process(prediction)
     return intents
   }
