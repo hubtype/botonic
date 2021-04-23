@@ -8,15 +8,19 @@ import type { Tensor2D } from '@tensorflow/tfjs'
 import { tensor } from '@tensorflow/tfjs'
 
 export class TextProcessor {
+  private readonly encoder: LabelEncoder
+
   constructor(
     readonly vocabulary: string[],
     private readonly preprocessor: Preprocessor
-  ) {}
+  ) {
+    this.encoder = new LabelEncoder(this.vocabulary)
+  }
 
   process(text: string): { sequence: string[]; input: Tensor2D } {
     const sequence = this.preprocessor.preprocess(text, PADDING_TOKEN)
     const maskedSequence = this.maskUnknownTokens(sequence)
-    const encodedSequence = this.encodeSequence(maskedSequence)
+    const encodedSequence = this.encoder.encode(maskedSequence)
     const input = tensor([encodedSequence]) as Tensor2D
     return { sequence, input }
   }
@@ -25,10 +29,5 @@ export class TextProcessor {
     return sequence.map(token =>
       this.vocabulary.includes(token) ? token : UNKNOWN_TOKEN
     )
-  }
-
-  private encodeSequence(sequence: string[]): number[] {
-    const encoder = new LabelEncoder(this.vocabulary)
-    return encoder.encode(sequence)
   }
 }
