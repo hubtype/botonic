@@ -2,20 +2,21 @@ import { Locale } from '@botonic/nlp/lib/types'
 
 import { ASSETS_DIR, MODELS_DIR, TEXT_CLASSIFICATION_DIR } from '../constants'
 
-export enum Environment {
+enum Environment {
   DEPLOYED,
   LOCAL,
 }
 
-export function getEnvironment(): Environment {
-  if (process.env.STATIC_URL !== undefined) {
-    return Environment.DEPLOYED
+export function getModelUri(locale: Locale): string {
+  const domain = getEnvironmentDomain()
+  if (getEnvironment() === Environment.DEPLOYED) {
+    return `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${TEXT_CLASSIFICATION_DIR}/${locale}`
   } else {
-    return Environment.LOCAL
+    return `${domain}/${TEXT_CLASSIFICATION_DIR}/${MODELS_DIR}/${locale}`
   }
 }
 
-export function getDomain(): string {
+function getEnvironmentDomain(): string {
   if (getEnvironment() == Environment.DEPLOYED) {
     return process.env.STATIC_URL
   } else {
@@ -23,11 +24,10 @@ export function getDomain(): string {
   }
 }
 
-export function getUri(locale: Locale): string {
-  const domain = getDomain()
-  if (getEnvironment() === Environment.DEPLOYED) {
-    return `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${TEXT_CLASSIFICATION_DIR}/${locale}`
+function getEnvironment(): Environment {
+  if (process.env.STATIC_URL !== undefined) {
+    return Environment.DEPLOYED
   } else {
-    return `${domain}/${TEXT_CLASSIFICATION_DIR}/${MODELS_DIR}/${locale}`
+    return Environment.LOCAL
   }
 }
