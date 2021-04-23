@@ -26,9 +26,9 @@ export class TextClassifier {
   }
 
   classify(text: string): Intent[] {
-    const { sequence, input } = this.textProcessor.process(text)
+    const { input } = this.textProcessor.process(text)
     const prediction = this.model.predict(input) as Tensor3D
-    const intents = this.predictionProcessor.process(sequence, prediction)
+    const intents = this.predictionProcessor.process(prediction)
     return intents
   }
 }
