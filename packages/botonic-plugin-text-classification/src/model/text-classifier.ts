@@ -7,9 +7,6 @@ import { LayersModel } from '@tensorflow/tfjs'
 import { PredictionProcessor } from '../process/prediction-processor'
 import { TextProcessor } from '../process/text-processor'
 
-// @ts-ignore
-global.fetch = fetch
-
 export class TextClassifier {
   private readonly textProcessor: TextProcessor
   private readonly predictionProcessor: PredictionProcessor
