@@ -1,3 +1,4 @@
+import { IndexedItems } from '@botonic/nlp/lib/encode/indexed-items'
 import { LabelEncoder } from '@botonic/nlp/lib/encode/label-encoder'
 import {
   PADDING_TOKEN,
@@ -27,7 +28,7 @@ export class TextProcessor {
   }
 
   private encodeSequence(sequence: string[]): number[] {
-    const codifier = new LabelEncoder(this.vocabulary)
+    const codifier = new LabelEncoder(new IndexedItems(this.vocabulary))
     return codifier.encode(sequence)
   }
 }
