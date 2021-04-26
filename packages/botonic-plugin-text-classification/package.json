@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
-    "clean_install": "npm i && npm run-script build",
+    "clean_install": "npm i && npm run build",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "test": "../../node_modules/.bin/jest",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@babel/runtime": "^7.5.5",
     "@botonic/core": "~0.18.0",
-    "@botonic/nlp": "^0.19.0-alpha.1",
+    "@botonic/nlp": "^0.19.0-alpha.2",
     "@tensorflow/tfjs": "^2.7.0",
     "axios": "^0.21.1",
     "franc": "^5.0.0",
