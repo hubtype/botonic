@@ -1,9 +1,11 @@
 import { Dataset } from '../../src/dataset/dataset'
 import { EmbeddingsDimension } from '../../src/embeddings/database/types'
 import { WordEmbeddingStorage } from '../../src/embeddings/types'
+import { IndexedItems } from '../../src/encode/indexed-items'
 import { LabelEncoder } from '../../src/encode/label-encoder'
 import { OneHotEncoder } from '../../src/encode/one-hot-encoder'
 import { Preprocessor } from '../../src/preprocess'
+import { NEUTRAL_ENTITY } from '../../src/tasks/ner/process/constants'
 import { Processor as NerProcessor } from '../../src/tasks/ner/process/processor'
 import {
   CLASSES,
@@ -19,9 +21,11 @@ export const dataset = Dataset.load(DATA_DIR_PATH)
 
 export const preprocessor = new Preprocessor(LOCALE, MAX_SEQUENCE_LENGTH)
 
-export const tokenEncoder = new LabelEncoder(VOCABULARY)
-export const classEncoder = new OneHotEncoder(CLASSES)
-export const entitiesEncoder = new OneHotEncoder(['O'].concat(ENTITIES))
+export const tokenEncoder = new LabelEncoder(new IndexedItems(VOCABULARY))
+export const classEncoder = new OneHotEncoder(new IndexedItems(CLASSES))
+export const entitiesEncoder = new OneHotEncoder(
+  new IndexedItems([NEUTRAL_ENTITY].concat(ENTITIES))
+)
 
 export const nerProcessor = new NerProcessor(
   preprocessor,

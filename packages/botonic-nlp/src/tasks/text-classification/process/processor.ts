@@ -42,7 +42,7 @@ export class Processor {
 
   private maskUnknownTokens(sequence: string[]): string[] {
     return sequence.map(token =>
-      this.tokensEncoder.vocabulary.includes(token) ? token : UNKNOWN_TOKEN
+      this.tokensEncoder.items.includes(token) ? token : UNKNOWN_TOKEN
     )
   }
 

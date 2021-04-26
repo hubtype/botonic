@@ -1,7 +1,10 @@
+import { IndexedItems } from '../../src/encode/indexed-items'
 import { LabelEncoder } from '../../src/encode/label-encoder'
 
 describe('Label Encoder', () => {
-  const sut = new LabelEncoder(['this', 'test', 'is', 'yes', 'no', 'a', 'it'])
+  const sut = new LabelEncoder(
+    new IndexedItems(['this', 'test', 'is', 'yes', 'no', 'a', 'it'])
+  )
 
   test('Encoding', () => {
     expect(sut.encode(['is', 'this', 'a', 'test'])).toEqual([2, 0, 5, 1])

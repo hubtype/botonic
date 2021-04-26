@@ -1,31 +1,13 @@
-import { unique } from '../utils/array-utils'
+import { IndexedItems } from './indexed-items'
 
 export class LabelEncoder {
-  vocabulary: string[]
-
-  constructor(vocabulary: string[]) {
-    this.vocabulary = unique(vocabulary)
-  }
+  constructor(readonly items: IndexedItems) {}
 
   encode(sequence: string[]): number[] {
-    return sequence.map(token => this.encodeToken(token))
-  }
-
-  private encodeToken(token: string): number {
-    if (!this.vocabulary.includes(token)) {
-      throw new Error(`Invalid Token '${token}'.`)
-    }
-    return this.vocabulary.indexOf(token)
+    return sequence.map(item => this.items.getIndex(item))
   }
 
   decode(sequence: number[]): string[] {
-    return sequence.map(id => this.decodeTokenId(id))
-  }
-
-  private decodeTokenId(id: number): string {
-    if (id < 0 || id >= this.vocabulary.length) {
-      throw new Error(`Invalid Token id '${id}'.`)
-    }
-    return this.vocabulary[id]
+    return sequence.map(idx => this.items.getItem(idx))
   }
 }

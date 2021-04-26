@@ -1,29 +1,22 @@
-import { unique } from '../utils/array-utils'
+import { IndexedItems } from './indexed-items'
 
 type OneHotVector = number[]
 
 export class OneHotEncoder {
-  vocabulary: string[]
-
-  constructor(vocabulary: string[]) {
-    this.vocabulary = unique(vocabulary)
-  }
+  constructor(readonly items: IndexedItems) {}
 
   encode(sequence: string[]): OneHotVector[] {
-    return sequence.map(token => this.encodeToken(token))
+    return sequence.map(item => this.encodeItem(item))
   }
 
-  private encodeToken(token: string): OneHotVector {
-    if (!this.vocabulary.includes(token)) {
-      throw new Error(`Invalid Token '${token}'.`)
-    }
-    const id = this.vocabulary.indexOf(token)
-    return this.tokenIdToOneHotVector(id)
+  private encodeItem(item: string): OneHotVector {
+    const idx = this.items.getIndex(item)
+    return this.indexToOneHotVector(idx)
   }
 
-  private tokenIdToOneHotVector(id: number): OneHotVector {
-    const vector = Array(this.vocabulary.length).fill(0)
-    vector[id] = 1
+  private indexToOneHotVector(idx: number): OneHotVector {
+    const vector = Array(this.items.length).fill(0)
+    vector[idx] = 1
     return vector
   }
 
@@ -32,12 +25,12 @@ export class OneHotEncoder {
   }
 
   private decodeOneHotVector(vector: OneHotVector): string {
-    const id = this.oneHotVectorToTokenId(vector)
-    return this.vocabulary[id]
+    const idx = this.oneHotVectorToIndex(vector)
+    return this.items.getItem(idx)
   }
 
-  private oneHotVectorToTokenId(vector: OneHotVector): number {
-    if (vector.length !== this.vocabulary.length) {
+  private oneHotVectorToIndex(vector: OneHotVector): number {
+    if (vector.length !== this.items.length) {
       throw new Error(`Invalid categorical length '${vector.length}'.`)
     }
     return vector.indexOf(Math.max(...vector))

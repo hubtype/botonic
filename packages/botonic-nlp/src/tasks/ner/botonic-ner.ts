@@ -4,11 +4,11 @@ import { join } from 'path'
 import { Dataset } from '../../dataset/dataset'
 import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
 import { WordEmbeddingStorage } from '../../embeddings/types'
+import { IndexedItems } from '../../encode/indexed-items'
 import { LabelEncoder } from '../../encode/label-encoder'
 import { OneHotEncoder } from '../../encode/one-hot-encoder'
 import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
-import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
 import {
   Normalizer,
@@ -16,7 +16,6 @@ import {
   Stopwords,
   Tokenizer,
 } from '../../preprocess/types'
-import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
 import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils/array-utils'
@@ -29,57 +28,42 @@ import { Entity } from './process/types'
 import { NerConfigStorage } from './storage/config-storage'
 
 export class BotonicNer {
-  vocabulary: string[]
+  readonly entities: string[]
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
-  private constructor(
+  constructor(
     readonly locale: Locale,
     readonly maxLength: number,
-    readonly entities: string[],
-    private preprocessor: Preprocessor
-  ) {}
-
-  static with(
-    locale: Locale,
-    maxLength: number,
-    entities: string[]
-  ): BotonicNer {
-    return new BotonicNer(
-      locale,
-      maxLength,
-      unique([NEUTRAL_ENTITY].concat(entities)),
-      new Preprocessor(locale, maxLength)
-    )
+    entities: string[],
+    readonly vocabulary: string[],
+    private readonly preprocessor: Preprocessor
+  ) {
+    this.entities = unique([NEUTRAL_ENTITY].concat(entities))
   }
 
-  static async load(path: string): Promise<BotonicNer> {
+  static async load(
+    path: string,
+    preprocessor: Preprocessor
+  ): Promise<BotonicNer> {
     const config = NerConfigStorage.load(path)
     const ner = new BotonicNer(
       config.locale,
       config.maxLength,
       config.entities,
-      new Preprocessor(config.locale, config.maxLength)
+      config.vocabulary,
+      preprocessor
     )
-    ner.vocabulary = config.vocabulary
     ner.modelManager = new ModelManager(await ModelStorage.load(path))
     return ner
-  }
-
-  generateVocabulary(dataset: Dataset): void {
-    this.vocabulary = unique(
-      [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
-        new VocabularyGenerator(this.preprocessor).generate(dataset.samples)
-      )
-    )
   }
 
   compile(): void {
     this.processor = new Processor(
       this.preprocessor,
-      new LabelEncoder(this.vocabulary),
-      new OneHotEncoder(this.entities)
+      new LabelEncoder(new IndexedItems(this.vocabulary)),
+      new OneHotEncoder(new IndexedItems(this.entities))
     )
     this.predictionProcessor = new PredictionProcessor(this.entities)
   }

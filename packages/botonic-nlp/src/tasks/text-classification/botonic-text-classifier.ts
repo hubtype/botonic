@@ -4,11 +4,11 @@ import { join } from 'path'
 import { Dataset } from '../../dataset/dataset'
 import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
 import { WordEmbeddingStorage } from '../../embeddings/types'
+import { IndexedItems } from '../../encode/indexed-items'
 import { LabelEncoder } from '../../encode/label-encoder'
 import { OneHotEncoder } from '../../encode/one-hot-encoder'
 import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
-import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../preprocess/constants'
 import { Preprocessor } from '../../preprocess/preprocessor'
 import {
   Normalizer,
@@ -16,7 +16,6 @@ import {
   Stopwords,
   Tokenizer,
 } from '../../preprocess/types'
-import { VocabularyGenerator } from '../../preprocess/vocabulary-generator'
 import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils/array-utils'
@@ -33,8 +32,7 @@ import { Processor } from './process/processor'
 import { TextClassificationConfigStorage } from './storage/config-storage'
 
 export class BotonicTextClassifier {
-  vocabulary: string[]
-  private preprocessor: Preprocessor
+  readonly classes: string[]
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
@@ -42,38 +40,36 @@ export class BotonicTextClassifier {
   constructor(
     readonly locale: Locale,
     readonly maxLength: number,
-    readonly classes: string[]
+    classes: string[],
+    readonly vocabulary: string[],
+    private readonly preprocessor: Preprocessor
   ) {
-    this.preprocessor = new Preprocessor(locale, maxLength)
+    this.classes = unique(classes)
   }
 
-  static async load(path: string): Promise<BotonicTextClassifier> {
+  static async load(
+    path: string,
+    preprocessor: Preprocessor
+  ): Promise<BotonicTextClassifier> {
     const config = new TextClassificationConfigStorage().load(path)
     const textClassification = new BotonicTextClassifier(
       config.locale,
       config.maxLength,
-      config.classes
+      config.classes,
+      config.vocabulary,
+      preprocessor
     )
-    textClassification.vocabulary = config.vocabulary
     textClassification.modelManager = new ModelManager(
       await ModelStorage.load(path)
     )
     return textClassification
   }
 
-  generateVocabulary(dataset: Dataset): void {
-    this.vocabulary = unique(
-      [PADDING_TOKEN, UNKNOWN_TOKEN].concat(
-        new VocabularyGenerator(this.preprocessor).generate(dataset.samples)
-      )
-    )
-  }
-
   compile(): void {
     this.processor = new Processor(
       this.preprocessor,
-      new LabelEncoder(this.vocabulary),
-      new OneHotEncoder(this.classes)
+      new LabelEncoder(new IndexedItems(this.vocabulary)),
+      new OneHotEncoder(new IndexedItems(this.classes))
     )
     this.predictionProcessor = new PredictionProcessor(this.classes)
   }

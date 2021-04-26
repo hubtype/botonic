@@ -2,31 +2,24 @@ import { existsSync, rmdirSync } from 'fs'
 import { join } from 'path'
 
 import { DatabaseStorage } from '../../../src/embeddings/database/storage'
-import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../src/preprocess/constants'
 import { BotonicTextClassifier } from '../../../src/tasks/text-classification/botonic-text-classifier'
 import { TEXT_CLASSIFIER_TEMPLATE } from '../../../src/tasks/text-classification/models/types'
 import * as constantsHelper from '../../helpers/constants-helper'
 import * as toolsHelper from '../../helpers/tools-helper'
 
 describe('Botonic Text Classifier', () => {
+  const { trainSet, testSet } = toolsHelper.dataset.split()
+  const vocabulary = trainSet.extractVocabulary(toolsHelper.preprocessor)
   const sut = new BotonicTextClassifier(
     constantsHelper.LOCALE,
     constantsHelper.MAX_SEQUENCE_LENGTH,
-    constantsHelper.CLASSES
+    constantsHelper.CLASSES,
+    vocabulary,
+    toolsHelper.preprocessor
   )
-
-  test('Generate Vocabulary', () => {
-    const { trainSet } = toolsHelper.dataset.split()
-    sut.generateVocabulary(trainSet)
-    expect(sut.vocabulary.length).toBeGreaterThan(2)
-    expect(sut.vocabulary.includes(PADDING_TOKEN)).toBeTruthy()
-    expect(sut.vocabulary.includes(UNKNOWN_TOKEN)).toBeTruthy()
-  })
+  sut.compile()
 
   test('Train and Evaluate model', async () => {
-    const { trainSet, testSet } = toolsHelper.dataset.split()
-    sut.generateVocabulary(trainSet)
-    sut.compile()
     const model = await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
@@ -43,8 +36,6 @@ describe('Botonic Text Classifier', () => {
   })
 
   test('Save Model', async () => {
-    const { trainSet } = toolsHelper.dataset.split(0.5, false)
-    sut.generateVocabulary(trainSet)
     const model = await sut.createModel(
       TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
