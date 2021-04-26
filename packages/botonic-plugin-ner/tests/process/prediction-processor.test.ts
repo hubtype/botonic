@@ -39,12 +39,6 @@ describe('Prediction processor', () => {
         ],
       ]) as Tensor3D
     )
-    expect(entities.map(entity => entity.label)).toEqual([
-      'O',
-      'O',
-      'O',
-      'O',
-      'product',
-    ])
+    expect(entities.map(entity => entity.label)).toEqual(['product'])
   })
 })
