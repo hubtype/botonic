@@ -1,5 +1,5 @@
 // required by eslint to get the list of files to lint
 {
   "extends": "./tsconfig.tests.json",
-  "include": [".*.js", "*.js", "**/*.ts", "**/*.tsx"]
+  "include": [".*.js", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }
