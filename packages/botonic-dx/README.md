@@ -14,7 +14,7 @@ This package simplifies the configuration of all CI tasks for projects which use
 
 * Install this package
 ```
-npm run -D @botonic/ci
+npm install -D @botonic/dx
 ```
 * Copy the contents of the `sample-config` folder to the root of your project 
   (Merge this package.json's scripts into your project ones)

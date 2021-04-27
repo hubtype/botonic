@@ -1,5 +1,5 @@
 {
-  "name": "@botonic/ci",
+  "name": "@botonic/dx",
   "version": "0.19.0-alpha.0",
   "description": "Continuous integration for botonic packages",
   "scripts": {},
