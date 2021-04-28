@@ -12,7 +12,7 @@ const Link = styled.a`
 `
 
 const serialize = locationProps => {
-  return { location: { lat: locationProps.lat, long: locationProps.long } }
+  return { lat: locationProps.lat, long: locationProps.long }
 }
 
 export const Location = props => {

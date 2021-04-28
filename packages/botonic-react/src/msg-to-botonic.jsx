@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   isAudio,
-  isButtonMessage,
   isCarousel,
   isCustom,
   isDocument,
@@ -33,6 +32,7 @@ import { Video } from './components/video'
  * @return {React.ReactNode}
  */
 export function msgToBotonic(msg, customMessageTypes) {
+  console.log({ msg })
   delete msg.display
   if (isCustom(msg)) {
     try {
@@ -52,28 +52,21 @@ export function msgToBotonic(msg, customMessageTypes) {
       </Carousel>
     )
   } else if (isImage(msg)) {
-    return <Image key={msg.key} {...msg} />
-  } else if (isVideo(msg)) {
-    return <Video {...msg} />
-  } else if (isAudio(msg)) {
-    return <Audio {...msg} />
-  } else if (isDocument(msg)) {
-    return <Document {...msg} />
-  } else if (isLocation(msg)) {
-    const lat = msg.data ? msg.data.location.lat : msg.latitude
-    const long = msg.data ? msg.data.location.long : msg.longitude
-    return <Location {...msg} lat={lat} long={long} />
-  } else if (isButtonMessage(msg)) {
-    const buttons = buttonsParse(msg.buttons)
     return (
-      <>
-        <Text {...msg}>
-          {msg.text}
-          {buttons}
-        </Text>
-      </>
+      <Image key={msg.key} {...msg}>
+        {msg.buttons && buttonsParse(msg.buttons)}
+      </Image>
     )
-  }
+  } else if (isVideo(msg)) {
+    return <Video {...msg}>{msg.buttons && buttonsParse(msg.buttons)}</Video>
+  } else if (isAudio(msg)) {
+    return <Audio {...msg}>{msg.buttons && buttonsParse(msg.buttons)}</Audio>
+  } else if (isDocument(msg)) {
+    return (
+      <Document {...msg}>{msg.buttons && buttonsParse(msg.buttons)}</Document>
+    )
+  } else if (isLocation(msg)) return <Location {...msg} />
+
   console.warn(`Not converting message of type ${msg.type}`)
   return null
 }
@@ -105,10 +98,7 @@ export function msgsToBotonic(msgs, customMessageTypes) {
 
 function textToBotonic(msg) {
   const text = msg.text
-  if (
-    (msg.replies && msg.replies.length) ||
-    (msg.keyboard && msg.keyboard.length)
-  )
+  if (msg.replies && msg.replies.length)
     return (
       <Text {...msg} key={msg.key}>
         {text}
@@ -176,13 +166,6 @@ function quickrepliesParse(msg) {
         </Reply>
       )
     })
-  }
-  if (msg.keyboard) {
-    replies = msg.keyboard.map((el, i) => (
-      <Reply key={i} payload={el.data}>
-        {el.label}
-      </Reply>
-    ))
   }
   return replies
 }

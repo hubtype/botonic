@@ -18,7 +18,14 @@ const serialize = imageProps => {
 
 export const Image = props => {
   let content = props.children
-  if (isBrowser()) content = <StyledImage src={props.src} />
+  if (isBrowser()) {
+    // TODO: Solve workaround, passing as an array because using a React.Fragment nest the object inside an extra props.children
+    content = [
+      <StyledImage key={Math.random()} src={props.src}></StyledImage>,
+      props.children,
+    ]
+  }
+
   return (
     <Message
       role={ROLES.IMAGE_MESSAGE}

@@ -20,11 +20,13 @@ const serialize = videoProps => {
 export const Video = props => {
   let content = props.children
   if (isBrowser())
-    content = (
-      <StyledVideo controls>
+    content = [
+      <StyledVideo key={Math.random()} controls>
         <source src={props.src} />
-      </StyledVideo>
-    )
+      </StyledVideo>,
+      props.children,
+    ]
+
   return (
     <Message
       role={ROLES.VIDEO_MESSAGE}

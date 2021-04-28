@@ -40,8 +40,9 @@ export const Document = props => {
     documentDownload = documentDownload(props.from)
 
   if (isBrowser()) {
-    content = (
+    content = [
       <StyledButton
+        key={Math.random()}
         href={props.src}
         target='_blank'
         rel='noreferrer'
@@ -50,8 +51,9 @@ export const Document = props => {
         }}
       >
         {documentDownload.text || 'Download'}
-      </StyledButton>
-    )
+      </StyledButton>,
+      props.children,
+    ]
   }
 
   return (

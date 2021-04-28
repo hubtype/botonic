@@ -11,12 +11,18 @@ const serialize = audioProps => {
 export const Audio = props => {
   let content = props.children
   if (isBrowser())
-    content = (
-      <audio style={{ maxWidth: '100%' }} id='myAudio' controls>
+    content = [
+      <audio
+        key={Math.random()}
+        style={{ maxWidth: '100%' }}
+        id='myAudio'
+        controls
+      >
         <source src={props.src} type='audio/mpeg' />
         Your browser does not support this audio format.
-      </audio>
-    )
+      </audio>,
+      props.children,
+    ]
   return (
     <Message
       role={ROLES.AUDIO_MESSAGE}
