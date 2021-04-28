@@ -82,6 +82,7 @@ export const Message = props => {
     imagestyle = props.imagestyle || props.imageStyle,
     ...otherProps
   } = props
+
   const isFromUser = from === SENDERS.user
   const isFromBot = from === SENDERS.bot
   const markdown = props.markdown
@@ -102,9 +103,14 @@ export const Message = props => {
     setDisabled,
   })
 
-  const textChildren = React.Children.toArray(children)
-    .filter(e => ![Button, Reply].includes(e.type))
+  const childrenWithoutButtonsNorReplies = React.Children.toArray(
+    children
+  ).filter(e => ![Button, Reply].includes(e.type))
+
+  const textChildren = childrenWithoutButtonsNorReplies
+    .filter(e => typeof e === 'string')
     .join('')
+
   const replies = React.Children.toArray(children).filter(e => e.type === Reply)
   const buttons = React.Children.toArray(children).filter(
     e => e.type === Button
@@ -133,7 +139,8 @@ export const Message = props => {
         id: state.id,
         type,
         // data: decomposedChildren ? decomposedChildren : textChildren,
-        text: props.text || textChildren,
+        text: props.text || textChildren || undefined,
+        src: props.src,
         timestamp: props.timestamp || getFormattedTimestamp,
         markdown,
         from,
@@ -144,7 +151,7 @@ export const Message = props => {
           url: b.props.url,
           target: b.props.target,
           webview: b.props.webview && String(b.props.webview),
-          text: b.props.children,
+          title: b.props.children,
           ...ButtonsDisabler.withDisabledProps(b.props),
         })),
         delay,
@@ -152,8 +159,7 @@ export const Message = props => {
         replies: replies.map(r => ({
           payload: r.props.payload,
           path: r.props.path,
-          url: r.props.url,
-          text: r.props.children,
+          title: r.props.children,
         })),
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
@@ -310,7 +316,9 @@ export const Message = props => {
                   )}
                 />
               ) : (
-                <BlobText blob={blob}>{textChildren}</BlobText>
+                <BlobText blob={blob}>
+                  {childrenWithoutButtonsNorReplies}
+                </BlobText>
               )}
               {buttons}
               {Boolean(blob) && hasBlobTick() && getBlobTick(6)}

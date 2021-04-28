@@ -5,7 +5,7 @@ import { ROLES } from '../constants'
 import { Message } from './message'
 
 const serialize = audioProps => {
-  return { audio: audioProps.src }
+  return { src: audioProps.src }
 }
 
 export const Audio = props => {

@@ -52,34 +52,13 @@ export function msgToBotonic(msg, customMessageTypes) {
       </Carousel>
     )
   } else if (isImage(msg)) {
-    return (
-      <Image
-        key={msg.key}
-        {...msg}
-        src={msg.data.image != undefined ? msg.data.image : msg.data}
-      />
-    )
+    return <Image key={msg.key} {...msg} />
   } else if (isVideo(msg)) {
-    return (
-      <Video
-        {...msg}
-        src={msg.data.video != undefined ? msg.data.video : msg.data}
-      />
-    )
+    return <Video {...msg} />
   } else if (isAudio(msg)) {
-    return (
-      <Audio
-        {...msg}
-        src={msg.data.audio != undefined ? msg.data.audio : msg.data}
-      />
-    )
+    return <Audio {...msg} />
   } else if (isDocument(msg)) {
-    return (
-      <Document
-        {...msg}
-        src={msg.data.document != undefined ? msg.data.document : msg.data}
-      />
-    )
+    return <Document {...msg} />
   } else if (isLocation(msg)) {
     const lat = msg.data ? msg.data.location.lat : msg.latitude
     const long = msg.data ? msg.data.location.long : msg.longitude
@@ -167,7 +146,7 @@ function buttonsParse(buttons) {
     if (b.path) payload = `__PATH_PAYLOAD__${b.path}`
     const url = b.messenger_extensions ? null : b.url
     const target = b.messenger_extensions ? null : b.target
-    const text = b.text
+    const title = b.title
     const webview = b.messenger_extensions ? b.url : b.webview
     const disabledProps = ButtonsDisabler.constructBrowserProps(b)
     return (
@@ -179,7 +158,7 @@ function buttonsParse(buttons) {
         webview={webview}
         {...disabledProps}
       >
-        {text}
+        {title}
       </Button>
     )
   })
@@ -193,7 +172,7 @@ function quickrepliesParse(msg) {
       if (el.path) payload = `__PATH_PAYLOAD__${el.path}`
       return (
         <Reply key={i} payload={payload}>
-          {el.text}
+          {el.title}
         </Reply>
       )
     })

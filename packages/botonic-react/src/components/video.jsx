@@ -14,7 +14,7 @@ const StyledVideo = styled.video`
 `
 
 const serialize = videoProps => {
-  return { video: videoProps.src }
+  return { src: videoProps.src }
 }
 
 export const Video = props => {

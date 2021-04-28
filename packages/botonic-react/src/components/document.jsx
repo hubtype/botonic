@@ -25,7 +25,7 @@ const StyledButton = styled.a`
 `
 
 const serialize = documentProps => {
-  return { document: documentProps.src }
+  return { src: documentProps.src }
 }
 
 export const Document = props => {

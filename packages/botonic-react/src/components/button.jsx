@@ -182,7 +182,7 @@ Button.serialize = buttonProps => {
       url: buttonProps.url,
       target: buttonProps.target,
       webview: buttonProps.webview && String(buttonProps.webview),
-      text: buttonProps.children && String(buttonProps.children),
+      title: buttonProps.children && String(buttonProps.children),
       ...ButtonsDisabler.withDisabledProps(buttonProps),
     },
   }

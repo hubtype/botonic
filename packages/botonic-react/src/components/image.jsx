@@ -13,7 +13,7 @@ const StyledImage = styled.img`
 `
 
 const serialize = imageProps => {
-  return { image: imageProps.src }
+  return { src: imageProps.src }
 }
 
 export const Image = props => {
