@@ -45,10 +45,9 @@ export function msgToBotonic(msg, customMessageTypes) {
   } else if (isText(msg)) {
     return textToBotonic(msg)
   } else if (isCarousel(msg)) {
-    const elements = msg.elements || msg.data.elements
     return (
       <Carousel {...msg} key={msg.key}>
-        {elementsParse(elements)}
+        {elementsParse(msg.elements)}
       </Carousel>
     )
   } else if (isImage(msg)) {
@@ -122,10 +121,10 @@ function textToBotonic(msg) {
 function elementsParse(elements) {
   return elements.map((e, i) => (
     <Element key={i}>
-      <Pic src={e.img || e.pic || e.image_url} />
+      <Pic src={e.src} />
       <Title>{e.title}</Title>
       <Subtitle>{e.subtitle}</Subtitle>
-      {buttonsParse(e.button || e.buttons)}
+      {buttonsParse(e.buttons)}
     </Element>
   ))
 }

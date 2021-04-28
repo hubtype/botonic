@@ -169,6 +169,7 @@ export const Message = props => {
                 title: r.props.children,
               }))
             : undefined,
+        elements: props.elements,
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
