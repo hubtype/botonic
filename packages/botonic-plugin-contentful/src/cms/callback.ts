@@ -118,7 +118,7 @@ export class ResourceId implements ValueObject {
   constructor(readonly resourceType: string, readonly id: string) {}
 
   toString(): string {
-    return `${this.resourceType} with id '${this.id}'`
+    return `'${this.resourceType}' with id '${this.id}'`
   }
 
   equals(other: ContentId): boolean {
