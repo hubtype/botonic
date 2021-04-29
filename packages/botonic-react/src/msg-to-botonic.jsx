@@ -37,7 +37,7 @@ export function msgToBotonic(msg, customMessageTypes) {
   if (isCustom(msg)) {
     try {
       return customMessageTypes
-        .find(mt => mt.customTypeName === msg.data.customTypeName)
+        .find(mt => mt.customTypeName === msg.customTypeName)
         .deserialize(msg)
     } catch (e) {
       console.log(e)
