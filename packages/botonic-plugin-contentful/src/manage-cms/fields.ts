@@ -14,8 +14,13 @@ export enum ContentFieldType {
   TITLE = 'Title',
   SUBTITLE = 'Subtitle',
   BUTTONS = 'Buttons',
+  ELEMENTS = 'Elements',
   IMAGE = 'Image',
   URL = 'URL',
+  NAME = 'Name',
+  BUTTONS_STYLE = 'Buttons Style',
+  FOLLOW_UP = 'FollowUp',
+  TARGET = 'Target',
 }
 
 export enum ContentFieldValueType {
@@ -74,19 +79,88 @@ export class ContentField {
   }
 }
 
-/* eslint-disable prettier/prettier*/
 export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
   pairs([
-    new ContentField(ContentFieldType.TEXT, 'text', ContentFieldValueType.STRING, true),
-    new ContentField(ContentFieldType.SHORT_TEXT, 'shortText', ContentFieldValueType.STRING, true),
-    new ContentField(ContentFieldType.KEYWORDS, 'keywords', ContentFieldValueType.STRING_ARRAY, true),
-    new ContentField(ContentFieldType.TITLE, 'title', ContentFieldValueType.STRING, true),
-    new ContentField(ContentFieldType.SUBTITLE, 'subtitle', ContentFieldValueType.STRING, true),
-    new ContentField(ContentFieldType.BUTTONS, 'buttons', ContentFieldValueType.REFERENCE_ARRAY, true),
-    new ContentField(ContentFieldType.IMAGE, 'pic', ContentFieldValueType.ASSET, true),
-    new ContentField(ContentFieldType.URL, 'url', ContentFieldValueType.STRING, true),
-  ]))
-/* eslint-enable prettier/prettier*/
+    new ContentField(
+      ContentFieldType.TEXT,
+      'text',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.SHORT_TEXT,
+      'shortText',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.KEYWORDS,
+      'keywords',
+      ContentFieldValueType.STRING_ARRAY,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.TITLE,
+      'title',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.SUBTITLE,
+      'subtitle',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.BUTTONS,
+      'buttons',
+      ContentFieldValueType.REFERENCE_ARRAY,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.ELEMENTS,
+      'elements',
+      ContentFieldValueType.REFERENCE_ARRAY,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.IMAGE,
+      'pic',
+      ContentFieldValueType.ASSET,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.URL,
+      'url',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.NAME,
+      'name',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.BUTTONS_STYLE,
+      'buttonsStyle',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.FOLLOW_UP,
+      'followup',
+      ContentFieldValueType.REFERENCE,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.TARGET,
+      'target',
+      ContentFieldValueType.REFERENCE,
+      true
+    ),
+  ])
+)
 
 function pairs(cfs: ContentField[]): [ContentFieldType, ContentField][] {
   return cfs.map(cf => [cf.fieldType, cf])
