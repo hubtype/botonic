@@ -23,6 +23,10 @@ export interface ManageCms {
     fields: FieldsValues
   ): Promise<FieldsValues>
 
+  createEntryWithId(contentId: ContentId): Promise<void>
+
+  deleteEntry(contentId: ContentId): Promise<void>
+
   /**
    * Will not fail if source does not have this field set
    * onlyIfTargetEmpty: set to true to avoid overwriting existing data (it will not throw)

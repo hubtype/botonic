@@ -47,6 +47,34 @@ export class ManageContentful implements ManageCms {
     return this.environment
   }
 
+  async deleteEntry(contentId: ContentId): Promise<void> {
+    const environment = await this.getEnvironment()
+    const getEntry = async () => {
+      try {
+        return await environment.getEntry(contentId.id)
+      } catch (e) {
+        throw new ResourceNotFoundCmsException(contentId, e)
+      }
+    }
+    const oldEntry = await getEntry()
+    if (oldEntry) {
+      await oldEntry.unpublish()
+      await oldEntry.archive()
+      await oldEntry.delete()
+    }
+  }
+
+  async createEntryWithId(contentId: ContentId) {
+    const environment = await this.getEnvironment()
+    try {
+      await environment.createEntryWithId(contentId.model, contentId.id, {
+        fields: {},
+      })
+    } catch (e) {
+      console.error(`ERROR while creating entry ${contentId}:`, e)
+    }
+  }
+
   async updateFields(
     context: ManageContext,
     contentId: ContentId,
