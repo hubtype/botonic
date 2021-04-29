@@ -200,6 +200,18 @@ test('TEST: ContentUpdater', async () => {
       })
       return Promise.resolve(fields)
     }
+
+    deleteEntry<T extends cms.Content>(
+      contentId: cms.ContentId
+    ): Promise<void> {
+      fail("shouldn't be called")
+    }
+
+    createEntryWithId<T extends cms.Content>(
+      contentId: cms.ContentId
+    ): Promise<void> {
+      fail("shouldn't be called")
+    }
   }
   const mockCms = new MockCms()
   const sut = new ImportContentUpdater(
