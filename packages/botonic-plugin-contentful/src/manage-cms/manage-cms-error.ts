@@ -26,6 +26,20 @@ export class ErrorReportingManageCms implements ManageCms {
       .catch(this.handleError('updateFields', context, contentId, fields))
   }
 
+  deleteEntry<T extends cms.Content>(contentId: ContentId): Promise<void> {
+    return this.manageCms
+      .deleteEntry(contentId)
+      .catch(this.handleError('deleteEntry', undefined, contentId, {}))
+  }
+
+  createEntryWithId<T extends cms.Content>(
+    contentId: ContentId
+  ): Promise<void> {
+    return this.manageCms
+      .createEntryWithId(contentId)
+      .catch(this.handleError('createEntryWithId', undefined, contentId, {}))
+  }
+
   copyField<T extends cms.Content>(
     context: ManageContext,
     contentId: ContentId,
