@@ -9,7 +9,7 @@ on:
       - '.github/workflows/botonic-plugin-text-classification-tests.yml'
 
 jobs:
-  botonic-plugin-ner-tests:
+  botonic-plugin-text-classification-tests:
     name: Botonic plugin-text-classification tests
     runs-on: ubuntu-latest
     env:
@@ -44,7 +44,7 @@ jobs:
           files: ./packages/${{env.PACKAGE}}/junit.xml
 
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.4.1
         if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
