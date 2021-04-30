@@ -4,8 +4,7 @@ import {
   UNKNOWN_TOKEN,
 } from '@botonic/nlp/lib/preprocess/constants'
 import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
-import type { Tensor2D } from '@tensorflow/tfjs'
-import { tensor } from '@tensorflow/tfjs'
+import { Tensor2D, tensor2d } from '@tensorflow/tfjs'
 
 export class TextProcessor {
   private readonly encoder: LabelEncoder
@@ -21,7 +20,7 @@ export class TextProcessor {
     const sequence = this.preprocessor.preprocess(text, PADDING_TOKEN)
     const maskedSequence = this.maskUnknownTokens(sequence)
     const encodedSequence = this.encoder.encode(maskedSequence)
-    const input = tensor([encodedSequence]) as Tensor2D
+    const input = tensor2d([encodedSequence])
     return { sequence, input }
   }
 
