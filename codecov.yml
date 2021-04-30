@@ -32,7 +32,7 @@ flags:
     paths:
       - packages/botonic-plugin-contentful
     carryforward: true
-  
+
   botonic-plugin-dialogflow:
     paths:
       - packages/botonic-plugin-dialogflow
@@ -56,4 +56,9 @@ flags:
   botonic-plugin-ner:
     paths:
       - packages/botonic-plugin-ner
+    carryforward: true
+
+  botonic-plugin-text-classification:
+    paths:
+      - packages/botonic-plugin-text-classification
     carryforward: true

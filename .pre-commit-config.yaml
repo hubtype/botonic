@@ -127,3 +127,9 @@ repos:
         entry: scripts/qa/lint-package.sh packages/botonic-plugin-ner
         language: system
         files: ^packages/botonic-plugin-ner/
+
+      - id: plugin-text-classification
+        name: plugin-text-classification
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-text-classification
+        language: system
+        files: ^packages/botonic-plugin-text-classification/
