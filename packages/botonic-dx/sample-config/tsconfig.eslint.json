@@ -1,3 +1,3 @@
 {
-  "extends": "node_modules/botonic-dx/baseline/tsconfig.eslint.json",
+  "extends": "@botonic/dx/baseline/tsconfig.eslint.json",
 }

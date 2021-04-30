@@ -4,11 +4,11 @@
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "compilerOptions": {
     "allowUnreachableCode": false,
+    "skipLibCheck": true,
     "baseUrl": "src",
     "paths": {
       "*": ["src/*", "lib/src/*", "types/*"]
     },
-    "rootDir": "src",
     // end of path dependent configuration
     "outDir": "lib",
     "declaration": true,
@@ -21,6 +21,9 @@
     // without typeRoots, it also checks @types of parent folders, which is desirable if you you want to have
     // common development dependencies on a parent package in a monorepo.
     //"typeRoots" : ["node_modules/@types"],
+
+    // React
+    "jsx": "react",
 
     //performance
     "incremental": true,

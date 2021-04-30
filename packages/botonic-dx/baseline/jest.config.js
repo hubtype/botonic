@@ -2,23 +2,23 @@ module.exports = {
   roots: ['src/', 'tests/'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
-    '^.+\\.jsx?$': 'ts-jest',
+    '^.+\\.jsx?$': 'babel-jest',
   },
   globals: {
     'ts-jest': {
-      tsconfig: '<rootDir>/tests/tsconfig.json',
+      tsconfig: '<rootDir>/tsconfig.tests.json',
     },
   },
   preset: 'ts-jest',
-  testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
-  testPathIgnorePatterns: ['lib', '.*.d.ts', 'tests/helpers', '.*.helper.ts'],
+  testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.([jt]sx?)$',
+  testPathIgnorePatterns: ['dist', 'lib', '.*.d.ts', 'tests/helpers'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
   transformIgnorePatterns: ['node_modules/(?!@botonic).+\\.(js|jsx)$'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   snapshotSerializers: [],
   setupFilesAfterEnv: [
-    'jest-expect-message',
-    'jest-extended',
+    // 'jest-expect-message', // to display a message when an assert fails
+    // 'jest-extended', // more assertions
     '<rootDir>/jest.setup.js',
   ],
   modulePaths: ['node_modules', 'src'],

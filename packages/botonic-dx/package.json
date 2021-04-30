@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.19.0-alpha.0",
+  "version": "0.19.0-alpha.4",
   "description": "Continuous integration for botonic packages",
   "scripts": {},
   "author": "",
@@ -11,7 +11,7 @@
     "typescript"
   ],
   "dependencies": {
-    "@botonic/eslint-config": "0.19.0-alpha.0",
+    "@botonic/eslint-config": "0.19.0-alpha.2",
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.37",
     "@typescript-eslint/eslint-plugin": "*",
@@ -30,6 +30,7 @@
     "eslint-plugin-react-hooks": "*",
     "eslint-plugin-simple-import-sort": "*",
     "eslint_d": "^10.0.4",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "jest-each": "^26.6.2",
     "jest-expect-message": "^1.0.2",
@@ -43,6 +44,11 @@
   },
   "files": [
     "README.md",
+    "baseline/.eslintrc*.js",
+    "baseline/README.md",
+    "baseline/jest.config.js",
+    "baseline/package.json",
+    "baseline/tsconfig.*json",
     "sample-config/*js",
     "sample-config/*json",
     "impl/README.md",

@@ -32,6 +32,8 @@ For a project to use our proposed [eslint](https://eslint.org/) configuration, y
 * `npm run lint` will now perform a quick check which will also fix some of the detected issues. 
 * `npm run lint-ci` will perform a slower check which detects more issues. It will not fix any issue,
 since it's designed to be integrated into your CI pipeline.
+  
+Due to an [eslint_d issue](https://github.com/mantoni/eslint_d.js/issues/157), `--fix --quiet` does not autofix issues.
 
 Please check the [eslint user guide](https://eslint.org/docs/user-guide/) for adapting this configuration to your needs.
 
