@@ -22,8 +22,11 @@
     // common development dependencies on a parent package in a monorepo.
     //"typeRoots" : ["node_modules/@types"],
 
-    // React
-    "jsx": "react",
+    //// React
+    // See https://www.typescriptlang.org/tsconfig#jsx &
+    // https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#whats-different-in-the-new-transform on why
+    // using react-jsx is better (new in react 17, but backported to 16.14.0)
+    "jsx": "react-jsx",
 
     //performance
     "incremental": true,
