@@ -5,7 +5,18 @@ export class PredictionProcessor {
   constructor(private readonly classes: string[]) {}
 
   process(prediction: Tensor2D): Intent[] {
-    //TODO: pending to be implemented
-    return null
+    const confidences = prediction.arraySync()[0]
+    const intents = this.createIntents(confidences)
+    return this.sortIntentsByConfidence(intents)
+  }
+
+  private createIntents(confidences: number[]): Intent[] {
+    return confidences.map(
+      (confidence, idx) => new Intent(this.classes[idx], confidence)
+    )
+  }
+
+  private sortIntentsByConfidence(intents: Intent[]): Intent[] {
+    return intents.sort((a, b) => (a.confidence > b.confidence ? -1 : 1))
   }
 }
