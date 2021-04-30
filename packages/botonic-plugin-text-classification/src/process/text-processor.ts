@@ -1,3 +1,4 @@
+import { IndexedItems } from '@botonic/nlp/lib/encode/indexed-items'
 import { LabelEncoder } from '@botonic/nlp/lib/encode/label-encoder'
 import {
   PADDING_TOKEN,
@@ -13,20 +14,17 @@ export class TextProcessor {
     readonly vocabulary: string[],
     private readonly preprocessor: Preprocessor
   ) {
-    this.encoder = new LabelEncoder(this.vocabulary)
+    this.encoder = new LabelEncoder(new IndexedItems(this.vocabulary))
   }
 
   process(text: string): { sequence: string[]; input: Tensor2D } {
     const sequence = this.preprocessor.preprocess(text, PADDING_TOKEN)
-    const maskedSequence = this.maskUnknownTokens(sequence)
+    const maskedSequence = this.encoder.items.maskUnknownItems(
+      sequence,
+      UNKNOWN_TOKEN
+    )
     const encodedSequence = this.encoder.encode(maskedSequence)
     const input = tensor2d([encodedSequence])
     return { sequence, input }
-  }
-
-  private maskUnknownTokens(sequence: string[]): string[] {
-    return sequence.map(token =>
-      this.vocabulary.includes(token) ? token : UNKNOWN_TOKEN
-    )
   }
 }
