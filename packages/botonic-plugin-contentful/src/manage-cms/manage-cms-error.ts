@@ -1,8 +1,8 @@
-import * as cms from '../cms'
 import {
   AssetId,
   ContentfulExceptionWrapper,
   ContentId,
+  ContentType,
   ResourceId,
 } from '../cms'
 import * as nlp from '../nlp'
@@ -16,7 +16,7 @@ export class ErrorReportingManageCms implements ManageCms {
 
   constructor(readonly manageCms: ManageCms, readonly logErrors = true) {}
 
-  updateFields<T extends cms.Content>(
+  updateFields(
     context: ManageContext,
     contentId: ContentId,
     fields: FieldsValues
@@ -26,7 +26,30 @@ export class ErrorReportingManageCms implements ManageCms {
       .catch(this.handleError('updateFields', context, contentId, fields))
   }
 
-  copyField<T extends cms.Content>(
+  deleteContent(context: ManageContext, contentId: ContentId): Promise<void> {
+    return this.manageCms
+      .deleteContent(context, contentId)
+      .catch(this.handleError('deleteContent', undefined, contentId, {}))
+  }
+
+  async createContent(
+    context: ManageContext,
+    model: ContentType,
+    id: string
+  ): Promise<void> {
+    return this.manageCms
+      .createContent(context, model, id)
+      .catch(
+        this.handleError(
+          'createContent',
+          undefined,
+          new ContentId(model, id),
+          {}
+        )
+      )
+  }
+
+  copyField(
     context: ManageContext,
     contentId: ContentId,
     field: ContentFieldType,

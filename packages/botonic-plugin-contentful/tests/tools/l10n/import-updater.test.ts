@@ -176,7 +176,7 @@ test('TEST: ContentUpdater', async () => {
     }
     numCalls = 0
 
-    copyField<T extends cms.Content>(
+    copyField(
       context: ManageContext,
       contentId: cms.ContentId,
       field: ContentFieldType,
@@ -186,7 +186,7 @@ test('TEST: ContentUpdater', async () => {
       fail("shouldn't be called")
     }
 
-    updateFields<T extends cms.Content>(
+    updateFields(
       context: ManageContext,
       contentId: ContentId,
       fields: FieldsValues
@@ -199,6 +199,18 @@ test('TEST: ContentUpdater', async () => {
         [ContentFieldType.KEYWORDS]: ['kw1', 'hola, amigo'],
       })
       return Promise.resolve(fields)
+    }
+
+    deleteContent(context: ManageContext, contentId: ContentId): Promise<void> {
+      fail("shouldn't be called")
+    }
+
+    async createContent(
+      context: ManageContext,
+      model: ContentType,
+      id: string
+    ): Promise<void> {
+      fail("shouldn't be called")
     }
   }
   const mockCms = new MockCms()
