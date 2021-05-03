@@ -76,8 +76,17 @@ export const customMessage = ({
   }
   WrappedComponent.customTypeName = name
   // eslint-disable-next-line react/display-name
-  WrappedComponent.deserialize = msg => (
-    <WrappedComponent id={msg.id} key={msg.key} json={msg.data} {...msg.data} />
-  )
+  WrappedComponent.deserialize = msg => {
+    return (
+      <WrappedComponent {...msg}>
+        {msg.replies.length > 0 &&
+          msg.replies.map((r, i) => (
+            <Reply key={i} payload={r.payload}>
+              {r.title}
+            </Reply>
+          ))}
+      </WrappedComponent>
+    )
+  }
   return WrappedComponent
 }

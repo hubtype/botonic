@@ -43,7 +43,13 @@ export function msgToBotonic(msg, customMessageTypes) {
       console.log(e)
     }
   } else if (isText(msg)) {
-    return textToBotonic(msg)
+    return (
+      <Text {...msg} key={msg.key}>
+        {msg.text}
+        {msg.buttons && msg.buttons.length > 0 && buttonsParse(msg.buttons)}
+        {msg.replies && msg.replies.length > 0 && quickrepliesParse(msg)}
+      </Text>
+    )
   } else if (isCarousel(msg)) {
     return (
       <Carousel {...msg} key={msg.key}>
@@ -93,29 +99,6 @@ export function msgsToBotonic(msgs, customMessageTypes) {
     )
   }
   return msgToBotonic(msgs, customMessageTypes)
-}
-
-function textToBotonic(msg) {
-  const text = msg.text
-  if (msg.replies && msg.replies.length)
-    return (
-      <Text {...msg} key={msg.key}>
-        {text}
-        {quickrepliesParse(msg)}
-      </Text>
-    )
-  if (msg.buttons && msg.buttons.length)
-    return (
-      <Text {...msg} key={msg.key}>
-        {text}
-        {buttonsParse(msg.buttons)}
-      </Text>
-    )
-  return (
-    <Text {...msg} key={msg.key}>
-      {text}
-    </Text>
-  )
 }
 
 function elementsParse(elements) {

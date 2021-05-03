@@ -146,29 +146,23 @@ export const Message = props => {
         timestamp: props.timestamp || getFormattedTimestamp,
         markdown,
         from,
-        buttons:
-          buttons.length > 0
-            ? buttons.map(b => ({
-                parentId: b.props.parentId,
-                payload: b.props.payload,
-                path: b.props.path,
-                url: b.props.url,
-                target: b.props.target,
-                webview: b.props.webview && String(b.props.webview),
-                title: b.props.children,
-                ...ButtonsDisabler.withDisabledProps(b.props),
-              }))
-            : undefined,
+        buttons: buttons.map(b => ({
+          parentId: b.props.parentId,
+          payload: b.props.payload,
+          path: b.props.path,
+          url: b.props.url,
+          target: b.props.target,
+          webview: b.props.webview && String(b.props.webview),
+          title: b.props.children,
+          ...ButtonsDisabler.withDisabledProps(b.props),
+        })),
         delay,
         typing,
-        replies:
-          replies.length > 0
-            ? replies.map(r => ({
-                payload: r.props.payload,
-                path: r.props.path,
-                title: r.props.children,
-              }))
-            : undefined,
+        replies: replies.map(r => ({
+          payload: r.props.payload,
+          path: r.props.path,
+          title: r.props.children,
+        })),
         elements: props.elements,
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
