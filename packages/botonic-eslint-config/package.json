@@ -14,7 +14,7 @@
     "typescript"
   ],
   "dependencies": {
-    "@typescript-eslint/parser": "~4.19.0"
+    "@typescript-eslint/parser": "~4.22.0"
   },
   "peerDependencies": {
     "@typescript-eslint/eslint-plugin": "~4.19.0",
