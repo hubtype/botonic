@@ -1,8 +1,11 @@
 {
   "extends": "@botonic/dx/baseline/tsconfig.json",
   "compilerOptions": {
-    // @types/node imports NODE_ENV="production/development"
-    "types": ["@types/node"]
-    //["@types/jest", ]
+    // "@types/node" imports NODE_ENV="production/development"
+    "types": ["@types/node"],
+    "compilerOptions": {
+      // If you need to compile js/jsx files
+      //"allowJs": true //when set, jest does not validate types anymore https://github.com/kulshekhar/ts-jest/issues/740#issuecomment-424123303
+    }
   }
 }

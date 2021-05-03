@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.19.0-alpha.5",
+  "version": "0.19.0-alpha.6",
   "description": "Continuous integration for botonic packages",
   "scripts": {},
   "author": "",
