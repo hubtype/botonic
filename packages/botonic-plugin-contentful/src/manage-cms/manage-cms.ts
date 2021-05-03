@@ -1,4 +1,4 @@
-import { AssetId, ContentId } from '../cms'
+import { AssetId, ContentId, ContentType } from '../cms'
 import * as nlp from '../nlp'
 import { ContentFieldType } from './fields'
 import { ManageContext } from './manage-context'
@@ -23,9 +23,17 @@ export interface ManageCms {
     fields: FieldsValues
   ): Promise<FieldsValues>
 
-  createEntryWithId(contentId: ContentId): Promise<void>
+  /** TODO: Content will never be published, because it doesn't have fields yet */
+  createContent(
+    context: ManageContext,
+    model: ContentType,
+    id: string
+  ): Promise<void>
 
-  deleteEntry(contentId: ContentId): Promise<void>
+  /**
+   * @param context: Content will be deleted even if preview is true
+   */
+  deleteContent(context: ManageContext, contentId: ContentId): Promise<void>
 
   /**
    * Will not fail if source does not have this field set

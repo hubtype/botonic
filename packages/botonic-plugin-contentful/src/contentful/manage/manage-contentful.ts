@@ -8,7 +8,7 @@ import { Entry } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
 
-import { AssetId, CmsException, ContentId } from '../../cms'
+import { AssetId, CmsException, ContentId, ContentType } from '../../cms'
 import { ResourceNotFoundCmsException } from '../../cms/exceptions'
 import {
   CONTENT_FIELDS,
@@ -47,7 +47,10 @@ export class ManageContentful implements ManageCms {
     return this.environment
   }
 
-  async deleteEntry(contentId: ContentId): Promise<void> {
+  async deleteContent(
+    context: ManageContext,
+    contentId: ContentId
+  ): Promise<void> {
     const environment = await this.getEnvironment()
     const getEntry = async () => {
       try {
@@ -59,19 +62,22 @@ export class ManageContentful implements ManageCms {
     const oldEntry = await getEntry()
     if (oldEntry) {
       await oldEntry.unpublish()
-      await oldEntry.archive()
       await oldEntry.delete()
     }
   }
 
-  async createEntryWithId(contentId: ContentId) {
+  async createContent(
+    context: ManageContext,
+    model: ContentType,
+    id: string
+  ): Promise<void> {
     const environment = await this.getEnvironment()
     try {
-      await environment.createEntryWithId(contentId.model, contentId.id, {
+      await environment.createEntryWithId(model, id, {
         fields: {},
       })
     } catch (e) {
-      console.error(`ERROR while creating entry ${contentId}:`, e)
+      throw new CmsException('ERROR while creating content', e)
     }
   }
 
