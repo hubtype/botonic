@@ -4,9 +4,11 @@
 
 Botonic Plugin Text Classification uses the trained models defined by the user to classify the input text.
 
-After detecting the text locale, and using the corresponding model to predict the class, extra information about the user's intent is added to the input message.
+After detecting the text locale, and using the corresponding model to predict the class, extra information about the user's intent is added to the input object.
 
-## Install the plugin
+## Setup
+
+### Install the plugin
 
 From your project, install the plugin by using the following command:
 
@@ -17,11 +19,11 @@ npm install @botonic/plugin-text-classification
 > **Note**: Windows users should first use the command
 > `npm install --global --production windows-build-tools --vs2015`
 
-## Require the plugin
+### Requiring the plugin
 
-The plugin must be required in the `src/plugins.js` and the locales of the trained models must be defined in their options.
+The plugin must be required in `src/plugins.js` and, the locales of the trained models must be defined in their options.
 
-**Locales order matters.** In case locale detection fails, the first one in the array will be used as a fallback.
+**Locales order matters.** If locale detection is ambiguous, the locale defined first in the array will be used as a fallback.
 
 ```javascript
 export const plugins = [
@@ -32,5 +34,19 @@ export const plugins = [
       locales: ['en', 'es'],
     },
   },
+]
+```
+
+## Use
+
+You can use the information added by this plugin to create new routes in **`src/routes.js`**.
+
+```javascript
+import Start from './actions/start'
+import ShowRestaurants from './actions/show-restaurants'
+
+export const routes = [
+  { intent: 'Greetings', action: Start },
+  { intent: 'BookRestaurant', action: ShowRestaurants },
 ]
 ```
