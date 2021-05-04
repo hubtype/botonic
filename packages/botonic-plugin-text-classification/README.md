@@ -19,9 +19,9 @@ npm install @botonic/plugin-text-classification
 
 ## Require the plugin
 
-The plugin must be required in the `src/plugins.js` and defining the locales of trained models into the options.
+The plugin must be required in the `src/plugins.js` and the locales of the trained models must be defined in their options.
 
-> **Note:** The order of provided locales matters. In case locale detection fails, the first one in the array will be used as a fallback.
+**Locales order matters.** In case locale detection fails, the first one in the array will be used as a fallback.
 
 ```javascript
 export const plugins = [
