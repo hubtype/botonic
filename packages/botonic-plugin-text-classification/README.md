@@ -4,7 +4,7 @@
 
 Botonic Plugin Text Classification uses the trained models defined by the user to classify the input text.
 
-After detecting the locale of the text, and using the corresponding model to predict the class, extra information about the intent of the user is added to the input message.
+After detecting the text locale, and using the corresponding model to predict the class, extra information about the user's intent is added to the input message.
 
 ## Install the plugin
 
