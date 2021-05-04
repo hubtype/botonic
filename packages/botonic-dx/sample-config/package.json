@@ -1,20 +1,20 @@
 {
   "scripts": {
-    "# BUILD" : "",
+    "##########  BUILD": "",
     "build": "tsc",
     "build-ci": "tsc -b tsconfig.tests.json",
 
-    "# LINT" : "",
+    "##########  LINT": "",
     "lint": "npm run lint-core -- --fix",
     "lint-ci": "npm run lint-core -- -c ../.eslintrc-ci.js",
-    "lint-core": "eslint_d --cache --quiet '*.js' 'src/**/*.[jt]s*' 'tests/**/*.[t]s*'",
+    "lint-core": "eslint_d --cache --quiet '*.js' '{src,tests}/**/*.[jt]{s,sx}'",
 
-    "# DEBUG" : "",
+    "########## DEBUG": "",
     "test": "jest",
     "test-ci": "jest --coverage",
     "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
 
-    "# PUBLISH" : "",
+    "########## PUBLISH": "",
     "prepublishOnly": "npm run build && npm run lint-ci && npm test",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
