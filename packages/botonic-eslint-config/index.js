@@ -61,6 +61,7 @@ module.exports = {
     'jest/no-export': 'warn',
     // https://github.com/jest-community/eslint-plugin-jest/issues/657
     'jest/no-jasmine-globals': 'warn',
+    'jest/no-conditional-expect': 'warn',
     'no-empty': 'warn',
     'prefer-const': ['error', { destructuring: 'all' }],
     'simple-import-sort/imports': 'error',
