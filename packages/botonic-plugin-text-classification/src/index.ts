@@ -17,9 +17,9 @@ export default class BotonicPluginTextClassification implements Plugin {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const inputText = request.input.data
         const detectedLocale = detectLocale(inputText, this.options.locales)
-        const ner = (await this.modelsSelector).select(detectedLocale)
-        const entities = ner.classify(inputText)
-        Object.assign(request.input, { entities })
+        const classifier = (await this.modelsSelector).select(detectedLocale)
+        const intents = classifier.classify(inputText)
+        Object.assign(request.input, { intent: intents[0].label, intents })
       }
     } catch (e) {
       console.error(`Cannot classify the input: ${request.input}`, e)
