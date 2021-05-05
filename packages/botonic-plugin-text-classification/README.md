@@ -39,14 +39,18 @@ export const plugins = [
 
 ## Use
 
-You can use the information added by this plugin to create new routes in **`src/routes.js`**.
+You can now create new routes in **`src/routes.js`** depending on the intent information added by this plugin:
 
 ```javascript
+import BuyProduct from './actions/buy-product'
+import NotFound from './actions/not-found'
+import ReturnProduct from './actions/return-product'
 import Start from './actions/start'
-import ShowRestaurants from './actions/show-restaurants'
 
 export const routes = [
-  { intent: 'Greetings', action: Start },
-  { intent: 'BookRestaurant', action: ShowRestaurants },
+  { input: i => i.intents[0].confidence < 0.7, action: NotFound },
+  { intent: 'Greeting', action: Start },
+  { intent: 'BuyProduct', action: BuyProduct },
+  { intent: 'ReturnProduct', action: ReturnProduct },
 ]
 ```
