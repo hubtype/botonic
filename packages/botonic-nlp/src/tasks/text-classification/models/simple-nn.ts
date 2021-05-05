@@ -8,12 +8,13 @@ import {
   train,
 } from '@tensorflow/tfjs-node'
 
-import {
-  DEFAULT_DROPOUT,
-  DEFAULT_LEARNING_RATE,
-  DEFAULT_UNITS,
-} from './constants'
 import { TextClassifierParameters } from './types'
+
+const MODEL_NAME = 'SimpleTextClassifier'
+
+const DEFAULT_DROPOUT = 0.3
+const DEFAULT_UNITS = 128
+const DEFAULT_LEARNING_RATE = 0.001
 
 export function createSimpleNN(
   maxLength: number,
@@ -25,10 +26,10 @@ export function createSimpleNN(
     learningRate: DEFAULT_LEARNING_RATE,
   }
 ): LayersModel {
-  const inputs = input({ name: 'InputLayer', shape: [maxLength] })
+  const inputs = input({ name: `${MODEL_NAME}_InputLayer`, shape: [maxLength] })
 
   const embeddingsLayer = layers.embedding({
-    name: 'EmbeddingsLayer',
+    name: `${MODEL_NAME}_EmbeddingsLayer`,
     inputDim: embeddingsMatrix.shape[0],
     outputDim: embeddingsMatrix.shape[1],
     inputLength: maxLength,
@@ -37,14 +38,14 @@ export function createSimpleNN(
   })
 
   const lstmLayer = layers.lstm({
-    name: 'LSTMLayer',
+    name: `${MODEL_NAME}_LSTMLayer`,
     units: params.units ?? DEFAULT_UNITS,
     dropout: params.dropout ?? DEFAULT_DROPOUT,
     recurrentDropout: 0.3,
   })
 
   const denseLayer = layers.dense({
-    name: 'DenseLayer',
+    name: `${MODEL_NAME}_DenseLayer`,
     units: numClasses,
     activation: 'softmax',
   })
@@ -54,7 +55,7 @@ export function createSimpleNN(
   ) as SymbolicTensor
 
   const textClassifierModel = model({
-    name: 'SimpleTextClassifier',
+    name: MODEL_NAME,
     inputs,
     outputs,
   })
