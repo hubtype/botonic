@@ -1,0 +1,43 @@
+{
+  "name": "@botonic/plugin-text-classification",
+  "version": "0.19.0-alpha.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean_install": "npm i && npm run build",
+    "cloc": "../../scripts/qa/cloc-package.sh .",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "test": "../../node_modules/.bin/jest",
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
+    "prepare": "node ../../preinstall.js",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "@botonic/core": "~0.18.0",
+    "@botonic/nlp": "^0.19.0-alpha.2",
+    "@tensorflow/tfjs": "^2.7.0",
+    "axios": "^0.21.1",
+    "cross-fetch": "^3.1.4",
+    "franc": "^5.0.0",
+    "langs": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/webgl2": "0.0.6"
+  },
+  "resolutions": {
+    "@types/webgl2": "0.0.6"
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "conversational-app",
+    "conversational-ui",
+    "nlp",
+    "nlu",
+    "text-classification",
+    "typescript"
+  ]
+}
