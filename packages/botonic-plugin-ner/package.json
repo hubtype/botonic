@@ -18,7 +18,7 @@
     "@babel/runtime": "^7.5.5",
     "@botonic/core": "~0.18.0",
     "@botonic/nlp": "^0.19.0-alpha.2",
-    "@tensorflow/tfjs": "^2.7.0",
+    "@tensorflow/tfjs": "^3.6.0",
     "axios": "^0.21.1",
     "cross-fetch": "^3.1.4",
     "franc": "^5.0.0",
