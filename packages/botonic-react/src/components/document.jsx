@@ -29,8 +29,6 @@ const serialize = documentProps => {
 }
 
 export const Document = props => {
-  let content = props.children
-
   const { getThemeProperty } = useContext(WebchatContext)
   let documentDownload = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.documentDownload,
@@ -39,23 +37,6 @@ export const Document = props => {
   if (typeof documentDownload === 'function')
     documentDownload = documentDownload(props.from)
 
-  if (isBrowser()) {
-    content = [
-      <StyledButton
-        key={Math.random()}
-        href={props.src}
-        target='_blank'
-        rel='noreferrer'
-        style={{
-          ...documentDownload.style,
-        }}
-      >
-        {documentDownload.text || 'Download'}
-      </StyledButton>,
-      props.children,
-    ]
-  }
-
   return (
     <Message
       role={ROLES.DOCUMENT_MESSAGE}
@@ -63,7 +44,19 @@ export const Document = props => {
       {...props}
       type={INPUT.DOCUMENT}
     >
-      {content}
+      {isBrowser() && (
+        <StyledButton
+          href={props.src}
+          target='_blank'
+          rel='noreferrer'
+          style={{
+            ...documentDownload.style,
+          }}
+        >
+          {documentDownload.text || 'Download'}
+        </StyledButton>
+      )}
+      {props.children}
     </Message>
   )
 }
