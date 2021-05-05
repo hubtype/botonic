@@ -13,7 +13,7 @@ export class ModelSelector {
     const selector = new ModelSelector(locales)
     const modelsInfo = selector.loadModelsInfo()
     await selector.loadModels(modelsInfo)
-    return new ModelSelector(locales)
+    return selector
   }
 
   select(locale: Locale): TextClassifier {
