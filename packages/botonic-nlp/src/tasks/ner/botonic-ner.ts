@@ -1,31 +1,25 @@
 import { LayersModel, Tensor3D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
-import { Dataset } from '../../dataset/dataset'
-import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
-import { WordEmbeddingStorage } from '../../embeddings/types'
-import { IndexedItems } from '../../encode/indexed-items'
-import { LabelEncoder } from '../../encode/label-encoder'
-import { OneHotEncoder } from '../../encode/one-hot-encoder'
-import { ModelManager } from '../../model/manager'
-import { ModelEvaluation } from '../../model/types'
-import { Preprocessor } from '../../preprocess/preprocessor'
+import { Dataset } from '../../dataset'
 import {
-  Normalizer,
-  Stemmer,
-  Stopwords,
-  Tokenizer,
-} from '../../preprocess/types'
-import { ModelStorage } from '../../storage/model-storage'
+  generateEmbeddingsMatrix,
+  WordEmbeddingStorage,
+} from '../../embeddings'
+import { IndexedItems, LabelEncoder, OneHotEncoder } from '../../encode'
+import { ModelEvaluation, ModelManager } from '../../model'
+import { Preprocessor } from '../../preprocess'
+import { ModelStorage } from '../../storage'
 import { Locale } from '../../types'
-import { unique } from '../../utils/array-utils'
-import { createBiLstmModel } from '../ner/models/bilstm-model'
-import { NER_TEMPLATE, NerModelParameters } from './models/types'
-import { NEUTRAL_ENTITY } from './process/constants'
-import { PredictionProcessor } from './process/prediction-processor'
-import { Processor } from './process/processor'
-import { Entity } from './process/types'
-import { NerConfigStorage } from './storage/config-storage'
+import { unique } from '../../utils'
+import { createBiLstmModel, NER_TEMPLATE, NerModelParameters } from './models'
+import {
+  Entity,
+  NEUTRAL_ENTITY,
+  PredictionProcessor,
+  Processor,
+} from './process'
+import { NerConfig, NerConfigStorage } from './storage'
 
 export class BotonicNer {
   readonly entities: string[]
@@ -115,7 +109,7 @@ export class BotonicNer {
 
   async saveModel(path: string): Promise<void> {
     path = join(path, this.locale)
-    const config = {
+    const config: NerConfig = {
       locale: this.locale,
       maxLength: this.maxLength,
       vocabulary: this.vocabulary,
