@@ -1,26 +1,24 @@
 import { LayersModel, Tensor2D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
-import { Dataset } from '../../dataset/dataset'
-import { generateEmbeddingsMatrix } from '../../embeddings/embeddings-matrix'
-import { WordEmbeddingStorage } from '../../embeddings/types'
-import { IndexedItems } from '../../encode/indexed-items'
-import { LabelEncoder } from '../../encode/label-encoder'
-import { OneHotEncoder } from '../../encode/one-hot-encoder'
-import { ModelManager } from '../../model/manager'
-import { ModelEvaluation } from '../../model/types'
-import { Preprocessor } from '../../preprocess/preprocessor'
-import { ModelStorage } from '../../storage/model-storage'
-import { Locale } from '../../types'
-import { unique } from '../../utils/array-utils'
-import { createSimpleNN } from './models/simple-nn'
+import { Dataset } from '../../dataset'
 import {
+  generateEmbeddingsMatrix,
+  WordEmbeddingStorage,
+} from '../../embeddings'
+import { IndexedItems, LabelEncoder, OneHotEncoder } from '../../encode'
+import { ModelEvaluation, ModelManager } from '../../model'
+import { Preprocessor } from '../../preprocess'
+import { ModelStorage } from '../../storage'
+import { Locale } from '../../types'
+import { unique } from '../../utils'
+import {
+  createSimpleNN,
   INTENT_CLASSIFIER_TEMPLATE,
   IntentClassifierParameters,
-} from './models/types'
-import { Intent, PredictionProcessor } from './process/prediction-processor'
-import { Processor } from './process/processor'
-import { IntentClassificationConfigStorage } from './storage/config-storage'
+} from './models'
+import { Intent, PredictionProcessor, Processor } from './process'
+import { IntentClassificationConfigStorage } from './storage'
 
 export class BotonicIntentClassifier {
   readonly classes: string[]
