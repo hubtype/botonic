@@ -1,4 +1,4 @@
-import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess/constants'
+import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess'
 import { tensor, Tensor3D } from '@tensorflow/tfjs'
 
 import { PredictionProcessor } from '../../src/process/prediction-processor'

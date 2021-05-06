@@ -1,4 +1,4 @@
-import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess/constants'
+import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess'
 
 import { TextProcessor } from '../../src/process/text-processor'
 import * as constantsHelper from '../helper/constants-helper'

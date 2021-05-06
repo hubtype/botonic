@@ -1,4 +1,4 @@
-import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
+import { Preprocessor } from '@botonic/nlp/lib/preprocess'
 
 import { LOCALE, MAX_SEQUENCE_LENGTH } from './constants-helper'
 
