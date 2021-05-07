@@ -1,6 +1,6 @@
 import { tensor, Tensor2D } from '@tensorflow/tfjs-node'
 
-import { Sample } from '../../../dataset/types'
+import { Sample } from '../../../dataset/input-parser'
 import { LabelEncoder } from '../../../encode/label-encoder'
 import { OneHotEncoder } from '../../../encode/one-hot-encoder'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../preprocess/constants'
@@ -49,7 +49,7 @@ export class Processor {
       tokens = tokens.concat(partialSequence)
       entities = entities.concat(partialEntities)
 
-      text = e.text
+      text = sample.text.slice(e.start, e.end)
       partialSequence = this.processText(text)
       partialEntities = Array(partialSequence.length).fill(e.label)
 
