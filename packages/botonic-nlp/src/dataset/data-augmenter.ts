@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { AugmenterMap } from './types'
+
+export type AugmenterMap = { [keyword: string]: string[] }
 
 export class DataAugmenter {
   // eslint-disable-next-line no-useless-escape

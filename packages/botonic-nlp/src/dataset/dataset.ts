@@ -1,18 +1,18 @@
 import { Preprocessor } from '../preprocess'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../preprocess/constants'
 import { flatten, shuffle as shuffleArray, unique } from '../utils/array-utils'
-import { DatasetLoader } from './loader'
-import { Sample } from './types'
+import { InputParser, Sample } from './input-parser'
 
 export class Dataset {
-  constructor(
+  private constructor(
     readonly classes: string[],
     readonly entities: string[],
     readonly samples: Sample[]
   ) {}
 
   static load(path: string): Dataset {
-    return DatasetLoader.load(path)
+    const { classes, entities, samples } = new InputParser(path).parse()
+    return new Dataset(classes, entities, samples)
   }
 
   split(
