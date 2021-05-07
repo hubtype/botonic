@@ -1,4 +1,2 @@
-import { Dataset } from './dataset'
-import { Sample } from './types'
-
-export { Dataset, Sample }
+export * from './dataset'
+export * from './types'

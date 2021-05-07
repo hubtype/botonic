@@ -1,4 +1,2 @@
-import { flatten, shuffle, unique } from './array-utils'
-import { readJSON } from './file-utils'
-
-export { flatten, readJSON, shuffle, unique }
+export * from './array-utils'
+export * from './file-utils'

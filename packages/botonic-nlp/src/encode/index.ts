@@ -1,5 +1,3 @@
-import { IndexedItems } from './indexed-items'
-import { LabelEncoder } from './label-encoder'
-import { OneHotEncoder } from './one-hot-encoder'
-
-export { IndexedItems, LabelEncoder, OneHotEncoder }
+export * from './indexed-items'
+export * from './label-encoder'
+export * from './one-hot-encoder'
