@@ -41,6 +41,12 @@ export class BotonicNer {
     private readonly preprocessor: Preprocessor
   ) {
     this.entities = unique([NEUTRAL_ENTITY].concat(entities))
+    this.processor = new Processor(
+      this.preprocessor,
+      new LabelEncoder(new IndexedItems(this.vocabulary)),
+      new OneHotEncoder(new IndexedItems(this.entities))
+    )
+    this.predictionProcessor = new PredictionProcessor(this.entities)
   }
 
   static async load(
@@ -57,15 +63,6 @@ export class BotonicNer {
     )
     ner.modelManager = new ModelManager(await ModelStorage.load(path))
     return ner
-  }
-
-  compile(): void {
-    this.processor = new Processor(
-      this.preprocessor,
-      new LabelEncoder(new IndexedItems(this.vocabulary)),
-      new OneHotEncoder(new IndexedItems(this.entities))
-    )
-    this.predictionProcessor = new PredictionProcessor(this.entities)
   }
 
   async createModel(

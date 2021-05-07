@@ -17,7 +17,6 @@ describe('Botonic Text Classifier', () => {
     vocabulary,
     toolsHelper.preprocessor
   )
-  sut.compile()
 
   test('Train and Evaluate model', async () => {
     const model = await sut.createModel(

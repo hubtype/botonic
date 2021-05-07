@@ -14,7 +14,6 @@ describe('Botonic NER', () => {
     vocabulary,
     toolsHelper.preprocessor
   )
-  sut.compile()
 
   test('Evaluate model', async () => {
     // arrange
@@ -39,7 +38,6 @@ describe('Botonic NER', () => {
       constantsHelper.NER_MODEL_DIR_PATH,
       toolsHelper.preprocessor
     )
-    sut.compile()
 
     // act
     const entities = sut.recognizeEntities('I want to return this jacket')

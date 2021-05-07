@@ -10,12 +10,6 @@ import { OneHotEncoder } from '../../encode/one-hot-encoder'
 import { ModelManager } from '../../model/manager'
 import { ModelEvaluation } from '../../model/types'
 import { Preprocessor } from '../../preprocess/preprocessor'
-import {
-  Normalizer,
-  Stemmer,
-  Stopwords,
-  Tokenizer,
-} from '../../preprocess/types'
 import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils/array-utils'
@@ -45,6 +39,12 @@ export class BotonicTextClassifier {
     private readonly preprocessor: Preprocessor
   ) {
     this.classes = unique(classes)
+    this.processor = new Processor(
+      this.preprocessor,
+      new LabelEncoder(new IndexedItems(this.vocabulary)),
+      new OneHotEncoder(new IndexedItems(this.classes))
+    )
+    this.predictionProcessor = new PredictionProcessor(this.classes)
   }
 
   static async load(
@@ -63,15 +63,6 @@ export class BotonicTextClassifier {
       await ModelStorage.load(path)
     )
     return textClassification
-  }
-
-  compile(): void {
-    this.processor = new Processor(
-      this.preprocessor,
-      new LabelEncoder(new IndexedItems(this.vocabulary)),
-      new OneHotEncoder(new IndexedItems(this.classes))
-    )
-    this.predictionProcessor = new PredictionProcessor(this.classes)
   }
 
   // TODO: set embeddings as optional
