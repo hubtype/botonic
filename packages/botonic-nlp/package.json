@@ -27,7 +27,7 @@
     "@tensorflow/tfjs-node": "^2.7.0",
     "axios": "^0.21.0",
     "better-sqlite3": "^7.0.1",
-    "js-yaml": "4.0.0",
+    "js-yaml": "4.1.0",
     "@nlpjs/lang-en-min": "^4.19.1",
     "@nlpjs/lang-es": "^4.19.1"
   },
