@@ -16,7 +16,7 @@
     "colors": "^1.4.0",
     "fetch-repo-dir": "^1.0.4",
     "form-data": "^3.0.0",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^10.0.0",
     "inquirer": "^7.0.4",
     "ora": "^5.1.0",
     "qs": "^6.9.4",
