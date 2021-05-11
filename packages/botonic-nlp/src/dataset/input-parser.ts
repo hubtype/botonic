@@ -15,7 +15,11 @@ type InputData = {
 
 export type Sample = { text: string; class: string; entities: DefinedEntity[] }
 
-type ParsedData = { classes: string[]; entities: string[]; samples: Sample[] }
+export type ParsedData = {
+  classes: string[]
+  entities: string[]
+  samples: Sample[]
+}
 
 export class InputParser {
   public readonly ALLOWED_EXTENSIONS = ['.yaml', '.yml']
