@@ -10,7 +10,8 @@ export class EntitiesParser {
 
     let text = sentence
     let m
-    let accumulation = 0
+
+    let charactersRemoved = 0 //This value represents the amount of characters removed because of entity definition removal: [shirt](product) -> shirt.
 
     while ((m = this.ENTITY_DEFINITION_PATTERN.exec(sentence))) {
       const entityDefinition = m[0]
@@ -22,19 +23,19 @@ export class EntitiesParser {
       }
 
       text = text
-        .slice(0, m.index - accumulation)
+        .slice(0, m.index - charactersRemoved)
         .concat(
           entityText,
-          text.slice(m.index + entityDefinition.length - accumulation)
+          text.slice(m.index + entityDefinition.length - charactersRemoved)
         )
 
       definedEntities.push({
         label: entityLabel,
-        start: m.index - accumulation,
-        end: m.index + entityText.length - accumulation,
+        start: m.index - charactersRemoved,
+        end: m.index + entityText.length - charactersRemoved,
       })
 
-      accumulation += entityDefinition.length - entityText.length
+      charactersRemoved += entityDefinition.length - entityText.length
     }
 
     return { text, entities: definedEntities }
