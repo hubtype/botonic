@@ -45,7 +45,7 @@ export class DataAugmenter {
         )
       } else {
         throw new Error(
-          `Unable to augment the data. Undefined keyword: ${keyword}`
+          `Unable to augment the data. Undefined keyword '${keyword}'`
         )
       }
     }

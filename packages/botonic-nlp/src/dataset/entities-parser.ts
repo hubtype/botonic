@@ -19,7 +19,7 @@ export class EntitiesParser {
       const entityLabel = m[2]
 
       if (!this.entities.includes(entityLabel)) {
-        throw new Error(`Undefined entity: ${entityLabel}`)
+        throw new Error(`Undefined entity '${entityLabel}'`)
       }
 
       text = text

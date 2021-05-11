@@ -51,7 +51,7 @@ export class InputParser {
     const stat = lstatSync(this.path)
 
     if (!stat.isDirectory()) {
-      throw new Error(`path "${this.path}" must be a directory.`)
+      throw new Error(`path '${this.path}' must be a directory.`)
     }
 
     return readdirSync(this.path)
