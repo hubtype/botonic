@@ -18,7 +18,7 @@ const DEFAULT_LEARNING_RATE = 0.001
 
 export function createSimpleNN(
   maxLength: number,
-  numClasses: number,
+  numIntents: number,
   embeddingsMatrix: Tensor2D,
   params: IntentClassifierParameters = {
     dropout: DEFAULT_DROPOUT,
@@ -46,7 +46,7 @@ export function createSimpleNN(
 
   const denseLayer = layers.dense({
     name: `${MODEL_NAME}_DenseLayer`,
-    units: numClasses,
+    units: numIntents,
     activation: 'softmax',
   })
 
