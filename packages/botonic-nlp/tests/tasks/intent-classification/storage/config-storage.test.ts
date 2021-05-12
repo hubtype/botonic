@@ -1,14 +1,14 @@
 import { existsSync, rmdirSync } from 'fs'
 import { join } from 'path'
 
-import { TextClassificationConfigStorage } from '../../../../src/tasks/text-classification/storage/config-storage'
+import { IntentClassificationConfigStorage } from '../../../../src/tasks/intent-classification/storage/config-storage'
 import * as helper from '../../../helpers/constants-helper'
 
 describe('Config handler', () => {
-  const storer = new TextClassificationConfigStorage()
+  const storer = new IntentClassificationConfigStorage()
 
   test('Load config', () => {
-    const config = storer.load(helper.TEXT_CLASSIFIER_MODEL_DIR_PATH)
+    const config = storer.load(helper.INTENT_CLASSIFIER_MODEL_DIR_PATH)
     expect(config.locale).toEqual(helper.LOCALE)
     expect(config.maxLength).toEqual(helper.MAX_SEQUENCE_LENGTH)
     expect(config.vocabulary).toEqual(helper.VOCABULARY)

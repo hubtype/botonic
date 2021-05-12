@@ -13,19 +13,16 @@ import { Preprocessor } from '../../preprocess/preprocessor'
 import { ModelStorage } from '../../storage/model-storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils/array-utils'
-import {
-  Intent,
-  PredictionProcessor,
-} from '../text-classification/process/prediction-processor'
 import { createSimpleNN } from './models/simple-nn'
 import {
-  TEXT_CLASSIFIER_TEMPLATE,
-  TextClassifierParameters,
+  INTENT_CLASSIFIER_TEMPLATE,
+  IntentClassifierParameters,
 } from './models/types'
+import { Intent, PredictionProcessor } from './process/prediction-processor'
 import { Processor } from './process/processor'
-import { TextClassificationConfigStorage } from './storage/config-storage'
+import { IntentClassificationConfigStorage } from './storage/config-storage'
 
-export class BotonicTextClassifier {
+export class BotonicIntentClassifier {
   readonly classes: string[]
   private processor: Processor
   private predictionProcessor: PredictionProcessor
@@ -50,26 +47,24 @@ export class BotonicTextClassifier {
   static async load(
     path: string,
     preprocessor: Preprocessor
-  ): Promise<BotonicTextClassifier> {
-    const config = new TextClassificationConfigStorage().load(path)
-    const textClassification = new BotonicTextClassifier(
+  ): Promise<BotonicIntentClassifier> {
+    const config = new IntentClassificationConfigStorage().load(path)
+    const classifier = new BotonicIntentClassifier(
       config.locale,
       config.maxLength,
       config.classes,
       config.vocabulary,
       preprocessor
     )
-    textClassification.modelManager = new ModelManager(
-      await ModelStorage.load(path)
-    )
-    return textClassification
+    classifier.modelManager = new ModelManager(await ModelStorage.load(path))
+    return classifier
   }
 
   // TODO: set embeddings as optional
   async createModel(
-    template: TEXT_CLASSIFIER_TEMPLATE,
+    template: INTENT_CLASSIFIER_TEMPLATE,
     storage: WordEmbeddingStorage,
-    params?: TextClassifierParameters
+    params?: IntentClassifierParameters
   ): Promise<LayersModel> {
     const embeddingsMatrix = await generateEmbeddingsMatrix(
       storage,
@@ -77,7 +72,7 @@ export class BotonicTextClassifier {
     )
 
     switch (template) {
-      case TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN:
+      case INTENT_CLASSIFIER_TEMPLATE.SIMPLE_NN:
         return createSimpleNN(
           this.maxLength,
           this.classes.length,
@@ -122,7 +117,7 @@ export class BotonicTextClassifier {
       vocabulary: this.vocabulary,
       classes: this.classes,
     }
-    new TextClassificationConfigStorage().save(path, config)
+    new IntentClassificationConfigStorage().save(path, config)
     await this.modelManager.save(path)
   }
 }

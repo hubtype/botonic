@@ -2,15 +2,15 @@ import { existsSync, rmdirSync } from 'fs'
 import { join } from 'path'
 
 import { DatabaseStorage } from '../../../src/embeddings/database/storage'
-import { BotonicTextClassifier } from '../../../src/tasks/text-classification/botonic-text-classifier'
-import { TEXT_CLASSIFIER_TEMPLATE } from '../../../src/tasks/text-classification/models/types'
+import { BotonicIntentClassifier } from '../../../src/tasks/intent-classification/botonic-intent-classifier'
+import { INTENT_CLASSIFIER_TEMPLATE } from '../../../src/tasks/intent-classification/models/types'
 import * as constantsHelper from '../../helpers/constants-helper'
 import * as toolsHelper from '../../helpers/tools-helper'
 
-describe('Botonic Text Classifier', () => {
+describe('Botonic Intent Classifier', () => {
   const { trainSet, testSet } = toolsHelper.dataset.split()
   const vocabulary = trainSet.extractVocabulary(toolsHelper.preprocessor)
-  const sut = new BotonicTextClassifier(
+  const sut = new BotonicIntentClassifier(
     constantsHelper.LOCALE,
     constantsHelper.MAX_SEQUENCE_LENGTH,
     constantsHelper.CLASSES,
@@ -20,7 +20,7 @@ describe('Botonic Text Classifier', () => {
 
   test('Train and Evaluate model', async () => {
     const model = await sut.createModel(
-      TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
+      INTENT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
         constantsHelper.LOCALE,
         constantsHelper.EMBEDDINGS_TYPE,
@@ -36,7 +36,7 @@ describe('Botonic Text Classifier', () => {
 
   test('Save Model', async () => {
     const model = await sut.createModel(
-      TEXT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
+      INTENT_CLASSIFIER_TEMPLATE.SIMPLE_NN,
       await DatabaseStorage.with(
         constantsHelper.LOCALE,
         constantsHelper.EMBEDDINGS_TYPE,
@@ -44,7 +44,10 @@ describe('Botonic Text Classifier', () => {
       )
     )
     sut.setModel(model)
-    const path = join(constantsHelper.HELPER_DIR, 'tmp-botonic-text-classifier')
+    const path = join(
+      constantsHelper.HELPER_DIR,
+      'tmp-botonic-intent-classifier'
+    )
     await sut.saveModel(path)
     expect(existsSync(path)).toBeTruthy()
     rmdirSync(path, { recursive: true })

@@ -2,7 +2,7 @@
   "modelTopology": {
     "class_name": "Model",
     "config": {
-      "name": "SimpleTextClassifier",
+      "name": "SimpleIntentClassifier",
       "layers": [
         {
           "name": "InputLayer",

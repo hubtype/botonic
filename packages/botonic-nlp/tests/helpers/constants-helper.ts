@@ -52,15 +52,15 @@ export const DATA_DIR = 'data'
 export const TASKS_DIR = 'tasks'
 export const MODEL_DIR = 'models'
 export const NER_DIR = 'ner'
-export const TEXT_CLASSIFICATION_DIR = 'text-classification'
+export const INTENT_CLASSIFICATION_DIR = 'intent-classification'
 
 export const DATA_DIR_PATH = join(HELPER_DIR, 'data')
 
 export const NER_MODEL_DIR_PATH = join(HELPER_DIR, MODEL_DIR, NER_DIR, LOCALE)
 
-export const TEXT_CLASSIFIER_MODEL_DIR_PATH = join(
+export const INTENT_CLASSIFIER_MODEL_DIR_PATH = join(
   HELPER_DIR,
   MODEL_DIR,
-  TEXT_CLASSIFICATION_DIR,
+  INTENT_CLASSIFICATION_DIR,
   LOCALE
 )
