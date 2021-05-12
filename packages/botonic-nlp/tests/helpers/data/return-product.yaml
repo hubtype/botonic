@@ -1,4 +1,4 @@
-class: ReturnProduct
+intent: ReturnProduct
 
 entities:
   - product
