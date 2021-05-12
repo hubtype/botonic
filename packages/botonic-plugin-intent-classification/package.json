@@ -1,5 +1,5 @@
 {
-  "name": "@botonic/plugin-text-classification",
+  "name": "@botonic/plugin-intent-classification",
   "version": "0.19.0-alpha.0",
   "license": "MIT",
   "main": "lib/index.js",
@@ -37,7 +37,7 @@
     "conversational-ui",
     "nlp",
     "nlu",
-    "text-classification",
+    "intent-classification",
     "typescript"
   ]
 }
