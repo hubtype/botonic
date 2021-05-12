@@ -1,17 +1,6 @@
-import { lstatSync, readdirSync, readFileSync } from 'fs'
-import { load as loadYaml } from 'js-yaml'
-import { extname, join } from 'path'
-
-import { unique } from '../utils/array-utils'
 import { AugmenterMap, DataAugmenter } from './data-augmenter'
 import { DefinedEntity, EntitiesParser } from './entities-parser'
-
-type InputData = {
-  class?: string
-  entities?: string[]
-  'data-augmentation'?: AugmenterMap
-  samples: string[]
-}
+import { InputData } from './input-data-reader'
 
 export type Sample = { text: string; class: string; entities: DefinedEntity[] }
 
@@ -21,20 +10,14 @@ export type ParsedData = {
   samples: Sample[]
 }
 
-export class InputParser {
-  public readonly ALLOWED_EXTENSIONS = ['.yaml', '.yml']
-
-  constructor(private path: string) {}
-
-  parse(): ParsedData {
-    const files = this.getInputFiles()
-
+export class InputDataParser {
+  parse(inputData: InputData[]): ParsedData {
     const classes: Set<string> = new Set()
     const entities: Set<string> = new Set()
     const samples: Set<Sample> = new Set()
 
-    files.forEach(filePath => {
-      const parsedData = this.parseInputFile(filePath)
+    inputData.forEach(data => {
+      const parsedData = this.parseInputData(data)
       parsedData.classes.forEach(c => classes.add(c))
       parsedData.entities.forEach(e => entities.add(e))
       parsedData.samples.forEach(s => samples.add(s))
@@ -47,20 +30,7 @@ export class InputParser {
     }
   }
 
-  private getInputFiles(): string[] {
-    const stat = lstatSync(this.path)
-
-    if (!stat.isDirectory()) {
-      throw new Error(`path '${this.path}' must be a directory.`)
-    }
-
-    return readdirSync(this.path)
-      .filter(fileName => this.ALLOWED_EXTENSIONS.includes(extname(fileName)))
-      .map(fileName => join(this.path, fileName))
-  }
-
-  private parseInputFile(path: string): ParsedData {
-    const inputData: InputData = loadYaml(readFileSync(path))
+  private parseInputData(inputData: InputData): ParsedData {
     const className: string = inputData.class ?? ''
     const classes: string[] = inputData.class ? [inputData.class] : []
     const entities: string[] = inputData.entities ?? []

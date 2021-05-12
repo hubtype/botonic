@@ -1,6 +1,6 @@
 import { tensor } from '@tensorflow/tfjs-node'
 
-import { Sample } from '../../../dataset/input-parser'
+import { Sample } from '../../../dataset/input-data-parser'
 import { LabelEncoder } from '../../../encode/label-encoder'
 import { OneHotEncoder } from '../../../encode/one-hot-encoder'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../../preprocess/constants'
