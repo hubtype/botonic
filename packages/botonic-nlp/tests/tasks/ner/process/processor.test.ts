@@ -17,12 +17,12 @@ describe('NER Processor', () => {
   test('Process samples', () => {
     const { x, y } = sut.process([
       {
-        class: 'BuyProduct',
+        intent: 'BuyProduct',
         entities: [{ start: 27, end: 32, label: 'product' }],
         text: SHORT_TEXT,
       },
       {
-        class: 'BuyProduct',
+        intent: 'BuyProduct',
         entities: [{ start: 27, end: 32, label: 'product' }],
         text: LONG_TEXT,
       },
