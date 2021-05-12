@@ -11,7 +11,7 @@ export class EntitiesParser {
     let text = sentence
     let m
 
-    let charactersRemoved = 0 //This value represents the amount of characters removed because of entity definition removal: [shirt](product) -> shirt.
+    let charactersRemoved = 0 //amount of characters removed because of entity definition removal: [shirt](product) -> shirt.
 
     while ((m = this.ENTITY_DEFINITION_PATTERN.exec(sentence))) {
       const entityDefinition = m[0]
