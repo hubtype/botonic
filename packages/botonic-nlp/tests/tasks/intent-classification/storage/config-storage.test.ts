@@ -12,7 +12,7 @@ describe('Config handler', () => {
     expect(config.locale).toEqual(helper.LOCALE)
     expect(config.maxLength).toEqual(helper.MAX_SEQUENCE_LENGTH)
     expect(config.vocabulary).toEqual(helper.VOCABULARY)
-    expect(config.classes).toEqual(helper.CLASSES)
+    expect(config.intents).toEqual(helper.INTENTS)
   })
 
   test('Save config', () => {
@@ -21,7 +21,7 @@ describe('Config handler', () => {
       locale: helper.LOCALE,
       maxLength: helper.MAX_SEQUENCE_LENGTH,
       vocabulary: helper.VOCABULARY,
-      classes: helper.CLASSES,
+      intents: helper.INTENTS,
     })
     expect(existsSync(join(path, storer.CONFIG_FILENAME))).toBeTruthy()
     rmdirSync(path, { recursive: true })
