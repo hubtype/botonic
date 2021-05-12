@@ -1,4 +1,4 @@
-import { createSimpleNN } from '../../../../src/tasks/text-classification/models/simple-nn'
+import { createSimpleNN } from '../../../../src/tasks/intent-classification/models/simple-nn'
 import * as helper from '../../../helpers/constants-helper'
 
 describe('Simple NN Model', () => {
@@ -9,7 +9,7 @@ describe('Simple NN Model', () => {
       helper.EMBEDDINGS_MATRIX,
       { units: 64, dropout: 0.2, learningRate: 0.1 }
     )
-    expect(model.name).toEqual('SimpleTextClassifier')
+    expect(model.name).toEqual('SimpleIntentClassifier')
     expect(model.layers.length).toEqual(4)
   })
 })

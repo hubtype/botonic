@@ -1,7 +1,7 @@
 import { tensor } from '@tensorflow/tfjs-node'
 
-import { PredictionProcessor } from '../../../../src/tasks/text-classification/process/prediction-processor'
-import { OutputData } from '../../../../src/tasks/text-classification/process/types'
+import { PredictionProcessor } from '../../../../src/tasks/intent-classification/process/prediction-processor'
+import { OutputData } from '../../../../src/tasks/intent-classification/process/types'
 import * as helper from '../../../helpers/constants-helper'
 
 describe('Prediction Processor', () => {

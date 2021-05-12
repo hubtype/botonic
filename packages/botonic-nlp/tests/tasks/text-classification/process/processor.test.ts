@@ -1,4 +1,4 @@
-import { Processor } from '../../../../src/tasks/text-classification/process/processor'
+import { Processor } from '../../../../src/tasks/intent-classification/process/processor'
 import * as constantsHelper from '../../../helpers/constants-helper'
 import * as toolsHelper from '../../../helpers/tools-helper'
 
@@ -7,7 +7,7 @@ const SHORT_TEXT = 'I want to buy this pair of shoes.'
 const LONG_TEXT =
   'I want to buy this pair of shoes, this t-shirt and also, this jacket. I also want to know if this fur coat is on sale, because I love it!'
 
-describe('Text Classification Processor', () => {
+describe('Intent Classification Processor', () => {
   const sut = new Processor(
     toolsHelper.preprocessor,
     toolsHelper.tokenEncoder,
