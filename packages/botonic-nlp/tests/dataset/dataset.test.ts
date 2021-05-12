@@ -1,14 +1,14 @@
 import { Dataset } from '../../src/dataset/dataset'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../src/preprocess/constants'
-import * as constantssHelper from '../helpers/constants-helper'
+import * as constantsHelper from '../helpers/constants-helper'
 import * as toolsHelper from '../helpers/tools-helper'
 
 describe('Dataset', () => {
-  const sut = Dataset.load(constantssHelper.DATA_DIR_PATH)
+  const sut = Dataset.load(constantsHelper.DATA_DIR_PATH)
 
   test('Load Dataset', () => {
-    expect(sut.classes).toEqual(['BuyProduct', 'ReturnProduct'])
-    expect(sut.entities).toEqual(['product', 'color', 'size'])
+    expect(sut.intents.sort()).toEqual(constantsHelper.INTENTS.sort())
+    expect(sut.entities.sort()).toEqual(constantsHelper.ENTITIES.sort())
     expect(sut.samples.length).toEqual(180)
   })
 

@@ -5,7 +5,7 @@ import { extname, join } from 'path'
 import { AugmenterMap } from './data-augmenter'
 
 export type InputData = {
-  class?: string
+  intent?: string
   entities?: string[]
   'data-augmentation'?: AugmenterMap
   samples: string[]

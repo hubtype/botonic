@@ -8,9 +8,9 @@ describe('Input Data Parser', () => {
 
     const sut = new InputDataParser()
 
-    const { classes, entities, samples } = sut.parse(inputData)
-    expect(classes).toEqual(['BuyProduct', 'ReturnProduct'])
-    expect(entities).toEqual(['product', 'color', 'size'])
+    const { intents, entities, samples } = sut.parse(inputData)
+    expect(intents.sort()).toEqual(helper.INTENTS.sort())
+    expect(entities.sort()).toEqual(helper.ENTITIES.sort())
     expect(samples.length).toEqual(180)
   })
 })
