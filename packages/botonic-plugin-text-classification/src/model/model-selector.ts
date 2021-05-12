@@ -1,8 +1,8 @@
 import { Locale } from '@botonic/nlp/lib/types'
 
 import { getModelUri } from '../utils/environment-utils'
+import { IntentClassifier } from './intent-classifier'
 import { ModelInfo } from './model-info'
-import { IntentClassifier } from './text-classifier'
 
 export class ModelSelector {
   private models: { [locale: string]: IntentClassifier } = {}
