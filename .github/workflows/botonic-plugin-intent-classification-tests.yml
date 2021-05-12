@@ -1,19 +1,19 @@
-name: Botonic plugin-text-classification tests
+name: Botonic plugin-intent-classification tests
 
 on:
   push:
     paths:
       - '*'
       - 'packages/*'
-      - 'packages/botonic-plugin-text-classification/**'
-      - '.github/workflows/botonic-plugin-text-classification-tests.yml'
+      - 'packages/botonic-plugin-intent-classification/**'
+      - '.github/workflows/botonic-plugin-intent-classification-tests.yml'
 
 jobs:
-  botonic-plugin-text-classification-tests:
-    name: Botonic plugin-text-classification tests
+  botonic-plugin-intent-classification-tests:
+    name: Botonic plugin-intent-classification tests
     runs-on: ubuntu-latest
     env:
-      PACKAGE: botonic-plugin-text-classification
+      PACKAGE: botonic-plugin-intent-classification
     steps:
       - name: Checking out to current branch
         uses: actions/checkout@v2
@@ -30,7 +30,7 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dev dependencies
         run: (cd ./packages/$PACKAGE && npm install -D)
-      - name: Build botonic-plugin-text-classification
+      - name: Build botonic-plugin-intent-classification
         run: (cd ./packages/$PACKAGE && npm run build)
 
       - name: Run tests
@@ -53,5 +53,5 @@ jobs:
           name: ${{env.PACKAGE}}
           env_vars: ${{env.PACKAGE}}
 
-      - name: Verify lint botonic-plugin-text-classification
+      - name: Verify lint botonic-plugin-intent-classification
         run: (cd ./packages/$PACKAGE && npm run lint_ci)

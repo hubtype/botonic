@@ -128,8 +128,8 @@ repos:
         language: system
         files: ^packages/botonic-plugin-ner/
 
-      - id: plugin-text-classification
-        name: plugin-text-classification
-        entry: scripts/qa/lint-package.sh packages/botonic-plugin-text-classification
+      - id: plugin-intent-classification
+        name: plugin-intent-classification
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-intent-classification
         language: system
-        files: ^packages/botonic-plugin-text-classification/
+        files: ^packages/botonic-plugin-intent-classification/
