@@ -1,6 +1,6 @@
 import { Locale } from '@botonic/nlp/lib/types'
 
-import { ASSETS_DIR, MODELS_DIR, TEXT_CLASSIFICATION_DIR } from '../constants'
+import { ASSETS_DIR, INTENT_CLASSIFICATION_DIR, MODELS_DIR } from '../constants'
 
 enum Environment {
   DEPLOYED,
@@ -10,9 +10,9 @@ enum Environment {
 export function getModelUri(locale: Locale): string {
   const domain = getEnvironmentDomain()
   if (getEnvironment() === Environment.DEPLOYED) {
-    return `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${TEXT_CLASSIFICATION_DIR}/${locale}`
+    return `${domain}/${ASSETS_DIR}/${MODELS_DIR}/${INTENT_CLASSIFICATION_DIR}/${locale}`
   } else {
-    return `${domain}/${TEXT_CLASSIFICATION_DIR}/${MODELS_DIR}/${locale}`
+    return `${domain}/${INTENT_CLASSIFICATION_DIR}/${MODELS_DIR}/${locale}`
   }
 }
 
