@@ -1,3 +1,3 @@
 export * from './constants'
-export * from './preprocessor'
+export * from './model-storage'
 export * from './types'
