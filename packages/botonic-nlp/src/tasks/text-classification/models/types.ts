@@ -1,9 +1,9 @@
-export type TextClassifierParameters = {
+export type IntentClassifierParameters = {
   dropout?: number
   units?: number
   learningRate?: number
 }
 
-export enum TEXT_CLASSIFIER_TEMPLATE {
+export enum INTENT_CLASSIFIER_TEMPLATE {
   SIMPLE_NN,
 }

@@ -8,9 +8,9 @@ import {
   train,
 } from '@tensorflow/tfjs-node'
 
-import { TextClassifierParameters } from './types'
+import { IntentClassifierParameters } from './types'
 
-const MODEL_NAME = 'SimpleTextClassifier'
+const MODEL_NAME = 'SimpleIntentClassifier'
 
 const DEFAULT_DROPOUT = 0.3
 const DEFAULT_UNITS = 128
@@ -20,7 +20,7 @@ export function createSimpleNN(
   maxLength: number,
   numClasses: number,
   embeddingsMatrix: Tensor2D,
-  params: TextClassifierParameters = {
+  params: IntentClassifierParameters = {
     dropout: DEFAULT_DROPOUT,
     units: DEFAULT_UNITS,
     learningRate: DEFAULT_LEARNING_RATE,
@@ -54,17 +54,17 @@ export function createSimpleNN(
     lstmLayer.apply(embeddingsLayer.apply(inputs))
   ) as SymbolicTensor
 
-  const textClassifierModel = model({
+  const intentClassifierModel = model({
     name: MODEL_NAME,
     inputs,
     outputs,
   })
 
-  textClassifierModel.compile({
+  intentClassifierModel.compile({
     optimizer: train.adam(params.learningRate ?? DEFAULT_LEARNING_RATE),
     loss: 'categoricalCrossentropy',
     metrics: ['accuracy'],
   })
 
-  return textClassifierModel
+  return intentClassifierModel
 }

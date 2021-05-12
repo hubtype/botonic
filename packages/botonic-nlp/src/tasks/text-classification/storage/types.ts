@@ -1,3 +1,3 @@
 import { NlpConfig } from '../../../storage/types'
 
-export type TextClassificationConfig = NlpConfig & { classes: string[] }
+export type IntentClassificationConfig = NlpConfig & { classes: string[] }
