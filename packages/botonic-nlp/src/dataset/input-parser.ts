@@ -29,22 +29,22 @@ export class InputParser {
   parse(): ParsedData {
     const files = this.getInputFiles()
 
-    let classes: string[] = []
-    let entities: string[] = []
-    let samples: Sample[] = []
+    const classes: Set<string> = new Set()
+    const entities: Set<string> = new Set()
+    const samples: Set<Sample> = new Set()
 
     files.forEach(filePath => {
       const parsedData = this.parseInputFile(filePath)
-      classes = classes.concat(parsedData.classes)
-      entities = entities.concat(parsedData.entities)
-      samples = samples.concat(parsedData.samples)
+      parsedData.classes.forEach(c => classes.add(c))
+      parsedData.entities.forEach(e => entities.add(e))
+      parsedData.samples.forEach(s => samples.add(s))
     })
 
-    classes = unique(classes)
-    entities = unique(entities)
-    samples = unique(samples)
-
-    return { classes, entities, samples }
+    return {
+      classes: Array.from(classes),
+      entities: Array.from(entities),
+      samples: Array.from(samples),
+    }
   }
 
   private getInputFiles(): string[] {
