@@ -21,7 +21,7 @@ import { Intent, PredictionProcessor, Processor } from './process'
 import { IntentClassificationConfigStorage } from './storage'
 
 export class BotonicIntentClassifier {
-  readonly classes: string[]
+  readonly intents: string[]
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
@@ -29,17 +29,17 @@ export class BotonicIntentClassifier {
   constructor(
     readonly locale: Locale,
     readonly maxLength: number,
-    classes: string[],
+    intents: string[],
     readonly vocabulary: string[],
     private readonly preprocessor: Preprocessor
   ) {
-    this.classes = unique(classes)
+    this.intents = unique(intents)
     this.processor = new Processor(
       this.preprocessor,
       new LabelEncoder(new IndexedItems(this.vocabulary)),
-      new OneHotEncoder(new IndexedItems(this.classes))
+      new OneHotEncoder(new IndexedItems(this.intents))
     )
-    this.predictionProcessor = new PredictionProcessor(this.classes)
+    this.predictionProcessor = new PredictionProcessor(this.intents)
   }
 
   static async load(
@@ -50,7 +50,7 @@ export class BotonicIntentClassifier {
     const classifier = new BotonicIntentClassifier(
       config.locale,
       config.maxLength,
-      config.classes,
+      config.intents,
       config.vocabulary,
       preprocessor
     )
@@ -73,7 +73,7 @@ export class BotonicIntentClassifier {
       case INTENT_CLASSIFIER_TEMPLATE.SIMPLE_NN:
         return createSimpleNN(
           this.maxLength,
-          this.classes.length,
+          this.intents.length,
           embeddingsMatrix,
           params
         )
@@ -113,7 +113,7 @@ export class BotonicIntentClassifier {
       locale: this.locale,
       maxLength: this.maxLength,
       vocabulary: this.vocabulary,
-      classes: this.classes,
+      intents: this.intents,
     }
     new IntentClassificationConfigStorage().save(path, config)
     await this.modelManager.save(path)
