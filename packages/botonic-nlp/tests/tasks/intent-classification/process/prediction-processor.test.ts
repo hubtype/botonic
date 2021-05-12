@@ -7,9 +7,9 @@ import * as helper from '../../../helpers/constants-helper'
 describe('Prediction Processor', () => {
   test('Process Prediction', () => {
     const prediction = tensor([[0.3, 0.7]]) as OutputData
-    const sut = new PredictionProcessor(helper.CLASSES)
+    const sut = new PredictionProcessor(helper.INTENTS)
     const intents = sut.process(prediction)
-    expect(intents.length).toEqual(helper.CLASSES.length)
-    expect(intents[0].label).toEqual(helper.CLASSES[1])
+    expect(intents.length).toEqual(helper.INTENTS.length)
+    expect(intents[0].label).toEqual(helper.INTENTS[1])
   })
 })

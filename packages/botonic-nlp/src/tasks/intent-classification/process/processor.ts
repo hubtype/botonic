@@ -11,14 +11,14 @@ export class Processor {
   constructor(
     readonly preprocessor: Preprocessor,
     readonly tokensEncoder: LabelEncoder,
-    readonly classEncoder: OneHotEncoder
+    readonly intentEncoder: OneHotEncoder
   ) {}
 
   processSamples(samples: Sample[]): { x: InputData; y: OutputData } {
     const texts = samples.map(sample => sample.text)
-    const classes = samples.map(sample => sample.class)
+    const intents = samples.map(sample => sample.intent)
 
-    return { x: this.processTexts(texts), y: this.generateOutput(classes) }
+    return { x: this.processTexts(texts), y: this.generateOutput(intents) }
   }
 
   processTexts(texts: string[]): InputData {
@@ -42,7 +42,7 @@ export class Processor {
   }
 
   //TODO: modify encoders to just encode one token (not sequences).
-  private generateOutput(classes: string[]): OutputData {
-    return tensor(this.classEncoder.encode(classes))
+  private generateOutput(intents: string[]): OutputData {
+    return tensor(this.intentEncoder.encode(intents))
   }
 }

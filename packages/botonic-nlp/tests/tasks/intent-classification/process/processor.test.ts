@@ -11,18 +11,18 @@ describe('Intent Classification Processor', () => {
   const sut = new Processor(
     toolsHelper.preprocessor,
     toolsHelper.tokenEncoder,
-    toolsHelper.classEncoder
+    toolsHelper.intentEncoder
   )
 
   test('Process samples', () => {
     const { x, y } = sut.processSamples([
       {
-        class: 'BuyProduct',
+        intent: 'BuyProduct',
         entities: [{ start: 27, end: 32, label: 'product' }],
         text: SHORT_TEXT,
       },
       {
-        class: 'BuyProduct',
+        intent: 'BuyProduct',
         entities: [{ start: 27, end: 32, label: 'product' }],
         text: LONG_TEXT,
       },
@@ -32,7 +32,7 @@ describe('Intent Classification Processor', () => {
       [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
       [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
     ])
-    expect(y.shape).toEqual([2, constantsHelper.CLASSES.length])
+    expect(y.shape).toEqual([2, constantsHelper.INTENTS.length])
     expect(y.arraySync()).toEqual([
       [1, 0],
       [1, 0],
