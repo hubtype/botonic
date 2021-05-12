@@ -1,27 +1,21 @@
 import { Dataset } from '../../src/dataset/dataset'
 import { PADDING_TOKEN, UNKNOWN_TOKEN } from '../../src/preprocess/constants'
-import * as helper from '../helpers/tools-helper'
+import * as constantssHelper from '../helpers/constants-helper'
+import * as toolsHelper from '../helpers/tools-helper'
 
 describe('Dataset', () => {
-  const sut = new Dataset(
-    ['BuyProduct', 'ReturnProduct'],
-    ['product', 'material'],
-    [
-      { text: 'I want to buy this', class: 'BuyProduct', entities: [] },
-      { text: 'I want to return this', class: 'ReturnProduct', entities: [] },
-      {
-        text: 'I would like to return it',
-        class: 'ReturnProduct',
-        entities: [],
-      },
-      { text: 'I would like to buy it', class: 'BuyProduct', entities: [] },
-    ]
-  )
+  const sut = Dataset.load(constantssHelper.DATA_DIR_PATH)
+
+  test('Load Dataset', () => {
+    expect(sut.classes).toEqual(['BuyProduct', 'ReturnProduct'])
+    expect(sut.entities).toEqual(['product', 'color', 'size'])
+    expect(sut.samples.length).toEqual(180)
+  })
 
   test('Split Dataset', () => {
     const { trainSet, testSet } = sut.split(0.25)
-    expect(trainSet.length).toEqual(3)
-    expect(testSet.length).toEqual(1)
+    expect(trainSet.length).toEqual(135)
+    expect(testSet.length).toEqual(45)
   })
 
   test('Wrong Split Proportions', () => {
@@ -31,7 +25,9 @@ describe('Dataset', () => {
   })
 
   test('Vocabulary Extraction', () => {
-    const vocabulary = helper.dataset.extractVocabulary(helper.preprocessor)
+    const vocabulary = toolsHelper.dataset.extractVocabulary(
+      toolsHelper.preprocessor
+    )
     expect(vocabulary.length).toBeGreaterThan(2)
     expect(vocabulary.includes(PADDING_TOKEN)).toBeTruthy()
     expect(vocabulary.includes(UNKNOWN_TOKEN)).toBeTruthy()

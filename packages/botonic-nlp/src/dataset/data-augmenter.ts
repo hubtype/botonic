@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { AugmenterMap } from './types'
+
+export type AugmenterMap = { [keyword: string]: string[] }
 
 export class DataAugmenter {
   // eslint-disable-next-line no-useless-escape
@@ -44,7 +45,7 @@ export class DataAugmenter {
         )
       } else {
         throw new Error(
-          `Unable to augment the data. Undefined keyword: ${keyword}`
+          `Unable to augment the data. Undefined keyword '${keyword}'`
         )
       }
     }

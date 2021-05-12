@@ -1,33 +1,43 @@
-import { Sample } from './types'
+export type DefinedEntity = { start: number; end: number; label: string }
 
 export class EntitiesParser {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  static ENTITY_DEFINITION_PATTERN = /\[(.*?)\]\((.*?)\)/gm
+  private ENTITY_DEFINITION_PATTERN = /\[(.*?)\]\((.*?)\)/gm
 
-  static parse(samples: Sample[], entities: string[]): Sample[] {
-    return samples.map(sample => EntitiesParser.parseSample(sample, entities))
-  }
+  constructor(readonly entities: string[]) {}
 
-  private static parseSample(sample: Sample, entities: string[]): Sample {
-    const text = sample.text
-    let accumulation = 0
+  parse(sentence: string): { text: string; entities: DefinedEntity[] } {
+    const definedEntities = []
+
+    let text = sentence
     let m
-    while ((m = EntitiesParser.ENTITY_DEFINITION_PATTERN.exec(text))) {
-      if (entities.includes(m[2])) {
-        sample.text = sample.text
-          .slice(0, m.index - accumulation)
-          .concat(m[1], sample.text.slice(m.index + m[0].length - accumulation))
-        sample.entities.push({
-          text: m[1],
-          label: m[2],
-          start: m.index - accumulation,
-          end: m.index + m[1].length - accumulation,
-        })
-        accumulation += m[0].length - m[1].length
-      } else {
-        throw new Error(`Undefined entity: ${m[2]}`)
+
+    let charactersRemoved = 0 //amount of characters removed because of entity definition removal: [shirt](product) -> shirt.
+
+    while ((m = this.ENTITY_DEFINITION_PATTERN.exec(sentence))) {
+      const entityDefinition = m[0]
+      const entityText = m[1]
+      const entityLabel = m[2]
+
+      if (!this.entities.includes(entityLabel)) {
+        throw new Error(`Undefined entity '${entityLabel}'`)
       }
+
+      text = text
+        .slice(0, m.index - charactersRemoved)
+        .concat(
+          entityText,
+          text.slice(m.index + entityDefinition.length - charactersRemoved)
+        )
+
+      definedEntities.push({
+        label: entityLabel,
+        start: m.index - charactersRemoved,
+        end: m.index + entityText.length - charactersRemoved,
+      })
+
+      charactersRemoved += entityDefinition.length - entityText.length
     }
-    return sample
+
+    return { text, entities: definedEntities }
   }
 }

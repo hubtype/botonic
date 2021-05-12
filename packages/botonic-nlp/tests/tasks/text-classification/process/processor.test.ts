@@ -18,12 +18,12 @@ describe('Text Classification Processor', () => {
     const { x, y } = sut.processSamples([
       {
         class: 'BuyProduct',
-        entities: [{ start: 27, end: 32, text: 'shoes', label: 'product' }],
+        entities: [{ start: 27, end: 32, label: 'product' }],
         text: SHORT_TEXT,
       },
       {
         class: 'BuyProduct',
-        entities: [{ start: 27, end: 32, text: 'shoes', label: 'product' }],
+        entities: [{ start: 27, end: 32, label: 'product' }],
         text: LONG_TEXT,
       },
     ])
