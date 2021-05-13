@@ -19,7 +19,7 @@ export class IntentClassifier {
       this.config.vocabulary,
       new Preprocessor(this.config.locale, this.config.maxLength)
     )
-    this.predictionProcessor = new PredictionProcessor(this.config.classes)
+    this.predictionProcessor = new PredictionProcessor(this.config.intents)
   }
 
   classify(text: string): Intent[] {
