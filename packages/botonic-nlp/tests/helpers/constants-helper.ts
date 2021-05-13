@@ -4,7 +4,7 @@ import { join } from 'path'
 export const LOCALE = 'en'
 export const MAX_SEQUENCE_LENGTH = 12
 
-export const CLASSES = ['BuyProduct', 'ReturnProduct']
+export const INTENTS = ['BuyProduct', 'ReturnProduct']
 export const ENTITIES = ['product', 'color', 'size']
 
 export const VOCABULARY = [

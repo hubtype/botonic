@@ -6,12 +6,12 @@ describe('Input Data Reader', () => {
     const sut = new InputDataReader(helper.DATA_DIR_PATH)
     const inputData = sut.read()
     expect(inputData.length).toEqual(2)
-    expect(inputData.map(i => i.class).sort()).toEqual(helper.CLASSES.sort())
+    expect(inputData.map(i => i.intent).sort()).toEqual(helper.INTENTS.sort())
     expect(inputData.map(i => i.entities).sort()).toEqual(
-      Array(helper.CLASSES.length).fill(helper.ENTITIES).sort()
+      Array(helper.INTENTS.length).fill(helper.ENTITIES).sort()
     )
     expect(
-      inputData.filter(i => i.class == 'BuyProduct').map(i => i.samples.length)
+      inputData.filter(i => i.intent == 'BuyProduct').map(i => i.samples.length)
     ).toEqual([5])
   })
 })

@@ -1,4 +1,4 @@
-class: BuyProduct
+intent: BuyProduct
 
 entities:
   - product

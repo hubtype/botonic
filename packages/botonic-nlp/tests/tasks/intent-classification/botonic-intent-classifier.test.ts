@@ -13,7 +13,7 @@ describe('Botonic Intent Classifier', () => {
   const sut = new BotonicIntentClassifier(
     constantsHelper.LOCALE,
     constantsHelper.MAX_SEQUENCE_LENGTH,
-    constantsHelper.CLASSES,
+    constantsHelper.INTENTS,
     vocabulary,
     toolsHelper.preprocessor
   )

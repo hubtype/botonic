@@ -6,17 +6,17 @@ import { InputDataReader } from './input-data-reader'
 
 export class Dataset {
   private constructor(
-    readonly classes: string[],
+    readonly intents: string[],
     readonly entities: string[],
     readonly samples: Sample[]
   ) {}
 
   static load(path: string): Dataset {
     const inputData = new InputDataReader(path).read()
-    const { classes, entities, samples } = new InputDataParser().parse(
+    const { intents, entities, samples } = new InputDataParser().parse(
       inputData
     )
-    return new Dataset(classes, entities, samples)
+    return new Dataset(intents, entities, samples)
   }
 
   split(
@@ -30,8 +30,8 @@ export class Dataset {
     const trainSamples = samples.slice(testProportion * samples.length)
     const testSamples = samples.slice(0, testProportion * samples.length)
     return {
-      trainSet: new Dataset(this.classes, this.entities, trainSamples),
-      testSet: new Dataset(this.classes, this.entities, testSamples),
+      trainSet: new Dataset(this.intents, this.entities, trainSamples),
+      testSet: new Dataset(this.intents, this.entities, testSamples),
     }
   }
 

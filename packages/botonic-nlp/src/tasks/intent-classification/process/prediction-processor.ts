@@ -5,7 +5,7 @@ export class Intent {
 }
 
 export class PredictionProcessor {
-  constructor(private readonly classes: string[]) {}
+  constructor(private readonly intents: string[]) {}
 
   process(prediction: OutputData): Intent[] {
     const confidences = prediction.arraySync()[0]
@@ -15,7 +15,7 @@ export class PredictionProcessor {
 
   private createIntents(confidences: number[]): Intent[] {
     return confidences.map(
-      (confidence, idx) => new Intent(this.classes[idx], confidence)
+      (confidence, idx) => new Intent(this.intents[idx], confidence)
     )
   }
 

@@ -8,10 +8,10 @@ import { Preprocessor } from '../../src/preprocess'
 import { NEUTRAL_ENTITY } from '../../src/tasks/ner/process/constants'
 import { Processor as NerProcessor } from '../../src/tasks/ner/process/processor'
 import {
-  CLASSES,
   DATA_DIR_PATH,
   EMBEDDINGS_DIMENSION,
   ENTITIES,
+  INTENTS,
   LOCALE,
   MAX_SEQUENCE_LENGTH,
   VOCABULARY,
@@ -22,7 +22,7 @@ export const dataset = Dataset.load(DATA_DIR_PATH)
 export const preprocessor = new Preprocessor(LOCALE, MAX_SEQUENCE_LENGTH)
 
 export const tokenEncoder = new LabelEncoder(new IndexedItems(VOCABULARY))
-export const classEncoder = new OneHotEncoder(new IndexedItems(CLASSES))
+export const intentEncoder = new OneHotEncoder(new IndexedItems(INTENTS))
 export const entitiesEncoder = new OneHotEncoder(
   new IndexedItems([NEUTRAL_ENTITY].concat(ENTITIES))
 )

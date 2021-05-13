@@ -33,5 +33,5 @@
     "t-shirt",
     "white"
   ],
-  "classes": ["BuyProduct", "ReturnProduct"]
+  "intents": ["BuyProduct", "ReturnProduct"]
 }
