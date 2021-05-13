@@ -5,7 +5,7 @@ import { ModelSelector } from './model/model-selector'
 import type { PluginOptions } from './types'
 import { detectLocale } from './utils/locale-utils'
 
-export default class BotonicPluginTextClassification implements Plugin {
+export default class BotonicPluginIntentClassification implements Plugin {
   private readonly modelsSelector: Promise<ModelSelector>
 
   constructor(readonly options: PluginOptions) {

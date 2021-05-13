@@ -1,11 +1,11 @@
 import { Locale } from '@botonic/nlp/lib/types'
 
 import { getModelUri } from '../utils/environment-utils'
+import { IntentClassifier } from './intent-classifier'
 import { ModelInfo } from './model-info'
-import { TextClassifier } from './text-classifier'
 
 export class ModelSelector {
-  private models: { [locale: string]: TextClassifier } = {}
+  private models: { [locale: string]: IntentClassifier } = {}
 
   private constructor(readonly locales: Locale[]) {}
 
@@ -16,7 +16,7 @@ export class ModelSelector {
     return selector
   }
 
-  select(locale: Locale): TextClassifier {
+  select(locale: Locale): IntentClassifier {
     return this.models[locale]
   }
 
@@ -31,7 +31,7 @@ export class ModelSelector {
       const locale = modelInfo.locale
       const config = await modelInfo.getConfig()
       const model = await modelInfo.getModel()
-      this.models[locale] = new TextClassifier(config, model)
+      this.models[locale] = new IntentClassifier(config, model)
     }
   }
 }

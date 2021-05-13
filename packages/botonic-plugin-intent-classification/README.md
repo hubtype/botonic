@@ -1,10 +1,10 @@
-# Botonic Plugin Text Classification
+# Botonic Plugin Intent Classification
 
 ## What does this plugin do?
 
-Botonic Plugin Text Classification uses the trained models defined by the user to classify the input text.
+Botonic Plugin Intent Classification uses the trained models defined by the user to predict the intent of the input text.
 
-After detecting the text locale, and using the corresponding model to predict the class, extra information about the user's intent is added to the input object.
+After detecting the text locale, the plugin uses the corresponding model to predict the intent and adding some information about it into the input object.
 
 ## Setup
 
@@ -13,7 +13,7 @@ After detecting the text locale, and using the corresponding model to predict th
 From your project, install the plugin by using the following command:
 
 ```bash
-npm install @botonic/plugin-text-classification
+npm install @botonic/plugin-intent-classification
 ```
 
 > **Note**: Windows users should first use the command
@@ -28,8 +28,8 @@ The plugin must be required in `src/plugins.js` and, the locales of the trained 
 ```javascript
 export const plugins = [
   {
-    id: 'text-classification',
-    resolve: require('@botonic/plugin-text-classification'),
+    id: 'intent-classification',
+    resolve: require('@botonic/plugin-intent-classification'),
     options: {
       locales: ['en', 'es'],
     },

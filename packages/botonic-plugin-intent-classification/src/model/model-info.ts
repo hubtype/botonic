@@ -1,4 +1,4 @@
-import { TextClassificationConfig } from '@botonic/nlp/lib/tasks/text-classification/storage/types'
+import { IntentClassificationConfig } from '@botonic/nlp/lib/tasks/intent-classification/storage/types'
 import { Locale } from '@botonic/nlp/lib/types'
 import { LayersModel, loadLayersModel } from '@tensorflow/tfjs'
 import axios, { AxiosPromise } from 'axios'
@@ -7,7 +7,7 @@ import { fetch } from 'cross-fetch'
 import { CONFIG_FILENAME, MODEL_FILENAME } from '../constants'
 
 export class ModelInfo {
-  private readonly config: AxiosPromise<TextClassificationConfig>
+  private readonly config: AxiosPromise<IntentClassificationConfig>
   private readonly model: Promise<LayersModel>
 
   constructor(readonly locale: Locale, readonly uri: string) {
@@ -18,7 +18,7 @@ export class ModelInfo {
     })
   }
 
-  async getConfig(): Promise<TextClassificationConfig> {
+  async getConfig(): Promise<IntentClassificationConfig> {
     return (await this.config).data
   }
 

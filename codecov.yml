@@ -58,7 +58,7 @@ flags:
       - packages/botonic-plugin-ner
     carryforward: true
 
-  botonic-plugin-text-classification:
+  botonic-plugin-intent-classification:
     paths:
-      - packages/botonic-plugin-text-classification
+      - packages/botonic-plugin-intent-classification
     carryforward: true

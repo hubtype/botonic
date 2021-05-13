@@ -1,18 +1,18 @@
 import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
-import { Intent } from '@botonic/nlp/lib/tasks/text-classification/process/prediction-processor'
-import type { TextClassificationConfig } from '@botonic/nlp/lib/tasks/text-classification/storage/types'
+import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process/prediction-processor'
+import type { IntentClassificationConfig } from '@botonic/nlp/lib/tasks/intent-classification/storage/types'
 import type { Tensor2D } from '@tensorflow/tfjs'
 import { LayersModel } from '@tensorflow/tfjs'
 
 import { PredictionProcessor } from '../process/prediction-processor'
 import { TextProcessor } from '../process/text-processor'
 
-export class TextClassifier {
+export class IntentClassifier {
   private readonly textProcessor: TextProcessor
   private readonly predictionProcessor: PredictionProcessor
 
   constructor(
-    private readonly config: TextClassificationConfig,
+    private readonly config: IntentClassificationConfig,
     private readonly model: LayersModel
   ) {
     this.textProcessor = new TextProcessor(
