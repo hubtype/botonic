@@ -41,7 +41,7 @@ class Task {
 export class Tasks {
   static tasks = {
     ner: new Task('ner'),
-    'text-classification': new Task('text-classification'),
+    'intent-classification': new Task('intent-classification'),
   }
 
   static getAll(): Task[] {
