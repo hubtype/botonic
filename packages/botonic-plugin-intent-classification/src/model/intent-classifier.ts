@@ -1,6 +1,6 @@
-import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
-import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process/prediction-processor'
-import type { IntentClassificationConfig } from '@botonic/nlp/lib/tasks/intent-classification/storage/types'
+import { Preprocessor } from '@botonic/nlp/lib/preprocess'
+import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process'
+import type { IntentClassificationConfig } from '@botonic/nlp/lib/tasks/intent-classification/storage'
 import type { Tensor2D } from '@tensorflow/tfjs'
 import { LayersModel } from '@tensorflow/tfjs'
 
@@ -19,7 +19,7 @@ export class IntentClassifier {
       this.config.vocabulary,
       new Preprocessor(this.config.locale, this.config.maxLength)
     )
-    this.predictionProcessor = new PredictionProcessor(this.config.classes)
+    this.predictionProcessor = new PredictionProcessor(this.config.intents)
   }
 
   classify(text: string): Intent[] {

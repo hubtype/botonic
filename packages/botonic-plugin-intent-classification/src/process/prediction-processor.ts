@@ -1,8 +1,8 @@
-import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process/prediction-processor'
+import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process'
 import type { Tensor2D } from '@tensorflow/tfjs'
 
 export class PredictionProcessor {
-  constructor(private readonly classes: string[]) {}
+  constructor(private readonly intents: string[]) {}
 
   process(prediction: Tensor2D): Intent[] {
     const confidences = prediction.arraySync()[0]
@@ -12,7 +12,7 @@ export class PredictionProcessor {
 
   private createIntents(confidences: number[]): Intent[] {
     return confidences.map(
-      (confidence, idx) => new Intent(this.classes[idx], confidence)
+      (confidence, idx) => new Intent(this.intents[idx], confidence)
     )
   }
 
