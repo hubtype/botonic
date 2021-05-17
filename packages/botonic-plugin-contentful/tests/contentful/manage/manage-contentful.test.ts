@@ -71,8 +71,12 @@ describe('ManageContentful fields', () => {
         )
       }
       // ACT
-      await sut.updateFields(ctxt({ locale: SPANISH }), TEST_CONTENT_ID, {
-        [ContentFieldType.TEXT]: newValue,
+      // Despite the check of oldTextValue, it's possible that the content is externally updated
+      // in the interim
+      await repeatWithBackoff(async () => {
+        await sut.updateFields(ctxt({ locale: SPANISH }), TEST_CONTENT_ID, {
+          [ContentFieldType.TEXT]: newValue,
+        })
       })
       await repeatWithBackoff(async () => {
         const newContent = await contentful.text(TEST_CONTENT_ID.id, {
@@ -87,6 +91,9 @@ describe('ManageContentful fields', () => {
   }
 
   async function restoreValue(manage: ManageCms) {
+    contentful.text(TEST_CONTENT_ID.id, {
+      locale: SPANISH,
+    })
     await manage.updateFields(
       ctxt({ locale: SPANISH, allowOverwrites: true }),
       TEST_CONTENT_ID,
