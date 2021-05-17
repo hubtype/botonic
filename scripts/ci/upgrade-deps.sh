@@ -7,6 +7,8 @@ renice 10 $$ > /dev/null
 # restart eslint_d in case any eslint plugin has been upgraded
 eslint_d stop > /dev/null
 
+echo "Upgrading common dev dependencies"
+echo "===================================="
 npm i -D
 
 # upgrade dependencies of all packages
