@@ -65,7 +65,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "sort-stream": "^1.0.1",
-    "xlsx": "^0.16.9"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@types/joi": "^14.3.4",
