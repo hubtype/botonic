@@ -8,7 +8,7 @@ export enum ENVIRONMENT {
 }
 
 export function getEnvironment(): ENVIRONMENT {
-  if (process.env.STATIC_URL !== undefined) {
+  if (typeof process !== 'undefined' && process.env.STATIC_URL !== undefined) {
     return ENVIRONMENT.DEPLOYED
   } else {
     return ENVIRONMENT.LOCAL
@@ -17,7 +17,7 @@ export function getEnvironment(): ENVIRONMENT {
 
 export function getDomain(): string {
   if (getEnvironment() == ENVIRONMENT.DEPLOYED) {
-    return process.env.STATIC_URL
+    return typeof process !== 'undefined' && process.env.STATIC_URL
   } else {
     return window.location.href
   }
