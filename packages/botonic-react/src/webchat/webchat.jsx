@@ -946,9 +946,7 @@ export const Webchat = forwardRef((props, ref) => {
           )}
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
-          {webchatState.isCoverComponentOpen && (
-            <DarkenBackground component={coverComponent()} />
-          )}
+          {webchatState.isCoverComponentOpen && coverComponent()}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>
