@@ -10,13 +10,13 @@ import * as toolsHelper from '../../helpers/tools-helper'
 describe('Botonic Intent Classifier', () => {
   const { trainSet, testSet } = toolsHelper.dataset.split()
   const vocabulary = trainSet.extractVocabulary(toolsHelper.preprocessor)
-  const sut = new BotonicIntentClassifier(
-    constantsHelper.LOCALE,
-    constantsHelper.MAX_SEQUENCE_LENGTH,
-    constantsHelper.INTENTS,
-    vocabulary,
-    toolsHelper.preprocessor
-  )
+  const sut = new BotonicIntentClassifier({
+    locale: constantsHelper.LOCALE,
+    maxLength: constantsHelper.MAX_SEQUENCE_LENGTH,
+    vocabulary: vocabulary,
+    intents: constantsHelper.INTENTS,
+    preprocessor: toolsHelper.preprocessor,
+  })
 
   test('Train and Evaluate model', async () => {
     const model = await sut.createModel(
