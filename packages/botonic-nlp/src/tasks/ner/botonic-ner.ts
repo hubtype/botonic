@@ -12,6 +12,7 @@ import { Preprocessor } from '../../preprocess'
 import { ModelStorage } from '../../storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils'
+import { NlpTaskConfig } from '../nlp-task-config'
 import { createBiLstmModel, NER_TEMPLATE, NerModelParameters } from './models'
 import {
   Entity,
@@ -21,26 +22,30 @@ import {
 } from './process'
 import { NerConfig, NerConfigStorage } from './storage'
 
+export interface EntityRecognizerConfig extends NlpTaskConfig {
+  entities: string[]
+}
+
 export class BotonicNer {
+  readonly locale: Locale
+  readonly maxLength: number
+  readonly vocabulary: string[]
   readonly entities: string[]
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
-  constructor(
-    readonly locale: Locale,
-    readonly maxLength: number,
-    entities: string[],
-    readonly vocabulary: string[],
-    private readonly preprocessor: Preprocessor
-  ) {
-    this.entities = unique([NEUTRAL_ENTITY].concat(entities))
+  constructor(config: EntityRecognizerConfig) {
+    this.locale = config.locale
+    this.maxLength = config.maxLength
+    this.vocabulary = config.vocabulary
+    this.entities = unique([NEUTRAL_ENTITY].concat(config.entities))
     this.processor = new Processor(
-      this.preprocessor,
-      new LabelEncoder(new IndexedItems(this.vocabulary)),
+      config.preprocessor,
+      new LabelEncoder(new IndexedItems(config.vocabulary)),
       new OneHotEncoder(new IndexedItems(this.entities))
     )
-    this.predictionProcessor = new PredictionProcessor(this.entities)
+    this.predictionProcessor = new PredictionProcessor(config.entities)
   }
 
   static async load(
@@ -48,13 +53,13 @@ export class BotonicNer {
     preprocessor: Preprocessor
   ): Promise<BotonicNer> {
     const config = NerConfigStorage.load(path)
-    const ner = new BotonicNer(
-      config.locale,
-      config.maxLength,
-      config.entities,
-      config.vocabulary,
-      preprocessor
-    )
+    const ner = new BotonicNer({
+      locale: config.locale,
+      maxLength: config.maxLength,
+      vocabulary: config.vocabulary,
+      entities: config.entities,
+      preprocessor,
+    })
     ner.modelManager = new ModelManager(await ModelStorage.load(path))
     return ner
   }
