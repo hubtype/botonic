@@ -12,6 +12,7 @@ import { Preprocessor } from '../../preprocess'
 import { ModelStorage } from '../../storage'
 import { Locale } from '../../types'
 import { unique } from '../../utils'
+import { NlpTaskConfig } from '../nlp-task-config'
 import {
   createSimpleNN,
   INTENT_CLASSIFIER_TEMPLATE,
@@ -20,26 +21,30 @@ import {
 import { Intent, PredictionProcessor, Processor } from './process'
 import { IntentClassificationConfigStorage } from './storage'
 
+export interface IntentClassifierConfig extends NlpTaskConfig {
+  intents: string[]
+}
+
 export class BotonicIntentClassifier {
+  readonly locale: Locale
+  readonly maxLength: number
+  readonly vocabulary: string[]
   readonly intents: string[]
   private processor: Processor
   private predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
-  constructor(
-    readonly locale: Locale,
-    readonly maxLength: number,
-    intents: string[],
-    readonly vocabulary: string[],
-    private readonly preprocessor: Preprocessor
-  ) {
-    this.intents = unique(intents)
+  constructor(config: IntentClassifierConfig) {
+    this.locale = config.locale
+    this.maxLength = config.maxLength
+    this.vocabulary = config.vocabulary
+    this.intents = unique(config.intents)
     this.processor = new Processor(
-      this.preprocessor,
+      config.preprocessor,
       new LabelEncoder(new IndexedItems(this.vocabulary)),
       new OneHotEncoder(new IndexedItems(this.intents))
     )
-    this.predictionProcessor = new PredictionProcessor(this.intents)
+    this.predictionProcessor = new PredictionProcessor(config.intents)
   }
 
   static async load(
@@ -47,13 +52,13 @@ export class BotonicIntentClassifier {
     preprocessor: Preprocessor
   ): Promise<BotonicIntentClassifier> {
     const config = new IntentClassificationConfigStorage().load(path)
-    const classifier = new BotonicIntentClassifier(
-      config.locale,
-      config.maxLength,
-      config.intents,
-      config.vocabulary,
-      preprocessor
-    )
+    const classifier = new BotonicIntentClassifier({
+      locale: config.locale,
+      maxLength: config.maxLength,
+      vocabulary: config.vocabulary,
+      intents: config.intents,
+      preprocessor,
+    })
     classifier.modelManager = new ModelManager(await ModelStorage.load(path))
     return classifier
   }
