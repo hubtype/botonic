@@ -24,7 +24,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "skipLibCheck": true
   },
   // test options
   "types": [
