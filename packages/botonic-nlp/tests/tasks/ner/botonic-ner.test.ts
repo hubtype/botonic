@@ -7,13 +7,13 @@ import * as toolsHelper from '../../helpers/tools-helper'
 describe('Botonic NER', () => {
   const { trainSet, testSet } = toolsHelper.dataset.split()
   const vocabulary = trainSet.extractVocabulary(toolsHelper.preprocessor)
-  const sut = new BotonicNer(
-    constantsHelper.LOCALE,
-    constantsHelper.MAX_SEQUENCE_LENGTH,
-    constantsHelper.ENTITIES,
-    vocabulary,
-    toolsHelper.preprocessor
-  )
+  const sut = new BotonicNer({
+    locale: constantsHelper.LOCALE,
+    maxLength: constantsHelper.MAX_SEQUENCE_LENGTH,
+    vocabulary: vocabulary,
+    entities: constantsHelper.ENTITIES,
+    preprocessor: toolsHelper.preprocessor,
+  })
 
   test('Evaluate model', async () => {
     // arrange
