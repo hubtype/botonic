@@ -18,14 +18,14 @@ export function getModelUri(locale: Locale): string {
 
 function getEnvironmentDomain(): string {
   if (getEnvironment() == Environment.DEPLOYED) {
-    return process.env.STATIC_URL
+    return typeof process !== 'undefined' && process.env.STATIC_URL
   } else {
     return window.location.href
   }
 }
 
 function getEnvironment(): Environment {
-  if (process.env.STATIC_URL !== undefined) {
+  if (typeof process !== 'undefined' && process.env.STATIC_URL !== undefined) {
     return Environment.DEPLOYED
   } else {
     return Environment.LOCAL

@@ -1,6 +1,6 @@
-import { Preprocessor } from '@botonic/nlp/lib/preprocess'
-import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process'
-import type { IntentClassificationConfig } from '@botonic/nlp/lib/tasks/intent-classification/storage'
+import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
+import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process/prediction-processor'
+import type { IntentClassificationConfig } from '@botonic/nlp/lib/tasks/intent-classification/storage/types'
 import type { Tensor2D } from '@tensorflow/tfjs'
 import { LayersModel } from '@tensorflow/tfjs'
 
