@@ -25,8 +25,4 @@ export class ModelManager {
   predict(x: Tensor): Tensor {
     return this.model.predict(x) as Tensor
   }
-
-  async save(path: string): Promise<void> {
-    ModelStorage.save(this.model, path)
-  }
 }
