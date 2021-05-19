@@ -17,7 +17,7 @@ export class ConfigStorage {
     return readJSON(join(path, this.CONFIG_FILENAME))
   }
 
-  save<T extends NlpTaskConfig>(path: string, config: T): void {
+  save<T extends NlpTaskConfig>(config: T, path: string): void {
     mkdirSync(path, { recursive: true })
     writeFileSync(join(path, this.CONFIG_FILENAME), JSON.stringify(config))
   }
