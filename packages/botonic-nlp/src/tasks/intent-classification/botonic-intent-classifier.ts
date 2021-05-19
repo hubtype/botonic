@@ -30,8 +30,8 @@ export class BotonicIntentClassifier {
   readonly maxLength: number
   readonly vocabulary: string[]
   readonly intents: string[]
-  private processor: Processor
-  private predictionProcessor: PredictionProcessor
+  private readonly processor: Processor
+  private readonly predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
   constructor(config: IntentClassifierConfig) {

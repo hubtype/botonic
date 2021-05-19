@@ -31,8 +31,8 @@ export class BotonicNer {
   readonly maxLength: number
   readonly vocabulary: string[]
   readonly entities: string[]
-  private processor: Processor
-  private predictionProcessor: PredictionProcessor
+  private readonly processor: Processor
+  private readonly predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
   constructor(config: EntityRecognizerConfig) {
