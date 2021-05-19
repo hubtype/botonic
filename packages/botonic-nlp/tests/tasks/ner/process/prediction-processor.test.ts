@@ -9,16 +9,19 @@ import * as toolsHelper from '../../../helpers/tools-helper'
 
 describe('Prediction processor', () => {
   test('process prediction', async () => {
-    const manager = new ModelManager(
-      await ModelStorage.load(constantsHelper.NER_MODEL_DIR_PATH)
+    const model = await new ModelStorage().load(
+      constantsHelper.NER_MODEL_DIR_PATH
     )
+    const manager = new ModelManager(model)
     const { sequence, input } = toolsHelper.nerProcessor.generateInput(
       'I want to return this jacket'
     )
     const prediction = manager.predict(input) as Tensor3D
+
     const sut = new PredictionProcessor(
       [NEUTRAL_ENTITY].concat(constantsHelper.ENTITIES)
     )
+
     const entities = sut.process(sequence, prediction)
     expect(entities.length).toEqual(1)
     expect(entities.map(e => e.label)).toEqual(['product'])
