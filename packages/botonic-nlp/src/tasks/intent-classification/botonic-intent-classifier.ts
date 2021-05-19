@@ -9,57 +9,46 @@ import {
 import { IndexedItems, LabelEncoder, OneHotEncoder } from '../../encode'
 import { ModelEvaluation, ModelManager } from '../../model'
 import { Preprocessor } from '../../preprocess'
-import { ModelStorage } from '../../storage'
-import { Locale } from '../../types'
+import { ConfigStorage, ModelStorage, NlpTaskConfig } from '../../storage'
 import { unique } from '../../utils'
-import { NlpTaskConfig } from '../nlp-task-config'
 import {
   createSimpleNN,
   INTENT_CLASSIFIER_TEMPLATE,
   IntentClassifierParameters,
 } from './models'
 import { Intent, PredictionProcessor, Processor } from './process'
-import { IntentClassificationConfigStorage } from './storage'
 
 export interface IntentClassifierConfig extends NlpTaskConfig {
   intents: string[]
 }
 
 export class BotonicIntentClassifier {
-  readonly locale: Locale
-  readonly maxLength: number
-  readonly vocabulary: string[]
-  readonly intents: string[]
+  private readonly config: Readonly<IntentClassifierConfig>
   private readonly processor: Processor
   private readonly predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
-  constructor(config: IntentClassifierConfig) {
-    this.locale = config.locale
-    this.maxLength = config.maxLength
-    this.vocabulary = config.vocabulary
-    this.intents = unique(config.intents)
+  constructor(config: IntentClassifierConfig, preprocessor: Preprocessor) {
+    this.config = {
+      ...config,
+      intents: unique(config.intents),
+    }
     this.processor = new Processor(
-      config.preprocessor,
-      new LabelEncoder(new IndexedItems(this.vocabulary)),
-      new OneHotEncoder(new IndexedItems(this.intents))
+      preprocessor,
+      new LabelEncoder(new IndexedItems(this.config.vocabulary)),
+      new OneHotEncoder(new IndexedItems(this.config.intents))
     )
-    this.predictionProcessor = new PredictionProcessor(config.intents)
+    this.predictionProcessor = new PredictionProcessor(this.config.intents)
   }
 
   static async load(
     path: string,
     preprocessor: Preprocessor
   ): Promise<BotonicIntentClassifier> {
-    const config = new IntentClassificationConfigStorage().load(path)
-    const classifier = new BotonicIntentClassifier({
-      locale: config.locale,
-      maxLength: config.maxLength,
-      vocabulary: config.vocabulary,
-      intents: config.intents,
-      preprocessor,
-    })
-    classifier.modelManager = new ModelManager(await ModelStorage.load(path))
+    const config = new ConfigStorage().load(path) as IntentClassifierConfig
+    const classifier = new BotonicIntentClassifier(config, preprocessor)
+    const model = await new ModelStorage().load(path)
+    classifier.modelManager = new ModelManager(model)
     return classifier
   }
 
@@ -71,14 +60,14 @@ export class BotonicIntentClassifier {
   ): Promise<LayersModel> {
     const embeddingsMatrix = await generateEmbeddingsMatrix(
       storage,
-      this.vocabulary
+      this.config.vocabulary
     )
 
     switch (template) {
       case INTENT_CLASSIFIER_TEMPLATE.SIMPLE_NN:
         return createSimpleNN(
-          this.maxLength,
-          this.intents.length,
+          this.config.maxLength,
+          this.config.intents.length,
           embeddingsMatrix,
           params
         )
@@ -113,14 +102,8 @@ export class BotonicIntentClassifier {
   }
 
   async saveModel(path: string): Promise<void> {
-    path = join(path, this.locale)
-    const config = {
-      locale: this.locale,
-      maxLength: this.maxLength,
-      vocabulary: this.vocabulary,
-      intents: this.intents,
-    }
-    new IntentClassificationConfigStorage().save(path, config)
-    await this.modelManager.save(path)
+    path = join(path, this.config.locale)
+    new ConfigStorage().save(this.config, path)
+    await new ModelStorage().save(this.modelManager.model, path)
   }
 }
