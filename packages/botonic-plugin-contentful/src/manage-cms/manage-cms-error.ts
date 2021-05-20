@@ -101,4 +101,23 @@ export class ErrorReportingManageCms implements ManageCms {
       .removeAssetFile(context, assetId)
       .catch(this.handleError('removeAssetFile', context, assetId, {}))
   }
+
+  createAsset(
+    context: ManageContext,
+    title: string,
+    fileName: string,
+    contentType: string,
+    file: any,
+    description?: string
+  ): Promise<{ id: string; url?: string }> {
+    return this.manageCms
+      .createAsset(context, title, fileName, contentType, file, description)
+      .catch(this.handleError('createAsset', undefined, undefined, {}))
+  }
+
+  removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
+    return this.manageCms
+      .removeAsset(context, assetId)
+      .catch(this.handleError('removeAsset', undefined, assetId, {}))
+  }
 }

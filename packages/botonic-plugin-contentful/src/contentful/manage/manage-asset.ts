@@ -5,7 +5,7 @@ import { Asset } from 'contentful-management/dist/typings/entities/asset'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
 
-import { AssetId } from '../../cms'
+import { AssetId, CmsException } from '../../cms'
 import { ManageContext } from '../../manage-cms/manage-context'
 import * as nlp from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
@@ -49,6 +49,51 @@ export class ManageContentfulAsset {
     // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
     // the multilocale fields returned by update()
     await this.writeAsset(context, oldAsset)
+  }
+
+  async removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
+    const environment = await this.environment
+    try {
+      const asset = await environment.getAsset(assetId.id)
+      if (asset.isPublished()) await asset.unpublish()
+      await asset.delete()
+    } catch (e) {
+      throw new CmsException('ERROR while deleting asset', e)
+    }
+  }
+
+  async createAsset(
+    context: ManageContext,
+    title: string,
+    fileName: string,
+    contentType: string,
+    file: any,
+    description?: string
+  ): Promise<{ id: string; url?: string }> {
+    const environment = await this.environment
+    const asset = await environment.createAssetFromFiles({
+      fields: {
+        title: {
+          [context.locale]: title,
+        },
+        description: {
+          [context.locale]: description || title,
+        },
+        file: {
+          [context.locale]: {
+            contentType,
+            fileName,
+            file,
+          },
+        },
+      },
+    })
+    const processedAsset = await asset.processForLocale(context.locale)
+    const publishedAsset = await processedAsset.publish()
+    return {
+      id: publishedAsset.sys.id,
+      url: publishedAsset.fields.file[context.locale].url,
+    }
   }
 
   private async writeAsset(
