@@ -46,7 +46,7 @@ export class BotonicNer {
     path: string,
     preprocessor: Preprocessor
   ): Promise<BotonicNer> {
-    const config = new ConfigStorage().load(path) as NerConfig
+    const config = new ConfigStorage<NerConfig>().load(path)
     const ner = new BotonicNer(config, preprocessor)
     const model = await new ModelStorage().load(path)
     ner.modelManager = new ModelManager(model)
@@ -103,7 +103,7 @@ export class BotonicNer {
 
   async saveModel(path: string): Promise<void> {
     path = join(path, this.config.locale)
-    new ConfigStorage().save(this.config, path)
+    new ConfigStorage<NerConfig>().save(this.config, path)
     await new ModelStorage().save(this.modelManager.model, path)
   }
 }

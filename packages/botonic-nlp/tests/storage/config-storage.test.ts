@@ -2,12 +2,13 @@ import { existsSync, rmdirSync } from 'fs'
 import { join } from 'path'
 
 import { ConfigStorage } from '../../src/storage/config-storage'
+import { IntentClassifierConfig } from '../../src/tasks/intent-classification'
+import { NerConfig } from '../../src/tasks/ner'
 import * as helper from '../helpers/constants-helper'
 
 describe('Config Storage', () => {
-  const sut = new ConfigStorage()
-
   test('Load NER Config', () => {
+    const sut = new ConfigStorage<NerConfig>()
     const config = sut.load(helper.NER_MODEL_DIR_PATH)
     expect(config).toEqual({
       locale: helper.LOCALE,
@@ -18,6 +19,7 @@ describe('Config Storage', () => {
   })
 
   test('Load Intent Config', () => {
+    const sut = new ConfigStorage<IntentClassifierConfig>()
     const config = sut.load(helper.INTENT_CLASSIFIER_MODEL_DIR_PATH)
     expect(config).toEqual({
       locale: helper.LOCALE,
@@ -28,6 +30,7 @@ describe('Config Storage', () => {
   })
 
   test('Save Intent Config', () => {
+    const sut = new ConfigStorage<IntentClassifierConfig>()
     const tmpPath = join(helper.HELPER_DIR, 'tmpConfigStorage')
     sut.save(
       {

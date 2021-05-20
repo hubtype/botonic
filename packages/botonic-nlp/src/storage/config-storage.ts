@@ -10,14 +10,14 @@ export interface NlpTaskConfig {
   vocabulary: string[]
 }
 
-export class ConfigStorage {
+export class ConfigStorage<T extends NlpTaskConfig> {
   public readonly CONFIG_FILENAME = 'config.json'
 
-  load<T extends NlpTaskConfig>(path: string): T {
+  load(path: string): T {
     return readJSON(join(path, this.CONFIG_FILENAME))
   }
 
-  save<T extends NlpTaskConfig>(config: T, path: string): void {
+  save(config: T, path: string): void {
     mkdirSync(path, { recursive: true })
     writeFileSync(join(path, this.CONFIG_FILENAME), JSON.stringify(config))
   }

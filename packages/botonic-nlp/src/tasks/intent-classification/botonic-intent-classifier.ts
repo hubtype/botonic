@@ -45,7 +45,7 @@ export class BotonicIntentClassifier {
     path: string,
     preprocessor: Preprocessor
   ): Promise<BotonicIntentClassifier> {
-    const config = new ConfigStorage().load(path) as IntentClassifierConfig
+    const config = new ConfigStorage<IntentClassifierConfig>().load(path)
     const classifier = new BotonicIntentClassifier(config, preprocessor)
     const model = await new ModelStorage().load(path)
     classifier.modelManager = new ModelManager(model)
@@ -103,7 +103,7 @@ export class BotonicIntentClassifier {
 
   async saveModel(path: string): Promise<void> {
     path = join(path, this.config.locale)
-    new ConfigStorage().save(this.config, path)
+    new ConfigStorage<IntentClassifierConfig>().save(this.config, path)
     await new ModelStorage().save(this.modelManager.model, path)
   }
 }
