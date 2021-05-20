@@ -23,6 +23,8 @@ export interface NerConfig extends NlpTaskConfig {
   entities: string[]
 }
 
+export class NerConfigStorage extends ConfigStorage<NerConfig> {}
+
 export class BotonicNer {
   private readonly config: Readonly<NerConfig>
   private readonly processor: Processor
@@ -46,7 +48,7 @@ export class BotonicNer {
     path: string,
     preprocessor: Preprocessor
   ): Promise<BotonicNer> {
-    const config = new ConfigStorage<NerConfig>().load(path)
+    const config = new NerConfigStorage().load(path)
     const ner = new BotonicNer(config, preprocessor)
     const model = await new ModelStorage().load(path)
     ner.modelManager = new ModelManager(model)
@@ -103,7 +105,7 @@ export class BotonicNer {
 
   async saveModel(path: string): Promise<void> {
     path = join(path, this.config.locale)
-    new ConfigStorage<NerConfig>().save(this.config, path)
+    new NerConfigStorage().save(this.config, path)
     await new ModelStorage().save(this.modelManager.model, path)
   }
 }

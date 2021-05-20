@@ -22,6 +22,8 @@ export interface IntentClassifierConfig extends NlpTaskConfig {
   intents: string[]
 }
 
+export class IntentClassifierConfigStorage extends ConfigStorage<IntentClassifierConfig> {}
+
 export class BotonicIntentClassifier {
   private readonly config: Readonly<IntentClassifierConfig>
   private readonly processor: Processor
@@ -45,7 +47,7 @@ export class BotonicIntentClassifier {
     path: string,
     preprocessor: Preprocessor
   ): Promise<BotonicIntentClassifier> {
-    const config = new ConfigStorage<IntentClassifierConfig>().load(path)
+    const config = new IntentClassifierConfigStorage().load(path)
     const classifier = new BotonicIntentClassifier(config, preprocessor)
     const model = await new ModelStorage().load(path)
     classifier.modelManager = new ModelManager(model)
@@ -103,7 +105,7 @@ export class BotonicIntentClassifier {
 
   async saveModel(path: string): Promise<void> {
     path = join(path, this.config.locale)
-    new ConfigStorage<IntentClassifierConfig>().save(this.config, path)
+    new IntentClassifierConfigStorage().save(this.config, path)
     await new ModelStorage().save(this.modelManager.model, path)
   }
 }
