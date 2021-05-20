@@ -9,10 +9,8 @@ import {
 import { IndexedItems, LabelEncoder, OneHotEncoder } from '../../encode'
 import { ModelEvaluation, ModelManager } from '../../model'
 import { Preprocessor } from '../../preprocess'
-import { ModelStorage } from '../../storage'
-import { Locale } from '../../types'
+import { ConfigStorage, ModelStorage, NlpTaskConfig } from '../../storage'
 import { unique } from '../../utils'
-import { NlpTaskConfig } from '../nlp-task-config'
 import { createBiLstmModel, NER_TEMPLATE, NerModelParameters } from './models'
 import {
   Entity,
@@ -20,47 +18,40 @@ import {
   PredictionProcessor,
   Processor,
 } from './process'
-import { NerConfig, NerConfigStorage } from './storage'
 
-export interface EntityRecognizerConfig extends NlpTaskConfig {
+export interface NerConfig extends NlpTaskConfig {
   entities: string[]
 }
 
+export class NerConfigStorage extends ConfigStorage<NerConfig> {}
+
 export class BotonicNer {
-  readonly locale: Locale
-  readonly maxLength: number
-  readonly vocabulary: string[]
-  readonly entities: string[]
+  private readonly config: Readonly<NerConfig>
   private readonly processor: Processor
   private readonly predictionProcessor: PredictionProcessor
   private modelManager: ModelManager
 
-  constructor(config: EntityRecognizerConfig) {
-    this.locale = config.locale
-    this.maxLength = config.maxLength
-    this.vocabulary = config.vocabulary
-    this.entities = unique([NEUTRAL_ENTITY].concat(config.entities))
+  constructor(config: NerConfig, preprocessor: Preprocessor) {
+    this.config = {
+      ...config,
+      entities: unique([NEUTRAL_ENTITY].concat(config.entities)),
+    }
     this.processor = new Processor(
-      config.preprocessor,
-      new LabelEncoder(new IndexedItems(config.vocabulary)),
-      new OneHotEncoder(new IndexedItems(this.entities))
+      preprocessor,
+      new LabelEncoder(new IndexedItems(this.config.vocabulary)),
+      new OneHotEncoder(new IndexedItems(this.config.entities))
     )
-    this.predictionProcessor = new PredictionProcessor(config.entities)
+    this.predictionProcessor = new PredictionProcessor(this.config.entities)
   }
 
   static async load(
     path: string,
     preprocessor: Preprocessor
   ): Promise<BotonicNer> {
-    const config = NerConfigStorage.load(path)
-    const ner = new BotonicNer({
-      locale: config.locale,
-      maxLength: config.maxLength,
-      vocabulary: config.vocabulary,
-      entities: config.entities,
-      preprocessor,
-    })
-    ner.modelManager = new ModelManager(await ModelStorage.load(path))
+    const config = new NerConfigStorage().load(path)
+    const ner = new BotonicNer(config, preprocessor)
+    const model = await new ModelStorage().load(path)
+    ner.modelManager = new ModelManager(model)
     return ner
   }
 
@@ -72,14 +63,14 @@ export class BotonicNer {
     // TODO: set embeddings as optional
     const embeddingsMatrix = await generateEmbeddingsMatrix(
       storage,
-      this.vocabulary
+      this.config.vocabulary
     )
 
     switch (template) {
       case NER_TEMPLATE.BILSTM:
         return createBiLstmModel(
-          this.maxLength,
-          this.entities,
+          this.config.maxLength,
+          this.config.entities,
           embeddingsMatrix,
           params
         )
@@ -113,14 +104,8 @@ export class BotonicNer {
   }
 
   async saveModel(path: string): Promise<void> {
-    path = join(path, this.locale)
-    const config: NerConfig = {
-      locale: this.locale,
-      maxLength: this.maxLength,
-      vocabulary: this.vocabulary,
-      entities: this.entities,
-    }
-    NerConfigStorage.save(path, config)
-    await this.modelManager.save(path)
+    path = join(path, this.config.locale)
+    new NerConfigStorage().save(this.config, path)
+    await new ModelStorage().save(this.modelManager.model, path)
   }
 }

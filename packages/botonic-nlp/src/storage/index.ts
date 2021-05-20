@@ -1,3 +1,2 @@
-export * from './constants'
+export * from './config-storage'
 export * from './model-storage'
-export * from './types'
