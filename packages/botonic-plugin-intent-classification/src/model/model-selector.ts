@@ -1,16 +1,21 @@
 import { Locale } from '@botonic/nlp/lib/types'
 
-import { getModelUri } from '../utils/environment-utils'
 import { IntentClassifier } from './intent-classifier'
 import { ModelInfo } from './model-info'
 
 export class ModelSelector {
   private models: { [locale: string]: IntentClassifier } = {}
 
-  private constructor(readonly locales: Locale[]) {}
+  private constructor(
+    readonly locales: Locale[],
+    readonly modelsBaseUrl: string
+  ) {}
 
-  static async build(locales: Locale[]): Promise<ModelSelector> {
-    const selector = new ModelSelector(locales)
+  static async build(
+    locales: Locale[],
+    modelsBaseUrl: string
+  ): Promise<ModelSelector> {
+    const selector = new ModelSelector(locales, modelsBaseUrl)
     const modelsInfo = selector.loadModelsInfo()
     await selector.loadModels(modelsInfo)
     return selector
@@ -22,7 +27,7 @@ export class ModelSelector {
 
   private loadModelsInfo(): ModelInfo[] {
     return this.locales.map(
-      locale => new ModelInfo(locale, getModelUri(locale))
+      locale => new ModelInfo(locale, `${this.modelsBaseUrl}/${locale}`)
     )
   }
 
