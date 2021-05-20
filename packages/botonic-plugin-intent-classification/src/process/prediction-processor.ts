@@ -1,4 +1,4 @@
-import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process'
+import { Intent } from '@botonic/nlp/lib/tasks/intent-classification/process/prediction-processor'
 import type { Tensor2D } from '@tensorflow/tfjs'
 
 export class PredictionProcessor {

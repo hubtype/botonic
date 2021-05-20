@@ -1,9 +1,6 @@
-import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess'
-import {
-  Entity,
-  NEUTRAL_ENTITY,
-  Prediction,
-} from '@botonic/nlp/lib/tasks/ner/process'
+import { PADDING_TOKEN } from '@botonic/nlp/lib/preprocess/constants'
+import { NEUTRAL_ENTITY } from '@botonic/nlp/lib/tasks/ner/process/constants'
+import { Entity, Prediction } from '@botonic/nlp/lib/tasks/ner/process/types'
 import { Tensor3D } from '@tensorflow/tfjs'
 export class PredictionProcessor {
   constructor(private readonly entities: string[]) {}

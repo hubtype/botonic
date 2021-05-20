@@ -1,9 +1,10 @@
-import { IndexedItems, LabelEncoder } from '@botonic/nlp/lib/encode'
+import { IndexedItems } from '@botonic/nlp/lib/encode/indexed-items'
+import { LabelEncoder } from '@botonic/nlp/lib/encode/label-encoder'
 import {
   PADDING_TOKEN,
-  Preprocessor,
   UNKNOWN_TOKEN,
-} from '@botonic/nlp/lib/preprocess'
+} from '@botonic/nlp/lib/preprocess/constants'
+import { Preprocessor } from '@botonic/nlp/lib/preprocess/preprocessor'
 import { tensor, Tensor2D } from '@tensorflow/tfjs'
 
 export class TextProcessor {
