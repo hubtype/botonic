@@ -1,7 +1,6 @@
 import { LayersModel, Scalar, Tensor } from '@tensorflow/tfjs-node'
 
-import { ModelStorage } from '../storage/model-storage'
-import { ModelEvaluation } from './types'
+export type ModelEvaluation = { loss: number; accuracy: number }
 
 export class ModelManager {
   constructor(readonly model: LayersModel) {}
