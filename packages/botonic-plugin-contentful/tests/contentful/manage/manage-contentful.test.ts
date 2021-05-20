@@ -3,15 +3,10 @@ import { CmsException, TopContentId } from '../../../src/cms/'
 import { rndStr } from '../../../src/cms/test-helpers'
 import { ManageCms } from '../../../src/manage-cms'
 import { ContentFieldType } from '../../../src/manage-cms/fields'
-import { ManageContext } from '../../../src/manage-cms/manage-context'
 import { ENGLISH, SPANISH } from '../../../src/nlp'
 import { repeatWithBackoff } from '../../../src/util/backoff'
 import { TEST_DEFAULT_LOCALE, testContentful } from '../contentful.helper'
-import { testManageContentful } from './manage-contentful.helper'
-
-function ctxt(ctx: Partial<ManageContext>): ManageContext {
-  return { ...ctx, preview: false } as ManageContext
-}
+import { ctxt, testManageContentful } from './manage-contentful.helper'
 
 // Since the tests modify contentful contents, they might fail if executed
 // more than once simultaneously (eg from 2 different branches from CI)

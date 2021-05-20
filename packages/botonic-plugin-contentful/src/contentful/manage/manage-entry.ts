@@ -72,10 +72,12 @@ export class ManageContentfulEntry {
     contentId: ContentId
   ): Promise<void> {
     const environment = await this.environment
-    const oldEntry = await this.getEntry(environment, contentId)
-    if (oldEntry) {
-      await oldEntry.unpublish()
+    try {
+      const oldEntry = await this.getEntry(environment, contentId)
+      if (oldEntry.isPublished()) await oldEntry.unpublish()
       await oldEntry.delete()
+    } catch (e) {
+      throw new CmsException('ERROR while deleting content', e)
     }
   }
 
