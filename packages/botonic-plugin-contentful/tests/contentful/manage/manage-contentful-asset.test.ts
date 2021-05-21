@@ -28,20 +28,20 @@ describe('ManageContentful assets', () => {
     let assetId: string
     const file = JSON.stringify({ a: rndStr(), b: rndStr() })
     const fileName = rndStr()
+    const info = {
+      description: `${fileName} description`,
+      fileName: `${fileName}.json`,
+      name: fileName,
+      type: 'application/json',
+    }
     try {
       // ACT
-      const { id, url } = await sut.createAsset(
-        context,
-        fileName,
-        `${fileName}.json`,
-        'application/json',
-        file
-      )
+      const { id, url } = await sut.createAsset(context, file, info)
       assetId = id
       await repeatWithBackoff(async () => {
         const newContent = await contentful.asset(assetId, context)
         expect(newContent.id).toEqual(assetId)
-        expect(newContent.name).toEqual(fileName)
+        expect(newContent.info).toEqual(info)
         expect(newContent.url).toEqual(`https:${url}`)
       })
     } finally {

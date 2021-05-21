@@ -144,7 +144,14 @@ export class DummyCMS implements CMS {
   }
 
   asset(id: string, context?: Context): Promise<Asset> {
-    return Promise.resolve(new Asset(id, `name for ${id}`, `http://url.${id}`))
+    return Promise.resolve(
+      new Asset(id, `http://url.${id}`, {
+        name: `${id} title`,
+        fileName: `${id} fileName`,
+        description: `${id} description`,
+        type: `${id} type`,
+      })
+    )
   }
 
   dateRange(id: string, context?: Context): Promise<DateRangeContent> {

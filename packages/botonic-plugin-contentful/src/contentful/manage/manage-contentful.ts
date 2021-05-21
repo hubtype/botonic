@@ -3,8 +3,9 @@ import { createClient } from 'contentful-management'
 import { ClientAPI } from 'contentful-management/dist/typings/create-contentful-api'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
+import { Stream } from 'stream'
 
-import { AssetId, ContentId, ContentType } from '../../cms'
+import { AssetId, AssetInfo, ContentId, ContentType } from '../../cms'
 import { ContentFieldType } from '../../manage-cms/fields'
 import { ManageCms } from '../../manage-cms/manage-cms'
 import { ManageContext } from '../../manage-cms/manage-context'
@@ -105,20 +106,10 @@ export class ManageContentful implements ManageCms {
 
   async createAsset(
     context: ManageContext,
-    title: string,
-    fileName: string,
-    contentType: string,
-    file: any,
-    description?: string
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
   ): Promise<{ id: string; url?: string }> {
-    return this.manageAsset.createAsset(
-      context,
-      title,
-      fileName,
-      contentType,
-      file,
-      description
-    )
+    return this.manageAsset.createAsset(context, file, info)
   }
 
   async removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {

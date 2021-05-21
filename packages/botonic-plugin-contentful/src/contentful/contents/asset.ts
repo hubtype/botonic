@@ -11,11 +11,16 @@ export class AssetDelivery extends ResourceDelivery {
 
   private fromEntry(asset: Asset) {
     const url = this.urlFromAssetRequired(asset)
+    const fields = asset.fields
     return new cms.Asset(
       asset.sys.id,
-      asset.fields.title,
       url,
-      asset.fields.file.contentType,
+      {
+        fileName: fields.file.fileName,
+        name: fields.title,
+        type: fields.file.contentType,
+        description: fields.description,
+      },
       asset.fields.file.details
     )
   }

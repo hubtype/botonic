@@ -1,7 +1,8 @@
+import { Stream } from 'stream'
 import { anything, capture, instance, mock, when } from 'ts-mockito'
 
 import * as cms from '../../../src/cms'
-import { AssetId, ContentId, ContentType } from '../../../src/cms'
+import { AssetId, AssetInfo, ContentId, ContentType } from '../../../src/cms'
 import {
   ContentFieldType,
   ManageCms,
@@ -215,10 +216,8 @@ test('TEST: ContentUpdater', async () => {
 
     createAsset(
       context: ManageContext,
-      title: string,
-      fileName: string,
-      contentType: string,
-      file: any
+      file: string | ArrayBuffer | Stream,
+      info: AssetInfo
     ): Promise<{ id: string; url?: string }> {
       fail("shouldn't be called")
     }
