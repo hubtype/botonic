@@ -4,10 +4,13 @@ import { ManageContext } from '../../../src/manage-cms'
 import { testContentfulOptions } from '../contentful.helper'
 
 export function testManageContentful(options: Partial<ContentfulOptions> = {}) {
+  if (!process.env.CONTENTFUL_TEST_MANAGE_TOKEN) {
+    throw new Error('You need to set env var CONTENTFUL_TEST_MANAGE_TOKEN')
+  }
   return createManageCms(
     testContentfulOptions({
       ...options,
-      accessToken: process.env.CONTENTFUL_TEST_MANAGE_TOKEN!,
+      accessToken: process.env.CONTENTFUL_TEST_MANAGE_TOKEN,
     })
   )
 }

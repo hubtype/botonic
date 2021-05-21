@@ -4,11 +4,17 @@ import { CmsInfo } from '../../src/cms/cms-info'
 import { createCms, createCmsInfo } from '../../src/contentful/factories'
 
 export function testSpaceId(): string {
-  return process.env.CONTENTFUL_TEST_SPACE_ID!
+  if (!process.env.CONTENTFUL_TEST_SPACE_ID) {
+    throw new Error('You need to set env var CONTENTFUL_TEST_SPACE_ID')
+  }
+  return process.env.CONTENTFUL_TEST_SPACE_ID
 }
 
 export function testAccessToken(): string {
-  return process.env.CONTENTFUL_TEST_TOKEN!
+  if (!process.env.CONTENTFUL_TEST_TOKEN) {
+    throw new Error('You need to set env var CONTENTFUL_TEST_TOKEN')
+  }
+  return process.env.CONTENTFUL_TEST_TOKEN
 }
 
 export function testContentful(
