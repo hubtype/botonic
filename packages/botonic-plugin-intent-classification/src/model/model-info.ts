@@ -13,7 +13,7 @@ export class ModelInfo {
   constructor(readonly locale: Locale, readonly uri: string) {
     this.config = axios({ url: `${this.uri}/${CONFIG_FILENAME}` })
     this.model = loadLayersModel(`${this.uri}/${MODEL_FILENAME}`, {
-      fetchFunc: fetch, // fetchFunc is defined to replace window.fetch to work in node environment
+      fetchFunc: fetch, // replace window.fetch to work in node environment
     })
   }
 
