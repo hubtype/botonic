@@ -58,7 +58,7 @@ export class ManageContentfulAsset {
       if (asset.isPublished()) await asset.unpublish()
       await asset.delete()
     } catch (e) {
-      throw new CmsException('ERROR while deleting asset', e)
+      throw new CmsException('ERROR while deleting asset', e, assetId)
     }
   }
 

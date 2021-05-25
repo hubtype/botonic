@@ -205,11 +205,25 @@ test('TEST: ContentUpdater', async () => {
       fail("shouldn't be called")
     }
 
-    async createContent(
+    createContent(
       context: ManageContext,
       model: ContentType,
       id: string
     ): Promise<void> {
+      fail("shouldn't be called")
+    }
+
+    createAsset(
+      context: ManageContext,
+      title: string,
+      fileName: string,
+      contentType: string,
+      file: any
+    ): Promise<{ id: string; url?: string }> {
+      fail("shouldn't be called")
+    }
+
+    async removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
       fail("shouldn't be called")
     }
   }
