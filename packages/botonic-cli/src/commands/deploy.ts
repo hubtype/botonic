@@ -375,7 +375,7 @@ Uploading...
   /* istanbul ignore next */
   async deploy(): Promise<void> {
     try {
-      const buildOut = await this.botonicApiService.build()
+      const buildOut = await this.botonicApiService.build(npmCommand)
       if (!buildOut) {
         const error = 'Deploy Botonic Build Error'
         this.telemetry.trackError(error)
