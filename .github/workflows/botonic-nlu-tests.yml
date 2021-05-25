@@ -1,5 +1,5 @@
 name: Botonic nlu tests
- 
+
 on:
   push:
     paths:
@@ -7,7 +7,7 @@ on:
       - 'packages/*'
       - 'packages/botonic-nlu/**'
       - '.github/workflows/botonic-nlu-tests.yml'
- 
+
 jobs:
   botonic-plugin-nlu-tests:
     name: Botonic nlu tests
@@ -15,7 +15,7 @@ jobs:
     env:
       PACKAGE: botonic-nlu
     steps:
-    - name: Checking out to current branch 
+    - name: Checking out to current branch
       uses: actions/checkout@v2
     - name: Setting up node
       uses: actions/setup-node@v2-beta
@@ -28,23 +28,23 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Install dev dependencies 
+    - name: Install dev dependencies
       run: (cd ./packages/$PACKAGE && npm install -D)
-    - name: Build botonic-nlu 
+    - name: Build botonic-nlu
       run: (cd ./packages/$PACKAGE && npm run build)
-      
-    - name: Run tests 
+
+    - name: Run tests
       run: (cd ./packages/$PACKAGE && npm run test_ci)
-    
+
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1.6
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         files: ./packages/${{env.PACKAGE}}/junit.xml
-    
+
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v1.4.1
+      uses: codecov/codecov-action@v1
       if: always()
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -53,5 +53,5 @@ jobs:
         name: ${{env.PACKAGE}}
         env_vars: ${{env.PACKAGE}}
 
-    - name: Verify lint botonic-nlu 
+    - name: Verify lint botonic-nlu
       run: (cd ./packages/$PACKAGE && npm run lint_ci)

@@ -1,5 +1,5 @@
 name: Botonic plugin-dialogflow tests
- 
+
 on:
   push:
     paths:
@@ -7,7 +7,7 @@ on:
       - 'packages/*'
       - 'packages/botonic-plugin-dialogflow/**'
       - '.github/workflows/botonic-plugin-dialogflow-tests.yml'
- 
+
 jobs:
   botonic-plugin-dialogflow:
     name: Botonic plugin-dialogflow tests
@@ -15,7 +15,7 @@ jobs:
     env:
       PACKAGE: botonic-plugin-dialogflow
     steps:
-    - name: Checking out to current branch 
+    - name: Checking out to current branch
       uses: actions/checkout@v2
     - name: Setting up node
       uses: actions/setup-node@v2-beta
@@ -28,23 +28,23 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - name: Install dev dependencies 
+    - name: Install dev dependencies
       run: (cd ./packages/$PACKAGE && npm install -D)
     - name: Build botonic-plugin-dialogflow
       run: (cd ./packages/$PACKAGE && npm run build)
-      
-    - name: Run tests 
+
+    - name: Run tests
       run: (cd ./packages/$PACKAGE && npm run test_ci)
-    
+
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1.9
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         files: ./packages/${{env.PACKAGE}}/junit.xml
-    
+
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v1.4.1
+      uses: codecov/codecov-action@v1
       if: always()
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -54,5 +54,5 @@ jobs:
         env_vars: ${{env.PACKAGE}}
         network_filter: packages/${{env.PACKAGE}}/
 
-    - name: Verify lint botonic-dialogflow 
+    - name: Verify lint botonic-dialogflow
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
