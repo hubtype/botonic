@@ -63,7 +63,7 @@ export class ManageContentfulEntry {
         fields: {},
       })
     } catch (e) {
-      throw new CmsException('ERROR while creating content', e)
+      throw new CmsException(`ERROR while creating content with id: '${id}'`, e)
     }
   }
 
@@ -92,7 +92,7 @@ export class ManageContentfulEntry {
     }
     const field = CONTENT_FIELDS.get(fieldType)
     if (!field) {
-      throw new CmsException(`Invalid field type ${fieldType}`)
+      throw new CmsException(`Invalid field type '${fieldType}'`)
     }
     if (!context.locale) {
       // paranoic check
@@ -113,14 +113,11 @@ export class ManageContentfulEntry {
     if (!context.allowOverwrites) {
       const value = entry.fields[field.cmsName][context.locale]
       if (value) {
-        throw new CmsException(
-          `Cannot overwrite field '${field.cmsName}' of entry '${
-            entry.sys.id
-          }' "+
-          "(has value '${String(
-            value
-          )}') because ManageContext.allowOverwrites is false`
-        )
+        const error = `Cannot overwrite field '${field.cmsName}' of entry '${entry.sys.id}'`
+        const detail = `(has value '${String(
+          value
+        )}') because ManageContext.allowOverwrites is false`
+        throw new CmsException(error + detail)
       }
     }
     return field
@@ -138,7 +135,7 @@ export class ManageContentfulEntry {
     const field = this.checkOverwrite(context, oldEntry, fieldType, false)
 
     const fieldEntry = oldEntry.fields[field.cmsName]
-    if (fieldEntry == undefined) {
+    if (fieldEntry === undefined) {
       return
     }
     // TODO shouldn't this check be done before checkOverwrite?
