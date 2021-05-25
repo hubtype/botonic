@@ -1,11 +1,15 @@
 // eslint-disable-next-line node/no-missing-import
 import { ClientAPI } from 'contentful-management/dist/typings/create-contentful-api'
 // eslint-disable-next-line node/no-missing-import
-import { Asset } from 'contentful-management/dist/typings/entities/asset'
+import {
+  Asset,
+  AssetFileProp,
+} from 'contentful-management/dist/typings/entities/asset'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
+import { Stream } from 'stream'
 
-import { AssetId, CmsException } from '../../cms'
+import { AssetId, AssetInfo, CmsException } from '../../cms'
 import { ManageContext } from '../../manage-cms/manage-context'
 import * as nlp from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
@@ -64,30 +68,29 @@ export class ManageContentfulAsset {
 
   async createAsset(
     context: ManageContext,
-    title: string,
-    fileName: string,
-    contentType: string,
-    file: any,
-    description?: string
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
   ): Promise<{ id: string; url?: string }> {
     const environment = await this.environment
-    const asset = await environment.createAssetFromFiles({
+    const data: Omit<AssetFileProp, 'sys'> = {
       fields: {
         title: {
-          [context.locale]: title,
+          [context.locale]: info.name,
         },
-        description: {
-          [context.locale]: description || title,
-        },
+        description: {},
         file: {
           [context.locale]: {
-            contentType,
-            fileName,
+            contentType: info.type || '',
+            fileName: info.fileName || '',
             file,
           },
         },
       },
-    })
+    }
+    if (info.description) {
+      data.fields.description[context.locale] = info.description
+    }
+    const asset = await environment.createAssetFromFiles(data)
     const processedAsset = await asset.processForLocale(context.locale)
     const publishedAsset = await processedAsset.publish()
     return {

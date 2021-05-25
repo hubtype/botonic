@@ -9,17 +9,25 @@ export enum ButtonStyle {
   QUICK_REPLY = 1,
 }
 
+/**
+ * @param type eg. image/jpeg
+ */
+export interface AssetInfo {
+  readonly name: string
+  readonly fileName?: string
+  readonly type?: string
+  readonly description?: string
+}
+
 /** Not a Content because it cannot have custom fields */
 export class Asset {
   /**
-   * @param type eg. image/jpeg
    * @param details depends on the type. eg the image size
    */
   constructor(
     readonly id: string,
-    readonly name: string,
     readonly url: string,
-    readonly type?: string,
+    readonly info: AssetInfo,
     readonly details?: any
   ) {}
 }

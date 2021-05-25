@@ -1,4 +1,6 @@
-import { AssetId, ContentId, ContentType } from '../cms'
+import { Stream } from 'stream'
+
+import { AssetId, AssetInfo, ContentId, ContentType } from '../cms'
 import * as nlp from '../nlp'
 import { ContentFieldType } from './fields'
 import { ManageContext } from './manage-context'
@@ -55,13 +57,13 @@ export interface ManageCms {
 
   removeAssetFile(context: ManageContext, assetId: AssetId): Promise<void>
 
+  /**
+   * file: use a string to specify the contents of a text file
+   */
   createAsset(
     context: ManageContext,
-    title: string,
-    fileName: string,
-    contentType: string,
-    file: any,
-    description?: string
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
   ): Promise<{ id: string; url?: string }>
 
   removeAsset(context: ManageContext, assetId: AssetId): Promise<void>

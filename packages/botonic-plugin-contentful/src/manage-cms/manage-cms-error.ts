@@ -1,5 +1,8 @@
+import { Stream } from 'stream'
+
 import {
   AssetId,
+  AssetInfo,
   ContentfulExceptionWrapper,
   ContentId,
   ContentType,
@@ -104,14 +107,11 @@ export class ErrorReportingManageCms implements ManageCms {
 
   createAsset(
     context: ManageContext,
-    title: string,
-    fileName: string,
-    contentType: string,
-    file: any,
-    description?: string
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
   ): Promise<{ id: string; url?: string }> {
     return this.manageCms
-      .createAsset(context, title, fileName, contentType, file, description)
+      .createAsset(context, file, info)
       .catch(this.handleError('createAsset', undefined, undefined, {}))
   }
 
