@@ -1,5 +1,8 @@
-import { AssetId } from '../../../src/cms'
+import { AssetId, CmsException } from '../../../src/cms/'
+import { rndStr } from '../../../src/cms/test-helpers'
 import { ENGLISH, SPANISH } from '../../../src/nlp'
+import { repeatWithBackoff } from '../../../src/util/backoff'
+import { testContentful } from '../contentful.helper'
 import { TEST_ASSET_ID } from '../contents/asset.test'
 import { ctxt, testManageContentful } from './manage-contentful.helper'
 
@@ -16,5 +19,48 @@ describe('ManageContentful assets', () => {
       // RESTORE
       await sut.removeAssetFile(ctxt({ locale: SPANISH }), id)
     }
+  })
+
+  test('TEST: createAsset and removeAsset', async () => {
+    const context = ctxt({ locale: ENGLISH })
+    const contentful = testContentful({ disableCache: true })
+    const sut = testManageContentful()
+    let assetId: string
+    const file = JSON.stringify({ a: rndStr(), b: rndStr() })
+    const fileName = rndStr()
+    try {
+      // ACT
+      const { id, url } = await sut.createAsset(
+        context,
+        fileName,
+        `${fileName}.json`,
+        'application/json',
+        file
+      )
+      assetId = id
+      await repeatWithBackoff(async () => {
+        const newContent = await contentful.asset(assetId, context)
+        expect(newContent.id).toEqual(assetId)
+        expect(newContent.name).toEqual(fileName)
+        expect(newContent.url).toEqual(`https:${url}`)
+      })
+    } finally {
+      // RESTORE / ACT
+      await sut.removeAsset(context, new AssetId(assetId!, undefined))
+      await repeatWithBackoff(async () => {
+        await expect(contentful.asset(assetId, context)).rejects.toThrow(
+          CmsException
+        )
+      })
+    }
+  })
+
+  test('TEST: removeAsset fails if the content does not exists', async () => {
+    const context = ctxt({ locale: ENGLISH })
+    const sut = testManageContentful()
+    // ACT
+    await expect(
+      sut.removeAsset(context, new AssetId(rndStr(), undefined))
+    ).rejects.toThrow(CmsException)
   })
 })

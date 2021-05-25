@@ -54,4 +54,15 @@ export interface ManageCms {
   ): Promise<void>
 
   removeAssetFile(context: ManageContext, assetId: AssetId): Promise<void>
+
+  createAsset(
+    context: ManageContext,
+    title: string,
+    fileName: string,
+    contentType: string,
+    file: any,
+    description?: string
+  ): Promise<{ id: string; url?: string }>
+
+  removeAsset(context: ManageContext, assetId: AssetId): Promise<void>
 }

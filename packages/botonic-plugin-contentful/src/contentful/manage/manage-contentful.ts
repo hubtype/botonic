@@ -102,4 +102,26 @@ export class ManageContentful implements ManageCms {
   ): Promise<void> {
     return this.manageAsset.copyAssetFile(context, assetId, fromLocale)
   }
+
+  async createAsset(
+    context: ManageContext,
+    title: string,
+    fileName: string,
+    contentType: string,
+    file: any,
+    description?: string
+  ): Promise<{ id: string; url?: string }> {
+    return this.manageAsset.createAsset(
+      context,
+      title,
+      fileName,
+      contentType,
+      file,
+      description
+    )
+  }
+
+  async removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
+    return this.manageAsset.removeAsset(context, assetId)
+  }
 }

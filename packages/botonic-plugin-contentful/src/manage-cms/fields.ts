@@ -16,6 +16,7 @@ export enum ContentFieldType {
   BUTTONS = 'Buttons',
   ELEMENTS = 'Elements',
   IMAGE = 'Image',
+  PIC = 'pic',
   URL = 'URL',
   NAME = 'Name',
   BUTTONS_STYLE = 'Buttons Style',
@@ -125,6 +126,12 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     ),
     new ContentField(
       ContentFieldType.IMAGE,
+      'image',
+      ContentFieldValueType.ASSET,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.PIC,
       'pic',
       ContentFieldValueType.ASSET,
       true
