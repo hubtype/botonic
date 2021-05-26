@@ -2,14 +2,17 @@ import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
 
 import { ModelSelector } from './model/model-selector'
-import type { PluginOptions } from './types'
+import type { PluginOptions } from './options'
 import { detectLocale } from './utils/locale-utils'
 
 export default class BotonicPluginIntentClassification implements Plugin {
   private readonly modelsSelector: Promise<ModelSelector>
 
   constructor(readonly options: PluginOptions) {
-    this.modelsSelector = ModelSelector.build(this.options.locales)
+    this.modelsSelector = ModelSelector.build(
+      this.options.locales,
+      this.options.modelsBaseUrl
+    )
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
