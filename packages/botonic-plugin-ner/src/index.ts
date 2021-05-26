@@ -1,15 +1,15 @@
 import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
 
-import { ModelSelector } from './model/model-selector'
+import { NerModelSelector } from './model/model-selector'
 import { PluginOptions } from './options'
 import { detectLocale } from './utils/locale-utils'
 
 export default class BotonicPluginNER implements Plugin {
-  private modelsSelector: Promise<ModelSelector>
+  private modelsSelector: Promise<NerModelSelector>
 
   constructor(readonly options: PluginOptions) {
-    this.modelsSelector = ModelSelector.build(
+    this.modelsSelector = NerModelSelector.build(
       this.options.locales,
       this.options.modelsBaseUrl
     )
