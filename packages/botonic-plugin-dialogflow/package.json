@@ -5,10 +5,9 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "echo Nothing to build",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepare": "node ../../preinstall.js",
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "test": "jest --coverage",
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
     "lint": "npm run lint_core -- --fix",
