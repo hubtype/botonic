@@ -11,7 +11,8 @@
     "start": "npm run build && node lib/index.js",
     "test": "../../node_modules/.bin/jest",
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
-    "prepare": "node ../../preinstall.js"
+    "prepare": "node ../../preinstall.js",
+    "prepublishOnly": "npm run lint_ci && npm run build && npm test"
   },
   "author": "",
   "devDependencies": {
