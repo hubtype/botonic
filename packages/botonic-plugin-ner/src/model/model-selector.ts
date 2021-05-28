@@ -1,42 +1,26 @@
+import { ModelSelector } from '@botonic/nlp/lib/model/model-selector'
+import { NerConfig } from '@botonic/nlp/lib/tasks/ner'
 import { Locale } from '@botonic/nlp/lib/types'
+import { LayersModel } from '@tensorflow/tfjs'
 
-import { ModelInfo } from './model-info'
 import { NamedEntityRecognizer } from './ner'
 
-export class ModelSelector {
-  private models: { [locale: string]: NamedEntityRecognizer } = {}
-
-  private constructor(
-    readonly locales: Locale[],
-    readonly modelsBaseUrl: string
-  ) {}
-
+export class NerModelSelector extends ModelSelector<
+  NamedEntityRecognizer,
+  NerConfig
+> {
   static async build(
     locales: Locale[],
     modelsBaseUrl: string
-  ): Promise<ModelSelector> {
-    const selector = new ModelSelector(locales, modelsBaseUrl)
-    const modelsInfo = selector.loadModelsInfo()
-    await selector.loadModels(modelsInfo)
-    return selector
+  ): Promise<NerModelSelector> {
+    const selector = new NerModelSelector(locales, modelsBaseUrl)
+    return await selector.load()
   }
 
-  private loadModelsInfo(): ModelInfo[] {
-    return this.locales.map(
-      locale => new ModelInfo(locale, `${this.modelsBaseUrl}/${locale}`)
-    )
-  }
-
-  private async loadModels(modelsInfo: ModelInfo[]): Promise<void> {
-    for (const modelInfo of modelsInfo) {
-      const locale = modelInfo.locale
-      const config = await modelInfo.getConfig()
-      const model = await modelInfo.getModel()
-      this.models[locale] = new NamedEntityRecognizer(config, model)
-    }
-  }
-
-  select(locale: Locale): NamedEntityRecognizer {
-    return this.models[locale]
+  protected createModel(
+    config: NerConfig,
+    model: LayersModel
+  ): NamedEntityRecognizer {
+    return new NamedEntityRecognizer(config, model)
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/nlp",
-  "version": "0.19.0-alpha.4",
+  "version": "0.19.0-alpha.9",
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
@@ -15,20 +15,21 @@
   },
   "author": "",
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-typescript": "^7.9.0",
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-typescript": "^7.13.0",
     "@types/axios": "^0.14.0",
-    "@types/better-sqlite3": "^5.4.0",
+    "@types/better-sqlite3": "^5.4.1",
     "@types/webgl2": "^0.0.6"
   },
   "dependencies": {
-    "@tensorflow/tfjs-node": "^2.7.0",
-    "axios": "^0.21.0",
+    "@nlpjs/lang-en-min": "^4.22.0",
+    "@nlpjs/lang-es": "^4.22.0",
+    "@tensorflow/tfjs-node": "^2.8.6",
+    "axios": "^0.21.1",
     "better-sqlite3": "^7.0.1",
-    "js-yaml": "4.1.0",
-    "@nlpjs/lang-en-min": "^4.19.1",
-    "@nlpjs/lang-es": "^4.19.1"
+    "cross-fetch": "^3.1.4",
+    "js-yaml": "4.1.0"
   },
   "resolutions": {
     "@types/webgl2": "0.0.6"

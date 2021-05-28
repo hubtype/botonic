@@ -1,6 +1,6 @@
 import { Preprocessor } from '@botonic/nlp/lib/preprocess'
+import { NerConfig } from '@botonic/nlp/lib/tasks/ner'
 import { Entity } from '@botonic/nlp/lib/tasks/ner/process'
-import { NerConfig } from '@botonic/nlp/lib/tasks/ner/storage'
 import { LayersModel, Tensor3D } from '@tensorflow/tfjs'
 
 import { PredictionProcessor } from '../process/prediction-processor'

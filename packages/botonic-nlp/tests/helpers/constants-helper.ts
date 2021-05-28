@@ -48,8 +48,6 @@ export const EMBEDDINGS_MATRIX = tensor(
 ) as Tensor2D
 
 export const HELPER_DIR = __dirname
-export const DATA_DIR = 'data'
-export const TASKS_DIR = 'tasks'
 export const MODEL_DIR = 'models'
 export const NER_DIR = 'ner'
 export const INTENT_CLASSIFICATION_DIR = 'intent-classification'
