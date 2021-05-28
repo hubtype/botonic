@@ -17,6 +17,11 @@ import * as nlp from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
 
+class EntryLink {
+  public readonly type = 'Link'
+  constructor(public id: string, public linkType: string) {}
+}
+
 export class ManageContentfulEntry {
   constructor(
     readonly options: ContentfulOptions,
@@ -41,6 +46,10 @@ export class ManageContentfulEntry {
         continue
       }
       needUpdate = true
+      const valueType = CONTENT_FIELDS.get(key)?.valueType
+      if (fields[key] !== undefined && valueType !== typeof fields[key]) {
+        fields[key] = this.convertValueType(key, fields[key])
+      }
       oldEntry.fields[field.cmsName][context.locale] = fields[key]
     }
     if (!needUpdate) {
@@ -169,5 +178,28 @@ export class ManageContentfulEntry {
     } catch (e) {
       throw new ResourceNotFoundCmsException(contentId, e)
     }
+  }
+
+  private convertValueType(key: ContentFieldType, field: any): any {
+    if (key === ContentFieldType.BUTTONS_STYLE) {
+      return field ? 'QuickReplies' : 'Buttons'
+    }
+    if (key === ContentFieldType.FOLLOW_UP || key === ContentFieldType.TARGET) {
+      return this.getEntryLink(field)
+    }
+    if (key === ContentFieldType.IMAGE || key === ContentFieldType.PIC) {
+      return this.getEntryLink(field, 'Asset')
+    }
+    if (key === ContentFieldType.BUTTONS || key === ContentFieldType.ELEMENTS) {
+      const fieldLinks = field.map((id: string) => {
+        return this.getEntryLink(id)
+      })
+      return fieldLinks
+    }
+    return field
+  }
+
+  private getEntryLink(id: string, linkType = 'Entry') {
+    return { sys: { ...new EntryLink(id, linkType) } }
   }
 }
