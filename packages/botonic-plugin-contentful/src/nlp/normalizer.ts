@@ -70,6 +70,7 @@ export class NormalizedUtterance {
    * @param onlyStopWords: true iff all tokens are stop words
    */
   constructor(
+    /** raw is actually lowercased and trimmed*/
     readonly raw: string,
     readonly words: Word[],
     private readonly onlyStopWords = false
