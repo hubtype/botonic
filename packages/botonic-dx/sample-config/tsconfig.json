@@ -4,8 +4,6 @@
     "src"
   ],
   "compilerOptions": {
-    "rootDir": "src",
-    // "@types/node" imports NODE_ENV="production/development"
-    "types": ["@types/node"]
+    "rootDir": "src"
   }
 }
