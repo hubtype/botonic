@@ -48,6 +48,7 @@
     "baseline/babel.config.js",
     "baseline/jest.config.js",
     "baseline/package.json",
+    "baseline/prettier.config.js",
     "baseline/tsconfig.*json",
     "baseline/tests/__mocks__/file-mock.js",
     "sample-config/*js",
