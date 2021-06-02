@@ -7,8 +7,8 @@
     "##########  LINT": "",
     "lint": "npm run lint-core -- --fix && npm run prettier",
     "lint-ci": "npm run lint-core -- -c .eslintrc-ci.js && npm run prettier",
-    "lint-core": "eslint_d --cache --quiet  '*.md' './*.js' '*.js{,on}' '{src,tests}/**/*.[jt]{s,sx}'",
-    "prettier": "prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' ",
+    "lint-core": "eslint_d --cache --quiet '{src,tests}/**/*.[jt]{s,sx}'",
+    "prettier": "prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
 
     "########## DEBUG": "",
     "test": "jest",
