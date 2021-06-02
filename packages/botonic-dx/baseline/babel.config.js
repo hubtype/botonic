@@ -13,11 +13,11 @@ module.exports = {
   sourceType: 'unambiguous',
   // .map files are not generated unless babel invoked with --source-maps
   sourceMaps: true,
-  presets: ['@babel/preset-env'],
+  presets: ['@babel/preset-env', '@babel/preset-react'],
   plugins: [
     require('@babel/plugin-proposal-object-rest-spread'),
     require('@babel/plugin-proposal-class-properties'),
     require('@babel/plugin-transform-modules-commonjs'),
-    require('@babel/plugin-transform-runtime')
-  ]
+    require('@babel/plugin-transform-runtime'),
+  ],
 }

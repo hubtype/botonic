@@ -11,7 +11,13 @@
     "typescript"
   ],
   "dependencies": {
-    "@botonic/eslint-config": "0.19.0-alpha.5",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.14.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.14.0",
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-react": "^7.13.13",
+    "@botonic/eslint-config": "~0.19.0-alpha.6",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.1",
     "@typescript-eslint/eslint-plugin": "*",
@@ -51,6 +57,7 @@
     "baseline/prettier.config.js",
     "baseline/tsconfig.*json",
     "baseline/tests/__mocks__/file-mock.js",
+    "sample-config/.*js",
     "sample-config/*js",
     "sample-config/*json",
     "README.md"
