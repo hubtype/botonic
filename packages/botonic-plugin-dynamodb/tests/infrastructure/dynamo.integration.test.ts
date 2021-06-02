@@ -2,16 +2,14 @@ import BotonicPluginDynamoDB, { DynamoDbOptions, Env } from '../../src'
 import { Track, UserEvent } from '../../src/domain'
 import time from '../../src/domain/time'
 import { Track as DynamoTrack } from '../../src/infrastructure/track'
-import { testConfig } from '../helpers/dynamo'
 
 test('TEST: Track serialization', () => {
   DynamoTrack.testSerialization()
 })
 
 test('TEST: dynamo write', async () => {
-  const sut = new BotonicPluginDynamoDB(
-    testConfig({ env: Env.DEV } as DynamoDbOptions)
-  ).storage
+  const sut = new BotonicPluginDynamoDB({ env: Env.DEV } as DynamoDbOptions)
+    .storage
   const track1 = new Track('test_bot', time.now(), [
     new UserEvent('user1', 'event1', { arg1: 'val1' }),
     new UserEvent('user2', 'event2'),
