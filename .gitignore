@@ -24,4 +24,4 @@ packages/botonic-cli/botonic-tmp*
 .botonic.json
 .vscode
 docs/website/package-lock.json
-tsconfig.tsbuildinfo
+*.tsbuildinfo
