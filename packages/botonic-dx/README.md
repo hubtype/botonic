@@ -81,3 +81,7 @@ So, so far it's recommended to:
 * Install npm 7 locally in an empty project (`cd <project_with_npm7> && npm init && npm i npm`)
 * `cd botonic/packages/botonic-dx && <project_with_npm7>/node_modules/.bin/npm publish`
 
+
+# Future work
+.js files not yet processed with eslint because some rules require the typescript parser,
+which runs only on .ts files. It will be fixed by applying these rules only to .ts files.
