@@ -1,0 +1,3 @@
+{
+  "extends": "@botonic/dx/baseline/tsconfig.eslint.json",
+}
