@@ -1,4 +1,9 @@
-import { CmsException, ContentType, TopContentId } from '../../../src/cms/'
+import {
+  ButtonStyle,
+  CmsException,
+  ContentType,
+  TopContentId,
+} from '../../../src/cms/'
 import { rndStr } from '../../../src/cms/test-helpers'
 import { ContentFieldType } from '../../../src/manage-cms/fields'
 import { ENGLISH } from '../../../src/nlp'
@@ -74,5 +79,45 @@ describe('ManageContentful entries', () => {
     await expect(
       sut.deleteContent(context, TEST_NEW_CONTENT_ID)
     ).rejects.toThrow(CmsException)
+  })
+
+  test('TEST: updateFields is able to manage fields of type ButtonStyle and FollowUps', async () => {
+    const sut = testManageContentful()
+    const contentful = testContentful({ disableCache: true })
+    const NEW_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
+    const FOLLOW_UP_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
+    const name = rndStr()
+    const text = rndStr()
+    const followUpName = rndStr()
+    try {
+      // ACT
+      await sut.createContent(context, NEW_CONTENT.model, NEW_CONTENT.id)
+      await sut.createContent(
+        context,
+        FOLLOW_UP_CONTENT.model,
+        FOLLOW_UP_CONTENT.id
+      )
+      await sut.updateFields(context, NEW_CONTENT, {
+        [ContentFieldType.NAME]: name,
+        [ContentFieldType.TEXT]: text,
+        [ContentFieldType.BUTTONS_STYLE]: ButtonStyle.QUICK_REPLY,
+        [ContentFieldType.FOLLOW_UP]: FOLLOW_UP_CONTENT.id,
+      })
+      await sut.updateFields(context, FOLLOW_UP_CONTENT, {
+        [ContentFieldType.NAME]: followUpName,
+        [ContentFieldType.TEXT]: rndStr(),
+      })
+      await repeatWithBackoff(async () => {
+        const result = await contentful.text(NEW_CONTENT.id)
+        expect(result.name).toEqual(name)
+        expect(result.text).toEqual(text)
+        expect(result.buttonsStyle).toEqual(1)
+        expect(result.common.followUp?.name).toEqual(followUpName)
+      })
+    } finally {
+      // RESTORE
+      await sut.deleteContent(context, NEW_CONTENT)
+      await sut.deleteContent(context, FOLLOW_UP_CONTENT)
+    }
   })
 })

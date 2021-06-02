@@ -5,7 +5,7 @@ import { Entry } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
 
-import { CmsException, ContentId, ContentType } from '../../cms'
+import { ButtonStyle, CmsException, ContentId, ContentType } from '../../cms'
 import { ResourceNotFoundCmsException } from '../../cms/exceptions'
 import {
   CONTENT_FIELDS,
@@ -16,6 +16,7 @@ import { ManageContext } from '../../manage-cms/manage-context'
 import * as nlp from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
 import { isOfType } from '../../util/enums'
+import { BUTTON, EntryLink, LinkType, QUICK_REPLY } from './contentful-api'
 
 export class ManageContentfulEntry {
   constructor(
@@ -41,6 +42,7 @@ export class ManageContentfulEntry {
         continue
       }
       needUpdate = true
+      fields[key] = this.convertValueType(key, fields[key])
       oldEntry.fields[field.cmsName][context.locale] = fields[key]
     }
     if (!needUpdate) {
@@ -169,5 +171,32 @@ export class ManageContentfulEntry {
     } catch (e) {
       throw new ResourceNotFoundCmsException(contentId, e)
     }
+  }
+
+  private convertValueType(key: ContentFieldType, field: any): any {
+    const valueType = CONTENT_FIELDS.get(key)?.valueType
+    if (valueType === typeof field) return field
+    if (key === ContentFieldType.BUTTONS_STYLE) {
+      if (field === undefined) return null
+      return field === ButtonStyle.QUICK_REPLY ? QUICK_REPLY : BUTTON
+    }
+    if (field === undefined) return field
+    if (key === ContentFieldType.FOLLOW_UP || key === ContentFieldType.TARGET) {
+      return this.getEntryLink(field, 'Entry')
+    }
+    if (key === ContentFieldType.IMAGE || key === ContentFieldType.PIC) {
+      return this.getEntryLink(field, 'Asset')
+    }
+    if (key === ContentFieldType.BUTTONS || key === ContentFieldType.ELEMENTS) {
+      const fieldLinks = field.map((id: string) =>
+        this.getEntryLink(id, 'Entry')
+      )
+      return fieldLinks
+    }
+    return field
+  }
+
+  private getEntryLink(id: string, linkType: LinkType) {
+    return { sys: { ...new EntryLink(id, linkType) } }
   }
 }
