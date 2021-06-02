@@ -22,6 +22,13 @@ npm install -D @botonic/dx
   To adapt them to your project needs, you just need to patch the specific options after importing the baseline.
   See instructions on each of these files.
 
+### package.json
+Instructions here because it cannot contain comments
+* Even if you don't plan to publish your package, it's important to correctly configure the "files" field. 
+  Otherwise, you may get the node/no-unpublished-import
+  eslint error when importing a dev dependency from a test or a configuration file 
+  (remove --cache from eslint command after updating your package.json).
+
 
 ## Usage
 

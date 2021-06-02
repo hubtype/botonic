@@ -20,5 +20,15 @@
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"
-  }
+    },
+    "engines": {
+      "node": ">=12.22.1"
+    },
+    "files": [
+      "bin/**",
+      "doc/**",
+      "lib/**",
+      "src/**",
+      "README.md"
+    ]
 }
