@@ -81,7 +81,7 @@ describe('ManageContentful entries', () => {
     ).rejects.toThrow(CmsException)
   })
 
-  test('TEST: convertValueType converts the ButtonStyle and the FollowUp', async () => {
+  test('TEST: updateFields is able to manage fields of type ButtonStyle and FollowUps', async () => {
     const sut = testManageContentful()
     const contentful = testContentful({ disableCache: true })
     const NEW_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
