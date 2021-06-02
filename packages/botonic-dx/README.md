@@ -63,3 +63,12 @@ to avoid duplicating the version specification.
 ## Dependencies
 @types/node must be a direct dependency. If only defined in a parent package.json, we get TSC errors for
 symbols from these libs: "ES2016.Array.Include", "ES2017.object"
+
+## Version
+Due to a [npm bug](https://github.com/npm/cli/issues/2010), `npm version` interaction with git
+(check clean stage, commit and create tag) is broken. Hence, sample-config manually checks that
+there are no modifications in git files.
+
+## npm
+This package must be published with npm 7. 
+With v6, there's no way to install hidden files (required for sample-config files)

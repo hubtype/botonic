@@ -17,8 +17,9 @@
 
     "########## PUBLISH": "",
     "prepublishOnly": "npm run build && npm run lint-ci && npm test",
-    "preversion": "npm run lint",
-    "version": "git add -A src tests",
+    "preversion": "npm run lint-ci",
+    "# version issue": "See https://github.com/npm/cli/issues/2010. Temporarily checking all files have been git-added",
+    "version": "git add package.json && git diff --exit-code && git commit",
     "postversion": "git push && git push --tags"
     },
     "engines": {
