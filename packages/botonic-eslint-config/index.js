@@ -100,12 +100,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: [
-        '**/*.js', // to be able to skip required fields when not used in a particular test
-        '**/*.jsx',
-      ],
+      files: ['**/*.js', '**/*.jsx'],
       rules: {
+        '@typescript-eslint/no-var-requires': 'off',
         // pending to mark unused vars with _...
+        // to be able to skip required fields when not used in a particular test
         //'no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }],
       },
     },
