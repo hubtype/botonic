@@ -20,6 +20,7 @@ test.each<any>([
   ['U.S.A', 'USA'],
   ['o.k, vale', 'ok, vale'],
   //not acronyms
+  ['longerThan1Char.k', 'longerThan1Char.k'],
   ['.a.', '.a.'],
   ['U..A', 'U..A'],
   ['a. opcion', 'a. opcion'],
