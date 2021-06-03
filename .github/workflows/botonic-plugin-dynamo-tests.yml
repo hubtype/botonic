@@ -30,15 +30,25 @@ jobs:
           ${{ runner.os }}-node-
     - name: Install dev dependencies
       run: (cd ./packages/$PACKAGE && npm install -D)
-    - name: Build
-      run: (cd ./packages/$PACKAGE && npm run build_unit_tests)
-    - name: Run tests
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: (cd ./packages/$PACKAGE && npm run test)
+
     - name: Verify lint
       run: (cd ./packages/$PACKAGE && npm run lint_ci)
+
+    - name: Build
+      run: (cd ./packages/$PACKAGE && npm run build_unit_tests)
+
+    - name: Configure AWS Credentials with role
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_GH_ACTIONS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_GH_ACTIONS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+        role-to-assume: arn:aws:iam::319689072149:role/machine/ht-github-actions
+        role-duration-seconds: 900
+        role-session-name: HubtypeCITests
+
+    - name: Run tests
+      run: (cd ./packages/$PACKAGE && npm run test)
 
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
