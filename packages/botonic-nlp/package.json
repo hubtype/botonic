@@ -1,6 +1,7 @@
 {
   "name": "@botonic/nlp",
   "version": "0.19.0-alpha.9",
+  "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
