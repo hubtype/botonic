@@ -1,4 +1,4 @@
-import { LayersModel, loadLayersModel } from '@tensorflow/tfjs-node'
+import { LayersModel, loadLayersModel } from '@tensorflow/tfjs'
 import axios, { AxiosPromise } from 'axios'
 import { fetch } from 'cross-fetch'
 
