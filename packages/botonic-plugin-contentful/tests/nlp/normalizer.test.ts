@@ -1,4 +1,6 @@
 import {
+  AcronymPreprocessor,
+  DEFAULT_SEPARATORS,
   DEFAULT_STOP_WORDS,
   EmptyTextException,
   Locale,
@@ -8,6 +10,29 @@ import {
   SUPPORTED_LOCALES,
   Word,
 } from '../../src/nlp'
+
+test.each<any>([
+  //acronyms
+  ['o.k.', 'ok'],
+  ['o.k', 'ok'],
+  ['o.k ', 'ok '],
+  ['o.k ', 'ok '],
+  ['U.S.A', 'USA'],
+  ['o.k, vale', 'ok, vale'],
+  //not acronyms
+  ['longerThan1Char.k', 'longerThan1Char.k'],
+  ['.a.', '.a.'],
+  ['U..A', 'U..A'],
+  ['a. opcion', 'a. opcion'],
+  ['no separators', 'no separators'],
+  ['final dot.', 'final dot.'],
+])(
+  'TEST: AcronymPreprocessor removes acronyms (%s=>%s)',
+  (from: string, to: string) => {
+    const sut = new AcronymPreprocessor(DEFAULT_SEPARATORS)
+    expect(sut.preprocess(from)).toEqual(to)
+  }
+)
 
 test.each<any>(SUPPORTED_LOCALES)(
   'TEST: consecutive separators %s are removed',
@@ -255,6 +280,14 @@ test('TEST: Normalizer does not stem blacklisted tokens', () => {
     'perro',
     'perro',
   ])
+})
+
+test.each<any>([
+  ['o.k.', new NormalizedUtterance('o.k.', [new Word('ok', 'ok')])],
+])('TEST: sut.normalize acronyms', (from: string, to: string) => {
+  const loc = 'es'
+  const sut = new Normalizer()
+  expect(sut.normalize(loc, from)).toEqual(to)
 })
 
 function replaceI18nChars(word: string, locale: string): string {

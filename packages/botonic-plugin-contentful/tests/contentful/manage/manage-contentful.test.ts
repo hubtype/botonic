@@ -100,9 +100,6 @@ describe('ManageContentful fields', () => {
   }
 
   async function restoreValue(manage: ManageCms) {
-    contentful.text(TEST_CONTENT_ID.id, {
-      locale: SPANISH,
-    })
     await manage.updateFields(
       ctxt({ locale: SPANISH, allowOverwrites: true }),
       TEST_CONTENT_ID,

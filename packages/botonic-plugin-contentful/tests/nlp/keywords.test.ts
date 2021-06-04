@@ -143,6 +143,11 @@ test.each<any>([
 )
 
 test.each<any>([
+  // acronyms
+  ['o.k.', { OK: ['o.k.'] }, ['OK']],
+  ['ok', { OK: ['o.k.'] }, ['OK']],
+  ['o.k.', { OK: ['ok'] }, ['OK']],
+
   // found with multiword keyword
   ['k w A', { A: ['k w A', 'kwB'] }, ['A']],
 
