@@ -11,26 +11,26 @@
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.2",
-    "analytics-node": "^3.4.0-beta.1",
-    "axios": "^0.21.0",
+    "analytics-node": "^3.5.0",
+    "axios": "^0.21.1",
     "colors": "^1.4.0",
     "fetch-repo-dir": "^1.0.4",
     "form-data": "^3.0.0",
     "fs-extra": "^10.0.0",
-    "inquirer": "^7.0.4",
-    "ora": "^5.1.0",
-    "qs": "^6.9.4",
-    "tslib": "^2.0.1",
+    "inquirer": "^7.3.3",
+    "ora": "^5.4.0",
+    "qs": "^6.10.1",
+    "tslib": "^2.2.0",
     "uuid": "^8.3.2",
-    "zip-a-folder": "0.0.12"
+    "zip-a-folder": "0.1.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
-    "@types/analytics-node": "^3.1.3",
-    "@types/fs-extra": "^9.0.8",
+    "@types/analytics-node": "^3.1.4",
+    "@types/fs-extra": "^9.0.11",
     "@types/inquirer": "^7.3.1",
     "@types/uuid": "^8.3.0",
-    "globby": "^11.0.0"
+    "globby": "^11.0.3"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -62,7 +62,7 @@
     "version": "oclif-dev readme && git add README.md",
     "postinstall": "node scripts/postinstall.js",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c .eslintrc_slow.js",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
     "test": "../../node_modules/.bin/jest --coverage",
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"

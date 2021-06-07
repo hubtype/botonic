@@ -25,7 +25,10 @@ export default class BotonicPluginIntentClassification implements Plugin {
         Object.assign(request.input, { intent: intents[0].label, intents })
       }
     } catch (e) {
-      console.error(`Cannot classify the input: ${request.input}`, e)
+      console.error(
+        `Cannot classify the input: ${JSON.stringify(request.input)}`,
+        e
+      )
     }
   }
 

@@ -13,12 +13,12 @@ export class ModelManager {
     await this.model.fit(x, y, args)
   }
 
-  async evaluate(x: Tensor, y: Tensor): Promise<ModelEvaluation> {
-    const [loss, accuracy] = (await this.model.evaluate(x, y)) as Scalar[]
-    return {
+  evaluate(x: Tensor, y: Tensor): Promise<ModelEvaluation> {
+    const [loss, accuracy] = this.model.evaluate(x, y) as Scalar[]
+    return Promise.resolve({
       loss: loss.arraySync(),
       accuracy: accuracy.arraySync(),
-    }
+    })
   }
 
   predict(x: Tensor): Tensor {

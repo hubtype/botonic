@@ -42,11 +42,11 @@ export class CmsException extends Error {
     // resourceId already reported by ErrorReportingCMS, but not yet
     // for contents & topContents methods
     if (resourceId && !message.includes(resourceId.id)) {
-      message += ` on content ${resourceId}`
+      message += ` on content ${resourceId.toString()}`
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     if (reason) {
-      message += `. ${reason.message || String(reason)}`
+      message += `. ${String(reason.message || reason)}`
     }
     return message
   }
