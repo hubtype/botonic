@@ -167,6 +167,7 @@ export interface Route {
   request?: RequestMatcher
   session?: SessionMatcher
   text?: StringMatcher
+  data?: StringMatcher
   type?: StringMatcher
 }
 
