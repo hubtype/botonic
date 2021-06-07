@@ -222,7 +222,7 @@ test('TEST: ContentUpdater', async () => {
       fail("shouldn't be called")
     }
 
-    async removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
+    removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
       fail("shouldn't be called")
     }
   }

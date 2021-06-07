@@ -27,7 +27,9 @@ export async function repeatWithBackoff<T>(
     try {
       return await func()
     } catch (e) {
-      const stack = e.stack ? `\nat:\n${e.stack}` : ' (no stack available)'
+      const stack = e.stack
+        ? `\nat:\n${String(e.stack)}`
+        : ' (no stack available)'
       logger(
         `Retrying after exception at ${new Date().toISOString()}: ${String(
           e

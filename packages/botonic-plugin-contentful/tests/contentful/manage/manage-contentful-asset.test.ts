@@ -42,7 +42,7 @@ describe('ManageContentful assets', () => {
         const newContent = await contentful.asset(assetId, context)
         expect(newContent.id).toEqual(assetId)
         expect(newContent.info).toEqual(info)
-        expect(newContent.url).toEqual(`https:${url}`)
+        expect(newContent.url).toEqual(`https:${String(url)}`)
       })
     } finally {
       // RESTORE / ACT
