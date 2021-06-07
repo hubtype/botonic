@@ -1,6 +1,6 @@
 import { Command, flags } from '@oclif/command'
+// eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
-import { resolve } from 'path'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'

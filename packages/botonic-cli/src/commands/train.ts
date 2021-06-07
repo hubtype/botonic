@@ -81,7 +81,7 @@ export default class Run extends Command {
 
   private telemetry = new Telemetry()
 
-  async run(): Promise<void> {
+  run(): Promise<void> {
     try {
       this.telemetry.trackTrain()
       const { flags } = this.parse(Run)
@@ -90,5 +90,6 @@ export default class Run extends Command {
     } catch (e) {
       console.error(e)
     }
+    return Promise.resolve()
   }
 }

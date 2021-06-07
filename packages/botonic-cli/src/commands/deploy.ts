@@ -2,9 +2,10 @@ import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
 import { statSync } from 'fs'
+// eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
 import ora from 'ora'
-import { join } from 'path'
+// eslint-disable-next-line import/named
 import { zip } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
@@ -367,7 +368,9 @@ Uploading...
     } catch (e) {
       const error = `Deploy Botonic Provider Error: ${String(e)}`
       this.telemetry.trackError(error)
-      console.log(colors.red(`There was an error getting the providers: ${e}`))
+      console.log(
+        colors.red(`There was an error getting the providers: ${string(e)}`)
+      )
       return false
     }
   }
