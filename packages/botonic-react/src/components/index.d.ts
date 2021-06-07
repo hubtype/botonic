@@ -50,6 +50,9 @@ export interface ButtonProps {
   url?: string
   webview?: Webview
   onClick?: () => void
+  autodisable?: boolean
+  disabled?: boolean
+  disabledstyle?: boolean
 }
 
 export const Button: React.FunctionComponent<ButtonProps>

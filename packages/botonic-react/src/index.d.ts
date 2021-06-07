@@ -195,7 +195,7 @@ export class WebchatApp {
     appId: string
     visibility: () => boolean
   }): Promise<boolean>
-  setTyping(typing: number): void
+  setTyping(enable: boolean): void
   toggle(): void
   toggleCoverComponent(): void
   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
@@ -216,10 +216,7 @@ export interface WebchatContextProps {
   updateLatestInput: (input: core.Input) => void
   closeWebview: () => void
   toggleWebchat: () => void
-  getThemeProperty: (
-    property: string,
-    defaultValue?: string
-  ) => string | undefined
+  getThemeProperty: (property: string, defaultValue?: string) => any
   resolveCase: () => void
   theme: ThemeProps
   webchatState: WebchatState
