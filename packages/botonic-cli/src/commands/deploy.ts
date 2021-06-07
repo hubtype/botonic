@@ -5,8 +5,9 @@ import { statSync } from 'fs'
 // eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
 import ora from 'ora'
+import { join } from 'path'
 // eslint-disable-next-line import/named
-import { zip } from 'zip-a-folder'
+import { ZipAFolder } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
@@ -85,7 +86,7 @@ Uploading...
     if (bot == undefined) {
       console.log(colors.red(`Bot ${botName} doesn't exist.`))
       console.log('\nThese are the available options:')
-      bots.map(b => console.log(` > ${b.name}`))
+      bots.map(b => console.log(` > ${String(b.name)}`))
     } else {
       this.botonicApiService.setCurrentBot(bot)
       await this.deploy()
@@ -246,7 +247,9 @@ Uploading...
       return this.botonicApiService.saveBot(inp.bot_name).then(
         ({}) => this.deploy(),
         err =>
-          console.log(colors.red(`There was an error saving the bot: ${err}`))
+          console.log(
+            colors.red(`There was an error saving the bot: ${String(err)}`)
+          )
       )
     })
   }
@@ -266,7 +269,7 @@ Uploading...
     })
   }
 
-  displayProviders(providers: any): void {
+  displayProviders(providers: { username: string; provider: string }[]): void {
     console.log('Your bot is published on:')
     providers.forEach(p => {
       if (p.provider === 'whatsapp')
@@ -290,7 +293,10 @@ Uploading...
       removeRecursively(BOTONIC_TEMP_DIRNAME)
     createDir(join(process.cwd(), BOTONIC_TEMP_DIRNAME))
     copy('dist', join(BOTONIC_TEMP_DIRNAME, 'dist'))
-    const zipRes = await zip(BOTONIC_TEMP_DIRNAME, join(BOTONIC_BUNDLE_FILE))
+    const zipRes = await ZipAFolder.zip(
+      BOTONIC_TEMP_DIRNAME,
+      join(BOTONIC_BUNDLE_FILE)
+    )
     if (zipRes instanceof Error) {
       throw Error
     }
@@ -308,6 +314,7 @@ Uploading...
       return
     }
   }
+
   /* istanbul ignore next */
   async deployBundle(): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
@@ -359,7 +366,11 @@ Uploading...
       const providers = providersRes.data.results
       if (hasDeployErrors) return false
       if (!providers.length) {
-        const links = `Now, you can integrate a channel in:\nhttps://app.hubtype.com/bots/${this.botonicApiService.bot.id}/integrations?access_token=${this.botonicApiService.oauth.access_token}`
+        const botId = this.botonicApiService.botInfo().id
+        const accessToken = this.botonicApiService.getOauth().access_token
+        const links =
+          'Now, you can integrate a channel in:' +
+          `\nhttps://app.hubtype.com/bots/${botId}/integrations?access_token=${accessToken}`
         console.log(links)
       } else {
         this.displayProviders(providers)
@@ -369,7 +380,7 @@ Uploading...
       const error = `Deploy Botonic Provider Error: ${String(e)}`
       this.telemetry.trackError(error)
       console.log(
-        colors.red(`There was an error getting the providers: ${string(e)}`)
+        colors.red(`There was an error getting the providers: ${String(e)}`)
       )
       return false
     }
