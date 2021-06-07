@@ -4,7 +4,7 @@
     "@types/jest": "^26.0.23",
     "@types/node": "^15.3.0",
     "@types/rimraf": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "~4.25.0",
+    "@typescript-eslint/eslint-plugin": "~4.26.0",
     "@typescript-eslint/parser": "~4.25.0",
     "babel-eslint": "^10.1.0",
     "cloc": "^2.7.0",
