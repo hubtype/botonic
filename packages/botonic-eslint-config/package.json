@@ -14,10 +14,10 @@
     "typescript"
   ],
   "dependencies": {
-    "@typescript-eslint/parser": "~4.24.0"
+    "@typescript-eslint/parser": "^4.26.0"
   },
   "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": "~4.22.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
     "eslint-plugin-filenames": "^1.3.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.3.6",

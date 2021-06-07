@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.19.0-alpha.9",
+  "version": "0.19.0-alpha.16",
   "description": "Continuous integration for botonic packages",
   "scripts": {},
   "author": "",
@@ -22,7 +22,8 @@
     "@types/node": "^15.12.1",
     "@typescript-eslint/eslint-plugin": "*",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.25.0",
+    "eslint": "^7.28.0",
+    "eslint_d": "^10.1.3",
     "eslint-config-prettier": "^7.2.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-filenames": "*",
@@ -35,21 +36,22 @@
     "eslint-plugin-react": "*",
     "eslint-plugin-react-hooks": "*",
     "eslint-plugin-simple-import-sort": "*",
-    "eslint_d": "^10.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "jest-each": "^26.6.2",
     "jest-junit": "^12.0.0",
     "prettier": "^2.2.1",
-    "ts-jest": "^26.5.5",
+    "ts-jest": "^26.5.6",
     "ts-mockito": "^2.6.1",
     "ts-node": "^9.1.1",
     "tslib": "^2.2.0",
     "typescript": "^4.2.4"
   },
+  "engines": {
+    "npm": ">=17.13.0"
+  },
   "files": [
     "README.md",
-    "baseline/.eslintrc*.js",
     "baseline/README.md",
     "baseline/babel.config.js",
     "baseline/jest.config.js",

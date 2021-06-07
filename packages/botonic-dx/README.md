@@ -18,7 +18,7 @@ npm install -D @botonic/dx
 ```
 * Copy the contents of the `sample-config` folder to the root of your project 
   (Merge this package.json's scripts into your project ones)
-* These files just import the configuration maintained within this project. 
+* The files at `sample-config` just import the configuration maintained within this project. 
   To adapt them to your project needs, you just need to patch the specific options after importing the baseline.
   See instructions on each of these files.
 
@@ -72,3 +72,16 @@ there are no modifications in git files.
 ## npm
 This package must be published with npm 7. 
 With v6, there's no way to install hidden files (required for sample-config files)
+However, looks like "engines" restriction does not work. Also, npm 7 still has issues
+with our monorepo (hangs and spurious errors).
+
+### How to deploy with npm7
+So, so far it's recommended to:
+* Leave npm 6 globally installed
+* Install npm 7 locally in an empty project (`cd <project_with_npm7> && npm init && npm i npm`)
+* `cd botonic/packages/botonic-dx && <project_with_npm7>/node_modules/.bin/npm publish`
+
+
+# Future work
+.js files not yet processed with eslint because some rules require the typescript parser,
+which runs only on .ts files. It will be fixed by applying these rules only to .ts files.
