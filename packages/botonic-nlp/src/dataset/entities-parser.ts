@@ -9,7 +9,7 @@ export class EntitiesParser {
     const definedEntities = []
 
     let text = sentence
-    let m
+    let m: RegExpExecArray
 
     let charactersRemoved = 0 //amount of characters removed because of entity definition removal: [shirt](product) -> shirt.
 
@@ -19,7 +19,7 @@ export class EntitiesParser {
       const entityLabel = m[2]
 
       if (!this.entities.includes(entityLabel)) {
-        throw new Error(`Undefined entity '${entityLabel}'`)
+        throw new Error(`Undefined entity '${String(entityLabel)}'`)
       }
 
       text = text

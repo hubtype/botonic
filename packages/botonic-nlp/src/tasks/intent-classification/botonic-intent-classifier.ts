@@ -74,7 +74,7 @@ export class BotonicIntentClassifier {
           params
         )
       default:
-        throw new Error(`"${template}" is an invalid model template.`)
+        throw new Error(`"${String(template)}" is an invalid model template.`)
     }
   }
 

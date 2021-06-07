@@ -37,7 +37,7 @@ class TestWordEmbeddingStorage implements WordEmbeddingStorage {
   constructor(readonly dimension: EmbeddingsDimension) {}
 
   async getWordEmbedding(word: string): Promise<number[]> {
-    return Array(this.dimension).fill(Math.random() * 2 - 1)
+    return Promise.resolve(Array(this.dimension).fill(Math.random() * 2 - 1))
   }
 }
 

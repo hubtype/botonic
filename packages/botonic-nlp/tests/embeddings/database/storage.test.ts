@@ -12,6 +12,6 @@ describe('Database storage', () => {
 
   test('Get word embedding', async () => {
     const manager = await DatabaseStorage.with('es', '10k-fasttext', 300)
-    expect(await (await manager.getWordEmbedding('rojo')).length).toEqual(300)
+    expect((await manager.getWordEmbedding('rojo')).length).toEqual(300)
   })
 })
