@@ -22,6 +22,13 @@ npm install -D @botonic/dx
   To adapt them to your project needs, you just need to patch the specific options after importing the baseline.
   See instructions on each of these files.
 
+### package.json
+Instructions here because it cannot contain comments
+* Even if you don't plan to publish your package, it's important to correctly configure the "files" field. 
+  Otherwise, you may get the node/no-unpublished-import
+  eslint error when importing a dev dependency from a test or a configuration file 
+  (remove --cache from eslint command after updating your package.json).
+
 
 ## Usage
 
@@ -56,3 +63,12 @@ to avoid duplicating the version specification.
 ## Dependencies
 @types/node must be a direct dependency. If only defined in a parent package.json, we get TSC errors for
 symbols from these libs: "ES2016.Array.Include", "ES2017.object"
+
+## Version
+Due to a [npm bug](https://github.com/npm/cli/issues/2010), `npm version` interaction with git
+(check clean stage, commit and create tag) is broken. Hence, sample-config manually checks that
+there are no modifications in git files.
+
+## npm
+This package must be published with npm 7. 
+With v6, there's no way to install hidden files (required for sample-config files)

@@ -29,7 +29,10 @@
 
     //performance
     "incremental": true,
-    "types": [], //https://github.com/microsoft/TypeScript/wiki/Performance#controlling-types-inclusion
+    //https://github.com/microsoft/TypeScript/wiki/Performance#controlling-types-inclusion
+    "types": [
+      "@types/node" ////imports NODE_ENV="production/development"
+    ],
 
     // lint options
     "strict": true,

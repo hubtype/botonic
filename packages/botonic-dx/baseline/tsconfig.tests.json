@@ -12,7 +12,8 @@
     "declarationDir": null,
     "noEmit": true,
     "types": [
-      "@types/jest"
+      "@types/jest",
+      "@types/node"
     ]
 
   }
