@@ -1,4 +1,4 @@
-import { LayersModel } from '@tensorflow/tfjs-node'
+import { LayersModel } from '@tensorflow/tfjs'
 
 import { NlpTaskConfig } from '../storage'
 import { Locale } from '../types'
