@@ -1,0 +1,38 @@
+import { KJUR } from 'jsrsasign'
+
+import { Credentials } from './options'
+
+export class AccessToken {
+  value: string
+  private readonly header
+  private readonly payload
+
+  constructor(private readonly credentials: Credentials) {
+    this.header = JSON.stringify({
+      alg: 'RS256',
+      typ: 'JWT',
+      kid: credentials.privateKeyId,
+    })
+    this.payload = JSON.stringify({
+      iss: credentials.clientEmail,
+      sub: credentials.clientEmail,
+      iat: KJUR.jws.IntDate.get('now'),
+      exp: KJUR.jws.IntDate.get('now + 1hour'),
+      aud: 'https://translation.googleapis.com/',
+    })
+    this.value = this.generate()
+  }
+
+  refresh(): void {
+    this.value = this.generate()
+  }
+
+  private generate(): string {
+    return KJUR.jws.JWS.sign(
+      'RS256',
+      this.header,
+      this.payload,
+      this.credentials.privateKey
+    )
+  }
+}
