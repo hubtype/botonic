@@ -20,8 +20,8 @@ export interface BotResponse extends core.BotRequest {
 }
 
 export interface Route extends core.Route {
-  action?: typeof React.Component
-  retryAction?: typeof React.Component
+  action?: React.ComponentType<any>
+  retryAction?: React.ComponentType<any>
 }
 type Routes = core.Routes<Route>
 
