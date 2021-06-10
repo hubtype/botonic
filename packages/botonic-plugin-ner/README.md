@@ -2,9 +2,7 @@
 
 ## What does this plugin do?
 
-Botonic Plugin NER uses the trained models defined by the user to recognize named entities inside the input text.
-
-First, the text locale is detected. Then, by using the relevant model, extra information about the recognized entities is added to the input message.
+Botonic Plugin NER uses the trained models to recognize named entities in the input text.
 
 ## Setup
 
@@ -22,8 +20,6 @@ npm install @botonic/plugin-ner
 ### Requiring the plugin
 
 The plugin must be required in `src/plugins.js` and the locales of the trained models must be defined in their options.
-
-**Locales order matters.** If locale detection is ambiguous, the locale defined first in the array will be used as a fallback.
 
 ```javascript
 export const plugins = [
