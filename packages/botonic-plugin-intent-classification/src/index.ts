@@ -1,9 +1,9 @@
 import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
+import { Locale } from '@botonic/nlp'
 
 import { IntentModelSelector } from './model/model-selector'
 import type { PluginOptions } from './options'
-import { detectLocale } from './utils/locale-utils'
 
 export default class BotonicPluginIntentClassification implements Plugin {
   private readonly modelsSelector: Promise<IntentModelSelector>
@@ -19,8 +19,9 @@ export default class BotonicPluginIntentClassification implements Plugin {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const inputText = request.input.data
-        const detectedLocale = detectLocale(inputText, this.options.locales)
-        const classifier = (await this.modelsSelector).select(detectedLocale)
+        const classifier = (await this.modelsSelector).select(
+          request.session.__locale as Locale
+        )
         const intents = classifier.classify(inputText)
         Object.assign(request.input, { intent: intents[0].label, intents })
       }
