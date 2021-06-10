@@ -1,9 +1,9 @@
 import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
 import { INPUT } from '@botonic/core'
+import { Locale } from '@botonic/nlp'
 
 import { NerModelSelector } from './model/model-selector'
 import { PluginOptions } from './options'
-import { detectLocale } from './utils/locale-utils'
 
 export default class BotonicPluginNER implements Plugin {
   private modelsSelector: Promise<NerModelSelector>
@@ -19,8 +19,9 @@ export default class BotonicPluginNER implements Plugin {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const inputText = request.input.data
-        const detectedLocale = detectLocale(inputText, this.options.locales)
-        const ner = (await this.modelsSelector).select(detectedLocale)
+        const ner = (await this.modelsSelector).select(
+          request.session.__locale as Locale
+        )
         const entities = ner.recognize(inputText)
         Object.assign(request.input, { entities })
       }
