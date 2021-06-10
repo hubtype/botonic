@@ -186,6 +186,10 @@ export class I18nField {
   constructor(readonly name: ContentFieldType, readonly value: string) {}
 }
 
+/**
+ * Only contains i18nalizable fields (used by tools to detect which fields need to be imported/deleted)
+ * TODO add all fields
+ */
 const FIELDS_PER_CONTENT_TYPE: { [type: string]: ContentFieldType[] } = {
   [ContentType.BUTTON]: [ContentFieldType.TEXT],
   [ContentType.CAROUSEL]: [],
@@ -199,6 +203,10 @@ const FIELDS_PER_CONTENT_TYPE: { [type: string]: ContentFieldType[] } = {
   [ContentType.URL]: [ContentFieldType.URL],
 }
 
+/**
+ * Adds common fields to FIELDS_PER_CONTENT_TYPE
+ * IMPORTANT @see FIELDS_PER_CONTENT_TYPE
+ */
 export function getFieldsForContentType(
   contentType: ContentType
 ): ContentFieldType[] {

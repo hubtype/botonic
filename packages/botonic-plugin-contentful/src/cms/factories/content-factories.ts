@@ -12,6 +12,11 @@ import {
   Text,
 } from '../contents'
 
+/**
+ * Builder for Contents (which are immutable) which allow:
+ * - Setting the optional fields individually and in any order
+ * - Easing the implementation of the RndXXXBuilder classes at src/cms/test-helpers/builders.ts
+ */
 abstract class ContentBuilder {
   protected constructor(public id: string, public name: string) {}
 
@@ -27,9 +32,6 @@ abstract class ContentBuilder {
 
   abstract build(): Content
 }
-
-/** @deprecated use ContentBuilder */
-export type ModelBuilder = ContentBuilder
 
 export abstract class TopContentBuilder extends ContentBuilder {
   shortText?: string

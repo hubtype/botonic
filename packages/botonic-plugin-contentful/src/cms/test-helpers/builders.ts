@@ -20,6 +20,12 @@ import {
   TopContentId,
 } from '../index'
 
+/**
+ * The Builder classes below create Content instances with minimal effort
+ * to speedup the implementation of unit tests by setting random values for the
+ * non specified fields.
+ * They are exported by the plugin so that the can be used in bots' unit tests
+ */
 export function rndStr(): string {
   return Math.random().toString()
 }

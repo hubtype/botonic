@@ -33,12 +33,13 @@ export class Asset {
 }
 
 /**
- * Any content deliverable from a CMS
+ * Any content deliverable from a CMS.
+ * They are immutable, which allows sharing and caching them.
  */
 export abstract class Content implements Stringable {
   protected constructor(readonly contentType: ContentType) {}
 
-  /** @return message if any issue detected */
+  /** @return error message if any issue detected */
   validate(): string | undefined {
     return undefined
   }
@@ -157,7 +158,6 @@ export abstract class MessageContent extends TopContent {
 /**
  * When any {@link keywords} is detected on a user input, we can use display the {@link shortText} for users
  * to confirm their interest on this content
- * TODO move contentId o ContentType here?
  */
 export class CommonFields implements Stringable {
   readonly shortText: string
