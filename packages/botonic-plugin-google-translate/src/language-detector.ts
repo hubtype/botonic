@@ -6,18 +6,17 @@ import {
 export class LanguageDetector {
   constructor(
     private readonly service: GoogleTranslateApiService,
-    readonly whitelist: string[] = [],
-    readonly defaultLanguage = 'en'
+    readonly whitelist: string[]
   ) {}
 
   async detect(text: string): Promise<string> {
     let detectedLanguages = await this.service.detectLanguage(text)
-    if (this.whitelist.length != 0) {
+    if (this.whitelist) {
       detectedLanguages = this.applyWhitelist(detectedLanguages)
     }
     detectedLanguages = this.sortByConfidence(detectedLanguages)
-    if (detectedLanguages.length == 0) {
-      return this.defaultLanguage
+    if (detectedLanguages.length === 0) {
+      return null
     }
     return detectedLanguages[0].languageCode
   }

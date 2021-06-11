@@ -5,16 +5,8 @@ export interface Credentials {
   clientEmail: string
 }
 
-export interface TranslationOptions {
-  targets: string[]
-}
-
-export interface DetectLanguageOptions {
-  whitelist: string[]
-}
-
 export interface PluginOptions {
   credentials: Credentials
-  translation?: TranslationOptions
-  languageDetection?: DetectLanguageOptions
+  translateTo: string[]
+  whitelist?: string[]
 }

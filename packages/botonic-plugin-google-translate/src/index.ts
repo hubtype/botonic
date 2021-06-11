@@ -16,33 +16,26 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
       new AccessToken(this.options.credentials),
       this.options.credentials.projectId
     )
-
-    if (this.options.translation) {
-      this.translator = new Translator(service)
-    }
-
-    if (this.options.languageDetection) {
-      this.languageDetector = new LanguageDetector(
-        service,
-        this.options.languageDetection.whitelist
-      )
-    }
+    this.translator = new Translator(service)
+    this.languageDetector = new LanguageDetector(
+      service,
+      this.options.whitelist
+    )
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const text = request.input.data
-
-        if (this.options.translation) {
-          request.session['translations'] = await this.translator.translate(
-            text,
-            this.options.translation.targets
-          )
-        }
-        if (this.options.languageDetection) {
-          request.session.__locale = await this.languageDetector.detect(text)
-        }
+        const translations = await this.translator.translate(
+          text,
+          this.options.translateTo
+        )
+        const detectedLanguage = await this.languageDetector.detect(text)
+        Object.assign(request.input, {
+          translations,
+          language: detectedLanguage || request.session.__locale,
+        })
       }
     } catch (e) {
       console.error(
