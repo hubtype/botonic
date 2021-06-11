@@ -1,0 +1,34 @@
+{
+  "name": "@botonic/plugin-google-translate",
+  "version": "0.19.0-alpha.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean_install": "npm i && npm run-script build",
+    "cloc": "../../scripts/qa/cloc-package.sh .",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "test": "../../node_modules/.bin/jest",
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
+    "prepare": "node ../../preinstall.js",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.14.0",
+    "@botonic/core": "~0.18.2",
+    "axios": "^0.21.1",
+    "jsrsasign": "^10.3.0"
+  },
+  "resolutions": {
+    "@types/webgl2": "0.0.6"
+  },
+  "keywords": [
+    "bot-framework",
+    "google-colab",
+    "translate",
+    "language-detection",
+    "nlp",
+    "typescript"
+  ]
+}
