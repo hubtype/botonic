@@ -4,8 +4,8 @@ import { Credentials } from './options'
 
 export class AccessToken {
   value: string
-  private readonly header
-  private readonly payload
+  private readonly header: string
+  private readonly payload: string
 
   constructor(private readonly credentials: Credentials) {
     this.header = JSON.stringify({
