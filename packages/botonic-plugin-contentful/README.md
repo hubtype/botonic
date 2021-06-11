@@ -298,3 +298,28 @@ To define an empty day (such as bank holidays), just create the _Day Schedule_ b
 
 **Exceptional Schedule**
 For days with exceptional schedule (such as sales days), create the _Day Schedule_ and specify the special _Hour range_.
+
+# Extending this plugin
+
+## How to add a new TopContent
+- Don't panic. You can take [this](https://github.com/hubtype/botonic/pull/1417) as an example
+- Add enum entry to NonMessageTopContentType or MessageTopContentType
+- Implement a content class derived from TopContents to contents.ts
+- Add the new model to QA contentful space. To test custom fields, add a string
+field named "customFieldText"
+- Implement a delivery function to CMS interface
+- Implement a class derived from TopContentDelivery in src/contentful/contents
+- Integrate the previous class in ManageContentful as done for other types
+- Implement a delivery function to all classes that implement CMS interface
+- Implement a <NewContent>Builder class derived from TopContentBuilder in src/cms/factories/content-factories.ts.
+  Implement a Rnd<NewContent>Builder class derived from <NewContent>Builder at src/cms/test-helpers/builders.ts
+- Write integration tests using the builder classes in tests/contentful/contents which validates delivery of:
+  1. Minimal content (all content's optional fields in blank)
+  2. Full content. All content's optional fields filled. For complex contents, you may need
+     different tests for each subcase.
+  3. In contentful.com, add to the new model a text field named customFieldText.
+     Fill the customFields on one of the tests contents. Write a test which validates that when
+     delivered, the content common.customFields field only contains the field "customFieldText"
+- Add new field types to CONTENT_FIELDS in manage-cms/fields.ts
+    
+

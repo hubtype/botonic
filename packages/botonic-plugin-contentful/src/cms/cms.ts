@@ -62,7 +62,7 @@ export const CONTENT_TYPES: ContentType[] = [
 ]
 
 export enum AssetType {
-  AUDIO = 'image',
+  AUDIO = 'audio',
   IMAGE = 'image',
   VIDEO = 'video',
   DOCUMENT = 'document',
