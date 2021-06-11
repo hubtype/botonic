@@ -2,9 +2,7 @@
 
 ## What does this plugin do?
 
-Botonic Plugin Intent Classification uses the trained models defined by the user to predict the intent of the input text.
-
-After detecting the text locale, the plugin uses the corresponding model to predict the intent and adding some information about it into the input object.
+Botonic Plugin Intent Classification uses the trained models to predict the intent of the input text.
 
 ## Setup
 
@@ -22,8 +20,6 @@ npm install @botonic/plugin-intent-classification
 ### Requiring the plugin
 
 The plugin must be required in `src/plugins.js` and, the locales of the trained models must be defined in their options.
-
-**Locales order matters.** If locale detection is ambiguous, the locale defined first in the array will be used as a fallback.
 
 ```javascript
 export const plugins = [
