@@ -4,7 +4,7 @@
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
-  "types": "./index.d.ts",
+  "types": "./src/types",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
@@ -50,6 +50,5 @@
     "conversational-app",
     "conversational-ui",
     "javascript"
-  ],
-  "types": "./src/types"
+  ]
 }
