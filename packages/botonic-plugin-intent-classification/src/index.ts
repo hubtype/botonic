@@ -17,10 +17,11 @@ export default class BotonicPluginIntentClassification implements Plugin {
 
   async pre(request: PluginPreRequest): Promise<void> {
     try {
+      const language = request.input.language || request.session.__locale
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const inputText = request.input.data
         const classifier = (await this.modelsSelector).select(
-          request.session.__locale as Locale
+          language as Locale
         )
         const intents = classifier.classify(inputText)
         Object.assign(request.input, { intent: intents[0].label, intents })
