@@ -17,11 +17,10 @@ export default class BotonicPluginNER implements Plugin {
 
   async pre(request: PluginPreRequest): Promise<void> {
     try {
+      const language = request.input.language || request.session.__locale
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const inputText = request.input.data
-        const ner = (await this.modelsSelector).select(
-          request.session.__locale as Locale
-        )
+        const ner = (await this.modelsSelector).select(language as Locale)
         const entities = ner.recognize(inputText)
         Object.assign(request.input, { entities })
       }
