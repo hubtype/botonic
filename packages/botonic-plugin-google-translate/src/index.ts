@@ -28,7 +28,10 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
         request.session.__locale = await this.languageDetector.detect(text)
       }
     } catch (e) {
-      console.log('Cannot use Google Cloud Translate API', e)
+      console.error(
+        'Error detecting language with Google Cloud Translate API',
+        e
+      )
     }
   }
 
