@@ -25,7 +25,7 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const text = request.input.data
-        request.session.__locale = await this.languageDetector.detect(text)
+        request.input.language = await this.languageDetector.detect(text)
       }
     } catch (e) {
       console.error(
