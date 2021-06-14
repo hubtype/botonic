@@ -31,6 +31,7 @@ import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
 import { CachedClientApi } from './delivery/cache'
 import { ClientApiErrorReporter, ReducedClientApi } from './delivery/client-api'
+import { FallbackCachedClientApi } from './delivery/fallback-cache'
 import { AdaptorDeliveryApi, DeliveryApi } from './delivery-api'
 import {
   ContentfulEntryUtils,
@@ -75,6 +76,9 @@ export class Contentful implements cms.CMS {
       return Promise.resolve()
     }
     let client: ReducedClientApi = createContentfulClientApi(options)
+    if (!options.disableFallbackCache) {
+      client = new FallbackCachedClientApi(client, reporter)
+    }
     if (!options.disableCache) {
       client = new CachedClientApi(client, options.cacheTtlMs, reporter)
     }
