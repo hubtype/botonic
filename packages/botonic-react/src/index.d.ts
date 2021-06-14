@@ -114,6 +114,7 @@ export interface WebchatArgs {
   onInit?: (app: WebchatApp, args: any) => void
   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
   onOpen?: (app: WebchatApp, args: any) => void
+  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
   persistentMenu?: PersistentMenuTheme
   storage?: Storage
   storageKey?: any
