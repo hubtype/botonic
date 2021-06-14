@@ -97,7 +97,7 @@ export function fallbackStrategy(
       return newVal
     } catch (e) {
       if (oldVal !== Cache.NOT_FOUND) {
-        await usingFallback(String(func), args, e)
+        await usingFallback(String(func.name), args, e)
         return oldVal
       }
       throw e

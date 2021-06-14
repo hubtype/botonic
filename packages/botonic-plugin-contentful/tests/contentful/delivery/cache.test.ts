@@ -67,10 +67,13 @@ test('TEST: CachedClientApi does not remember exceptions', async () => {
 })
 
 export function apiFailed(
+  description: string,
   funcName: string,
-  e: any,
-  args: any[]
+  args: any[],
+  e: any
 ): Promise<void> {
-  console.error(`${funcName}(${String(args)}) threw error: ${String(e)}`)
+  console.error(
+    `${description}: ${funcName}(${String(args)}) threw error: ${String(e)}`
+  )
   return Promise.resolve()
 }

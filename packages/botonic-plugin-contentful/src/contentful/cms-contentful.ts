@@ -71,7 +71,7 @@ export class Contentful implements cms.CMS {
       error: any
     ) => {
       console.error(
-        `${msg}: ${func}(${String(args)}) caused error: ${String(error)}`
+        `${msg}. '${func}(${String(args)})' threw '${String(error)}'`
       )
       return Promise.resolve()
     }

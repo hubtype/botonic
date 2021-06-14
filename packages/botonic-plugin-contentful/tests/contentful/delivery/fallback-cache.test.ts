@@ -106,12 +106,13 @@ async function testSuccessAfterFailure<R>(
 }
 
 export function usingFallback(
+  description: string,
   funcName: string,
-  e: any,
-  args: any[]
+  args: any[],
+  e: any
 ): Promise<void> {
   console.error(
-    `Using fallback for ${funcName}(${String(args)}) after error: ${String(e)}`
+    `${description}: ${funcName}(${String(args)}) after error: ${String(e)}`
   )
   return Promise.resolve()
 }
