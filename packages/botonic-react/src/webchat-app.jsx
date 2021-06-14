@@ -28,6 +28,7 @@ export class WebchatApp {
     onOpen,
     onClose,
     onMessage,
+    onConnectionChange,
     appId,
     visibility,
     server,
@@ -56,6 +57,7 @@ export class WebchatApp {
     this.onOpen = onOpen
     this.onClose = onClose
     this.onMessage = onMessage
+    this.onConnectionChange = onConnectionChange
     this.visibility = visibility
     this.server = server
     this.webchatRef = createRef()
@@ -139,9 +141,10 @@ export class WebchatApp {
   }
 
   onServiceEvent(event) {
-    if (event.action === 'connectionChange')
+    if (event.action === 'connectionChange') {
+      this.onConnectionChange && this.onConnectionChange(this, event.online)
       this.webchatRef.current.setOnline(event.online)
-    else if (event.action === 'update_message_info')
+    } else if (event.action === 'update_message_info')
       this.updateMessageInfo(event.message.id, event.message)
     else if (event.message.type === 'update_webchat_settings')
       this.updateWebchatSettings(event.message.data)
@@ -258,6 +261,7 @@ export class WebchatApp {
       onOpen,
       onClose,
       onMessage,
+      onConnectionChange,
       appId,
       visibility,
       server,
@@ -280,6 +284,7 @@ export class WebchatApp {
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
+    this.onConnectionChange = onConnectionChange || this.onConnectionChange
     this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
     return (
