@@ -49,13 +49,12 @@ export class Memoizer {
     const cache: Cache<Return> = this.cacheFactory()
     const f = (...args: Args) =>
       this.strategy<Args, Return>(cache, this.normalizer, func, ...args)
-    // f.cache = cache
     return f as F
   }
 }
 
 /***
- * Only reinvoke if not in cache
+ * Only re-invoke if not in cache
  */
 export const cacheForeverStrategy: MemoizerStrategy = async <
   Args extends any[],
@@ -87,7 +86,6 @@ export function fallbackStrategy(
     func: (...args: Args) => Promise<Return>,
     ...args: Args
   ) => {
-    // return func(...args)
     const id = normalizer(...args)
     const oldVal = cache.get(id)
 
