@@ -17,7 +17,7 @@ Before using this plugin, you need a project that has the Cloud Translation API 
 
 ### Add the plugin
 
-You need to add the following configuration to your vot's plugins:
+You need to add the following configuration to your bot's plugins:
 
 ```js
 export const plugins = [
@@ -38,7 +38,7 @@ export const plugins = [
 ]
 ```
 
-> **Note:** Credentials definition is case-sensitive, make sure you correctly define them.
+> **Note:** Credentials definition is case-sensitive: make sure you correctly define them.
 
 This plugin has two parameters:
 - **`translateTo`**: languages we want to translate the input text to.
@@ -48,4 +48,4 @@ This plugin has two parameters:
 
 ## Use
 
-Once the plugin has translate the input text and detected the language, this information will be available in the input object.
+Once the plugin has translated the input text and detected the language, this information will be available in the input object.
