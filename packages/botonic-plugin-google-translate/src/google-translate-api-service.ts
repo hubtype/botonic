@@ -40,28 +40,20 @@ export class GoogleTranslateApiService {
       contents: [text],
       mimeType: 'text/plain',
     }
-    try {
-      const res = await this.query(this.translateTextEndpointUrl, data)
-      return res.data.translations[0]
-    } catch (e) {
-      this.accessToken.refresh()
-      const res = await this.query(this.translateTextEndpointUrl, data)
-      return res.data.translations[0]
-    }
+    const res = await this.refreshTokenIfFailure(() =>
+      this.query(this.translateTextEndpointUrl, data)
+    )
+    return res.data.translations[0]
   }
 
   async detectLanguage(text: string): Promise<LanguageDetection[]> {
     const data: DetectLanguageRequestData = {
       content: text,
     }
-    try {
-      const res = await this.query(this.detectLanguageEndpointUrl, data)
-      return res.data.languages
-    } catch (e) {
-      this.accessToken.refresh()
-      const res = await this.query(this.detectLanguageEndpointUrl, data)
-      return res.data.languages
-    }
+    const res = await this.refreshTokenIfFailure(() =>
+      this.query(this.detectLanguageEndpointUrl, data)
+    )
+    return res.data.languages
   }
 
   private async query(
@@ -77,5 +69,14 @@ export class GoogleTranslateApiService {
       },
       data,
     })
+  }
+
+  private async refreshTokenIfFailure<R>(f: () => Promise<R>): Promise<R> {
+    try {
+      return await f()
+    } catch (e) {
+      this.accessToken.refresh()
+      return await f()
+    }
   }
 }
