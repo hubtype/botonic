@@ -7,6 +7,6 @@ export interface Credentials {
 
 export interface PluginOptions {
   credentials: Credentials
-  translateTo: string[]
+  translateTo?: string[]
   whitelist?: string[]
 }

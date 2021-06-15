@@ -27,15 +27,15 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const text = request.input.data
-        const translations = await this.translator.translate(
-          text,
-          this.options.translateTo
-        )
+        if (this.options.translateTo) {
+          const translations = await this.translator.translate(
+            text,
+            this.options.translateTo
+          )
+          request.input['translations'] = translations
+        }
         const detectedLanguage = await this.languageDetector.detect(text)
-        Object.assign(request.input, {
-          translations,
-          language: detectedLanguage || request.session.__locale,
-        })
+        request.input['language'] = detectedLanguage || request.session.__locale
       }
     } catch (e) {
       console.error(
