@@ -18,7 +18,10 @@ describe('ManageContentful fields', () => {
     '627QkyJrFo3grJryj0vu6L' //TEST_MANAGE_CMS
   )
   const RESTORE_TEXT_VALUE = undefined // so that it fallbacks to English
-  const contentful = testContentful({ disableCache: true })
+  const contentful = testContentful({
+    disableCache: true,
+    disableFallbackCache: true,
+  })
   // @ts-ignore
   let fallbackLocaleContent: cms.Text = undefined
 
@@ -58,7 +61,10 @@ describe('ManageContentful fields', () => {
     newValue: string | undefined,
     expectedValue: string
   ) {
-    const contentful = testContentful({ disableCache: true })
+    const contentful = testContentful({
+      disableCache: true,
+      disableFallbackCache: true,
+    })
     const oldTextValue = (
       await contentful.text(
         TEST_CONTENT_ID.id,
@@ -152,7 +158,10 @@ describe('ManageContentful fields', () => {
   test(
     'TEST: copyField buttons',
     async () => {
-      const contentful = testContentful({ disableCache: true })
+      const contentful = testContentful({
+        disableCache: true,
+        disableFallbackCache: true,
+      })
       const oldContent = await contentful.text(TEST_CONTENT_ID.id)
       const sut = testManageContentful()
       const FROM_LOCALE = ENGLISH

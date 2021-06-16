@@ -23,7 +23,10 @@ describe('ManageContentful assets', () => {
 
   test('TEST: createAsset and removeAsset', async () => {
     const context = ctxt({ locale: ENGLISH })
-    const contentful = testContentful({ disableCache: true })
+    const contentful = testContentful({
+      disableCache: true,
+      disableFallbackCache: true,
+    })
     const sut = testManageContentful()
     let assetId: string
     const file = JSON.stringify({ a: rndStr(), b: rndStr() })

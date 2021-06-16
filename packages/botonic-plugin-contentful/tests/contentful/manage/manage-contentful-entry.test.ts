@@ -14,7 +14,10 @@ import { ctxt, testManageContentful } from './manage-contentful.helper'
 describe('ManageContentful entries', () => {
   const context = ctxt({ locale: ENGLISH })
   test('TEST: createContent and deleteContent', async () => {
-    const contentful = testContentful({ disableCache: true })
+    const contentful = testContentful({
+      disableCache: true,
+      disableFallbackCache: true,
+    })
     const sut = testManageContentful()
     const id = rndStr()
     const TEST_NEW_CONTENT_ID = new TopContentId(ContentType.TEXT, id)
@@ -83,7 +86,10 @@ describe('ManageContentful entries', () => {
 
   test('TEST: updateFields is able to manage fields of type ButtonStyle and FollowUps', async () => {
     const sut = testManageContentful()
-    const contentful = testContentful({ disableCache: true })
+    const contentful = testContentful({
+      disableCache: true,
+      disableFallbackCache: true,
+    })
     const NEW_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
     const FOLLOW_UP_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
     const name = rndStr()
