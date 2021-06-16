@@ -33,4 +33,5 @@ cd "$BIN_DIR"/../.. || exit
 
 ../../node_modules/.bin/ts-node --files	src/tools/l10n/locale-migrate.ts \
 	"$FROM_FILE" "$TO_FILE" "$FROM_LOCALE" "$TO_LOCALE" "$REMOVE_LOCALES"
-echo "Change Element.image so that it does not have 1 version per locale"
+echo "In case the source space has fallback languages and the target space doesn't, "
+echo "change Element.image so that it does not have 1 version per locale"

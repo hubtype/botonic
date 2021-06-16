@@ -2,7 +2,12 @@
   "name": "@botonic/dx",
   "version": "0.19.0-alpha.17",
   "description": "Continuous integration for botonic packages",
-  "scripts": {},
+  "scripts": {
+    "##########  LINT": "",
+    "lint": "npm run lint-core -- --fix",
+    "lint-ci": "npm run lint-core -- -c ../.eslintrc-ci.js",
+    "lint-core": "eslint_d --cache --quiet '*.js' '{src,tests}/**/*.[jt]{s,sx}' -c .eslintrc.js"
+  },
   "author": "",
   "license": "MIT",
   "keywords": [
