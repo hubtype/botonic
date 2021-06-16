@@ -33,6 +33,7 @@
   "dependencies": {
     "@nlpjs/lang-en-min": "^4.22.0",
     "@nlpjs/lang-es": "^4.22.0",
+    "@nlpjs/lang-fr": "^4.22.0",
     "@nlpjs/lang-it": "^4.22.0",
     "@tensorflow/tfjs-node": "^2.8.6",
     "axios": "^0.21.1",
