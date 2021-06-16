@@ -1,5 +1,9 @@
-import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
-import { INPUT } from '@botonic/core'
+import {
+  INPUT,
+  Plugin,
+  PluginPostRequest,
+  PluginPreRequest,
+} from '@botonic/core'
 
 import { AccessToken } from './access-token'
 import { GoogleTranslateApiService } from './google-translate-api-service'
@@ -32,10 +36,10 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
             text,
             this.options.translateTo
           )
-          request.input['translations'] = translations
+          request.input.translations = translations
         }
         const detectedLanguage = await this.languageDetector.detect(text)
-        request.input['language'] = detectedLanguage || request.session.__locale
+        request.input.language = detectedLanguage || request.session.__locale
       }
     } catch (e) {
       console.error(
