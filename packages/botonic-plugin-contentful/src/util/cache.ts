@@ -68,7 +68,11 @@ export class InMemoryCache<V> implements Cache<V> {
 }
 
 /**
- * Decorates a cache by limiting its size
+ * Decorates a cache by limiting its size.
+ *
+ * TODO Use an external library to have a LRU cache. However, it's not critical
+ * because typically data in CMS is small (we're not caching media, only their
+ * URLs)
  */
 export class LimitedCacheDecorator<V> implements Cache<V> {
   constructor(

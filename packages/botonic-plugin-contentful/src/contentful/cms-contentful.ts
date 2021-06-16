@@ -64,20 +64,19 @@ export class Contentful implements cms.CMS {
    *  https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
    */
   constructor(options: ContentfulOptions) {
+    const logger = options.logger ?? console.error
     const reporter: ClientApiErrorReporter = (
       msg: string,
       func: string,
       args,
       error: any
     ) => {
-      console.error(
-        `${msg}. '${func}(${String(args)})' threw '${String(error)}'`
-      )
+      logger(`${msg}. '${func}(${String(args)})' threw '${String(error)}'`)
       return Promise.resolve()
     }
     let client: ReducedClientApi = createContentfulClientApi(options)
     if (!options.disableFallbackCache) {
-      client = new FallbackCachedClientApi(client, reporter)
+      client = new FallbackCachedClientApi(client, reporter, logger)
     }
     if (!options.disableCache) {
       client = new CachedClientApi(client, options.cacheTtlMs, reporter)

@@ -23,23 +23,25 @@ export class FallbackCachedClientApi implements ReducedClientApi {
   readonly getContentType: (id: string) => Promise<ContentType>
 
   constructor(
-    readonly client: ReducedClientApi,
-    reporter: ClientApiErrorReporter
+    client: ReducedClientApi,
+    reporter: ClientApiErrorReporter,
+    private readonly logger: (msg: string) => void = console.error
   ) {
     // We could maybe use a more optimal normalizer than jsonNormalizer
     // (like they do in fast-json-stringify to avoid JSON.stringify for functions with a single nulls, numbers and booleans).
     // But it's not worth since stringify will have a cost much lower than constructing/rendering a botonic component
     // (and we're already optimizing the costly call to CMS)
-    this.memoizer = new Memoizer(
-      fallbackStrategy((f, args, e) =>
+    this.memoizer = new Memoizer({
+      logger: this.logger,
+      strategy: fallbackStrategy((f, args, e) =>
         reporter(
           `Successfully used cached fallback after Contentful API error`,
           f,
           args,
           e
         )
-      )
-    )
+      ),
+    })
     this.getAsset = this.memoize(client.getAsset.bind(client))
     this.getAssets = this.memoize(client.getAssets.bind(client))
     this.getEntries = this.memoize(

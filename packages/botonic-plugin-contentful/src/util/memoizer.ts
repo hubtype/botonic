@@ -21,21 +21,44 @@ export type MemoizerStrategy = <Args extends any[], Return>(
   ...args: Args
 ) => Promise<Return>
 
+export interface MemoizerOptions {
+  strategy: MemoizerStrategy
+  logger?: (msg: string) => void
+  cacheFactory?: () => Cache<any>
+  normalizer?: MemoizerNormalizer
+}
+
 export class Memoizer {
-  constructor(
-    private readonly strategy: MemoizerStrategy,
-    private readonly cacheFactory = () => new Cache<any>(),
-    private readonly normalizer = jsonNormalizer
-  ) {}
+  opts: Required<MemoizerOptions>
+  constructor(opts: MemoizerOptions) {
+    this.opts = {
+      strategy: opts.strategy,
+      logger: opts.logger || console.error,
+      normalizer: opts.normalizer || jsonNormalizer,
+      cacheFactory:
+        opts.cacheFactory ||
+        (() =>
+          new LimitedCacheDecorator(
+            new InMemoryCache<any>(),
+            100 * 1024,
+            this.opts.logger
+          )),
+    }
+  }
 
   memoize<
     Args extends any[],
     Return,
     F extends (...args: Args) => Promise<Return>
   >(func: F): F {
-    const cache: Cache<Return> = this.cacheFactory()
+    const cache: Cache<Return> = this.opts.cacheFactory()
     const f = (...args: Args) =>
-      this.strategy<Args, Return>(cache, this.normalizer, func, ...args)
+      this.opts.strategy<Args, Return>(
+        cache,
+        this.opts.normalizer,
+        func,
+        ...args
+      )
     return f as F
   }
 }
