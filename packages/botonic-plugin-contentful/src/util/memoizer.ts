@@ -1,22 +1,9 @@
-export class Cache<V> {
-  static readonly NOT_FOUND = Symbol('NOT_FOUND')
-  cache: Record<string, V> = {}
-  set(id: string, val: V): void {
-    this.cache[id] = val
-  }
-  get(id: string): V | typeof Cache.NOT_FOUND {
-    // Cache.has is only checked when undefined to avoid always searching twice in the object
-    const val = this.cache[id]
-    if (val === undefined && !this.has(id)) {
-      return Cache.NOT_FOUND
-    }
-    return val
-  }
-  has(id: string): boolean {
-    return id in this.cache
-  }
-}
-
+import {
+  Cache,
+  InMemoryCache,
+  LimitedCacheDecorator,
+  NOT_FOUND_IN_CACHE,
+} from './cache'
 export type MemoizerNormalizer = (...args: any) => string
 
 export const jsonNormalizer: MemoizerNormalizer = (...args: any) => {
@@ -67,7 +54,7 @@ export const cacheForeverStrategy: MemoizerStrategy = async <
 ) => {
   const id = normalizer(...args)
   let val = cache.get(id)
-  if (val === Cache.NOT_FOUND) {
+  if (val === NOT_FOUND_IN_CACHE) {
     val = await func(...args)
     cache.set(id, val)
   }
@@ -94,7 +81,7 @@ export function fallbackStrategy(
       cache.set(id, newVal)
       return newVal
     } catch (e) {
-      if (oldVal !== Cache.NOT_FOUND) {
+      if (oldVal !== NOT_FOUND_IN_CACHE) {
         await usingFallback(String(func.name), args, e)
         return oldVal
       }
