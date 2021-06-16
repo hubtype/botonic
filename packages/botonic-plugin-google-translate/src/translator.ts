@@ -1,6 +1,6 @@
-import { GoogleTranslateApiService } from './google-translate-api-service'
+import { Translations } from '@botonic/core'
 
-export type Translations = { [languageCode: string]: string }
+import { GoogleTranslateApiService } from './google-translate-api-service'
 
 export class Translator {
   constructor(private readonly service: GoogleTranslateApiService) {}

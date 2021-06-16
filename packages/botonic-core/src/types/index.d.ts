@@ -58,6 +58,11 @@ export interface IntentResult {
 }
 
 /** Fields set by NLU plugins: Luis, Dialogflow, ... **/
+
+export interface Translations {
+  [languageCode: string]: string
+}
+
 export interface NluResult {
   // the name of the highest confidence intent
   confidence: number
@@ -66,6 +71,7 @@ export interface NluResult {
   language: string
   // entity recognition results in the format provided by the NLU engine
   entities?: any
+  translations?: Translations
 }
 
 export interface Input extends Partial<NluResult> {
