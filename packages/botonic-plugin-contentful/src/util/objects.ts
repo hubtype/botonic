@@ -61,3 +61,37 @@ export interface Stringable {
 }
 
 export interface ValueObject extends Equatable, Stringable {}
+
+/**
+ * It returns a ROUGH estimation, since V8 will greatly optimize anyway
+ * @return the number of bytes
+ * Not using https://www.npmjs.com/package/object-sizeof to minimize dependencies
+ */
+export function roughSizeOfObject(object: any): number {
+  const objectList: any[] = []
+
+  const recurse = function (value: any) {
+    let bytes = 0
+    if (typeof value === 'boolean') {
+      bytes = 4
+    } else if (typeof value === 'string') {
+      bytes = value.length * 2
+    } else if (typeof value === 'number') {
+      bytes = 8
+    } else if (value == null) {
+      // Required because typeof null == 'object'
+      bytes = 0
+    } else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
+      objectList.push(value)
+      for (const [k, v] of Object.entries(value)) {
+        bytes += 8 // an assumed existence overhead
+        bytes += recurse(k)
+        bytes += recurse(v)
+      }
+    }
+
+    return bytes
+  }
+
+  return recurse(object)
+}
