@@ -14,7 +14,7 @@ import {
   TopContent,
   TopContentType,
 } from '../cms'
-import { ContentfulOptions } from '../plugin'
+import { ContentfulOptions, DEFAULT_FALLBACK_CACHE_LIMIT_KB } from '../plugin'
 import { SearchCandidate } from '../search'
 import { AssetDelivery } from './contents/asset'
 import { ButtonDelivery } from './contents/button'
@@ -76,7 +76,12 @@ export class Contentful implements cms.CMS {
     }
     let client: ReducedClientApi = createContentfulClientApi(options)
     if (!options.disableFallbackCache) {
-      client = new FallbackCachedClientApi(client, reporter, logger)
+      client = new FallbackCachedClientApi(
+        client,
+        options.fallbackCacheLimitKB ?? DEFAULT_FALLBACK_CACHE_LIMIT_KB,
+        reporter,
+        logger
+      )
     }
     if (!options.disableCache) {
       client = new CachedClientApi(client, options.cacheTtlMs, reporter)

@@ -1,9 +1,5 @@
-import {
-  Cache,
-  InMemoryCache,
-  LimitedCacheDecorator,
-  NOT_FOUND_IN_CACHE,
-} from './cache'
+import { Cache, InMemoryCache, NOT_FOUND_IN_CACHE } from './cache'
+
 export type MemoizerNormalizer = (...args: any) => string
 
 export const jsonNormalizer: MemoizerNormalizer = (...args: any) => {
@@ -23,7 +19,6 @@ export type MemoizerStrategy = <Args extends any[], Return>(
 
 export interface MemoizerOptions {
   strategy: MemoizerStrategy
-  logger?: (msg: string) => void
   cacheFactory?: () => Cache<any>
   normalizer?: MemoizerNormalizer
 }
@@ -33,16 +28,8 @@ export class Memoizer {
   constructor(opts: MemoizerOptions) {
     this.opts = {
       strategy: opts.strategy,
-      logger: opts.logger || console.error,
       normalizer: opts.normalizer || jsonNormalizer,
-      cacheFactory:
-        opts.cacheFactory ||
-        (() =>
-          new LimitedCacheDecorator(
-            new InMemoryCache<any>(),
-            100 * 1024,
-            this.opts.logger
-          )),
+      cacheFactory: opts.cacheFactory || (() => new InMemoryCache<any>()),
     }
   }
 

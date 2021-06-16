@@ -98,7 +98,7 @@ export class LimitedCacheDecorator<V> implements Cache<V> {
       }
       if (!itFits) {
         this.logger(
-          `Cannot add object in cache because it's larger than max capacity(${this.limitKB})`
+          `Cannot add entry in cache because IT ALONE is larger than max capacity(${this.limitKB})`
         )
         return
       }

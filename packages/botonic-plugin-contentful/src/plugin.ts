@@ -24,6 +24,7 @@ export interface CmsOptions extends OptionsBase {
 
 export const DEFAULT_TIMEOUT_MS = 30000
 export const DEFAULT_CACHE_TTL_MS = 10000
+export const DEFAULT_FALLBACK_CACHE_LIMIT_KB = 100 * 1024
 
 export interface ContentfulCredentials {
   spaceId: string
@@ -50,6 +51,10 @@ export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
    * fail.
    */
   disableFallbackCache?: boolean
+  /**
+   * {@link DEFAULT_FALLBACK_CACHE_LIMIT_KB} by default
+   */
+  fallbackCacheLimitKB?: number
 
   contentfulFactory?: (opts: ContentfulOptions) => cms.CMS
 
