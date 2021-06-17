@@ -22,7 +22,7 @@ type DetectLanguageRequestData = {
   content: string
 }
 
-export class GoogleTranslateApiService {
+export class GoogleTranslationApiService {
   private BASE_API_URL = 'https://translation.googleapis.com/v3'
   private PROJECTS_ENDPOINT = `${this.BASE_API_URL}/projects`
   private readonly translateTextEndpointUrl: string

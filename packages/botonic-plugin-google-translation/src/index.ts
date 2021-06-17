@@ -6,7 +6,7 @@ import {
 } from '@botonic/core'
 
 import { AccessToken } from './access-token'
-import { GoogleTranslateApiService } from './google-translate-api-service'
+import { GoogleTranslationApiService } from './google-translate-api-service'
 import { LanguageDetector } from './language-detector'
 import { PluginOptions } from './options'
 import { Translator } from './translator'
@@ -16,7 +16,7 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
   private readonly languageDetector: LanguageDetector
 
   constructor(readonly options: PluginOptions) {
-    const service = new GoogleTranslateApiService(
+    const service = new GoogleTranslationApiService(
       new AccessToken(this.options.credentials),
       this.options.credentials.projectId
     )

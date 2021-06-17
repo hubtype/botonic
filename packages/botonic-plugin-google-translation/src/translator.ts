@@ -1,9 +1,9 @@
 import { Translations } from '@botonic/core'
 
-import { GoogleTranslateApiService } from './google-translate-api-service'
+import { GoogleTranslationApiService } from './google-translate-api-service'
 
 export class Translator {
-  constructor(private readonly service: GoogleTranslateApiService) {}
+  constructor(private readonly service: GoogleTranslationApiService) {}
 
   async translate(text: string, targets: string[]): Promise<Translations> {
     const responses = await Promise.all(

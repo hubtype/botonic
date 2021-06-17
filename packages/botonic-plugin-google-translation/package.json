@@ -1,5 +1,5 @@
 {
-  "name": "@botonic/plugin-google-translate",
+  "name": "@botonic/plugin-google-translation",
   "version": "0.19.0-alpha.0",
   "license": "MIT",
   "main": "lib/index.js",
@@ -25,8 +25,8 @@
   },
   "keywords": [
     "bot-framework",
-    "google-colab",
-    "translate",
+    "google-cloud-translation",
+    "translation",
     "language-detection",
     "nlp",
     "typescript"
