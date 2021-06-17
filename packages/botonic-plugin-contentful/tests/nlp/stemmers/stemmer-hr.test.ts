@@ -23,6 +23,7 @@ test.each<any>([
   ['sretno', ['sret']],
   ['roditeljski', ['roditeljsk']],
 ])('TEST: Croatian stemmer("%s")->"%s"', (word: string, expected: string) => {
+  console.log(f({}))
   const tokenizer = tokenizerPerLocale('hr')
   const sut = new StemmerHr()
   const result = sut.stem(tokenizer.tokenize(word, true))
