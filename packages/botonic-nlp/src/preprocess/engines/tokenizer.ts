@@ -3,11 +3,13 @@ import { Tokenizer } from '../types'
 import { TokenizerEn } from './en/tokenizer-en'
 import { TokenizerEs } from './es/tokenizer-es'
 import { TokenizerIt } from './it/tokenizer-it'
+import { TokenizerRu } from './ru/tokenizer-ru'
 
 const TOKENIZERS = {
   en: new TokenizerEn(),
   es: new TokenizerEs(),
   it: new TokenizerIt(),
+  ru: new TokenizerRu(),
 }
 
 export function getTokenizer(locale: Locale): Tokenizer {
