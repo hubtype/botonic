@@ -10,6 +10,11 @@
     "allowJs": true, //when set, jest does not validate types anymore https://github.com/kulshekhar/ts-jest/issues/740#issuecomment-424123303
     "declaration": false,
     "declarationDir": null,
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      // @types/node must be a direct dependency. If only defined in a parent package.json, we get TSC errors for
+      // symbols from these libs: "ES2016.Array.Include", "ES2017.object"
+      "@types/jest"
+    ]
   }
 }

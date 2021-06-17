@@ -285,11 +285,6 @@ declare module 'sort-stream' {
   export = sort
 }
 
-declare namespace jest {
-  interface Expect {
-    <T = any>(actual: T, message?: string): JestMatchers<T>
-  }
-}
 
 declare module 'contentful-import/dist/utils/schema' {
   import { ObjectSchema } from 'joi'

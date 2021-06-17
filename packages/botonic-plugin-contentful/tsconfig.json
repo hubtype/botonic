@@ -25,12 +25,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": []
   },
-  // test options
-  "types": [
-    // @types/node must be a direct dependency. If only defined in a parent package.json, we get TSC errors for
-    // symbols from these libs: "ES2016.Array.Include", "ES2017.object"
-    "@types/jest"
-  ]
 }
