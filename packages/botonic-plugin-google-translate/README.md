@@ -1,7 +1,7 @@
 # Botonic Plugin Google Translate
 
 ## What does this plugin do?
-This plugin uses [Google Cloud Translation API](https://cloud.google.com/translate) to detect the language of the user input text.
+This plugin uses [Google Cloud Translation API](https://cloud.google.com/translate) to translate the user input text and detect its language.
 
 ## Setup
 
@@ -17,9 +17,7 @@ Before using this plugin, you need a project that has the Cloud Translation API 
 
 ### Add the plugin
 
-To being able of using this plugin to detect the language of the user input text, you need to have it installed and added to your plugins.
-
-> **Note:** This is case-sensitive so make sure to correctly define your credentials.
+You need to add the following configuration to your bot's plugins:
 
 ```js
 export const plugins = [
@@ -33,33 +31,21 @@ export const plugins = [
                 projectId: '',
                 clientEmail: '',
             },
+            translateTo: ['ca', 'it', 'ro'],
+            whitelist: ['en', 'es'],
         },
     },
 ]
 ```
 
-You can also add a **whitelist** parameter to filter the detected languages:
+> **Note:** Credentials definition is case-sensitive: make sure you correctly define them.
 
-```js
-export const plugins = [
-    {
-        id: 'google-translate',
-        resolve: require('@botonic/plugin-google-translate'),
-        options: {
-            whitelist: ['en', 'es', 'it'],
-            credentials: {
-                privateKeyId: '',
-                privateKey: '',
-                projectId: '',
-                clientEmail: '',
-            },
-        },
-    },
-]
-```
+This plugin has two parameters:
+- **`translateTo`**: languages we want to translate the input text to.
+- **`whitelist`**: **optional** parameter that defines the allowed languages for language detection. If the detected language is not included in the whitelist, the `session.__locale` is used.
 
-If this whitelist is defined and none of the specified languages match the detected ones, `'en'` will be set as default.
+> **Important**: all languages are specified using its [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) code.
 
 ## Use
 
-If you want to check the language of the user input text, you only need to take a look at the `__locale` variable of the current session.
+Once the plugin has translated the input text and detected the language, this information will be available in the input object.

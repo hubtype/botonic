@@ -1,23 +1,29 @@
-import type { Plugin, PluginPostRequest, PluginPreRequest } from '@botonic/core'
-import { INPUT } from '@botonic/core'
+import {
+  INPUT,
+  Plugin,
+  PluginPostRequest,
+  PluginPreRequest,
+} from '@botonic/core'
 
 import { AccessToken } from './access-token'
 import { GoogleTranslateApiService } from './google-translate-api-service'
 import { LanguageDetector } from './language-detector'
 import { PluginOptions } from './options'
+import { Translator } from './translator'
 
 export default class BotonicPluginGoogleTranslate implements Plugin {
-  private readonly service: GoogleTranslateApiService
+  private readonly translator: Translator
   private readonly languageDetector: LanguageDetector
 
   constructor(readonly options: PluginOptions) {
-    this.service = new GoogleTranslateApiService(
+    const service = new GoogleTranslateApiService(
       new AccessToken(this.options.credentials),
       this.options.credentials.projectId
     )
+    this.translator = new Translator(service)
     this.languageDetector = new LanguageDetector(
-      this.service,
-      this.options.whitelist || []
+      service,
+      this.options.whitelist
     )
   }
 
@@ -25,7 +31,15 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
     try {
       if (request.input.type == INPUT.TEXT && !request.input.payload) {
         const text = request.input.data
-        request.input.language = await this.languageDetector.detect(text)
+        if (this.options.translateTo) {
+          const translations = await this.translator.translate(
+            text,
+            this.options.translateTo
+          )
+          request.input.translations = translations
+        }
+        const detectedLanguage = await this.languageDetector.detect(text)
+        request.input.language = detectedLanguage || request.session.__locale
       }
     } catch (e) {
       console.error(
