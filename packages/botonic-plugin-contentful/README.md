@@ -299,9 +299,19 @@ To define an empty day (such as bank holidays), just create the _Day Schedule_ b
 **Exceptional Schedule**
 For days with exceptional schedule (such as sales days), create the _Day Schedule_ and specify the special _Hour range_.
 
-# Extending this plugin
+## Development
+How to contribute to the development of the plugin.
 
-## How to add a new TopContent
+### Testing
+To execute the unit tests, you'll need to:
+1. Create a space in contentful.com specific for running the tests.
+1. Import the models and test contents with import-contentful-models.sh
+1. Set the following environment variables with the credentials:
+  * CONTENTFUL_TEST_SPACE_ID: The contentful space
+  * CONTENTFUL_TEST_TOKEN: The delivery token
+  * CONTENTFUL_TEST_MANAGE_TOKEN: The management token (to update contents)
+
+### How to add a new TopContent
 - Don't panic. You can take [this](https://github.com/hubtype/botonic/pull/1417) as an example
 - Add enum entry to NonMessageTopContentType or MessageTopContentType
 - Implement a content class derived from TopContents to contents.ts

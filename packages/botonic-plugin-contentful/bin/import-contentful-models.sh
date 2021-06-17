@@ -4,7 +4,7 @@ BIN_DIR=${0:a:h}
 if [[ "$1" == "" ]]; then
   echo "Usage: $0 file_to_import"
   echo "Imports the content models. "
-  echo "Remove --content-model-only to also import the contents"
+  echo "Remove --content-model-only from the script to also import the contents"
   exit 1
 fi
 
