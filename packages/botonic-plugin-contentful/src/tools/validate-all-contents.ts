@@ -180,7 +180,7 @@ export class DefaultContentsValidatorReports
           : ` on locale '${context.locale}`
         msg = `${resourceId.toString()}${onLocale}': ${msg}`
       }
-      console.log(msg)
+      console.log(msg)a
     }
     this.errors.push({ resourceId, msg, critical })
   }
