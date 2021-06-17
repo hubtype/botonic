@@ -43,7 +43,7 @@ export class ContentsValidator {
       ? await this.reachableContents(messageContents, context)
       : messageContents
     for (const c of messageContentsToValidate) {
-      this.validate(c)
+      this.validate(c, context)
     }
   }
 
@@ -58,27 +58,28 @@ export class ContentsValidator {
           if (content instanceof MessageContent) {
             messageContents.push(content)
           } else {
-            this.validate(content)
+            this.validate(content, context)
           }
         }
       } catch (e) {
-        this.processException(model, e)
+        this.processException(model, context, e)
       }
     }
     return messageContents
   }
 
-  private processException(model: ContentType, e: any): void {
+  private processException(model: ContentType, context: Context, e: any): void {
     const resourceId = e instanceof CmsException && e.resourceId
 
     const multiError = this.getMultiError(e)
     if (multiError && !resourceId) {
       for (const e1 of multiError.list) {
-        this.processException(model, e1)
+        this.processException(model, context, e1)
       }
     } else {
       this.report.deliveryError(
         resourceId || new ContentId(model, '??'),
+        context,
         ensureError(e)
       )
     }
@@ -103,12 +104,12 @@ export class ContentsValidator {
     return reachable
   }
 
-  protected validate(content: TopContent) {
+  protected validate(content: TopContent, context: Context) {
     const res = content.validate()
     if (res) {
-      this.report.validationError(content.contentId, res)
+      this.report.validationError(content.contentId, context, res)
     } else {
-      this.report.successfulValidation(content.contentId)
+      this.report.successfulValidation(content.contentId, context)
     }
   }
 
@@ -128,9 +129,13 @@ export class ContentsValidator {
 }
 
 export interface ContentsValidatorReports {
-  deliveryError(resourceId: ResourceId, exception: Error): void
-  validationError(resourceId: ResourceId, error: string): void
-  successfulValidation(resourceId: ResourceId): void
+  deliveryError(
+    resourceId: ResourceId,
+    context: Context,
+    exception: Error
+  ): void
+  validationError(resourceId: ResourceId, context: Context, error: string): void
+  successfulValidation(resourceId: ResourceId, context: Context): void
 }
 
 type ResourceError = {
@@ -146,30 +151,34 @@ export class DefaultContentsValidatorReports
 
   constructor(readonly logErrors = true) {}
 
-  successfulValidation(resourceId: ResourceId): void {
+  successfulValidation(resourceId: ResourceId, context: Context): void {
     this.successContents.push(resourceId)
   }
 
-  deliveryError(resourceId: ResourceId, exception: Error) {
+  deliveryError(resourceId: ResourceId, context: Context, exception: Error) {
     let msg = exception.message
     if (exception instanceof CmsException) {
       msg += exception.messageFromReason()
     }
-    this.processError(resourceId, msg, true)
+    this.processError(resourceId, context, msg, true)
   }
 
-  validationError(resourceId: ResourceId, error: string) {
-    this.processError(resourceId, error, false)
+  validationError(resourceId: ResourceId, context: Context, error: string) {
+    this.processError(resourceId, context, error, false)
   }
 
   protected processError(
     resourceId: ResourceId,
+    context: Context,
     msg: string,
     critical: boolean
   ): void {
     if (this.logErrors) {
       if (!msg.includes(resourceId.id)) {
-        msg = `${resourceId.toString()}: ${msg}`
+        const onLocale = msg.includes('on locale')
+          ? ''
+          : ` on locale '${context.locale}`
+        msg = `${resourceId.toString()}${onLocale}': ${msg}`
       }
       console.log(msg)
     }
