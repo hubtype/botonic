@@ -1,7 +1,7 @@
 import { Tokenizer } from '../../types'
 
 export class TokenizerEs implements Tokenizer {
-  readonly locale = 'en'
+  readonly locale = 'es'
   private tokenizer = new (require('@nlpjs/lang-es/src/tokenizer-es'))()
 
   tokenize(text: string): string[] {
