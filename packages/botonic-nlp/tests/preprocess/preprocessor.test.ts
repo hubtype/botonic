@@ -8,8 +8,8 @@ describe('Preprocessor with loaded engines', () => {
 
   test('Preprocess', () => {
     expect(sut.preprocess('This is a test', '<PAD>')).toEqual([
-      'a',
       'test',
+      '<PAD>',
       '<PAD>',
       '<PAD>',
       '<PAD>',
@@ -26,10 +26,7 @@ describe('Preprocessor with loaded engines', () => {
   })
 
   test('Stopwords removal', () => {
-    expect(sut.removeStopwords(['this', 'is', 'a', 'test'])).toEqual([
-      'a',
-      'test',
-    ])
+    expect(sut.removeStopwords(['this', 'is', 'a', 'test'])).toEqual(['test'])
   })
 
   test('Stem', () => {
