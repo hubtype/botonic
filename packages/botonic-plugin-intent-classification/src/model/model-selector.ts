@@ -10,7 +10,7 @@ export class IntentModelSelector extends ModelSelector<
   IntentClassifierConfig
 > {
   static async build(locales: Locale[]): Promise<IntentModelSelector> {
-    const baseUrl =
+    const baseUrl: string =
       // @ts-ignore
       (typeof MODELS_BASE_URL !== 'undefined' && MODELS_BASE_URL) ||
       process.env.MODELS_BASE_URL

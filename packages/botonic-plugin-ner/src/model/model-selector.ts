@@ -10,7 +10,7 @@ export class NerModelSelector extends ModelSelector<
   NerConfig
 > {
   static async build(locales: Locale[]): Promise<NerModelSelector> {
-    const baseUrl =
+    const baseUrl: string =
       // @ts-ignore
       (typeof MODELS_BASE_URL !== 'undefined' && MODELS_BASE_URL) ||
       process.env.MODELS_BASE_URL
