@@ -9,11 +9,13 @@ export class NerModelSelector extends ModelSelector<
   NamedEntityRecognizer,
   NerConfig
 > {
-  static async build(
-    locales: Locale[],
-    modelsBaseUrl: string
-  ): Promise<NerModelSelector> {
-    const selector = new NerModelSelector(locales, modelsBaseUrl)
+  static async build(locales: Locale[]): Promise<NerModelSelector> {
+    const baseUrl =
+      // @ts-ignore
+      (typeof MODELS_BASE_URL !== 'undefined' && MODELS_BASE_URL) ||
+      process.env.MODELS_BASE_URL
+    const nerModelsUrl = `${baseUrl}/ner/models`
+    const selector = new NerModelSelector(locales, nerModelsUrl)
     return await selector.load()
   }
 

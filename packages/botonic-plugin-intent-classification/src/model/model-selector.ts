@@ -9,11 +9,13 @@ export class IntentModelSelector extends ModelSelector<
   IntentClassifier,
   IntentClassifierConfig
 > {
-  static async build(
-    locales: Locale[],
-    modelsBaseUrl: string
-  ): Promise<IntentModelSelector> {
-    const selector = new IntentModelSelector(locales, modelsBaseUrl)
+  static async build(locales: Locale[]): Promise<IntentModelSelector> {
+    const baseUrl =
+      // @ts-ignore
+      (typeof MODELS_BASE_URL !== 'undefined' && MODELS_BASE_URL) ||
+      process.env.MODELS_BASE_URL
+    const intentModelsUrl = `${baseUrl}/intent-classification/models`
+    const selector = new IntentModelSelector(locales, intentModelsUrl)
     return await selector.load()
   }
 
