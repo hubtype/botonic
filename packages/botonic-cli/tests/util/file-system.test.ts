@@ -3,32 +3,48 @@ import { join } from 'path'
 
 import {
   copy,
-  createDir,
-  createTempDir,
+  create,
+  createTemp,
   pathExists,
   readDir,
   readJSON,
-  removeRecursively,
+  remove,
   writeJSON,
 } from '../../src/util/file-system'
-import { execCommandSafe } from '../../src/util/system'
+import { execCommand } from '../../src/util/processes'
+import { rndBool } from '../../../botonic-plugin-contentful/src/cms/test-helpers'
+
+const existingPath = process.cwd()
+const unexistingPath = 'unexistingPath'
+const dirToTest = join(process.cwd(), 'botonic-tmp')
+
+const withDirToTest = (
+  toTest: () => any,
+  { createDir } = { createDir: true }
+): boolean => {
+  let success = false
+  try {
+    createDir && create(dirToTest)
+    toTest()
+    success = true
+  } catch (e) {
+    success = false
+  } finally {
+    remove(dirToTest)
+  }
+  return success
+}
+const withTempDir = (toTest: (tempDir: string) => any) => {
+  const tempDir = createTemp('botonic-tmp')
+  toTest(tempDir)
+  remove(tempDir)
+}
 
 const createFile = (path: string, content: string) => {
   writeFileSync(path, content, { encoding: 'utf-8' })
 }
 
 describe('TEST: File System utilities', () => {
-  const existingPath = process.cwd()
-  const unexistingPath = 'unexistingPath'
-
-  let tempDir
-  beforeEach(() => {
-    tempDir = createTempDir('botonic-tmp')
-  })
-
-  afterEach(() => {
-    removeRecursively(tempDir)
-  })
   it('Checks an existing path', () => {
     const sut = pathExists(existingPath)
     expect(sut).toBeTruthy()
@@ -46,48 +62,68 @@ describe('TEST: File System utilities', () => {
     expect(sut).toThrow()
   })
   it('Removes folders from existing path', () => {
-    const sut = pathExists(tempDir)
-    expect(sut).toBe(true)
+    withDirToTest(() => {
+      const sut = pathExists(dirToTest)
+      expect(sut).toBe(true)
+    })
   })
   it('Removes folders from unexisting path', () => {
-    const sut = () => removeRecursively(unexistingPath)
-    expect(sut()).toBeFalsy()
+    expect(
+      withDirToTest(
+        () => {
+          const sut = () => remove(unexistingPath)
+          expect(sut).toThrowError()
+        },
+        { createDir: false }
+      )
+    ).toBeFalsy()
   })
   it('Creates a directory in the given path', () => {
-    const sut = pathExists(tempDir)
-    expect(sut).toBe(true)
+    withDirToTest(() => {
+      const sut = pathExists(dirToTest)
+      expect(sut).toBe(true)
+    })
   })
   it('Creates a directory in the given path (already exists)', () => {
-    const sut = () => createDir(tempDir)
-    expect(sut).toThrow()
-  })
-
-  it('Copy content', () => {
-    const tmp1 = createTempDir('botonic-tmp1')
-    createFile(join(tmp1, 'dummy-file.txt'), 'dummy content')
-    const tmp2 = createTempDir('botonic-tmp2')
-    copy(tmp1, tmp2)
-    expect(readDir(tmp2)).toContain('dummy-file.txt')
-    removeRecursively(tmp1)
-    removeRecursively(tmp2)
+    withDirToTest(() => {
+      const sut = () => create(dirToTest)
+      expect(sut).toThrow()
+    })
   })
   it('Creates a temporary directory', () => {
-    const sut = pathExists(tempDir)
-    expect(sut).toBe(true)
-    expect.stringMatching(/botonic-tmp*/)
+    withTempDir(tempDir => {
+      const sut = pathExists(tempDir)
+      expect(sut).toBe(true)
+      expect.stringMatching(/botonic-tmp*/)
+    })
   })
-
+  it('Copy content', () => {
+    const tmp1 = createTemp('botonic-tmp1')
+    createFile(join(tmp1, 'dummy-file.txt'), 'dummy content')
+    const tmp2 = createTemp('botonic-tmp2')
+    copy(tmp1, tmp2)
+    expect(readDir(tmp2)).toContain('dummy-file.txt')
+    remove(tmp1)
+    remove(tmp2)
+  })
+  class A {
+    a = 3
+  }
   it('Reads/Writes JSON correctly', () => {
-    const path = join(tempDir, 'dummy.json')
+    const a: A | undefined = rndBool() ? undefined : new A()
+    console.log(a?.a)
+    const tmpDir = createTemp('botonic-tmp')
+    const path = join(tmpDir, 'dummy.json')
     writeJSON(path, {
       dummy: 'content',
-    })
+    } as JSON)
     const writtenContent = String(readFileSync(path))
     expect(writtenContent).toEqual('{"dummy":"content"}')
     const readContent = readJSON(path)
     expect(readContent).toEqual({ dummy: 'content' })
-    execCommandSafe(`touch ${tempDir}/another.json`)
-    const noContent = readJSON(join(tempDir, 'another.json'))
+    execCommand(`touch ${tmpDir}/another.json`)
+    const noContent = readJSON(join(tmpDir, 'another.json'))
     expect(noContent).toBeUndefined()
+    remove(tmpDir)
   })
 })

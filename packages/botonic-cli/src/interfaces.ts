@@ -5,11 +5,11 @@ export interface BotonicProject {
 }
 
 export interface CredentialsHandlerArgs {
-  homeDir: string
-  filename: string // only filename, it does not contain the path to folder
+  homePath: string
+  filename: string
 }
 
-export interface OAuth {
+interface OAuth {
   access_token: string
   expires_in: number
   token_type: string
@@ -59,8 +59,7 @@ interface BotLastUpdate {
   published_at: string
   comment: string
 }
-
-export interface BotInfo {
+interface BotInfo {
   id: string
   name: string
   organization: string
@@ -101,13 +100,12 @@ export interface BotCredentials {
   bot: BotInfo | null
 }
 
-export interface TrackArgs {
-  event: string
-  anonymousId: string
-  properties?: any
-}
 export interface AnalyticsService {
-  track: (args: TrackArgs) => void
+  track: (_: {
+    event: string
+    anonymousId: string | number|undefined
+    properties: any
+  }) => any
 }
 
 export interface SystemInformation {
@@ -122,8 +120,3 @@ export interface SystemInformation {
   botonic_cli_version: string
   botonic_dependencies: any[] | string
 }
-
-export type JSONPrimitive = string | number | boolean | null
-export type JSONValue = JSONPrimitive | JSONObject | JSONArray
-export type JSONObject = { [member: string]: JSONValue }
-export type JSONArray = JSONValue[]

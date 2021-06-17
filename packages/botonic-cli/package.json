@@ -29,6 +29,7 @@
     "@types/analytics-node": "^3.1.4",
     "@types/fs-extra": "^9.0.11",
     "@types/inquirer": "^7.3.1",
+    "@types/qs": "^6.9.5",
     "@types/uuid": "^8.3.0",
     "globby": "^11.0.3"
   },
@@ -54,9 +55,10 @@
   "repository": "hubtype/botonic",
   "scripts": {
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "ts-node": "ts-node",
+    "ts-node": "../../node_modules/.bin/ts-node -O '{ \"noUnusedLocals\":false}'",
     "prepare": "node ../../preinstall.js",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "build_unit_tests": "tsc -b tests/tsconfig.json",
     "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
     "prepack": "oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
     "version": "oclif-dev readme && git add README.md",
