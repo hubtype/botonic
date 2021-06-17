@@ -6,6 +6,8 @@ repos:
     hooks:
       - id: check-yaml
       - id: check-added-large-files
+        args: ['--maxkb=1']
+        exclude: 'kk'
       - id: check-byte-order-marker
       - id: check-case-conflict
       - id: check-merge-conflict

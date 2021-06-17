@@ -35,13 +35,7 @@ import { Video } from './components/video'
 export function msgToBotonic(msg, customMessageTypes) {
   delete msg.display
   if (isCustom(msg)) {
-    try {
-      return customMessageTypes
-        .find(mt => mt.customTypeName === msg.data.customTypeName)
-        .deserialize(msg)
-    } catch (e) {
-      console.log(e)
-    }
+    return customMsgToBotonic(msg, customMessageTypes)
   } else if (isText(msg)) {
     return textToBotonic(msg)
   } else if (isCarousel(msg)) {
@@ -97,6 +91,31 @@ export function msgToBotonic(msg, customMessageTypes) {
   }
   console.warn(`Not converting message of type ${msg.type}`)
   return null
+}
+
+function customMsgToBotonic(msg, customMessageTypes) {
+  try {
+    if (!customMessageTypes) {
+      console.error(
+        'Missing theme.message.customTypes or theme.customMessageTypes keys of webchat config'
+      )
+      return null
+    }
+    const customType = customMessageTypes.find(
+      mt => mt.customTypeName === msg.data.customTypeName
+    )
+    if (!customType) {
+      const typeNames = customMessageTypes.map(mt => mt.customTypeName)
+      console.error(
+        `No customType found for message of type '${msg.data.customTypeName}' in list '${typeNames}'`
+      )
+      return null
+    }
+    return customType.deserialize(msg)
+  } catch (e) {
+    console.error(`Error deserializing msg of type '${msg.type}':`, e)
+    return null
+  }
 }
 
 function rndStr() {
