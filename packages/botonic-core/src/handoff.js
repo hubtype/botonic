@@ -2,9 +2,17 @@ import axios from 'axios'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
-export async function getOpenQueues(session) {
+function contextDefaults(context) {
+  return {
+    timeoutMs: context.timeoutMs || 10000,
+  }
+}
+
+export async function getOpenQueues(session, context = {}) {
+  //be aware of https://github.com/axios/axios/issues/1543
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
+  context = contextDefaults(context)
   const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
@@ -12,6 +20,7 @@ export async function getOpenQueues(session) {
     method: 'post',
     url: endpointUrl,
     data: { bot_id: session.bot.id },
+    timeout: context.timeoutMs,
   })
   return resp.data
 }
@@ -130,9 +139,10 @@ async function _humanHandOff(
   session._botonic_action = `create_case:${JSON.stringify(params)}`
 }
 
-export async function storeCaseRating(session, rating) {
+export async function storeCaseRating(session, rating, context = {}) {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const chatId = session.user.id
+  context = contextDefaults(context)
   const resp = await axios({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
@@ -140,6 +150,7 @@ export async function storeCaseRating(session, rating) {
     method: 'post',
     url: `${baseUrl}/v1/chats/${chatId}/store_case_rating/`,
     data: { chat_id: chatId, rating },
+    timeout: context.timeoutMs,
   })
   return resp.data
 }
