@@ -20,6 +20,8 @@
     // without typeRoots, it also checks @types of parent folders
     //"typeRoots" : ["node_modules/@types"],
 
+    "experimentalDecorators": true,
+
     // lint options
     "strict": true,
     "forceConsistentCasingInFileNames": true,

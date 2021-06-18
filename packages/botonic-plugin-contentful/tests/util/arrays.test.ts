@@ -9,7 +9,6 @@ test('andArrays numbers', () => {
 test('andArrays derived class', () => {
   const b = new Base()
   const d = new Derive()
-
   const res: Derive[] = andArrays([d], [d, b])
   expect(res).toEqual([d])
 

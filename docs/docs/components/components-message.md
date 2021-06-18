@@ -250,9 +250,9 @@ export default customMessage({
       boxShadow: 'none',
       paddingLeft: '5px',
     },
-    imageStyle: { display: 'none' },
+    imagestyle: { display: 'none' },
     blob: false,
-    enableTimestamps: false,
+    enabletimestamps: false,
   },
 })
 ```

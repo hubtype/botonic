@@ -205,10 +205,18 @@ export class CommonFields implements Stringable {
 }
 
 /**
- * In CMS, it's possible both to have direct references to the target content
- * opened by the button, or to have intermediate button contents which reference
+ * In CMS, there are 2 options to store the buttons:
+ * 1) To have direct references to the target content opened by the button
+ * 2) To have intermediate button contents which reference
  * the target and allow the button to have a text different than the target content's
  * shortText.
+ *
+ * Option 1 has these advantages:
+ * - The contents also needs the shortText to display a button to disambiguate when
+ * the bot does NLU based on the content keywords.
+ * - It simplifies adding and removing a button (it's only a link to another content)
+ * - It avoids duplication of texts (specially for targets with many sources and many languages)
+ * - It simplifies the i18n (the text of the button is more related to the target content that to the source one)
  */
 export class Button extends Content {
   private readonly usingNameForText: boolean
