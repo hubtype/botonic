@@ -311,8 +311,8 @@ field named "customFieldText"
 - Implement a class derived from TopContentDelivery in src/contentful/contents
 - Integrate the previous class in ManageContentful as done for other types
 - Implement a delivery function to all classes that implement CMS interface
-- Implement a <NewContent>Builder class derived from TopContentBuilder in src/cms/factories/content-factories.ts.
-  Implement a Rnd<NewContent>Builder class derived from <NewContent>Builder at src/cms/test-helpers/builders.ts
+- Implement a \<NewContent\>Builder class derived from TopContentBuilder in src/cms/factories/content-factories.ts.
+  Implement a Rnd\<NewContent\>Builder class derived from \<NewContent\>Builder at src/cms/test-helpers/builders.ts
 - Write integration tests using the builder classes in tests/contentful/contents which validates delivery of:
   1. Minimal content (all content's optional fields in blank)
   2. Full content. All content's optional fields filled. For complex contents, you may need
