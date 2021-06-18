@@ -30,6 +30,7 @@ import { StartUpDelivery } from './contents/startup'
 import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
 import { CachedClientApi } from './delivery/cache'
+import { ClientApiErrorReporter, ReducedClientApi } from './delivery/client-api'
 import { AdaptorDeliveryApi, DeliveryApi } from './delivery-api'
 import {
   ContentfulEntryUtils,
@@ -62,13 +63,22 @@ export class Contentful implements cms.CMS {
    *  https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
    */
   constructor(options: ContentfulOptions) {
-    const client = createContentfulClientApi(options)
-    const deliveryApi = new AdaptorDeliveryApi(
-      options.disableCache
-        ? client
-        : new CachedClientApi(client, options.cacheTtlMs),
-      options
-    )
+    const reporter: ClientApiErrorReporter = (
+      msg: string,
+      func: string,
+      args,
+      error: any
+    ) => {
+      console.error(
+        `${msg}. '${func}(${String(args)})' threw '${String(error)}'`
+      )
+      return Promise.resolve()
+    }
+    let client: ReducedClientApi = createContentfulClientApi(options)
+    if (!options.disableCache) {
+      client = new CachedClientApi(client, options.cacheTtlMs, reporter)
+    }
+    const deliveryApi = new AdaptorDeliveryApi(client, options)
     const resumeErrors = options.resumeErrors || false
     const delivery = new IgnoreFallbackDecorator(deliveryApi)
     this._contents = new ContentsDelivery(delivery, resumeErrors)
