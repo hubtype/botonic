@@ -2,6 +2,7 @@
 import { MultiError } from 'async-parallel'
 
 import { SearchCandidate } from '../search'
+import { Measure } from '../util'
 import { reduceMultiError } from '../util/async'
 import { AssetId, ContentId, ResourceId } from './callback'
 import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
@@ -54,15 +55,22 @@ export class ErrorReportingCMS implements CMS {
     return content
   }
 
-  catchAndValidate<T extends Content>(
+  async catchAndValidate<T extends Content>(
     id: string,
     context: Context | undefined,
     contentType: ContentType,
     promise: Promise<T>
   ): Promise<T> {
-    return promise
-      .catch(this.handleContentError(contentType, id, context))
-      .then(c => this.validate(c, context))
+    const m = new Measure('cms.' + contentType)
+    try {
+      const c = await promise
+      m.end()
+      this.validate(c, context)
+      return c
+    } catch (e) {
+      this.handleContentError(contentType, id, context)(e)
+      throw new Error('should not reach here')
+    }
   }
 
   carousel(id: string, context?: Context): Promise<Carousel> {
@@ -168,15 +176,18 @@ export class ErrorReportingCMS implements CMS {
       .catch(this.handleError('contentsWithKeywords', {}, context))
   }
 
-  topContents<T extends TopContent>(
+  async topContents<T extends TopContent>(
     model: TopContentType,
     context?: Context,
     filter?: (cf: CommonFields) => boolean,
     paging?: PagingOptions
   ): Promise<T[]> {
-    return this.cms
+    const m = new Measure('topContents.' + model)
+    const contents = await this.cms
       .topContents<T>(model, context, filter, paging)
       .catch(this.handleError('topContents', { model }, context))
+    m.end()
+    return contents
   }
 
   content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {

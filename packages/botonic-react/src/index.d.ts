@@ -1,4 +1,4 @@
-import * as core from '@botonic/core/src'
+import * as core from '@botonic/core'
 import * as React from 'react'
 
 import {
