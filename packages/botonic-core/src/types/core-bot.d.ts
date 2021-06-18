@@ -2,6 +2,7 @@ import {
   BotRequest,
   BotResponse,
   Locales,
+  Plugin,
   PluginConfig,
   Routes,
   Session,
@@ -32,7 +33,7 @@ export declare class CoreBot {
   defaultTyping?: number
   inspector?: Inspector
   locales: Locales
-  plugins?: PluginConfig<any>
+  plugins?: Record<string, Plugin>
   renderer: any
   rootElement: any
   router: Router
