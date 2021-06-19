@@ -11,7 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "fs": "0.0.1-security",
+    "fs": "0.0.2",
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
