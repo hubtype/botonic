@@ -4,7 +4,11 @@ import { Context } from '../../cms'
 import * as cms from '../../cms'
 import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
-import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
+import {
+  addCustomFields,
+  CommonEntryFields,
+  ContentfulEntryUtils,
+} from '../delivery-utils'
 import { ScheduleDelivery, ScheduleFields } from './schedule'
 
 export class QueueDelivery extends TopContentDelivery {
@@ -31,12 +35,14 @@ export class QueueDelivery extends TopContentDelivery {
     const fields = entry.fields
 
     const schedule = fields.schedule && this.schedule.fromEntry(fields.schedule)
-
-    return new cms.Queue(
-      ContentfulEntryUtils.commonFieldsFromEntry(entry),
-      fields.queue,
-      schedule && schedule.schedule,
-      fields.handoffMessage
+    return addCustomFields(
+      new cms.Queue(
+        ContentfulEntryUtils.commonFieldsFromEntry(entry),
+        fields.queue,
+        schedule && schedule.schedule,
+        fields.handoffMessage
+      ),
+      fields
     )
   }
 }

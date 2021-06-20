@@ -8,6 +8,7 @@ import {
   DateRangeContent,
   FollowUp,
   SearchableBy,
+  TopContent,
 } from '../cms'
 import { ResourceTypeNotFoundCmsException } from '../cms/exceptions'
 import { ContentfulOptions } from '../plugin'
@@ -70,7 +71,6 @@ export class ContentfulEntryUtils {
     followUp?: FollowUp
   ): CommonFields {
     const fields = entry.fields
-
     const searchableBy =
       fields.searchableBy &&
       new SearchableBy(
@@ -90,6 +90,7 @@ export class ContentfulEntryUtils {
       searchableBy,
       dateRange,
       followUp,
+      //customFields cannot be easily told apart from standard fields until the content is created. see addCustomFields
     })
   }
 
@@ -143,4 +144,23 @@ export function convertContentfulException(e: any, query: any): any {
     )
   }
   return e
+}
+//supported types: string, number and boolean
+export function addCustomFields<T extends TopContent>(
+  content: T,
+  entryFields: CommonEntryFields,
+  ignoreFields?: string[]
+): T {
+  const customKeys = Object.keys(entryFields).filter(
+    f =>
+      !Object.keys(content).includes(f) &&
+      !Object.keys(content.common).includes(f) &&
+      !ignoreFields?.includes(f) &&
+      //contentful: followup, plugin: followUp
+      'followup' != f
+  )
+  for (const customKey of customKeys) {
+    content.common.customFields[customKey] = (entryFields as any)[customKey]
+  }
+  return content
 }

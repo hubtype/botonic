@@ -42,6 +42,10 @@ export class PostProcessor {
   }
 }
 
+/**
+ * @param targetLocale if set, it converts URLs which contain the
+ * locale (eg. a.com/es/) into targetLocale
+ */
 async function writeCsvForTranslators(
   options: ContentfulOptions,
   locale: Locale,
@@ -65,8 +69,12 @@ async function writeCsvForTranslators(
 }
 
 if (process.argv.length < 7 || process.argv[2] == '--help') {
-  console.error(
-    `Usage: space_id environment access_token locale filename [target_country]`
+  console.log(
+    `Usage: space_id environment access_token locale filename [target_locale]`
+  )
+  console.log(
+    'If target_locale specified, it converts URLs which contains the ' +
+      'locale (eg. a.com/es/) into target_locale'
   )
   // eslint-disable-next-line no-process-exit
   process.exit(1)

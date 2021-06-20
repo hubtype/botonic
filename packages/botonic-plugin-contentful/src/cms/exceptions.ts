@@ -14,7 +14,7 @@ export class CmsException extends Error {
     readonly reason?: any,
     readonly resourceId?: ResourceId
   ) {
-    super(CmsException.mergeMessages(message, reason))
+    super(CmsException.mergeMessages(message, reason, resourceId))
   }
 
   public messageFromReason(): string | undefined {
@@ -36,13 +36,19 @@ export class CmsException extends Error {
    */
   private static mergeMessages(
     message: string,
-    reason: any | undefined
+    reason: any | undefined,
+    resourceId: ResourceId | undefined
   ): string {
-    if (!reason) {
-      return message
+    // resourceId already reported by ErrorReportingCMS, but not yet
+    // for contents & topContents methods
+    if (resourceId && !message.includes(resourceId.id)) {
+      message += ` on content ${resourceId.toString()}`
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return `${message} Due to: ${reason.message || String(reason)}`
+    if (reason) {
+      message += `. ${String(reason.message || reason)}`
+    }
+    return message
   }
 }
 

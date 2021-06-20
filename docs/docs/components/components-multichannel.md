@@ -8,7 +8,46 @@ title: Multichannel
 The `Multichannel` component is a wrapper component used to transform existing representations of a channel into another one that does not support it natively. 
 As an example, it can be used to adapt native representations of a Text with Buttons or Carousel (available in Facebook) for WhatsApp : the multichannel component allows you to provide a way to concatenate and unify messages and conversations for your WhatsApp bot.
 
+## Example
+
+To get this kind of output:
+
+<img src="https://botonic-doc-static.netlify.com/images/multichannel/multichannel-visuals.png" width="600"/>
+
+
+You just have to add the following code in your `action` files, under the `render` section.
+
+```javascript
+<Multichannel
+  text={{ indexMode: 'number' }}
+  indexSeparator={':'}
+  messageSeparator={'\n'}
+>
+```
+
+
+As an example, you would get something like this: 
+
+```javascript
+<Multichannel>
+  <Text>
+    Welcome! Choose from the options below.
+      <Button key={'1'} payload='payload1'>
+        Option 1
+      </Button>,
+      <Button key={'2'} payload='payload1'>
+        Option 2
+      </Button>,
+      <Button key={'3'} payload='payload1'>
+        Option 3
+      </Button>
+  </Text>
+</Multichannel>
+```
+
 ## Properties
+
+You can customize the output by using this list of properties.
 
 | Property               | Type                                 | Description                                                                                                                            | Required | Default value |
 |------------------------|--------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------|---------------|
@@ -26,52 +65,7 @@ As an example, it can be used to adapt native representations of a Text with But
                       
 
 
-## Example
 
-Add the following code in your `action` files, under the `render` section.
 
-```javascript
-<Multichannel
-  firstIndex={'a'}
-  boldIndex={true}
-  carousel={{ indexMode: 'letter' }}
-  text={{ indexMode: 'letter' }}
-  indexSeparator={'.'}
-  messageSeparator={'\n\n'}
->
-```
 
-### Description
 
-- `firstIndex` = The index is the option title of a choice. Ex: a. b. or 1. 2. etc.
-
-- `boldIndex`: Applies a bold format to the index element. True or False.
-
-- `Carousel`: Adds a letter or number to the index for a carousel.
-
-- `Text` : Adds a letter or number to the index for a text.
-
-- `Indexseparator`: Adds a dot or dash after the letter or number.
-
-- `Message separator` : Adds a space between the various messages. `{'\n\n'}` adds a line break between the index message and the selection option.
-
-### Output
-
-```javascript
-<Multichannel {...LEGACY_PROPS}>
-  <Text>
-    Some with buttons
-    {[
-      <Button key={'1'} payload='payload1'>
-        Button 1
-      </Button>,
-      <Button key={'2'} path='path1'>
-        Button 2
-      </Button>,
-      <Button key={'3'} url='http://testurl.com'>
-        Visit website
-      </Button>,
-    ]}
-  </Text>
-</Multichannel>
-```

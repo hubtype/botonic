@@ -18,7 +18,12 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
 
 const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
 const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
+
+/**
+ * Calls Hubtype APIs from Webchat
+ */
 export class HubtypeService {
+  PUSHER_CONNECT_TIMEOUT_MS = 10000
   constructor({
     appId,
     user,
@@ -35,28 +40,34 @@ export class HubtypeService {
     this.onEvent = onEvent
     this.unsentInputs = unsentInputs
     this.server = server
-    if (user.id && (lastMessageId || lastMessageUpdateDate)) {
+    if (this.user.id && (lastMessageId || lastMessageUpdateDate)) {
+      // It's safe not awaiting Promise because:
+      // * it will never be called from AWS lambda
+      // * though init() is called again from postMesage, it does nothing if Pusher already created
       this.init()
-      this.resendUnsentInputs()
     }
   }
 
-  resolveServerConfig() {
-    if (!this.server) {
-      return { activityTimeout: ACTIVITY_TIMEOUT, pongTimeout: PONG_TIMEOUT }
-    }
-    return {
-      activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
-      pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
-    }
-  }
-
+  /**
+   * @returns {Promise<void>}
+   */
   init(user, lastMessageId, lastMessageUpdateDate) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (lastMessageUpdateDate)
       this.lastMessageUpdateDate = lastMessageUpdateDate
-    if (this.pusher || !this.user.id || !this.appId) return null
+    return this._initPusher()
+  }
+
+  /**
+   * @returns {Promise<void>}
+   */
+  _initPusher() {
+    if (this.pusher) return Promise.resolve()
+    if (!this.user.id || !this.appId) {
+      // TODO recover user & appId somehow
+      return Promise.reject('No User or appId. Clear cache and reload')
+    }
     this.pusher = new Pusher(_WEBCHAT_PUSHER_KEY_, {
       cluster: 'eu',
       authEndpoint: `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
@@ -71,39 +82,39 @@ export class HubtypeService {
       const cleanAndReject = msg => {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         clearTimeout(connectTimeout)
-        this.pusher.connection.unbind()
-        this.channel.unbind()
-        this.pusher = null
+        this.destroyPusher()
         reject(msg)
       }
       const connectTimeout = setTimeout(
         () => cleanAndReject('Connection Timeout'),
-        10000
+        this.PUSHER_CONNECT_TIMEOUT_MS
       )
       this.channel.bind('pusher:subscription_succeeded', () => {
+        // Once subscribed, we know that authentication has been done: https://pusher.com/docs/channels/server_api/authenticating-users
+        this.onConnectionRegained()
         clearTimeout(connectTimeout)
         resolve()
       })
+      this.channel.bind('botonic_response', data => this.onPusherEvent(data))
+      this.channel.bind('update_message_info', data => this.onPusherEvent(data))
+
       this.pusher.connection.bind('error', event => {
         if (event.type == 'WebSocketError') this.handleConnectionChange(false)
-        const errorMsg =
-          event.error && event.error.data
-            ? event.error.data.code || event.error.data.message
-            : 'Connection error'
-        cleanAndReject(`Pusher error (${errorMsg})`)
+        else {
+          const errorMsg =
+            event.error && event.error.data
+              ? event.error.data.code || event.error.data.message
+              : 'Connection error'
+          cleanAndReject(`Pusher error (${errorMsg})`)
+        }
       })
     })
-    this.pusher.connection.bind('connected', () =>
-      this.handleConnectionChange(true)
-    )
-    this.pusher.connection.bind('disconnected', () =>
-      this.handleConnectionChange(false)
-    )
-    this.pusher.connection.bind('unavailable', () =>
-      this.handleConnectionChange(false)
-    )
-    this.channel.bind('botonic_response', data => this.onPusherEvent(data))
-    this.channel.bind('update_message_info', data => this.onPusherEvent(data))
+    this.pusher.connection.bind('state_change', states => {
+      if (states.current === 'connecting') this.updateAuthHeaders()
+      if (states.current === 'connected') this.handleConnectionChange(true)
+      if (states.current === 'unavailable') this.handleConnectionChange(false)
+    })
+
     return connectionPromise
   }
 
@@ -115,6 +126,25 @@ export class HubtypeService {
     if (this.lastMessageUpdateDate)
       headers['X-BOTONIC-LAST-MESSAGE-UPDATE-DATE'] = this.lastMessageUpdateDate
     return headers
+  }
+
+  resolveServerConfig() {
+    if (!this.server) {
+      return { activityTimeout: ACTIVITY_TIMEOUT, pongTimeout: PONG_TIMEOUT }
+    }
+    return {
+      activityTimeout: this.server.activityTimeout || ACTIVITY_TIMEOUT,
+      pongTimeout: this.server.pongTimeout || PONG_TIMEOUT,
+    }
+  }
+
+  updateAuthHeaders() {
+    if (this.pusher) {
+      this.pusher.config.auth.headers = {
+        ...this.pusher.config.auth.headers,
+        ...this.constructHeaders(),
+      }
+    }
   }
 
   handleConnectionChange(online) {
@@ -143,38 +173,46 @@ export class HubtypeService {
     })
   }
 
-  // eslint-disable-next-line consistent-return
+  /**
+   * @return {Promise<void>}
+   */
   async postMessage(user, message) {
     try {
       await this.init(user)
-    } catch (e) {
-      this.handleUnsentInput(message)
-      this.handleConnectionChange(false)
-      return Promise.resolve()
-    }
-    try {
-      return axios
-        .post(
-          `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
-          {
-            sender: this.user,
-            message: message,
-          }
-        )
-        .then(res => {
-          if (res && res.status === 200) this.handleSentInput(message)
-          return
-        })
-        .catch(e => this.handleUnsentInput(message))
+      await axios.post(
+        `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
+        {
+          sender: this.user,
+          message: message,
+        },
+        {
+          validateStatus: status => status === 200,
+        }
+      )
+      this.handleSentInput(message)
     } catch (e) {
       this.handleUnsentInput(message)
     }
+    return Promise.resolve()
   }
 
   static async getWebchatVisibility({ appId }) {
     return axios.get(
       `${_HUBTYPE_API_URL_}/v1/provider_accounts/${appId}/visibility/`
     )
+  }
+
+  destroyPusher() {
+    if (!this.pusher) return
+    this.pusher.disconnect()
+    this.pusher.unsubscribe(this.pusherChannel)
+    this.pusher.unbind_all()
+    this.pusher.channels = {}
+    this.pusher = null
+  }
+
+  async onConnectionRegained() {
+    await this.resendUnsentInputs()
   }
 
   async resendUnsentInputs() {

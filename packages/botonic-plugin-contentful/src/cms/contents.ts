@@ -9,28 +9,37 @@ export enum ButtonStyle {
   QUICK_REPLY = 1,
 }
 
+/**
+ * @param type eg. image/jpeg
+ */
+export interface AssetInfo {
+  readonly name: string
+  readonly fileName?: string
+  readonly type?: string
+  readonly description?: string
+}
+
 /** Not a Content because it cannot have custom fields */
 export class Asset {
   /**
-   * @param type eg. image/jpeg
    * @param details depends on the type. eg the image size
    */
   constructor(
     readonly id: string,
-    readonly name: string,
     readonly url: string,
-    readonly type?: string,
+    readonly info: AssetInfo,
     readonly details?: any
   ) {}
 }
 
 /**
- * Any content deliverable from a CMS
+ * Any content deliverable from a CMS.
+ * They are immutable, which allows sharing and caching them.
  */
 export abstract class Content implements Stringable {
   protected constructor(readonly contentType: ContentType) {}
 
-  /** @return message if any issue detected */
+  /** @return error message if any issue detected */
   validate(): string | undefined {
     return undefined
   }
@@ -149,7 +158,6 @@ export abstract class MessageContent extends TopContent {
 /**
  * When any {@link keywords} is detected on a user input, we can use display the {@link shortText} for users
  * to confirm their interest on this content
- * TODO move contentId o ContentType here?
  */
 export class CommonFields implements Stringable {
   readonly shortText: string
@@ -160,6 +168,7 @@ export class CommonFields implements Stringable {
   readonly partitions: string[]
   readonly dateRange?: DateRangeContent
   readonly followUp?: FollowUp // TODO move to MessageContent
+  readonly customFields: Record<string, unknown>
 
   constructor(
     readonly id: string,
@@ -171,6 +180,8 @@ export class CommonFields implements Stringable {
       partitions?: string[]
       dateRange?: DateRangeContent
       followUp?: FollowUp
+      //customFields are any fields found in CMS but not expected in the corresponding model
+      customFields?: Record<string, unknown>
     }
   ) {
     if (opt) {
@@ -185,6 +196,7 @@ export class CommonFields implements Stringable {
       this.keywords = []
       this.partitions = []
     }
+    this.customFields = opt?.customFields || {}
   }
 
   toString(): string {
@@ -332,6 +344,12 @@ export class Element extends Content {
     const clone = shallowClone(this)
     ;(clone as any).buttons = buttons
     return clone
+  }
+}
+
+export class Document extends MessageContent {
+  constructor(readonly common: CommonFields, readonly docUrl: string) {
+    super(common, ContentType.DOCUMENT)
   }
 }
 

@@ -30,7 +30,7 @@ export function spawnProcess(
   })
   childProcess.on('close', code => {
     onClose && onClose()
-    process.stdout.write(`child process exited with code ${code}`)
+    process.stdout.write(`child process exited with code ${String(code)}`)
   })
 }
 

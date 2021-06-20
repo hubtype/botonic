@@ -38,6 +38,12 @@ repos:
         language: system
         files: ^packages/botonic-plugin-nlu/
 
+      - id: nlp
+        name: nlp
+        entry: scripts/qa/lint-package.sh packages/botonic-nlp
+        language: system
+        files: ^packages/botonic-nlp
+
       - id: contentful
         name: contentful
         entry: scripts/qa/lint-package.sh packages/botonic-plugin-contentful
@@ -115,3 +121,15 @@ repos:
         entry: scripts/qa/lint-package.sh docs/website
         language: system
         files: ^docs/website/
+
+      - id: plugin-ner
+        name: plugin-ner
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-ner
+        language: system
+        files: ^packages/botonic-plugin-ner/
+
+      - id: plugin-intent-classification
+        name: plugin-intent-classification
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-intent-classification
+        language: system
+        files: ^packages/botonic-plugin-intent-classification/

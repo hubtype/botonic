@@ -9,6 +9,7 @@ import {
   CommonFields,
   Content,
   DateRangeContent,
+  Document,
   Element,
   Image,
   Queue,
@@ -32,6 +33,11 @@ export class LogCMS implements CMS {
   carousel(id: string, context?: Context): Promise<Carousel> {
     this.logContentDelivery(ContentType.CAROUSEL, id, context)
     return this.cms.carousel(id, context)
+  }
+
+  document(id: string, context?: Context): Promise<Document> {
+    this.logContentDelivery(ContentType.DOCUMENT, id, context)
+    return this.cms.document(id, context)
   }
 
   text(id: string, context?: Context): Promise<Text> {

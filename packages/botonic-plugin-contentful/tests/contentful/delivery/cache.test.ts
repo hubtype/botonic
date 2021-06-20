@@ -1,60 +1,79 @@
-import { Entry, EntryCollection } from 'contentful'
-import { instance, mock, verify, when } from 'ts-mockito'
-
 import { CachedClientApi } from '../../../src/contentful/delivery/cache'
-import { ReducedClientApi } from '../../../src/contentful/delivery/client-api'
+import { MockClientApi } from './mock-client.helper'
 
-test('TEST: CachedDelivery getEntries', async () => {
-  const CACHE_TTL = 30
-  const mockApi = mock<ReducedClientApi>()
-  const query = {}
-  const entryCollection = ({
-    items: [],
-  } as any) as EntryCollection<any>
-  when(mockApi.getEntries(query)).thenResolve(entryCollection)
-  const sut = new CachedClientApi(instance(mockApi), CACHE_TTL)
-
-  await expect(sut.getEntries(query)).resolves.toBe(entryCollection)
-  await expect(sut.getEntries(query)).resolves.toBe(entryCollection)
-  verify(mockApi.getEntries(query)).once()
-
-  await new Promise(resolve => setTimeout(resolve, CACHE_TTL))
-  await expect(sut.getEntries(query)).resolves.toBe(entryCollection)
-  verify(mockApi.getEntries(query)).twice()
+test('TEST: CachedClientApi getAsset is cached', async () => {
+  const id = Math.random().toString()
+  await testHitAndMiss(
+    sut => sut.getAsset(id),
+    sut => sut.asset
+  )
 })
 
-test('TEST: CachedDelivery getEntry', async () => {
+test('TEST: CachedClientApi getAssets is cached', async () => {
+  await testHitAndMiss(
+    sut => sut.getAssets({}),
+    sut => sut.assetCollection
+  )
+})
+
+test('TEST: CachedClientApi getEntries is cached', async () => {
+  await testHitAndMiss(
+    sut => sut.getEntries({}),
+    sut => sut.entryCollection
+  )
+})
+
+test('TEST: CachedClientApi getEntry is cached', async () => {
+  const id = Math.random().toString()
+  await testHitAndMiss(
+    sut => sut.getEntry(id, {}),
+    sut => sut.entry
+  )
+})
+
+async function testHitAndMiss<R>(
+  call: (api: CachedClientApi) => Promise<R>,
+  expectedReturn: (api: MockClientApi) => R
+) {
   const CACHE_TTL = 30
-  const mockApi = mock<ReducedClientApi>()
+  const mockApi = new MockClientApi()
+  const sut = new CachedClientApi(mockApi, CACHE_TTL, apiFailed)
+  const expected = expectedReturn(mockApi)
+
+  // cache hit does not perform an extra call
+  await expect(call(sut)).resolves.toBe(expected)
+  expect(mockApi.numCalls).toBe(1)
+  await expect(call(sut)).resolves.toBe(expected)
+  expect(mockApi.numCalls).toBe(1)
+
+  // cache miss (due to timeout) performs an extra call
+  await new Promise(resolve => setTimeout(resolve, CACHE_TTL + 10))
+  await expect(call(sut)).resolves.toBe(expected)
+  expect(mockApi.numCalls).toBe(2)
+}
+
+test('TEST: CachedClientApi does not remember exceptions', async () => {
+  const CACHE_TTL = 300000
+  const mockApi = new MockClientApi()
   const id = Math.random().toString()
   const query = {}
-  const entry = ({} as any) as Entry<any>
-  when(mockApi.getEntry(id, query)).thenResolve(entry)
-  const sut = new CachedClientApi(instance(mockApi), CACHE_TTL)
+  const sut = new CachedClientApi(mockApi, CACHE_TTL, apiFailed)
 
-  await expect(sut.getEntry(id, query)).resolves.toBe(entry)
-  await expect(sut.getEntry(id, query)).resolves.toBe(entry)
-  verify(mockApi.getEntry(id, query)).once()
+  mockApi.error = new Error('forced failure')
+  await expect(sut.getEntry(id, query)).rejects.toThrowError(mockApi.error)
 
-  await new Promise(resolve => setTimeout(resolve, CACHE_TTL))
-  await expect(sut.getEntry(id, query)).resolves.toBe(entry)
-  verify(mockApi.getEntry(id, query)).twice()
+  mockApi.error = undefined
+  await expect(sut.getEntry(id, query)).resolves.toBe(mockApi.entry)
 })
 
-test('TEST: CachedDelivery getAsset', async () => {
-  const CACHE_TTL = 30
-  const mockApi = mock<ReducedClientApi>()
-  const id = Math.random().toString()
-  const query = {}
-  const entry = ({} as any) as Entry<any>
-  when(mockApi.getAsset(id, query)).thenResolve(entry)
-  const sut = new CachedClientApi(instance(mockApi), CACHE_TTL)
-
-  await expect(sut.getAsset(id, query)).resolves.toBe(entry)
-  await expect(sut.getAsset(id, query)).resolves.toBe(entry)
-  verify(mockApi.getAsset(id, query)).once()
-
-  await new Promise(resolve => setTimeout(resolve, CACHE_TTL))
-  await expect(sut.getAsset(id, query)).resolves.toBe(entry)
-  verify(mockApi.getAsset(id, query)).twice()
-})
+export function apiFailed(
+  description: string,
+  funcName: string,
+  args: any[],
+  e: any
+): Promise<void> {
+  console.error(
+    `${description}: ${funcName}(${String(args)}) threw error: ${String(e)}`
+  )
+  return Promise.resolve()
+}

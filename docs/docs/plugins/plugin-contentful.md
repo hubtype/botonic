@@ -33,7 +33,7 @@ of types, such as text, dates, numerics, images... These simple contents can be 
 - Updating the bot contents does not require redeploying the bot.
 - Users will need to download a much lighter bundle to start using the bot.
 
-Currently the Contentful plugin allows your bot to easily access this kind of contents:
+Currently, the Contentful plugin allows your bot to easily access this kind of contents:
 
 - Combinations of the following Botonic UI components: Start up messages, Carousels and Texts. Their buttons can be configured
   to trigger other botonic components as well as opening external URLs.
@@ -66,7 +66,6 @@ npm install @botonic/plugin-contentful
 
 ```javascript
 npm install -g contentful-cli
-
 ```
 
 3. Execute the following command to create content models required by the plugin. Replace YOUR_ID and YOUR_TOKEN with
@@ -74,7 +73,7 @@ npm install -g contentful-cli
    the export files in the [package exports directory](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful/exports)
 
 ```javascript
-contentful space import --space-id={SPACE_ID} --management-token={TOKEN} --content-file {EXPORT_FILE}.json
+contentful space import --space-id={SPACE_ID} --management-token={TOKEN} --content-model-only --content-file {EXPORT_FILE}.json
 ```
 
 > Note you will need to ensure your contentful locales are changed from `en-US` to `en`

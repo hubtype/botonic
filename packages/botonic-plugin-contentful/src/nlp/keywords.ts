@@ -7,6 +7,7 @@ import { SimilarWordFinder, SimilarWordResult } from './similar-words'
  * TODO consider storing as a list of new Token class instances', each with a raw and stem fields
  */
 export class Keyword {
+  /** Lowercase raw keyword */
   readonly raw: string
   /**
    * If hasOnlyStopWords == false, the stems of the non stopWords (eg. buy a shirt => buy shirt)

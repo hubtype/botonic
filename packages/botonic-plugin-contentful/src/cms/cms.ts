@@ -7,6 +7,7 @@ import {
   CommonFields,
   Content,
   DateRangeContent,
+  Document,
   Element,
   Image,
   Queue,
@@ -20,9 +21,10 @@ import { Context } from './context'
 
 export enum MessageContentType {
   CAROUSEL = 'carousel',
+  CHITCHAT = 'chitchat', //so far it's an alias for TEXT
+  DOCUMENT = 'document',
   IMAGE = 'image',
   TEXT = 'text',
-  CHITCHAT = 'chitchat', //so far it's an alias for TEXT
   STARTUP = 'startUp',
 }
 
@@ -60,7 +62,7 @@ export const CONTENT_TYPES: ContentType[] = [
 ]
 
 export enum AssetType {
-  AUDIO = 'image',
+  AUDIO = 'audio',
   IMAGE = 'image',
   VIDEO = 'video',
   DOCUMENT = 'document',
@@ -106,6 +108,8 @@ export interface CMS {
    * - If any element cannot be retrieved, only the rest will be returned
    */
   carousel(id: string, context?: Context): Promise<Carousel>
+
+  document(id: string, context?: Context): Promise<Document>
 
   chitchat(id: string, context?: Context): Promise<Chitchat>
   element(id: string, context?: Context): Promise<Element>

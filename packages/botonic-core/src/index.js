@@ -1,21 +1,11 @@
 export { Providers } from './constants'
 export { CoreBot } from './core-bot'
 export * from './debug'
-export {
-  cancelHandoff,
-  deleteUser,
-  getAgentVacationRanges,
-  getAvailableAgents,
-  getAvailableAgentsByQueue,
-  getOpenQueues,
-  HandOffBuilder,
-  humanHandOff,
-  storeCaseRating,
-} from './handoff'
+export * from './handoff'
 export { HubtypeService } from './hubtype-service'
 export { getString } from './i18n'
 export { Router } from './router'
-export { isBrowser, isMobile, isNode, params2queryString } from './utils'
+export * from './utils'
 
 export const PROVIDER = Object.freeze({
   DEV: 'dev',

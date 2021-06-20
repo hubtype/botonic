@@ -23,7 +23,10 @@ export class DeliveryWithFollowUp extends TopContentDelivery {
   }
 
   getFollowUp(): FollowUpDelivery {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    console.assert(
+      this.followUp,
+      'you need to call setFollowUp from Contentful constructor'
+    )
     return this.followUp!
   }
 }

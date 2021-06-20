@@ -67,7 +67,7 @@ module.exports = {
     'node/no-missing-import': [
       'error',
       {
-        tryExtensions: ['.ts', '.tsx', '.js', '.jsx'],
+        tryExtensions: ['.ts', '.tsx', '.js', '.jsx', '.d.ts'],
       },
     ],
     'import/no-unresolved': 'error',

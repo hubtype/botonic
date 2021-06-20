@@ -5,7 +5,7 @@
     "cloc-all": "./qa/cloc-all-packages.sh",
     "lint-all": "./qa/lint-all-packages.sh",
     "prepare-all": "./ci/prepare-package.sh",
-    "publish-all": "ts-node ./ci/publish.ts"
+    "publish-all": "BOTONIC_NO_INSTALL_ROOT_DEPENDENCIES=1 ts-node ./ci/publish.ts"
   },
   "keywords": [],
   "author": "",

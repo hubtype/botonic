@@ -2,7 +2,7 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import { DeliveryApi } from '../delivery-api'
-import { CommonEntryFields } from '../delivery-utils'
+import { addCustomFields, CommonEntryFields } from '../delivery-utils'
 import { ButtonDelivery } from './button'
 import { DeliveryWithFollowUp } from './follow-up'
 
@@ -34,11 +34,15 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
       fields.buttons || [],
       context
     )
-    return new cms.StartUp(
-      await this.getFollowUp().commonFields(entry, context),
-      this.urlFromAssetOptional(fields.pic, context),
-      fields.text ?? '',
-      buttons
+    return addCustomFields(
+      new cms.StartUp(
+        await this.getFollowUp().commonFields(entry, context),
+        this.urlFromAssetOptional(fields.pic, context),
+        fields.text ?? '',
+        buttons
+      ),
+      fields,
+      ['pic']
     )
   }
 }

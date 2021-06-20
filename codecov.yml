@@ -4,12 +4,15 @@ coverage:
       default:
         # if the coverage is under this value the Codecov GitHub check will fail
         threshold: 40%
+
+comment: false #https://docs.codecov.io/docs/pull-request-comments
+
 flags:
   botonic-cli:
     paths:
       - packages/botonic-cli
     carryforward: true
-    
+
   botonic-core:
     paths:
       - packages/botonic-core
@@ -19,10 +22,20 @@ flags:
     paths:
       - packages/botonic-nlu
     carryforward: true
-    
+
+  botonic-nlp:
+    paths:
+      - packages/botonic-nlp
+    carryforward: true
+
   botonic-plugin-contentful:
     paths:
       - packages/botonic-plugin-contentful
+    carryforward: true
+
+  botonic-plugin-dialogflow:
+    paths:
+      - packages/botonic-plugin-dialogflow
     carryforward: true
 
   botonic-plugin-dynamodb:
@@ -34,9 +47,18 @@ flags:
     paths:
       - packages/botonic-plugin-nlu
     carryforward: true
-  
+
   botonic-react:
     paths:
       - packages/botonic-react
     carryforward: true
-    
+
+  botonic-plugin-ner:
+    paths:
+      - packages/botonic-plugin-ner
+    carryforward: true
+
+  botonic-plugin-intent-classification:
+    paths:
+      - packages/botonic-plugin-intent-classification
+    carryforward: true

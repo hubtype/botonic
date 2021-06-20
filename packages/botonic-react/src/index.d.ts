@@ -20,8 +20,8 @@ export interface BotResponse extends core.BotRequest {
 }
 
 export interface Route extends core.Route {
-  action?: typeof React.Component
-  retryAction?: typeof React.Component
+  action?: React.ComponentType<any>
+  retryAction?: React.ComponentType<any>
 }
 type Routes = core.Routes<Route>
 
@@ -114,6 +114,7 @@ export interface WebchatArgs {
   onInit?: (app: WebchatApp, args: any) => void
   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
   onOpen?: (app: WebchatApp, args: any) => void
+  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
   persistentMenu?: PersistentMenuTheme
   storage?: Storage
   storageKey?: any
@@ -177,7 +178,7 @@ export class WebchatApp {
   getComponent(
     optionsAtRuntime?: WebchatAppArgs
   ): React.ForwardRefExoticComponent<any>
-  getLastMessageUpdate(): Date
+  getLastMessageUpdate(): string
   getMessages(): WebchatMessage[]
   getVisibility(): Promise<boolean>
   isWebchatVisible({ appId: string }): Promise<boolean>
@@ -195,10 +196,11 @@ export class WebchatApp {
     appId: string
     visibility: () => boolean
   }): Promise<boolean>
-  setTyping(typing: number): void
+  setTyping(enable: boolean): void
   toggle(): void
   toggleCoverComponent(): void
   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
+  updateLastMessageDate(date: string): void
   updateUser(user: core.SessionUser): void
   updateWebchatSettings(settings: WebchatSettingsProps): void
 }
@@ -215,10 +217,7 @@ export interface WebchatContextProps {
   updateLatestInput: (input: core.Input) => void
   closeWebview: () => void
   toggleWebchat: () => void
-  getThemeProperty: (
-    property: string,
-    defaultValue?: string
-  ) => string | undefined
+  getThemeProperty: (property: string, defaultValue?: string) => any
   resolveCase: () => void
   theme: ThemeProps
   webchatState: WebchatState

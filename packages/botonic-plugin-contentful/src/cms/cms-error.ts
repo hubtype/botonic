@@ -13,6 +13,7 @@ import {
   CommonFields,
   Content,
   DateRangeContent,
+  Document,
   Element,
   Image,
   Queue,
@@ -72,6 +73,14 @@ export class ErrorReportingCMS implements CMS {
     )
   }
 
+  document(id: string, context?: Context): Promise<Document> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.DOCUMENT,
+      this.cms.document(id, context)
+    )
+  }
   text(id: string, context?: Context): Promise<Text> {
     return this.catchAndValidate(
       id,
@@ -257,12 +266,12 @@ export class ContentfulExceptionWrapper {
       content += ` with locale '${context.locale}'`
     }
     if (resourceId) {
-      content += ` on '${resourceId.resourceType}' with id '${resourceId.id}'`
+      content += ` on ${resourceId.toString()}`
     }
     if (Object.keys(args).length) {
       content += ` with args '${JSON.stringify(args)}'`
     }
-    const msg = `Error calling ${this.wrappee}.${method}${content}.`
+    const msg = `Error calling ${this.wrappee}.${method}${content}`
     const exception = new CmsException(msg, contentfulError, resourceId)
     const err = this.processError(contentfulError)
     this.logger(`${msg} Due to ${err}`)

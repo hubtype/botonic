@@ -4,6 +4,7 @@
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
+    "build": "echo Nothing to build",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_core -- --fix",
@@ -11,7 +12,8 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "ibm-watson": "^6.0.0"
+    "@babel/runtime": "^7.13.10",
+    "axios": "^0.21.1"
   },
   "devDependencies": {},
   "keywords": [

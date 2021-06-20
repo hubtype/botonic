@@ -118,7 +118,7 @@ export class ResourceId implements ValueObject {
   constructor(readonly resourceType: string, readonly id: string) {}
 
   toString(): string {
-    return `${this.resourceType} with id '${this.id}'`
+    return `'${this.resourceType}' with id '${this.id}'`
   }
 
   equals(other: ContentId): boolean {
@@ -172,6 +172,8 @@ export class TopContentId extends ContentId {
     switch (this.model) {
       case ContentType.CAROUSEL:
         return cms.carousel(this.id, context)
+      case ContentType.DOCUMENT:
+        return cms.document(this.id, context)
       case ContentType.TEXT:
         return cms.text(this.id, context)
       case ContentType.CHITCHAT:

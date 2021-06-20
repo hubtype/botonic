@@ -1,7 +1,9 @@
 import { ContentType } from '../cms'
 import {
   CarouselBuilder,
+  DocumentBuilder,
   ElementBuilder,
+  ImageBuilder,
   StartUpBuilder,
   TextBuilder,
   TopContentBuilder,
@@ -18,6 +20,12 @@ import {
   TopContentId,
 } from '../index'
 
+/**
+ * The Builder classes below create Content instances with minimal effort
+ * to speedup the implementation of unit tests by setting random values for the
+ * non specified fields.
+ * They are exported by the plugin so that the can be used in bots' unit tests
+ */
 export function rndStr(): string {
   return Math.random().toString()
 }
@@ -127,7 +135,7 @@ export class RndTextBuilder extends TextBuilder {
 }
 
 export class RndElementBuilder extends ElementBuilder {
-  // move aa ButtonsBuilder to ElementBuilder?
+  // move ButtonsBuilder to ElementBuilder?
   private buttonsBuilder: RndButtonsBuilder | undefined
 
   constructor() {
@@ -202,6 +210,32 @@ export class RndStartUpBuilder extends StartUpBuilder {
   withRandomFields(): this {
     this.buttons = this.buttonsBuilder.addButton().addButton().build()
 
+    this.topComponentBuilder.withRandomFields(this)
+    return this
+  }
+}
+
+export class RndImageBuilder extends ImageBuilder {
+  readonly topComponentBuilder = new RndTopContentBuilder()
+
+  constructor(name: string = rndStr(), imgUrl: string = 'http://' + rndStr()) {
+    super(rndStr(), name, imgUrl)
+  }
+
+  withRandomFields(): this {
+    this.topComponentBuilder.withRandomFields(this)
+    return this
+  }
+}
+
+export class RndDocumentBuilder extends DocumentBuilder {
+  readonly topComponentBuilder = new RndTopContentBuilder()
+
+  constructor(name: string = rndStr(), docUrl: string = 'http://' + rndStr()) {
+    super(rndStr(), name, docUrl)
+  }
+
+  withRandomFields(): this {
     this.topComponentBuilder.withRandomFields(this)
     return this
   }

@@ -3,6 +3,7 @@ import { exec as childProcessExec } from 'child_process'
 import { bold, red } from 'colors'
 import fetchRepoDir from 'fetch-repo-dir'
 import { moveSync } from 'fs-extra'
+// eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
@@ -60,7 +61,9 @@ Creating...
       if (!selectedProject) {
         console.log(
           red(
-            `Example ${selectedProjectName} does not exist, please choose one of the following:\n` +
+            `Example ${String(
+              selectedProjectName
+            )} does not exist, please choose one of the following:\n` +
               `${this.examples.map(p => p.name).join(', ')}`
           )
         )

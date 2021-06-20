@@ -54,8 +54,9 @@ export const spawnProcess = async (
     log?.onSuccess()
   } catch (e) {
     console.log(
-      red(`   Failed on running commmand ${command} ${args.join(' ')}\n`)
+      red(`   Failed on running command ${command} ${args.join(' ')}:\n${e.stderr.toString()}`)
     )
+    process.exit(1)
   }
 }
 
@@ -110,8 +111,8 @@ export const changeBotonicDeps = async (packagePath, withVersion) => {
   }
 }
 
-export const installDeps = async () => {
-  console.log(' - Installing dependencies...')
+export const installDeps = async (project: string) => {
+  console.log(` - Installing ${project} dependencies...`)
   await spawnProcess('npm', ['install', '-D'], {
     onSuccess: () => console.log(green('   Installed successfully.\n')),
   })

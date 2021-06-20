@@ -3,6 +3,8 @@ import colors from 'colors'
 import FormData from 'form-data'
 import { createReadStream, unlinkSync } from 'fs'
 import * as util from 'util'
+
+import { BotInfo, OAuth } from './interfaces'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec)
 import ora from 'ora'
@@ -29,10 +31,10 @@ export class BotonicAPIService {
   loginUrl: string = this.baseUrl + '/o/token/'
   botCredentialsHandler = new BotCredentialsHandler()
   globalCredentialsHandler = new GlobalCredentialsHandler()
-  oauth: any
+  oauth?: OAuth
   me: any
   analytics: any
-  bot: any = null
+  bot: BotInfo | null
   headers: Record<string, string> | null = null
 
   constructor() {
@@ -45,18 +47,33 @@ export class BotonicAPIService {
     this.saveBotCredentials()
   }
 
+  botInfo(): BotInfo {
+    if (!this.bot) {
+      throw new Error('Not bot info available')
+    }
+    return this.bot
+  }
+
+  getOauth(): OAuth {
+    if (!this.oauth) {
+      throw new Error('Not OAuth available')
+    }
+    return this.oauth
+  }
+
   loadGlobalCredentials(): void {
     const credentials = this.globalCredentialsHandler.load()
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
       this.analytics = credentials.analytics
-      if (credentials.oauth)
+      if (this.oauth) {
         this.headers = {
           Authorization: `Bearer ${this.oauth.access_token}`,
           'content-type': 'application/json',
           'x-segment-anonymous-id': this.analytics.anonymous_id,
         }
+      }
     }
   }
 
@@ -68,7 +85,7 @@ export class BotonicAPIService {
         this.bot = credentials.bot
       } else {
         // Allow users < v0.1.12 to upgrade smoothly
-        this.bot = credentials
+        this.bot = (credentials as any) as BotInfo
       }
     }
   }
@@ -97,7 +114,10 @@ export class BotonicAPIService {
       await exec(`npm run ${npmCommand}`)
     } catch (error) {
       spinner.fail()
-      console.log(`${error.stdout}` + colors.red(`\n\nBuild error:\n${error}`))
+      console.log(
+        `${String(error.stdout)}` +
+          colors.red(`\n\nBuild error:\n${String(error)}`)
+      )
       return false
     }
     spinner.succeed()
@@ -109,8 +129,8 @@ export class BotonicAPIService {
   }
 
   logout(): void {
-    const globalCredentialsPath = this.globalCredentialsHandler.homeDir
-    if (pathExists(globalCredentialsPath)) unlinkSync(globalCredentialsPath)
+    const pathToCredentials = this.globalCredentialsHandler.pathToCredentials
+    if (pathExists(pathToCredentials)) unlinkSync(pathToCredentials)
   }
 
   async api(
@@ -139,7 +159,7 @@ export class BotonicAPIService {
     if (b == 1) {
       await this.refreshToken()
     }
-    return await axios({
+    return axios({
       method: method,
       url: this.baseApiUrl + path,
       headers: headers || this.headers,
@@ -152,7 +172,7 @@ export class BotonicAPIService {
     const data = qs.stringify({
       callback: 'none',
       grant_type: 'refresh_token',
-      refresh_token: this.oauth.refresh_token,
+      refresh_token: this.getOauth().refresh_token,
       client_id: this.clientId,
       client_secret: this.clientSecret,
     })
@@ -168,7 +188,7 @@ export class BotonicAPIService {
     if (!resp) return
     this.oauth = resp.data
     this.headers = {
-      Authorization: `Bearer ${this.oauth.access_token}`,
+      Authorization: `Bearer ${this.getOauth().access_token}`,
       'content-type': 'application/json',
       'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
@@ -196,7 +216,7 @@ export class BotonicAPIService {
     })
     this.oauth = resp.data
     this.headers = {
-      Authorization: `Bearer ${this.oauth.access_token}`,
+      Authorization: `Bearer ${this.getOauth().access_token}`,
       'content-type': 'application/json',
       'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
@@ -247,7 +267,7 @@ export class BotonicAPIService {
 
   async getProviders(): Promise<AxiosPromise> {
     return this.api('provider_accounts/', null, 'get', null, {
-      bot_id: this.bot.id,
+      bot_id: this.botInfo().id,
     })
   }
 
@@ -255,14 +275,14 @@ export class BotonicAPIService {
     try {
       const _authenticated = await this.getMe()
     } catch (e) {
-      console.log(`Error authenticating: ${e}`)
+      console.log(`Error authenticating: ${String(e)}`)
     }
     const form = new FormData()
     const data = createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
     const headers = await this.getHeaders(form)
     return await this.api(
-      `bots/${this.bot.id}/deploy_botonic_new/`,
+      `bots/${this.botInfo().id}/deploy_botonic_new/`,
       form,
       'post',
       { ...this.headers, ...headers },
@@ -272,7 +292,7 @@ export class BotonicAPIService {
 
   async deployStatus(deployId: string): Promise<AxiosPromise> {
     return this.api(
-      `bots/${this.bot.id}/deploy_botonic_status/`,
+      `bots/${this.botInfo().id}/deploy_botonic_status/`,
       null,
       'get',
       null,

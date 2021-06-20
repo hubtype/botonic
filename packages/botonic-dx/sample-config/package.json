@@ -1,0 +1,35 @@
+{
+  "scripts": {
+    "##########  BUILD": "",
+    "build": "tsc",
+    "build-ci": "tsc -b tsconfig.tests.json",
+
+    "##########  LINT": "",
+    "lint": "npm run lint-core -- --fix && npm run prettier",
+    "lint-ci": "npm run lint-core -- -c .eslintrc-ci.js && npm run prettier",
+    "lint-core": "eslint_d --cache --quiet '{src,tests}/**/*.[t]{s,sx}'",
+    "prettier": "prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
+
+    "########## DEBUG": "",
+    "test": "jest",
+    "test-ci": "jest --coverage",
+    "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
+
+    "########## PUBLISH": "",
+    "prepublishOnly": "npm run build && npm run lint-ci && npm test",
+    "preversion": "npm run lint-ci",
+    "# version issue": "See https://github.com/npm/cli/issues/2010. Temporarily checking all files have been git-added",
+    "version": "git add package.json && git diff --exit-code && git commit",
+    "postversion": "git push && git push --tags"
+    },
+    "engines": {
+      "node": ">=12.22.1"
+    },
+    "files": [
+      "bin/**",
+      "doc/**",
+      "lib/**",
+      "src/**",
+      "README.md"
+    ]
+}

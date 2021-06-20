@@ -21,6 +21,7 @@ import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
 import { ContentsDelivery } from './contents/contents'
 import { DateRangeDelivery } from './contents/date-range'
+import { DocumentDelivery } from './contents/document'
 import { FollowUpDelivery } from './contents/follow-up'
 import { ImageDelivery } from './contents/image'
 import { QueueDelivery } from './contents/queue'
@@ -29,6 +30,8 @@ import { StartUpDelivery } from './contents/startup'
 import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
 import { CachedClientApi } from './delivery/cache'
+import { ClientApiErrorReporter, ReducedClientApi } from './delivery/client-api'
+import { FallbackCachedClientApi } from './delivery/fallback-cache'
 import { AdaptorDeliveryApi, DeliveryApi } from './delivery-api'
 import {
   ContentfulEntryUtils,
@@ -41,6 +44,7 @@ export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
   private readonly _contents: ContentsDelivery
   private readonly _carousel: CarouselDelivery
+  private readonly _document: DocumentDelivery
   private readonly _text: TextDelivery
   private readonly _startUp: StartUpDelivery
   private readonly _url: UrlDelivery
@@ -60,13 +64,25 @@ export class Contentful implements cms.CMS {
    *  https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
    */
   constructor(options: ContentfulOptions) {
-    const client = createContentfulClientApi(options)
-    const deliveryApi = new AdaptorDeliveryApi(
-      options.disableCache
-        ? client
-        : new CachedClientApi(client, options.cacheTtlMs),
-      options
-    )
+    const reporter: ClientApiErrorReporter = (
+      msg: string,
+      func: string,
+      args,
+      error: any
+    ) => {
+      console.error(
+        `${msg}. '${func}(${String(args)})' threw '${String(error)}'`
+      )
+      return Promise.resolve()
+    }
+    let client: ReducedClientApi = createContentfulClientApi(options)
+    if (!options.disableFallbackCache) {
+      client = new FallbackCachedClientApi(client, reporter)
+    }
+    if (!options.disableCache) {
+      client = new CachedClientApi(client, options.cacheTtlMs, reporter)
+    }
+    const deliveryApi = new AdaptorDeliveryApi(client, options)
     const resumeErrors = options.resumeErrors || false
     const delivery = new IgnoreFallbackDecorator(deliveryApi)
     this._contents = new ContentsDelivery(delivery, resumeErrors)
@@ -74,6 +90,7 @@ export class Contentful implements cms.CMS {
     this._delivery = delivery
     this._button = new ButtonDelivery(delivery, resumeErrors)
     this._carousel = new CarouselDelivery(delivery, this._button, resumeErrors)
+    this._document = new DocumentDelivery(delivery, resumeErrors)
     this._text = new TextDelivery(delivery, this._button, resumeErrors)
     this._startUp = new StartUpDelivery(delivery, this._button, resumeErrors)
     this._url = new UrlDelivery(delivery, resumeErrors)
@@ -89,6 +106,7 @@ export class Contentful implements cms.CMS {
       this._startUp
     )
     ;[
+      this._document,
       this._text,
       this._url,
       this._carousel,
@@ -112,6 +130,10 @@ export class Contentful implements cms.CMS {
 
   async carousel(id: string, context = DEFAULT_CONTEXT): Promise<cms.Carousel> {
     return this._carousel.carousel(id, context)
+  }
+
+  document(id: string, context = DEFAULT_CONTEXT): Promise<cms.Document> {
+    return this._document.document(id, context)
   }
 
   async text(id: string, context = DEFAULT_CONTEXT): Promise<cms.Text> {
@@ -180,6 +202,8 @@ export class Contentful implements cms.CMS {
     switch (model) {
       case ContentType.CAROUSEL:
         return retype(await this._carousel.fromEntry(entry, context))
+      case ContentType.DOCUMENT:
+        return retype(await this._document.fromEntry(entry, context))
       case ContentType.QUEUE:
         return retype(this._queue.fromEntry(entry))
       case ContentType.CHITCHAT:

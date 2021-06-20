@@ -16,6 +16,7 @@ test('TEST: contentful startUp', async () => {
       new CommonFields(id, 'BANNER', {
         shortText: 'Bienvenida',
         keywords: ['keyword1'],
+        customFields: { customFieldText: 'Some text' },
       }),
 
       'https://images.ctfassets.net/p2iyhzd1u4a7/1T0ntgNJnDUSwz59zGMZO6/8f114c3d3fe8f541fefbec5a539dad35/red.jpg',

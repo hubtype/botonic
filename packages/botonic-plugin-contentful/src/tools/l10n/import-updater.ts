@@ -170,16 +170,6 @@ export class ImportContentUpdater {
   }
 
   private async updateFields(content: ContentToImport) {
-    for (const field of getFieldsForContentType(content.contentId.model)) {
-      const f = CONTENT_FIELDS.get(field)!
-      switch (f.valueType) {
-        case ContentFieldValueType.STRING_ARRAY:
-        case ContentFieldValueType.STRING:
-          break
-        default:
-          continue
-      }
-    }
     const newVal = await this.manageCms.updateFields(
       this.context,
       content.contentId,

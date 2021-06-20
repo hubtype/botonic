@@ -17,11 +17,14 @@ import {
 process.chdir('..')
 const packagesDir = join(process.cwd(), C.PACKAGES_DIRNAME)
 const packagesList = sortPackagesByPreference(packagesDir)
+const rootDir = join(packagesDir, "..")
 
 ;(async () => {
   const { version, confirmation } = await getVersionAndConfirmation()
   if (!confirmation) return
   console.log(blue(`Publishing new Botonic ${version} version:`))
+
+  await installDeps('common development')
 
   for (const pkg of packagesList) {
     const packagePath = join(packagesDir, pkg)
@@ -29,7 +32,7 @@ const packagesList = sortPackagesByPreference(packagesDir)
     console.log(`Preparing ${pkg}...`)
     console.log('====================================')
     await clean()
-    await installDeps()
+    await installDeps(pkg)
     await build()
     const bumpedVersion = await bumpVersion(version, packagePath)
     const botonicDepsVersion =

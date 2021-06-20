@@ -9,7 +9,7 @@
     "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
     "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm run build && npm test && npm run lint",
+    "prepublishOnly": "npm run lint_ci && npm run build && npm test",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"
@@ -33,7 +33,7 @@
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@babel/runtime": "^7.8.7",
-    "aws-sdk": "2.831.0"
+    "aws-sdk": "2.907.0"
   },
   "devDependencies": {},
   "engines": {

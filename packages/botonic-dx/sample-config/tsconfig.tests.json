@@ -1,0 +1,10 @@
+{
+  "extends": "@botonic/dx/baseline/tsconfig.tests.json",
+  "include": [
+    "src",
+    "tests"
+  ],
+  "compilerOptions": {
+    "rootDir": ".",
+  }
+}

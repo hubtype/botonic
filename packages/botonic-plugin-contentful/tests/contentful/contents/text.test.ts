@@ -98,7 +98,7 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
 
   // assert
   expect(text.buttons).toHaveLength(0)
-  expect((text.common.followUp as cms.Carousel).elements).toHaveLength(3)
+  expect((text.common.followUp as cms.Carousel).elements).toHaveLength(2)
 })
 
 test('TEST: contentful text without buttons with image followup with text followup', async () => {
@@ -147,4 +147,12 @@ test('TEST: contentful text with URL button', async () => {
   expect(text.buttons[0].callback).toEqual(
     cms.Callback.ofUrl('https://www.hubtype.com/en')
   )
+})
+
+test('Test: contentful text with custom field of type text', async () => {
+  const sut = testContentful()
+  const text = await sut.text(TEST_SORRY, testContext())
+  expect(text.common.customFields).toEqual({
+    customFieldText: 'This text is from a custom field',
+  })
 })

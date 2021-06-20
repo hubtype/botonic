@@ -2,18 +2,23 @@
   "name": "@botonic/plugin-dialogflow",
   "version": "0.18.0",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepare": "node ../../preinstall.js",
+    "test": "jest --coverage",
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts'"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.2",
     "axios": "latest",
-    "jsrsasign": "^10.0.4",
+    "jsrsasign": "^10.2.0",
+    "@botonic/core": "0.18.1",
     "uuid": "^8.1.0"
   },
   "devDependencies": {

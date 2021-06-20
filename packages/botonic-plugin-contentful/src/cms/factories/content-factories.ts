@@ -4,12 +4,19 @@ import {
   Carousel,
   CommonFields,
   Content,
+  Document,
   Element,
   FollowUp,
+  Image,
   StartUp,
   Text,
 } from '../contents'
 
+/**
+ * Builder for Contents (which are immutable) which allow:
+ * - Setting the optional fields individually and in any order
+ * - Easing the implementation of the RndXXXBuilder classes at src/cms/test-helpers/builders.ts
+ */
 abstract class ContentBuilder {
   protected constructor(public id: string, public name: string) {}
 
@@ -25,9 +32,6 @@ abstract class ContentBuilder {
 
   abstract build(): Content
 }
-
-/** @deprecated use ContentBuilder */
-export type ModelBuilder = ContentBuilder
 
 export abstract class TopContentBuilder extends ContentBuilder {
   shortText?: string
@@ -185,5 +189,35 @@ export class StartUpBuilder extends MessageContentBuilder {
       this.text,
       this.buttons
     )
+  }
+}
+
+export class ImageBuilder extends MessageContentBuilder {
+  constructor(id: string, name: string, public imgUrl: string) {
+    super(id, name)
+  }
+
+  withUrl(url: string): this {
+    this.imgUrl = url
+    return this
+  }
+
+  build(): Image {
+    return new Image(this.buildCommonFields(), this.imgUrl)
+  }
+}
+
+export class DocumentBuilder extends MessageContentBuilder {
+  constructor(id: string, name: string, public docUrl: string) {
+    super(id, name)
+  }
+
+  withUrl(url: string): this {
+    this.docUrl = url
+    return this
+  }
+
+  build(): Document {
+    return new Document(this.buildCommonFields(), this.docUrl)
   }
 }

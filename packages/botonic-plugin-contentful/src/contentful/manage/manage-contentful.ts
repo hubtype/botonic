@@ -2,31 +2,37 @@ import { createClient } from 'contentful-management'
 // eslint-disable-next-line node/no-missing-import
 import { ClientAPI } from 'contentful-management/dist/typings/create-contentful-api'
 // eslint-disable-next-line node/no-missing-import
-import { Asset } from 'contentful-management/dist/typings/entities/asset'
-// eslint-disable-next-line node/no-missing-import
-import { Entry } from 'contentful-management/dist/typings/entities/entry'
-// eslint-disable-next-line node/no-missing-import
 import { Environment } from 'contentful-management/dist/typings/entities/environment'
+import { Stream } from 'stream'
 
-import { AssetId, CmsException, ContentId } from '../../cms'
-import { ResourceNotFoundCmsException } from '../../cms/exceptions'
-import {
-  CONTENT_FIELDS,
-  ContentField,
-  ContentFieldType,
-} from '../../manage-cms/fields'
+import { AssetId, AssetInfo, ContentId, ContentType } from '../../cms'
+import { ContentFieldType } from '../../manage-cms/fields'
 import { ManageCms } from '../../manage-cms/manage-cms'
 import { ManageContext } from '../../manage-cms/manage-context'
 import * as nlp from '../../nlp'
 import { ContentfulOptions } from '../../plugin'
-import { isOfType } from '../../util/enums'
+import { ManageContentfulAsset } from './manage-asset'
+import { ManageContentfulEntry } from './manage-entry'
 
 export class ManageContentful implements ManageCms {
   readonly manage: ClientAPI
-  environment: Environment | undefined
+  private environment: Promise<Environment>
+  private readonly manageAsset: ManageContentfulAsset
+  private readonly manageEntry: ManageContentfulEntry
 
   constructor(readonly options: ContentfulOptions) {
     this.manage = this.createClient()
+    this.environment = this.getEnvironment()
+    this.manageAsset = new ManageContentfulAsset(
+      options,
+      this.manage,
+      this.environment
+    )
+    this.manageEntry = new ManageContentfulEntry(
+      options,
+      this.manage,
+      this.environment
+    )
   }
 
   private createClient() {
@@ -37,14 +43,26 @@ export class ManageContentful implements ManageCms {
   }
 
   private async getEnvironment(): Promise<Environment> {
-    if (!this.environment) {
-      const space = await this.manage.getSpace(this.options.spaceId)
-      if (!this.options.environment) {
-        throw new Error('Please specify environment in ContentfulOptions')
-      }
-      this.environment = await space.getEnvironment(this.options.environment)
+    const space = await this.manage.getSpace(this.options.spaceId)
+    if (!this.options.environment) {
+      throw new Error('Please specify environment in ContentfulOptions')
     }
-    return this.environment
+    return await space.getEnvironment(this.options.environment)
+  }
+
+  async deleteContent(
+    context: ManageContext,
+    contentId: ContentId
+  ): Promise<void> {
+    return this.manageEntry.deleteContent(context, contentId)
+  }
+
+  async createContent(
+    context: ManageContext,
+    model: ContentType,
+    id: string
+  ): Promise<void> {
+    return this.manageEntry.createContent(context, model, id)
   }
 
   async updateFields(
@@ -52,113 +70,7 @@ export class ManageContentful implements ManageCms {
     contentId: ContentId,
     fields: { [contentFieldType: string]: any }
   ): Promise<{ [contentFieldType: string]: any }> {
-    const environment = await this.getEnvironment()
-    const getEntry = async () => {
-      try {
-        return await environment.getEntry(contentId.id)
-      } catch (e) {
-        throw new ResourceNotFoundCmsException(contentId, e)
-      }
-    }
-    const oldEntry = await getEntry()
-    let needUpdate = false
-    for (const key of Object.keys(fields)) {
-      if (!isOfType(key, ContentFieldType)) {
-        throw new CmsException(`'${key}' is not a valid content field type`)
-      }
-      const field = this.checkOverwrite(context, oldEntry, key, false)
-      if (oldEntry.fields[field.cmsName][context.locale] === fields[key]) {
-        continue
-      }
-      needUpdate = true
-      oldEntry.fields[field.cmsName][context.locale] = fields[key]
-    }
-    if (!needUpdate) {
-      return oldEntry.fields
-    }
-    // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
-    // the multilocale fields returned by update()
-    await this.writeEntry(context, oldEntry)
-    return oldEntry.fields
-  }
-
-  async removeAssetFile(
-    context: ManageContext,
-    assetId: AssetId
-  ): Promise<void> {
-    const environment = await this.getEnvironment()
-    const asset = await environment.getAsset(assetId.id)
-    delete asset.fields.file[context.locale]
-    await this.writeAsset({ ...context, allowOverwrites: true }, asset)
-  }
-
-  async copyAssetFile(
-    context: ManageContext,
-    assetId: AssetId,
-    fromLocale: nlp.Locale
-  ): Promise<void> {
-    const environment = await this.getEnvironment()
-    const oldAsset = await environment.getAsset(assetId.id)
-    if (!context.allowOverwrites && oldAsset.fields.file[context.locale]) {
-      throw new Error(
-        `Cannot overwrite asset '${assetId.toString()}' because it's not empty and ManageContext.allowOverwrites is false`
-      )
-    }
-    const fromFile = oldAsset.fields.file[fromLocale]
-    if (!fromFile) {
-      throw Error(
-        `Asset '${assetId.toString()}' has no file for locale ${fromLocale}`
-      )
-    }
-    oldAsset.fields.file[context.locale] = fromFile
-    // we could use this.deliver.contentFromEntry & IgnoreFallbackDecorator to convert
-    // the multilocale fields returned by update()
-    await this.writeAsset(context, oldAsset)
-  }
-
-  private checkOverwrite(
-    context: ManageContext,
-    entry: Entry,
-    fieldType: ContentFieldType,
-    failIfMissing: boolean
-  ): ContentField {
-    if (entry.isArchived()) {
-      throw new CmsException(`Cannot update an archived entry`)
-    }
-    const field = CONTENT_FIELDS.get(fieldType)
-    if (!field) {
-      throw new CmsException(`Invalid field type ${fieldType}`)
-    }
-    if (!context.locale) {
-      // paranoic check
-      throw new Error('Context.locale must be defined')
-    }
-    if (!(field.cmsName in entry.fields)) {
-      if (!failIfMissing) {
-        entry.fields[field.cmsName] = {}
-        return field
-      }
-      const fields = Object.keys(entry.fields)
-      throw new CmsException(
-        `Field '${field.cmsName}' not found in entry of type '${
-          entry.sys.contentType.sys.id
-        }. It only has ${JSON.stringify(fields)}'`
-      )
-    }
-    if (!context.allowOverwrites) {
-      const value = entry.fields[field.cmsName][context.locale]
-      if (value) {
-        throw new CmsException(
-          `Cannot overwrite field '${field.cmsName}' of entry '${
-            entry.sys.id
-          }' "+
-          "(has value '${String(
-            value
-          )}') because ManageContext.allowOverwrites is false`
-        )
-      }
-    }
-    return field
+    return this.manageEntry.updateFields(context, contentId, fields)
   }
 
   async copyField(
@@ -168,46 +80,39 @@ export class ManageContentful implements ManageCms {
     fromLocale: nlp.Locale,
     onlyIfTargetEmpty: boolean
   ): Promise<void> {
-    const environment = await this.getEnvironment()
-    const oldEntry = await environment.getEntry(contentId.id)
-    const field = this.checkOverwrite(context, oldEntry, fieldType, false)
-
-    const fieldEntry = oldEntry.fields[field.cmsName]
-    if (fieldEntry == undefined) {
-      return
-    }
-    if (onlyIfTargetEmpty && context.locale in fieldEntry) {
-      return
-    }
-    fieldEntry[context.locale] = fieldEntry[fromLocale]
-    await this.writeEntry(context, oldEntry)
+    return this.manageEntry.copyField(
+      context,
+      contentId,
+      fieldType,
+      fromLocale,
+      onlyIfTargetEmpty
+    )
   }
 
-  private async writeEntry(
+  async removeAssetFile(
     context: ManageContext,
-    entry: Entry
+    assetId: AssetId
   ): Promise<void> {
-    if (context.dryRun) {
-      console.log('Not updating due to dryRun mode')
-      return
-    }
-    const updated = await entry.update()
-    if (!context.preview) {
-      await updated.publish()
-    }
+    return this.manageAsset.removeAssetFile(context, assetId)
   }
 
-  private async writeAsset(
+  async copyAssetFile(
     context: ManageContext,
-    asset: Asset
+    assetId: AssetId,
+    fromLocale: nlp.Locale
   ): Promise<void> {
-    if (context.dryRun) {
-      console.log('Not updating due to dryRun mode')
-      return
-    }
-    const updated = await asset.update()
-    if (!context.preview) {
-      await updated.publish()
-    }
+    return this.manageAsset.copyAssetFile(context, assetId, fromLocale)
+  }
+
+  async createAsset(
+    context: ManageContext,
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
+  ): Promise<{ id: string; url?: string }> {
+    return this.manageAsset.createAsset(context, file, info)
+  }
+
+  async removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
+    return this.manageAsset.removeAsset(context, assetId)
   }
 }

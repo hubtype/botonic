@@ -9,7 +9,7 @@ export interface CredentialsHandlerArgs {
   filename: string // only filename, it does not contain the path to folder
 }
 
-interface OAuth {
+export interface OAuth {
   access_token: string
   expires_in: number
   token_type: string
@@ -59,7 +59,8 @@ interface BotLastUpdate {
   published_at: string
   comment: string
 }
-interface BotInfo {
+
+export interface BotInfo {
   id: string
   name: string
   organization: string

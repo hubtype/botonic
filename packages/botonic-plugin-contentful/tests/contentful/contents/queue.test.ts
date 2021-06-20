@@ -21,6 +21,7 @@ test('TEST: contentful Queue', async () => {
       new CommonFields(TEST_QUEUE_ID, 'TEST_QUEUE', {
         shortText: 'Queue Short Text',
         searchableBy,
+        customFields: { customFieldText: 'This is text from a custom field' },
       }),
       'queueName',
       testSchedule(),

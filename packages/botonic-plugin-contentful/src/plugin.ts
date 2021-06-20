@@ -44,6 +44,13 @@ export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
   cacheTtlMs?: number
   disableCache?: boolean
 
+  /**
+   * By default, the result of the last delivery invocation will be cached
+   * forever and will only be used when a delivery call with the same arguments
+   * fail.
+   */
+  disableFallbackCache?: boolean
+
   contentfulFactory?: (opts: ContentfulOptions) => cms.CMS
 
   /** For locales not supported by the CMS (eg. English on a non-English country) */
