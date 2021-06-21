@@ -8,7 +8,7 @@ if [[ "$1" == "" ]]; then
   exit 1
 fi
 
-JSON_FILE="$( cd "$( dirname "$SOURCE" )" && pwd )/$(basename $SOURCE)"
+JSON_FILE="$( cd "$( dirname "$1" )" && pwd )/$(basename $1)"
 
 if [[ "$CONTENTFUL_SPACEID" == "" ]]; then
   echo "Assign your contentful account space id to environment variable CONTENTFUL_SPACEID"
