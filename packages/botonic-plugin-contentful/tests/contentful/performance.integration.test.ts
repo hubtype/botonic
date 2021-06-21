@@ -23,7 +23,7 @@ test('INTEGRATION TEST: performance', async () => {
   const loopM = new Measure('LOOP')
   for (let i = 0; i < 300; i++) {
     const searchM = new Measure('total')
-    const res = await contentful.topContents(
+    await contentful.topContents(
       ContentType.QUEUE,
       {
         locale: 'es',

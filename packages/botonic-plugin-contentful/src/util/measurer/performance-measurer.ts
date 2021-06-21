@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands*/
 export abstract class PerformanceMeasurer {
   protected enabled = false
   protected allProfiled: { [key: string]: PerformanceEntry[] } = {}
