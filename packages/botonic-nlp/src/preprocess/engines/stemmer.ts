@@ -1,11 +1,17 @@
 import { Locale } from '../../types'
 import { Stemmer } from '../types'
+import { StemmerDe } from './de/stemmer-de'
 import { StemmerEn } from './en/stemmer-en'
 import { StemmerEs } from './es/stemmer-es'
+import { StemmerIt } from './it/stemmer-it'
+import { StemmerRu } from './ru/stemmer-ru'
 
 const STEMMERS = {
+  de: new StemmerDe(),
   en: new StemmerEn(),
   es: new StemmerEs(),
+  it: new StemmerIt(),
+  ru: new StemmerRu(),
 }
 
 export function getStemmer(locale: Locale): Stemmer {

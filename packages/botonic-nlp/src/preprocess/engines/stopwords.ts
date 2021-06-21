@@ -1,11 +1,17 @@
 import { Locale } from '../../types'
 import { Stopwords } from '../types'
+import { STOPWORDS_DE } from './de/stopwords-de'
 import { STOPWORDS_EN } from './en/stopwords-en'
 import { STOPWORDS_ES } from './es/stopwords-es'
+import { STOPWORDS_IT } from './it/stopwords-it'
+import { STOPWORDS_RU } from './ru/stopwords-ru'
 
 const STOPWORDS = {
+  de: STOPWORDS_DE,
   en: STOPWORDS_EN,
   es: STOPWORDS_ES,
+  it: STOPWORDS_IT,
+  ru: STOPWORDS_RU,
 }
 
 export function getStopwords(locale: Locale): Stopwords {

@@ -31,8 +31,12 @@
     "@types/webgl2": "^0.0.6"
   },
   "dependencies": {
+    "@nlpjs/lang-de": "^4.22.0",
     "@nlpjs/lang-en-min": "^4.22.0",
     "@nlpjs/lang-es": "^4.22.0",
+    "@nlpjs/lang-fr": "^4.22.0",
+    "@nlpjs/lang-it": "^4.22.0",
+    "@nlpjs/lang-ru": "^4.22.0",
     "@tensorflow/tfjs-node": "^2.8.6",
     "axios": "^0.21.1",
     "better-sqlite3": "^7.0.1",
