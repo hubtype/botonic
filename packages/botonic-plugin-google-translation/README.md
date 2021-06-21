@@ -1,4 +1,4 @@
-# Botonic Plugin Google Translate
+# Botonic Plugin Google Translation
 
 ## What does this plugin do?
 This plugin uses [Google Cloud Translation API](https://cloud.google.com/translate) to translate the user input text and detect its language.
@@ -9,7 +9,7 @@ This plugin uses [Google Cloud Translation API](https://cloud.google.com/transla
 To install this plugin, you only need to execute the following command:
 
 ```bash
-npm i @botonic/plugin-google-translate 
+npm i @botonic/plugin-google-translation 
 ```
 
 ### Enable Cloud Translation API
@@ -22,8 +22,8 @@ You need to add the following configuration to your bot's plugins:
 ```js
 export const plugins = [
     {
-        id: 'google-translate',
-        resolve: require('@botonic/plugin-google-translate'),
+        id: 'google-translation',
+        resolve: require('@botonic/plugin-google-translation'),
         options: {
             credentials: {
                 privateKeyId: '',

@@ -1,11 +1,11 @@
 import {
-  GoogleTranslateApiService,
+  GoogleTranslationApiService,
   LanguageDetection,
 } from './google-translate-api-service'
 
 export class LanguageDetector {
   constructor(
-    private readonly service: GoogleTranslateApiService,
+    private readonly service: GoogleTranslationApiService,
     readonly whitelist: string[]
   ) {}
 
