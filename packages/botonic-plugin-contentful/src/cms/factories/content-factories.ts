@@ -7,7 +7,10 @@ import {
   Document,
   Element,
   FollowUp,
+  Handoff,
+  HandoffDestination,
   Image,
+  OnFinish,
   StartUp,
   Text,
 } from '../contents'
@@ -217,5 +220,39 @@ export class DocumentBuilder extends MessageContentBuilder {
 
   build(): Document {
     return new Document(this.buildCommonFields(), this.docUrl)
+  }
+}
+
+export class HandoffBuilder extends MessageContentBuilder {
+  onFinish?: OnFinish
+  destination?: HandoffDestination
+  shadowing?: boolean
+  constructor(id: string, name: string, public text: string) {
+    super(id, name)
+  }
+
+  withOnFinish(onFinish?: OnFinish): this {
+    this.onFinish = onFinish
+    return this
+  }
+
+  withDestination(destination?: HandoffDestination): this {
+    this.destination = destination
+    return this
+  }
+
+  withShadowing(shadowing?: boolean): this {
+    this.shadowing = shadowing
+    return this
+  }
+
+  build(): Handoff {
+    return new Handoff(
+      this.buildCommonFields(),
+      this.text,
+      this.onFinish,
+      this.destination,
+      this.shadowing
+    )
   }
 }

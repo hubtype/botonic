@@ -13,6 +13,7 @@ import {
   DateRangeContent,
   Document,
   Element,
+  Handoff,
   Image,
   MessageContent,
   PagingOptions,
@@ -90,6 +91,10 @@ export class FilteredCMS implements CMS {
   async image(id: string, context?: Context): Promise<Image> {
     const content = await this.cms.image(id, context)
     return this.filterContent(content, Image, context)
+  }
+
+  handoff(id: string, context?: Context): Promise<Handoff> {
+    return this.cms.handoff(id, context)
   }
 
   url(id: string, context?: Context): Promise<Url> {

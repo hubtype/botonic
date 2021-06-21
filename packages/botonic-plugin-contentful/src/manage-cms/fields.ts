@@ -22,6 +22,11 @@ export enum ContentFieldType {
   BUTTONS_STYLE = 'Buttons Style',
   FOLLOW_UP = 'FollowUp',
   TARGET = 'Target',
+  QUEUE = 'Queue',
+  AGENT_EMAIL = 'Agent Email',
+  AGENT_ID = 'Agent Id',
+  ON_FINISH = 'On Finish',
+  SHADOWING = 'shadowing',
 }
 
 export enum ContentFieldValueType {
@@ -30,6 +35,7 @@ export enum ContentFieldValueType {
   REFERENCE = 'reference',
   REFERENCE_ARRAY = 'reference[]',
   ASSET = 'asset',
+  BOOLEAN = 'boolean',
 }
 
 export class ContentField {
@@ -164,6 +170,36 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
       ContentFieldType.TARGET,
       'target',
       ContentFieldValueType.REFERENCE,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.QUEUE,
+      'queue',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.AGENT_EMAIL,
+      'agentEmail',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.AGENT_ID,
+      'agentId',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.ON_FINISH,
+      'onFinish',
+      ContentFieldValueType.REFERENCE,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.SHADOWING,
+      'shadowing',
+      ContentFieldValueType.BOOLEAN,
       true
     ),
   ])

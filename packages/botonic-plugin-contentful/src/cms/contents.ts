@@ -428,6 +428,55 @@ export class ScheduleContent extends TopContent {
   }
 }
 
+export type OnFinish = Callback
+
+export class HandoffAgentEmail {
+  readonly type = 'AGENT_EMAIL'
+  constructor(readonly agentEmail: string) {}
+}
+
+export class HandoffAgentId {
+  readonly type = 'AGENT_ID'
+  constructor(readonly agentId: string) {}
+}
+
+export class HandoffQueue {
+  readonly type = 'QUEUE'
+  /**
+   * @param queue the queue id or name
+   */
+  constructor(readonly queue: Queue) {}
+}
+
+export type HandoffDestination =
+  | HandoffAgentEmail
+  | HandoffAgentId
+  | HandoffQueue
+
+/**
+ * Most CommonFields make no sense for Handoff.
+ * However, we decided to make it a TopContent since it does not depend on other content.
+ * Also CommonFields might be potentially useful.
+ */
+export class Handoff extends TopContent {
+  constructor(
+    readonly common: CommonFields,
+    readonly text: string,
+    readonly onFinish?: OnFinish,
+    //destination is optional because often it is set dynamically by the bot
+    readonly destination?: HandoffDestination,
+    readonly shadowing?: boolean
+  ) {
+    super(common, ContentType.HANDOFF)
+  }
+
+  cloneWithDestination(newDestination: HandoffDestination): this {
+    const clone = shallowClone(this)
+    ;(clone as any).destination = newDestination
+    return clone
+  }
+}
+
 /**
  * A {@link Content} which is automatically displayed after another one
  */

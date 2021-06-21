@@ -11,16 +11,11 @@ import {
   ContentWithNameFields,
 } from '../delivery-utils'
 import { DeliveryApi } from '../index'
-import { CarouselFields } from './carousel'
-import { QueueFields } from './queue'
-import { HourRangeFields, ScheduleFields } from './schedule'
-import { StartUpFields } from './startup'
-import { TextFields } from './text'
+import { CallbackTarget, getTargetCallback } from './callback-delivery'
 import { UrlFields } from './url'
 
 export class ButtonDelivery extends ContentDelivery {
   public static BUTTON_CONTENT_TYPE = 'button'
-  private static PAYLOAD_CONTENT_TYPE = 'payload'
 
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(cms.ContentType.BUTTON, delivery, resumeErrors)
@@ -82,7 +77,7 @@ export class ButtonDelivery extends ContentDelivery {
       )
     }
     // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
-    const callback = this.getTargetCallback(buttonEntry.fields.target, context)
+    const callback = getTargetCallback(buttonEntry.fields.target, context)
     return new cms.Button(
       buttonEntry.sys.id,
       buttonEntry.fields.name,
@@ -115,55 +110,13 @@ export class ButtonDelivery extends ContentDelivery {
     }
     return new cms.ContentCallback(modelType, entry.sys.id)
   }
-
-  private getTargetCallback(
-    target: ButtonTarget,
-    context: cms.Context
-  ): cms.Callback {
-    const model = ContentfulEntryUtils.getContentModel(target) as string
-    try {
-      switch (model) {
-        case ContentType.URL: {
-          const urlFields = target as contentful.Entry<UrlFields>
-          if (!urlFields.fields.url && context.ignoreFallbackLocale) {
-            return cms.Callback.empty()
-          }
-          return cms.Callback.ofUrl(urlFields.fields.url || '')
-        }
-        case ButtonDelivery.PAYLOAD_CONTENT_TYPE: {
-          const payloadFields = target as contentful.Entry<PayloadFields>
-          return cms.Callback.ofPayload(payloadFields.fields.payload)
-        }
-      }
-      if (isOfType(model, TopContentType)) {
-        return new cms.ContentCallback(model, target.sys.id)
-      }
-      throw new Error('Unexpected type: ' + model)
-    } catch (e) {
-      throw new CmsException(
-        `Error delivering button with id '${target.sys.id}'`,
-        e
-      )
-    }
-  }
 }
 
 export interface PayloadFields {
   payload: string
 }
 
-type ButtonTarget = contentful.Entry<
-  | CarouselFields
-  | TextFields
-  | UrlFields
-  | PayloadFields
-  | StartUpFields
-  | QueueFields
-  | HourRangeFields
-  | ScheduleFields
->
-
 export interface ButtonFields extends ContentWithNameFields {
   text?: string
-  target?: ButtonTarget
+  target?: CallbackTarget
 }

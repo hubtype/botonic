@@ -181,7 +181,11 @@ export class ManageContentfulEntry {
       return field === ButtonStyle.QUICK_REPLY ? QUICK_REPLY : BUTTON
     }
     if (field === undefined) return field
-    if (key === ContentFieldType.FOLLOW_UP || key === ContentFieldType.TARGET) {
+    if (
+      key === ContentFieldType.FOLLOW_UP ||
+      key === ContentFieldType.TARGET ||
+      key === ContentFieldType.ON_FINISH
+    ) {
       return this.getEntryLink(field, 'Entry')
     }
     if (key === ContentFieldType.IMAGE || key === ContentFieldType.PIC) {

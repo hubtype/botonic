@@ -11,6 +11,7 @@ import {
   DateRangeContent,
   Document,
   Element,
+  Handoff,
   Image,
   Queue,
   ScheduleContent,
@@ -78,6 +79,11 @@ export class LogCMS implements CMS {
   element(id: string, context?: Context): Promise<Element> {
     this.logContentDelivery(ContentType.ELEMENT, id, context)
     return this.cms.element(id, context)
+  }
+
+  handoff(id: string, context?: Context): Promise<Handoff> {
+    this.logContentDelivery(ContentType.HANDOFF, id, context)
+    return this.cms.handoff(id, context)
   }
 
   content(id: string, context?: Context): Promise<Content> {

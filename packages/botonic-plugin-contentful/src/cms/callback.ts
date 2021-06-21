@@ -190,6 +190,8 @@ export class TopContentId extends ContentId {
         return cms.url(this.id, context)
       case ContentType.SCHEDULE:
         return cms.schedule(this.id)
+      case ContentType.HANDOFF:
+        return cms.handoff(this.id, context)
       default:
         throw new Error(
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

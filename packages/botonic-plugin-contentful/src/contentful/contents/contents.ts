@@ -12,6 +12,7 @@ import {
 } from '../../cms'
 import { ResourceDelivery } from '../content-delivery'
 import { CommonEntryFields, ContentfulEntryUtils } from '../delivery-utils'
+import { HandoffDelivery } from './handoff'
 import { QueueDelivery } from './queue'
 import { ScheduleDelivery } from './schedule'
 
@@ -56,6 +57,7 @@ export class ContentsDelivery extends ResourceDelivery {
 
   private maxReferencesInclude() {
     return Math.max(
+      HandoffDelivery.REFERENCES_INCLUDE,
       QueueDelivery.REFERENCES_INCLUDE,
       ScheduleDelivery.REFERENCES_INCLUDE
     )
