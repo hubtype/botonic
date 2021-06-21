@@ -29,8 +29,8 @@ describe('NER Processor', () => {
     ])
     expect(x.shape).toEqual([2, constantsHelper.MAX_SEQUENCE_LENGTH])
     expect(x.arraySync()).toEqual([
-      [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-      [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
+      [7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+      [7, 9, 1, 1, 28, 27, 7, 1, 1, 21, 1, 11],
     ])
     expect(y.shape).toEqual([
       2,
@@ -42,8 +42,8 @@ describe('NER Processor', () => {
         [1, 0, 0, 0],
         [1, 0, 0, 0],
         [1, 0, 0, 0],
-        [1, 0, 0, 0],
         [0, 1, 0, 0],
+        [1, 0, 0, 0],
         [1, 0, 0, 0],
         [1, 0, 0, 0],
         [1, 0, 0, 0],
@@ -56,8 +56,8 @@ describe('NER Processor', () => {
         [1, 0, 0, 0],
         [1, 0, 0, 0],
         [1, 0, 0, 0],
-        [1, 0, 0, 0],
         [0, 1, 0, 0],
+        [1, 0, 0, 0],
         [1, 0, 0, 0],
         [1, 0, 0, 0],
         [1, 0, 0, 0],
@@ -73,7 +73,6 @@ describe('NER Processor', () => {
     const { sequence, input } = sut.generateInput(SHORT_TEXT)
     expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
     expect(sequence).toEqual([
-      'i',
       'want',
       'buy',
       'pair',
@@ -85,29 +84,32 @@ describe('NER Processor', () => {
       PADDING_TOKEN,
       PADDING_TOKEN,
       PADDING_TOKEN,
+      PADDING_TOKEN,
     ])
     expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
-    expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0]])
+    expect(input.arraySync()).toEqual([[7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]])
   })
 
   test('Generate Sequence and Input of long text', () => {
     const { sequence, input } = sut.generateInput(LONG_TEXT)
     expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
     expect(sequence).toEqual([
-      'i',
       'want',
       'buy',
       'pair',
       'shoes',
       't-shirt',
       'jacket',
-      'i',
       'want',
       'know',
       'fur',
       'coat',
+      'sale',
+      'love',
     ])
     expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
-    expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21]])
+    expect(input.arraySync()).toEqual([
+      [7, 9, 1, 1, 28, 27, 7, 1, 1, 21, 1, 11],
+    ])
   })
 })

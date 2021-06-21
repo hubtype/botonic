@@ -29,8 +29,8 @@ describe('Intent Classification Processor', () => {
     ])
     expect(x.shape).toEqual([2, constantsHelper.MAX_SEQUENCE_LENGTH])
     expect(x.arraySync()).toEqual([
-      [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-      [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
+      [7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+      [7, 9, 1, 1, 28, 27, 7, 1, 1, 21, 1, 11],
     ])
     expect(y.shape).toEqual([2, constantsHelper.INTENTS.length])
     expect(y.arraySync()).toEqual([
@@ -42,8 +42,8 @@ describe('Intent Classification Processor', () => {
   test('Texts Processing', () => {
     const input = sut.processTexts([SHORT_TEXT, LONG_TEXT])
     expect(input.arraySync()).toEqual([
-      [6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-      [6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21],
+      [7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+      [7, 9, 1, 1, 28, 27, 7, 1, 1, 21, 1, 11],
     ])
   })
 })
