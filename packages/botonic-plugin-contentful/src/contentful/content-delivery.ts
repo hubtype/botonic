@@ -52,7 +52,11 @@ export abstract class ResourceDelivery {
 
   protected checkEntry(entry: Entry<any>) {
     if (entry.fields == undefined) {
-      throw new CmsException(`Broken reference? Not published?`)
+      // this can also happen when the chain of content references is too long.
+      // Try increasing the {include} key in the call to getEntry of the top component
+      throw new CmsException(
+        `Cannot find '${entry.sys.type}' with id '${entry.sys.id}' Broken reference? Not published?`
+      )
     }
   }
 
@@ -85,7 +89,7 @@ export abstract class ResourceDelivery {
     })
   }
 
-  private getContentIdForLogs(entry: contentful.Entry<any>): ContentId {
+  protected getContentIdForLogs(entry: contentful.Entry<any>): ContentId {
     if (ContentfulEntryUtils.isFullEntry(entry)) {
       return ContentfulEntryUtils.getContentId(entry)
     }

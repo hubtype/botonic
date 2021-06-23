@@ -7,7 +7,11 @@ import {
   Document,
   Element,
   FollowUp,
+  Handoff,
+  HandoffAgent,
   Image,
+  OnFinish,
+  Queue,
   StartUp,
   Text,
 } from '../contents'
@@ -219,5 +223,53 @@ export class DocumentBuilder extends MessageContentBuilder {
 
   build(): Document {
     return new Document(this.buildCommonFields(), this.docUrl)
+  }
+}
+
+export class HandoffBuilder extends MessageContentBuilder {
+  message?: string
+  failMessage?: string
+  queue?: Queue
+  agent?: HandoffAgent
+  shadowing?: boolean
+  constructor(id: string, name: string, public onFinish: OnFinish) {
+    super(id, name)
+  }
+
+  withHandoffMessage(message?: string): this {
+    this.message = message
+    return this
+  }
+
+  withHandoffFailMessage(failMessage?: string): this {
+    this.failMessage = failMessage
+    return this
+  }
+
+  withQueue(queue?: Queue): this {
+    this.queue = queue
+    return this
+  }
+
+  withAgent(agent?: HandoffAgent): this {
+    this.agent = agent
+    return this
+  }
+
+  withShadowing(shadowing?: boolean): this {
+    this.shadowing = shadowing
+    return this
+  }
+
+  build(): Handoff {
+    return new Handoff(
+      this.buildCommonFields(),
+      this.onFinish,
+      this.message,
+      this.failMessage,
+      this.queue,
+      this.agent,
+      this.shadowing
+    )
   }
 }

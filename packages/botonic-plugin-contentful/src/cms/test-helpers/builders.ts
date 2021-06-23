@@ -1,8 +1,10 @@
 import { ContentType } from '../cms'
+import { HandoffAgentEmail, OnFinish } from '../contents'
 import {
   CarouselBuilder,
   DocumentBuilder,
   ElementBuilder,
+  HandoffBuilder,
   ImageBuilder,
   StartUpBuilder,
   TextBuilder,
@@ -236,6 +238,26 @@ export class RndDocumentBuilder extends DocumentBuilder {
   }
 
   withRandomFields(): this {
+    this.topComponentBuilder.withRandomFields(this)
+    return this
+  }
+}
+
+export class RndHandoffBuilder extends HandoffBuilder {
+  readonly topComponentBuilder = new RndTopContentBuilder()
+
+  constructor(
+    name: string = rndStr(),
+    onFinish: OnFinish = new ContentCallbackBuilder().build()
+  ) {
+    super(rndStr(), name, onFinish)
+  }
+
+  withRandomFields(): this {
+    this.message = rndStr()
+    this.failMessage = rndStr()
+    this.agent = new HandoffAgentEmail(rndStr())
+    this.shadowing = rndBool()
     this.topComponentBuilder.withRandomFields(this)
     return this
   }

@@ -15,6 +15,7 @@ import {
   DateRangeContent,
   Document,
   Element,
+  Handoff,
   Image,
   Queue,
   ScheduleContent,
@@ -79,6 +80,14 @@ export class ErrorReportingCMS implements CMS {
       context,
       ContentType.DOCUMENT,
       this.cms.document(id, context)
+    )
+  }
+  handoff(id: string, context?: Context): Promise<Handoff> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.HANDOFF,
+      this.cms.handoff(id, context)
     )
   }
   text(id: string, context?: Context): Promise<Text> {

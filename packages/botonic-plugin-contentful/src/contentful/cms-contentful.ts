@@ -23,6 +23,7 @@ import { ContentsDelivery } from './contents/contents'
 import { DateRangeDelivery } from './contents/date-range'
 import { DocumentDelivery } from './contents/document'
 import { FollowUpDelivery } from './contents/follow-up'
+import { HandoffDelivery } from './contents/handoff'
 import { ImageDelivery } from './contents/image'
 import { QueueDelivery } from './contents/queue'
 import { ScheduleDelivery } from './contents/schedule'
@@ -52,6 +53,7 @@ export class Contentful implements cms.CMS {
   private readonly _schedule: ScheduleDelivery
   private readonly _dateRange: DateRangeDelivery
   private readonly _image: ImageDelivery
+  private readonly _handoff: HandoffDelivery
   private readonly _asset: AssetDelivery
   private readonly _queue: QueueDelivery
   private readonly _button: ButtonDelivery
@@ -98,6 +100,7 @@ export class Contentful implements cms.CMS {
     this._asset = new AssetDelivery(delivery, resumeErrors)
     this._schedule = new ScheduleDelivery(delivery, resumeErrors)
     this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
+    this._handoff = new HandoffDelivery(delivery, this._queue, resumeErrors)
     const followUp = new FollowUpDelivery(
       this._delivery,
       this._carousel,
@@ -112,6 +115,7 @@ export class Contentful implements cms.CMS {
       this._carousel,
       this._image,
       this._startUp,
+      this._handoff,
     ].forEach(d => d.setFollowUp(followUp))
     this._keywords = new KeywordsDelivery(delivery)
     this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
@@ -158,6 +162,10 @@ export class Contentful implements cms.CMS {
 
   chitchat(id: string, context = DEFAULT_CONTEXT): Promise<cms.Chitchat> {
     return this._text.text(id, context)
+  }
+
+  async handoff(id: string, context = DEFAULT_CONTEXT): Promise<cms.Handoff> {
+    return this._handoff.handoff(id, context)
   }
 
   topContents<T extends TopContent>(
@@ -211,6 +219,8 @@ export class Contentful implements cms.CMS {
         return retype(await this._text.fromEntry(entry, context))
       case ContentType.IMAGE:
         return retype(await this._image.fromEntry(entry, context))
+      case ContentType.HANDOFF:
+        return retype(this._handoff.fromEntry(entry, context))
       case ContentType.URL:
         return retype(await this._url.fromEntry(entry, context))
       case ContentType.STARTUP:

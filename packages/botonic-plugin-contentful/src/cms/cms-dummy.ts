@@ -12,6 +12,7 @@ import {
   DateRangeContent,
   Document,
   Element,
+  Handoff,
   Image,
   Queue,
   ScheduleContent,
@@ -59,6 +60,19 @@ export class DummyCMS implements CMS {
         new CommonFields(id, id, { keywords: ['kw1', 'kw2'], shortText: id }),
         'Dummy text for ' + id,
         this.buttons()
+      )
+    )
+  }
+
+  async handoff(id: string, {} = DEFAULT_CONTEXT): Promise<Handoff> {
+    const queue = new Queue(new CommonFields(id, id), id)
+    return Promise.resolve(
+      new Handoff(
+        new CommonFields(id, id),
+        this.buttonCallbacks[0],
+        'Dummy message for ' + id,
+        'Dummy handofFailfMessage for ' + id,
+        queue
       )
     )
   }

@@ -9,6 +9,7 @@ import {
   DateRangeContent,
   Document,
   Element,
+  Handoff,
   Image,
   Queue,
   ScheduleContent,
@@ -35,9 +36,10 @@ export const MESSAGE_CONTENT_TYPES = Object.values(MessageContentType).filter(
 
 export enum NonMessageTopContentType {
   DATE_RANGE = 'dateRange',
+  HANDOFF = 'handoff',
   QUEUE = 'queue',
-  URL = 'url',
   SCHEDULE = 'schedule',
+  URL = 'url',
 }
 
 export type TopContentType = MessageContentType | NonMessageTopContentType
@@ -114,6 +116,7 @@ export interface CMS {
   chitchat(id: string, context?: Context): Promise<Chitchat>
   element(id: string, context?: Context): Promise<Element>
 
+  handoff(id: string, context?: Context): Promise<Handoff>
   /** Even if ContentfulOptions.resumeErrors is set, if the asset is not available
    * the method will fail. */
   image(id: string, context?: Context): Promise<Image>

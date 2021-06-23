@@ -10,6 +10,7 @@ import {
   DateRangeContent,
   Document,
   Element,
+  Handoff,
   Image,
   Queue,
   ScheduleContent,
@@ -93,6 +94,10 @@ export class MultiContextCms implements CMS {
 
   text(id: string, context?: Context): Promise<Text> {
     return this.cmsFromContext(context).text(id, context)
+  }
+
+  handoff(id: string, context?: Context): Promise<Handoff> {
+    return this.cmsFromContext(context).handoff(id, context)
   }
 
   topContents<T extends TopContent>(
