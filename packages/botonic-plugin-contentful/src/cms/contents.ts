@@ -440,18 +440,7 @@ export class HandoffAgentId {
   constructor(readonly agentId: string) {}
 }
 
-export class HandoffQueue {
-  readonly type = 'QUEUE'
-  /**
-   * @param queue the queue id or name
-   */
-  constructor(readonly queue: Queue) {}
-}
-
-export type HandoffDestination =
-  | HandoffAgentEmail
-  | HandoffAgentId
-  | HandoffQueue
+export type HandoffAgent = HandoffAgentEmail | HandoffAgentId
 
 /**
  * Most CommonFields make no sense for Handoff.
@@ -461,18 +450,26 @@ export type HandoffDestination =
 export class Handoff extends TopContent {
   constructor(
     readonly common: CommonFields,
-    readonly text: string,
-    readonly onFinish?: OnFinish,
-    //destination is optional because often it is set dynamically by the bot
-    readonly destination?: HandoffDestination,
+    readonly onFinish: OnFinish,
+    readonly message?: string,
+    readonly failMessage?: string,
+    //agent and queue are optional because often they are set dynamically by the bot
+    readonly queue?: Queue,
+    readonly agent?: HandoffAgent,
     readonly shadowing?: boolean
   ) {
     super(common, ContentType.HANDOFF)
   }
 
-  cloneWithDestination(newDestination: HandoffDestination): this {
+  cloneWithQueue(newQueue: Queue): this {
     const clone = shallowClone(this)
-    ;(clone as any).destination = newDestination
+    ;(clone as any).queue = newQueue
+    return clone
+  }
+
+  cloneWithAgent(newAgent: HandoffAgent): this {
+    const clone = shallowClone(this)
+    ;(clone as any).agent = newAgent
     return clone
   }
 }

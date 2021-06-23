@@ -2,12 +2,13 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import {
+  CmsException,
   ContentType,
+  HandoffAgent,
   HandoffAgentEmail,
   HandoffAgentId,
-  HandoffDestination,
-  HandoffQueue,
   OnFinish,
+  Queue,
 } from '../../cms'
 import { DeliveryApi } from '../delivery-api'
 import {
@@ -23,7 +24,7 @@ export class HandoffDelivery extends DeliveryWithFollowUp {
   static REFERENCES_INCLUDE = QueueDelivery.REFERENCES_INCLUDE + 1
   constructor(
     delivery: DeliveryApi,
-    private readonly queue: QueueDelivery,
+    private readonly queueDelivery: QueueDelivery,
     resumeErrors: boolean
   ) {
     super(ContentType.HANDOFF, delivery, resumeErrors)
@@ -41,38 +42,37 @@ export class HandoffDelivery extends DeliveryWithFollowUp {
   private onFinish(
     entry: contentful.Entry<HandoffFields>,
     context: cms.Context
-  ): OnFinish | undefined {
-    if (entry.fields.onFinish) {
-      return getTargetCallback(entry.fields.onFinish, context)
+  ): OnFinish {
+    if (!entry.fields.onFinish) {
+      throw new CmsException(`Handoff ${this.entryId(entry)} has no onFinish`)
     }
-    return undefined
+    return getTargetCallback(entry.fields.onFinish, context)
   }
 
-  private destination(
+  private queue(entry: contentful.Entry<HandoffFields>): Queue | undefined {
+    if (!entry.fields.queue) return undefined
+    return this.queueDelivery.fromEntry(
+      entry.fields.queue as contentful.Entry<QueueFields>
+    )
+  }
+
+  private agent(
     entry: contentful.Entry<HandoffFields>
-  ): HandoffDestination | undefined {
-    if (!entry.fields.destination) return undefined
+  ): HandoffAgent | undefined {
+    if (!entry.fields.agent) return undefined
     const AGENT_EMAIL_TYPE = 'agentEmail'
     const AGENT_ID_TYPE = 'agentId'
     const model = ContentfulEntryUtils.getContentModel(
-      entry.fields.destination
+      entry.fields.agent
     ) as string
     switch (model) {
-      case ContentType.QUEUE:
-        return new HandoffQueue(
-          this.queue.fromEntry(
-            entry.fields.destination as contentful.Entry<QueueFields>
-          )
-        )
       case AGENT_EMAIL_TYPE: {
-        const destination = entry.fields
-          .destination as contentful.Entry<AgentEmailFields>
-        return new HandoffAgentEmail(destination.fields.agentEmail)
+        const agent = entry.fields.agent as contentful.Entry<AgentEmailFields>
+        return new HandoffAgentEmail(agent.fields.agentEmail)
       }
       case AGENT_ID_TYPE: {
-        const destination = entry.fields
-          .destination as contentful.Entry<AgentIdFields>
-        return new HandoffAgentId(destination.fields.agentId)
+        const agent = entry.fields.agent as contentful.Entry<AgentIdFields>
+        return new HandoffAgentId(agent.fields.agentId)
       }
     }
     return undefined
@@ -87,13 +87,15 @@ export class HandoffDelivery extends DeliveryWithFollowUp {
     return addCustomFields(
       new cms.Handoff(
         common,
-        fields.text,
         this.onFinish(entry, context),
-        this.destination(entry),
+        fields.message,
+        fields.failMessage,
+        this.queue(entry),
+        this.agent(entry),
         fields.shadowing
       ),
       fields,
-      ['onFinish', 'destination']
+      ['onFinish', 'agent', 'queue']
     )
   }
 }
@@ -106,13 +108,13 @@ export interface AgentIdFields {
   agentId: string
 }
 
-type DestinationTarget = contentful.Entry<
-  QueueFields | AgentEmailFields | AgentIdFields
->
+type AgentTarget = contentful.Entry<AgentEmailFields | AgentIdFields>
 
 export interface HandoffFields extends CommonEntryFields {
-  text: string
-  destination?: DestinationTarget
-  onFinish?: CallbackTarget
+  message?: string
+  failMessage?: string
+  onFinish: CallbackTarget
+  queue?: contentful.Entry<QueueFields>
+  agent?: AgentTarget
   shadowing?: boolean
 }

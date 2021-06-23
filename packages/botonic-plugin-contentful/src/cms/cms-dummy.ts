@@ -13,7 +13,6 @@ import {
   Document,
   Element,
   Handoff,
-  HandoffQueue,
   Image,
   Queue,
   ScheduleContent,
@@ -70,9 +69,10 @@ export class DummyCMS implements CMS {
     return Promise.resolve(
       new Handoff(
         new CommonFields(id, id),
-        'Dummy text for ' + id,
         this.buttonCallbacks[0],
-        new HandoffQueue(queue)
+        'Dummy message for ' + id,
+        'Dummy handofFailfMessage for ' + id,
+        queue
       )
     )
   }

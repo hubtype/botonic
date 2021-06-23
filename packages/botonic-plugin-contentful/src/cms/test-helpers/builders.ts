@@ -1,5 +1,5 @@
 import { ContentType } from '../cms'
-import { HandoffAgentEmail } from '../contents'
+import { HandoffAgentEmail, OnFinish } from '../contents'
 import {
   CarouselBuilder,
   DocumentBuilder,
@@ -240,13 +240,17 @@ export class RndDocumentBuilder extends DocumentBuilder {
 export class RndHandoffBuilder extends HandoffBuilder {
   readonly topComponentBuilder = new RndTopContentBuilder()
 
-  constructor(name: string = rndStr(), text: string = rndStr()) {
-    super(rndStr(), name, text)
+  constructor(
+    name: string = rndStr(),
+    onFinish: OnFinish = new ContentCallbackBuilder().build()
+  ) {
+    super(rndStr(), name, onFinish)
   }
 
   withRandomFields(): this {
-    this.onFinish = new ContentCallbackBuilder().build()
-    this.destination = new HandoffAgentEmail(rndStr())
+    this.message = rndStr()
+    this.failMessage = rndStr()
+    this.agent = new HandoffAgentEmail(rndStr())
     this.shadowing = rndBool()
     this.topComponentBuilder.withRandomFields(this)
     return this
