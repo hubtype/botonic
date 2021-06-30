@@ -8,13 +8,22 @@ export interface HubtypeAgentsInfo {
   status: string
 }
 
+/**
+ * TODO add context argument to all API calls
+ */
+export interface BackendContext {
+  timeoutMs?: number
+}
+
 export declare function getOpenQueues(
-  session: Session
+  session: Session,
+  context?: BackendContext
 ): Promise<{ queues: string[] }>
 
 export declare function storeCaseRating(
   session: Session,
-  rating: number
+  rating: number,
+  context?: BackendContext
 ): Promise<{ status: string }>
 
 export declare function getAvailableAgentsByQueue(
