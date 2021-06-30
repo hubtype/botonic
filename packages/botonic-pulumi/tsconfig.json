@@ -1,17 +1,3 @@
 {
-  "compilerOptions": {
-    "outDir": "bin",
-    "target": "es2016",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "pretty": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true,
-    "strictNullChecks": true
-  }
+  "extends": "../../tsconfig.base.json"
 }
