@@ -34,6 +34,7 @@ export const INPUT = Object.freeze({
   CUSTOM: 'custom',
   WEBCHAT_SETTINGS: 'webchatsettings',
   WHATSAPP_TEMPLATE: 'whatsapptemplate',
+  RAW: 'raw',
 })
 
 export const CASE_STATUS = Object.freeze({

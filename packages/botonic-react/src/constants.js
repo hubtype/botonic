@@ -178,6 +178,7 @@ export const ROLES = {
   AUDIO_MESSAGE: 'audio-message',
   VIDEO_MESSAGE: 'video-message',
   DOCUMENT_MESSAGE: 'document-message',
+  RAW_MESSAGE: 'raw-message',
 }
 
 export const COMPONENT_TYPE = {
