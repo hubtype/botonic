@@ -1,7 +1,7 @@
 import { WithButtons } from './buttons'
 
 export interface CarouselElement extends WithButtons {
-  src: string
+  pic: string
   title: string
   subtitle?: string
 }

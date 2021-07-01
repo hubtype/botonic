@@ -2,7 +2,12 @@ import { ConnectionEvent } from './connections/index'
 import { CarouselMessageEvent } from './message/carousel'
 import { CustomMessageEvent } from './message/custom'
 import { LocationMessageEvent } from './message/location'
-import { MediaMessageEvent } from './message/media'
+import {
+  AudioMessageEvent,
+  DocumentMessageEvent,
+  ImageMessageEvent,
+  VideoMessageEvent,
+} from './message/media'
 import { TextMessageEvent } from './message/text'
 
 export enum EventTypes {
@@ -21,7 +26,10 @@ export interface BaseEvent {
 
 export type BotonicEvent =
   | TextMessageEvent
-  | MediaMessageEvent
+  | AudioMessageEvent
+  | DocumentMessageEvent
+  | ImageMessageEvent
+  | VideoMessageEvent
   | LocationMessageEvent
   | CarouselMessageEvent
   | CustomMessageEvent

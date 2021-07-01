@@ -1,28 +1,26 @@
 import { BotonicMessageEvent, MessageEventTypes } from '.'
 import { WithButtons } from './buttons'
 
-export interface AudioMessageEvent extends BotonicMessageEvent, WithButtons {
+interface MediaMessageEvent extends BotonicMessageEvent, WithButtons {
+  src: string
+}
+
+export interface AudioMessageEvent extends MediaMessageEvent {
   type: MessageEventTypes.AUDIO
   src: string
 }
 
-export interface ImageMessageEvent extends BotonicMessageEvent, WithButtons {
+export interface ImageMessageEvent extends MediaMessageEvent {
   type: MessageEventTypes.IMAGE
   src: string
 }
 
-export interface DocumentMessageEvent extends BotonicMessageEvent, WithButtons {
+export interface DocumentMessageEvent extends MediaMessageEvent {
   type: MessageEventTypes.DOCUMENT
   src: string
 }
 
-export interface VideoMessageEvent extends BotonicMessageEvent, WithButtons {
+export interface VideoMessageEvent extends MediaMessageEvent {
   type: MessageEventTypes.VIDEO
   src: string
 }
-
-export type MediaMessageEvent =
-  | AudioMessageEvent
-  | ImageMessageEvent
-  | DocumentMessageEvent
-  | VideoMessageEvent
