@@ -1,9 +1,7 @@
-import { BotonicMessageEvent, MessageEventType } from '.'
+import { BotonicMessageEvent, MessageEventTypes } from '.'
 import { WithReplies } from './replies'
 
-export interface CustomMessageEvent
-  extends BotonicMessageEvent<MessageEventType.custom>,
-    WithReplies {
-  type: MessageEventType.custom
+export interface CustomMessageEvent extends BotonicMessageEvent, WithReplies {
+  type: MessageEventTypes.CUSTOM
   customTypeName: string
 }

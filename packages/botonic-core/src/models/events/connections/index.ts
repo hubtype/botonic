@@ -1,10 +1,11 @@
 import { BaseEvent, EventTypes } from '..'
 
-export enum ConnectionEventStatus {
-  connected = 'connected',
-  disconnected = 'disconnected',
+export enum ConnectionEventStatuses {
+  CONNECTED = 'connected',
+  DISCONNECTED = 'disconnected',
 }
 
-export interface ConnectionEvent extends BaseEvent<EventTypes.connection> {
-  status: keyof typeof ConnectionEventStatus
+export interface ConnectionEvent extends BaseEvent {
+  eventType: EventTypes.CONNECTION
+  status: typeof ConnectionEventStatuses[keyof typeof ConnectionEventStatuses]
 }

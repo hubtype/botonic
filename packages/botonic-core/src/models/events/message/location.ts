@@ -1,7 +1,7 @@
-import { BotonicMessageEvent, MessageEventType } from '.'
+import { BotonicMessageEvent, MessageEventTypes } from '.'
 
-export interface LocationMessageEvent
-  extends BotonicMessageEvent<MessageEventType.location> {
+export interface LocationMessageEvent extends BotonicMessageEvent {
+  type: MessageEventTypes.LOCATION
   lat: number
   long: number
 }

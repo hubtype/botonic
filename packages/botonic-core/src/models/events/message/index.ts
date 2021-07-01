@@ -1,32 +1,31 @@
-import { BaseEvent, EventTypes } from '..'
+import { BaseEvent } from '..'
 
-export enum MessageEventType {
-  text = 'text',
-  audio = 'audio',
-  document = 'document',
-  image = 'image',
-  video = 'video',
-  location = 'location',
-  carousel = 'carousel',
-  custom = 'custom',
+export enum MessageEventTypes {
+  AUDIO = 'audio',
+  CAROUSEL = 'carousel',
+  CUSTOM = 'custom',
+  DOCUMENT = 'document',
+  IMAGE = 'image',
+  LOCATION = 'location',
+  TEXT = 'text',
+  VIDEO = 'video',
 }
 
 export enum MessageEventAck {
-  draft = 'draft',
-  sent = 'sent',
-  received = 'received',
-  read = 'read',
+  DRAFT = 'draft',
+  READ = 'read',
+  RECEIVED = 'received',
+  SENT = 'sent',
 }
 
 export enum MessageEventFrom {
-  user = 'user',
-  bot = 'bot',
-  agent = 'agent',
+  AGENT = 'agent',
+  BOT = 'bot',
+  USER = 'user',
 }
 
-export interface BotonicMessageEvent<MessageType>
-  extends BaseEvent<EventTypes.message> {
-  type: MessageType
-  ack: keyof typeof MessageEventAck
-  from: keyof typeof MessageEventFrom
+export interface BotonicMessageEvent extends BaseEvent {
+  ack: typeof MessageEventAck[keyof typeof MessageEventAck]
+  from: typeof MessageEventFrom[keyof typeof MessageEventFrom]
+  type: typeof MessageEventTypes[keyof typeof MessageEventTypes]
 }

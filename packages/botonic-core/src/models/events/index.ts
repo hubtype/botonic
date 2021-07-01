@@ -1,20 +1,20 @@
-import { TextMessageEvent } from './message/text'
-import { MediaMessageEvent } from './message/media'
-import { LocationMessageEvent } from './message/location'
+import { ConnectionEvent } from './connections/index'
 import { CarouselMessageEvent } from './message/carousel'
 import { CustomMessageEvent } from './message/custom'
-import { ConnectionEvent } from './connections/index'
+import { LocationMessageEvent } from './message/location'
+import { MediaMessageEvent } from './message/media'
+import { TextMessageEvent } from './message/text'
 
 export enum EventTypes {
-  connection = 'connection',
-  message = 'message',
-  ack = 'ack',
-  track = 'track',
+  CONNECTION = 'connection',
+  MESSAGE = 'message',
+  ACK = 'ack',
+  TRACK = 'track',
 }
 
-export interface BaseEvent<EventType extends EventTypes> {
+export interface BaseEvent {
   id: string
-  eventType: EventType
+  eventType: typeof EventTypes[keyof typeof EventTypes]
   createdAt: string
   modifiedAt?: string
 }
