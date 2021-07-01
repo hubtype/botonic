@@ -4,7 +4,7 @@ import * as pulumi from '@pulumi/pulumi'
 import {
   AWSComponentResource,
   AWSResourceOptions,
-  DYNAMODB_TABLE_NAME,
+  BOTONIC_SINGLE_TABLE_NAME,
 } from '.'
 
 export interface DynamoDBArgs {
@@ -12,10 +12,10 @@ export interface DynamoDBArgs {
 }
 export class DynamoDB extends AWSComponentResource<DynamoDBArgs> {
   table: aws.dynamodb.Table
-  endpoint: pulumi.Output<string>
+  url: pulumi.Output<string>
   constructor(args: DynamoDBArgs, opts: AWSResourceOptions) {
     super('dynamodb', args, opts)
-    const tableName = args.tableName || DYNAMODB_TABLE_NAME
+    const tableName = args.tableName || BOTONIC_SINGLE_TABLE_NAME
 
     const table = new aws.dynamodb.Table(
       `${this.namePrefix}-dynamodb-table`,
@@ -43,10 +43,10 @@ export class DynamoDB extends AWSComponentResource<DynamoDBArgs> {
       { ...opts, parent: this }
     )
     this.table = table
-    this.endpoint = pulumi.interpolate`dynamodb://${this.table.name}.${this.provider.region}.aws.com`
+    this.url = pulumi.interpolate`dynamodb://${this.table.name}.${this.provider.region}.aws.com`
     this.registerOutputs({
       table: this.table,
-      endpoint: this.endpoint,
+      url: this.url,
     })
   }
 }

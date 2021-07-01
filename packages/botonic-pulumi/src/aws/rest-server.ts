@@ -3,11 +3,7 @@ import * as pulumi from '@pulumi/pulumi'
 import { existsSync } from 'fs'
 
 import { REST_SERVER_ENDPOINT_PATH_NAME, REST_SERVER_PATH } from '..'
-import {
-  AWSComponentResource,
-  AWSResourceOptions,
-  REST_SERVER_LAMBDA_HANDLER_NAME,
-} from '.'
+import { AWSComponentResource, AWSResourceOptions } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
 import { getDynamoDbCrudPolicy, getManageConnectionsPolicy } from './policies'
@@ -20,7 +16,7 @@ export interface RestServerArgs {
   restServerLambdaPath?: string
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
-  endpoint: pulumi.Output<string>
+  url: pulumi.Output<string>
   constructor(args: RestServerArgs, opts: AWSResourceOptions) {
     super('rest-api-server', args, opts)
 
@@ -83,13 +79,13 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
             '.': new pulumi.asset.FileArchive(restServerLambdaPath),
           }),
           timeout: 6,
-          handler: REST_SERVER_LAMBDA_HANDLER_NAME,
+          handler: 'server.default',
           role: lambdaFunctionRole.arn,
           environment: {
             variables: {
-              MODELS_BASE_URL: args.nlpModelsBucket.endpoint,
-              DATA_PROVIDER_URL: args.database.endpoint,
-              WEBSOCKET_URL: args.websocketServer.endpoint,
+              MODELS_BASE_URL: args.nlpModelsBucket.url,
+              DATA_PROVIDER_URL: args.database.url,
+              WEBSOCKET_URL: args.websocketServer.url,
             },
           },
         },
@@ -173,9 +169,9 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
         },
         { ...opts, parent: this }
       )
-      const endpoint = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}`
-      this.endpoint = endpoint
-      this.registerOutputs({ endpoint: this.endpoint })
+      const url = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}`
+      this.url = url
+      this.registerOutputs({ url: this.url })
     }
   }
 }

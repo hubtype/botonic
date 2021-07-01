@@ -10,12 +10,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { argv, env } from 'process'
 
-import {
-  getFullRestServerUrl,
-  getFullStaticContentsUrl,
-  getFullWebsocketUrl,
-  WEBCHAT_BOTONIC_PATH,
-} from './'
+import { WEBCHAT_BOTONIC_PATH, WEBSOCKET_ENDPOINT_PATH_NAME } from './'
 import {
   deployBackendStack,
   deployFrontendStack,
@@ -39,9 +34,9 @@ export interface ProjectConfig {
 }
 
 export interface ProgramConfig extends ProjectConfig {
-  nlpModelsBucketEndpoint: string
-  websocketServerEndpoint: string
-  restServerEndpoint: string
+  nlpModelsUrl: string
+  websocketUrl: string
+  apiUrl: string
 }
 
 export class PulumiRunner {
@@ -198,28 +193,17 @@ export class PulumiRunner {
     await this.beforeRun()
     const backendResults = await this.runStack('backend')
     if (backendResults) {
-      this.programConfig['restServerEndpoint'] =
-        backendResults.outputs['restServerEndpoint'].value
-      this.programConfig['nlpModelsBucketEndpoint'] =
-        backendResults.outputs['nlpModelsBucketEndpoint'].value
-      const websocketServerEndpoint =
-        backendResults.outputs['websocketServerEndpoint'].value
-      this.programConfig['websocketServerEndpoint'] = websocketServerEndpoint
-      const websocketUrl = this.projectConfig?.customDomain
-        ? getFullWebsocketUrl(this.projectConfig.customDomain)
-        : websocketServerEndpoint
-
-      this.replaceWithWebSocketUrl(websocketUrl)
+      const websocketUrl = backendResults.outputs['websocketUrl'].value
+      this.programConfig['websocketUrl'] = websocketUrl
+      this.programConfig['apiUrl'] = backendResults.outputs['apiUrl'].value
+      this.programConfig['nlpModelsUrl'] =
+        backendResults.outputs['nlpModelsUrl'].value
+      const websocketReplacementUrl = this.projectConfig?.customDomain
+        ? `wss://${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
+        : websocketUrl
+      this.replaceWithWebSocketUrl(websocketReplacementUrl)
     }
     const frontendResults = await this.runStack('frontend')
-    if (frontendResults) {
-      const domainName =
-        this.projectConfig?.customDomain ||
-        frontendResults.outputs['cloudFrontDomainEndpoint'].value
-      console.log('Assets -->', getFullStaticContentsUrl(domainName))
-      console.log('Rest Api -->', getFullRestServerUrl(domainName))
-      console.log('WebSocket Api -->', getFullWebsocketUrl(domainName))
-    }
     return
   }
 

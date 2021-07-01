@@ -10,6 +10,9 @@
     "@types/semver": "^7.3.6",
     "@types/tar": "^4.0.4"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "dependencies": {
     "@pulumi/aws": "^4.8.0",
     "@pulumi/awsx": "^0.30.0",

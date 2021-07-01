@@ -152,13 +152,16 @@ function createCustomDomainCertificate(
 export interface StaticWebchatContentsArgs {
   pathToWebchatContents?: string
   customDomain?: string
-  nlpModelsBucketEndpoint: string
-  restServerEndpoint: string
-  websocketServerEndpoint: string
+  nlpModelsUrl: string
+  apiUrl: string
+  websocketUrl: string
 }
 export class StaticWebchatContents extends AWSComponentResource<StaticWebchatContentsArgs> {
-  customDomainEndpoint: pulumi.Output<string> | undefined
-  cloudFrontDomainEndpoint: pulumi.Output<string>
+  nlpModelsUrl: pulumi.Output<string>
+  websocketUrl: pulumi.Output<string>
+  apiUrl: pulumi.Output<string>
+  webchatUrl: pulumi.Output<string>
+  // webviewsUrl: pulumi.Output<string>
 
   constructor(args: StaticWebchatContentsArgs, opts: AWSResourceOptions) {
     super('static-webchat-contents', args, opts)
@@ -219,9 +222,9 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
       compress: true,
     }))
 
-    const nlpModelsUrl = new URL(args.nlpModelsBucketEndpoint)
-    const restServerUrl = new URL(args.restServerEndpoint)
-    const websocketServerUrl = new URL(args.websocketServerEndpoint)
+    const nlpModelsUrl = new URL(args.nlpModelsUrl)
+    const restServerUrl = new URL(args.apiUrl)
+    const websocketServerUrl = new URL(args.websocketUrl)
 
     const distributionArgs: aws.cloudfront.DistributionArgs = {
       enabled: true,
@@ -356,15 +359,21 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
         parent: this,
       }
     )
-    this.customDomainEndpoint = undefined
+
     if (customDomain) {
       const aRecord = createAliasRecord(customDomain, cdn, { parent: this })
-      this.customDomainEndpoint = pulumi.interpolate`https://${customDomain}/`
     }
-    this.cloudFrontDomainEndpoint = cdn.domainName
+    const domainName = customDomain ? customDomain : cdn.domainName
+
+    this.nlpModelsUrl = pulumi.interpolate`https://${domainName}/`
+    this.websocketUrl = pulumi.interpolate`wss://${domainName}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
+    this.apiUrl = pulumi.interpolate`https://${domainName}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
+    this.webchatUrl = pulumi.interpolate`https://${domainName}/`
     this.registerOutputs({
-      customDomainEndpoint: this.customDomainEndpoint,
-      cloudFrontDomainEndpoint: this.cloudFrontDomainEndpoint,
+      nlpModelsUrl: this.nlpModelsUrl,
+      websocketUrl: this.websocketUrl,
+      apiUrl: this.apiUrl,
+      webchatUrl: this.webchatUrl,
     })
   }
 }

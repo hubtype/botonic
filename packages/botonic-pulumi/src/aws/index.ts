@@ -4,19 +4,7 @@ import * as pulumi from '@pulumi/pulumi'
 import { getNamePrefix } from '..'
 
 // DynamoDB
-export const DYNAMODB_TABLE_NAME = 'user_events'
-
-// Websocket Server
-export const WEBSOCKET_LAMBDA_HANDLER_NAME = 'server.default'
-export const WEBSOCKET_ONCONNECT_LAMBDA_NAME = 'onConnect'
-export const WEBSOCKET_ONCONNECT_ROUTE_KEY = '$connect'
-export const WEBSOCKET_ONMESSAGE_LAMBDA_NAME = 'onMessage'
-export const WEBSOCKET_ONMESSAGE_ROUTE_KEY = '$default'
-export const WEBSOCKET_ONDISCONNECT_LAMBDA_NAME = 'onDisconnect'
-export const WEBSOCKET_ONDISCONNECT_ROUTE_KEY = '$disconnect'
-
-// Rest Server
-export const REST_SERVER_LAMBDA_HANDLER_NAME = 'server.default'
+export const BOTONIC_SINGLE_TABLE_NAME = 'user_events'
 
 export type AWSProvider = aws.Provider & { region: pulumi.Output<aws.Region> }
 

@@ -11,7 +11,7 @@ export interface NLPModelsBucketArgs {
 }
 
 export class NLPModelsBucket extends AWSComponentResource<NLPModelsBucketArgs> {
-  endpoint: pulumi.Output<string>
+  url: pulumi.Output<string>
   constructor(args: NLPModelsBucketArgs, opts: AWSResourceOptions) {
     super('nlp-models-bucket', args, opts)
     const nlpModelsPath = args.nlpModelsPath || NLP_MODELS_PATH
@@ -42,9 +42,9 @@ export class NLPModelsBucket extends AWSComponentResource<NLPModelsBucketArgs> {
       )
     })
 
-    this.endpoint = pulumi.interpolate`https://${nlpModelsBucket.bucketRegionalDomainName}`
+    this.url = pulumi.interpolate`https://${nlpModelsBucket.bucketRegionalDomainName}`
     this.registerOutputs({
-      endpoint: this.endpoint,
+      url: this.url,
     })
   }
 }

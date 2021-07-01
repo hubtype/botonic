@@ -1,11 +1,7 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import {
-  AWSComponentResource,
-  AWSResourceOptions,
-  WEBSOCKET_LAMBDA_HANDLER_NAME,
-} from '.'
+import { AWSComponentResource, AWSResourceOptions } from '.'
 
 export interface WebSocketServerLambdaArgs {
   name: string
@@ -67,7 +63,7 @@ export class WebsocketServerLambda extends AWSComponentResource<WebSocketServerL
       `${this.namePrefix}-${args.name}-lambda-function`,
       {
         name: `${this.namePrefix}-${args.name}-lambda-function`,
-        handler: `${WEBSOCKET_LAMBDA_HANDLER_NAME}.${args.name}`,
+        handler: `server.default.${args.name}`,
         role: lambdaFunctionRole.arn,
         ...defaultLambdaSettings,
       },

@@ -11,10 +11,9 @@ import { StaticWebchatContents } from './static-webchat-contents'
 import { WebSocketServer } from './websocket-server'
 
 interface BackendDeployResults {
-  nlpModelsBucketEndpoint: pulumi.Output<string>
-  databaseEndpoint: pulumi.Output<string>
-  websocketServerEndpoint: pulumi.Output<string>
-  restServerEndpoint: pulumi.Output<string>
+  nlpModelsUrl: pulumi.Output<string>
+  websocketUrl: pulumi.Output<string>
+  apiUrl: pulumi.Output<string>
 }
 
 export const deployBackendStack = async (
@@ -51,15 +50,17 @@ export const deployBackendStack = async (
   )
 
   return {
-    nlpModelsBucketEndpoint: nlpModelsBucket.endpoint,
-    databaseEndpoint: database.endpoint,
-    websocketServerEndpoint: websocketServer.endpoint,
-    restServerEndpoint: restServer.endpoint,
+    nlpModelsUrl: nlpModelsBucket.url,
+    websocketUrl: websocketServer.url,
+    apiUrl: restServer.url,
   }
 }
 
 interface FrontendDeployResults {
-  cloudFrontDomainEndpoint: pulumi.Output<string>
+  nlpModelsUrl: pulumi.Output<string>
+  websocketUrl: pulumi.Output<string>
+  apiUrl: pulumi.Output<string>
+  webchatUrl: pulumi.Output<string>
 }
 
 export const deployFrontendStack = async (
@@ -74,13 +75,16 @@ export const deployFrontendStack = async (
   const staticWebchatContents = new StaticWebchatContents(
     {
       customDomain: config.customDomain,
-      nlpModelsBucketEndpoint: config.nlpModelsBucketEndpoint,
-      restServerEndpoint: config.restServerEndpoint,
-      websocketServerEndpoint: config.websocketServerEndpoint,
+      nlpModelsUrl: config.nlpModelsUrl,
+      apiUrl: config.apiUrl,
+      websocketUrl: config.websocketUrl,
     },
     awsResourceOptions
   )
   return {
-    cloudFrontDomainEndpoint: staticWebchatContents.cloudFrontDomainEndpoint,
+    nlpModelsUrl: staticWebchatContents.nlpModelsUrl,
+    websocketUrl: staticWebchatContents.websocketUrl,
+    apiUrl: staticWebchatContents.apiUrl,
+    webchatUrl: staticWebchatContents.webchatUrl,
   }
 }
