@@ -25,7 +25,7 @@ export enum MessageEventFrom {
 }
 
 export interface BotonicMessageEvent extends BaseEvent {
-  ack: typeof MessageEventAck[keyof typeof MessageEventAck]
-  from: typeof MessageEventFrom[keyof typeof MessageEventFrom]
-  type: typeof MessageEventTypes[keyof typeof MessageEventTypes]
+  ack: MessageEventAck
+  from: MessageEventFrom
+  type: MessageEventTypes
 }

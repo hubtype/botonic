@@ -7,5 +7,5 @@ export enum ConnectionEventStatuses {
 
 export interface ConnectionEvent extends BaseEvent {
   eventType: EventTypes.CONNECTION
-  status: typeof ConnectionEventStatuses[keyof typeof ConnectionEventStatuses]
+  status: ConnectionEventStatuses
 }

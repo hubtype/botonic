@@ -20,7 +20,7 @@ export enum EventTypes {
 export interface BaseEvent {
   id: string
   userId: string
-  eventType: typeof EventTypes[keyof typeof EventTypes]
+  eventType: EventTypes
   createdAt: string
   modifiedAt?: string
 }
