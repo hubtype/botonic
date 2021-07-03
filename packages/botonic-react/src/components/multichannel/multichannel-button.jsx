@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { Button } from '../button'
 import { MultichannelContext } from './multichannel-context'
-import { isWhatsapp } from './multichannel-utils'
+import { isWhatsapp, WHATSAPP_MAX_BUTTON_CHARS } from './multichannel-utils'
 
 export const MultichannelButton = props => {
   const requestContext = useContext(RequestContext)
@@ -56,15 +56,29 @@ export const MultichannelButton = props => {
     return text
   }
 
+  const truncateText = (text, maxLength, ellipsis = '...') => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength - ellipsis.length) + ellipsis
+    }
+    return text
+  }
+
   if (isWhatsapp(requestContext)) {
-    if (hasUrl()) {
-      return `${getText()}: ${getUrl()}`
-    } else if (hasPath() || hasPayload()) {
-      const text = getText()
-      increaseCurrentIndex()
-      return `${text}`
-    } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
-    else return <Button {...props}>{props.children}</Button>
+    if (props.asText) {
+      if (hasUrl()) {
+        return `${getText()}: ${getUrl()}`
+      } else if (hasPath() || hasPayload()) {
+        const text = getText()
+        increaseCurrentIndex()
+        return `${text}`
+      } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
+    } else {
+      return (
+        <Button {...props}>
+          {truncateText(props.children, WHATSAPP_MAX_BUTTON_CHARS)}
+        </Button>
+      )
+    }
   }
   return <Button {...props}>{props.children}</Button>
 }
