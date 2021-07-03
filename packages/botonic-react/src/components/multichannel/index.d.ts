@@ -19,6 +19,8 @@ export interface MultichannelTextProps extends MultichannelViewOptions {
   indexMode?: IndexMode
   /** Defaults to no separator between lines*/
   newline?: string
+  buttonsAsText?: boolean
+  buttonsTextSeparator?: string
 }
 
 export const MultichannelText: React.FunctionComponent<MultichannelTextProps>
@@ -39,6 +41,7 @@ export interface MultichannelButtonProps {
   payload?: string
   url?: string
   webview?: string
+  asText?: boolean
 }
 export const MultichannelButton: React.FunctionComponent<MultichannelButtonProps>
 

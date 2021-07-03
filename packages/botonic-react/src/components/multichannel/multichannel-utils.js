@@ -7,6 +7,10 @@ import { Providers } from '@botonic/core'
  */
 export const MULTICHANNEL_WHATSAPP_PROPS = { markdown: false }
 
+export const WHATSAPP_MAX_BUTTONS = 3
+export const WHATSAPP_MAX_BUTTON_CHARS = 20
+export const DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR = 'More options:'
+
 export function isMultichannelButton(node) {
   return isNodeKind(node, 'MultichannelButton')
 }
