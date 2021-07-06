@@ -28,7 +28,7 @@ export const MultichannelText = props => {
   const requestContext = useContext(RequestContext)
   const multichannelContext = useContext(MultichannelContext)
   const postbackButtonsAsText =
-    props.buttonsAsText !== undefined ? props.buttonsAsText : true
+    props.buttonsAsText == null ? true : props.buttonsAsText
 
   let elements = []
 
