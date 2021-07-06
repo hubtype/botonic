@@ -64,7 +64,8 @@ export const MultichannelButton = props => {
   }
 
   if (isWhatsapp(requestContext)) {
-    if (props.asText) {
+    const asText = props.asText == null ? true : props.asText
+    if (asText) {
       if (hasUrl()) {
         return `${getText()}: ${getUrl()}`
       } else if (hasPath() || hasPayload()) {
