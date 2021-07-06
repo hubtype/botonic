@@ -1,5 +1,108 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Multichannel text display URL buttons as text even if buttonsAsText is set to false 1`] = `
+<message
+  buttonsAsText={0}
+  delay={0}
+  markdown={0}
+  type="text"
+  typing={0}
+>
+  The verbose text
+  <button
+    payload="payload1"
+  >
+    button text1
+  </button>
+  
+- button text2: http://adrss
+</message>
+`;
+
+exports[`Multichannel text display custom text as button separator when more than 3 buttons in message 1`] = `
+Array [
+  <message
+    buttonsAsText={0}
+    buttonsTextSeparator="Custom message"
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    The verbose text
+    
+- button text2: http://adrss
+    <button
+      payload="payload1"
+    >
+      button text1
+    </button>
+    <button
+      payload="__PATH_PAYLOAD__path"
+    >
+      button text3
+    </button>
+    <button
+      payload="payload2"
+    >
+      button with text ...
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    buttonsTextSeparator="Custom message"
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    Custom message
+    <button
+      payload="payload3"
+    >
+      button text5
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    buttonsTextSeparator="Custom message"
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    Custom message
+    <button
+      url="/webviews/undefined?"
+    >
+      button text4
+    </button>
+  </message>,
+]
+`;
+
+exports[`Multichannel text display postback buttons as whatsapp buttons 1`] = `
+<message
+  buttonsAsText={0}
+  delay={0}
+  markdown={0}
+  type="text"
+  typing={0}
+>
+  The verbose text
+  <button
+    payload="payload1"
+  >
+    button text1
+  </button>
+  <button
+    payload="__PATH_PAYLOAD__path"
+  >
+    button text2
+  </button>
+</message>
+`;
+
 exports[`Multichannel text just text 1`] = `
 <message
   delay={0}
@@ -10,6 +113,98 @@ exports[`Multichannel text just text 1`] = `
 >
   Some text
 </message>
+`;
+
+exports[`Multichannel text split messages with more than 3 postback buttons into separate messages 1`] = `
+Array [
+  <message
+    buttonsAsText={0}
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    The verbose text
+    
+- button text2: http://adrss
+    <button
+      payload="payload1"
+    >
+      button text1
+    </button>
+    <button
+      payload="__PATH_PAYLOAD__path"
+    >
+      button text3
+    </button>
+    <button
+      payload="payload2"
+    >
+      button with text ...
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    More options:
+    <button
+      payload="payload3"
+    >
+      button text5
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    More options:
+    <button
+      url="/webviews/undefined?"
+    >
+      button text4
+    </button>
+  </message>,
+]
+`;
+
+exports[`Multichannel text split webview buttons into separate messages 1`] = `
+Array [
+  <message
+    buttonsAsText={0}
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    The verbose text
+    <button
+      payload="payload1"
+    >
+      button text1
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    More options:
+    <button
+      url="/webviews/undefined?"
+    >
+      webview button text
+    </button>
+  </message>,
+]
 `;
 
 exports[`Multichannel text with buttons as array 1`] = `

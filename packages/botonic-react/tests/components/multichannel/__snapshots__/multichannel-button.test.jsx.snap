@@ -1,7 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Multichannel buttons: truncate text if more than 20 chars in whatsapp buttons 1`] = `
+<button
+  payload="payload1"
+>
+  button text with ...
+</button>
+`;
+
 exports[`Multichannel buttons: with URL 1`] = `"- button text with URL: https://docs.botonic.io/"`;
 
 exports[`Multichannel buttons: with path 1`] = `"1.- button text with path1"`;
 
 exports[`Multichannel buttons: with payload 1`] = `"1- button text with payload1"`;
+
+exports[`Multichannel buttons: with webview 1`] = `
+<button
+  url="/webviews/undefined?"
+>
+  button text with Webview
+</button>
+`;
