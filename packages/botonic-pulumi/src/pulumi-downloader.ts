@@ -1,5 +1,5 @@
-import { default as decompress } from 'decompress'
-import { default as download } from 'download'
+import decompress from 'decompress'
+import download from 'download'
 import { existsSync, unlinkSync } from 'fs'
 import { platform } from 'os'
 import { join } from 'path'

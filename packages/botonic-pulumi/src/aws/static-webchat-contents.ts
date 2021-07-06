@@ -70,7 +70,6 @@ function createAliasRecord(
 function getViewerCertificate(
   customDomain: string | undefined,
   providedCertificateArn: pulumi.Input<string> | undefined,
-  awsProviderConfig: AWSProvider,
   opts: pulumi.ResourceOptions
 ): pulumi.Input<aws.types.input.cloudfront.DistributionViewerCertificate> {
   const defaultViewerCertificateOptions = {
@@ -202,7 +201,6 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
     const viewerCertificate = getViewerCertificate(
       customDomain,
       undefined, // TODO: Allow passing custom certificates via config.providerCertificateArn?
-      this.provider,
       { parent: this }
     )
 

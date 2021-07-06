@@ -19,3 +19,5 @@ export const WEBCHAT_BOTONIC_PATH = join(
   'dist',
   'webchat.botonic.js'
 )
+
+export * from './pulumi-runner'
