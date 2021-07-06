@@ -35,6 +35,9 @@ export function elementHasPostback(element) {
     (element.props && element.props.path)
   )
 }
+export function elementHasWebview(element) {
+  return element.props && element.props.webview
+}
 
 export function getFilteredElements(node, filter) {
   const elements = []
