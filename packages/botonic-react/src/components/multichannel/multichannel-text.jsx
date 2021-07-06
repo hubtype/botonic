@@ -75,13 +75,19 @@ export const MultichannelText = props => {
     return props.indexMode === 'letter' ? 'a' : 1
   }
 
-  const generateMultichannelButtons = type => {
+  const generateMultichannelButtons = (type, newLineFirstButton = true) => {
     const asText = type === buttonTypes.POSTBACK ? postbackButtonsAsText : true
     const generator = (element, i) => {
+      const newline =
+        multichannelContext.messageSeparator == null &&
+        !newLineFirstButton &&
+        i === 0
+          ? ''
+          : '\n'
       return (
         <MultichannelButton
           key={`${type}${i}`}
-          newline={'\n'}
+          newline={newline}
           asText={asText}
           {...element.props}
         >
@@ -107,12 +113,9 @@ export const MultichannelText = props => {
     const textElements = texts.map(text => {
       return (props.newline || '') + text
     })
-    const postbackButtonElements = postbackButtons.map(
-      generateMultichannelButtons('postback')
-    )
-    const urlButtonElements = urlButtons.map(generateMultichannelButtons('url'))
+
     const webviewButtonElements = webviewButtons.map(
-      generateMultichannelButtons('webview')
+      generateMultichannelButtons('webview', false)
     )
 
     const buttonsTextSeparator =
@@ -122,13 +125,26 @@ export const MultichannelText = props => {
       !postbackButtonsAsText &&
       postbackButtons.length > WHATSAPP_MAX_BUTTONS
     ) {
+      const urlButtonElements = urlButtons.map(
+        generateMultichannelButtons('url', !!texts.length)
+      )
+      const postbackButtonElements = postbackButtons.map(
+        generateMultichannelButtons(
+          'postback',
+          !!texts.length || !!urlButtons.length
+        )
+      )
       const messagesPostbackButtons = splitPostbackButtons(
         postbackButtonElements
       )
 
       const messages = messagesPostbackButtons.map((postbackButtons, i) => {
         if (i === 0) {
-          return [].concat(...texts, ...urlButtonElements, ...postbackButtons)
+          return [].concat(
+            ...textElements,
+            ...urlButtonElements,
+            ...postbackButtons
+          )
         } else {
           return [].concat(buttonsTextSeparator, ...postbackButtons)
         }
@@ -148,6 +164,16 @@ export const MultichannelText = props => {
       )
     } else {
       multichannelContext.currentIndex = getDefaultIndex()
+      const postbackButtonElements = postbackButtons.map(
+        generateMultichannelButtons('postback', !!texts.length)
+      )
+      const urlButtonElements = urlButtons.map(
+        generateMultichannelButtons(
+          'url',
+          !!texts.length || !!postbackButtons.length
+        )
+      )
+
       elements = [].concat(
         [...textElements],
         [...postbackButtonElements],
