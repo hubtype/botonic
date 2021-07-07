@@ -4,7 +4,7 @@ exports[`Multichannel buttons: truncate text if more than 20 chars in whatsapp b
 <button
   payload="payload1"
 >
-  button text with ...
+  With text longer ...
 </button>
 `;
 
