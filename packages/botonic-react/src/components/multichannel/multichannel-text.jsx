@@ -157,41 +157,39 @@ export const MultichannelText = props => {
           ))}
         </>
       )
-    } else {
-      multichannelContext.currentIndex = getDefaultIndex()
-      const postbackButtonElements = postbackButtons.map(
-        regenerateMultichannelButtons(!!texts.length)
-      )
-      const urlButtonElements = urlButtons.map(
-        regenerateMultichannelButtons(
-          !!texts.length || !!postbackButtons.length
-        )
-      )
-
-      elements = [].concat(
-        [...textElements],
-        [...postbackButtonElements],
-        [...urlButtonElements]
-      )
-      if (multichannelContext.messageSeparator != null) {
-        return elements
-      }
-      const messages = [
-        <Text key={0} {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
-          {elements}
-        </Text>,
-      ]
-      if (webviewButtonElements.length) {
-        messages.push(
-          <Text key={1} {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
-            {buttonsTextSeparator}
-            {webviewButtonElements}
-          </Text>
-        )
-      }
-
-      return <>{messages}</>
     }
+
+    multichannelContext.currentIndex = getDefaultIndex()
+    const postbackButtonElements = postbackButtons.map(
+      regenerateMultichannelButtons(!!texts.length)
+    )
+    const urlButtonElements = urlButtons.map(
+      regenerateMultichannelButtons(!!texts.length || !!postbackButtons.length)
+    )
+
+    elements = [].concat(
+      [...textElements],
+      [...postbackButtonElements],
+      [...urlButtonElements]
+    )
+    if (multichannelContext.messageSeparator != null) {
+      return elements
+    }
+    const messages = [
+      <Text key={0} {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
+        {elements}
+      </Text>,
+    ]
+    if (webviewButtonElements.length) {
+      messages.push(
+        <Text key={1} {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
+          {buttonsTextSeparator}
+          {webviewButtonElements}
+        </Text>
+      )
+    }
+
+    return <>{messages}</>
   }
 
   if (isFacebook(requestContext)) {

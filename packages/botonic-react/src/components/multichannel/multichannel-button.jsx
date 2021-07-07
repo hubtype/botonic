@@ -73,13 +73,12 @@ export const MultichannelButton = props => {
         increaseCurrentIndex()
         return `${text}`
       } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
-    } else {
-      return (
-        <Button {...props}>
-          {truncateText(props.children, WHATSAPP_MAX_BUTTON_CHARS)}
-        </Button>
-      )
     }
+    return (
+      <Button {...props}>
+        {truncateText(props.children, WHATSAPP_MAX_BUTTON_CHARS)}
+      </Button>
+    )
   }
   return <Button {...props}>{props.children}</Button>
 }
