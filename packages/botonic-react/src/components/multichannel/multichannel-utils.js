@@ -39,6 +39,20 @@ export function elementHasWebview(element) {
   return element.props && element.props.webview
 }
 
+export const buttonTypes = {
+  POSTBACK: 'postback',
+  URL: 'url',
+  WEBVIEW: 'webview',
+}
+
+export function getButtonType(multichannelButton) {
+  if (elementHasUrl(multichannelButton)) return buttonTypes.URL
+  if (elementHasPostback(multichannelButton)) return buttonTypes.POSTBACK
+  if (elementHasWebview(multichannelButton)) return buttonTypes.WEBVIEW
+
+  return undefined
+}
+
 export function getFilteredElements(node, filter) {
   const elements = []
   for (const n of node) {
