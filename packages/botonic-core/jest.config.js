@@ -1,7 +1,7 @@
 // Options about JS are for compiling @botonic .js/jsx files
 module.exports = {
-  roots: ['src/'],
-  testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx)$',
+  roots: ['./'],
+  testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx|ts|tsx)$',
   testPathIgnorePatterns: [
     'lib',
     '.*.d.ts',
@@ -9,11 +9,14 @@ module.exports = {
     '.*.helper.js',
     'tests/__mocks__',
   ],
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
-  transformIgnorePatterns: [
-    'node_modules/(?!@botonic|react-children-utilities).+\\.(js|jsx)$',
-  ],
-  moduleFileExtensions: ['js', 'jsx', 'json'],
+  transform: {
+    '\\.js$': 'babel-jest',
+    '\\.(ts|tsx)$': 'ts-jest',
+  },
+  collectCoverageFrom: ['src/**/*.{js,ts,jsx,tsx}', '!/node_modules/'],
+  transformIgnorePatterns: ['node_modules/(?!@botonic).+\\.(ts|tsx|js|jsx)$'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
+  coveragePathIgnorePatterns: ['.d.ts'],
   snapshotSerializers: [],
   modulePaths: ['node_modules', 'src'],
   moduleNameMapper: {
