@@ -28,4 +28,6 @@ export interface BotonicMessageEvent extends BaseEvent {
   ack: MessageEventAck
   from: MessageEventFrom
   type: MessageEventTypes
+  typing: number
+  delay: number
 }
