@@ -1,7 +1,13 @@
 import { BotonicMessageEvent, MessageEventTypes } from '.'
 import { WithButtons } from './buttons'
 
-interface MediaMessageEvent extends BotonicMessageEvent, WithButtons {
+export const MEDIA_TYPES = [
+  MessageEventTypes.AUDIO,
+  MessageEventTypes.IMAGE,
+  MessageEventTypes.DOCUMENT,
+  MessageEventTypes.VIDEO,
+]
+export interface MediaMessageEvent extends BotonicMessageEvent, WithButtons {
   src: string
 }
 
