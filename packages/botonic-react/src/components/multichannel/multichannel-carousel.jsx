@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { Carousel } from '../carousel'
-// import { Image } from '../image'
 import { MultichannelText } from './multichannel-text'
 import {
   getFilteredElements,
@@ -18,7 +17,7 @@ export const MultichannelCarousel = props => {
     [].concat(getFilteredElements(node, isMultichannelButton))
 
   if (isWhatsapp(requestContext)) {
-    const elementsAsTexts = props.children
+    const elements = props.children
       .map(e => e.props.children)
       .map((element, i) => {
         let imageProps = undefined
@@ -59,7 +58,12 @@ export const MultichannelCarousel = props => {
 
         return (
           // TODO: newkey only for 1 nested button
-          <MultichannelText key={i} newkey={i} indexMode={props.indexMode}>
+          <MultichannelText
+            key={i}
+            newkey={i}
+            indexMode={props.indexMode}
+            buttonsAsText={props.buttonsAsText}
+          >
             {header || null}
             {buttons}
           </MultichannelText>
@@ -83,7 +87,7 @@ export const MultichannelCarousel = props => {
         // )
         // }
       })
-    return elementsAsTexts
+    return elements
   } else {
     return <Carousel {...props}>{props.children}</Carousel>
   }
