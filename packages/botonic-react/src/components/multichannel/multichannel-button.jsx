@@ -34,10 +34,7 @@ export const MultichannelButton = props => {
   }
 
   const formatIndex = index => {
-    const boldIndex =
-      multichannelContext.boldIndex == null
-        ? false
-        : multichannelContext.boldIndex
+    const boldIndex = multichannelContext.boldIndex ?? false
     return boldIndex ? `*${index}*` : index
   }
 
@@ -64,7 +61,7 @@ export const MultichannelButton = props => {
   }
 
   if (isWhatsapp(requestContext)) {
-    const asText = props.asText == null ? true : props.asText
+    const asText = props.asText ?? true
     if (asText) {
       if (hasUrl()) {
         return `${getText()}: ${getUrl()}`
