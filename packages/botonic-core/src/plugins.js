@@ -22,14 +22,21 @@ export async function runPlugins(
   input,
   session,
   lastRoutePath,
-  response = null
+  response = null,
+  parsedResponse = null
 ) {
   for (const key in plugins) {
     const p = await plugins[key]
     try {
       if (mode == 'pre') await p.pre({ input, session, lastRoutePath })
       if (mode == 'post')
-        await p.post({ input, session, lastRoutePath, response })
+        await p.post({
+          input,
+          session,
+          lastRoutePath,
+          response,
+          parsedResponse,
+        })
     } catch (e) {
       console.log(e)
     }

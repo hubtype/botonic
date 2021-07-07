@@ -10,7 +10,7 @@
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_ci -- --fix",
     "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'",
-    "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc;",
     "cloc": "../../scripts/qa/cloc-package.sh ."
   },
   "repository": {
@@ -29,6 +29,9 @@
   ],
   "dependencies": {
     "axios": "^0.21.0",
+    "decode": "^0.3.0",
+    "fast-xml-parser": "^3.19.0",
+    "html-entities": "^2.3.2",
     "pusher-js": "^5.1.1"
   },
   "devDependencies": {
