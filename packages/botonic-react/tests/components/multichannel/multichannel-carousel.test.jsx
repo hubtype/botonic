@@ -1,18 +1,13 @@
 import React from 'react'
 
 import {
-  Button,
-  Carousel,
   Element,
   MultichannelButton,
+  MultichannelCarousel,
   Pic,
   Subtitle,
   Title,
 } from '../../../src'
-import {
-  Multichannel,
-  MultichannelCarousel,
-} from '../../../src/components/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 const movies = [
@@ -164,6 +159,35 @@ describe('Multichannel carousel COMPACT mode', () => {
       </MultichannelCarousel>
     )
     const renderer = whatsappRenderer(sut, { messageSeparator: '\n' })
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('dynamic carousel with URL and postback buttons and displaying only postback buttons as whatsapp buttons', () => {
+    const postbackButtons = options.map((e, i) => (
+      <Element key={e.name}>
+        <Pic src={e.pic} />
+        <Title>{e.name}</Title>
+        <Subtitle>{e.desc}</Subtitle>
+        <MultichannelButton payload={e.payload}>
+          {e.buttonText}
+        </MultichannelButton>
+      </Element>
+    ))
+    const urlButtons = movies.map((e, i) => (
+      <Element key={e.name}>
+        <Pic src={e.pic} />
+        <Title>{e.name}</Title>
+        <Subtitle>{e.desc}</Subtitle>
+        <MultichannelButton url={e.url}>Visit website</MultichannelButton>
+      </Element>
+    ))
+    const sut = (
+      <MultichannelCarousel {...LEGACY_PROPS} buttonsAsText={false}>
+        {[...postbackButtons, ...urlButtons]}
+      </MultichannelCarousel>
+    )
+    const renderer = whatsappRenderer(sut, LEGACY_CONTEXT)
     const tree = renderer.toJSON()
     expect(tree).toMatchSnapshot()
   })

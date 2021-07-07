@@ -34,6 +34,69 @@ Array [
 ]
 `;
 
+exports[`Multichannel carousel COMPACT mode dynamic carousel with URL and postback buttons and displaying only postback buttons as whatsapp buttons 1`] = `
+Array [
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={0}
+    type="text"
+    typing={0}
+  >
+    *Title1* _Subtitle1_
+    <button
+      payload="Payload1"
+    >
+      Previo a la compra
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={1}
+    type="text"
+    typing={0}
+  >
+    *Title2* _Subtitle2_
+    <button
+      payload="Payload2"
+    >
+      Durante la compra
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={2}
+    type="text"
+    typing={0}
+  >
+    *Snatch* _Five minutes, Turkish_
+    
+- Visit website: https://www.imdb.com/title/tt0208092
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={3}
+    type="text"
+    typing={0}
+  >
+    *El laberinto del fauno* _2006_
+    
+- Visit website: https://www.imdb.com/title/tt0457430
+  </message>,
+]
+`;
+
 exports[`Multichannel carousel COMPACT mode dynamic carousel with payload/path buttons 1`] = `
 Array [
   <message

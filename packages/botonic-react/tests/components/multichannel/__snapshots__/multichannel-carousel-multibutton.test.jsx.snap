@@ -29,6 +29,85 @@ Array [
 ]
 `;
 
+exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with URL and postback buttons N Buttons displaying only postback buttons as whatsapp buttons 1`] = `
+Array [
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={0}
+    type="text"
+    typing={0}
+  >
+    *Title1* _Subtitle1_
+    <button
+      payload="payload1"
+    >
+      Previo a la compra
+    </button>
+    <button
+      payload="payload2"
+    >
+      another button
+      0
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={1}
+    type="text"
+    typing={0}
+  >
+    *Title2* _Subtitle2_
+    <button
+      payload="payload1"
+    >
+      Durante la compra
+    </button>
+    <button
+      payload="payload2"
+    >
+      another button
+      1
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={2}
+    type="text"
+    typing={0}
+  >
+    *Snatch* _Five minutes, Turkish_
+    
+- Visit website: https://www.imdb.com/title/tt0208092
+    
+- Another website,0: anotherurl.com
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={3}
+    type="text"
+    typing={0}
+  >
+    *El laberinto del fauno* _2006_
+    
+- Visit website: https://www.imdb.com/title/tt0457430
+    
+- Another website,1: anotherurl.com
+  </message>,
+]
+`;
+
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with payload/path buttons N Buttons 1`] = `
 Array [
   <message
