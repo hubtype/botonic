@@ -31,6 +31,7 @@ export interface MultichannelCarouselProps extends MultichannelViewOptions {
   indexMode?: IndexMode
   showTitle?: boolean
   showSubtitle?: boolean
+  buttonsAsText?: boolean
 }
 export const MultichannelCarousel: React.FunctionComponent<MultichannelCarouselProps>
 
