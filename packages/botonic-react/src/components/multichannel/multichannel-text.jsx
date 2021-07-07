@@ -6,10 +6,12 @@ import { MultichannelFacebook } from './facebook/facebook'
 import { MultichannelButton } from './multichannel-button'
 import { MultichannelContext } from './multichannel-context'
 import {
+  buttonTypes,
   DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR,
   elementHasPostback,
   elementHasUrl,
   elementHasWebview,
+  getButtonType,
   getMultichannelButtons,
   getMultichannelReplies,
   isFacebook,
@@ -17,12 +19,6 @@ import {
   MULTICHANNEL_WHATSAPP_PROPS,
   WHATSAPP_MAX_BUTTONS,
 } from './multichannel-utils'
-
-const buttonTypes = {
-  POSTBACK: 'postback',
-  URL: 'url',
-  WEBVIEW: 'webview',
-}
 
 export const MultichannelText = props => {
   const requestContext = useContext(RequestContext)
@@ -75,9 +71,11 @@ export const MultichannelText = props => {
     return props.indexMode === 'letter' ? 'a' : 1
   }
 
-  const generateMultichannelButtons = (type, newLineFirstButton = true) => {
-    const asText = type === buttonTypes.POSTBACK ? postbackButtonsAsText : true
-    const generator = (element, i) => {
+  const regenerateMultichannelButtons = (newLineFirstButton = true) => {
+    const generator = (multichannelButton, i) => {
+      const type = getButtonType(multichannelButton)
+      const asText =
+        type === buttonTypes.POSTBACK ? postbackButtonsAsText : true
       const newline =
         multichannelContext.messageSeparator == null &&
         !newLineFirstButton &&
@@ -89,9 +87,9 @@ export const MultichannelText = props => {
           key={`${type}${i}`}
           newline={newline}
           asText={asText}
-          {...element.props}
+          {...multichannelButton.props}
         >
-          {element.props.children}
+          {multichannelButton.props.children}
         </MultichannelButton>
       )
     }
@@ -115,7 +113,7 @@ export const MultichannelText = props => {
     })
 
     const webviewButtonElements = webviewButtons.map(
-      generateMultichannelButtons('webview', false)
+      regenerateMultichannelButtons(false)
     )
 
     const buttonsTextSeparator =
@@ -126,13 +124,10 @@ export const MultichannelText = props => {
       postbackButtons.length > WHATSAPP_MAX_BUTTONS
     ) {
       const urlButtonElements = urlButtons.map(
-        generateMultichannelButtons('url', !!texts.length)
+        regenerateMultichannelButtons(!!texts.length)
       )
       const postbackButtonElements = postbackButtons.map(
-        generateMultichannelButtons(
-          'postback',
-          !!texts.length || !!urlButtons.length
-        )
+        regenerateMultichannelButtons(!!texts.length || !!urlButtons.length)
       )
       const messagesPostbackButtons = splitPostbackButtons(
         postbackButtonElements
@@ -165,11 +160,10 @@ export const MultichannelText = props => {
     } else {
       multichannelContext.currentIndex = getDefaultIndex()
       const postbackButtonElements = postbackButtons.map(
-        generateMultichannelButtons('postback', !!texts.length)
+        regenerateMultichannelButtons(!!texts.length)
       )
       const urlButtonElements = urlButtons.map(
-        generateMultichannelButtons(
-          'url',
+        regenerateMultichannelButtons(
           !!texts.length || !!postbackButtons.length
         )
       )
