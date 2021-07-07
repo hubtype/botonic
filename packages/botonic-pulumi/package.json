@@ -1,0 +1,32 @@
+{
+  "name": "@botonic/pulumi",
+  "version": "1.0.0-alpha.1",
+  "scripts": {
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc"
+  },
+  "devDependencies": {
+    "@types/concurrently": "^6.2.0",
+    "@types/decompress": "^4.2.3",
+    "@types/download": "^8.0.0",
+    "@types/mime": "^2.0.3",
+    "@types/node": "^15.12.2",
+    "@types/semver": "^7.3.6",
+    "@types/tar": "^4.0.4"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "@pulumi/aws": "^4.8.0",
+    "@pulumi/awsx": "^0.30.0",
+    "@pulumi/pulumi": "^3.5.1",
+    "@vendia/serverless-express": "^4.3.9",
+    "concurrently": "^6.2.0",
+    "decompress": "^4.2.1",
+    "download": "^8.0.0",
+    "mime": "^2.5.2",
+    "semver": "^7.3.5",
+    "tar": "^6.1.0"
+  },
+  "main": "./lib/index.js"
+}
