@@ -1,4 +1,8 @@
-import { deepClone, shallowClone } from '../../src/util/objects'
+import {
+  deepClone,
+  roughSizeOfObject,
+  shallowClone,
+} from '../../src/util/objects'
 
 class Subclass {
   constructor(public field: number) {}
@@ -52,4 +56,18 @@ test('TEST: deepClone no recursive call', () => {
   // act
   const copy = deepClone(source)
   expect(copy).toEqual(source)
+})
+
+describe('roughSizeOfObject', () => {
+  const repeatedObject = { '1': undefined }
+  test.each([
+    [true, 4],
+    [42, 8],
+    ['42', 2 * 2],
+    [{ '42': 42 }, 8 + 2 * 2 + 8],
+    [repeatedObject, 2 + 8],
+    [{ '4': repeatedObject, '2': repeatedObject }, 2 * (8 + 2) + 10],
+  ])('TEST roughSizeOfObject(%j)=%d', (o: any, size: number) => {
+    expect(roughSizeOfObject(o)).toBe(size)
+  })
 })

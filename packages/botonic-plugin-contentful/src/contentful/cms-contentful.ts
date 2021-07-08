@@ -14,7 +14,7 @@ import {
   TopContent,
   TopContentType,
 } from '../cms'
-import { ContentfulOptions } from '../plugin'
+import { ContentfulOptions, DEFAULT_FALLBACK_CACHE_LIMIT_KB } from '../plugin'
 import { SearchCandidate } from '../search'
 import { AssetDelivery } from './contents/asset'
 import { ButtonDelivery } from './contents/button'
@@ -66,20 +66,24 @@ export class Contentful implements cms.CMS {
    *  https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
    */
   constructor(options: ContentfulOptions) {
+    const logger = options.logger ?? console.error
     const reporter: ClientApiErrorReporter = (
       msg: string,
       func: string,
       args,
       error: any
     ) => {
-      console.error(
-        `${msg}. '${func}(${String(args)})' threw '${String(error)}'`
-      )
+      logger(`${msg}. '${func}(${String(args)})' threw '${String(error)}'`)
       return Promise.resolve()
     }
     let client: ReducedClientApi = createContentfulClientApi(options)
     if (!options.disableFallbackCache) {
-      client = new FallbackCachedClientApi(client, reporter)
+      client = new FallbackCachedClientApi(
+        client,
+        options.fallbackCacheLimitKB ?? DEFAULT_FALLBACK_CACHE_LIMIT_KB,
+        reporter,
+        logger
+      )
     }
     if (!options.disableCache) {
       client = new CachedClientApi(client, options.cacheTtlMs, reporter)

@@ -54,7 +54,7 @@ async function testCallAfterHit<R>(
   expectedReturn: (api: MockClientApi) => R
 ) {
   const mockApi = new MockClientApi()
-  const sut = new FallbackCachedClientApi(mockApi, usingFallback)
+  const sut = new FallbackCachedClientApi(mockApi, 1, usingFallback)
   const expected = expectedReturn(mockApi)
 
   await expect(call(sut)).resolves.toBe(expected)
@@ -69,7 +69,7 @@ async function testFallbackIfFailure<R>(
   expectedReturn: (api: MockClientApi) => R
 ) {
   const mockApi = new MockClientApi()
-  const sut = new FallbackCachedClientApi(mockApi, usingFallback)
+  const sut = new FallbackCachedClientApi(mockApi, 1, usingFallback)
   const expected = expectedReturn(mockApi)
 
   await expect(call(sut)).resolves.toBe(expected)
@@ -93,7 +93,7 @@ async function testSuccessAfterFailure<R>(
   expectedReturn: (api: MockClientApi) => R
 ) {
   const mockApi = new MockClientApi()
-  const sut = new FallbackCachedClientApi(mockApi, usingFallback)
+  const sut = new FallbackCachedClientApi(mockApi, 1, usingFallback)
   const expected = expectedReturn(mockApi)
 
   mockApi.error = new Error('forced failure')

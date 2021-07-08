@@ -1,21 +1,4 @@
-export class Cache<V> {
-  static readonly NOT_FOUND = Symbol('NOT_FOUND')
-  cache: Record<string, V> = {}
-  set(id: string, val: V): void {
-    this.cache[id] = val
-  }
-  get(id: string): V | typeof Cache.NOT_FOUND {
-    // Cache.has is only checked when undefined to avoid always searching twice in the object
-    const val = this.cache[id]
-    if (val === undefined && !this.has(id)) {
-      return Cache.NOT_FOUND
-    }
-    return val
-  }
-  has(id: string): boolean {
-    return id in this.cache
-  }
-}
+import { Cache, InMemoryCache, NOT_FOUND_IN_CACHE } from './cache'
 
 export type MemoizerNormalizer = (...args: any) => string
 
@@ -34,21 +17,35 @@ export type MemoizerStrategy = <Args extends any[], Return>(
   ...args: Args
 ) => Promise<Return>
 
+export interface MemoizerOptions {
+  strategy: MemoizerStrategy
+  cacheFactory?: () => Cache<any>
+  normalizer?: MemoizerNormalizer
+}
+
 export class Memoizer {
-  constructor(
-    private readonly strategy: MemoizerStrategy,
-    private readonly cacheFactory = () => new Cache<any>(),
-    private readonly normalizer = jsonNormalizer
-  ) {}
+  opts: Required<MemoizerOptions>
+  constructor(opts: MemoizerOptions) {
+    this.opts = {
+      strategy: opts.strategy,
+      normalizer: opts.normalizer || jsonNormalizer,
+      cacheFactory: opts.cacheFactory || (() => new InMemoryCache<any>()),
+    }
+  }
 
   memoize<
     Args extends any[],
     Return,
     F extends (...args: Args) => Promise<Return>
   >(func: F): F {
-    const cache: Cache<Return> = this.cacheFactory()
+    const cache: Cache<Return> = this.opts.cacheFactory()
     const f = (...args: Args) =>
-      this.strategy<Args, Return>(cache, this.normalizer, func, ...args)
+      this.opts.strategy<Args, Return>(
+        cache,
+        this.opts.normalizer,
+        func,
+        ...args
+      )
     return f as F
   }
 }
@@ -67,7 +64,7 @@ export const cacheForeverStrategy: MemoizerStrategy = async <
 ) => {
   const id = normalizer(...args)
   let val = cache.get(id)
-  if (val === Cache.NOT_FOUND) {
+  if (val === NOT_FOUND_IN_CACHE) {
     val = await func(...args)
     cache.set(id, val)
   }
@@ -94,7 +91,7 @@ export function fallbackStrategy(
       cache.set(id, newVal)
       return newVal
     } catch (e) {
-      if (oldVal !== Cache.NOT_FOUND) {
+      if (oldVal !== NOT_FOUND_IN_CACHE) {
         await usingFallback(String(func.name), args, e)
         return oldVal
       }

@@ -30,12 +30,12 @@ class MockF {
 describe('Memoizer', () => {
   it('TEST: cacheForeverStrategy common properties', async () => {
     await assertCommonStrategyProperties(
-      () => new Memoizer(cacheForeverStrategy),
+      () => new Memoizer({ strategy: cacheForeverStrategy }),
       false
     )
   })
   it('TEST: cacheForeverStrategy only fails if last call failed', async () => {
-    const sut = new Memoizer(cacheForeverStrategy)
+    const sut = new Memoizer({ strategy: cacheForeverStrategy })
     const mock = new MockF()
     const memoized = sut.memoize(mock.fA.bind(mock))
 
@@ -58,13 +58,13 @@ describe('Memoizer', () => {
 
   it('TEST: fallbackStrategy common properties', async () => {
     await assertCommonStrategyProperties(
-      () => new Memoizer(fallbackStrategy(usingFallback)),
+      () => new Memoizer({ strategy: fallbackStrategy(usingFallback) }),
       true
     )
   })
 
   it('TEST: fallbackStrategy uses last invocation result', async () => {
-    const sut = new Memoizer(fallbackStrategy(usingFallback))
+    const sut = new Memoizer({ strategy: fallbackStrategy(usingFallback) })
     const mock = new MockF()
     const memoized = sut.memoize(mock.fA.bind(mock))
 
@@ -76,7 +76,7 @@ describe('Memoizer', () => {
   })
 
   test('TEST: fallbackStrategy returns latest success return if function fails', async () => {
-    const sut = new Memoizer(fallbackStrategy(usingFallback))
+    const sut = new Memoizer({ strategy: fallbackStrategy(usingFallback) })
     const mock = new MockF()
     const memoized = sut.memoize(mock.fA.bind(mock))
 
