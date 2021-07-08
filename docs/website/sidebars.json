@@ -49,6 +49,7 @@
       "webchat/webchat-timestamp",
       "webchat/webchat-updates",
       "webchat/webchat-api",
+      "webchat/webchat-connectivity",
       "webchat/webchat-storage"
     ],
     "Components": [
