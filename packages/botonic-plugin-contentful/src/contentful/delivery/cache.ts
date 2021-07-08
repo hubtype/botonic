@@ -2,8 +2,7 @@ import * as contentful from 'contentful'
 import { ContentType } from 'contentful'
 import memoize from 'memoizee'
 
-import { sleep } from '../../../src/util/backoff'
-import { rethrowDecorator } from '../../util'
+import { rethrowDecorator, sleep } from '../../util'
 import { jsonNormalizer } from '../../util/memoizer'
 import {
   ClientApiErrorReporter,
