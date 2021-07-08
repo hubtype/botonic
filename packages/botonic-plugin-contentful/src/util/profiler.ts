@@ -1,9 +1,7 @@
 import { NodePerformanceMeasurer } from './measurer/node-performance-measurer'
 import { PerformanceMeasurer } from './measurer/performance-measurer'
 import { WebPerformanceMeasurer } from './measurer/web-performance-measurer'
-// import { isBrowser } from '@botonic/core'
 
-//const isBrowser = !!performance.mark
 export const isBrowser = () => {
   // @ts-ignore
   return typeof IS_BROWSER !== 'undefined'

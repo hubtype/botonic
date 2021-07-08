@@ -30,12 +30,7 @@ test('INTEGRATION TEST: performance', async () => {
       },
       (cf: CommonFields) => cf.partitions && cf.partitions.includes('ES')
     )
-    console.log(res.length)
-    console.log('hola')
     searchM.end()
-    // expect(res.length).toBeGreaterThanOrEqual(1)
-    // expect(res.filter(res => res.common.name == 'POST_FAQ1')).toHaveLength(1)
-    // console.log(stringSummaryAll())
   }
   loopM.end()
   console.log(Profiler.getSummaryAll())
