@@ -10,7 +10,6 @@ import {
 import { checkLocale, KeywordsOptions, MatchType, Normalizer } from '../nlp'
 import { SearchByKeywords } from './search-by-keywords'
 import { SearchResult } from './search-result'
-// import { Profile } from '../util/profiler'
 
 export class Search {
   private readonly search: SearchByKeywords
