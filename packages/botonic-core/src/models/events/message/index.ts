@@ -8,7 +8,11 @@ export enum MessageEventTypes {
   IMAGE = 'image',
   LOCATION = 'location',
   TEXT = 'text',
+  POSTBACK = 'postback',
   VIDEO = 'video',
+  /**
+   * TODO: contact, buttonmessage?, webchatsettings, whatsapp template
+   */
 }
 
 export enum MessageEventAck {

@@ -27,6 +27,7 @@ describe('Parsing Carousel responses', () => {
     `
     const expected = [
       {
+        eventType: 'message',
         type: 'carousel',
         delay: 0,
         typing: 0,

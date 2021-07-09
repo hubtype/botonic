@@ -8,6 +8,7 @@ import {
   parseLocation,
   parseMedia,
   parseMessage,
+  parsePostback,
   parseReplies,
   parseText,
 } from './parsers'
@@ -18,6 +19,9 @@ export class MessageParsingFactory {
     const parsedMessage = parseMessage({ toParse: msgToParse })
     if (type === MessageEventTypes.TEXT) {
       return parseText(parseReplies(parseButtons(parsedMessage))).parsed
+    }
+    if (type === MessageEventTypes.POSTBACK) {
+      return parsePostback(parsedMessage).parsed
     }
     if (MEDIA_TYPES.includes(type)) {
       return parseMedia(parseButtons(parsedMessage)).parsed
