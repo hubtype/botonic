@@ -17,6 +17,7 @@ import { Reply, WithReplies } from '../models/events/message/replies'
 import { TextMessageEvent } from '../models/events/message/text'
 import { TEXT_NODE_NAME } from '.'
 import { parseBoolean, parseNumber } from './util'
+import { PostbackMessageEvent } from 'src/models/events/message/postback'
 
 export type ParseFunction<Out> = (args: {
   toParse: any
@@ -115,6 +116,18 @@ export const parseText: ParseFunction<TextMessageEvent> = args => {
   }
 }
 
+// POSTBACK
+
+export const parsePostback: ParseFunction<PostbackMessageEvent> = args => {
+  return {
+    toParse: args.toParse,
+    parsed: {
+      ...args.parsed,
+      payload: args.toParse.payload,
+    },
+  }
+}
+
 // MEDIA
 export const parseMedia: ParseFunction<
   | AudioMessageEvent
@@ -145,12 +158,14 @@ export const parseLocation: ParseFunction<LocationMessageEvent> = args => {
 
 // CAROUSEL
 export const parseElement = (element: any): CarouselElement => {
-  return {
+  const e: CarouselElement = {
     pic: element.pic,
     title: element.title,
     subtitle: element.desc,
-    buttons: element.button.map(b => parseButton(b)),
   }
+  const hasButtons = element.button !== undefined
+  if (hasButtons) e.buttons = element.button.map(b => parseButton(b))
+  return e
 }
 
 export const parseCarousel: ParseFunction<CarouselMessageEvent> = args => {

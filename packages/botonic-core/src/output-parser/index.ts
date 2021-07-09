@@ -22,6 +22,11 @@ export class BotonicOutputParser {
     return jsonMessages.map(msgToParse => this.factory.parse(msgToParse))
   }
 
+  /**
+   * Right now, when saving BotonicEvents to DataProvider, we need the standarized Botonic event
+   * to be saved. This is, converting a botonic input like: '{id: 'msgId', data: 'rawData', payload: 'somePayload'}'
+   * into a BotonicEvent with the expected properties.
+   */
   parseFromUserInput(input: any): Partial<BotonicEvent> {
     return this.factory.parse(input)
   }

@@ -13,6 +13,7 @@ describe('Parsing Media responses', () => {
     `
     const expected = [
       {
+        eventType: 'message',
         type: 'audio',
         delay: 0,
         typing: 0,
@@ -20,6 +21,7 @@ describe('Parsing Media responses', () => {
         src: 'https://www.w3schools.com/html/horse.mp3',
       },
       {
+        eventType: 'message',
         type: 'audio',
         delay: 0,
         typing: 0,
@@ -40,6 +42,7 @@ describe('Parsing Media responses', () => {
       `
     const expected = [
       {
+        eventType: 'message',
         type: 'image',
         delay: 0,
         typing: 0,
@@ -47,6 +50,7 @@ describe('Parsing Media responses', () => {
         src: 'https://media3.giphy.com/media/gtPaaCbkxpmWk/giphy.gif',
       },
       {
+        eventType: 'message',
         type: 'image',
         delay: 0,
         typing: 0,
@@ -67,6 +71,7 @@ describe('Parsing Media responses', () => {
       `
     const expected = [
       {
+        eventType: 'message',
         type: 'document',
         delay: 0,
         typing: 0,
@@ -74,6 +79,7 @@ describe('Parsing Media responses', () => {
         src: 'http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf',
       },
       {
+        eventType: 'message',
         type: 'document',
         delay: 0,
         typing: 0,
@@ -93,6 +99,7 @@ describe('Parsing Media responses', () => {
       `
     const expected = [
       {
+        eventType: 'message',
         type: 'video',
         delay: 0,
         typing: 0,
@@ -100,6 +107,7 @@ describe('Parsing Media responses', () => {
         src: 'https://www.w3schools.com/html/mov_bbb.mp4',
       },
       {
+        eventType: 'message',
         type: 'video',
         delay: 0,
         typing: 0,

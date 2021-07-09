@@ -13,6 +13,7 @@ describe('Parsing Location responses', () => {
     `
     const expected = [
       {
+        eventType: 'message',
         type: 'location',
         delay: 0,
         typing: 0,

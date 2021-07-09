@@ -11,9 +11,12 @@ export class BotonicOutputParserTester extends BotonicOutputParser {
     const sut = this.xmlToMessageEvents(botResponse)
     sut.forEach((s, i) => {
       expect(s).toEqual({
-        eventType: 'message',
         ...expected[i],
       })
     })
+  }
+  parseUserInputAndAssert(userInput, expected) {
+    const sut = this.parseFromUserInput(userInput)
+    expect(sut).toEqual(expected)
   }
 }

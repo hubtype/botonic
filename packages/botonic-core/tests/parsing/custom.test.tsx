@@ -16,6 +16,7 @@ describe('Parsing Location responses', () => {
 `
     const expected = [
       {
+        eventType: 'message',
         type: 'text',
         delay: 0,
         typing: 0,
@@ -25,6 +26,7 @@ describe('Parsing Location responses', () => {
         markdown: true,
       },
       {
+        eventType: 'message',
         type: 'custom',
         delay: 0,
         typing: 0,
