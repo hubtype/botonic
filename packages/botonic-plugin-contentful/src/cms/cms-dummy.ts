@@ -27,7 +27,7 @@ import { Context, DEFAULT_CONTEXT } from './context'
  * Useful for mocking CMS, as ts-mockito does not allow mocking interfaces
  */
 export class DummyCMS implements CMS {
-  static IMG = 'this_image_does_not_exist.png'
+  static readonly IMG = 'this_image_does_not_exist.png'
   static PDF = 'this_doc_does_not_exist.pdf'
   /**
    *

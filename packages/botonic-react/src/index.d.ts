@@ -1,4 +1,4 @@
-import * as core from '@botonic/core/src'
+import * as core from '@botonic/core'
 import * as React from 'react'
 
 import {
@@ -37,7 +37,7 @@ export class ReactBot extends core.CoreBot {
 }
 
 export class NodeApp {
-  constructor(options: BotOptions)
+  constructor(options: Omit<BotOptions, 'renderer'>)
   bot: ReactBot
   input(request: core.BotRequest): Promise<BotResponse>
   renderNode(args): string

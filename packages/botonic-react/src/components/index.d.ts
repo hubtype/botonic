@@ -18,6 +18,7 @@ export interface MessageProps {
   blob?: boolean
   children: React.ReactNode
   delay?: number
+  enabletimestamps?: boolean
   from?: 'user' | 'bot'
   json?: Record<string, unknown>
   style?: Record<string, unknown>
@@ -107,7 +108,7 @@ export interface BlobProps {
   blobTick?: boolean
   blobTickStyle?: any
   blobWidth?: string
-  imageStyle?: any
+  imagestyle?: any
 }
 
 export interface ScrollbarProps {
