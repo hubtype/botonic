@@ -15,6 +15,7 @@ describe('Parsing Text responses', () => {
     `
     const expected = [
       {
+        eventType: 'message',
         type: 'text',
         delay: 0,
         typing: 1,
@@ -24,6 +25,7 @@ describe('Parsing Text responses', () => {
         markdown: true,
       },
       {
+        eventType: 'message',
         type: 'text',
         delay: 1,
         typing: 0,
@@ -47,6 +49,7 @@ describe('Parsing Text responses', () => {
     `
     const expected = [
       {
+        eventType: 'message',
         type: 'text',
         delay: 0,
         typing: 0,
@@ -77,6 +80,7 @@ describe('Parsing Text responses', () => {
     `
     const expected = [
       {
+        eventType: 'message',
         type: 'text',
         delay: 0,
         typing: 0,
@@ -104,6 +108,7 @@ describe('Parsing Text responses', () => {
     `
     const expected = [
       {
+        eventType: 'message',
         type: 'text',
         delay: 0,
         typing: 0,
