@@ -8,6 +8,7 @@ import {
   ImageMessageEvent,
   VideoMessageEvent,
 } from './message/media'
+import { PostbackMessageEvent } from './message/postback'
 import { TextMessageEvent } from './message/text'
 
 export enum EventTypes {
@@ -27,6 +28,7 @@ export interface BaseEvent {
 
 export type BotonicEvent =
   | TextMessageEvent
+  | PostbackMessageEvent
   | AudioMessageEvent
   | DocumentMessageEvent
   | ImageMessageEvent
