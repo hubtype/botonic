@@ -9,10 +9,7 @@ export default class BotonicPluginNER implements Plugin {
   private modelsSelector: Promise<NerModelSelector>
 
   constructor(readonly options: PluginOptions) {
-    this.modelsSelector = NerModelSelector.build(
-      this.options.locales,
-      this.options.modelsBaseUrl
-    )
+    this.modelsSelector = NerModelSelector.build(this.options.locales)
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
