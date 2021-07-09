@@ -109,7 +109,7 @@ function elementsParse(elements) {
       <Pic src={e.pic} />
       <Title>{e.title}</Title>
       <Subtitle>{e.subtitle}</Subtitle>
-      {buttonsParse(e.buttons)}
+      {e.buttons && buttonsParse(e.buttons)}
     </Element>
   ))
 }
