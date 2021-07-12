@@ -21,7 +21,7 @@ export class DynamoDBDataProvider implements DataProvider {
   messageEventEntities: Record<string, Entity<any>>
   textMessageEventEntity: Entity<any>
   connectionEntity: Entity<any>
-  constructor(url) {
+  constructor(url: string) {
     try {
       ;[this.tableName, this.region] = url.split('://')[1].split('.')
       this.userEventsTable = getUserEventsTable(this.tableName, this.region)
@@ -33,14 +33,14 @@ export class DynamoDBDataProvider implements DataProvider {
     }
   }
 
-  async addConnection(websocketId) {
+  async addConnection(websocketId: string): Promise<void> {
     await this.connectionEntity.put({
       websocketId: websocketId,
       [`${SORT_KEY_NAME}`]: websocketId,
     })
   }
 
-  async updateConnection(websocketId, userId) {
+  async updateConnection(websocketId: string, userId: string): Promise<void> {
     await this.connectionEntity.update({
       websocketId: websocketId,
       [`${SORT_KEY_NAME}`]: websocketId,
@@ -48,14 +48,17 @@ export class DynamoDBDataProvider implements DataProvider {
     })
   }
 
-  async deleteConnection(websocketId) {
+  async deleteConnection(websocketId: string): Promise<void> {
     await this.connectionEntity.delete({
       websocketId: websocketId,
       [`${SORT_KEY_NAME}`]: websocketId,
     })
   }
 
-  async getUser(id) {
+  // @ts-ignore
+  async getUsers(limit = 10, offset = 0): Promise<User[]> {} // TODO: Implement
+
+  async getUser(id: string): Promise<User | undefined> {
     const userById = {
       id: id,
       SK: id,
@@ -76,7 +79,10 @@ export class DynamoDBDataProvider implements DataProvider {
     return user
   }
   // @ts-ignore
-  getEvent(id) {} // TODO: Implement
+  async getEvents(limit = 10, offset = 0): Promise<BotonicEvent[]> {} // TODO: Implement
+
+  // @ts-ignore
+  async getEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
 
   async saveEvent(event: BotonicEvent): Promise<BotonicEvent> {
     if (event.eventType === EventTypes.MESSAGE) {
@@ -86,7 +92,7 @@ export class DynamoDBDataProvider implements DataProvider {
     return event
   }
 
-  async getUserByWebsocketId(websocketId) {
+  async getUserByWebsocketId(websocketId: string): Promise<User | undefined> {
     const result = await this.userEventsTable.query(websocketId, {
       index: GLOBAL_SECONDARY_INDEX_NAME,
     })
