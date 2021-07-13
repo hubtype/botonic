@@ -6,6 +6,7 @@ import { LocalDevDataProvider } from './local-data-provider'
 
 export const dataProviderProtocols = {
   DYNAMO_DB: 'dynamodb',
+  FILE: 'file',
 }
 
 export interface DataProvider {
@@ -26,19 +27,26 @@ export interface DataProvider {
   ): User | Promise<User | undefined> | undefined
 }
 
-const localDataProvider: LocalDevDataProvider | undefined = undefined
-// url: dynamodb://my-table.my-region.aws.com
-// url: postgresql://my-database.my-db-provider.com
+/** URL examples:
+ * dynamodb://my-table.my-region.aws.com
+ * postgresql://my-database.my-db-provider.com
+ * file://path/to/local/db.json
+ */
 export function dataProviderFactory(url?: string): DataProvider {
   if (!url) {
-    return localDataProvider ?? new LocalDevDataProvider()
+    return new LocalDevDataProvider()
   }
 
   const protocol = url.split('://')[0]
   switch (protocol) {
     case dataProviderProtocols.DYNAMO_DB:
       return new DynamoDBDataProvider(url)
+    case dataProviderProtocols.FILE:
+      return new LocalDevDataProvider(url)
     default:
-      return localDataProvider ?? new LocalDevDataProvider()
+      console.error(
+        `Protocol ${protocol} not implemented, using local DB instead.`
+      )
+      return new LocalDevDataProvider()
   }
 }
