@@ -23,6 +23,7 @@ export class LocalDevDataProvider implements DataProvider {
   getUsers(limit = 10, offset = 0): User[] {
     const path = this.paths.USERS
     try {
+      this.db.reload()
       const userList = this.db.getObject<Record<string, User>>(path)
       const users = Object.values(userList)
       const from = offset * limit
@@ -37,6 +38,7 @@ export class LocalDevDataProvider implements DataProvider {
   getUser(userId: string): User | undefined {
     const path = this.createPath([this.paths.USERS, userId])
     try {
+      this.db.reload()
       return this.db.exists(path) ? this.db.getObject<User>(path) : undefined
     } catch (e) {
       console.error(`Error fetching user with ID '${userId}' from local DB`, e)
@@ -47,6 +49,7 @@ export class LocalDevDataProvider implements DataProvider {
   saveUser(user: User): User {
     const path = this.createPath([this.paths.USERS, user.id])
     try {
+      this.db.reload()
       this.db.push(path, user, false)
     } catch (e) {
       console.error(`Error saving user with ID '${user.id}' to local DB`, e)
@@ -57,6 +60,7 @@ export class LocalDevDataProvider implements DataProvider {
   updateUser(user: User): User {
     const path = this.createPath([this.paths.USERS, user.id])
     try {
+      this.db.reload()
       this.db.push(path, user, true)
     } catch (e) {
       console.error(`Error updating user with ID '${user.id}' to local DB`, e)
@@ -67,6 +71,7 @@ export class LocalDevDataProvider implements DataProvider {
   getEvents(limit = 10, offset = 0): BotonicEvent[] {
     const path = this.paths.EVENTS
     try {
+      this.db.reload()
       const eventList = this.db.getObject<Record<string, BotonicEvent>>(path)
       const events = Object.values(eventList)
       const from = offset * limit
@@ -81,6 +86,7 @@ export class LocalDevDataProvider implements DataProvider {
   getEvent(id: string): BotonicEvent | undefined {
     const path = this.createPath([this.paths.EVENTS, id])
     try {
+      this.db.reload()
       return this.db.exists(path)
         ? this.db.getObject<BotonicEvent>(path)
         : undefined
@@ -93,6 +99,7 @@ export class LocalDevDataProvider implements DataProvider {
   saveEvent(event: BotonicEvent): BotonicEvent {
     const path = this.createPath([this.paths.EVENTS, event.eventId])
     try {
+      this.db.reload()
       this.db.push(path, event, false)
     } catch (e) {
       console.error(
@@ -106,6 +113,7 @@ export class LocalDevDataProvider implements DataProvider {
   addConnection(websocketId: string) {
     const path = this.createPath([this.paths.CONNECTIONS, websocketId])
     try {
+      this.db.reload()
       this.db.push(path, '', false)
     } catch (e) {
       console.error(
@@ -117,6 +125,7 @@ export class LocalDevDataProvider implements DataProvider {
   updateConnection(websocketId: string, userId: string) {
     const path = this.createPath([this.paths.CONNECTIONS, websocketId])
     try {
+      this.db.reload()
       this.db.push(path, userId, true)
     } catch (e) {
       console.error(
@@ -128,6 +137,7 @@ export class LocalDevDataProvider implements DataProvider {
   deleteConnection(websocketId: string) {
     const path = this.createPath([this.paths.CONNECTIONS, websocketId])
     try {
+      this.db.reload()
       this.db.delete(path)
     } catch (e) {
       console.error(
@@ -140,6 +150,7 @@ export class LocalDevDataProvider implements DataProvider {
   getUserByWebsocketId(websocketId: string): User | undefined {
     const path = this.paths.USERS
     try {
+      this.db.reload()
       this.db.find<User>(path, (user: User) => user.websocketId === websocketId)
     } catch (e) {
       console.error(
