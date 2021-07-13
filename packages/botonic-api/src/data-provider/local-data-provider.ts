@@ -15,8 +15,9 @@ export class LocalDevDataProvider implements DataProvider {
   }
   db: JsonDB
 
-  constructor() {
-    this.db = new JsonDB(new Config(this.DB_PATH, true, false, this.SEPARATOR))
+  constructor(url?: string) {
+    const dbPath = url ? url.split('://')[1] : this.DB_PATH
+    this.db = new JsonDB(new Config(dbPath, true, false, this.SEPARATOR))
   }
 
   getUsers(limit = 10, offset = 0): User[] {
