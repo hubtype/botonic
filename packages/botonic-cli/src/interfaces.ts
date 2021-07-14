@@ -72,6 +72,16 @@ export interface BotInfo {
   active_users: number
 }
 
+export interface PlaygroundSessionInfo {
+  id: string
+  created_at: string
+  code: string
+  url: string
+  anonymous_id: string
+  app_name: string
+  is_active: boolean
+}
+
 interface ProviderAccountsInfo {
   id: string
   queue_id: string
