@@ -26,7 +26,7 @@ export class LocalDevDataProvider implements DataProvider {
       this.db.reload()
       const userList = this.db.getObject<Record<string, User>>(path)
       const users = Object.values(userList)
-      const from = offset * limit
+      const from = offset
       const to = limit !== 0 ? from + limit : undefined
       return users.slice(from, to)
     } catch (e) {
@@ -74,7 +74,7 @@ export class LocalDevDataProvider implements DataProvider {
       this.db.reload()
       const eventList = this.db.getObject<Record<string, BotonicEvent>>(path)
       const events = Object.values(eventList)
-      const from = offset * limit
+      const from = offset
       const to = limit !== 0 ? from + limit : undefined
       return events.slice(from, to)
     } catch (e) {
