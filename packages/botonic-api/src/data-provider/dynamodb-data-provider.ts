@@ -92,6 +92,9 @@ export class DynamoDBDataProvider implements DataProvider {
     return event
   }
 
+  // @ts-ignore
+  async deleteEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
+
   async getUserByWebsocketId(websocketId: string): Promise<User | undefined> {
     const result = await this.userEventsTable.query(websocketId, {
       index: GLOBAL_SECONDARY_INDEX_NAME,

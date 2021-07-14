@@ -22,6 +22,9 @@ export interface DataProvider {
     id: string
   ): BotonicEvent | Promise<BotonicEvent | undefined> | undefined
   saveEvent(event: BotonicEvent): BotonicEvent | Promise<BotonicEvent>
+  deleteEvent(
+    id: string
+  ): BotonicEvent | Promise<BotonicEvent | undefined> | undefined
   getUserByWebsocketId(
     websocketId: string
   ): User | Promise<User | undefined> | undefined
