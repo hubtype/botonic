@@ -26,6 +26,7 @@ const isNaturalNumber: ParamSchema = {
 }
 const isNumeric: ParamSchema = { isNumeric: true }
 const isBoolean: ParamSchema = { isBoolean: true }
+const isDate: ParamSchema = { isDate: true }
 const isIn = (valueList: string[]): ParamSchema => {
   return {
     isIn: { options: [valueList] },
@@ -38,12 +39,13 @@ const equals = (text: string): ParamSchema => {
     errorMessage: `Invalid value. Value should be '${text}'`,
   }
 }
+const toInt: ParamSchema = { toInt: true }
 
 export const limitParamSchema: ParamSchema = {
   ...inQuery,
   ...isOptional,
   ...isNaturalNumber,
-  toInt: true,
+  ...toInt,
 }
 export const offsetParamSchema = limitParamSchema
 
@@ -89,8 +91,8 @@ export const carouselSchema: Schema = {
 export const baseEventSchema: Schema = {
   eventId: { ...inBody, ...isRequired },
   eventType: { ...inBody, ...isRequired, ...isIn(Object.values(EventTypes)) },
-  createdAt: { ...inBody, ...isRequired, isDate: true },
-  modifiedAt: { ...inBody, ...isOptional, isDate: true },
+  createdAt: { ...inBody, ...isRequired, ...isDate },
+  modifiedAt: { ...inBody, ...isOptional, ...isDate },
 }
 
 export const botonicMessageEventSchema: Schema = {
@@ -98,8 +100,8 @@ export const botonicMessageEventSchema: Schema = {
   ack: { ...inBody, ...isRequired, ...isIn(Object.values(MessageEventAck)) },
   from: { ...inBody, ...isRequired, ...isIn(Object.values(MessageEventFrom)) },
   type: { ...inBody, ...isRequired, ...isIn(Object.values(MessageEventTypes)) },
-  typing: { ...inBody, ...isRequired, ...isNaturalNumber, toInt: true },
-  delay: { ...inBody, ...isRequired, ...isNaturalNumber, toInt: true },
+  typing: { ...inBody, ...isRequired, ...isNaturalNumber, ...toInt },
+  delay: { ...inBody, ...isRequired, ...isNaturalNumber, ...toInt },
 }
 
 export const mediaMessageEventSchema: Schema = {
@@ -143,8 +145,8 @@ export const videoMessageEventSchema: Schema = {
 export const locationMessageEventSchema: Schema = {
   ...botonicMessageEventSchema,
   type: { ...inBody, ...isRequired, ...equals(MessageEventTypes.LOCATION) },
-  lat: { ...inBody, ...isRequired, ...isNumeric, toInt: true },
-  long: { ...inBody, ...isRequired, ...isNumeric, toInt: true },
+  lat: { ...inBody, ...isRequired, ...isNumeric, ...toInt },
+  long: { ...inBody, ...isRequired, ...isNumeric, ...toInt },
 }
 export const carouselMessageEventSchema: Schema = {
   ...botonicMessageEventSchema,
