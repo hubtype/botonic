@@ -176,7 +176,7 @@ const ChannelSelector = ({ playgroundCode }) => {
   const channels = [
     {
       name: 'Whatsapp',
-      url: `https://wa.me/34632451007?text=CODE%3D${playgroundCode}`,
+      url: `https://wa.me/34631914102?text=CODE%3D${playgroundCode}`,
       logo: WhatsappLogo,
     },
     {
@@ -305,6 +305,7 @@ export const PlaygroundPortal = props =>
               <a
                 href='https://botonic.io/docs/getting-started/'
                 target='_blank'
+                rel='noreferrer'
               >
                 getting started guide
               </a>{' '}
@@ -312,7 +313,11 @@ export const PlaygroundPortal = props =>
             </li>
             <li>
               Our{' '}
-              <a href='https://slack.botonic.io' target='_blank'>
+              <a
+                href='https://slack.botonic.io'
+                target='_blank'
+                rel='noreferrer'
+              >
                 slack community
               </a>{' '}
               is full of friendly humans who can help answer questions.
@@ -323,6 +328,7 @@ export const PlaygroundPortal = props =>
               <a
                 href='https://botonic.io/blog/2021/03/10/introducing-botonic-office-hours/'
                 target='_blank'
+                rel='noreferrer'
               >
                 office hours
               </a>
