@@ -93,6 +93,9 @@ export class DynamoDBDataProvider implements DataProvider {
   }
 
   // @ts-ignore
+  async updateEvent(event: BotonicEvent): Promise<BotonicEvent> {} // TODO: Implement
+
+  // @ts-ignore
   async deleteEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
 
   async getUserByWebsocketId(websocketId: string): Promise<User | undefined> {

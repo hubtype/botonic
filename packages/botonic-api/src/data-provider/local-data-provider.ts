@@ -82,6 +82,15 @@ export class LocalDevDataProvider implements DataProvider {
     return event
   }
 
+  updateEvent(event: BotonicEvent): BotonicEvent {
+    const path = this.createPath([this.paths.EVENTS, event.eventId])
+    this.db.reload()
+    if (this.db.exists(path)) {
+      this.db.push(path, event, true)
+    }
+    return event
+  }
+
   deleteEvent(id: string): BotonicEvent | undefined {
     const path = this.createPath([this.paths.EVENTS, id])
     this.db.reload()
