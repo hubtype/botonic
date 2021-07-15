@@ -1,4 +1,4 @@
-import { ConnectionEvent } from './connections/index'
+import { ConnectionEvent } from './connections'
 import { CarouselMessageEvent } from './message/carousel'
 import { CustomMessageEvent } from './message/custom'
 import { LocationMessageEvent } from './message/location'
@@ -8,6 +8,7 @@ import {
   ImageMessageEvent,
   VideoMessageEvent,
 } from './message/media'
+import { PostbackMessageEvent } from './message/postback'
 import { TextMessageEvent } from './message/text'
 
 export enum EventTypes {
@@ -18,7 +19,7 @@ export enum EventTypes {
 }
 
 export interface BaseEvent {
-  id: string
+  eventId: string
   userId: string
   eventType: EventTypes
   createdAt: string
@@ -27,6 +28,7 @@ export interface BaseEvent {
 
 export type BotonicEvent =
   | TextMessageEvent
+  | PostbackMessageEvent
   | AudioMessageEvent
   | DocumentMessageEvent
   | ImageMessageEvent

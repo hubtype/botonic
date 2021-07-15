@@ -9,10 +9,7 @@ export default class BotonicPluginIntentClassification implements Plugin {
   private readonly modelsSelector: Promise<IntentModelSelector>
 
   constructor(readonly options: PluginOptions) {
-    this.modelsSelector = IntentModelSelector.build(
-      this.options.locales,
-      this.options.modelsBaseUrl
-    )
+    this.modelsSelector = IntentModelSelector.build(this.options.locales)
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
