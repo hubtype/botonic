@@ -1,0 +1,50 @@
+intent: Return
+
+entities:
+  - product
+  - color
+  - size
+
+data-augmentation:
+  product:
+    - jacket
+    - shirt
+    - t-shirt
+    - coat
+    - suit
+    - sweater
+    - hat
+    - socks
+
+  color:
+    - black
+    - white
+    - blue
+    - red
+    - gray
+    - purple
+    - orange
+    - beige
+    - yellow
+    - pink
+
+  size:
+    - XS
+    - S
+    - M
+    - L
+    - XL
+    - XXL
+
+samples:
+  - I want to return this [product] because a [size] doesn't fit me
+  - I would like to return this [color] [product]
+  - This [product] is not my correct size. I want to return it or change it for a size [size]
+  - Can I please return this [product], a size [size] does not fit me.
+  - I want to return these [trousers](product) because I don't like them in [color].
+  - This [product] is awful, I want to return it.
+  - I want my money back, take these [shoes](product).
+  - I have the ticket and I want to return this [product].
+  - I bought a wrong size, can you return my money back or change this [product] for another one in size [size].
+  - I hate [color] [product]s, I want to return this.
+  - My brother buy me this [product] but is not my size, I want to return it or replace it by a correct size.

@@ -1,0 +1,49 @@
+intent: Availability
+
+entities:
+  - product
+  - color
+  - size
+
+data-augmentation:
+  product:
+    - jacket
+    - shirt
+    - t-shirt
+    - coat
+    - suit
+    - sweater
+    - hat
+    - socks
+
+  color:
+    - black
+    - white
+    - blue
+    - red
+    - gray
+    - purple
+    - orange
+    - beige
+    - yellow
+    - pink
+
+  size:
+    - XS
+    - S
+    - M
+    - L
+    - XL
+    - XXL
+
+samples:
+  - Do you have this [product] in [color]?
+  - Do you have this [product] in size [size]?
+  - I wonder if you have stock of these [trousers](product)
+  - I want this [product] in size [size]
+  - Do you only have this [product] online?
+  - When will be stock again of this [product] in size [size]?
+  - I think this [product] in size [size] is out of stock, can you confirm that?
+  - I would like to buy this [color] [product] but the web says there is no stock, is it right?
+  - When will you have the [color] [product] available?
+  - I would like to know if there is stock of this [product] in size [size]
