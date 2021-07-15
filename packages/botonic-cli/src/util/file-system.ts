@@ -9,6 +9,7 @@ import {
 } from 'fs'
 import { copySync } from 'fs-extra'
 import { homedir } from 'os'
+import { basename } from 'path'
 
 import { JSONObject } from '../interfaces'
 import { isWindows } from './environment-info'
@@ -56,4 +57,8 @@ export function removeRecursively(path: string): void {
 
 export function getHomeDirectory(): string {
   return isWindows() ? homedir() : execCommand('eval echo ~${SUDO_USER}')
+}
+
+export function getCurrentDirectory() {
+  return basename(process.cwd())
 }
