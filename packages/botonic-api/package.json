@@ -32,7 +32,6 @@
     "dynamodb-toolbox": "^0.3.4",
     "express": "^4.17.1",
     "express-validator": "^6.12.0",
-    "lodash": "^4.17.21",
     "node-json-db": "^1.3.0",
     "terminal-link": "^3.0.0",
     "ulid": "^2.3.0",

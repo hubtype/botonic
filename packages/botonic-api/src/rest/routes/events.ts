@@ -1,7 +1,6 @@
 import { BotonicEvent } from '@botonic/core/src/models/events'
 import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
-import * as _ from 'lodash'
 
 import { dataProviderFactory } from '../../data-provider'
 import {
@@ -145,7 +144,7 @@ router
           .send({ error: `Event with ID '${params.eventId}' not found` })
         return
       }
-      const updatedEvent = _.merge(event, newEventData)
+      const updatedEvent = { ...event, ...newEventData } as BotonicEvent
       await dp.updateEvent(updatedEvent)
       res.status(200).send(updatedEvent)
     } catch (e) {
