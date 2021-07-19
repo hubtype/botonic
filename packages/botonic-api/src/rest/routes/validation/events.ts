@@ -26,7 +26,9 @@ const isNaturalNumber: ParamSchema = {
 }
 const isNumeric: ParamSchema = { isNumeric: true }
 const isBoolean: ParamSchema = { isBoolean: true }
-const isDate: ParamSchema = { isDate: true }
+const isDateTime: ParamSchema = {
+  isISO8601: { options: { strict: true, strictSeparator: true } },
+}
 const isIn = (valueList: string[]): ParamSchema => {
   return {
     isIn: { options: [valueList] },
@@ -91,8 +93,8 @@ export const carouselSchema: Schema = {
 export const baseEventSchema: Schema = {
   eventId: { ...inBody, ...isRequired },
   eventType: { ...inBody, ...isRequired, ...isIn(Object.values(EventTypes)) },
-  createdAt: { ...inBody, ...isRequired, ...isDate },
-  modifiedAt: { ...inBody, ...isOptional, ...isDate },
+  createdAt: { ...inBody, ...isRequired, ...isDateTime },
+  modifiedAt: { ...inBody, ...isOptional, ...isDateTime },
 }
 
 export const botonicMessageEventSchema: Schema = {
@@ -100,8 +102,8 @@ export const botonicMessageEventSchema: Schema = {
   ack: { ...inBody, ...isRequired, ...isIn(Object.values(MessageEventAck)) },
   from: { ...inBody, ...isRequired, ...isIn(Object.values(MessageEventFrom)) },
   type: { ...inBody, ...isRequired, ...isIn(Object.values(MessageEventTypes)) },
-  typing: { ...inBody, ...isRequired, ...isNaturalNumber, ...toInt },
-  delay: { ...inBody, ...isRequired, ...isNaturalNumber, ...toInt },
+  typing: { ...inBody, ...isOptional, ...isNaturalNumber, ...toInt },
+  delay: { ...inBody, ...isOptional, ...isNaturalNumber, ...toInt },
 }
 
 export const mediaMessageEventSchema: Schema = {
