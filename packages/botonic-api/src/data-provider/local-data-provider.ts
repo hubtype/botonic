@@ -35,6 +35,19 @@ export class LocalDevDataProvider implements DataProvider {
     return this.db.exists(path) ? this.db.getObject<User>(path) : undefined
   }
 
+  getUserByWebsocketId(websocketId: string): User | undefined {
+    return this.getUserByField('websocketId', websocketId)
+  }
+
+  getUserByField(field: string, value: any): User | undefined {
+    const path = this.paths.USERS
+    this.db.reload()
+    const dbUser = this.db.exists(path)
+      ? this.db.find<User>(path, (user: User) => user[field] === value)
+      : undefined
+    return dbUser?.[dbUser.id]
+  }
+
   saveUser(user: User): User {
     const path = this.createPath([this.paths.USERS, user.id])
     this.db.reload()
@@ -122,15 +135,6 @@ export class LocalDevDataProvider implements DataProvider {
     const path = this.createPath([this.paths.CONNECTIONS, websocketId])
     this.db.reload()
     this.db.delete(path)
-  }
-
-  getUserByWebsocketId(websocketId: string): User | undefined {
-    const path = this.paths.USERS
-    this.db.reload()
-    return this.db.find<User>(
-      path,
-      (user: User) => user.websocketId === websocketId
-    )
   }
 
   private createPath(urlChunks: string[]): string {

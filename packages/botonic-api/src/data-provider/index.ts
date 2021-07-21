@@ -12,6 +12,14 @@ export const dataProviderProtocols = {
 export interface DataProvider {
   getUsers(limit?: number, offset?: number): User[] | Promise<User[]>
   getUser(id: string): User | Promise<User | undefined> | undefined
+  //TODO: replace getUserByWebsocketId to getUserByField?
+  getUserByWebsocketId(
+    websocketId: string
+  ): User | Promise<User | undefined> | undefined
+  getUserByField(
+    field: string,
+    value: any
+  ): User | Promise<User | undefined> | undefined
   saveUser(user: User): User | Promise<User>
   updateUser(user: User): User | Promise<User>
   getEvents(
@@ -26,9 +34,6 @@ export interface DataProvider {
   deleteEvent(
     id: string
   ): BotonicEvent | Promise<BotonicEvent | undefined> | undefined
-  getUserByWebsocketId(
-    websocketId: string
-  ): User | Promise<User | undefined> | undefined
 }
 
 /** URL examples:

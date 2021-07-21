@@ -68,6 +68,16 @@ export class DynamoDBDataProvider implements DataProvider {
     return result.Item
   }
 
+  async getUserByWebsocketId(websocketId: string): Promise<User | undefined> {
+    const result = await this.userEventsTable.query(websocketId, {
+      index: GLOBAL_SECONDARY_INDEX_NAME,
+    })
+    if (result.Count === 0) return undefined
+    return result.Items[0]
+  }
+  // @ts-ignore
+  async getUserByField(field: string, value: any): Promise<User | undefined> {} //TODO: Implement
+
   async saveUser(user: User): Promise<User> {
     const putUser = { ...user, id: user.id, userId: user.id }
     await this.userEntity.put(putUser)
@@ -97,12 +107,4 @@ export class DynamoDBDataProvider implements DataProvider {
 
   // @ts-ignore
   async deleteEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
-
-  async getUserByWebsocketId(websocketId: string): Promise<User | undefined> {
-    const result = await this.userEventsTable.query(websocketId, {
-      index: GLOBAL_SECONDARY_INDEX_NAME,
-    })
-    if (result.Count === 0) return undefined
-    return result.Items[0]
-  }
 }
