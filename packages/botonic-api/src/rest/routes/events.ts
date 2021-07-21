@@ -28,10 +28,8 @@ router
         }
 
         const query = matchedData(req, { locations: ['query'] })
-        const limit = query.limit ?? undefined
-        const offset = query.offset ?? undefined
         const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const events = await dp.getEvents(limit, offset)
+        const events = await dp.getEvents(query.limit, query.offset)
         res.status(200).send(events)
       } catch (e) {
         res.status(500).send({ error: e.message })
