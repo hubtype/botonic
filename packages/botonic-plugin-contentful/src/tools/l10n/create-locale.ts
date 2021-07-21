@@ -35,7 +35,7 @@ export class SpaceManager {
       .catch(console.error)
   }
 }
-
+console.log('PROCE', process.argv)
 if (process.argv.length < 7 || process.argv[2] == '--help') {
   console.warn(
     `Usage: space_id environment access_token locale_name locale_code`

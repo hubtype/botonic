@@ -46,7 +46,9 @@ export class SearchByKeywords {
     contentsWithKeywords.forEach(content =>
       kws.addCandidate(content, content.common.keywords)
     )
-    const results = kws.findCandidatesWithKeywordsAt(inputText)
+    let results = kws.findCandidatesWithKeywordsAt(inputText)
+    console.log('results', results)
+    results = results.filter(res => res.distance < 1)
     return results.map(res => {
       const score = res.match.length / inputText.raw.length
       return res.candidate.withResult(res.match, score)
