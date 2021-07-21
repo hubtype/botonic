@@ -115,6 +115,51 @@ exports[`Multichannel text just text 1`] = `
 </message>
 `;
 
+exports[`Multichannel text split messages with more than 3 postback buttons into separate messages (without webview buttons) 1`] = `
+Array [
+  <message
+    buttonsAsText={0}
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    The verbose text
+    
+- button text2: http://adrss
+    <button
+      payload="payload1"
+    >
+      button text1
+    </button>
+    <button
+      payload="__PATH_PAYLOAD__path"
+    >
+      button text3
+    </button>
+    <button
+      payload="payload2"
+    >
+      button with text ...
+    </button>
+  </message>,
+  <message
+    buttonsAsText={0}
+    delay={0}
+    markdown={0}
+    type="text"
+    typing={0}
+  >
+    More options:
+    <button
+      payload="payload3"
+    >
+      button text5
+    </button>
+  </message>,
+]
+`;
+
 exports[`Multichannel text split messages with more than 3 postback buttons into separate messages 1`] = `
 Array [
   <message

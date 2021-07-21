@@ -143,7 +143,7 @@ export const MultichannelText = props => {
           return [].concat(buttonsTextSeparator, ...postbackButtons)
         }
       })
-      if (webviewButtonElements) {
+      if (webviewButtonElements.length) {
         messages.push([buttonsTextSeparator, ...webviewButtonElements])
       }
 
@@ -194,11 +194,8 @@ export const MultichannelText = props => {
   if (isFacebook(requestContext)) {
     const text = getText(props.children)
     const multichannelFacebook = new MultichannelFacebook()
-    const {
-      texts,
-      propsLastText,
-      propsWithoutChildren,
-    } = multichannelFacebook.convertText(props, text[0])
+    const { texts, propsLastText, propsWithoutChildren } =
+      multichannelFacebook.convertText(props, text[0])
     return (
       <>
         {texts &&

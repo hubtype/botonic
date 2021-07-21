@@ -229,6 +229,32 @@ describe('Multichannel text', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('split messages with more than 3 postback buttons into separate messages (without webview buttons)', () => {
+    const sut = (
+      <MultichannelText {...AS_BUTTONS_PROPS}>
+        The verbose text
+        <MultichannelButton key='0' payload='payload1'>
+          button text1
+        </MultichannelButton>
+        <MultichannelButton key='1' url='http://adrss'>
+          button text2
+        </MultichannelButton>
+        <MultichannelButton key='2' path='path'>
+          button text3
+        </MultichannelButton>
+        <MultichannelButton key='4' payload='payload2'>
+          button with text longer than 20 chars
+        </MultichannelButton>
+        <MultichannelButton key='5' payload='payload3'>
+          button text5
+        </MultichannelButton>
+      </MultichannelText>
+    )
+    const renderer = whatsappRenderer(sut, CONTEXT_WITH_BUTTONS)
+    const tree = renderer.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
+
   test('display custom text as button separator when more than 3 buttons in message', () => {
     const sut = (
       <MultichannelText {...AS_BUTTONS_PROPS_CUSTOM}>
