@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as cors from 'cors'
 import * as morgan from 'morgan'
 import { routes } from '@botonic/api/src/rest/routes'
-import * as bot from 'bot/src'
+import { app as bot } from 'bot/src'
 
 export let app
 app = express()
