@@ -1,14 +1,36 @@
 import { Router } from 'express'
-// import { dataProviderFactory } from '../../data-provider/'
-// import { ApiGatewayManagementApi } from 'aws-sdk'
+import { checkSchema, matchedData, validationResult } from 'express-validator'
+
+import { dataProviderFactory } from '../../data-provider'
+import { limitParamSchema, offsetParamSchema } from './validation/common';
+
 
 const router = Router()
 
 router
   .route('/')
-  .get((_, res) => {
-    res.send('GET HTTP method on user resource')
-  })
+  .get(
+    checkSchema({
+      limit: limitParamSchema,
+      offset: offsetParamSchema,
+    }),
+    async (req, res) => {
+      try {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+          res.status(400).send({ errors: errors.array() })
+          return
+        }
+
+        const query = matchedData(req, { locations: ['query'] })
+        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const events = await dp.getUsers(query.limit, query.offset)
+        res.status(200).send(events)
+      } catch (e) {
+        res.status(500).send({ error: e.message })
+      }
+    }
+  )
   .post((_, res) => {
     res.send('POST HTTP method on user resource')
   })

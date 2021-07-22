@@ -14,42 +14,20 @@ import {
   Schema,
   validationResult,
 } from 'express-validator'
-import { ValidatorsSchema } from 'express-validator/src/middlewares/schema'
 
-const inQuery: ParamSchema = { in: ['query'] }
-const inParams: ParamSchema = { in: ['params'] }
-const inBody: ParamSchema = { in: ['body'] }
-const isRequired: ValidatorsSchema = { notEmpty: true }
-const isOptional: ParamSchema = { optional: { options: { nullable: true } } }
-const isNaturalNumber: ParamSchema = {
-  isNumeric: { options: { no_symbols: true } },
-}
-const isNumeric: ParamSchema = { isNumeric: true }
-const isBoolean: ParamSchema = { isBoolean: true }
-const isDateTime: ParamSchema = {
-  isISO8601: { options: { strict: true, strictSeparator: true } },
-}
-const isIn = (valueList: string[]): ParamSchema => {
-  return {
-    isIn: { options: [valueList] },
-    errorMessage: `Invalid value. Allowed values: ${valueList}`,
-  }
-}
-const equals = (text: string): ParamSchema => {
-  return {
-    equals: { options: [text] },
-    errorMessage: `Invalid value. Value should be '${text}'`,
-  }
-}
-const toInt: ParamSchema = { toInt: true }
-
-export const limitParamSchema: ParamSchema = {
-  ...inQuery,
-  ...isOptional,
-  ...isNaturalNumber,
-  ...toInt,
-}
-export const offsetParamSchema = limitParamSchema
+import {
+  equals,
+  inBody,
+  inParams,
+  isBoolean,
+  isDateTime,
+  isIn,
+  isNaturalNumber,
+  isNumeric,
+  isOptional,
+  isRequired,
+  toInt,
+} from './common'
 
 export const eventIdParamSchema: ParamSchema = { ...inParams, ...isRequired }
 

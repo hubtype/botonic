@@ -3,10 +3,9 @@ import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 
 import { dataProviderFactory } from '../../data-provider'
+import { limitParamSchema, offsetParamSchema } from './validation/common'
 import {
   eventIdParamSchema,
-  limitParamSchema,
-  offsetParamSchema,
   validateBotonicEventData,
 } from './validation/events'
 
