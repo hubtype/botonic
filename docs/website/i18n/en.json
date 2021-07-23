@@ -131,6 +131,15 @@
       },
       "plugins/plugin-watson": {
         "title": "Plugin Watson"
+      },
+      "plugins/plugin-google-translation": {
+        "title": "Plugin Google Translation"
+      },
+      "plugins/plugin-intent-classification": {
+        "title": "Plugin Intent Classification"
+      },
+      "plugins/plugin-ner": {
+        "title": "Plugin Ner"
       }
     },
     "links": {
