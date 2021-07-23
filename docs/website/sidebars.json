@@ -77,8 +77,11 @@
       "plugins/plugin-dialogflow",
       "plugins/plugin-dynamodb",
       "plugins/plugin-google-analytics",
+      "plugins/plugin-google-translation",
       "plugins/plugin-inbenta",
+      "plugins/plugin-intent-classification",
       "plugins/plugin-luis",
+      "plugins/plugin-ner",
       "plugins/plugin-nlu",
       "plugins/plugin-segment",
       "plugins/plugin-watson"
