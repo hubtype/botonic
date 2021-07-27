@@ -64,7 +64,6 @@
     "memoizee": "^0.4.15",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
-    "perf_hooks": "0.0.1",
     "sort-stream": "^1.0.1",
     "xlsx": "^0.17.0"
   },
