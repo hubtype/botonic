@@ -84,9 +84,11 @@ export class CoreBot {
     const actions = [output.action, output.retryAction, output.defaultAction]
 
     const response = await this.renderer({ request, actions })
-    const parsedResponse = new BotonicOutputParser().xmlToMessageEvents(
-      response
-    )
+    let parsedResponse = undefined
+    try {
+      parsedResponse = new BotonicOutputParser().xmlToMessageEvents(response)
+    } catch (e) {}
+
     lastRoutePath = output.lastRoutePath
     if (this.plugins) {
       await runPlugins(
