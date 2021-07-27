@@ -1,4 +1,5 @@
 import * as cms from '../cms'
+import { PagingOptions } from '../cms'
 import {
   checkLocale,
   KeywordsOptions,
@@ -24,10 +25,14 @@ export class SearchByKeywords {
   async searchContentsFromInput(
     inputText: NormalizedUtterance,
     matchType: MatchType,
-    context: cms.ContextWithLocale
+    context: cms.ContextWithLocale,
+    paging?: PagingOptions
   ): Promise<SearchResult[]> {
     checkLocale(context.locale)
-    const contentsWithKeywords = await this.cms.contentsWithKeywords(context)
+    const contentsWithKeywords = await this.cms.contentsWithKeywords(
+      context,
+      paging
+    )
     const options =
       this.keywordsOptions[context.locale] ||
       this.keywordsOptions[languageFromLocale(context.locale)] ||

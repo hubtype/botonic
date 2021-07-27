@@ -91,9 +91,12 @@ export class LogCMS implements CMS {
     return this.cms.content(id, context)
   }
 
-  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
+  contentsWithKeywords(
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<SearchCandidate[]> {
     this.logger('contentsWithKeywords')
-    return this.cms.contentsWithKeywords(context)
+    return this.cms.contentsWithKeywords(context, paging)
   }
 
   topContents<T extends TopContent>(

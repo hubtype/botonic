@@ -258,9 +258,10 @@ export class Contentful implements cms.CMS {
   }
 
   async contentsWithKeywords(
-    context = DEFAULT_CONTEXT
+    context = DEFAULT_CONTEXT,
+    paging = new PagingOptions()
   ): Promise<SearchCandidate[]> {
-    return this._keywords.contentsWithKeywords(context)
+    return this._keywords.contentsWithKeywords(context, paging)
   }
 
   async schedule(id: string): Promise<ScheduleContent> {

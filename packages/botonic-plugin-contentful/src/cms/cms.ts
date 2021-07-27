@@ -161,7 +161,10 @@ export interface CMS {
    * For contents with 'Searchable by' field (eg. {@link Queue}), it returns one result per each 'Seachable by' entry
    * @param context If locale specified, it does not return contents without values for the locale (even if it has value for the fallback locale)
    */
-  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]>
+  contentsWithKeywords(
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<SearchCandidate[]>
   schedule(id: string, context?: Context): Promise<ScheduleContent>
   dateRange(id: string, context?: Context): Promise<DateRangeContent>
   asset(id: string, context?: Context): Promise<Asset>
