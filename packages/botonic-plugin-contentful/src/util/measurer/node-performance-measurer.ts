@@ -5,16 +5,16 @@ class PerformanceFactory {
     try {
       return performance
     } catch {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require('perf_hooks').performance
+      //TODO: investigate why a normal require breaks the bot when compiling with webpack
+      return eval('require')('perf_hooks').performance
     }
   }
   static getObserver(): typeof PerformanceObserver {
     try {
       return PerformanceObserver
     } catch {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require('perf_hooks').PerformanceObserver
+      //TODO: investigate why a normal require breaks the bot when compiling with webpack
+      return eval('require')('perf_hooks').PerformanceObserver
     }
   }
 }
@@ -22,7 +22,6 @@ export class NodePerformanceMeasurer extends PerformanceMeasurer {
   private performanceObserver?: PerformanceObserver
 
   constructor() {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     super(PerformanceFactory.getPerformance())
   }
 
