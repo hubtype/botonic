@@ -30,6 +30,7 @@ export function predictionToIntent(
     intents,
     intent: intents[0].intent,
     confidence: intents[0].confidence,
+    translations: {},
   }
 }
 
