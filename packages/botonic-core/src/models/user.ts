@@ -1,7 +1,8 @@
 import { Session } from '../types/'
 export interface User {
   id: string //TODO: UUID
-  websocketId: string
+  providerId?: string
+  websocketId?: string
   session: Session
   route: string
   isOnline: boolean

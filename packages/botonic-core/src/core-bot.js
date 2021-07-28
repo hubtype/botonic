@@ -1,5 +1,6 @@
 import { Inspector } from './debug/inspector'
 import { getString } from './i18n'
+import { BotonicOutputParser } from './output-parser/'
 import { loadPlugins, runPlugins } from './plugins'
 import { Router } from './router'
 import { isFunction } from './utils'
@@ -83,9 +84,12 @@ export class CoreBot {
     const actions = [output.action, output.retryAction, output.defaultAction]
 
     const response = await this.renderer({ request, actions })
+    let parsedResponse = undefined
+    try {
+      parsedResponse = new BotonicOutputParser().xmlToMessageEvents(response)
+    } catch (e) {}
 
     lastRoutePath = output.lastRoutePath
-
     if (this.plugins) {
       await runPlugins(
         this.plugins,
@@ -93,11 +97,12 @@ export class CoreBot {
         input,
         session,
         lastRoutePath,
-        response
+        response,
+        parsedResponse
       )
     }
 
     session.is_first_interaction = false
-    return { input, response, session, lastRoutePath }
+    return { input, response, parsedResponse, session, lastRoutePath }
   }
 }

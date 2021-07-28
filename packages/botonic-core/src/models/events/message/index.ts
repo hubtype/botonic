@@ -8,7 +8,11 @@ export enum MessageEventTypes {
   IMAGE = 'image',
   LOCATION = 'location',
   TEXT = 'text',
+  POSTBACK = 'postback',
   VIDEO = 'video',
+  /**
+   * TODO: contact, buttonmessage?, webchatsettings, whatsapp template
+   */
 }
 
 export enum MessageEventAck {
@@ -28,4 +32,6 @@ export interface BotonicMessageEvent extends BaseEvent {
   ack: MessageEventAck
   from: MessageEventFrom
   type: MessageEventTypes
+  typing: number
+  delay: number
 }
