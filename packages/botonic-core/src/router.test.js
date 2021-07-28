@@ -340,8 +340,6 @@ test.each([
     const input = { type: 'postback', payload: inputPayload }
     expect(router.getOnFinishParams(input)).toEqual(expectedParams)
     expect(input.path).toEqual(expectedPath)
-    if (input.path) {
-      expect(input.payload).toBeUndefined()
-    }
+    expect(input.payload).toEqual(input.path ? undefined : input.payload)
   }
 )
