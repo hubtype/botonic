@@ -6,6 +6,7 @@ class PerformanceFactory {
       return performance
     } catch {
       //TODO: investigate why a normal require breaks the bot when compiling with webpack
+      //To solve the issue we're executing eval('require') instead of using a direct require (https://stackoverflow.com/a/67288823/3982733)
       return eval('require')('perf_hooks').performance
     }
   }
@@ -14,6 +15,7 @@ class PerformanceFactory {
       return PerformanceObserver
     } catch {
       //TODO: investigate why a normal require breaks the bot when compiling with webpack
+      //To solve the issue we're executing eval('require') instead of using a direct require (https://stackoverflow.com/a/67288823/3982733)
       return eval('require')('perf_hooks').PerformanceObserver
     }
   }
