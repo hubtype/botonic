@@ -134,7 +134,7 @@ export function keywordsWithMockCms(
   stemBlackList: { [locale: string]: StemmingBlackList[] } = {}
 ): SearchByKeywords {
   const mockCms = mock(DummyCMS)
-  when(mockCms.contentsWithKeywords(deepEqual(context))).thenResolve(
+  when(mockCms.contentsWithKeywords(deepEqual(context), undefined)).thenResolve(
     allContents
   )
   const normalizer = new Normalizer(stemBlackList)
