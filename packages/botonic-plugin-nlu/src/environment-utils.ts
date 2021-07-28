@@ -3,8 +3,8 @@ import {
   MODEL_DATA_FILENAME,
   MODEL_FILENAME,
   MODELS_DIR,
-} from '@botonic/nlu/dist/constants'
-import { Language } from '@botonic/nlu/dist/language'
+} from '@botonic/nlu/lib/constants'
+import { Language } from '@botonic/nlu/lib/language'
 import { loadLayersModel } from '@tensorflow/tfjs'
 import axios from 'axios'
 
