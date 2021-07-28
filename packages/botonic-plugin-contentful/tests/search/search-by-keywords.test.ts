@@ -1,6 +1,6 @@
 import 'jest-extended'
 
-import { deepEqual, instance, mock, when } from 'ts-mockito'
+import { anything, deepEqual, instance, mock, when } from 'ts-mockito'
 
 import {
   CommonFields,
@@ -134,9 +134,9 @@ export function keywordsWithMockCms(
   stemBlackList: { [locale: string]: StemmingBlackList[] } = {}
 ): SearchByKeywords {
   const mockCms = mock(DummyCMS)
-  when(mockCms.contentsWithKeywords(deepEqual(context), undefined)).thenResolve(
-    allContents
-  )
+  when(
+    mockCms.contentsWithKeywords(deepEqual(context), anything())
+  ).thenResolve(allContents)
   const normalizer = new Normalizer(stemBlackList)
   return new SearchByKeywords(instance(mockCms), normalizer)
 }
