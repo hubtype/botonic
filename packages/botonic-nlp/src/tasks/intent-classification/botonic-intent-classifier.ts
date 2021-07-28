@@ -1,4 +1,4 @@
-import { LayersModel, Tensor2D } from '@tensorflow/tfjs-node'
+import { ClassWeight, LayersModel, Tensor2D } from '@tensorflow/tfjs-node'
 import { join } from 'path'
 
 import { Dataset } from '../../dataset'
@@ -85,10 +85,31 @@ export class BotonicIntentClassifier {
   async train(
     dataset: Dataset,
     epochs: number,
-    batchSize: number
+    batchSize: number,
+    balanceClasses = false
   ): Promise<void> {
     const { x, y } = this.processor.processSamples(dataset.samples)
-    await this.modelManager.train(x, y, { epochs, batchSize })
+    const args = { epochs, batchSize }
+    if (balanceClasses) {
+      args['classWeight'] = this.getClassWeight(y)
+    }
+    await this.modelManager.train(x, y, args)
+  }
+
+  private getClassWeight(y: Tensor2D): ClassWeight {
+    const encodedIntents = y.argMax(1).arraySync() as number[]
+    const classCount: { [intent: number]: number } = {}
+    encodedIntents.forEach(encodedIntent =>
+      encodedIntent in classCount
+        ? (classCount[encodedIntent as number] += 1)
+        : (classCount[encodedIntent as number] = 1)
+    )
+    const maxCount = Math.max(...Object.values(classCount))
+    const classWeight: ClassWeight = {}
+    Object.entries(classCount).forEach(
+      ([key, value]) => (classWeight[key] = maxCount / value)
+    )
+    return classWeight
   }
 
   async evaluate(dataset: Dataset): Promise<ModelEvaluation> {

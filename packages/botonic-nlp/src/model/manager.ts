@@ -1,4 +1,4 @@
-import { LayersModel, Scalar, Tensor } from '@tensorflow/tfjs-node'
+import { ClassWeight, LayersModel, Scalar, Tensor } from '@tensorflow/tfjs-node'
 
 export type ModelEvaluation = { loss: number; accuracy: number }
 
@@ -8,7 +8,11 @@ export class ModelManager {
   async train(
     x: Tensor,
     y: Tensor,
-    args: { epochs: number; batchSize: number }
+    args: {
+      epochs: number
+      batchSize: number
+      classWeight?: ClassWeight
+    }
   ): Promise<void> {
     await this.model.fit(x, y, args)
   }
