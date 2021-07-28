@@ -119,8 +119,11 @@ export class FilteredCMS implements CMS {
     return this.cms.content(id, context)
   }
 
-  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
-    return this.cms.contentsWithKeywords(context)
+  contentsWithKeywords(
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<SearchCandidate[]> {
+    return this.cms.contentsWithKeywords(context, paging)
   }
 
   async topContents<T extends TopContent>(

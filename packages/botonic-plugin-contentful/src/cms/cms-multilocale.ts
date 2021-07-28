@@ -60,8 +60,11 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).assets(context)
   }
 
-  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
-    return this.cmsFromContext(context).contentsWithKeywords(context)
+  contentsWithKeywords(
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<SearchCandidate[]> {
+    return this.cmsFromContext(context).contentsWithKeywords(context, paging)
   }
 
   dateRange(id: string, context?: Context): Promise<DateRangeContent> {

@@ -133,7 +133,10 @@ export class DummyCMS implements CMS {
     return Promise.resolve([])
   }
 
-  contentsWithKeywords({} = DEFAULT_CONTEXT): Promise<SearchCandidate[]> {
+  contentsWithKeywords(
+    {} = DEFAULT_CONTEXT,
+    paging?: PagingOptions
+  ): Promise<SearchCandidate[]> {
     const contents = this.buttonCallbacks.map((cb, id) => {
       const button = DummyCMS.buttonFromCallback(cb)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

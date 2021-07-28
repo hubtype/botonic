@@ -1,8 +1,14 @@
 import { Entry, EntryCollection } from 'contentful'
 
 import * as cms from '../../cms'
-import { CommonFields, Context, TopContentId, TopContentType } from '../../cms'
-import { ContentType } from '../../cms/cms'
+import {
+  CommonFields,
+  ContentType,
+  Context,
+  PagingOptions,
+  TopContentId,
+  TopContentType,
+} from '../../cms'
 import { SearchCandidate } from '../../search'
 import { QueueFields } from '../contents/queue'
 import { DeliveryApi } from '../delivery-api'
@@ -13,6 +19,7 @@ export class KeywordsDelivery {
 
   async contentsWithKeywords(
     context: Context,
+    paging: PagingOptions,
     modelsWithKeywords = [
       ContentType.TEXT,
       ContentType.CAROUSEL,
@@ -22,7 +29,11 @@ export class KeywordsDelivery {
   ): Promise<SearchCandidate[]> {
     // TODO maybe it's more efficient to get all contents (since most have keywords anyway and we normally have few non
     //  TopContents such as Buttons)
-    const fromKeywords = this.entriesWithKeywords(context, modelsWithKeywords)
+    const fromKeywords = this.entriesWithKeywords(
+      context,
+      modelsWithKeywords,
+      paging
+    )
     const fromSearchable = this.entriesWithSearchableByKeywords(
       context,
       modelsWithSearchableByKeywords
@@ -99,10 +110,12 @@ export class KeywordsDelivery {
 
   private entriesWithKeywords(
     context: Context,
-    models: TopContentType[]
+    models: TopContentType[],
+    paging: PagingOptions
   ): Promise<SearchCandidate[]> {
     const getWithKeywords = (contentType: cms.TopContentType) =>
       this.delivery.getEntries<CommonEntryFields>(context, {
+        ...paging,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         content_type: contentType,
         'fields.keywords[exists]': true,

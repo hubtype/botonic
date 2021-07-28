@@ -5,6 +5,7 @@ import {
   ContentType,
   Context,
   ContextWithLocale,
+  PagingOptions,
   Text,
 } from '../cms'
 import { checkLocale, KeywordsOptions, MatchType, Normalizer } from '../nlp'
@@ -28,14 +29,16 @@ export class Search {
   async searchByKeywords(
     inputText: string,
     matchType: MatchType,
-    context: ContextWithLocale
+    context: ContextWithLocale,
+    paging: PagingOptions = new PagingOptions()
   ): Promise<SearchResult[]> {
     const locale = checkLocale(context.locale)
     const utterance = this.normalizer.normalize(locale, inputText)
     const results = await this.search.searchContentsFromInput(
       utterance,
       matchType,
-      context
+      context,
+      paging
     )
     return this.search.filterChitchat(utterance.words, results)
   }

@@ -170,9 +170,12 @@ export class ErrorReportingCMS implements CMS {
     )
   }
 
-  contentsWithKeywords(context?: Context): Promise<SearchCandidate[]> {
+  contentsWithKeywords(
+    context?: Context,
+    paging?: PagingOptions
+  ): Promise<SearchCandidate[]> {
     return this.cms
-      .contentsWithKeywords(context)
+      .contentsWithKeywords(context, paging)
       .catch(this.handleError('contentsWithKeywords', {}, context))
   }
 
