@@ -164,51 +164,55 @@ export const botonicEventValidationChains = [
 
 export async function validateBotonicEventData(
   req: Request,
-  allFieldsOptional = false
+  allFieldsOptional = false,
+  withParamEventId = false
 ): Promise<Result> {
   const opt = allFieldsOptional
-  await checkSchema(getSchema(baseEventSchema, opt)).run(req)
+  const e = withParamEventId
+  await checkSchema(getSchema(baseEventSchema, opt, e)).run(req)
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return errors
   }
 
+  let schema
   if (req.body.eventType === EventTypes.CONNECTION) {
-    await checkSchema(getSchema(connectionEventSchema, opt)).run(req)
+    schema = getSchema(connectionEventSchema, opt, e)
   } else {
     switch (req.body.type) {
       case MessageEventTypes.TEXT:
-        await checkSchema(getSchema(textMessageEventSchema, opt)).run(req)
+        schema = getSchema(textMessageEventSchema, opt, e)
         break
       case MessageEventTypes.POSTBACK:
-        await checkSchema(getSchema(postbackMessageEventSchema, opt)).run(req)
+        schema = getSchema(postbackMessageEventSchema, opt, e)
         break
       case MessageEventTypes.AUDIO:
-        await checkSchema(getSchema(audioMessageEventSchema, opt)).run(req)
+        schema = getSchema(audioMessageEventSchema, opt, e)
         break
       case MessageEventTypes.DOCUMENT:
-        await checkSchema(getSchema(documentMessageEventSchema, opt)).run(req)
+        schema = getSchema(documentMessageEventSchema, opt, e)
         break
       case MessageEventTypes.IMAGE:
-        await checkSchema(getSchema(imageMessageEventSchema, opt)).run(req)
+        schema = getSchema(imageMessageEventSchema, opt, e)
         break
       case MessageEventTypes.VIDEO:
-        await checkSchema(getSchema(videoMessageEventSchema, opt)).run(req)
+        schema = getSchema(videoMessageEventSchema, opt, e)
         break
       case MessageEventTypes.LOCATION:
-        await checkSchema(getSchema(locationMessageEventSchema, opt)).run(req)
+        schema = getSchema(locationMessageEventSchema, opt, e)
         break
       case MessageEventTypes.CAROUSEL:
-        await checkSchema(getSchema(carouselMessageEventSchema, opt)).run(req)
+        schema = getSchema(carouselMessageEventSchema, opt, e)
         break
       case MessageEventTypes.CUSTOM:
-        await checkSchema(getSchema(customMessageEventSchema, opt)).run(req)
+        schema = getSchema(customMessageEventSchema, opt, e)
         break
       default:
-        await checkSchema(getSchema(botonicMessageEventSchema, opt)).run(req)
+        schema = getSchema(botonicMessageEventSchema, opt, e)
         break
     }
   }
+  await checkSchema(schema).run(req)
   return validationResult(req)
 }
 
@@ -226,7 +230,14 @@ export async function validateType(req: Request): Promise<Result> {
   return validationResult(req)
 }
 
-function getSchema(schema: Schema, allFieldsOptional = false): Schema {
+function getSchema(
+  schema: Schema,
+  allFieldsOptional = false,
+  withParamEventId = false
+): Schema {
+  if (withParamEventId) {
+    schema = { eventId: eventIdParamSchema, ...schema }
+  }
   if (!allFieldsOptional) {
     return schema
   }

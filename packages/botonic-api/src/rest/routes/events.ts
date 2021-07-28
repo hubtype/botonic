@@ -60,13 +60,13 @@ router
 router
   .route('/:eventId')
   .get(checkSchema({ eventId: eventIdParamSchema }), async (req, res) => {
-    try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        res.status(400).send({ errors: errors.array() })
-        return
-      }
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).send({ errors: errors.array() })
+      return
+    }
 
+    try {
       const params = matchedData(req, { locations: ['params'] })
       const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
       const event = await dp.getEvent(params.eventId)
@@ -81,20 +81,14 @@ router
       res.status(500).send({ error: e.message })
     }
   })
-  .put(checkSchema({ eventId: eventIdParamSchema }), async (req, res) => {
-    const errors = await validateBotonicEventData(req)
+  .put(async (req, res) => {
+    const errors = await validateBotonicEventData(req, false, true)
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
     }
 
     try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        res.status(400).send({ errors: errors.array() })
-        return
-      }
-
       const params = matchedData(req, { locations: ['params'] })
       const updatedEvent = matchedData(req, {
         locations: ['body'],
@@ -114,20 +108,14 @@ router
       res.status(500).send({ error: e.message })
     }
   })
-  .patch(checkSchema({ eventId: eventIdParamSchema }), async (req, res) => {
-    const errors = await validateBotonicEventData(req, true)
+  .patch(async (req, res) => {
+    const errors = await validateBotonicEventData(req, true, true)
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
     }
 
     try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        res.status(400).send({ errors: errors.array() })
-        return
-      }
-
       const params = matchedData(req, { locations: ['params'] })
       const newEventData = matchedData(req, {
         locations: ['body'],
