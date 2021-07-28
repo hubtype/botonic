@@ -14,7 +14,11 @@ it('Pre response is rejected when using fake crededentials', async () => {
   }
   const request: BotRequest = {
     input: { data: 'hi', payload: 'payload', type: 'audio' },
-    session: { bot: { id: 'test' }, user: { id: 'user1', provider: 'dev' } },
+    session: {
+      bot: { id: 'test' },
+      user: { id: 'user1', provider: 'dev' },
+      is_first_interaction: true,
+    },
     lastRoutePath: 'initial',
   }
 
