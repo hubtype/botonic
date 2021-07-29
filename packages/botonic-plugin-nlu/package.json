@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-nlu",
-  "version": "0.19.0-beta.1",
+  "version": "0.19.0",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.6",
-    "@botonic/core": "beta",
-    "@botonic/nlu": "beta",
+    "@botonic/core": "~0.19.0",
+    "@botonic/nlu": "~0.19.0",
     "@tensorflow/tfjs": "^2.8.6",
     "@types/webgl2": "0.0.6",
     "axios": "latest",
