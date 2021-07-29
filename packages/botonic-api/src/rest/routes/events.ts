@@ -102,6 +102,12 @@ router
           .send({ error: `Event with ID '${params.eventId}' not found` })
         return
       }
+      if (event.eventId !== updatedEvent.eventId) {
+        res
+          .status(400)
+          .send({ error: `Both event ID (params and body) must match` })
+        return
+      }
       await dp.updateEvent(updatedEvent)
       res.status(200).send(updatedEvent)
     } catch (e) {
@@ -127,6 +133,12 @@ router
         res
           .status(404)
           .send({ error: `Event with ID '${params.eventId}' not found` })
+        return
+      }
+      if (newEventData.eventId && event.eventId !== newEventData.eventId) {
+        res
+          .status(400)
+          .send({ error: `Both user ID (params and body) must match` })
         return
       }
       const updatedEvent = { ...event, ...newEventData } as BotonicEvent

@@ -1,4 +1,4 @@
-import { ParamSchema } from 'express-validator'
+import { ParamSchema, Schema } from 'express-validator'
 
 export const inQuery: ParamSchema = { in: ['query'] }
 export const inParams: ParamSchema = { in: ['params'] }
@@ -36,3 +36,14 @@ export const limitParamSchema: ParamSchema = {
   ...toInt,
 }
 export const offsetParamSchema = limitParamSchema
+
+export function getOptionalSchema(schema: Schema): Schema {
+  for (const field of Object.keys(schema)) {
+    const validations = schema[field]
+    delete validations.notEmpty
+    if (!('optional' in validations)) {
+      schema[field] = { ...validations, ...isOptional }
+    }
+  }
+  return schema
+}

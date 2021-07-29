@@ -17,6 +17,7 @@ import {
 
 import {
   equals,
+  getOptionalSchema,
   inBody,
   inParams,
   isBoolean,
@@ -238,15 +239,8 @@ function getSchema(
   if (withParamEventId) {
     schema = { eventId: eventIdParamSchema, ...schema }
   }
-  if (!allFieldsOptional) {
-    return schema
-  }
-  for (const field of Object.keys(schema)) {
-    const validations = schema[field]
-    delete validations.notEmpty
-    if (!('optional' in validations)) {
-      schema[field] = { ...validations, ...isOptional }
-    }
+  if (allFieldsOptional) {
+    schema = getOptionalSchema(schema)
   }
   return schema
 }
