@@ -1,9 +1,18 @@
+import { User } from '@botonic/core/src/models/user'
 import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 
 import { dataProviderFactory } from '../../data-provider'
-import { limitParamSchema, offsetParamSchema } from './validation/common';
-
+import {
+  getOptionalSchema,
+  limitParamSchema,
+  offsetParamSchema,
+} from './validation/common'
+import {
+  userIdParamSchema,
+  userSchema,
+  userWithUserIdParamSchema,
+} from './validation/users'
 
 const router = Router()
 
@@ -24,54 +33,150 @@ router
 
         const query = matchedData(req, { locations: ['query'] })
         const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const events = await dp.getUsers(query.limit, query.offset)
-        res.status(200).send(events)
+        const users = await dp.getUsers(query.limit, query.offset)
+        res.status(200).send(users)
       } catch (e) {
         res.status(500).send({ error: e.message })
       }
     }
   )
-  .post((_, res) => {
-    res.send('POST HTTP method on user resource')
+  .post(checkSchema(userSchema), async (req, res) => {
+    const errors = await validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
+      return
+    }
+
+    try {
+      const user = matchedData(req, { locations: ['body'] }) as User
+      const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+      if (await dp.getUser(user.id)) {
+        res
+          .status(409)
+          .send({ error: `User with ID '${user.id} already exists` })
+      }
+      const storedUser = await dp.saveUser(user)
+      res.status(201).send(storedUser)
+    } catch (e) {
+      res.status(500).send({ error: e.message })
+    }
   })
 
 router
   .route('/:userId')
-  .get((req, res) => {
-    return res.send(`GET HTTP method on user/${req.params.userId} resource`)
+  .get(checkSchema({ userId: userIdParamSchema }), async (req, res) => {
+    const errors = await validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).send({ errors: errors.array() })
+      return
+    }
+
+    try {
+      const params = matchedData(req, { locations: ['params'] })
+      const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+      const user = await dp.getUser(params.userId)
+      if (!user) {
+        res
+          .status(404)
+          .send({ error: `User with ID '${params.userId}' not found` })
+        return
+      }
+      res.status(200).send(user)
+    } catch (e) {
+      res.status(500).send({ error: e.message })
+    }
   })
-  .put((req, res) => {
-    return res.send(`PUT HTTP method on user/${req.params.userId} resource`)
+  .put(checkSchema(userWithUserIdParamSchema), async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
+      return
+    }
+
+    try {
+      const params = matchedData(req, { locations: ['params'] })
+      const updatedUser = matchedData(req, {
+        locations: ['body'],
+      }) as User
+
+      const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+      const user = await dp.getUser(params.userId)
+      if (!user) {
+        res
+          .status(404)
+          .send({ error: `User with ID '${params.userId}' not found` })
+        return
+      }
+      if (user.id !== updatedUser.id) {
+        res
+          .status(400)
+          .send({ error: `Both user ID (params and body) must match` })
+        return
+      }
+      await dp.updateUser(updatedUser)
+      res.status(200).send(updatedUser)
+    } catch (e) {
+      res.status(500).send({ error: e.message })
+    }
   })
-  .patch((req, res) => {
-    return res.send(`PATCH HTTP method on user/${req.params.userId} resource`)
+  .patch(
+    checkSchema(getOptionalSchema(userWithUserIdParamSchema)),
+    async (req, res) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
+        return
+      }
+
+      try {
+        const params = matchedData(req, { locations: ['params'] })
+        const newUserData = matchedData(req, {
+          locations: ['body'],
+        }) as Partial<User>
+
+        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const user = await dp.getUser(params.userId)
+        if (!user) {
+          res
+            .status(404)
+            .send({ error: `User with ID '${params.userId}' not found` })
+          return
+        }
+        if (newUserData.id && user.id !== newUserData.id) {
+          res
+            .status(400)
+            .send({ error: `Both user ID (params and body) must match` })
+          return
+        }
+        const updatedUser = { ...user, ...newUserData }
+        await dp.updateUser(updatedUser)
+        res.status(200).send(updatedUser)
+      } catch (e) {
+        res.status(500).send({ error: e.message })
+      }
+    }
+  )
+  .delete(checkSchema({ userId: userIdParamSchema }), async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).send({ errors: errors.array() })
+      return
+    }
+
+    try {
+      const params = matchedData(req, { locations: ['params'] })
+      const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+      const user = await dp.deleteUser(params.userId)
+      if (!user) {
+        res
+          .status(404)
+          .send({ error: `User with ID '${params.userId}' not found` })
+        return
+      }
+      res.status(200).send(user)
+    } catch (e) {
+      res.status(500).send({ error: e.message })
+    }
   })
-  .delete((req, res) => {
-    return res.send(`DELETE HTTP method on user/${req.params.userId} resource`)
-  })
-//// TODO: TEST (worked): User has to previously post a message to the websocket connection in order to have its websocket_id updated
-// .post(async (req, res) => {
-//   const userId = req.params.userId
-//   let user = undefined
-//   try {
-//     var dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-//     user = await dp.getUser(userId)
-//     const { websocketId } = user
-//     const websocketEndpoint = process.env.WEBSOCKET_URL.split('wss://')[1]
-//     const apigwManagementApi = new ApiGatewayManagementApi({
-//       apiVersion: '2018-11-29',
-//       endpoint: websocketEndpoint,
-//     })
-//     await apigwManagementApi
-//       .postToConnection({
-//         ConnectionId: websocketId,
-//         Data: JSON.stringify('hello from rest-server'),
-//       })
-//       .promise()
-//   } catch (e) {
-//     console.log({ e })
-//   }
-//   return res.send(`POST HTTP method on user/${req.params.userId}`)
-// })
 
 export default router
