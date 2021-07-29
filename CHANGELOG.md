@@ -11,7 +11,75 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
-## [0.18.0] - 2020-02-02
+## [0.19.0] - 2021-07-29
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Added [@botonic/plugin-google-translation](https://www.npmjs.com/package/@botonic/plugin-google-translation): Translating user inputs text and detect its languages.
+  - Added new packages with common configurations for bot development encapsulating logic that may be not relevant to the developer but keeping them extendable.
+    - [@botonic/dx](https://www.npmjs.com/package/@botonic/dx): Transpiling, compiling and testing configurations for bot projects.
+    - [@botonic/eslint-config](https://www.npmjs.com/package/@botonic/eslint-config): Linter configurations for bot projects.
+  - Added new NLP packages with improved training scripts, improved intent classification and new entities detection feature:
+    - [@botonic/nlp](https://www.npmjs.com/package/@botonic/nlp): NLP module to train models with intent and entity recognition with Botonic CLI.
+    - [@botonic/plugin-intent-classification](https://www.npmjs.com/package/@botonic/plugin-intent-classification): Run intent predictions from your trained model within your bot.
+    - [@botonic/plugin-ner](https://www.npmjs.com/package/@botonic/plugin-ner): Run entity predictions from your trained model within your bot.
+  - Added new packages for incoming Botonic 1.0:
+    - [@botonic/api](https://www.npmjs.com/package/@botonic/pulumi): Customize the behavior of your backend stack.
+    - [@botonic/pulumi](https://www.npmjs.com/package/@botonic/pulumi): Deploying seamlessly your infrastructure to the cloud with Pulumi.
+    - [create-botonic-app](https://www.npmjs.com/package/create-botonic-app): Scaffolding new Botonic 1.0 projects.
+
+* [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - Added new serve command for Botonic 1.0 [under flag `--preview`](https://github.com/hubtype/botonic/pull/1721).
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Added new `BotonicOutputParser` for Botonic 1.0.
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Added [onConnectionChange](https://github.com/hubtype/botonic/pull/1637) event listener that will be triggered when connection status of websocket changes.
+  - Added new [`Raw` component](https://github.com/hubtype/botonic/pull/1649) to directly send JSON payloads to connected messaging APIs and allow access to all of their features.
+  - Improved buttons support in Multichannel components and allow displaying them in Whatsapp. [#1699](https://github.com/hubtype/botonic/pull/1699)
+  - Added `experimental` directory for Botonic 1.0. [#1701](https://github.com/hubtype/botonic/pull/1701)
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Improved [error reporting](https://github.com/hubtype/botonic/pull/1470).
+  - Added support for defining [handoff content](https://github.com/hubtype/botonic/pull/1625).
+  - [Caching contentful results](https://github.com/hubtype/botonic/pull/1639) for improved performance.
+  - Added [profiler utilities](https://github.com/hubtype/botonic/pull/1649) to measure performance.
+  - Added [paging](https://github.com/hubtype/botonic/pull/1740) in searchByKeywords.
+
+* [@botonic/plugin-watson](https://www.npmjs.com/package/@botonic/plugin-watson)
+  - Adapt `botonic-plugin-watson` [to work with Assistant V2](https://github.com/hubtype/botonic/pull/1401).
+
+### Changed
+
+- [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - Improved telemetry. [#1305](https://github.com/hubtype/botonic/pull/1305), [#1307](https://github.com/hubtype/botonic/pull/1307), [#1342](https://github.com/hubtype/botonic/pull/1342)
+  - Removed force flag (default behavior is to always deploy your bot bundle), improved error handling and minor refactor. [#1321](https://github.com/hubtype/botonic/pull/1321)
+
+* [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+  - Removed [deprecated integrations code](https://github.com/hubtype/botonic/pull/1292).
+  - Improved [offline support](https://github.com/hubtype/botonic/pull/1360) and add customization of [behavior and error messages](https://github.com/hubtype/botonic/pull/1373).
+
+### Fixed
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Updated [standalone deployment](https://github.com/hubtype/botonic/pull/1293) documentation. Thanks to our contributor [@ChristoperGS](https://github.com/ChristopherGS).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+  - Replaced unusable document previewer with a [button with a link to download documents](https://github.com/hubtype/botonic/pull/1319).
+  - Fixed [touch events](https://github.com/hubtype/botonic/pull/1359) in Safari Mobile.
+  - Fixed cover component [breaking bot layout](https://github.com/hubtype/botonic/pull/1554).
+  - Fixed [`-c` flag](https://github.com/hubtype/botonic/pull/1586) of deploy command not working.
+
+## [0.18.0] - 2021-02-02
 
 ### Added
 
@@ -51,7 +119,7 @@ All notable changes to Botonic will be documented in this file.
   - [Fixed typings](https://github.com/hubtype/botonic/pull/1262).
   - Fixed scroll to bottom for [mobile devices](https://github.com/hubtype/botonic/pull/1263).
 
-## [0.17.0] - 2020-18-12
+## [0.17.0] - 2020-12-18
 
 ### Added
 
@@ -66,7 +134,7 @@ All notable changes to Botonic will be documented in this file.
 * [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
 
   - Botonic CLI to [download examples](https://github.com/hubtype/botonic/pull/1134) directly from [botonic-examples](https://github.com/hubtype/botonic-examples).
-  - Improved analytics and fixed spawn processes in Windows (`botonic serve`, `botonic train`). Now it is no longer necessary to run `npm run start`. [#1176](https://github.com/hubtype/botonic/pull/1176)
+  - Improved analytics and fixed spawn processes in Windows (`botonic serve`, `botonic train`). Now it is no longer necessary to run `npm run start`. [#1176](https://github.com/hubtype/botonic/pull/1176)
 
 - [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
 
@@ -107,7 +175,7 @@ All notable changes to Botonic will be documented in this file.
   - Avoid [circular dependencies](https://github.com/hubtype/botonic/pull/1135).
   - [Fixed webchat behavior](https://github.com/hubtype/botonic/pull/1175) when `user ID` was lost, causing some webchat's to not load correctly.
 
-## [0.16.0] - 2020-20-11
+## [0.16.0] - 2020-11-20
 
 ### Added
 
@@ -186,7 +254,7 @@ All notable changes to Botonic will be documented in this file.
 
   - Added [missing storage key in constructor](https://github.com/hubtype/botonic/pull/1039), now `storageKey` works as expected.
   - Automatically [call `onMessage`](https://github.com/hubtype/botonic/pull/1056) when receiveng messages coming from server-side.
-  - Added missing call to `stringifyWithRegexs` causing some regexes not being updated in local/session storages. Fixed react warnings (produced by `npm run test`), log deprecated props in custom messages. [#1063](https://github.com/hubtype/botonic/pull/1063)
+  - Added missing call to `stringifyWithRegexs` causing some regexes not being updated in local/session storages. Fixed react warnings (produced by `npm run test`), log deprecated props in custom messages. [#1063](https://github.com/hubtype/botonic/pull/1063)
     Deprecated props:
     - **`enableTimestamps` => `enabletimestamps`**
     - **`imagesStyle` => `imagestyle`**
@@ -199,7 +267,7 @@ All notable changes to Botonic will be documented in this file.
 
   - The csv importer of texts, which was coming from content translator, now groups all the fields from the same content. [#1036](https://github.com/hubtype/botonic/pull/1036).
 
-## [0.15.0] - 2020-27-10
+## [0.15.0] - 2020-10-27
 
 ### Added
 
@@ -261,7 +329,7 @@ All notable changes to Botonic will be documented in this file.
   - Avoid [customMessage to crash](https://github.com/hubtype/botonic/pull/1000) if they have bad children. Some bots may store no-react objects in children.
   - [Fixed](https://github.com/hubtype/botonic/pull/1017/) error appearing in some tests: `Received true for a non-boolean attribute markdown`. Caused by styled-components.
 
-## [0.14.0] - 2020-01-10
+## [0.14.0] - 2020-10-01
 
 ### Added
 
@@ -353,7 +421,7 @@ All notable changes to Botonic will be documented in this file.
 
   - Fixed bug in Contentful Schedule, where schedule was miscalculating around midnight. It was not taking the timezone offset into account to calculate the weekday.
 
-## [0.13.0] - 2020-15-06
+## [0.13.0] - 2020-06-15
 
 ### Added
 
@@ -409,7 +477,7 @@ All notable changes to Botonic will be documented in this file.
 
   - Updated and freezed `@tensorflow/tfjs` to 1.7.3.
 
-## [0.12.0] - 2020-26-05
+## [0.12.0] - 2020-05-26
 
 ### Added
 
@@ -518,7 +586,7 @@ All notable changes to Botonic will be documented in this file.
   - New operations are available to traverse the chain of followUp fields of MessageContent.
   - When calculating the match substring and score between an utterance and a keyword, tokens are preferred to stems when comparing to keywords.
 
-## [0.11.0] - 2020-25-03
+## [0.11.0] - 2020-03-25
 
 ### Added
 
@@ -597,7 +665,7 @@ All notable changes to Botonic will be documented in this file.
   - Fixed `compromise` import in `@botonic/cli`'s `nlu` template.
   - Webviews are now rendered within `div` instead of `iframe` for a better visualization when developing locally without affecting production builds
 
-## [0.10.1] - 2020-14-01
+## [0.10.1] - 2020-01-14
 
 ### Added
 
@@ -615,7 +683,7 @@ All notable changes to Botonic will be documented in this file.
 - Fix for issue [#409](https://github.com/hubtype/botonic/issues/409).
 - Fix for runtime error produced when a `Text` had empty text and no buttons nor replies.
 
-## [0.10.0] - 2019-12-03
+## [0.10.0] - 2019-03-12
 
 ### Added
 
@@ -657,3 +725,4 @@ All notable changes to Botonic will be documented in this file.
 [0.16.0]: https://github.com/hubtype/botonic/releases/tag/v0.16.0
 [0.17.0]: https://github.com/hubtype/botonic/releases/tag/v0.17.0
 [0.18.0]: https://github.com/hubtype/botonic/releases/tag/v0.18.0
+[0.19.0]: https://github.com/hubtype/botonic/releases/tag/v0.19.0
