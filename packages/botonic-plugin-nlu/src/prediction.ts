@@ -1,7 +1,7 @@
 import type { NluResult } from '@botonic/core'
-import { Language } from '@botonic/nlu/dist/language'
-import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
-import { IntentDecoder } from '@botonic/nlu/dist/types'
+import { Language } from '@botonic/nlu/lib/language'
+import { Preprocessor } from '@botonic/nlu/lib/preprocessor'
+import { IntentDecoder } from '@botonic/nlu/lib/types'
 import { Tensor, tensor, tensor1d } from '@tensorflow/tfjs'
 import franc from 'franc'
 import langs from 'langs'
@@ -30,6 +30,7 @@ export function predictionToIntent(
     intents,
     intent: intents[0].intent,
     confidence: intents[0].confidence,
+    translations: {},
   }
 }
 

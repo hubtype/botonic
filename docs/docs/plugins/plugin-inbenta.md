@@ -1,8 +1,6 @@
 ---
-
 title: Plugin Inbenta
 id: plugin-inbenta
-
 ---
 
 ---

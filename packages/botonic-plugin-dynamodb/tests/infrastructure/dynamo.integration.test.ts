@@ -7,7 +7,8 @@ test('TEST: Track serialization', () => {
   DynamoTrack.testSerialization()
 })
 
-test('TEST: dynamo write', async () => {
+// TODO: Review test
+test.skip('TEST: dynamo write', async () => {
   const sut = new BotonicPluginDynamoDB({ env: Env.DEV } as DynamoDbOptions)
     .storage
   const track1 = new Track('test_bot', time.now(), [

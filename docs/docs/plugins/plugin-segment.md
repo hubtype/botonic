@@ -1,8 +1,6 @@
 ---
-
 title: Plugin Segment
 id: plugin-segment
-
 ---
 
 ---

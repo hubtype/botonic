@@ -1,11 +1,11 @@
-import { Language } from '@botonic/nlu/dist/language'
-import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
+import { Language } from '@botonic/nlu/lib/language'
+import { Preprocessor } from '@botonic/nlu/lib/preprocessor'
 import {
   ModelData,
   Normalizer,
   Stemmer,
   Tokenizer,
-} from '@botonic/nlu/dist/types'
+} from '@botonic/nlu/lib/types'
 import { LayersModel } from '@tensorflow/tfjs'
 import { AxiosPromise } from 'axios'
 

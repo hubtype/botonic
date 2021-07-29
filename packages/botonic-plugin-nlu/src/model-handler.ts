@@ -1,7 +1,7 @@
 import type { NluResult } from '@botonic/core'
-import { Language } from '@botonic/nlu/dist/language'
-import { Preprocessor } from '@botonic/nlu/dist/preprocessor'
-import { Vocabulary } from '@botonic/nlu/dist/types'
+import { Language } from '@botonic/nlu/lib/language'
+import { Preprocessor } from '@botonic/nlu/lib/preprocessor'
+import { Vocabulary } from '@botonic/nlu/lib/types'
 import { Tensor } from '@tensorflow/tfjs'
 import { default as fetch } from 'node-fetch'
 

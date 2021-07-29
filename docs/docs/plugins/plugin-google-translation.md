@@ -1,8 +1,6 @@
 ---
-
 title: Plugin Google Translation
 id: plugin-google-translation
-
 ---
 
 ---
