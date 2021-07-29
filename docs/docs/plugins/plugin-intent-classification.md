@@ -1,8 +1,6 @@
 ---
-
 title: Plugin Intent Classification
 id: plugin-intent-classification
-
 ---
 
 ---
