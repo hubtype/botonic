@@ -19,7 +19,6 @@ describe('Text Processor', () => {
     const { sequence, input } = sut.process(SHORT_TEXT)
     expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
     expect(sequence).toEqual([
-      'i',
       'want',
       'buy',
       'pair',
@@ -31,29 +30,32 @@ describe('Text Processor', () => {
       PADDING_TOKEN,
       PADDING_TOKEN,
       PADDING_TOKEN,
+      PADDING_TOKEN,
     ])
     expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
-    expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0]])
+    expect(input.arraySync()).toEqual([[7, 9, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]])
   })
 
   test('Generate Sequence and Input of long text', () => {
     const { sequence, input } = sut.process(LONG_TEXT)
     expect(sequence.length).toEqual(constantsHelper.MAX_SEQUENCE_LENGTH)
     expect(sequence).toEqual([
-      'i',
       'want',
       'buy',
       'pair',
       'shoes',
       't-shirt',
       'jacket',
-      'i',
       'want',
       'know',
       'fur',
       'coat',
+      'sale',
+      'love',
     ])
     expect(input.shape).toEqual([1, constantsHelper.MAX_SEQUENCE_LENGTH])
-    expect(input.arraySync()).toEqual([[6, 7, 9, 1, 1, 28, 27, 6, 7, 1, 1, 21]])
+    expect(input.arraySync()).toEqual([
+      [7, 9, 1, 1, 28, 27, 7, 1, 1, 21, 1, 11],
+    ])
   })
 })
