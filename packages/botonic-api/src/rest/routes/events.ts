@@ -3,7 +3,8 @@ import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 
 import { dataProviderFactory } from '../../data-provider'
-import { limitParamSchema, offsetParamSchema } from './validation/common'
+import { Paginator } from '../utils/paginator'
+import { pageParamSchema, pageSizeParamSchema } from './validation/common'
 import {
   eventIdParamSchema,
   validateBotonicEventData,
@@ -15,8 +16,8 @@ router
   .route('/')
   .get(
     checkSchema({
-      limit: limitParamSchema,
-      offset: offsetParamSchema,
+      page: pageParamSchema,
+      pageSize: pageSizeParamSchema,
     }),
     async (req, res) => {
       try {
@@ -27,9 +28,12 @@ router
         }
 
         const query = matchedData(req, { locations: ['query'] })
+        const paginator = new Paginator(req, query.page, query.pageSize)
         const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const events = await dp.getEvents(query.limit, query.offset)
-        res.status(200).send(events)
+        const events = await dp.getEvents(paginator.limit, paginator.offset)
+
+        const response = paginator.generateResponse(events)
+        res.status(200).json(response)
       } catch (e) {
         res.status(500).send({ error: e.message })
       }
