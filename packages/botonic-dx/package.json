@@ -29,7 +29,7 @@
     "css-loader": "^5.2.6",
     "esbuild-loader": "^2.13.1",
     "eslint": "^7.28.0",
-    "eslint-config-prettier": "^7.2.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-filenames": "*",
     "eslint-plugin-import": "*",
