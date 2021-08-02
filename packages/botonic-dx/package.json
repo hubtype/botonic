@@ -26,7 +26,7 @@
     "babel-loader": "^8.2.2",
     "babel-plugin-add-module-exports": "^1.0.4",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
-    "css-loader": "^5.2.6",
+    "css-loader": "^6.2.0",
     "esbuild-loader": "^2.13.1",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^7.2.0",
