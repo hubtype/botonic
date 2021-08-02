@@ -68,7 +68,7 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
-    "@types/joi": "^14.3.4",
+    "@types/joi": "^17.2.2",
     "@types/marked": "^2.0.3",
     "@types/memoizee": "^0.4.5",
     "contentful-cli": "^1.7.1",
