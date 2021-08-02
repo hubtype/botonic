@@ -67,6 +67,19 @@ export class LocalDevDataProvider implements DataProvider {
     return user
   }
 
+  deleteUser(id: string): User | undefined {
+    const path = this.createPath([this.paths.USERS, id])
+    this.db.reload()
+    const user = this.db.exists(path)
+      ? this.db.getObject<User>(path)
+      : undefined
+    if (user) {
+      this.db.delete(path)
+      return user
+    }
+    return undefined
+  }
+
   getEvents(limit = 10, offset = 0): BotonicEvent[] {
     const path = this.paths.EVENTS
     this.db.reload()

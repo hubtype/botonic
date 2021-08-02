@@ -89,6 +89,9 @@ export class DynamoDBDataProvider implements DataProvider {
     return user
   }
   // @ts-ignore
+  async deleteUser(id: string): Promise<User | undefined> {} // TODO: Implement
+
+  // @ts-ignore
   async getEvents(limit = 10, offset = 0): Promise<BotonicEvent[]> {} // TODO: Implement
 
   // @ts-ignore

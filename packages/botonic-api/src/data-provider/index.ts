@@ -22,6 +22,7 @@ export interface DataProvider {
   ): User | Promise<User | undefined> | undefined
   saveUser(user: User): User | Promise<User>
   updateUser(user: User): User | Promise<User>
+  deleteUser(id: string): User | Promise<User | undefined> | undefined
   getEvents(
     limit?: number,
     offset?: number

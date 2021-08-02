@@ -14,42 +14,21 @@ import {
   Schema,
   validationResult,
 } from 'express-validator'
-import { ValidatorsSchema } from 'express-validator/src/middlewares/schema'
 
-const inQuery: ParamSchema = { in: ['query'] }
-const inParams: ParamSchema = { in: ['params'] }
-const inBody: ParamSchema = { in: ['body'] }
-const isRequired: ValidatorsSchema = { notEmpty: true }
-const isOptional: ParamSchema = { optional: { options: { nullable: true } } }
-const isNaturalNumber: ParamSchema = {
-  isNumeric: { options: { no_symbols: true } },
-}
-const isNumeric: ParamSchema = { isNumeric: true }
-const isBoolean: ParamSchema = { isBoolean: true }
-const isDateTime: ParamSchema = {
-  isISO8601: { options: { strict: true, strictSeparator: true } },
-}
-const isIn = (valueList: string[]): ParamSchema => {
-  return {
-    isIn: { options: [valueList] },
-    errorMessage: `Invalid value. Allowed values: ${valueList}`,
-  }
-}
-const equals = (text: string): ParamSchema => {
-  return {
-    equals: { options: [text] },
-    errorMessage: `Invalid value. Value should be '${text}'`,
-  }
-}
-const toInt: ParamSchema = { toInt: true }
-
-export const limitParamSchema: ParamSchema = {
-  ...inQuery,
-  ...isOptional,
-  ...isNaturalNumber,
-  ...toInt,
-}
-export const offsetParamSchema = limitParamSchema
+import {
+  equals,
+  getOptionalSchema,
+  inBody,
+  inParams,
+  isBoolean,
+  isDateTime,
+  isIn,
+  isNaturalNumber,
+  isNumeric,
+  isOptional,
+  isRequired,
+  toInt,
+} from './common'
 
 export const eventIdParamSchema: ParamSchema = { ...inParams, ...isRequired }
 
@@ -184,54 +163,58 @@ export const botonicEventValidationChains = [
   checkSchema(connectionEventSchema),
 ]
 
-export async function validateBotonicEventData(
-  req: Request,
-  allFieldsOptional = false
-): Promise<Result> {
+export async function validateBotonicEventData({
+  request,
+  allFieldsOptional = false,
+  withParamEventId = false,
+}): Promise<Result> {
   const opt = allFieldsOptional
-  await checkSchema(getSchema(baseEventSchema, opt)).run(req)
-  const errors = validationResult(req)
+  const e = withParamEventId
+  await checkSchema(getSchema(baseEventSchema, opt, e)).run(request)
+  const errors = validationResult(request)
   if (!errors.isEmpty()) {
     return errors
   }
 
-  if (req.body.eventType === EventTypes.CONNECTION) {
-    await checkSchema(getSchema(connectionEventSchema, opt)).run(req)
+  let schema
+  if (request.body.eventType === EventTypes.CONNECTION) {
+    schema = getSchema(connectionEventSchema, opt, e)
   } else {
-    switch (req.body.type) {
+    switch (request.body.type) {
       case MessageEventTypes.TEXT:
-        await checkSchema(getSchema(textMessageEventSchema, opt)).run(req)
+        schema = getSchema(textMessageEventSchema, opt, e)
         break
       case MessageEventTypes.POSTBACK:
-        await checkSchema(getSchema(postbackMessageEventSchema, opt)).run(req)
+        schema = getSchema(postbackMessageEventSchema, opt, e)
         break
       case MessageEventTypes.AUDIO:
-        await checkSchema(getSchema(audioMessageEventSchema, opt)).run(req)
+        schema = getSchema(audioMessageEventSchema, opt, e)
         break
       case MessageEventTypes.DOCUMENT:
-        await checkSchema(getSchema(documentMessageEventSchema, opt)).run(req)
+        schema = getSchema(documentMessageEventSchema, opt, e)
         break
       case MessageEventTypes.IMAGE:
-        await checkSchema(getSchema(imageMessageEventSchema, opt)).run(req)
+        schema = getSchema(imageMessageEventSchema, opt, e)
         break
       case MessageEventTypes.VIDEO:
-        await checkSchema(getSchema(videoMessageEventSchema, opt)).run(req)
+        schema = getSchema(videoMessageEventSchema, opt, e)
         break
       case MessageEventTypes.LOCATION:
-        await checkSchema(getSchema(locationMessageEventSchema, opt)).run(req)
+        schema = getSchema(locationMessageEventSchema, opt, e)
         break
       case MessageEventTypes.CAROUSEL:
-        await checkSchema(getSchema(carouselMessageEventSchema, opt)).run(req)
+        schema = getSchema(carouselMessageEventSchema, opt, e)
         break
       case MessageEventTypes.CUSTOM:
-        await checkSchema(getSchema(customMessageEventSchema, opt)).run(req)
+        schema = getSchema(customMessageEventSchema, opt, e)
         break
       default:
-        await checkSchema(getSchema(botonicMessageEventSchema, opt)).run(req)
+        schema = getSchema(botonicMessageEventSchema, opt, e)
         break
     }
   }
-  return validationResult(req)
+  await checkSchema(schema).run(request)
+  return validationResult(request)
 }
 
 export async function validateEventType(req: Request): Promise<Result> {
@@ -248,16 +231,16 @@ export async function validateType(req: Request): Promise<Result> {
   return validationResult(req)
 }
 
-function getSchema(schema: Schema, allFieldsOptional = false): Schema {
-  if (!allFieldsOptional) {
-    return schema
+function getSchema(
+  schema: Schema,
+  allFieldsOptional = false,
+  withParamEventId = false
+): Schema {
+  if (withParamEventId) {
+    schema = { ...schema, eventId: eventIdParamSchema }
   }
-  for (const field of Object.keys(schema)) {
-    const validations = schema[field]
-    delete validations.notEmpty
-    if (!('optional' in validations)) {
-      schema[field] = { ...validations, ...isOptional }
-    }
+  if (allFieldsOptional) {
+    schema = getOptionalSchema(schema)
   }
   return schema
 }

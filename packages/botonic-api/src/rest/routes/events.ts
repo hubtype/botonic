@@ -3,10 +3,9 @@ import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 
 import { dataProviderFactory } from '../../data-provider'
+import { limitParamSchema, offsetParamSchema } from './validation/common'
 import {
   eventIdParamSchema,
-  limitParamSchema,
-  offsetParamSchema,
   validateBotonicEventData,
 } from './validation/events'
 
@@ -37,7 +36,7 @@ router
     }
   )
   .post(async (req, res) => {
-    const errors = await validateBotonicEventData(req)
+    const errors = await validateBotonicEventData({ request: req })
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
@@ -61,13 +60,13 @@ router
 router
   .route('/:eventId')
   .get(checkSchema({ eventId: eventIdParamSchema }), async (req, res) => {
-    try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        res.status(400).send({ errors: errors.array() })
-        return
-      }
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.status(400).send({ errors: errors.array() })
+      return
+    }
 
+    try {
       const params = matchedData(req, { locations: ['params'] })
       const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
       const event = await dp.getEvent(params.eventId)
@@ -82,20 +81,18 @@ router
       res.status(500).send({ error: e.message })
     }
   })
-  .put(checkSchema({ eventId: eventIdParamSchema }), async (req, res) => {
-    const errors = await validateBotonicEventData(req)
+  .put(async (req, res) => {
+    const errors = await validateBotonicEventData({
+      request: req,
+      allFieldsOptional: false,
+      withParamEventId: true,
+    })
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
     }
 
     try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        res.status(400).send({ errors: errors.array() })
-        return
-      }
-
       const params = matchedData(req, { locations: ['params'] })
       const updatedEvent = matchedData(req, {
         locations: ['body'],
@@ -109,26 +106,26 @@ router
           .send({ error: `Event with ID '${params.eventId}' not found` })
         return
       }
+
+      updatedEvent.eventId = event.eventId
       await dp.updateEvent(updatedEvent)
       res.status(200).send(updatedEvent)
     } catch (e) {
       res.status(500).send({ error: e.message })
     }
   })
-  .patch(checkSchema({ eventId: eventIdParamSchema }), async (req, res) => {
-    const errors = await validateBotonicEventData(req, true)
+  .patch(async (req, res) => {
+    const errors = await validateBotonicEventData({
+      request: req,
+      allFieldsOptional: true,
+      withParamEventId: true,
+    })
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
     }
 
     try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        res.status(400).send({ errors: errors.array() })
-        return
-      }
-
       const params = matchedData(req, { locations: ['params'] })
       const newEventData = matchedData(req, {
         locations: ['body'],
@@ -142,6 +139,8 @@ router
           .send({ error: `Event with ID '${params.eventId}' not found` })
         return
       }
+
+      newEventData.eventId = event.eventId
       const updatedEvent = { ...event, ...newEventData } as BotonicEvent
       await dp.updateEvent(updatedEvent)
       res.status(200).send(updatedEvent)
