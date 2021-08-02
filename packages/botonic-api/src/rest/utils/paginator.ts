@@ -3,6 +3,7 @@ import { Request } from 'express'
 export const FIRST_PAGE = 1
 export const DEFAULT_PAGE_SIZE = 10
 export const MAX_PAGE_SIZE = 100
+export const MIN_PAGE_SIZE = 1
 
 type JsonResponse<T> = {
   previous?: string
@@ -23,7 +24,8 @@ export class Paginator {
   ) {
     this.baseUrl = this.getBaseUrl(request)
     this.page = page < FIRST_PAGE ? FIRST_PAGE : page
-    this.pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize
+    pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize
+    this.pageSize = pageSize < MIN_PAGE_SIZE ? DEFAULT_PAGE_SIZE : pageSize
   }
 
   get limit(): number {
