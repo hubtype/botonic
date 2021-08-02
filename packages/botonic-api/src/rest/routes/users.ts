@@ -107,12 +107,8 @@ router
           .send({ error: `User with ID '${params.userId}' not found` })
         return
       }
-      if (user.id !== updatedUser.id) {
-        res
-          .status(400)
-          .send({ error: `Both user ID (params and body) must match` })
-        return
-      }
+
+      updatedUser.id = user.id
       await dp.updateUser(updatedUser)
       res.status(200).send(updatedUser)
     } catch (e) {
@@ -142,12 +138,8 @@ router
             .send({ error: `User with ID '${params.userId}' not found` })
           return
         }
-        if (newUserData.id && user.id !== newUserData.id) {
-          res
-            .status(400)
-            .send({ error: `Both user ID (params and body) must match` })
-          return
-        }
+
+        newUserData.id = user.id
         const updatedUser = { ...user, ...newUserData }
         await dp.updateUser(updatedUser)
         res.status(200).send(updatedUser)

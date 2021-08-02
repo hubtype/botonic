@@ -25,4 +25,5 @@ export const userSchema: Schema = {
 export const userWithUserIdParamSchema: Schema = {
   userId: userIdParamSchema,
   ...userSchema,
+  id: { ...inBody, ...isOptional },
 }

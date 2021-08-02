@@ -36,7 +36,7 @@ router
     }
   )
   .post(async (req, res) => {
-    const errors = await validateBotonicEventData(req)
+    const errors = await validateBotonicEventData({ request: req })
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
@@ -82,7 +82,11 @@ router
     }
   })
   .put(async (req, res) => {
-    const errors = await validateBotonicEventData(req, false, true)
+    const errors = await validateBotonicEventData({
+      request: req,
+      allFieldsOptional: false,
+      withParamEventId: true,
+    })
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
@@ -102,12 +106,8 @@ router
           .send({ error: `Event with ID '${params.eventId}' not found` })
         return
       }
-      if (event.eventId !== updatedEvent.eventId) {
-        res
-          .status(400)
-          .send({ error: `Both event ID (params and body) must match` })
-        return
-      }
+
+      updatedEvent.eventId = event.eventId
       await dp.updateEvent(updatedEvent)
       res.status(200).send(updatedEvent)
     } catch (e) {
@@ -115,7 +115,11 @@ router
     }
   })
   .patch(async (req, res) => {
-    const errors = await validateBotonicEventData(req, true, true)
+    const errors = await validateBotonicEventData({
+      request: req,
+      allFieldsOptional: true,
+      withParamEventId: true,
+    })
     if (!errors.isEmpty()) {
       res.status(400).send({ errors: errors.array({ onlyFirstError: true }) })
       return
@@ -135,12 +139,8 @@ router
           .send({ error: `Event with ID '${params.eventId}' not found` })
         return
       }
-      if (newEventData.eventId && event.eventId !== newEventData.eventId) {
-        res
-          .status(400)
-          .send({ error: `Both user ID (params and body) must match` })
-        return
-      }
+
+      newEventData.eventId = event.eventId
       const updatedEvent = { ...event, ...newEventData } as BotonicEvent
       await dp.updateEvent(updatedEvent)
       res.status(200).send(updatedEvent)

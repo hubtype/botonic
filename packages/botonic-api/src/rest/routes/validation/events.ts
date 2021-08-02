@@ -163,24 +163,24 @@ export const botonicEventValidationChains = [
   checkSchema(connectionEventSchema),
 ]
 
-export async function validateBotonicEventData(
-  req: Request,
+export async function validateBotonicEventData({
+  request,
   allFieldsOptional = false,
-  withParamEventId = false
-): Promise<Result> {
+  withParamEventId = false,
+}): Promise<Result> {
   const opt = allFieldsOptional
   const e = withParamEventId
-  await checkSchema(getSchema(baseEventSchema, opt, e)).run(req)
-  const errors = validationResult(req)
+  await checkSchema(getSchema(baseEventSchema, opt, e)).run(request)
+  const errors = validationResult(request)
   if (!errors.isEmpty()) {
     return errors
   }
 
   let schema
-  if (req.body.eventType === EventTypes.CONNECTION) {
+  if (request.body.eventType === EventTypes.CONNECTION) {
     schema = getSchema(connectionEventSchema, opt, e)
   } else {
-    switch (req.body.type) {
+    switch (request.body.type) {
       case MessageEventTypes.TEXT:
         schema = getSchema(textMessageEventSchema, opt, e)
         break
@@ -213,8 +213,8 @@ export async function validateBotonicEventData(
         break
     }
   }
-  await checkSchema(schema).run(req)
-  return validationResult(req)
+  await checkSchema(schema).run(request)
+  return validationResult(request)
 }
 
 export async function validateEventType(req: Request): Promise<Result> {
@@ -237,7 +237,7 @@ function getSchema(
   withParamEventId = false
 ): Schema {
   if (withParamEventId) {
-    schema = { eventId: eventIdParamSchema, ...schema }
+    schema = { ...schema, eventId: eventIdParamSchema }
   }
   if (allFieldsOptional) {
     schema = getOptionalSchema(schema)
