@@ -1,3 +1,4 @@
+import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
@@ -6,11 +7,13 @@ import { statSync } from 'fs'
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
+import { cwd } from 'process'
 // eslint-disable-next-line import/named
 import { ZipAFolder } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
+import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
 import {
   copy,
   createDir,
@@ -34,6 +37,9 @@ Creating bundle...
 Uploading...
 🚀 Bot deployed!
 `,
+    `$ botonic deploy aws
+Deploying to AWS...
+`,
   ]
   static flags = {
     command: flags.string({
@@ -54,7 +60,7 @@ Uploading...
     }),
   }
 
-  static args = [{ name: 'bot_name' }]
+  static args = [{ name: 'provider', options: Object.values(CLOUD_PROVIDERS) }]
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
   private botName: string | undefined = undefined
@@ -62,20 +68,41 @@ Uploading...
 
   /* istanbul ignore next */
   async run(): Promise<void> {
-    const { flags } = this.parse(Run)
-    this.telemetry.trackDeploy()
-    npmCommand = flags.command
-    this.botName = flags.botName
-    const email = flags.email
-    const password = flags.password
-    if (email && password) await this.login(email, password)
-    else if (!this.botonicApiService.oauth) await this.signupFlow()
-    else if (this.botName) {
-      await this.deployBotFromFlag(this.botName)
-    } else await this.deployBotFlow()
+    const { flags, args } = this.parse(Run)
+    const provider = args.provider
+    if (provider && provider !== CLOUD_PROVIDERS.HUBTYPE) {
+      this.deployToProvider(provider)
+    } else {
+      this.telemetry.trackDeploy()
+      npmCommand = flags.command
+      this.botName = flags.botName
+      const email = flags.email
+      const password = flags.password
+      if (email && password) await this.login(email, password)
+      else if (!this.botonicApiService.oauth) await this.signupFlow()
+      else if (this.botName) {
+        await this.deployBotFromFlag(this.botName)
+      } else await this.deployBotFlow()
+    }
   }
 
-  async deployBotFromFlag(botName: string) {
+  async deployToProvider(provider: string): Promise<void> {
+    this.telemetry.trackDeploy1_0({ provider })
+    if (provider === CLOUD_PROVIDERS.AWS) {
+      console.log(`Deploying to ${CLOUD_PROVIDERS.AWS}...`)
+      console.log('This can take a while, do not cancel this process.')
+      const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
+      try {
+        await pulumiRunner.deploy()
+      } catch (e) {
+        const error = `Deploy Botonic 1.0 ${provider} Error: ${String(e)}`
+        this.telemetry.trackError(error)
+        throw new Error(e)
+      }
+    }
+  }
+
+  async deployBotFromFlag(botName: string): Promise<void> {
     const resp = await this.botonicApiService.getBots()
     const nextBots = resp.data.next
     const bots = resp.data.results

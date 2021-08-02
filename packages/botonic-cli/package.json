@@ -8,6 +8,7 @@
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
   "dependencies": {
+    "@botonic/pulumi": "^1.0.0-alpha.0",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.2",
@@ -60,6 +61,7 @@
     "ts-node": "ts-node",
     "prepare": "node ../../preinstall.js",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "build:watch": "rm -rf lib && ../../node_modules/.bin/tsc -w",
     "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
     "prepack": "oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
     "version": "oclif-dev readme && git add README.md",
