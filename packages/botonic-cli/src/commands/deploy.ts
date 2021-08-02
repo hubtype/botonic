@@ -7,7 +7,6 @@ import { statSync } from 'fs'
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
-import { cwd } from 'process'
 // eslint-disable-next-line import/named
 import { ZipAFolder } from 'zip-a-folder'
 
@@ -28,7 +27,7 @@ const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 const BOTONIC_TEMP_DIRNAME = 'tmp'
 
 export default class Run extends Command {
-  static description = 'Deploy Botonic project to hubtype.com'
+  static description = 'Deploy Botonic project to cloud provider'
 
   static examples = [
     `$ botonic deploy

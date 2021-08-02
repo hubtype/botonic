@@ -5,7 +5,7 @@ import { Telemetry } from '../analytics/telemetry'
 import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
 
 export default class Run extends Command {
-  static description = 'Deploy Botonic project to hubtype.com'
+  static description = 'Destroy Botonic project from cloud provider'
 
   static examples = [
     `$ botonic destroy aws
