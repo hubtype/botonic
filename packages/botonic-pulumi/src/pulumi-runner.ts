@@ -1,4 +1,3 @@
-import { CloudFront } from '@aws-sdk/client-cloudfront'
 import {
   InlineProgramArgs,
   LocalWorkspace,
@@ -12,22 +11,25 @@ import { join } from 'path'
 import { env } from 'process'
 
 import { WEBCHAT_BOTONIC_PATH, WEBSOCKET_ENDPOINT_PATH_NAME } from './'
+import { CacheInvalidator } from './aws/cache-invalidator'
 import {
   deployBackendStack,
   deployFrontendStack,
 } from './aws/deployment-stacks'
 import { PulumiDownloader } from './pulumi-downloader'
 import { getCleanVersionForPackage, getHomeDirectory } from './system-utils'
-export interface ProjectConfig {
-  projectName?: string
-  stackName?: string
-  customDomain?: string
-  // AWS Authentication Params
+
+export interface AWSCredentials {
   region?: string
   profile?: string
   accessKey?: string
   secretKey?: string
   token?: string
+}
+export interface ProjectConfig extends AWSCredentials {
+  projectName?: string
+  stackName?: string
+  customDomain?: string
   tags?: Record<string, string>
   // DynamoDB
   tableName?: string
@@ -249,21 +251,24 @@ export class PulumiRunner {
       this.replaceWithWebSocketUrl(websocketReplacementUrl)
     }
     const frontendResults = await this.runStack('frontend')
-    if (frontendResults) {
-      console.log('Running cache invalidations on updated files...')
-      const cloudfrontId = frontendResults.outputs['cloudfrontId'].value
-      const client = new CloudFront({ region: this.projectConfig.region })
-      const itemsToInvalidate = this.updatedBucketObjects.map(e => `/${e}`)
-      await client.createInvalidation({
-        DistributionId: cloudfrontId,
-        InvalidationBatch: {
-          CallerReference: new Date().toISOString(),
-          Paths: {
-            Items: itemsToInvalidate,
-            Quantity: itemsToInvalidate.length,
-          },
-        },
-      })
+    if (frontendResults && this.updatedBucketObjects.length > 0) {
+      try {
+        const cacheInvalidator = new CacheInvalidator({
+          region: this.projectConfig.region,
+          profile: this.projectConfig.profile,
+          accessKey: this.projectConfig.accessKey,
+          secretKey: this.projectConfig.secretKey,
+          token: this.projectConfig.token,
+        })
+        const cloudfrontId = frontendResults.outputs['cloudfrontId'].value
+        await cacheInvalidator.invalidateBucketObjects(
+          cloudfrontId,
+          '/',
+          this.updatedBucketObjects
+        )
+      } catch (e) {
+        console.log('Could not invalidate cache for files.', e)
+      }
     }
     return
   }
