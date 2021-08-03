@@ -161,6 +161,7 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
   apiUrl: pulumi.Output<string>
   webchatUrl: pulumi.Output<string>
   // webviewsUrl: pulumi.Output<string>
+  cloudfrontId: pulumi.Output<string>
 
   constructor(args: StaticWebchatContentsArgs, opts: AWSResourceOptions) {
     super('static-webchat-contents', args, opts)
@@ -367,7 +368,9 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
     this.websocketUrl = pulumi.interpolate`wss://${domainName}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
     this.apiUrl = pulumi.interpolate`https://${domainName}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
     this.webchatUrl = pulumi.interpolate`https://${domainName}/`
+    this.cloudfrontId = cdn.id
     this.registerOutputs({
+      cloudfrontId: this.cloudfrontId,
       nlpModelsUrl: this.nlpModelsUrl,
       websocketUrl: this.websocketUrl,
       apiUrl: this.apiUrl,

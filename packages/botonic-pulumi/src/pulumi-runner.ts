@@ -1,3 +1,4 @@
+import { CloudFront } from '@aws-sdk/client-cloudfront'
 import {
   InlineProgramArgs,
   LocalWorkspace,
@@ -17,7 +18,6 @@ import {
 } from './aws/deployment-stacks'
 import { PulumiDownloader } from './pulumi-downloader'
 import { getCleanVersionForPackage, getHomeDirectory } from './system-utils'
-
 export interface ProjectConfig {
   projectName?: string
   stackName?: string
@@ -47,6 +47,7 @@ export class PulumiRunner {
   private pulumiDownloader = new PulumiDownloader()
   private isDestroy = false
   private programConfig: ProgramConfig
+  private updatedBucketObjects: string[] = []
   public projectConfig: ProjectConfig = {}
   private commands = [
     {
@@ -151,7 +152,6 @@ export class PulumiRunner {
 
   private async refreshStack(stack: Stack): Promise<void> {
     console.info('refreshing stack...')
-    // await stack.refresh({ onOutput: console.info })
     await stack.refresh()
     console.info('refresh complete')
   }
@@ -175,6 +175,32 @@ export class PulumiRunner {
     return upRes
   }
 
+  private async previewStack(stack: Stack): Promise<void> {
+    const previewRes = await stack.preview()
+    this.updatedBucketObjects = this.updatedBucketObjects.concat(
+      this.getUpdatedBucketObjects(previewRes.stdout)
+    )
+  }
+
+  private getUpdatedBucketObjects(stdout: string): string[] {
+    try {
+      const updatedObjectsRegex = /.*aws:s3:BucketObject(.*)update/
+      return stdout
+        .trim()
+        .split('\n')
+        .map(e => e.trim())
+        .filter(e => e.startsWith('~') && e.includes('aws:s3:BucketObject'))
+        .map((e: string) => {
+          const res = updatedObjectsRegex.exec(e)
+          if (!res) return ''
+          return res[1].trim()
+        })
+        .filter(e => Boolean(e) && e)
+    } catch (e) {
+      return []
+    }
+  }
+
   private replaceWithWebSocketUrl(websocketUrl: string): void {
     let fileContent = readFileSync(WEBCHAT_BOTONIC_PATH, {
       encoding: 'utf8',
@@ -194,6 +220,7 @@ export class PulumiRunner {
       await this.destroyStack(stack)
       return undefined
     } else {
+      const previewResults = await this.previewStack(stack)
       const updateResults = await this.updateStack(stack)
       return updateResults
     }
@@ -222,6 +249,22 @@ export class PulumiRunner {
       this.replaceWithWebSocketUrl(websocketReplacementUrl)
     }
     const frontendResults = await this.runStack('frontend')
+    if (frontendResults) {
+      console.log('Running cache invalidations on updated files...')
+      const cloudfrontId = frontendResults.outputs['cloudfrontId'].value
+      const client = new CloudFront({ region: this.projectConfig.region })
+      const itemsToInvalidate = this.updatedBucketObjects.map(e => `/${e}`)
+      await client.createInvalidation({
+        DistributionId: cloudfrontId,
+        InvalidationBatch: {
+          CallerReference: new Date().toISOString(),
+          Paths: {
+            Items: itemsToInvalidate,
+            Quantity: itemsToInvalidate.length,
+          },
+        },
+      })
+    }
     return
   }
 
