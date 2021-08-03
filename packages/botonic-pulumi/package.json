@@ -18,9 +18,9 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@pulumi/aws": "^4.8.0",
+    "@pulumi/aws": "^4.14.0",
     "@pulumi/awsx": "^0.30.0",
-    "@pulumi/pulumi": "^3.5.1",
+    "@pulumi/pulumi": "^3.9.1",
     "@vendia/serverless-express": "^4.3.9",
     "concurrently": "^6.2.0",
     "decompress": "^4.2.1",
