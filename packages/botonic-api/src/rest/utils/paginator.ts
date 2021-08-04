@@ -50,6 +50,7 @@ export class Paginator {
     return {
       previous: this.page > FIRST_PAGE ? this.previousUrl : undefined,
       next: items.length === this.pageSize ? this.nextUrl : undefined,
+      //TODO: count should be the total amount of items, not only the number of items of the actual page
       count: items.length,
       results: items,
     }
