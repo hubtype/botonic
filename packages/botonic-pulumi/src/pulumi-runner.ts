@@ -10,7 +10,11 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { env } from 'process'
 
-import { WEBCHAT_BOTONIC_PATH, WEBSOCKET_ENDPOINT_PATH_NAME } from './'
+import {
+  generatePrefix,
+  WEBCHAT_BOTONIC_PATH,
+  WEBSOCKET_ENDPOINT_PATH_NAME,
+} from './'
 import {
   CacheInvalidator,
   getUpdatedObjectsFromPreview,
@@ -99,9 +103,10 @@ export class PulumiRunner {
   ): Promise<Stack> {
     const projectName = this.projectConfig?.projectName || 'botonic'
     const stackName = this.projectConfig?.stackName || 'full-stack'
+    const prefix = generatePrefix(projectName, stackName)
     const args: InlineProgramArgs = {
       projectName,
-      stackName: `${stackToDeploy}-${stackName}`,
+      stackName: `${prefix}-${stackToDeploy}`,
       program: async () => {
         return stackToDeploy === 'backend'
           ? await deployBackendStack(this.programConfig)

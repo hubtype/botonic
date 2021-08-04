@@ -2,10 +2,27 @@ import { Config } from '@pulumi/pulumi'
 import { join } from 'path'
 import { cwd } from 'process'
 
-export const getNamePrefix = (): string => {
+export function getNamePrefix(): string {
   const config = new Config()
-  return `botonic-${config.get('projectName')}-${config.get('stackName')}`
+  const prefix = generatePrefix(
+    config.get('projectName') as string,
+    config.get('stackName') as string
+  )
+  return prefix
 }
+
+export function generatePrefix(projectName: string, stackName: string): string {
+  const SEPARATOR = '-'
+  const prefix = `${projectName}${SEPARATOR}${stackName}`
+  const MAX_LENGTH = 30
+  if (prefix.length > MAX_LENGTH + 1) {
+    throw new Error(
+      `The combination of 'projectName' and 'stackName' names can not exceed ${MAX_LENGTH} chars.`
+    )
+  }
+  return prefix
+}
+
 export const NLP_MODELS_PATH = join(cwd(), 'bot', 'src', 'nlp', 'tasks')
 export const WEBSOCKET_SERVER_PATH = join(cwd(), 'api', 'dist', 'websocket')
 export const REST_SERVER_PATH = join(cwd(), 'api', 'dist', 'rest')
