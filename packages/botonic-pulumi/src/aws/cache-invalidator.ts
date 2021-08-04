@@ -1,17 +1,31 @@
-import { CloudFront } from '@aws-sdk/client-cloudfront'
+import { CloudFront, CloudFrontClientConfig } from '@aws-sdk/client-cloudfront'
+import { Credentials } from '@aws-sdk/types'
 
 import { AWSCredentials } from '../pulumi-runner'
-
 export class CacheInvalidator {
-  awsConfig: AWSCredentials
   client: CloudFront
-
   constructor(awsConfig: AWSCredentials) {
-    this.awsConfig = awsConfig
-    // TODO: What more credentials have to be used here?
-    this.client = new CloudFront({
+    const cfClientConfig: CloudFrontClientConfig = {
       region: awsConfig.region,
-    })
+    }
+    const credentials = this.resolveCredentials(awsConfig)
+    if (credentials) cfClientConfig.credentials = credentials
+    this.client = new CloudFront(cfClientConfig)
+  }
+
+  resolveCredentials(awsConfig: AWSCredentials): Credentials | undefined {
+    const credentials = {}
+    if (awsConfig.accessKey && awsConfig.secretKey) {
+      credentials['accessKeyId'] = awsConfig.accessKey
+      credentials['secretAccessKey'] = awsConfig.secretKey
+    }
+    if (awsConfig.token) {
+      credentials['sessionToken'] = awsConfig.token
+    }
+    if (Object.keys(credentials).length > 0) {
+      return credentials as Credentials
+    }
+    return undefined
   }
 
   async invalidateBucketObjects(
@@ -31,5 +45,24 @@ export class CacheInvalidator {
         },
       },
     })
+  }
+}
+
+export function getUpdatedObjectsFromPreview(previewStdout: string): string[] {
+  try {
+    const updatedObjectsRegex = /.*aws:s3:BucketObject(.*)update/
+    return previewStdout
+      .trim()
+      .split('\n')
+      .map(e => e.trim())
+      .filter(e => e.startsWith('~') && e.includes('aws:s3:BucketObject'))
+      .map((e: string) => {
+        const res = updatedObjectsRegex.exec(e)
+        if (!res) return ''
+        return res[1].trim()
+      })
+      .filter(e => Boolean(e) && e)
+  } catch (e) {
+    return []
   }
 }

@@ -11,7 +11,10 @@ import { join } from 'path'
 import { env } from 'process'
 
 import { WEBCHAT_BOTONIC_PATH, WEBSOCKET_ENDPOINT_PATH_NAME } from './'
-import { CacheInvalidator } from './aws/cache-invalidator'
+import {
+  CacheInvalidator,
+  getUpdatedObjectsFromPreview,
+} from './aws/cache-invalidator'
 import {
   deployBackendStack,
   deployFrontendStack,
@@ -177,30 +180,11 @@ export class PulumiRunner {
     return upRes
   }
 
-  private async previewStack(stack: Stack): Promise<void> {
+  private async updateUpdatedBucketObjects(stack: Stack): Promise<void> {
     const previewRes = await stack.preview()
     this.updatedBucketObjects = this.updatedBucketObjects.concat(
-      this.getUpdatedBucketObjects(previewRes.stdout)
+      getUpdatedObjectsFromPreview(previewRes.stdout)
     )
-  }
-
-  private getUpdatedBucketObjects(stdout: string): string[] {
-    try {
-      const updatedObjectsRegex = /.*aws:s3:BucketObject(.*)update/
-      return stdout
-        .trim()
-        .split('\n')
-        .map(e => e.trim())
-        .filter(e => e.startsWith('~') && e.includes('aws:s3:BucketObject'))
-        .map((e: string) => {
-          const res = updatedObjectsRegex.exec(e)
-          if (!res) return ''
-          return res[1].trim()
-        })
-        .filter(e => Boolean(e) && e)
-    } catch (e) {
-      return []
-    }
   }
 
   private replaceWithWebSocketUrl(websocketUrl: string): void {
@@ -222,7 +206,7 @@ export class PulumiRunner {
       await this.destroyStack(stack)
       return undefined
     } else {
-      const previewResults = await this.previewStack(stack)
+      await this.updateUpdatedBucketObjects(stack)
       const updateResults = await this.updateStack(stack)
       return updateResults
     }
@@ -252,25 +236,35 @@ export class PulumiRunner {
     }
     const frontendResults = await this.runStack('frontend')
     if (frontendResults && this.updatedBucketObjects.length > 0) {
-      try {
-        const cacheInvalidator = new CacheInvalidator({
-          region: this.projectConfig.region,
-          profile: this.projectConfig.profile,
-          accessKey: this.projectConfig.accessKey,
-          secretKey: this.projectConfig.secretKey,
-          token: this.projectConfig.token,
-        })
-        const cloudfrontId = frontendResults.outputs['cloudfrontId'].value
-        await cacheInvalidator.invalidateBucketObjects(
-          cloudfrontId,
-          '/',
-          this.updatedBucketObjects
-        )
-      } catch (e) {
-        console.log('Could not invalidate cache for files.', e)
-      }
+      await this.doInvalidateUpdatedFiles(
+        frontendResults,
+        this.updatedBucketObjects
+      )
     }
     return
+  }
+
+  private async doInvalidateUpdatedFiles(
+    updateResults: UpResult,
+    updatedBucketObjects: string[]
+  ): Promise<void> {
+    try {
+      const cacheInvalidator = new CacheInvalidator({
+        region: this.projectConfig.region,
+        profile: this.projectConfig.profile,
+        accessKey: this.projectConfig.accessKey,
+        secretKey: this.projectConfig.secretKey,
+        token: this.projectConfig.token,
+      })
+      const cloudfrontId = updateResults.outputs['cloudfrontId'].value
+      await cacheInvalidator.invalidateBucketObjects(
+        cloudfrontId,
+        '/',
+        updatedBucketObjects
+      )
+    } catch (e) {
+      console.log('Could not invalidate cache for files.', e)
+    }
   }
 
   private setExecutionVariables(): void {
