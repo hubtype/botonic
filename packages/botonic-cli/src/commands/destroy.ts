@@ -21,26 +21,28 @@ Destroying AWS stack...
   /* istanbul ignore next */
   async run(): Promise<void> {
     const { args } = this.parse(Run)
-    const provider = args.provider
-    if (provider) {
-      this.destroyProvider(provider)
+    const provider = args.provider || CLOUD_PROVIDERS.HUBTYPE
+    this.telemetry.trackDestroy1_0({ provider })
+    console.log(`Destroying ${provider} stack...`)
+    console.log('This can take a while, do not cancel this process.')
+    if (provider === CLOUD_PROVIDERS.AWS) this.destroyAWS()
+    else if (provider === CLOUD_PROVIDERS.HUBTYPE) this.destroyHubtype()
+  }
+
+  async destroyAWS(): Promise<void> {
+    try {
+      const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
+      await pulumiRunner.destroy()
+    } catch (e) {
+      const error = `Destroy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
+        e
+      )}`
+      this.telemetry.trackError(error)
+      throw new Error(e)
     }
   }
 
-  async destroyProvider(provider: string): Promise<void> {
-    this.telemetry.trackDeploy({ provider })
-    if (provider === CLOUD_PROVIDERS.AWS) {
-      console.log(`Destroying ${CLOUD_PROVIDERS.AWS} stack...`)
-      console.log('This can take a while, do not cancel this process.')
-      this.telemetry.trackDestroy1_0({ provider })
-      try {
-        const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
-        await pulumiRunner.destroy()
-      } catch (e) {
-        const error = `Destroy Botonic 1.0 ${provider} Error: ${String(e)}`
-        this.telemetry.trackError(error)
-        throw new Error(e)
-      }
-    }
+  async destroyHubtype(): Promise<void> {
+    // TODO: Implement logic to destroy Hubtype bots
   }
 }

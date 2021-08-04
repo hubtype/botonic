@@ -26,6 +26,12 @@ let npmCommand: string | undefined
 const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 const BOTONIC_TEMP_DIRNAME = 'tmp'
 
+interface DeployHubtypeFlags {
+  command?: string
+  botName?: string
+  email?: string
+  password?: string
+}
 export default class Run extends Command {
   static description = 'Deploy Botonic project to cloud provider'
 
@@ -68,37 +74,38 @@ Deploying to AWS...
   /* istanbul ignore next */
   async run(): Promise<void> {
     const { flags, args } = this.parse(Run)
-    const provider = args.provider
-    if (provider && provider !== CLOUD_PROVIDERS.HUBTYPE) {
-      this.deployToProvider(provider)
-    } else {
-      this.telemetry.trackDeploy()
-      npmCommand = flags.command
-      this.botName = flags.botName
-      const email = flags.email
-      const password = flags.password
-      if (email && password) await this.login(email, password)
-      else if (!this.botonicApiService.oauth) await this.signupFlow()
-      else if (this.botName) {
-        await this.deployBotFromFlag(this.botName)
-      } else await this.deployBotFlow()
+    const provider = args.provider || CLOUD_PROVIDERS.HUBTYPE
+    // TODO: -> In a next iteration it would be cool to get a prompt asking which provider we prefer (if it's the 1st deploy) or getting the provider from `.botonic.json` (after 1st deploy)
+    this.telemetry.trackDeploy1_0({ provider })
+    console.log(`Deploying to ${provider}...`)
+    console.log('This can take a while, do not cancel this process.')
+    if (provider === CLOUD_PROVIDERS.AWS) this.deployAWS()
+    else if (provider === CLOUD_PROVIDERS.HUBTYPE) this.deployHubtype(flags)
+  }
+
+  async deployAWS(): Promise<void> {
+    const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
+    try {
+      await pulumiRunner.deploy()
+    } catch (e) {
+      const error = `Deploy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
+        e
+      )}`
+      this.telemetry.trackError(error)
+      throw new Error(e)
     }
   }
 
-  async deployToProvider(provider: string): Promise<void> {
-    this.telemetry.trackDeploy1_0({ provider })
-    if (provider === CLOUD_PROVIDERS.AWS) {
-      console.log(`Deploying to ${CLOUD_PROVIDERS.AWS}...`)
-      console.log('This can take a while, do not cancel this process.')
-      const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
-      try {
-        await pulumiRunner.deploy()
-      } catch (e) {
-        const error = `Deploy Botonic 1.0 ${provider} Error: ${String(e)}`
-        this.telemetry.trackError(error)
-        throw new Error(e)
-      }
-    }
+  async deployHubtype(flags: DeployHubtypeFlags): Promise<void> {
+    npmCommand = flags.command
+    this.botName = flags.botName
+    const email = flags.email
+    const password = flags.password
+    if (email && password) await this.login(email, password)
+    else if (!this.botonicApiService.oauth) await this.signupFlow()
+    else if (this.botName) {
+      await this.deployBotFromFlag(this.botName)
+    } else await this.deployBotFlow()
   }
 
   async deployBotFromFlag(botName: string): Promise<void> {
