@@ -3,10 +3,11 @@ import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 
 import { dataProviderFactory } from '../../data-provider'
+import { Paginator } from '../utils/paginator'
 import {
   getOptionalSchema,
-  limitParamSchema,
-  offsetParamSchema,
+  pageParamSchema,
+  pageSizeParamSchema,
 } from './validation/common'
 import {
   userIdParamSchema,
@@ -20,8 +21,8 @@ router
   .route('/')
   .get(
     checkSchema({
-      limit: limitParamSchema,
-      offset: offsetParamSchema,
+      page: pageParamSchema,
+      pageSize: pageSizeParamSchema,
     }),
     async (req, res) => {
       try {
@@ -32,9 +33,12 @@ router
         }
 
         const query = matchedData(req, { locations: ['query'] })
+        const paginator = new Paginator(req, query.page, query.pageSize)
         const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const users = await dp.getUsers(query.limit, query.offset)
-        res.status(200).send(users)
+        const users = await dp.getUsers(paginator.limit, paginator.offset)
+
+        const response = paginator.generateResponse(users)
+        res.status(200).json(response)
       } catch (e) {
         res.status(500).send({ error: e.message })
       }

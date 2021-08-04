@@ -29,13 +29,13 @@ export const equals = (text: string): ParamSchema => {
 }
 export const toInt: ParamSchema = { toInt: true }
 
-export const limitParamSchema: ParamSchema = {
+export const pageParamSchema: ParamSchema = {
   ...inQuery,
   ...isOptional,
   ...isNaturalNumber,
   ...toInt,
 }
-export const offsetParamSchema = limitParamSchema
+export const pageSizeParamSchema = pageParamSchema
 
 export function getOptionalSchema(schema: Schema): Schema {
   for (const field of Object.keys(schema)) {
