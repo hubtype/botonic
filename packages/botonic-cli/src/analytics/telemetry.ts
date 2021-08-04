@@ -17,6 +17,8 @@ const TRACKING_EVENTS = {
   TRAIN_BOT: 'Trained with Botonic train',
   DEPLOY_BOT: 'Deployed Botonic CLI',
   ERROR_BOTONIC_CLI: 'Error Botonic CLI',
+  DEPLOY_BOT_1_0: 'Deployed Botonic 1.0',
+  DESTROY_BOT_1_0: 'Destroyed Botonic 1.0',
 }
 
 export class Telemetry {
@@ -94,6 +96,14 @@ export class Telemetry {
 
   trackDeploy(properties = {}): void {
     this.track(this.events.DEPLOY_BOT, properties)
+  }
+
+  trackDeploy1_0(properties = {}): void {
+    this.track(this.events.DEPLOY_BOT_1_0, properties)
+  }
+
+  trackDestroy1_0(properties = {}): void {
+    this.track(this.events.DESTROY_BOT_1_0, properties)
   }
 
   trackError(type: string, properties = {}): void {

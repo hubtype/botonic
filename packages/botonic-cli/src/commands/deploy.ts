@@ -1,3 +1,4 @@
+import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
@@ -11,6 +12,7 @@ import { ZipAFolder } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
+import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
 import {
   copy,
   createDir,
@@ -24,8 +26,14 @@ let npmCommand: string | undefined
 const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 const BOTONIC_TEMP_DIRNAME = 'tmp'
 
+interface DeployHubtypeFlags {
+  command?: string
+  botName?: string
+  email?: string
+  password?: string
+}
 export default class Run extends Command {
-  static description = 'Deploy Botonic project to hubtype.com'
+  static description = 'Deploy Botonic project to cloud provider'
 
   static examples = [
     `$ botonic deploy
@@ -33,6 +41,9 @@ Building...
 Creating bundle...
 Uploading...
 🚀 Bot deployed!
+`,
+    `$ botonic deploy aws
+Deploying to AWS...
 `,
   ]
   static flags = {
@@ -54,7 +65,7 @@ Uploading...
     }),
   }
 
-  static args = [{ name: 'bot_name' }]
+  static args = [{ name: 'provider', options: Object.values(CLOUD_PROVIDERS) }]
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
   private botName: string | undefined = undefined
@@ -62,8 +73,31 @@ Uploading...
 
   /* istanbul ignore next */
   async run(): Promise<void> {
-    const { flags } = this.parse(Run)
-    this.telemetry.trackDeploy()
+    const { flags, args } = this.parse(Run)
+    const provider: string = args.provider || CLOUD_PROVIDERS.HUBTYPE
+    // TODO: -> In a next iteration it would be cool to get a prompt asking which provider we prefer (if it's the 1st deploy) or getting the provider from `.botonic.json` (after 1st deploy)
+    this.telemetry.trackDeploy1_0({ provider })
+    console.log(`Deploying to ${provider}...`)
+    console.log('This can take a while, do not cancel this process.')
+    if (provider === CLOUD_PROVIDERS.AWS) await this.deployAWS()
+    else if (provider === CLOUD_PROVIDERS.HUBTYPE)
+      await this.deployHubtype(flags)
+  }
+
+  async deployAWS(): Promise<void> {
+    const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
+    try {
+      await pulumiRunner.deploy()
+    } catch (e) {
+      const error = `Deploy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
+        e
+      )}`
+      this.telemetry.trackError(error)
+      throw new Error(e)
+    }
+  }
+
+  async deployHubtype(flags: DeployHubtypeFlags): Promise<void> {
     npmCommand = flags.command
     this.botName = flags.botName
     const email = flags.email
@@ -75,7 +109,7 @@ Uploading...
     } else await this.deployBotFlow()
   }
 
-  async deployBotFromFlag(botName: string) {
+  async deployBotFromFlag(botName: string): Promise<void> {
     const resp = await this.botonicApiService.getBots()
     const nextBots = resp.data.next
     const bots = resp.data.results

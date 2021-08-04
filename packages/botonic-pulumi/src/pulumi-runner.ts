@@ -8,7 +8,7 @@ import { execSync } from 'child_process'
 import concurrently from 'concurrently'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { argv, env } from 'process'
+import { env } from 'process'
 
 import { WEBCHAT_BOTONIC_PATH, WEBSOCKET_ENDPOINT_PATH_NAME } from './'
 import {
@@ -39,23 +39,42 @@ export interface ProgramConfig extends ProjectConfig {
   apiUrl: string
 }
 
+export interface RunOptions {
+  destroy: boolean
+}
+
 export class PulumiRunner {
   private pulumiDownloader = new PulumiDownloader()
   private isDestroy = false
   private programConfig: ProgramConfig
   public projectConfig: ProjectConfig = {}
+  private commands = [
+    {
+      name: 'WebSocket Server Build',
+      command: 'yarn workspace api build:websocket',
+    },
+    {
+      name: 'Rest Server Build',
+      command: 'yarn workspace api build:rest',
+    },
+    {
+      name: 'Static Contents Build',
+      command: 'yarn workspace webchat build',
+    },
+  ]
 
-  constructor(
-    private commands: Array<concurrently.CommandObj>,
-    projectConfig?: ProjectConfig
-  ) {
-    this.commands = commands
-    this.projectConfig = projectConfig || {}
+  constructor(pathToProjectConfig: string) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      this.projectConfig = require(pathToProjectConfig).default
+    } catch (e) {
+      this.projectConfig = {}
+    }
     this.programConfig = this.projectConfig as ProgramConfig
   }
 
-  private async beforeRun(): Promise<void> {
-    this.isDestroy = this.resolveIsDestroy()
+  private async beforeRun(isDestroy: boolean): Promise<void> {
+    this.isDestroy = isDestroy
     if (!this.isDestroy) {
       try {
         await concurrently(this.commands)
@@ -66,15 +85,6 @@ export class PulumiRunner {
     await this.pulumiDownloader.downloadBinaryIfNotInstalled()
     this.setExecutionVariables()
     this.doPulumiLoginLocally()
-  }
-
-  private resolveIsDestroy(): boolean {
-    const execArgs = argv.slice(2)
-    let destroy = false
-    if (execArgs.length > 0 && execArgs[0]) {
-      destroy = execArgs[0] === 'destroy'
-    }
-    return destroy
   }
 
   private async initStack(
@@ -189,8 +199,16 @@ export class PulumiRunner {
     }
   }
 
-  async run(): Promise<UpResult | undefined> {
-    await this.beforeRun()
+  async deploy(): Promise<void> {
+    await this.run({ destroy: false })
+  }
+
+  async destroy(): Promise<void> {
+    await this.run({ destroy: true })
+  }
+
+  private async run({ destroy = false }: RunOptions): Promise<undefined> {
+    await this.beforeRun(destroy)
     const backendResults = await this.runStack('backend')
     if (backendResults) {
       const websocketUrl = backendResults.outputs['websocketUrl'].value
