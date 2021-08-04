@@ -21,12 +21,12 @@ Destroying AWS stack...
   /* istanbul ignore next */
   async run(): Promise<void> {
     const { args } = this.parse(Run)
-    const provider = args.provider || CLOUD_PROVIDERS.HUBTYPE
+    const provider: string = args.provider || CLOUD_PROVIDERS.HUBTYPE
     this.telemetry.trackDestroy1_0({ provider })
     console.log(`Destroying ${provider} stack...`)
     console.log('This can take a while, do not cancel this process.')
-    if (provider === CLOUD_PROVIDERS.AWS) this.destroyAWS()
-    else if (provider === CLOUD_PROVIDERS.HUBTYPE) this.destroyHubtype()
+    if (provider === CLOUD_PROVIDERS.AWS) await this.destroyAWS()
+    else if (provider === CLOUD_PROVIDERS.HUBTYPE) await this.destroyHubtype()
   }
 
   async destroyAWS(): Promise<void> {

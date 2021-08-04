@@ -74,13 +74,14 @@ Deploying to AWS...
   /* istanbul ignore next */
   async run(): Promise<void> {
     const { flags, args } = this.parse(Run)
-    const provider = args.provider || CLOUD_PROVIDERS.HUBTYPE
+    const provider: string = args.provider || CLOUD_PROVIDERS.HUBTYPE
     // TODO: -> In a next iteration it would be cool to get a prompt asking which provider we prefer (if it's the 1st deploy) or getting the provider from `.botonic.json` (after 1st deploy)
     this.telemetry.trackDeploy1_0({ provider })
     console.log(`Deploying to ${provider}...`)
     console.log('This can take a while, do not cancel this process.')
-    if (provider === CLOUD_PROVIDERS.AWS) this.deployAWS()
-    else if (provider === CLOUD_PROVIDERS.HUBTYPE) this.deployHubtype(flags)
+    if (provider === CLOUD_PROVIDERS.AWS) await this.deployAWS()
+    else if (provider === CLOUD_PROVIDERS.HUBTYPE)
+      await this.deployHubtype(flags)
   }
 
   async deployAWS(): Promise<void> {
