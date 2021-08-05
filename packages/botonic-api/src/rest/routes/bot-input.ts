@@ -4,7 +4,7 @@ import { MessageEventFrom } from '@botonic/core/lib/models/events/message'
 import { BotonicEvent } from '@botonic/core/src/models/events'
 import { MessageEventAck } from '@botonic/core/src/models/events/message'
 import { User } from '@botonic/core/src/models/user'
-import { NodeApp } from '@botonic/react'
+import { NodeApp } from '@botonic/react/src/experimental'
 import { Request, Router } from 'express'
 import { ulid } from 'ulid'
 import { v4 } from 'uuid'
@@ -72,6 +72,9 @@ async function createUser(providerId: string): Promise<User> {
     isOnline: true,
     route: '/',
     session: {} as Session,
+    // TODO: fill information
+    websocketId: '',
+    locationInfo: '',
   }
   return dp.saveUser(user)
 }

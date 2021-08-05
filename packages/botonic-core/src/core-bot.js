@@ -17,8 +17,10 @@ export class CoreBot {
     defaultDelay,
     defaultRoutes,
     inspector,
+    dataProvider,
   }) {
     this.renderer = renderer
+    this.dataProvider = dataProvider
     this.plugins = loadPlugins(plugins)
     this.theme = theme || {}
     this.defaultTyping =
@@ -54,7 +56,16 @@ export class CoreBot {
     if (!session.__locale) session.__locale = 'en'
 
     if (this.plugins) {
-      await runPlugins(this.plugins, 'pre', input, session, lastRoutePath)
+      await runPlugins(
+        this.plugins,
+        'pre',
+        input,
+        session,
+        lastRoutePath,
+        undefined,
+        undefined,
+        this.dataProvider
+      )
     }
 
     if (isFunction(this.routes)) {
@@ -79,6 +90,7 @@ export class CoreBot {
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
       lastRoutePath,
+      dataProvider: this.dataProvider,
     }
 
     const actions = [output.action, output.retryAction, output.defaultAction]
@@ -98,7 +110,8 @@ export class CoreBot {
         session,
         lastRoutePath,
         response,
-        parsedResponse
+        parsedResponse,
+        this.dataProvider
       )
     }
 

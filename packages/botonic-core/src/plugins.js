@@ -23,12 +23,14 @@ export async function runPlugins(
   session,
   lastRoutePath,
   response = null,
-  parsedResponse = null
+  parsedResponse = null,
+  dataProvider = null
 ) {
   for (const key in plugins) {
     const p = await plugins[key]
     try {
-      if (mode == 'pre') await p.pre({ input, session, lastRoutePath })
+      if (mode == 'pre')
+        await p.pre({ input, session, lastRoutePath, dataProvider })
       if (mode == 'post')
         await p.post({
           input,
@@ -36,6 +38,7 @@ export async function runPlugins(
           lastRoutePath,
           response,
           parsedResponse,
+          dataProvider,
         })
     } catch (e) {
       console.log(e)

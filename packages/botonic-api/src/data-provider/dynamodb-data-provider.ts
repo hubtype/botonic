@@ -10,6 +10,7 @@ import {
   getUserEventsTable,
   GLOBAL_SECONDARY_INDEX_NAME,
   SORT_KEY_NAME,
+  USER_PREFIX,
 } from './dynamodb-utils'
 
 export class DynamoDBDataProvider implements DataProvider {
@@ -56,7 +57,15 @@ export class DynamoDBDataProvider implements DataProvider {
   }
 
   // @ts-ignore
-  async getUsers(limit = 10, offset = 0): Promise<User[]> {} // TODO: Implement
+  async getUsers(limit = 10, offset = 0): Promise<User[]> {
+    // TODO: offset really needed here?
+    const result = await this.userEventsTable.scan({
+      filters: { attr: SORT_KEY_NAME, beginsWith: USER_PREFIX },
+      limit,
+    })
+    if (result.Count === 0) return []
+    return result.Items
+  }
 
   async getUser(id: string): Promise<User | undefined> {
     const userById = {

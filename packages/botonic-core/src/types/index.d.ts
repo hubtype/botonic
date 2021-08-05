@@ -211,6 +211,7 @@ export interface BotRequest {
   input: Input
   lastRoutePath: string
   session: Session
+  dataProvider: any // TODO: Should data provider be typed in core and used in @botonic/api?
 }
 
 /** The response of the bot for the triggered actions, which can be
@@ -219,6 +220,7 @@ export interface BotRequest {
  * */
 export interface BotResponse extends BotRequest {
   response: any
+  parsedResponse?: any
 }
 
 export type PluginPreRequest = BotRequest
