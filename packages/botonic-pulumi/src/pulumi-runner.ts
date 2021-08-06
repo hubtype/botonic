@@ -12,6 +12,7 @@ import { env } from 'process'
 
 import {
   generatePrefix,
+  PROJECT_NAME_SEPARATOR,
   WEBCHAT_BOTONIC_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
 } from './'
@@ -106,7 +107,7 @@ export class PulumiRunner {
     const prefix = generatePrefix(projectName, stackName)
     const args: InlineProgramArgs = {
       projectName,
-      stackName: `${prefix}-${stackToDeploy}`,
+      stackName: `${prefix}${PROJECT_NAME_SEPARATOR}${stackToDeploy}`,
       program: async () => {
         return stackToDeploy === 'backend'
           ? await deployBackendStack(this.programConfig)

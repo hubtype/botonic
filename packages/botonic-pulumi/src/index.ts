@@ -2,22 +2,22 @@ import { Config } from '@pulumi/pulumi'
 import { join } from 'path'
 import { cwd } from 'process'
 
+export const PROJECT_NAME_SEPARATOR = '-'
+export const MAX_PROJECT_NAME_LENGTH = 30
+
 export function getNamePrefix(): string {
   const config = new Config()
-  const prefix = generatePrefix(
+  return generatePrefix(
     config.get('projectName') as string,
     config.get('stackName') as string
   )
-  return prefix
 }
 
 export function generatePrefix(projectName: string, stackName: string): string {
-  const SEPARATOR = '-'
-  const prefix = `${projectName}${SEPARATOR}${stackName}`
-  const MAX_LENGTH = 30
-  if (prefix.length > MAX_LENGTH + 1) {
+  const prefix = `${projectName}${PROJECT_NAME_SEPARATOR}${stackName}`
+  if (prefix.length > MAX_PROJECT_NAME_LENGTH + PROJECT_NAME_SEPARATOR.length) {
     throw new Error(
-      `The combination of 'projectName' and 'stackName' names can not exceed ${MAX_LENGTH} chars.`
+      `The combination of 'projectName' and 'stackName' names can not exceed ${MAX_PROJECT_NAME_LENGTH} chars.`
     )
   }
   return prefix
