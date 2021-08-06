@@ -31,9 +31,9 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
     // Check that path exists so pulumi do not throw an exception in runtime when previewing the update
     if (existsSync(websocketLambdaPath)) {
       const websocketApiGateway = new aws.apigatewayv2.Api(
-        `${this.namePrefix}-api-gateway`,
+        `${this.namePrefix}-ws-api`,
         {
-          name: `${this.namePrefix}-api-gateway`,
+          name: `${this.namePrefix}-ws-api`,
           protocolType: 'WEBSOCKET',
           routeSelectionExpression: '$request.body.action',
         },
