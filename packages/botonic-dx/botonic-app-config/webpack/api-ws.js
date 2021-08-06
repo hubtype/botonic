@@ -21,10 +21,10 @@ module.exports = ({
   output: {
     path: path.resolve(projectPath, 'dist/websocket'),
     filename: 'server.js',
-    libraryTarget: 'commonjs',
+    libraryTarget: 'umd',
   },
   module: {
-    rules: [transpilingLoaderConfig('babel'), nullLoaderConfig],
+    rules: [transpilingLoaderConfig('esbuild'), nullLoaderConfig],
   },
   resolve: {
     extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
