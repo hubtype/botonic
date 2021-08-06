@@ -95,6 +95,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
       const API_PATH_NAME = REST_SERVER_ENDPOINT_PATH_NAME // TODO: Make it configurable?
 
       // Create the Swagger spec for a proxy which forwards all HTTP requests through to the Lambda function.
+      // eslint-disable-next-line no-inner-declarations
       function swaggerSpec(lambdaArn: string, region: string): string {
         const swaggerSpec = {
           swagger: '2.0',
@@ -109,6 +110,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
 
       // Create a single Swagger spec route handler for a Lambda function.
 
+      // eslint-disable-next-line no-inner-declarations
       function swaggerRouteHandler(lambdaArn: string, region: string) {
         return {
           'x-amazon-apigateway-any-method': {

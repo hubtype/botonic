@@ -61,6 +61,7 @@ interface FrontendDeployResults {
   websocketUrl: pulumi.Output<string>
   apiUrl: pulumi.Output<string>
   webchatUrl: pulumi.Output<string>
+  cloudfrontId: pulumi.Output<string>
 }
 
 export const deployFrontendStack = async (
@@ -86,5 +87,6 @@ export const deployFrontendStack = async (
     websocketUrl: staticWebchatContents.websocketUrl,
     apiUrl: staticWebchatContents.apiUrl,
     webchatUrl: staticWebchatContents.webchatUrl,
+    cloudfrontId: staticWebchatContents.cloudfrontId,
   }
 }

@@ -3,5 +3,6 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "outDir": "./lib"
-  }
+  },
+  "exclude": ["tests", "lib"]
 }

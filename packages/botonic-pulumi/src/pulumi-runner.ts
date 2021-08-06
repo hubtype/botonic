@@ -12,22 +12,28 @@ import { env } from 'process'
 
 import { WEBCHAT_BOTONIC_PATH, WEBSOCKET_ENDPOINT_PATH_NAME } from './'
 import {
+  CacheInvalidator,
+  getUpdatedObjectsFromPreview,
+  INVALIDATION_PATH_PREFIX,
+} from './aws/cache-invalidator'
+import {
   deployBackendStack,
   deployFrontendStack,
 } from './aws/deployment-stacks'
 import { PulumiDownloader } from './pulumi-downloader'
 import { getCleanVersionForPackage, getHomeDirectory } from './system-utils'
 
-export interface ProjectConfig {
-  projectName?: string
-  stackName?: string
-  customDomain?: string
-  // AWS Authentication Params
+export interface AWSCredentials {
   region?: string
   profile?: string
   accessKey?: string
   secretKey?: string
   token?: string
+}
+export interface ProjectConfig extends AWSCredentials {
+  projectName?: string
+  stackName?: string
+  customDomain?: string
   tags?: Record<string, string>
   // DynamoDB
   tableName?: string
@@ -47,6 +53,7 @@ export class PulumiRunner {
   private pulumiDownloader = new PulumiDownloader()
   private isDestroy = false
   private programConfig: ProgramConfig
+  private updatedBucketObjects: string[] = []
   public projectConfig: ProjectConfig = {}
   private commands = [
     {
@@ -151,7 +158,6 @@ export class PulumiRunner {
 
   private async refreshStack(stack: Stack): Promise<void> {
     console.info('refreshing stack...')
-    // await stack.refresh({ onOutput: console.info })
     await stack.refresh()
     console.info('refresh complete')
   }
@@ -175,6 +181,13 @@ export class PulumiRunner {
     return upRes
   }
 
+  private async updateUpdatedBucketObjects(stack: Stack): Promise<void> {
+    const previewRes = await stack.preview()
+    this.updatedBucketObjects = this.updatedBucketObjects.concat(
+      getUpdatedObjectsFromPreview(previewRes.stdout)
+    )
+  }
+
   private replaceWithWebSocketUrl(websocketUrl: string): void {
     let fileContent = readFileSync(WEBCHAT_BOTONIC_PATH, {
       encoding: 'utf8',
@@ -194,6 +207,7 @@ export class PulumiRunner {
       await this.destroyStack(stack)
       return undefined
     } else {
+      await this.updateUpdatedBucketObjects(stack)
       const updateResults = await this.updateStack(stack)
       return updateResults
     }
@@ -222,7 +236,32 @@ export class PulumiRunner {
       this.replaceWithWebSocketUrl(websocketReplacementUrl)
     }
     const frontendResults = await this.runStack('frontend')
+    if (frontendResults && this.updatedBucketObjects.length > 0) {
+      await this.doInvalidateUpdatedFiles(
+        frontendResults,
+        this.updatedBucketObjects
+      )
+    }
     return
+  }
+
+  private async doInvalidateUpdatedFiles(
+    updateResults: UpResult,
+    updatedBucketObjects: string[]
+  ): Promise<void> {
+    try {
+      const cacheInvalidator = new CacheInvalidator(
+        this.projectConfig as AWSCredentials
+      )
+      const cloudfrontId = updateResults.outputs['cloudfrontId'].value
+      await cacheInvalidator.invalidateBucketObjects(
+        cloudfrontId,
+        INVALIDATION_PATH_PREFIX,
+        updatedBucketObjects
+      )
+    } catch (e) {
+      console.log('Could not invalidate cache for files.', e)
+    }
   }
 
   private setExecutionVariables(): void {
