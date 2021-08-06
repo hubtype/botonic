@@ -2,6 +2,8 @@ import { CloudFront, CloudFrontClientConfig } from '@aws-sdk/client-cloudfront'
 import { Credentials } from '@aws-sdk/types'
 
 import { AWSCredentials } from '../pulumi-runner'
+
+export const INVALIDATION_PATH_PREFIX = '/'
 export class CacheInvalidator {
   client: CloudFront
   constructor(awsConfig: AWSCredentials) {
@@ -30,7 +32,7 @@ export class CacheInvalidator {
 
   async invalidateBucketObjects(
     distributionId: string,
-    pathPrefix = '/',
+    pathPrefix = INVALIDATION_PATH_PREFIX,
     bucketObjects: string[]
   ): Promise<void> {
     const itemsToInvalidate = bucketObjects.map(e => `${pathPrefix}${e}`)

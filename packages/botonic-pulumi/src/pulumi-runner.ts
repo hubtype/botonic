@@ -14,6 +14,7 @@ import { WEBCHAT_BOTONIC_PATH, WEBSOCKET_ENDPOINT_PATH_NAME } from './'
 import {
   CacheInvalidator,
   getUpdatedObjectsFromPreview,
+  INVALIDATION_PATH_PREFIX,
 } from './aws/cache-invalidator'
 import {
   deployBackendStack,
@@ -249,17 +250,13 @@ export class PulumiRunner {
     updatedBucketObjects: string[]
   ): Promise<void> {
     try {
-      const cacheInvalidator = new CacheInvalidator({
-        region: this.projectConfig.region,
-        profile: this.projectConfig.profile,
-        accessKey: this.projectConfig.accessKey,
-        secretKey: this.projectConfig.secretKey,
-        token: this.projectConfig.token,
-      })
+      const cacheInvalidator = new CacheInvalidator(
+        this.projectConfig as AWSCredentials
+      )
       const cloudfrontId = updateResults.outputs['cloudfrontId'].value
       await cacheInvalidator.invalidateBucketObjects(
         cloudfrontId,
-        '/',
+        INVALIDATION_PATH_PREFIX,
         updatedBucketObjects
       )
     } catch (e) {
