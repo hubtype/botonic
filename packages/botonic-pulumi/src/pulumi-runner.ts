@@ -11,7 +11,7 @@ import { join } from 'path'
 import { env } from 'process'
 
 import {
-  generatePrefix,
+  generateProjectStackNamePrefix,
   PROJECT_NAME_SEPARATOR,
   WEBCHAT_BOTONIC_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
@@ -104,7 +104,7 @@ export class PulumiRunner {
   ): Promise<Stack> {
     const projectName = this.projectConfig?.projectName || 'botonic'
     const stackName = this.projectConfig?.stackName || 'full-stack'
-    const prefix = generatePrefix(projectName, stackName)
+    const prefix = generateProjectStackNamePrefix(projectName, stackName)
     const args: InlineProgramArgs = {
       projectName,
       stackName: `${prefix}${PROJECT_NAME_SEPARATOR}${stackToDeploy}`,

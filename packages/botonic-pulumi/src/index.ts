@@ -5,19 +5,24 @@ import { cwd } from 'process'
 export const PROJECT_NAME_SEPARATOR = '-'
 export const MAX_PROJECT_NAME_LENGTH = 30
 
-export function getNamePrefix(): string {
+export function getProjectStackNamePrefix(): string {
   const config = new Config()
-  return generatePrefix(
+  return generateProjectStackNamePrefix(
     config.get('projectName') as string,
     config.get('stackName') as string
   )
 }
 
-export function generatePrefix(projectName: string, stackName: string): string {
+export function generateProjectStackNamePrefix(
+  projectName: string,
+  stackName: string
+): string {
   const prefix = `${projectName}${PROJECT_NAME_SEPARATOR}${stackName}`
   if (prefix.length > MAX_PROJECT_NAME_LENGTH + PROJECT_NAME_SEPARATOR.length) {
     throw new Error(
-      `The combination of 'projectName' and 'stackName' names can not exceed ${MAX_PROJECT_NAME_LENGTH} chars.`
+      `Provided projectName "${projectName}" and stackName "${stackName}" that combined exceed the max allowed length: ${
+        prefix.length - PROJECT_NAME_SEPARATOR.length
+      } / ${MAX_PROJECT_NAME_LENGTH}`
     )
   }
   return prefix

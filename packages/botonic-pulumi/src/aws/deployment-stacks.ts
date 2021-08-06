@@ -1,7 +1,7 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import { getNamePrefix } from '..'
+import { getProjectStackNamePrefix } from '..'
 import { ProgramConfig } from '../pulumi-runner'
 import { AWSProvider, getAwsProviderConfig } from '.'
 import { DynamoDB } from './dynamodb'
@@ -19,10 +19,13 @@ interface BackendDeployResults {
 export const deployBackendStack = async (
   config: ProgramConfig
 ): Promise<BackendDeployResults> => {
-  const awsProvider = new aws.Provider(`${getNamePrefix()}-aws-provider`, {
-    ...getAwsProviderConfig(),
-    defaultTags: { tags: config.tags || {} },
-  }) as AWSProvider
+  const awsProvider = new aws.Provider(
+    `${getProjectStackNamePrefix()}-aws-provider`,
+    {
+      ...getAwsProviderConfig(),
+      defaultTags: { tags: config.tags || {} },
+    }
+  ) as AWSProvider
   const awsResourceOptions = { provider: awsProvider, parent: awsProvider }
 
   const nlpModelsBucket = new NLPModelsBucket({}, awsResourceOptions)
@@ -67,10 +70,13 @@ interface FrontendDeployResults {
 export const deployFrontendStack = async (
   config: ProgramConfig
 ): Promise<FrontendDeployResults> => {
-  const awsProvider = new aws.Provider(`${getNamePrefix()}-aws-provider`, {
-    ...getAwsProviderConfig(),
-    defaultTags: { tags: config.tags || {} },
-  }) as AWSProvider
+  const awsProvider = new aws.Provider(
+    `${getProjectStackNamePrefix()}-aws-provider`,
+    {
+      ...getAwsProviderConfig(),
+      defaultTags: { tags: config.tags || {} },
+    }
+  ) as AWSProvider
   const awsResourceOptions = { provider: awsProvider, parent: awsProvider }
 
   const staticWebchatContents = new StaticWebchatContents(

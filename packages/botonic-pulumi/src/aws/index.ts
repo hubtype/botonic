@@ -1,7 +1,7 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import { getNamePrefix } from '..'
+import { getProjectStackNamePrefix } from '..'
 
 // DynamoDB
 export const BOTONIC_SINGLE_TABLE_NAME = 'user_events'
@@ -18,9 +18,9 @@ export class AWSComponentResource<
   namePrefix: string
   provider: AWSProvider
   constructor(type: string, args: ComponentArgs, opts: AWSResourceOptions) {
-    super(type, `${getNamePrefix()}-${type}`, args, opts)
+    super(type, `${getProjectStackNamePrefix()}-${type}`, args, opts)
     this.provider = opts.provider
-    this.namePrefix = getNamePrefix()
+    this.namePrefix = getProjectStackNamePrefix()
   }
 }
 
