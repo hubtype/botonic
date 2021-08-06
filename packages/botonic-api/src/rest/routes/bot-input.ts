@@ -1,10 +1,9 @@
 import { Session } from '@botonic/core'
-import { BotonicOutputParser } from '@botonic/core/lib'
 import { MessageEventFrom } from '@botonic/core/lib/models/events/message'
+import { BotonicOutputParser } from '@botonic/core/lib/output-parser'
 import { BotonicEvent } from '@botonic/core/src/models/events'
 import { MessageEventAck } from '@botonic/core/src/models/events/message'
 import { User } from '@botonic/core/src/models/user'
-import { NodeApp } from '@botonic/react/src/experimental'
 import { Request, Router } from 'express'
 import { ulid } from 'ulid'
 import { v4 } from 'uuid'
@@ -13,7 +12,8 @@ import { dataProviderFactory } from '../../data-provider'
 
 const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
-export default function botInputRouter(bot: NodeApp): Router {
+export default function botInputRouter(bot: any): Router {
+  // TODO: bot was typed like bot: NodeApp, but this requires to add @botonic/react as an extra dependency. We should rethink how to handle this
   const router = Router()
   const botonicOutputParser = new BotonicOutputParser()
 

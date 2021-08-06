@@ -63,7 +63,6 @@ export class DynamoDBDataProvider implements DataProvider {
       filters: { attr: SORT_KEY_NAME, beginsWith: USER_PREFIX },
       limit,
     })
-    if (result.Count === 0) return []
     return result.Items
   }
 

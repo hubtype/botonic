@@ -29,9 +29,9 @@ export async function runPlugins(
   for (const key in plugins) {
     const p = await plugins[key]
     try {
-      if (mode == 'pre')
+      if (mode === 'pre')
         await p.pre({ input, session, lastRoutePath, dataProvider })
-      if (mode == 'post')
+      if (mode === 'post')
         await p.post({
           input,
           session,
