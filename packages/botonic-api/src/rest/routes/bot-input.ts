@@ -27,6 +27,7 @@ export default function botInputRouter(bot: any): Router {
       input: req.body.input,
       session: { user },
       lastRoutePath: user.route,
+      dataProvider: dp,
     })
 
     const parsedUserEvent = botonicOutputParser.parseFromUserInput(
