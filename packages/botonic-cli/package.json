@@ -19,7 +19,7 @@
     "fetch-repo-dir": "^1.0.4",
     "form-data": "^3.0.0",
     "fs-extra": "^10.0.0",
-    "inquirer": "^7.3.3",
+    "inquirer": "^8.1.2",
     "kill-port": "^1.6.1",
     "localtunnel": "^2.0.1",
     "ora": "^5.4.0",
