@@ -72,23 +72,19 @@ function getViewerCertificate(
   providedCertificateArn: pulumi.Input<string> | undefined,
   opts: pulumi.ResourceOptions
 ): pulumi.Input<aws.types.input.cloudfront.DistributionViewerCertificate> {
-  const defaultViewerCertificateOptions = {
-    minimumProtocolVersion: 'TLSv1.1_2016', // TODO: allow to customize
-  }
   if (!customDomain) {
     return {
-      ...defaultViewerCertificateOptions,
+      // If cloudfrontDefaultCertificate is specified, TLSv1 must be set. Ref: https://www.pulumi.com/docs/reference/pkg/aws/cloudfront/distribution/#minimumprotocolversion_nodejs
       cloudfrontDefaultCertificate: true,
+      minimumProtocolVersion: 'TLSv1',
     }
   }
-
   let certificateArn = providedCertificateArn
   if (certificateArn === undefined) {
     certificateArn = createCustomDomainCertificate(customDomain, opts)
   }
-
   return {
-    ...defaultViewerCertificateOptions,
+    minimumProtocolVersion: 'TLSv1.1_2016', // TODO: allow to customize
     acmCertificateArn: certificateArn,
     sslSupportMethod: 'sni-only',
   }
