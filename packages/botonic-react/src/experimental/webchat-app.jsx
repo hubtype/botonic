@@ -141,13 +141,13 @@ export class WebchatApp {
   onServiceEvent(event) {
     if (event.action === 'connectionChange')
       this.webchatRef.current.setOnline(event.online)
-    else if (event.action === 'update_message_info')
+    else if (event.message.action === 'update_message_info') {
       this.updateMessageInfo(event.message.id, event.message)
-    else if (event.message.type === 'update_webchat_settings')
+    } else if (event.message.type === 'update_webchat_settings') {
       this.updateWebchatSettings(event.message.data)
-    else if (event.message.type === 'sender_action')
+    } else if (event.message.type === 'sender_action') {
       this.setTyping(event.message.data === 'typing_on')
-    else {
+    } else {
       this.onMessage &&
         this.onMessage(this, { from: SENDERS.bot, message: event.message })
       this.addBotMessage(event.message)

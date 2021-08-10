@@ -1,4 +1,5 @@
 import { INPUT, isBrowser } from '@botonic/core'
+import { MessageEventAck } from '@botonic/core/lib/models/events/message'
 import React, { useContext, useEffect, useState } from 'react'
 import Fade from 'react-reveal/Fade'
 import styled from 'styled-components'
@@ -126,14 +127,14 @@ export const Message = props => {
     timestampStyle,
   } = resolveMessageTimestamps(getThemeProperty, enabletimestamps)
 
-  const getEnvAck = () => {
-    if (isDev) return 1
-    if (!isFromUser) return 1
-    if (props.ack !== undefined) return props.ack
-    return 0
+  const resolveAck = ack => {
+    // TODO: Resolution for browser app?
+    if (ack !== undefined) return ack
+    if (isFromBot) return MessageEventAck.RECEIVED
+    return MessageEventAck.DRAFT
   }
 
-  const ack = getEnvAck()
+  const ack = resolveAck(props.ack)
 
   if (isBrowser()) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -305,7 +306,7 @@ export const Message = props => {
               style={{
                 ...getMessageStyle(),
                 ...style,
-                ...{ opacity: ack === 0 ? 0.6 : 1 },
+                ...{ opacity: ack === MessageEventAck.DRAFT ? 0.6 : 1 },
               }}
               {...otherProps}
             >
