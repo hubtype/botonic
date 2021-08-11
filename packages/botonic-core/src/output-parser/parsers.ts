@@ -186,7 +186,7 @@ export const parseCustom: ParseFunction<CustomMessageEvent> = args => {
     toParse: args.toParse,
     parsed: {
       ...args.parsed,
-      customTypeName: JSON.parse(args.toParse.json).customTypeName,
+      json: JSON.parse(args.toParse.json),
     },
   }
 }

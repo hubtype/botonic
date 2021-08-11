@@ -93,7 +93,7 @@ export function getMessageEventEntities(
   }
 
   const customAttributes: EntityAttributes = {
-    customTypeName: 'string',
+    json: 'map',
     replies: 'list',
   }
 
