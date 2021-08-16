@@ -15,7 +15,7 @@
     "@types/decompress": "^4.2.3",
     "@types/download": "^8.0.0",
     "@types/mime": "^2.0.3",
-    "@types/node": "^15.12.2",
+    "@types/node": "^16.6.1",
     "@types/semver": "^7.3.6",
     "@types/tar": "^4.0.4"
   },
