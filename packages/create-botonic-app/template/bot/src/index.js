@@ -1,4 +1,4 @@
-import { NodeApp } from '@botonic/react'
+import { NodeApp } from '@botonic/react/src/experimental'
 
 import { locales } from './locales'
 import { plugins } from './plugins'
