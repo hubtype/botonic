@@ -1,6 +1,7 @@
 import { User } from '@botonic/core/src/models/user'
 import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
+import { sign } from 'jsonwebtoken'
 
 import { dataProviderFactory } from '../../data-provider'
 import { Paginator } from '../utils/paginator'
@@ -175,4 +176,14 @@ router
     }
   })
 
+router.route('/login').post(async (req: any, res) => {
+  // TODO: Restrict access to this endpoint
+  const { userId } = req.body
+  const PRIVATE_KEY = 'shhhhhh'
+  const token = sign({ userId }, PRIVATE_KEY, {
+    algorithm: 'HS256',
+    expiresIn: '24h',
+  })
+  res.json({ token })
+})
 export default router

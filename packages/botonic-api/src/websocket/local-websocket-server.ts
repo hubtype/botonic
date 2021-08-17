@@ -15,7 +15,7 @@ export const localWebSocketServer = ({
   )
   wss.on('connection', function connection(ws: any) {
     ws.id = v4()
-    onConnect(ws.id)
+    onConnect()
     ws.on('message', async function incoming(data) {
       onMessage({
         websocketId: ws.id,

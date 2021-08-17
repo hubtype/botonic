@@ -13,6 +13,7 @@ import { env } from 'process'
 import {
   generateProjectStackNamePrefix,
   PROJECT_NAME_SEPARATOR,
+  REST_SERVER_ENDPOINT_PATH_NAME,
   WEBCHAT_BOTONIC_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
 } from './'
@@ -194,11 +195,11 @@ export class PulumiRunner {
     )
   }
 
-  private replaceWithWebSocketUrl(websocketUrl: string): void {
+  private replaceEnvVarWith(envVar: string, replacement: string): void {
     let fileContent = readFileSync(WEBCHAT_BOTONIC_PATH, {
       encoding: 'utf8',
     })
-    fileContent = fileContent.replace('WEBSOCKET_URL', `"${websocketUrl}"`)
+    fileContent = fileContent.replace(envVar, `"${replacement}"`)
     writeFileSync(WEBCHAT_BOTONIC_PATH, fileContent, { encoding: 'utf8' })
   }
 
@@ -233,13 +234,18 @@ export class PulumiRunner {
     if (backendResults) {
       const websocketUrl = backendResults.outputs['websocketUrl'].value
       this.programConfig['websocketUrl'] = websocketUrl
-      this.programConfig['apiUrl'] = backendResults.outputs['apiUrl'].value
+      const apiUrl = backendResults.outputs['apiUrl'].value
+      this.programConfig['apiUrl'] = apiUrl
       this.programConfig['nlpModelsUrl'] =
         backendResults.outputs['nlpModelsUrl'].value
       const websocketReplacementUrl = this.projectConfig?.customDomain
         ? `wss://${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
         : websocketUrl
-      this.replaceWithWebSocketUrl(websocketReplacementUrl)
+      this.replaceEnvVarWith('WEBSOCKET_URL', websocketReplacementUrl)
+      const restApiReplacementUrl = this.projectConfig?.customDomain
+        ? `https://${this.projectConfig.customDomain}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
+        : apiUrl
+      this.replaceEnvVarWith('REST_API_URL', restApiReplacementUrl)
     }
     const frontendResults = await this.runStack('frontend')
     if (frontendResults && this.updatedBucketObjects.length > 0) {
