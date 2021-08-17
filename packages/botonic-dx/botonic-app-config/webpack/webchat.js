@@ -16,6 +16,7 @@ module.exports = ({ projectPath, env, argv }) => {
   const fullstack = env.fullstack || false
   const playgroundCode = env.playgroundCode
   const websocketUrl = mode === 'development' && 'ws://localhost:9011/'
+  const restApiUrl = mode === 'development' && 'http://localhost:9010/'
   return {
     ...optimizationConfig(mode),
     mode,
@@ -69,6 +70,7 @@ module.exports = ({ projectPath, env, argv }) => {
         ...(websocketUrl
           ? { WEBSOCKET_URL: JSON.stringify(websocketUrl) }
           : {}),
+        ...(restApiUrl ? { REST_API_URL: JSON.stringify(restApiUrl) } : {}),
       }),
     ],
   }

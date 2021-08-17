@@ -12,7 +12,6 @@ class WebsocketBackendService {
   constructor({ user, lastMessageId, onEvent }) {
     this.user = user || {}
     this.lastMessageId = lastMessageId
-    console.log(onEvent)
     this.onEvent = onEvent
     this.init()
   }
@@ -23,9 +22,11 @@ class WebsocketBackendService {
     // Establish WebSocket Connection
     // eslint-disable-next-line no-undef
     this.wsClient = new ReconnectingWebSocket(WEBSOCKET_URL)
-
     // On Connection Established...
-    this.wsClient.addEventListener('open', event => {})
+    this.wsClient.addEventListener('open', () => {
+      const token = sessionStorage.getItem('botonic-jwt-token')
+      this.wsClient.send(JSON.stringify({ token }))
+    })
 
     // On Event Received...
     this.wsClient.addEventListener('message', event => {

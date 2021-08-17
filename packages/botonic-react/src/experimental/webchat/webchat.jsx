@@ -1,4 +1,5 @@
 import { INPUT, isMobile, params2queryString } from '@botonic/core'
+import axios from 'axios'
 import { motion } from 'framer-motion'
 import merge from 'lodash.merge'
 import React, {
@@ -70,7 +71,6 @@ import { WebviewContainer } from '../../webchat/webview'
 import { Audio, Document, Image, Video } from '../components'
 import { Text } from '../components/text'
 import { msgToBotonic } from '../msg-to-botonic'
-
 export const getParsedAction = botonicAction => {
   const splittedAction = botonicAction.split('create_case:')
   if (splittedAction.length <= 1) return undefined
@@ -289,8 +289,27 @@ export const Webchat = forwardRef((props, ref) => {
     }
   })
 
+  const doLogin = async userId => {
+    // TODO: Move to core?
+    const BOTONIC_JWT_ITEM_NAME = 'botonic-jwt-token'
+    const token = sessionStorage.getItem(BOTONIC_JWT_ITEM_NAME)
+    if (token !== null) return
+    try {
+      const {
+        data: { token },
+        // eslint-disable-next-line no-undef
+      } = await axios.post(`${REST_API_URL}/users/login/`, {
+        userId,
+      })
+      console.log('LOGGED IN')
+      sessionStorage.setItem(BOTONIC_JWT_ITEM_NAME, token)
+    } catch (e) {
+      console.error('Cannot do login')
+    }
+  }
+
   // Load initial state from storage
-  useEffect(() => {
+  useAsyncEffect(async () => {
     let {
       messages,
       session,
@@ -300,6 +319,7 @@ export const Webchat = forwardRef((props, ref) => {
       themeUpdates,
     } = botonicState || {}
     session = initSession(session)
+    await doLogin(session.user.id)
     updateSession(session)
     if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
       if (messages) {
