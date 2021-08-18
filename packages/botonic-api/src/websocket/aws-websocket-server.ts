@@ -1,6 +1,6 @@
 import { ApiGatewayManagementApi } from 'aws-sdk'
 
-export const WebSocketServer = ({ onConnect, onMessage, onDisconnect }) => {
+export const WebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
   return {
     onConnect: async event => {
       const websocketId = event.requestContext.connectionId
@@ -14,9 +14,9 @@ export const WebSocketServer = ({ onConnect, onMessage, onDisconnect }) => {
       }
       return { statusCode: 200, body: 'Connected successfully.' }
     },
-    onMessage: async event => {
+    onAuth: async event => {
       const websocketId = event.requestContext.connectionId
-      await onMessage({
+      await onAuth({
         websocketId,
         data: event.body,
         send: async message => {

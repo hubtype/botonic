@@ -83,19 +83,19 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
         lambdaAWSResourceOptions
       )
 
-      const WEBSOCKET_ONMESSAGE_LAMBDA_NAME = 'onMessage'
-      const onMessageLambda = new WebsocketServerLambda(
+      const WEBSOCKET_ONAUTH_LAMBDA_NAME = 'onAuth'
+      const onAuthLambda = new WebsocketServerLambda(
         {
-          name: WEBSOCKET_ONMESSAGE_LAMBDA_NAME,
+          name: WEBSOCKET_ONAUTH_LAMBDA_NAME,
           routeKey: '$default',
           inlinePolicies: [
             {
               policy: DYNAMODB_CRUD_POLICY,
-              name: `${WEBSOCKET_ONMESSAGE_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
+              name: `${WEBSOCKET_ONAUTH_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
             },
             {
               policy: MANAGE_CONNECTIONS_POLICY,
-              name: `${WEBSOCKET_ONMESSAGE_LAMBDA_NAME}-manage-connections-inline-policy`,
+              name: `${WEBSOCKET_ONAUTH_LAMBDA_NAME}-manage-connections-inline-policy`,
             },
           ],
           ...wsLambdaCommonArgs,
@@ -128,7 +128,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           dependsOn: [
             ...(opts.dependsOn as any),
             onConnectLambda.route,
-            onMessageLambda.route,
+            onAuthLambda.route,
             onDisconnectLambda.route,
           ],
           parent: this,
