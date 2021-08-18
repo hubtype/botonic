@@ -176,7 +176,7 @@ router
     }
   })
 
-router.route('/login').post(async (req: any, res) => {
+router.route('/auth').post(async (req: any, res) => {
   // TODO: Restrict access to this endpoint
   const { userId } = req.body
   const PRIVATE_KEY = 'shhhhhh'

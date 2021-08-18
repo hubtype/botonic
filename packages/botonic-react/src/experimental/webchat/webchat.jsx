@@ -289,7 +289,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   })
 
-  const doLogin = async userId => {
+  const doAuth = async userId => {
     // TODO: Move to core?
     const BOTONIC_JWT_ITEM_NAME = 'botonic-jwt-token'
     const token = sessionStorage.getItem(BOTONIC_JWT_ITEM_NAME)
@@ -298,13 +298,13 @@ export const Webchat = forwardRef((props, ref) => {
       const {
         data: { token },
         // eslint-disable-next-line no-undef
-      } = await axios.post(`${REST_API_URL}/users/login/`, {
+      } = await axios.post(`${REST_API_URL}/users/auth/`, {
         userId,
       })
-      console.log('LOGGED IN')
+      console.log('AUTHORIZED')
       sessionStorage.setItem(BOTONIC_JWT_ITEM_NAME, token)
     } catch (e) {
-      console.error('Cannot do login')
+      console.error('Cannot authorize')
     }
   }
 
@@ -319,7 +319,7 @@ export const Webchat = forwardRef((props, ref) => {
       themeUpdates,
     } = botonicState || {}
     session = initSession(session)
-    await doLogin(session.user.id)
+    await doAuth(session.user.id)
     updateSession(session)
     if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
       if (messages) {
