@@ -298,7 +298,7 @@ export const Webchat = forwardRef((props, ref) => {
       const {
         data: { token },
         // eslint-disable-next-line no-undef
-      } = await axios.post(`${REST_API_URL}/users/auth/`, {
+      } = await axios.post(`${REST_API_URL}/auth/`, {
         userId,
       })
       console.log('AUTHORIZED')
