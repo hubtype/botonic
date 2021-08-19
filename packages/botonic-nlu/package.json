@@ -29,7 +29,7 @@
   "dependencies": {
     "@tensorflow/tfjs-node": "^2.7.0",
     "axios": "^0.21.0",
-    "better-sqlite3": "^7.0.1",
+    "better-sqlite3": "^7.4.3",
     "d3": "^6.2.0",
     "machinelearn": "^2.1.5",
     "natural": "^2.1.5"
