@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { HandOffBuilder, humanHandOff } from './handoff'
 
 describe('handOff', () => {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export class NoMatchingRouteError extends Error {
   constructor(input) {
     super(

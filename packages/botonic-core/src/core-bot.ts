@@ -1,6 +1,7 @@
+// @ts-nocheck
 import { Inspector } from './debug/inspector'
 import { getString } from './i18n'
-import { BotonicOutputParser } from './output-parser/'
+import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
 import { Router } from './router'
 import { isFunction } from './utils'

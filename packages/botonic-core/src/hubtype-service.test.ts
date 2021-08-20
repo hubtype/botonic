@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { HubtypeService } from './hubtype-service'
 
 describe('HubtypeService', () => {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const Providers = Object.freeze({
   Messaging: {
     TELEGRAM: 'telegram',

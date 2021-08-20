@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NoMatchingRouteError } from './errors'
 import { PROVIDER } from './index'
 import { Router } from './router'

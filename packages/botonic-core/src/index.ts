@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { Providers } from './constants'
 export { CoreBot } from './core-bot'
 export * from './debug'

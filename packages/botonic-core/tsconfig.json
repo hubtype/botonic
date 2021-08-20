@@ -4,8 +4,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "allowJs": true,
-    "declaration": true,
+    // "declaration": true,
     "outDir": "./lib",
-    "esModuleInterop": true
+    "esModuleInterop": false
   }
 }

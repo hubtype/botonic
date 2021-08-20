@@ -1,7 +1,7 @@
+// @ts-nocheck
 export const isNode = () => {
   return typeof IS_NODE !== 'undefined'
-    ? // eslint-disable-next-line no-undef
-      IS_NODE
+    ? IS_NODE
     : typeof process !== 'undefined' &&
         process.versions !== null &&
         process.versions.node !== null
