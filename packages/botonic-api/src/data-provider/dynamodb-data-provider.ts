@@ -5,6 +5,7 @@ import { Entity, Table } from 'dynamodb-toolbox'
 import { DataProvider } from '.'
 import {
   getConnectionEntity,
+  getConnectionEventEntity,
   getMessageEventEntities,
   getUserEntity,
   getUserEventsTable,
@@ -21,12 +22,16 @@ export class DynamoDBDataProvider implements DataProvider {
   messageEventEntities: Record<string, Entity<any>>
   textMessageEventEntity: Entity<any>
   connectionEntity: Entity<any>
+  connectionEventEntity: Entity<any>
   constructor(url: string) {
     try {
       ;[this.tableName, this.region] = url.split('://')[1].split('.')
       this.userEventsTable = getUserEventsTable(this.tableName, this.region)
-      this.connectionEntity = getConnectionEntity(this.userEventsTable)
+      this.connectionEntity = getConnectionEntity(this.userEventsTable) // TODO: Remove, not needed anymore
       this.userEntity = getUserEntity(this.userEventsTable)
+      this.connectionEventEntity = getConnectionEventEntity(
+        this.userEventsTable
+      )
       this.messageEventEntities = getMessageEventEntities(this.userEventsTable)
     } catch (e) {
       console.log({ e })
@@ -98,6 +103,9 @@ export class DynamoDBDataProvider implements DataProvider {
   async getEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
 
   async saveEvent(event: BotonicEvent): Promise<BotonicEvent> {
+    if (event.eventType === EventTypes.CONNECTION) {
+      await this.connectionEventEntity.put(event)
+    }
     if (event.eventType === EventTypes.MESSAGE) {
       await this.messageEventEntities[event.type].put(event)
     }
