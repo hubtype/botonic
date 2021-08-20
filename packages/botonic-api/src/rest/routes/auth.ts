@@ -9,7 +9,7 @@ router.route('/').post(async (req: any, res) => {
   const PRIVATE_KEY = 'shhhhhh'
   const token = sign({ userId }, PRIVATE_KEY, {
     algorithm: 'HS256',
-    expiresIn: '24h',
+    expiresIn: 8,
   })
   res.json({ token })
 })

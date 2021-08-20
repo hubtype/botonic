@@ -196,6 +196,7 @@ export const Webchat = forwardRef((props, ref) => {
     setCurrentAttachment,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
+
   const firstUpdate = useRef(true)
   const isOnline = () => webchatState.online
   const currentDateString = () => new Date().toISOString()
@@ -212,6 +213,11 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState] = useStorageState(
     storage,
     storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
+  )
+
+  const [botonicJwtToken, saveBotonicJwtToken] = useStorageState(
+    sessionStorage,
+    'botonic-jwt-token'
   )
 
   const host = props.host || document.body
@@ -289,25 +295,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   })
 
-  const doAuth = async userId => {
-    // TODO: Move to core?
-    const BOTONIC_JWT_ITEM_NAME = 'botonic-jwt-token'
-    const token = sessionStorage.getItem(BOTONIC_JWT_ITEM_NAME)
-    if (token !== null) return
-    try {
-      const {
-        data: { token },
-        // eslint-disable-next-line no-undef
-      } = await axios.post(`${REST_API_URL}/auth/`, {
-        userId,
-      })
-      console.log('AUTHORIZED')
-      sessionStorage.setItem(BOTONIC_JWT_ITEM_NAME, token)
-    } catch (e) {
-      console.error('Cannot authorize')
-    }
-  }
-
   // Load initial state from storage
   useAsyncEffect(async () => {
     let {
@@ -319,7 +306,6 @@ export const Webchat = forwardRef((props, ref) => {
       themeUpdates,
     } = botonicState || {}
     session = initSession(session)
-    await doAuth(session.user.id)
     updateSession(session)
     if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
       if (messages) {
@@ -350,9 +336,14 @@ export const Webchat = forwardRef((props, ref) => {
     scrollToBottom({ behavior: 'auto', host })
   }, [webchatState.isWebchatOpen])
 
-  useEffect(() => {
-    if (onStateChange && typeof onStateChange === 'function')
-      onStateChange(webchatState)
+  useAsyncEffect(async () => {
+    if (onStateChange && typeof onStateChange === 'function') {
+      onStateChange({
+        ...webchatState,
+        botonicJwtToken,
+        saveBotonicJwtToken,
+      })
+    }
     saveWebchatState(webchatState)
   }, [
     webchatState.messagesJSON,
@@ -360,6 +351,7 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.lastRoutePath,
     webchatState.devSettings,
     webchatState.lastMessageUpdate,
+    botonicJwtToken,
   ])
 
   useAsyncEffect(async () => {

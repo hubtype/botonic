@@ -1,7 +1,6 @@
 import { User } from '@botonic/core/src/models/user'
 import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
-import { sign } from 'jsonwebtoken'
 
 import { dataProviderFactory } from '../../data-provider'
 import { Paginator } from '../utils/paginator'

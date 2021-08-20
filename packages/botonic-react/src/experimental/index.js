@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { decode } from 'he'
 import merge from 'lodash.merge'
 import React from 'react'
@@ -9,25 +10,37 @@ import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
 
 class WebsocketBackendService {
-  constructor({ user, lastMessageId, onEvent }) {
+  constructor({
+    user,
+    lastMessageId,
+    onEvent,
+    updateAppToken,
+    botonicJwtToken,
+  }) {
     this.user = user || {}
     this.lastMessageId = lastMessageId
     this.onEvent = onEvent
+    this.botonicJwtToken = botonicJwtToken
+    this.updateAppToken = updateAppToken
     this.init()
   }
-  init(user, lastMessageId) {
+  async init(user, lastMessageId) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (this.wsClient || !this.user.id) return
+    if (!this.botonicJwtToken) await this.doAuthAndUpdateToken()
+    await this.initWebsocket()
+  }
+
+  async initWebsocket() {
     // Establish WebSocket Connection
     // eslint-disable-next-line no-undef
     this.wsClient = new ReconnectingWebSocket(WEBSOCKET_URL)
     // On Connection Established...
     this.wsClient.addEventListener('open', () => {
-      const token = sessionStorage.getItem('botonic-jwt-token')
-      this.wsClient.send(JSON.stringify({ token }))
+      // Send JWT token to onAuth and update user with new connection ID
+      this.wsClient.send(JSON.stringify({ token: this.botonicJwtToken }))
     })
-
     // On Event Received...
     this.wsClient.addEventListener('message', event => {
       console.log(event, this.onEvent)
@@ -36,14 +49,50 @@ class WebsocketBackendService {
         this.onEvent({ message })
     })
   }
-  async postMessage(user, message) {
-    if (this.wsClient.readyState > 1) this.wsClient.reconnect()
-    this.wsClient.send(
-      JSON.stringify({
-        sender: user,
-        message,
+  async doAuthAndUpdateToken() {
+    this.botonicJwtToken = await this.doAuth({ userId: this.user.id })
+    this.updateAppToken(this.botonicJwtToken)
+  }
+
+  async doAuth({ userId }) {
+    try {
+      const {
+        data: { token },
+        // eslint-disable-next-line no-undef
+      } = await axios.post(`${REST_API_URL}/auth/`, {
+        userId,
       })
-    )
+      return token
+    } catch (e) {
+      console.error(e)
+      return null
+    }
+  }
+
+  async postMessage(user, message) {
+    let hasErrors = false
+    try {
+      await axios
+        .post(
+          // eslint-disable-next-line no-undef
+          `${REST_API_URL}/events/`,
+          {
+            message,
+            sender: user,
+          },
+          { headers: { Authorization: 'Bearer ' + this.botonicJwtToken } } // Note: Do not use string template as it will convert the token with commas, which will be invalid
+        )
+        .catch(error => {
+          if (error.response.status === 401) hasErrors = true
+        })
+    } catch (error) {
+      if (error && error.response.status === 401) hasErrors = true
+    }
+    if (hasErrors) {
+      // TODO: Handle rest of errors
+      await this.doAuthAndUpdateToken()
+      await this.postMessage(user, message)
+    }
   }
 }
 
@@ -53,13 +102,24 @@ export class FullstackProdApp extends WebchatApp {
     this.backendService.postMessage(user, input)
   }
 
-  onStateChange({ session: { user }, messagesJSON }) {
+  async doAuth({ userId }) {
+    return await this.backendService.doAuth({ userId })
+  }
+
+  onStateChange({
+    session: { user },
+    messagesJSON,
+    botonicJwtToken,
+    saveBotonicJwtToken,
+  }) {
     if (!this.backendService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
       this.backendService = new WebsocketBackendService({
         user,
         lastMessageId: lastMessage && lastMessage.id,
         onEvent: event => this.onServiceEvent(event),
+        updateAppToken: async token => saveBotonicJwtToken(token),
+        botonicJwtToken,
       })
     }
   }
@@ -133,17 +193,29 @@ export class FullstackDevApp extends DevApp {
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
+        doAuth={(...args) => this.doAuth(...args)}
       />
     )
   }
 
-  onStateChange({ session: { user }, messagesJSON }) {
+  async doAuth({ userId }) {
+    return await this.backendService.doAuth({ userId })
+  }
+
+  onStateChange({
+    session: { user },
+    messagesJSON,
+    botonicJwtToken,
+    saveBotonicJwtToken,
+  }) {
     if (!this.backendService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
       this.backendService = new WebsocketBackendService({
         user,
         lastMessageId: lastMessage && lastMessage.id,
         onEvent: event => this.onServiceEvent(event),
+        updateAppToken: async token => saveBotonicJwtToken(token),
+        botonicJwtToken,
       })
     }
   }
