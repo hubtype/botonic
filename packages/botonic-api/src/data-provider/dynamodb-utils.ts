@@ -13,6 +13,10 @@ export const SORT_KEY_NAME = 'SK'
 export const USER_PREFIX = 'USR#'
 export const EVENT_PREFIX = 'EVT#'
 
+function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 export function getUserEventsTable(tableName: string, region: string): Table {
   const documentClient = new DynamoDB.DocumentClient({
     apiVersion: '2012-08-10',
@@ -68,6 +72,26 @@ export function getConnectionEntity(table: Table): Entity<any> {
   })
 }
 
+export function getConnectionEventEntity(table: Table): Entity<any> {
+  return new Entity({
+    name: 'Connection Event',
+    attributes: {
+      userId: { partitionKey: true, prefix: USER_PREFIX },
+      [`${SORT_KEY_NAME}`]: {
+        hidden: true,
+        sortKey: true,
+        prefix: EVENT_PREFIX,
+      },
+      eventId: [SORT_KEY_NAME, 0],
+      eventType: 'string',
+      createdAt: 'string',
+      modifiedAt: 'string',
+      status: 'string',
+    },
+    table,
+  })
+}
+
 export function getMessageEventEntities(
   table: Table
 ): Record<string, Entity<any>> {
@@ -99,7 +123,7 @@ export function getMessageEventEntities(
 
   const entityWithAttributes = (type: string, attributes: EntityAttributes) =>
     new Entity({
-      name: `${type} Message`, // Entity Names must be unique
+      name: `${capitalize(type)} Message Event`, // Entity Names must be unique
       attributes: {
         userId: { partitionKey: true, prefix: USER_PREFIX },
         [`${SORT_KEY_NAME}`]: {
@@ -110,6 +134,7 @@ export function getMessageEventEntities(
         eventId: [SORT_KEY_NAME, 0],
         eventType: 'string',
         createdAt: 'string',
+        modifiedAt: 'string',
         from: 'string',
         ack: 'string',
         typing: 'number',
