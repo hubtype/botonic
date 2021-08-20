@@ -306,8 +306,13 @@ export class WebchatApp {
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
         server={server}
+        doAuth={(...args) => this.doAuth(...args)}
       />
     )
+  }
+
+  doAuth() {
+    // TODO: we should inject the service in question to WebchatApp and do call this one
   }
 
   async isWebchatVisible({ appId }) {
