@@ -89,6 +89,11 @@ export class PulumiRunner {
   private async beforeRun(isDestroy: boolean): Promise<void> {
     this.isDestroy = isDestroy
     if (!this.isDestroy) {
+      if (process.env.BOTONIC_JWT_SECRET === undefined) {
+        const errMsg =
+          'You must export an env variable BOTONIC_JWT_SECRET with your secret for authenticating users.'
+        throw new Error(errMsg)
+      }
       try {
         await concurrently(this.commands)
       } catch (e) {

@@ -296,7 +296,7 @@ export const Webchat = forwardRef((props, ref) => {
   })
 
   // Load initial state from storage
-  useAsyncEffect(async () => {
+  useEffect(() => {
     let {
       messages,
       session,
@@ -336,7 +336,7 @@ export const Webchat = forwardRef((props, ref) => {
     scrollToBottom({ behavior: 'auto', host })
   }, [webchatState.isWebchatOpen])
 
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (onStateChange && typeof onStateChange === 'function') {
       onStateChange({
         ...webchatState,
