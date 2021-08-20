@@ -6,10 +6,9 @@ const router = Router()
 router.route('/').post(async (req: any, res) => {
   // TODO: Restrict access to this endpoint
   const { userId } = req.body
-  const PRIVATE_KEY = 'shhhhhh'
-  const token = sign({ userId }, PRIVATE_KEY, {
+  const token = sign({ userId }, process.env.BOTONIC_JWT_SECRET, {
     algorithm: 'HS256',
-    expiresIn: 8,
+    expiresIn: '24h', // TODO: Make it configurable?
   })
   res.json({ token })
 })

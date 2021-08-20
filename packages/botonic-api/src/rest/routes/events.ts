@@ -70,7 +70,7 @@ router
   //   }
   // })
   .post(
-    jwt({ secret: 'shhhhhh', algorithms: ['HS256'] }),
+    jwt({ secret: process.env.BOTONIC_JWT_SECRET, algorithms: ['HS256'] }),
     async (req: any, res: any) => {
       // TODO: Validate event
       const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
