@@ -13,7 +13,7 @@
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.12",
     "@types/morgan": "^1.9.2",
-    "@types/node": "^15.12.2",
+    "@types/node": "^16.7.1",
     "@types/uuid": "^8.3.0",
     "@types/ws": "^7.4.6",
     "babel-loader": "^8.2.2",
