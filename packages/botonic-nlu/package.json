@@ -20,7 +20,7 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-typescript": "^7.9.0",
     "@types/axios": "^0.14.0",
-    "@types/better-sqlite3": "^5.4.0",
+    "@types/better-sqlite3": "^7.4.0",
     "@types/d3": "^7.0.0",
     "@types/natural": "^2.1.0",
     "@types/webgl2": "^0.0.6",
