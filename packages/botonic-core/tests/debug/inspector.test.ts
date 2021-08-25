@@ -1,4 +1,4 @@
-import { LogRouteInspector } from './inspector'
+import { LogRouteInspector } from '../../src/debug/inspector'
 
 test('LogRouteInspector', () => {
   const sut = new LogRouteInspector()

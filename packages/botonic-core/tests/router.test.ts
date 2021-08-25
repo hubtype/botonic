@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { NoMatchingRouteError } from './errors'
-import { PROVIDER } from './index'
-import { Router } from './router'
+import { NoMatchingRouteError } from '../src/errors'
+import { PROVIDER } from '../src/index'
+import { Router } from '../src/router'
 
 /** @type Input */
 const textInput = { type: 'text', data: 'hi' }
