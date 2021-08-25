@@ -1,3 +1,4 @@
+// @ts-nocheck
 export function loadPlugins(plugins) {
   if (!plugins) return []
   const _plugins = {}

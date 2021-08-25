@@ -1,4 +1,5 @@
-import { HandOffBuilder, humanHandOff } from './handoff'
+// @ts-nocheck
+import { HandOffBuilder, humanHandOff } from '../src/handoff'
 
 describe('handOff', () => {
   test.each([

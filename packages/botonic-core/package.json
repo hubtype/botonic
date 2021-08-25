@@ -9,7 +9,7 @@
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
     "lint": "npm run lint_ci -- --fix",
-    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'",
+    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' '*.ts' 'src/**/*.ts*' 'src/**/*.d.ts'",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc;",
     "cloc": "../../scripts/qa/cloc-package.sh ."
   },
@@ -53,5 +53,9 @@
     "conversational-app",
     "conversational-ui",
     "javascript"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": "../.eslintrc.js",
+    "root": true
+  }
 }

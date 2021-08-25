@@ -1,9 +1,12 @@
+// @ts-nocheck
 export class RouteInspector {
   routeMatched(route, routeKey, routeValue, input) {}
   routeNotMatched(route, routeKey, routeValue, inputValue) {}
 }
 
 export class FocusRouteInspector extends RouteInspector {
+  focusRoutePaths
+  focusOnMatches
   constructor() {
     super()
     this.focusRoutePaths = null
@@ -28,6 +31,7 @@ export class FocusRouteInspector extends RouteInspector {
   }
 }
 
+// @ts-nocheck
 export class LogRouteInspector extends FocusRouteInspector {
   routeMatched(route, routeKey, routeValue, inputValue) {
     if (!this._isOnFocus(route)) {
@@ -67,6 +71,7 @@ export class LogRouteInspector extends FocusRouteInspector {
 }
 
 export class Inspector {
+  routeInspector
   constructor(routeInspector = undefined) {
     this.routeInspector = routeInspector || new RouteInspector()
   }

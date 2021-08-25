@@ -1,4 +1,5 @@
-import { HubtypeService } from './hubtype-service'
+// @ts-nocheck
+import { HubtypeService } from '../src/hubtype-service'
 
 describe('HubtypeService', () => {
   test.each([

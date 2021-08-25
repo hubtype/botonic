@@ -1,3 +1,4 @@
+// @ts-nocheck
 import axios from 'axios'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
