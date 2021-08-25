@@ -53,5 +53,9 @@
     "conversational-app",
     "conversational-ui",
     "javascript"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": "../.eslintrc.js",
+    "root": true
+  }
 }
