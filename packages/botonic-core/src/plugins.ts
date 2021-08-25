@@ -1,5 +1,9 @@
-// @ts-nocheck
-export function loadPlugins(plugins) {
+import { Input, PluginConfig, Session } from './index'
+import { BotonicEvent } from './models/events'
+
+type PluginMode = 'pre' | 'post'
+
+export function loadPlugins(plugins: PluginConfig<any>[]): any {
   if (!plugins) return []
   const _plugins = {}
   const pluginsLength = plugins.length
@@ -18,14 +22,14 @@ export function loadPlugins(plugins) {
 }
 
 export async function runPlugins(
-  plugins,
-  mode,
-  input,
-  session,
-  lastRoutePath,
-  response = null,
-  parsedResponse = null
-) {
+  plugins: any, // // TODO: Add type for resolvedPlugins, they differ from loaded plugins
+  mode: PluginMode,
+  input: Input,
+  session: Session,
+  lastRoutePath: string,
+  response: string | null = null,
+  parsedResponse: Partial<BotonicEvent>[] | null = null
+): Promise<void> {
   for (const key in plugins) {
     const p = await plugins[key]
     try {

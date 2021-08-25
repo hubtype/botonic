@@ -1,22 +1,28 @@
-// @ts-nocheck
-export const isNode = () => {
+export const isNode = (): boolean => {
+  // @ts-ignore
   return typeof IS_NODE !== 'undefined'
-    ? IS_NODE
+    ? // @ts-ignore
+      IS_NODE
     : typeof process !== 'undefined' &&
         process.versions !== null &&
         process.versions.node !== null
 }
 
-export const isBrowser = () => {
+export const isBrowser = (): boolean => {
+  // @ts-ignore
   return typeof IS_BROWSER !== 'undefined'
-    ? // eslint-disable-next-line no-undef
+    ? // @ts-ignore
       IS_BROWSER
     : typeof window !== 'undefined' &&
         typeof window.document !== 'undefined' &&
         !window.process
 }
 
-export function getWebpackEnvVar(webpackEnvVar, name, defaultValue) {
+export function getWebpackEnvVar(
+  webpackEnvVar: string | false,
+  name: string,
+  defaultValue: string
+): string {
   return (
     webpackEnvVar ||
     (typeof process !== 'undefined' && process.env[name]) ||
@@ -24,7 +30,7 @@ export function getWebpackEnvVar(webpackEnvVar, name, defaultValue) {
   )
 }
 
-export const isMobile = (mobileBreakpoint = 460) => {
+export const isMobile = (mobileBreakpoint = 460): boolean => {
   if (isBrowser()) {
     const w = Math.max(
       document.documentElement.clientWidth,
@@ -36,19 +42,19 @@ export const isMobile = (mobileBreakpoint = 460) => {
   }
   return false
 }
-export function isFunction(o) {
+export function isFunction(o: any): boolean {
   return typeof o === 'function'
 }
 
-export const params2queryString = params =>
+export const params2queryString = (params): string =>
   Object.entries(params)
-    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    .map(([k, v]: any) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join('&')
 
 // Joins path segments.  Preserves initial "/" and resolves ".." and "."
 // Does not support using ".." to go above/outside the root.
 // This means that join("foo", "../../bar") will not resolve to "../bar"
-export const join = (...segments) => {
+export const join = (...segments): string => {
   // Split the inputs into a list of path commands.
   let parts = []
   for (let i = 0, l = segments.length; i < l; i++) {
@@ -67,6 +73,7 @@ export const join = (...segments) => {
     else newParts.push(part)
   }
   // Preserve the initial slash if there was one.
+  // @ts-ignore
   if (parts[0] === '') newParts.unshift('')
   // Turn back into a single string path.
   return newParts.join('/') || (newParts.length ? '/' : '.')
@@ -74,4 +81,4 @@ export const join = (...segments) => {
 
 // A simple function to get the dirname of a path
 // Trailing slashes are ignored. Leading slash is preserved.
-export const dirname = path => join(path, '..')
+export const dirname = (path): string => join(path, '..')

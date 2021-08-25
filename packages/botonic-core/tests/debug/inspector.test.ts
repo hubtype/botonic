@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { LogRouteInspector } from '../../src/debug/inspector'
 
 test('LogRouteInspector', () => {

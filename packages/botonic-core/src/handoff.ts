@@ -1,15 +1,44 @@
-// @ts-nocheck
 import axios from 'axios'
+
+import { Session } from './index'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
-function contextDefaults(context) {
+export interface HubtypeAgentsInfo {
+  attending_count: number
+  email: string
+  idle_count: number
+  last_message_sent: string
+  status: string
+}
+export interface HubtypeSession extends Session {
+  _hubtype_api?: string
+  _access_token: string
+}
+
+export interface SessionWithBotonicAction extends Session {
+  _botonic_action: string
+}
+export interface BackendContext {
+  timeoutMs: number
+}
+
+export interface VacationRange {
+  end_date: number // timestamp
+  id: number
+  start_date: number // timestamp
+}
+
+function contextDefaults(context: any): BackendContext {
   return {
     timeoutMs: context.timeoutMs || 10000,
   }
 }
 
-export async function getOpenQueues(session, context = {}) {
+export async function getOpenQueues(
+  session: HubtypeSession,
+  context = {}
+): Promise<{ queues: string[] }> {
   //be aware of https://github.com/axios/axios/issues/1543
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
@@ -21,57 +50,66 @@ export async function getOpenQueues(session, context = {}) {
     method: 'post',
     url: endpointUrl,
     data: { bot_id: session.bot.id },
-    timeout: context.timeoutMs,
+    timeout: (context as BackendContext).timeoutMs,
   })
   return resp.data
 }
 
 export class HandOffBuilder {
-  constructor(session) {
+  _session: SessionWithBotonicAction
+  _queue: string
+  _onFinish: string
+  _email: string
+  _agentId: string
+  _note: string
+  _caseInfo: string
+  _shadowing: boolean
+
+  constructor(session: SessionWithBotonicAction) {
     this._session = session
   }
 
-  withQueue(queueNameOrId) {
+  withQueue(queueNameOrId: string): this {
     this._queue = queueNameOrId
     return this
   }
 
-  withOnFinishPayload(payload) {
+  withOnFinishPayload(payload: string): this {
     this._onFinish = payload
     return this
   }
 
-  withOnFinishPath(path) {
+  withOnFinishPath(path: string): this {
     this._onFinish = `__PATH_PAYLOAD__${path}`
     return this
   }
 
-  withAgentEmail(email) {
+  withAgentEmail(email: string): this {
     this._email = email
     return this
   }
 
-  withAgentId(agentId) {
+  withAgentId(agentId: string): this {
     this._agentId = agentId
     return this
   }
 
-  withNote(note) {
+  withNote(note: string): this {
     this._note = note
     return this
   }
 
-  withCaseInfo(caseInfo) {
+  withCaseInfo(caseInfo: string): this {
     this._caseInfo = caseInfo
     return this
   }
 
-  withShadowing(shadowing = true) {
+  withShadowing(shadowing = true): this {
     this._shadowing = shadowing
     return this
   }
 
-  async handOff() {
+  async handOff(): Promise<void> {
     return _humanHandOff(
       this._session,
       this._queue,
@@ -105,17 +143,26 @@ export async function humanHandOff(session, queueNameOrId = '', onFinish) {
   return builder.handOff()
 }
 
+interface HubtypeHandoffParams {
+  queue?: string
+  agent_email?: string
+  agent_id?: string
+  case_info?: string
+  note?: string
+  shadowing?: boolean
+  on_finish?: string
+}
 async function _humanHandOff(
-  session,
+  session: SessionWithBotonicAction,
   queueNameOrId = '',
-  onFinish,
+  onFinish: string,
   agentEmail = '',
   agentId = '',
   caseInfo = '',
   note = '',
   shadowing = false
 ) {
-  const params = {}
+  const params: HubtypeHandoffParams = {}
   if (queueNameOrId) {
     params.queue = queueNameOrId
   }
@@ -140,7 +187,11 @@ async function _humanHandOff(
   session._botonic_action = `create_case:${JSON.stringify(params)}`
 }
 
-export async function storeCaseRating(session, rating, context = {}) {
+export async function storeCaseRating(
+  session: HubtypeSession,
+  rating: number,
+  context: any = {}
+): Promise<{ status: string }> {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const chatId = session.user.id
   context = contextDefaults(context)
@@ -151,12 +202,15 @@ export async function storeCaseRating(session, rating, context = {}) {
     method: 'post',
     url: `${baseUrl}/v1/chats/${chatId}/store_case_rating/`,
     data: { chat_id: chatId, rating },
-    timeout: context.timeoutMs,
+    timeout: (context as BackendContext).timeoutMs,
   })
   return resp.data
 }
 
-export async function getAvailableAgentsByQueue(session, queueId) {
+export async function getAvailableAgentsByQueue(
+  session: HubtypeSession,
+  queueId: string
+): Promise<{ agents: string[] }> {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const resp = await axios({
     headers: {
@@ -168,7 +222,9 @@ export async function getAvailableAgentsByQueue(session, queueId) {
   return resp.data
 }
 
-export async function getAvailableAgents(session) {
+export async function getAvailableAgents(
+  session: HubtypeSession
+): Promise<{ agents: HubtypeAgentsInfo[] }> {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const botId = session.bot.id
   const resp = await axios({
@@ -181,7 +237,10 @@ export async function getAvailableAgents(session) {
   return resp.data
 }
 
-export async function getAgentVacationRanges(session, { agentId, agentEmail }) {
+export async function getAgentVacationRanges(
+  session: HubtypeSession,
+  { agentId, agentEmail }: { agentId?: string; agentEmail?: string }
+): Promise<{ vacation_ranges: VacationRange[] }> {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const botId = session.bot.id
   const resp = await axios({
@@ -195,12 +254,15 @@ export async function getAgentVacationRanges(session, { agentId, agentEmail }) {
   return resp.data
 }
 
-export function cancelHandoff(session, typification = null) {
+export function cancelHandoff(
+  session: SessionWithBotonicAction,
+  typification: string | null = null
+): void {
   let action = 'discard_case'
   if (typification) action = `${action}:${JSON.stringify({ typification })}`
   session._botonic_action = action
 }
 
-export function deleteUser(session) {
+export function deleteUser(session: SessionWithBotonicAction): void {
   session._botonic_action = `delete_user`
 }
