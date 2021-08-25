@@ -13,11 +13,11 @@ import {
   ImageMessageEvent,
   VideoMessageEvent,
 } from '../models/events/message/media'
+import { PostbackMessageEvent } from '../models/events/message/postback'
 import { Reply, WithReplies } from '../models/events/message/replies'
 import { TextMessageEvent } from '../models/events/message/text'
 import { TEXT_NODE_NAME } from '.'
 import { parseBoolean, parseNumber } from './util'
-import { PostbackMessageEvent } from 'src/models/events/message/postback'
 
 export type ParseFunction<Out> = (args: {
   toParse: any

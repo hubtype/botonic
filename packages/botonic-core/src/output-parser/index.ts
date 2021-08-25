@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/named
 import { parse, X2jOptions } from 'fast-xml-parser'
 import { decode } from 'html-entities'
 
