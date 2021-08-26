@@ -4,13 +4,13 @@ export class RouteInspector {
     _route: Route,
     _routeKey: string,
     _routeValue: RouteMatcher,
-    _input: Input
+    _input: any
   ): void {}
   routeNotMatched(
     _route: Route,
     _routeKey: string,
     _routeValue: RouteMatcher,
-    _input: Input
+    _input: any
   ): void {}
 }
 
