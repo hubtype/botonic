@@ -17,7 +17,7 @@
     "colors": "^1.4.0",
     "concurrently": "^6.2.0",
     "fetch-repo-dir": "^1.0.4",
-    "form-data": "^3.0.0",
+    "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^7.3.3",
     "kill-port": "^1.6.1",
