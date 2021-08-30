@@ -46,7 +46,7 @@ export function isFunction(o: any): boolean {
   return typeof o === 'function'
 }
 
-export const params2queryString = (params): string =>
+export const params2queryString = (params: { [key: string]: string }): string =>
   Object.entries(params)
     .map(([k, v]: any) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join('&')
@@ -54,14 +54,14 @@ export const params2queryString = (params): string =>
 // Joins path segments.  Preserves initial "/" and resolves ".." and "."
 // Does not support using ".." to go above/outside the root.
 // This means that join("foo", "../../bar") will not resolve to "../bar"
-export const join = (...segments): string => {
+export const join = (...segments: string[]): string => {
   // Split the inputs into a list of path commands.
-  let parts = []
+  let parts: string[] = []
   for (let i = 0, l = segments.length; i < l; i++) {
     parts = parts.concat(segments[i].split('/'))
   }
   // Interpret the path commands to get the new resolved path.
-  const newParts = []
+  const newParts: string[] = []
   for (let i = 0, l = parts.length; i < l; i++) {
     const part = parts[i]
     // Remove leading and trailing slashes
@@ -81,4 +81,4 @@ export const join = (...segments): string => {
 
 // A simple function to get the dirname of a path
 // Trailing slashes are ignored. Leading slash is preserved.
-export const dirname = (path): string => join(path, '..')
+export const dirname = (path: string): string => join(path, '..')

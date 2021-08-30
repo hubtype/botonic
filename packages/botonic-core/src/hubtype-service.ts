@@ -184,7 +184,7 @@ export class HubtypeService {
     }
   }
 
-  handleConnectionChange(online): void {
+  handleConnectionChange(online: boolean): void {
     this.onPusherEvent({ action: 'connectionChange', online })
   }
 

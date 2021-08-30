@@ -92,7 +92,7 @@ export class LogRouteInspector extends FocusRouteInspector {
 
 export class Inspector {
   routeInspector: RouteInspector
-  constructor(routeInspector = undefined) {
+  constructor(routeInspector: RouteInspector | undefined = undefined) {
     this.routeInspector = routeInspector || new RouteInspector()
   }
 
