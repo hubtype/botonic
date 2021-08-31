@@ -69,9 +69,9 @@ export class CoreBot {
         )
   }
 
-  getString(stringID: string, session: Session): string {
+  getString(id: string, session: Session): string {
     // @ts-ignore
-    return getString(this.locales, session.__locale, stringID)
+    return getString(this.locales, session.__locale, id)
   }
 
   setLocale(locale: string, session: Session): void {

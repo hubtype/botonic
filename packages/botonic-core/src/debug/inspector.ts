@@ -34,7 +34,7 @@ export class FocusRouteInspector extends RouteInspector {
   }
 
   _isOnFocus(route: Route): boolean {
-    if (this.focusRoutePaths == null) {
+    if (this.focusRoutePaths === null) {
       return true
     }
     // @ts-ignore
