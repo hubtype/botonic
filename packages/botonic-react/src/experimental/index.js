@@ -10,25 +10,19 @@ import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
 
 class WebsocketBackendService {
-  constructor({
-    user,
-    lastMessageId,
-    onEvent,
-    updateAppToken,
-    botonicJwtToken,
-  }) {
+  constructor({ user, lastMessageId, onEvent, updateJwt, jwt }) {
     this.user = user || {}
     this.lastMessageId = lastMessageId
     this.onEvent = onEvent
-    this.botonicJwtToken = botonicJwtToken
-    this.updateAppToken = updateAppToken
+    this.jwt = jwt
+    this.updateJwt = updateJwt
     this.init()
   }
   async init(user, lastMessageId) {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (this.wsClient || !this.user.id) return
-    if (!this.botonicJwtToken) await this.doAuthAndUpdateToken()
+    if (!this.jwt) await this.doAuthAndUpdateJwt()
     await this.initWebsocket()
   }
 
@@ -39,7 +33,7 @@ class WebsocketBackendService {
     // On Connection Established...
     this.wsClient.addEventListener('open', () => {
       // Send JWT token to onAuth and update user with new connection ID
-      this.wsClient.send(JSON.stringify({ token: this.botonicJwtToken }))
+      this.wsClient.send(JSON.stringify({ token: this.jwt }))
     })
     // On Event Received...
     this.wsClient.addEventListener('message', event => {
@@ -49,9 +43,9 @@ class WebsocketBackendService {
         this.onEvent({ message })
     })
   }
-  async doAuthAndUpdateToken() {
-    this.botonicJwtToken = await this.doAuth({ userId: this.user.id })
-    this.updateAppToken(this.botonicJwtToken)
+  async doAuthAndUpdateJwt() {
+    this.jwt = await this.doAuth({ userId: this.user.id })
+    this.updateJwt(this.jwt)
   }
 
   async doAuth({ userId }) {
@@ -80,7 +74,7 @@ class WebsocketBackendService {
             message,
             sender: user,
           },
-          { headers: { Authorization: 'Bearer ' + this.botonicJwtToken } } // Note: Do not use string template as it will convert the token with commas, which will be invalid
+          { headers: { Authorization: 'Bearer ' + this.jwt } } // Note: Do not use string template as it will convert the token with commas, which will be invalid
         )
         .catch(error => {
           if (error.response.status === 401) hasErrors = true
@@ -90,7 +84,7 @@ class WebsocketBackendService {
     }
     if (hasErrors) {
       // TODO: Handle rest of errors
-      await this.doAuthAndUpdateToken()
+      await this.doAuthAndUpdateJwt()
       await this.postMessage(user, message)
     }
   }
@@ -106,20 +100,15 @@ export class FullstackProdApp extends WebchatApp {
     return await this.backendService.doAuth({ userId })
   }
 
-  onStateChange({
-    session: { user },
-    messagesJSON,
-    botonicJwtToken,
-    saveBotonicJwtToken,
-  }) {
+  onStateChange({ session: { user }, messagesJSON, jwt, updateJwt }) {
     if (!this.backendService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
       this.backendService = new WebsocketBackendService({
         user,
         lastMessageId: lastMessage && lastMessage.id,
         onEvent: event => this.onServiceEvent(event),
-        updateAppToken: async token => saveBotonicJwtToken(token),
-        botonicJwtToken,
+        jwt,
+        updateJwt: async token => updateJwt(token),
       })
     }
   }
@@ -202,20 +191,15 @@ export class FullstackDevApp extends DevApp {
     return await this.backendService.doAuth({ userId })
   }
 
-  onStateChange({
-    session: { user },
-    messagesJSON,
-    botonicJwtToken,
-    saveBotonicJwtToken,
-  }) {
+  onStateChange({ session: { user }, messagesJSON, jwt, updateJwt }) {
     if (!this.backendService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
       this.backendService = new WebsocketBackendService({
         user,
         lastMessageId: lastMessage && lastMessage.id,
         onEvent: event => this.onServiceEvent(event),
-        updateAppToken: async token => saveBotonicJwtToken(token),
-        botonicJwtToken,
+        updateJwt: async token => updateJwt(token),
+        jwt,
       })
     }
   }
