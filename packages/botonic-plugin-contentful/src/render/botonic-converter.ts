@@ -179,6 +179,8 @@ export class BotonicMsgConverter {
       return this.image(followUp)
     } else if (followUp instanceof cms.StartUp) {
       return this.startUp(followUp)
+    } else if (followUp instanceof cms.Document) {
+      return this.document(followUp)
     } else {
       throw new Error('Unexpected followUp type ' + typeof followUp)
     }

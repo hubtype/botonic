@@ -110,7 +110,8 @@ export class Contentful implements cms.CMS {
       this._carousel,
       this._text,
       this._image,
-      this._startUp
+      this._startUp,
+      this._document
     )
     ;[
       this._document,

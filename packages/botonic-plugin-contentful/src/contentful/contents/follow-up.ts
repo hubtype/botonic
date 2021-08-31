@@ -10,6 +10,7 @@ import {
   FollowUpFields,
 } from '../delivery-utils'
 import { CarouselDelivery } from './carousel'
+import { DocumentDelivery, DocumentFields } from './document'
 import { ImageDelivery, ImageFields } from './image'
 import { StartUpDelivery, StartUpFields } from './startup'
 import { TextDelivery, TextFields } from './text'
@@ -37,7 +38,8 @@ export class FollowUpDelivery {
     private readonly carousel: CarouselDelivery,
     private readonly text: TextDelivery,
     private readonly image: ImageDelivery,
-    private readonly startUp: StartUpDelivery
+    private readonly startUp: StartUpDelivery,
+    private readonly document: DocumentDelivery
   ) {}
 
   async fromEntry(
@@ -75,6 +77,11 @@ export class FollowUpDelivery {
         return this.image.fromEntry(followUp as Entry<ImageFields>, context)
       case cms.ContentType.STARTUP:
         return this.startUp.fromEntry(followUp as Entry<StartUpFields>, context)
+      case cms.ContentType.DOCUMENT:
+        return this.document.fromEntry(
+          followUp as Entry<DocumentFields>,
+          context
+        )
       default:
         throw new Error(`Unexpected followUp type ${followUp.sys.type}`)
     }
