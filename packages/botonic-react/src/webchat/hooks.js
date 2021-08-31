@@ -15,6 +15,7 @@ import {
   TOGGLE_WEBCHAT,
   UPDATE_DEV_SETTINGS,
   UPDATE_HANDOFF,
+  UPDATE_JWT,
   UPDATE_LAST_MESSAGE_DATE,
   UPDATE_LAST_ROUTE_PATH,
   UPDATE_LATEST_INPUT,
@@ -60,6 +61,7 @@ export const webchatInitialState = {
   isCoverComponentOpen: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
+  jwt: null,
 }
 
 export function useWebchat() {
@@ -164,6 +166,13 @@ export function useWebchat() {
     })
   }
 
+  const updateJwt = jwt => {
+    webchatDispatch({
+      type: UPDATE_JWT,
+      payload: jwt,
+    })
+  }
+
   return {
     webchatState,
     webchatDispatch,
@@ -188,6 +197,7 @@ export function useWebchat() {
     clearMessages,
     updateLastMessageDate,
     setCurrentAttachment,
+    updateJwt,
   }
 }
 

@@ -8,6 +8,7 @@ import {
   TOGGLE_WEBCHAT,
   UPDATE_DEV_SETTINGS,
   UPDATE_HANDOFF,
+  UPDATE_JWT,
   UPDATE_LAST_ROUTE_PATH,
   UPDATE_LATEST_INPUT,
   UPDATE_SESSION,
@@ -52,6 +53,8 @@ export function webchatReducer(state, action) {
       return { ...state, lastRoutePath: action.payload }
     case SET_CURRENT_ATTACHMENT:
       return { ...state, currentAttachment: action.payload }
+    case UPDATE_JWT:
+      return { ...state, jwt: action.payload }
     default:
       return messagesReducer(state, action)
   }

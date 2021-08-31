@@ -1,5 +1,4 @@
 import { INPUT, isMobile, params2queryString } from '@botonic/core'
-import axios from 'axios'
 import { motion } from 'framer-motion'
 import merge from 'lodash.merge'
 import React, {
@@ -194,6 +193,7 @@ export const Webchat = forwardRef((props, ref) => {
     closeWebviewT,
     updateLastMessageDate,
     setCurrentAttachment,
+    updateJwt,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
 
@@ -215,11 +215,6 @@ export const Webchat = forwardRef((props, ref) => {
     storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
   )
 
-  const [botonicJwtToken, saveBotonicJwtToken] = useStorageState(
-    sessionStorage,
-    'botonic-jwt-token'
-  )
-
   const host = props.host || document.body
 
   const saveWebchatState = webchatState => {
@@ -233,6 +228,7 @@ export const Webchat = forwardRef((props, ref) => {
             devSettings: webchatState.devSettings,
             lastMessageUpdate: webchatState.lastMessageUpdate,
             themeUpdates: webchatState.themeUpdates,
+            jwt: webchatState.jwt,
           })
         )
       )
@@ -338,11 +334,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (onStateChange && typeof onStateChange === 'function') {
-      onStateChange({
-        ...webchatState,
-        botonicJwtToken,
-        saveBotonicJwtToken,
-      })
+      onStateChange({ ...webchatState, updateJwt })
     }
     saveWebchatState(webchatState)
   }, [
@@ -351,7 +343,7 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.lastRoutePath,
     webchatState.devSettings,
     webchatState.lastMessageUpdate,
-    botonicJwtToken,
+    webchatState.jwt,
   ])
 
   useAsyncEffect(async () => {
