@@ -7,6 +7,14 @@ const { nullLoaderConfig, imageminPlugin } = require('./assets-loaders')
 const optimizationConfig = require('./optimization')
 const WebpackBar = require('webpackbar')
 
+const bundleExternals = mode => {
+  // duplicated import of express in local development (api-rest and api-ws), telling webpack not to bundle it again
+  if (mode === 'development') {
+    return { externals: ['express'] }
+  }
+  return {}
+}
+
 module.exports = ({
   projectPath,
   mode = 'development',
@@ -29,6 +37,7 @@ module.exports = ({
   resolve: {
     extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
   },
+  ...bundleExternals(mode),
   stats: 'minimal',
   devtool: 'source-map',
   plugins: [
