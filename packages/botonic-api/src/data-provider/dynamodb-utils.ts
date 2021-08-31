@@ -55,22 +55,6 @@ export function getUserEntity(table: Table): Entity<any> {
     table,
   })
 }
-/**
- * To associate userId with corresponding websocketId
- * @param table
- * @returns Connection Entity
- */
-export function getConnectionEntity(table: Table): Entity<any> {
-  return new Entity({
-    name: 'Connection',
-    attributes: {
-      websocketId: { partitionKey: true },
-      [`${SORT_KEY_NAME}`]: { hidden: true, sortKey: true },
-      userId: 'string',
-    },
-    table,
-  })
-}
 
 export function getConnectionEventEntity(table: Table): Entity<any> {
   return new Entity({

@@ -4,7 +4,6 @@ import { Entity, Table } from 'dynamodb-toolbox'
 
 import { DataProvider } from '.'
 import {
-  getConnectionEntity,
   getConnectionEventEntity,
   getMessageEventEntities,
   getUserEntity,
@@ -21,13 +20,11 @@ export class DynamoDBDataProvider implements DataProvider {
   eventEntity: Entity<any>
   messageEventEntities: Record<string, Entity<any>>
   textMessageEventEntity: Entity<any>
-  connectionEntity: Entity<any>
   connectionEventEntity: Entity<any>
   constructor(url: string) {
     try {
       ;[this.tableName, this.region] = url.split('://')[1].split('.')
       this.userEventsTable = getUserEventsTable(this.tableName, this.region)
-      this.connectionEntity = getConnectionEntity(this.userEventsTable) // TODO: Remove, not needed anymore
       this.userEntity = getUserEntity(this.userEventsTable)
       this.connectionEventEntity = getConnectionEventEntity(
         this.userEventsTable
@@ -36,28 +33,6 @@ export class DynamoDBDataProvider implements DataProvider {
     } catch (e) {
       console.log({ e })
     }
-  }
-
-  async addConnection(websocketId: string): Promise<void> {
-    await this.connectionEntity.put({
-      websocketId: websocketId,
-      [`${SORT_KEY_NAME}`]: websocketId,
-    })
-  }
-
-  async updateConnection(websocketId: string, userId: string): Promise<void> {
-    await this.connectionEntity.update({
-      websocketId: websocketId,
-      [`${SORT_KEY_NAME}`]: websocketId,
-      userId,
-    })
-  }
-
-  async deleteConnection(websocketId: string): Promise<void> {
-    await this.connectionEntity.delete({
-      websocketId: websocketId,
-      [`${SORT_KEY_NAME}`]: websocketId,
-    })
   }
 
   // @ts-ignore
