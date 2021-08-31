@@ -13,9 +13,10 @@ import { dataProviderFactory } from '../../data-provider'
 
 const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
-export default function botInputRouter(bot: NodeApp): Router {
+export default function botInputRouter(args: any): Router {
   const router = Router()
   const botonicOutputParser = new BotonicOutputParser()
+  const { bot } = args
 
   router.route('/').post(async (req, res) => {
     // TODO: parse: Boolean arg to indicate if we should parse the output or not (default true)
