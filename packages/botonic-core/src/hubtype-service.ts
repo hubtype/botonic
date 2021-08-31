@@ -1,17 +1,42 @@
-// @ts-nocheck
-import axios from 'axios'
-import Pusher from 'pusher-js'
+import axios, { AxiosResponse } from 'axios'
+import Pusher, { AuthOptions, Channel } from 'pusher-js'
+import Channels from 'pusher-js/types/src/core/channels/channels'
 
+import { Input, SessionUser } from './index'
 import { getWebpackEnvVar } from './utils'
 
+interface UnsentInput {
+  id: string
+  ack: number
+  unsentInput: Input
+}
+interface BotonicHeaders {
+  'X-BOTONIC-USER-ID': string
+  'X-BOTONIC-LAST-MESSAGE-ID': string
+  'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': string
+}
+interface ServerConfig {
+  activityTimeout?: number
+  pongTimeout?: number
+}
+interface HubtypeServiceArgs {
+  appId: string
+  user: SessionUser
+  lastMessageId: string
+  lastMessageUpdateDate: string
+  onEvent: any
+  unsentInputs: () => UnsentInput[]
+  server: ServerConfig
+}
+
 const _WEBCHAT_PUSHER_KEY_ = getWebpackEnvVar(
-  // eslint-disable-next-line no-undef
+  // @ts-ignore
   typeof WEBCHAT_PUSHER_KEY !== 'undefined' && WEBCHAT_PUSHER_KEY,
   'WEBCHAT_PUSHER_KEY',
   '434ca667c8e6cb3f641c'
 )
 const _HUBTYPE_API_URL_ = getWebpackEnvVar(
-  // eslint-disable-next-line no-undef
+  // @ts-ignore
   typeof HUBTYPE_API_URL !== 'undefined' && HUBTYPE_API_URL,
   'HUBTYPE_API_URL',
   'https://api.hubtype.com'
@@ -24,6 +49,15 @@ const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels
  * Calls Hubtype APIs from Webchat
  */
 export class HubtypeService {
+  appId: string
+  user: SessionUser
+  lastMessageId: string
+  lastMessageUpdateDate: string
+  onEvent: any
+  unsentInputs: () => UnsentInput[]
+  pusher: Pusher | null
+  channel: Channel
+  server: ServerConfig
   PUSHER_CONNECT_TIMEOUT_MS = 10000
   constructor({
     appId,
@@ -33,7 +67,7 @@ export class HubtypeService {
     onEvent,
     unsentInputs,
     server,
-  }) {
+  }: HubtypeServiceArgs) {
     this.appId = appId
     this.user = user || {}
     this.lastMessageId = lastMessageId
@@ -45,6 +79,7 @@ export class HubtypeService {
       // It's safe not awaiting Promise because:
       // * it will never be called from AWS lambda
       // * though init() is called again from postMesage, it does nothing if Pusher already created
+      // @ts-ignore
       this.init()
     }
   }
@@ -52,7 +87,7 @@ export class HubtypeService {
   /**
    * @returns {Promise<void>}
    */
-  init(user, lastMessageId, lastMessageUpdateDate) {
+  init(user, lastMessageId, lastMessageUpdateDate): Promise<void> {
     if (user) this.user = user
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (lastMessageUpdateDate)
@@ -63,7 +98,7 @@ export class HubtypeService {
   /**
    * @returns {Promise<void>}
    */
-  _initPusher() {
+  _initPusher(): Promise<void> {
     if (this.pusher) return Promise.resolve()
     if (!this.user.id || !this.appId) {
       // TODO recover user & appId somehow
@@ -75,11 +110,11 @@ export class HubtypeService {
       forceTLS: true,
       auth: {
         headers: this.constructHeaders(),
-      },
+      } as AuthOptions,
       ...this.resolveServerConfig(),
     })
     this.channel = this.pusher.subscribe(this.pusherChannel)
-    const connectionPromise = new Promise((resolve, reject) => {
+    const connectionPromise = new Promise<void>((resolve, reject) => {
       const cleanAndReject = msg => {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         clearTimeout(connectTimeout)
@@ -99,16 +134,17 @@ export class HubtypeService {
       this.channel.bind('botonic_response', data => this.onPusherEvent(data))
       this.channel.bind('update_message_info', data => this.onPusherEvent(data))
 
-      this.pusher.connection.bind('error', event => {
-        if (event.type == 'WebSocketError') this.handleConnectionChange(false)
-        else {
-          const errorMsg =
-            event.error && event.error.data
-              ? event.error.data.code || event.error.data.message
-              : 'Connection error'
-          cleanAndReject(`Pusher error (${errorMsg})`)
-        }
-      })
+      this.pusher &&
+        this.pusher.connection.bind('error', event => {
+          if (event.type == 'WebSocketError') this.handleConnectionChange(false)
+          else {
+            const errorMsg =
+              event.error && event.error.data
+                ? event.error.data.code || event.error.data.message
+                : 'Connection error'
+            cleanAndReject(`Pusher error (${errorMsg})`)
+          }
+        })
     })
     this.pusher.connection.bind('state_change', states => {
       if (states.current === 'connecting') this.updateAuthHeaders()
@@ -119,17 +155,17 @@ export class HubtypeService {
     return connectionPromise
   }
 
-  constructHeaders() {
+  constructHeaders(): BotonicHeaders {
     const headers = {}
     if (this.user && this.user.id) headers['X-BOTONIC-USER-ID'] = this.user.id
     if (this.lastMessageId)
       headers['X-BOTONIC-LAST-MESSAGE-ID'] = this.lastMessageId
     if (this.lastMessageUpdateDate)
       headers['X-BOTONIC-LAST-MESSAGE-UPDATE-DATE'] = this.lastMessageUpdateDate
-    return headers
+    return headers as BotonicHeaders
   }
 
-  resolveServerConfig() {
+  resolveServerConfig(): ServerConfig {
     if (!this.server) {
       return { activityTimeout: ACTIVITY_TIMEOUT, pongTimeout: PONG_TIMEOUT }
     }
@@ -139,7 +175,7 @@ export class HubtypeService {
     }
   }
 
-  updateAuthHeaders() {
+  updateAuthHeaders(): void {
     if (this.pusher) {
       this.pusher.config.auth.headers = {
         ...this.pusher.config.auth.headers,
@@ -148,26 +184,26 @@ export class HubtypeService {
     }
   }
 
-  handleConnectionChange(online) {
+  handleConnectionChange(online: boolean): void {
     this.onPusherEvent({ action: 'connectionChange', online })
   }
 
-  onPusherEvent(event) {
+  onPusherEvent(event: any): void {
     if (this.onEvent && typeof this.onEvent === 'function') this.onEvent(event)
   }
 
-  get pusherChannel() {
+  get pusherChannel(): string {
     return `private-encrypted-${this.appId}-${this.user.id}`
   }
 
-  handleSentInput(message) {
+  handleSentInput(message: any): void {
     this.onEvent({
       action: 'update_message_info',
       message: { id: message.id, ack: 1 },
     })
   }
 
-  handleUnsentInput(message) {
+  handleUnsentInput(message: any): void {
     this.onEvent({
       action: 'update_message_info',
       message: { id: message.id, ack: 0, unsentInput: message },
@@ -177,8 +213,9 @@ export class HubtypeService {
   /**
    * @return {Promise<void>}
    */
-  async postMessage(user, message) {
+  async postMessage(user: SessionUser, message: any): Promise<void> {
     try {
+      // @ts-ignore
       await this.init(user)
       await axios.post(
         `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
@@ -197,26 +234,30 @@ export class HubtypeService {
     return Promise.resolve()
   }
 
-  static async getWebchatVisibility({ appId }) {
+  static async getWebchatVisibility({
+    appId,
+  }: {
+    appId: string
+  }): Promise<AxiosResponse<any>> {
     return axios.get(
       `${_HUBTYPE_API_URL_}/v1/provider_accounts/${appId}/visibility/`
     )
   }
 
-  destroyPusher() {
+  destroyPusher(): void {
     if (!this.pusher) return
     this.pusher.disconnect()
     this.pusher.unsubscribe(this.pusherChannel)
     this.pusher.unbind_all()
-    this.pusher.channels = {}
+    this.pusher.channels = {} as Channels
     this.pusher = null
   }
 
-  async onConnectionRegained() {
+  async onConnectionRegained(): Promise<void> {
     await this.resendUnsentInputs()
   }
 
-  async resendUnsentInputs() {
+  async resendUnsentInputs(): Promise<void> {
     for (const message of this.unsentInputs()) {
       message.unsentInput &&
         (await this.postMessage(this.user, message.unsentInput))

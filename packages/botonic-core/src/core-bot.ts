@@ -1,12 +1,38 @@
-// @ts-nocheck
 import { Inspector } from './debug/inspector'
 import { getString } from './i18n'
+import { BotRequest, BotResponse, Locales, Routes, Session } from './index'
+import { BotonicEvent } from './models/events'
 import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
 import { Router } from './router'
 import { isFunction } from './utils'
 
+interface CoreBotConfig {
+  appId?: string
+  defaultDelay?: number
+  defaultRoutes?: Routes
+  defaultTyping?: number
+  inspector?: Inspector
+  locales: Locales
+  plugins?: any
+  renderer: any
+  routes: Routes
+  theme?: any
+}
 export class CoreBot {
+  appId?: string
+  defaultDelay?: number
+  defaultRoutes?: Routes
+  defaultTyping?: number
+  inspector?: Inspector
+  locales: Locales
+  plugins?: Record<string, Plugin>
+  renderer: any
+  rootElement: any
+  router: any
+  routes: Routes
+  theme?: any
+
   constructor({
     renderer,
     routes,
@@ -18,7 +44,7 @@ export class CoreBot {
     defaultDelay,
     defaultRoutes,
     inspector,
-  }) {
+  }: CoreBotConfig) {
     this.renderer = renderer
     this.plugins = loadPlugins(plugins)
     this.theme = theme || {}
@@ -37,20 +63,26 @@ export class CoreBot {
     this.router = isFunction(this.routes)
       ? null
       : new Router(
+          // @ts-ignore
           [...this.routes, ...this.defaultRoutes],
           this.inspector.routeInspector
         )
   }
 
-  getString(stringID, session) {
-    return getString(this.locales, session.__locale, stringID)
+  getString(id: string, session: Session): string {
+    // @ts-ignore
+    return getString(this.locales, session.__locale, id)
   }
 
-  setLocale(locale, session) {
+  setLocale(locale: string, session: Session): void {
     session.__locale = locale
   }
 
-  async input({ input, session, lastRoutePath }) {
+  async input({
+    input,
+    session,
+    lastRoutePath,
+  }: BotRequest): Promise<BotResponse> {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
 
@@ -61,9 +93,12 @@ export class CoreBot {
     if (isFunction(this.routes)) {
       this.router = new Router(
         [
+          // @ts-ignore
           ...(await this.routes({ input, session, lastRoutePath })),
+          // @ts-ignore
           ...this.defaultRoutes,
         ],
+        // @ts-ignore
         this.inspector.routeInspector
       )
     }
@@ -85,7 +120,7 @@ export class CoreBot {
     const actions = [output.action, output.retryAction, output.defaultAction]
 
     const response = await this.renderer({ request, actions })
-    let parsedResponse = undefined
+    let parsedResponse: Partial<BotonicEvent>[] | null = null
     try {
       parsedResponse = new BotonicOutputParser().xmlToMessageEvents(response)
     } catch (e) {}

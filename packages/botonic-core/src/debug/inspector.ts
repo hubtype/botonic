@@ -1,39 +1,54 @@
-// @ts-nocheck
+import { Input, Route, RouteMatcher } from '../index'
 export class RouteInspector {
-  routeMatched(route, routeKey, routeValue, input) {}
-  routeNotMatched(route, routeKey, routeValue, inputValue) {}
+  routeMatched(
+    _route: Route,
+    _routeKey: string,
+    _routeValue: RouteMatcher,
+    _input: any
+  ): void {}
+  routeNotMatched(
+    _route: Route,
+    _routeKey: string,
+    _routeValue: RouteMatcher,
+    _input: any
+  ): void {}
 }
 
 export class FocusRouteInspector extends RouteInspector {
-  focusRoutePaths
-  focusOnMatches
+  focusRoutePaths: string[] | null
+  focusOnMatches: boolean
   constructor() {
     super()
     this.focusRoutePaths = null
     this.focusOnMatches = false
   }
 
-  focusOnlyOnRoutes(focusRoutePaths) {
+  focusOnlyOnRoutes(focusRoutePaths: string[]): this {
     this.focusRoutePaths = focusRoutePaths
     return this
   }
 
-  focusOnlyOnMatches() {
+  focusOnlyOnMatches(): this {
     this.focusOnMatches = true
     return this
   }
 
-  _isOnFocus(route) {
-    if (this.focusRoutePaths == null) {
+  _isOnFocus(route: Route): boolean {
+    if (this.focusRoutePaths === null) {
       return true
     }
+    // @ts-ignore
     return this.focusRoutePaths.includes(route.path)
   }
 }
 
-// @ts-nocheck
 export class LogRouteInspector extends FocusRouteInspector {
-  routeMatched(route, routeKey, routeValue, inputValue) {
+  routeMatched(
+    route: Route,
+    routeKey: string,
+    routeValue: RouteMatcher,
+    inputValue: string
+  ): void {
     if (!this._isOnFocus(route)) {
       return
     }
@@ -43,7 +58,13 @@ export class LogRouteInspector extends FocusRouteInspector {
     )
   }
 
-  routeNotMatched(route, routeKey, routeValue, inputValue) {
+  // @ts-ignore
+  routeNotMatched(
+    route: Route,
+    routeKey: string,
+    routeValue: RouteMatcher,
+    inputValue: string
+  ): void {
     if (!this._isOnFocus(route) || this.focusOnMatches) {
       return
     }
@@ -53,7 +74,7 @@ export class LogRouteInspector extends FocusRouteInspector {
     )
   }
 
-  _routeName(obj) {
+  _routeName(obj: Route): string {
     let name = obj.path || '<<no path defined>>'
     if (obj.action) {
       name = `'${name}' (to action '${obj.action.name}')`
@@ -61,22 +82,21 @@ export class LogRouteInspector extends FocusRouteInspector {
     if (obj.redirect) {
       name = `'${name}' (with redirect to '${obj.redirect}')`
     }
-
-    return name
+    return name as string
   }
 
-  _log(message, ...optionalParams) {
+  _log(message: string, ...optionalParams: string[]): void {
     console.log(message, ...optionalParams)
   }
 }
 
 export class Inspector {
-  routeInspector
-  constructor(routeInspector = undefined) {
+  routeInspector: RouteInspector
+  constructor(routeInspector: RouteInspector | undefined = undefined) {
     this.routeInspector = routeInspector || new RouteInspector()
   }
 
-  getRouteInspector() {
+  getRouteInspector(): RouteInspector {
     return this.routeInspector
   }
 }

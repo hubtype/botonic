@@ -1,4 +1,4 @@
-import { Session } from '../types/'
+import { Session } from '../index'
 export interface User {
   id: string //TODO: UUID
   providerId?: string
