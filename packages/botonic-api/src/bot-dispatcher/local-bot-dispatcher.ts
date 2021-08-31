@@ -13,7 +13,6 @@ export class LocalBotDispatcher implements BotDispatcher {
     lastRoutePath,
     websocketId,
   }: DispatchArgs): Promise<void> {
-    console.log('EXECUTING LOCAL DISPATCH')
     const output = await this.bot.app.input({
       input,
       session,

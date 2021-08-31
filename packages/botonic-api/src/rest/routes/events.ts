@@ -18,9 +18,9 @@ import {
   validateBotonicEventData,
 } from './validation/events'
 
-export default function eventsRouter(args?: any): Router {
+export default function eventsRouter(args: any): Router {
   const router = Router()
-  const botDispatcher: BotDispatcher = (args as any).botDispatcher
+  const botDispatcher: BotDispatcher = args.botDispatcher
   router
     .route('/')
     .get(
