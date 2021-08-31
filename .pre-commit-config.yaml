@@ -133,3 +133,12 @@ repos:
         entry: scripts/qa/lint-package.sh packages/botonic-plugin-intent-classification
         language: system
         files: ^packages/botonic-plugin-intent-classification/
+
+  - repo: git://github.com/Yelp/detect-secrets
+    rev: v1.1.0
+    hooks:
+    -   id: detect-secrets
+        args: ['--baseline', '.secrets.baseline'] 
+        exclude: package.lock.json
+        name: Detect secrets
+        description: Detects high entropy strings that are likely to be passwords.
