@@ -4,12 +4,12 @@
 import {
   Button,
   Carousel,
+  Document,
   Element,
   Image,
   MessageContent,
   StartUp,
   Text,
-  Document,
 } from '../contents'
 import { Context } from '../context'
 import { CmsException } from '../exceptions'
