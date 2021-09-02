@@ -3,9 +3,9 @@ import axios from 'axios'
 import { BotDispatcher, DispatchArgs } from '.'
 
 export class LocalBotDispatcher implements BotDispatcher {
-  bot
-  constructor(bot: any) {
-    this.bot = bot
+  botExecutor
+  constructor(botExecutor: any) {
+    this.botExecutor = botExecutor
   }
   async dispatch({
     input,
@@ -13,7 +13,7 @@ export class LocalBotDispatcher implements BotDispatcher {
     lastRoutePath,
     websocketId,
   }: DispatchArgs): Promise<void> {
-    const output = await this.bot.app.input({
+    const output = await this.botExecutor.run({
       input,
       session,
       lastRoutePath,

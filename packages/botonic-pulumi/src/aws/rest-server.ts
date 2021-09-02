@@ -13,6 +13,7 @@ export interface RestServerArgs {
   nlpModelsBucket: NLPModelsBucket
   database: DynamoDB
   websocketServer: WebSocketServer
+  newEventsQueueUrl: pulumi.Input<string>
   restServerLambdaPath?: string
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
@@ -66,6 +67,16 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
         { ...opts, parent: this }
       )
 
+      // TODO: Do it more explicit with inline policy?
+      const sqsExeuctionRoleAttachment = new aws.iam.RolePolicyAttachment(
+        `${this.namePrefix}-rest-api-sqs-execution-role`,
+        {
+          role: lambdaFunctionRole,
+          policyArn: aws.iam.ManagedPolicy.AmazonSQSFullAccess,
+        },
+        { ...opts, parent: this }
+      )
+
       console.log(
         `Syncing rest-server api lambda contents from local disk at`,
         restServerLambdaPath
@@ -87,6 +98,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
               DATA_PROVIDER_URL: args.database.url,
               WEBSOCKET_URL: args.websocketServer.url,
               BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
+              NEW_EVENTS_QUEUE_URL: args.newEventsQueueUrl,
             },
           },
         },
@@ -172,7 +184,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
         },
         { ...opts, parent: this }
       )
-      const url = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}`
+      const url = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}/`
       this.url = url
       this.registerOutputs({ url: this.url })
     }

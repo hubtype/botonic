@@ -1,39 +1,32 @@
-import { ApiGatewayManagementApi } from 'aws-sdk'
+import { SQS } from 'aws-sdk'
+import { v4 } from 'uuid'
 
 import { BotDispatcher, DispatchArgs } from '.'
 
 export class AWSBotDispatcher implements BotDispatcher {
-  bot
-  constructor(bot) {
-    this.bot = bot
+  sqs: SQS
+  constructor() {
+    this.sqs = new SQS({ apiVersion: '2012-11-05', region: 'eu-west-1' }) // TODO: as process.env
   }
-  async dispatch(args: DispatchArgs): Promise<void> {
-    const output = await this.bot.app.input({
-      input: args.input,
-      session: args.session,
-      lastRoutePath: args.lastRoutePath,
-    })
-    await this.sendEvents(output, args.websocketId)
-  }
-  async sendEvents(botOutput: any, websocketId: string): Promise<void> {
-    // @ts-ignore
-    const websocketEndpoint = process.env.WEBSOCKET_URL.split('wss://')[1]
-    const apigwManagementApi = new ApiGatewayManagementApi({
-      apiVersion: '2018-11-29',
-      endpoint: websocketEndpoint,
-    })
-    const { parsedResponse } = botOutput
-    for (const botEvent of parsedResponse) {
-      try {
-        await apigwManagementApi
-          .postToConnection({
-            ConnectionId: websocketId,
-            Data: JSON.stringify(botEvent),
-          })
-          .promise()
-      } catch (e) {
-        console.log('ERR POSTING TO CONNECTION', { e })
-      }
+  async dispatch({
+    input,
+    session,
+    lastRoutePath,
+    websocketId,
+  }: DispatchArgs): Promise<void> {
+    console.log('DISPATCHING WITH SQS')
+    const msgId = v4()
+    const sqsParams = {
+      MessageBody: JSON.stringify({
+        input,
+        session,
+        lastRoutePath,
+        websocketId,
+      }),
+      MessageDeduplicationId: msgId, // Required for FIFO queues
+      MessageGroupId: msgId, // Required for FIFO queues
+      QueueUrl: process.env.NEW_EVENTS_QUEUE_URL as string,
     }
+    await this.sqs.sendMessage(sqsParams).promise()
   }
 }

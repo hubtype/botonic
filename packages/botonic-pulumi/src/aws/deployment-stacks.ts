@@ -1,12 +1,13 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import { getProjectStackNamePrefix } from '..'
+import { BOT_EXECUTOR_PATH, getProjectStackNamePrefix, SENDER_PATH } from '..'
 import { ProgramConfig } from '../pulumi-runner'
 import { AWSProvider, getAwsProviderConfig } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
 import { RestServer } from './rest-server'
+import { SQSLambdaMapping } from './sqs-lambda-mapping'
 import { StaticWebchatContents } from './static-webchat-contents'
 import { WebSocketServer } from './websocket-server'
 
@@ -43,11 +44,48 @@ export const deployBackendStack = async (
     }
   )
 
+  const sender = new SQSLambdaMapping(
+    {
+      lambdaName: 'sender',
+      queueName: 'send-events',
+      sqsLambdaPath: SENDER_PATH,
+      handler: 'server.senderHandler',
+      inlinePolicies: [
+        {
+          name: 'sender-execute-connections',
+          policy: websocketServer.manageConnectionsPolicy,
+        },
+      ],
+      environmentVariables: {
+        BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
+        DATA_PROVIDER_URL: database.url,
+        WEBSOCKET_URL: websocketServer.url,
+      },
+    },
+    awsResourceOptions
+  )
+
+  const botExecutor = new SQSLambdaMapping(
+    {
+      lambdaName: 'bot-executor',
+      queueName: 'new-events',
+      sqsLambdaPath: BOT_EXECUTOR_PATH,
+      handler: 'server.botExecutorHandler',
+      environmentVariables: {
+        BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
+        DATA_PROVIDER_URL: database.url,
+        SEND_EVENTS_QUEUE_URL: sender.queueUrl,
+      },
+    },
+    awsResourceOptions
+  )
+
   const restServer = new RestServer(
     {
       nlpModelsBucket,
       database,
       websocketServer,
+      newEventsQueueUrl: botExecutor.queueUrl,
     },
     awsResourceOptions
   )

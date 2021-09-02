@@ -53,7 +53,7 @@ class WebsocketBackendService {
       const {
         data: { token },
         // eslint-disable-next-line no-undef
-      } = await axios.post(`${REST_API_URL}/auth/`, {
+      } = await axios.post(`${REST_API_URL}auth/`, {
         userId,
       })
       return token
@@ -69,7 +69,7 @@ class WebsocketBackendService {
       await axios
         .post(
           // eslint-disable-next-line no-undef
-          `${REST_API_URL}/events/`,
+          `${REST_API_URL}events/`,
           {
             message,
             sender: user,

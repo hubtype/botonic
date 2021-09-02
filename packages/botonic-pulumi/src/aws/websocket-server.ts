@@ -18,6 +18,7 @@ export interface WebSocketServerArgs {
   websocketLambdaPath?: string
 }
 export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
+  manageConnectionsPolicy: pulumi.Output<string>
   url: pulumi.Output<string>
   apiGateway: aws.apigatewayv2.Api
   constructor(args: WebSocketServerArgs, opts: AWSResourceOptions) {
@@ -51,6 +52,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
         accountId,
         websocketApiGateway.id
       )
+      this.manageConnectionsPolicy = MANAGE_CONNECTIONS_POLICY
 
       const wsLambdaCommonArgs: Partial<WebSocketServerLambdaArgs> = {
         lambdaPath: websocketLambdaPath,
@@ -143,11 +145,12 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
         },
         { ...opts, parent: this }
       )
-      this.url = pulumi.interpolate`${websocketApiGateway.apiEndpoint}/${prodStage.name}`
+      this.url = pulumi.interpolate`${websocketApiGateway.apiEndpoint}/${prodStage.name}/`
       this.apiGateway = websocketApiGateway
       this.registerOutputs({
         url: this.url,
         apiGateway: websocketApiGateway,
+        manageConnectionsPolicy: this.manageConnectionsPolicy,
       })
     }
   }
