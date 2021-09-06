@@ -77,16 +77,8 @@
   },
   "files": [
     "README.md",
-    "baseline/README.md",
-    "baseline/babel.config.js",
-    "baseline/jest.config.js",
-    "baseline/package.json",
-    "baseline/prettier.config.js",
-    "baseline/tsconfig.*json",
-    "baseline/tests/__mocks__/file-mock.js",
-    "sample-config/.*js",
-    "sample-config/*js",
-    "sample-config/*json",
+    "baseline/*",
+    "sample-config/*",
     "botonic-app-config/*",
     "README.md"
   ]
