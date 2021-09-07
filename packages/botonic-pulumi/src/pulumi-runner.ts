@@ -206,7 +206,7 @@ export class PulumiRunner {
     )
   }
 
-  private replaceMatchWith(regex: RegExp, replacement: string): void {
+  private replaceMatchWithinWebchat(regex: RegExp, replacement: string): void {
     let fileContent = readFileSync(WEBCHAT_BOTONIC_PATH, {
       encoding: 'utf8',
     })
@@ -252,11 +252,11 @@ export class PulumiRunner {
       const websocketReplacementUrl = this.projectConfig?.customDomain
         ? `${WSS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
         : websocketUrl
-      this.replaceMatchWith(/WEBSOCKET_URL/g, websocketReplacementUrl)
+      this.replaceMatchWithinWebchat(/WEBSOCKET_URL/g, websocketReplacementUrl)
       const restApiReplacementUrl = this.projectConfig?.customDomain
         ? `${HTTPS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
         : apiUrl
-      this.replaceMatchWith(/REST_API_URL/g, restApiReplacementUrl)
+      this.replaceMatchWithinWebchat(/REST_API_URL/g, restApiReplacementUrl)
     }
     const frontendResults = await this.runStack('frontend')
     if (frontendResults && this.updatedBucketObjects.length > 0) {
