@@ -1,9 +1,10 @@
 import serverlessExpress from '@vendia/serverless-express'
 import chalk from 'chalk'
 import terminalLink from 'terminal-link'
+import { Environments } from '..'
 
 export function restServerFactory({ env, app }) {
-  if (env === 'local') {
+  if (env === Environments.LOCAL) {
     const port = process.env.PORT
     if (port) {
       app.listen(port, () => {
@@ -19,5 +20,5 @@ export function restServerFactory({ env, app }) {
       })
     }
   }
-  if (env === 'aws') return serverlessExpress({ app })
+  if (env === Environments.AWS) return serverlessExpress({ app })
 }

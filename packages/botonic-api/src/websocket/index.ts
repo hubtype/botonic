@@ -1,3 +1,4 @@
+import { Environments } from '..'
 import { WebSocketServer } from './aws-websocket-server'
 import { localWebSocketServer } from './local-websocket-server'
 
@@ -7,9 +8,9 @@ export const websocketServerFactory = ({
   onAuth,
   onDisconnect,
 }) => {
-  if (env === 'local') {
+  if (env === Environments.LOCAL) {
     return localWebSocketServer({ onConnect, onAuth, onDisconnect })
-  } else if (env === 'aws') {
+  } else if (env === Environments.AWS) {
     return WebSocketServer({
       onConnect,
       onAuth,
