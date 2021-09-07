@@ -1,7 +1,13 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
+import { join } from 'path'
 
-import { BOT_EXECUTOR_PATH, getProjectStackNamePrefix, SENDER_PATH } from '..'
+import {
+  BOT_EXECUTOR_LAMBDA_NAME,
+  getProjectStackNamePrefix,
+  HANDLERS_PATH,
+  SENDER_LAMBDA_NAME,
+} from '..'
 import { ProgramConfig } from '../pulumi-runner'
 import { AWSProvider, getAwsProviderConfig } from '.'
 import { DynamoDB } from './dynamodb'
@@ -46,10 +52,10 @@ export const deployBackendStack = async (
 
   const sender = new SQSLambdaMapping(
     {
-      lambdaName: 'sender',
-      queueName: 'send-events',
-      sqsLambdaPath: SENDER_PATH,
-      handler: 'sender.default',
+      lambdaName: SENDER_LAMBDA_NAME,
+      queueName: `${SENDER_LAMBDA_NAME}-queue`,
+      sqsLambdaPath: join(HANDLERS_PATH, SENDER_LAMBDA_NAME),
+      handler: 'index.default',
       inlinePolicies: [
         {
           name: 'sender-execute-connections',
@@ -65,13 +71,13 @@ export const deployBackendStack = async (
 
   const botExecutor = new SQSLambdaMapping(
     {
-      lambdaName: 'botExecutor',
-      queueName: 'new-events',
-      sqsLambdaPath: BOT_EXECUTOR_PATH,
-      handler: 'botExecutor.default',
+      lambdaName: BOT_EXECUTOR_LAMBDA_NAME,
+      queueName: `${BOT_EXECUTOR_LAMBDA_NAME}-queue`,
+      sqsLambdaPath: join(HANDLERS_PATH, BOT_EXECUTOR_LAMBDA_NAME),
+      handler: 'index.default',
       environmentVariables: {
         DATA_PROVIDER_URL: database.url,
-        sender_QUEUE_URL: sender.queueUrl,
+        [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: sender.queueUrl,
       },
     },
     awsResourceOptions
@@ -82,7 +88,7 @@ export const deployBackendStack = async (
       nlpModelsBucket,
       database,
       websocketServer,
-      newEventsQueueUrl: botExecutor.queueUrl,
+      botExecutorQueueUrl: botExecutor.queueUrl,
     },
     awsResourceOptions
   )

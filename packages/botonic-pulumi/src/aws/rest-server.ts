@@ -2,7 +2,11 @@ import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 import { existsSync } from 'fs'
 
-import { REST_SERVER_ENDPOINT_PATH_NAME, REST_SERVER_PATH } from '..'
+import {
+  BOT_EXECUTOR_LAMBDA_NAME,
+  REST_SERVER_ENDPOINT_PATH_NAME,
+  REST_SERVER_PATH,
+} from '..'
 import { AWSComponentResource, AWSResourceOptions } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
@@ -13,7 +17,7 @@ export interface RestServerArgs {
   nlpModelsBucket: NLPModelsBucket
   database: DynamoDB
   websocketServer: WebSocketServer
-  newEventsQueueUrl: pulumi.Input<string>
+  botExecutorQueueUrl: pulumi.Input<string>
   restServerLambdaPath?: string
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
@@ -98,7 +102,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
               DATA_PROVIDER_URL: args.database.url,
               WEBSOCKET_URL: args.websocketServer.url,
               BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
-              botExecutor_QUEUE_URL: args.newEventsQueueUrl,
+              [`${BOT_EXECUTOR_LAMBDA_NAME}_QUEUE_URL`]: args.botExecutorQueueUrl,
             },
           },
         },

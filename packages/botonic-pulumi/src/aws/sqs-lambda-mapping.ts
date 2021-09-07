@@ -2,7 +2,6 @@ import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
 import { AWSComponentResource, AWSResourceOptions } from '.'
-import { DynamoDB } from './dynamodb'
 
 interface SQSLambdaPolicy {
   name: string
@@ -103,7 +102,7 @@ export class SQSLambdaMapping extends AWSComponentResource<SQSLambdaMappingArgs>
     super(`${queueName}<>${lambdaName}`, args, opts)
 
     const queue = new aws.sqs.Queue(`${this.namePrefix}-${queueName}`, {
-      name: `${lambdaName}.fifo`,
+      name: `${queueName}.fifo`,
       fifoQueue: true,
     })
     this.queueUrl = queue.url
