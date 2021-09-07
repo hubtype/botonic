@@ -1,9 +1,10 @@
+import { Environments } from '../..'
 import { awsSender } from './aws-sender'
 import { localSender } from './local-sender'
 
 export function senderHandlerFactory(env) {
-  if (env === 'local') return localSender
-  if (env === 'aws') {
+  if (env === Environments.LOCAL) return localSender
+  if (env === Environments.AWS) {
     return async function (event, context) {
       try {
         const { body } = event.Records[0]
