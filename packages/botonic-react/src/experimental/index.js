@@ -23,10 +23,10 @@ class WebsocketBackendService {
     if (lastMessageId) this.lastMessageId = lastMessageId
     if (this.wsClient || !this.user.id) return
     if (!this.jwt) await this.doAuthAndUpdateJwt()
-    await this.initWebsocket()
+    this.initWebsocket()
   }
 
-  async initWebsocket() {
+  initWebsocket() {
     // Establish WebSocket Connection
     // eslint-disable-next-line no-undef
     this.wsClient = new ReconnectingWebSocket(WEBSOCKET_URL)
