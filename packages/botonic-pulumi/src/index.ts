@@ -31,8 +31,8 @@ export function generateProjectStackNamePrefix(
 export const NLP_MODELS_PATH = join(cwd(), 'bot', 'src', 'nlp', 'tasks')
 export const WEBSOCKET_SERVER_PATH = join(cwd(), 'api', 'dist', 'websocket')
 export const REST_SERVER_PATH = join(cwd(), 'api', 'dist', 'rest')
-export const BOT_EXECUTOR_PATH = join(cwd(), 'api', 'dist', 'rest')
-export const SENDER_PATH = join(cwd(), 'api', 'dist', 'rest')
+export const BOT_EXECUTOR_PATH = join(cwd(), 'api', 'dist', 'handlers')
+export const SENDER_PATH = join(cwd(), 'api', 'dist', 'handlers')
 export const WEBCHAT_CONTENTS_PATH = join(cwd(), 'webchat', 'dist')
 export const WEBSOCKET_ENDPOINT_PATH_NAME = 'ws'
 export const REST_SERVER_ENDPOINT_PATH_NAME = 'api'

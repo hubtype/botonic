@@ -49,7 +49,7 @@ export const deployBackendStack = async (
       lambdaName: 'sender',
       queueName: 'send-events',
       sqsLambdaPath: SENDER_PATH,
-      handler: 'server.senderHandler',
+      handler: 'sender.default',
       inlinePolicies: [
         {
           name: 'sender-execute-connections',
@@ -57,8 +57,6 @@ export const deployBackendStack = async (
         },
       ],
       environmentVariables: {
-        BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
-        DATA_PROVIDER_URL: database.url,
         WEBSOCKET_URL: websocketServer.url,
       },
     },
@@ -67,14 +65,13 @@ export const deployBackendStack = async (
 
   const botExecutor = new SQSLambdaMapping(
     {
-      lambdaName: 'bot-executor',
+      lambdaName: 'botExecutor',
       queueName: 'new-events',
       sqsLambdaPath: BOT_EXECUTOR_PATH,
-      handler: 'server.botExecutorHandler',
+      handler: 'botExecutor.default',
       environmentVariables: {
-        BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
         DATA_PROVIDER_URL: database.url,
-        SEND_EVENTS_QUEUE_URL: sender.queueUrl,
+        sender_QUEUE_URL: sender.queueUrl,
       },
     },
     awsResourceOptions
