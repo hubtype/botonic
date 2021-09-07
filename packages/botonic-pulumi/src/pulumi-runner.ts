@@ -12,10 +12,12 @@ import { env } from 'process'
 
 import {
   generateProjectStackNamePrefix,
+  HTTPS_PROTOCOL_PREFIX,
   PROJECT_NAME_SEPARATOR,
   REST_SERVER_ENDPOINT_PATH_NAME,
   WEBCHAT_BOTONIC_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
+  WSS_PROTOCOL_PREFIX,
 } from './'
 import {
   CacheInvalidator,
@@ -248,11 +250,11 @@ export class PulumiRunner {
       this.programConfig['nlpModelsUrl'] =
         backendResults.outputs['nlpModelsUrl'].value
       const websocketReplacementUrl = this.projectConfig?.customDomain
-        ? `wss://${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
+        ? `${WSS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
         : websocketUrl
       this.replaceMatchWith(/WEBSOCKET_URL/g, websocketReplacementUrl)
       const restApiReplacementUrl = this.projectConfig?.customDomain
-        ? `https://${this.projectConfig.customDomain}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
+        ? `${HTTPS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
         : apiUrl
       this.replaceMatchWith(/REST_API_URL/g, restApiReplacementUrl)
     }

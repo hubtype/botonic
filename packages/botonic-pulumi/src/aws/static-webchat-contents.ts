@@ -4,9 +4,11 @@ import * as pulumi from '@pulumi/pulumi'
 import * as mime from 'mime'
 
 import {
+  HTTPS_PROTOCOL_PREFIX,
   REST_SERVER_ENDPOINT_PATH_NAME,
   WEBCHAT_CONTENTS_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
+  WSS_PROTOCOL_PREFIX,
 } from '..'
 import { crawlDirectory } from '../system-utils'
 import {
@@ -360,10 +362,10 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
     }
     const domainName = customDomain ? customDomain : cdn.domainName
 
-    this.nlpModelsUrl = pulumi.interpolate`https://${domainName}/`
-    this.websocketUrl = pulumi.interpolate`wss://${domainName}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
-    this.apiUrl = pulumi.interpolate`https://${domainName}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
-    this.webchatUrl = pulumi.interpolate`https://${domainName}/`
+    this.nlpModelsUrl = pulumi.interpolate`${HTTPS_PROTOCOL_PREFIX}${domainName}/`
+    this.websocketUrl = pulumi.interpolate`${WSS_PROTOCOL_PREFIX}${domainName}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
+    this.apiUrl = pulumi.interpolate`${HTTPS_PROTOCOL_PREFIX}${domainName}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
+    this.webchatUrl = pulumi.interpolate`${HTTPS_PROTOCOL_PREFIX}${domainName}/`
     this.cloudfrontId = cdn.id
     this.registerOutputs({
       cloudfrontId: this.cloudfrontId,

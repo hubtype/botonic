@@ -37,6 +37,8 @@ export const SENDER_LAMBDA_NAME = 'sender'
 export const WEBCHAT_CONTENTS_PATH = join(cwd(), 'webchat', 'dist')
 export const WEBSOCKET_ENDPOINT_PATH_NAME = 'ws'
 export const REST_SERVER_ENDPOINT_PATH_NAME = 'api'
+export const WSS_PROTOCOL_PREFIX = 'wss://'
+export const HTTPS_PROTOCOL_PREFIX = 'https://'
 
 export const WEBCHAT_BOTONIC_PATH = join(
   process.cwd(),
