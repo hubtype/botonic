@@ -20,7 +20,7 @@ export const WebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
         websocketId,
         data: event.body,
         send: async message => {
-          const apigwManagementApi = new ApiGatewayManagementApi({
+          const apiGwManagementApi = new ApiGatewayManagementApi({
             apiVersion: '2018-11-29',
             endpoint:
               event.requestContext.domainName +
@@ -28,7 +28,7 @@ export const WebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
               event.requestContext.stage,
           })
           try {
-            await apigwManagementApi
+            await apiGwManagementApi
               .postToConnection({
                 ConnectionId: websocketId,
                 Data: JSON.stringify(message),
