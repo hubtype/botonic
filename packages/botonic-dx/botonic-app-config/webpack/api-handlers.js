@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const transpilingLoaderConfig = require('@botonic/dx/botonic-app-config/webpack/transpiling/transpiling-loader')
@@ -8,6 +9,17 @@ const {
 } = require('@botonic/dx/botonic-app-config/webpack/assets-loaders')
 const optimizationConfig = require('@botonic/dx/botonic-app-config/webpack/optimization')
 const WebpackBar = require('webpackbar')
+
+const getHandlerEntries = handlersPath => {
+  const files = fs
+    .readdirSync(handlersPath)
+    .filter(file => !file.includes('index'))
+  return files.reduce((entries, fileName) => {
+    const entryName = fileName.split('.')[0]
+    entries[entryName] = path.resolve(handlersPath, fileName)
+    return entries
+  }, {})
+}
 
 module.exports = ({
   projectPath,
@@ -20,18 +32,10 @@ module.exports = ({
     //context: root,
     mode: mode,
     target: 'node',
-    entry: {
-      botExecutor: path.resolve(
-        projectPath,
-        'src',
-        'handlers',
-        'botExecutor.js'
-      ),
-      sender: path.resolve(projectPath, 'src', 'handlers', 'sender.js'),
-    },
+    entry: getHandlerEntries(path.resolve(projectPath, 'src', 'handlers')),
     output: {
-      path: path.resolve(projectPath, 'dist/handlers'),
-      filename: '[name].js',
+      path: path.resolve(projectPath, 'dist', 'handlers'),
+      filename: '[name]/index.js',
       libraryTarget: 'umd',
     },
     module: {
@@ -49,7 +53,7 @@ module.exports = ({
       new CleanWebpackPlugin({}),
       imageminPlugin,
       new webpack.DefinePlugin({
-        ENV: JSON.stringify('aws'),
+        ENV: JSON.stringify(env.provider || 'local'),
       }),
     ],
   }
