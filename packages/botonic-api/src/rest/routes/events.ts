@@ -11,6 +11,7 @@ import { ulid } from 'ulid'
 
 import { dataProviderFactory } from '../../data-provider'
 import { Paginator } from '../utils/paginator'
+import { SIGNATURE_ALGORITHM } from './auth'
 import { pageParamSchema, pageSizeParamSchema } from './validation/common'
 import {
   eventIdParamSchema,
@@ -72,7 +73,7 @@ export default function eventsRouter(args: any): Router {
     .post(
       jwt({
         secret: process.env.BOTONIC_JWT_SECRET,
-        algorithms: ['HS256'],
+        algorithms: [SIGNATURE_ALGORITHM],
       }),
       async (req: any, res: any) => {
         // TODO: Validate event
