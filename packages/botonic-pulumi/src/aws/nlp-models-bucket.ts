@@ -2,7 +2,7 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import { NLP_MODELS_PATH } from '..'
+import { HTTPS_PROTOCOL_PREFIX, NLP_MODELS_PATH } from '..'
 import { crawlDirectory } from '../system-utils'
 import { AWSComponentResource, AWSResourceOptions } from '.'
 
@@ -42,7 +42,7 @@ export class NLPModelsBucket extends AWSComponentResource<NLPModelsBucketArgs> {
       )
     })
 
-    this.url = pulumi.interpolate`https://${nlpModelsBucket.bucketRegionalDomainName}`
+    this.url = pulumi.interpolate`${HTTPS_PROTOCOL_PREFIX}${nlpModelsBucket.bucketRegionalDomainName}`
     this.registerOutputs({
       url: this.url,
     })
