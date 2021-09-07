@@ -9,7 +9,6 @@ import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 import { ulid } from 'ulid'
 
-import { BotDispatcher } from '../../bot-dispatcher'
 import { dataProviderFactory } from '../../data-provider'
 import { Paginator } from '../utils/paginator'
 import { pageParamSchema, pageSizeParamSchema } from './validation/common'
@@ -20,7 +19,7 @@ import {
 
 export default function eventsRouter(args: any): Router {
   const router = Router()
-  const botDispatcher: BotDispatcher = args.botDispatcher
+  const { handlers } = args
   router
     .route('/')
     .get(
@@ -98,7 +97,8 @@ export default function eventsRouter(args: any): Router {
             from: MessageEventFrom.USER,
             ack: MessageEventAck.SENT,
           })
-          await botDispatcher.dispatch({
+          await handlers.run('botExecutor', {
+            handlers,
             input: message,
             session: JSON.parse(user.session),
             lastRoutePath: user.route,

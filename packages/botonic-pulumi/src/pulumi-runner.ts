@@ -67,6 +67,10 @@ export class PulumiRunner {
       command: 'yarn workspace api build:websocket',
     },
     {
+      name: 'Handlers Build',
+      command: 'yarn workspace api build:handlers',
+    },
+    {
       name: 'Rest Server Build',
       command: 'yarn workspace api build:rest',
     },

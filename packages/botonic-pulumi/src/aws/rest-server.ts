@@ -98,7 +98,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
               DATA_PROVIDER_URL: args.database.url,
               WEBSOCKET_URL: args.websocketServer.url,
               BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
-              NEW_EVENTS_QUEUE_URL: args.newEventsQueueUrl,
+              botExecutor_QUEUE_URL: args.newEventsQueueUrl,
             },
           },
         },

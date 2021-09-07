@@ -10,8 +10,8 @@ export const localWebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
   wsApp.use(express.urlencoded({ extended: true }))
 
   wsApp.post('/send', (req, res) => {
-    const { botEvent, websocketId } = req.body
-    connections[websocketId].send(JSON.stringify(botEvent))
+    const { message, websocketId } = req.body
+    connections[websocketId].send(JSON.stringify(message))
     res.status(200)
     res.end() // TODO: is res.end necessary?
   })
