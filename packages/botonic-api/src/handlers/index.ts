@@ -5,9 +5,13 @@ export class Handlers {
   localHandlers
   sqs
   constructor(handlers) {
-    if (!handlers) {
-      this.sqs = new SQS({ apiVersion: '2012-11-05', region: 'eu-west-1' })
-    } else this.localHandlers = handlers
+    if (handlers) this.localHandlers = handlers
+    else {
+      this.sqs = new SQS({
+        apiVersion: '2012-11-05',
+        region: process.env.AWS_REGION,
+      })
+    }
   }
   async run(handlerName, params) {
     if (this.localHandlers) {
