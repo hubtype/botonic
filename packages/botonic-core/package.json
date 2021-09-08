@@ -8,7 +8,7 @@
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "lint": "npm run lint_ci -- --fix",
     "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*'",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
