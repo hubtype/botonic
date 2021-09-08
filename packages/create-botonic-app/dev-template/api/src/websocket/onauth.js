@@ -1,7 +1,7 @@
 import { dataProviderFactory } from '@botonic/api/src/data-provider'
-import { decode } from 'jsonwebtoken'
 import { EventTypes } from '@botonic/core/lib/esm/models/events'
 import { ConnectionEventStatuses } from '@botonic/core/lib/esm/models/events/connections'
+import { decode } from 'jsonwebtoken'
 import { ulid } from 'ulid'
 
 export const onAuth = async ({ websocketId, data, send }) => {

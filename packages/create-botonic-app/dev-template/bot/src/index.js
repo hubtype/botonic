@@ -1,9 +1,10 @@
 import { NodeApp } from '@botonic/react/src/experimental'
-import { routes } from './routes'
-import { plugins } from './plugins'
-import { locales } from './locales'
 
-export let app = new NodeApp({
+import { locales } from './locales'
+import { plugins } from './plugins'
+import { routes } from './routes'
+
+export const app = new NodeApp({
   routes,
   locales,
   plugins,

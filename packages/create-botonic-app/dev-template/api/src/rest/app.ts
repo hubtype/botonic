@@ -1,7 +1,7 @@
-import * as express from 'express'
-import * as cors from 'cors'
-import * as morgan from 'morgan'
 import { routes } from '@botonic/api/src/rest/routes'
+import * as cors from 'cors'
+import * as express from 'express'
+import * as morgan from 'morgan'
 
 export function getApp(env: string, args: any) {
   const app = express()
