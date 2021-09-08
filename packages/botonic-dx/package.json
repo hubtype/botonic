@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-dev.0",
   "description": "Continuous integration for botonic packages",
   "scripts": {},
   "author": "",
@@ -18,7 +18,7 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.14.5",
-    "@botonic/eslint-config": "~0.19.0-alpha.6",
+    "@botonic/eslint-config": "dev",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.1",
     "@typescript-eslint/eslint-plugin": "*",
