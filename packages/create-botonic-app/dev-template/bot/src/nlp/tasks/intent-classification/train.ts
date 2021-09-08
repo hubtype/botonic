@@ -1,10 +1,10 @@
 import {
-  Dataset,
-  DatabaseStorage,
   BotonicIntentClassifier,
-  Preprocessor,
+  DatabaseStorage,
+  Dataset,
   INTENT_CLASSIFIER_TEMPLATE,
-} from '@botonic/nlp'
+  Preprocessor,
+} from '@botonic/nlp' // eslint-disable-line node/no-missing-import, import/no-unresolved
 import { join } from 'path'
 
 const LOCALE = 'en'
