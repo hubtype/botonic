@@ -3,16 +3,16 @@
 // Usage:
 // `$ yarn create botonic-app ./path/to/new-project`
 
-import path from 'path'
-
+// eslint-disable-next-line node/shebang
 import chalk from 'chalk'
 import checkNodeVersion from 'check-node-version'
 import execa from 'execa'
 import fs from 'fs-extra'
 import Listr from 'listr'
+import path from 'path'
 import yargs from 'yargs'
 
-import { name, version } from '../package'
+import { name, version } from '../package.json'
 
 const style = {
   error: chalk.bold.red,
@@ -61,6 +61,7 @@ if (!targetDir) {
 const newAppDir = path.resolve(process.cwd(), targetDir)
 const appDirExists = fs.existsSync(newAppDir)
 const templateDir = path.resolve(__dirname, '../template')
+const devTemplateDir = path.resolve(__dirname, '../dev-template')
 
 const createProjectTasks = ({ newAppDir }) => {
   return [
@@ -76,7 +77,7 @@ const createProjectTasks = ({ newAppDir }) => {
         } else {
           fs.ensureDirSync(path.dirname(newAppDir))
         }
-        fs.copySync(templateDir, newAppDir)
+        fs.copySync(devTemplateDir, newAppDir)
       },
     },
   ]
@@ -88,6 +89,7 @@ const installNodeModulesTasks = ({ newAppDir }) => {
       title: 'Checking node and yarn compatibility',
       task: () => {
         return new Promise((resolve, reject) => {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
           const { engines } = require(path.join(newAppDir, 'package.json'))
 
           checkNodeVersion(engines, (_error, result) => {
@@ -95,7 +97,7 @@ const installNodeModulesTasks = ({ newAppDir }) => {
               return resolve()
             }
 
-            const errors = Object.keys(result.versions).map((name) => {
+            const errors = Object.keys(result.versions).map(name => {
               const { version, wanted } = result.versions[name]
               return `${name} ${wanted} required, but you have ${version}.`
             })
@@ -135,6 +137,7 @@ new Listr(
   { collapse: false, exitOnError: true }
 )
   .run()
+  // eslint-disable-next-line promise/always-return
   .then(() => {
     // zOMG the semicolon below is a real Prettier thing. What??
     // https://prettier.io/docs/en/rationale.html#semicolons
@@ -155,9 +158,7 @@ new Listr(
       `${style.botonic(
         ' ❖ Get started with the Tutorial'
       )}: https://botonic.io/docs/create-convapp`,
-      `${style.botonic(
-        ' ❖ Read the Documentation'
-      )}: https://botonic.io/docs`,
+      `${style.botonic(' ❖ Read the Documentation')}: https://botonic.io/docs`,
       '',
       `${style.botonic(
         ' ❖ Follow us on Twitter'
@@ -177,9 +178,9 @@ new Listr(
       `${style.botonic(` > ${style.green(`cd ${targetDir}`)}`)}`,
       `${style.botonic(` > ${style.green(`yarn serve`)}`)}`,
       '',
-    ].map((item) => console.log(item))
+    ].map(item => console.log(item))
   })
-  .catch((e) => {
+  .catch(e => {
     console.log()
     console.log(e)
     process.exit(1)
