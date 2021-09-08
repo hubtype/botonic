@@ -5,6 +5,7 @@
   "main": "index.js",
   "bin": "./dist/create-botonic-app.js",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "babel src -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
