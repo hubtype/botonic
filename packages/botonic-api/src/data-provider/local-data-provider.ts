@@ -1,5 +1,5 @@
-import { BotonicEvent } from '@botonic/core/src/models/events'
-import { User } from '@botonic/core/src/models/user'
+import { BotonicEvent } from '@botonic/core/lib/esm/models/events'
+import { User } from '@botonic/core/lib/esm/models/user'
 import { JsonDB } from 'node-json-db'
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 

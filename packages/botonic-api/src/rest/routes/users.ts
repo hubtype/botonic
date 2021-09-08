@@ -1,4 +1,4 @@
-import { User } from '@botonic/core/src/models/user'
+import { User } from '@botonic/core/lib/esm/models/user'
 import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 
