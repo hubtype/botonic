@@ -6,7 +6,19 @@ import { PlaygroundSessionInfo } from './interfaces'
 import { getCurrentDirectory } from './util/file-system'
 
 const PLAYGROUND_API_HOST = 'https://api.playground.botonic.io'
-
+/**
+ * Temporary solution to allow aborting promise after a certain timeout.
+ */
+function withTimeout<T>(
+  promise: Promise<T>,
+  errorMsg: string,
+  timeout = 2 * 1000
+): Promise<T> {
+  return new Promise(function (resolve, reject: any) {
+    promise.then(resolve, reject).catch(e => console.log({ e }))
+    setTimeout(reject(errorMsg), timeout)
+  })
+}
 export class PlaygroundService {
   baseUrl: string = PLAYGROUND_API_HOST
   playgroundSessionsApi = `${this.baseUrl}/playground-sessions/`
@@ -24,7 +36,10 @@ export class PlaygroundService {
 
   async start() {
     try {
-      this.tunnel = await localtunnel({ port: this.port })
+      this.tunnel = await withTimeout<localtunnel.Tunnel>(
+        localtunnel({ port: this.port }),
+        'Tunneling service not reachable.'
+      )
       this.playgroundSession = await this.newPlaygroundSession({
         anonymous_id: this.globalCredentialsHandler.getAnonymousId(),
         url: this.tunnel.url,
