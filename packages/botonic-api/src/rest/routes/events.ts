@@ -1,9 +1,9 @@
+import { BotonicEvent } from '@botonic/core/lib/esm/models/events'
 import {
   MessageEventAck,
   MessageEventFrom,
-} from '@botonic/core/lib/models/events/message'
-import { BotonicOutputParser } from '@botonic/core/lib/output-parser'
-import { BotonicEvent } from '@botonic/core/src/models/events'
+} from '@botonic/core/lib/esm/models/events/message'
+import { BotonicOutputParser } from '@botonic/core/lib/esm/output-parser'
 import { Router } from 'express'
 import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
