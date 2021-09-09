@@ -188,8 +188,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
         },
         { ...opts, parent: this }
       )
-      const url = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}/`
-      this.url = url
+      this.url = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}/`
       this.registerOutputs({ url: this.url })
     }
   }

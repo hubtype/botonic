@@ -7,7 +7,12 @@ export function botExecutorHandlerFactory(env, botExecutor) {
       try {
         const params = JSON.parse(event.Records[0].body)
         await botExecutor(params)
-      } catch (e) {}
+      } catch (e) {
+        console.error(e)
+        return {
+          statusCode: 500,
+        }
+      }
       return {
         statusCode: 200,
       }
