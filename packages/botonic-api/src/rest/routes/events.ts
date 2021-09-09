@@ -99,7 +99,6 @@ export default function eventsRouter(args: any): Router {
             ack: MessageEventAck.SENT,
           })
           await handlers.run('botExecutor', {
-            handlers,
             input: message,
             session: JSON.parse(user.session),
             lastRoutePath: user.route,

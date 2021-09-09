@@ -11,7 +11,10 @@ export function senderHandlerFactory(env) {
         const { messages, websocketId } = JSON.parse(body)
         await awsSender({ messages, websocketId })
       } catch (e) {
-        console.log(e)
+        console.error(e)
+        return {
+          statusCode: 500,
+        }
       }
       return {
         statusCode: 200,
