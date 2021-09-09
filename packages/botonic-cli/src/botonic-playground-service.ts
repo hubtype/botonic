@@ -12,12 +12,17 @@ const PLAYGROUND_API_HOST = 'https://api.playground.botonic.io'
 function withTimeout<T>(
   promise: Promise<T>,
   errorMsg: string,
-  timeout = 2 * 1000
+  timeoutMs = 2 * 1000
 ): Promise<T> {
-  return new Promise(function (resolve, reject: any) {
-    promise.then(resolve, reject).catch(e => console.log({ e }))
-    setTimeout(reject(errorMsg), timeout)
-  })
+  return Promise.race([
+    new Promise<T>(resolve => {
+      setTimeout(() => resolve(promise), timeoutMs)
+    }),
+    // eslint-disable-next-line promise/param-names
+    new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error(errorMsg)), timeoutMs)
+    }),
+  ])
 }
 export class PlaygroundService {
   baseUrl: string = PLAYGROUND_API_HOST
@@ -34,7 +39,7 @@ export class PlaygroundService {
     this.tunnel = null
   }
 
-  async start() {
+  async start(): Promise<void> {
     try {
       this.tunnel = await withTimeout<localtunnel.Tunnel>(
         localtunnel({ port: this.port }),
