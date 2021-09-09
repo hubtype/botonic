@@ -84,15 +84,8 @@ export default class Run extends Command {
         }
       }
 
+      const WEBCHAT_JOB_SECONDS_DELAY = 10 // Sleep 10s to give rest and ws servers enough time to be up and running
       const jobs = {
-        webchat: {
-          name: 'webchat',
-          command: `yarn workspace webchat start --env playgroundCode=${
-            pgs.code || ''
-          }`,
-          prefixColor: 'yellowBright.bgBlack',
-          runWhen: () => fs.existsSync(WEBCHAT_DIR_SRC),
-        },
         rest: {
           name: 'api.rest',
           command: 'yarn workspace api start:rest',
@@ -104,6 +97,14 @@ export default class Run extends Command {
           command: 'yarn workspace api start:websocket',
           prefixColor: 'magentaBright.bgBlack',
           runWhen: () => fs.existsSync(API_WS_DIR_SRC),
+        },
+        webchat: {
+          name: 'webchat',
+          command: `sleep ${WEBCHAT_JOB_SECONDS_DELAY}; yarn workspace webchat start --env playgroundCode=${
+            pgs.code || ''
+          }`,
+          prefixColor: 'yellowBright.bgBlack',
+          runWhen: () => fs.existsSync(WEBCHAT_DIR_SRC),
         },
       }
 
