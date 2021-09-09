@@ -20,7 +20,7 @@
     "@botonic/nlu": "~0.19.0",
     "@tensorflow/tfjs": "^2.8.6",
     "@types/webgl2": "0.0.6",
-    "axios": "latest",
+    "axios": "0.21.3",
     "franc": "^5.0.0",
     "langs": "^2.0.0",
     "node-fetch": "^2.6.1",
