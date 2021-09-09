@@ -102,7 +102,6 @@ export class SQSLambdaMapping extends AWSComponentResource<SQSLambdaMappingArgs>
     super(`${queueName}<>${lambdaName}`, args, opts)
 
     const queue = new aws.sqs.Queue(`${this.namePrefix}-${queueName}`, {
-      name: `${queueName}.fifo`,
       fifoQueue: true,
     })
     this.queueUrl = queue.url
