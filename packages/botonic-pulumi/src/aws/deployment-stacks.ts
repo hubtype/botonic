@@ -12,6 +12,7 @@ import { ProgramConfig } from '../pulumi-runner'
 import { AWSProvider, getAwsProviderConfig } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
+import { getDynamoDbCrudPolicy } from './policies'
 import { RestServer } from './rest-server'
 import { SQSLambdaMapping } from './sqs-lambda-mapping'
 import { StaticWebchatContents } from './static-webchat-contents'
@@ -33,6 +34,7 @@ export const deployBackendStack = async (
       defaultTags: { tags: config.tags || {} },
     }
   ) as AWSProvider
+
   const awsResourceOptions = { provider: awsProvider, parent: awsProvider }
 
   const nlpModelsBucket = new NLPModelsBucket({}, awsResourceOptions)
@@ -42,8 +44,17 @@ export const deployBackendStack = async (
     awsResourceOptions
   )
 
+  const callerIdentity = aws.getCallerIdentity({ provider: awsProvider })
+  const accountId = callerIdentity.then(identity => identity.accountId)
+
+  const DYNAMODB_CRUD_POLICY = getDynamoDbCrudPolicy(
+    awsProvider.region,
+    accountId,
+    database.table.name
+  )
+
   const websocketServer = new WebSocketServer(
-    { database, nlpModelsBucket },
+    { database, nlpModelsBucket, dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY },
     {
       ...awsResourceOptions,
       dependsOn: [nlpModelsBucket, database],
@@ -58,7 +69,7 @@ export const deployBackendStack = async (
       handler: 'index.default',
       inlinePolicies: [
         {
-          name: 'sender-execute-connections',
+          name: `${SENDER_LAMBDA_NAME}-execute-connections`,
           policy: websocketServer.manageConnectionsPolicy,
         },
       ],
@@ -75,6 +86,12 @@ export const deployBackendStack = async (
       queueName: `${BOT_EXECUTOR_LAMBDA_NAME}-queue`,
       sqsLambdaPath: join(HANDLERS_PATH, BOT_EXECUTOR_LAMBDA_NAME),
       handler: 'index.default',
+      inlinePolicies: [
+        {
+          name: `${BOT_EXECUTOR_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
+          policy: DYNAMODB_CRUD_POLICY,
+        },
+      ],
       environmentVariables: {
         DATA_PROVIDER_URL: database.url,
         [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: sender.queueUrl,
@@ -87,6 +104,7 @@ export const deployBackendStack = async (
     {
       nlpModelsBucket,
       database,
+      dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY,
       websocketServer,
       botExecutorQueueUrl: botExecutor.queueUrl,
     },
