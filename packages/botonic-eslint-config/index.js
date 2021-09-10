@@ -77,6 +77,7 @@ module.exports = {
     'import/default': 'warn', // syntax "export = xxxx" is not supported
     'node/no-extraneous-import': 'warn', // otherwise it does not find ts-mockito if only defined in parent project
     'array-callback-return': 'error',
+    eqeqeq: 'error',
     // special for TYPESCRIPT
     '@typescript-eslint/ban-ts-comment': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off', // annoying for tests
