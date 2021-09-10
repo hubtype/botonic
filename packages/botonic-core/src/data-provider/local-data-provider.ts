@@ -1,9 +1,8 @@
 import { JsonDB } from 'node-json-db'
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 
-import { BotonicEvent } from '../models/events'
-import { User } from '../models/user'
-import { DataProvider } from '.'
+import { BotonicEvent, User } from '../models'
+import { DataProvider } from './data-provider'
 
 export class LocalDevDataProvider implements DataProvider {
   private readonly DB_PATH = 'tmp/localDb'

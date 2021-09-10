@@ -1,7 +1,13 @@
-import { Inspector } from './debug/inspector'
+import { Inspector } from './debug'
 import { getString } from './i18n'
-import { BotRequest, BotResponse, Locales, Routes, Session } from './index'
-import { BotonicEvent } from './models/events'
+import {
+  BotonicEvent,
+  BotRequest,
+  BotResponse,
+  Locales,
+  Routes,
+  Session,
+} from './models'
 import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
 import { Router } from './router'
@@ -34,6 +40,7 @@ export class CoreBot {
   theme?: any
 
   constructor({
+    // TODO: Receives dataProvider
     renderer,
     routes,
     locales,
@@ -86,7 +93,10 @@ export class CoreBot {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
 
+    // TODO: save new userEvent
+
     if (this.plugins) {
+      // pass dataProvider
       await runPlugins(this.plugins, 'pre', input, session, lastRoutePath)
     }
 
@@ -115,6 +125,7 @@ export class CoreBot {
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
       lastRoutePath,
+      // dataProvider
     }
 
     const actions = [output.action, output.retryAction, output.defaultAction]
@@ -137,6 +148,8 @@ export class CoreBot {
         parsedResponse
       )
     }
+
+    // TODO: save bot responses to db and update user with new session and new params
 
     session.is_first_interaction = false
     return { input, response, parsedResponse, session, lastRoutePath }

@@ -2,7 +2,7 @@ import { DynamoDB } from 'aws-sdk'
 import { Entity, Table } from 'dynamodb-toolbox'
 import { EntityAttributes } from 'dynamodb-toolbox/dist/classes/Entity'
 
-import { MessageEventTypes } from '../models/events/message'
+import { MessageEventTypes } from '../models'
 
 // Table Definitions
 export const GLOBAL_SECONDARY_INDEX_NAME = 'GSI1'

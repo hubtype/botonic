@@ -1,6 +1,1 @@
-export {
-  FocusRouteInspector,
-  Inspector,
-  LogRouteInspector,
-  RouteInspector,
-} from './inspector'
+export * from './inspector'

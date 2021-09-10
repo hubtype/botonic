@@ -1,6 +1,4 @@
-import { BotonicEvent } from '../models/events'
-import { MessageEventTypes } from '../models/events/message'
-import { MEDIA_TYPES } from '../models/events/message/media'
+import { BotonicEvent, MEDIA_TYPES, MessageEventTypes } from '../models'
 import {
   parseButtons,
   parseCarousel,

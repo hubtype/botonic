@@ -1,4 +1,4 @@
-import { Input, Route, RouteMatcher } from '../index'
+import { Route, RouteMatcher } from '../models'
 export class RouteInspector {
   routeMatched(
     _route: Route,
