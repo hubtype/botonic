@@ -1,6 +1,5 @@
+import { ConnectionEventStatuses, EventTypes } from '@botonic/core'
 import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
-import { EventTypes } from '@botonic/core/lib/esm/models/events'
-import { ConnectionEventStatuses } from '@botonic/core/lib/esm/models/events/connections'
 import { decode } from 'jsonwebtoken'
 import { ulid } from 'ulid'
 
