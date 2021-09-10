@@ -1,3 +1,4 @@
+import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { BotonicEvent } from '@botonic/core/lib/esm/models/events'
 import {
   MessageEventAck,
@@ -9,7 +10,6 @@ import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 import { ulid } from 'ulid'
 
-import { dataProviderFactory } from '../../data-provider'
 import { Paginator } from '../utils/paginator'
 import { SIGNATURE_ALGORITHM } from './auth'
 import { pageParamSchema, pageSizeParamSchema } from './validation/common'

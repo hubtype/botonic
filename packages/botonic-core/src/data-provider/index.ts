@@ -1,6 +1,5 @@
-import { BotonicEvent } from '@botonic/core/lib/esm/models/events'
-import { User } from '@botonic/core/lib/esm/models/user'
-
+import { BotonicEvent } from '../models/events/index'
+import { User } from '../models/user'
 import { DynamoDBDataProvider } from './dynamodb-data-provider'
 import { LocalDevDataProvider } from './local-data-provider'
 
