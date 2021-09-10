@@ -1,13 +1,15 @@
 // eslint-disable-next-line filenames/match-regex
 import { botExecutorHandlerFactory } from '@botonic/api/src/handlers/bot-executor'
+import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { app as bot } from 'bot'
 
 import { handlers } from '.'
 
-// create dataProvider
+const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+
 async function botExecutor({ input, session, lastRoutePath, websocketId }) {
   const { parsedResponse } = await bot.input({
-    // dataProvider
+    dataProvider,
     input,
     session,
     lastRoutePath,
