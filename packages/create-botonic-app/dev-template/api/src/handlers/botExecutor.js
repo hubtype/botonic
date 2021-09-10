@@ -4,8 +4,10 @@ import { app as bot } from 'bot'
 
 import { handlers } from '.'
 
+// create dataProvider
 async function botExecutor({ input, session, lastRoutePath, websocketId }) {
   const { parsedResponse } = await bot.input({
+    // dataProvider
     input,
     session,
     lastRoutePath,

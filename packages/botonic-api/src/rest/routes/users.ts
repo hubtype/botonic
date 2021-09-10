@@ -1,8 +1,8 @@
-import { User } from '@botonic/core/lib/esm/models/user'
+import { User } from '@botonic/core'
+import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Router } from 'express'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 
-import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Paginator } from '../utils/paginator'
 import {
   getOptionalSchema,

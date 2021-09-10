@@ -1,12 +1,12 @@
-import { Session } from '@botonic/core/lib/esm/'
-import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
-import { BotonicEvent } from '@botonic/core/lib/esm/models/events'
 import {
+  BotonicEvent,
+  BotonicOutputParser,
   MessageEventAck,
   MessageEventFrom,
-} from '@botonic/core/lib/esm/models/events/message'
-import { User } from '@botonic/core/lib/esm/models/user'
-import { BotonicOutputParser } from '@botonic/core/lib/esm/output-parser'
+  Session,
+  User,
+} from '@botonic/core'
+import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Request, Router } from 'express'
 import { ulid } from 'ulid'
 import { v4 } from 'uuid'

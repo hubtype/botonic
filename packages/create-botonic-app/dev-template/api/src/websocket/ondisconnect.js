@@ -1,6 +1,5 @@
+import { ConnectionEventStatuses, EventTypes } from '@botonic/core'
 import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
-import { EventTypes } from '@botonic/core/lib/esm/models/events'
-import { ConnectionEventStatuses } from '@botonic/core/lib/esm/models/events/connections'
 import { ulid } from 'ulid'
 
 export const onDisconnect = async websocketId => {
