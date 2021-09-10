@@ -1,5 +1,5 @@
 // eslint-disable-next-line filenames/match-regex
-import { Locales } from './index'
+import { Locales } from './models'
 
 export const getString = (
   locales: Locales,

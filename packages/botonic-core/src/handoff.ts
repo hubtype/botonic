@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { Session } from './index'
+import { Session } from './models'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 

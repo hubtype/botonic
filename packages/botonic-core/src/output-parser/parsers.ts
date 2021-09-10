@@ -1,23 +1,31 @@
-import { EventTypes } from '../models/events'
-import { BotonicMessageEvent } from '../models/events/message'
-import { Button, WithButtons } from '../models/events/message/buttons'
-import {
-  CarouselElement,
-  CarouselMessageEvent,
-} from '../models/events/message/carousel'
-import { CustomMessageEvent } from '../models/events/message/custom'
-import { LocationMessageEvent } from '../models/events/message/location'
 import {
   AudioMessageEvent,
+  BotonicMessageEvent,
+  Button,
+  CarouselElement,
+  CarouselMessageEvent,
+  CustomMessageEvent,
   DocumentMessageEvent,
+  EventTypes,
   ImageMessageEvent,
+  LocationMessageEvent,
+  PostbackMessageEvent,
+  Reply,
+  TextMessageEvent,
   VideoMessageEvent,
-} from '../models/events/message/media'
-import { PostbackMessageEvent } from '../models/events/message/postback'
-import { Reply, WithReplies } from '../models/events/message/replies'
-import { TextMessageEvent } from '../models/events/message/text'
-import { TEXT_NODE_NAME } from '.'
-import { parseBoolean, parseNumber } from './util'
+  WithButtons,
+  WithReplies,
+} from '../models'
+import { TEXT_NODE_NAME } from './botonic-output-parser'
+
+export function parseNumber(strNumber: string): number {
+  return parseInt(strNumber)
+}
+
+export function parseBoolean(strNumber: string): boolean {
+  if (strNumber === '0') return false
+  return true
+}
 
 export type ParseFunction<Out> = (args: {
   toParse: any

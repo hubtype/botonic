@@ -1,4 +1,5 @@
-import { Session } from '../index'
+import { Session } from './legacy-types'
+
 export interface User {
   id: string //TODO: UUID
   providerId?: string
