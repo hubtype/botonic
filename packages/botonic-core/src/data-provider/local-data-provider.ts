@@ -1,8 +1,8 @@
-import { BotonicEvent } from '@botonic/core/lib/esm/models/events'
-import { User } from '@botonic/core/lib/esm/models/user'
 import { JsonDB } from 'node-json-db'
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 
+import { BotonicEvent } from '../models/events'
+import { User } from '../models/user'
 import { DataProvider } from '.'
 
 export class LocalDevDataProvider implements DataProvider {

@@ -1,7 +1,7 @@
-import { BotonicEvent, EventTypes } from '@botonic/core/lib/esm/models/events'
-import { User } from '@botonic/core/lib/esm/models/user'
 import { Entity, Table } from 'dynamodb-toolbox'
 
+import { BotonicEvent, EventTypes } from '../models/events'
+import { User } from '../models/user'
 import { DataProvider } from '.'
 import {
   getConnectionEventEntity,
