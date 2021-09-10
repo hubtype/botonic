@@ -1,10 +1,10 @@
-import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
-import { BotonicEvent } from '@botonic/core/lib/esm/models/events'
 import {
+  BotonicEvent,
+  BotonicOutputParser,
   MessageEventAck,
   MessageEventFrom,
-} from '@botonic/core/lib/esm/models/events/message'
-import { BotonicOutputParser } from '@botonic/core/lib/esm/output-parser'
+} from '@botonic/core'
+import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Router } from 'express'
 import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
@@ -90,14 +90,14 @@ export default function eventsRouter(args: any): Router {
           const parsedUserEvent = botonicOutputParser.parseFromUserInput(
             message
           )
-          const newUserEvent = await dp.saveEvent({
-            ...parsedUserEvent,
-            userId,
-            eventId: ulid(),
-            createdAt: new Date().toISOString(),
-            from: MessageEventFrom.USER,
-            ack: MessageEventAck.SENT,
-          })
+          // const newUserEvent = await dp.saveEvent({
+          //   ...parsedUserEvent,
+          //   userId,
+          //   eventId: ulid(),
+          //   createdAt: new Date().toISOString(),
+          //   from: MessageEventFrom.USER,
+          //   ack: MessageEventAck.SENT,
+          // })
           await handlers.run('botExecutor', {
             input: message,
             session: JSON.parse(user.session),
