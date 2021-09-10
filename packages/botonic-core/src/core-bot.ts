@@ -1,3 +1,4 @@
+import { ulid } from 'ulid'
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
@@ -5,6 +6,8 @@ import {
   BotRequest,
   BotResponse,
   Locales,
+  MessageEventAck,
+  MessageEventFrom,
   Routes,
   Session,
 } from './models'
@@ -38,6 +41,7 @@ export class CoreBot {
   router: any
   routes: Routes
   theme?: any
+  botonicOutputParser = new BotonicOutputParser()
 
   constructor({
     // TODO: Receives dataProvider
@@ -89,15 +93,34 @@ export class CoreBot {
     input,
     session,
     lastRoutePath,
+    dataProvider,
   }: BotRequest): Promise<BotResponse> {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
 
-    // TODO: save new userEvent
+    const parsedUserEvent = this.botonicOutputParser.parseFromUserInput(input)
+    const userId = session.user.id
+    // @ts-ignore
+    const userEvent = await dataProvider.saveEvent({
+      ...parsedUserEvent,
+      userId,
+      eventId: ulid(),
+      createdAt: new Date().toISOString(),
+      from: MessageEventFrom.USER,
+      ack: MessageEventAck.SENT,
+    })
 
     if (this.plugins) {
-      // pass dataProvider
-      await runPlugins(this.plugins, 'pre', input, session, lastRoutePath)
+      await runPlugins(
+        this.plugins,
+        'pre',
+        input,
+        session,
+        lastRoutePath,
+        undefined,
+        undefined,
+        dataProvider
+      )
     }
 
     if (isFunction(this.routes)) {
@@ -125,16 +148,18 @@ export class CoreBot {
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
       lastRoutePath,
-      // dataProvider
+      dataProvider,
     }
 
     const actions = [output.action, output.retryAction, output.defaultAction]
 
     const response = await this.renderer({ request, actions })
-    let parsedResponse: Partial<BotonicEvent>[] | null = null
+    let parsedResponse: Partial<BotonicEvent>[] = []
     try {
-      parsedResponse = new BotonicOutputParser().xmlToMessageEvents(response)
-    } catch (e) {}
+      parsedResponse = this.botonicOutputParser.xmlToMessageEvents(response)
+    } catch (e) {
+      console.error(e)
+    }
 
     lastRoutePath = output.lastRoutePath
     if (this.plugins) {
@@ -145,13 +170,32 @@ export class CoreBot {
         session,
         lastRoutePath,
         response,
-        parsedResponse
+        parsedResponse,
+        dataProvider
       )
     }
 
     // TODO: save bot responses to db and update user with new session and new params
+    for (const messageEvent of parsedResponse) {
+      // @ts-ignore
+      const botEvent = await dataProvider.saveEvent({
+        ...messageEvent,
+        userId,
+        eventId: ulid(),
+        createdAt: new Date().toISOString(),
+        from: MessageEventFrom.BOT,
+        ack: MessageEventAck.SENT,
+      })
+    }
 
     session.is_first_interaction = false
-    return { input, response, parsedResponse, session, lastRoutePath }
+    return {
+      input,
+      response,
+      parsedResponse,
+      session,
+      lastRoutePath,
+      dataProvider,
+    }
   }
 }

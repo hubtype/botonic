@@ -1,14 +1,8 @@
-import {
-  BotonicEvent,
-  BotonicOutputParser,
-  MessageEventAck,
-  MessageEventFrom,
-} from '@botonic/core'
+import { BotonicEvent } from '@botonic/core'
 import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Router } from 'express'
 import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
-import { ulid } from 'ulid'
 
 import { Paginator } from '../utils/paginator'
 import { SIGNATURE_ALGORITHM } from './auth'
@@ -78,7 +72,6 @@ export default function eventsRouter(args: any): Router {
       async (req: any, res: any) => {
         // TODO: Validate event
         const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const botonicOutputParser = new BotonicOutputParser()
         try {
           const { userId } = req.user
           const { message, sender } = req.body
@@ -87,17 +80,6 @@ export default function eventsRouter(args: any): Router {
             ...user,
             session: JSON.stringify({ user: sender }),
           })
-          const parsedUserEvent = botonicOutputParser.parseFromUserInput(
-            message
-          )
-          // const newUserEvent = await dp.saveEvent({
-          //   ...parsedUserEvent,
-          //   userId,
-          //   eventId: ulid(),
-          //   createdAt: new Date().toISOString(),
-          //   from: MessageEventFrom.USER,
-          //   ack: MessageEventAck.SENT,
-          // })
           await handlers.run('botExecutor', {
             input: message,
             session: JSON.parse(user.session),
@@ -109,7 +91,6 @@ export default function eventsRouter(args: any): Router {
           res.status(500).send(JSON.stringify(e))
         }
         res.status(200).send('OK')
-        // TODO: Finally, update user
       }
     )
 

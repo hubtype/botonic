@@ -1,5 +1,6 @@
 // TODO: This file contains all the legacy types we had in index.ts. After some refactors, we should be able to get rid of many of them.
 
+import { DataProvider } from '../data-provider'
 import { BotonicEvent } from './events'
 
 export type CaseStatusType =
@@ -205,6 +206,7 @@ export interface BotRequest {
   input: Input
   lastRoutePath: string
   session: Session
+  dataProvider: DataProvider
 }
 
 /** The response of the bot for the triggered actions, which can be
