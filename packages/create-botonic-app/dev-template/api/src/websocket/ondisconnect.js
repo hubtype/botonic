@@ -1,4 +1,4 @@
-import { dataProviderFactory } from '@botonic/api/src/data-provider'
+import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { EventTypes } from '@botonic/core/lib/esm/models/events'
 import { ConnectionEventStatuses } from '@botonic/core/lib/esm/models/events/connections'
 import { ulid } from 'ulid'
