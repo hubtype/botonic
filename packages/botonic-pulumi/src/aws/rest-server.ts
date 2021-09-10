@@ -10,12 +10,13 @@ import {
 import { AWSComponentResource, AWSResourceOptions } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
-import { getDynamoDbCrudPolicy, getManageConnectionsPolicy } from './policies'
+import { getManageConnectionsPolicy } from './policies'
 import { WebSocketServer } from './websocket-server'
 
 export interface RestServerArgs {
   nlpModelsBucket: NLPModelsBucket
   database: DynamoDB
+  dynamodbCrudPolicy: pulumi.Input<string>
   websocketServer: WebSocketServer
   botExecutorQueueUrl: pulumi.Input<string>
   restServerLambdaPath?: string
@@ -30,11 +31,6 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
     if (existsSync(restServerLambdaPath)) {
       const callerIdentity = aws.getCallerIdentity({ provider: opts.provider })
       const accountId = callerIdentity.then(identity => identity.accountId)
-      const DYNAMODB_CRUD_POLICY = getDynamoDbCrudPolicy(
-        this.provider.region,
-        accountId,
-        args.database.table.name
-      )
       const MANAGE_CONNECTIONS_POLICY = getManageConnectionsPolicy(
         this.provider.region,
         accountId,
@@ -51,7 +47,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
           inlinePolicies: [
             {
               name: 'rest-api-dynamodb-crud-inline-policy',
-              policy: DYNAMODB_CRUD_POLICY,
+              policy: args.dynamodbCrudPolicy,
             },
             {
               name: 'rest-api-manage-connections-inline-policy',

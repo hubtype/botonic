@@ -6,7 +6,7 @@ import { WEBSOCKET_ENDPOINT_PATH_NAME, WEBSOCKET_SERVER_PATH } from '..'
 import { AWSComponentResource, AWSResourceOptions } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
-import { getDynamoDbCrudPolicy, getManageConnectionsPolicy } from './policies'
+import { getManageConnectionsPolicy } from './policies'
 import {
   WebsocketServerLambda,
   WebSocketServerLambdaArgs,
@@ -15,6 +15,7 @@ import {
 export interface WebSocketServerArgs {
   database: DynamoDB
   nlpModelsBucket: NLPModelsBucket
+  dynamodbCrudPolicy: pulumi.Input<string>
   websocketLambdaPath?: string
 }
 export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
@@ -39,12 +40,6 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           routeSelectionExpression: '$request.body.action',
         },
         { ...opts, parent: this }
-      )
-
-      const DYNAMODB_CRUD_POLICY = getDynamoDbCrudPolicy(
-        this.provider.region,
-        accountId,
-        args.database.table.name
       )
 
       const MANAGE_CONNECTIONS_POLICY = getManageConnectionsPolicy(
@@ -77,7 +72,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           inlinePolicies: [
             {
               name: `${WEBSOCKET_ONCONNECT_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
-              policy: DYNAMODB_CRUD_POLICY,
+              policy: args.dynamodbCrudPolicy,
             },
           ],
           ...wsLambdaCommonArgs,
@@ -92,7 +87,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           routeKey: '$default',
           inlinePolicies: [
             {
-              policy: DYNAMODB_CRUD_POLICY,
+              policy: args.dynamodbCrudPolicy,
               name: `${WEBSOCKET_ONAUTH_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
             },
             {
@@ -112,7 +107,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           routeKey: '$disconnect',
           inlinePolicies: [
             {
-              policy: DYNAMODB_CRUD_POLICY,
+              policy: args.dynamodbCrudPolicy,
               name: `${WEBSOCKET_ONDISCONNECT_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
             },
           ],
