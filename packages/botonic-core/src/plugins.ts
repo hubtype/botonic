@@ -1,5 +1,4 @@
-import { Input, PluginConfig, Session } from './index'
-import { BotonicEvent } from './models/events'
+import { BotonicEvent, Input, PluginConfig, Session } from './models'
 
 type PluginMode = 'pre' | 'post'
 

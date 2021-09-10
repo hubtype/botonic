@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import Pusher, { AuthOptions, Channel } from 'pusher-js'
 import Channels from 'pusher-js/types/src/core/channels/channels'
 
-import { Input, SessionUser } from './index'
+import { Input, SessionUser } from './models'
 import { getWebpackEnvVar } from './utils'
 
 interface UnsentInput {

@@ -1,5 +1,5 @@
-import { BotonicMessageEvent, MessageEventTypes } from '.'
 import { WithButtons } from './buttons'
+import { BotonicMessageEvent, MessageEventTypes } from './message-event'
 
 export interface CarouselElement extends WithButtons {
   pic: string
