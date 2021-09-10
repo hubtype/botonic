@@ -8,7 +8,7 @@ export const onAuth = async ({ websocketId, data, send }) => {
   const { userId } = decode(token)
   const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
   let user = await dp.getUser(userId)
-  console.log('got user', { user })
+  // console.log('got user', { user })
   await dp.saveEvent({
     eventType: EventTypes.CONNECTION,
     userId,
@@ -17,7 +17,7 @@ export const onAuth = async ({ websocketId, data, send }) => {
     status: ConnectionEventStatuses.CONNECTED,
   })
   if (!user) {
-    console.log('create user connection id', websocketId)
+    // console.log('create user connection id', websocketId)
     user = await dp.saveUser({
       id: userId,
       websocketId,
@@ -25,13 +25,13 @@ export const onAuth = async ({ websocketId, data, send }) => {
       route: '/',
       session: JSON.stringify({}),
     })
-    console.log('created user', { user })
+    // console.log('created user', { user })
   } else {
     // UPDATE USER CONNECTION
     user = await dp.updateUser({
       ...user,
       websocketId,
     })
-    console.log('updated user', { user })
+    // console.log('updated user', { user })
   }
 }
