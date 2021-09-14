@@ -7,7 +7,7 @@ describe('Parsing Location responses', () => {
     <message typing="0" delay="0" markdown="1" type="text">
         Custom Message
     </message>
-    <message json='{"children":[],"customTypeName":"calendar"}' typing="0" delay="0" type="custom">
+    <message json="{&quot;customTypeName&quot;:&quot;calendar&quot;}" typing="0" delay="0" type="custom">
     <div class="react-calendar">COMPONENT HTML DATA</div>
         <p></p>
         <reply payload="payload cus1">Payload Custom 1</reply>
@@ -40,7 +40,9 @@ describe('Parsing Location responses', () => {
             title: 'Payload Custom 2',
           },
         ],
-        customTypeName: 'calendar',
+        json: {
+          customTypeName: 'calendar',
+        },
       },
     ]
     tester.parseResponseAndAssert(botResponse, expected)
