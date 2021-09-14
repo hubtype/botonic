@@ -101,6 +101,7 @@ export class CoreBot {
 
     const parsedUserEvent = this.botonicOutputParser.parseFromUserInput(input)
     const userId = session.user.id
+    // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
     // @ts-ignore
     const userEvent = await dataProvider.saveEvent({
       ...parsedUserEvent,
@@ -108,7 +109,7 @@ export class CoreBot {
       eventId: ulid(),
       createdAt: new Date().toISOString(),
       from: MessageEventFrom.USER,
-      ack: MessageEventAck.SENT,
+      ack: MessageEventAck.RECEIVED,
     })
 
     if (this.plugins) {
@@ -155,9 +156,9 @@ export class CoreBot {
     const actions = [output.action, output.retryAction, output.defaultAction]
 
     const response = await this.renderer({ request, actions })
-    let parsedResponse: Partial<BotonicEvent>[] = []
+    let messageEvents: Partial<BotonicEvent>[] = []
     try {
-      parsedResponse = this.botonicOutputParser.xmlToMessageEvents(response)
+      messageEvents = this.botonicOutputParser.xmlToMessageEvents(response)
     } catch (e) {
       console.error(e)
     }
@@ -171,13 +172,13 @@ export class CoreBot {
         session,
         lastRoutePath,
         response,
-        parsedResponse,
+        messageEvents,
         dataProvider
       )
     }
 
     // TODO: save bot responses to db and update user with new session and new params
-    for (const messageEvent of parsedResponse) {
+    for (const messageEvent of messageEvents) {
       // @ts-ignore
       const botEvent = await dataProvider.saveEvent({
         ...messageEvent,
@@ -193,7 +194,7 @@ export class CoreBot {
     return {
       input,
       response,
-      parsedResponse,
+      messageEvents,
       session,
       lastRoutePath,
       dataProvider,

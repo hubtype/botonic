@@ -8,13 +8,13 @@ import { handlers } from '.'
 const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
 async function botExecutor({ input, session, lastRoutePath, websocketId }) {
-  const { parsedResponse } = await bot.input({
+  const { messageEvents } = await bot.input({
     dataProvider,
     input,
     session,
     lastRoutePath,
   })
-  await handlers.run('sender', { messages: parsedResponse, websocketId })
+  await handlers.run('sender', { events: messageEvents, websocketId })
 }
 
 // eslint-disable-next-line no-undef

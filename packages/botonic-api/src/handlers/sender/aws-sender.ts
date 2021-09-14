@@ -7,12 +7,12 @@ const apiGwManagementApi = new ApiGatewayManagementApi({
   endpoint: process.env.WEBSOCKET_URL?.split(WSS_PROTOCOL_PREFIX)[1],
 })
 
-export async function awsSender({ messages, websocketId }) {
-  for (const message of messages) {
+export async function awsSender({ events, websocketId }) {
+  for (const event of events) {
     await apiGwManagementApi
       .postToConnection({
         ConnectionId: websocketId,
-        Data: JSON.stringify(message),
+        Data: JSON.stringify(event),
       })
       .promise()
   }

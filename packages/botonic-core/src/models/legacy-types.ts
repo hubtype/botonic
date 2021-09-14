@@ -215,7 +215,7 @@ export interface BotRequest {
  * */
 export interface BotResponse extends BotRequest {
   response: any
-  parsedResponse: Partial<BotonicEvent>[] | null
+  messageEvents: Partial<BotonicEvent>[] | null
 }
 
 export type PluginPreRequest = BotRequest
