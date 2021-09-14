@@ -42,8 +42,8 @@ export default function botInputRouter(args: any): Router {
       ack: MessageEventAck.SENT,
     } as BotonicEvent)
 
-    const messages = output.parsedResponse
-    for (const messageEvent of messages) {
+    const { messageEvents } = output
+    for (const messageEvent of messageEvents) {
       await dp.saveEvent({
         ...messageEvent,
         userId: user.id,

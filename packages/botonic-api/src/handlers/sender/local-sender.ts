@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-export async function localSender({ messages, websocketId }) {
-  for (const message of messages) {
+export async function localSender({ events, websocketId }) {
+  for (const event of events) {
     await axios.post(`${WEBSOCKET_URL}send/`, {
-      message,
+      event,
       websocketId,
     })
   }

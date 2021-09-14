@@ -80,10 +80,10 @@ export default function eventsRouter(args: any): Router {
             ...user,
             session: JSON.stringify({ user: sender }),
           })
-          // TODO: Next iterations. We should receive an already valid user and event ids from frontend
+          // TODO: Next iterations: We should receive an event with userId and eventId from frontend
           const webchatMsgId = message.id
           await handlers.run('sender', {
-            messages: [
+            events: [
               {
                 action: 'update_message_info',
                 message: { id: webchatMsgId, ack: MessageEventAck.RECEIVED },
