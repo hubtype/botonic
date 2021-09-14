@@ -18,9 +18,8 @@ export class DynamoDB extends AWSComponentResource<DynamoDBArgs> {
     const tableName = args.tableName || BOTONIC_SINGLE_TABLE_NAME
 
     const table = new aws.dynamodb.Table(
-      `${this.namePrefix}-dynamodb-table`,
+      `${this.namePrefix}-dynamodb-${tableName}`,
       {
-        name: tableName,
         hashKey: 'PK',
         rangeKey: 'SK',
         attributes: [
