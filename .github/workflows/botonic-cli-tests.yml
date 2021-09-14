@@ -38,7 +38,8 @@ jobs:
         run: (cd ./packages/$PACKAGE && npm run test_ci)
 
       - name: Publish Unit Test Results
-        uses: docker://ghcr.io/enricomi/publish-unit-test-result-action:latest
+        uses: EnricoMi/publish-unit-test-result-action@v1.19
+        continue-on-error: true
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
