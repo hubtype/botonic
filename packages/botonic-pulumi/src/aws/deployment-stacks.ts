@@ -107,6 +107,7 @@ export const deployBackendStack = async (
       dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY,
       websocketServer,
       botExecutorQueueUrl: botExecutor.queueUrl,
+      senderQueueUrl: sender.queueUrl,
     },
     awsResourceOptions
   )

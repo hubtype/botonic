@@ -1,4 +1,10 @@
-import { INPUT, isMobile, params2queryString } from '@botonic/core'
+import {
+  INPUT,
+  isMobile,
+  MessageEventAck,
+  MessageEventFrom,
+  params2queryString,
+} from '@botonic/core'
 import { motion } from 'framer-motion'
 import merge from 'lodash.merge'
 import React, {
@@ -254,10 +260,15 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.currentAttachment])
 
   const sendUserInput = async input => {
+    input = {
+      ...input,
+      ack: MessageEventAck.DRAFT,
+      from: MessageEventFrom.USER,
+    }
     props.onUserInput &&
       props.onUserInput({
         user: webchatState.session.user,
-        input: input,
+        input,
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
       })
