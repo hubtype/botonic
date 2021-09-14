@@ -6,6 +6,7 @@ import {
   BOT_EXECUTOR_LAMBDA_NAME,
   REST_SERVER_ENDPOINT_PATH_NAME,
   REST_SERVER_PATH,
+  SENDER_LAMBDA_NAME,
 } from '..'
 import { AWSComponentResource, AWSResourceOptions } from '.'
 import { DynamoDB } from './dynamodb'
@@ -19,6 +20,7 @@ export interface RestServerArgs {
   dynamodbCrudPolicy: pulumi.Input<string>
   websocketServer: WebSocketServer
   botExecutorQueueUrl: pulumi.Input<string>
+  senderQueueUrl: pulumi.Input<string>
   restServerLambdaPath?: string
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
@@ -98,6 +100,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
               DATA_PROVIDER_URL: args.database.url,
               WEBSOCKET_URL: args.websocketServer.url,
               BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
+              [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: args.senderQueueUrl,
               [`${BOT_EXECUTOR_LAMBDA_NAME}_QUEUE_URL`]: args.botExecutorQueueUrl,
             },
           },

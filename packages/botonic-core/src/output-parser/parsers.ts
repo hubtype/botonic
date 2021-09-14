@@ -50,6 +50,8 @@ export const parseMessage: ParseFunction<BotonicMessageEvent> = args => {
       // Following properties added later before saving event: eventId, userId, createdAt, from, ack
       eventType: EventTypes.MESSAGE,
       type: args.toParse.type,
+      ack: args.toParse.ack,
+      from: args.toParse.from,
       ...typingAndDelay,
     },
   }

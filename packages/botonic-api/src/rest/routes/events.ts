@@ -1,4 +1,4 @@
-import { BotonicEvent } from '@botonic/core'
+import { BotonicEvent, MessageEventAck } from '@botonic/core'
 import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Router } from 'express'
 import jwt from 'express-jwt'
@@ -79,6 +79,17 @@ export default function eventsRouter(args: any): Router {
           user = await dp.updateUser({
             ...user,
             session: JSON.stringify({ user: sender }),
+          })
+          // TODO: Next iterations. We should receive an already valid user and event ids from frontend
+          const webchatMsgId = message.id
+          await handlers.run('sender', {
+            messages: [
+              {
+                action: 'update_message_info',
+                message: { id: webchatMsgId, ack: MessageEventAck.RECEIVED },
+              },
+            ],
+            websocketId: user.websocketId,
           })
           await handlers.run('botExecutor', {
             input: message,
