@@ -1,5 +1,10 @@
+import CalendarMessage from './custom-messages/calendar-message'
+
 export const webchat = {
   theme: {
-    brandColor: 'blue',
+    brand: { color: 'blue' },
+    message: {
+      customTypes: [CalendarMessage],
+    },
   },
 }
