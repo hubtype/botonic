@@ -6,6 +6,7 @@ export const onDisconnect = async websocketId => {
   const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
   try {
     const user = await dp.getUserByWebsocketId(websocketId)
+    if (!user) throw new Error('User not found')
     await dp.updateUser({ ...user, isOnline: false, websocketId: '' })
     await dp.saveEvent({
       eventType: EventTypes.CONNECTION,

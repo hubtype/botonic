@@ -44,7 +44,7 @@ export class LocalDevDataProvider implements DataProvider {
     const dbUser = this.db.exists(path)
       ? this.db.find<User>(path, (user: User) => user[field] === value)
       : undefined
-    return dbUser?.[dbUser.id]
+    return dbUser
   }
 
   saveUser(user: User): User {
@@ -62,7 +62,6 @@ export class LocalDevDataProvider implements DataProvider {
     if (this.db.exists(path)) {
       this.db.push(path, user, true)
     }
-
     return user
   }
 
