@@ -1,9 +1,10 @@
 import {
-  FullstackProdApp,
-  FullstackDevApp,
   BrowserDevApp,
   BrowserProdApp,
+  FullstackDevApp,
+  FullstackProdApp,
 } from '@botonic/react/src/experimental'
+
 import { webchat } from './webchat-config'
 export let app
 
