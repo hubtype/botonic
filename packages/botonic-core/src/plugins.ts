@@ -28,7 +28,7 @@ export async function runPlugins(
   session: Session,
   lastRoutePath: string,
   response: string | null = null,
-  parsedResponse: Partial<BotonicEvent>[] | null = null,
+  messageEvents: Partial<BotonicEvent>[] | null = null,
   dataProvider: DataProvider
 ): Promise<void> {
   for (const key in plugins) {
@@ -42,7 +42,7 @@ export async function runPlugins(
           session,
           lastRoutePath,
           response,
-          parsedResponse,
+          messageEvents,
           dataProvider,
         })
     } catch (e) {

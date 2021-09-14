@@ -8,8 +8,8 @@ export function senderHandlerFactory(env) {
     return async function (event, context) {
       try {
         const { body } = event.Records[0]
-        const { messages, websocketId } = JSON.parse(body)
-        await awsSender({ messages, websocketId })
+        const { events, websocketId } = JSON.parse(body)
+        await awsSender({ events, websocketId })
       } catch (e) {
         console.error(e)
         return {
