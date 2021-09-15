@@ -1,7 +1,6 @@
 import { Entity, Table } from 'dynamodb-toolbox'
 
 import { BotonicEvent, EventTypes, User } from '../models'
-import { DataProvider } from './data-provider'
 import {
   getConnectionEventEntity,
   getMessageEventEntities,
@@ -10,6 +9,7 @@ import {
   GLOBAL_SECONDARY_INDEX_NAME,
   SORT_KEY_NAME,
 } from './dynamodb-utils'
+import { DataProvider } from './factory'
 
 export class DynamoDBDataProvider implements DataProvider {
   region: string
