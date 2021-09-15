@@ -127,7 +127,11 @@ export const Message = props => {
   } = resolveMessageTimestamps(getThemeProperty, enabletimestamps)
 
   const resolveAck = ack => {
-    // TODO: Resolution for browser app?
+    // Browser app version
+    // eslint-disable-next-line no-undef
+    if (typeof FULLSTACK === 'undefined' || !FULLSTACK) {
+      return MessageEventAck.RECEIVED
+    }
     if (ack !== undefined) return ack
     if (isFromBot) return MessageEventAck.RECEIVED
     return MessageEventAck.DRAFT
