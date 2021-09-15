@@ -434,7 +434,7 @@ export const Webchat = forwardRef((props, ref) => {
     )
     if (!Array.isArray(blockInputs)) return false
     for (const rule of blockInputs) {
-      if (getBlockInputs(rule, input.data)) {
+      if (getBlockInputs(rule, input.text)) {
         addMessageComponent(
           <Text
             id={input.id}
@@ -512,7 +512,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (isText(input)) {
       messageComponent = (
         <Text id={input.id} payload={input.payload} from={SENDERS.user}>
-          {input.data}
+          {input.text}
         </Text>
       )
     } else if (isMedia(input)) {
@@ -533,7 +533,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendInput = async input => {
     if (!input || Object.keys(input).length == 0) return
-    if (isText(input) && (!input.data || !input.data.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.data)
+    if (isText(input) && (!input.text || !input.text.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.data)
     if (isText(input) && checkBlockInput(input)) return
     if (!input.id) input.id = uuidv4()
     const messageComponent = messageComponentFromInput(input)
@@ -623,7 +623,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendText = async (text, payload) => {
     if (!text) return
-    const input = { type: INPUT.TEXT, data: text, payload }
+    const input = { type: INPUT.TEXT, text, payload }
     await sendInput(input)
   }
 
