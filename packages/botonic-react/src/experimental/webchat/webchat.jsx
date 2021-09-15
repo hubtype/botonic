@@ -516,7 +516,7 @@ export const Webchat = forwardRef((props, ref) => {
         </Text>
       )
     } else if (isMedia(input)) {
-      const temporaryDisplayUrl = URL.createObjectURL(input.data)
+      const temporaryDisplayUrl = URL.createObjectURL(input.src)
       const mediaProps = {
         id: input.id,
         from: SENDERS.user,
@@ -533,12 +533,12 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendInput = async input => {
     if (!input || Object.keys(input).length == 0) return
-    if (isText(input) && (!input.text || !input.text.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.data)
+    if (isText(input) && (!input.text || !input.text.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.text)
     if (isText(input) && checkBlockInput(input)) return
     if (!input.id) input.id = uuidv4()
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
-    if (isMedia(input)) input.data = await readDataURL(input.data)
+    if (isMedia(input)) input.src = await readDataURL(input.src)
     sendUserInput(input)
     updateLatestInput(input)
     isOnline() && updateLastMessageDate(currentDateString())
@@ -639,7 +639,7 @@ export const Webchat = forwardRef((props, ref) => {
       if (!attachmentType) return
       const input = {
         type: attachmentType,
-        data: attachment.file,
+        src: attachment.file,
       }
       await sendInput(input)
       setCurrentAttachment(undefined)
