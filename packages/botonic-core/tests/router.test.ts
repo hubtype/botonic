@@ -11,6 +11,14 @@ const textPayloadInput = { type: 'text', text: 'hi', payload: 'foo' }
 /** @type Input */
 const postbackInput = { type: 'postback', payload: 'foo' }
 
+const audioInput = { type: 'audio', src: 'data:audio/mpeg;base64,iVBORw0KG' }
+const documentInput = {
+  type: 'document',
+  src: 'data:application/pdf;base64,iVBORw0KG',
+}
+const imageInput = { type: 'image', src: 'data:image/png;base64,iVBORw0KG' }
+const videoInput = { type: 'video', src: 'data:video/mp4;base64,iVBORw0KG' }
+
 const requestInput = {
   input: textInput,
   session: { organization: 'myOrg' },
@@ -63,6 +71,8 @@ describe('Match route by MATCHER <> INPUT', () => {
     router.matchRoute(testRoute(), 'text', matcher, textInput, testSession())
   const matchPayloadProp = (matcher, payload) =>
     router.matchRoute(testRoute(), 'payload', matcher, payload, testSession())
+  const matchTypeProp = (type, input) =>
+    router.matchRoute(testRoute(), 'type', type, input, testSession())
   const matchRequestProp = (matcher, request) =>
     router.matchRoute(
       testRoute(),
@@ -168,6 +178,15 @@ describe('Match route by MATCHER <> INPUT', () => {
         requestInput
       )
     ).toBeFalsy()
+  })
+  test('type <> audio, document, image, video', () => {
+    expect(matchTypeProp('audio', audioInput)).toBeTruthy()
+    expect(matchTypeProp('document', documentInput)).toBeTruthy()
+    expect(matchTypeProp('image', imageInput)).toBeTruthy()
+    expect(matchTypeProp('video', videoInput)).toBeTruthy()
+  })
+  test('type <> other inputs', () => {
+    expect(matchTypeProp(/.*/, { type: 'anyOtherInput' })).toBeTruthy()
   })
 })
 
