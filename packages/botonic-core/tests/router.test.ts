@@ -3,11 +3,11 @@ import { PROVIDER } from '../src/index'
 import { NoMatchingRouteError, Router } from '../src/router'
 
 /** @type Input */
-const textInput = { type: 'text', data: 'hi' }
+const textInput = { type: 'text', text: 'hi' }
 /** @type Input */
-const textInputComplex = { type: 'text', data: 'Cömplêx input &% 🚀' }
+const textInputComplex = { type: 'text', text: 'Cömplêx input &% 🚀' }
 /** @type Input */
-const textPayloadInput = { type: 'text', data: 'hi', payload: 'foo' }
+const textPayloadInput = { type: 'text', text: 'hi', payload: 'foo' }
 /** @type Input */
 const postbackInput = { type: 'postback', payload: 'foo' }
 
@@ -96,7 +96,7 @@ describe('Match route by MATCHER <> INPUT', () => {
       router.matchRoute(
         testRoute(),
         'input',
-        i => i.data.startsWith('hi'),
+        i => i.text.startsWith('hi'),
         textInput,
         testSession()
       )
@@ -105,7 +105,7 @@ describe('Match route by MATCHER <> INPUT', () => {
       router.matchRoute(
         testRoute(),
         'input',
-        i => !i.data.startsWith('hi'),
+        i => !i.text.startsWith('hi'),
         textInput,
         testSession()
       )
@@ -153,7 +153,7 @@ describe('Match route by MATCHER <> INPUT', () => {
     expect(
       matchRequestProp(
         request =>
-          request.input.data === 'hi' &&
+          request.input.text === 'hi' &&
           request.session.organization === 'myOrg' &&
           request.lastRoutePath === 'initial',
         requestInput
@@ -162,7 +162,7 @@ describe('Match route by MATCHER <> INPUT', () => {
     expect(
       matchRequestProp(
         request =>
-          request.input.data === 'hello' &&
+          request.input.text === 'hello' &&
           request.session.organization === 'myOrg' &&
           request.lastRoutePath === 'initial',
         requestInput

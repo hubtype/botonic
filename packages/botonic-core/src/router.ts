@@ -30,7 +30,6 @@ type Matcher = string | RegExp | ((args) => boolean)
 export class Router {
   routes: Routes
   routeInspector: RouteInspector
-  lastRoutePath: string | null
   /**
    * @param {Route[]} routes
    * @param routeInspector
@@ -166,7 +165,6 @@ export class Router {
         lastRoutePath: lastRoutePath,
       }
     } else {
-      this.lastRoutePath = null
       session.__retries = 0
       return {
         action: notFound.action,
@@ -284,9 +282,7 @@ export class Router {
     /** @type {any} */
     let value: any = ''
     if (Object.keys(input).indexOf(prop) > -1) value = input[prop]
-    if (prop === 'text') {
-      if (input.type === 'text') value = input.data
-    } else if (prop === 'input') value = input
+    if (prop === 'input') value = input
     else if (prop === 'session') value = session
     else if (prop === 'request') value = { input, session, lastRoutePath }
     const matched = this.matchValue(matcher, value)
@@ -307,8 +303,7 @@ export class Router {
     value: any
   ): boolean {
     if (typeof matcher === 'string') {
-      // TODO should this be === to avoid matching '' with undefined?
-      return value == matcher
+      return value === matcher
     }
     if (matcher instanceof RegExp) {
       // check if undefined to avoid conversion to 'undefined'
