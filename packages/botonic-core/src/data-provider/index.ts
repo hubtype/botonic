@@ -1,4 +1,3 @@
-export * from './data-provider'
 export * from './dynamodb-data-provider'
 export * from './dynamodb-utils'
 export * from './factory'
