@@ -3,7 +3,7 @@ export interface CommonFields {
   name: string
   keywords?: string[]
   followup?: Text | Image
-  customFields?: unknown
+  customFields?: Record<string, unknown>
 }
 
 export abstract class Content {
