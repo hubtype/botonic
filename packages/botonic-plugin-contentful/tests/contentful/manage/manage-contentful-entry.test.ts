@@ -126,4 +126,62 @@ describe('ManageContentful entries', () => {
       await sut.deleteContent(context, FOLLOW_UP_CONTENT)
     }
   })
+
+  test('TEST: updateFields is able to manage fields of type Handoff Queue, onFinish and Messages', async () => {
+    const sut = testManageContentful()
+    const contentful = testContentful({
+      disableCache: true,
+      disableFallbackCache: true,
+    })
+    const NEW_CONTENT = new TopContentId(ContentType.HANDOFF, rndStr())
+    const ON_FINISH_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
+    const NEW_QUEUE = new TopContentId(ContentType.QUEUE, rndStr())
+    const name = rndStr()
+    const message = rndStr()
+    const failMessage = rndStr()
+    const queueName = rndStr()
+    const queue = rndStr()
+
+    try {
+      // ACT
+      await sut.createContent(context, NEW_CONTENT.model, NEW_CONTENT.id)
+      await sut.createContent(
+        context,
+        ON_FINISH_CONTENT.model,
+        ON_FINISH_CONTENT.id
+      )
+      await sut.createContent(context, NEW_QUEUE.model, NEW_QUEUE.id)
+      await sut.updateFields(context, NEW_CONTENT, {
+        [ContentFieldType.NAME]: name,
+        [ContentFieldType.MESSAGE]: message,
+        [ContentFieldType.FAIL_MESSAGE]: failMessage,
+        [ContentFieldType.ON_FINISH]: ON_FINISH_CONTENT.id,
+        [ContentFieldType.HANDOFF_QUEUE]: NEW_QUEUE.id,
+      })
+      await sut.updateFields(context, ON_FINISH_CONTENT, {
+        [ContentFieldType.NAME]: rndStr(),
+        [ContentFieldType.TEXT]: rndStr(),
+      })
+      await sut.updateFields(context, NEW_QUEUE, {
+        [ContentFieldType.NAME]: queueName,
+        [ContentFieldType.SHORT_TEXT]: queueName,
+        [ContentFieldType.QUEUE]: queue,
+      })
+      await repeatWithBackoff(async () => {
+        const result = await contentful.handoff(NEW_CONTENT.id)
+        expect(result.name).toEqual(name)
+        expect(result.message).toEqual(message)
+        expect(result.failMessage).toEqual(failMessage)
+        expect(result.shadowing).toEqual(false)
+        expect(result.queue?.name).toEqual(queueName)
+        expect(result.queue?.queue).toEqual(queue)
+        expect(result.onFinish.asContentId()?.id).toEqual(ON_FINISH_CONTENT.id)
+      })
+    } finally {
+      // RESTORE
+      await sut.deleteContent(context, NEW_CONTENT)
+      await sut.deleteContent(context, ON_FINISH_CONTENT)
+      await sut.deleteContent(context, NEW_QUEUE)
+    }
+  })
 })
