@@ -18,6 +18,7 @@ export enum ContentFieldType {
   IMAGE = 'Image',
   PIC = 'pic',
   URL = 'URL',
+  PAYLOAD = 'payload',
   NAME = 'Name',
   BUTTONS_STYLE = 'Buttons Style',
   FOLLOW_UP = 'FollowUp',
@@ -149,6 +150,12 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
       true
     ),
     new ContentField(
+      ContentFieldType.PAYLOAD,
+      'payload',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
       ContentFieldType.NAME,
       'name',
       ContentFieldValueType.STRING,
@@ -237,6 +244,7 @@ const FIELDS_PER_CONTENT_TYPE: { [type: string]: ContentFieldType[] } = {
   [ContentType.STARTUP]: [ContentFieldType.TEXT, ContentFieldType.BUTTONS],
   [ContentType.TEXT]: [ContentFieldType.TEXT, ContentFieldType.BUTTONS],
   [ContentType.URL]: [ContentFieldType.URL],
+  [ContentType.PAYLOAD]: [ContentFieldType.PAYLOAD],
 }
 
 /**

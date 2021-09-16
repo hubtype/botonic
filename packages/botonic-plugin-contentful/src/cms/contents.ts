@@ -410,6 +410,12 @@ export class Url extends TopContent {
   }
 }
 
+export class Payload extends TopContent {
+  constructor(readonly common: CommonFields, readonly payload: string) {
+    super(common, ContentType.PAYLOAD)
+  }
+}
+
 export class Queue extends TopContent {
   constructor(
     readonly common: CommonFields,

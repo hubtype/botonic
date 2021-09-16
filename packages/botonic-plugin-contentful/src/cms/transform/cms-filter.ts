@@ -17,6 +17,7 @@ import {
   Image,
   MessageContent,
   PagingOptions,
+  Payload,
   Queue,
   ScheduleContent,
   StartUp,
@@ -99,6 +100,10 @@ export class FilteredCMS implements CMS {
 
   url(id: string, context?: Context): Promise<Url> {
     return this.cms.url(id, context)
+  }
+
+  payload(id: string, context?: Context): Promise<Payload> {
+    return this.cms.payload(id, context)
   }
 
   queue(id: string, context?: Context): Promise<Queue> {

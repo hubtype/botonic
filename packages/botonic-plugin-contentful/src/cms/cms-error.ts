@@ -18,6 +18,7 @@ import {
   Element,
   Handoff,
   Image,
+  Payload,
   Queue,
   ScheduleContent,
   StartUp,
@@ -131,6 +132,15 @@ export class ErrorReportingCMS implements CMS {
       context,
       ContentType.URL,
       this.cms.url(id, context)
+    )
+  }
+
+  payload(id: string, context?: Context): Promise<Payload> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.PAYLOAD,
+      this.cms.payload(id, context)
     )
   }
 

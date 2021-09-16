@@ -112,10 +112,6 @@ export class ButtonDelivery extends ContentDelivery {
   }
 }
 
-export interface PayloadFields {
-  payload: string
-}
-
 export interface ButtonFields extends ContentWithNameFields {
   text?: string
   target?: CallbackTarget
