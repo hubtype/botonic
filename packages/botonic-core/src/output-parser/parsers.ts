@@ -120,7 +120,7 @@ export const parseText: ParseFunction<TextMessageEvent> = args => {
     toParse: args.toParse,
     parsed: {
       ...args.parsed,
-      text: args.toParse[TEXT_NODE_NAME] || args.toParse.data,
+      text: args.toParse[TEXT_NODE_NAME],
       markdown: parseBoolean(args.toParse.markdown),
     },
   }
@@ -149,7 +149,7 @@ export const parseMedia: ParseFunction<
     toParse: args.toParse,
     parsed: {
       ...args.parsed,
-      src: args.toParse.src || args.toParse.data,
+      src: args.toParse.src,
     },
   }
 }

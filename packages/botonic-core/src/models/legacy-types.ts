@@ -111,6 +111,8 @@ export interface NluResult {
 }
 
 export interface Input extends Partial<NluResult> {
+  text?: string
+  src?: string
   data?: string
   path?: string
   payload?: string
