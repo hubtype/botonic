@@ -28,7 +28,7 @@ npm install --save @botonic/plugin-dashbot
     id: 'dashbot',
     resolve: require("@botonic/plugin-dashbot"),
     options: {
-      apiKey: 'YOUR_DASHBOT_APIKEY'
+      apiKey: 'YOUR_DASHBOT_APIKEY' <!-- pragma: allowlist secret-->
     }
 }
 ```

@@ -32,7 +32,7 @@ import * as dynamodb from '@botonic/plugin-dynamodb'
       //env: isProd() ? 'pro': 'dev',
       env: 'pro', // or 'dev'
       accessKeyId: 'your AWS access key id',
-      secretAccessKey: 'your AWS secret access key',
+      secretAccessKey: 'your AWS secret access key', <!-- pragma: allowlist secret-->
       region: 'your AWS region',
       timeout: 2500, // timeout in millisecons
     }, //You can add in 'options' field any DynamoDB.ClientConfiguration from the AWS library
