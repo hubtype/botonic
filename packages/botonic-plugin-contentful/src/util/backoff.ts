@@ -26,7 +26,7 @@ export async function repeatWithBackoff<T>(
   for (;;) {
     try {
       return await func()
-    } catch (e : any) {
+    } catch (e: any) {
       const stack = e.stack
         ? `\nat:\n${String(e.stack)}`
         : ' (no stack available)'
