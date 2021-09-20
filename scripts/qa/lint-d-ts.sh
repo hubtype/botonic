@@ -1,4 +1,11 @@
 #!/bin/bash
+if [ "$GITHUB_ACTIONS" == "true" ]; then
+  echo 'Will skip tsc as it will run in separate workflow'
+  exit
+else
+  echo "Will run tsc for package $1"
+fi
+
 BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 

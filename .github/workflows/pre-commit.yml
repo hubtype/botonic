@@ -1,0 +1,18 @@
+#copied from https://github.com/pre-commit/action
+name: pre-commit
+
+on:
+  pull_request:
+#  push:
+#    branches: [master]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: pre-commit/action@v2.0.3
+        # this will push back fixes to the pull request branch.
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
