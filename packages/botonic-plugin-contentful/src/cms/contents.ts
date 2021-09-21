@@ -272,7 +272,7 @@ export class Custom extends Content {
   constructor(
     readonly id: string,
     readonly name: string,
-    readonly fields: Record<string, unknown> | undefined
+    readonly fields: Record<string, unknown> | {}
   ) {
     super(ContentType.CUSTOM)
   }

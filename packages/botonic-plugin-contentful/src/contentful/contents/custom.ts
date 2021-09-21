@@ -24,12 +24,14 @@ export class CustomDelivery extends ContentDelivery {
     )
   }
 
-  private getCustomFields(fields: CustomFields): Record<string, unknown> | {} {
-    const { name, ...customFields } = fields
-    return customFields ? customFields : {}
+  private getCustomFields(
+    entryFields: CustomFields
+  ): Record<string, unknown> | {} {
+    const { name, ...fields } = entryFields
+    return fields ? fields : {}
   }
 }
 
 export interface CustomFields extends ContentWithNameFields {
-  customFields: Record<string, unknown> | undefined
+  fields: Record<string, unknown> | undefined
 }
