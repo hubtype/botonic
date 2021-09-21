@@ -23,10 +23,13 @@ export enum ContentFieldType {
   FOLLOW_UP = 'FollowUp',
   TARGET = 'Target',
   QUEUE = 'Queue',
+  HANDOFF_QUEUE = 'Handoff Queue',
+  MESSAGE = 'Message',
+  FAIL_MESSAGE = 'Fail Message',
   AGENT_EMAIL = 'Agent Email',
   AGENT_ID = 'Agent Id',
   ON_FINISH = 'On Finish',
-  SHADOWING = 'shadowing',
+  SHADOWING = 'Shadowing',
 }
 
 export enum ContentFieldValueType {
@@ -175,6 +178,24 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     new ContentField(
       ContentFieldType.QUEUE,
       'queue',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.HANDOFF_QUEUE,
+      'queue',
+      ContentFieldValueType.REFERENCE,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.MESSAGE,
+      'message',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.FAIL_MESSAGE,
+      'failMessage',
       ContentFieldValueType.STRING,
       true
     ),

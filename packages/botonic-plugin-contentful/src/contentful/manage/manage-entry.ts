@@ -184,6 +184,7 @@ export class ManageContentfulEntry {
     if (
       key === ContentFieldType.FOLLOW_UP ||
       key === ContentFieldType.TARGET ||
+      key === ContentFieldType.HANDOFF_QUEUE ||
       key === ContentFieldType.ON_FINISH
     ) {
       return this.getEntryLink(field, 'Entry')
