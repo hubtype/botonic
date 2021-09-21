@@ -7,6 +7,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -102,6 +103,10 @@ export class MultiContextCms implements CMS {
 
   handoff(id: string, context?: Context): Promise<Handoff> {
     return this.cmsFromContext(context).handoff(id, context)
+  }
+
+  custom(id: string, context?: Context): Promise<Custom> {
+    return this.cmsFromContext(context).custom(id, context)
   }
 
   topContents<T extends TopContent>(

@@ -8,6 +8,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -90,6 +91,11 @@ export class LogCMS implements CMS {
   handoff(id: string, context?: Context): Promise<Handoff> {
     this.logContentDelivery(ContentType.HANDOFF, id, context)
     return this.cms.handoff(id, context)
+  }
+
+  custom(id: string, context?: Context): Promise<Custom> {
+    this.logContentDelivery(ContentType.CUSTOM, id, context)
+    return this.cms.custom(id, context)
   }
 
   content(id: string, context?: Context): Promise<Content> {

@@ -268,6 +268,16 @@ export class Button extends Content {
   }
 }
 
+export class Custom extends Content {
+  constructor(
+    readonly id: string,
+    readonly name: string,
+    readonly fields: Record<string, unknown> | undefined
+  ) {
+    super(ContentType.CUSTOM)
+  }
+}
+
 export class StartUp extends MessageContent {
   constructor(
     readonly common: CommonFields,

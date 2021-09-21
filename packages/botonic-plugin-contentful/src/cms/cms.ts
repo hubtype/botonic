@@ -6,6 +6,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -42,6 +43,7 @@ export enum NonMessageTopContentType {
   SCHEDULE = 'schedule',
   URL = 'url',
   PAYLOAD = 'payload',
+  CUSTOM = 'custom',
 }
 
 export type TopContentType = MessageContentType | NonMessageTopContentType
@@ -119,6 +121,8 @@ export interface CMS {
   element(id: string, context?: Context): Promise<Element>
 
   handoff(id: string, context?: Context): Promise<Handoff>
+
+  custom(id: string, context?: Context): Promise<Custom>
   /** Even if ContentfulOptions.resumeErrors is set, if the asset is not available
    * the method will fail. */
   image(id: string, context?: Context): Promise<Image>

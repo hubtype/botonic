@@ -151,6 +151,8 @@ export class ContentId extends ResourceId {
         return cms.button(this.id, context)
       case ContentType.ELEMENT:
         return cms.element(this.id, context)
+      case ContentType.CUSTOM:
+        return cms.custom(this.id, context)
       default:
         return new TopContentId(this.model, this.id).deliver(cms, context)
     }

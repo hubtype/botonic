@@ -13,6 +13,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -97,6 +98,15 @@ export class ErrorReportingCMS implements CMS {
       context,
       ContentType.HANDOFF,
       this.cms.handoff(id, context)
+    )
+  }
+
+  custom(id: string, context?: Context): Promise<Custom> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.CUSTOM,
+      this.cms.custom(id, context)
     )
   }
   text(id: string, context?: Context): Promise<Text> {
