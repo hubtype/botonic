@@ -1,4 +1,12 @@
 #!/bin/bash
+
+if [ "$GITHUB_ACTIONS" == "true" ]; then
+  echo 'Will skip lint as it will run in separate workflow'
+  exit
+else
+  echo "Will run linters for package $1"
+fi
+
 cd "$1" || exit
 
 # quick lint. Not running slow lint to avoid penalizing pre-commit
