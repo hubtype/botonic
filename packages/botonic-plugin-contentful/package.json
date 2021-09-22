@@ -58,7 +58,7 @@
     "contentful": "^8.4.2",
     "contentful-import": "^8.1.15",
     "contentful-management": "^7.24.0",
-    "csv-parse": "^4.16.0",
+    "csv-parse": "^4.16.2",
     "csv-stringify": "^5.6.2",
     "escape-string-regexp": "^4.0.0",
     "marked": "^2.1.1",
