@@ -38,6 +38,8 @@ export class Router {
     routes: Routes,
     routeInspector: RouteInspector | undefined = undefined
   ) {
+    // TODO: Add a routes validator
+    // TODO: Test functional routers
     this.routes = routes
     this.routeInspector = routeInspector || new RouteInspector()
   }
@@ -53,7 +55,7 @@ export class Router {
       const pathParam = input.payload.split('__PATH_PAYLOAD__')
       routeParams.route = this.getRouteByPath(pathParam[1], this.routes)
     }
-    const pathParams = this.getOnFinishParams(input)
+    const pathParams = this.getPathAndParamsFromPayloadInput(input)
     let brokenFlow = false
     const lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (!lastRoute && input.path)
@@ -94,7 +96,6 @@ export class Router {
       let defaultAction
       if (routeParams.route) {
         if (
-          !routeParams.route.path &&
           routeParams.route.childRoutes &&
           routeParams.route.childRoutes.length
         ) {
@@ -175,27 +176,194 @@ export class Router {
     }
   }
 
-  getOnFinishParams(input: Input): string | undefined {
+  getNextRouteFromPathPayload(lastRoutePath, pathPayload) {
+    let nextRoute: any = null
+    let nextRoutePath: any = null
+    if (lastRoutePath === null) {
+      // We don't have lastRoutePath, so we directly trust on the incoming pathPayload
+      nextRoute = this.getRouteByPath(pathPayload)
+      if (nextRoute) nextRoutePath = pathPayload
+    } else {
+      /**
+       * Two scenarios here:
+       * Given a valid path: 'Flow1/Subflow1' we can have it in the following way.
+       * 1. Receive __PATH_PAYLOAD__Subflow2, so we need to first try to concatenate it with Flow1 (lastRoutePath)
+       * 2. Receive __PATH_PAYLOAD__Flow1/Subflow1, so we can resolve it directly
+       */
+      nextRoute = this.getRouteByPath(lastRoutePath + '/' + pathPayload)
+      if (nextRoute) nextRoutePath = lastRoutePath + '/' + pathPayload
+      if (!nextRoute) {
+        nextRoute = this.getRouteByPath(pathPayload)
+        if (nextRoute) nextRoutePath = pathPayload
+      }
+    }
+    return { nextRoute, nextRoutePath }
+  }
+
+  getNextRoute(input, session, lastRoutePath) {
+    let nextRoute: any = null
+    let nextRoutePath: any = null
+    const currentRoute = this.getRouteByPath(lastRoutePath, this.routes)
+    if (currentRoute && currentRoute.childRoutes) {
+      const routeParams = this.getRoute(
+        input,
+        currentRoute.childRoutes,
+        session as Session,
+        lastRoutePath
+      )
+      if (routeParams && routeParams.route) {
+        nextRoute = routeParams.route
+        nextRoutePath = lastRoutePath + '/' + routeParams?.route.path
+      }
+    }
+    if (!nextRoute) {
+      const routeParams = this.getRoute(
+        input,
+        this.routes,
+        session as Session,
+        lastRoutePath
+      )
+      if (routeParams && routeParams.route) {
+        nextRoute = routeParams.route
+        nextRoutePath = routeParams?.route.path
+      }
+    }
+    return { nextRoute, nextRoutePath }
+  }
+
+  // eslint-disable-next-line complexity
+  newprocessInput(
+    input: Input,
+    // @ts-ignore
+    session: Partial<Session> = {},
+    // @ts-ignore
+    lastRoutePath: string | null = null
+  ): any {
+    let brokenFlow = false
+    let nextRoute: any = null
+    let nextRoutePath: any = null
+
+    const { pathPayload, params } = this.getPathAndParamsFromPayloadInput(input)
+
+    // Resolve which will be the nextRoute to be computed
+    if (pathPayload) {
+      const res = this.getNextRouteFromPathPayload(lastRoutePath, pathPayload)
+      nextRoute = res.nextRoute
+      nextRoutePath = res.nextRoutePath
+    } else {
+      const res = this.getNextRoute(input, session, lastRoutePath)
+      nextRoute = res.nextRoute
+      nextRoutePath = res.nextRoutePath
+    }
+
+    // Next route computation
+    if (nextRoute) {
+      if ('redirect' in nextRoute) {
+        return this.computeRedirectAction(
+          input,
+          session,
+          nextRoute,
+          nextRoutePath
+        )
+      }
+      if (nextRoute && nextRoute.childRoutes) {
+        if (this.hasDefaultAction(nextRoute.childRoutes)) {
+          return this.computeDefaultAction(
+            input,
+            session,
+            nextRoute.childRoutes,
+            nextRoutePath
+          )
+        }
+        return {
+          action: nextRoute.action,
+          params: undefined,
+          lastRoutePath: nextRoutePath,
+        }
+      }
+      return {
+        action: nextRoute.action,
+        params: undefined,
+        lastRoutePath: nextRoutePath !== '404' ? nextRoutePath : null,
+      }
+    }
+
+    return this.computeNotFoundAction(input)
+  }
+
+  computeNotFoundAction(input) {
+    const notFound = this.getRouteByPath('404', this.routes)
+    if (!notFound) throw new NoMatchingRouteError(input)
+    return { action: notFound.action, params: undefined, lastRoutePath: null }
+  }
+
+  hasDefaultAction(childRoutes) {
+    return childRoutes.some(r => r.path === '')
+  }
+
+  computeDefaultAction(
+    _input,
+    session,
+    defaultActionChildRoutes,
+    nextRoutePath
+  ) {
+    const defaultActionRoute = this.getRoute(
+      { path: '' },
+      defaultActionChildRoutes,
+      session as Session,
+      nextRoutePath
+    ) as RouteParams
+    return {
+      action: defaultActionRoute.route.action,
+      params: undefined,
+      lastRoutePath: nextRoutePath,
+    }
+  }
+
+  computeRedirectAction(input, session, nextRoute, nextRoutePath) {
+    const redirectRoute = this.getRouteByPath(nextRoute.redirect, this.routes)
+    if (!redirectRoute) return this.computeNotFoundAction(input)
+    nextRoutePath = nextRoute.redirect
+    if (
+      redirectRoute.childRoutes &&
+      this.hasDefaultAction(redirectRoute.childRoutes)
+    ) {
+      return this.computeDefaultAction(
+        input,
+        session,
+        redirectRoute.childRoutes,
+        nextRoutePath
+      )
+    }
+    return {
+      action: redirectRoute.action,
+      params: undefined,
+      lastRoutePath: nextRoutePath,
+    }
+  }
+
+  getPathAndParamsFromPayloadInput(input: Input): any {
     try {
       if (!input.payload) {
-        return undefined
+        throw 'input.payload is not defined'
       }
-      const params = input.payload.split('__PATH_PAYLOAD__')
-      if (params.length < 2) {
-        return undefined
+      const isValidPathPayload = /^__PATH_PAYLOAD__(.*)/.exec(input.payload)
+      if (!isValidPathPayload) {
+        throw 'input.payload does not match the expected format'
       }
-      const pathParams = params[1].split('?')
-      if (pathParams.length > 0) {
-        input.path = pathParams[0]
-        delete input.payload
+      const pathWithParams = input.payload.split('__PATH_PAYLOAD__')[1]
+      if (!pathWithParams) {
+        throw '__PATH_PAYLOAD__ is empty'
       }
-      if (pathParams.length > 1) {
-        return pathParams[1]
-      }
+      const [path, params] = pathWithParams.split('?')
+      return { pathPayload: path ? path : null, params }
     } catch (e) {
-      console.error('ERROR getOnFinishParams', e)
+      // console.error('Error getting path and params from input.payload:', e)
+      return {
+        pathPayload: null,
+        params: undefined,
+      }
     }
-    return undefined
   }
 
   /**
