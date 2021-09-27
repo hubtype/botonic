@@ -36,4 +36,16 @@ export interface CMS {
     contentType: ContentType,
     context: SupportedLocales
   ): Promise<Content[]>
+
+  deleteContent(
+    context: SupportedLocales,
+    contentType: ContentType,
+    id: string
+  ): Promise<void>
+
+  createContent(
+    context: SupportedLocales,
+    contentType: ContentType,
+    id: string
+  ): Promise<void>
 }

@@ -46,4 +46,19 @@ export class Directus implements cms.CMS {
   ): Promise<Content[]> {
     return this._contents.topContents(contentType, context)
   }
+  async deleteContent(
+    context: cms.SupportedLocales,
+    contentType: cms.ContentType,
+    id: string
+  ): Promise<void> {
+    await this._contents.deleteContent(context, contentType, id)
+  }
+
+  async createContent(
+    context: cms.SupportedLocales,
+    contentType: cms.ContentType,
+    id: string
+  ): Promise<void> {
+    await this._contents.createContent(context, contentType, id)
+  }
 }

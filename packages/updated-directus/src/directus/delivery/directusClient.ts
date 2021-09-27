@@ -87,6 +87,37 @@ export class DirectusClient {
     }
   }
 
+  async deleteContent(
+    context: cms.SupportedLocales,
+    contentType: cms.ContentType,
+    id: string
+  ) {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      await this.client.items(contentType).deleteOne(id)
+    } catch (e) {
+      throw new Error(
+        `Error deleting content with id: ${id} of content type ${contentType}, error: ${e}`
+      )
+    }
+  }
+
+  async createContent(
+    context: cms.SupportedLocales,
+    contentType: cms.ContentType,
+    id: string
+  ) {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      const name = 'random-' + Math.random().toString(36).substring(2)
+      await this.client.items(contentType).createOne({ id, name })
+    } catch (e) {
+      throw new Error(
+        `Error creating content with id: ${id} of content type ${contentType}, error: ${e}`
+      )
+    }
+  }
+
   private async getFollowup(
     entry: PartialItem<any>,
     context: cms.SupportedLocales

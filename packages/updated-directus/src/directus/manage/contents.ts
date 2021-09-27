@@ -26,6 +26,22 @@ export class ContentsDelivery {
     return this.fromEntry(entries, contentType, context)
   }
 
+  async deleteContent(
+    context: cms.SupportedLocales,
+    contentType: cms.ContentType,
+    id: string
+  ) {
+    await this.client.deleteContent(context, contentType, id)
+  }
+
+  async createContent(
+    context: cms.SupportedLocales,
+    contentType: cms.ContentType,
+    id: string
+  ) {
+    await this.client.createContent(context, contentType, id)
+  }
+
   fromEntry(
     entries: PartialItem<any>[],
     contentType: cms.MessageContentType,
@@ -37,7 +53,6 @@ export class ContentsDelivery {
         this.ContentDeliveries[contentType].fromEntry(entry, context)
       )
     })
-
     return convertedEntries
   }
 }
