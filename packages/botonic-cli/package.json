@@ -15,7 +15,7 @@
     "analytics-node": "^3.5.0",
     "axios": "^0.21.3",
     "colors": "^1.4.0",
-    "concurrently": "^6.2.0",
+    "concurrently": "^6.2.1",
     "fetch-repo-dir": "^1.0.4",
     "form-data": "^3.0.0",
     "fs-extra": "^10.0.0",
@@ -24,7 +24,7 @@
     "localtunnel": "^2.0.1",
     "ora": "^5.4.0",
     "qs": "^6.10.1",
-    "tslib": "^2.3.0",
+    "tslib": "^2.3.1",
     "uuid": "^8.3.2",
     "zip-a-folder": "0.1.0"
   },
