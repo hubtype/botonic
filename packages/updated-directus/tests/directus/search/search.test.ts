@@ -10,12 +10,3 @@ test.each([['help'], ['jejeje'], ['need']])(
     expect(searchResults[0]).toEqual(TEXT_WITH_KEYWORDS)
   }
 )
-
-test('Test: search text with keywords and other words', async () => {
-  const search = testSearch()
-  const searchResults = await search.searchByKeywords(
-    'El otro dia me lo pasé muy bien jejeje y disfruté'
-  )
-  console.log({ searchResults })
-  expect(searchResults[0]).toEqual(TEXT_WITH_KEYWORDS)
-})

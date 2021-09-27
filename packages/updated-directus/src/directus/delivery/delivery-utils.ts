@@ -98,12 +98,10 @@ export function hasFollowUp(entry: OneItem<any>): boolean {
 }
 
 export function getKeywordsFilter(input: string): {} {
-  const inputWords = input.split(' ')
-  console.log({ inputWords })
   return {
     filter: {
       keywords: {
-        _contains: inputWords,
+        _contains: input,
       },
     },
   }
