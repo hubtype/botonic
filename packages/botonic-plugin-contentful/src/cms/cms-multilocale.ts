@@ -12,6 +12,7 @@ import {
   Element,
   Handoff,
   Image,
+  Payload,
   Queue,
   ScheduleContent,
   StartUp,
@@ -119,5 +120,9 @@ export class MultiContextCms implements CMS {
 
   url(id: string, context?: Context): Promise<Url> {
     return this.cmsFromContext(context).url(id, context)
+  }
+
+  payload(id: string, context?: Context): Promise<Payload> {
+    return this.cmsFromContext(context).payload(id, context)
   }
 }

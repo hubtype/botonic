@@ -25,6 +25,7 @@ import { DocumentDelivery } from './contents/document'
 import { FollowUpDelivery } from './contents/follow-up'
 import { HandoffDelivery } from './contents/handoff'
 import { ImageDelivery } from './contents/image'
+import { PayloadDelivery } from './contents/payload'
 import { QueueDelivery } from './contents/queue'
 import { ScheduleDelivery } from './contents/schedule'
 import { StartUpDelivery } from './contents/startup'
@@ -49,6 +50,7 @@ export class Contentful implements cms.CMS {
   private readonly _text: TextDelivery
   private readonly _startUp: StartUpDelivery
   private readonly _url: UrlDelivery
+  private readonly _payload: PayloadDelivery
   private readonly _keywords: KeywordsDelivery
   private readonly _schedule: ScheduleDelivery
   private readonly _dateRange: DateRangeDelivery
@@ -100,6 +102,7 @@ export class Contentful implements cms.CMS {
     this._text = new TextDelivery(delivery, this._button, resumeErrors)
     this._startUp = new StartUpDelivery(delivery, this._button, resumeErrors)
     this._url = new UrlDelivery(delivery, resumeErrors)
+    this._payload = new PayloadDelivery(delivery, resumeErrors)
     this._image = new ImageDelivery(delivery, resumeErrors)
     this._asset = new AssetDelivery(delivery, resumeErrors)
     this._schedule = new ScheduleDelivery(delivery, resumeErrors)
@@ -116,6 +119,7 @@ export class Contentful implements cms.CMS {
       this._document,
       this._text,
       this._url,
+      this._payload,
       this._carousel,
       this._image,
       this._startUp,
@@ -154,6 +158,10 @@ export class Contentful implements cms.CMS {
 
   async url(id: string, context = DEFAULT_CONTEXT): Promise<cms.Url> {
     return this._url.url(id, context)
+  }
+
+  async payload(id: string, context = DEFAULT_CONTEXT): Promise<cms.Payload> {
+    return this._payload.payload(id, context)
   }
 
   async queue(id: string, context = DEFAULT_CONTEXT): Promise<cms.Queue> {
@@ -227,6 +235,8 @@ export class Contentful implements cms.CMS {
         return retype(this._handoff.fromEntry(entry, context))
       case ContentType.URL:
         return retype(await this._url.fromEntry(entry, context))
+      case ContentType.PAYLOAD:
+        return retype(await this._payload.fromEntry(entry, context))
       case ContentType.STARTUP:
         return retype(await this._startUp.fromEntry(entry, context))
       case ContentType.SCHEDULE:

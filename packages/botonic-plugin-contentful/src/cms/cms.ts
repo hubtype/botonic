@@ -11,6 +11,7 @@ import {
   Element,
   Handoff,
   Image,
+  Payload,
   Queue,
   ScheduleContent,
   StartUp,
@@ -40,6 +41,7 @@ export enum NonMessageTopContentType {
   QUEUE = 'queue',
   SCHEDULE = 'schedule',
   URL = 'url',
+  PAYLOAD = 'payload',
 }
 
 export type TopContentType = MessageContentType | NonMessageTopContentType
@@ -129,6 +131,7 @@ export interface CMS {
   startUp(id: string, context?: Context): Promise<StartUp>
   text(id: string, context?: Context): Promise<Text>
   url(id: string, context?: Context): Promise<Url>
+  payload(id: string, context?: Context): Promise<Payload>
 
   /**
    * If locale specified in context, it does not return contents without values for the locale (even if it has value for the fallback locale)

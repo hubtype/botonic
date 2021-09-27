@@ -188,6 +188,8 @@ export class TopContentId extends ContentId {
         return cms.queue(this.id, context)
       case ContentType.URL:
         return cms.url(this.id, context)
+      case ContentType.PAYLOAD:
+        return cms.payload(this.id, context)
       case ContentType.SCHEDULE:
         return cms.schedule(this.id)
       case ContentType.HANDOFF:

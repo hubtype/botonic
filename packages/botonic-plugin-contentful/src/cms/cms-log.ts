@@ -13,6 +13,7 @@ import {
   Element,
   Handoff,
   Image,
+  Payload,
   Queue,
   ScheduleContent,
   StartUp,
@@ -59,6 +60,11 @@ export class LogCMS implements CMS {
   url(id: string, context?: Context): Promise<Url> {
     this.logContentDelivery(ContentType.URL, id, context)
     return this.cms.url(id, context)
+  }
+
+  payload(id: string, context?: Context): Promise<Payload> {
+    this.logContentDelivery(ContentType.PAYLOAD, id, context)
+    return this.cms.payload(id, context)
   }
 
   image(id: string, context?: Context): Promise<Image> {

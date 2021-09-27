@@ -14,6 +14,7 @@ import {
   Element,
   Handoff,
   Image,
+  Payload,
   Queue,
   ScheduleContent,
   StartUp,
@@ -113,6 +114,12 @@ export class DummyCMS implements CMS {
         new CommonFields(id, id, { shortText: 'button text for' + id }),
         `http://url.${id}`
       )
+    )
+  }
+
+  payload(id: string, {} = DEFAULT_CONTEXT): Promise<Payload> {
+    return Promise.resolve(
+      new Payload(new CommonFields(id, id), 'Dummy payload for ' + id)
     )
   }
 

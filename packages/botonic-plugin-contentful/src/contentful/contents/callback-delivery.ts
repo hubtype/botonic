@@ -5,9 +5,9 @@ import { CmsException, ContentType } from '../../cms'
 import { TopContentType } from '../../cms/cms'
 import { isOfType } from '../../util/enums'
 import { ContentfulEntryUtils } from '../delivery-utils'
-import { PayloadFields } from './button'
 import { CarouselFields } from './carousel'
 import { HandoffFields } from './handoff'
+import { PayloadFields } from './payload'
 import { QueueFields } from './queue'
 import { HourRangeFields, ScheduleFields } from './schedule'
 import { StartUpFields } from './startup'
@@ -30,7 +30,6 @@ export function getTargetCallback(
   target: CallbackTarget,
   context: cms.Context
 ): cms.Callback {
-  const PAYLOAD_CONTENT_TYPE = 'payload'
   const model = ContentfulEntryUtils.getContentModel(target) as string
   try {
     switch (model) {
@@ -41,7 +40,7 @@ export function getTargetCallback(
         }
         return cms.Callback.ofUrl(urlFields.fields.url || '')
       }
-      case PAYLOAD_CONTENT_TYPE: {
+      case ContentType.PAYLOAD: {
         const payloadFields = target as contentful.Entry<PayloadFields>
         return cms.Callback.ofPayload(payloadFields.fields.payload)
       }
