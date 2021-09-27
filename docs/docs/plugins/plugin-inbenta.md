@@ -54,7 +54,7 @@ export const plugins = [
     id: 'inbenta',
     resolve: require('@botonic/plugin-inbenta'),
     options: {
-      API_KEY: 'ACB',
+      API_KEY: 'ACB', <!-- pragma: allowlist secret-->
       API_SECRET: 'XYZ',
     },
   },

@@ -60,7 +60,7 @@ export const plugins = [
     id: 'watson',
     resolve: require('@botonic/plugin-watson'),
     options: {
-      apikey: 'apikey',
+      apikey: 'apikey', <!-- pragma: allowlist secret-->
       url: 'url',
       assistant_id: 'assistant_id',
       version: 'version',
