@@ -39,40 +39,52 @@ export class DirectusClient {
   }
 
   async contentsWithKeywords(input: string): Promise<string[]> {
-    await this.client.auth.static(this.clientParams.credentials.token)
-    const entry = await this.client
-      .items(cms.MessageContentType.TEXT)
-      .readMany(getKeywordsFilter(input))
-    const ids =
-      (entry.data &&
-        entry.data.map((searchResult: any) => {
-          return searchResult.id
-        })) ??
-      []
-    return ids
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      const entry = await this.client
+        .items(cms.MessageContentType.TEXT)
+        .readMany(getKeywordsFilter(input))
+      const ids =
+        (entry.data &&
+          entry.data.map((searchResult: any) => {
+            return searchResult.id
+          })) ??
+        []
+      return ids
+    } catch (e) {
+      throw new Error(
+        `Error getting keywords from input: ${input}, error: ${e}`
+      )
+    }
   }
 
   async topContents(
     contentType: cms.ContentType,
     context: cms.SupportedLocales
   ): Promise<PartialItem<any>[]> {
-    await this.client.auth.static(this.clientParams.credentials.token)
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
 
-    const entriesIds = await this.client
-      .items(contentType)
-      .readMany({ fields: ['id'] })
-    
-    let entries: PartialItem<any>[] | undefined = []
-    
-    for (let i = 0; i < entriesIds.data!.length; i++) {
-      const entry = await this.getEntry(
-        entriesIds.data![i].id,
-        contentType,
-        context
+      const entriesIds = await this.client
+        .items(contentType)
+        .readMany({ fields: ['id'] })
+
+      let entries: PartialItem<any>[] | undefined = []
+
+      for (let i = 0; i < entriesIds.data!.length; i++) {
+        const entry = await this.getEntry(
+          entriesIds.data![i].id,
+          contentType,
+          context
+        )
+        entries.push(entry)
+      }
+      return entries ?? []
+    } catch (e) {
+      throw new Error(
+        `Error getting the contents of type ${contentType}, error: ${e}`
       )
-      entries.push(entry)
     }
-    return entries ?? []
   }
 
   private async getFollowup(
