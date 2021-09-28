@@ -70,16 +70,95 @@ export class ContentsDelivery {
     context: cms.SupportedLocales,
     fields: TextFields
   ): Object {
-    return {
-      name: fields.name,
-      shorttext: fields.shorttext,
-      text: [
-        {
-          text_id: id,
-          languages_code: context,
-          text: fields.buttons![0].text,
-        },
-      ],
+    let convertedDirectusText = {}
+    if (fields.name) {
+      convertedDirectusText = { ...convertedDirectusText, name: fields.name }
     }
+    if (fields.shorttext) {
+      convertedDirectusText = {
+        ...convertedDirectusText,
+        shorttext: fields.shorttext,
+      }
+    }
+    if (fields.text) {
+      convertedDirectusText = {
+        ...convertedDirectusText,
+        text: [
+          {
+            text_id: id,
+            languages_code: context,
+            text: fields.text,
+          },
+        ],
+      }
+    }
+
+    if (fields.buttons) {
+      convertedDirectusText = {
+        ...convertedDirectusText,
+        buttons: this.convertButtons(id, fields.buttons, context),
+      }
+    }
+    return convertedDirectusText
+  }
+
+  private convertButtons(
+    textId: string,
+    buttons: PartialItem<any>,
+    context: cms.SupportedLocales
+  ): Object[] {
+    const convertedButtons = buttons.map((button: any) => {
+      let convertedDirectusButton = {}
+      let item = {}
+      convertedDirectusButton = { ...convertedDirectusButton, text_id: textId }
+      if (button.buttonType) {
+        convertedDirectusButton = {
+          ...convertedDirectusButton,
+          collection: button.buttonType,
+        }
+      }
+      if (button.id) {
+        item = {
+          ...item,
+          id: button.id,
+        }
+      }
+      if (button.name) {
+        item = {
+          ...item,
+          name: button.name,
+        }
+      }
+      if (button.text) {
+        item = {
+          ...item,
+          text: [
+            {
+              text_id: button.id,
+              languages_code: context,
+              text: button.text,
+            },
+          ],
+        }
+      }
+      if (button.target) {
+        item = {
+          ...item,
+          target: [
+            {
+              button_id: button.id,
+              collection: button.target.targetType,
+              item: {
+                id: button.target.id,
+                name: button.target.name,
+              },
+            },
+          ],
+        }
+      }
+      convertedDirectusButton = { ...convertedDirectusButton, item }
+      return convertedDirectusButton
+    })
+    return convertedButtons
   }
 }

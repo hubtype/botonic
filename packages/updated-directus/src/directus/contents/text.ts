@@ -32,7 +32,6 @@ export class TextDelivery extends ContentDelivery {
 
   async text(id: string, context: cms.SupportedLocales): Promise<Text> {
     const entry = await this.getEntry(id, context)
-    console.log(entry)
     return this.fromEntry(entry, context)
   }
 
