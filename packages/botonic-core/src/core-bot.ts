@@ -138,7 +138,7 @@ export class CoreBot {
       )
     }
 
-    const output = this.router.processInput(input, session, lastRoutePath)
+    const output = this.router.newprocessInput(input, session, lastRoutePath)
 
     const request = {
       getString: stringId => this.getString(stringId, session),
@@ -153,9 +153,7 @@ export class CoreBot {
       dataProvider,
     }
 
-    const actions = [output.action, output.retryAction, output.defaultAction]
-
-    const response = await this.renderer({ request, actions })
+    const response = await this.renderer({ request, actions: [output.action] })
     let messageEvents: Partial<BotonicEvent>[] = []
     try {
       messageEvents = this.botonicOutputParser.xmlToMessageEvents(response)

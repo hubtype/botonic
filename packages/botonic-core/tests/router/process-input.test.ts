@@ -47,6 +47,7 @@ const defaultRoutes = [
           { path: '1', payload: '1', action: 'Flow1.1.1' },
           { path: '2', payload: '2', action: 'Flow1.1.2' },
           { path: '3', payload: '3', action: 'Flow1.1.3' },
+          { path: 'fallback', text: /.*/, action: 'ChildRouteFallback' },
         ],
       },
       {
@@ -79,9 +80,9 @@ const retryRoutes = [
     action: 'RetryFlow',
     retry: 2,
     childRoutes: [
-      { path: '1', payload: '1', action: 'Flow1.1.1' },
-      { path: '2', payload: '2', action: 'Flow1.1.2' },
-      { path: '3', payload: '3', action: 'Flow1.1.3' },
+      { path: '1', payload: '1', action: 'FlowFinal1' },
+      { path: '2', payload: '2', action: 'FlowFinal2' },
+      { path: '3', payload: '3', action: 'FlowFinal3' },
     ],
   },
   { path: 'text', text: 'bye', action: 'Bye' },
@@ -91,23 +92,96 @@ const routes = [...defaultRoutes, notFoundRoute]
 const routesWithRedirects = [...defaultRoutes, ...redirectRoutes, notFoundRoute]
 const routesWithRetries = [...defaultRoutes, ...retryRoutes, notFoundRoute]
 
-// describe('Retries', () => {
-//   const router = new Router(routesWithRetries)
+describe('Retries', () => {
+  let retriesSession
+  beforeEach(() => {
+    retriesSession = testSession
+  })
+  afterEach(() => {
+    retriesSession = null
+  })
+  const router = new Router(routesWithRetries)
 
-//   it('Test retry action in retryRoutes', () => {
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: 'final' },
-//         testSession,
-//         null
-//       )
-//     ).toEqual({
-//       action: 'RetryFlow',
-//       params: undefined,
-//       lastRoutePath: 'final',
-//     })
-//   })
-// })
+  it('Test retry action in retryRoutes', () => {
+    expect(
+      router.newprocessInput(
+        { type: 'postback', payload: 'final' },
+        testSession,
+        null
+      )
+    ).toEqual({
+      action: 'RetryFlow',
+      params: undefined,
+      lastRoutePath: 'final',
+    })
+  })
+  it('Test retry flow in retryRoutes (2 mistakes)', () => {
+    expect(retriesSession.__retries).toEqual(0)
+    expect(
+      router.newprocessInput(
+        { type: 'postback', payload: 'kk' },
+        retriesSession,
+        'final'
+      )
+    ).toEqual({
+      action: 'RetryFlow',
+      params: undefined,
+      lastRoutePath: 'final',
+    })
+    expect(retriesSession.__retries).toEqual(1)
+    expect(
+      router.newprocessInput(
+        { type: 'postback', payload: 'kk' },
+        retriesSession,
+        'final'
+      )
+    ).toEqual({
+      action: 'RetryFlow',
+      params: undefined,
+      lastRoutePath: 'final',
+    })
+    expect(retriesSession.__retries).toEqual(2)
+    expect(
+      router.newprocessInput(
+        { type: 'postback', payload: 'kk' },
+        retriesSession,
+        'final'
+      )
+    ).toEqual({
+      action: '404Action',
+      params: undefined,
+      lastRoutePath: null,
+    })
+    expect(retriesSession.__retries).toEqual(0)
+  })
+  it('Test retry flow in retryRoutes (with success)', () => {
+    expect(retriesSession.__retries).toEqual(0)
+    expect(
+      router.newprocessInput(
+        { type: 'postback', payload: 'kk' },
+        retriesSession,
+        'final'
+      )
+    ).toEqual({
+      action: 'RetryFlow',
+      params: undefined,
+      lastRoutePath: 'final',
+    })
+    expect(retriesSession.__retries).toEqual(1)
+    expect(
+      router.newprocessInput(
+        { type: 'postback', payload: '1' },
+        retriesSession,
+        'final'
+      )
+    ).toEqual({
+      action: 'FlowFinal1',
+      params: undefined,
+      lastRoutePath: 'final/1',
+    })
+    expect(retriesSession.__retries).toEqual(0)
+  })
+})
 
 describe('Redirects', () => {
   const router = new Router(routesWithRedirects)
@@ -237,6 +311,19 @@ describe('Accesses to routes (1st level, lastRoutePath=initial)', () => {
       lastRoutePath: 'initial/1',
     })
   })
+  it('1.1. should access subflows', () => {
+    expect(
+      router.newprocessInput(
+        { type: 'text', payload: 'whatever' },
+        testSession,
+        'initial/1'
+      )
+    ).toEqual({
+      action: 'ChildRouteFallback',
+      params: undefined,
+      lastRoutePath: 'initial/1/fallback',
+    })
+  })
   it('2. should access subflows', () => {
     expect(
       processInputLRPInitial({
@@ -294,6 +381,19 @@ describe('Accesses to routes (1st level, lastRoutePath=initial)', () => {
     ).toEqual({
       action: 'ChildAction',
       lastRoutePath: 'initial/2/child',
+      params: undefined,
+    })
+  })
+  it('mistake on subflow', () => {
+    expect(
+      router.newprocessInput(
+        { type: 'postback', payload: 'mistake' },
+        testSession,
+        'initial/2'
+      )
+    ).toEqual({
+      action: '404Action',
+      lastRoutePath: null,
       params: undefined,
     })
   })

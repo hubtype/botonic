@@ -12,6 +12,19 @@ export class NoMatchingRouteError extends Error {
   }
 }
 
+interface ComputedAction {
+  action: string
+  params: any
+  lastRoutePath: string | null
+}
+
+interface ComputedNextRoute {
+  currentRoute: Route | null
+  nextRoute: Route | null
+  nextRoutePath: string | null
+  brokenFlow: boolean
+}
+
 interface RouteParams {
   route: Route
   params: any
@@ -176,33 +189,44 @@ export class Router {
     }
   }
 
-  getNextRouteFromPathPayload(lastRoutePath, pathPayload) {
-    let nextRoute: any = null
-    let nextRoutePath: any = null
-    if (lastRoutePath === null) {
-      // We don't have lastRoutePath, so we directly trust on the incoming pathPayload
-      nextRoute = this.getRouteByPath(pathPayload)
-      if (nextRoute) nextRoutePath = pathPayload
-    } else {
-      /**
-       * Two scenarios here:
-       * Given a valid path: 'Flow1/Subflow1' we can have it in the following way.
-       * 1. Receive __PATH_PAYLOAD__Subflow2, so we need to first try to concatenate it with Flow1 (lastRoutePath)
-       * 2. Receive __PATH_PAYLOAD__Flow1/Subflow1, so we can resolve it directly
-       */
-      nextRoute = this.getRouteByPath(lastRoutePath + '/' + pathPayload)
-      if (nextRoute) nextRoutePath = lastRoutePath + '/' + pathPayload
-      if (!nextRoute) {
-        nextRoute = this.getRouteByPath(pathPayload)
-        if (nextRoute) nextRoutePath = pathPayload
+  getNextRouteFromPathPayload(
+    lastRoutePath: string | null,
+    pathPayload: string
+  ): ComputedNextRoute {
+    // TODO: Can flow be broken with __PATH_PAYLOAD__?
+    const brokenFlow = false
+    let nextRoute: Route | null = null
+    let nextRoutePath: string | null = null
+    const currentRoute = this.getRouteByPath(lastRoutePath, this.routes)
+    /**
+     * Given a valid path: 'Flow1/Subflow1' we are in one of the two scenarios below.
+     */
+
+    //  1. Received __PATH_PAYLOAD__Subflow2, so we need to first try to concatenate it with Flow1 (lastRoutePath)
+    if (lastRoutePath) {
+      nextRoute = this.getRouteByPath(`${lastRoutePath}/${pathPayload}`)
+      if (nextRoute) {
+        nextRoutePath = `${lastRoutePath}/${pathPayload}`
+        return { currentRoute, nextRoute, nextRoutePath, brokenFlow }
       }
     }
-    return { nextRoute, nextRoutePath }
+    // 2. Received __PATH_PAYLOAD__Flow1/Subflow1, so we can resolve it directly
+    nextRoute = this.getRouteByPath(pathPayload)
+    if (nextRoute) {
+      nextRoutePath = pathPayload
+      return { currentRoute, nextRoute, nextRoutePath, brokenFlow }
+    }
+    return { currentRoute, nextRoute, nextRoutePath, brokenFlow }
   }
 
-  getNextRoute(input, session, lastRoutePath) {
-    let nextRoute: any = null
-    let nextRoutePath: any = null
+  getNextRoute(
+    input: Input,
+    session: Session,
+    lastRoutePath: string | null
+  ): ComputedNextRoute {
+    let brokenFlow = false
+    let nextRoute: Route | null = null
+    let nextRoutePath: string | null = null
     const currentRoute = this.getRouteByPath(lastRoutePath, this.routes)
     if (currentRoute && currentRoute.childRoutes) {
       const routeParams = this.getRoute(
@@ -211,102 +235,130 @@ export class Router {
         session as Session,
         lastRoutePath
       )
-      if (routeParams && routeParams.route) {
+      if (routeParams && routeParams.route && routeParams.route.path) {
         nextRoute = routeParams.route
-        nextRoutePath = lastRoutePath + '/' + routeParams?.route.path
+        nextRoutePath = `${lastRoutePath}/${routeParams.route.path}`
       }
     }
     if (!nextRoute) {
+      /**
+       * we couldn't find a route in the state of the lastRoutePath,
+       * so let's find in the general routes
+       */
       const routeParams = this.getRoute(
         input,
         this.routes,
         session as Session,
         lastRoutePath
       )
+      brokenFlow = true
       if (routeParams && routeParams.route) {
         nextRoute = routeParams.route
-        nextRoutePath = routeParams?.route.path
+        nextRoutePath = routeParams.route.path
+          ? String(routeParams.route.path)
+          : null
       }
     }
-    return { nextRoute, nextRoutePath }
+
+    return { currentRoute, nextRoute, nextRoutePath, brokenFlow }
   }
 
-  // eslint-disable-next-line complexity
   newprocessInput(
     input: Input,
-    // @ts-ignore
-    session: Partial<Session> = {},
-    // @ts-ignore
+    session: Session,
     lastRoutePath: string | null = null
-  ): any {
-    let brokenFlow = false
-    let nextRoute: any = null
-    let nextRoutePath: any = null
-
+  ): ComputedAction {
     const { pathPayload, params } = this.getPathAndParamsFromPayloadInput(input)
 
-    // Resolve which will be the nextRoute to be computed
-    if (pathPayload) {
-      const res = this.getNextRouteFromPathPayload(lastRoutePath, pathPayload)
-      nextRoute = res.nextRoute
-      nextRoutePath = res.nextRoutePath
-    } else {
-      const res = this.getNextRoute(input, session, lastRoutePath)
-      nextRoute = res.nextRoute
-      nextRoutePath = res.nextRoutePath
+    const resolveNextRoute = (): ComputedNextRoute => {
+      if (!pathPayload) return this.getNextRoute(input, session, lastRoutePath)
+      return this.getNextRouteFromPathPayload(lastRoutePath, pathPayload)
     }
 
+    const {
+      currentRoute,
+      nextRoute,
+      nextRoutePath,
+      brokenFlow,
+    } = resolveNextRoute()
     // Next route computation
-    if (nextRoute) {
+
+    if (nextRoute && nextRoutePath !== '404') {
+      session.__retries = 0
       if ('redirect' in nextRoute) {
+        const redirectRoute = this.getRouteByPath(
+          nextRoute.redirect as string,
+          this.routes
+        )
+        if (!redirectRoute) {
+          return this.computeNotFoundAction(input)
+        }
+
         return this.computeRedirectAction(
           input,
           session,
+          redirectRoute,
           nextRoute,
           nextRoutePath
         )
       }
       if (nextRoute && nextRoute.childRoutes) {
-        if (this.hasDefaultAction(nextRoute.childRoutes)) {
-          return this.computeDefaultAction(
-            input,
-            session,
-            nextRoute.childRoutes,
-            nextRoutePath
-          )
+        if (!this.hasDefaultAction(nextRoute.childRoutes)) {
+          return {
+            action: nextRoute.action,
+            params: undefined,
+            lastRoutePath: nextRoutePath,
+          }
         }
-        return {
-          action: nextRoute.action,
-          params: undefined,
-          lastRoutePath: nextRoutePath,
-        }
+        return this.computeDefaultAction(
+          input,
+          session,
+          nextRoute.childRoutes,
+          nextRoutePath
+        )
       }
       return {
         action: nextRoute.action,
         params: undefined,
-        lastRoutePath: nextRoutePath !== '404' ? nextRoutePath : null,
+        lastRoutePath: nextRoutePath,
       }
     }
-
+    if (
+      currentRoute &&
+      currentRoute.retry &&
+      // @ts-ignore
+      session.__retries < currentRoute.retry
+    ) {
+      session.__retries = session.__retries ? session.__retries + 1 : 1
+      return {
+        action: currentRoute.action,
+        params: undefined,
+        lastRoutePath: currentRoute.path || null,
+      }
+    } else session.__retries = 0
     return this.computeNotFoundAction(input)
   }
 
-  computeNotFoundAction(input) {
+  computeNotFoundAction(input: Input): ComputedAction {
     const notFound = this.getRouteByPath('404', this.routes)
     if (!notFound) throw new NoMatchingRouteError(input)
-    return { action: notFound.action, params: undefined, lastRoutePath: null }
+    return {
+      action: notFound.action,
+      params: undefined,
+      lastRoutePath: null,
+    }
   }
 
-  hasDefaultAction(childRoutes) {
-    return childRoutes.some(r => r.path === '')
+  hasDefaultAction(childRoutes: Route[]): boolean {
+    return childRoutes && childRoutes.some(r => r.path === '')
   }
 
   computeDefaultAction(
-    _input,
-    session,
-    defaultActionChildRoutes,
-    nextRoutePath
-  ) {
+    _input: Input,
+    session: Session,
+    defaultActionChildRoutes: Routes,
+    nextRoutePath: string | null
+  ): ComputedAction {
     const defaultActionRoute = this.getRoute(
       { path: '' },
       defaultActionChildRoutes,
@@ -320,26 +372,27 @@ export class Router {
     }
   }
 
-  computeRedirectAction(input, session, nextRoute, nextRoutePath) {
-    const redirectRoute = this.getRouteByPath(nextRoute.redirect, this.routes)
-    if (!redirectRoute) return this.computeNotFoundAction(input)
+  computeRedirectAction(
+    input: Input,
+    session: Session,
+    redirectRoute,
+    nextRoute,
+    nextRoutePath
+  ): ComputedAction {
     nextRoutePath = nextRoute.redirect
-    if (
-      redirectRoute.childRoutes &&
-      this.hasDefaultAction(redirectRoute.childRoutes)
-    ) {
-      return this.computeDefaultAction(
-        input,
-        session,
-        redirectRoute.childRoutes,
-        nextRoutePath
-      )
+    if (!this.hasDefaultAction(redirectRoute.childRoutes)) {
+      return {
+        action: redirectRoute.action,
+        params: undefined,
+        lastRoutePath: nextRoutePath,
+      }
     }
-    return {
-      action: redirectRoute.action,
-      params: undefined,
-      lastRoutePath: nextRoutePath,
-    }
+    return this.computeDefaultAction(
+      input,
+      session,
+      redirectRoute.childRoutes,
+      nextRoutePath
+    )
   }
 
   getPathAndParamsFromPayloadInput(input: Input): any {
@@ -396,7 +449,7 @@ export class Router {
             lastRoutePath
           )
           try {
-            params = match.groups
+            params = (match as any).groups
           } catch (e) {}
           return Boolean(match)
         })
@@ -441,14 +494,14 @@ export class Router {
     input: Input,
     session: Session,
     lastRoutePath: string | null
-  ): any {
+  ): boolean {
     /*
         prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' | 'request' ...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
         input: user input object, ex: {type: 'text', data: 'Hi'}
       */
     /** @type {any} */
-    let value: any = ''
+    let value: any = null
     if (Object.keys(input).indexOf(prop) > -1) value = input[prop]
     if (prop === 'input') value = input
     else if (prop === 'session') value = session
