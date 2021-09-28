@@ -1,14 +1,14 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.19.0",
+  "version": "1.0.0-dev.1",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
   "dependencies": {
-    "@botonic/pulumi": "^1.0.0-alpha.2",
+    "@botonic/pulumi": "dev",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.2",
@@ -31,8 +31,10 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
     "@types/analytics-node": "^3.1.4",
+    "@types/concurrently": "^6.2.1",
     "@types/fs-extra": "^9.0.11",
     "@types/inquirer": "^7.3.1",
+    "@types/localtunnel": "^2.0.1",
     "@types/uuid": "^8.3.0",
     "globby": "^11.0.3"
   },
@@ -60,6 +62,7 @@
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "ts-node": "ts-node",
     "prepare": "node ../../preinstall.js",
+    "prepublishOnly": "npm run build",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
     "build:watch": "rm -rf lib && ../../node_modules/.bin/tsc -w",
     "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",

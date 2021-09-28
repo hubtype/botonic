@@ -21,7 +21,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.19.0 darwin-x64 node-v12.22.3
+@botonic/cli/1.0.0-dev.1 darwin-x64 node-v12.22.3
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -32,7 +32,8 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`botonic deploy [BOT_NAME]`](#botonic-deploy-bot_name)
+* [`botonic deploy [PROVIDER]`](#botonic-deploy-provider)
+* [`botonic destroy [PROVIDER]`](#botonic-destroy-provider)
 * [`botonic help [COMMAND]`](#botonic-help-command)
 * [`botonic login`](#botonic-login)
 * [`botonic logout`](#botonic-logout)
@@ -41,13 +42,13 @@ USAGE
 * [`botonic test`](#botonic-test)
 * [`botonic train`](#botonic-train)
 
-## `botonic deploy [BOT_NAME]`
+## `botonic deploy [PROVIDER]`
 
-Deploy Botonic project to hubtype.com
+Deploy Botonic project to cloud provider
 
 ```
 USAGE
-  $ botonic deploy [BOT_NAME]
+  $ botonic deploy [PROVIDER]
 
 OPTIONS
   -b, --botName=botName    Name of the bot from Hubtype where you want to deploy
@@ -55,15 +56,33 @@ OPTIONS
   -e, --email=email        Email from Hubtype Organization
   -p, --password=password  Password from Hubtype Organization
 
-EXAMPLE
+EXAMPLES
   $ botonic deploy
   Building...
   Creating bundle...
   Uploading...
   🚀 Bot deployed!
+
+  $ botonic deploy aws
+  Deploying to AWS...
 ```
 
-_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.19.0/lib/commands/deploy.js)_
+_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/deploy.js)_
+
+## `botonic destroy [PROVIDER]`
+
+Destroy Botonic project from cloud provider
+
+```
+USAGE
+  $ botonic destroy [PROVIDER]
+
+EXAMPLE
+  $ botonic destroy aws
+  Destroying AWS stack...
+```
+
+_See code: [lib/commands/destroy.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/destroy.js)_
 
 ## `botonic help [COMMAND]`
 
@@ -94,7 +113,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.19.0/lib/commands/login.js)_
+_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/login.js)_
 
 ## `botonic logout`
 
@@ -108,7 +127,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.19.0/lib/commands/logout.js)_
+_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/logout.js)_
 
 ## `botonic new NAME [PROJECTNAME]`
 
@@ -128,7 +147,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.19.0/lib/commands/new.js)_
+_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/new.js)_
 
 ## `botonic serve`
 
@@ -146,7 +165,7 @@ EXAMPLE
   > Project is running at http://localhost:8080/
 ```
 
-_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.19.0/lib/commands/serve.js)_
+_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/serve.js)_
 
 ## `botonic test`
 
@@ -173,7 +192,7 @@ EXAMPLE
   Ran all test suites.
 ```
 
-_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.19.0/lib/commands/test.js)_
+_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/test.js)_
 
 ## `botonic train`
 
@@ -191,5 +210,5 @@ EXAMPLE
        TRAINING MODEL...
 ```
 
-_See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v0.19.0/lib/commands/train.js)_
+_See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v1.0.0-dev.1/lib/commands/train.js)_
 <!-- commandsstop -->

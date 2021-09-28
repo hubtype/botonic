@@ -1,9 +1,8 @@
-import { BotonicEvent } from '@botonic/core/src/models/events'
-import { User } from '@botonic/core/src/models/user'
 import { JsonDB } from 'node-json-db'
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 
-import { DataProvider } from '.'
+import { BotonicEvent, User } from '../models'
+import { DataProvider } from './factory'
 
 export class LocalDevDataProvider implements DataProvider {
   private readonly DB_PATH = 'tmp/localDb'
@@ -45,7 +44,7 @@ export class LocalDevDataProvider implements DataProvider {
     const dbUser = this.db.exists(path)
       ? this.db.find<User>(path, (user: User) => user[field] === value)
       : undefined
-    return dbUser?.[dbUser.id]
+    return dbUser
   }
 
   saveUser(user: User): User {
@@ -63,7 +62,6 @@ export class LocalDevDataProvider implements DataProvider {
     if (this.db.exists(path)) {
       this.db.push(path, user, true)
     }
-
     return user
   }
 

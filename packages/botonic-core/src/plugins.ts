@@ -1,5 +1,5 @@
-import { Input, PluginConfig, Session } from './index'
-import { BotonicEvent } from './models/events'
+import { DataProvider } from './data-provider'
+import { BotonicEvent, Input, PluginConfig, Session } from './models'
 
 type PluginMode = 'pre' | 'post'
 
@@ -28,19 +28,22 @@ export async function runPlugins(
   session: Session,
   lastRoutePath: string,
   response: string | null = null,
-  parsedResponse: Partial<BotonicEvent>[] | null = null
+  messageEvents: Partial<BotonicEvent>[] | null = null,
+  dataProvider: DataProvider
 ): Promise<void> {
   for (const key in plugins) {
     const p = await plugins[key]
     try {
-      if (mode == 'pre') await p.pre({ input, session, lastRoutePath })
-      if (mode == 'post')
+      if (mode === 'pre')
+        await p.pre({ input, session, lastRoutePath, dataProvider })
+      if (mode === 'post')
         await p.post({
           input,
           session,
           lastRoutePath,
           response,
-          parsedResponse,
+          messageEvents,
+          dataProvider,
         })
     } catch (e) {
       console.log(e)

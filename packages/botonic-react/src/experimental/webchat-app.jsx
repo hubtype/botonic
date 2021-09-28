@@ -141,7 +141,11 @@ export class WebchatApp {
   onServiceEvent(event) {
     if (event.action === 'connectionChange')
       this.webchatRef.current.setOnline(event.online)
-    else if (event.action === 'update_message_info')
+    // TODO: Temporary solution, decide how we will send these events in next iterations
+    else if (event.message.action === 'update_message_info') {
+      const { message } = event.message
+      this.updateMessageInfo(message.id, message)
+    } else if (event.action === 'update_message_info')
       this.updateMessageInfo(event.message.id, event.message)
     else if (event.message.type === 'update_webchat_settings')
       this.updateWebchatSettings(event.message.data)
@@ -306,8 +310,13 @@ export class WebchatApp {
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
         server={server}
+        doAuth={(...args) => this.doAuth(...args)}
       />
     )
+  }
+
+  doAuth() {
+    // TODO: we should inject the service in question to WebchatApp and do call this one
   }
 
   async isWebchatVisible({ appId }) {

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { LogRouteInspector } from '../../src/debug/inspector'
+import { LogRouteInspector } from '../../src/debug'
 
 test('LogRouteInspector', () => {
   const sut = new LogRouteInspector()

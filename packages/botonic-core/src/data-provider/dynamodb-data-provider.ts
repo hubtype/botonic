@@ -1,16 +1,16 @@
-import { BotonicEvent, EventTypes } from '@botonic/core/src/models/events'
-import { User } from '@botonic/core/src/models/user'
 import { Entity, Table } from 'dynamodb-toolbox'
 
-import { DataProvider } from '.'
+import { BotonicEvent, EventTypes, User } from '../models'
 import {
-  getConnectionEntity,
+  getConnectionEventEntity,
   getMessageEventEntities,
   getUserEntity,
   getUserEventsTable,
   GLOBAL_SECONDARY_INDEX_NAME,
   SORT_KEY_NAME,
+  USER_PREFIX,
 } from './dynamodb-utils'
+import { DataProvider } from './factory'
 
 export class DynamoDBDataProvider implements DataProvider {
   region: string
@@ -20,43 +20,30 @@ export class DynamoDBDataProvider implements DataProvider {
   eventEntity: Entity<any>
   messageEventEntities: Record<string, Entity<any>>
   textMessageEventEntity: Entity<any>
-  connectionEntity: Entity<any>
+  connectionEventEntity: Entity<any>
   constructor(url: string) {
     try {
       ;[this.tableName, this.region] = url.split('://')[1].split('.')
       this.userEventsTable = getUserEventsTable(this.tableName, this.region)
-      this.connectionEntity = getConnectionEntity(this.userEventsTable)
       this.userEntity = getUserEntity(this.userEventsTable)
+      this.connectionEventEntity = getConnectionEventEntity(
+        this.userEventsTable
+      )
       this.messageEventEntities = getMessageEventEntities(this.userEventsTable)
     } catch (e) {
       console.log({ e })
     }
   }
 
-  async addConnection(websocketId: string): Promise<void> {
-    await this.connectionEntity.put({
-      websocketId: websocketId,
-      [`${SORT_KEY_NAME}`]: websocketId,
-    })
-  }
-
-  async updateConnection(websocketId: string, userId: string): Promise<void> {
-    await this.connectionEntity.update({
-      websocketId: websocketId,
-      [`${SORT_KEY_NAME}`]: websocketId,
-      userId,
-    })
-  }
-
-  async deleteConnection(websocketId: string): Promise<void> {
-    await this.connectionEntity.delete({
-      websocketId: websocketId,
-      [`${SORT_KEY_NAME}`]: websocketId,
-    })
-  }
-
   // @ts-ignore
-  async getUsers(limit = 10, offset = 0): Promise<User[]> {} // TODO: Implement
+  async getUsers(limit = 10, offset = 0): Promise<User[]> {
+    // TODO: finish to implement with offset
+    const result = await this.userEventsTable.scan({
+      filters: { attr: SORT_KEY_NAME, beginsWith: USER_PREFIX },
+      limit,
+    })
+    return result.Items
+  }
 
   async getUser(id: string): Promise<User | undefined> {
     const userById = {
@@ -98,6 +85,9 @@ export class DynamoDBDataProvider implements DataProvider {
   async getEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
 
   async saveEvent(event: BotonicEvent): Promise<BotonicEvent> {
+    if (event.eventType === EventTypes.CONNECTION) {
+      await this.connectionEventEntity.put(event)
+    }
     if (event.eventType === EventTypes.MESSAGE) {
       await this.messageEventEntities[event.type].put(event)
     }

@@ -1,7 +1,16 @@
 import { RouteInspector } from './debug/inspector'
-import { NoMatchingRouteError } from './errors'
-import { Input, Route, Routes, Session } from './index'
+import { Input, Route, Routes, Session } from './models'
 import { isFunction } from './utils'
+
+export class NoMatchingRouteError extends Error {
+  input: Input
+  constructor(input: Input) {
+    super(
+      `No route found for input '${String(input)}' and no 404 route defined`
+    )
+    this.input = input
+  }
+}
 
 interface RouteParams {
   route: Route

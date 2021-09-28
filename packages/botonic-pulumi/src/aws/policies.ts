@@ -8,8 +8,9 @@ export function getDynamoDbCrudPolicy(
 ): pulumi.Output<string> {
   return pulumi
     .all([region, accountId, tableName])
-    .apply(([region, accountId, tableName]) =>
-      JSON.stringify({
+    .apply(([region, accountId, tableName]) => {
+      const dynamoDbArn = `arn:aws:dynamodb:${region}:${accountId}:table/${tableName}`
+      return JSON.stringify({
         Statement: [
           {
             Action: [
@@ -24,12 +25,12 @@ export function getDynamoDbCrudPolicy(
               'dynamodb:DescribeTable',
               'dynamodb:ConditionCheckItem',
             ],
-            Resource: `arn:aws:dynamodb:${region}:${accountId}:table/${tableName}`,
+            Resource: [dynamoDbArn, `${dynamoDbArn}/index/*`], // To allow accessing indexes, e.g.: getting user by its websocket ID (which is indexed)
             Effect: 'Allow',
           },
         ],
       })
-    )
+    })
 }
 
 export function getManageConnectionsPolicy(

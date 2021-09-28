@@ -1,4 +1,10 @@
-import { INPUT, isMobile, params2queryString } from '@botonic/core'
+import {
+  INPUT,
+  isMobile,
+  MessageEventAck,
+  MessageEventFrom,
+  params2queryString,
+} from '@botonic/core'
 import { motion } from 'framer-motion'
 import merge from 'lodash.merge'
 import React, {
@@ -70,7 +76,6 @@ import { WebviewContainer } from '../../webchat/webview'
 import { Audio, Document, Image, Video } from '../components'
 import { Text } from '../components/text'
 import { msgToBotonic } from '../msg-to-botonic'
-
 export const getParsedAction = botonicAction => {
   const splittedAction = botonicAction.split('create_case:')
   if (splittedAction.length <= 1) return undefined
@@ -194,8 +199,10 @@ export const Webchat = forwardRef((props, ref) => {
     closeWebviewT,
     updateLastMessageDate,
     setCurrentAttachment,
+    updateJwt,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
+
   const firstUpdate = useRef(true)
   const isOnline = () => webchatState.online
   const currentDateString = () => new Date().toISOString()
@@ -227,6 +234,7 @@ export const Webchat = forwardRef((props, ref) => {
             devSettings: webchatState.devSettings,
             lastMessageUpdate: webchatState.lastMessageUpdate,
             themeUpdates: webchatState.themeUpdates,
+            jwt: webchatState.jwt,
           })
         )
       )
@@ -252,10 +260,15 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.currentAttachment])
 
   const sendUserInput = async input => {
+    input = {
+      ...input,
+      ack: MessageEventAck.DRAFT,
+      from: MessageEventFrom.USER,
+    }
     props.onUserInput &&
       props.onUserInput({
         user: webchatState.session.user,
-        input: input,
+        input,
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
       })
@@ -331,8 +344,9 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
-    if (onStateChange && typeof onStateChange === 'function')
-      onStateChange(webchatState)
+    if (onStateChange && typeof onStateChange === 'function') {
+      onStateChange({ ...webchatState, updateJwt })
+    }
     saveWebchatState(webchatState)
   }, [
     webchatState.messagesJSON,
@@ -340,6 +354,7 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.lastRoutePath,
     webchatState.devSettings,
     webchatState.lastMessageUpdate,
+    webchatState.jwt,
   ])
 
   useAsyncEffect(async () => {

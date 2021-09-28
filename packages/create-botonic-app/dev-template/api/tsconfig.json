@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["ES6"],
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "paths": {
+      "src/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

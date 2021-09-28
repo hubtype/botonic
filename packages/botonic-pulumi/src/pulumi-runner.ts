@@ -12,9 +12,12 @@ import { env } from 'process'
 
 import {
   generateProjectStackNamePrefix,
+  HTTPS_PROTOCOL_PREFIX,
   PROJECT_NAME_SEPARATOR,
+  REST_SERVER_ENDPOINT_PATH_NAME,
   WEBCHAT_BOTONIC_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
+  WSS_PROTOCOL_PREFIX,
 } from './'
 import {
   CacheInvalidator,
@@ -66,6 +69,10 @@ export class PulumiRunner {
       command: 'yarn workspace api build:websocket',
     },
     {
+      name: 'Handlers Build',
+      command: 'yarn workspace api build:handlers',
+    },
+    {
       name: 'Rest Server Build',
       command: 'yarn workspace api build:rest',
     },
@@ -88,6 +95,11 @@ export class PulumiRunner {
   private async beforeRun(isDestroy: boolean): Promise<void> {
     this.isDestroy = isDestroy
     if (!this.isDestroy) {
+      if (process.env.BOTONIC_JWT_SECRET === undefined) {
+        const errMsg =
+          'You must export an env variable BOTONIC_JWT_SECRET with your secret for authenticating users.'
+        throw new Error(errMsg)
+      }
       try {
         await concurrently(this.commands)
       } catch (e) {
@@ -194,11 +206,11 @@ export class PulumiRunner {
     )
   }
 
-  private replaceWithWebSocketUrl(websocketUrl: string): void {
+  private replaceMatchWithinWebchat(regex: RegExp, replacement: string): void {
     let fileContent = readFileSync(WEBCHAT_BOTONIC_PATH, {
       encoding: 'utf8',
     })
-    fileContent = fileContent.replace('WEBSOCKET_URL', `"${websocketUrl}"`)
+    fileContent = fileContent.replace(regex, `"${replacement}"`)
     writeFileSync(WEBCHAT_BOTONIC_PATH, fileContent, { encoding: 'utf8' })
   }
 
@@ -233,13 +245,18 @@ export class PulumiRunner {
     if (backendResults) {
       const websocketUrl = backendResults.outputs['websocketUrl'].value
       this.programConfig['websocketUrl'] = websocketUrl
-      this.programConfig['apiUrl'] = backendResults.outputs['apiUrl'].value
+      const apiUrl = backendResults.outputs['apiUrl'].value
+      this.programConfig['apiUrl'] = apiUrl
       this.programConfig['nlpModelsUrl'] =
         backendResults.outputs['nlpModelsUrl'].value
       const websocketReplacementUrl = this.projectConfig?.customDomain
-        ? `wss://${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
+        ? `${WSS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
         : websocketUrl
-      this.replaceWithWebSocketUrl(websocketReplacementUrl)
+      this.replaceMatchWithinWebchat(/WEBSOCKET_URL/g, websocketReplacementUrl)
+      const restApiReplacementUrl = this.projectConfig?.customDomain
+        ? `${HTTPS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
+        : apiUrl
+      this.replaceMatchWithinWebchat(/REST_API_URL/g, restApiReplacementUrl)
     }
     const frontendResults = await this.runStack('frontend')
     if (frontendResults && this.updatedBucketObjects.length > 0) {

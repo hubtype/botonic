@@ -1,23 +1,31 @@
-import { EventTypes } from '../models/events'
-import { BotonicMessageEvent } from '../models/events/message'
-import { Button, WithButtons } from '../models/events/message/buttons'
-import {
-  CarouselElement,
-  CarouselMessageEvent,
-} from '../models/events/message/carousel'
-import { CustomMessageEvent } from '../models/events/message/custom'
-import { LocationMessageEvent } from '../models/events/message/location'
 import {
   AudioMessageEvent,
+  BotonicMessageEvent,
+  Button,
+  CarouselElement,
+  CarouselMessageEvent,
+  CustomMessageEvent,
   DocumentMessageEvent,
+  EventTypes,
   ImageMessageEvent,
+  LocationMessageEvent,
+  PostbackMessageEvent,
+  Reply,
+  TextMessageEvent,
   VideoMessageEvent,
-} from '../models/events/message/media'
-import { PostbackMessageEvent } from '../models/events/message/postback'
-import { Reply, WithReplies } from '../models/events/message/replies'
-import { TextMessageEvent } from '../models/events/message/text'
-import { TEXT_NODE_NAME } from '.'
-import { parseBoolean, parseNumber } from './util'
+  WithButtons,
+  WithReplies,
+} from '../models'
+import { TEXT_NODE_NAME } from './botonic-output-parser'
+
+export function parseNumber(strNumber: string): number {
+  return parseInt(strNumber)
+}
+
+export function parseBoolean(strNumber: string): boolean {
+  if (strNumber === '0') return false
+  return true
+}
 
 export type ParseFunction<Out> = (args: {
   toParse: any
@@ -42,6 +50,8 @@ export const parseMessage: ParseFunction<BotonicMessageEvent> = args => {
       // Following properties added later before saving event: eventId, userId, createdAt, from, ack
       eventType: EventTypes.MESSAGE,
       type: args.toParse.type,
+      ack: args.toParse.ack,
+      from: args.toParse.from,
       ...typingAndDelay,
     },
   }
@@ -184,7 +194,7 @@ export const parseCustom: ParseFunction<CustomMessageEvent> = args => {
     toParse: args.toParse,
     parsed: {
       ...args.parsed,
-      customTypeName: JSON.parse(args.toParse.json).customTypeName,
+      json: JSON.parse(args.toParse.json),
     },
   }
 }

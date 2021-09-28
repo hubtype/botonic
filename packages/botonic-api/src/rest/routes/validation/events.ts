@@ -1,10 +1,10 @@
-import { MessageEventFrom } from '@botonic/core/lib/models/events/message'
-import { EventTypes } from '@botonic/core/src/models/events'
-import { ConnectionEventStatuses } from '@botonic/core/src/models/events/connections/index'
 import {
+  ConnectionEventStatuses,
+  EventTypes,
   MessageEventAck,
+  MessageEventFrom,
   MessageEventTypes,
-} from '@botonic/core/src/models/events/message'
+} from '@botonic/core'
 import { Request } from 'express'
 import {
   body,

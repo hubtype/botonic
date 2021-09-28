@@ -6,7 +6,7 @@ import { WEBSOCKET_ENDPOINT_PATH_NAME, WEBSOCKET_SERVER_PATH } from '..'
 import { AWSComponentResource, AWSResourceOptions } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
-import { getDynamoDbCrudPolicy, getManageConnectionsPolicy } from './policies'
+import { getManageConnectionsPolicy } from './policies'
 import {
   WebsocketServerLambda,
   WebSocketServerLambdaArgs,
@@ -15,9 +15,11 @@ import {
 export interface WebSocketServerArgs {
   database: DynamoDB
   nlpModelsBucket: NLPModelsBucket
+  dynamodbCrudPolicy: pulumi.Input<string>
   websocketLambdaPath?: string
 }
 export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
+  manageConnectionsPolicy: pulumi.Output<string>
   url: pulumi.Output<string>
   apiGateway: aws.apigatewayv2.Api
   constructor(args: WebSocketServerArgs, opts: AWSResourceOptions) {
@@ -40,17 +42,12 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
         { ...opts, parent: this }
       )
 
-      const DYNAMODB_CRUD_POLICY = getDynamoDbCrudPolicy(
-        this.provider.region,
-        accountId,
-        args.database.table.name
-      )
-
       const MANAGE_CONNECTIONS_POLICY = getManageConnectionsPolicy(
         this.provider.region,
         accountId,
         websocketApiGateway.id
       )
+      this.manageConnectionsPolicy = MANAGE_CONNECTIONS_POLICY
 
       const wsLambdaCommonArgs: Partial<WebSocketServerLambdaArgs> = {
         lambdaPath: websocketLambdaPath,
@@ -75,7 +72,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           inlinePolicies: [
             {
               name: `${WEBSOCKET_ONCONNECT_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
-              policy: DYNAMODB_CRUD_POLICY,
+              policy: args.dynamodbCrudPolicy,
             },
           ],
           ...wsLambdaCommonArgs,
@@ -83,19 +80,19 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
         lambdaAWSResourceOptions
       )
 
-      const WEBSOCKET_ONMESSAGE_LAMBDA_NAME = 'onMessage'
-      const onMessageLambda = new WebsocketServerLambda(
+      const WEBSOCKET_ONAUTH_LAMBDA_NAME = 'onAuth'
+      const onAuthLambda = new WebsocketServerLambda(
         {
-          name: WEBSOCKET_ONMESSAGE_LAMBDA_NAME,
+          name: WEBSOCKET_ONAUTH_LAMBDA_NAME,
           routeKey: '$default',
           inlinePolicies: [
             {
-              policy: DYNAMODB_CRUD_POLICY,
-              name: `${WEBSOCKET_ONMESSAGE_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
+              policy: args.dynamodbCrudPolicy,
+              name: `${WEBSOCKET_ONAUTH_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
             },
             {
               policy: MANAGE_CONNECTIONS_POLICY,
-              name: `${WEBSOCKET_ONMESSAGE_LAMBDA_NAME}-manage-connections-inline-policy`,
+              name: `${WEBSOCKET_ONAUTH_LAMBDA_NAME}-manage-connections-inline-policy`,
             },
           ],
           ...wsLambdaCommonArgs,
@@ -110,7 +107,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           routeKey: '$disconnect',
           inlinePolicies: [
             {
-              policy: DYNAMODB_CRUD_POLICY,
+              policy: args.dynamodbCrudPolicy,
               name: `${WEBSOCKET_ONDISCONNECT_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
             },
           ],
@@ -128,7 +125,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
           dependsOn: [
             ...(opts.dependsOn as any),
             onConnectLambda.route,
-            onMessageLambda.route,
+            onAuthLambda.route,
             onDisconnectLambda.route,
           ],
           parent: this,
@@ -143,11 +140,12 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
         },
         { ...opts, parent: this }
       )
-      this.url = pulumi.interpolate`${websocketApiGateway.apiEndpoint}/${prodStage.name}`
+      this.url = pulumi.interpolate`${websocketApiGateway.apiEndpoint}/${prodStage.name}/`
       this.apiGateway = websocketApiGateway
       this.registerOutputs({
         url: this.url,
         apiGateway: websocketApiGateway,
+        manageConnectionsPolicy: this.manageConnectionsPolicy,
       })
     }
   }

@@ -2,17 +2,25 @@ import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 import { existsSync } from 'fs'
 
-import { REST_SERVER_ENDPOINT_PATH_NAME, REST_SERVER_PATH } from '..'
+import {
+  BOT_EXECUTOR_LAMBDA_NAME,
+  REST_SERVER_ENDPOINT_PATH_NAME,
+  REST_SERVER_PATH,
+  SENDER_LAMBDA_NAME,
+} from '..'
 import { AWSComponentResource, AWSResourceOptions } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
-import { getDynamoDbCrudPolicy, getManageConnectionsPolicy } from './policies'
+import { getManageConnectionsPolicy } from './policies'
 import { WebSocketServer } from './websocket-server'
 
 export interface RestServerArgs {
   nlpModelsBucket: NLPModelsBucket
   database: DynamoDB
+  dynamodbCrudPolicy: pulumi.Input<string>
   websocketServer: WebSocketServer
+  botExecutorQueueUrl: pulumi.Input<string>
+  senderQueueUrl: pulumi.Input<string>
   restServerLambdaPath?: string
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
@@ -25,11 +33,6 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
     if (existsSync(restServerLambdaPath)) {
       const callerIdentity = aws.getCallerIdentity({ provider: opts.provider })
       const accountId = callerIdentity.then(identity => identity.accountId)
-      const DYNAMODB_CRUD_POLICY = getDynamoDbCrudPolicy(
-        this.provider.region,
-        accountId,
-        args.database.table.name
-      )
       const MANAGE_CONNECTIONS_POLICY = getManageConnectionsPolicy(
         this.provider.region,
         accountId,
@@ -46,7 +49,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
           inlinePolicies: [
             {
               name: 'rest-api-dynamodb-crud-inline-policy',
-              policy: DYNAMODB_CRUD_POLICY,
+              policy: args.dynamodbCrudPolicy,
             },
             {
               name: 'rest-api-manage-connections-inline-policy',
@@ -62,6 +65,16 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
         {
           role: lambdaFunctionRole,
           policyArn: aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole,
+        },
+        { ...opts, parent: this }
+      )
+
+      // TODO: Do it more explicit with inline policy?
+      const sqsExeuctionRoleAttachment = new aws.iam.RolePolicyAttachment(
+        `${this.namePrefix}-rest-api-sqs-execution-role`,
+        {
+          role: lambdaFunctionRole,
+          policyArn: aws.iam.ManagedPolicy.AmazonSQSFullAccess,
         },
         { ...opts, parent: this }
       )
@@ -86,6 +99,9 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
               MODELS_BASE_URL: args.nlpModelsBucket.url,
               DATA_PROVIDER_URL: args.database.url,
               WEBSOCKET_URL: args.websocketServer.url,
+              BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
+              [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: args.senderQueueUrl,
+              [`${BOT_EXECUTOR_LAMBDA_NAME}_QUEUE_URL`]: args.botExecutorQueueUrl,
             },
           },
         },
@@ -171,8 +187,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
         },
         { ...opts, parent: this }
       )
-      const url = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}`
-      this.url = url
+      this.url = pulumi.interpolate`${deployment.invokeUrl}${API_PATH_NAME}/`
       this.registerOutputs({ url: this.url })
     }
   }
