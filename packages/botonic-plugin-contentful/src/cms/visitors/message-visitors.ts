@@ -162,10 +162,7 @@ export class MessageContentInverseTraverser {
         if (set) {
           set.add(fromContent)
         } else {
-          this.referencesTo.set(
-            r.id,
-            new Set<MessageContent>([fromContent])
-          )
+          this.referencesTo.set(r.id, new Set<MessageContent>([fromContent]))
         }
       }
     }

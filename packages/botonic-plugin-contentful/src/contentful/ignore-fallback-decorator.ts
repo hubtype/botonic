@@ -126,7 +126,7 @@ class IgnoreFallbackVisitor implements ContentfulVisitor {
     if (defaultValue != undefined) {
       t = t ?? defaultValue
     }
-    return (t as any) as I18nValue<T>
+    return t as any as I18nValue<T>
   }
 
   visitMultipleStringField(vf: VisitedField<string[]>): I18nValue<string[]> {
@@ -134,7 +134,7 @@ class IgnoreFallbackVisitor implements ContentfulVisitor {
   }
 
   visitSingleReference<T>(vf: VisitedField<Entry<T>>): I18nValue<Entry<T>> {
-    return this.hackType(vf.value[vf.locale], (undefined as any) as Entry<T>)
+    return this.hackType(vf.value[vf.locale], undefined as any as Entry<T>)
   }
 
   visitMultipleReference<T>(

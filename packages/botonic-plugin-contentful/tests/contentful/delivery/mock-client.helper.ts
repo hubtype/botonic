@@ -14,17 +14,17 @@ export class MockClientApi implements ReducedClientApi {
   error: Error | undefined
   numCalls = 0
 
-  asset = ({ ka: 'va' } as any) as Asset
-  assetCollection = ({
+  asset = { ka: 'va' } as any as Asset
+  assetCollection = {
     items: [this.asset],
-  } as any) as AssetCollection
+  } as any as AssetCollection
 
-  contentType = ({ kct: 'vct' } as any) as ContentType
+  contentType = { kct: 'vct' } as any as ContentType
 
-  entry = ({ ke: 've' } as any) as Entry<any>
-  entryCollection = ({
+  entry = { ke: 've' } as any as Entry<any>
+  entryCollection = {
     items: [],
-  } as any) as EntryCollection<any>
+  } as any as EntryCollection<any>
 
   getAsset(id: string, query: any): Promise<contentful.Asset> {
     this.numCalls++

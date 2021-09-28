@@ -27,7 +27,7 @@ test('TEST: Measure without name', () => {
   m1.end()
   expect(Profiler.getCallCount('<NO_NAME>')).toEqual(1)
 
-  const m2 = new Measure((undefined as any) as string)
+  const m2 = new Measure(undefined as any as string)
   m2.end()
   expect(Profiler.getCallCount('<NO_NAME>')).toEqual(2)
   Profiler.disable()
