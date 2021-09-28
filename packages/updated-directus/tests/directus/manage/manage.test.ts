@@ -51,3 +51,13 @@ test('Test: delete content from content id', async () => {
   }
   expect(myMock).toBeCalledTimes(1)
 })
+
+test('Test: update content', async () => {
+  const directus = testDirectus()
+  const contentId = '86c1ef8b-35d0-48e9-b976-2afbe42a6eb5'
+  await directus.updateTextFields(testContext(), contentId, {
+    name: 'NAME_CHANGED_FROM_TEST',
+  })
+  const content = await directus.text(contentId, testContext())
+  expect(content.common.name).toBe('NAME_CHANGED_FROM_TEST')
+})

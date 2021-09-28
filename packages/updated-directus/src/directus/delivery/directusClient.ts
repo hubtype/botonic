@@ -8,6 +8,7 @@ import {
 } from './delivery-utils'
 import { DirectusOptions } from '../../plugin'
 
+
 export class DirectusClient {
   clientParams: DirectusOptions
   private client: Directus<any>
@@ -114,6 +115,21 @@ export class DirectusClient {
     } catch (e) {
       throw new Error(
         `Error creating content with id: ${id} of content type ${contentType}, error: ${e}`
+      )
+    }
+  }
+
+  async updateTextFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: Object
+  ): Promise<void> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      await this.client.items(cms.MessageContentType.TEXT).updateOne(id, fields)
+    } catch (e) {
+      throw new Error(
+        `Error updating content with id: ${id} of content type ${cms.MessageContentType.TEXT}, error: ${e}`
       )
     }
   }

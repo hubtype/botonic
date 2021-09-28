@@ -7,6 +7,16 @@ import { ButtonDelivery } from './button'
 import { ImageDelivery } from './image'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
 
+export interface TextFields {
+  id?: string
+  name?: string
+  text?: string
+  shorttext?: string
+  buttons?: PartialItem<any>[]
+  keywords?: string
+  followup?: Text | Image
+}
+
 export class TextDelivery extends ContentDelivery {
   private readonly button: ButtonDelivery
   private readonly image: ImageDelivery
@@ -22,6 +32,7 @@ export class TextDelivery extends ContentDelivery {
 
   async text(id: string, context: cms.SupportedLocales): Promise<Text> {
     const entry = await this.getEntry(id, context)
+    console.log(entry)
     return this.fromEntry(entry, context)
   }
 

@@ -1,3 +1,4 @@
+import { TextFields } from '../directus/contents/text'
 import { Button, Text, Image, Content } from './contents'
 
 export enum MessageContentType {
@@ -47,5 +48,11 @@ export interface CMS {
     context: SupportedLocales,
     contentType: ContentType,
     id: string
+  ): Promise<void>
+
+  updateTextFields(
+    context: SupportedLocales,
+    id: string,
+    fields: TextFields
   ): Promise<void>
 }

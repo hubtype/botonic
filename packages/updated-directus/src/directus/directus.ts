@@ -1,5 +1,5 @@
 import * as cms from '../cms'
-import { TextDelivery } from './contents/text'
+import { TextDelivery, TextFields } from './contents/text'
 import { ButtonDelivery } from './contents/button'
 import { ImageDelivery } from './contents/image'
 import { KeywordsDelivery } from './search/keywords'
@@ -60,5 +60,13 @@ export class Directus implements cms.CMS {
     id: string
   ): Promise<void> {
     await this._contents.createContent(context, contentType, id)
+  }
+
+  async updateTextFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: TextFields
+  ): Promise<void> {
+    await this._contents.updateTextFields(context, id, fields)
   }
 }
