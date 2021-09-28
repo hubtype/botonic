@@ -46,14 +46,14 @@ function testSession() {
 describe('Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
     const router = new Router([])
-    expect(() => router.processInput(textInput, testSession())).toThrow(
+    expect(() => router.newprocessInput(textInput, testSession())).toThrow(
       NoMatchingRouteError
     )
   })
   test('null routes throw TypeError', () => {
     // @ts-ignore
     const router = new Router()
-    expect(() => router.processInput(textInput, testSession())).toThrow(
+    expect(() => router.newprocessInput(textInput, testSession())).toThrow(
       TypeError
     )
   })
@@ -61,7 +61,7 @@ describe('Bad router initialization', () => {
 
 test('Router returns 404', () => {
   const router = new Router([{ path: '404', action: '404Action' }])
-  const { action } = router.processInput(textInput, testSession())
+  const { action } = router.newprocessInput(textInput, testSession())
   expect(action).toBe('404Action')
 })
 
@@ -264,7 +264,7 @@ describe('Get route by path', () => {
   })
 })
 
-fdescribe('Process input (v<0.9)', () => {
+describe('Process input (v<0.9)', () => {
   const externalRoutes = [
     { path: '', action: 'Flow1.2' },
     { path: 'child', action: 'ChildAction' },
@@ -307,23 +307,21 @@ fdescribe('Process input (v<0.9)', () => {
   ])
   test('text input, root level route', () => {
     expect(
-      router.processInput(
+      router.newprocessInput(
         { type: 'text', data: 'hi', intent: 'greeting' },
         testSession(),
         null
       )
     ).toEqual({
       action: 'Flow1',
-      defaultAction: null,
       lastRoutePath: 'initial',
       params: undefined,
-      retryAction: null,
     })
   })
   test('payload input, 2nd level route', () => {
     /** @type Input */
     expect(
-      router.processInput(
+      router.newprocessInput(
         { type: 'postback', payload: '2' },
         testSession(),
         'initial'
@@ -336,22 +334,20 @@ fdescribe('Process input (v<0.9)', () => {
   })
   test('old protocol:path payload input, root level route', () => {
     expect(
-      router.processInput(
+      router.newprocessInput(
         { type: 'postback', payload: '__PATH_PAYLOAD__initial' },
         testSession(),
         null
       )
     ).toEqual({
       action: 'Flow1',
-      defaultAction: null,
       lastRoutePath: 'initial',
       params: undefined,
-      retryAction: null,
     })
   })
   test('old protocol: path payload input, 2nd level route with lastRoutePath', () => {
     expect(
-      router.processInput(
+      router.newprocessInput(
         { type: 'postback', payload: '__PATH_PAYLOAD__2' },
         testSession(),
         'initial'
@@ -365,7 +361,7 @@ fdescribe('Process input (v<0.9)', () => {
   test('path payload input with deprecated protocol, root level route', () => {
     // TODO: Fix this test
     expect(
-      router.processInput(
+      router.newprocessInput(
         { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' },
         testSession(),
         null
@@ -379,7 +375,7 @@ fdescribe('Process input (v<0.9)', () => {
   test('old protocol:path payload input with deprecated protocol, 2nd level route', () => {
     // TODO: Fix this test
     expect(
-      router.processInput(
+      router.newprocessInput(
         { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' },
         testSession(),
         'initial'
@@ -392,22 +388,26 @@ fdescribe('Process input (v<0.9)', () => {
   })
 })
 
-test.each([
-  [undefined, null, undefined],
-  ['', null, undefined],
-  ['bad_input', null, undefined],
-  ['__PATH_PAYLOAD__', null, undefined],
-  ['__PATH_PAYLOAD__path1', 'path1', undefined],
-  ['__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
-  ['__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
-])(
-  'getOnFinishParams(%s)=>%s',
-  (inputPayload, expectedPath, expectedParams) => {
-    const router = new Router([])
-    /** @type Input */
-    const input = { type: 'postback', payload: inputPayload }
-    const { path, params } = router.getPathAndParamsFromPayloadInput(input)
-    expect(path).toEqual(expectedPath)
-    expect(params).toEqual(expectedParams)
-  }
-)
+describe('TEST: getting path and params from payload input', () => {
+  test.each([
+    [undefined, null, undefined],
+    ['', null, undefined],
+    ['bad_input', null, undefined],
+    ['__PATH_PAYLOAD__', null, undefined],
+    ['__PATH_PAYLOAD__path1', 'path1', undefined],
+    ['__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
+    ['__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
+  ])(
+    'getOnFinishParams(%s)=>%s',
+    (inputPayload, expectedPath, expectedParams) => {
+      const router = new Router([])
+      /** @type Input */
+      const input = { type: 'postback', payload: inputPayload }
+      const { pathPayload, params } = router.getPathAndParamsFromPayloadInput(
+        input
+      )
+      expect(pathPayload).toEqual(expectedPath)
+      expect(params).toEqual(expectedParams)
+    }
+  )
+})
