@@ -1,9 +1,10 @@
-import { DirectusClient } from '../delivery/directusClient'
+import { DirectusClient } from '../delivery/directus-client'
 import * as cms from '../../cms'
 import { Content } from '../../cms'
 import { PartialItem } from '@directus/sdk'
-import { TextDelivery, TextFields } from '../contents/text'
+import { TextDelivery } from '../contents/text'
 import { ImageDelivery } from '../contents/image'
+import { ButtonFields, ImageFields, TextFields } from './directus-contents'
 
 export interface ContentDeliveries {
   [cms.MessageContentType.TEXT]: TextDelivery
@@ -51,6 +52,24 @@ export class ContentsDelivery {
     await this.client.updateTextFields(context, id, convertedFields)
   }
 
+  async updateButtonFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: ButtonFields
+  ): Promise<void> {
+    const convertedFields = this.convertButtonFields(id, context, fields)
+    await this.client.updateButtonFields(context, id, convertedFields)
+  }
+
+  async updateImageFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: ImageFields
+  ): Promise<void> {
+    const convertedFields = this.convertImageFields(id, context, fields)
+    await this.client.updateImageFields(context, id, convertedFields)
+  }
+
   fromEntry(
     entries: PartialItem<any>[],
     contentType: cms.MessageContentType,
@@ -69,96 +88,124 @@ export class ContentsDelivery {
     id: string,
     context: cms.SupportedLocales,
     fields: TextFields
-  ): Object {
-    let convertedDirectusText = {}
+  ): PartialItem<any> {
+    let convertedDirectusText: PartialItem<any> = {}
+
     if (fields.name) {
       convertedDirectusText = { ...convertedDirectusText, name: fields.name }
     }
-    if (fields.shorttext) {
-      convertedDirectusText = {
-        ...convertedDirectusText,
-        shorttext: fields.shorttext,
-      }
-    }
+
     if (fields.text) {
       convertedDirectusText = {
         ...convertedDirectusText,
-        text: [
-          {
-            text_id: id,
-            languages_code: context,
-            text: fields.text,
-          },
-        ],
+        text: fields.text,
       }
     }
-
     if (fields.buttons) {
       convertedDirectusText = {
         ...convertedDirectusText,
-        buttons: this.convertButtons(id, fields.buttons, context),
+        buttons: this.addButtons(id, fields.buttons),
+      }
+    }
+
+    if (fields.followup) {
+      convertedDirectusText = {
+        ...convertedDirectusText,
+        followup: [
+          {
+            collection: fields.followup.type,
+            text_id: id,
+            item: {
+              id: fields.followup.id,
+            },
+          },
+        ],
       }
     }
     return convertedDirectusText
   }
 
-  private convertButtons(
-    textId: string,
-    buttons: PartialItem<any>,
-    context: cms.SupportedLocales
-  ): Object[] {
-    const convertedButtons = buttons.map((button: any) => {
-      let convertedDirectusButton = {}
-      let item = {}
-      convertedDirectusButton = { ...convertedDirectusButton, text_id: textId }
-      if (button.buttonType) {
-        convertedDirectusButton = {
-          ...convertedDirectusButton,
-          collection: button.buttonType,
-        }
+  private addButtons(textId: string, buttonsIds: string[]): PartialItem<any>[] {
+    const textButtons = buttonsIds.map((buttonId: string) => {
+      return {
+        collection: 'button',
+        text_id: textId,
+        item: {
+          id: buttonId,
+        },
       }
-      if (button.id) {
-        item = {
-          ...item,
-          id: button.id,
-        }
-      }
-      if (button.name) {
-        item = {
-          ...item,
-          name: button.name,
-        }
-      }
-      if (button.text) {
-        item = {
-          ...item,
-          text: [
-            {
-              text_id: button.id,
-              languages_code: context,
-              text: button.text,
-            },
-          ],
-        }
-      }
-      if (button.target) {
-        item = {
-          ...item,
-          target: [
-            {
-              button_id: button.id,
-              collection: button.target.targetType,
-              item: {
-                id: button.target.id,
-                name: button.target.name,
-              },
-            },
-          ],
-        }
-      }
-      convertedDirectusButton = { ...convertedDirectusButton, item }
-      return convertedDirectusButton
     })
-    return convertedButtons
+    return textButtons
+  }
+
+  private convertButtonFields(
+    id: string,
+    context: cms.SupportedLocales,
+    fields: ButtonFields
+  ): PartialItem<any> {
+    let convertedDirectusButton: PartialItem<any> = {}
+
+    if (fields.name) {
+      convertedDirectusButton = {
+        ...convertedDirectusButton,
+        name: fields.name,
+      }
+    }
+
+    if (fields.text) {
+      convertedDirectusButton = {
+        ...convertedDirectusButton,
+        text: fields.text,
+      }
+    }
+
+    if (fields.target) {
+      convertedDirectusButton = {
+        ...convertedDirectusButton,
+        target: [
+          {
+            collection: fields.target.type,
+            item: {
+              id: fields.target.id,
+            },
+          },
+        ],
+      }
+    }
+    return convertedDirectusButton
+  }
+
+  private convertImageFields(
+    id: string,
+    context: cms.SupportedLocales,
+    fields: ImageFields
+  ): Object {
+    let convertedDirectusText: PartialItem<any> = {}
+
+    if (fields.name) {
+      convertedDirectusText = { ...convertedDirectusText, name: fields.name }
+    }
+
+    if (fields.imgUrl) {
+      convertedDirectusText = {
+        ...convertedDirectusText,
+        image: fields.imgUrl,
+      }
+    }
+
+    if (fields.followup) {
+      convertedDirectusText = {
+        ...convertedDirectusText,
+        followup: [
+          {
+            collection: fields.followup.type,
+            item: {
+              id: fields.followup.id,
+            },
+          },
+        ],
+      }
+    }
+    return convertedDirectusText
   }
 }

@@ -1,4 +1,4 @@
-import { DirectusClient } from './directusClient'
+import { DirectusClient } from './directus-client'
 import * as cms from '../../cms'
 import { PartialItem } from '@directus/sdk'
 

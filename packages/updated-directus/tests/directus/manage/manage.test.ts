@@ -4,7 +4,13 @@ import {
   Image,
   MessageContentType,
   SubContentType,
+  ContentType,
 } from '../../../src/cms'
+import {
+  createContents,
+  deleteContents,
+  generateRandomUUID,
+} from './helpers/utils'
 
 const randomUUID = 'd8b5a518-1fbf-11ec-9621-0242ac130002'
 const myMock = jest.fn()
@@ -63,51 +69,54 @@ test('Test: create content with given id', async () => {
   )
 })
 
-test('Test: update content of type text', async () => {
+test('Test: update content of type text and button', async () => {
   const directus = testDirectus()
-  const newContentId = '8ea1c538-2078-11ec-9621-0242ac130002'
-  const newButtonId = '97cbd90a-2078-11ec-9621-0242ac130002'
-  const newTargetId = '9cfb4c80-2078-11ec-9621-0242ac130002'
-  await directus.createContent(
-    testContext(),
-    MessageContentType.TEXT,
-    newContentId
-  )
+
+  const newContentId = generateRandomUUID()
+  const newButtonId = generateRandomUUID()
+  const newTargetId = generateRandomUUID()
+  const newFollowupId = generateRandomUUID()
+
+  const ContentTypePerId: Record<string, ContentType> = {
+    [newContentId]: MessageContentType.TEXT,
+    [newButtonId]: SubContentType.BUTTON,
+    [newFollowupId]: MessageContentType.TEXT,
+    [newTargetId]: MessageContentType.IMAGE,
+  }
+
+  await createContents(ContentTypePerId)
+
   await directus.updateTextFields(testContext(), newContentId, {
-    name: 'name_changed_test',
+    name: 'bla_bla_bla',
     text: 'new text changed!',
-    buttons: [
-      {
-        id: newButtonId,
-        name: 'new_button_created_when_update',
-        text: 'new button texttttt',
-        target: {
-          id: newTargetId,
-          name: 'new_target_image_created_when_update',
-          targetType: MessageContentType.IMAGE,
-        },
-        buttonType: SubContentType.BUTTON,
-      },
-    ],
+    buttons: [newButtonId],
+    followup: {
+      id: newFollowupId,
+      type: MessageContentType.TEXT,
+    },
+  })
+
+  await directus.updateButtonFields(testContext(), newButtonId, {
+    name: 'button_updated_from_test',
+    text: 'helllou',
+    target: {
+      id: newTargetId,
+      type: MessageContentType.IMAGE,
+    },
+  })
+
+  await directus.updateTextFields(testContext(), newFollowupId, {
+    name: 'follow_up_updated',
+    text: 'helllou',
   })
 
   const contentUpdated = await directus.text(newContentId, testContext())
-  expect(contentUpdated.common.name).toBe('name_changed_test')
-  expect(contentUpdated.buttons![0].text).toBe('new button texttttt')
 
-  await directus.deleteContent(
-    testContext(),
-    MessageContentType.TEXT,
-    newContentId
+  expect(contentUpdated.common.name).toBe('bla_bla_bla')
+  expect(contentUpdated.buttons![0].text).toBe('helllou')
+  expect((contentUpdated.common.followup as Text).name).toBe(
+    'follow_up_updated'
   )
-  await directus.deleteContent(
-    testContext(),
-    SubContentType.BUTTON,
-    newButtonId
-  )
-  await directus.deleteContent(
-    testContext(),
-    MessageContentType.IMAGE,
-    newTargetId
-  )
+
+  await deleteContents(ContentTypePerId)
 })

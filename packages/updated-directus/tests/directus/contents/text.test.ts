@@ -1,14 +1,13 @@
 import { testDirectus, testContext } from '../helpers/directus'
-import { Text, Image, SupportedLocales as sl } from '../../../src/cms'
+import { Text, Image } from '../../../src/cms'
 
-const TEXT_WITHOUT_B_WITHOUT_F = 'a3b990d2-0f03-4b9a-996d-05316ac2352a'
-const TEXT_WITH_2B_WITHOUT_F = 'f8a7cc7d-11f3-4893-a6ec-5eb8152d654f'
+const TEXT_WITHOUT_B_WITHOUT_F = '4873aa47-f797-43c0-afbf-86700f52c9f6'
+const TEXT_WITH_2B_WITHOUT_F = 'e808f179-cbae-4d2b-81ea-178018e9801c'
 const TEXT_WITHOUT_B_WITH_F_T = '11d4756a-085c-4256-8edb-3e9db2472aeb'
 const TEXT_WITHOUT_B_WITH_F_I = '630dbe23-10c6-4fb4-b71c-f4b734c6ac6a'
 const TEXT_WITH_B_WITH_F_T_WITH_F_T = 'c9e56d03-9c18-4c97-ac6b-67fb0f38080d'
 const TEXT_WITH_CUSTOM_FIELD = 'b52a16f9-1aed-4d71-bfb2-445399bdca2d'
 const TEXT_WITH_B_TYPE_TEXT = '3f622db8-6206-4e4d-ac82-6bf508414941'
-const TEXT_WITH_THREE_LOCALES = '132573f0-33f7-48f3-98fb-e5ec362ebb48'
 
 test('Test: directus text without buttons without followup', async () => {
   const directus = testDirectus()
@@ -27,7 +26,7 @@ test('Test: directus text with buttons (with target payload and text) and withou
   expect(testText.buttons![0].target).toEqual('payloadFromDirectus')
   expect(testText.buttons![1].text).toEqual('buttonText2')
   expect(testText.buttons![1].target).toEqual(
-    'text$a3b990d2-0f03-4b9a-996d-05316ac2352a'
+    'text$7b9cb226-a82c-46bc-8f82-e2d233a77de3'
   )
 })
 
@@ -87,34 +86,3 @@ test('Test: directus text with button of type text without shorText', async () =
   const testText = await directus.text(TEXT_WITH_B_TYPE_TEXT, testContext())
   expect(testText.buttons![1].text).toEqual('z_TEST_TEXT_WITHOUT_SHORTTEXT')
 })
-
-const TEXT_TEXT_PER_LOCALE: Record<sl, string> = {
-  [sl.SPANISH]: 'Esto es un texto en español',
-  [sl.ENGLISH]: 'This is a text written in english',
-  [sl.ITALIAN]: 'Questo è un testo scritto in italiano',
-}
-
-const BUTTON_TEXT_PER_LOCALE: Record<sl, string> = {
-  [sl.SPANISH]: 'Botón en español',
-  [sl.ENGLISH]: 'Button text in english',
-  [sl.ITALIAN]: 'Pulsante in italiano',
-}
-
-const FOLLOWUP_TEXT_PER_LOCALE: Record<sl, string> = {
-  [sl.SPANISH]: 'Texto de followup en español',
-  [sl.ENGLISH]: 'Followup text in english',
-  [sl.ITALIAN]: 'Testo di follow-up in italiano',
-}
-
-test.each([[sl.SPANISH], [sl.ITALIAN], [sl.ENGLISH]])(
-  'Test:directus text with different locales',
-  async lang => {
-    const directus = testDirectus()
-    const testText = await directus.text(TEXT_WITH_THREE_LOCALES, lang)
-    expect(testText.text).toEqual(TEXT_TEXT_PER_LOCALE[lang])
-    expect(testText.buttons![0].text).toEqual(BUTTON_TEXT_PER_LOCALE[lang])
-    expect((testText.common.followup as Text).text).toEqual(
-      FOLLOWUP_TEXT_PER_LOCALE[lang]
-    )
-  }
-)

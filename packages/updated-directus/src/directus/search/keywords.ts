@@ -1,4 +1,4 @@
-import { DirectusClient } from '../delivery/directusClient'
+import { DirectusClient } from '../delivery/directus-client'
 
 export class KeywordsDelivery {
   readonly client: DirectusClient

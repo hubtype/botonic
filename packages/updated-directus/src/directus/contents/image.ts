@@ -12,6 +12,7 @@ export class ImageDelivery extends ContentDelivery {
 
   async image(id: string, context: cms.SupportedLocales): Promise<Image> {
     const entry = await this.getEntry(id, context)
+    console.log({ entry })
     return this.fromEntry(entry, context)
   }
 
@@ -23,7 +24,7 @@ export class ImageDelivery extends ContentDelivery {
         keywords: (entry.keywords?.split(',') as string[]) ?? undefined,
         customFields: getCustomFields(entry),
       } as CommonFields,
-      image: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image[0].image}`,
+      image: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`,
     }
     return new Image(opt)
   }

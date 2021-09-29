@@ -30,12 +30,12 @@ function getTextFields(): string[] {
   return [
     'id',
     'name',
-    'text.*',
+    'text',
     'shorttext',
     'keywords',
     'buttons.*',
     'buttons.item.*',
-    'buttons.item.text.*',
+    'buttons.item.text',
     'buttons.item.target.*',
     'buttons.item.target.item.*',
     'followup.item.*',
@@ -44,29 +44,29 @@ function getTextFields(): string[] {
 }
 
 function getImageFields(): string[] {
-  return ['id', 'name', 'image.*', '*']
+  return ['id', 'name', 'image', '*']
 }
 
 function getButtonFields(): string[] {
-  return ['id', 'name', 'text.*', 'target.*', 'target.item.*', '*']
+  return ['id', 'name', 'text', 'target.*', 'target.item.*', '*']
 }
 
-export function getLocaleFilter(
-  context: cms.SupportedLocales,
-  contentType: cms.ContentType
-): {} {
-  return contentType === cms.MessageContentType.IMAGE
-    ? {
-        image: {
-          _filter: { languages_code: { _eq: `${context}` } },
-        },
-      }
-    : {
-        text: {
-          _filter: { languages_code: { _eq: `${context}` } },
-        },
-      }
-}
+// export function getLocaleFilter(
+//   context: cms.SupportedLocales,
+//   contentType: cms.ContentType
+// ): {} {
+//   return contentType === cms.MessageContentType.IMAGE
+//     ? {
+//         image: {
+//           _filter: { languages_code: { _eq: `${context}` } },
+//         },
+//       }
+//     : {
+//         text: {
+//           _filter: { languages_code: { _eq: `${context}` } },
+//         },
+//       }
+// }
 
 //Descomment when in Directus is possible to create more than one localized field in a content model
 /*

@@ -7,16 +7,6 @@ import { ButtonDelivery } from './button'
 import { ImageDelivery } from './image'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
 
-export interface TextFields {
-  id?: string
-  name?: string
-  text?: string
-  shorttext?: string
-  buttons?: PartialItem<any>[]
-  keywords?: string
-  followup?: Text | Image
-}
-
 export class TextDelivery extends ContentDelivery {
   private readonly button: ButtonDelivery
   private readonly image: ImageDelivery
@@ -44,7 +34,7 @@ export class TextDelivery extends ContentDelivery {
         keywords: (entry?.keywords?.split(',') as string[]) ?? undefined,
         customFields: getCustomFields(entry),
       } as CommonFields,
-      text: (entry?.text[0]?.text as string) ?? undefined,
+      text: (entry?.text as string) ?? undefined,
       buttons: this.createButtons(entry.buttons, context),
     }
     return new Text(opt)
@@ -58,25 +48,8 @@ export class TextDelivery extends ContentDelivery {
       return undefined
     }
     return buttons.map((item: any) => {
-      Object.assign(item.item, this.applyContextFilter(item.item, context))
       return this.button.fromEntry(item.item, item.collection)
     })
-  }
-
-  private applyContextFilter(item: any, locale: cms.SupportedLocales): any {
-    const getLocaleText = () => {
-      let finalText = [{}]
-      item.text.map((text: any) => {
-        if (text.languages_code === locale) {
-          finalText[0] = text
-        }
-      })
-      return finalText
-    }
-    return {
-      ...item,
-      text: getLocaleText(),
-    }
   }
 
   private createFollowup(

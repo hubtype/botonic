@@ -1,4 +1,8 @@
-import { TextFields } from '../directus/contents/text'
+import {
+  ButtonFields,
+  ImageFields,
+  TextFields,
+} from '../directus/manage/directus-contents'
 import { Button, Text, Image, Content } from './contents'
 
 export enum MessageContentType {
@@ -8,6 +12,7 @@ export enum MessageContentType {
 
 export enum NonMessageContentType {
   QUEUE = 'queue',
+  PAYLOAD = 'payload',
 }
 
 export enum SubContentType {
@@ -54,5 +59,17 @@ export interface CMS {
     context: SupportedLocales,
     id: string,
     fields: TextFields
+  ): Promise<void>
+
+  updateButtonFields(
+    context: SupportedLocales,
+    id: string,
+    fields: ButtonFields
+  ): Promise<void>
+
+  updateImageFields(
+    context: SupportedLocales,
+    id: string,
+    fields: ImageFields
   ): Promise<void>
 }

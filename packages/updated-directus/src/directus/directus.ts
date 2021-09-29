@@ -1,12 +1,13 @@
 import * as cms from '../cms'
-import { TextDelivery, TextFields } from './contents/text'
+import { TextDelivery } from './contents/text'
 import { ButtonDelivery } from './contents/button'
 import { ImageDelivery } from './contents/image'
 import { KeywordsDelivery } from './search/keywords'
-import { DirectusClient } from './delivery/directusClient'
+import { DirectusClient } from './delivery/directus-client'
 import { Button, Text, Image, Content } from '../cms'
 import { DirectusOptions } from '../plugin'
 import { ContentsDelivery } from './manage/contents'
+import { TextFields } from './manage/directus-contents'
 
 export class Directus implements cms.CMS {
   private readonly _text: TextDelivery
@@ -68,5 +69,21 @@ export class Directus implements cms.CMS {
     fields: TextFields
   ): Promise<void> {
     await this._contents.updateTextFields(context, id, fields)
+  }
+
+  async updateButtonFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: TextFields
+  ): Promise<void> {
+    await this._contents.updateButtonFields(context, id, fields)
+  }
+  
+  async updateImageFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: TextFields
+  ): Promise<void> {
+    await this._contents.updateImageFields(context, id, fields)
   }
 }

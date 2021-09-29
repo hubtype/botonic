@@ -1,6 +1,6 @@
 import { testDirectus, testContext } from '../helpers/directus'
 
-const TEST_IMAGE = '7e194cc0-bf97-4478-ae59-44f19e55a8ae'
+const TEST_IMAGE = 'ce1c96b1-a933-4e6e-85f4-f7070eaba84c'
 
 type CustomFieldImageJson = {
   isImage: boolean
@@ -9,7 +9,7 @@ type CustomFieldImageJson = {
 test('TEST: contentful image with JSON custom field', async () => {
   const directus = testDirectus()
   const image = await directus.image(TEST_IMAGE, testContext())
-  expectImgUrlIs(image.image, 'b1d851d0-57d2-43ee-973e-954192b2cc6a')
+  expectImgUrlIs(image.image, 'a3c5da57-d285-4a30-a036-447485d6e4f1')
   expect(
     (image.common.customFields!.customfieldimagejson as CustomFieldImageJson)
       .text

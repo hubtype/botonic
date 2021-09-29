@@ -3,11 +3,9 @@ import { Directus, PartialItem } from '@directus/sdk/dist'
 import {
   getContentFields,
   getKeywordsFilter,
-  getLocaleFilter,
   hasFollowUp,
 } from './delivery-utils'
 import { DirectusOptions } from '../../plugin'
-
 
 export class DirectusClient {
   clientParams: DirectusOptions
@@ -26,7 +24,6 @@ export class DirectusClient {
       await this.client.auth.static(this.clientParams.credentials.token)
       const entry = await this.client.items(contentType).readOne(id, {
         fields: getContentFields(contentType),
-        deep: getLocaleFilter(context, contentType),
       })
       if (hasFollowUp(entry)) {
         Object.assign(entry, await this.getFollowup(entry!, context))
@@ -34,7 +31,7 @@ export class DirectusClient {
       return entry!
     } catch (e) {
       throw new Error(
-        `Error getting content with id ${id} of content type ${contentType} and locale ${context}, error: ${e}`
+        `Error getting content with id ${id} of content type ${contentType} and locale ${context}, ${e}`
       )
     }
   }
@@ -53,9 +50,7 @@ export class DirectusClient {
         []
       return ids
     } catch (e) {
-      throw new Error(
-        `Error getting keywords from input: ${input}, error: ${e}`
-      )
+      throw new Error(`Error getting keywords from input: ${input}, ${e}`)
     }
   }
 
@@ -82,9 +77,7 @@ export class DirectusClient {
       }
       return entries ?? []
     } catch (e) {
-      throw new Error(
-        `Error getting the contents of type ${contentType}, error: ${e}`
-      )
+      throw new Error(`Error getting the contents of type ${contentType}, ${e}`)
     }
   }
 
@@ -98,7 +91,7 @@ export class DirectusClient {
       await this.client.items(contentType).deleteOne(id)
     } catch (e) {
       throw new Error(
-        `Error deleting content with id: ${id} of content type ${contentType}, error: ${e}`
+        `Error deleting content with id: ${id} of content type ${contentType}, ${e}`
       )
     }
   }
@@ -114,7 +107,7 @@ export class DirectusClient {
       await this.client.items(contentType).createOne({ id, name })
     } catch (e) {
       throw new Error(
-        `Error creating content with id: ${id} of content type ${contentType}, error: ${e}`
+        `Error creating content with id: ${id} of content type ${contentType}, ${e}`
       )
     }
   }
@@ -122,14 +115,46 @@ export class DirectusClient {
   async updateTextFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: Object
+    fields: PartialItem<any>
   ): Promise<void> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
       await this.client.items(cms.MessageContentType.TEXT).updateOne(id, fields)
     } catch (e) {
       throw new Error(
-        `Error updating content with id: ${id} of content type ${cms.MessageContentType.TEXT}, error: ${e}`
+        `Error updating content with id: ${id} of content type ${cms.MessageContentType.TEXT}, ${e}`
+      )
+    }
+  }
+
+  async updateButtonFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: PartialItem<any>
+  ): Promise<void> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      await this.client.items(cms.SubContentType.BUTTON).updateOne(id, fields)
+    } catch (e) {
+      throw new Error(
+        `Error updating content with id: ${id} of content type ${cms.SubContentType.BUTTON}, ${e}`
+      )
+    }
+  }
+
+  async updateImageFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: PartialItem<any>
+  ): Promise<void> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      await this.client
+        .items(cms.MessageContentType.IMAGE)
+        .updateOne(id, fields)
+    } catch (e) {
+      throw new Error(
+        `Error updating content with id: ${id} of content type ${cms.MessageContentType.IMAGE}, ${e}`
       )
     }
   }

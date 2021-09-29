@@ -51,6 +51,6 @@ export class ButtonDelivery extends ContentDelivery {
   ): string {
     if (contentType === cms.MessageContentType.TEXT) {
       return entry.shorttext ?? entry.name
-    } else return (entry.text[0].text as string) ?? entry.name
+    } else return (entry.text as string) ?? entry.name
   }
 }
