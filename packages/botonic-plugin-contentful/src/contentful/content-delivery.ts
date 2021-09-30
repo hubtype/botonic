@@ -8,6 +8,7 @@ import {
   ContentId,
   ContentType,
   Context,
+  isCustomModel,
   isSameModel,
   ResourceId,
 } from '../cms'
@@ -113,7 +114,10 @@ export abstract class ContentDelivery extends ResourceDelivery {
   ): Promise<contentful.Entry<T>> {
     const entry = await this.delivery.getEntry<T>(id, context, query)
     const gotType = ContentfulEntryUtils.getContentModel(entry)
-    if (!isSameModel(gotType, this.modelType)) {
+    if (
+      !isCustomModel(gotType, this.modelType) &&
+      !isSameModel(gotType, this.modelType)
+    ) {
       throw new Error(
         `Requested model with id '${id}' of type '${this.modelType}' but got '${gotType}'`
       )

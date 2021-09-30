@@ -268,11 +268,13 @@ export class Button extends Content {
   }
 }
 
+export type CustomFields = Record<string, unknown>
+
 export class Custom extends Content {
   constructor(
     readonly id: string,
     readonly name: string,
-    readonly fields: Record<string, unknown> | {}
+    readonly fields: CustomFields = {}
   ) {
     super(ContentType.CUSTOM)
   }

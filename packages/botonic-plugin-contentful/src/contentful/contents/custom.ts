@@ -1,9 +1,9 @@
 import * as contentful from 'contentful'
-import { ContentWithNameFields } from '../delivery-utils'
 
 import * as cms from '../../cms'
-
+import { CustomFields } from '../../cms'
 import { ContentDelivery } from '../content-delivery'
+import { ContentWithNameFields } from '../delivery-utils'
 import { DeliveryApi } from '../index'
 
 export class CustomDelivery extends ContentDelivery {
@@ -12,11 +12,13 @@ export class CustomDelivery extends ContentDelivery {
   }
 
   public async custom(id: string, context: cms.Context): Promise<cms.Custom> {
-    const entry = await this.getEntry<CustomFields>(id, context)
+    const entry = await this.getEntry<ContentWithCustomFields>(id, context)
     return this.fromEntry(entry)
   }
 
-  public fromEntry(customEntry: contentful.Entry<CustomFields>): cms.Custom {
+  public fromEntry(
+    customEntry: contentful.Entry<ContentWithCustomFields>
+  ): cms.Custom {
     return new cms.Custom(
       customEntry.sys.id,
       customEntry.fields.name,
@@ -24,14 +26,10 @@ export class CustomDelivery extends ContentDelivery {
     )
   }
 
-  private getCustomFields(
-    entryFields: CustomFields
-  ): Record<string, unknown> | {} {
+  private getCustomFields(entryFields: ContentWithCustomFields): CustomFields {
     const { name, ...fields } = entryFields
     return fields ? fields : {}
   }
 }
 
-export interface CustomFields extends ContentWithNameFields {
-  fields: Record<string, unknown> | undefined
-}
+export type ContentWithCustomFields = ContentWithNameFields & CustomFields

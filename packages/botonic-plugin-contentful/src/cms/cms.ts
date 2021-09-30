@@ -86,6 +86,17 @@ export const BOTONIC_CONTENT_TYPES: BotonicContentType[] = [
   ...Object.values(SubContentType),
 ]
 
+export function isCustomModel(
+  cmsModelType: ContentType,
+  localModelType: ContentType
+): boolean {
+  return (
+    localModelType === ContentType.CUSTOM &&
+    (isSameModel(cmsModelType, ContentType.CUSTOM) ||
+      !CONTENT_TYPES.includes(cmsModelType))
+  )
+}
+
 export function isSameModel(model1: ContentType, model2: ContentType): boolean {
   switch (model1) {
     case ContentType.TEXT:

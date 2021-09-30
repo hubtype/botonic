@@ -20,6 +20,7 @@ import { AssetDelivery } from './contents/asset'
 import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
 import { ContentsDelivery } from './contents/contents'
+import { CustomDelivery } from './contents/custom'
 import { DateRangeDelivery } from './contents/date-range'
 import { DocumentDelivery } from './contents/document'
 import { FollowUpDelivery } from './contents/follow-up'
@@ -41,7 +42,6 @@ import {
 } from './delivery-utils'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 import { KeywordsDelivery } from './search/keywords'
-import { CustomDelivery } from './contents/custom'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
