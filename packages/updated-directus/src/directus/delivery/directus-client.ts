@@ -164,7 +164,7 @@ export class DirectusClient {
     context: cms.SupportedLocales
   ) {
     const followupId = entry.followup[0].item.id
-    const contentType = !!entry.followup[0].item.image
+    const contentType = entry.followup[0].item.hasOwnProperty('image')
       ? cms.MessageContentType.IMAGE
       : cms.MessageContentType.TEXT
     return {

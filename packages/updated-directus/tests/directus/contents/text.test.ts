@@ -3,11 +3,11 @@ import { Text, Image } from '../../../src/cms'
 
 const TEXT_WITHOUT_B_WITHOUT_F = '4873aa47-f797-43c0-afbf-86700f52c9f6'
 const TEXT_WITH_2B_WITHOUT_F = 'e808f179-cbae-4d2b-81ea-178018e9801c'
-const TEXT_WITHOUT_B_WITH_F_T = '11d4756a-085c-4256-8edb-3e9db2472aeb'
-const TEXT_WITHOUT_B_WITH_F_I = '630dbe23-10c6-4fb4-b71c-f4b734c6ac6a'
-const TEXT_WITH_B_WITH_F_T_WITH_F_T = 'c9e56d03-9c18-4c97-ac6b-67fb0f38080d'
-const TEXT_WITH_CUSTOM_FIELD = 'b52a16f9-1aed-4d71-bfb2-445399bdca2d'
-const TEXT_WITH_B_TYPE_TEXT = '3f622db8-6206-4e4d-ac82-6bf508414941'
+const TEXT_WITHOUT_B_WITH_F_T = '8cc141f9-c600-408d-9d07-6b6c075657e0'
+const TEXT_WITHOUT_B_WITH_F_I = '6d85f523-7d47-4227-a58c-b68ffcd47b92'
+const TEXT_WITH_B_WITH_F_T_WITH_F_T = '8cc141f9-c600-408d-9d07-6b6c075657e0'
+const TEXT_WITH_CUSTOM_FIELD = '96b15a4f-e0ac-444e-8784-e74f11969f00'
+const TEXT_WITH_B_TYPE_TEXT = '62616d02-3537-4a0d-9e60-d4fd37f04b52'
 
 test('Test: directus text without buttons without followup', async () => {
   const directus = testDirectus()
@@ -56,11 +56,11 @@ test('Test: directus text with buttons with text followup with text followup', a
   expect(testText.buttons).toHaveLength(3)
   const followup1 = testText.common.followup as Text
   expect(followup1).toBeInstanceOf(Text)
-  expect(followup1.common.name).toEqual('TEST_BASKETBALL')
+  expect(followup1.common.name).toEqual('TEST_FOLLOWUP_TEXT')
 
   const followup2 = followup1.common.followup as Text
   expect(followup2).toBeInstanceOf(Text)
-  expect(followup2.common.name).toEqual('TEST_FOOTBALL')
+  expect(followup2.common.name).toEqual('TEST_FOLLOWUP_OF_FOLLOWUP')
   expect(followup2.buttons).toHaveLength(1)
 })
 
@@ -77,7 +77,7 @@ test('Test: directus text with button of type text', async () => {
   const testText = await directus.text(TEXT_WITH_B_TYPE_TEXT, testContext())
   expect(testText.buttons![0].text).toEqual('This will be the button text')
   expect(testText.buttons![0].target).toEqual(
-    'text$32cb73fa-3ee9-4a56-9fe8-fd2e95b5525a'
+    'text$68123386-d046-411d-9e0c-9e9d6bc08c05'
   )
 })
 

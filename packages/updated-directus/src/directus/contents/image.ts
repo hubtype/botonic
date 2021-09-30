@@ -12,7 +12,6 @@ export class ImageDelivery extends ContentDelivery {
 
   async image(id: string, context: cms.SupportedLocales): Promise<Image> {
     const entry = await this.getEntry(id, context)
-    console.log({ entry })
     return this.fromEntry(entry, context)
   }
 

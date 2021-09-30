@@ -59,7 +59,7 @@ export class TextDelivery extends ContentDelivery {
     if (followup.length === 0) {
       return undefined
     }
-    const contentType = !!followup.image
+    const contentType = followup.hasOwnProperty('image')
       ? cms.MessageContentType.IMAGE
       : cms.MessageContentType.TEXT
     return contentType === cms.MessageContentType.IMAGE

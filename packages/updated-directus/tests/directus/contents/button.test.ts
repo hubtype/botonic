@@ -1,15 +1,15 @@
 import { testDirectus, testContext } from '../helpers/directus'
 
-const BUTTON_TEXT_TARGET = 'f5cc71dd-0393-46c7-b0a4-834ca9d813e7'
-const BUTTON_PAYLOAD_TARGET = '92f17fbe-784e-433b-b328-82e5e89da84d'
-const BUTTON_IMAGE_TARGET = '397e92d4-3c44-4f2c-9743-a9d7c0bc72e3'
+const BUTTON_TEXT_TARGET = 'd467a152-a746-4ed0-9e6f-d83a6d0c3a5b'
+const BUTTON_PAYLOAD_TARGET = '09f88f45-c717-449b-b979-51308e779744'
+const BUTTON_IMAGE_TARGET = 'ff8b23c4-872f-4b81-bb6a-d30d4d044a7b'
 
 test('Test: directus button with Text target', async () => {
   const directus = testDirectus()
   const testButton = await directus.button(BUTTON_TEXT_TARGET, testContext())
   expect(testButton.common.name).toEqual('TEST_BUTTON_2')
   expect(testButton.text).toEqual('buttonText2')
-  expect(testButton.target).toEqual('text$a3b990d2-0f03-4b9a-996d-05316ac2352a')
+  expect(testButton.target).toEqual('text$7b9cb226-a82c-46bc-8f82-e2d233a77de3')
 })
 
 test('Test: directus button with payload target', async () => {
@@ -22,6 +22,6 @@ test('Test: directus button with image target', async () => {
   const directus = testDirectus()
   const testButton = await directus.button(BUTTON_IMAGE_TARGET, testContext())
   expect(testButton.target).toEqual(
-    'image$7fc52bdc-4013-4872-b143-a1e715ee8901'
+    'image$f3753667-f745-4258-b20c-afad44c4939b'
   )
 })
