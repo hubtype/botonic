@@ -179,7 +179,7 @@ export class ImportContentUpdater {
   }
 
   async contentTypes(): Promise<ContentType[]> {
-    return andArrays(await this.info.contentTypes(), EXPORTABLE_CONTENT_TYPES)
+    return andArrays(EXPORTABLE_CONTENT_TYPES, await this.info.contentTypes())
   }
 
   async warnMissingFields(

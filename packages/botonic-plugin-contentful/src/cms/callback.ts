@@ -2,7 +2,7 @@ import escapeStringRegexp from 'escape-string-regexp'
 
 import { isOfType } from '../util/enums'
 import { Equatable, ValueObject } from '../util/objects'
-import { CMS, ContentType, TopContentType } from './cms'
+import { CMS, ContentType, CustomContentType, TopContentType } from './cms'
 import { Content, TopContent } from './contents'
 import { Context } from './context'
 import { CmsException } from './exceptions'
@@ -151,7 +151,7 @@ export class ContentId extends ResourceId {
         return cms.button(this.id, context)
       case ContentType.ELEMENT:
         return cms.element(this.id, context)
-      case ContentType.CUSTOM:
+      case CustomContentType.CUSTOM:
         return cms.custom(this.id, context)
       default:
         return new TopContentId(this.model, this.id).deliver(cms, context)

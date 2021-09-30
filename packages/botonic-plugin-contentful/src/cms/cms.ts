@@ -43,7 +43,6 @@ export enum NonMessageTopContentType {
   SCHEDULE = 'schedule',
   URL = 'url',
   PAYLOAD = 'payload',
-  CUSTOM = 'custom',
 }
 
 export type TopContentType = MessageContentType | NonMessageTopContentType
@@ -60,7 +59,12 @@ export enum SubContentType {
   BUTTON = 'button',
   ELEMENT = 'element',
 }
-export type ContentType = TopContentType | SubContentType
+
+export enum CustomContentType {
+  CUSTOM = 'custom',
+}
+
+export type ContentType = TopContentType | SubContentType | CustomContentType
 export const ContentType = { ...TopContentType, ...SubContentType }
 export const CONTENT_TYPES: ContentType[] = [
   ...TOP_CONTENT_TYPES,
@@ -91,8 +95,8 @@ export function isCustomModel(
   localModelType: ContentType
 ): boolean {
   return (
-    localModelType === ContentType.CUSTOM &&
-    (isSameModel(cmsModelType, ContentType.CUSTOM) ||
+    localModelType === CustomContentType.CUSTOM &&
+    (isSameModel(cmsModelType, CustomContentType.CUSTOM) ||
       !CONTENT_TYPES.includes(cmsModelType))
   )
 }

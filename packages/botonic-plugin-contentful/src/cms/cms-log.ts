@@ -1,6 +1,12 @@
 import { ContentfulOptions } from '../plugin'
 import { SearchCandidate } from '../search'
-import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
+import {
+  CMS,
+  ContentType,
+  CustomContentType,
+  PagingOptions,
+  TopContentType,
+} from './cms'
 import {
   Asset,
   Button,
@@ -94,7 +100,7 @@ export class LogCMS implements CMS {
   }
 
   custom(id: string, context?: Context): Promise<Custom> {
-    this.logContentDelivery(ContentType.CUSTOM, id, context)
+    this.logContentDelivery(CustomContentType.CUSTOM, id, context)
     return this.cms.custom(id, context)
   }
 

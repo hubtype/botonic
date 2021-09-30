@@ -8,7 +8,7 @@ import { DeliveryApi } from '../index'
 
 export class CustomDelivery extends ContentDelivery {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
-    super(cms.ContentType.CUSTOM, delivery, resumeErrors)
+    super(cms.CustomContentType.CUSTOM, delivery, resumeErrors)
   }
 
   public async custom(id: string, context: cms.Context): Promise<cms.Custom> {

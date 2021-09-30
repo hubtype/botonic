@@ -5,7 +5,13 @@ import { SearchCandidate } from '../search'
 import { Measure } from '../util'
 import { reduceMultiError } from '../util/async'
 import { AssetId, ContentId, ResourceId } from './callback'
-import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
+import {
+  CMS,
+  ContentType,
+  CustomContentType,
+  PagingOptions,
+  TopContentType,
+} from './cms'
 import {
   Asset,
   Button,
@@ -105,7 +111,7 @@ export class ErrorReportingCMS implements CMS {
     return this.catchAndValidate(
       id,
       context,
-      ContentType.CUSTOM,
+      CustomContentType.CUSTOM,
       this.cms.custom(id, context)
     )
   }
