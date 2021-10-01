@@ -1,10 +1,11 @@
 import { DirectusClient } from '../delivery/directus-client'
 import * as cms from '../../cms'
-import { Content } from '../../cms'
+import { AssetInfo, Content } from '../../cms'
 import { PartialItem } from '@directus/sdk'
 import { TextDelivery } from '../contents/text'
 import { ImageDelivery } from '../contents/image'
 import { ButtonFields, ImageFields, TextFields } from './directus-contents'
+import { Stream } from 'stream'
 
 export interface ContentDeliveries {
   [cms.MessageContentType.TEXT]: TextDelivery
@@ -68,6 +69,14 @@ export class ContentsDelivery {
   ): Promise<void> {
     const convertedFields = this.convertImageFields(id, context, fields)
     await this.client.updateImageFields(context, id, convertedFields)
+  }
+
+  async createAsset(
+    context: cms.SupportedLocales,
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
+  ): Promise<void> {
+    await this.client.createAsset(context, file, info)
   }
 
   fromEntry(

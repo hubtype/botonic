@@ -4,6 +4,8 @@ import {
   TextFields,
 } from '../directus/manage/directus-contents'
 import { Button, Text, Image, Content } from './contents'
+import { Stream } from 'stream'
+
 
 export enum MessageContentType {
   TEXT = 'text',
@@ -70,6 +72,12 @@ export interface CMS {
   updateImageFields(
     context: SupportedLocales,
     id: string,
+    fields: ImageFields
+  ): Promise<void>
+
+  createAsset(
+    context: SupportedLocales,
+    file: string | ArrayBuffer | Stream,
     fields: ImageFields
   ): Promise<void>
 }

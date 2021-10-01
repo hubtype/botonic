@@ -4,10 +4,11 @@ import { ButtonDelivery } from './contents/button'
 import { ImageDelivery } from './contents/image'
 import { KeywordsDelivery } from './search/keywords'
 import { DirectusClient } from './delivery/directus-client'
-import { Button, Text, Image, Content } from '../cms'
+import { Button, Text, Image, Content, AssetInfo } from '../cms'
 import { DirectusOptions } from '../plugin'
 import { ContentsDelivery } from './manage/contents'
 import { TextFields } from './manage/directus-contents'
+import { Stream } from 'stream'
 
 export class Directus implements cms.CMS {
   private readonly _text: TextDelivery
@@ -78,12 +79,20 @@ export class Directus implements cms.CMS {
   ): Promise<void> {
     await this._contents.updateButtonFields(context, id, fields)
   }
-  
+
   async updateImageFields(
     context: cms.SupportedLocales,
     id: string,
     fields: TextFields
   ): Promise<void> {
     await this._contents.updateImageFields(context, id, fields)
+  }
+
+  async createAsset(
+    context: cms.SupportedLocales,
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
+  ): Promise<void> {
+    await this._contents.createAsset(context, file, info)
   }
 }

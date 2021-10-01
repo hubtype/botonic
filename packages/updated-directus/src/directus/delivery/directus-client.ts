@@ -6,6 +6,8 @@ import {
   hasFollowUp,
 } from './delivery-utils'
 import { DirectusOptions } from '../../plugin'
+import { Stream } from 'stream'
+import { AssetInfo } from '../../cms'
 
 export class DirectusClient {
   clientParams: DirectusOptions
@@ -156,6 +158,25 @@ export class DirectusClient {
       throw new Error(
         `Error updating content with id: ${id} of content type ${cms.MessageContentType.IMAGE}, ${e}`
       )
+    }
+  }
+
+  //in progress...
+  async createAsset(
+    context: cms.SupportedLocales,
+    file: string | ArrayBuffer | Stream,
+    info: AssetInfo
+  ): Promise<void> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      const image = await this.client.items('directus_files').createOne({
+        title: info.name,
+        storage: 'amazon',
+        filename_download: 'new_file',
+      })
+      console.log({ image })
+    } catch (e) {
+      throw new Error(`Error creating new asset, ${e}`)
     }
   }
 

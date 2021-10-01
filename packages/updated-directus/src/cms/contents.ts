@@ -7,6 +7,13 @@ export interface CommonFields {
   customFields?: Record<string, unknown>
 }
 
+export interface AssetInfo {
+  readonly name: string
+  readonly fileName?: string
+  readonly type?: string
+  readonly description?: string
+}
+
 export abstract class Content {
   readonly common: CommonFields
   constructor(common: CommonFields) {
