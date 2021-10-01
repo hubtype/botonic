@@ -10,6 +10,7 @@ import {
   Content,
   ContentType,
   Context,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -96,6 +97,10 @@ export class FilteredCMS implements CMS {
 
   handoff(id: string, context?: Context): Promise<Handoff> {
     return this.cms.handoff(id, context)
+  }
+
+  custom(id: string, context?: Context): Promise<Custom> {
+    return this.cms.custom(id, context)
   }
 
   url(id: string, context?: Context): Promise<Url> {

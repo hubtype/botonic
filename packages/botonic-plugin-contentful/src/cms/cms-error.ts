@@ -5,7 +5,13 @@ import { SearchCandidate } from '../search'
 import { Measure } from '../util'
 import { reduceMultiError } from '../util/async'
 import { AssetId, ContentId, ResourceId } from './callback'
-import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
+import {
+  CMS,
+  ContentType,
+  CustomContentType,
+  PagingOptions,
+  TopContentType,
+} from './cms'
 import {
   Asset,
   Button,
@@ -13,6 +19,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -97,6 +104,15 @@ export class ErrorReportingCMS implements CMS {
       context,
       ContentType.HANDOFF,
       this.cms.handoff(id, context)
+    )
+  }
+
+  custom(id: string, context?: Context): Promise<Custom> {
+    return this.catchAndValidate(
+      id,
+      context,
+      CustomContentType.CUSTOM,
+      this.cms.custom(id, context)
     )
   }
   text(id: string, context?: Context): Promise<Text> {

@@ -9,6 +9,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -76,6 +77,10 @@ export class DummyCMS implements CMS {
         queue
       )
     )
+  }
+
+  async custom(id: string, {} = DEFAULT_CONTEXT): Promise<Custom> {
+    return Promise.resolve(new Custom(id, id, {}))
   }
 
   chitchat(id: string, context = DEFAULT_CONTEXT): Promise<Chitchat> {

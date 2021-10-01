@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "build:watch": "../../node_modules/.bin/tsc --watch",
     "build_unit_tests": "tsc -b tests/tsconfig.json",
     "build:watch": "npm run build -- --watch",
     "test": "../../node_modules/.bin/jest --coverage",

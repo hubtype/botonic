@@ -1,6 +1,12 @@
 import { ContentfulOptions } from '../plugin'
 import { SearchCandidate } from '../search'
-import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
+import {
+  CMS,
+  ContentType,
+  CustomContentType,
+  PagingOptions,
+  TopContentType,
+} from './cms'
 import {
   Asset,
   Button,
@@ -8,6 +14,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -90,6 +97,11 @@ export class LogCMS implements CMS {
   handoff(id: string, context?: Context): Promise<Handoff> {
     this.logContentDelivery(ContentType.HANDOFF, id, context)
     return this.cms.handoff(id, context)
+  }
+
+  custom(id: string, context?: Context): Promise<Custom> {
+    this.logContentDelivery(CustomContentType.CUSTOM, id, context)
+    return this.cms.custom(id, context)
   }
 
   content(id: string, context?: Context): Promise<Content> {

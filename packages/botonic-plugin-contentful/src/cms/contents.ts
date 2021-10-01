@@ -1,7 +1,12 @@
 import * as time from '../time'
 import { shallowClone, Stringable } from '../util/objects'
 import { Callback, ContentCallback, ContentId, TopContentId } from './callback'
-import { ContentType, MessageContentType, TopContentType } from './cms'
+import {
+  ContentType,
+  CustomContentType,
+  MessageContentType,
+  TopContentType,
+} from './cms'
 import { SearchableBy } from './fields'
 
 export enum ButtonStyle {
@@ -265,6 +270,18 @@ export class Button extends Content {
     const clone = shallowClone(this)
     ;(clone as any).text = newText
     return clone
+  }
+}
+
+export type CustomFields = Record<string, any>
+
+export class Custom extends Content {
+  constructor(
+    readonly id: string,
+    readonly name: string,
+    readonly fields: CustomFields = {}
+  ) {
+    super(CustomContentType.CUSTOM)
   }
 }
 

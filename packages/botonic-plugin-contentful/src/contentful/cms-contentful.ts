@@ -20,6 +20,7 @@ import { AssetDelivery } from './contents/asset'
 import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
 import { ContentsDelivery } from './contents/contents'
+import { CustomDelivery } from './contents/custom'
 import { DateRangeDelivery } from './contents/date-range'
 import { DocumentDelivery } from './contents/document'
 import { FollowUpDelivery } from './contents/follow-up'
@@ -56,6 +57,7 @@ export class Contentful implements cms.CMS {
   private readonly _dateRange: DateRangeDelivery
   private readonly _image: ImageDelivery
   private readonly _handoff: HandoffDelivery
+  private readonly _custom: CustomDelivery
   private readonly _asset: AssetDelivery
   private readonly _queue: QueueDelivery
   private readonly _button: ButtonDelivery
@@ -108,6 +110,7 @@ export class Contentful implements cms.CMS {
     this._schedule = new ScheduleDelivery(delivery, resumeErrors)
     this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
     this._handoff = new HandoffDelivery(delivery, this._queue, resumeErrors)
+    this._custom = new CustomDelivery(delivery, resumeErrors)
     const followUp = new FollowUpDelivery(
       this._delivery,
       this._carousel,
@@ -178,6 +181,10 @@ export class Contentful implements cms.CMS {
 
   async handoff(id: string, context = DEFAULT_CONTEXT): Promise<cms.Handoff> {
     return this._handoff.handoff(id, context)
+  }
+
+  async custom(id: string, context = DEFAULT_CONTEXT): Promise<cms.Custom> {
+    return this._custom.custom(id, context)
   }
 
   topContents<T extends TopContent>(

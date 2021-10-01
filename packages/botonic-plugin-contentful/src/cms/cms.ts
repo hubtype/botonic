@@ -6,6 +6,7 @@ import {
   Chitchat,
   CommonFields,
   Content,
+  Custom,
   DateRangeContent,
   Document,
   Element,
@@ -58,7 +59,12 @@ export enum SubContentType {
   BUTTON = 'button',
   ELEMENT = 'element',
 }
-export type ContentType = TopContentType | SubContentType
+
+export enum CustomContentType {
+  CUSTOM = 'custom',
+}
+
+export type ContentType = TopContentType | SubContentType | CustomContentType
 export const ContentType = { ...TopContentType, ...SubContentType }
 export const CONTENT_TYPES: ContentType[] = [
   ...TOP_CONTENT_TYPES,
@@ -83,6 +89,17 @@ export const BOTONIC_CONTENT_TYPES: BotonicContentType[] = [
   ...MESSAGE_CONTENT_TYPES,
   ...Object.values(SubContentType),
 ]
+
+export function isCustomModel(
+  cmsModelType: ContentType,
+  localModelType: ContentType
+): boolean {
+  return (
+    localModelType === CustomContentType.CUSTOM &&
+    (isSameModel(cmsModelType, CustomContentType.CUSTOM) ||
+      !CONTENT_TYPES.includes(cmsModelType))
+  )
+}
 
 export function isSameModel(model1: ContentType, model2: ContentType): boolean {
   switch (model1) {
@@ -119,6 +136,8 @@ export interface CMS {
   element(id: string, context?: Context): Promise<Element>
 
   handoff(id: string, context?: Context): Promise<Handoff>
+
+  custom(id: string, context?: Context): Promise<Custom>
   /** Even if ContentfulOptions.resumeErrors is set, if the asset is not available
    * the method will fail. */
   image(id: string, context?: Context): Promise<Image>
