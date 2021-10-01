@@ -8,6 +8,7 @@ test('TEST: ErrorReportingCMS integration test', async () => {
   const sut = testContentful({}, true)
   expect.assertions(1)
   await sut.text('invalid_id').catch(error => {
+    // eslint-disable-next-line jest/no-conditional-expect
     expect(error).toBeInstanceOf(CmsException)
   })
 })
@@ -24,6 +25,7 @@ test('TEST: ErrorReportingCMS content delivery failed', async () => {
       throw Error('should have thrown')
     })
     .catch((error2: any) => {
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(error2).toEqual(
         new CmsException(
           "Error calling CMS.carousel on 'carousel' with id 'id1'",
@@ -39,6 +41,7 @@ test('TEST: ErrorReportingCMS content delivery failed', async () => {
       throw Error('should have thrown')
     })
     .catch((error2: any) => {
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(error2).toEqual(
         new CmsException(
           "Error calling CMS.text with locale 'es' on 'text' with id 'id1'",
