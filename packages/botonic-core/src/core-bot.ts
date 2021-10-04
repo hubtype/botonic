@@ -101,16 +101,18 @@ export class CoreBot {
 
     const parsedUserEvent = this.botonicOutputParser.parseFromUserInput(input)
     const userId = session.user.id
-    // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
-    // @ts-ignore
-    const userEvent = await dataProvider.saveEvent({
-      ...parsedUserEvent,
-      userId,
-      eventId: ulid(),
-      createdAt: new Date().toISOString(),
-      from: MessageEventFrom.USER,
-      ack: MessageEventAck.RECEIVED,
-    })
+    if (dataProvider) {
+      // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
+      // @ts-ignore
+      const userEvent = await dataProvider.saveEvent({
+        ...parsedUserEvent,
+        userId,
+        eventId: ulid(),
+        createdAt: new Date().toISOString(),
+        from: MessageEventFrom.USER,
+        ack: MessageEventAck.RECEIVED,
+      })
+    }
 
     if (this.plugins) {
       await runPlugins(
@@ -138,8 +140,7 @@ export class CoreBot {
       )
     }
 
-    const output = this.router.newprocessInput(input, session, lastRoutePath)
-
+    const output = this.router.processInput(input, session, lastRoutePath)
     const request = {
       getString: stringId => this.getString(stringId, session),
       setLocale: locale => this.setLocale(locale, session),
@@ -153,7 +154,10 @@ export class CoreBot {
       dataProvider,
     }
 
-    const response = await this.renderer({ request, actions: [output.action] })
+    const response = await this.renderer({
+      request,
+      actions: [output.fallbackAction, output.action, output.emptyAction],
+    })
     let messageEvents: Partial<BotonicEvent>[] = []
     try {
       messageEvents = this.botonicOutputParser.xmlToMessageEvents(response)
@@ -175,17 +179,19 @@ export class CoreBot {
       )
     }
 
-    // TODO: save bot responses to db and update user with new session and new params
-    for (const messageEvent of messageEvents) {
-      // @ts-ignore
-      const botEvent = await dataProvider.saveEvent({
-        ...messageEvent,
-        userId,
-        eventId: ulid(),
-        createdAt: new Date().toISOString(),
-        from: MessageEventFrom.BOT,
-        ack: MessageEventAck.SENT,
-      })
+    if (dataProvider) {
+      // TODO: save bot responses to db and update user with new session and new params
+      for (const messageEvent of messageEvents) {
+        // @ts-ignore
+        const botEvent = await dataProvider.saveEvent({
+          ...messageEvent,
+          userId,
+          eventId: ulid(),
+          createdAt: new Date().toISOString(),
+          from: MessageEventFrom.BOT,
+          ack: MessageEventAck.SENT,
+        })
+      }
     }
 
     session.is_first_interaction = false

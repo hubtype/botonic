@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { PROVIDER } from '../src/index'
-import { NoMatchingRouteError, Router } from '../src/router'
+import { PROVIDER } from '../../src/index'
+import { NoMatchingRouteError, Router } from '../../src/router'
 
 /** @type Input */
 const textInput = { type: 'text', text: 'hi' }
@@ -46,14 +46,14 @@ function testSession() {
 describe('Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
     const router = new Router([])
-    expect(() => router.newprocessInput(textInput, testSession())).toThrow(
+    expect(() => router.processInput(textInput, testSession())).toThrow(
       NoMatchingRouteError
     )
   })
   test('null routes throw TypeError', () => {
     // @ts-ignore
     const router = new Router()
-    expect(() => router.newprocessInput(textInput, testSession())).toThrow(
+    expect(() => router.processInput(textInput, testSession())).toThrow(
       TypeError
     )
   })
@@ -61,8 +61,8 @@ describe('Bad router initialization', () => {
 
 test('Router returns 404', () => {
   const router = new Router([{ path: '404', action: '404Action' }])
-  const { action } = router.newprocessInput(textInput, testSession())
-  expect(action).toBe('404Action')
+  const { fallbackAction } = router.processInput(textInput, testSession())
+  expect(fallbackAction).toBe('404Action')
 })
 
 describe('Match route by MATCHER <> INPUT', () => {
@@ -279,11 +279,67 @@ describe('TEST: getting path and params from payload input', () => {
       const router = new Router([])
       /** @type Input */
       const input = { type: 'postback', payload: inputPayload }
-      const { pathPayload, params } = router.getPathAndParamsFromPayloadInput(
-        input
+      const { path, params } = router.getPathParamsFromPathPayload(
+        input.payload
       )
-      expect(pathPayload).toEqual(expectedPath)
+      expect(path).toEqual(expectedPath)
       expect(params).toEqual(expectedParams)
     }
   )
+})
+
+describe('TEST: convert pathParams to params', () => {
+  const router = new Router([])
+  const getPathParams = (pathPayload: string | undefined) => {
+    return router.getPathParamsFromPathPayload(pathPayload)
+  }
+  it('converts valid pathParams', () => {
+    let res = router.pathParamsToParams(
+      getPathParams('__PATH_PAYLOAD__path1?path1').params
+    )
+    expect(res).toEqual({ path1: '' })
+    res = router.pathParamsToParams(
+      getPathParams('__PATH_PAYLOAD__path1?param1=value1&param2=value2').params
+    )
+    expect(res).toEqual({ param1: 'value1', param2: 'value2' })
+    res = router.pathParamsToParams(
+      getPathParams('__PATH_PAYLOAD__path1?param1=false&param2=5').params
+    )
+    expect(res).toEqual({ param1: 'false', param2: '5' })
+    res = router.pathParamsToParams(getPathParams(undefined).params)
+    expect(res).toEqual({})
+  })
+})
+
+describe('TEST: Named Group Regex', () => {
+  const router = new Router([
+    {
+      path: 'namedGroup',
+      text: /order (?<orderNumber>\w+)/,
+      action: 'hello',
+    },
+    {
+      path: 'noNamedGroup',
+      text: /hi/,
+      action: 'hello',
+    },
+  ])
+  it('matches named groups', () => {
+    const routeParams = router.getRoute(
+      { type: 'text', text: 'order 12345' },
+      router.routes,
+      testSession(),
+      null
+    )
+    expect(routeParams.params).toEqual({ orderNumber: '12345' })
+  })
+  it('no named groups', () => {
+    const routeParams = router.getRoute(
+      { type: 'text', text: 'hi' },
+      router.routes,
+      testSession(),
+      null
+    )
+    expect(routeParams.params).toEqual({})
+  })
 })

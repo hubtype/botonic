@@ -152,7 +152,7 @@ export interface Session {
     name?: string
   }
   __locale?: string
-  __retries?: number
+  __retries: number
   is_first_interaction: boolean
   last_session?: any
   organization?: string

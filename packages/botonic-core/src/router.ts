@@ -6,22 +6,79 @@ export class NoMatchingRouteError extends Error {
   input: Input
   constructor(input: Input) {
     super(
-      `No route found for input '${String(input)}' and no 404 route defined`
+      `No route found for input '${JSON.stringify(
+        input
+      )}' and no 404 route defined`
     )
     this.input = input
   }
 }
 
-interface ComputedAction {
-  action: string
-  params: any
-  lastRoutePath: string | null
+type Nullable<T> = T | null
+
+type Action = () => any
+
+interface ProcessedInput {
+  action: Nullable<Action>
+  emptyAction: Nullable<Action>
+  fallbackAction: Nullable<Action>
+  lastRoutePath: Nullable<string>
+  params: Params
 }
 
-interface RouterState {
-  matchedRoute: Route | null
-  matchedRoutePath: string | null
-  brokenFlow: boolean
+class ProcessedInputBuilder {
+  private processedInput: ProcessedInput
+
+  constructor() {
+    this.processedInput = {
+      action: null,
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: null,
+      params: {},
+    }
+  }
+  withAction(action: Nullable<Action>): this {
+    if (action) this.processedInput.action = action
+    return this
+  }
+
+  withEmptyAction(emptyAction: Nullable<Action>): this {
+    if (emptyAction) this.processedInput.emptyAction = emptyAction
+    return this
+  }
+
+  withFallbackAction(fallbackAction: Nullable<Action>): this {
+    if (fallbackAction) this.processedInput.fallbackAction = fallbackAction
+    return this
+  }
+
+  withLastRoutePath(lastRoutePath: Nullable<string>): this {
+    if (lastRoutePath) this.processedInput.lastRoutePath = lastRoutePath
+    return this
+  }
+
+  withParams(params: Params): this {
+    if (Object.keys(params).length > 1) this.processedInput.params = params
+    return this
+  }
+
+  build(): ProcessedInput {
+    return this.processedInput
+  }
+}
+
+interface Params {
+  [key: string]: any
+}
+
+type RoutingState = {
+  previousRoute: Nullable<Route>
+  previousRoutePath: Nullable<string>
+  matchedRoute: Nullable<Route>
+  matchedRoutePath: Nullable<string>
+  params: Params
+  isRetry: boolean
 }
 
 interface RouteParams {
@@ -56,398 +113,293 @@ export class Router {
     this.routeInspector = routeInspector || new RouteInspector()
   }
 
-  // eslint-disable-next-line complexity
-  processInput(
-    input: Input,
-    session: Partial<Session> = {},
-    lastRoutePath: string | null = null
-  ): any {
-    let routeParams: any = {}
-    if (input.payload && input.payload.includes('__PATH_PAYLOAD__')) {
-      const pathParam = input.payload.split('__PATH_PAYLOAD__')
-      routeParams.route = this.getRouteByPath(pathParam[1], this.routes)
-    }
-    const pathParams = this.getPathAndParamsFromPayloadInput(input)
-    let brokenFlow = false
-    const lastRoute = this.getRouteByPath(lastRoutePath, this.routes)
-    if (!lastRoute && input.path)
-      routeParams.route = this.getRouteByPath(input.path, this.routes)
-    if (lastRoute && lastRoute.childRoutes && !routeParams.route)
-      //get route depending of current ChildRoute
-      routeParams = this.getRoute(
-        input,
-        lastRoute.childRoutes,
-        session as Session,
-        lastRoutePath
-      )
-    if (!routeParams || !Object.keys(routeParams).length) {
-      /*
-          we couldn't find a route in the state of the lastRoute, so let's find in
-          the general conf.route
-        */
-      brokenFlow = Boolean(lastRoutePath)
-      routeParams = this.getRoute(
-        input,
-        this.routes,
-        session as Session,
-        lastRoutePath
-      )
-    }
-    try {
-      if (pathParams) {
-        const searchParams = new URLSearchParams(pathParams)
-        for (const [key, value] of searchParams) {
-          routeParams.params
-            ? (routeParams.params[key] = value)
-            : (routeParams.params = { [key]: value })
-        }
-      }
-    } catch (e) {}
-    if (routeParams && Object.keys(routeParams).length) {
-      //get in childRoute if one has path ''
-      let defaultAction
-      if (routeParams.route) {
-        if (
-          routeParams.route.childRoutes &&
-          routeParams.route.childRoutes.length
-        ) {
-          defaultAction = this.getRoute(
-            { path: '' },
-            routeParams.route.childRoutes,
-            session as Session,
-            lastRoutePath
-          )
-        }
-        if ('action' in routeParams.route) {
-          if (
-            brokenFlow &&
-            routeParams.route.ignoreRetry != true &&
-            lastRoute &&
-            (session.__retries || 0) < (lastRoute.retry || 0) &&
-            routeParams.route.path != lastRoute.action
-          ) {
-            session.__retries = session.__retries ? session.__retries + 1 : 1
-            // The flow was broken, but we want to recover it
-            return {
-              action: routeParams.route.action,
-              params: routeParams.params,
-              retryAction: lastRoute ? lastRoute.action : null,
-              defaultAction: defaultAction ? defaultAction.route.action : null,
-              lastRoutePath: lastRoutePath,
-            }
-          } else {
-            session.__retries = 0
-            if (lastRoutePath && !brokenFlow)
-              lastRoutePath = `${lastRoutePath}/${routeParams.route.path}`
-            else lastRoutePath = routeParams.route.path
-            return {
-              action: routeParams.route.action,
-              params: routeParams.params,
-              retryAction: null,
-              defaultAction: defaultAction ? defaultAction.route.action : null,
-              lastRoutePath: lastRoutePath,
-            }
-          }
-        } else if (defaultAction) {
-          return {
-            action: defaultAction.route.action,
-            params: defaultAction.params,
-            lastRoutePath: lastRoutePath,
-          }
-        } else if ('redirect' in routeParams.route) {
-          lastRoutePath = routeParams.route.redirect
-          const redirectRoute = this.getRouteByPath(lastRoutePath, this.routes)
-          if (redirectRoute) {
-            return {
-              action: redirectRoute.action,
-              params: redirectRoute.params,
-              lastRoutePath: lastRoutePath,
-            }
-          }
-        }
-      }
-    }
-    const notFound = this.getRouteByPath('404', this.routes)
-    if (!notFound) throw new NoMatchingRouteError(input)
-    if (lastRoute && (session.__retries || 0) < (lastRoute.retry || 0)) {
-      session.__retries = session.__retries ? session.__retries + 1 : 1
-      return {
-        action: notFound.action,
-        params: {},
-        retryAction: lastRoute.action,
-        lastRoutePath: lastRoutePath,
-      }
-    } else {
-      session.__retries = 0
-      return {
-        action: notFound.action,
-        params: {},
-        retryAction: null,
-        lastRoutePath: lastRoutePath,
-      }
-    }
-  }
-
-  getMatchedRouteFromPathPayload(
-    lastRoutePath: string | null,
+  getRoutingStateFromPathPayload(
+    session: Session,
+    previousRoute: Nullable<Route>,
+    previousRoutePath: Nullable<string>,
     pathPayload: string
-  ): RouterState {
-    // TODO: Can flow be broken with __PATH_PAYLOAD__?
-    const brokenFlow = false
-    let matchedRoute: Route | null = null
-    let matchedRoutePath: string | null = null
+  ): RoutingState {
+    let matchedRoute: Nullable<Route> = null
+    const pathParams = this.getPathParamsFromPathPayload(pathPayload)
+    const getMatchedRouteByPath = (seekPath: string): RoutingState => {
+      matchedRoute = this.getRouteByPath(seekPath)
+      if (!matchedRoute) {
+        return {
+          previousRoute,
+          previousRoutePath,
+          matchedRoute: null,
+          matchedRoutePath: null,
+          params: {},
+          isRetry: this.isRetry(true, session, previousRoute),
+        }
+      }
+      return {
+        previousRoute,
+        previousRoutePath,
+        matchedRoute: { ...matchedRoute },
+        matchedRoutePath: seekPath,
+        params: this.pathParamsToParams(pathParams.params),
+        isRetry: this.isRetry(false, session, previousRoute),
+      }
+    }
     /**
      * Given a valid path: 'Flow1/Subflow1' we are in one of the two scenarios below.
      */
     //  1. Received __PATH_PAYLOAD__Subflow2, so we need to first try to concatenate it with Flow1 (lastRoutePath)
-    if (lastRoutePath) {
-      matchedRoute = this.getRouteByPath(`${lastRoutePath}/${pathPayload}`)
-      if (matchedRoute) {
-        matchedRoutePath = `${lastRoutePath}/${pathPayload}`
-        return { matchedRoute, matchedRoutePath, brokenFlow }
-      }
+    if (previousRoutePath) {
+      const matchingResults = getMatchedRouteByPath(
+        `${previousRoutePath}/${pathParams.path}`
+      )
+      if (matchingResults.matchedRoute) return matchingResults
     }
     // 2. Received __PATH_PAYLOAD__Flow1/Subflow1, so we can resolve it directly
-    matchedRoute = this.getRouteByPath(pathPayload)
-    if (matchedRoute) {
-      matchedRoutePath = pathPayload
-      return { matchedRoute, matchedRoutePath, brokenFlow }
-    }
-    return { matchedRoute, matchedRoutePath, brokenFlow }
+    const matchingResults = getMatchedRouteByPath(pathParams.path)
+    return matchingResults
   }
 
-  getMatchedRouteFromInput(
+  getRoutingStateFromInput(
+    previousRoute: Nullable<Route>,
+    previousRoutePath: Nullable<string>,
     input: Input,
-    session: Session,
-    lastRoutePath: string | null,
-    previousRoute: Route | null
-  ): RouterState {
-    let brokenFlow = false
-    let matchedRoute: Route | null = null
-    let matchedRoutePath: string | null = null
-
+    session: Session
+  ): RoutingState {
+    let matchedRoute: Nullable<Route> = null
+    let matchedRoutePath: Nullable<string> = null
+    let params: Params = {}
+    // get route depending of current ChildRoutes
     if (previousRoute && previousRoute.childRoutes) {
       const routeParams = this.getRoute(
         input,
         previousRoute.childRoutes,
-        session as Session,
-        lastRoutePath
+        session,
+        previousRoutePath
       )
-      if (routeParams && routeParams.route && routeParams.route.path) {
-        matchedRoute = routeParams.route
-        matchedRoutePath = `${lastRoutePath}/${routeParams.route.path}`
+      if (routeParams) {
+        matchedRoute = {
+          ...routeParams.route,
+        }
+        params = routeParams.params
+        matchedRoutePath = `${previousRoutePath}/${routeParams.route.path}`
       }
     }
-    return { matchedRoute, matchedRoutePath, brokenFlow }
-  }
-
-  getRouterState(input, session, lastRoutePath) {
-    const previousRoute = this.getRouteByPath(lastRoutePath, this.routes)
-    const { pathPayload, params } = this.getPathAndParamsFromPayloadInput(input)
-
-    let { matchedRoute, matchedRoutePath, brokenFlow } = pathPayload
-      ? this.getMatchedRouteFromPathPayload(lastRoutePath, pathPayload)
-      : this.getMatchedRouteFromInput(
-          input,
-          session,
-          lastRoutePath,
-          previousRoute
-        )
-
-    if (!matchedRoute) {
-      /**
-       * we couldn't find a route in the state of the lastRoutePath,
-       * so let's find in the general routes
-       */
-      const routeParams = this.getRoute(
-        input,
-        this.routes,
-        session as Session,
-        lastRoutePath
-      )
-      brokenFlow = true
-      if (routeParams && routeParams.route) {
-        matchedRoute = routeParams.route
-        matchedRoutePath = routeParams.route.path
-          ? String(routeParams.route.path)
-          : null
+    if (matchedRoute) {
+      return {
+        previousRoute,
+        previousRoutePath,
+        matchedRoute,
+        matchedRoutePath,
+        params,
+        isRetry: this.isRetry(false, session, previousRoute),
       }
     }
-    return { previousRoute, matchedRoute, matchedRoutePath, brokenFlow }
-  }
-
-  newprocessInput(
-    input: Input,
-    session: Session,
-    lastRoutePath: string | null = null
-  ): ComputedAction | any {
-    const {
+    /**
+     * we couldn't find a route in the state of the previousRoute childRoutes,
+     * so let's find in the general routes
+     */
+    const routeParams = this.getRoute(
+      input,
+      this.routes,
+      session,
+      previousRoutePath
+    )
+    if (routeParams && routeParams.route && routeParams.route.path) {
+      matchedRoute = {
+        ...routeParams.route,
+      }
+      params = routeParams.params
+      matchedRoutePath = routeParams.route.path
+    }
+    const brokenFlow = !previousRoutePath ? false : true
+    return {
       previousRoute,
+      previousRoutePath,
       matchedRoute,
       matchedRoutePath,
-      brokenFlow,
-    } = this.getRouterState(input, session, lastRoutePath)
-
-    // Next route computation
-    if (matchedRoute && matchedRoutePath !== '404') {
-      if ('__retries' in session) {
-        delete session.__retries
-      }
-      if ('redirect' in matchedRoute) {
-        const redirectRoute = this.getRouteByPath(
-          matchedRoute.redirect as string,
-          this.routes
-        )
-        if (!redirectRoute) {
-          return this.getNotFoundAction(input, lastRoutePath)
-        }
-        return this.getRedirectAction(
-          input,
-          session,
-          redirectRoute,
-          matchedRoute,
-          matchedRoutePath
-        )
-      }
-      if (matchedRoute && matchedRoute.childRoutes) {
-        if (!this.hasEmptyAction(matchedRoute.childRoutes)) {
-          return {
-            action: matchedRoute.action,
-            params: undefined,
-            lastRoutePath: matchedRoutePath,
-          }
-        }
-        return this.getEmptyAction(
-          input,
-          session,
-          matchedRoute.childRoutes,
-          matchedRoutePath
-        )
-      }
-      return {
-        action: matchedRoute.action,
-        params: undefined,
-        lastRoutePath: matchedRoutePath,
-      }
-    }
-
-    if (previousRoute && previousRoute.retry) {
-      if (!('__retries' in session)) {
-        session.__retries = 0
-      }
-      if ((session as any).__retries < previousRoute.retry) {
-        session.__retries = session.__retries ? session.__retries + 1 : 1
-        const notFoundAction = this.getNotFoundAction(input, lastRoutePath)
-        if (!this.hasEmptyAction(previousRoute.childRoutes)) {
-          return {
-            fallbackAction: notFoundAction.action,
-            action: previousRoute.action,
-            params: undefined,
-            lastRoutePath,
-          }
-        }
-        const defaultAction = this.getEmptyAction(
-          input,
-          session,
-          previousRoute.childRoutes as Routes,
-          previousRoute.path as string
-        )
-        return {
-          fallbackAction: notFoundAction.action,
-          action: defaultAction.action,
-          params: undefined,
-          lastRoutePath,
-        }
-      } else {
-        delete session.__retries
-      }
-    }
-
-    return this.getNotFoundAction(input, lastRoutePath)
-    // input, session, lastRoutePath -> actions[{action, params}], lastRoutePath
-  }
-
-  getNotFoundAction(
-    input: Input,
-    lastRoutePath: string | null
-  ): ComputedAction {
-    const notFound = this.getRouteByPath('404', this.routes)
-    if (!notFound) throw new NoMatchingRouteError(input)
-    return {
-      action: notFound.action,
-      params: undefined,
-      lastRoutePath,
+      params,
+      isRetry: this.isRetry(brokenFlow, session, previousRoute),
     }
   }
 
-  hasEmptyAction(childRoutes?: Route[]): boolean {
-    if (!childRoutes) return false
-    return childRoutes.some(r => r.path === '')
+  pathParamsToParams(pathParams?: string): { [key: string]: any } {
+    if (!pathParams) return {}
+    try {
+      const params = {}
+      const searchParams = new URLSearchParams(pathParams)
+      for (const [key, value] of searchParams) {
+        params[key] = value
+      }
+      return params
+    } catch (e) {
+      return {}
+    }
   }
 
-  getEmptyAction(
-    _input: Input,
+  isRetry(
+    brokenFlow: boolean,
     session: Session,
-    defaultActionChildRoutes: Routes,
-    matchedRoutePath: string | null
-  ): ComputedAction {
-    const defaultActionRoute = this.getRoute(
-      { path: '' },
-      defaultActionChildRoutes,
-      session as Session,
-      matchedRoutePath
-    ) as RouteParams
-    return {
-      action: defaultActionRoute.route.action,
-      params: undefined,
-      lastRoutePath: matchedRoutePath,
-    }
+    previousRoute: Nullable<Route>
+  ): boolean {
+    if (!brokenFlow || !previousRoute || !previousRoute.retry) return false
+    return session.__retries < previousRoute.retry
   }
 
-  getRedirectAction(
+  getRoutingState(
     input: Input,
     session: Session,
-    redirectRoute,
-    matchedRoute,
-    matchedRoutePath
-  ): ComputedAction {
-    matchedRoutePath = matchedRoute.redirect
-    if (!this.hasEmptyAction(redirectRoute.childRoutes)) {
-      return {
-        action: redirectRoute.action,
-        params: undefined,
-        lastRoutePath: matchedRoutePath,
-      }
+    lastRoutePath: Nullable<string>
+  ): RoutingState {
+    const previousRoute = {
+      ...this.getRouteByPath(lastRoutePath, this.routes),
     }
-    return this.getEmptyAction(
+    const previousRoutePath = lastRoutePath
+    if (this.isPathPayload(input.payload)) {
+      return this.getRoutingStateFromPathPayload(
+        session,
+        previousRoute,
+        previousRoutePath,
+        input.payload as string
+      )
+    }
+    return this.getRoutingStateFromInput(
+      previousRoute,
+      previousRoutePath,
       input,
-      session,
-      redirectRoute.childRoutes,
-      matchedRoutePath
+      session
     )
   }
 
-  getPathAndParamsFromPayloadInput(input: Input): any {
+  computeProcessedInput(
+    input: Input,
+    session: Session,
+    routingState: RoutingState
+  ): ProcessedInput {
+    const {
+      previousRoute,
+      previousRoutePath,
+      matchedRoute,
+      matchedRoutePath,
+      params,
+      isRetry,
+    } = routingState
+    const processedInput = new ProcessedInputBuilder()
+    if (isRetry) {
+      session.__retries = session.__retries !== 0 ? session.__retries + 1 : 1
+      if (!matchedRoute || (matchedRoute && matchedRoutePath === '404')) {
+        return processedInput
+          .withAction(previousRoute?.action ?? null)
+          .withEmptyAction(this.getEmptyAction(previousRoute?.childRoutes))
+          .withFallbackAction(
+            matchedRoute?.action ?? this.getNotFoundAction(input)
+          )
+          .withLastRoutePath(previousRoutePath)
+          .withParams(params)
+          .build()
+      }
+      if (matchedRoute.ignoreRetry === true) {
+        session.__retries = 0
+        return processedInput
+          .withAction(matchedRoute.action)
+          .withEmptyAction(this.getEmptyAction(matchedRoute.childRoutes))
+          .withLastRoutePath(matchedRoutePath)
+          .withParams(params)
+          .build()
+      }
+      return processedInput
+        .withAction(previousRoute?.action)
+        .withEmptyAction(this.getEmptyAction(matchedRoute.childRoutes))
+        .withFallbackAction(matchedRoute.action)
+        .withLastRoutePath(previousRoutePath)
+        .withParams(params)
+        .build()
+    }
+
+    session.__retries = 0
+    if (!matchedRoute || (matchedRoute && matchedRoutePath === '404')) {
+      return processedInput
+        .withFallbackAction(
+          matchedRoute?.action ?? this.getNotFoundAction(input)
+        )
+        .withLastRoutePath(previousRoutePath)
+        .withParams(params)
+        .build()
+    }
+
+    if (matchedRoute.redirect) {
+      const redirectedRoute = this.getRouteByPath(
+        matchedRoute.redirect,
+        this.routes
+      )
+      if (!redirectedRoute) {
+        return processedInput
+          .withFallbackAction(this.getNotFoundAction(input))
+          .withLastRoutePath(previousRoutePath)
+          .withParams(params)
+          .build()
+      }
+      return processedInput
+        .withAction(redirectedRoute.action)
+        .withEmptyAction(this.getEmptyAction(redirectedRoute.childRoutes))
+        .withLastRoutePath(matchedRoute.redirect)
+        .withParams(params)
+        .build()
+    }
+
+    return processedInput
+      .withAction(matchedRoute.action)
+      .withEmptyAction(this.getEmptyAction(matchedRoute.childRoutes))
+      .withLastRoutePath(matchedRoutePath)
+      .withParams(params)
+      .build()
+  }
+
+  processInput(
+    input: Input,
+    session: Session,
+    lastRoutePath: Nullable<string> = null
+  ): ProcessedInput {
+    session.__retries = session.__retries ?? 0
+    const routingState = this.getRoutingState(input, session, lastRoutePath)
+    return this.computeProcessedInput(input, session, routingState)
+    // TODO: new return? input, session, lastRoutePath -> actions[{action, params}], lastRoutePath
+  }
+
+  getNotFoundAction(input: Input): Nullable<Action> {
+    const notFoundActionRoute = this.getRouteByPath('404', this.routes)
+    if (!notFoundActionRoute) throw new NoMatchingRouteError(input)
+    return notFoundActionRoute.action
+  }
+
+  getEmptyAction(childRoutes?: Route[]): Nullable<Action> {
+    if (!childRoutes) return null
+    const emptyActionRoute = childRoutes.find(r => r.path === '')
+    if (!emptyActionRoute) return null
+    return emptyActionRoute.action
+  }
+
+  isPathPayload(payload?: string): boolean {
+    if (!payload) return false
+    const isPathPayload = /^__PATH_PAYLOAD__(.*)/.exec(payload)
+    return Boolean(isPathPayload)
+  }
+
+  getPathParamsFromPathPayload(payload?: string): any {
+    const defaultPathParams = {
+      path: null,
+      params: undefined,
+    }
+    if (!payload) return defaultPathParams
+    if (!this.isPathPayload(payload)) return defaultPathParams
+
     try {
-      if (!input.payload) {
-        throw 'input.payload is not defined'
-      }
-      const isValidPathPayload = /^__PATH_PAYLOAD__(.*)/.exec(input.payload)
-      if (!isValidPathPayload) {
-        throw 'input.payload does not match the expected format'
-      }
-      const pathWithParams = input.payload.split('__PATH_PAYLOAD__')[1]
+      const pathWithParams = payload.split('__PATH_PAYLOAD__')[1]
       if (!pathWithParams) {
         throw '__PATH_PAYLOAD__ is empty'
       }
       const [path, params] = pathWithParams.split('?')
-      return { pathPayload: path ? path : null, params }
+      return { path: path ?? null, params }
     } catch (e) {
-      // console.error('Error getting path and params from input.payload:', e)
-      return {
-        pathPayload: null,
-        params: undefined,
-      }
+      console.error('Error getting path and params from input.payload:', e)
+      return defaultPathParams
     }
   }
 
@@ -458,7 +410,7 @@ export class Router {
     input: Input | Partial<Input>,
     routes: Routes,
     session: Session,
-    lastRoutePath: string | null
+    lastRoutePath: Nullable<string>
   ): RouteParams | null {
     const computedRoutes = isFunction(routes)
       ? // @ts-ignore
@@ -470,7 +422,10 @@ export class Router {
     let params = {}
     const route = computedRoutes.find(r =>
       Object.entries(r)
-        .filter(([key, _]) => key != 'action' && key != 'childRoutes')
+        .filter(
+          ([key, _]) =>
+            key !== 'action' && key !== 'childRoutes' && key !== 'path'
+        )
         .some(([key, value]) => {
           const match = this.matchRoute(
             r,
@@ -481,7 +436,10 @@ export class Router {
             lastRoutePath
           )
           try {
-            params = (match as any).groups
+            if (match !== null && typeof match !== 'boolean' && match.groups) {
+              // Strip '[Object: null prototype]' from groups result: https://stackoverflow.com/a/62945609/6237608
+              params = { ...match.groups }
+            }
           } catch (e) {}
           return Boolean(match)
         })
@@ -493,11 +451,11 @@ export class Router {
   }
 
   getRouteByPath(
-    path: string | null,
+    path: Nullable<string>,
     routeList: Routes | null = null
-  ): Route | null {
+  ): Nullable<Route> {
     if (!path) return null
-    let route: Route | null = null
+    let route: Nullable<Route> = null
     routeList = routeList || this.routes
     const [currentPath, ...childPath] = path.split('/')
     if (Array.isArray(routeList)) {
@@ -525,8 +483,8 @@ export class Router {
     matcher: Matcher,
     input: Input,
     session: Session,
-    lastRoutePath: string | null
-  ): boolean {
+    lastRoutePath: Nullable<string>
+  ): any {
     /*
         prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' | 'request' ...)
         matcher: (string: exact match | regex: regular expression match | function: return true)
@@ -535,7 +493,7 @@ export class Router {
     /** @type {any} */
     let value: any = null
     if (Object.keys(input).indexOf(prop) > -1) value = input[prop]
-    if (prop === 'input') value = input
+    else if (prop === 'input') value = input
     else if (prop === 'session') value = session
     else if (prop === 'request') value = { input, session, lastRoutePath }
     const matched = this.matchValue(matcher, value)
@@ -547,27 +505,13 @@ export class Router {
     return matched
   }
 
-  /**
-   *
-   * @return {*|boolean|Params}
-   */
-  matchValue(
-    matcher: string | RegExp | ((args) => boolean),
-    value: any
-  ): boolean {
-    if (typeof matcher === 'string') {
-      return value === matcher
-    }
+  matchValue(matcher: Matcher, value: any): boolean | RegExpExecArray | null {
+    if (typeof matcher === 'string') return value === matcher
     if (matcher instanceof RegExp) {
-      // check if undefined to avoid conversion to 'undefined'
-      if (value === undefined) {
-        return false
-      }
-      return Boolean(matcher.exec(value))
+      if (value === undefined || value === null) return false
+      return matcher.exec(value)
     }
-    if (typeof matcher === 'function') {
-      return matcher(value)
-    }
+    if (typeof matcher === 'function') return matcher(value)
     return false
   }
 }

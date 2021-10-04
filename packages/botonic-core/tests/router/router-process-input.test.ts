@@ -2,11 +2,11 @@
 import { PROVIDER } from '../../src/index'
 import { Router } from '../../src/router'
 
-const testSession = {
+const testSession = () => ({
   user: { id: 'userid', provider: PROVIDER.DEV },
   bot: { id: 'bot_id' },
   is_first_interaction: true,
-}
+})
 
 const redirectRoutes = [
   {
@@ -57,9 +57,10 @@ const defaultRoutes = [
       {
         path: '2',
         payload: '2',
+        action: 'Flow1.2',
         childRoutes: [
           // External Routes
-          { path: '', action: 'Flow1.2' },
+          { path: '', action: 'Flow1.2.emptyAction' },
           { path: 'child', text: 'child', action: 'ChildAction' },
         ],
       },
@@ -67,7 +68,7 @@ const defaultRoutes = [
         path: '3',
         payload: '3',
         action: 'Flow1.3',
-        retry: 2,
+        retry: 3,
         childRoutes: [
           // { path: '', action: 'EmptyAction' },
           { path: '1', payload: '1', action: 'Flow1.3.1' },
@@ -121,70 +122,177 @@ const routesWithRetries = [
   notFoundRoute,
 ]
 
-// const routesWithDefaultActionRetries = [
-//   ...defaultRoutes,
-//   ...retryDefaultActionRoutes,
-//   ...fallbackRoutes,
-//   notFoundRoute,
-// ]
+const routesWithDefaultActionRetries = [
+  ...defaultRoutes,
+  ...retryDefaultActionRoutes,
+  ...fallbackRoutes,
+  notFoundRoute,
+]
 
-// describe('Retries (in default action)', () => {
-//   let retriesSession
-//   beforeEach(() => {
-//     retriesSession = testSession
-//   })
-//   afterEach(() => {
-//     retriesSession = null
-//   })
-//   const router = new Router(routesWithDefaultActionRetries)
+describe('Retries (in childRoutes)', () => {
+  const retriesSession = testSession()
 
-//   it('Test retry action in retryRoutes (with default action)', () => {
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: 'final' },
-//         testSession,
-//         'final'
-//       )
-//     ).toEqual({
-//       action: 'RetryFlowDefaultAction',
-//       params: undefined,
-//       lastRoutePath: 'retryFlowDA',
-//     })
-//   })
-//   it('Test retry flow in retryRoutes (1 mistakes)', () => {
-//     expect(retriesSession.__retries).toBeUndefined()
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: 'kk' },
-//         retriesSession,
-//         'retryFlowDA'
-//       )
-//     ).toEqual({
-//       action: 'RetryFlowDefaultAction',
-//       fallbackAction: '404Action',
-//       params: undefined,
-//       lastRoutePath: 'retryFlowDA',
-//     })
-//     expect(retriesSession.__retries).toEqual(1)
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: 'kk' },
-//         retriesSession,
-//         'retryFlowDA'
-//       )
-//     ).toEqual({
-//       action: '404Action',
-//       params: undefined,
-//       lastRoutePath: null,
-//     })
-//     expect(retriesSession.__retries).toBeUndefined()
-//   })
-// })
+  const router = new Router(routes)
+  it('Test retry flow in childRoutes (3 mistakes, 1 goes to a fallback action which does not break flow)', () => {
+    expect(retriesSession.__retries).toEqual(undefined)
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
+        retriesSession,
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Flow1.3',
+      emptyAction: null,
+      fallbackAction: '404Action',
+      lastRoutePath: 'initial/3',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(1)
+    expect(
+      router.processInput(
+        { type: 'text', text: 'fuck' },
+        retriesSession,
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Flow1.3',
+      emptyAction: null,
+      fallbackAction: 'Insult',
+      lastRoutePath: 'initial/3',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(2)
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
+        retriesSession,
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Flow1.3',
+      emptyAction: null,
+      fallbackAction: '404Action',
+      lastRoutePath: 'initial/3',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(3)
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'kk' },
+        retriesSession,
+        'initial/3'
+      )
+    ).toEqual({
+      action: null,
+      emptyAction: null,
+      fallbackAction: '404Action',
+      lastRoutePath: 'initial/3',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(0)
+  })
+})
+
+describe('Retries (in childRoutes, ignoreRetry)', () => {
+  const retriesSession = testSession()
+
+  const router = new Router(routes)
+  it('Test retry flow in childRoutes (1 mistake and go to an action which break flow)', () => {
+    expect(retriesSession.__retries).toEqual(undefined)
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
+        retriesSession,
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Flow1.3',
+      emptyAction: null,
+      fallbackAction: '404Action',
+      lastRoutePath: 'initial/3',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(1)
+    expect(
+      router.processInput(
+        { type: 'text', payload: 'help' },
+        retriesSession,
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Help',
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: 'help',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(0)
+  })
+})
+
+describe('Retries (in default action)', () => {
+  let retriesSession
+  beforeEach(() => {
+    retriesSession = testSession()
+  })
+  afterEach(() => {
+    retriesSession = null
+  })
+  const router = new Router(routesWithDefaultActionRetries)
+
+  it('Test retry action in retryRoutes (with default action)', () => {
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'final' },
+        testSession(),
+        'final'
+      )
+    ).toEqual({
+      action: null,
+      emptyAction: 'RetryFlowDefaultAction',
+      fallbackAction: null,
+      lastRoutePath: 'retryFlowDA',
+      params: {},
+    })
+  })
+  it('Test retry flow in retryRoutes (1 mistakes)', () => {
+    expect(retriesSession.__retries).toEqual(undefined)
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
+        retriesSession,
+        'retryFlowDA'
+      )
+    ).toEqual({
+      action: null,
+      emptyAction: 'RetryFlowDefaultAction',
+      fallbackAction: '404Action',
+      lastRoutePath: 'retryFlowDA',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(1)
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
+        retriesSession,
+        'retryFlowDA'
+      )
+    ).toEqual({
+      action: null,
+      emptyAction: null,
+      fallbackAction: '404Action',
+      lastRoutePath: 'retryFlowDA',
+      params: {},
+    })
+    expect(retriesSession.__retries).toEqual(0)
+  })
+})
 
 describe('Retries', () => {
   let retriesSession
   beforeEach(() => {
-    retriesSession = testSession
+    retriesSession = testSession()
   })
   afterEach(() => {
     retriesSession = null
@@ -193,85 +301,94 @@ describe('Retries', () => {
 
   it('Test retry action in retryRoutes', () => {
     expect(
-      router.newprocessInput(
+      router.processInput(
         { type: 'postback', payload: 'final' },
-        testSession,
+        retriesSession,
         null
       )
     ).toEqual({
       action: 'RetryFlow',
-      params: undefined,
+      emptyAction: null,
+      fallbackAction: null,
       lastRoutePath: 'retryFlow',
+      params: {},
     })
   })
   it('Test retry flow in retryRoutes (2 mistakes)', () => {
-    expect(retriesSession.__retries).toBeUndefined()
+    expect(retriesSession.__retries).toEqual(undefined)
     expect(
-      router.newprocessInput(
-        { type: 'postback', payload: 'kk' },
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
         retriesSession,
         'retryFlow'
       )
     ).toEqual({
       action: 'RetryFlow',
+      emptyAction: null,
       fallbackAction: '404Action',
-      params: undefined,
       lastRoutePath: 'retryFlow',
+      params: {},
     })
     expect(retriesSession.__retries).toEqual(1)
     expect(
-      router.newprocessInput(
-        { type: 'postback', payload: 'kk' },
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
         retriesSession,
         'retryFlow'
       )
     ).toEqual({
       action: 'RetryFlow',
+      emptyAction: null,
       fallbackAction: '404Action',
-      params: undefined,
       lastRoutePath: 'retryFlow',
+      params: {},
     })
     expect(retriesSession.__retries).toEqual(2)
     expect(
-      router.newprocessInput(
-        { type: 'postback', payload: 'kk' },
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
         retriesSession,
         'retryFlow'
       )
     ).toEqual({
-      action: '404Action',
-      params: undefined,
-      lastRoutePath: null,
+      action: null,
+      emptyAction: null,
+      fallbackAction: '404Action',
+      lastRoutePath: 'retryFlow',
+      params: {},
     })
-    expect(retriesSession.__retries).toBeUndefined()
+    expect(retriesSession.__retries).toEqual(0)
   })
   it('Test retry flow in retryRoutes (with success)', () => {
-    expect(retriesSession.__retries).toBeUndefined()
+    expect(retriesSession.__retries).toEqual(undefined)
     expect(
-      router.newprocessInput(
-        { type: 'postback', payload: 'kk' },
+      router.processInput(
+        { type: 'postback', payload: 'fail' },
         retriesSession,
         'retryFlow'
       )
     ).toEqual({
       action: 'RetryFlow',
+      emptyAction: null,
       fallbackAction: '404Action',
-      params: undefined,
       lastRoutePath: 'retryFlow',
+      params: {},
     })
     expect(retriesSession.__retries).toEqual(1)
     expect(
-      router.newprocessInput(
+      router.processInput(
         { type: 'postback', payload: '1' },
         retriesSession,
         'retryFlow'
       )
     ).toEqual({
       action: 'FlowFinal1',
-      params: undefined,
+      emptyAction: null,
+      fallbackAction: null,
       lastRoutePath: 'retryFlow/1',
+      params: {},
     })
-    expect(retriesSession.__retries).toBeUndefined()
+    expect(retriesSession.__retries).toEqual(0)
   })
 })
 
@@ -279,201 +396,231 @@ describe('Redirects', () => {
   const router = new Router(routesWithRedirects)
   it('should redirect to default action', () => {
     expect(
-      router.newprocessInput(
+      router.processInput(
         { type: 'text', text: 'redirectToDefaultAction' },
-        testSession,
+        testSession(),
         null
       )
     ).toEqual({
       action: 'Flow1.2',
-      params: undefined,
+      emptyAction: 'Flow1.2.emptyAction',
+      fallbackAction: null,
       lastRoutePath: 'initial/2',
+      params: {},
     })
   })
   it('should redirect to default action child route', () => {
     expect(
-      router.newprocessInput(
+      router.processInput(
         { type: 'text', text: 'redirectToDefaultActionChildRoute' },
-        testSession,
+        testSession(),
         null
       )
     ).toEqual({
       action: 'ChildAction',
-      params: undefined,
+      emptyAction: null,
+      fallbackAction: null,
       lastRoutePath: 'initial/2/child',
+      params: {},
     })
   })
   it('should redirect', () => {
     expect(
-      router.newprocessInput(
+      router.processInput(
         { type: 'text', text: 'redirectToChildRoute' },
-        testSession,
+        testSession(),
         null
       )
     ).toEqual({
       action: 'Flow1.3.2',
-      params: undefined,
+      emptyAction: null,
+      fallbackAction: null,
       lastRoutePath: 'initial/3/2',
+      params: {},
     })
   })
   it('redirect is not found', () => {
     expect(
-      router.newprocessInput(
+      router.processInput(
         { type: 'text', text: 'wontBeResolved' },
-        testSession,
+        testSession(),
         null
       )
     ).toEqual({
-      action: '404Action',
-      params: undefined,
+      action: null,
+      emptyAction: null,
+      fallbackAction: '404Action',
       lastRoutePath: null,
+      params: {},
     })
   })
 })
-// describe('Accesses in Flow1.3', () => {
-//   const router = new Router(routes)
-//   it('1. Flow1.3 Payload', () => {
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: '3' },
-//         testSession,
-//         'initial'
-//       )
-//     ).toEqual({
-//       action: 'Flow1.3',
-//       lastRoutePath: 'initial/3',
-//       params: undefined,
-//     })
-//   })
-//   it('2. Flow1.3 Unexisting Payload', () => {
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: 'wont-match' },
-//         testSession,
-//         'initial'
-//       )
-//     ).toEqual({
-//       action: '404Action',
-//       lastRoutePath: 'initial',
-//       params: undefined,
-//     })
-//   })
-//   it('3. Flow1.3 (childRoutes)', () => {
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: '1' },
-//         testSession,
-//         'initial/3'
-//       )
-//     ).toEqual({
-//       action: 'Flow1.3.1',
-//       lastRoutePath: 'initial/3/1',
-//       params: undefined,
-//     })
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: '2' },
-//         testSession,
-//         'initial/3'
-//       )
-//     ).toEqual({
-//       action: 'Flow1.3.2',
-//       lastRoutePath: 'initial/3/2',
-//       params: undefined,
-//     })
-//     expect(
-//       router.newprocessInput(
-//         { type: 'postback', payload: '3' },
-//         testSession,
-//         'initial/3'
-//       )
-//     ).toEqual({
-//       action: 'Flow1.3.3',
-//       lastRoutePath: 'initial/3/3',
-//       params: undefined,
-//     })
-//   })
-// })
+describe('Accesses in Flow1.3', () => {
+  const router = new Router(routes)
+  it('1. Flow1.3 Payload', () => {
+    expect(
+      router.processInput(
+        { type: 'postback', payload: '3' },
+        testSession(),
+        'initial'
+      )
+    ).toEqual({
+      action: 'Flow1.3',
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: 'initial/3',
+      params: {},
+    })
+  })
+  it('2. Flow1.3 Unexisting Payload', () => {
+    expect(
+      router.processInput(
+        { type: 'postback', payload: 'wont-match' },
+        testSession(),
+        'initial'
+      )
+    ).toEqual({
+      action: null,
+      emptyAction: null,
+      fallbackAction: '404Action',
+      lastRoutePath: 'initial',
+      params: {},
+    })
+  })
+  it('3. Flow1.3 (childRoutes)', () => {
+    expect(
+      router.processInput(
+        { type: 'postback', payload: '1' },
+        testSession(),
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Flow1.3.1',
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: 'initial/3/1',
+      params: {},
+    })
+    expect(
+      router.processInput(
+        { type: 'postback', payload: '2' },
+        testSession(),
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Flow1.3.2',
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: 'initial/3/2',
+      params: {},
+    })
+    expect(
+      router.processInput(
+        { type: 'postback', payload: '3' },
+        testSession(),
+        'initial/3'
+      )
+    ).toEqual({
+      action: 'Flow1.3.3',
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: 'initial/3/3',
+      params: {},
+    })
+  })
+})
 
 describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/1)', () => {
   const router = new Router(routes)
   describe('normal input', () => {
     it('1 Accessible from initial/1', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '1' },
-          testSession,
+          testSession(),
           'initial/1'
         )
       ).toEqual({
         action: 'Flow1.1.1',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/1/1',
+        params: {},
       })
     })
     it('Fallback Accessible from initial/1', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'text', text: 'whatever' },
-          testSession,
+          testSession(),
           'initial/1'
         )
       ).toEqual({
         action: 'ChildRouteFallback',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/1/fallback',
+        params: {},
       })
     })
     it('unexisting childRoute', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: 'unexisting' },
-          testSession,
+          testSession(),
           'initial/1'
         )
       ).toEqual({
-        action: '404Action',
-        params: undefined,
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'initial/1',
+        params: {},
       })
     })
   })
   describe('path payload input', () => {
     it('1 Accessible from initial/1', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__1' },
-          testSession,
+          testSession(),
           'initial/1'
         )
       ).toEqual({
         action: 'Flow1.1.1',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/1/1',
+        params: {},
       })
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__initial/1/1' },
-          testSession,
+          testSession(),
           'initial/1'
         )
       ).toEqual({
         action: 'Flow1.1.1',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/1/1',
+        params: {},
       })
     })
     it('unexisting childRoute', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__unexisting' },
-          testSession,
+          testSession(),
           'initial/1'
         )
       ).toEqual({
-        action: '404Action',
-        params: undefined,
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'initial/1',
+        params: {},
       })
     })
   })
@@ -484,68 +631,78 @@ describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/2)', () => {
   describe('normal input', () => {
     it('child Accessible from initial/2', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'text', text: 'child' },
-          testSession,
+          testSession(),
           'initial/2'
         )
       ).toEqual({
         action: 'ChildAction',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/2/child',
+        params: {},
       })
     })
     it('unexisting childRoute', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'text', text: 'unexisting' },
-          testSession,
+          testSession(),
           'initial/2'
         )
       ).toEqual({
-        action: '404Action',
-        params: undefined,
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'initial/2',
+        params: {},
       })
     })
   })
   describe('path payload input', () => {
     it('child Accessible from initial/2', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__child' },
-          testSession,
+          testSession(),
           'initial/2'
         )
       ).toEqual({
         action: 'ChildAction',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/2/child',
+        params: {},
       })
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__initial/2/child' },
-          testSession,
+          testSession(),
           'initial/2'
         )
       ).toEqual({
         action: 'ChildAction',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/2/child',
+        params: {},
       })
     })
   })
   it('unexisting childRoute', () => {
     expect(
-      router.newprocessInput(
+      router.processInput(
         { type: 'postback', payload: '__PATH_PAYLOAD__unexisting' },
-        testSession,
+        testSession(),
         'initial/2'
       )
     ).toEqual({
-      action: '404Action',
-      params: undefined,
+      action: null,
+      emptyAction: null,
+      fallbackAction: '404Action',
       lastRoutePath: 'initial/2',
+      params: {},
     })
   })
 })
@@ -555,67 +712,78 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
   describe('normal input', () => {
     it('1. initial/1 accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '1' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.1',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/1',
+        params: {},
       })
     })
     it('2. initial/2 accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '2' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.2',
+        emptyAction: 'Flow1.2.emptyAction',
+        fallbackAction: null,
         lastRoutePath: 'initial/2',
-        params: undefined,
+        params: {},
       })
     })
     it('3. initial/3 accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '3' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.3',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/3',
+        params: {},
       })
     })
     it('4. help accessible from initial', () => {
+      // NVS
       expect(
-        router.newprocessInput(
-          { type: 'text', text: 'help' },
-          testSession,
+        router.processInput(
+          { type: 'postback', payload: 'help' },
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Help',
-        params: undefined,
-        lastRoutePath: 'initial',
+        emptyAction: null,
+        fallbackAction: null,
+        lastRoutePath: 'help',
+        params: {},
       })
     })
     it('5. not found accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: 'unexisting' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
-        action: '404Action',
-        params: undefined,
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'initial',
+        params: {},
       })
     })
   })
@@ -623,107 +791,124 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
   describe('path payload input', () => {
     it('1. initial/1 accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__1' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.1',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/1',
+        params: {},
       })
       expect(
-        router.newprocessInput(
+        router.processInput(
           {
             type: 'postback',
             payload: '__PATH_PAYLOAD__initial/1',
           },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.1',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/1',
+        params: {},
       })
     })
 
     it('2. initial/2 accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__2' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.2',
+        emptyAction: 'Flow1.2.emptyAction',
+        fallbackAction: null,
         lastRoutePath: 'initial/2',
-        params: undefined,
+        params: {},
       })
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.2',
+        emptyAction: 'Flow1.2.emptyAction',
+        fallbackAction: null,
         lastRoutePath: 'initial/2',
-        params: undefined,
+        params: {},
       })
     })
 
     it('3. initial/3 accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__3' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.3',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/3',
-        params: undefined,
+        params: {},
       })
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__initial/3' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1.3',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/3',
-        params: undefined,
+        params: {},
       })
     })
 
+    // HEHEHEHE
     it('4. help accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__help' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Help',
-        lastRoutePath: 'initial',
-        params: undefined,
+        emptyAction: null,
+        fallbackAction: null,
+        lastRoutePath: 'help',
+        params: {},
       })
     })
 
     it('5. not found accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__unexisting' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
-        action: '404Action',
+        action: null,
+        fallbackAction: '404Action',
+        emptyAction: null,
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
   })
@@ -731,32 +916,36 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
   describe('nested path payload', () => {
     it('initial/2/child accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           {
             type: 'postback',
             payload: '__PATH_PAYLOAD__2/child',
           },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'ChildAction',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/2/child',
-        params: undefined,
+        params: {},
       })
       expect(
-        router.newprocessInput(
+        router.processInput(
           {
             type: 'postback',
             payload: '__PATH_PAYLOAD__initial/2/child',
           },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'ChildAction',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial/2/child',
-        params: undefined,
+        params: {},
       })
     })
   })
@@ -768,77 +957,97 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
   describe('normal input', () => {
     it('1. initial accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'text', text: 'hi', intent: 'greeting' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('2. initial accessible from help', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'text', text: 'hi', intent: 'greeting' },
-          testSession,
+          testSession(),
           'help'
         )
       ).toEqual({
         action: 'Flow1',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('3. help accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: 'help' },
-          testSession,
+          testSession(),
           'initial'
         )
-      ).toEqual({ action: 'Help', lastRoutePath: 'help', params: undefined })
+      ).toEqual({
+        action: 'Help',
+        emptyAction: null,
+        fallbackAction: null,
+        lastRoutePath: 'help',
+        params: {},
+      })
     })
 
     it('4. help accessible from help', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: 'help' },
-          testSession,
+          testSession(),
           'help'
         )
-      ).toEqual({ action: 'Help', lastRoutePath: 'help', params: undefined })
+      ).toEqual({
+        action: 'Help',
+        emptyAction: null,
+        fallbackAction: null,
+        lastRoutePath: 'help',
+        params: {},
+      })
     })
 
     it('5. not found accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: 'unexisting' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
-        action: '404Action',
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('6. not found accessible from help', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: 'unexisting' },
-          testSession,
+          testSession(),
           'help'
         )
       ).toEqual({
-        action: '404Action',
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'help',
-        params: undefined,
+        params: {},
       })
     })
   })
@@ -846,77 +1055,97 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
   describe('path payload input', () => {
     it('1. initial accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__initial' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
         action: 'Flow1',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('2. initial accessible from help', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__initial' },
-          testSession,
+          testSession(),
           'help'
         )
       ).toEqual({
         action: 'Flow1',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('3. help accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__help' },
-          testSession,
+          testSession(),
           'initial'
         )
-      ).toEqual({ action: 'Help', lastRoutePath: 'help', params: undefined })
+      ).toEqual({
+        action: 'Help',
+        emptyAction: null,
+        fallbackAction: null,
+        lastRoutePath: 'help',
+        params: {},
+      })
     })
 
     it('4. help accessible from help', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__help' },
-          testSession,
+          testSession(),
           'help'
         )
-      ).toEqual({ action: 'Help', lastRoutePath: 'help', params: undefined })
+      ).toEqual({
+        action: 'Help',
+        emptyAction: null,
+        fallbackAction: null,
+        lastRoutePath: 'help',
+        params: {},
+      })
     })
 
     it('5. not found accessible from initial', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__404' },
-          testSession,
+          testSession(),
           'initial'
         )
       ).toEqual({
-        action: '404Action',
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('6. not found accessible from help', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__404' },
-          testSession,
+          testSession(),
           'help'
         )
       ).toEqual({
-        action: '404Action',
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: 'help',
-        params: undefined,
+        params: {},
       })
     })
   })
@@ -928,43 +1157,49 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is null)', () => {
   describe('normal input', () => {
     it('1. should retrieve routes at root level (initial path)', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'text', text: 'hi', intent: 'greeting' },
-          testSession,
+          testSession(),
           null
         )
       ).toEqual({
         action: 'Flow1',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('2. should retrieve routes at root level (help path)', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: 'help' },
-          testSession,
+          testSession(),
           null
         )
       ).toEqual({
         action: 'Help',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'help',
-        params: undefined,
+        params: {},
       })
     })
 
     it('3. should retrieve routes at root level (404 path)', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'text', text: 'not_found' },
-          testSession,
+          testSession(),
           null
         )
       ).toEqual({
-        action: '404Action',
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: null,
-        params: undefined,
+        params: {},
       })
     })
   })
@@ -972,46 +1207,52 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is null)', () => {
   describe('path payload input', () => {
     it('1. should retrieve routes at root level (initial path)', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           {
             type: 'postback',
             payload: '__PATH_PAYLOAD__initial',
           },
-          testSession,
+          testSession(),
           null
         )
       ).toEqual({
         action: 'Flow1',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'initial',
-        params: undefined,
+        params: {},
       })
     })
 
     it('2. should retrieve routes at root level (help path)', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__help' },
-          testSession,
+          testSession(),
           null
         )
       ).toEqual({
         action: 'Help',
+        emptyAction: null,
+        fallbackAction: null,
         lastRoutePath: 'help',
-        params: undefined,
+        params: {},
       })
     })
 
     it('3. should retrieve routes at root level (404 path payload)', () => {
       expect(
-        router.newprocessInput(
+        router.processInput(
           { type: 'postback', payload: '__PATH_PAYLOAD__404' },
-          testSession,
+          testSession(),
           null
         )
       ).toEqual({
-        action: '404Action',
+        action: null,
+        emptyAction: null,
+        fallbackAction: '404Action',
         lastRoutePath: null,
-        params: undefined,
+        params: {},
       })
     })
   })
