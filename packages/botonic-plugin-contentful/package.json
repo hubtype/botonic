@@ -56,7 +56,7 @@
     "@nlpjs/ner": "^4.22.0",
     "@nlpjs/similarity": "^4.21.1",
     "async-parallel": "^1.2.3",
-    "contentful": "^8.4.2",
+    "contentful": "^9.0.2",
     "contentful-import": "^8.1.15",
     "contentful-management": "^7.24.0",
     "csv-parse": "^4.16.0",
