@@ -16,13 +16,14 @@ export class NoMatchingRouteError extends Error {
 
 type Nullable<T> = T | null
 
-type Action = () => any
+type Action = Nullable<() => any>
+type RoutePath = Nullable<string>
 
 interface ProcessedInput {
-  action: Nullable<Action>
-  emptyAction: Nullable<Action>
-  fallbackAction: Nullable<Action>
-  lastRoutePath: Nullable<string>
+  action: Action
+  emptyAction: Action
+  fallbackAction: Action
+  lastRoutePath: RoutePath
   params: Params
 }
 
@@ -38,22 +39,22 @@ class ProcessedInputBuilder {
       params: {},
     }
   }
-  withAction(action: Nullable<Action>): this {
+  withAction(action: Action): this {
     if (action) this.processedInput.action = action
     return this
   }
 
-  withEmptyAction(emptyAction: Nullable<Action>): this {
+  withEmptyAction(emptyAction: Action): this {
     if (emptyAction) this.processedInput.emptyAction = emptyAction
     return this
   }
 
-  withFallbackAction(fallbackAction: Nullable<Action>): this {
+  withFallbackAction(fallbackAction: Action): this {
     if (fallbackAction) this.processedInput.fallbackAction = fallbackAction
     return this
   }
 
-  withLastRoutePath(lastRoutePath: Nullable<string>): this {
+  withLastRoutePath(lastRoutePath: RoutePath): this {
     if (lastRoutePath) this.processedInput.lastRoutePath = lastRoutePath
     return this
   }
@@ -74,16 +75,17 @@ interface Params {
 
 type RoutingState = {
   previousRoute: Nullable<Route>
-  previousRoutePath: Nullable<string>
+  previousRoutePath: RoutePath
   matchedRoute: Nullable<Route>
-  matchedRoutePath: Nullable<string>
+  matchedRoutePath: RoutePath
   params: Params
   isRetry: boolean
+  isMatched: boolean
 }
 
 interface RouteParams {
-  route: Route
-  params: any
+  route: Nullable<Route>
+  params: Params
 }
 type MatchingProp =
   | 'text'
@@ -116,10 +118,11 @@ export class Router {
   getRoutingStateFromPathPayload(
     session: Session,
     previousRoute: Nullable<Route>,
-    previousRoutePath: Nullable<string>,
+    previousRoutePath: RoutePath,
     pathPayload: string
   ): RoutingState {
     let matchedRoute: Nullable<Route> = null
+    let matchedRoutePath: RoutePath = null
     const pathParams = this.getPathParamsFromPathPayload(pathPayload)
     const getMatchedRouteByPath = (seekPath: string): RoutingState => {
       matchedRoute = this.getRouteByPath(seekPath)
@@ -127,18 +130,22 @@ export class Router {
         return {
           previousRoute,
           previousRoutePath,
-          matchedRoute: null,
-          matchedRoutePath: null,
+          matchedRoute,
+          matchedRoutePath,
           params: {},
+          isMatched: this.isMatched(matchedRoute, matchedRoutePath),
           isRetry: this.isRetry(true, session, previousRoute),
         }
       }
+      matchedRoute = { ...matchedRoute }
+      matchedRoutePath = seekPath
       return {
         previousRoute,
         previousRoutePath,
-        matchedRoute: { ...matchedRoute },
-        matchedRoutePath: seekPath,
+        matchedRoute,
+        matchedRoutePath,
         params: this.pathParamsToParams(pathParams.params),
+        isMatched: this.isMatched(matchedRoute, matchedRoutePath),
         isRetry: this.isRetry(false, session, previousRoute),
       }
     }
@@ -159,12 +166,12 @@ export class Router {
 
   getRoutingStateFromInput(
     previousRoute: Nullable<Route>,
-    previousRoutePath: Nullable<string>,
+    previousRoutePath: RoutePath,
     input: Input,
     session: Session
   ): RoutingState {
     let matchedRoute: Nullable<Route> = null
-    let matchedRoutePath: Nullable<string> = null
+    let matchedRoutePath: RoutePath = null
     let params: Params = {}
     // get route depending of current ChildRoutes
     if (previousRoute && previousRoute.childRoutes) {
@@ -179,7 +186,11 @@ export class Router {
           ...routeParams.route,
         }
         params = routeParams.params
-        matchedRoutePath = `${previousRoutePath}/${routeParams.route.path}`
+        if (routeParams.route) {
+          matchedRoutePath = `${previousRoutePath}/${routeParams.route.path}`
+        } else {
+          matchedRoutePath = previousRoutePath
+        }
       }
     }
     if (matchedRoute) {
@@ -189,6 +200,7 @@ export class Router {
         matchedRoute,
         matchedRoutePath,
         params,
+        isMatched: this.isMatched(matchedRoute, matchedRoutePath),
         isRetry: this.isRetry(false, session, previousRoute),
       }
     }
@@ -216,6 +228,7 @@ export class Router {
       matchedRoute,
       matchedRoutePath,
       params,
+      isMatched: this.isMatched(matchedRoute, matchedRoutePath),
       isRetry: this.isRetry(brokenFlow, session, previousRoute),
     }
   }
@@ -243,10 +256,19 @@ export class Router {
     return session.__retries < previousRoute.retry
   }
 
+  isMatched(
+    matchedRoute: Nullable<Route>,
+    matchedRoutePath: RoutePath
+  ): boolean {
+    if (!matchedRoute) return false
+    if (matchedRoutePath === '404') return false
+    return true
+  }
+
   getRoutingState(
     input: Input,
     session: Session,
-    lastRoutePath: Nullable<string>
+    lastRoutePath: RoutePath
   ): RoutingState {
     const previousRoute = {
       ...this.getRouteByPath(lastRoutePath, this.routes),
@@ -268,7 +290,7 @@ export class Router {
     )
   }
 
-  computeProcessedInput(
+  computeRetryProcessedInput(
     input: Input,
     session: Session,
     routingState: RoutingState
@@ -276,27 +298,16 @@ export class Router {
     const {
       previousRoute,
       previousRoutePath,
-      matchedRoute,
       matchedRoutePath,
       params,
-      isRetry,
+      isMatched,
     } = routingState
+
     const processedInput = new ProcessedInputBuilder()
-    if (isRetry) {
-      session.__retries = session.__retries !== 0 ? session.__retries + 1 : 1
-      if (!matchedRoute || (matchedRoute && matchedRoutePath === '404')) {
-        return processedInput
-          .withAction(previousRoute?.action ?? null)
-          .withEmptyAction(this.getEmptyAction(previousRoute?.childRoutes))
-          .withFallbackAction(
-            matchedRoute?.action ?? this.getNotFoundAction(input)
-          )
-          .withLastRoutePath(previousRoutePath)
-          .withParams(params)
-          .build()
-      }
+    if (isMatched) {
+      const matchedRoute = routingState.matchedRoute as Route
       if (matchedRoute.ignoreRetry === true) {
-        session.__retries = 0
+        this.reinitializeRetries(session)
         return processedInput
           .withAction(matchedRoute.action)
           .withEmptyAction(this.getEmptyAction(matchedRoute.childRoutes))
@@ -313,17 +324,24 @@ export class Router {
         .build()
     }
 
-    session.__retries = 0
-    if (!matchedRoute || (matchedRoute && matchedRoutePath === '404')) {
-      return processedInput
-        .withFallbackAction(
-          matchedRoute?.action ?? this.getNotFoundAction(input)
-        )
-        .withLastRoutePath(previousRoutePath)
-        .withParams(params)
-        .build()
-    }
+    return processedInput
+      .withAction(previousRoute?.action ?? null)
+      .withEmptyAction(this.getEmptyAction(previousRoute?.childRoutes))
+      .withFallbackAction(
+        routingState.matchedRoute?.action ?? this.getNotFoundAction(input)
+      )
+      .withLastRoutePath(previousRoutePath)
+      .withParams(params)
+      .build()
+  }
 
+  computeMatchedProcessedInput(
+    input: Input,
+    routingState: RoutingState
+  ): ProcessedInput {
+    const processedInput = new ProcessedInputBuilder()
+    const matchedRoute = routingState.matchedRoute as Route
+    const { previousRoutePath, matchedRoutePath, params } = routingState
     if (matchedRoute.redirect) {
       const redirectedRoute = this.getRouteByPath(
         matchedRoute.redirect,
@@ -352,10 +370,50 @@ export class Router {
       .build()
   }
 
+  computeNotFoundProcessedInput(
+    input: Input,
+    routingState: RoutingState
+  ): ProcessedInput {
+    const { previousRoutePath, matchedRoute, params } = routingState
+    const processedInput = new ProcessedInputBuilder()
+    return processedInput
+      .withFallbackAction(matchedRoute?.action ?? this.getNotFoundAction(input))
+      .withLastRoutePath(previousRoutePath)
+      .withParams(params)
+      .build()
+  }
+
+  increaseRetries(session: Session): void {
+    session.__retries = session.__retries !== 0 ? session.__retries + 1 : 1
+  }
+
+  reinitializeRetries(session: Session): void {
+    session.__retries = 0
+  }
+
+  computeProcessedInput(
+    input: Input,
+    session: Session,
+    routingState: RoutingState
+  ): ProcessedInput {
+    if (routingState.isRetry) {
+      this.increaseRetries(session)
+      return this.computeRetryProcessedInput(input, session, routingState)
+    }
+
+    this.reinitializeRetries(session)
+
+    if (routingState.isMatched) {
+      return this.computeMatchedProcessedInput(input, routingState)
+    }
+
+    return this.computeNotFoundProcessedInput(input, routingState)
+  }
+
   processInput(
     input: Input,
     session: Session,
-    lastRoutePath: Nullable<string> = null
+    lastRoutePath: RoutePath = null
   ): ProcessedInput {
     session.__retries = session.__retries ?? 0
     const routingState = this.getRoutingState(input, session, lastRoutePath)
@@ -363,13 +421,13 @@ export class Router {
     // TODO: new return? input, session, lastRoutePath -> actions[{action, params}], lastRoutePath
   }
 
-  getNotFoundAction(input: Input): Nullable<Action> {
+  getNotFoundAction(input: Input): Action {
     const notFoundActionRoute = this.getRouteByPath('404', this.routes)
     if (!notFoundActionRoute) throw new NoMatchingRouteError(input)
     return notFoundActionRoute.action
   }
 
-  getEmptyAction(childRoutes?: Route[]): Nullable<Action> {
+  getEmptyAction(childRoutes?: Route[]): Action {
     if (!childRoutes) return null
     const emptyActionRoute = childRoutes.find(r => r.path === '')
     if (!emptyActionRoute) return null
@@ -410,7 +468,7 @@ export class Router {
     input: Input | Partial<Input>,
     routes: Routes,
     session: Session,
-    lastRoutePath: Nullable<string>
+    lastRoutePath: RoutePath
   ): RouteParams | null {
     const computedRoutes = isFunction(routes)
       ? // @ts-ignore
@@ -451,7 +509,7 @@ export class Router {
   }
 
   getRouteByPath(
-    path: Nullable<string>,
+    path: RoutePath,
     routeList: Routes | null = null
   ): Nullable<Route> {
     if (!path) return null
@@ -483,7 +541,7 @@ export class Router {
     matcher: Matcher,
     input: Input,
     session: Session,
-    lastRoutePath: Nullable<string>
+    lastRoutePath: RoutePath
   ): any {
     /*
         prop: ('text' | 'payload' | 'intent' | 'type' | 'input' | 'session' | 'request' ...)
