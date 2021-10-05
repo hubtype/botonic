@@ -55,6 +55,7 @@ export const Button = props => {
         ? sendPayload(`__PATH_PAYLOAD__${props.path}`)
         : sendInput({
             type: INPUT.TEXT,
+            data: String(props.children),
             text: String(props.children),
             payload: `__PATH_PAYLOAD__${props.path}`,
           })
@@ -63,6 +64,7 @@ export const Button = props => {
         ? sendPayload(props.payload)
         : sendInput({
             type: INPUT.TEXT,
+            data: String(props.children),
             text: String(props.children),
             payload: props.payload,
           })

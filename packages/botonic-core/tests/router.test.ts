@@ -1,14 +1,356 @@
 // @ts-nocheck
-import { PATH_PAYLOAD_IDENTIFIER, PROVIDER } from '../../src'
-import { Router } from '../../src/routing'
+import { Input, PATH_PAYLOAD_IDENTIFIER, PROVIDER } from '../src'
+import { Router } from '../src/router'
+import {
+  getPathParamsFromPathPayload,
+  NoMatchingRouteError,
+  pathParamsToParams,
+} from '../src/routing'
 
 const createPathPayload = (pathWithParams: string) =>
   `${PATH_PAYLOAD_IDENTIFIER}${pathWithParams}`
 
-const testSession = () => ({
-  user: { id: 'userid', provider: PROVIDER.DEV },
-  bot: { id: 'bot_id' },
-  is_first_interaction: true,
+const textInput: Input = { type: 'text', text: 'hi' }
+const textInputComplex: Input = { type: 'text', text: 'Cömplêx input &% 🚀' }
+const textPayloadInput: Input = { type: 'text', text: 'hi', payload: 'foo' }
+const postbackInput: Input = { type: 'postback', payload: 'foo' }
+
+const audioInput: Input = {
+  type: 'audio',
+  src: 'data:audio/mpeg;base64,iVBORw0KG',
+}
+const documentInput: Input = {
+  type: 'document',
+  src: 'data:application/pdf;base64,iVBORw0KG',
+}
+const imageInput: Input = {
+  type: 'image',
+  src: 'data:image/png;base64,iVBORw0KG',
+}
+const videoInput: Input = {
+  type: 'video',
+  src: 'data:video/mp4;base64,iVBORw0KG',
+}
+
+const requestInput: Input = {
+  input: textInput,
+  session: { organization: 'myOrg' },
+  lastRoutePath: 'initial',
+}
+
+/**
+ * @return {Route}
+ */
+function testRoute() {
+  return {}
+}
+
+/**
+ * @return {Session}
+ */
+function testSession() {
+  return {
+    user: { id: 'userid', provider: PROVIDER.DEV },
+    bot: { id: 'bot_id' },
+    is_first_interaction: true,
+  }
+}
+
+describe('Bad router initialization', () => {
+  test('empty routes throw TypeError', () => {
+    const router = new Router([])
+    expect(() => router.processInput(textInput, testSession())).toThrow(
+      NoMatchingRouteError
+    )
+  })
+  test('null routes throw TypeError', () => {
+    // @ts-ignore
+    const router = new Router()
+    expect(() => router.processInput(textInput, testSession())).toThrow(
+      TypeError
+    )
+  })
+})
+
+test('Router returns 404', () => {
+  const router = new Router([{ path: '404', action: '404Action' }])
+  const { fallbackAction } = router.processInput(textInput, testSession())
+  expect(fallbackAction).toBe('404Action')
+})
+
+describe('Match route by MATCHER <> INPUT', () => {
+  const router = new Router([])
+  const matchTextProp = (matcher, textInput) =>
+    router.matchRoute(testRoute(), 'text', matcher, textInput, testSession())
+  const matchPayloadProp = (matcher, payload) =>
+    router.matchRoute(testRoute(), 'payload', matcher, payload, testSession())
+  const matchTypeProp = (type, input) =>
+    router.matchRoute(testRoute(), 'type', type, input, testSession())
+  const matchRequestProp = (matcher, request) =>
+    router.matchRoute(
+      testRoute(),
+      'request',
+      matcher,
+      request.input,
+      request.session,
+      request.lastRoutePath
+    )
+  test('text <> text', () => {
+    expect(matchTextProp('hi', textInput)).toBeTruthy()
+    expect(matchTextProp('hii', textInput)).toBeFalsy()
+    expect(matchTextProp('bye', textInput)).toBeFalsy()
+    expect(matchTextProp('', textInput)).toBeFalsy()
+    expect(matchTextProp(null, textInput)).toBeFalsy()
+    expect(matchTextProp('Cömplêx input &% 🚀', textInputComplex)).toBeTruthy()
+    expect(matchTextProp(' Cömplêx input &% 🚀', textInputComplex)).toBeFalsy() // has a space at the beginning
+  })
+  test('regex <> text', () => {
+    expect(matchTextProp(/hi/, textInput)).toBeTruthy()
+    expect(matchTextProp(/bye/, textInput)).toBeFalsy()
+    expect(matchTextProp(/🚀/, textInputComplex)).toBeTruthy()
+    expect(matchTextProp(/complex/, textInputComplex)).toBeFalsy()
+  })
+  test('function <> text', () => {
+    expect(matchTextProp(v => v.startsWith('hi'), textInput)).toBeTruthy()
+    expect(matchTextProp(v => !v.startsWith('hi'), textInput)).toBeFalsy()
+  })
+  test('input <> text', () => {
+    expect(
+      router.matchRoute(
+        testRoute(),
+        'input',
+        i => i.text.startsWith('hi'),
+        textInput,
+        testSession()
+      )
+    ).toBeTruthy()
+    expect(
+      router.matchRoute(
+        testRoute(),
+        'input',
+        i => !i.text.startsWith('hi'),
+        textInput,
+        testSession()
+      )
+    ).toBeFalsy()
+  })
+  test('text <> text payload', () => {
+    expect(matchPayloadProp('foo', textPayloadInput)).toBeTruthy()
+    expect(matchPayloadProp('fooo', textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp('bar', textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp('', textPayloadInput)).toBeFalsy()
+    expect(matchPayloadProp(null, textPayloadInput)).toBeFalsy()
+  })
+  test('regex <> text payload', () => {
+    expect(matchPayloadProp(/foo/, textPayloadInput)).toBeTruthy()
+    expect(matchPayloadProp(/bar/, textPayloadInput)).toBeFalsy()
+  })
+  test('function <> text payload', () => {
+    expect(
+      matchPayloadProp(v => v.startsWith('fo'), textPayloadInput)
+    ).toBeTruthy()
+    expect(
+      matchPayloadProp(v => !v.startsWith('fo'), textPayloadInput)
+    ).toBeFalsy()
+  })
+  test('text <> postback', () => {
+    expect(matchPayloadProp('foo', postbackInput)).toBeTruthy()
+    expect(matchPayloadProp('fooo', postbackInput)).toBeFalsy()
+    expect(matchPayloadProp('bar', postbackInput)).toBeFalsy()
+    expect(matchPayloadProp('', postbackInput)).toBeFalsy()
+    expect(matchPayloadProp(null, postbackInput)).toBeFalsy()
+  })
+  test('regex <> postback', () => {
+    expect(matchPayloadProp(/foo/, postbackInput)).toBeTruthy()
+    expect(matchPayloadProp(/bar/, postbackInput)).toBeFalsy()
+  })
+  test('function <> postback', () => {
+    expect(
+      matchPayloadProp(v => v.startsWith('fo'), postbackInput)
+    ).toBeTruthy()
+    expect(
+      matchPayloadProp(v => !v.startsWith('fo'), postbackInput)
+    ).toBeFalsy()
+  })
+  test('function <> request', () => {
+    expect(
+      matchRequestProp(
+        request =>
+          request.input.text === 'hi' &&
+          request.session.organization === 'myOrg' &&
+          request.lastRoutePath === 'initial',
+        requestInput
+      )
+    ).toBeTruthy()
+    expect(
+      matchRequestProp(
+        request =>
+          request.input.text === 'hello' &&
+          request.session.organization === 'myOrg' &&
+          request.lastRoutePath === 'initial',
+        requestInput
+      )
+    ).toBeFalsy()
+  })
+  test('type <> audio, document, image, video', () => {
+    expect(matchTypeProp('audio', audioInput)).toBeTruthy()
+    expect(matchTypeProp('document', documentInput)).toBeTruthy()
+    expect(matchTypeProp('image', imageInput)).toBeTruthy()
+    expect(matchTypeProp('video', videoInput)).toBeTruthy()
+  })
+  test('type <> other inputs', () => {
+    expect(matchTypeProp(/.*/, { type: 'anyOtherInput' })).toBeTruthy()
+  })
+})
+
+describe('Get route by path', () => {
+  const externalRoutes = [
+    { path: '', action: 'Flow1.2' },
+    { path: 'child', action: 'ChildAction' },
+  ]
+  const router = new Router([
+    { path: 'initial', action: 'Initial' },
+    {
+      path: 'flow-1',
+      action: 'Flow1',
+      childRoutes: [
+        {
+          path: '1',
+          action: 'Flow1.1',
+          childRoutes: [
+            { path: '1', action: 'Flow1.1.1' },
+            { path: '2', action: 'Flow1.1.2' },
+            { path: '3', action: 'Flow1.1.3' },
+          ],
+        },
+        { path: '2', childRoutes: externalRoutes },
+        {
+          path: '3',
+          action: 'Flow1.3',
+          childRoutes: [
+            { path: '1', action: 'Flow1.3.1' },
+            { path: '2', action: 'Flow1.3.2' },
+            { path: '3', action: 'Flow1.3.3' },
+          ],
+        },
+      ],
+    },
+    { path: '404', action: '404Action' },
+  ])
+
+  test('path exists', () => {
+    expect(router.getRouteByPath('initial')).toEqual({
+      path: 'initial',
+      action: 'Initial',
+    })
+    expect(router.getRouteByPath('flow-1/1')).toEqual({
+      path: '1',
+      action: 'Flow1.1',
+      childRoutes: [
+        { path: '1', action: 'Flow1.1.1' },
+        { path: '2', action: 'Flow1.1.2' },
+        { path: '3', action: 'Flow1.1.3' },
+      ],
+    })
+    expect(router.getRouteByPath('flow-1/3/2')).toEqual({
+      action: 'Flow1.3.2',
+      path: '2',
+    })
+  })
+  test('path exists in composed child routes', () => {
+    expect(router.getRouteByPath('flow-1/2')).toEqual({
+      path: '2',
+      childRoutes: [
+        { action: 'Flow1.2', path: '' },
+        { action: 'ChildAction', path: 'child' },
+      ],
+    })
+    expect(router.getRouteByPath('flow-1/2/child')).toEqual({
+      path: 'child',
+      action: 'ChildAction',
+    })
+  })
+  test('path does not exist', () => {
+    expect(router.getRouteByPath('')).toBeNull()
+    expect(router.getRouteByPath('foo')).toBeNull()
+    expect(router.getRouteByPath('flow-1/3/2/6')).toBeNull()
+  })
+})
+
+describe('TEST: getting path and params from path payload input', () => {
+  test.each([
+    [undefined, null, undefined],
+    ['', null, undefined],
+    ['bad_input', null, undefined],
+    [PATH_PAYLOAD_IDENTIFIER, null, undefined],
+    [`${PATH_PAYLOAD_IDENTIFIER}path1`, 'path1', undefined],
+    [`${PATH_PAYLOAD_IDENTIFIER}path1?path1`, 'path1', 'path1'],
+  ])(
+    'getOnFinishParams(%s)=>%s',
+    (inputPayload, expectedPath, expectedParams) => {
+      const input = { type: 'postback', payload: inputPayload }
+      const { path, params } = getPathParamsFromPathPayload(input.payload)
+      expect(path).toEqual(expectedPath)
+      expect(params).toEqual(expectedParams)
+    }
+  )
+})
+
+describe('TEST: convert pathParams to params', () => {
+  it('converts valid pathParams', () => {
+    let res = pathParamsToParams(
+      getPathParamsFromPathPayload(`${PATH_PAYLOAD_IDENTIFIER}path1?path1`)
+        .params
+    )
+    expect(res).toEqual({ path1: '' })
+    res = pathParamsToParams(
+      getPathParamsFromPathPayload(
+        `${PATH_PAYLOAD_IDENTIFIER}path1?param1=value1&param2=value2`
+      ).params
+    )
+    expect(res).toEqual({ param1: 'value1', param2: 'value2' })
+    res = pathParamsToParams(
+      getPathParamsFromPathPayload(
+        `${PATH_PAYLOAD_IDENTIFIER}path1?param1=false&param2=5`
+      ).params
+    )
+    expect(res).toEqual({ param1: 'false', param2: '5' })
+    res = pathParamsToParams(getPathParamsFromPathPayload(undefined).params)
+    expect(res).toEqual({})
+  })
+})
+
+describe('TEST: Named Group Regex', () => {
+  const router = new Router([
+    {
+      path: 'namedGroup',
+      text: /order (?<orderNumber>\w+)/,
+      action: 'hello',
+    },
+    {
+      path: 'noNamedGroup',
+      text: /hi/,
+      action: 'hello',
+    },
+  ])
+  it('matches named groups', () => {
+    const routeParams = router.getRoute(
+      { type: 'text', text: 'order 12345' },
+      router.routes,
+      testSession(),
+      null
+    )
+    expect(routeParams.params).toEqual({ orderNumber: '12345' })
+  })
+  it('no named groups', () => {
+    const routeParams = router.getRoute(
+      { type: 'text', text: 'hi' },
+      router.routes,
+      testSession(),
+      null
+    )
+    expect(routeParams.params).toEqual({})
+  })
 })
 
 const redirectRoutes = [
@@ -18,13 +360,13 @@ const redirectRoutes = [
     redirect: 'initial/3/2',
   },
   {
-    path: 'redirectToDefaultAction',
-    text: 'redirectToDefaultAction',
+    path: 'redirectToEmptyAction',
+    text: 'redirectToEmptyAction',
     redirect: 'initial/2',
   },
   {
-    path: 'redirectToDefaultActionChildRoute',
-    text: 'redirectToDefaultActionChildRoute',
+    path: 'redirectToEmptyActionChildRoute',
+    text: 'redirectToEmptyActionChildRoute',
     redirect: 'initial/2/child',
   },
   {
@@ -98,13 +440,13 @@ const retryRoutes = [
   { path: 'text', text: 'bye', action: 'Bye' },
 ]
 
-const retryDefaultActionRoutes = [
+const retryEmptyActionRoutes = [
   {
     path: 'retryFlowDA',
     payload: 'final',
     retry: 1,
     childRoutes: [
-      { path: '', action: 'RetryFlowDefaultAction' },
+      { path: '', action: 'RetryFlowEmptyAction' },
       { path: 'child', payload: '2', action: 'RetryFlowChildAction' },
     ],
   },
@@ -125,9 +467,9 @@ const routesWithRetries = [
   notFoundRoute,
 ]
 
-const routesWithDefaultActionRetries = [
+const routesWithEmptyActionRetries = [
   ...defaultRoutes,
-  ...retryDefaultActionRoutes,
+  ...retryEmptyActionRoutes,
   ...fallbackRoutes,
   notFoundRoute,
 ]
@@ -242,7 +584,7 @@ describe('Retries (in default action)', () => {
   afterEach(() => {
     retriesSession = null
   })
-  const router = new Router(routesWithDefaultActionRetries)
+  const router = new Router(routesWithEmptyActionRetries)
 
   it('Test retry action in retryRoutes (with default action)', () => {
     expect(
@@ -253,7 +595,7 @@ describe('Retries (in default action)', () => {
       )
     ).toEqual({
       action: null,
-      emptyAction: 'RetryFlowDefaultAction',
+      emptyAction: 'RetryFlowEmptyAction',
       fallbackAction: null,
       lastRoutePath: 'retryFlowDA',
       params: {},
@@ -269,7 +611,7 @@ describe('Retries (in default action)', () => {
       )
     ).toEqual({
       action: null,
-      emptyAction: 'RetryFlowDefaultAction',
+      emptyAction: 'RetryFlowEmptyAction',
       fallbackAction: '404Action',
       lastRoutePath: 'retryFlowDA',
       params: {},
@@ -400,7 +742,7 @@ describe('Redirects', () => {
   it('should redirect to default action', () => {
     expect(
       router.processInput(
-        { type: 'text', text: 'redirectToDefaultAction' },
+        { type: 'text', text: 'redirectToEmptyAction' },
         testSession(),
         null
       )
@@ -415,7 +757,7 @@ describe('Redirects', () => {
   it('should redirect to default action child route', () => {
     expect(
       router.processInput(
-        { type: 'text', text: 'redirectToDefaultActionChildRoute' },
+        { type: 'text', text: 'redirectToEmptyActionChildRoute' },
         testSession(),
         null
       )

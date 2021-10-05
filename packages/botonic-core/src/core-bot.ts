@@ -14,7 +14,7 @@ import {
 } from './models'
 import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
-import { Router } from './routing'
+import { Router } from './router'
 import { isFunction } from './utils'
 
 interface CoreBotConfig {
