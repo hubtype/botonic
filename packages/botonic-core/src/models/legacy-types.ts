@@ -226,7 +226,9 @@ export interface Plugin {
   pre(pluginRequest: PluginPreRequest): void
 }
 
-export type Params = { [key: string]: string }
+export interface Params {
+  [key: string]: any
+}
 
 export const Providers = Object.freeze({
   Messaging: {
@@ -243,3 +245,47 @@ export const Providers = Object.freeze({
     WHATSAPP: 'whatsapp',
   },
 })
+
+export type Nullable<T> = T | null
+
+export type Action = Nullable<() => any>
+export type RoutePath = Nullable<string>
+
+export interface ProcessInputResult {
+  action: Action
+  emptyAction: Action
+  fallbackAction: Action
+  lastRoutePath: RoutePath
+  params: Params
+}
+
+export type MatchedValue = boolean | RegExpExecArray | null
+
+export type RoutingState = {
+  currentRoute: Nullable<Route>
+  currentRoutePath: RoutePath
+  matchedRoute: Nullable<Route>
+  matchedRoutePath: RoutePath
+  params: Params
+  isFlowBroken: boolean
+}
+
+export interface RouteParams {
+  route: Nullable<Route>
+  params: Params
+}
+export interface PathParams {
+  path: Nullable<string>
+  params: string | undefined
+}
+
+export type MatchingProp =
+  | 'text'
+  | 'payload'
+  | 'intent'
+  | 'type'
+  | 'input'
+  | 'session'
+  | 'request'
+
+export type Matcher = string | RegExp | ((args) => boolean)

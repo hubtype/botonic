@@ -1,6 +1,11 @@
 // @ts-nocheck
 import { PROVIDER } from '../../src/index'
-import { NoMatchingRouteError, Router } from '../../src/router'
+import {
+  getPathParamsFromPathPayload,
+  NoMatchingRouteError,
+  pathParamsToParams,
+  Router,
+} from '../../src/routing'
 
 /** @type Input */
 const textInput = { type: 'text', text: 'hi' }
@@ -264,7 +269,7 @@ describe('Get route by path', () => {
   })
 })
 
-describe('TEST: getting path and params from payload input', () => {
+describe('TEST: getting path and params from path payload input', () => {
   test.each([
     [undefined, null, undefined],
     ['', null, undefined],
@@ -272,16 +277,11 @@ describe('TEST: getting path and params from payload input', () => {
     ['__PATH_PAYLOAD__', null, undefined],
     ['__PATH_PAYLOAD__path1', 'path1', undefined],
     ['__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
-    ['__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
   ])(
     'getOnFinishParams(%s)=>%s',
     (inputPayload, expectedPath, expectedParams) => {
-      const router = new Router([])
-      /** @type Input */
       const input = { type: 'postback', payload: inputPayload }
-      const { path, params } = router.getPathParamsFromPathPayload(
-        input.payload
-      )
+      const { path, params } = getPathParamsFromPathPayload(input.payload)
       expect(path).toEqual(expectedPath)
       expect(params).toEqual(expectedParams)
     }
@@ -289,24 +289,24 @@ describe('TEST: getting path and params from payload input', () => {
 })
 
 describe('TEST: convert pathParams to params', () => {
-  const router = new Router([])
-  const getPathParams = (pathPayload: string | undefined) => {
-    return router.getPathParamsFromPathPayload(pathPayload)
-  }
   it('converts valid pathParams', () => {
-    let res = router.pathParamsToParams(
-      getPathParams('__PATH_PAYLOAD__path1?path1').params
+    let res = pathParamsToParams(
+      getPathParamsFromPathPayload('__PATH_PAYLOAD__path1?path1').params
     )
     expect(res).toEqual({ path1: '' })
-    res = router.pathParamsToParams(
-      getPathParams('__PATH_PAYLOAD__path1?param1=value1&param2=value2').params
+    res = pathParamsToParams(
+      getPathParamsFromPathPayload(
+        '__PATH_PAYLOAD__path1?param1=value1&param2=value2'
+      ).params
     )
     expect(res).toEqual({ param1: 'value1', param2: 'value2' })
-    res = router.pathParamsToParams(
-      getPathParams('__PATH_PAYLOAD__path1?param1=false&param2=5').params
+    res = pathParamsToParams(
+      getPathParamsFromPathPayload(
+        '__PATH_PAYLOAD__path1?param1=false&param2=5'
+      ).params
     )
     expect(res).toEqual({ param1: 'false', param2: '5' })
-    res = router.pathParamsToParams(getPathParams(undefined).params)
+    res = pathParamsToParams(getPathParamsFromPathPayload(undefined).params)
     expect(res).toEqual({})
   })
 })

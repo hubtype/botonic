@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { PROVIDER } from '../../src/index'
-import { Router } from '../../src/router'
+import { Router } from '../../src/routing'
 
 const testSession = () => ({
   user: { id: 'userid', provider: PROVIDER.DEV },

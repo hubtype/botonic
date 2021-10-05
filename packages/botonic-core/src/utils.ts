@@ -46,6 +46,10 @@ export function isFunction(o: any): boolean {
   return typeof o === 'function'
 }
 
+export function cloneObject(object: any): any {
+  return { ...object }
+}
+
 export const params2queryString = (params: { [key: string]: string }): string =>
   Object.entries(params)
     .map(([k, v]: any) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
