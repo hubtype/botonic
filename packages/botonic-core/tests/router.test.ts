@@ -56,7 +56,7 @@ function testSession() {
   }
 }
 
-describe('Bad router initialization', () => {
+describe('TEST: Bad router initialization', () => {
   test('empty routes throw TypeError', () => {
     const router = new Router([])
     expect(() => router.processInput(textInput, testSession())).toThrow(
@@ -78,7 +78,7 @@ test('Router returns 404', () => {
   expect(fallbackAction).toBe('404Action')
 })
 
-describe('Match route by MATCHER <> INPUT', () => {
+describe('TEST: Match route by MATCHER <> INPUT', () => {
   const router = new Router([])
   const matchTextProp = (matcher, textInput) =>
     router.matchRoute(testRoute(), 'text', matcher, textInput, testSession())
@@ -203,7 +203,7 @@ describe('Match route by MATCHER <> INPUT', () => {
   })
 })
 
-describe('Get route by path', () => {
+describe('TEST: Get route by path', () => {
   const externalRoutes = [
     { path: '', action: 'Flow1.2' },
     { path: 'child', action: 'ChildAction' },
@@ -415,7 +415,6 @@ const defaultRoutes = [
         action: 'Flow1.3',
         retry: 3,
         childRoutes: [
-          // { path: '', action: 'EmptyAction' },
           { path: '1', payload: '1', action: 'Flow1.3.1' },
           { path: '2', payload: '2', action: 'Flow1.3.2' },
           { path: '3', payload: '3', action: 'Flow1.3.3' },
@@ -474,7 +473,7 @@ const routesWithEmptyActionRetries = [
   notFoundRoute,
 ]
 
-describe('Retries (in childRoutes)', () => {
+describe('TEST: Retries (in childRoutes)', () => {
   const retriesSession = testSession()
 
   const router = new Router(routes)
@@ -539,7 +538,7 @@ describe('Retries (in childRoutes)', () => {
   })
 })
 
-describe('Retries (in childRoutes, ignoreRetry)', () => {
+describe('TEST: Retries (in childRoutes, ignoreRetry)', () => {
   const retriesSession = testSession()
 
   const router = new Router(routes)
@@ -576,7 +575,7 @@ describe('Retries (in childRoutes, ignoreRetry)', () => {
   })
 })
 
-describe('Retries (in default action)', () => {
+describe('Retries (with empty action)', () => {
   let retriesSession
   beforeEach(() => {
     retriesSession = testSession()
@@ -586,7 +585,7 @@ describe('Retries (in default action)', () => {
   })
   const router = new Router(routesWithEmptyActionRetries)
 
-  it('Test retry action in retryRoutes (with default action)', () => {
+  it('Test retry action in retryRoutes (with empty action)', () => {
     expect(
       router.processInput(
         { type: 'postback', payload: 'final' },
@@ -634,7 +633,7 @@ describe('Retries (in default action)', () => {
   })
 })
 
-describe('Retries', () => {
+describe('TEST: Retries', () => {
   let retriesSession
   beforeEach(() => {
     retriesSession = testSession()
@@ -737,9 +736,9 @@ describe('Retries', () => {
   })
 })
 
-describe('Redirects', () => {
+describe('TEST: Redirects', () => {
   const router = new Router(routesWithRedirects)
-  it('should redirect to default action', () => {
+  it('should redirect to empty action', () => {
     expect(
       router.processInput(
         { type: 'text', text: 'redirectToEmptyAction' },
@@ -754,7 +753,7 @@ describe('Redirects', () => {
       params: {},
     })
   })
-  it('should redirect to default action child route', () => {
+  it('should redirect to empty action child route', () => {
     expect(
       router.processInput(
         { type: 'text', text: 'redirectToEmptyActionChildRoute' },
@@ -796,80 +795,6 @@ describe('Redirects', () => {
       emptyAction: null,
       fallbackAction: '404Action',
       lastRoutePath: null,
-      params: {},
-    })
-  })
-})
-describe('Accesses in Flow1.3', () => {
-  const router = new Router(routes)
-  it('1. Flow1.3 Payload', () => {
-    expect(
-      router.processInput(
-        { type: 'postback', payload: '3' },
-        testSession(),
-        'initial'
-      )
-    ).toEqual({
-      action: 'Flow1.3',
-      emptyAction: null,
-      fallbackAction: null,
-      lastRoutePath: 'initial/3',
-      params: {},
-    })
-  })
-  it('2. Flow1.3 Unexisting Payload', () => {
-    expect(
-      router.processInput(
-        { type: 'postback', payload: 'wont-match' },
-        testSession(),
-        'initial'
-      )
-    ).toEqual({
-      action: null,
-      emptyAction: null,
-      fallbackAction: '404Action',
-      lastRoutePath: 'initial',
-      params: {},
-    })
-  })
-  it('3. Flow1.3 (childRoutes)', () => {
-    expect(
-      router.processInput(
-        { type: 'postback', payload: '1' },
-        testSession(),
-        'initial/3'
-      )
-    ).toEqual({
-      action: 'Flow1.3.1',
-      emptyAction: null,
-      fallbackAction: null,
-      lastRoutePath: 'initial/3/1',
-      params: {},
-    })
-    expect(
-      router.processInput(
-        { type: 'postback', payload: '2' },
-        testSession(),
-        'initial/3'
-      )
-    ).toEqual({
-      action: 'Flow1.3.2',
-      emptyAction: null,
-      fallbackAction: null,
-      lastRoutePath: 'initial/3/2',
-      params: {},
-    })
-    expect(
-      router.processInput(
-        { type: 'postback', payload: '3' },
-        testSession(),
-        'initial/3'
-      )
-    ).toEqual({
-      action: 'Flow1.3.3',
-      emptyAction: null,
-      fallbackAction: null,
-      lastRoutePath: 'initial/3/3',
       params: {},
     })
   })
