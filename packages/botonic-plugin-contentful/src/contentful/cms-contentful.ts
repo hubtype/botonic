@@ -121,12 +121,9 @@ export class Contentful implements cms.CMS {
     ;[
       this._document,
       this._text,
-      this._url,
-      this._payload,
       this._carousel,
       this._image,
       this._startUp,
-      this._handoff,
     ].forEach(d => d.setFollowUp(followUp))
     this._keywords = new KeywordsDelivery(delivery)
     this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
@@ -241,9 +238,9 @@ export class Contentful implements cms.CMS {
       case ContentType.HANDOFF:
         return retype(this._handoff.fromEntry(entry, context))
       case ContentType.URL:
-        return retype(await this._url.fromEntry(entry, context))
+        return retype(this._url.fromEntry(entry, context))
       case ContentType.PAYLOAD:
-        return retype(await this._payload.fromEntry(entry, context))
+        return retype(this._payload.fromEntry(entry, context))
       case ContentType.STARTUP:
         return retype(await this._startUp.fromEntry(entry, context))
       case ContentType.SCHEDULE:

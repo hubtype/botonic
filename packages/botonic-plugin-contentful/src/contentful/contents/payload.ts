@@ -2,11 +2,15 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import { Context } from '../../cms'
+import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
-import { addCustomFields, CommonEntryFields } from '../delivery-utils'
-import { DeliveryWithFollowUp } from './follow-up'
+import {
+  addCustomFields,
+  CommonEntryFields,
+  ContentfulEntryUtils,
+} from '../delivery-utils'
 
-export class PayloadDelivery extends DeliveryWithFollowUp {
+export class PayloadDelivery extends TopContentDelivery {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(cms.ContentType.PAYLOAD, delivery, resumeErrors)
   }
@@ -19,10 +23,10 @@ export class PayloadDelivery extends DeliveryWithFollowUp {
     return this.fromEntry(entry, context)
   }
 
-  async fromEntry(entry: contentful.Entry<PayloadFields>, context: Context) {
+  fromEntry(entry: contentful.Entry<PayloadFields>, context: Context) {
     return addCustomFields(
       new cms.Payload(
-        await this.getFollowUp().commonFields(entry, context),
+        ContentfulEntryUtils.commonFieldsFromEntry(entry),
         entry.fields.payload || ''
       ),
       entry.fields

@@ -10,6 +10,7 @@ import {
   OnFinish,
   Queue,
 } from '../../cms'
+import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
@@ -17,10 +18,9 @@ import {
   ContentfulEntryUtils,
 } from '../delivery-utils'
 import { CallbackTarget, getTargetCallback } from './callback-delivery'
-import { DeliveryWithFollowUp } from './follow-up'
 import { QueueDelivery, QueueFields } from './queue'
 
-export class HandoffDelivery extends DeliveryWithFollowUp {
+export class HandoffDelivery extends TopContentDelivery {
   static REFERENCES_INCLUDE = QueueDelivery.REFERENCES_INCLUDE + 1
   constructor(
     delivery: DeliveryApi,
