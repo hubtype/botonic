@@ -1,3 +1,8 @@
+export enum ButtonStyle {
+  BUTTON = 0,
+  QUICK_REPLY = 1,
+}
+
 export interface CommonFields {
   id: string
   name: string
@@ -31,10 +36,17 @@ export abstract class Content {
 export class Text extends Content {
   readonly text: string
   readonly buttons: Button[]
-  constructor(opt: { common: CommonFields; text: string; buttons: Button[] }) {
+  readonly buttonsStyle?: ButtonStyle
+  constructor(opt: {
+    common: CommonFields
+    text: string
+    buttons: Button[]
+    buttonsStyle?: ButtonStyle
+  }) {
     super(opt.common)
     this.text = opt.text
     this.buttons = opt.buttons
+    this.buttonsStyle = opt.buttonsStyle
   }
 }
 

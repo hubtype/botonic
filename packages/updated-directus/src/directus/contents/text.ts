@@ -36,6 +36,7 @@ export class TextDelivery extends ContentDelivery {
       } as CommonFields,
       text: (entry?.text as string) ?? undefined,
       buttons: this.createButtons(entry.buttons, context),
+      buttonsStyle: this.getButtonsStyle(entry.buttonstyle),
     }
     return new Text(opt)
   }
@@ -65,5 +66,11 @@ export class TextDelivery extends ContentDelivery {
     return contentType === cms.MessageContentType.IMAGE
       ? this.image.fromEntry(followup, context)
       : this.fromEntry(followup, context)
+  }
+
+  private getButtonsStyle(buttonsStyle: string): cms.ButtonStyle | undefined {
+    if (buttonsStyle == 'QuickReplies') return cms.ButtonStyle.QUICK_REPLY
+    else if (buttonsStyle == 'Buttons') return cms.ButtonStyle.BUTTON
+    return undefined
   }
 }
