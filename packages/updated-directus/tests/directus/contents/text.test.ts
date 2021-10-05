@@ -13,7 +13,7 @@ const TEXT_BUTTONS_W_BUTTONSTYLE_QR = 'ce7c06b7-8817-4fa7-b0a5-1b1b84cd3da6'
 test('Test: directus text without buttons without followup', async () => {
   const directus = testDirectus()
   const testText = await directus.text(TEXT_WITHOUT_B_WITHOUT_F, testContext())
-  expect(testText.buttons).toBeUndefined
+  expect(testText.buttons).toEqual([])
   expect(testText.common.name).toEqual('z_TEST_TEXT_WITHOUT_B_WITHOUT_F')
   expect(testText.text).toEqual(
     'directus text without buttons and without followup'

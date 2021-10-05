@@ -32,13 +32,16 @@ export class BotonicMsgConverter {
 
   text(text: cms.Text, delayS = 0): BotonicMsg[] {
     const buttonsStyle = text.buttonsStyle || this.options.defaultButtonsStyle
+    const buttons = this.convertButtons(text.buttons, buttonsStyle!)
     const msg: any = {
       type: 'text',
       delay: delayS,
       data: { text: text.text },
-      buttons: text.buttons
-        ? this.convertButtons(text.buttons, buttonsStyle!)
-        : undefined,
+    }
+    if (buttonsStyle === ButtonStyle.QUICK_REPLY) {
+      msg['replies'] = buttons
+    } else {
+      msg['buttons'] = buttons
     }
     return this.appendFollowUp(msg, text)
   }
@@ -48,6 +51,11 @@ export class BotonicMsgConverter {
       const msgButton = {
         payload: cmsButton.target,
       } as any
+      if (style === ButtonStyle.BUTTON) {
+        msgButton['title'] = cmsButton.text
+      } else {
+        msgButton['text'] = cmsButton.text
+      }
       return msgButton
     })
   }

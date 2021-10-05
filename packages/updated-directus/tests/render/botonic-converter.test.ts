@@ -11,6 +11,7 @@ test('Test: convert a text with text followup and buttons correctly', async () =
           id: 'id',
           name: 'name',
         },
+        buttons: [],
         text: 'http://test-cms-directus-alb-1959632461.eu-west-1.elb.amazonaws.com:8055/assets/59a3cf05-c6e1-4482-8c3a-2ab926b0b884',
       }),
       keywords: ['basket', ' michael'],
@@ -64,7 +65,7 @@ test('Test: convert a text with text followup and buttons correctly', async () =
       data: {
         text: 'http://test-cms-directus-alb-1959632461.eu-west-1.elb.amazonaws.com:8055/assets/59a3cf05-c6e1-4482-8c3a-2ab926b0b884',
       },
-      buttons: undefined,
+      buttons: [],
     },
   ]
   expect(convertedText).toEqual(correctConvertedText)
