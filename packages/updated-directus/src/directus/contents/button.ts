@@ -7,7 +7,7 @@ import { getCustomFields } from '../../directus/delivery/delivery-utils'
 
 export class ButtonDelivery extends ContentDelivery {
   constructor(client: DirectusClient) {
-    super(client, cms.SubContentType.BUTTON)
+    super(client, cms.ContentType.BUTTON)
   }
 
   async button(id: string, context: cms.SupportedLocales): Promise<Button> {
@@ -33,7 +33,7 @@ export class ButtonDelivery extends ContentDelivery {
     entry: any,
     contentType?: cms.ContentType
   ): string {
-    if (contentType === cms.MessageContentType.TEXT) {
+    if (contentType === cms.ContentType.TEXT) {
       return `${contentType}$${entry.id}`
     }
     const PAYLOAD_CONTENT_TYPE = 'payload'
@@ -49,7 +49,7 @@ export class ButtonDelivery extends ContentDelivery {
     entry: PartialItem<any>,
     contentType?: cms.ContentType
   ): string {
-    if (contentType === cms.MessageContentType.TEXT) {
+    if (contentType === cms.ContentType.TEXT) {
       return entry.shorttext ?? entry.name
     } else return (entry.text as string) ?? entry.name
   }

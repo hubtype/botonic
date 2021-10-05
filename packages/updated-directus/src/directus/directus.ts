@@ -4,15 +4,17 @@ import { ButtonDelivery } from './contents/button'
 import { ImageDelivery } from './contents/image'
 import { KeywordsDelivery } from './search/keywords'
 import { DirectusClient } from './delivery/directus-client'
-import { Button, Text, Image, Content, AssetInfo } from '../cms'
+import { Button, Text, Image, Content, AssetInfo, Url } from '../cms'
 import { DirectusOptions } from '../plugin'
 import { ContentsDelivery } from './manage/contents'
 import { TextFields } from './manage/directus-contents'
 import { Stream } from 'stream'
+import { UrlDelivery } from './contents/url'
 
 export class Directus implements cms.CMS {
   private readonly _text: TextDelivery
   private readonly _button: ButtonDelivery
+  private readonly _url: UrlDelivery
   private readonly _image: ImageDelivery
   private readonly _keywords: KeywordsDelivery
   private readonly _contents: ContentsDelivery
@@ -20,6 +22,7 @@ export class Directus implements cms.CMS {
   constructor(opt: DirectusOptions) {
     const client = new DirectusClient(opt)
     this._button = new ButtonDelivery(client)
+    this._url = new UrlDelivery(client)
     this._image = new ImageDelivery(client)
     this._text = new TextDelivery(client, this._button, this._image)
     this._keywords = new KeywordsDelivery(client)
@@ -39,6 +42,10 @@ export class Directus implements cms.CMS {
   async image(id: string, context: cms.SupportedLocales): Promise<Image> {
     return this._image.image(id, context)
   }
+  async url(id: string, context: cms.SupportedLocales): Promise<Url> {
+    return this._url.url(id, context)
+  }
+
   async contentsWithKeywords(input: string): Promise<string[]> {
     return this._keywords.contentsWithKeywords(input)
   }

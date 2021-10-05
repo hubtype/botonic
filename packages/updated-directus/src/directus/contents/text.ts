@@ -15,7 +15,7 @@ export class TextDelivery extends ContentDelivery {
     deliveryButton: ButtonDelivery,
     deliveryImage: ImageDelivery
   ) {
-    super(client, cms.MessageContentType.TEXT)
+    super(client, cms.ContentType.TEXT)
     this.button = deliveryButton
     this.image = deliveryImage
   }
@@ -61,9 +61,9 @@ export class TextDelivery extends ContentDelivery {
       return undefined
     }
     const contentType = followup.hasOwnProperty('image')
-      ? cms.MessageContentType.IMAGE
-      : cms.MessageContentType.TEXT
-    return contentType === cms.MessageContentType.IMAGE
+      ? cms.ContentType.IMAGE
+      : cms.ContentType.TEXT
+    return contentType === cms.ContentType.IMAGE
       ? this.image.fromEntry(followup, context)
       : this.fromEntry(followup, context)
   }

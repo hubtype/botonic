@@ -1,21 +1,20 @@
 import { ContentDelivery } from '../delivery'
 import { DirectusClient } from '../delivery'
-import * as cms from '../../cms'
-import { CommonFields, Image } from '../../cms'
+import { CommonFields, Url, ContentType, SupportedLocales } from '../../cms'
 import { PartialItem } from '@directus/sdk'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
 
-export class ImageDelivery extends ContentDelivery {
+export class UrlDelivery extends ContentDelivery {
   constructor(client: DirectusClient) {
-    super(client, cms.ContentType.IMAGE)
+    super(client, ContentType.URL)
   }
 
-  async image(id: string, context: cms.SupportedLocales): Promise<Image> {
+  async url(id: string, context: SupportedLocales): Promise<Url> {
     const entry = await this.getEntry(id, context)
-    return this.fromEntry(entry, context)
+    return this.fromEntry(entry)
   }
 
-  fromEntry(entry: PartialItem<any>, context?: cms.SupportedLocales): Image {
+  fromEntry(entry: PartialItem<any>): Url {
     const opt = {
       common: {
         id: entry.id as string,
@@ -23,8 +22,8 @@ export class ImageDelivery extends ContentDelivery {
         keywords: (entry.keywords?.split(',') as string[]) ?? undefined,
         customFields: getCustomFields(entry),
       } as CommonFields,
-      imgUrl: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`,
+      url: entry.url ?? '',
     }
-    return new Image(opt)
+    return new Url(opt)
   }
 }

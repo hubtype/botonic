@@ -1,4 +1,4 @@
-import { ContentType, MessageContentType, SubContentType } from './cms'
+import { ContentType } from './cms'
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -49,6 +49,14 @@ export abstract class Content {
   }
 }
 
+export class Url extends Content {
+  readonly url: string
+  constructor(opt: { common: CommonFields; url: string }) {
+    super(opt.common, ContentType.URL)
+    this.url = opt.url
+  }
+}
+
 export class Text extends Content {
   readonly text: string
   readonly buttons: Button[]
@@ -59,7 +67,7 @@ export class Text extends Content {
     buttons: Button[]
     buttonsStyle?: ButtonStyle
   }) {
-    super(opt.common, MessageContentType.TEXT)
+    super(opt.common, ContentType.TEXT)
     this.text = opt.text
     this.buttons = opt.buttons
     this.buttonsStyle = opt.buttonsStyle
@@ -70,7 +78,7 @@ export class Button extends Content {
   readonly text: string
   readonly target: string
   constructor(opt: { common: CommonFields; text: string; target: string }) {
-    super(opt.common, SubContentType.BUTTON)
+    super(opt.common, ContentType.BUTTON)
     this.text = opt.text
     this.target = opt.target
   }
@@ -79,7 +87,7 @@ export class Button extends Content {
 export class Image extends Content {
   readonly imgUrl: string
   constructor(opt: { common: CommonFields; imgUrl: string }) {
-    super(opt.common, MessageContentType.IMAGE)
+    super(opt.common, ContentType.IMAGE)
     this.imgUrl = opt.imgUrl
   }
 }

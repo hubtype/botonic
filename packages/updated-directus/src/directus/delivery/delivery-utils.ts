@@ -11,16 +11,19 @@ export const knownFields = [
   'buttons',
   'image',
   'target',
+  'url',
 ]
 
 export function getContentFields(contentType: cms.ContentType): string[] {
   switch (contentType) {
-    case cms.MessageContentType.TEXT:
+    case cms.ContentType.TEXT:
       return getTextFields()
-    case cms.MessageContentType.IMAGE:
+    case cms.ContentType.IMAGE:
       return getImageFields()
-    case cms.SubContentType.BUTTON:
+    case cms.ContentType.BUTTON:
       return getButtonFields()
+    case cms.ContentType.URL:
+      return getUrlFields()
     default:
       return []
   }
@@ -49,6 +52,10 @@ function getImageFields(): string[] {
 
 function getButtonFields(): string[] {
   return ['id', 'name', 'text', 'target.*', 'target.item.*', '*']
+}
+
+function getUrlFields(): string[] {
+  return ['id', 'name', 'shorttext', 'url', 'keywords']
 }
 
 // export function getLocaleFilter(

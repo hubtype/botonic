@@ -3,9 +3,8 @@ import {
   ImageFields,
   TextFields,
 } from '../directus/manage/directus-contents'
-import { Button, Text, Image, Content } from './contents'
+import { Button, Text, Image, Content, Url } from './contents'
 import { Stream } from 'stream'
-
 
 export enum MessageContentType {
   TEXT = 'text',
@@ -15,10 +14,12 @@ export enum MessageContentType {
 export enum NonMessageContentType {
   QUEUE = 'queue',
   PAYLOAD = 'payload',
+  URL = 'url',
 }
 
 export enum SubContentType {
   BUTTON = 'button',
+  ELEMENT = 'element',
 }
 
 export enum SupportedLocales {
@@ -29,7 +30,14 @@ export enum SupportedLocales {
 
 export type TopContentType = MessageContentType | NonMessageContentType
 
+export const TopContentType = {
+  ...MessageContentType,
+  ...NonMessageContentType,
+}
+
 export type ContentType = TopContentType | SubContentType
+
+export const ContentType = { ...TopContentType, ...SubContentType }
 
 export interface CMS {
   button(id: string, context: SupportedLocales): Promise<Button>
@@ -37,6 +45,8 @@ export interface CMS {
   image(id: string, context: SupportedLocales): Promise<Image>
 
   text(id: string, context: SupportedLocales): Promise<Text>
+
+  url(id: string, context: SupportedLocales): Promise<Url>
 
   contentsWithKeywords(input: string): Promise<string[]>
 
