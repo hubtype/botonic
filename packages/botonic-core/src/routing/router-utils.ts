@@ -1,6 +1,10 @@
+import {
+  EMPTY_ACTION_PATH,
+  NOT_FOUND_PATH,
+  PATH_PAYLOAD_IDENTIFIER,
+  PATH_PAYLOAD_REGEXP,
+} from '../constants'
 import { Action, Input, Params, PathParams, Route } from '../models'
-
-export const NOT_FOUND_PATH = '404'
 
 export class NoMatchingRouteError extends Error {
   input: Input
@@ -16,7 +20,7 @@ export class NoMatchingRouteError extends Error {
 
 export function isPathPayload(payload?: string): boolean {
   if (!payload) return false
-  const isPathPayload = /^__PATH_PAYLOAD__(.*)/.exec(payload)
+  const isPathPayload = PATH_PAYLOAD_REGEXP.exec(payload)
   return Boolean(isPathPayload)
 }
 
@@ -28,9 +32,9 @@ export function getPathParamsFromPathPayload(payload?: string): PathParams {
   if (!payload) return defaultPathParams
   if (!isPathPayload(payload)) return defaultPathParams
   try {
-    const pathWithParams = payload.split('__PATH_PAYLOAD__')[1]
+    const pathWithParams = payload.split(PATH_PAYLOAD_IDENTIFIER)[1]
     if (!pathWithParams) {
-      throw '__PATH_PAYLOAD__ is empty'
+      throw `${PATH_PAYLOAD_IDENTIFIER} is empty`
     }
     const [path, params] = pathWithParams.split('?')
     return { path: path ?? null, params }
@@ -56,7 +60,7 @@ export function pathParamsToParams(pathParams?: string): Params {
 
 export function getEmptyAction(childRoutes?: Route[]): Action {
   if (!childRoutes) return null
-  const emptyActionRoute = childRoutes.find(r => r.path === '')
+  const emptyActionRoute = childRoutes.find(r => r.path === EMPTY_ACTION_PATH)
   if (!emptyActionRoute) return null
   return emptyActionRoute.action
 }

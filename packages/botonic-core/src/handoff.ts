@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+import { PATH_PAYLOAD_IDENTIFIER } from './constants'
 import { Session } from './models'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
@@ -80,7 +81,7 @@ export class HandOffBuilder {
   }
 
   withOnFinishPath(path: string): this {
-    this._onFinish = `__PATH_PAYLOAD__${path}`
+    this._onFinish = `${PATH_PAYLOAD_IDENTIFIER}${path}`
     return this
   }
 

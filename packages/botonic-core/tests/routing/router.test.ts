@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { PROVIDER } from '../../src/index'
+import { PATH_PAYLOAD_IDENTIFIER, PROVIDER } from '../../src'
 import {
   getPathParamsFromPathPayload,
   NoMatchingRouteError,
@@ -274,9 +274,9 @@ describe('TEST: getting path and params from path payload input', () => {
     [undefined, null, undefined],
     ['', null, undefined],
     ['bad_input', null, undefined],
-    ['__PATH_PAYLOAD__', null, undefined],
-    ['__PATH_PAYLOAD__path1', 'path1', undefined],
-    ['__PATH_PAYLOAD__path1?path1', 'path1', 'path1'],
+    [PATH_PAYLOAD_IDENTIFIER, null, undefined],
+    [`${PATH_PAYLOAD_IDENTIFIER}path1`, 'path1', undefined],
+    [`${PATH_PAYLOAD_IDENTIFIER}path1?path1`, 'path1', 'path1'],
   ])(
     'getOnFinishParams(%s)=>%s',
     (inputPayload, expectedPath, expectedParams) => {
@@ -291,18 +291,19 @@ describe('TEST: getting path and params from path payload input', () => {
 describe('TEST: convert pathParams to params', () => {
   it('converts valid pathParams', () => {
     let res = pathParamsToParams(
-      getPathParamsFromPathPayload('__PATH_PAYLOAD__path1?path1').params
+      getPathParamsFromPathPayload(`${PATH_PAYLOAD_IDENTIFIER}path1?path1`)
+        .params
     )
     expect(res).toEqual({ path1: '' })
     res = pathParamsToParams(
       getPathParamsFromPathPayload(
-        '__PATH_PAYLOAD__path1?param1=value1&param2=value2'
+        `${PATH_PAYLOAD_IDENTIFIER}path1?param1=value1&param2=value2`
       ).params
     )
     expect(res).toEqual({ param1: 'value1', param2: 'value2' })
     res = pathParamsToParams(
       getPathParamsFromPathPayload(
-        '__PATH_PAYLOAD__path1?param1=false&param2=5'
+        `${PATH_PAYLOAD_IDENTIFIER}path1?param1=false&param2=5`
       ).params
     )
     expect(res).toEqual({ param1: 'false', param2: '5' })

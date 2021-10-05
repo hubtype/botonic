@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { PATH_PAYLOAD_IDENTIFIER } from '../src'
 import { HandOffBuilder, humanHandOff } from '../src/handoff'
 
 describe('handOff', () => {
@@ -13,7 +14,7 @@ describe('handOff', () => {
     ],
     [
       `create_case:{
-        "on_finish":"__PATH_PAYLOAD__path1"
+        "on_finish":"${PATH_PAYLOAD_IDENTIFIER}path1"
        }`,
       '',
       { path: 'path1' },
@@ -44,7 +45,7 @@ describe('handOff', () => {
     [
       `create_case:` +
         JSON.stringify({
-          on_finish: '__PATH_PAYLOAD__path1',
+          on_finish: `${PATH_PAYLOAD_IDENTIFIER}path1`,
         }),
       new HandOffBuilder({}).withOnFinishPath('path1'),
     ],

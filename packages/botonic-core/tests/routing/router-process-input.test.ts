@@ -1,6 +1,9 @@
 // @ts-nocheck
-import { PROVIDER } from '../../src/index'
+import { PATH_PAYLOAD_IDENTIFIER, PROVIDER } from '../../src'
 import { Router } from '../../src/routing'
+
+const createPathPayload = (pathWithParams: string) =>
+  `${PATH_PAYLOAD_IDENTIFIER}${pathWithParams}`
 
 const testSession = () => ({
   user: { id: 'userid', provider: PROVIDER.DEV },
@@ -583,7 +586,7 @@ describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/1)', () => {
     it('1 Accessible from initial/1', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__1' },
+          { type: 'postback', payload: createPathPayload('1') },
           testSession(),
           'initial/1'
         )
@@ -596,7 +599,7 @@ describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/1)', () => {
       })
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__initial/1/1' },
+          { type: 'postback', payload: createPathPayload('initial/1/1') },
           testSession(),
           'initial/1'
         )
@@ -611,7 +614,7 @@ describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/1)', () => {
     it('unexisting childRoute', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__unexisting' },
+          { type: 'postback', payload: createPathPayload('unexisting') },
           testSession(),
           'initial/1'
         )
@@ -664,7 +667,7 @@ describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/2)', () => {
     it('child Accessible from initial/2', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__child' },
+          { type: 'postback', payload: createPathPayload('child') },
           testSession(),
           'initial/2'
         )
@@ -677,7 +680,7 @@ describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/2)', () => {
       })
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__initial/2/child' },
+          { type: 'postback', payload: createPathPayload('initial/2/child') },
           testSession(),
           'initial/2'
         )
@@ -693,7 +696,7 @@ describe('TEST: 2nd LEVEL ACCESSES (lastRoutePath=initial/2)', () => {
   it('unexisting childRoute', () => {
     expect(
       router.processInput(
-        { type: 'postback', payload: '__PATH_PAYLOAD__unexisting' },
+        { type: 'postback', payload: createPathPayload('unexisting') },
         testSession(),
         'initial/2'
       )
@@ -792,7 +795,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
     it('1. initial/1 accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__1' },
+          { type: 'postback', payload: createPathPayload('1') },
           testSession(),
           'initial'
         )
@@ -807,7 +810,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
         router.processInput(
           {
             type: 'postback',
-            payload: '__PATH_PAYLOAD__initial/1',
+            payload: createPathPayload('initial/1'),
           },
           testSession(),
           'initial'
@@ -824,7 +827,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
     it('2. initial/2 accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__2' },
+          { type: 'postback', payload: createPathPayload('2') },
           testSession(),
           'initial'
         )
@@ -837,7 +840,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
       })
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' },
+          { type: 'postback', payload: createPathPayload('initial/2') },
           testSession(),
           'initial'
         )
@@ -853,7 +856,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
     it('3. initial/3 accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__3' },
+          { type: 'postback', payload: createPathPayload('3') },
           testSession(),
           'initial'
         )
@@ -866,7 +869,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
       })
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__initial/3' },
+          { type: 'postback', payload: createPathPayload('initial/3') },
           testSession(),
           'initial'
         )
@@ -883,7 +886,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
     it('4. help accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__help' },
+          { type: 'postback', payload: createPathPayload('help') },
           testSession(),
           'initial'
         )
@@ -899,7 +902,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
     it('5. not found accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__unexisting' },
+          { type: 'postback', payload: createPathPayload('unexisting') },
           testSession(),
           'initial'
         )
@@ -919,7 +922,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
         router.processInput(
           {
             type: 'postback',
-            payload: '__PATH_PAYLOAD__2/child',
+            payload: createPathPayload('2/child'),
           },
           testSession(),
           'initial'
@@ -935,7 +938,7 @@ describe('TEST: 1st LEVEL ACCESSES (lastRoutePath=initial)', () => {
         router.processInput(
           {
             type: 'postback',
-            payload: '__PATH_PAYLOAD__initial/2/child',
+            payload: createPathPayload('initial/2/child'),
           },
           testSession(),
           'initial'
@@ -1056,7 +1059,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
     it('1. initial accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__initial' },
+          { type: 'postback', payload: createPathPayload('initial') },
           testSession(),
           'initial'
         )
@@ -1072,7 +1075,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
     it('2. initial accessible from help', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__initial' },
+          { type: 'postback', payload: createPathPayload('initial') },
           testSession(),
           'help'
         )
@@ -1088,7 +1091,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
     it('3. help accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__help' },
+          { type: 'postback', payload: createPathPayload('help') },
           testSession(),
           'initial'
         )
@@ -1104,7 +1107,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
     it('4. help accessible from help', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__help' },
+          { type: 'postback', payload: createPathPayload('help') },
           testSession(),
           'help'
         )
@@ -1120,7 +1123,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
     it('5. not found accessible from initial', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__404' },
+          { type: 'postback', payload: createPathPayload('404') },
           testSession(),
           'initial'
         )
@@ -1136,7 +1139,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is not null)', () => {
     it('6. not found accessible from help', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__404' },
+          { type: 'postback', payload: createPathPayload('404') },
           testSession(),
           'help'
         )
@@ -1210,7 +1213,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is null)', () => {
         router.processInput(
           {
             type: 'postback',
-            payload: '__PATH_PAYLOAD__initial',
+            payload: createPathPayload('initial'),
           },
           testSession(),
           null
@@ -1227,7 +1230,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is null)', () => {
     it('2. should retrieve routes at root level (help path)', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__help' },
+          { type: 'postback', payload: createPathPayload('help') },
           testSession(),
           null
         )
@@ -1243,7 +1246,7 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is null)', () => {
     it('3. should retrieve routes at root level (404 path payload)', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: '__PATH_PAYLOAD__404' },
+          { type: 'postback', payload: createPathPayload('404') },
           testSession(),
           null
         )

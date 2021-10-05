@@ -1,3 +1,4 @@
+import { NOT_FOUND_PATH } from '../constants'
 import { RouteInspector } from '../debug/inspector'
 import {
   Input,
@@ -19,7 +20,6 @@ import {
   getNotFoundAction,
   getPathParamsFromPathPayload,
   isPathPayload,
-  NOT_FOUND_PATH,
   pathParamsToParams,
 } from './router-utils'
 
