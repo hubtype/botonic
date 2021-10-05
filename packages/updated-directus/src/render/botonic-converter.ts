@@ -49,7 +49,8 @@ export class BotonicMsgConverter {
   private convertButtons(cmsButtons: cms.Button[], style: ButtonStyle): any[] {
     return cmsButtons.map(cmsButton => {
       const msgButton = {
-        payload: cmsButton.target,
+        payload: cmsButton.callback.payload,
+        url: cmsButton.callback.url,
       } as any
       if (style === ButtonStyle.BUTTON) {
         msgButton['title'] = cmsButton.text
@@ -77,8 +78,8 @@ export class BotonicMsgConverter {
     contentMsgs: BotonicMsg[],
     content: cms.Content
   ): BotonicMsg[] {
-    if (content.common.followup) {
-      const followUp = this.followUp(content.common.followup)
+    if (content.common.followUp) {
+      const followUp = this.followUp(content.common.followUp)
       const followUps = Array.isArray(followUp) ? followUp : [followUp]
       if (Array.isArray(contentMsgs)) {
         contentMsgs.push(...followUps)

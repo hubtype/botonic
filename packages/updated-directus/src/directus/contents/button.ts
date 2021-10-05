@@ -1,21 +1,27 @@
 import { ContentDelivery } from '../delivery'
 import { DirectusClient } from '../delivery'
-import * as cms from '../../cms'
-import { Button, CommonFields } from '../../cms'
+import {
+  Button,
+  CommonFields,
+  Callback,
+  ContentType,
+  SupportedLocales,
+  ContentCallback,
+} from '../../cms'
 import { PartialItem } from '@directus/sdk'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
 
 export class ButtonDelivery extends ContentDelivery {
   constructor(client: DirectusClient) {
-    super(client, cms.ContentType.BUTTON)
+    super(client, ContentType.BUTTON)
   }
 
-  async button(id: string, context: cms.SupportedLocales): Promise<Button> {
+  async button(id: string, context: SupportedLocales): Promise<Button> {
     const entry = await this.getEntry(id, context)
     return this.fromEntry(entry)
   }
 
-  fromEntry(entry: PartialItem<any>, contentType?: cms.ContentType): Button {
+  fromEntry(entry: PartialItem<any>, contentType?: ContentType): Button {
     const opt = {
       common: {
         id: entry.id as string,
@@ -24,32 +30,36 @@ export class ButtonDelivery extends ContentDelivery {
         customFields: getCustomFields(entry),
       } as CommonFields,
       text: this.createButtonText(entry, contentType),
-      target: this.createButtonTarget(entry, contentType),
+      callback: this.createButtonTarget(entry, contentType),
     }
     return new Button(opt)
   }
 
-  private createButtonTarget(
-    entry: any,
-    contentType?: cms.ContentType
-  ): string {
-    if (contentType === cms.ContentType.TEXT) {
-      return `${contentType}$${entry.id}`
+  private createButtonTarget(entry: any, contentType?: ContentType): Callback {
+    if (contentType === ContentType.TEXT) {
+      return new ContentCallback(contentType, entry.id)
     }
+
     const PAYLOAD_CONTENT_TYPE = 'payload'
+
     switch (entry.target[0].collection) {
       case PAYLOAD_CONTENT_TYPE:
-        return entry.target[0].item.payload
+        return new Callback(entry.target[0].item.payload, undefined)
+      case ContentType.URL:
+        return new Callback(undefined, entry.target[0].item.url)
       default:
-        return `${entry.target[0].collection}$${entry.target[0].item.id}`
+        return new ContentCallback(
+          entry.target[0].collection,
+          entry.target[0].item.id
+        )
     }
   }
 
   private createButtonText(
     entry: PartialItem<any>,
-    contentType?: cms.ContentType
+    contentType?: ContentType
   ): string {
-    if (contentType === cms.ContentType.TEXT) {
+    if (contentType === ContentType.TEXT) {
       return entry.shorttext ?? entry.name
     } else return (entry.text as string) ?? entry.name
   }

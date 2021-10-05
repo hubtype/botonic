@@ -1,3 +1,4 @@
+import { Callback } from './callback'
 import { ContentType } from './cms'
 
 export enum ButtonStyle {
@@ -76,11 +77,11 @@ export class Text extends Content {
 
 export class Button extends Content {
   readonly text: string
-  readonly target: string
-  constructor(opt: { common: CommonFields; text: string; target: string }) {
+  readonly callback: Callback
+  constructor(opt: { common: CommonFields; text: string; callback: Callback }) {
     super(opt.common, ContentType.BUTTON)
     this.text = opt.text
-    this.target = opt.target
+    this.callback = opt.callback
   }
 }
 

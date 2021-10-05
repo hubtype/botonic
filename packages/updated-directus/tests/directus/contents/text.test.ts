@@ -24,9 +24,9 @@ test('Test: directus text with buttons (with target payload and text) and withou
   const directus = testDirectus()
   const testText = await directus.text(TEXT_WITH_2B_WITHOUT_F, testContext())
   expect(testText.buttons![0].text).toEqual('buttonText')
-  expect(testText.buttons![0].target).toEqual('payloadFromDirectus')
+  expect(testText.buttons![0].callback.payload).toEqual('payloadFromDirectus')
   expect(testText.buttons![1].text).toEqual('buttonText2')
-  expect(testText.buttons![1].target).toEqual(
+  expect(testText.buttons![1].callback.payload).toEqual(
     'text$7b9cb226-a82c-46bc-8f82-e2d233a77de3'
   )
 })
@@ -77,7 +77,7 @@ test('Test: directus text with button of type text', async () => {
   const directus = testDirectus()
   const testText = await directus.text(TEXT_WITH_B_TYPE_TEXT, testContext())
   expect(testText.buttons![0].text).toEqual('This will be the button text')
-  expect(testText.buttons![0].target).toEqual(
+  expect(testText.buttons![0].callback.payload).toEqual(
     'text$68123386-d046-411d-9e0c-9e9d6bc08c05'
   )
 })
