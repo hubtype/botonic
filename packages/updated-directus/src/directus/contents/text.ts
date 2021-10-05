@@ -43,9 +43,9 @@ export class TextDelivery extends ContentDelivery {
   private createButtons(
     buttons: PartialItem<any>,
     context: cms.SupportedLocales
-  ): cms.Button[] | undefined {
+  ): cms.Button[] {
     if (buttons.length === 0) {
-      return undefined
+      return []
     }
     return buttons.map((item: any) => {
       return this.button.fromEntry(item.item, item.collection)

@@ -30,8 +30,8 @@ export abstract class Content {
 
 export class Text extends Content {
   readonly text: string
-  readonly buttons?: Button[]
-  constructor(opt: { common: CommonFields; text: string; buttons?: Button[] }) {
+  readonly buttons: Button[]
+  constructor(opt: { common: CommonFields; text: string; buttons: Button[] }) {
     super(opt.common)
     this.text = opt.text
     this.buttons = opt.buttons
