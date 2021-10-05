@@ -10,7 +10,7 @@ export interface CommonFields {
   name: string
   shortText?: string
   keywords?: string[]
-  followup?: Text | Image
+  followUp?: Text | Image
   customFields?: Record<string, unknown>
 }
 

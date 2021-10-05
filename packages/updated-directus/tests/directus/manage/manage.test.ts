@@ -109,7 +109,7 @@ test('Test: update content of type text and button', async () => {
 
   expect(contentUpdated.common.name).toBe('bla_bla_bla')
   expect(contentUpdated.buttons![0].text).toBe('helllou')
-  expect((contentUpdated.common.followup as Text).name).toBe(
+  expect((contentUpdated.common.followUp as Text).name).toBe(
     'follow_up_updated'
   )
 

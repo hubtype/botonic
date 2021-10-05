@@ -30,7 +30,7 @@ export class TextDelivery extends ContentDelivery {
       common: {
         id: entry.id as string,
         name: entry.name as string,
-        followup: this.createFollowup(entry.followup, context),
+        followUp: this.createFollowup(entry.followup, context),
         keywords: (entry?.keywords?.split(',') as string[]) ?? undefined,
         customFields: getCustomFields(entry),
       } as CommonFields,

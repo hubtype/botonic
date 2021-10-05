@@ -34,7 +34,7 @@ test('Test: directus text with buttons (with target payload and text) and withou
 test('Test: directus text without buttons with text followup', async () => {
   const directus = testDirectus()
   const testText = await directus.text(TEXT_WITHOUT_B_WITH_F_T, testContext())
-  const followup = testText.common.followup as Text
+  const followup = testText.common.followUp as Text
   expect(followup).toBeInstanceOf(Text)
   expect(followup.common.name).toEqual('TEST_FOLLOWUP_TEXT')
   expect(followup.text).toEqual("Hey, I'm a followup!")
@@ -43,7 +43,7 @@ test('Test: directus text without buttons with text followup', async () => {
 test('Test: directus text without buttons image followup', async () => {
   const directus = testDirectus()
   const testText = await directus.text(TEXT_WITHOUT_B_WITH_F_I, testContext())
-  const followup = testText.common.followup as Image
+  const followup = testText.common.followUp as Image
   expect(followup).toBeInstanceOf(Image)
   expect(followup.common.name).toEqual('TEST_FOLLOWUP_IMAGE')
 })
@@ -55,11 +55,11 @@ test('Test: directus text with buttons with text followup with text followup', a
     testContext()
   )
   expect(testText.buttons).toHaveLength(3)
-  const followup1 = testText.common.followup as Text
+  const followup1 = testText.common.followUp as Text
   expect(followup1).toBeInstanceOf(Text)
   expect(followup1.common.name).toEqual('TEST_FOLLOWUP_TEXT')
 
-  const followup2 = followup1.common.followup as Text
+  const followup2 = followup1.common.followUp as Text
   expect(followup2).toBeInstanceOf(Text)
   expect(followup2.common.name).toEqual('TEST_FOLLOWUP_OF_FOLLOWUP')
   expect(followup2.buttons).toHaveLength(1)
