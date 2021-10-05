@@ -1,7 +1,9 @@
 import * as cms from '../cms'
+import { ButtonStyle } from '../cms'
 
 export class RenderOptions {
   followUpDelaySeconds = 3
+  defaultButtonsStyle?: ButtonStyle = ButtonStyle.BUTTON
 }
 
 export interface BotonicMsg {
@@ -29,19 +31,21 @@ export class BotonicMsgConverter {
   }
 
   text(text: cms.Text, delayS = 0): BotonicMsg[] {
+    const buttonsStyle = text.buttonsStyle || this.options.defaultButtonsStyle
     const msg: any = {
       type: 'text',
       delay: delayS,
       data: { text: text.text },
-      buttons: text.buttons ? this.convertButtons(text.buttons) : undefined,
+      buttons: text.buttons
+        ? this.convertButtons(text.buttons, buttonsStyle!)
+        : undefined,
     }
     return this.appendFollowUp(msg, text)
   }
 
-  convertButtons(cmsButtons: cms.Button[]): any[] {
+  private convertButtons(cmsButtons: cms.Button[], style: ButtonStyle): any[] {
     return cmsButtons.map(cmsButton => {
       const msgButton = {
-        title: cmsButton.text,
         payload: cmsButton.target,
       } as any
       return msgButton
