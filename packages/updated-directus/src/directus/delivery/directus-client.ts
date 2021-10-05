@@ -79,7 +79,9 @@ export class DirectusClient {
       }
       return entries ?? []
     } catch (e) {
-      throw new Error(`Error getting the contents of type ${contentType}, ${e}`)
+      console.error(`Error getting the contents of type ${contentType}, ${e}`)
+
+      return []
     }
   }
 
@@ -87,12 +89,12 @@ export class DirectusClient {
     context: cms.SupportedLocales,
     contentType: cms.ContentType,
     id: string
-  ) {
+  ): Promise<void> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
       await this.client.items(contentType).deleteOne(id)
     } catch (e) {
-      throw new Error(
+      console.error(
         `Error deleting content with id: ${id} of content type ${contentType}, ${e}`
       )
     }
@@ -102,13 +104,13 @@ export class DirectusClient {
     context: cms.SupportedLocales,
     contentType: cms.ContentType,
     id: string
-  ) {
+  ): Promise<void> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
       const name = 'random-' + Math.random().toString(36).substring(2)
       await this.client.items(contentType).createOne({ id, name })
     } catch (e) {
-      throw new Error(
+      console.error(
         `Error creating content with id: ${id} of content type ${contentType}, ${e}`
       )
     }
@@ -123,7 +125,7 @@ export class DirectusClient {
       await this.client.auth.static(this.clientParams.credentials.token)
       await this.client.items(cms.MessageContentType.TEXT).updateOne(id, fields)
     } catch (e) {
-      throw new Error(
+      console.error(
         `Error updating content with id: ${id} of content type ${cms.MessageContentType.TEXT}, ${e}`
       )
     }
@@ -138,7 +140,7 @@ export class DirectusClient {
       await this.client.auth.static(this.clientParams.credentials.token)
       await this.client.items(cms.SubContentType.BUTTON).updateOne(id, fields)
     } catch (e) {
-      throw new Error(
+      console.error(
         `Error updating content with id: ${id} of content type ${cms.SubContentType.BUTTON}, ${e}`
       )
     }
@@ -155,7 +157,7 @@ export class DirectusClient {
         .items(cms.MessageContentType.IMAGE)
         .updateOne(id, fields)
     } catch (e) {
-      throw new Error(
+      console.error(
         `Error updating content with id: ${id} of content type ${cms.MessageContentType.IMAGE}, ${e}`
       )
     }

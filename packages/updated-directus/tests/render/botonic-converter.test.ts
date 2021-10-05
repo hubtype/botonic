@@ -92,7 +92,7 @@ test('Test: convert a text with text followup and buttons correctly', () => {
   expect(convertedText).toEqual(correctConvertedText)
 })
 
-test('Test: conbert text with reply button correctly', () => {
+test('Test: convert text with reply button correctly', () => {
   const opt = {
     common: {
       id: 'id',
