@@ -66,7 +66,7 @@ export class BotonicMsgConverter {
       type: 'image',
       delay: delayS,
       data: {
-        image: img.image,
+        image: img.imgUrl,
       },
     }
     msgs.push(msg)

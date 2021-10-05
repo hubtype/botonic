@@ -77,9 +77,9 @@ export class Button extends Content {
 }
 
 export class Image extends Content {
-  readonly image: string
-  constructor(opt: { common: CommonFields; image: string }) {
+  readonly imgUrl: string
+  constructor(opt: { common: CommonFields; imgUrl: string }) {
     super(opt.common, MessageContentType.IMAGE)
-    this.image = opt.image
+    this.imgUrl = opt.imgUrl
   }
 }

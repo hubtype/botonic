@@ -1,16 +1,17 @@
-import { testContext, testDirectus } from '../helpers/directus'
+import { testContext, testDirectus } from '../helpers/directus.helper'
 import {
   Text,
   Image,
   MessageContentType,
   SubContentType,
   ContentType,
+  ContentId,
 } from '../../../src/cms'
 import {
   createContents,
   deleteContents,
   generateRandomUUID,
-} from './helpers/utils'
+} from './helpers/utils.helper'
 
 const randomUUID = 'd8b5a518-1fbf-11ec-9621-0242ac130002'
 const myMock = jest.fn()
@@ -90,19 +91,13 @@ test('Test: update content of type text and button', async () => {
     name: 'bla_bla_bla',
     text: 'new text changed!',
     buttons: [newButtonId],
-    followup: {
-      id: newFollowupId,
-      type: MessageContentType.TEXT,
-    },
+    followup: new ContentId(MessageContentType.TEXT, newFollowupId),
   })
 
   await directus.updateButtonFields(testContext(), newButtonId, {
     name: 'button_updated_from_test',
     text: 'helllou',
-    target: {
-      id: newTargetId,
-      type: MessageContentType.IMAGE,
-    },
+    target: new ContentId(MessageContentType.IMAGE, newFollowupId),
   })
 
   await directus.updateTextFields(testContext(), newFollowupId, {

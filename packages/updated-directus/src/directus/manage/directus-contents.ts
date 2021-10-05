@@ -1,30 +1,20 @@
-import { MessageContentType, NonMessageContentType } from '../../cms'
+import { ContentId } from '../../cms'
 
 export interface TextFields {
   name?: string
   text?: string
   buttons?: string[]
-  followup?: FollowupField
+  followup?: ContentId
 }
 
 export interface ButtonFields {
   name?: string
   text?: string
-  target?: TargetField
+  target?: ContentId
 }
 
 export interface ImageFields {
   name?: string
   imgUrl?: string
-  followup?: FollowupField
-}
-
-type FollowupField = {
-  id: string
-  type: MessageContentType
-}
-
-type TargetField = {
-  id: string
-  type: MessageContentType | NonMessageContentType.PAYLOAD
+  followup?: ContentId
 }

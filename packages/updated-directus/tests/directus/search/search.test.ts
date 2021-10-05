@@ -1,6 +1,6 @@
-import { testSearch } from './helpers/search'
+import { testSearch } from './helpers/search.helper'
 
-const TEXT_WITH_KEYWORDS = 'c2634da5-f8cd-4254-a68b-9a76d6792b81'
+const TEXT_WITH_KEYWORDS = 'ce1f229c-9f30-4bf4-a891-102b66a91287'
 
 test.each([['help'], ['jejeje'], ['need']])(
   'Test: search text with exact keywords',

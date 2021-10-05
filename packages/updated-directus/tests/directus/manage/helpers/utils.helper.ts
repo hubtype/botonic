@@ -1,5 +1,5 @@
 import { ContentType } from '../../../../src/cms'
-import { testContext, testDirectus } from '../../helpers/directus'
+import { testContext, testDirectus } from '../../helpers/directus.helper'
 
 export async function createContents(
   contentTypePerId: Record<string, ContentType>

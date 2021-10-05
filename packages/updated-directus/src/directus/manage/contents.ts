@@ -122,7 +122,7 @@ export class ContentsDelivery {
         ...convertedDirectusText,
         followup: [
           {
-            collection: fields.followup.type,
+            collection: fields.followup.model,
             text_id: id,
             item: {
               id: fields.followup.id,
@@ -173,7 +173,7 @@ export class ContentsDelivery {
         ...convertedDirectusButton,
         target: [
           {
-            collection: fields.target.type,
+            collection: fields.target.model,
             item: {
               id: fields.target.id,
             },
@@ -207,7 +207,7 @@ export class ContentsDelivery {
         ...convertedDirectusText,
         followup: [
           {
-            collection: fields.followup.type,
+            collection: fields.followup.model,
             item: {
               id: fields.followup.id,
             },

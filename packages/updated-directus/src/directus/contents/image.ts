@@ -23,7 +23,7 @@ export class ImageDelivery extends ContentDelivery {
         keywords: (entry.keywords?.split(',') as string[]) ?? undefined,
         customFields: getCustomFields(entry),
       } as CommonFields,
-      image: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`,
+      imgUrl: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`,
     }
     return new Image(opt)
   }

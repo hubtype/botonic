@@ -69,8 +69,8 @@ export class TextDelivery extends ContentDelivery {
   }
 
   private getButtonsStyle(buttonsStyle: string): cms.ButtonStyle | undefined {
-    if (buttonsStyle == 'QuickReplies') return cms.ButtonStyle.QUICK_REPLY
-    else if (buttonsStyle == 'Buttons') return cms.ButtonStyle.BUTTON
+    if (buttonsStyle === 'QuickReplies') return cms.ButtonStyle.QUICK_REPLY
+    else if (buttonsStyle === 'Buttons') return cms.ButtonStyle.BUTTON
     return undefined
   }
 }

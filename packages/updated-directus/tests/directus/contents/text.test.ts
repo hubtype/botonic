@@ -1,4 +1,4 @@
-import { testDirectus, testContext } from '../helpers/directus'
+import { testDirectus, testContext } from '../helpers/directus.helper'
 import { Text, Image, ButtonStyle } from '../../../src/cms'
 
 const TEXT_WITHOUT_B_WITHOUT_F = '4873aa47-f797-43c0-afbf-86700f52c9f6'

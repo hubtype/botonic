@@ -24,7 +24,7 @@ export class ButtonDelivery extends ContentDelivery {
         customFields: getCustomFields(entry),
       } as CommonFields,
       text: this.createButtonText(entry, contentType),
-      target: this.createButtonTarget(entry, contentType) ?? undefined,
+      target: this.createButtonTarget(entry, contentType),
     }
     return new Button(opt)
   }
