@@ -7,7 +7,7 @@ export class RenderOptions {
 }
 
 export interface BotonicMsg {
-  type: 'text' | 'image'
+  type: 'text' | 'image' | 'carousel'
   delay?: number
   data: any
   buttons?: any[]
@@ -26,6 +26,9 @@ export class BotonicMsgConverter {
     }
     if (content instanceof cms.Image) {
       return this.image(content)
+    }
+    if (content instanceof cms.Carousel) {
+      return this.carousel(content)
     }
     throw new Error('Unsupported content type')
   }
@@ -74,6 +77,28 @@ export class BotonicMsgConverter {
     return msgs
   }
 
+  carousel(carousel: cms.Carousel, delayS = 0): BotonicMsg[] {
+    const msgs: BotonicMsg[] = []
+    const msg: BotonicMsg = {
+      type: 'carousel',
+      delay: delayS,
+      data: {
+        elements: carousel.elements.map(e => this.element(e)),
+      },
+    }
+    msgs.push(msg)
+    return msgs
+  }
+
+  private element(cmsElement: cms.Element): any {
+    return {
+      img: cmsElement.imgUrl,
+      title: cmsElement.title,
+      subtitle: cmsElement.subtitle,
+      buttons: this.convertButtons(cmsElement.buttons, ButtonStyle.BUTTON),
+    }
+  }
+
   private appendFollowUp(
     contentMsgs: BotonicMsg[],
     content: cms.Content
@@ -96,6 +121,8 @@ export class BotonicMsgConverter {
       return this.text(followUp, this.options.followUpDelaySeconds)
     } else if (followUp instanceof cms.Image) {
       return this.image(followUp)
+    } else if (followUp instanceof cms.Carousel) {
+      return this.carousel(followUp)
     } else {
       throw new Error(`Unexpected followUp type: ${typeof followUp}`)
     }
