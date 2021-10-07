@@ -4,17 +4,19 @@ import { ButtonDelivery } from './contents/button'
 import { ImageDelivery } from './contents/image'
 import { KeywordsDelivery } from './search/keywords'
 import { DirectusClient } from './delivery/directus-client'
-import { Button, Text, Image, Content, AssetInfo, Url } from '../cms'
+import { Button, Text, Image, Content, AssetInfo, Url, Carousel } from '../cms'
 import { DirectusOptions } from '../plugin'
 import { ContentsDelivery } from './manage/contents'
 import { TextFields } from './manage/directus-contents'
 import { Stream } from 'stream'
 import { UrlDelivery } from './contents/url'
+import { CarouselDelivery } from './contents/carousel'
 
 export class Directus implements cms.CMS {
   private readonly _text: TextDelivery
   private readonly _button: ButtonDelivery
   private readonly _url: UrlDelivery
+  private readonly _carousel: CarouselDelivery
   private readonly _image: ImageDelivery
   private readonly _keywords: KeywordsDelivery
   private readonly _contents: ContentsDelivery
@@ -25,10 +27,12 @@ export class Directus implements cms.CMS {
     this._url = new UrlDelivery(client)
     this._image = new ImageDelivery(client)
     this._text = new TextDelivery(client, this._button, this._image)
+    this._carousel = new CarouselDelivery(client, this._button)
     this._keywords = new KeywordsDelivery(client)
     const deliveries = {
-      [cms.MessageContentType.TEXT]: this._text,
-      [cms.MessageContentType.IMAGE]: this._image,
+      [cms.ContentType.TEXT]: this._text,
+      [cms.ContentType.IMAGE]: this._image,
+      [cms.ContentType.CAROUSEL]: this._carousel,
     }
     this._contents = new ContentsDelivery(client, deliveries)
   }
@@ -44,6 +48,10 @@ export class Directus implements cms.CMS {
   }
   async url(id: string, context: cms.SupportedLocales): Promise<Url> {
     return this._url.url(id, context)
+  }
+
+  async carousel(id: string, context: cms.SupportedLocales): Promise<Carousel> {
+    return this._carousel.carousel(id, context)
   }
 
   async contentsWithKeywords(input: string): Promise<string[]> {

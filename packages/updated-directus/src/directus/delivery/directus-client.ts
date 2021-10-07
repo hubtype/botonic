@@ -32,9 +32,10 @@ export class DirectusClient {
       }
       return entry!
     } catch (e) {
-      throw new Error(
+      console.error(
         `Error getting content with id ${id} of content type ${contentType} and locale ${context}, ${e}`
       )
+      return {}
     }
   }
 
@@ -52,7 +53,8 @@ export class DirectusClient {
         []
       return ids
     } catch (e) {
-      throw new Error(`Error getting keywords from input: ${input}, ${e}`)
+      console.error(`Error getting keywords from input: ${input}, ${e}`)
+      return []
     }
   }
 

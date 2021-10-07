@@ -12,6 +12,7 @@ export const knownFields = [
   'image',
   'target',
   'url',
+  'elements',
 ]
 
 export function getContentFields(contentType: cms.ContentType): string[] {
@@ -24,6 +25,8 @@ export function getContentFields(contentType: cms.ContentType): string[] {
       return getButtonFields()
     case cms.ContentType.URL:
       return getUrlFields()
+    case cms.ContentType.CAROUSEL:
+      return getCarouselFields()
     default:
       return []
   }
@@ -42,6 +45,23 @@ function getTextFields(): string[] {
     'buttons.item.target.*',
     'buttons.item.target.item.*',
     'followup.item.*',
+    '*',
+  ]
+}
+
+function getCarouselFields(): string[] {
+  return [
+    'id',
+    'name',
+    'shorttext',
+    'keywords',
+    'elements.*',
+    'elements.item.*',
+    'elements.item.buttons.*',
+    'elements.item.buttons.item.*',
+    'elements.item.buttons.item.text',
+    'elements.item.buttons.item.target.*',
+    'elements.item.buttons.item.target.item.*',
     '*',
   ]
 }

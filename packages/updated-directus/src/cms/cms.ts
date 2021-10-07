@@ -3,12 +3,13 @@ import {
   ImageFields,
   TextFields,
 } from '../directus/manage/directus-contents'
-import { Button, Text, Image, Content, Url } from './contents'
+import { Button, Text, Image, Content, Url, Carousel } from './contents'
 import { Stream } from 'stream'
 
 export enum MessageContentType {
   TEXT = 'text',
   IMAGE = 'image',
+  CAROUSEL = 'carousel',
 }
 
 export enum NonMessageContentType {
@@ -47,6 +48,8 @@ export interface CMS {
   text(id: string, context: SupportedLocales): Promise<Text>
 
   url(id: string, context: SupportedLocales): Promise<Url>
+
+  carousel(id: string, context: SupportedLocales): Promise<Carousel>
 
   contentsWithKeywords(input: string): Promise<string[]>
 

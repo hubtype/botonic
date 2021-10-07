@@ -2,14 +2,16 @@ import { DirectusClient } from '../delivery/directus-client'
 import * as cms from '../../cms'
 import { AssetInfo, Content } from '../../cms'
 import { PartialItem } from '@directus/sdk'
-import { TextDelivery } from '../contents/text'
-import { ImageDelivery } from '../contents/image'
 import { ButtonFields, ImageFields, TextFields } from './directus-contents'
 import { Stream } from 'stream'
+import { CarouselDelivery } from '../contents/carousel'
+import { TextDelivery } from '../contents/text'
+import { ImageDelivery } from '../contents/image'
 
 export interface ContentDeliveries {
-  [cms.MessageContentType.TEXT]: TextDelivery
-  [cms.MessageContentType.IMAGE]: ImageDelivery
+  [cms.ContentType.TEXT]: TextDelivery
+  [cms.ContentType.IMAGE]: ImageDelivery
+  [cms.ContentType.CAROUSEL]: CarouselDelivery
 }
 
 export class ContentsDelivery {

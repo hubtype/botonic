@@ -92,3 +92,31 @@ export class Image extends Content {
     this.imgUrl = opt.imgUrl
   }
 }
+
+export class Element extends Content {
+  readonly title: string
+  readonly subtitle: string
+  readonly buttons: Button[]
+  readonly imgUrl: string
+  constructor(opt: {
+    common: CommonFields
+    title: string
+    subtitle: string
+    buttons: Button[]
+    imgUrl: string
+  }) {
+    super(opt.common, ContentType.ELEMENT)
+    this.title = opt.title
+    this.subtitle = opt.subtitle
+    this.buttons = opt.buttons
+    this.imgUrl = opt.imgUrl
+  }
+}
+
+export class Carousel extends Content {
+  readonly elements: Element[]
+  constructor(opt: { common: CommonFields; elements: Element[] }) {
+    super(opt.common, ContentType.CAROUSEL)
+    this.elements = opt.elements
+  }
+}
