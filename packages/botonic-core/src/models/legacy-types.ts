@@ -164,13 +164,13 @@ export interface Session {
 }
 // eslint-enable @typescript-eslint/naming-convention
 
-type InputMatcher = (input: Input) => boolean
-type ParamsMatcher =
+export type InputMatcher = (input: Input) => boolean
+export type ParamsMatcher =
   | { [key: string]: string }
   | ((params: { [key: string]: string }) => boolean)
-type SessionMatcher = (session: Session) => boolean
-type RequestMatcher = (request: BotRequest) => boolean
-type StringMatcher = RegExp | string | ((data: string) => boolean)
+export type SessionMatcher = (session: Session) => boolean
+export type RequestMatcher = (request: BotRequest) => boolean
+export type StringMatcher = RegExp | string | ((data: string) => boolean)
 
 export type RouteMatcher =
   | InputMatcher
