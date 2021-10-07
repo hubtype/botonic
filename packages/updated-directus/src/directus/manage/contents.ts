@@ -52,7 +52,12 @@ export class ContentsDelivery {
     fields: TextFields
   ): Promise<void> {
     const convertedFields = this.convertTextFields(id, context, fields)
-    await this.client.updateTextFields(context, id, convertedFields)
+    await this.client.updateFields(
+      context,
+      cms.ContentType.TEXT,
+      id,
+      convertedFields
+    )
   }
 
   async updateButtonFields(
@@ -61,7 +66,12 @@ export class ContentsDelivery {
     fields: ButtonFields
   ): Promise<void> {
     const convertedFields = this.convertButtonFields(id, context, fields)
-    await this.client.updateButtonFields(context, id, convertedFields)
+    await this.client.updateFields(
+      context,
+      cms.ContentType.BUTTON,
+      id,
+      convertedFields
+    )
   }
 
   async updateImageFields(
@@ -70,7 +80,12 @@ export class ContentsDelivery {
     fields: ImageFields
   ): Promise<void> {
     const convertedFields = this.convertImageFields(id, context, fields)
-    await this.client.updateImageFields(context, id, convertedFields)
+    await this.client.updateFields(
+      context,
+      cms.ContentType.IMAGE,
+      id,
+      convertedFields
+    )
   }
 
   async createAsset(

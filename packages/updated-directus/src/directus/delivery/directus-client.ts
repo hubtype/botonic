@@ -118,49 +118,18 @@ export class DirectusClient {
     }
   }
 
-  async updateTextFields(
+  async updateFields(
     context: cms.SupportedLocales,
+    contentType: cms.ContentType,
     id: string,
     fields: PartialItem<any>
   ): Promise<void> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
-      await this.client.items(cms.MessageContentType.TEXT).updateOne(id, fields)
+      await this.client.items(contentType).updateOne(id, fields)
     } catch (e) {
       console.error(
-        `Error updating content with id: ${id} of content type ${cms.MessageContentType.TEXT}, ${e}`
-      )
-    }
-  }
-
-  async updateButtonFields(
-    context: cms.SupportedLocales,
-    id: string,
-    fields: PartialItem<any>
-  ): Promise<void> {
-    try {
-      await this.client.auth.static(this.clientParams.credentials.token)
-      await this.client.items(cms.SubContentType.BUTTON).updateOne(id, fields)
-    } catch (e) {
-      console.error(
-        `Error updating content with id: ${id} of content type ${cms.SubContentType.BUTTON}, ${e}`
-      )
-    }
-  }
-
-  async updateImageFields(
-    context: cms.SupportedLocales,
-    id: string,
-    fields: PartialItem<any>
-  ): Promise<void> {
-    try {
-      await this.client.auth.static(this.clientParams.credentials.token)
-      await this.client
-        .items(cms.MessageContentType.IMAGE)
-        .updateOne(id, fields)
-    } catch (e) {
-      console.error(
-        `Error updating content with id: ${id} of content type ${cms.MessageContentType.IMAGE}, ${e}`
+        `Error updating content with id: ${id} of content type ${contentType}, ${e}`
       )
     }
   }
