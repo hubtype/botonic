@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { Input, PATH_PAYLOAD_IDENTIFIER, PROVIDER } from '../src'
-import { Router } from '../src/router'
+import { Input, PATH_PAYLOAD_IDENTIFIER, PROVIDER } from '../../src'
 import {
   getPathParamsFromPathPayload,
   NoMatchingRouteError,
   pathParamsToParams,
-} from '../src/routing'
+  Router,
+} from '../../src/routing'
 
 const createPathPayload = (pathWithParams: string) =>
   `${PATH_PAYLOAD_IDENTIFIER}${pathWithParams}`
