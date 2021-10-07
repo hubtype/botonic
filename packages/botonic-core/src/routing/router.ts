@@ -1,5 +1,5 @@
-import { NOT_FOUND_PATH } from './constants'
-import { RouteInspector } from './debug/inspector'
+import { NOT_FOUND_PATH } from '../constants'
+import { RouteInspector } from '../debug/inspector'
 import {
   Input,
   MatchedValue,
@@ -13,15 +13,15 @@ import {
   Routes,
   RoutingState,
   Session,
-} from './models'
+} from '../models'
+import { cloneObject, isFunction } from '../utils'
 import {
   getEmptyAction,
   getNotFoundAction,
   getPathParamsFromPathPayload,
   isPathPayload,
   pathParamsToParams,
-} from './routing/router-utils'
-import { cloneObject, isFunction } from './utils'
+} from './router-utils'
 
 export class Router {
   routes: Routes
