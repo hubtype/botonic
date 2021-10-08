@@ -46,6 +46,7 @@ export class Router {
    * - fallbackAction: any other action that acts as a fallback (404, )
    */
 
+  // eslint-disable-next-line complexity
   processInput(
     input: Input,
     session: Session,
@@ -56,12 +57,13 @@ export class Router {
     // 1. Getting the current routing state.
     const {
       currentRoute,
-      currentRoutePath,
       matchedRoute,
-      matchedRoutePath,
       params,
       isFlowBroken,
     } = this.getRoutingState(input, session, lastRoutePath)
+
+    const currentRoutePath = currentRoute?.path ?? null
+    const matchedRoutePath = matchedRoute?.path ?? null
 
     // 2. Given a routing state, resolve the different possible scenarios and return the new bot state.
 
@@ -298,20 +300,11 @@ export class Router {
     lastRoutePath: RoutePath
   ): RoutingState {
     const currentRoute = this.getRouteByPath(lastRoutePath, this.routes)
-    const currentRoutePath = lastRoutePath
-    if (isPathPayload(input.payload)) {
-      return this.getRoutingStateFromPathPayload(
-        currentRoute,
-        currentRoutePath,
-        input.payload as string
-      )
+    if (currentRoute && lastRoutePath) currentRoute.path = lastRoutePath
+    if (typeof input.payload === 'string' && isPathPayload(input.payload)) {
+      return this.getRoutingStateFromPathPayload(currentRoute, input.payload)
     }
-    return this.getRoutingStateFromInput(
-      currentRoute,
-      currentRoutePath,
-      input,
-      session
-    )
+    return this.getRoutingStateFromInput(currentRoute, input, session)
   }
 
   /**
@@ -319,7 +312,6 @@ export class Router {
    * */
   getRoutingStateFromInput(
     currentRoute: Nullable<Route>,
-    currentRoutePath: RoutePath,
     input: Input,
     session: Session
   ): RoutingState {
@@ -329,16 +321,18 @@ export class Router {
         input,
         currentRoute.childRoutes,
         session,
-        currentRoutePath
+        currentRoute.path
       )
       if (routeParams) {
         return {
           currentRoute,
-          currentRoutePath,
-          matchedRoute: routeParams.route,
-          matchedRoutePath: routeParams.route
-            ? `${currentRoutePath}/${routeParams.route.path}`
-            : currentRoutePath,
+          matchedRoute: {
+            ...routeParams.route,
+            path:
+              routeParams.route && currentRoute.path
+                ? `${currentRoute.path}/${routeParams.route.path}`
+                : currentRoute.path,
+          },
           params: routeParams.params,
           isFlowBroken: false,
         }
@@ -352,24 +346,23 @@ export class Router {
       input,
       this.routes,
       session,
-      currentRoutePath
+      currentRoute?.path ?? null
     )
-    const isFlowBroken = !currentRoutePath ? false : true
-    if (routeParams) {
+    const isFlowBroken = !currentRoute?.path ? false : true
+    if (routeParams?.route) {
       return {
         currentRoute,
-        currentRoutePath,
-        matchedRoute: routeParams.route,
-        matchedRoutePath: routeParams.route?.path ?? null,
+        matchedRoute: {
+          ...routeParams.route,
+          path: routeParams.route?.path ?? null,
+        },
         params: routeParams.params,
         isFlowBroken,
       }
     }
     return {
       currentRoute,
-      currentRoutePath,
       matchedRoute: null,
-      matchedRoutePath: null,
       params: {},
       isFlowBroken,
     }
@@ -380,33 +373,25 @@ export class Router {
    * */
   getRoutingStateFromPathPayload(
     currentRoute: Nullable<Route>,
-    currentRoutePath: RoutePath,
     pathPayload: string
   ): RoutingState {
     const { path, params } = getPathParamsFromPathPayload(pathPayload)
-
     /**
      * shorthand function to update the matching information given a path
      */
     const getRoutingStateFromPath = (seekPath: string): RoutingState => {
       const matchedRoute = this.getRouteByPath(seekPath)
-
       if (!matchedRoute) {
         return {
           currentRoute,
-          currentRoutePath,
           matchedRoute: null,
-          matchedRoutePath: null,
           params: {},
           isFlowBroken: true,
         }
       }
-
       return {
         currentRoute,
-        currentRoutePath,
-        matchedRoute,
-        matchedRoutePath: seekPath,
+        matchedRoute: { ...matchedRoute, path: seekPath },
         params: pathParamsToParams(params),
         isFlowBroken: false,
       }
@@ -415,9 +400,9 @@ export class Router {
      * Given a valid path: 'Flow1/Subflow1' we are in one of the two scenarios below.
      */
     //  1. Received __PATH_PAYLOAD__Subflow2, so we need to first try to concatenate it with Flow1 (lastRoutePath)
-    if (currentRoutePath) {
+    if (currentRoute?.path) {
       const routingState = getRoutingStateFromPath(
-        `${currentRoutePath}/${path}`
+        `${currentRoute.path}/${path}`
       )
       if (routingState.matchedRoute) return routingState
     }

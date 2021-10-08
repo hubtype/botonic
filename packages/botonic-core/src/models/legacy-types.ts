@@ -184,7 +184,7 @@ export interface Route {
   childRoutes?: Route[]
   lastRoutePath?: string
   ignoreRetry?: boolean
-  path?: string
+  path: Nullable<string>
   redirect?: string
   retry?: number
 
@@ -263,9 +263,7 @@ export type MatchedValue = boolean | RegExpExecArray | null
 
 export type RoutingState = {
   currentRoute: Nullable<Route>
-  currentRoutePath: RoutePath
   matchedRoute: Nullable<Route>
-  matchedRoutePath: RoutePath
   params: Params
   isFlowBroken: boolean
 }
