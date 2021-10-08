@@ -133,6 +133,12 @@ export class ContentsDelivery {
         buttons: this.addButtons(id, fields.buttons),
       }
     }
+    if (fields.buttonsStyle) {
+      convertedDirectusText = {
+        ...convertedDirectusText,
+        buttonstyle: fields.buttonsStyle,
+      }
+    }
 
     if (fields.followup) {
       convertedDirectusText = {

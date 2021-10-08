@@ -45,6 +45,7 @@ function getTextFields(): string[] {
     'buttons.item.target.*',
     'buttons.item.target.item.*',
     'followup.item.*',
+    'buttonstyle',
     '*',
   ]
 }
@@ -75,7 +76,7 @@ function getButtonFields(): string[] {
 }
 
 function getUrlFields(): string[] {
-  return ['id', 'name', 'shorttext', 'url', 'keywords']
+  return ['id', 'name', 'shorttext', 'url', 'keywords', '*']
 }
 
 // export function getLocaleFilter(

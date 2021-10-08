@@ -11,7 +11,7 @@ export interface CommonFields {
   name: string
   shortText?: string
   keywords?: string[]
-  followUp?: Text | Image
+  followUp?: Text | Image | Carousel
   customFields?: Record<string, unknown>
 }
 

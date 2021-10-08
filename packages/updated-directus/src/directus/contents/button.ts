@@ -39,7 +39,13 @@ export class ButtonDelivery extends ContentDelivery {
     if (contentType === ContentType.TEXT) {
       return new ContentCallback(contentType, entry.id)
     }
+    if (contentType === ContentType.CAROUSEL) {
+      return new ContentCallback(contentType, entry.id)
+    }
 
+    if (contentType === ContentType.URL) {
+      return new Callback(undefined, entry.url)
+    }
     const PAYLOAD_CONTENT_TYPE = 'payload'
 
     switch (entry.target[0].collection) {
@@ -59,8 +65,8 @@ export class ButtonDelivery extends ContentDelivery {
     entry: PartialItem<any>,
     contentType?: ContentType
   ): string {
-    if (contentType === ContentType.TEXT) {
-      return entry.shorttext ?? entry.name
-    } else return (entry.text as string) ?? entry.name
+    if (contentType === ContentType.BUTTON) {
+      return (entry.text as string) ?? entry.name
+    } else return entry.shorttext ?? entry.name
   }
 }

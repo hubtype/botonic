@@ -26,8 +26,13 @@ export class Directus implements cms.CMS {
     this._button = new ButtonDelivery(client)
     this._url = new UrlDelivery(client)
     this._image = new ImageDelivery(client)
-    this._text = new TextDelivery(client, this._button, this._image)
     this._carousel = new CarouselDelivery(client, this._button)
+    this._text = new TextDelivery(
+      client,
+      this._button,
+      this._image,
+      this._carousel
+    )
     this._keywords = new KeywordsDelivery(client)
     const deliveries = {
       [cms.ContentType.TEXT]: this._text,

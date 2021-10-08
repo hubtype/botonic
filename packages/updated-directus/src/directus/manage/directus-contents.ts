@@ -5,6 +5,7 @@ export interface TextFields {
   text?: string
   buttons?: string[]
   followup?: ContentId
+  buttonsStyle?: 'Buttons' | 'QuickReplies'
 }
 
 export interface ButtonFields {
