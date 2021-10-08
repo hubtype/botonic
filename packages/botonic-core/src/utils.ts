@@ -47,6 +47,7 @@ export function isFunction(o: any): boolean {
 }
 
 export function cloneObject(object: any): any {
+  if (!object) return {}
   return { ...object }
 }
 
