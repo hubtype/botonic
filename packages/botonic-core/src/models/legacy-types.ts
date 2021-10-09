@@ -184,7 +184,7 @@ export interface Route {
   childRoutes?: Route[]
   lastRoutePath?: string
   ignoreRetry?: boolean
-  path: Nullable<string>
+  path: RoutePath
   redirect?: string
   retry?: number
 
@@ -204,7 +204,7 @@ export type Routes<R = Route> = R[] | ((_: BotRequest) => R[])
 
 export interface BotRequest {
   input: Input
-  lastRoutePath: string
+  lastRoutePath: RoutePath
   session: Session
   dataProvider: DataProvider
 }
@@ -273,7 +273,7 @@ export interface RouteParams {
   params: Params
 }
 export interface PathParams {
-  path: Nullable<string>
+  path: RoutePath
   params: string | undefined
 }
 

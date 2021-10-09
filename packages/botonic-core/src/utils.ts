@@ -42,6 +42,7 @@ export const isMobile = (mobileBreakpoint = 460): boolean => {
   }
   return false
 }
+
 export function isFunction(o: any): boolean {
   return typeof o === 'function'
 }
