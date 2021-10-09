@@ -9,18 +9,18 @@ import {
   Locales,
   MessageEventAck,
   MessageEventFrom,
+  Route,
   Routes,
   Session,
 } from './models'
 import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
-import { Router } from './routing'
-import { isFunction } from './utils'
+import { getComputedRoutes, Router } from './routing'
 
 interface CoreBotConfig {
   appId?: string
   defaultDelay?: number
-  defaultRoutes?: Routes
+  defaultRoutes?: Route[]
   defaultTyping?: number
   inspector?: Inspector
   locales: Locales
@@ -32,14 +32,14 @@ interface CoreBotConfig {
 export class CoreBot {
   appId?: string
   defaultDelay?: number
-  defaultRoutes?: Routes
+  defaultRoutes: Route[]
   defaultTyping?: number
-  inspector?: Inspector
+  inspector: Inspector
   locales: Locales
   plugins?: Record<string, Plugin>
   renderer: any
   rootElement: any
-  router: any
+  router: Router | null
   routes: Routes
   theme?: any
   botonicOutputParser = new BotonicOutputParser()
@@ -72,13 +72,13 @@ export class CoreBot {
     this.inspector = inspector || new Inspector()
     this.routes = routes
     this.defaultRoutes = defaultRoutes || []
-    this.router = isFunction(this.routes)
-      ? null
-      : new Router(
-          // @ts-ignore
-          [...this.routes, ...this.defaultRoutes],
-          this.inspector.routeInspector
-        )
+    this.router =
+      this.routes instanceof Function
+        ? null
+        : new Router(
+            [...this.routes, ...this.defaultRoutes],
+            this.inspector.routeInspector
+          )
   }
 
   getString(id: string, session: Session): string {
@@ -127,20 +127,25 @@ export class CoreBot {
       )
     }
 
-    if (isFunction(this.routes)) {
+    if (!this.router && this.routes instanceof Function) {
       this.router = new Router(
         [
-          // @ts-ignore
-          ...(await this.routes({ input, session, lastRoutePath })),
-          // @ts-ignore
+          ...(await getComputedRoutes(this.routes, {
+            input,
+            session,
+            lastRoutePath,
+          })),
           ...this.defaultRoutes,
         ],
-        // @ts-ignore
         this.inspector.routeInspector
       )
     }
 
-    const output = this.router.processInput(input, session, lastRoutePath)
+    const output = (this.router as Router).processInput(
+      input,
+      session,
+      lastRoutePath
+    )
     const request = {
       getString: stringId => this.getString(stringId, session),
       setLocale: locale => this.setLocale(locale, session),

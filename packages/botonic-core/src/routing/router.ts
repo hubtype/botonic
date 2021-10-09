@@ -10,11 +10,10 @@ import {
   Route,
   RouteParams,
   RoutePath,
-  Routes,
   RoutingState,
   Session,
 } from '../models'
-import { cloneObject, isFunction } from '../utils'
+import { cloneObject } from '../utils'
 import {
   getEmptyAction,
   getNotFoundAction,
@@ -24,11 +23,11 @@ import {
 } from './router-utils'
 
 export class Router {
-  routes: Routes
+  routes: Route[]
   routeInspector: RouteInspector
 
   constructor(
-    routes: Routes,
+    routes: Route[],
     routeInspector: RouteInspector | undefined = undefined
   ) {
     this.routes = routes
@@ -91,7 +90,7 @@ export class Router {
       return {
         action: null,
         emptyAction: null,
-        fallbackAction: getNotFoundAction(input, this.routes as Route[]),
+        fallbackAction: getNotFoundAction(input, this.routes),
         lastRoutePath: null,
         params,
       }
@@ -136,7 +135,7 @@ export class Router {
       return {
         action: currentRoute.action ?? null,
         emptyAction: getEmptyAction(currentRoute.childRoutes),
-        fallbackAction: getNotFoundAction(input, this.routes as Route[]),
+        fallbackAction: getNotFoundAction(input, this.routes),
         lastRoutePath: currentRoutePath,
         params,
       }
@@ -169,7 +168,7 @@ export class Router {
     return {
       action: null,
       emptyAction: null,
-      fallbackAction: getNotFoundAction(input, this.routes as Route[]),
+      fallbackAction: getNotFoundAction(input, this.routes),
       params,
       lastRoutePath: currentRoutePath,
     }
@@ -181,16 +180,12 @@ export class Router {
    * */
   getRoute(
     input: Input | Partial<Input>,
-    routes: Routes,
+    routes: Route[],
     session: Session,
     lastRoutePath: RoutePath
   ): RouteParams | null {
-    const computedRoutes = isFunction(routes)
-      ? // @ts-ignore
-        routes({ input, session, lastRoutePath })
-      : routes
     let params = {}
-    const route = computedRoutes.find(r =>
+    const route = routes.find(r =>
       Object.entries(r)
         .filter(
           ([key, _]) =>
@@ -224,24 +219,22 @@ export class Router {
    * */
   getRouteByPath(
     path: RoutePath,
-    routeList: Routes | null = null
+    routeList: Route[] | null = null
   ): Nullable<Route> {
     if (!path) return null
     let route: Nullable<Route> = null
     routeList = routeList || this.routes
     const [currentPath, ...childPath] = path.split('/')
-    if (Array.isArray(routeList)) {
-      for (const r of routeList) {
-        //iterate over all routeList
-        if (r.path == currentPath) {
-          route = r
-          if (r.childRoutes && r.childRoutes.length && childPath.length > 0) {
-            //evaluate childroute over next actions
-            route = this.getRouteByPath(childPath.join('/'), r.childRoutes)
-            // IMPORTANT: Returning a new object to avoid modifying dev routes and introduce side effects
-            if (route) return cloneObject(route)
-          } else if (childPath.length === 0) return cloneObject(route) //last action and found route
-        }
+    for (const r of routeList) {
+      //iterate over all routeList
+      if (r.path == currentPath) {
+        route = r
+        if (r.childRoutes && r.childRoutes.length && childPath.length > 0) {
+          //evaluate childroute over next actions
+          route = this.getRouteByPath(childPath.join('/'), r.childRoutes)
+          // IMPORTANT: Returning a new object to avoid modifying dev routes and introduce side effects
+          if (route) return cloneObject(route)
+        } else if (childPath.length === 0) return cloneObject(route) //last action and found route
       }
     }
     return null

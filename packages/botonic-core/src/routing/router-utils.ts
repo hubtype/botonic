@@ -4,7 +4,7 @@ import {
   PATH_PAYLOAD_IDENTIFIER,
   PATH_PAYLOAD_REGEXP,
 } from '../constants'
-import { Action, Input, Params, PathParams, Route } from '../models'
+import { Action, Input, Params, PathParams, Route, Routes } from '../models'
 
 export class NoMatchingRouteError extends Error {
   input: Input
@@ -69,4 +69,27 @@ export function getNotFoundAction(input: Input, routes: Route[]): Action {
   const notFoundActionRoute = routes.find(r => r.path === NOT_FOUND_PATH)
   if (!notFoundActionRoute) throw new NoMatchingRouteError(input)
   return notFoundActionRoute.action
+}
+
+export async function getComputedRoutes(
+  routes: Routes,
+  args: any
+): Promise<Route[]> {
+  if (routes instanceof Function) {
+    return await getComputedRoutes(await routes(args), args)
+  }
+  if (!routes.some(r => r.childRoutes && r.childRoutes instanceof Function)) {
+    return routes
+  }
+  for (const [key, route] of Object.entries(routes) as any) {
+    if (route.childRoutes && route.childRoutes instanceof Function) {
+      routes[key].childRoutes = await getComputedRoutes(
+        route.childRoutes(args),
+        args
+      )
+    } else {
+      routes[key] = route
+    }
+  }
+  return await getComputedRoutes(routes, args)
 }
