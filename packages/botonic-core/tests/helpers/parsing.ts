@@ -1,4 +1,4 @@
-import { BotonicOutputParser } from '../src/output-parser'
+import { BotonicOutputParser } from '../../src/output-parser'
 
 // @ts-ignore
 const { expect } = global
