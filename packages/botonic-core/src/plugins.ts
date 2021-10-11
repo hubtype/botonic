@@ -29,7 +29,7 @@ export async function runPlugins(
   lastRoutePath: RoutePath,
   response: string | null = null,
   messageEvents: Partial<BotonicEvent>[] | null = null,
-  dataProvider: DataProvider
+  dataProvider?: DataProvider
 ): Promise<void> {
   for (const key in plugins) {
     const p = await plugins[key]

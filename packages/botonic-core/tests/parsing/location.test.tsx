@@ -1,4 +1,4 @@
-import { BotonicOutputParserTester } from '../helpers'
+import { BotonicOutputParserTester } from '../helpers/parsing'
 
 // TODO: Location Messages coming without typing nor delay
 

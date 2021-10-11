@@ -206,7 +206,7 @@ export interface BotRequest {
   input: Input
   lastRoutePath: RoutePath
   session: Session
-  dataProvider: DataProvider
+  dataProvider?: DataProvider
 }
 
 /** The response of the bot for the triggered actions, which can be

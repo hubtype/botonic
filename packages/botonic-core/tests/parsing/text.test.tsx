@@ -1,6 +1,6 @@
 /* eslint-disable jest/expect-expect */
 import { PATH_PAYLOAD_IDENTIFIER } from '../../src'
-import { BotonicOutputParserTester } from '../helpers'
+import { BotonicOutputParserTester } from '../helpers/parsing'
 
 // TODO: Test with Markdown, test with Markdown + new lines
 
