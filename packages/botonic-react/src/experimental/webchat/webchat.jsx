@@ -328,7 +328,11 @@ export const Webchat = forwardRef((props, ref) => {
       }
       if (initialSession) updateSession(merge(initialSession, session))
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-    } else updateSession(merge(initialSession, session))
+    } else {
+      session.__retries = 0
+      session.is_first_interaction = true
+      updateSession(merge(initialSession, session))
+    }
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
     if (lastMessageUpdate) updateLastMessageDate(lastMessageUpdate)
