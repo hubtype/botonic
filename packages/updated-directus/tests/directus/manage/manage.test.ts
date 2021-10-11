@@ -6,6 +6,7 @@ import {
   SubContentType,
   ContentType,
   ContentId,
+  Carousel,
 } from '../../../src/cms'
 import {
   createContents,
@@ -24,6 +25,17 @@ test('Test: get all contents of type text', async () => {
   )
   textEntries.forEach(textEntry => {
     expect(textEntry).toBeInstanceOf(Text)
+  })
+})
+
+test('Test: get all contents of type carousel', async () => {
+  const directus = testDirectus()
+  const textEntries = await directus.topContents(
+    MessageContentType.CAROUSEL,
+    testContext()
+  )
+  textEntries.forEach(textEntry => {
+    expect(textEntry).toBeInstanceOf(Carousel)
   })
 })
 

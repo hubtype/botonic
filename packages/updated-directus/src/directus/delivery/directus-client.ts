@@ -158,11 +158,15 @@ export class DirectusClient {
     context: cms.SupportedLocales
   ) {
     const followupId = entry.followup[0].item.id
-    const contentType = entry.followup[0].item.hasOwnProperty('image')
-      ? cms.ContentType.IMAGE
-      : entry.followup[0].item.hasOwnProperty('elements')
-      ? cms.ContentType.CAROUSEL
-      : cms.ContentType.TEXT
+    const followup = entry.followup[0].item
+    let contentType
+
+    if (followup.hasOwnProperty('image')) {
+      contentType = cms.ContentType.IMAGE
+    } else if (followup.hasOwnProperty('elements')) {
+      contentType = cms.ContentType.CAROUSEL
+    } else contentType = cms.ContentType.TEXT
+
     return {
       ...entry,
       followup: await this.getEntry(followupId, contentType, context),

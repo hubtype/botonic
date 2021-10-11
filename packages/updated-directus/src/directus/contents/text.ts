@@ -64,11 +64,13 @@ export class TextDelivery extends ContentDelivery {
     if (followup.length === 0) {
       return undefined
     }
-    const contentType = followup.hasOwnProperty('image')
-      ? cms.ContentType.IMAGE
-      : followup.hasOwnProperty('elements')
-      ? cms.ContentType.CAROUSEL
-      : cms.ContentType.TEXT
+    
+    let contentType
+    if (followup.hasOwnProperty('image')) {
+      contentType = cms.ContentType.IMAGE
+    } else if (followup.hasOwnProperty('elements')) {
+      contentType = cms.ContentType.CAROUSEL
+    } else contentType = cms.ContentType.TEXT
 
     return contentType === cms.ContentType.IMAGE
       ? this.image.fromEntry(followup, context)
