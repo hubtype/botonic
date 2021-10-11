@@ -1,4 +1,4 @@
-import { BotonicOutputParserTester } from '../helpers'
+import { BotonicOutputParserTester } from '../helpers/parsing'
 
 const tester = new BotonicOutputParserTester()
 describe('Parsing Carousel responses', () => {
