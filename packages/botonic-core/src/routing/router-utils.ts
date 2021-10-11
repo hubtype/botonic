@@ -84,7 +84,7 @@ export async function getComputedRoutes(
   for (const [key, route] of Object.entries(routes) as any) {
     if (route.childRoutes && route.childRoutes instanceof Function) {
       routes[key].childRoutes = await getComputedRoutes(
-        route.childRoutes(args),
+        await route.childRoutes(args),
         args
       )
     } else {

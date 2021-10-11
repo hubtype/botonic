@@ -127,7 +127,7 @@ export class CoreBot {
       )
     }
 
-    if (!this.router && this.routes instanceof Function) {
+    if (this.routes instanceof Function) {
       this.router = new Router(
         [
           ...(await getComputedRoutes(this.routes, {
