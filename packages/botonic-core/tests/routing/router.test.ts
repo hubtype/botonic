@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { Input, PATH_PAYLOAD_IDENTIFIER, PROVIDER } from '../../src'
 import {
+  getComputedRoutes,
   getPathParamsFromPathPayload,
   NoMatchingRouteError,
   pathParamsToParams,
@@ -1524,6 +1525,95 @@ describe('TEST: ROOT LEVEL ACCESSES (lastRoutePath is null)', () => {
         lastRoutePath: null,
         params: {},
       })
+    })
+  })
+})
+
+describe('TEST: Converting Functional Routes to Routes', () => {
+  const routes = [
+    {
+      path: '1',
+      childRoutes: [
+        {
+          path: '1.1',
+          childRoutes: [],
+        },
+        {
+          path: '1.2',
+          childRoutes: [],
+        },
+      ],
+    },
+  ]
+
+  it('get expected routes given functional routes', async () => {
+    const functionalRoutes = async () => routes
+    const computedRoutes = await getComputedRoutes(await functionalRoutes())
+    expect(computedRoutes).toEqual(routes)
+  })
+  it('get expected routes given functional routes with functional childRoutes', async () => {
+    const functionalRoutes = async args => [
+      {
+        path: '1',
+        childRoutes: () => [
+          {
+            path: '1.1',
+            childRoutes: async () => [],
+          },
+          {
+            path: '1.2',
+            childRoutes: () => [],
+          },
+        ],
+      },
+    ]
+    const computedRoutes = await getComputedRoutes(await functionalRoutes())
+    expect(computedRoutes).toEqual(routes)
+  })
+})
+
+// eslint-disable-next-line jest/valid-describe
+describe('TEST: Functional Router process input', () => {
+  it('Resolves correctly the dynamic routes and incoming input', async () => {
+    const routes = async ({ input, session }) => {
+      if (session.is_first_interaction) {
+        return [{ text: /.*/, action: 'Hi' }]
+      } else {
+        return [
+          { path: 'help', text: 'help', action: 'Help' },
+          { path: '404', action: 'NotFound' },
+        ]
+      }
+    }
+    const args = {
+      input: { type: 'text', text: 'hi' },
+      session: testSession(),
+    }
+    let computedRoutes = await getComputedRoutes(routes, args)
+    let router = new Router(computedRoutes)
+    expect(computedRoutes).toEqual([{ text: /.*/, action: 'Hi' }])
+    expect(router.processInput(args.input, args.session, null)).toEqual({
+      action: 'Hi',
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: null,
+      params: {},
+    })
+    // Now modifying args to process an input when is not first interaction
+    args.session.is_first_interaction = false
+    args.input.text = 'help'
+    computedRoutes = await getComputedRoutes(routes, args)
+    router = new Router(computedRoutes)
+    expect(computedRoutes).toEqual([
+      { path: 'help', text: 'help', action: 'Help' },
+      { path: '404', action: 'NotFound' },
+    ])
+    expect(router.processInput(args.input, args.session, null)).toEqual({
+      action: 'Help',
+      emptyAction: null,
+      fallbackAction: null,
+      lastRoutePath: 'help',
+      params: {},
     })
   })
 })

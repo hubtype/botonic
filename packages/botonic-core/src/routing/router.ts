@@ -51,7 +51,7 @@ export class Router {
     session: Session,
     lastRoutePath: RoutePath = null
   ): ProcessInputResult {
-    session.__retries = session.__retries ?? 0
+    session.__retries = session?.__retries ?? 0
 
     // 1. Getting the current routing state.
     const {
