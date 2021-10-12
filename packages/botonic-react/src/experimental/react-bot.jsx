@@ -1,8 +1,8 @@
 import { CoreBot } from '@botonic/core'
 import React from 'react'
 
-import { RequestContext } from '../contexts'
 import { Text } from './components/text'
+import { RequestContext } from './contexts'
 
 export class ReactBot extends CoreBot {
   constructor(options) {

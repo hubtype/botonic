@@ -1,5 +1,12 @@
 import React from 'react'
 
+import { Button } from '../components/button'
+import { ButtonsDisabler } from '../components/buttons-disabler'
+import { Element } from '../components/element'
+import { Pic } from '../components/pic'
+import { Reply } from '../components/reply'
+import { Subtitle } from '../components/subtitle'
+import { Title } from '../components/title'
 import {
   isAudio,
   isCarousel,
@@ -9,14 +16,7 @@ import {
   isLocation,
   isText,
   isVideo,
-} from '../../src/message-utils'
-import { Button } from '../components/button'
-import { ButtonsDisabler } from '../components/buttons-disabler'
-import { Element } from '../components/element'
-import { Pic } from '../components/pic'
-import { Reply } from '../components/reply'
-import { Subtitle } from '../components/subtitle'
-import { Title } from '../components/title'
+} from '../message-utils'
 // Experimental
 import { Audio } from './components/audio'
 import { Carousel } from './components/carousel'

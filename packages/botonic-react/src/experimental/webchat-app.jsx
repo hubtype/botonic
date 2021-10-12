@@ -3,9 +3,9 @@ import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { render } from 'react-dom'
 
-import { SENDERS, WEBCHAT } from '../constants'
-import { isShadowDOMSupported, onDOMLoaded } from '../util/dom'
+import { SENDERS, WEBCHAT } from './constants'
 import { msgToBotonic } from './msg-to-botonic'
+import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {

@@ -5,7 +5,6 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
-import { useWebchat } from '../../webchat/hooks'
 import { SessionView } from '../../webchat/session-view'
 import MessengerLogo from './assets/messenger.svg'
 import Open from './assets/open.svg'
@@ -13,6 +12,7 @@ import OpenNewWindow from './assets/open-new-window.svg'
 import TelegramLogo from './assets/telegram.svg'
 import WebchatLogo from './assets/webchat.svg'
 import WhatsappLogo from './assets/whatsapp.svg'
+import { useWebchat } from './hooks'
 import { Webchat } from './webchat'
 
 export const DebugTab = styled.div`

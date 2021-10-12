@@ -2,9 +2,9 @@ import merge from 'lodash.merge'
 import React from 'react'
 import { render } from 'react-dom'
 
-import { SENDERS } from '../constants'
-import { onDOMLoaded } from '../util/dom'
+import { SENDERS } from './constants'
 import { ReactBot } from './react-bot'
+import { onDOMLoaded } from './util/dom'
 import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
 

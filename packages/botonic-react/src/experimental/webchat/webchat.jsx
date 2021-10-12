@@ -228,6 +228,8 @@ export const Webchat = forwardRef((props, ref) => {
           stringifyWithRegexs({
             messages: webchatState.messagesJSON,
             session: webchatState.session,
+            botState: webchatState.botState,
+            user: webchatState.user,
             lastRoutePath: webchatState.lastRoutePath,
             devSettings: webchatState.devSettings,
             lastMessageUpdate: webchatState.lastMessageUpdate,
