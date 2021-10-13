@@ -8,12 +8,13 @@ import { testSession } from '../helpers/routing'
 
 describe('TEST: getting path and params from path payload input', () => {
   test.each([
-    [undefined, null, undefined],
-    ['', null, undefined],
-    ['bad_input', null, undefined],
-    [PATH_PAYLOAD_IDENTIFIER, null, undefined],
-    [`${PATH_PAYLOAD_IDENTIFIER}path1`, 'path1', undefined],
-    [`${PATH_PAYLOAD_IDENTIFIER}path1?path1`, 'path1', 'path1'],
+    [undefined, null, {}],
+    ['', null, {}],
+    ['bad_input', null, {}],
+    [PATH_PAYLOAD_IDENTIFIER, null, {}],
+    [`${PATH_PAYLOAD_IDENTIFIER}path1`, 'path1', {}],
+    [`${PATH_PAYLOAD_IDENTIFIER}path1?path1`, 'path1', { path1: '' }],
+    [`${PATH_PAYLOAD_IDENTIFIER}path1?param1=5`, 'path1', { param1: '5' }],
   ])(
     'getOnFinishParams(%s)=>%s',
     (inputPayload, expectedPath, expectedParams) => {
@@ -27,24 +28,13 @@ describe('TEST: getting path and params from path payload input', () => {
 
 describe('TEST: convert pathParams to params', () => {
   it('converts valid pathParams', () => {
-    let res = pathParamsToParams(
-      getPathParamsFromPathPayload(`${PATH_PAYLOAD_IDENTIFIER}path1?path1`)
-        .params
-    )
+    let res = pathParamsToParams('path1')
     expect(res).toEqual({ path1: '' })
-    res = pathParamsToParams(
-      getPathParamsFromPathPayload(
-        `${PATH_PAYLOAD_IDENTIFIER}path1?param1=value1&param2=value2`
-      ).params
-    )
+    res = pathParamsToParams('param1=value1&param2=value2')
     expect(res).toEqual({ param1: 'value1', param2: 'value2' })
-    res = pathParamsToParams(
-      getPathParamsFromPathPayload(
-        `${PATH_PAYLOAD_IDENTIFIER}path1?param1=false&param2=5`
-      ).params
-    )
+    res = pathParamsToParams('param1=false&param2=5')
     expect(res).toEqual({ param1: 'false', param2: '5' })
-    res = pathParamsToParams(getPathParamsFromPathPayload(undefined).params)
+    res = pathParamsToParams(undefined)
     expect(res).toEqual({})
   })
 })
