@@ -19,3 +19,15 @@ export interface ImageFields {
   imgUrl?: string
   followup?: ContentId
 }
+
+export interface CarouselFields {
+  name: string
+  elements: string[]
+}
+
+export interface ElementFields {
+  title: string
+  subtitle: string
+  imageId: string
+  buttons: string[]
+}

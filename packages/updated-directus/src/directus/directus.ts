@@ -7,7 +7,11 @@ import { DirectusClient } from './delivery/directus-client'
 import { Button, Text, Image, Content, AssetInfo, Url, Carousel } from '../cms'
 import { DirectusOptions } from '../plugin'
 import { ContentsDelivery } from './manage/contents'
-import { TextFields } from './manage/directus-contents'
+import {
+  CarouselFields,
+  ElementFields,
+  TextFields,
+} from './manage/directus-contents'
 import { Stream } from 'stream'
 import { UrlDelivery } from './contents/url'
 import { CarouselDelivery } from './contents/carousel'
@@ -38,6 +42,7 @@ export class Directus implements cms.CMS {
       [cms.ContentType.TEXT]: this._text,
       [cms.ContentType.IMAGE]: this._image,
       [cms.ContentType.CAROUSEL]: this._carousel,
+      [cms.ContentType.URL]: this._url,
     }
     this._contents = new ContentsDelivery(client, deliveries)
   }
@@ -106,6 +111,22 @@ export class Directus implements cms.CMS {
     fields: TextFields
   ): Promise<void> {
     await this._contents.updateImageFields(context, id, fields)
+  }
+
+  async updateCarouselFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: CarouselFields
+  ) {
+    await this._contents.updateCarouselFields(context, id, fields)
+  }
+
+  async updateElementFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: ElementFields
+  ) {
+    await this._contents.updateElementFields(context, id, fields)
   }
 
   async createAsset(
