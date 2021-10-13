@@ -382,7 +382,7 @@ export class Router {
       return {
         currentRoute,
         matchedRoute: { ...matchedRoute, path: seekPath },
-        params: pathParamsToParams(params),
+        params,
         isFlowBroken: false,
       }
     }

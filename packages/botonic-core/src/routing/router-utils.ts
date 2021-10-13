@@ -27,7 +27,7 @@ export function isPathPayload(payload?: string): boolean {
 export function getPathParamsFromPathPayload(payload?: string): PathParams {
   const defaultPathParams = {
     path: null,
-    params: undefined,
+    params: {},
   }
   if (!payload) return defaultPathParams
   if (!isPathPayload(payload)) return defaultPathParams
@@ -37,7 +37,7 @@ export function getPathParamsFromPathPayload(payload?: string): PathParams {
       throw `${PATH_PAYLOAD_IDENTIFIER} is empty`
     }
     const [path, params] = pathWithParams.split('?')
-    return { path: path ?? null, params }
+    return { path: path ?? null, params: pathParamsToParams(params) }
   } catch (e) {
     console.error('Error getting path and params from input.payload:', e)
     return defaultPathParams
