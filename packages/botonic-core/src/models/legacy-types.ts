@@ -274,7 +274,7 @@ export interface RouteParams {
 }
 export interface PathParams {
   path: RoutePath
-  params: string | undefined
+  params: Params
 }
 
 export type MatchingProp =
