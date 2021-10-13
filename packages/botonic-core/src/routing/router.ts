@@ -74,10 +74,7 @@ export class Router {
      */
     if (matchedRoute && matchedRoute.redirect) {
       session.__retries = 0
-      const redirectionRoute = this.getRouteByPath(
-        matchedRoute.redirect,
-        this.routes
-      )
+      const redirectionRoute = this.getRouteByPath(matchedRoute.redirect)
       if (redirectionRoute) {
         return {
           action: redirectionRoute.action,
@@ -292,7 +289,7 @@ export class Router {
     session: Session,
     lastRoutePath: RoutePath
   ): RoutingState {
-    const currentRoute = this.getRouteByPath(lastRoutePath, this.routes)
+    const currentRoute = this.getRouteByPath(lastRoutePath)
     if (currentRoute && lastRoutePath) currentRoute.path = lastRoutePath
     if (typeof input.payload === 'string' && isPathPayload(input.payload)) {
       return this.getRoutingStateFromPathPayload(currentRoute, input.payload)
@@ -341,7 +338,7 @@ export class Router {
       session,
       currentRoute?.path ?? null
     )
-    const isFlowBroken = !currentRoute?.path ? false : true
+    const isFlowBroken = Boolean(currentRoute?.path)
     if (routeParams?.route) {
       return {
         currentRoute,
