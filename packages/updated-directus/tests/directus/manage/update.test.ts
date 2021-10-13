@@ -33,12 +33,16 @@ test('Test: update content of type text and button', async () => {
   await directus.updateButtonFields(testContext(), newButtonId, {
     name: 'button_updated_from_test',
     text: 'helllou',
-    target: new ContentId(ContentType.IMAGE, newFollowupId),
+    target: new ContentId(ContentType.IMAGE, newTargetId),
   })
 
   await directus.updateTextFields(testContext(), newFollowupId, {
     name: 'follow_up_updated',
     text: 'helllou',
+  })
+
+  await directus.updateImageFields(testContext(), newTargetId, {
+    name: 'image_updated',
   })
 
   const contentUpdated = await directus.text(newContentId, testContext())
@@ -47,6 +51,9 @@ test('Test: update content of type text and button', async () => {
   expect(contentUpdated.buttons![0].text).toBe('helllou')
   expect((contentUpdated.common.followUp as Text).name).toBe(
     'follow_up_updated'
+  )
+  expect(contentUpdated.buttons![0].callback.payload).toBe(
+    `image$${newTargetId}`
   )
 
   await deleteContents(ContentTypePerId)

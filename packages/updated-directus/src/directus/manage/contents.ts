@@ -59,7 +59,7 @@ export class ContentsDelivery {
     id: string,
     fields: TextFields
   ): Promise<void> {
-    const convertedFields = this.convertTextFields(id, context, fields)
+    const convertedFields = this.convertTextFields(context, fields)
     await this.client.updateFields(
       context,
       cms.ContentType.TEXT,
@@ -73,7 +73,7 @@ export class ContentsDelivery {
     id: string,
     fields: ButtonFields
   ): Promise<void> {
-    const convertedFields = this.convertButtonFields(id, context, fields)
+    const convertedFields = this.convertButtonFields(context, fields)
     await this.client.updateFields(
       context,
       cms.ContentType.BUTTON,
@@ -87,7 +87,7 @@ export class ContentsDelivery {
     id: string,
     fields: ImageFields
   ): Promise<void> {
-    const convertedFields = this.convertImageFields(id, context, fields)
+    const convertedFields = this.convertImageFields(context, fields)
     await this.client.updateFields(
       context,
       cms.ContentType.IMAGE,
@@ -101,7 +101,7 @@ export class ContentsDelivery {
     id: string,
     fields: CarouselFields
   ): Promise<void> {
-    const convertedFields = this.convertCarouselFields(id, context, fields)
+    const convertedFields = this.convertCarouselFields(context, fields)
     await this.client.updateFields(
       context,
       cms.ContentType.CAROUSEL,
@@ -115,7 +115,7 @@ export class ContentsDelivery {
     id: string,
     fields: ElementFields
   ): Promise<void> {
-    const convertedFields = this.convertElementFields(id, context, fields)
+    const convertedFields = this.convertElementFields(context, fields)
     await this.client.updateFields(
       context,
       cms.ContentType.ELEMENT,
@@ -147,7 +147,6 @@ export class ContentsDelivery {
   }
 
   private convertTextFields(
-    id: string,
     context: cms.SupportedLocales,
     fields: TextFields
   ): PartialItem<any> {
@@ -166,7 +165,7 @@ export class ContentsDelivery {
     if (fields.buttons) {
       convertedDirectusText = {
         ...convertedDirectusText,
-        buttons: this.addButtons(id, fields.buttons),
+        buttons: this.addButtons(fields.buttons),
       }
     }
     if (fields.buttonsStyle) {
@@ -182,7 +181,6 @@ export class ContentsDelivery {
         followup: [
           {
             collection: fields.followup.model,
-            text_id: id,
             item: {
               id: fields.followup.id,
             },
@@ -193,11 +191,10 @@ export class ContentsDelivery {
     return convertedDirectusText
   }
 
-  private addButtons(textId: string, buttonsIds: string[]): PartialItem<any>[] {
+  private addButtons(buttonsIds: string[]): PartialItem<any>[] {
     const buttons = buttonsIds.map((buttonId: string) => {
       return {
         collection: 'button',
-        text_id: textId,
         item: {
           id: buttonId,
         },
@@ -207,7 +204,6 @@ export class ContentsDelivery {
   }
 
   private convertButtonFields(
-    id: string,
     context: cms.SupportedLocales,
     fields: ButtonFields
   ): PartialItem<any> {
@@ -244,7 +240,6 @@ export class ContentsDelivery {
   }
 
   private convertImageFields(
-    id: string,
     context: cms.SupportedLocales,
     fields: ImageFields
   ): Object {
@@ -277,11 +272,7 @@ export class ContentsDelivery {
     return convertedDirectusText
   }
 
-  convertCarouselFields(
-    id: string,
-    context: cms.SupportedLocales,
-    fields: CarouselFields
-  ) {
+  convertCarouselFields(context: cms.SupportedLocales, fields: CarouselFields) {
     let convertedDirectusCarousel: PartialItem<any> = {}
 
     if (fields.name) {
@@ -293,20 +284,16 @@ export class ContentsDelivery {
     if (fields.elements) {
       convertedDirectusCarousel = {
         ...convertedDirectusCarousel,
-        elements: this.addElements(id, fields.elements),
+        elements: this.addElements(fields.elements),
       }
     }
     return convertedDirectusCarousel
   }
 
-  private addElements(
-    carouselId: string,
-    elementdIds: string[]
-  ): PartialItem<any>[] {
+  private addElements(elementdIds: string[]): PartialItem<any>[] {
     const carouselElements = elementdIds.map((elementId: string) => {
       return {
         collection: 'element',
-        carousel_id: carouselId,
         item: {
           id: elementId,
         },
@@ -315,11 +302,7 @@ export class ContentsDelivery {
     return carouselElements
   }
 
-  convertElementFields(
-    id: string,
-    context: cms.SupportedLocales,
-    fields: ElementFields
-  ) {
+  convertElementFields(context: cms.SupportedLocales, fields: ElementFields) {
     let convertedDirectusElement: PartialItem<any> = {}
     if (fields.title) {
       convertedDirectusElement = {
@@ -342,7 +325,7 @@ export class ContentsDelivery {
     if (fields.buttons) {
       convertedDirectusElement = {
         ...convertedDirectusElement,
-        buttons: this.addButtons(id, fields.buttons),
+        buttons: this.addButtons(fields.buttons),
       }
     }
 
