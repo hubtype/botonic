@@ -1,5 +1,5 @@
-import { testDirectus, testContext } from '../helpers/directus.helper'
-import { Text, Image, ButtonStyle, Carousel } from '../../../src/cms'
+import { ButtonStyle, Carousel, Image, Text } from '../../../src/cms'
+import { testContext, testDirectus } from '../helpers/directus.helper'
 
 const TEXT_WITHOUT_B_WITHOUT_F = '4873aa47-f797-43c0-afbf-86700f52c9f6'
 const TEXT_WITH_2B_WITHOUT_F = 'e808f179-cbae-4d2b-81ea-178018e9801c'

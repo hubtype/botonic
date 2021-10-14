@@ -1,1 +1,1 @@
-export { TextDelivery } from "./text";
+export { TextDelivery } from './text'

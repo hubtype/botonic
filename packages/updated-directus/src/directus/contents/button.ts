@@ -1,15 +1,15 @@
-import { ContentDelivery } from '../delivery'
-import { DirectusClient } from '../delivery'
+import { PartialItem } from '@directus/sdk'
+
 import {
   Button,
-  CommonFields,
   Callback,
+  CommonFields,
+  ContentCallback,
   ContentType,
   SupportedLocales,
-  ContentCallback,
 } from '../../cms'
-import { PartialItem } from '@directus/sdk'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
+import { ContentDelivery, DirectusClient } from '../delivery'
 
 export class ButtonDelivery extends ContentDelivery {
   constructor(client: DirectusClient) {

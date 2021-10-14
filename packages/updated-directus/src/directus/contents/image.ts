@@ -1,9 +1,9 @@
-import { ContentDelivery } from '../delivery'
-import { DirectusClient } from '../delivery'
+import { PartialItem } from '@directus/sdk'
+
 import * as cms from '../../cms'
 import { CommonFields, Image } from '../../cms'
-import { PartialItem } from '@directus/sdk'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
+import { ContentDelivery, DirectusClient } from '../delivery'
 
 export class ImageDelivery extends ContentDelivery {
   constructor(client: DirectusClient) {

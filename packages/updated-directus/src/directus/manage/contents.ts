@@ -1,7 +1,13 @@
-import { DirectusClient } from '../delivery/directus-client'
+import { PartialItem } from '@directus/sdk'
+import { Stream } from 'stream'
+
 import * as cms from '../../cms'
 import { AssetInfo, Content } from '../../cms'
-import { PartialItem } from '@directus/sdk'
+import { CarouselDelivery } from '../contents/carousel'
+import { ImageDelivery } from '../contents/image'
+import { TextDelivery } from '../contents/text'
+import { UrlDelivery } from '../contents/url'
+import { DirectusClient } from '../delivery/directus-client'
 import {
   ButtonFields,
   CarouselFields,
@@ -9,11 +15,6 @@ import {
   ImageFields,
   TextFields,
 } from './directus-contents'
-import { Stream } from 'stream'
-import { CarouselDelivery } from '../contents/carousel'
-import { TextDelivery } from '../contents/text'
-import { ImageDelivery } from '../contents/image'
-import { UrlDelivery } from '../contents/url'
 
 export interface ContentDeliveries {
   [cms.ContentType.TEXT]: TextDelivery
@@ -137,7 +138,7 @@ export class ContentsDelivery {
     contentType: cms.MessageContentType,
     context: cms.SupportedLocales
   ): Content[] {
-    let convertedEntries: Content[] = []
+    const convertedEntries: Content[] = []
     entries.forEach((entry: PartialItem<any>) => {
       convertedEntries.push(
         this.ContentDeliveries[contentType].fromEntry(entry, context)
@@ -304,6 +305,13 @@ export class ContentsDelivery {
 
   convertElementFields(context: cms.SupportedLocales, fields: ElementFields) {
     let convertedDirectusElement: PartialItem<any> = {}
+
+    if (fields.name) {
+      convertedDirectusElement = {
+        ...convertedDirectusElement,
+        name: fields.name,
+      }
+    }
     if (fields.title) {
       convertedDirectusElement = {
         ...convertedDirectusElement,
@@ -316,10 +324,10 @@ export class ContentsDelivery {
         subtitle: fields.subtitle,
       }
     }
-    if (fields.imageId) {
+    if (fields.image) {
       convertedDirectusElement = {
         ...convertedDirectusElement,
-        image: fields.imageId,
+        image: fields.image,
       }
     }
     if (fields.buttons) {
@@ -328,7 +336,6 @@ export class ContentsDelivery {
         buttons: this.addButtons(fields.buttons),
       }
     }
-
     return convertedDirectusElement
   }
 }

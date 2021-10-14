@@ -1,4 +1,5 @@
 import { OneItem, PartialItem } from '@directus/sdk'
+
 import * as cms from '../../cms'
 
 export const knownFields = [
@@ -110,7 +111,7 @@ export function getFieldsToLocalize(context: cms.SupportedLocales): {} {
 */
 
 export function getCustomFields(entry: PartialItem<any>) {
-  let customFields: PartialItem<any> = {}
+  const customFields: PartialItem<any> = {}
   Object.assign(customFields, entry)
   const keys = Object.keys(customFields)
   keys.map((key: string) => {

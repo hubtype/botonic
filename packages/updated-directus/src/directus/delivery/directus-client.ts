@@ -1,13 +1,14 @@
-import * as cms from '../../cms'
 import { Directus, PartialItem } from '@directus/sdk/dist'
+import { Stream } from 'stream'
+
+import * as cms from '../../cms'
+import { AssetInfo } from '../../cms'
+import { DirectusOptions } from '../../plugin'
 import {
   getContentFields,
   getKeywordsFilter,
   hasFollowUp,
 } from './delivery-utils'
-import { DirectusOptions } from '../../plugin'
-import { Stream } from 'stream'
-import { AssetInfo } from '../../cms'
 
 export class DirectusClient {
   clientParams: DirectusOptions
@@ -69,7 +70,7 @@ export class DirectusClient {
         .items(contentType)
         .readMany({ fields: ['id'] })
 
-      let entries: PartialItem<any>[] | undefined = []
+      const entries: PartialItem<any>[] | undefined = []
 
       for (let i = 0; i < entriesIds.data!.length; i++) {
         const entry = await this.getEntry(

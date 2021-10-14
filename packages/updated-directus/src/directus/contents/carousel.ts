@@ -1,15 +1,15 @@
-import { ContentDelivery } from '../delivery'
-import { DirectusClient } from '../delivery'
+import { PartialItem } from '@directus/sdk'
+
 import {
+  Button,
+  Carousel,
   CommonFields,
   ContentType,
-  SupportedLocales,
-  Carousel,
   Element,
-  Button,
+  SupportedLocales,
 } from '../../cms'
-import { PartialItem } from '@directus/sdk'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
+import { ContentDelivery, DirectusClient } from '../delivery'
 import { ButtonDelivery } from './button'
 
 export class CarouselDelivery extends ContentDelivery {

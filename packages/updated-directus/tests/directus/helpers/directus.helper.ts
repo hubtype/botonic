@@ -1,5 +1,5 @@
-import { createCms } from '../../../src/factories'
 import { CMS, SupportedLocales } from '../../../src/cms'
+import { createCms } from '../../../src/factories'
 import { DirectusOptions } from '../../../src/plugin'
 
 export function testDirectus(): CMS {

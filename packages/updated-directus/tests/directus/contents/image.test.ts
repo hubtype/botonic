@@ -1,4 +1,4 @@
-import { testDirectus, testContext } from '../helpers/directus.helper'
+import { testContext, testDirectus } from '../helpers/directus.helper'
 
 const TEST_IMAGE = 'ce1c96b1-a933-4e6e-85f4-f7070eaba84c'
 

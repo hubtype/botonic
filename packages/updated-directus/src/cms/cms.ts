@@ -1,10 +1,13 @@
+import { Stream } from 'stream'
+
 import {
   ButtonFields,
+  CarouselFields,
+  ElementFields,
   ImageFields,
   TextFields,
 } from '../directus/manage/directus-contents'
-import { Button, Text, Image, Content, Url, Carousel } from './contents'
-import { Stream } from 'stream'
+import { Button, Carousel, Content, Image, Text, Url } from './contents'
 
 export enum MessageContentType {
   TEXT = 'text',
@@ -86,6 +89,24 @@ export interface CMS {
     context: SupportedLocales,
     id: string,
     fields: ImageFields
+  ): Promise<void>
+
+  updateImageFields(
+    context: SupportedLocales,
+    id: string,
+    fields: ImageFields
+  ): Promise<void>
+
+  updateCarouselFields(
+    context: SupportedLocales,
+    id: string,
+    fields: CarouselFields
+  ): Promise<void>
+
+  updateElementFields(
+    context: SupportedLocales,
+    id: string,
+    fields: ElementFields
   ): Promise<void>
 
   createAsset(

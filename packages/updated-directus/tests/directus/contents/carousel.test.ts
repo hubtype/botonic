@@ -1,4 +1,4 @@
-import { testDirectus, testContext } from '../helpers/directus.helper'
+import { testContext, testDirectus } from '../helpers/directus.helper'
 
 export const CAROUSEL_TEST = '3c2bfdb6-8e2f-43f8-9173-32956c11c48d'
 

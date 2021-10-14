@@ -21,13 +21,14 @@ export interface ImageFields {
 }
 
 export interface CarouselFields {
-  name: string
-  elements: string[]
+  name?: string
+  elements?: string[]
 }
 
 export interface ElementFields {
-  title: string
-  subtitle: string
-  imageId: string
-  buttons: string[]
+  name?: string
+  title?: string
+  subtitle?: string
+  image?: string
+  buttons?: string[]
 }

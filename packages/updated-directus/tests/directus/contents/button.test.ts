@@ -1,4 +1,4 @@
-import { testDirectus, testContext } from '../helpers/directus.helper'
+import { testContext, testDirectus } from '../helpers/directus.helper'
 
 const BUTTON_TEXT_TARGET = 'd467a152-a746-4ed0-9e6f-d83a6d0c3a5b'
 const BUTTON_PAYLOAD_TARGET = '09f88f45-c717-449b-b979-51308e779744'

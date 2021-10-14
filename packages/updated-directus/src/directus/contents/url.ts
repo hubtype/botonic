@@ -1,8 +1,8 @@
-import { ContentDelivery } from '../delivery'
-import { DirectusClient } from '../delivery'
-import { CommonFields, Url, ContentType, SupportedLocales } from '../../cms'
 import { PartialItem } from '@directus/sdk'
+
+import { CommonFields, ContentType, SupportedLocales, Url } from '../../cms'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
+import { ContentDelivery, DirectusClient } from '../delivery'
 
 export class UrlDelivery extends ContentDelivery {
   constructor(client: DirectusClient) {

@@ -1,20 +1,21 @@
+import { Stream } from 'stream'
+
 import * as cms from '../cms'
-import { TextDelivery } from './contents/text'
-import { ButtonDelivery } from './contents/button'
-import { ImageDelivery } from './contents/image'
-import { KeywordsDelivery } from './search/keywords'
-import { DirectusClient } from './delivery/directus-client'
-import { Button, Text, Image, Content, AssetInfo, Url, Carousel } from '../cms'
+import { AssetInfo, Button, Carousel, Content, Image, Text, Url } from '../cms'
 import { DirectusOptions } from '../plugin'
+import { ButtonDelivery } from './contents/button'
+import { CarouselDelivery } from './contents/carousel'
+import { ImageDelivery } from './contents/image'
+import { TextDelivery } from './contents/text'
+import { UrlDelivery } from './contents/url'
+import { DirectusClient } from './delivery/directus-client'
 import { ContentsDelivery } from './manage/contents'
 import {
   CarouselFields,
   ElementFields,
   TextFields,
 } from './manage/directus-contents'
-import { Stream } from 'stream'
-import { UrlDelivery } from './contents/url'
-import { CarouselDelivery } from './contents/carousel'
+import { KeywordsDelivery } from './search/keywords'
 
 export class Directus implements cms.CMS {
   private readonly _text: TextDelivery

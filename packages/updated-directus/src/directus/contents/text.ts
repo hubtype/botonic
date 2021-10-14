@@ -1,12 +1,12 @@
-import { ContentDelivery } from '../delivery'
-import { DirectusClient } from '../delivery'
-import * as cms from '../../cms'
-import { CommonFields, Text, Image, Carousel } from '../../cms'
 import { PartialItem } from '@directus/sdk'
-import { ButtonDelivery } from './button'
-import { ImageDelivery } from './image'
+
+import * as cms from '../../cms'
+import { Carousel, CommonFields, Image, Text } from '../../cms'
 import { getCustomFields } from '../../directus/delivery/delivery-utils'
+import { ContentDelivery, DirectusClient } from '../delivery'
+import { ButtonDelivery } from './button'
 import { CarouselDelivery } from './carousel'
+import { ImageDelivery } from './image'
 
 export class TextDelivery extends ContentDelivery {
   private readonly button: ButtonDelivery
@@ -64,7 +64,7 @@ export class TextDelivery extends ContentDelivery {
     if (followup.length === 0) {
       return undefined
     }
-    
+
     let contentType
     if (followup.hasOwnProperty('image')) {
       contentType = cms.ContentType.IMAGE

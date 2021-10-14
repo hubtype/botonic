@@ -1,6 +1,6 @@
 import * as cms from './cms'
-import * as search from './search'
 import { Directus } from './directus/directus'
+import * as search from './search'
 import { KeywordsOptions, Search } from './search'
 
 export type DirectusCredentials = {

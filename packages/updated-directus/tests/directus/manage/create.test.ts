@@ -1,5 +1,5 @@
-import { testContext, testDirectus } from '../helpers/directus.helper'
 import { ContentType } from '../../../src/cms'
+import { testContext, testDirectus } from '../helpers/directus.helper'
 
 const randomUUID = 'd8b5a518-1fbf-11ec-9621-0242ac130002'
 

@@ -1,5 +1,5 @@
+import { Carousel, ContentType, Image, Text, Url } from '../../../src/cms'
 import { testContext, testDirectus } from '../helpers/directus.helper'
-import { Text, ContentType, Url, Carousel, Image } from '../../../src/cms'
 
 test('Test: get all contents of type text', async () => {
   const directus = testDirectus()
