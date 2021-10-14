@@ -1,4 +1,4 @@
-import { BotonicOutputParserTester } from '../helpers'
+import { BotonicOutputParserTester } from '../helpers/parsing'
 
 const tester = new BotonicOutputParserTester()
 
@@ -6,7 +6,7 @@ describe('Parsing Text responses', () => {
   it('TEST: Text sent by user', () => {
     const userInput = {
       type: 'text',
-      data: 't',
+      text: 't',
       id: 'b584bc1c-0524-44f6-a6fe-0845f87e236d',
     }
 
@@ -24,7 +24,7 @@ describe('Parsing Text responses', () => {
   it('TEST: Button clicked by user (no postback)', () => {
     const userInput = {
       type: 'text',
-      data: 'Button1',
+      text: 'Button1',
       payload: 'payload1',
       id: 'af0a25b9-e601-4460-81da-86a2701cbc11',
     }
@@ -54,7 +54,7 @@ describe('Parsing Text responses', () => {
   it('TEST: Media attachment by user', () => {
     const userInput = {
       type: 'image',
-      data: 'data:image/png;base64,iVBORw0KG',
+      src: 'data:image/png;base64,iVBORw0KG',
       id: 'bf5090f0-0e79-4a17-bb0e-46797cd5b363',
     }
 

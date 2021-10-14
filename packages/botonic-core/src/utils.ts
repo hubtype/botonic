@@ -42,8 +42,14 @@ export const isMobile = (mobileBreakpoint = 460): boolean => {
   }
   return false
 }
+
 export function isFunction(o: any): boolean {
   return typeof o === 'function'
+}
+
+export function cloneObject(object: any): any {
+  if (!object) return {}
+  return { ...object }
 }
 
 export const params2queryString = (params: { [key: string]: string }): string =>

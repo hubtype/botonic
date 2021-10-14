@@ -111,6 +111,8 @@ export interface NluResult {
 }
 
 export interface Input extends Partial<NluResult> {
+  text?: string
+  src?: string
   data?: string
   path?: string
   payload?: string
@@ -150,7 +152,7 @@ export interface Session {
     name?: string
   }
   __locale?: string
-  __retries?: number
+  __retries: number
   is_first_interaction: boolean
   last_session?: any
   organization?: string
@@ -162,13 +164,13 @@ export interface Session {
 }
 // eslint-enable @typescript-eslint/naming-convention
 
-type InputMatcher = (input: Input) => boolean
-type ParamsMatcher =
+export type InputMatcher = (input: Input) => boolean
+export type ParamsMatcher =
   | { [key: string]: string }
   | ((params: { [key: string]: string }) => boolean)
-type SessionMatcher = (session: Session) => boolean
-type RequestMatcher = (request: BotRequest) => boolean
-type StringMatcher = RegExp | string | ((data: string) => boolean)
+export type SessionMatcher = (session: Session) => boolean
+export type RequestMatcher = (request: BotRequest) => boolean
+export type StringMatcher = RegExp | string | ((data: string) => boolean)
 
 export type RouteMatcher =
   | InputMatcher
@@ -180,13 +182,11 @@ export type RouteMatcher =
 export interface Route {
   action?: any
   childRoutes?: Route[]
-  defaultAction?: any
   lastRoutePath?: string
   ignoreRetry?: boolean
-  path?: StringMatcher
+  path: RoutePath
   redirect?: string
   retry?: number
-  retryAction?: any
 
   // matchers
   input?: InputMatcher
@@ -204,9 +204,9 @@ export type Routes<R = Route> = R[] | ((_: BotRequest) => R[])
 
 export interface BotRequest {
   input: Input
-  lastRoutePath: string
+  lastRoutePath: RoutePath
   session: Session
-  dataProvider: DataProvider
+  dataProvider?: DataProvider
 }
 
 /** The response of the bot for the triggered actions, which can be
@@ -226,7 +226,9 @@ export interface Plugin {
   pre(pluginRequest: PluginPreRequest): void
 }
 
-export type Params = { [key: string]: string }
+export interface Params {
+  [key: string]: any
+}
 
 export const Providers = Object.freeze({
   Messaging: {
@@ -243,3 +245,45 @@ export const Providers = Object.freeze({
     WHATSAPP: 'whatsapp',
   },
 })
+
+export type Nullable<T> = T | null
+
+export type Action = Nullable<() => any>
+export type RoutePath = Nullable<string>
+
+export interface ProcessInputResult {
+  action: Action
+  emptyAction: Action
+  fallbackAction: Action
+  lastRoutePath: RoutePath
+  params: Params
+}
+
+export type MatchedValue = boolean | RegExpExecArray | null
+
+export type RoutingState = {
+  currentRoute: Nullable<Route>
+  matchedRoute: Nullable<Route>
+  params: Params
+  isFlowBroken: boolean
+}
+
+export interface RouteParams {
+  route: Nullable<Route>
+  params: Params
+}
+export interface PathParams {
+  path: RoutePath
+  params: Params
+}
+
+export type MatchingProp =
+  | 'text'
+  | 'payload'
+  | 'intent'
+  | 'type'
+  | 'input'
+  | 'session'
+  | 'request'
+
+export type Matcher = string | RegExp | ((args) => boolean)

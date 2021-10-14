@@ -1,4 +1,6 @@
-import { BotonicOutputParserTester } from '../helpers'
+/* eslint-disable jest/expect-expect */
+import { PATH_PAYLOAD_IDENTIFIER } from '../../src'
+import { BotonicOutputParserTester } from '../helpers/parsing'
 
 // TODO: Test with Markdown, test with Markdown + new lines
 
@@ -43,7 +45,7 @@ describe('Parsing Text responses', () => {
     <message typing="0" delay="0" markdown="1" type="text">
       Some numbers 12
       <button payload="payload1">Button1</button>
-      <button payload="__PATH_PAYLOAD__path1">Path1</button>
+      <button payload="${PATH_PAYLOAD_IDENTIFIER}path1">Path1</button>
       <button url="https://www.google.com" target="_blank">Url with target</button>
     </message>
     `
@@ -55,7 +57,7 @@ describe('Parsing Text responses', () => {
         typing: 0,
         buttons: [
           { title: 'Button1', payload: 'payload1' },
-          { title: 'Path1', payload: '__PATH_PAYLOAD__path1' },
+          { title: 'Path1', payload: `${PATH_PAYLOAD_IDENTIFIER}path1` },
           {
             title: 'Url with target',
             url: 'https://www.google.com',
@@ -75,7 +77,7 @@ describe('Parsing Text responses', () => {
     <message typing="0" delay="0" markdown="1" type="text">
       Some replies
       <reply payload="payload1">ReplyPayload1</reply>
-      <reply payload="__PATH_PAYLOAD__path1">ReplyPath1</reply>
+      <reply payload="${PATH_PAYLOAD_IDENTIFIER}path1">ReplyPath1</reply>
     </message>
     `
     const expected = [
@@ -87,7 +89,7 @@ describe('Parsing Text responses', () => {
         buttons: [],
         replies: [
           { title: 'ReplyPayload1', payload: 'payload1' },
-          { title: 'ReplyPath1', payload: '__PATH_PAYLOAD__path1' },
+          { title: 'ReplyPath1', payload: `${PATH_PAYLOAD_IDENTIFIER}path1` },
         ],
         text: 'Some replies',
         markdown: true,
@@ -103,7 +105,7 @@ describe('Parsing Text responses', () => {
       <button payload="payload1">Button1</button>
       <button url="https://www.google.com" target="_blank">Url with target</button>
       <reply payload="payload1">ReplyPayload1</reply>
-      <reply payload="__PATH_PAYLOAD__path1">ReplyPath1</reply>
+      <reply payload="${PATH_PAYLOAD_IDENTIFIER}path1">ReplyPath1</reply>
     </message>
     `
     const expected = [
@@ -122,7 +124,7 @@ describe('Parsing Text responses', () => {
         ],
         replies: [
           { title: 'ReplyPayload1', payload: 'payload1' },
-          { title: 'ReplyPath1', payload: '__PATH_PAYLOAD__path1' },
+          { title: 'ReplyPath1', payload: `${PATH_PAYLOAD_IDENTIFIER}path1` },
         ],
         text: 'Text with Buttons and Replies',
         markdown: true,

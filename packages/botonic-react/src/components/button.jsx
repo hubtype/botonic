@@ -56,6 +56,7 @@ export const Button = props => {
         : sendInput({
             type: INPUT.TEXT,
             data: String(props.children),
+            text: String(props.children),
             payload: `__PATH_PAYLOAD__${props.path}`,
           })
     } else if (props.payload) {
@@ -64,6 +65,7 @@ export const Button = props => {
         : sendInput({
             type: INPUT.TEXT,
             data: String(props.children),
+            text: String(props.children),
             payload: props.payload,
           })
     } else if (props.url) {
