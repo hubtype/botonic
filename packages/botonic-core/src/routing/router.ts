@@ -216,22 +216,28 @@ export class Router {
    * */
   getRouteByPath(
     path: RoutePath,
-    routeList: Route[] | null = null
+    routeList: Route[] = this.routes
   ): Nullable<Route> {
     if (!path) return null
-    let route: Nullable<Route> = null
-    routeList = routeList || this.routes
     const [currentPath, ...childPath] = path.split('/')
-    for (const r of routeList) {
-      //iterate over all routeList
-      if (r.path == currentPath) {
-        route = r
-        if (r.childRoutes && r.childRoutes.length && childPath.length > 0) {
-          //evaluate childroute over next actions
-          route = this.getRouteByPath(childPath.join('/'), r.childRoutes)
+    for (const route of routeList) {
+      // iterate over all routeList
+      if (route.path === currentPath) {
+        if (
+          route.childRoutes &&
+          route.childRoutes.length &&
+          childPath.length > 0
+        ) {
+          // evaluate childroute over next actions
+          const computedRoute = this.getRouteByPath(
+            childPath.join('/'),
+            route.childRoutes
+          )
           // IMPORTANT: Returning a new object to avoid modifying dev routes and introduce side effects
-          if (route) return cloneObject(route)
-        } else if (childPath.length === 0) return cloneObject(route) //last action and found route
+          if (computedRoute) return cloneObject(computedRoute)
+        } else if (childPath.length === 0) {
+          return cloneObject(route) // last action and found route
+        }
       }
     }
     return null
