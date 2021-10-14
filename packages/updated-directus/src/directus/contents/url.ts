@@ -19,6 +19,7 @@ export class UrlDelivery extends ContentDelivery {
       common: {
         id: entry.id as string,
         name: entry.name as string,
+        shortText: (entry.shorttext as string) ?? undefined,
         keywords: (entry.keywords?.split(',') as string[]) ?? undefined,
         customFields: getCustomFields(entry),
       } as CommonFields,
