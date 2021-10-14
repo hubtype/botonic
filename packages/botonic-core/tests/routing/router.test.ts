@@ -1233,7 +1233,7 @@ describe('TEST: Converting Functional Routes to Routes', () => {
 
   it('get expected routes given functional routes', async () => {
     const functionalRoutes = async () => routes
-    const computedRoutes = await getComputedRoutes(await functionalRoutes())
+    const computedRoutes = await getComputedRoutes(functionalRoutes)
     expect(computedRoutes).toEqual(routes)
   })
 
@@ -1253,7 +1253,7 @@ describe('TEST: Converting Functional Routes to Routes', () => {
         ],
       },
     ]
-    const computedRoutes = await getComputedRoutes(await functionalRoutes())
+    const computedRoutes = await getComputedRoutes(functionalRoutes)
     expect(computedRoutes).toEqual(routes)
   })
 })
