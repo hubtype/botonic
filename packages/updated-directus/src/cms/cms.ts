@@ -91,12 +91,6 @@ export interface CMS {
     fields: ImageFields
   ): Promise<void>
 
-  updateImageFields(
-    context: SupportedLocales,
-    id: string,
-    fields: ImageFields
-  ): Promise<void>
-
   updateCarouselFields(
     context: SupportedLocales,
     id: string,
