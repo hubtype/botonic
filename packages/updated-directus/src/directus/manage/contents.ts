@@ -273,7 +273,10 @@ export class ContentsDelivery {
     return convertedDirectusText
   }
 
-  convertCarouselFields(context: cms.SupportedLocales, fields: CarouselFields) {
+  private convertCarouselFields(
+    context: cms.SupportedLocales,
+    fields: CarouselFields
+  ) {
     let convertedDirectusCarousel: PartialItem<any> = {}
 
     if (fields.name) {
