@@ -3,12 +3,21 @@ import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { decode } from 'jsonwebtoken'
 import { ulid } from 'ulid'
 
+const initialBotState = {
+  botId: '1234',
+  lastRoutePath: null,
+  isFirstInteraction: true,
+  retries: 0,
+  locale: 'en',
+  isHandoff: false,
+  isShadowing: false,
+}
+
 export const onAuth = async ({ websocketId, data, send }) => {
   const { token } = JSON.parse(data)
   const { userId } = decode(token)
   const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
   let user = await dp.getUser(userId)
-  // console.log('got user', { user })
   await dp.saveEvent({
     eventType: EventTypes.CONNECTION,
     userId,
@@ -17,21 +26,20 @@ export const onAuth = async ({ websocketId, data, send }) => {
     status: ConnectionEventStatuses.CONNECTED,
   })
   if (!user) {
-    // console.log('create user connection id', websocketId)
-    user = await dp.saveUser({
+    const newUser = {
       id: userId,
       websocketId,
       isOnline: true,
-      route: '/',
-      session: JSON.stringify({}),
-    })
-    // console.log('created user', { user })
+      botState: initialBotState,
+      session: {},
+      details: {}, // TODO: To be filled with geolocation info
+    }
+    user = await dp.saveUser(newUser)
   } else {
     // UPDATE USER CONNECTION
     user = await dp.updateUser({
       ...user,
       websocketId,
     })
-    // console.log('updated user', { user })
   }
 }
