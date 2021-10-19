@@ -38,9 +38,9 @@ class WebsocketBackendService {
     // On Event Received...
     this.wsClient.addEventListener('message', event => {
       console.log(event, this.onEvent)
-      const message = JSON.parse(decode(event.data))
+      const eventData = JSON.parse(decode(event.data))
       if (this.onEvent && typeof this.onEvent === 'function')
-        this.onEvent({ message })
+        this.onEvent(eventData)
     })
   }
   async doAuthAndUpdateJwt() {
@@ -72,7 +72,7 @@ class WebsocketBackendService {
           `${REST_API_URL}events/`,
           {
             message,
-            sender: user,
+            sender: user, // TODO: Really needed or we should pass user information through JWT?
           },
           { headers: { Authorization: 'Bearer ' + this.jwt } } // Note: Do not use string template as it will convert the token with commas, which will be invalid
         )
@@ -85,14 +85,14 @@ class WebsocketBackendService {
     if (hasErrors) {
       // TODO: Handle rest of errors
       await this.doAuthAndUpdateJwt()
-      await this.postMessage(user, message)
+      // await this.postMessage(user, message) // Temporary, avoid infinite events loop
     }
   }
 }
 
 export class FullstackProdApp extends WebchatApp {
-  async onUserInput({ user, input }) {
-    this.onMessage && this.onMessage(this, { from: 'user', message: input })
+  async onUserInput({ user, input, session, botState }) {
+    this.onMessage && this.onMessage(this, { from: input.from, message: input })
     this.backendService.postMessage(user, input)
   }
 
@@ -100,7 +100,7 @@ export class FullstackProdApp extends WebchatApp {
     return await this.backendService.doAuth({ userId })
   }
 
-  onStateChange({ session: { user }, messagesJSON, jwt, updateJwt }) {
+  onStateChange({ user, messagesJSON, jwt, updateJwt }) {
     if (!this.backendService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
       this.backendService = new WebsocketBackendService({
@@ -121,8 +121,8 @@ export class FullstackDevApp extends DevApp {
     console.log('FullstackDevApp ', args.playgroundCode)
   }
 
-  async onUserInput({ user, input }) {
-    this.onMessage && this.onMessage(this, { from: 'user', message: input })
+  async onUserInput({ user, input, session, botState }) {
+    this.onMessage && this.onMessage(this, { from: input.from, message: input })
     this.backendService && this.backendService.postMessage(user, input)
   }
 
@@ -179,8 +179,10 @@ export class FullstackDevApp extends DevApp {
         storageKey={storageKey}
         playgroundCode={this.playgroundCode}
         onStateChange={webchatState => this.onStateChange(webchatState)}
-        getString={(stringId, session) => this.bot.getString(stringId, session)}
-        setLocale={(locale, session) => this.bot.setLocale(locale, session)}
+        getString={(stringId, botState) =>
+          this.bot.getString(stringId, botState)
+        }
+        setLocale={(locale, botState) => this.bot.setLocale(locale, botState)}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
@@ -194,7 +196,7 @@ export class FullstackDevApp extends DevApp {
     return await this.backendService.doAuth({ userId })
   }
 
-  onStateChange({ session: { user }, messagesJSON, jwt, updateJwt }) {
+  onStateChange({ user, messagesJSON, jwt, updateJwt }) {
     if (!this.backendService && user) {
       const lastMessage = messagesJSON[messagesJSON.length - 1]
       this.backendService = new WebsocketBackendService({
@@ -260,6 +262,7 @@ export class BrowserProdApp extends WebchatApp {
       ...botOptions,
     })
   }
+  // TODO: Review how this be done for only browser versions
   async onUserInput({ input, session, lastRoutePath }) {
     this.onMessage && this.onMessage(this, { from: 'user', message: input })
     const resp = await this.bot.input({ input, session, lastRoutePath })
@@ -280,10 +283,10 @@ export { ShareButton } from '../components/share-button'
 export { Subtitle } from '../components/subtitle'
 export { Title } from '../components/title'
 export { WebchatSettings } from '../components/webchat-settings'
-export { RequestContext, WebchatContext } from '../contexts'
 export { staticAsset } from '../util/environment'
 export { getBotonicApp } from '../webchat'
 export { WebviewApp } from '../webview'
+export { RequestContext, WebchatContext } from './contexts'
 // Experimental
 export { Audio } from './components/audio'
 export { Carousel } from './components/carousel'

@@ -100,7 +100,9 @@ const KeepSessionContainer = styled.div`
 export const SessionView = props => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { webchatState, updateDevSettings } = props.webchatHooks || useWebchat()
-  const { latestInput: input, session, lastRoutePath } = webchatState
+  const { latestInput: input, session, botState } = webchatState
+  const { type, id, ...latestInputData } = input
+
   const toggleSessionView = () =>
     updateDevSettings({
       ...webchatState.devSettings,
@@ -122,7 +124,7 @@ export const SessionView = props => {
           label='INPUT:'
           value={
             input && Object.keys(input).length
-              ? `[${input.type}] ${input.data || ''}`
+              ? `[${type}] ${JSON.stringify(latestInputData) || ''}`
               : ''
           }
         />
@@ -137,8 +139,12 @@ export const SessionView = props => {
         />
         <SessionViewAttribute
           label='PATH:'
-          value={lastRoutePath ? `/${lastRoutePath}` : '/'}
+          value={botState.lastRoutePath ? `/${botState.lastRoutePath}` : '/'}
         />
+        <SessionViewAttribute label='BOT STATE:' />
+        <SessionContainer>
+          <JSONTree data={botState} hideRoot={true} />
+        </SessionContainer>
         <SessionViewAttribute label='SESSION:' />
         <SessionContainer>
           <JSONTree data={session} hideRoot={true} />

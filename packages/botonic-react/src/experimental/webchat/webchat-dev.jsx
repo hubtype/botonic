@@ -5,7 +5,6 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
-import { SessionView } from '../../webchat/session-view'
 import MessengerLogo from './assets/messenger.svg'
 import Open from './assets/open.svg'
 import OpenNewWindow from './assets/open-new-window.svg'
@@ -13,6 +12,7 @@ import TelegramLogo from './assets/telegram.svg'
 import WebchatLogo from './assets/webchat.svg'
 import WhatsappLogo from './assets/whatsapp.svg'
 import { useWebchat } from './hooks'
+import { SessionView } from './session-view'
 import { Webchat } from './webchat'
 
 export const DebugTab = styled.div`
@@ -341,22 +341,25 @@ export const PlaygroundPortal = props =>
     document.body
   )
 
-const initialSession = {
-  is_first_interaction: true,
-  last_session: {},
-  user: {
-    id: '000001',
-    username: 'johndoe',
-    name: 'John Doe',
-    provider: PROVIDER.DEV,
-    provider_id: '0000000',
-    extra_data: {},
-  },
-  organization: '',
-  bot: {
-    id: '0000000',
-    name: 'botName',
-  },
+const initialUser = {
+  id: '000001',
+  name: 'John Doe',
+  username: 'johndoe',
+  channel: PROVIDER.DEV,
+  idFromChannel: '0000000',
+  details: {},
+}
+
+const initialSession = {}
+
+const initialBotState = {
+  botId: '0000000',
+  isFirstInteraction: true,
+  retries: 0,
+  locale: undefined,
+  lastRoutePath: null,
+  isHandoff: false,
+  isShadowing: false,
 }
 
 // eslint-disable-next-line react/display-name
@@ -377,7 +380,9 @@ export const WebchatDev = forwardRef((props, ref) => {
         {...props}
         ref={ref}
         webchatHooks={webchatHooks}
+        initialUser={initialUser}
         initialSession={initialSession}
+        initialBotState={initialBotState}
         initialDevSettings={{
           keepSessionOnReload: webchatState.devSettings.keepSessionOnReload,
           showSessionView: webchatState.devSettings.showSessionView,
