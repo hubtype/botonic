@@ -1,6 +1,6 @@
+// eslint-disable-next-line filenames/match-regex
 import { Button, Reply, Text } from '@botonic/react/src/experimental'
 import React from 'react'
-
 import CalendarMessage from 'webchat/custom-messages/calendar-message'
 
 export default class extends React.Component {

@@ -1,1 +1,3 @@
-export const locales = {}
+import es from './es'
+
+export const locales = { es }
