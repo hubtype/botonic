@@ -1,6 +1,7 @@
 import { NOT_FOUND_PATH } from '../constants'
 import { RouteInspector } from '../debug/inspector'
 import {
+  BotState,
   Input,
   MatchedValue,
   Matcher,
@@ -19,7 +20,6 @@ import {
   getNotFoundAction,
   getPathParamsFromPathPayload,
   isPathPayload,
-  pathParamsToParams,
 } from './router-utils'
 
 export class Router {
@@ -49,9 +49,9 @@ export class Router {
   processInput(
     input: Input,
     session: Session,
-    lastRoutePath: RoutePath = null
+    botState: BotState
   ): ProcessInputResult {
-    session.__retries = session?.__retries ?? 0
+    botState.retries = botState.retries ?? 0
 
     // 1. Getting the current routing state.
     const {
@@ -59,7 +59,7 @@ export class Router {
       matchedRoute,
       params,
       isFlowBroken,
-    } = this.getRoutingState(input, session, lastRoutePath)
+    } = this.getRoutingState(input, session, botState)
 
     const currentRoutePath = currentRoute?.path ?? null
     const matchedRoutePath = matchedRoute?.path ?? null
@@ -73,22 +73,24 @@ export class Router {
      * It has preference over ignoring retries.
      */
     if (matchedRoute && matchedRoute.redirect) {
-      session.__retries = 0
+      botState.retries = 0
       const redirectionRoute = this.getRouteByPath(matchedRoute.redirect)
       if (redirectionRoute) {
+        botState.lastRoutePath = matchedRoute.redirect
         return {
           action: redirectionRoute.action,
           emptyAction: getEmptyAction(redirectionRoute.childRoutes),
           fallbackAction: null,
-          lastRoutePath: matchedRoute.redirect,
+          botState,
           params,
         }
       }
+      botState.lastRoutePath = null
       return {
         action: null,
         emptyAction: null,
         fallbackAction: getNotFoundAction(input, this.routes),
-        lastRoutePath: null,
+        botState,
         params,
       }
     }
@@ -98,12 +100,13 @@ export class Router {
      * We have matched a route with an ignore retry, so we return directly the new bot state. The intent is to break the flow, so retries are set to 0.
      */
     if (matchedRoute && matchedRoute.ignoreRetry) {
-      session.__retries = 0
+      botState.retries = 0
+      botState.lastRoutePath = matchedRoutePath
       return {
         action: matchedRoute.action,
         emptyAction: getEmptyAction(matchedRoute.childRoutes),
         fallbackAction: null,
-        lastRoutePath: matchedRoutePath,
+        botState,
         params,
       }
     }
@@ -117,15 +120,16 @@ export class Router {
       isFlowBroken &&
       currentRoute &&
       currentRoute.retry &&
-      session.__retries < currentRoute.retry
+      botState.retries < currentRoute.retry
     ) {
-      session.__retries = session.__retries !== 0 ? session.__retries + 1 : 1
+      botState.retries = botState.retries !== 0 ? botState.retries + 1 : 1
+      botState.lastRoutePath = currentRoutePath
       if (matchedRoute && matchedRoutePath !== NOT_FOUND_PATH) {
         return {
           action: currentRoute.action,
           emptyAction: getEmptyAction(matchedRoute.childRoutes),
           fallbackAction: matchedRoute.action,
-          lastRoutePath: currentRoutePath,
+          botState,
           params,
         }
       }
@@ -133,7 +137,7 @@ export class Router {
         action: currentRoute.action ?? null,
         emptyAction: getEmptyAction(currentRoute.childRoutes),
         fallbackAction: getNotFoundAction(input, this.routes),
-        lastRoutePath: currentRoutePath,
+        botState,
         params,
       }
     }
@@ -142,18 +146,19 @@ export class Router {
      * Default Scenario:
      * We have matched a route or not, but we don't need to execute retries logic, so retries stay to 0.
      */
-    session.__retries = 0
+    botState.retries = 0
 
     /**
      * Matching Route Scenario:
      * We have matched a route, so we return the new bot state.
      */
     if (matchedRoute && matchedRoutePath !== NOT_FOUND_PATH) {
+      botState.lastRoutePath = matchedRoutePath
       return {
         action: matchedRoute.action ?? null,
         emptyAction: getEmptyAction(matchedRoute.childRoutes),
         fallbackAction: null,
-        lastRoutePath: matchedRoutePath,
+        botState,
         params,
       }
     }
@@ -162,12 +167,13 @@ export class Router {
      * 404 Scenario (No Route Found):
      * We have not matched any route, so we return the new bot state.
      */
+    botState.lastRoutePath = currentRoutePath
     return {
       action: null,
       emptyAction: null,
       fallbackAction: getNotFoundAction(input, this.routes),
       params,
-      lastRoutePath: currentRoutePath,
+      botState,
     }
   }
 
@@ -293,10 +299,11 @@ export class Router {
   getRoutingState(
     input: Input,
     session: Session,
-    lastRoutePath: RoutePath
+    botState: BotState
   ): RoutingState {
-    const currentRoute = this.getRouteByPath(lastRoutePath)
-    if (currentRoute && lastRoutePath) currentRoute.path = lastRoutePath
+    const currentRoute = this.getRouteByPath(botState.lastRoutePath)
+    if (currentRoute && botState.lastRoutePath)
+      currentRoute.path = botState.lastRoutePath
     if (typeof input.payload === 'string' && isPathPayload(input.payload)) {
       return this.getRoutingStateFromPathPayload(currentRoute, input.payload)
     }
