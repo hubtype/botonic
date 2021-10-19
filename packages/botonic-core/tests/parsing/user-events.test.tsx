@@ -18,7 +18,7 @@ describe('Parsing Text responses', () => {
       text: 't',
       markdown: true,
     }
-    tester.parseUserInputAndAssert(userInput, expected)
+    tester.inputToBotonicEventAndAssert(userInput, expected)
   })
 
   it('TEST: Button clicked by user (no postback)', () => {
@@ -37,7 +37,7 @@ describe('Parsing Text responses', () => {
       text: 'Button1',
       markdown: true,
     }
-    tester.parseUserInputAndAssert(userInput, expected)
+    tester.inputToBotonicEventAndAssert(userInput, expected)
   })
 
   it('TEST: Postback sent by user', () => {
@@ -48,7 +48,7 @@ describe('Parsing Text responses', () => {
     }
 
     const expected = { eventType: 'message', type: 'postback', payload: 'hi' }
-    tester.parseUserInputAndAssert(userInput, expected)
+    tester.inputToBotonicEventAndAssert(userInput, expected)
   })
 
   it('TEST: Media attachment by user', () => {
@@ -65,6 +65,6 @@ describe('Parsing Text responses', () => {
       src: 'data:image/png;base64,iVBORw0KG',
     }
 
-    tester.parseUserInputAndAssert(userInput, expected)
+    tester.inputToBotonicEventAndAssert(userInput, expected)
   })
 })

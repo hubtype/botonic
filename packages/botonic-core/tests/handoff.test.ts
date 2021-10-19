@@ -2,7 +2,7 @@
 import { PATH_PAYLOAD_IDENTIFIER } from '../src'
 import { HandOffBuilder, humanHandOff } from '../src/handoff'
 
-describe('handOff', () => {
+describe.skip('handOff', () => {
   test.each([
     [
       `create_case:{
