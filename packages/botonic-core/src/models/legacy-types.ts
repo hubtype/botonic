@@ -1,7 +1,8 @@
 // TODO: This file contains all the legacy types we had in index.ts. After some refactors, we should be able to get rid of many of them.
-
 import { DataProvider } from '../data-provider'
+import { BotState } from './bot-state'
 import { BotonicEvent } from './events'
+import { Session } from './session'
 
 export type CaseStatusType =
   | typeof CASE_STATUS.ATTENDING
@@ -131,37 +132,6 @@ export type ProviderType =
   | typeof PROVIDER.WECHAT
   | typeof PROVIDER.WHATSAPP
 
-export interface SessionUser {
-  id: string
-  // login
-  username?: string
-  // person name
-  name?: string
-  // whatsapp, telegram,...
-  provider: ProviderType
-  // The provider's user id
-  extra_data?: any
-  imp_id?: string
-  provider_id?: string
-}
-
-// eslint-disable @typescript-eslint/naming-convention
-export interface Session {
-  bot: {
-    id: string
-    name?: string
-  }
-  __locale?: string
-  __retries: number
-  is_first_interaction: boolean
-  last_session?: any
-  organization?: string
-  user: SessionUser
-  // after handoff
-  _hubtype_case_status?: CaseStatusType
-  _hubtype_case_typification?: string
-  _shadowing?: boolean
-}
 // eslint-enable @typescript-eslint/naming-convention
 
 export type InputMatcher = (input: Input) => boolean
@@ -204,8 +174,8 @@ export type Routes<R = Route> = R[] | ((_: BotRequest) => R[])
 
 export interface BotRequest {
   input: Input
-  lastRoutePath: RoutePath
   session: Session
+  botState: BotState
   dataProvider?: DataProvider
 }
 
@@ -259,7 +229,7 @@ export interface ProcessInputResult {
   action: Action
   emptyAction: Action
   fallbackAction: Action
-  lastRoutePath: RoutePath
+  botState: BotState
   params: Params
 }
 
