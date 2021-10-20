@@ -1,10 +1,12 @@
 import { WEBCHAT } from '../constants'
 
+export const getScrollableContent = webchatElement => {
+  return webchatElement.querySelector(WEBCHAT.SELECTORS.SCROLLABLE_CONTENT)
+}
+
 export const getScrollableArea = webchatElement => {
   const getArea = area => {
-    const botonicScrollableContent = webchatElement.querySelector(
-      WEBCHAT.SELECTORS.SCROLLABLE_CONTENT
-    )
+    const botonicScrollableContent = getScrollableContent(webchatElement)
     const scrollableArea =
       botonicScrollableContent && botonicScrollableContent.querySelector(area)
     return scrollableArea
