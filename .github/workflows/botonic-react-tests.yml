@@ -40,7 +40,7 @@ jobs:
       run: scripts/qa/lint-d-ts.sh ./packages/$PACKAGE
 
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
       if: always()
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
