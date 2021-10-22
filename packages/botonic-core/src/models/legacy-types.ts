@@ -218,12 +218,16 @@ export interface BotResponse extends BotRequest {
   messageEvents: Partial<BotonicEvent>[] | null
 }
 
-export type PluginPreRequest = BotRequest
-export type PluginPostRequest = BotResponse
+export interface PluginPreRequest extends BotRequest {
+  plugins: Plugin[]
+}
+export interface PluginPostRequest extends BotResponse {
+  plugins: Plugin[]
+}
 
 export interface Plugin {
-  post(_: PluginPostRequest): void
-  pre(pluginRequest: PluginPreRequest): void
+  post(request: PluginPostRequest): void
+  pre(request: PluginPreRequest): void
 }
 
 export interface Params {
