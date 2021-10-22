@@ -356,7 +356,6 @@ const initialBotState = {
   botId: '0000000',
   isFirstInteraction: true,
   retries: 0,
-  locale: undefined,
   lastRoutePath: null,
   isHandoff: false,
   isShadowing: false,

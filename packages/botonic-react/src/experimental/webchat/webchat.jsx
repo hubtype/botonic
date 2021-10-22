@@ -321,7 +321,7 @@ export const Webchat = forwardRef((props, ref) => {
       session,
       botState,
     } = botonicState || {}
-    updateUser({ ...initialUser, ...initUser(user) })
+    updateUser(merge(initialUser, initUser(user)))
 
     if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
       if (messages) {
@@ -339,11 +339,11 @@ export const Webchat = forwardRef((props, ref) => {
         updateSession(merge(initialSession, session))
       }
       if (initialBotState) {
-        updateBotState({ ...initialBotState, ...botState })
+        updateBotState(merge(initialBotState, botState))
       }
     } else {
       updateSession(merge(initialSession, session))
-      updateBotState({ ...initialBotState, ...botState })
+      updateBotState(merge(initialBotState, botState))
     }
     if (devSettings) updateDevSettings(devSettings)
     else if (initialDevSettings) updateDevSettings(initialDevSettings)
