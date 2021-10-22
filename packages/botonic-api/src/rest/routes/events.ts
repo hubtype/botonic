@@ -93,7 +93,7 @@ export default function eventsRouter(args: any): Router {
           })
           await handlers.run('botExecutor', {
             input: { ...message, userId }, // To identify user executing the input
-            session: updatedUser.session,
+            session: user.session,
             botState: user.botState,
             websocketId: user.websocketId,
           })

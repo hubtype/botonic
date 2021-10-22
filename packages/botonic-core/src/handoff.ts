@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
-import { Session } from './models'
+import { BotState, Session } from './models'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
@@ -257,14 +257,15 @@ export async function getAgentVacationRanges(
 }
 
 export function cancelHandoff(
-  botState: any,
+  botState: BotState,
   typification: string | null = null
 ): void {
   let action = 'discard_case'
   if (typification) action = `${action}:${JSON.stringify({ typification })}`
   botState.botonicAction = action
+  botState.isHandoff = false // TODO: Review handoff functionalities
 }
 
-export function deleteUser(botState: any): void {
+export function deleteUser(botState: BotState): void {
   botState.botonicAction = `delete_user`
 }

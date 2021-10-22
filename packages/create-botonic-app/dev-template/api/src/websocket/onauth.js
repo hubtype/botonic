@@ -8,7 +8,6 @@ const initialBotState = {
   lastRoutePath: null,
   isFirstInteraction: true,
   retries: 0,
-  locale: 'en',
   isHandoff: false,
   isShadowing: false,
 }
