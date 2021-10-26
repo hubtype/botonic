@@ -76,7 +76,7 @@ export const plugins = [
         auth_provider_x509_cert_url: '',
         client_x509_cert_url: '',
       },
-      queryData: {
+      queryData: { // Default query data (Optional)
         ... // https://cloud.google.com/dialogflow/es/docs/reference/rest/v2/projects.agent.sessions/detectIntent
       }
     },
