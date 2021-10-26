@@ -7,6 +7,8 @@ export interface Credentials {
   project_id: string
 }
 
-export interface Options {
+export type Options = {
   credentials: Credentials
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  queryData?: Record<string, any>
 }

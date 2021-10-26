@@ -4,16 +4,18 @@ import axios, { AxiosResponse } from 'axios'
 import { KJUR } from 'jsrsasign'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Options, Credentials } from './types'
+import { Credentials, Options } from './types'
 
 export default class BotonicPluginDialogflow {
   sessionId: string
   creds: Credentials
   token: string
+  defaultQueryData: Options['queryData']
   constructor(options: Options) {
-    const { credentials } = options
+    const { credentials, queryData } = options
     this.sessionId = uuidv4()
     this.creds = credentials
+    this.defaultQueryData = queryData || {}
   }
 
   async getToken(): Promise<string> {
@@ -77,7 +79,9 @@ export default class BotonicPluginDialogflow {
         'Content-Type': 'application/json',
       },
       data: {
+        ...this.defaultQueryData,
         queryInput: {
+          ...this.defaultQueryData?.queryInput,
           text: {
             text: queryData,
             languageCode: languageCode,

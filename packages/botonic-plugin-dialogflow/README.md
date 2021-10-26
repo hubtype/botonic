@@ -75,6 +75,9 @@ export const plugins = [
         token_uri: '',
         auth_provider_x509_cert_url: '',
         client_x509_cert_url: '',
+      },
+      queryData: {
+        ... // https://cloud.google.com/dialogflow/es/docs/reference/rest/v2/projects.agent.sessions/detectIntent
       }
     },
   },
