@@ -244,7 +244,7 @@ export class WebchatApp {
   }
 
   // eslint-disable-next-line complexity
-  getComponent(optionsAtRuntime = {}) {
+  getComponent(host, optionsAtRuntime = {}) {
     let {
       theme = {},
       persistentMenu,
@@ -262,6 +262,7 @@ export class WebchatApp {
       onOpen,
       onClose,
       onMessage,
+      hostId,
       appId,
       visibility,
       server,
@@ -286,6 +287,8 @@ export class WebchatApp {
     this.onMessage = onMessage || this.onMessage
     this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
+    this.hostId = hostId || this.hostId
+    this.createRootElement(host)
     return (
       <Webchat
         {...webchatOptions}
@@ -346,11 +349,10 @@ export class WebchatApp {
 
   async render(dest, optionsAtRuntime = {}) {
     onDOMLoaded(async () => {
-      this.createRootElement(dest)
       const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
       if (isVisible)
         render(
-          this.getComponent(optionsAtRuntime),
+          this.getComponent(dest, optionsAtRuntime),
           this.getReactMountNode(dest)
         )
     })

@@ -126,7 +126,7 @@ export class FullstackDevApp extends DevApp {
     this.backendService && this.backendService.postMessage(user, input)
   }
 
-  getComponent(optionsAtRuntime = {}) {
+  getComponent(host, optionsAtRuntime = {}) {
     let {
       theme = {},
       persistentMenu,
@@ -142,6 +142,7 @@ export class FullstackDevApp extends DevApp {
       onOpen,
       onClose,
       onMessage,
+      hostId,
       ...webchatOptions
     } = optionsAtRuntime
     theme = merge(this.theme, theme)
@@ -158,6 +159,8 @@ export class FullstackDevApp extends DevApp {
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
+    this.hostId = hostId || this.hostId
+    this.createRootElement(host)
     return (
       <WebchatDev
         {...webchatOptions}

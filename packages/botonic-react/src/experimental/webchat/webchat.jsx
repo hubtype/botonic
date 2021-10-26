@@ -1,10 +1,8 @@
+import { INPUT, isMobile, params2queryString } from '@botonic/core'
 import {
-  INPUT,
-  isMobile,
   MessageEventAck,
   MessageEventFrom,
-  params2queryString,
-} from '@botonic/core'
+} from '@botonic/core/src/models/events/message'
 import { motion } from 'framer-motion'
 import merge from 'lodash.merge'
 import React, {

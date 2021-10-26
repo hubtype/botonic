@@ -1,4 +1,5 @@
-import { INPUT, isBrowser, MessageEventAck } from '@botonic/core'
+import { INPUT, isBrowser } from '@botonic/core'
+import { MessageEventAck } from '@botonic/core/src/models/events/message'
 import React, { useContext, useEffect, useState } from 'react'
 import Fade from 'react-reveal/Fade'
 import styled from 'styled-components'

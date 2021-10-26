@@ -51,7 +51,7 @@ export class DevApp extends WebchatApp {
     })
   }
 
-  getComponent(optionsAtRuntime = {}) {
+  getComponent(host, optionsAtRuntime = {}) {
     let {
       theme = {},
       persistentMenu,
@@ -67,6 +67,7 @@ export class DevApp extends WebchatApp {
       onOpen,
       onClose,
       onMessage,
+      hostId,
       ...webchatOptions
     } = optionsAtRuntime
     theme = merge(this.theme, theme)
@@ -83,6 +84,8 @@ export class DevApp extends WebchatApp {
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
+    this.hostId = hostId || this.hostId
+    this.createRootElement(host)
     return (
       <WebchatDev
         {...webchatOptions}
@@ -111,8 +114,10 @@ export class DevApp extends WebchatApp {
 
   render(dest, optionsAtRuntime = {}) {
     onDOMLoaded(() => {
-      this.createRootElement(dest)
-      render(this.getComponent(optionsAtRuntime), this.getReactMountNode(dest))
+      render(
+        this.getComponent(dest, optionsAtRuntime),
+        this.getReactMountNode(dest)
+      )
     })
   }
 

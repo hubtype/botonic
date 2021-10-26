@@ -176,6 +176,7 @@ export class WebchatApp {
   close(): void
   closeCoverComponent(): void
   getComponent(
+    host: HTMLElement,
     optionsAtRuntime?: WebchatAppArgs
   ): React.ForwardRefExoticComponent<any>
   getLastMessageUpdate(): string

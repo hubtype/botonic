@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 
 import { ROLES } from '../../src/constants'
 import { WebchatApp } from '../../src/webchat-app'
@@ -15,23 +15,19 @@ describe('TEST: Webchat App', () => {
 
   it('TEST: WebchatApp adds <div id="root"> to DOM on initialize', async () => {
     const webchatApp = new WebchatApp({})
-    webchatApp.render()
+    await webchatApp.render()
     expect(document.body.querySelector('#root')).toBeTruthy()
   })
 
   it('TEST: WebchatApp custom hostId', async () => {
     const webchatApp = new WebchatApp({ hostId: 'myCustomId' })
-    webchatApp.render()
+    await webchatApp.render()
     expect(document.body.querySelector('#myCustomId')).toBeTruthy()
   })
 
   it('TEST: WebchatApp renders webchat', async () => {
     const webchatApp = new WebchatApp({})
-    webchatApp.createRootElement()
-    await act(async () => {
-      const WebchatComponent = webchatApp.getComponent()
-      render(WebchatComponent, webchatApp.getReactMountNode())
-    })
+    await webchatApp.render()
     expectToHaveRoles([ROLES.TRIGGER_BUTTON], screen)
     expectNotToHaveRoles([ROLES.WEBCHAT], screen)
     const root = document.body.querySelector('#root')
@@ -40,15 +36,18 @@ describe('TEST: Webchat App', () => {
 
   it('TEST: WebchatApp renders webchat in shadowDOM', async () => {
     const webchatApp = new WebchatApp({ shadowDOM: true })
-    webchatApp.createRootElement()
-    await act(async () => {
-      const WebchatComponent = webchatApp.getComponent()
-      render(WebchatComponent, webchatApp.getReactMountNode())
-    })
-    expectToHaveRoles([ROLES.TRIGGER_BUTTON], screen)
+    await webchatApp.render()
+    expectNotToHaveRoles([ROLES.TRIGGER_BUTTON], screen)
     expectNotToHaveRoles([ROLES.WEBCHAT], screen)
     const root = document.body.querySelector('#root')
     expect(root.shadowRoot).toBeTruthy()
+    expect(
+      root.shadowRoot.querySelectorAll(`div[role=${ROLES.TRIGGER_BUTTON}]`)
+        .length
+    ).toEqual(1)
+    expect(
+      root.shadowRoot.querySelectorAll(`div[role=${ROLES.WEBCHAT}]`).length
+    ).toEqual(0)
 
     // When building with Webpack we have a lot of styles in shadowRoot
     // but in this tests only styled-components styles will be present
