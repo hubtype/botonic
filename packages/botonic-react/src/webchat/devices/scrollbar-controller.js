@@ -1,4 +1,8 @@
-import { getScrollableArea, getWebchatElement } from '../../util/dom'
+import {
+  getScrollableArea,
+  getScrollableContent,
+  getWebchatElement,
+} from '../../util/dom'
 import { DEVICES, isMobileDevice } from '.'
 
 const debounced = (delay, fn) => {
@@ -28,7 +32,7 @@ export class ScrollbarController {
 
   handleScrollEvents() {
     /*
-      It handles scroll events for Mobile/Desktop. 
+      It handles scroll events for Mobile/Desktop.
       "ontouchmove" is the phone equivalent for "onmouseover"
     */
     if (isMobileDevice()) {
@@ -61,11 +65,12 @@ export class ScrollbarController {
   }
 
   toggleOnMouseWheelEvents() {
+    const scrollableContent = getScrollableContent(this.webchat)
     if (this.hasScrollbar()) {
-      this.webchat.onmousewheel = {}
+      scrollableContent.onmousewheel = {}
       return
     }
-    this.webchat.onmousewheel = e => e.preventDefault()
+    scrollableContent.onmousewheel = e => e.preventDefault()
   }
 
   handleOnTouchMoveEvents(e) {
