@@ -6,3 +6,7 @@ export interface Credentials {
   client_email: string
   project_id: string
 }
+
+export interface Options {
+  credentials: Credentials
+}
