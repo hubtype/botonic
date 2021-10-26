@@ -212,6 +212,8 @@ export const Webchat = forwardRef((props, ref) => {
 
   const host = props.host || document.body
 
+  const deviceAdapter = new DeviceAdapter()
+
   const saveWebchatState = webchatState => {
     storage &&
       saveState(
@@ -227,7 +229,6 @@ export const Webchat = forwardRef((props, ref) => {
         )
       )
   }
-  const deviceAdapter = new DeviceAdapter()
 
   const handleAttachment = event => {
     if (!isAllowedSize(event.target.files[0].size)) {
