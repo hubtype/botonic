@@ -278,6 +278,12 @@ Deploying to AWS...
         message: 'Bot name:',
       },
     ]).then((inp: any) => {
+      const MAX_ALLOWED_CHARS_FOR_BOT_NAME = 25
+      if (inp.bot_name.length > MAX_ALLOWED_CHARS_FOR_BOT_NAME) {
+        throw new Error(
+          `Maximum allowed chars for bot name is ${MAX_ALLOWED_CHARS_FOR_BOT_NAME} chars. Please, give a shorter name.`
+        )
+      }
       return this.botonicApiService.saveBot(inp.bot_name).then(
         ({}) => this.deploy(),
         err =>
