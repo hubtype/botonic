@@ -167,7 +167,8 @@ export class CoreBot {
     try {
       messageEvents = this.botonicOutputParser.xmlToMessageEvents(response)
     } catch (e) {
-      console.error(e)
+      // Disabling Botonic 1.0 error log for LTS version:
+      // console.error(e)
     }
 
     lastRoutePath = output.lastRoutePath
