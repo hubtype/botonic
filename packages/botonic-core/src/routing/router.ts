@@ -259,6 +259,7 @@ export class Router {
   ): MatchedValue {
     let value: any = null
     if (Object.keys(input).indexOf(prop) > -1) value = input[prop]
+    else if (prop === 'text') value = input.data
     else if (prop === 'input') value = input
     else if (prop === 'session') value = session
     else if (prop === 'request') value = { input, session, lastRoutePath }
