@@ -11,6 +11,42 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.20.0] - 2021-10-28
+
+**NOTE**: At this moment, Botonic `v0.20.0` will be in `Mainteinance LTS` status and will be maintained in [`master-lts` branch](https://github.com/hubtype/botonic/tree/master-lts) until further notice.
+Currently we are working on Botonic 1.0 which will come with several improvements and hence all its commits from now on will reside in [`master`](https://github.com/hubtype/botonic/tree/master).
+
+### Added
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Plugins now can be accessed within plugins' [`pre` and `post` calls](https://github.com/hubtype/botonic/pull/1975).
+
+* [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Added [new components](https://github.com/hubtype/botonic/pull/1900) to allow creating custom models with contentful.
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Allow `hostId` [to be changed at runtime](https://github.com/hubtype/botonic/pull/1976).
+
+### Changed
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - Distribute `@botonic/core` library with CJS and ESM versions to improve tree-shaking functionalities. [#1826](https://github.com/hubtype/botonic/pull/1826)
+  - Refactored `@botonic/core` from JS to TS. Reviewed and improved functionalities like `retries`, `redirects`, `dynamic routes` and `empty actions`. [#1937](https://github.com/hubtype/botonic/pull/1937) Feel free to check [tests](https://github.com/hubtype/botonic/pull/1937/files#diff-4a6b294c08198652053f71e9a4fe32ef57f7b06ab9a5648e8fc9b16d0777868c) for further information.
+
+### Fixed
+
+- [@botonic/plugin-dialogflow](https://www.npmjs.com/package/@botonic/plugin-dialogflow)
+  - Allow to pass [custom data](https://github.com/hubtype/botonic/pull/1987) to dialogflow queries. Big thanks to external contributor [herrlegno](https://github.com/herrlegno).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - Fixed bug regarding emoji panel and cover component [unable to be scrolled](https://github.com/hubtype/botonic/pull/1968). Big thanks to external contributor [TD-LiXiang](https://github.com/TD-LiXiang).
+  - Fixed `deviceAdapter` behavior with [improved device detection](https://github.com/hubtype/botonic/pull/1988).
+
 ## [0.19.0] - 2021-07-29
 
 ### Added
@@ -726,3 +762,4 @@ All notable changes to Botonic will be documented in this file.
 [0.17.0]: https://github.com/hubtype/botonic/releases/tag/v0.17.0
 [0.18.0]: https://github.com/hubtype/botonic/releases/tag/v0.18.0
 [0.19.0]: https://github.com/hubtype/botonic/releases/tag/v0.19.0
+[0.20.0]: https://github.com/hubtype/botonic/releases/tag/v0.20.0
