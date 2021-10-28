@@ -1,6 +1,6 @@
 {
   "name": "@botonic/nlp",
-  "version": "0.20.0-rc.0",
+  "version": "0.20.0",
   "main": "lib/index.js",
   "license": "MIT",
   "types": "lib/index.d.ts",

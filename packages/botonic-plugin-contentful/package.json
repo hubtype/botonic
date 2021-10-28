@@ -16,7 +16,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-contentful",
-  "version": "0.20.0-rc.0",
+  "version": "0.20.0",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
