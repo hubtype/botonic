@@ -21,6 +21,7 @@ it('Pre response is rejected when using fake credentials', async () => {
       bot: { id: 'test' },
       user: { id: 'user1', provider: 'dev' },
       is_first_interaction: true,
+      __retries: 0,
     },
     lastRoutePath: 'initial',
   }
