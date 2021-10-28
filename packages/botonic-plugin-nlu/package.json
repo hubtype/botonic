@@ -23,7 +23,7 @@
     "axios": "0.24.0",
     "franc": "^5.0.0",
     "langs": "^2.0.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.5",
     "ts-node": "^9.1.1",
     "typescript": "^4.4.3"
   },
