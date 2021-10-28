@@ -1,14 +1,14 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "1.0.0-dev.3",
+  "version": "0.20.0",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
   "dependencies": {
-    "@botonic/pulumi": "^1.0.0-dev.2",
+    "@botonic/pulumi": "1.0.0-dev.0",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.2",
