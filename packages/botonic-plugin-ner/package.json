@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-ner",
-  "version": "0.19.0",
+  "version": "0.20.0-rc.0",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
-    "@botonic/core": "~0.19.0",
-    "@botonic/nlp": "~0.19.0",
+    "@botonic/core": "0.20.0-rc.0",
+    "@botonic/nlp": "0.20.0-rc.0",
     "@tensorflow/tfjs": "^2.8.6"
   },
   "devDependencies": {
