@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import Pusher, { AuthOptions, Channel } from 'pusher-js'
 import Channels from 'pusher-js/types/src/core/channels/channels'
 
-import { Input, SessionUser } from './models'
+import { Input } from './models'
 import { getWebpackEnvVar } from './utils'
 
 interface UnsentInput {
@@ -21,7 +21,7 @@ interface ServerConfig {
 }
 interface HubtypeServiceArgs {
   appId: string
-  user: SessionUser
+  user: any
   lastMessageId: string
   lastMessageUpdateDate: string
   onEvent: any
@@ -50,7 +50,7 @@ const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels
  */
 export class HubtypeService {
   appId: string
-  user: SessionUser
+  user: any
   lastMessageId: string
   lastMessageUpdateDate: string
   onEvent: any
@@ -185,7 +185,7 @@ export class HubtypeService {
   }
 
   handleConnectionChange(online: boolean): void {
-    this.onPusherEvent({ action: 'connectionChange', online })
+    this.onPusherEvent({ action: 'connection_change', online })
   }
 
   onPusherEvent(event: any): void {
@@ -213,7 +213,7 @@ export class HubtypeService {
   /**
    * @return {Promise<void>}
    */
-  async postMessage(user: SessionUser, message: any): Promise<void> {
+  async postMessage(user: any, message: any): Promise<void> {
     try {
       // @ts-ignore
       await this.init(user)

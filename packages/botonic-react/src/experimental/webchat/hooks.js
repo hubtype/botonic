@@ -13,6 +13,7 @@ import {
   TOGGLE_EMOJI_PICKER,
   TOGGLE_PERSISTENT_MENU,
   TOGGLE_WEBCHAT,
+  UPDATE_BOT_STATE,
   UPDATE_DEV_SETTINGS,
   UPDATE_HANDOFF,
   UPDATE_JWT,
@@ -24,9 +25,30 @@ import {
   UPDATE_SESSION,
   UPDATE_THEME,
   UPDATE_TYPING,
+  UPDATE_USER,
   UPDATE_WEBVIEW,
 } from './actions'
 import { webchatReducer } from './webchat-reducer'
+
+export const initialUser = {
+  id: undefined,
+  name: undefined,
+  userName: undefined,
+  channel: undefined,
+  idFromChannel: undefined,
+  isOnline: true,
+}
+
+const initialBotState = {
+  botId: undefined,
+  lastRoutePath: null,
+  isFirstInteraction: true,
+  retries: 0,
+  isHandoff: false,
+  isShadowing: false,
+}
+
+const initialSession = {}
 
 export const webchatInitialState = {
   width: WEBCHAT.DEFAULTS.WIDTH,
@@ -38,9 +60,9 @@ export const webchatInitialState = {
   typing: false,
   webview: null,
   webviewParams: null,
-  session: { user: null },
-  lastRoutePath: null,
-  handoff: false,
+  // session: { user: null },
+  // lastRoutePath: null,
+  // handoff: false,
   theme: {
     headerTitle: WEBCHAT.DEFAULTS.TITLE,
     brandColor: COLORS.BOTONIC_BLUE,
@@ -53,7 +75,7 @@ export const webchatInitialState = {
   },
   themeUpdates: {},
   error: {},
-  online: true,
+  isWebchatOnline: true,
   devSettings: { keepSessionOnReload: false },
   isWebchatOpen: false,
   isEmojiPickerOpen: false,
@@ -62,6 +84,9 @@ export const webchatInitialState = {
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
   jwt: null,
+  user: initialUser,
+  session: initialSession,
+  botState: initialBotState,
 }
 
 export function useWebchat() {
@@ -87,12 +112,23 @@ export function useWebchat() {
       type: UPDATE_WEBVIEW,
       payload: { webview, webviewParams: params },
     })
-  const updateSession = session => {
+  const updateSession = session =>
     webchatDispatch({
       type: UPDATE_SESSION,
       payload: session,
     })
-  }
+
+  const updateUser = user =>
+    webchatDispatch({
+      type: UPDATE_USER,
+      payload: user,
+    })
+
+  const updateBotState = botState =>
+    webchatDispatch({
+      type: UPDATE_BOT_STATE,
+      payload: botState,
+    })
 
   const updateLastRoutePath = path =>
     webchatDispatch({
@@ -198,6 +234,8 @@ export function useWebchat() {
     updateLastMessageDate,
     setCurrentAttachment,
     updateJwt,
+    updateBotState,
+    updateUser,
   }
 }
 

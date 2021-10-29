@@ -1,4 +1,4 @@
-import { BotonicEvent, MessageEventAck } from '@botonic/core'
+import { BotonicEvent, MessageEventAck, PROVIDER } from '@botonic/core'
 import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Router } from 'express'
 import jwt from 'express-jwt'
@@ -76,25 +76,25 @@ export default function eventsRouter(args: any): Router {
           const { userId } = req.user
           const { message, sender } = req.body
           let user = await dp.getUser(userId)
-          user = await dp.updateUser({
-            ...user,
-            session: JSON.stringify({ user: sender }),
-          })
-          // TODO: Next iterations: We should receive an event with userId and eventId from frontend
+          const updatedUser = { ...user, ...sender }
+          user = await dp.updateUser(updatedUser)
+          // TODO: Only update ack for webchat
+          // TODO: Specific logic for webchat, move to webchat-events?
           const webchatMsgId = message.id
           await handlers.run('sender', {
             events: [
               {
                 action: 'update_message_info',
-                message: { id: webchatMsgId, ack: MessageEventAck.RECEIVED },
+                id: webchatMsgId,
+                ack: MessageEventAck.RECEIVED,
               },
             ],
             websocketId: user.websocketId,
           })
           await handlers.run('botExecutor', {
-            input: message,
-            session: JSON.parse(user.session),
-            lastRoutePath: user.route,
+            input: { ...message, userId }, // To identify user executing the input
+            session: user.session,
+            botState: user.botState,
             websocketId: user.websocketId,
           })
         } catch (e) {

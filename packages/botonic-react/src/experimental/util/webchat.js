@@ -1,3 +1,4 @@
+import { PROVIDER } from '@botonic/core'
 import merge from 'lodash.merge'
 import UAParser from 'ua-parser-js'
 import { v4 as uuidv4 } from 'uuid'
@@ -34,14 +35,14 @@ export const createUser = () => {
   return {
     id: uuidv4(),
     name,
+    channel: PROVIDER.DEV,
   }
 }
-export const initSession = session => {
-  if (!session) session = {}
-  const hasUserId = session.user && session.user.id !== undefined
-  if (!session.user || Object.keys(session.user).length === 0 || !hasUserId)
-    session.user = !hasUserId ? merge(session.user, createUser()) : createUser()
-  return session
+
+export const initUser = user => {
+  if (!user) return createUser()
+  if (user && !user.id) return merge(user, createUser())
+  return user
 }
 
 export const shouldKeepSessionOnReload = ({

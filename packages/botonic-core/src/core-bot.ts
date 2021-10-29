@@ -6,6 +6,7 @@ import {
   BotonicEvent,
   BotRequest,
   BotResponse,
+  BotState,
   Locales,
   MessageEventAck,
   MessageEventFrom,
@@ -81,26 +82,30 @@ export class CoreBot {
           )
   }
 
-  getString(id: string, session: Session): string {
-    // @ts-ignore
-    return getString(this.locales, session.__locale, id)
+  getString(id: string, botState: BotState): string {
+    if (!botState.locale) {
+      console.error('Locale is not defined')
+      return ''
+    }
+    return getString(this.locales, botState.locale, id)
   }
 
-  setLocale(locale: string, session: Session): void {
-    session.__locale = locale
+  setLocale(locale: string, botState: BotState): void {
+    botState.locale = locale
   }
 
   async input({
     input,
     session,
-    lastRoutePath,
+    botState,
     dataProvider,
   }: BotRequest): Promise<BotResponse> {
-    session = session || {}
-    if (!session.__locale) session.__locale = 'en'
+    if (!botState.locale) botState.locale = 'en'
+    // @ts-ignore
+    const userId = input.userId
 
-    const parsedUserEvent = this.botonicOutputParser.parseFromUserInput(input)
-    const userId = session.user.id
+    const parsedUserEvent = this.botonicOutputParser.inputToBotonicEvent(input)
+
     if (dataProvider) {
       // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
       // @ts-ignore
@@ -120,7 +125,7 @@ export class CoreBot {
         'pre',
         input,
         session,
-        lastRoutePath,
+        botState,
         undefined,
         undefined,
         dataProvider
@@ -133,7 +138,7 @@ export class CoreBot {
           ...(await getComputedRoutes(this.routes, {
             input,
             session,
-            lastRoutePath,
+            botState,
           })),
           ...this.defaultRoutes,
         ],
@@ -144,18 +149,19 @@ export class CoreBot {
     const output = (this.router as Router).processInput(
       input,
       session,
-      lastRoutePath
+      botState
     )
+
     const request = {
-      getString: stringId => this.getString(stringId, session),
-      setLocale: locale => this.setLocale(locale, session),
+      getString: stringId => this.getString(stringId, botState),
+      setLocale: locale => this.setLocale(locale, botState),
       session: session || {},
       params: output.params || {},
       input: input,
       plugins: this.plugins,
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
-      lastRoutePath,
+      botState,
       dataProvider,
     }
 
@@ -171,14 +177,15 @@ export class CoreBot {
       // console.error(e)
     }
 
-    lastRoutePath = output.lastRoutePath
+    botState.lastRoutePath = output.botState.lastRoutePath
+
     if (this.plugins) {
       await runPlugins(
         this.plugins,
         'post',
         input,
         session,
-        lastRoutePath,
+        botState,
         response,
         messageEvents,
         dataProvider
@@ -200,13 +207,25 @@ export class CoreBot {
       }
     }
 
-    session.is_first_interaction = false
+    botState.isFirstInteraction = false
+
+    if (dataProvider) {
+      const user = await dataProvider.getUser(userId)
+      if (!user) {
+        // throw error
+      } else {
+        const updatedUser = { ...user, session, botState }
+        // @ts-ignore
+        await dataProvider.updateUser(updatedUser)
+      }
+    }
+    // TODO: return also updatedUser?
     return {
       input,
       response,
       messageEvents,
       session,
-      lastRoutePath,
+      botState,
       dataProvider,
     }
   }

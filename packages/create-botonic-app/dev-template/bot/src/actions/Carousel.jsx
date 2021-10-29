@@ -1,13 +1,14 @@
-import React from 'react'
+// eslint-disable-next-line filenames/match-regex
 import {
-  Text,
   Button,
   Carousel,
-  Pic,
   Element,
-  Title,
+  Pic,
   Subtitle,
+  Text,
+  Title,
 } from '@botonic/react/src/experimental'
+import React from 'react'
 
 export default class extends React.Component {
   render() {
@@ -16,7 +17,8 @@ export default class extends React.Component {
         name: 'Pulp Fiction',
         desc: 'Le Big Mac',
         url: 'https://www.imdb.com/title/tt0110912',
-        pic: 'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg',
+        pic:
+          'https://images-na.ssl-images-amazon.com/images/I/51Z95XQDHRL._SY445_.jpg',
       },
       {
         name: 'The Big Lebowski',
