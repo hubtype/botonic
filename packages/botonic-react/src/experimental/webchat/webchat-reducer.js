@@ -6,6 +6,7 @@ import {
   TOGGLE_EMOJI_PICKER,
   TOGGLE_PERSISTENT_MENU,
   TOGGLE_WEBCHAT,
+  UPDATE_BOT_STATE,
   UPDATE_DEV_SETTINGS,
   UPDATE_HANDOFF,
   UPDATE_JWT,
@@ -14,16 +15,16 @@ import {
   UPDATE_SESSION,
   UPDATE_THEME,
   UPDATE_TYPING,
+  UPDATE_USER,
   UPDATE_WEBVIEW,
 } from './actions'
 import { messagesReducer } from './messages-reducer'
 
+// eslint-disable-next-line complexity
 export function webchatReducer(state, action) {
   switch (action.type) {
     case UPDATE_WEBVIEW:
       return { ...state, ...action.payload }
-    case UPDATE_SESSION:
-      return { ...state, session: { ...action.payload } }
     case UPDATE_TYPING:
       return { ...state, typing: action.payload }
     case UPDATE_THEME:
@@ -55,6 +56,12 @@ export function webchatReducer(state, action) {
       return { ...state, currentAttachment: action.payload }
     case UPDATE_JWT:
       return { ...state, jwt: action.payload }
+    case UPDATE_USER:
+      return { ...state, user: action.payload }
+    case UPDATE_SESSION:
+      return { ...state, session: action.payload }
+    case UPDATE_BOT_STATE:
+      return { ...state, botState: action.payload }
     default:
       return messagesReducer(state, action)
   }

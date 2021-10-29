@@ -141,7 +141,7 @@ export class WebchatApp {
   }
 
   onServiceEvent(event) {
-    if (event.action === 'connectionChange') {
+    if (event.action === 'connection_change') {
       this.onConnectionChange && this.onConnectionChange(this, event.online)
       this.webchatRef.current.setOnline(event.online)
     } else if (event.action === 'update_message_info')
