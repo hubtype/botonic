@@ -15,8 +15,8 @@ export class BotonicOutputParserTester extends BotonicOutputParser {
       })
     })
   }
-  parseUserInputAndAssert(userInput, expected) {
-    const sut = this.parseFromUserInput(userInput)
+  inputToBotonicEventAndAssert(userInput, expected) {
+    const sut = this.inputToBotonicEvent(userInput)
     expect(sut).toEqual(expected)
   }
 }

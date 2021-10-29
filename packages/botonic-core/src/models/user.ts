@@ -1,11 +1,18 @@
-import { Session } from './legacy-types'
+import { BotState } from './bot-state'
+import { Session } from './session'
 
 export interface User {
   id: string //TODO: UUID
-  providerId?: string
-  websocketId?: string
+  name?: string
+  userName?: string
+  channel: string
+  idFromChannel: string // providerId
   session: Session
-  route: string
+  botState: BotState
+  // functioning
   isOnline: boolean
+  websocketId?: string
+  // part of details?
+  // route: string inside botState
   locationInfo: string
 }

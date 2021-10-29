@@ -2,9 +2,9 @@ import merge from 'lodash.merge'
 import React from 'react'
 import { render } from 'react-dom'
 
-import { SENDERS } from '../constants'
-import { onDOMLoaded } from '../util/dom'
+import { SENDERS } from './constants'
 import { ReactBot } from './react-bot'
+import { onDOMLoaded } from './util/dom'
 import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
 
@@ -102,8 +102,10 @@ export class DevApp extends WebchatApp {
         enableAnimations={enableAnimations}
         storage={storage}
         storageKey={storageKey}
-        getString={(stringId, session) => this.bot.getString(stringId, session)}
-        setLocale={(locale, session) => this.bot.setLocale(locale, session)}
+        getString={(stringId, botState) =>
+          this.bot.getString(stringId, botState)
+        }
+        setLocale={(locale, botState) => this.bot.setLocale(locale, botState)}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}

@@ -28,7 +28,7 @@ export class BotonicOutputParser {
    * to be saved. This is, converting a botonic input like: '{id: 'msgId', data: 'rawData', payload: 'somePayload'}'
    * into a BotonicEvent with the expected properties.
    */
-  parseFromUserInput(input: any): Partial<BotonicEvent> {
+  inputToBotonicEvent(input: any): Partial<BotonicEvent> {
     return this.factory.parse(input)
   }
 

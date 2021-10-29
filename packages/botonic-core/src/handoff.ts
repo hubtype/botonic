@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
-import { Session } from './models'
+import { BotState, Session } from './models'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
@@ -57,7 +57,7 @@ export async function getOpenQueues(
 }
 
 export class HandOffBuilder {
-  _session: SessionWithBotonicAction
+  _botState: any
   _queue: string
   _onFinish: string
   _email: string
@@ -66,8 +66,8 @@ export class HandOffBuilder {
   _caseInfo: string
   _shadowing: boolean
 
-  constructor(session: SessionWithBotonicAction) {
-    this._session = session
+  constructor(botState: any) {
+    this._botState = botState
   }
 
   withQueue(queueNameOrId: string): this {
@@ -112,7 +112,7 @@ export class HandOffBuilder {
 
   async handOff(): Promise<void> {
     return _humanHandOff(
-      this._session,
+      this._botState,
       this._queue,
       this._onFinish,
       this._email,
@@ -154,7 +154,7 @@ interface HubtypeHandoffParams {
   on_finish?: string
 }
 async function _humanHandOff(
-  session: SessionWithBotonicAction,
+  botState: any,
   queueNameOrId = '',
   onFinish: string,
   agentEmail = '',
@@ -185,7 +185,8 @@ async function _humanHandOff(
   if (onFinish) {
     params.on_finish = onFinish
   }
-  session._botonic_action = `create_case:${JSON.stringify(params)}`
+  botState.botonicAction = `create_case:${JSON.stringify(params)}`
+  botState.isHandoff = true
 }
 
 export async function storeCaseRating(
@@ -256,14 +257,15 @@ export async function getAgentVacationRanges(
 }
 
 export function cancelHandoff(
-  session: SessionWithBotonicAction,
+  botState: BotState,
   typification: string | null = null
 ): void {
   let action = 'discard_case'
   if (typification) action = `${action}:${JSON.stringify({ typification })}`
-  session._botonic_action = action
+  botState.botonicAction = action
+  botState.isHandoff = false // TODO: Review handoff functionalities
 }
 
-export function deleteUser(session: SessionWithBotonicAction): void {
-  session._botonic_action = `delete_user`
+export function deleteUser(botState: BotState): void {
+  botState.botonicAction = `delete_user`
 }

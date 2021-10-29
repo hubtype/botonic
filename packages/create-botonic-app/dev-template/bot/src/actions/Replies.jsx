@@ -1,5 +1,6 @@
+// eslint-disable-next-line filenames/match-regex
+import { Reply, Text } from '@botonic/react/src/experimental'
 import React from 'react'
-import { Text, Reply } from '@botonic/react/src/experimental'
 
 export default class extends React.Component {
   render() {

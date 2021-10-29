@@ -3,9 +3,9 @@ import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { render } from 'react-dom'
 
-import { SENDERS, WEBCHAT } from '../constants'
-import { isShadowDOMSupported, onDOMLoaded } from '../util/dom'
+import { SENDERS, WEBCHAT } from './constants'
 import { msgToBotonic } from './msg-to-botonic'
+import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
@@ -139,27 +139,40 @@ export class WebchatApp {
   }
 
   onServiceEvent(event) {
-    if (event.action === 'connectionChange')
+    const { action, ...eventData } = event
+    if (action === 'connection_change')
       this.webchatRef.current.setOnline(event.online)
-    // TODO: Temporary solution, decide how we will send these events in next iterations
-    else if (event.message.action === 'update_message_info') {
-      const { message } = event.message
-      this.updateMessageInfo(message.id, message)
-    } else if (event.action === 'update_message_info')
-      this.updateMessageInfo(event.message.id, event.message)
-    else if (event.message.type === 'update_webchat_settings')
-      this.updateWebchatSettings(event.message.data)
-    else if (event.message.type === 'sender_action')
-      this.setTyping(event.message.data === 'typing_on')
-    else {
+    else if (action === 'update_message_info') {
+      this.updateMessageInfo(eventData.id, eventData)
+    } else if (action === 'update_user') {
+      this.updateUser(eventData)
+    } else if (action === 'update_session') {
+      this.updateSession(eventData)
+    } else if (action === 'update_bot_state') {
+      this.updateBotState(eventData)
+    }
+    // TODO: Discuss how this updates  to be done
+    else if (eventData.type === 'update_webchat_settings')
+      this.updateWebchatSettings(event.data)
+    else if (eventData.type === 'sender_action')
+      this.setTyping(event.data === 'typing_on')
+    else if (eventData.eventType === 'message') {
       this.onMessage &&
-        this.onMessage(this, { from: SENDERS.bot, message: event.message })
-      this.addBotMessage(event.message)
+        this.onMessage(this, { from: SENDERS.bot, message: eventData })
+      this.addBotMessage(eventData)
     }
   }
 
   updateUser(user) {
     this.webchatRef.current.updateUser(user)
+  }
+
+  updateSession(session) {
+    this.webchatRef.current.updateSession(session)
+  }
+
+  updateBotState(botState) {
+    this.webchatRef.current.updateBotState(botState)
   }
 
   addBotMessage(message) {
