@@ -18,11 +18,6 @@ flags:
       - packages/botonic-core
     carryforward: true
 
-  botonic-nlu:
-    paths:
-      - packages/botonic-nlu
-    carryforward: true
-
   botonic-nlp:
     paths:
       - packages/botonic-nlp
@@ -41,11 +36,6 @@ flags:
   botonic-plugin-dynamodb:
     paths:
       - packages/botonic-plugin-dynamodb
-    carryforward: true
-
-  botonic-plugin-nlu:
-    paths:
-      - packages/botonic-plugin-nlu
     carryforward: true
 
   botonic-react:
