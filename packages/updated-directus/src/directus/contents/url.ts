@@ -23,7 +23,7 @@ export class UrlDelivery extends ContentDelivery {
         keywords: (entry[mf][0].keywords?.split(',') as string[]) ?? undefined,
         customFields: getCustomFields(entry[mf][0]),
       } as CommonFields,
-      url: entry[mf[0]].url ?? '',
+      url: entry[mf][0].url ?? '',
     }
     return new Url(opt)
   }

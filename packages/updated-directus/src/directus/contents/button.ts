@@ -18,12 +18,12 @@ export class ButtonDelivery extends ContentDelivery {
 
   async button(id: string, context: SupportedLocales): Promise<Button> {
     const entry = await this.getEntry(id, context)
-    return this.fromEntry(entry)
+    return this.fromEntry(entry, ContentType.BUTTON)
   }
 
   fromEntry(
     entry: PartialItem<any>,
-    contentType?: ContentType,
+    contentType: ContentType,
     context?: SupportedLocales
   ): Button {
     if (context) this.getContextContent(entry[mf], context)
@@ -41,7 +41,6 @@ export class ButtonDelivery extends ContentDelivery {
   }
 
   private createButtonTarget(entry: any, contentType?: ContentType): Callback {
-
     if (contentType === ContentType.TEXT) {
       return new ContentCallback(contentType, entry.text_id)
     }
