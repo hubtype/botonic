@@ -1,7 +1,7 @@
 import { PartialItem } from '@directus/sdk'
 
 import * as cms from '../../cms'
-import { CommonFields, Image } from '../../cms'
+import { Image } from '../../cms'
 import { getCustomFields, mf } from '../../directus/delivery/delivery-utils'
 import { ContentDelivery, DirectusClient } from '../delivery'
 
@@ -18,13 +18,15 @@ export class ImageDelivery extends ContentDelivery {
   fromEntry(entry: PartialItem<any>, context?: cms.SupportedLocales): Image {
     const opt = {
       common: {
-        id: entry.id as string,
-        name: entry.name as string,
-        shortText: (entry[mf][0].shorttext as string) ?? undefined,
-        keywords: (entry[mf][0].keywords?.split(',') as string[]) ?? undefined,
-        customFields: getCustomFields(entry[mf][0]),
-      } as CommonFields,
-      imgUrl: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry[mf][0].image}`,
+        id: entry.id,
+        name: entry.name ?? '',
+        shortText: entry[mf][0]?.shorttext ?? undefined,
+        keywords: entry[mf][0]?.keywords?.split(',') ?? undefined,
+        customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
+      },
+      imgUrl: entry[mf][0]
+        ? `${this.client.clientParams.credentials.apiEndPoint}assets/${entry[mf][0]?.image}`
+        : '',
     }
     return new Image(opt)
   }

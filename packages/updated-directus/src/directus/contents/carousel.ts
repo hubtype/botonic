@@ -1,9 +1,7 @@
 import { PartialItem } from '@directus/sdk'
-
 import {
   Button,
   Carousel,
-  CommonFields,
   ContentType,
   Element,
   SupportedLocales,
@@ -28,13 +26,15 @@ export class CarouselDelivery extends ContentDelivery {
   fromEntry(entry: PartialItem<any>, context?: SupportedLocales): Carousel {
     const opt = {
       common: {
-        id: entry.id as string,
-        name: entry.name as string,
-        shortText: entry[mf][0].shorttext as string,
-        keywords: (entry[mf][0].keywords?.split(',') as string[]) ?? undefined,
-        customFields: getCustomFields(entry[mf][0]),
-      } as CommonFields,
-      elements: this.createElements(entry[mf][0].elements, context),
+        id: entry.id,
+        name: entry.name ?? '',
+        shortText: entry[mf][0]?.shorttext ?? undefined,
+        keywords: entry[mf][0]?.keywords?.split(',') ?? undefined,
+        customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
+      },
+      elements: entry[mf][0]?.elements
+        ? this.createElements(entry[mf][0].elements, context)
+        : [],
     }
     return new Carousel(opt)
   }
@@ -58,13 +58,15 @@ export class CarouselDelivery extends ContentDelivery {
   ): Element {
     const opt = {
       common: {
-        id: entry.id as string,
-        name: entry.name as string,
+        id: entry.id,
+        name: entry.name ?? '',
       },
-      title: entry.title as string,
-      subtitle: entry.subtitle as string,
-      imgUrl: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`,
-      buttons: this.createButtons(entry.buttons, context),
+      title: entry.title ?? '',
+      subtitle: entry.subtitle ?? '',
+      imgUrl: entry.image
+        ? `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`
+        : '',
+      buttons: entry.buttons ? this.createButtons(entry.buttons, context) : [],
     }
     return new Element(opt)
   }

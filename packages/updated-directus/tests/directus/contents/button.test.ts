@@ -5,6 +5,7 @@ const BUTTON_PAYLOAD_TARGET = '09f88f45-c717-449b-b979-51308e779744'
 const BUTTON_IMAGE_TARGET = 'ff8b23c4-872f-4b81-bb6a-d30d4d044a7b'
 const BUTTON_URL_TARGET = 'eefd1c61-0881-4bf7-b863-94e6bb1a52ed'
 const BUTTON_CAROUSEL_TARGET = 'b4aca626-b988-40de-a26f-5bac3005b3c4'
+
 test('Test: directus button with Text target', async () => {
   const directus = testDirectus()
   const testButton = await directus.button(BUTTON_TEXT_TARGET, testContext())

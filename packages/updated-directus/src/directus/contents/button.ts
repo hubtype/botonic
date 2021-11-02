@@ -1,9 +1,7 @@
 import { PartialItem } from '@directus/sdk'
-
 import {
   Button,
   Callback,
-  CommonFields,
   ContentCallback,
   ContentType,
   SupportedLocales,
@@ -29,13 +27,15 @@ export class ButtonDelivery extends ContentDelivery {
     if (context) this.getContextContent(entry[mf], context)
     const opt = {
       common: {
-        id: entry.id as string,
-        name: entry.name as string,
-        keywords: (entry[mf][0].keywords?.split(',') as string[]) ?? undefined,
-        customFields: getCustomFields(entry[mf][0]),
-      } as CommonFields,
+        id: entry.id,
+        name: entry.name ?? '',
+        keywords: entry[mf][0]?.keywords?.split(',') ?? undefined,
+        customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
+      },
       text: this.createButtonText(entry, contentType),
-      callback: this.createButtonTarget(entry[mf][0], contentType),
+      callback: entry[mf][0]
+        ? this.createButtonTarget(entry[mf][0], contentType)
+        : new Callback(undefined, undefined),
     }
     return new Button(opt)
   }
@@ -70,8 +70,8 @@ export class ButtonDelivery extends ContentDelivery {
     contentType?: ContentType
   ): string {
     if (contentType === ContentType.BUTTON) {
-      return (entry[mf][0].text as string) ?? entry.name
-    } else return entry[mf][0].shorttext ?? entry.name
+      return entry[mf][0]?.text ?? entry.name
+    } else return entry[mf][0]?.shorttext ?? entry.name
   }
 
   private getContextContent(

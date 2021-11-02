@@ -37,7 +37,6 @@ export class DirectusClient {
           await this.getFollowup(entry![mf][0], context)
         )
       }
-
       return entry!
     } catch (e) {
       console.error(

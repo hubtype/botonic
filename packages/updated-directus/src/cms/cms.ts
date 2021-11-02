@@ -30,6 +30,7 @@ export enum SupportedLocales {
   SPANISH = 'es-ES',
   ENGLISH = 'en-US',
   ITALIAN = 'it-IT',
+  GERMAN = 'de-DE',
 }
 
 export type TopContentType = MessageContentType | NonMessageContentType

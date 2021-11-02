@@ -1,3 +1,4 @@
+import { ContentType } from '../../../src/cms'
 import { testContext, testDirectus } from '../helpers/directus.helper'
 
 const MULTI_LANGUAGE_TEXT_ID = 'ee791f5c-f90a-49af-b75e-f6aac779b902'
@@ -40,4 +41,13 @@ test('Test: url', async () => {
   const directus = testDirectus()
   const testUrl = await directus.url(MULTI_LANGUAGE_URL_ID, testContext())
   console.log(testUrl)
+})
+
+test('Test: topContents', async () => {
+  const directus = testDirectus()
+  const topContents = await directus.topContents(
+    ContentType.IMAGE,
+    testContext()
+  )
+  console.log('topContent:', topContents)
 })

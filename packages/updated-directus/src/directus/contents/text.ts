@@ -1,7 +1,7 @@
 import { PartialItem } from '@directus/sdk'
 
 import * as cms from '../../cms'
-import { Carousel, CommonFields, Image, Text } from '../../cms'
+import { Carousel, Image, Text } from '../../cms'
 import { getCustomFields, mf } from '../../directus/delivery/delivery-utils'
 import { ContentDelivery, DirectusClient } from '../delivery'
 import { ButtonDelivery } from './button'
@@ -32,16 +32,22 @@ export class TextDelivery extends ContentDelivery {
   fromEntry(entry: PartialItem<any>, context: cms.SupportedLocales): Text {
     const opt = {
       common: {
-        id: entry.id as string,
-        name: entry.name as string,
-        shortText: (entry[mf][0].shorttext as string) ?? undefined,
-        followUp: this.createFollowup(entry[mf][0].followup, context),
-        keywords: (entry[mf][0].keywords?.split(',') as string[]) ?? undefined,
-        customFields: getCustomFields(entry[mf][0]),
-      } as CommonFields,
-      text: (entry[mf][0].text as string) ?? undefined,
-      buttons: this.createButtons(entry[mf][0].buttons, context),
-      buttonsStyle: this.getButtonsStyle(entry[mf][0].buttonstyle),
+        id: entry.id,
+        name: entry.name ?? '',
+        shortText: entry[mf][0]?.shorttext ?? undefined,
+        followUp: entry[mf][0]
+          ? this.createFollowup(entry[mf][0]?.followup, context)
+          : undefined,
+        keywords: entry[mf][0]?.keywords?.split(',') ?? undefined,
+        customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
+      },
+      text: entry[mf][0]?.text ?? '',
+      buttons: entry[mf][0]
+        ? this.createButtons(entry[mf][0]?.buttons, context)
+        : [],
+      buttonsStyle: entry[mf][0]
+        ? this.getButtonsStyle(entry[mf][0]?.buttonstyle)
+        : undefined,
     }
     return new Text(opt)
   }

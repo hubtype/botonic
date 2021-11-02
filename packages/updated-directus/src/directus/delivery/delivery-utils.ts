@@ -107,7 +107,7 @@ export function getCustomFields(entry: PartialItem<any>) {
 }
 
 export function hasFollowUp(entry: OneItem<any>): boolean {
-  return !!entry![mf][0].followup?.length
+  return !!entry![mf][0]?.followup?.length
 }
 
 export function getKeywordsFilter(input: string): {} {
