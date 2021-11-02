@@ -1,6 +1,6 @@
+import { buildSendMessageRequestForQueue } from '@botonic/core/lib/esm/data-provider/sqs-utils'
 import { SQS } from 'aws-sdk'
 import { v4 } from 'uuid'
-
 export class Handlers {
   localHandlers
   sqs
@@ -18,15 +18,12 @@ export class Handlers {
       await this.localHandlers[handlerName](params)
     } else {
       try {
-        const msgId = v4()
-        const sqsParams = {
-          MessageBody: JSON.stringify(params),
-          MessageDeduplicationId: msgId,
-          MessageGroupId: msgId,
-          QueueUrl: process.env[`${handlerName}_QUEUE_URL`],
-        }
-        console.log('queueing to', sqsParams.QueueUrl)
-        await this.sqs.sendMessage(sqsParams).promise()
+        const messageRequest = buildSendMessageRequestForQueue(
+          params,
+          process.env[`${handlerName}_QUEUE_URL`]
+        )
+        console.log('queueing to', messageRequest.QueueUrl)
+        await this.sqs.sendMessage(messageRequest).promise()
       } catch (e) {
         console.log({ e })
       }

@@ -1,4 +1,4 @@
-import { ConnectionEvent } from './connections'
+import { ConnectionEvent } from './connection'
 import {
   AudioMessageEvent,
   CarouselMessageEvent,

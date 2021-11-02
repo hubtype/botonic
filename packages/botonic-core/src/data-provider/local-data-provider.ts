@@ -3,6 +3,7 @@ import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 
 import { BotonicEvent, User } from '../models'
 import { DataProvider } from './factory'
+import { enqueueToHubtypeSQS } from './sqs-utils'
 
 export class LocalDevDataProvider implements DataProvider {
   private readonly DB_PATH = 'tmp/localDb'
@@ -95,6 +96,7 @@ export class LocalDevDataProvider implements DataProvider {
       : undefined
   }
 
+  @enqueueToHubtypeSQS()
   saveEvent(event: BotonicEvent): BotonicEvent {
     const path = this.createPath([this.paths.EVENTS, event.eventId])
     this.db.reload()

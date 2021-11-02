@@ -11,7 +11,7 @@ import {
   USER_PREFIX,
 } from './dynamodb-utils'
 import { DataProvider } from './factory'
-import { queueToSQS } from './sqs-utils/queue-to-sqs-decorator'
+import { enqueueToHubtypeSQS } from './sqs-utils/queue-to-sqs-decorator'
 
 export class DynamoDBDataProvider implements DataProvider {
   region: string
@@ -67,14 +67,13 @@ export class DynamoDBDataProvider implements DataProvider {
   // @ts-ignore
   async getUserByField(field: string, value: any): Promise<User | undefined> {} //TODO: Implement
 
-  @queueToSQS()
+  @enqueueToHubtypeSQS()
   async saveUser(user: User): Promise<User> {
     const putUser = { ...user, id: user.id, userId: user.id }
     await this.userEntity.put(putUser)
     return user
   }
 
-  @queueToSQS()
   async updateUser(user: User): Promise<User> {
     const updateUser = { ...user, id: user.id, userId: user.id }
     const res = await this.userEntity.update(updateUser)
@@ -90,7 +89,7 @@ export class DynamoDBDataProvider implements DataProvider {
   // @ts-ignore
   async getEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
 
-  @queueToSQS()
+  @enqueueToHubtypeSQS()
   async saveEvent(event: BotonicEvent): Promise<BotonicEvent> {
     if (event.eventType === EventTypes.CONNECTION) {
       await this.connectionEventEntity.put(event)
