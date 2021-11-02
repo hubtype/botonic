@@ -8,7 +8,7 @@ import {
   Element,
   SupportedLocales,
 } from '../../cms'
-import { getCustomFields } from '../../directus/delivery/delivery-utils'
+import { getCustomFields, mf } from '../../directus/delivery/delivery-utils'
 import { ContentDelivery, DirectusClient } from '../delivery'
 import { ButtonDelivery } from './button'
 
@@ -22,33 +22,40 @@ export class CarouselDelivery extends ContentDelivery {
 
   async carousel(id: string, context: SupportedLocales): Promise<Carousel> {
     const entry = await this.getEntry(id, context)
-    return this.fromEntry(entry)
+    return this.fromEntry(entry, context)
   }
 
-  fromEntry(entry: PartialItem<any>): Carousel {
+  fromEntry(entry: PartialItem<any>, context?: SupportedLocales): Carousel {
     const opt = {
       common: {
         id: entry.id as string,
         name: entry.name as string,
-        shortText: entry.shorttext as string,
-        keywords: (entry.keywords?.split(',') as string[]) ?? undefined,
-        customFields: getCustomFields(entry),
+        shortText: entry[mf][0].shorttext as string,
+        keywords: (entry[mf][0].keywords?.split(',') as string[]) ?? undefined,
+        customFields: getCustomFields(entry[mf][0]),
       } as CommonFields,
-      elements: this.createElements(entry.elements),
+      elements: this.createElements(entry[mf][0].elements, context),
     }
     return new Carousel(opt)
   }
 
-  private createElements(elements: PartialItem<any>): Element[] {
+  private createElements(
+    elements: PartialItem<any>,
+    context?: SupportedLocales
+  ): Element[] {
     if (elements.length === 0) {
       return []
     }
+    if (context) this.getContextContent(elements[0].item[mf], context)
     return elements.map((item: any) => {
-      return this.fromEntryElement(item.item)
+      return this.fromEntryElement(item.item[mf][0], context)
     })
   }
 
-  private fromEntryElement(entry: PartialItem<any>): Element {
+  private fromEntryElement(
+    entry: PartialItem<any>,
+    context?: SupportedLocales
+  ): Element {
     const opt = {
       common: {
         id: entry.id as string,
@@ -57,17 +64,31 @@ export class CarouselDelivery extends ContentDelivery {
       title: entry.title as string,
       subtitle: entry.subtitle as string,
       imgUrl: `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`,
-      buttons: this.createButtons(entry.buttons),
+      buttons: this.createButtons(entry.buttons, context),
     }
     return new Element(opt)
   }
 
-  private createButtons(buttons: PartialItem<any>): Button[] {
+  private createButtons(
+    buttons: PartialItem<any>,
+    context?: SupportedLocales
+  ): Button[] {
     if (buttons.length === 0) {
       return []
     }
     return buttons.map((item: any) => {
-      return this.button.fromEntry(item.item, item.collection)
+      return this.button.fromEntry(item.item, item.collection, context)
+    })
+  }
+
+  private getContextContent(
+    entry: PartialItem<any>,
+    context: SupportedLocales
+  ): void {
+    entry.map((content: PartialItem<any>, i: number) => {
+      if (content.languages_code != context) {
+        entry.splice(i, 1)
+      }
     })
   }
 }

@@ -2,9 +2,12 @@ import { OneItem, PartialItem } from '@directus/sdk'
 
 import * as cms from '../../cms'
 
+export const mf = 'multilanguage_fields'
+
 export const knownFields = [
   'id',
   'name',
+  'status',
   'shorttext',
   'keywords',
   'followup',
@@ -14,6 +17,8 @@ export const knownFields = [
   'target',
   'url',
   'elements',
+  'languages_code',
+  'buttonstyle',
 ]
 
 export function getContentFields(contentType: cms.ContentType): string[] {
@@ -37,17 +42,13 @@ function getTextFields(): string[] {
   return [
     'id',
     'name',
-    'text',
-    'shorttext',
-    'keywords',
-    'buttons.*',
-    'buttons.item.*',
-    'buttons.item.text',
-    'buttons.item.target.*',
-    'buttons.item.target.item.*',
-    'followup.item.*',
-    'buttonstyle',
-    '*',
+    'status',
+    'multilanguage_fields.*',
+    'multilanguage_fields.buttons.*',
+    'multilanguage_fields.buttons.item.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.target.*',
+    'multilanguage_fields.followup.item.*',
   ]
 }
 
@@ -55,64 +56,47 @@ function getCarouselFields(): string[] {
   return [
     'id',
     'name',
-    'shorttext',
-    'keywords',
-    'elements.*',
-    'elements.item.*',
-    'elements.item.buttons.*',
-    'elements.item.buttons.item.*',
-    'elements.item.buttons.item.text',
-    'elements.item.buttons.item.target.*',
-    'elements.item.buttons.item.target.item.*',
-    '*',
+    'multilanguage_fields.shorttext',
+    'multilanguage_fields.keywords',
+    'multilanguage_fields.elements.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.target.*',
+    'multilanguage_fields.*',
   ]
 }
 
 function getImageFields(): string[] {
-  return ['id', 'name', 'image', '*']
+  return ['id', 'name', 'multilanguage_fields.image', 'multilanguage_fields.*']
 }
 
 function getButtonFields(): string[] {
-  return ['id', 'name', 'text', 'target.*', 'target.item.*', '*']
+  return [
+    'id',
+    'name',
+    'status',
+    'multilanguage_fields.text',
+    'multilanguage_fields.target.*',
+    'multilanguage_fields.*',
+  ]
 }
 
 function getUrlFields(): string[] {
-  return ['id', 'name', 'shorttext', 'url', 'keywords', '*']
+  return ['id', 'name', 'multilanguage_fields.*']
 }
 
-// export function getLocaleFilter(
-//   context: cms.SupportedLocales,
-//   contentType: cms.ContentType
-// ): {} {
-//   return contentType === cms.MessageContentType.IMAGE
-//     ? {
-//         image: {
-//           _filter: { languages_code: { _eq: `${context}` } },
-//         },
-//       }
-//     : {
-//         text: {
-//           _filter: { languages_code: { _eq: `${context}` } },
-//         },
-//       }
-// }
-
-//Descomment when in Directus is possible to create more than one localized field in a content model
-/*
-export function getFieldsToLocalize(context: cms.SupportedLocales): {} {
-  let fieldsFilters: Record<string, {}> = {}
-  knownFields.map((field: string) => {
-    fieldsFilters[field] = {
-      _filter: { languages_code: { _eq: `${context}` } },
-    }
-  })
-  return fieldsFilters
+export function getContextContent(context: cms.SupportedLocales): {} {
+  return {
+    multilanguage_fields: {
+      _filter: { languages_code: { _eq: context } },
+    },
+  }
 }
-*/
 
 export function getCustomFields(entry: PartialItem<any>) {
-  const customFields: PartialItem<any> = {}
-  Object.assign(customFields, entry)
+  const customFields: PartialItem<any> = { ...entry }
   const keys = Object.keys(customFields)
   keys.map((key: string) => {
     if (knownFields.includes(key)) {
@@ -123,7 +107,7 @@ export function getCustomFields(entry: PartialItem<any>) {
 }
 
 export function hasFollowUp(entry: OneItem<any>): boolean {
-  return !!entry?.followup?.length
+  return !!entry![mf][0].followup?.length
 }
 
 export function getKeywordsFilter(input: string): {} {

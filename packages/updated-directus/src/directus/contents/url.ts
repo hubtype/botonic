@@ -1,7 +1,7 @@
 import { PartialItem } from '@directus/sdk'
 
 import { CommonFields, ContentType, SupportedLocales, Url } from '../../cms'
-import { getCustomFields } from '../../directus/delivery/delivery-utils'
+import { getCustomFields, mf } from '../../directus/delivery/delivery-utils'
 import { ContentDelivery, DirectusClient } from '../delivery'
 
 export class UrlDelivery extends ContentDelivery {
@@ -19,11 +19,11 @@ export class UrlDelivery extends ContentDelivery {
       common: {
         id: entry.id as string,
         name: entry.name as string,
-        shortText: (entry.shorttext as string) ?? undefined,
-        keywords: (entry.keywords?.split(',') as string[]) ?? undefined,
-        customFields: getCustomFields(entry),
+        shortText: (entry[mf][0].shorttext as string) ?? undefined,
+        keywords: (entry[mf][0].keywords?.split(',') as string[]) ?? undefined,
+        customFields: getCustomFields(entry[mf][0]),
       } as CommonFields,
-      url: entry.url ?? '',
+      url: entry[mf[0]].url ?? '',
     }
     return new Url(opt)
   }

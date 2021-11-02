@@ -10,13 +10,12 @@ export function testDirectusOptions(): DirectusOptions {
   return {
     credentials: {
       token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9kldsncuierUYVRTCVL87',
-      apiEndPoint:
-        'http://test-cms-directus-alb-1959632461.eu-west-1.elb.amazonaws.com:8055/',
+      apiEndPoint: 'http://directus2-2065312077.eu-west-1.elb.amazonaws.com/',
     },
     keywordOptions: {},
   }
 }
 
 export function testContext(): SupportedLocales {
-  return SupportedLocales.ENGLISH
+  return SupportedLocales.SPANISH
 }

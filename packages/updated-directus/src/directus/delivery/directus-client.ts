@@ -6,8 +6,10 @@ import { AssetInfo } from '../../cms'
 import { DirectusOptions } from '../../plugin'
 import {
   getContentFields,
+  getContextContent,
   getKeywordsFilter,
   hasFollowUp,
+  mf,
 } from './delivery-utils'
 
 export class DirectusClient {
@@ -27,10 +29,15 @@ export class DirectusClient {
       await this.client.auth.static(this.clientParams.credentials.token)
       const entry = await this.client.items(contentType).readOne(id, {
         fields: getContentFields(contentType),
+        deep: getContextContent(context),
       })
       if (hasFollowUp(entry)) {
-        Object.assign(entry, await this.getFollowup(entry!, context))
+        Object.assign(
+          entry![mf][0],
+          await this.getFollowup(entry![mf][0], context)
+        )
       }
+
       return entry!
     } catch (e) {
       console.error(
