@@ -32,12 +32,6 @@ repos:
         language: system
         files: ^packages/botonic-core/src/.*\.d\.ts
 
-      - id: nlu
-        name: nlu
-        entry: scripts/qa/lint-package.sh packages/botonic-plugin-nlu
-        language: system
-        files: ^packages/botonic-plugin-nlu/
-
       - id: nlp
         name: nlp
         entry: scripts/qa/lint-package.sh packages/botonic-nlp
@@ -73,12 +67,6 @@ repos:
         entry: scripts/qa/lint-package.sh packages/botonic-plugin-luis
         language: system
         files: ^packages/botonic-plugin-luis/
-
-      - id: plugin-nlu
-        name: plugin-nlu
-        entry: scripts/qa/lint-package.sh packages/botonic-plugin-nlu
-        language: system
-        files: ^packages/botonic-plugin-nlu/
 
       - id: segment
         name: segment
@@ -137,8 +125,9 @@ repos:
   - repo: git://github.com/Yelp/detect-secrets
     rev: v1.1.0
     hooks:
-    -   id: detect-secrets
-        args: ['--baseline', '.secrets.baseline','--exclude-files ', .*/tests/.*'] 
+      - id: detect-secrets
+        args:
+          ['--baseline', '.secrets.baseline', '--exclude-files ', .*/tests/.*']
         exclude: package.lock.json
         name: Detect secrets
         description: Detects high entropy strings that are likely to be passwords.
