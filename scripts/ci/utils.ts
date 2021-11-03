@@ -24,7 +24,7 @@ export const CONSTANTS = {
 
 /**
  * It orders the list so the packages depended by others get published first
- * e.g.: ['botonic-core', 'botonic-nlu', ..., 'botonic-cli']
+ * e.g.: ['botonic-core', ..., 'botonic-cli']
  * @param packagesDir
  */
 export const sortPackagesByPreference = (packagesDir: string): string[] => {
@@ -54,7 +54,11 @@ export const spawnProcess = async (
     log?.onSuccess()
   } catch (e) {
     console.log(
-      red(`   Failed on running command ${command} ${args.join(' ')}:\n${e.stderr.toString()}`)
+      red(
+        `   Failed on running command ${command} ${args.join(
+          ' '
+        )}:\n${e.stderr.toString()}`
+      )
     )
     process.exit(1)
   }

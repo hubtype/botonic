@@ -41,7 +41,7 @@ if [ -z "$PHASE" ]
       fi
 
       # Update botonic dependencies for packages pointing to other botonic projects
-      if [ "$package" == "botonic-react" ] || [ "$package" == "botonic-plugin-nlu" ];
+      if [ "$package" == "botonic-react" ];
       then
         update_botonic_deps "$package" "$VERSION" "$PHASE"
       fi
