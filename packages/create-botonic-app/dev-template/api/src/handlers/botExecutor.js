@@ -19,6 +19,7 @@ async function botExecutor({ userId, input, session, botState, websocketId }) {
     { action: 'update_bot_state', ...output.botState },
     { action: 'update_session', ...output.session },
   ]
+  // post events to sender sqs
   await handlers.run('sender', {
     userId,
     events,

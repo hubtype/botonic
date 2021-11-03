@@ -7,6 +7,7 @@ const apiGwManagementApi = new ApiGatewayManagementApi({
   endpoint: process.env.WEBSOCKET_URL?.split(WSS_PROTOCOL_PREFIX)[1],
 })
 
+// TODO: Rename to webchatSender
 export async function awsSender({ events, websocketId }) {
   for (const event of events) {
     await apiGwManagementApi

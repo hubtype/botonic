@@ -11,7 +11,7 @@ export function buildSendMessageRequestForQueue(
   queueUrl: string
 ): SendMessageRequest {
   const { userId, ...body } = message
-  const messageBody = JSON.stringify(body)
+  const messageBody = JSON.stringify(message)
   return {
     MessageGroupId: userId,
     MessageBody: messageBody,
