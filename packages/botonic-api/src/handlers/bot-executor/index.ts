@@ -6,8 +6,12 @@ export function botExecutorHandlerFactory(env, botExecutor) {
     return async function (event, context) {
       try {
         const params = JSON.parse(event.Records[0].body)
+        // Publish Received Message Event
+        // await dataProvider.saveEvent()
         await botExecutor(params)
+        // Publish Bot Executed Event
       } catch (e) {
+        // Bot Failed Event
         console.error(e)
         return {
           statusCode: 500,

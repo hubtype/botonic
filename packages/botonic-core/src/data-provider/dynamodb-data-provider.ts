@@ -1,4 +1,5 @@
 import { Entity, Table } from 'dynamodb-toolbox'
+import { ulid } from 'ulid'
 
 import { BotonicEvent, EventTypes, User } from '../models'
 import {
@@ -11,7 +12,7 @@ import {
   USER_PREFIX,
 } from './dynamodb-utils'
 import { DataProvider } from './factory'
-import { enqueueToHubtypeSQS } from './sqs-utils/queue-to-sqs-decorator'
+import { enqueueToSQS } from './sqs-utils/queue-to-sqs-decorator'
 
 export class DynamoDBDataProvider implements DataProvider {
   region: string
@@ -67,10 +68,16 @@ export class DynamoDBDataProvider implements DataProvider {
   // @ts-ignore
   async getUserByField(field: string, value: any): Promise<User | undefined> {} //TODO: Implement
 
-  @enqueueToHubtypeSQS()
   async saveUser(user: User): Promise<User> {
     const putUser = { ...user, id: user.id, userId: user.id }
     await this.userEntity.put(putUser)
+    const newUser = await this.saveEvent({
+      userId: user.id,
+      createdAt: new Date().toISOString(),
+      eventId: ulid(),
+      eventType: EventTypes.NEW_USER,
+      details: user,
+    })
     return user
   }
 
@@ -89,7 +96,7 @@ export class DynamoDBDataProvider implements DataProvider {
   // @ts-ignore
   async getEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
 
-  @enqueueToHubtypeSQS()
+  @enqueueToSQS(process.env.EXTERNAL_SYSTEM_QUEUE_URL)
   async saveEvent(event: BotonicEvent): Promise<BotonicEvent> {
     if (event.eventType === EventTypes.CONNECTION) {
       await this.connectionEventEntity.put(event)

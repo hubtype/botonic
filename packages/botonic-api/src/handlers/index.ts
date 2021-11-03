@@ -22,7 +22,6 @@ export class Handlers {
           params,
           process.env[`${handlerName}_QUEUE_URL`]
         )
-        console.log('queueing to', messageRequest.QueueUrl)
         await this.sqs.sendMessage(messageRequest).promise()
       } catch (e) {
         console.log({ e })

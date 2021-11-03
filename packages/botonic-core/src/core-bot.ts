@@ -13,6 +13,7 @@ import {
   Route,
   Routes,
   Session,
+  EventTypes,
 } from './models'
 import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
@@ -109,13 +110,22 @@ export class CoreBot {
     if (dataProvider) {
       // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
       // @ts-ignore
-      const userEvent = await dataProvider.saveEvent({
+      const receivedUserEvent = {
         ...parsedUserEvent,
         userId,
         eventId: ulid(),
         createdAt: new Date().toISOString(),
         from: MessageEventFrom.USER,
         ack: MessageEventAck.RECEIVED,
+      }
+      // @ts-ignore
+      const userEvent = await dataProvider.saveEvent(receivedUserEvent)
+      const receivedMessage = await dataProvider.saveEvent({
+        userId,
+        createdAt: new Date().toISOString(),
+        eventId: ulid(),
+        eventType: EventTypes.RECEIVED_MESSAGE,
+        details: receivedUserEvent,
       })
     }
 
@@ -220,7 +230,7 @@ export class CoreBot {
       }
     }
     // TODO: return also updatedUser?
-    return {
+    const botResponse = {
       input,
       response,
       messageEvents,
@@ -228,5 +238,15 @@ export class CoreBot {
       botState,
       dataProvider,
     }
+    if (dataProvider) {
+      const botExecuted = await dataProvider.saveEvent({
+        userId,
+        createdAt: new Date().toISOString(),
+        eventId: ulid(),
+        eventType: EventTypes.BOT_EXECUTED,
+        details: { input, response, messageEvents, session, botState },
+      })
+    }
+    return botResponse
   }
 }

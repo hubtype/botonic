@@ -3,6 +3,11 @@ export enum EventTypes {
   MESSAGE = 'message',
   ACK = 'ack',
   TRACK = 'track',
+  // Integration Events
+  NEW_USER = 'newUser',
+  RECEIVED_MESSAGE = 'receivedMessage',
+  BOT_EXECUTED = 'botExecuted',
+  ACTION_SENT = 'actionSent',
 }
 
 export interface BaseEvent {

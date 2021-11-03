@@ -66,7 +66,7 @@ export class SQSLambdaFunction extends AWSComponentResource<SQSLambdaFunctionArg
         }),
         handler,
         role: role.arn,
-        // timeout: 6,
+        timeout: 4, // Give enough time to botExecutor
         ...environmentVariables,
       },
       opts
