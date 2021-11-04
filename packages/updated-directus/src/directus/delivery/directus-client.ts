@@ -31,7 +31,6 @@ export class DirectusClient {
         fields: getContentFields(contentType),
         deep: context && getContextContent(context),
       })
-      console.log('entry: ', entry![mf])
       if (!context) return entry!
       if (hasFollowUp(entry)) {
         Object.assign(

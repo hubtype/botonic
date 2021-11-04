@@ -67,7 +67,7 @@ export class ContentsDelivery {
     id: string,
     fields: ButtonFields
   ): Promise<void> {
-    const convertedFields = this.convertButtonFields(context, fields)
+    const convertedFields = await this.convertButtonFields(context, fields, id)
     await this.client.updateFields(
       context,
       cms.ContentType.BUTTON,
@@ -81,7 +81,7 @@ export class ContentsDelivery {
     id: string,
     fields: ImageFields
   ): Promise<void> {
-    const convertedFields = this.convertImageFields(context, fields)
+    const convertedFields = await this.convertImageFields(context, fields, id)
     await this.client.updateFields(
       context,
       cms.ContentType.IMAGE,
@@ -95,7 +95,11 @@ export class ContentsDelivery {
     id: string,
     fields: CarouselFields
   ): Promise<void> {
-    const convertedFields = this.convertCarouselFields(context, fields)
+    const convertedFields = await this.convertCarouselFields(
+      context,
+      fields,
+      id
+    )
     await this.client.updateFields(
       context,
       cms.ContentType.CAROUSEL,
@@ -109,7 +113,7 @@ export class ContentsDelivery {
     id: string,
     fields: ElementFields
   ): Promise<void> {
-    const convertedFields = this.convertElementFields(context, fields)
+    const convertedFields = await this.convertElementFields(context, fields, id)
     await this.client.updateFields(
       context,
       cms.ContentType.ELEMENT,
@@ -154,7 +158,7 @@ export class ContentsDelivery {
       }
       entry.multilanguage_fields.push(localeContent)
     }
-    
+
     if (fields.name) {
       entry.name = fields.name
     }
@@ -182,7 +186,6 @@ export class ContentsDelivery {
       ]
     }
 
-    console.log({ localeContent })
     return entry
   }
 
@@ -198,130 +201,104 @@ export class ContentsDelivery {
     return buttons
   }
 
-  private convertButtonFields(
+  private async convertButtonFields(
     context: cms.SupportedLocales,
-    fields: ButtonFields
-  ): PartialItem<any> {
-    let convertedDirectusButton: PartialItem<any> = {}
-    let multilanguage_fields: PartialItem<any> = {}
+    fields: ButtonFields,
+    id: string
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(id, cms.ContentType.BUTTON)
+    let localeContent = this.getLocaleContent(entry, context)
 
-    if (fields.name) {
-      convertedDirectusButton = {
-        ...convertedDirectusButton,
-        name: fields.name,
+    if (localeContent === undefined) {
+      localeContent = {
+        languages_code: context,
       }
+      entry.multilanguage_fields.push(localeContent)
     }
 
-    multilanguage_fields = {
-      ...multilanguage_fields,
-      languages_code: context,
+    if (fields.name) {
+      entry.name = fields.name
     }
 
     if (fields.text) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        text: fields.text,
-      }
+      localeContent.text = fields.text
     }
 
     if (fields.target) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        target: [
-          {
-            collection: fields.target.model,
-            item: {
-              id: fields.target.id,
-            },
+      localeContent.target = [
+        {
+          collection: fields.target.model,
+          item: {
+            id: fields.target.id,
           },
-        ],
-      }
+        },
+      ]
     }
 
-    convertedDirectusButton = {
-      ...convertedDirectusButton,
-      multilanguage_fields,
-    }
-
-    return convertedDirectusButton
+    return entry
   }
 
-  private convertImageFields(
+  private async convertImageFields(
     context: cms.SupportedLocales,
-    fields: ImageFields
-  ): Object {
-    let convertedDirectusImage: PartialItem<any> = {}
-    let multilanguage_fields: PartialItem<any> = {}
+    fields: ImageFields,
+    id: string
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(id, cms.ContentType.IMAGE)
+    let localeContent = this.getLocaleContent(entry, context)
 
-    if (fields.name) {
-      convertedDirectusImage = { ...convertedDirectusImage, name: fields.name }
+    if (localeContent === undefined) {
+      localeContent = {
+        languages_code: context,
+      }
+      entry.multilanguage_fields.push(localeContent)
     }
 
-    multilanguage_fields = {
-      ...multilanguage_fields,
-      languages_code: context,
+    if (fields.name) {
+      entry.name = fields.name
     }
 
     if (fields.imgUrl) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        image: fields.imgUrl,
-      }
+      localeContent.imgUrl = fields.imgUrl
     }
 
     if (fields.followup) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        followup: [
-          {
-            collection: fields.followup.model,
-            item: {
-              id: fields.followup.id,
-            },
+      localeContent.followup = [
+        {
+          collection: fields.followup.model,
+          item: {
+            id: fields.followup.id,
           },
-        ],
-      }
+        },
+      ]
     }
 
-    convertedDirectusImage = {
-      ...convertedDirectusImage,
-      multilanguage_fields,
-    }
-
-    return convertedDirectusImage
+    return entry
   }
 
-  private convertCarouselFields(
+  private async convertCarouselFields(
     context: cms.SupportedLocales,
-    fields: CarouselFields
-  ) {
-    let convertedDirectusCarousel: PartialItem<any> = {}
-    let multilanguage_fields: PartialItem<any> = {}
+    fields: CarouselFields,
+    id: string
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(id, cms.ContentType.CAROUSEL)
+    let localeContent = this.getLocaleContent(entry, context)
 
-    if (fields.name) {
-      convertedDirectusCarousel = {
-        ...convertedDirectusCarousel,
-        name: fields.name,
+    if (localeContent === undefined) {
+      localeContent = {
+        languages_code: context,
       }
+      entry.multilanguage_fields.push(localeContent)
     }
 
-    multilanguage_fields = {
-      ...multilanguage_fields,
-      languages_code: context,
+    if (fields.name) {
+      entry.name = fields.name
     }
 
     if (fields.elements) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        elements: this.addElements(fields.elements),
-      }
+      localeContent.elements = this.addElements(fields.elements)
     }
 
-    convertedDirectusCarousel = {
-      ...convertedDirectusCarousel,
-      multilanguage_fields,
-    }
-    return convertedDirectusCarousel
+    return entry
   }
 
   private addElements(elementdIds: string[]): PartialItem<any>[] {
@@ -336,53 +313,42 @@ export class ContentsDelivery {
     return carouselElements
   }
 
-  convertElementFields(context: cms.SupportedLocales, fields: ElementFields) {
-    let convertedDirectusElement: PartialItem<any> = {}
-    let multilanguage_fields: PartialItem<any> = {}
+  private async convertElementFields(
+    context: cms.SupportedLocales,
+    fields: ElementFields,
+    id: string
+  ) {
+    const entry = await this.client.getEntry(id, cms.ContentType.ELEMENT)
+    let localeContent = this.getLocaleContent(entry, context)
 
-    if (fields.name) {
-      convertedDirectusElement = {
-        ...convertedDirectusElement,
-        name: fields.name,
+    if (localeContent === undefined) {
+      localeContent = {
+        languages_code: context,
       }
+      entry.multilanguage_fields.push(localeContent)
     }
 
-    multilanguage_fields = {
-      ...multilanguage_fields,
-      languages_code: context,
+    if (fields.name) {
+      entry.name = fields.name
     }
 
     if (fields.title) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        title: fields.title,
-      }
+      localeContent.title = fields.title
     }
+
     if (fields.subtitle) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        subtitle: fields.subtitle,
-      }
+      localeContent.subtitle = fields.subtitle
     }
+
     if (fields.image) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        image: fields.image,
-      }
+      localeContent.image = fields.image
     }
+
     if (fields.buttons) {
-      multilanguage_fields = {
-        ...multilanguage_fields,
-        buttons: this.addButtons(fields.buttons),
-      }
+      localeContent.buttons = this.addButtons(fields.buttons)
     }
 
-    convertedDirectusElement = {
-      ...convertedDirectusElement,
-      multilanguage_fields,
-    }
-
-    return convertedDirectusElement
+    return entry
   }
 
   private getLocaleContent(
