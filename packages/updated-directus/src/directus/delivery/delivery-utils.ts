@@ -48,6 +48,7 @@ function getTextFields(): string[] {
     'multilanguage_fields.buttons.item.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.target.*',
+    'multilanguage_fields.followup.*',
     'multilanguage_fields.followup.item.*',
   ]
 }
@@ -92,6 +93,12 @@ export function getContextContent(context: cms.SupportedLocales): {} {
     multilanguage_fields: {
       _filter: { languages_code: { _eq: context } },
     },
+  }
+}
+
+export function getAllLocalesContent(): {} {
+  return {
+    multilanguage_fields: { _filter: { text: { _eq: null } } },
   }
 }
 

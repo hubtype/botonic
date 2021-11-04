@@ -2,7 +2,7 @@ import { Directus, PartialItem } from '@directus/sdk/dist'
 import { Stream } from 'stream'
 
 import * as cms from '../../cms'
-import { AssetInfo } from '../../cms'
+import { AssetInfo, ContentId } from '../../cms'
 import { DirectusOptions } from '../../plugin'
 import {
   getContentFields,
@@ -23,14 +23,16 @@ export class DirectusClient {
   async getEntry(
     id: string,
     contentType: cms.ContentType,
-    context: cms.SupportedLocales
+    context?: cms.SupportedLocales
   ): Promise<PartialItem<any>> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
       const entry = await this.client.items(contentType).readOne(id, {
         fields: getContentFields(contentType),
-        deep: getContextContent(context),
+        deep: context && getContextContent(context),
       })
+      console.log('entry: ', entry![mf])
+      if (!context) return entry!
       if (hasFollowUp(entry)) {
         Object.assign(
           entry![mf][0],
@@ -94,33 +96,27 @@ export class DirectusClient {
     }
   }
 
-  async deleteContent(
-    context: cms.SupportedLocales,
-    contentType: cms.ContentType,
-    id: string
-  ): Promise<void> {
+  async deleteContent(contentId: ContentId): Promise<void> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
-      await this.client.items(contentType).deleteOne(id)
+      await this.client.items(contentId.model).deleteOne(contentId.id)
     } catch (e) {
       console.error(
-        `Error deleting content with id: ${id} of content type ${contentType}, ${e}`
+        `Error deleting content with id: ${contentId.id} of content type ${contentId.model}, ${e}`
       )
     }
   }
 
-  async createContent(
-    context: cms.SupportedLocales,
-    contentType: cms.ContentType,
-    id: string
-  ): Promise<void> {
+  async createContent(contentId: ContentId): Promise<void> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
       const name = 'random-' + Math.random().toString(36).substring(2)
-      await this.client.items(contentType).createOne({ id, name })
+      await this.client
+        .items(contentId.model)
+        .createOne({ id: contentId.id, name })
     } catch (e) {
       console.error(
-        `Error creating content with id: ${id} of content type ${contentType}, ${e}`
+        `Error creating content with id: ${contentId.id} of content type ${contentId.model}, ${e}`
       )
     }
   }

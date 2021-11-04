@@ -1,8 +1,9 @@
 import { PartialItem } from '@directus/sdk'
+import { mf } from '../delivery/delivery-utils'
 import { Stream } from 'stream'
 
 import * as cms from '../../cms'
-import { AssetInfo, Content } from '../../cms'
+import { AssetInfo, Content, ContentId } from '../../cms'
 import { CarouselDelivery } from '../contents/carousel'
 import { ImageDelivery } from '../contents/image'
 import { TextDelivery } from '../contents/text'
@@ -39,20 +40,12 @@ export class ContentsDelivery {
     return this.fromEntry(entries, contentType, context)
   }
 
-  async deleteContent(
-    context: cms.SupportedLocales,
-    contentType: cms.ContentType,
-    id: string
-  ) {
-    await this.client.deleteContent(context, contentType, id)
+  async deleteContent(contentId: ContentId) {
+    await this.client.deleteContent(contentId)
   }
 
-  async createContent(
-    context: cms.SupportedLocales,
-    contentType: cms.ContentType,
-    id: string
-  ) {
-    await this.client.createContent(context, contentType, id)
+  async createContent(contentId: ContentId) {
+    await this.client.createContent(contentId)
   }
 
   async updateTextFields(
@@ -60,7 +53,7 @@ export class ContentsDelivery {
     id: string,
     fields: TextFields
   ): Promise<void> {
-    const convertedFields = this.convertTextFields(context, fields)
+    const convertedFields = await this.convertTextFields(context, fields, id)
     await this.client.updateFields(
       context,
       cms.ContentType.TEXT,
@@ -147,49 +140,50 @@ export class ContentsDelivery {
     return convertedEntries
   }
 
-  private convertTextFields(
+  private async convertTextFields(
     context: cms.SupportedLocales,
-    fields: TextFields
-  ): PartialItem<any> {
-    let convertedDirectusText: PartialItem<any> = {}
+    fields: TextFields,
+    id: string
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(id, cms.ContentType.TEXT)
+    let localeContent = this.getLocaleContent(entry, context)
 
+    if (localeContent === undefined) {
+      localeContent = {
+        languages_code: context,
+      }
+      entry.multilanguage_fields.push(localeContent)
+    }
+    
     if (fields.name) {
-      convertedDirectusText = { ...convertedDirectusText, name: fields.name }
+      entry.name = fields.name
     }
 
     if (fields.text) {
-      convertedDirectusText = {
-        ...convertedDirectusText,
-        text: fields.text,
-      }
+      localeContent.text = fields.text
     }
+
     if (fields.buttons) {
-      convertedDirectusText = {
-        ...convertedDirectusText,
-        buttons: this.addButtons(fields.buttons),
-      }
+      localeContent.buttons = this.addButtons(fields.buttons)
     }
+
     if (fields.buttonsStyle) {
-      convertedDirectusText = {
-        ...convertedDirectusText,
-        buttonstyle: fields.buttonsStyle,
-      }
+      localeContent.buttonsStyle = fields.buttonsStyle
     }
 
     if (fields.followup) {
-      convertedDirectusText = {
-        ...convertedDirectusText,
-        followup: [
-          {
-            collection: fields.followup.model,
-            item: {
-              id: fields.followup.id,
-            },
+      localeContent.followup = [
+        {
+          collection: fields.followup.model,
+          item: {
+            id: fields.followup.id,
           },
-        ],
-      }
+        },
+      ]
     }
-    return convertedDirectusText
+
+    console.log({ localeContent })
+    return entry
   }
 
   private addButtons(buttonsIds: string[]): PartialItem<any>[] {
@@ -209,6 +203,7 @@ export class ContentsDelivery {
     fields: ButtonFields
   ): PartialItem<any> {
     let convertedDirectusButton: PartialItem<any> = {}
+    let multilanguage_fields: PartialItem<any> = {}
 
     if (fields.name) {
       convertedDirectusButton = {
@@ -217,16 +212,21 @@ export class ContentsDelivery {
       }
     }
 
+    multilanguage_fields = {
+      ...multilanguage_fields,
+      languages_code: context,
+    }
+
     if (fields.text) {
-      convertedDirectusButton = {
-        ...convertedDirectusButton,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         text: fields.text,
       }
     }
 
     if (fields.target) {
-      convertedDirectusButton = {
-        ...convertedDirectusButton,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         target: [
           {
             collection: fields.target.model,
@@ -237,6 +237,12 @@ export class ContentsDelivery {
         ],
       }
     }
+
+    convertedDirectusButton = {
+      ...convertedDirectusButton,
+      multilanguage_fields,
+    }
+
     return convertedDirectusButton
   }
 
@@ -244,22 +250,28 @@ export class ContentsDelivery {
     context: cms.SupportedLocales,
     fields: ImageFields
   ): Object {
-    let convertedDirectusText: PartialItem<any> = {}
+    let convertedDirectusImage: PartialItem<any> = {}
+    let multilanguage_fields: PartialItem<any> = {}
 
     if (fields.name) {
-      convertedDirectusText = { ...convertedDirectusText, name: fields.name }
+      convertedDirectusImage = { ...convertedDirectusImage, name: fields.name }
+    }
+
+    multilanguage_fields = {
+      ...multilanguage_fields,
+      languages_code: context,
     }
 
     if (fields.imgUrl) {
-      convertedDirectusText = {
-        ...convertedDirectusText,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         image: fields.imgUrl,
       }
     }
 
     if (fields.followup) {
-      convertedDirectusText = {
-        ...convertedDirectusText,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         followup: [
           {
             collection: fields.followup.model,
@@ -270,7 +282,13 @@ export class ContentsDelivery {
         ],
       }
     }
-    return convertedDirectusText
+
+    convertedDirectusImage = {
+      ...convertedDirectusImage,
+      multilanguage_fields,
+    }
+
+    return convertedDirectusImage
   }
 
   private convertCarouselFields(
@@ -278,6 +296,7 @@ export class ContentsDelivery {
     fields: CarouselFields
   ) {
     let convertedDirectusCarousel: PartialItem<any> = {}
+    let multilanguage_fields: PartialItem<any> = {}
 
     if (fields.name) {
       convertedDirectusCarousel = {
@@ -285,11 +304,22 @@ export class ContentsDelivery {
         name: fields.name,
       }
     }
+
+    multilanguage_fields = {
+      ...multilanguage_fields,
+      languages_code: context,
+    }
+
     if (fields.elements) {
-      convertedDirectusCarousel = {
-        ...convertedDirectusCarousel,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         elements: this.addElements(fields.elements),
       }
+    }
+
+    convertedDirectusCarousel = {
+      ...convertedDirectusCarousel,
+      multilanguage_fields,
     }
     return convertedDirectusCarousel
   }
@@ -308,6 +338,7 @@ export class ContentsDelivery {
 
   convertElementFields(context: cms.SupportedLocales, fields: ElementFields) {
     let convertedDirectusElement: PartialItem<any> = {}
+    let multilanguage_fields: PartialItem<any> = {}
 
     if (fields.name) {
       convertedDirectusElement = {
@@ -315,30 +346,53 @@ export class ContentsDelivery {
         name: fields.name,
       }
     }
+
+    multilanguage_fields = {
+      ...multilanguage_fields,
+      languages_code: context,
+    }
+
     if (fields.title) {
-      convertedDirectusElement = {
-        ...convertedDirectusElement,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         title: fields.title,
       }
     }
     if (fields.subtitle) {
-      convertedDirectusElement = {
-        ...convertedDirectusElement,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         subtitle: fields.subtitle,
       }
     }
     if (fields.image) {
-      convertedDirectusElement = {
-        ...convertedDirectusElement,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         image: fields.image,
       }
     }
     if (fields.buttons) {
-      convertedDirectusElement = {
-        ...convertedDirectusElement,
+      multilanguage_fields = {
+        ...multilanguage_fields,
         buttons: this.addButtons(fields.buttons),
       }
     }
+
+    convertedDirectusElement = {
+      ...convertedDirectusElement,
+      multilanguage_fields,
+    }
+
     return convertedDirectusElement
+  }
+
+  private getLocaleContent(
+    entry: PartialItem<any>,
+    context: cms.SupportedLocales
+  ): PartialItem<any> {
+    const localeFound = entry[mf].find(
+      (localeContent: PartialItem<any>) =>
+        localeContent.languages_code === context
+    )
+    return localeFound
   }
 }

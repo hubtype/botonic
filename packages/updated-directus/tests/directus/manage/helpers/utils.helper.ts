@@ -1,12 +1,12 @@
-import { ContentType } from '../../../../src/cms'
-import { testContext, testDirectus } from '../../helpers/directus.helper'
+import { ContentId, ContentType } from '../../../../src/cms'
+import { testDirectus } from '../../helpers/directus.helper'
 
 export async function createContents(
   contentTypePerId: Record<string, ContentType>
 ): Promise<void> {
   const directus = testDirectus()
   for (const id of Object.keys(contentTypePerId)) {
-    await directus.createContent(testContext(), contentTypePerId[id], id)
+    await directus.createContent(new ContentId(contentTypePerId[id], id))
   }
 }
 
@@ -15,7 +15,7 @@ export async function deleteContents(
 ): Promise<void> {
   const directus = testDirectus()
   for (const id of Object.keys(contentTypePerId)) {
-    await directus.deleteContent(testContext(), contentTypePerId[id], id)
+    await directus.deleteContent(new ContentId(contentTypePerId[id], id))
   }
 }
 

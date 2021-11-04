@@ -1,3 +1,4 @@
+import { ContentId } from '../cms'
 import { Stream } from 'stream'
 
 import {
@@ -102,17 +103,9 @@ export interface CMS {
     context: SupportedLocales
   ): Promise<Content[]>
 
-  deleteContent(
-    context: SupportedLocales,
-    contentType: ContentType,
-    id: string
-  ): Promise<void>
+  deleteContent(contentId: ContentId): Promise<void>
 
-  createContent(
-    context: SupportedLocales,
-    contentType: ContentType,
-    id: string
-  ): Promise<void>
+  createContent(contentId: ContentId): Promise<void>
 
   updateTextFields(
     context: SupportedLocales,

@@ -1,7 +1,16 @@
 import { Stream } from 'stream'
 
 import * as cms from '../cms'
-import { AssetInfo, Button, Carousel, Content, Image, Text, Url } from '../cms'
+import {
+  AssetInfo,
+  Button,
+  Carousel,
+  Content,
+  ContentId,
+  Image,
+  Text,
+  Url,
+} from '../cms'
 import { DirectusOptions } from '../plugin'
 import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
@@ -77,20 +86,12 @@ export class Directus implements cms.CMS {
   ): Promise<Content[]> {
     return this._contents.topContents(contentType, context)
   }
-  async deleteContent(
-    context: cms.SupportedLocales,
-    contentType: cms.ContentType,
-    id: string
-  ): Promise<void> {
-    await this._contents.deleteContent(context, contentType, id)
+  async deleteContent(contentId: ContentId): Promise<void> {
+    await this._contents.deleteContent(contentId)
   }
 
-  async createContent(
-    context: cms.SupportedLocales,
-    contentType: cms.ContentType,
-    id: string
-  ): Promise<void> {
-    await this._contents.createContent(context, contentType, id)
+  async createContent(contentId: ContentId): Promise<void> {
+    await this._contents.createContent(contentId)
   }
 
   async updateTextFields(

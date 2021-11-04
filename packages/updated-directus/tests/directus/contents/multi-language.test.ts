@@ -1,5 +1,6 @@
-import { ContentType } from '../../../src/cms'
+import { ContentId, ContentType } from '../../../src/cms'
 import { testContext, testDirectus } from '../helpers/directus.helper'
+import { generateRandomUUID } from '../manage/helpers/utils.helper'
 
 const MULTI_LANGUAGE_TEXT_ID = 'ee791f5c-f90a-49af-b75e-f6aac779b902'
 const MULTI_LANGUAGE_CAROUSEL_ID = '82e47156-9a9a-4fd8-a20c-b4240de2489c'
@@ -56,4 +57,17 @@ test('Test: get  the list of locales', async () => {
   const directus = testDirectus()
   const locales = await directus.getLocales()
   console.log({ locales })
+})
+
+test('Test: update content in locale', async () => {
+  const directus = testDirectus()
+  const TEXT_ID = 'd81c1530-f14a-4275-a826-f907846c2ab1'
+  await directus.updateTextFields(testContext(), TEXT_ID, {
+    name: 'hola_updated_111222221',
+    text: 'hola esto funciona?',
+    buttons: [generateRandomUUID()],
+    followup: new ContentId(ContentType.TEXT, generateRandomUUID()),
+  })
+  const text = await directus.text(TEXT_ID, testContext())
+  console.log({ text })
 })
