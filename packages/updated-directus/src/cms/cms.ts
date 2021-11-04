@@ -149,4 +149,6 @@ export interface CMS {
     file: string | ArrayBuffer | Stream,
     fields: ImageFields
   ): Promise<void>
+
+  getLocales(): Promise<SupportedLocales[]>
 }

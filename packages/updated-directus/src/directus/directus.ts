@@ -15,6 +15,7 @@ import {
   ElementFields,
   TextFields,
 } from './manage/directus-contents'
+import { LocalesDelivery } from './manage/locales'
 import { KeywordsDelivery } from './search/keywords'
 
 export class Directus implements cms.CMS {
@@ -25,6 +26,7 @@ export class Directus implements cms.CMS {
   private readonly _image: ImageDelivery
   private readonly _keywords: KeywordsDelivery
   private readonly _contents: ContentsDelivery
+  private readonly _locales: LocalesDelivery
 
   constructor(opt: DirectusOptions) {
     const client = new DirectusClient(opt)
@@ -46,6 +48,7 @@ export class Directus implements cms.CMS {
       [cms.ContentType.URL]: this._url,
     }
     this._contents = new ContentsDelivery(client, deliveries)
+    this._locales = new LocalesDelivery(client)
   }
 
   async text(id: string, context: cms.SupportedLocales): Promise<Text> {
@@ -136,5 +139,9 @@ export class Directus implements cms.CMS {
     info: AssetInfo
   ): Promise<void> {
     await this._contents.createAsset(context, file, info)
+  }
+
+  async getLocales(): Promise<cms.SupportedLocales[]> {
+    return await this._locales.getLocales()
   }
 }

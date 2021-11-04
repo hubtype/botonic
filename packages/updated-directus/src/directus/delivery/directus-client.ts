@@ -160,6 +160,22 @@ export class DirectusClient {
     }
   }
 
+  async getLocales(): Promise<cms.SupportedLocales[]> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      const entry = await this.client.items('languages').readMany()
+      const locales = entry.data
+        ? entry.data.map((locale: PartialItem<any>) => {
+            return locale.code
+          })
+        : []
+      return locales
+    } catch (e) {
+      console.error(`Error getting the list of locales, ${e}`)
+      return []
+    }
+  }
+
   private async getFollowup(
     entry: PartialItem<any>,
     context: cms.SupportedLocales

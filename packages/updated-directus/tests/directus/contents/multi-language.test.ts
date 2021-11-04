@@ -46,8 +46,14 @@ test('Test: url', async () => {
 test('Test: topContents', async () => {
   const directus = testDirectus()
   const topContents = await directus.topContents(
-    ContentType.IMAGE,
+    ContentType.CAROUSEL,
     testContext()
   )
   console.log('topContent:', topContents)
+})
+
+test('Test: get  the list of locales', async () => {
+  const directus = testDirectus()
+  const locales = await directus.getLocales()
+  console.log({ locales })
 })
