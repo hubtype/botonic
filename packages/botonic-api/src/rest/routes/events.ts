@@ -14,7 +14,7 @@ import {
 
 export default function eventsRouter(args: any): Router {
   const router = Router()
-  const { handlers } = args
+  const { dispatchers } = args
   router
     .route('/')
     .get(
@@ -81,7 +81,7 @@ export default function eventsRouter(args: any): Router {
           // TODO: Only update ack for webchat
           // TODO: Specific logic for webchat, move to webchat-events?
           const webchatMsgId = message.id
-          await handlers.run('sender', {
+          await dispatchers.run('sender', {
             events: [
               {
                 action: 'update_message_info',
@@ -92,7 +92,7 @@ export default function eventsRouter(args: any): Router {
             userId,
             websocketId: user.websocketId,
           })
-          await handlers.run('botExecutor', {
+          await dispatchers.run('botExecutor', {
             userId: user.id,
             input: { ...message, userId }, // To identify user executing the input
             session: user.session,

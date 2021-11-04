@@ -1,6 +1,6 @@
 import { restServerFactory } from '@botonic/api/src/rest'
 
-import { handlers } from '../handlers'
+import { dispatchers } from '../handlers'
 import { getApp } from './app'
 
 export default restServerFactory({
@@ -8,6 +8,6 @@ export default restServerFactory({
   env: ENV,
   // eslint-disable-next-line no-undef
   app: getApp(ENV, {
-    handlers,
+    dispatchers,
   }),
 })
