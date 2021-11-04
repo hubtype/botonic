@@ -1,4 +1,4 @@
-import { ApiGatewayManagementApi } from 'aws-sdk'
+import ApiGatewayManagementApi from 'aws-sdk/clients/apigatewaymanagementapi'
 
 import { WSS_PROTOCOL_PREFIX } from '../..'
 

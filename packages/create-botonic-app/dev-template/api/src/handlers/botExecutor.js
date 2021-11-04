@@ -3,7 +3,7 @@ import { botExecutorHandlerFactory } from '@botonic/api/src/handlers/bot-executo
 import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { app as bot } from 'bot'
 
-import { handlers } from '.'
+import { dispatchers } from '.'
 
 const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
@@ -20,7 +20,7 @@ async function botExecutor({ userId, input, session, botState, websocketId }) {
     { action: 'update_session', ...output.session },
   ]
   // post events to sender sqs
-  await handlers.run('sender', {
+  await dispatchers.run('sender', {
     userId,
     events,
     websocketId,

@@ -1,11 +1,11 @@
-import { Handlers } from '@botonic/api/src/handlers'
+import { Dispatchers } from '@botonic/api/src/handlers'
 import { Environments } from '@botonic/api/src/index'
 
-export const handlers =
+export const dispatchers =
   // eslint-disable-next-line no-undef
   ENV === Environments.LOCAL
-    ? new Handlers({
+    ? new Dispatchers({
         botExecutor: require('./botExecutor').default,
         sender: require('./sender').default,
       })
-    : new Handlers(undefined)
+    : new Dispatchers(undefined)
