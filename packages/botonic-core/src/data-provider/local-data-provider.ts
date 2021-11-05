@@ -101,7 +101,11 @@ export class LocalDevDataProvider implements DataProvider {
     const path = this.createPath([this.paths.EVENTS, event.eventId])
     this.db.reload()
     if (!this.db.exists(path)) {
-      this.db.push(path, event)
+      if (
+        [EventTypes.CONNECTION, EventTypes.MESSAGE].includes(event.eventType)
+      ) {
+        this.db.push(path, event)
+      }
     }
     return event
   }
