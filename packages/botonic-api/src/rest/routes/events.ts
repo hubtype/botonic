@@ -81,7 +81,7 @@ export default function eventsRouter(args: any): Router {
           // TODO: Only update ack for webchat
           // TODO: Specific logic for webchat, move to webchat-events?
           const webchatMsgId = message.id
-          await dispatchers.run('sender', {
+          await dispatchers.dispatch('sender', {
             events: [
               {
                 action: 'update_message_info',
@@ -92,7 +92,7 @@ export default function eventsRouter(args: any): Router {
             userId,
             websocketId: user.websocketId,
           })
-          await dispatchers.run('botExecutor', {
+          await dispatchers.dispatch('botExecutor', {
             userId: user.id,
             input: { ...message, userId }, // To identify user executing the input
             session: user.session,

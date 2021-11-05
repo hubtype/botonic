@@ -2,7 +2,7 @@ import { Environments } from '../..'
 import { awsSender } from './aws-sender'
 import { localSender } from './local-sender'
 
-export function senderHandlerFactory(env) {
+export function senderHandlerFactory(env, dataProvider) {
   if (env === Environments.LOCAL) return localSender
   if (env === Environments.AWS) {
     return async function (event, context) {

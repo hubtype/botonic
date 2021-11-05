@@ -4,7 +4,7 @@ export class LocalDispatchers {
   constructor(dispatchers) {
     this.localDispatchers = dispatchers
   }
-  async run(handlerName, params) {
+  async dispatch(handlerName, params) {
     await this.localDispatchers[handlerName](params)
   }
 }
