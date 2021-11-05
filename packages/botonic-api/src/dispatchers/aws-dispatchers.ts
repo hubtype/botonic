@@ -9,7 +9,7 @@ export class AWSDispatchers {
       region: process.env.AWS_REGION,
     })
   }
-  async run(handlerName, params) {
+  async dispatch(handlerName, params) {
     try {
       const messageRequest = buildSendMessageRequestForQueue(
         params,

@@ -75,6 +75,7 @@ export const deployBackendStack = async (
       ],
       environmentVariables: {
         WEBSOCKET_URL: websocketServer.url,
+        DATA_PROVIDER_URL: database.url,
       },
     },
     awsResourceOptions
