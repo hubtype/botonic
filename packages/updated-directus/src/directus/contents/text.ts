@@ -30,7 +30,6 @@ export class TextDelivery extends ContentDelivery {
   }
 
   fromEntry(entry: PartialItem<any>, context: cms.SupportedLocales): Text {
-    console.log('entry text: ', entry[mf][0].followup)
     const opt = {
       common: {
         id: entry.id,
@@ -69,7 +68,6 @@ export class TextDelivery extends ContentDelivery {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ): Text | Image | Carousel | undefined {
-    console.log({ entry })
     if (!entry.followup) {
       return undefined
     }
