@@ -1,4 +1,4 @@
-import { Environments } from '..'
+import { Environments } from '../constants'
 import { AWSDispatchers } from './aws-dispatchers'
 import { LocalDispatchers } from './local-dispatchers'
 

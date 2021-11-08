@@ -1,7 +1,7 @@
 import { EventTypes, MessageEventAck, MessageEventFrom } from '@botonic/core'
 import { ulid } from 'ulid'
 
-import { Environments } from '../..'
+import { Environments } from '../../constants'
 
 const botExecutor = (bot, dataProvider, dispatchers) =>
   async function executeBot({ userId, input }) {

@@ -1,7 +1,9 @@
 // eslint-disable-next-line filenames/match-regex
-import { dataProviderFactory } from '@botonic/server'
-import { dispatchersFactory } from '@botonic/server/src/dispatchers'
-import { botExecutorHandlerFactory } from '@botonic/server/src/handlers/bot-executor'
+import {
+  botExecutorHandlerFactory,
+  dataProviderFactory,
+  dispatchersFactory,
+} from '@botonic/server'
 import { app as bot } from 'bot'
 
 import sender from './sender'

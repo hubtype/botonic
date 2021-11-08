@@ -1,7 +1,7 @@
 import { EventTypes } from '@botonic/core'
 import { ulid } from 'ulid'
 
-import { Environments } from '../..'
+import { Environments } from '../../constants'
 import { awsSender } from './aws-sender'
 import { localSender } from './local-sender'
 
