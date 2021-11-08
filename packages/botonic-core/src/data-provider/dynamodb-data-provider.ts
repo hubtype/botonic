@@ -71,13 +71,6 @@ export class DynamoDBDataProvider implements DataProvider {
   async saveUser(user: User): Promise<User> {
     const putUser = { ...user, id: user.id, userId: user.id }
     await this.userEntity.put(putUser)
-    const newUser = await this.saveEvent({
-      userId: user.id,
-      createdAt: new Date().toISOString(),
-      eventId: ulid(),
-      eventType: EventTypes.NEW_USER,
-      details: user,
-    })
     return user
   }
 
