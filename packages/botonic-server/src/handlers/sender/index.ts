@@ -1,5 +1,6 @@
 import { EventTypes } from '@botonic/core'
 import { ulid } from 'ulid'
+import { sqsEnqueuer } from '../..'
 
 import { Environments } from '../../constants'
 import { awsSender } from './aws-sender'
@@ -21,7 +22,7 @@ export function senderHandlerFactory(env, dataProvider) {
         const user = await dataProvider.getUser(userId)
         for (const event of events) {
           await awsSender({ event, websocketId: user.websocketId })
-          const actionSent = await dataProvider.saveEvent({
+          await sqsEnqueuer?.enqueue({
             userId,
             createdAt: new Date().toISOString(),
             eventId: ulid(),
