@@ -1,5 +1,5 @@
 //import { ContentType } from '../../../src/cms'
-import { ContentId, ContentType } from '../../../src/cms'
+import { /*ContentId,*/ ContentType } from '../../../src/cms'
 import { testContext, testDirectus } from '../helpers/directus.helper'
 
 //const MULTI_LANGUAGE_TEXT_ID = 'ee791f5c-f90a-49af-b75e-f6aac779b902'
@@ -8,14 +8,14 @@ import { testContext, testDirectus } from '../helpers/directus.helper'
 // const MULTI_LANGUAGE_BUTTON_ID = '84d8d76c-f4a1-4b9e-b0c0-238ebb5daa61'
 // const MULTI_LANGUAGE_URL_ID = '2e3ff9bd-7a09-4684-be16-1337d68fbf9e'
 
-test('Test: text', async () => {
-  const directus = testDirectus()
-  const testText = await directus.text(
-    '13dfd5aa-357a-4942-bdcc-6484906816e0',
-    testContext()
-  )
-  console.log(testText)
-})
+// test('Test: text', async () => {
+//   const directus = testDirectus()
+//   const testText = await directus.text(
+//     '13dfd5aa-357a-4942-bdcc-6484906816e0',
+//     testContext()
+//   )
+//   console.log(testText)
+// })
 
 // test('Test: carousel', async () => {
 //   const directus = testDirectus()
@@ -47,14 +47,14 @@ test('Test: text', async () => {
 //   console.log(testUrl)
 // })
 
-// test('Test: topContents', async () => {
-//   const directus = testDirectus()
-//   const topContents = await directus.topContents(
-//     ContentType.CAROUSEL,
-//     testContext()
-//   )
-//   console.log('topContent:', topContents)
-// })
+test('Test: topContents', async () => {
+  const directus = testDirectus()
+  const topContents = await directus.topContents(
+    ContentType.TEXT,
+    testContext()
+  )
+  console.log('topContent:', topContents)
+})
 
 // test('Test: get  the list of locales', async () => {
 //   const directus = testDirectus()
@@ -82,17 +82,17 @@ test('Test: text', async () => {
 //   console.log({ carousel })
 // })
 
-test('Test: update content in locale', async () => {
-  const directus = testDirectus()
-  const textId = '13dfd5aa-357a-4942-bdcc-6484906816e0'
+// test('Test: update content in locale', async () => {
+//   const directus = testDirectus()
+//   const textId = '13dfd5aa-357a-4942-bdcc-6484906816e0'
 
-  await directus.updateTextFields(testContext(), textId, {
-    followup: new ContentId(
-      ContentType.CAROUSEL,
-      '82e47156-9a9a-4fd8-a20c-b4240de2489c'
-    ),
-  })
+//   await directus.updateTextFields(testContext(), textId, {
+//     followup: new ContentId(
+//       ContentType.CAROUSEL,
+//       '82e47156-9a9a-4fd8-a20c-b4240de2489c'
+//     ),
+//   })
 
-  const carousel = await directus.text(textId, testContext())
-  console.log({ carousel })
-})
+//   const carousel = await directus.text(textId, testContext())
+//   console.log({ carousel })
+// })

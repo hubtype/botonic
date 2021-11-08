@@ -68,7 +68,8 @@ export class TextDelivery extends ContentDelivery {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ): Text | Image | Carousel | undefined {
-    if (!entry.followup) {
+    console.log({ entry })
+    if (!entry.followup || !entry.followup.length) {
       return undefined
     }
 
