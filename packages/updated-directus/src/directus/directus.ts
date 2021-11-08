@@ -97,41 +97,71 @@ export class Directus implements cms.CMS {
   async updateTextFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: TextFields
+    fields: TextFields,
+    applyToAllLocales: boolean = true
   ): Promise<void> {
-    await this._contents.updateTextFields(context, id, fields)
+    await this._contents.updateTextFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
   }
 
   async updateButtonFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: TextFields
+    fields: TextFields,
+    applyToAllLocales: boolean = true
   ): Promise<void> {
-    await this._contents.updateButtonFields(context, id, fields)
+    await this._contents.updateButtonFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
   }
 
   async updateImageFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: TextFields
+    fields: TextFields,
+    applyToAllLocales: boolean = true
   ): Promise<void> {
-    await this._contents.updateImageFields(context, id, fields)
+    await this._contents.updateImageFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
   }
 
   async updateCarouselFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: CarouselFields
+    fields: CarouselFields,
+    applyToAllLocales: boolean = true
   ) {
-    await this._contents.updateCarouselFields(context, id, fields)
+    await this._contents.updateCarouselFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
   }
 
   async updateElementFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: ElementFields
+    fields: ElementFields,
+    applyToAllLocales: boolean = true
   ) {
-    await this._contents.updateElementFields(context, id, fields)
+    await this._contents.updateElementFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
   }
 
   async createAsset(

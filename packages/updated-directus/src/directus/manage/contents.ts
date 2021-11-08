@@ -51,9 +51,15 @@ export class ContentsDelivery {
   async updateTextFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: TextFields
+    fields: TextFields,
+    applyToAllLocales: boolean
   ): Promise<void> {
-    const convertedFields = await this.convertTextFields(context, fields, id)
+    const convertedFields = await this.convertTextFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
     await this.client.updateFields(
       context,
       cms.ContentType.TEXT,
@@ -65,9 +71,15 @@ export class ContentsDelivery {
   async updateButtonFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: ButtonFields
+    fields: ButtonFields,
+    applyToAllLocales: boolean
   ): Promise<void> {
-    const convertedFields = await this.convertButtonFields(context, fields, id)
+    const convertedFields = await this.convertButtonFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
     await this.client.updateFields(
       context,
       cms.ContentType.BUTTON,
@@ -79,9 +91,15 @@ export class ContentsDelivery {
   async updateImageFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: ImageFields
+    fields: ImageFields,
+    applyToAllLocales: boolean
   ): Promise<void> {
-    const convertedFields = await this.convertImageFields(context, fields, id)
+    const convertedFields = await this.convertImageFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
     await this.client.updateFields(
       context,
       cms.ContentType.IMAGE,
@@ -93,12 +111,14 @@ export class ContentsDelivery {
   async updateCarouselFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: CarouselFields
+    fields: CarouselFields,
+    applyToAllLocales: boolean
   ): Promise<void> {
     const convertedFields = await this.convertCarouselFields(
       context,
       fields,
-      id
+      id,
+      applyToAllLocales
     )
     await this.client.updateFields(
       context,
@@ -111,9 +131,15 @@ export class ContentsDelivery {
   async updateElementFields(
     context: cms.SupportedLocales,
     id: string,
-    fields: ElementFields
+    fields: ElementFields,
+    applyToAllLocales: boolean
   ): Promise<void> {
-    const convertedFields = await this.convertElementFields(context, fields, id)
+    const convertedFields = await this.convertElementFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
     await this.client.updateFields(
       context,
       cms.ContentType.ELEMENT,
@@ -147,43 +173,53 @@ export class ContentsDelivery {
   private async convertTextFields(
     context: cms.SupportedLocales,
     fields: TextFields,
-    id: string
+    id: string,
+    applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
     const entry = await this.client.getEntry(id, cms.ContentType.TEXT)
-    let localeContent = this.getLocaleContent(entry, context)
 
-    if (localeContent === undefined) {
-      localeContent = {
-        languages_code: context,
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, locale)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
       }
-      entry.multilanguage_fields.push(localeContent)
-    }
+
+      if (fields.text && isActualLocale) {
+        localeContent.text = fields.text
+      }
+
+      if (fields.buttons) {
+        localeContent.buttons = this.addButtons(fields.buttons)
+      }
+
+      if (fields.buttonsStyle && isActualLocale) {
+        localeContent.buttonsStyle = fields.buttonsStyle
+      }
+
+      if (fields.followup) {
+        localeContent.followup = [
+          {
+            collection: fields.followup.model,
+            item: {
+              id: fields.followup.id,
+            },
+          },
+        ]
+      }
+    })
 
     if (fields.name) {
       entry.name = fields.name
-    }
-
-    if (fields.text) {
-      localeContent.text = fields.text
-    }
-
-    if (fields.buttons) {
-      localeContent.buttons = this.addButtons(fields.buttons)
-    }
-
-    if (fields.buttonsStyle) {
-      localeContent.buttonsStyle = fields.buttonsStyle
-    }
-
-    if (fields.followup) {
-      localeContent.followup = [
-        {
-          collection: fields.followup.model,
-          item: {
-            id: fields.followup.id,
-          },
-        },
-      ]
     }
 
     return entry
@@ -204,35 +240,45 @@ export class ContentsDelivery {
   private async convertButtonFields(
     context: cms.SupportedLocales,
     fields: ButtonFields,
-    id: string
+    id: string,
+    applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
     const entry = await this.client.getEntry(id, cms.ContentType.BUTTON)
-    let localeContent = this.getLocaleContent(entry, context)
 
-    if (localeContent === undefined) {
-      localeContent = {
-        languages_code: context,
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, context)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
       }
-      entry.multilanguage_fields.push(localeContent)
-    }
+
+      if (fields.text && isActualLocale) {
+        localeContent.text = fields.text
+      }
+
+      if (fields.target) {
+        localeContent.target = [
+          {
+            collection: fields.target.model,
+            item: {
+              id: fields.target.id,
+            },
+          },
+        ]
+      }
+    })
 
     if (fields.name) {
       entry.name = fields.name
-    }
-
-    if (fields.text) {
-      localeContent.text = fields.text
-    }
-
-    if (fields.target) {
-      localeContent.target = [
-        {
-          collection: fields.target.model,
-          item: {
-            id: fields.target.id,
-          },
-        },
-      ]
     }
 
     return entry
@@ -241,35 +287,45 @@ export class ContentsDelivery {
   private async convertImageFields(
     context: cms.SupportedLocales,
     fields: ImageFields,
-    id: string
+    id: string,
+    applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
     const entry = await this.client.getEntry(id, cms.ContentType.IMAGE)
-    let localeContent = this.getLocaleContent(entry, context)
 
-    if (localeContent === undefined) {
-      localeContent = {
-        languages_code: context,
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, context)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
       }
-      entry.multilanguage_fields.push(localeContent)
-    }
+
+      if (fields.imgUrl && isActualLocale) {
+        localeContent.imgUrl = fields.imgUrl
+      }
+
+      if (fields.followup) {
+        localeContent.followup = [
+          {
+            collection: fields.followup.model,
+            item: {
+              id: fields.followup.id,
+            },
+          },
+        ]
+      }
+    })
 
     if (fields.name) {
       entry.name = fields.name
-    }
-
-    if (fields.imgUrl) {
-      localeContent.imgUrl = fields.imgUrl
-    }
-
-    if (fields.followup) {
-      localeContent.followup = [
-        {
-          collection: fields.followup.model,
-          item: {
-            id: fields.followup.id,
-          },
-        },
-      ]
     }
 
     return entry
@@ -278,25 +334,32 @@ export class ContentsDelivery {
   private async convertCarouselFields(
     context: cms.SupportedLocales,
     fields: CarouselFields,
-    id: string
+    id: string,
+    applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
     const entry = await this.client.getEntry(id, cms.ContentType.CAROUSEL)
 
-    let localeContent = this.getLocaleContent(entry, context)
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
 
-    if (localeContent === undefined) {
-      localeContent = {
-        languages_code: context,
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, context)
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
       }
-      entry.multilanguage_fields.push(localeContent)
-    }
+
+      if (fields.elements) {
+        localeContent.elements = this.addElements(fields.elements)
+      }
+    })
 
     if (fields.name) {
       entry.name = fields.name
-    }
-
-    if (fields.elements) {
-      localeContent.elements = this.addElements(fields.elements)
     }
 
     return entry
@@ -317,36 +380,46 @@ export class ContentsDelivery {
   private async convertElementFields(
     context: cms.SupportedLocales,
     fields: ElementFields,
-    id: string
+    id: string,
+    applyToAllLocales: boolean
   ) {
     const entry = await this.client.getEntry(id, cms.ContentType.ELEMENT)
-    let localeContent = this.getLocaleContent(entry, context)
 
-    if (localeContent === undefined) {
-      localeContent = {
-        languages_code: context,
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, context)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
       }
-      entry.multilanguage_fields.push(localeContent)
-    }
+
+      if (fields.title && isActualLocale) {
+        localeContent.title = fields.title
+      }
+
+      if (fields.subtitle && isActualLocale) {
+        localeContent.subtitle = fields.subtitle
+      }
+
+      if (fields.image && isActualLocale) {
+        localeContent.image = fields.image
+      }
+
+      if (fields.buttons) {
+        localeContent.buttons = this.addButtons(fields.buttons)
+      }
+    })
 
     if (fields.name) {
       entry.name = fields.name
-    }
-
-    if (fields.title) {
-      localeContent.title = fields.title
-    }
-
-    if (fields.subtitle) {
-      localeContent.subtitle = fields.subtitle
-    }
-
-    if (fields.image) {
-      localeContent.image = fields.image
-    }
-
-    if (fields.buttons) {
-      localeContent.buttons = this.addButtons(fields.buttons)
     }
 
     return entry

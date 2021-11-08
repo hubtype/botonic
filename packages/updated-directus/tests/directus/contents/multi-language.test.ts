@@ -1,4 +1,4 @@
-import { ContentType } from '../../../src/cms'
+//import { ContentType } from '../../../src/cms'
 //import { /*ContentId,*/ ContentType } from '../../../src/cms'
 import { testContext, testDirectus } from '../helpers/directus.helper'
 
@@ -47,14 +47,14 @@ import { testContext, testDirectus } from '../helpers/directus.helper'
 //   console.log(testUrl)
 // })
 
-test('Test: topContents', async () => {
-  const directus = testDirectus()
-  const topContents = await directus.topContents(
-    ContentType.IMAGE,
-    testContext()
-  )
-  console.log('topContent:', topContents)
-})
+// test('Test: topContents', async () => {
+//   const directus = testDirectus()
+//   const topContents = await directus.topContents(
+//     ContentType.IMAGE,
+//     testContext()
+//   )
+//   console.log('topContent:', topContents)
+// })
 
 // test('Test: get  the list of locales', async () => {
 //   const directus = testDirectus()
@@ -82,17 +82,15 @@ test('Test: topContents', async () => {
 //   console.log({ carousel })
 // })
 
-// test('Test: update content in locale', async () => {
-//   const directus = testDirectus()
-//   const textId = '13dfd5aa-357a-4942-bdcc-6484906816e0'
+test('Test: update content in locale', async () => {
+  const directus = testDirectus()
+  const textId = 'd263b703-4941-4dcd-bf1d-e6b6127b89b6'
+  const buttonId = 'ea63b9a8-6893-444b-90cf-191348e8e5ef'
+  await directus.updateTextFields(testContext(), textId, {
+    text: 'ieieieieieieie12345678',
+    buttons: [buttonId],
+  })
 
-//   await directus.updateTextFields(testContext(), textId, {
-//     followup: new ContentId(
-//       ContentType.CAROUSEL,
-//       '82e47156-9a9a-4fd8-a20c-b4240de2489c'
-//     ),
-//   })
-
-//   const carousel = await directus.text(textId, testContext())
-//   console.log({ carousel })
-// })
+  const text = await directus.text(textId, testContext())
+  console.log({ text })
+})

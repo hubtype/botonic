@@ -110,31 +110,36 @@ export interface CMS {
   updateTextFields(
     context: SupportedLocales,
     id: string,
-    fields: TextFields
+    fields: TextFields,
+    applyToAllLocales?: boolean
   ): Promise<void>
 
   updateButtonFields(
     context: SupportedLocales,
     id: string,
-    fields: ButtonFields
+    fields: ButtonFields,
+    applyToAllLocales?: boolean
   ): Promise<void>
 
   updateImageFields(
     context: SupportedLocales,
     id: string,
-    fields: ImageFields
+    fields: ImageFields,
+    applyToAllLocales?: boolean
   ): Promise<void>
 
   updateCarouselFields(
     context: SupportedLocales,
     id: string,
-    fields: CarouselFields
+    fields: CarouselFields,
+    applyToAllLocales?: boolean
   ): Promise<void>
 
   updateElementFields(
     context: SupportedLocales,
     id: string,
-    fields: ElementFields
+    fields: ElementFields,
+    applyToAllLocales?: boolean
   ): Promise<void>
 
   createAsset(
