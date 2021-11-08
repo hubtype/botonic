@@ -1,10 +1,8 @@
 import { JsonDB } from 'node-json-db'
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
-import { ulid } from 'ulid'
 
 import { BotonicEvent, EventTypes, User } from '../models'
 import { DataProvider } from './factory'
-import { enqueueToSQS } from './sqs-utils'
 
 export class LocalDevDataProvider implements DataProvider {
   private readonly DB_PATH = 'tmp/localDb'
