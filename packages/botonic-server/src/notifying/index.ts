@@ -1,1 +1,1 @@
-export { sqsEnqueuer } from './sqs-enqueuer-instance'
+export { sqsPublisher } from './sqs-publisher-instance'
