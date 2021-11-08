@@ -102,32 +102,6 @@ export class CoreBot {
     dataProvider,
   }: BotRequest): Promise<BotResponse> {
     if (!botState.locale) botState.locale = 'en'
-    // @ts-ignore
-    const userId = input.userId
-
-    const parsedUserEvent = this.botonicOutputParser.inputToBotonicEvent(input)
-
-    if (dataProvider) {
-      // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
-      // @ts-ignore
-      const receivedUserEvent = {
-        ...parsedUserEvent,
-        userId,
-        eventId: ulid(),
-        createdAt: new Date().toISOString(),
-        from: MessageEventFrom.USER,
-        ack: MessageEventAck.RECEIVED,
-      }
-      // @ts-ignore
-      const userEvent = await dataProvider.saveEvent(receivedUserEvent)
-      const receivedMessage = await dataProvider.saveEvent({
-        userId,
-        createdAt: new Date().toISOString(),
-        eventId: ulid(),
-        eventType: EventTypes.RECEIVED_MESSAGE,
-        details: receivedUserEvent,
-      })
-    }
 
     if (this.plugins) {
       await runPlugins(
@@ -202,35 +176,9 @@ export class CoreBot {
       )
     }
 
-    if (dataProvider) {
-      // TODO: save bot responses to db and update user with new session and new params
-      for (const messageEvent of messageEvents) {
-        // @ts-ignore
-        const botEvent = await dataProvider.saveEvent({
-          ...messageEvent,
-          userId,
-          eventId: ulid(),
-          createdAt: new Date().toISOString(),
-          from: MessageEventFrom.BOT,
-          ack: MessageEventAck.SENT,
-        })
-      }
-    }
-
     botState.isFirstInteraction = false
 
-    if (dataProvider) {
-      const user = await dataProvider.getUser(userId)
-      if (!user) {
-        // throw error
-      } else {
-        const updatedUser = { ...user, session, botState }
-        // @ts-ignore
-        await dataProvider.updateUser(updatedUser)
-      }
-    }
-    // TODO: return also updatedUser?
-    const botResponse = {
+    return {
       input,
       response,
       messageEvents,
@@ -238,15 +186,5 @@ export class CoreBot {
       botState,
       dataProvider,
     }
-    if (dataProvider) {
-      const botExecuted = await dataProvider.saveEvent({
-        userId,
-        createdAt: new Date().toISOString(),
-        eventId: ulid(),
-        eventType: EventTypes.BOT_EXECUTED,
-        details: { input, response, messageEvents, session, botState },
-      })
-    }
-    return botResponse
   }
 }

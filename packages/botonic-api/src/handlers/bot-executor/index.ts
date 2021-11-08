@@ -1,13 +1,51 @@
+import { EventTypes, MessageEventAck, MessageEventFrom } from '@botonic/core'
+import { ulid } from 'ulid'
+
 import { Environments } from '../..'
 
 const botExecutor = (bot, dataProvider, dispatchers) =>
-  async function executeBot({ userId, input, session, botState, websocketId }) {
+  async function executeBot({ userId, input }) {
+    const user = await dataProvider.getUser(userId)
     const output = await bot.input({
       input,
-      session,
-      botState,
+      session: user.session,
+      botState: user.botState,
       dataProvider,
     })
+
+    for (const messageEvent of output.messageEvents) {
+      // @ts-ignore
+      const botEvent = await dataProvider.saveEvent({
+        ...messageEvent,
+        userId,
+        eventId: ulid(),
+        createdAt: new Date().toISOString(),
+        from: MessageEventFrom.BOT,
+        ack: MessageEventAck.SENT,
+      })
+    }
+
+    const botExecuted = await dataProvider.saveEvent({
+      userId,
+      createdAt: new Date().toISOString(),
+      eventId: ulid(),
+      eventType: EventTypes.BOT_EXECUTED,
+      details: {
+        input,
+        response: output.response,
+        messageEvents: output.messageEvents,
+        session: output.session,
+        botState: output.botState,
+      },
+    })
+
+    const updatedUser = {
+      ...user,
+      session: output.session,
+      botState: output.botState,
+    }
+    await dataProvider.updateUser(updatedUser)
+
     const events = [
       ...output.messageEvents,
       { action: 'update_bot_state', ...output.botState },
@@ -17,7 +55,6 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
     await dispatchers.dispatch('sender', {
       userId,
       events,
-      websocketId,
     })
   }
 
@@ -28,10 +65,16 @@ export function botExecutorHandlerFactory(env, bot, dataProvider, dispatchers) {
     return async function (event, context) {
       try {
         const params = JSON.parse(event.Records[0].body)
+        const userId = params.userId
         // Publish Received Message Event
-        // await dataProvider.saveEvent()
+        const receivedMessage = await dataProvider.saveEvent({
+          userId,
+          createdAt: new Date().toISOString(),
+          eventId: ulid(),
+          eventType: EventTypes.RECEIVED_MESSAGE,
+          details: params.input,
+        })
         await botExecutor(bot, dataProvider, dispatchers)(params)
-        // Publish Bot Executed Event
       } catch (e) {
         // Bot Failed Event
         console.error(e)
