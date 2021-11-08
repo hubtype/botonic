@@ -1,5 +1,4 @@
 import { Entity, Table } from 'dynamodb-toolbox'
-import { ulid } from 'ulid'
 
 import { BotonicEvent, EventTypes, User } from '../models'
 import {
