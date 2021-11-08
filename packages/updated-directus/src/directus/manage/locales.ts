@@ -7,7 +7,11 @@ export class LocalesDelivery {
   constructor(client: DirectusClient) {
     this.client = client
   }
-    async getLocales(): Promise<cms.SupportedLocales[]> {
-      return await this.client.getLocales()
+  async getLocales(): Promise<cms.SupportedLocales[]> {
+    return await this.client.getLocales()
+  }
+
+  async removeLocale(locale: cms.SupportedLocales): Promise<void> {
+    await this.client.removeLocale(locale)
   }
 }

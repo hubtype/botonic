@@ -172,6 +172,15 @@ export class DirectusClient {
     }
   }
 
+  async removeLocale(locale: cms.SupportedLocales): Promise<void> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      await this.client.items('languages').deleteOne(locale)
+    } catch (e) {
+      console.error(`Error deleting locale ${locale}, ${e}`)
+    }
+  }
+
   private async getFollowup(
     entry: PartialItem<any>,
     context: cms.SupportedLocales

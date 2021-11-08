@@ -149,4 +149,6 @@ export interface CMS {
   ): Promise<void>
 
   getLocales(): Promise<SupportedLocales[]>
+
+  removeLocale(locale: SupportedLocales): Promise<void>
 }
