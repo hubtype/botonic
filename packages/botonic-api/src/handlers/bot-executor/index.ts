@@ -51,6 +51,14 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
       { action: 'update_bot_state', ...output.botState },
       { action: 'update_session', ...output.session },
     ]
+    const botActions = await dataProvider.saveEvent({
+      userId,
+      createdAt: new Date().toISOString(),
+      eventId: ulid(),
+      eventType: EventTypes.BOT_ACTION,
+      details: events,
+    })
+
     // post events to sender sqs
     await dispatchers.dispatch('sender', {
       userId,
