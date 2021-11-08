@@ -1,4 +1,5 @@
-import { BotonicEvent, User } from '../models'
+import { BotonicEvent, User } from '@botonic/core'
+
 import { DynamoDBDataProvider } from './dynamodb-data-provider'
 import { LocalDevDataProvider } from './local-data-provider'
 

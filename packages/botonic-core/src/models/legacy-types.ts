@@ -1,5 +1,4 @@
 // TODO: This file contains all the legacy types we had in index.ts. After some refactors, we should be able to get rid of many of them.
-import { DataProvider } from '../data-provider'
 import { BotState } from './bot-state'
 import { BotonicEvent } from './events'
 import { Session } from './session'
@@ -176,7 +175,7 @@ export interface BotRequest {
   input: Input
   session: Session
   botState: BotState
-  dataProvider?: DataProvider
+  dataProvider?: any // TODO: type as dataProvider
 }
 
 /** The response of the bot for the triggered actions, which can be

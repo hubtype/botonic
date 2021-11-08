@@ -1,6 +1,6 @@
 import { SQS } from 'aws-sdk'
 
-import { buildSendMessageRequestForQueue } from './send-message-request'
+import { buildSendMessageRequestForQueue } from '../sqs-utils'
 
 export class SQSEnqueuer {
   sqs: SQS

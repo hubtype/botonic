@@ -1,5 +1,5 @@
-import { websocketServerFactory } from '@botonic/api/src/websocket'
-import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
+import { dataProviderFactory } from '@botonic/server'
+import { websocketServerFactory } from '@botonic/server/src/websocket'
 
 import { onAuth } from './onauth'
 import { onConnect } from './onconnect'

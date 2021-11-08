@@ -1,6 +1,9 @@
 import { SendMessageRequest } from 'aws-sdk/clients/sqs'
+import crypto from 'crypto'
 
-import { sha256 } from './hashing'
+function sha256(message: string): string {
+  return crypto.createHash('sha256').update(message).digest('hex')
+}
 
 interface UnnormalizedMessage {
   userId: string
