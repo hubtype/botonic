@@ -1,5 +1,5 @@
-//import { ContentType } from '../../../src/cms'
-import { /*ContentId,*/ ContentType } from '../../../src/cms'
+import { ContentType } from '../../../src/cms'
+//import { /*ContentId,*/ ContentType } from '../../../src/cms'
 import { testContext, testDirectus } from '../helpers/directus.helper'
 
 //const MULTI_LANGUAGE_TEXT_ID = 'ee791f5c-f90a-49af-b75e-f6aac779b902'
@@ -11,7 +11,7 @@ import { testContext, testDirectus } from '../helpers/directus.helper'
 // test('Test: text', async () => {
 //   const directus = testDirectus()
 //   const testText = await directus.text(
-//     '13dfd5aa-357a-4942-bdcc-6484906816e0',
+//     'd81c1530-f14a-4275-a826-f907846c2ab1',
 //     testContext()
 //   )
 //   console.log(testText)
@@ -50,7 +50,7 @@ import { testContext, testDirectus } from '../helpers/directus.helper'
 test('Test: topContents', async () => {
   const directus = testDirectus()
   const topContents = await directus.topContents(
-    ContentType.TEXT,
+    ContentType.IMAGE,
     testContext()
   )
   console.log('topContent:', topContents)

@@ -8,6 +8,7 @@ export const knownFields = [
   'id',
   'name',
   'status',
+  'collection',
   'shorttext',
   'keywords',
   'followup',
@@ -19,6 +20,10 @@ export const knownFields = [
   'elements',
   'languages_code',
   'buttonstyle',
+  'text_id',
+  'button_id',
+  'element_id',
+  'carousel_id',
 ]
 
 export function getContentFields(contentType: cms.ContentType): string[] {
@@ -60,6 +65,7 @@ function getCarouselFields(): string[] {
   return [
     'id',
     'name',
+    'status',
     'multilanguage_fields.*',
     'multilanguage_fields.shorttext',
     'multilanguage_fields.keywords',
@@ -77,6 +83,7 @@ function getElementFields(): string[] {
   return [
     'id',
     'name',
+    'status',
     'multilanguage_fields.*',
     'multilanguage_fields.buttons.*',
     'multilanguage_fields.buttons.item.*',
@@ -86,7 +93,13 @@ function getElementFields(): string[] {
 }
 
 function getImageFields(): string[] {
-  return ['id', 'name', 'multilanguage_fields.image', 'multilanguage_fields.*']
+  return [
+    'id',
+    'name',
+    'status',
+    'multilanguage_fields.image',
+    'multilanguage_fields.*',
+  ]
 }
 
 function getButtonFields(): string[] {
@@ -101,7 +114,7 @@ function getButtonFields(): string[] {
 }
 
 function getUrlFields(): string[] {
-  return ['id', 'name', 'multilanguage_fields.*']
+  return ['id', 'name', 'status', 'multilanguage_fields.*']
 }
 
 export function getContextContent(context: cms.SupportedLocales): {} {

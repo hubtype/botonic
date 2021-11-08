@@ -68,17 +68,10 @@ export class TextDelivery extends ContentDelivery {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ): Text | Image | Carousel | undefined {
-    console.log({ entry })
-    if (!entry.followup || !entry.followup.length) {
+    if (entry.followup.length === 0) {
       return undefined
     }
-
-    let contentType
-    if (entry.followup[mf][0].hasOwnProperty('image')) {
-      contentType = cms.ContentType.IMAGE
-    } else if (entry.followup[mf][0].hasOwnProperty('elements')) {
-      contentType = cms.ContentType.CAROUSEL
-    } else contentType = cms.ContentType.TEXT
+    const contentType = entry.followup.collection
 
     return contentType === cms.ContentType.IMAGE
       ? this.image.fromEntry(entry.followup, context)

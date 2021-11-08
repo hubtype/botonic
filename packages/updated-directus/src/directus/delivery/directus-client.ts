@@ -27,10 +27,11 @@ export class DirectusClient {
   ): Promise<PartialItem<any>> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
-      const entry = await this.client.items(contentType).readOne(id, {
+      let entry = await this.client.items(contentType).readOne(id, {
         fields: getContentFields(contentType),
         deep: context && getContextContent(context),
       })
+      entry = { ...entry, collection: contentType }
       if (!context) return entry!
       if (hasFollowUp(entry)) {
         Object.assign(
@@ -176,14 +177,7 @@ export class DirectusClient {
     context: cms.SupportedLocales
   ) {
     const followupId = entry.followup[0].item.id
-    const followup = entry.followup[0].item[mf][0]
-    let contentType
-    if (followup.hasOwnProperty('image')) {
-      contentType = cms.ContentType.IMAGE
-    } else if (followup.hasOwnProperty('elements')) {
-      contentType = cms.ContentType.CAROUSEL
-    } else contentType = cms.ContentType.TEXT
-
+    const contentType = entry.followup[0].collection
     return {
       ...entry,
       followup: await this.getEntry(followupId, contentType, context),
