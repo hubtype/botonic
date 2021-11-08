@@ -1,7 +1,7 @@
+import { BotonicEvent, EventTypes, User } from '@botonic/core'
 import { JsonDB } from 'node-json-db'
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 
-import { BotonicEvent, EventTypes, User } from '../models'
 import { DataProvider } from './factory'
 
 export class LocalDevDataProvider implements DataProvider {

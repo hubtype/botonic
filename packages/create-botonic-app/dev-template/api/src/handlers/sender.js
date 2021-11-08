@@ -1,5 +1,5 @@
-import { senderHandlerFactory } from '@botonic/api/src/handlers/sender'
-import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
+import { dataProviderFactory } from '@botonic/server/src/data-provider'
+import { senderHandlerFactory } from '@botonic/server/src/handlers/sender'
 
 const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
