@@ -1,11 +1,11 @@
 import { BotonicEvent, MessageEventAck } from '@botonic/core'
 import { BotonicOutputParser } from '@botonic/core'
-import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Router } from 'express'
 import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
 import { ulid } from 'ulid'
 
+import { dataProviderFactory } from '../../data-provider'
 import { Paginator } from '../utils/paginator'
 import { SIGNATURE_ALGORITHM } from './auth'
 import { pageParamSchema, pageSizeParamSchema } from './validation/common'

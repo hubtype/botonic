@@ -1,7 +1,8 @@
 import serverlessExpress from '@vendia/serverless-express'
 import chalk from 'chalk'
 import terminalLink from 'terminal-link'
-import { Environments } from '..'
+
+import { Environments } from '../constants'
 
 export function restServerFactory({ env, app }) {
   if (env === Environments.LOCAL) {
