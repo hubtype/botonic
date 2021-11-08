@@ -7,6 +7,7 @@ export enum EventTypes {
   NEW_USER = 'newUser',
   RECEIVED_MESSAGE = 'receivedMessage',
   BOT_EXECUTED = 'botExecuted',
+  BOT_ACTION = 'botAction',
   ACTION_SENT = 'actionSent',
 }
 
