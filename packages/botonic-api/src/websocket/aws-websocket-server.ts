@@ -1,6 +1,14 @@
 import { ApiGatewayManagementApi } from 'aws-sdk'
 
-export const WebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
+import { doAuth } from './onauth'
+import { doDisconnect } from './ondisconnect'
+
+export const WebSocketServer = ({
+  onConnect,
+  onAuth,
+  onDisconnect,
+  dataProvider,
+}) => {
   return {
     onConnect: async event => {
       const websocketId = event.requestContext.connectionId
@@ -15,17 +23,15 @@ export const WebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
       return { statusCode: 200, body: 'Connected successfully.' }
     },
     onAuth: async event => {
-      const websocketId = event.requestContext.connectionId
-      await onAuth({
+      const { requestContext } = event
+      const websocketId = requestContext.connectionId
+      await doAuth({
         websocketId,
         data: event.body,
         send: async message => {
           const apiGwManagementApi = new ApiGatewayManagementApi({
             apiVersion: '2018-11-29',
-            endpoint:
-              event.requestContext.domainName +
-              '/' +
-              event.requestContext.stage,
+            endpoint: `${requestContext.domainName}/${requestContext.stage}`,
           })
           try {
             await apiGwManagementApi
@@ -42,12 +48,15 @@ export const WebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
             }
           }
         },
+        dataProvider,
       })
+      await onAuth({ websocketId })
       return { statusCode: 200, body: 'Data sent.' }
     },
     onDisconnect: async event => {
       const websocketId = event.requestContext.connectionId
       try {
+        await doDisconnect(websocketId, dataProvider)
         await onDisconnect(websocketId)
       } catch (err) {
         return {

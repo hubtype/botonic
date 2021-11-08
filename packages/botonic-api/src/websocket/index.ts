@@ -7,14 +7,21 @@ export const websocketServerFactory = ({
   onConnect,
   onAuth,
   onDisconnect,
+  dataProvider,
 }) => {
   if (env === Environments.LOCAL) {
-    return localWebSocketServer({ onConnect, onAuth, onDisconnect })
+    return localWebSocketServer({
+      onConnect,
+      onAuth,
+      onDisconnect,
+      dataProvider,
+    })
   } else if (env === Environments.AWS) {
     return WebSocketServer({
       onConnect,
       onAuth,
       onDisconnect,
+      dataProvider,
     })
   } else {
     throw Error(
