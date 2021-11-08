@@ -1,6 +1,7 @@
+import { BotonicEvent, EventTypes, User } from '@botonic/core'
 import { Entity, Table } from 'dynamodb-toolbox'
 
-import { BotonicEvent, EventTypes, User } from '../models'
+import { enqueueToSQS } from '../notifying'
 import {
   getConnectionEventEntity,
   getMessageEventEntities,
@@ -11,7 +12,6 @@ import {
   USER_PREFIX,
 } from './dynamodb-utils'
 import { DataProvider } from './factory'
-import { enqueueToSQS } from './sqs-utils/queue-to-sqs-decorator'
 
 export class DynamoDBDataProvider implements DataProvider {
   region: string

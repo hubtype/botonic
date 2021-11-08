@@ -19,7 +19,7 @@
     "webpack-cli": "^4.7.0"
   },
   "dependencies": {
-    "@botonic/api": "dev",
+    "@botonic/server": "dev",
     "aws-sdk": "^2.981.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
