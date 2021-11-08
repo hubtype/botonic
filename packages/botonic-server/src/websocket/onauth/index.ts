@@ -2,7 +2,7 @@ import { ConnectionEventStatuses, EventTypes } from '@botonic/core'
 import { decode } from 'jsonwebtoken'
 import { ulid } from 'ulid'
 
-import { sqsEnqueuer } from '../../notifying'
+import { sqsPublisher } from '../../notifying'
 
 const initialBotState = {
   botId: '1234',
@@ -35,7 +35,7 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       details: {}, // TODO: To be filled with geolocation info
     }
     user = await dataProvider.saveUser(newUser)
-    await sqsEnqueuer?.enqueue({
+    await sqsPublisher?.publish({
       userId: user.id,
       createdAt: new Date().toISOString(),
       eventId: ulid(),

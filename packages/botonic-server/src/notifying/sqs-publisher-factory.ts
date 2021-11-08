@@ -2,7 +2,7 @@ import { SQS } from 'aws-sdk'
 
 import { buildSendMessageRequestForQueue } from '../sqs-utils'
 
-export class SQSEnqueuer {
+export class SQSPublisher {
   sqs: SQS
   queueUrl: string | undefined
   constructor(queueUrl: string | undefined = undefined) {
@@ -12,7 +12,7 @@ export class SQSEnqueuer {
     })
     this.queueUrl = queueUrl
   }
-  async enqueue(message: any): Promise<void> {
+  async publish(message: any): Promise<void> {
     if (this.queueUrl !== undefined) {
       // TODO: This should be refactored as an environment variable. Also, check how permissions should be given in Pulumi
       const messageRequest = buildSendMessageRequestForQueue(
@@ -30,13 +30,13 @@ export class SQSEnqueuer {
   }
 }
 
-let sqsEnqueuer: SQSEnqueuer
+let sqsPublisher: SQSPublisher
 
-export class SQSEnqueuerFactory {
-  public static getInstance(queueUrl: string | undefined): SQSEnqueuer {
-    if (!sqsEnqueuer) {
-      sqsEnqueuer = new SQSEnqueuer(queueUrl)
+export class SQSPublisherFactory {
+  public static getInstance(queueUrl: string | undefined): SQSPublisher {
+    if (!sqsPublisher) {
+      sqsPublisher = new SQSPublisher(queueUrl)
     }
-    return sqsEnqueuer
+    return sqsPublisher
   }
 }
