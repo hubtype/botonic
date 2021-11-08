@@ -6,10 +6,11 @@ import {
   Session,
   User,
 } from '@botonic/core'
-import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Request, Router } from 'express'
 import { ulid } from 'ulid'
 import { v4 } from 'uuid'
+
+import { dataProviderFactory } from '../../data-provider'
 
 const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 

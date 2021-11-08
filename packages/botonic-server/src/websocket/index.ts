@@ -1,4 +1,4 @@
-import { Environments } from '..'
+import { Environments } from '../constants'
 import { WebSocketServer } from './aws-websocket-server'
 import { localWebSocketServer } from './local-websocket-server'
 
