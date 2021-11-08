@@ -1,8 +1,10 @@
-import { BotonicEvent, MessageEventAck, PROVIDER } from '@botonic/core'
+import { BotonicEvent, MessageEventAck } from '@botonic/core'
+import { BotonicOutputParser } from '@botonic/core'
 import { dataProviderFactory } from '@botonic/core/lib/esm/data-provider'
 import { Router } from 'express'
 import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
+import { ulid } from 'ulid'
 
 import { Paginator } from '../utils/paginator'
 import { SIGNATURE_ALGORITHM } from './auth'
@@ -11,6 +13,8 @@ import {
   eventIdParamSchema,
   validateBotonicEventData,
 } from './validation/events'
+
+const botonicOutputParser = new BotonicOutputParser()
 
 export default function eventsRouter(args: any): Router {
   const router = Router()
@@ -75,13 +79,26 @@ export default function eventsRouter(args: any): Router {
         try {
           const { userId } = req.user
           const { message, sender } = req.body
+          const input = message
           let user = await dp.getUser(userId)
+          // TODO: Decide how to update user with sender information
           const updatedUser = { ...user, ...sender }
           user = await dp.updateUser(updatedUser)
+          const parsedUserEvent = botonicOutputParser.inputToBotonicEvent(input)
+          const receivedUserEvent = {
+            ...parsedUserEvent,
+            userId,
+            eventId: ulid(),
+            createdAt: new Date().toISOString(),
+            ack: MessageEventAck.RECEIVED,
+          }
+          // @ts-ignore
+          const userEvent = await dp.saveEvent(receivedUserEvent)
           // TODO: Only update ack for webchat
           // TODO: Specific logic for webchat, move to webchat-events?
-          const webchatMsgId = message.id
+          const webchatMsgId = input.id
           await dispatchers.dispatch('sender', {
+            userId,
             events: [
               {
                 action: 'update_message_info',
@@ -89,15 +106,10 @@ export default function eventsRouter(args: any): Router {
                 ack: MessageEventAck.RECEIVED,
               },
             ],
-            userId,
-            websocketId: user.websocketId,
           })
           await dispatchers.dispatch('botExecutor', {
-            userId: user.id,
-            input: { ...message, userId }, // To identify user executing the input
-            session: user.session,
-            botState: user.botState,
-            websocketId: user.websocketId,
+            userId,
+            input: receivedUserEvent,
           })
         } catch (e) {
           console.log({ e })
