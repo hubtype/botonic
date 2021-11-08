@@ -33,6 +33,13 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       details: {}, // TODO: To be filled with geolocation info
     }
     user = await dataProvider.saveUser(newUser)
+    const newUserEvent = await dataProvider.saveEvent({
+      userId: user.id,
+      createdAt: new Date().toISOString(),
+      eventId: ulid(),
+      eventType: EventTypes.NEW_USER,
+      details: user,
+    })
   } else {
     // UPDATE USER CONNECTION
     user = await dataProvider.updateUser({
