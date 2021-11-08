@@ -1,7 +1,6 @@
 import { BotonicEvent, EventTypes, User } from '@botonic/core'
 import { Entity, Table } from 'dynamodb-toolbox'
 
-import { enqueueToSQS } from '../notifying'
 import {
   getConnectionEventEntity,
   getMessageEventEntities,
@@ -88,7 +87,6 @@ export class DynamoDBDataProvider implements DataProvider {
   // @ts-ignore
   async getEvent(id: string): Promise<BotonicEvent | undefined> {} // TODO: Implement
 
-  @enqueueToSQS(process.env.EXTERNAL_SYSTEM_URL)
   async saveEvent(event: BotonicEvent): Promise<BotonicEvent> {
     if (event.eventType === EventTypes.CONNECTION) {
       await this.connectionEventEntity.put(event)

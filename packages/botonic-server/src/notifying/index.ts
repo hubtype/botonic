@@ -1,1 +1,1 @@
-export { enqueueToSQS } from './queue-to-sqs-decorator'
+export { sqsEnqueuer } from './sqs-enqueuer-instance'

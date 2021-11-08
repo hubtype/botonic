@@ -1,6 +1,7 @@
 import { EventTypes, MessageEventAck, MessageEventFrom } from '@botonic/core'
 import { ulid } from 'ulid'
 
+import { sqsEnqueuer } from '../..'
 import { Environments } from '../../constants'
 
 const botExecutor = (bot, dataProvider, dispatchers) =>
@@ -25,7 +26,7 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
       })
     }
 
-    const botExecuted = await dataProvider.saveEvent({
+    await sqsEnqueuer?.enqueue({
       userId,
       createdAt: new Date().toISOString(),
       eventId: ulid(),
@@ -51,7 +52,8 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
       { action: 'update_bot_state', ...output.botState },
       { action: 'update_session', ...output.session },
     ]
-    const botActions = await dataProvider.saveEvent({
+
+    await sqsEnqueuer?.enqueue({
       userId,
       createdAt: new Date().toISOString(),
       eventId: ulid(),
@@ -74,8 +76,7 @@ export function botExecutorHandlerFactory(env, bot, dataProvider, dispatchers) {
       try {
         const params = JSON.parse(event.Records[0].body)
         const userId = params.userId
-        // Publish Received Message Event
-        const receivedMessage = await dataProvider.saveEvent({
+        await sqsEnqueuer?.enqueue({
           userId,
           createdAt: new Date().toISOString(),
           eventId: ulid(),
