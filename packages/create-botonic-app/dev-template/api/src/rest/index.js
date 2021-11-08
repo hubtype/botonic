@@ -1,5 +1,5 @@
-import { dispatchersFactory } from '@botonic/api/src/dispatchers/index'
-import { restServerFactory } from '@botonic/api/src/rest'
+import { dispatchersFactory } from '@botonic/server/src/dispatchers/index'
+import { restServerFactory } from '@botonic/server/src/rest'
 
 import botExecutor from '../handlers/botExecutor'
 import sender from '../handlers/sender'

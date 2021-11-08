@@ -1,4 +1,3 @@
-import { DataProvider } from './data-provider'
 import {
   BotonicEvent,
   BotState,
@@ -36,7 +35,7 @@ export async function runPlugins(
   botState: BotState,
   response: string | null = null,
   messageEvents: Partial<BotonicEvent>[] | null = null,
-  dataProvider?: DataProvider
+  dataProvider?: any // TODO: type as dataProvider
 ): Promise<void> {
   for (const key in plugins) {
     const p = await plugins[key]

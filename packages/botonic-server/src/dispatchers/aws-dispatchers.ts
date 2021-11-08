@@ -1,5 +1,6 @@
-import { buildSendMessageRequestForQueue } from '@botonic/core/lib/esm/data-provider/sqs-utils'
 import { SQS } from 'aws-sdk'
+
+import { buildSendMessageRequestForQueue } from '../sqs-utils'
 
 export class AWSDispatchers {
   sqs
