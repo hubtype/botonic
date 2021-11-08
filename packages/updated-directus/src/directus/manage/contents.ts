@@ -281,6 +281,7 @@ export class ContentsDelivery {
     id: string
   ): Promise<PartialItem<any>> {
     const entry = await this.client.getEntry(id, cms.ContentType.CAROUSEL)
+
     let localeContent = this.getLocaleContent(entry, context)
 
     if (localeContent === undefined) {

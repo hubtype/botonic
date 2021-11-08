@@ -33,6 +33,8 @@ export function getContentFields(contentType: cms.ContentType): string[] {
       return getUrlFields()
     case cms.ContentType.CAROUSEL:
       return getCarouselFields()
+    case cms.ContentType.ELEMENT:
+      return getElementFields()
     default:
       return []
   }
@@ -50,6 +52,7 @@ function getTextFields(): string[] {
     'multilanguage_fields.buttons.item.multilanguage_fields.target.*',
     'multilanguage_fields.followup.*',
     'multilanguage_fields.followup.item.*',
+    'multilanguage_fields.followup.item.multilanguage_fields.*',
   ]
 }
 
@@ -57,15 +60,28 @@ function getCarouselFields(): string[] {
   return [
     'id',
     'name',
+    'multilanguage_fields.*',
     'multilanguage_fields.shorttext',
     'multilanguage_fields.keywords',
     'multilanguage_fields.elements.*',
+    'multilanguage_fields.elements.item.*',
     'multilanguage_fields.elements.item.multilanguage_fields.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.target.*',
+  ]
+}
+
+function getElementFields(): string[] {
+  return [
+    'id',
+    'name',
     'multilanguage_fields.*',
+    'multilanguage_fields.buttons.*',
+    'multilanguage_fields.buttons.item.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.target.*',
   ]
 }
 

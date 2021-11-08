@@ -58,7 +58,7 @@ export class CarouselDelivery extends ContentDelivery {
   ): Element {
     const opt = {
       common: {
-        id: entry.id,
+        id: entry.element_id,
         name: entry.name ?? '',
       },
       title: entry.title ?? '',

@@ -175,10 +175,10 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
+    console.log({ entry })
     const followupId = entry.followup[0].item.id
-    const followup = entry.followup[0].item
+    const followup = entry.followup[0].item[mf][0]
     let contentType
-
     if (followup.hasOwnProperty('image')) {
       contentType = cms.ContentType.IMAGE
     } else if (followup.hasOwnProperty('elements')) {

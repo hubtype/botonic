@@ -30,13 +30,14 @@ export class TextDelivery extends ContentDelivery {
   }
 
   fromEntry(entry: PartialItem<any>, context: cms.SupportedLocales): Text {
+    console.log('entry text: ', entry[mf][0].followup)
     const opt = {
       common: {
         id: entry.id,
         name: entry.name ?? '',
         shortText: entry[mf][0]?.shorttext ?? undefined,
         followUp: entry[mf][0]
-          ? this.createFollowup(entry[mf][0]?.followup, context)
+          ? this.createFollowup(entry[mf][0], context)
           : undefined,
         keywords: entry[mf][0]?.keywords?.split(',') ?? undefined,
         customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
@@ -65,25 +66,26 @@ export class TextDelivery extends ContentDelivery {
   }
 
   private createFollowup(
-    followup: PartialItem<any>,
+    entry: PartialItem<any>,
     context: cms.SupportedLocales
   ): Text | Image | Carousel | undefined {
-    if (followup.length === 0) {
+    console.log({ entry })
+    if (!entry.followup) {
       return undefined
     }
 
     let contentType
-    if (followup.hasOwnProperty('image')) {
+    if (entry.followup[mf][0].hasOwnProperty('image')) {
       contentType = cms.ContentType.IMAGE
-    } else if (followup.hasOwnProperty('elements')) {
+    } else if (entry.followup[mf][0].hasOwnProperty('elements')) {
       contentType = cms.ContentType.CAROUSEL
     } else contentType = cms.ContentType.TEXT
 
     return contentType === cms.ContentType.IMAGE
-      ? this.image.fromEntry(followup, context)
+      ? this.image.fromEntry(entry.followup, context)
       : contentType === cms.ContentType.CAROUSEL
-      ? this.carousel.fromEntry(followup)
-      : this.fromEntry(followup, context)
+      ? this.carousel.fromEntry(entry.followup, context)
+      : this.fromEntry(entry.followup, context)
   }
 
   private getButtonsStyle(buttonsStyle: string): cms.ButtonStyle | undefined {
