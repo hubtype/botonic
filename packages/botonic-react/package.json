@@ -62,7 +62,7 @@
     "@babel/preset-react": "^7.13.13",
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^7.0.0",
-    "@types/react": "17.0.27",
+    "@types/react": "17.0.34",
     "babel-plugin-add-module-exports": "^1.0.2",
     "identity-obj-proxy": "^3.0.0",
     "react-test-renderer": "^16.14.0"
