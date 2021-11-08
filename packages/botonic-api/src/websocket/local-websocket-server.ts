@@ -3,7 +3,15 @@ import express from 'express'
 import expressWs from 'express-ws'
 import { v4 } from 'uuid'
 
-export const localWebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
+import { doAuth } from './onauth'
+import { doDisconnect } from './ondisconnect'
+
+export const localWebSocketServer = ({
+  onConnect,
+  onAuth,
+  onDisconnect,
+  dataProvider,
+}) => {
   const connections = {}
   const wsApp = expressWs(express()).app
   wsApp.use(express.json())
@@ -20,13 +28,16 @@ export const localWebSocketServer = ({ onConnect, onAuth, onDisconnect }) => {
     connections[ws.id] = ws
     onConnect(ws.id)
     ws.on('message', function (data) {
-      onAuth({
+      doAuth({
         websocketId: ws.id,
         data,
         send: message => ws.send(JSON.stringify(message)),
+        dataProvider,
       })
+      onAuth()
     })
     ws.on('close', () => {
+      doDisconnect(ws.id, dataProvider)
       onDisconnect(ws.id)
       delete connections[ws.id]
     })
