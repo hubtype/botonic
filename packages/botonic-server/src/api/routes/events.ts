@@ -37,8 +37,13 @@ export default function eventsRouter(args: any): Router {
 
           const query = matchedData(req, { locations: ['query'] })
           const paginator = new Paginator(req, query.page, query.pageSize)
-          const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-          const events = await dp.getEvents(paginator.limit, paginator.offset)
+          const dataProvider = dataProviderFactory(
+            process.env.DATA_PROVIDER_URL
+          )
+          const events = await dataProvider.getEvents(
+            paginator.limit,
+            paginator.offset
+          )
 
           const response = paginator.generateResponse(events)
           res.status(200).json(response)
@@ -57,13 +62,13 @@ export default function eventsRouter(args: any): Router {
 
     //   try {
     //     const event = matchedData(req, { locations: ['body'] }) as BotonicEvent
-    //     const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-    //     if (await dp.getEvent(event.eventId)) {
+    //     const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+    //     if (await dataProvider.getEvent(event.eventId)) {
     //       res
     //         .status(409)
     //         .send({ error: `Event with ID '${event.eventId} already exists` })
     //     }
-    //     const storedEvent = await dp.saveEvent(event)
+    //     const storedEvent = await dataProvider.saveEvent(event)
     //     res.status(201).send(storedEvent)
     //   } catch (e) {
     //     res.status(500).send({ error: e.message })
@@ -76,15 +81,15 @@ export default function eventsRouter(args: any): Router {
       }),
       async (req: any, res: any) => {
         // TODO: Validate event
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
         try {
           const { userId } = req.user
           const { message, sender } = req.body
           const input = message
-          let user = await dp.getUser(userId)
+          let user = await dataProvider.getUser(userId)
           // TODO: Decide how to update user with sender information
           const updatedUser = { ...user, ...sender }
-          user = await dp.updateUser(updatedUser)
+          user = await dataProvider.updateUser(updatedUser)
           const parsedUserEvent = botonicOutputParser.inputToBotonicEvent(input)
           const receivedUserEvent = {
             ...parsedUserEvent,
@@ -94,7 +99,7 @@ export default function eventsRouter(args: any): Router {
             ack: MessageEventAck.RECEIVED,
           }
           // @ts-ignore
-          const userEvent = await dp.saveEvent(receivedUserEvent)
+          const userEvent = await dataProvider.saveEvent(receivedUserEvent)
           // TODO: Only update ack for webchat
           // TODO: Specific logic for webchat, move to webchat-events?
           const webchatMsgId = input.id
@@ -133,8 +138,8 @@ export default function eventsRouter(args: any): Router {
 
       try {
         const params = matchedData(req, { locations: ['params'] })
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const event = await dp.getEvent(params.eventId)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const event = await dataProvider.getEvent(params.eventId)
         if (!event) {
           res
             .status(404)
@@ -163,8 +168,8 @@ export default function eventsRouter(args: any): Router {
           locations: ['body'],
         }) as BotonicEvent
 
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const event = await dp.getEvent(params.eventId)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const event = await dataProvider.getEvent(params.eventId)
         if (!event) {
           res
             .status(404)
@@ -173,7 +178,7 @@ export default function eventsRouter(args: any): Router {
         }
 
         updatedEvent.eventId = event.eventId
-        await dp.updateEvent(updatedEvent)
+        await dataProvider.updateEvent(updatedEvent)
         res.status(200).send(updatedEvent)
       } catch (e) {
         res.status(500).send({ error: e.message })
@@ -196,8 +201,8 @@ export default function eventsRouter(args: any): Router {
           locations: ['body'],
         }) as Partial<BotonicEvent>
 
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const event = await dp.getEvent(params.eventId)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const event = await dataProvider.getEvent(params.eventId)
         if (!event) {
           res
             .status(404)
@@ -207,7 +212,7 @@ export default function eventsRouter(args: any): Router {
 
         newEventData.eventId = event.eventId
         const updatedEvent = { ...event, ...newEventData } as BotonicEvent
-        await dp.updateEvent(updatedEvent)
+        await dataProvider.updateEvent(updatedEvent)
         res.status(200).send(updatedEvent)
       } catch (e) {
         res.status(500).send({ error: e.message })
@@ -222,8 +227,8 @@ export default function eventsRouter(args: any): Router {
         }
 
         const params = matchedData(req, { locations: ['params'] })
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const event = await dp.deleteEvent(params.eventId)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const event = await dataProvider.deleteEvent(params.eventId)
         if (!event) {
           res
             .status(404)
