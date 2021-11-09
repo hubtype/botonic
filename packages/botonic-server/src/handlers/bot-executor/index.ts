@@ -56,8 +56,18 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
 
     const events = [
       ...messageEvents,
-      { action: 'update_bot_state', ...output.botState },
-      { action: 'update_session', ...output.session },
+      {
+        action: 'update_bot_state',
+        botState: output.botState,
+        idFromChannel: user.idFromChannel,
+        channel: user.channel,
+      },
+      {
+        action: 'update_session',
+        session: output.session,
+        idFromChannel: user.idFromChannel,
+        channel: user.channel,
+      },
     ]
 
     await sqsPublisher?.publish({
@@ -82,7 +92,7 @@ export function botExecutorHandlerFactory(env, bot, dataProvider, dispatchers) {
     return async function (event, context) {
       try {
         const params = JSON.parse(event.Records[0].body)
-        const userId = params.userId
+        const { userId } = params
         await sqsPublisher?.publish({
           userId,
           createdAt: new Date().toISOString(),
