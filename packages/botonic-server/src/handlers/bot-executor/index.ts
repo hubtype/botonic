@@ -13,8 +13,14 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
       botState: user.botState,
       dataProvider,
     })
+    // Adding channel information once the input has been processed
+    const messageEvents = output.messageEvents.map(messageEvent => ({
+      ...messageEvent,
+      channel: user.channel,
+      idFromChannel: user.idFromChannel,
+    }))
 
-    for (const messageEvent of output.messageEvents) {
+    for (const messageEvent of messageEvents) {
       // @ts-ignore
       const botEvent = await dataProvider.saveEvent({
         ...messageEvent,
@@ -34,7 +40,7 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
       details: {
         input,
         response: output.response,
-        messageEvents: output.messageEvents,
+        messageEvents,
         session: output.session,
         botState: output.botState,
       },
@@ -48,7 +54,7 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
     await dataProvider.updateUser(updatedUser)
 
     const events = [
-      ...output.messageEvents,
+      ...messageEvents,
       { action: 'update_bot_state', ...output.botState },
       { action: 'update_session', ...output.session },
     ]

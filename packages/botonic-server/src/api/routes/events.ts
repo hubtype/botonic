@@ -103,7 +103,9 @@ export default function eventsRouter(args: any): Router {
               {
                 action: 'update_message_info',
                 id: webchatMsgId,
-                ack: MessageEventAck.RECEIVED,
+                ack: MessageEventAck.SENT,
+                idFromChannel: user.idFromChannel,
+                channel: user.channel,
               },
             ],
           })
