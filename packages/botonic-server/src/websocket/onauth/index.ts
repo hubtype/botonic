@@ -13,14 +13,19 @@ const initialBotState = {
   isShadowing: false,
 }
 
+// TODO: To be obtained from new row in DynamoDB table
+const ID_FROM_CHANNEL = '1234'
+
 export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
   const { token } = JSON.parse(data)
   // @ts-ignore
-  const { userId } = decode(token)
+  const { userId, channel, idFromChannel } = decode(token)
   let user = await dataProvider.getUser(userId)
   await dataProvider.saveEvent({
     eventType: EventTypes.CONNECTION,
     userId,
+    channel,
+    idFromChannel: idFromChannel || ID_FROM_CHANNEL,
     eventId: ulid(),
     createdAt: new Date().toISOString(),
     status: ConnectionEventStatuses.CONNECTED,
@@ -33,8 +38,8 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       botState: initialBotState,
       session: {},
       details: {}, // TODO: To be filled with geolocation info
-      channel: 'webchat',
-      idFromChannel: '1234',
+      channel,
+      idFromChannel: idFromChannel || ID_FROM_CHANNEL,
     }
     user = await dataProvider.saveUser(newUser)
     await sqsPublisher?.publish({
