@@ -123,6 +123,8 @@ export function getMessageEventEntities(
         },
         eventId: [SORT_KEY_NAME, 0],
         eventType: 'string',
+        channel: 'string',
+        idFromChannel: 'string',
         createdAt: 'string',
         modifiedAt: 'string',
         from: 'string',
