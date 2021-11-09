@@ -73,6 +73,8 @@ export function getConnectionEventEntity(table: Table): Entity<any> {
         prefix: EVENT_PREFIX,
       },
       eventId: [SORT_KEY_NAME, 0],
+      idFromChannel: 'string',
+      channel: 'string',
       eventType: 'string',
       createdAt: 'string',
       modifiedAt: 'string',
