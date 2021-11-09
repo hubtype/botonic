@@ -33,6 +33,8 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       botState: initialBotState,
       session: {},
       details: {}, // TODO: To be filled with geolocation info
+      channel: 'webchat',
+      idFromChannel: '1234',
     }
     user = await dataProvider.saveUser(newUser)
     await sqsPublisher?.publish({
