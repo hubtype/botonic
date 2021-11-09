@@ -44,17 +44,23 @@ class WebsocketBackendService {
     })
   }
   async doAuthAndUpdateJwt() {
-    this.jwt = await this.doAuth({ userId: this.user.id })
+    this.jwt = await this.doAuth({
+      userId: this.user.id,
+      channel: this.user.channel,
+      idFromChannel: this.user.idFromChannel,
+    })
     this.updateJwt(this.jwt)
   }
 
-  async doAuth({ userId }) {
+  async doAuth({ userId, channel, idFromChannel }) {
     try {
       const {
         data: { token },
         // eslint-disable-next-line no-undef
       } = await axios.post(`${REST_API_URL}auth/`, {
         userId,
+        channel,
+        idFromChannel,
       })
       return token
     } catch (e) {
@@ -96,8 +102,8 @@ export class FullstackProdApp extends WebchatApp {
     this.backendService.postMessage(user, input)
   }
 
-  async doAuth({ userId }) {
-    return await this.backendService.doAuth({ userId })
+  async doAuth(user) {
+    return await this.backendService.doAuth(user)
   }
 
   onStateChange({ user, messagesJSON, jwt, updateJwt }) {
@@ -192,8 +198,8 @@ export class FullstackDevApp extends DevApp {
     )
   }
 
-  async doAuth({ userId }) {
-    return await this.backendService.doAuth({ userId })
+  async doAuth(user) {
+    return await this.backendService.doAuth(user)
   }
 
   onStateChange({ user, messagesJSON, jwt, updateJwt }) {
