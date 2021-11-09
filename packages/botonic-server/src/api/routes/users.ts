@@ -34,8 +34,13 @@ export default function usersRouter(args) {
 
           const query = matchedData(req, { locations: ['query'] })
           const paginator = new Paginator(req, query.page, query.pageSize)
-          const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-          const users = await dp.getUsers(paginator.limit, paginator.offset)
+          const dataProvider = dataProviderFactory(
+            process.env.DATA_PROVIDER_URL
+          )
+          const users = await dataProvider.getUsers(
+            paginator.limit,
+            paginator.offset
+          )
 
           const response = paginator.generateResponse(users)
           res.status(200).json(response)
@@ -53,13 +58,13 @@ export default function usersRouter(args) {
 
       try {
         const user = matchedData(req, { locations: ['body'] }) as User
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        if (await dp.getUser(user.id)) {
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        if (await dataProvider.getUser(user.id)) {
           res
             .status(409)
             .send({ error: `User with ID '${user.id} already exists` })
         }
-        const storedUser = await dp.saveUser(user)
+        const storedUser = await dataProvider.saveUser(user)
         res.status(201).send(storedUser)
       } catch (e) {
         res.status(500).send({ error: e.message })
@@ -77,8 +82,8 @@ export default function usersRouter(args) {
 
       try {
         const params = matchedData(req, { locations: ['params'] })
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const user = await dp.getUser(params.userId)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const user = await dataProvider.getUser(params.userId)
         if (!user) {
           res
             .status(404)
@@ -103,8 +108,8 @@ export default function usersRouter(args) {
           locations: ['body'],
         }) as User
 
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const user = await dp.getUser(params.userId)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const user = await dataProvider.getUser(params.userId)
         if (!user) {
           res
             .status(404)
@@ -113,7 +118,7 @@ export default function usersRouter(args) {
         }
 
         updatedUser.id = user.id
-        await dp.updateUser(updatedUser)
+        await dataProvider.updateUser(updatedUser)
         res.status(200).send(updatedUser)
       } catch (e) {
         res.status(500).send({ error: e.message })
@@ -136,8 +141,10 @@ export default function usersRouter(args) {
             locations: ['body'],
           }) as Partial<User>
 
-          const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-          const user = await dp.getUser(params.userId)
+          const dataProvider = dataProviderFactory(
+            process.env.DATA_PROVIDER_URL
+          )
+          const user = await dataProvider.getUser(params.userId)
           if (!user) {
             res
               .status(404)
@@ -147,7 +154,7 @@ export default function usersRouter(args) {
 
           newUserData.id = user.id
           const updatedUser = { ...user, ...newUserData }
-          await dp.updateUser(updatedUser)
+          await dataProvider.updateUser(updatedUser)
           res.status(200).send(updatedUser)
         } catch (e) {
           res.status(500).send({ error: e.message })
@@ -163,8 +170,8 @@ export default function usersRouter(args) {
 
       try {
         const params = matchedData(req, { locations: ['params'] })
-        const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
-        const user = await dp.deleteUser(params.userId)
+        const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+        const user = await dataProvider.deleteUser(params.userId)
         if (!user) {
           res
             .status(404)
