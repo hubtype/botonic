@@ -176,6 +176,8 @@ export const Message = props => {
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
+        channel: props.channel,
+        idFromChannel: props.idFromChannel,
       }
       addMessage(message)
     }, [])

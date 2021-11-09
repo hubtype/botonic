@@ -52,6 +52,8 @@ export const parseMessage: ParseFunction<BotonicMessageEvent> = args => {
       type: args.toParse.type,
       ack: args.toParse.ack,
       from: args.toParse.from,
+      channel: args.toParse.channel,
+      idFromChannel: args.toParse.idFromChannel,
       ...typingAndDelay,
     },
   }
