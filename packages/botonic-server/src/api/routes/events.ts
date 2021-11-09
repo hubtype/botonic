@@ -95,6 +95,8 @@ export default function eventsRouter(args: any): Router {
             ...parsedUserEvent,
             userId,
             eventId: ulid(),
+            idFromChannel: user.idFromChannel,
+            channel: user.channel,
             createdAt: new Date().toISOString(),
             ack: MessageEventAck.RECEIVED,
           }

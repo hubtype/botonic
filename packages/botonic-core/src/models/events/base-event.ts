@@ -17,4 +17,6 @@ export interface BaseEvent {
   eventType: EventTypes
   createdAt: string
   modifiedAt?: string
+  channel: string
+  idFromChannel: string
 }

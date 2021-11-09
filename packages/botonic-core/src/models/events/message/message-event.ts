@@ -34,6 +34,4 @@ export interface BotonicMessageEvent extends BaseEvent {
   type: MessageEventTypes
   typing: number
   delay: number
-  // idFromChannel?:string references to msgId
-  // also channel
 }
