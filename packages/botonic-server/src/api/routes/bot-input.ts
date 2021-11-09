@@ -12,7 +12,7 @@ import { v4 } from 'uuid'
 
 import { dataProviderFactory } from '../../data-provider'
 
-const dp = dataProviderFactory(process.env.DATA_PROVIDER_URL)
+const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
 export default function botInputRouter(args: any): Router {
   const router = Router()
@@ -34,7 +34,7 @@ export default function botInputRouter(args: any): Router {
     const parsedUserEvent = botonicOutputParser.parseFromUserInput(
       req.body.input
     )
-    await dp.saveEvent({
+    await dataProvider.saveEvent({
       ...parsedUserEvent,
       userId: user.id,
       eventId: ulid(),
@@ -45,7 +45,7 @@ export default function botInputRouter(args: any): Router {
 
     const { messageEvents } = output
     for (const messageEvent of messageEvents) {
-      await dp.saveEvent({
+      await dataProvider.saveEvent({
         ...messageEvent,
         userId: user.id,
         eventId: ulid(),
@@ -62,8 +62,11 @@ export default function botInputRouter(args: any): Router {
 
 async function getUser(req: Request): Promise<User | undefined> {
   return (
-    (await dp.getUser(req.body.session.user.id)) ??
-    (await dp.getUserByField('provider_id', req.body.session.user.provider_id))
+    (await dataProvider.getUser(req.body.session.user.id)) ??
+    (await dataProvider.getUserByField(
+      'provider_id',
+      req.body.session.user.provider_id
+    ))
   )
 }
 
@@ -75,5 +78,5 @@ async function createUser(providerId: string): Promise<User> {
     route: '/',
     session: {} as Session,
   }
-  return dp.saveUser(user)
+  return dataProvider.saveUser(user)
 }
