@@ -1,8 +1,9 @@
 import { EventTypes, MessageEventAck, MessageEventFrom } from '@botonic/core'
 import { ulid } from 'ulid'
 
-import { sqsPublisher } from '../..'
 import { Environments } from '../../constants'
+import { Commands } from '../../dispatchers'
+import { sqsPublisher } from '../../notifying'
 
 const botExecutor = (bot, dataProvider, dispatchers) =>
   async function executeBot({ userId, input }) {
@@ -68,7 +69,7 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
     })
 
     // post events to sender sqs
-    await dispatchers.dispatch('sender', {
+    await dispatchers.dispatch(Commands.SEND, {
       userId,
       events,
     })
