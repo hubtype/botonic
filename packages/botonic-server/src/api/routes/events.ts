@@ -6,6 +6,7 @@ import { checkSchema, matchedData, validationResult } from 'express-validator'
 import { ulid } from 'ulid'
 
 import { dataProviderFactory } from '../../data-provider'
+import { Commands } from '../../dispatchers'
 import { Paginator } from '../utils/paginator'
 import { SIGNATURE_ALGORITHM } from './auth'
 import { pageParamSchema, pageSizeParamSchema } from './validation/common'
@@ -97,7 +98,7 @@ export default function eventsRouter(args: any): Router {
           // TODO: Only update ack for webchat
           // TODO: Specific logic for webchat, move to webchat-events?
           const webchatMsgId = input.id
-          await dispatchers.dispatch('sender', {
+          await dispatchers.dispatch(Commands.SEND, {
             userId,
             events: [
               {
@@ -109,7 +110,7 @@ export default function eventsRouter(args: any): Router {
               },
             ],
           })
-          await dispatchers.dispatch('botExecutor', {
+          await dispatchers.dispatch(Commands.EXECUTE_BOT, {
             userId,
             input: receivedUserEvent,
           })
