@@ -7,6 +7,7 @@ import {
   createIntegrationEvent,
   createMessageEvent,
   createWebchatActionEvent,
+  initChannelInformation,
 } from '../../helpers'
 import { sqsPublisher } from '../../notifying'
 
@@ -29,8 +30,10 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
     // TODO: Adding channel information once the input has been processed (rethink it?)
     const messageEvents = output.messageEvents.map(messageEvent => ({
       ...messageEvent,
-      channel: user.channel,
-      idFromChannel: user.idFromChannel,
+      ...initChannelInformation({
+        channel: user.channel,
+        idFromChannel: user.idFromChannel,
+      }),
     }))
 
     for (const messageEvent of messageEvents) {
