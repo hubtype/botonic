@@ -3,18 +3,30 @@ import { ulid } from 'ulid'
 
 import { Environments } from '../../constants'
 import { Commands } from '../../dispatchers'
+import {
+  createIntegrationEvent,
+  createMessageEvent,
+  createWebchatActionEvent,
+} from '../../helpers'
 import { sqsPublisher } from '../../notifying'
 
 const botExecutor = (bot, dataProvider, dispatchers) =>
   async function executeBot({ userId, input }) {
     const user = await dataProvider.getUser(userId)
+    await sqsPublisher?.publish(
+      createIntegrationEvent(EventTypes.RECEIVED_MESSAGE, {
+        user,
+        details: input,
+      })
+    )
     const output = await bot.input({
       input,
       session: user.session,
       botState: user.botState,
       dataProvider,
     })
-    // Adding channel information once the input has been processed
+
+    // TODO: Adding channel information once the input has been processed (rethink it?)
     const messageEvents = output.messageEvents.map(messageEvent => ({
       ...messageEvent,
       channel: user.channel,
@@ -22,30 +34,30 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
     }))
 
     for (const messageEvent of messageEvents) {
-      // @ts-ignore
-      const botEvent = await dataProvider.saveEvent({
-        ...messageEvent,
-        userId,
-        eventId: ulid(),
-        createdAt: new Date().toISOString(),
-        from: MessageEventFrom.BOT,
-        ack: MessageEventAck.SENT,
-      })
+      const botEvent = await dataProvider.saveEvent(
+        createMessageEvent({
+          user,
+          properties: {
+            ...messageEvent,
+            from: MessageEventFrom.BOT,
+            ack: MessageEventAck.SENT,
+          },
+        })
+      )
     }
 
-    await sqsPublisher?.publish({
-      userId,
-      createdAt: new Date().toISOString(),
-      eventId: ulid(),
-      eventType: EventTypes.BOT_EXECUTED,
-      details: {
-        input,
-        response: output.response,
-        messageEvents,
-        session: output.session,
-        botState: output.botState,
-      },
-    })
+    await sqsPublisher?.publish(
+      createIntegrationEvent(EventTypes.BOT_EXECUTED, {
+        user,
+        details: {
+          input,
+          response: output.response,
+          messageEvents,
+          session: output.session,
+          botState: output.botState,
+        },
+      })
+    )
 
     const updatedUser = {
       ...user,
@@ -56,27 +68,21 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
 
     const events = [
       ...messageEvents,
-      {
+      createWebchatActionEvent({
         action: 'update_bot_state',
-        botState: output.botState,
-        idFromChannel: user.idFromChannel,
-        channel: user.channel,
-      },
-      {
+        user,
+        properties: { botState: output.botState },
+      }),
+      createWebchatActionEvent({
         action: 'update_session',
-        session: output.session,
-        idFromChannel: user.idFromChannel,
-        channel: user.channel,
-      },
+        user,
+        properties: { session: output.session },
+      }),
     ]
 
-    await sqsPublisher?.publish({
-      userId,
-      createdAt: new Date().toISOString(),
-      eventId: ulid(),
-      eventType: EventTypes.BOT_ACTION,
-      details: events,
-    })
+    await sqsPublisher?.publish(
+      createIntegrationEvent(EventTypes.BOT_ACTION, { user, details: events })
+    )
 
     // post events to sender sqs
     await dispatchers.dispatch(Commands.SEND, {
@@ -86,23 +92,15 @@ const botExecutor = (bot, dataProvider, dispatchers) =>
   }
 
 export function botExecutorHandlerFactory(env, bot, dataProvider, dispatchers) {
-  if (env === Environments.LOCAL)
+  if (env === Environments.LOCAL) {
     return botExecutor(bot, dataProvider, dispatchers)
+  }
   if (env === Environments.AWS) {
     return async function (event, context) {
       try {
         const params = JSON.parse(event.Records[0].body)
-        const { userId } = params
-        await sqsPublisher?.publish({
-          userId,
-          createdAt: new Date().toISOString(),
-          eventId: ulid(),
-          eventType: EventTypes.RECEIVED_MESSAGE,
-          details: params.input,
-        })
         await botExecutor(bot, dataProvider, dispatchers)(params)
       } catch (e) {
-        // Bot Failed Event
         console.error(e)
         return {
           statusCode: 500,
