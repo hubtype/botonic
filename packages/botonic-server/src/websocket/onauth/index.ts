@@ -1,7 +1,11 @@
 import { ConnectionEventStatuses, EventTypes } from '@botonic/core'
 import { decode } from 'jsonwebtoken'
 
-import { createConnectionEvent, createIntegrationEvent } from '../../helpers'
+import {
+  createConnectionEvent,
+  createIntegrationEvent,
+  initChannelInformation,
+} from '../../helpers'
 import { sqsPublisher } from '../../notifying'
 
 const initialBotState = {
@@ -13,12 +17,10 @@ const initialBotState = {
   isShadowing: false,
 }
 
-const ID_FROM_CHANNEL = '1234'
-
 export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
   const { token } = JSON.parse(data)
   // @ts-ignore
-  const { userId, channel, idFromChannel } = decode(token)
+  const { userId, idFromChannel, channel } = decode(token)
   let user = await dataProvider.getUser(userId)
   if (!user) {
     const newUser = {
@@ -28,8 +30,7 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       botState: initialBotState,
       session: {},
       details: {}, // TODO: To be filled with geolocation info
-      channel,
-      idFromChannel: idFromChannel || ID_FROM_CHANNEL,
+      ...initChannelInformation({ idFromChannel, channel }),
     }
     user = await dataProvider.saveUser(newUser)
     await sqsPublisher?.publish(
