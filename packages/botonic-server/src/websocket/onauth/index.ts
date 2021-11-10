@@ -1,7 +1,7 @@
 import { ConnectionEventStatuses, EventTypes } from '@botonic/core'
 import { decode } from 'jsonwebtoken'
-import { ulid } from 'ulid'
 
+import { createConnectionEvent, createIntegrationEvent } from '../../helpers'
 import { sqsPublisher } from '../../notifying'
 
 const initialBotState = {
@@ -13,7 +13,6 @@ const initialBotState = {
   isShadowing: false,
 }
 
-// TODO: To be obtained from new row in DynamoDB table
 const ID_FROM_CHANNEL = '1234'
 
 export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
@@ -21,15 +20,6 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
   // @ts-ignore
   const { userId, channel, idFromChannel } = decode(token)
   let user = await dataProvider.getUser(userId)
-  await dataProvider.saveEvent({
-    eventType: EventTypes.CONNECTION,
-    userId,
-    channel,
-    idFromChannel: idFromChannel || ID_FROM_CHANNEL,
-    eventId: ulid(),
-    createdAt: new Date().toISOString(),
-    status: ConnectionEventStatuses.CONNECTED,
-  })
   if (!user) {
     const newUser = {
       id: userId,
@@ -42,13 +32,9 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       idFromChannel: idFromChannel || ID_FROM_CHANNEL,
     }
     user = await dataProvider.saveUser(newUser)
-    await sqsPublisher?.publish({
-      userId: user.id,
-      createdAt: new Date().toISOString(),
-      eventId: ulid(),
-      eventType: EventTypes.NEW_USER,
-      details: user,
-    })
+    await sqsPublisher?.publish(
+      createIntegrationEvent(EventTypes.NEW_USER, { user, details: user })
+    )
   } else {
     // UPDATE USER CONNECTION
     user = await dataProvider.updateUser({
@@ -56,4 +42,7 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       websocketId,
     })
   }
+  await dataProvider.saveEvent(
+    createConnectionEvent({ user, status: ConnectionEventStatuses.CONNECTED })
+  )
 }

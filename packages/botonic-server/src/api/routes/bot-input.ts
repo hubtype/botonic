@@ -11,6 +11,7 @@ import { ulid } from 'ulid'
 import { v4 } from 'uuid'
 
 import { dataProviderFactory } from '../../data-provider'
+import { createMessageEvent } from '../../helpers'
 
 const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
@@ -34,25 +35,31 @@ export default function botInputRouter(args: any): Router {
     const parsedUserEvent = botonicOutputParser.parseFromUserInput(
       req.body.input
     )
-    await dataProvider.saveEvent({
-      ...parsedUserEvent,
-      userId: user.id,
-      eventId: ulid(),
-      createdAt: new Date().toISOString(),
-      from: MessageEventFrom.USER,
-      ack: MessageEventAck.SENT,
-    } as BotonicEvent)
+
+    await dataProvider.saveEvent(
+      createMessageEvent({
+        user,
+        properties: {
+          ...parsedUserEvent,
+          from: MessageEventFrom.USER,
+          ack: MessageEventAck.SENT,
+        },
+      })
+    )
 
     const { messageEvents } = output
+
     for (const messageEvent of messageEvents) {
-      await dataProvider.saveEvent({
-        ...messageEvent,
-        userId: user.id,
-        eventId: ulid(),
-        createdAt: new Date().toISOString(),
-        from: MessageEventFrom.BOT,
-        ack: MessageEventAck.SENT,
-      })
+      await dataProvider.saveEvent(
+        createMessageEvent({
+          user,
+          properties: {
+            ...messageEvent,
+            from: MessageEventFrom.BOT,
+            ack: MessageEventAck.SENT,
+          },
+        })
+      )
     }
     res.json(output)
   })
