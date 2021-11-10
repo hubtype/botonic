@@ -1,6 +1,6 @@
 import { BaseEvent, EventTypes } from '../base-event'
 
-type IntegrationEventType =
+export type IntegrationEventType =
   | EventTypes.NEW_USER
   | EventTypes.RECEIVED_MESSAGE
   | EventTypes.BOT_EXECUTED

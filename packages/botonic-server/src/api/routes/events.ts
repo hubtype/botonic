@@ -7,6 +7,7 @@ import { ulid } from 'ulid'
 
 import { dataProviderFactory } from '../../data-provider'
 import { Commands } from '../../dispatchers'
+import { createMessageEvent, createWebchatActionEvent } from '../../helpers'
 import { Paginator } from '../utils/paginator'
 import { SIGNATURE_ALGORITHM } from './auth'
 import { pageParamSchema, pageSizeParamSchema } from './validation/common'
@@ -91,16 +92,10 @@ export default function eventsRouter(args: any): Router {
           const updatedUser = { ...user, ...sender }
           user = await dataProvider.updateUser(updatedUser)
           const parsedUserEvent = botonicOutputParser.inputToBotonicEvent(input)
-          const receivedUserEvent = {
-            ...parsedUserEvent,
-            userId,
-            eventId: ulid(),
-            idFromChannel: user.idFromChannel,
-            channel: user.channel,
-            createdAt: new Date().toISOString(),
-            ack: MessageEventAck.RECEIVED,
-          }
-          // @ts-ignore
+          const receivedUserEvent = createMessageEvent({
+            user,
+            properties: { ...parsedUserEvent, ack: MessageEventAck.RECEIVED },
+          })
           const userEvent = await dataProvider.saveEvent(receivedUserEvent)
           // TODO: Only update ack for webchat
           // TODO: Specific logic for webchat, move to webchat-events?
@@ -108,13 +103,11 @@ export default function eventsRouter(args: any): Router {
           await dispatchers.dispatch(Commands.SEND, {
             userId,
             events: [
-              {
+              createWebchatActionEvent({
                 action: 'update_message_info',
-                id: webchatMsgId,
-                ack: MessageEventAck.SENT,
-                idFromChannel: user.idFromChannel,
-                channel: user.channel,
-              },
+                user,
+                properties: { id: webchatMsgId, ack: MessageEventAck.SENT },
+              }),
             ],
           })
           await dispatchers.dispatch(Commands.EXECUTE_BOT, {
