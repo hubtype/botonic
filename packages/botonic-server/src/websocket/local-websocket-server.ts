@@ -28,13 +28,14 @@ export const localWebSocketServer = ({
     connections[ws.id] = ws
     onConnect(ws.id)
     ws.on('message', function (data) {
+      const websocketId = ws.id
       doAuth({
-        websocketId: ws.id,
+        websocketId,
         data,
         send: message => ws.send(JSON.stringify(message)),
         dataProvider,
       })
-      onAuth()
+      onAuth({ websocketId })
     })
     ws.on('close', () => {
       doDisconnect(ws.id, dataProvider)

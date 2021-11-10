@@ -1,18 +1,18 @@
-import { ConnectionEventStatuses, EventTypes } from '@botonic/core'
-import { ulid } from 'ulid'
+import { ConnectionEventStatuses } from '@botonic/core'
+
+import { createConnectionEvent } from '../../helpers'
 
 export const doDisconnect = async (websocketId, dataProvider) => {
   try {
     const user = await dataProvider.getUserByWebsocketId(websocketId)
     if (!user) throw new Error('User not found')
     await dataProvider.updateUser({ ...user, isOnline: false, websocketId: '' })
-    await dataProvider.saveEvent({
-      eventType: EventTypes.CONNECTION,
-      userId: user.id,
-      eventId: ulid(),
-      createdAt: new Date().toISOString(),
-      status: ConnectionEventStatuses.DISCONNECTED,
-    })
+    await dataProvider.saveEvent(
+      createConnectionEvent({
+        user,
+        status: ConnectionEventStatuses.DISCONNECTED,
+      })
+    )
   } catch (e) {
     console.log({ e })
   }

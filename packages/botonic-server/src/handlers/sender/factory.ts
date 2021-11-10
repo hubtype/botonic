@@ -3,6 +3,7 @@ import { ulid } from 'ulid'
 
 import { sqsPublisher } from '../..'
 import { Environments } from '../../constants'
+import { createIntegrationEvent } from '../../helpers'
 import { awsSender } from './aws-sender'
 import { localSender } from './local-sender'
 
@@ -23,13 +24,12 @@ export function senderHandlerFactory(env, dataProvider) {
         const user = await dataProvider.getUser(userId)
         for (const event of events) {
           await awsSender({ event, websocketId: user.websocketId })
-          await sqsPublisher?.publish({
-            userId,
-            createdAt: new Date().toISOString(),
-            eventId: ulid(),
-            eventType: EventTypes.ACTION_SENT,
-            details: event,
-          })
+          await sqsPublisher?.publish(
+            createIntegrationEvent(EventTypes.ACTION_SENT, {
+              user,
+              details: event,
+            })
+          )
         }
       } catch (e) {
         console.error(e)

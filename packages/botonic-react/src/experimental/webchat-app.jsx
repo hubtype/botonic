@@ -147,9 +147,9 @@ export class WebchatApp {
     } else if (action === 'update_user') {
       this.updateUser(eventData)
     } else if (action === 'update_session') {
-      this.updateSession(eventData)
+      this.updateSession(eventData.session)
     } else if (action === 'update_bot_state') {
-      this.updateBotState(eventData)
+      this.updateBotState(eventData.botState)
     }
     // TODO: Discuss how this updates  to be done
     else if (eventData.type === 'update_webchat_settings')
