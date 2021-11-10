@@ -4,8 +4,6 @@ import {
   BotonicMessageEvent,
   ConnectionEventStatuses,
   EventTypes,
-  MessageEventAck,
-  MessageEventFrom,
   User,
 } from '@botonic/core'
 import { ulid } from 'ulid'
@@ -13,14 +11,24 @@ import { ulid } from 'ulid'
 // TODO: To be obtained from new row in DynamoDB table
 export const ID_FROM_CHANNEL = '1234'
 
+export function initChannelInformation({
+  idFromChannel,
+  channel,
+}: {
+  idFromChannel: string
+  channel: string
+}) {
+  return { idFromChannel: idFromChannel || ID_FROM_CHANNEL, channel }
+}
+
 export function initBaseEvent(user: User, eventType: EventTypes): BaseEvent {
+  const { idFromChannel, channel } = user
   return {
     userId: user.id,
     eventId: ulid(),
     createdAt: new Date().toISOString(),
-    idFromChannel: user.idFromChannel || ID_FROM_CHANNEL,
-    channel: user.channel,
     eventType,
+    ...initChannelInformation({ idFromChannel, channel }),
   }
 }
 
@@ -56,18 +64,14 @@ export function createIntegrationEvent(
   return { ...initBaseEvent(user, eventType), details } as BotonicEvent
 }
 
-function initChannelInformation(user: User) {
-  const { idFromChannel, channel } = user
-  return { idFromChannel, channel }
-}
-
 // TODO: Validate how to define these kind of events
 // We need channel information in these events to distinguish in which cases it should be executed
 type WebchatActionEventArgs = { user: User; action: string; properties: any }
 export function createWebchatActionEvent(args: WebchatActionEventArgs): any {
   const { user, properties, action } = args
+  const { idFromChannel, channel } = user
   return {
-    ...initChannelInformation(user),
+    ...initChannelInformation({ idFromChannel, channel }),
     ...properties,
     action,
   } as BotonicEvent
