@@ -46,9 +46,8 @@ export class CarouselDelivery extends ContentDelivery {
     if (elements.length === 0) {
       return []
     }
-    if (context) this.getContextContent(elements[0].item[mf], context)
-    return elements.map((item: any) => {
-      return this.fromEntryElement(item.item[mf][0], context)
+    return elements.map((element: any) => {
+      return this.fromEntryElement(element.item, context)
     })
   }
 
@@ -56,17 +55,20 @@ export class CarouselDelivery extends ContentDelivery {
     entry: PartialItem<any>,
     context?: SupportedLocales
   ): Element {
+    if (context) entry[mf] = this.getContextContent(entry[mf], context)
     const opt = {
       common: {
-        id: entry.element_id,
+        id: entry.id,
         name: entry.name ?? '',
       },
-      title: entry.title ?? '',
-      subtitle: entry.subtitle ?? '',
-      imgUrl: entry.image
-        ? `${this.client.clientParams.credentials.apiEndPoint}assets/${entry.image}`
+      title: entry[mf][0].title ?? '',
+      subtitle: entry[mf][0].subtitle ?? '',
+      imgUrl: entry[mf][0].image
+        ? `${this.client.clientParams.credentials.apiEndPoint}assets/${entry[mf][0].image}`
         : '',
-      buttons: entry.buttons ? this.createButtons(entry.buttons, context) : [],
+      buttons: entry[mf][0].buttons
+        ? this.createButtons(entry[mf][0].buttons, context)
+        : [],
     }
     return new Element(opt)
   }
@@ -86,11 +88,10 @@ export class CarouselDelivery extends ContentDelivery {
   private getContextContent(
     entry: PartialItem<any>,
     context: SupportedLocales
-  ): void {
-    entry.map((content: PartialItem<any>, i: number) => {
-      if (content.languages_code != context) {
-        entry.splice(i, 1)
-      }
-    })
+  ): PartialItem<any> {
+    const localeContent = entry.find(
+      (content: PartialItem<any>) => content.languages_code === context
+    )
+    return [localeContent]
   }
 }

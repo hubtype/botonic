@@ -24,7 +24,7 @@ export class ButtonDelivery extends ContentDelivery {
     contentType: ContentType,
     context?: SupportedLocales
   ): Button {
-    if (context) this.getContextContent(entry[mf], context)
+    if (context) entry[mf] = this.getContextContent(entry[mf], context)
     const opt = {
       common: {
         id: entry.id,
@@ -77,11 +77,10 @@ export class ButtonDelivery extends ContentDelivery {
   private getContextContent(
     entry: PartialItem<any>,
     context: SupportedLocales
-  ): void {
-    entry.map((content: PartialItem<any>, i: number) => {
-      if (content.languages_code != context) {
-        entry.splice(i, 1)
-      }
-    })
+  ): PartialItem<any> {
+    const localeContent = entry.find(
+      (content: PartialItem<any>) => content.languages_code === context
+    )
+    return [localeContent]
   }
 }

@@ -1,7 +1,12 @@
 //import { ContentType } from '../../../src/cms'
-import { SupportedLocales } from '../../../src/cms'
+//import { SupportedLocales } from '../../../src/cms'
 //import { /*ContentId,*/ ContentType } from '../../../src/cms'
-import { /*testContext,*/ testDirectus } from '../helpers/directus.helper'
+import { ContentId, ContentType } from '../../../src/cms'
+import { testContext, testDirectus } from '../helpers/directus.helper'
+import {
+  deleteContents,
+  generateRandomUUID,
+} from '../manage/helpers/utils.helper'
 
 //const MULTI_LANGUAGE_TEXT_ID = 'ee791f5c-f90a-49af-b75e-f6aac779b902'
 // const MULTI_LANGUAGE_CAROUSEL_ID = '874d9221-339b-48bc-b203-8217c9f2e8be'
@@ -83,20 +88,40 @@ import { /*testContext,*/ testDirectus } from '../helpers/directus.helper'
 //   console.log({ carousel })
 // })
 
-// test('Test: update content in locale', async () => {
-//   const directus = testDirectus()
-//   const textId = 'd263b703-4941-4dcd-bf1d-e6b6127b89b6'
-//   const buttonId = 'ea63b9a8-6893-444b-90cf-191348e8e5ef'
-//   await directus.updateTextFields(testContext(), textId, {
-//     text: 'ieieieieieieie12345678',
-//     buttons: [buttonId],
-//   })
-
-//   const text = await directus.text(textId, testContext())
-//   console.log({ text })
-// })
-
-test('Test: remove locale', async () => {
+test('Test: update content in locale', async () => {
   const directus = testDirectus()
-  await directus.removeLocale(SupportedLocales.FRENCH)
+  const newTextId = generateRandomUUID()
+  await directus.createContent(new ContentId(ContentType.TEXT, newTextId))
+  const newButtonId = generateRandomUUID()
+  await directus.createContent(new ContentId(ContentType.BUTTON, newButtonId))
+  const newTargetId = generateRandomUUID()
+  await directus.createContent(new ContentId(ContentType.TEXT, newTargetId))
+  const ContentTypePerId: Record<string, ContentType> = {
+    [newButtonId]: ContentType.BUTTON,
+    [newTargetId]: ContentType.TEXT,
+    [newTextId]: ContentType.TEXT,
+  }
+  await directus.updateTextFields(testContext(), newTextId, {
+    name: 'lombriz',
+    text: 'piupiu',
+    buttons: [newButtonId],
+  })
+  await directus.updateButtonFields(testContext(), newButtonId, {
+    text: 'uipuip',
+    target: new ContentId(ContentType.TEXT, newTargetId),
+  })
+
+  await directus.updateTextFields(testContext(), newTargetId, {
+    text: 'iepiep',
+  })
+
+  const text = await directus.text(newTextId, testContext())
+  await deleteContents(ContentTypePerId)
+
+  console.log({ text })
 })
+
+// test('Test: remove locale', async () => {
+//   const directus = testDirectus()
+//   await directus.removeLocale(SupportedLocales.FRENCH)
+// })
