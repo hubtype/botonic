@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const Content = styled.div`
+export const ModalContent = styled.div`
   position: relative;
   padding: 4px;
   box-sizing: border-box;

@@ -211,6 +211,14 @@ export class WebchatApp {
     this.webchatRef.current.closeCoverComponent()
   }
 
+  openModal(customModalContent) {
+    this.webchatRef.current.openModal(customModalContent)
+  }
+
+  closeModal() {
+    this.webchatRef.current.closeModal()
+  }
+
   toggleCoverComponent() {
     this.webchatRef.current.toggleCoverComponent()
   }

@@ -6,19 +6,25 @@ import {
   MODAL_CONTENT_CLASSNAME,
   MODAL_PORTAL_CLASS_NAME,
 } from './constants'
-import { Content } from './content'
+import { ModalContent } from './content'
 import { Portal } from './portal'
 
 const ESCAPE_KEY_CODE = 27
 
-export function PortalModalComponent({ opened, onClose, locked, children }) {
+export function PortalModalComponent({
+  open,
+  onClose,
+  locked,
+  children,
+  customContent,
+}) {
   const [active, setActive] = useState(false)
 
   const backdrop = useRef(null)
 
   useEffect(() => {
     const { current } = backdrop
-    const transitionEnd = () => setActive(opened)
+    const transitionEnd = () => setActive(open)
     const keyHandler = e =>
       !locked && [ESCAPE_KEY_CODE].indexOf(e.which) >= 0 && onClose()
     const clickHandler = e => !locked && e.target === current && onClose()
@@ -29,10 +35,10 @@ export function PortalModalComponent({ opened, onClose, locked, children }) {
       window.addEventListener('keyup', keyHandler)
     }
 
-    if (opened) {
+    if (open) {
       window.setTimeout(() => {
         document.activeElement.blur()
-        setActive(opened)
+        setActive(open)
       }, 10)
     }
 
@@ -43,16 +49,22 @@ export function PortalModalComponent({ opened, onClose, locked, children }) {
       }
       window.removeEventListener('keyup', keyHandler)
     }
-  }, [opened, locked, onClose])
+  }, [open, locked, onClose])
 
   return (
-    (opened || active) && (
+    (open || active) && (
       <Portal className={MODAL_PORTAL_CLASS_NAME}>
         <Backdrop
           ref={backdrop}
-          className={active && opened && MODAL_ACTIVE_CLASSNAME}
+          className={active && open && MODAL_ACTIVE_CLASSNAME}
         >
-          <Content className={MODAL_CONTENT_CLASSNAME}>{children}</Content>
+          {customContent ? (
+            customContent
+          ) : (
+            <ModalContent className={MODAL_CONTENT_CLASSNAME}>
+              {children}
+            </ModalContent>
+          )}
         </Backdrop>
       </Portal>
     )

@@ -11,7 +11,7 @@ const StyledImage = styled.img`
   max-width: 150px;
   max-height: 150px;
   margin: -3px -6px;
-  cursor: ${props => (props.isHovered ? 'zoom-in' : 'none')};
+  cursor: ${props => (props.isHovered ? 'pointer' : 'none')};
 `
 
 const StyledPreviewImage = styled.img`
@@ -26,7 +26,7 @@ const serialize = imageProps => {
 
 export const Image = props => {
   const [isHovered, setIsHovered] = useState(false)
-  const [isModalOpened, setIsModalOpened] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   let content = props.children
 
@@ -38,12 +38,12 @@ export const Image = props => {
           isHovered={isHovered}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={() => setIsModalOpened(true)}
+          onClick={() => setIsModalOpen(true)}
         />
-        {isModalOpened && (
+        {isModalOpen && (
           <PortalModalComponent
-            opened={isModalOpened}
-            onClose={() => setIsModalOpened(false)}
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
             locked={false}
           >
             <StyledPreviewImage src={props.src} />

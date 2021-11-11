@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
+  useState,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import styled, { StyleSheetManager } from 'styled-components'
@@ -46,6 +47,7 @@ import {
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
+import { PortalModalComponent } from '../webchat/components/portal-modal'
 import { Attachment } from './components/attachment'
 import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
 import {
@@ -183,6 +185,7 @@ export const Webchat = forwardRef((props, ref) => {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleCoverComponent,
+    toggleModal,
     setError,
     setOnline,
     clearMessages,
@@ -198,6 +201,8 @@ export const Webchat = forwardRef((props, ref) => {
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
+
+  const [customModalContent, setCustomModalContent] = useState(undefined)
 
   const storage = props.storage === undefined ? localStorage : props.storage
   const storageKey =
@@ -559,6 +564,11 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
     openCoverComponent: () => toggleCoverComponent(true),
     closeCoverComponent: () => toggleCoverComponent(false),
+    openModal: customModalContent => {
+      setCustomModalContent(customModalContent)
+      toggleModal(true)
+    },
+    closeModal: () => toggleModal(false),
     toggleCoverComponent: () =>
       toggleCoverComponent(!webchatState.isCoverComponentOpen),
     openWebviewApi: component => openWebviewT(component),
@@ -948,6 +958,14 @@ export const Webchat = forwardRef((props, ref) => {
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
           {webchatState.isCoverComponentOpen && coverComponent()}
+          {webchatState.isModalOpen && (
+            <PortalModalComponent
+              open={webchatState.isModalOpen}
+              onClose={() => toggleModal(false)}
+              locked={false}
+              customContent={customModalContent}
+            />
+          )}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>
