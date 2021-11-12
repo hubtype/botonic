@@ -1,4 +1,4 @@
-import { PROVIDER } from '@botonic/core'
+import { Channels } from '@botonic/core'
 import merge from 'lodash.merge'
 import UAParser from 'ua-parser-js'
 import { v4 as uuidv4 } from 'uuid'
@@ -37,7 +37,7 @@ export const createUser = () => {
   return {
     id: uuidv4(),
     name,
-    channel: isDev ? PROVIDER.DEV : PROVIDER.WEBCHAT,
+    channel: isDev ? Channels.DEV : Channels.WEBCHAT,
   }
 }
 
