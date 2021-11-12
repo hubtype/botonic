@@ -1,5 +1,5 @@
 import { Environments } from '../constants'
-import { WebSocketServer } from './aws-websocket-server'
+import { AWSWebsocketServer } from './aws-websocket-server'
 import { localWebSocketServer } from './local-websocket-server'
 
 export const websocketServerFactory = ({
@@ -17,7 +17,7 @@ export const websocketServerFactory = ({
       dataProvider,
     })
   } else if (env === Environments.AWS) {
-    return WebSocketServer({
+    return AWSWebsocketServer({
       onConnect,
       onAuth,
       onDisconnect,
