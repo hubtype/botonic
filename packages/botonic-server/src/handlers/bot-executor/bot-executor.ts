@@ -1,4 +1,4 @@
-import { MessageEventAck, MessageEventFrom } from '@botonic/core'
+import { Channels, MessageEventAck, MessageEventFrom } from '@botonic/core'
 
 import { Commands } from '../../dispatchers'
 import {
@@ -49,25 +49,10 @@ export async function executeBot({ bot, user, input, dataProvider }) {
   return output
 }
 
-async function sendActions({ output, user, eventHandlers, dispatchers }) {
-  const actions = [
-    ...output.messageEvents,
-    createWebchatActionEvent({
-      action: 'update_bot_state',
-      user,
-      properties: { botState: output.botState },
-    }),
-    createWebchatActionEvent({
-      action: 'update_session',
-      user,
-      properties: { session: output.session },
-    }),
-  ]
-
+async function sendActions({ actions, user, eventHandlers, dispatchers }) {
   if ('onBotAction' in eventHandlers) {
     await eventHandlers.onBotAction({ user, details: actions })
   }
-
   await dispatchers.dispatch(Commands.SEND, {
     userId: user.id,
     events: actions,
@@ -95,5 +80,28 @@ export const botExecutor = (
     await eventHandlers.onBotExecuted({ user, details: input })
   }
 
-  await sendActions({ output, user, eventHandlers, dispatchers })
+  const actions = output.messageEvents
+
+  // TOOD: in Webchat/Dev we additionally want to update the client app
+  if ([Channels.DEV, Channels.WEBCHAT].includes(user.channel)) {
+    actions.push(
+      createWebchatActionEvent({
+        action: 'update_bot_state',
+        user,
+        properties: { botState: output.botState },
+      }),
+      createWebchatActionEvent({
+        action: 'update_session',
+        user,
+        properties: { session: output.session },
+      })
+    )
+  }
+
+  await sendActions({
+    actions,
+    user,
+    eventHandlers,
+    dispatchers,
+  })
 }
