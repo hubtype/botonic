@@ -1,5 +1,4 @@
 import {
-  BotonicEvent,
   BotonicOutputParser,
   MessageEventAck,
   MessageEventFrom,
@@ -7,7 +6,6 @@ import {
   User,
 } from '@botonic/core'
 import { Request, Router } from 'express'
-import { ulid } from 'ulid'
 import { v4 } from 'uuid'
 
 import { dataProviderFactory } from '../../data-provider'
