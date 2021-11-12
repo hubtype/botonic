@@ -1,9 +1,14 @@
 import { ApiGatewayManagementApi } from 'aws-sdk'
 
+import { publishNewUser } from '../notifying'
 import { doAuth } from './onauth'
 import { doDisconnect } from './ondisconnect'
 
-export const WebSocketServer = ({
+const eventHandlers = {
+  onNewUser: publishNewUser,
+}
+
+export const AWSWebsocketServer = ({
   onConnect,
   onAuth,
   onDisconnect,
@@ -49,6 +54,7 @@ export const WebSocketServer = ({
           }
         },
         dataProvider,
+        eventHandlers,
       })
       await onAuth({ websocketId })
       return { statusCode: 200, body: 'Data sent.' }
