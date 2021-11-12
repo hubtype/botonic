@@ -204,6 +204,8 @@ export class WebchatApp {
   updateLastMessageDate(date: string): void
   updateUser(user: core.SessionUser): void
   updateWebchatSettings(settings: WebchatSettingsProps): void
+  openModal(customContent: React.ReactNode): void
+  closeModal(): void
 }
 
 export interface WebchatContextProps {
