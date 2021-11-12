@@ -2,8 +2,8 @@ import {
   publishBotAction,
   publishBotExecuted,
   publishReceivedMessage,
-} from '../../notifying'
-import { botExecutor } from './bot-executor'
+} from '../../../notifying'
+import { botExecutor } from '../bot-executor'
 
 const eventHandlers = {
   onReceivedMessage: publishReceivedMessage,
