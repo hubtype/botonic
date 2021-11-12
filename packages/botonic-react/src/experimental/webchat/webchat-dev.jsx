@@ -1,4 +1,4 @@
-import { PROVIDER } from '@botonic/core'
+import { Channels } from '@botonic/core'
 import merge from 'lodash.merge'
 import QRCode from 'qrcode.react'
 import React, { forwardRef, useEffect, useState } from 'react'
@@ -345,7 +345,7 @@ const initialUser = {
   id: '000001',
   name: 'John Doe',
   username: 'johndoe',
-  channel: PROVIDER.DEV,
+  channel: Channels.DEV,
   idFromChannel: '0000000',
   details: {},
 }
