@@ -3,7 +3,6 @@ import { BotonicOutputParser } from '@botonic/core'
 import { Router } from 'express'
 import jwt from 'express-jwt'
 import { checkSchema, matchedData, validationResult } from 'express-validator'
-import { ulid } from 'ulid'
 
 import { dataProviderFactory } from '../../data-provider'
 import { Commands } from '../../dispatchers'
