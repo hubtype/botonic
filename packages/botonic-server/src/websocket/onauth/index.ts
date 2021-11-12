@@ -1,12 +1,8 @@
-import { ConnectionEventStatuses, EventTypes } from '@botonic/core'
+import { ConnectionEventStatuses } from '@botonic/core'
 import { decode } from 'jsonwebtoken'
 
-import {
-  createConnectionEvent,
-  createIntegrationEvent,
-  initChannelInformation,
-} from '../../helpers'
-import { sqsPublisher } from '../../notifying'
+import { createConnectionEvent, initChannelInformation } from '../../helpers'
+import { publishNewUser } from '../../notifying'
 
 const initialBotState = {
   botId: '1234',
@@ -33,9 +29,7 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       ...initChannelInformation({ idFromChannel, channel }),
     }
     user = await dataProvider.saveUser(newUser)
-    await sqsPublisher?.publish(
-      createIntegrationEvent(EventTypes.NEW_USER, { user, details: user })
-    )
+    await publishNewUser({ user, details: user })
   } else {
     // UPDATE USER CONNECTION
     user = await dataProvider.updateUser({
