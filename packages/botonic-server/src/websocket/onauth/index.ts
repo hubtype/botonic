@@ -2,7 +2,6 @@ import { ConnectionEventStatuses } from '@botonic/core'
 import { decode } from 'jsonwebtoken'
 
 import { createConnectionEvent, initChannelInformation } from '../../helpers'
-import { publishNewUser } from '../../notifying'
 
 const initialBotState = {
   botId: '1234',
@@ -13,7 +12,13 @@ const initialBotState = {
   isShadowing: false,
 }
 
-export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
+export const doAuth = async ({
+  websocketId,
+  data,
+  send,
+  dataProvider,
+  eventHandlers = {},
+}) => {
   const { token } = JSON.parse(data)
   // @ts-ignore
   const { userId, idFromChannel, channel } = decode(token)
@@ -29,7 +34,10 @@ export const doAuth = async ({ websocketId, data, send, dataProvider }) => {
       ...initChannelInformation({ idFromChannel, channel }),
     }
     user = await dataProvider.saveUser(newUser)
-    await publishNewUser({ user, details: user })
+    if ('onNewUser' in eventHandlers) {
+      // @ts-ignore
+      await eventHandlers.onNewUser({ user, details: user })
+    }
   } else {
     // UPDATE USER CONNECTION
     user = await dataProvider.updateUser({

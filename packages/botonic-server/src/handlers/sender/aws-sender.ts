@@ -8,10 +8,10 @@ const apiGwManagementApi = new ApiGatewayManagementApi({
 })
 
 // TODO: Rename to webchatSender
-export async function awsSender({ event, websocketId }) {
+export async function awsSender({ user, event }) {
   await apiGwManagementApi
     .postToConnection({
-      ConnectionId: websocketId,
+      ConnectionId: user.websocketId,
       Data: JSON.stringify(event),
     })
     .promise()
