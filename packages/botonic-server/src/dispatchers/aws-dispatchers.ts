@@ -11,14 +11,10 @@ export class AWSDispatchers {
     })
   }
   async dispatch(handlerName, params) {
-    try {
-      const messageRequest = buildSendMessageRequestForQueue(
-        params,
-        process.env[`${handlerName}_QUEUE_URL`]
-      )
-      await this.sqs.sendMessage(messageRequest).promise()
-    } catch (e) {
-      console.log({ e })
-    }
+    const messageRequest = buildSendMessageRequestForQueue(
+      params,
+      process.env[`${handlerName}_QUEUE_URL`]
+    )
+    await this.sqs.sendMessage(messageRequest).promise()
   }
 }
