@@ -148,23 +148,20 @@ export class CoreBot {
       request,
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
-    let messageEvents: Partial<BotonicEvent>[] = []
-    try {
-      messageEvents = this.botonicOutputParser.xmlToMessageEvents(response)
-    } catch (e) {
-      // Disabling Botonic 1.0 error log for LTS version:
-      // console.error(e)
-    }
 
-    botState.lastRoutePath = output.botState.lastRoutePath
+    const messageEvents: Partial<BotonicEvent>[] = this.botonicOutputParser.xmlToMessageEvents(
+      response
+    )
+
+    botState.lastRoutePath = output.botState.lastRoutePath // not needed if updated below
 
     if (this.plugins) {
       await runPlugins(
         this.plugins,
         'post',
         input,
-        session,
-        botState,
+        session, // passing output.session instead
+        botState, // passing output.botState instead
         response,
         messageEvents,
         dataProvider
@@ -174,12 +171,12 @@ export class CoreBot {
     botState.isFirstInteraction = false
 
     return {
-      input,
-      response,
-      messageEvents,
-      session,
-      botState,
-      dataProvider,
+      input, // Delete
+      response, // xml/rendered react for actions (not needed)
+      messageEvents, // xml to Botonic Events
+      session, // to be output.session
+      botState, // to be output.botState
+      dataProvider, // no need to return it
     }
   }
 }
