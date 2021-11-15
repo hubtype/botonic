@@ -19,6 +19,7 @@ export async function executeBot({ bot, user, input, dataProvider }) {
    * TODO: Adding channel information once the input has been processed (rethink this?)
    * Right now, modifying bot output to inject the channel information. (beware side effects)
    */
+  // Function to append channel information metadata
   const messageEvents = output.messageEvents.map(messageEvent => ({
     ...messageEvent,
     ...initChannelInformation({
@@ -35,7 +36,7 @@ export async function executeBot({ bot, user, input, dataProvider }) {
         properties: {
           ...messageEvent,
           from: MessageEventFrom.BOT,
-          ack: MessageEventAck.SENT,
+          ack: MessageEventAck.SENT, // to be updated within sender. Should be save without ack or with received
         },
       })
     )
@@ -50,13 +51,22 @@ export async function executeBot({ bot, user, input, dataProvider }) {
 }
 
 async function sendActions({ actions, user, eventHandlers, dispatchers }) {
-  if ('onBotAction' in eventHandlers) {
-    await eventHandlers.onBotAction({ user, details: actions })
+  try {
+    await dispatchers.dispatch(Commands.SEND, {
+      userId: user.id,
+      events: actions,
+    })
+    if ('onBotAction' in eventHandlers) {
+      await eventHandlers.onBotAction({ user, details: actions })
+    }
+    // // Save ACK sent
+  } catch (e) {
+    // if ('onBotActionFailed' in eventHandlers) {
+    //   await eventHandlers.onBotAction({ user, details: actions })
+    // }
+    // throw e
+    // // Save ACK failed?
   }
-  await dispatchers.dispatch(Commands.SEND, {
-    userId: user.id,
-    events: actions,
-  })
 }
 
 export const botExecutor = (
@@ -68,6 +78,7 @@ export const botExecutor = (
   const user = await dataProvider.getUser(userId)
 
   if ('onReceivedMessage' in eventHandlers) {
+    // Append TRACE_ID to group events of the same group
     await eventHandlers.onReceivedMessage({ user, details: input })
   }
 
@@ -77,7 +88,7 @@ export const botExecutor = (
   delete output.dataProvider
 
   if ('onBotExecuted' in eventHandlers) {
-    await eventHandlers.onBotExecuted({ user, details: input })
+    await eventHandlers.onBotExecuted({ user, details: output })
   }
 
   const actions = output.messageEvents
