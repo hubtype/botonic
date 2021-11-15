@@ -5,6 +5,9 @@ import {
 } from '../../../notifying'
 import { botExecutor } from '../bot-executor'
 
+// Factory to get eventHandlers
+// eventHandlers | eventPublishers | eventNotifiers
+
 const eventHandlers = {
   onReceivedMessage: publishReceivedMessage,
   onBotExecuted: publishBotExecuted,
