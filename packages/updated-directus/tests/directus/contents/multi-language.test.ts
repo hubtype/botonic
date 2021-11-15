@@ -117,7 +117,11 @@ test('Test: update content in locale', async () => {
 
   const text = await directus.text(newTextId, testContext())
   await deleteContents(ContentTypePerId)
-
+  const carousel = await directus.carousel(
+    '9abfba0c-0769-4f02-8960-5f284e7f5a06',
+    testContext()
+  )
+  console.log({ carousel })
   console.log({ text })
 })
 
