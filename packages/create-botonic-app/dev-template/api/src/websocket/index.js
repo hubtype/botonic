@@ -1,8 +1,10 @@
-import { websocketServerFactory } from '@botonic/api/src/websocket'
+import { dataProviderFactory, websocketServerFactory } from '@botonic/server'
 
 import { onAuth } from './onauth'
 import { onConnect } from './onconnect'
 import { onDisconnect } from './ondisconnect'
+
+const dataProvider = dataProviderFactory(process.env.DATA_PROVIDER_URL)
 
 export default websocketServerFactory({
   // eslint-disable-next-line no-undef
@@ -10,4 +12,5 @@ export default websocketServerFactory({
   onConnect,
   onAuth,
   onDisconnect,
+  dataProvider,
 })

@@ -1,5 +1,3 @@
-import { ulid } from 'ulid'
-
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
@@ -8,8 +6,6 @@ import {
   BotResponse,
   BotState,
   Locales,
-  MessageEventAck,
-  MessageEventFrom,
   Route,
   Routes,
   Session,
@@ -101,23 +97,6 @@ export class CoreBot {
     dataProvider,
   }: BotRequest): Promise<BotResponse> {
     if (!botState.locale) botState.locale = 'en'
-    // @ts-ignore
-    const userId = input.userId
-
-    const parsedUserEvent = this.botonicOutputParser.inputToBotonicEvent(input)
-
-    if (dataProvider) {
-      // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
-      // @ts-ignore
-      const userEvent = await dataProvider.saveEvent({
-        ...parsedUserEvent,
-        userId,
-        eventId: ulid(),
-        createdAt: new Date().toISOString(),
-        from: MessageEventFrom.USER,
-        ack: MessageEventAck.RECEIVED,
-      })
-    }
 
     if (this.plugins) {
       await runPlugins(
@@ -169,64 +148,35 @@ export class CoreBot {
       request,
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
-    let messageEvents: Partial<BotonicEvent>[] = []
-    try {
-      messageEvents = this.botonicOutputParser.xmlToMessageEvents(response)
-    } catch (e) {
-      // Disabling Botonic 1.0 error log for LTS version:
-      // console.error(e)
-    }
 
-    botState.lastRoutePath = output.botState.lastRoutePath
+    const messageEvents: Partial<BotonicEvent>[] = this.botonicOutputParser.xmlToMessageEvents(
+      response
+    )
+
+    botState.lastRoutePath = output.botState.lastRoutePath // not needed if updated below
 
     if (this.plugins) {
       await runPlugins(
         this.plugins,
         'post',
         input,
-        session,
-        botState,
+        session, // passing output.session instead
+        botState, // passing output.botState instead
         response,
         messageEvents,
         dataProvider
       )
     }
 
-    if (dataProvider) {
-      // TODO: save bot responses to db and update user with new session and new params
-      for (const messageEvent of messageEvents) {
-        // @ts-ignore
-        const botEvent = await dataProvider.saveEvent({
-          ...messageEvent,
-          userId,
-          eventId: ulid(),
-          createdAt: new Date().toISOString(),
-          from: MessageEventFrom.BOT,
-          ack: MessageEventAck.SENT,
-        })
-      }
-    }
-
     botState.isFirstInteraction = false
 
-    if (dataProvider) {
-      const user = await dataProvider.getUser(userId)
-      if (!user) {
-        // throw error
-      } else {
-        const updatedUser = { ...user, session, botState }
-        // @ts-ignore
-        await dataProvider.updateUser(updatedUser)
-      }
-    }
-    // TODO: return also updatedUser?
     return {
-      input,
-      response,
-      messageEvents,
-      session,
-      botState,
-      dataProvider,
+      input, // Delete
+      response, // xml/rendered react for actions (not needed)
+      messageEvents, // xml to Botonic Events
+      session, // to be output.session
+      botState, // to be output.botState
+      dataProvider, // no need to return it
     }
   }
 }

@@ -1,4 +1,5 @@
-import { ConnectionEvent } from './connections'
+import { ConnectionEvent } from './connection'
+import { IntegrationEvent } from './integration'
 import {
   AudioMessageEvent,
   CarouselMessageEvent,
@@ -22,3 +23,4 @@ export type BotonicEvent =
   | CarouselMessageEvent
   | CustomMessageEvent
   | ConnectionEvent
+  | IntegrationEvent

@@ -9,10 +9,8 @@ export interface User {
   idFromChannel: string // providerId
   session: Session
   botState: BotState
-  // functioning
   isOnline: boolean
   websocketId?: string
   // part of details?
-  // route: string inside botState
   locationInfo: string
 }

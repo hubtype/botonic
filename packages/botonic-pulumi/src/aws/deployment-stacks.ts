@@ -69,12 +69,17 @@ export const deployBackendStack = async (
       handler: 'index.default',
       inlinePolicies: [
         {
+          name: `${SENDER_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
+          policy: DYNAMODB_CRUD_POLICY,
+        },
+        {
           name: `${SENDER_LAMBDA_NAME}-execute-connections`,
           policy: websocketServer.manageConnectionsPolicy,
         },
       ],
       environmentVariables: {
         WEBSOCKET_URL: websocketServer.url,
+        DATA_PROVIDER_URL: database.url,
       },
     },
     awsResourceOptions

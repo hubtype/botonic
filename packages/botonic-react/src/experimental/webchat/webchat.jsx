@@ -267,11 +267,6 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.currentAttachment])
 
   const sendUserInput = async input => {
-    input = {
-      ack: MessageEventAck.DRAFT,
-      from: MessageEventFrom.USER,
-      ...input,
-    }
     props.onUserInput &&
       props.onUserInput({
         user: webchatState.user,
@@ -530,24 +525,16 @@ export const Webchat = forwardRef((props, ref) => {
 
   const messageComponentFromInput = input => {
     let messageComponent = null
+    let props = { ...input }
     if (isText(input)) {
-      messageComponent = (
-        <Text id={input.id} payload={input.payload} from={SENDERS.user}>
-          {input.text}
-        </Text>
-      )
+      messageComponent = <Text {...props}>{input.text}</Text>
     } else if (isMedia(input)) {
       const temporaryDisplayUrl = URL.createObjectURL(input.src)
-      const mediaProps = {
-        id: input.id,
-        from: SENDERS.user,
-        src: temporaryDisplayUrl,
-      }
-      if (isImage(input)) messageComponent = <Image {...mediaProps} />
-      else if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
-      else if (isVideo(input)) messageComponent = <Video {...mediaProps} />
-      else if (isDocument(input))
-        messageComponent = <Document {...mediaProps} />
+      props = { ...props, src: temporaryDisplayUrl }
+      if (isImage(input)) messageComponent = <Image {...props} />
+      else if (isAudio(input)) messageComponent = <Audio {...props} />
+      else if (isVideo(input)) messageComponent = <Video {...props} />
+      else if (isDocument(input)) messageComponent = <Document {...props} />
     }
     return messageComponent
   }
@@ -557,6 +544,14 @@ export const Webchat = forwardRef((props, ref) => {
     if (isText(input) && (!input.text || !input.text.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.text)
     if (isText(input) && checkBlockInput(input)) return
     if (!input.id) input.id = uuidv4()
+    const { idFromChannel, channel } = webchatState.user
+    input = {
+      idFromChannel,
+      channel,
+      ack: MessageEventAck.DRAFT,
+      from: MessageEventFrom.USER,
+      ...input,
+    }
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
     if (isMedia(input)) input.src = await readDataURL(input.src)

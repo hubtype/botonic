@@ -1,4 +1,4 @@
-import { routes } from '@botonic/api/src/rest/routes'
+import { routes } from '@botonic/server/src/api/routes'
 import * as cors from 'cors'
 import * as express from 'express'
 import * as morgan from 'morgan'

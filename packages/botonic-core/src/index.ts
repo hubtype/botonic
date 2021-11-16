@@ -1,7 +1,5 @@
 export * from './constants'
 export * from './core-bot'
-// TODO: Review @botonic/react's tree-shaking to remove dataProvider from bundle
-// export * from './data-provider'
 export * from './debug'
 export * from './handoff'
 export * from './hubtype-service'
