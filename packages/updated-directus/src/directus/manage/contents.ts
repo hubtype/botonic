@@ -14,7 +14,9 @@ import {
   CarouselFields,
   ElementFields,
   ImageFields,
+  PayloadFields,
   TextFields,
+  UrlFields,
 } from './directus-contents'
 
 export interface ContentDeliveries {
@@ -40,12 +42,65 @@ export class ContentsDelivery {
     return this.fromEntry(entries, contentType, context)
   }
 
+  fromEntry(
+    entries: PartialItem<any>[],
+    contentType: cms.MessageContentType,
+    context: cms.SupportedLocales
+  ): Content[] {
+    const convertedEntries: Content[] = []
+    entries.forEach((entry: PartialItem<any>) => {
+      convertedEntries.push(
+        this.ContentDeliveries[contentType].fromEntry(entry, context)
+      )
+    })
+    return convertedEntries
+  }
+
   async deleteContent(contentId: ContentId) {
     await this.client.deleteContent(contentId)
   }
 
   async createContent(contentId: ContentId) {
     await this.client.createContent(contentId)
+  }
+
+  async updateUrlFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: UrlFields,
+    applyToAllLocales: boolean
+  ): Promise<void> {
+    const convertedFields = await this.convertUrlFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
+    await this.client.updateFields(
+      context,
+      cms.ContentType.URL,
+      id,
+      convertedFields
+    )
+  }
+  async updatePayloadFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: PayloadFields,
+    applyToAllLocales: boolean
+  ): Promise<void> {
+    const convertedFields = await this.convertPayloadFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
+    await this.client.updateFields(
+      context,
+      cms.ContentType.PAYLOAD,
+      id,
+      convertedFields
+    )
   }
 
   async updateTextFields(
@@ -156,18 +211,68 @@ export class ContentsDelivery {
     await this.client.createAsset(context, file, info)
   }
 
-  fromEntry(
-    entries: PartialItem<any>[],
-    contentType: cms.MessageContentType,
-    context: cms.SupportedLocales
-  ): Content[] {
-    const convertedEntries: Content[] = []
-    entries.forEach((entry: PartialItem<any>) => {
-      convertedEntries.push(
-        this.ContentDeliveries[contentType].fromEntry(entry, context)
-      )
+  private async convertUrlFields(
+    context: cms.SupportedLocales,
+    fields: UrlFields,
+    id: string,
+    applyToAllLocales: boolean
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(id, cms.ContentType.URL)
+
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, locale)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
+      }
+      if (fields.url && isActualLocale) {
+        localeContent.url = fields.url
+      }
     })
-    return convertedEntries
+    if (fields.name) {
+      entry.name = fields.name
+    }
+
+    return entry
+  }
+
+  private async convertPayloadFields(
+    context: cms.SupportedLocales,
+    fields: PayloadFields,
+    id: string,
+    applyToAllLocales: boolean
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(id, cms.ContentType.PAYLOAD)
+
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, locale)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
+      }
+      if (fields.payload && isActualLocale) {
+        localeContent.payload = fields.payload
+      }
+    })
+    return entry
   }
 
   private async convertTextFields(

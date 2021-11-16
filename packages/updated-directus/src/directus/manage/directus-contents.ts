@@ -32,3 +32,12 @@ export interface ElementFields {
   image?: string
   buttons?: string[]
 }
+
+export interface UrlFields {
+  name?: string
+  url?: string
+}
+
+export interface PayloadFields {
+  payload?: string
+}

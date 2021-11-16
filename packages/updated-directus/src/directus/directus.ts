@@ -8,6 +8,7 @@ import {
   Content,
   ContentId,
   Image,
+  Payload,
   Text,
   Url,
 } from '../cms'
@@ -15,6 +16,7 @@ import { DirectusOptions } from '../plugin'
 import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
 import { ImageDelivery } from './contents/image'
+import { PayloadDelivery } from './contents/payload'
 import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
 import { DirectusClient } from './delivery/directus-client'
@@ -22,7 +24,9 @@ import { ContentsDelivery } from './manage/contents'
 import {
   CarouselFields,
   ElementFields,
+  PayloadFields,
   TextFields,
+  UrlFields,
 } from './manage/directus-contents'
 import { LocalesDelivery } from './manage/locales'
 import { KeywordsDelivery } from './search/keywords'
@@ -31,6 +35,7 @@ export class Directus implements cms.CMS {
   private readonly _text: TextDelivery
   private readonly _button: ButtonDelivery
   private readonly _url: UrlDelivery
+  private readonly _payload: PayloadDelivery
   private readonly _carousel: CarouselDelivery
   private readonly _image: ImageDelivery
   private readonly _keywords: KeywordsDelivery
@@ -41,6 +46,7 @@ export class Directus implements cms.CMS {
     const client = new DirectusClient(opt)
     this._button = new ButtonDelivery(client)
     this._url = new UrlDelivery(client)
+    this._payload = new PayloadDelivery(client)
     this._image = new ImageDelivery(client)
     this._carousel = new CarouselDelivery(client, this._button)
     this._text = new TextDelivery(
@@ -55,6 +61,7 @@ export class Directus implements cms.CMS {
       [cms.ContentType.IMAGE]: this._image,
       [cms.ContentType.CAROUSEL]: this._carousel,
       [cms.ContentType.URL]: this._url,
+      [cms.ContentType.PAYLOAD]: this._payload,
     }
     this._contents = new ContentsDelivery(client, deliveries)
     this._locales = new LocalesDelivery(client)
@@ -71,6 +78,10 @@ export class Directus implements cms.CMS {
   }
   async url(id: string, context: cms.SupportedLocales): Promise<Url> {
     return this._url.url(id, context)
+  }
+
+  async payload(id: string, context: cms.SupportedLocales): Promise<Payload> {
+    return this._payload.payload(id, context)
   }
 
   async carousel(id: string, context: cms.SupportedLocales): Promise<Carousel> {
@@ -92,6 +103,29 @@ export class Directus implements cms.CMS {
 
   async createContent(contentId: ContentId): Promise<void> {
     await this._contents.createContent(contentId)
+  }
+
+  async updateUrlFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: UrlFields,
+    applyToAllLocales: boolean = true
+  ): Promise<void> {
+    await this._contents.updateUrlFields(context, id, fields, applyToAllLocales)
+  }
+
+  async updatePayloadFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: PayloadFields,
+    applyToAllLocales: boolean = true
+  ): Promise<void> {
+    await this._contents.updatePayloadFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
   }
 
   async updateTextFields(

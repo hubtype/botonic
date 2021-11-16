@@ -1,12 +1,12 @@
 //import { ContentType } from '../../../src/cms'
 //import { SupportedLocales } from '../../../src/cms'
 //import { /*ContentId,*/ ContentType } from '../../../src/cms'
-import { ContentId, ContentType } from '../../../src/cms'
+// import { ContentId, ContentType } from '../../../src/cms'
 import { testContext, testDirectus } from '../helpers/directus.helper'
-import {
-  deleteContents,
-  generateRandomUUID,
-} from '../manage/helpers/utils.helper'
+// import {
+//   deleteContents,
+//   generateRandomUUID,
+// } from '../manage/helpers/utils.helper'
 
 //const MULTI_LANGUAGE_TEXT_ID = 'ee791f5c-f90a-49af-b75e-f6aac779b902'
 // const MULTI_LANGUAGE_CAROUSEL_ID = '874d9221-339b-48bc-b203-8217c9f2e8be'
@@ -90,39 +90,51 @@ import {
 
 test('Test: update content in locale', async () => {
   const directus = testDirectus()
-  const newTextId = generateRandomUUID()
-  await directus.createContent(new ContentId(ContentType.TEXT, newTextId))
-  const newButtonId = generateRandomUUID()
-  await directus.createContent(new ContentId(ContentType.BUTTON, newButtonId))
-  const newTargetId = generateRandomUUID()
-  await directus.createContent(new ContentId(ContentType.TEXT, newTargetId))
-  const ContentTypePerId: Record<string, ContentType> = {
-    [newButtonId]: ContentType.BUTTON,
-    [newTargetId]: ContentType.TEXT,
-    [newTextId]: ContentType.TEXT,
-  }
-  await directus.updateTextFields(testContext(), newTextId, {
-    name: 'lombriz',
-    text: 'piupiu',
-    buttons: [newButtonId],
-  })
-  await directus.updateButtonFields(testContext(), newButtonId, {
-    text: 'uipuip',
-    target: new ContentId(ContentType.TEXT, newTargetId),
-  })
+  // const newTextId = generateRandomUUID()
+  // await directus.createContent(new ContentId(ContentType.TEXT, newTextId))
+  // const newButtonId = generateRandomUUID()
+  // await directus.createContent(new ContentId(ContentType.BUTTON, newButtonId))
+  // const newTargetId = generateRandomUUID()
+  // await directus.createContent(new ContentId(ContentType.TEXT, newTargetId))
+  // const ContentTypePerId: Record<string, ContentType> = {
+  //   [newButtonId]: ContentType.BUTTON,
+  //   [newTargetId]: ContentType.TEXT,
+  //   [newTextId]: ContentType.TEXT,
+  // }
+  // await directus.updateTextFields(testContext(), newTextId, {
+  //   name: 'lombriz',
+  //   text: 'piupiu',
+  //   buttons: [newButtonId],
+  // })
+  // await directus.updateButtonFields(testContext(), newButtonId, {
+  //   text: 'uipuip',
+  //   target: new ContentId(ContentType.TEXT, newTargetId),
+  // })
 
-  await directus.updateTextFields(testContext(), newTargetId, {
-    text: 'iepiep',
-  })
+  // await directus.updateTextFields(testContext(), newTargetId, {
+  //   text: 'iepiep',
+  // })
 
-  const text = await directus.text(newTextId, testContext())
-  await deleteContents(ContentTypePerId)
-  const carousel = await directus.carousel(
-    '9abfba0c-0769-4f02-8960-5f284e7f5a06',
+  // const text = await directus.text(newTextId, testContext())
+  // await deleteContents(ContentTypePerId)
+  const payload = await directus.payload(
+    '40cbe362-ecc3-4186-8d42-c6d0f7fd2026',
     testContext()
   )
-  console.log({ carousel })
-  console.log({ text })
+
+  const url = await directus.url(
+    '825a4cd9-a163-42f4-9e4d-bce5346ea9a9',
+    testContext()
+  )
+
+  await directus.updateUrlFields(
+    testContext(),
+    '825a4cd9-a163-42f4-9e4d-bce5346ea9a9',
+    { name: 'URL_URL', url: 'www.gomariz.com' }
+  )
+
+  console.log({ payload })
+  console.log({ url })
 })
 
 // test('Test: remove locale', async () => {

@@ -24,6 +24,7 @@ export const knownFields = [
   'button_id',
   'element_id',
   'carousel_id',
+  'payload_id',
 ]
 
 export function getContentFields(contentType: cms.ContentType): string[] {
@@ -36,6 +37,8 @@ export function getContentFields(contentType: cms.ContentType): string[] {
       return getButtonFields()
     case cms.ContentType.URL:
       return getUrlFields()
+    case cms.ContentType.PAYLOAD:
+      return getPayloadFields()
     case cms.ContentType.CAROUSEL:
       return getCarouselFields()
     case cms.ContentType.ELEMENT:
@@ -114,6 +117,10 @@ function getButtonFields(): string[] {
 }
 
 function getUrlFields(): string[] {
+  return ['id', 'name', 'status', 'multilanguage_fields.*']
+}
+
+function getPayloadFields(): string[] {
   return ['id', 'name', 'status', 'multilanguage_fields.*']
 }
 

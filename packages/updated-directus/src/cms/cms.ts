@@ -6,9 +6,19 @@ import {
   CarouselFields,
   ElementFields,
   ImageFields,
+  PayloadFields,
   TextFields,
+  UrlFields,
 } from '../directus/manage/directus-contents'
-import { Button, Carousel, Content, Image, Text, Url } from './contents'
+import {
+  Button,
+  Carousel,
+  Content,
+  Image,
+  Payload,
+  Text,
+  Url,
+} from './contents'
 
 export enum MessageContentType {
   TEXT = 'text',
@@ -96,6 +106,8 @@ export interface CMS {
 
   carousel(id: string, context: SupportedLocales): Promise<Carousel>
 
+  payload(id: string, context: SupportedLocales): Promise<Payload>
+
   contentsWithKeywords(input: string): Promise<string[]>
 
   topContents(
@@ -106,6 +118,20 @@ export interface CMS {
   deleteContent(contentId: ContentId): Promise<void>
 
   createContent(contentId: ContentId): Promise<void>
+
+  updateUrlFields(
+    context: SupportedLocales,
+    id: string,
+    fields: UrlFields,
+    applyToAllLocales?: boolean
+  ): Promise<void>
+
+  updatePayloadFields(
+    context: SupportedLocales,
+    id: string,
+    fields: PayloadFields,
+    applyToAllLocales?: boolean
+  ): Promise<void>
 
   updateTextFields(
     context: SupportedLocales,

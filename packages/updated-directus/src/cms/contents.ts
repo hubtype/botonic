@@ -58,6 +58,14 @@ export class Url extends Content {
   }
 }
 
+export class Payload extends Content {
+  readonly payload: string
+  constructor(opt: { common: CommonFields; payload: string }) {
+    super(opt.common, ContentType.PAYLOAD)
+    this.payload = opt.payload
+  }
+}
+
 export class Text extends Content {
   readonly text: string
   readonly buttons: Button[]
