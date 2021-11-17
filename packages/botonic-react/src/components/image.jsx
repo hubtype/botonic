@@ -16,7 +16,8 @@ const StyledImage = styled.img`
 
 const StyledPreviewImage = styled.img`
   width: 100%;
-  height: auto;
+  max-width: 75vw;
+  max-height: 75vh;
   object-fit: contain;
 `
 
