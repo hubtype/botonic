@@ -25,6 +25,13 @@ export const knownFields = [
   'element_id',
   'carousel_id',
   'payload_id',
+  'hour_range_id',
+  'day_schedule_id',
+  'schedule_id',
+  'queue_id',
+  'handoff_id',
+  'agent_id_id',
+  'agent_email_id',
 ]
 
 export function getContentFields(contentType: cms.ContentType): string[] {
@@ -43,6 +50,8 @@ export function getContentFields(contentType: cms.ContentType): string[] {
       return getCarouselFields()
     case cms.ContentType.ELEMENT:
       return getElementFields()
+    case cms.ContentType.QUEUE:
+      return getQueueFields()
     default:
       return []
   }
@@ -121,6 +130,10 @@ function getUrlFields(): string[] {
 }
 
 function getPayloadFields(): string[] {
+  return ['id', 'name', 'status', 'multilanguage_fields.*']
+}
+
+function getQueueFields(): string[] {
   return ['id', 'name', 'status', 'multilanguage_fields.*']
 }
 

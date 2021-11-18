@@ -9,6 +9,8 @@ import {
   ContentId,
   Image,
   Payload,
+  Queue,
+  ScheduleContent,
   Text,
   Url,
 } from '../cms'
@@ -17,6 +19,8 @@ import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
 import { ImageDelivery } from './contents/image'
 import { PayloadDelivery } from './contents/payload'
+import { QueueDelivery } from './contents/queue'
+import { ScheduleDelivery } from './contents/schedule'
 import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
 import { DirectusClient } from './delivery/directus-client'
@@ -41,12 +45,16 @@ export class Directus implements cms.CMS {
   private readonly _keywords: KeywordsDelivery
   private readonly _contents: ContentsDelivery
   private readonly _locales: LocalesDelivery
+  private readonly _schedule: ScheduleDelivery
+  private readonly _queue: QueueDelivery
 
   constructor(opt: DirectusOptions) {
     const client = new DirectusClient(opt)
     this._button = new ButtonDelivery(client)
     this._url = new UrlDelivery(client)
     this._payload = new PayloadDelivery(client)
+    this._schedule = new ScheduleDelivery(client)
+    this._queue = new QueueDelivery(client)
     this._image = new ImageDelivery(client)
     this._carousel = new CarouselDelivery(client, this._button)
     this._text = new TextDelivery(
@@ -82,6 +90,17 @@ export class Directus implements cms.CMS {
 
   async payload(id: string, context: cms.SupportedLocales): Promise<Payload> {
     return this._payload.payload(id, context)
+  }
+
+  async queue(id: string, context: cms.SupportedLocales): Promise<Queue> {
+    return this._queue.queue(id, context)
+  }
+
+  async schedule(
+    id: string,
+    context: cms.SupportedLocales
+  ): Promise<ScheduleContent> {
+    return this._schedule.schedule(id, context)
   }
 
   async carousel(id: string, context: cms.SupportedLocales): Promise<Carousel> {

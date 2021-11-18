@@ -1,5 +1,6 @@
 import { Callback } from './callback'
 import { ContentType } from './cms'
+import * as time from '../time'
 
 export enum ButtonStyle {
   BUTTON = 0,
@@ -126,5 +127,70 @@ export class Carousel extends Content {
   constructor(opt: { common: CommonFields; elements: Element[] }) {
     super(opt.common, ContentType.CAROUSEL)
     this.elements = opt.elements
+  }
+}
+
+export class Queue extends Content {
+  readonly queue: string
+  readonly schedule?: time.Schedule
+  constructor(opt: {
+    common: CommonFields
+    queue: string
+    schedule: time.Schedule
+  }) {
+    super(opt.common, ContentType.QUEUE)
+    this.queue = opt.queue
+    this.schedule = opt.schedule
+  }
+}
+
+export class DateRangeContent extends Content {
+  constructor(
+    readonly common: CommonFields,
+    readonly dateRange: time.DateRange
+  ) {
+    super(common, ContentType.DATE_RANGE)
+  }
+}
+
+export class ScheduleContent extends Content {
+  readonly schedule: time.Schedule
+  constructor(opt: { common: CommonFields; schedule: time.Schedule }) {
+    super(opt.common, ContentType.SCHEDULE)
+    this.schedule = opt.schedule
+  }
+}
+
+export type OnFinish = Callback
+
+export class HandoffAgentEmail {
+  readonly type = 'AGENT_EMAIL'
+  constructor(readonly agentEmail: string) {}
+}
+
+export class HandoffAgentId {
+  readonly type = 'AGENT_ID'
+  constructor(readonly agentId: string) {}
+}
+
+export type HandoffAgent = HandoffAgentEmail | HandoffAgentId
+
+/**
+ * Most CommonFields make no sense for Handoff.
+ * However, we decided to make it a TopContent since it does not depend on other content.
+ * Also CommonFields might be potentially useful.
+ */
+export class Handoff extends Content {
+  constructor(
+    readonly common: CommonFields,
+    readonly onFinish: OnFinish,
+    readonly message?: string,
+    readonly failMessage?: string,
+    //agent and queue are optional because often they are set dynamically by the bot
+    readonly queue?: Queue,
+    readonly agent?: HandoffAgent,
+    readonly shadowing?: boolean
+  ) {
+    super(common, ContentType.HANDOFF)
   }
 }

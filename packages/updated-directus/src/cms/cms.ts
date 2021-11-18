@@ -16,8 +16,10 @@ import {
   Content,
   Image,
   Payload,
+  Queue,
   Text,
   Url,
+  ScheduleContent,
 } from './contents'
 
 export enum MessageContentType {
@@ -27,9 +29,12 @@ export enum MessageContentType {
 }
 
 export enum NonMessageContentType {
-  QUEUE = 'queue',
-  PAYLOAD = 'payload',
+  DATE_RANGE = 'dateRange',
+  HANDOFF = 'handoff',
+  QUEUE = 'desk_queue',
+  SCHEDULE = 'schedule',
   URL = 'url',
+  PAYLOAD = 'payload',
 }
 
 export enum SubContentType {
@@ -107,6 +112,10 @@ export interface CMS {
   carousel(id: string, context: SupportedLocales): Promise<Carousel>
 
   payload(id: string, context: SupportedLocales): Promise<Payload>
+
+  schedule(id: string, context?: SupportedLocales): Promise<ScheduleContent>
+
+  queue(id: string, context?: SupportedLocales): Promise<Queue>
 
   contentsWithKeywords(input: string): Promise<string[]>
 
