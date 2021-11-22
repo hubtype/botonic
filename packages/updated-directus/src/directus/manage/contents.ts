@@ -229,11 +229,10 @@ export class ContentsDelivery {
   }
 
   async createAsset(
-    context: cms.SupportedLocales,
     file: string | ArrayBuffer | Stream,
-    info: AssetInfo
+    info?: AssetInfo
   ): Promise<void> {
-    await this.client.createAsset(context, file, info)
+    await this.client.createAsset(file, info)
   }
 
   private async convertUrlFields(

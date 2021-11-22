@@ -154,20 +154,18 @@ export class DirectusClient {
 
   //in progress...
   async createAsset(
-    context: cms.SupportedLocales,
     file: string | ArrayBuffer | Stream,
-    info: AssetInfo
+    info?: AssetInfo
   ): Promise<void> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
-      const image = await this.client.items('directus_files').createOne({
-        title: info.name,
-        storage: 'amazon',
-        filename_download: 'new_file',
+      await this.client.items('directus_files').createOne({
+        data: file,
+        filename_download: 'jeje',
+        storage: 's3',
       })
-      console.log({ image })
     } catch (e) {
-      throw new Error(`Error creating new asset, ${e}`)
+      throw new Error(`Error creating new file, ${e}`)
     }
   }
 

@@ -242,11 +242,10 @@ export class Directus implements cms.CMS {
   }
 
   async createAsset(
-    context: cms.SupportedLocales,
     file: string | ArrayBuffer | Stream,
-    info: AssetInfo
+    info?: AssetInfo
   ): Promise<void> {
-    await this._contents.createAsset(context, file, info)
+    await this._contents.createAsset(file, info)
   }
 
   async getLocales(): Promise<cms.SupportedLocales[]> {

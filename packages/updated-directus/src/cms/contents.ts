@@ -17,7 +17,7 @@ export interface CommonFields {
 }
 
 export interface AssetInfo {
-  readonly name: string
+  readonly name?: string
   readonly fileName?: string
   readonly type?: string
   readonly description?: string

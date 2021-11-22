@@ -29,6 +29,7 @@
     "noUnusedLocals": true,
     "skipLibCheck": true
   },
+
   // test options
   "types": [
     // @types/node must be a direct dependency. If only defined in a parent package.json, we get TSC errors for

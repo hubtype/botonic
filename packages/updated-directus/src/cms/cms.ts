@@ -23,6 +23,7 @@ import {
   ScheduleContent,
   Handoff,
 } from './contents'
+import { AssetInfo } from './contents'
 
 export enum MessageContentType {
   TEXT = 'text',
@@ -189,9 +190,8 @@ export interface CMS {
   ): Promise<void>
 
   createAsset(
-    context: SupportedLocales,
     file: string | ArrayBuffer | Stream,
-    fields: ImageFields
+    info?: AssetInfo
   ): Promise<void>
 
   getLocales(): Promise<SupportedLocales[]>

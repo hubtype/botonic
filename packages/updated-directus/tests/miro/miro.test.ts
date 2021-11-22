@@ -71,7 +71,7 @@ test('Test: create bot flow from Miro to Directus', async () => {
   for (const content of miroContents) {
     const id = generateRandomUUID()
     content.id = id
-    await directus.createContent(testContext(), content.type as ContentType, id)
+    await directus.createContent(new ContentId(content.type as ContentType, id))
   }
 
   for (const content of miroContents) {
