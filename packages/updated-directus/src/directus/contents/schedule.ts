@@ -29,7 +29,7 @@ export class ScheduleDelivery extends ContentDelivery {
       common: {
         id: entry.id as string,
         name: entry.name ?? '',
-        shortText: entry[mf][0]?.shoqrttext ?? undefined,
+        shortText: entry[mf][0]?.shorttext ?? undefined,
         keywords: entry[mf][0]?.keywords?.split(',') ?? undefined,
         customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
       },
