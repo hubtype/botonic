@@ -5,6 +5,7 @@ import {
   ButtonFields,
   CarouselFields,
   ElementFields,
+  HandoffFields,
   ImageFields,
   PayloadFields,
   TextFields,
@@ -177,6 +178,13 @@ export interface CMS {
     context: SupportedLocales,
     id: string,
     fields: ElementFields,
+    applyToAllLocales?: boolean
+  ): Promise<void>
+
+  updateHandoffFields(
+    context: SupportedLocales,
+    id: string,
+    fields: HandoffFields,
     applyToAllLocales?: boolean
   ): Promise<void>
 

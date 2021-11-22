@@ -41,3 +41,12 @@ export interface UrlFields {
 export interface PayloadFields {
   payload?: string
 }
+
+export interface HandoffFields {
+  name?: string
+  handoffMessage?: string
+  handoffFailMessage?: string
+  queue?: string
+  shadowing?: boolean
+  onFinish?: ContentId
+}

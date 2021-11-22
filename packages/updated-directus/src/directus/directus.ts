@@ -29,6 +29,7 @@ import { ContentsDelivery } from './manage/contents'
 import {
   CarouselFields,
   ElementFields,
+  HandoffFields,
   PayloadFields,
   TextFields,
   UrlFields,
@@ -219,6 +220,20 @@ export class Directus implements cms.CMS {
     applyToAllLocales: boolean = true
   ) {
     await this._contents.updateElementFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
+  }
+
+  async updateHandoffFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: HandoffFields,
+    applyToAllLocales: boolean = true
+  ): Promise<void> {
+    await this._contents.updateHandoffFields(
       context,
       id,
       fields,

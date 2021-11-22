@@ -13,6 +13,7 @@ import {
   ButtonFields,
   CarouselFields,
   ElementFields,
+  HandoffFields,
   ImageFields,
   PayloadFields,
   TextFields,
@@ -207,6 +208,26 @@ export class ContentsDelivery {
     )
   }
 
+  async updateHandoffFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: HandoffFields,
+    applyToAllLocales: boolean
+  ): Promise<void> {
+    const convertedFields = await this.convertHandoffFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
+    await this.client.updateFields(
+      context,
+      cms.ContentType.HANDOFF,
+      id,
+      convertedFields
+    )
+  }
+
   async createAsset(
     context: cms.SupportedLocales,
     file: string | ArrayBuffer | Stream,
@@ -276,6 +297,71 @@ export class ContentsDelivery {
         localeContent.payload = fields.payload
       }
     })
+    return entry
+  }
+
+  private async convertHandoffFields(
+    context: cms.SupportedLocales,
+    fields: HandoffFields,
+    id: string,
+    applyToAllLocales: boolean
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(id, cms.ContentType.HANDOFF)
+
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, locale)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
+      }
+
+      if (fields.handoffMessage && isActualLocale) {
+        localeContent.handoff_message = fields.handoffMessage
+      }
+
+      if (fields.handoffFailMessage && isActualLocale) {
+        localeContent.handoff_fail_message = fields.handoffFailMessage
+      }
+
+      if (fields.shadowing && isActualLocale) {
+        localeContent.shadowing = fields.shadowing
+      }
+
+      if (fields.queue) {
+        localeContent.queue = [
+          {
+            collection: cms.ContentType.QUEUE,
+            item: {
+              id: fields.queue,
+            },
+          },
+        ]
+      }
+      if (fields.onFinish) {
+        localeContent.onfinish = [
+          {
+            collection: fields.onFinish.model,
+            item: {
+              id: fields.onFinish.id,
+            },
+          },
+        ]
+      }
+    })
+
+    if (fields.name) {
+      entry.name = fields.name
+    }
+
     return entry
   }
 

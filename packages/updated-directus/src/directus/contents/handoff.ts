@@ -40,8 +40,8 @@ export class HandoffDelivery extends ContentDelivery {
       queue: queue ?? undefined,
       message: entry[mf][0]?.handoff_message ?? '',
       failMessage: entry[mf][0]?.handoff_fail_message ?? '',
-      shadowing: entry[mf][0]?.shadowing ?? false,
-      onFinish: entry[mf][0]?.onfinish
+      shadowing: entry[mf][0]?.shadowing ?? undefined,
+      onFinish: entry[mf][0]?.onfinish?.length
         ? this.createOnFinishTarget(entry[mf][0])
         : undefined,
     }
