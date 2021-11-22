@@ -9,6 +9,7 @@ import {
   getContextContent,
   getKeywordsFilter,
   hasFollowUp,
+  hasQueue,
   hasSchedule,
   mf,
 } from './delivery-utils'
@@ -44,6 +45,12 @@ export class DirectusClient {
         Object.assign(
           entry![mf][0],
           await this.getSchedule(entry![mf][0], context)
+        )
+      }
+      if (hasQueue(entry)) {
+        Object.assign(
+          entry![mf][0],
+          await this.getQueue(entry![mf][0], context)
         )
       }
       return entry!
@@ -213,6 +220,17 @@ export class DirectusClient {
         cms.ContentType.SCHEDULE,
         context
       ),
+    }
+  }
+
+  private async getQueue(
+    entry: PartialItem<any>,
+    context: cms.SupportedLocales
+  ) {
+    const queueId = entry.queue[0].item
+    return {
+      ...entry,
+      queue: await this.getEntry(queueId, cms.ContentType.QUEUE, context),
     }
   }
 }

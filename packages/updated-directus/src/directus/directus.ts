@@ -1,5 +1,4 @@
 import { Stream } from 'stream'
-
 import * as cms from '../cms'
 import {
   AssetInfo,
@@ -7,6 +6,7 @@ import {
   Carousel,
   Content,
   ContentId,
+  Handoff,
   Image,
   Payload,
   Queue,
@@ -17,6 +17,7 @@ import {
 import { DirectusOptions } from '../plugin'
 import { ButtonDelivery } from './contents/button'
 import { CarouselDelivery } from './contents/carousel'
+import { HandoffDelivery } from './contents/handoff'
 import { ImageDelivery } from './contents/image'
 import { PayloadDelivery } from './contents/payload'
 import { QueueDelivery } from './contents/queue'
@@ -47,6 +48,7 @@ export class Directus implements cms.CMS {
   private readonly _locales: LocalesDelivery
   private readonly _schedule: ScheduleDelivery
   private readonly _queue: QueueDelivery
+  private readonly _handoff: HandoffDelivery
 
   constructor(opt: DirectusOptions) {
     const client = new DirectusClient(opt)
@@ -55,6 +57,7 @@ export class Directus implements cms.CMS {
     this._payload = new PayloadDelivery(client)
     this._schedule = new ScheduleDelivery(client)
     this._queue = new QueueDelivery(client, this._schedule)
+    this._handoff = new HandoffDelivery(client, this._queue)
     this._image = new ImageDelivery(client)
     this._carousel = new CarouselDelivery(client, this._button)
     this._text = new TextDelivery(
@@ -71,6 +74,7 @@ export class Directus implements cms.CMS {
       [cms.ContentType.URL]: this._url,
       [cms.ContentType.PAYLOAD]: this._payload,
       [cms.ContentType.QUEUE]: this._queue,
+      [cms.ContentType.HANDOFF]: this._handoff,
     }
     this._contents = new ContentsDelivery(client, deliveries)
     this._locales = new LocalesDelivery(client)
@@ -95,6 +99,10 @@ export class Directus implements cms.CMS {
 
   async queue(id: string, context: cms.SupportedLocales): Promise<Queue> {
     return this._queue.queue(id, context)
+  }
+
+  async handoff(id: string, context: cms.SupportedLocales): Promise<Handoff> {
+    return this._handoff.handoff(id, context)
   }
 
   async schedule(

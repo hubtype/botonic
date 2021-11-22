@@ -20,6 +20,7 @@ import {
   Text,
   Url,
   ScheduleContent,
+  Handoff,
 } from './contents'
 
 export enum MessageContentType {
@@ -113,9 +114,11 @@ export interface CMS {
 
   payload(id: string, context: SupportedLocales): Promise<Payload>
 
-  schedule(id: string, context?: SupportedLocales): Promise<ScheduleContent>
+  schedule(id: string, context: SupportedLocales): Promise<ScheduleContent>
 
-  queue(id: string, context?: SupportedLocales): Promise<Queue>
+  queue(id: string, context: SupportedLocales): Promise<Queue>
+
+  handoff(id: string, context: SupportedLocales): Promise<Handoff>
 
   contentsWithKeywords(input: string): Promise<string[]>
 

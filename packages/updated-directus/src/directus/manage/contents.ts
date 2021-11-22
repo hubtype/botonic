@@ -19,6 +19,7 @@ import {
   UrlFields,
 } from './directus-contents'
 import { QueueDelivery } from '../contents/queue'
+import { HandoffDelivery } from '../contents/handoff'
 
 export interface ContentDeliveries {
   [cms.ContentType.TEXT]: TextDelivery
@@ -26,6 +27,7 @@ export interface ContentDeliveries {
   [cms.ContentType.CAROUSEL]: CarouselDelivery
   [cms.ContentType.URL]: UrlDelivery
   [cms.ContentType.QUEUE]: QueueDelivery
+  [cms.ContentType.HANDOFF]: HandoffDelivery
 }
 
 export class ContentsDelivery {

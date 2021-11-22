@@ -161,7 +161,7 @@ export class ScheduleContent extends Content {
   }
 }
 
-export type OnFinish = Callback
+export type OnFinish = Callback | undefined
 
 export class HandoffAgentEmail {
   readonly type = 'AGENT_EMAIL'
@@ -175,22 +175,25 @@ export class HandoffAgentId {
 
 export type HandoffAgent = HandoffAgentEmail | HandoffAgentId
 
-/**
- * Most CommonFields make no sense for Handoff.
- * However, we decided to make it a TopContent since it does not depend on other content.
- * Also CommonFields might be potentially useful.
- */
 export class Handoff extends Content {
-  constructor(
-    readonly common: CommonFields,
-    readonly onFinish: OnFinish,
-    readonly message?: string,
-    readonly failMessage?: string,
-    //agent and queue are optional because often they are set dynamically by the bot
-    readonly queue?: Queue,
-    readonly agent?: HandoffAgent,
-    readonly shadowing?: boolean
-  ) {
-    super(common, ContentType.HANDOFF)
+  readonly onFinish: OnFinish
+  readonly message?: string
+  readonly failMessage?: string
+  readonly queue?: Queue
+  readonly shadowing?: boolean
+  constructor(opt: {
+    common: CommonFields
+    onFinish?: OnFinish
+    message?: string
+    failMessage?: string
+    queue?: Queue
+    shadowing?: boolean
+  }) {
+    super(opt.common, ContentType.HANDOFF)
+    this.onFinish = opt.onFinish
+    this.message = opt.message
+    this.failMessage = opt.failMessage
+    this.queue = opt.queue
+    this.shadowing = opt.shadowing
   }
 }

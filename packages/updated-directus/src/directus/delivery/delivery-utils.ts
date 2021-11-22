@@ -31,6 +31,11 @@ export const knownFields = [
   'hourRanges',
   'schedule',
   'botonic_queue_name',
+  'handoff_fail_message',
+  'handoff_message',
+  'shadowing',
+  'onfinish',
+  'queue',
   'queue_id',
   'text_id',
   'button_id',
@@ -66,6 +71,8 @@ export function getContentFields(contentType: cms.ContentType): string[] {
       return getQueueFields()
     case cms.ContentType.SCHEDULE:
       return getScheduleFields()
+    case cms.ContentType.HANDOFF:
+      return getHandoffFields()
     default:
       return []
   }
@@ -192,6 +199,17 @@ function getQueueFields(): string[] {
   ]
 }
 
+function getHandoffFields(): string[] {
+  return [
+    'id',
+    'name',
+    'status',
+    'multilanguage_fields.*',
+    'multilanguage_fields.queue.*',
+    'multilanguage_fields.onfinish.*',
+  ]
+}
+
 export function getContextContent(context: cms.SupportedLocales): {} {
   return {
     multilanguage_fields: {
@@ -223,6 +241,10 @@ export function hasFollowUp(entry: OneItem<any>): boolean {
 
 export function hasSchedule(entry: OneItem<any>): boolean {
   return !!entry![mf][0]?.schedule?.length
+}
+
+export function hasQueue(entry: OneItem<any>): boolean {
+  return !!entry![mf][0]?.queue?.length
 }
 
 export function getKeywordsFilter(input: string): {} {
