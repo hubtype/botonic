@@ -54,7 +54,7 @@ export class Directus implements cms.CMS {
     this._url = new UrlDelivery(client)
     this._payload = new PayloadDelivery(client)
     this._schedule = new ScheduleDelivery(client)
-    this._queue = new QueueDelivery(client)
+    this._queue = new QueueDelivery(client, this._schedule)
     this._image = new ImageDelivery(client)
     this._carousel = new CarouselDelivery(client, this._button)
     this._text = new TextDelivery(
@@ -70,6 +70,7 @@ export class Directus implements cms.CMS {
       [cms.ContentType.CAROUSEL]: this._carousel,
       [cms.ContentType.URL]: this._url,
       [cms.ContentType.PAYLOAD]: this._payload,
+      [cms.ContentType.QUEUE]: this._queue,
     }
     this._contents = new ContentsDelivery(client, deliveries)
     this._locales = new LocalesDelivery(client)

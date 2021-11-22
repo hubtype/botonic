@@ -31,7 +31,7 @@ export enum MessageContentType {
 export enum NonMessageContentType {
   DATE_RANGE = 'dateRange',
   HANDOFF = 'handoff',
-  QUEUE = 'desk_queue',
+  QUEUE = 'queue',
   SCHEDULE = 'schedule',
   URL = 'url',
   PAYLOAD = 'payload',

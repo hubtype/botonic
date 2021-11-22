@@ -18,12 +18,14 @@ import {
   TextFields,
   UrlFields,
 } from './directus-contents'
+import { QueueDelivery } from '../contents/queue'
 
 export interface ContentDeliveries {
   [cms.ContentType.TEXT]: TextDelivery
   [cms.ContentType.IMAGE]: ImageDelivery
   [cms.ContentType.CAROUSEL]: CarouselDelivery
   [cms.ContentType.URL]: UrlDelivery
+  [cms.ContentType.QUEUE]: QueueDelivery
 }
 
 export class ContentsDelivery {

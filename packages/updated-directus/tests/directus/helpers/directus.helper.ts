@@ -17,5 +17,5 @@ export function testDirectusOptions(): DirectusOptions {
 }
 
 export function testContext(): SupportedLocales {
-  return SupportedLocales.ENGLISH
+  return SupportedLocales.GERMAN
 }

@@ -12,7 +12,7 @@ export class Schedule {
   static TZ_CET = 'Europe/Madrid'
   private readonly zone: momentTz.MomentZone
   private readonly scheduleByDay = new Map<WeekDay, DaySchedule>()
-  private readonly exceptions = [] as ExceptionSchedule[]
+  readonly exceptions = [] as ExceptionSchedule[]
 
   constructor(tzName: string) {
     const zone = momentTz.tz.zone(tzName)
@@ -82,13 +82,11 @@ export class ScheduleAlwaysOn extends Schedule {
 }
 
 export class DaySchedule {
-  constructor(readonly ranges: TimeRange[]) {}
+  constructor(readonly range: TimeRange) {}
 
   contains(date: Date): boolean {
-    for (const range of this.ranges) {
-      if (range.contains(date)) {
-        return true
-      }
+    if (this.range.contains(date)) {
+      return true
     }
     return false
   }

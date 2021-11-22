@@ -9,6 +9,7 @@ import {
   getContextContent,
   getKeywordsFilter,
   hasFollowUp,
+  hasSchedule,
   mf,
 } from './delivery-utils'
 
@@ -37,6 +38,12 @@ export class DirectusClient {
         Object.assign(
           entry![mf][0],
           await this.getFollowup(entry![mf][0], context)
+        )
+      }
+      if (hasSchedule(entry)) {
+        Object.assign(
+          entry![mf][0],
+          await this.getSchedule(entry![mf][0], context)
         )
       }
       return entry!
@@ -88,6 +95,7 @@ export class DirectusClient {
         )
         entries.push(entry)
       }
+
       return entries ?? []
     } catch (e) {
       console.error(`Error getting the contents of type ${contentType}, ${e}`)
@@ -190,6 +198,21 @@ export class DirectusClient {
     return {
       ...entry,
       followup: await this.getEntry(followupId, contentType, context),
+    }
+  }
+
+  private async getSchedule(
+    entry: PartialItem<any>,
+    context: cms.SupportedLocales
+  ) {
+    const scheduleId = entry.schedule[0].item
+    return {
+      ...entry,
+      schedule: await this.getEntry(
+        scheduleId,
+        cms.ContentType.SCHEDULE,
+        context
+      ),
     }
   }
 }

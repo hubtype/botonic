@@ -20,6 +20,18 @@ export const knownFields = [
   'elements',
   'languages_code',
   'buttonstyle',
+  'mondays',
+  'tuesdays',
+  'wednesdays',
+  'thursdays',
+  'fridays',
+  'saturdays',
+  'sundays',
+  'exceptions',
+  'hourRanges',
+  'schedule',
+  'botonic_queue_name',
+  'queue_id',
   'text_id',
   'button_id',
   'element_id',
@@ -52,6 +64,8 @@ export function getContentFields(contentType: cms.ContentType): string[] {
       return getElementFields()
     case cms.ContentType.QUEUE:
       return getQueueFields()
+    case cms.ContentType.SCHEDULE:
+      return getScheduleFields()
     default:
       return []
   }
@@ -133,8 +147,49 @@ function getPayloadFields(): string[] {
   return ['id', 'name', 'status', 'multilanguage_fields.*']
 }
 
+function getScheduleFields(): string[] {
+  return [
+    'id',
+    'name',
+    'status',
+    'multilanguage_fields.*',
+    'multilanguage_fields.mondays.*',
+    'multilanguage_fields.mondays.item.*',
+    'multilanguage_fields.mondays.item.multilanguage_fields.*',
+    'multilanguage_fields.tuesdays.*',
+    'multilanguage_fields.tuesdays.item.*',
+    'multilanguage_fields.tuesdays.item.multilanguage_fields.*',
+    'multilanguage_fields.wednesdays.*',
+    'multilanguage_fields.wednesdays.item.*',
+    'multilanguage_fields.wednesdays.item.multilanguage_fields.*',
+    'multilanguage_fields.thursdays.*',
+    'multilanguage_fields.thursdays.item.*',
+    'multilanguage_fields.thursdays.item.multilanguage_fields.*',
+    'multilanguage_fields.fridays.*',
+    'multilanguage_fields.fridays.item.*',
+    'multilanguage_fields.fridays.item.multilanguage_fields.*',
+    'multilanguage_fields.saturdays.*',
+    'multilanguage_fields.saturdays.item.*',
+    'multilanguage_fields.saturdays.item.multilanguage_fields.*',
+    'multilanguage_fields.sundays.*',
+    'multilanguage_fields.sundays.item.*',
+    'multilanguage_fields.sundays.item.multilanguage_fields.*',
+    'multilanguage_fields.exceptions.*',
+    'multilanguage_fields.exceptions.item.*',
+    'multilanguage_fields.exceptions.item.multilanguage_fields.*',
+    'multilanguage_fields.exceptions.item.multilanguage_fields.hour_ranges.*',
+    'multilanguage_fields.exceptions.item.multilanguage_fields.hour_ranges.item.multilanguage_fields.*',
+  ]
+}
+
 function getQueueFields(): string[] {
-  return ['id', 'name', 'status', 'multilanguage_fields.*']
+  return [
+    'id',
+    'name',
+    'status',
+    'multilanguage_fields.*',
+    'multilanguage_fields.schedule.*',
+  ]
 }
 
 export function getContextContent(context: cms.SupportedLocales): {} {
@@ -164,6 +219,10 @@ export function getCustomFields(entry: PartialItem<any>) {
 
 export function hasFollowUp(entry: OneItem<any>): boolean {
   return !!entry![mf][0]?.followup?.length
+}
+
+export function hasSchedule(entry: OneItem<any>): boolean {
+  return !!entry![mf][0]?.schedule?.length
 }
 
 export function getKeywordsFilter(input: string): {} {
