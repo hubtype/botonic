@@ -30,6 +30,7 @@
     "@pulumi/awsx": "^0.32.0",
     "@pulumi/pulumi": "^3.9.1",
     "@vendia/serverless-express": "^4.3.9",
+    "adm-zip": "^0.5.9",
     "concurrently": "^6.2.0",
     "decompress": "^4.2.1",
     "download": "^8.0.0",

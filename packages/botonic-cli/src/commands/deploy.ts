@@ -1,4 +1,4 @@
-import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
+import { ProjectConfig, PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
@@ -85,8 +85,10 @@ Deploying to AWS...
   }
 
   async deployAWS(): Promise<void> {
-    const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const projectConfig: ProjectConfig = require(PATH_TO_AWS_CONFIG).default
+      const pulumiRunner = new PulumiRunner(projectConfig)
       await pulumiRunner.deploy()
     } catch (e) {
       const error = `Deploy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
