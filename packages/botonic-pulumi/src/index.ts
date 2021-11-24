@@ -1,4 +1,5 @@
 import { Config } from '@pulumi/pulumi'
+import { tmpdir } from 'os'
 import { join } from 'path'
 import { cwd } from 'process'
 
@@ -27,21 +28,34 @@ export function generateProjectStackNamePrefix(
   }
   return prefix
 }
+// const MAIN_DIRECTORY = cwd()
+const MAIN_DIRECTORY = join(tmpdir(), 'botonic-dist', 'dist')
 
-export const NLP_MODELS_PATH = join(cwd(), 'bot', 'src', 'nlp', 'tasks')
-export const WEBSOCKET_SERVER_PATH = join(cwd(), 'api', 'dist', 'websocket')
-export const REST_SERVER_PATH = join(cwd(), 'api', 'dist', 'rest')
-export const HANDLERS_PATH = join(cwd(), 'api', 'dist', 'handlers')
+export const NLP_MODELS_PATH = join(
+  MAIN_DIRECTORY,
+  'bot',
+  'src',
+  'nlp',
+  'tasks'
+)
+export const WEBSOCKET_SERVER_PATH = join(
+  MAIN_DIRECTORY,
+  'api',
+  'dist',
+  'websocket'
+)
+export const REST_SERVER_PATH = join(MAIN_DIRECTORY, 'api', 'dist', 'rest')
+export const HANDLERS_PATH = join(MAIN_DIRECTORY, 'api', 'dist', 'handlers')
 export const BOT_EXECUTOR_LAMBDA_NAME = 'botExecutor'
 export const SENDER_LAMBDA_NAME = 'sender'
-export const WEBCHAT_CONTENTS_PATH = join(cwd(), 'webchat', 'dist')
+export const WEBCHAT_CONTENTS_PATH = join(MAIN_DIRECTORY, 'webchat', 'dist')
 export const WEBSOCKET_ENDPOINT_PATH_NAME = 'ws'
 export const REST_SERVER_ENDPOINT_PATH_NAME = 'api'
 export const WSS_PROTOCOL_PREFIX = 'wss://'
 export const HTTPS_PROTOCOL_PREFIX = 'https://'
 
 export const WEBCHAT_BOTONIC_PATH = join(
-  process.cwd(),
+  MAIN_DIRECTORY,
   'webchat',
   'dist',
   'webchat.botonic.js'

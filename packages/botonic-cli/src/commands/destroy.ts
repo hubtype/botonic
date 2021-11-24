@@ -1,4 +1,4 @@
-import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
+import { ProjectConfig, PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command } from '@oclif/command'
 
 import { Telemetry } from '../analytics/telemetry'
@@ -31,7 +31,9 @@ Destroying AWS stack...
 
   async destroyAWS(): Promise<void> {
     try {
-      const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const projectConfig: ProjectConfig = require(PATH_TO_AWS_CONFIG).default
+      const pulumiRunner = new PulumiRunner(projectConfig)
       await pulumiRunner.destroy()
     } catch (e) {
       const error = `Destroy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(

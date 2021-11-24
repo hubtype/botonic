@@ -15,7 +15,6 @@ export class NLPModelsBucket extends AWSComponentResource<NLPModelsBucketArgs> {
   constructor(args: NLPModelsBucketArgs, opts: AWSResourceOptions) {
     super('nlp-models-bucket', args, opts)
     const nlpModelsPath = args.nlpModelsPath || NLP_MODELS_PATH
-
     const nlpModelsBucket = new aws.s3.Bucket(
       `${this.namePrefix}-models-bucket`,
       {

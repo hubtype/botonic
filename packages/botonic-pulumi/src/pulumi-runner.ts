@@ -57,39 +57,42 @@ export interface RunOptions {
   destroy: boolean
 }
 
+const BUILD_COMMANDS = [
+  {
+    name: 'WebSocket Server Build',
+    command: 'yarn workspace api build:websocket',
+  },
+  {
+    name: 'Handlers Build',
+    command: 'yarn workspace api build:handlers',
+  },
+  {
+    name: 'Rest Server Build',
+    command: 'yarn workspace api build:rest',
+  },
+  {
+    name: 'Static Contents Build',
+    command: 'yarn workspace webchat build',
+  },
+]
+
 export class PulumiRunner {
-  private pulumiDownloader = new PulumiDownloader()
   private isDestroy = false
   private programConfig: ProgramConfig
   private updatedBucketObjects: string[] = []
   public projectConfig: ProjectConfig = {}
-  private commands = [
-    {
-      name: 'WebSocket Server Build',
-      command: 'yarn workspace api build:websocket',
-    },
-    {
-      name: 'Handlers Build',
-      command: 'yarn workspace api build:handlers',
-    },
-    {
-      name: 'Rest Server Build',
-      command: 'yarn workspace api build:rest',
-    },
-    {
-      name: 'Static Contents Build',
-      command: 'yarn workspace webchat build',
-    },
-  ]
+  private buildCommands: concurrently.CommandObj[] | string[]
+  pulumiDownloader: PulumiDownloader
 
-  constructor(pathToProjectConfig: string) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      this.projectConfig = require(pathToProjectConfig).default
-    } catch (e) {
-      this.projectConfig = {}
-    }
+  constructor(
+    projectConfig: ProjectConfig,
+    buildCommands = BUILD_COMMANDS,
+    pulumiDownloader = new PulumiDownloader()
+  ) {
+    this.projectConfig = projectConfig
     this.programConfig = this.projectConfig as ProgramConfig
+    this.buildCommands = buildCommands
+    this.pulumiDownloader = pulumiDownloader
   }
 
   private async beforeRun(isDestroy: boolean): Promise<void> {
@@ -101,7 +104,9 @@ export class PulumiRunner {
         throw new Error(errMsg)
       }
       try {
-        await concurrently(this.commands)
+        if (this.buildCommands.length > 0) {
+          await concurrently(this.buildCommands)
+        }
       } catch (e) {
         throw new Error(e)
       }
@@ -134,22 +139,30 @@ export class PulumiRunner {
   }
 
   private async installAwsPlugin(stack: Stack): Promise<void> {
-    const awsPluginVersion = `v${getCleanVersionForPackage('@pulumi/aws')}`
-    const pluginInstallationPath = join(
-      getHomeDirectory(),
-      '.pulumi',
-      'plugins',
-      `resource-aws-${awsPluginVersion}`
-    )
-    if (!existsSync(pluginInstallationPath)) {
-      console.info('installing plugins...')
-      await stack.workspace.installPlugin('aws', awsPluginVersion)
-      console.info('plugins installed')
-    }
+    // const awsPluginVersion = `v${getCleanVersionForPackage('@pulumi/aws')}`
+    const awsPluginVersion = `v4.25.0` // not working with 4.27.1 (no space left in device, lambda)
+    // const awsPluginVersion = `v4.19.0`
+    // const pluginInstallationPath = join(
+    //   getHomeDirectory(),
+    //   '.pulumi',
+    //   'plugins',
+    //   `resource-aws-${awsPluginVersion}`
+    // )
+    // if (!existsSync(pluginInstallationPath)) {
+    //   console.log({ pluginInstallationPath })
+    console.info('installing plugins...')
+    await stack.workspace.installPlugin('aws', awsPluginVersion)
+    console.info('plugins installed')
+    // }
   }
 
   private async withAwsProvider(stack: Stack): Promise<Stack> {
-    await this.installAwsPlugin(stack)
+    try {
+      await this.installAwsPlugin(stack)
+    } catch (e) {
+      console.error({ e })
+    }
+
     console.log('setting up AWS config...')
     await stack.setConfig('aws:region', {
       value:
@@ -241,30 +254,38 @@ export class PulumiRunner {
 
   private async run({ destroy = false }: RunOptions): Promise<undefined> {
     await this.beforeRun(destroy)
-    const backendResults = await this.runStack('backend')
-    if (backendResults) {
-      const websocketUrl = backendResults.outputs['websocketUrl'].value
-      this.programConfig['websocketUrl'] = websocketUrl
-      const apiUrl = backendResults.outputs['apiUrl'].value
-      this.programConfig['apiUrl'] = apiUrl
-      this.programConfig['nlpModelsUrl'] =
-        backendResults.outputs['nlpModelsUrl'].value
-      const websocketReplacementUrl = this.projectConfig?.customDomain
-        ? `${WSS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
-        : websocketUrl
-      this.replaceMatchWithinWebchat(/WEBSOCKET_URL/g, websocketReplacementUrl)
-      const restApiReplacementUrl = this.projectConfig?.customDomain
-        ? `${HTTPS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
-        : apiUrl
-      this.replaceMatchWithinWebchat(/REST_API_URL/g, restApiReplacementUrl)
+    try {
+      const backendResults = await this.runStack('backend')
+      if (backendResults) {
+        const websocketUrl = backendResults.outputs['websocketUrl'].value
+        this.programConfig['websocketUrl'] = websocketUrl
+        const apiUrl = backendResults.outputs['apiUrl'].value
+        this.programConfig['apiUrl'] = apiUrl
+        this.programConfig['nlpModelsUrl'] =
+          backendResults.outputs['nlpModelsUrl'].value
+        const websocketReplacementUrl = this.projectConfig?.customDomain
+          ? `${WSS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${WEBSOCKET_ENDPOINT_PATH_NAME}/`
+          : websocketUrl
+        this.replaceMatchWithinWebchat(
+          /WEBSOCKET_URL/g,
+          websocketReplacementUrl
+        )
+        const restApiReplacementUrl = this.projectConfig?.customDomain
+          ? `${HTTPS_PROTOCOL_PREFIX}${this.projectConfig.customDomain}/${REST_SERVER_ENDPOINT_PATH_NAME}/`
+          : apiUrl
+        this.replaceMatchWithinWebchat(/REST_API_URL/g, restApiReplacementUrl)
+      }
+      const frontendResults = await this.runStack('frontend')
+      if (frontendResults && this.updatedBucketObjects.length > 0) {
+        await this.doInvalidateUpdatedFiles(
+          frontendResults,
+          this.updatedBucketObjects
+        )
+      }
+    } catch (e) {
+      console.log({ e })
     }
-    const frontendResults = await this.runStack('frontend')
-    if (frontendResults && this.updatedBucketObjects.length > 0) {
-      await this.doInvalidateUpdatedFiles(
-        frontendResults,
-        this.updatedBucketObjects
-      )
-    }
+
     return
   }
 
@@ -295,6 +316,23 @@ export class PulumiRunner {
   private doPulumiLoginLocally(): void {
     // TODO: Login in our S3 bucket ?
     // TODO: Leave it configurable
-    execSync(`pulumi login --local --non-interactive`)
+
+    // execSync(
+    //   `${join(
+    //     this.pulumiDownloader.getBinaryPath(),
+    //     'pulumi'
+    //   )} login --local --non-interactive`
+    // )
+    try {
+      process.env.PULUMI_HOME = '/tmp/'
+      execSync(
+        `${join(
+          this.pulumiDownloader.getBinaryPath(),
+          'pulumi'
+        )} login s3://botonic-deployer-bucket`
+      )
+    } catch (e) {
+      console.log({ e })
+    }
   }
 }
