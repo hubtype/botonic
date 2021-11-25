@@ -144,15 +144,6 @@ export class Queue extends Content {
   }
 }
 
-export class DateRangeContent extends Content {
-  constructor(
-    readonly common: CommonFields,
-    readonly dateRange: time.DateRange
-  ) {
-    super(common, ContentType.DATE_RANGE)
-  }
-}
-
 export class ScheduleContent extends Content {
   readonly schedule: time.Schedule
   constructor(opt: { common: CommonFields; schedule: time.Schedule }) {

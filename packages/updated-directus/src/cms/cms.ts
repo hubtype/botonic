@@ -32,7 +32,6 @@ export enum MessageContentType {
 }
 
 export enum NonMessageContentType {
-  DATE_RANGE = 'dateRange',
   HANDOFF = 'handoff',
   QUEUE = 'queue',
   SCHEDULE = 'schedule',
@@ -102,6 +101,24 @@ export const TopContentType = {
 export type ContentType = TopContentType | SubContentType
 
 export const ContentType = { ...TopContentType, ...SubContentType }
+
+export const ContentTypes = [
+  ContentType.URL,
+  ContentType.PAYLOAD,
+  ContentType.TEXT,
+  ContentType.CAROUSEL,
+  ContentType.QUEUE,
+  ContentType.HANDOFF,
+  ContentType.IMAGE,
+  ContentType.SCHEDULE,
+  ContentType.ELEMENT,
+  ContentType.BUTTON,
+]
+
+export type LocaleToBeAddedType = {
+  locale: SupportedLocales
+  copyFrom?: SupportedLocales
+}
 
 export interface CMS {
   button(id: string, context: SupportedLocales): Promise<Button>
@@ -197,4 +214,6 @@ export interface CMS {
   getLocales(): Promise<SupportedLocales[]>
 
   removeLocale(locale: SupportedLocales): Promise<void>
+
+  addLocales(localesToBeAdded: LocaleToBeAddedType[]): Promise<void>
 }

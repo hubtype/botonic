@@ -2,7 +2,7 @@ import { Directus, PartialItem } from '@directus/sdk/dist'
 import { Stream } from 'stream'
 
 import * as cms from '../../cms'
-import { AssetInfo, ContentId } from '../../cms'
+import { AssetInfo, ContentId, LocaleToBeAddedType } from '../../cms'
 import { DirectusOptions } from '../../plugin'
 import {
   getContentFields,
@@ -25,7 +25,8 @@ export class DirectusClient {
   async getEntry(
     id: string,
     contentType: cms.ContentType,
-    context?: cms.SupportedLocales
+    context?: cms.SupportedLocales,
+    returnOriginalEntry?: boolean
   ): Promise<PartialItem<any>> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
@@ -34,23 +35,25 @@ export class DirectusClient {
         deep: context && getContextContent(context),
       })
       entry = { ...entry, collection: contentType }
-      if (!context) return entry!
+      console.log(entry[mf][0].target)
+
+      if (returnOriginalEntry) return entry!
       if (hasFollowUp(entry)) {
         Object.assign(
           entry![mf][0],
-          await this.getFollowup(entry![mf][0], context)
+          await this.getFollowup(entry![mf][0], context!)
         )
       }
       if (hasSchedule(entry)) {
         Object.assign(
           entry![mf][0],
-          await this.getSchedule(entry![mf][0], context)
+          await this.getSchedule(entry![mf][0], context!)
         )
       }
       if (hasQueue(entry)) {
         Object.assign(
           entry![mf][0],
-          await this.getQueue(entry![mf][0], context)
+          await this.getQueue(entry![mf][0], context!)
         )
       }
       return entry!
@@ -83,7 +86,8 @@ export class DirectusClient {
 
   async topContents(
     contentType: cms.ContentType,
-    context: cms.SupportedLocales
+    context?: cms.SupportedLocales,
+    returnOriginalEntry?: boolean
   ): Promise<PartialItem<any>[]> {
     try {
       await this.client.auth.static(this.clientParams.credentials.token)
@@ -98,7 +102,8 @@ export class DirectusClient {
         const entry = await this.getEntry(
           entriesIds.data![i].id,
           contentType,
-          context
+          context,
+          returnOriginalEntry
         )
         entries.push(entry)
       }
@@ -137,7 +142,6 @@ export class DirectusClient {
   }
 
   async updateFields(
-    context: cms.SupportedLocales,
     contentType: cms.ContentType,
     id: string,
     fields: PartialItem<any>
@@ -194,6 +198,70 @@ export class DirectusClient {
     }
   }
 
+  async addLocales(localesToBeAdded: LocaleToBeAddedType[]): Promise<void> {
+    for (let localeToBeAdded of localesToBeAdded) {
+      try {
+        await this.client.auth.static(this.clientParams.credentials.token)
+        await this.client.items('languages').createOne({
+          name: localeToBeAdded.locale,
+          code: localeToBeAdded.locale,
+        })
+        if (!localeToBeAdded.copyFrom) {
+          return
+        }
+
+        await this.copyLocale(localeToBeAdded)
+      } catch (e) {
+        localeToBeAdded.copyFrom
+          ? console.error(
+              `Error adding locale: ${localeToBeAdded.locale} copying content from locale: ${localeToBeAdded.copyFrom}, ${e}`
+            )
+          : console.error(
+              `Error adding locale: ${localeToBeAdded.locale}, ${e}`
+            )
+      }
+    }
+  }
+
+  private async copyLocale(
+    localeToBeAdded: LocaleToBeAddedType
+  ): Promise<void> {
+    for (let contentType of cms.ContentTypes) {
+      const contentTypeEntries = await this.topContents(
+        contentType,
+        undefined,
+        true
+      )
+      for (let entry of contentTypeEntries) {
+        let localeCopyFrom = this.getLocaleContent(
+          entry,
+          localeToBeAdded.copyFrom!
+        )
+        if (localeCopyFrom != undefined) {
+          const newLocale = {
+            ...localeCopyFrom,
+          }
+          newLocale['languages_code'] = localeToBeAdded.locale
+
+          entry.multilanguage_fields.push(newLocale)
+
+          await this.updateFields(contentType, entry.id, entry)
+        }
+      }
+    }
+  }
+
+  private getLocaleContent(
+    entry: PartialItem<any>,
+    context: cms.SupportedLocales
+  ): PartialItem<any> {
+    const localeFound = entry[mf].find(
+      (localeContent: PartialItem<any>) =>
+        localeContent.languages_code === context
+    )
+    return localeFound
+  }
+
   private async getFollowup(
     entry: PartialItem<any>,
     context: cms.SupportedLocales
@@ -210,7 +278,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const scheduleId = entry.schedule[0].item
+    const scheduleId = entry.schedule[0].item.id
     return {
       ...entry,
       schedule: await this.getEntry(
@@ -225,7 +293,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const queueId = entry.queue[0].item
+    const queueId = entry.queue[0].item.id
     return {
       ...entry,
       queue: await this.getEntry(queueId, cms.ContentType.QUEUE, context),

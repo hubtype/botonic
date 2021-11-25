@@ -76,6 +76,8 @@ export class Directus implements cms.CMS {
       [cms.ContentType.PAYLOAD]: this._payload,
       [cms.ContentType.QUEUE]: this._queue,
       [cms.ContentType.HANDOFF]: this._handoff,
+      [cms.ContentType.SCHEDULE]: this._schedule,
+      [cms.ContentType.BUTTON]:this._button
     }
     this._contents = new ContentsDelivery(client, deliveries)
     this._locales = new LocalesDelivery(client)
@@ -254,5 +256,9 @@ export class Directus implements cms.CMS {
 
   async removeLocale(locale: cms.SupportedLocales): Promise<void> {
     await this._locales.removeLocale(locale)
+  }
+
+  async addLocales(localesToBeAdded: cms.LocaleToBeAddedType[]): Promise<void> {
+    await this._locales.addLocales(localesToBeAdded)
   }
 }

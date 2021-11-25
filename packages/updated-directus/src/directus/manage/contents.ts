@@ -21,6 +21,9 @@ import {
 } from './directus-contents'
 import { QueueDelivery } from '../contents/queue'
 import { HandoffDelivery } from '../contents/handoff'
+import { ScheduleDelivery } from '../contents/schedule'
+import { ButtonDelivery } from '../contents/button'
+import { PayloadDelivery } from '../contents/payload'
 
 export interface ContentDeliveries {
   [cms.ContentType.TEXT]: TextDelivery
@@ -29,6 +32,9 @@ export interface ContentDeliveries {
   [cms.ContentType.URL]: UrlDelivery
   [cms.ContentType.QUEUE]: QueueDelivery
   [cms.ContentType.HANDOFF]: HandoffDelivery
+  [cms.ContentType.SCHEDULE]: ScheduleDelivery
+  [cms.ContentType.BUTTON]: ButtonDelivery
+  [cms.ContentType.PAYLOAD]: PayloadDelivery
 }
 
 export class ContentsDelivery {
@@ -81,12 +87,7 @@ export class ContentsDelivery {
       id,
       applyToAllLocales
     )
-    await this.client.updateFields(
-      context,
-      cms.ContentType.URL,
-      id,
-      convertedFields
-    )
+    await this.client.updateFields(cms.ContentType.URL, id, convertedFields)
   }
   async updatePayloadFields(
     context: cms.SupportedLocales,
@@ -100,12 +101,7 @@ export class ContentsDelivery {
       id,
       applyToAllLocales
     )
-    await this.client.updateFields(
-      context,
-      cms.ContentType.PAYLOAD,
-      id,
-      convertedFields
-    )
+    await this.client.updateFields(cms.ContentType.PAYLOAD, id, convertedFields)
   }
 
   async updateTextFields(
@@ -120,12 +116,7 @@ export class ContentsDelivery {
       id,
       applyToAllLocales
     )
-    await this.client.updateFields(
-      context,
-      cms.ContentType.TEXT,
-      id,
-      convertedFields
-    )
+    await this.client.updateFields(cms.ContentType.TEXT, id, convertedFields)
   }
 
   async updateButtonFields(
@@ -140,12 +131,7 @@ export class ContentsDelivery {
       id,
       applyToAllLocales
     )
-    await this.client.updateFields(
-      context,
-      cms.ContentType.BUTTON,
-      id,
-      convertedFields
-    )
+    await this.client.updateFields(cms.ContentType.BUTTON, id, convertedFields)
   }
 
   async updateImageFields(
@@ -160,12 +146,7 @@ export class ContentsDelivery {
       id,
       applyToAllLocales
     )
-    await this.client.updateFields(
-      context,
-      cms.ContentType.IMAGE,
-      id,
-      convertedFields
-    )
+    await this.client.updateFields(cms.ContentType.IMAGE, id, convertedFields)
   }
 
   async updateCarouselFields(
@@ -181,7 +162,6 @@ export class ContentsDelivery {
       applyToAllLocales
     )
     await this.client.updateFields(
-      context,
       cms.ContentType.CAROUSEL,
       id,
       convertedFields
@@ -200,12 +180,7 @@ export class ContentsDelivery {
       id,
       applyToAllLocales
     )
-    await this.client.updateFields(
-      context,
-      cms.ContentType.ELEMENT,
-      id,
-      convertedFields
-    )
+    await this.client.updateFields(cms.ContentType.ELEMENT, id, convertedFields)
   }
 
   async updateHandoffFields(
@@ -220,12 +195,7 @@ export class ContentsDelivery {
       id,
       applyToAllLocales
     )
-    await this.client.updateFields(
-      context,
-      cms.ContentType.HANDOFF,
-      id,
-      convertedFields
-    )
+    await this.client.updateFields(cms.ContentType.HANDOFF, id, convertedFields)
   }
 
   async createAsset(
@@ -241,7 +211,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
-    const entry = await this.client.getEntry(id, cms.ContentType.URL)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.URL,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()
@@ -275,7 +250,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
-    const entry = await this.client.getEntry(id, cms.ContentType.PAYLOAD)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.PAYLOAD,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()
@@ -305,7 +285,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
-    const entry = await this.client.getEntry(id, cms.ContentType.HANDOFF)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.HANDOFF,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()
@@ -370,7 +355,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
-    const entry = await this.client.getEntry(id, cms.ContentType.TEXT)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.TEXT,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()
@@ -437,7 +427,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
-    const entry = await this.client.getEntry(id, cms.ContentType.BUTTON)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.BUTTON,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()
@@ -484,7 +479,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
-    const entry = await this.client.getEntry(id, cms.ContentType.IMAGE)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.IMAGE,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()
@@ -531,7 +531,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ): Promise<PartialItem<any>> {
-    const entry = await this.client.getEntry(id, cms.ContentType.CAROUSEL)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.CAROUSEL,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()
@@ -577,7 +582,12 @@ export class ContentsDelivery {
     id: string,
     applyToAllLocales: boolean
   ) {
-    const entry = await this.client.getEntry(id, cms.ContentType.ELEMENT)
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.ELEMENT,
+      undefined,
+      true
+    )
 
     const locales = applyToAllLocales
       ? await this.client.getLocales()

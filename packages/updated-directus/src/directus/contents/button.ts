@@ -51,6 +51,8 @@ export class ButtonDelivery extends ContentDelivery {
     if (contentType === ContentType.URL) {
       return new Callback(undefined, entry.url)
     }
+
+    console.log(entry.target[0].item)
     const PAYLOAD_CONTENT_TYPE = 'payload'
     switch (entry.target[0].collection) {
       case PAYLOAD_CONTENT_TYPE:
