@@ -37,91 +37,96 @@ export const deployBackendStack = async (
 
   const awsResourceOptions = { provider: awsProvider, parent: awsProvider }
 
-  const nlpModelsBucket = new NLPModelsBucket({}, awsResourceOptions)
+  // const nlpModelsBucket = new NLPModelsBucket({}, awsResourceOptions)
 
   const database = new DynamoDB(
     { tableName: config.tableName },
     awsResourceOptions
   )
 
-  const callerIdentity = aws.getCallerIdentity({ provider: awsProvider })
-  const accountId = callerIdentity.then(identity => identity.accountId)
+  // const callerIdentity = aws.getCallerIdentity({ provider: awsProvider })
+  // const accountId = callerIdentity.then(identity => identity.accountId)
 
-  const DYNAMODB_CRUD_POLICY = getDynamoDbCrudPolicy(
-    awsProvider.region,
-    accountId,
-    database.table.name
-  )
+  // const DYNAMODB_CRUD_POLICY = getDynamoDbCrudPolicy(
+  //   awsProvider.region,
+  //   accountId,
+  //   database.table.name
+  // )
 
-  const websocketServer = new WebSocketServer(
-    { database, nlpModelsBucket, dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY },
-    {
-      ...awsResourceOptions,
-      dependsOn: [nlpModelsBucket, database],
-    }
-  )
+  // const websocketServer = new WebSocketServer(
+  //   { database, nlpModelsBucket, dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY },
+  //   {
+  //     ...awsResourceOptions,
+  //     dependsOn: [nlpModelsBucket, database],
+  //   }
+  // )
 
-  const sender = new SQSLambdaMapping(
-    {
-      lambdaName: SENDER_LAMBDA_NAME,
-      queueName: `${SENDER_LAMBDA_NAME}-queue`,
-      sqsLambdaPath: join(HANDLERS_PATH, SENDER_LAMBDA_NAME),
-      handler: 'index.default',
-      inlinePolicies: [
-        {
-          name: `${SENDER_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
-          policy: DYNAMODB_CRUD_POLICY,
-        },
-        {
-          name: `${SENDER_LAMBDA_NAME}-execute-connections`,
-          policy: websocketServer.manageConnectionsPolicy,
-        },
-      ],
-      environmentVariables: {
-        WEBSOCKET_URL: websocketServer.url,
-        DATA_PROVIDER_URL: database.url,
-      },
-    },
-    awsResourceOptions
-  )
+  // const sender = new SQSLambdaMapping(
+  //   {
+  //     lambdaName: SENDER_LAMBDA_NAME,
+  //     queueName: `${SENDER_LAMBDA_NAME}-queue`,
+  //     sqsLambdaPath: join(HANDLERS_PATH, SENDER_LAMBDA_NAME),
+  //     handler: 'index.default',
+  //     inlinePolicies: [
+  //       {
+  //         name: `${SENDER_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
+  //         policy: DYNAMODB_CRUD_POLICY,
+  //       },
+  //       {
+  //         name: `${SENDER_LAMBDA_NAME}-execute-connections`,
+  //         policy: websocketServer.manageConnectionsPolicy,
+  //       },
+  //     ],
+  //     environmentVariables: {
+  //       WEBSOCKET_URL: websocketServer.url,
+  //       DATA_PROVIDER_URL: database.url,
+  //     },
+  //   },
+  //   awsResourceOptions
+  // )
 
-  const botExecutor = new SQSLambdaMapping(
-    {
-      lambdaName: BOT_EXECUTOR_LAMBDA_NAME,
-      queueName: `${BOT_EXECUTOR_LAMBDA_NAME}-queue`,
-      sqsLambdaPath: join(HANDLERS_PATH, BOT_EXECUTOR_LAMBDA_NAME),
-      handler: 'index.default',
-      inlinePolicies: [
-        {
-          name: `${BOT_EXECUTOR_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
-          policy: DYNAMODB_CRUD_POLICY,
-        },
-      ],
-      environmentVariables: {
-        DATA_PROVIDER_URL: database.url,
-        [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: sender.queueUrl,
-      },
-    },
-    awsResourceOptions
-  )
+  // const botExecutor = new SQSLambdaMapping(
+  //   {
+  //     lambdaName: BOT_EXECUTOR_LAMBDA_NAME,
+  //     queueName: `${BOT_EXECUTOR_LAMBDA_NAME}-queue`,
+  //     sqsLambdaPath: join(HANDLERS_PATH, BOT_EXECUTOR_LAMBDA_NAME),
+  //     handler: 'index.default',
+  //     inlinePolicies: [
+  //       {
+  //         name: `${BOT_EXECUTOR_LAMBDA_NAME}-dynamodb-crud-inline-policy`,
+  //         policy: DYNAMODB_CRUD_POLICY,
+  //       },
+  //     ],
+  //     environmentVariables: {
+  //       DATA_PROVIDER_URL: database.url,
+  //       [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: sender.queueUrl,
+  //     },
+  //   },
+  //   awsResourceOptions
+  // )
 
-  const restServer = new RestServer(
-    {
-      nlpModelsBucket,
-      database,
-      dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY,
-      websocketServer,
-      botExecutorQueueUrl: botExecutor.queueUrl,
-      senderQueueUrl: sender.queueUrl,
-    },
-    awsResourceOptions
-  )
+  // const restServer = new RestServer(
+  //   {
+  //     nlpModelsBucket,
+  //     database,
+  //     dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY,
+  //     websocketServer,
+  //     botExecutorQueueUrl: botExecutor.queueUrl,
+  //     senderQueueUrl: sender.queueUrl,
+  //   },
+  //   awsResourceOptions
+  // )
 
   return {
-    nlpModelsUrl: nlpModelsBucket.url,
-    websocketUrl: websocketServer.url,
-    apiUrl: restServer.url,
+    nlpModelsUrl: pulumi.output('nlpModelsBucket.url'),
+    websocketUrl: pulumi.output('websocketServer.url'),
+    apiUrl: pulumi.output('restServer.url'),
   }
+  // return {
+  //   nlpModelsUrl: nlpModelsBucket.url,
+  //   websocketUrl: websocketServer.url,
+  //   apiUrl: restServer.url,
+  // }
 }
 
 interface FrontendDeployResults {

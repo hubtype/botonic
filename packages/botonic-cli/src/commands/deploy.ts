@@ -1,4 +1,3 @@
-import { ProjectConfig, PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
@@ -12,13 +11,14 @@ import { ZipAFolder } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
-import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
+import { CLOUD_PROVIDERS } from '../constants'
 import {
   copy,
   createDir,
   pathExists,
   removeRecursively,
 } from '../util/file-system'
+import { getPulumiRunnerInstance } from '../util/pulumi'
 import { sleep } from '../util/system'
 
 let npmCommand: string | undefined
@@ -86,9 +86,7 @@ Deploying to AWS...
 
   async deployAWS(): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const projectConfig: ProjectConfig = require(PATH_TO_AWS_CONFIG).default
-      const pulumiRunner = new PulumiRunner(projectConfig)
+      const pulumiRunner = await getPulumiRunnerInstance()
       await pulumiRunner.deploy()
     } catch (e) {
       const error = `Deploy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
