@@ -76,29 +76,37 @@ const BUILD_COMMANDS = [
   },
 ]
 
+// Things to be able to configure:
+/**
+ * PULUMI_HOME
+ * MAIN_DIRECTORY to different handlers, server code, etc..
+ * How Pulumi logs in
+ */
+
 export class PulumiRunner {
   private isDestroy = false
   private programConfig: ProgramConfig
   private updatedBucketObjects: string[] = []
   public projectConfig: ProjectConfig = {}
   private buildCommands: concurrently.CommandObj[] | string[]
+  private pathToBinary: string
   pulumiDownloader: PulumiDownloader
 
   constructor(
     projectConfig: ProjectConfig,
     buildCommands = BUILD_COMMANDS,
-    pulumiDownloader = new PulumiDownloader()
+    binaryPath: string
   ) {
     this.projectConfig = projectConfig
     this.programConfig = this.projectConfig as ProgramConfig
     this.buildCommands = buildCommands
-    this.pulumiDownloader = pulumiDownloader
+    env.PATH = `${env.PATH}:${binaryPath}` // path to directory where pulumi bin is located to allow executing stack commands
   }
 
   private async beforeRun(isDestroy: boolean): Promise<void> {
     this.isDestroy = isDestroy
     if (!this.isDestroy) {
-      if (process.env.BOTONIC_JWT_SECRET === undefined) {
+      if (env.BOTONIC_JWT_SECRET === undefined) {
         const errMsg =
           'You must export an env variable BOTONIC_JWT_SECRET with your secret for authenticating users.'
         throw new Error(errMsg)
@@ -111,9 +119,7 @@ export class PulumiRunner {
         throw new Error(e)
       }
     }
-    await this.pulumiDownloader.downloadBinaryIfNotInstalled()
-    this.setExecutionVariables()
-    this.doPulumiLoginLocally()
+    env.PULUMI_CONFIG_PASSPHRASE = env.PULUMI_CONFIG_PASSPHRASE || ''
   }
 
   private async initStack(
@@ -139,21 +145,23 @@ export class PulumiRunner {
   }
 
   private async installAwsPlugin(stack: Stack): Promise<void> {
+    // this gets defined by PULUMI_HOME
     // const awsPluginVersion = `v${getCleanVersionForPackage('@pulumi/aws')}`
     const awsPluginVersion = `v4.25.0` // not working with 4.27.1 (no space left in device, lambda)
-    // const awsPluginVersion = `v4.19.0`
-    // const pluginInstallationPath = join(
-    //   getHomeDirectory(),
-    //   '.pulumi',
-    //   'plugins',
-    //   `resource-aws-${awsPluginVersion}`
-    // )
-    // if (!existsSync(pluginInstallationPath)) {
-    //   console.log({ pluginInstallationPath })
-    console.info('installing plugins...')
-    await stack.workspace.installPlugin('aws', awsPluginVersion)
-    console.info('plugins installed')
-    // }
+    const awsPluginName = `resource-aws-${awsPluginVersion}`
+    const pluginInstallationPath = join(
+      // @ts-ignore
+      env.PULUMI_HOME,
+      'plugins',
+      awsPluginName
+    )
+    if (!existsSync(pluginInstallationPath)) {
+      console.info(`installing plugin ${awsPluginName}...`)
+      await stack.workspace.installPlugin('aws', awsPluginVersion)
+      console.info('plugin installed.')
+    } else {
+      console.log(`Detected plugin ${awsPluginName}`)
+    }
   }
 
   private async withAwsProvider(stack: Stack): Promise<Stack> {
@@ -165,24 +173,19 @@ export class PulumiRunner {
 
     console.log('setting up AWS config...')
     await stack.setConfig('aws:region', {
-      value:
-        this.projectConfig.region ||
-        process.env.DEFAULT_AWS_REGION ||
-        'eu-west-1',
+      value: this.projectConfig.region || env.DEFAULT_AWS_REGION || 'eu-west-1',
     })
     await stack.setConfig('aws:profile', {
-      value: this.projectConfig.profile || process.env.AWS_PROFILE || 'default',
+      value: this.projectConfig.profile || env.AWS_PROFILE || 'default',
     })
     await stack.setConfig('aws:accessKey', {
-      value:
-        this.projectConfig.accessKey || process.env.AWS_ACCESS_KEY_ID || '',
+      value: this.projectConfig.accessKey || env.AWS_ACCESS_KEY_ID || '',
     })
     await stack.setConfig('aws:secretKey', {
-      value:
-        this.projectConfig.secretKey || process.env.AWS_SECRET_ACCESS_KEY || '',
+      value: this.projectConfig.secretKey || env.AWS_SECRET_ACCESS_KEY || '',
     })
     await stack.setConfig('aws:token', {
-      value: this.projectConfig.token || process.env.AWS_SESSION_TOKEN || '',
+      value: this.projectConfig.token || env.AWS_SESSION_TOKEN || '',
     })
     return stack
   }
@@ -305,34 +308,6 @@ export class PulumiRunner {
       )
     } catch (e) {
       console.log('Could not invalidate cache for files.', e)
-    }
-  }
-
-  private setExecutionVariables(): void {
-    env.PULUMI_CONFIG_PASSPHRASE = process.env.PULUMI_CONFIG_PASSPHRASE || ''
-    env.PATH += `:${this.pulumiDownloader.getBinaryPath()}`
-  }
-
-  private doPulumiLoginLocally(): void {
-    // TODO: Login in our S3 bucket ?
-    // TODO: Leave it configurable
-
-    // execSync(
-    //   `${join(
-    //     this.pulumiDownloader.getBinaryPath(),
-    //     'pulumi'
-    //   )} login --local --non-interactive`
-    // )
-    try {
-      process.env.PULUMI_HOME = '/tmp/'
-      execSync(
-        `${join(
-          this.pulumiDownloader.getBinaryPath(),
-          'pulumi'
-        )} login s3://botonic-deployer-bucket`
-      )
-    } catch (e) {
-      console.log({ e })
     }
   }
 }

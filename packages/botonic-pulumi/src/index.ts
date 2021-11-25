@@ -28,8 +28,8 @@ export function generateProjectStackNamePrefix(
   }
   return prefix
 }
-// const MAIN_DIRECTORY = cwd()
-const MAIN_DIRECTORY = join(tmpdir(), 'botonic-dist', 'dist')
+const MAIN_DIRECTORY = cwd()
+// const MAIN_DIRECTORY = join(tmpdir(), 'botonic-dist', 'dist')
 
 export const NLP_MODELS_PATH = join(
   MAIN_DIRECTORY,
