@@ -140,11 +140,6 @@ export const deployBackendStack = async (
     awsResourceOptions
   )
 
-  // return {
-  //   nlpModelsUrl: pulumi.output('nlpModelsBucket.url'),
-  //   websocketUrl: pulumi.output('websocketServer.url'),
-  //   apiUrl: pulumi.output('restServer.url'),
-  // }
   return {
     nlpModelsUrl: nlpModelsBucket.url,
     websocketUrl: websocketServer.url,
