@@ -3,7 +3,7 @@ import { PulumiDownloader } from '@botonic/pulumi/lib/pulumi-downloader'
 import { ProjectConfig, PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { execSync } from 'child_process'
 import { join } from 'path'
-import { env } from 'process'
+import { cwd, env } from 'process'
 
 import { PATH_TO_AWS_CONFIG } from '../constants'
 import { getHomeDirectory } from './file-system'
@@ -33,5 +33,6 @@ export async function getPulumiRunnerInstance(): Promise<PulumiRunner> {
   new PulumiLocalAuthenticator(binary).doLogin()
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const projectConfig: ProjectConfig = require(PATH_TO_AWS_CONFIG).default
-  return new PulumiRunner(projectConfig, [], binaryPath)
+  const workingDirectory = cwd()
+  return new PulumiRunner(projectConfig, binaryPath, workingDirectory)
 }

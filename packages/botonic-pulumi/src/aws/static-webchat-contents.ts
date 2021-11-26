@@ -147,7 +147,7 @@ function createCustomDomainCertificate(
   return certificateValidation.certificateArn
 }
 export interface StaticWebchatContentsArgs {
-  pathToWebchatContents?: string
+  pathToWebchatContents: string
   customDomain?: string
   nlpModelsUrl: string
   apiUrl: string
@@ -163,8 +163,7 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
 
   constructor(args: StaticWebchatContentsArgs, opts: AWSResourceOptions) {
     super('static-webchat-contents', args, opts)
-    const pathToWebchatContents =
-      args.pathToWebchatContents || WEBCHAT_CONTENTS_PATH
+    const { pathToWebchatContents } = args
 
     const customDomain = args.customDomain
 

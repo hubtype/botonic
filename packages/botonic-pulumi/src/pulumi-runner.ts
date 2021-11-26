@@ -4,7 +4,6 @@ import {
   Stack,
   UpResult,
 } from '@pulumi/pulumi/automation'
-import { execSync } from 'child_process'
 import concurrently from 'concurrently'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
@@ -19,6 +18,7 @@ import {
   WEBSOCKET_ENDPOINT_PATH_NAME,
   WSS_PROTOCOL_PREFIX,
 } from './'
+import { getWebchatBotonicPath } from './'
 import {
   CacheInvalidator,
   getUpdatedObjectsFromPreview,
@@ -39,6 +39,7 @@ export interface AWSCredentials {
   token?: string
 }
 export interface ProjectConfig extends AWSCredentials {
+  workingDirectory?: string
   projectName?: string
   stackName?: string
   customDomain?: string
@@ -94,12 +95,14 @@ export class PulumiRunner {
 
   constructor(
     projectConfig: ProjectConfig,
-    buildCommands = BUILD_COMMANDS,
-    binaryPath: string
+    binaryPath: string,
+    workingDirectory: string,
+    buildCommands = BUILD_COMMANDS
   ) {
-    this.projectConfig = projectConfig
+    this.projectConfig = { ...projectConfig, workingDirectory }
     this.programConfig = this.projectConfig as ProgramConfig
     this.buildCommands = buildCommands
+    this.pathToBinary = binaryPath
     env.PATH = `${env.PATH}:${binaryPath}` // path to directory where pulumi bin is located to allow executing stack commands
   }
 
@@ -223,11 +226,13 @@ export class PulumiRunner {
   }
 
   private replaceMatchWithinWebchat(regex: RegExp, replacement: string): void {
-    let fileContent = readFileSync(WEBCHAT_BOTONIC_PATH, {
+    const workingDirectory = this.projectConfig.workingDirectory as string
+    const webchatBotonicPath = getWebchatBotonicPath(workingDirectory)
+    let fileContent = readFileSync(webchatBotonicPath, {
       encoding: 'utf8',
     })
     fileContent = fileContent.replace(regex, `"${replacement}"`)
-    writeFileSync(WEBCHAT_BOTONIC_PATH, fileContent, { encoding: 'utf8' })
+    writeFileSync(webchatBotonicPath, fileContent, { encoding: 'utf8' })
   }
 
   private async runStack(

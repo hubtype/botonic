@@ -21,14 +21,14 @@ export interface RestServerArgs {
   websocketServer: WebSocketServer
   botExecutorQueueUrl: pulumi.Input<string>
   senderQueueUrl: pulumi.Input<string>
-  restServerLambdaPath?: string
+  restServerLambdaPath: string
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
   url: pulumi.Output<string>
   constructor(args: RestServerArgs, opts: AWSResourceOptions) {
     super('rest-api-server', args, opts)
 
-    const restServerLambdaPath = args.restServerLambdaPath || REST_SERVER_PATH
+    const { restServerLambdaPath } = args
 
     if (existsSync(restServerLambdaPath)) {
       const callerIdentity = aws.getCallerIdentity({ provider: opts.provider })
