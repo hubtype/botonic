@@ -51,6 +51,25 @@ export const knownFields = [
   'agent_email_id',
 ]
 
+export const referenceFields = [
+  'buttons',
+  'followup',
+  'target',
+  'elements',
+  'mondays',
+  'tuesdays',
+  'wednesdays',
+  'thursdays',
+  'fridays',
+  'saturdays',
+  'sundays',
+  'exceptions',
+  'hourRanges',
+  'schedule',
+  'onfinish',
+  'queue',
+]
+
 export function getContentFields(contentType: cms.ContentType): string[] {
   switch (contentType) {
     case cms.ContentType.TEXT:
@@ -88,6 +107,8 @@ function getTextFields(): string[] {
     'multilanguage_fields.buttons.item.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.target.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.target.item.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.target.item.multilanguage_fields.*',
     'multilanguage_fields.followup.*',
     'multilanguage_fields.followup.item.*',
     'multilanguage_fields.followup.item.multilanguage_fields.*',
@@ -109,6 +130,8 @@ function getCarouselFields(): string[] {
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.target.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.item.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.item.multilanguage_fields.*',
   ]
 }
 
@@ -122,6 +145,8 @@ function getElementFields(): string[] {
     'multilanguage_fields.buttons.item.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.target.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.target.item.*',
+    'multilanguage_fields.buttons.item.multilanguage_fields.target.item.multilanguage_fields.*',
   ]
 }
 
@@ -140,9 +165,10 @@ function getButtonFields(): string[] {
     'id',
     'name',
     'status',
-    'multilanguage_fields.text',
-    'multilanguage_fields.target.*',
     'multilanguage_fields.*',
+    'multilanguage_fields.target.*',
+    'multilanguage_fields.target.item.*',
+    'multilanguage_fields.target.item.multilanguage_fields.*',
   ]
 }
 

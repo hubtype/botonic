@@ -16,7 +16,7 @@ export class ButtonDelivery extends ContentDelivery {
 
   async button(id: string, context: SupportedLocales): Promise<Button> {
     const entry = await this.getEntry(id, context)
-    return this.fromEntry(entry, ContentType.BUTTON)
+    return this.fromEntry(entry, ContentType.BUTTON, context)
   }
 
   fromEntry(
@@ -34,13 +34,17 @@ export class ButtonDelivery extends ContentDelivery {
       },
       text: this.createButtonText(entry, contentType),
       callback: entry[mf][0]
-        ? this.createButtonTarget(entry[mf][0], contentType)
+        ? this.createButtonTarget(entry[mf][0], contentType, context)
         : new Callback(undefined, undefined),
     }
     return new Button(opt)
   }
 
-  private createButtonTarget(entry: any, contentType?: ContentType): Callback {
+  private createButtonTarget(
+    entry: any,
+    contentType?: ContentType,
+    context?: SupportedLocales
+  ): Callback {
     if (contentType === ContentType.TEXT) {
       return new ContentCallback(contentType, entry.text_id)
     }
@@ -51,18 +55,22 @@ export class ButtonDelivery extends ContentDelivery {
     if (contentType === ContentType.URL) {
       return new Callback(undefined, entry.url)
     }
+    if (context)
+      entry.target[0].item[mf] = this.getContextContent(
+        entry.target[0].item[mf],
+        context
+      )
 
-    console.log(entry.target[0].item)
     const PAYLOAD_CONTENT_TYPE = 'payload'
     switch (entry.target[0].collection) {
       case PAYLOAD_CONTENT_TYPE:
-        return new Callback(entry.target[0].item.payload, undefined)
+        return new Callback(entry.target[0].item[mf][0].payload, undefined)
       case ContentType.URL:
-        return new Callback(undefined, entry.target[0].item.url)
+        return new Callback(undefined, entry.target[0].item[mf][0].url)
       default:
         return new ContentCallback(
           entry.target[0].collection,
-          entry.target[0].item
+          entry.target[0].item.id
         )
     }
   }

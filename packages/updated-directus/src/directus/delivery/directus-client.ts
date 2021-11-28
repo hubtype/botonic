@@ -12,6 +12,7 @@ import {
   hasQueue,
   hasSchedule,
   mf,
+  referenceFields,
 } from './delivery-utils'
 
 export class DirectusClient {
@@ -35,8 +36,7 @@ export class DirectusClient {
         deep: context && getContextContent(context),
       })
       entry = { ...entry, collection: contentType }
-      console.log(entry[mf][0].target)
-
+      entry[mf] = this.removeEmptyLocales(entry[mf])
       if (returnOriginalEntry) return entry!
       if (hasFollowUp(entry)) {
         Object.assign(
@@ -241,14 +241,64 @@ export class DirectusClient {
           const newLocale = {
             ...localeCopyFrom,
           }
+
           newLocale['languages_code'] = localeToBeAdded.locale
+          delete newLocale['id']
 
-          entry.multilanguage_fields.push(newLocale)
+          this.addReferenceFields(newLocale)
 
-          await this.updateFields(contentType, entry.id, entry)
+          entry[mf].push(newLocale)
+
+          await this.updateFields(contentType, entry.id, {
+            [mf]: entry[mf],
+          })
         }
       }
     }
+  }
+
+  private removeEmptyLocales(
+    localesContent: PartialItem<any>[]
+  ): PartialItem<any>[] {
+    const notEmptyLocalesContent = localesContent.filter(
+      (localeContent: PartialItem<any>) => localeContent.languages_code != null
+    )
+    localesContent = [...notEmptyLocalesContent]
+    return localesContent
+  }
+
+  private addReferenceFields(newLocale: PartialItem<any>) {
+    referenceFields.forEach((field: string) => {
+      if (newLocale[field] && newLocale[field].length) {
+        if (newLocale[field].length > 1) {
+          newLocale[field].forEach(
+            (elementField: PartialItem<any>, i: number) => {
+              newLocale[field][i] = this.createItem(
+                elementField.item.id,
+                elementField.collection
+              )
+            }
+          )
+        } else {
+          newLocale[field] = [
+            this.createItem(
+              newLocale[field][0].item.id,
+              newLocale[field][0].collection
+            ),
+          ]
+        }
+      }
+    })
+  }
+
+  private createItem(id: string, model: string): PartialItem<any> {
+    const newItem = {
+      collection: model,
+      item: {
+        id: id,
+      },
+    }
+    return newItem
   }
 
   private getLocaleContent(
