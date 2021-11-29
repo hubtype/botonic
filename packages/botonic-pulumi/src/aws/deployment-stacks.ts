@@ -2,17 +2,15 @@ import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 import { join } from 'path'
 
+import { BOT_EXECUTOR_LAMBDA_NAME, SENDER_LAMBDA_NAME } from '../constants'
 import {
-  BOT_EXECUTOR_LAMBDA_NAME,
   getHandlersPath,
   getNlpModelsPath,
   getPathToWebchatContents,
-  getProjectStackNamePrefix,
   getRestServerPath,
   getWebsocketServerPath,
-  SENDER_LAMBDA_NAME,
-} from '..'
-import { ProgramConfig } from '../pulumi-runner'
+} from '../paths'
+import { getProjectStackNamePrefix, ProgramConfig } from '../pulumi'
 import { AWSProvider, getAwsProviderConfig } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
@@ -186,4 +184,9 @@ export const deployFrontendStack = async (
     webchatUrl: staticWebchatContents.webchatUrl,
     cloudfrontId: staticWebchatContents.cloudfrontId,
   }
+}
+
+export const deployFullStack = {
+  backend: deployBackendStack,
+  frontend: deployFrontendStack,
 }

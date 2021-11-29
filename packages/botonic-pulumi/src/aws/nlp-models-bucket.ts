@@ -2,9 +2,9 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import { HTTPS_PROTOCOL_PREFIX, NLP_MODELS_PATH } from '..'
+import { HTTPS_PROTOCOL_PREFIX } from '../constants'
 import { crawlDirectory } from '../system-utils'
-import { AWSComponentResource, AWSResourceOptions } from '.'
+import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
 
 export interface NLPModelsBucketArgs {
   nlpModelsPath: string

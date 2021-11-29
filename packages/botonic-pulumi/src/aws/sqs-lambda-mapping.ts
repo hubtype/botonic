@@ -1,7 +1,7 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import { AWSComponentResource, AWSResourceOptions } from '.'
+import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
 
 interface SQSLambdaPolicy {
   name: string
