@@ -40,6 +40,7 @@ export class PulumiCoordinator {
   private downloader: PulumiDownloader
   private authenticator: PulumiAuthenticator
   private projectConfig: ProjectConfig
+  private pulumiConfig: PulumiConfig
   private updatedBucketObjects: string[] = []
 
   constructor(
@@ -52,6 +53,7 @@ export class PulumiCoordinator {
     this.downloader = downloader
     this.authenticator = authenticator
     this.projectConfig = projectConfig
+    this.pulumiConfig = pulumiConfig
   }
 
   definePulumiEnvironment(pulumiConfig: PulumiConfig): void {
@@ -62,7 +64,9 @@ export class PulumiCoordinator {
   }
 
   async init(): Promise<void> {
-    const { binaryPath } = await this.downloader.downloadBinaryIfNotInstalled()
+    const { binaryPath } = await this.downloader.downloadBinaryIfNotInstalled(
+      this.pulumiConfig.pulumiVersion
+    )
     env.PATH = `${env.PATH}:${binaryPath}` // path to directory where pulumi bin is located to allow executing stack commands
     this.authenticator.doLogin(`${join(binaryPath, PULUMI_BINARY_NAME)}`)
   }
@@ -143,7 +147,7 @@ export class PulumiCoordinator {
 
   private async prepareStack(stackRunner: StackRunner) {
     await stackRunner.init()
-    await stackRunner.initAWSProvider()
+    await stackRunner.initAWSProvider(this.pulumiConfig.awsPluginVersion)
     await stackRunner.refresh()
   }
 
