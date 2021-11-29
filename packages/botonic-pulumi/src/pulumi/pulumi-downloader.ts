@@ -5,7 +5,7 @@ import { platform } from 'os'
 import { join } from 'path'
 import { extract } from 'tar'
 
-import { getCleanVersionForPackage, getHomeDirectory } from '../system-utils'
+import { getCleanVersionForPackage } from '../system-utils'
 
 export class PulumiDownloader {
   private PULUMI_SDK_URL = 'https://get.pulumi.com/releases/sdk'
@@ -21,7 +21,7 @@ export class PulumiDownloader {
   }
 
   async downloadBinaryIfNotInstalled(
-    version = '3.11.0' // getCleanVersionForPackage('@pulumi/pulumi')
+    version = getCleanVersionForPackage('@pulumi/pulumi')
   ): Promise<any> {
     if (!this.isBinaryInstalled()) {
       console.log('It seems that it is the first time using Botonic 1.0')

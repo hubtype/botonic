@@ -9,6 +9,7 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import { env } from 'process'
 
+import { getCleanVersionForPackage } from '../system-utils'
 import { PROJECT_NAME_SEPARATOR } from './constants'
 import { generateProjectStackNamePrefix } from './project-utils'
 import { ProjectConfig } from './types'
@@ -40,8 +41,9 @@ export class StackRunner {
     console.info(`successfully initialized ${this.stackName} stack`)
   }
 
-  async installAwsPlugin(version = '4.25.0'): Promise<void> {
-    // const awsPluginVersion = `v${getCleanVersionForPackage('@pulumi/aws')}`
+  async installAwsPlugin(
+    version = `${getCleanVersionForPackage('@pulumi/aws')}`
+  ): Promise<void> {
     const awsPluginVersion = `v${version}` // not working with 4.27.1 (no space left in device, lambda)
     const awsPluginName = `resource-aws-${awsPluginVersion}`
     const pluginInstallationPath = join(
@@ -59,9 +61,9 @@ export class StackRunner {
     }
   }
 
-  async initAWSProvider(): Promise<void> {
+  async initAWSProvider(version?: string | undefined): Promise<void> {
     try {
-      await this.installAwsPlugin()
+      await this.installAwsPlugin(version)
     } catch (e) {
       console.error({ e })
     }
