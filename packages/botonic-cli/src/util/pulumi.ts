@@ -1,38 +1,41 @@
-import { PulumiAuthenticator } from '@botonic/pulumi/lib/pulumi/pulumi-authenticator'
-import { PulumiDownloader } from '@botonic/pulumi/lib/pulumi-downloader'
-import { ProjectConfig, PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
-import { execSync } from 'child_process'
+import {
+  ProjectConfig,
+  PulumiConfig,
+  PulumiCoordinator,
+  PulumiDownloader,
+  PulumiLocalAuthenticator,
+} from '@botonic/pulumi/lib/pulumi'
 import { join } from 'path'
-import { cwd, env } from 'process'
+import { cwd } from 'process'
 
 import { PATH_TO_AWS_CONFIG } from '../constants'
 import { getHomeDirectory } from './file-system'
 
-class PulumiLocalAuthenticator implements PulumiAuthenticator {
-  binary: string
-  constructor(binary: string) {
-    this.binary = binary
-  }
-  doLogin(): void {
-    env.PULUMI_ACCESS_TOKEN = ''
-    env.PULUMI_CREDENTIALS_PATH = join(getHomeDirectory(), '.pulumi')
-    console.log('Logging in locally...')
-    execSync(`${this.binary} login --local --non-interactive`)
-  }
-}
+export const PULUMI_INSTALLATION_PATH = join(getHomeDirectory(), '.botonic')
+export const PULUMI_HOME = join(getHomeDirectory(), '.botonic', 'pulumi')
+export const PULUMI_WORKING_DIRECTORY = cwd()
+export const PULUMI_CREDENTIALS_PATH = join(getHomeDirectory(), '.pulumi')
 
-export async function getPulumiRunnerInstance(): Promise<PulumiRunner> {
-  const pulumiDownloader = new PulumiDownloader(
-    join(getHomeDirectory(), '.botonic')
-  )
-  env.PULUMI_HOME = join(getHomeDirectory(), '.botonic', 'pulumi')
-  const {
-    binaryPath,
-    binary,
-  } = await pulumiDownloader.downloadBinaryIfNotInstalled()
-  new PulumiLocalAuthenticator(binary).doLogin()
+export async function getPulumiCoordinatorInstance(): Promise<PulumiCoordinator> {
+  const pulumiDownloader = new PulumiDownloader(PULUMI_INSTALLATION_PATH)
+  const pulumiAuthenticator = new PulumiLocalAuthenticator()
+
+  const pulumiConfig: PulumiConfig = {
+    pulumiHome: PULUMI_HOME,
+    pulumiCredentialsPath: PULUMI_CREDENTIALS_PATH,
+    pulumiAccessToken: '',
+    pulumiConfigPassphrase: '',
+  }
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const projectConfig: ProjectConfig = require(PATH_TO_AWS_CONFIG).default
-  const workingDirectory = cwd()
-  return new PulumiRunner(projectConfig, binaryPath, workingDirectory)
+  projectConfig.workingDirectory = PULUMI_WORKING_DIRECTORY
+
+  const pulumiCoordinator = new PulumiCoordinator(
+    pulumiConfig,
+    projectConfig,
+    pulumiDownloader,
+    pulumiAuthenticator
+  )
+  await pulumiCoordinator.init()
+  return pulumiCoordinator
 }

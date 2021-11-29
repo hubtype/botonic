@@ -5,10 +5,9 @@ import { existsSync } from 'fs'
 import {
   BOT_EXECUTOR_LAMBDA_NAME,
   REST_SERVER_ENDPOINT_PATH_NAME,
-  REST_SERVER_PATH,
   SENDER_LAMBDA_NAME,
-} from '..'
-import { AWSComponentResource, AWSResourceOptions } from '.'
+} from '../constants'
+import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
 import { getManageConnectionsPolicy } from './policies'

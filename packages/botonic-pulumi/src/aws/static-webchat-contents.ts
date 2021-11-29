@@ -6,17 +6,15 @@ import * as mime from 'mime'
 import {
   HTTPS_PROTOCOL_PREFIX,
   REST_SERVER_ENDPOINT_PATH_NAME,
-  WEBCHAT_CONTENTS_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
   WSS_PROTOCOL_PREFIX,
-} from '..'
+} from '../constants'
 import { crawlDirectory } from '../system-utils'
 import {
   AWSComponentResource,
-  AWSProvider,
   AWSResourceOptions,
   getAwsProviderConfig,
-} from '.'
+} from './aws-resource'
 import { getCachePolicyId, getOriginRequestPolicyId } from './policies'
 
 function getDomainAndSubdomain(

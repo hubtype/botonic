@@ -1,18 +1,11 @@
 import decompress from 'decompress'
 import download from 'download'
-import {
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  renameSync,
-  rmSync,
-  unlinkSync,
-} from 'fs'
-import { platform, tmpdir } from 'os'
+import { existsSync, unlinkSync } from 'fs'
+import { platform } from 'os'
 import { join } from 'path'
 import { extract } from 'tar'
 
-import { getCleanVersionForPackage, getHomeDirectory } from './system-utils'
+import { getCleanVersionForPackage, getHomeDirectory } from '../system-utils'
 
 export class PulumiDownloader {
   private PULUMI_SDK_URL = 'https://get.pulumi.com/releases/sdk'

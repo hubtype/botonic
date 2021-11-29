@@ -1,11 +1,10 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import {
-  AWSComponentResource,
-  AWSResourceOptions,
-  BOTONIC_SINGLE_TABLE_NAME,
-} from '.'
+import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
+
+// DynamoDB
+export const BOTONIC_SINGLE_TABLE_NAME = 'user_events'
 
 export interface DynamoDBArgs {
   tableName?: string

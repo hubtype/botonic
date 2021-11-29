@@ -6,7 +6,6 @@ import { statSync } from 'fs'
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
-// eslint-disable-next-line import/named
 import { ZipAFolder } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
@@ -18,7 +17,7 @@ import {
   pathExists,
   removeRecursively,
 } from '../util/file-system'
-import { getPulumiRunnerInstance } from '../util/pulumi'
+import { getPulumiCoordinatorInstance } from '../util/pulumi'
 import { sleep } from '../util/system'
 
 let npmCommand: string | undefined
@@ -86,14 +85,14 @@ Deploying to AWS...
 
   async deployAWS(): Promise<void> {
     try {
-      const pulumiRunner = await getPulumiRunnerInstance()
-      await pulumiRunner.deploy()
+      const pulumiCoordinator = await getPulumiCoordinatorInstance()
+      await pulumiCoordinator.deploy()
     } catch (e) {
       const error = `Deploy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
         e
       )}`
       this.telemetry.trackError(error)
-      throw new Error(e)
+      throw new Error(String(e))
     }
   }
 
