@@ -1,5 +1,6 @@
 import { INPUT, isBrowser } from '@botonic/core'
 import React, { useState } from 'react'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import styled from 'styled-components'
 
 import { ROLES } from '../constants'
@@ -28,7 +29,7 @@ const serialize = imageProps => {
 export const Image = props => {
   const [isHovered, setIsHovered] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const [isZoomed, setIsZoomed] = useState(false)
   let content = props.children
 
   if (isBrowser()) {
@@ -47,7 +48,16 @@ export const Image = props => {
             onClose={() => setIsModalOpen(false)}
             locked={false}
           >
-            <StyledPreviewImage src={props.src} />
+            <TransformWrapper
+              initialScale={1}
+              initialPositionX={0}
+              initialPositionY={0}
+              wheel={{ step: 0.05 }}
+            >
+              <TransformComponent>
+                <StyledPreviewImage src={props.src} />
+              </TransformComponent>
+            </TransformWrapper>
           </PortalModalComponent>
         )}
       </>
