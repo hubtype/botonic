@@ -26,7 +26,7 @@ export class HandoffDelivery extends ContentDelivery {
   fromEntry(entry: PartialItem<any>, context: SupportedLocales): Handoff {
     const queue =
       entry[mf][0] &&
-      entry[mf][0].queue &&
+      entry[mf][0].queue.length &&
       this.queue.fromEntry(entry[mf][0].queue, context)
 
     const opt = {

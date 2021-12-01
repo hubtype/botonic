@@ -33,6 +33,7 @@ import {
   PayloadFields,
   TextFields,
   UrlFields,
+  QueueFields
 } from './manage/directus-contents'
 import { LocalesDelivery } from './manage/locales'
 import { KeywordsDelivery } from './search/keywords'
@@ -77,7 +78,7 @@ export class Directus implements cms.CMS {
       [cms.ContentType.QUEUE]: this._queue,
       [cms.ContentType.HANDOFF]: this._handoff,
       [cms.ContentType.SCHEDULE]: this._schedule,
-      [cms.ContentType.BUTTON]:this._button
+      [cms.ContentType.BUTTON]: this._button,
     }
     this._contents = new ContentsDelivery(client, deliveries)
     this._locales = new LocalesDelivery(client)
@@ -143,6 +144,15 @@ export class Directus implements cms.CMS {
     applyToAllLocales: boolean = true
   ): Promise<void> {
     await this._contents.updateUrlFields(context, id, fields, applyToAllLocales)
+  }
+
+  async updateQueueFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: QueueFields,
+    applyToAllLocales: boolean = true
+  ): Promise<void> {
+    await this._contents.updateQueueFields(context, id, fields, applyToAllLocales)
   }
 
   async updatePayloadFields(

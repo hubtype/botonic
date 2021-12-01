@@ -8,6 +8,7 @@ import {
   HandoffFields,
   ImageFields,
   PayloadFields,
+  QueueFields,
   TextFields,
   UrlFields,
 } from '../directus/manage/directus-contents'
@@ -161,6 +162,13 @@ export interface CMS {
     context: SupportedLocales,
     id: string,
     fields: PayloadFields,
+    applyToAllLocales?: boolean
+  ): Promise<void>
+
+  updateQueueFields(
+    context: SupportedLocales,
+    id: string,
+    fields: QueueFields,
     applyToAllLocales?: boolean
   ): Promise<void>
 

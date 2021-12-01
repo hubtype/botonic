@@ -16,6 +16,7 @@ import {
   HandoffFields,
   ImageFields,
   PayloadFields,
+  QueueFields,
   TextFields,
   UrlFields,
 } from './directus-contents'
@@ -89,6 +90,22 @@ export class ContentsDelivery {
     )
     await this.client.updateFields(cms.ContentType.URL, id, convertedFields)
   }
+
+  async updateQueueFields(
+    context: cms.SupportedLocales,
+    id: string,
+    fields: UrlFields,
+    applyToAllLocales: boolean
+  ): Promise<void> {
+    const convertedFields = await this.convertQueueFields(
+      context,
+      fields,
+      id,
+      applyToAllLocales
+    )
+    await this.client.updateFields(cms.ContentType.QUEUE, id, convertedFields)
+  }
+
   async updatePayloadFields(
     context: cms.SupportedLocales,
     id: string,
@@ -235,6 +252,45 @@ export class ContentsDelivery {
       }
       if (fields.url && isActualLocale) {
         localeContent.url = fields.url
+      }
+    })
+    if (fields.name) {
+      entry.name = fields.name
+    }
+
+    return entry
+  }
+
+  private async convertQueueFields(
+    context: cms.SupportedLocales,
+    fields: QueueFields,
+    id: string,
+    applyToAllLocales: boolean
+  ): Promise<PartialItem<any>> {
+    const entry = await this.client.getEntry(
+      id,
+      cms.ContentType.QUEUE,
+      undefined,
+      true
+    )
+
+    const locales = applyToAllLocales
+      ? await this.client.getLocales()
+      : [context]
+
+    locales.forEach((locale: cms.SupportedLocales) => {
+      let localeContent = this.getLocaleContent(entry, locale)
+
+      const isActualLocale = locale === context
+
+      if (localeContent === undefined) {
+        localeContent = {
+          languages_code: locale,
+        }
+        entry.multilanguage_fields.push(localeContent)
+      }
+      if (fields.queue && isActualLocale) {
+        localeContent.botonic_queue_name = fields.queue
       }
     })
     if (fields.name) {

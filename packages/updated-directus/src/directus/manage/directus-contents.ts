@@ -38,6 +38,11 @@ export interface UrlFields {
   url?: string
 }
 
+export interface QueueFields {
+  name?: string
+  queue?: string
+}
+
 export interface PayloadFields {
   payload?: string
 }

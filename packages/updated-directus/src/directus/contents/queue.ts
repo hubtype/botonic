@@ -20,7 +20,7 @@ export class QueueDelivery extends ContentDelivery {
   fromEntry(entry: PartialItem<any>, context: SupportedLocales): Queue {
     const schedule =
       entry[mf][0] &&
-      entry[mf][0].schedule &&
+      entry[mf][0].schedule.length &&
       this.schedule.fromEntry(entry[mf][0].schedule, context)
 
     const opt = {
