@@ -19,8 +19,8 @@ export class QueueDelivery extends ContentDelivery {
 
   fromEntry(entry: PartialItem<any>, context: SupportedLocales): Queue {
     const scheduleEmpty =
-      !entry[mf][0].schedule.length || !entry[mf][0].schedule
-    
+      !!!entry[mf][0].schedule.length || !!!entry[mf][0].schedule
+
     const schedule =
       entry[mf][0] &&
       !scheduleEmpty &&
@@ -35,7 +35,7 @@ export class QueueDelivery extends ContentDelivery {
         customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
       },
       queue: entry[mf][0]?.botonic_queue_name ?? '',
-      schedule: schedule ?? undefined,
+      schedule: schedule ? schedule : undefined,
     }
     return new Queue(opt)
   }

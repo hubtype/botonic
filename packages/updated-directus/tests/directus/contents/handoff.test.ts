@@ -28,7 +28,7 @@ test('Test: directus handoff', async () => {
   // )
   // console.log(handoff)
   // console.log(handoffs)
-  const handoffId = '558071cf-653e-4573-b231-178cae598e3c'
+  const handoffId = '8b507395-b5b2-4c76-a721-5b67d0bed730'
   const handoff = await directus.handoff(handoffId, testContext())
   console.log({handoff})
 })

@@ -24,11 +24,11 @@ export class HandoffDelivery extends ContentDelivery {
   }
 
   fromEntry(entry: PartialItem<any>, context: SupportedLocales): Handoff {
-    const queueEmpty = !entry[mf][0].queue.length || !entry[mf][0].queue
+    const queueEmpty = !!!entry[mf][0].queue.length || !!!entry[mf][0].queue
 
     const queue =
       entry[mf][0] &&
-      !queueEmpty &&
+      queueEmpty &&
       this.queue.fromEntry(entry[mf][0].queue, context)
 
     const opt = {
@@ -39,7 +39,7 @@ export class HandoffDelivery extends ContentDelivery {
         keywords: entry[mf][0]?.keywords?.split(',') ?? undefined,
         customFields: entry[mf][0] ? getCustomFields(entry[mf][0]) : {},
       },
-      queue: queue ?? undefined,
+      queue: queue ? queue : undefined,
       message: entry[mf][0]?.handoff_message ?? '',
       failMessage: entry[mf][0]?.handoff_fail_message ?? '',
       shadowing: entry[mf][0]?.shadowing ?? undefined,
