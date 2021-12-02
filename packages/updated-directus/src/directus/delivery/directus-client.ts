@@ -316,7 +316,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const followupId = entry.followup[0].item.id
+    const followupId = entry.followup[0].item
     const contentType = entry.followup[0].collection
     return {
       ...entry,
@@ -328,7 +328,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const scheduleId = entry.schedule[0].item.id
+    const scheduleId = entry.schedule[0].item
     return {
       ...entry,
       schedule: await this.getEntry(
@@ -343,7 +343,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const queueId = entry.queue[0].item.id
+    const queueId = entry.queue[0].item
     return {
       ...entry,
       queue: await this.getEntry(queueId, cms.ContentType.QUEUE, context),

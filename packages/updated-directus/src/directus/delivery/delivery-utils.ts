@@ -110,8 +110,6 @@ function getTextFields(): string[] {
     'multilanguage_fields.buttons.item.multilanguage_fields.target.item.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.target.item.multilanguage_fields.*',
     'multilanguage_fields.followup.*',
-    'multilanguage_fields.followup.item.*',
-    'multilanguage_fields.followup.item.multilanguage_fields.*',
   ]
 }
 
