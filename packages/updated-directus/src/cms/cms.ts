@@ -30,10 +30,10 @@ export enum MessageContentType {
   TEXT = 'text',
   IMAGE = 'image',
   CAROUSEL = 'carousel',
+  HANDOFF = 'handoff',
 }
 
 export enum NonMessageContentType {
-  HANDOFF = 'handoff',
   QUEUE = 'queue',
   SCHEDULE = 'schedule',
   URL = 'url',

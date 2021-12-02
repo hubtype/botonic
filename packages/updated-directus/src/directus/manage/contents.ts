@@ -242,7 +242,7 @@ export class ContentsDelivery {
     locales.forEach((locale: cms.SupportedLocales) => {
       let localeContent = this.getLocaleContent(entry, locale)
 
-      const isActualLocale = locale === context
+      //const isActualLocale = locale === context
 
       if (localeContent === undefined) {
         localeContent = {
@@ -250,7 +250,7 @@ export class ContentsDelivery {
         }
         entry.multilanguage_fields.push(localeContent)
       }
-      if (fields.url && isActualLocale) {
+      if (fields.url) {
         localeContent.url = fields.url
       }
     })
@@ -320,7 +320,7 @@ export class ContentsDelivery {
     locales.forEach((locale: cms.SupportedLocales) => {
       let localeContent = this.getLocaleContent(entry, locale)
 
-      const isActualLocale = locale === context
+      //const isActualLocale = locale === context
 
       if (localeContent === undefined) {
         localeContent = {
@@ -328,7 +328,7 @@ export class ContentsDelivery {
         }
         entry.multilanguage_fields.push(localeContent)
       }
-      if (fields.payload && isActualLocale) {
+      if (fields.payload) {
         localeContent.payload = fields.payload
       }
     })
