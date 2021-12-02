@@ -56,7 +56,6 @@ export class DirectusClient {
           await this.getQueue(entry![mf][0], context!)
         )
       }
-      console.log(entry[mf][0])
       return entry!
     } catch (e) {
       console.error(
