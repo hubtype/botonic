@@ -12,8 +12,8 @@ export class LocalesDelivery {
     return await this.client.getLocales()
   }
 
-  async removeLocale(locale: cms.SupportedLocales): Promise<void> {
-    await this.client.removeLocale(locale)
+  async removeLocales(locales: cms.SupportedLocales[]): Promise<void> {
+    await this.client.removeLocales(locales)
   }
 
   async addLocales(localesToBeAdded: LocaleToBeAddedType[]): Promise<void> {

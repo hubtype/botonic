@@ -264,8 +264,8 @@ export class Directus implements cms.CMS {
     return await this._locales.getLocales()
   }
 
-  async removeLocale(locale: cms.SupportedLocales): Promise<void> {
-    await this._locales.removeLocale(locale)
+  async removeLocales(locales: cms.SupportedLocales[]): Promise<void> {
+    await this._locales.removeLocales(locales)
   }
 
   async addLocales(localesToBeAdded: cms.LocaleToBeAddedType[]): Promise<void> {

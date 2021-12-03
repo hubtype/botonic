@@ -3,11 +3,10 @@ import * as cms from '../../../src/cms'
 
 test('Test: add locale copying the content from other locale', async () => {
   const directus = testDirectus()
-  await directus.removeLocale(cms.SupportedLocales.ITALIAN)
-  await directus.removeLocale(cms.SupportedLocales.GERMAN)
+  await directus.removeLocales([cms.SupportedLocales.FRENCH])
   await directus.addLocales([
     {
-      locale: cms.SupportedLocales.GERMAN,
+      locale: cms.SupportedLocales.FRENCH,
       copyFrom: cms.SupportedLocales.SPANISH,
     },
   ])
