@@ -75,7 +75,7 @@
     "@types/memoizee": "^0.4.5",
     "contentful-cli": "^1.7.1",
     "identity-obj-proxy": "^3.0.0",
-    "jest-extended": "^0.11.5"
+    "jest-extended": "^1.2.0"
   },
   "engines": {
     "node": ">=12.3.0"
