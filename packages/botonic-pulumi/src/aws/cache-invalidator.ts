@@ -1,7 +1,7 @@
 import { CloudFront, CloudFrontClientConfig } from '@aws-sdk/client-cloudfront'
 import { Credentials } from '@aws-sdk/types'
 
-import { AWSCredentials } from '../pulumi-runner'
+import { AWSCredentials } from '../pulumi'
 
 export const INVALIDATION_PATH_PREFIX = '/'
 export class CacheInvalidator {

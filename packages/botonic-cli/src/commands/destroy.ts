@@ -1,8 +1,8 @@
-import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command } from '@oclif/command'
 
 import { Telemetry } from '../analytics/telemetry'
-import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
+import { CLOUD_PROVIDERS } from '../constants'
+import { getPulumiCoordinatorInstance } from '../util/pulumi'
 
 export default class Run extends Command {
   static description = 'Destroy Botonic project from cloud provider'
@@ -31,14 +31,14 @@ Destroying AWS stack...
 
   async destroyAWS(): Promise<void> {
     try {
-      const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
-      await pulumiRunner.destroy()
+      const pulumiCoordinator = await getPulumiCoordinatorInstance()
+      await pulumiCoordinator.destroy()
     } catch (e) {
       const error = `Destroy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
         e
       )}`
       this.telemetry.trackError(error)
-      throw new Error(e)
+      throw new Error(String(e))
     }
   }
 

@@ -2,8 +2,8 @@ import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 import { existsSync } from 'fs'
 
-import { WEBSOCKET_ENDPOINT_PATH_NAME, WEBSOCKET_SERVER_PATH } from '..'
-import { AWSComponentResource, AWSResourceOptions } from '.'
+import { WEBSOCKET_ENDPOINT_PATH_NAME } from '../constants'
+import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
 import { getManageConnectionsPolicy } from './policies'
@@ -16,7 +16,7 @@ export interface WebSocketServerArgs {
   database: DynamoDB
   nlpModelsBucket: NLPModelsBucket
   dynamodbCrudPolicy: pulumi.Input<string>
-  websocketLambdaPath?: string
+  websocketLambdaPath: string
 }
 export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
   manageConnectionsPolicy: pulumi.Output<string>
@@ -27,8 +27,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
 
     const callerIdentity = aws.getCallerIdentity({ provider: opts.provider })
     const accountId = callerIdentity.then(identity => identity.accountId)
-    const websocketLambdaPath =
-      args.websocketLambdaPath || WEBSOCKET_SERVER_PATH
+    const { websocketLambdaPath } = args
 
     // Check that path exists so pulumi do not throw an exception in runtime when previewing the update
     if (existsSync(websocketLambdaPath)) {

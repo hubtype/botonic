@@ -6,17 +6,15 @@ import * as mime from 'mime'
 import {
   HTTPS_PROTOCOL_PREFIX,
   REST_SERVER_ENDPOINT_PATH_NAME,
-  WEBCHAT_CONTENTS_PATH,
   WEBSOCKET_ENDPOINT_PATH_NAME,
   WSS_PROTOCOL_PREFIX,
-} from '..'
+} from '../constants'
 import { crawlDirectory } from '../system-utils'
 import {
   AWSComponentResource,
-  AWSProvider,
   AWSResourceOptions,
   getAwsProviderConfig,
-} from '.'
+} from './aws-resource'
 import { getCachePolicyId, getOriginRequestPolicyId } from './policies'
 
 function getDomainAndSubdomain(
@@ -147,7 +145,7 @@ function createCustomDomainCertificate(
   return certificateValidation.certificateArn
 }
 export interface StaticWebchatContentsArgs {
-  pathToWebchatContents?: string
+  pathToWebchatContents: string
   customDomain?: string
   nlpModelsUrl: string
   apiUrl: string
@@ -163,8 +161,7 @@ export class StaticWebchatContents extends AWSComponentResource<StaticWebchatCon
 
   constructor(args: StaticWebchatContentsArgs, opts: AWSResourceOptions) {
     super('static-webchat-contents', args, opts)
-    const pathToWebchatContents =
-      args.pathToWebchatContents || WEBCHAT_CONTENTS_PATH
+    const { pathToWebchatContents } = args
 
     const customDomain = args.customDomain
 

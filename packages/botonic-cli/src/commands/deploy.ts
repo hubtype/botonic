@@ -1,4 +1,3 @@
-import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
@@ -7,18 +6,18 @@ import { statSync } from 'fs'
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { join } from 'path'
-// eslint-disable-next-line import/named
 import { ZipAFolder } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
-import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
+import { CLOUD_PROVIDERS } from '../constants'
 import {
   copy,
   createDir,
   pathExists,
   removeRecursively,
 } from '../util/file-system'
+import { getPulumiCoordinatorInstance } from '../util/pulumi'
 import { sleep } from '../util/system'
 
 let npmCommand: string | undefined
@@ -85,15 +84,15 @@ Deploying to AWS...
   }
 
   async deployAWS(): Promise<void> {
-    const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
     try {
-      await pulumiRunner.deploy()
+      const pulumiCoordinator = await getPulumiCoordinatorInstance()
+      await pulumiCoordinator.deploy()
     } catch (e) {
       const error = `Deploy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
         e
       )}`
       this.telemetry.trackError(error)
-      throw new Error(e)
+      throw new Error(String(e))
     }
   }
 

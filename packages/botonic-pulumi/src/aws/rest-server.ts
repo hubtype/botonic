@@ -5,10 +5,9 @@ import { existsSync } from 'fs'
 import {
   BOT_EXECUTOR_LAMBDA_NAME,
   REST_SERVER_ENDPOINT_PATH_NAME,
-  REST_SERVER_PATH,
   SENDER_LAMBDA_NAME,
-} from '..'
-import { AWSComponentResource, AWSResourceOptions } from '.'
+} from '../constants'
+import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
 import { getManageConnectionsPolicy } from './policies'
@@ -21,14 +20,14 @@ export interface RestServerArgs {
   websocketServer: WebSocketServer
   botExecutorQueueUrl: pulumi.Input<string>
   senderQueueUrl: pulumi.Input<string>
-  restServerLambdaPath?: string
+  restServerLambdaPath: string
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
   url: pulumi.Output<string>
   constructor(args: RestServerArgs, opts: AWSResourceOptions) {
     super('rest-api-server', args, opts)
 
-    const restServerLambdaPath = args.restServerLambdaPath || REST_SERVER_PATH
+    const { restServerLambdaPath } = args
 
     if (existsSync(restServerLambdaPath)) {
       const callerIdentity = aws.getCallerIdentity({ provider: opts.provider })

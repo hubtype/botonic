@@ -2,20 +2,19 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-import { HTTPS_PROTOCOL_PREFIX, NLP_MODELS_PATH } from '..'
+import { HTTPS_PROTOCOL_PREFIX } from '../constants'
 import { crawlDirectory } from '../system-utils'
-import { AWSComponentResource, AWSResourceOptions } from '.'
+import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
 
 export interface NLPModelsBucketArgs {
-  nlpModelsPath?: string
+  nlpModelsPath: string
 }
 
 export class NLPModelsBucket extends AWSComponentResource<NLPModelsBucketArgs> {
   url: pulumi.Output<string>
   constructor(args: NLPModelsBucketArgs, opts: AWSResourceOptions) {
     super('nlp-models-bucket', args, opts)
-    const nlpModelsPath = args.nlpModelsPath || NLP_MODELS_PATH
-
+    const { nlpModelsPath } = args
     const nlpModelsBucket = new aws.s3.Bucket(
       `${this.namePrefix}-models-bucket`,
       {
