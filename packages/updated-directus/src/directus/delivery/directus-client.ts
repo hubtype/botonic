@@ -1,4 +1,5 @@
 import { Directus, PartialItem } from '@directus/sdk/dist'
+import { Environment } from '../manage/environments'
 import { Stream } from 'stream'
 
 import * as cms from '../../cms'
@@ -221,6 +222,75 @@ export class DirectusClient {
               `Error adding locale: ${localeToBeAdded.locale}, ${e}`
             )
       }
+    }
+  }
+
+  async getEnvironments(): Promise<Environment[]> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      const entry = await this.client.items('environment').readMany()
+      const envsPromises = entry.data
+        ? entry.data.map(async (env: PartialItem<any>) => {
+            const alias = env.alias
+              ? await this.getEnvironment(env.alias)
+              : undefined
+            return new Environment(env.name, alias)
+          })
+        : []
+      const envs = Promise.all(envsPromises)
+      return envs
+    } catch (e) {
+      console.error(`Error getting the list of environments, ${e}`)
+      return []
+    }
+  }
+
+  async deleteEnvironment(environmentId: string): Promise<void> {
+    try {
+      // add getIdByName() in order to get the env id by name received in params
+      await this.client.auth.static(this.clientParams.credentials.token)
+      await this.client.items('environment').deleteOne(environmentId)
+    } catch (e) {
+      console.error(`Error deleting environment with id ${environmentId}, ${e}`)
+    }
+  }
+
+  async getEnvironment(
+    environmentId: string
+  ): Promise<Environment | undefined> {
+    try {
+      // add getIdByName() in order to get the env id by name received in params
+      await this.client.auth.static(this.clientParams.credentials.token)
+      const entry = await this.client
+        .items('environment')
+        .readOne(environmentId)
+      const alias = entry!.alias
+        ? await this.getEnvironment(entry!.alias)
+        : undefined
+      return new Environment(entry!.name, alias)
+    } catch (e) {
+      console.error(
+        `Error getting the environment with id ${environmentId}, ${e}`
+      )
+      return undefined
+    }
+  }
+
+  async createEnvironmentWithId(
+    environmentId: string
+  ): Promise<Environment | undefined> {
+    try {
+      await this.client.auth.static(this.clientParams.credentials.token)
+      const entry = await this.client
+        .items('environment')
+        .createOne({ name: environmentId, alias: null })
+      const alias = entry!.alias
+        ? await this.getEnvironment(entry!.alias)
+        : undefined
+      return new Environment(entry!.name, alias)
+    } catch (e) {
+      console.error(`Error creating environment ${environmentId}, ${e}`)
+      return undefined
     }
   }
 

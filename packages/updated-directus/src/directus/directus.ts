@@ -33,8 +33,9 @@ import {
   PayloadFields,
   TextFields,
   UrlFields,
-  QueueFields
+  QueueFields,
 } from './manage/directus-contents'
+import { Environment, EnvironmentsDelivery } from './manage/environments'
 import { LocalesDelivery } from './manage/locales'
 import { KeywordsDelivery } from './search/keywords'
 
@@ -48,6 +49,7 @@ export class Directus implements cms.CMS {
   private readonly _keywords: KeywordsDelivery
   private readonly _contents: ContentsDelivery
   private readonly _locales: LocalesDelivery
+  private readonly _environments: EnvironmentsDelivery
   private readonly _schedule: ScheduleDelivery
   private readonly _queue: QueueDelivery
   private readonly _handoff: HandoffDelivery
@@ -82,6 +84,7 @@ export class Directus implements cms.CMS {
     }
     this._contents = new ContentsDelivery(client, deliveries)
     this._locales = new LocalesDelivery(client)
+    this._environments = new EnvironmentsDelivery(client)
   }
 
   async text(id: string, context: cms.SupportedLocales): Promise<Text> {
@@ -152,7 +155,12 @@ export class Directus implements cms.CMS {
     fields: QueueFields,
     applyToAllLocales: boolean = true
   ): Promise<void> {
-    await this._contents.updateQueueFields(context, id, fields, applyToAllLocales)
+    await this._contents.updateQueueFields(
+      context,
+      id,
+      fields,
+      applyToAllLocales
+    )
   }
 
   async updatePayloadFields(
@@ -270,5 +278,25 @@ export class Directus implements cms.CMS {
 
   async addLocales(localesToBeAdded: cms.LocaleToBeAddedType[]): Promise<void> {
     await this._locales.addLocales(localesToBeAdded)
+  }
+
+  async getEnvironments(): Promise<Environment[]> {
+    return await this._environments.getEnvironments()
+  }
+
+  async deleteEnvironment(environmentId: string): Promise<void> {
+    await this._environments.deleteEnvironment(environmentId)
+  }
+
+  async getEnvironment(
+    environmentId: string
+  ): Promise<Environment | undefined> {
+    return await this._environments.getEnvironment(environmentId)
+  }
+
+  async createEnvironmentWithId(
+    environmentId: string
+  ): Promise<Environment | undefined> {
+    return await this._environments.createEnvironmentWithId(environmentId)
   }
 }

@@ -25,6 +25,7 @@ import {
   Handoff,
 } from './contents'
 import { AssetInfo } from './contents'
+import { Environment } from '../directus/manage/environments'
 
 export enum MessageContentType {
   TEXT = 'text',
@@ -226,4 +227,14 @@ export interface CMS {
   removeLocales(locales: SupportedLocales[]): Promise<void>
 
   addLocales(localesToBeAdded: LocaleToBeAddedType[]): Promise<void>
+
+  getEnvironments(): Promise<Environment[]>
+
+  deleteEnvironment(environmentId: string): Promise<void>
+
+  getEnvironment(environmentId: string): Promise<Environment | undefined>
+
+  createEnvironmentWithId(
+    environmentId: string
+  ): Promise<Environment | undefined>
 }
