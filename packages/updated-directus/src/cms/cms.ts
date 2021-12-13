@@ -43,6 +43,7 @@ export enum NonMessageContentType {
 export enum SubContentType {
   BUTTON = 'button',
   ELEMENT = 'element',
+  HOUR_RANGE = 'hour_range',
 }
 
 export enum SupportedLocales {
@@ -103,7 +104,7 @@ export type ContentType = TopContentType | SubContentType
 
 export const ContentType = { ...TopContentType, ...SubContentType }
 
-export const ContentTypes = [
+export const DirectusContentTypes = [
   ContentType.URL,
   ContentType.PAYLOAD,
   ContentType.TEXT,
@@ -114,6 +115,7 @@ export const ContentTypes = [
   ContentType.SCHEDULE,
   ContentType.ELEMENT,
   ContentType.BUTTON,
+  ContentType.HOUR_RANGE,
 ]
 
 export type LocaleToBeAddedType = {

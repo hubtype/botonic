@@ -64,7 +64,7 @@ export const referenceFields = [
   'saturdays',
   'sundays',
   'exceptions',
-  'hourRanges',
+  'hour_ranges',
   'schedule',
   'onfinish',
   'queue',
@@ -92,6 +92,8 @@ export function getContentFields(contentType: cms.ContentType): string[] {
       return getScheduleFields()
     case cms.ContentType.HANDOFF:
       return getHandoffFields()
+    case cms.ContentType.HOUR_RANGE:
+      return getHourRangeFields()
     default:
       return []
   }
@@ -110,6 +112,7 @@ function getTextFields(): string[] {
     'multilanguage_fields.buttons.item.multilanguage_fields.target.item.*',
     'multilanguage_fields.buttons.item.multilanguage_fields.target.item.multilanguage_fields.*',
     'multilanguage_fields.followup.*',
+    'multilanguage_fields.followup.item.*',
   ]
 }
 
@@ -178,6 +181,10 @@ function getPayloadFields(): string[] {
   return ['id', 'name', 'status', 'multilanguage_fields.*']
 }
 
+function getHourRangeFields(): string[] {
+  return ['id', 'name', 'status', 'multilanguage_fields.*']
+}
+
 function getScheduleFields(): string[] {
   return [
     'id',
@@ -209,6 +216,7 @@ function getScheduleFields(): string[] {
     'multilanguage_fields.exceptions.item.*',
     'multilanguage_fields.exceptions.item.multilanguage_fields.*',
     'multilanguage_fields.exceptions.item.multilanguage_fields.hour_ranges.*',
+    'multilanguage_fields.exceptions.item.multilanguage_fields.hour_ranges.item.*',
     'multilanguage_fields.exceptions.item.multilanguage_fields.hour_ranges.item.multilanguage_fields.*',
   ]
 }
@@ -220,6 +228,7 @@ function getQueueFields(): string[] {
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.schedule.*',
+    'multilanguage_fields.schedule.item.*',
   ]
 }
 
@@ -230,6 +239,7 @@ function getHandoffFields(): string[] {
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.queue.*',
+    'multilanguage_fields.queue.item.*',
     'multilanguage_fields.onfinish.*',
   ]
 }

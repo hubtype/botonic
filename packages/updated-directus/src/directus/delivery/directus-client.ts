@@ -95,7 +95,6 @@ export class DirectusClient {
       const entriesIds = await this.client
         .items(contentType)
         .readMany({ fields: ['id'] })
-
       const entries: PartialItem<any>[] | undefined = []
 
       for (let i = 0; i < entriesIds.data!.length; i++) {
@@ -228,7 +227,7 @@ export class DirectusClient {
   private async copyLocale(
     localeToBeAdded: LocaleToBeAddedType
   ): Promise<void> {
-    for (let contentType of cms.ContentTypes) {
+    for (let contentType of cms.DirectusContentTypes) {
       const contentTypeEntries = await this.topContents(
         contentType,
         undefined,
@@ -239,6 +238,7 @@ export class DirectusClient {
           entry,
           localeToBeAdded.copyFrom!
         )
+
         if (localeCopyFrom != undefined) {
           const newLocale = {
             ...localeCopyFrom,
@@ -247,7 +247,7 @@ export class DirectusClient {
           newLocale['languages_code'] = localeToBeAdded.locale
           delete newLocale['id']
 
-          this.addReferenceFields(newLocale)
+          this.addReferenceFields(newLocale, localeCopyFrom)
 
           entry[mf].push(newLocale)
 
@@ -269,36 +269,27 @@ export class DirectusClient {
     return localesContent
   }
 
-  private addReferenceFields(newLocale: PartialItem<any>) {
+  private addReferenceFields(
+    newLocale: PartialItem<any>,
+    localeCopyFrom: PartialItem<any>
+  ) {
     referenceFields.forEach((field: string) => {
       if (newLocale[field] && newLocale[field].length) {
         if (newLocale[field].length > 1) {
-          newLocale[field].forEach(
-            (elementField: PartialItem<any>, i: number) => {
-              newLocale[field][i] = this.createItem(
-                elementField.item.id,
-                elementField.collection
-              )
-            }
-          )
+          newLocale[field].forEach((element: PartialItem<any>, i: number) => {
+            newLocale[field][i] = this.createItem(localeCopyFrom[field][i])
+          })
         } else {
-          newLocale[field] = [
-            this.createItem(
-              newLocale[field][0].item.id,
-              newLocale[field][0].collection
-            ),
-          ]
+          newLocale[field] = [this.createItem(localeCopyFrom[field][0])]
         }
       }
     })
   }
 
-  private createItem(id: string, model: string): PartialItem<any> {
+  private createItem(itemToCopyFrom: PartialItem<any>): PartialItem<any> {
     const newItem = {
-      collection: model,
-      item: {
-        id: id,
-      },
+      collection: itemToCopyFrom.collection,
+      item: itemToCopyFrom.item,
     }
     return newItem
   }
@@ -318,7 +309,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const followupId = entry.followup[0].item
+    const followupId = entry.followup[0].item.id
     const contentType = entry.followup[0].collection
     return {
       ...entry,
@@ -330,7 +321,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const scheduleId = entry.schedule[0].item
+    const scheduleId = entry.schedule[0].item.id
     return {
       ...entry,
       schedule: await this.getEntry(
@@ -345,7 +336,7 @@ export class DirectusClient {
     entry: PartialItem<any>,
     context: cms.SupportedLocales
   ) {
-    const queueId = entry.queue[0].item
+    const queueId = entry.queue[0].item.id
     return {
       ...entry,
       queue: await this.getEntry(queueId, cms.ContentType.QUEUE, context),
