@@ -7,6 +7,7 @@ export const mf = 'multilanguage_fields'
 export const knownFields = [
   'id',
   'name',
+  'environment',
   'status',
   'collection',
   'shorttext',
@@ -103,6 +104,7 @@ function getTextFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.buttons.*',
@@ -120,6 +122,7 @@ function getCarouselFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.shorttext',
@@ -140,6 +143,7 @@ function getElementFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.buttons.*',
@@ -155,6 +159,7 @@ function getImageFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.image',
     'multilanguage_fields.*',
@@ -165,6 +170,7 @@ function getButtonFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.target.*',
@@ -174,21 +180,22 @@ function getButtonFields(): string[] {
 }
 
 function getUrlFields(): string[] {
-  return ['id', 'name', 'status', 'multilanguage_fields.*']
+  return ['id', 'name', 'environment', 'status', 'multilanguage_fields.*']
 }
 
 function getPayloadFields(): string[] {
-  return ['id', 'name', 'status', 'multilanguage_fields.*']
+  return ['id', 'name', 'environment', 'status', 'multilanguage_fields.*']
 }
 
 function getHourRangeFields(): string[] {
-  return ['id', 'name', 'status', 'multilanguage_fields.*']
+  return ['id', 'name', 'environment', 'status', 'multilanguage_fields.*']
 }
 
 function getScheduleFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.mondays.*',
@@ -225,6 +232,7 @@ function getQueueFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.schedule.*',
@@ -236,6 +244,7 @@ function getHandoffFields(): string[] {
   return [
     'id',
     'name',
+    'environment',
     'status',
     'multilanguage_fields.*',
     'multilanguage_fields.queue.*',
