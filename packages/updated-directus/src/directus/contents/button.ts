@@ -55,11 +55,13 @@ export class ButtonDelivery extends ContentDelivery {
     if (contentType === ContentType.URL) {
       return new Callback(undefined, entry.url)
     }
-    if (context)
+    
+    if (context) {
       entry.target[0].item[mf] = this.getContextContent(
         entry.target[0].item[mf],
         context
       )
+    }
 
     const PAYLOAD_CONTENT_TYPE = 'payload'
     switch (entry.target[0].collection) {

@@ -12,7 +12,10 @@ test('Test: add locale copying the content from other locale', async () => {
   ])
 
   for (let contentType of cms.DirectusContentTypes) {
-    if (contentType == cms.ContentType.HOUR_RANGE) {
+    if (
+      contentType == cms.ContentType.HOUR_RANGE ||
+      contentType === cms.ContentType.ELEMENT
+    ) {
       return
     }
     const spanishEntries = await directus.topContents(
