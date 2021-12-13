@@ -131,8 +131,8 @@ function getCarouselFields(): string[] {
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.*',
     'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.target.*',
-    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.item.*',
-    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.item.multilanguage_fields.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.target.item.*',
+    'multilanguage_fields.elements.item.multilanguage_fields.buttons.item.multilanguage_fields.target.item.multilanguage_fields.*',
   ]
 }
 
