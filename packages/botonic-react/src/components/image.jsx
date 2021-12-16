@@ -1,10 +1,12 @@
+import 'react-photoswipe/lib/photoswipe.css'
+
 import { INPUT, isBrowser } from '@botonic/core'
 import React, { useState } from 'react'
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
+import { PhotoSwipe } from 'react-photoswipe'
 import styled from 'styled-components'
 
 import { ROLES } from '../constants'
-import { PortalModalComponent } from '../webchat/components/portal-modal'
+import { Portal } from '../webchat/components/portal-modal'
 import { Message } from './message'
 
 const StyledImage = styled.img`
@@ -12,14 +14,7 @@ const StyledImage = styled.img`
   max-width: 150px;
   max-height: 150px;
   margin: -3px -6px;
-  cursor: ${props => (props.isHovered ? 'pointer' : 'none')};
-`
-
-const StyledPreviewImage = styled.img`
-  width: 100%;
-  max-width: 75vw;
-  max-height: 75vh;
-  object-fit: contain;
+  cursor: pointer;
 `
 
 const serialize = imageProps => {
@@ -27,38 +22,22 @@ const serialize = imageProps => {
 }
 
 export const Image = props => {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isZoomed, setIsZoomed] = useState(false)
   let content = props.children
+  const [isGalleryOpened, setIsGalleryOpened] = useState(false)
 
   if (isBrowser()) {
     content = (
       <>
-        <StyledImage
-          src={props.src}
-          isHovered={isHovered}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={() => setIsModalOpen(true)}
-        />
-        {isModalOpen && (
-          <PortalModalComponent
-            open={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            locked={false}
-          >
-            <TransformWrapper
-              initialScale={1}
-              initialPositionX={0}
-              initialPositionY={0}
-              wheel={{ step: 0.05 }}
-            >
-              <TransformComponent>
-                <StyledPreviewImage src={props.src} />
-              </TransformComponent>
-            </TransformWrapper>
-          </PortalModalComponent>
+        <StyledImage src={props.src} onClick={() => setIsGalleryOpened(true)} />
+        {isGalleryOpened && (
+          <Portal>
+            <PhotoSwipe
+              isOpen={true}
+              items={[{ src: props.src, w: 1200, h: 900 }]}
+              options={{ bgOpacity: 0.7 }}
+              onClose={() => setIsGalleryOpened(false)}
+            />
+          </Portal>
         )}
       </>
     )

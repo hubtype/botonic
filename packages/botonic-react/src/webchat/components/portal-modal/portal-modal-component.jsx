@@ -53,19 +53,12 @@ export function PortalModalComponent({
 
   return (
     (open || active) && (
-      <Portal className={MODAL_PORTAL_CLASS_NAME}>
-        <Backdrop
+      <Portal id='botonic-portal'>
+        {/* <Backdrop
           ref={backdrop}
           className={active && open && MODAL_ACTIVE_CLASSNAME}
-        >
-          {customContent ? (
-            customContent
-          ) : (
-            <ModalContent className={MODAL_CONTENT_CLASSNAME}>
-              {children}
-            </ModalContent>
-          )}
-        </Backdrop>
+        > */}
+        <div style={{ position: 'absolute', top: 0, left: 0 }}>{children}</div>
       </Portal>
     )
   )
