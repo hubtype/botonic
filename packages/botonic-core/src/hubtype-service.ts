@@ -149,10 +149,7 @@ export class HubtypeService {
       this.channel.bind('botonic_response', data => this.onPusherEvent(data))
       this.channel.bind('botonic_response_compressed', compressedData => {
         try {
-          const compressedMessage = compressedData.message
-          const data = {
-            message: JSON.parse(decompressData(compressedMessage)),
-          }
+          const data = JSON.parse(decompressData(compressedData))
           this.onPusherEvent(data)
         } catch (e) {
           console.error('Error: Unable to decompress data', e)
