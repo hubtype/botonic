@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@types/joi": "^14.3.4",
-    "@types/marked": "^2.0.3",
+    "@types/marked": "^4.0.1",
     "@types/memoizee": "^0.4.5",
     "contentful-cli": "^1.7.1",
     "identity-obj-proxy": "^3.0.0",
