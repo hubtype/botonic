@@ -31,7 +31,7 @@
     "@botonic/core": "dev",
     "axios": "^0.24.0",
     "emoji-picker-react": "^3.2.3",
-    "framer-motion": "^3.1.1",
+    "framer-motion": "^5.5.5",
     "he": "^1.2.0",
     "lodash.merge": "^4.6.2",
     "markdown-it": "^12.0.6",
