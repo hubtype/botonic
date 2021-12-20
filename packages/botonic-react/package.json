@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
@@ -28,7 +28,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@botonic/core": "~0.20.0",
+    "@botonic/core": "^0.20.1",
     "axios": "^0.24.0",
     "emoji-picker-react": "^3.2.3",
     "framer-motion": "^3.1.1",
