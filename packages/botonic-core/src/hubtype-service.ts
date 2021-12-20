@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
+import { inflate } from 'pako'
 import Pusher, { AuthOptions, Channel } from 'pusher-js'
 import Channels from 'pusher-js/types/src/core/channels/channels'
 
@@ -27,6 +28,20 @@ interface HubtypeServiceArgs {
   onEvent: any
   unsentInputs: () => UnsentInput[]
   server: ServerConfig
+}
+/**
+ *
+ * @param compressedData a string representing gzipped data previously encoded to base64 for very large contents
+ * @returns a string representing the information of a very large content
+ * Ref: https://stackoverflow.com/questions/4875020/javascript-decompress-inflate-unzip-ungzip-strings
+ */
+function decompressData(compressedData) {
+  const strData = atob(compressedData)
+  const charData = strData.split('').map(x => x.charCodeAt(0))
+  const binData = new Uint8Array(charData)
+  const data = inflate(binData)
+  // @ts-ignore
+  return String.fromCharCode.apply(null, new Uint8Array(data))
 }
 
 const _WEBCHAT_PUSHER_KEY_ = getWebpackEnvVar(
@@ -132,6 +147,14 @@ export class HubtypeService {
         resolve()
       })
       this.channel.bind('botonic_response', data => this.onPusherEvent(data))
+      this.channel.bind('botonic_response_compressed', compressedData => {
+        try {
+          const data = JSON.parse(decompressData(compressedData))
+          this.onPusherEvent(data)
+        } catch (e) {
+          console.error('Error: Unable to decompress data', e)
+        }
+      })
       this.channel.bind('update_message_info', data => this.onPusherEvent(data))
 
       this.pusher &&
