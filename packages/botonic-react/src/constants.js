@@ -65,6 +65,7 @@ export const WEBCHAT = {
     enableAnimations: 'animations.enable',
     markdownStyle: 'markdownStyle',
     scrollbar: 'scrollbar',
+    imagePreviewer: 'imagePreviewer',
     // Mobile
     mobileBreakpoint: 'mobileBreakpoint',
     mobileStyle: 'mobileStyle',

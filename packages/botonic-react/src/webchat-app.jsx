@@ -211,12 +211,12 @@ export class WebchatApp {
     this.webchatRef.current.closeCoverComponent()
   }
 
-  openModal(customModalContent) {
-    this.webchatRef.current.openModal(customModalContent)
+  openImagePreviewer(customModalContent) {
+    this.webchatRef.current.openImagePreviewer(customModalContent)
   }
 
-  closeModal() {
-    this.webchatRef.current.closeModal()
+  closeImagePreviewer() {
+    this.webchatRef.current.closeImagePreviewer()
   }
 
   toggleCoverComponent() {

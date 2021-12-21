@@ -185,7 +185,7 @@ export const Webchat = forwardRef((props, ref) => {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleCoverComponent,
-    toggleModal,
+    toggleImagePreviewer,
     setError,
     setOnline,
     clearMessages,
@@ -564,11 +564,11 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
     openCoverComponent: () => toggleCoverComponent(true),
     closeCoverComponent: () => toggleCoverComponent(false),
-    openModal: customModalContent => {
-      setCustomModalContent(customModalContent)
-      toggleModal(true)
+    openImagePreviewer: customImagePreviewerContent => {
+      setCustomModalContent(customImagePreviewerContent)
+      toggleImagePreviewer(true)
     },
-    closeModal: () => toggleModal(false),
+    closeImagePreviewer: () => toggleImagePreviewer(false),
     toggleCoverComponent: () =>
       toggleCoverComponent(!webchatState.isCoverComponentOpen),
     openWebviewApi: component => openWebviewT(component),
@@ -958,10 +958,10 @@ export const Webchat = forwardRef((props, ref) => {
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
           {webchatState.isCoverComponentOpen && coverComponent()}
-          {/* {webchatState.isModalOpen && (
+          {/* {webchatState.isImagePreviewerOpened && (
             <PortalModalComponent
-              open={webchatState.isModalOpen}
-              onClose={() => toggleModal(false)}
+              open={webchatState.isImagePreviewerOpened}
+              onClose={() => toggleImagePreviewer(false)}
               locked={false}
               customContent={customModalContent}
             />
