@@ -261,12 +261,6 @@ export function getContextContent(context: cms.SupportedLocales): {} {
   }
 }
 
-export function getAllLocalesContent(): {} {
-  return {
-    multilanguage_fields: { _filter: { text: { _eq: null } } },
-  }
-}
-
 export function getCustomFields(entry: PartialItem<any>) {
   const customFields: PartialItem<any> = { ...entry }
   const keys = Object.keys(customFields)
