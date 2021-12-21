@@ -211,8 +211,8 @@ export class WebchatApp {
     this.webchatRef.current.closeCoverComponent()
   }
 
-  openImagePreviewer(customModalContent) {
-    this.webchatRef.current.openImagePreviewer(customModalContent)
+  openImagePreviewer(imagePreviewerContent) {
+    this.webchatRef.current.openImagePreviewer(imagePreviewerContent)
   }
 
   closeImagePreviewer() {

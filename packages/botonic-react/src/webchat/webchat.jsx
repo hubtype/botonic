@@ -47,7 +47,6 @@ import {
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
-// import { PortalModalComponent } from '../webchat/components/portal-modal'
 import { Attachment } from './components/attachment'
 import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
 import {
@@ -202,8 +201,7 @@ export const Webchat = forwardRef((props, ref) => {
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
 
-  const [customModalContent, setCustomModalContent] = useState(undefined)
-
+  const [imagePreviewerComponent, setImagePreviewerComponent] = useState(null)
   const storage = props.storage === undefined ? localStorage : props.storage
   const storageKey =
     typeof props.storageKey === 'function'
@@ -564,8 +562,8 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
     openCoverComponent: () => toggleCoverComponent(true),
     closeCoverComponent: () => toggleCoverComponent(false),
-    openImagePreviewer: customImagePreviewerContent => {
-      setCustomModalContent(customImagePreviewerContent)
+    openImagePreviewer: imagePreviewerContent => {
+      setImagePreviewerComponent(imagePreviewerContent)
       toggleImagePreviewer(true)
     },
     closeImagePreviewer: () => toggleImagePreviewer(false),
@@ -896,6 +894,11 @@ export const Webchat = forwardRef((props, ref) => {
     )
   }
 
+  const imagePreviewer = () => {
+    if (!imagePreviewerComponent) return <></>
+    else return imagePreviewerComponent
+  }
+
   const WebchatComponent = (
     <WebchatContext.Provider
       value={{
@@ -926,6 +929,7 @@ export const Webchat = forwardRef((props, ref) => {
           {triggerButton()}
         </div>
       )}
+
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
@@ -949,6 +953,9 @@ export const Webchat = forwardRef((props, ref) => {
             </ErrorMessageContainer>
           )}
           {webchatMessageList()}
+          {webchatState.isImagePreviewerOpened &&
+            imagePreviewerComponent &&
+            imagePreviewer()}
           {webchatState.replies &&
             Object.keys(webchatState.replies).length > 0 &&
             webchatReplies()}
@@ -958,14 +965,6 @@ export const Webchat = forwardRef((props, ref) => {
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
           {webchatState.isCoverComponentOpen && coverComponent()}
-          {/* {webchatState.isImagePreviewerOpened && (
-            <PortalModalComponent
-              open={webchatState.isImagePreviewerOpened}
-              onClose={() => toggleImagePreviewer(false)}
-              locked={false}
-              customContent={customModalContent}
-            />
-          )} */}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>
