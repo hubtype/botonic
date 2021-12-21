@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 
-import { BOTONIC_PORTAL_CLASS_LIST_NAME } from './constants'
+export const BOTONIC_PORTAL_CLASS_LIST_NAME = 'botonic-portal-container'
 
 export function Portal({ children, parent, className }) {
   const element = useMemo(() => document.createElement('div'), [])

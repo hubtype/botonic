@@ -47,7 +47,7 @@ import {
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
-import { PortalModalComponent } from '../webchat/components/portal-modal'
+// import { PortalModalComponent } from '../webchat/components/portal-modal'
 import { Attachment } from './components/attachment'
 import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
 import {
@@ -958,14 +958,14 @@ export const Webchat = forwardRef((props, ref) => {
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
           {webchatState.isCoverComponentOpen && coverComponent()}
-          {webchatState.isModalOpen && (
+          {/* {webchatState.isModalOpen && (
             <PortalModalComponent
               open={webchatState.isModalOpen}
               onClose={() => toggleModal(false)}
               locked={false}
               customContent={customModalContent}
             />
-          )}
+          )} */}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>
