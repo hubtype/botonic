@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
+  useState,
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import styled, { StyleSheetManager } from 'styled-components'
@@ -183,6 +184,7 @@ export const Webchat = forwardRef((props, ref) => {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleCoverComponent,
+    doRenderCustomComponent,
     setError,
     setOnline,
     clearMessages,
@@ -199,6 +201,7 @@ export const Webchat = forwardRef((props, ref) => {
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
 
+  const [customComponent, setCustomComponent] = useState(null)
   const storage = props.storage === undefined ? localStorage : props.storage
   const storageKey =
     typeof props.storageKey === 'function'
@@ -559,6 +562,11 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
     openCoverComponent: () => toggleCoverComponent(true),
     closeCoverComponent: () => toggleCoverComponent(false),
+    renderCustomComponent: _customComponent => {
+      setCustomComponent(_customComponent)
+      doRenderCustomComponent(true)
+    },
+    unmountCustomComponent: () => doRenderCustomComponent(false),
     toggleCoverComponent: () =>
       toggleCoverComponent(!webchatState.isCoverComponentOpen),
     openWebviewApi: component => openWebviewT(component),
@@ -886,6 +894,11 @@ export const Webchat = forwardRef((props, ref) => {
     )
   }
 
+  const _renderCustomComponent = () => {
+    if (!customComponent) return <></>
+    else return customComponent
+  }
+
   const WebchatComponent = (
     <WebchatContext.Provider
       value={{
@@ -916,6 +929,7 @@ export const Webchat = forwardRef((props, ref) => {
           {triggerButton()}
         </div>
       )}
+
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
@@ -948,6 +962,9 @@ export const Webchat = forwardRef((props, ref) => {
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
           {webchatState.isCoverComponentOpen && coverComponent()}
+          {webchatState.isCustomComponentRendered &&
+            customComponent &&
+            _renderCustomComponent()}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>
