@@ -211,6 +211,14 @@ export class WebchatApp {
     this.webchatRef.current.closeCoverComponent()
   }
 
+  renderCustomComponent(_customComponent) {
+    this.webchatRef.current.renderCustomComponent(_customComponent)
+  }
+
+  unmountCustomComponent() {
+    this.webchatRef.current.unmountCustomComponent()
+  }
+
   toggleCoverComponent() {
     this.webchatRef.current.toggleCoverComponent()
   }

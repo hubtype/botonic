@@ -6,6 +6,7 @@ import {
   ADD_MESSAGE,
   ADD_MESSAGE_COMPONENT,
   CLEAR_MESSAGES,
+  DO_RENDER_CUSTOM_COMPONENT,
   SET_CURRENT_ATTACHMENT,
   SET_ERROR,
   SET_ONLINE,
@@ -59,6 +60,7 @@ export const webchatInitialState = {
   isEmojiPickerOpen: false,
   isPersistentMenuOpen: false,
   isCoverComponentOpen: false,
+  isCustomComponentRendered: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
   jwt: null,
@@ -137,6 +139,11 @@ export function useWebchat() {
       type: TOGGLE_COVER_COMPONENT,
       payload: toggle,
     })
+  const doRenderCustomComponent = toggle =>
+    webchatDispatch({
+      type: DO_RENDER_CUSTOM_COMPONENT,
+      payload: toggle,
+    })
   const setError = error =>
     webchatDispatch({
       type: SET_ERROR,
@@ -192,6 +199,7 @@ export function useWebchat() {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleCoverComponent,
+    doRenderCustomComponent,
     setError,
     setOnline,
     clearMessages,

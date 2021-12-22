@@ -1,4 +1,5 @@
 import {
+  DO_RENDER_CUSTOM_COMPONENT,
   SET_CURRENT_ATTACHMENT,
   SET_ERROR,
   SET_ONLINE,
@@ -18,6 +19,7 @@ import {
 } from './actions'
 import { messagesReducer } from './messages-reducer'
 
+// eslint-disable-next-line complexity
 export function webchatReducer(state, action) {
   switch (action.type) {
     case UPDATE_WEBVIEW:
@@ -41,6 +43,8 @@ export function webchatReducer(state, action) {
       return { ...state, isPersistentMenuOpen: action.payload }
     case TOGGLE_COVER_COMPONENT:
       return { ...state, isCoverComponentOpen: action.payload }
+    case DO_RENDER_CUSTOM_COMPONENT:
+      return { ...state, isCustomComponentRendered: action.payload }
     case SET_ERROR:
       return { ...state, error: action.payload || {} }
     case SET_ONLINE:
