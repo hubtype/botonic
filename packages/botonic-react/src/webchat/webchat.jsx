@@ -184,7 +184,7 @@ export const Webchat = forwardRef((props, ref) => {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleCoverComponent,
-    toggleImagePreviewer,
+    doRenderCustomComponent,
     setError,
     setOnline,
     clearMessages,
@@ -201,7 +201,7 @@ export const Webchat = forwardRef((props, ref) => {
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
 
-  const [imagePreviewerComponent, setImagePreviewerComponent] = useState(null)
+  const [customComponent, setCustomComponent] = useState(null)
   const storage = props.storage === undefined ? localStorage : props.storage
   const storageKey =
     typeof props.storageKey === 'function'
@@ -562,11 +562,11 @@ export const Webchat = forwardRef((props, ref) => {
     toggleWebchat: () => toggleWebchat(!webchatState.isWebchatOpen),
     openCoverComponent: () => toggleCoverComponent(true),
     closeCoverComponent: () => toggleCoverComponent(false),
-    openImagePreviewer: imagePreviewerContent => {
-      setImagePreviewerComponent(imagePreviewerContent)
-      toggleImagePreviewer(true)
+    renderCustomComponent: _customComponent => {
+      setCustomComponent(_customComponent)
+      doRenderCustomComponent(true)
     },
-    closeImagePreviewer: () => toggleImagePreviewer(false),
+    unmountCustomComponent: () => doRenderCustomComponent(false),
     toggleCoverComponent: () =>
       toggleCoverComponent(!webchatState.isCoverComponentOpen),
     openWebviewApi: component => openWebviewT(component),
@@ -894,9 +894,9 @@ export const Webchat = forwardRef((props, ref) => {
     )
   }
 
-  const imagePreviewer = () => {
-    if (!imagePreviewerComponent) return <></>
-    else return imagePreviewerComponent
+  const _renderCustomComponent = () => {
+    if (!customComponent) return <></>
+    else return customComponent
   }
 
   const WebchatComponent = (
@@ -953,9 +953,6 @@ export const Webchat = forwardRef((props, ref) => {
             </ErrorMessageContainer>
           )}
           {webchatMessageList()}
-          {webchatState.isImagePreviewerOpened &&
-            imagePreviewerComponent &&
-            imagePreviewer()}
           {webchatState.replies &&
             Object.keys(webchatState.replies).length > 0 &&
             webchatReplies()}
@@ -965,6 +962,9 @@ export const Webchat = forwardRef((props, ref) => {
           {!webchatState.handoff && userInputArea()}
           {webchatState.webview && webchatWebview()}
           {webchatState.isCoverComponentOpen && coverComponent()}
+          {webchatState.isCustomComponentRendered &&
+            customComponent &&
+            _renderCustomComponent()}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>

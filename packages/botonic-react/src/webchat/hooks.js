@@ -6,12 +6,12 @@ import {
   ADD_MESSAGE,
   ADD_MESSAGE_COMPONENT,
   CLEAR_MESSAGES,
+  DO_RENDER_CUSTOM_COMPONENT,
   SET_CURRENT_ATTACHMENT,
   SET_ERROR,
   SET_ONLINE,
   TOGGLE_COVER_COMPONENT,
   TOGGLE_EMOJI_PICKER,
-  TOGGLE_IMAGE_PREVIEWER,
   TOGGLE_PERSISTENT_MENU,
   TOGGLE_WEBCHAT,
   UPDATE_DEV_SETTINGS,
@@ -60,7 +60,7 @@ export const webchatInitialState = {
   isEmojiPickerOpen: false,
   isPersistentMenuOpen: false,
   isCoverComponentOpen: false,
-  isImagePreviewerOpened: false,
+  isCustomComponentRendered: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
   jwt: null,
@@ -139,9 +139,9 @@ export function useWebchat() {
       type: TOGGLE_COVER_COMPONENT,
       payload: toggle,
     })
-  const toggleImagePreviewer = toggle =>
+  const doRenderCustomComponent = toggle =>
     webchatDispatch({
-      type: TOGGLE_IMAGE_PREVIEWER,
+      type: DO_RENDER_CUSTOM_COMPONENT,
       payload: toggle,
     })
   const setError = error =>
@@ -199,7 +199,7 @@ export function useWebchat() {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleCoverComponent,
-    toggleImagePreviewer,
+    doRenderCustomComponent,
     setError,
     setOnline,
     clearMessages,
@@ -227,7 +227,7 @@ export function useTyping({ webchatState, updateTyping, updateMessage, host }) {
           updateMessage({ ...nextMsg, display: true })
           updateTyping(false)
         }, totalDelay * 1000)
-    } catch (e) { }
+    } catch (e) {}
     return () => {
       clearTimeout(delayTimeout)
       clearTimeout(typingTimeout)

@@ -204,8 +204,8 @@ export class WebchatApp {
   updateLastMessageDate(date: string): void
   updateUser(user: core.SessionUser): void
   updateWebchatSettings(settings: WebchatSettingsProps): void
-  openImagePreviewer(customContent: React.ReactNode): void
-  closeImagePreviewer(): void
+  renderCustomComponent(customComponent: React.ReactNode): void
+  unmountCustomComponent(): void
 }
 
 export interface WebchatContextProps {

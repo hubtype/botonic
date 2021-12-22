@@ -211,12 +211,12 @@ export class WebchatApp {
     this.webchatRef.current.closeCoverComponent()
   }
 
-  openImagePreviewer(imagePreviewerContent) {
-    this.webchatRef.current.openImagePreviewer(imagePreviewerContent)
+  renderCustomComponent(_customComponent) {
+    this.webchatRef.current.renderCustomComponent(_customComponent)
   }
 
-  closeImagePreviewer() {
-    this.webchatRef.current.closeImagePreviewer()
+  unmountCustomComponent() {
+    this.webchatRef.current.unmountCustomComponent()
   }
 
   toggleCoverComponent() {
