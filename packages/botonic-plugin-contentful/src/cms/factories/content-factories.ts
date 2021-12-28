@@ -10,6 +10,7 @@ import {
   Handoff,
   HandoffAgent,
   Image,
+  Input,
   OnFinish,
   Queue,
   StartUp,
@@ -270,6 +271,27 @@ export class HandoffBuilder extends MessageContentBuilder {
       this.queue,
       this.agent,
       this.shadowing
+    )
+  }
+}
+
+export class InputBuilder extends MessageContentBuilder {
+  constructor(
+    id: string,
+    name: string,
+    public shortText: string,
+    public keywords: string[],
+    public target: OnFinish
+  ) {
+    super(id, name)
+  }
+
+  build(): Input {
+    return new Input(
+      this.buildCommonFields(),
+      this.shortText,
+      this.keywords,
+      this.target
     )
   }
 }

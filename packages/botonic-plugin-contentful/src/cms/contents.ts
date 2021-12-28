@@ -505,6 +505,29 @@ export class Handoff extends TopContent {
   }
 }
 
+export class Input extends TopContent {
+  constructor(
+    readonly common: CommonFields,
+    readonly shortText: string,
+    readonly keywords: string[],
+    readonly target: OnFinish,
+    readonly type = InputType.KEYWORDS
+  ) {
+    super(common, ContentType.INPUT)
+  }
+}
+
+export enum InputType {
+  INTENTS = 'Intents',
+  KEYWORDS = 'Keywords',
+}
+
+export class Intent extends TopContent {
+  constructor(readonly common: CommonFields, readonly intent: string) {
+    super(common, ContentType.INTENT)
+  }
+}
+
 /**
  * A {@link Content} which is automatically displayed after another one
  */

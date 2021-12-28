@@ -15,6 +15,8 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
+  Intent,
   Payload,
   Queue,
   ScheduleContent,
@@ -76,6 +78,23 @@ export class DummyCMS implements CMS {
         'Dummy handofFailfMessage for ' + id,
         queue
       )
+    )
+  }
+
+  async input(id: string, {} = DEFAULT_CONTEXT): Promise<Input> {
+    return Promise.resolve(
+      new Input(
+        new CommonFields(id, id),
+        'Dummy message',
+        [],
+        this.buttonCallbacks[0]
+      )
+    )
+  }
+
+  intent(id: string, {} = DEFAULT_CONTEXT): Promise<Intent> {
+    return Promise.resolve(
+      new Intent(new CommonFields(id, id), 'Dummy payload for ' + id)
     )
   }
 

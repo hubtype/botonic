@@ -31,6 +31,8 @@ export enum ContentFieldType {
   AGENT_ID = 'Agent Id',
   ON_FINISH = 'On Finish',
   SHADOWING = 'Shadowing',
+  INPUT_TYPE = 'Input Type',
+  INTENT = 'Intent',
 }
 
 export enum ContentFieldValueType {
@@ -228,6 +230,18 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
       ContentFieldType.SHADOWING,
       'shadowing',
       ContentFieldValueType.BOOLEAN,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.INPUT_TYPE,
+      'type',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.INTENT,
+      'intent',
+      ContentFieldValueType.STRING,
       true
     ),
   ])
