@@ -134,6 +134,8 @@ export class CoreBot {
             input,
             session,
             lastRoutePath,
+            //@ts-ignore
+            plugins: this.plugins,
           })),
           ...this.defaultRoutes,
         ],
