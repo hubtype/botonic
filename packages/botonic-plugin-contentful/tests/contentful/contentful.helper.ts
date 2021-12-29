@@ -17,6 +17,13 @@ export function testAccessToken(): string {
   return process.env.CONTENTFUL_TEST_TOKEN
 }
 
+export function testManageToken(): string {
+  if (!process.env.CONTENTFUL_TEST_MANAGE_TOKEN) {
+    throw new Error('You need to set env var CONTENTFUL_TEST_MANAGE_TOKEN')
+  }
+  return process.env.CONTENTFUL_TEST_MANAGE_TOKEN
+}
+
 export function testContentful(
   options: Partial<ContentfulOptions> = {},
   errorReporting = true
