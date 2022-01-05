@@ -1,6 +1,6 @@
 {
   "name": "@botonic/pulumi",
-  "version": "1.0.0-dev.0",
+  "version": "1.0.0-dev.2",
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.24.0",
     "@aws-sdk/types": "^3.22.0",
-    "@pulumi/aws": "4.33.0",
+    "@pulumi/aws": "4.25.0",
     "@pulumi/awsx": "^0.32.0",
     "@pulumi/pulumi": "3.11.0",
     "@vendia/serverless-express": "^4.3.9",

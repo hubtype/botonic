@@ -1,6 +1,6 @@
 {
   "name": "@botonic/server",
-  "version": "1.0.0-dev.0",
+  "version": "1.0.0-dev.2",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
@@ -25,7 +25,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.14.5",
     "@babel/runtime": "^7.14.6",
-    "@botonic/core": "dev",
+    "@botonic/core": "^1.0.0-dev.2",
     "@vendia/serverless-express": "^4.3.9",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.1023.0",
