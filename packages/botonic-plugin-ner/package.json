@@ -15,7 +15,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@babel/runtime": "^7.15.4",
+    "@babel/runtime": "^7.16.5",
     "@botonic/core": "~0.19.0",
     "@botonic/nlp": "~0.19.0",
     "@tensorflow/tfjs": "^2.8.6"
