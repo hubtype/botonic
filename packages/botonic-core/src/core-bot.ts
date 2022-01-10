@@ -96,8 +96,7 @@ export class CoreBot {
     botState,
     dataProvider,
   }: BotRequest): Promise<BotResponse> {
-    if (!botState.locale) botState.locale = 'en'
-
+    if (!botState?.locale) botState.locale = 'en'
     if (this.plugins) {
       await runPlugins(
         this.plugins,
