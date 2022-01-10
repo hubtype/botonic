@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "bt": "botonic",
+    "btt": "botonic",
+    "bt": "/Users/mrabat/Documents/hubtype/botonic/packages/botonic-cli/bin/run",
     "serve": "yarn bt serve --preview",
     "train": "yarn workspace bot train",
     "clean": "rm yarn.lock yarn-error.log; rm -rf node_modules */node_modules; rm -rf  */dist; yarn cache clean",
