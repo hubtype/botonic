@@ -1,6 +1,6 @@
 {
   "name": "create-botonic-app",
-  "version": "0.1.1-dev",
+  "version": "0.1.2-dev",
   "description": "Scaffold a new Botonic project",
   "main": "index.js",
   "bin": "./dist/create-botonic-app.js",
