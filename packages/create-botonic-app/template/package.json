@@ -19,8 +19,8 @@
     ]
   },
   "devDependencies": {
-    "@botonic/dx": "alpha",
-    "@botonic/cli": "alpha"
+    "@botonic/dx": "dev",
+    "@botonic/cli": "dev"
   },
   "engines": {
     "node": ">=12",

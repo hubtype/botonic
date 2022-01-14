@@ -1,7 +1,7 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "1.0.0-dev.2",
+  "version": "1.0.0-dev.3",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
@@ -14,7 +14,7 @@
     "@oclif/plugin-help": "^3.2.2",
     "analytics-node": "^3.5.0",
     "axios": "^0.24.0",
-    "colors": "^1.4.0",
+    "colors": "1.4.0",
     "concurrently": "^6.2.1",
     "fetch-repo-dir": "^1.0.4",
     "form-data": "^3.0.0",
