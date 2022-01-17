@@ -10,6 +10,7 @@ export interface AWSCredentials {
 
 export interface ProjectConfig extends AWSCredentials {
   workingDirectory?: string
+  environmentVariables?: Record<string, string>
   projectName?: string
   stackName?: string
   customDomain?: string

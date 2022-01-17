@@ -14,7 +14,7 @@ import { getProjectStackNamePrefix, ProgramConfig } from '../pulumi'
 import { AWSProvider, getAwsProviderConfig } from '.'
 import { DynamoDB } from './dynamodb'
 import { NLPModelsBucket } from './nlp-models-bucket'
-import { getDynamoDbCrudPolicy } from './policies'
+import { getDynamoDbCrudPolicy, getManageConnectionsPolicy } from './policies'
 import { RestServer } from './rest-server'
 import { SQSLambdaMapping } from './sqs-lambda-mapping'
 import { StaticWebchatContents } from './static-webchat-contents'
@@ -41,6 +41,13 @@ export const deployBackendStack = async (
 
   const workingDirectory = config.workingDirectory as string
 
+  // Get Botonic Environment variables coming from aws.config.js
+  const configEnvironmentVariables =
+    config.environmentVariables &&
+    Object.keys(config.environmentVariables).length > 0
+      ? config.environmentVariables
+      : {}
+
   const nlpModelsBucket = new NLPModelsBucket(
     { nlpModelsPath: getNlpModelsPath(workingDirectory) },
     awsResourceOptions
@@ -63,8 +70,11 @@ export const deployBackendStack = async (
   const websocketServer = new WebSocketServer(
     {
       websocketLambdaPath: getWebsocketServerPath(workingDirectory),
-      database,
-      nlpModelsBucket,
+      environmentVariables: {
+        MODELS_BASE_URL: nlpModelsBucket.url,
+        DATA_PROVIDER_URL: database.url,
+        ...configEnvironmentVariables,
+      },
       dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY,
     },
     {
@@ -96,6 +106,7 @@ export const deployBackendStack = async (
       environmentVariables: {
         WEBSOCKET_URL: websocketServer.url,
         DATA_PROVIDER_URL: database.url,
+        ...configEnvironmentVariables,
       },
     },
     awsResourceOptions
@@ -120,20 +131,40 @@ export const deployBackendStack = async (
       environmentVariables: {
         DATA_PROVIDER_URL: database.url,
         [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: sender.queueUrl,
+        ...configEnvironmentVariables,
       },
     },
     awsResourceOptions
   )
 
+  const MANAGE_CONNECTIONS_POLICY = getManageConnectionsPolicy(
+    awsProvider.region,
+    accountId,
+    websocketServer.apiGateway.id
+  )
+
   const restServer = new RestServer(
     {
       restServerLambdaPath: getRestServerPath(workingDirectory),
-      nlpModelsBucket,
-      database,
-      dynamodbCrudPolicy: DYNAMODB_CRUD_POLICY,
-      websocketServer,
-      botExecutorQueueUrl: botExecutor.queueUrl,
-      senderQueueUrl: sender.queueUrl,
+      inlinePolicies: [
+        {
+          name: 'rest-api-dynamodb-crud-inline-policy',
+          policy: DYNAMODB_CRUD_POLICY,
+        },
+        {
+          name: 'rest-api-manage-connections-inline-policy',
+          policy: MANAGE_CONNECTIONS_POLICY,
+        },
+      ],
+      environmentVariables: {
+        MODELS_BASE_URL: nlpModelsBucket.url,
+        DATA_PROVIDER_URL: database.url,
+        WEBSOCKET_URL: websocketServer.url,
+        BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
+        [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: sender.queueUrl,
+        [`${BOT_EXECUTOR_LAMBDA_NAME}_QUEUE_URL`]: botExecutor.queueUrl,
+        ...configEnvironmentVariables,
+      },
     },
     awsResourceOptions
   )

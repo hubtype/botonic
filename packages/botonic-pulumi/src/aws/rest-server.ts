@@ -2,25 +2,18 @@ import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 import { existsSync } from 'fs'
 
-import {
-  BOT_EXECUTOR_LAMBDA_NAME,
-  REST_SERVER_ENDPOINT_PATH_NAME,
-  SENDER_LAMBDA_NAME,
-} from '../constants'
+import { REST_SERVER_ENDPOINT_PATH_NAME } from '../constants'
 import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
-import { DynamoDB } from './dynamodb'
-import { NLPModelsBucket } from './nlp-models-bucket'
 import { getManageConnectionsPolicy } from './policies'
-import { WebSocketServer } from './websocket-server'
 
 export interface RestServerArgs {
-  nlpModelsBucket: NLPModelsBucket
-  database: DynamoDB
-  dynamodbCrudPolicy: pulumi.Input<string>
-  websocketServer: WebSocketServer
-  botExecutorQueueUrl: pulumi.Input<string>
-  senderQueueUrl: pulumi.Input<string>
   restServerLambdaPath: string
+  environmentVariables: pulumi.Input<{
+    [key: string]: pulumi.Input<string>
+  }>
+  inlinePolicies: pulumi.Input<
+    pulumi.Input<aws.types.input.iam.RoleInlinePolicy>[]
+  >
 }
 export class RestServer extends AWSComponentResource<RestServerArgs> {
   url: pulumi.Output<string>
@@ -32,11 +25,6 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
     if (existsSync(restServerLambdaPath)) {
       const callerIdentity = aws.getCallerIdentity({ provider: opts.provider })
       const accountId = callerIdentity.then(identity => identity.accountId)
-      const MANAGE_CONNECTIONS_POLICY = getManageConnectionsPolicy(
-        this.provider.region,
-        accountId,
-        args.websocketServer.apiGateway.id
-      )
       // Give our Lambda access to the Dynamo DB table, CloudWatch Logs and Metrics.
       const lambdaFunctionRole = new aws.iam.Role(
         `${this.namePrefix}-rest-api-lambda-role`,
@@ -45,16 +33,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
           assumeRolePolicy: aws.iam.assumeRolePolicyForPrincipal({
             Service: 'lambda.amazonaws.com',
           }),
-          inlinePolicies: [
-            {
-              name: 'rest-api-dynamodb-crud-inline-policy',
-              policy: args.dynamodbCrudPolicy,
-            },
-            {
-              name: 'rest-api-manage-connections-inline-policy',
-              policy: MANAGE_CONNECTIONS_POLICY,
-            },
-          ],
+          inlinePolicies: args.inlinePolicies,
         },
         { parent: this }
       )
@@ -93,16 +72,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
           timeout: 6,
           handler: 'server.default',
           role: lambdaFunctionRole.arn,
-          environment: {
-            variables: {
-              MODELS_BASE_URL: args.nlpModelsBucket.url,
-              DATA_PROVIDER_URL: args.database.url,
-              WEBSOCKET_URL: args.websocketServer.url,
-              BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
-              [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: args.senderQueueUrl,
-              [`${BOT_EXECUTOR_LAMBDA_NAME}_QUEUE_URL`]: args.botExecutorQueueUrl,
-            },
-          },
+          environment: { variables: args.environmentVariables },
         },
         { ...opts, parent: this }
       )

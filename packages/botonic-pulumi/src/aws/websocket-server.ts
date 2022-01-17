@@ -4,8 +4,6 @@ import { existsSync } from 'fs'
 
 import { WEBSOCKET_ENDPOINT_PATH_NAME } from '../constants'
 import { AWSComponentResource, AWSResourceOptions } from './aws-resource'
-import { DynamoDB } from './dynamodb'
-import { NLPModelsBucket } from './nlp-models-bucket'
 import { getManageConnectionsPolicy } from './policies'
 import {
   WebsocketServerLambda,
@@ -13,10 +11,11 @@ import {
 } from './websocket-server-lambda'
 
 export interface WebSocketServerArgs {
-  database: DynamoDB
-  nlpModelsBucket: NLPModelsBucket
-  dynamodbCrudPolicy: pulumi.Input<string>
   websocketLambdaPath: string
+  dynamodbCrudPolicy: pulumi.Input<string>
+  environmentVariables: pulumi.Input<{
+    [key: string]: pulumi.Input<string>
+  }>
 }
 export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
   manageConnectionsPolicy: pulumi.Output<string>
@@ -51,10 +50,7 @@ export class WebSocketServer extends AWSComponentResource<WebSocketServerArgs> {
       const wsLambdaCommonArgs: Partial<WebSocketServerLambdaArgs> = {
         lambdaPath: websocketLambdaPath,
         apiId: websocketApiGateway.id,
-        environmentVariables: {
-          MODELS_BASE_URL: args.nlpModelsBucket.url,
-          DATA_PROVIDER_URL: args.database.url,
-        },
+        environmentVariables: args.environmentVariables,
       }
 
       const lambdaAWSResourceOptions = {
