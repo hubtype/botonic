@@ -8,15 +8,15 @@
     "lint-core": "eslint_d --cache --quiet '*/{src,tests}/**/*.[jt]{s,sx}'",
     "lint-ci": "npm run lint-core -- -c ./node_modules/@botonic/eslint-config/index-ci.js",
     "lint": "npm run lint-core -- -c ./node_modules/@botonic/eslint-config/index.js --fix",
+    "build": "concurrently \"yarn:build:*\"",
     "build:rest": "yarn workspace api build:rest;",
     "build:websocket": "yarn workspace api build:websocket;",
     "build:handlers": "yarn workspace api build:handlers;",
     "build:webchat": "yarn workspace webchat build",
-    "build:all": "npm run build:rest; npm run build:websocket; npm run build:webchat; npm run build:handlers;",
     "deploy": "yarn bt deploy",
     "destroy": "yarn bt destroy",
-    "hubtype:build": "npm run build:all; cp ./aws.config.js ./dist",
-    "hubtype:bundle": "rm -rf ./dist; mkdir dist; cp -r ./api/dist ./dist/api; cp -r ./webchat/dist ./dist/webchat;"
+    "hubtype:build": "yarn build; yarn hubtype:bundle;",
+    "hubtype:bundle": "rm -rf ./dist; mkdir dist; mkdir ./dist/api; mkdir ./dist/webchat; mkdir ./dist/bot; mkdir ./dist/bot/src; cp -r ./api/dist ./dist/api; cp -r ./webchat/dist ./dist/webchat; cp -r ./bot/src/nlp ./dist/bot/src; cp ./aws.config.js ./dist;"
   },
   "workspaces": {
     "packages": [
@@ -27,8 +27,9 @@
     ]
   },
   "devDependencies": {
+    "@botonic/cli": "dev",
     "@botonic/dx": "dev",
-    "@botonic/cli": "dev"
+    "concurrently": "^7.0.0"
   },
   "engines": {
     "node": ">=12",
