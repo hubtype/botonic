@@ -3,7 +3,7 @@ import { Measure, Profiler } from '../../src/util/profiler'
 import { testContentful } from './contentful.helper'
 import { TEST_POST_FAQ1_ID } from './contents/text.test'
 
-test('INTEGRATION TEST: performance', async () => {
+test.skip('INTEGRATION TEST: performance', async () => {
   Profiler.enable()
   const contentful = testContentful({
     disableCache: true,
