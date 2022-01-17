@@ -4,13 +4,17 @@ import { ENGLISH, SPANISH } from '../../../src/nlp'
 import { repeatWithBackoff } from '../../../src/util/backoff'
 import { testContentful } from '../contentful.helper'
 import { TEST_ASSET_ID } from '../contents/asset.test'
-import { ctxt, testManageContentful } from './manage-contentful.helper'
+import {
+  ctxt,
+  MANAGE_CONTENTFUL_ENV,
+  testManageContentful,
+} from './manage-contentful.helper'
 
 // Since the tests modify contentful contents, they might fail if executed
 // more than once simultaneously (eg from 2 different branches from CI)
 describe('ManageContentful assets', () => {
   test('TEST: copyAssetFile', async () => {
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     const id = new AssetId(TEST_ASSET_ID, undefined)
     try {
       // ACT
@@ -26,8 +30,9 @@ describe('ManageContentful assets', () => {
     const contentful = testContentful({
       disableCache: true,
       disableFallbackCache: true,
+      environment: MANAGE_CONTENTFUL_ENV,
     })
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     let assetId: string
     const file = JSON.stringify({ a: rndStr(), b: rndStr() })
     const fileName = rndStr()
@@ -60,7 +65,7 @@ describe('ManageContentful assets', () => {
 
   test('TEST: removeAsset fails if the content does not exists', async () => {
     const context = ctxt({ locale: ENGLISH })
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     // ACT
     await expect(
       sut.removeAsset(context, new AssetId(rndStr(), undefined))
