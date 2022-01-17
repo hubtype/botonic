@@ -8,9 +8,10 @@ describe('ManageEnvironment', () => {
 
     expect(environments.items[0].name).toEqual('master')
     expect(environments.items[1].name).toEqual('testx')
+    expect(environments.items[2].name).toEqual('manage-contentful')
   })
 
-  test.each([['master'], ['testx']])(
+  test.each([['master'], ['testx'], ['manage-contentful']])(
     'TEST: get environment %s',
     async (environmentName: string) => {
       const environmentManager = testManageEnvironment()
@@ -33,16 +34,18 @@ describe('ManageEnvironment', () => {
       )
       const environments = await environmentManager.getEnvironments()
       expect(environment.name).toEqual(newEnvironment)
-      expect(environments.items.length).toBe(3)
+      expect(environments.items.length).toBe(4)
       expect(environments.items[0].name).toEqual('master')
       expect(environments.items[1].name).toEqual('testx')
-      expect(environments.items[2].name).toEqual(newEnvironment)
+      expect(environments.items[2].name).toEqual('manage-contentful')
+      expect(environments.items[3].name).toEqual(newEnvironment)
     } finally {
       await environmentManager.deleteEnvironment(newEnvironment)
       const environments = await environmentManager.getEnvironments()
-      expect(environments.items.length).toBe(2)
+      expect(environments.items.length).toBe(3)
       expect(environments.items[0].name).toEqual('master')
       expect(environments.items[1].name).toEqual('testx')
+      expect(environments.items[2].name).toEqual('manage-contentful')
     }
   })
 })
