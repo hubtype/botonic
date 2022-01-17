@@ -156,13 +156,16 @@ export const deployBackendStack = async (
           policy: MANAGE_CONNECTIONS_POLICY,
         },
       ],
+      // @ts-ignore
       environmentVariables: {
         MODELS_BASE_URL: nlpModelsBucket.url,
         DATA_PROVIDER_URL: database.url,
         WEBSOCKET_URL: websocketServer.url,
-        BOTONIC_JWT_SECRET: process.env.BOTONIC_JWT_SECRET as string,
         [`${SENDER_LAMBDA_NAME}_QUEUE_URL`]: sender.queueUrl,
         [`${BOT_EXECUTOR_LAMBDA_NAME}_QUEUE_URL`]: botExecutor.queueUrl,
+        BOTONIC_JWT_SECRET:
+          configEnvironmentVariables.BOTONIC_JWT_SECRET ||
+          process.env.BOTONIC_JWT_SECRET, // make aws.config to have preference over local environment
         ...configEnvironmentVariables,
       },
     },
