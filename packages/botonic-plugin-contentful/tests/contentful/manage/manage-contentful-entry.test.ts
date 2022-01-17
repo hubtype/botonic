@@ -9,7 +9,11 @@ import { ContentFieldType } from '../../../src/manage-cms/fields'
 import { ENGLISH } from '../../../src/nlp'
 import { repeatWithBackoff } from '../../../src/util/backoff'
 import { testContentful } from '../contentful.helper'
-import { ctxt, testManageContentful } from './manage-contentful.helper'
+import {
+  ctxt,
+  MANAGE_CONTENTFUL_ENV,
+  testManageContentful,
+} from './manage-contentful.helper'
 
 describe('ManageContentful entries', () => {
   const context = ctxt({ locale: ENGLISH })
@@ -17,8 +21,9 @@ describe('ManageContentful entries', () => {
     const contentful = testContentful({
       disableCache: true,
       disableFallbackCache: true,
+      environment: MANAGE_CONTENTFUL_ENV,
     })
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     const id = rndStr()
     const TEST_NEW_CONTENT_ID = new TopContentId(ContentType.TEXT, id)
     try {
@@ -51,7 +56,7 @@ describe('ManageContentful entries', () => {
   })
 
   test('TEST: createContent fails if the content already exists', async () => {
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     const id = rndStr()
     const TEST_NEW_CONTENT_ID = new TopContentId(ContentType.TEXT, id)
     try {
@@ -75,7 +80,7 @@ describe('ManageContentful entries', () => {
   })
 
   test('TEST: deleteContent fails if the content does not exists', async () => {
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     const id = rndStr()
     const TEST_NEW_CONTENT_ID = new TopContentId(ContentType.TEXT, id)
     // ACT
@@ -85,10 +90,11 @@ describe('ManageContentful entries', () => {
   })
 
   test('TEST: updateFields is able to manage fields of type ButtonStyle and FollowUps', async () => {
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     const contentful = testContentful({
       disableCache: true,
       disableFallbackCache: true,
+      environment: MANAGE_CONTENTFUL_ENV,
     })
     const NEW_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
     const FOLLOW_UP_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
@@ -128,10 +134,11 @@ describe('ManageContentful entries', () => {
   })
 
   test('TEST: updateFields is able to manage fields of type Handoff Queue, onFinish and Messages', async () => {
-    const sut = testManageContentful()
+    const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     const contentful = testContentful({
       disableCache: true,
       disableFallbackCache: true,
+      environment: MANAGE_CONTENTFUL_ENV,
     })
     const NEW_CONTENT = new TopContentId(ContentType.HANDOFF, rndStr())
     const ON_FINISH_CONTENT = new TopContentId(ContentType.TEXT, rndStr())
