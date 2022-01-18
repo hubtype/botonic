@@ -55,6 +55,15 @@ export class WebsocketServerLambda extends AWSComponentResource<WebSocketServerL
       { ...opts, parent: this }
     )
 
+    const sqsExecutionRoleAttachment = new aws.iam.RolePolicyAttachment(
+      `${this.namePrefix}-${args.name}-lambda-sqs-execution-role`,
+      {
+        role: lambdaFunctionRole,
+        policyArn: aws.iam.ManagedPolicy.AmazonSQSFullAccess,
+      },
+      { ...opts, parent: this }
+    )
+
     console.log(
       `Syncing ${args.name} lambda contents from local disk at`,
       args.lambdaPath

@@ -48,7 +48,7 @@ export class RestServer extends AWSComponentResource<RestServerArgs> {
       )
 
       // TODO: Do it more explicit with inline policy?
-      const sqsExeuctionRoleAttachment = new aws.iam.RolePolicyAttachment(
+      const sqsExecutionRoleAttachment = new aws.iam.RolePolicyAttachment(
         `${this.namePrefix}-rest-api-sqs-execution-role`,
         {
           role: lambdaFunctionRole,
