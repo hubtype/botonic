@@ -1,0 +1,60 @@
+{
+  "name": "@botonic/plugin-hubtype-babel",
+  "version": "0.20.2",
+  "license": "MIT",
+  "description": "Use Hubtype Babel to predict Intents.",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "scripts": {
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
+    "test": "../../node_modules/.bin/jest --coverage",
+    "prepare": "node ../../preinstall.js",
+    "prepublishOnly": "rm -rf lib && npm run build",
+    "build:watch": "npm run build -- --watch",
+    "cloc": "../../scripts/qa/cloc-package.sh .",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubtype/botonic.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/hubtype/botonic/issues"
+  },
+  "files": [
+    "lib/**",
+    "src/**",
+    "README.md"
+  ],
+  "dependencies": {
+    "@babel/runtime": "^7.16.7",
+    "@botonic/core": "^0.20.2",
+    "axios": "^0.25.0",
+    "process": "^0.11.10"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.10",
+    "typescript": "^4.5.4"
+  },
+  "homepage": "https://github.com/hubtype/botonic#readme",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "hubtype-babel",
+    "nlp",
+    "ai",
+    "conversational-app",
+    "conversational-ui",
+    "javascript"
+  ],
+  "eslintConfig": {
+    "extends": "../.eslintrc.js",
+    "root": true
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": ["src/"],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "outDir": "./lib/cjs",
+    "esModuleInterop": true,
+    "lib": ["es2015"],
+    "skipLibCheck": true,
+  }
+}
