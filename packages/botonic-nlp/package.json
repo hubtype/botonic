@@ -40,7 +40,7 @@
     "@tensorflow/tfjs-node": "^2.8.6",
     "axios": "^0.24.0",
     "better-sqlite3": "^7.0.1",
-    "cross-fetch": "^3.1.4",
+    "cross-fetch": "^3.1.5",
     "js-yaml": "4.1.0"
   },
   "resolutions": {
