@@ -7,6 +7,18 @@ import {
 } from '../cms'
 import { isOfType } from '../util/enums'
 
+export enum SharedContentFieldType {
+  BUTTONS = 'Buttons',
+  ELEMENTS = 'Elements',
+  URL = 'URL',
+  PAYLOAD = 'payload',
+  NAME = 'Name',
+  BUTTONS_STYLE = 'Buttons Style',
+  FOLLOW_UP = 'FollowUp',
+  ON_FINISH = 'On Finish',
+  SHADOWING = 'Shadowing',
+}
+
 export enum ContentFieldType {
   TEXT = 'Text',
   SHORT_TEXT = 'Short text',

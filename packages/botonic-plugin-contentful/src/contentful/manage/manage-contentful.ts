@@ -68,9 +68,17 @@ export class ManageContentful implements ManageCms {
   async updateFields(
     context: ManageContext,
     contentId: ContentId,
-    fields: { [contentFieldType: string]: any }
+    fields: { [contentFieldType: string]: any },
+    defaultLocale?: string,
+    copyOnDefaultLocale?: boolean
   ): Promise<{ [contentFieldType: string]: any }> {
-    return this.manageEntry.updateFields(context, contentId, fields)
+    return this.manageEntry.updateFields(
+      context,
+      contentId,
+      fields,
+      defaultLocale,
+      copyOnDefaultLocale
+    )
   }
 
   async copyField(
