@@ -384,6 +384,12 @@ export class Image extends MessageContent {
   }
 }
 
+export class Video extends MessageContent {
+  constructor(readonly common: CommonFields, readonly videoUrl: string) {
+    super(common, ContentType.VIDEO)
+  }
+}
+
 export class Text extends MessageContent {
   constructor(
     readonly common: CommonFields,

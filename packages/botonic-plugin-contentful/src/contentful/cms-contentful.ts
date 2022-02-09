@@ -44,6 +44,7 @@ import {
 } from './delivery-utils'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 import { KeywordsDelivery } from './search/keywords'
+import { VideoDelivery } from './contents/video'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
@@ -58,6 +59,7 @@ export class Contentful implements cms.CMS {
   private readonly _schedule: ScheduleDelivery
   private readonly _dateRange: DateRangeDelivery
   private readonly _image: ImageDelivery
+  private readonly _video: VideoDelivery
   private readonly _handoff: HandoffDelivery
   private readonly _input: InputDelivery
   private readonly _intent: IntentDelivery
@@ -110,6 +112,7 @@ export class Contentful implements cms.CMS {
     this._url = new UrlDelivery(delivery, resumeErrors)
     this._payload = new PayloadDelivery(delivery, resumeErrors)
     this._image = new ImageDelivery(delivery, resumeErrors)
+    this._video = new VideoDelivery(delivery, resumeErrors)
     this._asset = new AssetDelivery(delivery, resumeErrors)
     this._schedule = new ScheduleDelivery(delivery, resumeErrors)
     this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
@@ -122,7 +125,8 @@ export class Contentful implements cms.CMS {
       this._carousel,
       this._text,
       this._image,
-      this._startUp
+      this._startUp,
+      this._video
     )
     ;[
       this._document,
@@ -130,6 +134,7 @@ export class Contentful implements cms.CMS {
       this._carousel,
       this._image,
       this._startUp,
+      this._video,
     ].forEach(d => d.setFollowUp(followUp))
     this._keywords = new KeywordsDelivery(delivery)
     this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
@@ -176,6 +181,10 @@ export class Contentful implements cms.CMS {
 
   image(id: string, context = DEFAULT_CONTEXT): Promise<cms.Image> {
     return this._image.image(id, context)
+  }
+
+  video(id: string, context = DEFAULT_CONTEXT): Promise<cms.Video> {
+    return this._video.video(id, context)
   }
 
   chitchat(id: string, context = DEFAULT_CONTEXT): Promise<cms.Chitchat> {
@@ -249,6 +258,8 @@ export class Contentful implements cms.CMS {
         return retype(await this._text.fromEntry(entry, context))
       case ContentType.IMAGE:
         return retype(await this._image.fromEntry(entry, context))
+      case ContentType.VIDEO:
+        return retype(await this._video.fromEntry(entry, context))
       case ContentType.HANDOFF:
         return retype(this._handoff.fromEntry(entry, context))
       case ContentType.INPUT:

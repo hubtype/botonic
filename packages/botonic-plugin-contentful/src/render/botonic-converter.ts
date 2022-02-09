@@ -12,7 +12,7 @@ export class RenderOptions {
 
 // TODO consider moving it to @botonic/core
 export interface BotonicMsg {
-  type: 'carousel' | 'text' | 'image' | 'document'
+  type: 'carousel' | 'text' | 'image' | 'document' | 'video'
   delay?: number
   data: any
 }
@@ -49,6 +49,9 @@ export class BotonicMsgConverter {
     }
     if (content instanceof cms.Image) {
       return this.image(content, delayS)
+    }
+    if (content instanceof cms.Video) {
+      return this.video(content, delayS)
     }
     if (content instanceof cms.Document) {
       return this.document(content, delayS)
@@ -140,6 +143,17 @@ export class BotonicMsgConverter {
     return this.appendFollowUp(msg, img)
   }
 
+  video(video: cms.Video, delayS = 0): BotonicMsgs {
+    const msg: BotonicMsg = {
+      type: 'video',
+      delay: delayS,
+      data: {
+        video: video.videoUrl,
+      },
+    }
+    return this.appendFollowUp(msg, video)
+  }
+
   document(doc: cms.Document, delayS = 0): BotonicMsgs {
     const msg: BotonicMsg = {
       type: 'document',
@@ -177,6 +191,8 @@ export class BotonicMsgConverter {
       return this.carousel(followUp, 2)
     } else if (followUp instanceof cms.Image) {
       return this.image(followUp)
+    } else if (followUp instanceof cms.Video) {
+      return this.video(followUp)
     } else if (followUp instanceof cms.StartUp) {
       return this.startUp(followUp)
     } else {

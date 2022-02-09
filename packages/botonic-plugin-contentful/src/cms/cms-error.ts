@@ -34,6 +34,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context, DEFAULT_CONTEXT } from './context'
 import { CmsException } from './exceptions'
@@ -186,6 +187,15 @@ export class ErrorReportingCMS implements CMS {
       context,
       ContentType.IMAGE,
       this.cms.image(id, context)
+    )
+  }
+
+  video(id: string, context?: Context): Promise<Video> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.VIDEO,
+      this.cms.video(id, context)
     )
   }
 

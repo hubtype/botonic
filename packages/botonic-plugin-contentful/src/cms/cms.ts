@@ -21,6 +21,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context } from './context'
 
@@ -29,6 +30,7 @@ export enum MessageContentType {
   CHITCHAT = 'chitchat', //so far it's an alias for TEXT
   DOCUMENT = 'document',
   IMAGE = 'image',
+  VIDEO = 'video',
   TEXT = 'text',
   STARTUP = 'startUp',
 }
@@ -147,6 +149,7 @@ export interface CMS {
   /** Even if ContentfulOptions.resumeErrors is set, if the asset is not available
    * the method will fail. */
   image(id: string, context?: Context): Promise<Image>
+  video(id: string, context?: Context): Promise<Video>
   queue(id: string, context?: Context): Promise<Queue>
 
   /**
