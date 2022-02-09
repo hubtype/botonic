@@ -21,10 +21,23 @@ Example of the same `input` object after being processed by this plugin:
 ```
 {
     "type": "text",
-    "data": "Where's my order?"
-    "intent": "order-location"
+    "data": "I want to talk with an agent"
+    "intent": "help"
     "confidence": 0.9987
-    "intents": []  // The raw response from Hubtype Babel API
+    "intents": [
+      {
+        "intent": "help",
+        "confidence": 0.9987
+      },
+      {
+        "intent": "greeting",
+        "confidence": 0.0010
+      },
+      {
+        "intent": "insult",
+        "confidence": 0.0003
+      }
+    ]
     "entities": []  // Currently not supported
 }
 ```

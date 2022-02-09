@@ -40,8 +40,12 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
         const text = request.input.data
         const response = await this.apiService.inference(text, authToken)
 
-        request.input.intent = response.data['label']
-        request.input.confidence = response.data['score']
+        request.input.intent = response.data['predictions'][0]['label']
+        request.input.confidence = response.data['predictions'][0]['confidence']
+        request.input.intents = response.data['predictions'].map(x => ({
+          intent: x['label'],
+          confidence: x['confidence'],
+        }))
       }
     } catch (e) {
       console.error('Error during inference with Hubtype Babel', e)
