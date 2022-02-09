@@ -9,6 +9,7 @@ import {
   MessageContent,
   StartUp,
   Text,
+  Video,
 } from '../contents'
 import { Context } from '../context'
 import { CmsException } from '../exceptions'
@@ -22,6 +23,7 @@ export type MessageContentFilter<T> = (
 export type FilterByMessageContentType = {
   carousel?: MessageContentFilter<Carousel>
   image?: MessageContentFilter<Image>
+  video?: MessageContentFilter<Video>
   startUp?: MessageContentFilter<StartUp>
   text?: MessageContentFilter<Text>
 }
@@ -30,15 +32,15 @@ export function enableDependingOnContext(
   inFilter: FilterByMessageContentType,
   enabler: (ctx: Context) => boolean
 ): FilterByMessageContentType {
-  const filter = <T>(filter?: MessageContentFilter<T>) => (
-    c: T,
-    ctx: Context
-  ) => {
-    return (enabler(ctx) && filter && filter(c, ctx)) || Promise.resolve(c)
-  }
+  const filter =
+    <T>(filter?: MessageContentFilter<T>) =>
+    (c: T, ctx: Context) => {
+      return (enabler(ctx) && filter && filter(c, ctx)) || Promise.resolve(c)
+    }
   return {
     carousel: filter(inFilter.carousel),
     image: filter(inFilter.image),
+    video: filter(inFilter.video),
     startUp: filter(inFilter.startUp),
     text: filter(inFilter.text),
   }
@@ -84,20 +86,23 @@ export class RecursiveMessageContentFilter {
     if (content instanceof Image) {
       return this.filters.image && (await this.filters.image(content, context))
     }
+    if (content instanceof Video) {
+      return this.filters.video && (await this.filters.video(content, context))
+    }
     throw new CmsException(`Type '${content.contentType}' not supported`)
   }
 }
 
 export type StringFilter = (txt: string) => string
 
-export const buttonsTextFilter = (filter: StringFilter) => (
-  buttons: Button[]
-) => buttons.map(b => b.cloneWithText(filter(b.text)))
+export const buttonsTextFilter =
+  (filter: StringFilter) => (buttons: Button[]) =>
+    buttons.map(b => b.cloneWithText(filter(b.text)))
 
 // only applies filter to buttons text
-export const elementsTextFilter = (filter: StringFilter) => (
-  elements: Element[]
-) => elements.map(e => e.cloneWithButtons(buttonsTextFilter(filter)(e.buttons)))
+export const elementsTextFilter =
+  (filter: StringFilter) => (elements: Element[]) =>
+    elements.map(e => e.cloneWithButtons(buttonsTextFilter(filter)(e.buttons)))
 
 /**
  * Applies a transformation to all visible string in a MessageContent
