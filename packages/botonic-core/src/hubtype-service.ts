@@ -34,7 +34,7 @@ const _WEBCHAT_PUSHER_KEY_ = getWebpackEnvVar(
   // @ts-ignore
   typeof WEBCHAT_PUSHER_KEY !== 'undefined' && WEBCHAT_PUSHER_KEY,
   'WEBCHAT_PUSHER_KEY',
-  '434ca667c8e6cb3f641c'
+  '434ca667c8e6cb3f641c' // pragma: allowlist secret
 )
 const _HUBTYPE_API_URL_ = getWebpackEnvVar(
   // @ts-ignore
