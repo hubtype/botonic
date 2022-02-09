@@ -5,7 +5,7 @@ import {
   DocumentBuilder,
   ElementBuilder,
   HandoffBuilder,
-  ImageBuilder,
+  MediaBuilder,
   StartUpBuilder,
   TextBuilder,
   TopContentBuilder,
@@ -217,11 +217,14 @@ export class RndStartUpBuilder extends StartUpBuilder {
   }
 }
 
-export class RndImageBuilder extends ImageBuilder {
+export class RndMediaBuilder extends MediaBuilder {
   readonly topComponentBuilder = new RndTopContentBuilder()
 
-  constructor(name: string = rndStr(), imgUrl: string = 'http://' + rndStr()) {
-    super(rndStr(), name, imgUrl)
+  constructor(
+    name: string = rndStr(),
+    mediaUrl: string = 'http://' + rndStr()
+  ) {
+    super(rndStr(), name, mediaUrl)
   }
 
   withRandomFields(): this {

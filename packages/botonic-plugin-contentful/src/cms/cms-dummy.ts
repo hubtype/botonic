@@ -22,6 +22,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context, DEFAULT_CONTEXT } from './context'
 
@@ -30,6 +31,7 @@ import { Context, DEFAULT_CONTEXT } from './context'
  */
 export class DummyCMS implements CMS {
   static readonly IMG = 'this_image_does_not_exist.png'
+  static readonly VIDEO = 'this_video_does_not_exist.mp4'
   static PDF = 'this_doc_does_not_exist.pdf'
   /**
    *
@@ -130,6 +132,10 @@ export class DummyCMS implements CMS {
 
   image(id: string, {} = DEFAULT_CONTEXT): Promise<Image> {
     return Promise.resolve(new Image(new CommonFields(id, id), DummyCMS.IMG))
+  }
+
+  video(id: string, {} = DEFAULT_CONTEXT): Promise<Video> {
+    return Promise.resolve(new Video(new CommonFields(id, id), DummyCMS.VIDEO))
   }
 
   queue(id: string, {} = DEFAULT_CONTEXT): Promise<Queue> {

@@ -20,6 +20,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context } from './context'
 
@@ -83,6 +84,9 @@ export class MultiContextCms implements CMS {
 
   image(id: string, context?: Context): Promise<Image> {
     return this.cmsFromContext(context).image(id, context)
+  }
+  video(id: string, context?: Context): Promise<Video> {
+    return this.cmsFromContext(context).video(id, context)
   }
 
   queue(id: string, context?: Context): Promise<Queue> {
