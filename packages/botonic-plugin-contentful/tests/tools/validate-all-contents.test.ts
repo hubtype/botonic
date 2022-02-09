@@ -10,7 +10,6 @@ test('TEST: ContentsValidator.validateAllTopContents', async () => {
   const sut = new ContentsValidator(contentful, report, true, [
     '2mlEy6WndAoTvfGY15qlJz', // RATING
   ])
-
   // act
   await sut.validateAllTopContents({ locale: 'es' })
 

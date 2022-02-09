@@ -2,12 +2,15 @@ import * as cms from '../../../src'
 import { Content, SPANISH } from '../../../src'
 import { testContentful, testContext } from '../contentful.helper'
 import { expectImgUrlIs } from './image.test'
+import { expectVideoUrlIs } from './video.test'
 
 export const TEST_POST_FAQ1_ID = 'djwHOFKknJ3AmyG6YKNip'
 export const TEST_POST_FAQ2_ID = '22h2Vba7v92MadcL5HeMrt'
 export const TEST_NO_SPANISH_TEXT = '429vGzREpGXhiV24yvggTp'
 const TEST_FBK_MSG = '1U7XKJccDSsI3mP0yX04Mj'
 const TEST_FBK_OK_MSG = '63lakRZRu1AJ1DqlbZZb9O'
+const TEST_TXT_BEFORE_VIDEO = '7gnPtjOVOgKYLru4kJtIkp'
+const TEST_TXT_VIDEO_FOLLOWUP = 'bbK9o4ngqBaPwNiGEFbHe'
 export const TEST_SORRY = '6ZjjdrKQbaLNc6JAhRnS8D'
 const TEST_TEXT_QUEUE_BUTTON = '7Liwyx92Yna3fzHvh9AGut'
 const TEST_TEXT_URL_BUTTON = '2N9HQ960BdUVlDDQjpTA6I'
@@ -99,6 +102,25 @@ test('TEST: contentful text without buttons with carousel followup', async () =>
   // assert
   expect(text.buttons).toHaveLength(0)
   expect((text.common.followUp as cms.Carousel).elements).toHaveLength(2)
+})
+
+test('TEST: contentful text without buttons with video followup with text followup', async () => {
+  const sut = testContentful()
+
+  // act
+  const text = await sut.text(TEST_TXT_BEFORE_VIDEO, testContext())
+
+  // assert
+  const followUp1 = text.common.followUp as cms.Video
+  expect(text.buttons).toHaveLength(0)
+  expect(followUp1).toBeInstanceOf(cms.Video)
+  expectVideoUrlIs(followUp1.videoUrl, 'video.mp4')
+
+  const followUp2 = followUp1.common.followUp as cms.Text
+  expect(followUp2).toBeInstanceOf(cms.Text)
+
+  const videoFollowUp = await sut.text(TEST_TXT_VIDEO_FOLLOWUP, testContext())
+  expect(followUp2).toEqual(videoFollowUp)
 })
 
 test('TEST: contentful text without buttons with image followup with text followup', async () => {
