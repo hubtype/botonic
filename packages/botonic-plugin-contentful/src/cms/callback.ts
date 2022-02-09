@@ -184,6 +184,8 @@ export class TopContentId extends ContentId {
         return cms.startUp(this.id, context)
       case ContentType.IMAGE:
         return cms.image(this.id, context)
+      case ContentType.VIDEO:
+        return cms.video(this.id, context)
       case ContentType.DATE_RANGE:
         return cms.dateRange(this.id)
       case ContentType.QUEUE:

@@ -26,6 +26,7 @@ import {
   TopContent,
   TopContentType,
   Url,
+  Video,
 } from '../index'
 import { RecursiveMessageContentFilter } from './message-content-filters'
 
@@ -93,6 +94,11 @@ export class FilteredCMS implements CMS {
   async image(id: string, context?: Context): Promise<Image> {
     const content = await this.cms.image(id, context)
     return this.filterContent(content, Image, context)
+  }
+
+  async video(id: string, context?: Context): Promise<Video> {
+    const content = await this.cms.video(id, context)
+    return this.filterContent(content, Video, context)
   }
 
   handoff(id: string, context?: Context): Promise<Handoff> {
