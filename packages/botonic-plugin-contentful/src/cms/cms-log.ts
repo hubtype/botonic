@@ -27,6 +27,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context } from './context'
 
@@ -77,6 +78,11 @@ export class LogCMS implements CMS {
   image(id: string, context?: Context): Promise<Image> {
     this.logContentDelivery(ContentType.IMAGE, id, context)
     return this.cms.image(id, context)
+  }
+
+  video(id: string, context?: Context): Promise<Video> {
+    this.logContentDelivery(ContentType.VIDEO, id, context)
+    return this.cms.video(id, context)
   }
 
   queue(id: string, context?: Context): Promise<Queue> {
