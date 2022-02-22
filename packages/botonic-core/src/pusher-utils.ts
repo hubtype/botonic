@@ -1,4 +1,4 @@
-import { inflate } from 'pako/dist/pako_inflate.js'
+import { inflate } from 'pako'
 
 /**
  *
