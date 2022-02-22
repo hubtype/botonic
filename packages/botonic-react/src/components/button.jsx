@@ -85,6 +85,25 @@ export const Button = props => {
     }
   }
 
+  const getClassName = (isCustom = false) => {
+    if (isCustom) {
+      return 'button-custom'
+    }
+    if (props.payload) {
+      return 'button-payload'
+    }
+    if (props.url) {
+      return 'button-url'
+    }
+    if (props.webview) {
+      return 'button-webview'
+    }
+    if (props.path) {
+      return 'button-path'
+    }
+    return ''
+  }
+
   const renderBrowser = () => {
     const buttonStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.buttonStyle)
     const CustomButton = getThemeProperty(
@@ -92,7 +111,7 @@ export const Button = props => {
     )
     if (CustomButton) {
       return (
-        <div onClick={e => handleClick(e)}>
+        <div className={getClassName(true)} onClick={e => handleClick(e)}>
           <CustomButton>{props.children}</CustomButton>
         </div>
       )
@@ -119,6 +138,7 @@ export const Button = props => {
 
     return (
       <StyledButton
+        className={getClassName()}
         theme={theme}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
