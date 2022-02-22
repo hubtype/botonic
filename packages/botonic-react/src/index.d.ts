@@ -25,10 +25,6 @@ export interface Route extends core.Route {
 }
 type Routes = core.Routes<Route>
 
-export interface BotOptions extends core.BotOptions {
-  routes: Routes
-}
-
 export class ReactBot extends core.CoreBot {
   renderReactActions({
     actions,
@@ -37,7 +33,7 @@ export class ReactBot extends core.CoreBot {
 }
 
 export class NodeApp {
-  constructor(options: Omit<BotOptions, 'renderer'>)
+  constructor(options: Omit<core.CoreBotConfig, 'renderer'>)
   bot: ReactBot
   input(request: core.BotRequest): Promise<BotResponse>
   renderNode(args): string
