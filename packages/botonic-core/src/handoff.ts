@@ -64,6 +64,7 @@ export class HandOffBuilder {
   _agentId: string
   _note: string
   _caseInfo: string
+  _autoIdleMessage: string
   _shadowing: boolean
 
   constructor(session: SessionWithBotonicAction) {
@@ -105,6 +106,11 @@ export class HandOffBuilder {
     return this
   }
 
+  withAutoIdleMessage(message: string): this {
+    this._autoIdleMessage = message
+    return this
+  }
+
   withShadowing(shadowing = true): this {
     this._shadowing = shadowing
     return this
@@ -119,6 +125,7 @@ export class HandOffBuilder {
       this._agentId,
       this._caseInfo,
       this._note,
+      this._autoIdleMessage,
       this._shadowing
     )
   }
@@ -150,6 +157,7 @@ interface HubtypeHandoffParams {
   agent_id?: string
   case_info?: string
   note?: string
+  auto_idle_message?: string
   shadowing?: boolean
   on_finish?: string
 }
@@ -161,6 +169,7 @@ async function _humanHandOff(
   agentId = '',
   caseInfo = '',
   note = '',
+  autoIdleMessage = '',
   shadowing = false
 ) {
   const params: HubtypeHandoffParams = {}
@@ -178,6 +187,9 @@ async function _humanHandOff(
   }
   if (note) {
     params.note = note
+  }
+  if (autoIdleMessage) {
+    params.auto_idle_message = autoIdleMessage
   }
   if (shadowing) {
     params.shadowing = shadowing
