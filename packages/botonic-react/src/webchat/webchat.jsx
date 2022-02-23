@@ -405,9 +405,13 @@ export const Webchat = forwardRef((props, ref) => {
   )
 
   const getBlockInputs = (rule, inputData) => {
+    const processedInput = rule.preprocess
+      ? rule.preprocess(inputData)
+      : inputData
+
     return rule.match.some(regex => {
       if (typeof regex === 'string') regex = deserializeRegex(regex)
-      return regex.test(inputData)
+      return regex.test(processedInput)
     })
   }
 

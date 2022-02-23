@@ -17,7 +17,7 @@ import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
 import { getComputedRoutes, Router } from './routing'
 
-interface CoreBotConfig {
+export interface CoreBotConfig {
   appId?: string
   defaultDelay?: number
   defaultRoutes?: Route[]
