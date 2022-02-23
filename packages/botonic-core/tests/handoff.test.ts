@@ -2,7 +2,7 @@
 import { PATH_PAYLOAD_IDENTIFIER } from '../src'
 import { HandOffBuilder, humanHandOff } from '../src/handoff'
 
-describe.skip('handOff', () => {
+describe('Handoff', () => {
   test.each([
     [
       `create_case:{
@@ -59,5 +59,18 @@ describe.skip('handOff', () => {
   ])('HandOffBuilder', (expected, builder) => {
     builder.handOff()
     expect(builder._session._botonic_action).toEqual(expected)
+  })
+
+  test('receives the auto idle message', () => {
+    const builder = new HandOffBuilder({}).withAutoIdleMessage(
+      'the case is in IDLE status'
+    )
+    builder.handOff()
+    const expectedBotonicAction =
+      'create_case:' +
+      JSON.stringify({
+        auto_idle_message: 'the case is in IDLE status',
+      })
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
 })
