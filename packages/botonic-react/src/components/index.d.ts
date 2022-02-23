@@ -102,7 +102,11 @@ export interface PersistentMenuProps {
   options: any
 }
 
-export type BlockInputOption = { match: RegExp[]; message: string }
+export type BlockInputOption = {
+  preprocess?: (message: string) => string
+  match: RegExp[]
+  message: string
+}
 
 export interface BlobProps {
   blobTick?: boolean
