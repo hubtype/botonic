@@ -22,10 +22,18 @@ export class ErrorReportingManageCms implements ManageCms {
   updateFields(
     context: ManageContext,
     contentId: ContentId,
-    fields: FieldsValues
+    fields: FieldsValues,
+    defaultLocale?: string,
+    copyOnDefaultLocale?: boolean
   ): Promise<FieldsValues> {
     return this.manageCms
-      .updateFields(context, contentId, fields)
+      .updateFields(
+        context,
+        contentId,
+        fields,
+        defaultLocale,
+        copyOnDefaultLocale
+      )
       .catch(this.handleError('updateFields', context, contentId, fields))
   }
 
