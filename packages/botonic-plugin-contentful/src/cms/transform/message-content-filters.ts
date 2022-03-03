@@ -32,11 +32,12 @@ export function enableDependingOnContext(
   inFilter: FilterByMessageContentType,
   enabler: (ctx: Context) => boolean
 ): FilterByMessageContentType {
-  const filter =
-    <T>(filter?: MessageContentFilter<T>) =>
-    (c: T, ctx: Context) => {
-      return (enabler(ctx) && filter && filter(c, ctx)) || Promise.resolve(c)
-    }
+  const filter = <T>(filter?: MessageContentFilter<T>) => (
+    c: T,
+    ctx: Context
+  ) => {
+    return (enabler(ctx) && filter && filter(c, ctx)) || Promise.resolve(c)
+  }
   return {
     carousel: filter(inFilter.carousel),
     image: filter(inFilter.image),
@@ -95,14 +96,14 @@ export class RecursiveMessageContentFilter {
 
 export type StringFilter = (txt: string) => string
 
-export const buttonsTextFilter =
-  (filter: StringFilter) => (buttons: Button[]) =>
-    buttons.map(b => b.cloneWithText(filter(b.text)))
+export const buttonsTextFilter = (filter: StringFilter) => (
+  buttons: Button[]
+) => buttons.map(b => b.cloneWithText(filter(b.text)))
 
 // only applies filter to buttons text
-export const elementsTextFilter =
-  (filter: StringFilter) => (elements: Element[]) =>
-    elements.map(e => e.cloneWithButtons(buttonsTextFilter(filter)(e.buttons)))
+export const elementsTextFilter = (filter: StringFilter) => (
+  elements: Element[]
+) => elements.map(e => e.cloneWithButtons(buttonsTextFilter(filter)(e.buttons)))
 
 /**
  * Applies a transformation to all visible string in a MessageContent

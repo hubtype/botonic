@@ -32,6 +32,7 @@ import { ScheduleDelivery } from './contents/schedule'
 import { StartUpDelivery } from './contents/startup'
 import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
+import { VideoDelivery } from './contents/video'
 import { CachedClientApi } from './delivery/cache'
 import { ClientApiErrorReporter, ReducedClientApi } from './delivery/client-api'
 import { FallbackCachedClientApi } from './delivery/fallback-cache'
@@ -42,7 +43,6 @@ import {
 } from './delivery-utils'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 import { KeywordsDelivery } from './search/keywords'
-import { VideoDelivery } from './contents/video'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
