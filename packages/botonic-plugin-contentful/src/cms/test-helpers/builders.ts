@@ -6,6 +6,7 @@ import {
   ElementBuilder,
   HandoffBuilder,
   MediaBuilder,
+  InputBuilder,
   StartUpBuilder,
   TextBuilder,
   TopContentBuilder,
@@ -263,5 +264,17 @@ export class RndHandoffBuilder extends HandoffBuilder {
     this.shadowing = rndBool()
     this.topComponentBuilder.withRandomFields(this)
     return this
+  }
+}
+
+export class RndInputBuilder extends InputBuilder {
+  readonly topComponentBuilder = new RndTopContentBuilder()
+
+  constructor(
+    name: string = rndStr(),
+    keywords: string[] = [rndStr(), rndStr()],
+    target: OnFinish = new ContentCallbackBuilder().build()
+  ) {
+    super(rndStr(), name, rndStr(), keywords, target)
   }
 }
