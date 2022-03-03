@@ -25,6 +25,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -104,6 +105,15 @@ export class ErrorReportingCMS implements CMS {
       context,
       ContentType.HANDOFF,
       this.cms.handoff(id, context)
+    )
+  }
+
+  input(id: string, context?: Context): Promise<Input> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.INPUT,
+      this.cms.input(id, context)
     )
   }
 

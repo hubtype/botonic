@@ -20,6 +20,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -97,6 +98,11 @@ export class LogCMS implements CMS {
   handoff(id: string, context?: Context): Promise<Handoff> {
     this.logContentDelivery(ContentType.HANDOFF, id, context)
     return this.cms.handoff(id, context)
+  }
+
+  input(id: string, context?: Context): Promise<Input> {
+    this.logContentDelivery(ContentType.INPUT, id, context)
+    return this.cms.input(id, context)
   }
 
   custom(id: string, context?: Context): Promise<Custom> {
