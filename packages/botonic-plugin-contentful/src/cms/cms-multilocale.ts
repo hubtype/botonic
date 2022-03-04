@@ -14,6 +14,7 @@ import {
   Handoff,
   Image,
   Input,
+  Intent,
   Payload,
   Queue,
   ScheduleContent,
@@ -112,6 +113,10 @@ export class MultiContextCms implements CMS {
 
   input(id: string, context?: Context): Promise<Input> {
     return this.cmsFromContext(context).input(id, context)
+  }
+
+  intent(id: string, context?: Context): Promise<Intent> {
+    return this.cmsFromContext(context).intent(id, context)
   }
 
   custom(id: string, context?: Context): Promise<Custom> {
