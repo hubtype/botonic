@@ -522,6 +522,12 @@ export class Input extends TopContent {
   }
 }
 
+export class Intent extends TopContent {
+  constructor(readonly common: CommonFields, readonly intent: string) {
+    super(common, ContentType.INTENT)
+  }
+}
+
 /**
  * A {@link Content} which is automatically displayed after another one
  */

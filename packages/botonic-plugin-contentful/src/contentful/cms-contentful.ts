@@ -27,6 +27,7 @@ import { FollowUpDelivery } from './contents/follow-up'
 import { HandoffDelivery } from './contents/handoff'
 import { ImageDelivery } from './contents/image'
 import { InputDelivery } from './contents/input'
+import { IntentDelivery } from './contents/intent'
 import { PayloadDelivery } from './contents/payload'
 import { QueueDelivery } from './contents/queue'
 import { ScheduleDelivery } from './contents/schedule'
@@ -59,6 +60,7 @@ export class Contentful implements cms.CMS {
   private readonly _image: ImageDelivery
   private readonly _handoff: HandoffDelivery
   private readonly _input: InputDelivery
+  private readonly _intent: IntentDelivery
   private readonly _custom: CustomDelivery
   private readonly _asset: AssetDelivery
   private readonly _queue: QueueDelivery
@@ -113,6 +115,7 @@ export class Contentful implements cms.CMS {
     this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
     this._handoff = new HandoffDelivery(delivery, this._queue, resumeErrors)
     this._input = new InputDelivery(delivery, resumeErrors)
+    this._intent = new IntentDelivery(delivery, resumeErrors)
     this._custom = new CustomDelivery(delivery, resumeErrors)
     const followUp = new FollowUpDelivery(
       this._delivery,
@@ -187,6 +190,10 @@ export class Contentful implements cms.CMS {
     return this._input.input(id, context)
   }
 
+  async intent(id: string, context = DEFAULT_CONTEXT): Promise<cms.Intent> {
+    return this._intent.intent(id, context)
+  }
+
   async custom(id: string, context = DEFAULT_CONTEXT): Promise<cms.Custom> {
     return this._custom.custom(id, context)
   }
@@ -246,6 +253,8 @@ export class Contentful implements cms.CMS {
         return retype(this._handoff.fromEntry(entry, context))
       case ContentType.INPUT:
         return retype(this._input.fromEntry(entry, context))
+      case ContentType.INTENT:
+        return retype(this._intent.fromEntry(entry, context))
       case ContentType.URL:
         return retype(this._url.fromEntry(entry, context))
       case ContentType.PAYLOAD:

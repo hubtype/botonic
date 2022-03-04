@@ -17,6 +17,7 @@ import {
   Handoff,
   Image,
   Input,
+  Intent,
   MessageContent,
   PagingOptions,
   Payload,
@@ -102,6 +103,10 @@ export class FilteredCMS implements CMS {
 
   input(id: string, context?: Context): Promise<Input> {
     return this.cms.input(id, context)
+  }
+
+  intent(id: string, context?: Context): Promise<Intent> {
+    return this.cms.intent(id, context)
   }
 
   custom(id: string, context?: Context): Promise<Custom> {
