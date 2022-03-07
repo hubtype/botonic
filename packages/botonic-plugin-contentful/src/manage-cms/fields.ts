@@ -32,6 +32,7 @@ export enum ContentFieldType {
   ON_FINISH = 'On Finish',
   SHADOWING = 'Shadowing',
   INPUT_TYPE = 'Input Type',
+  INTENT = 'Intent',
 }
 
 export enum ContentFieldValueType {
@@ -234,6 +235,12 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     new ContentField(
       ContentFieldType.INPUT_TYPE,
       'type',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.INTENT,
+      'intent',
       ContentFieldValueType.STRING,
       true
     ),
