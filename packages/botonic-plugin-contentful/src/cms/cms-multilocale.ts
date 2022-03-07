@@ -13,6 +13,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -107,6 +108,10 @@ export class MultiContextCms implements CMS {
 
   handoff(id: string, context?: Context): Promise<Handoff> {
     return this.cmsFromContext(context).handoff(id, context)
+  }
+
+  input(id: string, context?: Context): Promise<Input> {
+    return this.cmsFromContext(context).input(id, context)
   }
 
   custom(id: string, context?: Context): Promise<Custom> {
