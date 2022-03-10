@@ -12,6 +12,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -45,6 +46,7 @@ export enum NonMessageTopContentType {
   SCHEDULE = 'schedule',
   URL = 'url',
   PAYLOAD = 'payload',
+  INPUT = 'user-input',
 }
 
 export type TopContentType = MessageContentType | NonMessageTopContentType
@@ -138,6 +140,7 @@ export interface CMS {
   element(id: string, context?: Context): Promise<Element>
 
   handoff(id: string, context?: Context): Promise<Handoff>
+  input(id: string, context?: Context): Promise<Input>
 
   custom(id: string, context?: Context): Promise<Custom>
   /** Even if ContentfulOptions.resumeErrors is set, if the asset is not available
