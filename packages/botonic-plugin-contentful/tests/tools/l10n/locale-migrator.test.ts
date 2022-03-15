@@ -7,7 +7,7 @@ import {
 import { SpaceExport } from '../../../src/contentful/export/space-export'
 
 const FIXTURES_BASE = path.resolve(__dirname, '__fixtures__/space-export')
-describe('LocaleMigrator', () => {
+describe.skip('LocaleMigrator', () => {
   test('TEST: LocaleMigrator some fields are falsy', () => {
     const fromFile = FIXTURES_BASE + '/entries_hour_range.json'
     const toFile = '/tmp/entries_hour_range.json'

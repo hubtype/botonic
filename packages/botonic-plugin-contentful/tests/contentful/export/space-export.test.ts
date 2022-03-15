@@ -3,7 +3,7 @@ import path from 'path'
 import { SpaceExport } from '../../../src/contentful/export/space-export'
 
 const FIXTURES_BASE = path.resolve(__dirname, '__fixtures__')
-describe('SpaceExport', () => {
+describe.skip('SpaceExport', () => {
   test('TEST: contentTypes overcomes lack of items in schema', () => {
     const fromFile = FIXTURES_BASE + '/contentTypes-with-items.json'
 
