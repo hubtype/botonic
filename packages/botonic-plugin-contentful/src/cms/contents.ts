@@ -237,7 +237,7 @@ export class Button extends Content {
     readonly id: string,
     readonly name: string,
     text: string,
-    readonly callback: Callback
+    readonly callback?: Callback
   ) {
     super(ContentType.BUTTON)
     this.usingNameForText = !text
@@ -260,6 +260,7 @@ export class Button extends Content {
   }
 
   toString(): string {
+    if (!this.callback) return 'undefined'
     if (this.isDirectReferenceToTarget()) {
       return `to ${this.callback.toString()}`
     }
@@ -373,19 +374,19 @@ export class Element extends Content {
 }
 
 export class Document extends MessageContent {
-  constructor(readonly common: CommonFields, readonly docUrl: string) {
+  constructor(readonly common: CommonFields, readonly docUrl?: string) {
     super(common, ContentType.DOCUMENT)
   }
 }
 
 export class Image extends MessageContent {
-  constructor(readonly common: CommonFields, readonly imgUrl: string) {
+  constructor(readonly common: CommonFields, readonly imgUrl?: string) {
     super(common, ContentType.IMAGE)
   }
 }
 
 export class Video extends MessageContent {
-  constructor(readonly common: CommonFields, readonly videoUrl: string) {
+  constructor(readonly common: CommonFields, readonly videoUrl?: string) {
     super(common, ContentType.VIDEO)
   }
 }
@@ -487,7 +488,7 @@ export type HandoffAgent = HandoffAgentEmail | HandoffAgentId
 export class Handoff extends TopContent {
   constructor(
     readonly common: CommonFields,
-    readonly onFinish: OnFinish,
+    readonly onFinish?: OnFinish,
     readonly message?: string,
     readonly failMessage?: string,
     //agent and queue are optional because often they are set dynamically by the bot
@@ -521,7 +522,7 @@ export class Input extends TopContent {
     readonly common: CommonFields,
     readonly title: string,
     readonly keywords: string[],
-    readonly target: OnFinish,
+    readonly target?: Callback,
     readonly type = InputType.KEYWORDS
   ) {
     super(common, ContentType.INPUT)

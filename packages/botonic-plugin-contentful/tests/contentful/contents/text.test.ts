@@ -67,7 +67,7 @@ test('TEST: contentful text with URL button with followup', async () => {
   )
   expect(text.buttons).toHaveLength(1)
   expect(text.buttons[0].text).toEqual('Acceda a su cuenta')
-  expect(text.buttons[0].callback.url).toEqual('https://shop.com/es/')
+  expect(text.buttons[0].callback?.url).toEqual('https://shop.com/es/')
   expect(text.common.followUp).not.toBeUndefined()
 })
 
@@ -79,7 +79,7 @@ test('TEST: contentful text with payload button', async () => {
 
   // assert
   expect(text.buttons).toHaveLength(1)
-  expect(text.buttons[0].callback.payload).toBe('humanHandOff')
+  expect(text.buttons[0].callback?.payload).toBe('humanHandOff')
 })
 
 test('TEST: contentful text without buttons with text followup', async () => {
@@ -114,7 +114,7 @@ test('TEST: contentful text without buttons with video followup with text follow
   const followUp1 = text.common.followUp as cms.Video
   expect(text.buttons).toHaveLength(0)
   expect(followUp1).toBeInstanceOf(cms.Video)
-  expectVideoUrlIs(followUp1.videoUrl, 'video.mp4')
+  expectVideoUrlIs(followUp1.videoUrl!, 'video.mp4')
 
   const followUp2 = followUp1.common.followUp as cms.Text
   expect(followUp2).toBeInstanceOf(cms.Text)
@@ -132,7 +132,7 @@ test('TEST: contentful text without buttons with image followup with text follow
   // assert
   const followUp1 = text.common.followUp as cms.Image
   expect(followUp1).toBeInstanceOf(cms.Image)
-  expectImgUrlIs(followUp1.imgUrl, 'red.jpg')
+  expectImgUrlIs(followUp1.imgUrl!, 'red.jpg')
 
   const followUp2 = followUp1.common.followUp as cms.Text
   expect(followUp2).toBeInstanceOf(cms.Text)

@@ -26,7 +26,7 @@ export class VideoDelivery extends DeliveryWithFollowUp {
     return addCustomFields(
       new cms.Video(
         await this.getFollowUp().commonFields(entry, context),
-        this.urlFromAssetRequired(entry.fields.video)
+        this.urlFromAssetOptional(entry.fields.video, context)
       ),
       entry.fields,
       ['video']

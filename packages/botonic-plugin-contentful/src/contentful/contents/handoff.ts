@@ -2,7 +2,6 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import {
-  CmsException,
   ContentType,
   HandoffAgent,
   HandoffAgentEmail,
@@ -42,9 +41,10 @@ export class HandoffDelivery extends TopContentDelivery {
   private onFinish(
     entry: contentful.Entry<HandoffFields>,
     context: cms.Context
-  ): OnFinish {
+  ): OnFinish | undefined {
     if (!entry.fields.onFinish) {
-      throw new CmsException(`Handoff ${this.entryId(entry)} has no onFinish`)
+      console.error(`Handoff ${this.entryId(entry)} has no onFinish`)
+      return undefined
     }
     return getTargetCallback(entry.fields.onFinish, context)
   }
@@ -113,7 +113,7 @@ type AgentTarget = contentful.Entry<AgentEmailFields | AgentIdFields>
 export interface HandoffFields extends CommonEntryFields {
   message?: string
   failMessage?: string
-  onFinish: CallbackTarget
+  onFinish?: CallbackTarget
   queue?: contentful.Entry<QueueFields>
   agent?: AgentTarget
   shadowing?: boolean

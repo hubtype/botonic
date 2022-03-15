@@ -45,19 +45,19 @@ export class InputDelivery extends TopContentDelivery {
   private target(
     entry: contentful.Entry<InputFields>,
     context: cms.Context
-  ): cms.Callback {
+  ): cms.Callback | undefined {
     if (!entry.fields.target) {
-      throw new cms.CmsException(`Input ${this.entryId(entry)} has no target`)
+      console.error(`Input ${this.entryId(entry)} has no target`)
+      return undefined
     }
     return getTargetCallback(entry.fields.target, context)
   }
 }
 
 export interface InputFields extends CommonEntryFields {
-  input: string
   title: string
   keywords: string[]
-  target: InputTarget
+  target?: InputTarget
   type: cms.InputType
 }
 

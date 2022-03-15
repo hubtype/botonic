@@ -182,7 +182,8 @@ export class DummyCMS implements CMS {
         new CommonFields(String(id), button.name, {
           shortText: button.text,
           keywords: [
-            'keyword for ' + (button.callback.payload || button.callback.url!),
+            'keyword for ' +
+              (button.callback?.payload || button.callback?.url || 'undefined'),
           ],
         })
       )

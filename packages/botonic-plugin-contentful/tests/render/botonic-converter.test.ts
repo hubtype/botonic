@@ -24,12 +24,12 @@ describe('TEST BotonicMsgConverter', () => {
       data: { text: text.text },
       buttons: [
         {
-          payload: text.buttons[0].callback.payload,
+          payload: text.buttons[0].callback?.payload,
           url: undefined,
           title: text.buttons[0].text,
         },
         {
-          payload: text.buttons[1].callback.payload,
+          payload: text.buttons[1].callback?.payload,
           url: undefined,
           title: text.buttons[1].text,
         },
@@ -90,7 +90,7 @@ describe('TEST BotonicMsgConverter', () => {
             subtitle: element.subtitle,
             buttons: [
               {
-                payload: button.callback.payload,
+                payload: button.callback?.payload,
                 url: undefined,
                 title: button.text,
               },

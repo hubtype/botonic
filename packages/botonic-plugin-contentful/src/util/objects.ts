@@ -57,7 +57,7 @@ export interface Equatable {
 }
 
 export interface Stringable {
-  toString(): string
+  toString(): string | undefined
 }
 
 export interface ValueObject extends Equatable, Stringable {}

@@ -71,13 +71,12 @@ export class ButtonDelivery extends ContentDelivery {
     buttonEntry: contentful.Entry<ButtonFields>,
     context: cms.Context
   ): cms.Button {
+    let callback: cms.Callback | undefined
     if (!buttonEntry.fields.target) {
-      throw new CmsException(
-        `Button ${this.entryId(buttonEntry)} has no target`
-      )
+      console.error(`Button ${this.entryId(buttonEntry)} has no target`)
+    } else {
+      callback = getTargetCallback(buttonEntry.fields.target, context)
     }
-    // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
-    const callback = getTargetCallback(buttonEntry.fields.target, context)
     return new cms.Button(
       buttonEntry.sys.id,
       buttonEntry.fields.name,

@@ -88,10 +88,11 @@ export class BotonicMsgConverter {
       console.error('Content has more buttons than maximum. Trimming')
       cmsButtons = cmsButtons.slice(0, maxButtons)
     }
+    cmsButtons = cmsButtons.filter(b => b.callback)
     return cmsButtons.map(cmsButton => {
       const msgButton = {
-        payload: cmsButton.callback.payload,
-        url: cmsButton.callback.url,
+        payload: cmsButton.callback?.payload,
+        url: cmsButton.callback?.url,
       } as any
       if (style == ButtonStyle.BUTTON) {
         msgButton['title'] = this.str(cmsButton.text)

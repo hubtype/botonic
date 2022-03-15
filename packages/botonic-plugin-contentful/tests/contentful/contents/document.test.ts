@@ -7,7 +7,7 @@ test('TEST: contentful document', async () => {
   const document = await sut.document(TEST_DOCUMENT, {
     locale: TEST_DEFAULT_LOCALE,
   })
-  expectDocUrlIs(document.docUrl, 'srp.pdf')
+  expectDocUrlIs(document.docUrl!, 'srp.pdf')
   expect(document.common.customFields).toEqual({
     customFieldText: 'Custom data',
   })

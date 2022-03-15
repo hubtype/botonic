@@ -49,6 +49,7 @@ export class SpaceExport {
   }
 
   private static validate(jsonObject: any) {
+    // @ts-ignore
     const err = joi.validate(
       SpaceExport.hideFieldsWithBadSchema(jsonObject),
       schema.payloadSchema

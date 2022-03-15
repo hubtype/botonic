@@ -26,7 +26,7 @@ export class ImageDelivery extends DeliveryWithFollowUp {
     return addCustomFields(
       new cms.Image(
         await this.getFollowUp().commonFields(entry, context),
-        this.urlFromAssetRequired(entry.fields.image)
+        this.urlFromAssetOptional(entry.fields.image, context)
       ),
       entry.fields,
       ['image']

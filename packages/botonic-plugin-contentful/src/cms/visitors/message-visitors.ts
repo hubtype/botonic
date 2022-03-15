@@ -77,7 +77,7 @@ export class MessageContentTraverser {
   ): Promise<void> {
     const buttons = getButtons(content)
     for (const button of buttons) {
-      const contentId = button.callback.asContentId()
+      const contentId = button.callback?.asContentId()
       if (contentId) {
         const reference = (await contentId.deliver(
           this.cms,
@@ -162,10 +162,7 @@ export class MessageContentInverseTraverser {
         if (set) {
           set.add(fromContent)
         } else {
-          this.referencesTo.set(
-            r.id,
-            new Set<MessageContent>([fromContent])
-          )
+          this.referencesTo.set(r.id, new Set<MessageContent>([fromContent]))
         }
       }
     }

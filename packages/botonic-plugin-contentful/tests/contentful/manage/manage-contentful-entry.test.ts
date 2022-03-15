@@ -182,7 +182,7 @@ describe('ManageContentful entries', () => {
         expect(result.shadowing).toEqual(false)
         expect(result.queue?.name).toEqual(queueName)
         expect(result.queue?.queue).toEqual(queue)
-        expect(result.onFinish.asContentId()?.id).toEqual(ON_FINISH_CONTENT.id)
+        expect(result.onFinish?.asContentId()?.id).toEqual(ON_FINISH_CONTENT.id)
       })
     } finally {
       // RESTORE

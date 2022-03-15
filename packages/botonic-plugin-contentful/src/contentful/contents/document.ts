@@ -26,7 +26,7 @@ export class DocumentDelivery extends DeliveryWithFollowUp {
     return addCustomFields(
       new cms.Document(
         await this.getFollowUp().commonFields(entry, context),
-        this.urlFromAssetRequired(entry.fields.document)
+        this.urlFromAssetOptional(entry.fields.document, context)
       ),
       entry.fields,
       ['document']

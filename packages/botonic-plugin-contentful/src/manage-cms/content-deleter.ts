@@ -62,7 +62,9 @@ export class ContentDeleter {
         continue
       }
       const buttons = originalButtons
-        .filter(b => !b.callback.equals(ContentCallback.ofContentId(contentId)))
+        .filter(
+          b => !b.callback?.equals(ContentCallback.ofContentId(contentId))
+        )
         .map(b => ({
           sys: {
             type: 'Link',

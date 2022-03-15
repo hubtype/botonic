@@ -5,7 +5,7 @@ const TEST_VIDEO = '41VjWsD8wJLeOx4EQsGMVr'
 test('TEST: contentful video', async () => {
   const sut = testContentful()
   const video = await sut.video(TEST_VIDEO, testContext())
-  expectVideoUrlIs(video.videoUrl, 'video.mp4')
+  expectVideoUrlIs(video.videoUrl!, 'video.mp4')
   expect(video.common.customFields).toEqual({
     customFieldText: 'custom field test',
   })

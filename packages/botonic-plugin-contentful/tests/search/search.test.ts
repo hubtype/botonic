@@ -47,10 +47,10 @@ test('TEST: respondFoundContents text with buttons', async () => {
   expect(response.text).toEqual('foundText')
   expect(response.buttons).toHaveLength(2)
   expect(response.buttons[0].text).toEqual('url shortText')
-  expect(response.buttons[0].callback.url).toEqual('http:/mocked_url')
+  expect(response.buttons[0].callback?.url).toEqual('http:/mocked_url')
 
   expect(response.buttons[1].text).toEqual('text shortText')
-  expect(response.buttons[1].callback.asContentId()).toEqual(
+  expect(response.buttons[1].callback?.asContentId()).toEqual(
     textContent.contentId
   )
 })
