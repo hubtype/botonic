@@ -11,12 +11,14 @@ import {
   Handoff,
   HandoffAgent,
   Image,
+  Input,
   OnFinish,
   Queue,
   StartUp,
   Text,
   Video,
 } from '../contents'
+import { Callback } from './../callback'
 
 /**
  * Builder for Contents (which are immutable) which allow:
@@ -274,6 +276,27 @@ export class HandoffBuilder extends MessageContentBuilder {
       this.queue,
       this.agent,
       this.shadowing
+    )
+  }
+}
+
+export class InputBuilder extends MessageContentBuilder {
+  constructor(
+    id: string,
+    name: string,
+    public title: string,
+    public keywords: string[],
+    public target: Callback
+  ) {
+    super(id, name)
+  }
+
+  build(): Input {
+    return new Input(
+      this.buildCommonFields(),
+      this.title,
+      this.keywords,
+      this.target
     )
   }
 }
