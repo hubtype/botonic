@@ -63,6 +63,7 @@ export class HandOffBuilder {
   _email: string
   _agentId: string
   _forceAssignIfNotAvailable: boolean
+  _autoAssignOnWaiting: boolean
   _note: string
   _caseInfo: string
   _autoIdleMessage: string
@@ -102,6 +103,11 @@ export class HandOffBuilder {
     return this
   }
 
+  withAutoAssignOnWaiting(autoAssignOnWaiting: boolean): this {
+    this._autoAssignOnWaiting = autoAssignOnWaiting
+    return this
+  }
+
   withNote(note: string): this {
     this._note = note
     return this
@@ -130,6 +136,7 @@ export class HandOffBuilder {
       this._email,
       this._agentId,
       this._forceAssignIfNotAvailable,
+      this._autoAssignOnWaiting,
       this._caseInfo,
       this._note,
       this._autoIdleMessage,
@@ -163,6 +170,7 @@ interface HubtypeHandoffParams {
   agent_email?: string
   agent_id?: string
   force_assign_if_not_available?: boolean
+  auto_assign_on_waiting?: boolean
   case_info?: string
   note?: string
   auto_idle_message?: string
@@ -176,6 +184,7 @@ async function _humanHandOff(
   agentEmail = '',
   agentId = '',
   forceAssignIfNotAvailable: boolean,
+  autoAssignOnWaiting = false,
   caseInfo = '',
   note = '',
   autoIdleMessage = '',
@@ -193,6 +202,9 @@ async function _humanHandOff(
   }
   if (forceAssignIfNotAvailable !== undefined) {
     params.force_assign_if_not_available = forceAssignIfNotAvailable
+  }
+  if (autoAssignOnWaiting) {
+    params.auto_assign_on_waiting = autoAssignOnWaiting
   }
   if (caseInfo) {
     params.case_info = caseInfo
