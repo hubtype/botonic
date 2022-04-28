@@ -73,4 +73,22 @@ describe('Handoff', () => {
       })
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
+
+  test.each([undefined, true, false])(
+    'sends the force assign if not available parameter',
+    (forceAssign: boolean | undefined) => {
+      const builder = new HandOffBuilder({}).withForceAssignIfNotAvailable(
+        forceAssign
+      )
+      builder.handOff()
+      const params =
+        forceAssign === undefined
+          ? {}
+          : {
+              force_assign_if_not_available: forceAssign,
+            }
+      const expectedBotonicAction = 'create_case:' + JSON.stringify(params)
+      expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+    }
+  )
 })
