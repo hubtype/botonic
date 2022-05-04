@@ -183,7 +183,7 @@ async function _humanHandOff(
   onFinish: string,
   agentEmail = '',
   agentId = '',
-  forceAssignIfNotAvailable: boolean,
+  forceAssignIfNotAvailable = true,
   autoAssignOnWaiting = false,
   caseInfo = '',
   note = '',
@@ -191,6 +191,9 @@ async function _humanHandOff(
   shadowing = false
 ) {
   const params: HubtypeHandoffParams = {}
+
+  params.force_assign_if_not_available = forceAssignIfNotAvailable
+
   if (queueNameOrId) {
     params.queue = queueNameOrId
   }
@@ -199,9 +202,6 @@ async function _humanHandOff(
   }
   if (agentId) {
     params.agent_id = agentId
-  }
-  if (forceAssignIfNotAvailable !== undefined) {
-    params.force_assign_if_not_available = forceAssignIfNotAvailable
   }
   if (autoAssignOnWaiting) {
     params.auto_assign_on_waiting = autoAssignOnWaiting
