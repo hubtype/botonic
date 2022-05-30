@@ -40,8 +40,20 @@ class App extends React.Component {
         console.log(e)
       }
     }
-    if (this.state.session.user.provider === PROVIDER.WHATSAPP) {
-      location.href = 'https://wa.me/' + this.state.session.user.imp_id
+    const provider = this.state.session.user.provider
+    const impId = this.state.session.user.imp_id
+    if (provider === PROVIDER.WHATSAPP) {
+      location.href = 'https://wa.me/' + impId
+    }
+    if (provider === PROVIDER.TELEGRAM) {
+      location.href = 'https://t.me/' + impId
+    }
+    if (provider === PROVIDER.APPLE) {
+      location.href = 'https://bcrw.apple.com/urn:biz:' + impId
+    }
+    if (provider === PROVIDER.TWITTER) {
+      location.href =
+        'https://twitter.com/messages/compose?recipient_id=' + impId
     } else {
       try {
         window.MessengerExtensions.requestCloseBrowser(
