@@ -112,7 +112,7 @@ export interface WebchatArgs {
   onOpen?: (app: WebchatApp, args: any) => void
   onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
   persistentMenu?: PersistentMenuTheme
-  storage?: Storage
+  storage?: Storage | null
   storageKey?: any
   theme?: ThemeProps
 }
@@ -171,6 +171,7 @@ export class WebchatApp {
   clearMessages(): void
   close(): void
   closeCoverComponent(): void
+  destroy(): void
   getComponent(
     host: HTMLElement,
     optionsAtRuntime?: WebchatAppArgs
@@ -187,7 +188,7 @@ export class WebchatApp {
   onUserInput(args: OnUserInputArgs): Promise<void>
   open(): void
   openCoverComponent(): void
-  render(dest: HTMLElement, optionsAtRuntime: WebchatAppArgs): void
+  render(dest?: HTMLElement, optionsAtRuntime?: WebchatAppArgs): void
   resendUnsentInputs(): Promise<void>
   resolveWebchatVisibility(optionsAtRuntime: {
     appId: string
@@ -198,14 +199,14 @@ export class WebchatApp {
   toggleCoverComponent(): void
   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
   updateLastMessageDate(date: string): void
-  updateUser(user: core.SessionUser): void
+  updateUser(user: Partial<core.SessionUser>): void
   updateWebchatSettings(settings: WebchatSettingsProps): void
   renderCustomComponent(customComponent: React.ReactNode): void
   unmountCustomComponent(): void
 }
 
 export interface WebchatContextProps {
-  sendText: (text: string) => void
+  sendText: (text: string, payload?: string) => void
   sendAttachment: (attachment: File) => void
   sendPayload: (payload: string) => void
   sendInput: (input: core.Input) => void
@@ -221,7 +222,7 @@ export interface WebchatContextProps {
   theme: ThemeProps
   webchatState: WebchatState
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
-  updateUser: (user: core.SessionUser) => void
+  updateUser: (user: Partial<core.SessionUser>) => void
 }
 export const WebchatContext: React.Context<WebchatContextProps>
 export type WebchatContext = React.Context<WebchatContextProps>
