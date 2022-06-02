@@ -1,7 +1,7 @@
 import { HubtypeService, INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { createRef } from 'react'
-import { render } from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 
 import { SENDERS, WEBCHAT } from './constants'
 import { msgToBotonic } from './msg-to-botonic'
@@ -51,8 +51,8 @@ export class WebchatApp {
     this.hostId = hostId || WEBCHAT.DEFAULTS.HOST_ID
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
-    this.storage = storage
-    this.storageKey = storageKey
+    this.storage = storage === undefined ? localStorage : storage
+    this.storageKey = storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
     this.onInit = onInit
     this.onOpen = onOpen
     this.onClose = onClose
@@ -286,9 +286,9 @@ export class WebchatApp {
     enableAnimations = enableAnimations || this.enableAnimations
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
-    storage = storage || this.storage
-    storageKey = storageKey || this.storageKey
     server = server || this.server
+    this.storage = storage || this.storage
+    this.storageKey = storageKey || this.storageKey
     this.onInit = onInit || this.onInit
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
@@ -349,6 +349,12 @@ export class WebchatApp {
     if (visibility === 'dynamic' && (await this.isWebchatVisible({ appId })))
       return true
     return false
+  }
+
+  destroy() {
+    if (this.hubtypeService) this.hubtypeService.destroyPusher()
+    unmountComponentAtNode(this.host)
+    if (this.storage) this.storage.removeItem(this.storageKey)
   }
 
   async render(dest, optionsAtRuntime = {}) {
