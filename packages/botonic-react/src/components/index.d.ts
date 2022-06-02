@@ -112,7 +112,7 @@ export interface BlobProps {
   blobTick?: boolean
   blobTickStyle?: any
   blobWidth?: string
-  imagestyle?: any
+  imageStyle?: any
 }
 
 export interface ScrollbarProps {
@@ -189,7 +189,7 @@ export interface ThemeProps extends StyleProp {
 }
 
 export interface CoverComponentOptions {
-  component: React.Component<CoverComponentProps>
+  component: React.ComponentType<CoverComponentProps>
   props?: any
 }
 
