@@ -16,6 +16,7 @@ export type CaseResolution =
   | typeof CASE_RESOLUTION.OK
 
 export const PROVIDER = Object.freeze({
+  APPLE: 'apple',
   DEV: 'dev',
   FACEBOOK: 'facebook',
   GENERIC: 'generic',
@@ -236,6 +237,7 @@ export interface Params {
 
 export const Providers = Object.freeze({
   Messaging: {
+    APPLE: 'apple',
     FACEBOOK: 'facebook',
     GENERIC: 'generic',
     IMBEE: 'imbee',
