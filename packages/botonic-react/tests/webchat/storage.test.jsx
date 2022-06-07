@@ -1,6 +1,7 @@
 import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
 
+import { WEBCHAT } from '../../src/constants'
 import { Webchat } from '../../src/webchat/webchat'
 
 describe('TEST: storage', () => {
@@ -11,7 +12,12 @@ describe('TEST: storage', () => {
 
   it('Stores botonicState in the localStorage by default with its default values', async () => {
     await act(async () => {
-      TestRenderer.create(<Webchat />)
+      TestRenderer.create(
+        <Webchat
+          storage={localStorage}
+          storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
+        />
+      )
     })
     const botonicState = JSON.parse(localStorage.getItem('botonicState'))
     expect(botonicState.session.user).toHaveProperty('id' && 'name')
@@ -26,7 +32,12 @@ describe('TEST: storage', () => {
 
   it('Stores botonicState in the localStorage', async () => {
     await act(async () => {
-      TestRenderer.create(<Webchat storage={localStorage} />)
+      TestRenderer.create(
+        <Webchat
+          storage={localStorage}
+          storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
+        />
+      )
     })
     expect(localStorage.getItem('botonicState')).not.toBeNull()
     expect(sessionStorage.getItem('botonicState')).toBeNull()
@@ -34,7 +45,12 @@ describe('TEST: storage', () => {
 
   it('Stores botonicState in the sessionStorage', async () => {
     await act(async () => {
-      TestRenderer.create(<Webchat storage={sessionStorage} />)
+      TestRenderer.create(
+        <Webchat
+          storage={sessionStorage}
+          storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
+        />
+      )
     })
     expect(localStorage.getItem('botonicState')).toBeNull()
     expect(sessionStorage.getItem('botonicState')).not.toBeNull()
@@ -42,7 +58,9 @@ describe('TEST: storage', () => {
 
   it('Does not store botonicState', async () => {
     await act(async () => {
-      TestRenderer.create(<Webchat storage={null} />)
+      TestRenderer.create(
+        <Webchat storage={null} storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY} />
+      )
     })
     expect(localStorage.getItem('botonicState')).toBeNull()
     expect(sessionStorage.getItem('botonicState')).toBeNull()
@@ -57,7 +75,9 @@ describe('TEST: storageKey', () => {
 
   it('Stores botonicState in the localStorage key defined in the settings', async () => {
     await act(async () => {
-      TestRenderer.create(<Webchat storageKey='myCustomKey' />)
+      TestRenderer.create(
+        <Webchat storage={localStorage} storageKey='myCustomKey' />
+      )
     })
     expect(localStorage.getItem('botonicState')).toBeNull()
     expect(localStorage.getItem('myCustomKey')).not.toBeNull()
@@ -65,18 +85,12 @@ describe('TEST: storageKey', () => {
 
   it('Stores botonicState in the localStorage key returned if storageKey is a function', async () => {
     await act(async () => {
-      TestRenderer.create(<Webchat storageKey={() => 'myCustomKey'} />)
+      TestRenderer.create(
+        <Webchat storage={localStorage} storageKey={() => 'myCustomKey'} />
+      )
     })
     expect(localStorage.getItem('botonicState')).toBeNull()
     expect(localStorage.getItem('myCustomKey')).not.toBeNull()
-  })
-
-  it('Stores botonicState in the default localStorage key if storageKey is null', async () => {
-    await act(async () => {
-      TestRenderer.create(<Webchat storageKey={null} />)
-    })
-    expect(localStorage.getItem('botonicState')).not.toBeNull()
-    expect(localStorage.getItem('myCustomKey')).toBeNull()
   })
 
   it('Inits session correctly with user id (corrupted localStorage)', async () => {
@@ -85,7 +99,12 @@ describe('TEST: storageKey', () => {
       '{"user":{"extra_data":{"url":"https://www.some-domain.com/","lang":"GB_en"}},"messages":[],"session":{"user":{"extra_data":{"url":"https://www.some-domain.com/","lang":"GB_en"}}},"lastRoutePath":null,"devSettings":{},"lastMessageUpdate":"2020-12-04T16:30:11.833Z"}'
     )
     await act(async () => {
-      TestRenderer.create(<Webchat storage={localStorage} />)
+      TestRenderer.create(
+        <Webchat
+          storage={localStorage}
+          storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
+        />
+      )
     })
     const botonicState = JSON.parse(localStorage.getItem('botonicState'))
     expect(localStorage.getItem('botonicState')).not.toBeNull()

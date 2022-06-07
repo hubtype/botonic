@@ -202,16 +202,13 @@ export const Webchat = forwardRef((props, ref) => {
   const getThemeProperty = _getThemeProperty(theme)
 
   const [customComponent, setCustomComponent] = useState(null)
-  const storage = props.storage === undefined ? localStorage : props.storage
+  const storage = props.storage
   const storageKey =
     typeof props.storageKey === 'function'
       ? props.storageKey()
       : props.storageKey
 
-  const [botonicState, saveState] = useStorageState(
-    storage,
-    storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
-  )
+  const [botonicState, saveState] = useStorageState(storage, storageKey)
 
   const host = props.host || document.body
 
