@@ -312,8 +312,8 @@ export class WebchatApp {
         enableAttachments={enableAttachments}
         enableUserInput={enableUserInput}
         enableAnimations={enableAnimations}
-        storage={storage}
-        storageKey={storageKey}
+        storage={this.storage}
+        storageKey={this.storageKey}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
         onInit={(...args) => this.onInitWebchat(...args)}
