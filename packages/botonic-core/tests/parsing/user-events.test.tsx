@@ -67,4 +67,16 @@ describe('Parsing Text responses', () => {
 
     tester.parseUserInputAndAssert(userInput, expected)
   })
+
+  it('TEST: Missed with media type sent by user', () => {
+    const userInput = {
+      type: 'missed',
+      reason: 'disallowed_attachments',
+      media_type: 'document',
+      id: '23522aed-bfec-423d-b311-79825661666b',
+    }
+
+    const expected = { eventType: 'message', type: 'missed', reason: 'disallowed_attachments', media_type: 'document' }
+    tester.parseUserInputAndAssert(userInput, expected)
+  })
 })

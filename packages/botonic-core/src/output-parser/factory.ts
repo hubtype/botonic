@@ -6,6 +6,7 @@ import {
   parseLocation,
   parseMedia,
   parseMessage,
+  parseMissed,
   parsePostback,
   parseReplies,
   parseText,
@@ -15,23 +16,23 @@ export class MessageParsingFactory {
   parse(msgToParse: any): Partial<BotonicEvent> {
     const type = msgToParse.type
     const parsedMessage = parseMessage({ toParse: msgToParse })
-    if (type === MessageEventTypes.TEXT) {
-      return parseText(parseReplies(parseButtons(parsedMessage))).parsed
-    }
-    if (type === MessageEventTypes.POSTBACK) {
-      return parsePostback(parsedMessage).parsed
-    }
     if (MEDIA_TYPES.includes(type)) {
       return parseMedia(parseButtons(parsedMessage)).parsed
     }
-    if (type === MessageEventTypes.LOCATION) {
-      return parseLocation(parsedMessage).parsed
-    }
-    if (type === MessageEventTypes.CAROUSEL) {
-      return parseCarousel(parsedMessage).parsed
-    }
-    if (type === MessageEventTypes.CUSTOM) {
-      return parseCustom(parseReplies(parsedMessage)).parsed
+    switch (type) {
+      case MessageEventTypes.TEXT:
+        // statement 1
+        return parseText(parseReplies(parseButtons(parsedMessage))).parsed
+      case MessageEventTypes.POSTBACK:
+        return parsePostback(parsedMessage).parsed
+      case MessageEventTypes.LOCATION:
+        return parseLocation(parsedMessage).parsed
+      case MessageEventTypes.CAROUSEL:
+        return parseCarousel(parsedMessage).parsed
+      case MessageEventTypes.CUSTOM:
+        return parseCustom(parseReplies(parsedMessage)).parsed
+      case MessageEventTypes.MISSED:
+        return parseMissed(parsedMessage).parsed
     }
     throw new Error(`Parsing for type: '${type}' not implemented.`)
   }
