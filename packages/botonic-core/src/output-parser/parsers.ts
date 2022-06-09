@@ -9,6 +9,7 @@ import {
   EventTypes,
   ImageMessageEvent,
   LocationMessageEvent,
+  MissedMessageEvent,
   PostbackMessageEvent,
   Reply,
   TextMessageEvent,
@@ -195,6 +196,18 @@ export const parseCustom: ParseFunction<CustomMessageEvent> = args => {
     parsed: {
       ...args.parsed,
       json: JSON.parse(args.toParse.json),
+    },
+  }
+}
+
+// MISSED
+export const parseMissed: ParseFunction<MissedMessageEvent> = args => {
+  return {
+    toParse: args.toParse,
+    parsed: {
+      ...args.parsed,
+      reason: args.toParse.reason,
+      media_type: args.toParse.media_type,
     },
   }
 }
