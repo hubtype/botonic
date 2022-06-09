@@ -54,13 +54,16 @@ class App extends React.Component {
     if (provider === PROVIDER.TWITTER) {
       location.href =
         'https://twitter.com/messages/compose?recipient_id=' + impId
-    } else {
+    }
+    if (provider === PROVIDER.FACEBOOK) {
       try {
         window.MessengerExtensions.requestCloseBrowser(
           () => undefined,
           err => console.log(err)
         )
       } catch (e) {}
+    }
+    if (provider === PROVIDER.WEBCHAT) {
       try {
         await parent.postMessage('botonicCloseWebview', '*')
       } catch (e) {}
