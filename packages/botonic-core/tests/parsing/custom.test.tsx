@@ -1,8 +1,8 @@
 import { BotonicOutputParserTester } from '../helpers/parsing'
 
 const tester = new BotonicOutputParserTester()
-describe('Parsing Location responses', () => {
-  it('TEST: Location', () => {
+describe('Parsing Custom responses', () => {
+  it('TEST: Custom', () => {
     const botResponse = `
     <message typing="0" delay="0" markdown="1" type="text">
         Custom Message
