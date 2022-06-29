@@ -14,6 +14,7 @@ import { ImageDelivery, ImageFields } from './image'
 import { StartUpDelivery, StartUpFields } from './startup'
 import { TextDelivery, TextFields } from './text'
 import { VideoDelivery, VideoFields } from './video'
+import { DocumentDelivery, DocumentFields } from './document'
 
 export class DeliveryWithFollowUp extends TopContentDelivery {
   followUp: FollowUpDelivery | undefined
@@ -39,7 +40,8 @@ export class FollowUpDelivery {
     private readonly text: TextDelivery,
     private readonly image: ImageDelivery,
     private readonly startUp: StartUpDelivery,
-    private readonly video: VideoDelivery
+    private readonly video: VideoDelivery,
+    private readonly document: DocumentDelivery
   ) {}
 
   async fromEntry(
@@ -79,6 +81,12 @@ export class FollowUpDelivery {
         return this.startUp.fromEntry(followUp as Entry<StartUpFields>, context)
       case cms.ContentType.VIDEO:
         return this.video.fromEntry(followUp as Entry<VideoFields>, context)
+      case cms.ContentType.DOCUMENT:
+        return this.document.fromEntry(
+          followUp as Entry<DocumentFields>,
+          context
+        )
+
       default:
         throw new Error(`Unexpected followUp type ${followUp.sys.type}`)
     }
