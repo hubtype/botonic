@@ -123,7 +123,8 @@ export class Contentful implements cms.CMS {
       this._text,
       this._image,
       this._startUp,
-      this._video
+      this._video,
+      this._document
     )
     ;[
       this._document,
