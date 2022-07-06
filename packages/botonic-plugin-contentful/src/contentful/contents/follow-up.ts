@@ -10,11 +10,11 @@ import {
   FollowUpFields,
 } from '../delivery-utils'
 import { CarouselDelivery } from './carousel'
+import { DocumentDelivery, DocumentFields } from './document'
 import { ImageDelivery, ImageFields } from './image'
 import { StartUpDelivery, StartUpFields } from './startup'
 import { TextDelivery, TextFields } from './text'
 import { VideoDelivery, VideoFields } from './video'
-import { DocumentDelivery, DocumentFields } from './document'
 
 export class DeliveryWithFollowUp extends TopContentDelivery {
   followUp: FollowUpDelivery | undefined
