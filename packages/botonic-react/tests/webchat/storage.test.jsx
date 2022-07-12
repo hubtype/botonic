@@ -3,6 +3,7 @@ import TestRenderer, { act } from 'react-test-renderer'
 
 import { WEBCHAT } from '../../src/constants'
 import { Webchat } from '../../src/webchat/webchat'
+import { InMemoryStorage } from '../helpers/in-memory-storage'
 
 describe('TEST: storage', () => {
   afterEach(() => {
@@ -54,6 +55,23 @@ describe('TEST: storage', () => {
     })
     expect(localStorage.getItem('botonicState')).toBeNull()
     expect(sessionStorage.getItem('botonicState')).not.toBeNull()
+  })
+
+  it('Stores botonicState in the memory storage', async () => {
+    const inMemoryStorage = new InMemoryStorage()
+    await act(async () => {
+      TestRenderer.create(
+        <Webchat
+          storage={inMemoryStorage}
+          storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
+        />
+      )
+    })
+    const botonicState = JSON.parse(inMemoryStorage.getItem('botonicState'))
+    expect(localStorage.getItem('botonicState')).toBeNull()
+    expect(sessionStorage.getItem('botonicState')).toBeNull()
+    expect(botonicState).not.toBeNull()
+    expect(botonicState).toHaveProperty('messages', [])
   })
 
   it('Does not store botonicState', async () => {
