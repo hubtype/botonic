@@ -92,6 +92,7 @@ export class BotonicMsgConverter {
       const msgButton = {
         payload: cmsButton.callback.payload,
         url: cmsButton.callback.url,
+        webview: cmsButton.callback.webview,
       } as any
       if (style == ButtonStyle.BUTTON) {
         msgButton['title'] = this.str(cmsButton.text)

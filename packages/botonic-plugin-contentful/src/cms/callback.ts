@@ -18,6 +18,7 @@ export class Callback implements ValueObject, Equatable {
   protected constructor(
     readonly payload?: string,
     readonly url?: string,
+    public webview?: any,
     readonly empty = false
   ) {
     if (!empty && !payload && !url) {
@@ -46,7 +47,7 @@ export class Callback implements ValueObject, Equatable {
   }
 
   static empty(): Callback {
-    return new Callback(undefined, undefined, true)
+    return new Callback(undefined, undefined, undefined, true)
   }
 
   asContentId(): TopContentId | undefined {
