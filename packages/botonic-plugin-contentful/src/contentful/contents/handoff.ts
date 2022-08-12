@@ -19,12 +19,14 @@ import {
 } from '../delivery-utils'
 import { CallbackTarget, getTargetCallback } from './callback-delivery'
 import { QueueDelivery, QueueFields } from './queue'
+import { TextDelivery, TextFields } from './text'
 
 export class HandoffDelivery extends TopContentDelivery {
-  static REFERENCES_INCLUDE = QueueDelivery.REFERENCES_INCLUDE + 1
+  static REFERENCES_INCLUDE = QueueDelivery.REFERENCES_INCLUDE + 3
   constructor(
     delivery: DeliveryApi,
     private readonly queueDelivery: QueueDelivery,
+    private readonly textDelivery: TextDelivery,
     resumeErrors: boolean
   ) {
     super(ContentType.HANDOFF, delivery, resumeErrors)
@@ -78,18 +80,40 @@ export class HandoffDelivery extends TopContentDelivery {
     return undefined
   }
 
-  fromEntry(
+  private async message(
     entry: contentful.Entry<HandoffFields>,
     context: cms.Context
-  ): cms.Handoff {
+  ): Promise<cms.Text | undefined> {
+    if (!entry.fields.message) return undefined
+    return await this.textDelivery.fromEntry(
+      entry.fields.message as contentful.Entry<TextFields>,
+      context
+    )
+  }
+
+  private async failMessage(
+    entry: contentful.Entry<HandoffFields>,
+    context: cms.Context
+  ): Promise<cms.Text | undefined> {
+    if (!entry.fields.failMessage) return undefined
+    return await this.textDelivery.fromEntry(
+      entry.fields.failMessage as contentful.Entry<TextFields>,
+      context
+    )
+  }
+
+  async fromEntry(
+    entry: contentful.Entry<HandoffFields>,
+    context: cms.Context
+  ): Promise<cms.Handoff> {
     const fields = entry.fields
     const common = ContentfulEntryUtils.commonFieldsFromEntry(entry)
     return addCustomFields(
       new cms.Handoff(
         common,
         this.onFinish(entry, context),
-        fields.message,
-        fields.failMessage,
+        await this.message(entry, context),
+        await this.failMessage(entry, context),
         this.queue(entry),
         this.agent(entry),
         fields.shadowing
@@ -111,8 +135,8 @@ export interface AgentIdFields {
 type AgentTarget = contentful.Entry<AgentEmailFields | AgentIdFields>
 
 export interface HandoffFields extends CommonEntryFields {
-  message?: string
-  failMessage?: string
+  message?: contentful.Entry<TextFields>
+  failMessage?: contentful.Entry<TextFields>
   onFinish: CallbackTarget
   queue?: contentful.Entry<QueueFields>
   agent?: AgentTarget

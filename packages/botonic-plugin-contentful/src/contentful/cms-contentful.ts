@@ -114,7 +114,12 @@ export class Contentful implements cms.CMS {
     this._asset = new AssetDelivery(delivery, resumeErrors)
     this._schedule = new ScheduleDelivery(delivery, resumeErrors)
     this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
-    this._handoff = new HandoffDelivery(delivery, this._queue, resumeErrors)
+    this._handoff = new HandoffDelivery(
+      delivery,
+      this._queue,
+      this._text,
+      resumeErrors
+    )
     this._input = new InputDelivery(delivery, resumeErrors)
     this._custom = new CustomDelivery(delivery, resumeErrors)
     const followUp = new FollowUpDelivery(
@@ -255,7 +260,7 @@ export class Contentful implements cms.CMS {
       case ContentType.VIDEO:
         return retype(await this._video.fromEntry(entry, context))
       case ContentType.HANDOFF:
-        return retype(this._handoff.fromEntry(entry, context))
+        return retype(await this._handoff.fromEntry(entry, context))
       case ContentType.INPUT:
         return retype(this._input.fromEntry(entry, context))
       case ContentType.URL:
