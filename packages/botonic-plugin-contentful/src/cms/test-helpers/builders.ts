@@ -258,8 +258,12 @@ export class RndHandoffBuilder extends HandoffBuilder {
   }
 
   withRandomFields(): this {
-    this.message = rndStr()
-    this.failMessage = rndStr()
+    this.message = new Text(new CommonFields(rndStr(), rndStr()), rndStr(), [])
+    this.failMessage = new Text(
+      new CommonFields(rndStr(), rndStr()),
+      rndStr(),
+      []
+    )
     this.agent = new HandoffAgentEmail(rndStr())
     this.shadowing = rndBool()
     this.topComponentBuilder.withRandomFields(this)

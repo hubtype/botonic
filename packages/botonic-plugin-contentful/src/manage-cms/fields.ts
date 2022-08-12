@@ -198,13 +198,13 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     new ContentField(
       ContentFieldType.MESSAGE,
       'message',
-      ContentFieldValueType.STRING,
+      ContentFieldValueType.REFERENCE,
       true
     ),
     new ContentField(
       ContentFieldType.FAIL_MESSAGE,
       'failMessage',
-      ContentFieldValueType.STRING,
+      ContentFieldValueType.REFERENCE,
       true
     ),
     new ContentField(
