@@ -157,11 +157,7 @@ export class ContentToCsvLines {
         new I18nField(ContentFieldType.URL, content.url),
       ]
     } else if (content instanceof Handoff) {
-      return [
-        ...this.getCommonFields(content.common),
-        new I18nField(ContentFieldType.MESSAGE, content.message!),
-        new I18nField(ContentFieldType.FAIL_MESSAGE, content.failMessage!),
-      ]
+      return [...this.getCommonFields(content.common)]
     } else if (content instanceof TopContent) {
       return this.getCommonFields(content.common)
     }

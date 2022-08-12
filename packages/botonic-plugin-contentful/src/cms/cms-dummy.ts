@@ -71,12 +71,14 @@ export class DummyCMS implements CMS {
 
   async handoff(id: string, {} = DEFAULT_CONTEXT): Promise<Handoff> {
     const queue = new Queue(new CommonFields(id, id), id)
+    const message = new Text(new CommonFields(id, id), id, [])
+    const failMessage = new Text(new CommonFields(id, id), id, [])
     return Promise.resolve(
       new Handoff(
         new CommonFields(id, id),
         this.buttonCallbacks[0],
-        'Dummy message for ' + id,
-        'Dummy handofFailfMessage for ' + id,
+        message,
+        failMessage,
         queue
       )
     )
