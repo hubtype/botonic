@@ -233,8 +233,8 @@ export class DocumentBuilder extends MessageContentBuilder {
 }
 
 export class HandoffBuilder extends MessageContentBuilder {
-  message?: string
-  failMessage?: string
+  message?: Text
+  failMessage?: Text
   queue?: Queue
   agent?: HandoffAgent
   shadowing?: boolean
@@ -242,12 +242,12 @@ export class HandoffBuilder extends MessageContentBuilder {
     super(id, name)
   }
 
-  withHandoffMessage(message?: string): this {
+  withHandoffMessage(message?: Text): this {
     this.message = message
     return this
   }
 
-  withHandoffFailMessage(failMessage?: string): this {
+  withHandoffFailMessage(failMessage?: Text): this {
     this.failMessage = failMessage
     return this
   }
