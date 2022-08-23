@@ -1,7 +1,7 @@
 import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
-import { CmsException, ContentType } from '../../cms'
+import { Button, CmsException, ContentType } from '../../cms'
 import { TopContentType } from '../../cms/cms'
 import { isOfType } from '../../util/enums'
 import { ContentDelivery } from '../content-delivery'
@@ -78,12 +78,13 @@ export class ButtonDelivery extends ContentDelivery {
     }
     // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
     const callback = getTargetCallback(buttonEntry.fields.target, context)
-    return new cms.Button(
+    const newButton = new cms.Button(
       buttonEntry.sys.id,
       buttonEntry.fields.name,
       buttonEntry.fields.text ?? '',
       callback
     )
+    return this.addCustomFields(newButton, buttonEntry.fields)
   }
 
   // TODO move to a new CmsUtils.buttonToCallback(cms.ContentCallback)?
@@ -93,12 +94,25 @@ export class ButtonDelivery extends ContentDelivery {
   ): cms.Button {
     const fields = entry.fields
     const text = fields.shortText || ''
-    return new cms.Button(
+    const newButton = new Button(
       entry.sys.id,
       fields.name,
       text,
       ButtonDelivery.callbackFromEntry(entry)
     )
+    return this.addCustomFields(newButton, fields)
+  }
+
+  private addCustomFields(button: Button, entryFields: Object): Button {
+    const buttonAttributes = Object.keys(button)
+
+    const customKeys = Object.keys(entryFields).filter(
+      (field: string) => !buttonAttributes.includes(field)
+    )
+    for (const customKey of customKeys) {
+      button.customFields[customKey] = (entryFields as any)[customKey]
+    }
+    return button
   }
 
   private static callbackFromEntry(entry: contentful.Entry<any>): cms.Callback {
