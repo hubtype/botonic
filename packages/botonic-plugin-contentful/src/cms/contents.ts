@@ -226,7 +226,7 @@ export class CommonFields implements Stringable {
 export class Button extends Content {
   private readonly usingNameForText: boolean
   public readonly text: string
-
+  public customFields: Record<string, unknown> = {}
   /**
    * @param id If content having the button has a direct reference to the target
    * content instead of a Button content, the id will be the id of the target.
