@@ -39,13 +39,13 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
         return this.elementFromEntry(entry, context)
       }
     )
-    return addCustomFields(
-      new cms.Carousel(
-        ContentfulEntryUtils.commonFieldsFromEntry(entry),
-        elements
-      ),
-      entry.fields
+    const fields = entry.fields
+    const followup = await this.getFollowUp().fromEntry(
+      fields.followup,
+      context
     )
+    const common = ContentfulEntryUtils.commonFieldsFromEntry(entry, followup)
+    return addCustomFields(new cms.Carousel(common, elements), entry.fields)
   }
 
   public async element(id: string, context: cms.Context): Promise<cms.Element> {
