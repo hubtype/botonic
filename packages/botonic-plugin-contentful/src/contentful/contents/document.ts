@@ -4,9 +4,9 @@ import * as cms from '../../cms'
 import { ContentType } from '../../cms'
 import { DeliveryApi } from '../delivery-api'
 import { addCustomFields, CommonEntryFields } from '../delivery-utils'
-import { DeliveryWithFollowUp } from './follow-up'
+import { DeliveryWithReference } from './reference'
 
-export class DocumentDelivery extends DeliveryWithFollowUp {
+export class DocumentDelivery extends DeliveryWithReference {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(ContentType.DOCUMENT, delivery, resumeErrors)
   }
@@ -23,12 +23,17 @@ export class DocumentDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<DocumentFields>,
     context: cms.Context
   ): Promise<cms.Document> {
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Document(
-        await this.getFollowUp().commonFields(entry, context),
+        await this.getReference().commonFields(entry, context),
         this.urlFromAssetRequired(entry.fields.document)
       ),
       entry.fields,
+      referenceDelivery,
       ['document']
     )
   }

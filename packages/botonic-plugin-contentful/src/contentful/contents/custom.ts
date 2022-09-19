@@ -13,11 +13,12 @@ export class CustomDelivery extends ContentDelivery {
 
   public async custom(id: string, context: cms.Context): Promise<cms.Custom> {
     const entry = await this.getEntry<ContentWithCustomFields>(id, context)
-    return this.fromEntry(entry)
+    return this.fromEntry(entry, context)
   }
 
   public fromEntry(
-    customEntry: contentful.Entry<ContentWithCustomFields>
+    customEntry: contentful.Entry<ContentWithCustomFields>,
+    context: cms.Context
   ): cms.Custom {
     return new cms.Custom(
       customEntry.sys.id,

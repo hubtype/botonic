@@ -2,15 +2,15 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import { Context } from '../../cms'
-import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
   CommonEntryFields,
   ContentfulEntryUtils,
 } from '../delivery-utils'
+import { DeliveryWithReference } from './reference'
 
-export class UrlDelivery extends TopContentDelivery {
+export class UrlDelivery extends DeliveryWithReference {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(cms.ContentType.URL, delivery, resumeErrors)
   }
@@ -21,12 +21,17 @@ export class UrlDelivery extends TopContentDelivery {
   }
 
   fromEntry(entry: contentful.Entry<UrlFields>, context: Context) {
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Url(
         ContentfulEntryUtils.commonFieldsFromEntry(entry),
         entry.fields.url || ''
       ),
-      entry.fields
+      entry.fields,
+      referenceDelivery
     )
   }
 }
