@@ -23,7 +23,6 @@ import { ContentsDelivery } from './contents/contents'
 import { CustomDelivery } from './contents/custom'
 import { DateRangeDelivery } from './contents/date-range'
 import { DocumentDelivery } from './contents/document'
-import { FollowUpDelivery } from './contents/follow-up'
 import { HandoffDelivery } from './contents/handoff'
 import { ImageDelivery } from './contents/image'
 import { InputDelivery } from './contents/input'
@@ -44,6 +43,7 @@ import {
 } from './delivery-utils'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 import { KeywordsDelivery } from './search/keywords'
+import { ReferenceDelivery } from './contents/reference'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
@@ -122,25 +122,39 @@ export class Contentful implements cms.CMS {
     )
     this._input = new InputDelivery(delivery, resumeErrors)
     this._custom = new CustomDelivery(delivery, resumeErrors)
-    const followUp = new FollowUpDelivery(
+    this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
+    const followUp = new ReferenceDelivery(
       this._delivery,
       this._carousel,
       this._text,
       this._image,
       this._startUp,
       this._video,
-      this._document
+      this._document,
+      this._url,
+      this._handoff,
+      this._queue,
+      this._schedule,
+      this._input,
+      this._payload,
+      this._dateRange
     )
     ;[
-      this._document,
-      this._text,
       this._carousel,
+      this._text,
       this._image,
       this._startUp,
       this._video,
-    ].forEach(d => d.setFollowUp(followUp))
+      this._document,
+      this._url,
+      this._handoff,
+      this._queue,
+      this._schedule,
+      this._input,
+      this._payload,
+      this._dateRange,
+    ].forEach(d => d.setReference(followUp))
     this._keywords = new KeywordsDelivery(delivery)
-    this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
   }
 
   button(id: string, context: Context = DEFAULT_CONTEXT): Promise<cms.Button> {
@@ -251,7 +265,7 @@ export class Contentful implements cms.CMS {
       case ContentType.DOCUMENT:
         return retype(await this._document.fromEntry(entry, context))
       case ContentType.QUEUE:
-        return retype(this._queue.fromEntry(entry))
+        return retype(await this._queue.fromEntry(entry, context))
       case ContentType.CHITCHAT:
       case ContentType.TEXT:
         return retype(await this._text.fromEntry(entry, context))
@@ -262,17 +276,17 @@ export class Contentful implements cms.CMS {
       case ContentType.HANDOFF:
         return retype(await this._handoff.fromEntry(entry, context))
       case ContentType.INPUT:
-        return retype(this._input.fromEntry(entry, context))
+        return retype(await this._input.fromEntry(entry, context))
       case ContentType.URL:
-        return retype(this._url.fromEntry(entry, context))
+        return retype(await this._url.fromEntry(entry, context))
       case ContentType.PAYLOAD:
-        return retype(this._payload.fromEntry(entry, context))
+        return retype(await this._payload.fromEntry(entry, context))
       case ContentType.STARTUP:
         return retype(await this._startUp.fromEntry(entry, context))
       case ContentType.SCHEDULE:
-        return retype(this._schedule.fromEntry(entry))
+        return retype(await this._schedule.fromEntry(entry, context))
       case ContentType.DATE_RANGE:
-        return retype(DateRangeDelivery.fromEntry(entry))
+        return retype(await this._dateRange.fromEntry(entry, context))
       default:
         throw new Error(`${model} is not a Content type`)
     }
@@ -304,8 +318,8 @@ export class Contentful implements cms.CMS {
     return this._keywords.contentsWithKeywords(context, paging)
   }
 
-  async schedule(id: string): Promise<ScheduleContent> {
-    return this._schedule.schedule(id)
+  async schedule(id: string, context: Context): Promise<ScheduleContent> {
+    return this._schedule.schedule(id, context)
   }
 
   asset(id: string, context = DEFAULT_CONTEXT): Promise<cms.Asset> {
@@ -316,7 +330,7 @@ export class Contentful implements cms.CMS {
     return this._asset.assets(context)
   }
 
-  dateRange(id: string): Promise<DateRangeContent> {
-    return this._dateRange.dateRange(id)
+  dateRange(id: string, context: Context): Promise<DateRangeContent> {
+    return this._dateRange.dateRange(id, context)
   }
 }
