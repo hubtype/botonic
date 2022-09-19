@@ -488,8 +488,8 @@ export class Handoff extends TopContent {
   constructor(
     readonly common: CommonFields,
     readonly onFinish: OnFinish,
-    readonly message?: Text,
-    readonly failMessage?: Text,
+    readonly message?: Text | string,
+    readonly failMessage?: Text | string,
     //agent and queue are optional because often they are set dynamically by the bot
     readonly queue?: Queue,
     readonly agent?: HandoffAgent,
