@@ -8,9 +8,9 @@ import {
   ContentfulEntryUtils,
 } from '../delivery-utils'
 import { ButtonDelivery } from './button'
-import { DeliveryWithFollowUp } from './follow-up'
+import { DeliveryWithReference } from './reference'
 
-export class TextDelivery extends DeliveryWithFollowUp {
+export class TextDelivery extends DeliveryWithReference {
   constructor(
     protected delivery: DeliveryApi,
     private readonly button: ButtonDelivery,
@@ -32,7 +32,7 @@ export class TextDelivery extends DeliveryWithFollowUp {
   ): Promise<cms.Text> {
     const fields = entry.fields
     const buttonEntries = fields.buttons || []
-    const followup = this.getFollowUp().fromEntry(fields.followup, context)
+    const followup = this.getReference().fromEntry(fields.followup, context)
     const promises: Promise<any>[] = [
       followup,
       this.button.fromReferenceSkipErrors(buttonEntries, context),
@@ -43,9 +43,14 @@ export class TextDelivery extends DeliveryWithFollowUp {
     const buttons = followUpAndButtons[1] as cms.Button[]
     const common = ContentfulEntryUtils.commonFieldsFromEntry(entry, followUp)
     const buttonsStyle = this.getButtonsStyle(fields.buttonsStyle)
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Text(common, fields.text ?? '', buttons, buttonsStyle),
-      fields
+      fields,
+      referenceDelivery
     )
   }
 
