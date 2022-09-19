@@ -83,23 +83,27 @@ export class HandoffDelivery extends TopContentDelivery {
   private async message(
     entry: contentful.Entry<HandoffFields>,
     context: cms.Context
-  ): Promise<cms.Text | undefined> {
+  ): Promise<cms.Text | string | undefined> {
     if (!entry.fields.message) return undefined
-    return await this.textDelivery.fromEntry(
-      entry.fields.message as contentful.Entry<TextFields>,
-      context
-    )
+    return typeof entry.fields.message === 'string'
+      ? entry.fields.message
+      : await this.textDelivery.fromEntry(
+          entry.fields.message as contentful.Entry<TextFields>,
+          context
+        )
   }
 
   private async failMessage(
     entry: contentful.Entry<HandoffFields>,
     context: cms.Context
-  ): Promise<cms.Text | undefined> {
+  ): Promise<cms.Text | string | undefined> {
     if (!entry.fields.failMessage) return undefined
-    return await this.textDelivery.fromEntry(
-      entry.fields.failMessage as contentful.Entry<TextFields>,
-      context
-    )
+    return typeof entry.fields.failMessage === 'string'
+      ? entry.fields.failMessage
+      : await this.textDelivery.fromEntry(
+          entry.fields.failMessage as contentful.Entry<TextFields>,
+          context
+        )
   }
 
   async fromEntry(
