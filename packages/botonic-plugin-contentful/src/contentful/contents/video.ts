@@ -4,9 +4,9 @@ import * as cms from '../../cms'
 import { Context } from '../../cms'
 import { DeliveryApi } from '../delivery-api'
 import { addCustomFields, CommonEntryFields } from '../delivery-utils'
-import { DeliveryWithFollowUp } from './follow-up'
+import { DeliveryWithReference } from './reference'
 
-export class VideoDelivery extends DeliveryWithFollowUp {
+export class VideoDelivery extends DeliveryWithReference {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(cms.ContentType.VIDEO, delivery, resumeErrors)
   }
@@ -23,12 +23,17 @@ export class VideoDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<VideoFields>,
     context: cms.Context
   ): Promise<cms.Video> {
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Video(
-        await this.getFollowUp().commonFields(entry, context),
+        await this.getReference().commonFields(entry, context),
         this.urlFromAssetRequired(entry.fields.video)
       ),
       entry.fields,
+      referenceDelivery,
       ['video']
     )
   }

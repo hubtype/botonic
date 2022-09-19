@@ -8,9 +8,7 @@ import {
   HandoffAgentEmail,
   HandoffAgentId,
   OnFinish,
-  Queue,
 } from '../../cms'
-import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
@@ -19,9 +17,10 @@ import {
 } from '../delivery-utils'
 import { CallbackTarget, getTargetCallback } from './callback-delivery'
 import { QueueDelivery, QueueFields } from './queue'
+import { DeliveryWithReference } from './reference'
 import { TextDelivery, TextFields } from './text'
 
-export class HandoffDelivery extends TopContentDelivery {
+export class HandoffDelivery extends DeliveryWithReference {
   static REFERENCES_INCLUDE = QueueDelivery.REFERENCES_INCLUDE + 3
   constructor(
     delivery: DeliveryApi,
@@ -51,10 +50,14 @@ export class HandoffDelivery extends TopContentDelivery {
     return getTargetCallback(entry.fields.onFinish, context)
   }
 
-  private queue(entry: contentful.Entry<HandoffFields>): Queue | undefined {
+  private async queue(
+    entry: contentful.Entry<HandoffFields>,
+    context: cms.Context
+  ): Promise<cms.Queue | undefined> {
     if (!entry.fields.queue) return undefined
     return this.queueDelivery.fromEntry(
-      entry.fields.queue as contentful.Entry<QueueFields>
+      entry.fields.queue as contentful.Entry<QueueFields>,
+      context
     )
   }
 
@@ -112,17 +115,22 @@ export class HandoffDelivery extends TopContentDelivery {
   ): Promise<cms.Handoff> {
     const fields = entry.fields
     const common = ContentfulEntryUtils.commonFieldsFromEntry(entry)
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Handoff(
         common,
         this.onFinish(entry, context),
         await this.message(entry, context),
         await this.failMessage(entry, context),
-        this.queue(entry),
+        await this.queue(entry, context),
         this.agent(entry),
         fields.shadowing
       ),
       fields,
+      referenceDelivery,
       ['onFinish', 'agent', 'queue']
     )
   }

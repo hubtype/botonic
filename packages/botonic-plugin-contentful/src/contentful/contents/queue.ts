@@ -2,7 +2,6 @@ import * as contentful from 'contentful'
 
 import { Context } from '../../cms'
 import * as cms from '../../cms'
-import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
@@ -10,8 +9,9 @@ import {
   ContentfulEntryUtils,
 } from '../delivery-utils'
 import { ScheduleDelivery, ScheduleFields } from './schedule'
+import { DeliveryWithReference } from './reference'
 
-export class QueueDelivery extends TopContentDelivery {
+export class QueueDelivery extends DeliveryWithReference {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1
 
   constructor(
@@ -28,13 +28,22 @@ export class QueueDelivery extends TopContentDelivery {
       context,
       { include: QueueDelivery.REFERENCES_INCLUDE }
     )
-    return this.fromEntry(entry)
+    return this.fromEntry(entry, context)
   }
 
-  fromEntry(entry: contentful.Entry<QueueFields>): cms.Queue {
+  async fromEntry(
+    entry: contentful.Entry<QueueFields>,
+    context: cms.Context
+  ): Promise<cms.Queue> {
     const fields = entry.fields
 
-    const schedule = fields.schedule && this.schedule.fromEntry(fields.schedule)
+    const schedule =
+      fields.schedule &&
+      (await this.schedule.fromEntry(fields.schedule, context))
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Queue(
         ContentfulEntryUtils.commonFieldsFromEntry(entry),
@@ -42,7 +51,8 @@ export class QueueDelivery extends TopContentDelivery {
         schedule && schedule.schedule,
         fields.handoffMessage
       ),
-      fields
+      fields,
+      referenceDelivery
     )
   }
 }
