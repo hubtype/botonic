@@ -3,11 +3,11 @@ import { Entry } from 'contentful'
 import {
   CmsException,
   ContentType,
+  Context,
   DEFAULT_CONTEXT,
   ScheduleContent,
 } from '../../cms'
 import * as time from '../../time'
-import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
@@ -15,33 +15,42 @@ import {
   ContentfulEntryUtils,
   ContentWithNameFields,
 } from '../delivery-utils'
+import { DeliveryWithReference } from './reference'
 
-export class ScheduleDelivery extends TopContentDelivery {
+export class ScheduleDelivery extends DeliveryWithReference {
   static REFERENCES_INCLUDE = 2
 
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(ContentType.SCHEDULE, delivery, resumeErrors)
   }
 
-  async schedule(id: string): Promise<ScheduleContent> {
+  async schedule(id: string, context: Context): Promise<ScheduleContent> {
     const f = await this.getEntry<ScheduleFields>(id, DEFAULT_CONTEXT, {
       include: ScheduleDelivery.REFERENCES_INCLUDE,
     })
-    return this.fromEntry(f)
+    return this.fromEntry(f, context)
   }
 
-  fromEntry(entry: Entry<ScheduleFields>): ScheduleContent {
+  async fromEntry(
+    entry: Entry<ScheduleFields>,
+    context: Context
+  ): Promise<ScheduleContent> {
     try {
       this.checkEntry(entry)
       const schedule = new time.Schedule(time.Schedule.TZ_CET) // TODO allow configuration
       this.addDaySchedules(schedule, entry.fields)
       this.addExceptions(schedule, entry.fields.exceptions)
-      return addCustomFields(
+      const referenceDelivery = {
+        delivery: this.reference!,
+        context,
+      }
+      return await addCustomFields(
         new ScheduleContent(
           ContentfulEntryUtils.commonFieldsFromEntry(entry),
           schedule
         ),
         entry.fields,
+        referenceDelivery,
         [
           'exceptions',
           'partition',

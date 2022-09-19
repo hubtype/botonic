@@ -174,7 +174,15 @@ test('TEST: contentful text with URL button', async () => {
 test('Test: contentful text with custom field of type text', async () => {
   const sut = testContentful()
   const text = await sut.text(TEST_SORRY, testContext())
-  expect(text.common.customFields).toEqual({
-    customFieldText: 'This text is from a custom field',
-  })
+  expect(text.common.customFields.customFieldText).toEqual(
+    'This text is from a custom field'
+  )
+})
+
+test('Test: contentful text with custom field of type reference', async () => {
+  const sut = testContentful()
+  const text = await sut.text(TEST_SORRY, testContext())
+  expect((text.common.customFields.customReference as cms.Text).name).toEqual(
+    'SEND_EMAIL'
+  )
 })

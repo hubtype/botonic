@@ -2,15 +2,15 @@ import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
 import { Context } from '../../cms'
-import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
   CommonEntryFields,
   ContentfulEntryUtils,
 } from '../delivery-utils'
+import { DeliveryWithReference } from './reference'
 
-export class PayloadDelivery extends TopContentDelivery {
+export class PayloadDelivery extends DeliveryWithReference {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(cms.ContentType.PAYLOAD, delivery, resumeErrors)
   }
@@ -24,12 +24,17 @@ export class PayloadDelivery extends TopContentDelivery {
   }
 
   fromEntry(entry: contentful.Entry<PayloadFields>, context: Context) {
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Payload(
         ContentfulEntryUtils.commonFieldsFromEntry(entry),
         entry.fields.payload || ''
       ),
-      entry.fields
+      entry.fields,
+      referenceDelivery
     )
   }
 }
