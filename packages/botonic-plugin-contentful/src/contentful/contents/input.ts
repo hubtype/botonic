@@ -1,7 +1,6 @@
 import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
-import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
@@ -12,9 +11,10 @@ import { getTargetCallback } from './callback-delivery'
 import { CarouselFields } from './carousel'
 import { HandoffFields } from './handoff'
 import { ImageFields } from './image'
+import { DeliveryWithReference } from './reference'
 import { TextFields } from './text'
 
-export class InputDelivery extends TopContentDelivery {
+export class InputDelivery extends DeliveryWithReference {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(cms.ContentType.INPUT, delivery, resumeErrors)
   }
@@ -30,6 +30,10 @@ export class InputDelivery extends TopContentDelivery {
   fromEntry(entry: contentful.Entry<InputFields>, context: cms.Context) {
     const fields = entry.fields
     const common = ContentfulEntryUtils.commonFieldsFromEntry(entry)
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Input(
         common,
@@ -38,7 +42,8 @@ export class InputDelivery extends TopContentDelivery {
         this.target(entry, context),
         fields.type
       ),
-      entry.fields
+      entry.fields,
+      referenceDelivery
     )
   }
 

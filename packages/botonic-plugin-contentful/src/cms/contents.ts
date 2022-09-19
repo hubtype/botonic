@@ -532,3 +532,5 @@ export class Input extends TopContent {
  * A {@link Content} which is automatically displayed after another one
  */
 export type FollowUp = MessageContent
+
+export type Reference = Content

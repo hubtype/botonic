@@ -4,9 +4,9 @@ import * as cms from '../../cms'
 import { DeliveryApi } from '../delivery-api'
 import { addCustomFields, CommonEntryFields } from '../delivery-utils'
 import { ButtonDelivery } from './button'
-import { DeliveryWithFollowUp } from './follow-up'
+import { DeliveryWithReference } from './reference'
 
-export class StartUpDelivery extends DeliveryWithFollowUp {
+export class StartUpDelivery extends DeliveryWithReference {
   constructor(
     protected delivery: DeliveryApi,
     private readonly button: ButtonDelivery,
@@ -34,14 +34,19 @@ export class StartUpDelivery extends DeliveryWithFollowUp {
       fields.buttons || [],
       context
     )
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.StartUp(
-        await this.getFollowUp().commonFields(entry, context),
+        await this.getReference().commonFields(entry, context),
         this.urlFromAssetOptional(fields.pic, context),
         fields.text ?? '',
         buttons
       ),
       fields,
+      referenceDelivery,
       ['pic']
     )
   }

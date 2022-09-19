@@ -8,10 +8,10 @@ import {
   ContentfulEntryUtils,
 } from '../delivery-utils'
 import { ButtonDelivery } from './button'
-import { DeliveryWithFollowUp } from './follow-up'
+import { DeliveryWithReference } from './reference'
 
 // TODO does not yet load the followU p
-export class CarouselDelivery extends DeliveryWithFollowUp {
+export class CarouselDelivery extends DeliveryWithReference {
   constructor(
     delivery: DeliveryApi,
     readonly button: ButtonDelivery,
@@ -40,12 +40,23 @@ export class CarouselDelivery extends DeliveryWithFollowUp {
       }
     )
     const fields = entry.fields
-    const followup = await this.getFollowUp().fromEntry(
+    const followup = await this.getReference().fromEntry(
       fields.followup,
       context
     )
-    const common = ContentfulEntryUtils.commonFieldsFromEntry(entry, followup)
-    return addCustomFields(new cms.Carousel(common, elements), entry.fields)
+    const common = ContentfulEntryUtils.commonFieldsFromEntry(
+      entry,
+      followup as cms.MessageContent
+    )
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
+    return addCustomFields(
+      new cms.Carousel(common, elements),
+      entry.fields,
+      referenceDelivery
+    )
   }
 
   public async element(id: string, context: cms.Context): Promise<cms.Element> {
