@@ -13,7 +13,10 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
   private readonly apiService: HubtypeBabelApiService
 
   constructor(private readonly options: PluginOptions) {
-    this.apiService = new HubtypeBabelApiService(options.projectId)
+    this.apiService = new HubtypeBabelApiService(
+      options.projectId,
+      options.host
+    )
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
