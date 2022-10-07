@@ -124,7 +124,7 @@ export class ButtonDelivery extends ContentDelivery {
       (field: string) =>
         !buttonAttributes.includes(field) && !knownFields.includes(field)
     )
-
+    button.customFields = {}
     for (const customKey of customKeys) {
       button.customFields[customKey] = (entryFields as any)[customKey]
     }
