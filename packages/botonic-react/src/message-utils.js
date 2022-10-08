@@ -42,13 +42,13 @@ export const isAllowedSize = fileSize => {
   return true
 }
 
-export const getMediaType = fileType => {
-  return Object.entries(MIME_WHITELIST)
+export const getMediaType = (fileType, mimeWhitList = MIME_WHITELIST) => {
+  return Object.entries(mimeWhitList)
     .filter(([_, formatsForType]) => formatsForType.includes(fileType))
     .map(([type, _]) => type)[0]
 }
 
-export const getFullMimeWhitelist = () =>
-  Object.values(MIME_WHITELIST).map(acceptedFormatsForType =>
+export const getFullMimeWhitelist = (mimeWhitList = MIME_WHITELIST) =>
+  Object.values(mimeWhitList).map(acceptedFormatsForType =>
     acceptedFormatsForType.join(',')
   )

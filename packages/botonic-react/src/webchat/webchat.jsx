@@ -21,6 +21,7 @@ import {
   ROLES,
   SENDERS,
   WEBCHAT,
+  MIME_WHITELIST
 } from '../constants'
 import { RequestContext, WebchatContext } from '../contexts'
 import {
@@ -198,6 +199,7 @@ export const Webchat = forwardRef((props, ref) => {
   const theme = merge(webchatState.theme, props.theme)
   const { initialSession, initialDevSettings, onStateChange } = props
   const getThemeProperty = _getThemeProperty(theme)
+  const defaultMimeWhiteList = props.defaultMimeWhiteList || MIME_WHITELIST;
 
   const storage = props.storage === undefined ? localStorage : props.storage
   const storageKey =
@@ -231,16 +233,27 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const handleAttachment = event => {
-    if (!isAllowedSize(event.target.files[0].size)) {
-      throw new Error(
-        `The file is too large. A maximum of ${MAX_ALLOWED_SIZE_MB}MB is allowed.`
-      )
+    const { handleCustomAttachment } = props
+    if (handleCustomAttachment && typeof handleCustomAttachment === 'function') {
+      if (handleCustomAttachment(event)) {
+        setCurrentAttachment({
+          fileName: event.target.files[0].name,
+          file: event.target.files[0], // TODO: Attach more files?
+          attachmentType: getMediaType(event.target.files[0].type, defaultMimeWhiteList),
+        });
+      }
+    } else {
+      if (!isAllowedSize(event.target.files[0].size)) {
+        throw new Error(
+          `The file is too large. A maximum of ${MAX_ALLOWED_SIZE_MB}MB is allowed.`
+        )
+      }
+      setCurrentAttachment({
+        fileName: event.target.files[0].name,
+        file: event.target.files[0], // TODO: Attach more files?
+        attachmentType: getMediaType(event.target.files[0].type, defaultMimeWhiteList),
+      })
     }
-    setCurrentAttachment({
-      fileName: event.target.files[0].name,
-      file: event.target.files[0], // TODO: Attach more files?
-      attachmentType: getMediaType(event.target.files[0].type),
-    })
   }
 
   useEffect(() => {
@@ -503,6 +516,7 @@ export const Webchat = forwardRef((props, ref) => {
         id: input.id,
         from: SENDERS.user,
         src: temporaryDisplayUrl,
+        file: input.data
       }
       if (isImage(input)) messageComponent = <Image {...mediaProps} />
       else if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
@@ -520,7 +534,10 @@ export const Webchat = forwardRef((props, ref) => {
     if (!input.id) input.id = uuidv4()
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
-    if (isMedia(input)) input.data = await readDataURL(input.data)
+    if (isMedia(input)) {
+      input.file = input.data
+      input.data = await readDataURL(input.data)
+    }
     sendUserInput(input)
     updateLatestInput(input)
     isOnline() && updateLastMessageDate(currentDateString())
@@ -617,7 +634,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const sendAttachment = async attachment => {
     if (attachment.file) {
-      const attachmentType = getMediaType(attachment.file.type)
+      const attachmentType = getMediaType(attachment.file.type, defaultMimeWhiteList)
       if (!attachmentType) return
       const input = {
         type: attachmentType,
@@ -817,7 +834,7 @@ export const Webchat = forwardRef((props, ref) => {
               <ConditionalAnimation>
                 <Attachment
                   onChange={handleAttachment}
-                  accept={getFullMimeWhitelist().join(',')}
+                  accept={getFullMimeWhitelist(defaultMimeWhiteList).join(',')}
                 />
               </ConditionalAnimation>
             )}
