@@ -1,4 +1,5 @@
 import * as contentful from 'contentful'
+import { ContentField, CONTENT_FIELDS } from '../../manage-cms/fields'
 
 import * as cms from '../../cms'
 import { Button, CmsException, ContentType } from '../../cms'
@@ -100,15 +101,30 @@ export class ButtonDelivery extends ContentDelivery {
       text,
       ButtonDelivery.callbackFromEntry(entry)
     )
-    return this.addCustomFields(newButton, fields)
+    return this.addCustomFields(newButton, fields, true)
   }
 
-  private addCustomFields(button: Button, entryFields: Object): Button {
+  private addCustomFields(
+    button: Button,
+    entryFields: Object,
+    buttonIsContent: boolean = false
+  ): Button {
     const buttonAttributes = Object.keys(button)
 
+    const knownFields: string[] = []
+
+    //if the button is created from a content (text, image, etc) we have to avoid adding all their fields as custom fields
+    if (buttonIsContent) {
+      CONTENT_FIELDS.forEach((field: ContentField) => {
+        knownFields.push(field.cmsName)
+      })
+    }
+
     const customKeys = Object.keys(entryFields).filter(
-      (field: string) => !buttonAttributes.includes(field)
+      (field: string) =>
+        !buttonAttributes.includes(field) && !knownFields.includes(field)
     )
+
     for (const customKey of customKeys) {
       button.customFields[customKey] = (entryFields as any)[customKey]
     }
