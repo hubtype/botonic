@@ -107,14 +107,14 @@ export class ButtonDelivery extends ContentDelivery {
   private addCustomFields(
     button: Button,
     entryFields: Object,
-    buttonIsContent: boolean = false
+    buttonIsMessageContent: boolean = false
   ): Button {
     const buttonAttributes = Object.keys(button)
 
     const knownFields: string[] = []
 
     //if the button is created from a content (text, image, etc) we have to avoid adding all their fields as custom fields
-    if (buttonIsContent) {
+    if (buttonIsMessageContent) {
       CONTENT_FIELDS.forEach((field: ContentField) => {
         knownFields.push(field.cmsName)
       })
