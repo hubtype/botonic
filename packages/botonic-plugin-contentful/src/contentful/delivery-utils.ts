@@ -172,11 +172,12 @@ export async function addCustomFields<T extends TopContent>(
     const customField = (entryFields as any)[customKey]
     if (isReferenceField(customField)) {
       if (referenceDelivery) {
-        content.common.customFields[customKey] =
-          await referenceDelivery.delivery.fromEntry(
-            customField,
-            referenceDelivery.context
-          )
+        content.common.customFields[
+          customKey
+        ] = await referenceDelivery.delivery.fromEntry(
+          customField,
+          referenceDelivery.context
+        )
       } else {
         console.error(
           `Warning: entry with id ${content.common.id}: type ${content.contentType} can't have custom reference fields`
