@@ -1,5 +1,5 @@
 import * as cms from '../../../src'
-import { SPANISH } from '../../../src'
+import { SPANISH, Video } from '../../../src'
 import { testContentful, testContext } from '../contentful.helper'
 import { expectImgUrlIs } from './image.test'
 
@@ -23,6 +23,8 @@ test('TEST: contentful carousel', async () => {
   expect(carousel.common.customFields).toEqual({
     customFieldNumber: 3.14159265389,
   })
+  expect(carousel.common.followUp).toBeInstanceOf(Video)
+  expect(carousel.common.followUp!.name).toBe('VIDEO_TEST')
   assertElementDudasPrevias(carousel.elements[0])
 })
 
