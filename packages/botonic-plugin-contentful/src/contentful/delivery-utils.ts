@@ -5,11 +5,11 @@ import {
   CommonFields,
   ContentId,
   ContentType,
+  Context,
   DateRangeContent,
   FollowUp,
   SearchableBy,
   TopContent,
-  Context,
 } from '../cms'
 import { ResourceTypeNotFoundCmsException } from '../cms/exceptions'
 import { ContentfulOptions } from '../plugin'
