@@ -28,6 +28,7 @@ import { ImageDelivery } from './contents/image'
 import { InputDelivery } from './contents/input'
 import { PayloadDelivery } from './contents/payload'
 import { QueueDelivery } from './contents/queue'
+import { ReferenceDelivery } from './contents/reference'
 import { ScheduleDelivery } from './contents/schedule'
 import { StartUpDelivery } from './contents/startup'
 import { TextDelivery } from './contents/text'
@@ -43,7 +44,6 @@ import {
 } from './delivery-utils'
 import { IgnoreFallbackDecorator } from './ignore-fallback-decorator'
 import { KeywordsDelivery } from './search/keywords'
-import { ReferenceDelivery } from './contents/reference'
 
 export class Contentful implements cms.CMS {
   private readonly _delivery: DeliveryApi
