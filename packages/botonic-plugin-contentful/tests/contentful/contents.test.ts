@@ -35,7 +35,7 @@ test('TEST: contentful contents buttons', async () => {
     locale: 'en',
   })
   expect(buttons).toSatisfyAll(button => button instanceof Button)
-  expect(buttons.length).toEqual(28)
+  expect(buttons.length).toEqual(29)
 
   const star = buttons.filter(b => b.id == '6JYiydi8JhveDAjDSQ2fp4')
   expectIs1StarButton(star[0])

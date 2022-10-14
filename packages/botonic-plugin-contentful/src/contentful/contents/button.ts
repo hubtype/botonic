@@ -111,7 +111,7 @@ export class ButtonDelivery extends ContentDelivery {
   ): Button {
     const buttonAttributes = Object.keys(button)
 
-    const knownFields: string[] = []
+    const knownFields: string[] = ['target']
 
     //if the button is created from a content (text, image, etc) we have to avoid adding all their fields as custom fields
     if (buttonIsMessageContent) {
