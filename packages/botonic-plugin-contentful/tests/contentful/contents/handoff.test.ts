@@ -5,6 +5,7 @@ import {
   HandoffAgentId,
   SPANISH,
 } from '../../../src'
+import { Text } from '../../../src/cms'
 import { testContentful, testContext } from '../contentful.helper'
 
 const TEST_HANDOFF_AGENT_ID_MAIN_ID = '6I5SudoItjGmxrVZPr0qeG'
@@ -23,7 +24,9 @@ describe('Contentful Handoff', () => {
 
     // assert
     const queue = await testContentful().queue(TEST_QUEUE_ID, testContext())
-    expect(handoff.message).toEqual('En breve un agente le atenderá')
+    expect((handoff.message as Text).text).toEqual(
+      'En breve un agente le atenderá'
+    )
     expect(handoff.common.name).toEqual('HANDOFF QUEUE')
     expect(handoff.common.shortText).toEqual('Agent Handoff')
     expect(handoff.queue).toEqual(queue)
@@ -47,8 +50,10 @@ describe('Contentful Handoff', () => {
     )
 
     // assert
-    expect(handoff.message).toEqual('En breve un agente le atenderá')
-    expect(handoff.failMessage).toEqual('Agente no disponible')
+    expect((handoff.message as Text).text).toEqual(
+      'En breve un agente le atenderá'
+    )
+    expect((handoff.failMessage as Text).text).toEqual('Agente no disponible')
     expect(handoff.common.name).toEqual('HANDOFF AGENT_ID')
     expect(handoff.common.shortText).toEqual('Agent Handoff')
     expect(handoff.agent).toEqual(new HandoffAgentId('agent id'))
