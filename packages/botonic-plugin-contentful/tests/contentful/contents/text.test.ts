@@ -183,6 +183,6 @@ test('Test: contentful text with custom field of type reference', async () => {
   const sut = testContentful()
   const text = await sut.text(TEST_SORRY, testContext())
   expect((text.common.customFields.customReference as cms.Text).name).toEqual(
-    'SEND_EMAIL'
+    'PRE_FAQ2'
   )
 })
