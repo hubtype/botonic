@@ -1,9 +1,9 @@
 import * as contentful from 'contentful'
-import { ContentField, CONTENT_FIELDS } from '../../manage-cms/fields'
 
 import * as cms from '../../cms'
 import { Button, CmsException, ContentType } from '../../cms'
 import { TopContentType } from '../../cms/cms'
+import { CONTENT_FIELDS, ContentField } from '../../manage-cms/fields'
 import { isOfType } from '../../util/enums'
 import { ContentDelivery } from '../content-delivery'
 import {
@@ -106,8 +106,8 @@ export class ButtonDelivery extends ContentDelivery {
 
   private addCustomFields(
     button: Button,
-    entryFields: Object,
-    buttonIsMessageContent: boolean = false
+    entryFields: CommonEntryFields,
+    buttonIsMessageContent = false
   ): Button {
     const buttonAttributes = Object.keys(button)
 
