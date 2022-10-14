@@ -8,8 +8,8 @@ import {
   CommonEntryFields,
   ContentfulEntryUtils,
 } from '../delivery-utils'
-import { ScheduleDelivery, ScheduleFields } from './schedule'
 import { DeliveryWithReference } from './reference'
+import { ScheduleDelivery, ScheduleFields } from './schedule'
 
 export class QueueDelivery extends DeliveryWithReference {
   static REFERENCES_INCLUDE = ScheduleDelivery.REFERENCES_INCLUDE + 1
