@@ -1,5 +1,7 @@
 import { Entry } from 'contentful'
+
 import * as cms from '../../cms'
+import { ContentType } from '../../cms'
 import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
@@ -10,19 +12,18 @@ import {
   ReferenceFields,
 } from '../delivery-utils'
 import { CarouselDelivery } from './carousel'
+import { DateRangeDelivery } from './date-range'
 import { DocumentDelivery, DocumentFields } from './document'
+import { HandoffDelivery, HandoffFields } from './handoff'
 import { ImageDelivery, ImageFields } from './image'
+import { InputDelivery, InputFields } from './input'
+import { PayloadDelivery, PayloadFields } from './payload'
+import { QueueDelivery, QueueFields } from './queue'
+import { ScheduleDelivery, ScheduleFields } from './schedule'
 import { StartUpDelivery, StartUpFields } from './startup'
 import { TextDelivery, TextFields } from './text'
 import { UrlDelivery, UrlFields } from './url'
 import { VideoDelivery, VideoFields } from './video'
-import { QueueDelivery, QueueFields } from './queue'
-import { ScheduleDelivery, ScheduleFields } from './schedule'
-import { PayloadDelivery, PayloadFields } from './payload'
-import { InputDelivery, InputFields } from './input'
-import { HandoffDelivery, HandoffFields } from './handoff'
-import { ContentType } from '../../cms'
-import { DateRangeDelivery } from './date-range'
 
 export class DeliveryWithReference extends TopContentDelivery {
   reference: ReferenceDelivery | undefined
