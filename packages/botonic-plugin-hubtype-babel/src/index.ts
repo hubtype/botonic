@@ -24,7 +24,8 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
       if (
         request.input.type == INPUT.TEXT &&
         !request.input.payload &&
-        request.input.data
+        request.input.data &&
+        !this.isAutomaticBotMessage(request.input.data)
       ) {
         const sessionAuthToken = (request.session as HubtypeSession)
           ._access_token
@@ -54,6 +55,10 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
     } catch (e) {
       console.error('Error during inference with Hubtype Babel', e)
     }
+  }
+
+  isAutomaticBotMessage(text: string): boolean {
+    return text.toLowerCase().startsWith('[automatic bot message]')
   }
 
   async post(_request: PluginPostRequest) {}
