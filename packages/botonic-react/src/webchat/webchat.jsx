@@ -258,6 +258,18 @@ export const Webchat = forwardRef((props, ref) => {
       })
   }
 
+  const sendUserAction = async action => {
+    const userAction = { type: 'user_action', data: action } // make it a constant
+    userAction.id = uuidv4()
+    props.onUserInput &&
+      props.onUserInput({
+        user: webchatState.session.user,
+        input: userAction,
+        session: webchatState.session,
+        lastRoutePath: webchatState.lastRoutePath,
+      })
+  }
+
   // Load styles stored in window._botonicInsertStyles by Webpack
   useComponentWillMount(() => {
     if (window._botonicInsertStyles && window._botonicInsertStyles.length) {
@@ -642,11 +654,43 @@ export const Webchat = forwardRef((props, ref) => {
     textArea.current.value = ''
   }
 
+  let isTyping = false
+  let typingTimeout = null
+
+  function clearTimeoutWithReset(reset) {
+    const waitTime = 20 * 1000
+    if (typingTimeout) clearTimeout(typingTimeout)
+    if (reset) typingTimeout = setTimeout(stopTyping, waitTime)
+  }
+
+  function startTyping() {
+    isTyping = true
+    sendUserAction('typing_on')
+  }
+
+  function stopTyping() {
+    clearTimeoutWithReset(false)
+    isTyping = false
+    sendUserAction('typing_off')
+  }
+
   const onKeyDown = event => {
-    if (event.keyCode == 13 && event.shiftKey == false) {
+    if (event.keyCode === 13 && event.shiftKey === false) {
       event.preventDefault()
       sendTextAreaText()
+      stopTyping()
     }
+  }
+
+  const onKeyUp = () => {
+    if (textArea.current.value === '') {
+      stopTyping()
+      return
+    }
+    if (!isTyping) {
+      startTyping()
+    }
+    clearTimeoutWithReset(true)
   }
 
   const webviewRequestContext = {
@@ -798,6 +842,7 @@ export const Webchat = forwardRef((props, ref) => {
               autoFocus={true}
               inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
+              onKeyUp={onKeyUp}
               style={{
                 display: 'flex',
                 fontSize: deviceAdapter.fontSize(14),
