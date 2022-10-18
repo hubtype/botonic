@@ -11,12 +11,15 @@ import { PluginOptions } from './options'
 
 export default class BotonicPluginHubtypeBabel implements Plugin {
   private readonly apiService: HubtypeBabelApiService
+  readonly automaticBotMessagePrefix: string
 
   constructor(private readonly options: PluginOptions) {
     this.apiService = new HubtypeBabelApiService(
       options.projectId,
       options.host
     )
+    this.automaticBotMessagePrefix =
+      options.automaticBotMessagePrefix || '[Automatic Bot Message]'
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
@@ -24,7 +27,8 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
       if (
         request.input.type == INPUT.TEXT &&
         !request.input.payload &&
-        request.input.data
+        request.input.data &&
+        !this.isAutomaticBotMessage(request.input.data)
       ) {
         const sessionAuthToken = (request.session as HubtypeSession)
           ._access_token
@@ -54,6 +58,12 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
     } catch (e) {
       console.error('Error during inference with Hubtype Babel', e)
     }
+  }
+
+  isAutomaticBotMessage(text: string): boolean {
+    return text
+      .toLowerCase()
+      .startsWith(this.automaticBotMessagePrefix.toLowerCase())
   }
 
   async post(_request: PluginPostRequest) {}
