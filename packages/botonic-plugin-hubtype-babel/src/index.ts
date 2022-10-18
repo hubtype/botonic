@@ -11,12 +11,15 @@ import { PluginOptions } from './options'
 
 export default class BotonicPluginHubtypeBabel implements Plugin {
   private readonly apiService: HubtypeBabelApiService
+  readonly automaticBotMessagePrefix: string
 
   constructor(private readonly options: PluginOptions) {
     this.apiService = new HubtypeBabelApiService(
       options.projectId,
       options.host
     )
+    this.automaticBotMessagePrefix =
+      options.automaticBotMessagePrefix || '[Automatic Bot Message]'
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
@@ -58,7 +61,9 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
   }
 
   isAutomaticBotMessage(text: string): boolean {
-    return text.toLowerCase().startsWith('[automatic bot message]')
+    return text
+      .toLowerCase()
+      .startsWith(this.automaticBotMessagePrefix.toLowerCase())
   }
 
   async post(_request: PluginPostRequest) {}
