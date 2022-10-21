@@ -2,7 +2,7 @@ import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
-import { statSync } from 'fs'
+import { rmSync, statSync } from 'fs'
 // eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
 import ora from 'ora'
@@ -442,7 +442,7 @@ Deploying to AWS...
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)
     } finally {
-      removeRecursively(BOTONIC_BUNDLE_FILE)
+      rmSync(BOTONIC_BUNDLE_FILE)
       removeRecursively(BOTONIC_TEMP_DIRNAME)
       this.botonicApiService.beforeExit()
     }
