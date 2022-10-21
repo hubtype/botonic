@@ -135,7 +135,9 @@ Creating...
     }
   }
 
-  async installDependencies(commmand = 'npm install'): Promise<void> {
+  async installDependencies(
+    commmand = 'CXXFLAGS="--std=c++14" npm install' // Solve issue with node-sass and higher versions of Node. Ref: https://github.com/nodejs/node/issues/38367#issuecomment-1025343439
+  ): Promise<void> {
     const spinner = ora({
       text: 'Installing dependencies...',
       spinner: 'bouncingBar',
