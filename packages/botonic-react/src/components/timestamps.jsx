@@ -52,8 +52,9 @@ const TimestampText = styled.div`
 `
 
 export const MessageTimestamp = ({ timestamp, style, isfromuser }) => {
+  const classSufix = isfromuser ? 'user' : 'bot'
   return (
-    <TimestampContainer>
+    <TimestampContainer className={`botonic-timestamp-${classSufix}`}>
       <TimestampText
         isfromuser={isfromuser}
         style={{
