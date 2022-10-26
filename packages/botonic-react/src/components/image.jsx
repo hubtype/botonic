@@ -26,7 +26,7 @@ export const Image = props => {
   const closePreviewer = () => setIsPreviewerOpened(false)
 
   const { getThemeProperty } = useContext(WebchatContext)
-  const imagePreviewer = getThemeProperty(
+  const ImagePreviewer = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.imagePreviewer,
     null
   )
@@ -36,15 +36,16 @@ export const Image = props => {
         <StyledImage
           src={props.src}
           onClick={openPreviewer}
-          hasPreviewer={Boolean(imagePreviewer)}
+          hasPreviewer={Boolean(ImagePreviewer)}
         />
-        {imagePreviewer &&
-          imagePreviewer({
-            src: props.src,
-            isPreviewerOpened,
-            openPreviewer,
-            closePreviewer,
-          })}
+        {ImagePreviewer && (
+          <ImagePreviewer
+            src={props.src}
+            isPreviewerOpened={isPreviewerOpened}
+            openPreviewer={openPreviewer}
+            closePreviewer={closePreviewer}
+          />
+        )}
       </>
     )
   }
