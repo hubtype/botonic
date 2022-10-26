@@ -38,11 +38,10 @@ export const Image = props => {
           onClick={openPreviewer}
           hasPreviewer={Boolean(ImagePreviewer)}
         />
-        {ImagePreviewer && (
+        {isPreviewerOpened && (
           <ImagePreviewer
             src={props.src}
             isPreviewerOpened={isPreviewerOpened}
-            openPreviewer={openPreviewer}
             closePreviewer={closePreviewer}
           />
         )}
