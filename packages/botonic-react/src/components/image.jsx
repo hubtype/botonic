@@ -31,7 +31,6 @@ export const Image = props => {
     null
   )
   if (isBrowser()) {
-    console.log(ImagePreviewer)
     content = (
       <>
         <StyledImage
