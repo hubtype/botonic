@@ -6,6 +6,7 @@ import { moveSync } from 'fs-extra'
 // eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
 import ora from 'ora'
+import { platform } from 'os'
 import { join } from 'path'
 import { promisify } from 'util'
 
@@ -77,7 +78,9 @@ Creating...
         userProjectDirName
       )
       process.chdir(userProjectDirName)
-      await this.installDependencies()
+      const devPlatform = platform()
+      if (devPlatform === 'win32') await this.installDependencies()
+      else await this.installDependencies('CXXFLAGS="--std=c++14" npm install') // Solve issue with node-sass and higher versions of Node. Ref: https://github.com/nodejs/node/issues/38367#issuecomment-1025343439)
       this.botonicApiService.beforeExit()
       moveSync(
         join('..', '.botonic.json'),
@@ -135,9 +138,7 @@ Creating...
     }
   }
 
-  async installDependencies(
-    commmand = 'CXXFLAGS="--std=c++14" npm install' // Solve issue with node-sass and higher versions of Node. Ref: https://github.com/nodejs/node/issues/38367#issuecomment-1025343439
-  ): Promise<void> {
+  async installDependencies(commmand = 'npm install'): Promise<void> {
     const spinner = ora({
       text: 'Installing dependencies...',
       spinner: 'bouncingBar',
