@@ -1,7 +1,7 @@
 import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
-import { CmsException, ContentType } from '../../cms'
+import { CallbackInfo, CmsException, ContentType } from '../../cms'
 import { TopContentType } from '../../cms/cms'
 import { isOfType } from '../../util/enums'
 import { ContentfulEntryUtils } from '../delivery-utils'
@@ -28,7 +28,8 @@ export type CallbackTarget = contentful.Entry<
 
 export function getTargetCallback(
   target: CallbackTarget,
-  context: cms.Context
+  context: cms.Context,
+  callbackExtraInfo?: CallbackInfo
 ): cms.Callback {
   const model = ContentfulEntryUtils.getContentModel(target) as string
   try {
@@ -46,7 +47,7 @@ export function getTargetCallback(
       }
     }
     if (isOfType(model, TopContentType)) {
-      return new cms.ContentCallback(model, target.sys.id)
+      return new cms.ContentCallback(model, target.sys.id, callbackExtraInfo)
     }
     throw new Error('Unexpected type: ' + model)
   } catch (e) {

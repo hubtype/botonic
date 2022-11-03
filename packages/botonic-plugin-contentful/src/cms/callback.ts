@@ -66,11 +66,28 @@ export class Callback implements ValueObject, Equatable {
   }
 }
 
+export type CallbackInfo = {
+  id: string
+  name: string
+  text?: string
+}
+
 export class ContentCallback extends Callback {
   private static PAYLOAD_SEPARATOR = '$'
 
-  constructor(readonly model: TopContentType, readonly id: string) {
-    super(model + ContentCallback.PAYLOAD_SEPARATOR + id)
+  constructor(
+    readonly model: TopContentType,
+    readonly id: string,
+    readonly callbackInfo?: CallbackInfo
+  ) {
+    super(
+      model +
+        ContentCallback.PAYLOAD_SEPARATOR +
+        JSON.stringify({
+          id,
+          origin: { ...callbackInfo },
+        })
+    )
   }
 
   asContentId(): TopContentId {
@@ -82,7 +99,10 @@ export class ContentCallback extends Callback {
   }
 
   static ofPayload(payload: string): ContentCallback {
-    const [type, id] = payload.split(ContentCallback.PAYLOAD_SEPARATOR)
+    const type = payload.split(ContentCallback.PAYLOAD_SEPARATOR)[0]
+    const id = JSON.parse(
+      payload.split(ContentCallback.PAYLOAD_SEPARATOR)[1]
+    ).id
     if (!id) {
       throw new Error(
         `Callback payload '${payload}' does not contain a model reference`
@@ -99,7 +119,7 @@ export class ContentCallback extends Callback {
     return new RegExp(
       '^' +
         escapeStringRegexp(modelType + ContentCallback.PAYLOAD_SEPARATOR) +
-        '[a-zA-Z0-9]*$'
+        '{.*}'
     )
   }
 

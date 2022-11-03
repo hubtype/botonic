@@ -16,20 +16,31 @@ test('TEST: contentful standalone button', async () => {
   const button = await sut.button('40buQOqp9jbwoxmMZhFO16', { locale: ENGLISH })
   expect(button.text).toEqual('Return an article')
   expect(button.name).toEqual('POST_FAQ3')
+
   expect(button.callback).toEqual(
-    new ContentCallback(ContentType.TEXT, 'C39lEROUgJl9hHSXKOEXS')
+    new ContentCallback(ContentType.TEXT, 'C39lEROUgJl9hHSXKOEXS', {
+      id: '40buQOqp9jbwoxmMZhFO16',
+      name: 'POST_FAQ3',
+      text: 'Return an article',
+    })
   )
+  const payload =
+    'text${"id":"C39lEROUgJl9hHSXKOEXS","origin":{"id":"40buQOqp9jbwoxmMZhFO16","name":"POST_FAQ3","text":"Return an article"}}'
+
+  expect(button.callback.payload).toEqual(payload)
+
   expect(button.toString()).toEqual(
-    "'40buQOqp9jbwoxmMZhFO16/POST_FAQ3' to content 'payload:text$C39lEROUgJl9hHSXKOEXS'"
+    `'40buQOqp9jbwoxmMZhFO16/POST_FAQ3' to content 'payload:${payload}'`
   )
 })
 
 test('TEST: button from direct reference to target', async () => {
   const sut = testContentful()
   const text = await sut.text(TEST_SORRY, testContext())
-  expect(text.buttons[0].toString()).toEqual(
-    "to 'payload:text$3lzJqY4sI3VDgMRFsgvtvT'"
-  )
+  const payload =
+    'text${"id":"3lzJqY4sI3VDgMRFsgvtvT","origin":{"id":"3lzJqY4sI3VDgMRFsgvtvT","name":"SEND_EMAIL","text":"Contactar con agente"}}'
+
+  expect(text.buttons[0].toString()).toEqual(`to 'payload:${payload}'`)
 })
 
 test('TEST: button with custom field', async () => {

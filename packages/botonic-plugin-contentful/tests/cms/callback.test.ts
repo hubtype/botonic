@@ -21,7 +21,7 @@ test('TEST: Callback.ofUrl', () => {
 })
 
 test('TEST: Callback.ofPayload', () => {
-  const callback = cms.Callback.ofPayload('text$text1')
+  const callback = cms.Callback.ofPayload('text${"id":"text1","origin":{}}')
   expect(callback).toBeInstanceOf(ContentCallback)
   expect((callback as ContentCallback).id).toEqual('text1')
   expect((callback as ContentCallback).model).toEqual(ContentType.TEXT)

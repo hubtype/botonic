@@ -45,7 +45,11 @@ test('TEST: contentful contents buttons', async () => {
       BUTTON_POST_FAQ3,
       'POST_FAQ3',
       'Return an article',
-      new ContentCallback(ContentType.TEXT, 'C39lEROUgJl9hHSXKOEXS')
+      new ContentCallback(ContentType.TEXT, 'C39lEROUgJl9hHSXKOEXS', {
+        id: '40buQOqp9jbwoxmMZhFO16',
+        name: 'POST_FAQ3',
+        text: 'Return an article',
+      })
     )
   )
 })

@@ -78,7 +78,11 @@ export class ButtonDelivery extends ContentDelivery {
       )
     }
     // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
-    const callback = getTargetCallback(buttonEntry.fields.target, context)
+    const callback = getTargetCallback(buttonEntry.fields.target, context, {
+      id: buttonEntry.sys.id,
+      name: buttonEntry.fields.name,
+      text: buttonEntry.fields.text,
+    })
     const newButton = new cms.Button(
       buttonEntry.sys.id,
       buttonEntry.fields.name,
@@ -138,7 +142,11 @@ export class ButtonDelivery extends ContentDelivery {
     if (modelType === ContentType.URL) {
       return cms.Callback.ofUrl((entry.fields as UrlFields).url || '')
     }
-    return new cms.ContentCallback(modelType, entry.sys.id)
+    return new cms.ContentCallback(modelType, entry.sys.id, {
+      id: entry.sys.id,
+      name: entry.fields.name,
+      text: entry.fields.shortText,
+    })
   }
 }
 

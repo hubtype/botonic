@@ -48,7 +48,11 @@ test('interactive ContentDeleter', async () => {
     console.log('Checking that initial contents are available')
     const sourceBefore = await contentful.text(TEST_DELETER_SOURCE_ID, context)
     expect(sourceBefore.buttons.map(b => b.callback)).toContainEqual(
-      new ContentCallback(ContentType.TEXT, TEST_DELETER_ID)
+      new ContentCallback(ContentType.TEXT, TEST_DELETER_ID, {
+        id: '1gYR6JNTdBpHBFVDhpQjyD',
+        name: 'TEST_DELETER',
+        text: 'english st',
+      })
     )
 
     const targetBefore = await contentful.text(targetId.id, context)

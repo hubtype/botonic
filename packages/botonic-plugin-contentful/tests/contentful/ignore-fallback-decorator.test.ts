@@ -63,7 +63,11 @@ test('TEST: ignoreFallbackLocale with a carousel with buttons to other carousels
   expect(elementPost).toBeDefined()
   expect(elementPost!.buttons).toHaveLength(1)
   expect(elementPost!.buttons[0].callback).toEqual(
-    new ContentCallback(ContentType.CAROUSEL, TEST_POST_MENU_CRSL)
+    new ContentCallback(ContentType.CAROUSEL, TEST_POST_MENU_CRSL, {
+      id: '1JRV9UETmx8KQ0ngooVWq5',
+      name: 'POST_MENU_CRSL',
+      text: '',
+    })
   )
 })
 

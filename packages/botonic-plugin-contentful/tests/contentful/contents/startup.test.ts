@@ -15,7 +15,11 @@ test('TEST: contentful startUp', async () => {
     TEST_CAROUSEL_MAIN_ID,
     'INICIO',
     'Start menu',
-    new ContentCallback(ContentType.CAROUSEL, TEST_CAROUSEL_MAIN_ID)
+    new ContentCallback(ContentType.CAROUSEL, TEST_CAROUSEL_MAIN_ID, {
+      id: '2yR9f3stNAEqdamUr8VtfD',
+      name: 'INICIO',
+      text: 'Start menu',
+    })
   )
   startUpButton.customFields = { customFieldNumber: 3.14159265389 }
   expect(startUp).toEqual(

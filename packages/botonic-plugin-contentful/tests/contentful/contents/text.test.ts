@@ -34,7 +34,11 @@ export function expectContentIsSorryText(content: Content) {
   expect(text.buttons).toHaveLength(1)
   expect(text.buttons[0].text).toEqual('Contactar con agente')
   expect(text.buttons[0].callback).toEqual(
-    new cms.ContentCallback(cms.ContentType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT')
+    new cms.ContentCallback(cms.ContentType.TEXT, '3lzJqY4sI3VDgMRFsgvtvT', {
+      id: '3lzJqY4sI3VDgMRFsgvtvT',
+      name: 'SEND_EMAIL',
+      text: 'Contactar con agente',
+    })
   )
   expect(text.common.followUp).toBeUndefined()
 }
@@ -49,7 +53,11 @@ test('TEST: contentful text with callback to NonMessageContentType without follo
   expect(text.buttons).toHaveLength(1)
   expect(text.buttons[0].text).toEqual('Queue Short Text')
   expect(text.buttons[0].callback).toEqual(
-    new cms.ContentCallback(cms.ContentType.QUEUE, '62ILnVxLHOEp7aVvPMpCO8')
+    new cms.ContentCallback(cms.ContentType.QUEUE, '62ILnVxLHOEp7aVvPMpCO8', {
+      id: '62ILnVxLHOEp7aVvPMpCO8',
+      name: 'TEST_QUEUE',
+      text: 'Queue Short Text',
+    })
   )
 })
 
