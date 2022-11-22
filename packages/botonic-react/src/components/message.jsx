@@ -313,7 +313,9 @@ export const Message = props => {
               ) : (
                 <BlobText blob={blob}>{textChildren}</BlobText>
               )}
-              {buttons}
+              {!!buttons.length && (
+                <div className='message-buttons-container'>{buttons}</div>
+              )}
               {Boolean(blob) && hasBlobTick() && getBlobTick(6)}
               {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
             </Blob>
