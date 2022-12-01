@@ -5,6 +5,7 @@ import {
   CarouselMessageEvent,
   CustomMessageEvent,
   DocumentMessageEvent,
+  FormMessageEvent,
   ImageMessageEvent,
   LocationMessageEvent,
   PostbackMessageEvent,
@@ -24,3 +25,4 @@ export type BotonicEvent =
   | CustomMessageEvent
   | ConnectionEvent
   | IntegrationEvent
+  | FormMessageEvent

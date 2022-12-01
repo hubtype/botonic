@@ -11,6 +11,7 @@ export enum MessageEventTypes {
   POSTBACK = 'postback',
   VIDEO = 'video',
   MISSED = 'missed',
+  FORM = 'form',
   /**
    * TODO: contact, buttonmessage?, webchatsettings, whatsapp template
    */

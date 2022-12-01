@@ -11,6 +11,7 @@ import {
   LocationMessageEvent,
   MissedMessageEvent,
   PostbackMessageEvent,
+  FormMessageEvent,
   Reply,
   TextMessageEvent,
   VideoMessageEvent,
@@ -130,7 +131,6 @@ export const parseText: ParseFunction<TextMessageEvent> = args => {
 }
 
 // POSTBACK
-
 export const parsePostback: ParseFunction<PostbackMessageEvent> = args => {
   return {
     toParse: args.toParse,
@@ -210,6 +210,18 @@ export const parseMissed: ParseFunction<MissedMessageEvent> = args => {
       ...args.parsed,
       reason: args.toParse.reason,
       media_type: args.toParse.media_type,
+    },
+  }
+}
+
+// FORM
+export const parseForm: ParseFunction<FormMessageEvent> = args => {
+  return {
+    toParse: args.toParse,
+    parsed: {
+      ...args.parsed,
+      form_title: args.toParse.form_title,
+      form_answers: args.toParse.form_answers,
     },
   }
 }
