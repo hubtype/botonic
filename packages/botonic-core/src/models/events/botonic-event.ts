@@ -9,6 +9,7 @@ import {
   PostbackMessageEvent,
   TextMessageEvent,
   VideoMessageEvent,
+  FormMessageEvent,
 } from './message'
 
 export type BotonicEvent =
@@ -22,3 +23,4 @@ export type BotonicEvent =
   | CarouselMessageEvent
   | CustomMessageEvent
   | ConnectionEvent
+  | FormMessageEvent
