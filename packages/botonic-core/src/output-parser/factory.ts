@@ -32,7 +32,7 @@ export class MessageParsingFactory {
         return parseCarousel(parsedMessage).parsed
       case MessageEventTypes.CUSTOM:
         return parseCustom(parseReplies(parsedMessage)).parsed
-      case MessageEventTypes.MISSED:
+      case MessageEventTypes.FORM:
         return parseForm(parsedMessage).parsed
       case MessageEventTypes.MISSED:
         return parseMissed(parsedMessage).parsed
