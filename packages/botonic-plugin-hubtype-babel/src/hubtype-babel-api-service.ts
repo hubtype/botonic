@@ -6,7 +6,7 @@ export class HubtypeBabelApiService {
     readonly host: string = 'https://api.hubtype.com'
   ) {}
 
-  async inference(text: string, accessToken: string) {
+  async inference(text: string, accessToken: string, hasSenseEnabled: boolean) {
     return await axios({
       method: 'POST',
       url: `${this.host}/v1/babel/projects/${this.projectId}/inference/`,
@@ -14,7 +14,7 @@ export class HubtypeBabelApiService {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      data: { text },
+      data: { text, has_sense_enabled: hasSenseEnabled },
     })
   }
 }

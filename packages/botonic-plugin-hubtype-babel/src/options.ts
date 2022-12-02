@@ -3,4 +3,5 @@ export interface PluginOptions {
   authToken?: string
   host?: string
   automaticBotMessagePrefix?: string
+  hasSenseEnabled?: boolean
 }
