@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 export class HubtypeBabelApiService {
   constructor(
@@ -6,7 +6,11 @@ export class HubtypeBabelApiService {
     readonly host: string = 'https://api.hubtype.com'
   ) {}
 
-  async inference(text: string, accessToken: string, hasSenseEnabled: boolean) {
+  async inference(
+    text: string,
+    accessToken: string,
+    includeHasSense: boolean
+  ): Promise<AxiosResponse> {
     return await axios({
       method: 'POST',
       url: `${this.host}/v1/babel/projects/${this.projectId}/inference/`,
@@ -14,7 +18,7 @@ export class HubtypeBabelApiService {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      data: { text, has_sense_enabled: hasSenseEnabled },
+      data: { text, include_has_sense: includeHasSense },
     })
   }
 }

@@ -11,7 +11,7 @@ import { PluginOptions } from './options'
 
 export default class BotonicPluginHubtypeBabel implements Plugin {
   private readonly apiService: HubtypeBabelApiService
-  private readonly hasSenseEnabled: boolean
+  private readonly includeHasSense: boolean
   readonly automaticBotMessagePrefix: string
 
   constructor(private readonly options: PluginOptions) {
@@ -19,7 +19,7 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
       options.projectId,
       options.host
     )
-    this.hasSenseEnabled = options.hasSenseEnabled || false
+    this.includeHasSense = options.includeHasSense || false
     this.automaticBotMessagePrefix =
       options.automaticBotMessagePrefix || '[Automatic Bot Message]'
   }
@@ -50,7 +50,7 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
         const response = await this.apiService.inference(
           text,
           authToken,
-          this.hasSenseEnabled
+          this.includeHasSense
         )
 
         request.input.intent = response.data['intents'][0]['label']
@@ -60,7 +60,7 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
           confidence: x['confidence'],
         }))
 
-        if (this.hasSenseEnabled) {
+        if (this.includeHasSense) {
           request.input.hasSense = response.data['has_sense']
         }
       }
