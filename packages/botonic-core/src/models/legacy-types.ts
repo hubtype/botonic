@@ -105,7 +105,7 @@ export interface NluResult {
   confidence: number
   intent: string
   intents: IntentResult[]
-  hasSense: boolean
+  hasSense?: boolean
   language: string
   // entity recognition results in the format provided by the NLU engine
   entities?: any
