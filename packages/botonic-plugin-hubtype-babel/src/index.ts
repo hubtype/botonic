@@ -11,6 +11,7 @@ import { PluginOptions } from './options'
 
 export default class BotonicPluginHubtypeBabel implements Plugin {
   private readonly apiService: HubtypeBabelApiService
+  private readonly includeHasSense: boolean
   readonly automaticBotMessagePrefix: string
 
   constructor(private readonly options: PluginOptions) {
@@ -18,6 +19,7 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
       options.projectId,
       options.host
     )
+    this.includeHasSense = options.includeHasSense || false
     this.automaticBotMessagePrefix =
       options.automaticBotMessagePrefix || '[Automatic Bot Message]'
   }
@@ -45,7 +47,11 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
         }
 
         const text = request.input.data
-        const response = await this.apiService.inference(text, authToken)
+        const response = await this.apiService.inference(
+          text,
+          authToken,
+          this.includeHasSense
+        )
 
         request.input.intent = response.data['intents'][0]['label']
         request.input.confidence = response.data['intents'][0]['confidence']
@@ -53,7 +59,10 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
           intent: x['label'],
           confidence: x['confidence'],
         }))
-        request.input.hasSense = response.data['has_sense']
+
+        if (this.includeHasSense) {
+          request.input.hasSense = response.data['has_sense']
+        }
       }
     } catch (e) {
       console.error('Error during inference with Hubtype Babel', e)
