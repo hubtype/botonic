@@ -37,7 +37,8 @@ Example of the same `input` object after being processed by this plugin:
         "intent": "insult",
         "confidence": 0.0003
       }
-    ]
+    ],
+    "hasSense": true,
     "entities": []  // Currently not supported
 }
 ```
@@ -97,3 +98,15 @@ export default class OrderLocation extends React.Component {
 }
 
 ```
+
+## Plugin Options
+
+
+- **`projectId`**: Id of the project used to predict the intent.
+- **`[includeHasSense]`**: Whether to include if the input text has sense or not.
+  - Default: *False.*
+- **`[automaticBotMessagePrefix]`**: Prefix of an automatic bot message added to the input text. If a message has this prefix, inference will not be executed. 
+  - Default: *'[Automatic Bot Message]'.*
+- **`[host]`**: Host uri where to request inference. 
+  - Default: *https://api.hubtype.com.*
+- **`[authToken]`**: Authorization Token to being able to run inference. Only needed when using the plugin locally.
