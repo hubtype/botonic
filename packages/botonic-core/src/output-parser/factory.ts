@@ -10,6 +10,7 @@ import {
   parsePostback,
   parseReplies,
   parseText,
+  parseForm,
 } from './parsers'
 
 export class MessageParsingFactory {
@@ -31,6 +32,8 @@ export class MessageParsingFactory {
         return parseCarousel(parsedMessage).parsed
       case MessageEventTypes.CUSTOM:
         return parseCustom(parseReplies(parsedMessage)).parsed
+      case MessageEventTypes.FORM:
+        return parseForm(parsedMessage).parsed
       case MessageEventTypes.MISSED:
         return parseMissed(parsedMessage).parsed
     }
