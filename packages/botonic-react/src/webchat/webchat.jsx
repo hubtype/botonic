@@ -258,13 +258,16 @@ export const Webchat = forwardRef((props, ref) => {
       })
   }
 
-  const sendUserAction = async action => {
-    const userAction = { type: 'user_action', data: action } // make it a constant
-    userAction.id = uuidv4()
+  const sendChatEvent = async chatEvent => {
+    const chatEventInput = {
+      id: uuidv4(),
+      type: INPUT.CHAT_EVENT,
+      data: chatEvent,
+    }
     props.onUserInput &&
       props.onUserInput({
         user: webchatState.session.user,
-        input: userAction,
+        input: chatEventInput,
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
       })
@@ -665,13 +668,13 @@ export const Webchat = forwardRef((props, ref) => {
 
   function startTyping() {
     isTyping = true
-    sendUserAction('typing_on')
+    sendChatEvent('typing_on')
   }
 
   function stopTyping() {
     clearTimeoutWithReset(false)
     isTyping = false
-    sendUserAction('typing_off')
+    sendChatEvent('typing_off')
   }
 
   const onKeyDown = event => {
