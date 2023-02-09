@@ -83,10 +83,7 @@ export class ScrollbarController {
       this.webchat.ontouchstart = {}
       return
     }
-    this.webchat.ontouchmove = e => {
-      if(e.target === e.currentTarget)
-      e.preventDefault()
-    }
+    this.webchat.ontouchmove = e => e.preventDefault()
   }
 
   limitScrollBoundaries() {
