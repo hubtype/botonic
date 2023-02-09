@@ -7,13 +7,20 @@ import { ROLES } from '../../constants'
 import { useComponentVisible } from '../hooks'
 import { Icon, IconContainer } from './common'
 
-export const EmojiPicker = props => (
-  <IconContainer role={ROLES.EMOJI_PICKER_ICON}>
-    <div onClick={props.onClick}>
-      <Icon src={LogoEmoji} />
-    </div>
-  </IconContainer>
-)
+export const EmojiPicker = props =>{
+  const onClick = event =>{
+    props.onClick()
+    event.stopPropagation()
+  }
+
+  return (
+    <IconContainer role={ROLES.EMOJI_PICKER_ICON}>
+      <div onClick={onClick}>
+        <Icon src={LogoEmoji} />
+      </div>
+    </IconContainer>
+  )
+} 
 
 const Container = styled.div`
   display: flex;
