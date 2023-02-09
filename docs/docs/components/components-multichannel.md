@@ -6,7 +6,7 @@ title: Multichannel
 ## Purpose
 
 The `Multichannel` component is a wrapper component used to transform existing representations of a channel into another one that does not support it natively. 
-As an example, it can be used to adapt native representations of a Text with Buttons or Carousel (available in Facebook) for WhatsApp : the multichannel component allows you to provide a way to concatenate and unify messages and conversations for your WhatsApp bot.
+As an example, it can be used to adapt native representations of a Text with Buttons or Carousel (available in Facebook) for WhatsApp: the multichannel component allows you to provide a way to concatenate and unify messages and conversations for your WhatsApp bot.
 
 ## Example
 
