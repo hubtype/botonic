@@ -3,7 +3,7 @@ id: webchat-button-disable
 title: Enabling and Disabling Buttons
 ---
 
-This functionality allows you to disable a button once the user has clicked on it. Thanks to this visual information, the user must follow a specific flow, which helps him to to better understand the logical flow and navigate more easily.
+This functionality allows you to disable a button once the user has clicked on it. Thanks to this visual information, the user must follow a specific flow, which helps him to better understand the logical flow and navigate more easily.
 
 Remember that:
 - To add this property by default, you must set `autodisable: true` in the webchat `index.js`.
