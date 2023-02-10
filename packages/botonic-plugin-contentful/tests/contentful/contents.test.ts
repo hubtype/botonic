@@ -5,6 +5,8 @@ import {
   Content,
   ContentCallback,
   ContentType,
+  Handoff,
+  HandoffAgentEmail,
   Queue,
   Text,
   TopContentType,
@@ -14,6 +16,8 @@ import { RATING_1STAR_ID } from './contents/button.test'
 import { expectContentIsSorryText, TEST_SORRY } from './contents/text.test'
 
 const BUTTON_POST_FAQ3 = '40buQOqp9jbwoxmMZhFO16'
+const TEST_HANDOFF_ID = '6A7D4ssRYuLufjvl1pnOzV'
+const TEST_QUEUE_ID = '62ILnVxLHOEp7aVvPMpCO8'
 
 test('TEST: contentful.content subContent', async () => {
   const button = await testContentful().content(RATING_1STAR_ID, {
@@ -28,6 +32,30 @@ test('TEST: contentful.content topContent', async () => {
     locale: 'en',
   })
   expectContentIsSorryText(content)
+})
+
+test('TEST: contentful.content topContent with more than 3 references to include', async () => {
+  const content = await testContentful().content(TEST_HANDOFF_ID, {
+    locale: 'en',
+  })
+  const queue = await testContentful().queue(TEST_QUEUE_ID, testContext())
+  expect(((content as Handoff).message as Text).text).toEqual(
+    'En breve un agente le atenderá'
+  )
+  expect((content as Handoff).common.name).toEqual('HANDOFF QUEUE')
+  expect((content as Handoff).common.shortText).toEqual('Agent Handoff')
+  expect((content as Handoff).queue).toEqual(queue)
+  expect((content as Handoff).queue?.schedule).not.toBe(undefined)
+  expect((content as Handoff).agent).toEqual(
+    new HandoffAgentEmail('agent email')
+  )
+  expect((content as Handoff).onFinish).toEqual(
+    new ContentCallback(ContentType.TEXT, 'C39lEROUgJl9hHSXKOEXS')
+  )
+  expect((content as Handoff).shadowing).toEqual(true)
+  expect((content as Handoff).common.customFields).toEqual({
+    customFieldText: 'custom Text',
+  })
 })
 
 test('TEST: contentful contents buttons', async () => {
