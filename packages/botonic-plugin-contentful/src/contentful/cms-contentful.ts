@@ -236,7 +236,10 @@ export class Contentful implements cms.CMS {
   }
 
   async content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
-    const entry = await this._delivery.getEntry(id, context)
+    const REFERENCES_TO_INCLUDE = 6
+    const entry = await this._delivery.getEntry(id, context, {
+      include: REFERENCES_TO_INCLUDE,
+    })
     return this.contentFromEntry(entry, context)
   }
 
