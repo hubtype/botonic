@@ -34,7 +34,7 @@ test('TEST: contentful.content topContent', async () => {
   expectContentIsSorryText(content)
 })
 
-test('TEST: contentful.content topContent with more than 3 references to include', async () => {
+test('TEST: contentful.content topContent with more than 4 references to include', async () => {
   const content = await testContentful().content(TEST_HANDOFF_ID, {
     locale: 'en',
   })
