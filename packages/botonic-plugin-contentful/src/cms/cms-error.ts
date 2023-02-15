@@ -239,9 +239,13 @@ export class ErrorReportingCMS implements CMS {
     return contents
   }
 
-  content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
+  content(
+    id: string,
+    context = DEFAULT_CONTEXT,
+    referencesToInclude = 6
+  ): Promise<Content> {
     return this.cms
-      .content(id, context)
+      .content(id, context, referencesToInclude)
       .catch(this.handleContentError('content' as ContentType, id, context))
   }
 
