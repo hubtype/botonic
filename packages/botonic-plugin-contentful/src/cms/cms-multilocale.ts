@@ -48,8 +48,16 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).chitchat(id, context)
   }
 
-  content(id: string, context?: Context): Promise<Content> {
-    return this.cmsFromContext(context).content(id, context)
+  content(
+    id: string,
+    context?: Context,
+    referencesToInclude?: number
+  ): Promise<Content> {
+    return this.cmsFromContext(context).content(
+      id,
+      context,
+      referencesToInclude
+    )
   }
 
   contents<T extends Content>(
