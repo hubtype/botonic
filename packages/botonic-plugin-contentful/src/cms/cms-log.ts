@@ -116,9 +116,13 @@ export class LogCMS implements CMS {
     return this.cms.custom(id, context)
   }
 
-  content(id: string, context?: Context): Promise<Content> {
+  content(
+    id: string,
+    context?: Context,
+    referencesToInclude?: number
+  ): Promise<Content> {
     this.logContentDelivery('content' as ContentType, id, context)
-    return this.cms.content(id, context)
+    return this.cms.content(id, context, referencesToInclude)
   }
 
   contentsWithKeywords(

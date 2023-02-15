@@ -171,7 +171,11 @@ export interface CMS {
     paging?: PagingOptions
   ): Promise<T[]>
 
-  content(id: string, context?: Context): Promise<Content>
+  content(
+    id: string,
+    context?: Context,
+    referencesToInclude?: number
+  ): Promise<Content>
 
   /**
    * If ContentfulOptions.resumeErrors is set: if some contents fail to be delivered,

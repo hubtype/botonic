@@ -215,7 +215,11 @@ export class DummyCMS implements CMS {
     return this.buttonCallbacks.map(DummyCMS.buttonFromCallback)
   }
 
-  content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
+  content(
+    id: string,
+    context = DEFAULT_CONTEXT,
+    referencesToInclude = 6
+  ): Promise<Content> {
     return this.text(id, context)
   }
 
