@@ -9,6 +9,7 @@ import {
   CMS,
   ContentType,
   CustomContentType,
+  DEFAULT_REFERENCES_TO_INCLUDE,
   PagingOptions,
   TopContentType,
 } from './cms'
@@ -242,7 +243,7 @@ export class ErrorReportingCMS implements CMS {
   content(
     id: string,
     context = DEFAULT_CONTEXT,
-    referencesToInclude = 6
+    referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
   ): Promise<Content> {
     return this.cms
       .content(id, context, referencesToInclude)

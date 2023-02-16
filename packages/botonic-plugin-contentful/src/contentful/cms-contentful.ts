@@ -9,6 +9,7 @@ import {
   Context,
   DateRangeContent,
   DEFAULT_CONTEXT,
+  DEFAULT_REFERENCES_TO_INCLUDE,
   PagingOptions,
   ScheduleContent,
   TopContent,
@@ -238,7 +239,7 @@ export class Contentful implements cms.CMS {
   async content(
     id: string,
     context = DEFAULT_CONTEXT,
-    referencesToInclude = 6
+    referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
   ): Promise<Content> {
     const entry = await this._delivery.getEntry(id, context, {
       include: referencesToInclude,

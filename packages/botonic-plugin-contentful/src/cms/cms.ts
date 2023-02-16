@@ -24,6 +24,8 @@ import {
 } from './contents'
 import { Context } from './context'
 
+export const DEFAULT_REFERENCES_TO_INCLUDE = 6
+
 export enum MessageContentType {
   CAROUSEL = 'carousel',
   CHITCHAT = 'chitchat', //so far it's an alias for TEXT
