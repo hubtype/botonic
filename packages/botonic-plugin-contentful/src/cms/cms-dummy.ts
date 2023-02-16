@@ -1,7 +1,13 @@
 import { SearchCandidate } from '../search/search-result'
 import * as time from '../time'
 import { Callback, ContentCallback } from './callback'
-import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
+import {
+  CMS,
+  ContentType,
+  DEFAULT_REFERENCES_TO_INCLUDE,
+  PagingOptions,
+  TopContentType,
+} from './cms'
 import {
   Asset,
   Button,
@@ -218,7 +224,7 @@ export class DummyCMS implements CMS {
   content(
     id: string,
     context = DEFAULT_CONTEXT,
-    referencesToInclude = 6
+    referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
   ): Promise<Content> {
     return this.text(id, context)
   }
