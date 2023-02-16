@@ -50,6 +50,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async pre(request: PluginPreRequest): Promise<void> {
     this.currentRequest = request
+    this.flow = this.readFlowContent()
   }
 
   async post(_request: PluginPostRequest): Promise<void> {}
