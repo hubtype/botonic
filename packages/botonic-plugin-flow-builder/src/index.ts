@@ -25,13 +25,13 @@ import {
 type BotonicPluginFlowBuilderOptions = {
   flowUrl: string
   flow: any
-  customFunctions: object
+  customFunctions: Record<any, any>
 }
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   private flowUrl: string
   private flow: Promise<HtFlowBuilderData>
-  private functions: object
+  private functions: Record<any, any>
   private currentRequest: PluginPreRequest
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
@@ -82,7 +82,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       case MessageContentType.CAROUSEL:
         return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale)
       default:
-        return
+        return undefined
     }
   }
 
@@ -198,7 +198,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       },
       ...nameValues
     )
-    const functionResult = await this.functions[functionNode.content.subtype](
+    const functionResult = await this.functions[functionNode.content.action](
       args
     )
     // TODO define result_mapping per locale??

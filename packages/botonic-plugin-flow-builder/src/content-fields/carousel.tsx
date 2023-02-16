@@ -30,7 +30,7 @@ export class FlowCarousel extends ContentFieldsBase {
             <Title style=''>{e.title}</Title>
             <Subtitle style=''>{e.subtitle}</Subtitle>
             {/* @ts-ignore */}
-            <Button payload={e.buttons?.payload}>{e.buttons?.text}</Button>
+            <Button payload={e.buttons?.payload}>{e.buttons?.text}</Button>,
           </Element>
         ))}
       </Carousel>
