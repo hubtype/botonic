@@ -3,6 +3,7 @@ import {
   Plugin,
   PluginPostRequest,
   PluginPreRequest,
+  Session,
 } from '@botonic/core'
 import axios from 'axios'
 
@@ -26,6 +27,7 @@ type BotonicPluginFlowBuilderOptions = {
   flowUrl: string
   flow: any
   customFunctions: Record<any, any>
+  getLocale: (session: Session) => string
 }
 
 export default class BotonicPluginFlowBuilder implements Plugin {
@@ -33,12 +35,14 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private flow: Promise<HtFlowBuilderData>
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
+  public getLocale: (session: Session) => string
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.flowUrl = options.flowUrl
     this.flow = options.flow || this.readFlowContent()
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
+    this.getLocale = options.getLocale
   }
 
   async readFlowContent() {
