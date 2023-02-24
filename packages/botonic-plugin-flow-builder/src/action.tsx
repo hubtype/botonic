@@ -6,9 +6,6 @@ import { doHandoff } from './handoff'
 import { HtHandoffNode } from './hubtype-models'
 import BotonicPluginFlowBuilder from './index'
 
-// TODO: remove this from here and use the new "start" attribute in the flow
-export const START = '08c7df06-0c7c-4f06-b8c1-4157582efeb2'
-
 type FlowBuilderActionProps = {
   content?: FlowContent[]
   handoffMsg?: HtHandoffNode
@@ -24,7 +21,10 @@ export default class FlowBuilderAction extends React.Component<FlowBuilderAction
 
     const locale = flowBuilderPlugin.getLocale(request.session)
 
-    let payload = request.input.payload ? request.input.payload : START
+    let payload = request.input.payload
+      ? request.input.payload
+      : await flowBuilderPlugin.getStartId()
+
     if (!request.input.payload) {
       const intentPayload = await flowBuilderPlugin.getPayloadByInput(
         request.input,

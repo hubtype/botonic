@@ -31,7 +31,7 @@ export enum MediaContentType {
 }
 
 export enum StartFieldsType {
-  STARTUP = 'startUp',
+  START_UP = 'start-up',
 }
 
 export enum InputContentType {
@@ -62,8 +62,18 @@ export interface HtNodeLink {
   type: NodeContentType
 }
 
-export interface HtBaseNode {
+export interface HtStartReference {
   id: string
+  type: NodeContentType
+  target: HtNodeLink
+}
+
+export interface HtBase {
+  id: string
+  type: NodeContentType | StartFieldsType
+}
+
+export interface HtBaseNode extends HtBase {
   code: string
   meta: {
     x: number
