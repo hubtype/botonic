@@ -13,6 +13,7 @@ import { FlowImage } from './content-fields/image'
 import { FlowText } from './content-fields/text'
 import { DEFAULT_FUNCTIONS } from './functions'
 import {
+  HtBase,
   HtBaseNode,
   HtFlowBuilderData,
   HtFunctionNode,
@@ -20,7 +21,9 @@ import {
   HtIntentNode,
   HtKeywordNode,
   HtNodeComponent,
+  HtStartReference,
   MessageContentType,
+  StartFieldsType,
 } from './hubtype-models'
 
 type BotonicPluginFlowBuilderOptions = {
@@ -89,6 +92,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       default:
         return undefined
     }
+  }
+
+  async getStartId(): Promise<string> {
+    const flow = await this.flow
+    const startNode = flow.nodes.find(
+      (node: HtBase) => node?.type === StartFieldsType.START_UP
+    )
+
+    if (!startNode) {
+      throw new Error('start-up id must be defined')
+    }
+
+    return (startNode as HtStartReference).target.id
   }
 
   async getContents(
