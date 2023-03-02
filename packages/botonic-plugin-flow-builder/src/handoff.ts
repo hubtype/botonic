@@ -9,7 +9,6 @@ export async function doHandoff(request: ActionRequest) {
   // @ts-ignore
   const flowBuilderPlugin = request.plugins.hubtypeFlowBuilder as any
   const handoffContent = await flowBuilderPlugin.getHandoffContent()
-  console.log(handoffContent)
   // @ts-ignore
   let openQueues = await getOpenQueues(request.session)
   const queueName = 'Test'

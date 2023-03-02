@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export async function conditionalQueueStatus({ queue_id }): Promise<string> {
   const response = await axios.get(
+    // `https://api.int.qa.hubtype.com/v1/queues/${queue_id}/availability/`
     `https://api.hubtype.com/v1/queues/${queue_id}/availability/`,
     // TODO: Make it configurable in the future
     {

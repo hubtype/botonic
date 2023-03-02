@@ -31,6 +31,7 @@ type BotonicPluginFlowBuilderOptions = {
   flow: any
   customFunctions: Record<any, any>
   getLocale: (session: Session) => string
+  getAccessToken: () => string
 }
 
 export default class BotonicPluginFlowBuilder implements Plugin {
@@ -38,6 +39,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private flow: Promise<HtFlowBuilderData>
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
+  private getAccessToken: () => string
   public getLocale: (session: Session) => string
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
@@ -46,13 +48,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
     this.getLocale = options.getLocale
+    this.getAccessToken = options.getAccessToken
   }
 
   async readFlowContent() {
-    const response = await axios.get(this.flowUrl)
-    const data = await response.data
+    const response = await axios.get(this.flowUrl, {
+      headers: { Authorization: `Bearer ${this.getAccessToken()}` },
+    })
+    const data = response.data
     //@ts-ignore
-    return Promise.resolve(data as HtFlowBuilderData)
+    return data as HtFlowBuilderData
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
@@ -96,10 +101,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async getStartId(): Promise<string> {
     const flow = await this.flow
+
     const startNode = flow.nodes.find(
       (node: HtBase) => node?.type === StartFieldsType.START_UP
     )
-
     if (!startNode) {
       throw new Error('start-up id must be defined')
     }
