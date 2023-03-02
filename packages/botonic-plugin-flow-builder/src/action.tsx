@@ -15,12 +15,9 @@ export default class FlowBuilderAction extends React.Component<FlowBuilderAction
   static contextType = RequestContext
 
   static async botonicInit(request: ActionRequest): Promise<any> {
-    console.log(request)
     const flowBuilderPlugin = request.plugins
       .flowBuilder as BotonicPluginFlowBuilder
-
     const locale = flowBuilderPlugin.getLocale(request.session)
-
     let payload = request.input.payload
       ? request.input.payload
       : await flowBuilderPlugin.getStartId()
