@@ -139,7 +139,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     try {
       const flow = await this.flow
       const intents = flow.nodes.filter(
-        node => node.type == MessageContentType.INTENT
+        node => node.type === MessageContentType.INTENT
       ) as HtIntentNode[]
       if (input.intent) {
         const matchedIntents = intents.filter(node =>

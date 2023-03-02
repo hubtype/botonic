@@ -44,7 +44,7 @@ export default class FlowBuilderAction extends React.Component<FlowBuilderAction
     // We use only Spanish because they are the backend examples
     const content = await flowBuilderPlugin.getContents(payload, locale)
 
-    if (content.length == 0) {
+    if (content.length === 0) {
       const handoffMsg = await doHandoff(request)
       return { handoffMsg }
     }
