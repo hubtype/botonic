@@ -43,7 +43,8 @@ class App extends React.Component {
     const provider = this.state.session.user.provider
     const impId = this.state.session.user.imp_id
     if (provider === PROVIDER.WHATSAPP) {
-      location.href = 'https://wa.me/' + impId
+      const phone_number = this.state.session.user.unformatted_phone_number
+      location.href = 'https://wa.me/' + phone_number
     }
     if (provider === PROVIDER.TELEGRAM) {
       location.href = 'https://t.me/' + impId
