@@ -84,8 +84,7 @@ export class ScrollbarController {
       return
     }
     this.webchat.ontouchmove = e => {
-      if(e.target === e.currentTarget)
-      e.preventDefault()
+      if (e.target === e.currentTarget) e.preventDefault()
     }
   }
 
