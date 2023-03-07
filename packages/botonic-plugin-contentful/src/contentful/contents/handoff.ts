@@ -8,9 +8,7 @@ import {
   HandoffAgentEmail,
   HandoffAgentId,
   OnFinish,
-  Queue,
 } from '../../cms'
-import { TopContentDelivery } from '../content-delivery'
 import { DeliveryApi } from '../delivery-api'
 import {
   addCustomFields,
@@ -19,12 +17,15 @@ import {
 } from '../delivery-utils'
 import { CallbackTarget, getTargetCallback } from './callback-delivery'
 import { QueueDelivery, QueueFields } from './queue'
+import { DeliveryWithReference } from './reference'
+import { TextDelivery, TextFields } from './text'
 
-export class HandoffDelivery extends TopContentDelivery {
-  static REFERENCES_INCLUDE = QueueDelivery.REFERENCES_INCLUDE + 1
+export class HandoffDelivery extends DeliveryWithReference {
+  static REFERENCES_INCLUDE = QueueDelivery.REFERENCES_INCLUDE + 3
   constructor(
     delivery: DeliveryApi,
     private readonly queueDelivery: QueueDelivery,
+    private readonly textDelivery: TextDelivery,
     resumeErrors: boolean
   ) {
     super(ContentType.HANDOFF, delivery, resumeErrors)
@@ -49,10 +50,14 @@ export class HandoffDelivery extends TopContentDelivery {
     return getTargetCallback(entry.fields.onFinish, context)
   }
 
-  private queue(entry: contentful.Entry<HandoffFields>): Queue | undefined {
+  private async queue(
+    entry: contentful.Entry<HandoffFields>,
+    context: cms.Context
+  ): Promise<cms.Queue | undefined> {
     if (!entry.fields.queue) return undefined
     return this.queueDelivery.fromEntry(
-      entry.fields.queue as contentful.Entry<QueueFields>
+      entry.fields.queue as contentful.Entry<QueueFields>,
+      context
     )
   }
 
@@ -78,23 +83,54 @@ export class HandoffDelivery extends TopContentDelivery {
     return undefined
   }
 
-  fromEntry(
+  private async message(
     entry: contentful.Entry<HandoffFields>,
     context: cms.Context
-  ): cms.Handoff {
+  ): Promise<cms.Text | string | undefined> {
+    if (!entry.fields.message) return undefined
+    return typeof entry.fields.message === 'string'
+      ? entry.fields.message
+      : await this.textDelivery.fromEntry(
+          entry.fields.message as contentful.Entry<TextFields>,
+          context
+        )
+  }
+
+  private async failMessage(
+    entry: contentful.Entry<HandoffFields>,
+    context: cms.Context
+  ): Promise<cms.Text | string | undefined> {
+    if (!entry.fields.failMessage) return undefined
+    return typeof entry.fields.failMessage === 'string'
+      ? entry.fields.failMessage
+      : await this.textDelivery.fromEntry(
+          entry.fields.failMessage as contentful.Entry<TextFields>,
+          context
+        )
+  }
+
+  async fromEntry(
+    entry: contentful.Entry<HandoffFields>,
+    context: cms.Context
+  ): Promise<cms.Handoff> {
     const fields = entry.fields
     const common = ContentfulEntryUtils.commonFieldsFromEntry(entry)
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Handoff(
         common,
         this.onFinish(entry, context),
-        fields.message,
-        fields.failMessage,
-        this.queue(entry),
+        await this.message(entry, context),
+        await this.failMessage(entry, context),
+        await this.queue(entry, context),
         this.agent(entry),
         fields.shadowing
       ),
       fields,
+      referenceDelivery,
       ['onFinish', 'agent', 'queue']
     )
   }
@@ -111,8 +147,8 @@ export interface AgentIdFields {
 type AgentTarget = contentful.Entry<AgentEmailFields | AgentIdFields>
 
 export interface HandoffFields extends CommonEntryFields {
-  message?: string
-  failMessage?: string
+  message?: contentful.Entry<TextFields>
+  failMessage?: contentful.Entry<TextFields>
   onFinish: CallbackTarget
   queue?: contentful.Entry<QueueFields>
   agent?: AgentTarget

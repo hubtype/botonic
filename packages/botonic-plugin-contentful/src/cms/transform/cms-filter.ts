@@ -16,6 +16,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   MessageContent,
   PagingOptions,
   Payload,
@@ -26,6 +27,7 @@ import {
   TopContent,
   TopContentType,
   Url,
+  Video,
 } from '../index'
 import { RecursiveMessageContentFilter } from './message-content-filters'
 
@@ -95,8 +97,17 @@ export class FilteredCMS implements CMS {
     return this.filterContent(content, Image, context)
   }
 
+  async video(id: string, context?: Context): Promise<Video> {
+    const content = await this.cms.video(id, context)
+    return this.filterContent(content, Video, context)
+  }
+
   handoff(id: string, context?: Context): Promise<Handoff> {
     return this.cms.handoff(id, context)
+  }
+
+  input(id: string, context?: Context): Promise<Input> {
+    return this.cms.input(id, context)
   }
 
   custom(id: string, context?: Context): Promise<Custom> {
@@ -125,8 +136,12 @@ export class FilteredCMS implements CMS {
     return this.cms.element(id, context)
   }
 
-  content(id: string, context?: Context): Promise<Content> {
-    return this.cms.content(id, context)
+  content(
+    id: string,
+    context?: Context,
+    referencesToInclude?: number
+  ): Promise<Content> {
+    return this.cms.content(id, context, referencesToInclude)
   }
 
   contentsWithKeywords(

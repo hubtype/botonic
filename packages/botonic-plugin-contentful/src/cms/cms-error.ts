@@ -9,6 +9,7 @@ import {
   CMS,
   ContentType,
   CustomContentType,
+  DEFAULT_REFERENCES_TO_INCLUDE,
   PagingOptions,
   TopContentType,
 } from './cms'
@@ -25,6 +26,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -32,6 +34,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context, DEFAULT_CONTEXT } from './context'
 import { CmsException } from './exceptions'
@@ -107,6 +110,15 @@ export class ErrorReportingCMS implements CMS {
     )
   }
 
+  input(id: string, context?: Context): Promise<Input> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.INPUT,
+      this.cms.input(id, context)
+    )
+  }
+
   custom(id: string, context?: Context): Promise<Custom> {
     return this.catchAndValidate(
       id,
@@ -169,6 +181,15 @@ export class ErrorReportingCMS implements CMS {
     )
   }
 
+  video(id: string, context?: Context): Promise<Video> {
+    return this.catchAndValidate(
+      id,
+      context,
+      ContentType.VIDEO,
+      this.cms.video(id, context)
+    )
+  }
+
   queue(id: string, context?: Context): Promise<Queue> {
     return this.catchAndValidate(
       id,
@@ -219,9 +240,13 @@ export class ErrorReportingCMS implements CMS {
     return contents
   }
 
-  content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
+  content(
+    id: string,
+    context = DEFAULT_CONTEXT,
+    referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
+  ): Promise<Content> {
     return this.cms
-      .content(id, context)
+      .content(id, context, referencesToInclude)
       .catch(this.handleContentError('content' as ContentType, id, context))
   }
 

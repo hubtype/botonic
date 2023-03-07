@@ -1,8 +1,9 @@
 import * as contentful from 'contentful'
 
 import * as cms from '../../cms'
-import { CmsException, ContentType } from '../../cms'
+import { Button, CmsException, ContentType } from '../../cms'
 import { TopContentType } from '../../cms/cms'
+import { CONTENT_FIELDS, ContentField } from '../../manage-cms/fields'
 import { isOfType } from '../../util/enums'
 import { ContentDelivery } from '../content-delivery'
 import {
@@ -78,12 +79,13 @@ export class ButtonDelivery extends ContentDelivery {
     }
     // target may be empty if we got it from a reference (delivery does not provide infinite recursive references)
     const callback = getTargetCallback(buttonEntry.fields.target, context)
-    return new cms.Button(
+    const newButton = new cms.Button(
       buttonEntry.sys.id,
       buttonEntry.fields.name,
       buttonEntry.fields.text ?? '',
       callback
     )
+    return this.addCustomFields(newButton, buttonEntry.fields)
   }
 
   // TODO move to a new CmsUtils.buttonToCallback(cms.ContentCallback)?
@@ -93,12 +95,40 @@ export class ButtonDelivery extends ContentDelivery {
   ): cms.Button {
     const fields = entry.fields
     const text = fields.shortText || ''
-    return new cms.Button(
+    const newButton = new Button(
       entry.sys.id,
       fields.name,
       text,
       ButtonDelivery.callbackFromEntry(entry)
     )
+    return this.addCustomFields(newButton, fields, true)
+  }
+
+  private addCustomFields(
+    button: Button,
+    entryFields: CommonEntryFields,
+    buttonIsMessageContent = false
+  ): Button {
+    const buttonAttributes = Object.keys(button)
+
+    const knownFields: string[] = ['target']
+
+    //if the button is created from a content (text, image, etc) we have to avoid adding all their fields as custom fields
+    if (buttonIsMessageContent) {
+      CONTENT_FIELDS.forEach((field: ContentField) => {
+        knownFields.push(field.cmsName)
+      })
+    }
+
+    const customKeys = Object.keys(entryFields).filter(
+      (field: string) =>
+        !buttonAttributes.includes(field) && !knownFields.includes(field)
+    )
+    button.customFields = {}
+    for (const customKey of customKeys) {
+      button.customFields[customKey] = (entryFields as any)[customKey]
+    }
+    return button
   }
 
   private static callbackFromEntry(entry: contentful.Entry<any>): cms.Callback {

@@ -13,6 +13,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -20,6 +21,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context } from './context'
 
@@ -46,8 +48,16 @@ export class MultiContextCms implements CMS {
     return this.cmsFromContext(context).chitchat(id, context)
   }
 
-  content(id: string, context?: Context): Promise<Content> {
-    return this.cmsFromContext(context).content(id, context)
+  content(
+    id: string,
+    context?: Context,
+    referencesToInclude?: number
+  ): Promise<Content> {
+    return this.cmsFromContext(context).content(
+      id,
+      context,
+      referencesToInclude
+    )
   }
 
   contents<T extends Content>(
@@ -84,6 +94,9 @@ export class MultiContextCms implements CMS {
   image(id: string, context?: Context): Promise<Image> {
     return this.cmsFromContext(context).image(id, context)
   }
+  video(id: string, context?: Context): Promise<Video> {
+    return this.cmsFromContext(context).video(id, context)
+  }
 
   queue(id: string, context?: Context): Promise<Queue> {
     return this.cmsFromContext(context).queue(id, context)
@@ -103,6 +116,10 @@ export class MultiContextCms implements CMS {
 
   handoff(id: string, context?: Context): Promise<Handoff> {
     return this.cmsFromContext(context).handoff(id, context)
+  }
+
+  input(id: string, context?: Context): Promise<Input> {
+    return this.cmsFromContext(context).input(id, context)
   }
 
   custom(id: string, context?: Context): Promise<Custom> {

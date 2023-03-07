@@ -20,6 +20,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -27,6 +28,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context } from './context'
 
@@ -79,6 +81,11 @@ export class LogCMS implements CMS {
     return this.cms.image(id, context)
   }
 
+  video(id: string, context?: Context): Promise<Video> {
+    this.logContentDelivery(ContentType.VIDEO, id, context)
+    return this.cms.video(id, context)
+  }
+
   queue(id: string, context?: Context): Promise<Queue> {
     this.logContentDelivery(ContentType.QUEUE, id, context)
     return this.cms.queue(id, context)
@@ -99,14 +106,23 @@ export class LogCMS implements CMS {
     return this.cms.handoff(id, context)
   }
 
+  input(id: string, context?: Context): Promise<Input> {
+    this.logContentDelivery(ContentType.INPUT, id, context)
+    return this.cms.input(id, context)
+  }
+
   custom(id: string, context?: Context): Promise<Custom> {
     this.logContentDelivery(CustomContentType.CUSTOM, id, context)
     return this.cms.custom(id, context)
   }
 
-  content(id: string, context?: Context): Promise<Content> {
+  content(
+    id: string,
+    context?: Context,
+    referencesToInclude?: number
+  ): Promise<Content> {
     this.logContentDelivery('content' as ContentType, id, context)
-    return this.cms.content(id, context)
+    return this.cms.content(id, context, referencesToInclude)
   }
 
   contentsWithKeywords(

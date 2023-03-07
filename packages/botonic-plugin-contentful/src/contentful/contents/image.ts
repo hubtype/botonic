@@ -4,9 +4,9 @@ import * as cms from '../../cms'
 import { Context } from '../../cms'
 import { DeliveryApi } from '../delivery-api'
 import { addCustomFields, CommonEntryFields } from '../delivery-utils'
-import { DeliveryWithFollowUp } from './follow-up'
+import { DeliveryWithReference } from './reference'
 
-export class ImageDelivery extends DeliveryWithFollowUp {
+export class ImageDelivery extends DeliveryWithReference {
   constructor(delivery: DeliveryApi, resumeErrors: boolean) {
     super(cms.ContentType.IMAGE, delivery, resumeErrors)
   }
@@ -23,12 +23,17 @@ export class ImageDelivery extends DeliveryWithFollowUp {
     entry: contentful.Entry<ImageFields>,
     context: cms.Context
   ): Promise<cms.Image> {
+    const referenceDelivery = {
+      delivery: this.reference!,
+      context,
+    }
     return addCustomFields(
       new cms.Image(
-        await this.getFollowUp().commonFields(entry, context),
+        await this.getReference().commonFields(entry, context),
         this.urlFromAssetRequired(entry.fields.image)
       ),
       entry.fields,
+      referenceDelivery,
       ['image']
     )
   }
