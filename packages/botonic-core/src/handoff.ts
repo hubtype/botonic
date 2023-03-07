@@ -30,6 +30,12 @@ export interface VacationRange {
   start_date: number // timestamp
 }
 
+export type HandoffExtraData = {
+  language?: string
+  url?: string
+  location?: string
+}
+
 function contextDefaults(context: any): BackendContext {
   return {
     timeoutMs: context.timeoutMs || 10000,
@@ -68,6 +74,7 @@ export class HandOffBuilder {
   _caseInfo: string
   _autoIdleMessage: string
   _shadowing: boolean
+  _extraData: HandoffExtraData
 
   constructor(botState: any) {
     this._botState = botState
@@ -128,6 +135,11 @@ export class HandOffBuilder {
     return this
   }
 
+  withExtraData(extraData: HandoffExtraData): this {
+    this._extraData = extraData
+    return this
+  }
+
   async handOff(): Promise<void> {
     return _humanHandOff(
       this._botState,
@@ -140,7 +152,8 @@ export class HandOffBuilder {
       this._caseInfo,
       this._note,
       this._autoIdleMessage,
-      this._shadowing
+      this._shadowing,
+      this._extraData
     )
   }
 }
@@ -176,6 +189,7 @@ interface HubtypeHandoffParams {
   auto_idle_message?: string
   shadowing?: boolean
   on_finish?: string
+  case_extra_data?: HandoffExtraData
 }
 async function _humanHandOff(
   botState: any,
@@ -188,7 +202,8 @@ async function _humanHandOff(
   caseInfo = '',
   note = '',
   autoIdleMessage = '',
-  shadowing = false
+  shadowing = false,
+  extraData: HandoffExtraData | undefined = undefined
 ) {
   const params: HubtypeHandoffParams = {}
 
@@ -221,6 +236,11 @@ async function _humanHandOff(
   if (onFinish) {
     params.on_finish = onFinish
   }
+
+  if (extraData) {
+    params.case_extra_data = extraData
+  }
+  // session._botonic_action = `create_case:${JSON.stringify(params)}` // TODO: Beware changing session._botonic_action->botState.botonicAction
   botState.botonicAction = `create_case:${JSON.stringify(params)}`
   botState.isHandoff = true
 }
