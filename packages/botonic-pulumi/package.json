@@ -1,6 +1,6 @@
 {
   "name": "@botonic/pulumi",
-  "version": "1.0.0-dev.2",
+  "version": "0.21.0",
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc",

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-ner",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
@@ -15,9 +15,9 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@babel/runtime": "^7.16.5",
-    "@botonic/core": "~0.19.0",
-    "@botonic/nlp": "~0.19.0",
+    "@babel/runtime": "^7.15.4",
+    "@botonic/core": "0.21.0",
+    "@botonic/nlp": "0.21.0",
     "@tensorflow/tfjs": "^2.8.6"
   },
   "devDependencies": {
