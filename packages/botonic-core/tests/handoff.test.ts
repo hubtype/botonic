@@ -112,4 +112,19 @@ describe('Handoff', () => {
       expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
     }
   )
+
+  test('receives the extra data', () => {
+    const builder = new HandOffBuilder({}).withExtraData({
+      language: 'en',
+      location: 'Spain',
+    })
+    builder.handOff()
+    const expectedBotonicAction =
+      'create_case:' +
+      JSON.stringify({
+        force_assign_if_not_available: true,
+        case_extra_data: { language: 'en', location: 'Spain' },
+      })
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
 })
