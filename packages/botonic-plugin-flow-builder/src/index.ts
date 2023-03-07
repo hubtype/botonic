@@ -26,10 +26,10 @@ import {
   StartFieldsType,
 } from './hubtype-models'
 
-type BotonicPluginFlowBuilderOptions = {
+export type BotonicPluginFlowBuilderOptions = {
   flowUrl: string
-  flow: any
-  customFunctions: Record<any, any>
+  flow?: any
+  customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
   getAccessToken: () => string
 }
