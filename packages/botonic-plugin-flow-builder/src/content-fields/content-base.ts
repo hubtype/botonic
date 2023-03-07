@@ -1,4 +1,4 @@
-import { HtTextLocale } from '../hubtype-models'
+import { HtMediaFileLocale, HtTextLocale } from '../hubtype-models'
 import { FlowCarousel } from './carousel'
 import { FlowImage } from './image'
 import { FlowText } from './text'
@@ -9,6 +9,11 @@ export abstract class ContentFieldsBase {
   static getTextByLocale(locale: string, text: HtTextLocale[]) {
     const result = text.find(t => t.locale === locale)
     return result?.message ?? ''
+  }
+
+  static getImageByLocale(locale: string, image: HtMediaFileLocale[]) {
+    const result = image.find(t => t.locale === locale)
+    return result?.file ?? ''
   }
 }
 

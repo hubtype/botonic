@@ -1,5 +1,4 @@
 import { HtElement } from '../hubtype-models'
-import { getImageByLocale } from '../utils'
 import { FlowButton } from './button'
 import { ContentFieldsBase } from './content-base'
 
@@ -17,7 +16,7 @@ export class FlowElement extends ContentFieldsBase {
       locale,
       component.subtitle
     )
-    newElement.image = getImageByLocale(locale, component.image)
+    newElement.image = FlowElement.getImageByLocale(locale, component.image)
     newElement.buttons = FlowButton.fromHubtypeCMS(component.button, locale)
     return newElement
   }
