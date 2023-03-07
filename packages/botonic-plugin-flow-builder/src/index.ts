@@ -43,12 +43,12 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getLocale: (session: Session) => string
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
+    this.getLocale = options.getLocale
+    this.getAccessToken = options.getAccessToken
     this.flowUrl = options.flowUrl
     this.flow = options.flow || this.readFlowContent()
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
-    this.getLocale = options.getLocale
-    this.getAccessToken = options.getAccessToken
   }
 
   async readFlowContent() {
