@@ -16,7 +16,6 @@ import {
 
 export class MessageParsingFactory {
   parse(msgToParse: any): Partial<BotonicEvent> {
-    console.log('msgToParse', msgToParse)
     const type = msgToParse.type
     const parsedMessage = parseMessage({ toParse: msgToParse })
     if (MEDIA_TYPES.includes(type)) {
