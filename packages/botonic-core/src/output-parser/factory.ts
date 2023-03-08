@@ -2,6 +2,7 @@ import { BotonicEvent, MEDIA_TYPES, MessageEventTypes } from '../models'
 import {
   parseButtons,
   parseCarousel,
+  parseContact,
   parseCustom,
   parseForm,
   parseLocation,
@@ -15,6 +16,7 @@ import {
 
 export class MessageParsingFactory {
   parse(msgToParse: any): Partial<BotonicEvent> {
+    console.log('msgToParse', msgToParse)
     const type = msgToParse.type
     const parsedMessage = parseMessage({ toParse: msgToParse })
     if (MEDIA_TYPES.includes(type)) {
@@ -34,6 +36,8 @@ export class MessageParsingFactory {
         return parseCustom(parseReplies(parsedMessage)).parsed
       case MessageEventTypes.FORM:
         return parseForm(parsedMessage).parsed
+      case MessageEventTypes.CONTACT:
+        return parseContact(parsedMessage).parsed
       case MessageEventTypes.MISSED:
         return parseMissed(parsedMessage).parsed
     }

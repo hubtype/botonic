@@ -3,6 +3,7 @@ import { BaseEvent } from '../base-event'
 export enum MessageEventTypes {
   AUDIO = 'audio',
   CAROUSEL = 'carousel',
+  CONTACT = 'contact',
   CUSTOM = 'custom',
   DOCUMENT = 'document',
   IMAGE = 'image',
