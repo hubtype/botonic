@@ -57,7 +57,6 @@ export default class FlowBuilderAction extends React.Component<FlowBuilderAction
   render() {
     // @ts-ignore
     const { content: contents, isHandoff } = this.props
-    console.log('isHandoff: ', isHandoff)
     if (isHandoff) {
       return <Text>You are being transferred to an agent!</Text>
     } else {
