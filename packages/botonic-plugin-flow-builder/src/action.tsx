@@ -8,7 +8,7 @@ import BotonicPluginFlowBuilder from './index'
 
 type FlowBuilderActionProps = {
   content?: FlowContent[]
-  handoffMsg?: HtHandoffNode
+  isHandoff?: boolean
 }
 
 export default class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
@@ -42,18 +42,24 @@ export default class FlowBuilderAction extends React.Component<FlowBuilderAction
     const content = await flowBuilderPlugin.getContents(payload, locale)
 
     if (content.length === 0) {
-      const handoffMsg = await doHandoff(request)
-      return { handoffMsg }
+      const handoffParams = {
+        queue: 'Test', // TODO: Take it from the flow
+        agentEmail: 'test@gmail.com',
+        note: 'This is a note that will be attached to the case as a reminder',
+      }
+      await doHandoff(request, handoffParams.queue, handoffParams.note)
+      const isHandoff = true
+      return { isHandoff }
     }
     return { content }
   }
 
   render() {
     // @ts-ignore
-    const { content: contents, handoffMsg } = this.props
-    if (handoffMsg) {
-      // @ts-ignore
-      return <Text>{handoffMsg}</Text>
+    const { content: contents, isHandoff } = this.props
+    console.log('isHandoff: ', isHandoff)
+    if (isHandoff) {
+      return <Text>You are being transferred to an agent!</Text>
     } else {
       return contents!.map((content, index) => content.toBotonic(index))
     }
