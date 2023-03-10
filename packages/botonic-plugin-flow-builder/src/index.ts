@@ -30,7 +30,7 @@ export type BotonicPluginFlowBuilderOptions = {
   flowUrl: string
   flow?: any
   customFunctions?: Record<any, any>
-  getLocale: (session: Session) => string
+  getLocale: () => string
   getAccessToken: () => string
 }
 
@@ -40,7 +40,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
   private getAccessToken: () => string
-  public getLocale: (session: Session) => string
+  public getLocale: () => string
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.getLocale = options.getLocale
