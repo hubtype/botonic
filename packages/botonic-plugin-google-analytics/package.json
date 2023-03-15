@@ -16,8 +16,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "uuid": "^8.2.0"
+    "axios": "^0.24.0"
   },
   "devDependencies": {
     "@botonic/core": "^0.21.0",
