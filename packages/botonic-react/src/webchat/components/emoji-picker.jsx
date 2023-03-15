@@ -1,13 +1,21 @@
 import Picker from 'emoji-picker-react'
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import LogoEmoji from '../../assets/emojiButton.svg'
-import { ROLES } from '../../constants'
+import { ROLES, WEBCHAT } from '../../constants'
+import { WebchatContext } from '../../contexts'
 import { useComponentVisible } from '../hooks'
 import { Icon, IconContainer } from './common'
 
 export const EmojiPicker = props => {
+  const { getThemeProperty } = useContext(WebchatContext)
+
+  const CustomEmojiPicker = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.customEmojiPicker,
+    undefined
+  )
+
   const onClick = event => {
     props.onClick()
     event.stopPropagation()
@@ -16,7 +24,7 @@ export const EmojiPicker = props => {
   return (
     <IconContainer role={ROLES.EMOJI_PICKER_ICON}>
       <div onClick={onClick}>
-        <Icon src={LogoEmoji} />
+        {CustomEmojiPicker ? <CustomEmojiPicker /> : <Icon src={LogoEmoji} />}
       </div>
     </IconContainer>
   )
