@@ -774,18 +774,40 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const userInputEnabled = isUserInputEnabled()
-  const emojiPickerEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableEmojiPicker,
-    props.enableEmojiPicker
-  )
-  const attachmentsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableAttachments,
-    props.enableAttachments
-  )
+
+  const isEmojiPickerEnabled = () => {
+    const hasCustomEmojiPicker = !!getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.customEmojiPicker,
+      props.enableEmojiPicker
+    )
+    return (
+      getThemeProperty(
+        WEBCHAT.CUSTOM_PROPERTIES.enableEmojiPicker,
+        props.enableEmojiPicker
+      ) ?? hasCustomEmojiPicker
+    )
+  }
+  const emojiPickerEnabled = isEmojiPickerEnabled()
+
+  const isAttacmentsEnabled = () => {
+    const hasCustomAttacments = !!getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.customAttachments,
+      props.enableAttachments
+    )
+    return (
+      getThemeProperty(
+        WEBCHAT.CUSTOM_PROPERTIES.enableAttachments,
+        props.enableAttachments
+      ) ?? hasCustomAttacments
+    )
+  }
+  const attachmentsEnabled = isAttacmentsEnabled()
+
   const sendButtonEnabled = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.enableSendButton,
     true
   )
+
   const CustomSendButton = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.customSendButton,
     undefined
