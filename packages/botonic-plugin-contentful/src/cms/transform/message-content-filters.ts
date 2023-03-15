@@ -4,11 +4,13 @@
 import {
   Button,
   Carousel,
+  Document,
   Element,
   Image,
   MessageContent,
   StartUp,
   Text,
+  Video,
 } from '../contents'
 import { Context } from '../context'
 import { CmsException } from '../exceptions'
@@ -22,8 +24,10 @@ export type MessageContentFilter<T> = (
 export type FilterByMessageContentType = {
   carousel?: MessageContentFilter<Carousel>
   image?: MessageContentFilter<Image>
+  video?: MessageContentFilter<Video>
   startUp?: MessageContentFilter<StartUp>
   text?: MessageContentFilter<Text>
+  document?: MessageContentFilter<Document>
 }
 
 export function enableDependingOnContext(
@@ -39,8 +43,10 @@ export function enableDependingOnContext(
   return {
     carousel: filter(inFilter.carousel),
     image: filter(inFilter.image),
+    video: filter(inFilter.video),
     startUp: filter(inFilter.startUp),
     text: filter(inFilter.text),
+    document: filter(inFilter.document),
   }
 }
 
@@ -83,6 +89,14 @@ export class RecursiveMessageContentFilter {
     }
     if (content instanceof Image) {
       return this.filters.image && (await this.filters.image(content, context))
+    }
+    if (content instanceof Video) {
+      return this.filters.video && (await this.filters.video(content, context))
+    }
+    if (content instanceof Document) {
+      return (
+        this.filters.document && (await this.filters.document(content, context))
+      )
     }
     throw new CmsException(`Type '${content.contentType}' not supported`)
   }

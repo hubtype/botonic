@@ -3,6 +3,7 @@ import {
   parseButtons,
   parseCarousel,
   parseCustom,
+  parseForm,
   parseLocation,
   parseMedia,
   parseMessage,
@@ -10,7 +11,6 @@ import {
   parsePostback,
   parseReplies,
   parseText,
-  parseForm,
 } from './parsers'
 
 export class MessageParsingFactory {

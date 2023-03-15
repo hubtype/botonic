@@ -4,12 +4,12 @@ import {
   CarouselMessageEvent,
   CustomMessageEvent,
   DocumentMessageEvent,
+  FormMessageEvent,
   ImageMessageEvent,
   LocationMessageEvent,
   PostbackMessageEvent,
   TextMessageEvent,
   VideoMessageEvent,
-  FormMessageEvent,
 } from './message'
 
 export type BotonicEvent =

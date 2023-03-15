@@ -1,7 +1,13 @@
 import { SearchCandidate } from '../search/search-result'
 import * as time from '../time'
 import { Callback, ContentCallback } from './callback'
-import { CMS, ContentType, PagingOptions, TopContentType } from './cms'
+import {
+  CMS,
+  ContentType,
+  DEFAULT_REFERENCES_TO_INCLUDE,
+  PagingOptions,
+  TopContentType,
+} from './cms'
 import {
   Asset,
   Button,
@@ -15,6 +21,7 @@ import {
   Element,
   Handoff,
   Image,
+  Input,
   Payload,
   Queue,
   ScheduleContent,
@@ -22,6 +29,7 @@ import {
   Text,
   TopContent,
   Url,
+  Video,
 } from './contents'
 import { Context, DEFAULT_CONTEXT } from './context'
 
@@ -30,6 +38,7 @@ import { Context, DEFAULT_CONTEXT } from './context'
  */
 export class DummyCMS implements CMS {
   static readonly IMG = 'this_image_does_not_exist.png'
+  static readonly VIDEO = 'this_video_does_not_exist.mp4'
   static PDF = 'this_doc_does_not_exist.pdf'
   /**
    *
@@ -68,13 +77,26 @@ export class DummyCMS implements CMS {
 
   async handoff(id: string, {} = DEFAULT_CONTEXT): Promise<Handoff> {
     const queue = new Queue(new CommonFields(id, id), id)
+    const message = new Text(new CommonFields(id, id), id, [])
+    const failMessage = new Text(new CommonFields(id, id), id, [])
     return Promise.resolve(
       new Handoff(
         new CommonFields(id, id),
         this.buttonCallbacks[0],
-        'Dummy message for ' + id,
-        'Dummy handofFailfMessage for ' + id,
+        message,
+        failMessage,
         queue
+      )
+    )
+  }
+
+  async input(id: string, {} = DEFAULT_CONTEXT): Promise<Input> {
+    return Promise.resolve(
+      new Input(
+        new CommonFields(id, id),
+        'Dummy message',
+        [],
+        this.buttonCallbacks[0]
       )
     )
   }
@@ -130,6 +152,10 @@ export class DummyCMS implements CMS {
 
   image(id: string, {} = DEFAULT_CONTEXT): Promise<Image> {
     return Promise.resolve(new Image(new CommonFields(id, id), DummyCMS.IMG))
+  }
+
+  video(id: string, {} = DEFAULT_CONTEXT): Promise<Video> {
+    return Promise.resolve(new Video(new CommonFields(id, id), DummyCMS.VIDEO))
   }
 
   queue(id: string, {} = DEFAULT_CONTEXT): Promise<Queue> {
@@ -195,7 +221,11 @@ export class DummyCMS implements CMS {
     return this.buttonCallbacks.map(DummyCMS.buttonFromCallback)
   }
 
-  content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
+  content(
+    id: string,
+    context = DEFAULT_CONTEXT,
+    referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
+  ): Promise<Content> {
     return this.text(id, context)
   }
 

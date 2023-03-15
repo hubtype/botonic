@@ -1,3 +1,4 @@
+import { ContentType } from '../cms'
 import {
   Button,
   ButtonStyle,
@@ -10,11 +11,14 @@ import {
   Handoff,
   HandoffAgent,
   Image,
+  Input,
   OnFinish,
   Queue,
   StartUp,
   Text,
+  Video,
 } from '../contents'
+import { Callback } from './../callback'
 
 /**
  * Builder for Contents (which are immutable) which allow:
@@ -34,7 +38,7 @@ abstract class ContentBuilder {
     return this
   }
 
-  abstract build(): Content
+  abstract build(contentType?: ContentType): Content
 }
 
 export abstract class TopContentBuilder extends ContentBuilder {
@@ -196,18 +200,20 @@ export class StartUpBuilder extends MessageContentBuilder {
   }
 }
 
-export class ImageBuilder extends MessageContentBuilder {
-  constructor(id: string, name: string, public imgUrl: string) {
+export class MediaBuilder extends MessageContentBuilder {
+  constructor(id: string, name: string, public mediaUrl: string) {
     super(id, name)
   }
 
   withUrl(url: string): this {
-    this.imgUrl = url
+    this.mediaUrl = url
     return this
   }
 
-  build(): Image {
-    return new Image(this.buildCommonFields(), this.imgUrl)
+  build(contentType: ContentType): Image | Video {
+    return contentType === ContentType.IMAGE
+      ? new Image(this.buildCommonFields(), this.mediaUrl)
+      : new Video(this.buildCommonFields(), this.mediaUrl)
   }
 }
 
@@ -227,8 +233,8 @@ export class DocumentBuilder extends MessageContentBuilder {
 }
 
 export class HandoffBuilder extends MessageContentBuilder {
-  message?: string
-  failMessage?: string
+  message?: Text
+  failMessage?: Text
   queue?: Queue
   agent?: HandoffAgent
   shadowing?: boolean
@@ -236,12 +242,12 @@ export class HandoffBuilder extends MessageContentBuilder {
     super(id, name)
   }
 
-  withHandoffMessage(message?: string): this {
+  withHandoffMessage(message?: Text): this {
     this.message = message
     return this
   }
 
-  withHandoffFailMessage(failMessage?: string): this {
+  withHandoffFailMessage(failMessage?: Text): this {
     this.failMessage = failMessage
     return this
   }
@@ -270,6 +276,27 @@ export class HandoffBuilder extends MessageContentBuilder {
       this.queue,
       this.agent,
       this.shadowing
+    )
+  }
+}
+
+export class InputBuilder extends MessageContentBuilder {
+  constructor(
+    id: string,
+    name: string,
+    public title: string,
+    public keywords: string[],
+    public target: Callback
+  ) {
+    super(id, name)
+  }
+
+  build(): Input {
+    return new Input(
+      this.buildCommonFields(),
+      this.title,
+      this.keywords,
+      this.target
     )
   }
 }

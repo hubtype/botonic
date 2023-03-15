@@ -31,6 +31,7 @@ export enum ContentFieldType {
   AGENT_ID = 'Agent Id',
   ON_FINISH = 'On Finish',
   SHADOWING = 'Shadowing',
+  INPUT_TYPE = 'Input Type',
 }
 
 export enum ContentFieldValueType {
@@ -197,13 +198,13 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     new ContentField(
       ContentFieldType.MESSAGE,
       'message',
-      ContentFieldValueType.STRING,
+      ContentFieldValueType.REFERENCE,
       true
     ),
     new ContentField(
       ContentFieldType.FAIL_MESSAGE,
       'failMessage',
-      ContentFieldValueType.STRING,
+      ContentFieldValueType.REFERENCE,
       true
     ),
     new ContentField(
@@ -228,6 +229,12 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
       ContentFieldType.SHADOWING,
       'shadowing',
       ContentFieldValueType.BOOLEAN,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.INPUT_TYPE,
+      'type',
+      ContentFieldValueType.STRING,
       true
     ),
   ])

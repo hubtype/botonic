@@ -40,7 +40,7 @@ export const deepClone = <T>(target: T, alreadyCloned: object[] = []): T => {
     })
     return cp.map((n: any) => deepClone<any>(n, alreadyCloned)) as any
   }
-  if (typeof target === 'object' && target !== {}) {
+  if (typeof target === 'object' && Object.keys(target as any).length !== 0) {
     const cp = { ...(target as { [key: string]: any }) } as {
       [key: string]: any
     }

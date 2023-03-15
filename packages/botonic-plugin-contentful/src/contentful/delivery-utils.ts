@@ -5,6 +5,7 @@ import {
   CommonFields,
   ContentId,
   ContentType,
+  Context,
   DateRangeContent,
   FollowUp,
   SearchableBy,
@@ -13,6 +14,7 @@ import {
 import { ResourceTypeNotFoundCmsException } from '../cms/exceptions'
 import { ContentfulOptions } from '../plugin'
 import * as time from '../time'
+import { ReferenceDelivery } from './contents/reference'
 import {
   SearchableByKeywordsDelivery,
   SearchableByKeywordsFields,
@@ -34,6 +36,7 @@ export interface CommonEntryFields extends ContentWithNameFields {
 }
 
 export type FollowUpFields = CommonEntryFields
+export type ReferenceFields = CommonEntryFields
 
 export class ContentfulEntryUtils {
   static getContentId<T extends ContentType = ContentType>(
@@ -145,12 +148,18 @@ export function convertContentfulException(e: any, query: any): any {
   }
   return e
 }
+
+export type Reference = {
+  delivery: ReferenceDelivery
+  context: Context
+}
 //supported types: string, number and boolean
-export function addCustomFields<T extends TopContent>(
+export async function addCustomFields<T extends TopContent>(
   content: T,
   entryFields: CommonEntryFields,
+  referenceDelivery?: Reference,
   ignoreFields?: string[]
-): T {
+): Promise<T> {
   const customKeys = Object.keys(entryFields).filter(
     f =>
       !Object.keys(content).includes(f) &&
@@ -160,7 +169,27 @@ export function addCustomFields<T extends TopContent>(
       'followup' != f
   )
   for (const customKey of customKeys) {
-    content.common.customFields[customKey] = (entryFields as any)[customKey]
+    const customField = (entryFields as any)[customKey]
+    if (isReferenceField(customField)) {
+      if (referenceDelivery) {
+        content.common.customFields[
+          customKey
+        ] = await referenceDelivery.delivery.fromEntry(
+          customField,
+          referenceDelivery.context
+        )
+      } else {
+        console.error(
+          `Warning: entry with id ${content.common.id}: type ${content.contentType} can't have custom reference fields`
+        )
+      }
+    } else {
+      content.common.customFields[customKey] = (entryFields as any)[customKey]
+    }
   }
   return content
+}
+
+export function isReferenceField(field: any): boolean {
+  return field?.sys?.id
 }

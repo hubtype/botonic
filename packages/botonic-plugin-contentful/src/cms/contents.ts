@@ -226,7 +226,7 @@ export class CommonFields implements Stringable {
 export class Button extends Content {
   private readonly usingNameForText: boolean
   public readonly text: string
-
+  public customFields: Record<string, unknown> = {}
   /**
    * @param id If content having the button has a direct reference to the target
    * content instead of a Button content, the id will be the id of the target.
@@ -384,6 +384,12 @@ export class Image extends MessageContent {
   }
 }
 
+export class Video extends MessageContent {
+  constructor(readonly common: CommonFields, readonly videoUrl: string) {
+    super(common, ContentType.VIDEO)
+  }
+}
+
 export class Text extends MessageContent {
   constructor(
     readonly common: CommonFields,
@@ -482,8 +488,8 @@ export class Handoff extends TopContent {
   constructor(
     readonly common: CommonFields,
     readonly onFinish: OnFinish,
-    readonly message?: string,
-    readonly failMessage?: string,
+    readonly message?: Text | string,
+    readonly failMessage?: Text | string,
     //agent and queue are optional because often they are set dynamically by the bot
     readonly queue?: Queue,
     readonly agent?: HandoffAgent,
@@ -505,7 +511,26 @@ export class Handoff extends TopContent {
   }
 }
 
+export enum InputType {
+  INTENTS = 'intents',
+  KEYWORDS = 'keywords',
+}
+
+export class Input extends TopContent {
+  constructor(
+    readonly common: CommonFields,
+    readonly title: string,
+    readonly keywords: string[],
+    readonly target: Callback,
+    readonly type = InputType.KEYWORDS
+  ) {
+    super(common, ContentType.INPUT)
+  }
+}
+
 /**
  * A {@link Content} which is automatically displayed after another one
  */
 export type FollowUp = MessageContent
+
+export type Reference = Content

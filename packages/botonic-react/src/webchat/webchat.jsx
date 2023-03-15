@@ -813,6 +813,7 @@ export const Webchat = forwardRef((props, ref) => {
           style={{
             ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userInputStyle),
           }}
+          className='user-input-container'
         >
           {webchatState.isEmojiPickerOpen && (
             <OpenedEmojiPicker

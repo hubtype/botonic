@@ -1,9 +1,11 @@
 {
   "name": "@botonic/eslint-config",
-  "version": "1.0.0-dev.0",
+  "version": "0.21.0",
   "description": "Eslint config for botonic packages",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "echo Skipping build..."
+  },
   "author": "",
   "license": "MIT",
   "keywords": [

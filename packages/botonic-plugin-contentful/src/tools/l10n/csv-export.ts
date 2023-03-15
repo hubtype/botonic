@@ -4,7 +4,7 @@ import sort from 'sort-stream'
 import * as stream from 'stream'
 import { promisify } from 'util'
 
-import { BOTONIC_CONTENT_TYPES, ContentType, Text } from '../../cms'
+import { BOTONIC_CONTENT_TYPES, ContentType, Handoff, Text } from '../../cms'
 import { ResourceTypeNotFoundCmsException } from '../../cms/exceptions'
 import {
   Button,
@@ -74,7 +74,11 @@ export class CsvExport {
 
   async *generate(cms: CMS, from: Locale): AsyncGenerator<CsvLine> {
     // TODO use CmsInfo to restrict the types
-    for (const model of [...BOTONIC_CONTENT_TYPES, ContentType.URL]) {
+    for (const model of [
+      ...BOTONIC_CONTENT_TYPES,
+      ContentType.URL,
+      ContentType.HANDOFF,
+    ]) {
       console.log(`Exporting contents of type ${model}`)
       try {
         const contents = await cms.contents(model, {
@@ -152,6 +156,8 @@ export class ContentToCsvLines {
         ...this.getCommonFields(content.common),
         new I18nField(ContentFieldType.URL, content.url),
       ]
+    } else if (content instanceof Handoff) {
+      return [...this.getCommonFields(content.common)]
     } else if (content instanceof TopContent) {
       return this.getCommonFields(content.common)
     }

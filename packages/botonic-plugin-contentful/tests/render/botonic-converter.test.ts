@@ -1,8 +1,8 @@
-import { ButtonStyle } from '../../src/cms'
+import { ButtonStyle, ContentType } from '../../src/cms'
 import {
   RndCarouselBuilder,
   RndDocumentBuilder,
-  RndImageBuilder,
+  RndMediaBuilder,
   RndTextBuilder,
 } from '../../src/cms/test-helpers'
 import { BotonicMsgConverter } from '../../src/render'
@@ -103,15 +103,28 @@ describe('TEST BotonicMsgConverter', () => {
 
   test('image', () => {
     const sut = new BotonicMsgConverter()
-    const builder = new RndImageBuilder()
-    const image = builder.withRandomFields().build()
+    const builder = new RndMediaBuilder()
+    const image = builder.withRandomFields().build(ContentType.IMAGE)
 
     // act
     const msgs = sut.convert(image, 42) as any
 
     // assert
     const msg = assertHasFollowUp(msgs, builder.followUp != undefined)
-    expect(msg['data']['image']).toEqual(builder.imgUrl)
+    expect(msg['data']['image']).toEqual(builder.mediaUrl)
+  })
+
+  test('video', () => {
+    const sut = new BotonicMsgConverter()
+    const builder = new RndMediaBuilder()
+    const video = builder.withRandomFields().build(ContentType.VIDEO)
+
+    // act
+    const msgs = sut.convert(video, 42) as any
+
+    // assert
+    const msg = assertHasFollowUp(msgs, builder.followUp != undefined)
+    expect(msg['data']['video']).toEqual(builder.mediaUrl)
   })
 
   test('document', () => {

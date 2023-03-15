@@ -5,7 +5,8 @@ import {
   DocumentBuilder,
   ElementBuilder,
   HandoffBuilder,
-  ImageBuilder,
+  InputBuilder,
+  MediaBuilder,
   StartUpBuilder,
   TextBuilder,
   TopContentBuilder,
@@ -217,11 +218,14 @@ export class RndStartUpBuilder extends StartUpBuilder {
   }
 }
 
-export class RndImageBuilder extends ImageBuilder {
+export class RndMediaBuilder extends MediaBuilder {
   readonly topComponentBuilder = new RndTopContentBuilder()
 
-  constructor(name: string = rndStr(), imgUrl: string = 'http://' + rndStr()) {
-    super(rndStr(), name, imgUrl)
+  constructor(
+    name: string = rndStr(),
+    mediaUrl: string = 'http://' + rndStr()
+  ) {
+    super(rndStr(), name, mediaUrl)
   }
 
   withRandomFields(): this {
@@ -254,11 +258,27 @@ export class RndHandoffBuilder extends HandoffBuilder {
   }
 
   withRandomFields(): this {
-    this.message = rndStr()
-    this.failMessage = rndStr()
+    this.message = new Text(new CommonFields(rndStr(), rndStr()), rndStr(), [])
+    this.failMessage = new Text(
+      new CommonFields(rndStr(), rndStr()),
+      rndStr(),
+      []
+    )
     this.agent = new HandoffAgentEmail(rndStr())
     this.shadowing = rndBool()
     this.topComponentBuilder.withRandomFields(this)
     return this
+  }
+}
+
+export class RndInputBuilder extends InputBuilder {
+  readonly topComponentBuilder = new RndTopContentBuilder()
+
+  constructor(
+    name: string = rndStr(),
+    keywords: string[] = [rndStr(), rndStr()],
+    target: Callback = new ContentCallbackBuilder().build()
+  ) {
+    super(rndStr(), name, rndStr(), keywords, target)
   }
 }

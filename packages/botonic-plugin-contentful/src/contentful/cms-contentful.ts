@@ -9,6 +9,7 @@ import {
   Context,
   DateRangeContent,
   DEFAULT_CONTEXT,
+  DEFAULT_REFERENCES_TO_INCLUDE,
   PagingOptions,
   ScheduleContent,
   TopContent,
@@ -23,15 +24,17 @@ import { ContentsDelivery } from './contents/contents'
 import { CustomDelivery } from './contents/custom'
 import { DateRangeDelivery } from './contents/date-range'
 import { DocumentDelivery } from './contents/document'
-import { FollowUpDelivery } from './contents/follow-up'
 import { HandoffDelivery } from './contents/handoff'
 import { ImageDelivery } from './contents/image'
+import { InputDelivery } from './contents/input'
 import { PayloadDelivery } from './contents/payload'
 import { QueueDelivery } from './contents/queue'
+import { ReferenceDelivery } from './contents/reference'
 import { ScheduleDelivery } from './contents/schedule'
 import { StartUpDelivery } from './contents/startup'
 import { TextDelivery } from './contents/text'
 import { UrlDelivery } from './contents/url'
+import { VideoDelivery } from './contents/video'
 import { CachedClientApi } from './delivery/cache'
 import { ClientApiErrorReporter, ReducedClientApi } from './delivery/client-api'
 import { FallbackCachedClientApi } from './delivery/fallback-cache'
@@ -56,7 +59,9 @@ export class Contentful implements cms.CMS {
   private readonly _schedule: ScheduleDelivery
   private readonly _dateRange: DateRangeDelivery
   private readonly _image: ImageDelivery
+  private readonly _video: VideoDelivery
   private readonly _handoff: HandoffDelivery
+  private readonly _input: InputDelivery
   private readonly _custom: CustomDelivery
   private readonly _asset: AssetDelivery
   private readonly _queue: QueueDelivery
@@ -106,27 +111,51 @@ export class Contentful implements cms.CMS {
     this._url = new UrlDelivery(delivery, resumeErrors)
     this._payload = new PayloadDelivery(delivery, resumeErrors)
     this._image = new ImageDelivery(delivery, resumeErrors)
+    this._video = new VideoDelivery(delivery, resumeErrors)
     this._asset = new AssetDelivery(delivery, resumeErrors)
     this._schedule = new ScheduleDelivery(delivery, resumeErrors)
     this._queue = new QueueDelivery(delivery, this._schedule, resumeErrors)
-    this._handoff = new HandoffDelivery(delivery, this._queue, resumeErrors)
+    this._handoff = new HandoffDelivery(
+      delivery,
+      this._queue,
+      this._text,
+      resumeErrors
+    )
+    this._input = new InputDelivery(delivery, resumeErrors)
     this._custom = new CustomDelivery(delivery, resumeErrors)
-    const followUp = new FollowUpDelivery(
+    this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
+    const followUp = new ReferenceDelivery(
       this._delivery,
       this._carousel,
       this._text,
       this._image,
-      this._startUp
+      this._startUp,
+      this._video,
+      this._document,
+      this._url,
+      this._handoff,
+      this._queue,
+      this._schedule,
+      this._input,
+      this._payload,
+      this._dateRange
     )
     ;[
-      this._document,
-      this._text,
       this._carousel,
+      this._text,
       this._image,
       this._startUp,
-    ].forEach(d => d.setFollowUp(followUp))
+      this._video,
+      this._document,
+      this._url,
+      this._handoff,
+      this._queue,
+      this._schedule,
+      this._input,
+      this._payload,
+      this._dateRange,
+    ].forEach(d => d.setReference(followUp))
     this._keywords = new KeywordsDelivery(delivery)
-    this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
   }
 
   button(id: string, context: Context = DEFAULT_CONTEXT): Promise<cms.Button> {
@@ -172,12 +201,20 @@ export class Contentful implements cms.CMS {
     return this._image.image(id, context)
   }
 
+  video(id: string, context = DEFAULT_CONTEXT): Promise<cms.Video> {
+    return this._video.video(id, context)
+  }
+
   chitchat(id: string, context = DEFAULT_CONTEXT): Promise<cms.Chitchat> {
     return this._text.text(id, context)
   }
 
   async handoff(id: string, context = DEFAULT_CONTEXT): Promise<cms.Handoff> {
     return this._handoff.handoff(id, context)
+  }
+
+  async input(id: string, context = DEFAULT_CONTEXT): Promise<cms.Input> {
+    return this._input.input(id, context)
   }
 
   async custom(id: string, context = DEFAULT_CONTEXT): Promise<cms.Custom> {
@@ -199,8 +236,14 @@ export class Contentful implements cms.CMS {
     )
   }
 
-  async content(id: string, context = DEFAULT_CONTEXT): Promise<Content> {
-    const entry = await this._delivery.getEntry(id, context)
+  async content(
+    id: string,
+    context = DEFAULT_CONTEXT,
+    referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
+  ): Promise<Content> {
+    const entry = await this._delivery.getEntry(id, context, {
+      include: referencesToInclude,
+    })
     return this.contentFromEntry(entry, context)
   }
 
@@ -229,24 +272,28 @@ export class Contentful implements cms.CMS {
       case ContentType.DOCUMENT:
         return retype(await this._document.fromEntry(entry, context))
       case ContentType.QUEUE:
-        return retype(this._queue.fromEntry(entry))
+        return retype(await this._queue.fromEntry(entry, context))
       case ContentType.CHITCHAT:
       case ContentType.TEXT:
         return retype(await this._text.fromEntry(entry, context))
       case ContentType.IMAGE:
         return retype(await this._image.fromEntry(entry, context))
+      case ContentType.VIDEO:
+        return retype(await this._video.fromEntry(entry, context))
       case ContentType.HANDOFF:
-        return retype(this._handoff.fromEntry(entry, context))
+        return retype(await this._handoff.fromEntry(entry, context))
+      case ContentType.INPUT:
+        return retype(await this._input.fromEntry(entry, context))
       case ContentType.URL:
-        return retype(this._url.fromEntry(entry, context))
+        return retype(await this._url.fromEntry(entry, context))
       case ContentType.PAYLOAD:
-        return retype(this._payload.fromEntry(entry, context))
+        return retype(await this._payload.fromEntry(entry, context))
       case ContentType.STARTUP:
         return retype(await this._startUp.fromEntry(entry, context))
       case ContentType.SCHEDULE:
-        return retype(this._schedule.fromEntry(entry))
+        return retype(await this._schedule.fromEntry(entry, context))
       case ContentType.DATE_RANGE:
-        return retype(DateRangeDelivery.fromEntry(entry))
+        return retype(await this._dateRange.fromEntry(entry, context))
       default:
         throw new Error(`${model} is not a Content type`)
     }
@@ -278,8 +325,8 @@ export class Contentful implements cms.CMS {
     return this._keywords.contentsWithKeywords(context, paging)
   }
 
-  async schedule(id: string): Promise<ScheduleContent> {
-    return this._schedule.schedule(id)
+  async schedule(id: string, context: Context): Promise<ScheduleContent> {
+    return this._schedule.schedule(id, context)
   }
 
   asset(id: string, context = DEFAULT_CONTEXT): Promise<cms.Asset> {
@@ -290,7 +337,7 @@ export class Contentful implements cms.CMS {
     return this._asset.assets(context)
   }
 
-  dateRange(id: string): Promise<DateRangeContent> {
-    return this._dateRange.dateRange(id)
+  dateRange(id: string, context: Context): Promise<DateRangeContent> {
+    return this._dateRange.dateRange(id, context)
   }
 }
