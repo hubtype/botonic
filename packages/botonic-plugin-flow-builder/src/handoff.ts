@@ -22,7 +22,7 @@ export async function doHandoff(
   if (agentEmail) {
     handOffBuilder.withAgentEmail(agentEmail)
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   handOffBuilder.withOnFinishPayload(handoffContent.target?.id!)
   await handOffBuilder.handOff()
 }
