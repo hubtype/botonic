@@ -12,8 +12,8 @@ export class FlowCarousel extends ContentFieldsBase {
   static fromHubtypeCMS(component: CarouselNode, locale: string): FlowCarousel {
     const newCarousel = new FlowCarousel(component.id)
     newCarousel.code = component.code
-    newCarousel.elements = component.content.elements.map(ele =>
-      FlowElement.fromHubtypeCMS(ele, locale)
+    newCarousel.elements = component.content.elements.map(element =>
+      FlowElement.fromHubtypeCMS(element, locale)
     )
     return newCarousel
   }
@@ -21,13 +21,16 @@ export class FlowCarousel extends ContentFieldsBase {
   toBotonic(index: number): JSX.Element {
     return (
       <Carousel key={index}>
-        {this.elements.map((e, eIndex) => (
+        {this.elements.map((element, eIndex) => (
           <Element key={eIndex}>
-            <Pic src={e.image} />
-            <Title style=''>{e.title}</Title>
-            <Subtitle style=''>{e.subtitle}</Subtitle>
+            <Pic src={element.image} />
+            <Title style=''>{element.title}</Title>
+            <Subtitle style=''>{element.subtitle}</Subtitle>
             {/* @ts-ignore */}
-            <Button payload={e.buttons?.payload}>{e.buttons?.text}</Button>,
+            <Button payload={element.buttons?.payload}>
+              {element.buttons?.text}
+            </Button>
+            ,
           </Element>
         ))}
       </Carousel>

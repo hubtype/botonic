@@ -9,6 +9,7 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
   'HUBTYPE_API_URL',
   'https://api.hubtype.com'
 )
+
 export async function conditionalQueueStatus({
   queue_id,
 }: {

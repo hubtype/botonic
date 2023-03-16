@@ -1,55 +1,3 @@
-export enum ButtonStyle {
-  BUTTON = 'button',
-  QUICK_REPLY = 'quick-reply',
-}
-
-export enum MessageContentType {
-  CAROUSEL = 'carousel',
-  IMAGE = 'image',
-  TEXT = 'text',
-  KEYWORD = 'keyword',
-  HANDOFF = 'handoff',
-  FUNCTION = 'function',
-  INTENT = 'intent',
-}
-
-// TODO: refactor types correctly
-export enum NonMessageContentType {
-  INTENT = 'intent',
-  PAYLOAD = 'payload',
-  QUEUE = 'queue',
-  URL = 'url',
-}
-
-export enum SubContentType {
-  BUTTON = 'button',
-  ELEMENT = 'element',
-}
-
-export enum MediaContentType {
-  ASSET = 'asset',
-}
-
-export enum StartFieldsType {
-  START_UP = 'start-up',
-}
-
-export enum InputContentType {
-  INPUT = 'user-input',
-}
-
-export enum InputType {
-  INTENTS = 'intents',
-  KEYWORDS = 'keywords',
-}
-
-export const NodeContentType = {
-  ...MessageContentType,
-  ...InputContentType,
-}
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export type NodeContentType = MessageContentType | InputContentType
-
 export interface FlowBuilderData {
   version: string
   name: string
@@ -59,108 +7,111 @@ export interface FlowBuilderData {
   nodes: NodeComponent[]
 }
 
-export interface NodeLink {
-  id: string
-  type: NodeContentType
+export enum NodeType {
+  TEXT = 'text',
+  IMAGE = 'image',
+  CAROUSEL = 'carousel',
+  HANDOFF = 'handoff',
+  KEYWORD = 'keyword',
+  INTENT = 'intent',
+  START_UP = 'start-up',
+  URL = 'url',
+  PAYLOAD = 'payload',
+  FUNCTION = 'function',
 }
 
-export interface StartReference {
+export interface BaseNode {
   id: string
-  type: NodeContentType
-  target: NodeLink
+  type: NodeType
 }
 
-export interface Base {
-  id: string
-  type: NodeContentType | StartFieldsType
+export interface Meta {
+  x: number
+  y: number
 }
 
-export interface BaseNode extends Base {
+export interface Node extends BaseNode {
   code: string
-  meta: {
-    x: number
-    y: number
-  }
+  meta: Meta
   follow_up?: NodeLink
   target?: NodeLink
+}
+
+export interface NodeLink {
+  id: string
+  type: NodeType
 }
 
 export interface TextLocale {
   message: string
   locale: string
 }
-export interface InputLocale {
-  values: string[]
-  locale: string
+
+export enum ButtonStyle {
+  BUTTON = 'button',
+  QUICK_REPLY = 'quick-reply',
 }
-export interface MediaFileLocale {
+
+export interface UrlLocale {
   id: string
-  file: string
   locale: string
 }
 
-export interface TextNode extends BaseNode {
-  type: MessageContentType.TEXT
-  content: {
-    text: TextLocale[]
-    buttons_style?: ButtonStyle
-    buttons: Button[]
-  }
+export interface PayloadLocale {
+  id: string
+  locale: string
 }
 
 export interface Button {
   id: string
   text: TextLocale[]
   target?: NodeLink
-  hidden: string[]
+  hidden: string
+  url?: UrlLocale
+  payload?: PayloadLocale
 }
 
-export interface ImageNode extends BaseNode {
-  type: MessageContentType.IMAGE
-  content: {
-    image: MediaFileLocale[]
-  }
+export interface TextNodeContent {
+  text: TextLocale[]
+  buttons_style?: ButtonStyle
+  buttons: Button[]
 }
 
-export interface CarouselNode extends BaseNode {
-  type: MessageContentType.CAROUSEL
-  content: {
-    elements: Element[]
-  }
+export interface TextNode extends Node {
+  type: NodeType.TEXT
+  content: TextNodeContent
 }
 
-export interface Element {
+export interface MediaFileLocale {
+  id: string
+  file: string
+  locale: string
+}
+
+export interface ImageNodeContent {
+  image: MediaFileLocale[]
+}
+
+export interface ImageNode extends Node {
+  type: NodeType.IMAGE
+  content: ImageNodeContent
+}
+
+export interface CarouselElementNode {
   id: string
   title: TextLocale[]
   subtitle: TextLocale[]
   image: MediaFileLocale[]
   button: Button
-  hidden: string[]
 }
 
-export interface IntentNode extends BaseNode {
-  type: MessageContentType.INTENT
-  content: {
-    title: TextLocale[]
-    intents: InputLocale[]
-    confidence: number
-  }
-}
-export interface KeywordNode extends BaseNode {
-  type: MessageContentType.KEYWORD
-  content: {
-    title: TextLocale[]
-    keywords: InputLocale[]
-  }
+export interface CarouselNodeContent {
+  elements: CarouselElementNode[]
 }
 
-export interface HandoffNode extends BaseNode {
-  type: MessageContentType.HANDOFF
-  content: {
-    queue: QueueLocale[]
-    message: TextLocale[]
-    failMessage: TextLocale[]
-  }
+export interface CarouselNode extends Node {
+  type: NodeType.CAROUSEL
+  content: CarouselNodeContent
 }
 
 export interface QueueLocale {
@@ -169,21 +120,101 @@ export interface QueueLocale {
   locale: string
 }
 
-export interface FunctionNode extends BaseNode {
-  type: MessageContentType.FUNCTION
-  content: {
-    subtype: string
-    action: string
-    arguments: Array<any>
-    result_mapping: Array<any>
-  }
+export interface HandoffNodeContent {
+  message: TextLocale[]
+  fail_message: TextLocale[]
+  queue: QueueLocale[]
+}
+
+export interface HandoffNode extends Node {
+  type: NodeType.HANDOFF
+  content: HandoffNodeContent
+}
+
+export interface InputLocale {
+  values: string[]
+  locale: string
+}
+
+export interface KeywordNodeContent {
+  title: TextLocale[]
+  keywords: InputLocale[]
+}
+export interface KeywordNode extends Node {
+  type: NodeType.KEYWORD
+  content: KeywordNodeContent
+}
+
+export interface IntentNodeContent {
+  title: TextLocale[]
+  intents: InputLocale[]
+  confidence: number
+}
+export interface IntentNode extends Node {
+  type: NodeType.INTENT
+  content: IntentNodeContent
+}
+
+export interface StartNode extends BaseNode {
+  type: NodeType.START_UP
+  target: NodeLink
+}
+
+export interface UrlNodeContent {
+  url: string
+}
+
+export interface UrlNode extends BaseNode {
+  type: NodeType.URL
+  content: UrlNodeContent
+}
+
+export interface PayloadNodeContent {
+  payload: string
+}
+
+export interface PayloadNode extends BaseNode {
+  type: NodeType.PAYLOAD
+  content: PayloadNodeContent
+}
+
+export type ArgumentType = number | string | Record<any, any>
+
+export interface FunctionNodeArgument {
+  type: ArgumentType
+  name: string
+  value: string
+}
+
+export interface FunctionNodeArgumentLocale {
+  locale: string
+  values: FunctionNodeArgument[]
+}
+
+export interface FunctionNodeResult {
+  result: string
+  target: NodeLink
+}
+
+export interface FunctionNodeContent {
+  action: string
+  arguments: FunctionNodeArgumentLocale[]
+  result_mapping: FunctionNodeResult[]
+}
+
+export interface FunctionNode extends Node {
+  type: NodeType.FUNCTION
+  content: FunctionNodeContent
 }
 
 export type NodeComponent =
   | TextNode
   | ImageNode
   | CarouselNode
-  | IntentNode
-  | KeywordNode
   | HandoffNode
+  | KeywordNode
+  | IntentNode
+  | UrlNode
+  | StartNode
+  | PayloadNode
   | FunctionNode

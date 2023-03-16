@@ -1,4 +1,4 @@
-import { Element } from '../flow-builder-models'
+import { CarouselElementNode } from '../flow-builder-models'
 import { FlowButton } from './button'
 import { ContentFieldsBase } from './content-base'
 
@@ -9,7 +9,10 @@ export class FlowElement extends ContentFieldsBase {
   public image = ''
   public hidden = false
 
-  static fromHubtypeCMS(component: Element, locale: string): FlowElement {
+  static fromHubtypeCMS(
+    component: CarouselElementNode,
+    locale: string
+  ): FlowElement {
     const newElement = new FlowElement(component.id)
     newElement.title = FlowElement.getTextByLocale(locale, component.title)
     newElement.subtitle = FlowElement.getTextByLocale(
