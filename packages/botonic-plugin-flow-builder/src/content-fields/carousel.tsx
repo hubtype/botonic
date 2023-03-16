@@ -1,7 +1,7 @@
 import { Button, Carousel, Element, Pic, Subtitle, Title } from '@botonic/react'
 import React from 'react'
 
-import { HtCarouselNode } from '../flow-builder-models'
+import { CarouselNode } from '../flow-builder-models'
 import { ContentFieldsBase } from './content-base'
 import { FlowElement } from './element'
 
@@ -9,10 +9,7 @@ export class FlowCarousel extends ContentFieldsBase {
   public code = ''
   public elements: FlowElement[] = []
 
-  static fromHubtypeCMS(
-    component: HtCarouselNode,
-    locale: string
-  ): FlowCarousel {
+  static fromHubtypeCMS(component: CarouselNode, locale: string): FlowCarousel {
     const newCarousel = new FlowCarousel(component.id)
     newCarousel.code = component.code
     newCarousel.elements = component.content.elements.map(ele =>
