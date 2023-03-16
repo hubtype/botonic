@@ -11,7 +11,6 @@ import { FlowCarousel } from './content-fields/carousel'
 import { FlowContent } from './content-fields/content-base'
 import { FlowImage } from './content-fields/image'
 import { FlowText } from './content-fields/text'
-import { DEFAULT_FUNCTIONS } from './functions'
 import {
   HtBase,
   HtBaseNode,
@@ -24,7 +23,8 @@ import {
   HtStartReference,
   MessageContentType,
   StartFieldsType,
-} from './hubtype-models'
+} from './flow-builder-models'
+import { DEFAULT_FUNCTIONS } from './functions'
 
 export type BotonicPluginFlowBuilderOptions = {
   flowUrl: string

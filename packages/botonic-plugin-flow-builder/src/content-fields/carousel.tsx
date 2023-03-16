@@ -1,7 +1,7 @@
 import { Button, Carousel, Element, Pic, Subtitle, Title } from '@botonic/react'
 import React from 'react'
 
-import { HtCarouselNode } from '../hubtype-models'
+import { HtCarouselNode } from '../flow-builder-models'
 import { ContentFieldsBase } from './content-base'
 import { FlowElement } from './element'
 
