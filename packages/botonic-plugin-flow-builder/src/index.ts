@@ -51,7 +51,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
 
-  async readFlowContent() {
+  async readFlowContent(): Promise<HtFlowBuilderData> {
     const response = await axios.get(this.flowUrl, {
       headers: { Authorization: `Bearer ${this.getAccessToken()}` },
     })
@@ -162,7 +162,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return undefined
   }
 
-  hasIntent(node: HtIntentNode, intent: string, locale: string) {
+  hasIntent(node: HtIntentNode, intent: string, locale: string): boolean {
     const result = node.content.intents.find(
       i => i.locale === locale && i.values.includes(intent)
     )
@@ -192,14 +192,14 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return undefined
   }
 
-  matchKeywords(node: HtKeywordNode, input: string, locale: string) {
+  matchKeywords(node: HtKeywordNode, input: string, locale: string): boolean {
     const result = node.content.keywords.find(
       i => i.locale === locale && this.containsAnyKeywords(input, i.values)
     )
     return Boolean(result)
   }
 
-  containsAnyKeywords(input: string, keywords: string[]) {
+  containsAnyKeywords(input: string, keywords: string[]): boolean {
     for (let i = 0; i < keywords.length; i++) {
       if (input.includes(keywords[i])) {
         return true

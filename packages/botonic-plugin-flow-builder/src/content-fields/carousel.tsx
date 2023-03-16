@@ -21,7 +21,7 @@ export class FlowCarousel extends ContentFieldsBase {
     return newCarousel
   }
 
-  toBotonic(index: number) {
+  toBotonic(index: number): JSX.Element {
     return (
       <Carousel key={index}>
         {this.elements.map((e, eIndex) => (

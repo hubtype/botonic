@@ -54,6 +54,8 @@ export interface HtFlowBuilderData {
   version: string
   name: string
   locales: string[]
+  start_node_id?: string
+  ai_model_id?: string
   nodes: HtNodeComponent[]
 }
 
@@ -176,19 +178,6 @@ export interface HtFunctionNode extends HtBaseNode {
     result_mapping: Array<any>
   }
 }
-
-/*
-subtype: "conditional-queue-status",
-        action: "check-queue-status",
-        arguments: [{
-          locale: "es-ES",
-          values: [{type: "string", value: "056236e2-bcb5-452e-9020-e7e44e5769fc"}]
-        }],
-        result_mapping: [
-          { result: "open", target: { id: "0fab7257-6773-4ae9-9deb-cb0b6a864d08", type: "carousel" }},
-          { result: "closed", target: { id: "4fb1b430-f719-47d2-8e51-dcbc6d3cfa77", type: "image" }}
-        ]
-*/
 
 export type HtNodeComponent =
   | HtTextNode

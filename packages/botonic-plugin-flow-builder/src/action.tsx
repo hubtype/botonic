@@ -3,7 +3,6 @@ import React from 'react'
 
 import { FlowContent } from './content-fields/content-base'
 import { doHandoff } from './handoff'
-import { HtHandoffNode } from './hubtype-models'
 import BotonicPluginFlowBuilder from './index'
 
 type FlowBuilderActionProps = {
@@ -54,7 +53,7 @@ export default class FlowBuilderAction extends React.Component<FlowBuilderAction
     return { content }
   }
 
-  render() {
+  render(): JSX.Element | JSX.Element[] {
     // @ts-ignore
     const { content: contents, isHandoff } = this.props
     if (isHandoff) {
