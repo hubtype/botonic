@@ -1,4 +1,4 @@
-import { HtElement } from '../hubtype-models'
+import { HtElement } from '../flow-builder-models'
 import { FlowButton } from './button'
 import { ContentFieldsBase } from './content-base'
 

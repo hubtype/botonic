@@ -1,7 +1,7 @@
 import { Button, Reply } from '@botonic/react'
 import React from 'react'
 
-import { ButtonStyle, HtButton } from '../hubtype-models'
+import { ButtonStyle, HtButton } from '../flow-builder-models'
 import { ContentFieldsBase } from './content-base'
 
 export class FlowButton extends ContentFieldsBase {

@@ -1,4 +1,4 @@
-import { HtMediaFileLocale, HtTextLocale } from '../hubtype-models'
+import { HtMediaFileLocale, HtTextLocale } from '../flow-builder-models'
 import { FlowCarousel } from './carousel'
 import { FlowImage } from './image'
 import { FlowText } from './text'
