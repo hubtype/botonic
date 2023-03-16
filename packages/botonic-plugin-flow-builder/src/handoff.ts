@@ -6,7 +6,7 @@ export async function doHandoff(
   queue: string,
   note?: string,
   agentEmail?: string
-) {
+): Promise<void> {
   // @ts-ignore
   const flowBuilderPlugin = request.plugins.hubtypeFlowBuilder as any
   const handoffContent = await flowBuilderPlugin.getHandoffContent()

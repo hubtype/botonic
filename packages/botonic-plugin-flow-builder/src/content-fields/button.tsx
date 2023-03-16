@@ -16,7 +16,7 @@ export class FlowButton extends ContentFieldsBase {
     return newButton
   }
 
-  renderButton(index: number, buttonStyle: ButtonStyle) {
+  renderButton(index: number, buttonStyle: ButtonStyle): JSX.Element {
     if (buttonStyle === ButtonStyle.QUICK_REPLY) {
       return (
         <Reply payload={this.payload} key={index}>

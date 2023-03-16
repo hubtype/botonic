@@ -22,7 +22,7 @@ export class FlowText extends ContentFieldsBase {
     return newText
   }
 
-  toBotonic(index: number) {
+  toBotonic(index: number): JSX.Element {
     return (
       <Text key={index}>
         {this.text}

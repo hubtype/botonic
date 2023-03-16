@@ -6,12 +6,12 @@ import { FlowText } from './text'
 export abstract class ContentFieldsBase {
   constructor(private readonly id: string) {}
 
-  static getTextByLocale(locale: string, text: HtTextLocale[]) {
+  static getTextByLocale(locale: string, text: HtTextLocale[]): string {
     const result = text.find(t => t.locale === locale)
     return result?.message ?? ''
   }
 
-  static getImageByLocale(locale: string, image: HtMediaFileLocale[]) {
+  static getImageByLocale(locale: string, image: HtMediaFileLocale[]): string {
     const result = image.find(t => t.locale === locale)
     return result?.file ?? ''
   }
