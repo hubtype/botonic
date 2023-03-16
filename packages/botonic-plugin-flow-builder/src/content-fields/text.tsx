@@ -1,7 +1,7 @@
 import { Text } from '@botonic/react'
 import React from 'react'
 
-import { ButtonStyle, HtTextNode } from '../flow-builder-models'
+import { ButtonStyle, TextNode } from '../flow-builder-models'
 import { FlowButton } from './button'
 import { ContentFieldsBase } from './content-base'
 
@@ -11,7 +11,7 @@ export class FlowText extends ContentFieldsBase {
   public buttons: FlowButton[] = []
   public buttonStyle = ButtonStyle.BUTTON
 
-  static fromHubtypeCMS(component: HtTextNode, locale: string): FlowText {
+  static fromHubtypeCMS(component: TextNode, locale: string): FlowText {
     const newText = new FlowText(component.id)
     newText.code = component.code
     newText.buttonStyle = component.content.buttons_style || ButtonStyle.BUTTON

@@ -50,126 +50,126 @@ export const NodeContentType = {
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type NodeContentType = MessageContentType | InputContentType
 
-export interface HtFlowBuilderData {
+export interface FlowBuilderData {
   version: string
   name: string
   locales: string[]
   start_node_id?: string
   ai_model_id?: string
-  nodes: HtNodeComponent[]
+  nodes: NodeComponent[]
 }
 
-export interface HtNodeLink {
+export interface NodeLink {
   id: string
   type: NodeContentType
 }
 
-export interface HtStartReference {
+export interface StartReference {
   id: string
   type: NodeContentType
-  target: HtNodeLink
+  target: NodeLink
 }
 
-export interface HtBase {
+export interface Base {
   id: string
   type: NodeContentType | StartFieldsType
 }
 
-export interface HtBaseNode extends HtBase {
+export interface BaseNode extends Base {
   code: string
   meta: {
     x: number
     y: number
   }
-  follow_up?: HtNodeLink
-  target?: HtNodeLink
+  follow_up?: NodeLink
+  target?: NodeLink
 }
 
-export interface HtTextLocale {
+export interface TextLocale {
   message: string
   locale: string
 }
-export interface HtInputLocale {
+export interface InputLocale {
   values: string[]
   locale: string
 }
-export interface HtMediaFileLocale {
+export interface MediaFileLocale {
   id: string
   file: string
   locale: string
 }
 
-export interface HtTextNode extends HtBaseNode {
+export interface TextNode extends BaseNode {
   type: MessageContentType.TEXT
   content: {
-    text: HtTextLocale[]
+    text: TextLocale[]
     buttons_style?: ButtonStyle
-    buttons: HtButton[]
+    buttons: Button[]
   }
 }
 
-export interface HtButton {
+export interface Button {
   id: string
-  text: HtTextLocale[]
-  target?: HtNodeLink
+  text: TextLocale[]
+  target?: NodeLink
   hidden: string[]
 }
 
-export interface HtImageNode extends HtBaseNode {
+export interface ImageNode extends BaseNode {
   type: MessageContentType.IMAGE
   content: {
-    image: HtMediaFileLocale[]
+    image: MediaFileLocale[]
   }
 }
 
-export interface HtCarouselNode extends HtBaseNode {
+export interface CarouselNode extends BaseNode {
   type: MessageContentType.CAROUSEL
   content: {
-    elements: HtElement[]
+    elements: Element[]
   }
 }
 
-export interface HtElement {
+export interface Element {
   id: string
-  title: HtTextLocale[]
-  subtitle: HtTextLocale[]
-  image: HtMediaFileLocale[]
-  button: HtButton
+  title: TextLocale[]
+  subtitle: TextLocale[]
+  image: MediaFileLocale[]
+  button: Button
   hidden: string[]
 }
 
-export interface HtIntentNode extends HtBaseNode {
+export interface IntentNode extends BaseNode {
   type: MessageContentType.INTENT
   content: {
-    title: HtTextLocale[]
-    intents: HtInputLocale[]
+    title: TextLocale[]
+    intents: InputLocale[]
     confidence: number
   }
 }
-export interface HtKeywordNode extends HtBaseNode {
+export interface KeywordNode extends BaseNode {
   type: MessageContentType.KEYWORD
   content: {
-    title: HtTextLocale[]
-    keywords: HtInputLocale[]
+    title: TextLocale[]
+    keywords: InputLocale[]
   }
 }
 
-export interface HtHandoffNode extends HtBaseNode {
+export interface HandoffNode extends BaseNode {
   type: MessageContentType.HANDOFF
   content: {
-    queue: HtQueueLocale[]
-    message: HtTextLocale[]
-    failMessage: HtTextLocale[]
+    queue: QueueLocale[]
+    message: TextLocale[]
+    failMessage: TextLocale[]
   }
 }
 
-export interface HtQueueLocale {
+export interface QueueLocale {
   id: string
   name: string
   locale: string
 }
 
-export interface HtFunctionNode extends HtBaseNode {
+export interface FunctionNode extends BaseNode {
   type: MessageContentType.FUNCTION
   content: {
     subtype: string
@@ -179,11 +179,11 @@ export interface HtFunctionNode extends HtBaseNode {
   }
 }
 
-export type HtNodeComponent =
-  | HtTextNode
-  | HtImageNode
-  | HtCarouselNode
-  | HtIntentNode
-  | HtKeywordNode
-  | HtHandoffNode
-  | HtFunctionNode
+export type NodeComponent =
+  | TextNode
+  | ImageNode
+  | CarouselNode
+  | IntentNode
+  | KeywordNode
+  | HandoffNode
+  | FunctionNode

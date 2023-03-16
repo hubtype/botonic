@@ -1,4 +1,4 @@
-import { HtMediaFileLocale, HtTextLocale } from '../flow-builder-models'
+import { MediaFileLocale, TextLocale } from '../flow-builder-models'
 import { FlowCarousel } from './carousel'
 import { FlowImage } from './image'
 import { FlowText } from './text'
@@ -6,12 +6,12 @@ import { FlowText } from './text'
 export abstract class ContentFieldsBase {
   constructor(private readonly id: string) {}
 
-  static getTextByLocale(locale: string, text: HtTextLocale[]): string {
+  static getTextByLocale(locale: string, text: TextLocale[]): string {
     const result = text.find(t => t.locale === locale)
     return result?.message ?? ''
   }
 
-  static getImageByLocale(locale: string, image: HtMediaFileLocale[]): string {
+  static getImageByLocale(locale: string, image: MediaFileLocale[]): string {
     const result = image.find(t => t.locale === locale)
     return result?.file ?? ''
   }
