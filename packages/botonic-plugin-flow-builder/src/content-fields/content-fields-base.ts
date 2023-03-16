@@ -1,7 +1,4 @@
 import { MediaFileLocale, TextLocale } from '../flow-builder-models'
-import { FlowCarousel } from './carousel'
-import { FlowImage } from './image'
-import { FlowText } from './text'
 
 export abstract class ContentFieldsBase {
   constructor(private readonly id: string) {}
@@ -16,5 +13,3 @@ export abstract class ContentFieldsBase {
     return result?.file ?? ''
   }
 }
-
-export type FlowContent = FlowText | FlowImage | FlowCarousel

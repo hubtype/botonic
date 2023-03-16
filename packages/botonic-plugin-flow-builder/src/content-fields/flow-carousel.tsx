@@ -2,8 +2,8 @@ import { Button, Carousel, Element, Pic, Subtitle, Title } from '@botonic/react'
 import React from 'react'
 
 import { CarouselNode } from '../flow-builder-models'
-import { ContentFieldsBase } from './content-base'
-import { FlowElement } from './element'
+import { ContentFieldsBase } from './content-fields-base'
+import { FlowElement } from './flow-element'
 
 export class FlowCarousel extends ContentFieldsBase {
   public code = ''

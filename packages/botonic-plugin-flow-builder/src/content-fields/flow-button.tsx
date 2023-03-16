@@ -2,7 +2,7 @@ import { Button, Reply } from '@botonic/react'
 import React from 'react'
 
 import { Button as FbButton, ButtonStyle } from '../flow-builder-models'
-import { ContentFieldsBase } from './content-base'
+import { ContentFieldsBase } from './content-fields-base'
 
 export class FlowButton extends ContentFieldsBase {
   public text = ''

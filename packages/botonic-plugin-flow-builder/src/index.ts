@@ -7,10 +7,12 @@ import {
 } from '@botonic/core'
 import axios from 'axios'
 
-import { FlowCarousel } from './content-fields/carousel'
-import { FlowContent } from './content-fields/content-base'
-import { FlowImage } from './content-fields/image'
-import { FlowText } from './content-fields/text'
+import {
+  FlowCarousel,
+  FlowContent,
+  FlowImage,
+  FlowText,
+} from './content-fields'
 import {
   FlowBuilderData,
   FunctionNode,
@@ -52,9 +54,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const response = await axios.get(this.flowUrl, {
       headers: { Authorization: `Bearer ${this.getAccessToken()}` },
     })
-    const data = response.data
-    //@ts-ignore
-    return data
+    return response.data
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
@@ -232,3 +232,5 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return result.target.id
   }
 }
+
+export { FlowBuilderAction } from './action'

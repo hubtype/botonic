@@ -1,7 +1,7 @@
 import { ActionRequest, RequestContext, Text } from '@botonic/react'
 import React from 'react'
 
-import { FlowContent } from './content-fields/content-base'
+import { FlowContent } from './content-fields'
 import { doHandoff } from './handoff'
 import BotonicPluginFlowBuilder from './index'
 
@@ -10,7 +10,7 @@ type FlowBuilderActionProps = {
   isHandoff?: boolean
 }
 
-export default class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
+export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
   static async botonicInit(request: ActionRequest): Promise<any> {

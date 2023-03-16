@@ -2,8 +2,8 @@ import { Text } from '@botonic/react'
 import React from 'react'
 
 import { ButtonStyle, TextNode } from '../flow-builder-models'
-import { FlowButton } from './button'
-import { ContentFieldsBase } from './content-base'
+import { ContentFieldsBase } from './content-fields-base'
+import { FlowButton } from './flow-button'
 
 export class FlowText extends ContentFieldsBase {
   public text = ''

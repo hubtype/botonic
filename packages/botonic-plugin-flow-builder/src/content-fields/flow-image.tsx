@@ -2,7 +2,7 @@ import { Image } from '@botonic/react'
 import React from 'react'
 
 import { ImageNode } from '../flow-builder-models'
-import { ContentFieldsBase } from './content-base'
+import { ContentFieldsBase } from './content-fields-base'
 
 export class FlowImage extends ContentFieldsBase {
   public src = ''
