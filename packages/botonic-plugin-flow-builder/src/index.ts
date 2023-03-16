@@ -12,23 +12,20 @@ import { FlowContent } from './content-fields/content-base'
 import { FlowImage } from './content-fields/image'
 import { FlowText } from './content-fields/text'
 import {
-  Base,
-  BaseNode,
   FlowBuilderData,
   FunctionNode,
   HandoffNode,
   IntentNode,
   KeywordNode,
-  MessageContentType,
   NodeComponent,
-  StartFieldsType,
-  StartReference,
+  NodeType,
+  StartNode,
 } from './flow-builder-models'
 import { DEFAULT_FUNCTIONS } from './functions'
 
 export type BotonicPluginFlowBuilderOptions = {
   flowUrl: string
-  flow?: any
+  flow?: FlowBuilderData
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
   getAccessToken: () => string
@@ -36,7 +33,7 @@ export type BotonicPluginFlowBuilderOptions = {
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   private flowUrl: string
-  private flow: Promise<FlowBuilderData>
+  private flow: Promise<FlowBuilderData> | FlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
   private getAccessToken: () => string
@@ -57,7 +54,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     })
     const data = response.data
     //@ts-ignore
-    return data as FlowBuilderData
+    return data
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
@@ -69,7 +66,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async getContent(id: string): Promise<NodeComponent> {
     const flow = await this.flow
-    const content = flow.nodes.find((c: BaseNode) => c.id === id)
+    const content = flow.nodes.find(node => node.id === id)
     if (!content) throw Error(`text with id: '${id}' not found`)
     return content
   }
@@ -77,7 +74,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   async getHandoffContent(): Promise<HandoffNode> {
     const flow = await this.flow
     const content = flow.nodes.find(
-      (c: NodeComponent) => c.type === 'handoff'
+      node => node.type === NodeType.HANDOFF
     ) as HandoffNode
     if (!content) throw Error(`Handoff node not found`)
     return content
@@ -88,11 +85,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     locale: string
   ): FlowContent | undefined {
     switch (hubtypeContent.type) {
-      case MessageContentType.TEXT:
+      case NodeType.TEXT:
         return FlowText.fromHubtypeCMS(hubtypeContent, locale)
-      case MessageContentType.IMAGE:
+      case NodeType.IMAGE:
         return FlowImage.fromHubtypeCMS(hubtypeContent, locale)
-      case MessageContentType.CAROUSEL:
+      case NodeType.CAROUSEL:
         return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale)
       default:
         return undefined
@@ -101,15 +98,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async getStartId(): Promise<string> {
     const flow = await this.flow
-
-    const startNode = flow.nodes.find(
-      (node: Base) => node?.type === StartFieldsType.START_UP
-    )
+    const startNode = flow.nodes.find(node => node.type === NodeType.START_UP)
     if (!startNode) {
       throw new Error('start-up id must be defined')
     }
-
-    return (startNode as StartReference).target.id
+    return (startNode as StartNode).target.id
   }
 
   async getContents(
@@ -118,17 +111,15 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const contents = prevContents || []
-    const hubtypeContent = await this.getContent(id)
+    const hubtypeContent: any = await this.getContent(id)
     const content = await this.getFlowContent(hubtypeContent, locale)
-    if (hubtypeContent.type === MessageContentType.FUNCTION) {
-      const targetId = await this.callFunction(
-        hubtypeContent as FunctionNode,
-        locale
-      )
+    if (hubtypeContent.type === NodeType.FUNCTION) {
+      const targetId = await this.callFunction(hubtypeContent, locale)
       return this.getContents(targetId, locale, contents)
     } else {
       if (content) contents.push(content)
       // TODO: prevent infinite recursive calls
+
       if (hubtypeContent.follow_up)
         return this.getContents(hubtypeContent.follow_up.id, locale, contents)
     }
@@ -144,7 +135,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     try {
       const flow = await this.flow
       const intents = flow.nodes.filter(
-        node => node.type === MessageContentType.INTENT
+        node => node.type === NodeType.INTENT
       ) as IntentNode[]
       if (input.intent) {
         const matchedIntents = intents.filter(node =>
@@ -176,7 +167,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     try {
       const flow = await this.flow
       const keywordNodes = flow.nodes.filter(
-        node => node.type == MessageContentType.KEYWORD
+        node => node.type == NodeType.KEYWORD
       ) as KeywordNode[]
       const matchedKeywordNodes = keywordNodes.filter(node =>
         //@ts-ignore
@@ -212,11 +203,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     functionNode: FunctionNode,
     locale: string
   ): Promise<string> {
-    // Check if target is missing or missing arguments
-    // TODO: get arguments by locale
+    const functionNodeId = functionNode.id
     const nameValues = functionNode.content.arguments
       .find(arg => arg.locale === locale)
-      .values.map(value => ({ [value.name]: value.value }))
+      ?.values.map(value => ({ [value.name]: value.value }))
+    if (!nameValues) {
+      throw new Error(`No arguments found for node with id ${functionNodeId}`)
+    }
     const args = Object.assign(
       {
         session: this.currentRequest.session,
@@ -231,6 +224,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const result = functionNode.content.result_mapping.find(
       r => r.result === functionResult
     )
+    if (!result) {
+      throw new Error(
+        `No result found for result_mapping for node with id: ${functionNodeId}`
+      )
+    }
     return result.target.id
   }
 }
