@@ -789,8 +789,8 @@ export const Webchat = forwardRef((props, ref) => {
   }
   const emojiPickerEnabled = isEmojiPickerEnabled()
 
-  const isAttacmentsEnabled = () => {
-    const hasCustomAttacments = !!getThemeProperty(
+  const isAttachmentsEnabled = () => {
+    const hasCustomAttachments = !!getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.customAttachments,
       props.enableAttachments
     )
@@ -798,10 +798,10 @@ export const Webchat = forwardRef((props, ref) => {
       getThemeProperty(
         WEBCHAT.CUSTOM_PROPERTIES.enableAttachments,
         props.enableAttachments
-      ) ?? hasCustomAttacments
+      ) ?? hasCustomAttachments
     )
   }
-  const attachmentsEnabled = isAttacmentsEnabled()
+  const attachmentsEnabled = isAttachmentsEnabled()
 
   const sendButtonEnabled = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.enableSendButton,
