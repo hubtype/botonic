@@ -39,7 +39,6 @@ import {
 import { msgToBotonic } from '../msg-to-botonic'
 import { scrollToBottom } from '../util/dom'
 import { isDev, resolveImage } from '../util/environment'
-import { ConditionalWrapper } from '../util/react'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
 import {
   _getThemeProperty,
@@ -106,8 +105,13 @@ const StyledTriggerButton = styled.div`
 
 const UserInputContainer = styled.div`
   min-height: 52px;
-  display: flex;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 0px 16px;
+  z-index: 1;
   border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5};
 `
 
@@ -115,13 +119,6 @@ const TextAreaContainer = styled.div`
   display: flex;
   flex: 1 1 auto;
   align-items: center;
-`
-
-const FeaturesWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
 `
 
 const TriggerImage = styled.img`
@@ -402,10 +399,6 @@ export const Webchat = forwardRef((props, ref) => {
     toggleEmojiPicker(!webchatState.isEmojiPickerOpen)
   }
 
-  const animationsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
-    props.enableAnimations !== undefined ? props.enableAnimations : true
-  )
   const persistentMenuOptions = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.persistentMenu,
     props.persistentMenu
@@ -775,59 +768,6 @@ export const Webchat = forwardRef((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
-  const isEmojiPickerEnabled = () => {
-    const hasCustomEmojiPicker = !!getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.customEmojiPicker,
-      props.enableEmojiPicker
-    )
-    return (
-      getThemeProperty(
-        WEBCHAT.CUSTOM_PROPERTIES.enableEmojiPicker,
-        props.enableEmojiPicker
-      ) ?? hasCustomEmojiPicker
-    )
-  }
-  const emojiPickerEnabled = isEmojiPickerEnabled()
-
-  const isAttachmentsEnabled = () => {
-    const hasCustomAttachments = !!getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.customAttachments,
-      props.enableAttachments
-    )
-    return (
-      getThemeProperty(
-        WEBCHAT.CUSTOM_PROPERTIES.enableAttachments,
-        props.enableAttachments
-      ) ?? hasCustomAttachments
-    )
-  }
-  const attachmentsEnabled = isAttachmentsEnabled()
-
-  const sendButtonEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableSendButton,
-    true
-  )
-
-  const CustomSendButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customSendButton,
-    undefined
-  )
-  const CustomMenuButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customMenuButton,
-    undefined
-  )
-
-  const ConditionalAnimation = props => (
-    <ConditionalWrapper
-      condition={animationsEnabled}
-      wrapper={children => (
-        <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
-      )}
-    >
-      {props.children}
-    </ConditionalWrapper>
-  )
-
   const userInputArea = () => {
     return (
       userInputEnabled && (
@@ -844,15 +784,12 @@ export const Webchat = forwardRef((props, ref) => {
               onClick={handleEmojiClick}
             />
           )}
-          {persistentMenuOptions && (
-            <FeaturesWrapper>
-              <ConditionalAnimation>
-                <div onClick={handleMenu}>
-                  {CustomMenuButton ? <CustomMenuButton /> : <PersistentMenu />}
-                </div>
-              </ConditionalAnimation>
-            </FeaturesWrapper>
-          )}
+
+          <PersistentMenu
+            onClick={handleMenu}
+            persistentMenu={props.persistentMenu}
+          />
+
           <TextAreaContainer>
             <Textarea
               name='text'
@@ -887,28 +824,19 @@ export const Webchat = forwardRef((props, ref) => {
               }}
             />
           </TextAreaContainer>
-          <FeaturesWrapper>
-            {emojiPickerEnabled && (
-              <ConditionalAnimation>
-                <EmojiPicker onClick={handleEmojiClick} />
-              </ConditionalAnimation>
-            )}
-            {attachmentsEnabled && (
-              <ConditionalAnimation>
-                <Attachment
-                  onChange={handleAttachment}
-                  accept={getFullMimeWhitelist().join(',')}
-                />
-              </ConditionalAnimation>
-            )}
-            {(sendButtonEnabled || CustomSendButton) && (
-              <ConditionalAnimation>
-                <div onClick={sendTextAreaText}>
-                  {CustomSendButton ? <CustomSendButton /> : <SendButton />}
-                </div>
-              </ConditionalAnimation>
-            )}
-          </FeaturesWrapper>
+
+          <EmojiPicker
+            enableEmojiPicker={props.enableEmojiPicker}
+            onClick={handleEmojiClick}
+          />
+
+          <Attachment
+            enableAttachments={props.enableAttachments}
+            onChange={handleAttachment}
+            accept={getFullMimeWhitelist().join(',')}
+          />
+
+          <SendButton onClick={sendTextAreaText} />
         </UserInputContainer>
       )
     )

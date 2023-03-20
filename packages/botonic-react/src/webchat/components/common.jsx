@@ -7,9 +7,3 @@ const PointerImage = styled.img`
   cursor: pointer;
 `
 export const Icon = props => <PointerImage src={resolveImage(props.src)} />
-
-export const IconContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding-right: 15px;
-`
