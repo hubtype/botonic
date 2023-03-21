@@ -3,6 +3,7 @@ import { BaseEvent } from '../base-event'
 export enum MessageEventTypes {
   AUDIO = 'audio',
   CAROUSEL = 'carousel',
+  CONTACT = 'contact',
   CUSTOM = 'custom',
   DOCUMENT = 'document',
   IMAGE = 'image',
@@ -13,7 +14,7 @@ export enum MessageEventTypes {
   MISSED = 'missed',
   FORM = 'form',
   /**
-   * TODO: contact, buttonmessage?, webchatsettings, whatsapp template
+   * TODO: buttonmessage?, webchatsettings, whatsapp template
    */
 }
 
