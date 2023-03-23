@@ -174,10 +174,10 @@ export interface ThemeProps extends StyleProp {
   markdownStyle?: string // string template with css styles
   scrollbar?: ScrollbarProps & EnableProp
   userInput?: {
-    attachments?: EnableProp
+    attachments?: EnableProp & CustomProp
     blockInputs?: BlockInputOption[]
     box?: { placeholder: string } & StyleProp
-    emojiPicker?: EnableProp
+    emojiPicker?: EnableProp & CustomProp
     menu?: { darkBackground?: boolean } & {
       custom?: React.ComponentType<PersistentMenuProps>
     }

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.21.1",
+  "version": "0.21.2",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "src/index.js",
@@ -10,6 +10,7 @@
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepare": "node ../../preinstall.js",
     "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
+    "build:watch": "npm run build -- --watch",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"

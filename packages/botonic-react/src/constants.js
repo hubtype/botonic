@@ -130,6 +130,8 @@ export const WEBCHAT = {
     documentDownload: 'documentDownload',
     customMenuButton: 'userInput.menuButton.custom',
     customPersistentMenu: 'userInput.menu.custom',
+    customEmojiPicker: 'userInput.emojiPicker.custom',
+    customAttachments: 'userInput.attachments.custom',
     customSendButton: 'userInput.sendButton.custom',
     darkBackgroundMenu: 'userInput.menu.darkBackground',
     enableAttachments: 'userInput.attachments.enable',
