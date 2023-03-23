@@ -11,6 +11,43 @@ All notable changes to Botonic will be documented in this file.
   </summary>
 </details>
 
+## [0.21.0] - 2023-03-09
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Added [@botonic/plugin-hubtype-babel](https://www.npmjs.com/package/@botonic/plugin-hubtype-babel): This plugin allows you to integrate Hubtype Babel in your Botonic project. It works like any other AI/NLU services plugin, like Dialogflow, Watson, etc.
+
+* [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - [Decompressing data](https://github.com/hubtype/botonic/pull/2102) for large contents coming from `Pusher`.
+  - [Allow to set an auto idle message](https://github.com/hubtype/botonic/pull/2218) in `HandoffBuilder`.
+  - [Handoff improvements](https://github.com/hubtype/botonic/pull/2231). Added `forceAssignIfNotAvailable`and `autoAssignOnWaiting` and [`extraData`](https://github.com/hubtype/botonic/pull/2307) in `HandoffBuilder`.
+  - Support new types of input event [`Missed`](<(#https://github.com/hubtype/botonic/pull/2244)>) and [`FormMessage`](https://github.com/hubtype/botonic/commit/4059284aaaee5fd426d11c2dedbf75c689193826).
+  - Added support [for detecting typing on/off events](https://github.com/hubtype/botonic/commit/2fd2d961967087f680776417e8b0d0ea472fa234).
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+
+  - Added [several improvements](https://github.com/hubtype/botonic/pull/2301) to plugin (check further details in [#2301](https://github.com/hubtype/botonic/pull/2301)).
+
+* [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Added `imagePreviewer` webchat's property](https://github.com/hubtype/botonic/pull/2030) to allow customizing preview of media files.
+  - [Allow user input preprocess](https://github.com/hubtype/botonic/pull/2219) in `blockInputs`.
+  - [Added classnames to buttons](https://github.com/hubtype/botonic/pull/2220), [timestamp component](https://github.com/hubtype/botonic/commit/89c7dc96e91cd2902c078670b5b45d5dfa8e835c), [list of message buttons](https://github.com/hubtype/botonic/pull/2285) and [user input](https://github.com/hubtype/botonic/pull/2309).
+  - [Added deep links](https://github.com/hubtype/botonic/pull/2238) for different messaging providers.
+  - [Fixed scrolling](https://github.com/hubtype/botonic/commit/4153133cee67973a876a928e2c03eede921cd9f9) for iPhone in `CoverComponent`. Thanks to external contributor [jruivo-dev](https://github.com/jruivo-dev).
+  - [Fixed `emoji clarification icon`](https://github.com/hubtype/botonic/pull/2240) not working in ShadowDOM mode. Thanks to external contributor [TD-fupengfei](https://github.com/TD-fupengfei).
+  - [Fixed webviews](https://github.com/hubtype/botonic/commit/778160174ed55aad96503758a3b22b8a180e7f8e) not redirecting correctly on `WhatsApp Cloud`.
+  - [Added new properties](https://github.com/hubtype/botonic/pull/2314) `userInput.attachments.custom` and `userInput.emojiPicker.custom` to allow declaring custom components.
+
+### Changed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Refactored `useStorageState`](https://github.com/hubtype/botonic/commit/1a0eb4ed96fc022e584e5393ba603bc0dee58596) to support usage of different storages.
+
 ## [0.20.0] - 2021-10-28
 
 **NOTE**: At this moment, Botonic `v0.20.0` will be in `Mainteinance LTS` status and will be maintained in [`master-lts` branch](https://github.com/hubtype/botonic/tree/master-lts) until further notice.
@@ -763,3 +800,4 @@ Currently we are working on Botonic 1.0 which will come with several improvement
 [0.18.0]: https://github.com/hubtype/botonic/releases/tag/v0.18.0
 [0.19.0]: https://github.com/hubtype/botonic/releases/tag/v0.19.0
 [0.20.0]: https://github.com/hubtype/botonic/releases/tag/v0.20.0
+[0.21.0]: https://github.com/hubtype/botonic/releases/tag/v0.21.0
