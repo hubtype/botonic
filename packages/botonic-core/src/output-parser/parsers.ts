@@ -18,6 +18,7 @@ import {
   WithButtons,
   WithReplies,
 } from '../models'
+import { ContactMessageEvent } from '../models/events/message/contact'
 import { TEXT_NODE_NAME } from './botonic-output-parser'
 
 export function parseNumber(strNumber: string): number {
@@ -220,6 +221,20 @@ export const parseForm: ParseFunction<FormMessageEvent> = args => {
       ...args.parsed,
       form_title: args.toParse.form_title,
       form_answers: args.toParse.form_answers,
+    },
+  }
+}
+
+// CONTACT
+export const parseContact: ParseFunction<ContactMessageEvent> = args => {
+  return {
+    toParse: args.toParse,
+    parsed: {
+      ...args.parsed,
+      phone_number: args.toParse.phone_number,
+      first_name: args.toParse.first_name,
+      last_name: args.toParse.last_name,
+      vcard: args.toParse.vcard,
     },
   }
 }
