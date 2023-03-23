@@ -5,6 +5,7 @@ import LogoMenu from '../../assets/menuButton.svg'
 import { Button } from '../../components/button'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
+import { ConditionalAnimation } from '../components/conditional-animation'
 import { useComponentVisible } from '../hooks'
 import { Icon } from './common'
 
@@ -59,17 +60,30 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
   )
 }
 
-const IconContainer = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 18px;
-`
+export const PersistentMenu = ({ onClick, persistentMenu }) => {
+  const { getThemeProperty } = useContext(WebchatContext)
 
-export const PersistentMenu = props => (
-  <IconContainer role={ROLES.PERSISTENT_MENU_ICON} onClick={props.onClick}>
-    <Icon src={LogoMenu} />
-  </IconContainer>
-)
+  const persistentMenuOptions = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.persistentMenu,
+    persistentMenu
+  )
+
+  const CustomMenuButton = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.customMenuButton,
+    undefined
+  )
+
+  return (
+    <>
+      {persistentMenuOptions ? (
+        <ConditionalAnimation>
+          <div role={ROLES.PERSISTENT_MENU_ICON} onClick={onClick}>
+            {CustomMenuButton ? <CustomMenuButton /> : <Icon src={LogoMenu} />}
+          </div>
+        </ConditionalAnimation>
+      ) : null}
+    </>
+  )
+}
 
 export default OpenedPersistentMenu
