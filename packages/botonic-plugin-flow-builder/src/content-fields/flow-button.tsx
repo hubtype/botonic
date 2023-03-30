@@ -14,9 +14,10 @@ export class FlowButton extends ContentFieldsBase {
     newButton.text = FlowButton.getTextByLocale(locale, component.text)
     newButton.payload = component.target?.id
     if (component.url) {
-      newButton.url = (component.url as any).find(
+      const urlButton = (component.url as any).find(
         url => url.locale === locale
-      ).content.url
+      )
+      if (urlButton) newButton.url = urlButton.content.url
     }
     return newButton
   }
