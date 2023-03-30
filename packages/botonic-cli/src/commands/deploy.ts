@@ -174,9 +174,13 @@ Deploying to AWS...
     )
   }
 
-  async deployBotFlow() {
+  async deployBotFlow(): Promise<void> {
     if (this.botName) return this.deployBotFromFlag(this.botName)
-    if (!this.botonicApiService.bot) return this.newBotFlow()
+    if (
+      !this.botonicApiService.bot ||
+      !Object.keys(this.botonicApiService.bot).length
+    )
+      return this.newBotFlow()
     else {
       const resp = await this.botonicApiService.getBots()
       const nextBots = resp.data.next
@@ -243,7 +247,7 @@ Deploying to AWS...
       )
   }
 
-  async newBotFlow() {
+  async newBotFlow(): Promise<void> {
     const resp = await this.botonicApiService.getBots()
     const nextBots = resp.data.next
     const bots = resp.data.results
