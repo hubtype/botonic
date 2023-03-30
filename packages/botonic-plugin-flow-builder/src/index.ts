@@ -67,7 +67,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   async getContent(id: string): Promise<NodeComponent> {
     const flow = await this.flow
     const content = flow.nodes.find(node => node.id === id)
-    if (!content) throw Error(`text with id: '${id}' not found`)
+    if (!content) throw Error(`Node with id: '${id}' not found`)
     return content
   }
 
@@ -112,6 +112,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   ): Promise<FlowContent[]> {
     const contents = prevContents || []
     const hubtypeContent: any = await this.getContent(id)
+    if (hubtypeContent.content.buttons) {
+      for (const i in hubtypeContent.content.buttons) {
+        const button = hubtypeContent.content.buttons[i]
+        if (button.url) {
+          for (const j in button.url) {
+            button.url[j] = {
+              ...button.url[j],
+              ...(await this.getContent(button.url[j].id)),
+            }
+          }
+        }
+      }
+    }
     const content = await this.getFlowContent(hubtypeContent, locale)
     if (hubtypeContent.type === NodeType.FUNCTION) {
       const targetId = await this.callFunction(hubtypeContent, locale)
