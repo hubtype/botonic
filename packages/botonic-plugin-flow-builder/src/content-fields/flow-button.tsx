@@ -13,6 +13,11 @@ export class FlowButton extends ContentFieldsBase {
     const newButton = new FlowButton(component.id)
     newButton.text = FlowButton.getTextByLocale(locale, component.text)
     newButton.payload = component.target?.id
+    if (component.url) {
+      newButton.url = (component.url as any).find(
+        url => url.locale === locale
+      ).content.url
+    }
     return newButton
   }
 
@@ -24,9 +29,11 @@ export class FlowButton extends ContentFieldsBase {
         </Reply>
       )
     }
+    let props = {}
+    if (this.url) props = { url: this.url }
     return (
       // @ts-ignore
-      <Button payload={this.payload} key={index}>
+      <Button payload={this.payload} key={index} {...props}>
         {this.text}
       </Button>
     )
