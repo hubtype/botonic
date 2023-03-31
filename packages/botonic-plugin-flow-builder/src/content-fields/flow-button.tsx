@@ -12,7 +12,9 @@ export class FlowButton extends ContentFieldsBase {
   static fromHubtypeCMS(component: FbButton, locale: string): FlowButton {
     const newButton = new FlowButton(component.id)
     newButton.text = FlowButton.getTextByLocale(locale, component.text)
-    newButton.payload = component.target?.id
+    newButton.payload = component.target
+      ? component.target.id
+      : component.payload?.find(payload => payload.locale === locale)?.id
     if (component.url) {
       const urlButton = (component.url as any).find(
         url => url.locale === locale
