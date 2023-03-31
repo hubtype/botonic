@@ -67,7 +67,7 @@ export interface Button {
   text: TextLocale[]
   target?: NodeLink
   hidden: string
-  url?: UrlLocale
+  url?: UrlLocale[]
   payload?: PayloadLocale[]
 }
 
