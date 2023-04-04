@@ -112,6 +112,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   ): Promise<FlowContent[]> {
     const contents = prevContents || []
     const hubtypeContent: any = await this.getContent(id)
+    if (hubtypeContent.content.elements) {
+      for (const i in hubtypeContent.content.elements) {
+        const button = hubtypeContent.content.elements[i].button
+        if (button.url) {
+          for (const j in button.url) {
+            button.url[j] = {
+              ...button.url[j],
+              ...(await this.getContent(button.url[j].id)),
+            }
+          }
+        }
+      }
+    }
     if (hubtypeContent.content.buttons) {
       for (const i in hubtypeContent.content.buttons) {
         const button = hubtypeContent.content.buttons[i]
