@@ -33,7 +33,7 @@
   "dependencies": {
     "@nlpjs/lang-de": "^4.22.0",
     "@nlpjs/lang-en-min": "^4.22.0",
-    "@nlpjs/lang-es": "^4.22.0",
+    "@nlpjs/lang-es": "^4.26.1",
     "@nlpjs/lang-fr": "^4.22.0",
     "@nlpjs/lang-it": "^4.22.0",
     "@nlpjs/lang-ru": "^4.22.0",
