@@ -20,6 +20,7 @@ export const PROVIDER = Object.freeze({
   DEV: 'dev',
   FACEBOOK: 'facebook',
   GENERIC: 'generic',
+  INSTAGRAM: 'instagram',
   INTERCOM: 'intercom',
   SMOOCH: 'smooch',
   TELEGRAM: 'telegram',
@@ -126,6 +127,7 @@ export type ProviderType =
   | typeof PROVIDER.DEV
   | typeof PROVIDER.FACEBOOK
   | typeof PROVIDER.GENERIC
+  | typeof PROVIDER.INSTAGRAM
   | typeof PROVIDER.INTERCOM
   | typeof PROVIDER.SMOOCH
   | typeof PROVIDER.TELEGRAM
@@ -243,6 +245,7 @@ export const Providers = Object.freeze({
     FACEBOOK: 'facebook',
     GENERIC: 'generic',
     IMBEE: 'imbee',
+    INSTAGRAM: 'instagram',
     INTERCOM: 'intercom',
     SMOOCH_WEB: 'smooch_web',
     SMOOCH: 'smooch',
