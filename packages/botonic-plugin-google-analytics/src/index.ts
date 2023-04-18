@@ -10,7 +10,7 @@ export default class BotonicPluginGoogleAnalytics4 {
   private apiSecret: string
   private measurementId: string
   private getClientId: (session: Session) => string
-  private getUserId: () => string
+  private getUserId?: () => string
 
   constructor(options: GA4Options) {
     this.apiSecret = options.apiSecret
@@ -32,7 +32,7 @@ export default class BotonicPluginGoogleAnalytics4 {
       this.baseUrl,
       {
         client_id: this.getClientId(session),
-        user_id: this.getUserId(),
+        user_id: this.getUserId && this.getUserId(),
         events,
       },
       {
