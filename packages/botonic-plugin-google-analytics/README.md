@@ -14,48 +14,40 @@ With this plugin you can track the user interaction with the bot or the bot's be
 ```javascript
 export const plugins = [
   {
-    id: 'google_analytics',
+    id: 'googleAnalytics',
     resolve: require('@botonic/plugin-google-analytics'),
     options: {
-      trackingId: 'UA-XXXXXXXX-Y', // Your Google Analytics tracking ID
-      getUserId: ({session}) => session.user.extra_data.analyticsUserId, //Optional. Method that returns a unique user ID as string
-      getUserTraits: ({session}) => { userName: session.user.extra_data.analyticsUserName, userEmail: session.user.extra_data.analyticsUserEmail }, //Optional. Method that returns an object with the user Traits
-      automaticTracking: true, //Optional. Indicates if an automatic tracking will be executed on every user interaction (true by default)
-      getEventFields: () => ({category: 'bot', action: 'user_interaction'}) //Optional. Set custom event fields to track if automatic tracking is enabled
+      measurementId: 'G-XXXXXXXXXX', // Your Google Analytics measurement ID
+      apiSecret: 'xxxxxxxxxx', // Your API Secret key for the property to send events to #pragma: allowlist secret
+      getUserId: ({session}) => session.user.extra_data.clientId, //Optional. Method that returns a unique user ID as string (to track logged users for example)
     }
   }
 ]
 ```
+You can see a detailed explanation of `measurementId` and `apiSecret` config fields [here](https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference?hl=es&client_type=firebase).  
+If no `getUserId` is set, the plugin will not identify the `userId` (logged user) to Google Analytics. The `clientId` will be sent either way in all trackings. (see [clientId vs. userId](https://support.google.com/analytics/answer/6205850?hl=en#clientid-userid) for more information).   
 
-If no `getUserId` is set, the plugin will not identify the userId (logged user) to Google Analytics. The clientId will be sent either way in all trackings. (see [clientId vs. userId](https://support.google.com/analytics/answer/6205850?hl=en#clientid-userid) for more information).  
-The user traits (`getUserTraits`) will be sent only if `getUserId` is set.  
-If `automaticTracking` is set to `false`, the plugin will not track automatically in every user interaction.
-If no `getEventFields` is set, the plugin will send a default set of fields to the automatic tracking. This option is used only if `automaticTracking` is not set or is set to `true`.
 
-## Use
+## Usage
 
-This plugin can also be used to track manually.  
-The tracking must be done inside the `botonicInit` method and make sure to call it with the `await` keyword to ensure its execution.
-For every tracking, the user will be identified with the `userId` and `userTraits` defined in the plugin's options or with its default values.
+If the tracking is done inside the `botonicInit` method and make sure to call it with the `await` keyword to ensure its execution.  
+For every tracking, the user will be identified with the `clientId` and `userId` defined in the plugin's options or with its default values.
 
-`eventFields` contains these Google Analytic [event tracking fields](https://developers.google.com/analytics/devguides/collection/analyticsjs/events#event_fields) :
+In each track call, multiple events can be sent at once (as an array) or just one at a time (as object). In any case, each `event` will contain the `name` of the event (required) and a dictionary of `params` (optional) with all the extra parameters to be tracked.
 
-- `category`: eventCategory in Google Analytics (string, required)
-- `action`: eventAction in Google Analytics (string, required)
-- `label`: eventLabel in Google Analytics (string, optional)
-- `value`: eventValue in Google Analytics (numeric, optional)
 
 ```javascript
 static async botonicInit({ input, session, params, lastRoutePath, plugins }) {
-    const ga = plugins.google_analytics
+    const ga = plugins.googleAnalytics
 
-    const eventFields = {
-      category: 'chatbot',
-      action: 'user_message_sent',
-      label: 'rating',
-      value: 4
+    const event = {
+      name: 'rating',
+      params: {
+        type: 'agent',
+        value: 4,
+      },
     }
 
-    await ga.track({ session, eventFields })
+    await ga.track({ session, event })
 }
 ```
