@@ -18,6 +18,8 @@ export enum NodeType {
   URL = 'url',
   PAYLOAD = 'payload',
   FUNCTION = 'function',
+  FALLBACK = 'fallback',
+  VIDEO = 'video',
 }
 
 export interface BaseNode {
@@ -207,6 +209,27 @@ export interface FunctionNode extends Node {
   content: FunctionNodeContent
 }
 
+// TODO: Specify content for FallbackNode
+export interface FallbackNode extends Node {
+  type: NodeType.FALLBACK
+  content: any
+}
+
+export interface VideoLocale {
+  url: string
+  is_embedded?: boolean
+  locale: string
+}
+
+export interface VideoNodeContent {
+  video: VideoLocale[]
+}
+
+export interface VideoNode extends Node {
+  type: NodeType.VIDEO
+  content: VideoNodeContent
+}
+
 export type NodeComponent =
   | TextNode
   | ImageNode
@@ -218,3 +241,5 @@ export type NodeComponent =
   | StartNode
   | PayloadNode
   | FunctionNode
+  | FallbackNode
+  | VideoNode
