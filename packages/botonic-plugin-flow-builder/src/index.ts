@@ -167,13 +167,15 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         node => node.type === NodeType.INTENT
       ) as IntentNode[]
       if (input.intent) {
-        const matchedIntents = intents.filter(node =>
-          //@ts-ignore
-          this.hasIntent(node, input.intent, locale)
+        const matchedIntentNode = intents.find(
+          node =>
+            //@ts-ignore
+            this.hasIntent(node, input.intent, locale) &&
+            //@ts-ignore
+            this.hasMetConfidenceThreshold(node, input.confidence)
         )
-        if (matchedIntents.length > 0) {
-          return matchedIntents[0].target?.id
-        }
+        if (!matchedIntentNode) return undefined
+        return matchedIntentNode.target?.id
       }
     } catch (error) {
       console.error('Error getting payload by input: ', error)
@@ -183,10 +185,21 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   hasIntent(node: IntentNode, intent: string, locale: string): boolean {
-    const result = node.content.intents.find(
+    const intentFound = node.content.intents.find(
       i => i.locale === locale && i.values.includes(intent)
     )
-    return Boolean(result)
+    if (!intentFound) return false
+    return true
+  }
+
+  hasMetConfidenceThreshold(
+    node: IntentNode,
+    predictedConfidence: number
+  ): boolean {
+    const nodeConfidence = node.content.confidence / 100
+    const metsConfidenceThreshold = predictedConfidence >= nodeConfidence
+    if (!metsConfidenceThreshold) return false
+    return true
   }
 
   async getPayloadByKeyword(
