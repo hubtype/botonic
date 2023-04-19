@@ -1,0 +1,53 @@
+{
+  "name": "@botonic/plugin-flow-builder",
+  "version": "0.21.0-alpha.9",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "description": "Use Flow Builder to show your contents",
+  "scripts": {
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
+    "build:watch": "npm run build -- --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cloc": "../../scripts/qa/cloc-package.sh .",
+    "prepare": "node ../../preinstall.js",
+    "prepublishOnly": "rm -rf lib && npm run build",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubtype/botonic.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/hubtype/botonic/issues"
+  },
+  "files": [
+    "lib/**",
+    "src/**",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.13.0",
+    "@types/react": "^18.0.28",
+    "typescript": "^4.9.5"
+  },
+  "keywords": [
+    "bot-framework",
+    "chatbot",
+    "flow-builder",
+    "conversational-app",
+    "conversational-ui",
+    "javascript"
+  ],
+  "eslintConfig": {
+    "extends": "../.eslintrc.js",
+    "root": true
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.20.13",
+    "@botonic/react": "^0.21.0",
+    "axios": "^1.3.3"
+  }
+}
