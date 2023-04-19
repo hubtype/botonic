@@ -56,6 +56,9 @@ class App extends React.Component {
       location.href =
         'https://twitter.com/messages/compose?recipient_id=' + impId
     }
+    if (provider === PROVIDER.INSTAGRAM) {
+      window.close()
+    }
     if (provider === PROVIDER.FACEBOOK) {
       try {
         window.MessengerExtensions.requestCloseBrowser(
