@@ -12,6 +12,7 @@ import {
   FlowContent,
   FlowImage,
   FlowText,
+  FlowVideo,
 } from './content-fields'
 import {
   FlowBuilderData,
@@ -91,6 +92,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         return FlowImage.fromHubtypeCMS(hubtypeContent, locale)
       case NodeType.CAROUSEL:
         return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale)
+      case NodeType.VIDEO:
+        return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
       default:
         return undefined
     }

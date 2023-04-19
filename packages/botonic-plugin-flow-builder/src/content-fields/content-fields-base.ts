@@ -1,4 +1,8 @@
-import { MediaFileLocale, TextLocale } from '../flow-builder-models'
+import {
+  MediaFileLocale,
+  TextLocale,
+  VideoLocale,
+} from '../flow-builder-models'
 
 export abstract class ContentFieldsBase {
   constructor(private readonly id: string) {}
@@ -11,5 +15,10 @@ export abstract class ContentFieldsBase {
   static getImageByLocale(locale: string, image: MediaFileLocale[]): string {
     const result = image.find(t => t.locale === locale)
     return result?.file ?? ''
+  }
+
+  static getVideoByLocale(locale: string, video: VideoLocale[]): string {
+    const result = video.find(t => t.locale === locale)
+    return result?.url ?? ''
   }
 }
