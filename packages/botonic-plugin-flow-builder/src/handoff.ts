@@ -1,5 +1,6 @@
 import { HandOffBuilder } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
+import { getFlowBuilderPlugin } from './helpers'
 
 export async function doHandoff(
   request: ActionRequest,
@@ -8,7 +9,7 @@ export async function doHandoff(
   agentEmail?: string
 ): Promise<void> {
   // @ts-ignore
-  const flowBuilderPlugin = request.plugins.hubtypeFlowBuilder as any
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const handoffContent = await flowBuilderPlugin.getHandoffContent()
 
   // @ts-ignore

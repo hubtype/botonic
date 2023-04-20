@@ -3,7 +3,7 @@ import React from 'react'
 
 import { FlowContent } from './content-fields'
 import { doHandoff } from './handoff'
-import BotonicPluginFlowBuilder from './index'
+import { getFlowBuilderPlugin } from './helpers'
 
 type FlowBuilderActionProps = {
   content?: FlowContent[]
@@ -14,8 +14,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
   static async botonicInit(request: ActionRequest): Promise<any> {
-    const flowBuilderPlugin = request.plugins
-      .hubtypeFlowBuilder as BotonicPluginFlowBuilder
+    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
     let payload = request.input.payload
       ? request.input.payload

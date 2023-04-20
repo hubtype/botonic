@@ -52,10 +52,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async readFlowContent(): Promise<FlowBuilderData> {
-    const response = await axios.get(this.flowUrl, {
+    const { data } = await axios.get(this.flowUrl, {
       headers: { Authorization: `Bearer ${this.getAccessToken()}` },
     })
-    return response.data
+    return data
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
