@@ -22,13 +22,13 @@ export class FlowText extends ContentFieldsBase {
     return newText
   }
 
-  toBotonic(index: number): JSX.Element {
+  toBotonic(id: string): JSX.Element {
     return (
-      <Text key={index}>
+      <Text key={id}>
         {this.text}
-        {this.buttons.map((button, index) =>
-          button.renderButton(index, this.buttonStyle)
-        )}
+        {this.buttons.map(button => {
+          return button.renderButton(button.id, this.buttonStyle)
+        })}
       </Text>
     )
   }

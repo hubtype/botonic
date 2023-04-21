@@ -54,6 +54,6 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   render(): JSX.Element | JSX.Element[] {
     // @ts-ignore
     const { contents, handoffNode } = this.props
-    return contents!.map((content, index) => content.toBotonic(index))
+    return contents!.map(content => content.toBotonic(content.id))
   }
 }
