@@ -209,10 +209,13 @@ export interface FunctionNode extends Node {
   content: FunctionNodeContent
 }
 
-// TODO: Specify content for FallbackNode
+export interface FallbackNodeContent {
+  first_message: NodeLink
+  second_message: NodeLink
+}
 export interface FallbackNode extends Node {
   type: NodeType.FALLBACK
-  content: any
+  content: FallbackNodeContent
 }
 
 export interface VideoLocale {

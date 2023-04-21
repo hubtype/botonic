@@ -1,28 +1,37 @@
 import { HandOffBuilder } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
+import { HandoffNode } from './flow-builder-models'
+import { getFlowBuilderPlugin } from './helpers'
+
 export async function doHandoff(
   request: ActionRequest,
-  queue: string,
-  note?: string,
-  agentEmail?: string
+  locale: string,
+  handoffNode: HandoffNode
 ): Promise<void> {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const handoffTargetNode = await flowBuilderPlugin.getHandoffContent(
+    handoffNode.target?.id
+  )
   // @ts-ignore
-  const flowBuilderPlugin = request.plugins.hubtypeFlowBuilder as any
-  const handoffContent = await flowBuilderPlugin.getHandoffContent()
+  const handOffBuilder = new HandOffBuilder(request.session) // handOffBuilder.withQueue(handoffNode.content.queue)
+  const handoffQueues = handoffNode.content.queue
+  const queueFound = handoffQueues.find(q => q.locale === locale)
+  if (queueFound) handOffBuilder.withQueue(queueFound.id)
+  // TODO: Retrieve params from FlowBuilder
+  // const handoffParams = {
+  //   agentEmail: 'test@gmail.com',
+  //   note: 'This is a note that will be attached to the case as a reminder',
+  // }
 
-  // @ts-ignore
-  const handOffBuilder = new HandOffBuilder(request.session)
-  handOffBuilder.withQueue(queue)
+  // if (handoffParams.note) {
+  //   handOffBuilder.withNote(handoffParams.note)
+  // }
 
-  if (note) {
-    handOffBuilder.withNote(note)
-  }
+  // if (handoffParams.agentEmail) {
+  //   handOffBuilder.withAgentEmail(handoffParams.agentEmail)
+  // }
 
-  if (agentEmail) {
-    handOffBuilder.withAgentEmail(agentEmail)
-  }
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  handOffBuilder.withOnFinishPayload(handoffContent.target?.id!)
+  handOffBuilder.withOnFinishPayload(handoffTargetNode.id)
   await handOffBuilder.handOff()
 }
