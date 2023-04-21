@@ -22,7 +22,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       targetContentId = await flowBuilderPlugin.getStartId()
     }
     if (!payload) {
-      const intentPayload = await flowBuilderPlugin.getPayloadByInput(
+      const intentPayload = await flowBuilderPlugin.getPayloadByIntent(
         request.input,
         locale
       )

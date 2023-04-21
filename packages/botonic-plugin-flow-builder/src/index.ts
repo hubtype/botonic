@@ -175,7 +175,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return { contents, handoffNode: isHandoff && hubtypeContent }
   }
 
-  async getPayloadByInput(
+  async getPayloadByIntent(
     input: Input,
     locale: string
   ): Promise<string | undefined> {
@@ -184,16 +184,17 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       const intents = flow.nodes.filter(
         node => node.type === NodeType.INTENT
       ) as IntentNode[]
-      if (input.intent) {
+      const inputIntent = input.intent
+      const inputConfidence = input.confidence
+      if (inputIntent) {
         const matchedIntentNode = intents.find(
           node =>
-            //@ts-ignore
-            this.hasIntent(node, input.intent, locale) &&
-            //@ts-ignore
-            this.hasMetConfidenceThreshold(node, input.confidence)
+            inputIntent &&
+            this.hasIntent(node, inputIntent, locale) &&
+            inputConfidence &&
+            this.hasMetConfidenceThreshold(node, inputConfidence)
         )
-        if (!matchedIntentNode) return undefined
-        return matchedIntentNode.target?.id
+        return matchedIntentNode?.target?.id
       }
     } catch (error) {
       console.error('Error getting payload by input: ', error)
@@ -203,11 +204,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   hasIntent(node: IntentNode, intent: string, locale: string): boolean {
-    const intentFound = node.content.intents.find(
+    return node.content.intents.some(
       i => i.locale === locale && i.values.includes(intent)
     )
-    if (!intentFound) return false
-    return true
   }
 
   hasMetConfidenceThreshold(
@@ -215,9 +214,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     predictedConfidence: number
   ): boolean {
     const nodeConfidence = node.content.confidence / 100
-    const metsConfidenceThreshold = predictedConfidence >= nodeConfidence
-    if (!metsConfidenceThreshold) return false
-    return true
+    return predictedConfidence >= nodeConfidence
   }
 
   async getPayloadByKeyword(

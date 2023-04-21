@@ -18,19 +18,19 @@ export async function doHandoff(
   const handoffQueues = handoffNode.content.queue
   const queueFound = handoffQueues.find(q => q.locale === locale)
   if (queueFound) handOffBuilder.withQueue(queueFound.id)
-  // TODO: Take it from FlowBuilder
-  const handoffParams = {
-    agentEmail: 'test@gmail.com',
-    note: 'This is a note that will be attached to the case as a reminder',
-  }
+  // TODO: Retrieve params from FlowBuilder
+  // const handoffParams = {
+  //   agentEmail: 'test@gmail.com',
+  //   note: 'This is a note that will be attached to the case as a reminder',
+  // }
 
-  if (handoffParams.note) {
-    handOffBuilder.withNote(handoffParams.note)
-  }
+  // if (handoffParams.note) {
+  //   handOffBuilder.withNote(handoffParams.note)
+  // }
 
-  if (handoffParams.agentEmail) {
-    handOffBuilder.withAgentEmail(handoffParams.agentEmail)
-  }
+  // if (handoffParams.agentEmail) {
+  //   handOffBuilder.withAgentEmail(handoffParams.agentEmail)
+  // }
 
   handOffBuilder.withOnFinishPayload(handoffTargetNode.id)
   await handOffBuilder.handOff()
