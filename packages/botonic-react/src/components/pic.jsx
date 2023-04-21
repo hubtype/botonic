@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../util/react'
 
-const PicStyled = styled.div`
+const PicStyled = styled.img`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   width: ${WEBCHAT.DEFAULTS.ELEMENT_WIDTH}px;
