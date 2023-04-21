@@ -1,4 +1,4 @@
-import { ActionRequest, RequestContext, Text } from '@botonic/react'
+import { ActionRequest, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowContent } from './content-fields'
@@ -16,49 +16,40 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static async botonicInit(request: ActionRequest): Promise<any> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
-    let payload = request.input.payload
-      ? request.input.payload
-      : await flowBuilderPlugin.getStartId()
-
-    if (!request.input.payload) {
+    const payload = request.input.payload
+    let targetContentId: string | undefined = payload
+    if (!payload && request.session.is_first_interaction) {
+      targetContentId = await flowBuilderPlugin.getStartId()
+    }
+    if (!payload) {
       const intentPayload = await flowBuilderPlugin.getPayloadByInput(
         request.input,
         locale
       )
-      if (intentPayload) {
-        payload = intentPayload
-      }
+      if (intentPayload) targetContentId = intentPayload
       const keywordPayload = await flowBuilderPlugin.getPayloadByKeyword(
         request.input,
         locale
       )
-      if (keywordPayload) {
-        payload = keywordPayload
-      }
+      if (keywordPayload) targetContentId = keywordPayload
     }
-    // We use only Spanish because they are the backend examples
-    const content = await flowBuilderPlugin.getContents(payload, locale)
+    if (!targetContentId) {
+      targetContentId = await flowBuilderPlugin.getFallbackId()
+    }
 
-    if (content.length === 0) {
-      const handoffParams = {
-        queue: 'Test', // TODO: Take it from the flow
-        agentEmail: 'test@gmail.com',
-        note: 'This is a note that will be attached to the case as a reminder',
-      }
-      await doHandoff(request, handoffParams.queue, handoffParams.note)
-      const isHandoff = true
-      return { isHandoff }
-    }
-    return { content }
+    const { contents, handoffNode } = await flowBuilderPlugin.getContents(
+      targetContentId,
+      locale
+    )
+
+    if (handoffNode) await doHandoff(request, locale, handoffNode)
+
+    return { contents, handoffNode }
   }
 
   render(): JSX.Element | JSX.Element[] {
     // @ts-ignore
-    const { content: contents, isHandoff } = this.props
-    if (isHandoff) {
-      return <Text>You are being transferred to an agent!</Text>
-    } else {
-      return contents!.map((content, index) => content.toBotonic(index))
-    }
+    const { contents, handoffNode } = this.props
+    return contents!.map((content, index) => content.toBotonic(index))
   }
 }
