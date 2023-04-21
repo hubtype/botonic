@@ -112,7 +112,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return startNode.target.id
   }
 
-  async getFallbackId(): Promise<string> {
+  async getFallbackId(alternate: boolean): Promise<string> {
     const flow = await this.flow
     const fallbackNode = flow.nodes.find(
       node => node.type === NodeType.FALLBACK
@@ -121,8 +121,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const fallbackFirstMessage = fallbackNode.content.first_message
     const fallbackSecondMessage = fallbackNode.content.second_message
     if (!fallbackSecondMessage) return fallbackFirstMessage.id
-    const fallbackIds = [fallbackFirstMessage.id, fallbackSecondMessage.id]
-    return fallbackIds[Math.floor(Math.random() * fallbackIds.length)]
+    return alternate ? fallbackFirstMessage.id : fallbackSecondMessage.id
   }
   async getContents(
     id: string,
