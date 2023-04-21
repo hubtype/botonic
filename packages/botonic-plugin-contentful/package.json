@@ -64,7 +64,7 @@
     "marked": "^2.1.1",
     "memoizee": "^0.4.15",
     "moment": "^2.29.1",
-    "moment-timezone": "^0.5.33",
+    "moment-timezone": "^0.5.43",
     "sort-stream": "^1.0.1",
     "xlsx": "^0.17.0"
   },
