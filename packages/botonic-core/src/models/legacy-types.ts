@@ -166,6 +166,7 @@ export interface Session {
   _hubtype_case_status?: CaseStatusType
   _hubtype_case_typification?: string
   _shadowing?: boolean
+  _access_token?: string
 }
 // eslint-enable @typescript-eslint/naming-convention
 

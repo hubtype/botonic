@@ -22,47 +22,40 @@ import {
   IntentNode,
   KeywordNode,
   NodeComponent,
-  NodeLink,
   NodeType,
   StartNode,
 } from './flow-builder-models'
 import { DEFAULT_FUNCTIONS } from './functions'
-
-export type BotonicPluginFlowBuilderOptions = {
-  flowUrl: string
-  flow?: FlowBuilderData
-  customFunctions?: Record<any, any>
-  getLocale: (session: Session) => string
-  getAccessToken: () => string
-}
+import { BotonicPluginFlowBuilderOptions } from './types'
+import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   private flowUrl: string
   private flow: Promise<FlowBuilderData> | FlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
-  private getAccessToken: () => string
+  private getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.getLocale = options.getLocale
-    this.getAccessToken = options.getAccessToken
+    this.getAccessToken = resolveGetAccessToken(options)
     this.flowUrl = options.flowUrl
-    this.flow = options.flow || this.readFlowContent()
+    if (options.flow) this.flow = options.flow
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
 
-  async readFlowContent(): Promise<FlowBuilderData> {
+  async readFlowContent(session: Session): Promise<FlowBuilderData> {
     const { data } = await axios.get(this.flowUrl, {
-      headers: { Authorization: `Bearer ${this.getAccessToken()}` },
+      headers: { Authorization: `Bearer ${this.getAccessToken(session)}` },
     })
     return data
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
     this.currentRequest = request
-    this.flow = this.readFlowContent()
+    this.flow = await this.readFlowContent(this.currentRequest.session)
   }
 
   async post(_request: PluginPostRequest): Promise<void> {}
@@ -131,7 +124,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const contents = prevContents || []
     const hubtypeContent: any = await this.getContent(id)
     const isHandoff = hubtypeContent.type === NodeType.HANDOFF
-
+    // TODO: Create function to populate these buttons
     if (hubtypeContent.content.elements) {
       for (const i in hubtypeContent.content.elements) {
         const button = hubtypeContent.content.elements[i].button
