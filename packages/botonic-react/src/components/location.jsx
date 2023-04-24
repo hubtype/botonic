@@ -16,8 +16,8 @@ const serialize = locationProps => {
 }
 
 export const Location = props => {
-  const lat = parseFloat(props.lat)
-  const long = parseFloat(props.long)
+  const { lat, long } = props
+
   const renderBrowser = () => {
     const locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
     return (
