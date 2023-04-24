@@ -28,6 +28,7 @@ import {
 import { DEFAULT_FUNCTIONS } from './functions'
 import { BotonicPluginFlowBuilderOptions } from './types'
 import { resolveGetAccessToken } from './utils'
+import { updateButtonUrls } from './helpers'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   private flowUrl: string
@@ -125,32 +126,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const hubtypeContent: any = await this.getContent(id)
     const isHandoff = hubtypeContent.type === NodeType.HANDOFF
     // TODO: Create function to populate these buttons
-    if (hubtypeContent.content.elements) {
-      for (const i in hubtypeContent.content.elements) {
-        const button = hubtypeContent.content.elements[i].button
-        if (button.url) {
-          for (const j in button.url) {
-            button.url[j] = {
-              ...button.url[j],
-              ...(await this.getContent(button.url[j].id)),
-            }
-          }
-        }
-      }
-    }
-    if (hubtypeContent.content.buttons) {
-      for (const i in hubtypeContent.content.buttons) {
-        const button = hubtypeContent.content.buttons[i]
-        if (button.url) {
-          for (const j in button.url) {
-            button.url[j] = {
-              ...button.url[j],
-              ...(await this.getContent(button.url[j].id)),
-            }
-          }
-        }
-      }
-    }
+    await updateButtonUrls(hubtypeContent, 'elements', this.getContent)
+    await updateButtonUrls(hubtypeContent, 'buttons', this.getContent)
     const content = await this.getFlowContent(hubtypeContent, locale)
     if (hubtypeContent.type === NodeType.FUNCTION) {
       const targetId = await this.callFunction(hubtypeContent, locale)
