@@ -9,6 +9,8 @@ import {
 import { HubtypeBabelApiService } from './hubtype-babel-api-service'
 import { PluginOptions } from './options'
 
+const isProd = process.env.NODE_ENV === 'production'
+
 export default class BotonicPluginHubtypeBabel implements Plugin {
   private readonly apiService: HubtypeBabelApiService
   private readonly includeHasSense: boolean
@@ -33,9 +35,9 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
         !this.isAutomaticBotMessage(request.input.data)
       ) {
         const sessionAuthToken = (request.session as HubtypeSession)
-          ._access_token
+          ?._access_token
 
-        const authToken = this.options.authToken || sessionAuthToken
+        const authToken = isProd ? sessionAuthToken : this.options.authToken
 
         if (!authToken) {
           if (!sessionAuthToken) {
