@@ -15,7 +15,7 @@ export class FlowImage extends ContentFieldsBase {
     return newImage
   }
 
-  toBotonic(index: number): JSX.Element {
-    return <Image src={this.src} key={index} />
+  toBotonic(id: string): JSX.Element {
+    return <Image key={id} src={this.src} />
   }
 }

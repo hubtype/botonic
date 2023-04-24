@@ -5,7 +5,7 @@ import {
 } from '../flow-builder-models'
 
 export abstract class ContentFieldsBase {
-  constructor(private readonly id: string) {}
+  constructor(public readonly id: string) {}
 
   static getTextByLocale(locale: string, text: TextLocale[]): string {
     const result = text.find(t => t.locale === locale)

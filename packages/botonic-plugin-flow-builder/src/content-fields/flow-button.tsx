@@ -24,10 +24,10 @@ export class FlowButton extends ContentFieldsBase {
     return newButton
   }
 
-  renderButton(index: number, buttonStyle: ButtonStyle): JSX.Element {
+  renderButton(id: string, buttonStyle: ButtonStyle): JSX.Element {
     if (buttonStyle === ButtonStyle.QUICK_REPLY) {
       return (
-        <Reply payload={this.payload} key={index}>
+        <Reply key={id} payload={this.payload}>
           {this.text}
         </Reply>
       )
@@ -36,7 +36,7 @@ export class FlowButton extends ContentFieldsBase {
     if (this.url) props = { url: this.url }
     return (
       // @ts-ignore
-      <Button payload={this.payload} key={index} {...props}>
+      <Button key={id} payload={this.payload} {...props}>
         {this.text}
       </Button>
     )
