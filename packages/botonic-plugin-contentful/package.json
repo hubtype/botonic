@@ -56,7 +56,7 @@
     "@nlpjs/similarity": "^4.21.1",
     "async-parallel": "^1.2.3",
     "contentful": "^8.5.8",
-    "contentful-import": "^8.2.9",
+    "contentful-import": "^8.5.43",
     "contentful-management": "^7.39.0",
     "csv-parse": "^4.16.0",
     "csv-stringify": "^5.6.5",
@@ -69,9 +69,9 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
-    "@types/joi": "^14.3.4",
     "@types/marked": "^2.0.3",
     "@types/memoizee": "^0.4.5",
+    "@types/minipass": "^3.3.5",
     "contentful-cli": "^1.7.1",
     "identity-obj-proxy": "^3.0.0",
     "jest-extended": "^0.11.5"

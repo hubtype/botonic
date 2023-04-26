@@ -292,7 +292,7 @@ declare namespace jest {
 }
 
 declare module 'contentful-import/dist/utils/schema' {
-  import { ObjectSchema } from 'joi'
-  const exports: { payloadSchema: ObjectSchema }
+  import { payloadSchema as PayloadSchema } from 'contentful-import/dist/utils/schema'
+  const exports: { payloadSchema: PayloadSchema }
   export = exports
 }
