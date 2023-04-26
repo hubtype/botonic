@@ -76,6 +76,13 @@ export interface PluginConfig<T> {
   resolve: { default: PluginConstructor<T> }
 }
 
+export interface ResolvedPlugin extends Plugin {
+  id: string
+  name: string
+  config: any
+}
+export type ResolvedPlugins = Record<string, ResolvedPlugin>
+
 export type InputType =
   | typeof INPUT.AUDIO
   | typeof INPUT.BUTTON_MESSAGE
@@ -166,6 +173,7 @@ export interface Session {
   _hubtype_case_status?: CaseStatusType
   _hubtype_case_typification?: string
   _shadowing?: boolean
+  _access_token?: string
 }
 // eslint-enable @typescript-eslint/naming-convention
 
@@ -224,15 +232,15 @@ export interface BotResponse extends BotRequest {
 }
 
 export interface PluginPreRequest extends BotRequest {
-  plugins: Plugin[]
+  plugins: ResolvedPlugins
 }
 export interface PluginPostRequest extends BotResponse {
-  plugins: Plugin[]
+  plugins: ResolvedPlugins
 }
 
 export interface Plugin {
-  post(request: PluginPostRequest): void
-  pre(request: PluginPreRequest): void
+  post?(request: PluginPostRequest): void | Promise<void>
+  pre?(request: PluginPreRequest): void | Promise<void>
 }
 
 export interface Params {

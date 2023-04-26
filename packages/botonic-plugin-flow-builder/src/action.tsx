@@ -10,6 +10,7 @@ type FlowBuilderActionProps = {
   isHandoff?: boolean
 }
 
+let alternateFallbackMessage = false
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
@@ -34,7 +35,10 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       if (keywordPayload) targetContentId = keywordPayload
     }
     if (!targetContentId) {
-      targetContentId = await flowBuilderPlugin.getFallbackId()
+      targetContentId = await flowBuilderPlugin.getFallbackId(
+        alternateFallbackMessage
+      )
+      alternateFallbackMessage = !alternateFallbackMessage
     }
 
     const { contents, handoffNode } = await flowBuilderPlugin.getContents(
@@ -50,6 +54,6 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   render(): JSX.Element | JSX.Element[] {
     // @ts-ignore
     const { contents, handoffNode } = this.props
-    return contents!.map((content, index) => content.toBotonic(index))
+    return contents!.map(content => content.toBotonic(content.id))
   }
 }

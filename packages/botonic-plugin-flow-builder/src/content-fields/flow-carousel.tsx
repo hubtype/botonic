@@ -18,11 +18,11 @@ export class FlowCarousel extends ContentFieldsBase {
     return newCarousel
   }
 
-  toBotonic(index: number): JSX.Element {
+  toBotonic(id: string): JSX.Element {
     return (
-      <Carousel key={index}>
-        {this.elements.map((element, eIndex) => (
-          <Element key={eIndex}>
+      <Carousel key={id}>
+        {this.elements.map(element => (
+          <Element key={`${id}-${element.id}`}>
             <Pic src={element.image} />
             <Title style=''>{element.title}</Title>
             <Subtitle style=''>{element.subtitle}</Subtitle>
@@ -33,7 +33,6 @@ export class FlowCarousel extends ContentFieldsBase {
             >
               {element.buttons?.text}
             </Button>
-            ,
           </Element>
         ))}
       </Carousel>
