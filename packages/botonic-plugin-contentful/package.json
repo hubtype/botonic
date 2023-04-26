@@ -69,9 +69,9 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
-    "@types/joi": "^14.3.4",
     "@types/marked": "^2.0.3",
     "@types/memoizee": "^0.4.5",
+    "@types/minipass": "^3.3.5",
     "contentful-cli": "^1.7.1",
     "identity-obj-proxy": "^3.0.0",
     "jest-extended": "^0.11.5"

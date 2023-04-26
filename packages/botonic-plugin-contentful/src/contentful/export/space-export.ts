@@ -9,7 +9,6 @@ import { EntryProps } from 'contentful-management/dist/typings/entities/entry'
 // eslint-disable-next-line node/no-missing-import
 import { LocaleProps } from 'contentful-management/dist/typings/entities/locale'
 import fs from 'fs'
-import * as joi from 'joi'
 
 export type I18nFieldValues = { [locale: string]: any }
 
@@ -49,12 +48,11 @@ export class SpaceExport {
   }
 
   private static validate(jsonObject: any) {
-    const err = joi.validate(
-      SpaceExport.hideFieldsWithBadSchema(jsonObject),
-      schema.payloadSchema
+    const { error } = schema.payloadSchema.validate(
+      SpaceExport.hideFieldsWithBadSchema(jsonObject)
     )
-    if (err.error) {
-      throw new Error(err.error.message)
+    if (error) {
+      throw new Error(error.details[0].message)
     }
   }
 
