@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.21.5",
+  "version": "0.21.6",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
@@ -48,6 +48,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
+    "@types/minipass": "^3.3.5",
     "@types/pako": "^1.0.2",
     "babel-plugin-add-module-exports": "^1.0.2"
   },
