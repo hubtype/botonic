@@ -45,7 +45,7 @@
     "react-textarea-autosize": "^7.1.2",
     "react-use-storage": "^0.5.1",
     "reconnecting-websocket": "^4.4.0",
-    "simplebar-react": "^2.3.3",
+    "simplebar-react": "^2.4.3",
     "styled-components": "^5.3.0",
     "ua-parser-js": "^1.0.2",
     "unescape": "^1.0.1",
