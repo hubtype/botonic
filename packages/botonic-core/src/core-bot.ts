@@ -9,6 +9,7 @@ import {
   Locales,
   MessageEventAck,
   MessageEventFrom,
+  ResolvedPlugins,
   Route,
   Routes,
   Session,
@@ -36,7 +37,7 @@ export class CoreBot {
   defaultTyping?: number
   inspector: Inspector
   locales: Locales
-  plugins?: Record<string, Plugin>
+  plugins?: ResolvedPlugins
   renderer: any
   rootElement: any
   router: Router | null
