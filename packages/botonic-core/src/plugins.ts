@@ -1,5 +1,12 @@
 import { DataProvider } from './data-provider'
-import { BotonicEvent, Input, PluginConfig, RoutePath, Session } from './models'
+import {
+  BotonicEvent,
+  Input,
+  Plugin,
+  PluginConfig,
+  RoutePath,
+  Session,
+} from './models'
 
 type PluginMode = 'pre' | 'post'
 
@@ -32,11 +39,12 @@ export async function runPlugins(
   dataProvider?: DataProvider
 ): Promise<void> {
   for (const key in plugins) {
-    const p = await plugins[key]
+    const p: Plugin = await plugins[key]
     try {
-      if (mode === 'pre')
+      if (mode === 'pre' && p.pre) {
         await p.pre({ input, session, lastRoutePath, dataProvider, plugins })
-      if (mode === 'post')
+      }
+      if (mode === 'post' && p.post) {
         await p.post({
           input,
           session,
@@ -46,6 +54,7 @@ export async function runPlugins(
           dataProvider,
           plugins,
         })
+      }
     } catch (e) {
       console.log(e)
     }
