@@ -232,8 +232,8 @@ export interface PluginPostRequest extends BotResponse {
 }
 
 export interface Plugin {
-  post(request: PluginPostRequest): void
-  pre(request: PluginPreRequest): void
+  post?(request: PluginPostRequest): void | Promise<void>
+  pre?(request: PluginPreRequest): void | Promise<void>
 }
 
 export interface Params {
