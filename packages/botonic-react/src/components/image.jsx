@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { ROLES, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
+import { staticAsset } from '../util/environment'
 import { Message } from './message'
 
 const StyledImage = styled.img`
@@ -19,6 +20,7 @@ const serialize = imageProps => {
 }
 
 export const Image = props => {
+  props = { ...props, src: staticAsset(props.src) }
   let content = props.children
 
   const [isPreviewerOpened, setIsPreviewerOpened] = useState(false)

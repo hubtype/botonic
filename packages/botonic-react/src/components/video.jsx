@@ -3,6 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS, ROLES } from '../constants'
+import { staticAsset } from '../util/environment'
 import { Message } from './message'
 
 const StyledVideo = styled.video`
@@ -18,6 +19,7 @@ const serialize = videoProps => {
 }
 
 export const Video = props => {
+  props = { ...props, src: staticAsset(props.src) }
   let content = props.children
   if (isBrowser())
     content = (

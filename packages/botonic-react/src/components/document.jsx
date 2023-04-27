@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { ROLES, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
+import { staticAsset } from '../util/environment'
 import { Message } from './message'
 
 const StyledButton = styled.a`
@@ -29,6 +30,7 @@ const serialize = documentProps => {
 }
 
 export const Document = props => {
+  props = { ...props, src: staticAsset(props.src) }
   let content = props.children
 
   const { getThemeProperty } = useContext(WebchatContext)

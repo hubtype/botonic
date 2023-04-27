@@ -9,7 +9,8 @@ export const staticAsset = path => {
       .getAttribute('src')
     const scriptName = scriptBaseURL.split('/').pop()
     const basePath = scriptBaseURL.replace('/' + scriptName, '/')
-    return basePath + path
+    const resolvedStaticAssetPath = basePath + path
+    return resolvedStaticAssetPath
   } catch (e) {
     console.error(`Could not resolve path: '${path}'`)
     return path
