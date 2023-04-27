@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
+import { staticAsset } from '../util/environment'
 import { renderComponent } from '../util/react'
 
 const PicStyled = styled.img`
@@ -15,6 +16,7 @@ const PicStyled = styled.img`
 `
 
 export const Pic = props => {
+  props = { ...props, src: staticAsset(props.src) }
   const renderBrowser = () => <PicStyled src={props.src} />
   const renderNode = () => <pic>{props.src}</pic>
   return renderComponent({ renderBrowser, renderNode })

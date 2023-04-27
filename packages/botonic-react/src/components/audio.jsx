@@ -2,6 +2,7 @@ import { INPUT, isBrowser } from '@botonic/core'
 import React from 'react'
 
 import { ROLES } from '../constants'
+import { staticAsset } from '../util/environment'
 import { Message } from './message'
 
 const serialize = audioProps => {
@@ -9,6 +10,7 @@ const serialize = audioProps => {
 }
 
 export const Audio = props => {
+  props = { ...props, src: staticAsset(props.src) }
   let content = props.children
   if (isBrowser())
     content = (
