@@ -50,18 +50,21 @@ npm install @botonic/plugin-flow-builder
 1. Add the following to you bot's `plugins.js` file:
 ```ts
 import * as hubtypeFlowBuilder from '@botonic/plugin-flow-builder'
-import { CONFIG } from './config'
-...
-const config = CONFIG[process.env.ENVIRONMENT]
+
+const flowBuilderOptions = {
+  flowUrl: 'HUBTYPE_FLOW_BUILDER_URL',
+  getAccessToken: () => 'HUBTYPE_FLOW_BUILDER_ACCESS_TOKEN',
+  getLocale: () => 'YOUR_LOCALE',
+}
+
 export const plugins = [
-  ...
   {
     id: 'hubtypeFlowBuilder',
     resolve: hubtypeFlowBuilder,
-    options: config.hubtypeFlowBuilder,
+    options: flowBuilderOptions,
   },
-  ...
 ]
+
 ```
 By doing this, we are passing configuration parameters to the Plugin. 
 Con esto, le pasamos las options, los parámetros de configuración, al bot. De esta manera le podemos pasar pámetros al Plugin desde fuera. Esto nos da más flexibilidad a la hora de configurar el plugin. 
@@ -81,19 +84,7 @@ Below are the parameters that we can pass to the plugin:
     <img alt="Access token" title="access-token" src=" https://i.ibb.co/9V2kSd3/Pasted-image-20230427120910.png" width="650">
 </p>
 
-2. We just need to define those variables in the `config.ts` file:
-```ts
-export const CONFIG = {
-	local: {
-		hubtypeFlowBuilder: {
-	      flowUrl: "HUBTYPE_FLOW_BUILDER_URL",
-	      getAccessToken: () => "HUBTYPE_FLOW_BUILDER_ACCESS_TOKEN",
-	      getLocale: () => 'YOUR_LOCALE',
-		},
-	}
-	...
-```
-3. Modify the `routes.ts` file, where routes map user inputs to actions which are in fact React Components:
+2. Modify the `routes.ts` file, where routes map user inputs to actions which are in fact React Components:
 ```ts
 import { Input, Session } from '@botonic/core'
 import FlowBuilderAction from '@botonic/plugin-flow-builder/lib/esm/action'
