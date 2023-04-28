@@ -109,7 +109,7 @@ Deploying to AWS...
     } else await this.deployBotFlow()
   }
 
-  async deployBotFromFlag(botName: string): Promise<void> {
+  async deployBotFromFlag(botName: string): Promise<void | undefined> {
     const resp = await this.botonicApiService.getBots()
     const nextBots = resp.data.next
     const bots = resp.data.results
@@ -117,13 +117,32 @@ Deploying to AWS...
       await this.botonicApiService.getMoreBots(bots, nextBots)
     }
     const bot = bots.filter(b => b.name === botName)[0]
-    if (bot == undefined) {
+    if (bot == undefined && !botName) {
       console.log(colors.red(`Bot ${botName} doesn't exist.`))
       console.log('\nThese are the available options:')
       bots.map(b => console.log(` > ${String(b.name)}`))
+      return undefined
+    } else if (botName) {
+      const bots = await this.getAvailableBots()
+      const botByBotName = bots.find(bot => bot.name === botName)
+      if (botByBotName) {
+        this.botonicApiService.setCurrentBot(bot)
+        return await this.deploy()
+      }
+      return prompt([
+        {
+          type: 'confirm',
+          name: 'create_bot_confirm',
+          message: 'Do you want to create a new Bot?',
+        },
+      ]).then((res: any) => {
+        const confirm = res.create_bot_confirm
+        if (confirm) return this.createNewBot(botName)
+        return undefined
+      })
     } else {
       this.botonicApiService.setCurrentBot(bot)
-      await this.deploy()
+      return await this.deploy()
     }
   }
 
@@ -176,6 +195,7 @@ Deploying to AWS...
 
   async deployBotFlow(): Promise<void> {
     if (this.botName) return this.deployBotFromFlag(this.botName)
+    console.log(this.botonicApiService.bot)
     if (
       !this.botonicApiService.bot ||
       !Object.keys(this.botonicApiService.bot).length
@@ -185,9 +205,7 @@ Deploying to AWS...
       const resp = await this.botonicApiService.getBots()
       const nextBots = resp.data.next
       const bots = resp.data.results
-      if (nextBots) {
-        await this.botonicApiService.getMoreBots(bots, nextBots)
-      }
+      if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
       // Show the current bot in credentials at top of the list
       const first_id = this.botonicApiService.bot.id
       bots.sort(function (x, y) {
@@ -247,13 +265,16 @@ Deploying to AWS...
       )
   }
 
-  async newBotFlow(): Promise<void> {
+  async getAvailableBots(): Promise<any> {
     const resp = await this.botonicApiService.getBots()
     const nextBots = resp.data.next
     const bots = resp.data.results
-    if (nextBots) {
-      const _new_bots = await this.botonicApiService.getMoreBots(bots, nextBots)
-    }
+    if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
+    return bots
+  }
+
+  async newBotFlow(): Promise<void> {
+    const bots = await this.getAvailableBots()
     if (!bots.length) {
       return this.createNewBot()
     } else {
@@ -274,7 +295,24 @@ Deploying to AWS...
     }
   }
 
-  createNewBot(): Promise<void> {
+  createNewBotWithName(inpBotName: string): Promise<void> {
+    const MAX_ALLOWED_CHARS_FOR_BOT_NAME = 25
+    if (inpBotName.length > MAX_ALLOWED_CHARS_FOR_BOT_NAME) {
+      throw new Error(
+        `Maximum allowed chars for bot name is ${MAX_ALLOWED_CHARS_FOR_BOT_NAME} chars. Please, give a shorter name.`
+      )
+    }
+    return this.botonicApiService.saveBot(inpBotName).then(
+      ({}) => this.deploy(),
+      err =>
+        console.log(
+          colors.red(`There was an error saving the bot: ${String(err)}`)
+        )
+    )
+  }
+
+  createNewBot(botName?: string): Promise<void> {
+    if (botName) return this.createNewBotWithName(botName)
     return prompt([
       {
         type: 'input',
@@ -282,19 +320,7 @@ Deploying to AWS...
         message: 'Bot name:',
       },
     ]).then((inp: any) => {
-      const MAX_ALLOWED_CHARS_FOR_BOT_NAME = 25
-      if (inp.bot_name.length > MAX_ALLOWED_CHARS_FOR_BOT_NAME) {
-        throw new Error(
-          `Maximum allowed chars for bot name is ${MAX_ALLOWED_CHARS_FOR_BOT_NAME} chars. Please, give a shorter name.`
-        )
-      }
-      return this.botonicApiService.saveBot(inp.bot_name).then(
-        ({}) => this.deploy(),
-        err =>
-          console.log(
-            colors.red(`There was an error saving the bot: ${String(err)}`)
-          )
-      )
+      return this.createNewBotWithName(inp.bot_name)
     })
   }
 
