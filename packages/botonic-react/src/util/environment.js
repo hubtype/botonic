@@ -13,7 +13,7 @@ export const staticAsset = path => {
     return resolvedStaticAssetPath
   } catch (e) {
     console.error(`Could not resolve path: '${path}'`)
-    return path
+    return normalize(path)
   }
 }
 
@@ -26,4 +26,32 @@ export const isURL = urlPath => {
   // @stephenhay (38 chars) from: https://mathiasbynens.be/demo/url-regex
   const pattern = new RegExp(/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/)
   return !!pattern.test(urlPath)
+}
+
+export function normalize(path) {
+  const isAbsolute = path.charAt(0) === '/'
+  const trailingSlash = path && path[path.length - 1] === '/'
+  // Normalize the path
+  path = normalizeArray(path.split('/'), !isAbsolute).join('/')
+  if (!path && !isAbsolute) path = '.'
+  if (path && trailingSlash) path += '/'
+  return (isAbsolute ? '/' : '') + path
+}
+
+function normalizeArray(parts, allowAboveRoot) {
+  const res = []
+  for (let i = 0; i < parts.length; i++) {
+    const p = parts[i]
+    if (!p || p === '.') continue
+    if (p === '..') {
+      if (res.length && res[res.length - 1] !== '..') {
+        res.pop()
+      } else if (allowAboveRoot) {
+        res.push('..')
+      }
+    } else {
+      res.push(p)
+    }
+  }
+  return res
 }
