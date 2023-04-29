@@ -35,7 +35,7 @@
     "download": "^8.0.0",
     "mime": "^2.5.2",
     "semver": "^7.3.5",
-    "tar": "^6.1.0"
+    "tar": "^6.1.13"
   },
   "main": "./lib/index.js"
 }
