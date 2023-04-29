@@ -33,7 +33,7 @@
     "concurrently": "^6.2.0",
     "decompress": "^4.2.1",
     "download": "^8.0.0",
-    "mime": "^2.5.2",
+    "mime": "^2.6.0",
     "semver": "^7.3.5",
     "tar": "^6.1.0"
   },
