@@ -34,8 +34,13 @@
     "decompress": "^4.2.1",
     "download": "^8.0.0",
     "mime": "^2.5.2",
+
     "semver": "^7.3.8",
-    "tar": "^6.1.0"
+    "tar": "^6.1.13"
+
+
+
+
   },
   "main": "./lib/index.js"
 }
