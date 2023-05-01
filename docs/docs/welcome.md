@@ -147,16 +147,9 @@ Botonic's goal is not to fully replace all these amazing products feature by fea
 
 ## Who uses Botonic
 
-- EPSON
-- Michael Kors
-- Levi
-- Massimo Dutti
-- Zurich
-- Bershka
-- Decathlon
-- Privalia
-- Stradivarius
-- Bankia
-- Caixabank
+<p  align="center">
+<img  alt="who-use-it"  title="who-use-botonic"  src="https://i.ibb.co/tqymB78/SCR-20230428-mf8-removebg-preview.png"  width="550">
+</p>
+
 
 Want to see your name here? Please [submit a pull request](https://github.com/hubtype/botonic/pulls) with your use case!
