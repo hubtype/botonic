@@ -195,7 +195,6 @@ Deploying to AWS...
 
   async deployBotFlow(): Promise<void> {
     if (this.botName) return this.deployBotFromFlag(this.botName)
-    console.log(this.botonicApiService.bot)
     if (
       !this.botonicApiService.bot ||
       !Object.keys(this.botonicApiService.bot).length
