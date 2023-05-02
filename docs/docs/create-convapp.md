@@ -170,8 +170,10 @@ export const routes = [
 
 ## Add NLU
 
-1. In the bot directory, enter `npm install @botonic/plugin-nlu`.
-
+1. In the bot directory, enter: 
+```bash
+npm install @botonic/plugin-ner @botonic/plugin-intent-classification
+```
 2. Create two types of `intents`, i.e. two text files called `chitchat.txt` and `help.txt` in `src/nlu/utterances/en` containing utterances related to an intent. You must create at least **two files** to make the NLU plugin work.
 
 3. Enter the content of your choice in both files. In our example, we are going to add content to the `help.txt` file. Make sure to add a line break between each intent.
