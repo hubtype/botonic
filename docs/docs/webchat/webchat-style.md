@@ -38,14 +38,14 @@ export const webchat = {
 This Webchat example allows definitions that enable you to configure the example.
 
 | Property            | Description                                                                                                                                                                                                                                                                               |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `theme`             | Define your **[webchat styles](#webchat-styles)**                                                                                                                                                                                                                                         |  |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| `theme`             | Define your **[webchat styles](#webchat-styles)**                                                                                                                                                                                                                                         |     |
 | `persistentMenu`    | A persistent menu can be accessed from a small button in the input text box. It allows the user to access popular functionalities anywhere in the conversation                                                                                                                            |
 | `blockInputs`       | Enables you to define which user input is forbidden. It is useful to prevent the user from entering a credit card number.                                                                                                                                                                 |
-| `enableEmojiPicker` | Enables the emoji picker. It can also be defined in `theme.userInput.enableEmojiPicker`. Default value: `false`.                                                                                                                                                               |
-| `enableAttachments` | Authorizes user media attachments or not (`true` or `false`). It can also be defined in `theme.userInput.attachments.enable`. Default value: `false`. |
-| `enableUserInput`   | Enables the user typing zone (true or false). It can also be defined in `theme.userInput.enable`. Default value:`true`.                                                                                                                                                                      |
-| `enableAnimations`  | Enables webchat animations (true or false). Default value:`true`. It can also be defined in `theme.animations.enable`.                                                                                                                                                                         |
+| `enableEmojiPicker` | Enables the emoji picker. It can also be defined in `theme.userInput.enableEmojiPicker`. Default value: `false`.                                                                                                                                                                          |
+| `enableAttachments` | Authorizes user media attachments or not (`true` or `false`). It can also be defined in `theme.userInput.attachments.enable`. Default value: `false`.                                                                                                                                     |
+| `enableUserInput`   | Enables the user typing zone (true or false). It can also be defined in `theme.userInput.enable`. Default value:`true`.                                                                                                                                                                   |
+| `enableAnimations`  | Enables webchat animations (true or false). Default value:`true`. It can also be defined in `theme.animations.enable`.                                                                                                                                                                    |
 | `visibility`        | To make webchat visible or not. If you want to use the settings defined in Hubtype Desk, you must set this value to 'dynamic'. You can pass a boolean `true` to make it visible or false to make it invisible, or you can define a function returning a boolean resolving the visibility. |
 | `coverComponent`    | A `React.Component` shown the first time a user interacts with the Webchat.                                                                                                                                                                                                               |
 | `onInit`            | This event is triggered once the webchat is loaded in the webpage.                                                                                                                                                                                                                        |
@@ -59,7 +59,7 @@ This Webchat example allows definitions that enable you to configure the example
 
 Here is a list of available styles. You need to modify them inside **src/webchat/index.js**'s `theme` object:
 
-| Property                | Description                                                                                                                                                                                          |
+| Property                | Description                                                                                                                                                                                   |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mobileBreakpoint`      | Width (in pixels) for mobile responsive design. Set to `460` pixels by default                                                                                                                |
 | `style`                 | The main characteristics of webchat such as size, background color, etc.                                                                                                                      |
@@ -76,8 +76,8 @@ Here is a list of available styles. You need to modify them inside **src/webchat
 | `buttonStyle`           | Button styles. It can also be defined in `button.style`.                                                                                                                                      |
 | `buttonHoverBackground` | Background color when hovering over a button. It can also be defined in `button.hoverBackground`.                                                                                             |
 | `buttonHoverTextColor`  | Text color when hovering over a button. It can also be defined in `button.hoverTextColor`.                                                                                                    |
-| `buttonAutoDisable`    | Disables a button once the user has clicked on it. Default value:`false`. It can also be defined in `button.autodisable`. |
-| `buttonDisabledStyle`   | Styles of a disabled button once clicked. It can also be defined in `button.disabledstyle`.|
+| `buttonAutoDisable`     | Disables a button once the user has clicked on it. Default value:`false`. It can also be defined in `button.autodisable`.                                                                     |
+| `buttonDisabledStyle`   | Styles of a disabled button once clicked. It can also be defined in `button.disabledstyle`.                                                                                                   |
 | `replyStyle`            | Styles for replies. It can also be defined in `reply.style`.                                                                                                                                  |
 | `alignReplies`          | Aligns replies at `left`, `center` or `right`. It can also be defined in `replies.align`.                                                                                                     |
 | `wrapReplies`           | Whether replies be displayed on a single row `nowrap` (horizontal scrolling is displayed when required) or it is wrapped in different lines `wrap`. It can also be defined in `replies.wrap`. |
@@ -93,8 +93,8 @@ Here is a list of available styles. You need to modify them inside **src/webchat
 | `emojiPicker`           | Set it to `true` to enable the emoji picker. It can also be defined in `userInput.emojiPicker`. `false` by default.                                                                           |
 | `blockInputs`           | The inputs not allowed by the bot. It can also be defined in `userInput.blockInputs`.                                                                                                         |
 | `persistentMenu`        | An array containing the options of your persistent menu. It can also be defined in `userInput.persistentMenu`.                                                                                |
-| `enableAttachments`     | Whether to allow user media attachments or not (`true` or `false`). It can also be defined in `userInput.attachments.enable`. `false` by default. |
-| `documentDownload`      | Styles of the button displayed to download a document sent via webchat.   |
+| `enableAttachments`     | Whether to allow user media attachments or not (`true` or `false`). It can also be defined in `userInput.attachments.enable`. `false` by default.                                             |
+| `documentDownload`      | Styles of the button displayed to download a document sent via webchat.                                                                                                                       |
 | `scrollbar`             | Refer to the example below **`src/webchat/index.js`** for a complete description of scrollbar's customizable attributes.                                                                      |
 
 **Note**: By specifying the `fontFamily` attribute in `style` property, you can overwrite your webchat entire typography.
@@ -181,18 +181,17 @@ blobTickStyle: {
 
 You can also create your own components from scratch.
 
-| Property                | Description                                                                                                                                                                                          |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `customIntro` | React component that is injected where introImage is displayed. It can also be defined in `intro.custom`.| 
-| `customTrigger`| React component that is injected in the Launcher icon. It can also be defined in `triggerButton.custom`.| 
-| `customHeader` | React Component that is injected in the Header of the widget. It can also be defined in `header.custom`.| 
-| `customReply`| React Component that is injected in the Reply components of the widget. It can also be defined in `reply.custom`.| 
-| `customButton` | React Component that is injected in the Button components of the widget. It can also be defined in `button.custom`.| 
-| `customSendButton` | A fully customizable send button. It can also be defined in `userInput.sendButton.custom`.| 
-| `customMenuButton` | A fully customizable button for trigger the persistent menu. It can also be defined in `userInput.menuButton.custom`.| 
+| Property           | Description                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `customIntro`      | React component that is injected where introImage is displayed. It can also be defined in `intro.custom`.             |
+| `customTrigger`    | React component that is injected in the Launcher icon. It can also be defined in `triggerButton.custom`.              |
+| `customHeader`     | React Component that is injected in the Header of the widget. It can also be defined in `header.custom`.              |
+| `customReply`      | React Component that is injected in the Reply components of the widget. It can also be defined in `reply.custom`.     |
+| `customButton`     | React Component that is injected in the Button components of the widget. It can also be defined in `button.custom`.   |
+| `customSendButton` | A fully customizable send button. It can also be defined in `userInput.sendButton.custom`.                            |
+| `customMenuButton` | A fully customizable button for trigger the persistent menu. It can also be defined in `userInput.menuButton.custom`. |
 
 **Note**: Custom components redefine completely the components that are replacing, so the styles in conflicts with these components are overridden.
-
 
 In this example, we are putting CSS styles into a custom 'quickreply'.
 It's very important to put `{props.children}` inside the container, in this case the `<div>` tag:
@@ -219,7 +218,7 @@ export const CustomReply = props => (
 ```
 
 This is an example of a custom Reply for our webchat. We can put all the fancy CSS styles we want.
-This is a static object, so it's not applied in any [component](/docs/components/components), so we don't have to put `{props.children}` inside any container.
+This is a static object, so it's not applied in any [component](/docs/components), so we don't have to put `{props.children}` inside any container.
 
 **src/webchat/custom-intro.js**
 

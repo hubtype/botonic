@@ -27,7 +27,7 @@ You can integrate your chatbot into your webpage. This integration is 100% edita
 
 **Note**: If you want to enable visibility settings, you must add the `visibility` parameter set to `'dynamic'` as shown: `{appId: 'YOUR_APP_ID', visibility: 'dynamic'}`
 
-For more information, refer to the **[Webchat](/docs/webchat/webchat)** section.
+For more information, refer to the **[Webchat](/docs/webchat)** section.
 
 <details>
 <summary>Example</summary>
@@ -69,7 +69,7 @@ For more information about WhatsApp full integration, contact us via **[Slack](h
 
 ## Facebook Messenger
 
-Facebook Messenger is one of the best messenger platforms for deploying chatbots with its variety of **[components](/docs/components/components)** outputs.
+Facebook Messenger is one of the best messenger platforms for deploying chatbots with its variety of **[components](/docs/components)** outputs.
 
 1. Connect your Facebook account to Hubtype and accept the permissions.
 2. Select which of your Facebook Pages you want to connect. If you don't have one, create one **[here](https://www.facebook.com/pages/create/)** and click on **refresh**.

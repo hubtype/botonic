@@ -1,4 +1,15 @@
-# Botonic Plugin Flow Builder
+---
+
+title: Plugin Flow Builder
+id: plugin-flow-builder
+
+---
+
+---
+
+For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-flow-builder)**.
+
+---
 
 ## What Does This Plugin Do?
 

@@ -45,4 +45,4 @@ export default class extends React.Component {
 }
 ```
 
-> Note: you can get a more detailed example in the **[Webchat](/docs/webchat/webchat)** section.
+> Note: you can get a more detailed example in the **[Webchat](/docs/webchat)** section.

@@ -1,6 +1,8 @@
 ---
+
 title: Plugin Dashbot
 id: plugin-dashbot
+
 ---
 
 ---

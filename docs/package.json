@@ -1,0 +1,70 @@
+{
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "npm run update-docs && docusaurus build && cp _redirects build",
+    "update-docs": "./node_modules/.bin/ts-node ./scripts/update-plugins-docs/index.ts; npm run prettify-updated-docs;",
+    "prettify-updated-docs": "./node_modules/.bin/prettier --write --config ../.prettierrc ./sidebars.json ./i18n/en.json ./docs/plugins ./docs/releases",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "typecheck": "tsc",
+    "lint": "npm run lint_core -- --fix",
+    "lint_ci": "npm run lint_core",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js' 'scripts/**/*.ts'"
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.4.0",
+    "@docusaurus/preset-classic": "2.4.0",
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
+    "@mdx-js/react": "^1.6.22",
+    "@mui/material": "^5.12.3",
+    "@mui/styles": "^5.12.3",
+    "aos": "^2.3.4",
+    "autoprefixer": "^10.4.14",
+    "classnames": "^2.3.2",
+    "clsx": "^1.2.1",
+    "css-loader": "^6.7.3",
+    "docusaurus2-dotenv-2": "^1.4.1",
+    "dotenv-webpack": "^8.0.1",
+    "file-loader": "^6.2.0",
+    "markdown-it": "^13.0.1",
+    "postcss": "^8.4.23",
+    "prism-react-renderer": "^1.3.5",
+    "react": "^17.0.2",
+    "react-calendly": "^4.1.1",
+    "react-dom": "^17.0.2",
+    "react-syntax-highlighter": "^15.5.0",
+    "sass": "^1.62.1",
+    "sass-loader": "^13.2.2",
+    "style-loader": "^3.3.2",
+    "tailwindcss": "^3.3.2"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "2.4.0",
+    "@tsconfig/docusaurus": "^1.0.5",
+    "@types/markdown-it": "^12.2.3",
+    "prettier": "^2.8.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=16.14"
+  }
+}

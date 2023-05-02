@@ -152,7 +152,7 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
 
 Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file to add or remove routes. View **[Routes](/docs/concepts/routes)** for more details.
 
-Actions are where you define the behavior of your bot. You can add an Action by creating a new `.js` file inside `src/actions`. View **[Actions](/docs/concepts/actions)** and **[Components](/docs/components/components)** for more details.
+Actions are where you define the behavior of your bot. You can add an Action by creating a new `.js` file inside `src/actions`. View **[Actions](/docs/concepts/actions)** and **[Components](/docs/components)** for more details.
 
 <img src="https://botonic-doc-static.netlify.app/images/general/understanding-project.png"/>
 
