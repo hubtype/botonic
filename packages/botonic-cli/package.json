@@ -16,7 +16,7 @@
     "axios": "^0.24.0",
     "colors": "1.4.0",
     "concurrently": "^6.2.1",
-    "fetch-repo-dir": "^1.0.4",
+    "fetch-repo-dir": "^1.0.6",
     "form-data": "^3.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^7.3.3",
