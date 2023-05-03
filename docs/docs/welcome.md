@@ -39,7 +39,7 @@ Botonic adds an abstraction layer on top of messaging platforms so you don't hav
 </Text>
 ```
 
-Sometimes messaging apps support elements that don't exist in other platforms so we can't make this straightforward standarization. For instance [Messenger's Carousel](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic/#carousel) has no equivalent on Whatsapp. In this case, you can use our [Multichannel](/docs/components/multichannel) component, which offers a sane transformation using available elements in the destination platform.
+Sometimes messaging apps support elements that don't exist in other platforms so we can't make this straightforward standarization. For instance [Messenger's Carousel](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic/#carousel) has no equivalent on Whatsapp. In this case, you can use our [Multichannel](/docs/components/multichannel) component, which offers a same transformation using available elements in the destination platform.
 
 In this sense, **Botonic is to messaging platforms what React Native is to mobile platforms**.
 

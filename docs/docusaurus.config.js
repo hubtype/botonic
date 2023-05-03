@@ -75,10 +75,11 @@ const config = {
     {
       // Replace with your project's social card
       // image: 'img/docusaurus.png',
+      // ALGOLIA KEYS aren't secrets, can be uploaded to Github: https://docusaurus.io/blog/2021/11/21/algolia-docsearch-migration#upgrading-your-docusaurus-site
       algolia: {
-        appId: process.env.ALGOLIA_APP_ID,
-        apiKey: process.env.ALGOLIA_SEARCH_API_KEY,
-        indexName: process.env.INDEX_NAME,
+        appId: '9PPT3RKLKS', // pragma: allowlist secret
+        apiKey: '01be5fc8fdd468f6dd66c8b9c4ede394', // pragma: allowlist secret
+        indexName: 'botonic', // pragma: allowlist secret
       },
       announcementBar: {
         id: 'supportus',
