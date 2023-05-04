@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.312.0",
-    "@aws-sdk/types": "^3.306.0",
+    "@aws-sdk/types": "^3.310.0",
     "@pulumi/aws": "^4.14.0",
     "@pulumi/awsx": "^0.40.1",
     "@pulumi/pulumi": "^3.9.1",
