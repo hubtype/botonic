@@ -26,7 +26,7 @@ export async function updateButtonUrls(
   if (hubtypeContent.content[contentKey]) {
     for (const i in hubtypeContent.content[contentKey]) {
       const button = hubtypeContent.content[contentKey][i].button
-      if (button.url) {
+      if (button?.url) {
         for (const j in button.url) {
           button.url[j] = {
             ...button.url[j],
