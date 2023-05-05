@@ -30,7 +30,7 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
       </a>
     </td>
     <td align="center">
-      <a href="https://botonic.io/examples/booking-platform/">🔗</a>
+      <a href="https://botonic-example-booking-platform.netlify.app/">🔗</a>
     </td>
     <td>
       This example shows you how to make a reservation in a hotel using a
