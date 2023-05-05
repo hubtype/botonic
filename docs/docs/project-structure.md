@@ -37,6 +37,20 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
       cover component, custom messages and webviews.
     </td>
   </tr>
+    <tr>
+    <td align="center">
+      <a href="https://github.com/hubtype/botonic-examples/tree/master/telco-offers">
+        Telco Offers
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://botonic-example-telco-offers.netlify.app/">🔗</a>
+    </td>
+    <td>
+      This example shows you a multi-language conversation flow to acquire an 
+      Internet or a cell phone rate using buttons and replies.
+    </td>
+  </tr>
   <tr>
     <td align="center">
       <a href="https://github.com/hubtype/botonic-examples/tree/master/nlu-assistant">
@@ -44,7 +58,7 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
       </a>
     </td>
     <td align="center">
-      <a href="https://botonic.io/examples/nlu-assistant/">🔗</a>
+      <a href="https://github.com/hubtype/botonic-examples/tree/master/nlu-assistant">🔗</a>
     </td>
     <td>
       This example shows you how to train a custom model using Botonic NLU
