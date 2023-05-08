@@ -14,6 +14,7 @@
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-color-success: rgb(180, 146, 224);
   --ifm-code-background: rgb(216 220 226);
+  --ifm-link-color: rgb(9, 105, 218);
 }
 
 .docusaurus-highlight-code-line {
