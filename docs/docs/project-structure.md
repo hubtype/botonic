@@ -167,7 +167,7 @@ Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file
 Actions are where you define the behavior of your bot. You can add an Action by creating a new `.js` file inside `src/actions`. View **[Actions](/docs/concepts/actions)** and **[Components](/docs/components)** for more details.
 
 <div align="center">
-  <img src="https://i.ibb.co/r2WktPk/routes.png"/>
+  <img src="https://i.ibb.co/vPt2BDn/dfda.png"/>
 </div>
 
 ## Natural Language Understanding
