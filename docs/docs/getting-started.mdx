@@ -60,23 +60,18 @@ Windows users might need to use the alternative `npm run start`
 
 2. Open [http://localhost:8080/](http://localhost:8080/) in your web browser. You'll see the Botonic logo at the bottom-right corner, click on it to open the chat interface and start talking.
 
-<div className='flex flex-col md:flex-row mb-4'>
-  <div className='flex-1'>
-    <img
-      width='350px'
-      src={require('../static/img/botonic_getting_started_1.png').default}
-      alt='Example banner'
-    />
-  </div>
-  <p className='flex-1 md:pl-4'>
-    You'll notice that the bot doesn't understand anything you say, that's fine.
-    In Botonic there are two main concepts that need to be defined in order to
-    add functionality to your bot: <a href='/docs/concepts/routes'>routes</a>{' '}
-    and <a href='/docs/concepts/actions'>actions</a>. If those are not defined,
-    any user input will fallback to the "404" route that responds "I don't
-    understand you" by default.
-  </p>
+<div align='center'>
+  <img src='https://i.ibb.co/VL2vxf9/SCR-20230508-gh1.png' width='270' />
 </div>
+
+<p>
+  You'll notice that the bot doesn't understand anything you say, that's fine.
+  In Botonic there are two main concepts that need to be defined in order to add
+  functionality to your bot: <a href='/docs/concepts/routes'>routes</a> and{' '}
+  <a href='/docs/concepts/actions'>actions</a>. If those are not defined, any
+  user input will fallback to the "404" route that responds "I don't understand
+  you" by default.
+</p>
 
 :::tip
 You can leave the `botonic serve` process running while you edit the code, the browser will auto-refresh the page when it detects changes in the source files.
@@ -111,26 +106,20 @@ export const routes = [
 
 2. Go back to the browser and try typing "Hi there!":
 
-<div className='flex flex-col md:flex-row mb-4'>
-  <div className='flex-1'>
-    <img
-      width='350px'
-      src={require('../static/img/botonic_getting_started_2.png').default}
-      alt='Example banner'
-    />
-  </div>
-  <p className='flex-1 md:pl-4'>
-    The route we just defined indicates that any input text matching the regex{' '}
-    <code>/hi/i</code> will be responded by the text "Hello! Nice to meet you
-    ;)", defined in the <code>action</code> attribute.
-    <br />
-    <br />
-    Actions are just React components that can run random JS code (fetching data
-    from APIs, etc) and return components supported by messaging channels, like <code>
-      Text
-    </code> or <code>Reply</code>
-  </p>
+<div align='center'>
+  <img src='https://i.ibb.co/Tqm8VMB/SCR-20230508-gqx.png' width='270' />
 </div>
+<p className='flex-1 md:pl-4'>
+  The route we just defined indicates that any input text matching the regex{' '}
+  <code>/hi/i</code> will be responded by the text "Hello! Nice to meet you ;)",
+  defined in the <code>action</code> attribute.
+  <br />
+  <br />
+  Actions are just React components that can run random JS code (fetching data from
+  APIs, etc) and return components supported by messaging channels, like <code>
+    Text
+  </code> or <code>Reply</code>
+</p>
 
 :::note
 
