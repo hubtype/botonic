@@ -11,8 +11,6 @@ To start a new bot, you must run `botonic new testBot nlu`
 - `testBot` will be your bot's project name.
 - `nlu` will be the starter example for your project. This example comes with NLU capabilities by default.
 
-<img src="https://botonic-doc-static.netlify.app/images/general/CLI.png"/>
-
 ## Examples
 
 Botonic offers a list of examples to help you set up a chatbot rapidly.
@@ -30,11 +28,25 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
       </a>
     </td>
     <td align="center">
-      <a href="https://botonic.io/examples/booking-platform/">🔗</a>
+      <a href="https://botonic-example-booking-platform.netlify.app/">🔗</a>
     </td>
     <td>
       This example shows you how to make a reservation in a hotel using a
       cover component, custom messages and webviews.
+    </td>
+  </tr>
+    <tr>
+    <td align="center">
+      <a href="https://github.com/hubtype/botonic-examples/tree/master/telco-offers">
+        Telco Offers
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://botonic-example-telco-offers.netlify.app/">🔗</a>
+    </td>
+    <td>
+      This example shows you a multi-language conversation flow to acquire an 
+      Internet or a cell phone rate using buttons and replies.
     </td>
   </tr>
   <tr>
@@ -44,7 +56,7 @@ Botonic offers a list of examples to help you set up a chatbot rapidly.
       </a>
     </td>
     <td align="center">
-      <a href="https://botonic.io/examples/nlu-assistant/">🔗</a>
+      <a href="https://github.com/hubtype/botonic-examples/tree/master/nlu-assistant">🔗</a>
     </td>
     <td>
       This example shows you how to train a custom model using Botonic NLU
@@ -154,7 +166,9 @@ Routes are how you turn user inputs into Actions. Edit your `src/routes.js` file
 
 Actions are where you define the behavior of your bot. You can add an Action by creating a new `.js` file inside `src/actions`. View **[Actions](/docs/concepts/actions)** and **[Components](/docs/components)** for more details.
 
-<img src="https://botonic-doc-static.netlify.app/images/general/understanding-project.png"/>
+<div align="center">
+  <img src="https://i.ibb.co/vPt2BDn/dfda.png"/>
+</div>
 
 ## Natural Language Understanding
 

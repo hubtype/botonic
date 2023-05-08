@@ -22,7 +22,7 @@ const cards = [
     links: {
       github:
         'https://github.com/hubtype/botonic-examples/tree/master/booking-platform',
-      example: '/examples/booking-platform',
+      example: 'https://botonic-example-booking-platform.netlify.app/',
     },
   },
   {
@@ -48,7 +48,7 @@ const cards = [
     links: {
       github:
         'https://github.com/hubtype/botonic-examples/tree/master/telco-offers',
-      example: '/examples/telco-offers',
+      example: 'https://botonic-example-telco-offers.netlify.app/',
     },
   },
 ]
