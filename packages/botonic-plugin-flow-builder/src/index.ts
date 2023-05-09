@@ -26,9 +26,9 @@ import {
   StartNode,
 } from './flow-builder-models'
 import { DEFAULT_FUNCTIONS } from './functions'
+import { updateButtonUrls } from './helpers'
 import { BotonicPluginFlowBuilderOptions } from './types'
 import { resolveGetAccessToken } from './utils'
-import { updateButtonUrls } from './helpers'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   private flowUrl: string
