@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 
 import AttachmentIcon from '../../assets/attachment-icon.svg'
 import { ROLES, WEBCHAT } from '../../constants'
@@ -8,6 +8,8 @@ import { Icon } from './common'
 
 export const Attachment = ({ onChange, accept, enableAttachments }) => {
   const { getThemeProperty } = useContext(WebchatContext)
+
+  const fileInputRef = useRef(null)
 
   const CustomAttachments = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.customAttachments,
@@ -25,6 +27,11 @@ export const Attachment = ({ onChange, accept, enableAttachments }) => {
   }
   const attachmentsEnabled = isAttachmentsEnabled()
 
+  const handleOnChange = event => {
+    onChange(event)
+    fileInputRef.current.value = null
+  }
+
   return (
     <>
       {attachmentsEnabled ? (
@@ -38,11 +45,12 @@ export const Attachment = ({ onChange, accept, enableAttachments }) => {
               )}
             </label>
             <input
+              ref={fileInputRef}
               type='file'
               name='file'
               id='attachment'
               style={{ display: 'none' }}
-              onChange={onChange}
+              onChange={handleOnChange}
               accept={accept}
             />
           </div>
