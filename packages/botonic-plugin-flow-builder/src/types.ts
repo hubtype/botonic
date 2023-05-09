@@ -7,7 +7,7 @@ export interface BotonicPluginFlowBuilderOptions {
   flow?: FlowBuilderData
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
-  getAccessToken: () => string
+  getAccessToken: (session: Session) => string
 }
 
 export enum ProcessEnvNodeEnvs {
