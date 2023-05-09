@@ -9,7 +9,7 @@ export function getFlowBuilderPlugin(plugins: {
 }): BotonicPluginFlowBuilder {
   const flowBuilderPlugin = Object.values(plugins).find(
     // @ts-ignore
-    plugin => plugin.name === FLOW_BUILDER_PLUGIN_NAME
+    plugin => plugin.name.includes(FLOW_BUILDER_PLUGIN_NAME)
   ) as BotonicPluginFlowBuilder
   if (!flowBuilderPlugin)
     throw new Error(
