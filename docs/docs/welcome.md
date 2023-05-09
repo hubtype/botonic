@@ -39,15 +39,15 @@ Botonic adds an abstraction layer on top of messaging platforms so you don't hav
 </Text>
 ```
 
-Sometimes messaging apps support elements that don't exist in other platforms so we can't make this straightforward standarization. For instance [Messenger's Carousel](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic/#carousel) has no equivalent on Whatsapp. In this case, you can use our [Multichannel](/docs/components/multichannel) component, which offers a sane transformation using available elements in the destination platform.
+Sometimes messaging apps support elements that don't exist in other platforms so we can't make this straightforward standarization. For instance [Messenger's Carousel](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic/#carousel) has no equivalent on Whatsapp. In this case, you can use our [Multichannel](/docs/components/multichannel) component, which offers a same transformation using available elements in the destination platform.
 
 In this sense, **Botonic is to messaging platforms what React Native is to mobile platforms**.
 
-Checkout the supported [components](/docs/components/components).
+Checkout the supported [components](/docs/components).
 
 ### Fully Customizable Webchat SDK
 
-Messaging apps offer a limited set of interactive elements, so there's only so much you can do in terms of UI as you're not in full control. However, if you're building for the web, you can use the full power of React. Our [Webchat SDK](/docs/webchat/webchat) allows you to easily customize the behaviour and styles using properties like `enableEmojiPicker: true` or `brandColor: 'blue'`. You can also tailor your bot in a more advanced way with **custom components** and [custom message types](/docs/webchat/webchat-style#custom-message). With the latter, you can **embed complex UI elements** right in the middle of the conversation, like forms or calendars.
+Messaging apps offer a limited set of interactive elements, so there's only so much you can do in terms of UI as you're not in full control. However, if you're building for the web, you can use the full power of React. Our [Webchat SDK](/docs/webchat) allows you to easily customize the behaviour and styles using properties like `enableEmojiPicker: true` or `brandColor: 'blue'`. You can also tailor your bot in a more advanced way with **custom components** and [custom message types](/docs/webchat/webchat-style#custom-message). With the latter, you can **embed complex UI elements** right in the middle of the conversation, like forms or calendars.
 
 ### Webviews
 
@@ -148,8 +148,7 @@ Botonic's goal is not to fully replace all these amazing products feature by fea
 ## Who uses Botonic
 
 <p  align="center">
-<img  alt="who-use-it"  title="who-use-botonic"  src="https://i.ibb.co/tqymB78/SCR-20230428-mf8-removebg-preview.png"  width="550">
+<img  alt="who-use-it"  title="who-use-botonic"  src="https://i.ibb.co/tqymB78/SCR-20230428-mf8-removebg-preview.png"  width="550"/>
 </p>
-
 
 Want to see your name here? Please [submit a pull request](https://github.com/hubtype/botonic/pulls) with your use case!

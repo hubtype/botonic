@@ -1,16 +1,8 @@
-name: Botonic docs tests
-
+name: Build and Deploy Botonic Docs to Netlify
 on:
   push:
-    paths:
-      - '*'
-      - 'packages/*'
-      - 'docs/**'
-      - '.github/workflows/botonic-docs-tests.yml'
-
 jobs:
-  botonic-core-tests:
-    name: Botonic docs tests
+  build:
     runs-on: ubuntu-latest
     env:
       DOCS: docs
@@ -36,3 +28,17 @@ jobs:
         run: (cd ./$DOCS && npm run build)
       - name: Verify lint
         run: (cd ./$DOCS && npm run lint_ci)
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: './docs/build'
+          production-branch: master-lts
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: 'Deploy from GitHub Actions'
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1

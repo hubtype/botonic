@@ -13,12 +13,13 @@ hide_table_of_contents: false
 :::note TLDR;
 The upcoming Botonic 1.0 release will come with live testing on WhatsApp, Messenger and Telegram.
 [Try it out now, give us feedback and get a free subscription to egghead.io!](#try-it-out-and-help-us-improve)
+
 :::
 
 Our goal at Botonic is to make bot development as fast and easy as possible. In our 0.x versions we focused on creating the basic building blocks of the framework:
 
-- [React components that work across all messaging apps](https://botonic.io/docs/components/components) (WhatsApp, Telegram, Messenger, Twitter DM) and the web.
-- [A webchat that is fully customisable](https://botonic.io/docs/webchat/webchat).
+- [React components that work across all messaging apps](https://botonic.io/docs/components) (WhatsApp, Telegram, Messenger, Twitter DM) and the web.
+- [A webchat that is fully customisable](https://botonic.io/docs/webchat).
 - The [routes](https://botonic.io/docs/concepts/routes) and [actions](https://botonic.io/docs/concepts/actions) logic.
 - The [plugin system](https://botonic.io/docs/plugins/botonic-plugins) (including a bunch of [official plugins](https://botonic.io/docs/plugins/plugin-contentful)).
 
@@ -65,6 +66,7 @@ This command will start 3 servers: the REST API, the Websocket server and the fr
 
 :::caution
 Due to a [long standing Yarn bug](https://github.com/yarnpkg/yarn/issues/4667), exiting the serve command with `CTRL-C` will leave your terminal in a bad state. You can either do `CTRL-C` again or `ENTER` to fix it.
+
 :::
 
 ### 3. Try your bot on webchat
@@ -213,6 +215,7 @@ import WebchatPizzaBot from './assets/webchat-pizza-bot.png'
 
 :::note
 If this is the first time trying Botonic and you're wondering how to add natural language understanding we suggest you have a look at the [NLU example](https://botonic.io/examples/nlu-assistant/) or wait for an upcoming post that will cover the new NLP packages in Botonic 1.0
+
 :::
 
 ### 6. Give us feedback and get your egghead.io gift card!
@@ -228,6 +231,7 @@ import Feedback from './assets/feedback.jpg'
 
 :::note
 You can send us feedback anytime you want just by sending "/feedback [your feedback]", for instance `/feedback I wish you had more examples!`
+
 :::
 
 ### 7. What's next?

@@ -24,7 +24,7 @@ _This tutorial assumes you've already created a bot with `botonic new`, if not p
    - Log in with your email/password if you already signed up at [hubtype.com](https://hubtype.com/).
    - Or create a new account on-the-fly.
 3. Enter a name for your bot.
-4. Go to app.hubtype.com > "Bots" tab > select your bot > "Integrations" tab and select one of the available messaging channels. Follow the screen instructions.
+4. Go to [app.hubtype.com/bots](https://app.hubtype.com/bots/) > select your bot > "Integrations" tab and select one of the available messaging channels. Follow the screen instructions.  
 
 🎉 That's it!
 
