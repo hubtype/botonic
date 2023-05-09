@@ -49,6 +49,6 @@
   "dependencies": {
     "@babel/runtime": "^7.21.0",
     "axios": "^1.3.6",
-    "@botonic/react": "^0.21.3"
+    "@botonic/react": "^0.21.6"
   }
 }
