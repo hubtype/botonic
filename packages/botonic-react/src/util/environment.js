@@ -4,14 +4,18 @@ export const isProd = process.env.NODE_ENV === 'production'
 export const staticAsset = path => {
   try {
     if (isURL(path)) return path // Webpack 5 >= fully resolves absolute path to assets
-    const scriptBaseURL = document
-      .querySelector('script[src$="webchat.botonic.js"]')
-      .getAttribute('src')
+    console.log({ document })
+    const querySelector = document.querySelector(
+      'script[src$="webchat.botonic.js"]'
+    )
+    console.log({ querySelector })
+    const scriptBaseURL = querySelector.getAttribute('src')
     const scriptName = scriptBaseURL.split('/').pop()
     const basePath = scriptBaseURL.replace('/' + scriptName, '/')
     const resolvedStaticAssetPath = basePath + path
     return resolvedStaticAssetPath
   } catch (e) {
+    console.log({ e })
     console.error(`Could not resolve path: '${path}'`)
     return normalize(path)
   }

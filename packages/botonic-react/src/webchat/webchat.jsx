@@ -803,7 +803,7 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
               autoFocus={true}
-              inputRef={textArea}
+              ref={textArea}
               onKeyDown={e => onKeyDown(e)}
               onKeyUp={onKeyUp}
               style={{
