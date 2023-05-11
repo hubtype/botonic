@@ -15,52 +15,52 @@ export type CaseResolution =
   | typeof CASE_RESOLUTION.NOT_SOLVED
   | typeof CASE_RESOLUTION.OK
 
-export const PROVIDER = Object.freeze({
-  APPLE: 'apple',
-  DEV: 'dev',
-  FACEBOOK: 'facebook',
-  GENERIC: 'generic',
-  INSTAGRAM: 'instagram',
-  INTERCOM: 'intercom',
-  SMOOCH: 'smooch',
-  TELEGRAM: 'telegram',
-  TWITTER: 'twitter',
-  WEBCHAT: 'webchat',
-  WECHAT: 'wechat',
-  WHATSAPP: 'whatsapp',
-})
+export enum PROVIDER {
+  APPLE = 'apple',
+  DEV = 'dev',
+  FACEBOOK = 'facebook',
+  GENERIC = 'generic',
+  INSTAGRAM = 'instagram',
+  INTERCOM = 'intercom',
+  SMOOCH = 'smooch',
+  TELEGRAM = 'telegram',
+  TWITTER = 'twitter',
+  WEBCHAT = 'webchat',
+  WECHAT = 'wechat',
+  WHATSAPP = 'whatsapp',
+}
 
-export const INPUT = Object.freeze({
-  TEXT: 'text',
-  POSTBACK: 'postback',
-  AUDIO: 'audio',
-  IMAGE: 'image',
-  VIDEO: 'video',
-  DOCUMENT: 'document',
-  LOCATION: 'location',
-  CONTACT: 'contact',
-  BUTTON_MESSAGE: 'buttonmessage',
-  CAROUSEL: 'carousel',
-  CUSTOM: 'custom',
-  WEBCHAT_SETTINGS: 'webchatsettings',
-  WHATSAPP_TEMPLATE: 'whatsapptemplate',
-  RAW: 'raw',
-  CHAT_EVENT: 'chatevent',
-})
+export enum INPUT {
+  TEXT = 'text',
+  POSTBACK = 'postback',
+  AUDIO = 'audio',
+  IMAGE = 'image',
+  VIDEO = 'video',
+  DOCUMENT = 'document',
+  LOCATION = 'location',
+  CONTACT = 'contact',
+  BUTTON_MESSAGE = 'buttonmessage',
+  CAROUSEL = 'carousel',
+  CUSTOM = 'custom',
+  WEBCHAT_SETTINGS = 'webchatsettings',
+  WHATSAPP_TEMPLATE = 'whatsapptemplate',
+  RAW = 'raw',
+  CHAT_EVENT = 'chatevent',
+}
 
-export const CASE_STATUS = Object.freeze({
-  WAITING: 'status_waiting',
-  ATTENDING: 'status_attending',
-  IDLE: 'status_idle',
-  RESOLVED: 'status_resolved',
-})
+export enum CASE_STATUS {
+  WAITING = 'status_waiting',
+  ATTENDING = 'status_attending',
+  IDLE = 'status_idle',
+  RESOLVED = 'status_resolved',
+}
 
-export const CASE_RESOLUTION = Object.freeze({
-  OK: 'result_ok',
-  NOK: 'result_nok',
-  NOT_SOLVED: 'result_not_solved',
-  BANNED: 'result_banned',
-})
+export enum CASE_RESOLUTION {
+  OK = 'result_ok',
+  NOK = 'result_nok',
+  NOT_SOLVED = 'result_not_solved',
+  BANNED = 'result_banned',
+}
 
 export interface Locales {
   [id: string]: string | string[] | Locales
