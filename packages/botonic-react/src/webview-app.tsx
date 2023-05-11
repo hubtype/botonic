@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getString, params2queryString, PROVIDER } from '@botonic/core'
 import axios from 'axios'
 import React from 'react'

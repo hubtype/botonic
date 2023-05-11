@@ -65,7 +65,8 @@
     "@types/react": "17.0.27",
     "babel-plugin-add-module-exports": "^1.0.4",
     "identity-obj-proxy": "^3.0.0",
-    "react-test-renderer": "^16.14.0"
+    "react-test-renderer": "^16.14.0",
+    "typescript": "^5.0.4"
   },
   "engines": {
     "node": ">=10.0.0"
