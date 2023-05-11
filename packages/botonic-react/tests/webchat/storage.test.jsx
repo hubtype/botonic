@@ -1,8 +1,8 @@
 import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
 
-import { WEBCHAT } from '../../src/constants'
-import { Webchat } from '../../src/webchat/webchat'
+import { WEBCHAT } from '../../lib/cjs/constants'
+import { Webchat } from '../../lib/cjs/webchat/webchat'
 import { InMemoryStorage } from '../helpers/in-memory-storage'
 
 describe('TEST: storage', () => {

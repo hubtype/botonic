@@ -1,5 +1,4 @@
 import { INPUT, isMobile, params2queryString } from '@botonic/core'
-import { motion } from 'framer-motion'
 import merge from 'lodash.merge'
 import React, {
   forwardRef,
@@ -161,7 +160,7 @@ const DarkBackgroundMenu = styled.div`
   height: 100%;
 `
 
-// eslint-disable-next-line complexity
+// eslint-disable-next-line complexity, react/display-name
 export const Webchat = forwardRef((props, ref) => {
   const {
     webchatState,

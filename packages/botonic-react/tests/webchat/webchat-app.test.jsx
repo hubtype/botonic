@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react'
 
-import { ROLES } from '../../src/constants'
-import { WebchatApp } from '../../src/webchat-app'
+import { ROLES } from '../../lib/cjs/constants'
+import { WebchatApp } from '../../lib/cjs/webchat-app'
 import { expectNotToHaveRoles, expectToHaveRoles } from '../helpers/test-utils'
 
 describe('TEST: Webchat App', () => {

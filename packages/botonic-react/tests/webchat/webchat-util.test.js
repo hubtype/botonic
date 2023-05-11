@@ -2,7 +2,7 @@ import {
   createUser,
   initSession,
   shouldKeepSessionOnReload,
-} from '../../src/util/webchat'
+} from '../../lib/cjs/util/webchat'
 
 describe('TEST: User Creation', () => {
   it('Creates a new user', () => {

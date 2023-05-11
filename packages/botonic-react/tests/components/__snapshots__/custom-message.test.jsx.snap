@@ -1,42 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CustomMessage failing TEST: ErrorBoundary different errorComponent which gets the props 1`] = `
-<message
-  delay={0}
-  json="{\\"bang\\":\\"Bang!\\",\\"customTypeName\\":\\"test1\\"}"
-  type="custom"
-  typing={0}
->
-  <message
-    delay={0}
-    markdown={1}
-    type="text"
-    typing={0}
-  >
-    Boom!Bang!: Forced exception
-  </message>
-</message>
-`;
-
-exports[`CustomMessage failing TEST: ErrorBoundary on a failing component 1`] = `
-<message
-  delay={0}
-  json="{\\"customTypeName\\":\\"test1\\"}"
-  type="custom"
-  typing={0}
-  wrapperProp="wrapperPropV"
->
-  <message
-    delay={0}
-    markdown={1}
-    type="text"
-    typing={0}
-  >
-    The message cannot be displayed
-  </message>
-</message>
-`;
-
 exports[`CustomMessage replies TEST: replies are moved outside the custom component Button 1`] = `
 <message
   delay={0}

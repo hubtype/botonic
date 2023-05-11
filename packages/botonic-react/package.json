@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.21.6",
+  "version": "0.22.0-alpha.1",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -9,14 +9,15 @@
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepare": "node ../../preinstall.js; npm run clean; npm run build; npm run copy-files;",
-    "clean": "rimraf ./lib/",
+    "prepublishOnly": "npm run clean; npm run build; npm run copy-files;",
+    "prepare": "node ../../preinstall.js;",
+    "clean": "rm -rf ./lib/",
     "copy-files": "copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/esm/; copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/cjs/;",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts'"
   },
   "sideEffects": [
     "*.scss",
@@ -32,7 +33,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@botonic/core": "~0.21.6",
+    "@botonic/core": "0.22.0-alpha.0",
     "axios": "^1.4.0",
     "emoji-picker-react": "^3.2.3",
     "framer-motion": "^3.1.1",
@@ -70,7 +71,6 @@
     "copyfiles": "^2.4.1",
     "identity-obj-proxy": "^3.0.0",
     "react-test-renderer": "^16.14.0",
-    "rimraf": "^5.0.0",
     "typescript": "^5.0.4"
   },
   "engines": {

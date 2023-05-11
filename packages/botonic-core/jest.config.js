@@ -14,7 +14,9 @@ module.exports = {
     '\\.(ts|tsx)$': 'ts-jest',
   },
   collectCoverageFrom: ['src/**/*.{js,ts,jsx,tsx}', '!/node_modules/'],
-  transformIgnorePatterns: ['node_modules/(?!@botonic).+\\.(ts|tsx|js|jsx)$'],
+  transformIgnorePatterns: [
+    'node_modules/(?!@botonic|axios).+\\.(ts|tsx|js|jsx)$',
+  ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   coveragePathIgnorePatterns: ['.d.ts'],
   snapshotSerializers: [],

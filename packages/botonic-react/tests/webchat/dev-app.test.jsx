@@ -1,7 +1,7 @@
 import { act, screen } from '@testing-library/react'
 
-import { ROLES } from '../../src/constants'
-import { DevApp } from '../../src/dev-app'
+import { ROLES } from '../../lib/cjs/constants'
+import { DevApp } from '../../lib/cjs/dev-app'
 import { expectNotToHaveRoles, expectToHaveRoles } from '../helpers/test-utils'
 
 describe('TEST: Dev App', () => {

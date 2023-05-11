@@ -9,9 +9,9 @@ import {
   Subtitle,
   Text,
   Title,
-} from '../../src/components'
-import { ButtonsDisabler } from '../../src/components/buttons-disabler'
-import { msgToBotonic } from '../../src/msg-to-botonic'
+} from '../../lib/cjs/components'
+import { ButtonsDisabler } from '../../lib/cjs/components/buttons-disabler'
+import { msgToBotonic } from '../../lib/cjs/msg-to-botonic'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()
 
@@ -88,8 +88,7 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
   it('Converts correctly a buttonmessage event', () => {
     const buttonMessage = {
       type: 'buttonmessage',
-      text:
-        'Here I display two types of buttons, the first one is a URL button and the second is a payload button:',
+      text: 'Here I display two types of buttons, the first one is a URL button and the second is a payload button:',
       buttons: [
         {
           type: 'postback',

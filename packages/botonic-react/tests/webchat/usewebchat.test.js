@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react-hooks'
 
-import { SENDERS } from '../../src/constants'
+import { SENDERS } from '../../lib/cjs/constants'
 import { renderUseWebchatHook } from '../helpers/test-utils'
 
 describe('TEST: useWebchat', () => {

@@ -4,6 +4,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./lib/cjs",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   }
 }
