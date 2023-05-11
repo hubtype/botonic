@@ -1,5 +1,7 @@
 // @ts-nocheck
-import { getString, params2queryString, PROVIDER } from '@botonic/core'
+import type { PROVIDER } from '@botonic/core'
+import { getString } from '@botonic/core/lib/esm/i18n'
+import { params2queryString } from '@botonic/core/lib/esm/utils'
 import axios from 'axios'
 import React from 'react'
 import { render } from 'react-dom'
