@@ -1,4 +1,7 @@
-import { getString, params2queryString, PROVIDER } from '@botonic/core'
+// @ts-nocheck
+import { getString } from '@botonic/core/lib/esm/i18n'
+import { PROVIDER } from '@botonic/core/lib/esm/models/legacy-types'
+import { params2queryString } from '@botonic/core/lib/esm/utils'
 import axios from 'axios'
 import React from 'react'
 import { render } from 'react-dom'

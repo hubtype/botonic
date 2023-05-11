@@ -2,7 +2,7 @@ import {
   getFullMimeWhitelist,
   getMediaType,
   isAllowedSize,
-} from '../../src/message-utils'
+} from '../../lib/cjs/message-utils'
 import { toMB } from '../helpers/test-utils'
 
 describe('TEST: attachments', () => {

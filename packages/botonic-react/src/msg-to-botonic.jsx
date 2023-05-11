@@ -1,16 +1,5 @@
 import React from 'react'
 
-import {
-  isAudio,
-  isButtonMessage,
-  isCarousel,
-  isCustom,
-  isDocument,
-  isImage,
-  isLocation,
-  isText,
-  isVideo,
-} from '../src/message-utils'
 import { Audio } from './components/audio'
 import { Button } from './components/button'
 import { ButtonsDisabler } from './components/buttons-disabler'
@@ -25,6 +14,17 @@ import { Subtitle } from './components/subtitle'
 import { Text } from './components/text'
 import { Title } from './components/title'
 import { Video } from './components/video'
+import {
+  isAudio,
+  isButtonMessage,
+  isCarousel,
+  isCustom,
+  isDocument,
+  isImage,
+  isLocation,
+  isText,
+  isVideo,
+} from './message-utils'
 
 /**
  *

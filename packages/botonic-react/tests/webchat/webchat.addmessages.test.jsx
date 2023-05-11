@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { act } from 'react-test-renderer'
 
-import { Audio, Document, Image, Video } from '../../src/components'
-import { ROLES } from '../../src/constants'
-import { Webchat } from '../../src/webchat/webchat'
+import { Audio, Document, Image, Video } from '../../lib/cjs/components'
+import { ROLES } from '../../lib/cjs/constants'
+import { Webchat } from '../../lib/cjs/webchat/webchat'
 import {
   expectNotToHaveRoles,
   expectToHaveRoles,

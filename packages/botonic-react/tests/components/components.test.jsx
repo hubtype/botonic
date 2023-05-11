@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { Text } from '../../src/components'
+import { Text } from '../../lib/cjs/components'
 import {
   getComponentTypeName,
   getElementName,
-} from '../../src/components/components'
+} from '../../lib/cjs/components/components'
 
 describe('getDisplayName', () => {
   test('React.Component', () => {

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { Reply } from '../../../src'
-import { MultichannelReply } from '../../../src/components/multichannel'
+import { Reply } from '../../../lib/cjs'
+import { MultichannelReply } from '../../../lib/cjs/components/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 describe('Multichannel replies:', () => {

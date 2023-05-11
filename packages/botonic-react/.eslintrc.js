@@ -18,6 +18,7 @@ module.exports = {
       'error', // we have many variables which are actually functions
       { variables: false, functions: false, classes: false },
     ],
+    'react/no-unknown-property': ['warn'],
   },
   settings: {
     react: {

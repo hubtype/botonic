@@ -1,19 +1,24 @@
 {
   "name": "@botonic/react",
-  "version": "0.21.6",
+  "version": "0.22.0-alpha.1",
   "license": "MIT",
   "description": "Build Chatbots using React",
-  "main": "src/index.js",
-  "types": "./index.d.ts",
+  "main": "./lib/cjs",
+  "module": "./lib/esm",
+  "types": "./lib/cjs/index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepare": "node ../../preinstall.js",
-    "build": "rm -rf lib && babel src --out-dir lib --source-maps --copy-files",
+    "prepublishOnly": "npm run clean; npm run build; npm run copy-files;",
+    "prepare": "node ../../preinstall.js;",
+    "clean": "rm -rf ./lib/",
+    "copy-files": "copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/esm/; copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/cjs/;",
+    "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
-    "lint": "npm run lint_core -- --fix",
+    "prettier": "../../node_modules/.bin/prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
+    "lint": "npm run prettier; npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' 'tests/**/*.js' 'tests/**/*.jsx'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' --fix"
   },
   "sideEffects": [
     "*.scss",
@@ -29,8 +34,8 @@
     "README.md"
   ],
   "dependencies": {
-    "@botonic/core": "~0.21.6",
-    "axios": "^0.24.0",
+    "@botonic/core": "0.22.0-alpha.0",
+    "axios": "^1.4.0",
     "emoji-picker-react": "^3.2.3",
     "framer-motion": "^3.1.1",
     "he": "^1.2.0",
@@ -64,8 +69,10 @@
     "@testing-library/react-hooks": "^7.0.0",
     "@types/react": "17.0.27",
     "babel-plugin-add-module-exports": "^1.0.4",
+    "copyfiles": "^2.4.1",
     "identity-obj-proxy": "^3.0.0",
-    "react-test-renderer": "^16.14.0"
+    "react-test-renderer": "^16.14.0",
+    "typescript": "^5.0.4"
   },
   "engines": {
     "node": ">=10.0.0"

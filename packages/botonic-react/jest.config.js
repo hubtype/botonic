@@ -11,9 +11,9 @@ module.exports = {
   ],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!/node_modules/'],
   transformIgnorePatterns: [
-    'node_modules/(?!@botonic|react-children-utilities).+\\.(js|jsx)$',
+    'node_modules/(?!@botonic|axios|react-children-utilities).+\\.(js|jsx|tsx)$',
   ],
-  moduleFileExtensions: ['js', 'jsx', 'json'],
+  moduleFileExtensions: ['js', 'jsx', 'json', 'tsx'],
   snapshotSerializers: [],
   modulePaths: ['node_modules', 'src'],
   moduleNameMapper: {

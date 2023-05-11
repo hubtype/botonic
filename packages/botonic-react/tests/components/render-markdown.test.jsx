@@ -2,7 +2,7 @@ import {
   ESCAPED_LINE_BREAK,
   renderLinks,
   renderMarkdown,
-} from '../../src/components/markdown'
+} from '../../lib/cjs/components/markdown'
 
 describe('Using renderMarkdown', () => {
   // MarkdownIt renderer adds an extra blank space after each tag, hence the trim.

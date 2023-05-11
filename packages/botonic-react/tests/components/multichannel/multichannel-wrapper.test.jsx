@@ -9,8 +9,8 @@ import {
   Subtitle,
   Text,
   Title,
-} from '../../../src'
-import { Multichannel } from '../../../src/components/multichannel/multichannel'
+} from '../../../lib/cjs'
+import { Multichannel } from '../../../lib/esm/components/multichannel/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 const LEGACY_PROPS = {
@@ -89,15 +89,13 @@ describe('Multichannel wrapper', () => {
     {
       title: 'Title1',
       subtitle: 'Subtitle1',
-      pic:
-        'https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614',
+      pic: 'https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614',
       buttons: [{ payload: 'Payload1', text: 'Previo a la compra' }],
     },
     {
       title: 'Title2',
       subtitle: 'Subtitle2',
-      pic:
-        'https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614',
+      pic: 'https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614',
       buttons: [
         { payload: 'Payload2.1', text: 'Durante la compra' },
         { payload: 'Payload2.2', text: 'Durante la compra2' },
@@ -106,8 +104,7 @@ describe('Multichannel wrapper', () => {
     {
       title: 'Title3',
       subtitle: 'Subtitle3',
-      pic:
-        'https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614',
+      pic: 'https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614',
       buttons: [{ payload: 'Payload3', text: 'Posterior a la compra' }],
     },
   ]

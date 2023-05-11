@@ -1,4 +1,4 @@
-import { MultichannelFacebook } from '../../../../src/components/multichannel/facebook/facebook'
+import { MultichannelFacebook } from '../../../../lib/esm/components/multichannel/facebook/facebook'
 
 describe('Multichannel Facebook text converter', () => {
   const multichannelFacebook = new MultichannelFacebook()
@@ -34,11 +34,8 @@ describe('Multichannel Facebook text converter', () => {
       children: longText,
       delay: '1',
     }
-    const {
-      texts,
-      propsLastText,
-      propsWithoutChildren,
-    } = multichannelFacebook.convertText(props, longText)
+    const { texts, propsLastText, propsWithoutChildren } =
+      multichannelFacebook.convertText(props, longText)
 
     const expectedPropsLastText = {
       children: [lastText],
@@ -55,11 +52,8 @@ describe('Multichannel Facebook text converter', () => {
       children: [longText, button],
       delay: '1',
     }
-    const {
-      texts,
-      propsLastText,
-      propsWithoutChildren,
-    } = multichannelFacebook.convertText(props, longText)
+    const { texts, propsLastText, propsWithoutChildren } =
+      multichannelFacebook.convertText(props, longText)
 
     const expectedPropsLastText = {
       children: [lastText, button],
@@ -76,11 +70,8 @@ describe('Multichannel Facebook text converter', () => {
       children: shortText,
       delay: '1',
     }
-    const {
-      texts,
-      propsLastText,
-      propsWithoutChildren,
-    } = multichannelFacebook.convertText(props, shortText)
+    const { texts, propsLastText, propsWithoutChildren } =
+      multichannelFacebook.convertText(props, shortText)
     expect(texts).toEqual(undefined)
     expect(propsLastText).toEqual(props)
     expect(propsWithoutChildren).toEqual(undefined)
@@ -91,11 +82,8 @@ describe('Multichannel Facebook text converter', () => {
       children: [shortText, button],
       delay: '1',
     }
-    const {
-      texts,
-      propsLastText,
-      propsWithoutChildren,
-    } = multichannelFacebook.convertText(props, shortText)
+    const { texts, propsLastText, propsWithoutChildren } =
+      multichannelFacebook.convertText(props, shortText)
     expect(texts).toEqual(undefined)
     expect(propsLastText).toEqual(props)
     expect(propsWithoutChildren).toEqual(undefined)
