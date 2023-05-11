@@ -10,7 +10,7 @@ import {
   isLocation,
   isText,
   isVideo,
-} from '../src/message-utils'
+} from './message-utils'
 import { Audio } from './components/audio'
 import { Button } from './components/button'
 import { ButtonsDisabler } from './components/buttons-disabler'

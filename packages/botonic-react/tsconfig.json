@@ -1,8 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src/**/*.d.ts"],
+  "include": ["src/"],
   "compilerOptions": {
+    "sourceRoot": "src",
     "baseUrl": ".",
-    "allowJs": true
+    "outDir": "./lib/cjs",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   }
 }
