@@ -3,7 +3,7 @@
 exports[`CustomMessage failing TEST: ErrorBoundary different errorComponent which gets the props 1`] = `
 <message
   delay={0}
-  json="{\\"bang\\":\\"Bang!\\",\\"customTypeName\\":\\"test1\\"}"
+  json="{"bang":"Bang!","customTypeName":"test1"}"
   type="custom"
   typing={0}
 >
@@ -21,7 +21,7 @@ exports[`CustomMessage failing TEST: ErrorBoundary different errorComponent whic
 exports[`CustomMessage failing TEST: ErrorBoundary on a failing component 1`] = `
 <message
   delay={0}
-  json="{\\"customTypeName\\":\\"test1\\"}"
+  json="{"customTypeName":"test1"}"
   type="custom"
   typing={0}
   wrapperProp="wrapperPropV"
@@ -40,7 +40,7 @@ exports[`CustomMessage failing TEST: ErrorBoundary on a failing component 1`] = 
 exports[`CustomMessage replies TEST: replies are moved outside the custom component Button 1`] = `
 <message
   delay={0}
-  json="{\\"children\\":{\\"key\\":null,\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payloadundefined\\",\\"children\\":[\\"button\\",null]},\\"_owner\\":null,\\"_store\\":{}},\\"customTypeName\\":\\"test1\\"}"
+  json="{"children":{"key":null,"ref":null,"props":{"payload":"payloadundefined","children":["button",null]},"_owner":null,"_store":{}},"customTypeName":"test1"}"
   type="custom"
   typing={0}
 >
@@ -62,7 +62,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 exports[`CustomMessage replies TEST: replies are moved outside the custom component Button,Button 1`] = `
 <message
   delay={0}
-  json="{\\"children\\":[{\\"key\\":\\".$1\\",\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payload1\\",\\"children\\":[\\"button\\",1]},\\"_owner\\":null,\\"_store\\":{}},{\\"key\\":\\".$2\\",\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payload2\\",\\"children\\":[\\"button\\",2]},\\"_owner\\":null,\\"_store\\":{}}],\\"customTypeName\\":\\"test1\\"}"
+  json="{"children":[{"key":".$1","ref":null,"props":{"payload":"payload1","children":["button",1]},"_owner":null,"_store":{}},{"key":".$2","ref":null,"props":{"payload":"payload2","children":["button",2]},"_owner":null,"_store":{}}],"customTypeName":"test1"}"
   type="custom"
   typing={0}
 >
@@ -91,7 +91,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply 1`] = `
 <message
   delay={0}
-  json="{\\"children\\":[],\\"customTypeName\\":\\"test1\\"}"
+  json="{"children":[],"customTypeName":"test1"}"
   type="custom"
   typing={0}
 >
@@ -112,7 +112,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply,Button 1`] = `
 <message
   delay={0}
-  json="{\\"children\\":[{\\"key\\":\\".$2\\",\\"ref\\":null,\\"props\\":{\\"payload\\":\\"payload2\\",\\"children\\":[\\"button\\",2]},\\"_owner\\":null,\\"_store\\":{}}],\\"customTypeName\\":\\"test1\\"}"
+  json="{"children":[{"key":".$2","ref":null,"props":{"payload":"payload2","children":["button",2]},"_owner":null,"_store":{}}],"customTypeName":"test1"}"
   type="custom"
   typing={0}
 >
@@ -141,7 +141,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply,Reply 1`] = `
 <message
   delay={0}
-  json="{\\"children\\":[],\\"customTypeName\\":\\"test1\\"}"
+  json="{"children":[],"customTypeName":"test1"}"
   type="custom"
   typing={0}
 >
@@ -169,7 +169,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 exports[`TEST: CustomMessage defaultProps, props and children are injected into the component 1`] = `
 <message
   delay={0}
-  json="{\\"wrappedProp\\":\\"wrappedPropV\\",\\"children\\":\\"body\\",\\"customTypeName\\":\\"test1\\"}"
+  json="{"wrappedProp":"wrappedPropV","children":"body","customTypeName":"test1"}"
   type="custom"
   typing={0}
   wrapperProp="wrapperPropV"

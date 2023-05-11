@@ -15,6 +15,7 @@ export function useStorageState(storage, key, defaultValue) {
         key,
         JSON.stringify(updatedValue)
       )
+      console.log({ evtTarget })
       evtTarget.dispatchEvent(
         new CustomEvent('storage_change', { detail: { key } })
       )
@@ -32,7 +33,6 @@ export function useStorageState(storage, key, defaultValue) {
         lraw !== raw && setValue(JSON.parse(lraw))
       }
     }
-
     evtTarget.addEventListener('storage_change', listener)
     return () => evtTarget.removeEventListener('storage_change', listener)
   })

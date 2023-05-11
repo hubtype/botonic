@@ -712,7 +712,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [webchatState.isWebchatOpen])
 
-  const textArea = useRef()
+  const textArea = useRef(null)
 
   const getTriggerImage = () => {
     const triggerImage = getThemeProperty(
@@ -803,7 +803,7 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
               autoFocus={true}
-              inputRef={textArea}
+              ref={textArea}
               onKeyDown={e => onKeyDown(e)}
               onKeyUp={onKeyUp}
               style={{

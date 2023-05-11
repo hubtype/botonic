@@ -54,7 +54,7 @@ exports[`Multichannel wrapper just text 1`] = `
 `;
 
 exports[`Multichannel wrapper many multichannels 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"
@@ -98,7 +98,7 @@ Array [
 `;
 
 exports[`Multichannel wrapper text and carousel legacy 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"
