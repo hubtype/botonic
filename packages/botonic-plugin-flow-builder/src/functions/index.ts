@@ -5,5 +5,5 @@ export const DEFAULT_FUNCTIONS = {
   // TODO: Rename api action name
   // 'conditional-queue-status': conditionalQueueStatus,
   'check-queue-status': conditionalQueueStatus,
-  'conditional-provider': conditionalProvider,
+  'get-channel-type': conditionalProvider,
 }
