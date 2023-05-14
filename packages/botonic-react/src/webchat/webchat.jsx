@@ -371,8 +371,8 @@ export const Webchat = forwardRef((props, ref) => {
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
-  const handleSelectedEmoji = (event, emojiObject) => {
-    textArea.current.value += emojiObject.emoji
+  const handleSelectedEmoji = event => {
+    textArea.current.value += event.emoji
     textArea.current.focus()
   }
 
