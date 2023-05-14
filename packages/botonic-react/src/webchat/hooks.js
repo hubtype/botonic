@@ -247,7 +247,8 @@ export function useComponentVisible(initialIsVisible, onClickOutside) {
   const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible)
   const ref = useRef(null)
   const handleClickOutside = event => {
-    if (ref.current && !ref.current.contains(event.path[0])) {
+    const target = event.path ? event.path[0] : event.target
+    if (ref.current && !ref.current.contains(target)) {
       setIsComponentVisible(false)
       onClickOutside()
     }
