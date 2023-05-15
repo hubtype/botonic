@@ -5,6 +5,7 @@
     "baseUrl": ".",
     "outDir": "./lib/esm",
     "target": "ES2017",
-    "module": "ES2020"
+    "module": "ES2020",
+    "skipLibCheck": true
   }
 }

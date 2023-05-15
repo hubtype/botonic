@@ -372,14 +372,14 @@ export const Webchat = forwardRef((props, ref) => {
     updateWebview(webviewComponent, params)
 
   const handleSelectedEmoji = event => {
-    textArea.current.value += event.emoji
-    textArea.current.focus()
+    textArea.value += event.emoji
+    textArea.focus()
   }
 
   const closeWebview = options => {
     updateWebview()
     if (userInputEnabled) {
-      textArea.current.focus()
+      textArea.focus()
     }
     if (options && options.payload) {
       sendPayload(options.payload)
@@ -645,8 +645,8 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const sendTextAreaText = () => {
-    sendText(textArea.current.value)
-    textArea.current.value = ''
+    sendText(textArea.value)
+    textArea.value = ''
   }
 
   let isTyping = false
@@ -678,7 +678,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const onKeyUp = () => {
-    if (textArea.current.value === '') {
+    if (textArea.value === '') {
       stopTyping()
       return
     }
@@ -710,8 +710,6 @@ export const Webchat = forwardRef((props, ref) => {
       togglePersistentMenu(false)
     }
   }, [webchatState.isWebchatOpen])
-
-  const textArea = useRef()
 
   const getTriggerImage = () => {
     const triggerImage = getThemeProperty(
@@ -767,6 +765,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
+  const [textArea, setTextArea] = useState('')
   const userInputArea = () => {
     return (
       userInputEnabled && (
@@ -791,6 +790,7 @@ export const Webchat = forwardRef((props, ref) => {
 
           <TextAreaContainer>
             <Textarea
+              ref={tag => setTextArea(tag)}
               name='text'
               onFocus={() => deviceAdapter.onFocus(host)}
               onBlur={() => deviceAdapter.onBlur()}
@@ -802,7 +802,6 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
               autoFocus={true}
-              inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
               onKeyUp={onKeyUp}
               style={{
