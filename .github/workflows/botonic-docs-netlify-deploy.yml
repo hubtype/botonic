@@ -1,6 +1,8 @@
 name: Build and Deploy Botonic Docs to Netlify
 on:
   push:
+  paths:
+    - 'docs/'
 jobs:
   build:
     runs-on: ubuntu-latest

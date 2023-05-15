@@ -12,7 +12,7 @@ exports[`Text Component Just one Text 1`] = `
 `;
 
 exports[`Text Component N Text with N button 1`] = `
-Array [
+[
   <message
     delay={0}
     markdown={1}
@@ -47,7 +47,7 @@ Array [
 `;
 
 exports[`Text Component N Text with N replies 1`] = `
-Array [
+[
   <message
     delay={0}
     markdown={1}
