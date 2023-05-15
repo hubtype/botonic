@@ -372,14 +372,14 @@ export const Webchat = forwardRef((props, ref) => {
     updateWebview(webviewComponent, params)
 
   const handleSelectedEmoji = event => {
-    textArea.value += event.emoji
-    textArea.focus()
+    textArea.current.value += event.emoji
+    textArea.current.focus()
   }
 
   const closeWebview = options => {
     updateWebview()
     if (userInputEnabled) {
-      textArea.focus()
+      textArea.current.focus()
     }
     if (options && options.payload) {
       sendPayload(options.payload)
@@ -645,8 +645,8 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const sendTextAreaText = () => {
-    sendText(textArea.value)
-    textArea.value = ''
+    sendText(textArea.current.value)
+    textArea.current.value = ''
   }
 
   let isTyping = false
@@ -678,7 +678,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const onKeyUp = () => {
-    if (textArea.value === '') {
+    if (textArea.current.value === '') {
       stopTyping()
       return
     }
@@ -765,7 +765,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
-  const [textArea, setTextArea] = useState('')
+  const textArea = useRef(null)
   const userInputArea = () => {
     return (
       userInputEnabled && (
@@ -790,7 +790,7 @@ export const Webchat = forwardRef((props, ref) => {
 
           <TextAreaContainer>
             <Textarea
-              ref={tag => setTextArea(tag)}
+              inputRef={textArea}
               name='text'
               onFocus={() => deviceAdapter.onFocus(host)}
               onBlur={() => deviceAdapter.onBlur()}
