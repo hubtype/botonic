@@ -33,7 +33,7 @@
     "axios": "^0.24.0",
     "decode": "^0.3.0",
     "fast-xml-parser": "^3.21.1",
-    "html-entities": "^2.3.2",
+    "html-entities": "^2.3.3",
     "pusher-js": "^5.1.1"
   },
   "devDependencies": {
