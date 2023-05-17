@@ -26,9 +26,9 @@ import {
   StartNode,
 } from './flow-builder-models'
 import { DEFAULT_FUNCTIONS } from './functions'
+import { updateButtonUrls } from './helpers'
 import { BotonicPluginFlowBuilderOptions } from './types'
 import { resolveGetAccessToken } from './utils'
-import { updateButtonUrls } from './helpers'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   private flowUrl: string
@@ -129,6 +129,18 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     await updateButtonUrls(hubtypeContent, 'elements', this.getContent)
     await updateButtonUrls(hubtypeContent, 'buttons', this.getContent)
     const content = await this.getFlowContent(hubtypeContent, locale)
+
+    if (content && 'buttons' in content) {
+      content.buttons.forEach(async button => {
+        if (button.payload) {
+          const contentButton = await this.getContent(button.payload)
+          if (contentButton?.type === NodeType.PAYLOAD) {
+            button.payload = contentButton.content.payload
+          }
+        }
+      })
+    }
+
     if (hubtypeContent.type === NodeType.FUNCTION) {
       const targetId = await this.callFunction(hubtypeContent, locale)
       return this.getContents(targetId, locale, contents)
@@ -230,12 +242,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     locale: string
   ): Promise<string> {
     const functionNodeId = functionNode.id
-    const nameValues = functionNode.content.arguments
-      .find(arg => arg.locale === locale)
-      ?.values.map(value => ({ [value.name]: value.value }))
-    if (!nameValues) {
-      throw new Error(`No arguments found for node with id ${functionNodeId}`)
-    }
+    const nameValues =
+      functionNode.content.arguments
+        .find(arg => arg.locale === locale)
+        ?.values.map(value => ({ [value.name]: value.value })) || []
+
     const args = Object.assign(
       {
         session: this.currentRequest.session,
