@@ -247,9 +247,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         .find(arg => arg.locale === locale)
         ?.values.map(value => ({ [value.name]: value.value })) || []
 
-    // if (!nameValues) {
-    //   // throw new Error(`No arguments found for node with id ${functionNodeId}`)
-    // }
     const args = Object.assign(
       {
         session: this.currentRequest.session,
