@@ -371,8 +371,8 @@ export const Webchat = forwardRef((props, ref) => {
   const openWebview = (webviewComponent, params) =>
     updateWebview(webviewComponent, params)
 
-  const handleSelectedEmoji = (event, emojiObject) => {
-    textArea.current.value += emojiObject.emoji
+  const handleSelectedEmoji = event => {
+    textArea.current.value += event.emoji
     textArea.current.focus()
   }
 
@@ -711,8 +711,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [webchatState.isWebchatOpen])
 
-  const textArea = useRef()
-
   const getTriggerImage = () => {
     const triggerImage = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.triggerButtonImage,
@@ -767,6 +765,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
+  const textArea = useRef(null)
   const userInputArea = () => {
     return (
       userInputEnabled && (
@@ -791,6 +790,7 @@ export const Webchat = forwardRef((props, ref) => {
 
           <TextAreaContainer>
             <Textarea
+              inputRef={textArea}
               name='text'
               onFocus={() => deviceAdapter.onFocus(host)}
               onBlur={() => deviceAdapter.onBlur()}
@@ -802,7 +802,6 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
               autoFocus={true}
-              inputRef={textArea}
               onKeyDown={e => onKeyDown(e)}
               onKeyUp={onKeyUp}
               style={{

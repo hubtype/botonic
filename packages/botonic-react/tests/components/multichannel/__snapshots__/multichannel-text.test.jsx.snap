@@ -20,7 +20,7 @@ exports[`Multichannel text display URL buttons as text even if buttonsAsText is 
 `;
 
 exports[`Multichannel text display custom text as button separator when more than 3 buttons in message 1`] = `
-Array [
+[
   <message
     buttonsAsText={0}
     buttonsTextSeparator="Custom message"
@@ -116,7 +116,7 @@ exports[`Multichannel text just text 1`] = `
 `;
 
 exports[`Multichannel text split messages with more than 3 postback buttons into separate messages (without webview buttons) 1`] = `
-Array [
+[
   <message
     buttonsAsText={0}
     delay={0}
@@ -161,7 +161,7 @@ Array [
 `;
 
 exports[`Multichannel text split messages with more than 3 postback buttons into separate messages 1`] = `
-Array [
+[
   <message
     buttonsAsText={0}
     delay={0}
@@ -220,7 +220,7 @@ Array [
 `;
 
 exports[`Multichannel text split webview buttons into separate messages 1`] = `
-Array [
+[
   <message
     buttonsAsText={0}
     delay={0}

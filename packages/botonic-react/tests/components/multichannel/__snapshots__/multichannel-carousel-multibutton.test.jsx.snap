@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel (just text in button) with payload/path buttons N Buttons 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"
@@ -30,7 +30,7 @@ Array [
 `;
 
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with URL and postback buttons N Buttons displaying only postback buttons as whatsapp buttons 1`] = `
-Array [
+[
   <message
     buttonsAsText={0}
     delay={0}
@@ -109,7 +109,7 @@ Array [
 `;
 
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with payload/path buttons N Buttons 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"
@@ -142,7 +142,7 @@ Array [
 `;
 
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with url buttons 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"

@@ -64,7 +64,13 @@ export const OpenedEmojiPicker = props => {
     <div ref={ref}>
       {isComponentVisible && (
         <Container role={ROLES.EMOJI_PICKER}>
-          <Picker onEmojiClick={props.onEmojiClick} disableAutoFocus={true} />
+          <Picker
+            width='100%'
+            height='19rem'
+            previewConfig={{ showPreview: false }}
+            onEmojiClick={props.onEmojiClick}
+            disableAutoFocus={true}
+          />
         </Container>
       )}
     </div>

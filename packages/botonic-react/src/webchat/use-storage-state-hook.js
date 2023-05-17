@@ -1,9 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
 
-//Code taken from https://github.com/leny/react-use-storage
-const evtTarget = new EventTarget()
+// Code taken from https://github.com/leny/react-use-storage/blob/master/src/index.js
+const IS_BROWSER =
+  typeof window !== 'undefined' &&
+  typeof navigator !== 'undefined' &&
+  typeof document !== 'undefined'
 
 export function useStorageState(storage, key, defaultValue) {
+  let evtTarget
+
+  try {
+    evtTarget = new EventTarget()
+  } catch {
+    evtTarget = (IS_BROWSER ? document : {})?.createElement?.('phony')
+  }
+
   const raw = storage?.getItem(key)
 
   const [value, setValue] = useState(raw ? JSON.parse(raw) : defaultValue)

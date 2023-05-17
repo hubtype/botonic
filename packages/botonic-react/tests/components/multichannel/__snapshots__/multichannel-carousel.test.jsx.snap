@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Multichannel carousel COMPACT mode all elements in same message 1`] = `
-Array [
+[
   "
 Previo",
   "
@@ -10,7 +10,7 @@ Durante",
 `;
 
 exports[`Multichannel carousel COMPACT mode dynamic carousel (just text in button) with payload/path buttons 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"
@@ -35,7 +35,7 @@ Array [
 `;
 
 exports[`Multichannel carousel COMPACT mode dynamic carousel with URL and postback buttons and displaying only postback buttons as whatsapp buttons 1`] = `
-Array [
+[
   <message
     buttonsAsText={0}
     delay={0}
@@ -98,7 +98,7 @@ Array [
 `;
 
 exports[`Multichannel carousel COMPACT mode dynamic carousel with payload/path buttons 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"
@@ -127,7 +127,7 @@ Array [
 `;
 
 exports[`Multichannel carousel COMPACT mode dynamic carousel with url buttons 1`] = `
-Array [
+[
   <message
     delay={0}
     indexMode="number"
