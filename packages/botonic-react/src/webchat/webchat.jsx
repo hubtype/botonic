@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import Textarea from 'react-textarea-autosize'
 import styled, { StyleSheetManager } from 'styled-components'
 import { useAsyncEffect } from 'use-async-effect'
 import { v4 as uuidv4 } from 'uuid'
@@ -52,6 +51,8 @@ import {
   PersistentMenu,
 } from './components/persistent-menu'
 import { SendButton } from './components/send-button'
+import { Textarea } from './components/textarea/textarea'
+import { useTextarea } from './components/textarea/use-text-area'
 import { TypingIndicator } from './components/typing-indicator'
 import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
@@ -99,10 +100,9 @@ const UserInputContainer = styled.div`
   border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5};
 `
 
-const TextAreaContainer = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
+const TriggerImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
 `
 
 const ErrorMessageContainer = styled.div`
@@ -234,21 +234,6 @@ export const Webchat = forwardRef((props, ref) => {
       })
   }
 
-  const sendChatEvent = async chatEvent => {
-    const chatEventInput = {
-      id: uuidv4(),
-      type: INPUT.CHAT_EVENT,
-      data: chatEvent,
-    }
-    props.onUserInput &&
-      props.onUserInput({
-        user: webchatState.session.user,
-        input: chatEventInput,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-      })
-  }
-
   // Load styles stored in window._botonicInsertStyles by Webpack
   useComponentWillMount(() => {
     if (window._botonicInsertStyles && window._botonicInsertStyles.length) {
@@ -352,14 +337,14 @@ export const Webchat = forwardRef((props, ref) => {
     updateWebview(webviewComponent, params)
 
   const handleSelectedEmoji = event => {
-    textArea.current.value += event.emoji
-    textArea.current.focus()
+    textAreaRef.current.value += event.emoji
+    textAreaRef.current.focus()
   }
 
   const closeWebview = options => {
     updateWebview()
     if (userInputEnabled) {
-      textArea.current.focus()
+      textAreaRef.current.focus()
     }
     if (options && options.payload) {
       sendPayload(options.payload)
@@ -627,49 +612,11 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const sendTextAreaText = () => {
-    sendText(textArea.current.value)
-    textArea.current.value = ''
-  }
-
-  let isTyping = false
-  let typingTimeout = null
-
-  function clearTimeoutWithReset(reset) {
-    const waitTime = 20 * 1000
-    if (typingTimeout) clearTimeout(typingTimeout)
-    if (reset) typingTimeout = setTimeout(stopTyping, waitTime)
-  }
-
-  function startTyping() {
-    isTyping = true
-    sendChatEvent('typing_on')
-  }
-
-  function stopTyping() {
-    clearTimeoutWithReset(false)
-    isTyping = false
-    sendChatEvent('typing_off')
-  }
-
-  const onKeyDown = event => {
-    if (event.keyCode === 13 && event.shiftKey === false) {
-      event.preventDefault()
-      sendTextAreaText()
-      stopTyping()
-    }
-  }
-
-  const onKeyUp = () => {
-    if (textArea.current.value === '') {
-      stopTyping()
-      return
-    }
-    if (!isTyping) {
-      startTyping()
-    }
-    clearTimeoutWithReset(true)
-  }
+  const { sendTextAreaText, ...textareaProps } = useTextarea(
+    props.onUserInput,
+    webchatState,
+    sendInput
+  )
 
   const webviewRequestContext = {
     getString: stringId => props.getString(stringId, webchatState.session),
@@ -711,7 +658,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
-  const textArea = useRef(null)
+  const textAreaRef = useRef(null)
   const userInputArea = () => {
     return (
       userInputEnabled && (
@@ -734,40 +681,7 @@ export const Webchat = forwardRef((props, ref) => {
             persistentMenu={props.persistentMenu}
           />
 
-          <TextAreaContainer>
-            <Textarea
-              inputRef={textArea}
-              name='text'
-              onFocus={() => deviceAdapter.onFocus(host)}
-              onBlur={() => deviceAdapter.onBlur()}
-              maxRows={4}
-              wrap='soft'
-              maxLength='1000'
-              placeholder={getThemeProperty(
-                WEBCHAT.CUSTOM_PROPERTIES.textPlaceholder,
-                WEBCHAT.DEFAULTS.PLACEHOLDER
-              )}
-              autoFocus={true}
-              onKeyDown={e => onKeyDown(e)}
-              onKeyUp={onKeyUp}
-              style={{
-                display: 'flex',
-                fontSize: deviceAdapter.fontSize(14),
-                width: '100%',
-                border: 'none',
-                resize: 'none',
-                overflow: 'auto',
-                outline: 'none',
-                flex: '1 1 auto',
-                padding: 10,
-                paddingLeft: persistentMenuOptions ? 0 : 10,
-                fontFamily: 'inherit',
-                ...getThemeProperty(
-                  WEBCHAT.CUSTOM_PROPERTIES.userInputBoxStyle
-                ),
-              }}
-            />
-          </TextAreaContainer>
+          <Textarea {...textareaProps} deviceAdapter={deviceAdapter} />
 
           <EmojiPicker
             enableEmojiPicker={props.enableEmojiPicker}
