@@ -43,7 +43,7 @@
     "@nlpjs/lang-en-min": "^4.22.0",
     "@nlpjs/lang-es": "^4.22.0",
     "@nlpjs/lang-fr": "^4.22.0",
-    "@nlpjs/lang-hu": "^4.22.0",
+    "@nlpjs/lang-hu": "^4.26.1",
     "@nlpjs/lang-it": "^4.22.0",
     "@nlpjs/lang-nl": "^4.22.0",
     "@nlpjs/lang-pl": "^4.22.0",
