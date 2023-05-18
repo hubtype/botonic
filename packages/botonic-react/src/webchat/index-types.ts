@@ -1,9 +1,7 @@
 import * as core from '@botonic/core'
-import * as React from 'react'
 import { RefObject } from 'react'
 
-import { Reply, Webview } from '../components/index-types'
-import { Message, WebchatApp, WebchatArgs } from '../index-types'
+import { Webview } from '../components/index-types'
 
 export interface WebchatStateTheme {
   headerTitle: string
@@ -20,8 +18,8 @@ export interface WebchatState {
   width: number
   height: number
   messagesJSON: any[]
-  messagesComponents: Message[]
-  replies: Reply[]
+  messagesComponents: any[]
+  replies: any[]
   latestInput: Partial<core.Input>
   typing: boolean
   webview: Webview | null
@@ -41,11 +39,11 @@ export interface WebchatState {
   currentAttachment: File | undefined
 }
 
-export interface WebchatProps extends WebchatArgs {
+// export interface WebchatProps extends WebchatArgs {
+export interface WebchatProps {
   ref: RefObject<any>
   onConnectionRegained?: () => Promise<void>
 }
-export const WebChat: React.ForwardRefExoticComponent<WebchatProps>
 
 export interface WebchatDevProps extends WebchatProps {
   initialDevSettings?: {
@@ -53,9 +51,6 @@ export interface WebchatDevProps extends WebchatProps {
     showSessionView?: boolean
   }
 }
-export const WebChatDev: React.ForwardRefExoticComponent<WebchatDevProps>
-
-export function getBotonicApp(): WebchatApp
 
 export interface CoverComponentProps {
   closeComponent: () => void

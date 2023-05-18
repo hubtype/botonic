@@ -1,11 +1,8 @@
 import * as core from '@botonic/core'
-import * as React from 'react'
+import React from 'react'
 
 import {
-  BlockInputOption,
   ButtonProps,
-  CoverComponentOptions,
-  PersistentMenuTheme,
   ReplyProps,
   ThemeProps,
   WebchatSettingsProps,
@@ -23,21 +20,7 @@ export interface Route extends core.Route {
   action?: React.ComponentType<any>
   retryAction?: React.ComponentType<any>
 }
-type Routes = core.Routes<Route>
-
-export class ReactBot extends core.CoreBot {
-  renderReactActions({
-    actions,
-    request: ActionRequest,
-  }): Promise<React.ReactNode>
-}
-
-export class NodeApp {
-  constructor(options: Omit<core.CoreBotConfig, 'renderer'>)
-  bot: ReactBot
-  input(request: core.BotRequest): Promise<BotResponse>
-  renderNode(args): string
-}
+export type Routes = core.Routes<Route>
 
 // Parameters of the actions' botonicInit method
 export interface ActionRequest {
@@ -50,74 +33,87 @@ export interface ActionRequest {
   session: core.Session
 }
 
-export class BotonicInputTester {
-  constructor(app: NodeApp)
-
-  text(
-    inp: string,
-    session?: core.Session,
-    lastRoutePath?: string
-  ): Promise<string>
-
-  payload(
-    inp: string,
-    session?: core.Session,
-    lastRoutePath?: string
-  ): Promise<string>
-}
-
-export class BotonicOutputTester {
-  constructor(app: NodeApp)
-
-  text(out: string, replies?: any): Promise<string>
-}
-
 export interface RequestContextInterface extends ActionRequest {
   getString: (stringId: string) => string
   setLocale: (locale: string) => string
 }
 
-export const RequestContext: React.Context<RequestContextInterface>
 export type RequestContext = React.Context<RequestContextInterface>
 
 export interface CustomMessageType {
   customTypeName: string
 }
 
-export function msgToBotonic(
-  msg: any,
-  customMessageTypes?: CustomMessageType[]
-): React.ReactNode
+// TODO: Reuse types to be reused in respective components
+// export class WebchatApp {
+//   constructor(options: WebchatAppArgs)
+//   addBotMessage(message: WebchatMessage): void
+//   addBotText(text: string): void
+//   addUserMessage(message: WebchatMessage): void
+//   addUserPayload(payload: string): void
+//   addUserText(text: string): void
+//   clearMessages(): void
+//   close(): void
+//   closeCoverComponent(): void
+//   destroy(): void
+//   getComponent(
+//     host: HTMLElement,
+//     optionsAtRuntime?: WebchatAppArgs
+//   ): React.ForwardRefExoticComponent<any>
+//   getLastMessageUpdate(): string
+//   getMessages(): WebchatMessage[]
+//   getVisibility(): Promise<boolean>
+//   isWebchatVisible({ appId: string }): Promise<boolean>
+//   onCloseWebchat(args: any): void
+//   onInitWebchat(args: any): void
+//   onOpenWebchat(args: any): void
+//   onServiceEvent(event: Event): void
+//   onStateChange(args: OnStateChangeArgs): void
+//   onUserInput(args: OnUserInputArgs): Promise<void>
+//   open(): void
+//   openCoverComponent(): void
+//   render(dest?: HTMLElement, optionsAtRuntime?: WebchatAppArgs): void
+//   resendUnsentInputs(): Promise<void>
+//   resolveWebchatVisibility(optionsAtRuntime: {
+//     appId: string
+//     visibility: () => boolean
+//   }): Promise<boolean>
+//   setTyping(enable: boolean): void
+//   toggle(): void
+//   toggleCoverComponent(): void
+//   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
+//   updateLastMessageDate(date: string): void
+//   updateUser(user: Partial<core.SessionUser>): void
+//   updateWebchatSettings(settings: WebchatSettingsProps): void
+//   renderCustomComponent(customComponent: React.ReactNode): void
+//   unmountCustomComponent(): void
+// }
 
-export function msgsToBotonic(
-  msgs: any | any[],
-  customMessageTypes?: CustomMessageType[]
-): React.ReactNode
+// export interface WebchatArgs {
+//   blockInputs?: BlockInputOption[]
+//   coverComponent?: CoverComponentOptions
+//   defaultDelay?: number
+//   defaultTyping?: number
+//   enableAnimations?: boolean
+//   enableAttachments?: boolean
+//   enableEmojiPicker?: boolean
+//   enableUserInput?: boolean
+//   shadowDOM?: boolean | (() => boolean)
+//   hostId?: string
+//   getString?: (stringId: string, session: core.Session) => string
+//   onClose?: (app: WebchatApp, args: any) => void
+//   onInit?: (app: WebchatApp, args: any) => void
+//   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
+//   onOpen?: (app: WebchatApp, args: any) => void
+//   onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+//   persistentMenu?: PersistentMenuTheme
+//   storage?: Storage | null
+//   storageKey?: any
+//   theme?: ThemeProps
+// }
 
-export interface WebchatArgs {
-  blockInputs?: BlockInputOption[]
-  coverComponent?: CoverComponentOptions
-  defaultDelay?: number
-  defaultTyping?: number
-  enableAnimations?: boolean
-  enableAttachments?: boolean
-  enableEmojiPicker?: boolean
-  enableUserInput?: boolean
-  shadowDOM?: boolean | (() => boolean)
-  hostId?: string
-  getString?: (stringId: string, session: core.Session) => string
-  onClose?: (app: WebchatApp, args: any) => void
-  onInit?: (app: WebchatApp, args: any) => void
-  onMessage?: (app: WebchatApp, message: WebchatMessage) => void
-  onOpen?: (app: WebchatApp, args: any) => void
-  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
-  persistentMenu?: PersistentMenuTheme
-  storage?: Storage | null
-  storageKey?: any
-  theme?: ThemeProps
-}
-
-export interface WebchatAppArgs extends WebchatArgs {
+// export interface WebchatAppArgs extends WebchatArgs {
+export interface WebchatAppArgs {
   appId?: string
   visibility?: () => boolean
 }
@@ -161,50 +157,6 @@ export interface Event {
   message?: MessageInfo
 }
 
-export class WebchatApp {
-  constructor(options: WebchatAppArgs)
-  addBotMessage(message: WebchatMessage): void
-  addBotText(text: string): void
-  addUserMessage(message: WebchatMessage): void
-  addUserPayload(payload: string): void
-  addUserText(text: string): void
-  clearMessages(): void
-  close(): void
-  closeCoverComponent(): void
-  destroy(): void
-  getComponent(
-    host: HTMLElement,
-    optionsAtRuntime?: WebchatAppArgs
-  ): React.ForwardRefExoticComponent<any>
-  getLastMessageUpdate(): string
-  getMessages(): WebchatMessage[]
-  getVisibility(): Promise<boolean>
-  isWebchatVisible({ appId: string }): Promise<boolean>
-  onCloseWebchat(args: any): void
-  onInitWebchat(args: any): void
-  onOpenWebchat(args: any): void
-  onServiceEvent(event: Event): void
-  onStateChange(args: OnStateChangeArgs): void
-  onUserInput(args: OnUserInputArgs): Promise<void>
-  open(): void
-  openCoverComponent(): void
-  render(dest?: HTMLElement, optionsAtRuntime?: WebchatAppArgs): void
-  resendUnsentInputs(): Promise<void>
-  resolveWebchatVisibility(optionsAtRuntime: {
-    appId: string
-    visibility: () => boolean
-  }): Promise<boolean>
-  setTyping(enable: boolean): void
-  toggle(): void
-  toggleCoverComponent(): void
-  updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
-  updateLastMessageDate(date: string): void
-  updateUser(user: Partial<core.SessionUser>): void
-  updateWebchatSettings(settings: WebchatSettingsProps): void
-  renderCustomComponent(customComponent: React.ReactNode): void
-  unmountCustomComponent(): void
-}
-
 export interface WebchatContextProps {
   sendText: (text: string, payload?: string) => void
   sendAttachment: (attachment: File) => void
@@ -224,14 +176,14 @@ export interface WebchatContextProps {
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   updateUser: (user: Partial<core.SessionUser>) => void
 }
-export const WebchatContext: React.Context<WebchatContextProps>
+
 export type WebchatContext = React.Context<WebchatContextProps>
 
-export class DevApp extends WebchatApp {
-  constructor(args: WebchatAppArgs)
-  onUserInput(args: OnUserInputArgs): Promise<void>
-  render(dest: HTMLElement, optionsAtRuntime: WebchatAppArgs): void
-}
+// export class DevApp extends WebchatApp {
+//   constructor(args: WebchatAppArgs)
+//   onUserInput(args: OnUserInputArgs): Promise<void>
+//   render(dest: HTMLElement, optionsAtRuntime: WebchatAppArgs): void
+// }
 
 export * from './components'
 export * from './util'

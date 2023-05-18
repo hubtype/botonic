@@ -1,4 +1,3 @@
-// @ts-nocheck
 export { Audio } from './audio'
 export { Button } from './button'
 export { Carousel } from './carousel'
@@ -6,6 +5,7 @@ export { customMessage } from './custom-message'
 export { Document } from './document'
 export { Element } from './element'
 export { Image } from './image'
+export * from './index-types'
 export { Location } from './location'
 export { Message } from './message'
 export { MessageTemplate } from './message-template'

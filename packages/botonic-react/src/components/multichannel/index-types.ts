@@ -1,6 +1,4 @@
-import * as React from 'react'
-
-type IndexMode = 'number' | 'letter' | undefined //undefined means no index
+export type IndexMode = 'number' | 'letter' | undefined //undefined means no index
 
 export interface MultichannelViewOptions {
   boldIndex?: boolean
@@ -23,8 +21,6 @@ export interface MultichannelTextProps extends MultichannelViewOptions {
   buttonsTextSeparator?: string
 }
 
-export const MultichannelText: React.FunctionComponent<MultichannelTextProps>
-
 // Carousel
 export interface MultichannelCarouselProps extends MultichannelViewOptions {
   enableURL?: boolean
@@ -33,7 +29,6 @@ export interface MultichannelCarouselProps extends MultichannelViewOptions {
   showSubtitle?: boolean
   buttonsAsText?: boolean
 }
-export const MultichannelCarousel: React.FunctionComponent<MultichannelCarouselProps>
 
 // Button
 export interface MultichannelButtonProps {
@@ -44,10 +39,8 @@ export interface MultichannelButtonProps {
   webview?: string
   asText?: boolean
 }
-export const MultichannelButton: React.FunctionComponent<MultichannelButtonProps>
 
 // Reply
-export const MultichannelReply: React.FunctionComponent<MultichannelButtonProps>
 
 export interface MultichannelProps extends MultichannelViewOptions {
   firstIndex?: number | string
@@ -61,5 +54,3 @@ export interface MultichannelProps extends MultichannelViewOptions {
    **/
   messageSeparator?: string
 }
-
-export const Multichannel: React.FunctionComponent<MultichannelProps>

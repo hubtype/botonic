@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { ErrorInfo } from 'react'
+import React, { ErrorInfo } from 'react'
 
 import { CoverComponentProps } from '../webchat/index-types'
 
@@ -26,18 +25,10 @@ export interface MessageProps {
   typing?: number
 }
 
-export const Audio: React.FunctionComponent<MessageProps>
-export const Document: React.FunctionComponent<MessageProps>
-
-export const Message: React.FunctionComponent<MessageProps>
-export type Message = React.FunctionComponent<MessageProps>
-export const Video: React.FunctionComponent<MessageProps>
-
 export interface TextProps extends MessageProps {
   // converts markdown syntax to HTML
   markdown?: boolean
 }
-export const Text: React.FunctionComponent<TextProps>
 
 export interface Webview {
   name: string
@@ -56,23 +47,16 @@ export interface ButtonProps {
   disabledstyle?: boolean
 }
 
-export const Button: React.FunctionComponent<ButtonProps>
-
 export interface ReplyProps {
   path?: string
   payload?: string
   children: string
 }
-export const Reply: React.FunctionComponent<ReplyProps>
-export type Reply = React.FunctionComponent<ReplyProps>
 
 export interface PicProps {
   src: string
 }
 
-export const Carousel: React.FunctionComponent<MessageProps>
-export const Image: React.FunctionComponent<ImageProps>
-export const Pic: React.FunctionComponent<PicProps>
 export type ImageProps = PicProps
 
 export interface TitleProps {
@@ -80,17 +64,14 @@ export interface TitleProps {
   style: string
 }
 
-export const Element: React.FunctionComponent<MessageProps>
-export const Subtitle: React.FunctionComponent<SubtitleProps>
-export const Title: React.FunctionComponent<TitleProps>
 export type SubtitleProps = TitleProps
 
-type CustomProp = { custom?: React.ComponentType }
-type EnableProp = { enable?: boolean }
-type ImageProp = { image?: string } // https URL or imported Image asset
-type PersistentMenuCloseOption = { closeLabel: string }
-type PersistentMenuOption = { label: string } & ButtonProps
-type StyleProp = { style?: any }
+export type CustomProp = { custom?: React.ComponentType }
+export type EnableProp = { enable?: boolean }
+export type ImageProp = { image?: string } // https URL or imported Image asset
+export type PersistentMenuCloseOption = { closeLabel: string }
+export type PersistentMenuOption = { label: string } & ButtonProps
+export type StyleProp = { style?: any }
 
 export type PersistentMenuTheme = (
   | PersistentMenuCloseOption
@@ -202,27 +183,25 @@ export interface WebchatSettingsProps {
   persistentMenu?: PersistentMenuTheme
   theme?: ThemeProps
 }
-export const WebchatSettings: React.FunctionComponent<WebchatSettingsProps>
 
 export type WrappedComponent<Props> = React.FunctionComponent<Props> & {
   customTypeName: string
 }
 
-export class ErrorBoundary<Props> extends React.Component<Props> {
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void
-}
+// TODO: Reuse types to be typed in respective functions
+// export class ErrorBoundary<Props> extends React.Component<Props> {
+//   componentDidCatch(error: Error, errorInfo: ErrorInfo): void
+// }
 
-export function createErrorBoundary<Props>(_?: {
-  errorComponent: React.ComponentType
-}): ErrorBoundary<Props>
+// export function createErrorBoundary<Props>(_?: {
+//   errorComponent: React.ComponentType
+// }): ErrorBoundary<Props>
 
-export function customMessage<Props>(_: {
-  name: string
-  component: React.ComponentType<Props>
-  defaultProps?: Record<string, unknown>
-  errorBoundary?: ErrorBoundary<Props>
-}): WrappedComponent<Props>
+// export function customMessage<Props>(_: {
+//   name: string
+//   component: React.ComponentType<Props>
+//   defaultProps?: Record<string, unknown>
+//   errorBoundary?: ErrorBoundary<Props>
+// }): WrappedComponent<Props>
 
-export function getDisplayName(component: React.ComponentType): string
-
-export * from './multichannel'
+// export function getDisplayName(component: React.ComponentType): string

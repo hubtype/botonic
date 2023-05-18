@@ -9,3 +9,5 @@ export { MultichannelText }
 export { MultichannelButton }
 export { MultichannelReply }
 export { MultichannelCarousel }
+
+export * from './index-types'

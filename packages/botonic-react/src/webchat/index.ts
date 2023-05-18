@@ -7,3 +7,5 @@ export function getBotonicApp() {
   // eslint-disable-next-line no-undef
   return Botonic
 }
+
+export * from './index-types'
