@@ -126,6 +126,7 @@ export interface HandoffNodeContent {
   message: TextLocale[]
   fail_message: TextLocale[]
   queue: QueueLocale[]
+  payload: PayloadLocale[]
 }
 
 export interface HandoffNode extends Node {
