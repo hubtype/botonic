@@ -38,8 +38,6 @@ export interface RequestContextInterface extends ActionRequest {
   setLocale: (locale: string) => string
 }
 
-export type RequestContext = React.Context<RequestContextInterface>
-
 export interface CustomMessageType {
   customTypeName: string
 }
@@ -176,8 +174,6 @@ export interface WebchatContextProps {
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   updateUser: (user: Partial<core.SessionUser>) => void
 }
-
-export type WebchatContext = React.Context<WebchatContextProps>
 
 // export class DevApp extends WebchatApp {
 //   constructor(args: WebchatAppArgs)
