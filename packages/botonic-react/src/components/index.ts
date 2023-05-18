@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { Audio } from './audio'
 export { Button } from './button'
 export { Carousel } from './carousel'
