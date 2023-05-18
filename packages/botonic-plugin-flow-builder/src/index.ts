@@ -126,16 +126,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     await updateButtonUrls(hubtypeContent, 'buttons', this.getContent)
     const content = await this.getFlowContent(hubtypeContent, locale)
 
-    if (content && 'buttons' in content) {
-      content.buttons.forEach(async button => {
-        if (button.payload) {
-          const contentButton = await this.getContent(button.payload)
-          if (contentButton?.type === NodeType.PAYLOAD) {
-            button.payload = contentButton.content.payload
-          }
-        }
-      })
-    }
+    this.replaceButtonPayload(content)
 
     if (hubtypeContent.type === NodeType.FUNCTION) {
       const targetId = await this.callFunction(hubtypeContent, locale)
@@ -150,6 +141,20 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     // execute function
     // return this.getContents(function result_mapping target, locale, contents)
     return { contents, handoffNode: isHandoff && hubtypeContent }
+  }
+
+  private async replaceButtonPayload(content: FlowContent | undefined) {
+    if (content && 'buttons' in content) {
+      for (let index = 0; index < content.buttons.length; index++) {
+        const button = content.buttons[index]
+        if (button.payload) {
+          const contentButton = await this.getContent(button.payload)
+          if (contentButton?.type === NodeType.PAYLOAD) {
+            button.payload = contentButton.content.payload
+          }
+        }
+      }
+    }
   }
 
   async getPayloadByIntent(
