@@ -1,7 +1,7 @@
 import { HandOffBuilder } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import { HandoffNode } from './flow-builder-models'
+import { HandoffNode, PayloadNode } from './flow-builder-models'
 import { getFlowBuilderPlugin } from './helpers'
 
 export async function doHandoff(
@@ -9,15 +9,15 @@ export async function doHandoff(
   locale: string,
   handoffNode: HandoffNode
 ): Promise<void> {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const handoffTargetNode = await flowBuilderPlugin.getHandoffContent(
-    handoffNode.target?.id
-  )
   // @ts-ignore
-  const handOffBuilder = new HandOffBuilder(request.session) // handOffBuilder.withQueue(handoffNode.content.queue)
+  const handOffBuilder = new HandOffBuilder(request.session)
   const handoffQueues = handoffNode.content.queue
   const queueFound = handoffQueues.find(q => q.locale === locale)
   if (queueFound) handOffBuilder.withQueue(queueFound.id)
+
+  const onFinishPayload = await getOnFinishPayload(handoffNode, locale, request)
+  if (onFinishPayload) handOffBuilder.withOnFinishPayload(onFinishPayload)
+
   // TODO: Retrieve params from FlowBuilder
   // const handoffParams = {
   //   agentEmail: 'test@gmail.com',
@@ -32,6 +32,28 @@ export async function doHandoff(
   //   handOffBuilder.withAgentEmail(handoffParams.agentEmail)
   // }
 
-  handOffBuilder.withOnFinishPayload(handoffTargetNode.id)
   await handOffBuilder.handOff()
+}
+
+async function getOnFinishPayload(
+  handoffNode: HandoffNode,
+  locale: string,
+  request: ActionRequest
+): Promise<string | undefined> {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+
+  const handoffTargetNode = await flowBuilderPlugin.getHandoffContent(
+    handoffNode.target?.id
+  )
+  if (handoffTargetNode?.id) return handoffTargetNode?.id
+
+  const payloadId = handoffNode.content.payload.find(
+    payload => payload.locale === locale
+  )?.id
+
+  if (!payloadId) return undefined
+
+  const actionPayload = await flowBuilderPlugin.getContent(payloadId)
+
+  return (actionPayload as PayloadNode).content.payload
 }
