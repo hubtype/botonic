@@ -124,7 +124,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     // TODO: Create function to populate these buttons
     await updateButtonUrls(hubtypeContent, 'elements', this.getContent)
     await updateButtonUrls(hubtypeContent, 'buttons', this.getContent)
-    const content = await this.getFlowContent(hubtypeContent, locale)
+    const content = this.getFlowContent(hubtypeContent, locale)
 
     this.replaceButtonPayload(content)
 
