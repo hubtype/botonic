@@ -2,8 +2,8 @@ import * as core from '@botonic/core'
 import * as React from 'react'
 import { RefObject } from 'react'
 
-import { Reply, Webview } from '../components/index'
-import { Message, WebchatApp, WebchatArgs } from '../index'
+import { Reply, Webview } from '../components/index-types'
+import { Message, WebchatApp, WebchatArgs } from '../index-types'
 
 export interface WebchatStateTheme {
   headerTitle: string

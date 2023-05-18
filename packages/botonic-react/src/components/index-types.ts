@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ErrorInfo } from 'react'
 
-import { CoverComponentProps } from '../webchat'
+import { CoverComponentProps } from '../webchat/index-types'
 
 export type MessageType =
   | 'audio'

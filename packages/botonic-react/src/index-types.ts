@@ -10,7 +10,7 @@ import {
   ThemeProps,
   WebchatSettingsProps,
   Webview,
-} from './components'
+} from './components/index-types'
 import { WebchatState } from './webchat'
 
 /**
