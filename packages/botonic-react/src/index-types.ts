@@ -1,4 +1,13 @@
-import * as core from '@botonic/core'
+import type {
+  BotRequest as CoreBotRequest,
+  Input as CoreInput,
+  InputType as CoreInputType,
+  Plugin as CorePlugin,
+  Route as CoreRoute,
+  Routes as CoreRoutes,
+  Session as CoreSession,
+  SessionUser as CoreSessionUser,
+} from '@botonic/core/lib/esm/models/legacy-types'
 import React from 'react'
 
 import {
@@ -12,25 +21,25 @@ import { WebchatState } from './webchat'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/
-export interface BotResponse extends core.BotRequest {
+export interface BotResponse extends CoreBotRequest {
   response: [React.ReactNode]
 }
 
-export interface Route extends core.Route {
+export interface Route extends CoreRoute {
   action?: React.ComponentType<any>
   retryAction?: React.ComponentType<any>
 }
-export type Routes = core.Routes<Route>
+export type Routes = CoreRoutes<Route>
 
 // Parameters of the actions' botonicInit method
 export interface ActionRequest {
   defaultDelay: number
   defaultTyping: number
-  input: core.Input
+  input: CoreInput
   lastRoutePath: string
   params: { [key: string]: string }
-  plugins: { [id: string]: core.Plugin }
-  session: core.Session
+  plugins: { [id: string]: CorePlugin }
+  session: CoreSession
 }
 
 export interface RequestContextInterface extends ActionRequest {
@@ -81,7 +90,7 @@ export interface CustomMessageType {
 //   toggleCoverComponent(): void
 //   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
 //   updateLastMessageDate(date: string): void
-//   updateUser(user: Partial<core.SessionUser>): void
+//   updateUser(user: Partial<CoreSessionUser>): void
 //   updateWebchatSettings(settings: WebchatSettingsProps): void
 //   renderCustomComponent(customComponent: React.ReactNode): void
 //   unmountCustomComponent(): void
@@ -98,7 +107,7 @@ export interface CustomMessageType {
 //   enableUserInput?: boolean
 //   shadowDOM?: boolean | (() => boolean)
 //   hostId?: string
-//   getString?: (stringId: string, session: core.Session) => string
+//   getString?: (stringId: string, session: CoreSession) => string
 //   onClose?: (app: WebchatApp, args: any) => void
 //   onInit?: (app: WebchatApp, args: any) => void
 //   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
@@ -127,20 +136,20 @@ export interface WebchatMessage {
   markdown: boolean
   replies: ReplyProps[]
   timestamp: string
-  type: core.InputType
+  type: CoreInputType
   typing: number
 }
 
 export interface OnUserInputArgs {
-  input: core.Input
+  input: CoreInput
   lastRoutePath?: string
-  session?: core.Session
-  user: core.SessionUser
+  session?: CoreSession
+  user: CoreSessionUser
 }
 
 export interface OnStateChangeArgs {
   messagesJSON: WebchatMessage[]
-  user: core.SessionUser
+  user: CoreSessionUser
 }
 
 export interface MessageInfo {
@@ -159,12 +168,12 @@ export interface WebchatContextProps {
   sendText: (text: string, payload?: string) => void
   sendAttachment: (attachment: File) => void
   sendPayload: (payload: string) => void
-  sendInput: (input: core.Input) => void
+  sendInput: (input: CoreInput) => void
   openWebview: (webviewComponent: Webview) => void
   addMessage: (message: WebchatMessage) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: boolean) => void
-  updateLatestInput: (input: core.Input) => void
+  updateLatestInput: (input: CoreInput) => void
   closeWebview: () => void
   toggleWebchat: () => void
   getThemeProperty: (property: string, defaultValue?: string) => any
@@ -172,7 +181,7 @@ export interface WebchatContextProps {
   theme: ThemeProps
   webchatState: WebchatState
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
-  updateUser: (user: Partial<core.SessionUser>) => void
+  updateUser: (user: Partial<CoreSessionUser>) => void
 }
 
 // export class DevApp extends WebchatApp {

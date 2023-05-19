@@ -1,4 +1,7 @@
-import * as core from '@botonic/core'
+import type {
+  Input as CoreInput,
+  Session as CoreSession,
+} from '@botonic/core/lib/esm/models/legacy-types'
 import { RefObject } from 'react'
 
 import { Webview } from '../components/index-types'
@@ -20,11 +23,11 @@ export interface WebchatState {
   messagesJSON: any[]
   messagesComponents: any[]
   replies: any[]
-  latestInput: Partial<core.Input>
+  latestInput: Partial<CoreInput>
   typing: boolean
   webview: Webview | null
   webviewParams: null
-  session: Partial<core.Session>
+  session: Partial<CoreSession>
   lastRoutePath: string | null
   handoff: boolean
   theme: WebchatStateTheme

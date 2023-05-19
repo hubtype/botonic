@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { INPUT } from '@botonic/core/lib/esm/models/legacy-types'
 
 import { MAX_ALLOWED_SIZE_MB, MIME_WHITELIST } from './constants'
 
