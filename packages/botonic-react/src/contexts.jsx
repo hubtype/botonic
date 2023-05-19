@@ -1,8 +1,8 @@
-import React from 'react'
+import { createContext } from 'react'
 
 import { webchatInitialState } from './webchat/hooks'
 
-export const RequestContext = React.createContext({
+export const RequestContext = createContext({
   getString: () => '',
   setLocale: () => '',
   session: {},
@@ -12,7 +12,7 @@ export const RequestContext = React.createContext({
   defaultTyping: 0,
 })
 
-export const WebchatContext = React.createContext({
+export const WebchatContext = createContext({
   sendText: text => {},
   sendAttachment: attachment => {},
   sendPayload: payload => {},

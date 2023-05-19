@@ -1,9 +1,9 @@
 import merge from 'lodash.merge'
 
-import { normalizeWebchatSettings } from '../src/components/webchat-settings'
-import { WEBCHAT } from '../src/constants'
-import { getProperty } from '../src/util/objects'
-import { _getThemeProperty } from '../src/util/webchat'
+import { normalizeWebchatSettings } from '../lib/cjs/components/webchat-settings'
+import { WEBCHAT } from '../lib/cjs/constants'
+import { getProperty } from '../lib/cjs/util/objects'
+import { _getThemeProperty } from '../lib/cjs/util/webchat'
 
 const theme = {
   message: {

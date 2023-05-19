@@ -1,9 +1,10 @@
-import * as core from '@botonic/core'
-import * as React from 'react'
+import type {
+  Input as CoreInput,
+  Session as CoreSession,
+} from '@botonic/core/lib/esm/models/legacy-types'
 import { RefObject } from 'react'
 
-import { Reply, Webview } from '../components/index'
-import { Message, WebchatApp, WebchatArgs } from '../index'
+import { Webview } from '../components/index-types'
 
 export interface WebchatStateTheme {
   headerTitle: string
@@ -20,13 +21,13 @@ export interface WebchatState {
   width: number
   height: number
   messagesJSON: any[]
-  messagesComponents: Message[]
-  replies: Reply[]
-  latestInput: Partial<core.Input>
+  messagesComponents: any[]
+  replies: any[]
+  latestInput: Partial<CoreInput>
   typing: boolean
   webview: Webview | null
   webviewParams: null
-  session: Partial<core.Session>
+  session: Partial<CoreSession>
   lastRoutePath: string | null
   handoff: boolean
   theme: WebchatStateTheme
@@ -41,11 +42,11 @@ export interface WebchatState {
   currentAttachment: File | undefined
 }
 
-export interface WebchatProps extends WebchatArgs {
+// export interface WebchatProps extends WebchatArgs {
+export interface WebchatProps {
   ref: RefObject<any>
   onConnectionRegained?: () => Promise<void>
 }
-export const WebChat: React.ForwardRefExoticComponent<WebchatProps>
 
 export interface WebchatDevProps extends WebchatProps {
   initialDevSettings?: {
@@ -53,9 +54,6 @@ export interface WebchatDevProps extends WebchatProps {
     showSessionView?: boolean
   }
 }
-export const WebChatDev: React.ForwardRefExoticComponent<WebchatDevProps>
-
-export function getBotonicApp(): WebchatApp
 
 export interface CoverComponentProps {
   closeComponent: () => void

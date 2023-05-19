@@ -9,8 +9,8 @@ import {
   Subtitle,
   Text,
   Title,
-} from '../src'
-import { msgsToBotonic } from '../src/msg-to-botonic'
+} from '../lib/cjs'
+import { msgsToBotonic } from '../lib/cjs/msg-to-botonic'
 
 describe('msgsToBotonic carousel', () => {
   test('with pic, title & subtitle', () => {
