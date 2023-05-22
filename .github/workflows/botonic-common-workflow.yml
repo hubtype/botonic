@@ -1,0 +1,101 @@
+name: Botonic packages reusable CI
+
+on:
+  workflow_call:
+    inputs:
+      NODE_VERSION:
+        type: string
+        description: 'Node version of the bot'
+        default: '14'
+        required: false
+      PACKAGE_NAME:
+        type: string
+        description: 'Bot name'
+        required: true
+      PACKAGE:
+        type: string
+        description: 'Relative path inside bots-definition repo'
+        required: true
+      UNIT_TEST_COMMAND:
+        type: string
+        description: 'Command to execute unit tests with npm'
+        default: npm run test
+        required: false
+      PUBLISH_TESTS_RESULTS:
+        type: string
+        description: 'Flag to know if tests should or should not be published'
+        required: false
+      NEEDS_AWS_CRED:
+        type: string
+        description: 'Flag to know if the CI needs AWS credentials'
+        required: false
+      NEEDS_CODECOV_UPLOAD:
+        type: string
+        description: 'Flag to know if the CI needs to Upload Codecov coverage'
+        required: false
+
+jobs:
+  bot-tests:
+    name: ${{ inputs.PACKAGE_NAME }} tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out to current branch
+        uses: actions/checkout@v3
+
+      - name: Setting up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.NODE_VERSION }}
+
+      - name: Setting up cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Configure AWS Credentials with role
+        if: ${{ inputs.NEEDS_AWS_CRED != '' && always() }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_GH_ACTIONS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_GH_ACTIONS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::319689072149:role/machine/ht-github-actions
+          role-duration-seconds: 900
+          role-session-name: HubtypeCITests
+
+      - name: Install dev dependencies
+        run: (cd ./packages/${{ inputs.PACKAGE }} && npm install -D)
+
+      - name: Build
+        run: (cd ./packages/${{ inputs.PACKAGE }} && npm run build)
+
+      - name: Run tests
+        if: ${{ inputs.UNIT_TEST_COMMAND != '' && always() }}
+        run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.UNIT_TEST_COMMAND }})
+
+      - name: Verify lint
+        run: (cd ./packages/${{ inputs.PACKAGE }} && npm run lint_ci)
+
+      - name: Verify index.d.ts
+        run: scripts/qa/lint-d-ts.sh packages/${{ inputs.PACKAGE }}
+
+      - name: Publish Unit Test Results
+        if: ${{ inputs.PUBLISH_TESTS_RESULTS != '' && always() }}
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        continue-on-error: true
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: ./packages/${{ inputs.PACKAGE }}/junit.xml
+
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v2
+        if: ${{ inputs.NEEDS_CODECOV_UPLOAD != '' && always()}}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ inputs.PACKAGE }}
+          file: ./packages/${{ inputs.PACKAGE }}/coverage/lcov.info
+          name: ${{ inputs.PACKAGE_NAME }}
+          env_vars: ${{ inputs.PACKAGE }}
