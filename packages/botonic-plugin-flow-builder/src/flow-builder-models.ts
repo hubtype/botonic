@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export interface FlowBuilderData {
   version: string
   name: string
@@ -123,10 +124,9 @@ export interface QueueLocale {
 }
 
 export interface HandoffNodeContent {
-  message: TextLocale[]
-  fail_message: TextLocale[]
   queue: QueueLocale[]
   payload: PayloadLocale[]
+  has_auto_assign: boolean
 }
 
 export interface HandoffNode extends Node {
