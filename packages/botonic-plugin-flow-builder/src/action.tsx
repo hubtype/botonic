@@ -1,4 +1,4 @@
-import { ActionRequest, RequestContext } from '@botonic/react'
+import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowContent } from './content-fields'
@@ -55,5 +55,18 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     // @ts-ignore
     const { contents, handoffNode } = this.props
     return contents!.map(content => content.toBotonic(content.id))
+  }
+}
+
+export class FlowBuilderMultichannelAction extends FlowBuilderAction {
+  render(): JSX.Element | JSX.Element[] {
+    // @ts-ignore
+    const { contents, handoffNode } = this.props
+    return (
+      //@ts-ignore
+      <Multichannel text={{ buttonsAsText: false }}>
+        {contents!.map(content => content.toBotonic(content.id))}
+      </Multichannel>
+    )
   }
 }

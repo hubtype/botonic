@@ -155,8 +155,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   private async replaceButtonPayload(content: FlowContent | undefined) {
     if (content && 'buttons' in content) {
-      for (let index = 0; index < content.buttons.length; index++) {
-        const button = content.buttons[index]
+      for (const button of content.buttons) {
         if (button.payload) {
           const contentButton = await this.getContent(button.payload)
           if (contentButton?.type === NodeType.PAYLOAD) {
@@ -281,4 +280,4 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 }
 
-export { FlowBuilderAction } from './action'
+export * from './action'
