@@ -68,6 +68,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return content
   }
 
+  async getContentByCode(code: string): Promise<NodeComponent> {
+    const flow = await this.flow
+    const content = flow.nodes.find(node => {
+      if ('code' in node) return node.code === code
+      return undefined
+    })
+    if (!content) throw Error(`Node with code: '${code}' not found`)
+    return content
+  }
+
   async getHandoffContent(
     handoffTargetId: string | undefined
   ): Promise<HandoffNode | undefined> {
