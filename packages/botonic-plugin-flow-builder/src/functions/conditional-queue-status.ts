@@ -1,5 +1,7 @@
+import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
+import { getFlowBuilderPlugin } from '../helpers'
 import { getWebpackEnvVar } from '../utils'
 
 const _HUBTYPE_API_URL_ = getWebpackEnvVar(
@@ -9,11 +11,17 @@ const _HUBTYPE_API_URL_ = getWebpackEnvVar(
   'https://api.hubtype.com'
 )
 
-export async function conditionalQueueStatus({
-  queue_id,
-}: {
+type ConditionalQueueStatusArgs = {
+  request: ActionRequest
   queue_id: string
-}): Promise<string> {
+  queue_name: string
+}
+
+export async function conditionalQueueStatus({
+  request,
+  queue_id,
+  queue_name,
+}: ConditionalQueueStatusArgs): Promise<string> {
   const response = await axios.get(
     `${_HUBTYPE_API_URL_}/v1/queues/${queue_id}/availability/`,
     // TODO: Make it configurable in the future
@@ -26,5 +34,18 @@ export async function conditionalQueueStatus({
     }
   )
   const isAvailable = response.data.available
+
+  console.log('conditionalQueueStatus', { data: response.data })
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  if (flowBuilderPlugin.trackEvent) {
+    const eventName = 'QUEUE_STATUS'
+    const args = {
+      queue_id,
+      queue_name,
+      status: isAvailable ? 'open' : 'closed',
+    }
+    await flowBuilderPlugin.trackEvent(request, eventName, args)
+  }
+
   return isAvailable ? 'open' : 'closed'
 }
