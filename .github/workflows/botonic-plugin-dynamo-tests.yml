@@ -10,51 +10,10 @@ on:
 
 jobs:
   botonic-plugin-dynamodb-tests:
-    name: Botonic plugin-dynamodb Tests
-    runs-on: ubuntu-latest
-    env:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit
+    with:
+      PACKAGE_NAME: Botonic plugin-dynamodb Tests
       PACKAGE: botonic-plugin-dynamodb
-    steps:
-    - name: Checking out to current branch
-      uses: actions/checkout@v2
-    - name: Setting up node
-      uses: actions/setup-node@v2-beta
-      with:
-        node-version: '12'
-    - name: Setting up cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Install dev dependencies
-      run: (cd ./packages/$PACKAGE && npm install -D)
-
-    - name: Verify lint
-      run: (cd ./packages/$PACKAGE && npm run lint_ci)
-
-    - name: Build
-      run: (cd ./packages/$PACKAGE && npm run build_unit_tests)
-
-    - name: Configure AWS Credentials with role
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_GH_ACTIONS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_GH_ACTIONS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-1
-        role-to-assume: arn:aws:iam::319689072149:role/machine/ht-github-actions
-        role-duration-seconds: 900
-        role-session-name: HubtypeCITests
-
-    - name: Run tests
-      run: (cd ./packages/$PACKAGE && npm run test)
-
-    - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v2
-      if: always()
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: ${{env.PACKAGE}}
-        file: ./packages/${{env.PACKAGE}}/coverage/lcov.info
-        name: ${{env.PACKAGE}}
+      NEEDS_CODECOV_UPLOAD: 'yes'
+      NEEDS_AWS_CRED: 'yes'

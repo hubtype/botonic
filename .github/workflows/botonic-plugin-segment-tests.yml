@@ -1,5 +1,5 @@
 name: Botonic plugin-segment tests
- 
+
 on:
   push:
     paths:
@@ -7,30 +7,12 @@ on:
       - 'packages/*'
       - 'packages/botonic-plugin-segment/**'
       - '.github/workflows/botonic-plugin-segment-tests.yml'
- 
+
 jobs:
   botonic-plugin-segment-tests:
-    name: Botonic plugin-segment tests
-    runs-on: ubuntu-latest
-    env:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit
+    with:
+      PACKAGE_NAME: Botonic plugin-segment tests
       PACKAGE: botonic-plugin-segment
-    steps:
-    - name: Checking out to current branch (Step 1 of 6)
-      uses: actions/checkout@v2
-    - name: Setting up node (Step 2 of 6)
-      uses: actions/setup-node@v2-beta
-      with:
-        node-version: '12'
-    - name: Setting up cache (Step 3 of 6)
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: Install botonic-plugin-segment (Step 4 of 6)
-      run: (cd ./packages/$PACKAGE && npm install -D)
-    - name: Install common packages dependencies (Step 5 of 6)
-      run: npm install -D
-    - name: Verify lint botonic-plugin-segment (Step 6 of 6)
-      run: (cd ./packages/$PACKAGE && npm run lint_ci)
+      UNIT_TEST_COMMAND: ''
