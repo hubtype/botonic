@@ -17,6 +17,9 @@ export async function doHandoff(
 
   const onFinishPayload = await getOnFinishPayload(handoffNode, locale, request)
   if (onFinishPayload) handOffBuilder.withOnFinishPayload(onFinishPayload)
+  if (handoffNode.content.has_auto_assign) {
+    handOffBuilder.withAutoAssignOnWaiting(true)
+  }
 
   // TODO: Retrieve params from FlowBuilder
   // const handoffParams = {
