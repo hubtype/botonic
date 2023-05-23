@@ -7,6 +7,7 @@ on:
       - 'packages/*'
       - 'packages/botonic-plugin-google-analytics/**'
       - '.github/workflows/botonic-plugin-google-analytics-tests.yml'
+  workflow_dispatch:
 
 jobs:
   botonic-plugin-google-analytics-tests:

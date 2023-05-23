@@ -7,6 +7,7 @@ on:
       - 'packages/*'
       - 'packages/botonic-plugin-intent-classification/**'
       - '.github/workflows/botonic-plugin-intent-classification-tests.yml'
+  workflow_dispatch:
 
 jobs:
   botonic-plugin-intent-classification-tests:

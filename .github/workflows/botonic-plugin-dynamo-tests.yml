@@ -7,6 +7,7 @@ on:
       - 'packages/*'
       - 'packages/botonic-plugin-dynamodb/**'
       - '.github/workflows/botonic-plugin-dynamo-tests.yml'
+  workflow_dispatch:
 
 jobs:
   botonic-plugin-dynamodb-tests:

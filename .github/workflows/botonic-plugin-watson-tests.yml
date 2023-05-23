@@ -7,6 +7,7 @@ on:
       - 'packages/*'
       - 'packages/botonic-plugin-watson/**'
       - '.github/workflows/botonic-plugin-watson-tests.yml'
+  workflow_dispatch:
 
 jobs:
   botonic-plugin-watson-tests:
