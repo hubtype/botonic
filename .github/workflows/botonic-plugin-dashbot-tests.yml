@@ -17,3 +17,4 @@ jobs:
       PACKAGE_NAME: Botonic plugin-dashbot tests
       PACKAGE: botonic-plugin-dashbot
       UNIT_TEST_COMMAND: ''
+      BUILD_COMMAND: ''

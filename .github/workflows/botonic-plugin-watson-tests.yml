@@ -16,4 +16,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-watson tests
       PACKAGE: botonic-plugin-watson
+      BUILD_COMMAND: ''
       UNIT_TEST_COMMAND: ''

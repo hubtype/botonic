@@ -16,5 +16,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic nlp tests
       PACKAGE: botonic-nlp
-      UNIT_TEST_COMMAND: npm run lint_ci
+      UNIT_TEST_COMMAND: npm run test_ci
       NEEDS_CODECOV_UPLOAD: 'yes'

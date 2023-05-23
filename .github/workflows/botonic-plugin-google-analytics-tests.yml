@@ -16,4 +16,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-google-analytics tests
       PACKAGE: botonic-plugin-google-analytics
+      BUILD_COMMAND: ''
       UNIT_TEST_COMMAND: ''

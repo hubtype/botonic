@@ -16,4 +16,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-segment tests
       PACKAGE: botonic-plugin-segment
+      BUILD_COMMAND: ''
       UNIT_TEST_COMMAND: ''

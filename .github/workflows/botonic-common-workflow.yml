@@ -21,6 +21,11 @@ on:
         description: 'Command to execute unit tests with npm'
         default: npm run test
         required: false
+      BUILD_COMMAND:
+        type: string
+        description: 'Command to execute the build of the package'
+        default: npm run build
+        required: false
       PUBLISH_TESTS_RESULTS:
         type: string
         description: 'Flag to know if tests should or should not be published'
@@ -74,7 +79,8 @@ jobs:
         run: (cd ./packages/${{ inputs.PACKAGE }} && npm install -D)
 
       - name: Build
-        run: (cd ./packages/${{ inputs.PACKAGE }} && npm run build)
+        if: ${{ inputs.BUILD_COMMAND != '' }}
+        run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.BUILD_COMMAND }})
 
       - name: Run tests
         if: ${{ inputs.UNIT_TEST_COMMAND != '' && always() && inputs.NEEDS_CONTENTFUL_SECRETS == '' }}

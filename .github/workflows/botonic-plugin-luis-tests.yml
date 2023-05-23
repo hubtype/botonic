@@ -16,4 +16,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-luis tests
       PACKAGE: botonic-plugin-luis
+      BUILD_COMMAND: ''
       UNIT_TEST_COMMAND: ''

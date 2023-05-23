@@ -16,4 +16,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-inbenta tests
       PACKAGE: botonic-plugin-inbenta
+      BUILD_COMMAND: ''
       UNIT_TEST_COMMAND: ''
