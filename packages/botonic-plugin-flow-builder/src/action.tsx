@@ -59,12 +59,10 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
-    // @ts-ignore
-    const { contents, handoffNode } = this.props
+    const { contents } = this.props
     return (
-      //@ts-ignore
       <Multichannel text={{ buttonsAsText: false }}>
-        {contents!.map(content => content.toBotonic(content.id))}
+        {contents.map(content => content.toBotonic(content.id))}
       </Multichannel>
     )
   }
