@@ -6,7 +6,7 @@ import { doHandoff } from './handoff'
 import { getFlowBuilderPlugin } from './helpers'
 
 type FlowBuilderActionProps = {
-  content?: FlowContent[]
+  contents: FlowContent[]
   isHandoff?: boolean
 }
 
@@ -52,9 +52,8 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   }
 
   render(): JSX.Element | JSX.Element[] {
-    // @ts-ignore
-    const { contents, handoffNode } = this.props
-    return contents!.map(content => content.toBotonic(content.id))
+    const { contents } = this.props
+    return contents.map(content => content.toBotonic(content.id))
   }
 }
 
