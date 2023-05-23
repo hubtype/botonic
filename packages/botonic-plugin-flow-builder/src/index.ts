@@ -5,6 +5,7 @@ import {
   PluginPreRequest,
   Session,
 } from '@botonic/core'
+import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
 import {
@@ -37,10 +38,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private currentRequest: PluginPreRequest
   private getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
+  public trackEvent?: (
+    request: ActionRequest,
+    eventName: string,
+    args?: Record<string, any>
+  ) => Promise<void>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
+    this.trackEvent = options.trackEvent
     this.flowUrl = options.flowUrl
     if (options.flow) this.flow = options.flow
     const customFunctions = options.customFunctions || {}
