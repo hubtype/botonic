@@ -46,6 +46,11 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       locale
     )
 
+    if (flowBuilderPlugin.trackEvent) {
+      // TODO: track all targets nodes?
+      await flowBuilderPlugin.trackEvent(request, contents[0].code)
+    }
+
     if (handoffNode) await doHandoff(request, locale, handoffNode)
 
     return { contents, handoffNode }
