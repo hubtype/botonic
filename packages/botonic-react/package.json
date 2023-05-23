@@ -19,7 +19,7 @@
     "prettier": "../../node_modules/.bin/prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
     "lint": "npm run prettier; npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' 'src/**/*.d.ts' --fix"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "sideEffects": [
     "*.scss",
