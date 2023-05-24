@@ -13,6 +13,7 @@ export enum MessageEventTypes {
   VIDEO = 'video',
   MISSED = 'missed',
   FORM = 'form',
+  CHAT_EVENT = 'chatevent',
   /**
    * TODO: buttonmessage?, webchatsettings, whatsapp template
    */

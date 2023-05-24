@@ -97,6 +97,7 @@ export type InputType =
   | typeof INPUT.VIDEO
   | typeof INPUT.WEBCHAT_SETTINGS
   | typeof INPUT.WHATSAPP_TEMPLATE
+  | typeof INPUT.CHAT_EVENT
 
 export interface IntentResult {
   intent: string

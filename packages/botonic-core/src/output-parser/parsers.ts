@@ -30,7 +30,10 @@ export function parseBoolean(strNumber: string): boolean {
   return true
 }
 
-export type ParseFunction<Out> = (args: { toParse: any; parsed?: any }) => {
+export type ParseFunction<Out> = (args: {
+  toParse: any
+  parsed?: any
+}) => {
   toParse: any
   parsed: Partial<Out>
 }
