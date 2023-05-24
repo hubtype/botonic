@@ -10,7 +10,6 @@ import {
   Locales,
   MessageEventAck,
   MessageEventFrom,
-  MessageEventTypes,
   ResolvedPlugins,
   Route,
   Routes,

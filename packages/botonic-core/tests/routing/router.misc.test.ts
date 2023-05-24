@@ -1,5 +1,6 @@
 import {
   getPathParamsFromPathPayload,
+  INPUT,
   PATH_PAYLOAD_IDENTIFIER,
   pathParamsToParams,
   Router,
@@ -54,7 +55,7 @@ describe('TEST: Named Group Regex', () => {
   ])
   it('matches named groups', () => {
     const routeParams = router.getRoute(
-      { type: 'text', text: 'order 12345' },
+      { type: INPUT.TEXT, text: 'order 12345' },
       router.routes,
       testSession(),
       null
@@ -63,7 +64,7 @@ describe('TEST: Named Group Regex', () => {
   })
   it('no named groups', () => {
     const routeParams = router.getRoute(
-      { type: 'text', text: 'hi' },
+      { type: INPUT.TEXT, text: 'hi' },
       router.routes,
       testSession(),
       null
