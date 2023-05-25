@@ -79,7 +79,7 @@ If you want to add an extra workflow follow the steps:
          UNIT_TEST_COMMAND: npm run test_ci #or just add '' if there is not tests in the package.
          PUBLISH_TESTS_RESULTS: 'yes' #or just any string you want, p.e. 'y'
          NEEDS_CODECOV_UPLOAD: 'yes'
-         #If any input extra is needed, add it below..
+         #If any input extra is needed, add it below...
    ```
 
    > :warning: Remember to check which inputs you need. Check and double-check every input to ensure the workflow correct functionality.
@@ -89,3 +89,34 @@ If you want to add an extra workflow follow the steps:
    - `secrets`: if the workflow needs secrets, it will inherit from the ones in the home repository of **THIS** file.
    - `with`: The required inputs to run the workflow.
    - `uses`: Which workflow with use to run the steps. The input can be a path inside the same repository, a reference to an online workflow or a reference to another repository **INSIDE** your organization. An example would be the following: `organization/repository/.github/workflows/workflow-to-use.yml@branch-to-fetch-from`.
+
+##Template to use
+
+```YAML
+name: <package name> tests
+
+   on:
+     push:
+       paths:
+       - '*'
+       - 'packages/*'
+       - 'packages/<package-name>/**'
+       - '.github/workflows/<name-of-this-file>.yml'
+   workflow_dispatch:
+
+jobs:
+  <package-name>-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit
+    with:
+      NODE_VERSION: '16' #or 12 if you want a below version
+      PACKAGE_NAME: <package name> tests
+      PACKAGE: <package-name> #Relative to the Packages folder not the root folder.
+      #The following inputs are not mandatory, but may be necessary depending on your needs
+      # UNIT_TEST_COMMAND: npm run test_ci
+      # PUBLISH_TESTS_RESULTS: 'yes'
+      # NEEDS_CODECOV_UPLOAD: 'yes'
+      #If any input extra is needed, add it below..
+```
+
+> :information_source: Swap `<package-name>` with the package name
