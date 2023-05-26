@@ -142,10 +142,10 @@ repos:
           [
             '--baseline',
             '.secrets.baseline',
+            '--exclude-lines',
+            '^secrets: inherit$',
             '--exclude-files ',
             .*/tests/.*',
-            '--exclude-lines',
-            'secrets: inherit',
           ]
         exclude: package.lock.json
         name: Detect secrets
