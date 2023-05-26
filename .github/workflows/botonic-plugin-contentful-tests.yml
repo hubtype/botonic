@@ -17,5 +17,5 @@ jobs:
       PACKAGE_NAME: Botonic plugin-contentful Tests
       PACKAGE: botonic-plugin-contentful
       BUILD_COMMAND: npm run build_unit_tests
-      NEEDS_CONTENTFUL_SECRETS: 'yes'
+      NEEDS_CONTENTFUL_SECRETS: 'yes' #pragma: allowlist secret
       NEEDS_CODECOV_UPLOAD: 'yes'
