@@ -3,8 +3,6 @@ name: Botonic plugin-ner tests
 on:
   push:
     paths:
-      - '*'
-      - 'packages/*'
       - 'packages/botonic-plugin-ner/**'
       - '.github/workflows/botonic-plugin-ner-tests.yml'
   workflow_dispatch:
@@ -12,7 +10,7 @@ on:
 jobs:
   botonic-plugin-ner-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-ner tests
       PACKAGE: botonic-plugin-ner

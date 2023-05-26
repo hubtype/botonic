@@ -3,8 +3,6 @@ name: Botonic cli tests
 on:
   push:
     paths:
-      - '*'
-      - 'packages/*'
       - 'packages/botonic-cli/**'
       - '.github/workflows/botonic-cli-tests.yml'
   workflow_dispatch:
@@ -12,7 +10,7 @@ on:
 jobs:
   botonic-cli-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic cli tests
       PACKAGE: botonic-cli

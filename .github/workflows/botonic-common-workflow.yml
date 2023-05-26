@@ -5,16 +5,16 @@ on:
     inputs:
       NODE_VERSION:
         type: string
-        description: 'Node version of the bot'
+        description: 'Node version of the package'
         default: '14'
         required: false
       PACKAGE_NAME:
         type: string
-        description: 'Bot name'
+        description: 'Package name'
         required: true
       PACKAGE:
         type: string
-        description: 'Relative path inside bots-definition repo'
+        description: 'Relative path inside botonic/packages repo'
         required: true
       UNIT_TEST_COMMAND:
         type: string

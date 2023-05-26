@@ -3,8 +3,6 @@ name: Botonic plugin-dynamodb tests
 on:
   push:
     paths:
-      - '*'
-      - 'packages/*'
       - 'packages/botonic-plugin-dynamodb/**'
       - '.github/workflows/botonic-plugin-dynamo-tests.yml'
   workflow_dispatch:
@@ -12,7 +10,7 @@ on:
 jobs:
   botonic-plugin-dynamodb-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-dynamodb Tests
       PACKAGE: botonic-plugin-dynamodb

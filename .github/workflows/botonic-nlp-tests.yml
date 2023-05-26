@@ -3,8 +3,6 @@ name: Botonic nlp tests
 on:
   push:
     paths:
-      - '*'
-      - 'packages/*'
       - 'packages/botonic-nlp/**'
       - '.github/workflows/botonic-nlp-tests.yml'
   workflow_dispatch:
@@ -12,7 +10,7 @@ on:
 jobs:
   botonic-plugin-contentful-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic nlp tests
       PACKAGE: botonic-nlp

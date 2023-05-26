@@ -3,8 +3,6 @@ name: Botonic plugin-segment tests
 on:
   push:
     paths:
-      - '*'
-      - 'packages/*'
       - 'packages/botonic-plugin-segment/**'
       - '.github/workflows/botonic-plugin-segment-tests.yml'
   workflow_dispatch:
@@ -12,7 +10,7 @@ on:
 jobs:
   botonic-plugin-segment-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-segment tests
       PACKAGE: botonic-plugin-segment

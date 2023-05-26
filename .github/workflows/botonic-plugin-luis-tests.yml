@@ -3,8 +3,6 @@ name: Botonic plugin-luis tests
 on:
   push:
     paths:
-      - '*'
-      - 'packages/*'
       - 'packages/botonic-plugin-luis/**'
       - '.github/workflows/botonic-plugin-luis-tests.yml'
   workflow_dispatch:
@@ -12,7 +10,7 @@ on:
 jobs:
   botonic-plugin-luis-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-luis tests
       PACKAGE: botonic-plugin-luis
