@@ -45,7 +45,8 @@ export async function doHandoff(
 
   if (flowBuilderPlugin.trackEvent) {
     await flowBuilderPlugin.trackEvent(request, 'HANDOFF_SUCCESSFULL', {
-      queueName: queueFound?.name,
+      queue_id: queueFound?.id,
+      queue_name: queueFound?.name,
     })
   }
 }
