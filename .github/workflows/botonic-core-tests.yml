@@ -3,8 +3,6 @@ name: Botonic core tests
 on:
   push:
     paths:
-      - '*'
-      - 'packages/*'
       - 'packages/botonic-core/**'
       - '.github/workflows/botonic-core-tests.yml'
   workflow_dispatch:
