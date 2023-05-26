@@ -6,6 +6,7 @@ import {
   BotonicEvent,
   BotRequest,
   BotResponse,
+  INPUT,
   Locales,
   MessageEventAck,
   MessageEventFrom,
@@ -99,6 +100,17 @@ export class CoreBot {
   }: BotRequest): Promise<BotResponse> {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
+
+    if (input.type === INPUT.CHAT_EVENT) {
+      return {
+        input,
+        session,
+        lastRoutePath,
+        dataProvider,
+        response: [],
+        messageEvents: null,
+      }
+    }
 
     const parsedUserEvent = this.botonicOutputParser.parseFromUserInput(input)
     const userId = session.user.id

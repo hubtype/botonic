@@ -1,26 +1,29 @@
-import { BotRequest, Input } from '../../src'
+import { BotRequest, INPUT, Input } from '../../src'
 import { Router } from '../../src/routing'
 import { testRoute, testSession } from '../helpers/routing'
 
-const textInput: Input = { type: 'text', text: 'hi' }
-const textInputComplex: Input = { type: 'text', text: 'Cömplêx input &% 🚀' }
-const textPayloadInput: Input = { type: 'text', text: 'hi', payload: 'foo' }
-const postbackInput: Input = { type: 'postback', payload: 'foo' }
+const textInput: Input = { type: INPUT.TEXT, text: 'hi' }
+const textInputComplex: Input = {
+  type: INPUT.TEXT,
+  text: 'Cömplêx input &% 🚀',
+}
+const textPayloadInput: Input = { type: INPUT.TEXT, text: 'hi', payload: 'foo' }
+const postbackInput: Input = { type: INPUT.POSTBACK, payload: 'foo' }
 
 const audioInput: Input = {
-  type: 'audio',
+  type: INPUT.AUDIO,
   src: 'data:audio/mpeg;base64,iVBORw0KG',
 }
 const documentInput: Input = {
-  type: 'document',
+  type: INPUT.DOCUMENT,
   src: 'data:application/pdf;base64,iVBORw0KG',
 }
 const imageInput: Input = {
-  type: 'image',
+  type: INPUT.IMAGE,
   src: 'data:image/png;base64,iVBORw0KG',
 }
 const videoInput: Input = {
-  type: 'video',
+  type: INPUT.VIDEO,
   src: 'data:video/mp4;base64,iVBORw0KG',
 }
 
