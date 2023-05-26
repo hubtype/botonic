@@ -77,10 +77,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async getContentByCode(code: string): Promise<NodeComponent> {
     const flow = await this.flow
-    const content = flow.nodes.find(node => {
-      if ('code' in node) return node.code === code
-      return undefined
-    })
+    const content = flow.nodes.find(node =>
+      'code' in node ? node.code === code : false
+    )
     if (!content) throw Error(`Node with code: '${code}' not found`)
     return content
   }
