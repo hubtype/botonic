@@ -12,6 +12,7 @@ on:
 jobs:
   botonic-cli-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit
     with:
       PACKAGE_NAME: Botonic cli tests
       PACKAGE: botonic-cli
