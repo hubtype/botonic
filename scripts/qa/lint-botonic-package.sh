@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$1" || exit
+
 # quick lint. Not running slow lint to avoid penalizing pre-commit
 npm run lint
 
