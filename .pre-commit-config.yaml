@@ -137,8 +137,16 @@ repos:
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.2.0
     hooks:
-    -   id: detect-secrets
-        args: ['--baseline', '.secrets.baseline','--exclude-files ', .*/tests/.*'] 
+      - id: detect-secrets
+        args:
+          [
+            '--baseline',
+            '.secrets.baseline',
+            '--exclude-files ',
+            '.*/tests/.*',
+            '--exclude-lines',
+            'secrets: inherit',
+          ]
         exclude: package.lock.json
         name: Detect secrets
         description: Detects high entropy strings that are likely to be passwords.
