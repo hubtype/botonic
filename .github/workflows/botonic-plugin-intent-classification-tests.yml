@@ -12,7 +12,7 @@ on:
 jobs:
   botonic-plugin-intent-classification-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-intent-classification tests
       PACKAGE: botonic-plugin-intent-classification

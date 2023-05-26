@@ -12,7 +12,7 @@ on:
 jobs:
   botonic-plugin-nlu-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-nlu tests
       PACKAGE: botonic-plugin-nlu

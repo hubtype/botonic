@@ -12,7 +12,7 @@ on:
 jobs:
   botonic-react-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic react tests
       PACKAGE: botonic-react

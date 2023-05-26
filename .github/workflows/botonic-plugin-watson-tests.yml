@@ -12,7 +12,7 @@ on:
 jobs:
   botonic-plugin-watson-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-watson tests
       PACKAGE: botonic-plugin-watson

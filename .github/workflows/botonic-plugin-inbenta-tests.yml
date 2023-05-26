@@ -12,7 +12,7 @@ on:
 jobs:
   botonic-plugin-inbenta-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-inbenta tests
       PACKAGE: botonic-plugin-inbenta

@@ -12,7 +12,7 @@ on:
 jobs:
   botonic-plugin-dashbot-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
+    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic plugin-dashbot tests
       PACKAGE: botonic-plugin-dashbot
