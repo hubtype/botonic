@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.22.0-alpha.1",
+  "version": "0.22.0-alpha.2",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
-    "@botonic/react": "^0.22.0-beta.2",
+    "@botonic/react": "beta",
     "axios": "^1.3.6"
   }
 }

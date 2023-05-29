@@ -3,19 +3,25 @@ import { ActionRequest } from '@botonic/react'
 
 import { HandoffNode, PayloadNode } from './flow-builder-models'
 import { getFlowBuilderPlugin } from './helpers'
+import BotonicPluginFlowBuilder from './index'
 
 export async function doHandoff(
   request: ActionRequest,
   locale: string,
   handoffNode: HandoffNode
 ): Promise<void> {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   // @ts-ignore
   const handOffBuilder = new HandOffBuilder(request.session)
   const handoffQueues = handoffNode.content.queue
   const queueFound = handoffQueues.find(q => q.locale === locale)
   if (queueFound) handOffBuilder.withQueue(queueFound.id)
 
-  const onFinishPayload = await getOnFinishPayload(handoffNode, locale, request)
+  const onFinishPayload = await getOnFinishPayload(
+    flowBuilderPlugin,
+    handoffNode,
+    locale
+  )
   if (onFinishPayload) handOffBuilder.withOnFinishPayload(onFinishPayload)
   if (handoffNode.content.has_auto_assign) {
     handOffBuilder.withAutoAssignOnWaiting(true)
@@ -36,15 +42,20 @@ export async function doHandoff(
   // }
 
   await handOffBuilder.handOff()
+
+  if (flowBuilderPlugin.trackEvent) {
+    await flowBuilderPlugin.trackEvent(request, 'HANDOFF_SUCCESSFULL', {
+      queue_id: queueFound?.id,
+      queue_name: queueFound?.name,
+    })
+  }
 }
 
 async function getOnFinishPayload(
+  flowBuilderPlugin: BotonicPluginFlowBuilder,
   handoffNode: HandoffNode,
-  locale: string,
-  request: ActionRequest
+  locale: string
 ): Promise<string | undefined> {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-
   const handoffTargetNode = await flowBuilderPlugin.getHandoffContent(
     handoffNode.target?.id
   )
