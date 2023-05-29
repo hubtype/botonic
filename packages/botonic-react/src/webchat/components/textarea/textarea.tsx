@@ -9,6 +9,8 @@ interface TextareaProps {
   host: HTMLElement
   onKeyDown: (event) => void
   onKeyUp: () => void
+  withPaddingLeft?: boolean
+  textareaRef: React.MutableRefObject<null>
   value: string
   webchatCustom: CSSProperties
 }
@@ -19,12 +21,16 @@ export const Textarea = ({
   host,
   onKeyDown,
   onKeyUp,
+  withPaddingLeft,
+  textareaRef,
   value,
   webchatCustom,
-}: TextareaProps) => {
+}: TextareaProps): JSX.Element => {
+  const fontSize = deviceAdapter.fontSize()
+
   return (
-    //@ts-ignore
     <StyledTextarea
+      ref={textareaRef}
       value={value}
       name='text'
       onChange={event => handleChange(event)}
@@ -35,6 +41,9 @@ export const Textarea = ({
       onFocus={() => deviceAdapter.onFocus(host)}
       onBlur={() => deviceAdapter.onBlur()}
       style={{ ...webchatCustom }}
+      paddingLeft={withPaddingLeft}
+      fontSize={fontSize}
+      rows={1}
     />
   )
 }

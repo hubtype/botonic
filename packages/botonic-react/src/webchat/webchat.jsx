@@ -679,7 +679,11 @@ export const Webchat = forwardRef((props, ref) => {
             persistentMenu={props.persistentMenu}
           />
 
-          <Textarea {...textareaProps} deviceAdapter={deviceAdapter} />
+          <Textarea
+            {...textareaProps}
+            deviceAdapter={deviceAdapter}
+            withPaddingLeft={withPaddingLeft}
+          />
 
           <EmojiPicker
             enableEmojiPicker={props.enableEmojiPicker}
