@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { WEBCHAT } from '../../../constants'
@@ -8,6 +8,8 @@ import { WebchatContext } from '../../../contexts'
 export const useTextarea = (onUserInput, webchatState, sendInput) => {
   const [value, setValue] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useAutosizeTextArea(textareaRef.current, value)
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value)
@@ -21,6 +23,7 @@ export const useTextarea = (onUserInput, webchatState, sendInput) => {
   const textareaFocus = () => {
     textareaRef.current?.focus()
   }
+
   const sendChatEvent = async chatEvent => {
     const chatEventInput = {
       id: uuidv4(),
@@ -77,7 +80,6 @@ export const useTextarea = (onUserInput, webchatState, sendInput) => {
   const sendTextAreaText = async () => {
     if (!value) return
     const input = { type: INPUT.TEXT, data: value, payload: undefined }
-    console.log({ input })
     await sendInput(input)
     setValue('')
   }
@@ -97,4 +99,21 @@ export const useTextarea = (onUserInput, webchatState, sendInput) => {
     value,
     webchatCustom,
   }
+}
+
+// Updates the height of a <textarea> when the value changes.
+const useAutosizeTextArea = (
+  textarea: HTMLTextAreaElement | null,
+  value: string
+) => {
+  useEffect(() => {
+    if (textarea) {
+      // We need to reset the height momentarily to get the correct scrollHeight for the textarea
+      textarea.style.height = '0px'
+      const scrollHeight = textarea.scrollHeight
+      // We then set the height directly, outside of the render loop
+      // Trying to set this with state or a ref will product an incorrect value.
+      textarea.style.height = scrollHeight + 'px'
+    }
+  }, [textarea, value])
 }
