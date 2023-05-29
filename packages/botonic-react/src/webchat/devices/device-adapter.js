@@ -40,7 +40,8 @@ export class DeviceAdapter {
   }
 
   fontSize(defaultFontSize = 14) {
-    if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return defaultFontSize
+    if (this.currentDevice !== DEVICES.MOBILE.IPHONE)
+      return `${defaultFontSize}px`
     // Disabling auto-zoom on input (iPhone devices): https://stackoverflow.com/a/25614477, https://stackoverflow.com/a/6394497
     return 'initial'
   }
