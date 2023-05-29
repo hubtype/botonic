@@ -7,10 +7,20 @@ import { WebchatContext } from '../../../contexts'
 
 export const useTextarea = (onUserInput, webchatState, sendInput) => {
   const [value, setValue] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value)
   }
 
+  const handleAddEmoji = (emoji: string) => {
+    setValue(value + emoji)
+    textareaFocus()
+  }
+
+  const textareaFocus = () => {
+    textareaRef.current?.focus()
+  }
   const sendChatEvent = async chatEvent => {
     const chatEventInput = {
       id: uuidv4(),
@@ -77,11 +87,14 @@ export const useTextarea = (onUserInput, webchatState, sendInput) => {
     getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userInputBoxStyle) || {}
 
   return {
+    handleAddEmoji,
     handleChange,
     onKeyDown,
     onKeyUp,
-    value,
     sendTextAreaText,
+    textareaFocus,
+    textareaRef,
+    value,
     webchatCustom,
   }
 }

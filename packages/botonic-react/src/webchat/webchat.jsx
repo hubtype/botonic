@@ -333,28 +333,6 @@ export const Webchat = forwardRef((props, ref) => {
     updateTheme(merge(props.theme, theme, webchatState.themeUpdates))
   }, [props.theme, webchatState.themeUpdates])
 
-  const openWebview = (webviewComponent, params) =>
-    updateWebview(webviewComponent, params)
-
-  const handleSelectedEmoji = event => {
-    textAreaRef.current.value += event.emoji
-    textAreaRef.current.focus()
-  }
-
-  const closeWebview = options => {
-    updateWebview()
-    if (userInputEnabled) {
-      textAreaRef.current.focus()
-    }
-    if (options && options.payload) {
-      sendPayload(options.payload)
-    } else if (options && options.path) {
-      let params = ''
-      if (options.params) params = params2queryString(options.params)
-      sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
-    }
-  }
-
   const handleMenu = () => {
     togglePersistentMenu(!webchatState.isPersistentMenuOpen)
   }
@@ -612,11 +590,32 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const { sendTextAreaText, ...textareaProps } = useTextarea(
-    props.onUserInput,
-    webchatState,
-    sendInput
-  )
+  const withPaddingLeft = persistentMenuOptions || false
+
+  const { handleAddEmoji, sendTextAreaText, textareaFocus, ...textareaProps } =
+    useTextarea(props.onUserInput, webchatState, sendInput)
+
+  const handleSelectedEmoji = event => {
+    handleAddEmoji(event.emoji)
+  }
+
+  const openWebview = (webviewComponent, params) => {
+    updateWebview(webviewComponent, params)
+  }
+
+  const closeWebview = options => {
+    updateWebview()
+    if (userInputEnabled) {
+      textareaFocus()
+    }
+    if (options && options.payload) {
+      sendPayload(options.payload)
+    } else if (options && options.path) {
+      let params = ''
+      if (options.params) params = params2queryString(options.params)
+      sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
+    }
+  }
 
   const webviewRequestContext = {
     getString: stringId => props.getString(stringId, webchatState.session),
@@ -658,7 +657,6 @@ export const Webchat = forwardRef((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
-  const textAreaRef = useRef(null)
   const userInputArea = () => {
     return (
       userInputEnabled && (
