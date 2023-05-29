@@ -35,7 +35,6 @@ export async function conditionalQueueStatus({
   )
   const isAvailable = response.data.available
 
-  console.log('conditionalQueueStatus', { data: response.data })
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   if (flowBuilderPlugin.trackEvent) {
     const eventName = `QUEUE_${isAvailable ? 'OPEN' : 'CLOSED'}`
