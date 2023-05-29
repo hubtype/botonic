@@ -5,6 +5,7 @@ import {
   PluginPreRequest,
   Session,
 } from '@botonic/core'
+import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
 import {
@@ -37,10 +38,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private currentRequest: PluginPreRequest
   private getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
+  public trackEvent?: (
+    request: ActionRequest,
+    eventName: string,
+    args?: Record<string, any>
+  ) => Promise<void>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
+    this.trackEvent = options.trackEvent
     this.flowUrl = options.flowUrl
     if (options.flow) this.flow = options.flow
     const customFunctions = options.customFunctions || {}
@@ -65,6 +72,15 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const flow = await this.flow
     const content = flow.nodes.find(node => node.id === id)
     if (!content) throw Error(`Node with id: '${id}' not found`)
+    return content
+  }
+
+  async getContentByCode(code: string): Promise<NodeComponent> {
+    const flow = await this.flow
+    const content = flow.nodes.find(node =>
+      'code' in node ? node.code === code : false
+    )
+    if (!content) throw Error(`Node with code: '${code}' not found`)
     return content
   }
 
@@ -145,8 +161,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   private async replaceButtonPayload(content: FlowContent | undefined) {
     if (content && 'buttons' in content) {
-      for (let index = 0; index < content.buttons.length; index++) {
-        const button = content.buttons[index]
+      for (const button of content.buttons) {
         if (button.payload) {
           const contentButton = await this.getContent(button.payload)
           if (contentButton?.type === NodeType.PAYLOAD) {
@@ -250,7 +265,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
     const args = Object.assign(
       {
-        session: this.currentRequest.session,
+        request: this.currentRequest,
         results: [functionNode.content.result_mapping.map(r => r.result)],
       },
       ...nameValues
@@ -271,4 +286,4 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 }
 
-export { FlowBuilderAction } from './action'
+export * from './action'

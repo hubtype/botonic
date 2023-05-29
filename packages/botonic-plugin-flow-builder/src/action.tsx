@@ -1,4 +1,4 @@
-import { ActionRequest, RequestContext } from '@botonic/react'
+import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowContent } from './content-fields'
@@ -6,7 +6,7 @@ import { doHandoff } from './handoff'
 import { getFlowBuilderPlugin } from './helpers'
 
 type FlowBuilderActionProps = {
-  content?: FlowContent[]
+  contents: FlowContent[]
   isHandoff?: boolean
 }
 
@@ -46,14 +46,29 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       locale
     )
 
+    if (flowBuilderPlugin.trackEvent) {
+      // TODO: track all targets nodes?
+      await flowBuilderPlugin.trackEvent(request, contents[0].code)
+    }
+
     if (handoffNode) await doHandoff(request, locale, handoffNode)
 
     return { contents, handoffNode }
   }
 
   render(): JSX.Element | JSX.Element[] {
-    // @ts-ignore
-    const { contents, handoffNode } = this.props
-    return contents!.map(content => content.toBotonic(content.id))
+    const { contents } = this.props
+    return contents.map(content => content.toBotonic(content.id))
+  }
+}
+
+export class FlowBuilderMultichannelAction extends FlowBuilderAction {
+  render(): JSX.Element | JSX.Element[] {
+    const { contents } = this.props
+    return (
+      <Multichannel text={{ buttonsAsText: false }}>
+        {contents.map(content => content.toBotonic(content.id))}
+      </Multichannel>
+    )
   }
 }
