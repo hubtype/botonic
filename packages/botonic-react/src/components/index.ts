@@ -19,4 +19,8 @@ export { Text } from './text'
 export { Title } from './title'
 export { Video } from './video'
 export { WebchatSettings } from './webchat-settings'
+export {
+  WhatsappButtonList,
+  WhatsappButtonListProps,
+} from './whatsapp-button-list'
 export { WhatsappTemplate } from './whatsapp-template'
