@@ -14,3 +14,7 @@ jobs:
         # this will push back fixes to the pull request branch.
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add detect-secrets changes
+        run: |
+          git add .secrets.baseline
