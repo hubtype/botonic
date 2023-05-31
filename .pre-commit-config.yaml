@@ -135,7 +135,7 @@ repos:
         files: ^packages/botonic-plugin-intent-classification/
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.2.0
+    rev: v1.4.0
     hooks:
       - id: detect-secrets
         args:
