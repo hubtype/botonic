@@ -78,3 +78,35 @@ export const isFacebook = context =>
   context.session &&
   context.session.user &&
   context.session.user.provider == Providers.Messaging.FACEBOOK
+
+export function whatsappMarkdown(text) {
+  const markdownRegex = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3/g
+
+  const matches = text.match(markdownRegex)
+  if (matches) {
+    const matchesResult = matches.map(match => {
+      if (match.startsWith('**')) {
+        return match.replaceAll('**', '*')
+      }
+      if (match.startsWith('__')) {
+        return match.replaceAll('__', '*')
+      }
+      if (match.startsWith('*')) {
+        return match.replaceAll('*', '_')
+      }
+      // if( match.startsWith('_')) {
+      //   return match.replaceAll('_', '_')
+      // }
+      return match
+    })
+    let textWhatsapp = ''
+    for (let i = 0; i < matches.length; i++) {
+      if (i === 0) {
+        textWhatsapp = text.replaceAll(matches[i], matchesResult[i])
+      }
+      textWhatsapp = textWhatsapp.replaceAll(matches[i], matchesResult[i])
+    }
+    return textWhatsapp
+  }
+  return text
+}

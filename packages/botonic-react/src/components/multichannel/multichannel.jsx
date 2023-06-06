@@ -13,6 +13,7 @@ import {
   isFacebook,
   isWhatsapp,
   MULTICHANNEL_WHATSAPP_PROPS,
+  whatsappMarkdown,
 } from './multichannel-utils'
 
 export const Multichannel = props => {
@@ -51,6 +52,9 @@ export const Multichannel = props => {
       )
     }
     if (child && child.type && child.type.name === COMPONENT_TYPE.TEXT) {
+      if (isWhatsapp(requestContext)) {
+        child.props.children[0] = whatsappMarkdown(child.props.children[0])
+      }
       return (
         <MultichannelText
           {...child.props}
