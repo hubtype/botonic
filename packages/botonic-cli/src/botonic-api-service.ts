@@ -18,14 +18,10 @@ import { pathExists } from './util/file-system'
 
 const BOTONIC_CLIENT_ID: string =
   process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
-const BOTONIC_CLIENT_SECRET: string =
-  process.env.BOTONIC_CLIENT_SECRET ||
-  'YY34FaaNMnIVKztd6LbLIKn3wFqtiLhDgl6ZVyICwsLVWkZN9UzXw0GXFMmWinP3noNGU9Obtb6Nrr1BwMc4IlCTcRDOKJ96JME5N02IGnIY62ZUezMgfeiUZUmMSu68'
 const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
 export class BotonicAPIService {
   clientId: string = BOTONIC_CLIENT_ID
-  clientSecret: string = BOTONIC_CLIENT_SECRET
   baseUrl: string = BOTONIC_URL
   baseApiUrl = this.baseUrl + '/v1/'
   loginUrl: string = this.baseUrl + '/o/token/'
@@ -174,7 +170,6 @@ export class BotonicAPIService {
       grant_type: 'refresh_token',
       refresh_token: this.getOauth().refresh_token,
       client_id: this.clientId,
-      client_secret: this.clientSecret,
     })
 
     const resp = await axios({
@@ -203,7 +198,6 @@ export class BotonicAPIService {
       password: password,
       grant_type: 'password',
       client_id: this.clientId,
-      client_secret: this.clientSecret,
     })
 
     let resp = await axios({
