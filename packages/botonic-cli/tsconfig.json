@@ -6,6 +6,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
+    "useUnknownInCatchVariables": false,
     "skipLibCheck": true
   },
   "include": [".*.js", "*.js", "**/*.ts", "**/*.tsx"],
