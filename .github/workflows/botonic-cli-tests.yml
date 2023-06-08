@@ -14,6 +14,7 @@ jobs:
     with:
       PACKAGE_NAME: Botonic cli tests
       PACKAGE: botonic-cli
-      UNIT_TEST_COMMAND: npm run test_ci
+      # Temporal workaround until ts-jest is fixed
+      UNIT_TEST_COMMAND: cp tsconfig.test.json tsconfig.json && npm run test_ci
       PUBLISH_TESTS_RESULTS: 'yes'
       NEEDS_CODECOV_UPLOAD: 'yes'
