@@ -16,16 +16,19 @@ import {
   FlowVideo,
 } from './content-fields'
 import {
-  FallbackNode,
-  FlowBuilderData,
-  FunctionNode,
-  HandoffNode,
-  IntentNode,
-  KeywordNode,
-  NodeComponent,
-  NodeType,
-  StartNode,
-} from './flow-builder-models'
+  HtFallbackNode,
+  HtFlowBuilderData,
+  HtFunctionNode,
+  HtHandoffNode,
+  HtIntentNode,
+  HtKeywordNode,
+  HtNodeComponent,
+  HtNodeStartType,
+  HtNodeWithContent,
+  HtNodeWithContentType,
+  HtNodeWithoutContentType,
+  HtStartNode,
+} from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
 import { updateButtonUrls } from './helpers'
 import { BotonicPluginFlowBuilderOptions } from './types'
@@ -33,7 +36,7 @@ import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   private flowUrl: string
-  private flow: Promise<FlowBuilderData> | FlowBuilderData
+  private flow: Promise<HtFlowBuilderData> | HtFlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
   private getAccessToken: (session: Session) => string
@@ -54,7 +57,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
 
-  async readFlowContent(session: Session): Promise<FlowBuilderData> {
+  async readFlowContent(session: Session): Promise<HtFlowBuilderData> {
     const { data } = await axios.get(this.flowUrl, {
       headers: { Authorization: `Bearer ${this.getAccessToken(session)}` },
     })
@@ -68,14 +71,14 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async post(_request: PluginPostRequest): Promise<void> {}
 
-  async getContent(id: string): Promise<NodeComponent> {
+  async getContent(id: string): Promise<HtNodeComponent> {
     const flow = await this.flow
     const content = flow.nodes.find(node => node.id === id)
     if (!content) throw Error(`Node with id: '${id}' not found`)
     return content
   }
 
-  async getContentByCode(code: string): Promise<NodeComponent> {
+  async getContentByCode(code: string): Promise<HtNodeComponent> {
     const flow = await this.flow
     const content = flow.nodes.find(node =>
       'code' in node ? node.code === code : false
@@ -86,23 +89,23 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async getHandoffContent(
     handoffTargetId: string | undefined
-  ): Promise<HandoffNode | undefined> {
+  ): Promise<HtHandoffNode | undefined> {
     if (!handoffTargetId) return undefined
-    return (await this.getContent(handoffTargetId)) as HandoffNode
+    return (await this.getContent(handoffTargetId)) as HtHandoffNode
   }
 
   getFlowContent(
-    hubtypeContent: NodeComponent,
+    hubtypeContent: HtNodeComponent,
     locale: string
   ): FlowContent | undefined {
     switch (hubtypeContent.type) {
-      case NodeType.TEXT:
+      case HtNodeWithContentType.TEXT:
         return FlowText.fromHubtypeCMS(hubtypeContent, locale)
-      case NodeType.IMAGE:
+      case HtNodeWithContentType.IMAGE:
         return FlowImage.fromHubtypeCMS(hubtypeContent, locale)
-      case NodeType.CAROUSEL:
+      case HtNodeWithContentType.CAROUSEL:
         return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale)
-      case NodeType.VIDEO:
+      case HtNodeWithContentType.VIDEO:
         return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
       default:
         return undefined
@@ -112,8 +115,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   async getStartId(): Promise<string> {
     const flow = await this.flow
     const startNode = flow.nodes.find(
-      node => node.type === NodeType.START_UP
-    ) as StartNode | undefined
+      node => node.type === HtNodeStartType.STARTUP
+    ) as HtStartNode | undefined
     if (!startNode) throw new Error('start-up id must be defined')
     return startNode.target.id
   }
@@ -121,10 +124,15 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   async getFallbackId(alternate: boolean): Promise<string> {
     const flow = await this.flow
     const fallbackNode = flow.nodes.find(
-      node => node.type === NodeType.FALLBACK
-    ) as FallbackNode | undefined
-    if (!fallbackNode) throw new Error('fallback node must be defined')
+      node => node.type === HtNodeWithContentType.FALLBACK
+    ) as HtFallbackNode | undefined
+    if (!fallbackNode) {
+      throw new Error('fallback node must be defined')
+    }
     const fallbackFirstMessage = fallbackNode.content.first_message
+    if (!fallbackFirstMessage) {
+      throw new Error('fallback 1st message must be defined')
+    }
     const fallbackSecondMessage = fallbackNode.content.second_message
     if (!fallbackSecondMessage) return fallbackFirstMessage.id
     return alternate ? fallbackFirstMessage.id : fallbackSecondMessage.id
@@ -133,18 +141,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     id: string,
     locale: string,
     prevContents?: FlowContent[]
-  ): Promise<{ contents: FlowContent[]; handoffNode: HandoffNode }> {
+  ): Promise<{ contents: FlowContent[]; handoffNode?: HtHandoffNode }> {
     const contents = prevContents || []
-    const hubtypeContent: any = await this.getContent(id)
-    const isHandoff = hubtypeContent.type === NodeType.HANDOFF
+    const hubtypeContent = (await this.getContent(id)) as HtNodeWithContent
+    const isHandoff = hubtypeContent.type === HtNodeWithContentType.HANDOFF
     // TODO: Create function to populate these buttons
-    await updateButtonUrls(hubtypeContent, 'elements', this.getContent)
+    await updateButtonUrls(hubtypeContent, 'elements', this.getContent) // not working
     await updateButtonUrls(hubtypeContent, 'buttons', this.getContent)
     const content = this.getFlowContent(hubtypeContent, locale)
 
     this.replaceButtonPayload(content)
+    //TODO: replace payloads on element buttons
 
-    if (hubtypeContent.type === NodeType.FUNCTION) {
+    if (hubtypeContent.type === HtNodeWithContentType.FUNCTION) {
       const targetId = await this.callFunction(hubtypeContent, locale)
       return this.getContents(targetId, locale, contents)
     } else {
@@ -156,7 +165,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
     // execute function
     // return this.getContents(function result_mapping target, locale, contents)
-    return { contents, handoffNode: isHandoff && hubtypeContent }
+    return { contents, handoffNode: isHandoff ? hubtypeContent : undefined }
   }
 
   private async replaceButtonPayload(content: FlowContent | undefined) {
@@ -164,7 +173,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       for (const button of content.buttons) {
         if (button.payload) {
           const contentButton = await this.getContent(button.payload)
-          if (contentButton?.type === NodeType.PAYLOAD) {
+          if (contentButton?.type === HtNodeWithoutContentType.PAYLOAD) {
             button.payload = contentButton.content.payload
           }
         }
@@ -179,8 +188,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     try {
       const flow = await this.flow
       const intents = flow.nodes.filter(
-        node => node.type === NodeType.INTENT
-      ) as IntentNode[]
+        node => node.type === HtNodeWithContentType.INTENT
+      ) as HtIntentNode[]
       const inputIntent = input.intent
       const inputConfidence = input.confidence
       if (inputIntent) {
@@ -200,14 +209,14 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return undefined
   }
 
-  hasIntent(node: IntentNode, intent: string, locale: string): boolean {
+  hasIntent(node: HtIntentNode, intent: string, locale: string): boolean {
     return node.content.intents.some(
       i => i.locale === locale && i.values.includes(intent)
     )
   }
 
   hasMetConfidenceThreshold(
-    node: IntentNode,
+    node: HtIntentNode,
     predictedConfidence: number
   ): boolean {
     const nodeConfidence = node.content.confidence / 100
@@ -221,8 +230,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     try {
       const flow = await this.flow
       const keywordNodes = flow.nodes.filter(
-        node => node.type == NodeType.KEYWORD
-      ) as KeywordNode[]
+        node => node.type == HtNodeWithContentType.KEYWORD
+      ) as HtKeywordNode[]
       const matchedKeywordNodes = keywordNodes.filter(node =>
         //@ts-ignore
         this.matchKeywords(node, input.data, locale)
@@ -237,7 +246,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return undefined
   }
 
-  matchKeywords(node: KeywordNode, input: string, locale: string): boolean {
+  matchKeywords(node: HtKeywordNode, input: string, locale: string): boolean {
     const result = node.content.keywords.find(
       i => i.locale === locale && this.containsAnyKeywords(input, i.values)
     )
@@ -254,7 +263,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async callFunction(
-    functionNode: FunctionNode,
+    functionNode: HtFunctionNode,
     locale: string
   ): Promise<string> {
     const functionNodeId = functionNode.id
@@ -277,7 +286,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const result = functionNode.content.result_mapping.find(
       r => r.result === functionResult
     )
-    if (!result) {
+    if (!result?.target) {
       throw new Error(
         `No result found for result_mapping for node with id: ${functionNodeId}`
       )

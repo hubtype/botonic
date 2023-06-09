@@ -1,14 +1,14 @@
 import { HandOffBuilder } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import { HandoffNode, PayloadNode } from './flow-builder-models'
+import { HtHandoffNode, HtPayloadNode } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
 import BotonicPluginFlowBuilder from './index'
 
 export async function doHandoff(
   request: ActionRequest,
   locale: string,
-  handoffNode: HandoffNode
+  handoffNode: HtHandoffNode
 ): Promise<void> {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   // @ts-ignore
@@ -53,7 +53,7 @@ export async function doHandoff(
 
 async function getOnFinishPayload(
   flowBuilderPlugin: BotonicPluginFlowBuilder,
-  handoffNode: HandoffNode,
+  handoffNode: HtHandoffNode,
   locale: string
 ): Promise<string | undefined> {
   const handoffTargetNode = await flowBuilderPlugin.getHandoffContent(
@@ -69,5 +69,5 @@ async function getOnFinishPayload(
 
   const actionPayload = await flowBuilderPlugin.getContent(payloadId)
 
-  return (actionPayload as PayloadNode).content.payload
+  return (actionPayload as HtPayloadNode).content.payload
 }

@@ -1,6 +1,3 @@
-import { FlowCarousel } from './flow-carousel'
-import { FlowImage } from './flow-image'
-import { FlowText } from './flow-text'
-import { FlowVideo } from './flow-video'
+import { FlowCarousel, FlowImage, FlowText, FlowVideo } from '../content-fields'
 
 export type FlowContent = FlowText | FlowImage | FlowCarousel | FlowVideo
