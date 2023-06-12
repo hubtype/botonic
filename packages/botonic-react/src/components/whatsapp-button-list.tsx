@@ -12,7 +12,7 @@ interface Action {
 }
 
 interface Section {
-  title: string
+  title?: string
   rows: Row[]
 }
 
@@ -22,16 +22,20 @@ interface Row {
   description: string
 }
 
-const serialize = _whatsappTemplateProps => {
-  // TODO: Implement to have data persistance in localStorage, not needed for this WhatsApp development
-  return {}
+interface TextMessage {
+  text: string
 }
 
 export interface WhatsappButtonListProps {
-  header: string
-  body: string
-  footer: string
+  header?: string
+  body: TextMessage
+  footer?: TextMessage
   action: Action
+}
+
+const serialize = _whatsappTemplateProps => {
+  // TODO: Implement to have data persistance in localStorage, not needed for this WhatsApp development
+  return {}
 }
 
 export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
@@ -51,15 +55,8 @@ export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
 
   const renderNode = () => {
     return (
-      // @ts-ignore
-      <message
-        {...props}
-        header={props.header}
-        body={props.body}
-        footer={props.footer}
-        action={props.action}
-        type={INPUT.WHATSAPP_BUTTON_LIST}
-      />
+      // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
+      <message {...props} type={INPUT.WHATSAPP_BUTTON_LIST} />
     )
   }
 
