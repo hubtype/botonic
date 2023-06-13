@@ -11,7 +11,7 @@ export class FlowButton extends ContentFieldsBase {
 
   static fromHubtypeCMS(component: HtButton, locale: string): FlowButton {
     const newButton = new FlowButton(component.id)
-    newButton.text = FlowButton.getTextByLocale(locale, component.text)
+    newButton.text = this.getTextByLocale(locale, component.text)
     newButton.payload = component.target
       ? component.target.id
       : component.payload?.find(payload => payload.locale === locale)?.id

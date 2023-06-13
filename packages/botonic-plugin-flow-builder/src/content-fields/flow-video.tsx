@@ -16,7 +16,6 @@ export class FlowVideo extends ContentFieldsBase {
   }
 
   toBotonic(id: string): JSX.Element {
-    // @ts-ignore
     return <Video key={id} src={this.src} />
   }
 }

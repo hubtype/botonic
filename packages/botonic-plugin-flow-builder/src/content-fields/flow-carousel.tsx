@@ -1,4 +1,4 @@
-import { Button, Carousel, Element, Pic, Subtitle, Title } from '@botonic/react'
+import { Carousel } from '@botonic/react'
 import React from 'react'
 
 import { ContentFieldsBase } from './content-fields-base'

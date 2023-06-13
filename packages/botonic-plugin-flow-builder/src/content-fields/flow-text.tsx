@@ -16,7 +16,7 @@ export class FlowText extends ContentFieldsBase {
     newText.code = component.code
     newText.buttonStyle =
       component.content.buttons_style || HtButtonStyle.BUTTON
-    newText.text = FlowText.getTextByLocale(locale, component.content.text)
+    newText.text = this.getTextByLocale(locale, component.content.text)
     newText.buttons = component.content.buttons.map(button =>
       FlowButton.fromHubtypeCMS(button, locale)
     )
