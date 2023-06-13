@@ -54,12 +54,8 @@ export class Router {
     session.__retries = session?.__retries ?? 0
 
     // 1. Getting the current routing state.
-    const {
-      currentRoute,
-      matchedRoute,
-      params,
-      isFlowBroken,
-    } = this.getRoutingState(input, session, lastRoutePath)
+    const { currentRoute, matchedRoute, params, isFlowBroken } =
+      this.getRoutingState(input, session, lastRoutePath)
 
     const currentRoutePath = currentRoute?.path ?? null
     const matchedRoutePath = matchedRoute?.path ?? null

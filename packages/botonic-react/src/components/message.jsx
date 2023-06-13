@@ -85,8 +85,12 @@ export const Message = props => {
   const isFromUser = from === SENDERS.user
   const isFromBot = from === SENDERS.bot
   const markdown = props.markdown
-  const { webchatState, addMessage, updateReplies, getThemeProperty } =
-    useContext(WebchatContext)
+  const {
+    webchatState,
+    addMessage,
+    updateReplies,
+    getThemeProperty,
+  } = useContext(WebchatContext)
   const [state, setState] = useState({
     id: props.id || uuidv4(),
   })
@@ -110,8 +114,11 @@ export const Message = props => {
       typeof e === 'string' ? renderLinks(e) : e
     )
 
-  const { timestampsEnabled, getFormattedTimestamp, timestampStyle } =
-    resolveMessageTimestamps(getThemeProperty, enabletimestamps)
+  const {
+    timestampsEnabled,
+    getFormattedTimestamp,
+    timestampStyle,
+  } = resolveMessageTimestamps(getThemeProperty, enabletimestamps)
 
   const getEnvAck = () => {
     if (isDev) return 1
