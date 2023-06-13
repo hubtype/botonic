@@ -8,6 +8,7 @@ export enum HtNodeWithContentType {
   FUNCTION = 'function',
   FALLBACK = 'fallback',
   VIDEO = 'video',
+  WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
 }
 
 export enum HtNodeStartType {
