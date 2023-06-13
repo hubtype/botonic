@@ -14,6 +14,7 @@ import {
   FlowImage,
   FlowText,
   FlowVideo,
+  FlowWhatsappButtonList,
 } from './content-fields'
 import {
   HtFallbackNode,
@@ -107,6 +108,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale)
       case HtNodeWithContentType.VIDEO:
         return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
+      case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
+        return FlowWhatsappButtonList.fromHubtypeCMS(hubtypeContent, locale)
       default:
         return undefined
     }
