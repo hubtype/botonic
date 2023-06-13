@@ -1,11 +1,11 @@
 import { Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderData } from './flow-builder-models'
+import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
 export interface BotonicPluginFlowBuilderOptions {
   flowUrl: string
-  flow?: FlowBuilderData
+  flow?: HtFlowBuilderData
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
   getAccessToken: () => string

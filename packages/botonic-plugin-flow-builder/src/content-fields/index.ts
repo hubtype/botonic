@@ -1,8 +1,11 @@
+import { FlowCarousel } from './flow-carousel'
+import { FlowImage } from './flow-image'
+import { FlowText } from './flow-text'
+import { FlowVideo } from './flow-video'
+
 export { ContentFieldsBase } from './content-fields-base'
 export { FlowButton } from './flow-button'
-export { FlowCarousel } from './flow-carousel'
 export { FlowElement } from './flow-element'
-export { FlowImage } from './flow-image'
-export { FlowText } from './flow-text'
-export { FlowVideo } from './flow-video'
-export type { FlowContent } from './types'
+export { FlowCarousel, FlowImage, FlowText, FlowVideo }
+
+export type FlowContent = FlowText | FlowImage | FlowCarousel | FlowVideo

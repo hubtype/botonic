@@ -1,6 +1,7 @@
 import { Plugin } from '@botonic/core'
+
+import { HtNodeWithContent } from './content-fields/hubtype-fields'
 import BotonicPluginFlowBuilder from './index'
-import { NodeComponent } from './flow-builder-models'
 
 const FLOW_BUILDER_PLUGIN_NAME = 'BotonicPluginFlowBuilder'
 
@@ -19,7 +20,7 @@ export function getFlowBuilderPlugin(plugins: {
 }
 
 export async function updateButtonUrls(
-  hubtypeContent: any,
+  hubtypeContent: HtNodeWithContent,
   contentKey: string,
   getContentFn: any
 ): Promise<void> {
