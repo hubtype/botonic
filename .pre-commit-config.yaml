@@ -134,6 +134,12 @@ repos:
         language: system
         files: ^packages/botonic-plugin-intent-classification/
 
+      - id: plugin-flow-builder
+        name: plugin-flow-builder
+        entry: scripts/qa/lint-package.sh packages/botonic-plugin-flow-builder
+        language: system
+        files: ^packages/botonic-plugin-flow-builder/
+
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
     hooks:
