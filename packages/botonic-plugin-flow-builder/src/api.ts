@@ -1,5 +1,5 @@
 import { Input } from '@botonic/core'
-import axios from 'axios/index'
+import axios from 'axios'
 
 import {
   HtFallbackNode,
