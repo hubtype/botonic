@@ -1,13 +1,12 @@
 import {
-  Input,
   Plugin,
   PluginPostRequest,
   PluginPreRequest,
   Session,
 } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import axios from 'axios'
 
+import { FlowBuilderApi } from './api'
 import {
   FlowCarousel,
   FlowContent,
@@ -17,27 +16,19 @@ import {
   FlowWhatsappButtonList,
 } from './content-fields'
 import {
-  HtFallbackNode,
-  HtFlowBuilderData,
   HtFunctionNode,
   HtHandoffNode,
-  HtIntentNode,
-  HtKeywordNode,
   HtNodeComponent,
-  HtNodeStartType,
   HtNodeWithContent,
   HtNodeWithContentType,
-  HtNodeWithoutContentType,
-  HtStartNode,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { updateButtonUrls } from './helpers'
+import { isHandoffNode } from './helpers'
 import { BotonicPluginFlowBuilderOptions } from './types'
 import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
-  private flowUrl: string
-  private flow: Promise<HtFlowBuilderData> | HtFlowBuilderData
+  public cmsApi: FlowBuilderApi
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
   private getAccessToken: (session: Session) => string
@@ -49,63 +40,62 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   ) => Promise<void>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
+    this.cmsApi = new FlowBuilderApi({
+      url: options.flowUrl,
+      flow: options.flow,
+    })
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
     this.trackEvent = options.trackEvent
-    this.flowUrl = options.flowUrl
-    if (options.flow) this.flow = options.flow
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
 
-  async readFlowContent(session: Session): Promise<HtFlowBuilderData> {
-    const { data } = await axios.get(this.flowUrl, {
-      headers: { Authorization: `Bearer ${this.getAccessToken(session)}` },
-    })
-    return data
-  }
-
   async pre(request: PluginPreRequest): Promise<void> {
     this.currentRequest = request
-    this.flow = await this.readFlowContent(this.currentRequest.session)
+    await this.cmsApi.init(this.getAccessToken(request.session))
   }
 
   async post(_request: PluginPostRequest): Promise<void> {}
 
-  async getContent(id: string): Promise<HtNodeComponent> {
-    const flow = await this.flow
-    const content = flow.nodes.find(node => node.id === id)
-    if (!content) throw Error(`Node with id: '${id}' not found`)
-    return content
+  async getContent(
+    nodeOrId: HtNodeWithContent | string,
+    locale: string,
+    prevContents?: FlowContent[]
+  ): Promise<{ contents: FlowContent[]; handoffNode?: HtHandoffNode }> {
+    const contents = prevContents || []
+    let node = nodeOrId as HtNodeWithContent
+    if (typeof nodeOrId === 'string') {
+      node = this.cmsApi.getNode(nodeOrId) as HtNodeWithContent
+    }
+
+    const content = await this.getFlowContent(node, locale)
+
+    if (node.type === HtNodeWithContentType.FUNCTION) {
+      const targetId = await this.callFunction(node, locale)
+      return this.getContent(targetId, locale, contents)
+    } else {
+      if (content) contents.push(content)
+      // TODO: prevent infinite recursive calls
+
+      if (node.follow_up)
+        return this.getContent(node.follow_up.id, locale, contents)
+    }
+
+    return { contents, handoffNode: isHandoffNode(node) ? node : undefined }
   }
 
-  async getContentByCode(code: string): Promise<HtNodeComponent> {
-    const flow = await this.flow
-    const content = flow.nodes.find(node =>
-      'code' in node ? node.code === code : false
-    )
-    if (!content) throw Error(`Node with code: '${code}' not found`)
-    return content
-  }
-
-  async getHandoffContent(
-    handoffTargetId: string | undefined
-  ): Promise<HtHandoffNode | undefined> {
-    if (!handoffTargetId) return undefined
-    return (await this.getContent(handoffTargetId)) as HtHandoffNode
-  }
-
-  getFlowContent(
+  private getFlowContent(
     hubtypeContent: HtNodeComponent,
     locale: string
   ): FlowContent | undefined {
     switch (hubtypeContent.type) {
       case HtNodeWithContentType.TEXT:
-        return FlowText.fromHubtypeCMS(hubtypeContent, locale)
+        return FlowText.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
       case HtNodeWithContentType.IMAGE:
         return FlowImage.fromHubtypeCMS(hubtypeContent, locale)
       case HtNodeWithContentType.CAROUSEL:
-        return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale)
+        return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
       case HtNodeWithContentType.VIDEO:
         return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
       case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
@@ -113,156 +103,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       default:
         return undefined
     }
-  }
-
-  async getStartId(): Promise<string> {
-    const flow = await this.flow
-    const startNode = flow.nodes.find(
-      node => node.type === HtNodeStartType.STARTUP
-    ) as HtStartNode | undefined
-    if (!startNode) throw new Error('start-up id must be defined')
-    return startNode.target.id
-  }
-
-  async getFallbackId(alternate: boolean): Promise<string> {
-    const flow = await this.flow
-    const fallbackNode = flow.nodes.find(
-      node => node.type === HtNodeWithContentType.FALLBACK
-    ) as HtFallbackNode | undefined
-    if (!fallbackNode) {
-      throw new Error('fallback node must be defined')
-    }
-    const fallbackFirstMessage = fallbackNode.content.first_message
-    if (!fallbackFirstMessage) {
-      throw new Error('fallback 1st message must be defined')
-    }
-    const fallbackSecondMessage = fallbackNode.content.second_message
-    if (!fallbackSecondMessage) return fallbackFirstMessage.id
-    return alternate ? fallbackFirstMessage.id : fallbackSecondMessage.id
-  }
-  async getContents(
-    id: string,
-    locale: string,
-    prevContents?: FlowContent[]
-  ): Promise<{ contents: FlowContent[]; handoffNode?: HtHandoffNode }> {
-    const contents = prevContents || []
-    const hubtypeContent = (await this.getContent(id)) as HtNodeWithContent
-    const isHandoff = hubtypeContent.type === HtNodeWithContentType.HANDOFF
-    // TODO: Create function to populate these buttons
-    await updateButtonUrls(hubtypeContent, 'elements', this.getContent) // not working
-    await updateButtonUrls(hubtypeContent, 'buttons', this.getContent)
-    const content = this.getFlowContent(hubtypeContent, locale)
-
-    this.replaceButtonPayload(content)
-    //TODO: replace payloads on element buttons
-
-    if (hubtypeContent.type === HtNodeWithContentType.FUNCTION) {
-      const targetId = await this.callFunction(hubtypeContent, locale)
-      return this.getContents(targetId, locale, contents)
-    } else {
-      if (content) contents.push(content)
-      // TODO: prevent infinite recursive calls
-
-      if (hubtypeContent.follow_up)
-        return this.getContents(hubtypeContent.follow_up.id, locale, contents)
-    }
-    // execute function
-    // return this.getContents(function result_mapping target, locale, contents)
-    return { contents, handoffNode: isHandoff ? hubtypeContent : undefined }
-  }
-
-  private async replaceButtonPayload(content: FlowContent | undefined) {
-    if (content && 'buttons' in content) {
-      for (const button of content.buttons) {
-        if (button.payload) {
-          const contentButton = await this.getContent(button.payload)
-          if (contentButton?.type === HtNodeWithoutContentType.PAYLOAD) {
-            button.payload = contentButton.content.payload
-          }
-        }
-      }
-    }
-  }
-
-  async getPayloadByIntent(
-    input: Input,
-    locale: string
-  ): Promise<string | undefined> {
-    try {
-      const flow = await this.flow
-      const intents = flow.nodes.filter(
-        node => node.type === HtNodeWithContentType.INTENT
-      ) as HtIntentNode[]
-      const inputIntent = input.intent
-      const inputConfidence = input.confidence
-      if (inputIntent) {
-        const matchedIntentNode = intents.find(
-          node =>
-            inputIntent &&
-            this.hasIntent(node, inputIntent, locale) &&
-            inputConfidence &&
-            this.hasMetConfidenceThreshold(node, inputConfidence)
-        )
-        return matchedIntentNode?.target?.id
-      }
-    } catch (error) {
-      console.error('Error getting payload by input: ', error)
-    }
-
-    return undefined
-  }
-
-  hasIntent(node: HtIntentNode, intent: string, locale: string): boolean {
-    return node.content.intents.some(
-      i => i.locale === locale && i.values.includes(intent)
-    )
-  }
-
-  hasMetConfidenceThreshold(
-    node: HtIntentNode,
-    predictedConfidence: number
-  ): boolean {
-    const nodeConfidence = node.content.confidence / 100
-    return predictedConfidence >= nodeConfidence
-  }
-
-  async getPayloadByKeyword(
-    input: Input,
-    locale: string
-  ): Promise<string | undefined> {
-    try {
-      const flow = await this.flow
-      const keywordNodes = flow.nodes.filter(
-        node => node.type == HtNodeWithContentType.KEYWORD
-      ) as HtKeywordNode[]
-      const matchedKeywordNodes = keywordNodes.filter(node =>
-        //@ts-ignore
-        this.matchKeywords(node, input.data, locale)
-      )
-      if (matchedKeywordNodes.length > 0) {
-        return matchedKeywordNodes[0].target?.id
-      }
-    } catch (error) {
-      console.error('Error getting payload by input: ', error)
-    }
-
-    return undefined
-  }
-
-  matchKeywords(node: HtKeywordNode, input: string, locale: string): boolean {
-    const result = node.content.keywords.find(
-      i => i.locale === locale && this.containsAnyKeywords(input, i.values)
-    )
-    return Boolean(result)
-  }
-
-  containsAnyKeywords(input: string, keywords: string[]): boolean {
-    for (let i = 0; i < keywords.length; i++) {
-      if (input.includes(keywords[i])) {
-        return true
-      }
-    }
-    return false
   }
 
   async callFunction(

@@ -56,10 +56,12 @@ async function getOnFinishPayload(
   handoffNode: HtHandoffNode,
   locale: string
 ): Promise<string | undefined> {
-  const handoffTargetNode = await flowBuilderPlugin.getHandoffContent(
-    handoffNode.target?.id
-  )
-  if (handoffTargetNode?.id) return handoffTargetNode?.id
+  if (handoffNode.target?.id) {
+    const handoffTargetNode = flowBuilderPlugin.cmsApi.getNode<HtHandoffNode>(
+      handoffNode.target?.id
+    )
+    if (handoffTargetNode?.id) return handoffTargetNode?.id
+  }
 
   const payloadId = handoffNode.content.payload.find(
     payload => payload.locale === locale
@@ -67,7 +69,7 @@ async function getOnFinishPayload(
 
   if (!payloadId) return undefined
 
-  const actionPayload = await flowBuilderPlugin.getContent(payloadId)
+  const actionPayload = flowBuilderPlugin.cmsApi.getNode(payloadId)
 
   return (actionPayload as HtPayloadNode).content.payload
 }
