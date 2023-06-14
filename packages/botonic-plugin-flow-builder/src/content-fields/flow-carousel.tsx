@@ -1,6 +1,7 @@
 import { Carousel } from '@botonic/react'
 import React from 'react'
 
+import { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowElement } from './flow-element'
 import { HtCarouselNode } from './hubtype-fields'
@@ -11,12 +12,13 @@ export class FlowCarousel extends ContentFieldsBase {
 
   static fromHubtypeCMS(
     component: HtCarouselNode,
-    locale: string
+    locale: string,
+    cmsApi: FlowBuilderApi
   ): FlowCarousel {
     const newCarousel = new FlowCarousel(component.id)
     newCarousel.code = component.code
     newCarousel.elements = component.content.elements.map(element =>
-      FlowElement.fromHubtypeCMS(element, locale)
+      FlowElement.fromHubtypeCMS(element, locale, cmsApi)
     )
     return newCarousel
   }

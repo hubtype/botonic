@@ -31,8 +31,7 @@
   "devDependencies": {
     "@types/minipass": "^3.3.5",
     "@types/node": "^18.16.0",
-    "@types/react": "^18.0.38",
-    "typescript": "^5.0.4"
+    "@types/react": "^16.14.43"
   },
   "keywords": [
     "bot-framework",
