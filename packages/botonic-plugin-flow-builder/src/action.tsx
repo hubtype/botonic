@@ -34,11 +34,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
         request.input.data,
         locale
       )
-      if (intentNode) {
-        targetNode = intentNode
-      } else if (keywordNode) {
-        targetNode = keywordNode
-      }
+      targetNode = intentNode ?? keywordNode ?? targetNode
     }
 
     if (!targetNode) {
@@ -48,7 +44,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       alternateFallbackMessage = !alternateFallbackMessage
     }
 
-    const { contents, handoffNode } = await flowBuilderPlugin.getContent(
+    const { contents, handoffNode } = await flowBuilderPlugin.getContents(
       targetNode,
       locale
     )

@@ -57,9 +57,10 @@ async function getOnFinishPayload(
   locale: string
 ): Promise<string | undefined> {
   if (handoffNode.target?.id) {
-    const handoffTargetNode = flowBuilderPlugin.cmsApi.getNode<HtHandoffNode>(
-      handoffNode.target?.id
-    )
+    const handoffTargetNode =
+      flowBuilderPlugin.cmsApi.getNodeById<HtHandoffNode>(
+        handoffNode.target?.id
+      )
     if (handoffTargetNode?.id) return handoffTargetNode?.id
   }
 
@@ -69,7 +70,7 @@ async function getOnFinishPayload(
 
   if (!payloadId) return undefined
 
-  const actionPayload = flowBuilderPlugin.cmsApi.getNode(payloadId)
+  const actionPayload = flowBuilderPlugin.cmsApi.getNodeById(payloadId)
 
   return (actionPayload as HtPayloadNode).content.payload
 }

@@ -15,24 +15,26 @@ import {
 import { FlowBuilderApiOptions } from './types'
 
 export class FlowBuilderApi {
-  private readonly url: string
-  public flow: HtFlowBuilderData
+  url: string
+  flow: HtFlowBuilderData
 
-  constructor(options: FlowBuilderApiOptions) {
-    this.url = options.url
-    if (options.flow) {
-      this.flow = options.flow
-    }
+  static async create(options: FlowBuilderApiOptions): Promise<FlowBuilderApi> {
+    const newApi = new FlowBuilderApi()
+
+    newApi.url = options.url
+    newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
+
+    return newApi
   }
 
-  async init(token: string) {
+  private async getFlow(token: string): Promise<HtFlowBuilderData> {
     const { data } = await axios.get(this.url, {
       headers: { Authorization: `Bearer ${token}` },
     })
-    this.flow = data
+    return data as HtFlowBuilderData
   }
 
-  getNode<T extends HtNodeComponent>(id: string): T {
+  getNodeById<T extends HtNodeComponent>(id: string): T {
     const node = this.flow.nodes.find(node => node.id === id)
     if (!node) throw Error(`Node with id: '${id}' not found`)
     return node as T
@@ -51,7 +53,7 @@ export class FlowBuilderApi {
       node => node.type === HtNodeStartType.STARTUP
     ) as HtStartNode | undefined
     if (!startUpNode) throw new Error('Start-up id must be defined')
-    return this.getNode(startUpNode.target.id)
+    return this.getNodeById(startUpNode.target.id)
   }
 
   getFallbackNode(alternate: boolean): HtNodeWithContent {
@@ -67,11 +69,11 @@ export class FlowBuilderApi {
     }
     const fallbackSecondMessage = fallbackNode.content.second_message
     if (!fallbackSecondMessage) {
-      return this.getNode(fallbackFirstMessage.id)
+      return this.getNodeById(fallbackFirstMessage.id)
     }
     return alternate
-      ? this.getNode(fallbackFirstMessage.id)
-      : this.getNode(fallbackSecondMessage.id)
+      ? this.getNodeById(fallbackFirstMessage.id)
+      : this.getNodeById(fallbackSecondMessage.id)
   }
 
   getNodeByIntent(input: Input, locale: string): HtNodeWithContent | undefined {
@@ -91,7 +93,7 @@ export class FlowBuilderApi {
         )
         return (
           matchedIntentNode?.target &&
-          this.getNode<HtNodeWithContent>(matchedIntentNode?.target.id)
+          this.getNodeById<HtNodeWithContent>(matchedIntentNode?.target.id)
         )
       }
     } catch (error) {
@@ -131,7 +133,9 @@ export class FlowBuilderApi {
         this.matchKeywords(node, userInput, locale)
       )
       if (matchedKeywordNodes.length > 0 && matchedKeywordNodes[0].target) {
-        return this.getNode<HtNodeWithContent>(matchedKeywordNodes[0].target.id)
+        return this.getNodeById<HtNodeWithContent>(
+          matchedKeywordNodes[0].target.id
+        )
       }
     } catch (error) {
       console.error(`Error getting node by keyword '${userInput}': `, error)
@@ -152,11 +156,6 @@ export class FlowBuilderApi {
   }
 
   private containsAnyKeywords(input: string, keywords: string[]): boolean {
-    for (let i = 0; i < keywords.length; i++) {
-      if (input.includes(keywords[i])) {
-        return true
-      }
-    }
-    return false
+    return keywords.some(keyword => input.includes(keyword))
   }
 }

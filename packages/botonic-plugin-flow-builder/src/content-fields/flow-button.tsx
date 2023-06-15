@@ -29,11 +29,11 @@ export class FlowButton extends ContentFieldsBase {
       newButton.payload = cmsButton.target.id
     }
     if (cmsButton.payload && payloadId) {
-      const payloadNode = cmsApi.getNode(payloadId) as HtPayloadNode
+      const payloadNode = cmsApi.getNodeById(payloadId) as HtPayloadNode
       newButton.payload = payloadNode.content.payload
     }
     if (cmsButton.url && urlId) {
-      const payloadNode = cmsApi.getNode(urlId) as HtUrlNode
+      const payloadNode = cmsApi.getNodeById(urlId) as HtUrlNode
       newButton.url = payloadNode.content.url
     }
 

@@ -20,6 +20,7 @@ export interface BotonicPluginFlowBuilderOptions {
 export interface FlowBuilderApiOptions {
   url: string
   flow?: HtFlowBuilderData
+  accessToken: string
 }
 
 export enum ProcessEnvNodeEnvs {

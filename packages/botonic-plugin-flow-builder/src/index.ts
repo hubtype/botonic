@@ -16,6 +16,7 @@ import {
   FlowWhatsappButtonList,
 } from './content-fields'
 import {
+  HtFlowBuilderData,
   HtFunctionNode,
   HtHandoffNode,
   HtNodeComponent,
@@ -29,6 +30,8 @@ import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
+  private flowUrl: string
+  private flow?: HtFlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
   private getAccessToken: (session: Session) => string
@@ -40,10 +43,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   ) => Promise<void>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
-    this.cmsApi = new FlowBuilderApi({
-      url: options.flowUrl,
-      flow: options.flow,
-    })
+    this.flowUrl = options.flowUrl
+    this.flow = options.flow
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
     this.trackEvent = options.trackEvent
@@ -53,12 +54,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async pre(request: PluginPreRequest): Promise<void> {
     this.currentRequest = request
-    await this.cmsApi.init(this.getAccessToken(request.session))
+    this.cmsApi = await FlowBuilderApi.create({
+      url: this.flowUrl,
+      flow: this.flow,
+      accessToken: this.getAccessToken(request.session),
+    })
   }
 
   async post(_request: PluginPostRequest): Promise<void> {}
 
-  async getContent(
+  async getContents(
     nodeOrId: HtNodeWithContent | string,
     locale: string,
     prevContents?: FlowContent[]
@@ -66,20 +71,20 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const contents = prevContents || []
     let node = nodeOrId as HtNodeWithContent
     if (typeof nodeOrId === 'string') {
-      node = this.cmsApi.getNode(nodeOrId) as HtNodeWithContent
+      node = this.cmsApi.getNodeById(nodeOrId) as HtNodeWithContent
     }
 
     const content = await this.getFlowContent(node, locale)
 
     if (node.type === HtNodeWithContentType.FUNCTION) {
       const targetId = await this.callFunction(node, locale)
-      return this.getContent(targetId, locale, contents)
+      return this.getContents(targetId, locale, contents)
     } else {
       if (content) contents.push(content)
       // TODO: prevent infinite recursive calls
 
       if (node.follow_up)
-        return this.getContent(node.follow_up.id, locale, contents)
+        return this.getContents(node.follow_up.id, locale, contents)
     }
 
     return { contents, handoffNode: isHandoffNode(node) ? node : undefined }
