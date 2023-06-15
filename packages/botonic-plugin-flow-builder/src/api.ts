@@ -18,6 +18,8 @@ export class FlowBuilderApi {
   url: string
   flow: HtFlowBuilderData
 
+  private constructor() {}
+
   static async create(options: FlowBuilderApiOptions): Promise<FlowBuilderApi> {
     const newApi = new FlowBuilderApi()
 
