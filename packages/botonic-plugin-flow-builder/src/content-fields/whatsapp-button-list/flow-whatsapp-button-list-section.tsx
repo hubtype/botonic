@@ -1,7 +1,7 @@
 import {
   WhatsappButtonListRowProps,
   WhatsappButtonListSectionProps,
-} from '@botonic/react/lib/cjs/components/whatsapp-button-list'
+} from '@botonic/react'
 
 import { HtWhatsappButtonListSection } from '../hubtype-fields'
 import { ContentFieldsBase } from './../content-fields-base'
