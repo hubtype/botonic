@@ -6,11 +6,6 @@ import { Message } from './message'
 
 // TODO: Add validation in component
 
-interface Action {
-  button: string
-  sections: WhatsappButtonListSectionProps[]
-}
-
 export interface WhatsappButtonListSectionProps {
   title?: string
   rows: WhatsappButtonListRowProps[]
@@ -26,7 +21,8 @@ export interface WhatsappButtonListProps {
   header?: string
   body: string
   footer?: string
-  action: Action
+  button: string
+  sections: WhatsappButtonListSectionProps[]
 }
 
 const serialize = _whatsappButtonListProps => {
@@ -54,9 +50,7 @@ export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
       // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...props}
-        header={{ text: props.header }}
-        body={{ text: props.body }}
-        footer={{ text: props.footer }}
+        sections={JSON.stringify(props.sections)}
         type={INPUT.WHATSAPP_BUTTON_LIST}
       />
     )

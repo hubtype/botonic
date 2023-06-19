@@ -22,5 +22,7 @@ export { WebchatSettings } from './webchat-settings'
 export {
   WhatsappButtonList,
   WhatsappButtonListProps,
+  WhatsappButtonListRowProps,
+  WhatsappButtonListSectionProps,
 } from './whatsapp-button-list'
 export { WhatsappTemplate } from './whatsapp-template'
