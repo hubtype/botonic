@@ -81,7 +81,7 @@ export class BotonicAPIService {
         this.bot = credentials.bot
       } else {
         // Allow users < v0.1.12 to upgrade smoothly
-        this.bot = (credentials as any) as BotInfo
+        this.bot = credentials as any as BotInfo
       }
     }
   }
