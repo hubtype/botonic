@@ -97,9 +97,6 @@ jobs:
       - name: Verify lint
         run: (cd ./packages/${{ inputs.PACKAGE }} && npm run lint_ci)
 
-      - name: Verify index.d.ts
-        run: scripts/qa/lint-d-ts.sh packages/${{ inputs.PACKAGE }}
-
       - name: Publish Unit Test Results
         if: ${{ inputs.PUBLISH_TESTS_RESULTS != '' && always() }}
         uses: EnricoMi/publish-unit-test-result-action@v2

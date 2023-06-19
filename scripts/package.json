@@ -4,7 +4,7 @@
   "scripts": {
     "cloc-all": "./qa/cloc-all-packages.sh",
     "lint-all": "./qa/lint-all-packages.sh",
-    "prepare-all": "./ci/prepare-package.sh",
+    "prepare-all": "./ci/prepare-packages.sh",
     "publish-all": "BOTONIC_NO_INSTALL_ROOT_DEPENDENCIES=1 ts-node ./ci/publish.ts"
   },
   "keywords": [],
