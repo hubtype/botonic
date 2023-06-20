@@ -1,6 +1,10 @@
 import { Plugin } from '@botonic/core'
 
-import { HtNodeWithContent } from './content-fields/hubtype-fields'
+import {
+  HtHandoffNode,
+  HtNodeWithContent,
+  HtNodeWithContentType,
+} from './content-fields/hubtype-fields'
 import BotonicPluginFlowBuilder from './index'
 
 const FLOW_BUILDER_PLUGIN_NAME = 'BotonicPluginFlowBuilder'
@@ -19,22 +23,6 @@ export function getFlowBuilderPlugin(plugins: {
   return flowBuilderPlugin
 }
 
-export async function updateButtonUrls(
-  hubtypeContent: HtNodeWithContent,
-  contentKey: string,
-  getContentFn: any
-): Promise<void> {
-  if (hubtypeContent.content[contentKey]) {
-    for (const i in hubtypeContent.content[contentKey]) {
-      const button = hubtypeContent.content[contentKey][i].button
-      if (button?.url) {
-        for (const j in button.url) {
-          button.url[j] = {
-            ...button.url[j],
-            ...(await getContentFn(button.url[j].id)),
-          }
-        }
-      }
-    }
-  }
+export function isHandoffNode(node: HtNodeWithContent): node is HtHandoffNode {
+  return node.type === HtNodeWithContentType.HANDOFF
 }

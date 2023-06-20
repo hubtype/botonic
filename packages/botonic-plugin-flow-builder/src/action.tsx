@@ -2,6 +2,7 @@ import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowContent } from './content-fields'
+import { HtNodeWithContent } from './content-fields/hubtype-fields'
 import { doHandoff } from './handoff'
 import { getFlowBuilderPlugin } from './helpers'
 
@@ -18,31 +19,33 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
     const payload = request.input.payload
-    let targetContentId: string | undefined = payload
+    let targetNode: HtNodeWithContent | string | undefined = payload
+
     if (!payload && request.session.is_first_interaction) {
-      targetContentId = await flowBuilderPlugin.getStartId()
+      targetNode = flowBuilderPlugin.cmsApi.getStartNode()
     }
-    if (!payload) {
-      const intentPayload = await flowBuilderPlugin.getPayloadByIntent(
+
+    if (!payload && request.input.data) {
+      const intentNode = flowBuilderPlugin.cmsApi.getNodeByIntent(
         request.input,
         locale
       )
-      if (intentPayload) targetContentId = intentPayload
-      const keywordPayload = await flowBuilderPlugin.getPayloadByKeyword(
-        request.input,
+      const keywordNode = flowBuilderPlugin.cmsApi.getNodeByKeyword(
+        request.input.data,
         locale
       )
-      if (keywordPayload) targetContentId = keywordPayload
+      targetNode = intentNode ?? keywordNode ?? targetNode
     }
-    if (!targetContentId) {
-      targetContentId = await flowBuilderPlugin.getFallbackId(
+
+    if (!targetNode) {
+      targetNode = flowBuilderPlugin.cmsApi.getFallbackNode(
         alternateFallbackMessage
       )
       alternateFallbackMessage = !alternateFallbackMessage
     }
 
     const { contents, handoffNode } = await flowBuilderPlugin.getContents(
-      targetContentId,
+      targetNode,
       locale
     )
 
