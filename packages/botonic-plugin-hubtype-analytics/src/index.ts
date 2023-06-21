@@ -3,14 +3,14 @@ import axios from 'axios'
 
 import { HtEvent } from './types'
 
-export interface HubtypeTrackingOptions {
+export interface HubtypeAnalyticsOptions {
   baseUrl: string
 }
 
-export default class HubtypeTracking implements Plugin {
+export default class BotonicPluginHubtypeAnalytics implements Plugin {
   baseUrl: string
-  constructor(opt: HubtypeTrackingOptions) {
-    this.baseUrl = opt.baseUrl
+  constructor(options: HubtypeAnalyticsOptions) {
+    this.baseUrl = options.baseUrl
   }
 
   pre(): void {
@@ -37,11 +37,6 @@ export default class HubtypeTracking implements Plugin {
       },
     }
     const headers = { Authorization: `Bearer ${request.session._access_token}` }
-    console.log({
-      url: this.getUrl(request),
-      token: request.session._access_token,
-      event: data,
-    })
     const config = { headers }
     return axios.post(url, data, config)
   }
