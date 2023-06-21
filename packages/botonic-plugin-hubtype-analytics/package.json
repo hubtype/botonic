@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-analytics",
-  "version": "0.22.0-alpha.0",
+  "version": "0.22.0-alpha.3",
   "description": "Plugin for tracking in the Hubtype backend to see the results in the Hubtype Dashbord",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -8,10 +8,33 @@
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "rm -rf lib && npm run build",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
+  "dependencies": {
+    "@babel/runtime": "^7.21.0",
+    "@botonic/core": "^0.22.0",
+    "@types/axios": "^0.14.0",
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.7",
+    "@types/react": "^16.14.0",
+    "typescript": "^4.8.4"
+  },
+  "files": [
+    "lib/**",
+    "src/**",
+    "README.md"
+  ],
+  "eslintConfig": {
+    "extends": "../.eslintrc.js",
+    "root": true
+  },
+  "author": "Hubtype",
+  "license": "MIT",
   "keywords": [
     "analytics",
     "bot-framework",
@@ -20,22 +43,5 @@
     "conversational-ui",
     "javascript",
     "typescript"
-  ],
-  "author": "Hubtype",
-  "license": "MIT",
-  "dependencies": {
-    "@babel/runtime": "^7.21.0",
-    "@botonic/core": "^0.22.0",
-    "@types/axios": "^0.14.0",
-    "axios": "^1.4.0"
-  },
-  "eslintConfig": {
-    "extends": "../.eslintrc.js",
-    "root": true
-  },
-  "devDependencies": {
-    "@types/node": "^16.11.7",
-    "@types/react": "^16.14.0",
-    "typescript": "^4.8.4"
-  }
+  ]
 }
