@@ -1,9 +1,4 @@
-import {
-  Plugin,
-  PluginPostRequest,
-  PluginPreRequest,
-  Session,
-} from '@botonic/core'
+import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from './api'
@@ -15,16 +10,15 @@ import {
   FlowVideo,
   FlowWhatsappButtonList,
 } from './content-fields'
+import { FlowHandoff } from './content-fields/flow-handoff'
 import {
   HtFlowBuilderData,
   HtFunctionNode,
-  HtHandoffNode,
   HtNodeComponent,
   HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { isHandoffNode } from './helpers'
 import { BotonicPluginFlowBuilderOptions } from './types'
 import { resolveGetAccessToken } from './utils'
 
@@ -117,6 +111,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
       case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
         return FlowWhatsappButtonList.fromHubtypeCMS(hubtypeContent, locale)
+      case HtNodeWithContentType.HANDOFF:
+        return FlowHandoff.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
       default:
         return undefined
     }

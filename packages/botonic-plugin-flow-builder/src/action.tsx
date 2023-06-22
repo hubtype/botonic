@@ -41,9 +41,15 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       await flowBuilderPlugin.trackEvent(request, contents[0].code)
     }
 
-    if (handoffNode) await doHandoff(request, locale, handoffNode)
+    const renderContents = contents.filter(content => {
+      if (content instanceof FlowHandoff) {
+        content.doHandoff(request)
+        return false
+      }
+      return true
+    })
 
-    return { contents, handoffNode }
+    return { contents: renderContents }
   }
 
   render(): JSX.Element | JSX.Element[] {
