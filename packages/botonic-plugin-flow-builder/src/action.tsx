@@ -1,50 +1,37 @@
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
+import { FlowBuilderApi } from './api'
 import { FlowContent } from './content-fields'
+import { FlowHandoff } from './content-fields/flow-handoff'
 import { HtNodeWithContent } from './content-fields/hubtype-fields'
-import { doHandoff } from './handoff'
 import { getFlowBuilderPlugin } from './helpers'
 
 type FlowBuilderActionProps = {
   contents: FlowContent[]
-  isHandoff?: boolean
 }
 
-let alternateFallbackMessage = false
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
   static async botonicInit(request: ActionRequest): Promise<any> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
-    const payload = request.input.payload
-    let targetNode: HtNodeWithContent | string | undefined = payload
+    const contentId = request.input.payload
 
-    if (!payload && request.session.is_first_interaction) {
-      targetNode = flowBuilderPlugin.cmsApi.getStartNode()
+    let targetNode: HtNodeWithContent | undefined
+
+    if (!contentId) {
+      targetNode =
+        getNodeByUserInput(flowBuilderPlugin.cmsApi, locale, request) ||
+        getFallbackNode(flowBuilderPlugin.cmsApi, request)
+    } else {
+      targetNode = flowBuilderPlugin.cmsApi.getNodeById(
+        contentId
+      ) as HtNodeWithContent
     }
 
-    if (!payload && request.input.data) {
-      const intentNode = flowBuilderPlugin.cmsApi.getNodeByIntent(
-        request.input,
-        locale
-      )
-      const keywordNode = flowBuilderPlugin.cmsApi.getNodeByKeyword(
-        request.input.data,
-        locale
-      )
-      targetNode = intentNode ?? keywordNode ?? targetNode
-    }
-
-    if (!targetNode) {
-      targetNode = flowBuilderPlugin.cmsApi.getFallbackNode(
-        alternateFallbackMessage
-      )
-      alternateFallbackMessage = !alternateFallbackMessage
-    }
-
-    const { contents, handoffNode } = await flowBuilderPlugin.getContents(
+    const contents = await flowBuilderPlugin.getContentsByNode(
       targetNode,
       locale
     )
