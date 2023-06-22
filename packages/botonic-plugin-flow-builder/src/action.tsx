@@ -75,3 +75,22 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
     )
   }
 }
+
+function getNodeByUserInput(
+  cmsApi: FlowBuilderApi,
+  locale: string,
+  request: ActionRequest
+): HtNodeWithContent | undefined {
+  if (request.session.is_first_interaction) {
+    const startNode = cmsApi.getStartNode()
+    return startNode
+  }
+
+  if (request.input.data) {
+    const intentNode = cmsApi.getNodeByIntent(request.input, locale)
+    const keywordNode = cmsApi.getNodeByKeyword(request.input.data, locale)
+    return intentNode ?? keywordNode
+  }
+
+  return undefined
+}
