@@ -70,31 +70,36 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return this.getContentsByNode(node, locale, prevContents)
   }
 
-  async getContents(
-    nodeOrId: HtNodeWithContent | string,
+  async getContentsById(
+    id: string,
     locale: string,
     prevContents?: FlowContent[]
-  ): Promise<{ contents: FlowContent[]; handoffNode?: HtHandoffNode }> {
-    const contents = prevContents || []
-    let node = nodeOrId as HtNodeWithContent
-    if (typeof nodeOrId === 'string') {
-      node = this.cmsApi.getNodeById(nodeOrId) as HtNodeWithContent
-    }
+  ): Promise<FlowContent[]> {
+    const node = this.cmsApi.getNodeById(id) as HtNodeWithContent
+    return this.getContentsByNode(node, locale, prevContents)
+  }
 
-    const content = await this.getFlowContent(node, locale)
+  async getContentsByNode(
+    node: HtNodeWithContent,
+    locale: string,
+    prevContents?: FlowContent[]
+  ): Promise<FlowContent[]> {
+    const contents = prevContents || []
+
+    const content = this.getFlowContent(node, locale)
 
     if (node.type === HtNodeWithContentType.FUNCTION) {
       const targetId = await this.callFunction(node, locale)
-      return this.getContents(targetId, locale, contents)
+      return this.getContentsById(targetId, locale, contents)
     } else {
       if (content) contents.push(content)
       // TODO: prevent infinite recursive calls
 
       if (node.follow_up)
-        return this.getContents(node.follow_up.id, locale, contents)
+        return this.getContentsById(node.follow_up.id, locale, contents)
     }
 
-    return { contents, handoffNode: isHandoffNode(node) ? node : undefined }
+    return contents
   }
 
   private getFlowContent(
