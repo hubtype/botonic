@@ -94,3 +94,11 @@ function getNodeByUserInput(
 
   return undefined
 }
+
+function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
+  const isFirstFallbackOption =
+    request.session.user.extra_data.isFirstFallbackOption || true
+  const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
+  request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
+  return fallbackNode
+}
