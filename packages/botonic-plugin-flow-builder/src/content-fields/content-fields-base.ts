@@ -1,5 +1,6 @@
 import {
   HtMediaFileLocale,
+  HtQueueLocale,
   HtTextLocale,
   HtVideoLocale,
 } from './hubtype-fields'
@@ -20,5 +21,13 @@ export abstract class ContentFieldsBase {
   static getVideoByLocale(locale: string, video: HtVideoLocale[]): string {
     const result = video.find(v => v.locale === locale)
     return result?.url ?? ''
+  }
+
+  static getQueueByLocale(
+    locale: string,
+    queues: HtQueueLocale[]
+  ): HtQueueLocale | undefined {
+    const queue = queues.find(queue => queue.locale === locale)
+    return queue
   }
 }

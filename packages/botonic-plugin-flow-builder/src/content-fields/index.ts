@@ -1,4 +1,5 @@
 import { FlowCarousel } from './flow-carousel'
+import { FlowHandoff } from './flow-handoff'
 import { FlowImage } from './flow-image'
 import { FlowText } from './flow-text'
 import { FlowVideo } from './flow-video'
@@ -15,3 +16,4 @@ export type FlowContent =
   | FlowText
   | FlowVideo
   | FlowWhatsappButtonList
+  | FlowHandoff
