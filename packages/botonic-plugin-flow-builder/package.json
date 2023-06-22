@@ -29,6 +29,7 @@
     "README.md"
   ],
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/minipass": "^3.3.5",
     "@types/node": "^18.16.0",
     "@types/react": "^16.14.43"
