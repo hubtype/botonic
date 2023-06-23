@@ -22,13 +22,15 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     let targetNode: HtNodeWithContent | undefined
 
     if (!contentId) {
-      targetNode =
-        getNodeByUserInput(flowBuilderPlugin.cmsApi, locale, request) ||
-        getFallbackNode(flowBuilderPlugin.cmsApi, request)
+      targetNode = getNodeByUserInput(flowBuilderPlugin.cmsApi, locale, request)
     } else {
       targetNode = flowBuilderPlugin.cmsApi.getNodeById(
         contentId
       ) as HtNodeWithContent
+    }
+
+    if (!targetNode) {
+      targetNode = getFallbackNode(flowBuilderPlugin.cmsApi, request)
     }
 
     const contents = await flowBuilderPlugin.getContentsByNode(
@@ -41,9 +43,9 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       await flowBuilderPlugin.trackEvent(request, contents[0].code)
     }
 
-    const renderContents = contents.filter(content => {
+    const renderContents = contents.filter(async content => {
       if (content instanceof FlowHandoff) {
-        content.doHandoff(request)
+        await content.doHandoff(request)
         return false
       }
       return true
