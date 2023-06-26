@@ -1,3 +1,11 @@
+import { PROVIDER } from '@botonic/core'
+
+export interface Event {
+  chat: string
+  event_type: EventName
+  event_data: BaseEventData
+}
+
 export enum EventName {
   botAgentRating = 'bot_agent_rating',
   botChannelRating = 'bot_channel_rating',
@@ -13,101 +21,113 @@ export enum EventName {
   handoffSuccess = 'handoff_success',
   handoffFail = 'handoff_fail',
 }
-
-interface EventData {
-  enduser_country?: string
+export interface BaseEventData {
+  channel: string
+  event_datetime: string
   enduser_language: string
+  enduser_country?: string
   format_version?: number
   bot_version?: string
   flow_version?: string
 }
 
-export interface EventAgentRating {
+export interface HtBaseEventProps {
+  event_type: EventName
+}
+
+export interface EventAgentRating extends HtBaseEventProps {
   event_type: EventName.botAgentRating
-  event_data: EventData & { rating: number }
+  event_data: EventDataRating
 }
-
-export interface EventChannelRating {
+export interface EventChannelRating extends HtBaseEventProps {
   event_type: EventName.botChannelRating
-  event_data: EventData & { rating: number }
+  event_data: EventDataRating
 }
 
-export interface EventFaqUseful {
+export interface EventDataRating {
+  rating: number
+}
+
+export interface EventFaqUseful extends HtBaseEventProps {
   event_type: EventName.botFaqUseful
-  event_data: EventData & { faq_name: string; useful: boolean }
+  event_data: EventDataUseful
 }
 
-export interface EventBotRating {
+export interface EventDataUseful {
+  faq_name: string
+  useful: boolean
+}
+export interface EventBotRating extends HtBaseEventProps {
   event_type: EventName.botRating
-  event_data: EventData & {
-    faq_name: string
-    useful: boolean
-    rating: number
-    free_comment: string
-    selected_options: string[]
-  }
+  event_data: EventDataBotRating
 }
 
-export interface EventBotFaq {
+interface EventDataBotRating {
+  rating: number
+  free_comment?: string
+  selected_options?: string[]
+}
+
+export interface EventBotFaq extends HtBaseEventProps {
   event_type: EventName.botFaq
-  event_data: EventData & { faq_name: string }
+  event_data: EventDataBotFaq
 }
 
-export interface EventBotStart {
+interface EventDataBotFaq {
+  faq_name: string
+}
+export interface EventBotStart extends HtBaseEventProps {
   event_type: EventName.botStart
-  event_data: EventData
 }
 
 export interface EventBotOpen {
   event_type: EventName.botOpen
-  event_data: EventData
 }
 
 export interface EventBotAiModel {
   event_type: EventName.botAiModel
-  event_data: EventData & {
-    intent: string
-    confidence: number
-    confidence_successful: boolean
-  }
+  event_data: EventDataBotAiModel
 }
 
-export interface EventBotKeywordModel {
+interface EventDataBotAiModel {
+  intent: string
+  confidence: number
+  confidence_successful: boolean
+}
+
+export interface EventBotKeywordModel extends HtBaseEventProps {
   event_type: EventName.botKeywordsModel
-  event_data: EventData & {
-    confidence_successful: boolean
-  }
+  event_data: EventDataBotKeywordModel
 }
 
-export interface EventFallback {
+interface EventDataBotKeywordModel {
+  confidence_successful: boolean
+}
+export interface EventFallback extends HtBaseEventProps {
   event_type: EventName.fallback
-  event_data: EventData
 }
 
-export interface EventHandoffOption {
+export interface EventHandoffOption extends HtBaseEventProps {
   event_type: EventName.handoffOption
-  event_data: EventData
 }
 
-export interface EventHandoffSuccess {
+export interface EventHandoffSuccess extends HtBaseEventProps {
   event_type: EventName.handoffSuccess
-  event_data: EventData & {
-    queue_open: boolean
-    available_agents: boolean
-    threshold_reached: boolean
-  }
+  event_data: EventDataHandoff
 }
 
-export interface EventHandoffFail {
+export interface EventHandoffFail extends HtBaseEventProps {
   event_type: EventName.handoffFail
-  event_data: EventData & {
-    queue_open: boolean
-    available_agents: boolean
-    threshold_reached: boolean
-  }
+  event_data: EventDataHandoff
 }
 
-export type HtEvent =
+interface EventDataHandoff {
+  queue_open: boolean
+  available_agents: boolean
+  threshold_reached: boolean
+}
+
+export type HtEventProps =
   | EventAgentRating
   | EventChannelRating
   | EventFaqUseful
@@ -121,3 +141,10 @@ export type HtEvent =
   | EventHandoffOption
   | EventHandoffSuccess
   | EventHandoffFail
+
+export interface RequestData {
+  language: string
+  country: string
+  provider: PROVIDER
+  userId: string
+}
