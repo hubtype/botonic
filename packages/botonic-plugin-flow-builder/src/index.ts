@@ -11,7 +11,6 @@ import {
   FlowVideo,
   FlowWhatsappButtonList,
 } from './content-fields'
-import { FlowHandoff } from './content-fields/flow-handoff'
 import {
   HtFlowBuilderData,
   HtFunctionNode,
