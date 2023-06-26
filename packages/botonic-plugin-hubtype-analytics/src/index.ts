@@ -1,20 +1,30 @@
 import { BotRequest, Plugin } from '@botonic/core'
 import axios from 'axios'
 
-import { HtEvent } from './types'
+import { HtEvent } from './event-models/ht-event'
+import { HtEventProps, RequestData } from './types'
 
 export interface HubtypeAnalyticsOptions {
-  baseUrl: string
+  getLaguange?: (request: BotRequest) => string
+  getCountry?: (request: BotRequest) => string
+}
+
+function getDefaultLanguage(request: BotRequest): string {
+  return request.session.user.extra_data.language
+}
+
+function getDefaultCountry(request: BotRequest): string {
+  return request.session.user.extra_data.country
 }
 
 export default class BotonicPluginHubtypeAnalytics implements Plugin {
   baseUrl: string
+  getLaguange: (request: BotRequest) => string
+  getCountry: (request: BotRequest) => string
   constructor(options: HubtypeAnalyticsOptions) {
-    this.baseUrl = options.baseUrl
-  }
-
-  pre(): void {
-    return
+    this.baseUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+    this.getLaguange = options.getLaguange || getDefaultLanguage
+    this.getCountry = options.getCountry || getDefaultCountry
   }
 
   post(): void {
@@ -25,19 +35,21 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
     return `${this.baseUrl}/external/v1/conversational_apps/${request.session.bot.id}/bot_event/`
   }
 
-  async trackEvent(request: BotRequest, event: HtEvent) {
-    const url = this.getUrl(request)
-    const data = {
-      chat: request.session.user.id,
-      event_type: event.event_type,
-      event_data: {
-        ...event.event_data,
-        event_datetime: new Date().toISOString(),
-        channel: request.session.user.provider,
-      },
+  getRequestData(request: BotRequest): RequestData {
+    return {
+      language: this.getLaguange(request),
+      country: this.getCountry(request),
+      provider: request.session.user.provider,
+      userId: request.session.user.id,
     }
+  }
+
+  async trackEvent(request: BotRequest, htEventProps: HtEventProps) {
+    const url = this.getUrl(request)
+    const requestData = this.getRequestData(request)
+    const event = HtEvent.create(requestData, htEventProps)
     const headers = { Authorization: `Bearer ${request.session._access_token}` }
     const config = { headers }
-    return axios.post(url, data, config)
+    return axios.post(url, event, config)
   }
 }
