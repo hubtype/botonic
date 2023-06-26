@@ -78,24 +78,16 @@ export class FlowBuilderApi {
       : this.getNodeById(fallbackSecondMessage.id)
   }
 
-  getNodeByIntent(input: Input, locale: string): HtNodeWithContent | undefined {
+  getIntentNode(input: Input, locale: string): HtIntentNode | undefined {
     try {
-      const intents = this.flow.nodes.filter(
+      const intentsNodes = this.flow.nodes.filter(
         node => node.type === HtNodeWithContentType.INTENT
       ) as HtIntentNode[]
       const inputIntent = input.intent
-      const inputConfidence = input.confidence
       if (inputIntent) {
-        const matchedIntentNode = intents.find(
+        return intentsNodes.find(
           node =>
-            inputIntent &&
-            this.hasIntent(node, inputIntent, locale) &&
-            inputConfidence &&
-            this.hasMetConfidenceThreshold(node, inputConfidence)
-        )
-        return (
-          matchedIntentNode?.target &&
-          this.getNodeById<HtNodeWithContent>(matchedIntentNode?.target.id)
+            inputIntent && this.nodeContainsIntent(node, inputIntent, locale)
         )
       }
     } catch (error) {
@@ -105,7 +97,7 @@ export class FlowBuilderApi {
     return undefined
   }
 
-  private hasIntent(
+  private nodeContainsIntent(
     node: HtIntentNode,
     intent: string,
     locale: string
@@ -115,7 +107,7 @@ export class FlowBuilderApi {
     )
   }
 
-  private hasMetConfidenceThreshold(
+  hasMetConfidenceThreshold(
     node: HtIntentNode,
     predictedConfidence: number
   ): boolean {
