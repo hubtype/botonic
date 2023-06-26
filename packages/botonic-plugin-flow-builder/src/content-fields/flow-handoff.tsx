@@ -26,7 +26,7 @@ export class FlowHandoff extends ContentFieldsBase {
   public code: string
   public queue?: HtQueueLocale
   public onFinishPayload?: string
-  public hanndoffAutoAssign: boolean
+  public handoffAutoAssign: boolean
 
   static fromHubtypeCMS(
     cmsHandoff: HtHandoffNode,
@@ -41,7 +41,7 @@ export class FlowHandoff extends ContentFieldsBase {
       locale,
       cmsApi
     )
-    newHandoff.hanndoffAutoAssign = cmsHandoff.content.has_auto_assign
+    newHandoff.handoffAutoAssign = cmsHandoff.content.has_auto_assign
 
     return newHandoff
   }
@@ -72,7 +72,7 @@ export class FlowHandoff extends ContentFieldsBase {
   async doHandoff(request: ActionRequest) {
     // @ts-ignore
     const handOffBuilder = new HandOffBuilder(request.session)
-    handOffBuilder.withAutoAssignOnWaiting(this.hanndoffAutoAssign)
+    handOffBuilder.withAutoAssignOnWaiting(this.handoffAutoAssign)
     if (this.onFinishPayload) {
       handOffBuilder.withOnFinishPayload(this.onFinishPayload)
     }
