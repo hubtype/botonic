@@ -9,6 +9,7 @@ export { ContentFieldsBase } from './content-fields-base'
 export { FlowButton } from './flow-button'
 export { FlowElement } from './flow-element'
 export { FlowCarousel, FlowImage, FlowText, FlowVideo, FlowWhatsappButtonList }
+export { FlowHandoff } from './flow-handoff'
 
 export type FlowContent =
   | FlowCarousel

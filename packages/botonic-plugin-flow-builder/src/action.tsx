@@ -2,8 +2,7 @@ import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from './api'
-import { FlowContent } from './content-fields'
-import { FlowHandoff } from './content-fields/flow-handoff'
+import { FlowContent, FlowHandoff } from './content-fields'
 import { HtNodeWithContent } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
 

@@ -5,12 +5,12 @@ import { FlowBuilderApi } from './api'
 import {
   FlowCarousel,
   FlowContent,
+  FlowHandoff,
   FlowImage,
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
 } from './content-fields'
-import { FlowHandoff } from './content-fields/flow-handoff'
 import {
   HtFlowBuilderData,
   HtFunctionNode,
