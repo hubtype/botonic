@@ -16,21 +16,8 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static async botonicInit(request: ActionRequest): Promise<any> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
-    const contentId = request.input.payload
 
-    let targetNode: HtNodeWithContent | undefined
-
-    if (!contentId) {
-      targetNode = getNodeByUserInput(flowBuilderPlugin.cmsApi, locale, request)
-    } else {
-      targetNode = flowBuilderPlugin.cmsApi.getNodeById(
-        contentId
-      ) as HtNodeWithContent
-    }
-
-    if (!targetNode) {
-      targetNode = getFallbackNode(flowBuilderPlugin.cmsApi, request)
-    }
+    const targetNode = getTargetNode(flowBuilderPlugin.cmsApi, locale, request)
 
     const contents = await flowBuilderPlugin.getContentsByNode(
       targetNode,
@@ -70,20 +57,38 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   }
 }
 
+function getTargetNode(
+  cmsApi: FlowBuilderApi,
+  locale: string,
+  request: ActionRequest
+) {
+  const contentId = request.input.payload
+  let targetNode: HtNodeWithContent | undefined
+  if (!contentId) {
+    targetNode = getNodeByUserInput(cmsApi, locale, request)
+  } else {
+    targetNode = cmsApi.getNodeById(contentId) as HtNodeWithContent
+  }
+  if (targetNode) {
+    return targetNode
+  }
+  return getFallbackNode(cmsApi, request)
+}
+
 function getNodeByUserInput(
   cmsApi: FlowBuilderApi,
   locale: string,
   request: ActionRequest
 ): HtNodeWithContent | undefined {
   if (request.session.is_first_interaction) {
-    const startNode = cmsApi.getStartNode()
-    return startNode
+    return cmsApi.getStartNode()
   }
 
   if (request.input.data) {
     const intentNode = cmsApi.getNodeByIntent(request.input, locale)
+    if (intentNode) return intentNode
     const keywordNode = cmsApi.getNodeByKeyword(request.input.data, locale)
-    return intentNode ?? keywordNode
+    return keywordNode
   }
 
   return undefined
