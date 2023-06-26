@@ -2,17 +2,20 @@
 
 ## What Does This Plugin Do?
 
-This plugin allows you to integrate Hubtype Analytics in your Botonic project.
+This plugin is used to integrate Hubtype Analytics Service in your Botonic project.
 
 ## Setup
 
 1. Install the plugin from npm (or yarn):
 
 ```
-npm i --save @botonic/plugin-hubtype-analytics
+npm i @botonic/plugin-hubtype-analytics
 ```
 
 2. Add it to the `src/plugins.js` file defining the projectId of the Project you want to use:
+
+You can define two optional functions to obtain the language and the country.
+By default if you do not define these functions it will use the language defined in request.session.user.extra_data.language and country defined in request.session.user.extra_data.country
 
 ```
   export const plugins = [
@@ -20,7 +23,8 @@ npm i --save @botonic/plugin-hubtype-analytics
       id: 'hubtype-analytics',
       resolve: require('@botonic/plugin-hubtype-analytics'),
       options: {
-        baseUrl: https://api.hubtype.com,
+        getLaguange?: (request: BotRequest) => request.session.user.extra_data.lang
+        getCountry?: (request: BotRequest) => request.session.user.extra_data.store
       },
     },
   ]
@@ -47,4 +51,5 @@ You can use it in your actions for example an event to check that a faq has been
 
 ## Plugin Options
 
-- **`baseUrl`**: baseUrl to the envirment https://api.hubtype.com for production
+- **`getLaguange`**: getLaguange(request) function to define the language when it is not in request.session.user.extra_data.language
+- **`getCountry`**: getCountry(request) function to define the country when it is not in request.session.user.extra_data.country
