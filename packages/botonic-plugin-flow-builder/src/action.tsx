@@ -19,10 +19,6 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
     const targetNode = getTargetNode(flowBuilderPlugin.cmsApi, locale, request)
 
-    if (!targetNode) {
-      targetNode = getFallbackNode(flowBuilderPlugin.cmsApi, request)
-    }
-
     const contents = await flowBuilderPlugin.getContentsByNode(
       targetNode,
       locale
