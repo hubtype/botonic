@@ -27,7 +27,6 @@ export abstract class ContentFieldsBase {
     locale: string,
     queues: HtQueueLocale[]
   ): HtQueueLocale | undefined {
-    const queue = queues.find(queue => queue.locale === locale)
-    return queue
+    return queues.find(queue => queue.locale === locale)
   }
 }
