@@ -1,11 +1,16 @@
-import { EventChannelRating, RequestData } from '../types'
+import {
+  BaseEventData,
+  EventChannelRating,
+  EventDataRating,
+  RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventChannelRating extends HtEvent {
-  rating: number
+  event_data: BaseEventData & EventDataRating
 
   constructor(event: EventChannelRating, requestData: RequestData) {
     super(event, requestData)
-    this.rating = event.event_data.rating
+    this.event_data.rating = event.event_data.rating
   }
 }

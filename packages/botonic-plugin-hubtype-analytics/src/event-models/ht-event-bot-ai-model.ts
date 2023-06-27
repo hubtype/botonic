@@ -1,15 +1,19 @@
-import { EventBotAiModel, RequestData } from '../types'
+import {
+  BaseEventData,
+  EventBotAiModel,
+  EventDataBotAiModel,
+  RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventBotAiModel extends HtEvent {
-  intent: string
-  confidence: number
-  confidence_successful: boolean
+  event_data: BaseEventData & EventDataBotAiModel
 
   constructor(event: EventBotAiModel, requestData: RequestData) {
     super(event, requestData)
-    this.intent = event.event_data.intent
-    this.confidence = event.event_data.confidence
-    this.confidence_successful = event.event_data.confidence_successful
+    this.event_data.intent = event.event_data.intent
+    this.event_data.confidence = event.event_data.confidence
+    this.event_data.confidence_successful =
+      event.event_data.confidence_successful
   }
 }

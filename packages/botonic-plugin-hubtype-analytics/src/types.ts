@@ -62,7 +62,7 @@ export interface EventBotRating extends HtBaseEventProps {
   event_data: EventDataBotRating
 }
 
-interface EventDataBotRating {
+export interface EventDataBotRating {
   rating: number
   free_comment?: string
   selected_options?: string[]
@@ -73,7 +73,7 @@ export interface EventBotFaq extends HtBaseEventProps {
   event_data: EventDataBotFaq
 }
 
-interface EventDataBotFaq {
+export interface EventDataBotFaq {
   faq_name: string
 }
 export interface EventBotStart extends HtBaseEventProps {
@@ -89,7 +89,7 @@ export interface EventBotAiModel {
   event_data: EventDataBotAiModel
 }
 
-interface EventDataBotAiModel {
+export interface EventDataBotAiModel {
   intent: string
   confidence: number
   confidence_successful: boolean
@@ -100,7 +100,7 @@ export interface EventBotKeywordModel extends HtBaseEventProps {
   event_data: EventDataBotKeywordModel
 }
 
-interface EventDataBotKeywordModel {
+export interface EventDataBotKeywordModel {
   confidence_successful: boolean
 }
 export interface EventFallback extends HtBaseEventProps {
@@ -121,7 +121,7 @@ export interface EventHandoffFail extends HtBaseEventProps {
   event_data: EventDataHandoff
 }
 
-interface EventDataHandoff {
+export interface EventDataHandoff {
   queue_open: boolean
   available_agents: boolean
   threshold_reached: boolean
