@@ -22,7 +22,3 @@ export function getFlowBuilderPlugin(plugins: {
     )
   return flowBuilderPlugin
 }
-
-export function isHandoffNode(node: HtNodeWithContent): node is HtHandoffNode {
-  return node.type === HtNodeWithContentType.HANDOFF
-}

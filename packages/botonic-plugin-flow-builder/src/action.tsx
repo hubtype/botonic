@@ -1,50 +1,25 @@
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
-import { FlowContent } from './content-fields'
+import { FlowBuilderApi } from './api'
+import { FlowContent, FlowHandoff } from './content-fields'
 import { HtNodeWithContent } from './content-fields/hubtype-fields'
-import { doHandoff } from './handoff'
 import { getFlowBuilderPlugin } from './helpers'
 
 type FlowBuilderActionProps = {
   contents: FlowContent[]
-  isHandoff?: boolean
 }
 
-let alternateFallbackMessage = false
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
   static async botonicInit(request: ActionRequest): Promise<any> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
-    const payload = request.input.payload
-    let targetNode: HtNodeWithContent | string | undefined = payload
 
-    if (!payload && request.session.is_first_interaction) {
-      targetNode = flowBuilderPlugin.cmsApi.getStartNode()
-    }
+    const targetNode = getTargetNode(flowBuilderPlugin.cmsApi, locale, request)
 
-    if (!payload && request.input.data) {
-      const intentNode = flowBuilderPlugin.cmsApi.getNodeByIntent(
-        request.input,
-        locale
-      )
-      const keywordNode = flowBuilderPlugin.cmsApi.getNodeByKeyword(
-        request.input.data,
-        locale
-      )
-      targetNode = intentNode ?? keywordNode ?? targetNode
-    }
-
-    if (!targetNode) {
-      targetNode = flowBuilderPlugin.cmsApi.getFallbackNode(
-        alternateFallbackMessage
-      )
-      alternateFallbackMessage = !alternateFallbackMessage
-    }
-
-    const { contents, handoffNode } = await flowBuilderPlugin.getContents(
+    const contents = await flowBuilderPlugin.getContentsByNode(
       targetNode,
       locale
     )
@@ -54,9 +29,15 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       await flowBuilderPlugin.trackEvent(request, contents[0].code)
     }
 
-    if (handoffNode) await doHandoff(request, locale, handoffNode)
+    const renderContents = contents.filter(async content => {
+      if (content instanceof FlowHandoff) {
+        await content.doHandoff(request)
+        return false
+      }
+      return true
+    })
 
-    return { contents, handoffNode }
+    return { contents: renderContents }
   }
 
   render(): JSX.Element | JSX.Element[] {
@@ -74,4 +55,49 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
       </Multichannel>
     )
   }
+}
+
+function getTargetNode(
+  cmsApi: FlowBuilderApi,
+  locale: string,
+  request: ActionRequest
+) {
+  const contentId = request.input.payload
+  let targetNode: HtNodeWithContent | undefined
+  if (!contentId) {
+    targetNode = getNodeByUserInput(cmsApi, locale, request)
+  } else {
+    targetNode = cmsApi.getNodeById(contentId) as HtNodeWithContent
+  }
+  if (targetNode) {
+    return targetNode
+  }
+  return getFallbackNode(cmsApi, request)
+}
+
+function getNodeByUserInput(
+  cmsApi: FlowBuilderApi,
+  locale: string,
+  request: ActionRequest
+): HtNodeWithContent | undefined {
+  if (request.session.is_first_interaction) {
+    return cmsApi.getStartNode()
+  }
+
+  if (request.input.data) {
+    const intentNode = cmsApi.getNodeByIntent(request.input, locale)
+    if (intentNode) return intentNode
+    const keywordNode = cmsApi.getNodeByKeyword(request.input.data, locale)
+    return keywordNode
+  }
+
+  return undefined
+}
+
+function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
+  const isFirstFallbackOption =
+    request.session.user.extra_data.isFirstFallbackOption || true
+  const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
+  request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
+  return fallbackNode
 }

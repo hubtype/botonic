@@ -1,15 +1,11 @@
-import {
-  Plugin,
-  PluginPostRequest,
-  PluginPreRequest,
-  Session,
-} from '@botonic/core'
+import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from './api'
 import {
   FlowCarousel,
   FlowContent,
+  FlowHandoff,
   FlowImage,
   FlowText,
   FlowVideo,
@@ -18,13 +14,11 @@ import {
 import {
   HtFlowBuilderData,
   HtFunctionNode,
-  HtHandoffNode,
   HtNodeComponent,
   HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { isHandoffNode } from './helpers'
 import { BotonicPluginFlowBuilderOptions } from './types'
 import { resolveGetAccessToken } from './utils'
 
@@ -61,33 +55,45 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     })
   }
 
-  async post(_request: PluginPostRequest): Promise<void> {}
-
-  async getContents(
-    nodeOrId: HtNodeWithContent | string,
+  getContentsByCode(
+    code: string,
     locale: string,
     prevContents?: FlowContent[]
-  ): Promise<{ contents: FlowContent[]; handoffNode?: HtHandoffNode }> {
-    const contents = prevContents || []
-    let node = nodeOrId as HtNodeWithContent
-    if (typeof nodeOrId === 'string') {
-      node = this.cmsApi.getNodeById(nodeOrId) as HtNodeWithContent
-    }
+  ): Promise<FlowContent[]> {
+    const node = this.cmsApi.getNodeByCode(code) as HtNodeWithContent
+    return this.getContentsByNode(node, locale, prevContents)
+  }
 
-    const content = await this.getFlowContent(node, locale)
+  async getContentsById(
+    id: string,
+    locale: string,
+    prevContents?: FlowContent[]
+  ): Promise<FlowContent[]> {
+    const node = this.cmsApi.getNodeById(id) as HtNodeWithContent
+    return this.getContentsByNode(node, locale, prevContents)
+  }
+
+  async getContentsByNode(
+    node: HtNodeWithContent,
+    locale: string,
+    prevContents?: FlowContent[]
+  ): Promise<FlowContent[]> {
+    const contents = prevContents || []
+
+    const content = this.getFlowContent(node, locale)
 
     if (node.type === HtNodeWithContentType.FUNCTION) {
       const targetId = await this.callFunction(node, locale)
-      return this.getContents(targetId, locale, contents)
+      return this.getContentsById(targetId, locale, contents)
     } else {
       if (content) contents.push(content)
       // TODO: prevent infinite recursive calls
 
       if (node.follow_up)
-        return this.getContents(node.follow_up.id, locale, contents)
+        return this.getContentsById(node.follow_up.id, locale, contents)
     }
 
-    return { contents, handoffNode: isHandoffNode(node) ? node : undefined }
+    return contents
   }
 
   private getFlowContent(
@@ -105,6 +111,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
       case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
         return FlowWhatsappButtonList.fromHubtypeCMS(hubtypeContent, locale)
+      case HtNodeWithContentType.HANDOFF:
+        return FlowHandoff.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
       default:
         return undefined
     }
