@@ -29,7 +29,7 @@
     "@pulumi/aws": "^4.14.0",
     "@pulumi/awsx": "^0.40.1",
     "@pulumi/pulumi": "^3.9.1",
-    "@vendia/serverless-express": "^4.10.1",
+    "@vendia/serverless-express": "^4.10.4",
     "concurrently": "^6.5.1",
     "decompress": "^4.2.1",
     "download": "^8.0.0",
