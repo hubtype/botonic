@@ -33,7 +33,7 @@
     "aws-sdk": "^2.1360.0",
     "axios": "^1.4.0",
     "decode": "^0.3.0",
-    "dynamodb-toolbox": "^0.3.4",
+    "dynamodb-toolbox": "^0.8.5",
     "fast-xml-parser": "^3.19.0",
     "html-entities": "^2.3.3",
     "node-json-db": "^1.6.0",
