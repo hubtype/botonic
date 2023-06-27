@@ -1,8 +1,8 @@
 import { BotRequest, Plugin } from '@botonic/core'
 import axios from 'axios'
 
-import { HtEvent } from './event-models/ht-event'
 import { HtEventProps, RequestData } from './types'
+import { createHtEvent } from './utils'
 
 export interface HubtypeAnalyticsOptions {
   getLaguange?: (request: BotRequest) => string
@@ -47,7 +47,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   async trackEvent(request: BotRequest, htEventProps: HtEventProps) {
     const url = this.getUrl(request)
     const requestData = this.getRequestData(request)
-    const event = HtEvent.create(requestData, htEventProps)
+    const event = createHtEvent(requestData, htEventProps)
     const headers = { Authorization: `Bearer ${request.session._access_token}` }
     const config = { headers }
     return axios.post(url, event, config)
