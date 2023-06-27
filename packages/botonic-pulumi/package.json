@@ -24,7 +24,7 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.321.1",
+    "@aws-sdk/client-cloudfront": "^3.345.0",
     "@aws-sdk/types": "^3.310.0",
     "@pulumi/aws": "^4.14.0",
     "@pulumi/awsx": "^0.40.1",
@@ -35,7 +35,7 @@
     "download": "^8.0.0",
     "mime": "^2.6.0",
     "semver": "^7.5.0",
-    "tar": "^6.1.13"
+    "tar": "^6.1.15"
   },
   "main": "./lib/index.js"
 }
