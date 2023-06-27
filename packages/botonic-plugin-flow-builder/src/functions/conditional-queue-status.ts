@@ -18,9 +18,7 @@ type ConditionalQueueStatusArgs = {
 }
 
 export async function conditionalQueueStatus({
-  request,
   queue_id,
-  queue_name,
 }: ConditionalQueueStatusArgs): Promise<string> {
   const data = await getQueueAvailability(queue_id)
   const isAvailable = data.available
