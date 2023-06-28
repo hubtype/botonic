@@ -20,7 +20,9 @@ type FlowBuilderActionProps = {
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
-  static async botonicInit(request: ActionRequest): Promise<any> {
+  static async botonicInit(
+    request: ActionRequest
+  ): Promise<FlowBuilderActionProps> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
 
