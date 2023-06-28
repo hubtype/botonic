@@ -33,7 +33,7 @@
   ],
   "author": "",
   "dependencies": {
-    "@babel/runtime": "^7.14.6",
+    "@babel/runtime": "^7.22.3",
     "@nlpjs/core": "^4.22.0",
     "@nlpjs/lang-ca": "^4.22.0",
     "@nlpjs/lang-cs": "^4.22.0",
