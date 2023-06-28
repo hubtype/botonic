@@ -1,7 +1,6 @@
 import { Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderApi } from './api'
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
 export interface BotonicPluginFlowBuilderOptions {
