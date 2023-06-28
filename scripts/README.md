@@ -8,7 +8,7 @@ Scripts for:
 
 ## Bash scripts
 
-#### QA
+#### CI
 
 - bump-version.sh:
   - Use: This script has to be launched manually.
@@ -20,7 +20,7 @@ Scripts for:
   - Use: This script has to be launched manually.
   - Functionality: This script stops eslint plugin, upgrades all the development dependencies for every package and finally restart the eslint plugin.
 
-#### CI
+#### QA
 
 - lint-d-ts.sh:
   - Use: This script is used by two pre-commit hooks: botonic-core and botonic-react.
