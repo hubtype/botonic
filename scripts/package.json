@@ -2,9 +2,9 @@
   "name": "botonic-scripts",
   "version": "1.0.0",
   "scripts": {
-    "cloc-all": "./qa/cloc-all-packages.sh",
-    "lint-all": "./qa/lint-all-packages.sh",
-    "prepare-all": "./ci/prepare-packages.sh",
+    "cloc-all": "ts-node ./qa/cloc-all-packages.ts",
+    "lint-all": "ts-node ./qa/lint-all-packages.ts",
+    "prepare-all": "ts-node ./ci/prepare-packages.ts",
     "publish-all": "BOTONIC_NO_INSTALL_ROOT_DEPENDENCIES=1 ts-node ./ci/publish.ts"
   },
   "keywords": [],
