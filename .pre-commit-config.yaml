@@ -17,126 +17,126 @@ repos:
     hooks:
       - id: cli
         name: cli
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-cli
+        entry: "bash -c 'npx ts-node scripts/qa/lint-package.th packages/botonic-cli'"
         language: system
         files: ^packages/botonic-cli/
       - id: core
         name: core
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-core
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-core'"
         language: system
         files: ^packages/botonic-core/
 
       - id: core-d-ts
         name: core-d-ts
-        entry: ts-node scripts/qa/lint--d-ts.ts packages/botonic-core
+        entry: "bash -c 'npx ts-node script/qa/lint-d-ts.ts  packages/botonic-core'"
         language: system
         files: ^packages/botonic-core/src/.*\.d\.ts
 
       - id: nlu
         name: nlu
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-nlu
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-nlu'"
         language: system
         files: ^packages/botonic-plugin-nlu/
 
       - id: nlp
         name: nlp
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-nlp
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-nlp'"
         language: system
         files: ^packages/botonic-nlp
 
       - id: contentful
         name: contentful
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-contentful
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-contentful'"
         language: system
         files: ^packages/botonic-plugin-contentful/
 
       - id: dashbot
         name: dashbot
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-dashbot
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-dashbot'"
         language: system
         files: ^packages/botonic-plugin-dashbot/
 
       - id: dialogflow
         name: dialogflow
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-dialogflow
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-dialogflow'"
         language: system
         files: ^packages/botonic-plugin-dialogflow/
 
       - id: dynamodb
         name: dynamodb
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-dynamodb
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-dynamodb'"
         language: system
         files: ^packages/botonic-plugin-dynamodb/
 
       - id: luis
         name: luis
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-luis
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-luis'"
         language: system
         files: ^packages/botonic-plugin-luis/
 
       - id: plugin-nlu
         name: plugin-nlu
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-nlu
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-nlu'"
         language: system
         files: ^packages/botonic-plugin-nlu/
 
       - id: segment
         name: segment
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-segment
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-segment'"
         language: system
         files: ^packages/botonic-plugin-segment/
 
       - id: watson
         name: watson
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-watson
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-watson'"
         language: system
         files: ^packages/botonic-plugin-watson/
 
       - id: react
         name: react
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-react
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-react'"
         language: system
         files: ^packages/botonic-react/
 
       - id: react-d-ts
         name: react-d-ts
-        entry: ts-node scripts/qa/lint--d-ts.ts packages/botonic-react
+        entry: "bash -c 'npx ts-node script/qa/lint-d-ts.ts  packages/botonic-react'"
         language: system
         files: ^packages/botonic-react/src/.*\.d\.ts
 
       - id: google-analytics
         name: google-analytics
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-google-analytics
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-google-analytics'"
         language: system
         files: ^packages/botonic-plugin-google-analytics/
 
       - id: inbenta
         name: inbenta
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-inbenta
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-inbenta'"
         language: system
         files: ^packages/botonic-plugin-inbenta/
 
       - id: docs
         name: docs
-        entry: ts-node scripts/qa/lint-package.ts docs/website
+        entry: ./script/qa/lint-package.sh  docs/website
         language: system
         files: ^docs/website/
 
       - id: plugin-ner
         name: plugin-ner
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-ner
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-ner'"
         language: system
         files: ^packages/botonic-plugin-ner/
 
       - id: plugin-intent-classification
         name: plugin-intent-classification
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-intent-classification
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-intent-classification'"
         language: system
         files: ^packages/botonic-plugin-intent-classification/
 
       - id: plugin-flow-builder
         name: plugin-flow-builder
-        entry: ts-node scripts/qa/lint-package.ts packages/botonic-plugin-flow-builder
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  packages/botonic-plugin-flow-builder'"
         language: system
         files: ^packages/botonic-plugin-flow-builder/
 
