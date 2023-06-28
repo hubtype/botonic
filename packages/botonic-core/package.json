@@ -30,7 +30,7 @@
     "README.md"
   ],
   "dependencies": {
-    "aws-sdk": "^2.1360.0",
+    "aws-sdk": "^2.1392.0",
     "axios": "^1.4.0",
     "decode": "^0.3.0",
     "dynamodb-toolbox": "^0.3.4",
