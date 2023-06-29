@@ -91,10 +91,11 @@ const MARKDOWN_BOLD_ITALIC_CLOSE = '*__'
 const MARKDOWN_NORMALIZED_BOLD_ITALIC_OPEN = '**_'
 const MARKDOWN_NORMALIZED_BOLD_ITALIC_CLOSE = '_**'
 
+const MARKDOWN_REGEX = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3/g
+
 export function whatsappMarkdown(text) {
-  const markdownRegex = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3/g
   const textNormalized = normalizeMarkdownWhatsApp(text)
-  const matches = textNormalized.match(markdownRegex)
+  const matches = textNormalized.match(MARKDOWN_REGEX)
   if (matches) {
     const matchesResult = matches.map(match => {
       if (match.startsWith(MARKDOWN_BOLD_OPTION_1)) {
