@@ -71,12 +71,10 @@ async function getTargetNode(
   request: ActionRequest
 ) {
   const contentId = request.input.payload
-  let targetNode: HtNodeWithContent | undefined
-  if (!contentId) {
-    targetNode = await getNodeByUserInput(cmsApi, locale, request)
-  } else {
-    targetNode = cmsApi.getNodeById(contentId) as HtNodeWithContent
-  }
+  const targetNode = !contentId
+    ? await getNodeByUserInput(cmsApi, locale, request)
+    : (cmsApi.getNodeById(contentId) as HtNodeWithContent)
+
   if (targetNode) {
     const event: EventBotFaq = {
       event_type: EventName.botFaq,
