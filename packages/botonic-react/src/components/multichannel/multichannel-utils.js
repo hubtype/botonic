@@ -81,8 +81,8 @@ export const isFacebook = context =>
 
 export function whatsappMarkdown(text) {
   const markdownRegex = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3/g
-
-  const matches = text.match(markdownRegex)
+  const textNormalized = normalizeMarkdownWhatsApp(text)
+  const matches = textNormalized.match(markdownRegex)
   if (matches) {
     const matchesResult = matches.map(match => {
       if (match.startsWith('**')) {
@@ -94,19 +94,17 @@ export function whatsappMarkdown(text) {
       if (match.startsWith('*')) {
         return match.replaceAll('*', '_')
       }
-      // if( match.startsWith('_')) {
-      //   return match.replaceAll('_', '_')
-      // }
       return match
     })
-    let textWhatsapp = ''
+    let textWhatsapp = textNormalized
     for (let i = 0; i < matches.length; i++) {
-      if (i === 0) {
-        textWhatsapp = text.replaceAll(matches[i], matchesResult[i])
-      }
       textWhatsapp = textWhatsapp.replaceAll(matches[i], matchesResult[i])
     }
     return textWhatsapp
   }
   return text
+}
+
+function normalizeMarkdownWhatsApp(text) {
+  return text.replaceAll('__*', '**_').replaceAll('*__', '_**')
 }
