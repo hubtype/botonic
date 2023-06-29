@@ -5,6 +5,7 @@ import {
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
+import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from './tracking'
 
 export async function getNodeByKeyword(
@@ -12,7 +13,7 @@ export async function getNodeByKeyword(
   locale: string,
   request: ActionRequest,
   userInput: string
-) {
+): Promise<HtNodeWithContent | undefined> {
   const keywordNode = cmsApi.getNodeByKeyword(userInput, locale)
   const eventBotKeywordModel: EventBotKeywordModel = {
     event_type: EventName.botKeywordsModel,
