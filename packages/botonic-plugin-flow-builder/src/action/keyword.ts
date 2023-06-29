@@ -15,15 +15,15 @@ export async function getNodeByKeyword(
   userInput: string
 ): Promise<HtNodeWithContent | undefined> {
   const keywordNode = cmsApi.getNodeByKeyword(userInput, locale)
+  if (!keywordNode) {
+    return undefined
+  }
   const eventBotKeywordModel: EventBotKeywordModel = {
     event_type: EventName.botKeywordsModel,
     event_data: {
       confidence_successful: true,
     },
   }
-  if (keywordNode) {
-    await trackEvent(request, eventBotKeywordModel)
-    return keywordNode
-  }
-  return undefined
+  await trackEvent(request, eventBotKeywordModel)
+  return keywordNode
 }
