@@ -14,33 +14,35 @@ export function createHtEvent(
   requestData: RequestData,
   htEventProps: HtEventProps
 ): HtEvent {
-  if (htEventProps.event_type === EventName.botAgentRating) {
-    return new HtEventAgentRating(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.botChannelRating) {
-    return new HtEventChannelRating(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.botFaqUseful) {
-    return new HtEventFaqUseful(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.botRating) {
-    return new HtEventBotRating(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.botFaq) {
-    return new HtEventBotFaq(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.botAiModel) {
-    return new HtEventBotAiModel(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.botKeywordsModel) {
-    return new HtEventBotKeywordModel(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.handoffSuccess) {
-    return new HtEventHandoffSuccess(htEventProps, requestData)
-  }
-  if (htEventProps.event_type === EventName.handoffFail) {
-    return new HtEventHandoffFail(htEventProps, requestData)
-  }
+  switch (htEventProps.event_type) {
+    case EventName.botAgentRating:
+      return new HtEventAgentRating(htEventProps, requestData)
 
-  return new HtEvent(htEventProps, requestData)
+    case EventName.botChannelRating:
+      return new HtEventChannelRating(htEventProps, requestData)
+
+    case EventName.botFaqUseful:
+      return new HtEventFaqUseful(htEventProps, requestData)
+
+    case EventName.botRating:
+      return new HtEventBotRating(htEventProps, requestData)
+
+    case EventName.botFaq:
+      return new HtEventBotFaq(htEventProps, requestData)
+
+    case EventName.botAiModel:
+      return new HtEventBotAiModel(htEventProps, requestData)
+
+    case EventName.botKeywordsModel:
+      return new HtEventBotKeywordModel(htEventProps, requestData)
+
+    case EventName.handoffSuccess:
+      return new HtEventHandoffSuccess(htEventProps, requestData)
+
+    case EventName.handoffFail:
+      return new HtEventHandoffFail(htEventProps, requestData)
+
+    default:
+      return new HtEvent(htEventProps, requestData)
+  }
 }
