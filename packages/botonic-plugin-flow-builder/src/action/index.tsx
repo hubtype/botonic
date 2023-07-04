@@ -37,13 +37,14 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       locale
     )
 
-    const renderContents = contents.filter(async content => {
-      if (content instanceof FlowHandoff) {
-        await content.doHandoff(request)
-        return false
-      }
-      return true
-    })
+    const handoffContent = contents.find(
+      content => content instanceof FlowHandoff
+    ) as FlowHandoff
+    if (handoffContent) await handoffContent.doHandoff(request)
+
+    const renderContents = contents.filter(content =>
+      content instanceof FlowHandoff ? false : true
+    )
 
     return { contents: renderContents }
   }

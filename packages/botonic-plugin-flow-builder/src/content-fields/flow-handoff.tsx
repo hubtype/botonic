@@ -75,7 +75,7 @@ export class FlowHandoff extends ContentFieldsBase {
     return (actionPayload as HtPayloadNode).content.payload
   }
 
-  async doHandoff(request: ActionRequest) {
+  async doHandoff(request: ActionRequest): Promise<void> {
     // @ts-ignore
     const handOffBuilder = new HandOffBuilder(request.session)
     handOffBuilder.withAutoAssignOnWaiting(this.handoffAutoAssign)
