@@ -24,7 +24,7 @@ export const WebchatContext = createContext({
   updateReplies: replies => {},
   updateLatestInput: input => {},
   closeWebview: () => {},
-  toggleWebchat: () => {},
+  toggleWebchat: toggle => {},
   getThemeProperty: property => undefined, // used to retrieve a specific property of the theme defined by the developer in his 'webchat/index.js'
   resolveCase: () => {},
   theme: {},
