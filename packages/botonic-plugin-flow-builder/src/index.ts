@@ -131,7 +131,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const args = Object.assign(
       {
         request: this.currentRequest,
-        results: [functionNode.content.result_mapping.map(r => r.result)],
+        results: functionNode.content.result_mapping.map(r => r.result),
       },
       ...nameValues
     )

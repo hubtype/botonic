@@ -1,8 +1,14 @@
 import { HandOffBuilder } from '@botonic/core'
+import {
+  EventHandoffSuccess,
+  EventName,
+} from '@botonic/plugin-hubtype-analytics/lib/cjs/types'
 import { ActionRequest } from '@botonic/react'
 import React from 'react'
 
+import { trackEvent } from '../action/tracking'
 import { FlowBuilderApi } from '../api'
+import { getQueueAvailability } from '../functions/conditional-queue-status'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtCarouselNode,
@@ -69,7 +75,7 @@ export class FlowHandoff extends ContentFieldsBase {
     return (actionPayload as HtPayloadNode).content.payload
   }
 
-  async doHandoff(request: ActionRequest) {
+  async doHandoff(request: ActionRequest): Promise<void> {
     // @ts-ignore
     const handOffBuilder = new HandOffBuilder(request.session)
     handOffBuilder.withAutoAssignOnWaiting(this.handoffAutoAssign)
@@ -77,6 +83,18 @@ export class FlowHandoff extends ContentFieldsBase {
       handOffBuilder.withOnFinishPayload(this.onFinishPayload)
     }
     if (this.queue) {
+      const availabilityData = await getQueueAvailability(this.queue.id)
+      const event: EventHandoffSuccess = {
+        event_type: EventName.handoffSuccess,
+        event_data: {
+          queue_open: availabilityData.open,
+          available_agents: availabilityData.available_agents > 0,
+          threshold_reached:
+            availabilityData.availability_threshold_waiting_cases > 0,
+        },
+      }
+      await trackEvent(request, event)
+
       handOffBuilder.withQueue(this.queue.id)
       await handOffBuilder.handOff()
     }

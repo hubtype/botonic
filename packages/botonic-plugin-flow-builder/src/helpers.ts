@@ -1,10 +1,5 @@
 import { Plugin } from '@botonic/core'
 
-import {
-  HtHandoffNode,
-  HtNodeWithContent,
-  HtNodeWithContentType,
-} from './content-fields/hubtype-fields'
 import BotonicPluginFlowBuilder from './index'
 
 const FLOW_BUILDER_PLUGIN_NAME = 'BotonicPluginFlowBuilder'
