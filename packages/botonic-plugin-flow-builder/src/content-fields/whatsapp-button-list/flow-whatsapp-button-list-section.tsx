@@ -23,12 +23,15 @@ export class FlowWhatsappButtonListSection extends ContentFieldsBase {
     return newButton
   }
 
-  toBotonic(): WhatsappButtonListSectionProps {
-    const rows = this.rows.reduce((acc: WhatsappButtonListRowProps[], row) => {
-      const botonicRow = row.toBotonic()
-      if (botonicRow) acc.push(botonicRow)
-      return acc
-    }, [])
+  toBotonic(sectionIndex: number): WhatsappButtonListSectionProps {
+    const rows = this.rows.reduce(
+      (acc: WhatsappButtonListRowProps[], row, rowIndex) => {
+        const botonicRow = row.toBotonic(rowIndex, sectionIndex)
+        if (botonicRow) acc.push(botonicRow)
+        return acc
+      },
+      []
+    )
 
     return { title: this.title, rows }
   }

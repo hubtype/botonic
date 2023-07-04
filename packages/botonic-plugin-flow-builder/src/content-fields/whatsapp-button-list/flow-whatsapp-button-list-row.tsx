@@ -1,5 +1,6 @@
 import { WhatsappButtonListRowProps } from '@botonic/react'
 
+import { SOURCE_INFO_SEPARATOR } from '../../constants'
 import { ContentFieldsBase } from '../content-fields-base'
 import { HtWhatsappButtonListRow } from '../hubtype-fields'
 
@@ -19,15 +20,22 @@ export class FlowWhatsappButtonListRow extends ContentFieldsBase {
     return newRow
   }
 
-  toBotonic(): WhatsappButtonListRowProps | undefined {
+  toBotonic(
+    rowIndex: number,
+    sectionIndex: number
+  ): WhatsappButtonListRowProps | undefined {
     if (!this.targetId) {
       console.error(`Row with title: '${this.title}' has no target`)
       return undefined
     }
     return {
-      id: this.targetId,
+      id: this.getRowId(rowIndex, sectionIndex),
       title: this.title,
       description: this.description,
     }
+  }
+
+  private getRowId(rowIndex: number, sectionIndex: number): string {
+    return `${this.targetId}${SOURCE_INFO_SEPARATOR}${sectionIndex}.${rowIndex}`
   }
 }

@@ -5,6 +5,7 @@ import {
 } from '@botonic/plugin-hubtype-analytics/lib/cjs/types'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
+import { SOURCE_INFO_SEPARATOR } from 'src/constants'
 
 import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
@@ -71,7 +72,8 @@ async function getTargetNode(
   locale: string,
   request: ActionRequest
 ) {
-  const contentId = request.input.payload
+  const payload = request.input.payload
+  const contentId = payload?.split(SOURCE_INFO_SEPARATOR)[0]
   const targetNode = !contentId
     ? await getNodeByUserInput(cmsApi, locale, request)
     : (cmsApi.getNodeById(contentId) as HtNodeWithContent)
