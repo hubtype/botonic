@@ -71,11 +71,14 @@ export function useWebchat() {
     webchatReducer,
     webchatInitialState
   )
+  const [unreadMessages, setUnreadMessages] = useState(0)
 
   const addMessage = message =>
     webchatDispatch({ type: ADD_MESSAGE, payload: message })
-  const addMessageComponent = message =>
+  const addMessageComponent = message => {
+    setUnreadMessages(value => value + 1)
     webchatDispatch({ type: ADD_MESSAGE_COMPONENT, payload: message })
+  }
   const updateMessage = message =>
     webchatDispatch({ type: UPDATE_MESSAGE, payload: message })
   const updateReplies = replies =>
@@ -119,11 +122,16 @@ export function useWebchat() {
       type: UPDATE_DEV_SETTINGS,
       payload: settings,
     })
-  const toggleWebchat = toggle =>
+
+  const toggleWebchat = toggle => {
+    console.log('toggleWebchat hook function')
+    setUnreadMessages(0)
     webchatDispatch({
       type: TOGGLE_WEBCHAT,
       payload: toggle,
     })
+  }
+
   const toggleEmojiPicker = toggle =>
     webchatDispatch({
       type: TOGGLE_EMOJI_PICKER,
@@ -195,6 +203,7 @@ export function useWebchat() {
     updateHandoff,
     updateTheme,
     updateDevSettings,
+    unreadMessages,
     toggleWebchat,
     toggleEmojiPicker,
     togglePersistentMenu,
