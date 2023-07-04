@@ -37,7 +37,7 @@ import {
 } from '../message-utils'
 import { msgToBotonic } from '../msg-to-botonic'
 import { scrollToBottom } from '../util/dom'
-import { isDev, resolveImage } from '../util/environment'
+import { isDev } from '../util/environment'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
 import {
   _getThemeProperty,
@@ -63,6 +63,7 @@ import {
 } from './hooks'
 import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
+import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { WebviewContainer } from './webview'
 
@@ -86,22 +87,6 @@ const StyledWebchat = styled.div`
   flex-direction: column;
 `
 
-const StyledTriggerButton = styled.div`
-  cursor: pointer;
-  position: fixed;
-  background: ${COLORS.SOLID_WHITE};
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  width: 65px;
-  height: 65px;
-  bottom: 20px;
-  right: 10px;
-  padding: 8px;
-`
-
 const UserInputContainer = styled.div`
   min-height: 52px;
   position: relative;
@@ -118,11 +103,6 @@ const TextAreaContainer = styled.div`
   display: flex;
   flex: 1 1 auto;
   align-items: center;
-`
-
-const TriggerImage = styled.img`
-  max-width: 100%;
-  max-height: 100%;
 `
 
 const ErrorMessageContainer = styled.div`
@@ -176,6 +156,7 @@ export const Webchat = forwardRef((props, ref) => {
     updateHandoff,
     updateTheme,
     updateDevSettings,
+    unreadMessages,
     toggleWebchat,
     toggleEmojiPicker,
     togglePersistentMenu,
@@ -448,6 +429,7 @@ export const Webchat = forwardRef((props, ref) => {
     }
     return false
   }
+
   const closeMenu = () => {
     togglePersistentMenu(false)
   }
@@ -711,43 +693,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [webchatState.isWebchatOpen])
 
-  const getTriggerImage = () => {
-    const triggerImage = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.triggerButtonImage,
-      null
-    )
-    if (triggerImage === null) {
-      webchatState.theme.triggerButtonImage = WEBCHAT.DEFAULTS.LOGO
-      return null
-    }
-    return triggerImage
-  }
-
-  const triggerButtonStyle = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.triggerButtonStyle
-  )
-
-  const CustomTriggerButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customTrigger,
-    undefined
-  )
-
-  const triggerButton = () => {
-    if (CustomTriggerButton) {
-      return <CustomTriggerButton />
-    }
-    return (
-      <StyledTriggerButton
-        role={ROLES.TRIGGER_BUTTON}
-        style={{ ...triggerButtonStyle }}
-      >
-        {getTriggerImage() && (
-          <TriggerImage src={resolveImage(getTriggerImage())} />
-        )}
-      </StyledTriggerButton>
-    )
-  }
-
   const webchatMessageList = () => (
     <WebchatMessageList style={{ flex: 1 }}>
       {webchatState.typing && <TypingIndicator />}
@@ -918,14 +863,11 @@ export const Webchat = forwardRef((props, ref) => {
       }}
     >
       {!webchatState.isWebchatOpen && (
-        <div
-          onClick={event => {
-            toggleWebchat(true)
-            event.preventDefault()
-          }}
-        >
-          {triggerButton()}
-        </div>
+        <TriggerButton
+          theme={theme}
+          unreadMessages={unreadMessages}
+          webchatState={webchatState}
+        />
       )}
 
       {webchatState.isWebchatOpen && (
