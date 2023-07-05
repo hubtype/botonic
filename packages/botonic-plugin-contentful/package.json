@@ -52,7 +52,7 @@
     "@nlpjs/lang-sl": "^4.22.0",
     "@nlpjs/lang-tr": "^4.22.0",
     "@nlpjs/lang-uk": "^4.22.0",
-    "@nlpjs/ner": "^4.22.0",
+    "@nlpjs/ner": "^4.27.0",
     "@nlpjs/similarity": "^4.21.1",
     "async-parallel": "^1.2.3",
     "contentful": "^8.5.8",
