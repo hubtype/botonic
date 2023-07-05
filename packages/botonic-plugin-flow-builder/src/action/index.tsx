@@ -5,9 +5,9 @@ import {
 } from '@botonic/plugin-hubtype-analytics/lib/cjs/types'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
-import { SOURCE_INFO_SEPARATOR } from 'src/constants'
 
 import { FlowBuilderApi } from '../api'
+import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
