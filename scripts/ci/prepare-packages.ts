@@ -33,11 +33,13 @@ botonicPackages.forEach(pkg => {
   console.log(`Preparing ${pkg}...`)
   console.log('====================================')
   console.log('Cleaning...')
-  child_process.execSync('nice rm rf node_modules lib dist')
+  child_process.execSync('rm -rf node_modules lib dist', {
+    stdio: 'inherit',
+  })
   console.log('Installing deps...')
-  child_process.execSync('nice npm i -D > /dev/null')
+  child_process.execSync('npm i -D > /dev/null', { stdio: 'inherit' })
   console.log('Building...')
-  child_process.execSync('nice npm run build > /dev/null')
+  child_process.execSync('npm run build > /dev/null', { stdio: 'inherit' })
   console.log('')
   process.chdir('..')
 })

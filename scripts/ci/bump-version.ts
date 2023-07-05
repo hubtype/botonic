@@ -30,16 +30,16 @@ try {
   process.exit(1)
 }
 
-const version = process.argv[2]
-const phase = process.argv[3]
-
-if (!phase) {
+const version = process.argv[3]
+const phase = process.argv[4]
+if (!!phase) {
   const PACKAGES_DIR: string = path.resolve(`${BIN_DIR}/../../packages`)
 
   const packageInPackages = fs.readdirSync(PACKAGES_DIR)
   const botonicPackages = packageInPackages.filter(function (file: string) {
     return file.startsWith('botonic')
   })
+  console.log(process.cwd())
 
   botonicPackages.forEach(pkg => {
     try {

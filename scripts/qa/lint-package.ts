@@ -16,7 +16,9 @@ try {
   process.exit(1)
 }
 
-const lintProcess = child_process.spawnSync('npm', ['run', 'lint'])
+const lintProcess = child_process.spawnSync('npm', ['run', 'lint'], {
+  stdio: 'inherit',
+})
 
 if (lintProcess.error) {
   console.error(`Failed to execute lint command: ${lintProcess.error}`)
