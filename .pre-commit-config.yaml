@@ -17,7 +17,7 @@ repos:
     hooks:
       - id: cli
         name: cli
-        entry: "bash -c 'npx ts-node scripts/qa/lint-package.th packages/botonic-cli'"
+        entry: "bash -c 'npx ts-node scripts/qa/lint-package.ts packages/botonic-cli'"
         language: system
         files: ^packages/botonic-cli/
       - id: core
@@ -118,9 +118,9 @@ repos:
 
       - id: docs
         name: docs
-        entry: ./script/qa/lint-package.sh  docs/website
+        entry: "bash -c 'npx ts-node script/qa/lint-package.ts  docs'"
         language: system
-        files: ^docs/website/
+        files: ^docs/
 
       - id: plugin-ner
         name: plugin-ner

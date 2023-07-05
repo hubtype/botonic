@@ -9,7 +9,7 @@ function update_botonic_deps(
 ) {
   console.log(` - Updating botonic deps for ${packageDir}`)
   const regex = new RegExp(`("@botonic\/(.*)": )"(.*)"`, 'g')
-  const rc = phase.includes('rc') ? `/$1"${version}` : `$1~"${version}`
+  const rc = phase.includes('rc') ? `/$1"${version}` : `/$1~"${version}`
   child_process.execSync(`sed -i.aux -E ${regex}${rc} package.json`)
   child_process.execSync('rm package.json.aux')
 }
