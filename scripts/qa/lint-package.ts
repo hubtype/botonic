@@ -1,6 +1,6 @@
 import * as child_process from 'child_process'
 
-if (process.env.GITHUB_ACTIONS === 'true') {
+if (process.env.GITHUB_ACTIONS !== undefined) {
   console.log('Will skip lint as it will run in separate workflow')
   process.exit()
 } else {
