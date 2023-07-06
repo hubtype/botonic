@@ -39,7 +39,6 @@ if (!!phase) {
   const botonicPackages = packageInPackages.filter(function (file: string) {
     return file.startsWith('botonic')
   })
-  console.log(process.cwd())
 
   botonicPackages.forEach(pkg => {
     try {
