@@ -21,10 +21,10 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   baseUrl: string
   getLaguange: (request: BotRequest) => string
   getCountry: (request: BotRequest) => string
-  constructor(options: HubtypeAnalyticsOptions) {
+  constructor(options?: HubtypeAnalyticsOptions) {
     this.baseUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
-    this.getLaguange = options.getLaguange || getDefaultLanguage
-    this.getCountry = options.getCountry || getDefaultCountry
+    this.getLaguange = options?.getLaguange || getDefaultLanguage
+    this.getCountry = options?.getCountry || getDefaultCountry
   }
 
   post(): void {
