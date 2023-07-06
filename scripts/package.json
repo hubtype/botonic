@@ -11,11 +11,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "child_process": "^1.0.2",
     "fs": "0.0.2",
+    "path": "^0.12.7",
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
     "@types/inquirer": "^7.3.1",
+    "@types/node": "^20.4.0",
     "app-root-path": "^3.0.0",
     "await-spawn": "^4.0.1",
     "colors": "^1.4.0",
