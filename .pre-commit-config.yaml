@@ -14,6 +14,8 @@ repos:
       - id: mixed-line-ending
 
   - repo: local
+    env:
+      GITHUB_ACTIONS: 'true'
     hooks:
       - id: cli
         name: cli
