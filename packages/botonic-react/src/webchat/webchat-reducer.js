@@ -35,8 +35,14 @@ export function webchatReducer(state, action) {
       }
     case UPDATE_HANDOFF:
       return { ...state, handoff: action.payload }
-    case TOGGLE_WEBCHAT:
-      return { ...state, isWebchatOpen: action.payload }
+    case TOGGLE_WEBCHAT: {
+      const isWebchatOpen = action.payload
+      return {
+        ...state,
+        isWebchatOpen,
+        unreadMessages: isWebchatOpen ? 0 : state.unreadMessages,
+      }
+    }
     case TOGGLE_EMOJI_PICKER:
       return { ...state, isEmojiPickerOpen: action.payload }
     case TOGGLE_PERSISTENT_MENU:

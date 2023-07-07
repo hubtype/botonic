@@ -12,13 +12,7 @@ export const messagesReducer = (state, action) => {
     case ADD_MESSAGE:
       return addMessageReducer(state, action)
     case ADD_MESSAGE_COMPONENT:
-      return {
-        ...state,
-        messagesComponents: [
-          ...(state.messagesComponents || []),
-          action.payload,
-        ],
-      }
+      return addMessageComponent(action, state)
     case UPDATE_MESSAGE:
       return updateMessageReducer(state, action)
     case UPDATE_REPLIES:
@@ -36,6 +30,21 @@ export const messagesReducer = (state, action) => {
       }
     default:
       throw new Error()
+  }
+}
+
+function addMessageComponent(action, state) {
+  const messageComponent = action.payload
+  const isUnreadMessage =
+    !state.isWebchatOpen && messageComponent.props.ack !== 1
+  const unreadMessages = isUnreadMessage
+    ? state.unreadMessages + 1
+    : state.unreadMessages
+
+  return {
+    ...state,
+    messagesComponents: [...(state.messagesComponents || []), messageComponent],
+    unreadMessages,
   }
 }
 
