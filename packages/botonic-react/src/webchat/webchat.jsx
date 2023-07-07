@@ -156,7 +156,6 @@ export const Webchat = forwardRef((props, ref) => {
     updateHandoff,
     updateTheme,
     updateDevSettings,
-    unreadMessages,
     toggleWebchat,
     toggleEmojiPicker,
     togglePersistentMenu,
@@ -862,13 +861,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateWebchatDevSettings: updateWebchatDevSettings,
       }}
     >
-      {!webchatState.isWebchatOpen && (
-        <TriggerButton
-          theme={theme}
-          unreadMessages={unreadMessages}
-          webchatState={webchatState}
-        />
-      )}
+      {!webchatState.isWebchatOpen && <TriggerButton />}
 
       {webchatState.isWebchatOpen && (
         <StyledWebchat
