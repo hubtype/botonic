@@ -122,9 +122,8 @@ export const Message = props => {
 
   const ack = getEnvAck()
 
-  if (isBrowser()) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
+  useEffect(() => {
+    if (isBrowser()) {
       const decomposedChildren = json
       const message = {
         id: state.id,
@@ -156,10 +155,11 @@ export const Message = props => {
         ack: ack,
       }
       addMessage(message)
-    }, [])
+    }
+  }, [])
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
+  useEffect(() => {
+    if (isBrowser()) {
       const msg = webchatState.messagesJSON.find(m => m.id === state.id)
       if (
         msg &&
@@ -168,8 +168,8 @@ export const Message = props => {
       ) {
         updateReplies(replies)
       }
-    }, [webchatState.messagesJSON])
-  }
+    }
+  }, [webchatState.messagesJSON])
 
   const brandColor = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.brandColor,
