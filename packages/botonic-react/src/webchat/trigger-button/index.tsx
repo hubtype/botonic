@@ -3,38 +3,30 @@ import React, { useContext } from 'react'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { resolveImage } from '../../util/environment'
-import { _getThemeProperty } from '../../util/webchat'
 import {
   StyledTriggerButton,
   TriggerImage,
   UnreadMessagesCounter,
 } from './styles'
 
-export interface TriggerButtonProps {
-  theme: any
-  unreadMessages: number
-  webchatState: any
-}
-
-export const TriggerButton = ({
-  theme,
-  unreadMessages,
-  webchatState,
-}: TriggerButtonProps): JSX.Element => {
-  const toggleWebchat = useContext(WebchatContext)
-  const getThemeProperty = _getThemeProperty(theme)
+export const TriggerButton = (): JSX.Element => {
+  const { webchatState, getThemeProperty, toggleWebchat } =
+    useContext(WebchatContext)
 
   const getTriggerImage = () => {
-    const triggerImage = getThemeProperty(
+    const image = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.triggerButtonImage,
       undefined
     )
-    if (triggerImage === null) {
+
+    if (!image) {
       webchatState.theme.triggerButtonImage = WEBCHAT.DEFAULTS.LOGO
       return null
     }
-    return triggerImage
+    return image
   }
+
+  const triggerButtonImage = getTriggerImage()
 
   const triggerButtonStyle = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.triggerButtonStyle
@@ -46,30 +38,31 @@ export const TriggerButton = ({
   )
 
   const handleClick = (event: any) => {
-    //@ts-ignore
     toggleWebchat(true)
     event.preventDefault()
   }
+
   return (
     <div
       onClick={event => {
         handleClick(event)
       }}
     >
-      {unreadMessages !== 0 && (
+      {webchatState.unreadMessages !== 0 && (
         <UnreadMessagesCounter className='trigger-notifications'>
-          {unreadMessages}
+          {webchatState.unreadMessages}
         </UnreadMessagesCounter>
       )}
       {CustomTriggerButton ? (
+        //@ts-ignore
         <CustomTriggerButton />
       ) : (
         <StyledTriggerButton
           role={ROLES.TRIGGER_BUTTON}
-          style={{ ...triggerButtonStyle }}
+          style={triggerButtonStyle}
         >
-          {getTriggerImage() && (
-            <TriggerImage src={resolveImage(getTriggerImage())} />
+          {triggerButtonImage && (
+            <TriggerImage src={resolveImage(triggerButtonImage)} />
           )}
         </StyledTriggerButton>
       )}
