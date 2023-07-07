@@ -25,10 +25,11 @@ export const WebchatContext = createContext({
   updateLatestInput: input => {},
   closeWebview: () => {},
   toggleWebchat: toggle => {},
-  getThemeProperty: property => undefined, // used to retrieve a specific property of the theme defined by the developer in his 'webchat/index.js'
+  getThemeProperty: (property, defaultValue) => undefined, // used to retrieve a specific property of the theme defined by the developer in his 'webchat/index.js'
   resolveCase: () => {},
   theme: {},
   webchatState: webchatInitialState,
+  unreadMessages: 0,
   updateWebchatDevSettings: settings => {
     return {}
   },
