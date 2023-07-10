@@ -47,7 +47,7 @@ export const MultichannelCarousel = props => {
 
         let header = ''
         if (props.showTitle && title) {
-          header += `${title ? `*${title}*` : ''}`
+          header += `${title ? `**${title}**` : ''}`
           if (title && subtitle) {
             header += ' '
           }
