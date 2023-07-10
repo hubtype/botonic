@@ -7,7 +7,7 @@ import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
-import { SOURCE_INFO_SEPARATOR } from '../constants'
+import { SOURCE_INFO_SEPARATOR, VARIABLE_REGEX } from '../constants'
 import { FlowContent, FlowHandoff, FlowText } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
@@ -119,8 +119,7 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
 }
 
 function replaceVariables(text: string, extraData?: Record<string, any>) {
-  const variableRegex = /{([^}]+)}/g
-  const matches = text.match(variableRegex)
+  const matches = text.match(VARIABLE_REGEX)
 
   if (matches && extraData) {
     matches.forEach(match => {
