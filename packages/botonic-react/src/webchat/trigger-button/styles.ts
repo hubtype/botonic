@@ -28,7 +28,7 @@ export const UnreadMessagesCounter = styled.div`
   bottom: 80px;
   width: 24px;
   height: 24px;
-  background-color: #ff426f;
+  background-color: ${COLORS.RED_NOTIFICATIONS};
   color: white;
   z-index: 10;
 `

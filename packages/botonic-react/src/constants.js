@@ -20,6 +20,7 @@ export const COLORS = {
   LIGHT_GRAY: 'rgba(209, 209, 209, 1)',
   MID_GRAY: 'rgba(105, 105, 115, 1)',
   PIGEON_POST_BLUE_ALPHA_0_5: 'rgba(176, 196, 222, 0.5)',
+  RED_NOTIFICATIONS: 'rgba(255, 66, 111, 1)',
   SCORPION_GRAY: 'rgba(87, 87, 87, 1)',
   SEASHELL_WHITE: 'rgba(241, 240, 240, 1)',
   SILVER: 'rgba(200, 200, 200, 1)',
