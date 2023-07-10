@@ -7,6 +7,7 @@ import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
+import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
@@ -71,7 +72,8 @@ async function getTargetNode(
   locale: string,
   request: ActionRequest
 ) {
-  const contentId = request.input.payload
+  const payload = request.input.payload
+  const contentId = payload?.split(SOURCE_INFO_SEPARATOR)[0]
   const targetNode = !contentId
     ? await getNodeByUserInput(cmsApi, locale, request)
     : (cmsApi.getNodeById(contentId) as HtNodeWithContent)

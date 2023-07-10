@@ -36,7 +36,7 @@ export class FlowElement extends ContentFieldsBase {
         <Pic src={this.image} />
         <Title>{this.title}</Title>
         <Subtitle>{this.subtitle}</Subtitle>
-        {this.button?.renderButton()}
+        {this.button?.renderButton(0)}
       </Element>
     )
   }

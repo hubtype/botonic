@@ -37,7 +37,9 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
         key={id}
         body={this.text}
         button={this.listButtonText}
-        sections={this.sections.map(section => section.toBotonic())}
+        sections={this.sections.map((section, sectionIndex) =>
+          section.toBotonic(sectionIndex)
+        )}
       ></WhatsappButtonList>
     )
   }

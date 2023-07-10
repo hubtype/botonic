@@ -31,7 +31,9 @@ export class FlowText extends ContentFieldsBase {
     return (
       <Text key={id}>
         {this.text}
-        {this.buttons.map(button => button.renderButton(this.buttonStyle))}
+        {this.buttons.map((button, buttonIndex) =>
+          button.renderButton(buttonIndex, this.buttonStyle)
+        )}
       </Text>
     )
   }

@@ -2,6 +2,7 @@ import { Button, Reply } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
+import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtButton,
@@ -40,26 +41,34 @@ export class FlowButton extends ContentFieldsBase {
     return newButton
   }
 
-  static getPayloadId(cmsButton, locale): string | undefined {
+  static getPayloadId(cmsButton: HtButton, locale: string): string | undefined {
     return cmsButton.payload.find(payload => payload.locale === locale)?.id
   }
 
-  static getUrlId(cmsButton, locale): string | undefined {
+  static getUrlId(cmsButton: HtButton, locale: string): string | undefined {
     return cmsButton.url.find(url => url.locale === locale)?.id
   }
 
-  renderButton(buttonStyle?: HtButtonStyle): JSX.Element {
+  renderButton(buttonIndex: number, buttonStyle?: HtButtonStyle): JSX.Element {
     if (buttonStyle === HtButtonStyle.QUICK_REPLY) {
       return (
-        <Reply key={this.id} payload={this.payload}>
+        <Reply key={this.id} payload={this.getButtonPayload(buttonIndex)}>
           {this.text}
         </Reply>
       )
     }
     return (
-      <Button key={this.id} payload={this.payload} url={this.url}>
+      <Button
+        key={this.id}
+        url={this.url}
+        payload={this.getButtonPayload(buttonIndex)}
+      >
         {this.text}
       </Button>
     )
+  }
+
+  private getButtonPayload(buttonIndex: number): string {
+    return `${this.payload}${SOURCE_INFO_SEPARATOR}${buttonIndex}`
   }
 }
