@@ -19,6 +19,7 @@ import {
   MULTICHANNEL_WHATSAPP_PROPS,
   WHATSAPP_MAX_BUTTONS,
 } from './multichannel-utils'
+import { whatsappMarkdown } from './whatsapp/markdown'
 
 export const MultichannelText = props => {
   const requestContext = useContext(RequestContext)
@@ -108,9 +109,11 @@ export const MultichannelText = props => {
     const { postbackButtons, urlButtons, webviewButtons } = getWhatsappButtons()
 
     const textElements = texts.map(text => {
-      return (props.newline || '') + text
+      const textWithMarkdown = whatsappMarkdown(text)
+      return (props.newline || '') + textWithMarkdown
     })
 
+    console.log({ props, texts, textElements })
     const webviewButtonElements = webviewButtons.map(
       regenerateMultichannelButtons(false)
     )
