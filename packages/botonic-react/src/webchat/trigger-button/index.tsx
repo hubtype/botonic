@@ -43,11 +43,7 @@ export const TriggerButton = (): JSX.Element => {
   }
 
   return (
-    <div
-      onClick={event => {
-        handleClick(event)
-      }}
-    >
+    <div onClick={handleClick}>
       {webchatState.unreadMessages !== 0 && (
         <UnreadMessagesCounter className='trigger-notifications'>
           {webchatState.unreadMessages}
