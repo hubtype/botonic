@@ -113,7 +113,6 @@ export const MultichannelText = props => {
       return (props.newline || '') + textWithMarkdown
     })
 
-    console.log({ props, texts, textElements })
     const webviewButtonElements = webviewButtons.map(
       regenerateMultichannelButtons(false)
     )
