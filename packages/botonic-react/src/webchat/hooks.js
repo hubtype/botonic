@@ -64,6 +64,7 @@ export const webchatInitialState = {
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
   jwt: null,
+  unreadMessages: 0,
 }
 
 export function useWebchat() {
@@ -71,7 +72,6 @@ export function useWebchat() {
     webchatReducer,
     webchatInitialState
   )
-
   const addMessage = message =>
     webchatDispatch({ type: ADD_MESSAGE, payload: message })
   const addMessageComponent = message =>
@@ -119,11 +119,14 @@ export function useWebchat() {
       type: UPDATE_DEV_SETTINGS,
       payload: settings,
     })
-  const toggleWebchat = toggle =>
+
+  const toggleWebchat = toggle => {
     webchatDispatch({
       type: TOGGLE_WEBCHAT,
       payload: toggle,
     })
+  }
+
   const toggleEmojiPicker = toggle =>
     webchatDispatch({
       type: TOGGLE_EMOJI_PICKER,

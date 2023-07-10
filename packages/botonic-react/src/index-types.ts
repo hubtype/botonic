@@ -175,7 +175,7 @@ export interface WebchatContextProps {
   updateReplies: (replies: boolean) => void
   updateLatestInput: (input: CoreInput) => void
   closeWebview: () => void
-  toggleWebchat: () => void
+  toggleWebchat: (toggle: boolean) => void
   getThemeProperty: (property: string, defaultValue?: string) => any
   resolveCase: () => void
   theme: ThemeProps
