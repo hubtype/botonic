@@ -106,3 +106,18 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
   await trackEvent(request, event)
   return fallbackNode
 }
+
+function replaceVariables(text: string, extraData?: Record<string, any>) {
+  const variableRegex = /{([^}]+)}/g
+  const matches = text.match(variableRegex)
+
+  if (matches && extraData) {
+    matches.forEach(match => {
+      const variable = match.slice(1, -1)
+      const value = extraData[variable] ? extraData[variable] : match
+      text = text.replace(match, value)
+    })
+  }
+
+  return text
+}
