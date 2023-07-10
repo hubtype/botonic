@@ -36,7 +36,7 @@ export const messagesReducer = (state, action) => {
 function addMessageComponent(action, state) {
   const messageComponent = action.payload
   const isUnreadMessage =
-    !state.isWebchatOpen && messageComponent.props.ack !== 1
+    !state.isWebchatOpen && messageComponent.props?.ack !== 1
   const unreadMessages = isUnreadMessage
     ? state.unreadMessages + 1
     : state.unreadMessages
