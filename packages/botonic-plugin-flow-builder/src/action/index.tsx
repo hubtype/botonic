@@ -8,7 +8,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
-import { FlowContent, FlowHandoff } from '../content-fields'
+import { FlowContent, FlowHandoff, FlowText } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from './tracking'
@@ -43,11 +43,22 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     ) as FlowHandoff
     if (handoffContent) await handoffContent.doHandoff(request)
 
-    const renderContents = contents.filter(content =>
+    const contentsWithoutHandoff = contents.filter(content =>
       content instanceof FlowHandoff ? false : true
     )
 
-    return { contents: renderContents }
+    const contentsWithVariables = contentsWithoutHandoff.map(content => {
+      if (content instanceof FlowText) {
+        console.log(content.text)
+        content.text = replaceVariables(
+          content.text,
+          request.session.user.extra_data
+        )
+      }
+      return content
+    })
+
+    return { contents: contentsWithVariables }
   }
 
   render(): JSX.Element | JSX.Element[] {
@@ -102,4 +113,19 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
   }
   await trackEvent(request, event)
   return fallbackNode
+}
+
+function replaceVariables(text: string, extraData?: Record<string, any>) {
+  const variableRegex = /{([^}]+)}/g
+  const matches = text.match(variableRegex)
+
+  if (matches && extraData) {
+    matches.forEach(match => {
+      const variable = match.slice(1, -1)
+      const value = extraData[variable] ? extraData[variable] : match
+      text = text.replace(match, value)
+    })
+  }
+
+  return text
 }
