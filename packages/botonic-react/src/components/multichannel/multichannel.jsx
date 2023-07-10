@@ -17,7 +17,6 @@ import {
 
 export const Multichannel = props => {
   const requestContext = useContext(RequestContext)
-
   if (!isWhatsapp(requestContext) && !isFacebook(requestContext)) {
     return props.children
   }
