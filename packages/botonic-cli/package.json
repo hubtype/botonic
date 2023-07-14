@@ -10,7 +10,7 @@
   "dependencies": {
     "@botonic/pulumi": "0.21.0",
     "@oclif/command": "^1.8.28",
-    "@oclif/config": "^1.17.0",
+    "@oclif/config": "^1.18.10",
     "@oclif/plugin-help": "^3.2.2",
     "analytics-node": "^3.5.0",
     "axios": "^0.24.0",
