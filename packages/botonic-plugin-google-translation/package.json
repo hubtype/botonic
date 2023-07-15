@@ -15,7 +15,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@babel/runtime": "^7.15.4",
+    "@babel/runtime": "^7.22.5",
     "@botonic/core": "0.21.6",
     "axios": "^0.24.0",
     "jsrsasign": "^10.8.6"
