@@ -5,8 +5,8 @@ cd "$BIN_DIR/../.." || exit 1
 
 cd packages || exit 1
 
-VERSION=$1
-PHASE=$2
+VERSION=$2
+PHASE=$3
 
 update_botonic_deps (){
   # $template $1
