@@ -34,7 +34,7 @@ export class FlowText extends ContentFieldsBase {
     if (matches && extraData) {
       matches.forEach(match => {
         const variable = match.slice(1, -1)
-        const value = extraData[variable] ? extraData[variable] : match
+        const value = extraData[variable] ?? match
         return this.text.replace(match, value)
       })
     }
