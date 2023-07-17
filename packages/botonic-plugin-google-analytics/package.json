@@ -16,7 +16,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --quiet 'src/**/*.ts'"
   },
   "dependencies": {
-    "@botonic/core": "^0.21.6",
+    "@botonic/core": "^0.22.0",
     "axios": "^0.24.0"
   },
   "devDependencies": {
