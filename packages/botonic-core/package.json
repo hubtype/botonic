@@ -35,7 +35,7 @@
     "decode": "^0.3.0",
     "dynamodb-toolbox": "^0.3.4",
     "fast-xml-parser": "^3.19.0",
-    "html-entities": "^2.3.5",
+    "html-entities": "^2.4.0",
     "node-json-db": "^1.6.0",
     "pako": "^2.1.0",
     "process": "^0.11.10",
