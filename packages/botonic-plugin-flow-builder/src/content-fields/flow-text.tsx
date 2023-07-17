@@ -2,6 +2,7 @@ import { Text } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
+import { VARIABLE_REGEX } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtButtonStyle, HtTextNode } from './hubtype-fields'
@@ -25,6 +26,20 @@ export class FlowText extends ContentFieldsBase {
       FlowButton.fromHubtypeCMS(button, locale, cmsApi)
     )
     return newText
+  }
+
+  replaceVariables(extraData?: Record<string, any>): string {
+    const matches = this.text.match(VARIABLE_REGEX)
+
+    if (matches && extraData) {
+      matches.forEach(match => {
+        const variable = match.slice(1, -1)
+        const value = extraData[variable] ? extraData[variable] : match
+        return this.text.replace(match, value)
+      })
+    }
+
+    return this.text
   }
 
   toBotonic(id: string): JSX.Element {
