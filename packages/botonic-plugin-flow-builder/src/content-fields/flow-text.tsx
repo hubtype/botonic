@@ -31,15 +31,16 @@ export class FlowText extends ContentFieldsBase {
   replaceVariables(extraData?: Record<string, any>): string {
     const matches = this.text.match(VARIABLE_REGEX)
 
+    let replacedText = this.text
     if (matches && extraData) {
       matches.forEach(match => {
         const variable = match.slice(1, -1)
         const value = extraData[variable] ?? match
-        return this.text.replace(match, value)
+        replacedText = replacedText.replace(match, value)
       })
     }
 
-    return this.text
+    return replacedText
   }
 
   toBotonic(id: string): JSX.Element {
