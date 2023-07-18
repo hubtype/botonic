@@ -48,7 +48,6 @@
   "dependencies": {
     "@babel/runtime": "^7.21.0",
     "@botonic/react": "^0.22.6",
-    "@botonic/plugin-hubtype-analytics": "0.22.0-alpha.5",
     "axios": "^1.3.6"
   }
 }
