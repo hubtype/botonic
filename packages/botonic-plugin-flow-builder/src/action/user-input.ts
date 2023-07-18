@@ -1,14 +1,10 @@
-import {
-  EventBotStart,
-  EventName,
-} from '@botonic/plugin-hubtype-analytics/lib/cjs/types'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getNodeByIntent } from './intent'
 import { getNodeByKeyword } from './keyword'
-import { trackEvent } from './tracking'
+import { EventName, trackEvent } from './tracking'
 
 export async function getNodeByUserInput(
   cmsApi: FlowBuilderApi,
@@ -17,10 +13,7 @@ export async function getNodeByUserInput(
 ): Promise<HtNodeWithContent | undefined> {
   if (request.session.is_first_interaction) {
     const startNode = cmsApi.getStartNode()
-    const event: EventBotStart = {
-      event_type: EventName.botStart,
-    }
-    await trackEvent(request, event)
+    await trackEvent(request, EventName.botStart)
     return startNode
   }
 

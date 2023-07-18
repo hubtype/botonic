@@ -1,7 +1,3 @@
-import {
-  EventBotAiModel,
-  EventName,
-} from '@botonic/plugin-hubtype-analytics/lib/cjs/types'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -9,15 +5,15 @@ import {
   HtIntentNode,
   HtNodeWithContent,
 } from '../content-fields/hubtype-fields'
-import { trackEvent } from './tracking'
+import { EventName, trackEvent } from './tracking'
 
 export async function getNodeByIntent(
   cmsApi: FlowBuilderApi,
   locale: string,
   request: ActionRequest
-) {
+): Promise<HtNodeWithContent | undefined> {
   const intentNode = cmsApi.getIntentNode(request.input, locale)
-  const eventBotAiModel: EventBotAiModel = {
+  const event = {
     event_type: EventName.botAiModel,
     event_data: {
       intent: request.input.intent as string,
@@ -26,11 +22,11 @@ export async function getNodeByIntent(
     },
   }
   if (isIntentValid(intentNode, request, cmsApi) && intentNode?.target?.id) {
-    await trackEvent(request, eventBotAiModel)
+    await trackEvent(request, EventName.botAiModel, event)
     return cmsApi.getNodeById<HtNodeWithContent>(intentNode.target.id)
   } else {
-    eventBotAiModel.event_data.confidence_successful = false
-    await trackEvent(request, eventBotAiModel)
+    event.event_data.confidence_successful = false
+    await trackEvent(request, EventName.botAiModel, event)
     return undefined
   }
 }

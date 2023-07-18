@@ -1,8 +1,3 @@
-import {
-  EventBotFaq,
-  EventFallback,
-  EventName,
-} from '@botonic/plugin-hubtype-analytics/lib/cjs/types'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
@@ -11,7 +6,7 @@ import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { FlowContent, FlowHandoff, FlowText } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { trackEvent } from './tracking'
+import { EventName, trackEvent } from './tracking'
 import { getNodeByUserInput } from './user-input'
 
 type FlowBuilderActionProps = {
@@ -79,13 +74,13 @@ async function getTargetNode(
     : (cmsApi.getNodeById(contentId) as HtNodeWithContent)
 
   if (targetNode) {
-    const event: EventBotFaq = {
+    const event = {
       event_type: EventName.botFaq,
       event_data: {
         faq_name: targetNode.code,
       },
     }
-    await trackEvent(request, event)
+    await trackEvent(request, EventName.botFaq, event)
     return targetNode
   }
   return await getFallbackNode(cmsApi, request)
@@ -100,9 +95,6 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
   const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
   request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
 
-  const event: EventFallback = {
-    event_type: EventName.fallback,
-  }
-  await trackEvent(request, event)
+  await trackEvent(request, EventName.fallback)
   return fallbackNode
 }
