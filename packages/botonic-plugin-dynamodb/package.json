@@ -33,7 +33,7 @@
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@babel/runtime": "^7.22.5",
-    "aws-sdk": "2.1365.0"
+    "aws-sdk": "2.1404.0"
   },
   "devDependencies": {},
   "engines": {
