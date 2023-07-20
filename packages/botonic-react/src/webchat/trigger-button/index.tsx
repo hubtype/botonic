@@ -32,6 +32,11 @@ export const TriggerButton = (): JSX.Element => {
     WEBCHAT.CUSTOM_PROPERTIES.triggerButtonStyle
   )
 
+  const triggerButtonNotifications = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.triggerButtonNotifications,
+    true
+  )
+
   const CustomTriggerButton = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.customTrigger,
     undefined
@@ -44,7 +49,7 @@ export const TriggerButton = (): JSX.Element => {
 
   return (
     <div onClick={handleClick}>
-      {webchatState.unreadMessages !== 0 && (
+      {webchatState.unreadMessages !== 0 && triggerButtonNotifications && (
         <UnreadMessagesCounter className='trigger-notifications'>
           {webchatState.unreadMessages}
         </UnreadMessagesCounter>
