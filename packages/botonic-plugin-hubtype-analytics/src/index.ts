@@ -53,3 +53,6 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
     return axios.post(url, event, config)
   }
 }
+
+export * from './types'
+export * from './utils'
