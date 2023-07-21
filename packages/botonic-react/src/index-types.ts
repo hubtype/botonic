@@ -11,13 +11,17 @@ import type {
 import React from 'react'
 
 import {
+  BlockInputOption,
   ButtonProps,
+  CoverComponentOptions,
+  PersistentMenuTheme,
   ReplyProps,
   ThemeProps,
   WebchatSettingsProps,
   Webview,
 } from './components/index-types'
 import { WebchatState } from './webchat'
+import { WebchatApp } from './webchat-app'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/
@@ -96,28 +100,28 @@ export interface CustomMessageType {
 //   unmountCustomComponent(): void
 // }
 
-// export interface WebchatArgs {
-//   blockInputs?: BlockInputOption[]
-//   coverComponent?: CoverComponentOptions
-//   defaultDelay?: number
-//   defaultTyping?: number
-//   enableAnimations?: boolean
-//   enableAttachments?: boolean
-//   enableEmojiPicker?: boolean
-//   enableUserInput?: boolean
-//   shadowDOM?: boolean | (() => boolean)
-//   hostId?: string
-//   getString?: (stringId: string, session: CoreSession) => string
-//   onClose?: (app: WebchatApp, args: any) => void
-//   onInit?: (app: WebchatApp, args: any) => void
-//   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
-//   onOpen?: (app: WebchatApp, args: any) => void
-//   onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
-//   persistentMenu?: PersistentMenuTheme
-//   storage?: Storage | null
-//   storageKey?: any
-//   theme?: ThemeProps
-// }
+export interface WebchatArgs {
+  blockInputs?: BlockInputOption[]
+  coverComponent?: CoverComponentOptions
+  defaultDelay?: number
+  defaultTyping?: number
+  enableAnimations?: boolean
+  enableAttachments?: boolean
+  enableEmojiPicker?: boolean
+  enableUserInput?: boolean
+  shadowDOM?: boolean | (() => boolean)
+  hostId?: string
+  getString?: (stringId: string, session: CoreSession) => string
+  onClose?: (app: WebchatApp, args: any) => void
+  onInit?: (app: WebchatApp, args: any) => void
+  onMessage?: (app: WebchatApp, message: WebchatMessage) => void
+  onOpen?: (app: WebchatApp, args: any) => void
+  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+  persistentMenu?: PersistentMenuTheme
+  storage?: Storage | null
+  storageKey?: any
+  theme?: ThemeProps
+}
 
 // export interface WebchatAppArgs extends WebchatArgs {
 export interface WebchatAppArgs {
@@ -189,7 +193,3 @@ export interface WebchatContextProps {
 //   onUserInput(args: OnUserInputArgs): Promise<void>
 //   render(dest: HTMLElement, optionsAtRuntime: WebchatAppArgs): void
 // }
-
-export * from './components'
-export * from './util'
-export * from './webchat'

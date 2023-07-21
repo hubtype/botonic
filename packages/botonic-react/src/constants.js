@@ -125,6 +125,7 @@ export const WEBCHAT = {
     // TriggerButton
     customTrigger: 'triggerButton.custom',
     triggerButtonImage: 'triggerButton.image',
+    triggerButtonNotificationsEnabled: 'triggerButton.notificationsEnabled',
     triggerButtonStyle: 'triggerButton.style',
     // User Input
     blockInputs: 'userInput.blockInputs',
