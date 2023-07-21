@@ -81,13 +81,10 @@ export class FlowHandoff extends ContentFieldsBase {
     if (this.queue) {
       const availabilityData = await getQueueAvailability(this.queue.id)
       const event = {
-        event_type: EventName.handoffSuccess,
-        event_data: {
-          queue_open: availabilityData.open,
-          available_agents: availabilityData.available_agents > 0,
-          threshold_reached:
-            availabilityData.availability_threshold_waiting_cases > 0,
-        },
+        queue_open: availabilityData.open,
+        available_agents: availabilityData.available_agents > 0,
+        threshold_reached:
+          availabilityData.availability_threshold_waiting_cases > 0,
       }
       await trackEvent(request, EventName.handoffSuccess, event)
 

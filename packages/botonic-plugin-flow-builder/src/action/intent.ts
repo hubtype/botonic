@@ -14,18 +14,15 @@ export async function getNodeByIntent(
 ): Promise<HtNodeWithContent | undefined> {
   const intentNode = cmsApi.getIntentNode(request.input, locale)
   const event = {
-    event_type: EventName.botAiModel,
-    event_data: {
-      intent: request.input.intent as string,
-      confidence: request.input.confidence as number,
-      confidence_successful: true,
-    },
+    intent: request.input.intent as string,
+    confidence: request.input.confidence as number,
+    confidence_successful: true,
   }
   if (isIntentValid(intentNode, request, cmsApi) && intentNode?.target?.id) {
     await trackEvent(request, EventName.botAiModel, event)
     return cmsApi.getNodeById<HtNodeWithContent>(intentNode.target.id)
   } else {
-    event.event_data.confidence_successful = false
+    event.confidence_successful = false
     await trackEvent(request, EventName.botAiModel, event)
     return undefined
   }

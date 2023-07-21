@@ -3,7 +3,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
-import { FlowContent, FlowHandoff, FlowText } from '../content-fields'
+import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import { EventName, trackEvent } from './tracking'
@@ -75,10 +75,7 @@ async function getTargetNode(
 
   if (targetNode) {
     const event = {
-      event_type: EventName.botFaq,
-      event_data: {
-        faq_name: targetNode.code,
-      },
+      faq_name: targetNode.code,
     }
     await trackEvent(request, EventName.botFaq, event)
     return targetNode

@@ -15,10 +15,7 @@ export async function getNodeByKeyword(
     return undefined
   }
   const event = {
-    event_type: EventName.botKeywordsModel,
-    event_data: {
-      confidence_successful: true,
-    },
+    confidence_successful: true,
   }
   await trackEvent(request, EventName.botKeywordsModel, event)
   return keywordNode
