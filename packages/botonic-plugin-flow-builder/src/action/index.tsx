@@ -43,18 +43,11 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     ) as FlowHandoff
     if (handoffContent) await handoffContent.doHandoff(request)
 
-    const contentsWithoutHandoff = contents.filter(content =>
+    const contentsToRender = contents.filter(content =>
       content instanceof FlowHandoff ? false : true
     )
 
-    const contentsWithVariables = contentsWithoutHandoff.map(content => {
-      if (content instanceof FlowText) {
-        content.text = content.replaceVariables(request.session.user.extra_data)
-      }
-      return content
-    })
-
-    return { contents: contentsWithVariables }
+    return { contents: contentsToRender }
   }
 
   render(): JSX.Element | JSX.Element[] {

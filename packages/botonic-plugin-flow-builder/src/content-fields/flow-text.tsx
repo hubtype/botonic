@@ -21,17 +21,23 @@ export class FlowText extends ContentFieldsBase {
     const newText = new FlowText(cmsText.id)
     newText.code = cmsText.code
     newText.buttonStyle = cmsText.content.buttons_style || HtButtonStyle.BUTTON
-    newText.text = this.getTextByLocale(locale, cmsText.content.text)
+    newText.text = this.replaceVariables(
+      this.getTextByLocale(locale, cmsText.content.text),
+      cmsApi.request.session.user.extra_data
+    )
     newText.buttons = cmsText.content.buttons.map(button =>
       FlowButton.fromHubtypeCMS(button, locale, cmsApi)
     )
     return newText
   }
 
-  replaceVariables(extraData?: Record<string, any>): string {
-    const matches = this.text.match(VARIABLE_REGEX)
+  static replaceVariables(
+    text: string,
+    extraData?: Record<string, any>
+  ): string {
+    const matches = text.match(VARIABLE_REGEX)
 
-    let replacedText = this.text
+    let replacedText = text
     if (matches && extraData) {
       matches.forEach(match => {
         const variable = match.slice(1, -1)
