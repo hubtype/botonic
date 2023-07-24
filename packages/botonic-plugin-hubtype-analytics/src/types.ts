@@ -123,6 +123,7 @@ export interface EventHandoffFail extends HtBaseEventProps {
 
 export interface EventDataHandoff {
   queue_open: boolean
+  queue_id: string
   available_agents: boolean
   threshold_reached: boolean
 }
