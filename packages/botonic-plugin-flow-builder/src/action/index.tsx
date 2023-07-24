@@ -8,7 +8,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
-import { FlowContent, FlowHandoff } from '../content-fields'
+import { FlowContent, FlowHandoff, FlowText } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from './tracking'
@@ -43,11 +43,11 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     ) as FlowHandoff
     if (handoffContent) await handoffContent.doHandoff(request)
 
-    const renderContents = contents.filter(content =>
+    const contentsToRender = contents.filter(content =>
       content instanceof FlowHandoff ? false : true
     )
 
-    return { contents: renderContents }
+    return { contents: contentsToRender }
   }
 
   render(): JSX.Element | JSX.Element[] {
@@ -92,8 +92,11 @@ async function getTargetNode(
 }
 
 async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
+  if (!request.session.user.extra_data) {
+    request.session.user.extra_data = { isFirstFallbackOption: true }
+  }
   const isFirstFallbackOption =
-    request.session.user.extra_data.isFirstFallbackOption ?? true
+    !!request.session.user.extra_data.isFirstFallbackOption
   const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
   request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
 

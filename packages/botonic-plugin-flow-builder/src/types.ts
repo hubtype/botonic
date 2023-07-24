@@ -1,4 +1,4 @@
-import { Session } from '@botonic/core'
+import { PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
@@ -20,6 +20,7 @@ export interface FlowBuilderApiOptions {
   url: string
   flow?: HtFlowBuilderData
   accessToken: string
+  request: PluginPreRequest
 }
 
 export enum ProcessEnvNodeEnvs {

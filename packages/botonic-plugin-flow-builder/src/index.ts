@@ -52,6 +52,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       url: this.flowUrl,
       flow: this.flow,
       accessToken: this.getAccessToken(request.session),
+      request: this.currentRequest,
     })
   }
 

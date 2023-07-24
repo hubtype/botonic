@@ -1,4 +1,4 @@
-import { Input } from '@botonic/core'
+import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
 import {
@@ -17,6 +17,7 @@ import { FlowBuilderApiOptions } from './types'
 export class FlowBuilderApi {
   url: string
   flow: HtFlowBuilderData
+  request: PluginPreRequest
 
   private constructor() {}
 
@@ -25,6 +26,7 @@ export class FlowBuilderApi {
 
     newApi.url = options.url
     newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
+    newApi.request = options.request
 
     return newApi
   }
