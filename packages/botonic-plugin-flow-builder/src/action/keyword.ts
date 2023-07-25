@@ -1,12 +1,8 @@
-import {
-  EventBotKeywordModel,
-  EventName,
-} from '@botonic/plugin-hubtype-analytics/lib/cjs/types'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
-import { trackEvent } from './tracking'
+import { EventName, trackEvent } from './tracking'
 
 export async function getNodeByKeyword(
   cmsApi: FlowBuilderApi,
@@ -18,12 +14,9 @@ export async function getNodeByKeyword(
   if (!keywordNode) {
     return undefined
   }
-  const eventBotKeywordModel: EventBotKeywordModel = {
-    event_type: EventName.botKeywordsModel,
-    event_data: {
-      confidence_successful: true,
-    },
+  const eventArgs = {
+    confidence_successful: true,
   }
-  await trackEvent(request, eventBotKeywordModel)
+  await trackEvent(request, EventName.botKeywordsModel, eventArgs)
   return keywordNode
 }
