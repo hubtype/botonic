@@ -74,10 +74,10 @@ async function getTargetNode(
     : (cmsApi.getNodeById(contentId) as HtNodeWithContent)
 
   if (targetNode) {
-    const event = {
+    const eventArgs = {
       faq_name: targetNode.code,
     }
-    await trackEvent(request, EventName.botFaq, event)
+    await trackEvent(request, EventName.botFaq, eventArgs)
     return targetNode
   }
   return await getFallbackNode(cmsApi, request)

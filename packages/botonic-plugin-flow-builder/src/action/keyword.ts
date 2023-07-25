@@ -14,9 +14,9 @@ export async function getNodeByKeyword(
   if (!keywordNode) {
     return undefined
   }
-  const event = {
+  const eventArgs = {
     confidence_successful: true,
   }
-  await trackEvent(request, EventName.botKeywordsModel, event)
+  await trackEvent(request, EventName.botKeywordsModel, eventArgs)
   return keywordNode
 }
