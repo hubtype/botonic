@@ -39,12 +39,18 @@ export interface EventAgentRating extends HtBaseEventProps {
   event_type: EventName.botAgentRating
   event_data: EventDataRating
 }
-export interface EventChannelRating extends HtBaseEventProps {
-  event_type: EventName.botChannelRating
-  event_data: EventDataRating
-}
 
 export interface EventDataRating {
+  case_id: string
+  rating?: number
+  commnent?: string
+}
+export interface EventChannelRating extends HtBaseEventProps {
+  event_type: EventName.botChannelRating
+  event_data: EventDataChannelRating
+}
+
+export interface EventDataChannelRating {
   rating: number
 }
 
