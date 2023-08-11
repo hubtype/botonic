@@ -7,7 +7,7 @@ import {
 } from '@botonic/core'
 
 import { HubtypeBabelApiService } from './hubtype-babel-api-service'
-import { PluginOptions } from './options'
+import { PluginHubtypeBabelOptions } from './options'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -16,7 +16,7 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
   private readonly includeHasSense: boolean
   readonly automaticBotMessagePrefix: string
 
-  constructor(private readonly options: PluginOptions) {
+  constructor(private readonly options: PluginHubtypeBabelOptions) {
     this.apiService = new HubtypeBabelApiService(
       options.projectId,
       options.host
@@ -79,3 +79,5 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
 
   async post(_request: PluginPostRequest) {}
 }
+
+export { PluginHubtypeBabelOptions } from './options'

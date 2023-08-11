@@ -1,4 +1,4 @@
-export interface PluginOptions {
+export interface PluginHubtypeBabelOptions {
   projectId: string
   authToken?: string
   host?: string

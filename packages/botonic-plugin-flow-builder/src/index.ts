@@ -153,4 +153,5 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 }
 
 export * from './action'
+export * from './content-fields'
 export { BotonicPluginFlowBuilderOptions } from './types'
