@@ -169,6 +169,13 @@ export interface ThemeProps extends StyleProp {
     sendButton?: EnableProp & CustomProp
   } & EnableProp &
     StyleProp
+  imagePreviewer?: React.ComponentType<ImagePreviewerProps>
+}
+
+interface ImagePreviewerProps {
+  src: string
+  isPreviewerOpened: boolean
+  closePreviewer: () => void
 }
 
 export interface CoverComponentOptions {
