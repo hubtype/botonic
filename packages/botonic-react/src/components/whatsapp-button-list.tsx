@@ -14,7 +14,7 @@ export interface WhatsappButtonListSectionProps {
 export interface WhatsappButtonListRowProps {
   id: string
   title: string
-  description: string
+  description?: string
 }
 
 export interface WhatsappButtonListProps {
