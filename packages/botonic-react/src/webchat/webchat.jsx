@@ -496,8 +496,10 @@ export const Webchat = forwardRef((props, ref) => {
         from: SENDERS.user,
         src: temporaryDisplayUrl,
       }
-      if (isImage(input)) messageComponent = <Image {...mediaProps} />
-      else if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
+      if (isImage(input)) {
+        mediaProps.input = input
+        messageComponent = <Image {...mediaProps} />
+      } else if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
       else if (isVideo(input)) messageComponent = <Video {...mediaProps} />
       else if (isDocument(input))
         messageComponent = <Document {...mediaProps} />

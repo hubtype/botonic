@@ -20,7 +20,9 @@ const serialize = imageProps => {
 }
 
 export const Image = props => {
-  props = { ...props, src: staticAsset(props.src) }
+  props = props.input?.data
+    ? { ...props, src: props.input.data }
+    : { ...props, src: staticAsset(props.src) }
   let content = props.children
 
   const [isPreviewerOpened, setIsPreviewerOpened] = useState(false)
