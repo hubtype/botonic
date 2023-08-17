@@ -153,6 +153,12 @@ export const MultichannelText = props => {
 
       const messages = messagesPostbackButtonList.map(
         (postbackButtons, index) => {
+          if (postbackButtons.length < 4) {
+            return {
+              type: INPUT.TEXT,
+              children: [...buttonsTextSeparator, ...postbackButtons],
+            }
+          }
           const rows = postbackButtons.map(postbackButton => {
             const row = {
               id: postbackButton.props.payload,
@@ -174,13 +180,21 @@ export const MultichannelText = props => {
       )
 
       const messageWithUrlButtonElements = (
-        <Text key={0} {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
+        <Text
+          key={`msg-with-url-button`}
+          {...MULTICHANNEL_WHATSAPP_PROPS}
+          {...props}
+        >
           {urlButtonElements}
         </Text>
       )
 
       const messageWithWebviewButtonElements = (
-        <Text key={1} {...MULTICHANNEL_WHATSAPP_PROPS} {...props}>
+        <Text
+          key={`msg-with-webview-button`}
+          {...MULTICHANNEL_WHATSAPP_PROPS}
+          {...props}
+        >
           {buttonsTextSeparator}
           {webviewButtonElements}
         </Text>
@@ -188,9 +202,24 @@ export const MultichannelText = props => {
 
       return (
         <>
-          {messages.map((message, i) => (
-            <WhatsappButtonList key={`whatsappList-${i}`} {...message.props} />
-          ))}
+          {messages.map((message, i) => {
+            if (message.type === INPUT.WHATSAPP_BUTTON_LIST)
+              return (
+                <WhatsappButtonList
+                  key={`msg-${i}-whatsapp-list`}
+                  {...message.props}
+                />
+              )
+            return (
+              <Text
+                key={`msg-${i}-with-postback-buttons`}
+                {...MULTICHANNEL_WHATSAPP_PROPS}
+                {...props}
+              >
+                {message.children}
+              </Text>
+            )
+          })}
           {urlButtonElements.length ? messageWithUrlButtonElements : null}
           {webviewButtonElements.length
             ? messageWithWebviewButtonElements
