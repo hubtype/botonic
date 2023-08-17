@@ -81,7 +81,7 @@ export const MultichannelText = props => {
       const asText =
         type === buttonTypes.POSTBACK ? postbackButtonsAsText : true
       const newline =
-        multichannelContext.messageSeparator == null &&
+        multichannelContext.messageSeparator === null &&
         !newLineFirstButton &&
         i === 0
           ? ''
@@ -161,9 +161,12 @@ export const MultichannelText = props => {
           }
           const rows = postbackButtons.map(postbackButton => {
             const row = {
-              id: postbackButton.props.payload,
+              id: postbackButton.props.path
+                ? `__PATH_PAYLOAD__${postbackButton.props.path}`
+                : postbackButton.props.payload,
               title: postbackButton.props.children,
             }
+            console.log({ row })
             return row
           })
           const whatsbuttonlistProps = {
