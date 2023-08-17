@@ -24,7 +24,7 @@ export const resolveImage = src => {
 
 export const isURL = urlPath => {
   // @stephenhay (38 chars) from: https://mathiasbynens.be/demo/url-regex
-  const pattern = new RegExp(/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/)
+  const pattern = new RegExp(/^(blob:)?(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/)
   return !!pattern.test(urlPath)
 }
 
