@@ -22,32 +22,15 @@ exports[`Multichannel text display URL buttons as text even if buttonsAsText is 
 exports[`Multichannel text display custom text as button separator when more than 3 buttons in message 1`] = `
 [
   <message
-    buttonsAsText={0}
-    buttonsTextSeparator="Custom message"
-    delay={0}
-    markdown={0}
-    type="text"
-    typing={0}
-  >
-    The verbose text
-    
-- button text2: http://adrss
-    <button
-      payload="payload1"
-    >
-      button text1
-    </button>
-    <button
-      payload="__PATH_PAYLOAD__path"
-    >
-      button text3
-    </button>
-    <button
-      payload="payload2"
-    >
-      button with text ...
-    </button>
-  </message>,
+    body={
+      [
+        "The verbose text",
+      ]
+    }
+    button="Menu"
+    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"},{"id":"payload4","title":"button text5"}]}]"
+    type="whatsapp-button-list"
+  />,
   <message
     buttonsAsText={0}
     buttonsTextSeparator="Custom message"
@@ -56,12 +39,8 @@ exports[`Multichannel text display custom text as button separator when more tha
     type="text"
     typing={0}
   >
-    Custom message
-    <button
-      payload="payload3"
-    >
-      button text5
-    </button>
+    
+- button text2: http://adrss
   </message>,
   <message
     buttonsAsText={0}
@@ -118,31 +97,15 @@ exports[`Multichannel text just text 1`] = `
 exports[`Multichannel text split messages with more than 3 postback buttons into separate messages (without webview buttons) 1`] = `
 [
   <message
-    buttonsAsText={0}
-    delay={0}
-    markdown={0}
-    type="text"
-    typing={0}
-  >
-    The verbose text
-    
-- button text2: http://adrss
-    <button
-      payload="payload1"
-    >
-      button text1
-    </button>
-    <button
-      payload="__PATH_PAYLOAD__path"
-    >
-      button text3
-    </button>
-    <button
-      payload="payload2"
-    >
-      button with text ...
-    </button>
-  </message>,
+    body={
+      [
+        "The verbose text",
+      ]
+    }
+    button="Menu"
+    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"}]}]"
+    type="whatsapp-button-list"
+  />,
   <message
     buttonsAsText={0}
     delay={0}
@@ -150,12 +113,7 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
     type="text"
     typing={0}
   >
-    More options:
-    <button
-      payload="payload3"
-    >
-      button text5
-    </button>
+    \n- button text2: http://adrss
   </message>,
 ]
 `;
@@ -163,31 +121,15 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
 exports[`Multichannel text split messages with more than 3 postback buttons into separate messages 1`] = `
 [
   <message
-    buttonsAsText={0}
-    delay={0}
-    markdown={0}
-    type="text"
-    typing={0}
-  >
-    The verbose text
-    
-- button text2: http://adrss
-    <button
-      payload="payload1"
-    >
-      button text1
-    </button>
-    <button
-      payload="__PATH_PAYLOAD__path"
-    >
-      button text3
-    </button>
-    <button
-      payload="payload2"
-    >
-      button with text ...
-    </button>
-  </message>,
+    body={
+      [
+        "The verbose text",
+      ]
+    }
+    button="Menu"
+    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"}]}]"
+    type="whatsapp-button-list"
+  />,
   <message
     buttonsAsText={0}
     delay={0}
@@ -195,12 +137,7 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
     type="text"
     typing={0}
   >
-    More options:
-    <button
-      payload="payload3"
-    >
-      button text5
-    </button>
+    \n- button text2: http://adrss
   </message>,
   <message
     buttonsAsText={0}
