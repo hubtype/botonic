@@ -2,7 +2,7 @@
 
 ## What Does This Plugin Do?
 
-Botonic Plugin Flow Builder is one of the **[available](https://github.com/hubtype/botonic/tree/master/packages)** plugins for Botonic.
+Botonic Plugin Flow Builder is one of the **[available](https://github.com/hubtype/botonic/tree/master-lts/packages)** plugins for Botonic.
 
 Flow Builder is a no-code, drag-and-drop chatbot builder that makes the process of creating and editing chatbot journeys faster and more intuitive.
 From [Hubtype](https://www.hubtype.com/) we offer a suite of tools and features that let you build, test and deploy both automated and agent-based journeys at scale. This plugin allows you to connect to our Flow Builder.
