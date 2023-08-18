@@ -284,7 +284,6 @@ describe('Multichannel text', () => {
     )
     const renderer = whatsappRenderer(sut, CONTEXT_WITH_BUTTONS_CUSTOM)
     const tree = renderer.toJSON()
-    // console.log(tree)
     expect(tree).toMatchSnapshot()
   })
 })

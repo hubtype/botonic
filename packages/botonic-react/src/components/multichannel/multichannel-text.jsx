@@ -166,7 +166,6 @@ export const MultichannelText = props => {
                 : postbackButton.props.payload,
               title: postbackButton.props.children,
             }
-            console.log({ row })
             return row
           })
           const whatsbuttonlistProps = {
