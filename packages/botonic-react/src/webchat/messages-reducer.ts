@@ -1,5 +1,5 @@
-import { WebchatState } from '.'
 import { WebchatAction } from './actions'
+import { WebchatState } from './index-types'
 
 export const messagesReducer = (
   state: WebchatState,
