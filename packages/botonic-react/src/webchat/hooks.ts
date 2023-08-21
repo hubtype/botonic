@@ -1,35 +1,14 @@
+import { Input } from '@botonic/core'
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 
 import { COLORS, WEBCHAT } from '../constants'
+import { WebchatMessage } from '../index-types'
 import { scrollToBottom } from '../util/dom'
-import {
-  ADD_MESSAGE,
-  ADD_MESSAGE_COMPONENT,
-  CLEAR_MESSAGES,
-  DO_RENDER_CUSTOM_COMPONENT,
-  SET_CURRENT_ATTACHMENT,
-  SET_ERROR,
-  SET_ONLINE,
-  TOGGLE_COVER_COMPONENT,
-  TOGGLE_EMOJI_PICKER,
-  TOGGLE_PERSISTENT_MENU,
-  TOGGLE_WEBCHAT,
-  UPDATE_DEV_SETTINGS,
-  UPDATE_HANDOFF,
-  UPDATE_JWT,
-  UPDATE_LAST_MESSAGE_DATE,
-  UPDATE_LAST_ROUTE_PATH,
-  UPDATE_LATEST_INPUT,
-  UPDATE_MESSAGE,
-  UPDATE_REPLIES,
-  UPDATE_SESSION,
-  UPDATE_THEME,
-  UPDATE_TYPING,
-  UPDATE_WEBVIEW,
-} from './actions'
+import { WebchatAction } from './actions'
+import { DevSettings, ErrorMessage, WebchatState } from './index-types'
 import { webchatReducer } from './webchat-reducer'
 
-export const webchatInitialState = {
+export const webchatInitialState: WebchatState = {
   width: WEBCHAT.DEFAULTS.WIDTH,
   height: WEBCHAT.DEFAULTS.HEIGHT,
   messagesJSON: [],
@@ -39,7 +18,7 @@ export const webchatInitialState = {
   typing: false,
   webview: null,
   webviewParams: null,
-  session: { user: null },
+  session: { user: undefined },
   lastRoutePath: null,
   handoff: false,
   theme: {
@@ -63,7 +42,7 @@ export const webchatInitialState = {
   isCustomComponentRendered: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
-  jwt: null,
+  jwt: undefined,
   unreadMessages: 0,
 }
 
@@ -72,147 +51,179 @@ export function useWebchat() {
     webchatReducer,
     webchatInitialState
   )
-  const addMessage = message =>
-    webchatDispatch({ type: ADD_MESSAGE, payload: message })
-  const addMessageComponent = message =>
-    webchatDispatch({ type: ADD_MESSAGE_COMPONENT, payload: message })
-  const updateMessage = message =>
-    webchatDispatch({ type: UPDATE_MESSAGE, payload: message })
+
+  const addMessage = (message: WebchatMessage) =>
+    webchatDispatch({ type: WebchatAction.ADD_MESSAGE, payload: message })
+
+  const addMessageComponent = (message: WebchatMessage) =>
+    webchatDispatch({
+      type: WebchatAction.ADD_MESSAGE_COMPONENT,
+      payload: message,
+    })
+
+  const updateMessage = (message: WebchatMessage) =>
+    webchatDispatch({ type: WebchatAction.UPDATE_MESSAGE, payload: message })
+
   const updateReplies = replies =>
-    webchatDispatch({ type: UPDATE_REPLIES, payload: replies })
-  const updateLatestInput = input =>
-    webchatDispatch({ type: UPDATE_LATEST_INPUT, payload: input })
-  const updateTyping = typing =>
-    webchatDispatch({ type: UPDATE_TYPING, payload: typing })
+    webchatDispatch({ type: WebchatAction.UPDATE_REPLIES, payload: replies })
+
+  const updateLatestInput = (input: Input) =>
+    webchatDispatch({ type: WebchatAction.UPDATE_LATEST_INPUT, payload: input })
+
+  const updateTyping = (typing: boolean) =>
+    webchatDispatch({ type: WebchatAction.UPDATE_TYPING, payload: typing })
+
   const updateWebview = (webview, params) =>
     webchatDispatch({
-      type: UPDATE_WEBVIEW,
+      type: WebchatAction.UPDATE_WEBVIEW,
       payload: { webview, webviewParams: params },
     })
+
   const updateSession = session => {
     webchatDispatch({
-      type: UPDATE_SESSION,
+      type: WebchatAction.UPDATE_SESSION,
       payload: session,
     })
   }
 
-  const updateLastRoutePath = path =>
+  const updateLastRoutePath = (path: string) =>
     webchatDispatch({
-      type: UPDATE_LAST_ROUTE_PATH,
+      type: WebchatAction.UPDATE_LAST_ROUTE_PATH,
       payload: path,
     })
-  const updateHandoff = handoff =>
+
+  const updateHandoff = (handoff: boolean) =>
     webchatDispatch({
-      type: UPDATE_HANDOFF,
+      type: WebchatAction.UPDATE_HANDOFF,
       payload: handoff,
     })
+
   const updateTheme = (theme, themeUpdates = undefined) => {
     const payload =
       themeUpdates !== undefined ? { theme, themeUpdates } : { theme }
     webchatDispatch({
-      type: UPDATE_THEME,
+      type: WebchatAction.UPDATE_THEME,
       payload,
     })
   }
-  const updateDevSettings = settings =>
+
+  const updateDevSettings = (settings: DevSettings) =>
     webchatDispatch({
-      type: UPDATE_DEV_SETTINGS,
+      type: WebchatAction.UPDATE_DEV_SETTINGS,
       payload: settings,
     })
 
-  const toggleWebchat = toggle => {
+  const toggleWebchat = (toggle: boolean) => {
     webchatDispatch({
-      type: TOGGLE_WEBCHAT,
+      type: WebchatAction.TOGGLE_WEBCHAT,
       payload: toggle,
     })
   }
 
-  const toggleEmojiPicker = toggle =>
+  const toggleEmojiPicker = (toggle: boolean) =>
     webchatDispatch({
-      type: TOGGLE_EMOJI_PICKER,
+      type: WebchatAction.TOGGLE_EMOJI_PICKER,
       payload: toggle,
     })
-  const togglePersistentMenu = toggle =>
+
+  const togglePersistentMenu = (toggle: boolean) =>
     webchatDispatch({
-      type: TOGGLE_PERSISTENT_MENU,
+      type: WebchatAction.TOGGLE_PERSISTENT_MENU,
       payload: toggle,
     })
-  const toggleCoverComponent = toggle =>
+
+  const toggleCoverComponent = (toggle: boolean) =>
     webchatDispatch({
-      type: TOGGLE_COVER_COMPONENT,
+      type: WebchatAction.TOGGLE_COVER_COMPONENT,
       payload: toggle,
     })
-  const doRenderCustomComponent = toggle =>
+
+  const doRenderCustomComponent = (toggle: boolean) =>
     webchatDispatch({
-      type: DO_RENDER_CUSTOM_COMPONENT,
+      type: WebchatAction.DO_RENDER_CUSTOM_COMPONENT,
       payload: toggle,
     })
-  const setError = error =>
+
+  const setError = (error: ErrorMessage) =>
     webchatDispatch({
-      type: SET_ERROR,
+      type: WebchatAction.SET_ERROR,
       payload: error,
     })
-  const setOnline = online =>
+
+  const setOnline = (online: boolean) =>
     webchatDispatch({
-      type: SET_ONLINE,
+      type: WebchatAction.SET_ONLINE,
       payload: online,
     })
 
   const clearMessages = () => {
     webchatDispatch({
-      type: CLEAR_MESSAGES,
+      type: WebchatAction.CLEAR_MESSAGES,
     })
   }
-  const updateLastMessageDate = date => {
+
+  const updateLastMessageDate = (date: string) => {
     webchatDispatch({
-      type: UPDATE_LAST_MESSAGE_DATE,
+      type: WebchatAction.UPDATE_LAST_MESSAGE_DATE,
       payload: date,
     })
   }
+
   const setCurrentAttachment = attachment => {
     webchatDispatch({
-      type: SET_CURRENT_ATTACHMENT,
+      type: WebchatAction.SET_CURRENT_ATTACHMENT,
       payload: attachment,
     })
   }
 
-  const updateJwt = jwt => {
+  const updateJwt = (jwt: string) => {
     webchatDispatch({
-      type: UPDATE_JWT,
+      type: WebchatAction.UPDATE_JWT,
       payload: jwt,
     })
   }
 
   return {
-    webchatState,
-    webchatDispatch,
     addMessage,
     addMessageComponent,
-    updateMessage,
-    updateReplies,
-    updateLatestInput,
-    updateTyping,
-    updateWebview,
-    updateSession,
-    updateLastRoutePath,
-    updateHandoff,
-    updateTheme,
-    updateDevSettings,
-    toggleWebchat,
-    toggleEmojiPicker,
-    togglePersistentMenu,
-    toggleCoverComponent,
+    clearMessages,
     doRenderCustomComponent,
+    setCurrentAttachment,
     setError,
     setOnline,
-    clearMessages,
-    updateLastMessageDate,
-    setCurrentAttachment,
+    toggleCoverComponent,
+    toggleEmojiPicker,
+    togglePersistentMenu,
+    toggleWebchat,
+    updateDevSettings,
+    updateHandoff,
     updateJwt,
+    updateLastMessageDate,
+    updateLastRoutePath,
+    updateLatestInput,
+    updateMessage,
+    updateReplies,
+    updateSession,
+    updateTheme,
+    updateTyping,
+    updateWebview,
+    webchatDispatch,
+    webchatState,
   }
 }
+interface UseTyping {
+  webchatState: WebchatState
+  updateTyping: (typing: boolean) => void
+  updateMessage: (message: any) => void
+  host: any
+}
 
-export function useTyping({ webchatState, updateTyping, updateMessage, host }) {
+export function useTyping({
+  webchatState,
+  updateTyping,
+  updateMessage,
+  host,
+}: UseTyping): void {
   useEffect(() => {
     let delayTimeout, typingTimeout
     scrollToBottom({ host })
@@ -246,9 +257,18 @@ export function usePrevious(value) {
   return ref.current
 }
 
-export function useComponentVisible(initialIsVisible, onClickOutside) {
+interface ComponentVisible {
+  ref: React.RefObject<HTMLElement>
+  isComponentVisible: boolean
+  setIsComponentVisible: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export function useComponentVisible(
+  initialIsVisible: boolean,
+  onClickOutside: () => void
+): ComponentVisible {
   const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible)
-  const ref = useRef(null)
+  const ref = useRef<HTMLElement>(null)
   const handleClickOutside = event => {
     const target = event.path ? event.path[0] : event.target
     if (ref.current && !ref.current.contains(target)) {
