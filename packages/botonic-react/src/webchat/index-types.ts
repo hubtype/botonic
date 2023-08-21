@@ -17,6 +17,14 @@ export interface WebchatStateTheme {
   }
 }
 
+export interface ErrorMessage {
+  message?: string
+}
+export interface DevSettings {
+  keepSessionOnReload?: boolean
+  showSessionView?: boolean
+}
+
 export interface WebchatState {
   width: number
   height: number
@@ -32,14 +40,18 @@ export interface WebchatState {
   handoff: boolean
   theme: WebchatStateTheme
   themeUpdates: Partial<WebchatStateTheme>
-  error: { message?: string }
-  devSettings: { keepSessionOnReload?: boolean; showSessionView?: boolean }
+  error: ErrorMessage
+  online: boolean
+  devSettings: DevSettings
   isWebchatOpen: boolean
   isEmojiPickerOpen: boolean
   isPersistentMenuOpen: boolean
   isCoverComponentOpen: boolean
-  lastMessageUpdate: string
+  isCustomComponentRendered: boolean
+  lastMessageUpdate?: string
   currentAttachment: File | undefined
+  jwt?: string
+  unreadMessages: number
 }
 
 // export interface WebchatProps extends WebchatArgs {

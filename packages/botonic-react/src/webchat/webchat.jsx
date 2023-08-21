@@ -165,7 +165,6 @@ export const Webchat = forwardRef((props, ref) => {
     setOnline,
     clearMessages,
     openWebviewT,
-    closeWebviewT,
     updateLastMessageDate,
     setCurrentAttachment,
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -846,21 +845,21 @@ export const Webchat = forwardRef((props, ref) => {
   const WebchatComponent = (
     <WebchatContext.Provider
       value={{
-        sendText,
-        sendAttachment,
-        sendPayload,
-        sendInput,
+        addMessage,
+        getThemeProperty,
         openWebview,
         resolveCase,
-        webchatState,
-        getThemeProperty,
-        addMessage,
+        sendAttachment,
+        sendInput,
+        sendPayload,
+        sendText,
         toggleWebchat,
+        updateLatestInput,
         updateMessage,
         updateReplies,
-        updateLatestInput,
         updateUser: updateSessionWithUser,
         updateWebchatDevSettings: updateWebchatDevSettings,
+        webchatState,
       }}
     >
       {!webchatState.isWebchatOpen && <TriggerButton />}

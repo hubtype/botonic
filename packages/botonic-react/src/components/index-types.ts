@@ -128,7 +128,7 @@ export interface ThemeProps extends StyleProp {
   } & StyleProp & {
       timestamps?: {
         enable?: boolean
-        format(): string
+        format: () => string
       } & StyleProp
     }
   button?: {
