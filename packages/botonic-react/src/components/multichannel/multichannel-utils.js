@@ -11,7 +11,7 @@ export const WHATSAPP_MAX_BUTTONS = 3
 export const WHATSAPP_LIST_MAX_BUTTONS = 10
 export const WHATSAPP_MAX_BUTTON_CHARS = 20
 export const DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR = 'More options:'
-export const MENU_BUTOON_WHATSAPP_BUTTON_LIST = 'Menu'
+export const MENU_BUTTON_WHATSAPP_BUTTON_LIST = 'Menu'
 
 export function isMultichannelButton(node) {
   return isNodeKind(node, 'MultichannelButton')

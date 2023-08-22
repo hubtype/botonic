@@ -18,7 +18,7 @@ import {
   getMultichannelReplies,
   isFacebook,
   isWhatsapp,
-  MENU_BUTOON_WHATSAPP_BUTTON_LIST,
+  MENU_BUTTON_WHATSAPP_BUTTON_LIST,
   MULTICHANNEL_WHATSAPP_PROPS,
   WHATSAPP_LIST_MAX_BUTTONS,
   WHATSAPP_MAX_BUTTONS,
@@ -138,7 +138,7 @@ export const MultichannelText = props => {
       postbackButtons.length > WHATSAPP_MAX_BUTTONS
     ) {
       const menuButtonTextWhatsappList =
-        props.menuButtonTextWhatsappList || MENU_BUTOON_WHATSAPP_BUTTON_LIST
+        props.menuButtonTextWhatsappList || MENU_BUTTON_WHATSAPP_BUTTON_LIST
 
       const urlButtonElements = urlButtons.map(
         regenerateMultichannelButtons(!!texts.length)
