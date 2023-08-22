@@ -1,6 +1,7 @@
 import BotonicPluginDynamoDB, { DynamoDbOptions, Env } from '../../src'
 import { Track, UserEvent } from '../../src/domain'
 import time from '../../src/domain/time'
+// eslint-disable-next-line import/named
 import { Track as DynamoTrack } from '../../src/infrastructure/track'
 
 test('TEST: Track serialization', () => {

@@ -24,8 +24,10 @@ test('TEST: ErrorReportingCMS write rejected', async (done: DoneCallback) => {
       return
     })
     .catch(error2 => {
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(error2).toBeInstanceOf(TrackException)
       const trackException = error2 as TrackException
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(trackException.reason).toBe(error)
       done()
     })
