@@ -153,7 +153,7 @@ export const MultichannelText = props => {
 
       const messages = messagesPostbackButtonList.map(
         (postbackButtons, index) => {
-          if (postbackButtons.length < 4) {
+          if (postbackButtons.length <= WHATSAPP_MAX_BUTTONS) {
             return {
               type: INPUT.TEXT,
               children: [...buttonsTextSeparator, ...postbackButtons],
