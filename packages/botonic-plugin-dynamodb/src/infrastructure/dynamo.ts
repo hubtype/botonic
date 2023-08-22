@@ -3,6 +3,7 @@ import { UpdateItemInput } from 'aws-sdk/clients/dynamodb'
 
 import * as domain from '../domain'
 import { Env } from './config'
+// eslint-disable-next-line import/named
 import { TABLE_NAME, Track } from './track'
 import DynamoDB = require('aws-sdk/clients/dynamodb')
 
