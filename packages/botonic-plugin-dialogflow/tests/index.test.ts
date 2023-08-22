@@ -16,9 +16,11 @@ it('Pre response is rejected when using fake credentials', async () => {
   }
 
   const request: BotRequest = {
+    // @ts-ignore
     input: { data: 'hi', payload: 'payload', type: 'audio' },
     session: {
       bot: { id: 'test' },
+      // @ts-ignore
       user: { id: 'user1', provider: 'dev' },
       is_first_interaction: true,
       __retries: 0,
