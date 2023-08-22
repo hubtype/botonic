@@ -1,11 +1,13 @@
-import { INPUT } from '@botonic/core'
+import { INPUT, Input as CoreInput } from '@botonic/core'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { WEBCHAT } from '../../../constants'
 import { WebchatContext } from '../../../contexts'
 
-export const useTextarea = (onUserInput, webchatState, sendInput) => {
+export const useTextarea = onUserInput => {
+  const { sendInput, webchatState } = useContext(WebchatContext)
+
   const [value, setValue] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -80,7 +82,7 @@ export const useTextarea = (onUserInput, webchatState, sendInput) => {
   const sendTextAreaText = async () => {
     if (!value) return
     const input = { type: INPUT.TEXT, data: value, payload: undefined }
-    await sendInput(input)
+    await sendInput(input as CoreInput)
     setValue('')
   }
 

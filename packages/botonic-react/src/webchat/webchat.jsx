@@ -593,7 +593,7 @@ export const Webchat = forwardRef((props, ref) => {
   const withPaddingLeft = persistentMenuOptions || false
 
   const { handleAddEmoji, sendTextAreaText, textareaFocus, ...textareaProps } =
-    useTextarea(props.onUserInput, webchatState, sendInput)
+    useTextarea(props.onUserInput)
 
   const handleSelectedEmoji = event => {
     handleAddEmoji(event.emoji)
