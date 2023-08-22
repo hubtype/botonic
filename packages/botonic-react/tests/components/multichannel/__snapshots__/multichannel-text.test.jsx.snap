@@ -27,7 +27,7 @@ exports[`Multichannel text display custom text as button separator when more tha
         "The verbose text",
       ]
     }
-    button="Menu"
+    button="Show options"
     sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"},{"id":"payload4","title":"button text5"}]}]"
     type="whatsapp-button-list"
   />,
@@ -102,7 +102,7 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
         "The verbose text",
       ]
     }
-    button="Menu"
+    button="Show options"
     sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"}]}]"
     type="whatsapp-button-list"
   />,
@@ -126,7 +126,7 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
         "The verbose text",
       ]
     }
-    button="Menu"
+    button="Show options"
     sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"}]}]"
     type="whatsapp-button-list"
   />,
