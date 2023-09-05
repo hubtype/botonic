@@ -7,6 +7,7 @@ import {
   HtIntentNode,
   HtKeywordNode,
   HtNodeComponent,
+  HtNodeLink,
   HtNodeStartType,
   HtNodeWithContent,
   HtNodeWithContentType,
@@ -78,6 +79,21 @@ export class FlowBuilderApi {
     return alternate
       ? this.getNodeById(fallbackFirstMessage.id)
       : this.getNodeById(fallbackSecondMessage.id)
+  }
+
+  getKnowledgeBaseNode():
+    | { followup?: HtNodeLink; isActive: boolean }
+    | undefined {
+    const fallbackNode = this.flow.nodes.find(
+      node => node.type === HtNodeWithContentType.FALLBACK
+    ) as HtFallbackNode | undefined
+
+    return fallbackNode
+      ? {
+          followup: fallbackNode.content.knowledge_base_followup,
+          isActive: fallbackNode.content.is_knowledge_base_active || false,
+        }
+      : undefined
   }
 
   getIntentNode(input: Input, locale: string): HtIntentNode | undefined {
