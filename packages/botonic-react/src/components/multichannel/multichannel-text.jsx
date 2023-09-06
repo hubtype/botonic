@@ -86,9 +86,7 @@ export const MultichannelText = props => {
         i === 0
           ? ''
           : '\n'
-      if (type !== buttonTypes.POSTBACK && multichannelButton.props.payload) {
-        delete multichannelButton.props.payload
-      }
+
       return (
         <MultichannelButton
           key={`${type}${i}`}

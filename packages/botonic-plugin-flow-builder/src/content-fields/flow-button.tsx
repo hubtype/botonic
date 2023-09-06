@@ -68,7 +68,9 @@ export class FlowButton extends ContentFieldsBase {
     )
   }
 
-  private getButtonPayload(buttonIndex: number): string {
-    return `${this.payload}${SOURCE_INFO_SEPARATOR}${buttonIndex}`
+  private getButtonPayload(buttonIndex: number): string | undefined {
+    return this.payload
+      ? `${this.payload}${SOURCE_INFO_SEPARATOR}${buttonIndex}`
+      : undefined
   }
 }
