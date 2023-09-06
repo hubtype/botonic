@@ -9,7 +9,7 @@ import { getFlowBuilderPlugin } from '../helpers'
 import { EventName, trackEvent } from './tracking'
 import { getNodeByUserInput } from './user-input'
 
-type FlowBuilderActionProps = {
+export type FlowBuilderActionProps = {
   contents: FlowContent[]
 }
 
