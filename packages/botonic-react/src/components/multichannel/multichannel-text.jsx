@@ -81,7 +81,7 @@ export const MultichannelText = props => {
       const asText =
         type === buttonTypes.POSTBACK ? postbackButtonsAsText : true
       const newline =
-        multichannelContext.messageSeparator === null &&
+        multichannelContext.messageSeparator == null &&
         !newLineFirstButton &&
         i === 0
           ? ''
@@ -113,7 +113,6 @@ export const MultichannelText = props => {
     return messages
   }
 
-  // START WHATSAPP LOGIC
   if (isWhatsapp(requestContext)) {
     const texts = getText(props.children)
     const { postbackButtons, urlButtons, webviewButtons } = getWhatsappButtons()
@@ -130,11 +129,10 @@ export const MultichannelText = props => {
     const buttonsTextSeparator =
       props.buttonsTextSeparator || DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR
 
-    //MORE THAN 3 BUTTONS
-    if (
-      !postbackButtonsAsText &&
-      postbackButtons.length > WHATSAPP_MAX_BUTTONS
-    ) {
+    const exceedWhatsAppMaxButtonNumber =
+      !postbackButtonsAsText && postbackButtons.length > WHATSAPP_MAX_BUTTONS
+
+    if (exceedWhatsAppMaxButtonNumber) {
       const menuButtonTextWhatsappList =
         props.menuButtonTextWhatsappList || MENU_BUTTON_WHATSAPP_BUTTON_LIST
 
@@ -220,14 +218,11 @@ export const MultichannelText = props => {
               </Text>
             )
           })}
-          {urlButtonElements.length ? messageWithUrlButtonElements : null}
-          {webviewButtonElements.length
-            ? messageWithWebviewButtonElements
-            : null}
+          {urlButtonElements.length > 0 && messageWithUrlButtonElements}
+          {webviewButtonElements.length > 0 && messageWithWebviewButtonElements}
         </>
       )
     }
-    // END LOGIC WHATSAPP WITH MORE THAN 3 BUTTONS
 
     multichannelContext.currentIndex = getDefaultIndex()
     const postbackButtonElements = postbackButtons.map(
@@ -261,9 +256,7 @@ export const MultichannelText = props => {
 
     return <>{messages}</>
   }
-  // END WHATSAPP LOGIC
 
-  // START FACEBOOK LOGIC
   if (isFacebook(requestContext)) {
     const text = getText(props.children)
     const multichannelFacebook = new MultichannelFacebook()
