@@ -1,13 +1,12 @@
 import { Input, Session } from '@botonic/core'
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useReducer } from 'react'
 
-import { ThemeProps, Webview } from '../components/index-types'
-import { COLORS, WEBCHAT } from '../constants'
-import { WebchatMessage } from '../index-types'
-import { scrollToBottom } from '../util/dom'
-import { WebchatAction } from './actions'
-import { DevSettings, ErrorMessage, WebchatState } from './index-types'
-import { webchatReducer } from './webchat-reducer'
+import { ThemeProps, Webview } from '../../components/index-types'
+import { COLORS, WEBCHAT } from '../../constants'
+import { WebchatMessage } from '../../index-types'
+import { WebchatAction } from '../actions'
+import { DevSettings, ErrorMessage, WebchatState } from '../index-types'
+import { webchatReducer } from '../webchat-reducer'
 
 export const webchatInitialState: WebchatState = {
   width: WEBCHAT.DEFAULTS.WIDTH,
@@ -211,81 +210,4 @@ export function useWebchat() {
     webchatDispatch,
     webchatState,
   }
-}
-interface UseTyping {
-  webchatState: WebchatState
-  updateTyping: (typing: boolean) => void
-  updateMessage: (message: WebchatMessage) => void
-  host: any
-}
-
-export function useTyping({
-  webchatState,
-  updateTyping,
-  updateMessage,
-  host,
-}: UseTyping): void {
-  useEffect(() => {
-    let delayTimeout, typingTimeout
-    scrollToBottom({ host })
-    try {
-      const nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
-      if (nextMsg.delay && nextMsg.typing) {
-        delayTimeout = setTimeout(
-          () => updateTyping(true),
-          nextMsg.delay * 1000
-        )
-      } else if (nextMsg.typing) updateTyping(true)
-      const totalDelay = nextMsg.delay + nextMsg.typing
-      if (totalDelay)
-        typingTimeout = setTimeout(() => {
-          updateMessage({ ...nextMsg, display: true })
-          updateTyping(false)
-        }, totalDelay * 1000)
-    } catch (e) {}
-    return () => {
-      clearTimeout(delayTimeout)
-      clearTimeout(typingTimeout)
-    }
-  }, [webchatState.messagesJSON, webchatState.typing])
-}
-
-export function usePrevious(value) {
-  const ref = useRef()
-  useEffect(() => {
-    ref.current = value
-  })
-  return ref.current
-}
-
-interface ComponentVisible {
-  ref: React.RefObject<HTMLElement>
-  isComponentVisible: boolean
-  setIsComponentVisible: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export function useComponentVisible(
-  initialIsVisible: boolean,
-  onClickOutside: () => void
-): ComponentVisible {
-  const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible)
-  const ref = useRef<HTMLElement>(null)
-  const handleClickOutside = event => {
-    const target = event.path ? event.path[0] : event.target
-    if (ref.current && !ref.current.contains(target)) {
-      setIsComponentVisible(false)
-      onClickOutside()
-    }
-  }
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside, false)
-    return () => {
-      document.removeEventListener('click', handleClickOutside, false)
-    }
-  })
-  return { ref, isComponentVisible, setIsComponentVisible }
-}
-
-export const useComponentWillMount = func => {
-  useMemo(func, [])
 }
