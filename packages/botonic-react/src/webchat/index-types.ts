@@ -1,7 +1,4 @@
-import type {
-  Input as CoreInput,
-  Session as CoreSession,
-} from '@botonic/core/lib/esm/models/legacy-types'
+import type { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 import { RefObject } from 'react'
 
 import { Webview } from '../components/index-types'
@@ -49,7 +46,7 @@ export interface WebchatState {
   isCoverComponentOpen: boolean
   isCustomComponentRendered: boolean
   lastMessageUpdate?: string
-  currentAttachment: File | undefined
+  currentAttachment?: File
   jwt?: string
   unreadMessages: number
 }

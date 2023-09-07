@@ -1,6 +1,7 @@
-import { Input } from '@botonic/core'
+import { Input, Session } from '@botonic/core'
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 
+import { ThemeProps, Webview } from '../components/index-types'
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatMessage } from '../index-types'
 import { scrollToBottom } from '../util/dom'
@@ -73,13 +74,13 @@ export function useWebchat() {
   const updateTyping = (typing: boolean) =>
     webchatDispatch({ type: WebchatAction.UPDATE_TYPING, payload: typing })
 
-  const updateWebview = (webview, params) =>
+  const updateWebview = (webview: Webview, params: Record<string, string>) =>
     webchatDispatch({
       type: WebchatAction.UPDATE_WEBVIEW,
       payload: { webview, webviewParams: params },
     })
 
-  const updateSession = session => {
+  const updateSession = (session: Session) => {
     webchatDispatch({
       type: WebchatAction.UPDATE_SESSION,
       payload: session,
@@ -98,7 +99,7 @@ export function useWebchat() {
       payload: handoff,
     })
 
-  const updateTheme = (theme, themeUpdates = undefined) => {
+  const updateTheme = (theme: ThemeProps, themeUpdates?: ThemeProps) => {
     const payload =
       themeUpdates !== undefined ? { theme, themeUpdates } : { theme }
     webchatDispatch({
@@ -169,7 +170,7 @@ export function useWebchat() {
     })
   }
 
-  const setCurrentAttachment = attachment => {
+  const setCurrentAttachment = (attachment: File) => {
     webchatDispatch({
       type: WebchatAction.SET_CURRENT_ATTACHMENT,
       payload: attachment,
@@ -214,7 +215,7 @@ export function useWebchat() {
 interface UseTyping {
   webchatState: WebchatState
   updateTyping: (typing: boolean) => void
-  updateMessage: (message: any) => void
+  updateMessage: (message: WebchatMessage) => void
   host: any
 }
 
