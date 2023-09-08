@@ -95,11 +95,11 @@ test('TEST: results sorted by length with ONLY_KEYWORDS_FOUND', () =>
   ))
 
 test('TEST: results sorted by length with KEYWORDS_AND_OTHERS_FOUND', () =>
-  testFindKeywords(
-    'es',
-    MatchType.KEYWORDS_AND_OTHERS_FOUND,
-    2
-  )('words before abcde words after', { A: ['abc'], B: ['abXde'] }, ['B', 'A']))
+  testFindKeywords('es', MatchType.KEYWORDS_AND_OTHERS_FOUND, 2)(
+    'words before abcde words after',
+    { A: ['abc'], B: ['abXde'] },
+    ['B', 'A']
+  ))
 
 test.each<any>([
   // found with multiword keyword

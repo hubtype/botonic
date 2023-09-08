@@ -127,7 +127,7 @@ export class I18nEntryTraverser {
     context: ContextWithLocale
   ): Promise<cf.Entry<T>> {
     entry = { ...entry, fields: { ...entry.fields } }
-    const fields = (entry.fields as unknown) as {
+    const fields = entry.fields as unknown as {
       [fieldName: string]: I18nValue<any>
     }
     if (!entry.sys.contentType) {
