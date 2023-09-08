@@ -20,7 +20,8 @@ export class KeywordsDelivery {
   async contentsWithKeywords(
     context: Context,
     paging: PagingOptions,
-    modelsWithKeywords = [
+    modelsWithKeywords = this.delivery.getOptions()
+      .contentModelsWithKeywords || [
       ContentType.TEXT,
       ContentType.CAROUSEL,
       ContentType.URL,
@@ -46,9 +47,8 @@ export class KeywordsDelivery {
     keywords: string[],
     priority?: number
   ): SearchCandidate {
-    const contentModel = ContentfulEntryUtils.getContentModel<TopContentType>(
-      entry
-    )
+    const contentModel =
+      ContentfulEntryUtils.getContentModel<TopContentType>(entry)
     if (!entry.fields.shortText) {
       console.error(
         `No shortText found for content of type ${contentModel} and name: ${entry.fields.name}`

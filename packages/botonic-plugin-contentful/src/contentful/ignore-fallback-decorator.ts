@@ -2,6 +2,7 @@ import * as contentful from 'contentful'
 import { Asset, ContentType, Entry, EntryCollection } from 'contentful'
 
 import { Context } from '../cms'
+import { ContentfulOptions } from '../plugin'
 import { DeliveryApi } from './delivery-api'
 import { convertContentfulException } from './delivery-utils'
 import {
@@ -88,6 +89,10 @@ export class IgnoreFallbackDecorator implements DeliveryApi {
     return this.api.getContentType(id)
   }
 
+  getOptions(): ContentfulOptions {
+    return this.api.getOptions()
+  }
+
   private i18nContext(context: Context) {
     return {
       ...context,
@@ -126,7 +131,7 @@ class IgnoreFallbackVisitor implements ContentfulVisitor {
     if (defaultValue != undefined) {
       t = t ?? defaultValue
     }
-    return (t as any) as I18nValue<T>
+    return t as any as I18nValue<T>
   }
 
   visitMultipleStringField(vf: VisitedField<string[]>): I18nValue<string[]> {
@@ -134,7 +139,7 @@ class IgnoreFallbackVisitor implements ContentfulVisitor {
   }
 
   visitSingleReference<T>(vf: VisitedField<Entry<T>>): I18nValue<Entry<T>> {
-    return this.hackType(vf.value[vf.locale], (undefined as any) as Entry<T>)
+    return this.hackType(vf.value[vf.locale], undefined as any as Entry<T>)
   }
 
   visitMultipleReference<T>(

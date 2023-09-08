@@ -27,6 +27,8 @@ export interface DeliveryApi {
   ): Promise<contentful.EntryCollection<T>>
 
   getContentType(id: string): Promise<contentful.ContentType>
+
+  getOptions(): ContentfulOptions
 }
 
 /**
@@ -79,6 +81,10 @@ export class AdaptorDeliveryApi implements DeliveryApi {
       console.error(`ERROR in getContentType for id ${id}:`, e)
       throw e
     }
+  }
+
+  getOptions(): ContentfulOptions {
+    return this.options
   }
 
   private queryFromContext(context: Context, query: any = {}): any {
