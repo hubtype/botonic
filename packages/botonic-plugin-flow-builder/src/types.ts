@@ -14,6 +14,11 @@ export interface BotonicPluginFlowBuilderOptions {
     eventName: string,
     args?: Record<string, any>
   ) => Promise<void>
+  getKnowledgeResponse?: (request: ActionRequest) => Promise<{
+    ai: string
+    hasKnowledge: boolean
+    source: string
+  }>
 }
 
 export interface FlowBuilderApiOptions {

@@ -6,5 +6,7 @@ export interface HtFallbackNode extends HtBaseNode {
   content: {
     first_message?: HtNodeLink
     second_message?: HtNodeLink
+    knowledge_base_followup?: HtNodeLink
+    is_knowledge_base_active?: boolean
   }
 }

@@ -35,6 +35,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     eventName: string,
     args?: Record<string, any>
   ) => Promise<void>
+  public getKnowledgeResponse?: (request: ActionRequest) => Promise<{
+    ai: string
+    hasKnowledge: boolean
+    source: string
+  }>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.flowUrl = options.flowUrl
@@ -42,6 +47,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
     this.trackEvent = options.trackEvent
+    this.getKnowledgeResponse = options.getKnowledgeResponse
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
