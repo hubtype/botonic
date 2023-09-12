@@ -55,7 +55,6 @@ export const TriggerButton = (): JSX.Element => {
         </UnreadMessagesCounter>
       )}
       {CustomTriggerButton ? (
-        //@ts-ignore
         <CustomTriggerButton />
       ) : (
         <StyledTriggerButton

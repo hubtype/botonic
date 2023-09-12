@@ -1,29 +1,26 @@
-import {
-  ADD_MESSAGE,
-  ADD_MESSAGE_COMPONENT,
-  CLEAR_MESSAGES,
-  UPDATE_LAST_MESSAGE_DATE,
-  UPDATE_MESSAGE,
-  UPDATE_REPLIES,
-} from './actions'
+import { WebchatAction } from './actions'
+import { WebchatState } from './index-types'
 
-export const messagesReducer = (state, action) => {
+export const messagesReducer = (
+  state: WebchatState,
+  action: { type: WebchatAction; payload?: any }
+): WebchatState => {
   switch (action.type) {
-    case ADD_MESSAGE:
+    case WebchatAction.ADD_MESSAGE:
       return addMessageReducer(state, action)
-    case ADD_MESSAGE_COMPONENT:
-      return addMessageComponent(action, state)
-    case UPDATE_MESSAGE:
+    case WebchatAction.ADD_MESSAGE_COMPONENT:
+      return addMessageComponent(state, action)
+    case WebchatAction.UPDATE_MESSAGE:
       return updateMessageReducer(state, action)
-    case UPDATE_REPLIES:
+    case WebchatAction.UPDATE_REPLIES:
       return { ...state, replies: action.payload }
-    case CLEAR_MESSAGES:
+    case WebchatAction.CLEAR_MESSAGES:
       return {
         ...state,
         messagesJSON: [],
         messagesComponents: [],
       }
-    case UPDATE_LAST_MESSAGE_DATE:
+    case WebchatAction.UPDATE_LAST_MESSAGE_DATE:
       return {
         ...state,
         lastMessageUpdate: action.payload,
@@ -33,7 +30,10 @@ export const messagesReducer = (state, action) => {
   }
 }
 
-function addMessageComponent(action, state) {
+function addMessageComponent(
+  state: WebchatState,
+  action: { type: WebchatAction; payload?: any }
+) {
   const messageComponent = action.payload
   const isUnreadMessage =
     !state.isWebchatOpen && messageComponent.props?.ack !== 1
@@ -48,7 +48,10 @@ function addMessageComponent(action, state) {
   }
 }
 
-function updateMessageReducer(state, action) {
+function updateMessageReducer(
+  state: WebchatState,
+  action: { type: WebchatAction; payload?: any }
+) {
   const msgIndex = state.messagesJSON.map(m => m.id).indexOf(action.payload.id)
   if (msgIndex > -1) {
     const msgComponent = state.messagesComponents[msgIndex]
@@ -82,7 +85,10 @@ function updateMessageReducer(state, action) {
   return state
 }
 
-function addMessageReducer(state, action) {
+function addMessageReducer(
+  state: WebchatState,
+  action: { type: WebchatAction; payload?: any }
+) {
   if (
     state.messagesJSON &&
     state.messagesJSON.find(m => m.id === action.payload.id)

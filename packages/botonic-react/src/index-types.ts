@@ -169,23 +169,23 @@ export interface Event {
 }
 
 export interface WebchatContextProps {
-  sendText: (text: string, payload?: string) => void
-  sendAttachment: (attachment: File) => void
-  sendPayload: (payload: string) => void
-  sendInput: (input: CoreInput) => void
-  openWebview: (webviewComponent: Webview) => void
   addMessage: (message: WebchatMessage) => void
+  closeWebview: () => void
+  getThemeProperty: (property: string, defaultValue?: string | boolean) => any
+  openWebview: (webviewComponent: Webview) => void
+  resolveCase: () => void
+  sendAttachment: (attachment: File) => void
+  sendInput: (input: CoreInput) => void
+  sendPayload: (payload: string) => void
+  sendText: (text: string, payload?: string) => void
+  theme: ThemeProps
+  toggleWebchat: (toggle: boolean) => void
+  updateLatestInput: (input: CoreInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: boolean) => void
-  updateLatestInput: (input: CoreInput) => void
-  closeWebview: () => void
-  toggleWebchat: (toggle: boolean) => void
-  getThemeProperty: (property: string, defaultValue?: string) => any
-  resolveCase: () => void
-  theme: ThemeProps
-  webchatState: WebchatState
-  updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   updateUser: (user: Partial<CoreSessionUser>) => void
+  updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
+  webchatState: WebchatState
 }
 
 // export class DevApp extends WebchatApp {

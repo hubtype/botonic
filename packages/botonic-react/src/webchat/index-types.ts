@@ -1,7 +1,4 @@
-import type {
-  Input as CoreInput,
-  Session as CoreSession,
-} from '@botonic/core/lib/esm/models/legacy-types'
+import type { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 import { RefObject } from 'react'
 
 import { Webview } from '../components/index-types'
@@ -15,6 +12,14 @@ export interface WebchatStateTheme {
   style: {
     fontFamily: string
   }
+}
+
+export interface ErrorMessage {
+  message?: string
+}
+export interface DevSettings {
+  keepSessionOnReload?: boolean
+  showSessionView?: boolean
 }
 
 export interface WebchatState {
@@ -32,14 +37,18 @@ export interface WebchatState {
   handoff: boolean
   theme: WebchatStateTheme
   themeUpdates: Partial<WebchatStateTheme>
-  error: { message?: string }
-  devSettings: { keepSessionOnReload?: boolean; showSessionView?: boolean }
+  error: ErrorMessage
+  online: boolean
+  devSettings: DevSettings
   isWebchatOpen: boolean
   isEmojiPickerOpen: boolean
   isPersistentMenuOpen: boolean
   isCoverComponentOpen: boolean
-  lastMessageUpdate: string
-  currentAttachment: File | undefined
+  isCustomComponentRendered: boolean
+  lastMessageUpdate?: string
+  currentAttachment?: File
+  jwt?: string
+  unreadMessages: number
 }
 
 // export interface WebchatProps extends WebchatArgs {
