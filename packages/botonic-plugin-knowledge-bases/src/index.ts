@@ -24,20 +24,18 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
 
   async getIaResponse(session: HubtypeSession): Promise<KnowledgebaseResponse> {
     try {
-      console.log({ isProd })
       const authToken = isProd ? session._access_token : this.authToken
       const response = await this.apiService.inference(
         authToken,
         session.user.id
       )
-      console.log(response)
       return {
         ai: response.data.ai,
         hasKnowledge: response.data.has_knowledge,
         sources: response.data.sources,
       }
     } catch (e) {
-      console.log(e)
+      console.error(e)
       return {
         ai: '',
         hasKnowledge: false,
