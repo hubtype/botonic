@@ -19,6 +19,7 @@ export interface MultichannelTextProps extends MultichannelViewOptions {
   newline?: string
   buttonsAsText?: boolean
   buttonsTextSeparator?: string
+  menuButtonTextWhatsappList?: string
 }
 
 // Carousel

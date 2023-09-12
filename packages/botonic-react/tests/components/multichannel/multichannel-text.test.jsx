@@ -277,6 +277,9 @@ describe('Multichannel text', () => {
         <MultichannelButton key='5' payload='payload3'>
           button text5
         </MultichannelButton>
+        <MultichannelButton key='6' payload='payload4'>
+          button text5
+        </MultichannelButton>
       </MultichannelText>
     )
     const renderer = whatsappRenderer(sut, CONTEXT_WITH_BUTTONS_CUSTOM)
