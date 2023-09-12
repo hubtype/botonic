@@ -89,11 +89,11 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
     request.session.user.extra_data = { isFirstFallbackOption: true }
   }
 
-  const knowladgeNode = await createKnowledgeNode(cmsApi, request)
-  if (knowladgeNode) {
+  const knowledgeNode = await createKnowledgeNode(cmsApi, request)
+  if (knowledgeNode) {
     // TODO: add event
     // await trackEvent(request, 'KnowledgeBase response')
-    return knowladgeNode
+    return knowledgeNode
   }
 
   const isFirstFallbackOption =
