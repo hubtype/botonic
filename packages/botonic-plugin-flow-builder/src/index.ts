@@ -2,6 +2,7 @@ import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from './api'
+import { SOURCE_INFO_SEPARATOR } from './constants'
 import {
   FlowCarousel,
   FlowContent,
@@ -58,6 +59,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       accessToken: this.getAccessToken(request.session),
       request: this.currentRequest,
     })
+    if (request.input.payload) {
+      request.input.payload = request.input.payload?.split(
+        SOURCE_INFO_SEPARATOR
+      )[0]
+    }
   }
 
   getContentsByCode(
