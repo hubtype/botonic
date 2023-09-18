@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ActionRequest } from '@botonic/react'
 import { randomUUID } from 'crypto'
 
@@ -8,6 +9,7 @@ import {
   HtTextNode,
 } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
+import { EventName, trackEvent } from './tracking'
 
 export async function createKnowledgeNode(
   cmsApi: FlowBuilderApi,
@@ -24,6 +26,13 @@ export async function createKnowledgeNode(
       )
 
       if (knowledgeResponse.hasKnowledge) {
+        await trackEvent(request, EventName.botAiKnowladgeBase, {
+          answer: knowledgeResponse.ai,
+          knowledge_source_ids: knowledgeResponse.sources.map(
+            source => source.knowledgeSourceId
+          ),
+        })
+
         const knowledgeNode: HtTextNode = {
           type: HtNodeWithContentType.TEXT,
           content: {

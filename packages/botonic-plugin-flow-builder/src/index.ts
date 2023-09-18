@@ -19,7 +19,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { BotonicPluginFlowBuilderOptions } from './types'
+import { BotonicPluginFlowBuilderOptions, KnowledgebaseResponse } from './types'
 import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
@@ -35,11 +35,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     eventName: string,
     args?: Record<string, any>
   ) => Promise<void>
-  public getKnowledgeResponse?: (request: ActionRequest) => Promise<{
-    ai: string
-    hasKnowledge: boolean
-    source: string
-  }>
+  public getKnowledgeResponse?: (
+    request: ActionRequest
+  ) => Promise<KnowledgebaseResponse>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.flowUrl = options.flowUrl
