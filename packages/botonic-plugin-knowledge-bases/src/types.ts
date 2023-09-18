@@ -8,5 +8,8 @@ export interface PluginKnowledgeBaseOptions {
 export interface KnowledgebaseResponse {
   ai: string
   hasKnowledge: boolean
-  sources: string[]
+  sources: {
+    knowledgeSourceId: string
+    page?: number
+  }[]
 }

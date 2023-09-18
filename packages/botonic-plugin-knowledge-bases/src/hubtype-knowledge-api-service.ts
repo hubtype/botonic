@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import axios, { AxiosResponse } from 'axios'
 
 const DEFAULT_TIMEOUT = 10000
@@ -20,7 +21,10 @@ export class HubtypeApiService {
     AxiosResponse<{
       ai: string
       has_knowledge: boolean
-      sources: string[]
+      sources: {
+        knowledge_source_id: string
+        page?: number
+      }[]
     }>
   > {
     return await axios({
