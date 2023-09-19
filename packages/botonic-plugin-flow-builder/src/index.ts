@@ -20,7 +20,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { BotonicPluginFlowBuilderOptions, KnowledgebaseResponse } from './types'
+import { BotonicPluginFlowBuilderOptions, KnowledgeBaseResponse } from './types'
 import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
@@ -36,9 +36,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     eventName: string,
     args?: Record<string, any>
   ) => Promise<void>
-  public getKnowledgeResponse?: (
+  public getKnowledgeBaseResponse?: (
     request: ActionRequest
-  ) => Promise<KnowledgebaseResponse>
+  ) => Promise<KnowledgeBaseResponse>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.flowUrl = options.flowUrl
@@ -46,7 +46,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
     this.trackEvent = options.trackEvent
-    this.getKnowledgeResponse = options.getKnowledgeResponse
+    this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }

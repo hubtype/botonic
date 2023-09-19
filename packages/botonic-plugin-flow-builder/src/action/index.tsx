@@ -5,7 +5,7 @@ import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { createKnowledgeNode } from './knowledge-bases'
+import { createNodeFromKnowledgeBase } from './knowledge-bases'
 import { EventName, trackEvent } from './tracking'
 import { getNodeByUserInput } from './user-input'
 
@@ -87,9 +87,9 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
     request.session.user.extra_data = { isFirstFallbackOption: true }
   }
 
-  const knowledgeNode = await createKnowledgeNode(cmsApi, request)
-  if (knowledgeNode) {
-    return knowledgeNode
+  const knowledgeBaseNode = await createNodeFromKnowledgeBase(cmsApi, request)
+  if (knowledgeBaseNode) {
+    return knowledgeBaseNode
   }
 
   const isFirstFallbackOption =

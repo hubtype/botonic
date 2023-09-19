@@ -81,7 +81,7 @@ export class FlowBuilderApi {
       : this.getNodeById(fallbackSecondMessage.id)
   }
 
-  getKnowledgeBaseNode():
+  getKnowledgeBaseConfig():
     | { followup?: HtNodeLink; isActive: boolean }
     | undefined {
     const fallbackNode = this.flow.nodes.find(

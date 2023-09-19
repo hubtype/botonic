@@ -11,34 +11,36 @@ import {
 import { getFlowBuilderPlugin } from '../helpers'
 import { EventName, trackEvent } from './tracking'
 
-export async function createKnowledgeNode(
+export async function createNodeFromKnowledgeBase(
   cmsApi: FlowBuilderApi,
   request: ActionRequest
 ): Promise<HtNodeWithContent | undefined> {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const locale = flowBuilderPlugin.getLocale(request.session)
-  const knowledgeBaseNode = cmsApi.getKnowledgeBaseNode()
+  const knowledgeBaseConfig = cmsApi.getKnowledgeBaseConfig()
 
-  if (flowBuilderPlugin.getKnowledgeResponse && knowledgeBaseNode?.isActive) {
+  if (
+    flowBuilderPlugin.getKnowledgeBaseResponse &&
+    knowledgeBaseConfig?.isActive
+  ) {
     try {
-      const knowledgeResponse = await flowBuilderPlugin.getKnowledgeResponse(
-        request
-      )
+      const knowledgeBaseResponse =
+        await flowBuilderPlugin.getKnowledgeBaseResponse(request)
 
-      if (knowledgeResponse.hasKnowledge) {
+      if (knowledgeBaseResponse.hasKnowledge) {
         await trackEvent(request, EventName.botAiKnowladgeBase, {
-          answer: knowledgeResponse.ai,
-          knowledge_source_ids: knowledgeResponse.sources.map(
+          answer: knowledgeBaseResponse.ai,
+          knowledge_source_ids: knowledgeBaseResponse.sources.map(
             source => source.knowledgeSourceId
           ),
         })
 
-        const knowledgeNode: HtTextNode = {
+        const knowledgeBaseNode: HtTextNode = {
           type: HtNodeWithContentType.TEXT,
           content: {
             text: [
               {
-                message: knowledgeResponse.ai,
+                message: knowledgeBaseResponse.ai,
                 locale,
               },
             ],
@@ -51,12 +53,12 @@ export async function createKnowledgeNode(
             x: 0,
             y: 0,
           },
-          follow_up: knowledgeBaseNode.followup,
+          follow_up: knowledgeBaseConfig.followup,
         }
-        return knowledgeNode
+        return knowledgeBaseNode
       }
     } catch (e) {
-      console.log('Hubtype knowledge api error: ', { e })
+      console.log('Hubtype knowledge base api error: ', { e })
       return undefined
     }
   }
