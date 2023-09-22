@@ -29,7 +29,7 @@ export class HubtypeApiService {
   > {
     return await axios({
       method: 'POST',
-      url: `${this.host}v1/ai/knowledge_bases/${this.knowledgeBaseId}/inference/`,
+      url: `${this.host}/v1/ai/knowledge_bases/${this.knowledgeBaseId}/inference/`,
       headers: {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
