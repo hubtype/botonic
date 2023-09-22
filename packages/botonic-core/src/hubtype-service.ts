@@ -4,7 +4,6 @@ import Channels from 'pusher-js/types/src/core/channels/channels'
 
 import { Input, SessionUser } from './models'
 import { decompressData } from './pusher-utils'
-import { getWebpackEnvVar } from './utils'
 
 interface UnsentInput {
   id: string
@@ -30,18 +29,10 @@ interface HubtypeServiceArgs {
   server: ServerConfig
 }
 
-const _WEBCHAT_PUSHER_KEY_ = getWebpackEnvVar(
-  // @ts-ignore
-  typeof WEBCHAT_PUSHER_KEY !== 'undefined' && WEBCHAT_PUSHER_KEY,
-  'WEBCHAT_PUSHER_KEY',
-  '434ca667c8e6cb3f641c' // pragma: allowlist secret
-)
-const _HUBTYPE_API_URL_ = getWebpackEnvVar(
-  // @ts-ignore
-  typeof HUBTYPE_API_URL !== 'undefined' && HUBTYPE_API_URL,
-  'HUBTYPE_API_URL',
-  'https://api.hubtype.com'
-)
+const WEBCHAT_PUSHER_KEY =
+  process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c'
+
+const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
 const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
@@ -105,9 +96,13 @@ export class HubtypeService {
       // TODO recover user & appId somehow
       return Promise.reject('No User or appId. Clear cache and reload')
     }
-    this.pusher = new Pusher(_WEBCHAT_PUSHER_KEY_, {
+    console.log('Initializing Pusher', {
+      _WEBCHAT_PUSHER_KEY_: WEBCHAT_PUSHER_KEY,
+      _HUBTYPE_API_URL_: HUBTYPE_API_URL,
+    })
+    this.pusher = new Pusher(WEBCHAT_PUSHER_KEY, {
       cluster: 'eu',
-      authEndpoint: `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
+      authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
       forceTLS: true,
       auth: {
         headers: this.constructHeaders(),
@@ -227,7 +222,7 @@ export class HubtypeService {
       // @ts-ignore
       await this.init(user)
       await axios.post(
-        `${_HUBTYPE_API_URL_}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
+        `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
         {
           sender: this.user,
           message: message,
@@ -249,7 +244,7 @@ export class HubtypeService {
     appId: string
   }): Promise<AxiosResponse<any>> {
     return axios.get(
-      `${_HUBTYPE_API_URL_}/v1/provider_accounts/${appId}/visibility/`
+      `${HUBTYPE_API_URL}/v1/provider_accounts/${appId}/visibility/`
     )
   }
 
