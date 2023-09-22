@@ -5,7 +5,7 @@ import { HtEventProps, RequestData } from './types'
 import { createHtEvent } from './utils'
 
 export interface HubtypeAnalyticsOptions {
-  getLaguange?: (request: BotRequest) => string
+  getLanguage?: (request: BotRequest) => string
   getCountry?: (request: BotRequest) => string
 }
 
@@ -19,11 +19,11 @@ function getDefaultCountry(request: BotRequest): string {
 
 export default class BotonicPluginHubtypeAnalytics implements Plugin {
   baseUrl: string
-  getLaguange: (request: BotRequest) => string
+  getLanguage: (request: BotRequest) => string
   getCountry: (request: BotRequest) => string
   constructor(options?: HubtypeAnalyticsOptions) {
     this.baseUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
-    this.getLaguange = options?.getLaguange || getDefaultLanguage
+    this.getLanguage = options?.getLanguage || getDefaultLanguage
     this.getCountry = options?.getCountry || getDefaultCountry
   }
 
@@ -37,7 +37,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
 
   getRequestData(request: BotRequest): RequestData {
     return {
-      language: this.getLaguange(request),
+      language: this.getLanguage(request),
       country: this.getCountry(request),
       provider: request.session.user.provider,
       userId: request.session.user.id,

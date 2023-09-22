@@ -12,7 +12,7 @@ export class HtEventAgentRating extends HtEvent {
   constructor(event: EventAgentRating, requestData: RequestData) {
     super(event, requestData)
     this.event_data.rating = event.event_data.rating
-    this.event_data.commnent = event.event_data.commnent
+    this.event_data.comment = event.event_data.comment
     this.event_data.case_id = event.event_data.case_id
   }
 }
