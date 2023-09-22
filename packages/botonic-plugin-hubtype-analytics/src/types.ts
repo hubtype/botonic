@@ -15,6 +15,7 @@ export enum EventName {
   botStart = 'bot_start',
   botOpen = 'bot_open',
   botAiModel = 'bot_ai_model',
+  botAiKnowladgeBase = 'bot_ai_knowledge_base',
   botKeywordsModel = 'bot_keywords_model',
   fallback = 'fallback',
   handoffOption = 'handoff_option',
@@ -43,7 +44,7 @@ export interface EventAgentRating extends HtBaseEventProps {
 export interface EventDataRating {
   case_id: string
   rating?: number
-  commnent?: string
+  comment?: string
 }
 export interface EventChannelRating extends HtBaseEventProps {
   event_type: EventName.botChannelRating
@@ -101,6 +102,16 @@ export interface EventDataBotAiModel {
   confidence_successful: boolean
 }
 
+export interface EventBotAiKnowladgeBase {
+  event_type: EventName.botAiKnowladgeBase
+  event_data: EventDataBotAiKnowladgeBase
+}
+
+export interface EventDataBotAiKnowladgeBase {
+  answer: string
+  knowledge_source_ids: string[]
+}
+
 export interface EventBotKeywordModel extends HtBaseEventProps {
   event_type: EventName.botKeywordsModel
   event_data: EventDataBotKeywordModel
@@ -143,6 +154,7 @@ export type HtEventProps =
   | EventBotStart
   | EventBotOpen
   | EventBotAiModel
+  | EventBotAiKnowladgeBase
   | EventBotKeywordModel
   | EventFallback
   | EventHandoffOption
