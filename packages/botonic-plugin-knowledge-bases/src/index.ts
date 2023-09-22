@@ -23,33 +23,21 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   }
 
   async getInference(session: HubtypeSession): Promise<KnowledgeBaseResponse> {
-    try {
-      const authToken = isProd ? session._access_token : this.authToken
+    const authToken = isProd ? session._access_token : this.authToken
 
-      const response = await this.apiService.inference(
-        authToken,
-        session.user.id
-      )
+    const response = await this.apiService.inference(authToken, session.user.id)
 
-      const sources = response.data.sources.map(source => {
-        return {
-          knowledgeSourceId: source.knowledge_source_id,
-          page: source.page,
-        }
-      })
-
+    const sources = response.data.sources.map(source => {
       return {
-        ai: response.data.ai,
-        hasKnowledge: response.data.has_knowledge,
-        sources,
+        knowledgeSourceId: source.knowledge_source_id,
+        page: source.page,
       }
-    } catch (e) {
-      console.error(e)
-      return {
-        ai: '',
-        hasKnowledge: false,
-        sources: [],
-      }
+    })
+
+    return {
+      ai: response.data.ai,
+      hasKnowledge: response.data.has_knowledge,
+      sources,
     }
   }
 }
