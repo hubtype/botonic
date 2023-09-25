@@ -29,9 +29,6 @@ interface AvailabilityData {
 export async function getQueueAvailability(
   queueId: string
 ): Promise<AvailabilityData> {
-  console.log('plugin-flow-builder getQueueAvailability', {
-    _HUBTYPE_API_URL_: HUBTYPE_API_URL,
-  })
   const response = await axios.get(
     `${HUBTYPE_API_URL}/v1/queues/${queueId}/availability/`,
     // TODO: Make it configurable in the future
