@@ -96,10 +96,6 @@ export class HubtypeService {
       // TODO recover user & appId somehow
       return Promise.reject('No User or appId. Clear cache and reload')
     }
-    console.log('Initializing Pusher', {
-      _WEBCHAT_PUSHER_KEY_: WEBCHAT_PUSHER_KEY,
-      _HUBTYPE_API_URL_: HUBTYPE_API_URL,
-    })
     this.pusher = new Pusher(WEBCHAT_PUSHER_KEY, {
       cluster: 'eu',
       authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
