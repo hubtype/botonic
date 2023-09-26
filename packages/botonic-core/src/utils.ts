@@ -13,21 +13,7 @@ export const isBrowser = (): boolean => {
   return typeof IS_BROWSER !== 'undefined'
     ? // @ts-ignore
       IS_BROWSER
-    : typeof window !== 'undefined' &&
-        typeof window.document !== 'undefined' &&
-        !window.process
-}
-
-export function getWebpackEnvVar(
-  webpackEnvVar: string | false,
-  name: string,
-  defaultValue: string
-): string {
-  return (
-    webpackEnvVar ||
-    (typeof process !== 'undefined' && process.env[name]) ||
-    defaultValue
-  )
+    : typeof window !== 'undefined' && typeof window.document !== 'undefined'
 }
 
 export const isMobile = (mobileBreakpoint = 460): boolean => {

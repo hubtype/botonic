@@ -1,15 +1,7 @@
 import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
-import { getFlowBuilderPlugin } from '../helpers'
-import { getWebpackEnvVar } from '../utils'
-
-const _HUBTYPE_API_URL_ = getWebpackEnvVar(
-  // @ts-ignore
-  typeof HUBTYPE_API_URL !== 'undefined' && HUBTYPE_API_URL,
-  'HUBTYPE_API_URL',
-  'https://api.hubtype.com'
-)
+const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 type ConditionalQueueStatusArgs = {
   request: ActionRequest
@@ -38,7 +30,7 @@ export async function getQueueAvailability(
   queueId: string
 ): Promise<AvailabilityData> {
   const response = await axios.get(
-    `${_HUBTYPE_API_URL_}/v1/queues/${queueId}/availability/`,
+    `${HUBTYPE_API_URL}/v1/queues/${queueId}/availability/`,
     // TODO: Make it configurable in the future
     {
       params: {
