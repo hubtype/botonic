@@ -5,8 +5,11 @@ export interface PluginKnowledgeBaseOptions {
   timeout?: number
 }
 
-export interface KnowledgebaseResponse {
+export interface KnowledgeBaseResponse {
   ai: string
   hasKnowledge: boolean
-  sources: string[]
+  sources: {
+    knowledgeSourceId: string
+    page?: number
+  }[]
 }

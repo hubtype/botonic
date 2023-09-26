@@ -23,6 +23,7 @@ export enum EventName {
   botStart = 'bot_start',
   botOpen = 'bot_open',
   botAiModel = 'bot_ai_model',
+  botAiKnowladgeBase = 'bot_ai_knowledge_base',
   botKeywordsModel = 'bot_keywords_model',
   fallback = 'fallback',
   handoffOption = 'handoff_option',

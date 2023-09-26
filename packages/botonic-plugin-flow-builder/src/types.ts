@@ -14,11 +14,9 @@ export interface BotonicPluginFlowBuilderOptions {
     eventName: string,
     args?: Record<string, any>
   ) => Promise<void>
-  getKnowledgeResponse?: (request: ActionRequest) => Promise<{
-    ai: string
-    hasKnowledge: boolean
-    source: string
-  }>
+  getKnowledgeBaseResponse?: (
+    request: ActionRequest
+  ) => Promise<KnowledgeBaseResponse>
 }
 
 export interface FlowBuilderApiOptions {
@@ -31,4 +29,13 @@ export interface FlowBuilderApiOptions {
 export enum ProcessEnvNodeEnvs {
   PRODUCTION = 'production',
   DEVELOPMENT = 'development',
+}
+
+export interface KnowledgeBaseResponse {
+  ai: string
+  hasKnowledge: boolean
+  sources: {
+    knowledgeSourceId: string
+    page?: number
+  }[]
 }

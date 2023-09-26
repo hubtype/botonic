@@ -2,6 +2,7 @@ import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from './api'
+import { SOURCE_INFO_SEPARATOR } from './constants'
 import {
   FlowCarousel,
   FlowContent,
@@ -19,7 +20,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { BotonicPluginFlowBuilderOptions } from './types'
+import { BotonicPluginFlowBuilderOptions, KnowledgeBaseResponse } from './types'
 import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
@@ -35,11 +36,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     eventName: string,
     args?: Record<string, any>
   ) => Promise<void>
-  public getKnowledgeResponse?: (request: ActionRequest) => Promise<{
-    ai: string
-    hasKnowledge: boolean
-    source: string
-  }>
+  public getKnowledgeBaseResponse?: (
+    request: ActionRequest
+  ) => Promise<KnowledgeBaseResponse>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     this.flowUrl = options.flowUrl
@@ -47,7 +46,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
     this.trackEvent = options.trackEvent
-    this.getKnowledgeResponse = options.getKnowledgeResponse
+    this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
@@ -60,6 +59,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       accessToken: this.getAccessToken(request.session),
       request: this.currentRequest,
     })
+    if (request.input.payload) {
+      request.input.payload = request.input.payload?.split(
+        SOURCE_INFO_SEPARATOR
+      )[0]
+    }
   }
 
   getContentsByCode(

@@ -1,7 +1,7 @@
 import { HubtypeSession, Plugin, PluginPreRequest } from '@botonic/core'
 
 import { HubtypeApiService } from './hubtype-knowledge-api-service'
-import { KnowledgebaseResponse, PluginKnowledgeBaseOptions } from './types'
+import { KnowledgeBaseResponse, PluginKnowledgeBaseOptions } from './types'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -22,25 +22,22 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     return
   }
 
-  async getIaResponse(session: HubtypeSession): Promise<KnowledgebaseResponse> {
-    try {
-      const authToken = isProd ? session._access_token : this.authToken
-      const response = await this.apiService.inference(
-        authToken,
-        session.user.id
-      )
+  async getInference(session: HubtypeSession): Promise<KnowledgeBaseResponse> {
+    const authToken = isProd ? session._access_token : this.authToken
+
+    const response = await this.apiService.inference(authToken, session.user.id)
+
+    const sources = response.data.sources.map(source => {
       return {
-        ai: response.data.ai,
-        hasKnowledge: response.data.has_knowledge,
-        sources: response.data.sources,
+        knowledgeSourceId: source.knowledge_source_id,
+        page: source.page,
       }
-    } catch (e) {
-      console.error(e)
-      return {
-        ai: '',
-        hasKnowledge: false,
-        sources: [],
-      }
+    })
+
+    return {
+      ai: response.data.ai,
+      hasKnowledge: response.data.has_knowledge,
+      sources,
     }
   }
 }

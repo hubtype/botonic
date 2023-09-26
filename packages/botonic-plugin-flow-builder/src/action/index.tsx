@@ -2,11 +2,10 @@ import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
-import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { createKnowledgeNode } from './knowledge-bases'
+import { createNodeFromKnowledgeBase } from './knowledge-bases'
 import { EventName, trackEvent } from './tracking'
 import { getNodeByUserInput } from './user-input'
 
@@ -68,8 +67,7 @@ async function getTargetNode(
   locale: string,
   request: ActionRequest
 ) {
-  const payload = request.input.payload
-  const contentId = payload?.split(SOURCE_INFO_SEPARATOR)[0]
+  const contentId = request.input.payload
   const targetNode = !contentId
     ? await getNodeByUserInput(cmsApi, locale, request)
     : (cmsApi.getNodeById(contentId) as HtNodeWithContent)
@@ -89,11 +87,9 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
     request.session.user.extra_data = { isFirstFallbackOption: true }
   }
 
-  const knowledgeNode = await createKnowledgeNode(cmsApi, request)
-  if (knowledgeNode) {
-    // TODO: add event
-    // await trackEvent(request, 'KnowledgeBase response')
-    return knowledgeNode
+  const knowledgeBaseNode = await createNodeFromKnowledgeBase(cmsApi, request)
+  if (knowledgeBaseNode) {
+    return knowledgeBaseNode
   }
 
   const isFirstFallbackOption =
