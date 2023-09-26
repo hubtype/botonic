@@ -29,7 +29,7 @@ export async function createNodeFromKnowledgeBase(
 
       if (knowledgeBaseResponse.hasKnowledge) {
         await trackEvent(request, EventName.botAiKnowladgeBase, {
-          answer: knowledgeBaseResponse.ai,
+          answer: knowledgeBaseResponse.answer,
           knowledge_source_ids: knowledgeBaseResponse.sources.map(
             source => source.knowledgeSourceId
           ),
@@ -40,7 +40,7 @@ export async function createNodeFromKnowledgeBase(
           content: {
             text: [
               {
-                message: knowledgeBaseResponse.ai,
+                message: knowledgeBaseResponse.answer,
                 locale,
               },
             ],
