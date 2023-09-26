@@ -6,7 +6,7 @@ export interface PluginKnowledgeBaseOptions {
 }
 
 export interface KnowledgeBaseResponse {
-  ai: string
+  answer: string
   hasKnowledge: boolean
   sources: {
     knowledgeSourceId: string
