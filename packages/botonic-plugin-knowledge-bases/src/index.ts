@@ -11,8 +11,8 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
 
   constructor(options: PluginKnowledgeBaseOptions) {
     this.apiService = new HubtypeApiService(
-      options.knowledgeBaseId,
       options.host,
+      options.knowledgeBaseId,
       options.timeout
     )
     this.authToken = options.authToken || ''
@@ -35,7 +35,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     })
 
     return {
-      ai: response.data.ai,
+      answer: response.data.answer,
       hasKnowledge: response.data.has_knowledge,
       sources,
     }

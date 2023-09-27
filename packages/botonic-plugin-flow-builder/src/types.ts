@@ -32,7 +32,7 @@ export enum ProcessEnvNodeEnvs {
 }
 
 export interface KnowledgeBaseResponse {
-  ai: string
+  answer: string
   hasKnowledge: boolean
   sources: {
     knowledgeSourceId: string
