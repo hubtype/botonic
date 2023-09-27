@@ -130,3 +130,24 @@ test('TEST: contentful contentsWithKeywords', async () => {
   expect(ofType(ContentType.IMAGE)).toHaveLength(0)
   expect(ofType(ContentType.QUEUE)).toHaveLength(2)
 }, 15000)
+
+test('TEST: contentful contentsWithKeywords with modelsWithKeywords defined in plugin options', async () => {
+  // act
+  const results = await testContentful({
+    contentModelsWithKeywords: [ContentType.URL],
+  }).contentsWithKeywords(testContext([{ locale: 'en' }, {}, undefined]))
+
+  // assert
+  expect(results.length).toBeGreaterThanOrEqual(1)
+  const ofType = (model: TopContentType) =>
+    results.filter(r => r.contentId.model == model)
+
+  expect(ofType(ContentType.CAROUSEL)).toHaveLength(0)
+  expect(ofType(ContentType.TEXT)).toHaveLength(0)
+  expect(ofType(ContentType.CHITCHAT)).toHaveLength(0)
+  expect(ofType(ContentType.URL)).toHaveLength(1)
+  expect(ofType(ContentType.SCHEDULE)).toHaveLength(0)
+  expect(ofType(ContentType.DATE_RANGE)).toHaveLength(0)
+  expect(ofType(ContentType.IMAGE)).toHaveLength(0)
+  expect(ofType(ContentType.QUEUE)).toHaveLength(2)
+}, 15000)

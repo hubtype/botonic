@@ -70,6 +70,8 @@ export interface ContentfulOptions extends OptionsBase, ContentfulCredentials {
   resumeErrors?: boolean
 
   logCalls?: boolean
+
+  contentModelsWithKeywords?: cms.TopContentType[]
 }
 
 export default class BotonicPluginContentful {
