@@ -810,7 +810,7 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
-    scrollToBottom({ host })
+    // scrollToBottom({ host })
   }, [webchatState.themeUpdates])
 
   // Only needed for dev/serve mode

@@ -29,7 +29,7 @@ export class WebchatResizer {
     }
     setTimeout(() => {
       this.setWebchatElementHeight(`${calculateNewWebchatElementHeight()}%`)
-      scrollToBottom(this.host)
+      // scrollToBottom(this.host)
       onKeyboardShownFn()
     }, waitUntilKeyboardIsShown)
   }

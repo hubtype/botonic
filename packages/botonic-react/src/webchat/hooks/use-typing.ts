@@ -15,11 +15,11 @@ export function useTyping({
   webchatState,
   updateTyping,
   updateMessage,
-  host,
-}: UseTyping): void {
+}: // host,
+UseTyping): void {
   useEffect(() => {
     let delayTimeout, typingTimeout
-    scrollToBottom({ host })
+    // scrollToBottom({ host })
     try {
       const nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
       if (nextMsg.delay && nextMsg.typing) {
