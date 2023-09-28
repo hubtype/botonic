@@ -40,7 +40,7 @@ import { Text } from '@botonic/react'
 export default class OrderLocation extends React.Component {
   static async botonicInit(request) {
     const knowledgePlugin = request.plugins.knwoledgePlugin
-    const response = await knowladgeBasePlugin.getIaResponse(request.session)
+    const response = await knowladgeBasePlugin.getInference(request.session)
 
     return {
       text: response.hasKnowledge
