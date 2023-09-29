@@ -9,7 +9,7 @@ This plugin allows you to integrate Hubtype Knowledge bases in your Botonic proj
 1. Install the plugin from npm (or yarn):
 
 ```
-npm i --save @botonic/plugin-hubtype-knowledge-bases
+npm i --save @botonic/plugin-knowledge-bases
 ```
 
 2. Add it to the `src/plugins.js` file defining the projectId of the Project you want to use:
@@ -18,7 +18,7 @@ npm i --save @botonic/plugin-hubtype-knowledge-bases
 export const plugins = [
   {
     id: 'hubtype-knowledge-bases',
-    resolve: require('@botonic/plugin-hubtype-knowledge-bases'),
+    resolve: require('@botonic/plugin-knowledge-bases'),
     options: {
         knowledgeBaseId: '6800762a-03b5-419e-be97-67feac7bc5b9',
         host: 'https://www.api.hubtype.com'
@@ -40,7 +40,7 @@ import { Text } from '@botonic/react'
 export default class OrderLocation extends React.Component {
   static async botonicInit(request) {
     const knowledgePlugin = request.plugins.knwoledgePlugin
-    const response = await knowladgeBasePlugin.getIaResponse(request.session)
+    const response = await knowladgeBasePlugin.getInference(request.session)
 
     return {
       text: response.hasKnowledge
