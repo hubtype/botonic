@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "include": ["src/"],
+  "moduleFileExtensions": ["js", "jsx", "json", "tsx"],
   "compilerOptions": {
     "sourceRoot": "src",
     "baseUrl": ".",

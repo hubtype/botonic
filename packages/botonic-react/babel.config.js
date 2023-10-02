@@ -14,6 +14,7 @@ module.exports = {
   // .map files are not generated unless babel invoked with --source-maps
   sourceMaps: true,
   presets: [
+    '@babel/preset-typescript',
     '@babel/preset-env',
     [
       '@babel/preset-react',
