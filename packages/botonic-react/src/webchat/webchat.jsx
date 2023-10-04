@@ -47,7 +47,6 @@ import {
   PersistentMenu,
 } from './components/persistent-menu'
 import { SendButton } from './components/send-button'
-import { TypingIndicator } from './components/typing-indicator'
 import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
 import {
@@ -710,11 +709,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [webchatState.isWebchatOpen])
 
-  const webchatMessageList = () => (
-    <WebchatMessageList style={{ flex: 1 }}>
-      {webchatState.typing && <TypingIndicator />}
-    </WebchatMessageList>
-  )
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
 
   const isUserInputEnabled = () => {
@@ -910,7 +904,9 @@ export const Webchat = forwardRef((props, ref) => {
               <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
-          {webchatMessageList()}
+
+          <WebchatMessageList style={{ flex: 1 }} host={host} />
+
           {webchatState.replies &&
             Object.keys(webchatState.replies).length > 0 &&
             webchatReplies()}
