@@ -129,16 +129,30 @@ export interface WebchatAppArgs {
   visibility?: () => boolean
 }
 
+export enum SENDERS {
+  bot = 'bot',
+  user = 'user',
+  agent = 'agent',
+}
+
 export interface WebchatMessage {
   ack: 0 | 1
+  bolb: boolean
   buttons: ButtonProps[]
+  children: any
   data: any
   delay: number
   display: boolean
-  from: 'user' | 'bot'
+  enabletimestamps: boolean
+  from: SENDERS.bot | SENDERS.user
   id: string
+  imagestyle: any
+  isUnread: boolean
+  json: any
   markdown: boolean
   replies: ReplyProps[]
+  sentBy: SENDERS
+  style: any
   timestamp: string
   type: CoreInputType
   typing: number
@@ -173,11 +187,13 @@ export interface WebchatContextProps {
   closeWebview: () => void
   getThemeProperty: (property: string, defaultValue?: string | boolean) => any
   openWebview: (webviewComponent: Webview) => void
+  resetUnreadMessages: () => void
   resolveCase: () => void
   sendAttachment: (attachment: File) => void
   sendInput: (input: CoreInput) => void
   sendPayload: (payload: string) => void
   sendText: (text: string, payload?: string) => void
+  setLastMessageVisible: (isLastMessageVisible: boolean) => void
   theme: ThemeProps
   toggleWebchat: (toggle: boolean) => void
   updateLatestInput: (input: CoreInput) => void

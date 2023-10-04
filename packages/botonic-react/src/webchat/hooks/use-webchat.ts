@@ -44,6 +44,7 @@ export const webchatInitialState: WebchatState = {
   currentAttachment: undefined,
   jwt: undefined,
   unreadMessages: 0,
+  isLastMessageVisible: true,
 }
 
 export function useWebchat() {
@@ -183,13 +184,28 @@ export function useWebchat() {
     })
   }
 
+  const resetUnreadMessages = () => {
+    webchatDispatch({
+      type: WebchatAction.RESET_UNREAD_MESSAGES,
+    })
+  }
+
+  const setLastMessageVisible = (isLastMessageVisible: boolean) => {
+    webchatDispatch({
+      type: WebchatAction.SET_LAST_MESSAGE_VISIBLE,
+      payload: isLastMessageVisible,
+    })
+  }
+
   return {
     addMessage,
     addMessageComponent,
     clearMessages,
     doRenderCustomComponent,
+    resetUnreadMessages,
     setCurrentAttachment,
     setError,
+    setLastMessageVisible,
     setOnline,
     toggleCoverComponent,
     toggleEmojiPicker,
