@@ -1,5 +1,6 @@
 import React, { ErrorInfo } from 'react'
 
+import { SENDERS } from '../index-types'
 import { CoverComponentProps } from '../webchat/index-types'
 
 export type MessageType =
@@ -18,7 +19,7 @@ export interface MessageProps {
   children: React.ReactNode
   delay?: number
   enabletimestamps?: boolean
-  from?: 'user' | 'bot'
+  sentBy?: SENDERS
   json?: Record<string, unknown>
   style?: Record<string, unknown>
   type?: MessageType

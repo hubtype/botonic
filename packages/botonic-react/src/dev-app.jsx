@@ -2,7 +2,7 @@ import merge from 'lodash.merge'
 import React from 'react'
 import { render } from 'react-dom'
 
-import { SENDERS } from './constants'
+import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
 import { onDOMLoaded } from './util/dom'
 import { WebchatDev } from './webchat/webchat-dev'
@@ -123,11 +123,17 @@ export class DevApp extends WebchatApp {
 
   async onUserInput({ input, session, lastRoutePath }) {
     this.onMessage &&
-      this.onMessage(this, { from: SENDERS.user, message: input })
+      this.onMessage(this, {
+        sentBy: SENDERS.user,
+        message: input,
+      })
     const resp = await this.bot.input({ input, session, lastRoutePath })
     this.onMessage &&
       resp.response.map(r =>
-        this.onMessage(this, { from: SENDERS.bot, message: r })
+        this.onMessage(this, {
+          sentBy: SENDERS.bot,
+          message: r,
+        })
       )
     this.webchatRef.current.addBotResponse(resp)
   }

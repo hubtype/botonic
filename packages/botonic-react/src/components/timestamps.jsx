@@ -46,17 +46,17 @@ const TimestampText = styled.div`
   font-size: 10px;
   color: ${COLORS.SOLID_BLACK};
   width: 100%;
-  text-align: ${props => (props.isfromuser ? 'right' : 'left')};
-  padding: ${props => (props.isfromuser ? '0px 15px' : '0px 50px')};
+  text-align: ${props => (props.isSentByUser ? 'right' : 'left')};
+  padding: ${props => (props.isSentByUser ? '0px 15px' : '0px 50px')};
   margin-bottom: 5px;
 `
 
-export const MessageTimestamp = ({ timestamp, style, isfromuser }) => {
-  const classSufix = isfromuser ? 'user' : 'bot'
+export const MessageTimestamp = ({ timestamp, style, isSentByUser }) => {
+  const classSufix = isSentByUser ? 'user' : 'bot'
   return (
     <TimestampContainer className={`botonic-timestamp-${classSufix}`}>
       <TimestampText
-        isfromuser={isfromuser}
+        isSentByUser={isSentByUser}
         style={{
           ...style,
         }}

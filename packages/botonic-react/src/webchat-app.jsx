@@ -112,7 +112,6 @@ export class WebchatApp {
   async onUserInput({ user, input }) {
     this.onMessage &&
       this.onMessage(this, {
-        from: SENDERS.user,
         sentBy: SENDERS.user,
         message: input,
         isUnread: false,

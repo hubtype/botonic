@@ -144,7 +144,6 @@ export interface WebchatMessage {
   delay: number
   display: boolean
   enabletimestamps: boolean
-  from: SENDERS.bot | SENDERS.user
   id: string
   imagestyle: any
   isUnread: boolean

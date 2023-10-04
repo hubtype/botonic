@@ -411,7 +411,6 @@ export const Webchat = forwardRef((props, ref) => {
         addMessageComponent(
           <Text
             id={input.id}
-            from={SENDERS.user}
             sentBy={SENDERS.user}
             blob={false}
             style={{
@@ -486,12 +485,7 @@ export const Webchat = forwardRef((props, ref) => {
     let messageComponent = null
     if (isText(input)) {
       messageComponent = (
-        <Text
-          id={input.id}
-          payload={input.payload}
-          from={SENDERS.user}
-          sentBy={SENDERS.user}
-        >
+        <Text id={input.id} payload={input.payload} sentBy={SENDERS.user}>
           {input.data}
         </Text>
       )
@@ -499,7 +493,6 @@ export const Webchat = forwardRef((props, ref) => {
       const temporaryDisplayUrl = URL.createObjectURL(input.data)
       const mediaProps = {
         id: input.id,
-        from: SENDERS.user,
         sentBy: SENDERS.user,
         src: temporaryDisplayUrl,
       }
