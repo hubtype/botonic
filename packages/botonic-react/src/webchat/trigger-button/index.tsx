@@ -33,7 +33,7 @@ export const TriggerButton = (): JSX.Element => {
   )
 
   const notificationsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.triggerButtonNotificationsEnabled,
+    WEBCHAT.CUSTOM_PROPERTIES.notificationsTriggerButtonEnabled,
     false
   )
 

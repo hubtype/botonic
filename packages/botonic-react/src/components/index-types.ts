@@ -151,9 +151,12 @@ export interface ThemeProps extends StyleProp {
     enableArrows?: boolean
   }
   reply?: StyleProp & CustomProp
-  triggerButton?: { notificationsEnabled?: boolean } & ImageProp &
-    StyleProp &
-    CustomProp
+  triggerButton?: ImageProp & StyleProp & CustomProp
+  notifications?: EnableProp & {
+    banner?: CustomProp & EnableProp & { text?: string }
+    triggerButton?: EnableProp
+  }
+  scrollButton?: EnableProp & CustomProp
   markdownStyle?: string // string template with css styles
   scrollbar?: ScrollbarProps & EnableProp
   userInput?: {
