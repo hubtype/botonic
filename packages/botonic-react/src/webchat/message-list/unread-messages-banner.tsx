@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 
 import ArrowDown from '../../assets/arrow-down.svg'
 import { WEBCHAT } from '../../constants'
@@ -7,22 +7,27 @@ import { resolveImage } from '../../util/environment'
 import { ContainerUnreadMessagesBanner } from './styles'
 
 interface UnreadMessagesBannerProps {
-  unreadMessages: number
+  numUnreadMessages: number
 }
 
 export const UnreadMessagesBanner = ({
-  unreadMessages,
+  numUnreadMessages,
 }: UnreadMessagesBannerProps): JSX.Element => {
-  const { getThemeProperty } = useContext(WebchatContext)
-
-  const notificationsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsEnabled,
-    false
-  )
+  const { getThemeProperty, webchatState } = useContext(WebchatContext)
 
   const CustomUnreadMessagesBanner = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerCustom,
     undefined
+  )
+
+  const notificationsBannerEnabled = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerEnabled,
+    undefined
+  )
+
+  const notificationsEnabled = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.notificationsEnabled,
+    CustomUnreadMessagesBanner || notificationsBannerEnabled
   )
 
   const text = getThemeProperty(
@@ -30,20 +35,29 @@ export const UnreadMessagesBanner = ({
     'unread messages'
   )
 
+  const unreadMessagesBannerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    console.log('useEffect MessagesList', unreadMessagesBannerRef.current)
+    if (webchatState.isWebchatOpen && unreadMessagesBannerRef.current) {
+      unreadMessagesBannerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }, [webchatState.isWebchatOpen, unreadMessagesBannerRef])
+
   return (
-    <>
-      {notificationsEnabled ? (
-        <>
-          {CustomUnreadMessagesBanner ? (
-            <CustomUnreadMessagesBanner />
-          ) : (
-            <ContainerUnreadMessagesBanner>
-              <img src={resolveImage(ArrowDown)} />
-              {unreadMessages} {text}
-            </ContainerUnreadMessagesBanner>
-          )}
-        </>
-      ) : null}
-    </>
+    notificationsEnabled && (
+      <div ref={unreadMessagesBannerRef}>
+        {CustomUnreadMessagesBanner ? (
+          <CustomUnreadMessagesBanner />
+        ) : (
+          <ContainerUnreadMessagesBanner>
+            <img src={resolveImage(ArrowDown)} />
+            {numUnreadMessages} {text}
+          </ContainerUnreadMessagesBanner>
+        )}
+      </div>
+    )
   )
 }
