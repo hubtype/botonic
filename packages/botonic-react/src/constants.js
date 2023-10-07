@@ -120,10 +120,10 @@ export const WEBCHAT = {
     // TriggerButton
     customTrigger: 'triggerButton.custom',
     triggerButtonImage: 'triggerButton.image',
-    // triggerButtonNotificationsEnabled: 'triggerButton.notificationsEnabled',
     triggerButtonStyle: 'triggerButton.style',
     // Notifications
     notificationsEnabled: 'notifications.enable',
+    notificationsBannerEnabled: 'notifications.banner.enable',
     notificationsBannerCustom: 'notifications.banner.custom',
     notificationsBannerText: 'notifications.banner.text',
     notificationsTriggerButtonEnabled: 'notifications.triggerButton.enable',

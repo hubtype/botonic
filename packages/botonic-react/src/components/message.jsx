@@ -135,7 +135,7 @@ export const Message = props => {
         data: decomposedChildren ? decomposedChildren : textChildren,
         timestamp: props.timestamp || getFormattedTimestamp,
         markdown,
-        sentBy: props.sentBy,
+        sentBy,
         buttons: buttons.map(b => ({
           parentId: b.props.parentId,
           payload: b.props.payload,
@@ -157,7 +157,7 @@ export const Message = props => {
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
-        isUnread: isUnread === 1 || isUnread === true ? true : false,
+        isUnread: isUnread === 1 || isUnread === true,
       }
       addMessage(message)
     }
@@ -200,8 +200,9 @@ export const Message = props => {
       ? getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.botMessageStyle)
       : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userMessageStyle)
 
+  const userOrBotMessage = isSentByUser ? SENDERS.user : SENDERS.bot
   const hasBlobTick = () =>
-    getThemeProperty(`message.${isSentByUser ? 'user' : 'bot'}.blobTick`, true)
+    getThemeProperty(`message.${userOrBotMessage}.blobTick`, true)
 
   const renderBrowser = () => {
     const m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -215,13 +216,11 @@ export const Message = props => {
         pointerSize == 5
           ? getBgColor()
           : getThemeProperty(
-              `message.${isSentByUser ? 'user' : 'bot'}.style.borderColor`,
+              `message.${userOrBotMessage}.style.borderColor`,
               COLORS.TRANSPARENT
             )
       const containerStyle = {
-        ...getThemeProperty(
-          `message.${isSentByUser ? 'user' : 'bot'}.blobTickStyle`
-        ),
+        ...getThemeProperty(`message.${userOrBotMessage}.blobTickStyle`),
       }
       const blobTickStyle = {}
       if (isSentByUser) {
@@ -257,9 +256,7 @@ export const Message = props => {
     const resolveCustomTypeName = () =>
       isSentByBot && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
 
-    const className = `${type}-${
-      isSentByUser ? 'user' : 'bot'
-    }${resolveCustomTypeName()}`
+    const className = `${type}-${userOrBotMessage}${resolveCustomTypeName()}`
 
     return (
       <ConditionalWrapper

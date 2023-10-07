@@ -43,7 +43,6 @@ export const WebchatMessageList = props => {
     }
   }, [webchatState.messagesComponents])
 
-  // TODO
   useEffect(() => {
     if (webchatState.isLastMessageVisible && webchatState.typing) {
       scrollToBottom({ host: props.host })
@@ -61,12 +60,10 @@ export const WebchatMessageList = props => {
   const showUnreadMessagesBanner = (messageComponentId: string) =>
     firstUnreadMessageId &&
     messageComponentId === firstUnreadMessageId &&
-    webchatState.unreadMessages > 0
+    webchatState.numUnreadMessages > 0
 
   const showScrollButton =
-    webchatState.unreadMessages > 0 && !webchatState.isLastMessageVisible
-
-  console.log('messagesComponents', webchatState.messagesComponents)
+    webchatState.numUnreadMessages > 0 && !webchatState.isLastMessageVisible
 
   return (
     <>
@@ -76,7 +73,7 @@ export const WebchatMessageList = props => {
         id='botonic-scrollable-content'
         scrollbar={scrollbarOptions}
         autoHide={scrollbarOptions.autoHide}
-        ismessagescontainer='true'
+        isMessagesContainer={true}
         style={{
           ...props.style,
         }}
@@ -87,7 +84,7 @@ export const WebchatMessageList = props => {
             <ContainerMessage role={ROLES.MESSAGE} key={index}>
               {showUnreadMessagesBanner(messageComponent.props.id) && (
                 <UnreadMessagesBanner
-                  unreadMessages={webchatState.unreadMessages}
+                  numUnreadMessages={webchatState.numUnreadMessages}
                 />
               )}
 

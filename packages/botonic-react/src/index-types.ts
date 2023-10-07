@@ -137,7 +137,7 @@ export enum SENDERS {
 
 export interface WebchatMessage {
   ack: 0 | 1
-  bolb: boolean
+  blob: boolean
   buttons: ButtonProps[]
   children: any
   data: any

@@ -19,7 +19,7 @@ export const messagesReducer = (
         ...state,
         messagesJSON: [],
         messagesComponents: [],
-        unreadMessages: 0,
+        numUnreadMessages: 0,
       }
     case WebchatAction.UPDATE_LAST_MESSAGE_DATE:
       return {
@@ -47,14 +47,14 @@ function addMessageComponent(
     messageComponent.props?.isUnread &&
     messageComponent.props?.sent_by !== 'user'
 
-  const unreadMessages = isUnreadMessage
-    ? state.unreadMessages + 1
-    : state.unreadMessages
+  const numUnreadMessages = isUnreadMessage
+    ? state.numUnreadMessages + 1
+    : state.numUnreadMessages
 
   return {
     ...state,
     messagesComponents: [...(state.messagesComponents || []), messageComponent],
-    unreadMessages,
+    numUnreadMessages,
   }
 }
 
@@ -75,7 +75,7 @@ function resetUnreadMessages(state: WebchatState) {
     ...state,
     messagesComponents,
     messagesJSON,
-    unreadMessages: 0,
+    numUnreadMessages: 0,
   }
 }
 
@@ -103,7 +103,7 @@ function updateMessageReducer(
       }
     }
 
-    const unreadMessages = state.messagesComponents.filter(
+    const numUnreadMessages = state.messagesComponents.filter(
       messageComponent => messageComponent.props.isUnread
     ).length
 
@@ -115,7 +115,7 @@ function updateMessageReducer(
         ...state.messagesJSON.slice(msgIndex + 1),
       ],
       ...updatedMessageComponents,
-      unreadMessages,
+      numUnreadMessages,
     }
   }
 
