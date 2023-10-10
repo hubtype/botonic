@@ -85,17 +85,15 @@ export function msgToBotonic(msg, customMessageTypes) {
     const long = msg.data ? msg.data.location.long : msg.longitude
     return <Location {...msg} lat={lat} long={long} />
   } else if (isButtonMessage(msg)) {
-    msg.data = msg.text
-    // const buttons = buttonsParse(msg.buttons)
-    // return (
-    //   <>
-    //     <Text {...msg} key={msg.key}>
-    //       {msg.text}
-    //       {buttons}
-    //     </Text>
-    //   </>
-    // )
-    return textToBotonic(msg)
+    const buttons = buttonsParse(msg.buttons)
+    return (
+      <>
+        <Text {...msg} key={msg.key}>
+          {msg.text}
+          {buttons}
+        </Text>
+      </>
+    )
   }
   console.warn(`Not converting message of type ${msg.type}`)
   return null
