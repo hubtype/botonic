@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { MultichannelButton } from '../../../lib/esm/components/multichannel'
+import { MultichannelButton } from '../../../src/components/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 describe('Multichannel buttons:', () => {
