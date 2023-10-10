@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 
 import ArrowScrollDown from '../../assets/arrow-scroll-down.svg'
 import { WEBCHAT } from '../../constants'
@@ -22,7 +22,7 @@ export const ScrollButton = ({
 
   const scrollButtonEnabled = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.scrollButtonEnabled,
-    false
+    CustomScrollButton
   )
 
   return (
