@@ -1,10 +1,16 @@
 import React from 'react'
 
-import { Carousel, Element, Pic, Subtitle, Title } from '../../../lib/cjs'
+import {
+  Carousel,
+  Element,
+  Pic,
+  Subtitle,
+  Title,
+} from '../../../src/components'
 import {
   MultichannelButton,
   MultichannelCarousel,
-} from '../../../lib/cjs/components/multichannel'
+} from '../../../src/components/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 export const LEGACY_CONTEXT = {

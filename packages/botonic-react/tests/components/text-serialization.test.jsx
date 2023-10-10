@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { Button } from '../../lib/cjs/components/button'
-import { Text } from '../../lib/cjs/components/text'
+import { Text } from '../../src/components/text'
 
 describe('Text serialization', () => {
   test.each([

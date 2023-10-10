@@ -1,4 +1,4 @@
-import { MultichannelFacebook } from '../../../../lib/esm/components/multichannel/facebook/facebook'
+import { MultichannelFacebook } from '../../../../src/components/multichannel/facebook/facebook'
 
 describe('Multichannel Facebook text converter', () => {
   const multichannelFacebook = new MultichannelFacebook()

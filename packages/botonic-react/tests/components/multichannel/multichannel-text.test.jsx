@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { Text } from '../../../lib/cjs'
+import { Text } from '../../../src/components'
 import {
   MultichannelButton,
   MultichannelText,
-} from '../../../lib/cjs/components/multichannel'
-import { MultichannelReply } from '../../../lib/cjs/components/multichannel/multichannel-reply'
+} from '../../../src/components/multichannel'
+import { MultichannelReply } from '../../../src/components/multichannel/multichannel-reply'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 const LEGACY_CONTEXT = {

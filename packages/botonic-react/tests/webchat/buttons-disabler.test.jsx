@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ * @jest-environment-options {"url": "https://jestjs.io/"}
+ */
+
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 
@@ -9,9 +14,9 @@ import {
   Subtitle,
   Text,
   Title,
-} from '../../lib/cjs/components'
-import { ButtonsDisabler } from '../../lib/cjs/components/buttons-disabler'
-import { msgToBotonic } from '../../lib/cjs/msg-to-botonic'
+} from '../../src/components'
+import { ButtonsDisabler } from '../../src/components/buttons-disabler'
+import { msgToBotonic } from '../../src/msg-to-botonic'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()
 
