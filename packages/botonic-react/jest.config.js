@@ -1,6 +1,8 @@
 // Options about JS are for compiling @botonic .js/jsx files
+/** @type {import('jest').Config} */
 module.exports = {
   roots: ['src/', 'tests/'],
+  preset: './node_modules/@babel/preset-typescript',
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx)$',
   testPathIgnorePatterns: [
     'lib',
@@ -13,7 +15,7 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!@botonic|axios|react-children-utilities|uuid|parse5).+\\.(js|jsx|tsx)$',
   ],
-  moduleFileExtensions: ['js', 'jsx', 'json', 'tsx'],
+  moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
   snapshotSerializers: [],
   modulePaths: ['node_modules', 'src'],
   moduleNameMapper: {
