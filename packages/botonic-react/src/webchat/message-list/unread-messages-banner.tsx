@@ -36,7 +36,6 @@ export const UnreadMessagesBanner = ({
   )
 
   useEffect(() => {
-    console.log('useEffect MessagesList', unreadMessagesBannerRef.current)
     if (webchatState.isWebchatOpen && unreadMessagesBannerRef.current) {
       unreadMessagesBannerRef.current.scrollIntoView({
         behavior: 'smooth',
