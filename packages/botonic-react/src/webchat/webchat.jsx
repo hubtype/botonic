@@ -313,7 +313,6 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     if (!webchatState.isWebchatOpen) return
     deviceAdapter.init(host)
-    scrollToBottom({ behavior: 'auto', host })
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
@@ -533,7 +532,8 @@ export const Webchat = forwardRef((props, ref) => {
     addBotResponse: ({ response, session, lastRoutePath }) => {
       updateTyping(false)
 
-      const isUnread = !webchatState.isLastMessageVisible
+      const isUnread =
+        !webchatState.isLastMessageVisible || webchatState.numUnreadMessages > 0
 
       if (Array.isArray(response)) {
         response.forEach(r => {
@@ -749,6 +749,7 @@ export const Webchat = forwardRef((props, ref) => {
               inputRef={textArea}
               name='text'
               onFocus={() => {
+                scrollToBottom({ host })
                 resetUnreadMessages()
                 deviceAdapter.onFocus(host)
               }}
@@ -762,7 +763,7 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.CUSTOM_PROPERTIES.textPlaceholder,
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
-              autoFocus={true}
+              autoFocus={false}
               onKeyDown={e => onKeyDown(e)}
               onKeyUp={onKeyUp}
               style={{
@@ -826,7 +827,6 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
-    // scrollToBottom({ host })
   }, [webchatState.themeUpdates])
 
   // Only needed for dev/serve mode
