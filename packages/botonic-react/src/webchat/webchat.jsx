@@ -311,7 +311,12 @@ export const Webchat = forwardRef((props, ref) => {
   }, [])
 
   useEffect(() => {
-    if (!webchatState.isWebchatOpen) return
+    if (!webchatState.isWebchatOpen) {
+      if (webchatState.isLastMessageVisible) {
+        resetUnreadMessages()
+      }
+      return
+    }
     deviceAdapter.init(host)
   }, [webchatState.isWebchatOpen])
 
@@ -749,8 +754,6 @@ export const Webchat = forwardRef((props, ref) => {
               inputRef={textArea}
               name='text'
               onFocus={() => {
-                scrollToBottom({ host })
-                resetUnreadMessages()
                 deviceAdapter.onFocus(host)
               }}
               onBlur={() => {
