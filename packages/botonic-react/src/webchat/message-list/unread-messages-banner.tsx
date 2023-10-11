@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext } from 'react'
 
 import ArrowDown from '../../assets/arrow-down.svg'
 import { WEBCHAT } from '../../constants'
@@ -34,15 +34,6 @@ export const UnreadMessagesBanner = ({
     WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerText,
     'unread messages'
   )
-
-  useEffect(() => {
-    if (webchatState.isWebchatOpen && unreadMessagesBannerRef.current) {
-      unreadMessagesBannerRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      })
-    }
-  }, [webchatState.isWebchatOpen, unreadMessagesBannerRef])
 
   return (
     notificationsEnabled && (
