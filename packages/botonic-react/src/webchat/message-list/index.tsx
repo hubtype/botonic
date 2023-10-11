@@ -24,6 +24,21 @@ export const WebchatMessageList = props => {
   }
 
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
+
+  const lastMessageRef = useRef<HTMLDivElement>(null)
+
+  const handleScrollToBottom = () => {
+    resetUnreadMessages()
+    scrollToBottom({ host: props.host })
+  }
+
+  const showUnreadMessagesBanner = (messageComponentId: string) =>
+    firstUnreadMessageId &&
+    messageComponentId === firstUnreadMessageId &&
+    webchatState.numUnreadMessages > 0
+
+  const unreadMessagesBannerRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const firstUnreadMessage = webchatState.messagesComponents.find(
       message => message.props.isUnread
@@ -31,7 +46,6 @@ export const WebchatMessageList = props => {
     setFirstUnreadMessageId(firstUnreadMessage?.props?.id)
   }, [webchatState.messagesComponents])
 
-  const lastMessageRef = useRef(null)
   useEffect(() => {
     if (webchatState.messagesComponents.length > 0 && lastMessageRef.current) {
       const observer = new IntersectionObserver(entries => {
@@ -52,15 +66,23 @@ export const WebchatMessageList = props => {
     }
   }, [webchatState.typing, webchatState.isLastMessageVisible])
 
-  const handleScrollToBottom = () => {
-    resetUnreadMessages()
-    scrollToBottom({ host: props.host })
-  }
-
-  const showUnreadMessagesBanner = (messageComponentId: string) =>
-    firstUnreadMessageId &&
-    messageComponentId === firstUnreadMessageId &&
-    webchatState.numUnreadMessages > 0
+  useEffect(() => {
+    if (firstUnreadMessageId) {
+      if (unreadMessagesBannerRef.current) {
+        unreadMessagesBannerRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+        return
+      }
+    } else if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      })
+      return
+    }
+  }, [firstUnreadMessageId])
 
   const showScrollButton =
     webchatState.numUnreadMessages > 0 && !webchatState.isLastMessageVisible
@@ -84,7 +106,7 @@ export const WebchatMessageList = props => {
             <ContainerMessage role={ROLES.MESSAGE} key={index}>
               {showUnreadMessagesBanner(messageComponent.props.id) && (
                 <UnreadMessagesBanner
-                  numUnreadMessages={webchatState.numUnreadMessages}
+                  unreadMessagesBannerRef={unreadMessagesBannerRef}
                 />
               )}
 

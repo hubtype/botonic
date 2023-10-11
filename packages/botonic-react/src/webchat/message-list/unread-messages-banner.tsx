@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext } from 'react'
 
 import ArrowDown from '../../assets/arrow-down.svg'
 import { WEBCHAT } from '../../constants'
@@ -7,11 +7,11 @@ import { resolveImage } from '../../util/environment'
 import { ContainerUnreadMessagesBanner } from './styles'
 
 interface UnreadMessagesBannerProps {
-  numUnreadMessages: number
+  unreadMessagesBannerRef: React.RefObject<HTMLDivElement>
 }
 
 export const UnreadMessagesBanner = ({
-  numUnreadMessages,
+  unreadMessagesBannerRef,
 }: UnreadMessagesBannerProps): JSX.Element => {
   const { getThemeProperty, webchatState } = useContext(WebchatContext)
 
@@ -35,16 +35,6 @@ export const UnreadMessagesBanner = ({
     'unread messages'
   )
 
-  const unreadMessagesBannerRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (webchatState.isWebchatOpen && unreadMessagesBannerRef.current) {
-      unreadMessagesBannerRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      })
-    }
-  }, [webchatState.isWebchatOpen, unreadMessagesBannerRef])
-
   return (
     notificationsEnabled && (
       <div ref={unreadMessagesBannerRef}>
@@ -53,7 +43,7 @@ export const UnreadMessagesBanner = ({
         ) : (
           <ContainerUnreadMessagesBanner>
             <img src={resolveImage(ArrowDown)} />
-            {numUnreadMessages} {text}
+            {webchatState.numUnreadMessages} {text}
           </ContainerUnreadMessagesBanner>
         )}
       </div>

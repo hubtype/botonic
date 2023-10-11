@@ -36,6 +36,8 @@ export const ContainerUnreadMessagesBanner = styled.div`
   align-items: center;
   gap: 5px;
 
+  border-top: 1px solid #e8e8ea;
+  padding: 8px;
   color: #6d6a78;
   font-size: 14px;
   font-weight: 400;
