@@ -29,7 +29,7 @@ export const ScrollButton = ({
     scrollButtonEnabled && (
       <>
         {CustomScrollButton ? (
-          <CustomScrollButton />
+          <CustomScrollButton handleScrollToBottom={handleClick} />
         ) : (
           <ContainerScrollButton onClick={handleClick}>
             <img src={resolveImage(ArrowScrollDown)} />
