@@ -19,8 +19,9 @@ import {
 } from '../helpers/test-utils'
 
 describe('Adding webchat messageComponent', () => {
-  // To avoid TypeError: frame.scrollTo is not a function
+  // To avoid TypeError: frame.scrollTo is not a function (same for scrollIntoView)
   window.HTMLElement.prototype.scrollTo = function () {}
+  window.HTMLElement.prototype.scrollIntoView = function () {}
 
   it('TEST: When adding an Image message the webchat has StyledWebchat, MessageList, StyledMessage and ImageMessage', async () => {
     const { result } = renderUseWebchatHook()
