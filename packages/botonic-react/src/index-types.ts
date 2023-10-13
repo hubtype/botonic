@@ -7,7 +7,7 @@ import {
   Routes as CoreRoutes,
   Session as CoreSession,
   SessionUser as CoreSessionUser,
-} from '@botonic/core/src'
+} from '@botonic/core'
 import React from 'react'
 
 import {

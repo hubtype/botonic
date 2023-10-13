@@ -1,4 +1,4 @@
-import { CoreBot } from '@botonic/core/lib/esm'
+import { CoreBot } from '@botonic/core'
 import React from 'react'
 
 import { Text } from './components/text'

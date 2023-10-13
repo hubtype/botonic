@@ -1,5 +1,4 @@
-import { HubtypeService } from '@botonic/core'
-import { INPUT } from '@botonic/core/lib/esm/models/legacy-types'
+import { HubtypeService, INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
