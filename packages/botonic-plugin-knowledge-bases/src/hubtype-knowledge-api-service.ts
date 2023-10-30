@@ -19,6 +19,7 @@ export class HubtypeApiService {
     chatId: string
   ): Promise<
     AxiosResponse<{
+      question: string
       answer: string
       has_knowledge: boolean
       sources: {
