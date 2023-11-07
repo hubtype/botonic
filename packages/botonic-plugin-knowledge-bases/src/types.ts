@@ -6,6 +6,7 @@ export interface PluginKnowledgeBaseOptions {
 }
 
 export interface KnowledgeBaseResponse {
+  question: string
   answer: string
   hasKnowledge: boolean
   sources: {
