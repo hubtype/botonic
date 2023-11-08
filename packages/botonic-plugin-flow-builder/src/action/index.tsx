@@ -83,8 +83,11 @@ async function getTargetNode(
 }
 
 async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
-  if (!request.session.user.extra_data) {
-    request.session.user.extra_data = { isFirstFallbackOption: true }
+  if (request.session.user.extra_data?.isFirstFallbackOption === undefined) {
+    request.session.user.extra_data = {
+      ...request.session.user.extra_data,
+      isFirstFallbackOption: true,
+    }
   }
 
   const knowledgeBaseNode = await createNodeFromKnowledgeBase(cmsApi, request)
