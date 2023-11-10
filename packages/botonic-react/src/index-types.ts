@@ -1,4 +1,4 @@
-import type {
+import {
   BotRequest as CoreBotRequest,
   Input as CoreInput,
   InputType as CoreInputType,
@@ -7,7 +7,7 @@ import type {
   Routes as CoreRoutes,
   Session as CoreSession,
   SessionUser as CoreSessionUser,
-} from '@botonic/core/lib/esm/models/legacy-types'
+} from '@botonic/core'
 import React from 'react'
 
 import {

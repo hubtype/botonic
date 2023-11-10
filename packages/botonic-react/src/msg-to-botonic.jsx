@@ -88,7 +88,7 @@ export function msgToBotonic(msg, customMessageTypes) {
     const buttons = buttonsParse(msg.buttons)
     return (
       <>
-        <Text {...msg}>
+        <Text {...msg} key={msg.key}>
           {msg.text}
           {buttons}
         </Text>

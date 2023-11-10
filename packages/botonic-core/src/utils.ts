@@ -13,7 +13,9 @@ export const isBrowser = (): boolean => {
   return typeof IS_BROWSER !== 'undefined'
     ? // @ts-ignore
       IS_BROWSER
-    : typeof window !== 'undefined' && typeof window.document !== 'undefined'
+    : typeof window !== 'undefined' &&
+        typeof window.document !== 'undefined' &&
+        !window.process?.versions?.node
 }
 
 export const isMobile = (mobileBreakpoint = 460): boolean => {

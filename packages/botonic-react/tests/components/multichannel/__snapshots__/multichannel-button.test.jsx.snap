@@ -4,33 +4,15 @@ exports[`Multichannel buttons: truncate text if more than 20 chars in whatsapp b
 <button
   payload="payload1"
 >
-  With text longer than 20 characters
+  With text longer ...
 </button>
 `;
 
-exports[`Multichannel buttons: with URL 1`] = `
-<button
-  url="https://docs.botonic.io/"
->
-  With URL
-</button>
-`;
+exports[`Multichannel buttons: with URL 1`] = `"- With URL: https://docs.botonic.io/"`;
 
-exports[`Multichannel buttons: with path 1`] = `
-<button
-  payload="__PATH_PAYLOAD__path1"
->
-  With path
-</button>
-`;
+exports[`Multichannel buttons: with path 1`] = `"1.- With path"`;
 
-exports[`Multichannel buttons: with payload 1`] = `
-<button
-  payload="payload1"
->
-  With payload
-</button>
-`;
+exports[`Multichannel buttons: with payload 1`] = `"1- With payload"`;
 
 exports[`Multichannel buttons: with webview 1`] = `
 <button

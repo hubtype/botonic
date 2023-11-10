@@ -9,8 +9,8 @@ import {
   Subtitle,
   Text,
   Title,
-} from '../../../lib/cjs'
-import { Multichannel } from '../../../lib/esm/components/multichannel/multichannel'
+} from '../../../src/components'
+import { Multichannel } from '../../../src/components/multichannel/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 const LEGACY_PROPS = {

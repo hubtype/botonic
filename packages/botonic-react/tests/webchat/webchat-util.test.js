@@ -1,8 +1,13 @@
+/**
+ * @jest-environment jsdom
+ * @jest-environment-options {"url": "https://jestjs.io/"}
+ */
+
 import {
   createUser,
   initSession,
   shouldKeepSessionOnReload,
-} from '../../lib/cjs/util/webchat'
+} from '../../src/util/webchat'
 
 describe('TEST: User Creation', () => {
   it('Creates a new user', () => {

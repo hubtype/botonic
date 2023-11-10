@@ -1,18 +1,23 @@
 import { act } from '@testing-library/react-hooks'
+import React from 'react'
 
-import { SENDERS } from '../../lib/cjs/constants'
+import { Message } from '../../src/components'
+import { SENDERS } from '../../src/index-types'
 import { renderUseWebchatHook } from '../helpers/test-utils'
 
 describe('TEST: useWebchat', () => {
-  const testMessage = {
-    id: '837da73-899',
-    type: 'text',
-    data: {
-      text: 'Hey!',
-    },
-    from: SENDERS.bot,
-    display: false,
-  }
+  const testMessage = (
+    <Message
+      id='837da73-899'
+      type='text'
+      data={{
+        text: 'Hey!',
+      }}
+      sentBy={SENDERS.bot}
+      display={false}
+      isUnread={true}
+    />
+  )
 
   const testUser = {
     id: '000001',

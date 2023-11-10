@@ -1,9 +1,9 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 
-import { Button, customMessage, Reply, Text } from '../../lib/cjs/components'
-import { getElementName } from '../../lib/cjs/components/components'
-import { createErrorBoundary } from '../../lib/cjs/util/error-boundary'
+import { Button, customMessage, Reply, Text } from '../../src/components'
+import { getElementName } from '../../src/components/components'
+import { createErrorBoundary } from '../../src/util/error-boundary'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()
 

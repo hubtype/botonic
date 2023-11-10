@@ -7,7 +7,7 @@ import {
   Pic,
   Subtitle,
   Title,
-} from '../../../lib/cjs'
+} from '../../../src/components'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 const movies = [

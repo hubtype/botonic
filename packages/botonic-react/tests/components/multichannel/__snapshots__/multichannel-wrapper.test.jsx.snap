@@ -3,7 +3,7 @@
 exports[`Multichannel wrapper 1 text in 1 single message 1`] = `
 <message
   delay={0}
-  markdown={1}
+  markdown={0}
   type="text"
   typing={0}
 >
@@ -12,61 +12,40 @@ exports[`Multichannel wrapper 1 text in 1 single message 1`] = `
 `;
 
 exports[`Multichannel wrapper 2 text in 1 single message 1`] = `
-[
-  <message
-    delay={0}
-    markdown={1}
-    type="text"
-    typing={0}
-  >
-    Text1
-  </message>,
-  <message
-    delay={0}
-    markdown={1}
-    type="text"
-    typing={0}
-  >
-    Text2
-  </message>,
-]
+<message
+  delay={0}
+  markdown={0}
+  type="text"
+  typing={0}
+>
+  Text1
+  
+Text2
+</message>
 `;
 
 exports[`Multichannel wrapper 2 texts with buttons 1`] = `
-[
-  <message
-    delay={0}
-    markdown={1}
-    type="text"
-    typing={0}
-  >
-    Text1
-    <button
-      payload="payload1"
-    >
-      Button 1
-    </button>
-  </message>,
-  <message
-    delay={0}
-    markdown={1}
-    type="text"
-    typing={0}
-  >
-    Text2
-    <button
-      payload="payload2"
-    >
-      Button 2
-    </button>
-  </message>,
-]
+<message
+  delay={0}
+  markdown={0}
+  type="text"
+  typing={0}
+>
+  Text1
+  
+Button 1
+  
+Text2
+  
+Button 2
+</message>
 `;
 
 exports[`Multichannel wrapper just text 1`] = `
 <message
   delay={0}
-  markdown={1}
+  indexMode="number"
+  markdown={0}
   type="text"
   typing={0}
 >
@@ -78,57 +57,42 @@ exports[`Multichannel wrapper many multichannels 1`] = `
 [
   <message
     delay={0}
-    markdown={1}
+    indexMode="number"
+    markdown={0}
     type="text"
     typing={0}
   >
     Some text with replies
-    <reply
-      payload="payload1"
-    >
-      Reply 1
-    </reply>
-    <reply
-      payload="__PATH_PAYLOAD__path1"
-    >
-      Reply 2
-    </reply>
+    
+1. Reply 1
+    
+2. Reply 2
   </message>,
   <message
     delay={0}
-    markdown={1}
+    indexMode="number"
+    markdown={0}
     type="text"
     typing={0}
   >
     Some text with replies
-    <reply
-      payload="payload1"
-    >
-      Reply 1 should have 3.
-    </reply>
-    <reply
-      payload="__PATH_PAYLOAD__path1"
-    >
-      Reply 2 should have 4.
-    </reply>
+    
+3. Reply 1 should have 3.
+    
+4. Reply 2 should have 4.
   </message>,
   <message
     delay={0}
-    markdown={1}
+    indexMode="number"
+    markdown={0}
     type="text"
     typing={0}
   >
     Some text with replies
-    <reply
-      payload="payload1"
-    >
-      Reply 1 number reset
-    </reply>
-    <reply
-      payload="__PATH_PAYLOAD__path1"
-    >
-      Reply 2 number reset
-    </reply>
+    
+1. Reply 1 number reset
+    
+2. Reply 2 number reset
   </message>,
 ]
 `;
@@ -137,7 +101,8 @@ exports[`Multichannel wrapper text and carousel legacy 1`] = `
 [
   <message
     delay={0}
-    markdown={1}
+    indexMode="number"
+    markdown={0}
     type="text"
     typing={0}
   >
@@ -145,159 +110,90 @@ exports[`Multichannel wrapper text and carousel legacy 1`] = `
   </message>,
   <message
     delay={0}
-    style={
-      {
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "padding": 0,
-        "width": "85%",
-      }
-    }
-    type="carousel"
+    indexMode="number"
+    markdown={0}
+    newkey={0}
+    type="text"
     typing={0}
   >
-    <element>
-      <pic>
-        https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614
-      </pic>
-      <title>
-        Title1
-      </title>
-      <desc>
-        Subtitle1
-      </desc>
-      <button
-        payload="Payload1"
-      >
-        Previo a la compra
-      </button>
-    </element>
-    <element>
-      <pic>
-        https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614
-      </pic>
-      <title>
-        Title2
-      </title>
-      <desc>
-        Subtitle2
-      </desc>
-      <button
-        payload="Payload2.1"
-      >
-        Durante la compra
-      </button>
-      <button
-        payload="Payload2.2"
-      >
-        Durante la compra2
-      </button>
-    </element>
-    <element>
-      <pic>
-        https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614
-      </pic>
-      <title>
-        Title3
-      </title>
-      <desc>
-        Subtitle3
-      </desc>
-      <button
-        payload="Payload3"
-      >
-        Posterior a la compra
-      </button>
-    </element>
+    *Title1* _Subtitle1_
+    
+1. Previo a la compra
+  </message>,
+  <message
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={1}
+    type="text"
+    typing={0}
+  >
+    *Title2* _Subtitle2_
+    
+2. Durante la compra
+    
+3. Durante la compra2
+  </message>,
+  <message
+    delay={0}
+    indexMode="number"
+    markdown={0}
+    newkey={2}
+    type="text"
+    typing={0}
+  >
+    *Title3* _Subtitle3_
+    
+4. Posterior a la compra
   </message>,
 ]
 `;
 
 exports[`Multichannel wrapper text and carousel only show button text, 1 single message 1`] = `
-[
-  <message
-    delay={0}
-    markdown={1}
-    type="text"
-    typing={0}
-  >
-    This is a multichannel Carousel
-  </message>,
-  <message
-    delay={0}
-    style={
-      {
-        "backgroundColor": "rgba(0, 0, 0, 0)",
-        "padding": 0,
-        "width": "85%",
-      }
-    }
-    type="carousel"
-    typing={0}
-  >
-    <element>
-      <desc>
-        Subtitle will not appear
-      </desc>
-      <button
-        payload="Payload1"
-      >
-        Previo
-      </button>
-    </element>
-    <element>
-      <button
-        payload="Payload2"
-      >
-        Durante
-      </button>
-    </element>
-  </message>,
-]
+<message
+  delay={0}
+  markdown={0}
+  type="text"
+  typing={0}
+>
+  This is a multichannel Carousel
+  
+a. Previo
+  
+b. Durante
+</message>
 `;
 
 exports[`Multichannel wrapper text with buttons 1`] = `
 <message
   delay={0}
-  markdown={1}
+  indexMode="number"
+  markdown={0}
   type="text"
   typing={0}
 >
   Some with buttons
-  <button
-    payload="payload1"
-  >
-    Button 1
-  </button>
-  <button
-    payload="__PATH_PAYLOAD__path1"
-  >
-    Button 2
-  </button>
-  <button
-    url="http://testurl.com"
-  >
-    Visit website
-  </button>
+  
+1. Button 1
+  
+2. Button 2
+  
+- Visit website: http://testurl.com
 </message>
 `;
 
 exports[`Multichannel wrapper text with replies 1`] = `
 <message
   delay={0}
-  markdown={1}
+  indexMode="number"
+  markdown={0}
   type="text"
   typing={0}
 >
   Some text with replies
-  <reply
-    payload="payload1"
-  >
-    Reply 1
-  </reply>
-  <reply
-    payload="__PATH_PAYLOAD__path1"
-  >
-    Reply 2
-  </reply>
+  
+1. Reply 1
+  
+2. Reply 2
 </message>
 `;
