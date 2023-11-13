@@ -714,8 +714,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [webchatState.isWebchatOpen])
 
-  const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
-
   const isUserInputEnabled = () => {
     const isUserInputEnabled = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.enableUserInput,
@@ -911,8 +909,10 @@ export const Webchat = forwardRef((props, ref) => {
           <WebchatMessageList style={{ flex: 1 }} host={host} />
 
           {webchatState.replies &&
-            Object.keys(webchatState.replies).length > 0 &&
-            webchatReplies()}
+            Object.keys(webchatState.replies).length > 0 && (
+              <WebchatReplies replies={webchatState.replies} />
+            )}
+
           {webchatState.isPersistentMenuOpen && (
             <DarkenBackground component={persistentMenu()} />
           )}
