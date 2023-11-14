@@ -32,7 +32,7 @@ test('INTEGRATION TEST plugin with contentfulFactory', async () => {
   // Arrange
   const otherEnvironmentCredentials = {
     spaceId: testSpaceId(),
-    environment: 'testx',
+    environment: 'manage-contentful',
     accessToken: testAccessToken(),
   }
   const opts = testContentfulOptions({
