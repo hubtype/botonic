@@ -2,21 +2,20 @@ import React, { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
+import { SENDERS } from '../../index-types'
 import { resolveImage } from '../../util/environment'
 import { BotMessageImageContainer } from './styles'
 
 interface MessageImageProps {
   imagestyle: Record<string, unknown>
-  isSentByUser: boolean
-  isSentByAgent: boolean
+  sentBy: SENDERS
 }
 
-export const MessageImage = ({
-  imagestyle,
-  isSentByUser,
-  isSentByAgent,
-}: MessageImageProps) => {
+export const MessageImage = ({ imagestyle, sentBy }: MessageImageProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
+
+  const isSentByAgent = sentBy === SENDERS.agent
+  const isSentByUser = sentBy === SENDERS.user
 
   const BotMessageImage = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.botMessageImage,

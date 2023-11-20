@@ -41,7 +41,6 @@ export const Message = props => {
 
   const isSentByUser = sentBy === SENDERS.user
   const isSentByBot = sentBy === SENDERS.bot
-  const isSentByAgent = sentBy === SENDERS.agent
   const markdown = props.markdown
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
@@ -219,11 +218,7 @@ export const Message = props => {
               ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.messageStyle),
             }}
           >
-            <MessageImage
-              imagestyle={imagestyle}
-              isSentByAgent={isSentByAgent}
-              isSentByUser={isSentByUser}
-            />
+            <MessageImage imagestyle={imagestyle} sentBy={sentBy} />
             <BlobContainer
               className={className}
               bgcolor={getBgColor()}
@@ -262,7 +257,6 @@ export const Message = props => {
           </MessageContainer>
           {timestampsEnabled && (
             <MessageTimestamp
-              isSentByUser={isSentByUser}
               sentBy={sentBy}
               style={timestampStyle}
               timestamp={messageJSON.timestamp}

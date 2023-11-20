@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { WEBCHAT } from '../../constants'
+import { SENDERS } from '../../index-types'
 import { TimestampContainer, TimestampText } from './styles'
 
 export const resolveMessageTimestamps = (
@@ -41,16 +42,11 @@ export const resolveMessageTimestamps = (
   }
 }
 
-export const MessageTimestamp = ({
-  timestamp,
-  style,
-  isSentByUser,
-  sentBy,
-}) => {
+export const MessageTimestamp = ({ timestamp, style, sentBy }) => {
   return (
     <TimestampContainer className={`botonic-timestamp-${sentBy}`}>
       <TimestampText
-        isSentByUser={isSentByUser}
+        isSentByUser={sentBy === SENDERS.user}
         style={{
           ...style,
         }}
