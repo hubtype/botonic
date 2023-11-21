@@ -95,7 +95,7 @@ export const WebchatMessageList = props => {
         id='botonic-scrollable-content'
         scrollbar={scrollbarOptions}
         autoHide={scrollbarOptions.autoHide}
-        isMessagesContainer={true}
+        ismessagescontainer={true.toString()}
         style={{
           ...props.style,
         }}
