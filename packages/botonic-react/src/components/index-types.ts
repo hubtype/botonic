@@ -124,6 +124,7 @@ export interface ThemeProps extends StyleProp {
     CustomProp
   message?: {
     bot?: BlobProps & ImageProp & StyleProp
+    agent?: ImageProp
     user?: BlobProps & StyleProp
     customTypes?: React.ComponentType[]
   } & StyleProp & {

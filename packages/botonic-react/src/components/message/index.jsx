@@ -1,72 +1,26 @@
 import { INPUT, isBrowser } from '@botonic/core'
 import React, { useContext, useEffect, useState } from 'react'
 import Fade from 'react-reveal/Fade'
-import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { COLORS, WEBCHAT } from '../constants'
-import { RequestContext, WebchatContext } from '../contexts'
-import { SENDERS } from '../index-types'
-import { isDev, resolveImage } from '../util/environment'
-import { ConditionalWrapper, renderComponent } from '../util/react'
-import { Button } from './button'
-import { ButtonsDisabler } from './buttons-disabler'
-import { getMarkdownStyle, renderLinks, renderMarkdown } from './markdown'
-import { Reply } from './reply'
+import { COLORS, WEBCHAT } from '../../constants'
+import { RequestContext, WebchatContext } from '../../contexts'
+import { SENDERS } from '../../index-types'
+import { isDev } from '../../util/environment'
+import { ConditionalWrapper, renderComponent } from '../../util/react'
+import { Button } from '../button'
+import { ButtonsDisabler } from '../buttons-disabler'
+import { getMarkdownStyle, renderLinks, renderMarkdown } from '../markdown'
+import { Reply } from '../reply'
+import { MessageImage } from './message-image'
+import {
+  BlobContainer,
+  BlobText,
+  BlobTick,
+  BlobTickContainer,
+  MessageContainer,
+} from './styles'
 import { MessageTimestamp, resolveMessageTimestamps } from './timestamps'
-
-const MessageContainer = styled.div`
-  display: flex;
-  justify-content: ${props => (props.isSentByUser ? 'flex-end' : 'flex-start')};
-  position: relative;
-  padding: 0px 6px;
-`
-
-const BotMessageImageContainer = styled.div`
-  width: 28px;
-  padding: 12px 4px;
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
-const Blob = styled.div`
-  position: relative;
-  margin: 8px;
-  border-radius: 8px;
-  background-color: ${props => props.bgcolor};
-  color: ${props => props.color};
-  max-width: ${props =>
-    props.blob
-      ? props.blobwidth
-        ? props.blobwidth
-        : '60%'
-      : 'calc(100% - 16px)'};
-`
-
-const BlobText = styled.div`
-  padding: ${props => (props.blob ? '8px 12px' : '0px')};
-  display: flex;
-  flex-direction: column;
-  white-space: pre-line;
-  ${props => props.markdownstyle}
-`
-
-const BlobTickContainer = styled.div`
-  position: absolute;
-  box-sizing: border-box;
-  height: 100%;
-  padding: 18px 0px 18px 0px;
-  display: flex;
-  top: 0;
-  align-items: center;
-`
-const BlobTick = styled.div`
-  position: relative;
-  margin: -${props => props.pointerSize}px 0px;
-  border: ${props => props.pointerSize}px solid ${COLORS.TRANSPARENT};
-`
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -87,7 +41,6 @@ export const Message = props => {
 
   const isSentByUser = sentBy === SENDERS.user
   const isSentByBot = sentBy === SENDERS.bot
-  const isSentByAgent = sentBy === SENDERS.agent
   const markdown = props.markdown
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
@@ -205,8 +158,8 @@ export const Message = props => {
     getThemeProperty(`message.${userOrBotMessage}.blobTick`, true)
 
   const renderBrowser = () => {
-    const m = webchatState.messagesJSON.find(m => m.id === state.id)
-    if (!m || !m.display) return <></>
+    const messageJSON = webchatState.messagesJSON.find(m => m.id === state.id)
+    if (!messageJSON || !messageJSON.display) return <></>
 
     const getBlobTick = pointerSize => {
       // to add a border to the blobTick we need to create two triangles and overlap them
@@ -241,20 +194,15 @@ export const Message = props => {
       )
     }
 
-    const BotMessageImage = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.botMessageImage,
-      getThemeProperty(
-        WEBCHAT.CUSTOM_PROPERTIES.brandImage,
-        WEBCHAT.DEFAULTS.LOGO
-      )
-    )
     const animationsEnabled = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
       true
     )
 
     const resolveCustomTypeName = () =>
-      isSentByBot && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
+      isSentByBot && type === INPUT.CUSTOM
+        ? ` ${messageJSON.customTypeName}`
+        : ''
 
     const className = `${type}-${userOrBotMessage}${resolveCustomTypeName()}`
 
@@ -270,22 +218,8 @@ export const Message = props => {
               ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.messageStyle),
             }}
           >
-            {isSentByBot && BotMessageImage && (
-              <BotMessageImageContainer
-                style={{
-                  ...getThemeProperty(
-                    WEBCHAT.CUSTOM_PROPERTIES.botMessageImageStyle
-                  ),
-                  ...imagestyle,
-                }}
-              >
-                <img
-                  style={{ width: '100%' }}
-                  src={resolveImage(BotMessageImage)}
-                />
-              </BotMessageImageContainer>
-            )}
-            <Blob
+            <MessageImage imagestyle={imagestyle} sentBy={sentBy} />
+            <BlobContainer
               className={className}
               bgcolor={getBgColor()}
               color={isSentByUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
@@ -319,13 +253,13 @@ export const Message = props => {
               )}
               {Boolean(blob) && hasBlobTick() && getBlobTick(6)}
               {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
-            </Blob>
+            </BlobContainer>
           </MessageContainer>
           {timestampsEnabled && (
             <MessageTimestamp
-              timestamp={m.timestamp}
+              sentBy={sentBy}
               style={timestampStyle}
-              isSentByUser={isSentByUser}
+              timestamp={messageJSON.timestamp}
             />
           )}
         </>

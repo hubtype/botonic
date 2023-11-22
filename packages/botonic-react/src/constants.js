@@ -86,6 +86,8 @@ export const WEBCHAT = {
     botMessageImage: 'message.bot.image',
     botMessageImageStyle: 'message.bot.imageStyle',
     botMessageStyle: 'message.bot.style',
+    // Agent Message
+    agentMessageImage: 'message.agent.image',
     // User Message
     customMessageTypes: 'message.customTypes',
     messageStyle: 'message.style',

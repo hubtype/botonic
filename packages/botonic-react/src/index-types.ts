@@ -20,7 +20,7 @@ import {
   WebchatSettingsProps,
   Webview,
 } from './components/index-types'
-import { WebchatState } from './webchat'
+import { WebchatState } from './webchat/index-types'
 import { WebchatApp } from './webchat-app'
 
 /**
