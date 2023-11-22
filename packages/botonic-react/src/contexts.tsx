@@ -29,6 +29,12 @@ export const WebchatContext = createContext<WebchatContextProps>({
   resolveCase: () => {
     return
   },
+  resetUnreadMessages: () => {
+    return
+  },
+  setLastMessageVisible: () => {
+    return
+  },
   sendAttachment: () => {
     return
   },

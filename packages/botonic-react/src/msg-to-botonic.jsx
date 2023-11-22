@@ -88,7 +88,7 @@ export function msgToBotonic(msg, customMessageTypes) {
     const buttons = buttonsParse(msg.buttons)
     return (
       <>
-        <Text {...msg}>
+        <Text {...msg} key={msg.key}>
           {msg.text}
           {buttons}
         </Text>
@@ -125,8 +125,7 @@ export function msgsToBotonic(msgs, customMessageTypes) {
 }
 
 function textToBotonic(msg) {
-  const txt =
-    msg.data && msg.data.text != undefined ? msg.data.text : String(msg.data)
+  const txt = msg.data?.text ?? String(msg.data)
   if (
     (msg.replies && msg.replies.length) ||
     (msg.keyboard && msg.keyboard.length)

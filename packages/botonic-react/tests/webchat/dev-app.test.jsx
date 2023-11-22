@@ -1,7 +1,12 @@
+/**
+ * @jest-environment jsdom
+ * @jest-environment-options {"url": "https://jestjs.io/"}
+ */
+
 import { act, screen } from '@testing-library/react'
 
-import { ROLES } from '../../lib/cjs/constants'
-import { DevApp } from '../../lib/cjs/dev-app'
+import { ROLES } from '../../src/constants'
+import { DevApp } from '../../src/dev-app'
 import { expectNotToHaveRoles, expectToHaveRoles } from '../helpers/test-utils'
 
 describe('TEST: Dev App', () => {

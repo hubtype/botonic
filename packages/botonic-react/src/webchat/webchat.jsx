@@ -15,14 +15,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { Audio, Document, Image, Text, Video } from '../components'
 import { Handoff } from '../components/handoff'
 import { normalizeWebchatSettings } from '../components/webchat-settings'
-import {
-  COLORS,
-  MAX_ALLOWED_SIZE_MB,
-  ROLES,
-  SENDERS,
-  WEBCHAT,
-} from '../constants'
+import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
 import { RequestContext, WebchatContext } from '../contexts'
+import { SENDERS } from '../index-types'
 import {
   getFullMimeWhitelist,
   getMediaType,
@@ -52,7 +47,6 @@ import {
   PersistentMenu,
 } from './components/persistent-menu'
 import { SendButton } from './components/send-button'
-import { TypingIndicator } from './components/typing-indicator'
 import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
 import {
@@ -143,30 +137,32 @@ const DarkBackgroundMenu = styled.div`
 // eslint-disable-next-line complexity, react/display-name
 export const Webchat = forwardRef((props, ref) => {
   const {
-    webchatState,
     addMessage,
     addMessageComponent,
-    updateMessage,
-    updateReplies,
-    updateLatestInput,
-    updateTyping,
-    updateWebview,
-    updateSession,
-    updateLastRoutePath,
-    updateHandoff,
-    updateTheme,
-    updateDevSettings,
-    toggleWebchat,
+    clearMessages,
+    doRenderCustomComponent,
+    openWebviewT,
+    resetUnreadMessages,
+    setCurrentAttachment,
+    setError,
+    setLastMessageVisible,
+    setOnline,
+    toggleCoverComponent,
     toggleEmojiPicker,
     togglePersistentMenu,
-    toggleCoverComponent,
-    doRenderCustomComponent,
-    setError,
-    setOnline,
-    clearMessages,
-    openWebviewT,
+    toggleWebchat,
+    updateDevSettings,
+    updateHandoff,
     updateLastMessageDate,
-    setCurrentAttachment,
+    updateLastRoutePath,
+    updateLatestInput,
+    updateMessage,
+    updateReplies,
+    updateSession,
+    updateTheme,
+    updateTyping,
+    updateWebview,
+    webchatState,
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const firstUpdate = useRef(true)
@@ -224,13 +220,16 @@ export const Webchat = forwardRef((props, ref) => {
   }, [webchatState.currentAttachment])
 
   const sendUserInput = async input => {
-    props.onUserInput &&
+    if (props.onUserInput) {
+      resetUnreadMessages()
+      scrollToBottom({ host })
       props.onUserInput({
         user: webchatState.session.user,
         input: input,
         session: webchatState.session,
         lastRoutePath: webchatState.lastRoutePath,
       })
+    }
   }
 
   const sendChatEvent = async chatEvent => {
@@ -290,14 +289,14 @@ export const Webchat = forwardRef((props, ref) => {
     updateSession(session)
     if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
       if (messages) {
-        messages.forEach(m => {
-          addMessage(m)
-          const newComponent = msgToBotonic(
-            { ...m, delay: 0, typing: 0 },
+        messages.forEach(message => {
+          addMessage(message)
+          const newMessageComponent = msgToBotonic(
+            { ...message, delay: 0, typing: 0 },
             (props.theme.message && props.theme.message.customTypes) ||
               props.theme.customMessageTypes
           )
-          if (newComponent) addMessageComponent(newComponent)
+          if (newMessageComponent) addMessageComponent(newMessageComponent)
         })
       }
       if (initialSession) updateSession(merge(initialSession, session))
@@ -312,14 +311,19 @@ export const Webchat = forwardRef((props, ref) => {
   }, [])
 
   useEffect(() => {
-    if (!webchatState.isWebchatOpen) return
+    if (!webchatState.isWebchatOpen) {
+      if (webchatState.isLastMessageVisible) {
+        resetUnreadMessages()
+      }
+      return
+    }
     deviceAdapter.init(host)
-    scrollToBottom({ behavior: 'auto', host })
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
-    if (onStateChange && typeof onStateChange === 'function')
+    if (onStateChange && typeof onStateChange === 'function') {
       onStateChange(webchatState)
+    }
     saveWebchatState(webchatState)
   }, [
     webchatState.messagesJSON,
@@ -410,7 +414,7 @@ export const Webchat = forwardRef((props, ref) => {
         addMessageComponent(
           <Text
             id={input.id}
-            from={SENDERS.user}
+            sentBy={SENDERS.user}
             blob={false}
             style={{
               backgroundColor: COLORS.SCORPION_GRAY,
@@ -484,7 +488,7 @@ export const Webchat = forwardRef((props, ref) => {
     let messageComponent = null
     if (isText(input)) {
       messageComponent = (
-        <Text id={input.id} payload={input.payload} from={SENDERS.user}>
+        <Text id={input.id} payload={input.payload} sentBy={SENDERS.user}>
           {input.data}
         </Text>
       )
@@ -492,7 +496,7 @@ export const Webchat = forwardRef((props, ref) => {
       const temporaryDisplayUrl = URL.createObjectURL(input.data)
       const mediaProps = {
         id: input.id,
-        from: SENDERS.user,
+        sentBy: SENDERS.user,
         src: temporaryDisplayUrl,
       }
       if (isImage(input)) {
@@ -532,8 +536,21 @@ export const Webchat = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
       updateTyping(false)
-      if (Array.isArray(response)) response.map(r => addMessageComponent(r))
-      else if (response) addMessageComponent(response)
+
+      const isUnread =
+        !webchatState.isLastMessageVisible || webchatState.numUnreadMessages > 0
+
+      if (Array.isArray(response)) {
+        response.forEach(r => {
+          addMessageComponent({ ...r, props: { ...r.props, isUnread } })
+        })
+      } else if (response) {
+        addMessageComponent({
+          ...response,
+          props: { ...response.props, isUnread },
+        })
+      }
+
       if (session) {
         updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
@@ -541,7 +558,9 @@ export const Webchat = forwardRef((props, ref) => {
         if (handoff && isDev) addMessageComponent(<Handoff />)
         updateHandoff(handoff)
       }
+
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+
       updateLastMessageDate(currentDateString())
     },
     setTyping: typing => updateTyping(typing),
@@ -685,7 +704,9 @@ export const Webchat = forwardRef((props, ref) => {
       firstUpdate.current = false
       return
     }
+
     if (webchatState.isWebchatOpen && props.onOpen) props.onOpen()
+
     if (!webchatState.isWebchatOpen && props.onClose && !firstUpdate.current) {
       props.onClose()
       toggleEmojiPicker(false)
@@ -693,11 +714,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }, [webchatState.isWebchatOpen])
 
-  const webchatMessageList = () => (
-    <WebchatMessageList style={{ flex: 1 }}>
-      {webchatState.typing && <TypingIndicator />}
-    </WebchatMessageList>
-  )
   const webchatReplies = () => <WebchatReplies replies={webchatState.replies} />
 
   const isUserInputEnabled = () => {
@@ -737,8 +753,12 @@ export const Webchat = forwardRef((props, ref) => {
             <Textarea
               inputRef={textArea}
               name='text'
-              onFocus={() => deviceAdapter.onFocus(host)}
-              onBlur={() => deviceAdapter.onBlur()}
+              onFocus={() => {
+                deviceAdapter.onFocus(host)
+              }}
+              onBlur={() => {
+                deviceAdapter.onBlur()
+              }}
               maxRows={4}
               wrap='soft'
               maxLength='1000'
@@ -746,7 +766,7 @@ export const Webchat = forwardRef((props, ref) => {
                 WEBCHAT.CUSTOM_PROPERTIES.textPlaceholder,
                 WEBCHAT.DEFAULTS.PLACEHOLDER
               )}
-              autoFocus={true}
+              autoFocus={false}
               onKeyDown={e => onKeyDown(e)}
               onKeyUp={onKeyUp}
               style={{
@@ -810,7 +830,6 @@ export const Webchat = forwardRef((props, ref) => {
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
-    scrollToBottom({ host })
   }, [webchatState.themeUpdates])
 
   // Only needed for dev/serve mode
@@ -849,6 +868,8 @@ export const Webchat = forwardRef((props, ref) => {
         getThemeProperty,
         openWebview,
         resolveCase,
+        resetUnreadMessages,
+        setLastMessageVisible,
         sendAttachment,
         sendInput,
         sendPayload,
@@ -886,7 +907,9 @@ export const Webchat = forwardRef((props, ref) => {
               <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
-          {webchatMessageList()}
+
+          <WebchatMessageList style={{ flex: 1 }} host={host} />
+
           {webchatState.replies &&
             Object.keys(webchatState.replies).length > 0 &&
             webchatReplies()}

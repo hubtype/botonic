@@ -21,6 +21,7 @@ module.exports = {
         runtime: 'automatic',
       },
     ],
+    '@babel/preset-typescript',
   ],
   plugins: [
     require('@babel/plugin-proposal-object-rest-spread'),

@@ -26,7 +26,6 @@ export function webchatReducer(
       return {
         ...state,
         isWebchatOpen,
-        unreadMessages: isWebchatOpen ? 0 : state.unreadMessages,
       }
     }
     case WebchatAction.TOGGLE_EMOJI_PICKER:

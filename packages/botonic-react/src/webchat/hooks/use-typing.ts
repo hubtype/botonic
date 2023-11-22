@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
 import { WebchatMessage } from '../../index-types'
-import { scrollToBottom } from '../../util'
 import { WebchatState } from '../index-types'
 
 interface UseTyping {
@@ -15,11 +14,9 @@ export function useTyping({
   webchatState,
   updateTyping,
   updateMessage,
-  host,
 }: UseTyping): void {
   useEffect(() => {
     let delayTimeout, typingTimeout
-    scrollToBottom({ host })
     try {
       const nextMsg = webchatState.messagesJSON.filter(m => !m.display)[0]
       if (nextMsg.delay && nextMsg.typing) {

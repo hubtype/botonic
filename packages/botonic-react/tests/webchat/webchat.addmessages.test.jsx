@@ -1,10 +1,17 @@
+/**
+ * @jest-environment jsdom
+ * @jest-environment-options {"url": "https://jestjs.io/"}
+ */
+
+import 'intersection-observer'
+
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { act } from 'react-test-renderer'
 
-import { Audio, Document, Image, Video } from '../../lib/cjs/components'
-import { ROLES } from '../../lib/cjs/constants'
-import { Webchat } from '../../lib/cjs/webchat/webchat'
+import { Audio, Document, Image, Video } from '../../src/components'
+import { ROLES } from '../../src/constants'
+import { Webchat } from '../../src/webchat/webchat'
 import {
   expectNotToHaveRoles,
   expectToHaveRoles,
@@ -12,8 +19,9 @@ import {
 } from '../helpers/test-utils'
 
 describe('Adding webchat messageComponent', () => {
-  // To avoid TypeError: frame.scrollTo is not a function
+  // To avoid TypeError: frame.scrollTo is not a function (same for scrollIntoView)
   window.HTMLElement.prototype.scrollTo = function () {}
+  window.HTMLElement.prototype.scrollIntoView = function () {}
 
   it('TEST: When adding an Image message the webchat has StyledWebchat, MessageList, StyledMessage and ImageMessage', async () => {
     const { result } = renderUseWebchatHook()

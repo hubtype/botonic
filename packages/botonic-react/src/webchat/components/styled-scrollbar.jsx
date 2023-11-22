@@ -8,7 +8,7 @@ import { COLORS } from '../../constants'
 
 export const StyledScrollbar = styled(SimpleBar)`
   ${props =>
-    props.ismessagescontainer &&
+    props.ismessagescontainer === 'true' &&
     css`
       display: flex;
       flex-direction: column;

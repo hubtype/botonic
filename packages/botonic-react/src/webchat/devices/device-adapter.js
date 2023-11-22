@@ -22,7 +22,7 @@ export class DeviceAdapter {
 
   onFocus(host) {
     if (this.currentDevice !== DEVICES.MOBILE.IPHONE) {
-      scrollToBottom({ host, timeout: 800 })
+      // scrollToBottom({ host, timeout: 800 })
       return
     }
     setTimeout(() => {

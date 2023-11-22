@@ -1,10 +1,10 @@
-import { HubtypeService } from '@botonic/core'
-import { INPUT } from '@botonic/core/lib/esm/models/legacy-types'
+import { HubtypeService, INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 
-import { SENDERS, WEBCHAT } from './constants'
+import { WEBCHAT } from './constants'
+import { SENDERS } from './index-types'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import { Webchat } from './webchat/webchat'
@@ -110,7 +110,11 @@ export class WebchatApp {
 
   async onUserInput({ user, input }) {
     this.onMessage &&
-      this.onMessage(this, { from: SENDERS.user, message: input })
+      this.onMessage(this, {
+        sentBy: SENDERS.user,
+        message: input,
+        isUnread: false,
+      })
     return this.hubtypeService.postMessage(user, input)
   }
 
@@ -145,15 +149,15 @@ export class WebchatApp {
     if (event.action === 'connectionChange') {
       this.onConnectionChange && this.onConnectionChange(this, event.online)
       this.webchatRef.current.setOnline(event.online)
-    } else if (event.action === 'update_message_info')
+    } else if (event.action === 'update_message_info') {
       this.updateMessageInfo(event.message.id, event.message)
-    else if (event.message.type === 'update_webchat_settings')
+    } else if (event.message?.type === 'update_webchat_settings') {
       this.updateWebchatSettings(event.message.data)
-    else if (event.message.type === 'sender_action')
+    } else if (event.message?.type === 'sender_action') {
       this.setTyping(event.message.data === 'typing_on')
-    else {
+    } else {
       this.onMessage &&
-        this.onMessage(this, { from: SENDERS.bot, message: event.message })
+        this.onMessage(this, { sentBy: SENDERS.bot, message: event.message })
       this.addBotMessage(event.message)
     }
   }
@@ -163,12 +167,18 @@ export class WebchatApp {
   }
 
   addBotMessage(message) {
+    message.ack = 0
+    message.isUnread = true
+    message.sentBy = message.sent_by?.split('message_sent_by_')[1]
+    delete message.sent_by
+    const response = msgToBotonic(
+      message,
+      (this.theme.message && this.theme.message.customTypes) ||
+        this.theme.customMessageTypes
+    )
+
     this.webchatRef.current.addBotResponse({
-      response: msgToBotonic(
-        message,
-        (this.theme.message && this.theme.message.customTypes) ||
-          this.theme.customMessageTypes
-      ),
+      response,
     })
   }
 
@@ -181,11 +191,11 @@ export class WebchatApp {
   }
 
   addUserText(text) {
-    this.webchatRef.current.addUserMessage({ type: INPUT.TEXT, data: text })
+    this.addUserMessage({ type: INPUT.TEXT, data: text })
   }
 
   addUserPayload(payload) {
-    this.webchatRef.current.addUserMessage({ type: INPUT.POSTBACK, payload })
+    this.addUserMessage({ type: INPUT.POSTBACK, payload })
   }
 
   setTyping(typing) {

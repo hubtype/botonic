@@ -43,7 +43,8 @@ export const webchatInitialState: WebchatState = {
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
   jwt: undefined,
-  unreadMessages: 0,
+  numUnreadMessages: 0,
+  isLastMessageVisible: true,
 }
 
 export function useWebchat() {
@@ -55,7 +56,7 @@ export function useWebchat() {
   const addMessage = (message: WebchatMessage) =>
     webchatDispatch({ type: WebchatAction.ADD_MESSAGE, payload: message })
 
-  const addMessageComponent = (message: WebchatMessage) =>
+  const addMessageComponent = (message: { props: WebchatMessage }) =>
     webchatDispatch({
       type: WebchatAction.ADD_MESSAGE_COMPONENT,
       payload: message,
@@ -183,13 +184,28 @@ export function useWebchat() {
     })
   }
 
+  const resetUnreadMessages = () => {
+    webchatDispatch({
+      type: WebchatAction.RESET_UNREAD_MESSAGES,
+    })
+  }
+
+  const setLastMessageVisible = (isLastMessageVisible: boolean) => {
+    webchatDispatch({
+      type: WebchatAction.SET_LAST_MESSAGE_VISIBLE,
+      payload: isLastMessageVisible,
+    })
+  }
+
   return {
     addMessage,
     addMessageComponent,
     clearMessages,
     doRenderCustomComponent,
+    resetUnreadMessages,
     setCurrentAttachment,
     setError,
+    setLastMessageVisible,
     setOnline,
     toggleCoverComponent,
     toggleEmojiPicker,

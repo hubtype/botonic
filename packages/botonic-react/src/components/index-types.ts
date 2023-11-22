@@ -1,5 +1,6 @@
 import React, { ErrorInfo } from 'react'
 
+import { SENDERS } from '../index-types'
 import { CoverComponentProps } from '../webchat/index-types'
 
 export type MessageType =
@@ -18,7 +19,7 @@ export interface MessageProps {
   children: React.ReactNode
   delay?: number
   enabletimestamps?: boolean
-  from?: 'user' | 'bot'
+  sentBy?: SENDERS
   json?: Record<string, unknown>
   style?: Record<string, unknown>
   type?: MessageType
@@ -151,9 +152,12 @@ export interface ThemeProps extends StyleProp {
     enableArrows?: boolean
   }
   reply?: StyleProp & CustomProp
-  triggerButton?: { notificationsEnabled?: boolean } & ImageProp &
-    StyleProp &
-    CustomProp
+  triggerButton?: ImageProp & StyleProp & CustomProp
+  notifications?: EnableProp & {
+    banner?: CustomProp & EnableProp & { text?: string }
+    triggerButton?: EnableProp
+  }
+  scrollButton?: EnableProp & CustomProp
   markdownStyle?: string // string template with css styles
   scrollbar?: ScrollbarProps & EnableProp
   userInput?: {

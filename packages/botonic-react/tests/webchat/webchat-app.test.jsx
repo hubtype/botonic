@@ -1,7 +1,12 @@
+/**
+ * @jest-environment jsdom
+ * @jest-environment-options {"url": "https://jestjs.io/"}
+ */
+
 import { screen } from '@testing-library/react'
 
-import { ROLES } from '../../lib/cjs/constants'
-import { WebchatApp } from '../../lib/cjs/webchat-app'
+import { ROLES } from '../../src/constants'
+import { WebchatApp } from '../../src/webchat-app'
 import { expectNotToHaveRoles, expectToHaveRoles } from '../helpers/test-utils'
 
 describe('TEST: Webchat App', () => {

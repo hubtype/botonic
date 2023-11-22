@@ -48,7 +48,8 @@ export interface WebchatState {
   lastMessageUpdate?: string
   currentAttachment?: File
   jwt?: string
-  unreadMessages: number
+  numUnreadMessages: number
+  isLastMessageVisible: boolean
 }
 
 // export interface WebchatProps extends WebchatArgs {

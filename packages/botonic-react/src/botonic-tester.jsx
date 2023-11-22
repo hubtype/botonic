@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core/lib/esm/models/legacy-types'
+import { INPUT } from '@botonic/core'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import decode from 'unescape'

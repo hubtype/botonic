@@ -4,8 +4,9 @@ import Fade from 'react-reveal/Fade'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { COLORS, SENDERS, WEBCHAT } from '../constants'
+import { COLORS, WEBCHAT } from '../constants'
 import { RequestContext, WebchatContext } from '../contexts'
+import { SENDERS } from '../index-types'
 import { isDev, resolveImage } from '../util/environment'
 import { ConditionalWrapper, renderComponent } from '../util/react'
 import { Button } from './button'
@@ -16,7 +17,7 @@ import { MessageTimestamp, resolveMessageTimestamps } from './timestamps'
 
 const MessageContainer = styled.div`
   display: flex;
-  justify-content: ${props => (props.isfromuser ? 'flex-end' : 'flex-start')};
+  justify-content: ${props => (props.isSentByUser ? 'flex-end' : 'flex-start')};
   position: relative;
   padding: 0px 6px;
 `
@@ -72,7 +73,7 @@ export const Message = props => {
   let {
     type = '',
     blob = true,
-    from = SENDERS.bot,
+    sentBy,
     delay = defaultDelay,
     typing = defaultTyping,
     children,
@@ -80,10 +81,13 @@ export const Message = props => {
     json,
     style,
     imagestyle = props.imagestyle || props.imageStyle,
+    isUnread = true,
     ...otherProps
   } = props
-  const isFromUser = from === SENDERS.user
-  const isFromBot = from === SENDERS.bot
+
+  const isSentByUser = sentBy === SENDERS.user
+  const isSentByBot = sentBy === SENDERS.bot
+  const isSentByAgent = sentBy === SENDERS.agent
   const markdown = props.markdown
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
@@ -105,7 +109,7 @@ export const Message = props => {
   let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
-  if (isFromUser)
+  if (isSentByUser)
     textChildren = textChildren.map(e =>
       typeof e === 'string' ? renderLinks(e) : e
     )
@@ -115,7 +119,7 @@ export const Message = props => {
 
   const getEnvAck = () => {
     if (isDev) return 1
-    if (!isFromUser) return 1
+    if (!isSentByUser) return 1
     if (props.ack !== undefined) return props.ack
     return 0
   }
@@ -131,7 +135,7 @@ export const Message = props => {
         data: decomposedChildren ? decomposedChildren : textChildren,
         timestamp: props.timestamp || getFormattedTimestamp,
         markdown,
-        from,
+        sentBy,
         buttons: buttons.map(b => ({
           parentId: b.props.parentId,
           payload: b.props.payload,
@@ -153,6 +157,7 @@ export const Message = props => {
         display: delay + typing == 0,
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
+        isUnread: isUnread === 1 || isUnread === true,
       }
       addMessage(message)
     }
@@ -178,7 +183,7 @@ export const Message = props => {
 
   const getBgColor = () => {
     if (!blob) return COLORS.TRANSPARENT
-    if (isFromUser) {
+    if (isSentByUser) {
       return getThemeProperty(
         WEBCHAT.CUSTOM_PROPERTIES.userMessageBackground,
         brandColor
@@ -191,11 +196,13 @@ export const Message = props => {
   }
 
   const getMessageStyle = () =>
-    isFromBot
+    isSentByBot
       ? getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.botMessageStyle)
       : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userMessageStyle)
 
-  const hasBlobTick = () => getThemeProperty(`message.${from}.blobTick`, true)
+  const userOrBotMessage = isSentByUser ? SENDERS.user : SENDERS.bot
+  const hasBlobTick = () =>
+    getThemeProperty(`message.${userOrBotMessage}.blobTick`, true)
 
   const renderBrowser = () => {
     const m = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -209,14 +216,14 @@ export const Message = props => {
         pointerSize == 5
           ? getBgColor()
           : getThemeProperty(
-              `message.${from}.style.borderColor`,
+              `message.${userOrBotMessage}.style.borderColor`,
               COLORS.TRANSPARENT
             )
       const containerStyle = {
-        ...getThemeProperty(`message.${from}.blobTickStyle`),
+        ...getThemeProperty(`message.${userOrBotMessage}.blobTickStyle`),
       }
       const blobTickStyle = {}
-      if (isFromUser) {
+      if (isSentByUser) {
         containerStyle.right = 0
         containerStyle.marginRight = -pointerSize
         blobTickStyle.borderRight = 0
@@ -247,9 +254,10 @@ export const Message = props => {
     )
 
     const resolveCustomTypeName = () =>
-      isFromBot && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
+      isSentByBot && type === INPUT.CUSTOM ? ` ${m.customTypeName}` : ''
 
-    const className = `${type}-${from}${resolveCustomTypeName()}`
+    const className = `${type}-${userOrBotMessage}${resolveCustomTypeName()}`
+
     return (
       <ConditionalWrapper
         condition={animationsEnabled}
@@ -257,12 +265,12 @@ export const Message = props => {
       >
         <>
           <MessageContainer
-            isfromuser={isFromUser}
+            isSentByUser={isSentByUser}
             style={{
               ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.messageStyle),
             }}
           >
-            {isFromBot && BotMessageImage && (
+            {isSentByBot && BotMessageImage && (
               <BotMessageImageContainer
                 style={{
                   ...getThemeProperty(
@@ -280,7 +288,7 @@ export const Message = props => {
             <Blob
               className={className}
               bgcolor={getBgColor()}
-              color={isFromUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
+              color={isSentByUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
               blobwidth={getThemeProperty(
                 WEBCHAT.CUSTOM_PROPERTIES.botMessageBlobWidth
               )}
@@ -300,7 +308,7 @@ export const Message = props => {
                   }}
                   markdownstyle={getMarkdownStyle(
                     getThemeProperty,
-                    isFromUser ? COLORS.SEASHELL_WHITE : brandColor
+                    isSentByUser ? COLORS.SEASHELL_WHITE : brandColor
                   )}
                 />
               ) : (
@@ -317,7 +325,7 @@ export const Message = props => {
             <MessageTimestamp
               timestamp={m.timestamp}
               style={timestampStyle}
-              isfromuser={isFromUser}
+              isSentByUser={isSentByUser}
             />
           )}
         </>

@@ -19,11 +19,19 @@ export const messagesReducer = (
         ...state,
         messagesJSON: [],
         messagesComponents: [],
+        numUnreadMessages: 0,
       }
     case WebchatAction.UPDATE_LAST_MESSAGE_DATE:
       return {
         ...state,
         lastMessageUpdate: action.payload,
+      }
+    case WebchatAction.RESET_UNREAD_MESSAGES:
+      return resetUnreadMessages(state)
+    case WebchatAction.SET_LAST_MESSAGE_VISIBLE:
+      return {
+        ...state,
+        isLastMessageVisible: action.payload,
       }
     default:
       throw new Error()
@@ -36,15 +44,38 @@ function addMessageComponent(
 ) {
   const messageComponent = action.payload
   const isUnreadMessage =
-    !state.isWebchatOpen && messageComponent.props?.ack !== 1
-  const unreadMessages = isUnreadMessage
-    ? state.unreadMessages + 1
-    : state.unreadMessages
+    messageComponent.props?.isUnread &&
+    messageComponent.props?.sent_by !== 'user'
+
+  const numUnreadMessages = isUnreadMessage
+    ? state.numUnreadMessages + 1
+    : state.numUnreadMessages
 
   return {
     ...state,
     messagesComponents: [...(state.messagesComponents || []), messageComponent],
-    unreadMessages,
+    numUnreadMessages,
+  }
+}
+
+function resetUnreadMessages(state: WebchatState) {
+  const messagesComponents = state.messagesComponents.map(messageComponent => {
+    if (messageComponent.props.isUnread) {
+      messageComponent.props.isUnread = false
+    }
+    return messageComponent
+  })
+  const messagesJSON = state.messagesJSON.map(messageJSON => {
+    if (messageJSON.isUnread) {
+      messageJSON.isUnread = false
+    }
+    return messageJSON
+  })
+  return {
+    ...state,
+    messagesComponents,
+    messagesJSON,
+    numUnreadMessages: 0,
   }
 }
 
@@ -71,6 +102,11 @@ function updateMessageReducer(
         ],
       }
     }
+
+    const numUnreadMessages = state.messagesComponents.filter(
+      messageComponent => messageComponent.props.isUnread
+    ).length
+
     return {
       ...state,
       messagesJSON: [
@@ -79,6 +115,7 @@ function updateMessageReducer(
         ...state.messagesJSON.slice(msgIndex + 1),
       ],
       ...updatedMessageComponents,
+      numUnreadMessages,
     }
   }
 

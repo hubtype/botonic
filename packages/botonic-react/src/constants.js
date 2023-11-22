@@ -1,10 +1,5 @@
 import BotonicLogo from './assets/botonic_react_logo100x100.png'
 
-export const SENDERS = {
-  bot: 'bot',
-  user: 'user',
-}
-
 export const COLORS = {
   // http://chir.ag/projects/name-that-color
   APPLE_GREEN: 'rgba(58, 156, 53, 1)',
@@ -125,8 +120,16 @@ export const WEBCHAT = {
     // TriggerButton
     customTrigger: 'triggerButton.custom',
     triggerButtonImage: 'triggerButton.image',
-    triggerButtonNotificationsEnabled: 'triggerButton.notificationsEnabled',
     triggerButtonStyle: 'triggerButton.style',
+    // Notifications
+    notificationsEnabled: 'notifications.enable',
+    notificationsBannerEnabled: 'notifications.banner.enable',
+    notificationsBannerCustom: 'notifications.banner.custom',
+    notificationsBannerText: 'notifications.banner.text',
+    notificationsTriggerButtonEnabled: 'notifications.triggerButton.enable',
+    // Scroll Button
+    scrollButtonEnabled: 'scrollButton.enable',
+    scrollButtonCustom: 'scrollButton.custom',
     // User Input
     blockInputs: 'userInput.blockInputs',
     documentDownload: 'documentDownload',
