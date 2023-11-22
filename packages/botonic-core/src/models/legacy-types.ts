@@ -168,6 +168,7 @@ export interface Session {
   }
   __locale?: string
   __retries: number
+  isStagingIntegration: boolean
   is_first_interaction: boolean
   last_session?: any
   organization?: string

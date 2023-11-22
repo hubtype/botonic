@@ -23,9 +23,16 @@ import { DEFAULT_FUNCTIONS } from './functions'
 import { BotonicPluginFlowBuilderOptions, KnowledgeBaseResponse } from './types'
 import { resolveGetAccessToken } from './utils'
 
+function getFlowUrl(request: PluginPreRequest) {
+  const baseFlowUrl = process.env.FLOWBUILDER_API_URL
+  return request.session.isStagingIntegration
+  ? `${baseFlowUrl}/latest`
+  : `${baseFlowUrl}/draft`
+}
+
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
-  private flowUrl: string
+  private customFlowUrl?: string
   private flow?: HtFlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
@@ -41,7 +48,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   ) => Promise<KnowledgeBaseResponse>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
-    this.flowUrl = options.flowUrl
+    this.customFlowUrl = options.flowUrl
     this.flow = options.flow
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
@@ -54,7 +61,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   async pre(request: PluginPreRequest): Promise<void> {
     this.currentRequest = request
     this.cmsApi = await FlowBuilderApi.create({
-      url: this.flowUrl,
+      url: this.customFlowUrl || getFlowUrl(request),
       flow: this.flow,
       accessToken: this.getAccessToken(request.session),
       request: this.currentRequest,
