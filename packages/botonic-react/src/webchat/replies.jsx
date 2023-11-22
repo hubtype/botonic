@@ -49,11 +49,9 @@ export const WebchatReplies = props => {
       autoHide={scrollbarOptions.autoHide}
     >
       <RepliesContainer
+        className='replies-container'
         justify={justifyContent}
         wrap={flexWrap}
-        style={{
-          ...props.style,
-        }}
       >
         {webchatState.replies.map((r, i) => (
           <ReplyContainer key={i}>{r}</ReplyContainer>
