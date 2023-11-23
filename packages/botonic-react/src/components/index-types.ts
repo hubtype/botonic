@@ -129,10 +129,10 @@ export interface ThemeProps extends StyleProp {
     customTypes?: React.ComponentType[]
   } & StyleProp & {
       timestamps?: {
-        EnableProp
         withImage?: boolean
         format: () => string
-      } & StyleProp
+      } & StyleProp &
+        EnableProp
     }
   button?: {
     autodisable?: boolean
