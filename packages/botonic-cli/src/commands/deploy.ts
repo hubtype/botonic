@@ -32,6 +32,11 @@ interface DeployHubtypeFlags {
   email?: string
   password?: string
 }
+
+interface LoginErrorData {
+  error_description?: string
+}
+
 export default class Run extends Command {
   static description = 'Deploy Botonic project to cloud provider'
 
@@ -217,7 +222,7 @@ Deploying to AWS...
   async login(email: string, password: string): Promise<void> {
     return this.botonicApiService.login(email, password).then(
       ({}) => this.deployBotFlow(),
-      async (err: AxiosError) => {
+      async (err: AxiosError<LoginErrorData>) => {
         if (
           err.response &&
           err.response.data &&
