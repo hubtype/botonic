@@ -87,12 +87,7 @@ export const MessageTimestamp = ({
           )}
         />
       )}
-      <TimestampText
-        isSentByUser={isSentByUser}
-        style={{
-          ...style,
-        }}
-      >
+      <TimestampText isSentByUser={isSentByUser} style={style}>
         {timestamp}
       </TimestampText>
     </TimestampContainer>

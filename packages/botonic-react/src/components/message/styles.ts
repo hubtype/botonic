@@ -73,8 +73,8 @@ export const TimestampContainer = styled.div`
 `
 
 export const TimestampText = styled.div`
-  /* @import url('https://fonts.googleapis.com/css?family=Lato');
-  font-family: Lato; */
+  @import url('https://fonts.googleapis.com/css?family=Lato');
+  font-family: Lato;
   font-size: 10px;
   color: ${COLORS.SOLID_BLACK};
   text-align: ${props => (props.isSentByUser ? 'right' : 'left')};
