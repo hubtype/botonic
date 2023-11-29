@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-google-analytics",
-  "version": "0.23.0",
+  "version": "0.23.1",
   "license": "MIT",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -16,8 +16,8 @@
     "lint_core": "../../node_modules/.bin/eslint_d --quiet 'src/**/*.ts'"
   },
   "dependencies": {
-    "@botonic/core": "^0.23.0",
-    "axios": "^0.24.0"
+    "@botonic/core": "^0.23.2",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
     "@types/node": "^18.14.1",

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-watson",
-  "version": "0.23.0",
+  "version": "0.23.1",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
-    "axios": "^0.24.0"
+    "axios": "^1.6.0"
   },
   "devDependencies": {},
   "keywords": [
