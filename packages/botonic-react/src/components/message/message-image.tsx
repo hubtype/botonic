@@ -17,6 +17,10 @@ export const MessageImage = ({ imagestyle, sentBy }: MessageImageProps) => {
   const isSentByAgent = sentBy === SENDERS.agent
   const isSentByUser = sentBy === SENDERS.user
 
+  const timestampsWithImage = getThemeProperty(
+    WEBCHAT.CUSTOM_PROPERTIES.messageTimestampsWithImage
+  )
+
   const BotMessageImage = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.botMessageImage,
     getThemeProperty(
@@ -31,6 +35,7 @@ export const MessageImage = ({ imagestyle, sentBy }: MessageImageProps) => {
   )
 
   return (
+    !timestampsWithImage &&
     !isSentByUser &&
     BotMessageImage && (
       <BotMessageImageContainer

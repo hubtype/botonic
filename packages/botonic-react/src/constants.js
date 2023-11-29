@@ -100,6 +100,7 @@ export const WEBCHAT = {
     enableMessageTimestamps: 'message.timestamps.enable',
     messageTimestampsFormat: 'message.timestamps.format',
     messageTimestampsStyle: 'message.timestamps.style',
+    messageTimestampsWithImage: 'message.timestamps.withImage',
     // Intro
     customIntro: 'intro.custom',
     introImage: 'intro.image',

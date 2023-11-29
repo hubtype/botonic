@@ -58,7 +58,18 @@ export const BlobTick = styled.div`
 export const TimestampContainer = styled.div`
   display: flex;
   position: relative;
-  align-items: flex-start;
+  justify-content: ${props => (props.isSentByUser ? 'flex-end' : 'flex-start')};
+  align-items: center;
+  gap: 10px;
+
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0px 15px 4px 15px;
+  padding-top: ${props => (props.isSentByUser ? '0px' : '4px')};
+
+  img {
+    max-width: 20px;
+  }
 `
 
 export const TimestampText = styled.div`
@@ -66,8 +77,5 @@ export const TimestampText = styled.div`
   font-family: Lato;
   font-size: 10px;
   color: ${COLORS.SOLID_BLACK};
-  width: 100%;
   text-align: ${props => (props.isSentByUser ? 'right' : 'left')};
-  padding: ${props => (props.isSentByUser ? '0px 15px' : '0px 50px')};
-  margin-bottom: 5px;
 `
