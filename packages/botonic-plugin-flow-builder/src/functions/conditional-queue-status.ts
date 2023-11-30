@@ -30,7 +30,7 @@ export async function getQueueAvailability(
   queueId: string
 ): Promise<AvailabilityData> {
   const response = await axios.get(
-    `${HUBTYPE_API_URL}/v1/queues/${queueId}/availability/`,
+    `${HUBTYPE_API_URL}/public/v1/queues/${queueId}/availability/`,
     // TODO: Make it configurable in the future
     {
       params: {
