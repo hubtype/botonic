@@ -7,6 +7,7 @@ import {
   MatchingProp,
   Nullable,
   ProcessInputResult,
+  ResolvedPlugins,
   Route,
   RouteParams,
   RoutePath,
@@ -19,19 +20,21 @@ import {
   getNotFoundAction,
   getPathParamsFromPathPayload,
   isPathPayload,
-  pathParamsToParams,
 } from './router-utils'
 
 export class Router {
   routes: Route[]
   routeInspector: RouteInspector
+  plugins?: ResolvedPlugins
 
   constructor(
     routes: Route[],
-    routeInspector: RouteInspector | undefined = undefined
+    routeInspector: RouteInspector | undefined = undefined,
+    plugins?: ResolvedPlugins
   ) {
     this.routes = routes
     this.routeInspector = routeInspector || new RouteInspector()
+    this.plugins = plugins
   }
 
   /**
@@ -258,7 +261,8 @@ export class Router {
     else if (prop === 'text') value = input.data
     else if (prop === 'input') value = input
     else if (prop === 'session') value = session
-    else if (prop === 'request') value = { input, session, lastRoutePath }
+    else if (prop === 'request')
+      value = { input, session, lastRoutePath, plugins: this.plugins }
     const matched = this.matchValue(matcher, value)
     if (matched) {
       this.routeInspector.routeMatched(route, prop, matcher, value)

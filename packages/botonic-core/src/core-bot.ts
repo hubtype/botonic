@@ -147,10 +147,12 @@ export class CoreBot {
             input,
             session,
             lastRoutePath,
+            plugins: this.plugins,
           })),
           ...this.defaultRoutes,
         ],
-        this.inspector.routeInspector
+        this.inspector.routeInspector,
+        this.plugins
       )
     }
 

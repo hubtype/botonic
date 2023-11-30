@@ -223,6 +223,7 @@ export interface BotRequest {
   lastRoutePath: RoutePath
   session: Session
   dataProvider?: DataProvider
+  plugins?: ResolvedPlugins
 }
 
 /** The response of the bot for the triggered actions, which can be
