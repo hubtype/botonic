@@ -1,4 +1,4 @@
-import { BotRequest, INPUT, Input } from '../../src'
+import { BotRequest, INPUT, Input, ResolvedPlugin } from '../../src'
 import { Router } from '../../src/routing'
 import { testRoute, testSession } from '../helpers/routing'
 
@@ -27,14 +27,22 @@ const videoInput: Input = {
   src: 'data:video/mp4;base64,iVBORw0KG',
 }
 
+const testPlugin: ResolvedPlugin = {
+  id: 'testPlugin',
+  name: 'testPlugin',
+  config: {},
+}
+const testPlugins = { testPlugin }
+
 const requestInput: BotRequest = {
   input: textInput,
   session: { ...testSession(), organization: 'myOrg' },
   lastRoutePath: 'initial',
+  plugins: testPlugins,
 }
 
 describe('TEST: Match route by MATCHER <> INPUT', () => {
-  const router = new Router([])
+  const router = new Router([], undefined, testPlugins)
   const matchTextProp = (matcher, textInput) =>
     router.matchRoute(
       testRoute(),
@@ -149,7 +157,8 @@ describe('TEST: Match route by MATCHER <> INPUT', () => {
         request =>
           request.input.text === 'hi' &&
           request.session.organization === 'myOrg' &&
-          request.lastRoutePath === 'initial',
+          request.lastRoutePath === 'initial' &&
+          request.plugins.testPlugin.id === 'testPlugin',
         requestInput
       )
     ).toBeTruthy()
@@ -158,7 +167,8 @@ describe('TEST: Match route by MATCHER <> INPUT', () => {
         request =>
           request.input.text === 'hello' &&
           request.session.organization === 'myOrg' &&
-          request.lastRoutePath === 'initial',
+          request.lastRoutePath === 'initial' &&
+          request.plugins.testPlugin.id === 'testPlugin',
         requestInput
       )
     ).toBeFalsy()
