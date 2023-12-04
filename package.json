@@ -47,5 +47,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "version": "0.23.5-alpha.0"
 }
