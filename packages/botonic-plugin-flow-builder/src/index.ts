@@ -66,13 +66,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
   }
 
-  getContentsByCode(
+  async getContentsByCode(
     code: string,
     locale: string,
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const node = this.cmsApi.getNodeByCode(code) as HtNodeWithContent
-    return this.getContentsByNode(node, locale, prevContents)
+    return await this.getContentsByNode(node, locale, prevContents)
   }
 
   async getContentsById(
@@ -81,7 +81,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const node = this.cmsApi.getNodeById(id) as HtNodeWithContent
-    return this.getContentsByNode(node, locale, prevContents)
+    return await this.getContentsByNode(node, locale, prevContents)
   }
 
   async getStartContents(locale: string): Promise<FlowContent[]> {
