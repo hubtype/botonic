@@ -6,7 +6,6 @@ import { HtImageNode } from './image'
 import { HtIntentNode } from './intent'
 import { HtKeywordNode } from './keyword'
 import { HtPayloadNode } from './payload'
-import { HtStartNode } from './start'
 import { HtTextNode } from './text'
 import { HtUrlNode } from './url'
 import { HtVideoNode } from './video'
@@ -26,7 +25,4 @@ export type HtNodeWithContent =
 
 export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode
 
-export type HtNodeComponent =
-  | HtNodeWithContent
-  | HtNodeWithoutContent
-  | HtStartNode
+export type HtNodeComponent = HtNodeWithContent | HtNodeWithoutContent
