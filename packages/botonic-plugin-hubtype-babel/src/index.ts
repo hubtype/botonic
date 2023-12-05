@@ -1,10 +1,4 @@
-import {
-  HubtypeSession,
-  INPUT,
-  Plugin,
-  PluginPostRequest,
-  PluginPreRequest,
-} from '@botonic/core'
+import { HubtypeSession, INPUT, Plugin, PluginPreRequest } from '@botonic/core'
 
 import { HubtypeBabelApiService } from './hubtype-babel-api-service'
 import { PluginHubtypeBabelOptions } from './options'
@@ -17,10 +11,7 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
   readonly automaticBotMessagePrefix: string
 
   constructor(private readonly options: PluginHubtypeBabelOptions) {
-    this.apiService = new HubtypeBabelApiService(
-      options.projectId,
-      options.host
-    )
+    this.apiService = new HubtypeBabelApiService(options.projectId)
     this.includeHasSense = options.includeHasSense || false
     this.automaticBotMessagePrefix =
       options.automaticBotMessagePrefix || '[Automatic Bot Message]'
@@ -76,8 +67,6 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
       .toLowerCase()
       .startsWith(this.automaticBotMessagePrefix.toLowerCase())
   }
-
-  async post(_request: PluginPostRequest) {}
 }
 
 export { PluginHubtypeBabelOptions } from './options'

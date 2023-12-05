@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios'
 
 export class HubtypeBabelApiService {
-  constructor(
-    readonly projectId: string,
-    readonly host: string = 'https://api.hubtype.com'
-  ) {}
+  private readonly host: string
+  constructor(readonly projectId: string) {
+    this.host = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+  }
 
   async inference(
     text: string,
