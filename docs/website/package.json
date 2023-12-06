@@ -31,7 +31,7 @@
     "sass": "^1.27.0",
     "sass-loader": "^10.0.3",
     "style-loader": "^2.0.0",
-    "tailwindcss": "^1.9.2"
+    "tailwindcss": "^2.2.5"
   },
   "browserslist": {
     "production": [
