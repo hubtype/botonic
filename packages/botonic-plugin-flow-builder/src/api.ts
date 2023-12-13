@@ -8,10 +8,8 @@ import {
   HtKeywordNode,
   HtNodeComponent,
   HtNodeLink,
-  HtNodeStartType,
   HtNodeWithContent,
   HtNodeWithContentType,
-  HtStartNode,
 } from './content-fields/hubtype-fields'
 import { FlowBuilderApiOptions } from './types'
 
@@ -54,11 +52,9 @@ export class FlowBuilderApi {
   }
 
   getStartNode(): HtNodeWithContent {
-    const startUpNode = this.flow.nodes.find(
-      node => node.type === HtNodeStartType.STARTUP
-    ) as HtStartNode | undefined
-    if (!startUpNode) throw new Error('Start-up id must be defined')
-    return this.getNodeById(startUpNode.target.id)
+    const startNodeId = this.flow.start_node_id
+    if (!startNodeId) throw new Error('Start node id must be defined')
+    return this.getNodeById(startNodeId)
   }
 
   getFallbackNode(alternate: boolean): HtNodeWithContent {

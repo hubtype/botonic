@@ -11,10 +11,6 @@ export enum HtNodeWithContentType {
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
 }
 
-export enum HtNodeStartType {
-  STARTUP = 'start-up',
-}
-
 export enum HtNodeWithoutContentType {
   URL = 'url',
   PAYLOAD = 'payload',
