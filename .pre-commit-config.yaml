@@ -139,6 +139,12 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
         language: system
         files: ^packages/botonic-plugin-flow-builder/
+      
+      - id: hubtype-analytics
+        name: hubtype-analytics
+        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-hubtype-analytics
+        language: system
+        files: ^packages/botonic-plugin-hubtype-analytics/
 
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
