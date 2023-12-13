@@ -1,15 +1,15 @@
 import {
   BaseEventData,
-  EventBotAiKnowladgeBase,
-  EventDataBotAiKnowladgeBase,
+  EventBotAiKnowledgeBase,
+  EventDataBotAiKnowledgeBase,
   RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventBotAiKnowledgeBase extends HtEvent {
-  event_data: BaseEventData & EventDataBotAiKnowladgeBase
+  event_data: BaseEventData & EventDataBotAiKnowledgeBase
 
-  constructor(event: EventBotAiKnowladgeBase, requestData: RequestData) {
+  constructor(event: EventBotAiKnowledgeBase, requestData: RequestData) {
     super(event, requestData)
     this.event_data.answer = event.event_data.answer
     this.event_data.knowledge_source_ids = event.event_data.knowledge_source_ids
