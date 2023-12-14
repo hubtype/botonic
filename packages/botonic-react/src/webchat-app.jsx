@@ -173,8 +173,7 @@ export class WebchatApp {
     delete message.sent_by
     const response = msgToBotonic(
       message,
-      (this.theme.message && this.theme.message.customTypes) ||
-        this.theme.customMessageTypes
+      this.theme.message?.customTypes || this.theme.customMessageTypes
     )
 
     this.webchatRef.current.addBotResponse({
