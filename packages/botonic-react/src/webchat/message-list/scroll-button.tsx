@@ -29,17 +29,18 @@ export const ScrollButton = ({
   )
 
   return (
-    scrollButtonEnabled &&
-    show && (
-      <>
-        {CustomScrollButton ? (
-          <CustomScrollButton handleScrollToBottom={handleClick} />
-        ) : (
-          <ContainerScrollButton onClick={handleClick}>
-            <img src={resolveImage(ArrowScrollDown)} />
-          </ContainerScrollButton>
-        )}
-      </>
-    )
+    <>
+      {scrollButtonEnabled && show ? (
+        <>
+          {CustomScrollButton ? (
+            <CustomScrollButton handleScrollToBottom={handleClick} />
+          ) : (
+            <ContainerScrollButton onClick={handleClick}>
+              <img src={resolveImage(ArrowScrollDown)} />
+            </ContainerScrollButton>
+          )}
+        </>
+      ) : null}
+    </>
   )
 }
