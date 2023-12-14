@@ -38,11 +38,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     ) as FlowHandoff
     if (handoffContent) await handoffContent.doHandoff(request)
 
-    const contentsToRender = contents.filter(content =>
-      content instanceof FlowHandoff ? false : true
-    )
-
-    return { contents: contentsToRender }
+    return { contents }
   }
 
   render(): JSX.Element | JSX.Element[] {
