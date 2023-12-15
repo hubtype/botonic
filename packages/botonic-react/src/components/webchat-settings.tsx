@@ -14,6 +14,7 @@ export const WebchatSettings = ({
   enableAttachments,
   enableUserInput,
   enableAnimations,
+  user,
 }: WebchatSettingsProps) => {
   const renderBrowser = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -43,7 +44,7 @@ export const WebchatSettings = ({
       //@ts-ignore
       <message
         type={INPUT.WEBCHAT_SETTINGS}
-        settings={stringifyWithRegexs({ theme: updatedTheme })}
+        settings={stringifyWithRegexs({ theme: updatedTheme, user })}
       />
     )
   }
