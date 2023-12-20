@@ -197,6 +197,7 @@ export interface WebchatSettingsProps {
   enableUserInput?: boolean
   persistentMenu?: PersistentMenuTheme
   theme?: ThemeProps
+  user?: { extra_data?: any }
 }
 
 export type WrappedComponent<Props> = React.FunctionComponent<Props> & {

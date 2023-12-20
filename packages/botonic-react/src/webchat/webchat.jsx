@@ -597,6 +597,9 @@ export const Webchat = forwardRef((props, ref) => {
       updateMessage(updatedMsg)
     },
     updateWebchatSettings: settings => {
+      if (settings.user) {
+        updateSessionWithUser(settings.user)
+      }
       const themeUpdates = normalizeWebchatSettings(settings)
       updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
       updateTyping(false)
