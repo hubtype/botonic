@@ -1,5 +1,5 @@
 import { HandOffBuilder } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { ActionRequest, WebchatSettings } from '@botonic/react'
 import React from 'react'
 
 import { EventName, trackEvent } from '../action/tracking'
@@ -95,6 +95,6 @@ export class FlowHandoff extends ContentFieldsBase {
   }
 
   toBotonic(): JSX.Element {
-    return <></>
+    return <WebchatSettings enableUserInput={true} />
   }
 }
