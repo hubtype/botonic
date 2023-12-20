@@ -11,7 +11,7 @@
     "@botonic/pulumi": "^1.0.0-dev.2",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^3.2.2",
+    "@oclif/plugin-help": "^4.0.0",
     "analytics-node": "^3.5.0",
     "axios": "^0.24.0",
     "colors": "1.4.0",
@@ -26,7 +26,7 @@
     "qs": "^6.10.1",
     "tslib": "^2.3.1",
     "uuid": "^8.3.2",
-    "zip-a-folder": "0.1.0"
+    "zip-a-folder": "1.0.1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
