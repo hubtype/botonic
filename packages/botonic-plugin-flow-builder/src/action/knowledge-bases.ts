@@ -28,7 +28,7 @@ export async function createNodeFromKnowledgeBase(
         await flowBuilderPlugin.getKnowledgeBaseResponse(request)
 
       if (knowledgeBaseResponse.hasKnowledge) {
-        await trackEvent(request, EventName.botAiKnowladgeBase, {
+        await trackEvent(request, EventName.botAiKnowledgeBase, {
           answer: knowledgeBaseResponse.answer,
           knowledge_source_ids: knowledgeBaseResponse.sources.map(
             source => source.knowledgeSourceId
