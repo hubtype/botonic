@@ -45,17 +45,19 @@ export const UnreadMessagesBanner = ({
   }, [webchatState.isWebchatOpen, unreadMessagesBannerRef])
 
   return (
-    notificationsEnabled && (
-      <div ref={unreadMessagesBannerRef}>
-        {CustomUnreadMessagesBanner ? (
-          <CustomUnreadMessagesBanner />
-        ) : (
-          <ContainerUnreadMessagesBanner>
-            <img src={resolveImage(ArrowDown)} />
-            {webchatState.numUnreadMessages} {text}
-          </ContainerUnreadMessagesBanner>
-        )}
-      </div>
-    )
+    <>
+      {notificationsEnabled ? (
+        <div ref={unreadMessagesBannerRef}>
+          {CustomUnreadMessagesBanner ? (
+            <CustomUnreadMessagesBanner />
+          ) : (
+            <ContainerUnreadMessagesBanner>
+              <img src={resolveImage(ArrowDown)} />
+              {webchatState.numUnreadMessages} {text}
+            </ContainerUnreadMessagesBanner>
+          )}
+        </div>
+      ) : null}
+    </>
   )
 }
