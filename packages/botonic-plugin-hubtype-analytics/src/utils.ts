@@ -3,7 +3,7 @@ import { HtEventAgentRating } from './event-models/ht-event-agent-rating'
 import { HtEventBotAiModel } from './event-models/ht-event-bot-ai-model'
 import { HtEventBotFaq } from './event-models/ht-event-bot-faq'
 import { HtEventBotKeywordModel } from './event-models/ht-event-bot-keyword-model'
-import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowladge-base'
+import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowledge-base'
 import { HtEventBotRating } from './event-models/ht-event-bot-rating'
 import { HtEventChannelRating } from './event-models/ht-event-channel-rating'
 import { HtEventFaqUseful } from './event-models/ht-event-faq-useful'
@@ -34,7 +34,7 @@ export function createHtEvent(
     case EventName.botAiModel:
       return new HtEventBotAiModel(htEventProps, requestData)
 
-    case EventName.botAiKnowladgeBase:
+    case EventName.botAiKnowledgeBase:
       return new HtEventBotAiKnowledgeBase(htEventProps, requestData)
 
     case EventName.botKeywordsModel:

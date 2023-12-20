@@ -15,7 +15,7 @@ export enum EventName {
   botStart = 'bot_start',
   botOpen = 'bot_open',
   botAiModel = 'bot_ai_model',
-  botAiKnowladgeBase = 'bot_ai_knowledge_base',
+  botAiKnowledgeBase = 'bot_ai_knowledge_base',
   botKeywordsModel = 'bot_keywords_model',
   fallback = 'fallback',
   handoffOption = 'handoff_option',
@@ -102,12 +102,12 @@ export interface EventDataBotAiModel {
   confidence_successful: boolean
 }
 
-export interface EventBotAiKnowladgeBase {
-  event_type: EventName.botAiKnowladgeBase
-  event_data: EventDataBotAiKnowladgeBase
+export interface EventBotAiKnowledgeBase {
+  event_type: EventName.botAiKnowledgeBase
+  event_data: EventDataBotAiKnowledgeBase
 }
 
-export interface EventDataBotAiKnowladgeBase {
+export interface EventDataBotAiKnowledgeBase {
   answer: string
   knowledge_source_ids: string[]
 }
@@ -154,7 +154,7 @@ export type HtEventProps =
   | EventBotStart
   | EventBotOpen
   | EventBotAiModel
-  | EventBotAiKnowladgeBase
+  | EventBotAiKnowledgeBase
   | EventBotKeywordModel
   | EventFallback
   | EventHandoffOption
