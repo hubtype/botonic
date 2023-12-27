@@ -32,7 +32,7 @@
   "dependencies": {
     "@babel/runtime": "^7.22.5",
     "@botonic/core": "^0.23.2",
-    "axios": "^1.6.0",
+    "axios": "^1.6.3",
     "process": "^0.11.10"
   },
   "devDependencies": {
