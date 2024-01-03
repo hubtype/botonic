@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-babel",
-  "version": "0.23.1",
+  "version": "0.24.0",
   "license": "MIT",
   "description": "Use Hubtype Babel to predict Intents.",
   "main": "./lib/cjs/index.js",
@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.22.5",
-    "@botonic/core": "^0.23.2",
+    "@botonic/core": "^0.24.0",
     "axios": "^1.6.0",
     "process": "^0.11.10"
   },

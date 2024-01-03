@@ -9,7 +9,92 @@ All notable changes to Botonic will be documented in this file.
     Changes that have landed in master but are not yet released.
     Click to see more.
   </summary>
+  
+  ## [0.24.1] - 2023-12-xx
+
+### Added
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Update webchat user using `WebchatSettings` component](https://github.com/hubtype/botonic/pull/2696) be able to update the webchat user from a bot action using WebchatSettings component.
+
+### Changed
+
+### Fixed
+
+- [`CustomMessage` className, avoid render undefined in `ScrollButton` and `BannerUnreadMessages`](https://github.com/hubtype/botonic/pull/2695) bug fixes introduced in version 0.24.0
+
+  ## [0.23.6/0.24.0] - 2023-12-xx
+
+### Added
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Enable user input of webchat when `doHandoff`](https://github.com/hubtype/botonic/pull/2694) webchat may not have the userInput enabled by default but when handoff it is necessary to enable it, for now it does not close automatically.
+
+### Changed
+
+### Fixed
+
 </details>
+
+## [0.24.0] - 2023-11-29
+
+### Added
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Added several custom properties to activate and style notifications for `Unread messages`](https://github.com/hubtype/botonic/pull/2626) allows to activate different visual notifications and to create custom components for each new component.
+
+  - [Added custom properties to set diferent `image for agent message`]() A different image can be defined for the agent's messages. This is defined in the ThemeProps message.agent.image, if this is not defined, the bot will be used for the agent's messages.
+
+  - [Added css class in `WebchatReplies`]() Add an empty css class `replies-container` in case you want to style the div.
+
+  - [Added custom properties to show bot / agent image next to the `timestamp`]() It is possible to define with a boolean in the ThemeProps message.timestamps.withImage to show the image of bot or agent next to the timestamp. When displayed in this position of the message it is not displayed in large next to the message. Also add an empty css class `botonic-timestamp-container` in case you want to style the div.
+
+### Changed
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+  - Fixed an error with isBrowser function, now check !window.process?.versions?.node
+
+### Fixed
+
+## [0.23.5] - 2023-12-13
+
+### Changed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Remove `start_up_node`](https://github.com/hubtype/botonic/pull/2686) remove start_up_node and use start_id_node and add a getStartContents function
+
+## [0.23.4] - 2023-12-01
+
+### Fixed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [CORS error in `availability endpoint`](https://github.com/hubtype/botonic/pull/2682) use external api to avoid availability endpoint
+
+## [0.23.0] - 2023-01-07
+
+### Added
+
+- [@botonic/plugin-hubtype-analytics](https://www.npmjs.com/package/@botonic/plugin-hubtype-analytics) This plugin is used to integrate Hubtype Analytics Service in your Botonic project.
+
+- [@botonic/plugin-knowledge-bases](https://www.npmjs.com/package/@botonic/plugin-knowledge-bases) This plugin allows you to integrate Hubtype Knowledge bases in your Botonic project. This allows you to train an AI with pdf documents of FAQs, and your bot knows how to answer those questions.
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder) You can pass functions through the configuration, so that the plugin-flow-builder uses the plugin-knowledge-bases and the plugin-hubtype-analytics.
+
+### Changed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - The Multichannel component will use the WhatsappButtonList when it finds a message with more than 3 WhatsApp buttons.
+
+- [@botonic/plugin-contentful](https://www.npmjs.com/package/@botonic/plugin-contentful)
+  - [Increase the limit of contents in topContents method](feature/cus-754-task-increase-the-limit-of-contents-from-contentful)
+
+### Fixed
 
 ## [0.21.0] - 2023-03-09
 
