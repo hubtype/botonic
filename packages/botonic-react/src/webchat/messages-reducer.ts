@@ -61,7 +61,10 @@ function addMessageComponent(
 function resetUnreadMessages(state: WebchatState) {
   const messagesComponents = state.messagesComponents.map(messageComponent => {
     if (messageComponent.props.isUnread) {
-      messageComponent.props.isUnread = false
+      messageComponent = {
+        ...messageComponent,
+        props: { ...messageComponent.props, isUnread: false },
+      }
     }
     return messageComponent
   })
