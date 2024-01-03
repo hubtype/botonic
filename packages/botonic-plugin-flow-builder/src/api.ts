@@ -10,6 +10,7 @@ import {
   HtNodeLink,
   HtNodeWithContent,
   HtNodeWithContentType,
+  HtNodeWithoutContentType,
 } from './content-fields/hubtype-fields'
 import { FlowBuilderApiOptions } from './types'
 
@@ -37,9 +38,18 @@ export class FlowBuilderApi {
     return data as HtFlowBuilderData
   }
 
+  getNodeByFlowId(id: string): HtNodeWithContent {
+    const subFlow = this.flow.flows.find(subFlow => subFlow.id === id)
+    if (!subFlow) throw Error(`SubFlow with id: '${id}' not found`)
+    return this.getNodeById<HtNodeWithContent>(subFlow.start_node_id)
+  }
+
   getNodeById<T extends HtNodeComponent>(id: string): T {
     const node = this.flow.nodes.find(node => node.id === id)
     if (!node) throw Error(`Node with id: '${id}' not found`)
+    if (node?.type === HtNodeWithoutContentType.GO_TO_FLOW) {
+      return this.getNodeByFlowId(node.content.flow_id) as T
+    }
     return node as T
   }
 

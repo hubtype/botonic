@@ -1,6 +1,7 @@
 import { HtCarouselNode } from './carousel'
 import { HtFallbackNode } from './fallback'
 import { HtFunctionNode } from './function'
+import { HtGoToFlow } from './go-to-flow'
 import { HtHandoffNode } from './handoff'
 import { HtImageNode } from './image'
 import { HtIntentNode } from './intent'
@@ -23,6 +24,6 @@ export type HtNodeWithContent =
   | HtFallbackNode
   | HtWhatsappButtonListNode
 
-export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode
+export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
 
 export type HtNodeComponent = HtNodeWithContent | HtNodeWithoutContent
