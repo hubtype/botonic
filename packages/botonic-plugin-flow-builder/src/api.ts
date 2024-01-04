@@ -47,7 +47,7 @@ export class FlowBuilderApi {
   getNodeById<T extends HtNodeComponent>(id: string): T {
     const node = this.flow.nodes.find(node => node.id === id)
     if (!node) throw Error(`Node with id: '${id}' not found`)
-    if (node?.type === HtNodeWithoutContentType.GO_TO_FLOW) {
+    if (node.type === HtNodeWithoutContentType.GO_TO_FLOW) {
       return this.getNodeByFlowId(node.content.flow_id) as T
     }
     return node as T
