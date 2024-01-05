@@ -22,7 +22,9 @@ export interface ManageCms {
   updateFields(
     context: ManageContext,
     contentId: ContentId,
-    fields: FieldsValues
+    fields: FieldsValues,
+    defaultLocale?: string,
+    copyOnDefaultLocale?: boolean
   ): Promise<FieldsValues>
 
   /** TODO: Content will never be published, because it doesn't have fields yet */

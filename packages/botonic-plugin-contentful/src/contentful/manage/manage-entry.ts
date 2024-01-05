@@ -11,6 +11,7 @@ import {
   CONTENT_FIELDS,
   ContentField,
   ContentFieldType,
+  SharedContentFieldType,
 } from '../../manage-cms/fields'
 import { ManageContext } from '../../manage-cms/manage-context'
 import * as nlp from '../../nlp'
@@ -28,7 +29,9 @@ export class ManageContentfulEntry {
   async updateFields(
     context: ManageContext,
     contentId: ContentId,
-    fields: { [contentFieldType: string]: any }
+    fields: { [contentFieldType: string]: any },
+    defaultLocale?: string,
+    copyOnDefaultLocale?: boolean
   ): Promise<{ [contentFieldType: string]: any }> {
     const environment = await this.environment
     const oldEntry = await this.getEntry(environment, contentId)
@@ -37,13 +40,24 @@ export class ManageContentfulEntry {
       if (!isOfType(key, ContentFieldType)) {
         throw new CmsException(`'${key}' is not a valid content field type`)
       }
+      let locale = context.locale
+      if (isOfType(key, SharedContentFieldType) && defaultLocale) {
+        locale = defaultLocale
+      }
       const field = this.checkOverwrite(context, oldEntry, key, false)
-      if (oldEntry.fields[field.cmsName][context.locale] === fields[key]) {
+      if (oldEntry.fields[field.cmsName][locale] === fields[key]) {
         continue
       }
       needUpdate = true
       fields[key] = this.convertValueType(key, fields[key])
-      oldEntry.fields[field.cmsName][context.locale] = fields[key]
+      oldEntry.fields[field.cmsName][locale] = fields[key]
+      if (
+        defaultLocale &&
+        copyOnDefaultLocale &&
+        defaultLocale !== context.locale
+      ) {
+        oldEntry.fields[field.cmsName][defaultLocale] = fields[key]
+      }
     }
     if (!needUpdate) {
       return oldEntry.fields

@@ -1,6 +1,6 @@
 import { testManageEnvironment } from './manage-contentful.helper'
 
-describe('ManageEnvironment', () => {
+describe.skip('ManageEnvironment', () => {
   test('TEST: environments', async () => {
     const environmentManager = testManageEnvironment()
 

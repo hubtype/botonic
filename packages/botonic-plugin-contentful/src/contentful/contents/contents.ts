@@ -26,8 +26,10 @@ export class ContentsDelivery extends ResourceDelivery {
     factory: (entry: contentful.Entry<any>, ctxt: Context) => Promise<T>,
     paging: PagingOptions
   ): Promise<T[]> {
-    const entryCollection: EntryCollection<CommonEntryFields> =
-      await this.delivery.getEntries(context, this.query(contentType, paging))
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
+      context,
+      this.query(contentType, paging)
+    )
     return this.asyncMap(context, entryCollection.items, entry =>
       factory(entry, context)
     )
@@ -40,13 +42,17 @@ export class ContentsDelivery extends ResourceDelivery {
     filter: ((cf: CommonFields) => boolean) | undefined,
     paging: PagingOptions
   ): Promise<T[]> {
-    const entryCollection: EntryCollection<CommonEntryFields> =
-      await this.delivery.getEntries(context, this.query(model, paging))
+    const entryCollection: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
+      context,
+      this.query(model, paging)
+    )
     let entries = entryCollection.items
     if (entryCollection.total > paging.limit) {
       const paging2 = new PagingOptions(1000, 1000)
-      const entryCollection2: EntryCollection<CommonEntryFields> =
-        await this.delivery.getEntries(context, this.query(model, paging2))
+      const entryCollection2: EntryCollection<CommonEntryFields> = await this.delivery.getEntries(
+        context,
+        this.query(model, paging2)
+      )
       entries.push(...entryCollection2.items)
     }
     if (filter) {

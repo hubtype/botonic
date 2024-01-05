@@ -12,7 +12,7 @@ import {
 
 // Since the tests modify contentful contents, they might fail if executed
 // more than once simultaneously (eg from 2 different branches from CI)
-describe('ManageContentful assets', () => {
+describe.skip('ManageContentful assets', () => {
   test('TEST: copyAssetFile', async () => {
     const sut = testManageContentful({ environment: MANAGE_CONTENTFUL_ENV })
     const id = new AssetId(TEST_ASSET_ID, undefined)

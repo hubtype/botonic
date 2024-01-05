@@ -7,6 +7,18 @@ import {
 } from '../cms'
 import { isOfType } from '../util/enums'
 
+export enum SharedContentFieldType {
+  BUTTONS = 'Buttons',
+  ELEMENTS = 'Elements',
+  URL = 'URL',
+  PAYLOAD = 'payload',
+  NAME = 'Name',
+  BUTTONS_STYLE = 'Buttons Style',
+  FOLLOW_UP = 'FollowUp',
+  ON_FINISH = 'On Finish',
+  SHADOWING = 'Shadowing',
+}
+
 export enum ContentFieldType {
   TEXT = 'Text',
   SHORT_TEXT = 'Short text',
@@ -32,6 +44,7 @@ export enum ContentFieldType {
   ON_FINISH = 'On Finish',
   SHADOWING = 'Shadowing',
   INPUT_TYPE = 'Input Type',
+  INTENT = 'Intent',
 }
 
 export enum ContentFieldValueType {
@@ -234,6 +247,12 @@ export const CONTENT_FIELDS = new Map<ContentFieldType, ContentField>(
     new ContentField(
       ContentFieldType.INPUT_TYPE,
       'type',
+      ContentFieldValueType.STRING,
+      true
+    ),
+    new ContentField(
+      ContentFieldType.INTENT,
+      'intent',
       ContentFieldValueType.STRING,
       true
     ),

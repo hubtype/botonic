@@ -22,6 +22,7 @@ import {
   Handoff,
   Image,
   Input,
+  Intent,
   Payload,
   Queue,
   ScheduleContent,
@@ -98,6 +99,12 @@ export class DummyCMS implements CMS {
         [],
         this.buttonCallbacks[0]
       )
+    )
+  }
+
+  intent(id: string, {} = DEFAULT_CONTEXT): Promise<Intent> {
+    return Promise.resolve(
+      new Intent(new CommonFields(id, id), 'Dummy payload for ' + id)
     )
   }
 

@@ -140,8 +140,7 @@ type ResourceError = {
 }
 
 export class DefaultContentsValidatorReports
-  implements ContentsValidatorReports
-{
+  implements ContentsValidatorReports {
   errors: ResourceError[] = []
   successContents: ResourceId[] = []
 

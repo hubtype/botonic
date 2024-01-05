@@ -27,6 +27,7 @@ import { DocumentDelivery } from './contents/document'
 import { HandoffDelivery } from './contents/handoff'
 import { ImageDelivery } from './contents/image'
 import { InputDelivery } from './contents/input'
+import { IntentDelivery } from './contents/intent'
 import { PayloadDelivery } from './contents/payload'
 import { QueueDelivery } from './contents/queue'
 import { ReferenceDelivery } from './contents/reference'
@@ -62,6 +63,7 @@ export class Contentful implements cms.CMS {
   private readonly _video: VideoDelivery
   private readonly _handoff: HandoffDelivery
   private readonly _input: InputDelivery
+  private readonly _intent: IntentDelivery
   private readonly _custom: CustomDelivery
   private readonly _asset: AssetDelivery
   private readonly _queue: QueueDelivery
@@ -122,6 +124,7 @@ export class Contentful implements cms.CMS {
       resumeErrors
     )
     this._input = new InputDelivery(delivery, resumeErrors)
+    this._intent = new IntentDelivery(delivery, resumeErrors)
     this._custom = new CustomDelivery(delivery, resumeErrors)
     this._dateRange = new DateRangeDelivery(delivery, resumeErrors)
     const followUp = new ReferenceDelivery(
@@ -217,6 +220,10 @@ export class Contentful implements cms.CMS {
     return this._input.input(id, context)
   }
 
+  async intent(id: string, context = DEFAULT_CONTEXT): Promise<cms.Intent> {
+    return this._intent.intent(id, context)
+  }
+
   async custom(id: string, context = DEFAULT_CONTEXT): Promise<cms.Custom> {
     return this._custom.custom(id, context)
   }
@@ -284,6 +291,8 @@ export class Contentful implements cms.CMS {
         return retype(await this._handoff.fromEntry(entry, context))
       case ContentType.INPUT:
         return retype(await this._input.fromEntry(entry, context))
+      case ContentType.INTENT:
+        return retype(await this._intent.fromEntry(entry, context))
       case ContentType.URL:
         return retype(await this._url.fromEntry(entry, context))
       case ContentType.PAYLOAD:

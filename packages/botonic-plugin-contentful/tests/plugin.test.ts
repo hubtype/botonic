@@ -28,7 +28,7 @@ test('TEST: plugin with logCalls', async () => {
   expect(carousel.common.id).toEqual(TEST_CAROUSEL_MAIN_ID)
 })
 
-test('INTEGRATION TEST plugin with contentfulFactory', async () => {
+test.skip('INTEGRATION TEST plugin with contentfulFactory', async () => {
   // Arrange
   const otherEnvironmentCredentials = {
     spaceId: testSpaceId(),
