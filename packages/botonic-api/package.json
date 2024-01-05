@@ -29,7 +29,7 @@
     "@vendia/serverless-express": "^4.3.9",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.1354.0",
-    "axios": "^0.24.0",
+    "axios": "^1.6.4",
     "bufferutil": "^4.0.3",
     "chalk": "^4.1.1",
     "cors": "^2.8.5",
