@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "aws-sdk": "^2.1404.0",
-    "axios": "^1.6.0",
+    "axios": "^1.6.4",
     "decode": "^0.3.0",
     "dynamodb-toolbox": "^0.3.4",
     "fast-xml-parser": "^3.19.0",
