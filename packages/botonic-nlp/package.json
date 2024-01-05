@@ -38,7 +38,7 @@
     "@nlpjs/lang-it": "^4.22.0",
     "@nlpjs/lang-ru": "^4.22.0",
     "@tensorflow/tfjs-node": "^2.8.6",
-    "axios": "^0.24.0",
+    "axios": "^1.6.4",
     "better-sqlite3": "^7.0.1",
     "cross-fetch": "^3.1.6",
     "js-yaml": "4.1.0"
