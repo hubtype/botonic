@@ -10,7 +10,25 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-  ## [0.24.1] - 2023-12-xx
+  ## [0.24.x] - 2024-01-xx
+
+### Added
+
+### Changed
+
+### Fixed
+
+</details>
+
+## [0.24.2] - 2024-01-05
+
+### Fixed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Fix an error with `resetUnreadMessages` in local](https://github.com/hubtype/botonic/pull/2736) The error occurred locally when maintaining the session and reloading the webchat. This only happened in local because in development mode the strict mode is used.
+
+## [0.24.1] - 2023-12-20
 
 ### Added
 
@@ -18,25 +36,25 @@ All notable changes to Botonic will be documented in this file.
 
   - [Update webchat user using `WebchatSettings` component](https://github.com/hubtype/botonic/pull/2696) be able to update the webchat user from a bot action using WebchatSettings component.
 
-### Changed
+## [0.24.1] - 2023-12-20
+
+### Added
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Update webchat user using `WebchatSettings` component](https://github.com/hubtype/botonic/pull/2696) be able to update the webchat user from a bot action using WebchatSettings component.
 
 ### Fixed
 
 - [`CustomMessage` className, avoid render undefined in `ScrollButton` and `BannerUnreadMessages`](https://github.com/hubtype/botonic/pull/2695) bug fixes introduced in version 0.24.0
 
-  ## [0.23.6/0.24.0] - 2023-12-xx
+  ## [0.24.0] - 2023-12-20
 
 ### Added
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
   - [Enable user input of webchat when `doHandoff`](https://github.com/hubtype/botonic/pull/2694) webchat may not have the userInput enabled by default but when handoff it is necessary to enable it, for now it does not close automatically.
-
-### Changed
-
-### Fixed
-
-</details>
 
 ## [0.24.0] - 2023-11-29
 
