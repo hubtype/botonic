@@ -1,5 +1,4 @@
-// Exports
-
+import { Plugin } from '@botonic/core'
 import { DynamoDB } from 'aws-sdk'
 
 import {
@@ -31,7 +30,7 @@ export interface DynamoDbOptions extends DynamoDB.ClientConfiguration {
   timeout?: number
 }
 
-export default class BotonicPluginDynamoDB {
+export default class BotonicPluginDynamoDB implements Plugin {
   readonly storage: TrackStorage
 
   constructor(opt: TrackOptions | DynamoDbOptions) {
@@ -57,11 +56,9 @@ export default class BotonicPluginDynamoDB {
     return this.storage.write(track)
   }
 
-  // @ts-ignore
-  pre({ input, session, lastRoutePath }) {}
-
-  // @ts-ignore
-  post({ input, session, lastRoutePath, response }) {}
+  pre(): void {
+    return
+  }
 
   private applyTimeout(pluginDynamoOpts: DynamoDbOptions): void {
     if (!pluginDynamoOpts.timeout) {

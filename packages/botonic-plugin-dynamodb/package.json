@@ -15,7 +15,7 @@
     "postversion": "git push && git push --tags"
   },
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.24.0",
+  "version": "0.24.1",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -36,6 +36,7 @@
     "aws-sdk": "2.1404.0"
   },
   "devDependencies": {
+    "@botonic/core": "^0.24.0",
     "@types/node": "20.5.1"
   },
   "engines": {
