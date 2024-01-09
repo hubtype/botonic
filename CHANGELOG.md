@@ -20,6 +20,14 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.24.1] - 2024-01-09
+
+### Added
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Add the `go-to-flow` node](https://github.com/hubtype/botonic/pull/2737) This node connects different flows, so it is not necessary to have a very large flow with the whole conversation.
+
 ## [0.24.2] - 2024-01-05
 
 ### Fixed
@@ -27,14 +35,6 @@ All notable changes to Botonic will be documented in this file.
 - [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
   - [Fix an error with `resetUnreadMessages` in local](https://github.com/hubtype/botonic/pull/2736) The error occurred locally when maintaining the session and reloading the webchat. This only happened in local because in development mode the strict mode is used.
-
-## [0.24.1] - 2023-12-20
-
-### Added
-
-- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
-
-  - [Update webchat user using `WebchatSettings` component](https://github.com/hubtype/botonic/pull/2696) be able to update the webchat user from a bot action using WebchatSettings component.
 
 ## [0.24.1] - 2023-12-20
 
