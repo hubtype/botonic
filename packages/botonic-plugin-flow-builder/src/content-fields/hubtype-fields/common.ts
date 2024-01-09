@@ -8,6 +8,13 @@ export interface HtFlowBuilderData {
   start_node_id?: string
   ai_model_id?: string
   nodes: HtNodeComponent[]
+  flows: HtFlows[]
+}
+
+export interface HtFlows {
+  id: string
+  name: string
+  start_node_id: string
 }
 
 export interface HtNodeLink {
