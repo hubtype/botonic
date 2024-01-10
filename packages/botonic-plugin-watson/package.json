@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.16.5",
-    "axios": "^0.24.0"
+    "axios": "^1.6.4"
   },
   "devDependencies": {},
   "keywords": [
