@@ -30,7 +30,7 @@
     "README.md"
   ],
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^1.6.4",
     "decode": "^0.3.0",
     "fast-xml-parser": "^3.21.1",
     "html-entities": "^2.3.2",
