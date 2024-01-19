@@ -1,7 +1,9 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
+import { SEPARATOR } from './constants'
 import {
+  HtBotActionNode,
   HtFallbackNode,
   HtFlowBuilderData,
   HtIntentNode,
@@ -11,6 +13,7 @@ import {
   HtNodeWithContent,
   HtNodeWithContentType,
   HtNodeWithoutContentType,
+  HtPayloadNode,
 } from './content-fields/hubtype-fields'
 import { FlowBuilderApiOptions } from './types'
 
@@ -175,5 +178,28 @@ export class FlowBuilderApi {
 
   private containsAnyKeywords(input: string, keywords: string[]): boolean {
     return keywords.some(keyword => input.includes(keyword))
+  }
+
+  getPayloadFromBotActionNodeId(id?: string): string | undefined {
+    if (id) {
+      const botActionNode = this.getNodeById(id)
+      if (botActionNode.type === HtNodeWithoutContentType.BOT_ACTION) {
+        return this.createPayloadWithParams(botActionNode)
+      }
+    }
+    return undefined
+  }
+
+  private createPayloadWithParams(botActionNode: HtBotActionNode): string {
+    const payloadId = botActionNode.content.payload_id
+    const payloadNode = this.getNodeById<HtPayloadNode>(payloadId)
+    const customParams = JSON.parse(
+      botActionNode.content.payload_params || '{}'
+    )
+    const payloadJson = JSON.stringify({
+      ...customParams,
+      followUpId: botActionNode.follow_up?.id,
+    })
+    return `${payloadNode.content.payload}${SEPARATOR}${payloadJson}`
   }
 }
