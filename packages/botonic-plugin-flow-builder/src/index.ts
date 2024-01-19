@@ -1,8 +1,9 @@
 import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
+import { getNodeByUserInput } from './action/user-input'
 import { FlowBuilderApi } from './api'
-import { SOURCE_INFO_SEPARATOR } from './constants'
+import { SEPARATOR, SOURCE_INFO_SEPARATOR } from './constants'
 import {
   FlowCarousel,
   FlowContent,
@@ -20,7 +21,11 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { BotonicPluginFlowBuilderOptions, KnowledgeBaseResponse } from './types'
+import {
+  BotonicPluginFlowBuilderOptions,
+  KnowledgeBaseResponse,
+  PayloadParamsBase,
+} from './types'
 import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
@@ -181,8 +186,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
     return result.target.id
   }
+
+  getPayloadParams<T>(payload: string): T & PayloadParamsBase {
+    const payloadParams = JSON.parse(payload.split(SEPARATOR)[1] || '{}')
+    return payloadParams
+  }
 }
 
 export * from './action'
 export * from './content-fields'
-export { BotonicPluginFlowBuilderOptions } from './types'
+export { BotonicPluginFlowBuilderOptions, PayloadParamsBase } from './types'
