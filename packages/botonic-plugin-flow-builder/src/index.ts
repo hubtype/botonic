@@ -59,6 +59,22 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       accessToken: this.getAccessToken(request.session),
       request: this.currentRequest,
     })
+
+    if (
+      request.input.data &&
+      !request.input.payload &&
+      !request.session.is_first_interaction
+    ) {
+      const nodeByUserInput = await getNodeByUserInput(
+        this.cmsApi,
+        this.getLocale(request.session),
+        request as unknown as ActionRequest
+      )
+      request.input.payload = this.cmsApi.getPayloadFromBotActionNodeId(
+        nodeByUserInput?.id
+      )
+    }
+
     if (request.input.payload) {
       request.input.payload = request.input.payload?.split(
         SOURCE_INFO_SEPARATOR
