@@ -1,3 +1,4 @@
+import { HtBotActionNode } from './bot-action'
 import { HtCarouselNode } from './carousel'
 import { HtFallbackNode } from './fallback'
 import { HtFunctionNode } from './function'
@@ -24,6 +25,10 @@ export type HtNodeWithContent =
   | HtFallbackNode
   | HtWhatsappButtonListNode
 
-export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
+export type HtNodeWithoutContent =
+  | HtUrlNode
+  | HtPayloadNode
+  | HtGoToFlow
+  | HtBotActionNode
 
 export type HtNodeComponent = HtNodeWithContent | HtNodeWithoutContent
