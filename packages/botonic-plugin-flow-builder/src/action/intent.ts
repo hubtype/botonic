@@ -15,14 +15,17 @@ export async function getIntentNodeByInput(
     confidence: request.input.confidence as number,
     confidence_successful: true,
   }
-  if (isIntentValid(intentNode, request, cmsApi) && intentNode?.target?.id) {
-    await trackEvent(request, EventName.botAiModel, eventArgs)
-    return intentNode
-  } else {
+  if (request.input.confidence && request.input.intent) {
+    if (isIntentValid(intentNode, request, cmsApi) && intentNode?.target?.id) {
+      await trackEvent(request, EventName.botAiModel, eventArgs)
+      return intentNode
+    }
+
     eventArgs.confidence_successful = false
     await trackEvent(request, EventName.botAiModel, eventArgs)
-    return undefined
   }
+
+  return undefined
 }
 
 function isIntentValid(
