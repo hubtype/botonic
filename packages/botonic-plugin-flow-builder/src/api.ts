@@ -180,9 +180,7 @@ export class FlowBuilderApi {
 
   getPayload(target?: HtNodeLink): string | undefined {
     if (target) {
-      console.log('getPayload', { target })
       if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
-        console.log('BOT_ACTION')
         const botActionNode = this.getNodeById<HtBotActionNode>(target.id)
         return this.createPayloadWithParams(botActionNode)
       }

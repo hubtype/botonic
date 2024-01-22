@@ -12,7 +12,6 @@ export async function getNodeByUserInput(
 ): Promise<HtIntentNode | HtKeywordNode | undefined> {
   if (request.input.data) {
     const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
-    console.log({ intentNode })
     if (intentNode) return intentNode
 
     const keywordNode = await getKeywordNodeByInput(
@@ -21,7 +20,6 @@ export async function getNodeByUserInput(
       request,
       request.input.data
     )
-    console.log({ keywordNode })
     if (keywordNode) return keywordNode
   }
   return undefined
