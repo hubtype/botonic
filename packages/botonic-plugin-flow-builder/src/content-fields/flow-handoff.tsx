@@ -38,10 +38,7 @@ export class FlowHandoff extends ContentFieldsBase {
     cmsApi: FlowBuilderApi
   ): string | undefined {
     if (cmsHandoff.target?.id) {
-      const payloadFromBotActionNode = cmsApi.getPayloadFromBotActionNodeId(
-        cmsHandoff.target.id
-      )
-      return payloadFromBotActionNode || cmsHandoff.target.id
+      return cmsApi.getPayload(cmsHandoff.target)
     }
 
     // OLD PAYLOAD

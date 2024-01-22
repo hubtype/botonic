@@ -27,12 +27,9 @@ export class FlowButton extends ContentFieldsBase {
     const newButton = new FlowButton(cmsButton.id)
     newButton.text = this.getTextByLocale(locale, cmsButton.text)
     if (cmsButton.target) {
-      const payloadFromBotActionNode = cmsApi.getPayloadFromBotActionNodeId(
-        cmsButton.target.id
-      )
-      const payload = payloadFromBotActionNode || cmsButton.target.id
-      newButton.payload = payload
+      newButton.payload = cmsApi.getPayload(cmsButton.target)
     }
+
     // OLD PAYLOAD
     if (cmsButton.payload && payloadId) {
       const payloadNode = cmsApi.getNodeById<HtPayloadNode>(payloadId)

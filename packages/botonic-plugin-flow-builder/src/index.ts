@@ -75,9 +75,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         this.getLocale(request.session),
         request as unknown as ActionRequest
       )
-      request.input.payload = this.cmsApi.getPayloadFromBotActionNodeId(
-        nodeByUserInput?.id
-      )
+      request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
     }
 
     if (request.input.payload) {

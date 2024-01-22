@@ -145,18 +145,16 @@ export class FlowBuilderApi {
   getNodeByKeyword(
     userInput: string,
     locale: string
-  ): HtNodeWithContent | undefined {
+  ): HtKeywordNode | undefined {
     try {
       const keywordNodes = this.flow.nodes.filter(
-        node => node.type == HtNodeWithContentType.KEYWORD
+        node => node.type === HtNodeWithContentType.KEYWORD
       ) as HtKeywordNode[]
       const matchedKeywordNodes = keywordNodes.filter(node =>
         this.matchKeywords(node, userInput, locale)
       )
       if (matchedKeywordNodes.length > 0 && matchedKeywordNodes[0].target) {
-        return this.getNodeById<HtNodeWithContent>(
-          matchedKeywordNodes[0].target.id
-        )
+        return matchedKeywordNodes[0]
       }
     } catch (error) {
       console.error(`Error getting node by keyword '${userInput}': `, error)
@@ -180,12 +178,16 @@ export class FlowBuilderApi {
     return keywords.some(keyword => input.includes(keyword))
   }
 
-  getPayloadFromBotActionNodeId(id?: string): string | undefined {
-    if (id) {
-      const botActionNode = this.getNodeById(id)
-      if (botActionNode.type === HtNodeWithoutContentType.BOT_ACTION) {
+  getPayload(target?: HtNodeLink): string | undefined {
+    if (target) {
+      console.log('getPayload', { target })
+      if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
+        console.log('BOT_ACTION')
+        const botActionNode = this.getNodeById<HtBotActionNode>(target.id)
         return this.createPayloadWithParams(botActionNode)
       }
+      const targetNode = this.getNodeById(target.id)
+      return targetNode.id
     }
     return undefined
   }

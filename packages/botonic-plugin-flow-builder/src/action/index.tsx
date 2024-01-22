@@ -7,7 +7,6 @@ import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import { createNodeFromKnowledgeBase } from './knowledge-bases'
 import { EventName, trackEvent } from './tracking'
-import { getNodeByUserInput } from './user-input'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
@@ -22,11 +21,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
 
-    const targetNode = await getTargetNode(
-      flowBuilderPlugin.cmsApi,
-      locale,
-      request
-    )
+    const targetNode = await getTargetNode(flowBuilderPlugin.cmsApi, request)
 
     const contents = await flowBuilderPlugin.getContentsByNode(
       targetNode,
@@ -58,15 +53,17 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   }
 }
 
-async function getTargetNode(
-  cmsApi: FlowBuilderApi,
-  locale: string,
-  request: ActionRequest
-) {
+async function getTargetNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
+  if (request.session.is_first_interaction) {
+    const startNode = cmsApi.getStartNode()
+    await trackEvent(request, EventName.botStart)
+    return startNode
+  }
   const contentId = request.input.payload
-  const targetNode = !contentId
-    ? await getNodeByUserInput(cmsApi, locale, request)
-    : (cmsApi.getNodeById(contentId) as HtNodeWithContent)
+
+  const targetNode = contentId
+    ? cmsApi.getNodeById<HtNodeWithContent>(contentId)
+    : undefined
 
   if (targetNode) {
     const eventArgs = {
