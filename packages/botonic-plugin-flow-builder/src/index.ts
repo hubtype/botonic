@@ -187,7 +187,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return result.target.id
   }
 
-  getPayloadParams<T>(payload: string): T & PayloadParamsBase {
+  getPayloadParams<T extends PayloadParamsBase>(payload: string): T {
     const payloadParams = JSON.parse(payload.split(SEPARATOR)[1] || '{}')
     return payloadParams
   }
