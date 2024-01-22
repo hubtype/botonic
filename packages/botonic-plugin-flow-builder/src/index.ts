@@ -65,11 +65,12 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request: this.currentRequest,
     })
 
-    if (
+    const checkUserTextInput =
       request.input.data &&
       !request.input.payload &&
       !request.session.is_first_interaction
-    ) {
+
+    if (checkUserTextInput) {
       const nodeByUserInput = await getNodeByUserInput(
         this.cmsApi,
         this.getLocale(request.session),
