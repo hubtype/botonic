@@ -15,23 +15,25 @@ export async function getIntentNodeByInput(
     confidence: request.input.confidence as number,
     confidence_successful: true,
   }
-  if (isIntentValid(intentNode, request, cmsApi) && intentNode?.target?.id) {
-    await trackEvent(request, EventName.botAiModel, eventArgs)
-    return intentNode
-  } else {
+  if (request.input.confidence && request.input.intent && intentNode) {
+    if (isIntentValid(intentNode, request, cmsApi)) {
+      await trackEvent(request, EventName.botAiModel, eventArgs)
+      return intentNode
+    }
+
     eventArgs.confidence_successful = false
     await trackEvent(request, EventName.botAiModel, eventArgs)
-    return undefined
   }
+
+  return undefined
 }
 
 function isIntentValid(
-  intentNode: HtIntentNode | undefined,
+  intentNode: HtIntentNode,
   request: ActionRequest,
   cmsApi: FlowBuilderApi
 ) {
   return (
-    intentNode &&
     request.input.confidence &&
     cmsApi.hasMetConfidenceThreshold(intentNode, request.input.confidence)
   )

@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-  ## [0.24.x] - 2024-01-xx
+  ## [0.24.x] - 2024-01-23
 
 ### Added
 
@@ -23,6 +23,20 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.24.x] - 2024-01-23
+
+### Added
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Add the `bot-action` node](https://github.com/hubtype/botonic/pull/2769) This node is used to define a payload and parameters, to execute an action defined in the bot routes.
+
+### Fixed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Fix `trackEvent` for intent](https://github.com/hubtype/botonic/pull/2773) Call trackEvent only when IntentNode exsits in the flow
 
 ## [0.24.1] - 2024-01-09
 
