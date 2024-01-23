@@ -39,3 +39,7 @@ export interface KnowledgeBaseResponse {
     page?: number
   }[]
 }
+
+export interface PayloadParamsBase {
+  followUpId?: string
+}

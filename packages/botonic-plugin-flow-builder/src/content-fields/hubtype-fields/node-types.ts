@@ -15,6 +15,7 @@ export enum HtNodeWithoutContentType {
   URL = 'url',
   PAYLOAD = 'payload',
   GO_TO_FLOW = 'go-to-flow',
+  BOT_ACTION = 'bot-action',
 }
 
 export enum HtButtonStyle {

@@ -1,7 +1,9 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
+import { SEPARATOR } from './constants'
 import {
+  HtBotActionNode,
   HtFallbackNode,
   HtFlowBuilderData,
   HtIntentNode,
@@ -11,6 +13,7 @@ import {
   HtNodeWithContent,
   HtNodeWithContentType,
   HtNodeWithoutContentType,
+  HtPayloadNode,
 } from './content-fields/hubtype-fields'
 import { FlowBuilderApiOptions } from './types'
 
@@ -142,18 +145,16 @@ export class FlowBuilderApi {
   getNodeByKeyword(
     userInput: string,
     locale: string
-  ): HtNodeWithContent | undefined {
+  ): HtKeywordNode | undefined {
     try {
       const keywordNodes = this.flow.nodes.filter(
-        node => node.type == HtNodeWithContentType.KEYWORD
+        node => node.type === HtNodeWithContentType.KEYWORD
       ) as HtKeywordNode[]
       const matchedKeywordNodes = keywordNodes.filter(node =>
         this.matchKeywords(node, userInput, locale)
       )
       if (matchedKeywordNodes.length > 0 && matchedKeywordNodes[0].target) {
-        return this.getNodeById<HtNodeWithContent>(
-          matchedKeywordNodes[0].target.id
-        )
+        return matchedKeywordNodes[0]
       }
     } catch (error) {
       console.error(`Error getting node by keyword '${userInput}': `, error)
@@ -175,5 +176,31 @@ export class FlowBuilderApi {
 
   private containsAnyKeywords(input: string, keywords: string[]): boolean {
     return keywords.some(keyword => input.includes(keyword))
+  }
+
+  getPayload(target?: HtNodeLink): string | undefined {
+    if (!target) {
+      return undefined
+    }
+
+    if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
+      const botActionNode = this.getNodeById<HtBotActionNode>(target.id)
+      return this.createPayloadWithParams(botActionNode)
+    }
+
+    return target.id
+  }
+
+  private createPayloadWithParams(botActionNode: HtBotActionNode): string {
+    const payloadId = botActionNode.content.payload_id
+    const payloadNode = this.getNodeById<HtPayloadNode>(payloadId)
+    const customParams = JSON.parse(
+      botActionNode.content.payload_params || '{}'
+    )
+    const payloadJson = JSON.stringify({
+      ...customParams,
+      followUpId: botActionNode.follow_up?.id,
+    })
+    return `${payloadNode.content.payload}${SEPARATOR}${payloadJson}`
   }
 }

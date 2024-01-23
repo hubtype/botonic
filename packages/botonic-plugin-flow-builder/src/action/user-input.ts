@@ -1,27 +1,20 @@
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
-import { HtNodeWithContent } from '../content-fields/hubtype-fields'
-import { getNodeByIntent } from './intent'
-import { getNodeByKeyword } from './keyword'
-import { EventName, trackEvent } from './tracking'
+import { HtIntentNode, HtKeywordNode } from '../content-fields/hubtype-fields'
+import { getIntentNodeByInput } from './intent'
+import { getKeywordNodeByInput } from './keyword'
 
 export async function getNodeByUserInput(
   cmsApi: FlowBuilderApi,
   locale: string,
   request: ActionRequest
-): Promise<HtNodeWithContent | undefined> {
-  if (request.session.is_first_interaction) {
-    const startNode = cmsApi.getStartNode()
-    await trackEvent(request, EventName.botStart)
-    return startNode
-  }
-
+): Promise<HtIntentNode | HtKeywordNode | undefined> {
   if (request.input.data) {
-    const nodeByIntent = await getNodeByIntent(cmsApi, locale, request)
-    if (nodeByIntent) return nodeByIntent
+    const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
+    if (intentNode) return intentNode
 
-    const keywordNode = await getNodeByKeyword(
+    const keywordNode = await getKeywordNodeByInput(
       cmsApi,
       locale,
       request,

@@ -6,23 +6,7 @@ import { EventName, trackEvent } from '../action/tracking'
 import { FlowBuilderApi } from '../api'
 import { getQueueAvailability } from '../functions/conditional-queue-status'
 import { ContentFieldsBase } from './content-fields-base'
-import {
-  HtCarouselNode,
-  HtHandoffNode,
-  HtImageNode,
-  HtPayloadNode,
-  HtQueueLocale,
-  HtTextNode,
-  HtVideoNode,
-  HtWhatsappButtonListNode,
-} from './hubtype-fields'
-
-type HtAfterHandoff =
-  | HtTextNode
-  | HtImageNode
-  | HtVideoNode
-  | HtCarouselNode
-  | HtWhatsappButtonListNode
+import { HtHandoffNode, HtPayloadNode, HtQueueLocale } from './hubtype-fields'
 
 export class FlowHandoff extends ContentFieldsBase {
   public code: string
@@ -54,21 +38,18 @@ export class FlowHandoff extends ContentFieldsBase {
     cmsApi: FlowBuilderApi
   ): string | undefined {
     if (cmsHandoff.target?.id) {
-      const handoffTargetNode = cmsApi.getNodeById<HtAfterHandoff>(
-        cmsHandoff.target?.id
-      )
-      if (handoffTargetNode?.id) return handoffTargetNode?.id
+      return cmsApi.getPayload(cmsHandoff.target)
     }
 
+    // OLD PAYLOAD
     const payloadId = cmsHandoff.content.payload.find(
       payload => payload.locale === locale
     )?.id
+    if (payloadId) {
+      return cmsApi.getNodeById<HtPayloadNode>(payloadId).content.payload
+    }
 
-    if (!payloadId) return undefined
-
-    const actionPayload = cmsApi.getNodeById(payloadId)
-
-    return (actionPayload as HtPayloadNode).content.payload
+    return undefined
   }
 
   async doHandoff(request: ActionRequest): Promise<void> {

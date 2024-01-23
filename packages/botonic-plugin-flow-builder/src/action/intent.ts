@@ -1,17 +1,14 @@
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
-import {
-  HtIntentNode,
-  HtNodeWithContent,
-} from '../content-fields/hubtype-fields'
+import { HtIntentNode } from '../content-fields/hubtype-fields'
 import { EventName, trackEvent } from './tracking'
 
-export async function getNodeByIntent(
+export async function getIntentNodeByInput(
   cmsApi: FlowBuilderApi,
   locale: string,
   request: ActionRequest
-): Promise<HtNodeWithContent | undefined> {
+): Promise<HtIntentNode | undefined> {
   const intentNode = cmsApi.getIntentNode(request.input, locale)
   const eventArgs = {
     intent: request.input.intent as string,
@@ -20,7 +17,7 @@ export async function getNodeByIntent(
   }
   if (isIntentValid(intentNode, request, cmsApi) && intentNode?.target?.id) {
     await trackEvent(request, EventName.botAiModel, eventArgs)
-    return cmsApi.getNodeById<HtNodeWithContent>(intentNode.target.id)
+    return intentNode
   } else {
     eventArgs.confidence_successful = false
     await trackEvent(request, EventName.botAiModel, eventArgs)
