@@ -14,6 +14,10 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Add the `bot-action` node](https://github.com/hubtype/botonic/pull/2769) This node is used to define a payload and parameters, to execute an action defined in the bot routes.
+
 ### Changed
 
 ### Fixed
