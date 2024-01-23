@@ -179,15 +179,16 @@ export class FlowBuilderApi {
   }
 
   getPayload(target?: HtNodeLink): string | undefined {
-    if (target) {
-      if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
-        const botActionNode = this.getNodeById<HtBotActionNode>(target.id)
-        return this.createPayloadWithParams(botActionNode)
-      }
-      const targetNode = this.getNodeById(target.id)
-      return targetNode.id
+    if (!target) {
+      return undefined
     }
-    return undefined
+
+    if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
+      const botActionNode = this.getNodeById<HtBotActionNode>(target.id)
+      return this.createPayloadWithParams(botActionNode)
+    }
+
+    return target.id
   }
 
   private createPayloadWithParams(botActionNode: HtBotActionNode): string {
