@@ -22,6 +22,10 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Fix `trackEvent` for intent](https://github.com/hubtype/botonic/pull/2773) Call trackEvent only when IntentNode exsits in the flow
+
 </details>
 
 ## [0.24.1] - 2024-01-09
