@@ -14,17 +14,21 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
-
-  - [Add the `bot-action` node](https://github.com/hubtype/botonic/pull/2769) This node is used to define a payload and parameters, to execute an action defined in the bot routes.
-
 ### Changed
 
 ### Fixed
 
 </details>
 
-## [0.24.x] - 2024-01-23
+## [0.24.3] - 2024-01-30
+
+### Fixed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Fix agent message use `botMessageStyle`](https://github.com/hubtype/botonic/pull/2777)
+
+## [0.24.2] - 2024-01-23
 
 ### Added
 
