@@ -149,9 +149,9 @@ export const Message = props => {
   }
 
   const getMessageStyle = () =>
-    isSentByBot
-      ? getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.botMessageStyle)
-      : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userMessageStyle)
+    isSentByUser
+      ? getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userMessageStyle)
+      : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.botMessageStyle)
 
   const userOrBotMessage = isSentByUser ? SENDERS.user : SENDERS.bot
   const hasBlobTick = () =>
