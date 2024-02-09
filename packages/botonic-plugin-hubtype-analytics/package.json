@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-analytics",
-  "version": "0.24.0",
+  "version": "0.25.0-alpha.0",
   "description": "Plugin for tracking in the Hubtype backend to see the results in the Hubtype Dashbord",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -15,13 +15,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
-    "@botonic/core": "0.23.2",
+    "@botonic/core": "0.25.0-alpha.2",
     "axios": "^1.6.0"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7",
+    "@types/node": "^20.11.17",
     "@types/react": "^16.14.0",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.5"
   },
   "files": [
     "lib/**",
