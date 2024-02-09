@@ -181,9 +181,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       },
       ...nameValues
     )
-    const functionResult = await this.functions[functionNode.content.action](
-      args
-    )
+    const functionResult =
+      await this.functions[functionNode.content.action](args)
     // TODO define result_mapping per locale??
     const result = functionNode.content.result_mapping.find(
       r => r.result === functionResult
