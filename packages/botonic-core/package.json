@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.24.0",
+  "version": "0.25.0-alpha.2",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
@@ -31,10 +31,10 @@
   ],
   "dependencies": {
     "aws-sdk": "^2.1404.0",
-    "axios": "^1.6.0",
+    "axios": "^1.6.7",
     "decode": "^0.3.0",
     "dynamodb-toolbox": "^0.3.4",
-    "fast-xml-parser": "^3.19.0",
+    "fast-xml-parser": "3.19.0",
     "html-entities": "^2.4.0",
     "node-json-db": "^1.6.0",
     "pako": "^2.1.0",
@@ -43,19 +43,13 @@
     "ulid": "^2.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.11.5",
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
-    "@babel/plugin-transform-runtime": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
     "@types/minipass": "^3.3.5",
     "@types/pako": "^1.0.2",
     "babel-plugin-add-module-exports": "^1.0.2"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   },
   "keywords": [
     "bot-framework",
