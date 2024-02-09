@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-knowledge-bases",
-  "version": "0.24.1",
+  "version": "0.25.0-alpha.1",
   "description": "Use a Hubtype to make the bot respond through a knowledge base.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -14,8 +14,16 @@
     "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
+  "dependencies": {
+    "@babel/runtime": "^7.22.5",
+    "@botonic/core": "0.25.0-alpha.2",
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16"
+  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   },
   "repository": {
     "type": "git",
@@ -27,14 +35,6 @@
     "src/**",
     "README.md"
   ],
-  "dependencies": {
-    "@babel/runtime": "^7.22.5",
-    "@botonic/core": "0.24.0",
-    "axios": "^1.6.0"
-  },
-  "devDependencies": {
-    "@types/node": "^18.16.0"
-  },
   "keywords": [
     "bot-framework",
     "chatbot",
