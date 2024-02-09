@@ -1,11 +1,11 @@
 {
-  "extends": "./tsconfig.json",
-
+  "extends": "../../tsconfig.esm.base.json",
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./lib/esm",
-    "target": "ES2017",
-    "module": "ES2022",
-    "skipLibCheck": true
-  }
+    "allowJs": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+  "exclude": ["tests/**/*"]
 }
