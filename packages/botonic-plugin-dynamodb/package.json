@@ -1,6 +1,11 @@
 {
+  "name": "@botonic/plugin-dynamodb",
+  "version": "0.25.0-alpha.0",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build_unit_tests": "tsc -b tests/tsconfig.json",
     "test": "../../node_modules/.bin/jest --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
@@ -9,37 +14,35 @@
     "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
     "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm run lint_ci && npm run build && npm test",
+    "prepublishOnly": "npm run lint_ci && rm -rf lib && npm run build && npm run test",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"
   },
-  "name": "@botonic/plugin-dynamodb",
-  "version": "0.24.0",
-  "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hubtype/botonic.git"
+  "dependencies": {
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "@babel/runtime": "^7.23.9",
+    "aws-sdk": "^2.1554.0"
+  },
+  "devDependencies": {
+    "@botonic/core": "0.25.0-alpha.2",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/node": "20.11.17"
   },
   "author": "",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "files": [
     "lib/**",
     "doc/**",
     "README.md"
   ],
-  "dependencies": {
-    "@aws/dynamodb-data-mapper": "^0.7.3",
-    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
-    "@babel/runtime": "^7.22.5",
-    "aws-sdk": "2.1404.0"
-  },
-  "devDependencies": {
-    "@types/node": "20.5.1"
-  },
-  "engines": {
-    "node": ">=12.0.0"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubtype/botonic.git"
   },
   "keywords": [
     "aws",
