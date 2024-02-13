@@ -1,9 +1,4 @@
-import {
-  INPUT,
-  Plugin,
-  PluginPostRequest,
-  PluginPreRequest,
-} from '@botonic/core'
+import { INPUT, Plugin, PluginPreRequest } from '@botonic/core'
 
 import { AccessToken } from './access-token'
 import { GoogleTranslationApiService } from './google-translate-api-service'
@@ -29,7 +24,11 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
 
   async pre(request: PluginPreRequest): Promise<void> {
     try {
-      if (request.input.type == INPUT.TEXT && !request.input.payload) {
+      if (
+        request.input.type === INPUT.TEXT &&
+        request.input.data &&
+        !request.input.payload
+      ) {
         const text = request.input.data
         if (this.options.translateTo) {
           const translations = await this.translator.translate(
@@ -48,6 +47,4 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
       )
     }
   }
-
-  post(request: PluginPostRequest): void {}
 }
