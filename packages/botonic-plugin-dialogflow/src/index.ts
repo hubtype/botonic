@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { BotRequest } from '@botonic/core'
 import axios, { AxiosResponse } from 'axios'
 import { KJUR } from 'jsrsasign'
@@ -52,8 +51,7 @@ export default class BotonicPluginDialogflow {
       sub: creds.client_email,
       iat: KJUR.jws.IntDate.get('now'),
       exp: KJUR.jws.IntDate.get('now + 1hour'),
-      aud:
-        'https://dialogflow.googleapis.com/google.cloud.dialogflow.v2.Sessions',
+      aud: 'https://dialogflow.googleapis.com/google.cloud.dialogflow.v2.Sessions',
     }
     const stringHeader = JSON.stringify(header)
     const stringPayload = JSON.stringify(payload)
@@ -99,7 +97,7 @@ export default class BotonicPluginDialogflow {
     let defaultFallback = ''
     let dialogflowResponse: AxiosResponse
 
-    const queryData = request.input.data || request.input.payload || null
+    const queryData = request.input.data || request.input.payload || ''
     dialogflowResponse = await this.query(queryData)
     const queryResult = dialogflowResponse.data.queryResult
     intent = queryResult.intent.displayName
