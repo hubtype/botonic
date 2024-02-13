@@ -1,11 +1,11 @@
 {
   "name": "@botonic/plugin-dialogflow",
-  "version": "0.23.0",
+  "version": "0.25.0-alpha.0",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepare": "node ../../preinstall.js",
     "test": "../../node_modules/.bin/jest --coverage",
@@ -15,14 +15,15 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts'"
   },
   "dependencies": {
-    "@babel/runtime": "^7.22.5",
-    "@botonic/core": "0.23.0",
-    "axios": "0.24.0",
-    "jsrsasign": "^10.4.0",
-    "uuid": "^8.1.0"
+    "@babel/runtime": "^7.23.9",
+    "axios": "^1.6.7",
+    "jsrsasign": "^10.9.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "core-js": "^3.1.4"
+    "@botonic/core": "0.25.0-alpha.2",
+    "@types/jsrsasign": "^10.5.12",
+    "core-js": "^3.35.1"
   },
   "keywords": [
     "bot-framework",
