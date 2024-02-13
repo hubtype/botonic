@@ -1,11 +1,11 @@
 {
   "name": "@botonic/plugin-google-analytics",
-  "version": "0.24.0",
+  "version": "0.25.0-alpha.0",
   "license": "MIT",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
+    "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
     "prepublishOnly": "rm -rf lib && npm run build",
@@ -16,10 +16,10 @@
     "lint_core": "../../node_modules/.bin/eslint_d --quiet 'src/**/*.ts'"
   },
   "dependencies": {
-    "@botonic/core": "^0.24.0",
-    "axios": "^1.6.0"
+    "axios": "^1.6.7"
   },
   "devDependencies": {
+    "@botonic/core": "0.25.0-alpha.2",
     "@types/node": "^18.14.1",
     "typescript": "^4.9.5"
   },
