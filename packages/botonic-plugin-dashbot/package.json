@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dashbot",
-  "version": "0.24.0",
+  "version": "0.25.0-alpha.0",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
@@ -12,8 +12,8 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "axios": "^1.6.0",
-    "dashbot": "^11.1.0"
+    "axios": "^1.6.7",
+    "dashbot": "^11.2.5"
   },
   "devDependencies": {},
   "keywords": [
