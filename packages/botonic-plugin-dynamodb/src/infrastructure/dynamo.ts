@@ -1,11 +1,9 @@
 import { DataMapper } from '@aws/dynamodb-data-mapper'
-import { UpdateItemInput } from 'aws-sdk/clients/dynamodb'
+import DynamoDB, { UpdateItemInput } from 'aws-sdk/clients/dynamodb'
 
 import * as domain from '../domain'
 import { Env } from './config'
-// eslint-disable-next-line import/named
 import { TABLE_NAME, Track } from './track'
-import DynamoDB = require('aws-sdk/clients/dynamodb')
 
 export class Dynamo {
   static tableName(name: string, env: Env): string {
