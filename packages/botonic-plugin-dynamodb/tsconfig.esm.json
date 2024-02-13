@@ -1,12 +1,12 @@
 {
-  "extends": "../../tsconfig.cjs.base.json",
+  "extends": "../../tsconfig.esm.base.json",
   "compilerOptions": {
-    "allowUnreachableCode": false,
     "baseUrl": ".",
-    "outDir": "lib/cjs",
+    "outDir": "./lib/esm",
+    "declarationDir": "lib/esm",
 
-    "declarationDir": "lib/cjs",
     "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
     // lint options
     "noImplicitReturns": true,
     "noUnusedLocals": true,
