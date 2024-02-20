@@ -1,9 +1,8 @@
 //https://www.npmjs.com/package/@tsconfig/node20
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "ES2015",
-    // "module": "ES2022", //commonjs, node16, nodenext
-    // "moduleResolution": "node16", // node, node16, nodenext
     "lib": ["ES2022"],
     "strict": true,
     "esModuleInterop": true,
@@ -19,7 +18,6 @@
     "strictPropertyInitialization": false,
     "importHelpers": true,
     "noImplicitAny": false,
-    //"pretty": true // true by default
     "paths": {
       "@botonic/core": ["./packages/botonic-core/src"],
       "@botonic/react": ["./packages/botonic-react/src"]
