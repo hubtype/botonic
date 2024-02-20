@@ -20,6 +20,7 @@ repos:
         entry: bash scripts/qa/old/lint-package.sh packages/botonic-cli
         language: system
         files: ^packages/botonic-cli/
+
       - id: core
         name: core
         entry: scripts/qa/old/lint-package.sh packages/botonic-core
@@ -31,18 +32,6 @@ repos:
         entry: scripts/qa/old/lint-d-ts.sh packages/botonic-core
         language: system
         files: ^packages/botonic-core/src/.*\.d\.ts
-
-      - id: nlu
-        name: nlu
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-nlu
-        language: system
-        files: ^packages/botonic-plugin-nlu/
-
-      - id: nlp
-        name: nlp
-        entry: scripts/qa/old/lint-package.sh packages/botonic-nlp
-        language: system
-        files: ^packages/botonic-nlp
 
       - id: contentful
         name: contentful
@@ -73,12 +62,6 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-luis
         language: system
         files: ^packages/botonic-plugin-luis/
-
-      - id: plugin-nlu
-        name: plugin-nlu
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-nlu
-        language: system
-        files: ^packages/botonic-plugin-nlu/
 
       - id: segment
         name: segment
@@ -122,12 +105,6 @@ repos:
         language: system
         files: ^docs/
 
-      - id: plugin-ner
-        name: plugin-ner
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-ner
-        language: system
-        files: ^packages/botonic-plugin-ner/
-
       - id: plugin-intent-classification
         name: plugin-intent-classification
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-intent-classification
@@ -139,7 +116,7 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
         language: system
         files: ^packages/botonic-plugin-flow-builder/
-      
+
       - id: hubtype-analytics
         name: hubtype-analytics
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-hubtype-analytics
