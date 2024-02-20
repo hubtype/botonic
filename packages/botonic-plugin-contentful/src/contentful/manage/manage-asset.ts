@@ -55,7 +55,7 @@ export class ManageContentfulAsset {
     await this.writeAsset(context, oldAsset)
   }
 
-  async removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
+  async removeAsset(_context: ManageContext, assetId: AssetId): Promise<void> {
     const environment = await this.environment
     try {
       const asset = await environment.getAsset(assetId.id)

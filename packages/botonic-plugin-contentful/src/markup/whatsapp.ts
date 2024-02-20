@@ -8,7 +8,7 @@ export class WhatsApp extends MarkUp {
     super(MarkupType.WHATSAPP)
   }
 
-  parse(txt: string): Token[] {
+  parse(_txt: string): Token[] {
     throw new Error('WhatsApp.parse not implemented')
   }
 

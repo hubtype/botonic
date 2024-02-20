@@ -42,9 +42,12 @@ export class ContentfulInfo implements CmsInfo {
         l =>
           new LocaleInfo(l.code, l.name, l.fallbackCode || undefined, l.default)
       )
-      .reduce((newObj, l) => {
-        newObj[l.code] = l
-        return newObj
-      }, {} as { [locale: string]: LocaleInfo })
+      .reduce(
+        (newObj, l) => {
+          newObj[l.code] = l
+          return newObj
+        },
+        {} as { [locale: string]: LocaleInfo }
+      )
   }
 }

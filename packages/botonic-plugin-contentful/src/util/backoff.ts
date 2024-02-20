@@ -7,7 +7,10 @@ export interface Backoff {
 }
 
 export class ExponentialBackoff implements Backoff {
-  constructor(private startMs = 10, private times = 10) {}
+  constructor(
+    private startMs = 10,
+    private times = 10
+  ) {}
   async backoff(): Promise<void> {
     if (this.times <= 0) {
       throw new Error('Aborting exponential backoff')

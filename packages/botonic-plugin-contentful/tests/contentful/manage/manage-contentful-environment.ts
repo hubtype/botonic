@@ -15,9 +15,8 @@ describe('ManageEnvironment', () => {
     async (environmentName: string) => {
       const environmentManager = testManageEnvironment()
 
-      const environment = await environmentManager.getEnvironment(
-        environmentName
-      )
+      const environment =
+        await environmentManager.getEnvironment(environmentName)
 
       expect(environment.name).toEqual(environmentName)
     }
@@ -28,9 +27,8 @@ describe('ManageEnvironment', () => {
     const newEnvironment = 'newEnvironment'
 
     try {
-      const environment = await environmentManager.createEnvironmentWithId(
-        newEnvironment
-      )
+      const environment =
+        await environmentManager.createEnvironmentWithId(newEnvironment)
       const environments = await environmentManager.getEnvironments()
       expect(environment.name).toEqual(newEnvironment)
       expect(environments.items.length).toBe(3)

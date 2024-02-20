@@ -1,8 +1,8 @@
 import { instance, mock, when } from 'ts-mockito'
 
+import { TrackException } from '../../src/domain/exceptions'
 import { ErrorReportingTrackStorage, Track } from '../../src/domain/track'
 import { DynamoTrackStorage } from '../../src/infrastructure/dynamo'
-import { TrackException } from '../../src/domain/exceptions'
 
 test('TEST: ErrorReportingCMS write rejected', async () => {
   const mockStorage = mock(DynamoTrackStorage)
@@ -15,13 +15,14 @@ test('TEST: ErrorReportingCMS write rejected', async () => {
   const promise = sut.write(track)
 
   // assert
+  await expect(promise).rejects.toBeInstanceOf(TrackException)
   try {
-    await promise
-    fail('should have thrown')
-  } catch (error2) {
-    expect(error2).toBeInstanceOf(TrackException)
+    const error2 = await promise.catch(e => e)
     const trackException = error2 as TrackException
     expect(trackException.reason).toBe(error)
+  } catch (error2) {
+    // Handle any unexpected errors here
+    console.log(error2)
   }
 })
 

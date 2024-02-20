@@ -15,7 +15,7 @@ describe('TEST MarkUp methods', () => {
   })
 
   test.each<any>([['a __kk__ 3', ['a ', 'kk', '__kk__', ' 3', 'a __kk__ 3']]])(
-    'TEST visitTokens(strong)(%s)=%',
+    'visitTokens(strong)(%s)=%',
     (txt: string, expected: Token[]) => {
       const parser = createMarkUp(MarkupType.MARKDOWN)
       const tokens = parser.parse(txt)
@@ -32,14 +32,11 @@ describe('TEST MarkUp methods', () => {
     ['escaped \\*', []],
     ['a __kkk__ 3', ['kkk']], // middle of sentence
     ['**q q** 3 **p**', ['q q', 'p']], // start and end of sentece
-  ])(
-    'TEST findTokensOfType(strong)(%s)=%',
-    (txt: string, expected: Token[]) => {
-      const parser = createMarkUp(MarkupType.MARKDOWN)
-      const tokens = parser.parse(txt)
+  ])('findTokensOfType(strong)(%s)=%', (txt: string, expected: Token[]) => {
+    const parser = createMarkUp(MarkupType.MARKDOWN)
+    const tokens = parser.parse(txt)
 
-      const found = recursiveTokenFind(tokens, t => t.type == TokenType.STRONG)
-      expect(found.map(t => t.text)).toEqual(expected)
-    }
-  )
+    const found = recursiveTokenFind(tokens, t => t.type == TokenType.STRONG)
+    expect(found.map(t => t.text)).toEqual(expected)
+  })
 })

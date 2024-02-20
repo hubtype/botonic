@@ -8,7 +8,10 @@ test('TEST: now() by default no ms', () => {
 test('TEST: now() similar to Date()', () => {
   // let diff =
   init()
-  ;(
-    expect(Time.now().getTime() + 1000) as any as ExtendedMatchers<any, any>
-  ).toBeAround(new Date().getTime(), 1000)
+  const time = Time.now().getTime() + 1000
+  // eslint-disable-next-line jest/valid-expect
+  ;(expect(time) as unknown as ExtendedMatchers<any, any>).toBeAround(
+    new Date().getTime(),
+    1000
+  )
 })

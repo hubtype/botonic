@@ -184,7 +184,7 @@ export class ImportContentUpdater {
 
   async warnMissingFields(
     content: ContentToImport,
-    newVals: FieldsValues
+    _newVals: FieldsValues
   ): Promise<void> {
     if (!this.defaultLocaleContents) {
       this.defaultLocaleContents = await allContents<MessageContent>(

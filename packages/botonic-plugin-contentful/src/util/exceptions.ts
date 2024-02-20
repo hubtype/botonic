@@ -6,7 +6,7 @@ export function isError(e: any): e is Error {
 export function rethrowDecorator<
   Args extends any[],
   Return,
-  F extends (...args: Args) => Promise<Return>
+  F extends (...args: Args) => Promise<Return>,
 >(func: F, beforeRethrow: (error: any, ...args: Args) => Promise<void>): F {
   const f = async (...args: Args) => {
     try {

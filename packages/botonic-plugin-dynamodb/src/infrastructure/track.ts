@@ -6,8 +6,7 @@ import {
   table,
 } from '@aws/dynamodb-data-mapper-annotations'
 import { marshallItem, Schema } from '@aws/dynamodb-data-marshaller'
-import { DynamoDB } from 'aws-sdk'
-import { AttributeValue } from 'aws-sdk/clients/dynamodb'
+import DynamoDB from 'aws-sdk/clients/dynamodb'
 
 import { UserEvent } from '../domain'
 import * as domain from '../domain'
@@ -74,11 +73,11 @@ export class Track extends TrackKey {
     return new domain.Track(this.bot, this.time, events)
   }
 
-  marshallEvents(): AttributeValue {
+  marshallEvents(): DynamoDB.AttributeValue {
     const schema = this.schema()
 
     const marshalled = marshallItem(schema, this)
-    return marshalled.events as AttributeValue
+    return marshalled.events as DynamoDB.AttributeValue
   }
 
   private schema(): Schema {

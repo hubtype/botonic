@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 module.exports = {
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   extends: [
@@ -10,7 +11,6 @@ module.exports = {
     // typescript
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     'plugin:@typescript-eslint/eslint-recommended',
-    'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
   plugins: [
     '@typescript-eslint',
@@ -22,7 +22,7 @@ module.exports = {
     'simple-import-sort',
   ],
   parserOptions: {
-    ecmaVersion: 2017, // async is from ecma2017. Supported in node >=7.10
+    ecmaVersion: 2022,
     sourceType: 'module', // Allows for the use of imports
     ecmaFeatures: {
       jsx: true, // Allows for the parsing of JSX
@@ -94,6 +94,10 @@ module.exports = {
     'unicorn/prevent-abbreviations': 'off', // the plugin removes removes type annotations from typescript code :-(
     'unicorn/filename-case': 'off', // React convention is in CamelCase
     'valid-jsdoc': 'off', // function comments hide code complexity (and typescript already have type specifications),
+
+    '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^_' }],
+    // acept any as a type but emit warning
+    '@typescript-eslint/no-explicit-any': 'warn',
   },
   overrides: [
     {
@@ -126,7 +130,7 @@ module.exports = {
     node: true,
   },
 }
-if (typeof AVOID_IMPORT_CRASH !== 'undefined' && AVOID_IMPORT_CRASH) {
-  // avoid eslint-plugin-import crash https://github.com/benmosher/eslint-plugin-import/issues/1818#issuecomment-651547125
-  delete module.exports['settings']['import/parsers']
-}
+// if (typeof AVOID_IMPORT_CRASH !== 'undefined' && AVOID_IMPORT_CRASH) {
+//   // avoid eslint-plugin-import crash https://github.com/benmosher/eslint-plugin-import/issues/1818#issuecomment-651547125
+//   delete module.exports['settings']['import/parsers']
+// }

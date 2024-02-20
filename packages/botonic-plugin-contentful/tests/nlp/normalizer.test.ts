@@ -290,7 +290,7 @@ test.each<any>([
   expect(sut.normalize(loc, from)).toEqual(to)
 })
 
-function replaceI18nChars(word: string, locale: string): string {
+function replaceI18nChars(word: string, _locale: string): string {
   word = word
     .replace('á', 'a')
     .replace('à', 'a')

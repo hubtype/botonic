@@ -71,7 +71,7 @@ export class FallbackCachedClientApi implements ReducedClientApi {
   memoize<
     Args extends any[],
     Return,
-    F extends (...args: Args) => Promise<Return>
+    F extends (...args: Args) => Promise<Return>,
   >(func: F): F {
     this.numMemoizations++
     return this.memoizer.memoize<Args, Return, F>(func)

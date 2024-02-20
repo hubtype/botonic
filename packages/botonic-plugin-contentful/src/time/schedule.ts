@@ -76,7 +76,7 @@ export class ScheduleAlwaysOn extends Schedule {
   constructor() {
     super('UTC')
   }
-  contains(date: Date): boolean {
+  contains(_date: Date): boolean {
     return true
   }
 }
@@ -105,7 +105,10 @@ export enum WeekDay {
 }
 
 class ExceptionSchedule {
-  constructor(readonly date: Date, readonly daySchedule: DaySchedule) {}
+  constructor(
+    readonly date: Date,
+    readonly daySchedule: DaySchedule
+  ) {}
 }
 
 export class TimeRange {
@@ -132,7 +135,10 @@ export class TimeRange {
 }
 
 export class HourAndMinute {
-  constructor(readonly hour: number, readonly minute: number = 0) {}
+  constructor(
+    readonly hour: number,
+    readonly minute: number = 0
+  ) {}
 
   compareToDate(date: Date): number {
     return HourAndMinute.compareNumber(

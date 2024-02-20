@@ -254,7 +254,10 @@ export function contentFieldByCmsName(cmsName: string): ContentField {
 }
 
 export class I18nField {
-  constructor(readonly name: ContentFieldType, readonly value: string) {}
+  constructor(
+    readonly name: ContentFieldType,
+    readonly value: string
+  ) {}
 }
 
 /**

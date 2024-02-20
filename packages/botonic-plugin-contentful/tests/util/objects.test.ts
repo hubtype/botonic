@@ -8,7 +8,10 @@ class Subclass {
   constructor(public field: number) {}
 }
 class Class {
-  constructor(public arr = [3, 4], public sub = new Subclass(1)) {}
+  constructor(
+    public arr = [3, 4],
+    public sub = new Subclass(1)
+  ) {}
 }
 
 test('TEST: shallowClone', () => {
@@ -67,7 +70,7 @@ describe('roughSizeOfObject', () => {
     [{ '42': 42 }, 8 + 2 * 2 + 8],
     [repeatedObject, 2 + 8],
     [{ '4': repeatedObject, '2': repeatedObject }, 2 * (8 + 2) + 10],
-  ])('TEST roughSizeOfObject(%j)=%d', (o: any, size: number) => {
+  ])('roughSizeOfObject(%j)=%d', (o: any, size: number) => {
     expect(roughSizeOfObject(o)).toBe(size)
   })
 })
