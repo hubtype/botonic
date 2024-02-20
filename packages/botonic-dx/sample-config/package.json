@@ -23,7 +23,7 @@
     "postversion": "git push && git push --tags"
     },
     "engines": {
-      "node": ">=12.22.1"
+      "node": ">=20.0.0"
     },
     "########## files": [
       "bin/**",
