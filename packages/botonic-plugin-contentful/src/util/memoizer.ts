@@ -36,7 +36,7 @@ export class Memoizer {
   memoize<
     Args extends any[],
     Return,
-    F extends (...args: Args) => Promise<Return>
+    F extends (...args: Args) => Promise<Return>,
   >(func: F): F {
     const cache: Cache<Return> = this.opts.cacheFactory()
     const f = (...args: Args) =>
@@ -55,7 +55,7 @@ export class Memoizer {
  */
 export const cacheForeverStrategy: MemoizerStrategy = async <
   Args extends any[],
-  Return
+  Return,
 >(
   cache: Cache<Return>,
   normalizer = jsonNormalizer,

@@ -46,7 +46,10 @@ import { CmsException } from './exceptions'
 export class ErrorReportingCMS implements CMS {
   private exceptionWrapper: ContentfulExceptionWrapper
 
-  constructor(readonly cms: CMS, readonly logger?: (msg: string) => void) {
+  constructor(
+    readonly cms: CMS,
+    readonly logger?: (msg: string) => void
+  ) {
     this.exceptionWrapper = new ContentfulExceptionWrapper('CMS', logger)
   }
 

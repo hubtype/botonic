@@ -34,8 +34,8 @@ export const StyledScrollbar = styled(SimpleBar)`
       scrollbar && !scrollbar.enable
         ? '0'
         : scrollbar && scrollbar.thumb && scrollbar.thumb.opacity
-        ? scrollbar.thumb.opacity
-        : '0.75'};
+          ? scrollbar.thumb.opacity
+          : '0.75'};
   }
   & .simplebar-track {
     background-color: ${({ scrollbar }) =>

@@ -78,7 +78,10 @@ export function ensureError(e: any): Error {
 }
 
 export class ExceptionUnpacker {
-  constructor(readonly indent = '    ', readonly prependSubErrorIndex = true) {}
+  constructor(
+    readonly indent = '    ',
+    readonly prependSubErrorIndex = true
+  ) {}
 
   public unpack(e: any): string[] {
     return this.processException(ensureError(e))

@@ -9,8 +9,9 @@
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
     "prepublishOnly": "rm -rf lib && npm run build",
-    "lint": "npm run lint_ci -- --fix",
+    "lint": "npm run lint_core -- --fix",
     "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*'",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*'",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
     "cloc": "../../scripts/qa/cloc-package.sh ."
@@ -30,6 +31,7 @@
     "README.md"
   ],
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.23.9",
     "aws-sdk": "^2.1404.0",
     "axios": "^1.6.7",
     "decode": "^0.3.0",

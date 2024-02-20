@@ -114,7 +114,7 @@ export default class BotonicPluginContentful {
     }
   }
 
-  pre(r: { input: any; session: any; lastRoutePath: any }) {}
+  pre(_r: { input: any; session: any; lastRoutePath: any }) {}
 
-  post(r: { input: any; session: any; lastRoutePath: any; response: any }) {}
+  post(_r: { input: any; session: any; lastRoutePath: any; response: any }) {}
 }

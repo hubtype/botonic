@@ -18,7 +18,7 @@ export class CustomDelivery extends ContentDelivery {
 
   public fromEntry(
     customEntry: contentful.Entry<ContentWithCustomFields>,
-    context: cms.Context
+    _context: cms.Context
   ): cms.Custom {
     return new cms.Custom(
       customEntry.sys.id,

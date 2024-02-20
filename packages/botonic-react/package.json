@@ -46,12 +46,14 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.23.9",
     "@babel/preset-react": "^7.18.6",
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/jest": "^29.5.1",
     "@types/parse5": "^7.0.0",
     "@types/react": "^16.14.56",
+    "babel-plugin-add-module-exports": "^1.0.4",
     "copyfiles": "^2.4.1",
     "identity-obj-proxy": "^3.0.0",
     "intersection-observer": "^0.12.2",

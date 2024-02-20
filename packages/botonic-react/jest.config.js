@@ -17,12 +17,12 @@ module.exports = {
   ],
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
   snapshotSerializers: [],
-  moduleDirectories: ['<rootDir>','node_modules', 'src'],
-  modulePaths: ['<rootDir>','node_modules', 'src'],
+  moduleDirectories: ['<rootDir>', 'node_modules', 'src'],
+  modulePaths: ['<rootDir>', 'node_modules', 'src'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/tests/__mocks__/file-mock.js',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
-projects: ["../../packages/botonic-core"],
+  projects: ['../../packages/botonic-core'],
 }

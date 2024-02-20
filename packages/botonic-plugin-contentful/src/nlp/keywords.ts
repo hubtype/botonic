@@ -57,7 +57,10 @@ export class Keyword {
 }
 
 export class CandidateWithKeywords<M> {
-  constructor(readonly owner: M, readonly keywords: Keyword[]) {}
+  constructor(
+    readonly owner: M,
+    readonly keywords: Keyword[]
+  ) {}
 }
 
 export enum MatchType {

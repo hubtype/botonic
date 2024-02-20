@@ -17,7 +17,10 @@ import { ManageContext } from './manage-context'
 export class ErrorReportingManageCms implements ManageCms {
   exceptionWrapper = new ContentfulExceptionWrapper('ManageCms')
 
-  constructor(readonly manageCms: ManageCms, readonly logErrors = true) {}
+  constructor(
+    readonly manageCms: ManageCms,
+    readonly logErrors = true
+  ) {}
 
   updateFields(
     context: ManageContext,

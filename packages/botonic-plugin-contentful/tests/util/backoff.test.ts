@@ -4,7 +4,7 @@ test('TEST: repeatWithBackoff', async () => {
   let counter = 0
   const NUM_FAILURES = 4
   let loggerCount = 0
-  const logger = (msg: string) => {
+  const logger = () => {
     loggerCount++
   }
 

@@ -39,9 +39,7 @@ export type FollowUpFields = CommonEntryFields
 export type ReferenceFields = CommonEntryFields
 
 export class ContentfulEntryUtils {
-  static getContentId<T extends ContentType = ContentType>(
-    entry: contentful.Entry<any>
-  ): ContentId {
+  static getContentId(entry: contentful.Entry<any>): ContentId {
     return new ContentId(
       ContentfulEntryUtils.getContentModel(entry),
       entry.sys.id

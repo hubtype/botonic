@@ -1,5 +1,5 @@
-import { Plugin, PluginPostRequest } from '@botonic/core'
-import { DynamoDB } from 'aws-sdk'
+import type { Plugin, PluginPostRequest } from '@botonic/core'
+import DynamoDB from 'aws-sdk/clients/dynamodb'
 
 import {
   ErrorReportingTrackStorage,

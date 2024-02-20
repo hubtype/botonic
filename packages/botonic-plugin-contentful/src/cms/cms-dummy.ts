@@ -46,11 +46,11 @@ export class DummyCMS implements CMS {
    */
   constructor(readonly buttonCallbacks: ContentCallback[]) {}
 
-  button(id: string, context?: Context | undefined): Promise<Button> {
+  button(_id: string, _context?: Context | undefined): Promise<Button> {
     throw new Error('Method not implemented.')
   }
 
-  element(id: string, context?: Context | undefined): Promise<Element> {
+  element(_id: string, _context?: Context | undefined): Promise<Element> {
     throw new Error('Method not implemented.')
   }
 
@@ -163,17 +163,17 @@ export class DummyCMS implements CMS {
   }
 
   topContents<T extends TopContent>(
-    model: TopContentType,
-    context?: Context,
-    filter?: (cf: CommonFields) => boolean,
-    paging?: PagingOptions
+    _model: TopContentType,
+    _context?: Context,
+    _filter?: (cf: CommonFields) => boolean,
+    _paging?: PagingOptions
   ): Promise<T[]> {
     return Promise.resolve([])
   }
 
   contentsWithKeywords(
     {} = DEFAULT_CONTEXT,
-    paging?: PagingOptions
+    _paging?: PagingOptions
   ): Promise<SearchCandidate[]> {
     const contents = this.buttonCallbacks.map((cb, id) => {
       const button = DummyCMS.buttonFromCallback(cb)
@@ -191,14 +191,14 @@ export class DummyCMS implements CMS {
     return Promise.resolve(contents)
   }
 
-  schedule(id: string, context?: Context): Promise<ScheduleContent> {
+  schedule(id: string, _context?: Context): Promise<ScheduleContent> {
     const schedule = new time.Schedule('Europe/Madrid')
     return Promise.resolve(
       new ScheduleContent(new CommonFields(id, 'name'), schedule)
     )
   }
 
-  asset(id: string, context?: Context): Promise<Asset> {
+  asset(id: string, _context?: Context): Promise<Asset> {
     return Promise.resolve(
       new Asset(id, `http://url.${id}`, {
         name: `${id} title`,
@@ -209,7 +209,7 @@ export class DummyCMS implements CMS {
     )
   }
 
-  dateRange(id: string, context?: Context): Promise<DateRangeContent> {
+  dateRange(id: string, _context?: Context): Promise<DateRangeContent> {
     const now = new Date()
     const dateRange = new time.DateRange('daterange name', now, now)
     return Promise.resolve(
@@ -224,20 +224,20 @@ export class DummyCMS implements CMS {
   content(
     id: string,
     context = DEFAULT_CONTEXT,
-    referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
+    _referencesToInclude = DEFAULT_REFERENCES_TO_INCLUDE
   ): Promise<Content> {
     return this.text(id, context)
   }
 
   contents<T extends Content>(
-    contentType: ContentType,
-    context?: Context,
-    paging?: PagingOptions
+    _contentType: ContentType,
+    _context?: Context,
+    _paging?: PagingOptions
   ): Promise<T[]> {
     return Promise.resolve([])
   }
 
-  assets(context?: Context): Promise<Asset[]> {
+  assets(_context?: Context): Promise<Asset[]> {
     return Promise.resolve([])
   }
 }

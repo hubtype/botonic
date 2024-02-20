@@ -118,7 +118,10 @@ export function isSameModel(model1: ContentType, model2: ContentType): boolean {
 }
 
 export class PagingOptions {
-  constructor(readonly limit = 1000, readonly skip = 0) {}
+  constructor(
+    readonly limit = 1000,
+    readonly skip = 0
+  ) {}
 }
 
 /**

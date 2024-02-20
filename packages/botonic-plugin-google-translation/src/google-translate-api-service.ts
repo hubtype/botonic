@@ -28,7 +28,10 @@ export class GoogleTranslationApiService {
   private readonly translateTextEndpointUrl: string
   private readonly detectLanguageEndpointUrl: string
 
-  constructor(private readonly accessToken: AccessToken, projectId: string) {
+  constructor(
+    private readonly accessToken: AccessToken,
+    projectId: string
+  ) {
     const projectEndpointUrl = `${this.PROJECTS_ENDPOINT}/${projectId}`
     this.translateTextEndpointUrl = `${projectEndpointUrl}:translateText`
     this.detectLanguageEndpointUrl = `${projectEndpointUrl}:detectLanguage`

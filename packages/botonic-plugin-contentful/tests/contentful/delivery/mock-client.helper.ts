@@ -26,7 +26,7 @@ export class MockClientApi implements ReducedClientApi {
     items: [],
   } as any as EntryCollection<any>
 
-  getAsset(id: string, query: any): Promise<contentful.Asset> {
+  getAsset(_id: string, _query: any): Promise<contentful.Asset> {
     this.numCalls++
     if (this.error) {
       return Promise.reject(this.error)
@@ -34,7 +34,7 @@ export class MockClientApi implements ReducedClientApi {
     return Promise.resolve(this.asset)
   }
 
-  getAssets(query: any): Promise<contentful.AssetCollection> {
+  getAssets(_query: any): Promise<contentful.AssetCollection> {
     this.numCalls++
     if (this.error) {
       return Promise.reject(this.error)
@@ -42,7 +42,7 @@ export class MockClientApi implements ReducedClientApi {
     return Promise.resolve(this.assetCollection)
   }
 
-  getContentType(id: string): Promise<contentful.ContentType> {
+  getContentType(_id: string): Promise<contentful.ContentType> {
     this.numCalls++
     if (this.error) {
       return Promise.reject(this.error)
@@ -50,7 +50,7 @@ export class MockClientApi implements ReducedClientApi {
     return Promise.resolve(this.contentType)
   }
 
-  getEntries<T>(query: any): Promise<EntryCollection<T>> {
+  getEntries<T>(_query: any): Promise<EntryCollection<T>> {
     this.numCalls++
     if (this.error) {
       return Promise.reject(this.error)
@@ -58,7 +58,7 @@ export class MockClientApi implements ReducedClientApi {
     return Promise.resolve(this.entryCollection)
   }
 
-  getEntry<T>(id: string, query: any): Promise<Entry<T>> {
+  getEntry<T>(_id: string, _query: any): Promise<Entry<T>> {
     this.numCalls++
     if (this.error) {
       return Promise.reject(this.error)

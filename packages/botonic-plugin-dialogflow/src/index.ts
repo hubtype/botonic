@@ -1,11 +1,11 @@
-import { BotRequest } from '@botonic/core'
+import type { Plugin, PluginPreRequest } from '@botonic/core'
 import axios, { AxiosResponse } from 'axios'
-import { KJUR } from 'jsrsasign'
+import jsrsasign from 'jsrsasign'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Credentials, Options } from './types'
 
-export default class BotonicPluginDialogflow {
+export default class BotonicPluginDialogflow implements Plugin {
   sessionId: string
   creds: Credentials
   token: string
@@ -24,17 +24,15 @@ export default class BotonicPluginDialogflow {
     return this.token
   }
 
-  async pre(botRequest: BotRequest): Promise<BotRequest> {
+  async pre(request: PluginPreRequest): Promise<void> {
     try {
-      await this.dialogflowToInput(botRequest)
+      await this.dialogflowToInput(request)
     } catch (error) {
       await this.refreshToken()
-      await this.dialogflowToInput(botRequest)
+      await this.dialogflowToInput(request)
     }
-    return botRequest
+    return
   }
-
-  async post(): Promise<void> {}
 
   async refreshToken(): Promise<void> {
     this.token = await this.generateToken(this.creds)
@@ -49,13 +47,13 @@ export default class BotonicPluginDialogflow {
     const payload = {
       iss: creds.client_email,
       sub: creds.client_email,
-      iat: KJUR.jws.IntDate.get('now'),
-      exp: KJUR.jws.IntDate.get('now + 1hour'),
+      iat: jsrsasign.KJUR.jws.IntDate.get('now'),
+      exp: jsrsasign.KJUR.jws.IntDate.get('now + 1hour'),
       aud: 'https://dialogflow.googleapis.com/google.cloud.dialogflow.v2.Sessions',
     }
     const stringHeader = JSON.stringify(header)
     const stringPayload = JSON.stringify(payload)
-    const token = KJUR.jws.JWS.sign(
+    const token = jsrsasign.KJUR.jws.JWS.sign(
       'RS256',
       stringHeader,
       stringPayload,
@@ -89,7 +87,7 @@ export default class BotonicPluginDialogflow {
     })
   }
 
-  async dialogflowToInput(request: BotRequest): Promise<BotRequest> {
+  async dialogflowToInput(request: PluginPreRequest): Promise<void> {
     let confidence = 0
     let intent = null
     const intents = []
@@ -114,6 +112,6 @@ export default class BotonicPluginDialogflow {
       defaultFallback,
       dialogflowResponse,
     })
-    return request
+    return
   }
 }

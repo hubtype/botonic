@@ -17,8 +17,8 @@ export const SCORE_MAX: Score = 1
 export class SearchableByKeywords {
   constructor(
     readonly name: string,
-    keywords: string[] = [],
-    priority = PRIORITY_MAX
+    public keywords: string[] = [],
+    public priority = PRIORITY_MAX
   ) {}
 }
 

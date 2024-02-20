@@ -75,7 +75,7 @@ test.skip('TEST: create_stringifier sync', () => {
 })
 
 test('TEST: create_stringifier', () => {
-  const fields = []
+  const fields: string[] = []
   // does not work with Readable.from
   // const readable = Readable.from(['1 "2" 3', '4']).pipe(exporter.stringifier)
   const stringifier = create_stringifier()
