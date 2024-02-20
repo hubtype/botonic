@@ -1,4 +1,4 @@
-import { Plugin, PluginPostRequest, Session } from '@botonic/core'
+import type { Plugin, PluginPostRequest, Session } from '@botonic/core'
 import axios from 'axios'
 
 import { GA4Event, GA4Options } from './types'

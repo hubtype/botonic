@@ -78,7 +78,7 @@ export class KeywordsDelivery {
         'fields.searchableBy[exists]': true,
         include: 1,
       })
-    const promises = []
+    const promises: Promise<EntryCollection<QueueFields>>[] = []
     for (const contentType of models) {
       promises.push(getWithKeywords(contentType))
     }
@@ -121,7 +121,7 @@ export class KeywordsDelivery {
         'fields.keywords[exists]': true,
         include: 0,
       })
-    const promises = []
+    const promises: Promise<EntryCollection<CommonEntryFields>>[] = []
     for (const contentType of models) {
       promises.push(getWithKeywords(contentType))
     }

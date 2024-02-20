@@ -60,7 +60,7 @@ test('TEST: CachedClientApi does not remember exceptions', async () => {
   const sut = new CachedClientApi(mockApi, CACHE_TTL, apiFailed)
 
   mockApi.error = new Error('forced failure')
-  await expect(sut.getEntry(id, query)).rejects.toThrowError(mockApi.error)
+  await expect(sut.getEntry(id, query)).rejects.toThrow(mockApi.error)
 
   mockApi.error = undefined
   await expect(sut.getEntry(id, query)).resolves.toBe(mockApi.entry)

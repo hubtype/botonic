@@ -52,7 +52,7 @@ test.each<any>([
 
 describe('Stemmers', () => {
   test.each<any>(SUPPORTED_LOCALES)(
-    "TEST numbers in words are kept for locale '%s'",
+    "numbers in words are kept for locale '%s'",
     (locale: Locale) => {
       const stemmer = stemmerFor(locale)
       for (const word of ['covid19', 'covid-19']) {

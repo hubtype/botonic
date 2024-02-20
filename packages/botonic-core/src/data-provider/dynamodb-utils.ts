@@ -1,4 +1,4 @@
-import { DynamoDB } from 'aws-sdk'
+import DynamoDB from 'aws-sdk/clients/dynamodb'
 import { Entity, Table } from 'dynamodb-toolbox'
 import { EntityAttributes } from 'dynamodb-toolbox/dist/classes/Entity'
 

@@ -29,7 +29,7 @@ export class Markdown extends MarkUp {
     return marked.lexer(txt) as Token[]
   }
 
-  renderToken(token: Token): string {
+  renderToken(_token: Token): string {
     throw new Error('Not implemented')
   }
 

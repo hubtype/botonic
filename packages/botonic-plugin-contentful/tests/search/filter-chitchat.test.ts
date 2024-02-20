@@ -19,7 +19,7 @@ test.each<any>([
   ['hey noReconocido', 1],
   ['hey adios noReconocido noReconocido', 2],
 ])(
-  'TEST treatChitChat(%s): only filtered keywords, plus aprox <=2 non recognized tokens',
+  'treatChitChat(%s): only filtered keywords, plus aprox <=2 non recognized tokens',
   async (inputText: string, numChitchats: number) => {
     const keywords = keywordsWithMockCms(
       [
@@ -81,7 +81,7 @@ test.each<any>([
   ['hey no_reconocido no_reconocido no_reconocido no_reconocido', 1],
   ['hey asdhas sad asd dsa', 1],
 ])(
-  'TEST treatChitChat: chitchats detected, plus aprox >2 non recognized tokens => ask user to repeat',
+  'treatChitChat: chitchats detected, plus aprox >2 non recognized tokens => ask user to repeat',
   async (inputText: string, numChitChats: number) => {
     const keywords = keywordsWithMockCms(
       [

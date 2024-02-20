@@ -83,8 +83,8 @@ const duplicateReferences =
   process.argv[9].toLowerCase() == 'true'
     ? true
     : process.argv[9].toLowerCase() == 'false'
-    ? false
-    : undefined
+      ? false
+      : undefined
 if (duplicateReferences == undefined) {
   throw Error("duplicateReferences argument must be 'true' or 'false'")
 }

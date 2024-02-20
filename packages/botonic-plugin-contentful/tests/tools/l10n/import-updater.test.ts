@@ -166,23 +166,23 @@ test('TEST: ContentUpdater', async () => {
   const contentId = new cms.ContentId(cms.ContentType.TEXT, TEST_CSV_IMPORT_ID)
   class MockCms implements ManageCms {
     copyAssetFile(
-      context: ManageContext,
-      assetId: AssetId,
-      fromLocale: string
+      _context: ManageContext,
+      _assetId: AssetId,
+      _fromLocale: string
     ): Promise<void> {
       fail("shouldn't be called")
     }
-    removeAssetFile(context: ManageContext, assetId: AssetId): Promise<void> {
+    removeAssetFile(_context: ManageContext, _assetId: AssetId): Promise<void> {
       fail("shouldn't be called")
     }
     numCalls = 0
 
     copyField(
-      context: ManageContext,
-      contentId: cms.ContentId,
-      field: ContentFieldType,
-      fromLocale: string,
-      onlyIfTargetEmpty: boolean
+      _context: ManageContext,
+      _contentId: cms.ContentId,
+      _field: ContentFieldType,
+      _fromLocale: string,
+      _onlyIfTargetEmpty: boolean
     ): Promise<void> {
       fail("shouldn't be called")
     }
@@ -202,27 +202,30 @@ test('TEST: ContentUpdater', async () => {
       return Promise.resolve(fields)
     }
 
-    deleteContent(context: ManageContext, contentId: ContentId): Promise<void> {
+    deleteContent(
+      _context: ManageContext,
+      _contentId: ContentId
+    ): Promise<void> {
       fail("shouldn't be called")
     }
 
     createContent(
-      context: ManageContext,
-      model: ContentType,
-      id: string
+      _context: ManageContext,
+      _model: ContentType,
+      _id: string
     ): Promise<void> {
       fail("shouldn't be called")
     }
 
     createAsset(
-      context: ManageContext,
-      file: string | ArrayBuffer | Stream,
-      info: AssetInfo
+      _context: ManageContext,
+      _file: string | ArrayBuffer | Stream,
+      _info: AssetInfo
     ): Promise<{ id: string; url?: string }> {
       fail("shouldn't be called")
     }
 
-    removeAsset(context: ManageContext, assetId: AssetId): Promise<void> {
+    removeAsset(_context: ManageContext, _assetId: AssetId): Promise<void> {
       fail("shouldn't be called")
     }
   }

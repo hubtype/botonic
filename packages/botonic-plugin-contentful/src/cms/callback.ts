@@ -69,7 +69,10 @@ export class Callback implements ValueObject, Equatable {
 export class ContentCallback extends Callback {
   private static PAYLOAD_SEPARATOR = '$'
 
-  constructor(readonly model: TopContentType, readonly id: string) {
+  constructor(
+    readonly model: TopContentType,
+    readonly id: string
+  ) {
     super(model + ContentCallback.PAYLOAD_SEPARATOR + id)
   }
 
@@ -115,7 +118,10 @@ export class ContentCallback extends Callback {
 }
 
 export class ResourceId implements ValueObject {
-  constructor(readonly resourceType: string, readonly id: string) {}
+  constructor(
+    readonly resourceType: string,
+    readonly id: string
+  ) {}
 
   toString(): string {
     return `'${this.resourceType}' with id '${this.id}'`
@@ -134,7 +140,10 @@ export class ResourceId implements ValueObject {
 }
 
 export class ContentId extends ResourceId {
-  constructor(readonly model: ContentType, id: string) {
+  constructor(
+    readonly model: ContentType,
+    id: string
+  ) {
     super(model, id)
   }
 
@@ -160,13 +169,19 @@ export class ContentId extends ResourceId {
 }
 
 export class AssetId extends ResourceId {
-  constructor(id: string, readonly assetType: string | undefined) {
+  constructor(
+    id: string,
+    readonly assetType: string | undefined
+  ) {
     super(`${String(assetType)} asset`, id)
   }
 }
 
 export class TopContentId extends ContentId {
-  constructor(readonly model: TopContentType, id: string) {
+  constructor(
+    readonly model: TopContentType,
+    id: string
+  ) {
     super(model, id)
   }
 

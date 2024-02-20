@@ -26,7 +26,10 @@ import { Callback } from './../callback'
  * - Easing the implementation of the RndXXXBuilder classes at src/cms/test-helpers/builders.ts
  */
 abstract class ContentBuilder {
-  protected constructor(public id: string, public name: string) {}
+  protected constructor(
+    public id: string,
+    public name: string
+  ) {}
 
   withId(id: string): this {
     this.id = id
@@ -76,7 +79,11 @@ export class TextBuilder extends MessageContentBuilder {
   buttons: Button[] = []
   buttonsStyle = ButtonStyle.BUTTON
 
-  constructor(id: string, name: string, public text: string) {
+  constructor(
+    id: string,
+    name: string,
+    public text: string
+  ) {
     super(id, name)
   }
 
@@ -176,7 +183,11 @@ export class StartUpBuilder extends MessageContentBuilder {
   imgUrl?: string
   buttons: Button[] = []
 
-  constructor(id: string, name: string, public text: string) {
+  constructor(
+    id: string,
+    name: string,
+    public text: string
+  ) {
     super(id, name)
   }
 
@@ -201,7 +212,11 @@ export class StartUpBuilder extends MessageContentBuilder {
 }
 
 export class MediaBuilder extends MessageContentBuilder {
-  constructor(id: string, name: string, public mediaUrl: string) {
+  constructor(
+    id: string,
+    name: string,
+    public mediaUrl: string
+  ) {
     super(id, name)
   }
 
@@ -218,7 +233,11 @@ export class MediaBuilder extends MessageContentBuilder {
 }
 
 export class DocumentBuilder extends MessageContentBuilder {
-  constructor(id: string, name: string, public docUrl: string) {
+  constructor(
+    id: string,
+    name: string,
+    public docUrl: string
+  ) {
     super(id, name)
   }
 
@@ -238,7 +257,11 @@ export class HandoffBuilder extends MessageContentBuilder {
   queue?: Queue
   agent?: HandoffAgent
   shadowing?: boolean
-  constructor(id: string, name: string, public onFinish: OnFinish) {
+  constructor(
+    id: string,
+    name: string,
+    public onFinish: OnFinish
+  ) {
     super(id, name)
   }
 

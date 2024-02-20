@@ -138,7 +138,10 @@ export class LocaleRemover {
   /**
    * @param removeLocs The locales to completely remove
    */
-  constructor(readonly removeLocs: string[], readonly newDefault?: string) {}
+  constructor(
+    readonly removeLocs: string[],
+    readonly newDefault?: string
+  ) {}
 
   remove(spaceExport: SpaceExport): void {
     this.removeEntries(spaceExport)
