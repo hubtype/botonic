@@ -6,7 +6,7 @@ on:
       NODE_VERSION:
         type: string
         description: 'Node version of the package'
-        default: '14'
+        default: '20'
         required: false
       PACKAGE_NAME:
         type: string
