@@ -8,7 +8,7 @@
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "test": "../../node_modules/.bin/jest --coverage",
     "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "rm -rf lib && npm run build",
+    "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "build:watch": "npm run build -- --watch",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "lint": "npm run lint_core -- --fix",
@@ -16,7 +16,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts'"
   },
   "dependencies": {
-    "@botonic/core": "0.25.0-alpha.2",
+    "@botonic/core": "0.25.0-alpha.3",
     "axios": "^1.6.7"
   },
   "devDependencies": {

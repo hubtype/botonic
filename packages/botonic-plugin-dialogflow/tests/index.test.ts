@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/named
-import { BotRequest } from '@botonic/core'
+import { INPUT, PluginPreRequest } from '@botonic/core'
 
 import BotonicPluginDialogflow from '../src/index'
 import { Options } from '../src/types'
@@ -15,9 +14,8 @@ it('Pre response is rejected when using fake credentials', async () => {
     },
   }
 
-  const request: BotRequest = {
-    // @ts-ignore
-    input: { data: 'hi', payload: 'payload', type: 'audio' },
+  const request: PluginPreRequest = {
+    input: { data: 'hi', payload: 'payload', type: INPUT.AUDIO },
     session: {
       bot: { id: 'test' },
       // @ts-ignore
