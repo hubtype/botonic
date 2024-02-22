@@ -6,6 +6,7 @@
   "scripts": {
     "build": "echo Nothing to build",
     "prepare": "node ../../preinstall.js",
+    "prepublishOnly": "npm i",
     "lint": "npm run lint_core -- --fix",
     "lint_ci": "npm run lint_core",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
