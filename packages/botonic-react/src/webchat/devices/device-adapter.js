@@ -23,7 +23,7 @@ export class DeviceAdapter {
   onFocus(host) {
     setTimeout(() => {
       // Place onFocus logic to be run the last on the queue of asynchronous events to give enough time to init method to be called. Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop#zero_delays
-      this.webchatResizer.onFocus(() =>
+      this.webchatResizer?.onFocus(() =>
         this.scrollbarController.handleOnTouchMoveEvents()
       )
     }, 0)

@@ -10,7 +10,7 @@ export class BotonicInputTester {
   constructor(bot) {
     this.bot = bot
   }
-  async text(inp, session = {}, lastRoutePath = '') {
+  async text(inp, session = { user: { id: '123' } }, lastRoutePath = '') {
     const res = await this.bot.input({
       input: { type: INPUT.TEXT, data: inp },
       session: session,
@@ -19,7 +19,7 @@ export class BotonicInputTester {
     return decode(res.response)
   }
 
-  async payload(inp, session = {}, lastRoutePath = '') {
+  async payload(inp, session = { user: { id: '123' } }, lastRoutePath = '') {
     const res = await this.bot.input({
       input: { type: INPUT.POSTBACK, payload: inp },
       session: session,
@@ -28,7 +28,7 @@ export class BotonicInputTester {
     return decode(res.response)
   }
 
-  async path(inp, session = {}, lastRoutePath = '') {
+  async path(inp, session = { user: { id: '123' } }, lastRoutePath = '') {
     const res = await this.bot.input({
       input: { type: INPUT.TEXT, payload: `__PATH_PAYLOAD__${inp}` },
       session: session,
