@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { ActionRequest } from '@botonic/react'
-import { randomUUID } from 'crypto'
+import { v4 as uuid } from 'uuid'
 
 import { FlowBuilderApi } from '../api'
 import {
@@ -47,7 +47,7 @@ export async function createNodeFromKnowledgeBase(
             buttons_style: undefined,
             buttons: [],
           },
-          id: randomUUID(),
+          id: uuid(),
           code: 'knowledge-response',
           meta: {
             x: 0,
