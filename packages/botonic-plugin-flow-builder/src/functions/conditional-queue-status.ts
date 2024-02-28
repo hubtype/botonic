@@ -7,14 +7,18 @@ type ConditionalQueueStatusArgs = {
   request: ActionRequest
   queue_id: string
   queue_name: string
+  check_available_agents: boolean
 }
 
 export async function conditionalQueueStatus({
   queue_id,
+  check_available_agents,
 }: ConditionalQueueStatusArgs): Promise<string> {
-  const data = await getQueueAvailability(queue_id)
-  const isAvailable = data.available
-  return isAvailable ? 'open' : 'closed'
+  const data = await getQueueAvailability(queue_id, check_available_agents)
+  if (check_available_agents && data.open && data.available_agents === 0) {
+    return 'open_without_agents'
+  }
+  return data.open ? 'open' : 'closed'
 }
 
 interface AvailabilityData {
@@ -27,7 +31,8 @@ interface AvailabilityData {
 }
 
 export async function getQueueAvailability(
-  queueId: string
+  queueId: string,
+  check_available_agents = false
 ): Promise<AvailabilityData> {
   const response = await axios.get(
     `${HUBTYPE_API_URL}/public/v1/queues/${queueId}/availability/`,
@@ -36,7 +41,7 @@ export async function getQueueAvailability(
       params: {
         check_queue_schedule: true,
         check_waiting_cases: false,
-        check_available_agents: false,
+        check_available_agents: check_available_agents,
       },
     }
   )

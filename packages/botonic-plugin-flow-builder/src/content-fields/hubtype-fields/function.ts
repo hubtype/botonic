@@ -2,6 +2,7 @@ import { HtBaseNode, HtNodeLink } from './common'
 import { HtNodeWithContentType } from './node-types'
 
 export enum HtArgumentType {
+  BOOLEAN = 'boolean',
   NUMBER = 'number',
   STRING = 'string',
   JSON = 'json',
@@ -23,11 +24,13 @@ export interface HtFunctionResult {
   target?: HtNodeLink
 }
 
+export type HtFunctionArguments = HtFunctionArgumentLocale | HtFunctionArgument
+
 export interface HtFunctionNode extends HtBaseNode {
   type: HtNodeWithContentType.FUNCTION
   content: {
     action: string
-    arguments: HtFunctionArgumentLocale[]
+    arguments: HtFunctionArguments[]
     result_mapping: HtFunctionResult[]
   }
 }
