@@ -73,9 +73,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       !request.session.is_first_interaction
 
     if (checkUserTextInput) {
+      const locale = this.getLocale(request.session)
+      const localeResolved = this.cmsApi.getLocaleResolved(locale)
       const nodeByUserInput = await getNodeByUserInput(
         this.cmsApi,
-        this.getLocale(request.session),
+        localeResolved,
         request as unknown as ActionRequest
       )
       request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
@@ -94,7 +96,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const node = this.cmsApi.getNodeByCode(code) as HtNodeWithContent
-    return await this.getContentsByNode(node, locale, prevContents)
+    const localeResolved = this.cmsApi.getLocaleResolved(locale)
+    return await this.getContentsByNode(node, localeResolved, prevContents)
   }
 
   async getContentsById(
@@ -103,12 +106,14 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const node = this.cmsApi.getNodeById(id) as HtNodeWithContent
-    return await this.getContentsByNode(node, locale, prevContents)
+    const localeResolved = this.cmsApi.getLocaleResolved(locale)
+    return await this.getContentsByNode(node, localeResolved, prevContents)
   }
 
   async getStartContents(locale: string): Promise<FlowContent[]> {
     const startNode = this.cmsApi.getStartNode()
-    return await this.getContentsByNode(startNode, locale)
+    const localeResolved = this.cmsApi.getLocaleResolved(locale)
+    return await this.getContentsByNode(startNode, localeResolved)
   }
 
   async getContentsByNode(
@@ -117,18 +122,18 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const contents = prevContents || []
-
-    const content = this.getFlowContent(node, locale)
+    const localeResolved = this.cmsApi.getLocaleResolved(locale)
+    const content = this.getFlowContent(node, localeResolved)
 
     if (node.type === HtNodeWithContentType.FUNCTION) {
-      const targetId = await this.callFunction(node, locale)
-      return this.getContentsById(targetId, locale, contents)
+      const targetId = await this.callFunction(node, localeResolved)
+      return this.getContentsById(targetId, localeResolved, contents)
     } else {
       if (content) contents.push(content)
       // TODO: prevent infinite recursive calls
 
       if (node.follow_up)
-        return this.getContentsById(node.follow_up.id, locale, contents)
+        return this.getContentsById(node.follow_up.id, localeResolved, contents)
     }
 
     return contents
@@ -156,7 +161,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
   }
 
-  async callFunction(
+  private async callFunction(
     functionNode: HtFunctionNode,
     locale: string
   ): Promise<string> {
