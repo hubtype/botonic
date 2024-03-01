@@ -1,0 +1,116 @@
+name: Botonic test all packages
+
+on:
+  workflow_dispatch:
+
+jobs:
+  botonic-cli-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic cli tests
+      PACKAGE: botonic-cli
+      # Temporal workaround until ts-jest is fixed
+      UNIT_TEST_COMMAND: cp tsconfig.test.json tsconfig.json && npm run test_ci
+      PUBLISH_TESTS_RESULTS: 'yes'
+      NEEDS_CODECOV_UPLOAD: 'yes'
+
+  botonic-core-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic core tests
+      PACKAGE: botonic-core
+      NEEDS_CODECOV_UPLOAD: 'yes'
+
+  botonic-plugin-contentful-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-contentful Tests
+      PACKAGE: botonic-plugin-contentful
+      BUILD_COMMAND: npm run build_unit_tests
+      NEEDS_CONTENTFUL_SECRETS: 'yes' #pragma: allowlist secret
+      NEEDS_CODECOV_UPLOAD: 'yes'
+
+  botonic-plugin-dashbot-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-dashbot tests
+      PACKAGE: botonic-plugin-dashbot
+      UNIT_TEST_COMMAND: ''
+      BUILD_COMMAND: ''
+
+  botonic-plugin-dialogflow:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-dialogflow tests
+      PACKAGE: botonic-plugin-dialogflow
+      UNIT_TEST_COMMAND: npm run test_ci
+      PUBLISH_TESTS_RESULTS: 'yes'
+      NEEDS_CODECOV_UPLOAD: 'yes'
+
+  botonic-plugin-dynamodb-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-dynamodb Tests
+      PACKAGE: botonic-plugin-dynamodb
+      BUILD_COMMAND: npm run build_unit_tests
+      NEEDS_CODECOV_UPLOAD: 'yes'
+      NEEDS_AWS_CRED: 'yes' #pragma: allowlist secret
+
+  botonic-plugin-google-analytics-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-google-analytics tests
+      PACKAGE: botonic-plugin-google-analytics
+      BUILD_COMMAND: ''
+      UNIT_TEST_COMMAND: ''
+
+  botonic-plugin-inbenta-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-inbenta tests
+      PACKAGE: botonic-plugin-inbenta
+      BUILD_COMMAND: ''
+      UNIT_TEST_COMMAND: ''
+
+  botonic-plugin-luis-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-luis tests
+      PACKAGE: botonic-plugin-luis
+      BUILD_COMMAND: ''
+      UNIT_TEST_COMMAND: ''
+
+  botonic-plugin-segment-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-segment tests
+      PACKAGE: botonic-plugin-segment
+      BUILD_COMMAND: ''
+      UNIT_TEST_COMMAND: ''
+
+  botonic-plugin-watson-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin-watson tests
+      PACKAGE: botonic-plugin-watson
+      BUILD_COMMAND: ''
+      UNIT_TEST_COMMAND: ''
+
+  botonic-react-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic react tests
+      PACKAGE: botonic-react
+      NEEDS_CODECOV_UPLOAD: 'yes'
