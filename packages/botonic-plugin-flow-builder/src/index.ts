@@ -169,8 +169,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       return { [arg.name]: arg.value }
     })
 
-    console.log('callFunction', { functionArguments, nameValues })
-
     const args = Object.assign(
       {
         request: this.currentRequest,
@@ -197,7 +195,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     args: HtFunctionArguments[],
     locale: string
   ): HtFunctionArgument[] {
-    console.log('getArgumentsByLocale', args)
     let resultArguments: HtFunctionArgument[] = []
     for (const arg of args) {
       if ('locale' in arg && arg.locale === locale) {

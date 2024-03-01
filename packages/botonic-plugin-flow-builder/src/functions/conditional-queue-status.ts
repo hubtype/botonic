@@ -38,7 +38,7 @@ interface AvailabilityData {
 
 export async function getQueueAvailability(
   queueId: string,
-  check_available_agents = false
+  checkAvailableAgents = false
 ): Promise<AvailabilityData> {
   const response = await axios.get(
     `${HUBTYPE_API_URL}/public/v1/queues/${queueId}/availability/`,
@@ -47,7 +47,7 @@ export async function getQueueAvailability(
       params: {
         check_queue_schedule: true,
         check_waiting_cases: false,
-        check_available_agents: check_available_agents,
+        check_available_agents: checkAvailableAgents,
       },
     }
   )
