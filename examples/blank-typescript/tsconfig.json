@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    // skipLibCheck to  avoid error below (I checked and all @types/react have the same versipn)
+    //    ERROR in [at-loader] ../../../botonic/packages/@botonic/plugin-contentful/node_modules/@botonic/react/node_modules/@types/react/index.d.ts:2814:14
+    //TS2300: Duplicate identifier 'LibraryManagedAttributes'.
+    //
+    //ERROR in [at-loader] ./node_modules/@botonic/react/node_modules/@types/react/index.d.ts:2814:14
+    //TS2300: Duplicate identifier 'LibraryManagedAttributes'.
+    "sourceMap": true,
+    "target": "ES2015",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "baseUrl": "src",
+    "paths": {
+      "*": ["src/*", "lib/*", "types/*"]
+    },
+    "outDir": "lib",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "lib": ["DOM", "ES2022"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "lib"]
+}
