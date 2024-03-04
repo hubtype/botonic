@@ -14,6 +14,7 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-dialogflow tests
       PACKAGE: botonic-plugin-dialogflow
+      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-dialogflow && npm run build'
       UNIT_TEST_COMMAND: npm run test_ci
       PUBLISH_TESTS_RESULTS: 'yes'
       NEEDS_CODECOV_UPLOAD: 'yes'

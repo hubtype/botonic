@@ -1,4 +1,4 @@
-name: Botonic test all packages
+name: Botonic CI test all packages
 
 on:
   workflow_dispatch:
@@ -49,6 +49,7 @@ jobs:
       PACKAGE_NAME: Botonic plugin-dialogflow tests
       PACKAGE: botonic-plugin-dialogflow
       UNIT_TEST_COMMAND: npm run test_ci
+      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-dialogflow && npm run build'
       PUBLISH_TESTS_RESULTS: 'yes'
       NEEDS_CODECOV_UPLOAD: 'yes'
 
@@ -68,7 +69,7 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-google-analytics tests
       PACKAGE: botonic-plugin-google-analytics
-      BUILD_COMMAND: ''
+      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-google-analytics && npm run build'
       UNIT_TEST_COMMAND: ''
 
   botonic-plugin-inbenta-tests:
@@ -113,4 +114,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic react tests
       PACKAGE: botonic-react
+      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-react && npm run build'
       NEEDS_CODECOV_UPLOAD: 'yes'

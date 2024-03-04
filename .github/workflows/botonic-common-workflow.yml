@@ -44,20 +44,20 @@ on:
         required: false
 
 jobs:
-  bot-tests:
+  botonic-tests:
     name: ${{ inputs.PACKAGE_NAME }} tests
     runs-on: ubuntu-latest
     steps:
       - name: Checking out to current branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setting up node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.NODE_VERSION }}
 
       - name: Setting up cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -75,8 +75,8 @@ jobs:
           role-duration-seconds: 900
           role-session-name: HubtypeCITests
 
-      - name: Install dev dependencies
-        run: (cd ./packages/${{ inputs.PACKAGE }} && npm install -D)
+      - name: Install dependencies
+        run: npm install
 
       - name: Build
         if: ${{ inputs.BUILD_COMMAND != '' }}
@@ -95,7 +95,7 @@ jobs:
           CONTENTFUL_TEST_MANAGE_TOKEN: ${{ secrets.CONTENTFUL_TEST_MANAGE_TOKEN }}
 
       - name: Verify lint
-        run: (cd ./packages/${{ inputs.PACKAGE }} && npm run lint_ci)
+        run: (cd ./packages/${{ inputs.PACKAGE }} && npm run lint_core)
 
       - name: Publish Unit Test Results
         if: ${{ inputs.PUBLISH_TESTS_RESULTS != '' && always() }}
