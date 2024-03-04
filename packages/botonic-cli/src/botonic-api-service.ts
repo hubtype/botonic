@@ -1,15 +1,15 @@
 import axios, { AxiosPromise, Method } from 'axios'
+import childProcess from 'child_process'
 import colors from 'colors'
 import FormData from 'form-data'
 import { createReadStream, unlinkSync } from 'fs'
+import ora from 'ora'
+import qs from 'qs'
 import * as util from 'util'
 
 import { BotInfo, OAuth } from './interfaces'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const exec = util.promisify(require('child_process').exec)
-import ora from 'ora'
-import qs from 'qs'
 
+const exec = util.promisify(childProcess.exec)
 import {
   BotCredentialsHandler,
   GlobalCredentialsHandler,
@@ -108,7 +108,7 @@ export class BotonicAPIService {
     }).start()
     try {
       await exec(`npm run ${npmCommand}`)
-    } catch (error) {
+    } catch (error: any) {
       spinner.fail()
       console.log(
         `${String(error.stdout)}` +
@@ -133,7 +133,7 @@ export class BotonicAPIService {
     path: string,
     body: any = null,
     method: Method = 'get',
-    headers: any | null = null,
+    headers: any = null,
     params: any = null
   ): Promise<any> {
     let b = 0
@@ -145,7 +145,7 @@ export class BotonicAPIService {
         data: body,
         params: params,
       })
-    } catch (e) {
+    } catch (e: any) {
       if (e.response.status == 401) {
         b = 1
       } else {
