@@ -21,7 +21,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.23.1 darwin-arm64 node-v14.21.3
+@botonic/cli/0.25.0-alpha.0 darwin-arm64 node-v20.11.1
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -40,7 +40,6 @@ USAGE
 * [`botonic new NAME [PROJECTNAME]`](#botonic-new-name-projectname)
 * [`botonic serve`](#botonic-serve)
 * [`botonic test`](#botonic-test)
-* [`botonic train`](#botonic-train)
 
 ## `botonic deploy [PROVIDER]`
 
@@ -67,7 +66,7 @@ EXAMPLES
   Deploying to AWS...
 ```
 
-_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/deploy.js)_
+_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.25.0-alpha.0/lib/commands/deploy.js)_
 
 ## `botonic destroy [PROVIDER]`
 
@@ -82,7 +81,7 @@ EXAMPLE
   Destroying AWS stack...
 ```
 
-_See code: [lib/commands/destroy.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/destroy.js)_
+_See code: [lib/commands/destroy.js](https://github.com/hubtype/botonic/blob/v0.25.0-alpha.0/lib/commands/destroy.js)_
 
 ## `botonic help [COMMAND]`
 
@@ -99,7 +98,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.3.1/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
 
 ## `botonic login`
 
@@ -113,7 +112,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/login.js)_
+_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.25.0-alpha.0/lib/commands/login.js)_
 
 ## `botonic logout`
 
@@ -127,7 +126,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/logout.js)_
+_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.25.0-alpha.0/lib/commands/logout.js)_
 
 ## `botonic new NAME [PROJECTNAME]`
 
@@ -147,7 +146,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/new.js)_
+_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.25.0-alpha.0/lib/commands/new.js)_
 
 ## `botonic serve`
 
@@ -165,7 +164,7 @@ EXAMPLE
   > Project is running at http://localhost:8080/
 ```
 
-_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/serve.js)_
+_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.25.0-alpha.0/lib/commands/serve.js)_
 
 ## `botonic test`
 
@@ -192,23 +191,5 @@ EXAMPLE
   Ran all test suites.
 ```
 
-_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/test.js)_
-
-## `botonic train`
-
-Train your bot with NLP
-
-```
-USAGE
-  $ botonic train
-
-OPTIONS
-  --task=task
-
-EXAMPLE
-  $ botonic train [--task=<ner|intent-classification>]
-      TRAINING MODEL...
-```
-
-_See code: [lib/commands/train.js](https://github.com/hubtype/botonic/blob/v0.23.1/lib/commands/train.js)_
+_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.25.0-alpha.0/lib/commands/test.js)_
 <!-- commandsstop -->

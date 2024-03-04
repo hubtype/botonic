@@ -51,7 +51,7 @@ export default class Run extends Command {
       if (apps.includes('websocket')) {
         try {
           await kill(API_WS_PORT, 'tcp')
-        } catch (e) {
+        } catch (e: any) {
           console.error(
             `Error whilst shutting down "api websocket" port (${API_WS_PORT}): ${colors.red(
               e.message
@@ -63,7 +63,7 @@ export default class Run extends Command {
       if (apps.includes('rest')) {
         try {
           await kill(API_REST_PORT, 'tcp')
-        } catch (e) {
+        } catch (e: any) {
           console.error(
             `Error whilst shutting down "api rest" port (${API_REST_PORT}): ${colors.red(
               e.message
@@ -75,7 +75,7 @@ export default class Run extends Command {
       if (apps.includes('webchat')) {
         try {
           await kill(WEBCHAT_PORT, 'tcp')
-        } catch (e) {
+        } catch (e: any) {
           console.error(
             `Error whilst shutting down "webchat" port (${WEBCHAT_PORT}): ${colors.red(
               e.message
