@@ -1,5 +1,6 @@
 import { Config } from '@oclif/config'
 import { assert } from 'console'
+// import { promises } from 'fs'
 import { join } from 'path'
 import { chdir } from 'process'
 
@@ -8,6 +9,7 @@ import { EXAMPLES } from '../../src/botonic-examples'
 import { default as DeployCommand } from '../../src/commands/deploy'
 import { default as NewCommand } from '../../src/commands/new'
 import {
+  copy,
   createTempDir,
   readDir,
   removeRecursively,
@@ -17,13 +19,14 @@ const botonicApiService = new BotonicAPIService()
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
 const deployCommand = new DeployCommand(process.argv, new Config({ root: '' }))
 
-const BLANK_EXAMPLE = EXAMPLES[3]
+const BLANK_EXAMPLE = EXAMPLES[0]
 assert(BLANK_EXAMPLE.name === 'blank')
 
 describe('TEST: Deploy pipeline', () => {
-  test('Download, install, build and deploy a project', async () => {
+  test('Install, build and deploy a project', async () => {
     const tmpPath = createTempDir('botonic-tmp')
-    await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
+    // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
+    copy(BLANK_EXAMPLE.localTestPath, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
 

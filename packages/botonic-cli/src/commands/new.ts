@@ -56,9 +56,8 @@ Creating...
       const userProjectDirName = args.name
       const selectedProjectName = args.projectName
 
-      const selectedProject = await this.resolveSelectedProject(
-        selectedProjectName
-      )
+      const selectedProject =
+        await this.resolveSelectedProject(selectedProjectName)
       if (!selectedProject) {
         console.log(
           red(

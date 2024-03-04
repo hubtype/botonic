@@ -17,5 +17,6 @@ module.exports = {
     'tests/helpers',
     '.*.helper.js',
     'tests/__mocks__',
+    'botonic-tmp*',
   ],
 }
