@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
-    "build_unit_tests": "tsc -b tests/tsconfig.json",
+    "build_unit_tests": "../../node_modules/.bin/tsc -b tests/tsconfig.json",
     "test": "../../node_modules/.bin/jest --coverage",
     "ts-node": "../../node_modules/.bin/ts-node -O '{ \"noUnusedLocals\":false}'",
     "cloc": "../../scripts/qa/cloc-package.sh .",
