@@ -11,9 +11,9 @@ type ConditionalQueueStatusArgs = {
 }
 
 enum QueueStatusResult {
-  open = 'open',
-  closed = 'closed',
-  openWithoutAgents = 'open-without-agents',
+  OPEN = 'open',
+  CLOSED = 'closed',
+  OPEN_WITHOUT_AGENTS = 'open-without-agents',
 }
 
 export async function conditionalQueueStatus({
@@ -22,9 +22,9 @@ export async function conditionalQueueStatus({
 }: ConditionalQueueStatusArgs): Promise<QueueStatusResult> {
   const data = await getQueueAvailability(queue_id, check_available_agents)
   if (check_available_agents && data.open && data.available_agents === 0) {
-    return QueueStatusResult.openWithoutAgents
+    return QueueStatusResult.OPEN_WITHOUT_AGENTS
   }
-  return data.open ? QueueStatusResult.open : QueueStatusResult.closed
+  return data.open ? QueueStatusResult.OPEN : QueueStatusResult.CLOSED
 }
 
 interface AvailabilityData {
