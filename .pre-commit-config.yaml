@@ -27,12 +27,6 @@ repos:
         language: system
         files: ^packages/botonic-core/
 
-      - id: core-d-ts
-        name: core-d-ts
-        entry: scripts/qa/old/lint-d-ts.sh packages/botonic-core
-        language: system
-        files: ^packages/botonic-core/src/.*\.d\.ts
-
       - id: contentful
         name: contentful
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-contentful
@@ -81,12 +75,6 @@ repos:
         language: system
         files: ^packages/botonic-react/
 
-      - id: react-d-ts
-        name: react-d-ts
-        entry: scripts/qa/old/lint-d-ts.sh packages/botonic-react
-        language: system
-        files: ^packages/botonic-react/src/.*\.d\.ts
-
       - id: google-analytics
         name: google-analytics
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-google-analytics
@@ -104,12 +92,6 @@ repos:
         entry: scripts/qa/old/lint-package.sh docs/
         language: system
         files: ^docs/
-
-      - id: plugin-intent-classification
-        name: plugin-intent-classification
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-intent-classification
-        language: system
-        files: ^packages/botonic-plugin-intent-classification/
 
       - id: plugin-flow-builder
         name: plugin-flow-builder
