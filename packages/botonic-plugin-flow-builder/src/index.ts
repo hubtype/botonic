@@ -73,9 +73,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       !request.session.is_first_interaction
 
     if (checkUserTextInput) {
+      const locale = this.getLocale(request.session)
+      const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
       const nodeByUserInput = await getNodeByUserInput(
         this.cmsApi,
-        this.getLocale(request.session),
+        resolvedLocale,
         request as unknown as ActionRequest
       )
       request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
@@ -117,18 +119,21 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const contents = prevContents || []
-
-    const content = this.getFlowContent(node, locale)
+    const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
 
     if (node.type === HtNodeWithContentType.FUNCTION) {
-      const targetId = await this.callFunction(node, locale)
-      return this.getContentsById(targetId, locale, contents)
-    } else {
-      if (content) contents.push(content)
-      // TODO: prevent infinite recursive calls
+      const targetId = await this.callFunction(node, resolvedLocale)
+      return this.getContentsById(targetId, resolvedLocale, contents)
+    }
 
-      if (node.follow_up)
-        return this.getContentsById(node.follow_up.id, locale, contents)
+    const content = this.getFlowContent(node, resolvedLocale)
+    if (content) {
+      contents.push(content)
+    }
+    // TODO: prevent infinite recursive calls
+
+    if (node.follow_up) {
+      return this.getContentsById(node.follow_up.id, resolvedLocale, contents)
     }
 
     return contents
@@ -156,7 +161,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
   }
 
-  async callFunction(
+  private async callFunction(
     functionNode: HtFunctionNode,
     locale: string
   ): Promise<string> {
