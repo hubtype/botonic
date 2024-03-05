@@ -20,6 +20,23 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.24.3] - 2024-03-05
+
+### Added
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Check if agents are available in `conditional queue`](https://github.com/hubtype/botonic/pull/2782)
+  - [Resolve the bot's `locale`](https://github.com/hubtype/botonic/pull/2784)
+
+## [0.24.4] - 2024-03-05
+
+### Fixed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [Fix className in `CustomMessage`](https://github.com/hubtype/botonic/pull/2786)
+
 ## [0.24.3] - 2024-01-30
 
 ### Fixed
