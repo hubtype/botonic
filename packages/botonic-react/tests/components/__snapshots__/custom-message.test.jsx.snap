@@ -4,6 +4,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 <message
   delay={0}
   json="{"children":{"key":null,"ref":null,"props":{"payload":"payloadundefined","children":["button",null]},"_owner":null,"_store":{}},"customTypeName":"test1"}"
+  sentBy="bot"
   type="custom"
   typing={0}
 >
@@ -26,6 +27,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 <message
   delay={0}
   json="{"children":[{"key":".$1","ref":null,"props":{"payload":"payload1","children":["button",1]},"_owner":null,"_store":{}},{"key":".$2","ref":null,"props":{"payload":"payload2","children":["button",2]},"_owner":null,"_store":{}}],"customTypeName":"test1"}"
+  sentBy="bot"
   type="custom"
   typing={0}
 >
@@ -55,6 +57,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 <message
   delay={0}
   json="{"children":[],"customTypeName":"test1"}"
+  sentBy="bot"
   type="custom"
   typing={0}
 >
@@ -76,6 +79,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 <message
   delay={0}
   json="{"children":[{"key":".$2","ref":null,"props":{"payload":"payload2","children":["button",2]},"_owner":null,"_store":{}}],"customTypeName":"test1"}"
+  sentBy="bot"
   type="custom"
   typing={0}
 >
@@ -105,6 +109,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 <message
   delay={0}
   json="{"children":[],"customTypeName":"test1"}"
+  sentBy="bot"
   type="custom"
   typing={0}
 >
@@ -133,6 +138,7 @@ exports[`TEST: CustomMessage defaultProps, props and children are injected into 
 <message
   delay={0}
   json="{"wrappedProp":"wrappedPropV","children":"body","customTypeName":"test1"}"
+  sentBy="bot"
   type="custom"
   typing={0}
   wrapperProp="wrapperPropV"

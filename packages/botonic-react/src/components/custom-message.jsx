@@ -24,7 +24,9 @@ export const customMessage = ({
 }) => {
   const CustomMessage = props => {
     warnDeprecatedProps(defaultProps, 'customMessage:')
-    if (defaultProps.sentBy === SENDERS.user) defaultProps.ack = 1
+    if (defaultProps.sentBy === SENDERS.user) {
+      defaultProps.ack = 1
+    }
     return (
       <Message
         {...merge(mapObjectNonBooleanValues(defaultProps), props)}
@@ -64,7 +66,7 @@ export const customMessage = ({
           children: childrenWithoutReplies,
           customTypeName: name,
         }}
-        sentBy={props.sentBy}
+        sentBy={props.sentBy || SENDERS.bot}
         isUnread={props.isUnread}
       >
         <ErrorBoundary key={'errorBoundary'} {...customMessageProps}>
@@ -84,7 +86,7 @@ export const customMessage = ({
       key={msg.key}
       json={msg.data}
       {...msg.data}
-      sentBy={msg.sentBy}
+      sentBy={msg.sentBy || SENDERS.bot}
       isUnread={msg.isUnread}
     />
   )
