@@ -128,12 +128,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     if (node.type === HtNodeWithContentType.FUNCTION) {
       const targetId = await this.callFunction(node, localeResolved)
       return this.getContentsById(targetId, localeResolved, contents)
-    } else {
-      if (content) contents.push(content)
-      // TODO: prevent infinite recursive calls
+    }
 
-      if (node.follow_up)
-        return this.getContentsById(node.follow_up.id, localeResolved, contents)
+    const content = this.getFlowContent(node, localeResolved)
+    if (content) {
+      contents.push(content)
+    }
+    // TODO: prevent infinite recursive calls
+
+    if (node.follow_up) {
+      return this.getContentsById(node.follow_up.id, localeResolved, contents)
     }
 
     return contents
