@@ -74,10 +74,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
     if (checkUserTextInput) {
       const locale = this.getLocale(request.session)
-      const localeResolved = this.cmsApi.getLocaleResolved(locale)
+      const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
       const nodeByUserInput = await getNodeByUserInput(
         this.cmsApi,
-        localeResolved,
+        resolvedLocale,
         request as unknown as ActionRequest
       )
       request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
@@ -96,8 +96,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const node = this.cmsApi.getNodeByCode(code) as HtNodeWithContent
-    const localeResolved = this.cmsApi.getLocaleResolved(locale)
-    return await this.getContentsByNode(node, localeResolved, prevContents)
+    return await this.getContentsByNode(node, locale, prevContents)
   }
 
   async getContentsById(
@@ -106,14 +105,12 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const node = this.cmsApi.getNodeById(id) as HtNodeWithContent
-    const localeResolved = this.cmsApi.getLocaleResolved(locale)
-    return await this.getContentsByNode(node, localeResolved, prevContents)
+    return await this.getContentsByNode(node, locale, prevContents)
   }
 
   async getStartContents(locale: string): Promise<FlowContent[]> {
     const startNode = this.cmsApi.getStartNode()
-    const localeResolved = this.cmsApi.getLocaleResolved(locale)
-    return await this.getContentsByNode(startNode, localeResolved)
+    return await this.getContentsByNode(startNode, locale)
   }
 
   async getContentsByNode(
@@ -122,22 +119,21 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
     const contents = prevContents || []
-    const localeResolved = this.cmsApi.getLocaleResolved(locale)
-    const content = this.getFlowContent(node, localeResolved)
+    const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
 
     if (node.type === HtNodeWithContentType.FUNCTION) {
-      const targetId = await this.callFunction(node, localeResolved)
-      return this.getContentsById(targetId, localeResolved, contents)
+      const targetId = await this.callFunction(node, resolvedLocale)
+      return this.getContentsById(targetId, resolvedLocale, contents)
     }
 
-    const content = this.getFlowContent(node, localeResolved)
+    const content = this.getFlowContent(node, resolvedLocale)
     if (content) {
       contents.push(content)
     }
     // TODO: prevent infinite recursive calls
 
     if (node.follow_up) {
-      return this.getContentsById(node.follow_up.id, localeResolved, contents)
+      return this.getContentsById(node.follow_up.id, resolvedLocale, contents)
     }
 
     return contents

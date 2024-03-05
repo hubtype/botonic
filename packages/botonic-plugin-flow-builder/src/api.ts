@@ -204,7 +204,7 @@ export class FlowBuilderApi {
     return `${payloadNode.content.payload}${SEPARATOR}${payloadJson}`
   }
 
-  getLocaleResolved(locale: string): string {
+  getResolvedLocale(locale: string): string {
     if (this.flow.locales.find(flowLocale => flowLocale === locale)) {
       return locale
     }

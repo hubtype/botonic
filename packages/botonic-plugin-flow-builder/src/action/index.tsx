@@ -20,13 +20,12 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const locale = flowBuilderPlugin.getLocale(request.session)
-    const localeResolved = flowBuilderPlugin.cmsApi.getLocaleResolved(locale)
 
     const targetNode = await getTargetNode(flowBuilderPlugin.cmsApi, request)
 
     const contents = await flowBuilderPlugin.getContentsByNode(
       targetNode,
-      localeResolved
+      locale
     )
 
     const handoffContent = contents.find(
