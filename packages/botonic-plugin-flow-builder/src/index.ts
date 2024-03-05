@@ -15,6 +15,8 @@ import {
 } from './content-fields'
 import {
   HtFlowBuilderData,
+  HtFunctionArgument,
+  HtFunctionArguments,
   HtFunctionNode,
   HtNodeComponent,
   HtNodeWithContent,
@@ -159,10 +161,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     locale: string
   ): Promise<string> {
     const functionNodeId = functionNode.id
-    const nameValues =
-      functionNode.content.arguments
-        .find(arg => arg.locale === locale)
-        ?.values.map(value => ({ [value.name]: value.value })) || []
+    const functionArguments = this.getArgumentsByLocale(
+      functionNode.content.arguments,
+      locale
+    )
+    const nameValues = functionArguments.map(arg => {
+      return { [arg.name]: arg.value }
+    })
 
     const args = Object.assign(
       {
@@ -184,6 +189,23 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       )
     }
     return result.target.id
+  }
+
+  private getArgumentsByLocale(
+    args: HtFunctionArguments[],
+    locale: string
+  ): HtFunctionArgument[] {
+    let resultArguments: HtFunctionArgument[] = []
+    for (const arg of args) {
+      if ('locale' in arg && arg.locale === locale) {
+        resultArguments = [...resultArguments, ...arg.values]
+      }
+      if ('type' in arg) {
+        resultArguments = [...resultArguments, arg]
+      }
+    }
+
+    return resultArguments
   }
 
   getPayloadParams<T extends PayloadParamsBase>(payload: string): T {
