@@ -1,3 +1,4 @@
+import { SENDERS } from '../index-types'
 import { WebchatAction } from './actions'
 import { WebchatState } from './index-types'
 
@@ -45,7 +46,7 @@ function addMessageComponent(
   const messageComponent = action.payload
   const isUnreadMessage =
     messageComponent.props?.isUnread &&
-    messageComponent.props?.sent_by !== 'user'
+    messageComponent.props?.sentBy !== SENDERS.user
 
   const numUnreadMessages = isUnreadMessage
     ? state.numUnreadMessages + 1
