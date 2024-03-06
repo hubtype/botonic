@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-contentful",
-  "version": "0.25.0-alpha.0",
+  "version": "0.25.0-alpha.1",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,10 +16,8 @@
     "ts-node": "../../node_modules/.bin/ts-node -O '{ \"noUnusedLocals\":false}'",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
-    "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm run lint_ci && npm i && npm run build && npm test",
+    "prepublishOnly": "npm run lint_core && npm i && npm run build && npm test",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"
