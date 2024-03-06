@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-google-translation",
-  "version": "0.25.0-alpha.0",
+  "version": "0.25.0-alpha.1",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
@@ -9,15 +9,13 @@
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "test": "../../node_modules/.bin/jest",
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
-    "prepare": "node ../../preinstall.js",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
-    "@botonic/core": "0.25.0-alpha.3",
+    "@botonic/core": "0.25.0-alpha.4",
     "axios": "^1.6.7",
     "jsrsasign": "^10.9.0"
   },

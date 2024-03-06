@@ -1,16 +1,14 @@
 {
   "name": "@botonic/core",
-  "version": "0.25.0-alpha.3",
+  "version": "0.25.0-alpha.4",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
-    "prepare": "node ../../preinstall.js",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*'",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*'",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-analytics",
-  "version": "0.25.0-alpha.1",
+  "version": "0.25.0-alpha.2",
   "description": "Plugin for tracking in the Hubtype backend to see the results in the Hubtype Dashbord",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -10,12 +10,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
-    "@botonic/core": "0.25.0-alpha.3",
+    "@botonic/core": "0.25.0-alpha.4",
     "axios": "^1.6.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.25.0-alpha.5",
+  "version": "0.25.0-alpha.6",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -11,18 +11,16 @@
     "test": "../../node_modules/.bin/jest -c ./jest.config.js --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "npm run clean; npm i; npm run build; npm run copy-files;",
-    "prepare": "node ../../preinstall.js;",
     "clean": "rm -rf ./lib/",
     "copy-files": "copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/esm/; copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/cjs/;",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
     "prettier": "../../node_modules/.bin/prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
     "lint": "npm run prettier; npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "dependencies": {
-    "@botonic/core": "^0.25.0-alpha.3",
+    "@botonic/core": "^0.25.0-alpha.4",
     "axios": "^1.6.7",
     "emoji-picker-react": "^4.4.9",
     "framer-motion": "^3.1.1",

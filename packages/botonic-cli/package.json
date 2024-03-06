@@ -1,15 +1,13 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.25.0-alpha.0",
+  "version": "0.25.0-alpha.1",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
   },
   "scripts": {
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "ts-node": "ts-node",
-    "prepare": "node ../../preinstall.js",
     "prepublishOnly": "npm i && npm run build",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json",
     "build:watch": "rm -rf lib && ./node_modules/.bin/tsc -w",
@@ -18,7 +16,6 @@
     "version": "oclif-dev readme && git add README.md",
     "postinstall": "node scripts/postinstall.js",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
     "test": "../../node_modules/.bin/jest --coverage",
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"
