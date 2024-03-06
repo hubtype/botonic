@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.25.0-alpha.0",
+  "version": "0.25.0-alpha.1",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/index.d.ts",
@@ -11,10 +11,8 @@
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
-    "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm run lint_ci && rm -rf lib && npm i && npm run build && npm run test",
+    "prepublishOnly": "npm run lint_core && rm -rf lib && npm i && npm run build && npm run test",
     "preversion": "npm run lint",
     "version": "git add -A src tests",
     "postversion": "git push && git push --tags"

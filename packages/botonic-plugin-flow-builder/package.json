@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.25.0-alpha.8",
+  "version": "0.25.0-alpha.9",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
@@ -9,14 +9,12 @@
     "build:watch": "npm run build -- --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepare": "node ../../preinstall.js",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@botonic/react": "0.25.0-alpha.5",
+    "@botonic/react": "0.25.0-alpha.6",
     "axios": "^1.6.7",
     "uuid": "^9.0.1"
   },
