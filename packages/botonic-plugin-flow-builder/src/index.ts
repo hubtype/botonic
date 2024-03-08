@@ -153,7 +153,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       case HtNodeWithContentType.VIDEO:
         return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
       case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
-        return FlowWhatsappButtonList.fromHubtypeCMS(hubtypeContent, locale)
+        return FlowWhatsappButtonList.fromHubtypeCMS(
+          hubtypeContent,
+          locale,
+          this.cmsApi
+        )
       case HtNodeWithContentType.HANDOFF:
         return FlowHandoff.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
       default:
