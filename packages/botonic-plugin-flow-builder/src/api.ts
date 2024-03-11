@@ -56,11 +56,11 @@ export class FlowBuilderApi {
     return node as T
   }
 
-  getNodeByCode(code: string): HtNodeComponent {
+  getNodeByContentID(contentID: string): HtNodeComponent {
     const content = this.flow.nodes.find(node =>
-      'code' in node ? node.code === code : false
+      'code' in node ? node.code === contentID : false
     )
-    if (!content) throw Error(`Node with code: '${code}' not found`)
+    if (!content) throw Error(`Node with contentID: '${contentID}' not found`)
     return content
   }
 
