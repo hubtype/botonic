@@ -104,7 +104,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return node.id
   }
 
-  async getContentsById(
+  private async getContentsById(
     id: string,
     locale: string,
     prevContents?: FlowContent[]
