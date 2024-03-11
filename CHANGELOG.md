@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-  ## [0.24.x] - 2024-01-23
+  ## [0.24.x] - 2024-xx-xx
 
 ### Added
 
@@ -20,11 +20,27 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.24.5] - 2024-03-11
+
+### Fixed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+- [use `resolvedLocale` in knowledge-base content](https://github.com/hubtype/botonic/pull/2789)
+
+## [0.24.5] - 2024-03-08
+
+### Fixed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+- [resolve use `bot actions` in whatsapp button list](https://github.com/hubtype/botonic/pull/2787)
+
 ## [0.24.3] - 2024-03-05
 
 ### Added
 
-- [@botonic/react](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
   - [Check if agents are available in `conditional queue`](https://github.com/hubtype/botonic/pull/2782)
   - [Resolve the bot's `locale`](https://github.com/hubtype/botonic/pull/2784)

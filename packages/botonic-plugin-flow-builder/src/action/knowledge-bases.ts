@@ -17,6 +17,7 @@ export async function createNodeFromKnowledgeBase(
 ): Promise<HtNodeWithContent | undefined> {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const locale = flowBuilderPlugin.getLocale(request.session)
+  const resolvedLocale = cmsApi.getResolvedLocale(locale)
   const knowledgeBaseConfig = cmsApi.getKnowledgeBaseConfig()
 
   if (
@@ -26,7 +27,6 @@ export async function createNodeFromKnowledgeBase(
     try {
       const knowledgeBaseResponse =
         await flowBuilderPlugin.getKnowledgeBaseResponse(request)
-
       if (knowledgeBaseResponse.hasKnowledge) {
         await trackEvent(request, EventName.botAiKnowledgeBase, {
           answer: knowledgeBaseResponse.answer,
@@ -41,7 +41,7 @@ export async function createNodeFromKnowledgeBase(
             text: [
               {
                 message: knowledgeBaseResponse.answer,
-                locale,
+                locale: resolvedLocale,
               },
             ],
             buttons_style: undefined,
