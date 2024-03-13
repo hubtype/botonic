@@ -13,9 +13,6 @@ export function conditionalBotVariable({
   results,
   keyPath,
 }: ConditionalCountryArgs): string {
-  const botVariable = getValueFromKeyPath(
-    request.session.user.extra_data,
-    keyPath
-  )
+  const botVariable = getValueFromKeyPath(request, keyPath)
   return results.find(result => result === botVariable) ?? 'default'
 }

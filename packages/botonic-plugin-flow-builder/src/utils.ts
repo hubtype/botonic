@@ -1,4 +1,5 @@
 import { Session } from '@botonic/core'
+import { ActionRequest } from '@botonic/react'
 
 import { BotonicPluginFlowBuilderOptions, ProcessEnvNodeEnvs } from './types'
 
@@ -22,8 +23,20 @@ export function resolveGetAccessToken(
   }
 }
 
-export function getValueFromKeyPath(extraData: any, keyPath: string): any {
+export function getValueFromKeyPath(
+  request: ActionRequest,
+  keyPath: string
+): any {
+  if (keyPath.startsWith('input') || keyPath.startsWith('session')) {
+    return keyPath
+      .split('.')
+      .reduce((object, key) => (object && object[key]) || undefined, request)
+  }
+
   return keyPath
     .split('.')
-    .reduce((object, key) => (object && object[key]) || undefined, extraData)
+    .reduce(
+      (object, key) => (object && object[key]) || undefined,
+      request.session.user.extra_data
+    )
 }
