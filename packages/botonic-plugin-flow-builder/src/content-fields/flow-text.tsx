@@ -1,4 +1,4 @@
-import { Text } from '@botonic/react'
+import { ActionRequest, Text } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
@@ -22,27 +22,27 @@ export class FlowText extends ContentFieldsBase {
     const newText = new FlowText(cmsText.id)
     newText.code = cmsText.code
     newText.buttonStyle = cmsText.content.buttons_style || HtButtonStyle.BUTTON
-    newText.text = this.replaceVariables(
-      this.getTextByLocale(locale, cmsText.content.text),
-      cmsApi.request.session.user.extra_data
-    )
+    newText.text = this.getTextByLocale(locale, cmsText.content.text)
+    // this.replaceVariables(
+    //   this.getTextByLocale(locale, cmsText.content.text),
+    //   cmsApi.request
+    // )
     newText.buttons = cmsText.content.buttons.map(button =>
       FlowButton.fromHubtypeCMS(button, locale, cmsApi)
     )
     return newText
   }
 
-  static replaceVariables(
-    text: string,
-    extraData?: Record<string, any>
-  ): string {
+  static replaceVariables(text: string, request: ActionRequest): string {
     const matches = text.match(VARIABLE_REGEX)
 
     let replacedText = text
-    if (matches && extraData) {
+    if (matches && request) {
       matches.forEach(match => {
         const keyPath = match.slice(1, -1)
-        const botVariable = getValueFromKeyPath(extraData, keyPath)
+        const botVariable = keyPath.endsWith('_access_token')
+          ? getValueFromKeyPath(request, match)
+          : getValueFromKeyPath(request, keyPath)
         replacedText = replacedText.replace(match, botVariable ?? match)
       })
     }
@@ -50,10 +50,11 @@ export class FlowText extends ContentFieldsBase {
     return replacedText
   }
 
-  toBotonic(id: string): JSX.Element {
+  toBotonic(id: string, request: ActionRequest): JSX.Element {
+    const replacedText = FlowText.replaceVariables(this.text, request)
     return (
       <Text key={id}>
-        {this.text}
+        {replacedText}
         {this.buttons.map((button, buttonIndex) =>
           button.renderButton(buttonIndex, this.buttonStyle)
         )}
