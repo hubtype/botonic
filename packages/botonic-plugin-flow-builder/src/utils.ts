@@ -21,3 +21,9 @@ export function resolveGetAccessToken(
       throw new Error('No method defined for getting access token')
   }
 }
+
+export function getValueFromKeyPath(extraData: any, keyPath: string): any {
+  return keyPath
+    .split('.')
+    .reduce((object, key) => (object && object[key]) || undefined, extraData)
+}

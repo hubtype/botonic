@@ -3,6 +3,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { VARIABLE_REGEX } from '../constants'
+import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtButtonStyle, HtTextNode } from './hubtype-fields'
@@ -40,9 +41,9 @@ export class FlowText extends ContentFieldsBase {
     let replacedText = text
     if (matches && extraData) {
       matches.forEach(match => {
-        const variable = match.slice(1, -1)
-        const value = extraData[variable] ?? match
-        replacedText = replacedText.replace(match, value)
+        const keyPath = match.slice(1, -1)
+        const botVariable = getValueFromKeyPath(extraData, keyPath)
+        replacedText = replacedText.replace(match, botVariable ?? match)
       })
     }
 

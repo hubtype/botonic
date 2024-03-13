@@ -1,16 +1,21 @@
 import { ActionRequest } from '@botonic/react'
 
+import { getValueFromKeyPath } from '../utils'
+
 interface ConditionalCountryArgs {
   request: ActionRequest
   results: string[]
-  variable: string
+  keyPath: string
 }
 
 export function conditionalBotVariable({
   request,
   results,
-  variable,
+  keyPath,
 }: ConditionalCountryArgs): string {
-  const botVariable = request.session.user.extra_data[variable]
+  const botVariable = getValueFromKeyPath(
+    request.session.user.extra_data,
+    keyPath
+  )
   return results.find(result => result === botVariable) ?? 'default'
 }
