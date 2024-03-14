@@ -18,7 +18,7 @@
     "@babel/runtime": "^7.22.5",
     "@botonic/core": "0.23.2",
     "axios": "^1.6.0",
-    "jsrsasign": "^10.8.6"
+    "jsrsasign": "^10.9.0"
   },
   "resolutions": {
     "@types/webgl2": "0.0.6"
