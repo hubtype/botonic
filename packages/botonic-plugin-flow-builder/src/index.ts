@@ -99,7 +99,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return await this.getContentsByNode(node, locale, prevContents)
   }
 
-  async getUUIDByContentID(contentID: string): Promise<string> {
+  getUUIDByContentID(contentID: string): string {
     const node = this.cmsApi.getNodeByContentID(contentID)
     return node.id
   }
