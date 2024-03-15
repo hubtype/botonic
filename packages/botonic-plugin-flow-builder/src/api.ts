@@ -6,6 +6,7 @@ import {
   HtBotActionNode,
   HtFallbackNode,
   HtFlowBuilderData,
+  HtGoToFlow,
   HtIntentNode,
   HtKeywordNode,
   HtNodeComponent,
@@ -214,11 +215,29 @@ export class FlowBuilderApi {
     const customParams = JSON.parse(
       botActionNode.content.payload_params || '{}'
     )
+
+    const followUpContentID = this.getFollowUpContentID(
+      botActionNode.follow_up?.id
+    )
+
     const payloadJson = JSON.stringify({
       ...customParams,
-      followUpId: botActionNode.follow_up?.id,
+      followUpContentID,
     })
     return `${payloadNode.content.payload}${SEPARATOR}${payloadJson}`
+  }
+
+  private getFollowUpContentID(id?: string): string | undefined {
+    const followUpNode = id
+      ? this.getNodeById<HtNodeWithContent | HtGoToFlow>(id)
+      : undefined
+
+    if (followUpNode?.type === HtNodeWithoutContentType.GO_TO_FLOW) {
+      return this.getNodeById<HtNodeWithContent>(followUpNode?.content.flow_id)
+        .code
+    } else {
+      return followUpNode?.code
+    }
   }
 
   getResolvedLocale(locale: string): string {
