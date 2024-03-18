@@ -2,7 +2,7 @@ import { ActionRequest, Text } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
-import { VARIABLE_REGEX } from '../constants'
+import { ACCESS_TOKEN_VARIABLE_KEY, VARIABLE_PATTERN } from '../constants'
 import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
@@ -23,10 +23,6 @@ export class FlowText extends ContentFieldsBase {
     newText.code = cmsText.code
     newText.buttonStyle = cmsText.content.buttons_style || HtButtonStyle.BUTTON
     newText.text = this.getTextByLocale(locale, cmsText.content.text)
-    // this.replaceVariables(
-    //   this.getTextByLocale(locale, cmsText.content.text),
-    //   cmsApi.request
-    // )
     newText.buttons = cmsText.content.buttons.map(button =>
       FlowButton.fromHubtypeCMS(button, locale, cmsApi)
     )
@@ -34,13 +30,13 @@ export class FlowText extends ContentFieldsBase {
   }
 
   static replaceVariables(text: string, request: ActionRequest): string {
-    const matches = text.match(VARIABLE_REGEX)
+    const matches = text.match(VARIABLE_PATTERN)
 
     let replacedText = text
     if (matches && request) {
       matches.forEach(match => {
         const keyPath = match.slice(1, -1)
-        const botVariable = keyPath.endsWith('_access_token')
+        const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
           ? getValueFromKeyPath(request, match)
           : getValueFromKeyPath(request, keyPath)
         replacedText = replacedText.replace(match, botVariable ?? match)
