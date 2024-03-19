@@ -30,13 +30,20 @@ export function getValueFromKeyPath(
   if (keyPath.startsWith('input') || keyPath.startsWith('session')) {
     return keyPath
       .split('.')
-      .reduce((object, key) => (object && object[key]) || undefined, request)
+      .reduce((object, key) => resolveObjectKey(object, key), request)
   }
 
   return keyPath
     .split('.')
     .reduce(
-      (object, key) => (object && object[key]) || undefined,
+      (object, key) => resolveObjectKey(object, key),
       request.session.user.extra_data
     )
+}
+
+function resolveObjectKey(object: any, key: string): any {
+  if (object && object[key] !== undefined) {
+    return object[key]
+  }
+  return undefined
 }

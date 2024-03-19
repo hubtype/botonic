@@ -39,11 +39,19 @@ export class FlowText extends ContentFieldsBase {
         const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
           ? getValueFromKeyPath(request, match)
           : getValueFromKeyPath(request, keyPath)
-        replacedText = replacedText.replace(match, botVariable ?? match)
+        replacedText = replacedText.replace(
+          match,
+          this.isValidType(botVariable) ? botVariable : match
+        )
       })
     }
 
     return replacedText
+  }
+
+  private static isValidType(botVariable: any): boolean {
+    const validTypes = ['boolean', 'string', 'number']
+    return validTypes.includes(typeof botVariable)
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
