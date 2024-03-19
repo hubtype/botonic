@@ -171,12 +171,12 @@ export class FlowBuilderApi {
     const result = node.content.keywords.find(
       keywords =>
         keywords.locale === locale &&
-        this.containsAnyKeywords(input, keywords.values)
+        this.inputMatchesAnyKeyword(input, keywords.values)
     )
     return Boolean(result)
   }
 
-  private containsAnyKeywords(input: string, keywords: string[]): boolean {
+  private inputMatchesAnyKeyword(input: string, keywords: string[]): boolean {
     return keywords.some(keyword => {
       const regExpMatchArray = keyword.match(REG_EXP_PATTERN)
       if (regExpMatchArray) {
