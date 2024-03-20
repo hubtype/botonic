@@ -22,6 +22,7 @@ export class HubtypeApiService {
       question: string
       answer: string
       has_knowledge: boolean
+      is_faithful: boolean
       sources: {
         knowledge_source_id: string
         page?: number
