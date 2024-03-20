@@ -10,6 +10,5 @@ export function conditionalProvider({
   results,
 }: ConditionalProviderArgs): string {
   const provider = request.session.user.provider
-  if (results.includes(provider)) return provider
-  return 'default'
+  return results.find(result => result === provider) || 'default'
 }
