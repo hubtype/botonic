@@ -1,5 +1,5 @@
 {
-  "name": "blank",
+  "name": "teleco-offers",
   "version": "0.25.0",
   "scripts": {
     "build": "webpack --env target=all --mode=production",

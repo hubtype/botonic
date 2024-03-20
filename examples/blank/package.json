@@ -1,6 +1,6 @@
 {
-  "name": "blank",
-  "version": "0.25.0",
+  "name": "@botonic/example-blank",
+  "version": "0.25.0-alpha.0",
   "scripts": {
     "build": "webpack --env target=all --mode=production",
     "start": "webpack-dev-server --env target=dev --mode=development",
@@ -9,10 +9,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
-    "@botonic/react": "0.25.0-alpha.5"
+    "@botonic/react": "0.25.0-alpha.6"
   },
   "devDependencies": {
-    "@botonic/dx": "0.25.0-alpha.5"
+    "@botonic/dx": "0.25.0-alpha.7"
   },
   "engines": {
     "node": ">=20.0.0"

@@ -59,7 +59,6 @@
   },
   "license": "MIT",
   "workspaces": [
-    "packages/*",
-    "exmaples/*"
+    "packages/*"
   ]
 }

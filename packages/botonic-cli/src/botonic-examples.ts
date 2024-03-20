@@ -2,19 +2,17 @@ import path from 'path'
 
 import { BotonicProject } from './interfaces'
 
-const GITHUB_EXAMPLES_PATH = 'hubtype/botonic-examples'
-
 export const EXAMPLES: BotonicProject[] = [
   {
     name: 'blank',
     description: 'Blank: A minimal template to start from scratch',
-    uri: `${GITHUB_EXAMPLES_PATH}/blank`,
+    version: '0.25.0-alpha.0',
     localTestPath: path.resolve(__dirname, '../../../examples/blank'),
   },
   {
     name: 'blank-typescript',
     description: 'Blank (TypeScript): A minimal template to start from scratch',
-    uri: `${GITHUB_EXAMPLES_PATH}/blank-typescript`,
+    version: '0.25.0-alpha.0',
     localTestPath: path.resolve(
       __dirname,
       '../../../examples/blank-typescript'
@@ -24,58 +22,58 @@ export const EXAMPLES: BotonicProject[] = [
     name: 'booking-platform',
     description:
       'Booking Platform: Use custom messages and webviews in order to book a reservation in a hotel',
-    uri: `${GITHUB_EXAMPLES_PATH}/booking-platform`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/booking-platform',
   },
   {
     name: 'childs',
     description: 'Childs: Understand how childRoutes works',
-    uri: `${GITHUB_EXAMPLES_PATH}/childs`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/childs',
   },
   {
     name: 'custom-webchat',
     description: 'Custom Webchat: See how it looks like a custom webchat',
-    uri: `${GITHUB_EXAMPLES_PATH}/custom-webchat`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/custom-webchat',
   },
   {
     name: 'dynamic-carousel',
     description: 'Dynamic Carousel: See a dynamic carousel for Facebook',
-    uri: `${GITHUB_EXAMPLES_PATH}/dynamic-carousel`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/dynamic-carousel',
   },
   {
     name: 'dynamodb',
     description: 'DynamoDB: Using AWS DynamoDB to track events.',
-    uri: `${GITHUB_EXAMPLES_PATH}/dynamodb`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/dynamodb',
   },
   {
     name: 'handoff',
     description:
       'Handoff: Test how to transfer a conversation into Hubtype Desk',
-    uri: `${GITHUB_EXAMPLES_PATH}/handoff`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/handoff',
   },
   {
     name: 'intent',
     description: 'Bot that uses external AI like DialogFlow.',
-    uri: `${GITHUB_EXAMPLES_PATH}/intent`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/intent',
   },
   {
     name: 'telco-offers',
     description:
       'Telco Offers: Flow to acquire an Internet or a cell phone rate using buttons and replies',
-    uri: `${GITHUB_EXAMPLES_PATH}/telco-offers`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/teleco-offers',
   },
   {
     name: 'tutorial',
     description:
       'Tutorial: An example with different examples that help you get started fast',
-    uri: `${GITHUB_EXAMPLES_PATH}/tutorial`,
+    version: '0.25.0-alpha.0',
     localTestPath: '../../../examples/tutorial',
   },
 ]
