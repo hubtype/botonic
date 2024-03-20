@@ -20,13 +20,36 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.24.1] - 2024-03-20
+
+### Added
+
+- [@botonic/plugin-knowledge-bases](https://www.npmjs.com/package/@botonic/plugin-knowledge-bases)
+
+- [add `is_faithful` attribut in api response](https://github.com/hubtype/botonic/pull/2798)
+
+## [0.24.6] - 2024-03-20
+
+### Added
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [`country conditional` function](https://github.com/hubtype/botonic/pull/2788)
+  - [`custom conditional` function](https://github.com/hubtype/botonic/pull/2791)
+
+### Changed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [resolve `regex in keywords`](https://github.com/hubtype/botonic/pull/2797)
+
 ## [0.24.5] - 2024-03-11
 
 ### Fixed
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
-- [use `resolvedLocale` in knowledge-base content](https://github.com/hubtype/botonic/pull/2789)
+  - [use `resolvedLocale` in knowledge-base content](https://github.com/hubtype/botonic/pull/2789)
 
 ## [0.24.5] - 2024-03-08
 
@@ -34,7 +57,7 @@ All notable changes to Botonic will be documented in this file.
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
-- [resolve use `bot actions` in whatsapp button list](https://github.com/hubtype/botonic/pull/2787)
+  - [resolve use `bot actions` in whatsapp button list](https://github.com/hubtype/botonic/pull/2787)
 
 ## [0.24.3] - 2024-03-05
 
