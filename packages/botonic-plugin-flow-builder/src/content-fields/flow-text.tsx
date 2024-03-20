@@ -1,8 +1,9 @@
-import { Text } from '@botonic/react'
+import { ActionRequest, Text } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
-import { VARIABLE_REGEX } from '../constants'
+import { ACCESS_TOKEN_VARIABLE_KEY, VARIABLE_PATTERN } from '../constants'
+import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtButtonStyle, HtTextNode } from './hubtype-fields'
@@ -21,38 +22,43 @@ export class FlowText extends ContentFieldsBase {
     const newText = new FlowText(cmsText.id)
     newText.code = cmsText.code
     newText.buttonStyle = cmsText.content.buttons_style || HtButtonStyle.BUTTON
-    newText.text = this.replaceVariables(
-      this.getTextByLocale(locale, cmsText.content.text),
-      cmsApi.request.session.user.extra_data
-    )
+    newText.text = this.getTextByLocale(locale, cmsText.content.text)
     newText.buttons = cmsText.content.buttons.map(button =>
       FlowButton.fromHubtypeCMS(button, locale, cmsApi)
     )
     return newText
   }
 
-  static replaceVariables(
-    text: string,
-    extraData?: Record<string, any>
-  ): string {
-    const matches = text.match(VARIABLE_REGEX)
+  static replaceVariables(text: string, request: ActionRequest): string {
+    const matches = text.match(VARIABLE_PATTERN)
 
     let replacedText = text
-    if (matches && extraData) {
+    if (matches && request) {
       matches.forEach(match => {
-        const variable = match.slice(1, -1)
-        const value = extraData[variable] ?? match
-        replacedText = replacedText.replace(match, value)
+        const keyPath = match.slice(1, -1)
+        const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
+          ? match
+          : getValueFromKeyPath(request, keyPath)
+        replacedText = replacedText.replace(
+          match,
+          this.isValidType(botVariable) ? botVariable : match
+        )
       })
     }
 
     return replacedText
   }
 
-  toBotonic(id: string): JSX.Element {
+  private static isValidType(botVariable: any): boolean {
+    const validTypes = ['boolean', 'string', 'number']
+    return validTypes.includes(typeof botVariable)
+  }
+
+  toBotonic(id: string, request: ActionRequest): JSX.Element {
+    const replacedText = FlowText.replaceVariables(this.text, request)
     return (
       <Text key={id}>
-        {this.text}
+        {replacedText}
         {this.buttons.map((button, buttonIndex) =>
           button.renderButton(buttonIndex, this.buttonStyle)
         )}
