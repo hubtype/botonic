@@ -7,6 +7,7 @@
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
+    "test": "echo Skipping tests...",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",

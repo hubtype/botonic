@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "echo Nothing to build",
+    "test": "echo Skipping tests...",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
