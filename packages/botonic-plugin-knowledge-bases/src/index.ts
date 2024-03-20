@@ -37,7 +37,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     return {
       question: response.data.question,
       answer: response.data.answer,
-      hasKnowledge: response.data.has_knowledge,
+      hasKnowledge: response.data.has_knowledge && response.data.is_faithful,
       sources,
     }
   }
