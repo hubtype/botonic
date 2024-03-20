@@ -37,7 +37,7 @@ export class FlowText extends ContentFieldsBase {
       matches.forEach(match => {
         const keyPath = match.slice(1, -1)
         const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
-          ? getValueFromKeyPath(request, match)
+          ? match
           : getValueFromKeyPath(request, keyPath)
         replacedText = replacedText.replace(
           match,
