@@ -1,7 +1,7 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import { SEPARATOR } from './constants'
+import { REG_EXP_PATTERN, SEPARATOR } from './constants'
 import {
   HtBotActionNode,
   HtFallbackNode,
@@ -169,13 +169,30 @@ export class FlowBuilderApi {
     locale: string
   ): boolean {
     const result = node.content.keywords.find(
-      i => i.locale === locale && this.containsAnyKeywords(input, i.values)
+      keywords =>
+        keywords.locale === locale &&
+        this.inputMatchesAnyKeyword(input, keywords.values)
     )
     return Boolean(result)
   }
 
-  private containsAnyKeywords(input: string, keywords: string[]): boolean {
-    return keywords.some(keyword => input.includes(keyword))
+  private inputMatchesAnyKeyword(input: string, keywords: string[]): boolean {
+    return keywords.some(keyword => {
+      const regExpMatchArray = keyword.match(REG_EXP_PATTERN)
+      if (regExpMatchArray) {
+        return this.resolveKeywordAsRegExp(regExpMatchArray, input)
+      }
+      return input.includes(keyword)
+    })
+  }
+
+  private resolveKeywordAsRegExp(
+    regExpMatchArray: RegExpMatchArray,
+    input: string
+  ) {
+    const [, pattern, flags] = regExpMatchArray
+    const keywordAsRegExp = new RegExp(pattern, flags)
+    return input.match(keywordAsRegExp)
   }
 
   getPayload(target?: HtNodeLink): string | undefined {
