@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders WhatsappButtonList component 1`] = `
+<message
+  body="This is the body"
+  button="Select option"
+  sections="[{"title":"Section 1","rows":[{"id":"1","title":"Row 1","description":"Description 1"},{"id":"2","title":"Row 2"}]},{"rows":[{"id":"3","title":"Row 3"},{"id":"4","title":"Row 4","description":"Description 4"}]}]"
+  type="whatsapp-button-list"
+/>
+`;
+
+exports[`renders WhatsappButtonList component but shows console.error due to long IDs 1`] = `
+<message
+  body="This is the body"
+  button="Button with more ..."
+  sections="[{"rows":[{"id":"1","title":"Row 1"},{"id":"ID larger than 200 characters to make the console error appear. ID larger than 200 characters to make the console error appear. ID larger than 200 characters to make the console error appear. ID larger than 200 characters to make the console error appear.","title":"Row 2"}]}]"
+  type="whatsapp-button-list"
+/>
+`;
+
+exports[`renders WhatsappButtonList component with truncated contents 1`] = `
+<message
+  body="This is the body"
+  button="Button with more ..."
+  sections="[{"title":"Section 1","rows":[{"id":"1","title":"Row 1","description":"Description 1"},{"id":"2","title":"Row 2","description":"Description 2"}]},{"title":"Section 2 with more t...","rows":[{"id":"3","title":"Row 3 with more than ...","description":"Description 3 with a very long text with more than 72 characters in d..."},{"id":"4","title":"Row 4","description":"Description 4"}]}]"
+  type="whatsapp-button-list"
+/>
+`;
