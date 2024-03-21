@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
+import { truncateText } from '../../util/strings'
 import { Button } from '../button'
 import { MultichannelContext } from './multichannel-context'
 import { isWhatsapp, WHATSAPP_MAX_BUTTON_CHARS } from './multichannel-utils'
@@ -49,13 +50,6 @@ export const MultichannelButton = props => {
       text = newline + `${index}${text}`
     } else if (hasUrl()) {
       text = newline + `- ${text}`
-    }
-    return text
-  }
-
-  const truncateText = (text, maxLength, ellipsis = '...') => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength - ellipsis.length) + ellipsis
     }
     return text
   }
