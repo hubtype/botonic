@@ -165,7 +165,7 @@ export const MultichannelText = props => {
             return row
           })
           const whatsbuttonlistProps = {
-            body: index === 0 ? textElements : buttonsTextSeparator,
+            body: index === 0 ? texts.join('') : buttonsTextSeparator,
             button: menuButtonTextWhatsappList,
             sections: [{ rows }],
           }
