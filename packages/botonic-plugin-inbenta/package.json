@@ -1,16 +1,17 @@
 {
   "name": "@botonic/plugin-inbenta",
-  "version": "0.25.0-alpha.0",
+  "version": "0.25.0-beta.0",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
     "build": "echo Nothing to build",
+    "test": "echo Skipping tests...",
     "prepublishOnly": "npm i",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "axios": "^1.6.7"
+    "axios": "^1.6.8"
   },
   "devDependencies": {},
   "keywords": [

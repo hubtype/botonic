@@ -1,4 +1,4 @@
-import { HubtypeSession, Plugin, PluginPreRequest } from '@botonic/core'
+import type { HubtypeSession, Plugin, PluginPreRequest } from '@botonic/core'
 
 import { HubtypeApiService } from './hubtype-knowledge-api-service'
 import { KnowledgeBaseResponse, PluginKnowledgeBaseOptions } from './types'

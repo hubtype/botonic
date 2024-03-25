@@ -1,9 +1,9 @@
 {
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.25.0-alpha.1",
+  "version": "0.25.0-beta.0",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
-  "types": "lib/index.d.ts",
+  "types": "lib/cjs/index.d.ts",
   "scripts": {
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build_unit_tests": "tsc -b tests/tsconfig.json",
@@ -12,10 +12,7 @@
     "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
-    "prepublishOnly": "npm run lint_core && rm -rf lib && npm i && npm run build && npm run test",
-    "preversion": "npm run lint",
-    "version": "git add -A src tests",
-    "postversion": "git push && git push --tags"
+    "prepublishOnly": "npm run lint_core && rm -rf lib && npm i && npm run build && npm run test"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
@@ -24,7 +21,7 @@
     "aws-sdk": "^2.1554.0"
   },
   "devDependencies": {
-    "@botonic/core": "0.25.0-alpha.2",
+    "@botonic/core": "0.25.0-beta.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "20.11.17"
   },

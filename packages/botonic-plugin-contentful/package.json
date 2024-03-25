@@ -1,9 +1,10 @@
 {
   "name": "@botonic/plugin-contentful",
-  "version": "0.25.0-alpha.1",
+  "version": "0.25.0-beta.0",
   "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "lib/cjs/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hubtype/botonic.git"
@@ -17,10 +18,7 @@
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
-    "prepublishOnly": "npm run lint_core && npm i && npm run build && npm test",
-    "preversion": "npm run lint",
-    "version": "git add -A src tests",
-    "postversion": "git push && git push --tags"
+    "prepublishOnly": "npm run lint_core && npm i && npm run build && npm test"
   },
   "files": [
     "bin/**",

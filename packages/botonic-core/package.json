@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.25.0-alpha.4",
+  "version": "0.25.0-beta.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
@@ -31,7 +31,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.23.9",
     "aws-sdk": "^2.1404.0",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "decode": "^0.3.0",
     "dynamodb-toolbox": "^0.3.4",
     "fast-xml-parser": "3.19.0",

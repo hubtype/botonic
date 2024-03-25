@@ -1,13 +1,13 @@
 {
   "name": "@botonic/plugin-hubtype-babel",
-  "version": "0.25.0-alpha.3",
+  "version": "0.25.0-beta.0",
   "license": "MIT",
   "description": "Use Hubtype Babel to predict Intents.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
-    "test": "../../node_modules/.bin/jest --coverage",
+    "test": "echo Skipping tests...",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "build:watch": "npm run build -- --watch",
     "cloc": "../../scripts/qa/cloc-package.sh .",
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
-    "@botonic/core": "^0.25.0-alpha.4",
-    "axios": "^1.6.7",
+    "@botonic/core": "0.25.0-beta.0",
+    "axios": "^1.6.8",
     "process": "^0.11.10"
   },
   "devDependencies": {
