@@ -22,7 +22,7 @@ export async function getSmartIntentNodeByInput(
   try {
     const response = await axios({
       method: 'POST',
-      url: `${process.env.HUBTYPE_API_URL}/external/v1/ai/smart_intents/inference`,
+      url: `${process.env.HUBTYPE_API_URL}/external/v1/ai/smart_intents/inference/`,
       headers: {
         Authorization: `Bearer ${request.session._access_token}`,
         'Content-Type': 'application/json',
