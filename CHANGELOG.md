@@ -20,13 +20,21 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.24.5] - 2024-03-21
+
+### Changed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [truncate long texts in WhatsappButtonList component](https://github.com/hubtype/botonic/pull/2798)
+
 ## [0.24.1] - 2024-03-20
 
 ### Added
 
 - [@botonic/plugin-knowledge-bases](https://www.npmjs.com/package/@botonic/plugin-knowledge-bases)
 
-- [add `is_faithful` attribut in api response](https://github.com/hubtype/botonic/pull/2798)
+  - [add `is_faithful` attribut in api response](https://github.com/hubtype/botonic/pull/2798)
 
 ## [0.24.6] - 2024-03-20
 

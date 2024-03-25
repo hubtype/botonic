@@ -22,13 +22,9 @@ exports[`Multichannel text display URL buttons as text even if buttonsAsText is 
 exports[`Multichannel text display custom text as button separator when more than 3 buttons in message 1`] = `
 [
   <message
-    body={
-      [
-        "The verbose text",
-      ]
-    }
+    body="The verbose text"
     button="Show options"
-    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"},{"id":"payload4","title":"button text5"}]}]"
+    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text long..."},{"id":"payload3","title":"button text5"},{"id":"payload4","title":"button text5"}]}]"
     type="whatsapp-button-list"
   />,
   <message
@@ -97,13 +93,9 @@ exports[`Multichannel text just text 1`] = `
 exports[`Multichannel text split messages with more than 3 postback buttons into separate messages (without webview buttons) 1`] = `
 [
   <message
-    body={
-      [
-        "The verbose text",
-      ]
-    }
+    body="The verbose text"
     button="Show options"
-    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"}]}]"
+    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text long..."},{"id":"payload3","title":"button text5"}]}]"
     type="whatsapp-button-list"
   />,
   <message
@@ -113,7 +105,8 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
     type="text"
     typing={0}
   >
-    \n- button text2: http://adrss
+    
+- button text2: http://adrss
   </message>,
 ]
 `;
@@ -121,13 +114,9 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
 exports[`Multichannel text split messages with more than 3 postback buttons into separate messages 1`] = `
 [
   <message
-    body={
-      [
-        "The verbose text",
-      ]
-    }
+    body="The verbose text"
     button="Show options"
-    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text longer than 20 chars"},{"id":"payload3","title":"button text5"}]}]"
+    sections="[{"rows":[{"id":"payload1","title":"button text1"},{"id":"__PATH_PAYLOAD__path","title":"button text3"},{"id":"payload2","title":"button with text long..."},{"id":"payload3","title":"button text5"}]}]"
     type="whatsapp-button-list"
   />,
   <message
@@ -137,7 +126,8 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
     type="text"
     typing={0}
   >
-    \n- button text2: http://adrss
+    
+- button text2: http://adrss
   </message>,
   <message
     buttonsAsText={0}
