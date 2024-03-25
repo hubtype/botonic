@@ -18,7 +18,7 @@
     "react-stars": "^2.2.5"
   },
   "devDependencies": {
-    "@baotonic/dx": "0.25.0-alpha.5"
+    "@botonic/dx": "0.25.0-alpha.5"
   },
   "engines": {
     "node": ">=20.0.0"
