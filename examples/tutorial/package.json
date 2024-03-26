@@ -1,6 +1,6 @@
 {
-  "name": "tutorial",
-  "version": "0.25.0",
+  "name": "@botonic/example-tutorial",
+  "version": "0.25.0-beta.0",
   "scripts": {
     "analyze": "esbuild-visualizer --metadata ./meta.json",
     "build:esbuild": "rm -rf ./dist; ts-node ./esbuild-config.ts",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
-    "@botonic/react": "0.25.0-alpha.5",
+    "@botonic/react": "0.25.0-beta.0",
     "core-js": "^3.36.0"
   },
   "devDependencies": {
@@ -22,7 +22,7 @@
     "esbuild-visualizer": "^0.4.1",
     "esbuild": "^0.19.4",
     "@craftamap/esbuild-plugin-html": "^0.5.0",
-    "@botonic/dx": "0.25.0-alpha.5"
+    "@botonic/dx": "0.25.0-beta.0"
   },
   "engines": {
     "node": ">=20.0.0"

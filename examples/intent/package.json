@@ -1,6 +1,6 @@
 {
-  "name": "intent",
-  "version": "0.25.0",
+  "name": "@botonic/example-intent",
+  "version": "0.25.0-beta.0",
   "scripts": {
     "build": "webpack --env target=all --mode=production",
     "start": "webpack-dev-server --env target=dev --mode=development",
@@ -8,12 +8,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "@botonic/plugin-dialogflow": "0.25.0-alpha.2",
+    "@botonic/plugin-dialogflow": "0.25.0-beta.0",
     "@babel/runtime": "^7.23.9",
-    "@botonic/react": "0.25.0-alpha.5"
+    "@botonic/react": "0.25.0-beta.0"
   },
   "devDependencies": {
-    "@botonic/dx": "0.25.0-alpha.5"
+    "@botonic/dx": "0.25.0-beta.0"
   },
   "engines": {
     "node": ">=20.0.0"
