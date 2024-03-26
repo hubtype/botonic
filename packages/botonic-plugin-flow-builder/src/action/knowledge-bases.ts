@@ -47,7 +47,7 @@ export async function createNodeFromKnowledgeBase(
             buttons_style: undefined,
             buttons: [],
           },
-          // flow_id: '', // TODO: Add flow_id consequentially with HtBaseNode changes
+          flow_id: 'randomUUID', // TODO: Add flow_id consequentially with HtBaseNode changes
           id: uuid(),
           code: 'knowledge-response',
           meta: {
