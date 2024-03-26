@@ -1,6 +1,5 @@
 import { Config } from '@oclif/config'
 import { assert } from 'console'
-// import { promises } from 'fs'
 import { join } from 'path'
 import { chdir } from 'process'
 
@@ -36,7 +35,7 @@ describe('TEST: New command (downloading project)', () => {
     const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     const packageJSON = readJSON(join(tmpPath, 'package.json'))
-    expect((packageJSON as any).name).toEqual('blank')
+    expect((packageJSON as any).name).toEqual(tmpPath)
     removeRecursively(tmpPath)
   })
   it('Fails to download into path', async () => {
@@ -45,7 +44,7 @@ describe('TEST: New command (downloading project)', () => {
       newCommand.downloadSelectedProjectIntoPath(
         {
           name: 'unexistingProject',
-          uri: 'https://not-existing.com',
+          version: '0.0.0',
           description: 'desc',
           localTestPath: 'unexistingLocalPath',
         },

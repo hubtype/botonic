@@ -79,7 +79,7 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
 
   getAnonymousId(): string | undefined {
     const content = this.load()
-    return content?.analytics.anonymous_id
+    return content?.analytics?.anonymous_id
   }
 
   hasAnonymousId(): boolean {

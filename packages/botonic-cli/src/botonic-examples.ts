@@ -2,80 +2,78 @@ import path from 'path'
 
 import { BotonicProject } from './interfaces'
 
-const GITHUB_EXAMPLES_PATH = 'hubtype/botonic-examples'
+const exampleTestPath = path.resolve(__dirname, '..', '..', '..', 'examples')
+const exampleVersion = '0.25.0-alpha.0'
 
 export const EXAMPLES: BotonicProject[] = [
   {
     name: 'blank',
     description: 'Blank: A minimal template to start from scratch',
-    uri: `${GITHUB_EXAMPLES_PATH}/blank`,
-    localTestPath: path.resolve(__dirname, '../../../examples/blank'),
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'blank'),
   },
   {
     name: 'blank-typescript',
     description: 'Blank (TypeScript): A minimal template to start from scratch',
-    uri: `${GITHUB_EXAMPLES_PATH}/blank-typescript`,
-    localTestPath: path.resolve(
-      __dirname,
-      '../../../examples/blank-typescript'
-    ),
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'blank-typescript'),
   },
   {
     name: 'booking-platform',
     description:
       'Booking Platform: Use custom messages and webviews in order to book a reservation in a hotel',
-    uri: `${GITHUB_EXAMPLES_PATH}/booking-platform`,
-    localTestPath: '../../../examples/booking-platform',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'booking-platform'),
   },
   {
     name: 'childs',
     description: 'Childs: Understand how childRoutes works',
-    uri: `${GITHUB_EXAMPLES_PATH}/childs`,
-    localTestPath: '../../../examples/childs',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'childs'),
   },
   {
     name: 'custom-webchat',
     description: 'Custom Webchat: See how it looks like a custom webchat',
-    uri: `${GITHUB_EXAMPLES_PATH}/custom-webchat`,
-    localTestPath: '../../../examples/custom-webchat',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'custom-webchat'),
   },
   {
     name: 'dynamic-carousel',
     description: 'Dynamic Carousel: See a dynamic carousel for Facebook',
-    uri: `${GITHUB_EXAMPLES_PATH}/dynamic-carousel`,
-    localTestPath: '../../../examples/dynamic-carousel',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'dynamic-carousel'),
   },
   {
     name: 'dynamodb',
     description: 'DynamoDB: Using AWS DynamoDB to track events.',
-    uri: `${GITHUB_EXAMPLES_PATH}/dynamodb`,
-    localTestPath: '../../../examples/dynamodb',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'dynamodb'),
   },
   {
     name: 'handoff',
     description:
       'Handoff: Test how to transfer a conversation into Hubtype Desk',
-    uri: `${GITHUB_EXAMPLES_PATH}/handoff`,
-    localTestPath: '../../../examples/handoff',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'handoff'),
   },
   {
     name: 'intent',
     description: 'Bot that uses external AI like DialogFlow.',
-    uri: `${GITHUB_EXAMPLES_PATH}/intent`,
-    localTestPath: '../../../examples/intent',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'intent'),
   },
   {
     name: 'telco-offers',
     description:
       'Telco Offers: Flow to acquire an Internet or a cell phone rate using buttons and replies',
-    uri: `${GITHUB_EXAMPLES_PATH}/telco-offers`,
-    localTestPath: '../../../examples/teleco-offers',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'telco-offers'),
   },
   {
     name: 'tutorial',
     description:
       'Tutorial: An example with different examples that help you get started fast',
-    uri: `${GITHUB_EXAMPLES_PATH}/tutorial`,
-    localTestPath: '../../../examples/tutorial',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'tutorial'),
   },
 ]

@@ -1,19 +1,25 @@
 import { Command } from '@oclif/command'
 import { exec as childProcessExec } from 'child_process'
 import { bold, red } from 'colors'
-import fetchRepoDir from 'fetch-repo-dir'
+// import fetchRepoDir from 'fetch-repo-dir'
 import { moveSync } from 'fs-extra'
 // eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
 import ora from 'ora'
 import { platform } from 'os'
-import { join } from 'path'
+import path, { join } from 'path'
 import { promisify } from 'util'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { EXAMPLES } from '../botonic-examples'
 import { BotonicProject } from '../interfaces'
+import {
+  downloadSelectedProject,
+  editPackageJsonName,
+  extractTarGz,
+  renameFolder,
+} from '../util/download-gzip'
 import { pathExists, removeRecursively } from '../util/file-system'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -78,8 +84,14 @@ Creating...
       )
       process.chdir(userProjectDirName)
       const devPlatform = platform()
-      if (devPlatform === 'win32') await this.installDependencies()
-      else await this.installDependencies('CXXFLAGS="--std=c++14" npm install') // Solve issue with node-sass and higher versions of Node. Ref: https://github.com/nodejs/node/issues/38367#issuecomment-1025343439)
+      if (devPlatform === 'win32') {
+        await this.installDependencies()
+      } else {
+        // TODO: review this when node-sass is nedded again
+        // Solve issue with node-sass and higher versions of Node.
+        // Ref: https://github.com/nodejs/node/issues/38367#issuecomment-1025343439)
+        await this.installDependencies('CXXFLAGS="--std=c++14" npm install')
+      }
       this.botonicApiService.beforeExit()
       moveSync(
         join('..', '.botonic.json'),
@@ -116,21 +128,35 @@ Creating...
 
   async downloadSelectedProjectIntoPath(
     selectedProject: BotonicProject,
-    path: string
+    userProjectDirName: string
   ): Promise<void> {
-    if (pathExists(path)) removeRecursively(path)
-    const spinner = ora({
+    if (pathExists(userProjectDirName)) removeRecursively(userProjectDirName)
+    const spinnerDownload = ora({
       text: 'Downloading files...',
       spinner: 'bouncingBar',
     }).start()
     try {
-      await fetchRepoDir({
-        src: selectedProject.uri,
-        dir: path,
+      const pathToCreateExample = path.join('.')
+      await downloadSelectedProject({
+        exampleName: selectedProject.name,
+        exampleVersion: selectedProject.version,
       })
-      spinner.succeed()
+      spinnerDownload.succeed()
+
+      const spinnerExtract = ora({
+        text: 'Extracting files...',
+        spinner: 'bouncingBar',
+      }).start()
+      await extractTarGz({
+        projectPath: pathToCreateExample,
+        exampleName: selectedProject.name,
+        exampleVersion: selectedProject.version,
+      })
+      spinnerExtract.succeed()
+      await renameFolder(userProjectDirName)
+      await editPackageJsonName(pathToCreateExample, userProjectDirName)
     } catch (e) {
-      spinner.fail()
+      spinnerDownload.fail()
       const error = `Downloading Project: ${selectedProject.name}: ${String(e)}`
       this.telemetry.trackError(error)
       throw new Error(error)

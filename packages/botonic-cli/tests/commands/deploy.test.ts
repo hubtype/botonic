@@ -25,7 +25,6 @@ assert(BLANK_EXAMPLE.name === 'blank')
 describe('TEST: Deploy pipeline', () => {
   test('Install, build and deploy a project', async () => {
     const tmpPath = createTempDir('botonic-tmp')
-    // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     copy(BLANK_EXAMPLE.localTestPath, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
