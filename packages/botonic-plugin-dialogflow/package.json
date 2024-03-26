@@ -16,12 +16,12 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
+    "@botonic/core": "0.25.0-beta.0",
     "axios": "^1.6.8",
     "jsrsasign": "^10.9.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@botonic/core": "0.25.0-beta.0",
     "@types/jsrsasign": "^10.5.12",
     "core-js": "^3.35.1"
   },

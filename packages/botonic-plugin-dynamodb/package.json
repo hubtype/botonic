@@ -18,10 +18,10 @@
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@babel/runtime": "^7.23.9",
+    "@botonic/core": "0.25.0-beta.0",
     "aws-sdk": "^2.1554.0"
   },
   "devDependencies": {
-    "@botonic/core": "0.25.0-beta.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "20.11.17"
   },
