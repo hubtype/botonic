@@ -1,7 +1,6 @@
 import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import { getNodeByUserInput } from './action/user-input'
 import { FlowBuilderApi } from './api'
 import { SEPARATOR, SOURCE_INFO_SEPARATOR } from './constants'
 import {
@@ -28,6 +27,7 @@ import {
   KnowledgeBaseResponse,
   PayloadParamsBase,
 } from './types'
+import { getNodeByUserInput } from './user-input'
 import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {

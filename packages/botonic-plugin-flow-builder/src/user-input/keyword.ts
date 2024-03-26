@@ -2,7 +2,7 @@ import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import { HtKeywordNode } from '../content-fields/hubtype-fields'
-import { EventName, trackEvent } from './tracking'
+import { EventName, trackEvent } from '../tracking'
 
 export async function getKeywordNodeByInput(
   cmsApi: FlowBuilderApi,

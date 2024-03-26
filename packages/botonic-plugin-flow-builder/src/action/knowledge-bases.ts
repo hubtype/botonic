@@ -9,7 +9,7 @@ import {
   HtTextNode,
 } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { EventName, trackEvent } from './tracking'
+import { EventName, trackEvent } from '../tracking'
 
 export async function createNodeFromKnowledgeBase(
   cmsApi: FlowBuilderApi,

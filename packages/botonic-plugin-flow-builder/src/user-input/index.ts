@@ -16,12 +16,6 @@ export async function getNodeByUserInput(
   request: ActionRequest
 ): Promise<HtSmartIntentNode | HtIntentNode | HtKeywordNode | undefined> {
   if (request.input.data) {
-    const smartIntentNode = await getSmartIntentNodeByInput(cmsApi, request)
-    if (smartIntentNode) return smartIntentNode
-
-    const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
-    if (intentNode) return intentNode
-
     const keywordNode = await getKeywordNodeByInput(
       cmsApi,
       locale,
@@ -29,6 +23,12 @@ export async function getNodeByUserInput(
       request.input.data
     )
     if (keywordNode) return keywordNode
+
+    const smartIntentNode = await getSmartIntentNodeByInput(cmsApi, request)
+    if (smartIntentNode) return smartIntentNode
+
+    const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
+    if (intentNode) return intentNode
   }
   return undefined
 }
