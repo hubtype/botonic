@@ -4,7 +4,7 @@ import { ActionRequest } from '@botonic/react'
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
 export interface BotonicPluginFlowBuilderOptions {
-  flowUrl: string
+  flowUrl?: string
   flow?: HtFlowBuilderData
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
