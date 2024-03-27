@@ -1,6 +1,6 @@
 {
   "name": "@botonic/example-telco-offers",
-  "version": "0.25.0-beta.0",
+  "version": "0.25.0",
   "scripts": {
     "build": "webpack --env target=all --mode=production",
     "start": "webpack-dev-server --env target=dev --mode=development",
@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "@botonic/react": "0.25.0-beta.0"
+    "@botonic/react": "^0.25.0"
   },
   "devDependencies": {
-    "@botonic/dx": "0.25.0-beta.0"
+    "@botonic/dx": "^0.25.0"
   }
 }

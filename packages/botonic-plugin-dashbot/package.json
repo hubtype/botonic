@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dashbot",
-  "version": "0.25.0-beta.0",
+  "version": "0.25.0",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "test": "echo Skipping tests...",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "lint": "npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'",
+    "prepublishOnly": "npm i && npm run build"
   },
   "dependencies": {
     "axios": "^1.6.8",
