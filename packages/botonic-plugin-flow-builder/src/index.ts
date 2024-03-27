@@ -1,7 +1,6 @@
 import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import { getNodeByUserInput } from './action/user-input'
 import { FlowBuilderApi } from './api'
 import { SEPARATOR, SOURCE_INFO_SEPARATOR } from './constants'
 import {
@@ -28,6 +27,7 @@ import {
   KnowledgeBaseResponse,
   PayloadParamsBase,
 } from './types'
+import { getNodeByUserInput } from './user-input'
 import { resolveGetAccessToken } from './utils'
 
 export default class BotonicPluginFlowBuilder implements Plugin {
@@ -90,16 +90,21 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
   }
 
-  async getContentsByCode(
-    code: string,
+  async getContentsByContentID(
+    contentID: string,
     locale: string,
     prevContents?: FlowContent[]
   ): Promise<FlowContent[]> {
-    const node = this.cmsApi.getNodeByCode(code) as HtNodeWithContent
+    const node = this.cmsApi.getNodeByContentID(contentID) as HtNodeWithContent
     return await this.getContentsByNode(node, locale, prevContents)
   }
 
-  async getContentsById(
+  getUUIDByContentID(contentID: string): string {
+    const node = this.cmsApi.getNodeByContentID(contentID)
+    return node.id
+  }
+
+  private async getContentsById(
     id: string,
     locale: string,
     prevContents?: FlowContent[]

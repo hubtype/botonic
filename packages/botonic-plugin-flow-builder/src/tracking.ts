@@ -1,6 +1,6 @@
 import { ActionRequest } from '@botonic/react'
 
-import { getFlowBuilderPlugin } from '../helpers'
+import { getFlowBuilderPlugin } from './helpers'
 
 export async function trackEvent(
   request: ActionRequest,

@@ -6,6 +6,7 @@ import {
   HtBotActionNode,
   HtFallbackNode,
   HtFlowBuilderData,
+  HtGoToFlow,
   HtIntentNode,
   HtKeywordNode,
   HtNodeComponent,
@@ -15,6 +16,7 @@ import {
   HtNodeWithoutContentType,
   HtPayloadNode,
 } from './content-fields/hubtype-fields'
+import { HtSmartIntentNode } from './content-fields/hubtype-fields/smart-intent'
 import { FlowBuilderApiOptions } from './types'
 
 export class FlowBuilderApi {
@@ -56,11 +58,11 @@ export class FlowBuilderApi {
     return node as T
   }
 
-  getNodeByCode(code: string): HtNodeComponent {
+  getNodeByContentID(contentID: string): HtNodeComponent {
     const content = this.flow.nodes.find(node =>
-      'code' in node ? node.code === code : false
+      'code' in node ? node.code === contentID : false
     )
-    if (!content) throw Error(`Node with code: '${code}' not found`)
+    if (!content) throw Error(`Node with contentID: '${contentID}' not found`)
     return content
   }
 
@@ -122,6 +124,12 @@ export class FlowBuilderApi {
     }
 
     return undefined
+  }
+
+  getSmartIntentNodes(): HtSmartIntentNode[] {
+    return this.flow.nodes.filter(
+      node => node.type === HtNodeWithContentType.SMART_INTENT
+    ) as HtSmartIntentNode[]
   }
 
   private nodeContainsIntent(
@@ -214,11 +222,29 @@ export class FlowBuilderApi {
     const customParams = JSON.parse(
       botActionNode.content.payload_params || '{}'
     )
+
+    const followUpContentID = this.getFollowUpContentID(
+      botActionNode.follow_up?.id
+    )
+
     const payloadJson = JSON.stringify({
       ...customParams,
-      followUpId: botActionNode.follow_up?.id,
+      followUpContentID,
     })
     return `${payloadNode.content.payload}${SEPARATOR}${payloadJson}`
+  }
+
+  private getFollowUpContentID(id?: string): string | undefined {
+    const followUpNode = id
+      ? this.getNodeById<HtNodeWithContent | HtGoToFlow>(id)
+      : undefined
+
+    if (followUpNode?.type === HtNodeWithoutContentType.GO_TO_FLOW) {
+      return this.getNodeById<HtNodeWithContent>(followUpNode?.content.flow_id)
+        .code
+    } else {
+      return followUpNode?.code
+    }
   }
 
   getResolvedLocale(locale: string): string {
