@@ -3,7 +3,7 @@ import path from 'path'
 import { BotonicProject } from './interfaces'
 
 const exampleTestPath = path.resolve(__dirname, '..', '..', '..', 'examples')
-const exampleVersion = '0.25.0-beta.0'
+const exampleVersion = '0.25.0'
 
 export const EXAMPLES: BotonicProject[] = [
   {

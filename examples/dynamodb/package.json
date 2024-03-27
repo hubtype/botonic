@@ -1,6 +1,6 @@
 {
   "name": "@botonic/example-dynamodb",
-  "version": "~0.25.0",
+  "version": "0.25.0",
   "scripts": {
     "build": "webpack --env target=all --mode=production",
     "start": "webpack-dev-server --env target=dev --mode=development",
@@ -9,11 +9,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
-    "@botonic/plugin-dynamodb": "~0.25.0",
-    "@botonic/react": "~0.25.0"
+    "@botonic/plugin-dynamodb": "^0.25.0",
+    "@botonic/react": "^0.25.0"
   },
   "devDependencies": {
-    "@botonic/dx": "~0.25.0"
+    "@botonic/dx": "^0.25.0"
   },
   "engines": {
     "node": ">=20.0.0"
