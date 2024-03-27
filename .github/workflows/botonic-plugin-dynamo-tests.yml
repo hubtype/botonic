@@ -14,6 +14,6 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-dynamodb Tests
       PACKAGE: botonic-plugin-dynamodb
-      BUILD_COMMAND: npm run build_unit_tests
+      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-dynamodb && npm run build_unit_tests'
       NEEDS_CODECOV_UPLOAD: 'yes'
       NEEDS_AWS_CRED: 'yes'

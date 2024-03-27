@@ -1,12 +1,12 @@
 module.exports = {
   roots: ['src/', 'tests/'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-  },
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tests/tsconfig.json',
-    },
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tests/tsconfig.json',
+      },
+    ],
   },
   preset: 'ts-jest',
   // regex works fine with "find tests | egrep ..." but incorrectly gets files with names without 'test' or 'spec

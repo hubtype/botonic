@@ -70,8 +70,8 @@ export class Profiler {
    */
   static Profile(customName?: string) {
     return function (
-      target: any,
-      propertyKey: string,
+      _target: any,
+      _propertyKey: string,
       descriptor: PropertyDescriptor
     ) {
       const f = descriptor.value

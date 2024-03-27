@@ -2,13 +2,13 @@
 module.exports = {
   roots: ['src/', 'tests/'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
     '^.+\\.jsx?$': 'ts-jest',
-  },
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tests/tsconfig.json',
-    },
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tests/tsconfig.json',
+      },
+    ],
   },
   preset: 'ts-jest',
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(ts|tsx)$',
@@ -19,7 +19,7 @@ module.exports = {
   snapshotSerializers: [],
   setupFilesAfterEnv: [
     'jest-expect-message',
-    'jest-extended',
+    'jest-extended/all',
     '<rootDir>/jest.setup.js',
   ],
   modulePaths: ['node_modules', 'src'],

@@ -97,7 +97,7 @@ async function testSuccessAfterFailure<R>(
   const expected = expectedReturn(mockApi)
 
   mockApi.error = new Error('forced failure')
-  await expect(call(sut)).rejects.toThrowError(mockApi.error)
+  await expect(call(sut)).rejects.toThrow(mockApi.error)
   expect(mockApi.numCalls).toBe(1)
 
   mockApi.error = undefined

@@ -2,7 +2,7 @@ import { HandOffBuilder } from '@botonic/core'
 import { ActionRequest, WebchatSettings } from '@botonic/react'
 import React from 'react'
 
-import { EventName, trackEvent } from '../action/tracking'
+import { EventName, trackEvent } from '../tracking'
 import { FlowBuilderApi } from '../api'
 import { getQueueAvailability } from '../functions/conditional-queue-status'
 import { ContentFieldsBase } from './content-fields-base'

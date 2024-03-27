@@ -1,19 +1,22 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.24.6",
+  "version": "0.25.0-beta.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo Skipping tests...",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "rm -rf lib && npm run build",
+    "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+  },
+  "dependencies": {
+    "@botonic/react": "0.25.0-beta.0",
+    "axios": "^1.6.8",
+    "uuid": "^9.0.1"
   },
   "repository": {
     "type": "git",
@@ -28,13 +31,8 @@
     "src/**",
     "README.md"
   ],
-  "devDependencies": {
-    "@types/minipass": "^3.3.5",
-    "@types/node": "^18.16.0",
-    "@types/react": "^16.14.55"
-  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   },
   "keywords": [
     "bot-framework",
@@ -47,10 +45,5 @@
   "eslintConfig": {
     "extends": "../.eslintrc.js",
     "root": true
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.23.8",
-    "@botonic/react": "0.24.4",
-    "axios": "^1.6.5"
   }
 }

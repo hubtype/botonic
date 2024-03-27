@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.esm.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./lib/esm",
+    "declarationDir": "lib/esm",
+
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    // lint options
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    // options for dynamo-data-mapper-annotations
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["src/"]
+}

@@ -1,7 +1,8 @@
 export interface BotonicProject {
   name: string
   description: string
-  uri: string
+  version: string
+  localTestPath: string
 }
 
 export interface CredentialsHandlerArgs {

@@ -2,7 +2,10 @@ import { CMS } from '../cms'
 import { Keyword, Locale, Normalizer } from '../nlp'
 
 export class StemmedKeyword {
-  constructor(readonly rawKeyword: string, readonly stemmedKeyword: string[]) {}
+  constructor(
+    readonly rawKeyword: string,
+    readonly stemmedKeyword: string[]
+  ) {}
 
   toString(): string {
     return `${this.rawKeyword}: ${this.stemmedKeyword.toString()}`

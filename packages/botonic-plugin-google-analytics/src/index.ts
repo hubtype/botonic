@@ -1,11 +1,11 @@
-import { PluginPostRequest, PluginPreRequest, Session } from '@botonic/core'
+import type { Plugin, PluginPostRequest, Session } from '@botonic/core'
 import axios from 'axios'
 
 import { GA4Event, GA4Options } from './types'
 
 const defaultGetClientId = (session: Session) => session.user.id
 
-export default class BotonicPluginGoogleAnalytics4 {
+export default class BotonicPluginGoogleAnalytics4 implements Plugin {
   private baseUrl = 'https://www.google-analytics.com/mp/collect'
   private apiSecret: string
   private measurementId: string
@@ -19,8 +19,9 @@ export default class BotonicPluginGoogleAnalytics4 {
     this.getClientId = options.getClientId || defaultGetClientId
   }
 
-  pre(_request: PluginPreRequest): void {}
-  post(_request: PluginPostRequest): void {}
+  post(_request: PluginPostRequest): void {
+    return
+  }
 
   public async track(
     session: Session,

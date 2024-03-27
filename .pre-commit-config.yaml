@@ -20,29 +20,12 @@ repos:
         entry: bash scripts/qa/old/lint-package.sh packages/botonic-cli
         language: system
         files: ^packages/botonic-cli/
+
       - id: core
         name: core
         entry: scripts/qa/old/lint-package.sh packages/botonic-core
         language: system
         files: ^packages/botonic-core/
-
-      - id: core-d-ts
-        name: core-d-ts
-        entry: scripts/qa/old/lint-d-ts.sh packages/botonic-core
-        language: system
-        files: ^packages/botonic-core/src/.*\.d\.ts
-
-      - id: nlu
-        name: nlu
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-nlu
-        language: system
-        files: ^packages/botonic-plugin-nlu/
-
-      - id: nlp
-        name: nlp
-        entry: scripts/qa/old/lint-package.sh packages/botonic-nlp
-        language: system
-        files: ^packages/botonic-nlp
 
       - id: contentful
         name: contentful
@@ -74,12 +57,6 @@ repos:
         language: system
         files: ^packages/botonic-plugin-luis/
 
-      - id: plugin-nlu
-        name: plugin-nlu
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-nlu
-        language: system
-        files: ^packages/botonic-plugin-nlu/
-
       - id: segment
         name: segment
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-segment
@@ -97,12 +74,6 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-react
         language: system
         files: ^packages/botonic-react/
-
-      - id: react-d-ts
-        name: react-d-ts
-        entry: scripts/qa/old/lint-d-ts.sh packages/botonic-react
-        language: system
-        files: ^packages/botonic-react/src/.*\.d\.ts
 
       - id: google-analytics
         name: google-analytics
@@ -122,24 +93,12 @@ repos:
         language: system
         files: ^docs/
 
-      - id: plugin-ner
-        name: plugin-ner
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-ner
-        language: system
-        files: ^packages/botonic-plugin-ner/
-
-      - id: plugin-intent-classification
-        name: plugin-intent-classification
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-intent-classification
-        language: system
-        files: ^packages/botonic-plugin-intent-classification/
-
       - id: plugin-flow-builder
         name: plugin-flow-builder
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
         language: system
         files: ^packages/botonic-plugin-flow-builder/
-      
+
       - id: hubtype-analytics
         name: hubtype-analytics
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-hubtype-analytics

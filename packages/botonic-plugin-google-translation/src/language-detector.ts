@@ -6,17 +6,17 @@ import {
 export class LanguageDetector {
   constructor(
     private readonly service: GoogleTranslationApiService,
-    readonly whitelist: string[]
+    readonly whitelist?: string[]
   ) {}
 
-  async detect(text: string): Promise<string> {
+  async detect(text: string): Promise<string | undefined> {
     let detectedLanguages = await this.service.detectLanguage(text)
     if (this.whitelist) {
       detectedLanguages = this.applyWhitelist(detectedLanguages)
     }
     detectedLanguages = this.sortByConfidence(detectedLanguages)
     if (detectedLanguages.length === 0) {
-      return null
+      return undefined
     }
     return detectedLanguages[0].languageCode
   }
@@ -25,7 +25,7 @@ export class LanguageDetector {
     detectedLanguages: LanguageDetection[]
   ): LanguageDetection[] {
     return detectedLanguages.filter(d =>
-      this.whitelist.includes(d.languageCode)
+      this.whitelist!.includes(d.languageCode)
     )
   }
 

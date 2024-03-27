@@ -133,21 +133,21 @@ describe('ManageContentful fields', () => {
           newFields
         )
       } catch (e) {
-        // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(e).toBeInstanceOf(CmsException)
         if (e instanceof CmsException) {
-          // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(e.message).toInclude(
             "Error calling ManageCms.updateFields with locale 'en' on 'text' with id '627QkyJrFo3grJryj0vu6L' " +
               `with args '${JSON.stringify(newFields)}'. ` +
               "Cannot overwrite field 'text' of entry '627QkyJrFo3grJryj0vu6L'"
           )
-          // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(e.message).toInclude(
             'because ManageContext.allowOverwrites is false'
           )
 
-          // eslint-disable-next-line jest/no-try-expect,jest/no-conditional-expect
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(e.reason.message).toInclude('Cannot overwrite')
         }
       }

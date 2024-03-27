@@ -1,48 +1,61 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.23.1",
+  "version": "0.25.0-beta.0",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
   },
-  "bugs": "https://github.com/hubtype/botonic/issues",
+  "scripts": {
+    "cloc": "../../scripts/qa/cloc-package.sh .",
+    "prepublishOnly": "npm i && npm run build",
+    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json",
+    "build:watch": "rm -rf lib && ./node_modules/.bin/tsc -w",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "oclif-dev manifest && oclif-dev readme",
+    "version": "oclif-dev readme && git add README.md",
+    "postinstall": "node scripts/postinstall.js",
+    "lint": "npm run lint_core -- --fix",
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
+    "test": "../../node_modules/.bin/jest --coverage",
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"
+  },
   "dependencies": {
-    "@botonic/pulumi": "0.21.0",
     "@oclif/command": "^1.8.32",
     "@oclif/config": "^1.18.10",
     "@oclif/plugin-help": "^3.2.2",
     "analytics-node": "^3.5.0",
-    "axios": "^1.6.0",
+    "axios": "^1.6.8",
     "colors": "^1.4.0",
     "concurrently": "^6.2.1",
-    "fetch-repo-dir": "^1.0.4",
-    "form-data": "^3.0.0",
-    "fs-extra": "^10.0.0",
+    "fetch-repo-dir": "^1.0.6",
+    "form-data": "^3.0.1",
+    "fs-extra": "^10.1.0",
     "inquirer": "^7.3.3",
     "kill-port": "^1.6.1",
-    "localtunnel": "^2.0.1",
-    "ora": "^5.4.0",
+    "localtunnel": "^2.0.2",
+    "ora": "^5.4.1",
     "qs": "^6.11.2",
-    "tslib": "^2.6.0",
-    "typescript": "^5.1.6",
+    "tar": "^6.2.0",
+    "tslib": "^2.6.2",
     "uuid": "^8.3.2",
-    "zip-a-folder": "0.1.0"
+    "zip-a-folder": "3.1.6"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@oclif/dev-cli": "^1.26.0",
     "@types/analytics-node": "^3.1.4",
     "@types/concurrently": "^6.2.1",
     "@types/fs-extra": "^9.0.11",
     "@types/inquirer": "^7.3.1",
     "@types/localtunnel": "^2.0.1",
+    "@types/tar": "^6.1.11",
     "@types/uuid": "^8.3.0",
     "globby": "^11.0.3"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=20.0.0"
   },
+  "bugs": "https://github.com/hubtype/botonic/issues",
   "files": [
     "/bin",
     "/lib",
@@ -60,23 +73,6 @@
     ]
   },
   "repository": "hubtype/botonic",
-  "scripts": {
-    "cloc": "../../scripts/qa/cloc-package.sh .",
-    "ts-node": "ts-node",
-    "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "npm run build",
-    "build": "rm -rf lib && ./node_modules/.bin/tsc",
-    "build:watch": "rm -rf lib && ./node_modules/.bin/tsc -w",
-    "postpack": "rm -f oclif.manifest.json npm-shrinkwrap.json",
-    "prepack": "oclif-dev manifest && oclif-dev readme && npm shrinkwrap",
-    "version": "oclif-dev readme && git add README.md",
-    "postinstall": "node scripts/postinstall.js",
-    "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
-    "test": "../../node_modules/.bin/jest --coverage",
-    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"
-  },
   "types": "lib/index.d.ts",
   "keywords": [
     "bot-framework",

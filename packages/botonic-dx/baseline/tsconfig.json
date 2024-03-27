@@ -12,8 +12,8 @@
     "declaration": true,
     "declarationDir": "lib",
     "sourceMap": true,
-    "target": "es2015",
-    "module": "commonjs",
+    "target": "ES2022",
+    "module": "node16",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": true,
@@ -38,6 +38,6 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": true
   }
 }

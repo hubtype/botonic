@@ -1,8 +1,8 @@
 // Options about JS are for compiling @botonic .js/jsx files
 /** @type {import('jest').Config} */
 module.exports = {
-  roots: ['src/', 'tests/'],
-  preset: './node_modules/@babel/preset-typescript',
+  roots: ['<rootDir>', 'src/', 'tests/'],
+  preset: '../../node_modules/@babel/preset-typescript',
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx)$',
   testPathIgnorePatterns: [
     'lib',
@@ -17,10 +17,12 @@ module.exports = {
   ],
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
   snapshotSerializers: [],
-  modulePaths: ['node_modules', 'src'],
+  moduleDirectories: ['<rootDir>', 'node_modules', 'src'],
+  modulePaths: ['<rootDir>', 'node_modules', 'src'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/tests/__mocks__/file-mock.js',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
+  projects: ['../../packages/botonic-core'],
 }

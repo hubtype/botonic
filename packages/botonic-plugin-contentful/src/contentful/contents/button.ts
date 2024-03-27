@@ -91,7 +91,7 @@ export class ButtonDelivery extends ContentDelivery {
   // TODO move to a new CmsUtils.buttonToCallback(cms.ContentCallback)?
   private fromContentReference(
     entry: contentful.Entry<CommonEntryFields>,
-    context: cms.Context
+    _context: cms.Context
   ): cms.Button {
     const fields = entry.fields
     const text = fields.shortText || ''

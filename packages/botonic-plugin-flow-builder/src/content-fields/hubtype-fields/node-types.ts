@@ -5,6 +5,7 @@ export enum HtNodeWithContentType {
   TEXT = 'text',
   KEYWORD = 'keyword',
   INTENT = 'intent',
+  SMART_INTENT = 'smart-intent',
   FUNCTION = 'function',
   FALLBACK = 'fallback',
   VIDEO = 'video',

@@ -40,7 +40,7 @@ export class CachedClientApi implements ReducedClientApi {
   memoize<
     Args extends any[],
     Return,
-    F extends (...args: Args) => Promise<Return>
+    F extends (...args: Args) => Promise<Return>,
   >(func: F, functionLength: number): F {
     const memo = memoize(func, this.options(functionLength))
     const dec = rethrowDecorator<Args, Return, F>(

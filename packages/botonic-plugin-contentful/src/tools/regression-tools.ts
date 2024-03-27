@@ -8,7 +8,10 @@ export type SearchEvaluator = (
 ) => number
 
 export class GroundTruth {
-  constructor(readonly utterance: string, readonly contentId: string) {}
+  constructor(
+    readonly utterance: string,
+    readonly contentId: string
+  ) {}
 }
 
 export class SearchRegression {

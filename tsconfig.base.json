@@ -1,19 +1,27 @@
+//https://www.npmjs.com/package/@tsconfig/node20
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
+    "baseUrl": ".",
+    "target": "ES2015",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
     "declaration": true,
     "sourceMap": true,
-    "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
-    "noImplicitReturns": false,
+    "noImplicitReturns": false, // why is false?
     "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
     "importHelpers": true,
     "noImplicitAny": false,
-    "outDir": "./lib",
-    "pretty": true
+    "paths": {
+      "@botonic/core": ["./packages/botonic-core/src"],
+      "@botonic/react": ["./packages/botonic-react/src"]
+    },
+    "preserveSymlinks": false
   }
 }

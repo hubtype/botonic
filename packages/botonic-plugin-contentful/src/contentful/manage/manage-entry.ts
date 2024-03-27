@@ -55,7 +55,7 @@ export class ManageContentfulEntry {
   }
 
   async createContent(
-    context: ManageContext,
+    _context: ManageContext,
     model: ContentType,
     id: string
   ): Promise<void> {
@@ -70,7 +70,7 @@ export class ManageContentfulEntry {
   }
 
   async deleteContent(
-    context: ManageContext,
+    _context: ManageContext,
     contentId: ContentId
   ): Promise<void> {
     const environment = await this.environment

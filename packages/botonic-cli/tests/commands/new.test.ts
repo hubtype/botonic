@@ -6,6 +6,7 @@ import { chdir } from 'process'
 import { EXAMPLES } from '../../src/botonic-examples'
 import { default as NewCommand } from '../../src/commands/new'
 import {
+  copy,
   createTempDir,
   readDir,
   readJSON,
@@ -14,7 +15,7 @@ import {
 
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
 
-const BLANK_EXAMPLE = EXAMPLES[3]
+const BLANK_EXAMPLE = EXAMPLES[0]
 assert(BLANK_EXAMPLE.name === 'blank')
 
 describe('TEST: New command (resolving project)', () => {
@@ -34,7 +35,7 @@ describe('TEST: New command (downloading project)', () => {
     const tmpPath = createTempDir('botonic-tmp')
     await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     const packageJSON = readJSON(join(tmpPath, 'package.json'))
-    expect((packageJSON as any).name).toEqual('blank')
+    expect((packageJSON as any).name).toEqual(tmpPath)
     removeRecursively(tmpPath)
   })
   it('Fails to download into path', async () => {
@@ -43,8 +44,9 @@ describe('TEST: New command (downloading project)', () => {
       newCommand.downloadSelectedProjectIntoPath(
         {
           name: 'unexistingProject',
-          uri: 'https://not-existing.com',
+          version: '0.0.0',
           description: 'desc',
+          localTestPath: 'unexistingLocalPath',
         },
         tmpPath
       )
@@ -56,7 +58,8 @@ describe('TEST: New command (downloading project)', () => {
 describe('TEST: New command (installing project)', () => {
   it('Succeeds to install', async () => {
     const tmpPath = createTempDir('botonic-tmp')
-    await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
+    // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
+    copy(BLANK_EXAMPLE.localTestPath, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
     const sut = readDir('.')
@@ -68,7 +71,8 @@ describe('TEST: New command (installing project)', () => {
 
   it('Fails to install', async () => {
     const tmpPath = createTempDir('botonic-tmp')
-    await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
+    // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
+    copy(BLANK_EXAMPLE.localTestPath, tmpPath)
     await expect(
       newCommand.installDependencies('npm instal-typo')
     ).rejects.toThrow(Error)

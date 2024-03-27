@@ -41,7 +41,7 @@ describe('Memoizer', () => {
 
     // act/assert
     mock.error = new Error('forced failure')
-    await expect(memoized(2, 'b')).rejects.toThrowError(mock.error)
+    await expect(memoized(2, 'b')).rejects.toThrow(mock.error)
     mock.error = undefined
     await expect(memoized(2, 'b')).resolves.toBe('A2b')
     expect(mock.callsFA).toBe(2)
@@ -113,8 +113,8 @@ async function memoizerFailsIfAllPreviousInvocationsFailed(sut: Memoizer) {
 
   // act/assert
   mock.error = new Error('forced failure')
-  await expect(memoized(2, 'b')).rejects.toThrowError(mock.error)
-  await expect(memoized(2, 'b')).rejects.toThrowError(mock.error)
+  await expect(memoized(2, 'b')).rejects.toThrow(mock.error)
+  await expect(memoized(2, 'b')).rejects.toThrow(mock.error)
 
   mock.error = undefined
   await expect(memoized(2, 'b')).resolves.toBe('A2b')

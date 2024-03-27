@@ -115,9 +115,7 @@ export interface CommonEntryFields extends ContentWithNameFields {
 export type FollowUpFields = CommonEntryFields
 
 export class ContentfulEntryUtils {
-  static getContentId<T extends ContentType = ContentType>(
-    entry: contentful.Entry<any>
-  ): ContentId {
+  static getContentId(entry: contentful.Entry<any>): ContentId {
     return ContentId.create(
       ContentfulEntryUtils.getContentModel(entry),
       entry.sys.id

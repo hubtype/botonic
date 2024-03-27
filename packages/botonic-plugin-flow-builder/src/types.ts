@@ -41,5 +41,5 @@ export interface KnowledgeBaseResponse {
 }
 
 export interface PayloadParamsBase {
-  followUpId?: string
+  followUpContentID?: string
 }

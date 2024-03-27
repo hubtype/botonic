@@ -23,7 +23,9 @@ export class DynamoDBDataProvider implements DataProvider {
   connectionEventEntity: Entity<any>
   constructor(url: string) {
     try {
-      ;[this.tableName, this.region] = url.split('://')[1].split('.')
+      const urlParts = url.split('://')[1].split('.')
+      this.tableName = urlParts[0]
+      this.region = urlParts[1]
       this.userEventsTable = getUserEventsTable(this.tableName, this.region)
       this.userEntity = getUserEntity(this.userEventsTable)
       this.connectionEventEntity = getConnectionEventEntity(

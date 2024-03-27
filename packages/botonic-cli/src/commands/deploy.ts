@@ -1,4 +1,3 @@
-import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command, flags } from '@oclif/command'
 import { AxiosError } from 'axios'
 import colors from 'colors'
@@ -12,7 +11,7 @@ import { ZipAFolder } from 'zip-a-folder'
 
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
-import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
+import { CLOUD_PROVIDERS } from '../constants'
 import {
   copy,
   createDir,
@@ -84,22 +83,8 @@ Deploying to AWS...
     this.telemetry.trackDeploy1_0({ provider })
     console.log(`Deploying to ${provider}...`)
     console.log('This can take a while, do not cancel this process.')
-    if (provider === CLOUD_PROVIDERS.AWS) await this.deployAWS()
-    else if (provider === CLOUD_PROVIDERS.HUBTYPE)
-      await this.deployHubtype(flags)
-  }
 
-  async deployAWS(): Promise<void> {
-    const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
-    try {
-      await pulumiRunner.deploy()
-    } catch (e) {
-      const error = `Deploy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
-        e
-      )}`
-      this.telemetry.trackError(error)
-      throw new Error(e)
-    }
+    if (provider === CLOUD_PROVIDERS.HUBTYPE) await this.deployHubtype(flags)
   }
 
   async deployHubtype(flags: DeployHubtypeFlags): Promise<void> {

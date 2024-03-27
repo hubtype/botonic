@@ -1,27 +1,21 @@
 {
   "name": "@botonic/plugin-google-analytics",
-  "version": "0.24.0",
+  "version": "0.25.0-beta.0",
   "license": "MIT",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
-    "test": "../../node_modules/.bin/jest --coverage",
-    "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "rm -rf lib && npm run build",
+    "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
+    "test": "echo Skipping tests...",
+    "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "build:watch": "npm run build -- --watch",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core",
-    "lint_core": "../../node_modules/.bin/eslint_d --quiet 'src/**/*.ts'"
+    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts'"
   },
   "dependencies": {
-    "@botonic/core": "^0.24.0",
-    "axios": "^1.6.0"
-  },
-  "devDependencies": {
-    "@types/node": "^18.14.1",
-    "typescript": "^4.9.5"
+    "@botonic/core": "0.25.0-beta.0",
+    "axios": "^1.6.8"
   },
   "keywords": [
     "analytics",

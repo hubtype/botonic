@@ -1,4 +1,4 @@
-import { KJUR } from 'jsrsasign'
+import jsrsasign from 'jsrsasign'
 
 import { Credentials } from './options'
 
@@ -16,8 +16,8 @@ export class AccessToken {
     this.payload = JSON.stringify({
       iss: credentials.clientEmail,
       sub: credentials.clientEmail,
-      iat: KJUR.jws.IntDate.get('now'),
-      exp: KJUR.jws.IntDate.get('now + 1hour'),
+      iat: jsrsasign.KJUR.jws.IntDate.get('now'),
+      exp: jsrsasign.KJUR.jws.IntDate.get('now + 1hour'),
       aud: 'https://translation.googleapis.com/',
     })
     this.value = this.generate()
@@ -28,7 +28,7 @@ export class AccessToken {
   }
 
   private generate(): string {
-    return KJUR.jws.JWS.sign(
+    return jsrsasign.KJUR.jws.JWS.sign(
       'RS256',
       this.header,
       this.payload,

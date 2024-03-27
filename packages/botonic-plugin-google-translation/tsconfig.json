@@ -1,35 +1,46 @@
+// {
+//   "extends": "../../tsconfig.cjs.base.json",
+//   "compilerOptions": {
+//     "allowUnreachableCode": false,
+//     "baseUrl": ".",
+//     // "paths": {
+//     //   "*": ["src/*", "lib/src/*", "types/*"]
+//     // },
+//     // "moduleResolution": "node",
+//     "rootDir": "src",
+//     "outDir": "./lib/cjs",
+//     // "declaration": true,
+//     // "declarationDir": "./lib/cjs",
+//     // "sourceMap": true,
+//     // "target": "es6",
+//     "allowSyntheticDefaultImports": true,
+//     // "esModuleInterop": true,
+//     "strict": false,
+//     // "forceConsistentCasingInFileNames": true,
+//     "noImplicitReturns": true,
+//     // "noImplicitAny": false,
+//     // "removeComments": false, // false by default
+//     "preserveConstEnums": true,
+//     "lib": ["DOM", "ES2022"],
+//     // "noUnusedLocals": false,
+//     "noImplicitThis": true,
+//     "alwaysStrict": true,
+//     "noUnusedParameters": false,
+//     // "pretty": true,
+//     // "noFallthroughCasesInSwitch": true,
+//     "resolveJsonModule": true
+//     // "skipLibCheck": true
+//   },
+//   "include": ["src/**/*.ts"],
+//   "exclude": ["tests", "lib"],
+//   "types": ["@types/jest"]
+// }
 {
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "extends": "../../tsconfig.cjs.base.json",
   "compilerOptions": {
-    "allowUnreachableCode": false,
-    "baseUrl": "src",
-    "paths": {
-      "*": ["src/*", "lib/src/*", "types/*"]
-    },
-    "moduleResolution": "node",
-    "rootDir": "src",
-    "outDir": "lib",
-    "declaration": true,
-    "declarationDir": "lib",
-    "sourceMap": true,
-    "target": "es6",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": false,
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "lib": ["dom", "es2015", "es2017"],
-    "noUnusedLocals": false,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedParameters": false,
-    "pretty": true,
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "outDir": "./lib/cjs"
   },
-
-  "types": ["@types/jest"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["tests", "lib"]
 }

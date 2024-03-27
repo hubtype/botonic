@@ -46,14 +46,12 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
     return this.visitor.visitEntry(entry)
   }
 
-  visitStringField<T>(field: VisitedField<string>): I18nValue<string> {
+  visitStringField(field: VisitedField<string>): I18nValue<string> {
     this.log('visitStringField', field.entry, field.field)
     return this.visitor.visitStringField(field)
   }
 
-  visitMultipleStringField<T>(
-    field: VisitedField<string[]>
-  ): I18nValue<string[]> {
+  visitMultipleStringField(field: VisitedField<string[]>): I18nValue<string[]> {
     this.log('visitMultipleStringField', field.entry, field.field)
     return this.visitor.visitMultipleStringField(field)
   }
@@ -77,7 +75,7 @@ export class LoggerContentfulVisitor implements ContentfulVisitor {
     return this.visitor.visitMultipleReference(field)
   }
 
-  log<V>(method: string, entry: cf.Entry<any>, field?: cf.Field): void {
+  log(method: string, entry: cf.Entry<any>, field?: cf.Field): void {
     const on = field
       ? LoggerContentfulVisitor.describeField(entry, field.id)
       : LoggerContentfulVisitor.describeEntry(entry)
@@ -150,7 +148,7 @@ export class I18nEntryTraverser {
     return entry
   }
 
-  async traverseField<E>(
+  async traverseField(
     context: ContextWithLocale,
     vf: VisitedField<any>
   ): Promise<I18nValue<any>> {

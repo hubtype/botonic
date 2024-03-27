@@ -55,7 +55,10 @@ export class SimilarWordFinder<M> {
    * @param wordsAreStemmed see {@link StemmedExtraDistance}
    * @param minMatchLength min number of characters that must match so that we tolerate non-identical matches
    */
-  constructor(readonly wordsAreStemmed: boolean, readonly minMatchLength = 3) {}
+  constructor(
+    readonly wordsAreStemmed: boolean,
+    readonly minMatchLength = 3
+  ) {}
 
   /**
    *
@@ -110,7 +113,7 @@ export class SimilarWordFinder<M> {
   ): SimilarWordResult<M>[] {
     const sorted = results.sort((a, b) => a.compare(b))
     // avoid duplicates
-    const uniq = []
+    const uniq: SimilarWordResult<M>[] = []
     const findBefore = (needle: M, before: number) => {
       for (let prev = before - 1; prev >= 0; prev--) {
         if (sorted[prev].candidate === needle) {
@@ -132,7 +135,10 @@ abstract class CandidateFinder {
   protected readonly stemmedDecorator: StemmedExtraDistance
   protected readonly similar = new ExtractorEnum()
 
-  constructor(readonly wordsAreStemmed: boolean, readonly minMatchLength = 3) {
+  constructor(
+    readonly wordsAreStemmed: boolean,
+    readonly minMatchLength = 3
+  ) {
     this.stemmedDecorator = new StemmedExtraDistance(wordsAreStemmed)
   }
 
@@ -307,7 +313,10 @@ class FindSubstring extends CandidateFinder {
 
 class FindMixedUp extends CandidateFinder {
   readonly substring: FindSubstring
-  constructor(readonly wordsAreStemmed: boolean, readonly minMatchLength = 3) {
+  constructor(
+    readonly wordsAreStemmed: boolean,
+    readonly minMatchLength = 3
+  ) {
     super(wordsAreStemmed, minMatchLength)
     this.substring = new FindSubstring(wordsAreStemmed, minMatchLength)
   }
@@ -317,7 +326,7 @@ class FindMixedUp extends CandidateFinder {
     utterance: NormalizedUtterance,
     maxDistance: number
   ): PartialMatch[] {
-    const matches = []
+    const matches: PartialMatch[] = []
     for (const keyword of keywords) {
       let submatches: PartialMatch[] | undefined = []
       for (const subkw of keyword.splitInWords()) {

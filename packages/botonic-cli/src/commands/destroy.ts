@@ -1,8 +1,7 @@
-import { PulumiRunner } from '@botonic/pulumi/lib/pulumi-runner'
 import { Command } from '@oclif/command'
 
 import { Telemetry } from '../analytics/telemetry'
-import { CLOUD_PROVIDERS, PATH_TO_AWS_CONFIG } from '../constants'
+import { CLOUD_PROVIDERS } from '../constants'
 
 export default class Run extends Command {
   static description = 'Destroy Botonic project from cloud provider'
@@ -25,21 +24,8 @@ Destroying AWS stack...
     this.telemetry.trackDestroy1_0({ provider })
     console.log(`Destroying ${provider} stack...`)
     console.log('This can take a while, do not cancel this process.')
-    if (provider === CLOUD_PROVIDERS.AWS) await this.destroyAWS()
-    else if (provider === CLOUD_PROVIDERS.HUBTYPE) await this.destroyHubtype()
-  }
 
-  async destroyAWS(): Promise<void> {
-    try {
-      const pulumiRunner = new PulumiRunner(PATH_TO_AWS_CONFIG)
-      await pulumiRunner.destroy()
-    } catch (e) {
-      const error = `Destroy Botonic 1.0 ${CLOUD_PROVIDERS.AWS} Error: ${String(
-        e
-      )}`
-      this.telemetry.trackError(error)
-      throw new Error(e)
-    }
+    if (provider === CLOUD_PROVIDERS.HUBTYPE) await this.destroyHubtype()
   }
 
   async destroyHubtype(): Promise<void> {

@@ -1,21 +1,28 @@
 {
   "name": "@botonic/plugin-knowledge-bases",
-  "version": "0.24.1",
+  "version": "0.25.0-beta.0",
   "description": "Use a Hubtype to make the bot respond through a knowledge base.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
+    "test": "echo Skipping tests...",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "rm -rf lib && npm run build",
+    "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
+  "dependencies": {
+    "@babel/runtime": "^7.23.9",
+    "@botonic/core": "0.25.0-beta.0",
+    "axios": "^1.6.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16"
+  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   },
   "repository": {
     "type": "git",
@@ -27,14 +34,6 @@
     "src/**",
     "README.md"
   ],
-  "dependencies": {
-    "@babel/runtime": "^7.22.5",
-    "@botonic/core": "0.24.0",
-    "axios": "^1.6.0"
-  },
-  "devDependencies": {
-    "@types/node": "^18.16.0"
-  },
   "keywords": [
     "bot-framework",
     "chatbot",

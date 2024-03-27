@@ -1,13 +1,8 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["src/"],
+  "extends": "../../tsconfig.cjs.base.json",
   "compilerOptions": {
-    "jsx": "react",
-    "experimentalDecorators": true,
     "baseUrl": ".",
-    "outDir": "./lib/cjs",
-    "esModuleInterop": true,
-    "lib": ["es2015"],
-    "skipLibCheck": true
-  }
+    "outDir": "./lib/cjs"
+  },
+  "include": ["src/"]
 }

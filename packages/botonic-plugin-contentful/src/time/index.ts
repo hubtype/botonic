@@ -1,7 +1,11 @@
 export * from './schedule'
 
 export class DateRange {
-  constructor(readonly name: string, readonly from: Date, readonly to: Date) {}
+  constructor(
+    readonly name: string,
+    readonly from: Date,
+    readonly to: Date
+  ) {}
 
   contains(date: Date): boolean {
     return (

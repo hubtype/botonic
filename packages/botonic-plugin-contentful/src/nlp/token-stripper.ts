@@ -6,7 +6,10 @@ import { TokenSkipper } from './token-skipper'
 import { DEFAULT_SEPARATORS_REGEX } from './tokens'
 
 export class TokenRange implements ValueObject {
-  constructor(readonly from: number, readonly to: number) {}
+  constructor(
+    readonly from: number,
+    readonly to: number
+  ) {}
 
   equals(other: TokenRange): boolean {
     return this.from == other.from && this.to == other.to

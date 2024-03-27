@@ -21,7 +21,7 @@ test('TEST: contentful delivery checks that we get the requested message type', 
 }, 10000)
 
 test('TEST: contentful cmsLocale', async () => {
-  const sut = testContentful({ cmsLocale: locale => ENGLISH })
+  const sut = testContentful({ cmsLocale: _locale => ENGLISH })
 
   const text = await sut.text(TEST_POST_FAQ1_ID, { locale: SPANISH })
 

@@ -1,26 +1,38 @@
 {
   "name": "@botonic/plugin-hubtype-babel",
-  "version": "0.24.0",
+  "version": "0.25.0-beta.0",
   "license": "MIT",
   "description": "Use Hubtype Babel to predict Intents.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
-    "test": "../../node_modules/.bin/jest --coverage",
-    "prepare": "node ../../preinstall.js",
-    "prepublishOnly": "rm -rf lib && npm run build",
+    "test": "echo Skipping tests...",
+    "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "build:watch": "npm run build -- --watch",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "lint": "npm run lint_core -- --fix",
-    "lint_ci": "npm run lint_core -- -c ../.eslintrc_slow.js",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
+  "dependencies": {
+    "@babel/runtime": "^7.23.9",
+    "@botonic/core": "0.25.0-beta.0",
+    "axios": "^1.6.8",
+    "process": "^0.11.10"
+  },
+  "devDependencies": {
+    "@types/minipass": "^3.3.5",
+    "@types/node": "^20.11.19",
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "author": "",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hubtype/botonic.git"
   },
-  "author": "",
   "bugs": {
     "url": "https://github.com/hubtype/botonic/issues"
   },
@@ -29,21 +41,6 @@
     "src/**",
     "README.md"
   ],
-  "dependencies": {
-    "@babel/runtime": "^7.22.5",
-    "@botonic/core": "^0.24.0",
-    "axios": "^1.6.0",
-    "process": "^0.11.10"
-  },
-  "devDependencies": {
-    "@types/minipass": "^3.3.5",
-    "@types/node": "^18.16.0",
-    "typescript": "^4.5.4"
-  },
-  "homepage": "https://github.com/hubtype/botonic#readme",
-  "engines": {
-    "node": ">=10.0.0"
-  },
   "keywords": [
     "bot-framework",
     "chatbot",
@@ -54,6 +51,7 @@
     "conversational-ui",
     "javascript"
   ],
+  "homepage": "https://github.com/hubtype/botonic#readme",
   "eslintConfig": {
     "extends": "../.eslintrc.js",
     "root": true

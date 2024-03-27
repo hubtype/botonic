@@ -33,7 +33,7 @@ export class NodePerformanceMeasurer extends PerformanceMeasurer {
     }
     super.enable()
     const ObsClass = PerformanceFactory.getObserver()
-    this.performanceObserver = new ObsClass((list, observer) => {
+    this.performanceObserver = new ObsClass(list => {
       list.getEntries().forEach(measure => {
         if (!this.allProfiled[measure.name]) {
           this.allProfiled[measure.name] = [measure]

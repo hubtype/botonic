@@ -1,33 +1,18 @@
 {
-  // start of path dependent configuration
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "extends": "../../tsconfig.cjs.base.json",
   "compilerOptions": {
     "allowUnreachableCode": false,
-    "baseUrl": "src",
-    "paths": {
-      "*": ["src/*", "lib/src/*", "types/*"]
-    },
-    "rootDir": "src",
-    // end of path dependent configuration
-    "outDir": "lib",
-    "declaration": true,
-    "declarationDir": "lib",
-    "sourceMap": true,
-    "target": "es2015",
-    "module": "commonjs",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    // without typeRoots, it also checks @types of parent folders
-    //    "typeRoots" : ["node_modules/@types"],
+    "baseUrl": ".",
+    "outDir": "lib/cjs",
 
+    "declarationDir": "lib/cjs",
+    "allowSyntheticDefaultImports": true,
     // lint options
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-
     // options for dynamo-data-mapper-annotations
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "include": ["src/"]
 }

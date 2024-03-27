@@ -4,7 +4,7 @@ import {
   mkdtempSync,
   readdirSync,
   readFileSync,
-  rmdirSync,
+  rmSync,
   writeFileSync,
 } from 'fs'
 import { copySync } from 'fs-extra'
@@ -52,7 +52,7 @@ export function copy(from: string, to: string): void {
 }
 
 export function removeRecursively(path: string): void {
-  rmdirSync(path, { recursive: true })
+  rmSync(path, { recursive: true, force: true })
 }
 
 export function getHomeDirectory(): string {

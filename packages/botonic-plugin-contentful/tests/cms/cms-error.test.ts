@@ -21,7 +21,7 @@ test('TEST: ErrorReportingCMS content delivery failed', async () => {
 
   await sut
     .carousel('id1')
-    .then(carousel => {
+    .then(_carousel => {
       throw Error('should have thrown')
     })
     .catch((error2: any) => {
@@ -37,7 +37,7 @@ test('TEST: ErrorReportingCMS content delivery failed', async () => {
   when(mockCms.text('id1', anything())).thenReject(error)
   await sut
     .text('id1', { locale: SPANISH })
-    .then(text => {
+    .then(_text => {
       throw Error('should have thrown')
     })
     .catch((error2: any) => {

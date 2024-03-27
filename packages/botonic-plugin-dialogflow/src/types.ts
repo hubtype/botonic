@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 //Dialogflow types
 export interface Credentials {
   private_key_id: string
@@ -9,6 +8,5 @@ export interface Credentials {
 
 export type Options = {
   credentials: Credentials
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   queryData?: Record<string, any>
 }

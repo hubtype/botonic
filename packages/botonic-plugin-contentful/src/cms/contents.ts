@@ -373,19 +373,28 @@ export class Element extends Content {
 }
 
 export class Document extends MessageContent {
-  constructor(readonly common: CommonFields, readonly docUrl: string) {
+  constructor(
+    readonly common: CommonFields,
+    readonly docUrl: string
+  ) {
     super(common, ContentType.DOCUMENT)
   }
 }
 
 export class Image extends MessageContent {
-  constructor(readonly common: CommonFields, readonly imgUrl: string) {
+  constructor(
+    readonly common: CommonFields,
+    readonly imgUrl: string
+  ) {
     super(common, ContentType.IMAGE)
   }
 }
 
 export class Video extends MessageContent {
-  constructor(readonly common: CommonFields, readonly videoUrl: string) {
+  constructor(
+    readonly common: CommonFields,
+    readonly videoUrl: string
+  ) {
     super(common, ContentType.VIDEO)
   }
 }
@@ -428,13 +437,19 @@ export type Chitchat = Text
 export const Chitchat = Text
 
 export class Url extends TopContent {
-  constructor(readonly common: CommonFields, readonly url: string) {
+  constructor(
+    readonly common: CommonFields,
+    readonly url: string
+  ) {
     super(common, ContentType.URL)
   }
 }
 
 export class Payload extends TopContent {
-  constructor(readonly common: CommonFields, readonly payload: string) {
+  constructor(
+    readonly common: CommonFields,
+    readonly payload: string
+  ) {
     super(common, ContentType.PAYLOAD)
   }
 }
@@ -460,7 +475,10 @@ export class DateRangeContent extends TopContent {
 }
 
 export class ScheduleContent extends TopContent {
-  constructor(readonly common: CommonFields, readonly schedule: time.Schedule) {
+  constructor(
+    readonly common: CommonFields,
+    readonly schedule: time.Schedule
+  ) {
     super(common, ContentType.SCHEDULE)
   }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { ActionRequest } from '@botonic/react'
-import { randomUUID } from 'crypto'
+import { v4 as uuid } from 'uuid'
 
 import { FlowBuilderApi } from '../api'
 import {
@@ -9,7 +9,7 @@ import {
   HtTextNode,
 } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { EventName, trackEvent } from './tracking'
+import { EventName, trackEvent } from '../tracking'
 
 export async function createNodeFromKnowledgeBase(
   cmsApi: FlowBuilderApi,
@@ -47,7 +47,8 @@ export async function createNodeFromKnowledgeBase(
             buttons_style: undefined,
             buttons: [],
           },
-          id: randomUUID(),
+          flow_id: 'randomUUID', // TODO: Add flow_id consequentially with HtBaseNode changes
+          id: uuid(),
           code: 'knowledge-response',
           meta: {
             x: 0,

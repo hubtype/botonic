@@ -1,13 +1,10 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.cjs.base.json",
   "compilerOptions": {
-    "outDir": "lib",
-    "esModuleInterop": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "outDir": "./lib",
     "noImplicitReturns": true,
-    "useUnknownInCatchVariables": false,
-    "skipLibCheck": true
+    "useUnknownInCatchVariables": false
   },
   "include": [".*.js", "*.js", "**/*.ts", "**/*.tsx"],
   "exclude": ["templates", "tests", "lib"]
