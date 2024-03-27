@@ -16,6 +16,7 @@ import {
   HtNodeWithoutContentType,
   HtPayloadNode,
 } from './content-fields/hubtype-fields'
+import { HtSmartIntentNode } from './content-fields/hubtype-fields/smart-intent'
 import { FlowBuilderApiOptions } from './types'
 
 export class FlowBuilderApi {
@@ -123,6 +124,12 @@ export class FlowBuilderApi {
     }
 
     return undefined
+  }
+
+  getSmartIntentNodes(): HtSmartIntentNode[] {
+    return this.flow.nodes.filter(
+      node => node.type === HtNodeWithContentType.SMART_INTENT
+    ) as HtSmartIntentNode[]
   }
 
   private nodeContainsIntent(

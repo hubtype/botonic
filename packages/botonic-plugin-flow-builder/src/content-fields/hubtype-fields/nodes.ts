@@ -8,6 +8,7 @@ import { HtImageNode } from './image'
 import { HtIntentNode } from './intent'
 import { HtKeywordNode } from './keyword'
 import { HtPayloadNode } from './payload'
+import { HtSmartIntentNode } from './smart-intent'
 import { HtTextNode } from './text'
 import { HtUrlNode } from './url'
 import { HtVideoNode } from './video'
@@ -24,6 +25,7 @@ export type HtNodeWithContent =
   | HtFunctionNode
   | HtFallbackNode
   | HtWhatsappButtonListNode
+  | HtSmartIntentNode
 
 export type HtNodeWithoutContent =
   | HtUrlNode
