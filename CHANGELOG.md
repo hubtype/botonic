@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-  ## [0.24.x] - 2024-xx-xx
+## [0.25.X] - 2024-xx-xx
 
 ### Added
 
@@ -19,6 +19,25 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.25.0] - 2024-03-27
+
+**NOTE**: [Required version has been updated to be run with Node 20 and npm 10](https://github.com/hubtype/botonic/pull/2780).
+
+### Added
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+  - [Added support for Smart Intents](https://github.com/hubtype/botonic/pull/2803).
+
+### Changed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+  - [Retrieve Flow Builder contents using content IDs instead of UUIDs](https://github.com/hubtype/botonic/pull/2790).
+
+### Fixed
+
+- [@botonic/dx](https://www.npmjs.com/package/@botonic/dx)
+  - `jest`, `eslint`, `prettier` and `webpack` has been updated to use latest versions.
 
 ## [0.24.5] - 2024-03-21
 
