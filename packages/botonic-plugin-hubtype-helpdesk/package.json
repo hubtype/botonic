@@ -1,0 +1,49 @@
+{
+    "name": "@botonic/plugin-hubtype-helpdesk",
+    "version": "0.25.0-alpha.0",
+    "main": "./lib/cjs/index.js",
+    "module": "./lib/esm/index.js",
+    "description": "Use hubtype helpdesk apis.",
+    "scripts": {
+      "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
+      "build:watch": "npm run build -- --watch",
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "prepublishOnly": "rm -rf lib && npm i && npm run build",
+      "lint": "npm run lint_core -- --fix",
+      "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+    },
+    "dependencies": {
+      "@botonic/core": "0.25.0-alpha.4",
+      "axios": "^1.6.7"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/hubtype/botonic.git"
+    },
+    "author": "",
+    "bugs": {
+      "url": "https://github.com/hubtype/botonic/issues"
+    },
+    "files": [
+      "lib/**",
+      "src/**",
+      "README.md"
+    ],
+    "engines": {
+      "node": ">=20.0.0"
+    },
+    "keywords": [
+      "bot-framework",
+      "chatbot",
+      "hubtype-helpdesk",
+      "conversational-app",
+      "conversational-ui",
+      "javascript",
+      "typescript"
+    ],
+    "eslintConfig": {
+      "extends": "../.eslintrc.js",
+      "root": true
+    }
+  }
+  
