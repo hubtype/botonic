@@ -25,4 +25,8 @@ export {
   WhatsappButtonListRowProps,
   WhatsappButtonListSectionProps,
 } from './whatsapp-button-list'
+export {
+  WhatsappCTAUrlButton,
+  WhatsappCTAUrlButtonProps,
+} from './whatsapp-cta-url-button'
 export { WhatsappTemplate } from './whatsapp-template'
