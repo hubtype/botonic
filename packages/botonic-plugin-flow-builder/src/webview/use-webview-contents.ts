@@ -30,9 +30,7 @@ export function useWebviewContents({
       })
 
       const textResponseContents = response.data.webview_contents.filter(
-        webviewContent =>
-          webviewContent.type === WebviewContentType.TEXT &&
-          'text' in webviewContent.content
+        webviewContent => webviewContent.type === WebviewContentType.TEXT
       ) as WebviewTextContent[]
       setTextContents(textResponseContents)
 
@@ -46,13 +44,19 @@ export function useWebviewContents({
     getResponseContents()
   }, [])
 
-  const getTextContent = (contentID: string, locale: string) => {
+  const getTextContent = (
+    contentID: string,
+    locale: string
+  ): string | undefined => {
     return textContents
       ?.find(textContent => textContent.code === contentID)
       ?.content.text.find(text => text.locale === locale)?.message
   }
 
-  const getImageSrc = (contentID: string, locale: string) => {
+  const getImageSrc = (
+    contentID: string,
+    locale: string
+  ): string | undefined => {
     return imageContents
       ?.find(imageContent => imageContent.code === contentID)
       ?.content.image.find(image => image.locale === locale)?.file
