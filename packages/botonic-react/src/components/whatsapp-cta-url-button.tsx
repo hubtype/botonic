@@ -41,6 +41,9 @@ const serialize = _whatsappCTAUrlButtonProps => {
 }
 
 export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
+  if (!props.url && !props.webview) {
+    console.error('You must provide at least a url or a webview')
+  }
   const renderBrowser = () => {
     // Return a dummy message for browser
     const message = `${JSON.stringify(props)}`
