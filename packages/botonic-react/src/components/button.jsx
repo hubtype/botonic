@@ -1,10 +1,11 @@
-import { INPUT, params2queryString } from '@botonic/core'
+import { INPUT } from '@botonic/core'
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
+import { generateWebviewUrlWithParams } from '../util/webviews'
 import { ButtonsDisabler } from './buttons-disabler'
 
 const StyledButton = styled.button`
@@ -159,11 +160,11 @@ export const Button = props => {
   const renderNode = () => {
     const disabledProps = ButtonsDisabler.constructNodeProps(props)
     if (props.webview) {
-      const Webview = props.webview
-      let params = ''
-      if (props.params) params = params2queryString(props.params)
       return (
-        <button url={`/webviews/${Webview.name}?${params}`} {...disabledProps}>
+        <button
+          url={generateWebviewUrlWithParams(props.webview, props.params)}
+          {...disabledProps}
+        >
           {props.children}
         </button>
       )
