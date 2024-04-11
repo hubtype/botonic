@@ -4,7 +4,6 @@ export function generateWebviewUrlWithParams(
   webview: any,
   params: any = ''
 ): string {
-  let webviewParams = ''
-  if (params) webviewParams = params2queryString(params)
+  const webviewParams = params ? params2queryString(params) : ''
   return `/webviews/${webview.name}?${webviewParams}`
 }
