@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders WhatsappCTAUrlButton component (passing a URL) 1`] = `
+<message
+  body="This is the body"
+  displayText="Go to Hubtype"
+  footer="This is the footer"
+  header="This is the header"
+  type="whatsapp-cta-url-button"
+  url="https://www.hubtype.com"
+/>
+`;
+
+exports[`renders WhatsappCTAUrlButton component (passing a Webview) 1`] = `
+<message
+  body="This is the body"
+  displayText="Go to webview"
+  footer="This is the footer"
+  header="This is the header"
+  params={
+    {
+      "numbers": "123",
+      "redirectUri": "www.some-site.com",
+    }
+  }
+  type="whatsapp-cta-url-button"
+  url="/webviews/MyWebview?numbers=123&redirectUri=www.some-site.com"
+  webview={[Function]}
+/>
+`;

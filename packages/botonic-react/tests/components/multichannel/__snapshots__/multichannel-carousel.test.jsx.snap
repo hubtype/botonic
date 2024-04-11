@@ -69,31 +69,17 @@ exports[`Multichannel carousel COMPACT mode dynamic carousel with URL and postba
     </button>
   </message>,
   <message
-    buttonsAsText={0}
-    delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={2}
-    type="text"
-    typing={0}
-  >
-    *Snatch* _Five minutes, Turkish_
-    
-- Visit website: https://www.imdb.com/title/tt0208092
-  </message>,
+    body="_Snatch_ _Five minutes, Turkish_"
+    displayText="Visit website"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0208092"
+  />,
   <message
-    buttonsAsText={0}
-    delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={3}
-    type="text"
-    typing={0}
-  >
-    *El laberinto del fauno* _2006_
-    
-- Visit website: https://www.imdb.com/title/tt0457430
-  </message>,
+    body="_El laberinto del fauno_ _2006_"
+    displayText="Visit website"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0457430"
+  />,
 ]
 `;
 
@@ -129,28 +115,16 @@ exports[`Multichannel carousel COMPACT mode dynamic carousel with payload/path b
 exports[`Multichannel carousel COMPACT mode dynamic carousel with url buttons 1`] = `
 [
   <message
-    delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={0}
-    type="text"
-    typing={0}
-  >
-    *Snatch* _Five minutes, Turkish_
-    
-- Visit website: https://www.imdb.com/title/tt0208092
-  </message>,
+    body="_Snatch_ _Five minutes, Turkish_"
+    displayText="Visit website"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0208092"
+  />,
   <message
-    delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={1}
-    type="text"
-    typing={0}
-  >
-    *El laberinto del fauno* _2006_
-    
-- Visit website: https://www.imdb.com/title/tt0457430
-  </message>,
+    body="_El laberinto del fauno_ _2006_"
+    displayText="Visit website"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0457430"
+  />,
 ]
 `;

@@ -24,5 +24,4 @@ module.exports = {
       '<rootDir>/tests/__mocks__/file-mock.js',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
-  projects: ['../../packages/botonic-core'],
 }
