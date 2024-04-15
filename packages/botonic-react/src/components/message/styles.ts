@@ -2,7 +2,11 @@ import styled from 'styled-components'
 
 import { COLORS } from '../../constants'
 
-export const MessageContainer = styled.div`
+interface MessageContainerProps {
+  isSentByUser: boolean
+}
+
+export const MessageContainer = styled.div<MessageContainerProps>`
   display: flex;
   justify-content: ${props => (props.isSentByUser ? 'flex-end' : 'flex-start')};
   position: relative;
@@ -17,8 +21,13 @@ export const BotMessageImageContainer = styled.div`
   align-items: center;
   justify-content: center;
 `
+interface BolbContainerProps {
+  bgcolor: string
+  blob: boolean
+  blobwidth?: string
+}
 
-export const BlobContainer = styled.div`
+export const BlobContainer = styled.div<BolbContainerProps>`
   position: relative;
   margin: 8px;
   border-radius: 8px;
@@ -31,8 +40,12 @@ export const BlobContainer = styled.div`
         : '60%'
       : 'calc(100% - 16px)'};
 `
+interface BlobTextProps {
+  blob: boolean
+  markdownstyle: any
+}
 
-export const BlobText = styled.div`
+export const BlobText = styled.div<BlobTextProps>`
   padding: ${props => (props.blob ? '8px 12px' : '0px')};
   display: flex;
   flex-direction: column;
@@ -49,13 +62,21 @@ export const BlobTickContainer = styled.div`
   top: 0;
   align-items: center;
 `
-export const BlobTick = styled.div`
+
+interface BlobTickProps {
+  pointerSize: number
+}
+
+export const BlobTick = styled.div<BlobTickProps>`
   position: relative;
   margin: -${props => props.pointerSize}px 0px;
   border: ${props => props.pointerSize}px solid ${COLORS.TRANSPARENT};
 `
+interface TimestampContainerProps {
+  isSentByUser: boolean
+}
 
-export const TimestampContainer = styled.div`
+export const TimestampContainer = styled.div<TimestampContainerProps>`
   display: flex;
   position: relative;
   justify-content: ${props => (props.isSentByUser ? 'flex-end' : 'flex-start')};
@@ -71,8 +92,11 @@ export const TimestampContainer = styled.div`
     max-width: 20px;
   }
 `
+interface TimestampTextProps {
+  isSentByUser: boolean
+}
 
-export const TimestampText = styled.div`
+export const TimestampText = styled.div<TimestampTextProps>`
   @import url('https://fonts.googleapis.com/css?family=Lato');
   font-family: Lato;
   font-size: 10px;

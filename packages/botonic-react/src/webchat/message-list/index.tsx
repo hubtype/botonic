@@ -93,6 +93,7 @@ export const WebchatMessageList = props => {
         role={ROLES.MESSAGE_LIST}
         // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-scrollable`
         id='botonic-scrollable-content'
+        // @ts-ignore
         scrollbar={scrollbarOptions}
         autoHide={scrollbarOptions.autoHide}
         ismessagescontainer={true.toString()}
