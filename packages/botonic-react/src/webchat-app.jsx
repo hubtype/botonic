@@ -209,6 +209,10 @@ export class WebchatApp {
     this.webchatRef.current.closeWebchat()
   }
 
+  closeWebview() {
+    this.webchatRef.current.closeWebview()
+  }
+
   toggle() {
     this.webchatRef.current.toggleWebchat()
   }

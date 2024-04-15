@@ -81,7 +81,7 @@ export const WebviewContainer = props => {
   const { closeWebview } = useContext(RequestContext)
   const Webview = webchatState.webview
 
-  const close = e => e.data == 'botonicCloseWebview' && closeWebview()
+  const close = e => e.data === 'botonicCloseWebview' && closeWebview()
 
   useEffect(() => {
     if (window.addEventListener) {

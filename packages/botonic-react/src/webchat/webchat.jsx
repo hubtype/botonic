@@ -367,8 +367,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (options && options.payload) {
       sendPayload(options.payload)
     } else if (options && options.path) {
-      let params = ''
-      if (options.params) params = params2queryString(options.params)
+      const params = options.params ? params2queryString(options.params) : ''
       sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
     }
   }
@@ -604,6 +603,7 @@ export const Webchat = forwardRef((props, ref) => {
       updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
       updateTyping(false)
     },
+    closeWebview: closeWebview,
   }))
 
   const resolveCase = () => {
@@ -695,7 +695,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const webviewRequestContext = {
     getString: stringId => props.getString(stringId, webchatState.session),
-    setLocale: locale => props.getString(locale, webchatState.session),
+    setLocale: locale => props.getString(locale, webchatState.session), // TODO Review if is necesary and getString or setLocale?
     session: webchatState.session || {},
     params: webchatState.webviewParams || {},
     closeWebview: closeWebview,
