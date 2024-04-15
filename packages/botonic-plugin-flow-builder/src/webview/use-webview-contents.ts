@@ -16,9 +16,11 @@ export function useWebviewContents({
   orgId,
   botId,
   webviewId,
+  locale,
 }: UseWebviewContentsProps): UseWebviewContents {
   const [textContents, setTextContents] = useState<WebviewTextContent[]>()
   const [imageContents, setImageContents] = useState<WebviewImageContent[]>()
+  const [currentLocale, setCurrentLocale] = useState(locale)
   const [isLoading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -44,22 +46,16 @@ export function useWebviewContents({
     getResponseContents()
   }, [])
 
-  const getTextContent = (
-    contentID: string,
-    locale: string
-  ): string | undefined => {
+  const getTextContent = (contentID: string): string | undefined => {
     return textContents
       ?.find(textContent => textContent.code === contentID)
-      ?.content.text.find(text => text.locale === locale)?.message
+      ?.content.text.find(text => text.locale === currentLocale)?.message
   }
 
-  const getImageSrc = (
-    contentID: string,
-    locale: string
-  ): string | undefined => {
+  const getImageSrc = (contentID: string): string | undefined => {
     return imageContents
       ?.find(imageContent => imageContent.code === contentID)
-      ?.content.image.find(image => image.locale === locale)?.file
+      ?.content.image.find(image => image.locale === currentLocale)?.file
   }
 
   return {
@@ -67,8 +63,7 @@ export function useWebviewContents({
     webviewContext: {
       getTextContent,
       getImageSrc,
-      textContents: textContents || [],
-      imageContents: imageContents || [],
+      setCurrentLocale,
     },
   }
 }

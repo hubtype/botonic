@@ -6,7 +6,6 @@ export const WebviewContentsContext = createContext<WebviewContentsContextType>(
   {
     getTextContent: () => undefined,
     getImageSrc: () => undefined,
-    textContents: [],
-    imageContents: [],
+    setCurrentLocale: () => undefined,
   }
 )
