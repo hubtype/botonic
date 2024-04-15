@@ -170,7 +170,8 @@ export interface Session {
   __retries: number
   is_first_interaction: boolean
   last_session?: any
-  organization?: string
+  organization: string
+  organization_id: string
   user: SessionUser
   // after handoff
   _hubtype_case_status?: CaseStatusType
