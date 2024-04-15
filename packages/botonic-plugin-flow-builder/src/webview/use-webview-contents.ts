@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
+import { FLOW_BUILDER_API_URL_PROD } from '../constants'
+import { FlowBuilderJSONVersion } from '../types'
 import {
   UseWebviewContents,
   UseWebviewContentsProps,
@@ -11,8 +13,8 @@ import {
 } from './types'
 
 export function useWebviewContents({
-  flowBuilderApiUrl,
-  version,
+  apiUrl = FLOW_BUILDER_API_URL_PROD,
+  version = FlowBuilderJSONVersion.LATEST,
   orgId,
   botId,
   webviewId,
@@ -27,7 +29,7 @@ export function useWebviewContents({
   useEffect(() => {
     const getResponseContents = async () => {
       setLoading(true)
-      const url = `${flowBuilderApiUrl}/webview/${version}`
+      const url = `${apiUrl}/webview/${version}`
       try {
         const response = await axios.get<WebviewContentsResponse>(url, {
           params: { org: orgId, bot: botId, webview: webviewId },
@@ -67,7 +69,7 @@ export function useWebviewContents({
   return {
     isLoading,
     error,
-    webviewContext: {
+    webviewContentsContext: {
       getTextContent,
       getImageSrc,
       setCurrentLocale,

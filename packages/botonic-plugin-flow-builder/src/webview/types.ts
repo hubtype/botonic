@@ -1,3 +1,5 @@
+import { FlowBuilderJSONVersion } from '../types'
+
 export enum WebviewContentType {
   TEXT = 'webview-text',
   IMAGE = 'webview-image',
@@ -24,8 +26,8 @@ export interface WebviewImageContent {
 }
 
 export interface UseWebviewContentsProps {
-  flowBuilderApiUrl: string
-  version: 'draft' | 'latest'
+  apiUrl?: string
+  version?: FlowBuilderJSONVersion
   orgId: string
   botId: string
   webviewId: string
@@ -35,11 +37,11 @@ export interface UseWebviewContentsProps {
 export interface UseWebviewContents {
   isLoading: boolean
   error: boolean
-  webviewContext: WebviewContentsContextType
+  webviewContentsContext: WebviewContentsContextType
 }
 
 export interface WebviewContentsContextType {
-  getTextContent: (code: string, locale: string) => string | undefined
-  getImageSrc: (code: string, locale: string) => string | undefined
+  getTextContent: (code: string) => string | undefined
+  getImageSrc: (code: string) => string | undefined
   setCurrentLocale: (locale: string) => void
 }
