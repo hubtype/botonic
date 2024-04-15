@@ -4,7 +4,8 @@ import { ActionRequest } from '@botonic/react'
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
 export interface BotonicPluginFlowBuilderOptions {
-  flowUrl: string
+  apiUrl?: string
+  jsonVersion?: FlowBuilderJSONVersion
   flow?: HtFlowBuilderData
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
@@ -29,6 +30,11 @@ export interface FlowBuilderApiOptions {
 export enum ProcessEnvNodeEnvs {
   PRODUCTION = 'production',
   DEVELOPMENT = 'development',
+}
+
+export enum FlowBuilderJSONVersion {
+  DRAFT = 'draft',
+  LATEST = 'latest',
 }
 
 export interface KnowledgeBaseResponse {
