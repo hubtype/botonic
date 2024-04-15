@@ -22,26 +22,32 @@ export function useWebviewContents({
   const [imageContents, setImageContents] = useState<WebviewImageContent[]>()
   const [currentLocale, setCurrentLocale] = useState(locale)
   const [isLoading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const getResponseContents = async () => {
       setLoading(true)
       const url = `${flowBuilderApiUrl}/webview/${version}`
-      const response = await axios.get<WebviewContentsResponse>(url, {
-        params: { org: orgId, bot: botId, webview: webviewId },
-      })
+      try {
+        const response = await axios.get<WebviewContentsResponse>(url, {
+          params: { org: orgId, bot: botId, webview: webviewId },
+        })
 
-      const textResponseContents = response.data.webview_contents.filter(
-        webviewContent => webviewContent.type === WebviewContentType.TEXT
-      ) as WebviewTextContent[]
-      setTextContents(textResponseContents)
+        const textResponseContents = response.data.webview_contents.filter(
+          webviewContent => webviewContent.type === WebviewContentType.TEXT
+        ) as WebviewTextContent[]
+        setTextContents(textResponseContents)
 
-      const imageResponseContents = response.data.webview_contents.filter(
-        webviewContent => webviewContent.type === WebviewContentType.IMAGE
-      ) as WebviewImageContent[]
-      setImageContents(imageResponseContents)
-
-      setLoading(false)
+        const imageResponseContents = response.data.webview_contents.filter(
+          webviewContent => webviewContent.type === WebviewContentType.IMAGE
+        ) as WebviewImageContent[]
+        setImageContents(imageResponseContents)
+      } catch (error) {
+        console.error('Error fetching webview contents:', error)
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
     }
     getResponseContents()
   }, [])
@@ -60,6 +66,7 @@ export function useWebviewContents({
 
   return {
     isLoading,
+    error,
     webviewContext: {
       getTextContent,
       getImageSrc,

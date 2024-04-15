@@ -34,6 +34,7 @@ export interface UseWebviewContentsProps {
 
 export interface UseWebviewContents {
   isLoading: boolean
+  error: boolean
   webviewContext: WebviewContentsContextType
 }
 
