@@ -5,7 +5,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import { RequestContext } from './contexts'
+import { CloseWebviewOptions, WebviewRequestContext } from './contexts'
 
 class App extends React.Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class App extends React.Component {
     this.state = { session, params }
   }
 
-  async close(options) {
+  async close(options?: CloseWebviewOptions) {
     let payload = options ? options.payload : null
     if (options.path) payload = `__PATH_PAYLOAD__${options.path}`
     if (payload) {
@@ -76,8 +76,8 @@ class App extends React.Component {
   }
 
   render() {
-    const requestContext = {
-      getString: stringId =>
+    const webviewRequestContext = {
+      getString: (stringId: string) =>
         getString(this.props.locales, this.state.session.__locale, stringId),
       session: this.state.session || {},
       params: this.state.params || {},
@@ -85,11 +85,11 @@ class App extends React.Component {
     }
 
     return (
-      <RequestContext.Provider value={requestContext}>
+      <WebviewRequestContext.Provider value={webviewRequestContext}>
         {this.props.webviews.map((Webview, i) => (
           <Route key={i} path={`/${Webview.name}`} component={Webview} />
         ))}
-      </RequestContext.Provider>
+      </WebviewRequestContext.Provider>
     )
   }
 }

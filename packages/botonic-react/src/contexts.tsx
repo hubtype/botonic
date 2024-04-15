@@ -19,6 +19,24 @@ export const RequestContext = createContext<
   defaultTyping: 0,
 })
 
+export interface CloseWebviewOptions {
+  payload?: string
+  path?: string
+  params?: Record<string, any>
+}
+
+export const WebviewRequestContext = createContext<{
+  closeWebview: (options?: CloseWebviewOptions) => undefined
+  getString: (stringId: string) => string
+  params: Record<string, any>
+  session: CoreSession
+}>({
+  closeWebview: () => undefined,
+  getString: () => '',
+  params: {} as Record<string, any>,
+  session: {} as CoreSession,
+})
+
 export const WebchatContext = createContext<WebchatContextProps>({
   addMessage: () => {
     return
