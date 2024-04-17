@@ -9,6 +9,8 @@ export function testSession(): Session {
     user: { id: 'userid', provider: PROVIDER.DEV },
     bot: { id: 'bot_id' },
     is_first_interaction: true,
+    organization: 'test_org',
+    organization_id: '1234567890',
     __retries: 0,
   }
 }

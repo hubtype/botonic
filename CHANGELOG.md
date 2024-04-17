@@ -20,6 +20,31 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.26.0-beta.0] - 2024-04-16
+
+### Added
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Add `WebviewContentsContext` and `useWebviewContents`](https://github.com/hubtype/botonic/pull/2810)
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+  - [Add `closeWebview` in browser API](https://github.com/hubtype/botonic/pull/2810)
+
+### Changed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Remove `flowUrl` and add `apiUrl`, `jsonVersion` in BotonicPluginFlowBuilderOptions](https://github.com/hubtype/botonic/pull/2810)
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+  - [Remove `RequestContext` and create `WebviewRequestContext` for webview](https://github.com/hubtype/botonic/pull/2810)
+
+### Fixed
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+  - [Add `organization_id` in Session](https://github.com/hubtype/botonic/pull/2810)
+
 ## [0.25.0] - 2024-03-27
 
 **NOTE**: [Required version has been updated to be run with Node 20 and npm 10](https://github.com/hubtype/botonic/pull/2780).

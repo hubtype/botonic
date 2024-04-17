@@ -3,7 +3,7 @@ import Frame from 'react-frame-component'
 import styled from 'styled-components'
 
 import { COLORS, ROLES, WEBCHAT } from '../constants'
-import { RequestContext, WebchatContext } from '../contexts'
+import { WebchatContext, WebviewRequestContext } from '../contexts'
 
 const StyledWebview = styled.div`
   position: absolute;
@@ -62,7 +62,7 @@ const WebviewMode = props => {
 }
 
 export const WebviewHeader = () => {
-  const { closeWebview } = useContext(RequestContext)
+  const { closeWebview } = useContext(WebviewRequestContext)
   const { getThemeProperty } = useContext(WebchatContext)
   return (
     <StyledWebviewHeader
@@ -78,10 +78,10 @@ export const WebviewHeader = () => {
 
 export const WebviewContainer = props => {
   const { webchatState } = useContext(WebchatContext)
-  const { closeWebview } = useContext(RequestContext)
+  const { closeWebview } = useContext(WebviewRequestContext)
   const Webview = webchatState.webview
 
-  const close = e => e.data == 'botonicCloseWebview' && closeWebview()
+  const close = e => e.data === 'botonicCloseWebview' && closeWebview()
 
   useEffect(() => {
     if (window.addEventListener) {

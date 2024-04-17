@@ -16,7 +16,7 @@ import { Audio, Document, Image, Text, Video } from '../components'
 import { Handoff } from '../components/handoff'
 import { normalizeWebchatSettings } from '../components/webchat-settings'
 import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
-import { RequestContext, WebchatContext } from '../contexts'
+import { WebchatContext, WebviewRequestContext } from '../contexts'
 import { SENDERS } from '../index-types'
 import {
   getFullMimeWhitelist,
@@ -367,8 +367,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (options && options.payload) {
       sendPayload(options.payload)
     } else if (options && options.path) {
-      let params = ''
-      if (options.params) params = params2queryString(options.params)
+      const params = options.params ? params2queryString(options.params) : ''
       sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
     }
   }
@@ -604,6 +603,7 @@ export const Webchat = forwardRef((props, ref) => {
       updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
       updateTyping(false)
     },
+    closeWebview: closeWebview,
   }))
 
   const resolveCase = () => {
@@ -694,13 +694,10 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const webviewRequestContext = {
-    getString: stringId => props.getString(stringId, webchatState.session),
-    setLocale: locale => props.getString(locale, webchatState.session),
-    session: webchatState.session || {},
-    params: webchatState.webviewParams || {},
     closeWebview: closeWebview,
-    defaultDelay: props.defaultDelay || 0,
-    defaultTyping: props.defaultTyping || 0,
+    getString: stringId => props.getString(stringId, webchatState.session),
+    params: webchatState.webviewParams || {},
+    session: webchatState.session || {},
   }
 
   useEffect(() => {
@@ -808,7 +805,7 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const webchatWebview = () => (
-    <RequestContext.Provider value={webviewRequestContext}>
+    <WebviewRequestContext.Provider value={webviewRequestContext}>
       <WebviewContainer
         style={{
           ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.webviewStyle),
@@ -816,7 +813,7 @@ export const Webchat = forwardRef((props, ref) => {
         }}
         webview={webchatState.webview}
       />
-    </RequestContext.Provider>
+    </WebviewRequestContext.Provider>
   )
   let mobileStyle = {}
   if (isMobile(getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.mobileBreakpoint))) {

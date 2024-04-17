@@ -1,16 +1,40 @@
+import { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 import { createContext } from 'react'
 
-import { WebchatContextProps } from './index-types'
+import { ActionRequest, WebchatContextProps } from './index-types'
 import { webchatInitialState } from './webchat/hooks'
 
-export const RequestContext = createContext({
+export const RequestContext = createContext<
+  Partial<ActionRequest> & {
+    getString: () => string
+    setLocale: () => void
+  }
+>({
   getString: () => '',
-  setLocale: () => '',
-  session: {},
+  setLocale: () => undefined,
+  session: {} as CoreSession,
   params: {},
-  input: {},
+  input: {} as CoreInput,
   defaultDelay: 0,
   defaultTyping: 0,
+})
+
+export interface CloseWebviewOptions {
+  payload?: string
+  path?: string
+  params?: Record<string, any>
+}
+
+export const WebviewRequestContext = createContext<{
+  closeWebview: (options?: CloseWebviewOptions) => undefined
+  getString: (stringId: string) => string
+  params: Record<string, any>
+  session: CoreSession
+}>({
+  closeWebview: () => undefined,
+  getString: () => '',
+  params: {} as Record<string, any>,
+  session: {} as CoreSession,
 })
 
 export const WebchatContext = createContext<WebchatContextProps>({

@@ -2,7 +2,11 @@ import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from './api'
-import { SEPARATOR, SOURCE_INFO_SEPARATOR } from './constants'
+import {
+  FLOW_BUILDER_API_URL_PROD,
+  SEPARATOR,
+  SOURCE_INFO_SEPARATOR,
+} from './constants'
 import {
   FlowCarousel,
   FlowContent,
@@ -24,6 +28,7 @@ import {
 import { DEFAULT_FUNCTIONS } from './functions'
 import {
   BotonicPluginFlowBuilderOptions,
+  FlowBuilderJSONVersion,
   KnowledgeBaseResponse,
   PayloadParamsBase,
 } from './types'
@@ -48,7 +53,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   ) => Promise<KnowledgeBaseResponse>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
-    this.flowUrl = options.flowUrl
+    const apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
+    const jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
+    this.flowUrl = `${apiUrl}/flow/${jsonVersion}`
     this.flow = options.flow
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
@@ -229,4 +236,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
 export * from './action'
 export * from './content-fields'
-export { BotonicPluginFlowBuilderOptions, PayloadParamsBase } from './types'
+export {
+  BotonicPluginFlowBuilderOptions,
+  FlowBuilderJSONVersion,
+  PayloadParamsBase,
+} from './types'
+export * from './webview'
