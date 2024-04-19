@@ -16,6 +16,7 @@ import {
   FlowVideo,
   FlowWhatsappButtonList,
 } from './content-fields'
+import { FlowWhatsappCtaUrlButtonNode } from './content-fields/flow-whatsapp-cta-url-button'
 import {
   HtFlowBuilderData,
   HtFunctionArgument,
@@ -166,6 +167,12 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
       case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
         return FlowWhatsappButtonList.fromHubtypeCMS(
+          hubtypeContent,
+          locale,
+          this.cmsApi
+        )
+      case HtNodeWithContentType.WHATSAPP_CTA_URL_BUTTON:
+        return FlowWhatsappCtaUrlButtonNode.fromHubtypeCMS(
           hubtypeContent,
           locale,
           this.cmsApi

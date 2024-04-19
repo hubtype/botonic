@@ -3,6 +3,7 @@ import { FlowHandoff } from './flow-handoff'
 import { FlowImage } from './flow-image'
 import { FlowText } from './flow-text'
 import { FlowVideo } from './flow-video'
+import { FlowWhatsappCtaUrlButtonNode } from './flow-whatsapp-cta-url-button'
 import { FlowWhatsappButtonList } from './whatsapp-button-list/flow-whatsapp-button-list'
 
 export { ContentFieldsBase } from './content-fields-base'
@@ -17,4 +18,5 @@ export type FlowContent =
   | FlowText
   | FlowVideo
   | FlowWhatsappButtonList
+  | FlowWhatsappCtaUrlButtonNode
   | FlowHandoff

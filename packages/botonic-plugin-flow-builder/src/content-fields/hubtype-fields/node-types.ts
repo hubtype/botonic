@@ -10,6 +10,7 @@ export enum HtNodeWithContentType {
   FALLBACK = 'fallback',
   VIDEO = 'video',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
+  WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
 }
 
 export enum HtNodeWithoutContentType {
