@@ -1,6 +1,4 @@
-import { DataProvider } from './data-provider'
 import {
-  BotonicEvent,
   Input,
   PluginConfig,
   ResolvedPlugins,
@@ -34,15 +32,13 @@ export async function runPlugins(
   input: Input,
   session: Session,
   lastRoutePath: RoutePath,
-  response: string | null = null,
-  messageEvents: Partial<BotonicEvent>[] | null = null,
-  dataProvider?: DataProvider
+  response: string | null = null
 ): Promise<void> {
   for (const key in plugins) {
     const p = await plugins[key]
     try {
       if (mode === 'pre' && p.pre) {
-        await p.pre({ input, session, lastRoutePath, dataProvider, plugins })
+        await p.pre({ input, session, lastRoutePath, plugins })
       }
       if (mode === 'post' && p.post) {
         await p.post({
@@ -50,8 +46,6 @@ export async function runPlugins(
           session,
           lastRoutePath,
           response,
-          messageEvents,
-          dataProvider,
           plugins,
         })
       }
