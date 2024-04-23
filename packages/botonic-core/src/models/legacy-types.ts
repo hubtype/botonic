@@ -3,17 +3,31 @@
 import { DataProvider } from '../data-provider'
 import { BotonicEvent } from './events'
 
+export enum CASE_STATUS {
+  WAITING = 'status_waiting',
+  ATTENDING = 'status_attending',
+  IDLE = 'status_idle',
+  RESOLVED = 'status_resolved',
+}
+
 export type CaseStatusType =
-  | typeof CASE_STATUS.ATTENDING
-  | typeof CASE_STATUS.IDLE
-  | typeof CASE_STATUS.RESOLVED
-  | typeof CASE_STATUS.WAITING
+  | CASE_STATUS.ATTENDING
+  | CASE_STATUS.IDLE
+  | CASE_STATUS.RESOLVED
+  | CASE_STATUS.WAITING
+
+export enum CASE_RESOLUTION {
+  OK = 'result_ok',
+  NOK = 'result_nok',
+  NOT_SOLVED = 'result_not_solved',
+  BANNED = 'result_banned',
+}
 
 export type CaseResolution =
-  | typeof CASE_RESOLUTION.BANNED
-  | typeof CASE_RESOLUTION.NOK
-  | typeof CASE_RESOLUTION.NOT_SOLVED
-  | typeof CASE_RESOLUTION.OK
+  | CASE_RESOLUTION.BANNED
+  | CASE_RESOLUTION.NOK
+  | CASE_RESOLUTION.NOT_SOLVED
+  | CASE_RESOLUTION.OK
 
 export enum PROVIDER {
   APPLE = 'apple',
@@ -29,6 +43,19 @@ export enum PROVIDER {
   WECHAT = 'wechat',
   WHATSAPP = 'whatsapp',
 }
+
+export type ProviderType =
+  | PROVIDER.DEV
+  | PROVIDER.FACEBOOK
+  | PROVIDER.GENERIC
+  | PROVIDER.INSTAGRAM
+  | PROVIDER.INTERCOM
+  | PROVIDER.SMOOCH
+  | PROVIDER.TELEGRAM
+  | PROVIDER.TWITTER
+  | PROVIDER.WEBCHAT
+  | PROVIDER.WECHAT
+  | PROVIDER.WHATSAPP
 
 export enum INPUT {
   TEXT = 'text',
@@ -48,20 +75,6 @@ export enum INPUT {
   CHAT_EVENT = 'chatevent',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
-}
-
-export enum CASE_STATUS {
-  WAITING = 'status_waiting',
-  ATTENDING = 'status_attending',
-  IDLE = 'status_idle',
-  RESOLVED = 'status_resolved',
-}
-
-export enum CASE_RESOLUTION {
-  OK = 'result_ok',
-  NOK = 'result_nok',
-  NOT_SOLVED = 'result_not_solved',
-  BANNED = 'result_banned',
 }
 
 export interface Locales {
@@ -132,21 +145,22 @@ export interface Input extends Partial<NluResult> {
   data?: string
   path?: string
   payload?: string
+  referral?: string
   type: InputType
+  context?: {
+    campaign?: Campaign
+  }
 }
 
-export type ProviderType =
-  | typeof PROVIDER.DEV
-  | typeof PROVIDER.FACEBOOK
-  | typeof PROVIDER.GENERIC
-  | typeof PROVIDER.INSTAGRAM
-  | typeof PROVIDER.INTERCOM
-  | typeof PROVIDER.SMOOCH
-  | typeof PROVIDER.TELEGRAM
-  | typeof PROVIDER.TWITTER
-  | typeof PROVIDER.WEBCHAT
-  | typeof PROVIDER.WECHAT
-  | typeof PROVIDER.WHATSAPP
+export interface Campaign {
+  id: string
+  name: string
+  status: string
+  start_date: string
+  end_date: string
+  bot_path: string
+  template_name: string
+}
 
 export interface SessionUser {
   id: string
@@ -161,8 +175,12 @@ export interface SessionUser {
   imp_id?: string
   provider_id?: string
 }
+export interface HubtypeCaseContactReason {
+  id: string
+  name: string
+  project_id: string
+}
 
-// eslint-disable @typescript-eslint/naming-convention
 export interface Session {
   bot: {
     id: string
@@ -170,18 +188,23 @@ export interface Session {
   }
   __locale?: string
   __retries: number
+  _access_token: string
+  _hubtype_api: string
   is_first_interaction: boolean
   last_session?: any
-  organization: string
   organization_id: string
+  organization: string
   user: SessionUser
   // after handoff
+  _botonic_action?: string
   _hubtype_case_status?: CaseStatusType
+  _hubtype_case_id?: string
   _hubtype_case_typification?: string
+  _hubtype_case_contact_reasons?: HubtypeCaseContactReason[]
   _shadowing?: boolean
-  _access_token?: string
+  external?: any
+  zendesk_ticket_id?: string
 }
-// eslint-enable @typescript-eslint/naming-convention
 
 export type InputMatcher = (input: Input) => boolean
 export type ParamsMatcher =

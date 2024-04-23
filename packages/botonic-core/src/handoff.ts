@@ -13,7 +13,7 @@ export interface HubtypeAgentsInfo {
   status: string
 }
 export interface HubtypeSession extends Session {
-  _hubtype_api?: string
+  _hubtype_api: string
   _access_token: string
 }
 
