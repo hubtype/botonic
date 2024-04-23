@@ -1,4 +1,4 @@
-import { Providers } from '@botonic/core'
+import { PROVIDER } from '@botonic/core'
 
 /**
  *
@@ -75,11 +75,7 @@ export function getMultichannelReplies(node) {
 }
 
 export const isWhatsapp = context =>
-  context.session &&
-  context.session.user &&
-  context.session.user.provider == Providers.Messaging.WHATSAPP
+  context.session?.user?.provider === PROVIDER.WHATSAPP
 
 export const isFacebook = context =>
-  context.session &&
-  context.session.user &&
-  context.session.user.provider == Providers.Messaging.FACEBOOK
+  context.session?.user?.provider === PROVIDER.FACEBOOK

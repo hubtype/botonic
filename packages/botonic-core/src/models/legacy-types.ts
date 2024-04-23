@@ -273,24 +273,6 @@ export interface Params {
   [key: string]: any
 }
 
-export const Providers = Object.freeze({
-  Messaging: {
-    APPLE: 'apple',
-    FACEBOOK: 'facebook',
-    GENERIC: 'generic',
-    IMBEE: 'imbee',
-    INSTAGRAM: 'instagram',
-    INTERCOM: 'intercom',
-    SMOOCH_WEB: 'smooch_web',
-    SMOOCH: 'smooch',
-    TELEGRAM: 'telegram',
-    TWITTER: 'twitter',
-    WEBCHAT: 'webchat',
-    WECHAT: 'wechat',
-    WHATSAPP: 'whatsapp',
-  },
-})
-
 export type Nullable<T> = T | null
 
 export type Action = Nullable<() => any>
