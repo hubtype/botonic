@@ -2,7 +2,7 @@ import { INPUT } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
-import { WhatsappButtonList } from '..'
+import { WhatsappButtonList, WhatsappCTAUrlButton } from '..'
 import { Text } from '../text'
 import { MultichannelFacebook } from './facebook/facebook'
 import { MultichannelButton } from './multichannel-button'
@@ -237,6 +237,29 @@ export const MultichannelText = props => {
       [...postbackButtonElements],
       [...urlButtonElements]
     )
+
+    if (postbackButtonElements.length === 0) {
+      if (urlButtonElements.length === 1) {
+        return (
+          <WhatsappCTAUrlButton
+            body={textElements[0]}
+            displayText={urlButtonElements[0].props.children}
+            url={urlButtonElements[0].props.url}
+          />
+        )
+      }
+
+      if (webviewButtonElements.length === 1) {
+        return (
+          <WhatsappCTAUrlButton
+            body={textElements[0]}
+            displayText={webviewButtonElements[0].props.children}
+            webview={webviewButtonElements[0].props.webview}
+          />
+        )
+      }
+    }
+
     if (multichannelContext.messageSeparator != null) {
       return elements
     }
@@ -273,7 +296,7 @@ export const MultichannelText = props => {
         <Text {...propsLastText}>{propsLastText.children}</Text>
       </>
     )
-  } else {
-    return <Text {...props}>{props.children}</Text>
   }
+
+  return <Text {...props}>{props.children}</Text>
 }

@@ -47,6 +47,7 @@ export enum INPUT {
   RAW = 'raw',
   CHAT_EVENT = 'chatevent',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
+  WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
 }
 
 export enum CASE_STATUS {
@@ -100,6 +101,7 @@ export type InputType =
   | typeof INPUT.WHATSAPP_TEMPLATE
   | typeof INPUT.CHAT_EVENT
   | typeof INPUT.WHATSAPP_BUTTON_LIST
+  | typeof INPUT.WHATSAPP_CTA_URL_BUTTON
 
 export interface IntentResult {
   intent: string

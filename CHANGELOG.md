@@ -20,6 +20,17 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.26.0-beta.1] - 2024-04-24
+
+### Added
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+  - [Added new component `WhatsappCTAUrlButton` to support Whatsapp's Call to Action URL Buttons](https://github.com/hubtype/botonic/pull/2811).
+
+### Changed
+
+### Fixed
+
 ## [0.26.0-beta.0] - 2024-04-16
 
 ### Added
