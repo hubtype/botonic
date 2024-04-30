@@ -13,6 +13,7 @@ import { HtTextNode } from './text'
 import { HtUrlNode } from './url'
 import { HtVideoNode } from './video'
 import { HtWhatsappButtonListNode } from './whatsapp-button-list'
+import { HtWhatsappCTAUrlButtonNode } from './whatsapp-cta-url-button'
 
 export type HtNodeWithContent =
   | HtTextNode
@@ -25,7 +26,8 @@ export type HtNodeWithContent =
   | HtFunctionNode
   | HtFallbackNode
   | HtWhatsappButtonListNode
-  | HtSmartIntentNode
+  | HtWhatsappCTAUrlButtonNode
+  | HtSmartIntentNode
 
 export type HtNodeWithoutContent =
   | HtUrlNode
