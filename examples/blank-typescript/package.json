@@ -1,6 +1,6 @@
 {
   "name": "@botonic/example-blank-typescript",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "scripts": {
     "build": "webpack --env target=all --mode=production",
     "start": "webpack-dev-server --env target=dev --mode=development",
@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
-    "@botonic/react": "^0.25.0"
+    "@botonic/react": "^0.26.0"
   },
   "devDependencies": {
-    "@botonic/dx": "^0.25.0"
+    "@botonic/dx": "^0.26.0"
   }
 }
