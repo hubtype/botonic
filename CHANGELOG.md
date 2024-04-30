@@ -20,32 +20,19 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.26.0-beta.1] - 2024-04-24
+## [0.26.0] - 2024-04-30
 
 ### Added
 
 - [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
   - [Added new component `WhatsappCTAUrlButton` to support Whatsapp's Call to Action URL Buttons](https://github.com/hubtype/botonic/pull/2811).
+  - [Add `closeWebview` in browser API](https://github.com/hubtype/botonic/pull/2810)
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
   - [Added support for reading `WhatsappCTAUrlButton` nodes from Flow Builder](https://github.com/hubtype/botonic/pull/2811)
-
-### Changed
-
-### Fixed
-
-## [0.26.0-beta.0] - 2024-04-16
-
-### Added
-
-- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
-
   - [Add `WebviewContentsContext` and `useWebviewContents`](https://github.com/hubtype/botonic/pull/2810)
-
-- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
-  - [Add `closeWebview` in browser API](https://github.com/hubtype/botonic/pull/2810)
 
 ### Changed
 
