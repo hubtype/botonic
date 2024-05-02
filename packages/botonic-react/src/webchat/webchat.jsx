@@ -364,9 +364,9 @@ export const Webchat = forwardRef((props, ref) => {
     if (userInputEnabled) {
       textArea.current.focus()
     }
-    if (options && options.payload) {
+    if (options?.payload) {
       sendPayload(options.payload)
-    } else if (options && options.path) {
+    } else if (options?.path) {
       const params = options.params ? params2queryString(options.params) : ''
       sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
     }
