@@ -9,6 +9,10 @@ export async function getSmartIntentNodeByInput(
   request: ActionRequest
 ): Promise<HtSmartIntentNode | undefined> {
   const smartIntentNodes = cmsApi.getSmartIntentNodes()
+  if (smartIntentNodes.length === 0) {
+    return undefined
+  }
+
   const intentsInferenceParams = smartIntentNodes.map(smartIntentNode => {
     return {
       name: smartIntentNode.content.title,
@@ -19,6 +23,7 @@ export async function getSmartIntentNodeByInput(
     name: 'Other',
     definition: 'The text does not belong to any other intent.',
   })
+
   try {
     const response = await axios({
       method: 'POST',
