@@ -23,9 +23,9 @@ class App extends React.Component {
 
   async close(options?: CloseWebviewOptions) {
     let payload = options ? options.payload : null
-    if (options.path) payload = `__PATH_PAYLOAD__${options.path}`
+    if (options?.path) payload = `__PATH_PAYLOAD__${options.path}`
     if (payload) {
-      if (options.params) {
+      if (options?.params) {
         payload = `${payload}?${params2queryString(options.params)}`
       }
       const s = this.state.session
