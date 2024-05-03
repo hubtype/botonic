@@ -140,6 +140,7 @@ export interface ThemeProps extends StyleProp {
     hoverBackground?: string
     hoverTextColor?: string
     messageType?: 'text' | 'payload'
+    urlIcon?: ImageProp & EnableProp
   } & StyleProp &
     CustomProp
   replies?: {

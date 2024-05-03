@@ -1,4 +1,5 @@
 import BotonicLogo from './assets/botonic_react_logo100x100.png'
+import UrlIcon from './assets/url-icon.png'
 
 export const COLORS = {
   // http://chir.ag/projects/name-that-color
@@ -36,6 +37,7 @@ export const WEBCHAT = {
     HEIGHT: 450,
     TITLE: 'Botonic',
     LOGO: BotonicLogo,
+    URL_ICON: UrlIcon,
     PLACEHOLDER: 'Ask me something...',
     FONT_FAMILY: "'Noto Sans JP', sans-serif",
     BORDER_RADIUS_TOP_CORNERS: '6px 6px 0px 0px',
@@ -115,6 +117,8 @@ export const WEBCHAT = {
     buttonStyleBackground: 'button.style.background',
     buttonStyleColor: 'button.style.color',
     customButton: 'button.custom',
+    urlIconImage: 'button.urlIcon.image',
+    urlIconEnabled: 'button.urlIcon.enable',
     // Replies
     alignReplies: 'replies.align',
     customReply: 'reply.custom',

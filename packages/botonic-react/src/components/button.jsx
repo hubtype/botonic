@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
+import { resolveImage } from '../util/environment'
 import { renderComponent } from '../util/react'
 import { generateWebviewUrlWithParams } from '../util/webviews'
 import { ButtonsDisabler } from './buttons-disabler'
@@ -137,6 +138,18 @@ export const Button = props => {
           COLORS.SOLID_BLACK
         )
 
+    const urlIconEnabled = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.urlIconEnabled
+    )
+
+    const urlIconImage = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.urlIconImage
+    )
+
+    const urlIcon = !propertyDisabled(urlIconEnabled)
+      ? urlIconImage || WEBCHAT.DEFAULTS.URL_ICON
+      : undefined
+
     return (
       <StyledButton
         className={getClassName()}
@@ -149,12 +162,24 @@ export const Button = props => {
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
           ...(props.disabled && autoDisable && disabledStyle),
+          position: 'relative',
         }}
         bottom={props.bottomRadius}
       >
         {props.children}
+        {props.url && urlIcon && (
+          <img
+            className='botonic-url-icon'
+            style={{ width: '20px', position: 'absolute', right: '12px' }}
+            src={resolveImage(urlIcon)}
+          />
+        )}
       </StyledButton>
     )
+  }
+
+  const propertyDisabled = value => {
+    return value === false
   }
 
   const renderNode = () => {
