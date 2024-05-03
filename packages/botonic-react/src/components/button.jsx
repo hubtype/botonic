@@ -138,6 +138,8 @@ export const Button = props => {
           COLORS.SOLID_BLACK
         )
 
+    const urlIconProp = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.urlIcon)
+
     const urlIconEnabled = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.urlIconEnabled
     )
@@ -146,9 +148,11 @@ export const Button = props => {
       WEBCHAT.CUSTOM_PROPERTIES.urlIconImage
     )
 
-    const urlIcon = !propertyDisabled(urlIconEnabled)
-      ? urlIconImage || WEBCHAT.DEFAULTS.URL_ICON
-      : undefined
+    const urlIcon = urlIconEnabled
+      ? urlIconImage ?? WEBCHAT.DEFAULTS.URL_ICON
+      : propertyDisabled(urlIconEnabled)
+        ? undefined
+        : urlIconImage
 
     return (
       <StyledButton
