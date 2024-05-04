@@ -1,3 +1,4 @@
+import { isFacebook, isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { COMPONENT_TYPE } from '../../constants'
@@ -9,18 +10,17 @@ import { MultichannelCarousel } from './multichannel-carousel'
 import { MultichannelContext } from './multichannel-context'
 import { MultichannelReply } from './multichannel-reply'
 import { MultichannelText } from './multichannel-text'
-import {
-  isFacebook,
-  isWhatsapp,
-  MULTICHANNEL_WHATSAPP_PROPS,
-} from './multichannel-utils'
+import { MULTICHANNEL_WHATSAPP_PROPS } from './multichannel-utils'
 
 export const Multichannel = props => {
   const requestContext = useContext(RequestContext)
-  if (!isWhatsapp(requestContext) && !isFacebook(requestContext)) {
+  if (
+    !isWhatsapp(requestContext.session) &&
+    !isFacebook(requestContext.session)
+  ) {
     return props.children
   }
-  if (isFacebook(requestContext)) {
+  if (isFacebook(requestContext.session)) {
     const newChildren = deepMapWithIndex(props.children, child => {
       if (child && child.type && child.type.name === COMPONENT_TYPE.TEXT) {
         return (

@@ -1,8 +1,8 @@
+import { isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { Reply } from '../reply'
-import { isWhatsapp } from './multichannel-utils'
 
 export const MultichannelReply = props => {
   const requestContext = useContext(RequestContext)
@@ -10,7 +10,7 @@ export const MultichannelReply = props => {
   const hasPayload = () => Boolean(props.payload)
   const getText = () => `${props.children}`
 
-  if (isWhatsapp(requestContext)) {
+  if (isWhatsapp(requestContext.session)) {
     if (hasPath() || hasPayload()) return `${getText()}`
     return null
   } else {

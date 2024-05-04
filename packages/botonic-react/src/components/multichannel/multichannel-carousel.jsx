@@ -1,3 +1,4 @@
+import { isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
@@ -7,7 +8,6 @@ import {
   getFilteredElements,
   isMultichannelButton,
   isNodeKind,
-  isWhatsapp,
 } from './multichannel-utils'
 
 export const MultichannelCarousel = props => {
@@ -16,7 +16,7 @@ export const MultichannelCarousel = props => {
   const getButtons = node =>
     [].concat(getFilteredElements(node, isMultichannelButton))
 
-  if (isWhatsapp(requestContext)) {
+  if (isWhatsapp(requestContext.session)) {
     const elements = props.children
       .map(e => e.props.children)
       .map((element, i) => {

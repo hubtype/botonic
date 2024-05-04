@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { INPUT, isFacebook, isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
@@ -16,8 +16,6 @@ import {
   getButtonType,
   getMultichannelButtons,
   getMultichannelReplies,
-  isFacebook,
-  isWhatsapp,
   MENU_BUTTON_WHATSAPP_BUTTON_LIST,
   MULTICHANNEL_WHATSAPP_PROPS,
   WHATSAPP_LIST_MAX_BUTTONS,
@@ -113,7 +111,7 @@ export const MultichannelText = props => {
     return messages
   }
 
-  if (isWhatsapp(requestContext)) {
+  if (isWhatsapp(requestContext.session)) {
     const texts = getText(props.children)
     const { postbackButtons, urlButtons, webviewButtons } = getWhatsappButtons()
 
@@ -280,7 +278,7 @@ export const MultichannelText = props => {
     return <>{messages}</>
   }
 
-  if (isFacebook(requestContext)) {
+  if (isFacebook(requestContext.session)) {
     const text = getText(props.children)
     const multichannelFacebook = new MultichannelFacebook()
     const { texts, propsLastText, propsWithoutChildren } =

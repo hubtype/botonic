@@ -1,10 +1,11 @@
+import { isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { truncateText } from '../../util'
 import { Button } from '../button'
 import { MultichannelContext } from './multichannel-context'
-import { isWhatsapp, WHATSAPP_MAX_BUTTON_CHARS } from './multichannel-utils'
+import { WHATSAPP_MAX_BUTTON_CHARS } from './multichannel-utils'
 
 export const MultichannelButton = props => {
   const requestContext = useContext(RequestContext)
@@ -54,7 +55,7 @@ export const MultichannelButton = props => {
     return text
   }
 
-  if (isWhatsapp(requestContext)) {
+  if (isWhatsapp(requestContext.session)) {
     const asText = props.asText ?? true
     if (asText) {
       if (hasUrl()) {
