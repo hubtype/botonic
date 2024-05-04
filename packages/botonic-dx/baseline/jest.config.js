@@ -5,16 +5,16 @@ const path = require('path')
 module.exports = {
   roots: ['src/', 'tests/'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.tests.json',
+      },
+    ],
     '^.+\\.jsx?$': [
       'babel-jest',
       { configFile: path.resolve(__dirname, 'babel.config.js') },
     ],
-  },
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.tests.json',
-    },
   },
   preset: 'ts-jest',
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.([jt]sx?)$',
