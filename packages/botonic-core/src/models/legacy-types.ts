@@ -1,7 +1,5 @@
 // TODO: This file contains all the legacy types we had in index.ts. After some refactors, we should be able to get rid of many of them.
 
-import { BotonicEvent } from './events'
-
 export enum CASE_STATUS {
   WAITING = 'status_waiting',
   ATTENDING = 'status_attending',
@@ -98,22 +96,22 @@ export interface ResolvedPlugin extends Plugin {
 export type ResolvedPlugins = Record<string, ResolvedPlugin>
 
 export type InputType =
-  | typeof INPUT.AUDIO
-  | typeof INPUT.BUTTON_MESSAGE
-  | typeof INPUT.CAROUSEL
-  | typeof INPUT.CONTACT
-  | typeof INPUT.CUSTOM
-  | typeof INPUT.DOCUMENT
-  | typeof INPUT.IMAGE
-  | typeof INPUT.LOCATION
-  | typeof INPUT.POSTBACK
-  | typeof INPUT.TEXT
-  | typeof INPUT.VIDEO
-  | typeof INPUT.WEBCHAT_SETTINGS
-  | typeof INPUT.WHATSAPP_TEMPLATE
-  | typeof INPUT.CHAT_EVENT
-  | typeof INPUT.WHATSAPP_BUTTON_LIST
-  | typeof INPUT.WHATSAPP_CTA_URL_BUTTON
+  | INPUT.AUDIO
+  | INPUT.BUTTON_MESSAGE
+  | INPUT.CAROUSEL
+  | INPUT.CONTACT
+  | INPUT.CUSTOM
+  | INPUT.DOCUMENT
+  | INPUT.IMAGE
+  | INPUT.LOCATION
+  | INPUT.POSTBACK
+  | INPUT.TEXT
+  | INPUT.VIDEO
+  | INPUT.WEBCHAT_SETTINGS
+  | INPUT.WHATSAPP_TEMPLATE
+  | INPUT.CHAT_EVENT
+  | INPUT.WHATSAPP_BUTTON_LIST
+  | INPUT.WHATSAPP_CTA_URL_BUTTON
 
 export interface IntentResult {
   intent: string
