@@ -21,7 +21,6 @@ export class FlowButton extends ContentFieldsBase {
     locale: string,
     cmsApi: FlowBuilderApi
   ): FlowButton {
-    const payloadId = this.getPayloadId(cmsButton, locale)
     const urlId = this.getUrlId(cmsButton, locale)
 
     const newButton = new FlowButton(cmsButton.id)
@@ -30,21 +29,12 @@ export class FlowButton extends ContentFieldsBase {
       newButton.payload = cmsApi.getPayload(cmsButton.target)
     }
 
-    // OLD PAYLOAD
-    if (cmsButton.payload && payloadId) {
-      const payloadNode = cmsApi.getNodeById<HtPayloadNode>(payloadId)
-      newButton.payload = payloadNode.content.payload
-    }
     if (cmsButton.url && urlId) {
       const urlNode = cmsApi.getNodeById<HtUrlNode>(urlId)
       newButton.url = urlNode.content.url
     }
 
     return newButton
-  }
-
-  static getPayloadId(cmsButton: HtButton, locale: string): string | undefined {
-    return cmsButton.payload.find(payload => payload.locale === locale)?.id
   }
 
   static getUrlId(cmsButton: HtButton, locale: string): string | undefined {
