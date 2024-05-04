@@ -3,6 +3,7 @@ import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from './api'
 import {
+  BOT_ACTION_PAYLOAD_SEPARATOR,
   FLOW_BUILDER_API_URL_PROD,
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
@@ -18,6 +19,7 @@ import {
 } from './content-fields'
 import { FlowWhatsappCtaUrlButtonNode } from './content-fields/flow-whatsapp-cta-url-button'
 import {
+  HtBotActionNode,
   HtFlowBuilderData,
   HtFunctionArgument,
   HtFunctionArguments,
@@ -91,11 +93,30 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
     }
 
+    this.updateRequestBeforeRoutes(request)
+  }
+
+  private updateRequestBeforeRoutes(request: PluginPreRequest) {
     if (request.input.payload) {
-      request.input.payload = request.input.payload?.split(
-        SOURCE_INFO_SEPARATOR
-      )[0]
+      request.input.payload = this.removeSourceSeparatorFromPayload(
+        request.input.payload
+      )
+      request.input.payload = this.updateBotActionPayload(request.input.payload)
     }
+  }
+
+  private removeSourceSeparatorFromPayload(payload: string): string {
+    return payload?.split(SOURCE_INFO_SEPARATOR)[0]
+  }
+
+  private updateBotActionPayload(payload: string): string {
+    if (payload.startsWith(BOT_ACTION_PAYLOAD_SEPARATOR)) {
+      const botActionId = payload.split(SEPARATOR)[1]
+      const botActionNode =
+        this.cmsApi.getNodeById<HtBotActionNode>(botActionId)
+      return this.cmsApi.createPayloadWithParams(botActionNode)
+    }
+    return payload
   }
 
   async getContentsByContentID(
