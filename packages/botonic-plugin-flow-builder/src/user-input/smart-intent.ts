@@ -35,7 +35,6 @@ export async function getSmartIntentNodeByInput(
       data: { text: request.input.data, intents: intentsInferenceParams },
       timeout: 10000,
     })
-    console.log({ response })
     return smartIntentNodes.find(
       smartIntentNode =>
         smartIntentNode.content.title === response.data.intent_name
