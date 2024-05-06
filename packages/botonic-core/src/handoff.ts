@@ -12,14 +12,7 @@ export interface HubtypeAgentsInfo {
   last_message_sent: string
   status: string
 }
-export interface HubtypeSession extends Session {
-  _hubtype_api: string
-  _access_token: string
-}
 
-export interface SessionWithBotonicAction extends Session {
-  _botonic_action: string
-}
 export interface BackendContext {
   timeoutMs: number
 }
@@ -43,7 +36,7 @@ function contextDefaults(context: any): BackendContext {
 }
 
 export async function getOpenQueues(
-  session: HubtypeSession,
+  session: Session,
   context = {}
 ): Promise<{ queues: string[] }> {
   //be aware of https://github.com/axios/axios/issues/1543
@@ -63,7 +56,7 @@ export async function getOpenQueues(
 }
 
 export class HandOffBuilder {
-  _session: SessionWithBotonicAction
+  _session: Session
   _queue: string
   _onFinish: string
   _email: string
@@ -76,7 +69,7 @@ export class HandOffBuilder {
   _shadowing: boolean
   _extraData: HandoffExtraData
 
-  constructor(session: SessionWithBotonicAction) {
+  constructor(session: Session) {
     this._session = session
   }
 
@@ -192,7 +185,7 @@ interface HubtypeHandoffParams {
   case_extra_data?: HandoffExtraData
 }
 async function _humanHandOff(
-  session: SessionWithBotonicAction,
+  session: Session,
   queueNameOrId = '',
   onFinish: string,
   agentEmail = '',
@@ -243,7 +236,7 @@ async function _humanHandOff(
 }
 
 export async function storeCaseRating(
-  session: HubtypeSession,
+  session: Session,
   rating: number,
   context: any = {}
 ): Promise<{ status: string }> {
@@ -263,7 +256,7 @@ export async function storeCaseRating(
 }
 
 export async function getAvailableAgentsByQueue(
-  session: HubtypeSession,
+  session: Session,
   queueId: string
 ): Promise<{ agents: string[] }> {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
@@ -278,7 +271,7 @@ export async function getAvailableAgentsByQueue(
 }
 
 export async function getAvailableAgents(
-  session: HubtypeSession
+  session: Session
 ): Promise<{ agents: HubtypeAgentsInfo[] }> {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const botId = session.bot.id
@@ -293,7 +286,7 @@ export async function getAvailableAgents(
 }
 
 export async function getAgentVacationRanges(
-  session: HubtypeSession,
+  session: Session,
   { agentId, agentEmail }: { agentId?: string; agentEmail?: string }
 ): Promise<{ vacation_ranges: VacationRange[] }> {
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
@@ -310,7 +303,7 @@ export async function getAgentVacationRanges(
 }
 
 export function cancelHandoff(
-  session: SessionWithBotonicAction,
+  session: Session,
   typification: string | null = null
 ): void {
   let action = 'discard_case'
@@ -318,6 +311,6 @@ export function cancelHandoff(
   session._botonic_action = action
 }
 
-export function deleteUser(session: SessionWithBotonicAction): void {
+export function deleteUser(session: Session): void {
   session._botonic_action = `delete_user`
 }
