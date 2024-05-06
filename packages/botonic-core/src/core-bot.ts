@@ -1,21 +1,15 @@
-import { ulid } from 'ulid'
-
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
-  BotonicEvent,
   BotRequest,
   BotResponse,
   INPUT,
   Locales,
-  MessageEventAck,
-  MessageEventFrom,
   ResolvedPlugins,
   Route,
   Routes,
   Session,
 } from './models'
-import { BotonicOutputParser } from './output-parser'
 import { loadPlugins, runPlugins } from './plugins'
 import { getComputedRoutes, Router } from './routing'
 
@@ -44,7 +38,6 @@ export class CoreBot {
   router: Router | null
   routes: Routes
   theme?: any
-  botonicOutputParser = new BotonicOutputParser()
 
   constructor({
     // TODO: Receives dataProvider
@@ -96,7 +89,6 @@ export class CoreBot {
     input,
     session,
     lastRoutePath,
-    dataProvider,
   }: BotRequest): Promise<BotResponse> {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
@@ -106,25 +98,8 @@ export class CoreBot {
         input,
         session,
         lastRoutePath,
-        dataProvider,
         response: [],
-        messageEvents: null,
       }
-    }
-
-    const parsedUserEvent = this.botonicOutputParser.parseFromUserInput(input)
-    const userId = session.user.id
-    if (dataProvider) {
-      // TODO: Next iterations. Review cycle of commited events to DB when messages change their ACK
-      // @ts-ignore
-      const userEvent = await dataProvider.saveEvent({
-        ...parsedUserEvent,
-        userId,
-        eventId: ulid(),
-        createdAt: new Date().toISOString(),
-        from: MessageEventFrom.USER,
-        ack: MessageEventAck.RECEIVED,
-      })
     }
 
     if (this.plugins) {
@@ -134,9 +109,7 @@ export class CoreBot {
         input,
         session,
         lastRoutePath,
-        undefined,
-        undefined,
-        dataProvider
+        undefined
       )
     }
 
@@ -169,20 +142,12 @@ export class CoreBot {
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
       lastRoutePath,
-      dataProvider,
     }
 
     const response = await this.renderer({
       request,
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
-    let messageEvents: Partial<BotonicEvent>[] = []
-    try {
-      messageEvents = this.botonicOutputParser.xmlToMessageEvents(response)
-    } catch (e) {
-      // Disabling Botonic 1.0 error log for LTS version:
-      // console.error(e)
-    }
 
     lastRoutePath = output.lastRoutePath
     if (this.plugins) {
@@ -192,35 +157,16 @@ export class CoreBot {
         input,
         session,
         lastRoutePath,
-        response,
-        messageEvents,
-        dataProvider
+        response
       )
-    }
-
-    if (dataProvider) {
-      // TODO: save bot responses to db and update user with new session and new params
-      for (const messageEvent of messageEvents) {
-        // @ts-ignore
-        const botEvent = await dataProvider.saveEvent({
-          ...messageEvent,
-          userId,
-          eventId: ulid(),
-          createdAt: new Date().toISOString(),
-          from: MessageEventFrom.BOT,
-          ack: MessageEventAck.SENT,
-        })
-      }
     }
 
     session.is_first_interaction = false
     return {
       input,
       response,
-      messageEvents,
       session,
       lastRoutePath,
-      dataProvider,
     }
   }
 }

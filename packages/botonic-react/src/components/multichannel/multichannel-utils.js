@@ -1,5 +1,3 @@
-import { Providers } from '@botonic/core'
-
 /**
  *
  * Whatsapp does not support Markdown
@@ -73,13 +71,3 @@ export function getMultichannelButtons(node) {
 export function getMultichannelReplies(node) {
   return getFilteredElements(node, isMultichannelReply)
 }
-
-export const isWhatsapp = context =>
-  context.session &&
-  context.session.user &&
-  context.session.user.provider == Providers.Messaging.WHATSAPP
-
-export const isFacebook = context =>
-  context.session &&
-  context.session.user &&
-  context.session.user.provider == Providers.Messaging.FACEBOOK

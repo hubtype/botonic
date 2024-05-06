@@ -1,19 +1,30 @@
 // TODO: This file contains all the legacy types we had in index.ts. After some refactors, we should be able to get rid of many of them.
 
-import { DataProvider } from '../data-provider'
-import { BotonicEvent } from './events'
+export enum CASE_STATUS {
+  WAITING = 'status_waiting',
+  ATTENDING = 'status_attending',
+  IDLE = 'status_idle',
+  RESOLVED = 'status_resolved',
+}
 
 export type CaseStatusType =
-  | typeof CASE_STATUS.ATTENDING
-  | typeof CASE_STATUS.IDLE
-  | typeof CASE_STATUS.RESOLVED
-  | typeof CASE_STATUS.WAITING
+  | CASE_STATUS.ATTENDING
+  | CASE_STATUS.IDLE
+  | CASE_STATUS.RESOLVED
+  | CASE_STATUS.WAITING
+
+export enum CASE_RESOLUTION {
+  OK = 'result_ok',
+  NOK = 'result_nok',
+  NOT_SOLVED = 'result_not_solved',
+  BANNED = 'result_banned',
+}
 
 export type CaseResolution =
-  | typeof CASE_RESOLUTION.BANNED
-  | typeof CASE_RESOLUTION.NOK
-  | typeof CASE_RESOLUTION.NOT_SOLVED
-  | typeof CASE_RESOLUTION.OK
+  | CASE_RESOLUTION.BANNED
+  | CASE_RESOLUTION.NOK
+  | CASE_RESOLUTION.NOT_SOLVED
+  | CASE_RESOLUTION.OK
 
 export enum PROVIDER {
   APPLE = 'apple',
@@ -29,6 +40,19 @@ export enum PROVIDER {
   WECHAT = 'wechat',
   WHATSAPP = 'whatsapp',
 }
+
+export type ProviderType =
+  | PROVIDER.DEV
+  | PROVIDER.FACEBOOK
+  | PROVIDER.GENERIC
+  | PROVIDER.INSTAGRAM
+  | PROVIDER.INTERCOM
+  | PROVIDER.SMOOCH
+  | PROVIDER.TELEGRAM
+  | PROVIDER.TWITTER
+  | PROVIDER.WEBCHAT
+  | PROVIDER.WECHAT
+  | PROVIDER.WHATSAPP
 
 export enum INPUT {
   TEXT = 'text',
@@ -48,20 +72,6 @@ export enum INPUT {
   CHAT_EVENT = 'chatevent',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
-}
-
-export enum CASE_STATUS {
-  WAITING = 'status_waiting',
-  ATTENDING = 'status_attending',
-  IDLE = 'status_idle',
-  RESOLVED = 'status_resolved',
-}
-
-export enum CASE_RESOLUTION {
-  OK = 'result_ok',
-  NOK = 'result_nok',
-  NOT_SOLVED = 'result_not_solved',
-  BANNED = 'result_banned',
 }
 
 export interface Locales {
@@ -86,22 +96,22 @@ export interface ResolvedPlugin extends Plugin {
 export type ResolvedPlugins = Record<string, ResolvedPlugin>
 
 export type InputType =
-  | typeof INPUT.AUDIO
-  | typeof INPUT.BUTTON_MESSAGE
-  | typeof INPUT.CAROUSEL
-  | typeof INPUT.CONTACT
-  | typeof INPUT.CUSTOM
-  | typeof INPUT.DOCUMENT
-  | typeof INPUT.IMAGE
-  | typeof INPUT.LOCATION
-  | typeof INPUT.POSTBACK
-  | typeof INPUT.TEXT
-  | typeof INPUT.VIDEO
-  | typeof INPUT.WEBCHAT_SETTINGS
-  | typeof INPUT.WHATSAPP_TEMPLATE
-  | typeof INPUT.CHAT_EVENT
-  | typeof INPUT.WHATSAPP_BUTTON_LIST
-  | typeof INPUT.WHATSAPP_CTA_URL_BUTTON
+  | INPUT.AUDIO
+  | INPUT.BUTTON_MESSAGE
+  | INPUT.CAROUSEL
+  | INPUT.CONTACT
+  | INPUT.CUSTOM
+  | INPUT.DOCUMENT
+  | INPUT.IMAGE
+  | INPUT.LOCATION
+  | INPUT.POSTBACK
+  | INPUT.TEXT
+  | INPUT.VIDEO
+  | INPUT.WEBCHAT_SETTINGS
+  | INPUT.WHATSAPP_TEMPLATE
+  | INPUT.CHAT_EVENT
+  | INPUT.WHATSAPP_BUTTON_LIST
+  | INPUT.WHATSAPP_CTA_URL_BUTTON
 
 export interface IntentResult {
   intent: string
@@ -132,21 +142,22 @@ export interface Input extends Partial<NluResult> {
   data?: string
   path?: string
   payload?: string
+  referral?: string
   type: InputType
+  context?: {
+    campaign?: Campaign
+  }
 }
 
-export type ProviderType =
-  | typeof PROVIDER.DEV
-  | typeof PROVIDER.FACEBOOK
-  | typeof PROVIDER.GENERIC
-  | typeof PROVIDER.INSTAGRAM
-  | typeof PROVIDER.INTERCOM
-  | typeof PROVIDER.SMOOCH
-  | typeof PROVIDER.TELEGRAM
-  | typeof PROVIDER.TWITTER
-  | typeof PROVIDER.WEBCHAT
-  | typeof PROVIDER.WECHAT
-  | typeof PROVIDER.WHATSAPP
+export interface Campaign {
+  id: string
+  name: string
+  status: string
+  start_date: string
+  end_date: string
+  bot_path: string
+  template_name: string
+}
 
 export interface SessionUser {
   id: string
@@ -161,8 +172,12 @@ export interface SessionUser {
   imp_id?: string
   provider_id?: string
 }
+export interface HubtypeCaseContactReason {
+  id: string
+  name: string
+  project_id: string
+}
 
-// eslint-disable @typescript-eslint/naming-convention
 export interface Session {
   bot: {
     id: string
@@ -170,18 +185,23 @@ export interface Session {
   }
   __locale?: string
   __retries: number
+  _access_token: string
+  _hubtype_api: string
   is_first_interaction: boolean
   last_session?: any
-  organization: string
   organization_id: string
+  organization: string
   user: SessionUser
   // after handoff
+  _botonic_action?: string
   _hubtype_case_status?: CaseStatusType
+  _hubtype_case_id?: string
   _hubtype_case_typification?: string
+  _hubtype_case_contact_reasons?: HubtypeCaseContactReason[]
   _shadowing?: boolean
-  _access_token?: string
+  external?: any
+  zendesk_ticket_id?: string
 }
-// eslint-enable @typescript-eslint/naming-convention
 
 export type InputMatcher = (input: Input) => boolean
 export type ParamsMatcher =
@@ -225,7 +245,6 @@ export interface BotRequest {
   input: Input
   lastRoutePath: RoutePath
   session: Session
-  dataProvider?: DataProvider
 }
 
 /** The response of the bot for the triggered actions, which can be
@@ -234,7 +253,6 @@ export interface BotRequest {
  * */
 export interface BotResponse extends BotRequest {
   response: any
-  messageEvents: Partial<BotonicEvent>[] | null
 }
 
 export interface PluginPreRequest extends BotRequest {
@@ -252,24 +270,6 @@ export interface Plugin {
 export interface Params {
   [key: string]: any
 }
-
-export const Providers = Object.freeze({
-  Messaging: {
-    APPLE: 'apple',
-    FACEBOOK: 'facebook',
-    GENERIC: 'generic',
-    IMBEE: 'imbee',
-    INSTAGRAM: 'instagram',
-    INTERCOM: 'intercom',
-    SMOOCH_WEB: 'smooch_web',
-    SMOOCH: 'smooch',
-    TELEGRAM: 'telegram',
-    TWITTER: 'twitter',
-    WEBCHAT: 'webchat',
-    WECHAT: 'wechat',
-    WHATSAPP: 'whatsapp',
-  },
-})
 
 export type Nullable<T> = T | null
 

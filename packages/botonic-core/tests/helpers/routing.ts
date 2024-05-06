@@ -8,6 +8,8 @@ export function testSession(): Session {
   return {
     user: { id: 'userid', provider: PROVIDER.DEV },
     bot: { id: 'bot_id' },
+    _access_token: '1234',
+    _hubtype_api: 'app.hubtype.com',
     is_first_interaction: true,
     organization: 'test_org',
     organization_id: '1234567890',
