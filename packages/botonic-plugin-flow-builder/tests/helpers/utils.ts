@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Input,
   PluginPreRequest,
@@ -47,7 +48,6 @@ export function createRequest({
       bot: { id: 'bid1' },
       user: { provider, id: 'uid1', extra_data: {} },
       __retries: 0,
-      _hubtype_api: 'https://api.hubtype.com',
       _access_token: 'fake_access_token',
     },
     input,
