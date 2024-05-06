@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.26.0",
+  "version": "0.26.1",
   "description": "Continuous integration for botonic packages",
   "scripts": {
     "build": "echo Skipping build..."
