@@ -17,6 +17,7 @@ const StyledButton = styled.button`
   text-align: center;
   align-content: center;
   justify-content: center;
+  gap: 6px;
   padding: 12px 32px;
   font-family: inherit;
   border: none;
@@ -28,6 +29,10 @@ const StyledButton = styled.button`
   border-bottom-right-radius: ${props => props.bottom || '0px'};
   border-bottom-left-radius: ${props => props.bottom || '0px'};
   overflow: hidden;
+`
+
+export const StyledUrlImage = styled.img`
+  width: 20px;
 `
 
 export const Button = props => {
@@ -138,21 +143,18 @@ export const Button = props => {
           COLORS.SOLID_BLACK
         )
 
-    const urlIconProp = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.urlIcon)
-
-    const urlIconEnabled = getThemeProperty(
+    const urlIconEnabledProp = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.urlIconEnabled
     )
 
-    const urlIconImage = getThemeProperty(
+    const urlIconImageProp = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.urlIconImage
     )
 
-    const urlIcon = urlIconEnabled
-      ? urlIconImage ?? WEBCHAT.DEFAULTS.URL_ICON
-      : propertyDisabled(urlIconEnabled)
-        ? undefined
-        : urlIconImage
+    const urlIconImage = urlIconImageProp ?? WEBCHAT.DEFAULTS.URL_ICON
+
+    const urlIcon =
+      urlIconEnabledProp || urlIconImageProp ? urlIconImage : undefined
 
     return (
       <StyledButton
@@ -166,24 +168,18 @@ export const Button = props => {
           color: buttonTextColor,
           backgroundColor: buttonBgColor,
           ...(props.disabled && autoDisable && disabledStyle),
-          position: 'relative',
         }}
         bottom={props.bottomRadius}
       >
         {props.children}
         {props.url && urlIcon && (
-          <img
+          <StyledUrlImage
             className='botonic-url-icon'
-            style={{ width: '20px', position: 'absolute', right: '12px' }}
             src={resolveImage(urlIcon)}
           />
         )}
       </StyledButton>
     )
-  }
-
-  const propertyDisabled = value => {
-    return value === false
   }
 
   const renderNode = () => {
