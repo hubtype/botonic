@@ -5,8 +5,8 @@ import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { createNodeFromKnowledgeBase } from './knowledge-bases'
 import { EventName, trackEvent } from '../tracking'
+import { createNodeFromKnowledgeBase } from './knowledge-bases'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]

@@ -1,7 +1,11 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import { REG_EXP_PATTERN, SEPARATOR } from './constants'
+import {
+  BOT_ACTION_PAYLOAD_PREFIX,
+  REG_EXP_PATTERN,
+  SEPARATOR,
+} from './constants'
 import {
   HtBotActionNode,
   HtFallbackNode,
@@ -209,14 +213,13 @@ export class FlowBuilderApi {
     }
 
     if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
-      const botActionNode = this.getNodeById<HtBotActionNode>(target.id)
-      return this.createPayloadWithParams(botActionNode)
+      return `${BOT_ACTION_PAYLOAD_PREFIX}${target.id}`
     }
 
     return target.id
   }
 
-  private createPayloadWithParams(botActionNode: HtBotActionNode): string {
+  createPayloadWithParams(botActionNode: HtBotActionNode): string {
     const payloadId = botActionNode.content.payload_id
     const payloadNode = this.getNodeById<HtPayloadNode>(payloadId)
     const customParams = JSON.parse(
