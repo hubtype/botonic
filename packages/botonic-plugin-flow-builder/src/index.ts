@@ -3,7 +3,7 @@ import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from './api'
 import {
-  BOT_ACTION_PAYLOAD_SEPARATOR,
+  BOT_ACTION_PAYLOAD_PREFIX,
   FLOW_BUILDER_API_URL_PROD,
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
@@ -101,22 +101,23 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request.input.payload = this.removeSourceSeparatorFromPayload(
         request.input.payload
       )
-      request.input.payload = this.updateBotActionPayload(request.input.payload)
+
+      if (request.input.payload.startsWith(BOT_ACTION_PAYLOAD_PREFIX)) {
+        request.input.payload = this.updateBotActionPayload(
+          request.input.payload
+        )
+      }
     }
   }
 
   private removeSourceSeparatorFromPayload(payload: string): string {
-    return payload?.split(SOURCE_INFO_SEPARATOR)[0]
+    return payload.split(SOURCE_INFO_SEPARATOR)[0]
   }
 
   private updateBotActionPayload(payload: string): string {
-    if (payload.startsWith(BOT_ACTION_PAYLOAD_SEPARATOR)) {
-      const botActionId = payload.split(SEPARATOR)[1]
-      const botActionNode =
-        this.cmsApi.getNodeById<HtBotActionNode>(botActionId)
-      return this.cmsApi.createPayloadWithParams(botActionNode)
-    }
-    return payload
+    const botActionId = payload.split(SEPARATOR)[1]
+    const botActionNode = this.cmsApi.getNodeById<HtBotActionNode>(botActionId)
+    return this.cmsApi.createPayloadWithParams(botActionNode)
   }
 
   async getContentsByContentID(

@@ -2,7 +2,7 @@ import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
 import {
-  BOT_ACTION_PAYLOAD_SEPARATOR,
+  BOT_ACTION_PAYLOAD_PREFIX,
   REG_EXP_PATTERN,
   SEPARATOR,
 } from './constants'
@@ -213,7 +213,7 @@ export class FlowBuilderApi {
     }
 
     if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
-      return `${BOT_ACTION_PAYLOAD_SEPARATOR}${target.id}`
+      return `${BOT_ACTION_PAYLOAD_PREFIX}${target.id}`
     }
 
     return target.id
