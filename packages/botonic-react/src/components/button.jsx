@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
+import { resolveImage } from '../util/environment'
 import { renderComponent } from '../util/react'
 import { generateWebviewUrlWithParams } from '../util/webviews'
 import { ButtonsDisabler } from './buttons-disabler'
@@ -16,6 +17,7 @@ const StyledButton = styled.button`
   text-align: center;
   align-content: center;
   justify-content: center;
+  gap: 6px;
   padding: 12px 32px;
   font-family: inherit;
   border: none;
@@ -27,6 +29,10 @@ const StyledButton = styled.button`
   border-bottom-right-radius: ${props => props.bottom || '0px'};
   border-bottom-left-radius: ${props => props.bottom || '0px'};
   overflow: hidden;
+`
+
+export const StyledUrlImage = styled.img`
+  width: 20px;
 `
 
 export const Button = props => {
@@ -137,6 +143,19 @@ export const Button = props => {
           COLORS.SOLID_BLACK
         )
 
+    const urlIconEnabledProp = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.urlIconEnabled
+    )
+
+    const urlIconImageProp = getThemeProperty(
+      WEBCHAT.CUSTOM_PROPERTIES.urlIconImage
+    )
+
+    const urlIconImage = urlIconImageProp ?? WEBCHAT.DEFAULTS.URL_ICON
+
+    const urlIcon =
+      urlIconEnabledProp || urlIconImageProp ? urlIconImage : undefined
+
     return (
       <StyledButton
         className={getClassName()}
@@ -153,6 +172,12 @@ export const Button = props => {
         bottom={props.bottomRadius}
       >
         {props.children}
+        {props.url && urlIcon && (
+          <StyledUrlImage
+            className='botonic-url-icon'
+            src={resolveImage(urlIcon)}
+          />
+        )}
       </StyledButton>
     )
   }
