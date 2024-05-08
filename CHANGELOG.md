@@ -14,9 +14,29 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  -[Add `url icon` theme property](https://github.com/hubtype/botonic/pull/2816)
+
 ### Changed
 
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - [Remove unused code from experimental 1.0 version](https://github.com/hubtype/botonic/pull/2812)
+  - [Remove types `HubtypeSession` and `SessionWithBotonicAction` all typed in `Session`](https://github.com/hubtype/botonic/pull/2812)
+
+- [@botonic/plugin-hubtype-babel](https://www.npmjs.com/package/@botonic/plugin-hubtype-babel)
+
+  - [Remove types `HubtypeSession` and use `Session`](https://github.com/hubtype/botonic/pull/2812)
+
+- [@botonic/plugin-knowledge-bases](https://www.npmjs.com/package/@botonic/plugin-knowledge-bases)
+  - [Remove types `HubtypeSession` and use `Session`](https://github.com/hubtype/botonic/pull/2812)
+
 ### Fixed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Fix `bot action payload` limit characters](https://github.com/hubtype/botonic/pull/2817)
 
 </details>
 
