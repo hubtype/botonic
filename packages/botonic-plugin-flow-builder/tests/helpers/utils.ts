@@ -49,6 +49,7 @@ export function createRequest({
       user: { provider, id: 'uid1', extra_data: {} },
       __retries: 0,
       _access_token: 'fake_access_token',
+      _hubtype_api: 'https://api.hubtype.com',
     },
     input,
     lastRoutePath: '',
