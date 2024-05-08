@@ -8,7 +8,7 @@ import {
 } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import BotonicPluginFlowBuilder from '../../src'
+import BotonicPluginFlowBuilder, { FlowBuilderAction } from '../../src'
 
 export function createFlowBuilderPlugin(flow: any, locale: string = 'es') {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
@@ -65,4 +65,13 @@ export function getActionRequest(request: PluginPreRequest): ActionRequest {
     defaultTyping: 0,
     params: {},
   }
+}
+
+export async function getContentsAfterPreAndBotonicInit(
+  request: PluginPreRequest,
+  flowBuilderPlugin: BotonicPluginFlowBuilder
+): Promise<any> {
+  await flowBuilderPlugin.pre(request)
+  const actionRequest = getActionRequest(request)
+  return await FlowBuilderAction.botonicInit(actionRequest)
 }

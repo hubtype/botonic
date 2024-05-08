@@ -1,21 +1,21 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { BOT_ACTION_PAYLOAD_SEPARATOR } from '../src/constants'
-import { FlowBuilderAction, FlowText } from '../src/index'
+import { BOT_ACTION_PAYLOAD_PREFIX } from '../src/constants'
+import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { testFlow } from './helpers/flows'
 import {
   createFlowBuilderPlugin,
   createRequest,
-  getActionRequest,
+  getContentsAfterPreAndBotonicInit,
 } from './helpers/utils'
 
 describe('Check the contents returned by the plugin', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
   const flowBuilderPlugin = createFlowBuilderPlugin(testFlow)
 
-  test('The user does the first interaction', async () => {
+  test('The starting content is displayed on the first interaction', async () => {
     const request = createRequest({
       input: { data: 'Hola', type: INPUT.TEXT },
       isFirstInteraction: true,
@@ -24,9 +24,11 @@ describe('Check the contents returned by the plugin', () => {
         flowBuilderPlugin,
       },
     })
-    await flowBuilderPlugin.pre(request)
-    const actionRequest = getActionRequest(request)
-    const { contents } = await FlowBuilderAction.botonicInit(actionRequest)
+
+    const { contents } = await getContentsAfterPreAndBotonicInit(
+      request,
+      flowBuilderPlugin
+    )
 
     expect((contents[0] as FlowText).text).toBe('Welcome message')
   })
@@ -49,18 +51,21 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
         flowBuilderPlugin,
       },
     })
-    await flowBuilderPlugin.pre(request)
-    const actionRequest = getActionRequest(request)
-    const { contents } = await FlowBuilderAction.botonicInit(actionRequest)
+
+    const { contents } = await getContentsAfterPreAndBotonicInit(
+      request,
+      flowBuilderPlugin
+    )
+
     const nextPaylod = (contents[0] as FlowText).buttons[0].payload
-    expect(nextPaylod).toBe(`${BOT_ACTION_PAYLOAD_SEPARATOR}${botActionUuid}`)
+    expect(nextPaylod).toBe(`${BOT_ACTION_PAYLOAD_PREFIX}${botActionUuid}`)
   })
 
   test('The bot routes receive the correct payload, in the custom action the payloadParmas defined in the BotActionNode are obtained', async () => {
     const request = createRequest({
       input: {
         type: INPUT.POSTBACK,
-        payload: `${BOT_ACTION_PAYLOAD_SEPARATOR}${botActionUuid}`,
+        payload: `${BOT_ACTION_PAYLOAD_PREFIX}${botActionUuid}`,
       },
       plugins: {
         // @ts-ignore
