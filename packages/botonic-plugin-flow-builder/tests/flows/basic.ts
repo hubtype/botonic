@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-export const testFlow = {
+export const basicFlow = {
   version: 'draft',
   name: 'Test data',
   comments: null,
@@ -400,26 +400,6 @@ export const testFlow = {
         buttons: [],
       },
     },
-    // {
-    //   id: '2a1c7318-74dd-4333-b607-74c9abe79881',
-    //   code: 'SMART-INTENT_91',
-    //   is_code_ai_generated: true,
-    //   meta: {
-    //     x: 959.8563430516933,
-    //     y: -322.6962038668304,
-    //   },
-    //   follow_up: null,
-    //   target: {
-    //     id: 'a91c0bca-c213-4693-b3bd-f091fcbf445c',
-    //     type: 'text',
-    //   },
-    //   flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
-    //   type: 'smart-intent',
-    //   content: {
-    //     title: 'Add a bag',
-    //     description: 'The user wants to add a bag',
-    //   },
-    // },
     {
       id: '731b6a73-dba9-4757-9243-782170640d9c',
       code: '2ND_FALLBACK_MSG',

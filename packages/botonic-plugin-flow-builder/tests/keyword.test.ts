@@ -3,7 +3,7 @@ import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
-import { testFlow } from './helpers/flows'
+import { basicFlow } from './flows/basic'
 import {
   createFlowBuilderPlugin,
   createRequest,
@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents returned by the plugin using keywords', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(testFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
 
   test.each(['reset', 'hola', 'HOLA'])(
     'The initial content is displayed when the user sends the %s text',

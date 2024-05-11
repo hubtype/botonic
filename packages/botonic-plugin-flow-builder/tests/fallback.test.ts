@@ -3,7 +3,7 @@ import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
-import { testFlow } from './helpers/flows'
+import { basicFlow } from './flows/basic'
 import {
   createFlowBuilderPlugin,
   createRequest,
@@ -12,7 +12,7 @@ import {
 
 describe('Check the content returned by the plugin when there is no match with payload or keyword or intents', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(testFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
 
   test('The content displayed changes between the 1st and 2nd fallback', async () => {
     const request = createRequest({
