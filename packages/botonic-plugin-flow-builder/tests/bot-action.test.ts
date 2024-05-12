@@ -4,7 +4,7 @@ import { describe, test } from '@jest/globals'
 import { BOT_ACTION_PAYLOAD_PREFIX } from '../src/constants'
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
-import { basicFlow } from './flows/basic'
+import { basicFlow } from './helpers/flows/basic'
 import {
   createFlowBuilderPlugin,
   createRequest,

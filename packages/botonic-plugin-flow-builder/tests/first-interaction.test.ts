@@ -3,7 +3,7 @@ import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
-import { basicFlow } from './flows/basic'
+import { basicFlow } from './helpers/flows/basic'
 import {
   createFlowBuilderPlugin,
   createRequest,
