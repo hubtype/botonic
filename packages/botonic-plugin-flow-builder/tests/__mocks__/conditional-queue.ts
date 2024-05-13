@@ -2,7 +2,7 @@ import { jest } from '@jest/globals'
 
 import {
   AvailabilityData,
-  QueuesApi,
+  HubtypeQueuesApi,
 } from '../../src/functions/conditional-queue-status'
 
 interface QueueAvailabilityMockOptions {
@@ -17,7 +17,7 @@ export function mockQueueAvailability({
   name,
 }: QueueAvailabilityMockOptions) {
   const getQueueAvailabilitySpy = jest.spyOn(
-    QueuesApi.prototype as any,
+    HubtypeQueuesApi.prototype as any,
     'getAvailability'
   )
 

@@ -27,7 +27,7 @@ export async function conditionalQueueStatus({
   return data.open ? QueueStatusResult.OPEN : QueueStatusResult.CLOSED
 }
 
-export class QueuesApi {
+export class HubtypeQueuesApi {
   public queueId: string
   public checkAvailableAgents: boolean
 
@@ -65,6 +65,6 @@ export async function getQueueAvailability(
   queueId: string,
   checkAvailableAgents = false
 ): Promise<AvailabilityData> {
-  const queuesApi = new QueuesApi(queueId, checkAvailableAgents)
+  const queuesApi = new HubtypeQueuesApi(queueId, checkAvailableAgents)
   return await queuesApi.getAvailability()
 }
