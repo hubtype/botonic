@@ -351,6 +351,22 @@ export const basicFlow = {
             },
             hidden: [],
           },
+          {
+            id: '9c559702-7e4a-48ed-9a01-193a0826c256',
+            text: [
+              {
+                message: 'Talk to an agent',
+                locale: 'en',
+              },
+            ],
+            url: [],
+            payload: [],
+            target: {
+              id: 'a73869bf-ddb0-4c15-b44b-fc152cb9a910',
+              type: 'go-to-flow',
+            },
+            hidden: [],
+          },
         ],
       },
     },
@@ -382,8 +398,8 @@ export const basicFlow = {
       code: 'SELECT_SEAT_MSG',
       is_code_ai_generated: false,
       meta: {
-        x: 1257.2104317972348,
-        y: 93.11680286099826,
+        x: 1649.027218197441,
+        y: -7.197735825801573,
       },
       follow_up: null,
       target: null,
@@ -398,6 +414,26 @@ export const basicFlow = {
         ],
         buttons_style: 'button',
         buttons: [],
+      },
+    },
+    {
+      id: '2a1c7318-74dd-4333-b607-74c9abe79881',
+      code: 'SMART-INTENT_91',
+      is_code_ai_generated: true,
+      meta: {
+        x: 959.8563430516933,
+        y: -322.6962038668304,
+      },
+      follow_up: null,
+      target: {
+        id: 'a91c0bca-c213-4693-b3bd-f091fcbf445c',
+        type: 'text',
+      },
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      type: 'smart-intent',
+      content: {
+        title: 'Add a bag',
+        description: 'The user wants to add a bag',
       },
     },
     {
@@ -423,6 +459,222 @@ export const basicFlow = {
         buttons: [],
       },
     },
+    {
+      id: 'e6684566-fe25-497d-b5dd-7a1b4f6d6672',
+      code: 'SMART-INTENT_53',
+      is_code_ai_generated: true,
+      meta: {
+        x: 1371.5717634769185,
+        y: -361.33521985338024,
+      },
+      follow_up: null,
+      target: {
+        id: '59071c29-2cd7-447a-b290-04269b76701d',
+        type: 'text',
+      },
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      type: 'smart-intent',
+      content: {
+        title: 'Select a seat',
+        description: 'The user wants to select a seat',
+      },
+    },
+    {
+      id: 'fdeb8bdf-73f2-42c4-bc0f-14ebca84e507',
+      code: 'SERVED_BY_HUMAN_AGENT',
+      is_code_ai_generated: true,
+      meta: {
+        x: 493.62603481718014,
+        y: -12.477605392762399,
+      },
+      follow_up: {
+        id: '07947391-3460-45fb-a195-2c2e12483ad3',
+        type: 'handoff',
+      },
+      target: null,
+      flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Soon you will be served by a human agent',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '07947391-3460-45fb-a195-2c2e12483ad3',
+      code: 'HANDOFF_47',
+      is_code_ai_generated: true,
+      meta: {
+        x: 807.5515323546948,
+        y: 11.1258154747199,
+      },
+      follow_up: null,
+      target: {
+        id: '0a2a0929-c694-4c5c-9a81-863d20eee1a6',
+        type: 'go-to-flow',
+      },
+      flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      type: 'handoff',
+      content: {
+        queue: [
+          {
+            id: 'e7a2304d-f73c-409d-b272-239a9b8a9e0e',
+            name: 'General',
+            locale: 'en',
+          },
+        ],
+        payload: [],
+        has_auto_assign: false,
+      },
+    },
+    {
+      id: '0a2a0929-c694-4c5c-9a81-863d20eee1a6',
+      code: 'Go to flow',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1208.8096871018943,
+        y: 41.81026260244691,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      type: 'go-to-flow',
+      content: {
+        flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      },
+    },
+    {
+      id: '3b363ae7-c7e5-4e6a-9df0-333cb2667637',
+      code: 'QUEUE-STATUS_48',
+      is_code_ai_generated: true,
+      meta: {
+        x: 187.96173458328417,
+        y: -75.02667069159055,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      type: 'function',
+      content: {
+        action: 'check-queue-status',
+        arguments: [
+          {
+            locale: 'en',
+            values: [
+              {
+                type: 'string',
+                name: 'queue_id',
+                value: 'e7a2304d-f73c-409d-b272-239a9b8a9e0e',
+              },
+              {
+                type: 'string',
+                name: 'queue_name',
+                value: 'General',
+              },
+            ],
+          },
+          {
+            type: 'boolean',
+            name: 'check_available_agents',
+            value: false,
+          },
+        ],
+        result_mapping: [
+          {
+            result: 'open',
+            target: {
+              id: 'fdeb8bdf-73f2-42c4-bc0f-14ebca84e507',
+              type: 'text',
+            },
+          },
+          {
+            result: 'closed',
+            target: {
+              id: '9e434de0-9974-430f-aa16-43149a3c6410',
+              type: 'text',
+            },
+          },
+          {
+            result: 'open-without-agents',
+            target: null,
+          },
+        ],
+      },
+    },
+    {
+      id: '9e434de0-9974-430f-aa16-43149a3c6410',
+      code: 'OUT_OF_OFFICE',
+      is_code_ai_generated: true,
+      meta: {
+        x: 508.9682583810436,
+        y: 190.51181406758548,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'At the moment we are out of office hours',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: 'a73869bf-ddb0-4c15-b44b-fc152cb9a910',
+      code: 'Go to flow',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1211.0880928654478,
+        y: 153.34696451171646,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      type: 'go-to-flow',
+      content: {
+        flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      },
+    },
+    {
+      id: 'a0950e26-db42-4b16-91a3-d575db79bced',
+      code: 'KEYWORD_25',
+      is_code_ai_generated: true,
+      meta: {
+        x: -116.59763102117329,
+        y: -253.0023061157998,
+      },
+      follow_up: null,
+      target: {
+        id: '3b363ae7-c7e5-4e6a-9df0-333cb2667637',
+        type: 'function',
+      },
+      flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      type: 'keyword',
+      content: {
+        title: [
+          {
+            message: '',
+            locale: 'en',
+          },
+        ],
+        keywords: [
+          {
+            values: ['agent'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
   ],
   flows: [
     {
@@ -439,6 +691,11 @@ export const basicFlow = {
       id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
       name: 'Rating',
       start_node_id: '578b30eb-d230-4162-8a36-6c7fa18ff0db',
+    },
+    {
+      id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      name: 'Handoff',
+      start_node_id: '3b363ae7-c7e5-4e6a-9df0-333cb2667637',
     },
   ],
   webviews: [],
