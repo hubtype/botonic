@@ -27,7 +27,32 @@ export async function conditionalQueueStatus({
   return data.open ? QueueStatusResult.OPEN : QueueStatusResult.CLOSED
 }
 
-interface AvailabilityData {
+export class QueuesApi {
+  public queueId: string
+  public checkAvailableAgents: boolean
+
+  constructor(queueId: string, checkAvailableAgents?: boolean) {
+    this.queueId = queueId
+    this.checkAvailableAgents = checkAvailableAgents || false
+  }
+
+  async getAvailability(): Promise<AvailabilityData> {
+    const response = await axios.get(
+      `${HUBTYPE_API_URL}/public/v1/queues/${this.queueId}/availability/`,
+      // TODO: Make it configurable in the future
+      {
+        params: {
+          check_queue_schedule: true,
+          check_waiting_cases: false,
+          check_available_agents: this.checkAvailableAgents,
+        },
+      }
+    )
+    return response.data
+  }
+}
+
+export interface AvailabilityData {
   available: boolean
   waiting_cases: number
   availability_threshold_waiting_cases: number
@@ -40,16 +65,6 @@ export async function getQueueAvailability(
   queueId: string,
   checkAvailableAgents = false
 ): Promise<AvailabilityData> {
-  const response = await axios.get(
-    `${HUBTYPE_API_URL}/public/v1/queues/${queueId}/availability/`,
-    // TODO: Make it configurable in the future
-    {
-      params: {
-        check_queue_schedule: true,
-        check_waiting_cases: false,
-        check_available_agents: checkAvailableAgents,
-      },
-    }
-  )
-  return response.data
+  const queuesApi = new QueuesApi(queueId, checkAvailableAgents)
+  return await queuesApi.getAvailability()
 }
