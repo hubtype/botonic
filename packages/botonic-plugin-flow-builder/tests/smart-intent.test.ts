@@ -40,3 +40,30 @@ describe('Check the contents returned by the plugin when match a smart intent', 
     )
   })
 })
+
+describe('Check the contents returned by the plugin when no match a smart intent', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+  const flowBuilderPlugin = createFlowBuilderPlugin(smartIntentsFlow)
+
+  beforeEach(() => mockSmartIntent('Other'))
+
+  test('When the smart intent inference returns the intent_name Other, fallback content are displayed', async () => {
+    const request = createRequest({
+      input: {
+        data: 'I want to cancel my booking',
+        type: INPUT.TEXT,
+      },
+      plugins: {
+        // @ts-ignore
+        flowBuilderPlugin,
+      },
+    })
+
+    const { contents } = await getContentsAfterPreAndBotonicInit(
+      request,
+      flowBuilderPlugin
+    )
+
+    expect((contents[0] as FlowText).text).toBe('fallback 1st message')
+  })
+})
