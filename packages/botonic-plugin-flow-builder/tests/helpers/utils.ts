@@ -10,7 +10,7 @@ import { ActionRequest } from '@botonic/react'
 
 import BotonicPluginFlowBuilder, { FlowBuilderAction } from '../../src'
 
-export function createFlowBuilderPlugin(flow: any, locale: string = 'es') {
+export function createFlowBuilderPlugin(flow: any, locale: string = 'en') {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
     getLocale: () => locale,
@@ -32,6 +32,7 @@ interface RequestArgs {
   plugins?: ResolvedPlugins
   provider?: ProviderType
   isFirstInteraction?: boolean
+  extraData?: any
 }
 
 export function createRequest({
@@ -39,6 +40,7 @@ export function createRequest({
   plugins = {},
   provider = PROVIDER.WEBCHAT,
   isFirstInteraction = false,
+  extraData = {},
 }: RequestArgs): PluginPreRequest {
   return {
     session: {
@@ -46,7 +48,7 @@ export function createRequest({
       organization: 'orgTest',
       organization_id: 'orgIdTest',
       bot: { id: 'bid1' },
-      user: { provider, id: 'uid1', extra_data: {} },
+      user: { provider, id: 'uid1', extra_data: extraData },
       __retries: 0,
       _access_token: 'fake_access_token',
       _hubtype_api: 'https://api.hubtype.com',

@@ -4,47 +4,23 @@ import { describe, test } from '@jest/globals'
 import { BOT_ACTION_PAYLOAD_PREFIX } from '../src/constants'
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
-import { testFlow } from './helpers/flows'
+import { basicFlow } from './helpers/flows/basic'
 import {
   createFlowBuilderPlugin,
   createRequest,
   getContentsAfterPreAndBotonicInit,
 } from './helpers/utils'
 
-describe('Check the contents returned by the plugin', () => {
-  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(testFlow)
-
-  test('The starting content is displayed on the first interaction', async () => {
-    const request = createRequest({
-      input: { data: 'Hola', type: INPUT.TEXT },
-      isFirstInteraction: true,
-      plugins: {
-        // @ts-ignore
-        flowBuilderPlugin,
-      },
-    })
-
-    const { contents } = await getContentsAfterPreAndBotonicInit(
-      request,
-      flowBuilderPlugin
-    )
-
-    expect((contents[0] as FlowText).text).toBe('Welcome message')
-  })
-})
-
 describe('The user clicks on a button that is connected to a BotActionNode', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(testFlow)
-  const messageUUidWithButtonConectedToBotAction =
-    '386ba508-a3b3-49a2-94d0-5e239ba63106'
-  const botActionUuid = '8b0c87c0-77b2-4b05-bae0-3b353240caaa'
-  test('The button has the payload = ba|botActionUuid', async () => {
+  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const ratingMessageUuid = '578b30eb-d230-4162-8a36-6c7fa18ff0db'
+  const botActionUuid = '85dbeb56-81c9-419d-a235-4ebf491b4fc9'
+  test('The button has  a payload equal to ba|botActionUuid', async () => {
     const request = createRequest({
       input: {
         type: INPUT.POSTBACK,
-        payload: messageUUidWithButtonConectedToBotAction,
+        payload: ratingMessageUuid,
       },
       plugins: {
         // @ts-ignore
@@ -61,7 +37,7 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
     expect(nextPaylod).toBe(`${BOT_ACTION_PAYLOAD_PREFIX}${botActionUuid}`)
   })
 
-  test('The bot routes receive the correct payload, in the custom action the payloadParmas defined in the BotActionNode are obtained', async () => {
+  test('The bot routes receive the correct payload', async () => {
     const request = createRequest({
       input: {
         type: INPUT.POSTBACK,
@@ -77,7 +53,21 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
     expect(request.input.payload).toBe(
       'rating|{"value":1,"followUpContentID":"SORRY"}'
     )
+  })
 
+  test('In the custom action the payloadParmas defined in the BotActionNode are obtained', async () => {
+    const request = createRequest({
+      input: {
+        type: INPUT.POSTBACK,
+        payload: `${BOT_ACTION_PAYLOAD_PREFIX}${botActionUuid}`,
+      },
+      plugins: {
+        // @ts-ignore
+        flowBuilderPlugin,
+      },
+    })
+
+    await flowBuilderPlugin.pre(request)
     const payloadParams = flowBuilderPlugin.getPayloadParams(
       request.input.payload as string
     )

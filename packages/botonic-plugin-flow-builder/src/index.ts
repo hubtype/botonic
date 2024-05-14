@@ -98,23 +98,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   private updateRequestBeforeRoutes(request: PluginPreRequest) {
     if (request.input.payload) {
-      request.input.payload = this.removeSourceSeparatorFromPayload(
-        request.input.payload
-      )
+      request.input.payload = this.removeSourceSufix(request.input.payload)
 
       if (request.input.payload.startsWith(BOT_ACTION_PAYLOAD_PREFIX)) {
-        request.input.payload = this.updateBotActionPayload(
-          request.input.payload
-        )
+        request.input.payload = this.replacePayload(request.input.payload)
       }
     }
   }
 
-  private removeSourceSeparatorFromPayload(payload: string): string {
+  private removeSourceSufix(payload: string): string {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
   }
 
-  private updateBotActionPayload(payload: string): string {
+  private replacePayload(payload: string): string {
     const botActionId = payload.split(SEPARATOR)[1]
     const botActionNode = this.cmsApi.getNodeById<HtBotActionNode>(botActionId)
     return this.cmsApi.createPayloadWithParams(botActionNode)

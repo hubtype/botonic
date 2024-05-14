@@ -8,7 +8,7 @@ import {
 } from '../content-fields/hubtype-fields'
 import { getIntentNodeByInput } from './intent'
 import { getKeywordNodeByInput } from './keyword'
-import { getSmartIntentNodeByInput } from './smart-intent'
+import { SmartIntentsApi } from './smart-intent'
 
 export async function getNodeByUserInput(
   cmsApi: FlowBuilderApi,
@@ -24,7 +24,8 @@ export async function getNodeByUserInput(
     )
     if (keywordNode) return keywordNode
 
-    const smartIntentNode = await getSmartIntentNodeByInput(cmsApi, request)
+    const smartIntentsApi = new SmartIntentsApi(cmsApi, request)
+    const smartIntentNode = smartIntentsApi.getNodeByInput()
     if (smartIntentNode) return smartIntentNode
 
     const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
