@@ -270,7 +270,7 @@ export const basicFlow = {
     },
     {
       id: '0d3fa83b-8d69-45bd-982a-fbcbfb83a28c',
-      code: 'KEYWORD_WELCOME',
+      code: '',
       is_code_ai_generated: false,
       meta: {
         x: 153.3970670849917,
@@ -367,6 +367,22 @@ export const basicFlow = {
             },
             hidden: [],
           },
+          {
+            id: 'c1628dd4-d434-46e4-a640-b2fc3c5dfe5e',
+            text: [
+              {
+                message: 'Conditionals',
+                locale: 'en',
+              },
+            ],
+            url: [],
+            payload: [],
+            target: {
+              id: '5042e484-b0b8-412c-9b2a-8768828653b7',
+              type: 'go-to-flow',
+            },
+            hidden: [],
+          },
         ],
       },
     },
@@ -375,8 +391,8 @@ export const basicFlow = {
       code: 'ADD_BAG_MSG',
       is_code_ai_generated: false,
       meta: {
-        x: 1286.1328324748395,
-        y: -137.19120253474404,
+        x: 1280.4629164691908,
+        y: -173.10067057051984,
       },
       follow_up: null,
       target: null,
@@ -398,8 +414,8 @@ export const basicFlow = {
       code: 'SELECT_SEAT_MSG',
       is_code_ai_generated: false,
       meta: {
-        x: 1649.027218197441,
-        y: -7.197735825801573,
+        x: 1485.5446400345668,
+        y: -33.65734385216269,
       },
       follow_up: null,
       target: null,
@@ -594,8 +610,8 @@ export const basicFlow = {
       code: 'Go to flow',
       is_code_ai_generated: false,
       meta: {
-        x: 1211.0880928654478,
-        y: 153.34696451171646,
+        x: 1295.1918469492387,
+        y: 106.09766446464303,
       },
       follow_up: null,
       target: null,
@@ -607,7 +623,7 @@ export const basicFlow = {
     },
     {
       id: 'a0950e26-db42-4b16-91a3-d575db79bced',
-      code: 'KEYWORD_25',
+      code: '',
       is_code_ai_generated: true,
       meta: {
         x: -116.59763102117329,
@@ -635,6 +651,376 @@ export const basicFlow = {
         ],
       },
     },
+    {
+      id: '7f6935df-4dab-42b9-a6f5-2f81e965cf75',
+      code: 'CHECK_CONDITIONALS',
+      is_code_ai_generated: true,
+      meta: {
+        x: 231.69008633045542,
+        y: -74.35932804519047,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Check diferents conditionals',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [
+          {
+            id: '7cec6bb9-32bb-43a7-8936-b4589b22a8f1',
+            text: [
+              {
+                message: 'Channel',
+                locale: 'en',
+              },
+            ],
+            url: [],
+            payload: [],
+            target: {
+              id: 'ddaf7bf5-0677-4a59-89e0-c3859a6fb7ce',
+              type: 'function',
+            },
+            hidden: [],
+          },
+          {
+            id: '439c51ae-56b5-43d4-bda0-296493620215',
+            text: [
+              {
+                message: 'Country',
+                locale: 'en',
+              },
+            ],
+            url: [],
+            payload: [],
+            target: {
+              id: 'c16d06b0-7b05-4771-94fe-065357bd6407',
+              type: 'function',
+            },
+            hidden: [],
+          },
+        ],
+      },
+    },
+    {
+      id: 'ddaf7bf5-0677-4a59-89e0-c3859a6fb7ce',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 522.8059647755006,
+        y: -481.84993175360717,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'function',
+      content: {
+        action: 'get-channel-type',
+        arguments: [],
+        result_mapping: [
+          {
+            result: 'default',
+            target: {
+              id: '4262525b-0e4f-4090-9356-9f892d938cf7',
+              type: 'text',
+            },
+          },
+          {
+            result: 'whatsapp',
+            target: {
+              id: '60e9d0e0-7dd4-4f2a-b30f-298937719c25',
+              type: 'text',
+            },
+          },
+          {
+            result: 'telegram',
+            target: {
+              id: 'c9a20d87-9b2c-455d-a31b-ded33d756847',
+              type: 'text',
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: '60e9d0e0-7dd4-4f2a-b30f-298937719c25',
+      code: 'MESSAGE_ONLY_FOR_WHATSAPP',
+      is_code_ai_generated: true,
+      meta: {
+        x: 848.8893348035837,
+        y: -537.2279171376994,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Message only for WhatsApp',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: 'c9a20d87-9b2c-455d-a31b-ded33d756847',
+      code: 'TELEGRAM_MESSAGE_ONLY',
+      is_code_ai_generated: true,
+      meta: {
+        x: 854.1559846947492,
+        y: -398.71523156558305,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Message only for Telegram',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '4262525b-0e4f-4090-9356-9f892d938cf7',
+      code: 'OTHER_CHANNELS_MESSAGE',
+      is_code_ai_generated: true,
+      meta: {
+        x: 858.5649161830746,
+        y: -278.76520914929284,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Message for other channels',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: 'c16d06b0-7b05-4771-94fe-065357bd6407',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 532.667540170762,
+        y: 223.77259352036748,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'function',
+      content: {
+        action: 'check-country',
+        arguments: [],
+        result_mapping: [
+          {
+            result: 'default',
+            target: {
+              id: '1706adbc-31cd-4cc9-add3-901f41a956a8',
+              type: 'text',
+            },
+          },
+          {
+            result: 'ES',
+            target: {
+              id: '95dc17c7-c3b3-419d-948c-85c5b05392d9',
+              type: 'text',
+            },
+          },
+          {
+            result: 'FR',
+            target: {
+              id: 'f4af1955-8621-44ed-93f1-68498499adac',
+              type: 'text',
+            },
+          },
+          {
+            result: 'GB',
+            target: {
+              id: '598ca5e5-56ac-4f58-8727-27f4507375f0',
+              type: 'text',
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: '95dc17c7-c3b3-419d-948c-85c5b05392d9',
+      code: 'SPAIN_MESSAGE_ONLY',
+      is_code_ai_generated: true,
+      meta: {
+        x: 896.4875421729283,
+        y: 183.61010102080365,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Message only for Spain',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: 'f4af1955-8621-44ed-93f1-68498499adac',
+      code: 'FRANCE_ONLY_MESSAGE',
+      is_code_ai_generated: true,
+      meta: {
+        x: 900.6570918662204,
+        y: 299.75833780730477,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Message only for France',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '598ca5e5-56ac-4f58-8727-27f4507375f0',
+      code: 'UNITED_KINGDOM_ONLY',
+      is_code_ai_generated: true,
+      meta: {
+        x: 899.7124975049799,
+        y: 416.9350353652432,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Message only for United Kingdom',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '1706adbc-31cd-4cc9-add3-901f41a956a8',
+      code: 'OTHER_COUNTRIES_MESSAGE',
+      is_code_ai_generated: true,
+      meta: {
+        x: 899.6266728962781,
+        y: 548.2985258661546,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Message for other countries',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '5042e484-b0b8-412c-9b2a-8768828653b7',
+      code: 'Go to flow',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1318.3299641099927,
+        y: 263.8609033427565,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      type: 'go-to-flow',
+      content: {
+        flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      },
+    },
+    {
+      id: '148f4963-8a2e-4d30-b2c1-f748155971b3',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 87.86857635527645,
+        y: 412.9193307070532,
+      },
+      follow_up: null,
+      target: {
+        id: 'c16d06b0-7b05-4771-94fe-065357bd6407',
+        type: 'function',
+      },
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['countryConditional'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '012a6fb8-6730-4ed4-834f-c06995a21dec',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 249.67211101249413,
+        y: -595.4743157872465,
+      },
+      follow_up: null,
+      target: {
+        id: 'ddaf7bf5-0677-4a59-89e0-c3859a6fb7ce',
+        type: 'function',
+      },
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['channelConditional'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
   ],
   flows: [
     {
@@ -656,6 +1042,11 @@ export const basicFlow = {
       id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
       name: 'Handoff',
       start_node_id: '3b363ae7-c7e5-4e6a-9df0-333cb2667637',
+    },
+    {
+      id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      name: 'Conditionals',
+      start_node_id: '7f6935df-4dab-42b9-a6f5-2f81e965cf75',
     },
   ],
   webviews: [],
