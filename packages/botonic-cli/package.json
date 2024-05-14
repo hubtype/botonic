@@ -23,7 +23,7 @@
   "dependencies": {
     "@oclif/command": "^1.8.32",
     "@oclif/config": "^1.18.10",
-    "@oclif/plugin-help": "^3.2.2",
+    "@oclif/plugin-help": "^4.0.0",
     "analytics-node": "^3.5.0",
     "axios": "^1.6.8",
     "colors": "^1.4.0",
