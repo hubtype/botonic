@@ -1750,8 +1750,8 @@ export const basicFlow = {
       code: 'CAROUSEL_65',
       is_code_ai_generated: true,
       meta: {
-        x: 884.4844470280865,
-        y: -512.5679853290751,
+        x: 955.1637874563928,
+        y: -510.8440989771652,
       },
       follow_up: null,
       target: null,
@@ -1871,8 +1871,8 @@ export const basicFlow = {
       code: 'BUTTON_2_MESSAGE',
       is_code_ai_generated: true,
       meta: {
-        x: 1226.0008425685378,
-        y: -366.4877435541607,
+        x: 1308.9522027695225,
+        y: -543.7234810769891,
       },
       follow_up: null,
       target: null,
@@ -1894,8 +1894,8 @@ export const basicFlow = {
       code: 'IMAGE_16',
       is_code_ai_generated: true,
       meta: {
-        x: 729.8216949745022,
-        y: -194.98345079823582,
+        x: 1177.51996320645,
+        y: -302.9225687176279,
       },
       follow_up: null,
       target: null,
@@ -1939,8 +1939,8 @@ export const basicFlow = {
       code: 'VIDEO_74',
       is_code_ai_generated: true,
       meta: {
-        x: 1078.419679697304,
-        y: 18.577197975003344,
+        x: 1189.9960330222464,
+        y: 87.1353488513532,
       },
       follow_up: null,
       target: null,
@@ -1961,8 +1961,8 @@ export const basicFlow = {
       code: 'WHATSAPP_BUTTON_LIST',
       is_code_ai_generated: true,
       meta: {
-        x: 1506.9574649513079,
-        y: 99.33883188137656,
+        x: 1479.9556416942435,
+        y: 213.13222989329068,
       },
       follow_up: null,
       target: null,
@@ -1986,7 +1986,7 @@ export const basicFlow = {
             id: '2638db97-3f21-4370-a32b-ebe46de87a34',
             title: [
               {
-                message: '',
+                message: 'Section 1',
                 locale: 'en',
               },
             ],
@@ -2235,6 +2235,156 @@ export const basicFlow = {
         keywords: [
           {
             values: ['differentMessages'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '8ec6a479-dca5-4623-8bab-41fa49c9d6e8',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 227.66304778904035,
+        y: -918.3254123731216,
+      },
+      follow_up: null,
+      target: {
+        id: '7afe0981-e9d3-4e3e-b9d1-5d362d3873b3',
+        type: 'text',
+      },
+      flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['flowText'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: 'd5f69849-d6c9-4845-9ed0-1ac999098ad3',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 688.39997409608,
+        y: -586.5527995084371,
+      },
+      follow_up: null,
+      target: {
+        id: 'd6f17ff2-a8de-4b57-8062-497616a6d35a',
+        type: 'carousel',
+      },
+      flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['flowCarousel'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '83ad6b2b-2240-4d2e-8be3-8543b76791c7',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 786.6092862088249,
+        y: -302.2270803512114,
+      },
+      follow_up: null,
+      target: {
+        id: '4140f25f-ab22-4c18-b13a-1fdb265368b6',
+        type: 'image',
+      },
+      flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['flowImage'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '059064c7-f37c-407a-8e92-ab8dbd073f7e',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 839.7855385035422,
+        y: -1.9261167769942915,
+      },
+      follow_up: null,
+      target: {
+        id: 'a1f94824-b620-4f58-9e7a-67e596efbd9d',
+        type: 'video',
+      },
+      flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['flowVideo'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '72d02d8e-e88d-4bcb-a11d-8dd0952e665a',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1121.3759810414992,
+        y: 497.6076134786967,
+      },
+      follow_up: null,
+      target: {
+        id: '07a91a2f-cc4e-480a-9f81-7767588682e2',
+        type: 'whatsapp-button-list',
+      },
+      flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['flowButtonList'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '2055cd95-b48b-48cb-825b-7787ec4462fd',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 284.31946007250366,
+        y: 420.4595470299414,
+      },
+      follow_up: null,
+      target: {
+        id: 'febabaa2-e6fe-4777-873b-2a874efcf248',
+        type: 'whatsapp-cta-url-button',
+      },
+      flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['flowURLButton'],
             locale: 'en',
           },
         ],
