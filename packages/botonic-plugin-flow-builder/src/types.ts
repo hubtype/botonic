@@ -18,6 +18,7 @@ export interface BotonicPluginFlowBuilderOptions {
   getKnowledgeBaseResponse?: (
     request: ActionRequest
   ) => Promise<KnowledgeBaseResponse>
+  smartIntentsConfig?: { numSmartIntentsToUse: number }
 }
 
 export interface FlowBuilderApiOptions {

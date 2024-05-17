@@ -36,8 +36,8 @@ import {
   PayloadParamsBase,
 } from './types'
 import { getNodeByUserInput } from './user-input'
+import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { resolveGetAccessToken } from './utils'
-
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
   private flowUrl: string
@@ -54,6 +54,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getKnowledgeBaseResponse?: (
     request: ActionRequest
   ) => Promise<KnowledgeBaseResponse>
+  public smartIntentsConfig: SmartIntentsInferenceConfig
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     const apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
@@ -64,6 +65,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getAccessToken = resolveGetAccessToken(options)
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
+    this.smartIntentsConfig = {
+      ...options?.smartIntentsConfig,
+      useLatest: jsonVersion === FlowBuilderJSONVersion.LATEST,
+    }
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
@@ -88,7 +93,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       const nodeByUserInput = await getNodeByUserInput(
         this.cmsApi,
         resolvedLocale,
-        request as unknown as ActionRequest
+        request as unknown as ActionRequest,
+        this.smartIntentsConfig
       )
       request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
     }
