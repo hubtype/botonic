@@ -1,20 +1,34 @@
-import { BaseEventData, EventName, HtEventProps, RequestData } from '../types'
+import { EventName, HtEventProps, RequestData } from '../types'
+
+// Eliminar despres de refactoritzar tots els events
+export interface BaseHtEventData {
+  channel: string
+  created_at: string
+  chat_language: string
+  chat_country?: string
+  format_version?: number
+  bot_version?: string
+  flow_version?: string
+}
 
 export class HtEvent {
-  chat: string
-  event_type: EventName
-  event_data: BaseEventData
+  chat_id: string
+  type: EventName
+  channel: string
+  created_at: string
+  chat_language: string
+  chat_country?: string
+  format_version?: number
+  bot_version?: string
+  flow_version?: string
 
   constructor(event: HtEventProps, requestData: RequestData) {
-    this.chat = requestData.userId
-    this.event_type = event.event_type
-    this.event_data = {
-      channel: requestData.provider,
-      event_datetime: new Date().toISOString(),
-      enduser_language: requestData.language,
-      enduser_country: requestData.country,
-      format_version: 1,
-      // flow_version?: string
-    }
+    this.chat_id = requestData.userId
+    this.type = event.type
+    this.channel = requestData.provider
+    this.created_at = new Date().toISOString()
+    this.chat_language = requestData.language
+    this.chat_country = requestData.country
+    this.format_version = 2
   }
 }

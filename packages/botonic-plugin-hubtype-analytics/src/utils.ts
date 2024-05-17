@@ -15,12 +15,9 @@ export function createHtEvent(
   requestData: RequestData,
   htEventProps: HtEventProps
 ): HtEvent {
-  switch (htEventProps.event_type) {
-    case EventName.botAgentRating:
-      return new HtEventAgentRating(htEventProps, requestData)
-
-    case EventName.botChannelRating:
-      return new HtEventChannelRating(htEventProps, requestData)
+  switch (htEventProps.type) {
+    case EventName.feedback:
+      return new HtEventFeedback(htEventProps, requestData)
 
     case EventName.botFaqUseful:
       return new HtEventFaqUseful(htEventProps, requestData)

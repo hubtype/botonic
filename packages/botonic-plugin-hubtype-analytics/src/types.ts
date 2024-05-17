@@ -7,11 +7,7 @@ export interface Event {
 }
 
 export enum EventName {
-  botAgentRating = 'bot_agent_rating',
-  botChannelRating = 'bot_channel_rating',
-  botFaqUseful = 'bot_faq_useful',
-  botRating = 'bot_rating',
-  botFaq = 'bot_faq',
+  feedback = 'feedback',
   botStart = 'bot_start',
   botOpen = 'bot_open',
   botAiModel = 'bot_ai_model',
@@ -33,40 +29,31 @@ export interface BaseEventData {
 }
 
 export interface HtBaseEventProps {
-  event_type: EventName
+  type: EventName
 }
 
-export interface EventAgentRating extends HtBaseEventProps {
-  event_type: EventName.botAgentRating
-  event_data: EventDataRating
+export interface EventFeedback extends HtBaseEventProps {
+  type: EventName.feedback
+  data: EventPropsFeedback
 }
 
-export interface EventDataRating {
-  case_id: string
-  rating?: number
-  comment?: string
-}
-export interface EventChannelRating extends HtBaseEventProps {
-  event_type: EventName.botChannelRating
-  event_data: EventDataChannelRating
-}
-
-export interface EventDataChannelRating {
-  rating: number
+export interface EventPropsFeedback {
+  action: FeedbackAction
+  messageGeneratedBy?: string
+  feedbackTargetId?: string
+  feedbackGroupId?: string
+  possibleOptions: string[]
+  possibleValues: number[]
+  option: string
+  value: number
 }
 
-export interface EventFaqUseful extends HtBaseEventProps {
-  event_type: EventName.botFaqUseful
-  event_data: EventDataUseful
+export enum FeedbackAction {
+  case = 'feedback_case',
+  message = 'feddback_message',
+  conversation = 'feddback_conversation',
+  webview = 'feddback_webview',
 }
-
-export interface EventDataUseful {
-  faq_name: string
-  useful: boolean
-}
-export interface EventBotRating extends HtBaseEventProps {
-  event_type: EventName.botRating
-  event_data: EventDataBotRating
 }
 
 export interface EventDataBotRating {
@@ -146,11 +133,7 @@ export interface EventDataHandoff {
 }
 
 export type HtEventProps =
-  | EventAgentRating
-  | EventChannelRating
-  | EventFaqUseful
-  | EventBotRating
-  | EventBotFaq
+  | EventFeedback
   | EventBotStart
   | EventBotOpen
   | EventBotAiModel
