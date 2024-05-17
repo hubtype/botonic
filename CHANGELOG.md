@@ -20,6 +20,18 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.27.0] - tbd
+
+### Added
+
+### Changed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Modified Smart Intents api request to call smart intents inference v2](https://github.com/hubtype/botonic/pull/2825)
+
+### Fixed
+
 ## [0.26.0] - 2024-04-30
 
 ### Added

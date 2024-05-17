@@ -36,7 +36,7 @@ import {
   PayloadParamsBase,
 } from './types'
 import { getNodeByUserInput } from './user-input'
-import { InferenceParams } from './user-input/smart-intent'
+import { SmartIntentsInferenceParams } from './user-input/smart-intent'
 import { resolveGetAccessToken } from './utils'
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
@@ -56,7 +56,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     request: ActionRequest
   ) => Promise<KnowledgeBaseResponse>
 
-  public smartIntentsConfig: Partial<InferenceParams>
+  public smartIntentsConfig: Partial<SmartIntentsInferenceParams>
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     const apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD

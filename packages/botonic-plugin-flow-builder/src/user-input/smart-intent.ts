@@ -4,7 +4,7 @@ import axios from 'axios'
 import { FlowBuilderApi } from '../api'
 import { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
 
-export interface InferenceParams {
+export interface SmartIntentsInferenceParams {
   bot_id: string
   text: string
   use_latest: boolean
@@ -13,12 +13,12 @@ export interface InferenceParams {
 export class SmartIntentsApi {
   public cmsApi: FlowBuilderApi
   public currentRequest: ActionRequest
-  public smartIntentsConfig: Partial<InferenceParams>
+  public smartIntentsConfig: Partial<SmartIntentsInferenceParams>
 
   constructor(
     cmsApi: FlowBuilderApi,
     request: ActionRequest,
-    smartIntentsConfig: Partial<InferenceParams>
+    smartIntentsConfig: Partial<SmartIntentsInferenceParams>
   ) {
     this.currentRequest = request
     this.cmsApi = cmsApi
@@ -30,11 +30,11 @@ export class SmartIntentsApi {
     const smartIntentNodes = this.cmsApi.getSmartIntentNodes()
     if (!smartIntentNodes.length) return undefined
 
-    const params: InferenceParams = {
+    const params: SmartIntentsInferenceParams = {
       bot_id: this.currentRequest.session.bot.id,
       text: this.currentRequest.input.data,
       ...this.smartIntentsConfig,
-    } as InferenceParams
+    } as SmartIntentsInferenceParams
 
     try {
       const response = await this.getInference(params)
@@ -49,7 +49,7 @@ export class SmartIntentsApi {
   }
 
   private async getInference(
-    inferenceParams: InferenceParams
+    inferenceParams: SmartIntentsInferenceParams
   ): Promise<{ data: { smart_intent_title: string } }> {
     return await axios({
       method: 'POST',
