@@ -1,14 +1,10 @@
-import {
-  HtEvent,
-  HtEventFeedback,
-  // HtEventFlow
-} from './event-models'
+import { HtEvent, HtEventFeedback, HtEventFlow } from './event-models'
 // import { HtEventBotAiModel } from './event-models/ht-event-bot-ai-model'
 // import { HtEventBotKeywordModel } from './event-models/ht-event-bot-keyword-model'
 // import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowledge-base'
 // import { HtEventHandoffFail } from './event-models/ht-event-handoff-fail'
 // import { HtEventHandoffSuccess } from './event-models/ht-event-handoff-success'
-import { FeedbackAction, HtEventProps, RequestData } from './types'
+import { FeedbackAction, FlowAction, HtEventProps, RequestData } from './types'
 
 export function createHtEvent(
   requestData: RequestData,
@@ -21,8 +17,8 @@ export function createHtEvent(
     case FeedbackAction.webview:
       return new HtEventFeedback(htEventProps, requestData)
 
-    // case EventName.flow:
-    //   return new HtEventFlow(htEventProps, requestData)
+    case FlowAction.flowNode:
+      return new HtEventFlow(htEventProps, requestData)
 
     // case EventName.botAiModel:
     //   return new HtEventBotAiModel(htEventProps, requestData)

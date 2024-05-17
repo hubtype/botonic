@@ -2,7 +2,7 @@ import { PROVIDER } from '@botonic/core'
 
 export enum EventName {
   feedback = 'feedback',
-  // flow = 'botevent',
+  flow = 'botevent',
 
   botStart = 'bot_start',
   botOpen = 'bot_open',
@@ -42,24 +42,24 @@ export enum FeedbackAction {
   webview = 'feddback_webview',
 }
 
-// export interface EventFlow extends HtBaseEventProps {
-//   type: EventName.flow
-//   data: EventPropsFlow
-// }
+export interface EventFlow extends HtBaseEventProps {
+  type: EventName.flow
+  data: EventPropsFlow
+}
 
-// export interface EventPropsFlow {
-//   action: FlowAction
-//   flowThreadId: string
-//   flowId: string
-//   flowName: string
-//   flowNodeId: string
-//   flowNodeContentId: string
-//   flowNodeIsMeaningful?: boolean
-// }
+export interface EventPropsFlow {
+  action: FlowAction
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  flowNodeIsMeaningful?: boolean
+}
 
-// export enum FlowAction {
-//   flowNode = 'flow_node',
-// }
+export enum FlowAction {
+  flowNode = 'flow_node',
+}
 export interface EventBotStart extends HtBaseEventProps {
   type: EventName.botStart
 }
@@ -122,8 +122,7 @@ export interface EventDataHandoff {
   threshold_reached: boolean
 }
 
-export type HtEventProps = EventFeedback
-// | EventFlow
+export type HtEventProps = EventFeedback | EventFlow
 // | EventBotStart
 // | EventBotOpen
 // | EventBotAiModel
