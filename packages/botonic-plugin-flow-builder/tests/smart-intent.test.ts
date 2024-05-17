@@ -34,7 +34,6 @@ describe('Check the contents returned by the plugin when match a smart intent', 
       request,
       flowBuilderPlugin
     )
-
     expect((contents[0] as FlowText).text).toBe(
       'Message explaining how to add a bag'
     )

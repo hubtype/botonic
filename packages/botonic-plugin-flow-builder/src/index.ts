@@ -36,7 +36,7 @@ import {
   PayloadParamsBase,
 } from './types'
 import { getNodeByUserInput } from './user-input'
-import { SmartIntentsInferenceParams } from './user-input/smart-intent'
+import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { resolveGetAccessToken } from './utils'
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
@@ -44,7 +44,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private flow?: HtFlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
-
   private getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
   public trackEvent?: (
@@ -55,8 +54,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getKnowledgeBaseResponse?: (
     request: ActionRequest
   ) => Promise<KnowledgeBaseResponse>
-
-  public smartIntentsConfig: Partial<SmartIntentsInferenceParams>
+  public smartIntentsConfig: SmartIntentsInferenceConfig
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     const apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
@@ -68,7 +66,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
     this.smartIntentsConfig = {
-      ...(options.smartIntentsConfig || {}),
+      ...options?.smartIntentsConfig,
       use_latest: jsonVersion === FlowBuilderJSONVersion.LATEST,
     }
     const customFunctions = options.customFunctions || {}

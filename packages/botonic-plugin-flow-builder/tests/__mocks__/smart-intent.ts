@@ -11,6 +11,6 @@ export function mockSmartIntent(intentName?: string) {
 
   // Change the implementation of getInference
   getInferenceSpy.mockImplementation(async () => {
-    return intentName ? { data: { intent_name: intentName } } : undefined
+    return intentName ? { data: { smart_intent_title: intentName } } : undefined
   })
 }
