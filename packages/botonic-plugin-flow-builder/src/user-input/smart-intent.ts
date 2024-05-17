@@ -8,7 +8,7 @@ export interface InferenceParams {
   bot_id: string
   text: string
   use_latest: boolean
-  num_smart_intents_to_use: number
+  num_smart_intents_to_use?: number
 }
 export class SmartIntentsApi {
   public cmsApi: FlowBuilderApi
@@ -33,10 +33,9 @@ export class SmartIntentsApi {
     const params: InferenceParams = {
       bot_id: this.currentRequest.session.bot.id,
       text: this.currentRequest.input.data,
-      num_smart_intents_to_use: 10,
-      use_latest: true,
       ...this.smartIntentsConfig,
-    }
+    } as InferenceParams
+
     try {
       const response = await this.getInference(params)
       return smartIntentNodes.find(
@@ -59,7 +58,7 @@ export class SmartIntentsApi {
         Authorization: `Bearer ${this.currentRequest.session._access_token}`,
         'Content-Type': 'application/json',
       },
-      data: { text: this.currentRequest.input.data, intents: inferenceParams },
+      data: inferenceParams,
       timeout: 10000,
     })
   }
