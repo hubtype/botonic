@@ -11,6 +11,7 @@ export { FlowButton } from './flow-button'
 export { FlowElement } from './flow-element'
 export { FlowCarousel, FlowImage, FlowText, FlowVideo, FlowWhatsappButtonList }
 export { FlowHandoff } from './flow-handoff'
+export { FlowWhatsappCtaUrlButtonNode } from './flow-whatsapp-cta-url-button'
 
 export type FlowContent =
   | FlowCarousel
