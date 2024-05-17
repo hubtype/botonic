@@ -1,17 +1,15 @@
 import {
-  BaseEventData,
   EventBotKeywordModel,
   EventDataBotKeywordModel,
   RequestData,
 } from '../types'
-import { HtEvent } from './ht-event'
+import { BaseHtEventData, HtEvent } from './ht-event'
 
 export class HtEventBotKeywordModel extends HtEvent {
-  event_data: BaseEventData & EventDataBotKeywordModel
+  data: BaseHtEventData & EventDataBotKeywordModel
 
   constructor(event: EventBotKeywordModel, requestData: RequestData) {
     super(event, requestData)
-    this.event_data.confidence_successful =
-      event.event_data.confidence_successful
+    this.data.confidence_successful = event.data.confidence_successful
   }
 }

@@ -1,13 +1,9 @@
 import { PROVIDER } from '@botonic/core'
 
-export interface Event {
-  chat: string
-  event_type: EventName
-  event_data: BaseEventData
-}
-
 export enum EventName {
   feedback = 'feedback',
+  // flow = 'botevent',
+
   botStart = 'bot_start',
   botOpen = 'bot_open',
   botAiModel = 'bot_ai_model',
@@ -17,15 +13,6 @@ export enum EventName {
   handoffOption = 'handoff_option',
   handoffSuccess = 'handoff_success',
   handoffFail = 'handoff_fail',
-}
-export interface BaseEventData {
-  channel: string
-  event_datetime: string
-  enduser_language: string
-  enduser_country?: string
-  format_version?: number
-  bot_version?: string
-  flow_version?: string
 }
 
 export interface HtBaseEventProps {
@@ -54,33 +41,36 @@ export enum FeedbackAction {
   conversation = 'feddback_conversation',
   webview = 'feddback_webview',
 }
-}
 
-export interface EventDataBotRating {
-  rating: number
-  free_comment?: string
-  selected_options?: string[]
-}
+// export interface EventFlow extends HtBaseEventProps {
+//   type: EventName.flow
+//   data: EventPropsFlow
+// }
 
-export interface EventBotFaq extends HtBaseEventProps {
-  event_type: EventName.botFaq
-  event_data: EventDataBotFaq
-}
+// export interface EventPropsFlow {
+//   action: FlowAction
+//   flowThreadId: string
+//   flowId: string
+//   flowName: string
+//   flowNodeId: string
+//   flowNodeContentId: string
+//   flowNodeIsMeaningful?: boolean
+// }
 
-export interface EventDataBotFaq {
-  faq_name: string
-}
+// export enum FlowAction {
+//   flowNode = 'flow_node',
+// }
 export interface EventBotStart extends HtBaseEventProps {
-  event_type: EventName.botStart
+  type: EventName.botStart
 }
 
 export interface EventBotOpen {
-  event_type: EventName.botOpen
+  type: EventName.botOpen
 }
 
 export interface EventBotAiModel {
-  event_type: EventName.botAiModel
-  event_data: EventDataBotAiModel
+  type: EventName.botAiModel
+  data: EventDataBotAiModel
 }
 
 export interface EventDataBotAiModel {
@@ -90,8 +80,8 @@ export interface EventDataBotAiModel {
 }
 
 export interface EventBotAiKnowledgeBase {
-  event_type: EventName.botAiKnowledgeBase
-  event_data: EventDataBotAiKnowledgeBase
+  type: EventName.botAiKnowledgeBase
+  data: EventDataBotAiKnowledgeBase
 }
 
 export interface EventDataBotAiKnowledgeBase {
@@ -100,29 +90,29 @@ export interface EventDataBotAiKnowledgeBase {
 }
 
 export interface EventBotKeywordModel extends HtBaseEventProps {
-  event_type: EventName.botKeywordsModel
-  event_data: EventDataBotKeywordModel
+  type: EventName.botKeywordsModel
+  data: EventDataBotKeywordModel
 }
 
 export interface EventDataBotKeywordModel {
   confidence_successful: boolean
 }
 export interface EventFallback extends HtBaseEventProps {
-  event_type: EventName.fallback
+  type: EventName.fallback
 }
 
 export interface EventHandoffOption extends HtBaseEventProps {
-  event_type: EventName.handoffOption
+  type: EventName.handoffOption
 }
 
 export interface EventHandoffSuccess extends HtBaseEventProps {
-  event_type: EventName.handoffSuccess
-  event_data: EventDataHandoff
+  type: EventName.handoffSuccess
+  data: EventDataHandoff
 }
 
 export interface EventHandoffFail extends HtBaseEventProps {
-  event_type: EventName.handoffFail
-  event_data: EventDataHandoff
+  type: EventName.handoffFail
+  data: EventDataHandoff
 }
 
 export interface EventDataHandoff {
@@ -134,6 +124,7 @@ export interface EventDataHandoff {
 
 export type HtEventProps =
   | EventFeedback
+  // | EventFlow
   | EventBotStart
   | EventBotOpen
   | EventBotAiModel
