@@ -36,14 +36,15 @@ import {
   PayloadParamsBase,
 } from './types'
 import { getNodeByUserInput } from './user-input'
+import { InferenceParams } from './user-input/smart-intent'
 import { resolveGetAccessToken } from './utils'
-
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
   private flowUrl: string
   private flow?: HtFlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
+
   private getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
   public trackEvent?: (
@@ -55,6 +56,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     request: ActionRequest
   ) => Promise<KnowledgeBaseResponse>
 
+  public smartIntentsConfig: Partial<InferenceParams>
+
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
     const apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
     const jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
@@ -64,6 +67,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getAccessToken = resolveGetAccessToken(options)
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
+    this.smartIntentsConfig = options.smartIntentsConfig || {}
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
@@ -88,7 +92,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       const nodeByUserInput = await getNodeByUserInput(
         this.cmsApi,
         resolvedLocale,
-        request as unknown as ActionRequest
+        request as unknown as ActionRequest,
+        this.smartIntentsConfig
       )
       request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
     }

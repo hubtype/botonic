@@ -2,6 +2,7 @@ import { PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
+import { InferenceParams } from './user-input/smart-intent'
 
 export interface BotonicPluginFlowBuilderOptions {
   apiUrl?: string
@@ -18,6 +19,7 @@ export interface BotonicPluginFlowBuilderOptions {
   getKnowledgeBaseResponse?: (
     request: ActionRequest
   ) => Promise<KnowledgeBaseResponse>
+  smartIntentsConfig?: Partial<InferenceParams>
 }
 
 export interface FlowBuilderApiOptions {
