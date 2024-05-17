@@ -4,15 +4,16 @@ import axios from 'axios'
 import { FlowBuilderApi } from '../api'
 import { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
 
-export interface SmartIntentsInferenceParams
-  extends SmartIntentsInferenceConfig {
+export interface SmartIntentsInferenceParams {
   bot_id: string
   text: string
+  num_smart_intents_to_use?: number
+  use_latest: boolean
 }
 
 export interface SmartIntentsInferenceConfig {
-  use_latest: boolean
-  num_smart_intents_to_use?: number
+  useLatest: boolean
+  numSmartIntentsToUse?: number
 }
 
 export class SmartIntentsApi {
@@ -30,7 +31,8 @@ export class SmartIntentsApi {
     const params = {
       bot_id: this.currentRequest.session.bot.id,
       text: this.currentRequest.input.data,
-      ...this.smartIntentsConfig,
+      num_smart_intents_to_use: this.smartIntentsConfig.numSmartIntentsToUse,
+      use_latest: this.smartIntentsConfig.useLatest,
     }
 
     try {

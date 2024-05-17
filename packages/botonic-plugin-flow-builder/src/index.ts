@@ -67,7 +67,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
     this.smartIntentsConfig = {
       ...options?.smartIntentsConfig,
-      use_latest: jsonVersion === FlowBuilderJSONVersion.LATEST,
+      useLatest: jsonVersion === FlowBuilderJSONVersion.LATEST,
     }
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
