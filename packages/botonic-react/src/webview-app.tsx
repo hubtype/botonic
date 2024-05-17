@@ -63,10 +63,14 @@ class App extends React.Component {
     if (provider === PROVIDER.FACEBOOK) {
       try {
         window.MessengerExtensions.requestCloseBrowser(
-          () => undefined,
-          err => console.log(err)
+          function success() {},
+          function error(err) {
+            window.close()
+          }
         )
-      } catch (e) {}
+      } catch (e) {
+        window.close()
+      }
     }
     if (provider === PROVIDER.WEBCHAT) {
       try {
