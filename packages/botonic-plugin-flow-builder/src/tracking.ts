@@ -5,12 +5,12 @@ import { getFlowBuilderPlugin } from './helpers'
 
 export async function trackEvent(
   request: ActionRequest,
-  eventName: EventName,
+  eventAction: EventAction,
   args?: Record<string, any>
 ): Promise<void> {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   if (flowBuilderPlugin.trackEvent) {
-    await flowBuilderPlugin.trackEvent(request, eventName, args)
+    await flowBuilderPlugin.trackEvent(request, eventAction, args)
   }
   return
 }
@@ -18,7 +18,6 @@ export async function trackEvent(
 export function getEventArgs(request: ActionRequest, node: HtNodeWithContent) {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   return {
-    action: 'flow_node',
     flowThreadId: request.session.flow_thread_id,
     flowId: node.flow_id,
     flowName: flowBuilderPlugin.getFlowName(node.flow_id),
@@ -28,16 +27,20 @@ export function getEventArgs(request: ActionRequest, node: HtNodeWithContent) {
   }
 }
 
-export enum EventName {
-  feedback = 'feedback',
-  flow = 'botevent',
-
-  botOpen = 'bot_open',
-  botAiModel = 'bot_ai_model',
-  botAiKnowledgeBase = 'bot_ai_knowledge_base',
-  botKeywordsModel = 'bot_keywords_model',
-  fallback = 'fallback',
-  handoffOption = 'handoff_option',
-  handoffSuccess = 'handoff_success',
-  handoffFail = 'handoff_fail',
+export enum EventAction {
+  flowNode = 'flow_node',
 }
+
+// export enum EventName {
+//   feedback = 'feedback',
+//   flow = 'botevent',
+
+//   botOpen = 'bot_open',
+//   botAiModel = 'bot_ai_model',
+//   botAiKnowledgeBase = 'bot_ai_knowledge_base',
+//   botKeywordsModel = 'bot_keywords_model',
+//   fallback = 'fallback',
+//   handoffOption = 'handoff_option',
+//   handoffSuccess = 'handoff_success',
+//   handoffFail = 'handoff_fail',
+// }

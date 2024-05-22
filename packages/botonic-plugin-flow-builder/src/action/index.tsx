@@ -6,7 +6,7 @@ import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
-import { EventName, getEventArgs, trackEvent } from '../tracking'
+import { EventAction, getEventArgs, trackEvent } from '../tracking'
 import { createNodeFromKnowledgeBase } from './knowledge-bases'
 
 export type FlowBuilderActionProps = {
@@ -90,7 +90,7 @@ async function getContentsByPayload({
 
   if (targetNode) {
     const eventArgs = getEventArgs(request, targetNode)
-    await trackEvent(request, EventName.flow, eventArgs)
+    await trackEvent(request, EventAction.flowNode, eventArgs)
     return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
   }
   return []
@@ -104,7 +104,7 @@ async function getContentsByFallback({
 }: FlowBuilderContext): Promise<FlowContent[]> {
   const fallbackNode = await getFallbackNode(cmsApi, request)
   const eventArgs = getEventArgs(request, fallbackNode)
-  await trackEvent(request, EventName.flow, eventArgs)
+  await trackEvent(request, EventAction.flowNode, eventArgs)
   return await flowBuilderPlugin.getContentsByNode(fallbackNode, resolvedLocale)
 }
 
@@ -126,6 +126,5 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
   const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
   request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
 
-  await trackEvent(request, EventName.fallback)
   return fallbackNode
 }

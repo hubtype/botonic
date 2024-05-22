@@ -12,7 +12,7 @@ export interface BotonicPluginFlowBuilderOptions {
   getAccessToken: () => string
   trackEvent?: (
     request: ActionRequest,
-    eventName: string,
+    eventAction: string,
     args?: Record<string, any>
   ) => Promise<void>
   getKnowledgeBaseResponse?: (

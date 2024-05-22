@@ -30,7 +30,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { EventName, getEventArgs, trackEvent } from './tracking'
+import { EventAction, getEventArgs, trackEvent } from './tracking'
 import {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
@@ -50,7 +50,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getLocale: (session: Session) => string
   public trackEvent?: (
     request: ActionRequest,
-    eventName: string,
+    eventAction: string,
     args?: Record<string, any>
   ) => Promise<void>
   public getKnowledgeBaseResponse?: (
@@ -151,7 +151,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     )
     await trackEvent(
       this.currentRequest as unknown as ActionRequest,
-      EventName.flow,
+      EventAction.flowNode,
       eventArgs
     )
     return await this.getContentsByNode(startNode, resolvedLocale)
