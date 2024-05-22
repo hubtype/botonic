@@ -4,7 +4,6 @@ export enum EventName {
   feedback = 'feedback',
   flow = 'botevent',
 
-  botStart = 'bot_start',
   botOpen = 'bot_open',
   botAiModel = 'bot_ai_model',
   botAiKnowledgeBase = 'bot_ai_knowledge_base',
@@ -59,9 +58,6 @@ export interface EventPropsFlow {
 
 export enum FlowAction {
   flowNode = 'flow_node',
-}
-export interface EventBotStart extends HtBaseEventProps {
-  type: EventName.botStart
 }
 
 export interface EventBotOpen {
