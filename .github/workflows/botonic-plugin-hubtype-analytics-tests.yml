@@ -1,0 +1,18 @@
+name: Botonic plugin hubtype analytics tests
+
+on:
+  push:
+    paths:
+      - 'packages/botonic-plugin-hubtype-analytics/**'
+      - '.github/workflows/botonic-plugin-hubtype-analytics-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  botonic-react-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit #pragma: allowlist secret
+    with:
+      PACKAGE_NAME: Botonic plugin hubtype analytics tests
+      PACKAGE: botonic-plugin-hubtype-analytics
+      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-hubtype-analytics && npm run build'
+      NEEDS_CODECOV_UPLOAD: 'yes'
