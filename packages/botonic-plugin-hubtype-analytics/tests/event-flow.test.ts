@@ -5,9 +5,8 @@ describe('Create flow event', () => {
   test('should create flow event', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
-      type: EventName.flow,
+      action: FlowAction.flowNode,
       data: {
-        action: FlowAction.flowNode,
         flowThreadId: 'flowThreadIdTest',
         flowId: 'flowIdTest',
         flowName: 'flowNameTest',
@@ -20,7 +19,6 @@ describe('Create flow event', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        type: EventName.flow,
         channel: 'webchat',
         created_at: htEvent.created_at,
         chat_language: 'es',
@@ -35,6 +33,7 @@ describe('Create flow event', () => {
           flow_node_content_id: 'flowNodeContentIdTest',
           flow_node_is_meaningful: false,
         },
+        type: EventName.flow,
       })
     )
   })
