@@ -1,4 +1,4 @@
-import { EventFlow, FlowAction, RequestData } from '../types'
+import { EventFlow, EventName, FlowAction, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 export interface EventDataFlow {
@@ -16,9 +16,8 @@ export class HtEventFlow extends HtEvent {
 
   constructor(event: EventFlow, requestData: RequestData) {
     super(event, requestData)
-    this.data = {} as EventDataFlow
-    this.data.action = event.data.action
-    this.data.flow_thread_id = event.data.flowThreadId // guarda en la sessio, s'ha d'actualitzar cada cop que es pasa pel flow node de conversation start
+    this.type = EventName.flow
+    this.data.flow_thread_id = event.data.flowThreadId // This value is managed by the flow builder plugin, stored in the session and updated every time the content connected to the conversation start is displayed
     this.data.flow_id = event.data.flowId
     this.data.flow_name = event.data.flowName
     this.data.flow_node_id = event.data.flowNodeId

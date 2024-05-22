@@ -10,7 +10,7 @@ export function createHtEvent(
   requestData: RequestData,
   htEventProps: HtEventProps
 ): HtEvent {
-  switch (htEventProps.data.action) {
+  switch (htEventProps.action) {
     case FeedbackAction.case:
     case FeedbackAction.conversation:
     case FeedbackAction.message:

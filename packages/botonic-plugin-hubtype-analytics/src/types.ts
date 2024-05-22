@@ -14,17 +14,18 @@ export enum EventName {
   handoffFail = 'handoff_fail',
 }
 
+export type EventAction = FeedbackAction | FlowAction
+
 export interface HtBaseEventProps {
-  type: EventName
+  action: EventAction
 }
 
 export interface EventFeedback extends HtBaseEventProps {
-  type: EventName.feedback
+  action: FeedbackAction
   data: EventPropsFeedback
 }
 
 export interface EventPropsFeedback {
-  action: FeedbackAction
   messageGeneratedBy?: string
   feedbackTargetId?: string
   feedbackGroupId?: string
@@ -42,12 +43,11 @@ export enum FeedbackAction {
 }
 
 export interface EventFlow extends HtBaseEventProps {
-  type: EventName.flow
+  action: FlowAction
   data: EventPropsFlow
 }
 
 export interface EventPropsFlow {
-  action: FlowAction
   flowThreadId: string
   flowId: string
   flowName: string
