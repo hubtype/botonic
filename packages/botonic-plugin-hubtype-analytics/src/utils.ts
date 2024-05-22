@@ -4,6 +4,7 @@ import {
   HtEventFlow,
   HtEventHandoff,
   HtEventIntentClassic,
+  HtEventKeyword,
 } from './event-models'
 import {
   FeedbackAction,
@@ -11,6 +12,7 @@ import {
   HandoffAction,
   HtEventProps,
   IntentClassicAction,
+  KeywordAction,
   RequestData,
 } from './types'
 
@@ -35,6 +37,9 @@ export function createHtEvent(
 
     case IntentClassicAction.intentClassic:
       return new HtEventIntentClassic(htEventProps, requestData)
+
+    case KeywordAction.keyword:
+      return new HtEventKeyword(htEventProps, requestData)
 
     // case EventName.botAiKnowledgeBase:
     //   return new HtEventBotAiKnowledgeBase(htEventProps, requestData)

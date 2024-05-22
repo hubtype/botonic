@@ -10,6 +10,7 @@ export type EventAction =
   | FlowAction
   | HandoffAction
   | IntentClassicAction
+  | KeywordAction
 
 export interface HtBaseEventProps {
   action: EventAction
@@ -92,11 +93,28 @@ export enum IntentClassicAction {
   intentClassic = 'nlu_intent_classic',
 }
 
+export interface EventKeyword extends HtBaseEventProps {
+  action: KeywordAction
+  data: EventPropsKeyword
+}
+
+export interface EventPropsKeyword {
+  nluKeywordId: string
+  nluKeywordName: string
+  nluKeywordIsRegex?: boolean
+  nluKeywordMessageId: string
+}
+
+export enum KeywordAction {
+  keyword = 'nlu_keyword',
+}
+
 export type HtEventProps =
   | EventFeedback
   | EventFlow
   | EventHandoff
   | EventIntentClassic
+  | EventKeyword
 
 export interface RequestData {
   language: string
