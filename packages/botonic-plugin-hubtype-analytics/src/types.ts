@@ -9,12 +9,9 @@ export enum EventName {
   botAiKnowledgeBase = 'bot_ai_knowledge_base',
   botKeywordsModel = 'bot_keywords_model',
   fallback = 'fallback',
-  handoffOption = 'handoff_option',
-  handoffSuccess = 'handoff_success',
-  handoffFail = 'handoff_fail',
 }
 
-export type EventAction = FeedbackAction | FlowAction
+export type EventAction = FeedbackAction | FlowAction | HandoffAction
 
 export interface HtBaseEventProps {
   action: EventAction
@@ -60,6 +57,26 @@ export enum FlowAction {
   flowNode = 'flow_node',
 }
 
+export interface EventHandoff extends HtBaseEventProps {
+  action: HandoffAction
+  data: EventPropsHandoff
+}
+
+export interface EventPropsHandoff {
+  handoffQueueId: string
+  handoffQueueName: string
+  handoffCaseId?: string
+  isQueueOpen?: boolean
+  handoffIsAvailableAgent?: boolean
+  handoffIsThresholdReached?: boolean
+}
+
+export enum HandoffAction {
+  handoffOption = 'handoff_option',
+  handoffSuccess = 'handoff_success',
+  handoffFail = 'handoff_fail',
+}
+
 export interface EventBotOpen {
   type: EventName.botOpen
 }
@@ -97,37 +114,13 @@ export interface EventFallback extends HtBaseEventProps {
   type: EventName.fallback
 }
 
-export interface EventHandoffOption extends HtBaseEventProps {
-  type: EventName.handoffOption
-}
-
-export interface EventHandoffSuccess extends HtBaseEventProps {
-  type: EventName.handoffSuccess
-  data: EventDataHandoff
-}
-
-export interface EventHandoffFail extends HtBaseEventProps {
-  type: EventName.handoffFail
-  data: EventDataHandoff
-}
-
-export interface EventDataHandoff {
-  queue_open: boolean
-  queue_id: string
-  available_agents: boolean
-  threshold_reached: boolean
-}
-
-export type HtEventProps = EventFeedback | EventFlow
+export type HtEventProps = EventFeedback | EventFlow | EventHandoff
 // | EventBotStart
 // | EventBotOpen
 // | EventBotAiModel
 // | EventBotAiKnowledgeBase
 // | EventBotKeywordModel
 // | EventFallback
-// | EventHandoffOption
-// | EventHandoffSuccess
-// | EventHandoffFail
 
 export interface RequestData {
   language: string

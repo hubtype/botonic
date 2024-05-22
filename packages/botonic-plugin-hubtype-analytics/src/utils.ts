@@ -1,10 +1,17 @@
 import { HtEvent, HtEventFeedback, HtEventFlow } from './event-models'
+import { HtEventHandoff } from './event-models/ht-event-handoff'
 // import { HtEventBotAiModel } from './event-models/ht-event-bot-ai-model'
 // import { HtEventBotKeywordModel } from './event-models/ht-event-bot-keyword-model'
 // import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowledge-base'
 // import { HtEventHandoffFail } from './event-models/ht-event-handoff-fail'
 // import { HtEventHandoffSuccess } from './event-models/ht-event-handoff-success'
-import { FeedbackAction, FlowAction, HtEventProps, RequestData } from './types'
+import {
+  FeedbackAction,
+  FlowAction,
+  HandoffAction,
+  HtEventProps,
+  RequestData,
+} from './types'
 
 export function createHtEvent(
   requestData: RequestData,
@@ -20,6 +27,11 @@ export function createHtEvent(
     case FlowAction.flowNode:
       return new HtEventFlow(htEventProps, requestData)
 
+    case HandoffAction.handoffOption:
+    case HandoffAction.handoffSuccess:
+    case HandoffAction.handoffFail:
+      return new HtEventHandoff(htEventProps, requestData)
+
     // case EventName.botAiModel:
     //   return new HtEventBotAiModel(htEventProps, requestData)
 
@@ -28,12 +40,6 @@ export function createHtEvent(
 
     // case EventName.botKeywordsModel:
     //   return new HtEventBotKeywordModel(htEventProps, requestData)
-
-    // case EventName.handoffSuccess:
-    //   return new HtEventHandoffSuccess(htEventProps, requestData)
-
-    // case EventName.handoffFail:
-    //   return new HtEventHandoffFail(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)
