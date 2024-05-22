@@ -122,18 +122,17 @@ export interface EventDataHandoff {
   threshold_reached: boolean
 }
 
-export type HtEventProps =
-  | EventFeedback
-  // | EventFlow
-  | EventBotStart
-  | EventBotOpen
-  | EventBotAiModel
-  | EventBotAiKnowledgeBase
-  | EventBotKeywordModel
-  | EventFallback
-  | EventHandoffOption
-  | EventHandoffSuccess
-  | EventHandoffFail
+export type HtEventProps = EventFeedback
+// | EventFlow
+// | EventBotStart
+// | EventBotOpen
+// | EventBotAiModel
+// | EventBotAiKnowledgeBase
+// | EventBotKeywordModel
+// | EventFallback
+// | EventHandoffOption
+// | EventHandoffSuccess
+// | EventHandoffFail
 
 export interface RequestData {
   language: string
