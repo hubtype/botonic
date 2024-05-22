@@ -1,4 +1,4 @@
-import { createHtEvent, EventName, FlowAction } from '../src'
+import { createHtEvent, EventType, FlowAction } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create flow event', () => {
@@ -33,7 +33,7 @@ describe('Create flow event', () => {
           flow_node_content_id: 'flowNodeContentIdTest',
           flow_node_is_meaningful: false,
         },
-        type: EventName.flow,
+        type: EventType.flow,
       })
     )
   })

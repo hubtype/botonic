@@ -1,4 +1,4 @@
-import { createHtEvent, EventName, FeedbackAction } from '../src'
+import { createHtEvent, EventType, FeedbackAction } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create feedback event', () => {
@@ -37,7 +37,7 @@ describe('Create feedback event', () => {
           option: 'thumbs_up',
           value: 1,
         },
-        type: EventName.feedback,
+        type: EventType.feedback,
       })
     )
   })
@@ -69,7 +69,7 @@ describe('Create feedback event', () => {
           option: '**',
           value: 2,
         },
-        type: EventName.feedback,
+        type: EventType.feedback,
       })
     )
   })

@@ -1,4 +1,4 @@
-import { createHtEvent, EventName, HandoffAction } from '../src'
+import { createHtEvent, EventType, HandoffAction } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create handoff events', () => {
@@ -7,12 +7,12 @@ describe('Create handoff events', () => {
     const htEvent = createHtEvent(requestData, {
       action: HandoffAction.handoffSuccess,
       data: {
-        handoffQueueId: 'handoffQueueIdTest',
-        handoffQueueName: 'handoffQueueNameTest',
-        handoffCaseId: 'handoffCaseIdTest',
+        queueId: 'handoffQueueIdTest',
+        queueName: 'handoffQueueNameTest',
+        caseId: 'handoffCaseIdTest',
         isQueueOpen: true,
-        handoffIsAvailableAgent: true,
-        handoffIsThresholdReached: false,
+        isAvailableAgent: true,
+        isThresholdReached: false,
       },
     })
 
@@ -33,7 +33,7 @@ describe('Create handoff events', () => {
           handoff_is_available_agent: true,
           handoff_is_threshold_reached: false,
         },
-        type: EventName.flow,
+        type: EventType.flow,
       })
     )
   })
@@ -42,12 +42,11 @@ describe('Create handoff events', () => {
     const htEvent = createHtEvent(requestData, {
       action: HandoffAction.handoffFail,
       data: {
-        handoffQueueId: 'handoffQueueIdTest',
-        handoffQueueName: 'handoffQueueNameTest',
-        handoffCaseId: 'handoffCaseIdTest',
+        queueId: 'handoffQueueIdTest',
+        queueName: 'handoffQueueNameTest',
         isQueueOpen: false,
-        handoffIsAvailableAgent: false,
-        handoffIsThresholdReached: false,
+        isAvailableAgent: false,
+        isThresholdReached: false,
       },
     })
 
@@ -63,12 +62,11 @@ describe('Create handoff events', () => {
           action: HandoffAction.handoffFail,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
-          handoff_case_id: 'handoffCaseIdTest',
           is_queue_open: false,
           handoff_is_available_agent: false,
           handoff_is_threshold_reached: false,
         },
-        type: EventName.flow,
+        type: EventType.flow,
       })
     )
   })
@@ -77,9 +75,8 @@ describe('Create handoff events', () => {
     const htEvent = createHtEvent(requestData, {
       action: HandoffAction.handoffOption,
       data: {
-        handoffQueueId: 'handoffQueueIdTest',
-        handoffQueueName: 'handoffQueueNameTest',
-        handoffCaseId: 'handoffCaseIdTest',
+        queueId: 'handoffQueueIdTest',
+        queueName: 'handoffQueueNameTest',
       },
     })
 
@@ -95,9 +92,8 @@ describe('Create handoff events', () => {
           action: HandoffAction.handoffOption,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
-          handoff_case_id: 'handoffCaseIdTest',
         },
-        type: EventName.flow,
+        type: EventType.flow,
       })
     )
   })

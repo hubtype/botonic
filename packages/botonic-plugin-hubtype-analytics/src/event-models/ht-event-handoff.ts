@@ -1,4 +1,4 @@
-import { EventHandoff, EventName, HandoffAction, RequestData } from '../types'
+import { EventHandoff, EventType, HandoffAction, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 export interface EventDataHandoff {
@@ -16,13 +16,12 @@ export class HtEventHandoff extends HtEvent {
 
   constructor(event: EventHandoff, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventName.flow
-    this.data.handoff_queue_id = event.data.handoffQueueId
-    this.data.handoff_queue_name = event.data.handoffQueueName
-    this.data.handoff_case_id = event.data.handoffCaseId
+    this.type = EventType.flow
+    this.data.handoff_queue_id = event.data.queueId
+    this.data.handoff_queue_name = event.data.queueName
+    this.data.handoff_case_id = event.data.caseId
     this.data.is_queue_open = event.data.isQueueOpen
-    this.data.handoff_is_available_agent = event.data.handoffIsAvailableAgent
-    this.data.handoff_is_threshold_reached =
-      event.data.handoffIsThresholdReached
+    this.data.handoff_is_available_agent = event.data.isAvailableAgent
+    this.data.handoff_is_threshold_reached = event.data.isThresholdReached
   }
 }

@@ -1,4 +1,4 @@
-import { EventName, HtEventProps, RequestData } from '../types'
+import { EventType, HtEventProps, RequestData } from '../types'
 
 // Eliminar despres de refactoritzar tots els events
 export interface BaseHtEventData {
@@ -13,7 +13,7 @@ export interface BaseHtEventData {
 
 export class HtEvent {
   chat_id: string
-  type: EventName
+  type: EventType
   channel: string
   created_at: string
   chat_language: string
