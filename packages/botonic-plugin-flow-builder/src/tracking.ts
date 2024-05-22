@@ -29,6 +29,9 @@ export function getEventArgs(request: ActionRequest, node: HtNodeWithContent) {
 
 export enum EventAction {
   flowNode = 'flow_node',
+  handoffOption = 'handoff_option',
+  handoffSuccess = 'handoff_success',
+  handoffFail = 'handoff_fail',
 }
 
 // export enum EventName {
