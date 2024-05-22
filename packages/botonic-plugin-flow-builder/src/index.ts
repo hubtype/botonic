@@ -1,5 +1,6 @@
 import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
+import { v4 as uuid } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import {
@@ -29,6 +30,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
+import { EventName, getEventArgs, trackEvent } from './tracking'
 import {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
@@ -140,8 +142,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async getStartContents(locale: string): Promise<FlowContent[]> {
+    const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
     const startNode = this.cmsApi.getStartNode()
-    return await this.getContentsByNode(startNode, locale)
+    this.currentRequest.session.flow_thread_id = uuid()
+    const eventArgs = getEventArgs(
+      this.currentRequest as unknown as ActionRequest,
+      startNode
+    )
+    await trackEvent(
+      this.currentRequest as unknown as ActionRequest,
+      EventName.flow,
+      eventArgs
+    )
+    return await this.getContentsByNode(startNode, resolvedLocale)
   }
 
   async getContentsByNode(
@@ -256,6 +269,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   getPayloadParams<T extends PayloadParamsBase>(payload: string): T {
     const payloadParams = JSON.parse(payload.split(SEPARATOR)[1] || '{}')
     return payloadParams
+  }
+
+  getFlowName(flowId: string): string {
+    return this.cmsApi.getFlowName(flowId)
   }
 }
 

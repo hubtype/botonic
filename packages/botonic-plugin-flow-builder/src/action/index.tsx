@@ -5,7 +5,8 @@ import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { EventName, trackEvent } from '../tracking'
+import BotonicPluginFlowBuilder from '../index'
+import { EventName, getEventArgs, trackEvent } from '../tracking'
 import { createNodeFromKnowledgeBase } from './knowledge-bases'
 
 export type FlowBuilderActionProps = {
@@ -18,15 +19,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static async botonicInit(
     request: ActionRequest
   ): Promise<FlowBuilderActionProps> {
-    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-    const locale = flowBuilderPlugin.getLocale(request.session)
-
-    const targetNode = await getTargetNode(flowBuilderPlugin.cmsApi, request)
-
-    const contents = await flowBuilderPlugin.getContentsByNode(
-      targetNode,
-      locale
-    )
+    const contents = await getContents(request)
 
     const handoffContent = contents.find(
       content => content instanceof FlowHandoff
@@ -55,26 +48,64 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   }
 }
 
-async function getTargetNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
-  if (request.session.is_first_interaction) {
-    const startNode = cmsApi.getStartNode()
-    await trackEvent(request, EventName.botStart)
-    return startNode
+async function getContents(request: ActionRequest): Promise<FlowContent[]> {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const cmsApi = flowBuilderPlugin.cmsApi
+  const locale = flowBuilderPlugin.getLocale(request.session)
+  const resolvedLocale = flowBuilderPlugin.cmsApi.getResolvedLocale(locale)
+  const context = {
+    cmsApi,
+    flowBuilderPlugin,
+    request,
+    resolvedLocale,
   }
-  const contentId = request.input.payload
 
-  const targetNode = contentId
-    ? cmsApi.getNodeById<HtNodeWithContent>(contentId)
+  if (request.session.is_first_interaction) {
+    return await flowBuilderPlugin.getStartContents(resolvedLocale)
+  }
+
+  if (request.input.payload) {
+    return await getContentsByPayload(context)
+  }
+
+  return await getContentsByFallback(context)
+}
+
+interface FlowBuilderContext {
+  cmsApi: FlowBuilderApi
+  flowBuilderPlugin: BotonicPluginFlowBuilder
+  request: ActionRequest
+  resolvedLocale: string
+}
+
+async function getContentsByPayload({
+  cmsApi,
+  flowBuilderPlugin,
+  request,
+  resolvedLocale,
+}: FlowBuilderContext): Promise<FlowContent[]> {
+  const targetNode = request.input.payload
+    ? cmsApi.getNodeById<HtNodeWithContent>(request.input.payload)
     : undefined
 
   if (targetNode) {
-    const eventArgs = {
-      faq_name: targetNode.code,
-    }
-    await trackEvent(request, EventName.botFaq, eventArgs)
-    return targetNode
+    const eventArgs = getEventArgs(request, targetNode)
+    await trackEvent(request, EventName.flow, eventArgs)
+    return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
   }
-  return await getFallbackNode(cmsApi, request)
+  return []
+}
+
+async function getContentsByFallback({
+  cmsApi,
+  flowBuilderPlugin,
+  request,
+  resolvedLocale,
+}: FlowBuilderContext): Promise<FlowContent[]> {
+  const fallbackNode = await getFallbackNode(cmsApi, request)
+  const eventArgs = getEventArgs(request, fallbackNode)
+  await trackEvent(request, EventName.flow, eventArgs)
+  return await flowBuilderPlugin.getContentsByNode(fallbackNode, resolvedLocale)
 }
 
 async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {

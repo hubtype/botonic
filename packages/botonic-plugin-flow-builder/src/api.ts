@@ -250,6 +250,11 @@ export class FlowBuilderApi {
     }
   }
 
+  getFlowName(flowId: string): string {
+    const flow = this.flow.flows.find(flow => flow.id === flowId)
+    return flow ? flow.name : ''
+  }
+
   getResolvedLocale(locale: string): string {
     if (this.flow.locales.find(flowLocale => flowLocale === locale)) {
       return locale

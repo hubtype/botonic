@@ -1,5 +1,6 @@
 import { ActionRequest } from '@botonic/react'
 
+import { HtNodeWithContent } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
 
 export async function trackEvent(
@@ -14,13 +15,23 @@ export async function trackEvent(
   return
 }
 
+export function getEventArgs(request: ActionRequest, node: HtNodeWithContent) {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  return {
+    action: 'flow_node',
+    flowThreadId: request.session.flow_thread_id,
+    flowId: node.flow_id,
+    flowName: flowBuilderPlugin.getFlowName(node.flow_id),
+    flowNodeId: node.id,
+    flowNodeContentId: node.code,
+    flowNodeIsMeaningful: undefined, //node?.isMeaningful,
+  }
+}
+
 export enum EventName {
-  botAgentRating = 'bot_agent_rating',
-  botChannelRating = 'bot_channel_rating',
-  botFaqUseful = 'bot_faq_useful',
-  botRating = 'bot_rating',
-  botFaq = 'bot_faq',
-  botStart = 'bot_start',
+  feedback = 'feedback',
+  flow = 'botevent',
+
   botOpen = 'bot_open',
   botAiModel = 'bot_ai_model',
   botAiKnowledgeBase = 'bot_ai_knowledge_base',
