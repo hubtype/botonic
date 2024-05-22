@@ -5,7 +5,11 @@ export enum EventType {
   flow = 'botevent',
 }
 
-export type EventAction = FeedbackAction | FlowAction | HandoffAction
+export type EventAction =
+  | FeedbackAction
+  | FlowAction
+  | HandoffAction
+  | IntentClassicAction
 
 export interface HtBaseEventProps {
   action: EventAction
@@ -71,7 +75,28 @@ export enum HandoffAction {
   handoffFail = 'handoff_fail',
 }
 
-export type HtEventProps = EventFeedback | EventFlow | EventHandoff
+export interface EventIntentClassic extends HtBaseEventProps {
+  action: IntentClassicAction
+  data: EventPropsIntentClassic
+}
+
+export interface EventPropsIntentClassic {
+  nluIntentLabel: string
+  nluIntentId: string
+  nluIntentConfidence: number
+  nluIntentThreshold: number
+  nluIntentMessageId: string
+}
+
+export enum IntentClassicAction {
+  intentClassic = 'nlu_intent_classic',
+}
+
+export type HtEventProps =
+  | EventFeedback
+  | EventFlow
+  | EventHandoff
+  | EventIntentClassic
 
 export interface RequestData {
   language: string

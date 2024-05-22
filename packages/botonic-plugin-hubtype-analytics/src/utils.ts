@@ -1,15 +1,16 @@
-import { HtEvent, HtEventFeedback, HtEventFlow } from './event-models'
-import { HtEventHandoff } from './event-models/ht-event-handoff'
-// import { HtEventBotAiModel } from './event-models/ht-event-bot-ai-model'
-// import { HtEventBotKeywordModel } from './event-models/ht-event-bot-keyword-model'
-// import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowledge-base'
-// import { HtEventHandoffFail } from './event-models/ht-event-handoff-fail'
-// import { HtEventHandoffSuccess } from './event-models/ht-event-handoff-success'
+import {
+  HtEvent,
+  HtEventFeedback,
+  HtEventFlow,
+  HtEventHandoff,
+  HtEventIntentClassic,
+} from './event-models'
 import {
   FeedbackAction,
   FlowAction,
   HandoffAction,
   HtEventProps,
+  IntentClassicAction,
   RequestData,
 } from './types'
 
@@ -32,8 +33,8 @@ export function createHtEvent(
     case HandoffAction.handoffFail:
       return new HtEventHandoff(htEventProps, requestData)
 
-    // case EventName.botAiModel:
-    //   return new HtEventBotAiModel(htEventProps, requestData)
+    case IntentClassicAction.intentClassic:
+      return new HtEventIntentClassic(htEventProps, requestData)
 
     // case EventName.botAiKnowledgeBase:
     //   return new HtEventBotAiKnowledgeBase(htEventProps, requestData)
