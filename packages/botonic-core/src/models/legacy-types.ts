@@ -201,6 +201,7 @@ export interface Session {
   _shadowing?: boolean
   external?: any
   zendesk_ticket_id?: string
+  flow_thread_id?: string
 }
 
 export type InputMatcher = (input: Input) => boolean
