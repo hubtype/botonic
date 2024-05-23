@@ -5,14 +5,32 @@ export enum EventType {
   flow = 'botevent',
 }
 
-export type EventAction = FeedbackAction | FlowAction | HandoffAction
+export enum EventAction {
+  feedbackCase = 'feedback_case',
+  feedbackMessage = 'feddback_message',
+  feedbackConversation = 'feddback_conversation',
+  feedbackWebview = 'feddback_webview',
+  flowNode = 'flow_node',
+  handoffOption = 'handoff_option',
+  handoffSuccess = 'handoff_success',
+  handoffFail = 'handoff_fail',
+  intentClassic = 'nlu_intent_classic',
+  keyword = 'nlu_keyword',
+  intentSmart = 'nlu_intent_smart',
+  knowledgebase = 'knowledgebase',
+  fallback = 'fallback',
+}
 
 export interface HtBaseEventProps {
   action: EventAction
 }
 
 export interface EventFeedback extends HtBaseEventProps {
-  action: FeedbackAction
+  action:
+    | EventAction.feedbackCase
+    | EventAction.feedbackConversation
+    | EventAction.feedbackMessage
+    | EventAction.feedbackWebview
   data: EventPropsFeedback
 }
 
@@ -26,15 +44,8 @@ export interface EventPropsFeedback {
   value: number
 }
 
-export enum FeedbackAction {
-  case = 'feedback_case',
-  message = 'feddback_message',
-  conversation = 'feddback_conversation',
-  webview = 'feddback_webview',
-}
-
 export interface EventFlow extends HtBaseEventProps {
-  action: FlowAction
+  action: EventAction.flowNode
   data: EventPropsFlow
 }
 
@@ -47,12 +58,11 @@ export interface EventPropsFlow {
   flowNodeIsMeaningful?: boolean
 }
 
-export enum FlowAction {
-  flowNode = 'flow_node',
-}
-
 export interface EventHandoff extends HtBaseEventProps {
-  action: HandoffAction
+  action:
+    | EventAction.handoffOption
+    | EventAction.handoffSuccess
+    | EventAction.handoffFail
   data: EventPropsHandoff
 }
 
@@ -65,13 +75,72 @@ export interface EventPropsHandoff {
   isThresholdReached?: boolean
 }
 
-export enum HandoffAction {
-  handoffOption = 'handoff_option',
-  handoffSuccess = 'handoff_success',
-  handoffFail = 'handoff_fail',
+export interface EventIntentClassic extends HtBaseEventProps {
+  action: EventAction.intentClassic
+  data: EventPropsIntentClassic
 }
 
-export type HtEventProps = EventFeedback | EventFlow | EventHandoff
+export interface EventPropsIntentClassic {
+  nluIntentLabel: string
+  nluIntentId: string
+  nluIntentConfidence: number
+  nluIntentThreshold: number
+  nluIntentMessageId: string
+}
+
+export interface EventKeyword extends HtBaseEventProps {
+  action: EventAction.keyword
+  data: EventPropsKeyword
+}
+
+export interface EventPropsKeyword {
+  nluKeywordId: string
+  nluKeywordName: string
+  nluKeywordIsRegex?: boolean
+  nluKeywordMessageId: string
+}
+
+export interface EventIntentSmart extends HtBaseEventProps {
+  action: EventAction.intentSmart
+  data: EventPropsIntentSmart
+}
+
+export interface EventPropsIntentSmart {
+  nluIntentSmartLabel: string
+  nluIntentSmartNumUsed: number
+  nluIntentSmartMessageId: string
+}
+
+export interface EventKnowledgeBase extends HtBaseEventProps {
+  action: EventAction.knowledgebase
+  data: EventPropsKnowledgeBase
+}
+
+export interface EventPropsKnowledgeBase {
+  knowledgebaseId: string
+  knowledgebaseFailReason: string
+  knowledgebaseSourcesIds: string[]
+  knowledgebaseChunksIds: string[]
+}
+
+export interface EventFallback extends HtBaseEventProps {
+  action: EventAction.fallback
+  data: EventPropsFallbackBase
+}
+
+export interface EventPropsFallbackBase {
+  fallbackAttempt: number
+}
+
+export type HtEventProps =
+  | EventFeedback
+  | EventFlow
+  | EventHandoff
+  | EventIntentClassic
+  | EventKeyword
+  | EventIntentSmart
+  | EventKnowledgeBase
+  | EventFallback
 
 export interface RequestData {
   language: string

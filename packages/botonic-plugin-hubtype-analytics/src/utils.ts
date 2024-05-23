@@ -1,45 +1,49 @@
-import { HtEvent, HtEventFeedback, HtEventFlow } from './event-models'
-import { HtEventHandoff } from './event-models/ht-event-handoff'
-// import { HtEventBotAiModel } from './event-models/ht-event-bot-ai-model'
-// import { HtEventBotKeywordModel } from './event-models/ht-event-bot-keyword-model'
-// import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowledge-base'
-// import { HtEventHandoffFail } from './event-models/ht-event-handoff-fail'
-// import { HtEventHandoffSuccess } from './event-models/ht-event-handoff-success'
 import {
-  FeedbackAction,
-  FlowAction,
-  HandoffAction,
-  HtEventProps,
-  RequestData,
-} from './types'
+  HtEvent,
+  HtEventFallback,
+  HtEventFeedback,
+  HtEventFlow,
+  HtEventHandoff,
+  HtEventIntentClassic,
+  HtEventIntentSmart,
+  HtEventKeyword,
+  HtEventKnowledgeBase,
+} from './event-models'
+import { EventAction, HtEventProps, RequestData } from './types'
 
 export function createHtEvent(
   requestData: RequestData,
   htEventProps: HtEventProps
 ): HtEvent {
   switch (htEventProps.action) {
-    case FeedbackAction.case:
-    case FeedbackAction.conversation:
-    case FeedbackAction.message:
-    case FeedbackAction.webview:
+    case EventAction.feedbackCase:
+    case EventAction.feedbackConversation:
+    case EventAction.feedbackMessage:
+    case EventAction.feedbackWebview:
       return new HtEventFeedback(htEventProps, requestData)
 
-    case FlowAction.flowNode:
+    case EventAction.flowNode:
       return new HtEventFlow(htEventProps, requestData)
 
-    case HandoffAction.handoffOption:
-    case HandoffAction.handoffSuccess:
-    case HandoffAction.handoffFail:
+    case EventAction.handoffOption:
+    case EventAction.handoffSuccess:
+    case EventAction.handoffFail:
       return new HtEventHandoff(htEventProps, requestData)
 
-    // case EventName.botAiModel:
-    //   return new HtEventBotAiModel(htEventProps, requestData)
+    case EventAction.intentClassic:
+      return new HtEventIntentClassic(htEventProps, requestData)
 
-    // case EventName.botAiKnowledgeBase:
-    //   return new HtEventBotAiKnowledgeBase(htEventProps, requestData)
+    case EventAction.keyword:
+      return new HtEventKeyword(htEventProps, requestData)
 
-    // case EventName.botKeywordsModel:
-    //   return new HtEventBotKeywordModel(htEventProps, requestData)
+    case EventAction.intentSmart:
+      return new HtEventIntentSmart(htEventProps, requestData)
+
+    case EventAction.knowledgebase:
+      return new HtEventKnowledgeBase(htEventProps, requestData)
+
+    case EventAction.fallback:
+      return new HtEventFallback(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

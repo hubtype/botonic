@@ -1,11 +1,11 @@
-import { createHtEvent, EventType, HandoffAction } from '../src'
+import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create handoff events', () => {
   const requestData = getRequestData()
   test('should create handoff success event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: HandoffAction.handoffSuccess,
+      action: EventAction.handoffSuccess,
       data: {
         queueId: 'handoffQueueIdTest',
         queueName: 'handoffQueueNameTest',
@@ -25,7 +25,7 @@ describe('Create handoff events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: HandoffAction.handoffSuccess,
+          action: EventAction.handoffSuccess,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
           handoff_case_id: 'handoffCaseIdTest',
@@ -40,7 +40,7 @@ describe('Create handoff events', () => {
 
   test('should create handoff fail event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: HandoffAction.handoffFail,
+      action: EventAction.handoffFail,
       data: {
         queueId: 'handoffQueueIdTest',
         queueName: 'handoffQueueNameTest',
@@ -59,7 +59,7 @@ describe('Create handoff events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: HandoffAction.handoffFail,
+          action: EventAction.handoffFail,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
           is_queue_open: false,
@@ -73,7 +73,7 @@ describe('Create handoff events', () => {
 
   test('should create handoff option event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: HandoffAction.handoffOption,
+      action: EventAction.handoffOption,
       data: {
         queueId: 'handoffQueueIdTest',
         queueName: 'handoffQueueNameTest',
@@ -89,7 +89,7 @@ describe('Create handoff events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: HandoffAction.handoffOption,
+          action: EventAction.handoffOption,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
         },
