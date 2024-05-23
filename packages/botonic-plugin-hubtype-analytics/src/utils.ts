@@ -8,47 +8,37 @@ import {
   HtEventKeyword,
   HtEventKnowledgeBase,
 } from './event-models'
-import {
-  FeedbackAction,
-  FlowAction,
-  HandoffAction,
-  HtEventProps,
-  IntentClassicAction,
-  IntentSmartAction,
-  KeywordAction,
-  KnowledgeBaseAction,
-  RequestData,
-} from './types'
+import { EventAction, HtEventProps, RequestData } from './types'
 
 export function createHtEvent(
   requestData: RequestData,
   htEventProps: HtEventProps
 ): HtEvent {
   switch (htEventProps.action) {
-    case FeedbackAction.case:
-    case FeedbackAction.conversation:
-    case FeedbackAction.message:
-    case FeedbackAction.webview:
+    case EventAction.feedbackCase:
+    case EventAction.feedbackConversation:
+    case EventAction.feedbackMessage:
+    case EventAction.feedbackWebview:
       return new HtEventFeedback(htEventProps, requestData)
 
-    case FlowAction.flowNode:
+    case EventAction.flowNode:
       return new HtEventFlow(htEventProps, requestData)
 
-    case HandoffAction.handoffOption:
-    case HandoffAction.handoffSuccess:
-    case HandoffAction.handoffFail:
+    case EventAction.handoffOption:
+    case EventAction.handoffSuccess:
+    case EventAction.handoffFail:
       return new HtEventHandoff(htEventProps, requestData)
 
-    case IntentClassicAction.intentClassic:
+    case EventAction.intentClassic:
       return new HtEventIntentClassic(htEventProps, requestData)
 
-    case KeywordAction.keyword:
+    case EventAction.keyword:
       return new HtEventKeyword(htEventProps, requestData)
 
-    case IntentSmartAction.intentSmart:
+    case EventAction.intentSmart:
       return new HtEventIntentSmart(htEventProps, requestData)
 
-    case KnowledgeBaseAction.knowledgebase:
+    case EventAction.knowledgebase:
       return new HtEventKnowledgeBase(htEventProps, requestData)
 
     default:

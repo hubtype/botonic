@@ -1,11 +1,11 @@
-import { createHtEvent, EventType, KeywordAction } from '../src'
+import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create nlu keyword events', () => {
   const requestData = getRequestData()
   test('should create keyword event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: KeywordAction.keyword,
+      action: EventAction.keyword,
       data: {
         nluKeywordId: 'keywordId',
         nluKeywordName: 'hello',
@@ -23,7 +23,7 @@ describe('Create nlu keyword events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: KeywordAction.keyword,
+          action: EventAction.keyword,
           nlu_keyword_id: 'keywordId',
           nlu_keyword_name: 'hello',
           nlu_keyword_is_regex: false,

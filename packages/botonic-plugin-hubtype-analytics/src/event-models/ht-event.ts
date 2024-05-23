@@ -1,16 +1,5 @@
 import { EventType, HtEventProps, RequestData } from '../types'
 
-// Eliminar despres de refactoritzar tots els events
-interface BaseHtEventData {
-  channel: string
-  created_at: string
-  chat_language: string
-  chat_country?: string
-  format_version?: number
-  bot_version?: string
-  flow_version?: string
-}
-
 export class HtEvent {
   chat_id: string
   type: EventType

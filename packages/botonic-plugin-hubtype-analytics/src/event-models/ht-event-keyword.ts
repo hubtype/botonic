@@ -1,7 +1,8 @@
-import { EventKeyword, EventType, RequestData } from '../types'
+import { EventAction, EventKeyword, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 interface EventDataKeyword {
+  action: EventAction.keyword
   nlu_keyword_id: string
   nlu_keyword_name: string
   nlu_keyword_is_regex: boolean

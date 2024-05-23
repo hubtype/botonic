@@ -1,7 +1,13 @@
-import { EventIntentClassic, EventType, RequestData } from '../types'
+import {
+  EventAction,
+  EventIntentClassic,
+  EventType,
+  RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 interface EventDataIntentClassic {
+  action: EventAction.intentClassic
   nlu_intent_label: string
   nlu_intent_id: string
   nlu_intent_confidence: number

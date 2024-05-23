@@ -1,11 +1,11 @@
-import { createHtEvent, EventType, KnowledgeBaseAction } from '../src'
+import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create knowledge base events', () => {
   const requestData = getRequestData()
   test('should create knowledge base event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: KnowledgeBaseAction.knowledgebase,
+      action: EventAction.knowledgebase,
       data: {
         knowledgebaseId: 'knowledgebaseId',
         knowledgebaseFailReason: 'knowledgebaseFailReason',
@@ -23,7 +23,7 @@ describe('Create knowledge base events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: KnowledgeBaseAction.knowledgebase,
+          action: EventAction.knowledgebase,
           knowledgebase_id: 'knowledgebaseId',
           knowledgebase_fail_reason: 'knowledgebaseFailReason',
           knowledgebase_sources_ids: ['sourceId1', 'sourceId2'],

@@ -5,21 +5,31 @@ export enum EventType {
   flow = 'botevent',
 }
 
-export type EventAction =
-  | FeedbackAction
-  | FlowAction
-  | HandoffAction
-  | IntentClassicAction
-  | KeywordAction
-  | IntentSmartAction
-  | KnowledgeBaseAction
+export enum EventAction {
+  feedbackCase = 'feedback_case',
+  feedbackMessage = 'feddback_message',
+  feedbackConversation = 'feddback_conversation',
+  feedbackWebview = 'feddback_webview',
+  flowNode = 'flow_node',
+  handoffOption = 'handoff_option',
+  handoffSuccess = 'handoff_success',
+  handoffFail = 'handoff_fail',
+  intentClassic = 'nlu_intent_classic',
+  keyword = 'nlu_keyword',
+  intentSmart = 'nlu_intent_smart',
+  knowledgebase = 'knowledgebase',
+}
 
 export interface HtBaseEventProps {
   action: EventAction
 }
 
 export interface EventFeedback extends HtBaseEventProps {
-  action: FeedbackAction
+  action:
+    | EventAction.feedbackCase
+    | EventAction.feedbackConversation
+    | EventAction.feedbackMessage
+    | EventAction.feedbackWebview
   data: EventPropsFeedback
 }
 
@@ -33,15 +43,8 @@ export interface EventPropsFeedback {
   value: number
 }
 
-export enum FeedbackAction {
-  case = 'feedback_case',
-  message = 'feddback_message',
-  conversation = 'feddback_conversation',
-  webview = 'feddback_webview',
-}
-
 export interface EventFlow extends HtBaseEventProps {
-  action: FlowAction
+  action: EventAction.flowNode
   data: EventPropsFlow
 }
 
@@ -54,12 +57,11 @@ export interface EventPropsFlow {
   flowNodeIsMeaningful?: boolean
 }
 
-export enum FlowAction {
-  flowNode = 'flow_node',
-}
-
 export interface EventHandoff extends HtBaseEventProps {
-  action: HandoffAction
+  action:
+    | EventAction.handoffOption
+    | EventAction.handoffSuccess
+    | EventAction.handoffFail
   data: EventPropsHandoff
 }
 
@@ -72,14 +74,8 @@ export interface EventPropsHandoff {
   isThresholdReached?: boolean
 }
 
-export enum HandoffAction {
-  handoffOption = 'handoff_option',
-  handoffSuccess = 'handoff_success',
-  handoffFail = 'handoff_fail',
-}
-
 export interface EventIntentClassic extends HtBaseEventProps {
-  action: IntentClassicAction
+  action: EventAction.intentClassic
   data: EventPropsIntentClassic
 }
 
@@ -91,12 +87,8 @@ export interface EventPropsIntentClassic {
   nluIntentMessageId: string
 }
 
-export enum IntentClassicAction {
-  intentClassic = 'nlu_intent_classic',
-}
-
 export interface EventKeyword extends HtBaseEventProps {
-  action: KeywordAction
+  action: EventAction.keyword
   data: EventPropsKeyword
 }
 
@@ -107,12 +99,8 @@ export interface EventPropsKeyword {
   nluKeywordMessageId: string
 }
 
-export enum KeywordAction {
-  keyword = 'nlu_keyword',
-}
-
 export interface EventIntentSmart extends HtBaseEventProps {
-  action: IntentSmartAction
+  action: EventAction.intentSmart
   data: EventPropsIntentSmart
 }
 
@@ -122,12 +110,8 @@ export interface EventPropsIntentSmart {
   nluIntentSmartMessageId: string
 }
 
-export enum IntentSmartAction {
-  intentSmart = 'nlu_intent_smart',
-}
-
 export interface EventKnowledgeBase extends HtBaseEventProps {
-  action: KnowledgeBaseAction
+  action: EventAction.knowledgebase
   data: EventPropsKnowledgeBase
 }
 
@@ -136,10 +120,6 @@ export interface EventPropsKnowledgeBase {
   knowledgebaseFailReason: string
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
-}
-
-export enum KnowledgeBaseAction {
-  knowledgebase = 'knowledgebase',
 }
 
 export type HtEventProps =

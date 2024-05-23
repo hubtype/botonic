@@ -1,11 +1,11 @@
-import { createHtEvent, EventType, IntentClassicAction } from '../src'
+import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create nlu intent classic events', () => {
   const requestData = getRequestData()
   test('should create intent classic event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: IntentClassicAction.intentClassic,
+      action: EventAction.intentClassic,
       data: {
         nluIntentLabel: 'ADD_A_BAG',
         nluIntentId: 'nluIntentIdTest',
@@ -24,7 +24,7 @@ describe('Create nlu intent classic events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: IntentClassicAction.intentClassic,
+          action: EventAction.intentClassic,
           nlu_intent_label: 'ADD_A_BAG',
           nlu_intent_id: 'nluIntentIdTest',
           nlu_intent_confidence: 0.7,

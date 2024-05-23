@@ -1,8 +1,8 @@
-import { EventFlow, EventType, FlowAction, RequestData } from '../types'
+import { EventAction, EventFlow, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 interface EventDataFlow {
-  action: FlowAction
+  action: EventAction.flowNode
   flow_thread_id: string
   flow_id: string
   flow_name: string
