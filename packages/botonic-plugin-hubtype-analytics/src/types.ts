@@ -11,6 +11,7 @@ export type EventAction =
   | HandoffAction
   | IntentClassicAction
   | KeywordAction
+  | IntentSmartAction
 
 export interface HtBaseEventProps {
   action: EventAction
@@ -109,12 +110,28 @@ export enum KeywordAction {
   keyword = 'nlu_keyword',
 }
 
+export interface EventIntentSmart extends HtBaseEventProps {
+  action: IntentSmartAction
+  data: EventPropsIntentSmart
+}
+
+export interface EventPropsIntentSmart {
+  nluIntentSmartLabel: string
+  nluIntentSmartNumUsed: number
+  nluIntentSmartMessageId: string
+}
+
+export enum IntentSmartAction {
+  intentSmart = 'nlu_intent_smart',
+}
+
 export type HtEventProps =
   | EventFeedback
   | EventFlow
   | EventHandoff
   | EventIntentClassic
   | EventKeyword
+  | EventIntentSmart
 
 export interface RequestData {
   language: string
