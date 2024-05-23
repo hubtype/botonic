@@ -1,8 +1,12 @@
-import { EventFeedback, FeedbackAction, RequestData } from '../types'
+import { EventAction, EventFeedback, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
-export interface EventDataFeedback {
-  action: FeedbackAction
+interface EventDataFeedback {
+  action:
+    | EventAction.feedbackCase
+    | EventAction.feedbackConversation
+    | EventAction.feedbackMessage
+    | EventAction.feedbackWebview
   message_generated_by?: string
   feedback_target_id?: string
   feedback_group_id?: string
@@ -17,8 +21,7 @@ export class HtEventFeedback extends HtEvent {
 
   constructor(event: EventFeedback, requestData: RequestData) {
     super(event, requestData)
-    this.data = {} as EventDataFeedback
-    this.data.action = event.data.action
+    this.type = EventType.feedback
     this.data.message_generated_by = event.data.messageGeneratedBy // ?? nomes te valor quan action es message. Si es message de knowledge base => sources y chunks. Quan es un node de flow builder => content_id
     this.data.feedback_target_id = event.data.feedbackTargetId // ?? case_id, message_id, conversation_id ???, webview_name
     this.data.feedback_group_id = event.data.feedbackGroupId // ??

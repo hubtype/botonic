@@ -32,19 +32,52 @@ By default if you do not define these functions it will use the language defined
 
 ## Use
 
-You can use it in your actions for example an event to check that a faq has been displayed in the bot:
+You can use it in your actions.
+
+- For example an event to save a feedback given by the user:
 
 ```
   const hubtypeAnalyticsPlugin = request.plugins.hubtypeAnalytics
-  const eventBotFaq = {
-    event_type: EventName.botFaq
-    event_data: { enduser_language: 'en', faq_name: 'orders_and_deliveries' }
+  const eventProps = {
+    action: FeedbackAction.case,
+    data: {
+        possibleOptions: ['*', '**', '***', '****', '*****'],
+        possibleValues: [1, 2, 3, 4, 5],
+        option: '**',
+        value: 2,
+    }
   }
+
   try {
     const response = await hubtypeAnalyticsPlugin.trackEvent(request, event)
     console.log(response)
   } catch(error) {
-    console.log(error)
+    console.error(error)
+  }
+
+```
+
+- For example an event to check that a flow content has been displayed in the bot:
+  flowThreadId -> This value is managed by the plugin-flow-builder, stored in the session and updated every time the content connected to the conversation start is displayed
+
+```
+  const hubtypeAnalyticsPlugin = request.plugins.hubtypeAnalytics
+  const eventProps = {
+    action: FlowAction.flowNode,
+    data: {
+      flowThreadId: request.session.flow_thread_id,
+      flowId: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      flowName: 'Main',
+      flowNodeId: 'WELCOME_MSG',
+      flowNodeContentId: '607205c9-6814-45ba-9aeb-2dd08d0cb529',
+    }
+  }
+
+  try {
+    const response = await hubtypeAnalyticsPlugin.trackEvent(request, event)
+    console.log(response)
+  } catch(error) {
+    console.error(error)
   }
 
 ```

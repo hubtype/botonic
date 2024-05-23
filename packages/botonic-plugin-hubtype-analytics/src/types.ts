@@ -1,31 +1,40 @@
 import { PROVIDER } from '@botonic/core'
 
-export enum EventName {
+export enum EventType {
   feedback = 'feedback',
-  // flow = 'botevent',
+  flow = 'botevent',
+}
 
-  botStart = 'bot_start',
-  botOpen = 'bot_open',
-  botAiModel = 'bot_ai_model',
-  botAiKnowledgeBase = 'bot_ai_knowledge_base',
-  botKeywordsModel = 'bot_keywords_model',
-  fallback = 'fallback',
+export enum EventAction {
+  feedbackCase = 'feedback_case',
+  feedbackMessage = 'feddback_message',
+  feedbackConversation = 'feddback_conversation',
+  feedbackWebview = 'feddback_webview',
+  flowNode = 'flow_node',
   handoffOption = 'handoff_option',
   handoffSuccess = 'handoff_success',
   handoffFail = 'handoff_fail',
+  intentClassic = 'nlu_intent_classic',
+  keyword = 'nlu_keyword',
+  intentSmart = 'nlu_intent_smart',
+  knowledgebase = 'knowledgebase',
+  fallback = 'fallback',
 }
 
 export interface HtBaseEventProps {
-  type: EventName
+  action: EventAction
 }
 
 export interface EventFeedback extends HtBaseEventProps {
-  type: EventName.feedback
+  action:
+    | EventAction.feedbackCase
+    | EventAction.feedbackConversation
+    | EventAction.feedbackMessage
+    | EventAction.feedbackWebview
   data: EventPropsFeedback
 }
 
 export interface EventPropsFeedback {
-  action: FeedbackAction
   messageGeneratedBy?: string
   feedbackTargetId?: string
   feedbackGroupId?: string
@@ -35,104 +44,103 @@ export interface EventPropsFeedback {
   value: number
 }
 
-export enum FeedbackAction {
-  case = 'feedback_case',
-  message = 'feddback_message',
-  conversation = 'feddback_conversation',
-  webview = 'feddback_webview',
+export interface EventFlow extends HtBaseEventProps {
+  action: EventAction.flowNode
+  data: EventPropsFlow
 }
 
-// export interface EventFlow extends HtBaseEventProps {
-//   type: EventName.flow
-//   data: EventPropsFlow
-// }
-
-// export interface EventPropsFlow {
-//   action: FlowAction
-//   flowThreadId: string
-//   flowId: string
-//   flowName: string
-//   flowNodeId: string
-//   flowNodeContentId: string
-//   flowNodeIsMeaningful?: boolean
-// }
-
-// export enum FlowAction {
-//   flowNode = 'flow_node',
-// }
-export interface EventBotStart extends HtBaseEventProps {
-  type: EventName.botStart
+export interface EventPropsFlow {
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  flowNodeIsMeaningful?: boolean
 }
 
-export interface EventBotOpen {
-  type: EventName.botOpen
+export interface EventHandoff extends HtBaseEventProps {
+  action:
+    | EventAction.handoffOption
+    | EventAction.handoffSuccess
+    | EventAction.handoffFail
+  data: EventPropsHandoff
 }
 
-export interface EventBotAiModel {
-  type: EventName.botAiModel
-  data: EventDataBotAiModel
+export interface EventPropsHandoff {
+  queueId: string
+  queueName: string
+  caseId?: string
+  isQueueOpen?: boolean
+  isAvailableAgent?: boolean
+  isThresholdReached?: boolean
 }
 
-export interface EventDataBotAiModel {
-  intent: string
-  confidence: number
-  confidence_successful: boolean
+export interface EventIntentClassic extends HtBaseEventProps {
+  action: EventAction.intentClassic
+  data: EventPropsIntentClassic
 }
 
-export interface EventBotAiKnowledgeBase {
-  type: EventName.botAiKnowledgeBase
-  data: EventDataBotAiKnowledgeBase
+export interface EventPropsIntentClassic {
+  nluIntentLabel: string
+  nluIntentId: string
+  nluIntentConfidence: number
+  nluIntentThreshold: number
+  nluIntentMessageId: string
 }
 
-export interface EventDataBotAiKnowledgeBase {
-  answer: string
-  knowledge_source_ids: string[]
+export interface EventKeyword extends HtBaseEventProps {
+  action: EventAction.keyword
+  data: EventPropsKeyword
 }
 
-export interface EventBotKeywordModel extends HtBaseEventProps {
-  type: EventName.botKeywordsModel
-  data: EventDataBotKeywordModel
+export interface EventPropsKeyword {
+  nluKeywordId: string
+  nluKeywordName: string
+  nluKeywordIsRegex?: boolean
+  nluKeywordMessageId: string
 }
 
-export interface EventDataBotKeywordModel {
-  confidence_successful: boolean
+export interface EventIntentSmart extends HtBaseEventProps {
+  action: EventAction.intentSmart
+  data: EventPropsIntentSmart
 }
+
+export interface EventPropsIntentSmart {
+  nluIntentSmartLabel: string
+  nluIntentSmartNumUsed: number
+  nluIntentSmartMessageId: string
+}
+
+export interface EventKnowledgeBase extends HtBaseEventProps {
+  action: EventAction.knowledgebase
+  data: EventPropsKnowledgeBase
+}
+
+export interface EventPropsKnowledgeBase {
+  knowledgebaseId: string
+  knowledgebaseFailReason: string
+  knowledgebaseSourcesIds: string[]
+  knowledgebaseChunksIds: string[]
+}
+
 export interface EventFallback extends HtBaseEventProps {
-  type: EventName.fallback
+  action: EventAction.fallback
+  data: EventPropsFallbackBase
 }
 
-export interface EventHandoffOption extends HtBaseEventProps {
-  type: EventName.handoffOption
+export interface EventPropsFallbackBase {
+  fallbackAttempt: number
 }
 
-export interface EventHandoffSuccess extends HtBaseEventProps {
-  type: EventName.handoffSuccess
-  data: EventDataHandoff
-}
-
-export interface EventHandoffFail extends HtBaseEventProps {
-  type: EventName.handoffFail
-  data: EventDataHandoff
-}
-
-export interface EventDataHandoff {
-  queue_open: boolean
-  queue_id: string
-  available_agents: boolean
-  threshold_reached: boolean
-}
-
-export type HtEventProps = EventFeedback
-// | EventFlow
-// | EventBotStart
-// | EventBotOpen
-// | EventBotAiModel
-// | EventBotAiKnowledgeBase
-// | EventBotKeywordModel
-// | EventFallback
-// | EventHandoffOption
-// | EventHandoffSuccess
-// | EventHandoffFail
+export type HtEventProps =
+  | EventFeedback
+  | EventFlow
+  | EventHandoff
+  | EventIntentClassic
+  | EventKeyword
+  | EventIntentSmart
+  | EventKnowledgeBase
+  | EventFallback
 
 export interface RequestData {
   language: string

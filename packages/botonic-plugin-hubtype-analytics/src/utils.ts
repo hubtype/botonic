@@ -1,43 +1,49 @@
 import {
   HtEvent,
+  HtEventFallback,
   HtEventFeedback,
-  // HtEventFlow
+  HtEventFlow,
+  HtEventHandoff,
+  HtEventIntentClassic,
+  HtEventIntentSmart,
+  HtEventKeyword,
+  HtEventKnowledgeBase,
 } from './event-models'
-// import { HtEventBotAiModel } from './event-models/ht-event-bot-ai-model'
-// import { HtEventBotKeywordModel } from './event-models/ht-event-bot-keyword-model'
-// import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowledge-base'
-// import { HtEventHandoffFail } from './event-models/ht-event-handoff-fail'
-// import { HtEventHandoffSuccess } from './event-models/ht-event-handoff-success'
-import { FeedbackAction, HtEventProps, RequestData } from './types'
+import { EventAction, HtEventProps, RequestData } from './types'
 
 export function createHtEvent(
   requestData: RequestData,
   htEventProps: HtEventProps
 ): HtEvent {
-  switch (htEventProps.data.action) {
-    case FeedbackAction.case:
-    case FeedbackAction.conversation:
-    case FeedbackAction.message:
-    case FeedbackAction.webview:
+  switch (htEventProps.action) {
+    case EventAction.feedbackCase:
+    case EventAction.feedbackConversation:
+    case EventAction.feedbackMessage:
+    case EventAction.feedbackWebview:
       return new HtEventFeedback(htEventProps, requestData)
 
-    // case EventName.flow:
-    //   return new HtEventFlow(htEventProps, requestData)
+    case EventAction.flowNode:
+      return new HtEventFlow(htEventProps, requestData)
 
-    // case EventName.botAiModel:
-    //   return new HtEventBotAiModel(htEventProps, requestData)
+    case EventAction.handoffOption:
+    case EventAction.handoffSuccess:
+    case EventAction.handoffFail:
+      return new HtEventHandoff(htEventProps, requestData)
 
-    // case EventName.botAiKnowledgeBase:
-    //   return new HtEventBotAiKnowledgeBase(htEventProps, requestData)
+    case EventAction.intentClassic:
+      return new HtEventIntentClassic(htEventProps, requestData)
 
-    // case EventName.botKeywordsModel:
-    //   return new HtEventBotKeywordModel(htEventProps, requestData)
+    case EventAction.keyword:
+      return new HtEventKeyword(htEventProps, requestData)
 
-    // case EventName.handoffSuccess:
-    //   return new HtEventHandoffSuccess(htEventProps, requestData)
+    case EventAction.intentSmart:
+      return new HtEventIntentSmart(htEventProps, requestData)
 
-    // case EventName.handoffFail:
-    //   return new HtEventHandoffFail(htEventProps, requestData)
+    case EventAction.knowledgebase:
+      return new HtEventKnowledgeBase(htEventProps, requestData)
+
+    case EventAction.fallback:
+      return new HtEventFallback(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)
