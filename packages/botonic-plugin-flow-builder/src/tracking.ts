@@ -66,3 +66,17 @@ export function getContentEventArgs(
     flowNodeIsMeaningful: undefined, //node?.isMeaningful,
   }
 }
+
+// export enum EventName {
+//   feedback = 'feedback',
+//   flow = 'botevent',
+
+//   botOpen = 'bot_open',
+//   botAiModel = 'bot_ai_model',
+//   botAiKnowledgeBase = 'bot_ai_knowledge_base',
+//   botKeywordsModel = 'bot_keywords_model',
+//   fallback = 'fallback',
+//   handoffOption = 'handoff_option',
+//   handoffSuccess = 'handoff_success',
+//   handoffFail = 'handoff_fail',
+// }
