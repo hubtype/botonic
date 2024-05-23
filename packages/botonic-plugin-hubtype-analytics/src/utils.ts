@@ -1,5 +1,6 @@
 import {
   HtEvent,
+  HtEventFallback,
   HtEventFeedback,
   HtEventFlow,
   HtEventHandoff,
@@ -40,6 +41,9 @@ export function createHtEvent(
 
     case EventAction.knowledgebase:
       return new HtEventKnowledgeBase(htEventProps, requestData)
+
+    case EventAction.fallback:
+      return new HtEventFallback(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)
