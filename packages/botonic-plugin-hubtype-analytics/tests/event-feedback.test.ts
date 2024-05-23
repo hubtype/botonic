@@ -1,11 +1,11 @@
-import { createHtEvent, EventName, FeedbackAction } from '../src'
+import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create feedback event', () => {
   test('A message feedback event is created', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
-      action: FeedbackAction.message,
+      action: EventAction.feedbackMessage,
       data: {
         possibleOptions: ['thumbs_up', 'thumbs_down'],
         possibleValues: [1, 0],
@@ -28,7 +28,7 @@ describe('Create feedback event', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: FeedbackAction.message,
+          action: EventAction.feedbackMessage,
           // message_generated_by: undefined,
           // feedback_target_id: undefined,
           // feedback_group_id: undefined,
@@ -37,7 +37,7 @@ describe('Create feedback event', () => {
           option: 'thumbs_up',
           value: 1,
         },
-        type: EventName.feedback,
+        type: EventType.feedback,
       })
     )
   })
@@ -45,7 +45,7 @@ describe('Create feedback event', () => {
   test('A conversation feedback event is created', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
-      action: FeedbackAction.message,
+      action: EventAction.feedbackMessage,
       data: {
         possibleOptions: ['*', '**', '***', '****', '*****'],
         possibleValues: [1, 2, 3, 4, 5],
@@ -63,13 +63,13 @@ describe('Create feedback event', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: FeedbackAction.message,
+          action: EventAction.feedbackMessage,
           possible_options: ['*', '**', '***', '****', '*****'],
           possible_values: [1, 2, 3, 4, 5],
           option: '**',
           value: 2,
         },
-        type: EventName.feedback,
+        type: EventType.feedback,
       })
     )
   })
