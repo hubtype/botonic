@@ -1,7 +1,7 @@
 import { EventType, HtEventProps, RequestData } from '../types'
 
 // Eliminar despres de refactoritzar tots els events
-export interface BaseHtEventData {
+interface BaseHtEventData {
   channel: string
   created_at: string
   chat_language: string

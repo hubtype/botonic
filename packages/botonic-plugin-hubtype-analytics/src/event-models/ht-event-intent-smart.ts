@@ -1,7 +1,7 @@
 import { EventIntentSmart, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
-export interface EventDataIntentSmart {
+interface EventDataIntentSmart {
   nlu_intent_smart_label: string
   nlu_intent_smart_num_used: number
   nlu_intent_smart_message_id: string

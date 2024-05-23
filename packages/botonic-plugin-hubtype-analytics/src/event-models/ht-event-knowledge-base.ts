@@ -1,7 +1,7 @@
 import { EventKnowledgeBase, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
-export interface EventDataKnowledgeBase {
+interface EventDataKnowledgeBase {
   knowledgebase_id: string
   knowledgebase_fail_reason: string
   knowledgebase_sources_ids: string[]
