@@ -1,8 +1,12 @@
-import { EventFeedback, EventType, FeedbackAction, RequestData } from '../types'
+import { EventAction, EventFeedback, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
-export interface EventDataFeedback {
-  action: FeedbackAction
+interface EventDataFeedback {
+  action:
+    | EventAction.feedbackCase
+    | EventAction.feedbackConversation
+    | EventAction.feedbackMessage
+    | EventAction.feedbackWebview
   message_generated_by?: string
   feedback_target_id?: string
   feedback_group_id?: string

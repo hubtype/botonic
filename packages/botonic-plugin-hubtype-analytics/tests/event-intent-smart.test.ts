@@ -1,11 +1,11 @@
-import { createHtEvent, EventType, IntentSmartAction } from '../src'
+import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create nlu intent smart events', () => {
   const requestData = getRequestData()
   test('should create intent smart event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: IntentSmartAction.intentSmart,
+      action: EventAction.intentSmart,
       data: {
         nluIntentSmartLabel: 'ADD_A_BAG',
         nluIntentSmartNumUsed: 2,
@@ -22,7 +22,7 @@ describe('Create nlu intent smart events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: IntentSmartAction.intentSmart,
+          action: EventAction.intentSmart,
           nlu_intent_smart_label: 'ADD_A_BAG',
           nlu_intent_smart_num_used: 2,
           nlu_intent_smart_message_id: 'messageId',

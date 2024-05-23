@@ -1,8 +1,11 @@
-import { EventHandoff, EventType, HandoffAction, RequestData } from '../types'
+import { EventAction, EventHandoff, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
-export interface EventDataHandoff {
-  action: HandoffAction
+interface EventDataHandoff {
+  action:
+    | EventAction.handoffOption
+    | EventAction.handoffSuccess
+    | EventAction.handoffFail
   handoff_queue_id: string
   handoff_queue_name: string
   handoff_case_id?: string

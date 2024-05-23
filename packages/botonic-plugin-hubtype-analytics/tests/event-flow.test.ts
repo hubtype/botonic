@@ -1,11 +1,11 @@
-import { createHtEvent, EventType, FlowAction } from '../src'
+import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create flow event', () => {
   test('should create flow event', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
-      action: FlowAction.flowNode,
+      action: EventAction.flowNode,
       data: {
         flowThreadId: 'flowThreadIdTest',
         flowId: 'flowIdTest',
@@ -25,7 +25,7 @@ describe('Create flow event', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: FlowAction.flowNode,
+          action: EventAction.flowNode,
           flow_thread_id: 'flowThreadIdTest',
           flow_id: 'flowIdTest',
           flow_name: 'flowNameTest',
