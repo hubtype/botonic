@@ -18,6 +18,7 @@ export enum EventAction {
   keyword = 'nlu_keyword',
   intentSmart = 'nlu_intent_smart',
   knowledgebase = 'knowledgebase',
+  fallback = 'fallback',
 }
 
 export interface HtBaseEventProps {
@@ -122,6 +123,15 @@ export interface EventPropsKnowledgeBase {
   knowledgebaseChunksIds: string[]
 }
 
+export interface EventFallback extends HtBaseEventProps {
+  action: EventAction.fallback
+  data: EventPropsFallbackBase
+}
+
+export interface EventPropsFallbackBase {
+  fallbackAttempt: number
+}
+
 export type HtEventProps =
   | EventFeedback
   | EventFlow
@@ -130,6 +140,7 @@ export type HtEventProps =
   | EventKeyword
   | EventIntentSmart
   | EventKnowledgeBase
+  | EventFallback
 
 export interface RequestData {
   language: string
