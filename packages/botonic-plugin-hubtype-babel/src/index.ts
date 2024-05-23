@@ -1,4 +1,4 @@
-import { HubtypeSession, INPUT, Plugin, PluginPreRequest } from '@botonic/core'
+import { INPUT, Plugin, PluginPreRequest } from '@botonic/core'
 
 import { HubtypeBabelApiService } from './hubtype-babel-api-service'
 import { PluginHubtypeBabelOptions } from './options'
@@ -25,8 +25,7 @@ export default class BotonicPluginHubtypeBabel implements Plugin {
         request.input.data &&
         !this.isAutomaticBotMessage(request.input.data)
       ) {
-        const sessionAuthToken = (request.session as HubtypeSession)
-          ?._access_token
+        const sessionAuthToken = request.session._access_token
 
         const authToken = isProd ? sessionAuthToken : this.options.authToken
 
