@@ -15,7 +15,10 @@ export async function trackEvent(
   return
 }
 
-export function getEventArgs(request: ActionRequest, node: HtNodeWithContent) {
+export function getNodeEventArgs(
+  request: ActionRequest,
+  node: HtNodeWithContent
+) {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   return {
     flowThreadId: request.session.flow_thread_id,

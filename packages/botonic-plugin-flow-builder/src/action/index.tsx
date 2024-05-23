@@ -6,7 +6,7 @@ import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
-import { EventAction, getEventArgs, trackEvent } from '../tracking'
+import { EventAction, getNodeEventArgs, trackEvent } from '../tracking'
 import { createNodeFromKnowledgeBase } from './knowledge-bases'
 
 export type FlowBuilderActionProps = {
@@ -89,7 +89,7 @@ async function getContentsByPayload({
     : undefined
 
   if (targetNode) {
-    const eventArgs = getEventArgs(request, targetNode)
+    const eventArgs = getNodeEventArgs(request, targetNode)
     await trackEvent(request, EventAction.flowNode, eventArgs)
     return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
   }
@@ -103,7 +103,7 @@ async function getContentsByFallback({
   resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
   const fallbackNode = await getFallbackNode(cmsApi, request)
-  const eventArgs = getEventArgs(request, fallbackNode)
+  const eventArgs = getNodeEventArgs(request, fallbackNode)
   await trackEvent(request, EventAction.flowNode, eventArgs)
   return await flowBuilderPlugin.getContentsByNode(fallbackNode, resolvedLocale)
 }
