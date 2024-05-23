@@ -6,6 +6,7 @@ import {
   HtEventIntentClassic,
   HtEventIntentSmart,
   HtEventKeyword,
+  HtEventKnowledgeBase,
 } from './event-models'
 import {
   FeedbackAction,
@@ -15,6 +16,7 @@ import {
   IntentClassicAction,
   IntentSmartAction,
   KeywordAction,
+  KnowledgeBaseAction,
   RequestData,
 } from './types'
 
@@ -46,8 +48,8 @@ export function createHtEvent(
     case IntentSmartAction.intentSmart:
       return new HtEventIntentSmart(htEventProps, requestData)
 
-    // case EventName.botAiKnowledgeBase:
-    //   return new HtEventBotAiKnowledgeBase(htEventProps, requestData)
+    case KnowledgeBaseAction.knowledgebase:
+      return new HtEventKnowledgeBase(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

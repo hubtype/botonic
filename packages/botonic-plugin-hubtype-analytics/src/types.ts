@@ -12,6 +12,7 @@ export type EventAction =
   | IntentClassicAction
   | KeywordAction
   | IntentSmartAction
+  | KnowledgeBaseAction
 
 export interface HtBaseEventProps {
   action: EventAction
@@ -125,6 +126,22 @@ export enum IntentSmartAction {
   intentSmart = 'nlu_intent_smart',
 }
 
+export interface EventKnowledgeBase extends HtBaseEventProps {
+  action: KnowledgeBaseAction
+  data: EventPropsKnowledgeBase
+}
+
+export interface EventPropsKnowledgeBase {
+  knowledgebaseId: string
+  knowledgebaseFailReason: string
+  knowledgebaseSourcesIds: string[]
+  knowledgebaseChunksIds: string[]
+}
+
+export enum KnowledgeBaseAction {
+  knowledgebase = 'knowledgebase',
+}
+
 export type HtEventProps =
   | EventFeedback
   | EventFlow
@@ -132,6 +149,7 @@ export type HtEventProps =
   | EventIntentClassic
   | EventKeyword
   | EventIntentSmart
+  | EventKnowledgeBase
 
 export interface RequestData {
   language: string
