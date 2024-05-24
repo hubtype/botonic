@@ -30,8 +30,7 @@ async function trackIntentEvent(
     nluIntentLabel: request.input.intent,
     nluIntentConfidence: request.input.confidence,
     nluIntentThreshold: intentNode?.content.confidence,
-    // @ts-ignore
-    nluIntentMessageId: request.input.messageId,
+    nluIntentMessageId: request.input.message_id,
   }
   await trackEvent(request, EventAction.intent, eventArgs)
 }

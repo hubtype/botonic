@@ -94,8 +94,7 @@ export class KeywordMatcher {
       nluKeywordId: this.keywordNodeId,
       nluKeywordName: this.matchedKeyword,
       nluKeywordIsRegex: this.isRegExp,
-      // @ts-ignore
-      nluKeywordMessageId: this.request.input.messageId,
+      nluKeywordMessageId: this.request.input.message_id,
     }
     await trackEvent(this.request, EventAction.keyword, eventArgs)
   }
