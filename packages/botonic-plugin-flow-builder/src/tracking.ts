@@ -36,6 +36,7 @@ export enum EventAction {
   handoffSuccess = 'handoff_success',
   handoffFail = 'handoff_fail',
   keyword = 'nlu_keyword',
+  intent = 'nlu_intent',
   intentSmart = 'nlu_intent_smart',
   knowledgebase = 'knowledgebase',
   fallback = 'fallback',

@@ -2,7 +2,7 @@ import { PROVIDER } from '@botonic/core'
 
 export enum EventType {
   feedback = 'feedback',
-  flow = 'botevent',
+  botevent = 'botevent',
 }
 
 export enum EventAction {
@@ -14,8 +14,8 @@ export enum EventAction {
   handoffOption = 'handoff_option',
   handoffSuccess = 'handoff_success',
   handoffFail = 'handoff_fail',
-  intentClassic = 'nlu_intent_classic',
   keyword = 'nlu_keyword',
+  intent = 'nlu_intent',
   intentSmart = 'nlu_intent_smart',
   knowledgebase = 'knowledgebase',
   fallback = 'fallback',
@@ -75,14 +75,13 @@ export interface EventPropsHandoff {
   isThresholdReached?: boolean
 }
 
-export interface EventIntentClassic extends HtBaseEventProps {
-  action: EventAction.intentClassic
-  data: EventPropsIntentClassic
+export interface EventIntent extends HtBaseEventProps {
+  action: EventAction.intent
+  data: EventPropsIntent
 }
 
-export interface EventPropsIntentClassic {
+export interface EventPropsIntent {
   nluIntentLabel: string
-  nluIntentId: string
   nluIntentConfidence: number
   nluIntentThreshold: number
   nluIntentMessageId: string
@@ -136,7 +135,7 @@ export type HtEventProps =
   | EventFeedback
   | EventFlow
   | EventHandoff
-  | EventIntentClassic
+  | EventIntent
   | EventKeyword
   | EventIntentSmart
   | EventKnowledgeBase

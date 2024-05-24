@@ -5,10 +5,9 @@ describe('Create nlu intent classic events', () => {
   const requestData = getRequestData()
   test('should create intent classic event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.intentClassic,
+      action: EventAction.intent,
       data: {
         nluIntentLabel: 'ADD_A_BAG',
-        nluIntentId: 'nluIntentIdTest',
         nluIntentConfidence: 0.7,
         nluIntentThreshold: 0.6,
         nluIntentMessageId: 'nluIntentMessageId',
@@ -24,14 +23,13 @@ describe('Create nlu intent classic events', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.intentClassic,
+          action: EventAction.intent,
           nlu_intent_label: 'ADD_A_BAG',
-          nlu_intent_id: 'nluIntentIdTest',
           nlu_intent_confidence: 0.7,
           nlu_intent_threshold: 0.6,
           nlu_intent_message_id: 'nluIntentMessageId',
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })
