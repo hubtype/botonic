@@ -3,6 +3,7 @@ import { PROVIDER } from '@botonic/core'
 export enum EventType {
   feedback = 'feedback',
   botevent = 'botevent',
+  webevent = 'webevent',
 }
 
 export enum EventAction {
@@ -19,6 +20,8 @@ export enum EventAction {
   intentSmart = 'nlu_intent_smart',
   knowledgebase = 'knowledgebase',
   fallback = 'fallback',
+  webviewStep = 'webview_step',
+  webviewEnd = 'webview_end',
 }
 
 export interface HtBaseEventProps {
@@ -130,6 +133,19 @@ export interface EventPropsFallbackBase {
   fallbackAttempt: number
 }
 
+export interface EventWebview extends HtBaseEventProps {
+  action: EventAction.webviewStep | EventAction.webviewEnd
+  data: EventPropsWebview
+}
+
+export interface EventPropsWebview {
+  webviewThreadId: string
+  webviewName: string
+  webviewStepName: string
+  webviewEndFailType?: string
+  webviewEndFailMessage?: string
+}
+
 export type HtEventProps =
   | EventFeedback
   | EventFlow
@@ -139,6 +155,7 @@ export type HtEventProps =
   | EventIntentSmart
   | EventKnowledgeBase
   | EventFallback
+  | EventWebview
 
 export interface RequestData {
   language: string
