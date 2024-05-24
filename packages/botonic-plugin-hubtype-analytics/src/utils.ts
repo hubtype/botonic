@@ -30,7 +30,7 @@ export function createHtEvent(
     case EventAction.handoffFail:
       return new HtEventHandoff(htEventProps, requestData)
 
-    case EventAction.intentClassic:
+    case EventAction.intent:
       return new HtEventIntentClassic(htEventProps, requestData)
 
     case EventAction.keyword:

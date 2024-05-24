@@ -7,7 +7,7 @@ describe('Create nlu intent smart events', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.intentSmart,
       data: {
-        nluIntentSmartLabel: 'ADD_A_BAG',
+        nluIntentSmartTitle: 'ADD_A_BAG',
         nluIntentSmartNumUsed: 2,
         nluIntentSmartMessageId: 'messageId',
       },
@@ -23,11 +23,11 @@ describe('Create nlu intent smart events', () => {
         format_version: 2,
         data: {
           action: EventAction.intentSmart,
-          nlu_intent_smart_label: 'ADD_A_BAG',
+          nlu_intent_smart_title: 'ADD_A_BAG',
           nlu_intent_smart_num_used: 2,
           nlu_intent_smart_message_id: 'messageId',
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })

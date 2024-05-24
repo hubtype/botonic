@@ -47,6 +47,17 @@ export interface KnowledgeBaseResponse {
   }[]
 }
 
+export interface SmartIntentResponse {
+  data: {
+    smart_intent_title: string
+    text: string
+    smart_intents_used: {
+      title: string
+      description: string
+    }[]
+  }
+}
+
 export interface PayloadParamsBase {
   followUpContentID?: string
 }

@@ -3,6 +3,8 @@ import axios from 'axios'
 
 import { FlowBuilderApi } from '../api'
 import { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
+import { EventAction, trackEvent } from '../tracking'
+import { SmartIntentResponse } from '../types'
 
 export interface SmartIntentsInferenceParams {
   bot_id: string
@@ -37,19 +39,28 @@ export class SmartIntentsApi {
 
     try {
       const response = await this.getInference(params)
-      return smartIntentNodes.find(
+      const smartIntentNode = smartIntentNodes.find(
         smartIntentNode =>
           smartIntentNode.content.title === response.data.smart_intent_title
       )
+      if (smartIntentNode) {
+        trackEvent(this.currentRequest, EventAction.intentSmart, {
+          nluIntentSmartTitle: response.data.smart_intent_title,
+          nluIntentSmartNumUsed: response.data.smart_intents_used,
+          // @ts-ignore
+          nluIntentSmartMessageId: this.currentRequest.input.messageId,
+        })
+        return smartIntentNode
+      }
     } catch (e) {
       console.error(e)
-      return undefined
     }
+    return undefined
   }
 
   private async getInference(
     inferenceParams: SmartIntentsInferenceParams
-  ): Promise<{ data: { smart_intent_title: string } }> {
+  ): Promise<SmartIntentResponse> {
     return await axios({
       method: 'POST',
       url: `${process.env.HUBTYPE_API_URL}/external/v2/ai/smart_intents/inference/`,
