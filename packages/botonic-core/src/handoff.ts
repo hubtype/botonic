@@ -29,6 +29,11 @@ export type HandoffExtraData = {
   location?: string
 }
 
+interface BotEventData {
+  language: string
+  country: string
+}
+
 function contextDefaults(context: any): BackendContext {
   return {
     timeoutMs: context.timeoutMs || 10000,
@@ -68,6 +73,7 @@ export class HandOffBuilder {
   _autoIdleMessage: string
   _shadowing: boolean
   _extraData: HandoffExtraData
+  _bot_event: BotEventData
 
   constructor(session: Session) {
     this._session = session
@@ -133,6 +139,11 @@ export class HandOffBuilder {
     return this
   }
 
+  withBotEvent(botEvent: BotEventData): this {
+    this._bot_event = botEvent
+    return this
+  }
+
   async handOff(): Promise<void> {
     return _humanHandOff(
       this._session,
@@ -146,7 +157,8 @@ export class HandOffBuilder {
       this._note,
       this._autoIdleMessage,
       this._shadowing,
-      this._extraData
+      this._extraData,
+      this._bot_event
     )
   }
 }
@@ -183,6 +195,7 @@ interface HubtypeHandoffParams {
   shadowing?: boolean
   on_finish?: string
   case_extra_data?: HandoffExtraData
+  bot_event?: BotEventData
 }
 async function _humanHandOff(
   session: Session,
@@ -196,7 +209,8 @@ async function _humanHandOff(
   note = '',
   autoIdleMessage = '',
   shadowing = false,
-  extraData: HandoffExtraData | undefined = undefined
+  extraData: HandoffExtraData | undefined = undefined,
+  botEvent: BotEventData
 ) {
   const params: HubtypeHandoffParams = {}
 
@@ -231,6 +245,9 @@ async function _humanHandOff(
   }
   if (extraData) {
     params.case_extra_data = extraData
+  }
+  if (botEvent) {
+    params.bot_event = botEvent
   }
   session._botonic_action = `create_case:${JSON.stringify(params)}`
 }
