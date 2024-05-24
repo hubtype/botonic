@@ -5,7 +5,7 @@ interface EventDataIntentSmart {
   action: EventAction.intentSmart
   nlu_intent_smart_title: string
   nlu_intent_smart_num_used: number
-  nlu_intent_smart_message_id?: string
+  nlu_intent_smart_message_id: string
 }
 
 export class HtEventIntentSmart extends HtEvent {

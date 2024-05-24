@@ -11,7 +11,7 @@ export class HtEventFallback extends HtEvent {
 
   constructor(event: EventFallback, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.flow
+    this.type = EventType.botevent
     this.data.fallback_attempt = event.data.fallbackAttempt
   }
 }

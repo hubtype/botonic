@@ -107,7 +107,7 @@ export interface EventIntentSmart extends HtBaseEventProps {
 export interface EventPropsIntentSmart {
   nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
-  nluIntentSmartMessageId?: string
+  nluIntentSmartMessageId: string
 }
 
 export interface EventKnowledgeBase extends HtBaseEventProps {
@@ -116,8 +116,7 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
 }
 
 export interface EventPropsKnowledgeBase {
-  knowledgebaseId: string
-  knowledgebaseFailReason: string
+  knowledgebaseFailReason?: string
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
 }

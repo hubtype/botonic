@@ -7,7 +7,6 @@ describe('Create knowledge base events', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.knowledgebase,
       data: {
-        knowledgebaseId: 'knowledgebaseId',
         knowledgebaseFailReason: 'knowledgebaseFailReason',
         knowledgebaseSourcesIds: ['sourceId1', 'sourceId2'],
         knowledgebaseChunksIds: ['cunkId1', 'chunkId2', 'chunkId3'],
@@ -24,12 +23,11 @@ describe('Create knowledge base events', () => {
         format_version: 2,
         data: {
           action: EventAction.knowledgebase,
-          knowledgebase_id: 'knowledgebaseId',
           knowledgebase_fail_reason: 'knowledgebaseFailReason',
           knowledgebase_sources_ids: ['sourceId1', 'sourceId2'],
           knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })

@@ -4,7 +4,7 @@ import {
   HtEventFeedback,
   HtEventFlow,
   HtEventHandoff,
-  HtEventIntentClassic,
+  HtEventIntent,
   HtEventIntentSmart,
   HtEventKeyword,
   HtEventKnowledgeBase,
@@ -31,7 +31,7 @@ export function createHtEvent(
       return new HtEventHandoff(htEventProps, requestData)
 
     case EventAction.intent:
-      return new HtEventIntentClassic(htEventProps, requestData)
+      return new HtEventIntent(htEventProps, requestData)
 
     case EventAction.keyword:
       return new HtEventKeyword(htEventProps, requestData)

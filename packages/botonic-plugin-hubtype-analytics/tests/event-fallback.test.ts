@@ -23,7 +23,7 @@ describe('Create fallback events', () => {
           action: EventAction.fallback,
           fallback_attempt: 1,
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })
@@ -48,7 +48,7 @@ describe('Create fallback events', () => {
           action: EventAction.fallback,
           fallback_attempt: 2,
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })
@@ -73,7 +73,7 @@ describe('Create fallback events', () => {
           action: EventAction.fallback,
           fallback_attempt: 1,
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })
