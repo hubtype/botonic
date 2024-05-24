@@ -10,7 +10,7 @@ interface KeywordProps {
   locale: string
   request: ActionRequest
 }
-export class Keyword {
+export class KeywordMatcher {
   public cmsApi: FlowBuilderApi
   public locale: string
   public request: ActionRequest
@@ -39,16 +39,12 @@ export class Keyword {
     userInput: string,
     keywordNodes: HtKeywordNode[]
   ): HtKeywordNode | undefined {
-    try {
-      const matchedKeywordNodes = keywordNodes.filter(node =>
-        this.matchKeywords(userInput, node)
-      )
+    const matchedKeywordNodes = keywordNodes.filter(node =>
+      this.matchKeywords(userInput, node)
+    )
 
-      if (matchedKeywordNodes.length > 0 && matchedKeywordNodes[0].target) {
-        return matchedKeywordNodes[0]
-      }
-    } catch (error) {
-      console.error(`Error getting node by keyword '${userInput}': `, error)
+    if (matchedKeywordNodes.length > 0 && matchedKeywordNodes[0].target) {
+      return matchedKeywordNodes[0]
     }
 
     return undefined
@@ -73,31 +69,24 @@ export class Keyword {
   ): boolean {
     return keywords.some(keyword => {
       const regExpMatchArray = keyword.match(REG_EXP_PATTERN)
+
       if (regExpMatchArray) {
-        return this.resolveKeywordAsRegExp(userInput, regExpMatchArray)
-      }
-
-      if (userInput.includes(keyword)) {
+        const keywordAsRegExp = this.resolveKeywordAsRegExp(regExpMatchArray)
+        const match = userInput.match(keywordAsRegExp)
+        this.isRegExp = true
+        this.matchedKeyword = match ? match[0] : undefined
+      } else {
         this.isRegExp = false
-        this.matchedKeyword = keyword
-        return true
+        this.matchedKeyword = userInput.includes(keyword) ? keyword : undefined
       }
 
-      return false
+      return this.matchedKeyword !== undefined
     })
   }
 
-  private resolveKeywordAsRegExp(
-    userInput: string,
-    regExpMatchArray: RegExpMatchArray
-  ) {
+  private resolveKeywordAsRegExp(regExpMatchArray: RegExpMatchArray): RegExp {
     const [, pattern, flags] = regExpMatchArray
-    const keywordAsRegExp = new RegExp(pattern, flags)
-    const match = userInput.match(keywordAsRegExp)
-    this.isRegExp = true
-    this.matchedKeyword = match ? match[0] : undefined
-
-    return match
+    return new RegExp(pattern, flags)
   }
 
   private async trackKeywordEvent() {
