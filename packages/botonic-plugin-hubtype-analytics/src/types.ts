@@ -121,9 +121,16 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
 }
 
 export interface EventPropsKnowledgeBase {
-  knowledgebaseFailReason?: string
+  knowlaedgebaseInferenceId: string
+  knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
+  knowledgebaseMessageId: string
+}
+
+export enum KnowledgebaseFailReason {
+  noKnowledge = 'no_knowledge',
+  hallucination = 'hallucination',
 }
 
 export interface EventFallback extends HtBaseEventProps {
