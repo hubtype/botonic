@@ -151,7 +151,7 @@ export interface EventWebview extends HtBaseEventProps {
 export interface EventPropsWebview {
   webviewThreadId: string
   webviewName: string
-  webviewStepName: string
+  webviewStepName?: string
   webviewEndFailType?: string
   webviewEndFailMessage?: string
 }
