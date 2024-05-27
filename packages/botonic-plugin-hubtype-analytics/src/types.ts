@@ -139,7 +139,8 @@ export interface EventFallback extends HtBaseEventProps {
 }
 
 export interface EventPropsFallbackBase {
-  fallbackAttempt: number
+  fallbackOut: number
+  fallbackMessageId: string
 }
 
 export interface EventWebview extends HtBaseEventProps {
