@@ -41,3 +41,8 @@ export enum EventAction {
   knowledgebase = 'knowledgebase',
   fallback = 'fallback',
 }
+
+export enum KnowledgebaseFailReason {
+  noKnowledge = 'no_knowledge',
+  hallucination = 'hallucination',
+}
