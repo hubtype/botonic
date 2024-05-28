@@ -1,34 +1,8 @@
 import { ActionRequest } from '@botonic/react'
 
+import { FlowContent } from './content-fields'
 import { HtNodeWithContent } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
-
-export async function trackEvent(
-  request: ActionRequest,
-  eventAction: EventAction,
-  args?: Record<string, any>
-): Promise<void> {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  if (flowBuilderPlugin.trackEvent) {
-    await flowBuilderPlugin.trackEvent(request, eventAction, args)
-  }
-  return
-}
-
-export function getNodeEventArgs(
-  request: ActionRequest,
-  node: HtNodeWithContent
-) {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  return {
-    flowThreadId: request.session.flow_thread_id,
-    flowId: node.flow_id,
-    flowName: flowBuilderPlugin.getFlowName(node.flow_id),
-    flowNodeId: node.id,
-    flowNodeContentId: node.code,
-    flowNodeIsMeaningful: undefined, //node?.isMeaningful,
-  }
-}
 
 export enum EventAction {
   flowNode = 'flow_node',
@@ -45,4 +19,53 @@ export enum EventAction {
 export enum KnowledgebaseFailReason {
   noKnowledge = 'no_knowledge',
   hallucination = 'hallucination',
+}
+
+export async function trackEvent(
+  request: ActionRequest,
+  eventAction: EventAction,
+  args?: Record<string, any>
+): Promise<void> {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  if (flowBuilderPlugin.trackEvent) {
+    await flowBuilderPlugin.trackEvent(request, eventAction, args)
+  }
+  return
+}
+
+export async function trackFlowContent(
+  request: ActionRequest,
+  contents: FlowContent[]
+) {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const cmsApi = flowBuilderPlugin.cmsApi
+  const firstNodeContent = cmsApi.getNodeById<HtNodeWithContent>(contents[0].id)
+  const flowName = flowBuilderPlugin.getFlowName(firstNodeContent.flow_id)
+  const eventArgs = getContentEventArgs(request, {
+    code: firstNodeContent.code,
+    flowId: firstNodeContent.flow_id,
+    flowName,
+    id: firstNodeContent.id,
+  })
+  await trackEvent(request, EventAction.flowNode, eventArgs)
+}
+
+export function getContentEventArgs(
+  request: ActionRequest,
+  contentInfo: {
+    code: string
+    flowId: string
+    flowName: string
+    id: string
+  }
+) {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  return {
+    flowThreadId: request.session.flow_thread_id,
+    flowId: contentInfo.flowId,
+    flowName: flowBuilderPlugin.getFlowName(contentInfo.flowId),
+    flowNodeId: contentInfo.id,
+    flowNodeContentId: contentInfo.code,
+    flowNodeIsMeaningful: undefined, //node?.isMeaningful,
+  }
 }
