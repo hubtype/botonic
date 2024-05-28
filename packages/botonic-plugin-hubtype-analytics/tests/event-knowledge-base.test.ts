@@ -29,7 +29,7 @@ describe('Create knowledge base events', () => {
         format_version: 2,
         data: {
           action: EventAction.knowledgebase,
-          knowlaedgebase_inference_id: 'knowlaedgebaseInferenceId',
+          knowledgebase_inference_id: 'knowlaedgebaseInferenceId',
           knowledgebase_sources_ids: ['sourceId1', 'sourceId2'],
           knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
           knowledgebase_message_id: 'knowledgebaseMessageId',
@@ -61,7 +61,7 @@ describe('Create knowledge base events', () => {
         format_version: 2,
         data: {
           action: EventAction.knowledgebase,
-          knowlaedgebase_inference_id: 'knowlaedgebaseInferenceId',
+          knowledgebase_inference_id: 'knowlaedgebaseInferenceId',
           knowledgebase_fail_reason: KnowledgebaseFailReason.hallucination,
           knowledgebase_sources_ids: ['sourceId1', 'sourceId2'],
           knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
