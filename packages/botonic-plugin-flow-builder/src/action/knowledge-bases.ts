@@ -9,7 +9,8 @@ import {
   HtTextNode,
 } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { EventName, trackEvent } from '../tracking'
+import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
+import { KnowledgeBaseResponse } from '../types'
 
 export async function createNodeFromKnowledgeBase(
   cmsApi: FlowBuilderApi,
@@ -27,14 +28,12 @@ export async function createNodeFromKnowledgeBase(
     try {
       const knowledgeBaseResponse =
         await flowBuilderPlugin.getKnowledgeBaseResponse(request)
-      if (knowledgeBaseResponse.hasKnowledge) {
-        await trackEvent(request, EventName.botAiKnowledgeBase, {
-          answer: knowledgeBaseResponse.answer,
-          knowledge_source_ids: knowledgeBaseResponse.sources.map(
-            source => source.knowledgeSourceId
-          ),
-        })
+      await trackKnowledgeBase(knowledgeBaseResponse, request)
 
+      if (
+        knowledgeBaseResponse.hasKnowledge &&
+        knowledgeBaseResponse.isFaithuful
+      ) {
         const knowledgeBaseNode: HtTextNode = {
           type: HtNodeWithContentType.TEXT,
           content: {
@@ -59,9 +58,44 @@ export async function createNodeFromKnowledgeBase(
         return knowledgeBaseNode
       }
     } catch (e) {
-      console.log('Hubtype knowledge base api error: ', { e })
-      return undefined
+      console.error('Hubtype knowledge base api error: ', { e })
     }
   }
   return undefined
+}
+
+async function trackKnowledgeBase(
+  response: KnowledgeBaseResponse,
+  request: ActionRequest
+) {
+  /*  TODO:
+      In order to have all these parameters in the base knowlege response 
+      it is necessary to use the new endpoint to which the knowledge sources 
+      have to be indicated. For now this will not work, we need to finish 
+      the knowldege base node in the flow builder frontend.
+  */
+  const knowledgebaseInferenceId = response.inferenceId
+  const knowledgebaseSourcesIds = response.sources.map(
+    source => source.knowledgeSourceId
+  )
+  const knowledgebaseChunksIds = response.sources.map(
+    source => source.knowledgeChunkId
+  )
+  const knowledgebaseMessageId = request.input.message_id
+
+  let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
+  if (!response.isFaithuful) {
+    knowledgebaseFailReason = KnowledgebaseFailReason.hallucination
+  }
+  if (!response.hasKnowledge) {
+    knowledgebaseFailReason = KnowledgebaseFailReason.noKnowledge
+  }
+
+  await trackEvent(request, EventAction.knowledgebase, {
+    knowledgebaseInferenceId,
+    knowledgebaseFailReason,
+    knowledgebaseSourcesIds,
+    knowledgebaseChunksIds,
+    knowledgebaseMessageId,
+  })
 }

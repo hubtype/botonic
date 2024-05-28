@@ -30,7 +30,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { EventAction, getNodeEventArgs, trackEvent } from './tracking'
+import { trackFlowContent } from './tracking'
 import {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
@@ -151,16 +151,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
     const startNode = this.cmsApi.getStartNode()
     this.currentRequest.session.flow_thread_id = uuid()
-    const eventArgs = getNodeEventArgs(
+    const contents = await this.getContentsByNode(startNode, resolvedLocale)
+
+    await trackFlowContent(
       this.currentRequest as unknown as ActionRequest,
-      startNode
+      contents
     )
-    await trackEvent(
-      this.currentRequest as unknown as ActionRequest,
-      EventAction.flowNode,
-      eventArgs
-    )
-    return await this.getContentsByNode(startNode, resolvedLocale)
+    return contents
   }
 
   async getContentsByNode(
