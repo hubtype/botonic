@@ -55,26 +55,6 @@ export class FlowHandoff extends ContentFieldsBase {
     }
   }
 
-  private async trackHandoff(
-    availabilityData: AvailabilityData,
-    request: ActionRequest,
-    queue: HtQueueLocale
-  ) {
-    const eventArgs = {
-      queueId: queue.id,
-      queueName: queue.name,
-      //caseId: 'handoffCaseIdTest', // de on surt?
-      isQueueOpen: availabilityData.open,
-      isAvailableAgent: availabilityData.available_agents > 0,
-      isThresholdReached:
-        availabilityData.availability_threshold_waiting_cases > 0,
-    }
-    const eventName = availabilityData.open
-      ? EventAction.handoffSuccess
-      : EventAction.handoffFail
-    await trackEvent(request, eventName, eventArgs)
-  }
-
   toBotonic(): JSX.Element {
     return <WebchatSettings enableUserInput={true} />
   }
