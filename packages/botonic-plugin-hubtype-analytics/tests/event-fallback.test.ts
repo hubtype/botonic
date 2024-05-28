@@ -7,7 +7,8 @@ describe('Create fallback events', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.fallback,
       data: {
-        fallbackAttempt: 1,
+        fallbackOut: 1,
+        fallbackMessageId: 'fallbackMessageIdTest',
       },
     })
 
@@ -21,9 +22,10 @@ describe('Create fallback events', () => {
         format_version: 2,
         data: {
           action: EventAction.fallback,
-          fallback_attempt: 1,
+          fallback_out: 1,
+          fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })
@@ -32,7 +34,8 @@ describe('Create fallback events', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.fallback,
       data: {
-        fallbackAttempt: 2,
+        fallbackOut: 2,
+        fallbackMessageId: 'fallbackMessageIdTest',
       },
     })
 
@@ -46,9 +49,10 @@ describe('Create fallback events', () => {
         format_version: 2,
         data: {
           action: EventAction.fallback,
-          fallback_attempt: 2,
+          fallback_out: 2,
+          fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })
@@ -57,7 +61,8 @@ describe('Create fallback events', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.fallback,
       data: {
-        fallbackAttempt: 1,
+        fallbackOut: 1,
+        fallbackMessageId: 'fallbackMessageIdTest',
       },
     })
 
@@ -71,9 +76,10 @@ describe('Create fallback events', () => {
         format_version: 2,
         data: {
           action: EventAction.fallback,
-          fallback_attempt: 1,
+          fallback_out: 1,
+          fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })
