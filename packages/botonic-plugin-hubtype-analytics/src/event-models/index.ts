@@ -1,4 +1,5 @@
 export { HtEvent } from './ht-event'
+export { HtEventCustom } from './ht-event-custom'
 export { HtEventFallback } from './ht-event-fallback'
 export { HtEventFeedback } from './ht-event-feedback'
 export { HtEventFlow } from './ht-event-flow'

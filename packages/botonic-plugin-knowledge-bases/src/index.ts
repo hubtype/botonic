@@ -10,11 +10,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   private readonly authToken: string
 
   constructor(options: PluginKnowledgeBaseOptions) {
-    this.apiService = new HubtypeApiService(
-      options.host,
-      options.knowledgeBaseId,
-      options.timeout
-    )
+    this.apiService = new HubtypeApiService(options.host, options.timeout)
     this.authToken = options.authToken || ''
   }
 
@@ -22,23 +18,34 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     return
   }
 
-  async getInference(session: Session): Promise<KnowledgeBaseResponse> {
+  async getInference(
+    session: Session,
+    userInput: string,
+    sources: string[]
+  ): Promise<KnowledgeBaseResponse> {
     const authToken = isProd ? session._access_token : this.authToken
 
-    const response = await this.apiService.inference(authToken, session.user.id)
+    const response = await this.apiService.inference(
+      authToken,
+      userInput,
+      sources
+    )
 
-    const sources = response.data.sources.map(source => {
+    const responseSources = response.data.sources.map(source => {
       return {
+        knowledgeBaseId: source.knowledge_base_id,
         knowledgeSourceId: source.knowledge_source_id,
-        page: source.page,
+        knowledgeChunkId: source.knowledge_chunk_id,
       }
     })
 
     return {
+      inferenceId: response.data.inference_id,
       question: response.data.question,
       answer: response.data.answer,
-      hasKnowledge: response.data.has_knowledge && response.data.is_faithful,
-      sources,
+      hasKnowledge: response.data.has_knowledge,
+      isFaithuful: response.data.is_faithful,
+      sources: responseSources,
     }
   }
 }

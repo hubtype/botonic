@@ -1,5 +1,6 @@
 import {
   HtEvent,
+  HtEventCustom,
   HtEventFallback,
   HtEventFeedback,
   HtEventFlow,
@@ -48,6 +49,11 @@ export function createHtEvent(
 
     case EventAction.webviewStep:
       return new HtEventWebview(htEventProps, requestData)
+
+    case EventAction.customBot:
+    case EventAction.customWeb:
+      return new HtEventCustom(htEventProps, requestData)
+
     default:
       return new HtEvent(htEventProps, requestData)
   }

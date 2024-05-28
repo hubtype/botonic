@@ -46,7 +46,7 @@ export class SmartIntentsApi {
       if (smartIntentNode) {
         trackEvent(this.currentRequest, EventAction.intentSmart, {
           nluIntentSmartTitle: response.data.smart_intent_title,
-          nluIntentSmartNumUsed: response.data.smart_intents_used,
+          nluIntentSmartNumUsed: response.data.smart_intents_used.length,
           nluIntentSmartMessageId: this.currentRequest.input.message_id,
         })
         return smartIntentNode
