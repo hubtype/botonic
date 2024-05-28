@@ -2,7 +2,8 @@ import { PROVIDER } from '@botonic/core'
 
 export enum EventType {
   feedback = 'feedback',
-  flow = 'botevent',
+  botevent = 'botevent',
+  webevent = 'webevent',
 }
 
 export enum EventAction {
@@ -14,11 +15,15 @@ export enum EventAction {
   handoffOption = 'handoff_option',
   handoffSuccess = 'handoff_success',
   handoffFail = 'handoff_fail',
-  intentClassic = 'nlu_intent_classic',
   keyword = 'nlu_keyword',
+  intent = 'nlu_intent',
   intentSmart = 'nlu_intent_smart',
   knowledgebase = 'knowledgebase',
   fallback = 'fallback',
+  webviewStep = 'webview_step',
+  webviewEnd = 'webview_end',
+  customBot = 'custom_bot', // Custom event for bot
+  customWeb = 'custom_web', // Custom event for web
 }
 
 export interface HtBaseEventProps {
@@ -75,14 +80,13 @@ export interface EventPropsHandoff {
   isThresholdReached?: boolean
 }
 
-export interface EventIntentClassic extends HtBaseEventProps {
-  action: EventAction.intentClassic
-  data: EventPropsIntentClassic
+export interface EventIntent extends HtBaseEventProps {
+  action: EventAction.intent
+  data: EventPropsIntent
 }
 
-export interface EventPropsIntentClassic {
+export interface EventPropsIntent {
   nluIntentLabel: string
-  nluIntentId: string
   nluIntentConfidence: number
   nluIntentThreshold: number
   nluIntentMessageId: string
@@ -106,7 +110,7 @@ export interface EventIntentSmart extends HtBaseEventProps {
 }
 
 export interface EventPropsIntentSmart {
-  nluIntentSmartLabel: string
+  nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
   nluIntentSmartMessageId: string
 }
@@ -117,10 +121,16 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
 }
 
 export interface EventPropsKnowledgeBase {
-  knowledgebaseId: string
-  knowledgebaseFailReason: string
+  knowledgebaseInferenceId: string
+  knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
+  knowledgebaseMessageId: string
+}
+
+export enum KnowledgebaseFailReason {
+  noKnowledge = 'no_knowledge',
+  hallucination = 'hallucination',
 }
 
 export interface EventFallback extends HtBaseEventProps {
@@ -129,18 +139,43 @@ export interface EventFallback extends HtBaseEventProps {
 }
 
 export interface EventPropsFallbackBase {
-  fallbackAttempt: number
+  fallbackOut: number
+  fallbackMessageId: string
 }
+
+export interface EventWebview extends HtBaseEventProps {
+  action: EventAction.webviewStep | EventAction.webviewEnd
+  data: EventPropsWebview
+}
+
+export interface EventPropsWebview {
+  webviewThreadId: string
+  webviewName: string
+  webviewStepName?: string
+  webviewEndFailType?: string
+  webviewEndFailMessage?: string
+}
+
+export interface EventCustom extends HtBaseEventProps {
+  action: EventAction.customBot | EventAction.customWeb
+  data: Record<CustomAttribute, string>
+}
+
+export const CUSTOM_PREFIX = 'custom_'
+// All attributs that start with 'custom_' are considered custom attributs
+export type CustomAttribute = `${typeof CUSTOM_PREFIX}${string}`
 
 export type HtEventProps =
   | EventFeedback
   | EventFlow
   | EventHandoff
-  | EventIntentClassic
+  | EventIntent
   | EventKeyword
   | EventIntentSmart
   | EventKnowledgeBase
   | EventFallback
+  | EventWebview
+  | EventCustom
 
 export interface RequestData {
   language: string

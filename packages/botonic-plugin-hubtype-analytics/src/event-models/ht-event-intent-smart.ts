@@ -3,7 +3,7 @@ import { HtEvent } from './ht-event'
 
 interface EventDataIntentSmart {
   action: EventAction.intentSmart
-  nlu_intent_smart_label: string
+  nlu_intent_smart_title: string
   nlu_intent_smart_num_used: number
   nlu_intent_smart_message_id: string
 }
@@ -13,8 +13,8 @@ export class HtEventIntentSmart extends HtEvent {
 
   constructor(event: EventIntentSmart, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.flow
-    this.data.nlu_intent_smart_label = event.data.nluIntentSmartLabel
+    this.type = EventType.botevent
+    this.data.nlu_intent_smart_title = event.data.nluIntentSmartTitle
     this.data.nlu_intent_smart_num_used = event.data.nluIntentSmartNumUsed
     this.data.nlu_intent_smart_message_id = event.data.nluIntentSmartMessageId
   }

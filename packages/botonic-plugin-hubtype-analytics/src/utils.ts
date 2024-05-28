@@ -1,13 +1,15 @@
 import {
   HtEvent,
+  HtEventCustom,
   HtEventFallback,
   HtEventFeedback,
   HtEventFlow,
   HtEventHandoff,
-  HtEventIntentClassic,
+  HtEventIntent,
   HtEventIntentSmart,
   HtEventKeyword,
   HtEventKnowledgeBase,
+  HtEventWebview,
 } from './event-models'
 import { EventAction, HtEventProps, RequestData } from './types'
 
@@ -30,8 +32,8 @@ export function createHtEvent(
     case EventAction.handoffFail:
       return new HtEventHandoff(htEventProps, requestData)
 
-    case EventAction.intentClassic:
-      return new HtEventIntentClassic(htEventProps, requestData)
+    case EventAction.intent:
+      return new HtEventIntent(htEventProps, requestData)
 
     case EventAction.keyword:
       return new HtEventKeyword(htEventProps, requestData)
@@ -44,6 +46,13 @@ export function createHtEvent(
 
     case EventAction.fallback:
       return new HtEventFallback(htEventProps, requestData)
+
+    case EventAction.webviewStep:
+      return new HtEventWebview(htEventProps, requestData)
+
+    case EventAction.customBot:
+    case EventAction.customWeb:
+      return new HtEventCustom(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

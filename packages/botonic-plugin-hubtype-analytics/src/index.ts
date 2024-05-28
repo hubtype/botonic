@@ -1,7 +1,8 @@
 import { BotRequest, Plugin } from '@botonic/core'
 import axios from 'axios'
 
-import { HtEventProps, RequestData } from './types'
+import { HtEvent } from './event-models'
+import { EventType, HtEventProps, RequestData } from './types'
 import { createHtEvent } from './utils'
 
 export interface HubtypeAnalyticsOptions {
@@ -31,8 +32,11 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
     return
   }
 
-  getUrl(request: BotRequest) {
-    return `${this.baseUrl}/external/v1/conversational_apps/${request.session.bot.id}/bot_event/`
+  getUrl(request: BotRequest, eventType: EventType) {
+    if (eventType === EventType.webevent) {
+      return `${this.baseUrl}/external/v2/conversational_apps/${request.session.bot.id}/web_event/`
+    }
+    return `${this.baseUrl}/external/v2/conversational_apps/${request.session.bot.id}/bot_event/`
   }
 
   getRequestData(request: BotRequest): RequestData {
@@ -45,11 +49,16 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   }
 
   async trackEvent(request: BotRequest, htEventProps: HtEventProps) {
-    const url = this.getUrl(request)
     const requestData = this.getRequestData(request)
     const event = createHtEvent(requestData, htEventProps)
+
+    return this.sendEvent(request, event)
+  }
+
+  private sendEvent(request: BotRequest, event: HtEvent) {
+    const url = this.getUrl(request, event.type)
     const headers = { Authorization: `Bearer ${request.session._access_token}` }
-    const config = { headers }
+    const config = event.type !== EventType.webevent ? { headers } : undefined
     return axios.post(url, event, config)
   }
 }

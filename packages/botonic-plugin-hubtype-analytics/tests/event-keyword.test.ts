@@ -29,7 +29,7 @@ describe('Create nlu keyword events', () => {
           nlu_keyword_is_regex: false,
           nlu_keyword_message_id: 'messageId',
         },
-        type: EventType.flow,
+        type: EventType.botevent,
       })
     )
   })

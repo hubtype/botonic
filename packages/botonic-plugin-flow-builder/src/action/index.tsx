@@ -6,7 +6,7 @@ import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
-import { EventAction, getEventArgs, trackEvent } from '../tracking'
+import { EventAction, trackEvent, trackFlowContent } from '../tracking'
 import { createNodeFromKnowledgeBase } from './knowledge-bases'
 
 export type FlowBuilderActionProps = {
@@ -24,7 +24,9 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const handoffContent = contents.find(
       content => content instanceof FlowHandoff
     ) as FlowHandoff
-    if (handoffContent) await handoffContent.doHandoff(request)
+    if (handoffContent) {
+      await handoffContent.doHandoff(request)
+    }
 
     return { contents }
   }
@@ -89,10 +91,15 @@ async function getContentsByPayload({
     : undefined
 
   if (targetNode) {
-    const eventArgs = getEventArgs(request, targetNode)
-    await trackEvent(request, EventAction.flowNode, eventArgs)
-    return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
+    const contents = await flowBuilderPlugin.getContentsByNode(
+      targetNode,
+      resolvedLocale
+    )
+    await trackFlowContent(request, contents)
+
+    return contents
   }
+
   return []
 }
 
@@ -103,9 +110,13 @@ async function getContentsByFallback({
   resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
   const fallbackNode = await getFallbackNode(cmsApi, request)
-  const eventArgs = getEventArgs(request, fallbackNode)
-  await trackEvent(request, EventAction.flowNode, eventArgs)
-  return await flowBuilderPlugin.getContentsByNode(fallbackNode, resolvedLocale)
+  const fallbackContents = await flowBuilderPlugin.getContentsByNode(
+    fallbackNode,
+    resolvedLocale
+  )
+  await trackFlowContent(request, fallbackContents)
+
+  return fallbackContents
 }
 
 async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
@@ -125,6 +136,11 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
     !!request.session.user.extra_data.isFirstFallbackOption
   const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
   request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
+
+  trackEvent(request, EventAction.fallback, {
+    fallbackOut: isFirstFallbackOption ? 1 : 2,
+    fallbackMessageId: request.input.message_id,
+  })
 
   return fallbackNode
 }

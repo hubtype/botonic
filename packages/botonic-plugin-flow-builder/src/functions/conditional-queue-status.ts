@@ -1,8 +1,6 @@
 import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
-import { EventAction, trackEvent } from '../tracking'
-
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 type ConditionalQueueStatusArgs = {
@@ -19,16 +17,10 @@ enum QueueStatusResult {
 }
 
 export async function conditionalQueueStatus({
-  request,
   queue_id,
-  queue_name,
   check_available_agents,
 }: ConditionalQueueStatusArgs): Promise<QueueStatusResult> {
   const data = await getQueueAvailability(queue_id, check_available_agents)
-  await trackEvent(request, EventAction.handoffOption, {
-    queueId: queue_id,
-    queueName: queue_name,
-  })
   if (check_available_agents && data.open && data.available_agents === 0) {
     return QueueStatusResult.OPEN_WITHOUT_AGENTS
   }

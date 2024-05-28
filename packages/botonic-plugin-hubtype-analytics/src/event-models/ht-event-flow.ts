@@ -8,7 +8,7 @@ interface EventDataFlow {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
-  flow_node_is_meaningful?: boolean
+  flow_node_is_meaningful: boolean
 }
 
 export class HtEventFlow extends HtEvent {
@@ -16,7 +16,7 @@ export class HtEventFlow extends HtEvent {
 
   constructor(event: EventFlow, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.flow
+    this.type = EventType.botevent
     this.data.flow_thread_id = event.data.flowThreadId // This value is managed by the flow builder plugin, stored in the session and updated every time the content connected to the conversation start is displayed
     this.data.flow_id = event.data.flowId
     this.data.flow_name = event.data.flowName

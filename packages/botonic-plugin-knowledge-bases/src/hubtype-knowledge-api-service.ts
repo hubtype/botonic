@@ -5,39 +5,41 @@ const DEFAULT_TIMEOUT = 10000
 
 export class HubtypeApiService {
   private host: string
-  private knowledgeBaseId: string
   private timeout: number
 
-  constructor(host: string, knowledgeBaseId: string, timeout?: number) {
-    this.knowledgeBaseId = knowledgeBaseId
+  constructor(host: string, timeout?: number) {
     this.host = host
     this.timeout = timeout || DEFAULT_TIMEOUT
   }
 
   async inference(
     authToken: string,
-    chatId: string
+    question: string,
+    sources: string[]
   ): Promise<
     AxiosResponse<{
+      inference_id: string
       question: string
       answer: string
       has_knowledge: boolean
       is_faithful: boolean
       sources: {
+        knowledge_base_id: string
         knowledge_source_id: string
-        page?: number
+        knowledge_chunk_id: string
       }[]
     }>
   > {
     return await axios({
       method: 'POST',
-      url: `${this.host}/external/v1/ai/knowledge_bases/${this.knowledgeBaseId}/inference/`,
+      url: `${this.host}/external/v1/ai/knowledge_bases/inference/`,
       headers: {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
       data: {
-        chat_id: chatId,
+        question,
+        sources,
       },
       timeout: this.timeout,
     })
