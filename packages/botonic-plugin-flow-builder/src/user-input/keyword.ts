@@ -39,15 +39,11 @@ export class KeywordMatcher {
     userInput: string,
     keywordNodes: HtKeywordNode[]
   ): HtKeywordNode | undefined {
-    const matchedKeywordNodes = keywordNodes.filter(node =>
+    const matchedKeywordNode = keywordNodes.find(node =>
       this.matchKeywords(userInput, node)
     )
 
-    if (matchedKeywordNodes.length > 0 && matchedKeywordNodes[0].target) {
-      return matchedKeywordNodes[0]
-    }
-
-    return undefined
+    return matchedKeywordNode?.target ? matchedKeywordNode : undefined
   }
 
   private matchKeywords(userInput: string, node: HtKeywordNode): boolean {
@@ -94,8 +90,7 @@ export class KeywordMatcher {
       nluKeywordId: this.keywordNodeId,
       nluKeywordName: this.matchedKeyword,
       nluKeywordIsRegex: this.isRegExp,
-      // @ts-ignore
-      nluKeywordMessageId: this.request.input.messageId,
+      nluKeywordMessageId: this.request.input.message_id,
     }
     await trackEvent(this.request, EventAction.keyword, eventArgs)
   }

@@ -30,7 +30,7 @@ export async function getNodeByUserInput(
       request,
       smartIntentsConfig
     )
-    const smartIntentNode = smartIntentsApi.getNodeByInput()
+    const smartIntentNode = await smartIntentsApi.getNodeByInput()
     if (smartIntentNode) return smartIntentNode
 
     const intentNode = await getIntentNodeByInput(cmsApi, locale, request)

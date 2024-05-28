@@ -19,7 +19,7 @@ export class HtEventHandoff extends HtEvent {
 
   constructor(event: EventHandoff, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.flow
+    this.type = EventType.botevent
     this.data.handoff_queue_id = event.data.queueId
     this.data.handoff_queue_name = event.data.queueName
     this.data.handoff_case_id = event.data.caseId
