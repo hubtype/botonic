@@ -16,8 +16,6 @@ describe('Create nlu intent smart events', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        channel: 'webchat',
-        created_at: htEvent.created_at,
         chat_language: 'es',
         chat_country: 'ES',
         format_version: 2,

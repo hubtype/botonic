@@ -14,8 +14,6 @@ export class HtEvent {
 
   constructor(event: HtEventProps, requestData: RequestData) {
     this.chat_id = requestData.userId
-    this.channel = requestData.provider
-    this.created_at = new Date().toISOString()
     this.chat_language = requestData.language
     this.chat_country = requestData.country
     this.format_version = 2
