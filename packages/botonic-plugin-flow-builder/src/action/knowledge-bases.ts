@@ -74,7 +74,7 @@ async function trackKnowledgeBase(
       have to be indicated. For now this will not work, we need to finish 
       the knowldege base node in the flow builder frontend.
   */
-  const knowlaedgebaseInferenceId = response.inferenceId
+  const knowledgebaseInferenceId = response.inferenceId
   const knowledgebaseSourcesIds = response.sources.map(
     source => source.knowledgeSourceId
   )
@@ -92,7 +92,7 @@ async function trackKnowledgeBase(
   }
 
   await trackEvent(request, EventAction.knowledgebase, {
-    knowlaedgebaseInferenceId,
+    knowledgebaseInferenceId,
     knowledgebaseFailReason,
     knowledgebaseSourcesIds,
     knowledgebaseChunksIds,

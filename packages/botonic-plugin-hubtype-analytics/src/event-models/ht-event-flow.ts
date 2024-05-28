@@ -8,7 +8,7 @@ interface EventDataFlow {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
-  flow_node_is_meaningful?: boolean
+  flow_node_is_meaningful: boolean
 }
 
 export class HtEventFlow extends HtEvent {

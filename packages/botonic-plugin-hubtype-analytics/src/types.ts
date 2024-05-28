@@ -121,7 +121,7 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
 }
 
 export interface EventPropsKnowledgeBase {
-  knowlaedgebaseInferenceId: string
+  knowledgebaseInferenceId: string
   knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
@@ -139,7 +139,8 @@ export interface EventFallback extends HtBaseEventProps {
 }
 
 export interface EventPropsFallbackBase {
-  fallbackAttempt: number
+  fallbackOut: number
+  fallbackMessageId: string
 }
 
 export interface EventWebview extends HtBaseEventProps {
@@ -150,7 +151,7 @@ export interface EventWebview extends HtBaseEventProps {
 export interface EventPropsWebview {
   webviewThreadId: string
   webviewName: string
-  webviewStepName: string
+  webviewStepName?: string
   webviewEndFailType?: string
   webviewEndFailMessage?: string
 }
