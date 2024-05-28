@@ -12,7 +12,7 @@ describe('Create knowledge base events', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.knowledgebase,
       data: {
-        knowlaedgebaseInferenceId: 'knowlaedgebaseInferenceId',
+        knowledgebaseInferenceId: 'knowlaedgebaseInferenceId',
         knowledgebaseSourcesIds: ['sourceId1', 'sourceId2'],
         knowledgebaseChunksIds: ['cunkId1', 'chunkId2', 'chunkId3'],
         knowledgebaseMessageId: 'knowledgebaseMessageId',
@@ -43,7 +43,7 @@ describe('Create knowledge base events', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.knowledgebase,
       data: {
-        knowlaedgebaseInferenceId: 'knowlaedgebaseInferenceId',
+        knowledgebaseInferenceId: 'knowlaedgebaseInferenceId',
         knowledgebaseFailReason: KnowledgebaseFailReason.hallucination,
         knowledgebaseSourcesIds: ['sourceId1', 'sourceId2'],
         knowledgebaseChunksIds: ['cunkId1', 'chunkId2', 'chunkId3'],

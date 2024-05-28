@@ -121,7 +121,7 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
 }
 
 export interface EventPropsKnowledgeBase {
-  knowlaedgebaseInferenceId: string
+  knowledgebaseInferenceId: string
   knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
