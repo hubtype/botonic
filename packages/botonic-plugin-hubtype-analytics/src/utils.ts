@@ -50,8 +50,7 @@ export function createHtEvent(
     case EventAction.webviewStep:
       return new HtEventWebview(htEventProps, requestData)
 
-    case EventAction.customBot:
-    case EventAction.customWeb:
+    case EventAction.custom:
       return new HtEventCustom(htEventProps, requestData)
 
     default:

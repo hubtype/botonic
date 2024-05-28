@@ -33,10 +33,10 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   }
 
   getUrl(request: BotRequest, eventType: EventType) {
-    if (eventType === EventType.webevent) {
-      return `${this.baseUrl}/external/v2/conversational_apps/${request.session.bot.id}/web_event/`
-    }
-    return `${this.baseUrl}/external/v2/conversational_apps/${request.session.bot.id}/bot_event/`
+    const endpoint =
+      eventType === EventType.webevent ? 'web_event' : 'bot_event'
+    const botId = request.session.bot.id
+    return `${this.baseUrl}/external/v2/conversational_apps/${botId}/${endpoint}/`
   }
 
   getRequestData(request: BotRequest): RequestData {

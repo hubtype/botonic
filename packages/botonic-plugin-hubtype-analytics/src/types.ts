@@ -22,8 +22,7 @@ export enum EventAction {
   fallback = 'fallback',
   webviewStep = 'webview_step',
   webviewEnd = 'webview_end',
-  customBot = 'custom_bot', // Custom event for bot
-  customWeb = 'custom_web', // Custom event for web
+  custom = 'custom',
 }
 
 export interface HtBaseEventProps {
@@ -157,13 +156,13 @@ export interface EventPropsWebview {
 }
 
 export interface EventCustom extends HtBaseEventProps {
-  action: EventAction.customBot | EventAction.customWeb
-  data: Record<CustomAttribute, string>
+  action: EventAction.custom
+  data: EventPropsCustom
 }
 
-export const CUSTOM_PREFIX = 'custom_'
-// All attributs that start with 'custom_' are considered custom attributs
-export type CustomAttribute = `${typeof CUSTOM_PREFIX}${string}`
+export interface EventPropsCustom {
+  customFields: Record<string, any>
+}
 
 export type HtEventProps =
   | EventFeedback
