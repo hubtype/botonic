@@ -1,5 +1,6 @@
 import {
   HtEvent,
+  HtEventCustom,
   HtEventFallback,
   HtEventFeedback,
   HtEventFlow,
@@ -8,6 +9,7 @@ import {
   HtEventIntentSmart,
   HtEventKeyword,
   HtEventKnowledgeBase,
+  HtEventWebview,
 } from './event-models'
 import { EventAction, HtEventProps, RequestData } from './types'
 
@@ -44,6 +46,13 @@ export function createHtEvent(
 
     case EventAction.fallback:
       return new HtEventFallback(htEventProps, requestData)
+
+    case EventAction.webviewStep:
+      return new HtEventWebview(htEventProps, requestData)
+
+    case EventAction.customBot:
+    case EventAction.customWeb:
+      return new HtEventCustom(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

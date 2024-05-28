@@ -3,6 +3,7 @@ import { PROVIDER } from '@botonic/core'
 export enum EventType {
   feedback = 'feedback',
   botevent = 'botevent',
+  webevent = 'webevent',
 }
 
 export enum EventAction {
@@ -19,6 +20,10 @@ export enum EventAction {
   intentSmart = 'nlu_intent_smart',
   knowledgebase = 'knowledgebase',
   fallback = 'fallback',
+  webviewStep = 'webview_step',
+  webviewEnd = 'webview_end',
+  customBot = 'custom_bot', // Custom event for bot
+  customWeb = 'custom_web', // Custom event for web
 }
 
 export interface HtBaseEventProps {
@@ -116,9 +121,16 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
 }
 
 export interface EventPropsKnowledgeBase {
-  knowledgebaseFailReason?: string
+  knowledgebaseInferenceId: string
+  knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
+  knowledgebaseMessageId: string
+}
+
+export enum KnowledgebaseFailReason {
+  noKnowledge = 'no_knowledge',
+  hallucination = 'hallucination',
 }
 
 export interface EventFallback extends HtBaseEventProps {
@@ -127,8 +139,31 @@ export interface EventFallback extends HtBaseEventProps {
 }
 
 export interface EventPropsFallbackBase {
-  fallbackAttempt: number
+  fallbackOut: number
+  fallbackMessageId: string
 }
+
+export interface EventWebview extends HtBaseEventProps {
+  action: EventAction.webviewStep | EventAction.webviewEnd
+  data: EventPropsWebview
+}
+
+export interface EventPropsWebview {
+  webviewThreadId: string
+  webviewName: string
+  webviewStepName?: string
+  webviewEndFailType?: string
+  webviewEndFailMessage?: string
+}
+
+export interface EventCustom extends HtBaseEventProps {
+  action: EventAction.customBot | EventAction.customWeb
+  data: Record<CustomAttribute, string>
+}
+
+export const CUSTOM_PREFIX = 'custom_'
+// All attributs that start with 'custom_' are considered custom attributs
+export type CustomAttribute = `${typeof CUSTOM_PREFIX}${string}`
 
 export type HtEventProps =
   | EventFeedback
@@ -139,6 +174,8 @@ export type HtEventProps =
   | EventIntentSmart
   | EventKnowledgeBase
   | EventFallback
+  | EventWebview
+  | EventCustom
 
 export interface RequestData {
   language: string
