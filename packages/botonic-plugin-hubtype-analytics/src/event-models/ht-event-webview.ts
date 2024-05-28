@@ -5,7 +5,7 @@ interface EventDataWebview {
   action: EventAction.webviewStep | EventAction.webviewEnd
   webview_thread_id: string
   webview_name: string
-  webview_step_name: string
+  webview_step_name?: string
   webview_end_fail_type?: string
   webview_end_fail_message?: string
 }

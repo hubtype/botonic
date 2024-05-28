@@ -3,7 +3,8 @@ import { HtEvent } from './ht-event'
 
 interface EventDataFallback {
   action: EventAction.fallback
-  fallback_attempt: number
+  fallback_out: number
+  fallback_message_id: string
 }
 
 export class HtEventFallback extends HtEvent {
@@ -12,6 +13,7 @@ export class HtEventFallback extends HtEvent {
   constructor(event: EventFallback, requestData: RequestData) {
     super(event, requestData)
     this.type = EventType.botevent
-    this.data.fallback_attempt = event.data.fallbackAttempt
+    this.data.fallback_out = event.data.fallbackOut
+    this.data.fallback_message_id = event.data.fallbackMessageId
   }
 }
