@@ -1,7 +1,7 @@
 export enum EventType {
   Feedback = 'feedback',
-  Botevent = 'botevent',
-  Webevent = 'webevent',
+  BotEvent = 'botevent',
+  WebEvent = 'webevent',
 }
 
 export enum EventAction {

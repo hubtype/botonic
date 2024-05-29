@@ -13,7 +13,7 @@ export class HtEventIntentSmart extends HtEvent {
 
   constructor(event: EventIntentSmart, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Botevent
+    this.type = EventType.BotEvent
     this.data.nlu_intent_smart_title = event.data.nluIntentSmartTitle
     this.data.nlu_intent_smart_num_used = event.data.nluIntentSmartNumUsed
     this.data.nlu_intent_smart_message_id = event.data.nluIntentSmartMessageId

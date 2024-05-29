@@ -14,7 +14,7 @@ export class HtEventIntent extends HtEvent {
 
   constructor(event: EventIntent, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Botevent
+    this.type = EventType.BotEvent
     this.data.nlu_intent_label = event.data.nluIntentLabel
     this.data.nlu_intent_confidence = event.data.nluIntentConfidence
     this.data.nlu_intent_threshold = event.data.nluIntentThreshold

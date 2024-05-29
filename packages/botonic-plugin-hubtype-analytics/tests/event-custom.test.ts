@@ -27,7 +27,7 @@ describe('Create custom events', () => {
             value: '12345',
           },
         },
-        type: EventType.Webevent,
+        type: EventType.WebEvent,
       })
     )
   })

@@ -12,7 +12,7 @@ export class HtEventFallback extends HtEvent {
 
   constructor(event: EventFallback, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Botevent
+    this.type = EventType.BotEvent
     this.data.fallback_out = event.data.fallbackOut
     this.data.fallback_message_id = event.data.fallbackMessageId
   }

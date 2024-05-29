@@ -14,7 +14,7 @@ export class HtEventKeyword extends HtEvent {
 
   constructor(event: EventKeyword, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Botevent
+    this.type = EventType.BotEvent
     this.data.nlu_keyword_id = event.data.nluKeywordId
     this.data.nlu_keyword_name = event.data.nluKeywordName
     this.data.nlu_keyword_is_regex = event.data.nluKeywordIsRegex || false
