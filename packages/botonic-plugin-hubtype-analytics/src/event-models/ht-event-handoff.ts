@@ -3,9 +3,9 @@ import { HtEvent } from './ht-event'
 
 interface EventDataHandoff {
   action:
-    | EventAction.handoffOption
-    | EventAction.handoffSuccess
-    | EventAction.handoffFail
+    | EventAction.HandoffOption
+    | EventAction.HandoffSuccess
+    | EventAction.HandoffFail
   handoff_queue_id: string
   handoff_queue_name: string
   handoff_case_id?: string
@@ -19,7 +19,7 @@ export class HtEventHandoff extends HtEvent {
 
   constructor(event: EventHandoff, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.botevent
+    this.type = EventType.Botevent
     this.data.handoff_queue_id = event.data.queueId
     this.data.handoff_queue_name = event.data.queueName
     this.data.handoff_case_id = event.data.caseId

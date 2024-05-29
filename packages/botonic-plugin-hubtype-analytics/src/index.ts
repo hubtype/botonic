@@ -34,7 +34,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
 
   getUrl(request: BotRequest, eventType: EventType) {
     const endpoint =
-      eventType === EventType.webevent ? 'web_event' : 'bot_event'
+      eventType === EventType.Webevent ? 'web_event' : 'bot_event'
     const botId = request.session.bot.id
     return `${this.baseUrl}/external/v2/conversational_apps/${botId}/${endpoint}/`
   }
@@ -58,7 +58,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   private sendEvent(request: BotRequest, event: HtEvent) {
     const url = this.getUrl(request, event.type)
     const headers = { Authorization: `Bearer ${request.session._access_token}` }
-    const config = event.type !== EventType.webevent ? { headers } : undefined
+    const config = event.type !== EventType.Webevent ? { headers } : undefined
     return axios.post(url, event, config)
   }
 }

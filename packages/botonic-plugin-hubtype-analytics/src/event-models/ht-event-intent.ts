@@ -2,7 +2,7 @@ import { EventAction, EventIntent, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 interface EventDataIntent {
-  action: EventAction.intent
+  action: EventAction.Intent
   nlu_intent_label: string
   nlu_intent_confidence: number
   nlu_intent_threshold: number
@@ -14,7 +14,7 @@ export class HtEventIntent extends HtEvent {
 
   constructor(event: EventIntent, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.botevent
+    this.type = EventType.Botevent
     this.data.nlu_intent_label = event.data.nluIntentLabel
     this.data.nlu_intent_confidence = event.data.nluIntentConfidence
     this.data.nlu_intent_threshold = event.data.nluIntentThreshold

@@ -2,7 +2,7 @@ import { EventAction, EventFlow, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 interface EventDataFlow {
-  action: EventAction.flowNode
+  action: EventAction.FlowNode
   flow_thread_id: string
   flow_id: string
   flow_name: string
@@ -16,7 +16,7 @@ export class HtEventFlow extends HtEvent {
 
   constructor(event: EventFlow, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.botevent
+    this.type = EventType.Botevent
     this.data.flow_thread_id = event.data.flowThreadId // This value is managed by the flow builder plugin, stored in the session and updated every time the content connected to the conversation start is displayed
     this.data.flow_id = event.data.flowId
     this.data.flow_name = event.data.flowName
