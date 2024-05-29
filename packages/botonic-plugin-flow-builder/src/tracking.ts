@@ -5,20 +5,17 @@ import { HtNodeWithContent } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
 
 export enum EventAction {
-  flowNode = 'flow_node',
-  handoffOption = 'handoff_option',
-  handoffSuccess = 'handoff_success',
-  handoffFail = 'handoff_fail',
-  keyword = 'nlu_keyword',
-  intent = 'nlu_intent',
-  intentSmart = 'nlu_intent_smart',
-  knowledgebase = 'knowledgebase',
-  fallback = 'fallback',
+  FlowNode = 'flow_node',
+  Keyword = 'nlu_keyword',
+  Intent = 'nlu_intent',
+  IntentSmart = 'nlu_intent_smart',
+  Knowledgebase = 'knowledgebase',
+  Fallback = 'fallback',
 }
 
 export enum KnowledgebaseFailReason {
-  noKnowledge = 'no_knowledge',
-  hallucination = 'hallucination',
+  NoKnowledge = 'no_knowledge',
+  Hallucination = 'hallucination',
 }
 
 export async function trackEvent(
@@ -47,7 +44,7 @@ export async function trackFlowContent(
     flowName,
     id: firstNodeContent.id,
   })
-  await trackEvent(request, EventAction.flowNode, eventArgs)
+  await trackEvent(request, EventAction.FlowNode, eventArgs)
 }
 
 export function getContentEventArgs(

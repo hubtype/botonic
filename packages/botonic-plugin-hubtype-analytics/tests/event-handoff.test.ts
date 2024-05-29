@@ -5,7 +5,7 @@ describe('Create handoff events', () => {
   const requestData = getRequestData()
   test('should create handoff success event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.handoffSuccess,
+      action: EventAction.HandoffSuccess,
       data: {
         queueId: 'handoffQueueIdTest',
         queueName: 'handoffQueueNameTest',
@@ -19,13 +19,11 @@ describe('Create handoff events', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        channel: 'webchat',
-        created_at: htEvent.created_at,
         chat_language: 'es',
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.handoffSuccess,
+          action: EventAction.HandoffSuccess,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
           handoff_case_id: 'handoffCaseIdTest',
@@ -33,14 +31,14 @@ describe('Create handoff events', () => {
           handoff_is_available_agent: true,
           handoff_is_threshold_reached: false,
         },
-        type: EventType.botevent,
+        type: EventType.BotEvent,
       })
     )
   })
 
   test('should create handoff fail event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.handoffFail,
+      action: EventAction.HandoffFail,
       data: {
         queueId: 'handoffQueueIdTest',
         queueName: 'handoffQueueNameTest',
@@ -53,27 +51,25 @@ describe('Create handoff events', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        channel: 'webchat',
-        created_at: htEvent.created_at,
         chat_language: 'es',
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.handoffFail,
+          action: EventAction.HandoffFail,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
           is_queue_open: false,
           handoff_is_available_agent: false,
           handoff_is_threshold_reached: false,
         },
-        type: EventType.botevent,
+        type: EventType.BotEvent,
       })
     )
   })
 
   test('should create handoff option event', () => {
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.handoffOption,
+      action: EventAction.HandoffOption,
       data: {
         queueId: 'handoffQueueIdTest',
         queueName: 'handoffQueueNameTest',
@@ -83,17 +79,15 @@ describe('Create handoff events', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        channel: 'webchat',
-        created_at: htEvent.created_at,
         chat_language: 'es',
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.handoffOption,
+          action: EventAction.HandoffOption,
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
         },
-        type: EventType.botevent,
+        type: EventType.BotEvent,
       })
     )
   })

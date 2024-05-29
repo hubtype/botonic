@@ -1,29 +1,26 @@
-import { PROVIDER } from '@botonic/core'
-
 export enum EventType {
-  feedback = 'feedback',
-  botevent = 'botevent',
-  webevent = 'webevent',
+  Feedback = 'feedback',
+  BotEvent = 'botevent',
+  WebEvent = 'webevent',
 }
 
 export enum EventAction {
-  feedbackCase = 'feedback_case',
-  feedbackMessage = 'feddback_message',
-  feedbackConversation = 'feddback_conversation',
-  feedbackWebview = 'feddback_webview',
-  flowNode = 'flow_node',
-  handoffOption = 'handoff_option',
-  handoffSuccess = 'handoff_success',
-  handoffFail = 'handoff_fail',
-  keyword = 'nlu_keyword',
-  intent = 'nlu_intent',
-  intentSmart = 'nlu_intent_smart',
-  knowledgebase = 'knowledgebase',
-  fallback = 'fallback',
-  webviewStep = 'webview_step',
-  webviewEnd = 'webview_end',
-  customBot = 'custom_bot', // Custom event for bot
-  customWeb = 'custom_web', // Custom event for web
+  FeedbackCase = 'feedback_case',
+  FeedbackMessage = 'feddback_message',
+  FeedbackConversation = 'feddback_conversation',
+  FeedbackWebview = 'feddback_webview',
+  FlowNode = 'flow_node',
+  HandoffOption = 'handoff_option',
+  HandoffSuccess = 'handoff_success',
+  HandoffFail = 'handoff_fail',
+  Keyword = 'nlu_keyword',
+  Intent = 'nlu_intent',
+  IntentSmart = 'nlu_intent_smart',
+  Knowledgebase = 'knowledgebase',
+  Fallback = 'fallback',
+  WebviewStep = 'webview_step',
+  WebviewEnd = 'webview_end',
+  Custom = 'custom',
 }
 
 export interface HtBaseEventProps {
@@ -32,10 +29,10 @@ export interface HtBaseEventProps {
 
 export interface EventFeedback extends HtBaseEventProps {
   action:
-    | EventAction.feedbackCase
-    | EventAction.feedbackConversation
-    | EventAction.feedbackMessage
-    | EventAction.feedbackWebview
+    | EventAction.FeedbackCase
+    | EventAction.FeedbackConversation
+    | EventAction.FeedbackMessage
+    | EventAction.FeedbackWebview
   data: EventPropsFeedback
 }
 
@@ -50,7 +47,7 @@ export interface EventPropsFeedback {
 }
 
 export interface EventFlow extends HtBaseEventProps {
-  action: EventAction.flowNode
+  action: EventAction.FlowNode
   data: EventPropsFlow
 }
 
@@ -65,9 +62,9 @@ export interface EventPropsFlow {
 
 export interface EventHandoff extends HtBaseEventProps {
   action:
-    | EventAction.handoffOption
-    | EventAction.handoffSuccess
-    | EventAction.handoffFail
+    | EventAction.HandoffOption
+    | EventAction.HandoffSuccess
+    | EventAction.HandoffFail
   data: EventPropsHandoff
 }
 
@@ -81,7 +78,7 @@ export interface EventPropsHandoff {
 }
 
 export interface EventIntent extends HtBaseEventProps {
-  action: EventAction.intent
+  action: EventAction.Intent
   data: EventPropsIntent
 }
 
@@ -93,7 +90,7 @@ export interface EventPropsIntent {
 }
 
 export interface EventKeyword extends HtBaseEventProps {
-  action: EventAction.keyword
+  action: EventAction.Keyword
   data: EventPropsKeyword
 }
 
@@ -105,7 +102,7 @@ export interface EventPropsKeyword {
 }
 
 export interface EventIntentSmart extends HtBaseEventProps {
-  action: EventAction.intentSmart
+  action: EventAction.IntentSmart
   data: EventPropsIntentSmart
 }
 
@@ -116,7 +113,7 @@ export interface EventPropsIntentSmart {
 }
 
 export interface EventKnowledgeBase extends HtBaseEventProps {
-  action: EventAction.knowledgebase
+  action: EventAction.Knowledgebase
   data: EventPropsKnowledgeBase
 }
 
@@ -129,12 +126,12 @@ export interface EventPropsKnowledgeBase {
 }
 
 export enum KnowledgebaseFailReason {
-  noKnowledge = 'no_knowledge',
-  hallucination = 'hallucination',
+  NoKnowledge = 'no_knowledge',
+  Hallucination = 'hallucination',
 }
 
 export interface EventFallback extends HtBaseEventProps {
-  action: EventAction.fallback
+  action: EventAction.Fallback
   data: EventPropsFallbackBase
 }
 
@@ -144,7 +141,7 @@ export interface EventPropsFallbackBase {
 }
 
 export interface EventWebview extends HtBaseEventProps {
-  action: EventAction.webviewStep | EventAction.webviewEnd
+  action: EventAction.WebviewStep | EventAction.WebviewEnd
   data: EventPropsWebview
 }
 
@@ -157,13 +154,13 @@ export interface EventPropsWebview {
 }
 
 export interface EventCustom extends HtBaseEventProps {
-  action: EventAction.customBot | EventAction.customWeb
-  data: Record<CustomAttribute, string>
+  action: EventAction.Custom
+  data: EventPropsCustom
 }
 
-export const CUSTOM_PREFIX = 'custom_'
-// All attributs that start with 'custom_' are considered custom attributs
-export type CustomAttribute = `${typeof CUSTOM_PREFIX}${string}`
+export interface EventPropsCustom {
+  customFields: Record<string, any>
+}
 
 export type HtEventProps =
   | EventFeedback
@@ -180,6 +177,5 @@ export type HtEventProps =
 export interface RequestData {
   language: string
   country: string
-  provider: PROVIDER
   userId: string
 }

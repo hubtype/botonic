@@ -2,7 +2,7 @@ import { EventAction, EventType, EventWebview, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 interface EventDataWebview {
-  action: EventAction.webviewStep | EventAction.webviewEnd
+  action: EventAction.WebviewStep | EventAction.WebviewEnd
   webview_thread_id: string
   webview_name: string
   webview_step_name?: string
@@ -15,7 +15,7 @@ export class HtEventWebview extends HtEvent {
 
   constructor(event: EventWebview, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.webevent
+    this.type = EventType.WebEvent
     this.data.webview_thread_id = event.data.webviewThreadId
     this.data.webview_name = event.data.webviewName
     this.data.webview_step_name = event.data.webviewStepName

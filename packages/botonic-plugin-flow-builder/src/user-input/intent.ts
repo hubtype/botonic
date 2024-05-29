@@ -32,7 +32,7 @@ async function trackIntentEvent(
     nluIntentThreshold: intentNode?.content.confidence,
     nluIntentMessageId: request.input.message_id,
   }
-  await trackEvent(request, EventAction.intent, eventArgs)
+  await trackEvent(request, EventAction.Intent, eventArgs)
 }
 
 function isIntentValid(

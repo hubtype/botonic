@@ -18,40 +18,40 @@ export function createHtEvent(
   htEventProps: HtEventProps
 ): HtEvent {
   switch (htEventProps.action) {
-    case EventAction.feedbackCase:
-    case EventAction.feedbackConversation:
-    case EventAction.feedbackMessage:
-    case EventAction.feedbackWebview:
+    case EventAction.FeedbackCase:
+    case EventAction.FeedbackConversation:
+    case EventAction.FeedbackMessage:
+    case EventAction.FeedbackWebview:
       return new HtEventFeedback(htEventProps, requestData)
 
-    case EventAction.flowNode:
+    case EventAction.FlowNode:
       return new HtEventFlow(htEventProps, requestData)
 
-    case EventAction.handoffOption:
-    case EventAction.handoffSuccess:
-    case EventAction.handoffFail:
+    case EventAction.HandoffOption:
+    case EventAction.HandoffSuccess:
+    case EventAction.HandoffFail:
       return new HtEventHandoff(htEventProps, requestData)
 
-    case EventAction.intent:
+    case EventAction.Intent:
       return new HtEventIntent(htEventProps, requestData)
 
-    case EventAction.keyword:
+    case EventAction.Keyword:
       return new HtEventKeyword(htEventProps, requestData)
 
-    case EventAction.intentSmart:
+    case EventAction.IntentSmart:
       return new HtEventIntentSmart(htEventProps, requestData)
 
-    case EventAction.knowledgebase:
+    case EventAction.Knowledgebase:
       return new HtEventKnowledgeBase(htEventProps, requestData)
 
-    case EventAction.fallback:
+    case EventAction.Fallback:
       return new HtEventFallback(htEventProps, requestData)
 
-    case EventAction.webviewStep:
+    case EventAction.WebviewStep:
+    case EventAction.WebviewEnd:
       return new HtEventWebview(htEventProps, requestData)
 
-    case EventAction.customBot:
-    case EventAction.customWeb:
+    case EventAction.Custom:
       return new HtEventCustom(htEventProps, requestData)
 
     default:
