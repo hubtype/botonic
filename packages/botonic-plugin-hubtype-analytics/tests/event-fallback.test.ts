@@ -23,7 +23,7 @@ describe('Create fallback events', () => {
           fallback_out: 1,
           fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })
@@ -48,7 +48,7 @@ describe('Create fallback events', () => {
           fallback_out: 2,
           fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })
@@ -73,7 +73,7 @@ describe('Create fallback events', () => {
           fallback_out: 1,
           fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })

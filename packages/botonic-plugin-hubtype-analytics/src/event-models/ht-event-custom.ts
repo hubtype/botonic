@@ -11,7 +11,7 @@ export class HtEventCustom extends HtEvent {
 
   constructor(event: EventCustom, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Webevent
+    this.type = EventType.WebEvent
     this.data.custom_fields = event.data.customFields
   }
 }

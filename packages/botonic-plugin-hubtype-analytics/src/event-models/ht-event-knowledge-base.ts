@@ -20,7 +20,7 @@ export class HtEventKnowledgeBase extends HtEvent {
 
   constructor(event: EventKnowledgeBase, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Botevent
+    this.type = EventType.BotEvent
     this.data.knowledgebase_inference_id = event.data.knowledgebaseInferenceId
     this.data.knowledgebase_fail_reason = event.data.knowledgebaseFailReason
     this.data.knowledgebase_sources_ids = event.data.knowledgebaseSourcesIds

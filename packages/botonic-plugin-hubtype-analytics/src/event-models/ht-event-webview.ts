@@ -15,7 +15,7 @@ export class HtEventWebview extends HtEvent {
 
   constructor(event: EventWebview, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Webevent
+    this.type = EventType.WebEvent
     this.data.webview_thread_id = event.data.webviewThreadId
     this.data.webview_name = event.data.webviewName
     this.data.webview_step_name = event.data.webviewStepName

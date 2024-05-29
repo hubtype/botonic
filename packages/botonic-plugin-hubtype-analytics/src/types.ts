@@ -1,9 +1,7 @@
-import { PROVIDER } from '@botonic/core'
-
 export enum EventType {
   Feedback = 'feedback',
-  Botevent = 'botevent',
-  Webevent = 'webevent',
+  BotEvent = 'botevent',
+  WebEvent = 'webevent',
 }
 
 export enum EventAction {
@@ -179,6 +177,5 @@ export type HtEventProps =
 export interface RequestData {
   language: string
   country: string
-  provider: PROVIDER
   userId: string
 }

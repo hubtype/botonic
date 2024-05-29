@@ -32,7 +32,7 @@ describe('Create knowledge base events', () => {
           knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
           knowledgebase_message_id: 'knowledgebaseMessageId',
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })
@@ -63,7 +63,7 @@ describe('Create knowledge base events', () => {
           knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
           knowledgebase_message_id: 'knowledgebaseMessageId',
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })

@@ -31,7 +31,7 @@ describe('Create handoff events', () => {
           handoff_is_available_agent: true,
           handoff_is_threshold_reached: false,
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })
@@ -62,7 +62,7 @@ describe('Create handoff events', () => {
           handoff_is_available_agent: false,
           handoff_is_threshold_reached: false,
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })
@@ -87,7 +87,7 @@ describe('Create handoff events', () => {
           handoff_queue_id: 'handoffQueueIdTest',
           handoff_queue_name: 'handoffQueueNameTest',
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })

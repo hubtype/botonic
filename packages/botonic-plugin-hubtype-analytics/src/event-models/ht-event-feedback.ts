@@ -7,7 +7,6 @@ interface EventDataFeedback {
     | EventAction.FeedbackConversation
     | EventAction.FeedbackMessage
     | EventAction.FeedbackWebview
-  message_generated_by?: string
   feedback_target_id?: string
   feedback_group_id?: string
   possible_options: string[]
@@ -22,7 +21,6 @@ export class HtEventFeedback extends HtEvent {
   constructor(event: EventFeedback, requestData: RequestData) {
     super(event, requestData)
     this.type = EventType.Feedback
-    this.data.message_generated_by = event.data.messageGeneratedBy // ?? nomes te valor quan action es message. Si es message de knowledge base => sources y chunks. Quan es un node de flow builder => content_id
     this.data.feedback_target_id = event.data.feedbackTargetId // ?? case_id, message_id, conversation_id ???, webview_name
     this.data.feedback_group_id = event.data.feedbackGroupId // ??
     this.data.possible_options = event.data.possibleOptions

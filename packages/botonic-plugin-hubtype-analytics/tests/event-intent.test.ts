@@ -27,7 +27,7 @@ describe('Create nlu intent classic events', () => {
           nlu_intent_threshold: 0.6,
           nlu_intent_message_id: 'nluIntentMessageId',
         },
-        type: EventType.Botevent,
+        type: EventType.BotEvent,
       })
     )
   })

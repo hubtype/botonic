@@ -25,7 +25,7 @@ describe('Create webview events', () => {
           webview_name: 'ADD_A_BAG',
           webview_step_name: 'step1',
         },
-        type: EventType.Webevent,
+        type: EventType.WebEvent,
       })
     )
   })
@@ -54,7 +54,7 @@ describe('Create webview events', () => {
           webview_end_fail_type: 'canceled_by_user',
           webview_end_fail_message: 'Closed by user',
         },
-        type: EventType.Webevent,
+        type: EventType.WebEvent,
       })
     )
   })
