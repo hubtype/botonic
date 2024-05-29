@@ -36,7 +36,6 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
     const endpoint =
       eventType === EventType.BotEvent ? 'bot_event' : 'web_event'
     const botId = request.session.bot.id
-
     return `${this.baseUrl}/external/v2/conversational_apps/${botId}/${endpoint}/`
   }
 
