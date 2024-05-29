@@ -5,7 +5,7 @@ describe('Create fallback events', () => {
   const requestData = getRequestData()
   test('The first fallback event is created', () => {
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.fallback,
+      action: EventAction.Fallback,
       data: {
         fallbackOut: 1,
         fallbackMessageId: 'fallbackMessageIdTest',
@@ -15,24 +15,22 @@ describe('Create fallback events', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        channel: 'webchat',
-        created_at: htEvent.created_at,
         chat_language: 'es',
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.fallback,
+          action: EventAction.Fallback,
           fallback_out: 1,
           fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.botevent,
+        type: EventType.BotEvent,
       })
     )
   })
 
   test('The second fallback event is created', () => {
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.fallback,
+      action: EventAction.Fallback,
       data: {
         fallbackOut: 2,
         fallbackMessageId: 'fallbackMessageIdTest',
@@ -42,24 +40,22 @@ describe('Create fallback events', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        channel: 'webchat',
-        created_at: htEvent.created_at,
         chat_language: 'es',
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.fallback,
+          action: EventAction.Fallback,
           fallback_out: 2,
           fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.botevent,
+        type: EventType.BotEvent,
       })
     )
   })
 
   test('The third fallback event is created', () => {
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.fallback,
+      action: EventAction.Fallback,
       data: {
         fallbackOut: 1,
         fallbackMessageId: 'fallbackMessageIdTest',
@@ -69,17 +65,15 @@ describe('Create fallback events', () => {
     expect(JSON.stringify(htEvent)).toBe(
       JSON.stringify({
         chat_id: 'chatIdTest',
-        channel: 'webchat',
-        created_at: htEvent.created_at,
         chat_language: 'es',
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.fallback,
+          action: EventAction.Fallback,
           fallback_out: 1,
           fallback_message_id: 'fallbackMessageIdTest',
         },
-        type: EventType.botevent,
+        type: EventType.BotEvent,
       })
     )
   })
