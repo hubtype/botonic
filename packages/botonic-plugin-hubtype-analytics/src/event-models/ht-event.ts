@@ -3,8 +3,6 @@ import { EventType, HtEventProps, RequestData } from '../types'
 export class HtEvent {
   chat_id: string
   type: EventType
-  channel: string
-  created_at: string
   chat_language: string
   chat_country?: string
   format_version?: number

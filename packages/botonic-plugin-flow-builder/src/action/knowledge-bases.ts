@@ -85,13 +85,13 @@ async function trackKnowledgeBase(
 
   let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
   if (!response.isFaithuful) {
-    knowledgebaseFailReason = KnowledgebaseFailReason.hallucination
+    knowledgebaseFailReason = KnowledgebaseFailReason.Hallucination
   }
   if (!response.hasKnowledge) {
-    knowledgebaseFailReason = KnowledgebaseFailReason.noKnowledge
+    knowledgebaseFailReason = KnowledgebaseFailReason.NoKnowledge
   }
 
-  await trackEvent(request, EventAction.knowledgebase, {
+  await trackEvent(request, EventAction.Knowledgebase, {
     knowledgebaseInferenceId,
     knowledgebaseFailReason,
     knowledgebaseSourcesIds,

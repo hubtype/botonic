@@ -5,7 +5,7 @@ describe('Create flow event', () => {
   test('should create flow event', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.flowNode,
+      action: EventAction.FlowNode,
       data: {
         flowThreadId: 'flowThreadIdTest',
         flowId: 'flowIdTest',
@@ -23,7 +23,7 @@ describe('Create flow event', () => {
         chat_country: 'ES',
         format_version: 2,
         data: {
-          action: EventAction.flowNode,
+          action: EventAction.FlowNode,
           flow_thread_id: 'flowThreadIdTest',
           flow_id: 'flowIdTest',
           flow_name: 'flowNameTest',
@@ -31,7 +31,7 @@ describe('Create flow event', () => {
           flow_node_content_id: 'flowNodeContentIdTest',
           flow_node_is_meaningful: false,
         },
-        type: EventType.botevent,
+        type: EventType.BotEvent,
       })
     )
   })
