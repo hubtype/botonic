@@ -6,9 +6,9 @@ export enum EventType {
 
 export enum EventAction {
   FeedbackCase = 'feedback_case',
-  FeedbackMessage = 'feddback_message',
-  FeedbackConversation = 'feddback_conversation',
-  FeedbackWebview = 'feddback_webview',
+  FeedbackMessage = 'feedback_message',
+  FeedbackConversation = 'feedback_conversation',
+  FeedbackWebview = 'feedback_webview',
   FlowNode = 'flow_node',
   HandoffOption = 'handoff_option',
   HandoffSuccess = 'handoff_success',
