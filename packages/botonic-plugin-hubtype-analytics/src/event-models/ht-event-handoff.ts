@@ -1,7 +1,7 @@
 import { EventAction, EventHandoff, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
-interface EventDataHandoff {
+export class HtEventHandoff extends HtEvent {
   action: EventAction.HandoffSuccess | EventAction.HandoffFail
   handoff_queue_id: string
   handoff_queue_name: string
@@ -9,20 +9,16 @@ interface EventDataHandoff {
   handoff_is_queue_open: boolean
   handoff_is_available_agent: boolean
   handoff_is_threshold_reached: boolean
-}
-
-export class HtEventHandoff extends HtEvent {
-  data: EventDataHandoff
 
   constructor(event: EventHandoff, requestData: RequestData) {
     super(event, requestData)
     this.type = EventType.BotEvent
-    this.data.handoff_queue_id = event.data.queueId
-    this.data.handoff_queue_name = event.data.queueName
-    this.data.handoff_case_id = event.data.caseId
-    this.data.handoff_is_queue_open = event.data.isQueueOpen || false
-    this.data.handoff_is_available_agent = event.data.isAvailableAgent || false
-    this.data.handoff_is_threshold_reached =
-      event.data.isThresholdReached || false
+    this.action = event.action
+    this.handoff_queue_id = event.queueId
+    this.handoff_queue_name = event.queueName
+    this.handoff_case_id = event.caseId
+    this.handoff_is_queue_open = event.isQueueOpen || false
+    this.handoff_is_available_agent = event.isAvailableAgent || false
+    this.handoff_is_threshold_reached = event.isThresholdReached || false
   }
 }

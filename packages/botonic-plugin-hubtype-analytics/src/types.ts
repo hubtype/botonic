@@ -33,10 +33,6 @@ export interface EventFeedback extends HtBaseEventProps {
     | EventAction.FeedbackConversation
     | EventAction.FeedbackMessage
     | EventAction.FeedbackWebview
-  data: EventPropsFeedback
-}
-
-export interface EventPropsFeedback {
   messageGeneratedBy?: string
   feedbackTargetId?: string
   feedbackGroupId?: string
@@ -48,10 +44,6 @@ export interface EventPropsFeedback {
 
 export interface EventFlow extends HtBaseEventProps {
   action: EventAction.FlowNode
-  data: EventPropsFlow
-}
-
-export interface EventPropsFlow {
   flowThreadId: string
   flowId: string
   flowName: string
@@ -65,10 +57,6 @@ export interface EventHandoff extends HtBaseEventProps {
     | EventAction.HandoffOption
     | EventAction.HandoffSuccess
     | EventAction.HandoffFail
-  data: EventPropsHandoff
-}
-
-export interface EventPropsHandoff {
   queueId: string
   queueName: string
   caseId?: string
@@ -89,10 +77,6 @@ export interface EventPropsHandoffOption {
 
 export interface EventIntent extends HtBaseEventProps {
   action: EventAction.Intent
-  data: EventPropsIntent
-}
-
-export interface EventPropsIntent {
   nluIntentLabel: string
   nluIntentConfidence: number
   nluIntentThreshold: number
@@ -101,10 +85,6 @@ export interface EventPropsIntent {
 
 export interface EventKeyword extends HtBaseEventProps {
   action: EventAction.Keyword
-  data: EventPropsKeyword
-}
-
-export interface EventPropsKeyword {
   nluKeywordId: string
   nluKeywordName: string
   nluKeywordIsRegex?: boolean
@@ -113,10 +93,6 @@ export interface EventPropsKeyword {
 
 export interface EventIntentSmart extends HtBaseEventProps {
   action: EventAction.IntentSmart
-  data: EventPropsIntentSmart
-}
-
-export interface EventPropsIntentSmart {
   nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
   nluIntentSmartMessageId: string
@@ -124,10 +100,6 @@ export interface EventPropsIntentSmart {
 
 export interface EventKnowledgeBase extends HtBaseEventProps {
   action: EventAction.Knowledgebase
-  data: EventPropsKnowledgeBase
-}
-
-export interface EventPropsKnowledgeBase {
   knowledgebaseInferenceId: string
   knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
@@ -142,20 +114,12 @@ export enum KnowledgebaseFailReason {
 
 export interface EventFallback extends HtBaseEventProps {
   action: EventAction.Fallback
-  data: EventPropsFallbackBase
-}
-
-export interface EventPropsFallbackBase {
   fallbackOut: number
   fallbackMessageId: string
 }
 
 export interface EventWebview extends HtBaseEventProps {
   action: EventAction.WebviewStep | EventAction.WebviewEnd
-  data: EventPropsWebview
-}
-
-export interface EventPropsWebview {
   webviewThreadId: string
   webviewName: string
   webviewStepName?: string
@@ -165,10 +129,6 @@ export interface EventPropsWebview {
 
 export interface EventCustom extends HtBaseEventProps {
   action: EventAction.Custom
-  data: EventPropsCustom
-}
-
-export interface EventPropsCustom {
   customFields: Record<string, any>
 }
 

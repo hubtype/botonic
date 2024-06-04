@@ -6,89 +6,75 @@ describe('Create handoff events', () => {
   test('should create handoff success event', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffSuccess,
-      data: {
-        queueId: 'handoffQueueIdTest',
-        queueName: 'handoffQueueNameTest',
-        caseId: 'handoffCaseIdTest',
-        isQueueOpen: true,
-        isAvailableAgent: true,
-        isThresholdReached: false,
-      },
+      queueId: 'handoffQueueIdTest',
+      queueName: 'handoffQueueNameTest',
+      caseId: 'handoffCaseIdTest',
+      isQueueOpen: true,
+      isAvailableAgent: true,
+      isThresholdReached: false,
     })
 
-    expect(JSON.stringify(htEvent)).toBe(
-      JSON.stringify({
-        chat_id: 'chatIdTest',
-        chat_language: 'es',
-        chat_country: 'ES',
-        format_version: 2,
-        data: {
-          action: EventAction.HandoffSuccess,
-          handoff_queue_id: 'handoffQueueIdTest',
-          handoff_queue_name: 'handoffQueueNameTest',
-          handoff_case_id: 'handoffCaseIdTest',
-          handoff_is_queue_open: true,
-          handoff_is_available_agent: true,
-          handoff_is_threshold_reached: false,
-        },
-        type: EventType.BotEvent,
-      })
-    )
+    expect(htEvent).toEqual({
+      chat_id: 'chatIdTest',
+      chat_language: 'es',
+      chat_country: 'ES',
+      format_version: 2,
+      action: EventAction.HandoffSuccess,
+      handoff_queue_id: 'handoffQueueIdTest',
+      handoff_queue_name: 'handoffQueueNameTest',
+      handoff_case_id: 'handoffCaseIdTest',
+      handoff_is_queue_open: true,
+      handoff_is_available_agent: true,
+      handoff_is_threshold_reached: false,
+      type: EventType.BotEvent,
+    })
   })
 
   test('should create handoff fail event', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffFail,
-      data: {
-        queueId: 'handoffQueueIdTest',
-        queueName: 'handoffQueueNameTest',
-        isQueueOpen: false,
-        isAvailableAgent: false,
-        isThresholdReached: false,
-      },
+      queueId: 'handoffQueueIdTest',
+      queueName: 'handoffQueueNameTest',
+      isQueueOpen: false,
+      isAvailableAgent: false,
+      isThresholdReached: false,
     })
 
-    expect(JSON.stringify(htEvent)).toBe(
-      JSON.stringify({
-        chat_id: 'chatIdTest',
-        chat_language: 'es',
-        chat_country: 'ES',
-        format_version: 2,
-        data: {
-          action: EventAction.HandoffFail,
-          handoff_queue_id: 'handoffQueueIdTest',
-          handoff_queue_name: 'handoffQueueNameTest',
-          handoff_is_queue_open: false,
-          handoff_is_available_agent: false,
-          handoff_is_threshold_reached: false,
-        },
-        type: EventType.BotEvent,
-      })
-    )
+    expect(htEvent).toEqual({
+      chat_id: 'chatIdTest',
+      chat_language: 'es',
+      chat_country: 'ES',
+      format_version: 2,
+      action: EventAction.HandoffFail,
+      handoff_queue_id: 'handoffQueueIdTest',
+      handoff_queue_name: 'handoffQueueNameTest',
+      handoff_is_queue_open: false,
+      handoff_is_available_agent: false,
+      handoff_is_threshold_reached: false,
+      type: EventType.BotEvent,
+    })
   })
 
   test('should create handoff option event', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffOption,
-      data: {
-        queueId: 'handoffQueueIdTest',
-        queueName: 'handoffQueueNameTest',
-      },
+      queueId: 'handoffQueueIdTest',
+      queueName: 'handoffQueueNameTest',
     })
 
-    expect(JSON.stringify(htEvent)).toBe(
-      JSON.stringify({
-        chat_id: 'chatIdTest',
-        chat_language: 'es',
-        chat_country: 'ES',
-        format_version: 2,
-        data: {
-          action: EventAction.HandoffOption,
-          handoff_queue_id: 'handoffQueueIdTest',
-          handoff_queue_name: 'handoffQueueNameTest',
-        },
-        type: EventType.BotEvent,
-      })
-    )
+    expect(htEvent).toEqual({
+      chat_id: 'chatIdTest',
+      chat_language: 'es',
+      chat_country: 'ES',
+      format_version: 2,
+      action: EventAction.HandoffOption,
+      handoff_queue_id: 'handoffQueueIdTest',
+      handoff_queue_name: 'handoffQueueNameTest',
+      handoff_case_id: undefined,
+      handoff_is_available_agent: false,
+      handoff_is_threshold_reached: false,
+      handoff_is_queue_open: false,
+      type: EventType.BotEvent,
+    })
   })
 })

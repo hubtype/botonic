@@ -1,4 +1,4 @@
-import { EventType, HtEventProps, RequestData } from '../types'
+import { EventAction, EventType, HtEventProps, RequestData } from '../types'
 
 export class HtEvent {
   chat_id: string
@@ -8,14 +8,13 @@ export class HtEvent {
   format_version?: number
   bot_version?: string
   flow_version?: string
-  data: any
+  action: EventAction
 
   constructor(event: HtEventProps, requestData: RequestData) {
     this.chat_id = requestData.userId
     this.chat_language = requestData.language
     this.chat_country = requestData.country
     this.format_version = 2
-    this.data = {}
-    this.data.action = event.action
+    this.action = event.action
   }
 }

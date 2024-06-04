@@ -6,29 +6,23 @@ describe('Create feedback event', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
       action: EventAction.FeedbackMessage,
-      data: {
-        possibleOptions: ['*', '**', '***', '****', '*****'],
-        possibleValues: [1, 2, 3, 4, 5],
-        option: '**',
-        value: 2,
-      },
+      possibleOptions: ['*', '**', '***', '****', '*****'],
+      possibleValues: [1, 2, 3, 4, 5],
+      option: '**',
+      value: 2,
     })
 
-    expect(JSON.stringify(htEvent)).toBe(
-      JSON.stringify({
-        chat_id: 'chatIdTest',
-        chat_language: 'es',
-        chat_country: 'ES',
-        format_version: 2,
-        data: {
-          action: EventAction.FeedbackMessage,
-          possible_options: ['*', '**', '***', '****', '*****'],
-          possible_values: [1, 2, 3, 4, 5],
-          option: '**',
-          value: 2,
-        },
-        type: EventType.Feedback,
-      })
-    )
+    expect(htEvent).toEqual({
+      chat_id: 'chatIdTest',
+      chat_language: 'es',
+      chat_country: 'ES',
+      format_version: 2,
+      action: EventAction.FeedbackMessage,
+      possible_options: ['*', '**', '***', '****', '*****'],
+      possible_values: [1, 2, 3, 4, 5],
+      option: '**',
+      value: 2,
+      type: EventType.Feedback,
+    })
   })
 })
