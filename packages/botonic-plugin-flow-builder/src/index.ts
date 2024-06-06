@@ -1,4 +1,4 @@
-import { Plugin, PluginPreRequest, Session } from '@botonic/core'
+import { INPUT, Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import { v4 as uuid } from 'uuid'
 
@@ -86,6 +86,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
     const checkUserTextInput =
       request.input.data &&
+      request.input.type === INPUT.TEXT &&
       !request.input.payload &&
       !request.session.is_first_interaction
 

@@ -1,3 +1,4 @@
+import { INPUT } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -16,7 +17,7 @@ export async function getNodeByUserInput(
   request: ActionRequest,
   smartIntentsConfig: SmartIntentsInferenceConfig
 ): Promise<HtSmartIntentNode | HtIntentNode | HtKeywordNode | undefined> {
-  if (request.input.data) {
+  if (request.input.data && request.input.type === INPUT.TEXT) {
     const keywordMatcher = new KeywordMatcher({
       cmsApi,
       locale,
