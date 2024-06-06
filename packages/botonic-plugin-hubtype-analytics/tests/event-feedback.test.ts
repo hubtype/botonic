@@ -22,7 +22,7 @@ describe('Create feedback event', () => {
       possible_values: [1, 2, 3, 4, 5],
       option: '**',
       value: 2,
-      type: EventType.Feedback,
+      type: EventType.WebEvent,
     })
   })
 
@@ -48,7 +48,7 @@ describe('Create feedback event', () => {
       option: '**',
       value: 2,
       comment: 'This is a comment',
-      type: EventType.Feedback,
+      type: EventType.WebEvent,
     })
   })
 })

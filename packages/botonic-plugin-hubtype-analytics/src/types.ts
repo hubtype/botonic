@@ -1,5 +1,4 @@
 export enum EventType {
-  Feedback = 'feedback',
   BotEvent = 'botevent',
   WebEvent = 'webevent',
 }

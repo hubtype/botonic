@@ -17,7 +17,7 @@ export class HtEventFeedback extends HtEvent {
 
   constructor(event: EventFeedback, requestData: RequestData) {
     super(event, requestData)
-    this.type = EventType.Feedback
+    this.type = EventType.WebEvent
     this.action = event.action
     this.feedback_target_id = event.feedbackTargetId // ?? case_id, message_id, conversation_id ???, webview_name
     this.feedback_group_id = event.feedbackGroupId // ??
