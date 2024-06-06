@@ -53,10 +53,7 @@ export interface EventFlow extends HtBaseEventProps {
 }
 
 export interface EventHandoff extends HtBaseEventProps {
-  action:
-    | EventAction.HandoffOption
-    | EventAction.HandoffSuccess
-    | EventAction.HandoffFail
+  action: EventAction.HandoffSuccess | EventAction.HandoffFail
   queueId: string
   queueName: string
   caseId?: string
@@ -67,10 +64,6 @@ export interface EventHandoff extends HtBaseEventProps {
 
 export interface EventHandoffOption extends HtBaseEventProps {
   action: EventAction.HandoffOption
-  data: EventPropsHandoffOption
-}
-
-export interface EventPropsHandoffOption {
   queueId: string
   queueName: string
 }
@@ -136,6 +129,7 @@ export type HtEventProps =
   | EventFeedback
   | EventFlow
   | EventHandoff
+  | EventHandoffOption
   | EventIntent
   | EventKeyword
   | EventIntentSmart

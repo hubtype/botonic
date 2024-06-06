@@ -70,10 +70,6 @@ describe('Create handoff events', () => {
       action: EventAction.HandoffOption,
       handoff_queue_id: 'handoffQueueIdTest',
       handoff_queue_name: 'handoffQueueNameTest',
-      handoff_case_id: undefined,
-      handoff_is_available_agent: false,
-      handoff_is_threshold_reached: false,
-      handoff_is_queue_open: false,
       type: EventType.BotEvent,
     })
   })
