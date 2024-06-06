@@ -110,7 +110,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request.input.payload = this.removeSourceSufix(request.input.payload)
 
       if (request.input.payload.startsWith(BOT_ACTION_PAYLOAD_PREFIX)) {
-        request.input.payload = this.replacePayload(request.input.payload)
+        request.input.payload = this.replaceBotActionPayload(
+          request.input.payload
+        )
       }
     }
   }
@@ -119,7 +121,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
   }
 
-  private replacePayload(payload: string): string {
+  public replaceBotActionPayload(payload: string): string {
     const botActionId = payload.split(SEPARATOR)[1]
     const botActionNode = this.cmsApi.getNodeById<HtBotActionNode>(botActionId)
     return this.cmsApi.createPayloadWithParams(botActionNode)
@@ -281,6 +283,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 }
 
 export * from './action'
+export { BOT_ACTION_PAYLOAD_PREFIX } from './constants'
 export * from './content-fields'
 export {
   BotonicPluginFlowBuilderOptions,
