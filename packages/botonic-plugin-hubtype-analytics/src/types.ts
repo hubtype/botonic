@@ -40,6 +40,7 @@ export interface EventFeedback extends HtBaseEventProps {
   possibleValues: number[]
   option: string
   value: number
+  comment?: string
 }
 
 export interface EventFlow extends HtBaseEventProps {

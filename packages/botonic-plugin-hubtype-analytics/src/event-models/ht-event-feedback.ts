@@ -13,6 +13,7 @@ export class HtEventFeedback extends HtEvent {
   possible_values: number[]
   option: string
   value: number
+  comment?: string
 
   constructor(event: EventFeedback, requestData: RequestData) {
     super(event, requestData)
@@ -24,5 +25,6 @@ export class HtEventFeedback extends HtEvent {
     this.possible_values = event.possibleValues
     this.option = event.option
     this.value = event.value
+    this.comment = event.comment
   }
 }
