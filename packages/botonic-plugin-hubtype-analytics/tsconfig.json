@@ -4,5 +4,5 @@
     "baseUrl": ".",
     "outDir": "./lib/cjs"
   },
-  "include": ["src/", "tests/"]
+  "include": ["src/"]
 }

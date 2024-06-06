@@ -5,6 +5,7 @@ import {
   HtEventFeedback,
   HtEventFlow,
   HtEventHandoff,
+  HtEventHandoffOption,
   HtEventIntent,
   HtEventIntentSmart,
   HtEventKeyword,
@@ -28,6 +29,8 @@ export function createHtEvent(
       return new HtEventFlow(htEventProps, requestData)
 
     case EventAction.HandoffOption:
+      return new HtEventHandoffOption(htEventProps, requestData)
+
     case EventAction.HandoffSuccess:
     case EventAction.HandoffFail:
       return new HtEventHandoff(htEventProps, requestData)

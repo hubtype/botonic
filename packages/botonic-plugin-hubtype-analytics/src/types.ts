@@ -77,6 +77,16 @@ export interface EventPropsHandoff {
   isThresholdReached?: boolean
 }
 
+export interface EventHandoffOption extends HtBaseEventProps {
+  action: EventAction.HandoffOption
+  data: EventPropsHandoffOption
+}
+
+export interface EventPropsHandoffOption {
+  queueId: string
+  queueName: string
+}
+
 export interface EventIntent extends HtBaseEventProps {
   action: EventAction.Intent
   data: EventPropsIntent
