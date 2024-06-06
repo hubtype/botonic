@@ -10,7 +10,15 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.25.X] - 2024-xx-xx
+## [0.27.X] - 2024-xx-xx
+
+### Changed
+
+### Fixed
+
+</details>
+
+## [0.27.0] - tbd
 
 ### Added
 
@@ -30,27 +38,18 @@ All notable changes to Botonic will be documented in this file.
   - [Remove types `HubtypeSession` and use `Session`](https://github.com/hubtype/botonic/pull/2812)
 
 - [@botonic/plugin-knowledge-bases](https://www.npmjs.com/package/@botonic/plugin-knowledge-bases)
+
   - [Remove types `HubtypeSession` and use `Session`](https://github.com/hubtype/botonic/pull/2812)
-
-### Fixed
-
-- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
-
-  - [Fix `bot action payload` limit characters](https://github.com/hubtype/botonic/pull/2817)
-
-</details>
-
-## [0.27.0] - tbd
-
-### Added
-
-### Changed
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
   - [Modified Smart Intents api request to call smart intents inference v2](https://github.com/hubtype/botonic/pull/2825)
 
 ### Fixed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Fix `bot action payload` limit characters](https://github.com/hubtype/botonic/pull/2817)
 
 ## [0.26.0] - 2024-04-30
 
