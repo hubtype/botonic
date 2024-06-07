@@ -20,7 +20,6 @@ describe('Create nlu keyword events', () => {
       action: EventAction.Keyword,
       nlu_keyword_id: 'keywordId',
       nlu_keyword_name: 'hello',
-
       nlu_keyword_is_regex: false,
       nlu_keyword_message_id: 'messageId',
       type: EventType.BotEvent,
