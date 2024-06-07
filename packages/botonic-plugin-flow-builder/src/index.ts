@@ -285,6 +285,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 export * from './action'
 export { BOT_ACTION_PAYLOAD_PREFIX } from './constants'
 export * from './content-fields'
+export { trackFlowContent } from './tracking'
 export {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,

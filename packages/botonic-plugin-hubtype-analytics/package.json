@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-analytics",
-  "version": "0.27.0-alpha.5",
+  "version": "0.27.0-alpha.6",
   "description": "Plugin for tracking in the Hubtype backend to see the results in the Hubtype Dashbord",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",

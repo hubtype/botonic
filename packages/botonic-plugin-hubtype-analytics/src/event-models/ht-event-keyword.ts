@@ -1,23 +1,19 @@
 import { EventAction, EventKeyword, EventType, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
-interface EventDataKeyword {
-  action: EventAction.Keyword
+export class HtEventKeyword extends HtEvent {
   nlu_keyword_id: string
   nlu_keyword_name: string
   nlu_keyword_is_regex: boolean
   nlu_keyword_message_id: string
-}
-
-export class HtEventKeyword extends HtEvent {
-  data: EventDataKeyword
 
   constructor(event: EventKeyword, requestData: RequestData) {
     super(event, requestData)
     this.type = EventType.BotEvent
-    this.data.nlu_keyword_id = event.data.nluKeywordId
-    this.data.nlu_keyword_name = event.data.nluKeywordName
-    this.data.nlu_keyword_is_regex = event.data.nluKeywordIsRegex || false
-    this.data.nlu_keyword_message_id = event.data.nluKeywordMessageId
+    this.action = EventAction.Keyword
+    this.nlu_keyword_id = event.nluKeywordId
+    this.nlu_keyword_name = event.nluKeywordName
+    this.nlu_keyword_is_regex = event.nluKeywordIsRegex || false
+    this.nlu_keyword_message_id = event.nluKeywordMessageId
   }
 }

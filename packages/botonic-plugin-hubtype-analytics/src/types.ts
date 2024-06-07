@@ -1,5 +1,4 @@
 export enum EventType {
-  Feedback = 'feedback',
   BotEvent = 'botevent',
   WebEvent = 'webevent',
 }
@@ -33,10 +32,6 @@ export interface EventFeedback extends HtBaseEventProps {
     | EventAction.FeedbackConversation
     | EventAction.FeedbackMessage
     | EventAction.FeedbackWebview
-  data: EventPropsFeedback
-}
-
-export interface EventPropsFeedback {
   messageGeneratedBy?: string
   feedbackTargetId?: string
   feedbackGroupId?: string
@@ -44,14 +39,11 @@ export interface EventPropsFeedback {
   possibleValues: number[]
   option: string
   value: number
+  comment?: string
 }
 
 export interface EventFlow extends HtBaseEventProps {
   action: EventAction.FlowNode
-  data: EventPropsFlow
-}
-
-export interface EventPropsFlow {
   flowThreadId: string
   flowId: string
   flowName: string
@@ -61,14 +53,7 @@ export interface EventPropsFlow {
 }
 
 export interface EventHandoff extends HtBaseEventProps {
-  action:
-    | EventAction.HandoffOption
-    | EventAction.HandoffSuccess
-    | EventAction.HandoffFail
-  data: EventPropsHandoff
-}
-
-export interface EventPropsHandoff {
+  action: EventAction.HandoffSuccess | EventAction.HandoffFail
   queueId: string
   queueName: string
   caseId?: string
@@ -79,20 +64,12 @@ export interface EventPropsHandoff {
 
 export interface EventHandoffOption extends HtBaseEventProps {
   action: EventAction.HandoffOption
-  data: EventPropsHandoffOption
-}
-
-export interface EventPropsHandoffOption {
   queueId: string
   queueName: string
 }
 
 export interface EventIntent extends HtBaseEventProps {
   action: EventAction.Intent
-  data: EventPropsIntent
-}
-
-export interface EventPropsIntent {
   nluIntentLabel: string
   nluIntentConfidence: number
   nluIntentThreshold: number
@@ -101,10 +78,6 @@ export interface EventPropsIntent {
 
 export interface EventKeyword extends HtBaseEventProps {
   action: EventAction.Keyword
-  data: EventPropsKeyword
-}
-
-export interface EventPropsKeyword {
   nluKeywordId: string
   nluKeywordName: string
   nluKeywordIsRegex?: boolean
@@ -113,10 +86,6 @@ export interface EventPropsKeyword {
 
 export interface EventIntentSmart extends HtBaseEventProps {
   action: EventAction.IntentSmart
-  data: EventPropsIntentSmart
-}
-
-export interface EventPropsIntentSmart {
   nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
   nluIntentSmartMessageId: string
@@ -124,10 +93,6 @@ export interface EventPropsIntentSmart {
 
 export interface EventKnowledgeBase extends HtBaseEventProps {
   action: EventAction.Knowledgebase
-  data: EventPropsKnowledgeBase
-}
-
-export interface EventPropsKnowledgeBase {
   knowledgebaseInferenceId: string
   knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
@@ -142,20 +107,12 @@ export enum KnowledgebaseFailReason {
 
 export interface EventFallback extends HtBaseEventProps {
   action: EventAction.Fallback
-  data: EventPropsFallbackBase
-}
-
-export interface EventPropsFallbackBase {
   fallbackOut: number
   fallbackMessageId: string
 }
 
 export interface EventWebview extends HtBaseEventProps {
   action: EventAction.WebviewStep | EventAction.WebviewEnd
-  data: EventPropsWebview
-}
-
-export interface EventPropsWebview {
   webviewThreadId: string
   webviewName: string
   webviewStepName?: string
@@ -165,10 +122,6 @@ export interface EventPropsWebview {
 
 export interface EventCustom extends HtBaseEventProps {
   action: EventAction.Custom
-  data: EventPropsCustom
-}
-
-export interface EventPropsCustom {
   customFields: Record<string, any>
 }
 
@@ -176,6 +129,7 @@ export type HtEventProps =
   | EventFeedback
   | EventFlow
   | EventHandoff
+  | EventHandoffOption
   | EventIntent
   | EventKeyword
   | EventIntentSmart
