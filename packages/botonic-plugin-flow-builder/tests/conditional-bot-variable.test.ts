@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents returned by the plugin after conditional custom node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test.each(['tourist', 'business', 'first class', '', undefined])(
     'The expected content is displayed after using a string variable in the conditional',

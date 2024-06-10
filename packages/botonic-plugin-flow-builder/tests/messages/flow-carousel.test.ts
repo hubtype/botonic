@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents of a carousel node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The contents of the carousel and elements are displayed', async () => {
     const request = createRequest({

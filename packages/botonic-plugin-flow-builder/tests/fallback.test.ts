@@ -12,7 +12,7 @@ import {
 
 describe('Check the content returned by the plugin when there is no match with payload or keyword or intents', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The content displayed changes between the 1st and 2nd fallback', async () => {
     const request = createRequest({

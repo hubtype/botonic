@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents of a WhatsApp Button List node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The contents of the WhatsApp Button List are displayed', async () => {
     const request = createRequest({
