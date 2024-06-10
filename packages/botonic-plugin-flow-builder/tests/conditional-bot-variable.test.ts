@@ -61,7 +61,7 @@ describe('Check the contents returned by the plugin after conditional custom nod
   )
 
   test.each([
-    //{ messageExpected: 'The user has no bags in the booking', bagsAdded: 0 }, // REVIEW: If pass a 0 to conditioanl bot variable return default result becasue 0 is saved as '0' in backend
+    { messageExpected: 'The user has no bags in the booking', bagsAdded: 0 },
     { messageExpected: 'The user has 1 bag in the booking', bagsAdded: 1 },
     { messageExpected: 'The user has 2 bags in the booking', bagsAdded: 2 },
     {
