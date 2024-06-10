@@ -4,8 +4,7 @@ import React from 'react'
 import { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
-import { HtUrlNode } from './hubtype-fields'
-import { HtWhatsappCTAUrlButtonNode } from './hubtype-fields/whatsapp-cta-url-button'
+import { HtUrlNode, HtWhatsappCTAUrlButtonNode } from './hubtype-fields'
 
 export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
   public code = ''

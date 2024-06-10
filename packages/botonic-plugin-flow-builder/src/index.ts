@@ -14,11 +14,12 @@ import {
   FlowContent,
   FlowHandoff,
   FlowImage,
+  FlowKnowledgeBase,
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
+  FlowWhatsappCtaUrlButtonNode,
 } from './content-fields'
-import { FlowWhatsappCtaUrlButtonNode } from './content-fields/flow-whatsapp-cta-url-button'
 import {
   HtBotActionNode,
   HtFlowBuilderData,
@@ -54,7 +55,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     args?: Record<string, any>
   ) => Promise<void>
   public getKnowledgeBaseResponse?: (
-    request: ActionRequest
+    request: ActionRequest,
+    userInput: string,
+    sources: string[]
   ) => Promise<KnowledgeBaseResponse>
   public smartIntentsConfig: SmartIntentsInferenceConfig
 
@@ -216,6 +219,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         )
       case HtNodeWithContentType.HANDOFF:
         return FlowHandoff.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
+
+      case HtNodeWithContentType.KNOWLEDGE_BASE:
+        return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
       default:
         return undefined
     }
